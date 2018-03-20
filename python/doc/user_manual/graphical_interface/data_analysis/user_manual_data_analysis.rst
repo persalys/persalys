@@ -2,11 +2,11 @@
 User manual - Data analyses
 ===========================
 
-The OTGui allows the user to launch three types of data analyses:
+The OTGui allows the user to launch the following types of data analyses:
 
 - Data analyses to get moments, minimum, maximum, PDF, etc;
-- Marginal inferences;
-- Dependencies inferences;
+- Marginals inferences;
+- Dependence inferences;
 - Metamodels creation
 
 1- Data analysis
@@ -22,7 +22,8 @@ New sample analysis can be created through:
 
 When the analysis is required, a new item is added in the study tree below the data model item.
 
-Its context menu has one action:
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
   - **Remove**: Remove the analysis from the study.
 
 This item is associated with a window displaying a progress bar and the buttons
@@ -108,6 +109,13 @@ these points are automatically selected on the others.
   The **Export** button opens a dialog box for the user to select where the
   figure has to be saved.
 
+.. _dependenceTab:
+
+- The **Dependence** tab displays the estimate of the Spearman's matrix.
+
+  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_dependence.png
+      :align: center
+
 - The **Table** tab:
 
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_Table.png
@@ -162,19 +170,20 @@ these points are automatically selected on the others.
 
 .. _inferenceAnalysis:
 
-2- Inference analysis
-=====================
+2- Marginals inference
+======================
 
-New inference analysis can be created thanks to:
+The inference analysis allows to perform a Bayesian Information Criterion (BIC) and
+a Kolmogorov goodness-of-fit tests for 1-d continuous distributions.
 
-- the context menu of the data model **Definition** item
-- the **Inference analysis** box of the data model diagram.
-
-The inference analysis allows to perform a Kolmogorov goodness-of-fit test for 1-d
-continuous distributions.
+New marginals inference can be created thanks to:
+  - the context menu of the data model **Definition** item
+  - the **Marginals inference** box of the data model diagram
 
 2-1 Definition
 ''''''''''''''
+
+When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/data_analysis/inference_wizard.png
     :align: center
@@ -184,7 +193,7 @@ the corresponding lines in the table at the left side of the window. By default,
 are selected. To validate the window, at least one variable must be selected.
 
 The table at the right side of the window is used to list the distributions
-to test for each variable. By default, only the normal distribution is tested.
+to test for each variable. By default, only the Normal distribution is tested.
 The list of distributions can be different for each variable.
 
 To choose the distributions to test for each variable:
@@ -200,11 +209,16 @@ To choose the distributions to test for each variable:
 At the bottom of the page, the user can specify the value of the level. The level is
 the value such that :math:`\alpha = 1 - {\rm level}` is the risk of
 committing a Type I error, that is an incorrect rejection of a true
-null hypothesis. Its value is a float in the range :math:`]0, 1[` and is by default 0.95.
+null hypothesis. Its value is a float in the range :math:`]0, 1[` and is by default 0.05.
+
+
+2-2 Launch
+''''''''''
 
 When the analysis is required, a new item is added in the study tree below the data model item.
 
 Its context menu has two actions:
+  - **Rename**: Rename the analysis;
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
@@ -220,7 +234,7 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
 Click on the **Start** button enables to launch the analysis. The user can stop the evaluation by
 clicking on the **Stop** button.
 
-2-2 Results
+2-3 Results
 '''''''''''
 
 When the analysis is finished or stopped, the below window appears.
@@ -231,9 +245,9 @@ When the analysis is finished or stopped, the below window appears.
 The results window gathers two tabs for each variable:
 
 - The **Summary** tab includes, for a selected variable, a table of all the tested
-  distributions and the associated p-value. The last column
+  distributions, the associated Bayesian Information Criterion value and the p-value. The last column
   indicates whether the distribution is accepted or not according to the given level.
-  The distributions are sorted in decreasing order of p-values.
+  The distributions are sorted in increasing order of BIC values.
   The right side of this table is updated according to the distribution which is selected.
 
   This section contains 3 tabs:
@@ -292,22 +306,65 @@ The results window gathers two tabs for each variable:
       :align: center
 
 
-3- Dependencies inference analysis
-==================================
+.. _dependenceInference:
 
-3-1 Creation
-''''''''''''
+3- Dependence inference
+=======================
 
-The dependencies inference analysis allows to infer the Gaussian copula on the input sample
+The dependence inference allows to infer copulas on the input sample
 of the data model.
-This analysis can be created thanks to:
 
-- the context menu of a data model **Definition** item
-- the **Dependencies inference** box of the model diagram.
+This analysis can be created thanks to:
+  - the context menu of a data model **Definition** item
+  - the **Dependence inference** box of the model diagram.
+
+3-1 Definition
+''''''''''''''
+
+When requiring this analysis the following window appears to define its parameters.
+
+.. image:: /user_manual/graphical_interface/data_analysis/dependenceInference_wizard.png
+    :align: center
+
+This window enables to define group of variables and the copulas to test for each of them.
+
+The left side of the window lists all the variables of the model in a table.
+The right side list the groups of variables.
+
+To add a group, select at least two variables in the first table and click on the right arrow.
+To remove a group, select a group in the second table and click on the left arrow.
+
+The user can refer to the estimate of the :ref:`Spearman's matrix <dependenceTab>`
+in the result window of the data analysis to create the groups.
+For convenience the list of groups may be set by default thanks to this estimate
+if correlation between variables exists.
+
+.. image:: /user_manual/graphical_interface/data_analysis/dependenceInference_wizardOneGroup.png
+    :align: center
+
+When the group is adding, a new table appears with the **Normal** item.
+Below this table there are two buttons **Add** and **Remove** to add and remove items from
+the list.
+
+If the group has two variables the `available copulas <http://openturns.github.io/openturns/master/user_manual/_generated/openturns.Copula.html>`_ are:
+  - Ali-Mikhail-Haq
+  - Clayton
+  - Farlie-Gumbel-Morgenstern
+  - Frank
+  - Gumbel
+  - Normal
+
+If the group has more than two variables only the Normal copula is available. That is why the
+buttons **Add** and **Remove** are disabled in this case.
+
+3-2 Launch
+'''''''''''
 
 When the analysis is required, a new item is added in the study tree below the data model item.
 
-Its context menu has one action:
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
+  - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
 This item is associated with a window displaying a progress bar and the buttons
@@ -319,40 +376,62 @@ This item is associated with a window displaying a progress bar and the buttons
 Click on the **Start** button enables to launch the analysis. The user can stop the evaluation by
 clicking on the **Stop** button.
 
-3-2 Results
+3-3 Results
 '''''''''''
 
 The results window gathers the **Summary** tab for each set of variables.
 
 - The **Summary** tab includes, for a selected set of variables, a table of all the tested
-  copulas. The right side of this tab is updated according to the distribution which is selected.
+  copulas. The right side of this tab is updated according to the copula which is selected.
 
-  This section contains 2 tabs:
+  This section contains the following tabs:
 
   - The **PDF/CDF** tab presents for each pair of variables the PDF/CDF (default: PDF) of the sample
     together with the distribution PDF.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_PDF.png
-      :align: center
+    .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_PDF.png
+        :align: center
 
-  With the graphic settings below the study tree, the user can configure the plot, choose the pair of
-  variables to analyse and choose between PDF/CDF.
+    With the graphic settings below the study tree, the user can configure the plot, choose the pair of
+    variables to analyze and choose between PDF/CDF.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_PDF_setting.png
-      :align: center
+    .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_PDF_setting.png
+        :align: center
 
-  The user can define:
-    - The title of the graph, expected to be a string;
+    The user can define:
+      - The title of the graph, expected to be a string;
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
+    It has two tabs, **X-axis** and **Y-axis** where the user can define:
+      - The axis title, expected to be a string;
+      - The minimum bound of the axis, expected to be a floating point;
+      - The maximum bound of the axis, expected to be a floating point.
+
+  - The **Kendall** tab:
+
+    .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_Kendall.png
+        :align: center
+
+    With the graphic settings below the study tree, the user can configure the plot and choose the pair of
+    variables to analyze.
+
+    The user can define:
+      - The title of the graph, expected to be a string;
+
+    It has two tabs, **X-axis** and **Y-axis** where the user can define:
+      - The axis title, expected to be a string;
+      - The minimum bound of the axis, expected to be a floating point;
+      - The maximum bound of the axis, expected to be a floating point.
 
   - The **Parameters** tab includes the parameters of the selected copula. For the Gaussian copula, the
     tab displays the Spearman's coefficients.
 
   .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters.png
+      :align: center
+
+  - If an error occured when building a copula with the given sample, '-' is indicated in the
+    BIC column, the first two tabs are disabled and the **Parameters** tab displays the error message.
+
+  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters_ErrorMessage.png
       :align: center
 
 4- Metamodel creation
@@ -375,13 +454,13 @@ Two methods are available:
   - Functional chaos
   - Kriging
 
-The user can choose the outputs to analyse by clicking on the button **-- Select Outputs --**
+The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
     :align: center
 
-By default all the output variables are analysed.
+By default all the output variables are analyzed.
 
 Functional chaos
 ~~~~~~~~~~~~~~~~
@@ -391,9 +470,6 @@ Functional chaos
 
 - In the **Parameters** section the user can specify the needed chaos degree. The
   degree must superior or equal to 1. By default, it is equal to 2.
-
-- In the **Validation** section the user can request a validation of the metamodel
-  by the Leave-one-out method. Be careful, this method is very time consuming.
 
 - In the advanced parameters (default: hidden), the user can choose to use a sparse chaos.
 
@@ -406,11 +482,10 @@ Kriging
 - In the **Parameters** section the user can choose:
 
   - The covariance model (default: Squared exponential) between:
-
-    - Squared exponential,
-    - Absolute exponential,
-    - Generalized exponential,
-    - Matérn model
+      - Squared exponential,
+      - Absolute exponential,
+      - Generalized exponential,
+      - Matérn model
 
     To parametrize these models the user can defined:
 
@@ -437,10 +512,36 @@ Kriging
           :align: center
 
   - The trend basis (default: Constant) between:
+      - Constant,
+      - Linear,
+      - Quadratic
 
-    - Constant,
-    - Linear,
-    - Quadratic
+Validation
+~~~~~~~~~~
+
+For both analyses it is possible to validate the generated metamodel.
+The following page enables to parametrize the validation.
+By default the metamodel is validating analytically.
+
+.. image:: /user_manual/graphical_interface/data_analysis/metaModel_validation_page.png
+    :align: center
+
+Four methods are available:
+  - Analytically. This method correspond to an approximation of the Leave-one-out method result.
+      - Kriging: cf O. Dubrule, Cross Validation of Kriging in a Unique Neighborhood,
+        Mathematical Geology,1983.
+      - Functional chaos: cf G. Blatman, Adaptive sparse polynomial chaos
+        expansions for uncertainty propagation and sensitivity analysis.,
+        PhD thesis. Blaise Pascal University-Clermont II, France, 2009.
+  - Test sample: The data sample is dividing into two sub-samples:
+    a training sample (by default 80% of the sample points) and a test sample
+    (by default 20% of the sample points).
+    That is to say a new metamodel is building with the training sample
+    and it is validating with the test sample.
+    The points are randomly picked in the data sample (by default the seed is 1).
+  - `K-Fold <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_
+  - `Leave-one-out <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_.
+    Be careful, this method is very time consuming.
 
 
 4-2 Results
@@ -449,7 +550,8 @@ Kriging
 When validating the previous window, a new element appears in the study tree below the
 data model item or the design of experiments item.
 
-The context menu of this item contains three actions:
+The context menu of this item contains these actions:
+  - **Rename**: Rename the analysis;
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Convert metamodel into physical model** (Default: disabled): When the analysis
     is finished or stopped successfully, add the metamodel in the study tree;
@@ -536,16 +638,16 @@ The results window gathers:
 If the Sobol's indices estimates are incoherent, refer to the warning message in the tooltip of |attentionButton|,
 and try to perform the analysis with a greater sample size.
 
-- If the user requested a metamodel validation by the Leave-one-out method,
-  the window contains a tab **Validation**.
-  This tab presents for each output:
+- If the user requested a metamodel validation, the window contains a **Validation** tab.
+  This tab presents for each methods and for each output:
 
     - the metamodel predictivity coefficient: :math:`\displaystyle Q2 = 1 - \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(\bar{y} - y_i)^2}}`
     - the residual: :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
 
-  It contains also a plot opposing the predicted metamodel values by Leave-one-out
-  to the physical model output values. A diagonal is built with the physical
-  model output values.
+  It contains also a plot which opposes the predicted metamodel values
+  to the physical model output values (except for the analytical validation of
+  the metamodel built with the functional chaos method). A diagonal is built
+  with the physical model output values.
 
   .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_LOO_plot.png
       :align: center
@@ -604,7 +706,7 @@ The results window gathers:
   .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_kriging_results.png
       :align: center
 
-- As for the functional chaos result window, if the user requested a metamodel validation
-  by the Leave-one-out method, the window contains a tab **Validation**.
+- As for the functional chaos result window, if the user requested a metamodel validation,
+  the window contains a **Validation** tab.
 
 - The **Parameters** tab which contains the analysis' parameters' values.

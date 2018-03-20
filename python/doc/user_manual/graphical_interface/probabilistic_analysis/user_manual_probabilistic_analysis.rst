@@ -11,9 +11,8 @@ In order to perform probabilistic analysis, the user needs first to build a
 probabilistic model.
 
 New probabilistic model can be created through:
-
-- the context menu of the **Definition** item of the relevant physical model in the study tree;
-- the **Probabilistic model definition** box of the model diagram
+  - the context menu of the **Definition** item of the relevant physical model in the study tree;
+  - the **Probabilistic model definition** box of the model diagram
 
 A physical model can contain only one probabilistic model.
 
@@ -87,18 +86,74 @@ This item is associated with a window which has two tabs:
 
     When clicking on the **Finish** button, the chosen distribution is defined for the selected variable.
 
-- the **Correlation** tab:
+- the **Dependence** tab:
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelDependence.png
+        :align: center
+
+    All the stochastic input variables are listed at the left side of this tab.
+    By default no dependence is set between these variables.
+
+    To add dependence the user has to:
+      - create a group of at least two variables by selecting the variables in the list
+      - add this group in the table by clicking on the right arrow
+      - choose a copula in the list in the second column of the table.
+        If the group contains more than two variables only the normal copula is available.
+
+      .. image:: /user_manual/graphical_interface/probabilistic_analysis/copulasList.png
+          :align: center
+
+      - parametrize the copula at the right side of the window
+
+    By default the dependence is modeled by a Normal copula defined by a correlation matrix equal to
+    the identity matrix (so the variables are independent...)
+
+    The user may define correlation between the variables by modifying the upper triangular
+    part of the Spearman correlation matrix. OTGui handles automatically the symmetry of the correlation
+    matrix. The values are expected to be floating points or integers,
+    included in the interval :math:`\left[-1; 1\right]`.
+    The Spearman correlation matrix must be definite positive. If a wrong value is used, it will return
+    to its previous value and an error message will appear at the bottom of the window.
+
+    Example:
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelCorrelation.png
         :align: center
 
-    The user may define correlation between the variables by modifying the upper triangular
-    part of the Spearman correlation matrix. OTGui handles automatically the symmetry of the correlation
-    matrix. The Gaussian copula is used to model the dependency. By default all variables are set
-    independent. The values are expected to be floating points or integers,
-    included in the interval :math:`\left[-1; 1\right]`.
-    The Spearman correlation matrix must be definite positive. If a wrong value is used, it will return
-    to its previous value and an error message will appear at the bottom of the window.
+    To remove dependence, select a group in the table and click on the left arrow.
+
+    The icon |infoButton| is an hyperlink to the OpenTURNS documentation.
+
+    The user can configure the plot of the distribution and choose between PDF/CDF with the graphic
+    settings below the study tree.
+
+    The user can define:
+      - The title of the graph, expected to be a string;
+
+    It has two tabs, **X-axis** and **Y-axis** where the user can define:
+      - The axis title, expected to be a string;
+      - The minimum bound of the axis, expected to be a floating point;
+      - The maximum bound of the axis, expected to be a floating point.
+
+    The **Export** button opens a dialog box for the user to select where the
+    figure has to be saved.
+
+    In the copulas list, there is the item **Inference result**. If the current study has at least
+    a :ref:`dependence inference result <dependenceInference>`, when clicking on
+    this item, the following window appears:
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/dependenceInference_resultWizard.png
+        :align: center
+
+    The user can look for an analysis result with the **Inference analysis** combo box.
+    Then the user can choose a result of a group of variables with the **Group of variables** combo box.
+    The user can choose one copula in the displayed list. The right side of the window displays
+    the current copula PDF, Kendall plot and parameters.
+    The copulas with which the inference analysis failed ('-' indicated in the
+    **Bayesian Information Criterion** column) are
+    listed for convenience but it is not possible to validate the window when selecting one of them.
+
+    When clicking on the **Finish** button, the chosen copula is defined for the selected group of variables.
 
 2- Limit state
 ==============
@@ -141,75 +196,71 @@ to be floating points or integers. The available operators to define the failure
 3- Threshold exceedance analysis
 ================================
 
-3-1 Definition
-''''''''''''''
-
 The user can require a computation of the probability of failure relative to the limit state through:
   - the context menu of the relevant limit state;
   - the **Reliability** box of the physical model diagram.
+
+3-1 Definition
+''''''''''''''
 
 When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityAnalysis.png
     :align: center
 
-The window proposes two simulation methods:
+The window proposes simulation methods:
   - Monte Carlo
   - FORM - Importance sampling : the FORM algorithm starts from the result of the Importance sampling analysis
 
-and one approximation method:
+and approximation methods:
   - First Order Reliability Method (FORM)
+  - Second Order Reliability Method (SORM)
 
 Simulation methods
 ~~~~~~~~~~~~~~~~~~
 
-For the two simulation methods the user has to define the stop criteria of the algorithm.
-
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySimu.png
     :align: center
 
-- The maximum coefficient of variation for the probability, by default equal to 0.01,
-  expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
-- The maximum computation time, by default equal to one minute
-  (d means days, h means hours, m means minutes, s means seconds);
-- The maximum sampling size, by default equal to 10000 if this criterion is chosen,
-  expected to be an integer.
+For the two simulation methods the user has to define the stop criteria of the algorithm.
+  - The maximum coefficient of variation for the probability, by default equal to 0.01,
+    expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
+  - The maximum computation time, by default equal to one minute
+    (d means days, h means hours, m means minutes, s means seconds);
+  - The maximum sampling size, by default equal to 10000 if this criterion is chosen,
+    expected to be an integer.
 
 At least one criterion must be selected to validate the window.
 
 In the section **Evaluation parameter** the user can define:
-
-- The block size (i.e. number of runs launched at the same time), for parallelization purpose
-  (default: 1; integer expected). It must be inferior to the maximum sampling size.
+  - The block size (i.e. number of runs launched at the same time), for parallelization purpose
+    (default: 1; integer expected). It must be inferior to the maximum sampling size.
 
 In the advanced parameters (default: hidden), the user may also set:
+  - The seed of the random generator (default: 0, positive integer expected);
 
-- The seed of the random generator (default: 0, positive integer expected);
+Approximation methods
+~~~~~~~~~~~~~~~~~~~~~
 
-Approximation method
-~~~~~~~~~~~~~~~~~~~~
+For the approximation methods the user has to define optimization parameters:
+  - The algorithm method: Abdo-Rackwitz, Cobyla (default), SQP
+  - The starting point: by default it is the means of the distributions of the stochastic inputs
 
-For the FORM method the user has to define optimization parameters:
-
-- The algorithm method: Abdo-Rackwitz, Cobyla (default), SQP
-- The starting point: by default it is the means of the distributions of the stochastic inputs
-
-In the advanced parameters (default: hidden), the user may also set the stop criteria of the
-optimization:
-
-- The maximum number of iterations (default: 100, positive integer expected)
-- The errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
+In the advanced parameters (default: hidden), the user may also set the stop criteria of the optimization:
+  - The maximum number of iterations (default: 100, positive integer expected)
+  - The errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityApprox.png
     :align: center
 
-3-2 Results
-'''''''''''
+3-2 Launch
+''''''''''
 
 When validating the previous window, a new element appears in the study tree below an item
 named **Reliability**.
 
-Its context menu has two actions:
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
@@ -225,6 +276,9 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
 Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
 on the **Stop** button.
 
+3-3 Results
+'''''''''''
+
 When the analysis is finished or stopped, a new result window appears.
 
 Monte Carlo
@@ -232,7 +286,7 @@ Monte Carlo
 
 At the left of the result window the section **Output** reminds the user about the output used
 for the probability estimation.
-The result window has 3 tabs:
+The result window has the following tabs:
 
 - The **Summary** tab gathers:
     - The elapsed computation time;
@@ -265,7 +319,7 @@ FORM
 
 At the left of the result window the section **Output** reminds the user about the output used
 for the probability estimation.
-The result window has 4 tabs:
+The result window has the following tabs:
 
 - The **Summary** tab gathers:
     - The failure probability and the Hasofer reliability index
@@ -293,6 +347,19 @@ The result window has 4 tabs:
 
 - The **Parameters** tab reminds the user all the parameters values to perform the analysis.
 
+SORM
+~~~~
+
+The SORM result window contains the same tabs as the FORM result window.
+
+However the **Summary** tab contains additional results:
+  - The failure probability and the reliability index computed with the **Breitung** formula;
+  - The failure probability and the reliability index computed with the **Hohen Bichler** formula;
+  - The failure probability and the reliability index computed with the **Tvedt** formula.
+
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/sormResultWindow.png
+    :align: center
+
 FORM-IS
 ~~~~~~~
 
@@ -305,13 +372,13 @@ tab to display the tabs of a FORM result window.
 3- Central tendency analysis
 ============================
 
-3-1 Definition
-''''''''''''''
-
 New central tendency analysis can be created thanks to:
   - the context menu of the probabilistic model item;
   - the **Central tendency** box of the physical model diagram;
   - the context menu of the **Central tendency** item (if it already exists).
+
+3-1 Definition
+''''''''''''''
 
 When requiring this analysis the following window appears to define its parameters.
 
@@ -322,13 +389,13 @@ Two methods are available:
   - Monte Carlo sampling;
   - Taylor expansions (second order).
 
-The user can choose the outputs to analyse by clicking on the button **-- Select Outputs --**
+The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
     :align: center
 
-By default all the output variables are analysed.
+By default all the output variables are analyzed.
 
 Monte Carlo
 ~~~~~~~~~~~
@@ -337,26 +404,23 @@ Monte Carlo
     :align: center
 
 The user has to define the stop criteria of the algorithm.
-
-- The maximum coefficient of variation for the mean, by default equal to 0.01,
-  expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
-- The maximum computation time, by default equal to one minute
-  (d means days, h means hours, m means minutes, s means seconds);
-- The maximum sampling size, by default equal to 10000 if this criterion is chosen,
-  expected to be an integer.
+  - The maximum coefficient of variation for the mean, by default equal to 0.01,
+    expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
+  - The maximum computation time, by default equal to one minute
+    (d means days, h means hours, m means minutes, s means seconds);
+  - The maximum sampling size, by default equal to 10000 if this criterion is chosen,
+    expected to be an integer.
 
 At least one criterion must be selected to validate the window.
 
 In the section **Evaluation parameter** the user can define:
-
-- The block size (i.e. number of runs launched at the same time), for parallelization purpose
-  (default: 1; integer expected). It must be inferior to the maximum sampling size.
+  - The block size (i.e. number of runs launched at the same time), for parallelization purpose
+    (default: 1; integer expected). It must be inferior to the maximum sampling size.
 
 In the advanced parameters (default: hidden), the user can choose:
-
-- To compute the confidence interval thanks to the checkbox (default: checked)
-  at the given level;
-- To set the seed of the random generator (default: 0, positive integer expected).
+  - To compute the confidence interval thanks to the checkbox (default: checked)
+    at the given level;
+  - To set the seed of the random generator (default: 0, positive integer expected).
 
 Taylor expansions
 ~~~~~~~~~~~~~~~~~
@@ -364,13 +428,14 @@ Taylor expansions
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyTaylor.png
     :align: center
 
-3-2 Results
+3-2 Launch
 '''''''''''
 
 When validating the previous window, a new element appears in the study tree below an item
 named **Central tendency**.
 
-Its context menu has two actions:
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
@@ -385,6 +450,9 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
 
 Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
 on the **Stop** button.
+
+3-3 Results
+'''''''''''
 
 When the analysis is finished or stopped, a result window appears.
 
@@ -540,9 +608,6 @@ The results window gathers, for the selected output:
 4- Sensitivity analysis
 =======================
 
-4-1 Definition
-''''''''''''''
-
 New sensitivity analysis can be created thanks to:
   - the context menu of the probabilistic model item
   - the **Sensitivity** box of the physical model diagram
@@ -550,17 +615,19 @@ New sensitivity analysis can be created thanks to:
 
 The input variables must be independent to perform a sensitivity analysis.
 
+4-1 Definition
+''''''''''''''
+
 When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisMethods.png
     :align: center
 
 Two types of sensitivity indices are available:
+  - Sobol
+  - SRC (Standardised Regression Coefficient)
 
-- Sobol
-- SRC (Standardised Regression Coefficient)
-
-The user can choose the outputs to analyse by clicking on the button **-- Select Outputs --**
+The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
@@ -572,25 +639,25 @@ Sobol' indices
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSobol.png
     :align: center
 
-The user has to define the stop criteria of the algorithm.
-
-- The maximum coefficient of variation for the first order indices, by default equal to 0.01,
-  expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
-- The maximum computation time, by default equal to one minute
-  (d means days, h means hours, m means minutes, s means seconds);
-- The maximum calls, by default equal to 10000 if this criterion is chosen, expected to be an integer.
+The user has to define the stop criteria of the algorithm:
+  - The maximum coefficient of variation for the first order indices, by default equal to 0.01,
+    expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
+  - The maximum computation time, by default equal to one minute
+    (d means days, h means hours, m means minutes, s means seconds);
+  - The maximum calls, by default equal to 10000 if this criterion is chosen, expected to be an integer.
 
 At least one criterion must be selected to validate the window.
 
 In the section **Evaluation parameter** the user can define:
-
-- The block size (i.e. number of runs launched at the same time), for parallelization purpose
-  (default: 1; integer expected). It must be inferior to the maximum sampling size.
-  The resulting number of simulations (i.e. calls to the physical model) by iteration is given below;
+  - The block size (i.e. number of runs launched at the same time), for parallelization purpose
+    (default: 1; integer expected). It must be inferior to the maximum sampling size.
+    The resulting number of simulations (i.e. calls to the physical model) by iteration is given below;
 
 In the advanced parameters (default: hidden), the user can set:
-
-- The seed of the random generator (default: 0, positive integer expected).
+  - The Bootstrap sampling size (default: 100, positive integer expected) use
+    to compute the confidence intervals.
+  - The confidence level (default: 0.95; float expected).
+  - The seed of the random generator (default: 0, positive integer expected).
 
 The label number of calls by iteration is updated according to the given value
 of the block size.
@@ -621,13 +688,14 @@ In the advanced parameters (default: hidden), the user can set:
 - The seed of the random generator (default: 0, positive integer expected).
 
 
-4-2 Results
-'''''''''''
+4-2 Launch
+''''''''''
 
 When validating the previous window, a new element appears in the study tree below an item
 named **Sensitivity**.
 
-Its context menu has two actions:
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
@@ -643,6 +711,9 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
 Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
 on the **Stop** button.
 
+4-3 Results
+'''''''''''
+
 When the analysis is finished or stopped, a result window appears.
 
 Sobol' indices
@@ -652,11 +723,12 @@ Sobol' indices
     :align: center
 
 At the left of the result window the section **Outputs** enables the user to choose the result to display.
-The results window gathers 3 tabs:
+The results window gathers these tabs:
 
 - The **Indices** tab includes, for a selected output:
 
-  - The first and total order indices plotted for each input variable.
+  - The first and total order indices and there confidence intervals plotted
+    for each input variable.
     The user can configure the plot with the graphic settings (below the 
     study tree);
 
@@ -674,9 +746,9 @@ The results window gathers 3 tabs:
     The **Export** button opens a dialog box for the user to select where the
     figure has to be saved;
 
-  - A table with the first and total order indices value for each variable. Each
-    column can be sorted by clicking on its header. When sorting the table, the
-    points on the graphic are also sorted;
+  - A table with the first and total order indices value and there confidence
+    intervals for each variable. Each column of indices can be sorted by clicking
+    on its header. When sorting the table, the points on the graph are also sorted;
 
   - The index corresponding to the interactions;
 

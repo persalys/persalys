@@ -2,11 +2,11 @@
 User manual - Deterministic analyses
 ====================================
 
-The OTGui allows the user to launch three types of deterministic analyses:
-
-- Model evaluations;
-- Designs of experiments for model evaluations on a set of input values;
-- Screening.
+The OTGui allows the user to launch the following types of deterministic analyses:
+  - Designs of experiments for model evaluations on a set of input values;
+  - Model evaluations;
+  - Screening;
+  - Optimization.
 
 .. _deterministicStudy:
 
@@ -15,19 +15,20 @@ The OTGui allows the user to launch three types of deterministic analyses:
 
 The user may evaluate the physical model for defined input values.
 
+New model evaluations can be created through:
+  - the context menu of the **Definition** item of the relevant physical model in the study tree;
+  - the **Model evaluation** box of the model diagram
+  - the context menu of the **Evaluation** item (if it already exists).
+
 1-1 Definition
 ''''''''''''''
 
-New model evaluations can be created through:
-
-- the context menu of the **Definition** item of the relevant physical model in the study tree;
-- the **Model evaluation** box of the model diagram
-- the context menu of the **Evaluation** item (if it already exists).
+When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluation.png
     :align: center
 
-In the resulting window, the user has to define the value of each input variable
+The user has to define the value of each input variable
 for which the evaluation has to be performed. The values are expected
 to be floating points or integer. The default values are the ones defined in the physical
 model window.
@@ -40,7 +41,7 @@ at the top of the window:
 
 By default all the output variables are evaluated.
 
-3-2 Results
+3-2 Launch
 '''''''''''
 
 When validating this window, a new element appears in the study tree below an item
@@ -49,7 +50,8 @@ When validating this window, a new element appears in the study tree below an it
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluationItem.png
     :align: center
 
-Its context menu has two actions:
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
@@ -63,6 +65,9 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
     :align: center
 
 Click on the **Start** button launches the evaluation.
+
+3-3 Results
+'''''''''''
 
 When the evaluation is finished, a result window appears. It gathers the coordinates of
 the evaluation point and the corresponding output values.
@@ -80,11 +85,10 @@ The user may defined a set of input values and then evaluate output variable at 
 ''''''''''''''''''''''''''''''''''
 
 New design of experiments can be created through:
-
-- the context menu of the relevant model in the study tree (item **Definition** and
-  item **Probabilistic model** if it exists);
-- the **Design of experiments creation** box of the model diagram
-- the context menu of the **Designs of experiments** item (if it already exists).
+  - the context menu of the relevant model in the study tree (item **Definition** and
+    item **Probabilistic model** if it exists);
+  - the **Design of experiments creation** box of the model diagram
+  - the context menu of the **Designs of experiments** item (if it already exists).
 
 In the resulting window, the user has to choose between three types of design prior to
 click on the **Continue** button:
@@ -129,17 +133,15 @@ Define a probabilistic model to make this option available.
     :align: center
 
 Three types of designs are available:
-
-- LHS (Latin Hyper Cube)
-- Monte Carlo
-- Quasi-Monte Carlo
+  - LHS (Latin Hyper Cube)
+  - Monte Carlo
+  - Quasi-Monte Carlo
 
 If input variables are correlated, only the Monte Carlo design is available.
 
 The user may set:
-
-- the size of the design of experiments;
-- the seed the random generator (default: 0, positive integer expected).
+  - the size of the design of experiments;
+  - the seed the random generator (default: 0, positive integer expected).
 
 2-1-3 Import data
 ~~~~~~~~~~~~~~~~~
@@ -163,8 +165,14 @@ the design of experiments appears in a table.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableX.png
     :align: center
 
-The context menu of this new item proposes to modify the design of experiments, to evaluate it,
-or to remove it.
+Its context menu has the following actions:
+  - **Rename**: Rename the design of experiments;
+  - **Modify**: Reopen the setting window to change the design of experiments parameters
+    (modify the inputs values leads to remove the output values from the design of experiments);
+  - **Export data**: Export the design of experiments into a file;
+  - **Evaluate**: Open a setting window to evaluate the model at the input points
+    (if the design of experiments contains already output values, this item is disabled);
+  - **Remove**: Remove the design of experiments from the study.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentContextMenu.png
     :align: center
@@ -172,29 +180,26 @@ or to remove it.
 2-2 Design of experiments evaluation
 ''''''''''''''''''''''''''''''''''''
 
+New design of experiments can be evaluated through:
+  - the context menu of the relevant design in the study tree;
+  - the **Design of experiments evaluation** box of the model diagram
+
 2-2-1 Definition
 ~~~~~~~~~~~~~~~~
 
-New design of experiments can be evaluated through:
-
-- the context menu of the relevant design in the study tree;
-- the **Design of experiments evaluation** box of the model diagram
-
 When requiring an evaluation a window appears to set:
+  - the interest output variables (at least one of the listed outputs to validate the window);
+  - the block size (i.e. number of runs launched at the same time), for parallelization purpose
+    (default: 1; integer expected). It must be inferior to the input sample size.
 
-- the interest output variables (at least one of the listed outputs to validate the window);
-- the block size (i.e. number of runs launched at the same time), for parallelization purpose
-  (default: 1; integer expected). It must be inferior to the input sample size.
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentEvaluationWizard.png
-    :align: center
-
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentEvaluationWizard.png
+      :align: center
 
 When clicking on the box of the model diagram, if the physical model contains several
 not evaluated design of experiments, this window lists all of them in the combo box of the
 **Design of experiments** section.
 
-2-2-2 Results
+2-2-2 Launch
 ~~~~~~~~~~~~~
 
 When validating this window, a new item named **Evaluation** is added in the study tree below
@@ -216,6 +221,8 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
 Click on **Start** launches the model evaluation on all the points defined in the
 design of experiments. The user can stop the evaluation by clicking on the **Stop** button.
 
+2-2-3 Results
+~~~~~~~~~~~~~
 
 When the analysis is finished or stopped, the following window appears.
 
@@ -227,7 +234,7 @@ The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Sc
 are linked. It means that when the user select some points on one of these representations,
 these points are automatically selected on the others.
 
-- The **Min/Max** tab summarizes the result of the design. The minimum and maximum values
+- The **Summary** tab summarizes the result of the design. The minimum and maximum values
   of the selected output (at the left of the window) are presented with the input values which has
   led to these extrema.
 
@@ -356,12 +363,12 @@ these points are automatically selected on the others.
 
 OTGui proposes one method of screening, the `Morris method <http://openturns.github.io/otmorris/master/index.html>`_.
 
-3-1 Definition
-''''''''''''''
-
 New screening analysis can be created thanks to:
   - the context menu of the **Definition** item of the relevant physical model in the study tree;
   - the **Screening** box of the physical model diagram.
+
+3-1 Definition
+''''''''''''''
 
 When requiring this analysis the following window appears to define its parameters.
 
@@ -371,13 +378,13 @@ When requiring this analysis the following window appears to define its paramete
 One method is available:
   - Morris.
 
-The user can choose the outputs to analyse by clicking on the button **-- Select Outputs --**
+The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
 at the top of the window:
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
     :align: center
 
-By default all the output variables are analysed.
+By default all the output variables are analyzed.
 
 On the second page, the user has to define the lower and upper bounds for each variable.
 The values of the variables will be regularly spaced between these bounds.
@@ -386,9 +393,8 @@ The values of the variables will be regularly spaced between these bounds.
     :align: center
 
 In the section **Parameters**, on the third page, the user can define:
-
-- The number of trajectories (default: 10; integer expected)
-- The level (default: 5; integer expected) to define a regular grid.
+  - The number of trajectories (default: 10; integer expected)
+  - The level (default: 5; integer expected) to define a regular grid.
 
 In the advanced parameters (default: hidden), the user can define:
 
@@ -398,13 +404,14 @@ In the advanced parameters (default: hidden), the user can define:
     :align: center
 
 
-3-2 Results
+3-2 Launch
 ''''''''''''''
 
 When validating the previous window, a new element appears in the study tree below an item
-named **Sensitivity**.
+named **Screening**.
 
-Its context menu has two actions:
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
@@ -416,6 +423,9 @@ progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
 
 Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
 on the **Stop** button.
+
+3-3 Results
+''''''''''''''
 
 When the analysis is finished or stopped, a result window appears.
 
@@ -528,7 +538,7 @@ The results window gathers 6 tabs:
 
 - The **Parameters** tab reminds the user all the parameters values to perform the analysis.
 
-3-3 Use results
+3-4 Use results
 ''''''''''''''''''
 
 In the :ref:`probabilistic model <probaModel>` definition window, click on the button **Import Morris result**
@@ -549,3 +559,115 @@ The probabilistic model is modified as follows:
     :align: center
 
 Of course loading a result while all the input variables are already deterministic will not work...
+
+4- Optimization
+===============
+
+The user may optimize the physical model.
+
+New model optimization can be created through:
+  - the context menu of the **Definition** item of the relevant physical model in the study tree;
+  - the **Optimization** box of the model diagram
+  - the context menu of the **Optimization** item (if it already exists).
+
+4-1 Definition
+''''''''''''''
+
+When requiring this analysis the following window appears to define its parameters.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardFirstPage.png
+    :align: center
+
+The first page enables to define the output to optimize
+by clicking on the button **-- Select outputs --** at the top of the window:
+
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
+    :align: center
+
+By default the first output variable is optimized.
+
+The user may also define the method of optimization. **Cobyla** is used by default.
+The two first methods **Cobyla** and **TNC** are proposed by OpenTURNS.
+The other methods are solvers from the non-linear optimization library NLopt (if it is installed).
+
+When clicking on the **Continue** button the following page appears:
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardSecondPage.png
+    :align: center
+
+The user can choose the inputs which will vary by selecting the corresponding line
+in the first column of the table. At least one input must vary.
+
+The user has to define the starting point of the optimization in the third column
+of the table. The default values are the ones defined in the physical model window.
+
+The fourth and fifth columns enable to define the bounds of the variable inputs.
+The lower bound must be lesser than the upper bound.
+The fourth and fifth columns are checkable to specify if the bounds are finite or not.
+The interval of the variable inputs must contain the initial value written in the
+third column.
+
+The values of the table are expected to be floating points or integer.
+
+When a rule is not respected, the input name is colored in red, when clicking on
+the **Continue** button an error message appears and it is impossible to go to the next page.
+
+When clicking on the **Continue** button the following page appears:
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardThirdPage.png
+    :align: center
+
+The user has to define the type of the optimization:
+  - Minimization or Maximization (default: Minimization)
+
+The user may also set the stop criteria of the optimization:
+  - The maximum number of functin evaluations (default: 100, positive integer expected)
+  - The errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
+
+
+4-2 Launch
+''''''''''
+
+When validating this window, a new element appears in the study tree below an item
+**Optimization**.
+
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis;
+  - **Modify**: Reopen the setting window to change the analysis parameters;
+  - **Remove**: Remove the analysis from the study.
+
+.. image:: /user_manual/graphical_interface/probabilistic_analysis/analysisContextMenu.png
+    :align: center
+
+This item is associated with a window displaying the list of the parameters, a
+progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWindow.png
+    :align: center
+
+Click on the **Start** button launches the evaluation.
+
+4-3 Results
+'''''''''''
+
+When the analysis is finished, a result window appears.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationResultWindow.png
+    :align: center
+
+The results window gathers the following tabs:
+
+- The **Result** tab includes
+    - The optimal point
+    - The optimization stop criteria value:
+        - The number of function evaluations;
+        - The errors: absolute, relative, residual and constraint errors.
+
+- The **Convergence** tab includes:
+    - The optimal value convergence graph
+    - The convergence graph of the errors
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationResultWindowConvergence.png
+      :align: center
+
+- The **Parameters** tab reminds the user all the parameters values to perform the analysis.
