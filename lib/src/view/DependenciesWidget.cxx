@@ -257,7 +257,7 @@ void DependenciesWidget::addCopula()
   // check if at least two variables
   if (selectedVars.getSize() < 2)
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("Define at least a group of two variables"));
+    errorMessageLabel_->setTemporaryErrorMessage(tr("Define at least one group of two variables"));
     return;
   }
   // check the variables are not used elsewhere

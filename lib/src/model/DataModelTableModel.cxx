@@ -298,7 +298,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
   // emit error if all variables are disabled
   emit errorMessageChanged("");
   if (!inputColumns_.getSize() && !outputColumns_.getSize())
-    emit errorMessageChanged(tr("Define at least a variable"));
+    emit errorMessageChanged(tr("Define at least one variable"));
 
   dataModel_->blockNotification();
 

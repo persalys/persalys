@@ -224,7 +224,7 @@ void CopulaInferenceWizard::defineGroup()
   QString errorMessage;
   if (selectedVars.getSize() < 2)
   {
-    errorMessage = tr("Define at least a group of two variables");
+    errorMessage = tr("Define at least one group of two variables");
   }
   selectedVars.sort();
   // check if group already exists
@@ -283,7 +283,7 @@ bool CopulaInferenceWizard::validateCurrentPage()
   // check at least a group of variables
   if (!tableModel_->rowCount())
   {
-    const QString errorMessage = tr("Define at least a group of variables associated with a list of copulas");
+    const QString errorMessage = tr("Define at least one group of variables associated with a list of copulas");
     errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
     return false;
   }
