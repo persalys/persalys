@@ -578,7 +578,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="227"/>
-        <source>Define at least a group of two variables</source>
+        <source>Define at least one group of two variables</source>
         <translation>Définir au moins un groupe de deux variables</translation>
     </message>
     <message>
@@ -588,7 +588,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="286"/>
-        <source>Define at least a group of variables associated with a list of copulas</source>
+        <source>Define at least one group of variables associated with a list of copulas</source>
         <translation>Définir au moins un groupe de variables associé à une liste de copules</translation>
     </message>
     <message>
@@ -749,12 +749,12 @@ bayésien (BIC)</translation>
         <translation>Estimation de la matrice de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="198"/>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="191"/>
         <source>Spearman&apos;s coefficient</source>
         <translation>Coefficient de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="212"/>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="205"/>
         <source>Dependence</source>
         <translation>Dépendance</translation>
     </message>
@@ -1079,7 +1079,7 @@ données</translation>
     <message>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="73"/>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="85"/>
-        <source>Define at least a variable</source>
+        <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
     <message>
@@ -1126,7 +1126,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="109"/>
-        <source>Define at least an input variable and an output variable</source>
+        <source>Define at least one input variable and one output variable</source>
         <translation>Définir au moins une variable d&apos;entrée et une variable de sortie</translation>
     </message>
 </context>
@@ -1169,7 +1169,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DataModelTableModel.cxx" line="301"/>
-        <source>Define at least a variable</source>
+        <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
 </context>
@@ -1364,7 +1364,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DependenciesWidget.cxx" line="260"/>
-        <source>Define at least a group of two variables</source>
+        <source>Define at least one group of two variables</source>
         <translation>Définir au moins un groupe de deux variables</translation>
     </message>
     <message>
@@ -4758,7 +4758,7 @@ d&apos;expériences</translation>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="101"/>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="125"/>
-        <source>Define at least an input variable</source>
+        <source>Define at least one input variable</source>
         <translation>Définir au moins une variable d&apos;entrée</translation>
     </message>
     <message>
@@ -4796,7 +4796,7 @@ d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="137"/>
-        <source>Create at least a design of experiments and define output variables in the model</source>
+        <source>Create at least one design of experiments and define output variables in the model</source>
         <translation>Créer au moins un plan d&apos;expériences et définir des variables de sortie dans le modèle</translation>
     </message>
     <message>
@@ -4816,7 +4816,7 @@ d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="185"/>
-        <source>Define at least a design of experiments which contains output values</source>
+        <source>Define at least one design of experiments which contains output values</source>
         <translation>Définir au moins un plan d&apos;expériences qui contient des valeurs de sortie</translation>
     </message>
     <message>
@@ -4826,7 +4826,7 @@ d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="197"/>
-        <source>Define output variables in the model and at least a limit state</source>
+        <source>Define output variables in the model and at least one limit state</source>
         <translation>Définir des variables de sortie et au moins un état limite</translation>
     </message>
     <message>
