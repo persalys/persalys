@@ -186,16 +186,16 @@ void DataAnalysisResultWindow::addDependenceTab()
   {
     QPixmap px(20, 20);
     px.fill(colors[i]);
-    QTableWidgetItem * item = new QTableWidgetItem(px, labels[i]);
-    colorTable->setItem(i, 0, item);
+    colorTable->setItem(i, 0, new QTableWidgetItem(px, labels[i]));
   }
-  colorTable->setHorizontalHeaderLabels(QStringList() << tr("Spearman's\ncoefficient"));
+  colorTable->setHorizontalHeaderLabels(QStringList() << tr("Spearman's coefficient"));
   colorTable->resizeColumnsToContents();
   colorTable->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   const int w = colorTable->horizontalHeader()->length();
+  const int h = colorTable->verticalHeader()->length() + colorTable->horizontalHeader()->height();
   int x1, y1, x2, y2;
   colorTable->getContentsMargins(&x1, &y1, &x2, &y2);
-  colorTable->setFixedWidth(w + x1 + x2);
+  colorTable->setFixedSize(w + x1 + x2, h + y1 + y2);
   colorTable->verticalHeader()->hide();
 
   gpBoxLayout->addWidget(colorTable, 0, Qt::AlignTop);
