@@ -93,8 +93,8 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 
   DiagramPushButton * copulaInferenceButton = new DiagramPushButton;
   copulaInferenceButton->setText(tr("Dependence\ninference"));
-  copulaInferenceButton->setWhatsThis(tr("Test the dependence of the input variables"));
-  copulaInferenceButton->setErrorMessage(tr("Define at least two input variables"));
+  copulaInferenceButton->setWhatsThis(tr("Test the dependence of the variables"));
+  copulaInferenceButton->setErrorMessage(tr("Define at least two variables"));
   QGraphicsProxyWidget * copulaInferenceProxy = new QGraphicsProxyWidget;
   copulaInferenceProxy->setWidget(copulaInferenceButton);
   scene->addItem(copulaInferenceProxy);

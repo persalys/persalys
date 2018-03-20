@@ -309,8 +309,8 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
     nPWithDesc = nPWithDescColl[0];
 
     Description description(2);
-    description[0] = "mean";
-    description[1] = "standard deviation";
+    description[0] = "mu";
+    description[1] = "sigma";
     nPWithDesc.setDescription(description);
 
     nPWithDescColl[0] = nPWithDesc;
@@ -321,8 +321,8 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
 
     Description description(3);
     description[0] = "nu";
-    description[1] = "mean";
-    description[2] = "standard deviation";
+    description[1] = "mu";
+    description[2] = "sigma";
     nPWithDesc.setDescription(description);
 
     nPWithDescColl[0] = nPWithDesc;

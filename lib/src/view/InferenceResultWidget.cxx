@@ -25,6 +25,7 @@
 #include "otgui/WidgetBoundToDockWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/TranslationManager.hxx"
+#include "otgui/DistributionDictionary.hxx"
 
 #include <openturns/VisualTest.hxx>
 
@@ -372,11 +373,12 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     distParamTableView_->setSpan(row, 0, 1, 2);
     distParamTableModel_->setData(distParamTableModel_->index(row, 0), font, Qt::FontRole);
 
-    for (UnsignedInteger i = 0; i < distribution.getParameterDescription().getSize(); ++i)
+    const PointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[0];
+    for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
     {
-      const QString param(TranslationManager::GetTranslatedDistributionParameterName(distribution.getParameterDescription()[i]));
+      const QString param(TranslationManager::GetTranslatedDistributionParameterName(parameters.getDescription()[i]));
       distParamTableModel_->setNotEditableHeaderItem(++row, 0, param);
-      distParamTableModel_->setNotEditableItem(row, 1, distribution.getParameter()[i]);
+      distParamTableModel_->setNotEditableItem(row, 1, parameters[i]);
     }
   }
   distParamTableModel_->setNotEditableItem(++row, 0, tr("Moments"));

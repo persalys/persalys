@@ -50,8 +50,12 @@ public:
       return;
     }
 
+    // draw a radio button
     QStyleOptionButton optionButton;
     optionButton.rect = option.rect;
+    // add margin before the radio button
+    const int buttonMargin = 3;
+    optionButton.rect.translate(buttonMargin, 0);
     optionButton.text  = index.data(Qt::DisplayRole).toString();
 
     if (index.data(Qt::CheckStateRole).toBool())
@@ -67,7 +71,10 @@ public:
 
   virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
   {
-    return QRadioButton(index.data(Qt::DisplayRole).toString()).sizeHint();
+    const QSize buttonSize = QRadioButton(index.data(Qt::DisplayRole).toString()).sizeHint();
+    const int buttonMargin = 3;
+    const int epsilon = 15; // correction for Windows
+    return buttonSize + QSize(buttonMargin + epsilon, 0);
   }
 
 private:
