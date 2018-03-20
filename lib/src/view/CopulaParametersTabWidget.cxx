@@ -213,7 +213,8 @@ void CopulaParametersTabWidget::buildInterface()
   {
     distParamTableView->horizontalHeader()->hide();
     distParamTableView->verticalHeader()->hide();
-    distParamTableModel->setNotEditableHeaderItem(0, 0, distribution_.getParameterDescription()[0].c_str());
+    const QString paramName = TranslationManager::GetTranslatedDistributionParameterName(distribution_.getParameterDescription()[0]);
+    distParamTableModel->setNotEditableHeaderItem(0, 0, paramName);
     distParamTableModel->setNotEditableItem(0, 1, distribution_.getParameter()[0]);
   }
   // --- resize
