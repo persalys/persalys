@@ -84,9 +84,9 @@ void DesignOfExperimentIntroPage::initialize(const Analysis& analysis)
   // method
   const String analysisName = analysis.getImplementation()->getClassName();
 
-  if (analysisName == "ProbabilisticDesignOfExperiment")
+  if (analysisName == "ProbabilisticDesignOfExperiment" && analysis_ptr->getPhysicalModel().hasStochasticInputs())
     methodGroup_->button(DesignOfExperimentIntroPage::probabilistic)->click();
-  else if (analysisName == "ImportedDesignOfExperiment" && analysis_ptr->getPhysicalModel().hasStochasticInputs())
+  else if (analysisName == "ImportedDesignOfExperiment")
     methodGroup_->button(DesignOfExperimentIntroPage::import)->click();
   else
     methodGroup_->button(DesignOfExperimentIntroPage::deterministic)->click();
