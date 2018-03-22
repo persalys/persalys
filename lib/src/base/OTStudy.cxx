@@ -112,7 +112,10 @@ void OTStudy::Open(const String & xmlFileName)
   // check path
   boost::filesystem::path canonicalPath = boost::filesystem::canonical(xmlFileName);
 
-  if (GetFileNames().contains(canonicalPath.string()))
+  // TODO convert to utf-8
+  const String fileName = canonicalPath.string();
+
+  if (GetFileNames().contains(fileName))
     throw InvalidArgumentException (HERE) << "This study is already opened";
 
   // open study
@@ -121,7 +124,7 @@ void OTStudy::Open(const String & xmlFileName)
   study.load();
   OTStudy openedStudy;
   study.fillObject("otstudy", openedStudy);
-  openedStudy.getImplementation()->setFileName(canonicalPath.string());
+  openedStudy.getImplementation()->setFileName(fileName);
   Add(openedStudy);
 }
 

@@ -101,40 +101,38 @@ void DataModel::setFileName(const String& fileName)
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
 
+  // get sample from file
+  sampleFromFile_ = getSampleFromFile(fileName);
+
+  // save file path
   const String oldFileName = fileName_;
-  sampleFromFile_.clear();
+  // TODO convert to utf-8
   fileName_ = fileName;
-  try
-  {
-    getSampleFromFile();
-  }
-  catch (std::exception& ex)
-  {
-    fileName_ = oldFileName;
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
 
   // set columns and names
   bool validArg = false;
+  // if reload file
   if (fileName_ == oldFileName)
   {
     try
     {
+      // try to use the same indices
       setColumns(inputColumns_, outputColumns_, inputNames_, outputNames_);
       validArg = true;
     }
     catch (std::exception)
     {
+      // if the file content has changed
     }
   }
   // default values if needed
   if (!validArg)
   {
     const UnsignedInteger dim = sampleFromFile_.getDimension();
-    inputColumns_ = Indices(dim > 1 ? dim - 1 : 1);
-    inputColumns_.fill();
-    outputColumns_ = Indices(dim > 1 ? 1 : 0, dim - 1);
-    setColumns(inputColumns_, outputColumns_);
+    Indices inputColumns(dim > 1 ? dim - 1 : 1);
+    inputColumns.fill();
+    Indices outputColumns(dim > 1 ? 1 : 0, dim - 1);
+    setColumns(inputColumns, outputColumns);
   }
 }
 
@@ -252,24 +250,28 @@ Description DataModel::getOutputNames()
 }
 
 
-Sample DataModel::getSampleFromFile()
+Sample DataModel::getSampleFromFile() const
 {
-  if (!sampleFromFile_.getSize())
-  {
-    sampleFromFile_ = ImportedDesignOfExperiment::ImportSample(fileName_);
-
-    // check the sample description
-    const Description sampleDescription(sampleFromFile_.getDescription());
-    Description descriptionToCheck;
-    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
-      if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
-        descriptionToCheck.add(sampleDescription[i]);
-
-    // if empty name or at least two same names
-    if (descriptionToCheck.getSize() != sampleDescription.getSize())
-      sampleFromFile_.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
-  }
   return sampleFromFile_;
+}
+
+
+Sample DataModel::getSampleFromFile(const String& fileName)
+{
+  Sample sampleFromFile(ImportedDesignOfExperiment::ImportSample(fileName));
+
+  // check the sample description
+  const Description sampleDescription(sampleFromFile.getDescription());
+  Description descriptionToCheck;
+  for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
+    if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
+      descriptionToCheck.add(sampleDescription[i]);
+
+  // if empty name or at least two same names
+  if (descriptionToCheck.getSize() != sampleDescription.getSize())
+    sampleFromFile.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
+
+  return sampleFromFile;
 }
 
 

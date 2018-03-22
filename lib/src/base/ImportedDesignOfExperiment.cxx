@@ -92,38 +92,37 @@ void ImportedDesignOfExperiment::setFileName(const String& fileName)
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
 
+  // get sample from file
+  sampleFromFile_ = getSampleFromFile(fileName);
+
+  // save file path
   const String oldFileName = fileName_;
-  sampleFromFile_.clear();
+  // TODO convert to utf-8
   fileName_ = fileName;
-  try
-  {
-    getSampleFromFile();
-  }
-  catch (std::exception& ex)
-  {
-    fileName_ = oldFileName;
-    throw InvalidArgumentException(HERE) << ex.what();
-  }
 
   // set columns and names
   bool validArg = false;
+  // if reload file
   if (fileName_ == oldFileName)
   {
     try
     {
+      // try to use the same indices
       setInputColumns(inputColumns_);
       validArg = true;
     }
     catch (std::exception)
     {
+      // if the number of input variables in the physical model have changed
+      // of if the file content has changed
     }
   }
   // default values if needed
   if (!validArg)
   {
-    inputColumns_ = Indices(getPhysicalModel().getInputDimension());
-    inputColumns_.fill();
-    setInputColumns(inputColumns_);
+    Indices inputColumns(getPhysicalModel().getInputDimension());
+    inputColumns.fill();
+    setInputColumns(inputColumns);
   }
 }
 
@@ -157,29 +156,35 @@ void ImportedDesignOfExperiment::setInputColumns(const Indices& inputColumns)
 
 Sample ImportedDesignOfExperiment::getSampleFromFile() const
 {
-  if (!sampleFromFile_.getSize())
-  {
-    const Sample sampleFromFile(ImportSample(fileName_));
-
-    // check sampleFromFile dimension
-    const Description inputNames = getPhysicalModel().getInputNames();
-    if (sampleFromFile.getDimension() < inputNames.getSize())
-      throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension lesser than the number of inputs of the physical model: "
-                                           << inputNames.getSize();
-    sampleFromFile_ = sampleFromFile;
-
-    // check the sample description
-    const Description sampleDescription(sampleFromFile_.getDescription());
-    Description descriptionToCheck;
-    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
-      if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
-        descriptionToCheck.add(sampleDescription[i]);
-
-    // if empty name or at least two same names
-    if (descriptionToCheck.getSize() != sampleDescription.getSize())
-      sampleFromFile_.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
-  }
+  // TODO reload file if empty
+  // when we will be able to retrieve ImportedDesignOfExperiment object
+  // in the Python console (use boost::locale::conv::from_utf ?)
   return sampleFromFile_;
+}
+
+
+Sample ImportedDesignOfExperiment::getSampleFromFile(const String& fileName) const
+{
+  Sample sampleFromFile(ImportSample(fileName));
+
+  // check sampleFromFile dimension
+  const Description inputNames = getPhysicalModel().getInputNames();
+  if (sampleFromFile.getDimension() < inputNames.getSize())
+    throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension lesser than the number of inputs of the physical model: "
+                                          << inputNames.getSize();
+
+  // check the sample description
+  const Description sampleDescription(sampleFromFile.getDescription());
+  Description descriptionToCheck;
+  for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
+    if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
+      descriptionToCheck.add(sampleDescription[i]);
+
+  // if empty name or at least two same names
+  if (descriptionToCheck.getSize() != sampleDescription.getSize())
+    sampleFromFile.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
+
+  return sampleFromFile;
 }
 
 

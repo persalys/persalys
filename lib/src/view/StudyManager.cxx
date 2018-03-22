@@ -456,10 +456,11 @@ bool StudyManager::save(OTStudyItem* studyItem)
     showErrorMessage(tr("Can not save the current study"));
     return false;
   }
-  if (QFileInfo(QString::fromUtf8(studyItem->getOTStudy().getFileName().c_str())).exists())
+  const QFileInfo file(QString::fromUtf8(studyItem->getOTStudy().getFileName().c_str()));
+  if (file.exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    studyItem->getOTStudy().save(studyItem->getOTStudy().getFileName());
+    studyItem->getOTStudy().save(file.absoluteFilePath().toLocal8Bit().data());
     QApplication::restoreOverrideCursor();
     return true;
   }
@@ -524,7 +525,7 @@ void StudyManager::open(const QString& recentFileName)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   try
   {
-    OTStudy::Open(fileName.toUtf8().constData());
+    OTStudy::Open(fileName.toLocal8Bit().constData());
     emit recentFilesListChanged(fileName);
   }
   catch (std::exception & ex)

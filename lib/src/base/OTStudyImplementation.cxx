@@ -652,7 +652,11 @@ void OTStudyImplementation::save(const String& xmlFileName)
   study.setStorageManager(XMLStorageManager(xmlFileName));
   study.add("otstudy", this->clone());
   study.save();
-  setFileName(xmlFileName);
+
+  // TODO convert to utf-8
+  const String fileName = xmlFileName;
+
+  setFileName(fileName);
   modified_ = false;
   notify("statusChanged");
 }

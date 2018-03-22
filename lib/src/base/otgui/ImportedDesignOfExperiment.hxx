@@ -64,6 +64,7 @@ public:
   void load(OT::Advocate& adv);
 
 protected:
+  OT::Sample getSampleFromFile(const OT::String& fileName) const;
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
 
 protected:
