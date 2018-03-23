@@ -50,6 +50,7 @@ RequestExecutionLevel user
 
 ; MUI Settings
 !define MUI_ABORTWARNING
+!define MUI_ICON "otgui.ico"
 
 ; Language Selection Dialog Settings
 !define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
@@ -384,10 +385,10 @@ Section -AdditionalIcons
   SetOutPath "$MODULE_INSTALL_PATH"
 
   CreateDirectory "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}"
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" "" 0
-  ;CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" "" 1
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" "" 2
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\otgui.lnk" "$MODULE_INSTALL_PATH\otgui.vbs" "" "$MODULE_INSTALL_PATH\otgui.ico" 3
+  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" ""
+  ;CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" ""
+  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" ""
+  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\otgui.lnk" "$MODULE_INSTALL_PATH\otgui.vbs" "" "$MODULE_INSTALL_PATH\otgui.ico"
 SectionEnd
 
 

@@ -9,9 +9,9 @@ include_directories (${CMAKE_SOURCE_DIR}/lib/src/view/PyConsole)
 
 if (OTFMI_FOUND)
   # fmi make gui application crash, so use a console application
-  add_executable (otgui main.cxx)
+  add_executable (otgui main.cxx gui.rc)
 else ()
-  add_executable (otgui WIN32 main.cxx)
+  add_executable (otgui WIN32 main.cxx gui.rc)
 endif ()
 
 target_link_libraries (otgui otguiview)
