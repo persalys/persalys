@@ -209,9 +209,9 @@ QString TranslationManager::GetTranslatedDistributionParameterName(const std::st
     InitializeDistributionsParametersNames();
 
   QString paramName = name.c_str();
-  if (paramName == "mean")
+  if (paramName == "mean_0")
     paramName = "mu";
-  else if (paramName == "standard deviation")
+  else if (paramName == "standard_deviation_0")
     paramName = "sigma";
 
   bimap_type::left_const_iterator left_iter = DistributionsParametersNames_.left.find(paramName);
