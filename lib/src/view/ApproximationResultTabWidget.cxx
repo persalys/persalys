@@ -165,6 +165,8 @@ void ApproximationResultTabWidget::buildInterface()
     }
 
     // failure probability table
+
+    // -- Hasofer (FORM)
     namesList << tr("Failure probability (FORM)")
               << tr("Reliability index");
     valuesList << QString::number(eventProba)
@@ -173,28 +175,72 @@ void ApproximationResultTabWidget::buildInterface()
     ParametersWidget * parametersTable = new ParametersWidget(tr("Hasofer's formula"), namesList, valuesList, true, true);
     groupBoxLayout->addWidget(parametersTable);
 
-    // failure probability table
+    QString errorMessage;
+
     namesList[0] = tr("Failure probability");
 
-    valuesList[0] = QString::number(sormResult_.getEventProbabilityBreitung());
-    valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexBreitung());
+    // -- Breitung
+    try
+    {
+      valuesList[0] = QString::number(sormResult_.getEventProbabilityBreitung());
+      valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexBreitung());
+    }
+    catch (std::exception &ex)
+    {
+      valuesList[0] = "-";
+      valuesList[1] = "-";
+      errorMessage = ex.what();
+    }
 
     parametersTable = new ParametersWidget(tr("Breitung's formula"), namesList, valuesList, true, true);
     groupBoxLayout->addWidget(parametersTable);
+    if (!errorMessage.isEmpty())
+    {
+      groupBoxLayout->addWidget(new QLabel(QString("<font color=red>%1</font>").arg(errorMessage)));
+      errorMessage.clear();
+    }
 
-    // failure probability table
-    valuesList[0] = QString::number(sormResult_.getEventProbabilityHohenBichler());
-    valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexHohenBichler());
+    // -- HohenBichler
+    try
+    {
+      valuesList[0] = QString::number(sormResult_.getEventProbabilityHohenBichler());
+      valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexHohenBichler());
+    }
+    catch (std::exception &ex)
+    {
+      valuesList[0] = "-";
+      valuesList[1] = "-";
+      errorMessage = ex.what();
+    }
 
     parametersTable = new ParametersWidget(tr("Hohen Bichler's formula"), namesList, valuesList, true, true);
     groupBoxLayout->addWidget(parametersTable);
+    if (!errorMessage.isEmpty())
+    {
+      groupBoxLayout->addWidget(new QLabel(QString("<font color=red>%1</font>").arg(errorMessage)));
+      errorMessage.clear();
+    }
 
-    // failure probability table
-    valuesList[0] = QString::number(sormResult_.getEventProbabilityTvedt());
-    valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexTvedt());
+    // -- Tvedt
+    try
+    {
+      valuesList[0] = QString::number(sormResult_.getEventProbabilityTvedt());
+      valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexTvedt());
+    }
+    catch (std::exception &ex)
+    {
+      valuesList[0] = "-";
+      valuesList[1] = "-";
+      errorMessage = ex.what();
+    }
 
     parametersTable = new ParametersWidget(tr("Tvedt's formula"), namesList, valuesList, true, true);
     groupBoxLayout->addWidget(parametersTable);
+    if (!errorMessage.isEmpty())
+    {
+      groupBoxLayout->addWidget(new QLabel(QString("<font color=red>%1</font>").arg(errorMessage)));
+      errorMessage.clear();
+    }
 
     groupBoxLayout->addStretch();
     tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
