@@ -23,7 +23,6 @@
 #include "otgui/OTTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/SymbolicFunction.hxx>
 
 using namespace OT;
 
@@ -171,7 +170,7 @@ Function SymbolicPhysicalModel::generateFunction(const Description & outputNames
   {
     formulas.add(getFormula(outputNames[i]));
   }
-  return SymbolicFunction(getInputNames(), formulas);
+  return Function(getInputNames(), outputNames, formulas);
 }
 
 

@@ -126,6 +126,9 @@ void YACSEvaluation::loadData()
 
   for (int i = 0; i < outps.size(); ++i)
     outDescription_[i] = outps[i]->getName();
+
+  setInputDescription(inDescription_);
+  setOutputDescription(outDescription_);
 }
 
 

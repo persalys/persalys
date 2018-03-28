@@ -241,7 +241,7 @@ Function FMIPhysicalModel::getFunction() const
   if (!getOutputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
-  Function function(PythonScriptEvaluation(getInputDimension(), getOutputDimension(), getCode()));
+  Function function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode()));
   function.enableCache();
   return function;
 }

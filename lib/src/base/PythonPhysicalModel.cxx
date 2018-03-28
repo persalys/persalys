@@ -148,7 +148,7 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 {
   if (!functionCache_.getEvaluation()->isActualImplementation())
   {
-    functionCache_ = Function(PythonScriptEvaluation(getInputDimension(), getOutputDimension(), getCode()));
+    functionCache_ = Function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode()));
     functionCache_.enableCache();
   }
   return functionCache_;

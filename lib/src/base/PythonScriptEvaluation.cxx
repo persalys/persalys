@@ -43,14 +43,16 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 
 
 /* Constructor with parameters */
-PythonScriptEvaluation::PythonScriptEvaluation(const UnsignedInteger & inputDimension,
-    const UnsignedInteger & outputDimension,
-    const String & code)
+PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
+                                               const Description & outputVariablesNames,
+                                               const String & code)
   : EvaluationImplementation()
-  , inputDimension_(inputDimension)
-  , outputDimension_(outputDimension)
+  , inputDimension_(inputVariablesNames.getSize())
+  , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
 {
+  setInputDescription(inputVariablesNames);
+  setOutputDescription(outputVariablesNames);
 }
 
 
@@ -138,7 +140,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
     ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
     handleException();
 
-    if (outputDimension_ > 1)
+    if (getOutputDimension() > 1)
     {
       outP = convert<_PySequence_, Point>(outputList.get());
     }
