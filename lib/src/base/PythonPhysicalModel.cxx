@@ -177,7 +177,15 @@ String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "</table></p>";
   oss << "<h3>Python code</h3>";
   oss << "<pre>";
-  oss << getCode();
+  String code = getCode();
+  // replace all "<" by "&lt;"
+  int position = code.find("<");
+  while (position != std::string::npos)
+  {
+    code.replace(position, 1, "&lt;" );
+    position = code.find("<", position + 4);
+  }
+  oss << code;
   oss << "</pre>";
 
   return oss;

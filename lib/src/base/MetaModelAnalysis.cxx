@@ -296,6 +296,8 @@ Distribution MetaModelAnalysis::getDistribution()
       // get min/max inputSample
       const Point min(designOfExperiment_.getInputSample().getMin());
       const Point max(designOfExperiment_.getInputSample().getMax());
+      if (min == max)
+        throw InvalidValueException(HERE) << "The input sample has only one point";
 
       // build Uniform
       ComposedDistribution::DistributionCollection distributionCollection;
