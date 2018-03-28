@@ -4178,7 +4178,7 @@ ou interaction</translation>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="258"/>
         <source>The interval must contain the starting point</source>
-        <translation>L&apos;interval doit contenir le point de départ</translation>
+        <translation>L&apos;intervalle doit contenir le point de départ</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="130"/>
