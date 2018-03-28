@@ -48,7 +48,7 @@ OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
   // output selection
-  outputsSelectionGroupBox_ = new OutputsSelectionGroupBox(this);
+  outputsSelectionGroupBox_ = new OutputsSelectionGroupBox(false, this);
   pageLayout->addWidget(outputsSelectionGroupBox_);
 
   // button to open the NLopt documentation
