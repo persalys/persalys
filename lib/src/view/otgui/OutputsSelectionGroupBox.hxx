@@ -36,6 +36,7 @@ class OTGUI_API OutputsSelectionGroupBox : public QGroupBox
 
 public:
   OutputsSelectionGroupBox(QWidget* parent = 0);
+  OutputsSelectionGroupBox(bool pluralText, QWidget* parent = 0);
   OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& interestVariables, QWidget* parent = 0);
 
   QStringList getSelectedOutputsNames() const;
@@ -45,6 +46,7 @@ signals:
   void outputsSelectionChanged(QStringList);
 
 private:
+  bool pluralText_;
   ListWidgetWithCheckBox * outputsListWidget_;
   NoWheelEventComboBox * outputsComboBox_;
 };

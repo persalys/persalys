@@ -4238,14 +4238,25 @@ ou interaction</translation>
     <name>OTGUI::OutputsSelectionGroupBox</name>
     <message>
         <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="33"/>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="46"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="47"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="61"/>
         <source>Outputs to analyse</source>
         <translation>Sorties à analyser</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="87"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="47"/>
+        <source>Output to analyse</source>
+        <translation>Sortie à analyser</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="103"/>
         <source>Select outputs</source>
         <translation>Sélectionner des sorties</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="103"/>
+        <source>Select output</source>
+        <translation>Sélectionner une sortie</translation>
     </message>
 </context>
 <context>
