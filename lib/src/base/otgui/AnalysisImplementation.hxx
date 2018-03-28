@@ -80,6 +80,7 @@ protected:
 
 protected:
   bool isReliabilityAnalysis_;
+  bool isDeterministicAnalysis_;
   OT::String informationMessage_;
   OT::String warningMessage_;
   bool stopRequested_;

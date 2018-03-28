@@ -39,6 +39,7 @@ SRCAnalysis::SRCAnalysis()
   , simulationsNumber_(10000)
   , result_()
 {
+  isDeterministicAnalysis_ = false;
 }
 
 
@@ -48,6 +49,7 @@ SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalMode
   , simulationsNumber_(nbSimu)
   , result_()
 {
+  isDeterministicAnalysis_ = false;
 }
 
 

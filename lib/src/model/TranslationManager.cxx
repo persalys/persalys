@@ -159,6 +159,7 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Physical model", tr("Physical model")));
   ParametersNames_.insert(type("Deterministic inputs", tr("Deterministic inputs")));
   ParametersNames_.insert(type("Stochastic inputs", tr("Stochastic inputs")));
+  ParametersNames_.insert(type("Inputs", tr("Inputs")));
   ParametersNames_.insert(type("Outputs", tr("Outputs")));
   ParametersNames_.insert(type("Limit state", tr("Limit state")));
   ParametersNames_.insert(type("Name", tr("Name")));

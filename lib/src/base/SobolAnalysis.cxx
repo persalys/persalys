@@ -43,6 +43,7 @@ SobolAnalysis::SobolAnalysis()
   , bootstrapConfidenceLevel_(ResourceMap::GetAsScalar("SobolIndicesAlgorithm-DefaultBootstrapConfidenceLevel"))
   , result_()
 {
+  isDeterministicAnalysis_ = false;
 }
 
 
@@ -53,6 +54,7 @@ SobolAnalysis::SobolAnalysis(const String& name, const PhysicalModel& physicalMo
   , bootstrapConfidenceLevel_(ResourceMap::GetAsScalar("SobolIndicesAlgorithm-DefaultBootstrapConfidenceLevel"))
   , result_()
 {
+  isDeterministicAnalysis_ = false;
 }
 
 

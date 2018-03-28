@@ -104,7 +104,7 @@ public:
 
   bool isValid() const;
 
-  virtual OT::String getHtmlDescription() const;
+  virtual OT::String getHtmlDescription(const bool deterministic) const;
   virtual OT::String getPythonScript() const;
 
   /** String converter */

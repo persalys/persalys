@@ -247,10 +247,10 @@ Function FMIPhysicalModel::getFunction() const
 }
 
 
-String FMIPhysicalModel::getHtmlDescription() const
+String FMIPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
-  oss << PhysicalModelImplementation::getHtmlDescription();
+  oss << PhysicalModelImplementation::getHtmlDescription(deterministic);
   oss << "<h3>Outputs</h3><p>";
   oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
   oss << "<tr>";

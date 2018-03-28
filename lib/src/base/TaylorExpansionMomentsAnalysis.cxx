@@ -36,7 +36,7 @@ static Factory<TaylorExpansionMomentsAnalysis> Factory_TaylorExpansionMomentsAna
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
   : PhysicalModelAnalysis()
 {
-
+  isDeterministicAnalysis_ = false;
 }
 
 
@@ -44,6 +44,7 @@ TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
 {
+  isDeterministicAnalysis_ = false;
 }
 
 

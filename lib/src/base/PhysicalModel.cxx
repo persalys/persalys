@@ -350,9 +350,9 @@ bool PhysicalModel::isValid() const
 }
 
 
-String PhysicalModel::getHtmlDescription() const
+String PhysicalModel::getHtmlDescription(const bool deterministic) const
 {
-  return getImplementation()->getHtmlDescription();
+  return getImplementation()->getHtmlDescription(deterministic);
 }
 
 

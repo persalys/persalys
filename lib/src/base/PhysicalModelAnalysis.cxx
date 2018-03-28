@@ -58,7 +58,7 @@ PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 void PhysicalModelAnalysis::run()
 {
   AnalysisImplementation::run();
-  modelHtmlDescription_ = physicalModel_.getHtmlDescription();
+  modelHtmlDescription_ = physicalModel_.getHtmlDescription(isDeterministicAnalysis_);
 }
 
 
