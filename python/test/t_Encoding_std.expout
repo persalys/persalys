@@ -1,0 +1,61 @@
+class=DataModel name=myDataModel fileName=données.csv inputColumns=[0,2] outputColumns=[] inputNames=[X0,X2] outputNames=[]
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+inputColumns = [0, 2]
+outputColumns = []
+inputNames = ['X0', 'X2']
+outputNames = []
+myDataModel = otguibase.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myStudy.add(myDataModel)
+A = otguibase.Input('A', 0, '')
+B = otguibase.Input('B', 0, '')
+S = otguibase.Output('S', '')
+inputs = [A, B]
+outputs = [S]
+formulas = ['A+B+2']
+SM = otguibase.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
+myStudy.add(SM)
+inputColumns = [0,2]
+doeI = otguibase.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)
+doeI.setBlockSize(1)
+interestVariables = ['S']
+doeI.setInterestVariables(interestVariables)
+myStudy.add(doeI)
+
+#!/usr/bin/env python
+# coding: utf-8
+
+from __future__ import print_function
+import openturns as ot
+import otguibase
+
+myStudy = otguibase.OTStudy('myStudy')
+otguibase.OTStudy.Add(myStudy)
+inputColumns = [0, 2]
+outputColumns = []
+inputNames = ['X0', 'X2']
+outputNames = []
+myDataModel = otguibase.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myStudy.add(myDataModel)
+A = otguibase.Input('A', 0, '')
+B = otguibase.Input('B', 0, '')
+S = otguibase.Output('S', '')
+inputs = [A, B]
+outputs = [S]
+formulas = ['A+B+2']
+SM = otguibase.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
+myStudy.add(SM)
+inputColumns = [0,2]
+doeI = otguibase.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)
+doeI.setBlockSize(1)
+interestVariables = ['S']
+doeI.setInterestVariables(interestVariables)
+myStudy.add(doeI)
+
