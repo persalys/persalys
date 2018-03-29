@@ -113,6 +113,9 @@ void ModelEvaluation::initialize()
 
 void ModelEvaluation::launch()
 {
+  if (getInputValues().getSize() != getPhysicalModel().getInputDimension())
+    throw InvalidArgumentException(HERE) << "Wrong input point dimension";
+
   // output = f(input)
   Sample inputSample(1, getInputValues());
   inputSample.setDescription(inputNames_);
@@ -160,7 +163,14 @@ Parameters ModelEvaluation::getParameters() const
   Parameters param;
 
   param.add("Outputs of interest", getInterestVariables().__str__());
-  param.add("Point", getInputValues());
+  OSS values;
+  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
+  {
+    values << inputNames_[i] << " : " << inputValues_[i];
+    if (i < inputNames_.getSize() - 1)
+       values << "\n";
+  }
+  param.add("Point", values);
 
   return param;
 }
@@ -206,6 +216,7 @@ String ModelEvaluation::__repr__() const
 void ModelEvaluation::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
+  adv.saveAttribute("inputNames_", inputNames_);
   adv.saveAttribute("inputValues_", inputValues_);
   adv.saveAttribute("designOfExperiment_", designOfExperiment_);
 }
@@ -215,8 +226,8 @@ void ModelEvaluation::save(Advocate & adv) const
 void ModelEvaluation::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
+  adv.loadAttribute("inputNames_", inputNames_);
   adv.loadAttribute("inputValues_", inputValues_);
   adv.loadAttribute("designOfExperiment_", designOfExperiment_);
-  inputNames_ = getPhysicalModel().getInputNames();
 }
 }
