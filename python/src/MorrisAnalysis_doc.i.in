@@ -80,7 +80,7 @@ bounds : :py:class:`openturns.Interval`
 Returns
 -------
 number : int
-    Number of levels for a regular grid. It is set by default to 5."
+    Number of levels for a regular grid. It is set by default to 4."
 
 // ---------------------------------------------------------------------
 

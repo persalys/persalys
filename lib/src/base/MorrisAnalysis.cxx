@@ -21,6 +21,7 @@
 #include "otgui/MorrisAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
+#include <openturns/SpecFunc.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 #include <otmorris/Morris.hxx>
@@ -44,7 +45,7 @@ MorrisAnalysis::MorrisAnalysis()
   , trajectoriesNumber_(10)
   , inputNames_()
   , bounds_()
-  , level_(5)
+  , level_(4)
   , result_()
 {
 }
@@ -56,7 +57,7 @@ MorrisAnalysis::MorrisAnalysis(const String& name, const PhysicalModel& physical
   , trajectoriesNumber_(10)
   , inputNames_()
   , bounds_()
-  , level_(5)
+  , level_(4)
   , result_()
 {
   initializeParameters();
@@ -216,6 +217,7 @@ void MorrisAnalysis::launch()
   // build a Morris experiment
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
   MorrisExperimentGrid morris_experiment(Indices(nbInputs, level_), bounds_, trajectoriesNumber_);
+  morris_experiment.setJumpStep(Indices(nbInputs, std::floor(level_ * 0.5)));
 
   // generate input sample
   RandomGenerator::SetSeed(getSeed());
@@ -225,6 +227,19 @@ void MorrisAnalysis::launch()
   // compute output sample
   Sample outSample = getPhysicalModel().getFunction(getInterestVariables())(inSample);
   outSample.setDescription(getInterestVariables());
+
+  // check nan/inf value
+  // TODO with OT 1.11 : throw error directly when evaluating the model
+  for (UnsignedInteger i = 0; i < outSample.getSize(); ++i)
+  {
+    for (UnsignedInteger j = 0; j < outSample.getDimension(); ++j)
+    {
+      if (!SpecFunc::IsNormal(outSample(i, j)))
+      {
+        throw InvalidValueException(HERE) << "Can not compute the effects. The output sample is invalid. The model evaluation failed at least at the point " << Point(inSample[i]).__str__();
+      }
+    }
+  }
 
   // Compute effects
   // set result
