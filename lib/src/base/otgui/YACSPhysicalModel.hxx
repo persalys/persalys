@@ -54,7 +54,7 @@ public:
   /** Accesor to launching resource properties */
   AbstractResourceModel* getResourceModel();
 
-  virtual OT::String getHtmlDescription() const;
+  virtual OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
