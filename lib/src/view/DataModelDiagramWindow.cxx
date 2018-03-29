@@ -70,7 +70,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   DiagramPushButton * dataAnalysisButton = new DiagramPushButton;
   dataAnalysisButton->setText(tr("Data\nanalysis"));
   dataAnalysisButton->setWhatsThis(tr("Analyse each variable"));
-  dataAnalysisButton->setErrorMessage(tr("Define at least a variable"));
+  dataAnalysisButton->setErrorMessage(tr("Define at least one variable"));
   QGraphicsProxyWidget * dataAnalysisProxy = new QGraphicsProxyWidget;
   dataAnalysisProxy->setWidget(dataAnalysisButton);
   scene->addItem(dataAnalysisProxy);
@@ -82,7 +82,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   DiagramPushButton * inferenceButton = new DiagramPushButton;
   inferenceButton->setText(tr("Marginals\ninference"));
   inferenceButton->setWhatsThis(tr("Make an inference analysis for variables with given distributions"));
-  inferenceButton->setErrorMessage(tr("Define at least a variable"));
+  inferenceButton->setErrorMessage(tr("Define at least one variable"));
   QGraphicsProxyWidget * inferenceProxy = new QGraphicsProxyWidget;
   inferenceProxy->setWidget(inferenceButton);
   scene->addItem(inferenceProxy);
@@ -106,7 +106,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
   metamodelButton->setWhatsThis(tr("Two methods : Kriging and Functional chaos"));
-  metamodelButton->setErrorMessage(tr("Define at least an input variable and an output variable"));
+  metamodelButton->setErrorMessage(tr("Define at least one input variable and one output variable"));
   QGraphicsProxyWidget * metamodelProxy = new QGraphicsProxyWidget;
   metamodelProxy->setWidget(metamodelButton);
   scene->addItem(metamodelProxy);

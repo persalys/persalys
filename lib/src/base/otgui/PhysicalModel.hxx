@@ -100,7 +100,7 @@ public:
 
   bool isValid() const;
 
-  OT::String getHtmlDescription() const;
+  OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */

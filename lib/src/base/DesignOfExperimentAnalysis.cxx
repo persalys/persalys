@@ -62,6 +62,14 @@ DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 }
 
 
+void DesignOfExperimentAnalysis::run()
+{
+  AnalysisImplementation::run();
+  if (designOfExperiment_.hasPhysicalModel())
+    modelHtmlDescription_ = designOfExperiment_.getPhysicalModel().getHtmlDescription(false);
+}
+
+
 String DesignOfExperimentAnalysis::__repr__() const
 {
   OSS oss;

@@ -218,8 +218,8 @@
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="143"/>
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="149"/>
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="155"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="177"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="337"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="180"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="383"/>
         <source>Failure probability</source>
         <translation>Probabilité de défaillance</translation>
     </message>
@@ -229,137 +229,137 @@
         <translation>Indice de fiabilité Hasofer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="168"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="170"/>
         <source>Failure probability (FORM)</source>
         <translation>Probabilité de défaillance (FORM)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="173"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="175"/>
         <source>Hasofer&apos;s formula</source>
         <translation>Formule d&apos;Hasofer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="182"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="195"/>
         <source>Breitung&apos;s formula</source>
         <translation>Formule de Breitung</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="189"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="216"/>
         <source>Hohen Bichler&apos;s formula</source>
         <translation>Formule d&apos;Hohen Bichler</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="196"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="237"/>
         <source>Tvedt&apos;s formula</source>
         <translation>Formule de Tvedt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="204"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="250"/>
         <source>Optimization result</source>
         <translation>Résultat de l&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="207"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="253"/>
         <source>Iterations number</source>
         <translation>Nombre d&apos;itérations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="208"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="254"/>
         <source>Calls number</source>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="209"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="255"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="210"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="256"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="211"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="257"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="212"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="258"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="228"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="274"/>
         <source>Maximum iterations number reached</source>
         <translation>Nombre d&apos;itérations maximum atteint</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="237"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="283"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="246"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="305"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="292"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="351"/>
         <source>Design point</source>
         <translation>Point de conception</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="259"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="333"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="305"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="379"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="261"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="307"/>
         <source>Importance factors</source>
         <translation>Facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="263"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="309"/>
         <source>Coordinates</source>
         <translation>Coordonnées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="264"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="310"/>
         <source>Standard space</source>
         <translation>Espace standard</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="265"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="311"/>
         <source>Physical space</source>
         <translation>Espace physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="295"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="341"/>
         <source>Importance factors pie chart</source>
         <translation>Diagrammes des facteurs d&apos;importance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="298"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="344"/>
         <source>importanceFactors</source>
         <translation>facteursImportance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="322"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="381"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="392"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="368"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="427"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="438"/>
         <source>Sensitivities</source>
         <translation>Sensibilités</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="334"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="380"/>
         <source>Distribution parameters</source>
         <translation>Paramètres de distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="169"/>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="335"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="171"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="381"/>
         <source>Reliability index</source>
         <translation>Indice de fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="387"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="433"/>
         <source>Internal error during the computation of the sensitivities.
 
 %1</source>
@@ -368,7 +368,7 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="397"/>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="443"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -578,7 +578,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="227"/>
-        <source>Define at least a group of two variables</source>
+        <source>Define at least one group of two variables</source>
         <translation>Définir au moins un groupe de deux variables</translation>
     </message>
     <message>
@@ -588,7 +588,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="286"/>
-        <source>Define at least a group of variables associated with a list of copulas</source>
+        <source>Define at least one group of variables associated with a list of copulas</source>
         <translation>Définir au moins un groupe de variables associé à une liste de copules</translation>
     </message>
     <message>
@@ -749,12 +749,12 @@ bayésien (BIC)</translation>
         <translation>Estimation de la matrice de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="198"/>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="191"/>
         <source>Spearman&apos;s coefficient</source>
         <translation>Coefficient de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="212"/>
+        <location filename="../lib/src/view/DataAnalysisResultWindow.cxx" line="205"/>
         <source>Dependence</source>
         <translation>Dépendance</translation>
     </message>
@@ -1079,7 +1079,7 @@ données</translation>
     <message>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="73"/>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="85"/>
-        <source>Define at least a variable</source>
+        <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
     <message>
@@ -1126,7 +1126,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="109"/>
-        <source>Define at least an input variable and an output variable</source>
+        <source>Define at least one input variable and one output variable</source>
         <translation>Définir au moins une variable d&apos;entrée et une variable de sortie</translation>
     </message>
 </context>
@@ -1169,7 +1169,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DataModelTableModel.cxx" line="301"/>
-        <source>Define at least a variable</source>
+        <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
 </context>
@@ -1364,7 +1364,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DependenciesWidget.cxx" line="260"/>
-        <source>Define at least a group of two variables</source>
+        <source>Define at least one group of two variables</source>
         <translation>Définir au moins un groupe de deux variables</translation>
     </message>
     <message>
@@ -4178,7 +4178,7 @@ ou interaction</translation>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="258"/>
         <source>The interval must contain the starting point</source>
-        <translation>L&apos;interval doit contenir le point de départ</translation>
+        <translation>L&apos;intervalle doit contenir le point de départ</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="130"/>
@@ -4238,14 +4238,25 @@ ou interaction</translation>
     <name>OTGUI::OutputsSelectionGroupBox</name>
     <message>
         <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="33"/>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="46"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="47"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="61"/>
         <source>Outputs to analyse</source>
         <translation>Sorties à analyser</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="87"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="47"/>
+        <source>Output to analyse</source>
+        <translation>Sortie à analyser</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="103"/>
         <source>Select outputs</source>
         <translation>Sélectionner des sorties</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="103"/>
+        <source>Select output</source>
+        <translation>Sélectionner une sortie</translation>
     </message>
 </context>
 <context>
@@ -4758,7 +4769,7 @@ d&apos;expériences</translation>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="101"/>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="125"/>
-        <source>Define at least an input variable</source>
+        <source>Define at least one input variable</source>
         <translation>Définir au moins une variable d&apos;entrée</translation>
     </message>
     <message>
@@ -4796,7 +4807,7 @@ d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="137"/>
-        <source>Create at least a design of experiments and define output variables in the model</source>
+        <source>Create at least one design of experiments and define output variables in the model</source>
         <translation>Créer au moins un plan d&apos;expériences et définir des variables de sortie dans le modèle</translation>
     </message>
     <message>
@@ -4816,7 +4827,7 @@ d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="185"/>
-        <source>Define at least a design of experiments which contains output values</source>
+        <source>Define at least one design of experiments which contains output values</source>
         <translation>Définir au moins un plan d&apos;expériences qui contient des valeurs de sortie</translation>
     </message>
     <message>
@@ -4826,7 +4837,7 @@ d&apos;expériences</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="197"/>
-        <source>Define output variables in the model and at least a limit state</source>
+        <source>Define output variables in the model and at least one limit state</source>
         <translation>Définir des variables de sortie et au moins un état limite</translation>
     </message>
     <message>
@@ -6023,7 +6034,7 @@ de l&apos;indice total</translation>
     <message>
         <location filename="../lib/src/view/StudyManager.cxx" line="365"/>
         <location filename="../lib/src/view/StudyManager.cxx" line="392"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="561"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="562"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -6068,38 +6079,38 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <translation>Impossible de sauvegarder l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="478"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="479"/>
         <source>Can not save the current study as</source>
         <translation>Impossible de sauvegarder sous l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="483"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="484"/>
         <source>Save OTStudy...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="485"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="504"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="486"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="505"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="502"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="503"/>
         <source>Open an existing OTStudy</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="514"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="515"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="519"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="520"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="532"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="533"/>
         <source>An error has occured when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
@@ -6107,17 +6118,17 @@ Maybe objects are not opened.
 Des objets ne sont peut être pas ouverts.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="546"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="547"/>
         <source>Can not close the current study</source>
         <translation>Impossible de fermer l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="553"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="554"/>
         <source>Can not remove a study when one of its analyses is running.</source>
         <translation>Impossible de supprimer une étude lorsqu&apos;une de ses analyses est en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="562"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="563"/>
         <source>Do you want to save the OTStudy &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
@@ -6649,66 +6660,71 @@ Des objets ne sont peut être pas ouverts.</translation>
     </message>
     <message>
         <location filename="../lib/src/model/TranslationManager.cxx" line="162"/>
+        <source>Inputs</source>
+        <translation>Entrées</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="163"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="163"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="164"/>
         <source>Limit state</source>
         <translation>Etat limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="164"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="165"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="165"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="166"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="166"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="167"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="167"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="168"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="168"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="169"/>
         <source>Dependence</source>
         <translation>Dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="169"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="170"/>
         <source>Group of variables</source>
         <translation>Groupe de variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="170"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="171"/>
         <source>Copula</source>
         <translation>Copule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="171"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="172"/>
         <source>Formula</source>
         <translation>Formule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="172"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="173"/>
         <source>File name</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="173"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="174"/>
         <source>Number of trajectories</source>
         <translation>Nombre de trajectoires</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="174"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="175"/>
         <source>Columns</source>
         <translation>Colonnes</translation>
     </message>

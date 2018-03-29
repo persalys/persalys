@@ -40,8 +40,8 @@ public:
   /** Default constructor */
   PythonScriptEvaluation();
   /** Constructor with parameters */
-  PythonScriptEvaluation(const OT::UnsignedInteger & inputDimension,
-                         const OT::UnsignedInteger & ouputDimension,
+  PythonScriptEvaluation(const OT::Description & inputVariablesNames,
+                         const OT::Description & outputVariablesNames,
                          const OT::String & code);
 
   /** Virtual constructor */

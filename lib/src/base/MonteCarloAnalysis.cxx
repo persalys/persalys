@@ -44,6 +44,7 @@ MonteCarloAnalysis::MonteCarloAnalysis()
   , levelConfidenceInterval_(0.95)
   , result_()
 {
+  isDeterministicAnalysis_ = false;
 }
 
 
@@ -55,6 +56,7 @@ MonteCarloAnalysis::MonteCarloAnalysis(const String& name, const PhysicalModel& 
   , levelConfidenceInterval_(0.95)
   , result_()
 {
+  isDeterministicAnalysis_ = false;
 }
 
 

@@ -30,6 +30,7 @@ ReliabilityAnalysis::ReliabilityAnalysis()
   : PhysicalModelAnalysis()
 {
   isReliabilityAnalysis_ = true;
+  isDeterministicAnalysis_ = false;
 }
 
 
@@ -39,6 +40,7 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
   , limitState_(limitState)
 {
   isReliabilityAnalysis_ = true;
+  isDeterministicAnalysis_ = false;
 }
 
 

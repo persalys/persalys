@@ -148,17 +148,17 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 {
   if (!functionCache_.getEvaluation()->isActualImplementation())
   {
-    functionCache_ = Function(PythonScriptEvaluation(getInputDimension(), getOutputDimension(), getCode()));
+    functionCache_ = Function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode()));
     functionCache_.enableCache();
   }
   return functionCache_;
 }
 
 
-String PythonPhysicalModel::getHtmlDescription() const
+String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
-  oss << PhysicalModelImplementation::getHtmlDescription();
+  oss << PhysicalModelImplementation::getHtmlDescription(deterministic);
 
   oss << "<h3>Outputs</h3><p>";
   oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
@@ -177,7 +177,15 @@ String PythonPhysicalModel::getHtmlDescription() const
   oss << "</table></p>";
   oss << "<h3>Python code</h3>";
   oss << "<pre>";
-  oss << getCode();
+  String code = getCode();
+  // replace all "<" by "&lt;"
+  int position = code.find("<");
+  while (position != std::string::npos)
+  {
+    code.replace(position, 1, "&lt;" );
+    position = code.find("<", position + 4);
+  }
+  oss << code;
   oss << "</pre>";
 
   return oss;

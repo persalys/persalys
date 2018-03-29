@@ -98,7 +98,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * doeCreationButton = new DiagramPushButton;
   doeCreationButton->setText(tr("Design of\nexperiments\ncreation"));
   doeCreationButton->setWhatsThis(tr("Create manually a design of experiments or import one"));
-  doeCreationButton->setErrorMessage(tr("Define at least an input variable"));
+  doeCreationButton->setErrorMessage(tr("Define at least one input variable"));
   QGraphicsProxyWidget * doeCreationProxy = new QGraphicsProxyWidget;
   doeCreationProxy->setWidget(doeCreationButton);
   scene->addItem(doeCreationProxy);
@@ -122,7 +122,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
   probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependence"));
-  probaModelButton->setErrorMessage(tr("Define at least an input variable"));
+  probaModelButton->setErrorMessage(tr("Define at least one input variable"));
   QGraphicsProxyWidget * probaModelProxy = new QGraphicsProxyWidget;
   probaModelProxy->setWidget(probaModelButton);
   scene->addItem(probaModelProxy);
@@ -134,7 +134,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * doeEvaluationButton = new DiagramPushButton;
   doeEvaluationButton->setText(tr("Design of\nexperiments\nevaluation"));
   doeEvaluationButton->setWhatsThis(tr("Evaluate the model at the points of the design of experiments"));
-  doeEvaluationButton->setErrorMessage(tr("Create at least a design of experiments and define output variables in the model"));
+  doeEvaluationButton->setErrorMessage(tr("Create at least one design of experiments and define output variables in the model"));
   QGraphicsProxyWidget * doeEvaluationProxy = new QGraphicsProxyWidget;
   doeEvaluationProxy->setWidget(doeEvaluationButton);
   scene->addItem(doeEvaluationProxy);
@@ -182,7 +182,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
   metamodelButton->setWhatsThis(tr("Two methods : Kriging and Functional chaos"));
-  metamodelButton->setErrorMessage(tr("Define at least a design of experiments which contains output values"));
+  metamodelButton->setErrorMessage(tr("Define at least one design of experiments which contains output values"));
   QGraphicsProxyWidget * metamodelProxy = new QGraphicsProxyWidget;
   metamodelProxy->setWidget(metamodelButton);
   scene->addItem(metamodelProxy);
@@ -194,7 +194,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * reliabilityButton = new DiagramPushButton;
   reliabilityButton->setText(tr("Reliability"));
   reliabilityButton->setWhatsThis(tr("Four methods : Monte Carlo, FORM-Importance Sampling, FORM, SORM"));
-  reliabilityButton->setErrorMessage(tr("Define output variables in the model and at least a limit state"));
+  reliabilityButton->setErrorMessage(tr("Define output variables in the model and at least one limit state"));
   QGraphicsProxyWidget * reliabilityProxy = new QGraphicsProxyWidget;
   reliabilityProxy->setWidget(reliabilityButton);
   scene->addItem(reliabilityProxy);

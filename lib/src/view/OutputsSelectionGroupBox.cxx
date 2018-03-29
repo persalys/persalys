@@ -31,6 +31,21 @@ namespace OTGUI
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   : QGroupBox(tr("Outputs to analyse"), parent)
+  , pluralText_(true)
+  , outputsListWidget_(0)
+  , outputsComboBox_(0)
+{
+  QVBoxLayout * outputLayout = new QVBoxLayout(this);
+
+  // custom combobox to choose output to analyse
+  outputsComboBox_ = new NoWheelEventComboBox;
+  outputLayout->addWidget(outputsComboBox_);
+}
+
+
+OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* parent)
+  : QGroupBox((pluralText ? tr("Outputs to analyse") : tr("Output to analyse")), parent)
+  , pluralText_(pluralText)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
@@ -44,6 +59,7 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNames, const Description& interestVariables, QWidget* parent)
   : QGroupBox(tr("Outputs to analyse"), parent)
+  , pluralText_(true)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
@@ -84,7 +100,7 @@ void OutputsSelectionGroupBox::updateComboBoxModel(const Description& outputsNam
 
   if (!variablesStringList.size())
     variablesStringList = outputsList;
-  outputsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select outputs") + " --", outputsList, variablesStringList, this);
+  outputsListWidget_ = new ListWidgetWithCheckBox("-- " + (pluralText_ ? tr("Select outputs") : tr("Select output")) + " --", outputsList, variablesStringList, this);
 
   connect(outputsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SIGNAL(outputsSelectionChanged(QStringList)));
   outputsComboBox_->setModel(outputsListWidget_->model());

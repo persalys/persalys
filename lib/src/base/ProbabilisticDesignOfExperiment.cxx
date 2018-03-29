@@ -57,6 +57,7 @@ ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment()
   , designName_("LHS")
   , size_(ResourceMap::GetAsUnsignedInteger("WeightedExperiment-DefaultSize"))
 {
+  isDeterministicAnalysis_ = false;
 }
 
 
@@ -68,6 +69,7 @@ ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment(const String& n
   , designName_("")
   , size_(0)
 {
+  isDeterministicAnalysis_ = false;
   setDesignName(designName);
   setSize(size);
 }

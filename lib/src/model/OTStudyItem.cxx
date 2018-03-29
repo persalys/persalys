@@ -273,7 +273,7 @@ bool OTStudyItem::save(const QString& filename)
 
   // write file
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  otStudy_.save(fileName.toUtf8().constData());
+  otStudy_.save(fileName.toLocal8Bit().constData());
   QApplication::restoreOverrideCursor();
 
   // update QSettings

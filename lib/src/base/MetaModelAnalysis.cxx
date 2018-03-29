@@ -61,6 +61,8 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
   , nbFolds_(3)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
+  if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
+    isDeterministicAnalysis_ = false;
   if (designOfExperiment_.getOutputSample().getSize())
     setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
 }
@@ -86,6 +88,8 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
     throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiments";
   }
   designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
+  if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
+    isDeterministicAnalysis_ = false;
   setInterestVariables(analysis_ptr->getInterestVariables());
 }
 
@@ -292,6 +296,8 @@ Distribution MetaModelAnalysis::getDistribution()
       // get min/max inputSample
       const Point min(designOfExperiment_.getInputSample().getMin());
       const Point max(designOfExperiment_.getInputSample().getMax());
+      if (min == max)
+        throw InvalidValueException(HERE) << "The input sample has only one point";
 
       // build Uniform
       ComposedDistribution::DistributionCollection distributionCollection;

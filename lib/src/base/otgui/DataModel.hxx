@@ -62,7 +62,7 @@ public:
   OT::Description getInputNames();
   OT::Description getOutputNames();
 
-  OT::Sample getSampleFromFile();
+  OT::Sample getSampleFromFile() const;
 
   virtual OT::String getPythonScript() const;
 
@@ -74,6 +74,9 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
+
+protected:
+  OT::Sample getSampleFromFile(const OT::String& fileName);
 
 private:
   OT::String fileName_;

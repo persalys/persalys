@@ -23,7 +23,6 @@
 #include "otgui/OTTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/SymbolicFunction.hxx>
 
 using namespace OT;
 
@@ -171,14 +170,14 @@ Function SymbolicPhysicalModel::generateFunction(const Description & outputNames
   {
     formulas.add(getFormula(outputNames[i]));
   }
-  return SymbolicFunction(getInputNames(), formulas);
+  return Function(getInputNames(), outputNames, formulas);
 }
 
 
-String SymbolicPhysicalModel::getHtmlDescription() const
+String SymbolicPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
-  oss << PhysicalModelImplementation::getHtmlDescription();
+  oss << PhysicalModelImplementation::getHtmlDescription(deterministic);
   oss << "<h3>Outputs</h3><p>";
   oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
   oss << "<tr>";
