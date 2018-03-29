@@ -49,5 +49,11 @@ public:
 private:
   OT::Collection<std::pair<OT::String, OT::String> > pairsCollection_;
 };
+
+class OTGUI_API Tools
+{
+public:
+  static OT::String GetLocaleString(const OT::String& str);
+};
 }
 #endif

@@ -23,6 +23,7 @@
 #include "PyConsole_Interp.h"
 #include "PyConsole_Event.h"
 
+#include <QTextCodec>
 #include <QCoreApplication>
 
 /*!
@@ -56,7 +57,8 @@ PyConsole_ExecCommand::PyConsole_ExecCommand( PyInterp_Interp*        theInterp,
 void PyConsole_ExecCommand::execute()
 {
   if ( myCommand != "" ) {
-    int ret = getInterp()->run( myCommand.toLatin1().data() );
+    QTextCodec * codec = QTextCodec::codecForName("utf-8");
+    int ret = getInterp()->run(codec->fromUnicode(myCommand));
     if ( ret < 0 )
       myState = PyInterp_Event::ES_ERROR;
     else if ( ret > 0 )
