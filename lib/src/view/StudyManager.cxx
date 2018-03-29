@@ -394,9 +394,7 @@ void StudyManager::importPythonScript()
     }
     else
     {
-      QByteArray hex(fileName.toUtf8().toHex('x'));
-      QString escapedHex("\\x" + QString(hex).split("x").join("\\x"));
-      const QString command("exec(open(b\"" + escapedHex + "\", encoding=\"utf-8\").read())");
+      const QString command("exec(open(u\"" + fileName.toUtf8() + "\", encoding=\"utf-8\").read())");
       emit commandExecutionRequested(command);
     }
   }
@@ -462,7 +460,7 @@ bool StudyManager::save(OTStudyItem* studyItem)
   if (file.exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    studyItem->getOTStudy().save(file.absoluteFilePath().toLocal8Bit().data());
+    studyItem->getOTStudy().save(file.absoluteFilePath().toUtf8().data());
     QApplication::restoreOverrideCursor();
     return true;
   }
@@ -527,7 +525,7 @@ void StudyManager::open(const QString& recentFileName)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   try
   {
-    OTStudy newStudy(OTStudy::Open(fileName.toLocal8Bit().constData()));
+    OTStudy newStudy(OTStudy::Open(fileName.toUtf8().constData()));
     OTStudy::Add(newStudy);
     emit recentFilesListChanged(fileName);
   }

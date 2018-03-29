@@ -20,6 +20,8 @@
  */
 #include "otgui/ImportedDesignOfExperiment.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -93,11 +95,10 @@ void ImportedDesignOfExperiment::setFileName(const String& fileName)
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
 
   // get sample from file
-  sampleFromFile_ = getSampleFromFile(fileName);
+  sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));
 
   // save file path
   const String oldFileName = fileName_;
-  // TODO convert to utf-8
   fileName_ = fileName;
 
   // set columns and names

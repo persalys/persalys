@@ -302,7 +302,7 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
       QApplication::setOverrideCursor(Qt::WaitCursor);
       try
       {
-        fmiModel->setFMUFileName(fileName.toLocal8Bit().data());
+        fmiModel->setFMUFileName(fileName.toUtf8().data());
         errorMessageLabel_->reset();
       }
       catch (std::exception & ex)

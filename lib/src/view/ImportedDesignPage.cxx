@@ -150,7 +150,7 @@ void ImportedDesignPage::setData(const QString& fileName)
 void ImportedDesignPage::setTable(const QString& fileName)
 {
   // set file name
-  designOfExperiment_.setFileName(fileName.toLocal8Bit().data());
+  designOfExperiment_.setFileName(fileName.toUtf8().data());
 
   // get sample From File
   Sample sample(designOfExperiment_.getSampleFromFile());

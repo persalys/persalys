@@ -68,7 +68,7 @@ void PhysicalModelDiagramItem::setData(const QVariant & value, int role)
 {
   // rename
   if (role == Qt::EditRole)
-    physicalModel_.getImplementation()->setName(value.toString().toLocal8Bit().data());
+    physicalModel_.getImplementation()->setName(value.toString().toUtf8().data());
 
   QStandardItem::setData(value, role);
 }

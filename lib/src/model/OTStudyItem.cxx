@@ -273,7 +273,7 @@ bool OTStudyItem::save(const QString& filename)
 
   // write file
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  otStudy_.save(fileName.toLocal8Bit().constData());
+  otStudy_.save(fileName.toUtf8().constData());
   QApplication::restoreOverrideCursor();
 
   // update QSettings
@@ -427,7 +427,7 @@ void OTStudyItem::setData(const QVariant & value, int role)
   // when an observable has no observer, otgui is lost
   // for example is not possible to remove the items...
   if (role == Qt::EditRole)
-    otStudy_.getImplementation()->setName(value.toString().toLocal8Bit().data());
+    otStudy_.getImplementation()->setName(value.toString().toUtf8().data());
 
   QStandardItem::setData(value, role);
 }

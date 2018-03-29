@@ -280,7 +280,7 @@ void DataModelWindow::updateTable(const QString& fileName)
   try
   {
     // update file name
-    dataModel_->setFileName(fileName.toLocal8Bit().data());
+    dataModel_->setFileName(fileName.toUtf8().data());
     filePathLineEdit_->setText(fileName);
   }
   catch (std::exception& ex)

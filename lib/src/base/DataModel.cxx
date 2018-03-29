@@ -102,11 +102,10 @@ void DataModel::setFileName(const String& fileName)
     throw InvalidArgumentException(HERE) << "The file name can not be empty";
 
   // get sample from file
-  sampleFromFile_ = getSampleFromFile(fileName);
+  sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));
 
   // save file path
   const String oldFileName = fileName_;
-  // TODO convert to utf-8
   fileName_ = fileName;
 
   // set columns and names
