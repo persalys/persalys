@@ -151,9 +151,9 @@ void DataModelDefinitionItem::createCopulaInferenceAnalysis()
 void DataModelDefinitionItem::createMetaModel()
 {
   // check
-  if (!designOfExperiment_.getOutputSample().getSize())
+  if (!designOfExperiment_.getOutputSample().getSize() || !designOfExperiment_.getInputSample().getSize())
   {
-    emit showErrorMessageRequested(tr("The model must have at least one output."));
+    emit showErrorMessageRequested(tr("The model must have at least one output and one input."));
     return;
   }
 
