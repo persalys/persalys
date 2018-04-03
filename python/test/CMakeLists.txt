@@ -105,6 +105,7 @@ if (OTMORRIS_FOUND)
 ot_pyinstallcheck_test (MorrisAnalysis_std)
 endif ()
 ot_pyinstallcheck_test (OptimizationAnalysis_std)
+ot_pyinstallcheck_test (OTStudy_refCount)
 ot_pyinstallcheck_test (docstring)
 
 if (SalomeYACS_FOUND)
