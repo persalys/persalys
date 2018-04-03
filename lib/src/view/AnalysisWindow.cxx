@@ -25,6 +25,7 @@
 #include "otgui/TranslationManager.hxx"
 
 #include <QHBoxLayout>
+#include <QScrollArea>
 
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSPhysicalModel.hxx"
@@ -59,6 +60,9 @@ void AnalysisWindow::buildInterface()
 
   QWidget * mainWidget = new QWidget;
   QGridLayout * mainLayout = new QGridLayout(mainWidget);
+
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
 
   // analysis parameters widget
   const Parameters analysisParameters(analysisItem_->getAnalysis().getImplementation()->getParameters());
@@ -96,6 +100,7 @@ void AnalysisWindow::buildInterface()
   // information message
   messageLabel_ = new QLabel;
   messageLabel_->setWordWrap(true);
+  messageLabel_->setTextFormat(Qt::PlainText);
   mainLayout->addWidget(messageLabel_, 3, 0);
   connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
 
@@ -108,10 +113,12 @@ void AnalysisWindow::buildInterface()
     mainLayout->addWidget(launchParameters_, 4, 0);
   }
 
+  scrollArea->setWidget(mainWidget);
+
   // initialization
   initializeWidgets();
 
-  setWidget(mainWidget);
+  setWidget(scrollArea);
 }
 
 
@@ -129,8 +136,8 @@ void AnalysisWindow::initializeWidgets()
     // messages
     QString errorMessage = tr("No results are available. An error has occured during the execution of the analysis.") + "\n";
     errorMessage += analysisItem_->getAnalysis().getErrorMessage().c_str();
-    informationMessage = QString("<font color=red>%1</font>").arg(errorMessage);
-
+    informationMessage = errorMessage;
+    messageLabel_->setStyleSheet("color: red;");
     statusBarMessage = tr("An error has occured during the execution of the analysis");
   }
   else // if no error
@@ -147,15 +154,8 @@ void AnalysisWindow::initializeWidgets()
       statusBarMessage = tr("Ready to be launched");
     }
   }
-  setMessage(informationMessage);
+  messageLabel_->setText(informationMessage);
   setErrorMessage(statusBarMessage);
-}
-
-
-void AnalysisWindow::setMessage(const QString& message)
-{
-  if (messageLabel_)
-    messageLabel_->setText(message);
 }
 
 
@@ -179,6 +179,7 @@ void AnalysisWindow::launchAnalysis()
   progressBar_->setValue(10);
   // messages
   messageLabel_->setText(tr("The analysis is running"));
+  messageLabel_->setStyleSheet("");
   setErrorMessage("");
 
   // create controller
