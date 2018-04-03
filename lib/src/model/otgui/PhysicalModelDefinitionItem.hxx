@@ -50,7 +50,6 @@ signals:
   void codeChanged();
   void physicalModelRemoved(QStandardItem*);
   void parallelizeStatusChanged();
-  void wantedMachineChanged();
 
 protected:
   void buildActions();

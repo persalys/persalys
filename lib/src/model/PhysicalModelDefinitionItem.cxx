@@ -139,10 +139,6 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
   {
     emit parallelizeStatusChanged();
   }
-  else if (message == "wantedMachineChanged")
-  {
-    emit wantedMachineChanged();
-  }
   else if (message == "physicalModelRemoved")
   {
     if (hasChildren())
