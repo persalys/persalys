@@ -32,6 +32,14 @@ template <>
 
 %ignore *::SetInstanceObserver;
 
+%pythonappend OTGUI::OTStudy::add %{
+   args[0].thisown = 0
+%}
+
+%pythonappend OTGUI::OTStudy::remove %{
+   args[0].thisown = 1
+%}
+
 OTGUITypedInterfaceObjectHelper(OTStudy)
 OTGUITypedCollectionInterfaceObjectHelper(OTStudy)
 
