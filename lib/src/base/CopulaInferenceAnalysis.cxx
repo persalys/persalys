@@ -294,12 +294,12 @@ void CopulaInferenceAnalysis::launch()
         String str = it->second[i].getImplementation()->getClassName();
         const String distributionName = str.substr(0, str.find("Copula"));
         const String message = OSS() << "Error when building the "
-                                << distributionName
-                                << " copula with the sample of the variables "
-                                << sample.getDescription()
-                                << ". "
-                                << ex.what()
-                                << "\n";
+                               << distributionName
+                               << " copula with the sample of the variables "
+                               << sample.getDescription()
+                               << ". "
+                               << ex.what()
+                               << "\n";
         // set fittingTestResult
         inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
         Collection<Sample> kendallPlotDataCollection;

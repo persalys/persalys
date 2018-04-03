@@ -26,8 +26,8 @@ namespace OTGUI
 {
 
 ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
-                                               const QStringList &itemNames,
-                                               QWidget * parent)
+    const QStringList &itemNames,
+    QWidget * parent)
   : QListWidget(parent)
   , title_(title)
   , itemNames_(itemNames)
@@ -38,9 +38,9 @@ ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
 
 
 ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
-                                               const QStringList &itemNames,
-                                               const QStringList &selectedItemNames,
-                                               QWidget * parent)
+    const QStringList &itemNames,
+    const QStringList &selectedItemNames,
+    QWidget * parent)
   : QListWidget(parent)
   , title_(title)
   , itemNames_(itemNames)

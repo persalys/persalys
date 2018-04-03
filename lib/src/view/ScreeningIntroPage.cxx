@@ -90,7 +90,7 @@ void ScreeningIntroPage::initialize(const Analysis& analysis)
 int ScreeningIntroPage::nextId() const
 {
 //   if (methodGroup_->checkedId() == ScreeningIntroPage::Morris)
-    return ScreeningAnalysisWizard::Page_Morris;
+  return ScreeningAnalysisWizard::Page_Morris;
 }
 
 

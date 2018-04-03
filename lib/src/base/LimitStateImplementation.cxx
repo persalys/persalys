@@ -186,7 +186,7 @@ String LimitStateImplementation::__str__(const String & offset) const
   else if (operatorName == "GreaterOrEqual")
     oss <<  " >= ";
 
-   oss << getThreshold();
+  oss << getThreshold();
 
   return oss;
 }

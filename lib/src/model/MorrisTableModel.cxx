@@ -114,7 +114,7 @@ QVariant MorrisTableModel::data(const QModelIndex & index, int role) const
                     Point(1, analysis_.getBounds().getUpperBound()[inIndex]),
                     Interval::BoolCollection(1, analysis_.getBounds().getFiniteLowerBound()[inIndex]),
                     Interval::BoolCollection(1, analysis_.getBounds().getFiniteUpperBound()[inIndex])
-                    );
+                   );
     if (bounds.isEmpty())
       return QColor(Qt::red);
   }

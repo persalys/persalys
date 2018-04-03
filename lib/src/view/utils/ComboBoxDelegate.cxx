@@ -33,7 +33,7 @@ class CustomComboBox : public QComboBox
 {
 public:
   CustomComboBox(QWidget *parent)
-  : QComboBox(parent) {}
+    : QComboBox(parent) {}
 
   virtual void wheelEvent(QWheelEvent *e)
   {

@@ -144,9 +144,9 @@ void SobolAnalysis::launch()
 
   // We loop if there remains time, some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
   while (!stopRequested_
-          && (outerSampling < maximumOuterSampling)
-          && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
-          && (elapsedTime) < getMaximumElapsedTime())
+         && (outerSampling < maximumOuterSampling)
+         && ((coefficientOfVariation == -1.0) || (coefficientOfVariation > getMaximumCoefficientOfVariation()))
+         && (elapsedTime) < getMaximumElapsedTime())
   {
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
@@ -204,8 +204,8 @@ void SobolAnalysis::launch()
     if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling)) // must have at least two values
     {
       const UnsignedInteger sampleSize(outerSampling < (maximumOuterSampling - 1) ?
-                                        getBlockSize() * (outerSampling + 1) :
-                                        getBlockSize() * outerSampling + lastBlockSize);
+                                       getBlockSize() * (outerSampling + 1) :
+                                       getBlockSize() * outerSampling + lastBlockSize);
 
       // information message
       OSS oss;

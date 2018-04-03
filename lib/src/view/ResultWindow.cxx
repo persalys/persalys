@@ -86,7 +86,7 @@ void ResultWindow::setModelDescription(const Analysis& analysis)
       // get the word between the markers
       const QString subString = modelString.mid(j + markerSize, endPos - j - markerSize);
       // replace the word by its translation
-      modelString.replace(j + markerSize, endPos -j - markerSize, TranslationManager::GetTranslatedParameterName(subString.toStdString()));
+      modelString.replace(j + markerSize, endPos - j - markerSize, TranslationManager::GetTranslatedParameterName(subString.toStdString()));
       ++j;
     }
   }

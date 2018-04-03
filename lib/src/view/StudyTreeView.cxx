@@ -66,7 +66,7 @@ public:
         index.data(Qt::UserRole).toString().contains("ModelDiagram") ||
         index.data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem" ||
         index.data(Qt::UserRole).toString() == "LimitState"
-    )
+       )
     {
       QLineF aLine(optionButton.rect.bottomLeft(), optionButton.rect.bottomRight());
       QPen pen("#0a5205");

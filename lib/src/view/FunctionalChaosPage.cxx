@@ -139,8 +139,8 @@ bool FunctionalChaosPage::validatePage()
     if (inputSampleSize_ < minimumSize)
     {
       const QString errorMessage = tr("Design of experiments size too small : %1. It must be greater or equal to C(degree+nbInputs, degree) = %2")
-                                  .arg(inputSampleSize_)
-                                  .arg(minimumSize);
+                                   .arg(inputSampleSize_)
+                                   .arg(minimumSize);
       errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
       return false;
     }

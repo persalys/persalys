@@ -91,7 +91,10 @@ void CopulaInferenceResultWidget::buildInterface()
     indices.fill();
     std::sort(std::begin(indices),
               std::end(indices),
-              [&](UnsignedInteger i1, UnsignedInteger i2) {return bicValues[i1] < bicValues[i2];});
+              [&](UnsignedInteger i1, UnsignedInteger i2)
+    {
+      return bicValues[i1] < bicValues[i2];
+    });
   }
 
   // horizontal header

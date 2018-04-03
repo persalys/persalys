@@ -70,7 +70,10 @@ protected:
     {
       stopRequested_ = true;
     }
-    OT::Scalar getElapsedTime() const { return elapsedTime_; }
+    OT::Scalar getElapsedTime() const
+    {
+      return elapsedTime_;
+    }
     bool askStop() const
     {
       elapsedTime_ = Now() - startTime_;

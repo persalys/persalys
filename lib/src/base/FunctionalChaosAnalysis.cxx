@@ -158,9 +158,9 @@ void FunctionalChaosAnalysis::launch()
     const UnsignedInteger minimumSize  = SpecFunc::BinomialCoefficient(chaosDegree_ + inputDimension, chaosDegree_);
     if (size < minimumSize)
       throw InvalidArgumentException(HERE) << "Design of experiments size too small : "
-                                            << size
-                                            << ". It must be greater or equal to C(degree+nbInputs, degree) = "
-                                            << minimumSize << ")\n";
+                                           << size
+                                           << ". It must be greater or equal to C(degree+nbInputs, degree) = "
+                                           << minimumSize << ")\n";
   }
 
   // create FunctionalChaosAlgorithm and run it
@@ -221,7 +221,7 @@ FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(
     BasisSequenceFactory basisSequenceFactory = LARS();
     basisSequenceFactory.setMaximumRelativeConvergence(-1.0);
     projectionStrategy = LeastSquaresStrategy(LeastSquaresMetaModelSelectionFactory(basisSequenceFactory,
-                                                               CorrectedLeaveOneOut()));
+                         CorrectedLeaveOneOut()));
   }
 
   // FunctionalChaosAlgorithm

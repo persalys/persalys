@@ -33,10 +33,10 @@ namespace OTGUI
 {
 
 MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationResult& result,
-                                                     const Sample& outSample,
-                                                     const UnsignedInteger indexOutput,
-                                                     const QString measure,
-                                                     QWidget * parent
+    const Sample& outSample,
+    const UnsignedInteger indexOutput,
+    const QString measure,
+    QWidget * parent
                                                     )
   : QWidget(parent)
 {
@@ -94,10 +94,10 @@ MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationRe
 
     // GraphConfigurationWidget
     GraphConfigurationWidget * graphSettingWidget = new GraphConfigurationWidget(plot,
-                                                                                QStringList(),
-                                                                                QStringList(),
-                                                                                GraphConfigurationWidget::NoType,
-                                                                                this);
+        QStringList(),
+        QStringList(),
+        GraphConfigurationWidget::NoType,
+        this);
     mainWidget->setDockWidget(graphSettingWidget);
   }
   widgetLayout->addWidget(mainWidget);

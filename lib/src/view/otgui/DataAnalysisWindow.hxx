@@ -50,7 +50,7 @@ protected:
   void addBoxPlotTab();
 #ifdef OTGUI_HAVE_PARAVIEW
   virtual void addParaviewWidgetsTabs();
-  virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet=0);
+  virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet = 0);
 #endif
   void addPlotMatrixTab();
   void addScatterPlotsTab();

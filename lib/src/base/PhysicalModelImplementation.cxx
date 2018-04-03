@@ -740,7 +740,7 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
   // new collection of copulas
   Collection<Copula> newColl;
   if ((indicesToRemove.size() == 1 && copula.getImplementation()->getClassName() != "IndependentCopula") ||
-       indicesToRemove.size() == 0)
+      indicesToRemove.size() == 0)
   {
     newColl = coll;
   }

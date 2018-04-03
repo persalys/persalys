@@ -174,7 +174,7 @@ void InferenceAnalysis::launch()
     }
     if (!outputFound)
       throw InvalidArgumentException(HERE) << "The variable to analyse " << getInterestVariables()[i]
-                                            << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
+                                           << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
   }
 
   const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
@@ -215,12 +215,12 @@ void InferenceAnalysis::launch()
         String str = distFactory.getImplementation()->getClassName();
         const String distributionName = str.substr(0, str.find("Factory"));
         const String message = OSS() << "Error when building the "
-                                << distributionName
-                                << " distribution with the sample of the variable "
-                                << sample.getDescription()[i]
-                                << ". "
-                                << ex.what()
-                                << "\n";
+                               << distributionName
+                               << " distribution with the sample of the variable "
+                               << sample.getDescription()[i]
+                               << ". "
+                               << ex.what()
+                               << "\n";
         // set fittingTestResult
         fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
         TestResult testResult;

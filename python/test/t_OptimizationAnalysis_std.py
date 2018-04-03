@@ -26,11 +26,11 @@ analysis.setStartingPoint([0.5, 0.5])
 interval = ot.Interval([-5, 0], [5, 0])
 analysis.setBounds(interval)
 analysis.setVariableInputs(['X0'])
-analysis.setMaximumEvaluationNumber(150);
-analysis.setMaximumAbsoluteError(1e-6);
-analysis.setMaximumRelativeError(1e-6);
-analysis.setMaximumResidualError(1e-6);
-analysis.setMaximumConstraintError(1e-6);
+analysis.setMaximumEvaluationNumber(150)
+analysis.setMaximumAbsoluteError(1e-6)
+analysis.setMaximumRelativeError(1e-6)
+analysis.setMaximumResidualError(1e-6)
+analysis.setMaximumConstraintError(1e-6)
 myStudy.add(analysis)
 print(analysis)
 

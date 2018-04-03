@@ -87,7 +87,7 @@ myStudy = otguibase.OTStudy('myStudy')
 
 inputs = []
 for i in range(20):
-  inputs.append(otguibase.Input('x' + str(i+1), ot.Uniform(0, 1)))
+    inputs.append(otguibase.Input('x' + str(i + 1), ot.Uniform(0, 1)))
 y = otguibase.Output('y')
 y_fake = otguibase.Output('y_fake')
 print(inputs)

@@ -102,13 +102,13 @@ void SobolResultWindow::buildInterface()
 
     // build widget
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
-                                                                                foIndicesInterval,
-                                                                                result_.getTotalIndices()[i],
-                                                                                toIndicesInterval,
-                                                                                result_.getInputNames(),
-                                                                                result_.getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol,
-                                                                                this);
+        foIndicesInterval,
+        result_.getTotalIndices()[i],
+        toIndicesInterval,
+        result_.getInputNames(),
+        result_.getOutputNames()[i],
+        SensitivityResultWidget::Sobol,
+        this);
     stackedWidget->addWidget(indicesResultWidget);
   }
   vbox->addWidget(stackedWidget);

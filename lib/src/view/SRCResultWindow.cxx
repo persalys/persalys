@@ -92,13 +92,13 @@ void SRCResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getIndices()[i],
-                                                                                Interval(),
-                                                                                Point(),
-                                                                                Interval(),
-                                                                                result_.getInputNames(),
-                                                                                result_.getOutputNames()[i],
-                                                                                SensitivityResultWidget::SRC,
-                                                                                this);
+        Interval(),
+        Point(),
+        Interval(),
+        result_.getInputNames(),
+        result_.getOutputNames()[i],
+        SensitivityResultWidget::SRC,
+        this);
     stackedWidget->addWidget(indicesResultWidget);
   }
   vbox->addWidget(stackedWidget);

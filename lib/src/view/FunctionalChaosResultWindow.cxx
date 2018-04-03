@@ -100,10 +100,10 @@ void FunctionalChaosResultWindow::buildInterface()
                                        result_.getFunctionalChaosResult().getRelativeErrors(),
                                        result_.getFunctionalChaosResult().getResiduals());
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
-                                                                                 result_.getOutputSample(),
-                                                                                 i,
-                                                                                 tr("Relative error"),
-                                                                                 this);
+        result_.getOutputSample(),
+        i,
+        tr("Relative error"),
+        this);
 
     plotsStackedWidget->addWidget(validationWidget);
   }
@@ -226,13 +226,13 @@ void FunctionalChaosResultWindow::buildInterface()
     for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
-                                                                                Interval(),
-                                                                                result_.getSobolResult().getTotalIndices()[i],
-                                                                                Interval(),
-                                                                                result_.getSobolResult().getInputNames(),
-                                                                                result_.getSobolResult().getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol,
-                                                                                this);
+          Interval(),
+          result_.getSobolResult().getTotalIndices()[i],
+          Interval(),
+          result_.getSobolResult().getInputNames(),
+          result_.getSobolResult().getOutputNames()[i],
+          SensitivityResultWidget::Sobol,
+          this);
       sobolStackedWidget->addWidget(sobolResultWidget);
     }
     vbox->addWidget(sobolStackedWidget);
@@ -284,10 +284,10 @@ void FunctionalChaosResultWindow::buildInterface()
       for (UnsignedInteger j = 0; j < nbOutputs; ++j)
       {
         MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
-                                                                                    outputSample,
-                                                                                    j,
-                                                                                    tr("Q2"),
-                                                                                    this);
+            outputSample,
+            j,
+            tr("Q2"),
+            this);
         plotStackedWidget->addWidget(validationWidget);
       }
       tabLayout->addWidget(plotStackedWidget);

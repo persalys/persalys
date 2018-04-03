@@ -168,10 +168,10 @@ void MorrisResultWidget::buildInterface()
 
   // Graph Setting
   GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotMuStarSigma,
-                                                                         QStringList(),
-                                                                         QStringList(),
-                                                                         GraphConfigurationWidget::NoType,
-                                                                         this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
 
   tab->setDockWidget(graphSetting);
 
@@ -227,10 +227,10 @@ void MorrisResultWidget::buildInterface()
 
   // Graph Setting
   graphSetting = new GraphConfigurationWidget(plotMuStarMu,
-                                              QStringList(),
-                                              QStringList(),
-                                              GraphConfigurationWidget::NoType,
-                                              this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
 
   tab->setDockWidget(graphSetting);
 

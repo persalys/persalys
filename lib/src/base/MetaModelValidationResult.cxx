@@ -47,8 +47,8 @@ MetaModelValidationResult::MetaModelValidationResult(const String& name)
 
 
 MetaModelValidationResult::MetaModelValidationResult(const Sample& metaModelSample,
-                                                     const Point& q2,
-                                                     const Point& residuals)
+    const Point& q2,
+    const Point& residuals)
   : PersistentObject()
   , name_("")
   , metaModelSample_(metaModelSample)

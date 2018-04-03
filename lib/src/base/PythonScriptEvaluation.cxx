@@ -44,8 +44,8 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 
 /* Constructor with parameters */
 PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
-                                               const Description & outputVariablesNames,
-                                               const String & code)
+    const Description & outputVariablesNames,
+    const String & code)
   : EvaluationImplementation()
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())

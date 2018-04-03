@@ -171,7 +171,7 @@ Sample ImportedDesignOfExperiment::getSampleFromFile(const String& fileName) con
   const Description inputNames = getPhysicalModel().getInputNames();
   if (sampleFromFile.getDimension() < inputNames.getSize())
     throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension lesser than the number of inputs of the physical model: "
-                                          << inputNames.getSize();
+                                         << inputNames.getSize();
 
   // check the sample description
   const Description sampleDescription(sampleFromFile.getDescription());

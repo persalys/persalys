@@ -168,7 +168,7 @@ Parameters ModelEvaluation::getParameters() const
   {
     values << inputNames_[i] << " : " << inputValues_[i];
     if (i < inputNames_.getSize() - 1)
-       values << "\n";
+      values << "\n";
   }
   param.add("Point", values);
 

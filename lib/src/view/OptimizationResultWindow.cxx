@@ -106,8 +106,8 @@ void OptimizationResultWindow::buildInterface()
 
   // horizontal header
   optimTableModel->setHorizontalHeaderLabels(QStringList() << tr("")
-                                         << tr("Variable")
-                                         << tr("Value"));
+      << tr("Variable")
+      << tr("Value"));
 
   // output
   optimTableModel->setNotEditableHeaderItem(0, 0, tr("Output"));

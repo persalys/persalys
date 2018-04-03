@@ -40,7 +40,7 @@ public:
   void add(const OT::String& name, const OT::Point& values);
   OT::UnsignedInteger getSize() const;
   std::pair<OT::String, OT::String> operator[](const OT::UnsignedInteger index) const;
-  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator=",");
+  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ",");
   static OT::String GetOTDescriptionStr(const OT::Description& values);
   static OT::String GetOTBoolCollectionStr(const OT::Interval::BoolCollection& values);
   static OT::Description GetOTIntervalDescription(const OT::Interval& interval);

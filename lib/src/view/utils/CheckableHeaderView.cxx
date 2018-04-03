@@ -117,9 +117,9 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
       for (int i = 0; i < model()->rowCount(); ++i)
       {
         if ((model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() != (isChecked_ ? Qt::Checked : Qt::Unchecked)) &&
-             model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
+            model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
         {
-            model()->setData(model()->index(i, 0), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
+          model()->setData(model()->index(i, 0), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
         }
       }
       modelSignalBlocked_ = false;

@@ -436,7 +436,7 @@ Parameters GridDesignOfExperiment::getParameters() const
     else
       bounds << inputNames_[i] << " : " << values_[i];
     if (i < inputNames_.getSize() - 1)
-       bounds << "\n";
+      bounds << "\n";
   }
   param.add("Bounds", bounds);
 
