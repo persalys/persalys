@@ -39,8 +39,6 @@ public:
 
   virtual ~AnalysisWindow();
 
-  void setMessage(const QString& message);
-
 protected:
   void buildInterface();
   void initializeWidgets();

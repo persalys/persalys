@@ -233,13 +233,15 @@ void AnalysisItem::modifyAnalysis()
       }
     }
     // must have at least a point
-    else
+    if (!dmAnalysis_ptr->getDesignOfExperiment().getSample().getSize())
     {
-      if (!dmAnalysis_ptr->getDesignOfExperiment().getSample().getSize())
-      {
-        emit showErrorMessageRequested(tr("The sample is empty."));
-        return;
-      }
+      emit showErrorMessageRequested(tr("The sample is empty."));
+      return;
+    }
+    if (!dmAnalysis_ptr->getDesignOfExperiment().isValid())
+    {
+      emit showErrorMessageRequested(tr("The sample contains invalid values."));
+      return;
     }
   }
 

@@ -22,6 +22,8 @@
 
 #include "otgui/StudyTreeViewModel.hxx"
 
+#include <openturns/SpecFunc.hxx>
+
 #include <QColor>
 
 using namespace OT;
@@ -36,7 +38,7 @@ SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
 {
   for (UnsignedInteger j = 0; j < data_.getSize(); ++j)
     for (UnsignedInteger i = 0; i < data_.getDimension(); ++i)
-      if (std::isnan(data_(j, i)))
+      if (!SpecFunc::IsNormal(data_(j, i)))
       {
         sampleIsValid_ = false;
         break;
@@ -94,7 +96,7 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
     return data_(index.row(), index.column());
   else if (role == Qt::BackgroundRole)
   {
-    if (std::isnan(data_(index.row(), index.column())))
+    if (!SpecFunc::IsNormal(data_(index.row(), index.column())))
       return QColor(Qt::red);
     return QVariant();
   }

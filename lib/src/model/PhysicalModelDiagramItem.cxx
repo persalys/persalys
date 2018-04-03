@@ -282,7 +282,7 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 {
   // do nothing if the item already exists
   QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", 1, Qt::MatchRecursive);
-  if (listIndexes.size() == 1)
+  if (listIndexes.size() == 1 && listIndexes[0].parent() == this->index())
   {
     // emit signal to the study tree to display the window
     emit changeCurrentItemRequested(listIndexes[0]);

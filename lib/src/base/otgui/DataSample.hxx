@@ -50,6 +50,7 @@ public:
   SampleCollection getListXMax() const;
 
   OT::Sample getSample() const;
+  bool isValid() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

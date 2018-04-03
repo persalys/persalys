@@ -54,12 +54,17 @@
         <translation>Le modèle doit avoir une copule indépendante pour réaliser une analyse de sensibilité mais ici les entrées sont dépendantes.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="240"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="238"/>
         <source>The sample is empty.</source>
         <translation>L&apos;échantillon est vide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="278"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="243"/>
+        <source>The sample contains invalid values.</source>
+        <translation>L&apos;échantillon contient des valeurs invalides.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="280"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
@@ -933,79 +938,84 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::DataModelDefinitionItem</name>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="39"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="41"/>
         <source>Definition</source>
         <translation>Définition</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="53"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="55"/>
         <source>Analyse the data sample</source>
         <translation>Analyser l&apos;échantillon de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="69"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="71"/>
         <source>Analysis</source>
         <translation>Analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="139"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="146"/>
         <source>The model must contain at least two variables.</source>
         <translation>Le modèle doit contenir au moins deux variables.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="144"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="151"/>
         <source>dependenceInference_</source>
         <translation>inferenceDependance_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="156"/>
-        <source>The model must have at least one output.</source>
-        <translation>Le modèle doit avoir au moins une sortie.</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="52"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="54"/>
         <source>Data analysis</source>
         <translation>Analyse de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="56"/>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="57"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="58"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="59"/>
         <source>Marginals inference</source>
         <translation>Inférence des lois marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="60"/>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="61"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="62"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="63"/>
         <source>Dependence inference</source>
         <translation>Inférence de la dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="64"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="66"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="65"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="67"/>
         <source>Create a new metamodel</source>
         <translation>Créer un nouveau métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="97"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="99"/>
         <source>The sample is empty.</source>
         <translation>L&apos;échantillon est vide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="111"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="104"/>
+        <source>The sample contains invalid values.</source>
+        <translation>L&apos;échantillon contient des valeurs invalides.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="118"/>
         <source>dataAnalysis_</source>
         <translation>analyseDonnees_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="124"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="131"/>
         <source>marginalsInference_</source>
         <translation>inferenceMarginales_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="161"/>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="165"/>
+        <source>The model must have at least one output and one input.</source>
+        <translation>Le modèle doit avoir au moins une sortie et une entrée.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="170"/>
         <source>metaModel_</source>
         <translation>metamodele_</translation>
     </message>
@@ -1033,7 +1043,7 @@ bayésien (BIC)</translation>
         <translation>Supprimer le modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="152"/>
+        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="154"/>
         <source>Can not remove a design of experiments when an analysis is running.</source>
         <translation>Impossible de supprimer un plan d&apos;expériences lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
@@ -1133,42 +1143,48 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DataModelTableModel</name>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="120"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="96"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="313"/>
+        <source>The sample contains invalid values</source>
+        <translation>L&apos;échantillon contient des valeurs invalides</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="128"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="122"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="130"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="155"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="164"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="236"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="163"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="172"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="244"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="157"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="164"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="252"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="165"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="172"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="260"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="159"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="164"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="167"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="172"/>
         <source>Disable</source>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="224"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="232"/>
         <source>The name %2 is already used by another variable</source>
         <translation>Le nom %2 est déjà utilisé par une autre variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="301"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="309"/>
         <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>

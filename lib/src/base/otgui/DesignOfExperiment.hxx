@@ -59,6 +59,7 @@ public:
   OT::Sample getSample() const;
   void setInputSample(const OT::Sample & sample);
   void setOutputSample(const OT::Sample & sample);
+  bool isValid() const;
 
   OT::String getPythonScript() const;
 

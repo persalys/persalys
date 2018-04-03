@@ -22,6 +22,8 @@
 
 #include "otgui/StudyTreeViewModel.hxx"
 
+#include <openturns/SpecFunc.hxx>
+
 #include <QColor>
 
 using namespace OT;
@@ -88,6 +90,12 @@ void DataModelTableModel::updateData(const bool useColumns)
     }
     data_.setDescription(dataDescription);
   }
+
+  if (!dataModel_->isValid())
+  {
+    emit errorMessageChanged(tr("The sample contains invalid values"));
+  }
+
   endResetModel();
 }
 
@@ -191,7 +199,7 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
 
     // background
     else if (role == Qt::BackgroundRole)
-      if (std::isnan(data_(index.row() - 2, index.column())))
+      if (!SpecFunc::IsNormal(data_(index.row() - 2, index.column())))
         return QColor(Qt::red);
   }
   return QVariant();
@@ -299,6 +307,11 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
   emit errorMessageChanged("");
   if (!inputColumns_.getSize() && !outputColumns_.getSize())
     emit errorMessageChanged(tr("Define at least one variable"));
+
+  if (!dataModel_->isValid())
+  {
+    emit errorMessageChanged(tr("The sample contains invalid values"));
+  }
 
   dataModel_->blockNotification();
 
