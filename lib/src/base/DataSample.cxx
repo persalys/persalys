@@ -20,6 +20,8 @@
  */
 #include "otgui/DataSample.hxx"
 
+#include <openturns/SpecFunc.hxx>
+
 using namespace OT;
 
 namespace OTGUI
@@ -182,6 +184,22 @@ Sample DataSample::getSample() const
     }
   }
   return sample_;
+}
+
+
+bool DataSample::isValid() const
+{
+  for (UnsignedInteger i = 0; i < getSample().getSize(); ++i)
+  {
+    for (UnsignedInteger j = 0; j < sample_.getDimension(); ++j)
+    {
+      if (!SpecFunc::IsNormal(sample_(i, j)))
+      {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 

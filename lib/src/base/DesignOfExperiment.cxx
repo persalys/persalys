@@ -127,6 +127,12 @@ void DesignOfExperiment::setOutputSample(const Sample& sample)
 }
 
 
+bool DesignOfExperiment::isValid() const
+{
+  return getImplementation()->isValid();
+}
+
+
 String DesignOfExperiment::getPythonScript() const
 {
   return getImplementation()->getPythonScript();

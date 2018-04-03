@@ -26,6 +26,8 @@
 #include "otgui/CopulaInferenceAnalysis.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 
+#include <openturns/SpecFunc.hxx>
+
 #include <QDebug>
 
 using namespace OT;
@@ -97,6 +99,11 @@ bool DataModelDefinitionItem::designOfExperimentValid()
     emit showErrorMessageRequested(tr("The sample is empty."));
     return false;
   }
+  if (!designOfExperiment_.isValid())
+  {
+    emit showErrorMessageRequested(tr("The sample contains invalid values."));
+    return false;
+  }
   return true;
 }
 
@@ -151,6 +158,8 @@ void DataModelDefinitionItem::createCopulaInferenceAnalysis()
 void DataModelDefinitionItem::createMetaModel()
 {
   // check
+  if (!designOfExperimentValid())
+    return;
   if (!designOfExperiment_.getOutputSample().getSize() || !designOfExperiment_.getInputSample().getSize())
   {
     emit showErrorMessageRequested(tr("The model must have at least one output and one input."));

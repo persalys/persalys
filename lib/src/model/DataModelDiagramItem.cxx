@@ -68,9 +68,10 @@ void DataModelDiagramItem::update(Observable* source, const String& message)
     }
     // emit signals to DataModelDiagramWindow
     // to update the diagram (arrow color and button availability)
-    emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0);
-    emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1);
-    emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize());
+    const bool validDOE = designOfExperiment_.isValid();
+    emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0 && validDOE);
+    emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1 && validDOE);
+    emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize() && validDOE);
   }
   else if (message == "designOfExperimentRemoved")
   {
@@ -88,9 +89,10 @@ void DataModelDiagramItem::fill()
     appendDataModelItem();
 
   // update diagram (arrow color and button availability)
-  emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0);
-  emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1);
-  emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize());
+  const bool validDOE = designOfExperiment_.isValid();
+  emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0 && validDOE);
+  emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1 && validDOE);
+  emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize() && validDOE);
 }
 
 
