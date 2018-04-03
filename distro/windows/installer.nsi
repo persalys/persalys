@@ -335,8 +335,8 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   CopyFiles /SILENT $MODULE_INSTALL_PATH\..\openturns\*.dll $MODULE_INSTALL_PATH
   File /r "${MODULE_PREFIX}\bin\*.*"
   File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}base\*.*"
-  SetOutPath "$MODULE_INSTALL_PATH\plugins"
-  File /r "${MODULE_PREFIX}\lib\plugins\"
+  SetOutPath "$MODULE_INSTALL_PATH\platforms"
+  File /r "${MODULE_PREFIX}\lib\platforms\"
 
   SetOutPath "$MODULE_INSTALL_PATH"
   File "README.txt"

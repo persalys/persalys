@@ -34,7 +34,7 @@ ${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/bin/*.dll
 ${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/Lib/site-packages/otguibase/*.pyd
 make tests
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
-cp -r ${MINGW_PREFIX}/lib/qt/plugins ${MOD_PREFIX}/lib
+cp -r ${MINGW_PREFIX}/lib/qt/plugins/platforms ${MOD_PREFIX}/lib
 export WINEPATH=${MOD_PREFIX}/bin
 ${ARCH}-w64-mingw32-wine wineboot
 xvfb-run ctest --output-on-failure --timeout 100 -j8 -E FMI
