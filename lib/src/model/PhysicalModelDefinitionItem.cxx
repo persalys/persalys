@@ -135,9 +135,9 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
   {
     emit codeChanged();
   }
-  else if (message == "parallelizeStatusChanged")
+  else if (message == "parallelizationStatusChanged")
   {
-    emit parallelizeStatusChanged();
+    emit parallelizationStatusChanged();
   }
   else if (message == "physicalModelRemoved")
   {

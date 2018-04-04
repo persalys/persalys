@@ -344,6 +344,18 @@ void PhysicalModel::setCopula(const Description &inputNames, const Copula &copul
 }
 
 
+Bool PhysicalModel::isParallel() const
+{
+  return getImplementation()->isParallel();
+}
+
+
+void PhysicalModel::setParallel(const Bool flag)
+{
+  getImplementation()->setParallel(flag);
+}
+
+
 bool PhysicalModel::isValid() const
 {
   return getImplementation()->isValid();

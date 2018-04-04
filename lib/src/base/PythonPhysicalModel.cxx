@@ -148,10 +148,17 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 {
   if (!functionCache_.getEvaluation()->isActualImplementation())
   {
-    functionCache_ = Function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode()));
+    functionCache_ = Function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel()));
     functionCache_.enableCache();
   }
   return functionCache_;
+}
+
+
+void PythonPhysicalModel::setParallel(const Bool flag)
+{
+  functionCache_ = Function();
+  PhysicalModelImplementation::setParallel(flag);
 }
 
 
@@ -220,6 +227,8 @@ String PythonPhysicalModel::getPythonScript() const
   result += "code='" + escaped_code + "'\n";
 
   result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputCollection, outputCollection, code)\n";
+  if (isParallel())
+    result += getName() + ".setParallel(True)\n";
 
   result += PhysicalModelImplementation::getCopulaPythonScript();
 

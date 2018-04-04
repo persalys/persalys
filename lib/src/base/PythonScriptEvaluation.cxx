@@ -38,18 +38,22 @@ PythonScriptEvaluation::PythonScriptEvaluation()
   : EvaluationImplementation()
   , inputDimension_(0)
   , outputDimension_(0)
+  , code_("")
+  , isParallel_(false)
 {
 }
 
 
 /* Constructor with parameters */
 PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
-    const Description & outputVariablesNames,
-    const String & code)
+                                               const Description & outputVariablesNames,
+                                               const String & code,
+                                               const Bool isParallel)
   : EvaluationImplementation()
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
+  , isParallel_(isParallel)
 {
   setInputDescription(inputVariablesNames);
   setOutputDescription(outputVariablesNames);

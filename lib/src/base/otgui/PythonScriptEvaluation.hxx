@@ -42,7 +42,8 @@ public:
   /** Constructor with parameters */
   PythonScriptEvaluation(const OT::Description & inputVariablesNames,
                          const OT::Description & outputVariablesNames,
-                         const OT::String & code);
+                         const OT::String & code,
+                         const OT::Bool isParallel);
 
   /** Virtual constructor */
   virtual PythonScriptEvaluation * clone() const;
@@ -76,6 +77,7 @@ private:
   OT::UnsignedInteger inputDimension_;
   OT::UnsignedInteger outputDimension_;
   OT::String code_;
+  bool isParallel_;
 };
 }
 #endif
