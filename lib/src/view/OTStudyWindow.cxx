@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -90,13 +90,13 @@ void OTStudyWindow::buildInterface()
 
   textEdit = new QLabel;
   QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6\n- %7")
-                    .arg(tr("Evaluation"))
-                    .arg(tr("Optimization"))
-                    .arg(tr("Design of experiments"))
-                    .arg(tr("Central tendency"))
-                    .arg(tr("Sensitivity"))
-                    .arg(tr("Reliability"))
-                    .arg(tr("Metamodel"));
+                 .arg(tr("Evaluation"))
+                 .arg(tr("Optimization"))
+                 .arg(tr("Design of experiments"))
+                 .arg(tr("Central tendency"))
+                 .arg(tr("Sensitivity"))
+                 .arg(tr("Reliability"))
+                 .arg(tr("Metamodel"));
 #ifdef OTGUI_HAVE_OTMORRIS
   text.append(QString("\n- %1").arg(tr("Screening")));
 #endif
@@ -123,10 +123,10 @@ void OTStudyWindow::buildInterface()
 
   textEdit = new QLabel;
   text = QString("- %1\n- %2\n- %3\n- %4")
-                    .arg(tr("Data analysis"))
-                    .arg(tr("Marginals inference"))
-                    .arg(tr("Dependence inference"))
-                    .arg(tr("Metamodel"));
+         .arg(tr("Data analysis"))
+         .arg(tr("Marginals inference"))
+         .arg(tr("Dependence inference"))
+         .arg(tr("Metamodel"));
   textEdit->setText(text);
   layout->addWidget(textEdit, row + 1, 2, Qt::AlignHCenter | Qt::AlignTop);
 

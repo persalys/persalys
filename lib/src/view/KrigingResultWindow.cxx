@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -97,10 +97,10 @@ void KrigingResultWindow::buildInterface()
                                        Point(1, -1.),
                                        Point(1, -1.));
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
-                                                                                 result_.getOutputSample(),
-                                                                                 i,
-                                                                                 "",
-                                                                                 this);
+        result_.getOutputSample(),
+        i,
+        "",
+        this);
 
     plotsStackedWidget->addWidget(validationWidget);
   }
@@ -194,10 +194,10 @@ void KrigingResultWindow::buildInterface()
       for (UnsignedInteger j = 0; j < nbOutputs; ++j)
       {
         MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
-                                                                                     outputSample,
-                                                                                     j,
-                                                                                     tr("Q2"),
-                                                                                     this);
+            outputSample,
+            j,
+            tr("Q2"),
+            this);
         plotStackedWidget->addWidget(validationWidget);
       }
       tabLayout->addWidget(plotStackedWidget);

@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -186,7 +186,7 @@ String LimitStateImplementation::__str__(const String & offset) const
   else if (operatorName == "GreaterOrEqual")
     oss <<  " >= ";
 
-   oss << getThreshold();
+  oss << getThreshold();
 
   return oss;
 }

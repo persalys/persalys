@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -294,12 +294,12 @@ void CopulaInferenceAnalysis::launch()
         String str = it->second[i].getImplementation()->getClassName();
         const String distributionName = str.substr(0, str.find("Copula"));
         const String message = OSS() << "Error when building the "
-                                << distributionName
-                                << " copula with the sample of the variables "
-                                << sample.getDescription()
-                                << ". "
-                                << ex.what()
-                                << "\n";
+                               << distributionName
+                               << " copula with the sample of the variables "
+                               << sample.getDescription()
+                               << ". "
+                               << ex.what()
+                               << "\n";
         // set fittingTestResult
         inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
         Collection<Sample> kendallPlotDataCollection;

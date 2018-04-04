@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -168,10 +168,10 @@ void MorrisResultWidget::buildInterface()
 
   // Graph Setting
   GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotMuStarSigma,
-                                                                         QStringList(),
-                                                                         QStringList(),
-                                                                         GraphConfigurationWidget::NoType,
-                                                                         this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
 
   tab->setDockWidget(graphSetting);
 
@@ -227,10 +227,10 @@ void MorrisResultWidget::buildInterface()
 
   // Graph Setting
   graphSetting = new GraphConfigurationWidget(plotMuStarMu,
-                                              QStringList(),
-                                              QStringList(),
-                                              GraphConfigurationWidget::NoType,
-                                              this);
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
 
   tab->setDockWidget(graphSetting);
 

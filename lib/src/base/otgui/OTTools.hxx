@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -40,7 +40,7 @@ public:
   void add(const OT::String& name, const OT::Point& values);
   OT::UnsignedInteger getSize() const;
   std::pair<OT::String, OT::String> operator[](const OT::UnsignedInteger index) const;
-  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator=",");
+  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ",");
   static OT::String GetOTDescriptionStr(const OT::Description& values);
   static OT::String GetOTBoolCollectionStr(const OT::Interval::BoolCollection& values);
   static OT::Description GetOTIntervalDescription(const OT::Interval& interval);

@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -82,8 +82,11 @@ private:
 class OTGUI_API StaticPlotCurveItem : public QwtPlotCurve
 {
 public:
-  StaticPlotCurveItem(){};
-  virtual int rtti() const {return 1001;};
+  StaticPlotCurveItem() {};
+  virtual int rtti() const
+  {
+    return 1001;
+  };
 };
 
 
@@ -740,7 +743,7 @@ void PlotWidget::selectPoints(const QRectF& rect)
     QMenu contextMenu(this);
     // actions of the context menu
     QAction * deselectPointsAction = new QAction(tr("Deselect the points"), &contextMenu);
-    QAction * selectPointsAction= new QAction(tr("Select the points"), &contextMenu);
+    QAction * selectPointsAction = new QAction(tr("Select the points"), &contextMenu);
     contextMenu.addAction(deselectPointsAction);
     contextMenu.addAction(selectPointsAction);
 
@@ -809,7 +812,7 @@ QVector<PlotWidget*> PlotWidget::GetListScatterPlots(const Sample& inS,
     const QStringList inAxisNames,
     const QStringList outNames,
     const QStringList outAxisNames
-                                                   )
+                                                    )
 {
   QVector<PlotWidget*> listScatterPlotWidgets;
 

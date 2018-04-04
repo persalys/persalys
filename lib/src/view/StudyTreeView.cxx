@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -66,7 +66,7 @@ public:
         index.data(Qt::UserRole).toString().contains("ModelDiagram") ||
         index.data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem" ||
         index.data(Qt::UserRole).toString() == "LimitState"
-    )
+       )
     {
       QLineF aLine(optionButton.rect.bottomLeft(), optionButton.rect.bottomRight());
       QPen pen("#0a5205");

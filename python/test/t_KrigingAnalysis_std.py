@@ -68,7 +68,7 @@ metaModel2 = result2.getResultForVariable('y1').getMetaModel()
 openturns.testing.assert_almost_equal(
     aDesign.getDesignOfExperiment().getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
 openturns.testing.assert_almost_equal(
-    result2.getAnalyticalValidation().getQ2(), [0.8322798149785174,0.8322781778862545], 1e-4, 1e-4)
+    result2.getAnalyticalValidation().getQ2(), [0.8322798149785174, 0.8322781778862545], 1e-4, 1e-4)
 openturns.testing.assert_almost_equal(
     result2.getLeaveOneOutValidation().getQ2(), [0.832447, 0.832278], 1e-3, 1e-3)
 

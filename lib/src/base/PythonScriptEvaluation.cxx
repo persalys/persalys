@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -44,8 +44,8 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 
 /* Constructor with parameters */
 PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
-                                               const Description & outputVariablesNames,
-                                               const String & code)
+    const Description & outputVariablesNames,
+    const String & code)
   : EvaluationImplementation()
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())

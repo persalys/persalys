@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -144,7 +144,7 @@ void ApproximationResultTabWidget::buildInterface()
               << tr("Hasofer reliability index");
 
     valuesList << QString::number(formResult_.getEventProbability())
-              << QString::number(result_.getHasoferReliabilityIndex());
+               << QString::number(result_.getHasoferReliabilityIndex());
 
     ParametersWidget * parametersTable = new ParametersWidget(tr("Failure probability"), namesList, valuesList, true, true);
     tabLayout->addWidget(parametersTable, 0, Qt::AlignTop);

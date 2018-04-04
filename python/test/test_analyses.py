@@ -41,7 +41,9 @@ myStudy.add(model2)
 
 # model 3 ##
 filename = 'data.csv'
-cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()], ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
+cDist = ot.ComposedDistribution(
+    [ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
+                                ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, ',')
 model3 = otguibase.DataModel(
@@ -214,23 +216,23 @@ myStudy.add(src)
 optim = otguibase.OptimizationAnalysis('optim', model1, 'TNC')
 optim.setInterestVariables(['y1'])
 optim.setVariableInputs(['x1', 'x2'])
-optim.setMaximumEvaluationNumber(150);
-optim.setMaximumAbsoluteError(1e-6);
-optim.setMaximumRelativeError(1e-6);
-optim.setMaximumResidualError(1e-6);
-optim.setMaximumConstraintError(1e-6);
+optim.setMaximumEvaluationNumber(150)
+optim.setMaximumAbsoluteError(1e-6)
+optim.setMaximumRelativeError(1e-6)
+optim.setMaximumResidualError(1e-6)
+optim.setMaximumConstraintError(1e-6)
 myStudy.add(optim)
 
 # 6- morris ##
 try:
-  morris = otguibase.MorrisAnalysis('aMorris', model1)
-  morris.setInterestVariables(['y0'])
-  morris.setLevel(4)
-  morris.setTrajectoriesNumber(10)
-  morris.setSeed(2)
-  myStudy.add(morris)
+    morris = otguibase.MorrisAnalysis('aMorris', model1)
+    morris.setInterestVariables(['y0'])
+    morris.setLevel(4)
+    morris.setTrajectoriesNumber(10)
+    morris.setSeed(2)
+    myStudy.add(morris)
 except:
-  print("No Morris")
+    print("No Morris")
 
 # 7- data analysis ##
 dataAnalysis = otguibase.DataAnalysis('DataAnalysis', model3)

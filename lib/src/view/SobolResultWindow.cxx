@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -102,13 +102,13 @@ void SobolResultWindow::buildInterface()
 
     // build widget
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
-                                                                                foIndicesInterval,
-                                                                                result_.getTotalIndices()[i],
-                                                                                toIndicesInterval,
-                                                                                result_.getInputNames(),
-                                                                                result_.getOutputNames()[i],
-                                                                                SensitivityResultWidget::Sobol,
-                                                                                this);
+        foIndicesInterval,
+        result_.getTotalIndices()[i],
+        toIndicesInterval,
+        result_.getInputNames(),
+        result_.getOutputNames()[i],
+        SensitivityResultWidget::Sobol,
+        this);
     stackedWidget->addWidget(indicesResultWidget);
   }
   vbox->addWidget(stackedWidget);

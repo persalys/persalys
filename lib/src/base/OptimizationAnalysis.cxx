@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -71,8 +71,8 @@ OptimizationAnalysis::OptimizationAnalysis()
 
 /* Constructor with parameters */
 OptimizationAnalysis::OptimizationAnalysis(const String& name,
-                                 const PhysicalModel& physicalModel,
-                                 const String& algorithmName)
+    const PhysicalModel& physicalModel,
+    const String& algorithmName)
   : PhysicalModelAnalysis(name, physicalModel)
   , inputNames_(getPhysicalModel().getInputNames())
   , solverName_(algorithmName)
@@ -262,7 +262,8 @@ void OptimizationAnalysis::launch()
 
   // FIXME: https://github.com/openturns/openturns/pull/703
   NLopt * nlopt = dynamic_cast<NLopt*>(solver.getImplementation().get());
-  if (nlopt) {
+  if (nlopt)
+  {
     NLopt localAlgo("LD_MMA");
     nlopt->setLocalSolver(localAlgo);
   }
@@ -485,9 +486,9 @@ String OptimizationAnalysis::getPythonScript() const
   }
   oss << getName() << ".setMinimization(" << (isMinimization_ ? "True" : "False") << ")\n";
   oss << "bounds = ot.Interval(" << getBounds().getLowerBound().__str__()
-                                 << ", " << getBounds().getUpperBound().__str__()
-                                 << ", " << Parameters::GetOTBoolCollectionStr(getBounds().getFiniteLowerBound())
-                                 << ", " << Parameters::GetOTBoolCollectionStr(getBounds().getFiniteUpperBound());
+      << ", " << getBounds().getUpperBound().__str__()
+      << ", " << Parameters::GetOTBoolCollectionStr(getBounds().getFiniteLowerBound())
+      << ", " << Parameters::GetOTBoolCollectionStr(getBounds().getFiniteUpperBound());
   oss << ")\n";
 
   oss << getName() << ".setBounds(bounds)\n";

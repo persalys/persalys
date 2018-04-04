@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -133,9 +133,9 @@ void MonteCarloAnalysis::launch()
 
   // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
   while (!stopRequested_
-          && (outerSampling < maximumOuterSampling)
-          && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
-          && (elapsedTime < getMaximumElapsedTime()))
+         && (outerSampling < maximumOuterSampling)
+         && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
+         && (elapsedTime < getMaximumElapsedTime()))
   {
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
@@ -182,10 +182,10 @@ void MonteCarloAnalysis::launch()
           {
             failedInputSample_ = blockInputSample;
             warningMessage_ = "At least a point failed. "
-                            + getInterestVariables()[k]
-                            + Point(blockInputSample[j]).__str__()
-                            + " = "
-                            + (OSS() << blockOutputSample(j, k)).str();
+                              + getInterestVariables()[k]
+                              + Point(blockInputSample[j]).__str__()
+                              + " = "
+                              + (OSS() << blockOutputSample(j, k)).str();
             break;
           }
         }

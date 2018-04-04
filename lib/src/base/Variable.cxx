@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -52,7 +52,7 @@ String Variable::__repr__() const
 
 void Variable::setName(const String &name)
 {
-  if (name.empty()|| name.find_first_not_of(" \t\n\v\f\r") == name.npos)
+  if (name.empty() || name.find_first_not_of(" \t\n\v\f\r") == name.npos)
     throw InvalidArgumentException(HERE) << "The variable name can not be empty";
   PersistentObject::setName(name);
 }

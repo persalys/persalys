@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -26,8 +26,8 @@ namespace OTGUI
 {
 
 ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
-                                               const QStringList &itemNames,
-                                               QWidget * parent)
+    const QStringList &itemNames,
+    QWidget * parent)
   : QListWidget(parent)
   , title_(title)
   , itemNames_(itemNames)
@@ -38,9 +38,9 @@ ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
 
 
 ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,
-                                               const QStringList &itemNames,
-                                               const QStringList &selectedItemNames,
-                                               QWidget * parent)
+    const QStringList &itemNames,
+    const QStringList &selectedItemNames,
+    QWidget * parent)
   : QListWidget(parent)
   , title_(title)
   , itemNames_(itemNames)

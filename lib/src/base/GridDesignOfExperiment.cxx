@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -436,7 +436,7 @@ Parameters GridDesignOfExperiment::getParameters() const
     else
       bounds << inputNames_[i] << " : " << values_[i];
     if (i < inputNames_.getSize() - 1)
-       bounds << "\n";
+      bounds << "\n";
   }
   param.add("Bounds", bounds);
 

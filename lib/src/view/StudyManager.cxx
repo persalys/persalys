@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -306,7 +306,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     }
     catch (std::exception& ex)
     {
-      qDebug() << "Error when building the analysis window : "<< ex.what();
+      qDebug() << "Error when building the analysis window : " << ex.what();
       message = tr("Impossible to create a result window");
     }
   }
@@ -559,11 +559,11 @@ bool StudyManager::close(OTStudyItem* studyItem)
   if (studyItem->getOTStudy().getImplementation().get()->hasBeenModified())
   {
     const int ret = QMessageBox::warning(mainWidget_,
-                                        tr("Warning"),
-                                        tr("Do you want to save the OTStudy '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
-                                        .arg(studyItem->getOTStudy().getFileName().c_str()),
-                                        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-                                        QMessageBox::Save);
+                                         tr("Warning"),
+                                         tr("Do you want to save the OTStudy '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
+                                         .arg(studyItem->getOTStudy().getFileName().c_str()),
+                                         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                                         QMessageBox::Save);
     if (ret == QMessageBox::Cancel)
     {
       return false;

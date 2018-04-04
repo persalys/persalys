@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -278,9 +278,9 @@ void DataAnalysisWindow::addSummaryTab()
     ind.add(inInd);
 
     MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
-                                                                                          isConfidenceIntervalRequired_,
-                                                                                          levelConfidenceInterval_,
-                                                                                          ind);
+        isConfidenceIntervalRequired_,
+        levelConfidenceInterval_,
+        ind);
     tabLayout->addWidget(estimatesGroupBox, 0, Qt::AlignTop);
     connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
@@ -759,9 +759,9 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   // setting widget
   const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
   PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
-                                                                      designOfExperiment_.getSample(),
-                                                                      sampleRank,
-                                                                      this);
+      designOfExperiment_.getSample(),
+      sampleRank,
+      this);
   cobwebTabWidget->setDockWidget(cobwebSettingWidget);
 
   tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));

@@ -14,7 +14,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -166,10 +166,10 @@ void KrigingAnalysis::launch()
     throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
   if (getCovarianceModel().getSpatialDimension() != inputDimension)
     throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getSpatialDimension()
-                                          << ") must be equal to the number of effective inputs (" << inputDimension << ")";
+                                         << ") must be equal to the number of effective inputs (" << inputDimension << ")";
   if (getBasis().getDimension() != inputDimension)
     throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getDimension()
-                                          << ") must be equal to the number of effective inputs (" << inputDimension << ")";
+                                         << ") must be equal to the number of effective inputs (" << inputDimension << ")";
   if (testSampleValidation() && inputSize * getTestSampleValidationPercentageOfPoints() / 100 < 3)
     throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (inputSize * getTestSampleValidationPercentageOfPoints() / 100);
   if (kFoldValidation() && inputSize / getKFoldValidationNumberOfFolds() < 3)
@@ -247,8 +247,8 @@ Function KrigingAnalysis::runAlgo(const Sample& inputSample, const Sample& outpu
 
 
 KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const Sample& inputSample,
-                                                        const Sample& outputSample,
-                                                        const bool useOptimalCovModel)
+    const Sample& outputSample,
+    const bool useOptimalCovModel)
 {
   if (outputSample.getDimension() != 1)
     throw InternalException(HERE) << "KrigingAnalysis::buildKrigingAlgorithm: the output sample must have a dimension of 1";
