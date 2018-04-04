@@ -19,10 +19,16 @@
  *
  */
 #include "otgui/PythonScriptEvaluation.hxx"
+
 #include "otgui/InterpreterUnlocker.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
+
+#ifdef HAVE_BOOST_PROCESS
+#include <boost/process.hpp>
+#endif
+#include <boost/filesystem.hpp>
 
 using namespace OT;
 
@@ -36,6 +42,7 @@ static Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
 /* Default constructor */
 PythonScriptEvaluation::PythonScriptEvaluation()
   : EvaluationImplementation()
+  , scriptHasBeenEvaluated_(false)
   , inputDimension_(0)
   , outputDimension_(0)
   , code_("")
@@ -50,6 +57,7 @@ PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariable
                                                const String & code,
                                                const Bool isParallel)
   : EvaluationImplementation()
+  , scriptHasBeenEvaluated_(false)
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
@@ -113,6 +121,12 @@ UnsignedInteger PythonScriptEvaluation::getOutputDimension() const
 }
 
 
+void PythonScriptEvaluation::resetCallsNumber()
+{
+  callsNumber_ = 0;
+}
+
+
 /* Operator () */
 Point PythonScriptEvaluation::operator() (const Point & inP) const
 {
@@ -126,19 +140,21 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
   else
   {
     InterpreterUnlocker iul;
-    PyObject *module = PyImport_AddModule("__main__");// Borrowed reference.
-    PyObject *dict = PyModule_GetDict(module);// Borrowed reference.
+    PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
+    PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
 
     // define the script on the first run only to allow to save a state
-    if (callsNumber_ == 0)
+    if (!scriptHasBeenEvaluated_)
     {
       ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
       handleException();
+      scriptHasBeenEvaluated_ = true;
     }
 
     ++ callsNumber_;
-    PyObject *script = PyDict_GetItemString(dict, "_exec");
-    if (script == NULL) throw InternalException(HERE) << "no _exec function";
+    PyObject * script = PyDict_GetItemString(dict, "_exec");
+    if (script == NULL)
+      throw InternalException(HERE) << "no _exec function";
 
     ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
     ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
@@ -166,6 +182,139 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
     outputStrategy_.store(outP);
   }
   return outP;
+}
+
+
+Sample PythonScriptEvaluation::operator() (const Sample & inS) const
+{
+  // no multiprocessing if no boost process include files
+#ifndef HAVE_BOOST_PROCESS
+  return EvaluationImplementation::operator() (inS);
+#else
+  if (!isParallel_)
+    return EvaluationImplementation::operator() (inS);
+
+  const UnsignedInteger outDim = getOutputDimension();
+  const UnsignedInteger inDim = inS.getDimension();
+  const UnsignedInteger size = inS.getSize();
+
+  if (inDim != getInputDimension())
+    throw InvalidDimensionException(HERE) << "Sample has incorrect dimension. Got " << inDim << ". Expected " << getInputDimension();
+
+  // get input sample string
+  OSS sampleOss;
+  sampleOss << "[";
+  for (UnsignedInteger i = 0; i < size; ++i)
+  {
+    Point pt(inS[i]);
+    sampleOss << "[";
+    std::copy(pt.begin(), pt.end(), OSS_iterator<Scalar>(sampleOss, ","));
+    sampleOss << "],";
+  }
+  sampleOss << "]";
+
+  // get temporary directory path
+  boost::filesystem::path tempDir = boost::filesystem::temp_directory_path() / boost::filesystem::unique_path("otgui-%%%%-%%%%-%%%%-%%%%");
+  bool ret = boost::filesystem::create_directories(tempDir);
+  if (!ret)
+    throw InvalidArgumentException(HERE) << "Impossible to create a temporary directory. Do not use multiprocessing.\n";
+
+  // set temporary file path to save the evaluation result
+  const boost::filesystem::path tempResuFilePath = tempDir / "outputSample.csv";
+
+  // define the Python script
+  OSS ossEssai;
+  ossEssai << "#!/usr/bin/env python\n";
+  ossEssai << "# coding: utf-8\n";
+
+  ossEssai << "from multiprocessing import Pool\n";
+  ossEssai << "import openturns as ot\n";
+  ossEssai << "import traceback\n";
+  ossEssai << "import sys\n";
+
+  ossEssai << code_.c_str();
+
+  ossEssai << "def tmp_exec(x):\n";
+  ossEssai << "    try:\n";
+  ossEssai << "        return _exec(*x)\n";
+  ossEssai << "    except Exception as e:\n";
+  ossEssai << "        sys.stderr.write('Caught exception in worker thread (x = %s):\\n' % x)\n";
+  ossEssai << "        # This prints the type, value, and stack trace of the\n";
+  ossEssai << "        # current exception being handled.\n";
+  ossEssai << "        traceback.print_exc()\n";
+  ossEssai << "        raise e\n";
+
+  ossEssai << "def _exec_sample(X):\n";
+  ossEssai << "    p = Pool(" << size << ")\n";
+  ossEssai << "    try:\n";
+  ossEssai << "        Y = list(p.imap(tmp_exec, X))\n";
+  ossEssai << "        p.close()\n";
+  ossEssai << "        p.join()\n";
+  ossEssai << (outDim > 1 ? "        return Y\n" : "        return [[y] for y in Y]\n");
+  ossEssai << "    except Exception as e:\n";
+  ossEssai << "        p.close()\n";
+  ossEssai << "        p.join()\n";
+  ossEssai << "        raise e\n";
+
+  ossEssai << "if __name__ == '__main__':\n";
+
+  ossEssai << "  X = " << sampleOss.str() << "\n";
+  ossEssai << "  sample = ot.Sample(_exec_sample(X))\n";
+  ossEssai << "  sample.exportToCSVFile('" << tempResuFilePath.string() << "')\n";
+
+  // create the Python script file
+  const boost::filesystem::path tempScriptPath = tempDir / "evaluatePythonModel.py";
+  std::ofstream myfile;
+  myfile.open(tempScriptPath.string());
+  myfile << ossEssai.str();
+  myfile.close();
+
+  // get Python executable path
+  // this searches a Python executable in the directories of the "PATH" environment variable
+  const String pythonExePath = boost::process::search_path("python").string();
+  if (pythonExePath.empty())
+    throw InvalidArgumentException(HERE) << "Impossible to find a Python executable. Do not use multiprocessing.\n";
+
+  // launch Python script in a subprocess
+  boost::process::ipstream error;
+  boost::process::child subprocess(pythonExePath, tempScriptPath.string(), boost::process::std_err > error);
+
+  // retrieve error message
+  String errorMessage;
+  String line;
+  while (subprocess.running() && std::getline(error, line) && !line.empty())
+    errorMessage += line + "\n";
+
+  subprocess.wait();
+
+  // handle exception
+  if (!errorMessage.empty())
+  {
+    // remove script file
+    boost::filesystem::remove_all(tempDir);
+    throw InvalidArgumentException(HERE) << "Python function evaluation failed.\n" << errorMessage;
+  }
+
+  // retrieve output sample
+  Sample outputSample(Sample::ImportFromCSVFile(tempResuFilePath.string()));
+
+  // remove script file + result file
+  boost::filesystem::remove_all(tempDir);
+
+  // check
+  if (outputSample.getSize() != size)
+    throw InvalidArgumentException(HERE) << "Python Function returned a sequence object with incorrect size (got "
+                                          << outputSample.getSize() << ", expected " << size << ")";
+  if (outputSample.getDimension() != outDim)
+    throw InvalidArgumentException(HERE) << "Python Function returned a sequence object with incorrect dimension (got "
+                                          << outputSample.getDimension() << ", expected " << outDim << ")";
+
+
+  outputSample.setDescription(getOutputDescription());
+  callsNumber_ += size;
+
+  return outputSample;
+#endif
 }
 
 

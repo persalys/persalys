@@ -60,8 +60,11 @@ protected:
   void initialize();
 
 public:
+  void resetCallsNumber();
+
   /** Operator () */
   virtual OT::Point operator() (const OT::Point & inP) const;
+  virtual OT::Sample operator() (const OT::Sample & inS) const;
 
   /** Accessor for input point dimension */
   OT::UnsignedInteger getInputDimension() const;
@@ -74,6 +77,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
+  mutable bool scriptHasBeenEvaluated_;
   OT::UnsignedInteger inputDimension_;
   OT::UnsignedInteger outputDimension_;
   OT::String code_;

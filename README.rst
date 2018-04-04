@@ -10,6 +10,7 @@ Dependencies
 - Python >=2.7, < 3
 - Boost.regex
 - Boost.filesystem
+- Boost.process (optional, for multiprocessing support)
 - SalomeYACS (optional, for YACS support)
 - Sphinx >=1.1 (optional, for doc)
 - Numpydoc (optional, for doc)

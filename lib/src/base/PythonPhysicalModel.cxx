@@ -162,6 +162,14 @@ void PythonPhysicalModel::setParallel(const Bool flag)
 }
 
 
+void PythonPhysicalModel::resetCallsNumber()
+{
+  PythonScriptEvaluation * eval = dynamic_cast<PythonScriptEvaluation*>(functionCache_.getEvaluation().getImplementation().get());
+  if (eval)
+    eval->resetCallsNumber();
+}
+
+
 String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
@@ -186,7 +194,7 @@ String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "<pre>";
   String code = getCode();
   // replace all "<" by "&lt;"
-  int position = code.find("<");
+  size_t position = code.find("<");
   while (position != std::string::npos)
   {
     code.replace(position, 1, "&lt;" );
