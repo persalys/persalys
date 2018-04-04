@@ -52,6 +52,8 @@ public:
 
   int getCurrentPlotIndex() const;
 
+  QSize minimumSizeHint() const;
+
 protected:
   void buildInterface();
 
