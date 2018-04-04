@@ -15,7 +15,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           otgui
-Version:        4.0
+Version:        5.0dev
 Release:        0%{?dist}
 Summary:        GUI for OpenTURNS
 Group:          System Environment/Libraries
