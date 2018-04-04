@@ -37,7 +37,7 @@ print(analysis)
 analysis.run()
 
 result = analysis.getResult()
-print("result=", result)
+#print("result=", result)
 print("x=", result.getOptimalPoint())
 print("y=", result.getOptimalValue())
 
