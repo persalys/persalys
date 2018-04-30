@@ -20,6 +20,9 @@
  */
 #include "otgui/AnalysisImplementation.hxx"
 
+#include "otgui/PhysicalModelAnalysis.hxx"
+#include "otgui/PythonPhysicalModel.hxx"
+
 using namespace OT;
 
 namespace OTGUI
@@ -129,6 +132,18 @@ void AnalysisImplementation::initialize()
   stopRequested_ = false;
   progressValue_ = 0;
   modelHtmlDescription_ = "";
+
+  // if the model is a PythonPhysicalModel: reset the calls number
+  // do not need this operation for the other models because
+  // the Evaluation object is built each time getFunction() is called
+  if (PhysicalModelAnalysis * pmAnalysis = dynamic_cast<PhysicalModelAnalysis*>(this))
+  {
+    PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(pmAnalysis->getPhysicalModel().getImplementation().get());
+    if (model)
+    {
+      model->resetCallsNumber();
+    }
+  }
 }
 
 
