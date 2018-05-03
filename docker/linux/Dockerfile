@@ -91,7 +91,7 @@ RUN cd openturns && git checkout 1.10 && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_C
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git
-RUN cd otmorris && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF . && make install
+RUN cd otmorris && git checkout v0.3 && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF . && make install
 
 # otfmi
 RUN git clone https://github.com/openturns/otfmi.git
