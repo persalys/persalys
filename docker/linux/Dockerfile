@@ -17,7 +17,7 @@ ENV LD_LIBRARY_PATH /opt/rh/devtoolset-2/root/usr/lib64:/opt/rh/devtoolset-2/roo
 # muparser
 RUN yum install -y git
 RUN git clone https://github.com/beltoforion/muparser.git
-RUN cd muparser && ./configure --disable-samples && make && make install
+RUN cd muparser && git checkout v2.2.5 && ./configure --disable-samples && make && make install
 
 # swig
 RUN yum -y install pcre-devel
