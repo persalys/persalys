@@ -5,7 +5,7 @@ MAINTAINER jschueller
 RUN rm -rf ${HOME}/.wine*
 
 # https://github.com/docker/for-linux/issues/208
-RUN yaourt -S --noconfirm mingw-w64-qt5-base-nostatx
+RUN yaourt -Sy --noconfirm mingw-w64-qt5-base-nostatx
 
 RUN yaourt -S --noconfirm mingw-w64-qwt
 RUN yaourt -S --noconfirm mingw-w64-qt5-xmlpatterns mingw-w64-qt5-tools mingw-w64-glew mingw-w64-libtheora mingw-w64-libtiff
