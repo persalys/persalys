@@ -64,25 +64,22 @@ RUN cd sundials-2.7.0 && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Rel
 
 # fmilib
 RUN yum -y install unzip
-RUN wget http://www.jmodelica.org/downloads/FMIL/FMILibrary-2.0.3-src.zip
-RUN unzip FMILibrary-2.0.3-src.zip
-RUN cd FMILibrary-2.0.3 && mkdir build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install
+# wget http://www.jmodelica.org/downloads/FMIL/FMILibrary-2.0.3-src.zip && unzip FMILibrary-2.0.3-src.zip
+RUN yum -y install subversion && svn co https://svn.jmodelica.org/FMILibrary/tags/2.0.3/ FMILibrary-2.0.3 && cd FMILibrary-2.0.3 \
+ && mkdir build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install
 
 # pyfmi
-RUN pip install cython
-RUN pip install lxml assimulo
-RUN sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.py
-RUN python -c "import assimulo; import assimulo.solvers"
-RUN wget https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip
-RUN unzip PyFMI-2.4.0.zip
-RUN wget https://github.com/conda-forge/pyfmi-feedstock/raw/master/recipe/get_temp_location-keyerror.patch
-RUN cd PyFMI-2.4 && patch -p1 -i ../get_temp_location-keyerror.patch && python setup.py install --fmil-home=/usr/local
-RUN python -c "import pyfmi"
+RUN pip install cython && pip install lxml assimulo \
+ && sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.py \
+ && python -c "import assimulo; import assimulo.solvers" \
+ && wget https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip && unzip PyFMI-2.4.0.zip && cd PyFMI-2.4 \
+ && wget https://github.com/conda-forge/pyfmi-feedstock/raw/master/recipe/get_temp_location-keyerror.patch \
+ && patch -p1 -i get_temp_location-keyerror.patch && python setup.py install --fmil-home=/usr/local \
+ && python -c "import pyfmi"
 
 # boost
-RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2
-RUN tar xjf boost_1_64_0.tar.bz2
-RUN cd boost_1_64_0 && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
+RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 && tar xjf boost_1_64_0.tar.bz2 && cd boost_1_64_0 \
+ && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
