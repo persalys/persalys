@@ -8,10 +8,7 @@ RUN rm -rf ${HOME}/.wine*
 RUN yaourt -Sy --noconfirm mingw-w64-qt5-base-nostatx
 
 RUN yaourt -S --noconfirm mingw-w64-qwt
-RUN yaourt -S --noconfirm mingw-w64-qt5-xmlpatterns mingw-w64-qt5-tools mingw-w64-glew mingw-w64-libtheora mingw-w64-libtiff
-RUN yaourt -S --noconfirm mingw-w64-jsoncpp mingw-w64-pugixml mingw-w64-hdf5 mingw-w64-lz4 mingw-w64-cgns mingw-w64-netcdf-cxx-legacy mingw-w64-eigen
-RUN yaourt -S --noconfirm mingw-w64-paraview
-RUN rm -rf ${HOME}/.wine*
+RUN yaourt -Sy --noconfirm mingw-w64-paraview
 
 ENV ARCH x86_64
 ENV WINEARCH win64
