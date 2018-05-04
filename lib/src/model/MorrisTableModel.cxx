@@ -107,15 +107,8 @@ QVariant MorrisTableModel::data(const QModelIndex & index, int role) const
   }
   else if (role == Qt::ForegroundRole && index.column() == 0)
   {
-    const int inIndex = index.row();
     // check bounds
-    // TODO: next OT version: use getMarginal
-    Interval bounds(Point(1, analysis_.getBounds().getLowerBound()[inIndex]),
-                    Point(1, analysis_.getBounds().getUpperBound()[inIndex]),
-                    Interval::BoolCollection(1, analysis_.getBounds().getFiniteLowerBound()[inIndex]),
-                    Interval::BoolCollection(1, analysis_.getBounds().getFiniteUpperBound()[inIndex])
-                   );
-    if (bounds.isEmpty())
+    if (analysis_.getBounds().getMarginal(index.row()).isEmpty())
       return QColor(Qt::red);
   }
   return QVariant();

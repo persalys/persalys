@@ -203,7 +203,7 @@ void InferenceAnalysis::launch()
         TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, 1 - level_, distribution.getParameterDimension()));
 
         // BIC test
-        const NumericalScalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
+        const Scalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
 
         // set fittingTestResult
         fittingTestResult.testedDistributions_.add(distribution);

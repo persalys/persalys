@@ -228,22 +228,9 @@ void MorrisAnalysis::launch()
   Sample outSample = getPhysicalModel().getFunction(getInterestVariables())(inSample);
   outSample.setDescription(getInterestVariables());
 
-  // check nan/inf value
-  // TODO with OT 1.11 : throw error directly when evaluating the model
-  for (UnsignedInteger i = 0; i < outSample.getSize(); ++i)
-  {
-    for (UnsignedInteger j = 0; j < outSample.getDimension(); ++j)
-    {
-      if (!SpecFunc::IsNormal(outSample(i, j)))
-      {
-        throw InvalidValueException(HERE) << "Can not compute the effects. The output sample is invalid. The model evaluation failed at least at the point " << Point(inSample[i]).__str__();
-      }
-    }
-  }
-
   // Compute effects
   // set result
-  result_ = MorrisResult(inSample, outSample);
+  result_ = MorrisResult(inSample, outSample, bounds_);
 
   for (UnsignedInteger i = 0; i < outSample.getDimension(); ++i)
   {

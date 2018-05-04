@@ -193,12 +193,7 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
     // check bounds
     if (analysis_.getVariableInputs().contains(currentInputName))
     {
-      // TODO: next OT version: use getMarginal
-      Interval bounds(Point(1, analysis_.getBounds().getLowerBound()[inputIndex]),
-                      Point(1, analysis_.getBounds().getUpperBound()[inputIndex]),
-                      Interval::BoolCollection(1, analysis_.getBounds().getFiniteLowerBound()[inputIndex]),
-                      Interval::BoolCollection(1, analysis_.getBounds().getFiniteUpperBound()[inputIndex])
-                     );
+      const Interval bounds(analysis_.getBounds().getMarginal(inputIndex));
       if (bounds.isEmpty() || !bounds.contains(Point(1, analysis_.getStartingPoint()[inputIndex])))
         return QColor(Qt::red);
     }

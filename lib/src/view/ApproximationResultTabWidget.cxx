@@ -157,7 +157,7 @@ void ApproximationResultTabWidget::buildInterface()
 
     // evaluate the event probability FORM
     // in the standard space all marginals of the standard distribution are identical
-    Scalar eventProba = sormResult_.getLimitStateVariable().getImplementation()->getAntecedent()->getDistribution().getStandardDistribution().getMarginal(0).computeCDF(Point(1, -sormResult_.getHasoferReliabilityIndex()));
+    Scalar eventProba = sormResult_.getLimitStateVariable().getImplementation()->getAntecedent().getDistribution().getStandardDistribution().getMarginal(0).computeCDF(Point(1, -sormResult_.getHasoferReliabilityIndex()));
     if (sormResult_.getIsStandardPointOriginInFailureSpace())
     {
       // isStandardPointOriginInFailureSpace is true: unusual case

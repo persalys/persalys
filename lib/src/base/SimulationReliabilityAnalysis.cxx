@@ -21,6 +21,7 @@
 #include "otgui/SimulationReliabilityAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
+#include <openturns/MemoizeFunction.hxx>
 
 using namespace OT;
 
@@ -145,7 +146,7 @@ void SimulationReliabilityAnalysis::launch()
   outputName[0] = getLimitState().getOutputName();
 
   // get function
-  Function function(getPhysicalModel().getRestrictedFunction(outputName));
+  MemoizeFunction function(getPhysicalModel().getRestrictedFunction(outputName));
   function.enableHistory();
   function.clearHistory();
 
@@ -180,7 +181,7 @@ void SimulationReliabilityAnalysis::launch()
   // get convergence graph at level 0.95
   const Graph graph = algo.drawProbabilityConvergence();
   result_ = SimulationReliabilityResult(algo.getResult(),
-                                        function.getHistoryOutput().getSample(),
+                                        function.getOutputHistory(),
                                         graph.getDrawables()[0].getData(),
                                         graph.getDrawables()[1].getData(),
                                         graph.getDrawables()[2].getData());

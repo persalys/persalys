@@ -31,6 +31,7 @@
 #include <openturns/LARS.hxx>
 #include <openturns/Uniform.hxx>
 #include <openturns/StandardDistributionPolynomialFactory.hxx>
+#include <openturns/FunctionalChaosSobolIndices.hxx>
 #include <openturns/FunctionalChaosRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
@@ -247,7 +248,8 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
   const UnsignedInteger inputDimension = inputSample.getDimension();
   const UnsignedInteger outputDimension = result_.outputSample_.getDimension();
 
-  // get FunctionalChaosRandomVector
+  // get FunctionalChaosSobolIndices
+  const FunctionalChaosSobolIndices sobolIndices(result_.functionalChaosResult_);
   const FunctionalChaosRandomVector vector(result_.functionalChaosResult_);
 
   // mean
@@ -265,8 +267,8 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
 
     for (UnsignedInteger j = 0; j < inputDimension; ++j)
     {
-      firstOrderIndices(i, j) = vector.getSobolIndex(j, i);
-      totalIndices(i, j) = vector.getSobolTotalIndex(j, i);
+      firstOrderIndices(i, j) = sobolIndices.getSobolIndex(j, i);
+      totalIndices(i, j) = sobolIndices.getSobolTotalIndex(j, i);
     }
   }
   result_.variance_ = variance;

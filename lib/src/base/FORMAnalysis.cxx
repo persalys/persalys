@@ -66,8 +66,7 @@ void FORMAnalysis::initialize()
 
 void FORMAnalysis::launch()
 {
-  Description outputName(1);
-  outputName[0] = getLimitState().getOutputName();
+  const Description outputName(1, getLimitState().getOutputName());
 
   // get function
   Function function(getPhysicalModel().getRestrictedFunction(outputName));

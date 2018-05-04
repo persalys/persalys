@@ -123,7 +123,7 @@ CovarianceModel KrigingAnalysis::getCovarianceModel() const
 
 void KrigingAnalysis::setCovarianceModel(const CovarianceModel& model)
 {
-  if (model.getDimension() != 1)
+  if (model.getOutputDimension() != 1)
     throw InvalidArgumentException(HERE) << "The covariance model dimension must be equal to 1 ";
 
   covarianceModel_ = model;
@@ -164,8 +164,8 @@ void KrigingAnalysis::launch()
     throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
   if (inputSize != designOfExperiment_.getOutputSample().getSize())
     throw InvalidArgumentException(HERE) << "The input sample and the output sample must have the same size";
-  if (getCovarianceModel().getSpatialDimension() != inputDimension)
-    throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getSpatialDimension()
+  if (getCovarianceModel().getInputDimension() != inputDimension)
+    throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getInputDimension()
                                          << ") must be equal to the number of effective inputs (" << inputDimension << ")";
   if (getBasis().getDimension() != inputDimension)
     throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getDimension()
@@ -252,11 +252,10 @@ KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const Sample& inputSampl
 {
   if (outputSample.getDimension() != 1)
     throw InternalException(HERE) << "KrigingAnalysis::buildKrigingAlgorithm: the output sample must have a dimension of 1";
-  if (useOptimalCovModel && (optimalCovarianceModel_.getDimension() > 1))
+  if (useOptimalCovModel && (optimalCovarianceModel_.getOutputDimension() > 1))
     throw InternalException(HERE) << "KrigingAnalysis::buildKrigingAlgorithm: the optimal covariance model must have a dimension of 1";
 
   KrigingAlgorithm algo(inputSample,
-                        getDistribution().getIsoProbabilisticTransformation(),
                         outputSample,
                         useOptimalCovModel ? optimalCovarianceModel_ : covarianceModel_,
                         getBasis());
