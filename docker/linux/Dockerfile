@@ -182,26 +182,39 @@ RUN wget --no-check-certificate http://paraview.org/files/v5.4/ParaView-v5.4.1.t
   .. && make install
 
 # appimagetool
-RUN wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-RUN chmod a+rx appimagetool-x86_64.AppImage
-RUN ./appimagetool-x86_64.AppImage --appimage-extract
-RUN chmod -R a+rx squashfs-root
-RUN ln -s /usr/local/src/squashfs-root/AppRun /usr/bin/appimagetool
-RUN appimagetool -h
+RUN wget https://github.com/AppImage/AppImageKit/releases/download/10/appimagetool-x86_64.AppImage \
+ && chmod a+rx appimagetool-x86_64.AppImage \
+ && ./appimagetool-x86_64.AppImage --appimage-extract \
+ && chmod -R a+rx squashfs-root \
+ && ln -s /usr/local/src/squashfs-root/AppRun /usr/bin/appimagetool \
+ && appimagetool -h
+
+# glibc 2.14
+RUN wget http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz && tar zxvf glibc-2.14.tar.gz \
+ && cd glibc-2.14 && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make && make install
 
 # texlive: see https://github.com/leodido/dockerfiles/blob/master/texlive:latest/Dockerfile
-RUN yum install -y wget tar perl fontconfig
-# envinronment
+RUN yum install -y perl fontconfig
+# environment
 ENV TL install-tl
 RUN mkdir -p $TL
 # texlive net batch installation
 RUN wget -nv -O $TL.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 RUN tar -xzf $TL.tar.gz -C $TL --strip-components=1
 ADD full.profile $TL/
-RUN cd $TL/ && ./install-tl --persistent-downloads  --profile full.profile
+RUN cd $TL/ && LD_LIBRARY_PATH=/opt/glibc-2.14/lib ./install-tl --persistent-downloads  --profile full.profile
 RUN ln -s /usr/local/texlive/2014/bin/x86_64-linux /opt/texbin
 ENV PATH $PATH:/usr/local/texlive/2014/bin/x86_64-linux
+
+# relink texlive executables
+RUN wget http://springdale.math.ias.edu/data/puias/computational/6/x86_64/patchelf-0.8-2.sdl6.x86_64.rpm && rpm -Uvh patchelf*.rpm
+RUN patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/pdftex \
+ && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/bibtex \
+ && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/kpsewhich \
+ && latex --version
+
 # cleanup
+RUN tlmgr install ucs anyfontsize preview
 RUN rm $TL.tar.gz && rm -r $TL
 # tex fonts installation
 #RUN cp $(kpsewhich -var-value TEXMFSYSVAR)/fonts/conf/texlive-fontconfig.conf /etc/fonts/conf.d/09-texlive.conf
