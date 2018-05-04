@@ -25,7 +25,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
 
-#ifdef HAVE_BOOST_PROCESS
+#ifdef OTGUI_HAVE_BOOST_PROCESS
 #include <boost/process.hpp>
 #endif
 #include <boost/filesystem.hpp>
@@ -188,7 +188,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 {
   // no multiprocessing if no boost process include files
-#ifndef HAVE_BOOST_PROCESS
+#ifndef OTGUI_HAVE_BOOST_PROCESS
   return EvaluationImplementation::operator() (inS);
 #else
   if (!isParallel_)

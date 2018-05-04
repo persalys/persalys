@@ -71,9 +71,9 @@ endif ()
 find_package (Boost COMPONENTS regex filesystem REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 
-find_path (HAVE_BOOST_PROCESS NAMES process.hpp HINTS ${Boost_INCLUDE_DIRS} PATH_SUFFIXES boost)
-if (HAVE_BOOST_PROCESS)
-  list (APPEND OTGUI_DEFINITIONS -DHAVE_BOOST_PROCESS)
+find_path (OTGUI_HAVE_BOOST_PROCESS NAMES process.hpp HINTS ${Boost_INCLUDE_DIRS} PATH_SUFFIXES boost)
+if (OTGUI_HAVE_BOOST_PROCESS)
+  list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_BOOST_PROCESS)
 endif ()
 
 find_package (PythonInterp)
