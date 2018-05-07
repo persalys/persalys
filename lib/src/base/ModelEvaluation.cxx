@@ -117,14 +117,16 @@ void ModelEvaluation::launch()
     throw InvalidArgumentException(HERE) << "Wrong input point dimension";
 
   // output = f(input)
-  Sample inputSample(1, getInputValues());
-  inputSample.setDescription(inputNames_);
-
-  Sample outputSample = getPhysicalModel().getFunction(getInterestVariables())(inputSample);
-  outputSample.setDescription(getInterestVariables());
+  const Point outputP(getPhysicalModel().getFunction(getInterestVariables())(getInputValues()));
 
   // set design of experiments
+  // input sample
+  Sample inputSample(1, getInputValues());
+  inputSample.setDescription(inputNames_);
   designOfExperiment_.setInputSample(inputSample);
+  // output sample
+  Sample outputSample(1, outputP);
+  outputSample.setDescription(getInterestVariables());
   designOfExperiment_.setOutputSample(outputSample);
 }
 

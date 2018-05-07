@@ -46,6 +46,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   , outputs_()
   , composedCopula_()
   , finiteDifferenceSteps_()
+  , isParallel_(false)
 {
   setName(name);
   // by default a ComposedCopula contain an IndependentCopula with the description "X0"
@@ -63,6 +64,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
   , outputs_()
   , composedCopula_()
   , finiteDifferenceSteps_()
+  , isParallel_(false)
 {
   setName(name);
 
@@ -789,6 +791,19 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
 }
 
 
+Bool PhysicalModelImplementation::isParallel() const
+{
+  return isParallel_;
+}
+
+
+void PhysicalModelImplementation::setParallel(const Bool flag)
+{
+  isParallel_ = flag;
+  notify("parallelizationStatusChanged");
+}
+
+
 bool PhysicalModelImplementation::isValid() const
 {
   return getSelectedOutputsNames().getSize() && getInputDimension();
@@ -1022,7 +1037,8 @@ String PhysicalModelImplementation::__repr__() const
   oss << "class=" << getClassName()
       << " inputs=" << getInputs()
       << " outputs=" << getOutputs()
-      << " copula=" << getCopula();
+      << " copula=" << getCopula()
+      << " isParallel=" << isParallel();
   return oss;
 }
 
@@ -1034,6 +1050,7 @@ void PhysicalModelImplementation::save(Advocate & adv) const
   adv.saveAttribute("inputs_", inputs_);
   adv.saveAttribute("outputs_", outputs_);
   adv.saveAttribute("composedCopula_", composedCopula_);
+  adv.saveAttribute("isParallel_", isParallel_);
 }
 
 
@@ -1044,6 +1061,7 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("inputs_", inputs_);
   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("composedCopula_", composedCopula_);
+  adv.loadAttribute("isParallel_", isParallel_);
   updateCopula();
 }
 

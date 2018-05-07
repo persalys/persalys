@@ -184,7 +184,10 @@ if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
   target_compile_definitions (otguibase PRIVATE -DMS_WIN64)
 endif ()
 target_link_libraries (otguibase ${Boost_LIBRARIES})
-
+if(MINGW)
+  # add this link for boost::process
+  target_link_libraries(otguibase ws2_32)
+endif()
 install ( TARGETS otguibase
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}

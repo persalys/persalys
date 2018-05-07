@@ -65,6 +65,9 @@ public:
   void addOutput(const Output & output);
   void removeOutput(const OT::String & outputName);
 
+  virtual void setParallel(const OT::Bool flag);
+  void resetCallsNumber();
+
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;
 

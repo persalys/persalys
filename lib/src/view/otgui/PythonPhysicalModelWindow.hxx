@@ -37,6 +37,9 @@ class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
 public:
   PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
 
+public slots:
+  void parallelizationRequested(int);
+
 private:
   PhysicalModel physicalModel_;
 };

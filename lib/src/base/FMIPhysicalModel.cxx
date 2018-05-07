@@ -241,7 +241,7 @@ Function FMIPhysicalModel::getFunction() const
   if (!getOutputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
-  Function function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode()));
+  Function function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel()));
   function.enableCache();
   return function;
 }
@@ -309,6 +309,8 @@ String FMIPhysicalModel::getPythonScript() const
 
   oss << "fmuFile = '" + getFMUFileName() + "'\n";
   oss << getName() + " = otguibase.FMIPhysicalModel('" + getName() + "', inputs, outputs, fmuFile)\n";
+  if (isParallel())
+    oss << getName() + ".setParallel(True)\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 

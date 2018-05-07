@@ -148,10 +148,25 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 {
   if (!functionCache_.getEvaluation()->isActualImplementation())
   {
-    functionCache_ = Function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode()));
+    functionCache_ = Function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel()));
     functionCache_.enableCache();
   }
   return functionCache_;
+}
+
+
+void PythonPhysicalModel::setParallel(const Bool flag)
+{
+  functionCache_ = Function();
+  PhysicalModelImplementation::setParallel(flag);
+}
+
+
+void PythonPhysicalModel::resetCallsNumber()
+{
+  PythonScriptEvaluation * eval = dynamic_cast<PythonScriptEvaluation*>(functionCache_.getEvaluation().getImplementation().get());
+  if (eval)
+    eval->resetCallsNumber();
 }
 
 
@@ -179,7 +194,7 @@ String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "<pre>";
   String code = getCode();
   // replace all "<" by "&lt;"
-  int position = code.find("<");
+  size_t position = code.find("<");
   while (position != std::string::npos)
   {
     code.replace(position, 1, "&lt;" );
@@ -220,6 +235,8 @@ String PythonPhysicalModel::getPythonScript() const
   result += "code='" + escaped_code + "'\n";
 
   result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputCollection, outputCollection, code)\n";
+  if (isParallel())
+    result += getName() + ".setParallel(True)\n";
 
   result += PhysicalModelImplementation::getCopulaPythonScript();
 

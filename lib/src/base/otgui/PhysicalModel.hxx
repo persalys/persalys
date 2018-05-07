@@ -98,6 +98,9 @@ public:
   OT::Collection<OT::Copula> getCopulaCollection() const;
   void setCopula(const OT::Description& inputNames, const OT::Copula & copula);
 
+  OT::Bool isParallel() const;
+  void setParallel(const OT::Bool flag);
+
   bool isValid() const;
 
   OT::String getHtmlDescription(const bool deterministic) const;

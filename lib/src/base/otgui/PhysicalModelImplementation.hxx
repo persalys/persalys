@@ -102,6 +102,9 @@ public:
   OT::Collection<OT::Copula> getCopulaCollection() const;
   void setCopula(const OT::Description& inputNames, const OT::Copula & copula);
 
+  OT::Bool isParallel() const;
+  virtual void setParallel(const OT::Bool flag);
+
   bool isValid() const;
 
   virtual OT::String getHtmlDescription(const bool deterministic) const;
@@ -135,6 +138,7 @@ private:
   OT::PersistentCollection<Output> outputs_;
   mutable OT::ComposedCopula composedCopula_;
   mutable OT::Point finiteDifferenceSteps_;
+  OT::Bool isParallel_;
 };
 }
 #endif

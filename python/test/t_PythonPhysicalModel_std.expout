@@ -1,6 +1,12 @@
 [61.2676]
 [450000,42]
-[361.268]
+    [ G       ]
+0 : [ 361.268 ]
+    [ G       ]
+0 : [ 361.268 ]
+1 : [ 564.451 ]
+ZeroDivisionError occured: True
+Error on the line G = 2*R-F/(pi*100.0)/0. : True
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -20,7 +26,8 @@ inputCollection.append(R)
 inputCollection.append(F)
 outputCollection = []
 outputCollection.append(G)
-code='from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)\n    return G\n'
+code='from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)/0.\n    return G\n'
 myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputCollection, outputCollection, code)
+myPhysicalModel.setParallel(True)
 myStudy.add(myPhysicalModel)
 
