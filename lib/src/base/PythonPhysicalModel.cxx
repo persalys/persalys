@@ -149,7 +149,7 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 {
   if (!functionCache_.getEvaluation().getImplementation()->isActualImplementation())
   {
-    functionCache_ = Function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel()));
+    functionCache_ = MemoizeFunction(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel()));
   }
   return functionCache_;
 }

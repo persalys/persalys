@@ -615,7 +615,7 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
       }
       case 5://value
       {
-        NumericalScalar value = 0.0;
+        Scalar value = 0.0;
         String varName(variableNames_[index.row()]);
         if (physicalModel_.hasInputNamed(varName))
           value = physicalModel_.getInputByName(varName).getValue();

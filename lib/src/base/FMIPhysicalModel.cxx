@@ -23,7 +23,7 @@
 #include "otgui/FMUInfo.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-
+#include <openturns/MemoizeFunction.hxx>
 
 using namespace OT;
 
@@ -241,8 +241,7 @@ Function FMIPhysicalModel::getFunction() const
   if (!getOutputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
-  Function function(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel()));
-  function.enableCache();
+  Function function(MemoizeFunction(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel())));
   return function;
 }
 
