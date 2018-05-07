@@ -17,7 +17,7 @@ ENV LD_LIBRARY_PATH /opt/rh/devtoolset-2/root/usr/lib64:/opt/rh/devtoolset-2/roo
 # muparser
 RUN yum install -y git
 RUN git clone https://github.com/beltoforion/muparser.git
-RUN cd muparser && ./configure --disable-samples && make && make install
+RUN cd muparser && git checkout v2.2.5 && ./configure --disable-samples && make && make install
 
 # swig
 RUN yum -y install pcre-devel
@@ -64,25 +64,22 @@ RUN cd sundials-2.7.0 && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Rel
 
 # fmilib
 RUN yum -y install unzip
-RUN wget http://www.jmodelica.org/downloads/FMIL/FMILibrary-2.0.3-src.zip
-RUN unzip FMILibrary-2.0.3-src.zip
-RUN cd FMILibrary-2.0.3 && mkdir build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install
+# wget http://www.jmodelica.org/downloads/FMIL/FMILibrary-2.0.3-src.zip && unzip FMILibrary-2.0.3-src.zip
+RUN yum -y install subversion && svn co https://svn.jmodelica.org/FMILibrary/tags/2.0.3/ FMILibrary-2.0.3 && cd FMILibrary-2.0.3 \
+ && mkdir build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install
 
 # pyfmi
-RUN pip install cython
-RUN pip install lxml assimulo
-RUN sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.py
-RUN python -c "import assimulo; import assimulo.solvers"
-RUN wget https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip
-RUN unzip PyFMI-2.4.0.zip
-RUN wget https://github.com/conda-forge/pyfmi-feedstock/raw/master/recipe/get_temp_location-keyerror.patch
-RUN cd PyFMI-2.4 && patch -p1 -i ../get_temp_location-keyerror.patch && python setup.py install --fmil-home=/usr/local
-RUN python -c "import pyfmi"
+RUN pip install cython && pip install lxml assimulo \
+ && sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.py \
+ && python -c "import assimulo; import assimulo.solvers" \
+ && wget https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip && unzip PyFMI-2.4.0.zip && cd PyFMI-2.4 \
+ && wget https://github.com/conda-forge/pyfmi-feedstock/raw/master/recipe/get_temp_location-keyerror.patch \
+ && patch -p1 -i get_temp_location-keyerror.patch && python setup.py install --fmil-home=/usr/local \
+ && python -c "import pyfmi"
 
 # boost
-RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2
-RUN tar xjf boost_1_64_0.tar.bz2
-RUN cd boost_1_64_0 && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
+RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 && tar xjf boost_1_64_0.tar.bz2 && cd boost_1_64_0 \
+ && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
@@ -91,7 +88,7 @@ RUN cd openturns && git checkout 1.10 && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_C
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git
-RUN cd otmorris && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF . && make install
+RUN cd otmorris && git checkout v0.3 && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF . && make install
 
 # otfmi
 RUN git clone https://github.com/openturns/otfmi.git
@@ -185,26 +182,39 @@ RUN wget --no-check-certificate http://paraview.org/files/v5.4/ParaView-v5.4.1.t
   .. && make install
 
 # appimagetool
-RUN wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-RUN chmod a+rx appimagetool-x86_64.AppImage
-RUN ./appimagetool-x86_64.AppImage --appimage-extract
-RUN chmod -R a+rx squashfs-root
-RUN ln -s /usr/local/src/squashfs-root/AppRun /usr/bin/appimagetool
-RUN appimagetool -h
+RUN wget https://github.com/AppImage/AppImageKit/releases/download/10/appimagetool-x86_64.AppImage \
+ && chmod a+rx appimagetool-x86_64.AppImage \
+ && ./appimagetool-x86_64.AppImage --appimage-extract \
+ && chmod -R a+rx squashfs-root \
+ && ln -s /usr/local/src/squashfs-root/AppRun /usr/bin/appimagetool \
+ && appimagetool -h
+
+# glibc 2.14
+RUN wget http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz && tar zxvf glibc-2.14.tar.gz \
+ && cd glibc-2.14 && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make && make install
 
 # texlive: see https://github.com/leodido/dockerfiles/blob/master/texlive:latest/Dockerfile
-RUN yum install -y wget tar perl fontconfig
-# envinronment
+RUN yum install -y perl fontconfig
+# environment
 ENV TL install-tl
 RUN mkdir -p $TL
 # texlive net batch installation
 RUN wget -nv -O $TL.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 RUN tar -xzf $TL.tar.gz -C $TL --strip-components=1
 ADD full.profile $TL/
-RUN cd $TL/ && ./install-tl --persistent-downloads  --profile full.profile
+RUN cd $TL/ && LD_LIBRARY_PATH=/opt/glibc-2.14/lib ./install-tl --persistent-downloads  --profile full.profile
 RUN ln -s /usr/local/texlive/2014/bin/x86_64-linux /opt/texbin
 ENV PATH $PATH:/usr/local/texlive/2014/bin/x86_64-linux
+
+# relink texlive executables
+RUN wget http://springdale.math.ias.edu/data/puias/computational/6/x86_64/patchelf-0.8-2.sdl6.x86_64.rpm && rpm -Uvh patchelf*.rpm
+RUN patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/pdftex \
+ && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/bibtex \
+ && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/kpsewhich \
+ && latex --version
+
 # cleanup
+RUN tlmgr install ucs anyfontsize preview
 RUN rm $TL.tar.gz && rm -r $TL
 # tex fonts installation
 #RUN cp $(kpsewhich -var-value TEXMFSYSVAR)/fonts/conf/texlive-fontconfig.conf /etc/fonts/conf.d/09-texlive.conf
