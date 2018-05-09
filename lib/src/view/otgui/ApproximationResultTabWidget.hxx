@@ -52,7 +52,7 @@ private:
   OT::SORMResult sormResult_;
   OT::AnalyticalResult result_;
   QWidget * parametersWidget_;
-  OT::UnsignedInteger maximumIterationNumber_;
+  OT::UnsignedInteger maximumEvaluationNumber_;
 };
 }
 #endif

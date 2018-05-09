@@ -261,7 +261,7 @@ void OptimizationAnalysis::launch()
   OptimizationAlgorithm solver(OptimizationAlgorithm::Build(solverName_));
   solver.setProblem(problem);
   solver.setStartingPoint(variableInputsValues);
-  solver.setMaximumIterationNumber(getMaximumEvaluationNumber());
+  solver.setMaximumEvaluationNumber(getMaximumEvaluationNumber());
   solver.setMaximumAbsoluteError(getMaximumAbsoluteError());
   solver.setMaximumRelativeError(getMaximumRelativeError());
   solver.setMaximumResidualError(getMaximumResidualError());
