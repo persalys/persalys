@@ -88,9 +88,9 @@ sobolResult = sobol.getResult()
 
 # Comparaison
 firstOrderIndicesValues = [
-    [0.523176393470166312, 0.0101986249946708282, 0.209708683588914729]]
+    [ 0.5288606874811134, 0.01588291900561789, 0.2153929775998618 ]]
 totalIndicesValues = [
-    [0.630128593031639261, 0.0590753587602338703, 0.303448369989798072]]
+    [ 0.6301285930316392, 0.05907535876023369, 0.3034483699897979 ]]
 openturns.testing.assert_almost_equal(
     firstOrderIndicesValues, sobolResult.getFirstOrderIndices(), 1e-16)
 openturns.testing.assert_almost_equal(

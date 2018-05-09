@@ -453,17 +453,10 @@ void MarginalsWidget::distributionParametersChanged()
 
       DistributionDictionary::UpdateDistribution(distribution, parameters, parametersType);
 
-      // create a new TruncatedDistribution (that fixes a bug...)
+      // create a new TruncatedDistribution
       TruncatedDistribution newTruncatedDistribution;
       newTruncatedDistribution.setDistribution(distribution);
-      newTruncatedDistribution.setFiniteLowerBound(false);
-      newTruncatedDistribution.setFiniteUpperBound(false);
-
-      if (truncatedDistribution.getFiniteLowerBound())
-        newTruncatedDistribution.setLowerBound(truncatedDistribution.getLowerBound()); // FiniteLowerBound = true
-
-      if (truncatedDistribution.getFiniteUpperBound())
-        newTruncatedDistribution.setUpperBound(truncatedDistribution.getUpperBound()); // FiniteUpperBound = true
+      newTruncatedDistribution.setBounds(truncatedDistribution.getBounds());
 
       // update input distribution
       physicalModel_.blockNotification("ProbabilisticModel");
@@ -546,10 +539,12 @@ void MarginalsWidget::truncationParametersChanged()
     else
     {
       TruncatedDistribution truncatedDistribution(*dynamic_cast<TruncatedDistribution*>(inputDist.getImplementation().get()));
+      Interval bounds(truncatedDistribution.getBounds());
       if (lowerBoundCheckBox_->isChecked())
-        truncatedDistribution.setLowerBound(lowerBoundLineEdit_->value());
+        bounds.setLowerBound(Point(1, lowerBoundLineEdit_->value()));
       if (upperBoundCheckBox_->isChecked())
-        truncatedDistribution.setUpperBound(upperBoundLineEdit_->value());
+        bounds.setUpperBound(Point(1, upperBoundLineEdit_->value()));
+      truncatedDistribution.setBounds(bounds);
 
       physicalModel_.setDistribution(input.getName(), truncatedDistribution);
     }

@@ -19,8 +19,9 @@ ENV MAKEFLAGS -j8
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
-  && git checkout 1.10 \
-  && CXXFLAGS="-D_hypot=hypot" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF \
+  && git checkout 1.11 \
+  && CXXFLAGS="-D_hypot=hypot" ${ARCH}-w64-mingw32-cmake \
+  -DUSE_SPHINX=OFF \
   -DPYTHON_INCLUDE_DIR=/usr/${ARCH}-w64-mingw32/include/python27 \
   -DPYTHON_LIBRARY=/usr/${ARCH}-w64-mingw32/lib/libpython27.dll.a \
   -DPYTHON_EXECUTABLE=/usr/${ARCH}-w64-mingw32/bin/python27.exe \
@@ -33,7 +34,7 @@ RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded /usr/${ARCH}-w64-mingw32/Lib
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
-  && git checkout v0.3 \
+  && git checkout v0.4 \
   && CXXFLAGS="-D_hypot=hypot" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF \
   -DPYTHON_INCLUDE_DIR=/usr/${ARCH}-w64-mingw32/include/python27 \
   -DPYTHON_LIBRARY=/usr/${ARCH}-w64-mingw32/lib/libpython27.dll.a \

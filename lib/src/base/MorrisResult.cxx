@@ -42,8 +42,8 @@ MorrisResult::MorrisResult()
 }
 
 /** Standard constructor */
-MorrisResult::MorrisResult(const Sample& inputSample, const Sample& outputSample)
-  : Morris(inputSample, outputSample)
+MorrisResult::MorrisResult(const Sample& inputSample, const Sample& outputSample, const Interval& interval)
+  : Morris(inputSample, outputSample, interval)
   , inputsSelection_(outputSample.getDimension(), Indices(inputSample.getDimension(), 1))
   , noEffectBoundary_(outputSample.getDimension())
 {

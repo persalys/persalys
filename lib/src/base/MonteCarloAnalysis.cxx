@@ -169,31 +169,6 @@ void MonteCarloAnalysis::launch()
       warningMessage_ = ex.what();
     }
 
-    // if SymbolicPhysicalModel find NaN and inf
-    // for ex: in case of zero division the Symbolic models do not raise error
-    // TODO rm this section with the next OT version (cf: https://github.com/openturns/openturns/pull/600)
-    if (!failedInputSample_.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
-    {
-      for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
-      {
-        for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
-        {
-          if (!SpecFunc::IsNormal(blockOutputSample(j, k)))
-          {
-            failedInputSample_ = blockInputSample;
-            warningMessage_ = "At least a point failed. "
-                              + getInterestVariables()[k]
-                              + Point(blockInputSample[j]).__str__()
-                              + " = "
-                              + (OSS() << blockOutputSample(j, k)).str();
-            break;
-          }
-        }
-        if (failedInputSample_.getSize())
-          break;
-      }
-    }
-
     if (!failedInputSample_.getSize())
     {
       // if succeed fill samples

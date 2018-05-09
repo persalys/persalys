@@ -48,7 +48,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   , sormResult_()
   , result_(result)
   , parametersWidget_(0)
-  , maximumIterationNumber_(0)
+  , maximumEvaluationNumber_(0)
 {
   // analysis parameters
   Parameters analysisParameters;
@@ -57,7 +57,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   if (formAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
-    maximumIterationNumber_ = formAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+    maximumEvaluationNumber_ = formAnalysis->getOptimizationAlgorithm().getMaximumEvaluationNumber();
 
     // analysis parameters
     analysisParameters = analysis.getParameters();
@@ -66,7 +66,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   if (formISAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
-    maximumIterationNumber_ = formISAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+    maximumEvaluationNumber_ = formISAnalysis->getOptimizationAlgorithm().getMaximumEvaluationNumber();
 
     // analysis parameters
     FORMAnalysis aFakeAnalysis("Unnamed", formISAnalysis->getLimitState());
@@ -96,7 +96,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
   , sormResult_(result)
   , result_(result)
   , parametersWidget_(0)
-  , maximumIterationNumber_(0)
+  , maximumEvaluationNumber_(0)
 {
   // analysis parameters
   Parameters analysisParameters;
@@ -105,7 +105,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
   if (sormAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
-    maximumIterationNumber_ = sormAnalysis->getOptimizationAlgorithm().getMaximumIterationNumber();
+    maximumEvaluationNumber_ = sormAnalysis->getOptimizationAlgorithm().getMaximumEvaluationNumber();
 
     // analysis parameters
     analysisParameters = analysis.getParameters();
@@ -157,7 +157,7 @@ void ApproximationResultTabWidget::buildInterface()
 
     // evaluate the event probability FORM
     // in the standard space all marginals of the standard distribution are identical
-    Scalar eventProba = sormResult_.getLimitStateVariable().getImplementation()->getAntecedent()->getDistribution().getStandardDistribution().getMarginal(0).computeCDF(Point(1, -sormResult_.getHasoferReliabilityIndex()));
+    Scalar eventProba = sormResult_.getLimitStateVariable().getImplementation()->getAntecedent().getDistribution().getStandardDistribution().getMarginal(0).computeCDF(Point(1, -sormResult_.getHasoferReliabilityIndex()));
     if (sormResult_.getIsStandardPointOriginInFailureSpace())
     {
       // isStandardPointOriginInFailureSpace is true: unusual case
@@ -250,16 +250,14 @@ void ApproximationResultTabWidget::buildInterface()
   QGroupBox * groupBox = new QGroupBox(tr("Optimization result"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   namesList.clear();
-  namesList << tr("Iterations number")
-            << tr("Calls number")
+  namesList << tr("Evaluation number")
             << tr("Absolute error")
             << tr("Relative error")
             << tr("Residual error")
             << tr("Constraint error");
 
   valuesList.clear();
-  valuesList << QString::number(result_.getOptimizationResult().getIterationNumber())
-             << QString::number(result_.getLimitStateVariable().getFunction().getCallsNumber())
+  valuesList << QString::number(result_.getOptimizationResult().getEvaluationNumber())
              << QString::number(result_.getOptimizationResult().getAbsoluteError())
              << QString::number(result_.getOptimizationResult().getRelativeError())
              << QString::number(result_.getOptimizationResult().getResidualError())
@@ -268,7 +266,7 @@ void ApproximationResultTabWidget::buildInterface()
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
 
   // add warning if Maximum iteration number reached
-  if (result_.getOptimizationResult().getIterationNumber() == maximumIterationNumber_)
+  if (result_.getOptimizationResult().getEvaluationNumber() == maximumEvaluationNumber_)
   {
     table->model()->setData(table->model()->index(0, 1), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
     table->model()->setData(table->model()->index(0, 1), tr("Maximum iterations number reached"), Qt::ToolTipRole);

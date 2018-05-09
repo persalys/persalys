@@ -968,15 +968,16 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
         oss << "dist_" << inputPythonName << " = ot." << distributionName << "(";
         oss << "dist_" << inputPythonName << ", ";
 
-        if (!(truncatedDistribution.getFiniteLowerBound() && truncatedDistribution.getFiniteUpperBound())) // one side truncation ?
+        const Interval bounds(truncatedDistribution.getBounds());
+        if (!(bounds.getFiniteLowerBound()[0] && bounds.getFiniteUpperBound()[0])) // one side truncation ?
         {
-          if (truncatedDistribution.getFiniteLowerBound())    //lower bound truncation
-            oss << truncatedDistribution.getLowerBound() << ")\n";
+          if (bounds.getFiniteLowerBound()[0])    //lower bound truncation
+            oss << bounds.getLowerBound()[0] << ")\n";
           else
-            oss << truncatedDistribution.getUpperBound() << ", ot.TruncatedDistribution.UPPER)\n";
+            oss << bounds.getUpperBound()[0] << ", ot.TruncatedDistribution.UPPER)\n";
         }
         else  // both sides truncation
-          oss << "ot.Interval(" << truncatedDistribution.getLowerBound() << ", " << truncatedDistribution.getUpperBound() << "))\n";
+          oss << "ot.Interval(" << bounds.getLowerBound()[0] << ", " << bounds.getUpperBound()[0] << "))\n";
       }
 
       result += oss.str();

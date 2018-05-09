@@ -40,7 +40,7 @@ ${ARCH}-w64-mingw32-wine wineboot
 xvfb-run ctest --output-on-failure --timeout 100 -j8 -E FMI
 VERSION=`cat ../otgui/VERSION`
 cp /tmp/otgui/distro/windows/* .
-makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.10 -DPYBASEVER=${PYBASEVER} -DPYBASEVER_NODOT=${PYBASEVER_NODOT} -DARCH=${ARCH} installer.nsi
+makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.11 -DPYBASEVER=${PYBASEVER} -DPYBASEVER_NODOT=${PYBASEVER_NODOT} -DARCH=${ARCH} installer.nsi
 
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"

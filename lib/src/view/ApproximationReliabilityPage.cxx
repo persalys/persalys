@@ -50,7 +50,7 @@ ApproximationReliabilityPage::ApproximationReliabilityPage(QWidget* parent)
   , startingPoint_()
   , pointLineEdit_(0)
   , algoChoice_(0)
-  , iterationsSpinBox_(0)
+  , evaluationsSpinBox_(0)
   , absoluteErrSpinBox_(0)
   , relativeErrSpinBox_(0)
   , residualErrSpinBox_(0)
@@ -113,14 +113,14 @@ void ApproximationReliabilityPage::buildInterface()
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
   QGridLayout * advancedGroupLayout = new QGridLayout(advancedParamGroupBox);
 
-  // max number iterations
-  QLabel * label = new QLabel(tr("Number of iterations"));
+  // max number evaluations
+  QLabel * label = new QLabel(tr("Maximum number of evaluations"));
   advancedGroupLayout->addWidget(label, 0, 0);
-  iterationsSpinBox_ = new UIntSpinBox;
-  label->setBuddy(iterationsSpinBox_);
-  iterationsSpinBox_->setRange(1, 2e9);
-  iterationsSpinBox_->setSingleStep(5);
-  advancedGroupLayout->addWidget(iterationsSpinBox_, 0, 1);
+  evaluationsSpinBox_ = new UIntSpinBox;
+  label->setBuddy(evaluationsSpinBox_);
+  evaluationsSpinBox_->setRange(1, 2e9);
+  evaluationsSpinBox_->setSingleStep(5);
+  advancedGroupLayout->addWidget(evaluationsSpinBox_, 0, 1);
 
   // Absolute error
   label = new QLabel(tr("Absolute error"));
@@ -199,7 +199,7 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
   else
     algoChoice_->button(ApproximationReliabilityPage::SQPAlgo)->click();
 
-  iterationsSpinBox_->setValue(solver.getMaximumIterationNumber());
+  evaluationsSpinBox_->setValue(solver.getMaximumEvaluationNumber());
   absoluteErrSpinBox_->setValue(solver.getMaximumAbsoluteError());
   relativeErrSpinBox_->setValue(solver.getMaximumRelativeError());
   residualErrSpinBox_->setValue(solver.getMaximumResidualError());
@@ -246,7 +246,7 @@ OptimizationAlgorithm ApproximationReliabilityPage::getOptimizationAlgorithm() c
     optimAlgo = SQP();
 
   optimAlgo.setStartingPoint(startingPoint_);
-  optimAlgo.setMaximumIterationNumber(iterationsSpinBox_->value());
+  optimAlgo.setMaximumEvaluationNumber(evaluationsSpinBox_->value());
   optimAlgo.setMaximumAbsoluteError(absoluteErrSpinBox_->value());
   optimAlgo.setMaximumRelativeError(relativeErrSpinBox_->value());
   optimAlgo.setMaximumResidualError(residualErrSpinBox_->value());

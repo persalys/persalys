@@ -4,7 +4,7 @@ Qt GUI module for OpenTURNS
 
 Dependencies
 ------------
-- OpenTURNS >=1.10
+- OpenTURNS >=1.11
 - Qt >=4
 - Qwt >=6
 - Python >=2.7, < 3
@@ -16,7 +16,7 @@ Dependencies
 - Numpydoc (optional, for doc)
 - otfmi (optional, for FMI support)
 - ParaView >=5.4.0 (optional, for visualisation)
-- otmorris >=0.3 (optional, for Morris support)
+- otmorris >=0.4 (optional, for Morris support)
 
 Installation
 ------------

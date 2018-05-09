@@ -286,7 +286,7 @@ void SobolAnalysis::launch()
   {
     SaltelliSensitivityAlgorithm algoSaltelli(inputDesign, outputDesign.getMarginal(i), sampleSize);
     algoSaltelli.setBootstrapSize(bootstrapSize_);
-    algoSaltelli.setBootstrapConfidenceLevel(bootstrapConfidenceLevel_);
+    algoSaltelli.setConfidenceLevel(bootstrapConfidenceLevel_);
     foIntervals.add(algoSaltelli.getFirstOrderIndicesInterval());
     toIntervals.add(algoSaltelli.getTotalOrderIndicesInterval());
   }

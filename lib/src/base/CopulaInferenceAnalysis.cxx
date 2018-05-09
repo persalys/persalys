@@ -39,6 +39,7 @@ CLASSNAMEINIT(CopulaInferenceAnalysis)
 
 static Factory<CopulaInferenceAnalysis> Factory_CopulaInferenceAnalysis;
 static Factory<PersistentCollection<Description> > Factory_CollectionDescription;
+static Factory<PersistentCollection<PersistentCollection<DistributionFactory > > > Factory_CollectionCollectionFactories;
 
 /* Default constructor */
 CopulaInferenceAnalysis::CopulaInferenceAnalysis()
@@ -261,7 +262,7 @@ void CopulaInferenceAnalysis::launch()
     inferenceSetResult.setOfVariablesNames_ = it->first;
     inferenceSetResult.errorMessages_ = Description(it->second.getSize());
 
-    CombinatorialGeneratorImplementation::IndicesCollection pairs(Combinations(2, it->first.getSize()).generate());
+    IndicesCollection pairs(Combinations(2, it->first.getSize()).generate());
 
     // for each copula:
     for (UnsignedInteger i = 0; i < it->second.getSize(); ++i)
@@ -273,7 +274,7 @@ void CopulaInferenceAnalysis::launch()
         inferenceSetResult.testedDistributions_.add(distribution);
 
         // BIC test
-        const NumericalScalar bicResult = FittingTest::BIC(sample, distribution, distribution.getParameterDimension());
+        const Scalar bicResult = FittingTest::BIC(sample, distribution, distribution.getParameterDimension());
         inferenceSetResult.bicResults_.add(bicResult);
 
         // get Kendall plot data
@@ -281,9 +282,10 @@ void CopulaInferenceAnalysis::launch()
         Collection<Sample> kendallPlotDataCollection;
         for (UnsignedInteger j = 0; j < pairs.getSize(); ++j)
         {
-          const Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(pairs[j]), distribution.getMarginal(pairs[j]));
+          Indices ind(pairs.cbegin_at(j), pairs.cend_at(j));
+          const Graph graph = VisualTest::DrawKendallPlot(splitSample.getMarginal(ind), distribution.getMarginal(ind));
           Sample kendallPlotData(graph.getDrawable(1).getData());
-          description[0] = sample.getDescription()[pairs[j][0]] + " - " + sample.getDescription()[pairs[j][1]];
+          description[0] = sample.getDescription()[ind[0]] + " - " + sample.getDescription()[ind[1]];
           kendallPlotData.setDescription(description);
           kendallPlotDataCollection.add(kendallPlotData);
         }
@@ -377,25 +379,16 @@ void CopulaInferenceAnalysis::save(Advocate& adv) const
   DesignOfExperimentAnalysis::save(adv);
 
   PersistentCollection<Description> listSets;
-
-  // TODO with new version of OT (where DistributionFactory can be saved)
-//   DistributionFactoryCollectionCollection collection;
-  PersistentCollection<Description> collection;
+  PersistentCollection<PersistentCollection<DistributionFactory > > listFactories;
 
   std::map<Description, DistributionFactoryCollection>::const_iterator it;
   for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
   {
     listSets.add(it->first);
-    Description listFactoriesNames(it->second.getSize());
-    for (UnsignedInteger j = 0; j < it->second.getSize(); ++j)
-    {
-      String str = it->second[j].getImplementation()->getClassName();
-      listFactoriesNames[j] = str.substr(0, str.find("CopulaFactory"));
-    }
-    collection.add(listFactoriesNames);
+    listFactories.add(it->second);
   }
   adv.saveAttribute("listSetsOfVariables_", listSets);
-  adv.saveAttribute("distFactoriesCollection_", collection);
+  adv.saveAttribute("distFactoriesCollection_", listFactories);
   adv.saveAttribute("result_", result_);
 }
 
@@ -406,16 +399,13 @@ void CopulaInferenceAnalysis::load(Advocate& adv)
   DesignOfExperimentAnalysis::load(adv);
   PersistentCollection<Description> listSets;
   adv.loadAttribute("listSetsOfVariables_", listSets);
-  PersistentCollection<Description> collection;
-  adv.loadAttribute("distFactoriesCollection_", collection);
+  PersistentCollection<PersistentCollection<DistributionFactory > > listFactories;
+  adv.loadAttribute("distFactoriesCollection_", listFactories);
   adv.loadAttribute("result_", result_);
 
   for (UnsignedInteger i = 0; i < listSets.getSize(); ++i)
   {
-    DistributionFactoryCollection factoryCollection;
-    for (UnsignedInteger j = 0; j < collection[i].getSize(); ++j)
-      factoryCollection.add(DistributionDictionary::BuildCopulaFactory(collection[i][j]));
-    distFactoriesForSetVar_[listSets[i]] = factoryCollection;
+    distFactoriesForSetVar_[listSets[i]] = listFactories[i];
   }
 }
 }

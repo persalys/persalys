@@ -38,7 +38,7 @@ public:
   /** Default constructor */
   MorrisResult();
   /** Standard constructor with in/out designs */
-  MorrisResult(const OT::Sample & inputSample, const OT::Sample & outputSample);
+  MorrisResult(const OT::Sample & inputSample, const OT::Sample & outputSample, const OT::Interval & interval);
 
   /** Virtual constructor */
   virtual MorrisResult * clone() const;

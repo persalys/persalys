@@ -150,8 +150,8 @@ Available functions
 Available constants
 ~~~~~~~~~~~~~~~~~~~
 
-- _e
-- _pi
+- e\_
+- pi\_
 
 
 2-2 "Python physical model": define a physical model with a Python editor

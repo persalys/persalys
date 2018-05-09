@@ -58,7 +58,7 @@ OptimizationAnalysis::OptimizationAnalysis()
   , solverName_("Cobyla")
   , isMinimization_(true)
   , startingPoint_()
-  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIteration"))
+  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIterationNumber"))
   , maximumAbsoluteError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumAbsoluteError"))
   , maximumRelativeError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumRelativeError"))
   , maximumResidualError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumResidualError"))
@@ -78,7 +78,7 @@ OptimizationAnalysis::OptimizationAnalysis(const String& name,
   , solverName_(algorithmName)
   , isMinimization_(true)
   , startingPoint_()
-  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIteration"))
+  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIterationNumber"))
   , maximumAbsoluteError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumAbsoluteError"))
   , maximumRelativeError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumRelativeError"))
   , maximumResidualError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumResidualError"))
@@ -259,19 +259,9 @@ void OptimizationAnalysis::launch()
   problem.setMinimization(isMinimization_);
   // build solver
   OptimizationAlgorithm solver(OptimizationAlgorithm::Build(solverName_));
-
-  // FIXME: https://github.com/openturns/openturns/pull/703
-  NLopt * nlopt = dynamic_cast<NLopt*>(solver.getImplementation().get());
-  if (nlopt)
-  {
-    NLopt localAlgo("LD_MMA");
-    nlopt->setLocalSolver(localAlgo);
-  }
-
   solver.setProblem(problem);
   solver.setStartingPoint(variableInputsValues);
-  solver.getImplementation().get()->setMaximumEvaluationNumber(getMaximumEvaluationNumber()); // TODO with future OT : remove it
-  solver.setMaximumIterationNumber(getMaximumEvaluationNumber());
+  solver.setMaximumEvaluationNumber(getMaximumEvaluationNumber());
   solver.setMaximumAbsoluteError(getMaximumAbsoluteError());
   solver.setMaximumRelativeError(getMaximumRelativeError());
   solver.setMaximumResidualError(getMaximumResidualError());

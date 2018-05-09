@@ -65,7 +65,7 @@ private:
   OT::Point startingPoint_;
   QLineEdit * pointLineEdit_;
   QButtonGroup * algoChoice_;
-  UIntSpinBox * iterationsSpinBox_;
+  UIntSpinBox * evaluationsSpinBox_;
   LogDoubleSpinBox * absoluteErrSpinBox_;
   LogDoubleSpinBox * relativeErrSpinBox_;
   LogDoubleSpinBox * residualErrSpinBox_;

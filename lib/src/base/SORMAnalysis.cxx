@@ -66,8 +66,7 @@ void SORMAnalysis::initialize()
 
 void SORMAnalysis::launch()
 {
-  Description outputName(1);
-  outputName[0] = getLimitState().getOutputName();
+  const Description outputName(1, getLimitState().getOutputName());
 
   // get function
   Function function(getPhysicalModel().getRestrictedFunction(outputName));
@@ -101,7 +100,7 @@ Parameters SORMAnalysis::getParameters() const
   param.add("Output of interest", getLimitState().getOutputName());
   param.add("Optimization algorithm", getOptimizationAlgorithm().getImplementation()->getClassName());
   param.add("Physical starting point", getPhysicalStartingPoint());
-  param.add("Maximum iterations number", getOptimizationAlgorithm().getMaximumIterationNumber());
+  param.add("Maximum evaluation number", getOptimizationAlgorithm().getMaximumEvaluationNumber());
   param.add("Maximum absolute error", getOptimizationAlgorithm().getMaximumAbsoluteError());
   param.add("Maximum relative error", getOptimizationAlgorithm().getMaximumRelativeError());
   param.add("Maximum residual error", getOptimizationAlgorithm().getMaximumResidualError());
@@ -119,7 +118,7 @@ String SORMAnalysis::getPythonScript() const
   oss << getName() << ".setPhysicalStartingPoint(" << getPhysicalStartingPoint().__str__() << ")\n";
   // optimization algo
   oss << "optimizationAlgo = ot." << getOptimizationAlgorithm().getImplementation()->getClassName() << "()\n";
-  oss << "optimizationAlgo.setMaximumIterationNumber(" << getOptimizationAlgorithm().getMaximumIterationNumber() << ")\n";
+  oss << "optimizationAlgo.setMaximumEvaluationNumber(" << getOptimizationAlgorithm().getMaximumEvaluationNumber() << ")\n";
   oss << "optimizationAlgo.setMaximumAbsoluteError(" << getOptimizationAlgorithm().getMaximumAbsoluteError() << ")\n";
   oss << "optimizationAlgo.setMaximumRelativeError(" << getOptimizationAlgorithm().getMaximumRelativeError() << ")\n";
   oss << "optimizationAlgo.setMaximumResidualError(" << getOptimizationAlgorithm().getMaximumResidualError() << ")\n";

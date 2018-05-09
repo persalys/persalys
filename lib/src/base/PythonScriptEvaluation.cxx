@@ -132,55 +132,37 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 {
   Point outP;
 
-  CacheKeyType inKey(inP.getCollection());
-  if (p_cache_->isEnabled() && p_cache_->hasKey(inKey))
+  InterpreterUnlocker iul;
+  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
+  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
+
+  // define the script on the first run only to allow to save a state
+  if (!scriptHasBeenEvaluated_)
   {
-    outP = Point::ImplementationType(p_cache_->find(inKey));
+    ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
+    handleException();
+    scriptHasBeenEvaluated_ = true;
+  }
+
+  callsNumber_.increment();
+  PyObject * script = PyDict_GetItemString(dict, "_exec");
+  if (script == NULL)
+    throw InternalException(HERE) << "no _exec function";
+
+  ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
+  ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
+  handleException();
+
+  if (getOutputDimension() > 1)
+  {
+    outP = convert<_PySequence_, Point>(outputList.get());
   }
   else
   {
-    InterpreterUnlocker iul;
-    PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
-    PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
-
-    // define the script on the first run only to allow to save a state
-    if (!scriptHasBeenEvaluated_)
-    {
-      ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
-      handleException();
-      scriptHasBeenEvaluated_ = true;
-    }
-
-    ++ callsNumber_;
-    PyObject * script = PyDict_GetItemString(dict, "_exec");
-    if (script == NULL)
-      throw InternalException(HERE) << "no _exec function";
-
-    ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
-    ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
-    handleException();
-
-    if (getOutputDimension() > 1)
-    {
-      outP = convert<_PySequence_, Point>(outputList.get());
-    }
-    else
-    {
-      Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
-      outP = Point(1, value);
-    }
-
-    if (p_cache_->isEnabled())
-    {
-      CacheValueType outValue(outP.getCollection());
-      p_cache_->add(inKey, outValue);
-    }
+    Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
+    outP = Point(1, value);
   }
-  if (isHistoryEnabled_)
-  {
-    inputStrategy_.store(inP);
-    outputStrategy_.store(outP);
-  }
+
   return outP;
 }
 
@@ -311,7 +293,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 
 
   outputSample.setDescription(getOutputDescription());
-  callsNumber_ += size;
+  callsNumber_.fetchAndAdd(size);
 
   return outputSample;
 #endif
