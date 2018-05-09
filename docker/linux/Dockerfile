@@ -77,22 +77,13 @@ RUN pip install cython && pip install lxml assimulo \
  && patch -p1 -i get_temp_location-keyerror.patch && python setup.py install --fmil-home=/usr/local \
  && python -c "import pyfmi"
 
+# sphinx
+RUN yum -y install pandoc dvipng
+RUN pip install sphinx numpydoc --upgrade
+
 # boost
 RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 && tar xjf boost_1_64_0.tar.bz2 && cd boost_1_64_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
-
-# openturns
-RUN yum -y install blas-devel lapack-devel libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git
-RUN cd openturns && git checkout 1.11 && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" . && make install
-
-# otmorris
-RUN git clone https://github.com/openturns/otmorris.git
-RUN cd otmorris && git checkout v0.4 && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF . && make install
-
-# otfmi
-RUN git clone https://github.com/openturns/otfmi.git
-RUN cd otfmi && python setup.py install
 
 # X11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
@@ -220,9 +211,19 @@ RUN rm $TL.tar.gz && rm -r $TL
 #RUN cp $(kpsewhich -var-value TEXMFSYSVAR)/fonts/conf/texlive-fontconfig.conf /etc/fonts/conf.d/09-texlive.conf
 RUN fc-cache -fsv
 
-# sphinx
-RUN yum -y install pandoc dvipng
-RUN pip install sphinx numpydoc --upgrade
+# openturns
+RUN yum -y install blas-devel lapack-devel libxml2-devel
+RUN git clone https://github.com/openturns/openturns.git
+RUN cd openturns && git checkout 1.11 && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" . && make install
+
+# otmorris
+RUN git clone https://github.com/openturns/otmorris.git
+RUN cd otmorris && git checkout v0.4 && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF . && make install
+
+# otfmi
+RUN git clone https://github.com/openturns/otfmi.git
+RUN cd otfmi && python setup.py install
+
 
 # devel user
 RUN yum -y install sudo
