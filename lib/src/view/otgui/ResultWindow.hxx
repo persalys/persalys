@@ -26,9 +26,26 @@
 #include "otgui/ParametersWidget.hxx"
 
 #include <QListWidget>
+#include <QStyledItemDelegate>
 
 namespace OTGUI
 {
+
+// custom QStyledItemDelegate for OTguiListWidget
+class OTGUI_API ListWidgetItemDelegate : public QStyledItemDelegate
+{
+  public:
+    ListWidgetItemDelegate(QObject* parent = 0)
+        : QStyledItemDelegate(parent)
+    {
+    }
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const
+    {
+      QSize result = QStyledItemDelegate::sizeHint (option, index);
+      result.setHeight(result.height() * 2);
+      return result;
+    }
+};
 
 // custom QListWidget for all result windows
 class OTGUI_API OTguiListWidget : public QListWidget
@@ -42,8 +59,11 @@ public:
                                                              color: doubledarkgray; }";
 
     setStyleSheet(styleSheet);
+    ListWidgetItemDelegate * delegate = new ListWidgetItemDelegate;
+    setItemDelegateForColumn(0, delegate);
   }
 };
+
 
 // base class for all result windows
 class OTGUI_API ResultWindow : public OTguiSubWindow

@@ -132,4 +132,12 @@ void PVPlotSettingWidget::exportPlot()
 {
   pvViewWidget_->exportPlot();
 }
+
+
+QSize PVPlotSettingWidget::minimumSizeHint() const
+{
+  QSize size = QWidget::minimumSizeHint();
+  size.setHeight(10);
+  return size;
+}
 }

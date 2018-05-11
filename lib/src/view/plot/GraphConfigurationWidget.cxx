@@ -484,4 +484,12 @@ void GraphConfigurationWidget::exportPlot()
 
   plotWidgets_[currentPlotIndex_]->exportPlot();
 }
+
+
+QSize GraphConfigurationWidget::minimumSizeHint() const
+{
+  QSize size = QWidget::minimumSizeHint();
+  size.setHeight(10);
+  return size;
+}
 }

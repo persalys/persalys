@@ -40,6 +40,8 @@ public:
                       const OT::Sample& sampleRank,
                       QWidget* parent = 0);
 
+  QSize minimumSizeHint() const;
+
 protected:
   void buildInterface();
 
