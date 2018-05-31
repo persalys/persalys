@@ -5,10 +5,10 @@ MAINTAINER jschueller
 RUN rm -rf ${HOME}/.wine*
 
 # https://github.com/docker/for-linux/issues/208
-RUN yaourt -Sy --noconfirm mingw-w64-qt5-base-nostatx
+RUN aurman -S --noconfirm --noedit mingw-w64-qt5-base-nostatx
 
-RUN yaourt -S --noconfirm mingw-w64-qwt
-RUN yaourt -Sy --noconfirm mingw-w64-paraview
+RUN aurman -S --noconfirm --noedit mingw-w64-qwt
+RUN aurman -Sy --noconfirm mingw-w64-paraview
 
 ENV ARCH x86_64
 ENV WINEARCH win64
