@@ -8,7 +8,7 @@ RUN rm -rf ${HOME}/.wine*
 RUN aurman -S --noconfirm --noedit mingw-w64-qt5-base-nostatx
 
 RUN aurman -S --noconfirm --noedit mingw-w64-qwt
-RUN aurman -Sy --noconfirm mingw-w64-paraview
+RUN aurman -Syu --noconfirm --noedit mingw-w64-paraview
 
 ENV ARCH x86_64
 ENV WINEARCH win64
