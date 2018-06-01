@@ -48,12 +48,7 @@ RUN cd Python-2.7.14 && ./configure --enable-shared --enable-unicode=ucs4 LDFLAG
 # pip
 RUN curl -sSLO https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
-RUN pip install -U pip wheel setuptools
 RUN yum -y install patch
-# https://github.com/google/python-subprocess32/issues/12
-RUN pip download subprocess32
-RUN tar xzf subprocess32-3.2.7.tar.gz
-RUN cd subprocess32-3.2.7 && wget https://github.com/google/python-subprocess32/commit/eae9e95f1167ee357b89d6e1823ddaeeaa373019.patch && patch -p1 -i eae9e95f1167ee357b89d6e1823ddaeeaa373019.patch && python ./setup.py install
 RUN pip install scipy matplotlib ipython --upgrade
 
 # sundials
