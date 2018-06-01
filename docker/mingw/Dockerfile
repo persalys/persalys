@@ -14,7 +14,7 @@ ENV ARCH x86_64
 ENV WINEARCH win64
 ENV WINEPATH /usr/${ARCH}-w64-mingw32/bin
 ENV PYTHONHOME /usr/${ARCH}-w64-mingw32/
-ENV PYTHONPATH /usr/${ARCH}-w64-mingw32/lib/python27
+ENV PYTHONPATH /usr/${ARCH}-w64-mingw32/lib/python27;/usr/${ARCH}-w64-mingw32/Lib/site-packages
 ENV MAKEFLAGS -j8
 
 # openturns

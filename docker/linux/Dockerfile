@@ -4,40 +4,35 @@ MAINTAINER jschueller
 ENV MAKEFLAGS -j8
 WORKDIR /usr/local/src
 
+# utils
+RUN yum install -y epel-release wget git patch unzip perl subversion xz
+
 # devtoolset2
-RUN yum -y install wget epel-release
-RUN yum install -y wget
 RUN wget -O /etc/yum.repos.d/devtools-2.repo http://people.centos.org/tru/devtools-2/devtools-2.repo
 RUN yum -y update
 RUN yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran devtoolset-2-binutils
 ENV PATH /opt/rh/devtoolset-2/root/usr/bin:$PATH
 ENV LD_LIBRARY_PATH /opt/rh/devtoolset-2/root/usr/lib64:/opt/rh/devtoolset-2/root/usr/lib
 
-
 # muparser
-RUN yum install -y git
-RUN git clone https://github.com/beltoforion/muparser.git
-RUN cd muparser && git checkout v2.2.5 && ./configure --disable-samples && make && make install
+RUN git clone https://github.com/beltoforion/muparser.git \
+ && cd muparser && git checkout v2.2.5 && ./configure --disable-samples && make && make install
 
 # swig
 RUN yum -y install pcre-devel
-RUN wget --no-check-certificate http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz
-RUN tar xzf swig-3.0.12.tar.gz
-RUN cd swig-3.0.12 && ./configure --without-alllang && make && make install
-RUN swig -version
+RUN wget --no-check-certificate http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz && tar xzf swig-3.0.12.tar.gz \
+ && cd swig-3.0.12 && ./configure --without-alllang && make && make install && swig -version
 
 # cmake
-RUN wget --no-check-certificate https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz
-RUN tar xzf cmake-3.9.6.tar.gz
-RUN cd cmake-3.9.6 && ./bootstrap --parallel=8 && make install
+RUN wget --no-check-certificate https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz && tar xzf cmake-3.9.6.tar.gz \
+ && cd cmake-3.9.6 && ./bootstrap --parallel=8 && make install
 
 # nlopt
-RUN git clone https://github.com/stevengj/nlopt.git
-RUN cd nlopt && cmake -DINSTALL_LIB_DIR=/usr/local/lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install
+RUN git clone https://github.com/stevengj/nlopt.git && cd nlopt \
+ && cmake -DINSTALL_LIB_DIR=/usr/local/lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install
 
 # tbb
-RUN git clone https://github.com/wjakob/tbb.git
-RUN cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make && make install
+RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make && make install
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg openssl-devel
@@ -48,19 +43,17 @@ RUN cd Python-2.7.14 && ./configure --enable-shared --enable-unicode=ucs4 LDFLAG
 # pip
 RUN curl -sSLO https://bootstrap.pypa.io/get-pip.py
 RUN python get-pip.py
-RUN yum -y install patch
+RUN pip install -U pip wheel setuptools
 RUN pip install scipy matplotlib ipython --upgrade
 
 # sundials
-RUN wget http://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz
-RUN tar xzf sundials-2.7.0.tar.gz
-RUN cd sundials-2.7.0 && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF \
+RUN wget http://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz && tar xzf sundials-2.7.0.tar.gz \
+ && cd sundials-2.7.0 && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF \
     -DEXAMPLES_INSTALL=OFF -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t .. && make install
 
 # fmilib
-RUN yum -y install unzip
 # wget http://www.jmodelica.org/downloads/FMIL/FMILibrary-2.0.3-src.zip && unzip FMILibrary-2.0.3-src.zip
-RUN yum -y install subversion && svn co https://svn.jmodelica.org/FMILibrary/tags/2.0.3/ FMILibrary-2.0.3 && cd FMILibrary-2.0.3 \
+RUN svn co https://svn.jmodelica.org/FMILibrary/tags/2.0.3/ FMILibrary-2.0.3 && cd FMILibrary-2.0.3 \
  && mkdir build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install
 
 # pyfmi
@@ -87,7 +80,6 @@ RUN yum -y install freetype-devel libjpeg-turbo-devel libxcb-devel xcb-util xcb-
 RUN xvfb-run -h
 
 # qt
-RUN yum -y install xz
 RUN wget --no-check-certificate https://download.qt.io/archive/qt/5.10/5.10.0/single/qt-everywhere-src-5.10.0.tar.xz \
  && unxz qt-everywhere-src-5.10.0.tar.xz && tar xf qt-everywhere-src-5.10.0.tar
 # https://bugreports.qt.io/browse/QTBUG-64928
