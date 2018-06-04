@@ -1,19 +1,20 @@
 #!/bin/sh
 
 # installs paraview in ./pv-linux-install
+# sudo apt install qttools5-dev lzma-dev libxt-dev libqt5x11extras5-dev qtxmlpatterns5-dev-tools 
 
 set -e
 
-git clone https://gitlab.kitware.com/paraview/paraview.git
+export QT_SELECT=qt5
+
+
+git clone https://gitlab.kitware.com/paraview/paraview.git || echo "ok" 
 cd paraview
-git checkout v5.4.1
+git checkout v5.5.1
 git submodule init
 git submodule update
 
-# qt 5.5 on xenial
-sed -i 's|_qt_min_version "5.6"|_qt_min_version "5.5"|g' CMake/ParaViewQt.cmake
-
-mkdir build && cd build
+mkdir -p build && cd build
 
 cmake \
   -DBUILD_SHARED_LIBS=ON \
@@ -22,6 +23,7 @@ cmake \
   -DVTK_NO_PYTHON_THREADS=OFF \
   -DVTK_PYTHON_FULL_THREADSAFE=ON \
   -DPARAVIEW_ENABLE_PYTHON=ON \
+  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF \
   -DBUILD_DOCUMENTATION=OFF \
   -DVTK_USE_OGGTHEORA_ENCODER=ON \
   -DVTK_USE_SYSTEM_OGGTHEORA=ON \
@@ -41,28 +43,6 @@ cmake \
   -DPARAVIEW_QT_VERSION=5 \
   -DVTK_BUILD_QT_DESIGNER_PLUGIN:BOOL=OFF \
   -DPARAVIEW_ENABLE_MATPLOTLIB:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_Moments:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_SierraPlotTools:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_SLACTools:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_AnalyzeNIfTIIO:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_ArrowGlyph:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_CatalystScriptGeneratorPlugin:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_GMVReader:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_MobileRemoteControl:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_NonOrthogonalSource:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_QuadView:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_PacMan:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_PrismPlugin:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_RGBZView:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_SciberQuestToolKit:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_StreamingParticles:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_UncertaintyRendering:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_EyeDomeLighting:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_ForceTime:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_H5PartReader:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_PointSprite:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_SurfaceLIC:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_CatalystScriptGeneratorPlugin=ON \
   -DCMAKE_INSTALL_RPATH=$PWD/../../pv-linux-install/lib/paraview \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF  \
   -DCMAKE_SKIP_RPATH=OFF \
@@ -74,7 +54,8 @@ cmake \
   -DVTK_INSTALL_DATA_DIR="share/paraview" \
   -DVTK_INSTALL_DOC_DIR="share/doc/paraview" \
   -DVTK_INSTALL_PACKAGE_DIR="lib/cmake/paraview" \
-  -DVTK_USE_SYSTEM_PROTOBUF=ON \
+  -DVTK_USE_SYSTEM_PROTOBUF=OFF \
+  -DPARAVIEW_USE_VTKM=OFF \
   -DPARAVIEW_INSTALL_DEVELOPMENT_FILES:BOOL=ON \
   ..
 make install -j8
