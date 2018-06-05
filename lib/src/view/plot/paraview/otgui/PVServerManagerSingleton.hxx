@@ -16,6 +16,7 @@ public:
 
 private:
   PVServerManagerSingleton() {}
+  ~PVServerManagerSingleton() {}
   static PVServerManagerInterface * singleton_;
 };
 }
