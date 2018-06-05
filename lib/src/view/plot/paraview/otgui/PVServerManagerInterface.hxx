@@ -14,6 +14,8 @@ namespace OTGUI
 class OTGUI_API PVServerManagerInterface
 {
 public:
+  virtual ~PVServerManagerInterface() {}
+
   virtual pqServer * fetchServer(bool * isRemote = 0)
   {
     pqServer * ret(pqActiveObjects::instance().activeServer());

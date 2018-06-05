@@ -111,7 +111,7 @@ void ImportedDesignOfExperiment::setFileName(const String& fileName)
       setInputColumns(inputColumns_);
       validArg = true;
     }
-    catch (std::exception)
+    catch (std::exception &)
     {
       // if the number of input variables in the physical model have changed
       // of if the file content has changed

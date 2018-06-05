@@ -108,7 +108,7 @@ void DataAnalysis::launch()
       result_.skewness_[i] = sample.getMarginal(i).computeSkewness();
       result_.kurtosis_[i] = sample.getMarginal(i).computeKurtosis();
     }
-    catch (std::exception)
+    catch (std::exception &)
     {
       // nothing
     }
@@ -206,7 +206,7 @@ void DataAnalysis::launch()
       result_.pdf_[i] = fittedDistribution.drawPDF().getDrawable(0).getData();
       result_.cdf_[i] = fittedDistribution.drawCDF().getDrawable(0).getData();
     }
-    catch (std::exception)
+    catch (std::exception &)
     {
     }
   }

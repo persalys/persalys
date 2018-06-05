@@ -73,7 +73,7 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 
   // - parallelize
   QCheckBox * checkBox = new QCheckBox(tr("Enable multiprocessing"));
-  checkBox->setChecked(physicalModel_.isParallel() ? Qt::Checked : Qt::Unchecked);
+  checkBox->setChecked(physicalModel_.isParallel());
   checkBox->setToolTip(tr("Warning: the parallelization operation must be significantly faster than the code execution"));
   connect(checkBox, SIGNAL(stateChanged(int)), this, SLOT(parallelizationRequested(int)));
   vBoxLayout->addWidget(checkBox);
