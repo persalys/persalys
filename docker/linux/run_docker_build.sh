@@ -9,7 +9,7 @@ export MAKEFLAGS="-j8"
 cd /tmp
 
 mkdir -p build && cd build
-cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" ../otgui
+cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" ../otgui
 make
 sudo make install
 make tests
