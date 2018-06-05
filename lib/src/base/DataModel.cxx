@@ -120,7 +120,7 @@ void DataModel::setFileName(const String& fileName)
       setColumns(inputColumns_, outputColumns_, inputNames_, outputNames_);
       validArg = true;
     }
-    catch (std::exception)
+    catch (std::exception &)
     {
       // if the file content has changed
     }
