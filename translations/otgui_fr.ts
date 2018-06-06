@@ -3848,6 +3848,49 @@ ou interaction</translation>
     </message>
 </context>
 <context>
+    <name>OTGUI::OTguiAboutDialog</name>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="47"/>
+        <source>About OTGui</source>
+        <translation>À propos d&apos;OTGui</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="60"/>
+        <source>Version %1</source>
+        <translation>Version %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="75"/>
+        <source>OTGui, an interface for OpenTURNS</source>
+        <translation>OTGui, une interface pour OpenTURNS</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="84"/>
+        <source>Copyright 2015-2018, EDF-Phimeca Engineering</source>
+        <translation>Copyright 2015-2018, EDF-Phimeca Engineering</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="87"/>
+        <source>License: GNU Lesser General Public License Version 3</source>
+        <translation>Licence : Version 3 de la Licence Générale Publique Limitée GNU</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="90"/>
+        <source>&amp;About</source>
+        <translation>À &amp;propos</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="116"/>
+        <source>&amp;Librairies</source>
+        <translation>&amp;Bibliothèques</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiAboutDialog.cxx" line="123"/>
+        <source>&amp;Close</source>
+        <translation>&amp;Fermer</translation>
+    </message>
+</context>
+<context>
     <name>OTGUI::OTguiActions</name>
     <message>
         <location filename="../lib/src/view/OTguiActions.cxx" line="36"/>
@@ -3918,34 +3961,44 @@ ou interaction</translation>
 <context>
     <name>OTGUI::OTguiMenuBar</name>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="41"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="43"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="53"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="55"/>
         <source>Open Recent</source>
         <translation>Fichiers récents</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="59"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="61"/>
         <source>Clear list</source>
         <translation>Vider la liste</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="80"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="82"/>
         <source>&amp;View</source>
         <translation>&amp;Vue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="81"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="83"/>
         <source>W&amp;indow</source>
         <translation>&amp;Fenêtre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="82"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="84"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="95"/>
+        <source>&amp;Help</source>
+        <translation>&amp;Aide</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="96"/>
+        <source>About OTGui</source>
+        <translation>À propos d&apos;OTGui</translation>
     </message>
 </context>
 <context>
@@ -4630,7 +4683,8 @@ ou interaction</translation>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="156"/>
         <source>All the designs of experiments have already been evaluated.
 </source>
-        <translation>Tous les plans d&apos;expériences ont déjà été évalués.</translation>
+        <translation>Tous les plans d&apos;expériences ont déjà été évalués.
+</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="400"/>
@@ -6136,7 +6190,8 @@ Voulez-vous continuer et fermer les autres études ?</translation>
 Maybe objects are not opened.
 </source>
         <translation>Une erreur est survenue durant la lecture du fichier &apos;%1&apos;.
-Des objets ne sont peut être pas ouverts.</translation>
+Des objets ne sont peut être pas ouverts.
+</translation>
     </message>
     <message>
         <location filename="../lib/src/view/StudyManager.cxx" line="547"/>

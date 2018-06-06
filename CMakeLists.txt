@@ -150,8 +150,6 @@ if (USE_OTMORRIS)
   endif ()
 endif ()
 
-add_definitions (${OTGUI_DEFINITIONS})
-
 set ( OTGUI_LIBRARY_PATH lib${LIB_SUFFIX} )
 set ( OTGUI_INCLUDE_PATH include )
 set ( OTGUI_SWIG_INCLUDE_PATH ${OTGUI_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
@@ -310,6 +308,10 @@ set ( OTGUI_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
 set ( OTGUI_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
 set ( OTGUI_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
 set ( OTGUI_USE_FILE      ${OTGUI_CONFIG_CMAKE_PATH}/UseOTGui.cmake )
+
+list (APPEND OTGUI_DEFINITIONS -DOTGUI_VERSION="${OTGUI_VERSION_STRING}")
+
+add_definitions (${OTGUI_DEFINITIONS})
 
 # The tests can't be run if this function is absent
 enable_testing ()

@@ -20,6 +20,8 @@
  */
 #include "otgui/OTguiMenuBar.hxx"
 
+#include "otgui/OTguiAboutDialog.hxx"
+
 #include <QSettings>
 #include <QFileInfo>
 
@@ -88,6 +90,14 @@ void OTguiMenuBar::buildActions(const OTguiActions* actions)
   viewMenu->addMenu(windowMenu);
 
   addMenu(viewMenu);
+
+  // Help menu
+  QMenu * helpMenu = new QMenu(tr("&Help"));
+  action = new QAction(QIcon(":/images/OT_icon16x16.png"), tr("About OTGui"), this);
+  connect(action, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
+  helpMenu->addAction(action);
+
+  addMenu(helpMenu);
 }
 
 
@@ -140,5 +150,12 @@ void OTguiMenuBar::clearRecentFilesActions()
   QSettings settings;
   settings.setValue("recentFilesList", QStringList());
   updateRecentFilesActionsList();
+}
+
+
+void OTguiMenuBar::openAboutDialog()
+{
+  OTguiAboutDialog aboutDialog(this);
+  aboutDialog.exec();
 }
 }

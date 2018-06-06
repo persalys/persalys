@@ -102,6 +102,7 @@ ot_add_source_file ( DependenciesWidget.cxx )
 ot_add_source_file ( CopulaWidget.cxx )
 ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
+ot_add_source_file ( OTguiAboutDialog.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -206,7 +207,7 @@ ot_install_header_file ( DependenciesWidget.hxx )
 ot_install_header_file ( CopulaWidget.hxx )
 ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
-
+ot_install_header_file ( OTguiAboutDialog.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -304,6 +305,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaWidget.hxx
                                   otgui/CopulaInferenceWizard.hxx
                                   otgui/CopulaInferenceResultWizard.hxx
+                                  otgui/OTguiAboutDialog.hxx
                                   )
 
 

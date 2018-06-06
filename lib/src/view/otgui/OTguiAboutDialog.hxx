@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMenuBar
+ *  @brief QDialog
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,40 +18,21 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUIMENUBAR_HXX
-#define OTGUI_OTGUIMENUBAR_HXX
+#ifndef OTGUI_OTGUIABOUTDIALOG_HXX
+#define OTGUI_OTGUIABOUTDIALOG_HXX
 
-#include "otgui/OTguiActions.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
-#include <QMenuBar>
+#include <QDialog>
 
 namespace OTGUI
 {
-class OTGUI_API OTguiMenuBar : public QMenuBar
+class OTGUI_API OTguiAboutDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  enum { NbMaxRecentFiles = 5 };
-  OTguiMenuBar(const OTguiActions* actions);
-
-protected:
-  void buildActions(const OTguiActions* actions);
-
-public slots:
-  void openRecentFile();
-  void updateRecentFilesList(const QString & fileName);
-  void updateRecentFilesActionsList();
-  void clearRecentFilesActions();
-  void openAboutDialog();
-signals:
-  void openOTStudy(QString);
-  void showHidePythonConsole(bool);
-  void pythonConsoleVisibilityChanged(bool);
-
-private:
-  QMenu * recentFilesMenu_;
-  QAction * recentFileActions_[NbMaxRecentFiles];
+  OTguiAboutDialog(QWidget* parent = 0);
 };
 }
 #endif
