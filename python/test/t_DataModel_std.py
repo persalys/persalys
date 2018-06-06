@@ -50,6 +50,9 @@ print(model2)
 print("inputNames=", model2.getInputNames())
 print("outputNames=", model2.getOutputNames())
 
+print("min=", model2.getListXMin())
+print("max=", model2.getListXMax())
+
 # Model 3
 model3 = otguibase.DataModel('myDataModel3', filename, inColumns, outColumns)
 myStudy.add(model3)
@@ -60,6 +63,9 @@ print("outputNames=", model3.getOutputNames())
 
 print("inputSample=", model3.getInputSample())
 print("outputSample=", model3.getOutputSample())
+
+print("min=", model3.getListXMin())
+print("max=", model3.getListXMax())
 
 # script
 script = myStudy.getPythonScript()
