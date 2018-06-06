@@ -51,6 +51,10 @@ OTguiSubWindow::~OTguiSubWindow()
 
 bool OTguiSubWindow::HaveOpenGL32()
 {
+  char *pNO_GL = getenv("OTGUI_NO_GL");
+  if (pNO_GL)
+    return false;
+
   QSurfaceFormat requestedFormat;
   requestedFormat.setVersion(3, 2);
   QOpenGLContext context;
