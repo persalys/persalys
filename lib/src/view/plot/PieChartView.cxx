@@ -476,7 +476,6 @@ void PieChartView::draw(QPainter& painter)
     {
       QModelIndex labelIndex = model()->index(row, 0, rootIndex());
 
-      QStyleOptionViewItem option = viewOptions();
       option.rect = visualRect(labelIndex);
       if (selections->isSelected(labelIndex))
         option.state |= QStyle::State_Selected;
