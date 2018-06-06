@@ -107,7 +107,7 @@ OTguiAboutDialog::OTguiAboutDialog(QWidget* parent)
          << PY_VERSION
          << QWT_VERSION_STR;
 #ifdef OTGUI_HAVE_PARAVIEW
-  names << "Paraview";
+  names  << QString("Paraview") + (OTguiSubWindow::HaveOpenGL32() ? "" : " (" + tr("disabled") + ")");
   values << PARAVIEW_VERSION_FULL;
 #endif
   ParametersTableView * table = new ParametersTableView(names, values, false, false);

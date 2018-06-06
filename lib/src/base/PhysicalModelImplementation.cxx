@@ -1004,13 +1004,13 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
 
       oss << "R = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
 
-      for (UnsignedInteger i = 0; i < correlationMatrix.getNbRows(); ++i)
+      for (UnsignedInteger row = 0; row < correlationMatrix.getNbRows(); ++ row)
       {
-        for (UnsignedInteger j = i + 1; j < correlationMatrix.getNbRows(); ++j)
+        for (UnsignedInteger col = row + 1; col < correlationMatrix.getNbRows(); ++ col)
         {
-          if (correlationMatrix(i, j) != 0.0)
+          if (correlationMatrix(row, col) != 0.0)
           {
-            oss << "R[" << i << ", " << j << "] = " << correlationMatrix(i, j) << "\n";
+            oss << "R[" << row << ", " << col << "] = " << correlationMatrix(row, col) << "\n";
           }
         }
       }
