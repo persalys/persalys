@@ -21,7 +21,7 @@
 #include "otgui/OTguiAboutDialog.hxx"
 
 #include "otgui/ParametersTableView.hxx"
-#include "otgui/PythonEnvironment.hxx"
+#include "otgui/OTguiSubWindow.hxx"
 
 #include <openturns/PlatformInfo.hxx>
 
