@@ -200,12 +200,12 @@ RUN fc-cache -fsv
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git
-RUN cd openturns && git checkout 1.11 && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" . && make install
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 1.11 \
+ && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" . && make install
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git
-RUN cd otmorris && git checkout v0.4 && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF . && make install
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.4 \
+ && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" . && make install
 
 # otfmi
 RUN git clone https://github.com/openturns/otfmi.git
