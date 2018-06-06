@@ -84,7 +84,7 @@ OTguiAboutDialog::OTguiAboutDialog(QWidget* parent)
   otLinkLabel->setOpenExternalLinks(true);
   tabLayout->addWidget(otLinkLabel);
 
-  QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2018, EDF-Phimeca Engineering"));
+  QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2018 EDF-Phimeca"));
   tabLayout->addWidget(copyrightLabel);
 
   QLabel * licenseLabel = new QLabel(tr("License: GNU Lesser General Public License Version 3"));
