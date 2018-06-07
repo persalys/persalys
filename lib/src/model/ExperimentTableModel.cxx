@@ -22,6 +22,8 @@
 
 #include "otgui/StudyTreeViewModel.hxx"
 
+#include <QHeaderView>
+
 using namespace OT;
 
 namespace OTGUI
@@ -107,7 +109,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
   // header
   if (index.row() == 0)
   {
-    if (role == Qt::DisplayRole || role == Qt::EditRole)
+    if (role == Qt::DisplayRole)
     {
       switch (index.column())
       {
@@ -141,7 +143,7 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
     }
     else if (role == Qt::BackgroundRole)
     {
-      return QBrush("#f2f1f0");
+      return QHeaderView(Qt::Horizontal).palette().color(QPalette::Window);
     }
     else if (role == Qt::TextAlignmentRole)
     {

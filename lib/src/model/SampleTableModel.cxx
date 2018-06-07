@@ -65,6 +65,9 @@ QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, 
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     return QString::fromUtf8(data_.getDescription()[section].c_str());
 
+  if (orientation == Qt::Horizontal && role == Qt::TextAlignmentRole)
+    return Qt::AlignCenter;
+
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 
