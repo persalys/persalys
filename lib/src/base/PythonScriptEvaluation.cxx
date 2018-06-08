@@ -214,7 +214,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   ossEssai << "import traceback\n";
   ossEssai << "import sys\n";
 
-  ossEssai << code_.c_str();
+  ossEssai << code_.c_str() << "\n";
 
   ossEssai << "def tmp_exec(x):\n";
   ossEssai << "    try:\n";
