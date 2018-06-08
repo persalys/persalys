@@ -54,8 +54,8 @@ formIS.run()
 formISResult = formIS.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.000634097,
-                                      formISResult.getSimulationResult().getProbabilityEstimate(), 1e-16)
+openturns.testing.assert_almost_equal(0.000635,
+                                      formISResult.getSimulationResult().getProbabilityEstimate(), 1e-5)
 
 # script
 script = myStudy.getPythonScript()
