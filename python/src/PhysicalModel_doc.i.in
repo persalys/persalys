@@ -76,6 +76,8 @@ OTGUI_PhysicalModel_setDistributionParametersType_doc
 OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
 %feature("docstring") OTGUI::PhysicalModel::getRestrictedFunction
 OTGUI_PhysicalModel_getRestrictedFunction_doc
+%feature("docstring") OTGUI::PhysicalModel::getRestrictedPointToFieldFunction
+OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
 %feature("docstring") OTGUI::PhysicalModel::getSelectedOutputsNames
 OTGUI_PhysicalModel_getSelectedOutputsNames_doc
 %feature("docstring") OTGUI::PhysicalModel::selectOutput
@@ -84,3 +86,9 @@ OTGUI_PhysicalModel_selectOutput_doc
 OTGUI_PhysicalModel_isParallel_doc
 %feature("docstring") OTGUI::PhysicalModel::setParallel
 OTGUI_PhysicalModel_setParallel_doc
+%feature("docstring") OTGUI::PhysicalModel::setMeshModel
+OTGUI_PhysicalModel_setMeshModel_doc
+%feature("docstring") OTGUI::PhysicalModel::getMeshModel
+OTGUI_PhysicalModel_getMeshModel_doc
+%feature("docstring") OTGUI::PhysicalModel::hasMesh
+OTGUI_PhysicalModel_hasMesh_doc

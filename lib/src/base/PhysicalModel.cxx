@@ -332,6 +332,24 @@ Function PhysicalModel::getRestrictedFunction(const Description & outputNames) c
 }
 
 
+PointToFieldFunction PhysicalModel::getPointToFieldFunction() const
+{
+  return getImplementation()->getPointToFieldFunction();
+}
+
+
+PointToFieldFunction PhysicalModel::getPointToFieldFunction(const Description & outputNames) const
+{
+  return getImplementation()->getPointToFieldFunction(outputNames);
+}
+
+
+PointToFieldFunction PhysicalModel::getRestrictedPointToFieldFunction(const Description & outputNames) const
+{
+  return getImplementation()->getRestrictedPointToFieldFunction(outputNames);
+}
+
+
 Copula PhysicalModel::getCopula() const
 {
   return getImplementation()->getCopula();
@@ -347,6 +365,24 @@ Collection<Copula> PhysicalModel::getCopulaCollection() const
 void PhysicalModel::setCopula(const Description &inputNames, const Copula &copula)
 {
   getImplementation()->setCopula(inputNames, copula);
+}
+
+
+Bool PhysicalModel::hasMesh() const
+{
+  return getImplementation()->hasMesh();
+}
+
+
+MeshModel PhysicalModel::getMeshModel() const
+{
+  return getImplementation()->getMeshModel();
+}
+
+
+void PhysicalModel::setMeshModel(const MeshModel& meshModel)
+{
+  getImplementation()->setMeshModel(meshModel);
 }
 
 

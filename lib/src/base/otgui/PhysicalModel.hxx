@@ -94,10 +94,17 @@ public:
   OT::Function getFunction(const OT::String & outputName) const;
   OT::Function getRestrictedFunction() const;
   OT::Function getRestrictedFunction(const OT::Description & outputNames) const;
+  OT::PointToFieldFunction getPointToFieldFunction() const;
+  OT::PointToFieldFunction getPointToFieldFunction(const OT::Description & outputNames) const;
+  OT::PointToFieldFunction getRestrictedPointToFieldFunction(const OT::Description & outputNames) const;
 
   OT::Copula getCopula() const;
   OT::Collection<OT::Copula> getCopulaCollection() const;
   void setCopula(const OT::Description& inputNames, const OT::Copula & copula);
+
+  bool hasMesh() const;
+  MeshModel getMeshModel() const;
+  void setMeshModel(const MeshModel& meshModel);
 
   OT::Bool isParallel() const;
   void setParallel(const OT::Bool flag);
