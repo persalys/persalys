@@ -19,7 +19,7 @@
  *
  */
 #include "otgui/ResizableHeaderlessTableView.hxx"
-
+#include <QScrollBar>
 using namespace OT;
 
 namespace OTGUI
@@ -131,7 +131,9 @@ void ResizableHeaderlessTableView::resizeWithOptimalWidth()
   // set width
   int x1, y1, x2, y2;
   getContentsMargins(&x1, &y1, &x2, &y2);
-  const int w = horizontalHeader()->length() + verticalHeader()->width();
+  int w = horizontalHeader()->length() + verticalHeader()->width();
+  if (verticalScrollBar())
+    w += verticalScrollBar()->width();
   setFixedWidth(w + x1 + x2);
 }
 
