@@ -28,7 +28,7 @@ namespace OTGUI
 OTguiWizard::OTguiWizard(QWidget * parent)
   : QWizard(parent)
 {
-  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
+  setWindowIcon(QIcon(":/images/otgui.ico"));
   setWizardStyle(QWizard::MacStyle);
   setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/OT_image256x256.png"));
   setButtonText(QWizard::BackButton, tr("Back"));

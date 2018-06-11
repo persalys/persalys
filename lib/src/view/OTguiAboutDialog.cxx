@@ -46,7 +46,7 @@ namespace OTGUI
 OTguiAboutDialog::OTguiAboutDialog(QWidget* parent)
   : QDialog(parent)
 {
-  setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
+  setWindowIcon(QIcon(":/images/otgui.ico"));
   setWindowTitle(tr("About OTGui"));
 
   QVBoxLayout * mainLayout = new QVBoxLayout;

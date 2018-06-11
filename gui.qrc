@@ -45,5 +45,6 @@
         <file>images/edit-delete.png</file>
         <file>images/dialog-ok-apply.png</file>
         <file>images/optimize.png</file>
+        <file>images/otgui.ico</file>
     </qresource>
 </RCC>

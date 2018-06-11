@@ -43,7 +43,7 @@ QVariant StudyTreeViewModel::headerData(int section, Qt::Orientation orientation
       return tr("Studies");
 
     else if (role == Qt::DecorationRole)
-      return QIcon(":/images/OT_icon16x16.png");
+      return QIcon(":/images/otgui.ico");
   }
 
   return QStandardItemModel::headerData(section, orientation, role);

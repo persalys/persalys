@@ -51,7 +51,7 @@ MainWindow::MainWindow()
   , pythonConsole_(new PyConsole_Console(this))
 {
   setWindowTitle("OTGui");
-  setWindowIcon(QIcon(":/images/OT_icon32x32.png"));
+  setWindowIcon(QIcon(":/images/otgui.ico"));
 
 #ifdef OTGUI_HAVE_PARAVIEW
   if (OTguiSubWindow::HaveOpenGL32())
