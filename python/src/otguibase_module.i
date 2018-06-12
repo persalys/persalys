@@ -112,6 +112,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include FMUInfo.i
 %include FMIPhysicalModel.i
 #endif
+%include SymbolicFieldModel.i
+%include PythonFieldModel.i
 %include LimitStateImplementation.i
 %include LimitState.i
 %include AnalysisResult.i

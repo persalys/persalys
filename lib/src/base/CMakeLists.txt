@@ -16,7 +16,10 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx SymbolicPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
                      MetaModel.cxx
+                     SymbolicFieldModel.cxx
                      PythonScriptEvaluation.cxx
+                     PythonScriptFieldFunction.cxx
+                     PythonFieldModel.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      FixedDesignOfExperiment.cxx
                      GridDesignOfExperiment.cxx
@@ -88,7 +91,10 @@ ot_install_header_file ( PhysicalModel.hxx )
 ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( SymbolicPhysicalModel.hxx )
 ot_install_header_file ( PythonPhysicalModel.hxx )
+ot_install_header_file ( SymbolicFieldModel.hxx )
 ot_install_header_file ( PythonScriptEvaluation.hxx )
+ot_install_header_file ( PythonScriptFieldFunction.hxx )
+ot_install_header_file ( PythonFieldModel.hxx )
 ot_install_header_file ( MetaModel.hxx )
 ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )

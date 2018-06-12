@@ -60,7 +60,7 @@ public:
   Input & getInputByName(const OT::String & inputName);
   Input getInputByName(const OT::String & inputName) const;
   virtual void setInputs(const InputCollection & inputs);
-  void setInputName(const OT::String & inputName, const OT::String & newName);
+  virtual void setInputName(const OT::String & inputName, const OT::String & newName);
   void setInputDescription(const OT::String & inputName, const OT::String & description);
   void setInputValue(const OT::String & inputName, const double & value);
   void setInputStochastic(const OT::String & inputName, const bool & stoch);
