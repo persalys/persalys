@@ -28,6 +28,7 @@ ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
 ot_add_source_file ( WelcomeWindow.cxx )
 ot_add_source_file ( StudyWindow.cxx )
+ot_add_source_file ( MeshWindow.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
 ot_add_source_file ( MinMaxTableGroupBox.cxx )
 ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
@@ -127,6 +128,7 @@ ot_install_header_file ( WindowFactory.hxx )
 ot_install_header_file ( AnalysisWizard.hxx )
 ot_install_header_file ( WelcomeWindow.hxx )
 ot_install_header_file ( StudyWindow.hxx )
+ot_install_header_file ( MeshWindow.hxx )
 ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
 ot_install_header_file ( FieldModelDiagramWindow.hxx )
 ot_install_header_file ( DataModelDiagramWindow.hxx )
@@ -232,6 +234,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/StudyManager.hxx
                                   otgui/WelcomeWindow.hxx
                                   otgui/StudyWindow.hxx
+                                  otgui/MeshWindow.hxx
                                   otgui/PhysicalModelDiagramWindow.hxx
                                   otgui/FieldModelDiagramWindow.hxx
                                   otgui/DataModelDiagramWindow.hxx
