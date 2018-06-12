@@ -112,54 +112,36 @@ void DataSample::searchMinMax() const
   if (getInputSample().getSize() != getOutputSample().getSize())
     throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
 
-  const UnsignedInteger size = getInputSample().getSize();
-  const UnsignedInteger numberInputs = getInputSample().getDimension();
+  // get the minimum and the maximum output values
+  const Point outputMin = getOutputSample().getMin();
+  const Point outputMax = getOutputSample().getMax();
 
-  Indices indicesInputs(numberInputs);
-  indicesInputs.fill();
-
-  Sample sample(getInputSample());
-  sample.stack(getOutputSample());
-
-  for (UnsignedInteger i = numberInputs; i < sample.getDimension(); ++i)
+  // find for each output, the input points where the output is max and min
+  // (we can have several input points for each extremum)
+  for (UnsignedInteger out = 0; out < getOutputSample().getDimension(); ++out)
   {
-    Sample orderedSample(sample.sortAccordingToAComponent(i));
+    Sample inMinSample(0, getInputSample().getDimension());
+    Sample inMaxSample(0, getInputSample().getDimension());
 
-    // Search min value of the ith output and the corresponding set of inputs X
-    const double minValue = orderedSample(0, i);
-
-    UnsignedInteger it = 0;
-    double value = orderedSample(it, i);
-    Sample tempSample(0, numberInputs);
-    do
+    // if output min = output max : take all the input points
+    if (outputMin[out] == outputMax[out])
     {
-      const Point point(orderedSample.getMarginal(indicesInputs)[it]);
-      if (!tempSample.contains(point))
-        tempSample.add(point);
-      ++it;
-      value = orderedSample(it, i);
+      inMinSample = getInputSample();
+      inMaxSample = getInputSample();
     }
-    while (value == minValue && it < size);
-
-    listXMin_.add(tempSample);
-
-    // Search max value of the ith output and the corresponding set of inputs X
-    const double maxValue = orderedSample(size - 1, i);
-
-    it = 0;
-    value = orderedSample(size - 1 - it, i);
-    tempSample = Sample(0, numberInputs);
-    do
+    // else : find the input values for the output min and max
+    else
     {
-      const Point point(orderedSample.getMarginal(indicesInputs)[size - 1 - it]);
-      if (!tempSample.contains(point))
-        tempSample.add(point);
-      ++it;
-      value = orderedSample(size - 1 - it, i);
+      for (UnsignedInteger i = 0; i < getInputSample().getSize(); ++i)
+      {
+        if (getOutputSample()(i, out) == outputMin[out])
+          inMinSample.add(getInputSample()[i]);
+        if (getOutputSample()(i, out) == outputMax[out])
+          inMaxSample.add(getInputSample()[i]);
+      }
     }
-    while (value == maxValue && it < size);
-
-    listXMax_.add(tempSample);
+    listXMin_.add(inMinSample);
+    listXMax_.add(inMaxSample);
   }
 }
 

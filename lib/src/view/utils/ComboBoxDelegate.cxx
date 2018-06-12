@@ -24,6 +24,7 @@
 
 #include <QStandardItemModel>
 #include <QWheelEvent>
+#include <QLineEdit>
 
 namespace OTGUI
 {
@@ -73,7 +74,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
     if (index.row() != cell_.first || index.column() != cell_.second)
       return QItemDelegate::createEditor(parent, option, index);
 
-  QComboBox * editor;
+  QComboBox * editor = 0;
   if (noWheelEvent_)
     editor = new NoWheelEventComboBox(parent);
   else
@@ -81,6 +82,13 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
   const QStringList items(index.model()->data(index, Qt::UserRole + 1).toStringList());
   editor->addItems(items);
   editor->setEnabled(items.size() > 0);
+  // set text alignment
+  editor->setEditable(true);
+  editor->lineEdit()->setAlignment(Qt::AlignCenter);
+  editor->lineEdit()->setReadOnly(true);
+  // set Background color
+  const QString defaultColor = index.model()->data(index, Qt::BackgroundRole).value<QColor>().name();
+  editor->lineEdit()->setStyleSheet("QLineEdit {background: " + defaultColor + ";}");
 
   connect(editor, SIGNAL(activated(QString)), this, SLOT(emitCommitData()));
   return editor;

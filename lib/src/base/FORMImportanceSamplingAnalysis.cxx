@@ -127,9 +127,8 @@ String FORMImportanceSamplingAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
-  oss << ImportanceSamplingAnalysis::getPythonScript();
+  oss << SimulationReliabilityAnalysis::getPythonScript();
   oss << getName() << ".setPhysicalStartingPoint(" << getPhysicalStartingPoint().__str__() << ")\n";
-  oss << getName() << ".setStandardSpaceDesignPoint(" << getStandardSpaceDesignPoint().__str__() << ")\n";
   // optimization algo
   oss << "optimizationAlgo = ot." << getOptimizationAlgorithm().getImplementation()->getClassName() << "()\n";
   oss << "optimizationAlgo.setMaximumEvaluationNumber(" << getOptimizationAlgorithm().getMaximumEvaluationNumber() << ")\n";

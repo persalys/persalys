@@ -93,7 +93,7 @@ void OTguiMenuBar::buildActions(const OTguiActions* actions)
 
   // Help menu
   QMenu * helpMenu = new QMenu(tr("&Help"));
-  action = new QAction(QIcon(":/images/OT_icon16x16.png"), tr("About OTGui"), this);
+  action = new QAction(QIcon(":/images/otgui.ico"), tr("About OTGui"), this);
   connect(action, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
   helpMenu->addAction(action);
 

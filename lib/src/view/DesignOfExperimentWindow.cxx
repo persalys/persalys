@@ -77,8 +77,11 @@ void DesignOfExperimentWindow::fillTabWidget()
   if (!canUseParaview)
   {
     addTableTab();
-    addPlotMatrixTab();
-    addScatterPlotsTab();
+    if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+    {
+      addPlotMatrixTab();
+      addScatterPlotsTab();
+    }
   }
 
   if (parametersWidget_)

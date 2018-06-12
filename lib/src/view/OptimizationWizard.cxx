@@ -81,14 +81,14 @@ void OptimizationWizard::buildInterface()
   {
     tableView_->resizeWithOptimalHeight();
     groupBoxLayout_->addWidget(tableView_, 0, Qt::AlignTop);
+    pageLayout->addWidget(inputsBox);
+    pageLayout->addStretch();
   }
   else
   {
     groupBoxLayout_->addWidget(tableView_);
+    pageLayout->addWidget(inputsBox);
   }
-
-  pageLayout->addWidget(inputsBox);
-  pageLayout->addStretch();
 
   errorMessageLabel_ = new TemporaryLabel;
   pageLayout->addWidget(errorMessageLabel_);

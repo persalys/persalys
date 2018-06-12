@@ -520,6 +520,8 @@ outliers= [[-2.29006],[]]
 class=DataModel name=myDataModel2 fileName=data.csv inputColumns=[0,2] outputColumns=[1] inputNames=[var1,var2] outputNames=[var3]
 inputNames= [var1,var2]
 outputNames= [var3]
+min= [0 : [ 1.20548  0.350042 ]]
+max= [0 : [ -0.355007  0.810668 ]]
 class=DataModel name=myDataModel3 fileName=data.csv inputColumns=[0,2] outputColumns=[1] inputNames=[X0,X2] outputNames=[X1]
 inputNames= [X0,X2]
 outputNames= [X1]
@@ -545,6 +547,8 @@ outputSample=     [ X1         ]
 7 : [ -1.03808   ]
 8 : [ -0.125498  ]
 9 : [  0.0702074 ]
+min= [0 : [ 1.20548  0.350042 ]]
+max= [0 : [ -0.355007  0.810668 ]]
 #!/usr/bin/env python
 # coding: utf-8
 

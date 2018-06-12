@@ -25,6 +25,8 @@
 
 #include <openturns/IndependentCopula.hxx>
 
+#include <QColor>
+
 using namespace OT;
 
 namespace OTGUI
@@ -110,6 +112,10 @@ QVariant DependenciesTableModel::data(const QModelIndex &index, int role) const
   {
     const UnsignedInteger groupSize = copula_.getCopulaCollection()[index.row()].getDescription().getSize();
     return (groupSize > 2 ? QStringList() << tr("Normal") : TranslationManager::GetAvailableCopulas()) << tr("Inference result");
+  }
+  else if (role == Qt::BackgroundRole)
+  {
+    return QColor(Qt::white);
   }
 
   return QVariant();

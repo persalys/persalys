@@ -86,6 +86,7 @@ void CopulaInferenceResultWizard::buildInterface()
     for (UnsignedInteger i = 0; i < variables_.getSize(); ++i)
     {
       tableModel->setData(tableModel->index(0, i) , QtOT::DescriptionToStringList(variables_), Qt::UserRole + 1);
+      tableModel->setData(tableModel->index(0, i) , QColor(Qt::white), Qt::BackgroundRole);
     }
     // - delegate
     ComboBoxDelegate * delegate = new ComboBoxDelegate(tableView_);

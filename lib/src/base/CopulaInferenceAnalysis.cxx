@@ -39,6 +39,7 @@ CLASSNAMEINIT(CopulaInferenceAnalysis)
 
 static Factory<CopulaInferenceAnalysis> Factory_CopulaInferenceAnalysis;
 static Factory<PersistentCollection<Description> > Factory_CollectionDescription;
+static Factory<PersistentCollection<DistributionFactory > > Factory_CollectionFactories;
 static Factory<PersistentCollection<PersistentCollection<DistributionFactory > > > Factory_CollectionCollectionFactories;
 
 /* Default constructor */

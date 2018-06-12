@@ -26,6 +26,8 @@
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/Dirac.hxx>
 
+#include <QColor>
+
 using namespace OT;
 
 namespace OTGUI
@@ -133,6 +135,10 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
     const Input input(physicalModel_.getInputs()[index.row()]);
     const String distributionName = input.getDistribution().getImplementation()->getClassName();
     return distributionName == "Dirac" ? QStringList() : TranslationManager::GetAvailableDistributions() << tr("Inference result");
+  }
+  else if (role == Qt::BackgroundRole)
+  {
+    return QColor(Qt::white);
   }
   return QVariant();
 }

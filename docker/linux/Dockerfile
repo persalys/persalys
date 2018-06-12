@@ -58,6 +58,7 @@ RUN svn co https://svn.jmodelica.org/FMILibrary/tags/2.0.3/ FMILibrary-2.0.3 && 
 
 # pyfmi
 RUN pip install cython && pip install lxml assimulo \
+ && rm -f /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.pyc \
  && sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.py \
  && python -c "import assimulo; import assimulo.solvers" \
  && wget https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip && unzip PyFMI-2.4.0.zip && cd PyFMI-2.4 \

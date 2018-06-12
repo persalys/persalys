@@ -20,6 +20,8 @@
  */
 #include "otgui/HorizontalHeaderViewWithCombobox.hxx"
 
+#include <QLineEdit>
+
 namespace OTGUI
 {
 
@@ -41,6 +43,10 @@ HorizontalHeaderViewWithCombobox::HorizontalHeaderViewWithCombobox(QStringList c
 
 void HorizontalHeaderViewWithCombobox::showEvent(QShowEvent * e)
 {
+  // get default color
+  const QString defaultColor = QHeaderView(Qt::Horizontal).palette().color(QPalette::Window).name();
+
+  // create and/or update comboboxes
   for (int i = 0; i < columnsWithComboBox_.size(); ++i)
   {
     int j = columnsWithComboBox_[i];
@@ -50,6 +56,12 @@ void HorizontalHeaderViewWithCombobox::showEvent(QShowEvent * e)
       box->addItems(comboBoxItems_);
       box->setCurrentIndex(box->findText(model()->headerData(j, Qt::Horizontal).toString()));
       connect(box, SIGNAL(currentIndexChanged(int)), this, SLOT(setHeaderData(int)));
+      // set text alignment
+      box->setEditable(true);
+      box->lineEdit()->setReadOnly(true);
+      box->lineEdit()->setAlignment(Qt::AlignCenter);
+      // set Background color
+      box->lineEdit()->setStyleSheet("QLineEdit {background: " + defaultColor + ";}");
       boxes_[j] = box;
     }
     boxes_[j]->setGeometry(sectionViewportPosition(j), 0, sectionSize(j) - 1, height());

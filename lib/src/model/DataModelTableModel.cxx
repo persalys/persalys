@@ -25,6 +25,7 @@
 #include <openturns/SpecFunc.hxx>
 
 #include <QColor>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -181,6 +182,12 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
       QFont font;
       font.setBold(true);
       return font;
+    }
+
+    // background
+    else if (role == Qt::BackgroundRole)
+    {
+      return QHeaderView(Qt::Horizontal).palette().color(QPalette::Window);
     }
   }
   // variable value
