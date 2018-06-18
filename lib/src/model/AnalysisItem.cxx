@@ -84,9 +84,9 @@ void AnalysisItem::buildActions()
     convertAction_ = new QAction(tr("Convert metamodel into physical model"), this);
     convertAction_->setStatusTip(tr("Add the metamodel in the study tree"));
     connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendMetaModelItem()));
+    convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
+
     appendAction(convertAction_);
-    if (!analysis_.getImplementation()->hasValidResult())
-      convertAction_->setEnabled(false);
   }
 
   // no remove action for these analyses
@@ -156,8 +156,8 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable convertAction_ action
-  if (convertAction_ && !analysis_.hasValidResult())
-    convertAction_->setEnabled(false);
+  if (convertAction_)
+    convertAction_->setEnabled(analysis_.hasValidResult());
 }
 
 

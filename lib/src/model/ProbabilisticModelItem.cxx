@@ -32,6 +32,11 @@ namespace OTGUI
 
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
   : PhysicalModelItem(physicalModel, "ProbabilisticModel")
+  , newDesignOfExperiment_(0)
+  , newLimitState_(0)
+  , newCentralTendency_(0)
+  , newSensitivityAnalysis_(0)
+
 {
   setData(tr("Probabilistic model"), Qt::DisplayRole);
   QFont font;

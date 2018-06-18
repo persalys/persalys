@@ -40,6 +40,7 @@ PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & p
   , newProbabilisticModel_(0)
   , newModelEvaluation_(0)
   , newScreening_(0)
+  , newOptimization_(0)
   , newDesignOfExperiment_(0)
 {
   setData(tr("Definition"), Qt::DisplayRole);
@@ -84,8 +85,7 @@ void PhysicalModelDefinitionItem::buildActions()
   appendAction(newDesignOfExperiment_);
   appendSeparator(tr("Analysis"));
   appendAction(newModelEvaluation_);
-  if (newScreening_)
-    appendAction(newScreening_);
+  appendAction(newScreening_);
   appendAction(newOptimization_);
 }
 
