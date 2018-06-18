@@ -38,8 +38,11 @@ OTguiSubWindow::OTguiSubWindow(OTguiItem * item, QWidget * parent)
   setWindowIcon(QIcon(":/images/otgui.ico"));
 
   // connections: signal for mdiArea
-  connect(item, SIGNAL(removeWindowRequested()), this, SIGNAL(removeWindowRequested()));
-  connect(item, SIGNAL(showWindowRequested()), this, SIGNAL(showWindowRequested()));
+  if (item)
+  {
+    connect(item, SIGNAL(removeWindowRequested()), this, SIGNAL(removeWindowRequested()));
+    connect(item, SIGNAL(showWindowRequested()), this, SIGNAL(showWindowRequested()));
+  }
 }
 
 
