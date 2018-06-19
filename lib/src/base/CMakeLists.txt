@@ -10,6 +10,9 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      Variable.cxx Input.cxx Output.cxx
                      DataSample.cxx
                      DataModel.cxx
+                     MeshModel.cxx MeshModelImplementation.cxx
+                     GridMeshModel.cxx
+                     ImportedMeshModel.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx SymbolicPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
                      MetaModel.cxx
@@ -75,6 +78,10 @@ ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
 ot_install_header_file ( DataSample.hxx )
+ot_install_header_file ( MeshModel.hxx )
+ot_install_header_file ( MeshModelImplementation.hxx )
+ot_install_header_file ( GridMeshModel.hxx )
+ot_install_header_file ( ImportedMeshModel.hxx )
 ot_install_header_file ( PhysicalModel.hxx )
 ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( SymbolicPhysicalModel.hxx )

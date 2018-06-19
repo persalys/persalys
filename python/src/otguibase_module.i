@@ -96,6 +96,10 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include Input.i
 %include Output.i
 %include DataSample.i
+%include MeshModelImplementation.i
+%include MeshModel.i
+%include GridMeshModel.i
+%include ImportedMeshModel.i
 %include PhysicalModelImplementation.i
 %include SymbolicPhysicalModel.i
 %include PythonPhysicalModel.i

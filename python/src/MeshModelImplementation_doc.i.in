@@ -1,0 +1,89 @@
+%define OTGUI_MeshModel_doc
+"Mesh model base class.
+
+Notes
+-----
+Can only be used through it's derived classes.
+See :class:`~otguibase.GridMeshModel`, :class:`~otguibase.ImportedMeshModel`"
+%enddef
+%feature("docstring") OTGUI::MeshModelImplementation
+OTGUI_MeshModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_MeshModel_getMesh_doc
+"Mesh accessor.
+
+Returns
+-------
+mesh : :py:class:`openturns.Mesh`
+    Mesh"
+%enddef
+%feature("docstring") OTGUI::MeshModelImplementation::getMesh
+OTGUI_MeshModel_getMesh_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_MeshModel_getBounds_doc
+"Get bounds of the mesh nodes accessor.
+
+Returns
+-------
+bounds : :py:class:`openturns.Interval`
+    Bounds of the mesh nodes along each direction"
+%enddef
+%feature("docstring") OTGUI::MeshModelImplementation::getBounds
+OTGUI_MeshModel_getBounds_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_MeshModel_getNumberOfNodes_doc
+"Number of nodes accessor.
+
+Returns
+-------
+number : :py:class:`openturns.Indices`
+    Number of nodes along each direction"
+%enddef
+%feature("docstring") OTGUI::MeshModelImplementation::getNumberOfNodes
+OTGUI_MeshModel_getNumberOfNodes_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_MeshModel_getIndexParameters_doc
+"Index parameters accessor.
+
+Returns
+-------
+parameters : sequence of :class:`otguibase.Variable`
+    Index parameters"
+%enddef
+%feature("docstring") OTGUI::MeshModelImplementation::getIndexParameters
+OTGUI_MeshModel_getIndexParameters_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_MeshModel_setIndexParameters_doc
+"Index parameters accessor.
+
+Parameters
+----------
+parameters : sequence of :class:`otguibase.Variable`
+    Index parameters"
+%enddef
+%feature("docstring") OTGUI::MeshModelImplementation::setIndexParameters
+OTGUI_MeshModel_setIndexParameters_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_MeshModel_getPythonScript_doc
+"Python script accessor.
+
+Returns
+-------
+script : str
+    Python script to replay the analysis"
+%enddef
+%feature("docstring") OTGUI::MeshModelImplementation::getPythonScript
+OTGUI_MeshModel_getPythonScript_doc
+

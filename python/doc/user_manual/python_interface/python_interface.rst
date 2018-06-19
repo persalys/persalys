@@ -13,9 +13,14 @@ Model creation
 
     Input
     Output
+    MeshModel
+    GridMeshModel
+    ImportedMeshModel
     PhysicalModel
     SymbolicPhysicalModel
+    SymbolicFieldModel
     PythonPhysicalModel
+    PythonFieldModel
     DataModel
     MetaModel
 
@@ -29,6 +34,7 @@ Model evaluation
     :template: class.rst_t
 
     ModelEvaluation
+    FieldModelEvaluation
 
 Optimization
 ------------
@@ -68,6 +74,8 @@ Central tendency
     :template: class.rst_t
 
     MonteCarloAnalysis
+    FieldMonteCarloAnalysis
+    FieldMonteCarloResult
     TaylorExpansionMomentsAnalysis
     TaylorExpansionMomentsResult
 

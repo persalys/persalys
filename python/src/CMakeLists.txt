@@ -3,7 +3,7 @@ include (${SWIG_USE_FILE})
 include (TargetLinkLibrariesWithDynamicLookup)
 
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
-add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
+add_definitions ( ${OPENTURNS_SWIG_DEFINITIONS} )
 include_directories ( ${OTMORRIS_INCLUDE_DIR}/otmorris/swig )
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 include_directories ( ${PYTHON_INCLUDE_DIRS} )
@@ -94,6 +94,10 @@ ot_add_python_module (otguibase otguibase_module.i
                       Input.i Input_doc.i.in
                       Output.i Output_doc.i.in
                       DataSample.i DataSample_doc.i.in
+                      MeshModelImplementation.i MeshModelImplementation_doc.i.in
+                      MeshModel.i MeshModel_doc.i.in
+                      GridMeshModel.i GridMeshModel_doc.i.in
+                      ImportedMeshModel.i ImportedMeshModel_doc.i.in
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       SymbolicPhysicalModel.i SymbolicPhysicalModel_doc.i.in
                       PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
