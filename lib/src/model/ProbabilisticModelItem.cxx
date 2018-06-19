@@ -36,7 +36,6 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalMod
   , newLimitState_(0)
   , newCentralTendency_(0)
   , newSensitivityAnalysis_(0)
-
 {
   setData(tr("Probabilistic model"), Qt::DisplayRole);
   QFont font;
@@ -50,24 +49,28 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalMod
 
 void ProbabilisticModelItem::buildActions()
 {
-  // new design of experiments action
-  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
-  newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
-  connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
+  if (!physicalModel_.hasMesh())
+  {
+    // new design of experiments action
+    newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
+    newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
+    connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
 
-  // new limit state action
-  newLimitState_ = new QAction(QIcon(":/images/limitstate.png"), tr("Limit state"), this);
-  newLimitState_->setStatusTip(tr("Create a new limit state"));
-  connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createLimitState()));
+    // new limit state action
+    newLimitState_ = new QAction(QIcon(":/images/limitstate.png"), tr("Limit state"), this);
+    newLimitState_->setStatusTip(tr("Create a new limit state"));
+    connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createLimitState()));
+
+    // new analysis action
+    newSensitivityAnalysis_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Sensitivity"), this);
+    newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
+    connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createSensitivityAnalysis()));
+  }
 
   // new analysis action
   newCentralTendency_ = new QAction(QIcon(":/images/centralTendency.png"), tr("Central tendency"), this);
   newCentralTendency_->setStatusTip(tr("Create a new central tendency"));
   connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createCentralTendency()));
-
-  newSensitivityAnalysis_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Sensitivity"), this);
-  newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
-  connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createSensitivityAnalysis()));
 
   // add actions
   appendAction(newDesignOfExperiment_);

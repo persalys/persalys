@@ -61,24 +61,30 @@ void PhysicalModelDefinitionItem::buildActions()
   connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createProbabilisticModel()));
 
   // new design of experiments action
-  newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
-  newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
-  connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createDesignOfExperiment()));
+  if (!physicalModel_.hasMesh())
+  {
+    newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
+    newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
+    connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createDesignOfExperiment()));
+  }
 
   // new evaluation action
   newModelEvaluation_ = new QAction(QIcon(":/images/modelEvaluation.png"), tr("Evaluation"), this);
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
   connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createModelEvaluation()));
 
+  if (!physicalModel_.hasMesh())
+  {
 #ifdef OTGUI_HAVE_OTMORRIS
-  newScreening_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
-  newScreening_->setStatusTip(tr("Create a new screening"));
-  connect(newScreening_, SIGNAL(triggered()), this, SLOT(createScreening()));
+    newScreening_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
+    newScreening_->setStatusTip(tr("Create a new screening"));
+    connect(newScreening_, SIGNAL(triggered()), this, SLOT(createScreening()));
 #endif
-  // new optimization action
-  newOptimization_ = new QAction(QIcon(":/images/optimize.png"), tr("Optimization"), this);
-  newOptimization_->setStatusTip(tr("Create a new model optimization"));
-  connect(newOptimization_, SIGNAL(triggered()), this, SLOT(createOptimization()));
+    // new optimization action
+    newOptimization_ = new QAction(QIcon(":/images/optimize.png"), tr("Optimization"), this);
+    newOptimization_->setStatusTip(tr("Create a new model optimization"));
+    connect(newOptimization_, SIGNAL(triggered()), this, SLOT(createOptimization()));
+  }
 
   // add actions
   appendAction(newProbabilisticModel_);
@@ -138,6 +144,10 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
   else if (message == "parallelizationStatusChanged")
   {
     emit parallelizationStatusChanged();
+  }
+  else if (message == "meshChanged")
+  {
+    emit meshChanged();
   }
   else if (message == "physicalModelRemoved")
   {

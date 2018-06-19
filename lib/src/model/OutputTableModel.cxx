@@ -39,7 +39,10 @@ OutputTableModel::OutputTableModel(const PhysicalModel & physicalModel, QObject 
 
 int OutputTableModel::columnCount(const QModelIndex & parent) const
 {
-  return 4;
+  if (!physicalModel_.hasMesh())
+    return 4;
+  else
+    return 3;
 }
 
 

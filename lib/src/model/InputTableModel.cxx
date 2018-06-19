@@ -143,7 +143,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
 
 Qt::ItemFlags InputTableModel::flags(const QModelIndex & index) const
 {
-  if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
+  if (index.column() == 0 && !QString(physicalModel_.getImplementation()->getClassName().c_str()).contains("Symbolic"))
     return QAbstractTableModel::flags(index);
   return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }

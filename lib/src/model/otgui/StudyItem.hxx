@@ -53,7 +53,9 @@ protected slots:
 public slots:
   void updateIcon();
   void createSymbolicModel();
+  void createSymbolicFieldModel();
   void createPythonModel();
+  void createPythonFieldModel();
 #ifdef OTGUI_HAVE_YACS
   void createYACSModel();
 #endif
@@ -76,6 +78,7 @@ signals:
   void closeRequested(StudyItem* item);
   void dataModelItemCreated(DataModelDiagramItem*);
   void physicalModelItemCreated(PhysicalModelDiagramItem*);
+  void fieldModelItemCreated(PhysicalModelDiagramItem*);
 
 protected:
   void buildActions();

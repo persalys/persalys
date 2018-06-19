@@ -24,7 +24,9 @@
 #include "otgui/PhysicalModelAnalysis.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 #include "otgui/SymbolicPhysicalModel.hxx"
+#include "otgui/SymbolicFieldModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
+#include "otgui/PythonFieldModel.hxx"
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSPhysicalModel.hxx"
 #endif
@@ -163,9 +165,23 @@ void StudyItem::createSymbolicModel()
 }
 
 
+void StudyItem::createSymbolicFieldModel()
+{
+  SymbolicFieldModel * newModel = new SymbolicFieldModel(study_.getAvailablePhysicalModelName(tr("SymbolicModel_").toStdString()));
+  study_.add(newModel);
+}
+
+
 void StudyItem::createPythonModel()
 {
   PythonPhysicalModel * newModel = new PythonPhysicalModel(study_.getAvailablePhysicalModelName(tr("PythonModel_").toStdString()));
+  study_.add(newModel);
+}
+
+
+void StudyItem::createPythonFieldModel()
+{
+  PythonFieldModel * newModel = new PythonFieldModel(study_.getAvailablePhysicalModelName(tr("PythonModel_").toStdString()));
   study_.add(newModel);
 }
 
@@ -329,7 +345,10 @@ void StudyItem::appendItem(PhysicalModel & physicalModel)
   item->appendRow(newModelItem);
 
   // signal for StudyTreeView to create the window
-  emit physicalModelItemCreated(newModelItem);
+  if (!physicalModel.hasMesh())
+    emit physicalModelItemCreated(newModelItem);
+  else
+    emit fieldModelItemCreated(newModelItem);
 
   // Add sub items
   newModelItem->fill();
