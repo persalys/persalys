@@ -81,6 +81,11 @@ void StudyManager::showErrorMessage(QString message)
 
 void StudyManager::updateView(SubWindow * window)
 {
+  if (!window || !window->getItem())
+  {
+    qDebug() << "Error in StudyManager::updateView : empty pointer";
+    return;
+  }
   mainWidget_->getSubWindowsStackedWidget()->addSubWindow(window);
   mainWidget_->getStudyTree()->setCurrentIndex(window->getItem()->index());
   mainWidget_->getStudyTree()->setExpanded(window->getItem()->index(), true);

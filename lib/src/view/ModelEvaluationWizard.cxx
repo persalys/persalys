@@ -21,7 +21,7 @@
 #include "otgui/ModelEvaluationWizard.hxx"
 
 #include "otgui/DoubleSpinBox.hxx"
-#include "otgui/ModelEvaluation.hxx"
+#include "otgui/FieldModelEvaluation.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QVBoxLayout>
@@ -130,10 +130,7 @@ bool ModelEvaluationWizard::validateCurrentPage()
   // get the physical model
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel();
 
-  // update analysis_
-  ModelEvaluation eval(analysis_.getName(), model);
-  eval.setInterestVariables(QtOT::StringListToDescription(outputsGroupBox_->getSelectedOutputsNames()));
-
+  // get input values
   Point inputValues(table_->rowCount());
   for (int i = 0; i < table_->rowCount(); ++i)
   {
@@ -141,9 +138,20 @@ bool ModelEvaluationWizard::validateCurrentPage()
     DoubleSpinBox * spinBox = qobject_cast<DoubleSpinBox *>(cellWidget);
     inputValues[i] = spinBox->value();
   }
-  eval.setValues(inputValues);
 
-  analysis_ = eval;
+  // update analysis_
+  if (!model.hasMesh())
+  {
+    ModelEvaluation eval(analysis_.getName(), model, inputValues);
+    eval.setInterestVariables(QtOT::StringListToDescription(outputsGroupBox_->getSelectedOutputsNames()));
+    analysis_ = eval;
+  }
+  else
+  {
+    FieldModelEvaluation eval(analysis_.getName(), model, inputValues);
+    eval.setInterestVariables(QtOT::StringListToDescription(outputsGroupBox_->getSelectedOutputsNames()));
+    analysis_ = eval;
+  }
 
   return QWizard::validateCurrentPage();
 }

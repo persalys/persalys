@@ -381,7 +381,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
   // If not a DesignOfExperimentEvaluation
 
   // Evaluation title
-  if (analysisName == "ModelEvaluation")
+  if (analysisName.contains("ModelEvaluation"))
   {
     titleItem = getTitleItemNamed(tr("Evaluation"), "ModelEvaluationTitle");
 

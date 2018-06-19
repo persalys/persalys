@@ -44,6 +44,7 @@
 #include "otgui/KrigingResultWindow.hxx"
 #include "otgui/InferenceResultWindow.hxx"
 #include "otgui/CopulaInferenceResultWindow.hxx"
+#include "otgui/FieldModelEvaluationResultWindow.hxx"
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/ScreeningAnalysisWizard.hxx"
 #include "otgui/MorrisResultWindow.hxx"
@@ -107,7 +108,7 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
 
   const QString analysisType = analysis.getImplementation()->getClassName().c_str();
 
-  if (analysisType == "ModelEvaluation")
+  if (analysisType.contains("ModelEvaluation"))
   {
     wizard = new ModelEvaluationWizard(analysis, parent);
   }
@@ -177,6 +178,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   {
     resultWindow = new ModelEvaluationResultWindow(item, parent);
   }
+  else if (analysisType == "FieldModelEvaluation")
+  {
+    resultWindow = new FieldModelEvaluationResultWindow(item, parent);
+  }
 #ifdef OTGUI_HAVE_OTMORRIS
   else if (analysisType == "MorrisAnalysis")
   {
@@ -242,7 +247,8 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   }
   else
   {
-    qDebug() << "Error: In GetAnalysisWindow: analysisType " << analysisType << " not recognized.\n";
+    qDebug() << "Error: In WindowFactory::GetAnalysisWindow: analysisType " << analysisType << " not recognized.\n";
+    throw OT::InvalidArgumentException(HERE) << "Analysis type " << analysisType.toStdString() << " not recognized.\n";
   }
 
   return resultWindow;
