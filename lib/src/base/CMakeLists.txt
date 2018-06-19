@@ -32,6 +32,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      WithStopCriteriaAnalysis.cxx
                      DataAnalysisResult.cxx DataAnalysis.cxx
                      ModelEvaluation.cxx
+                     FieldModelEvaluation.cxx
                      DesignOfExperimentEvaluation.cxx
                      MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
                      TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
@@ -115,6 +116,7 @@ ot_install_header_file ( DataAnalysisResult.hxx )
 ot_install_header_file ( DataAnalysis.hxx )
 ot_install_header_file ( DesignOfExperimentEvaluation.hxx )
 ot_install_header_file ( ModelEvaluation.hxx )
+ot_install_header_file ( FieldModelEvaluation.hxx )
 ot_install_header_file ( MonteCarloAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResult.hxx )

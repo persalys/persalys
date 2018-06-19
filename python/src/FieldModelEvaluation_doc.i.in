@@ -1,0 +1,29 @@
+%feature("docstring") OTGUI::FieldModelEvaluation
+"Evaluation of a model with mesh.
+
+Parameters
+----------
+name : str
+    Name
+model : :class:`~otguibase.PhysicalModel`
+    Model containing a mesh
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> model = otguibase.SymbolicFieldModel('myModel')
+
+Create the analysis:
+
+>>> analysis = otguibase.FieldModelEvaluation('analysis', model)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()"
+
+// ---------------------------------------------------------------------
