@@ -46,6 +46,7 @@ public slots:
   void resizeInputTable();
   void resizeOutputTable();
   void updateMultiprocessingStatus(int);
+  void updateIndexParamLabel();
 
 signals:
   void updateInputTableData();
@@ -61,6 +62,7 @@ private:
   CopyableTableView * inputTableView_;
   CopyableTableView * outputTableView_;
   TemporaryLabel * errorMessageLabel_;
+  QLabel * indexParamLabel_;
 };
 }
 #endif

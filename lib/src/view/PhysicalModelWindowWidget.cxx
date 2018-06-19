@@ -27,6 +27,8 @@
 #include "otgui/InputTableModel.hxx"
 #include "otgui/OutputTableModel.hxx"
 #include "otgui/DifferentiationTableModel.hxx"
+#include "otgui/FieldModelEvaluation.hxx"
+#include "otgui/FieldModelEvaluationResultWindow.hxx"
 
 #include <QHeaderView>
 #include <QSplitter>
@@ -49,6 +51,7 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem
   , inputTableView_(0)
   , outputTableView_(0)
   , errorMessageLabel_(0)
+  , indexParamLabel_(0)
 {
   connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateInputTableData()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SIGNAL(updateInputTableData()));
@@ -58,6 +61,8 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem
 
   connect(item, SIGNAL(inputListDifferentiationChanged()), this, SIGNAL(updateDifferentiationTableData()));
   connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateDifferentiationTableData()));
+
+  connect(item, SIGNAL(meshChanged()), this, SLOT(updateIndexParamLabel()));
 
   buildInterface();
 }
@@ -108,6 +113,14 @@ void PhysicalModelWindowWidget::buildInterface()
     buttonsLayout->addWidget(addInputLineButton);
     buttonsLayout->addWidget(removeInputLineButton);
     inputsLayout->addLayout(buttonsLayout);
+  }
+
+  // index parameter label
+  if (physicalModel_.hasMesh())
+  {
+    indexParamLabel_ = new QLabel;
+    inputsLayout->addWidget(indexParamLabel_);
+    updateIndexParamLabel();
   }
 
   verticalSplitter->addWidget(inputsBox);
@@ -267,7 +280,8 @@ void PhysicalModelWindowWidget::resizeOutputTable()
   {
     outputTableView_->setColumnHidden(2, true); // hide formula section
     outputTableView_->horizontalHeader()->resizeSection(1, width - 2 * minSectionSize);
-    outputTableView_->horizontalHeader()->resizeSection(3, minSectionSize);
+    if (!physicalModel_.hasMesh())
+      outputTableView_->horizontalHeader()->resizeSection(3, minSectionSize);
   }
   else
   {
@@ -303,37 +317,59 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   // if no outputs do nothing
   if (!physicalModel_.getSelectedOutputsNames().getSize())
     return;
+  removeTab(2);
 
   // evaluate
-  ModelEvaluation eval("anEval", physicalModel_);
-  try
+  if (!physicalModel_.hasMesh())
   {
-    eval.run();
+    ModelEvaluation eval("anEval", physicalModel_);
+    try
+    {
+      eval.run();
+    }
+    catch (std::exception& ex)
+    {
+      // do nothing
+    }
+
+    // get result
+    Sample outputSample(eval.getResult().getDesignOfExperiment().getOutputSample());
+
+    // check
+    if (!eval.getErrorMessage().empty())
+    {
+      errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
+      return;
+    }
+    if (!outputSample.getSize())
+    {
+      errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
+      return;
+    }
+
+    // set output value
+    for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
+      physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
   }
-  catch (std::exception& ex)
+  else
   {
-    // do nothing
+    FieldModelEvaluation eval("anEval", physicalModel_);
+    try
+    {
+      eval.run();
+
+      Sample inputSample(1, eval.getValues());
+      inputSample.setDescription(physicalModel_.getInputNames());
+      FieldModelEvaluationResultWidget * widget = new FieldModelEvaluationResultWidget(inputSample, eval.getProcessSample(), this);
+      addTab(widget, tr("Evaluation"));
+      setCurrentIndex(2);
+    }
+    catch (std::exception& ex)
+    {
+      errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs %1").arg(ex.what()));
+      return;
+    }
   }
-
-  // get result
-  Sample outputSample(eval.getResult().getDesignOfExperiment().getOutputSample());
-
-  // check
-  if (!eval.getErrorMessage().empty())
-  {
-    errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
-    return;
-  }
-  if (!outputSample.getSize())
-  {
-    errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
-    return;
-  }
-
-  // set output value
-  for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
-    physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
-
   errorMessageLabel_->reset();
 }
 
@@ -341,5 +377,11 @@ void PhysicalModelWindowWidget::evaluateOutputs()
 void PhysicalModelWindowWidget::updateMultiprocessingStatus(int state)
 {
   physicalModel_.setParallel(state == Qt::Checked);
+}
+
+
+void PhysicalModelWindowWidget::updateIndexParamLabel()
+{
+  indexParamLabel_->setText(tr("Index parameter : %1").arg(physicalModel_.getMeshModel().getIndexParameters()[0].getName().c_str()));
 }
 }
