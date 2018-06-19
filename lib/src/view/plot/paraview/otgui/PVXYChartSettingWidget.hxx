@@ -24,6 +24,7 @@
 #include "otgui/PVXYChartViewWidget.hxx"
 #include "otgui/ValueLineEdit.hxx"
 #include "otgui/ListWidgetWithCheckBox.hxx"
+#include "otgui/UIntSpinBox.hxx"
 
 #include <QComboBox>
 #include <QButtonGroup>
@@ -36,7 +37,7 @@ class OTGUI_API PVXYChartSettingWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Scatter};
+  enum Type {NoType, Simple, Scatter, Trajectories, BagChart};
 
   PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
                          const OT::Sample& sample,
@@ -56,6 +57,11 @@ public:
                          Type plotType = NoType,
                          QWidget * parent = 0);
 
+  PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
+                         const QStringList& outputNames,
+                         Type plotType = NoType,
+                         QWidget * parent = 0);
+
   int getCurrentPlotIndex() const;
 
 protected:
@@ -71,9 +77,9 @@ public slots:
   void updateYLabel();
   void updateXrange();
   void updateYrange();
+  void updateQuantile();
   void setColor();
   void setMarkerStyle(const int);
-  void setRepresentationToDisplay();
 signals:
   void currentPlotChanged(QString varX, QString varY);
 
@@ -99,6 +105,7 @@ private:
   ValueLineEdit * ymin_;
   ValueLineEdit * ymax_;
   QCheckBox * ylogScaleCheckBox_;
+  UIntSpinBox * quantileSpinBox_;
   QToolButton * colorButton_;
   QComboBox * markerStyles_;
   ListWidgetWithCheckBox * reprListWidget_;

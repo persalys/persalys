@@ -2,6 +2,14 @@
 
 #include <pqSaveDataReaction.h>
 #include <pqActiveObjects.h>
+#include <pqApplicationCore.h>
+#include <vtkSMSourceProxy.h>
+#include <vtkSelection.h>
+#include <vtkSelectionNode.h>
+#include <vtkIdTypeArray.h>
+#include <vtkSMSelectionHelper.h>
+#include <vtkSMProxyManager.h>
+#include <pqSelectionManager.h>
 
 #include <QMenu>
 
@@ -41,7 +49,7 @@ void PVSpreadSheetViewWidget::contextMenu(const QPoint& pos)
 
 void PVSpreadSheetViewWidget::exportData()
 {
-  pqActiveObjects::instance().setActiveView(getView());
+  pqActiveObjects::instance().setActivePort(getPort());
   pqSaveDataReaction::saveActiveData();
 }
 }

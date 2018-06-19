@@ -15,24 +15,39 @@
 
 #include <vtkXYChartRepresentation.h>
 
+#include "otgui/ListWidgetWithCheckBox.hxx"
+
 #include <QEvent>
 
 using namespace OT;
 
 namespace OTGUI
 {
-const char PVXYChartViewWidget::PV_VIEW_TYPE[] = "XYChartView";
+const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_VIEW_TYPE{
+  {PVXYChartViewWidget::Scatter, "XYChartView"},
+  {PVXYChartViewWidget::Trajectories, "XYChartView"},
+  {PVXYChartViewWidget::BagChart, "XYBagChartView"},
+  {PVXYChartViewWidget::FunctionalBagChart, "XYFunctionalBagChartView"}};
 
-const char PVXYChartViewWidget::PV_REPRESENTATION_TYPE[] = "XYChartRepresentation";
+const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_REPRESENTATION_TYPE{
+  {PVXYChartViewWidget::Scatter, "XYChartRepresentation"},
+  {PVXYChartViewWidget::Trajectories, "XYChartRepresentation"},
+  {PVXYChartViewWidget::BagChart, "XYBagChartRepresentation"},
+  {PVXYChartViewWidget::FunctionalBagChart, "XYFunctionalBagChartRepresentation"}};
 
 const QColor PVXYChartViewWidget::DEFAULT_SCATTER_PLOT_COLOR = Qt::blue;
 
-PVXYChartViewWidget::PVXYChartViewWidget(QWidget *parent, PVServerManagerInterface *smb)
-  : PVViewWidget(parent, smb, PV_VIEW_TYPE)
+
+PVXYChartViewWidget::PVXYChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type)
+  : PVViewWidget(parent, smb, PV_VIEW_TYPE[type])
   , chartXY_(0)
+  , chartsTitle_()
+  , type_(type)
   , reprColors_()
+  , visibleRepr_()
 {
   pqContextView * viewC(dynamic_cast<pqContextView *>(getView()));
+
   if(!viewC)
     return ;
   vtkAbstractContextItem * contextItem(viewC->getContextViewProxy()->GetContextItem());
@@ -42,6 +57,8 @@ PVXYChartViewWidget::PVXYChartViewWidget(QWidget *parent, PVServerManagerInterfa
   int selectionModifier(vtkContextScene::SELECTION_DEFAULT);
   chartXY_->SetActionToButton(selectionType, vtkContextMouseEvent::RIGHT_BUTTON);
   chartXY_->SetSelectionMode(selectionModifier);
+  if (type_ == Trajectories)
+    chartXY_->SetSelectionMethod(vtkChart::SELECTION_COLUMNS);
 }
 
 
@@ -51,28 +68,41 @@ PVXYChartViewWidget::~PVXYChartViewWidget()
 }
 
 
+// TODO : rm
+bool PVXYChartViewWidget::eventFilter(QObject *obj, QEvent *event)
+{
+  if (obj == getView()->widget() && event->type() == QEvent::Paint && type_ == Trajectories)
+    chartXY_->SetSelectionMethod(vtkChart::SELECTION_COLUMNS);
+  return PVViewWidget::eventFilter(obj, event);
+}
+
+
 void PVXYChartViewWidget::setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames)
 {
   // set data
   PVViewWidget::setData(valuesByColumn, columnNames);
 
-  // set axis/title properties
-  for (std::size_t cc = 0; cc < columnNames.size(); cc++)
+  if (type_ == Scatter)
   {
-    for (std::size_t cc2 = 0; cc2 < columnNames.size(); cc2++)
+    // set axis/title properties
+    for (std::size_t cc = 0; cc < columnNames.size(); cc++)
     {
-      QPair<QString, QString> varPair(columnNames[cc].c_str(), columnNames[cc2].c_str());
-      if (!chartsTitle_.contains(varPair))
+      for (std::size_t cc2 = 0; cc2 < columnNames.size(); cc2++)
       {
-        chartsTitle_[varPair] = tr("Scatter plot:") + " " + columnNames[cc2].c_str() + " " + tr("vs") + " " + columnNames[cc].c_str();
-        XAxisTitle_[varPair] = columnNames[cc].c_str();
-        YAxisTitle_[varPair] = columnNames[cc2].c_str();
+        QPair<QString, QString> varPair(columnNames[cc].c_str(), columnNames[cc2].c_str());
+        if (!chartsTitle_.contains(varPair))
+        {
+          chartsTitle_[varPair] = QStringList() << (tr("Scatter plot") + ": " + columnNames[cc2].c_str() + " " + tr("vs") + " " + columnNames[cc].c_str()) << columnNames[cc].c_str() << columnNames[cc2].c_str();
+        }
       }
     }
   }
 
   // set scatter plot style
-  setScatterPlotStyle();
+  setPlotStyle();
+
+  // by default the representation is visible
+  visibleRepr_.insert(getView()->getNumberOfRepresentations() - 1);
 }
 
 
@@ -80,8 +110,27 @@ void PVXYChartViewWidget::setData(const Sample& sample, const QColor color)
 {
   // set data
   PVViewWidget::setData(sample);
+
   // set color
   setRepresentationColor(color, getView()->getNumberOfRepresentations() - 1);
+}
+
+
+void PVXYChartViewWidget::setXAxisData(const QString& varX)
+{
+  for (int reprInd = 0; reprInd < getView()->getNumberOfRepresentations(); reprInd++)
+  {
+    // set x axis
+    vtkSMProperty * idvpXName(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("XArrayName"));
+    if (!idvpXName)
+      return;
+    vtkSMPropertyHelper * smphXName(new vtkSMPropertyHelper(idvpXName));
+    if (!smphXName)
+      return;
+    smphXName->Set(varX.toStdString().c_str());
+    getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("XArrayName");
+    delete smphXName;
+  }
 }
 
 
@@ -108,11 +157,16 @@ void PVXYChartViewWidget::showChart(const QString& varX, const QString& varY)
   std::vector<std::string> sts(1, varY.toStdString());
   setAxisToShow(sts);
 
-  // set title
-  setChartTitle(varX, varY);
-  // set axis titles
-  setXAxisTitle(varX, varY);
-  setYAxisTitle(varX, varY);
+  // pair
+  QPair<QString, QString> varPair(varX, varY);
+  if (chartsTitle_.contains(varPair))
+  {
+    // set title
+    setChartTitle(varX, varY, chartsTitle_[varPair][0]);
+    // set axis titles
+    setXAxisTitle(varX, varY, chartsTitle_[varPair][1]);
+    setYAxisTitle(varX, varY, chartsTitle_[varPair][2]);
+  }
 
   // recalculate automatically the axis bounds
   chartXY_->GetAxis(vtkAxis::LEFT)->SetBehavior(0);
@@ -166,26 +220,29 @@ void PVXYChartViewWidget::setYAxisRange(const double minValue, const double maxV
 }
 
 
-void PVXYChartViewWidget::setScatterPlotStyle()
+void PVXYChartViewWidget::setPlotStyle()
 {
   for (int reprInd = 0; reprInd < getView()->getNumberOfRepresentations(); reprInd++)
   {
-    // line style : none
-    vtkSMProperty * idvpLineStyle(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesLineStyle"));
-    QList<QVariant> lineStyles = pqSMAdaptor::getMultipleElementProperty(idvpLineStyle);
-
-    vtkSMPropertyHelper * smphLineStyle(new vtkSMPropertyHelper(idvpLineStyle));
-
-    for (int cc = 0; cc < lineStyles.size() / 2; cc++)
+    if (type_ == Scatter)
     {
-      smphLineStyle->Set(2 * cc + 1, 0);
+      // line style : none
+      vtkSMProperty * idvpLineStyle(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesLineStyle"));
+      QList<QVariant> lineStyles = pqSMAdaptor::getMultipleElementProperty(idvpLineStyle);
+
+      vtkSMPropertyHelper * smphLineStyle(new vtkSMPropertyHelper(idvpLineStyle));
+
+      for (int cc = 0; cc < lineStyles.size() / 2; cc++)
+      {
+        smphLineStyle->Set(2 * cc + 1, 0);
+      }
+
+      getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("SeriesLineStyle");
+      delete smphLineStyle;
+
+      // marker style : circle
+      setMarkerStyle(vtkPlotPoints::CIRCLE);
     }
-
-    getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("SeriesLineStyle");
-    delete smphLineStyle;
-
-    // marker style : circle
-    setMarkerStyle(vtkPlotPoints::CIRCLE);
 
     // UseIndexForXAxis : no
     vtkSMProperty * idvpUseIndex(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("UseIndexForXAxis"));
@@ -203,115 +260,104 @@ void PVXYChartViewWidget::setScatterPlotStyle()
   delete smphTitleBold;
 
   // ShowLegend : no if only one representation
-  setShowLegend(getView()->getNumberOfRepresentations() > 1);
+  setShowLegend(getView()->getNumberOfRepresentations() > 1 || type_ == Trajectories);
 
   // set color
-  reprColors_.append(DEFAULT_SCATTER_PLOT_COLOR);
-  setRepresentationColor(DEFAULT_SCATTER_PLOT_COLOR, getView()->getNumberOfRepresentations() - 1);
+  if (type_ == Scatter)
+  {
+    reprColors_.append(DEFAULT_SCATTER_PLOT_COLOR);
+    setRepresentationColor(DEFAULT_SCATTER_PLOT_COLOR, getView()->getNumberOfRepresentations() - 1);
+  }
 }
 
 
 QString PVXYChartViewWidget::getChartTitle(const QString& varX, const QString& varY)
 {
-  QPair<QString, QString> varPair(varX, varY);
-  return chartsTitle_[varPair];
+  if (!varX.isEmpty() && !varY.isEmpty())
+  {
+    QPair<QString, QString> pair(varX, varY);
+    if (!chartsTitle_.contains(pair) || !chartsTitle_[pair].size())
+      throw InvalidArgumentException(HERE) << "Internal error in getChartTitle";
+    return chartsTitle_[pair][0];
+  }
+  else
+    return chartXY_->GetTitle().c_str();
 }
 
 
 QString PVXYChartViewWidget::getXAxisTitle(const QString& varX, const QString& varY)
 {
-  QPair<QString, QString> varPair(varX, varY);
-  return XAxisTitle_[varPair];
+  if (!varX.isEmpty() && !varY.isEmpty())
+  {
+    QPair<QString, QString> pair(varX, varY);
+    if (!chartsTitle_.contains(pair) || !chartsTitle_[pair].size())
+      throw InvalidArgumentException(HERE) << "Internal error in getXAxisTitle";
+    return chartsTitle_[pair][1];
+  }
+  else
+    return chartXY_->GetAxis(vtkAxis::BOTTOM)->GetTitle().c_str();
 }
 
 
 QString PVXYChartViewWidget::getYAxisTitle(const QString& varX, const QString& varY)
 {
-  QPair<QString, QString> varPair(varX, varY);
-  return YAxisTitle_[varPair];
-}
-
-
-void PVXYChartViewWidget::setChartTitle(const QString& varX, const QString& varY)
-{
-  // pair
-  QPair<QString, QString> varPair(varX, varY);
-  if (!chartsTitle_.contains(varPair))
-    return;
-
-  // set internal parameter to be able to update automatically the plot
-  chartXY_->GetScene()->SetDirty(true);
-
-  // chart title
-  chartXY_->SetTitle(chartsTitle_[varPair].toStdString());
-}
-
-
-void PVXYChartViewWidget::setXAxisTitle(const QString& varX, const QString& varY)
-{
-  // pair
-  QPair<QString, QString> varPair(varX, varY);
-  if (!XAxisTitle_.contains(varPair) || !chartXY_)
-    return;
-
-  // set internal parameter to be able to update automatically the plot
-  chartXY_->GetScene()->SetDirty(true);
-
-  // bottom axis title
-  chartXY_->GetAxis(vtkAxis::BOTTOM)->SetTitle(XAxisTitle_[varPair].toStdString());
-}
-
-
-void PVXYChartViewWidget::setYAxisTitle(const QString& varX, const QString& varY)
-{
-  // pair
-  QPair<QString, QString> varPair(varX, varY);
-  if (!YAxisTitle_.contains(varPair) || !chartXY_)
-    return;
-
-  // set internal parameter to be able to update automatically the plot
-  chartXY_->GetScene()->SetDirty(true);
-
-  // left axis title
-  chartXY_->GetAxis(vtkAxis::LEFT)->SetTitle(YAxisTitle_[varPair].toStdString());
+  if (!varX.isEmpty() && !varY.isEmpty())
+  {
+    QPair<QString, QString> pair(varX, varY);
+    if (!chartsTitle_.contains(pair) || !chartsTitle_[pair].size())
+      throw InvalidArgumentException(HERE) << "Internal error in getYAxisTitle";
+    return chartsTitle_[pair][2];
+  }
+  else
+    return chartXY_->GetAxis(vtkAxis::LEFT)->GetTitle().c_str();
 }
 
 
 void PVXYChartViewWidget::setChartTitle(const QString& varX, const QString& varY, const QString& title)
 {
-  // pair
-  QPair<QString, QString> varPair(varX, varY);
-  if (!chartsTitle_.contains(varPair))
-    return;
-
+  // set internal parameter to be able to update automatically the plot
+  chartXY_->GetScene()->SetDirty(true);
   // chart title
-  chartsTitle_[varPair] = title;
-  setChartTitle(varX, varY);
+  if (!varX.isEmpty() && !varY.isEmpty())
+  {
+    QPair<QString, QString> pair(varX, varY);
+    if (!chartsTitle_.contains(pair) || !chartsTitle_[pair].size())
+      throw InvalidArgumentException(HERE) << "Internal error in setChartTitle";
+    chartsTitle_[pair][0] = title;
+  }
+  chartXY_->SetTitle(title.toStdString());
 }
 
 
 void PVXYChartViewWidget::setXAxisTitle(const QString& varX, const QString& varY, const QString& title)
 {
-  // pair
-  QPair<QString, QString> varPair(varX, varY);
-  if (!XAxisTitle_.contains(varPair))
-    return;
-
-  // bottom axis title
-  XAxisTitle_[varPair] = title;
-  setXAxisTitle(varX, varY);
+  // set internal parameter to be able to update automatically the plot
+  chartXY_->GetScene()->SetDirty(true);
+  if (!varX.isEmpty() && !varY.isEmpty())
+  {
+    QPair<QString, QString> pair(varX, varY);
+    if (!chartsTitle_.contains(pair) || !chartsTitle_[pair].size())
+      throw InvalidArgumentException(HERE) << "Internal error in setXAxisTitle";
+    // bottom axis title
+    chartsTitle_[pair][1] = title;
+  }
+  chartXY_->GetAxis(vtkAxis::BOTTOM)->SetTitle(title.toStdString());
 }
 
 
 void PVXYChartViewWidget::setYAxisTitle(const QString& varX, const QString& varY, const QString& title)
 {
-  // pair
-  QPair<QString, QString> varPair(varX, varY);
-  if (!YAxisTitle_.contains(varPair))
-    return;
-  // left axis title
-  YAxisTitle_[varPair] = title;
-  setYAxisTitle(varX, varY);
+  // set internal parameter to be able to update automatically the plot
+  chartXY_->GetScene()->SetDirty(true);
+  if (!varX.isEmpty() && !varY.isEmpty())
+  {
+    QPair<QString, QString> pair(varX, varY);
+    if (!chartsTitle_.contains(pair) || !chartsTitle_[pair].size())
+      throw InvalidArgumentException(HERE) << "Internal error in setYAxisTitle";
+    // left axis title
+    chartsTitle_[pair][2] = title;
+  }
+  chartXY_->GetAxis(vtkAxis::LEFT)->SetTitle(title.toStdString());
 }
 
 
@@ -515,6 +561,20 @@ void PVXYChartViewWidget::setMarkerStyle(const int markerStyle)
 }
 
 
+int PVXYChartViewWidget::getMarkerStyle() const
+{
+  // get marker style property
+  vtkSMProperty * idvp(getView()->getRepresentation(0)->getProxy()->GetProperty("SeriesMarkerStyle"));
+  QList<QVariant> markerStyles = pqSMAdaptor::getMultipleElementProperty(idvp);
+
+  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+
+  int style = smph->GetAsInt(1);
+  delete smph;
+  return style;
+}
+
+
 void PVXYChartViewWidget::setMarkerSize(const int markerSize)
 {
   // set internal parameter to be able to update automatically the plot
@@ -559,7 +619,7 @@ void PVXYChartViewWidget::setRepresentationVisibility(const bool visibility, con
   if (reprIndex >= numberOfRepr)
   {
     OSS oss;
-    oss << "PVXYChartViewWidget::getRepresentationLabels: the given representation index "
+    oss << "PVXYChartViewWidget::setRepresentationVisibility: the given representation index "
         << reprIndex
         << " is not valid. The number of representations is "
         << numberOfRepr;
@@ -569,5 +629,59 @@ void PVXYChartViewWidget::setRepresentationVisibility(const bool visibility, con
   chartXY_->GetScene()->SetDirty(true);
 
   getView()->getRepresentation(reprIndex)->setVisible(visibility);
+  if (visibility)
+    visibleRepr_.insert(reprIndex);
+  else
+    visibleRepr_.remove(reprIndex);
+  emit reprVisibilityChanged(visibleRepr_.toList());
+}
+
+
+void PVXYChartViewWidget::setRepresentationVisibility(const QList<int>& indices)
+{
+  if (QSet<int>::fromList(indices) == visibleRepr_)
+    return;
+
+  visibleRepr_ = QSet<int>::fromList(indices);
+
+  // set internal parameter to be able to update automatically the plot
+  chartXY_->GetScene()->SetDirty(true);
+
+  QStringList visibleReprNames;
+  const int numberOfRepr = getView()->getNumberOfRepresentations();
+  for (int i = 0; i < numberOfRepr; ++i)
+  {
+    const bool isVisible = visibleRepr_.contains(i);
+    getView()->getRepresentation(i)->setVisible(isVisible);
+    if (isVisible)
+      visibleReprNames << getRepresentationLabels(i)[0];
+  }
+
+  // emit signal for ListWidgetWithCheckBox
+  if (!qobject_cast<ListWidgetWithCheckBox *>(sender()))
+    emit selectedReprChanged(visibleReprNames);
+
+  // emit signal for other charts or spreadSheets
+  if (!qobject_cast<PVXYChartViewWidget *>(sender()))
+    emit reprVisibilityChanged(visibleRepr_.toList());
+}
+
+
+bool PVXYChartViewWidget::getRepresentationVisibility(const int reprIndex)
+{
+  const int numberOfRepr = getView()->getNumberOfRepresentations();
+
+  // check index
+  if (reprIndex >= numberOfRepr)
+  {
+    OSS oss;
+    oss << "PVXYChartViewWidget::getRepresentationVisibility: the given representation index "
+        << reprIndex
+        << " is not valid. The number of representations is "
+        << numberOfRepr;
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
+
+  return getView()->getRepresentation(reprIndex)->isVisible();
 }
 }

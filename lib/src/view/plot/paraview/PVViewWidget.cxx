@@ -2,6 +2,7 @@
 
 #include "otgui/AppliException.hxx"
 #include "otgui/PVServerManagerInterface.hxx"
+#include "otgui/PVSpreadSheetViewWidget.hxx"
 
 #include <pqApplicationCore.h>
 #include <pqObjectBuilder.h>
@@ -25,6 +26,7 @@
 #include <vtkCommand.h>
 #include <vtkSMViewProxy.h>
 #include <vtkPVConfig.h>
+#include <vtkChartXY.h>
 
 #include <QVBoxLayout>
 #include <QMenu>
@@ -135,8 +137,6 @@ void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByCol
 {
   pqObjectBuilder * builder(pqApplicationCore::instance()->getObjectBuilder());
   pqServer * serv(smb_->fetchServer());
-  // create a new table
-  buildTableFrom(valuesByColumn, columnNames);
   // create a new source
   pqActiveObjects::instance().setActiveView(getView());
   pqPipelineSource * mySourceProducer(builder->createSource("sources", "PVTrivialProducer", serv));
@@ -144,8 +144,11 @@ void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByCol
   vtkSMSourceProxy * producer(vtkSMSourceProxy::SafeDownCast(mySourceProducer->getProxy()));
   vtkObjectBase * clientSideObject(producer->GetClientSideObject());
   vtkPVTrivialProducer * realProducer(vtkPVTrivialProducer::SafeDownCast(clientSideObject));
+  // create a new table
+  buildTableFrom(valuesByColumn, columnNames);
   realProducer->SetOutput(tables_[tables_.size() - 1]);
   mySourceProducer->updatePipeline();
+  ports_.append(mySourceProducer->getOutputPort(0));
   // create a new representation
   pqDataRepresentation * newRepr(builder->createDataRepresentation(mySourceProducer->getOutputPort(0), getView(), getRepresentationName()));
 #if PARAVIEW_VERSION_MAJOR == 5 && PARAVIEW_VERSION_MINOR >= 6
