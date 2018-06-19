@@ -53,10 +53,20 @@ void StudyWindow::buildInterface()
   connect(button, SIGNAL(clicked()), studyItem_, SLOT(createSymbolicModel()));
   layout->addWidget(button, 0, 0);
 
+  button = new DiagramPushButton(tr("Field Symbolic model"));
+  button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
+  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createSymbolicFieldModel()));
+  layout->addWidget(button, 0, 1);
+
   button = new DiagramPushButton(tr("Python model"));
   button->setStatusTip(tr("Create a physical model defined with a Python script"));
   connect(button, SIGNAL(clicked()), studyItem_, SLOT(createPythonModel()));
   layout->addWidget(button, 1, 0);
+
+  button = new DiagramPushButton(tr("Field Python model"));
+  button->setStatusTip(tr("Create a physical model defined with a Python script"));
+  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createPythonFieldModel()));
+  layout->addWidget(button, 1, 1);
 
   int row = 2;
 #ifdef OTGUI_HAVE_YACS
@@ -99,19 +109,31 @@ void StudyWindow::buildInterface()
 
   QFrame * buttonsFrame = new QFrame;
   buttonsFrame->setFrameShape(QFrame::VLine);
-  layout->addWidget(buttonsFrame, 0, 1, row + 2, 1);
+  layout->addWidget(buttonsFrame, 0, 2, row + 2, 1);
+
+  textEdit = new QLabel;
+  textEdit->setText(tr("Available functionalities :"));
+  textEdit->setStyleSheet("QLabel {font: bold;}");
+  layout->addWidget(textEdit, row, 1);
+
+  textEdit = new QLabel;
+  text = QString("- %1\n- %2")
+         .arg(tr("Evaluation"))
+         .arg(tr("Central tendency"));
+  textEdit->setText(text);
+  layout->addWidget(textEdit, row + 1, 1, Qt::AlignHCenter | Qt::AlignTop);
 
   // right side
 
   button = new DiagramPushButton(tr("Data model"));
   button->setStatusTip(tr("Import a sample to create a model"));
   connect(button, SIGNAL(clicked()), studyItem_, SLOT(createDataModel()));
-  layout->addWidget(button, 0, 2);
+  layout->addWidget(button, 0, 3);
 
   textEdit = new QLabel;
   textEdit->setText(tr("Available functionalities :"));
   textEdit->setStyleSheet("QLabel {font: bold;}");
-  layout->addWidget(textEdit, row, 2);
+  layout->addWidget(textEdit, row, 3);
 
   textEdit = new QLabel;
   text = QString("- %1\n- %2\n- %3\n- %4")
@@ -120,7 +142,7 @@ void StudyWindow::buildInterface()
          .arg(tr("Dependence inference"))
          .arg(tr("Metamodel"));
   textEdit->setText(text);
-  layout->addWidget(textEdit, row + 1, 2, Qt::AlignHCenter | Qt::AlignTop);
+  layout->addWidget(textEdit, row + 1, 3, Qt::AlignHCenter | Qt::AlignTop);
 
   // set widget
   mainLayout->addLayout(layout);

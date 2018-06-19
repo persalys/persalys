@@ -68,11 +68,11 @@ SubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* it
 
   const QString physicalModelType = item->getPhysicalModel().getImplementation()->getClassName().c_str();
 
-  if (physicalModelType == "SymbolicPhysicalModel")
+  if (physicalModelType == "SymbolicPhysicalModel" || physicalModelType == "SymbolicFieldModel")
   {
     window = new SymbolicPhysicalModelWindow(item, parent);
   }
-  else if (physicalModelType == "PythonPhysicalModel")
+  else if (physicalModelType == "PythonPhysicalModel" || physicalModelType == "PythonFieldModel")
   {
     window = new PythonPhysicalModelWindow(item, parent);
   }

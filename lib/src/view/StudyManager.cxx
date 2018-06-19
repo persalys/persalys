@@ -23,8 +23,10 @@
 #include "otgui/WindowFactory.hxx"
 
 #include "otgui/StudyWindow.hxx"
+#include "otgui/MeshWindow.hxx"
 #include "otgui/DataModelDiagramWindow.hxx"
 #include "otgui/PhysicalModelDiagramWindow.hxx"
+#include "otgui/FieldModelDiagramWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
 #include "otgui/DesignOfExperimentInputWindow.hxx"
 #include "otgui/LimitStateWindow.hxx"
@@ -141,6 +143,7 @@ void StudyManager::createStudyWindow(StudyItem* item)
   connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(dataModelItemCreated(DataModelDiagramItem*)), this, SLOT(createDataModelDiagramWindow(DataModelDiagramItem*)));
   connect(item, SIGNAL(physicalModelItemCreated(PhysicalModelDiagramItem*)), this, SLOT(createPhysicalModelDiagramWindow(PhysicalModelDiagramItem*)));
+  connect(item, SIGNAL(fieldModelItemCreated(PhysicalModelDiagramItem*)), this, SLOT(createFieldModelDiagramWindow(PhysicalModelDiagramItem*)));
   connect(item, SIGNAL(exportRequested()), this, SLOT(exportPythonScript()));
   connect(item, SIGNAL(saveRequested(StudyItem*)), this, SLOT(save(StudyItem*)));
   connect(item, SIGNAL(saveAsRequested(StudyItem*)), this, SLOT(saveAs(StudyItem*)));
@@ -206,6 +209,41 @@ void StudyManager::createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* it
 
   // window
   PhysicalModelDiagramWindow * window = new PhysicalModelDiagramWindow(item, mainWidget_);
+
+  updateView(window);
+}
+
+
+void StudyManager::createMeshWindow(MeshItem* item)
+{
+  if (!item)
+    return;
+
+  // window
+  MeshWindow * window = new MeshWindow(item, mainWidget_);
+
+  updateView(window);
+}
+
+
+void StudyManager::createFieldModelDiagramWindow(PhysicalModelDiagramItem* item)
+{
+  if (!item)
+    return;
+
+  // connections
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
+  connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), mainWidget_->getStudyTree(), SLOT(setCurrentIndex(QModelIndex)));
+  connect(item, SIGNAL(modelDefinitionWindowRequested(PhysicalModelDefinitionItem*)), this, SLOT(createPhysicalModelWindow(PhysicalModelDefinitionItem*)));
+  connect(item, SIGNAL(meshWindowRequested(MeshItem*)), this, SLOT(createMeshWindow(MeshItem*)));
+  connect(item, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createProbabilisticModelWindow(ProbabilisticModelItem*)));
+  connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(designOfExperimentEvaluationRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
+  connect(item, SIGNAL(doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
+  connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis, bool)));
+
+  // window
+  FieldModelDiagramWindow * window = new FieldModelDiagramWindow(item, mainWidget_);
 
   updateView(window);
 }

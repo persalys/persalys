@@ -52,6 +52,8 @@ public slots:
   void createDataModelDiagramWindow(DataModelDiagramItem*);
   void createDataModelWindow(DataModelDefinitionItem* item);
   void createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
+  void createMeshWindow(MeshItem* item);
+  void createFieldModelDiagramWindow(PhysicalModelDiagramItem* item);
   void createPhysicalModelWindow(PhysicalModelDefinitionItem* item);
   void createProbabilisticModelWindow(ProbabilisticModelItem* item);
   void createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);
