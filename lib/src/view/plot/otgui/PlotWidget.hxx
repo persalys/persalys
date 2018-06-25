@@ -70,6 +70,7 @@ public:
                               const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
                               const OT::Interval& totalIndicesIntervals = OT::Interval());
   void plotContour(const OT::Distribution& distribution, const bool isPdf = true);
+  void plotContour(const OT::Drawable& drawable, const bool displayContour = true);
   void setMorrisPlotType(const QPointF& initialMarkersCoord);
 
   /// clear plot
