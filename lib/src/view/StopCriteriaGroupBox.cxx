@@ -187,7 +187,10 @@ bool StopCriteriaGroupBox::isMaxCallsRequired() const
 
 bool StopCriteriaGroupBox::isValid() const
 {
-  if (criteria_ == Time_Calls_CoefVar)
+  if (criteria_ == Time_Calls)
+    return (maxTimeLineEdit_->isEnabled() ||
+            maxiCallsSpinbox_->isEnabled());
+  else if (criteria_ == Time_Calls_CoefVar)
     return (maxiCoefficientOfVariationSpinbox_->isEnabled() ||
             maxTimeLineEdit_->isEnabled() ||
             maxiCallsSpinbox_->isEnabled());
