@@ -22,6 +22,7 @@
 
 #include "otgui/LogDoubleSpinBox.hxx"
 #include "otgui/AppliException.hxx"
+#include "otgui/StudyTreeViewModel.hxx"
 
 namespace OTGUI
 {
@@ -47,7 +48,14 @@ QWidget* SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
   switch(type_)
   {
     case SpinBoxDelegate::noType:
-      return new QSpinBox(parent);
+    {
+      QSpinBox * editor = new QSpinBox(parent);
+      editor->setFrame(false);
+      editor->setMaximum(std::numeric_limits<int>::max());
+      // fix transparency of the spinbox
+      editor->setStyleSheet("background-color: white;");
+      return editor;
+    }
     case SpinBoxDelegate::doubleValue:
     {
       DoubleSpinBox * editor = new DoubleSpinBox(parent);
@@ -113,6 +121,7 @@ void SpinBoxDelegate::setModelData(QWidget * editor, QAbstractItemModel * model,
     DoubleSpinBox * spinBox = static_cast<DoubleSpinBox*>(editor);
     spinBox->interpretText();
     model->setData(index, spinBox->value(), Qt::EditRole);
+    model->setData(index, QString::number(spinBox->value(), 'g', StudyTreeViewModel::DefaultSignificantDigits), Qt::DisplayRole);
   }
 }
 
