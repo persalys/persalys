@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Results of a simulation analysis
+ *  @brief Monte Carlo analysis result
  *
- *  Copyright 2015-2019 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,33 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_EVALUATIONRESULT_HXX
-#define OTGUI_EVALUATIONRESULT_HXX
+#ifndef OTGUI_FIELDMONTECARLORESULT_HXX
+#define OTGUI_FIELDMONTECARLORESULT_HXX
 
-#include "AnalysisResult.hxx"
-#include "DesignOfExperiment.hxx"
+#include "EvaluationResult.hxx"
+
+#include <openturns/KarhunenLoeveResult.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API EvaluationResult : public AnalysisResult
+
+class OTGUI_API FieldMonteCarloResult : public EvaluationResult
 {
   CLASSNAME
 
 public:
-  friend class DesignOfExperimentEvaluation;
-  friend class ModelEvaluation;
-  friend class FieldModelEvaluation;
+  friend class FieldMonteCarloAnalysis;
 
   /** Default constructor */
-  EvaluationResult();
-
-  /** Constructor with parameters */
-  EvaluationResult(const DesignOfExperiment& design);
+  FieldMonteCarloResult();
 
   /** Virtual constructor */
-  virtual EvaluationResult * clone() const;
+  virtual FieldMonteCarloResult * clone() const;
 
-  DesignOfExperiment getDesignOfExperiment() const;
+  OT::ProcessSample getProcessSample() const;
+  OT::Sample getMeanSample() const;
+  OT::Sample getLowerQuantileSample() const;
+  OT::Sample getUpperQuantileSample() const;
+  OT::Collection<OT::Sample> getXiSamples() const;
+  OT::Collection<OT::Function> getCorrelationFunction() const;
+  OT::Collection<OT::KarhunenLoeveResult> getKarhunenLoeveResults() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -55,8 +58,14 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-protected:
-  DesignOfExperiment designOfExperiment_;
+private:
+  OT::ProcessSample processSample_;
+  OT::Sample meanSample_;
+  OT::Sample lowerQuantileSample_;
+  OT::Sample upperQuantileSample_;
+  OT::PersistentCollection<OT::Sample> xiSamples_;
+  OT::PersistentCollection<OT::Function> correlationFunction_;
+  OT::PersistentCollection<OT::KarhunenLoeveResult > karhunenLoeveResults_;
 };
 }
 #endif

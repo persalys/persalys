@@ -35,6 +35,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      FieldModelEvaluation.cxx
                      DesignOfExperimentEvaluation.cxx
                      MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
+                     FieldMonteCarloAnalysis.cxx FieldMonteCarloResult.cxx
                      TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
                      SRCResult.cxx SRCAnalysis.cxx
                      LimitStateImplementation.cxx LimitState.cxx
@@ -118,6 +119,8 @@ ot_install_header_file ( DesignOfExperimentEvaluation.hxx )
 ot_install_header_file ( ModelEvaluation.hxx )
 ot_install_header_file ( FieldModelEvaluation.hxx )
 ot_install_header_file ( MonteCarloAnalysis.hxx )
+ot_install_header_file ( FieldMonteCarloResult.hxx )
+ot_install_header_file ( FieldMonteCarloAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResult.hxx )
 ot_install_header_file ( SobolAnalysis.hxx )

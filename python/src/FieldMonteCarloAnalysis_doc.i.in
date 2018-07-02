@@ -1,0 +1,77 @@
+%feature("docstring") OTGUI::FieldMonteCarloAnalysis
+"Monte Carlo analysis for models with mesh.
+
+Parameters
+----------
+name : str
+    Name
+model : :class:`~otguibase.PhysicalModel`
+    Model containing a mesh
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the model:
+
+>>> model = otguibase.SymbolicFieldModel('myModel')
+
+Create the analysis:
+
+>>> analysis = otguibase.FieldMonteCarloAnalysis('analysis', model)
+>>> analysis.run()
+
+Get the result:
+
+>>> result = analysis.getResult()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloAnalysis::getKarhunenLoeveThreshold
+"Accessor to the limit ratio on eigenvalues.
+
+Returns
+-------
+threshold : float, positive
+    The threshold s defined in :py:meth:`openturns.KarhunenLoeveAlgorithm.setThreshold`"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloAnalysis::setKarhunenLoeveThreshold
+"Accessor to the limit ratio on eigenvalues.
+
+Parameters
+----------
+threshold : float, positive
+    The threshold s defined in :py:meth:`openturns.KarhunenLoeveAlgorithm.getThreshold`"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloAnalysis::getQuantileLevel
+"Probability level accessor.
+
+Returns
+-------
+level : float
+    Probability level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloAnalysis::setQuantileLevel
+"Probability level accessor.
+
+Parameters
+----------
+level : float, :math:`0 < p < 1`
+    Probability level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`otguibase.FieldMontecarloResult`
+    Result"

@@ -1,0 +1,90 @@
+%feature("docstring") OTGUI::FieldMonteCarloResult
+"Class containing results of the Monte Carlo analysis."
+
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getCorrelationFunction
+"Correlation function accessor.
+
+Returns
+-------
+functions : sequence of :py:class:`openturns.Function`
+    "
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getElapsedTime
+"Elapsed time accessor.
+
+Returns
+-------
+time : float
+    Elapsed time"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getKarhunenLoeveResult
+"Karhunen Loeve result accessor.
+
+Parameters
+----------
+index : int
+    Index of the output
+
+Returns
+-------
+result : :py:class:`openturns.KarhunenLoeveResult`
+    Karhunen Loeve result for an output"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getMeanSample
+"Mean trajectory accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+    Mean trajectory for each output"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getProcessSample
+" accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.ProcessSample`
+    Output values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getLowerQuantileSample
+"Lower quantile accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+    Lower quantile trajectory for each output at *level* defined in
+    :meth:`otguibase.FieldMonteCarloAnalysis.getQuantileLevel`"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getUpperQuantileSample
+"Upper quantile accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+    Upper quantile trajectory for each output at *1-level* defined in
+    :meth:`otguibase.FieldMonteCarloAnalysis.getQuantileLevel`"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::FieldMonteCarloResult::getXiSamples
+":math:`X_i` distribution values accessor.
+
+Returns
+-------
+samples : sequence of :py:class:`openturns.Sample`
+    Distribution values of the :math:`X_i` variables of the Karhunen Loeve decomposition"

@@ -138,6 +138,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include DataAnalysis.i
 %include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i
+%include FieldMonteCarloResult.i
+%include FieldMonteCarloAnalysis.i
 %include TaylorExpansionMomentsAnalysis.i
 %include SobolResult.i
 %include SobolAnalysis.i
