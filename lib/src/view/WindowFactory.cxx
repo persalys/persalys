@@ -45,6 +45,7 @@
 #include "otgui/InferenceResultWindow.hxx"
 #include "otgui/CopulaInferenceResultWindow.hxx"
 #include "otgui/FieldModelEvaluationResultWindow.hxx"
+#include "otgui/FieldMonteCarloWizard.hxx"
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/ScreeningAnalysisWizard.hxx"
 #include "otgui/MorrisResultWindow.hxx"
@@ -140,6 +141,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   {
     wizard = new CentralTendencyWizard(analysis, parent);
   }
+  else if (analysisType == "FieldMonteCarloAnalysis")
+  {
+    wizard = new FieldMonteCarloWizard(analysis, parent);
+  }
   else if (analysisType == "SobolAnalysis" ||
            analysisType == "SRCAnalysis")
   {
@@ -195,6 +200,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   else if (analysisType == "MonteCarloAnalysis")
   {
     resultWindow = new MonteCarloResultWindow(item, parent);
+  }
+  else if (analysisType == "FieldMonteCarloAnalysis")
+  {
+    resultWindow = new FieldCentralTendencyResultWindow(item, parent);
   }
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
   {

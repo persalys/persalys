@@ -395,7 +395,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
     }
   }
   // Central tendency title
-  else if (analysisName == "MonteCarloAnalysis" ||
+  else if (analysisName.contains("MonteCarloAnalysis") ||
            analysisName == "TaylorExpansionMomentsAnalysis")
   {
     titleItem = getTitleItemNamed(tr("Central tendency"), "CentralTendencyTitle");

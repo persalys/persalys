@@ -24,6 +24,7 @@
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
 #include "otgui/StudyItem.hxx"
+#include "otgui/FieldMonteCarloAnalysis.hxx"
 
 using namespace OT;
 
@@ -143,9 +144,18 @@ void ProbabilisticModelItem::createCentralTendency()
 
   // new analysis
   const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("centralTendency_").toStdString()));
-  MonteCarloAnalysis analysis(analysisName, physicalModel_);
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, analysis);
+  if (!physicalModel_.hasMesh())
+  {
+    MonteCarloAnalysis analysis(analysisName, physicalModel_);
+    // emit signal to StudyTreeView to open a wizard
+    emit analysisRequested(this, analysis);
+  }
+  else
+  {
+    FieldMonteCarloAnalysis analysis(analysisName, physicalModel_);
+    // emit signal to StudyTreeView to open a wizard
+    emit analysisRequested(this, analysis);
+  }
 }
 
 
