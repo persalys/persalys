@@ -36,7 +36,7 @@ class OTGUI_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Kendall, Scatter, PDF, PDF_Inference, PDFResult, SensitivityIndices, Copula};
+  enum Type {NoType, Kendall, Scatter, PDF, PDF_Inference, PDFResult, SensitivityIndices, Copula, KSPDF};
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
                            QStringList inputNames = QStringList(),

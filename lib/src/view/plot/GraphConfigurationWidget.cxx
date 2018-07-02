@@ -110,7 +110,8 @@ void GraphConfigurationWidget::buildInterface()
   if (plotType_ == GraphConfigurationWidget::PDF ||
       plotType_ == GraphConfigurationWidget::PDF_Inference ||
       plotType_ == GraphConfigurationWidget::PDFResult ||
-      plotType_ == GraphConfigurationWidget::Copula)
+      plotType_ == GraphConfigurationWidget::Copula ||
+      plotType_ == GraphConfigurationWidget::KSPDF)
   {
     QStringList distReprs = QStringList() << tr("PDF") << tr("CDF");
     if (plotType_ == GraphConfigurationWidget::PDF)
@@ -132,7 +133,8 @@ void GraphConfigurationWidget::buildInterface()
   // Axis comboboxes
   if (plotType_ == GraphConfigurationWidget::Scatter ||
       plotType_ == GraphConfigurationWidget::Copula  ||
-      plotType_ == GraphConfigurationWidget::Kendall)
+      plotType_ == GraphConfigurationWidget::Kendall ||
+      plotType_ == GraphConfigurationWidget::KSPDF)
   {
     // X-axis combobox
     label = new QLabel(tr("X-axis"));
@@ -147,7 +149,7 @@ void GraphConfigurationWidget::buildInterface()
       xAxisComboBox_->addItem(outputNames_[i], false);
 
     mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
-    if (plotType_ != GraphConfigurationWidget::Kendall)
+    if (plotType_ != GraphConfigurationWidget::Kendall && plotType_ != GraphConfigurationWidget::KSPDF)
     {
       connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
 
@@ -376,6 +378,10 @@ void GraphConfigurationWidget::plotChanged()
                                  plotType_ == GraphConfigurationWidget::PDFResult))
   {
     currentPlotIndex_ = 2 * outputIndex + distReprComboBox_->currentIndex();
+  }
+  else if (xAxisComboBox_ && plotType_ == GraphConfigurationWidget::KSPDF)
+  {
+    currentPlotIndex_ = 2 * xAxisComboBox_->currentIndex() + distReprComboBox_->currentIndex();
   }
 
   updateLineEdits();
