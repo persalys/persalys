@@ -1,4 +1,3 @@
-
 FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
@@ -28,7 +27,7 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
   -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
   -DUSE_TBB=OFF . \
-  && make OT && make -j4 && sudo make install
+  && make && sudo make install
 RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded /usr/${ARCH}-w64-mingw32/bin/libOT.dll
 RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns/*.pyd
 
