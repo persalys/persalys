@@ -36,13 +36,13 @@ RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_T
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg openssl-devel
-RUN wget https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
-RUN tar xzf Python-2.7.14.tgz
-RUN cd Python-2.7.14 && ./configure --enable-shared --enable-unicode=ucs4 LDFLAGS="-Wl,-rpath /usr/local/lib" && make && make install
+RUN wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz
+RUN tar xzf Python-3.6.5.tgz
+RUN cd Python-3.6.5 && ./configure --enable-shared --enable-unicode=ucs4 LDFLAGS="-Wl,-rpath /usr/local/lib" && make && make install
 
 # pip
 RUN curl -sSLO https://bootstrap.pypa.io/get-pip.py
-RUN python get-pip.py
+RUN python3 get-pip.py
 RUN pip install -U pip wheel setuptools
 RUN pip install scipy matplotlib ipython --upgrade
 
@@ -58,21 +58,23 @@ RUN svn co https://svn.jmodelica.org/FMILibrary/tags/2.0.3/ FMILibrary-2.0.3 && 
 
 # pyfmi
 RUN pip install cython && pip install lxml assimulo \
- && rm -f /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.pyc \
- && sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python2.7/site-packages/assimulo/solvers/glimda.py \
- && python -c "import assimulo; import assimulo.solvers" \
+ && rm -f /usr/local/lib/python3.*/site-packages/assimulo/solvers/glimda.pyc \
+ && sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python3.*/site-packages/assimulo/solvers/glimda.py \
+ && python3 -c "import assimulo; import assimulo.solvers" \
  && wget https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip && unzip PyFMI-2.4.0.zip && cd PyFMI-2.4 \
  && wget https://github.com/conda-forge/pyfmi-feedstock/raw/master/recipe/get_temp_location-keyerror.patch \
- && patch -p1 -i get_temp_location-keyerror.patch && python setup.py install --fmil-home=/usr/local \
- && python -c "import pyfmi"
+ && patch -p1 -i get_temp_location-keyerror.patch && python3 setup.py install --fmil-home=/usr/local \
+ && python3 -c "import pyfmi"
 
 # sphinx
 RUN yum -y install pandoc dvipng
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
+# https://svn.boost.org/trac10/ticket/11120
+RUN ln -s /usr/local/include/python3.6m /usr/local/include/python3.6
 RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 && tar xjf boost_1_64_0.tar.bz2 && cd boost_1_64_0 \
- && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
+ && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
 
 # X11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
@@ -96,22 +98,9 @@ RUN tar xjf qwt-6.1.3.tar.bz2
 RUN cd qwt-6.1.3 && sed -i "s|QWT_INSTALL_PREFIX    = /usr/local/qwt-\$\$QWT_VERSION|QWT_INSTALL_PREFIX = /usr/local|g" qwtconfig.pri && qmake && make && make install
 
 # paraview
-#  -DVTK_USE_SYSTEM_OGGTHEORA=ON \
-#  -DVTK_USE_SYSTEM_FREETYPE=ON \
-#  -DVTK_USE_SYSTEM_GL2PS=OFF \
-#  -DVTK_USE_SYSTEM_JPEG=ON \
-#  -DVTK_USE_SYSTEM_NETCDF=ON \
-#  -DVTK_USE_SYSTEM_GLEW=ON \
-#  -DVTK_USE_SYSTEM_PNG=ON \
-#  -DVTK_USE_SYSTEM_TIFF=ON \
-#  -DVTK_USE_SYSTEM_ZLIB=ON \
-#  -DVTK_USE_SYSTEM_LIBXML2=ON \
-#  -DVTK_USE_SYSTEM_EXPAT=ON \
-#  -DVTK_USE_SYSTEM_HDF5=ON \
-#  -DVTK_USE_SYSTEM_PROTOBUF=ON \
-RUN wget --no-check-certificate http://paraview.org/files/v5.4/ParaView-v5.4.1.tar.gz \
-  && tar xzf ParaView-v5.4.1.tar.gz \
-  && cd ParaView-v5.4.1 && mkdir build && cd build && cmake \
+RUN wget --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.2.tar.gz \
+  && tar xzf ParaView-v5.5.2.tar.gz
+RUN cd ParaView-v5.5.2 && mkdir build && cd build && cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DVTK_USE_64BIT_IDS=OFF \
@@ -125,28 +114,6 @@ RUN wget --no-check-certificate http://paraview.org/files/v5.4/ParaView-v5.4.1.t
   -DPARAVIEW_QT_VERSION=5 \
   -DVTK_BUILD_QT_DESIGNER_PLUGIN:BOOL=OFF \
   -DPARAVIEW_ENABLE_MATPLOTLIB:BOOL=ON \
-  -DPARAVIEW_BUILD_PLUGIN_AcceleratedAlgorithms:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_AdiosReader:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_AnalyzeNIfTIIO:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_ArrowGlyph:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_CDIReader:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_CatalystScriptGeneratorPlugin:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_LagrangianParticleTracker:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_EyeDomeLighting:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_GMVReader:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_GeodesicMeasurement:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_PacMan:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_StreamingParticles:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_Moments:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_NonOrthogonalSource:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_EyeDomeLighting:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_SLACTools:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_SurfaceLIC:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_SierraPlotTools:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_StreamingParticles:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_StreamLinesRepresentation:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_CatalystScriptGeneratorPlugin:BOOL=OFF \
-  -DPARAVIEW_BUILD_PLUGIN_ThickenLayeredCells:BOOL=OFF \
   -DCMAKE_INSTALL_RPATH=$PWD/../../pv-linux-install/lib/paraview \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF\ 
   -DCMAKE_SKIP_RPATH=OFF \
@@ -157,7 +124,9 @@ RUN wget --no-check-certificate http://paraview.org/files/v5.4/ParaView-v5.4.1.t
   -DVTK_INSTALL_DATA_DIR="share/paraview" \
   -DVTK_INSTALL_DOC_DIR="share/doc/paraview" \
   -DVTK_INSTALL_PACKAGE_DIR="lib/cmake/paraview" \
-  -DPARAVIEW_INSTALL_DEVELOPMENT_FILES:BOOL=ON \
+  -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON \
+  -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
+  -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   .. && make install
 
 # appimagetool
@@ -202,19 +171,23 @@ RUN fc-cache -fsv
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 11c7f774521f9179985ae3515bc9f88cd2f5eb15 \
- && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" . && make install
+ && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 . && make install
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.4 \
- && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" . && make install
+ && cmake -DUSE_SPHINX=OFF -DLINK_PYTHON_LIBRARY=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 . && make install
 
 # otfmi
 RUN git clone https://github.com/openturns/otfmi.git
-RUN cd otfmi && python setup.py install
+RUN cd otfmi && python3 setup.py install
 
+# locale
+RUN localedef -i en_US -f UTF-8 C.UTF-8
+ENV LANG "C.UTF-8"
 
 # devel user
 RUN yum -y install sudo
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel
+

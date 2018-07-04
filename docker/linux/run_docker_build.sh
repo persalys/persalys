@@ -9,7 +9,11 @@ export MAKEFLAGS="-j8"
 cd /tmp
 
 mkdir -p build && cd build
-cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" ../otgui
+cmake -DUSE_COTIRE=ON \
+-DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
+-DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" \
+-DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
+../otgui
 make
 sudo make install
 make tests
@@ -48,8 +52,8 @@ cp -v /usr/local/bin/otgui otgui.AppDir/usr/bin
 cp -rv /usr/local/lib/qt/plugins otgui.AppDir/usr/lib
 cp -rv /usr/local/etc/ otgui.AppDir/etc
 
-cp -v /usr/local/bin/python otgui.AppDir/usr/bin
-cp -r /usr/local/lib/python2.7 otgui.AppDir/usr/lib
+cp -v /usr/local/bin/python3.6 otgui.AppDir/usr/bin
+cp -r /usr/local/lib/python3.6 otgui.AppDir/usr/lib
 
 cp -v ../otgui/images/OT_icon32x32.png otgui.AppDir/otgui.png
 
@@ -64,7 +68,7 @@ do
   cp -v /usr/local/lib/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
 done
 
-cp -v /usr/local/lib/libpython2.7.so.1.0 otgui.AppDir/usr/lib
+cp -v /usr/local/lib/libpython*.so.* otgui.AppDir/usr/lib
 cp -v /usr/local/lib/libtbb.so otgui.AppDir/usr/lib
 
 # boost libs
