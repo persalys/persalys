@@ -25,7 +25,7 @@
 #include "PyInterp.h"
 
 template<class T>
-class PYINTERP_EXPORT PyInterp_Auto
+class PyInterp_Auto
 {
 public:
   PyInterp_Auto(const PyInterp_Auto& other):_ptr(0) { referPtr(other._ptr); }

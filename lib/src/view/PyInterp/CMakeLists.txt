@@ -1,4 +1,3 @@
-
 set (SOURCEFILES "" CACHE STRING "" FORCE)
 
 ot_add_current_dir_to_include_dirs ()

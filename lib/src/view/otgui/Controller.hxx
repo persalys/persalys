@@ -23,10 +23,7 @@
 
 #include "otgui/Analysis.hxx"
 
-#include <openturns/PythonWrappingFunctions.hxx>
-
-#include <QThread>
-#include <QMetaType> // mandatory to specify it to avoid windows compilation problem
+#include <QObject>
 
 namespace OTGUI
 {
@@ -35,17 +32,7 @@ class Worker : public QObject
   Q_OBJECT
 
 public slots:
-  void process(Analysis analysis)
-  {
-    try
-    {
-      analysis.run();
-    }
-    catch (std::exception &ex)
-    {
-    }
-    emit processFinished();
-  }
+  void process(Analysis analysis);
 
 signals:
   void processFinished();
@@ -57,38 +44,8 @@ class Controller : public QObject
   Q_OBJECT
 
 public:
-  Controller()
-  {
-    qRegisterMetaType<OTGUI::PhysicalModel>("PhysicalModel");
-    qRegisterMetaType<OTGUI::Analysis>("Analysis");
-
-    // new thread
-    QThread * workerThread = new QThread;
-    connect(workerThread, SIGNAL(finished()), workerThread, SLOT(deleteLater()));
-
-    // worker
-    Worker * worker = new Worker;
-    worker->moveToThread(workerThread);
-
-    // connections
-    connect(this, SIGNAL(launchAnalysisRequested(Analysis)), worker, SLOT(process(Analysis)));
-    connect(worker, SIGNAL(processFinished()), this, SIGNAL(processFinished()));
-    connect(worker, SIGNAL(processFinished()), workerThread, SLOT(quit()));
-    connect(worker, SIGNAL(processFinished()), worker, SLOT(deleteLater()));
-    connect(worker, SIGNAL(processFinished()), this, SLOT(deleteLater()));
-
-    // start thread
-    workerThread->start();
-  }
-
-
-  void launchAnalysis(Analysis analysis)
-  {
-    emit launchAnalysisRequested(analysis);
-
-    // Warning : NOT create worker as attribut and then write here worker.process():
-    // otherwise the run method WON'T be launch in a separate thread !
-  };
+  Controller();
+  void launchAnalysis(Analysis analysis);
 
 signals:
   void launchAnalysisRequested(Analysis analysis);

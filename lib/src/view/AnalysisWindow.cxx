@@ -18,9 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include "otgui/Controller.hxx"   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
+
 #include "otgui/AnalysisWindow.hxx"
 
-#include "otgui/Controller.hxx"
 #include "otgui/ParametersWidget.hxx"
 #include "otgui/TranslationManager.hxx"
 

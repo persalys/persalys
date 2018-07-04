@@ -13,7 +13,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesser General Public License
+// You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 //
@@ -38,8 +38,8 @@ PyInterp_Dispatcher* PyInterp_Dispatcher::Get()
   return myInstance;
 }
 
-PyInterp_Dispatcher::PyInterp_Dispatcher()
-  : QThread()
+PyInterp_Dispatcher::PyInterp_Dispatcher() 
+: QThread()
 {
 }
 
@@ -80,13 +80,12 @@ void PyInterp_Dispatcher::Exec( PyInterp_Request* theRequest )
     myQueueMutex.lock();
 
     myQueue.enqueue( theRequest );
-    if ( theRequest->listener() )
-    {
+    if ( theRequest->listener() ) {
       connect( theRequest->listener(), SIGNAL( destroyed( QObject* ) ),
                this, SLOT( objectDestroyed( QObject* ) ) );
     }
 
-    myQueueMutex.unlock();
+    myQueueMutex.unlock();  
 
     if ( !IsBusy() )
       start();
@@ -113,7 +112,7 @@ void PyInterp_Dispatcher::run()
 
     // prepare for removal of the first request in the queue
     myQueueMutex.lock();
-
+  
     // IMPORTANT: the first item could have been removed by objectDestroyed() --> we have to check it
     if ( myQueue.head() == aRequest ) // if it is still here --> remove it
       myQueue.dequeue();

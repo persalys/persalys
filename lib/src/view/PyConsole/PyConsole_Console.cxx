@@ -22,8 +22,8 @@
 // File   : PyConsole_Console.cxx
 // Author : Vadim SANDLER, Open CASCADE S.A.S. (vadim.sandler@opencascade.com)
 
-#include "PyConsole_Console.h"
 #include "PyConsole_Interp.h"
+#include "PyConsole_Console.h"
 #include "PyConsole_Editor.h"
 
 #include <QAction>
@@ -48,7 +48,7 @@
   \code
   PyConsole_Console c(myWindow, new MyEditor());
   \endcode
-*/
+*/  
 
 /*!
   \brief Default constructor.
@@ -57,7 +57,7 @@
   \param parent parent widget
 */
 PyConsole_Console::PyConsole_Console( QWidget* parent )
-  : QWidget( parent )
+: QWidget( parent )
 {
   init( 0 );
 }
@@ -70,7 +70,7 @@ PyConsole_Console::PyConsole_Console( QWidget* parent )
   \param editor python editor
 */
 PyConsole_Console::PyConsole_Console( QWidget* parent, PyConsole_Editor* editor )
-  : QWidget( parent )
+: QWidget( parent )
 {
   init( editor );
 }
@@ -84,7 +84,7 @@ void PyConsole_Console::init( PyConsole_Editor* editor )
   // initialize Python interpretator
   PyConsole_Interp* interp = editor ? editor->getInterp() : new PyConsole_Interp();
   interp->initialize();
-
+  
   // create editor console
   QVBoxLayout* lay = new QVBoxLayout( this );
   lay->setMargin( 0 );
@@ -128,9 +128,9 @@ void PyConsole_Console::exec( const QString& command )
 }
 
 /*!
-  \brief Execute python command in the interpreter
+  \brief Execute python command in the interpreter 
          and wait until it is finished.
-
+  
   Block execution of main application until the python command is executed.
   \param command string with command and arguments
 */
@@ -142,7 +142,7 @@ void PyConsole_Console::execAndWait( const QString& command )
 
 /*!
   \brief Get synchronous mode flag value.
-
+  
   \sa setIsSync()
   \return \c true if python console works in synchronous mode
 */
@@ -163,13 +163,13 @@ bool PyConsole_Console::isSync() const
 */
 void PyConsole_Console::setIsSync( const bool on )
 {
-  if ( myEditor )
+  if ( myEditor ) 
     myEditor->setIsSync( on );
 }
 
 /*!
   \brief Get suppress output flag value.
-
+  
   \sa setIsSuppressOutput()
   \return \c true if python console output is suppressed.
 */
@@ -181,7 +181,7 @@ bool PyConsole_Console::isSuppressOutput() const
 /*!
   \brief Set suppress output flag value.
 
-  In case if suppress output flag is \c true, the python
+  In case if suppress output flag is \c true, the python 
   console output suppressed.
 
   \param on suppress output flag
@@ -194,7 +194,7 @@ void PyConsole_Console::setIsSuppressOutput( const bool on )
 
 /*!
   \brief Get 'show banner' flag value.
-
+  
   \sa setIsShowBanner()
   \return \c true if python console shows banner
 */
@@ -258,8 +258,8 @@ QFont PyConsole_Console::font() const
 
 /*!
   \brief Set actions to be visible in the context popup menu.
-
-  Actions, which IDs are set in \a flags parameter, will be shown in the
+  
+  Actions, which IDs are set in \a flags parameter, will be shown in the 
   context popup menu. Other actions will not be shown.
 
   \param flags ORed together actions flags
@@ -319,7 +319,7 @@ void PyConsole_Console::createActions()
   a->setStatusTip( tr( "EDIT_SELECTALL_CMD" ) );
   connect( a, SIGNAL( triggered( bool ) ), myEditor, SLOT( selectAll() ) );
   myActions.insert( SelectAllId, a );
-
+  
   a = new QAction( tr( "EDIT_DUMPCOMMANDS_CMD" ), this );
   a->setStatusTip( tr( "EDIT_DUMPCOMMANDS_CMD" ) );
   connect( a, SIGNAL( triggered( bool ) ), myEditor, SLOT( dump() ) );
@@ -354,7 +354,7 @@ void PyConsole_Console::updateActions()
 */
 void PyConsole_Console::startLog( const QString& fileName )
 {
-  if ( myEditor )
+  if ( myEditor ) 
     myEditor->startLog( fileName );
 }
 
@@ -363,7 +363,7 @@ void PyConsole_Console::startLog( const QString& fileName )
 */
 void PyConsole_Console::stopLog()
 {
-  if ( myEditor )
+  if ( myEditor ) 
     myEditor->stopLog();
 }
 
@@ -380,7 +380,7 @@ void PyConsole_Console::contextMenuEvent( QContextMenuEvent* event )
     return;
 
   QMenu* menu = new QMenu( this );
-
+ 
   menu->addAction( myActions[CopyId] );
   menu->addAction( myActions[PasteId] );
   menu->addAction( myActions[ClearId] );
