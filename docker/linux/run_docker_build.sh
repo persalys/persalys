@@ -79,15 +79,11 @@ cp /usr/local/lib/paraview/libprotobuf*.so otgui.AppDir/usr/lib
 
 
 # system libs
-for libname in lapack blas xml2 png12
+for libname in lapack blas xml2 png12 gfortran
 do
   cp -v /usr/lib64/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
 done
 cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 otgui.AppDir/usr/lib
-
-# cp /lib64/libz.so.1 /usr/lib64/libGL.so.1 /lib64/libuuid.so.1 /usr/lib64/libxcb.so.1 /usr/lib64/libglapi.so.0 /lib64/libselinux.so.1 /usr/lib64/libXdamage.so.1 /usr/lib64/libXfixes.so.3  /usr/lib64/libgfortran.so.3 /usr/lib64/libXt.so.6 otgui.AppDir/usr/lib
-# cp /usr/lib64/libX11-xcb.so.1 /usr/lib64/libxcb-glx.so.0 /usr/lib64/libxcb-dri2.so.0 /usr/lib64/libXxf86vm.so.1 /usr/lib64/libdrm.so.2 /lib64/libexpat.so.1 /usr/lib64/libXau.so.6 otgui.AppDir/usr/lib
-
 
 LD_LIBRARY_PATH=$PWD/otgui.AppDir/usr/lib ldd otgui.AppDir/usr/bin/otgui
 

@@ -201,7 +201,7 @@ RUN fc-cache -fsv
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 1.11 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 6130bfe74823126a06b2845cbe2333f6091e0f07 \
  && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" . && make install
 
 # otmorris
