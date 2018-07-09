@@ -38,16 +38,16 @@ public:
   QStringList getCheckedItemNames() const;
   QStringList getItemNames() const;
 
-  void setCheckedNames(const QStringList &selectedItemNames);
-
 protected:
   void buildInterface();
   void updateTitleItem();
 
 public slots:
+  void setCheckedNames(const QStringList &selectedItemNames);
   void updateCheckState(QListWidgetItem *);
 signals:
   void checkedItemsChanged(const QStringList &itemsNames);
+  void checkedItemsChanged(const QList<int> &itemsIndices);
 
 private:
   QString title_;

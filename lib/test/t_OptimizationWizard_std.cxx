@@ -26,6 +26,7 @@ public:
     inputCollection[1] = E;
     inputCollection[2] = C;
     OutputCollection outputCollection(2, Ep);
+    outputCollection[0] = Output("Ep", "Primary energy savings");
     outputCollection[1] = Output("EpFake", "Primary energy savings");
 
     OT::Description formula(2, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
@@ -58,19 +59,20 @@ private slots:
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
 
     QTest::mouseClick(comboBox, Qt::LeftButton); // open listwidget
-    QTest::keyClick(listWidget, Qt::Key_Space); // select all
+    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // select all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
 
     wizard.next();
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0"); // can not go to next page
 
-    QTest::keyClick(listWidget, Qt::Key_Space); // deselect all
+    QRect rect = listWidget->visualItemRect(listWidget->item(0));
+    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, 0, rect.center()); // deselect all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
 
-    listWidget->setCurrentRow(1);
-    QTest::keyClick(listWidget, Qt::Key_Space); // check row 1
+    rect = listWidget->visualItemRect(listWidget->item(1));
+    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, 0, rect.center()); // check row 1
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
   }
