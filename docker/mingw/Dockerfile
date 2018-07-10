@@ -18,7 +18,7 @@ RUN /usr/${ARCH}-w64-mingw32/bin/python27.exe -V
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
-  && git checkout 6130bfe74823126a06b2845cbe2333f6091e0f07 \
+  && git checkout 11c7f774521f9179985ae3515bc9f88cd2f5eb15 \
   && CXXFLAGS="-D_hypot=hypot -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake \
   -DUSE_SPHINX=OFF \
   -DPYTHON_INCLUDE_DIR=/usr/${ARCH}-w64-mingw32/include/python27 \
