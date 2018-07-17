@@ -59,7 +59,7 @@ public:
                                                              color: doubledarkgray; }";
 
     setStyleSheet(styleSheet);
-    ListWidgetItemDelegate * delegate = new ListWidgetItemDelegate;
+    ListWidgetItemDelegate * delegate = new ListWidgetItemDelegate(this);
     setItemDelegateForColumn(0, delegate);
   }
 };

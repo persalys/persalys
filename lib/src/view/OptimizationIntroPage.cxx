@@ -62,7 +62,7 @@ OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
   }
 
   // optimization algorithm
-  methodGroup_ = new QButtonGroup;
+  methodGroup_ = new QButtonGroup(this);
 
   QVBoxLayout * optimAlgoGroupLayout = new QVBoxLayout;
 
