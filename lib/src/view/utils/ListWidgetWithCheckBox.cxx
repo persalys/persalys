@@ -76,12 +76,14 @@ void ListWidgetWithCheckBox::buildInterface()
 
 void ListWidgetWithCheckBox::setCheckedNames(const QStringList &selectedItemNames)
 {
+  blockSignals(true);
   for (int i = 0; i < itemNames_.size(); ++ i)
   {
     item(i + 1)->setData(Qt::CheckStateRole, selectedItemNames.contains(itemNames_[i]) ? Qt::Checked : Qt::Unchecked);
   }
   checkedItemNames_ = selectedItemNames;
   updateTitleItem();
+  blockSignals(false);
 
   emit checkedItemsChanged(checkedItemNames_);
 }
