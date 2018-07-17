@@ -65,6 +65,5 @@ chaos_0.setSparseChaos(False)
 chaos_0.setAnalyticalValidation(True)
 chaos_0.setTestSampleValidation(False)
 chaos_0.setKFoldValidation(False)
-chaos_0.setLeaveOneOutValidation(False)
 myStudy.add(chaos_0)
 

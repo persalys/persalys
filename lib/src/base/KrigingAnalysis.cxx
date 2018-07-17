@@ -433,7 +433,7 @@ Parameters KrigingAnalysis::getParameters() const
     param.add("Number of folds", getKFoldValidationNumberOfFolds());
     param.add("Seed", getKFoldValidationSeed());
   }
-  param.add("Leave-one-out validation", leaveOneOutValidation() ? "yes" : "no");
+//   param.add("Leave-one-out validation", leaveOneOutValidation() ? "yes" : "no");
 
   return param;
 }
@@ -491,7 +491,7 @@ String KrigingAnalysis::getPythonScript() const
     oss << getName() << ".setKFoldValidationNumberOfFolds(" << getKFoldValidationNumberOfFolds() << ")\n";
     oss << getName() << ".setKFoldValidationSeed(" << getKFoldValidationSeed() << ")\n";
   }
-  oss << getName() << ".setLeaveOneOutValidation(" << (leaveOneOutValidation() ? "True" : "False") << ")\n";
+//   oss << getName() << ".setLeaveOneOutValidation(" << (leaveOneOutValidation() ? "True" : "False") << ")\n";
 
   return oss;
 }
