@@ -83,6 +83,9 @@ void SORMAnalysis::launch()
 
   // set result
   result_ = algo.getResult();
+
+  // compute Hasofer reliability index sensitivity (not computed by default)
+  result_.getHasoferReliabilityIndexSensitivity();
 }
 
 

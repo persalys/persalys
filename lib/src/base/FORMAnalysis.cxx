@@ -83,6 +83,9 @@ void FORMAnalysis::launch()
 
   // set result
   result_ = algo.getResult();
+
+  // compute event probability sensitivity (not computed by default)
+  result_.getEventProbabilitySensitivity();
 }
 
 
