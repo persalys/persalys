@@ -18,6 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include <PyConsole_Interp.h>   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
+
 #include "otgui/MainWindow.hxx"
 
 #include "otgui/OTguiMenuBar.hxx"
@@ -31,8 +33,6 @@
 #include <QFileInfo>
 #include <QSettings>
 #include <QApplication>
-
-#include <PyConsole_Interp.h>
 
 #ifdef OTGUI_HAVE_PARAVIEW
 #include <vtkSMProxyManager.h>

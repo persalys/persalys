@@ -64,11 +64,11 @@
     </message>
     <message>
         <source>TOO_MANY_MATCHES</source>
-        <translation type="unfinished">Too many matches! Displaying first ones only...</translation>
+        <translation>Trop d'occurences! Affichage des premières...</translation>
     </message>
     <message>
         <source>NO_DOC_AVAILABLE</source>
-        <translation type="unfinished">no documentation available</translation>
+        <translation>pas de documentation disponible</translation>
     </message>
 </context>
 </TS>

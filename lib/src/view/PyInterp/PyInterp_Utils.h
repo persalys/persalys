@@ -31,6 +31,19 @@
   #include <iostream>
 #endif
 
+#if PY_VERSION_HEX < 0x03050000
+static char*
+Py_EncodeLocale(const wchar_t *arg, size_t *size)
+{
+	return _Py_wchar2char(arg, size);
+}
+static wchar_t*
+Py_DecodeLocale(const char *arg, size_t *size)
+{
+	return _Py_char2wchar(arg, size);
+}
+#endif
+
 /**
  * \class PyLockWrapper
  * \brief Python GIL wrapper.

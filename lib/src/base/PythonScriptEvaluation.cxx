@@ -253,7 +253,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 
   // get Python executable path
   // this searches a Python executable in the directories of the "PATH" environment variable
-  const String pythonExePath = boost::process::search_path("python").string();
+  const String pythonExePath = boost::process::search_path("python3").string();
   if (pythonExePath.empty())
     throw InvalidArgumentException(HERE) << "Impossible to find a Python executable. Do not use multiprocessing.\n";
 

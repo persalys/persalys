@@ -16,59 +16,59 @@
     <message>
       <location filename="../PyConsole_Console.cxx" line="226"/>
       <source>EDIT_CLEAR_CMD</source>
-      <translation>削除(&amp;r)</translation>
+      <translation>削除(&amp;R)</translation>
     </message>
     <message>
       <location filename="../PyConsole_Console.cxx" line="231"/>
       <source>EDIT_SELECTALL_CMD</source>
-      <translation>すべて選択します。(&amp;A)</translation>
+      <translation>全選択(&amp;A)</translation>
     </message>
     <message>
       <source>EDIT_DUMPCOMMANDS_CMD</source>
-      <translation>スクリプト コマンドを生成します。(&amp;u)</translation>
+      <translation>コマンドの保存 (&amp;u)</translation>
     </message>
     <message>
       <source>EDIT_STARTLOG_CMD</source>
-      <translation>ログの開始 (&amp;L)</translation>
+      <translation>ログの開始 </translation>
     </message>
     <message>
       <source>EDIT_STOPLOG_CMD</source>
-      <translation>ログの停止 (&amp;L)</translation>
+      <translation>ログの停止</translation>
     </message>
   </context>
   <context>
     <name>PyConsole_Editor</name>
     <message>
       <source>GET_DUMP_COMMANDS_FILENAME</source>
-      <translation type="unfinished">Dump commands to file</translation>
+      <translation>コマンドをファイルへ保存</translation>
     </message>
     <message>
       <source>GET_PYTHON_TRACE_FILENAME</source>
-      <translation type="unfinished">Save Python trace to file</translation>
+      <translation>Python動作追跡をファイルへ保存</translation>
     </message>
     <message>
       <source>PYTHON_SCRIPTS</source>
-      <translation type="unfinished">Python scripts</translation>
+      <translation>Python スクリプト</translation>
     </message>
     <message>
       <source>WARNING</source>
-      <translation type="unfinished">Warning!</translation>
+      <translation>警告</translation>
     </message>
     <message>
       <source>LOG_FILES</source>
-      <translation type="unfinished">Log files</translation>
+      <translation>ログフィル</translation>
     </message>
     <message>
       <source>ERR_FILE_NOT_WRITEABLE</source>
-      <translation type="unfinished">File is not writeable!</translation>
+      <translation>ファイルが書き込み不可 !</translation>
     </message>
     <message>
       <source>TOO_MANY_MATCHES</source>
-      <translation type="unfinished">Too many matches! Displaying first ones only...</translation>
+      <translation>多数が一致したので最初だけ表示</translation>
     </message>
     <message>
       <source>NO_DOC_AVAILABLE</source>
-      <translation type="unfinished">no documentation available</translation>
+      <translation>可能なドキュメントがない</translation>
     </message>
   </context>
 </TS>

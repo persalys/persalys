@@ -25,8 +25,8 @@
 #ifndef PYCONSOLE_INTERP_H
 #define PYCONSOLE_INTERP_H
 
-#include "PyConsole.h"
 #include "PyInterp_Interp.h"
+#include "PyConsole.h"
 
 #include <QStringList>
 
