@@ -1175,7 +1175,7 @@ void PyConsole_Editor::keyPressEvent( QKeyEvent* event )
 */
 void PyConsole_Editor::customEvent( QEvent* event )
 {
-  switch( event->type() )
+  switch( (int) event->type() )
   {
   case PyConsole_PrintEvent::EVENT_ID:
   {

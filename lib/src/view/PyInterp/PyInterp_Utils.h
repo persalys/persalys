@@ -73,6 +73,7 @@ public:
   ~PyLockWrapper()
   {
     PyThreadState* _currState = PyGILState_GetThisThreadState();
+    (void)_currState;
 #ifdef _DEBUG_
     if (_currState != _state)
     {
