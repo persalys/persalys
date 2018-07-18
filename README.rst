@@ -7,7 +7,7 @@ Dependencies
 - OpenTURNS >=1.11
 - Qt >=4
 - Qwt >=6
-- Python >=2.7, < 3
+- Python >=3
 - Boost.regex
 - Boost.filesystem
 - Boost.process (optional, for multiprocessing support)
