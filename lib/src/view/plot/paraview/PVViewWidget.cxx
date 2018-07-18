@@ -286,12 +286,6 @@ void PVViewWidget::setAxisToShow(const QStringList& variablesNames)
 
 void PVViewWidget::updateTable(const Sample& sample, const UnsignedInteger repr_ind)
 {
-  // values of each variable
-  std::vector< std::vector<double> > varData(sample.getDimension(), std::vector<double>(sample.getSize()));
-  for (UnsignedInteger i = 0; i < sample.getSize(); ++i)
-    for (UnsignedInteger j = 0; j < sample.getDimension(); ++j)
-      varData[j][i] = sample[i][j];
-
   vtkIdType nbCols(getTable(repr_ind)->GetNumberOfColumns());
   Q_ASSERT(sample.getDimension() == nbCols);
 
@@ -300,8 +294,10 @@ void PVViewWidget::updateTable(const Sample& sample, const UnsignedInteger repr_
     vtkAbstractArray * col(getTable(repr_ind)->GetColumn(i));
     vtkDoubleArray * cold(vtkDoubleArray::SafeDownCast(col));
     double * pt(cold->GetPointer(0));
-    std::copy(varData[i].begin(), varData[i].end(), pt);
-    cold->SetTuple(2, pt);
+    for (UnsignedInteger j = 0; j < sample.getSize(); j++)
+      pt[j] = sample[j][i];
+
+    cold->Modified();
   }
 
   // update view
