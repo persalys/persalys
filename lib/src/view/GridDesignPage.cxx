@@ -74,9 +74,6 @@ void GridDesignPage::buildInterface()
   // error message
   errorMessageLabel_ = new TemporaryLabel;
   pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
-
-  // register field
-  registerField("GridDOESize", DOESizeLabel_, "text", SIGNAL(textChanged()));
 }
 
 
