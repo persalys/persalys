@@ -1,8 +1,6 @@
 FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
-RUN rm -rf ${HOME}/.wine*
-
 # https://github.com/docker/for-linux/issues/208
 RUN aurman -S --noconfirm --noedit mingw-w64-qt5-base-nostatx
 
@@ -10,45 +8,36 @@ RUN aurman -S --noconfirm --noedit mingw-w64-qwt
 RUN aurman -Syu --noconfirm --noedit mingw-w64-paraview
 
 ENV ARCH x86_64
-ENV PYTHONHOME /usr/${ARCH}-w64-mingw32/
-ENV PYTHONPATH /usr/${ARCH}-w64-mingw32/lib/python36
-ENV WINEARCH win64
-ENV WINEPATH /usr/${ARCH}-w64-mingw32/bin
-
-# https://bugs.winehq.org/show_bug.cgi?id=42474#c22
-RUN sudo rm /usr/lib/wine/fakedlls/api-ms-win-core-path-l1-1-0.dll /usr/lib/wine/api-ms-win-core-path-l1-1-0.dll.so
-RUN rm -rf ${HOME}/.wine* && wine wineboot && xvfb-run winetricks -q vcrun2015
-RUN /usr/${ARCH}-w64-mingw32/bin/python36.exe -c "import sys; print(sys.version_info)"
+ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
+ENV PYMAJMIN 36
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
   && git checkout 11c7f774521f9179985ae3515bc9f88cd2f5eb15 \
   && CXXFLAGS="-D_hypot=hypot -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake \
   -DUSE_SPHINX=OFF \
-  -DPYTHON_INCLUDE_DIR=/usr/${ARCH}-w64-mingw32/include/python36 \
-  -DPYTHON_LIBRARY=/usr/${ARCH}-w64-mingw32/lib/libpython36.dll.a \
-  -DPYTHON_EXECUTABLE=/usr/${ARCH}-w64-mingw32/bin/python36.exe \
+  -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
+  -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
+  -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
   -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
   -DUSE_TBB=OFF . \
   && make && sudo make install
-RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded /usr/${ARCH}-w64-mingw32/bin/libOT.dll
-RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns/*.pyd
+RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libOT.dll
+RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/Lib/site-packages/openturns/*.pyd
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
   && git checkout v0.4 \
   && CXXFLAGS="-D_hypot=hypot -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF \
-  -DPYTHON_INCLUDE_DIR=/usr/${ARCH}-w64-mingw32/include/python36 \
-  -DPYTHON_LIBRARY=/usr/${ARCH}-w64-mingw32/lib/libpython36.dll.a \
-  -DPYTHON_EXECUTABLE=/usr/${ARCH}-w64-mingw32/bin/python36.exe . \
+  -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
+  -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
+  -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
   -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   && make && sudo make install
-RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded /usr/${ARCH}-w64-mingw32/bin/libotmorris.dll
-RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris/*.pyd
+RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libotmorris.dll
+RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/Lib/site-packages/otmorris/*.pyd
 
 # fake otfmi
 RUN echo "__version__= '0.0'" > /tmp/otfmi.py \
- && sudo mv /tmp/otfmi.py /usr/${ARCH}-w64-mingw32/lib/python36/otfmi.py
-
-ENV PYTHONIOENCODING "UTF-8"
+ && sudo mv /tmp/otfmi.py ${MINGW_PREFIX}/lib/python${PYMAJMIN}/otfmi.py

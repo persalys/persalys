@@ -174,7 +174,7 @@ char* PyInterp_Interp::_argv[] = {(char*)""};
   must call virtual method initalize().
 */
 PyInterp_Interp::PyInterp_Interp():
-  _vout(0), _verr(0), _local_context(0), _global_context(0), _initialized(false)
+  _vout(0), _verr(0), _global_context(0), _local_context(0), _initialized(false)
 {
 }
 
@@ -250,7 +250,6 @@ void PyInterp_Interp::initPython()
   if (!Py_IsInitialized()){
     // Python is not initialized
     wchar_t **changed_argv = new wchar_t*[_argc]; // Setting arguments
-    size_t mbslen;
     for (int i = 0; i < _argc; i++)
     {
       changed_argv[i] = Py_DecodeLocale(_argv[i], NULL);
@@ -397,7 +396,7 @@ __join(const std::vector<std::string>& v, int begin=0, int end=-1)
   if (end == -1)
     end = v.size();
   std::stringstream ss;
-  for (size_t i = begin; i < end; ++i) {
+  for (int i = begin; i < end; ++i) {
     if (i != begin)
       ss << ",";
     ss << v[i];
@@ -418,7 +417,7 @@ __getArgsList(std::string argsString)
   bool containsList = (argsString.find('[') != std::string::npos);
   if (containsList) {
     std::vector<int> listBeginIndices, listEndIndices;
-    for (int pos = 0; pos < x.size(); ++pos) {
+    for (int pos = 0; pos < (int)x.size(); ++pos) {
       if (x[pos][0] == '[')
         listBeginIndices.push_back(pos);
       else if (x[pos][x[pos].size()-1] == ']')
@@ -426,7 +425,7 @@ __getArgsList(std::string argsString)
     }
     std::vector<std::string> extractedArgs;
     int start = 0;
-    for (int pos = 0; pos < listBeginIndices.size(); ++pos) {
+    for (int pos = 0; pos < (int)listBeginIndices.size(); ++pos) {
       int lbeg = listBeginIndices[pos];
       int lend = listEndIndices[pos];
       if (lbeg > start)
@@ -435,8 +434,8 @@ __getArgsList(std::string argsString)
       extractedArgs.push_back(__join(x, lbeg, lend+1));
       start = lend+1;
     }
-    if (start < x.size())
-      for (int k = start; k < x.size(); ++k)
+    if (start < (int)x.size())
+      for (int k = start; k < (int)x.size(); ++k)
         extractedArgs.push_back(x[k]);
     return extractedArgs;
   }
