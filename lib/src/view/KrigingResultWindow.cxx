@@ -45,6 +45,7 @@ KrigingResultWindow::KrigingResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
   , optimizeParameters_(true)
+  , errorMessage_(item->getAnalysis().getWarningMessage().c_str())
 {
   const KrigingAnalysis * kriging = dynamic_cast<const KrigingAnalysis*>(item->getAnalysis().getImplementation().get());
   if (!kriging)
@@ -207,7 +208,18 @@ void KrigingResultWindow::buildInterface()
     tabWidget->addTab(validationTabWidget, tr("Validation"));
   }
 
-  // fourth tab : PARAMETERS --------------------------------
+  // tab : ERRORS --------------------------------
+  if (!errorMessage_.isEmpty())
+  {
+    QWidget * indicesWidget = new QWidget;
+    QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
+    QLabel * errorLabel = new QLabel(errorMessage_);
+    indicesWidgetLayout->addWidget(errorLabel);
+    indicesWidgetLayout->addStretch();
+    tabWidget->addTab(indicesWidget, tr("Error"));
+  }
+
+  // tab : PARAMETERS --------------------------------
   if (parametersWidget_)
     tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
