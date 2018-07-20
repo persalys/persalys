@@ -529,8 +529,12 @@ Designs of experiments
 
         - check all lines one by one :
 
-          - fifth header item is checked
+          - first header item is checked
           - size of the design of experiments : 84
+
+        - click on the 'Back' button then on the 'Continue' button
+
+          - check nothing has changed (values in the table, checked items, size label)
 
       - cancel
 
@@ -705,9 +709,9 @@ Analyses
         - unselect line : lower and upper bounds columns are disabled
         - unselect a lower bound : -inf symbol
         - unselect an upper bound : +inf symbol
-        - if lower > upper bound : variable name in red and can not validate the page
-        - if upper < lower bound : variable name in red and can not validate the page
-        - if starting point not in the interval [lower bound, upper bound] : variable name in red and can not validate the page
+        - if lower > upper bound : variable name in red, tooltip on the name and can not validate the page
+        - if upper < lower bound : variable name in red, tooltip on the name and can not validate the page
+        - if starting point not in the interval [lower bound, upper bound] : variable name in red, tooltip on the name and can not validate the page
 
     - Third page check the values :
 
@@ -754,8 +758,8 @@ Analyses
       - upper bounds : [10, 10, 1.1]
       - check table behavior:
 
-        - if lower > upper bound : variable name in red and can not validate the page
-        - if upper < lower bound : variable name in red and can not validate the page
+        - if lower > upper bound : variable name in red, tooltip on the name and can not validate the page
+        - if upper < lower bound : variable name in red, tooltip on the name and can not validate the page
 
     - Third page check the values :
 
@@ -790,7 +794,7 @@ Analyses
       - check Elementary effects tab behavior:
 
         - selection of points in the graphs (right click + draw rectangle) : a context menu appears with items : De/select the points
-        - click on the x-axis : move the green vertical line
+        - click on the x-axis : move the green vertical line. Check the line's position is synchronized on the two graphs
         - all points at the left of the green line on the graphs correspond to the lines of the table with a cross in the No effect column
         - the blue points on the graphs correspond to the selected lines of the table
         - the red points on the graphs correspond to the unselected lines of the table
@@ -965,7 +969,7 @@ Analyses
         .. image:: /developer_manual/validation/FORM_IS_reliability_starting_point_wizard.png
             :align: center
 
-      - Number of iterations : 150
+      - Maximum number of evaluations : 100000
       - Absolute error : 0.001
       - Relative/Residual/Constraint error : 1e-5
 
@@ -1008,7 +1012,7 @@ Analyses
 
       - Algorithm : Abdo-Rackwitz
       - Physical starting point : 5; 5
-      - Number of iterations : 150
+      - Maximum number of evaluations : 100000
       - Absolute error : 0.001
       - Relative/Residual/Constraint error : 1e-5
 
@@ -1043,7 +1047,7 @@ Analyses
 
       - Algorithm : Abdo-Rackwitz
       - Physical starting point : 5; 5
-      - Number of iterations : 150
+      - Maximum number of evaluations : 100000
       - Absolute error : 0.001
       - Relative/Residual/Constraint error : 1e-5
 
@@ -1090,6 +1094,8 @@ Analyses
       - max calls : 1000
       - block size : 100
       - number of calls by iteration : 400
+      - bootstrap sampling size : 100
+      - confidence level : 0.95
       - seed : 2
 
     - click on the Finish button
@@ -1206,7 +1212,7 @@ Analyses
       .. image:: /developer_manual/validation/kriging_wizard_3rd_page.png
           :align: center
 
-      - only Analytically/By Leave-one-out method are checked
+      - all methods are checked
 
     - click on the Finish button
 
@@ -1224,6 +1230,11 @@ Analyses
       - Metamodel tab : only the plot on the tab
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
+      - Validation tab has 3 tabs : Analytical, Test sample, K-Fold
+
+        .. image:: /developer_manual/validation/kriging_validation_result.png
+            :align: center
+
 
     - right click on the kriging item : choose 'Convert metamodel into physical model'
 
@@ -1237,14 +1248,14 @@ Analyses
 
     - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 
-      - choose the Kriging method and click on Continue button then the Finish button
+      - choose the Kriging method, select all the validation methods:
 
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button and click immediately on the Stop button
-      - there is only y0 in the list view at the left side of the result window
+      - The result window does not contain the Validation tab
 
       .. image:: /developer_manual/validation/design_3_result.png
           :align: center
@@ -1266,7 +1277,7 @@ Analyses
       .. image:: /developer_manual/validation/chaos_1_wizard_2nd_page.png
           :align: center
 
-      - degree : 2
+      - degree : 7
       - sparse : checked
       - continue
 
@@ -1275,7 +1286,7 @@ Analyses
       .. image:: /developer_manual/validation/chaos_1_wizard_3rd_page.png
           :align: center
 
-      - only Analytically is checked
+      - all validation methods are checked
 
     - click on the Finish button
 
@@ -1292,6 +1303,7 @@ Analyses
       - Metamodel tab : plot + Relative error table
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
+      - Validation tab has 3 tabs : Analytical, Test sample, K-Fold
 
 
   - chaos_2
@@ -1353,7 +1365,7 @@ Analyses
 
         - x_1 the output is the first item of the list
 
-      - right side, tabs : Summary - PDF/CDF - Box plots - Dependency - Table - Cobweb plot - Plot matrix - Scatter plots
+      - right side, tabs : Summary - PDF/CDF - Box plots - Dependence - Table - Cobweb plot - Plot matrix - Scatter plots
       - when changing the variable, the tabs (Summary - PDF/CDF - Box plots) are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
@@ -1478,7 +1490,7 @@ Analyses
     - check the reuse of the copula inference result by the Probabilistic model :
 
       - go on the Probabilistic model window of model1, tab 'Dependence'
-      - choose Inference result in the combo box of the [x1, x2] group
+      - choose Inference result in the combo box of the [x_0,x_3] group
       - a wizard appears, check its behavior (update of the tables when changing the items selection, etc.)
 
         .. image:: /developer_manual/validation/copulaInferenceResultWizard.png
