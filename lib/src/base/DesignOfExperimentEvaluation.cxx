@@ -141,27 +141,7 @@ void DesignOfExperimentEvaluation::launch()
     catch (InternalException & ex)
     {
       failedSample = blockInputSample;
-    }
-
-    // if SymbolicPhysicalModel find NaN and inf
-    // for ex: in case of zero division the Symbolic models do not raise error
-    if (!failedSample.getSize() && getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")
-    {
-      bool nanFound = false;
-      for (UnsignedInteger j = 0; j < blockInputSample.getSize(); ++j)
-      {
-        for (UnsignedInteger k = 0; k < getInterestVariables().getSize(); ++k)
-        {
-          if (!SpecFunc::IsNormal(blockOutputSample(j, k)))
-          {
-            failedSample = blockInputSample;
-            nanFound = true;
-            break;
-          }
-        }
-        if (nanFound)
-          break;
-      }
+      warningMessage_ = ex.what();
     }
 
     if (!failedSample.getSize())
@@ -176,7 +156,7 @@ void DesignOfExperimentEvaluation::launch()
   }
 
   if (!outputSample.getSize())
-    throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model.";
+    throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model. " << warningMessage_;
 
   // set design of experiments
   designOfExperiment_.setInputSample(inputSample);
