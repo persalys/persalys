@@ -178,7 +178,7 @@ void FunctionalChaosResultWindow::buildInterface()
 
       if (sparse_)
       {
-        namesList << tr("Basis size");
+        namesList << tr("Truncated basis size");
 
         UnsignedInteger notNullCoefCounter = 0;
         for (UnsignedInteger coefIndex = 0; coefIndex < result_.getFunctionalChaosResult().getCoefficients().getSize(); ++coefIndex)
@@ -199,7 +199,7 @@ void FunctionalChaosResultWindow::buildInterface()
 //     summaryWidgetLayout->addStretch();
     summaryWidgetLayout->setRowStretch(2, 1);
 
-    tabWidget->addTab(summaryWidget, tr("Summary"));
+    tabWidget->addTab(summaryWidget, tr("Results"));
   }
   else
   {
@@ -210,7 +210,7 @@ void FunctionalChaosResultWindow::buildInterface()
       QLabel * errorLabel = new QLabel(errorMessage_);
       summaryWidgetLayout->addWidget(errorLabel);
       summaryWidgetLayout->addStretch();
-      tabWidget->addTab(summaryWidget, tr("Summary"));
+      tabWidget->addTab(summaryWidget, tr("Results"));
     }
   }
 
