@@ -143,7 +143,7 @@ if (USE_OTFMI)
 endif ()
 
 if (USE_OTMORRIS)
-  find_package (OTMORRIS 0.3 NO_MODULE)
+  find_package (OTMORRIS 0.4 NO_MODULE)
   if (OTMORRIS_FOUND)
     list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_OTMORRIS)
     include_directories (${OTMORRIS_INCLUDE_DIRS})
