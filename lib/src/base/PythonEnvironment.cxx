@@ -19,6 +19,7 @@
  *
  */
 #include "otgui/PythonEnvironment.hxx"
+
 #include <Python.h>
 
 namespace OTGUI
@@ -29,14 +30,16 @@ PythonEnvironment::PythonEnvironment()
   // Py_Initialize should be done by PyInterp_Interp
   Py_Initialize();
   PyEval_InitThreads(); // Create (and acquire) the Python global interpreter lock (GIL)
+  // avoid error: "Exception ignored in: <module 'threading' from '/usr/lib/python3.6/threading.py'>" when closing the interface if the user used parallelisation
+  Py_DECREF(PyImport_ImportModule("threading"));
   PyEval_SaveThread(); /* Release the thread state */
   //here we do not have the Global Interpreter Lock
 }
+
 
 PythonEnvironment::~PythonEnvironment()
 {
   PyGILState_Ensure();
   Py_Finalize();
 }
-
 }
