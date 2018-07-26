@@ -6,7 +6,7 @@
 0 : [ 361.268 ]
 1 : [ 564.451 ]
 ZeroDivisionError occured: True
-Error on the line G = 2*R-F/(pi*100.0)/0. : True
+Error on the line 4 : True
 #!/usr/bin/env python
 # coding: utf-8
 

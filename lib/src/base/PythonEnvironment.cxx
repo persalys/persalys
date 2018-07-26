@@ -20,7 +20,9 @@
  */
 #include "otgui/PythonEnvironment.hxx"
 
-#include <Python.h>
+#include <openturns/PythonWrappingFunctions.hxx>
+
+using namespace OT;
 
 namespace OTGUI
 {
@@ -41,5 +43,70 @@ PythonEnvironment::~PythonEnvironment()
 {
   PyGILState_Ensure();
   Py_Finalize();
+}
+
+
+void handleExceptionTraceback()
+{
+  PyObject * exception = PyErr_Occurred();
+
+  if (exception)
+  {
+    PyObject *ptype = NULL, *pvalue = NULL, *ptraceback = NULL;
+    PyErr_Fetch(&ptype, &pvalue, &ptraceback);
+
+    String exceptionMessage("Python exception");
+
+    if (ptraceback != NULL)
+    {
+      // See if we can get a full traceback
+      ScopedPyObjectPointer pyth_module(PyImport_ImportModule("traceback"));
+
+      ScopedPyObjectPointer pyth_func(PyObject_GetAttrString(pyth_module.get(), "format_exception"));
+      if (pyth_func.get() && PyCallable_Check(pyth_func.get()))
+      {
+        ScopedPyObjectPointer pyth_val(PyObject_CallFunctionObjArgs(pyth_func.get(), ptype, pvalue, ptraceback, NULL));
+
+        if (pyth_val.get())
+        {
+          // The return value of format_exception() is a list of strings
+          const Description desc = checkAndConvert< _PySequence_, Description >(pyth_val.get());
+          exceptionMessage += ":\n";
+          for (UnsignedInteger i = 0; i < desc.getSize(); i++)
+          {
+            exceptionMessage += desc[i];
+          }
+        }
+      }
+    }
+    else
+    {
+      // get the name of the exception
+      if (ptype)
+      {
+        ScopedPyObjectPointer nameObj(PyObject_GetAttrString(ptype, "__name__"));
+        if (nameObj.get())
+        {
+          String typeString = checkAndConvert< _PyString_, String >(nameObj.get());
+          exceptionMessage += ": " + typeString;
+        }
+      }
+
+      // try to get error msg, value and traceback can be NULL
+      if (pvalue)
+      {
+        ScopedPyObjectPointer valueObj(PyObject_Str(pvalue));
+        if (valueObj.get())
+        {
+          String valueString = checkAndConvert< _PyString_, String >(valueObj.get());
+          exceptionMessage += ": " + valueString;
+        }
+      }
+    }
+
+    PyErr_Restore(ptype, pvalue, ptraceback);
+    PyErr_Print();
+    throw InternalException(HERE) << exceptionMessage;
+  }
 }
 }

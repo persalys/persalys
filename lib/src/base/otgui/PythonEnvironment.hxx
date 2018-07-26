@@ -35,5 +35,7 @@ public:
   virtual ~PythonEnvironment();
 
 };
+
+void handleExceptionTraceback();
 }
 #endif

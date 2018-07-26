@@ -21,14 +21,10 @@
 #include "otgui/PythonScriptEvaluation.hxx"
 
 #include "otgui/InterpreterUnlocker.hxx"
+#include "otgui/PythonEnvironment.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
-
-#ifdef OTGUI_HAVE_BOOST_PROCESS
-#include <boost/process.hpp>
-#endif
-#include <boost/filesystem.hpp>
 
 using namespace OT;
 
@@ -140,7 +136,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
   if (!scriptHasBeenEvaluated_)
   {
     ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
-    handleException();
+    handleExceptionTraceback();
     scriptHasBeenEvaluated_ = true;
   }
 
@@ -151,7 +147,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 
   ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
   ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
-  handleException();
+  handleExceptionTraceback();
 
   if (getOutputDimension() > 1)
   {
@@ -169,10 +165,6 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 
 Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 {
-  // no multiprocessing if no boost process include files
-#ifndef OTGUI_HAVE_BOOST_PROCESS
-  return EvaluationImplementation::operator() (inS);
-#else
   if (!isParallel_)
     return EvaluationImplementation::operator() (inS);
 
@@ -195,93 +187,39 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   }
   sampleOss << "]";
 
-  // get temporary directory path
-  boost::filesystem::path tempDir = boost::filesystem::temp_directory_path() / boost::filesystem::unique_path("otgui-%%%%-%%%%-%%%%-%%%%");
-  bool ret = boost::filesystem::create_directories(tempDir);
-  if (!ret)
-    throw InvalidArgumentException(HERE) << "Impossible to create a temporary directory. Do not use multiprocessing.\n";
+  // build script
+  InterpreterUnlocker iul;
+  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
+  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
 
-  // set temporary file path to save the evaluation result
-  const boost::filesystem::path tempResuFilePath = tempDir / "outputSample.csv";
+  OSS oss;
+  oss << code_ << "\n";
+  oss << "from concurrent.futures import ThreadPoolExecutor, as_completed\n";
+  oss << "import openturns as ot\n";
+  oss << "def _exec_sample():\n";
+  oss << "    X = " << sampleOss.str() << "\n";
+  oss << "    Y = []\n";
+  oss << "    with ThreadPoolExecutor() as executor:\n";
+  oss << "        resu = {executor.submit(_exec, *x): x for x in X}\n";
+  oss << "        for future in as_completed(resu):\n";
+  oss << "            Y.append(future.result())\n";
+  if (outDim < 2)
+    oss << "    Y = [[y] for y in Y]\n";
+  oss << "    return Y\n";
 
-  // define the Python script
-  OSS ossEssai;
-  ossEssai << "#!/usr/bin/env python\n";
-  ossEssai << "# coding: utf-8\n";
+  ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
+  handleExceptionTraceback();
 
-  ossEssai << "from multiprocessing import Pool\n";
-  ossEssai << "import openturns as ot\n";
-  ossEssai << "import traceback\n";
-  ossEssai << "import sys\n";
+  PyObject * script = PyDict_GetItemString(dict, "_exec_sample");
+  if (script == NULL)
+    throw InternalException(HERE) << "no _exec_sample function";
 
-  ossEssai << code_.c_str() << "\n";
+  // run _exec_sample
+  ScopedPyObjectPointer sampleResult(PyObject_CallObject(script, NULL));
+  handleExceptionTraceback();
 
-  ossEssai << "def tmp_exec(x):\n";
-  ossEssai << "    try:\n";
-  ossEssai << "        return _exec(*x)\n";
-  ossEssai << "    except Exception as e:\n";
-  ossEssai << "        sys.stderr.write('Caught exception in worker thread (x = %s):\\n' % x)\n";
-  ossEssai << "        # This prints the type, value, and stack trace of the\n";
-  ossEssai << "        # current exception being handled.\n";
-  ossEssai << "        traceback.print_exc()\n";
-  ossEssai << "        raise e\n";
-
-  ossEssai << "def _exec_sample(X):\n";
-  ossEssai << "    p = Pool(" << size << ")\n";
-  ossEssai << "    try:\n";
-  ossEssai << "        Y = list(p.imap(tmp_exec, X))\n";
-  ossEssai << "        p.close()\n";
-  ossEssai << "        p.join()\n";
-  ossEssai << (outDim > 1 ? "        return Y\n" : "        return [[y] for y in Y]\n");
-  ossEssai << "    except Exception as e:\n";
-  ossEssai << "        p.close()\n";
-  ossEssai << "        p.join()\n";
-  ossEssai << "        raise e\n";
-
-  ossEssai << "if __name__ == '__main__':\n";
-
-  ossEssai << "  X = " << sampleOss.str() << "\n";
-  ossEssai << "  sample = ot.Sample(_exec_sample(X))\n";
-  ossEssai << "  sample.exportToCSVFile('" << tempResuFilePath.string() << "')\n";
-
-  // create the Python script file
-  const boost::filesystem::path tempScriptPath = tempDir / "evaluatePythonModel.py";
-  std::ofstream myfile;
-  myfile.open(tempScriptPath.string());
-  myfile << ossEssai.str();
-  myfile.close();
-
-  // get Python executable path
-  // this searches a Python executable in the directories of the "PATH" environment variable
-  const String pythonExePath = boost::process::search_path("python3").string();
-  if (pythonExePath.empty())
-    throw InvalidArgumentException(HERE) << "Impossible to find a Python executable. Do not use multiprocessing.\n";
-
-  // launch Python script in a subprocess
-  boost::process::ipstream error;
-  boost::process::child subprocess(pythonExePath, tempScriptPath.string(), boost::process::std_err > error);
-
-  // retrieve error message
-  String errorMessage;
-  String line;
-  while (subprocess.running() && std::getline(error, line) && !line.empty())
-    errorMessage += line + "\n";
-
-  subprocess.wait();
-
-  // handle exception
-  if (!errorMessage.empty())
-  {
-    // remove script file
-    boost::filesystem::remove_all(tempDir);
-    throw InvalidArgumentException(HERE) << "Python function evaluation failed.\n" << errorMessage;
-  }
-
-  // retrieve output sample
-  Sample outputSample(Sample::ImportFromCSVFile(tempResuFilePath.string()));
-
-  // remove script file + result file
-  boost::filesystem::remove_all(tempDir);
+  // build output sample
+  Sample outputSample(convert<_PySequence_, Sample>(sampleResult.get()));
 
   // check
   if (outputSample.getSize() != size)
@@ -291,12 +229,10 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
     throw InvalidArgumentException(HERE) << "Python Function returned a sequence object with incorrect dimension (got "
                                           << outputSample.getDimension() << ", expected " << outDim << ")";
 
-
   outputSample.setDescription(getOutputDescription());
   callsNumber_.fetchAndAdd(size);
 
   return outputSample;
-#endif
 }
 
 

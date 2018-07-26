@@ -43,7 +43,7 @@ try:
   print(f([[300., 75000.]]))
 except Exception as e:
   print("ZeroDivisionError occured: %s" % ("ZeroDivisionError: float division by zero" in str(e)))
-  print("Error on the line G = 2*R-F/(pi*100.0)/0. : %s" % ("G = 2*R-F/(pi*100.0)/0." in str(e)))
+  print("Error on the line 4 : %s" % ("line 4" in str(e)))
 
 # script
 script = myStudy.getPythonScript()
