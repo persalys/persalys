@@ -89,6 +89,7 @@ public slots:
   virtual void replot();
   void exportPlot();
   void selectPoints(const QRectF&);
+  void updateVerticalMarkerValue(const QPointF&);
 
 signals:
   void plotChanged();
