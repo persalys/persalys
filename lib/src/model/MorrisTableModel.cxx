@@ -105,11 +105,14 @@ QVariant MorrisTableModel::data(const QModelIndex & index, int role) const
         return QVariant();
     }
   }
-  else if (role == Qt::ForegroundRole && index.column() == 0)
+  else if ((role == Qt::ForegroundRole || role == Qt::ToolTipRole) && index.column() == 0)
   {
     // check bounds
-    if (analysis_.getBounds().getMarginal(index.row()).isEmpty())
+    const bool boundsIsEmpty = analysis_.getBounds().getMarginal(index.row()).isEmpty();
+    if (role == Qt::ForegroundRole && boundsIsEmpty)
       return QColor(Qt::red);
+    else if (role == Qt::ToolTipRole && boundsIsEmpty)
+      return tr("The lower bound must be lesser than the upper bound");
   }
   return QVariant();
 }
