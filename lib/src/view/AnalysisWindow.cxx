@@ -76,7 +76,7 @@ void AnalysisWindow::buildInterface()
   // progress bar
   progressBar_ = new QProgressBar;
   mainLayout->addWidget(progressBar_, 1, 0);
-  connect(analysisItem_, SIGNAL(progressValueChanged(int)), progressBar_, SLOT(setValue(int)));
+  connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
 
   // buttons
   QHBoxLayout * hLayout = new QHBoxLayout;
@@ -203,6 +203,14 @@ void AnalysisWindow::stopAnalysis()
 
   // stop the analysis
   analysisItem_->stopAnalysis();
+}
+
+
+void AnalysisWindow::updateProgressBar(const int value)
+{
+  if (progressBar_->maximum() == progressBar_->minimum())
+    progressBar_->setRange(0, 100);
+  progressBar_->setValue(value);
 }
 
 
