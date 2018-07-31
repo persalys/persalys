@@ -49,17 +49,17 @@ void ModelEvaluationWizard::buildInterface()
   setWindowTitle(tr("Model evaluation"));
 
   // get data
-  ModelEvaluation * analysis_ptr = dynamic_cast<ModelEvaluation*>(analysis_.getImplementation()->clone());
-  analysis_ptr->updateParameters();
+  ModelEvaluation analysis = *dynamic_cast<ModelEvaluation*>(analysis_.getImplementation()->clone());
+  analysis.updateParameters();
 
-  const PhysicalModel model(analysis_ptr->getPhysicalModel());
+  const PhysicalModel model(analysis.getPhysicalModel());
 
   // build page
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);
 
   // output selection
-  outputsGroupBox_ = new OutputsSelectionGroupBox(model.getSelectedOutputsNames(), analysis_ptr->getInterestVariables(), this);
+  outputsGroupBox_ = new OutputsSelectionGroupBox(model.getSelectedOutputsNames(), analysis.getInterestVariables(), this);
   pageLayout->addWidget(outputsGroupBox_, 0, Qt::AlignTop);
 
   // table
@@ -83,7 +83,7 @@ void ModelEvaluationWizard::buildInterface()
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
     // input value
-    const double defaultValue = analysis_ptr->getInputValues()[i];
+    const double defaultValue = analysis.getInputValues()[i];
     const double delta(0.1 * fabs(defaultValue));
     const double step(delta > 1e-12 ? 0.5 * delta : 0.1);
 

@@ -49,6 +49,7 @@ public slots:
 signals:
   void plotItemsChanged();
   void resetTableModel();
+  void noEffectBoundaryChanged(const QPointF&);
 
 private:
   MorrisResult& result_;

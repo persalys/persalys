@@ -39,7 +39,7 @@ protected:
 private:
   KrigingAnalysisResult result_;
   bool optimizeParameters_;
-  OT::UnsignedInteger seedTestSample_;
+  QString errorMessage_;
 };
 }
 #endif

@@ -101,6 +101,9 @@ void CopulaInferenceResultWizard::buildInterface()
     tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
     tableView_->setFixedHeight(h + y1 + y2);
     topWidgetLayout->addWidget(tableView_, 2, 0, 1, 2);
+
+    // signal to update the table
+    connect(variablesComboBox_, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateVariablesTable(QString)));
   }
 
   mainLayout->addWidget(topWidget);
@@ -187,16 +190,13 @@ void CopulaInferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
   else
   {
     if (tableView_)
-    {
       tableView_->show();
-      connect(variablesComboBox_, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateVariablesTable(QString)));
 
-      variablesComboBox_->addItems(variablesNames);
-      variablesComboBox_->blockSignals(false);
-      variablesComboBox_->setCurrentIndex(0);
-      inferenceResultStackWidget_->setCurrentIndex(0);
-      updateVariablesTable(variablesComboBox_->currentText());
-    }
+    variablesComboBox_->addItems(variablesNames);
+    variablesComboBox_->blockSignals(false);
+    variablesComboBox_->setCurrentIndex(0);
+    inferenceResultStackWidget_->setCurrentIndex(0);
+    updateVariablesTable(variablesComboBox_->currentText());
   }
 }
 

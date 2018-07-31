@@ -186,13 +186,6 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     hbox->addWidget(interactionsLabel);
     interactionsLabel = new QLabel(QString::number(interactionsValue, 'g', 4));
     hbox->addWidget(interactionsLabel);
-    if (interactionsValue < 0 || interactionsValue > 1)
-    {
-      interactionsLabel = new QLabel;
-      interactionsLabel->setPixmap(QPixmap(":/images/task-attention.png"));
-      interactionsLabel->setToolTip(tr("Warning: The sum of the second order indices is not in the range [0, 1]."));
-      hbox->addWidget(interactionsLabel);
-    }
     hbox->addStretch();
     subWidgetLayout->addWidget(interactionWidget);
   }

@@ -765,6 +765,14 @@ void PlotWidget::selectPoints(const QRectF& rect)
 }
 
 
+void PlotWidget::updateVerticalMarkerValue(const QPointF& markerValue)
+{
+  if (!verticalMarker_)
+    return;
+  verticalMarker_->setValue(markerValue);
+}
+
+
 void PlotWidget::updateScaleParameters(const Distribution & distribution)
 {
   double mean = distribution.getMean()[0];

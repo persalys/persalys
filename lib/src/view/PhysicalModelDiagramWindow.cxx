@@ -272,7 +272,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   const QPointF limitState_rightPoint = limitStateProxy->pos() + deltaRight;
 
   // arrows ending points
-  const QPointF deltaLeft(0, boxHeight * 0.5);
+  const QPointF deltaLeft(-buttonMargin, boxHeight * 0.5);
   const QPointF modelEval_leftPoint = modelEvaluationProxy->pos() + deltaLeft;
   const QPointF optimizationCreation_leftPoint = optimizationCreationProxy->pos() + deltaLeft;
   const QPointF doeCreation_leftPoint = doeCreationProxy->pos() + deltaLeft;

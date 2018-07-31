@@ -186,7 +186,7 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
         return analysis_.getBounds().getFiniteUpperBound()[inputIndex] ? Qt::Checked : Qt::Unchecked;
     }
   }
-  else if (role == Qt::ForegroundRole && ind.column() == 0)
+  else if ((role == Qt::ForegroundRole || role == Qt::ToolTipRole) && ind.column() == 0)
   {
     const int inputIndex = ind.row() - 1;
     const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
@@ -194,8 +194,13 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
     if (analysis_.getVariableInputs().contains(currentInputName))
     {
       const Interval bounds(analysis_.getBounds().getMarginal(inputIndex));
-      if (bounds.isEmpty() || !bounds.contains(Point(1, analysis_.getStartingPoint()[inputIndex])))
+      const bool startPtInBounds = bounds.contains(Point(1, analysis_.getStartingPoint()[inputIndex]));
+      if (role == Qt::ForegroundRole && (bounds.isEmpty() || !startPtInBounds))
         return QColor(Qt::red);
+      if (role == Qt::ToolTipRole && bounds.isEmpty())
+        return tr("The lower bound must be lesser than the upper bound");
+      else if (role == Qt::ToolTipRole && !startPtInBounds)
+        return tr("The interval must contain the starting point");
     }
   }
 

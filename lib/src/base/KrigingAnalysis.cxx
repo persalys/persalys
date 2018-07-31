@@ -271,37 +271,69 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
   // validation: Analytical
   if (analyticalValidation_)
   {
-    for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+    try
     {
-      optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
-      computeAnalyticalValidation(results[i], inputSample);
+      for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+      {
+        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        computeAnalyticalValidation(results[i], inputSample);
+      }
+    }
+    catch (std::exception & ex)
+    {
+      analyticalValidation_ = false;
+      warningMessage_ += OSS() << "Analytical validation failed: " << ex.what() << "\n";
     }
   }
   // validation: Test sample
   if (testSampleValidation_)
   {
-    for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+    try
     {
-      optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
-      computeTestSampleValidation(results[i], inputSample);
+      for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+      {
+        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        computeTestSampleValidation(results[i], inputSample);
+      }
+    }
+    catch (std::exception & ex)
+    {
+      testSampleValidation_ = false;
+      warningMessage_ += OSS() << "Test sample validation failed: " << ex.what() << "\n";
     }
   }
   // validation: K-Fold
   if (kFoldValidation_)
   {
-    for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+    try
     {
-      optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
-      computeKFoldValidation(results[i], inputSample);
+      for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+      {
+        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        computeKFoldValidation(results[i], inputSample);
+      }
+    }
+    catch (std::exception & ex)
+    {
+      kFoldValidation_ = false;
+      warningMessage_ += OSS() << "K-Fold validation failed: " << ex.what() << "\n";
     }
   }
   // validation: Leave-one-out
   if (leaveOneOutValidation_)
   {
-    for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+    try
     {
-      optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
-      computeLOOValidation(results[i], inputSample);
+      for (UnsignedInteger i = 0; i < results.getSize(); ++i)
+      {
+        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        computeLOOValidation(results[i], inputSample);
+      }
+    }
+    catch (std::exception & ex)
+    {
+      leaveOneOutValidation_ = false;
+      warningMessage_ += OSS() << "Leave-one-out validation failed: " << ex.what() << "\n";
     }
   }
   if (analyticalValidation_ || testSampleValidation_ || kFoldValidation_ || leaveOneOutValidation_)
@@ -433,7 +465,7 @@ Parameters KrigingAnalysis::getParameters() const
     param.add("Number of folds", getKFoldValidationNumberOfFolds());
     param.add("Seed", getKFoldValidationSeed());
   }
-  param.add("Leave-one-out validation", leaveOneOutValidation() ? "yes" : "no");
+//   param.add("Leave-one-out validation", leaveOneOutValidation() ? "yes" : "no");
 
   return param;
 }
@@ -491,7 +523,7 @@ String KrigingAnalysis::getPythonScript() const
     oss << getName() << ".setKFoldValidationNumberOfFolds(" << getKFoldValidationNumberOfFolds() << ")\n";
     oss << getName() << ".setKFoldValidationSeed(" << getKFoldValidationSeed() << ")\n";
   }
-  oss << getName() << ".setLeaveOneOutValidation(" << (leaveOneOutValidation() ? "True" : "False") << ")\n";
+//   oss << getName() << ".setLeaveOneOutValidation(" << (leaveOneOutValidation() ? "True" : "False") << ")\n";
 
   return oss;
 }

@@ -99,9 +99,9 @@ void PVPlotSettingWidget::buildInterface()
   if (sample_.getSize() && sampleRank_.getSize())
   {
     QCheckBox * rankCheckBox = new QCheckBox(tr("Ranks"));
+    rankCheckBox->setChecked(true);
     mainGridLayout->addWidget(rankCheckBox, ++rowGrid, 0, 1, 2);
     connect(rankCheckBox, SIGNAL(clicked(bool)), this, SLOT(modifyData(bool)));
-    rankCheckBox->click();
   }
 
   // pushbutton to export the plot

@@ -7,10 +7,9 @@ Dependencies
 - OpenTURNS >=1.11
 - Qt >=4
 - Qwt >=6
-- Python >=3
+- Python >=3.2
 - Boost.regex
 - Boost.filesystem
-- Boost.process (optional, for multiprocessing support)
 - SalomeYACS (optional, for YACS support)
 - Sphinx >=1.1 (optional, for doc)
 - Numpydoc (optional, for doc)

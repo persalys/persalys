@@ -52,6 +52,7 @@ public slots:
 protected slots:
   void launchAnalysis();
   void stopAnalysis();
+  void updateProgressBar(const int value);
 
 private:
   bool analysisInProgress_;

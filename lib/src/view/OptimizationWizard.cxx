@@ -62,7 +62,7 @@ void OptimizationWizard::buildInterface()
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
 
   OptimizationAnalysis optim = *dynamic_cast<OptimizationAnalysis*>(analysis_.getImplementation().get());
-  tableModel_ = new OptimizationTableModel(optim);
+  tableModel_ = new OptimizationTableModel(optim, this);
   tableView_->setModel(tableModel_);
 
   // spinbox delegate column 2

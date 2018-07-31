@@ -131,6 +131,7 @@ void MorrisResultWidget::buildInterface()
   plotMuStarSigma->setMorrisPlotType(QPointF(noEffectBoundary, 0));
   connect(plotMuStarSigma, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuSigma()));
   connect(plotMuStarSigma, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
+  connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarSigma, SLOT(updateVerticalMarkerValue(QPointF)));
 
   // curve A
   QVector<QPointF> points1(2);
@@ -187,6 +188,7 @@ void MorrisResultWidget::buildInterface()
   plotMuStarMu->setMorrisPlotType(QPointF(noEffectBoundary, 0));
   connect(plotMuStarMu, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuMu()));
   connect(plotMuStarMu, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
+  connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarMu, SLOT(updateVerticalMarkerValue(QPointF)));
 
   // curve A
   QVector<QPointF> points(2);
@@ -338,6 +340,7 @@ void MorrisResultWidget::updateNoEffectBoundary(const double value)
   result_.setInputsSelection(0, selection);
 
   emit resetTableModel();
+  emit noEffectBoundaryChanged(QPointF(value, 0));
   updateLabels();
 }
 

@@ -248,7 +248,11 @@ void ImportedDesignPage::initialize(const Analysis& analysis)
   // if already a ImportedDesignOfExperiment
   if (analysis_ptr)
   {
-    designOfExperiment_ = *analysis_ptr;
+    designOfExperiment_ = ImportedDesignOfExperiment(analysis.getName(),
+                                                     analysis_ptr->getPhysicalModel(),
+                                                     analysis_ptr->getFileName(),
+                                                     analysis_ptr->getInputColumns()
+                                                    );
     setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
   }
   else

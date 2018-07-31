@@ -72,7 +72,6 @@ analysis2.setTestSampleValidationSeed(2)
 analysis2.setKFoldValidation(True)
 analysis2.setKFoldValidationNumberOfFolds(4)
 analysis2.setKFoldValidationSeed(2)
-analysis2.setLeaveOneOutValidation(True)
 analysis2.setInterestVariables(['y1'])
 myStudy.add(analysis2)
 print(analysis2)
@@ -90,8 +89,6 @@ ott.assert_almost_equal(
     [0.9457431125210048], chaosResult2.getTestSampleValidation().getQ2(), 1e-16)
 ott.assert_almost_equal(
     [0.9143738630455855], chaosResult2.getKFoldValidation().getQ2(), 1e-16)
-ott.assert_almost_equal(
-    [0.9223441081335274], chaosResult2.getLeaveOneOutValidation().getQ2(), 1e-16)
 
 # extract metamodel
 metamodel = chaosResult2.getMetaModel()

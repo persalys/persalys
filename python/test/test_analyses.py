@@ -79,7 +79,7 @@ myStudy.add(design_3)
 
 # design 4 ##
 design_4 = otguibase.ProbabilisticDesignOfExperiment(
-    'design_4', model1, 10, "MONTE_CARLO")
+    'design_4', model1, 100, "MONTE_CARLO")
 design_4.run()
 myStudy.add(design_4)
 
@@ -113,17 +113,20 @@ myStudy.add(evaluation2)
 # 1- meta model1 ##
 
 # 1-a Kriging ##
-kriging = otguibase.KrigingAnalysis('kriging', design_1)
+kriging = otguibase.KrigingAnalysis('kriging', design_4)
 kriging.setBasis(ot.LinearBasisFactory(2).build())
 kriging.setCovarianceModel(ot.MaternModel(2))
-kriging.setLeaveOneOutValidation(True)
+kriging.setTestSampleValidation(True)
+kriging.setKFoldValidation(True)
 kriging.setInterestVariables(['y0', 'y1'])
 myStudy.add(kriging)
 
 # 1-b Chaos ##
-chaos1 = otguibase.FunctionalChaosAnalysis('chaos_1', design_1)
-chaos1.setChaosDegree(2)
+chaos1 = otguibase.FunctionalChaosAnalysis('chaos_1', design_4)
+chaos1.setChaosDegree(7)
 chaos1.setSparseChaos(True)
+chaos1.setTestSampleValidation(True)
+chaos1.setKFoldValidation(True)
 chaos1.setInterestVariables(['y1'])
 myStudy.add(chaos1)
 

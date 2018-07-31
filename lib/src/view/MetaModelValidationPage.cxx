@@ -101,9 +101,9 @@ void MetaModelValidationPage::buildInterface()
   validationLayout->addLayout(kFoldLayout, ++row, 1, Qt::AlignLeft);
 
   // LOO
-  looCheckBox_ = new QCheckBox;
-  validationLayout->addWidget(looCheckBox_, ++row, 0);
-  validationLayout->addWidget(new QLabel(tr("By Leave-one-out method")), row, 1);
+//   looCheckBox_ = new QCheckBox;
+//   validationLayout->addWidget(looCheckBox_, ++row, 0);
+//   validationLayout->addWidget(new QLabel(tr("By Leave-one-out method")), row, 1);
 
   validationLayout->setColumnStretch(2, 1);
 
@@ -146,7 +146,7 @@ void MetaModelValidationPage::initialize(const Analysis& analysis)
   analyticalCheckBox_->setChecked(analysis_ptr->analyticalValidation());
   testSampleCheckBox_->setChecked(analysis_ptr->testSampleValidation());
   kFoldCheckBox_->setChecked(analysis_ptr->kFoldValidation());
-  looCheckBox_->setChecked(analysis_ptr->leaveOneOutValidation());
+//   looCheckBox_->setChecked(analysis_ptr->leaveOneOutValidation());
 
   percentageOfPointsSpinBox_->setValue(analysis_ptr->getTestSampleValidationPercentageOfPoints());
   percentageOfPointsSpinBox_->setEnabled(testSampleCheckBox_->isChecked());
@@ -167,7 +167,7 @@ void MetaModelValidationPage::updateMetamodelValidation(Analysis& analysis)
   analysis_ptr->setAnalyticalValidation(analyticalCheckBox_->isChecked());
   analysis_ptr->setTestSampleValidation(testSampleCheckBox_->isChecked());
   analysis_ptr->setKFoldValidation(kFoldCheckBox_->isChecked());
-  analysis_ptr->setLeaveOneOutValidation(looCheckBox_->isChecked());
+//   analysis_ptr->setLeaveOneOutValidation(looCheckBox_->isChecked());
   analysis_ptr->setTestSampleValidationPercentageOfPoints(percentageOfPointsSpinBox_->value());
   analysis_ptr->setTestSampleValidationSeed(seedTestSampleSpinBox_->value());
   analysis_ptr->setKFoldValidationNumberOfFolds(nbFoldsSpinBox_->value());

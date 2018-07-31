@@ -56,7 +56,7 @@ private:
   QCheckBox * kFoldCheckBox_;
   QCheckBox * testSampleCheckBox_;
   QLabel * trainingSampleSize_;
-  QCheckBox * looCheckBox_;
+//   QCheckBox * looCheckBox_;
   UIntSpinBox * percentageOfPointsSpinBox_;
   UIntSpinBox * seedTestSampleSpinBox_;
   UIntSpinBox * nbFoldsSpinBox_;

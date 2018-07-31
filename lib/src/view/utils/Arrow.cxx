@@ -46,10 +46,11 @@ int Arrow::type() const
 
 QRectF Arrow::boundingRect() const
 {
-  const qreal extra = (pen().width() + 20) / 2.0;
+  const int margin = QImage(":/images/user-busy.png").height() / 2.;
+  QPointF pt1 = mapFromScene(QPointF(startP_.x(), startP_.y() - margin));
+  QPointF pt2 = mapFromScene(QPointF(endP_.x(), endP_.y() + margin));
 
-  return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
-                                    line().p2().y() - line().p1().y())).normalized().adjusted(-extra, -extra, extra, extra);
+  return QRectF(pt1, pt2);
 }
 
 

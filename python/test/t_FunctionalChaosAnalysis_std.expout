@@ -6,7 +6,7 @@ functionalChaosResult meta model=([0,0.488533] + [-0.419403,-0.41936] * (1.73205
 | y1 = Uniform(a = 0, b = 10) -> y1 : Normal(mu = 0, sigma = 1)
 ))
 orthogonal basis=class=OrthogonalProductPolynomialFactory univariate polynomial collection=[class=OrthogonalUniVariatePolynomialFamily implementation=class=StandardDistributionPolynomialFactory hasSpecificFamily=true specificFamily=class=OrthogonalUniVariatePolynomialFamily implementation=class=LegendreFactory measure=class=Uniform name=Uniform dimension=1 a=-1 b=1,class=OrthogonalUniVariatePolynomialFamily implementation=class=StandardDistributionPolynomialFactory hasSpecificFamily=true specificFamily=class=OrthogonalUniVariatePolynomialFamily implementation=class=LegendreFactory measure=class=Uniform name=Uniform dimension=1 a=-1 b=1] measure=class=ComposedDistribution name=ComposedDistribution dimension=2 copula=class=IndependentCopula name=IndependentCopula dimension=2 marginal[0]=class=Uniform name=Uniform dimension=1 a=-1 b=1 marginal[1]=class=Uniform name=Uniform dimension=1 a=-1 b=1
-class=FunctionalChaosAnalysis name=chaos_1 designOfExperiment=design interestVariables=[y1] analyticalValidation=true testSampleValidation=true kFoldValidation=true leaveOneOutValidation=true test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[30,2] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[4,2] chaosDegree=4 sparseChaos=false
+class=FunctionalChaosAnalysis name=chaos_1 designOfExperiment=design interestVariables=[y1] analyticalValidation=true testSampleValidation=true kFoldValidation=true leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[30,2] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[4,2] chaosDegree=4 sparseChaos=false
 result= class=FunctionalChaosAnalysisResult name=Unnamed mean=class=Point name=Unnamed dimension=1 values=[0.479245] variance=class=Point name=Unnamed dimension=1 values=[0.930686] sobolResult=class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[xi1,xi2] data=[[0.474121,0.512988]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.487012,0.525879]] firstOrderIndicesInterval=[] totalIndicesInterval=[] callsNumber=0 coefficientOfVariation=-1
 functionalChaosResult meta model=(0.479245 - 0.38203 * (1.73205 * x0) - 0.0562303 * (1.73205 * x1) + 0.494897 * (-1.11803 + 3.3541 * x0^2) + 0.0534577 * ((1.73205 * x0) * (1.73205 * x1)) + 0.259244 * (-1.11803 + 3.3541 * x1^2) + 0.207598 * (-3.96863 * x0 + 6.61438 * x0^3) + 0.047602 * ((-1.11803 + 3.3541 * x0^2) * (1.73205 * x1)) + 0.0282647 * ((1.73205 * x0) * (-1.11803 + 3.3541 * x1^2)) - 0.207633 * (-3.96863 * x1 + 6.61438 * x1^3) - 0.0853881 * (1.125 - 11.25 * x0^2 + 13.125 * x0^4) + 0.0381849 * ((-3.96863 * x0 + 6.61438 * x0^3) * (1.73205 * x1)) + 0.0478029 * ((-1.11803 + 3.3541 * x0^2) * (-1.11803 + 3.3541 * x1^2)) + 0.0482908 * ((1.73205 * x0) * (-3.96863 * x1 + 6.61438 * x1^3)) - 0.603282 * (1.125 - 11.25 * x1^2 + 13.125 * x1^4))o((| y0 = Normal(mu = 0, sigma = 1) -> y0 : Uniform(a = -1, b = 1)
 | y1 = Normal(mu = 0, sigma = 1) -> y1 : Uniform(a = -1, b = 1)
@@ -100,7 +100,6 @@ chaos_0.setSparseChaos(True)
 chaos_0.setAnalyticalValidation(True)
 chaos_0.setTestSampleValidation(False)
 chaos_0.setKFoldValidation(False)
-chaos_0.setLeaveOneOutValidation(False)
 myStudy.add(chaos_0)
 chaos_1 = otguibase.FunctionalChaosAnalysis('chaos_1', design)
 interestVariables = ['y1']
@@ -114,6 +113,5 @@ chaos_1.setTestSampleValidationSeed(2)
 chaos_1.setKFoldValidation(True)
 chaos_1.setKFoldValidationNumberOfFolds(4)
 chaos_1.setKFoldValidationSeed(2)
-chaos_1.setLeaveOneOutValidation(True)
 myStudy.add(chaos_1)
 

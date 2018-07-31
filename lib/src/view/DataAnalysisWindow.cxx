@@ -662,7 +662,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       desc.add(tr("Status\n0: failed; 1: ok").toUtf8().constData());
       succeedAndFailedInS.setDescription(desc);
 
-      cobwebWidget->setData(succeedAndFailedInS);
+      cobwebWidget->setData(succeedAndFailedInSRank);
       cobwebWidget->setAxisToShow(desc);
       cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
@@ -751,13 +751,13 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
 
   PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
-  cobwebWidget->setData(designOfExperiment_.getSample());
+  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
+  cobwebWidget->setData(sampleRank);
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
   cobwebWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
   cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
   // setting widget
-  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
   PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
       designOfExperiment_.getSample(),
       sampleRank,
