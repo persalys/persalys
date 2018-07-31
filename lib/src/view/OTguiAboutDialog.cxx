@@ -110,6 +110,14 @@ OTguiAboutDialog::OTguiAboutDialog(QWidget* parent)
   names  << QString("Paraview") + (OTguiSubWindow::HaveOpenGL32() ? "" : " (" + tr("disabled") + ")");
   values << PARAVIEW_VERSION_FULL;
 #endif
+#ifdef OTGUI_HAVE_OTMORRIS
+  names << "OTMorris";
+  values << OTMORRIS_VERSION_STRING;
+#endif
+#ifdef OTGUI_HAVE_OTFMI
+  names << "OTFMI";
+  values << OTFMI_VERSION_STRING;
+#endif
   ParametersTableView * table = new ParametersTableView(names, values, false, false);
   table->setSelectionMode(QAbstractItemView::NoSelection);
   table->setSelectionBehavior(QAbstractItemView::SelectRows);
