@@ -11,7 +11,7 @@ cd /tmp
 mkdir -p build && cd build
 cmake -DUSE_COTIRE=ON \
 -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
--DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" \
+-DCMAKE_CXX_FLAGS="-Wall -Werror -D_GLIBCXX_ASSERTIONS" \
 -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
 ../otgui
 make
