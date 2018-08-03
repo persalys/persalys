@@ -178,7 +178,7 @@ RUN localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG "C.UTF-8"
 
 # devel user
-RUN yum -y install sudo
+RUN yum -y install sudo zip
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel

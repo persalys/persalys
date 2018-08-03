@@ -19,6 +19,8 @@ sudo make install
 make tests
 xvfb-run ctest --output-on-failure --timeout 100 -j8 -E FMI
 
+cd /usr/local/share/otgui/doc/ && zip -r /tmp/build/otgui-doc.zip ./html/* && cd -
+
 mkdir -p otgui.AppDir/usr/{bin,lib,share}
 
 cat > otgui.AppDir/AppRun <<\EOF
@@ -97,6 +99,6 @@ appimagetool -v otgui.AppDir
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"
 then
-  sudo cp otgui*.AppImage /tmp/otgui
-  sudo chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage
+  sudo cp otgui*.AppImage otgui-doc.zip /tmp/otgui
+  sudo chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage /tmp/otgui/otgui-doc.zip
 fi
