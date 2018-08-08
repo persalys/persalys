@@ -17,7 +17,7 @@ cmake -DUSE_COTIRE=ON \
 make
 sudo make install
 make tests
-xvfb-run ctest --output-on-failure --timeout 100 -j8 -E FMI
+xvfb-run ctest --output-on-failure --timeout 100 -j8
 
 cd /usr/local/share/otgui/doc/ && zip -r /tmp/build/otgui-doc.zip ./html/* && cd -
 
