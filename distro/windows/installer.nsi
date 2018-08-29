@@ -343,9 +343,9 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   File "otgui.ico"
   File "otgui.vbs"
 
-  ;!insertmacro PRINT "Install doc example in $MODULE_INSTALL_PATH\doc\pdf."
-  ;SetOutPath "$MODULE_INSTALL_PATH\doc\pdf"
-  ;File "${MODULE_PREFIX}\share\doc\${MODULE_NAME_LOWERCASE}\pdf\${MODULE_NAME}_Documentation.pdf"
+  !insertmacro PRINT "Install doc in $MODULE_INSTALL_PATH\doc\."
+  SetOutPath "$MODULE_INSTALL_PATH\doc\"
+  File /r "html"
 
   ; create a version file
   ClearErrors

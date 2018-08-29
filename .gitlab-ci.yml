@@ -19,7 +19,6 @@ linux-tag:
   artifacts:
     paths:
       - otgui*.AppImage
-      - otgui-doc.zip
   only:
     - tags
 

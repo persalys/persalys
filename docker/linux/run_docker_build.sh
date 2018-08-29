@@ -53,6 +53,7 @@ EOF
 cp -v /usr/local/bin/otgui otgui.AppDir/usr/bin
 cp -rv /usr/local/lib/qt/plugins otgui.AppDir/usr/lib
 cp -rv /usr/local/etc/ otgui.AppDir/etc
+cp -rv /usr/local/share/otgui otgui.AppDir/usr/share
 
 cp -v /usr/local/bin/python3.6 otgui.AppDir/usr/bin
 cp -r /usr/local/lib/python3.6 otgui.AppDir/usr/lib

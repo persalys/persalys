@@ -43,6 +43,7 @@ public slots:
   void updateRecentFilesList(const QString & fileName);
   void updateRecentFilesActionsList();
   void clearRecentFilesActions();
+  void openUserManual();
   void openAboutDialog();
 signals:
   void openOTStudy(QString);
