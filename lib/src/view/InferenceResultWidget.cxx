@@ -134,7 +134,7 @@ void InferenceResultWidget::buildInterface()
     GraphConfigurationWidget * pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listpdf_cdfPlot,
         QStringList(),
         QStringList(),
-        GraphConfigurationWidget::PDF,
+        GraphConfigurationWidget::PDF_Inference,
         this);
     pdf_cdfPlotSettingWidget->hide();
     plotWidget->setDockWidget(pdf_cdfPlotSettingWidget);

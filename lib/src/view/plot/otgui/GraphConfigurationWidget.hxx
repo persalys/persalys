@@ -36,7 +36,7 @@ class OTGUI_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Kendall, Scatter, PDF, CDF, PDFResult, SensitivityIndices, Copula};
+  enum Type {NoType, Kendall, Scatter, PDF, PDF_Inference, PDFResult, SensitivityIndices, Copula};
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
                            QStringList inputNames = QStringList(),
@@ -78,7 +78,7 @@ private:
   QStringList inputNames_;
   QStringList outputNames_;
   QCheckBox * rankCheckBox_;
-  QButtonGroup * pdf_cdfGroup_;
+  QComboBox * distReprComboBox_;
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;
   QLineEdit * titleLineEdit_;

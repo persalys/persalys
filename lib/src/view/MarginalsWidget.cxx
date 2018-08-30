@@ -161,6 +161,14 @@ void MarginalsWidget::buildInterface()
   plotStackedWidget->addWidget(cdfPlot_);
   listPlotWidgets.append(cdfPlot_);
 
+  quantilePlot_ = new PlotWidget(tr("distributionQuantile"));
+  plotStackedWidget->addWidget(quantilePlot_);
+  listPlotWidgets.append(quantilePlot_);
+
+  survivalPlot_ = new PlotWidget(tr("distributionSurvivalFunction"));
+  plotStackedWidget->addWidget(survivalPlot_);
+  listPlotWidgets.append(survivalPlot_);
+
   plotWidgetLayout->addWidget(plotStackedWidget);
 
   GraphConfigurationWidget * plotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
@@ -422,10 +430,16 @@ void MarginalsWidget::updatePlots()
   const Input input(physicalModel_.getInputs()[index.row()]);
   pdfPlot_->clear();
   cdfPlot_->clear();
+  quantilePlot_->clear();
+  survivalPlot_->clear();
   pdfPlot_->plotPDFCurve(input.getDistribution());
   pdfPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(input.getName().c_str()));
   cdfPlot_->plotCDFCurve(input.getDistribution());
   cdfPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(input.getName().c_str()));
+  quantilePlot_->plotQuantileCurve(input.getDistribution());
+  quantilePlot_->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(input.getName().c_str()));
+  survivalPlot_->plotSurvivalCurve(input.getDistribution());
+  survivalPlot_->setAxisTitle(QwtPlot::xBottom, QString::fromUtf8(input.getName().c_str()));
 }
 
 

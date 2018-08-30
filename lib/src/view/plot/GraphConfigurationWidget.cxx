@@ -50,7 +50,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWid
   , inputNames_(inputNames)
   , outputNames_(outputNames)
   , rankCheckBox_(0)
-  , pdf_cdfGroup_(0)
+  , distReprComboBox_(0)
   , xAxisComboBox_(0)
   , yAxisComboBox_(0)
   , titleLineEdit_(0)
@@ -77,7 +77,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(PlotWidget * plotWidget,
   , inputNames_(inputNames)
   , outputNames_(outputNames)
   , rankCheckBox_(0)
-  , pdf_cdfGroup_(0)
+  , distReprComboBox_(0)
   , xAxisComboBox_(0)
   , yAxisComboBox_(0)
   , titleLineEdit_(0)
@@ -106,9 +106,24 @@ void GraphConfigurationWidget::buildInterface()
   QGridLayout * mainGridLayout = new QGridLayout(frame);
   int rowGrid = 0;
 
+  // combobox PDF - CDF - quantile function - Survival function
+  if (plotType_ == GraphConfigurationWidget::PDF ||
+      plotType_ == GraphConfigurationWidget::PDF_Inference ||
+      plotType_ == GraphConfigurationWidget::PDFResult ||
+      plotType_ == GraphConfigurationWidget::Copula)
+  {
+    QStringList distReprs = QStringList() << tr("PDF") << tr("CDF");
+    if (plotType_ == GraphConfigurationWidget::PDF)
+      distReprs << tr("Quantile function") << tr("Survival function");
+    distReprComboBox_ = new QComboBox;
+    distReprComboBox_->addItems(distReprs);
+    mainGridLayout->addWidget(distReprComboBox_, rowGrid, 0, 1, 2);
+    connect(distReprComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+  }
+
   // title
   QLabel * label = new QLabel(tr("Title"));
-  mainGridLayout->addWidget(label, rowGrid, 0, 1, 1);
+  mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   titleLineEdit_ = new QLineEdit;
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
@@ -154,22 +169,6 @@ void GraphConfigurationWidget::buildInterface()
     rankCheckBox_ = new QCheckBox(tr("Ranks"));
     mainGridLayout->addWidget(rankCheckBox_, ++rowGrid, 0, 1, 2);
     connect(rankCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(plotChanged()));
-  }
-
-  // buttons PDF - CDF
-  if (plotType_ == GraphConfigurationWidget::PDF ||
-      plotType_ == GraphConfigurationWidget::PDFResult ||
-      plotType_ == GraphConfigurationWidget::Copula)
-  {
-    pdf_cdfGroup_ = new QButtonGroup(this);
-    QRadioButton * buttonToChoosePDForCDF = new QRadioButton(tr("PDF"));
-    buttonToChoosePDForCDF->setChecked(true);
-    pdf_cdfGroup_->addButton(buttonToChoosePDForCDF, GraphConfigurationWidget::PDF);
-    mainGridLayout->addWidget(buttonToChoosePDForCDF, ++rowGrid, 0, 1, 1);
-    buttonToChoosePDForCDF = new QRadioButton(tr("CDF"));
-    pdf_cdfGroup_->addButton(buttonToChoosePDForCDF, GraphConfigurationWidget::CDF);
-    mainGridLayout->addWidget(buttonToChoosePDForCDF, rowGrid, 1, 1, 1);
-    connect(pdf_cdfGroup_, SIGNAL(buttonClicked(int)), this, SLOT(plotChanged()));
   }
 
   // label direction
@@ -359,9 +358,9 @@ void GraphConfigurationWidget::plotChanged()
     else
       currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
   }
-  else if (plotType_ == GraphConfigurationWidget::Copula && pdf_cdfGroup_ && xAxisComboBox_ && yAxisComboBox_)
+  else if (plotType_ == GraphConfigurationWidget::Copula && distReprComboBox_ && xAxisComboBox_ && yAxisComboBox_)
   {
-    if (pdf_cdfGroup_->checkedId() == GraphConfigurationWidget::PDF)
+    if (distReprComboBox_->currentIndex() == 0)
       currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex);
     else
       currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
@@ -370,24 +369,11 @@ void GraphConfigurationWidget::plotChanged()
   {
     currentPlotIndex_ = xAxisComboBox_->currentIndex();
   }
-  else if (pdf_cdfGroup_ && (plotType_ == GraphConfigurationWidget::PDF ||
-                             plotType_ == GraphConfigurationWidget::PDFResult))
+  else if (distReprComboBox_ && (plotType_ == GraphConfigurationWidget::PDF ||
+                                 plotType_ == GraphConfigurationWidget::PDF_Inference ||
+                                 plotType_ == GraphConfigurationWidget::PDFResult))
   {
-    switch (GraphConfigurationWidget::Type(pdf_cdfGroup_->checkedId()))
-    {
-      case GraphConfigurationWidget::PDF:
-      {
-        currentPlotIndex_ = 2 * outputIndex;
-        break;
-      }
-      case GraphConfigurationWidget::CDF:
-      {
-        currentPlotIndex_ = 2 * outputIndex + 1;
-        break;
-      }
-      default:
-        break;
-    }
+    currentPlotIndex_ = 2 * outputIndex + distReprComboBox_->currentIndex();
   }
 
   updateLineEdits();
