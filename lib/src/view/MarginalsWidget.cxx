@@ -38,7 +38,6 @@
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/TruncatedNormal.hxx>
-#include <openturns/Dirac.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -740,7 +739,7 @@ void MarginalsWidget::openWizardToChooseScreeningResult()
       const Input input(physicalModel_.getInputs()[i]);
       if (selectedInputs[i] == 0 && input.isStochastic())
       {
-        physicalModel_.setDistribution(input.getName(), Dirac(input.getValue()));
+        physicalModel_.setInputStochastic(input.getName(), false);
       }
     }
     physicalModel_.blockNotification();

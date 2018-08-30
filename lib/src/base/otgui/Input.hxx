@@ -56,6 +56,7 @@ public:
   void setFiniteDifferenceStep(const double& step);
 
   bool isStochastic() const;
+  void setStochastic(const bool stoch);
 
   OT::String getPythonScript() const;
 
@@ -72,6 +73,7 @@ protected:
   OT::String getDistributionPythonScript() const;
 
 private:
+  bool isStochastic_;
   OT::Distribution distribution_;
   OT::UnsignedInteger distributionParametersType_;
   double finiteDifferenceStep_;

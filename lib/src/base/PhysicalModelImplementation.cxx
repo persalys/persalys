@@ -203,6 +203,15 @@ void PhysicalModelImplementation::setInputValue(const String & inputName, const 
 }
 
 
+void PhysicalModelImplementation::setInputStochastic(const String & inputName, const bool & stoch)
+{
+  getInputByName(inputName).setStochastic(stoch);
+  // update copula
+  updateCopula();
+  notify("inputDistributionChanged");
+}
+
+
 void PhysicalModelImplementation::setDistribution(const String & inputName, const Distribution & distribution)
 {
   if (distribution.getDimension() > 1)
