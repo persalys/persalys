@@ -472,9 +472,27 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // -- cdf
-  cdfPlot_->plotHistogram(currentFittingTestResult_.getValues(), 1);
+  const Sample sample(currentFittingTestResult_.getValues());
+  const Scalar xmin = sample.getMin()[0] - 1.0;
+  const Scalar xmax = sample.getMax()[0] + 1.0;
+  const Sample F_nx(VisualTest::DrawEmpiricalCDF(sample, xmin, xmax).getDrawable(0).getData());
+  cdfPlot_->plotCurve(F_nx, QPen(Qt::blue, 2));
   cdfPlot_->plotCDFCurve(distribution);
-  cdfPlot_->setTitle(tr("CDF") + ": " + distName);
+  // compute Kolmogorov–Smirnov statistic : D_n = sup |F_n(x) - F(x)|
+  const Sample Fx(distribution.computeCDF(F_nx.getMarginal(0)));
+  Sample KSStatistic(2, 2);
+  for (UnsignedInteger i = 0; i < F_nx.getSize(); ++i)
+  {
+    if (std::abs(F_nx[i][1] - Fx[i][0]) > std::abs(KSStatistic[0][1] - KSStatistic[1][1]))
+    {
+      KSStatistic[0][1] = F_nx[i][1];
+      KSStatistic[1][1] = Fx[i][0];
+      KSStatistic[0][0] = F_nx[i][0];
+      KSStatistic[1][0] = F_nx[i][0];
+    }
+  }
+  cdfPlot_->plotCurve(KSStatistic, QPen(Qt::red, 2));
+  cdfPlot_->setTitle(tr("CDF") + ": " + distName + " " + tr("(Kolmogorov–Smirnov statistic=%1)").arg(std::abs(KSStatistic[0][1] - KSStatistic[1][1])));
 
   // -- qq plot
   Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));
