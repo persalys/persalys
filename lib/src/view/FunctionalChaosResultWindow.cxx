@@ -31,6 +31,7 @@
 #include <openturns/SpecFunc.hxx>
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/KPermutationsDistribution.hxx>
+#include <openturns/FunctionalChaosSobolIndices.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -64,6 +65,12 @@ FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QW
 }
 
 
+inline bool varianceComparison(const std::pair<UnsignedInteger, Scalar> &a, const std::pair<UnsignedInteger, Scalar> &b)
+{
+  return a.second > b.second;
+}
+
+
 void FunctionalChaosResultWindow::buildInterface()
 {
   setWindowTitle(tr("Functional chaos results"));
@@ -94,11 +101,11 @@ void FunctionalChaosResultWindow::buildInterface()
 
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
+  MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
+                                     result_.getFunctionalChaosResult().getRelativeErrors(),
+                                     result_.getFunctionalChaosResult().getResiduals());
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
-                                       result_.getFunctionalChaosResult().getRelativeErrors(),
-                                       result_.getFunctionalChaosResult().getResiduals());
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
         result_.getOutputSample(),
         i,
@@ -114,6 +121,8 @@ void FunctionalChaosResultWindow::buildInterface()
   // second tab : MOMENTS --------------------------------
   if (result_.getMean().getSize() == nbOutputs && result_.getVariance().getSize() == nbOutputs)
   {
+    QScrollArea * scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
     QWidget * summaryWidget = new QWidget;
     QGridLayout * summaryWidgetLayout = new QGridLayout(summaryWidget);
 
@@ -192,14 +201,92 @@ void FunctionalChaosResultWindow::buildInterface()
       basisStackedWidget->addWidget(basisTableView);
     }
     basisGroupBoxLayout->addWidget(basisStackedWidget);
-
     connect(outputsListWidget, SIGNAL(currentRowChanged(int)), basisStackedWidget, SLOT(setCurrentIndex(int)));
-
     summaryWidgetLayout->addWidget(basisGroupBox);
-//     summaryWidgetLayout->addStretch();
-    summaryWidgetLayout->setRowStretch(2, 1);
 
-    tabWidget->addTab(summaryWidget, tr("Results"));
+    // Part of variance
+    // reuse of OT::FunctionalChaosSobolIndices::summary() content
+    QGroupBox * varGroupBox = new QGroupBox(tr("Part of variance"));
+    QVBoxLayout * varGroupBoxLayout = new QVBoxLayout(varGroupBox);
+    ResizableStackedWidget * varStackedWidget = new ResizableStackedWidget;
+
+    EnumerateFunction enumerateFunction(result_.getFunctionalChaosResult().getOrthogonalBasis().getEnumerateFunction());
+    const Indices indices(result_.getFunctionalChaosResult().getIndices());
+    const Sample coefficients(result_.getFunctionalChaosResult().getCoefficients());
+    const UnsignedInteger basisSize = indices.getSize();
+
+    for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
+    {
+      UnsignedInteger maxdegree = 0;
+
+      std::vector< std::pair<UnsignedInteger, Scalar > > varianceOrder;
+
+      // compute part of contribution of each basis term
+      for (UnsignedInteger i = 1; i < basisSize; ++ i)
+      {
+        Scalar coefI = coefficients(i, outputIndex);
+        Indices multiIndices(enumerateFunction(indices[i]));
+        UnsignedInteger degreeI = 0;
+        for (UnsignedInteger k = 0; k < multiIndices.getSize(); ++ k)
+          degreeI += multiIndices[k];
+
+        maxdegree = std::max(maxdegree, degreeI);
+        const Scalar varianceRatio = coefI * coefI / result_.getVariance()[outputIndex];
+        varianceOrder.push_back(std::pair<UnsignedInteger, Scalar >(i, varianceRatio));
+      }
+
+      // sort basis terms by descending variance contribution
+      std::sort(varianceOrder.begin(), varianceOrder.end(), varianceComparison);
+
+      // table of part of variance for each basis term
+      ResizableTableViewWithoutScrollBar * tableView = new ResizableTableViewWithoutScrollBar;
+      tableView->verticalHeader()->hide();
+      tableView->horizontalHeader()->hide();
+      CustomStandardItemModel * tableModel = new CustomStandardItemModel(1, 4, tableView);
+      tableView->setModel(tableModel);
+
+      // row
+      tableModel->setNotEditableHeaderItem(0, 0, tr("Index"));
+      tableModel->setNotEditableHeaderItem(0, 1, tr("Multi-indice"));
+      tableModel->setNotEditableHeaderItem(0, 2, tr("Coefficient"));
+      tableModel->setNotEditableHeaderItem(0, 3, tr("Part of variance") + "\n(" + tr("Threshold") + QString(" : %1 %").arg(ResourceMap::GetAsScalar("FunctionalChaosSobolIndices-VariancePartThreshold") * 100) + ")");
+
+      // first coefficient
+      tableModel->setNotEditableItem(1, 0, indices[0]);
+      tableModel->setNotEditableItem(1, 1, enumerateFunction(indices[0]).__str__().c_str());
+      tableModel->setNotEditableItem(1, 2, coefficients(indices[0], outputIndex));
+      tableModel->setNotEditableItem(1, 3, "-");
+
+      // part of variance
+      Scalar varPartSum = 0;
+      for (UnsignedInteger i = 0; i < basisSize; ++ i)
+      {
+        // stop when the variance contribution becomes less than epsilon
+        if (varianceOrder[i].second < ResourceMap::GetAsScalar("FunctionalChaosSobolIndices-VariancePartThreshold"))
+          break;
+
+        Indices multiIndices(enumerateFunction(indices[varianceOrder[i].first]));
+
+        tableModel->setNotEditableItem(i+2, 0, varianceOrder[i].first);
+        tableModel->setNotEditableItem(i+2, 1, multiIndices.__str__().c_str());
+        tableModel->setNotEditableItem(i+2, 2, coefficients(indices[varianceOrder[i].first], outputIndex));
+        tableModel->setNotEditableItem(i+2, 3, QString("%1 %").arg(varianceOrder[i].second * 100, 0, 'f', 2));
+        varPartSum += varianceOrder[i].second * 100;
+      }
+      tableModel->setNotEditableHeaderItem(tableModel->rowCount(), 0, tr("Sum"));
+      tableModel->setNotEditableItem(tableModel->rowCount()-1, 3, QString("%1 %").arg(varPartSum, 0, 'f', 2));
+
+      tableView->resizeToContents();
+      varStackedWidget->addWidget(tableView);
+    }
+    varGroupBoxLayout->addWidget(varStackedWidget);
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), varStackedWidget, SLOT(setCurrentIndex(int)));
+    summaryWidgetLayout->addWidget(varGroupBox);
+
+    summaryWidgetLayout->setRowStretch(3, 1);
+
+    scrollArea->setWidget(summaryWidget);
+    tabWidget->addTab(scrollArea, tr("Results"));
   }
   else
   {
