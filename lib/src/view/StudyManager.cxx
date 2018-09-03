@@ -394,7 +394,9 @@ void StudyManager::importPythonScript()
     }
     else
     {
-      const QString command("exec(open(u\"" + fileName + "\", encoding=\"utf-8\").read())");
+      QByteArray hex(fileName.toUtf8().toHex('x'));
+      QString escapedHex("\\x" + QString(hex).split("x").join("\\x"));
+      const QString command("exec(open(b\"" + escapedHex + "\", encoding=\"utf-8\").read())");
       emit commandExecutionRequested(command);
     }
   }

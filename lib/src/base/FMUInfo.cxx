@@ -60,16 +60,16 @@ void FMUInfo::initialize()
   InterpreterUnlocker uil;
 
   ScopedPyObjectPointer otfmi_fmiModule(PyImport_ImportModule("otfmi.fmi")); // new reference
-  handleException();// if cannot import otfm
-
+  handleException();// if cannot import otfmi
   assert(otfmi_fmiModule.get());
+
   PyObject * otfmi_fmiDict = PyModule_GetDict(otfmi_fmiModule.get());
   assert(otfmi_fmiDict);
   PyObject * load_fmuMethod = PyDict_GetItemString(otfmi_fmiDict, "load_fmu");
   assert(load_fmuMethod);
+
   ScopedPyObjectPointer fileName_py(convert< String, _PyString_>(fileName_));
   ScopedPyObjectPointer model(PyObject_CallFunctionObjArgs(load_fmuMethod, fileName_py.get(), NULL)); // new reference
-
   // loading can fail if no binary for the target platform
   handleException();
 
@@ -80,29 +80,41 @@ void FMUInfo::initialize()
   PyObject * get_causalityMethod = PyDict_GetItemString(otfmi_fmiDict, "get_causality");
   ScopedPyObjectPointer causalityList(PyObject_CallFunctionObjArgs(get_causalityMethod, model.get(), NULL)); // new reference
   causality_ = convert<_PySequence_, Indices>(causalityList.get());
+  if (variableNames_.getSize() != causality_.getSize())
+  {
+    throw InternalException(HERE) << "variableNames_.getSize() != causality_.getSize()";
+  }
 
   PyObject * get_variabilityMethod = PyDict_GetItemString(otfmi_fmiDict, "get_variability");
   ScopedPyObjectPointer variabilityList(PyObject_CallFunctionObjArgs(get_variabilityMethod, model.get(), NULL)); // new reference
   variability_ = convert<_PySequence_, Indices>(variabilityList.get());
+  if (variableNames_.getSize() != variability_.getSize())
+  {
+    throw InternalException(HERE) << "variableNames_.getSize() != variability_.getSize()";
+  }
 
   PyObject * get_start_valueMethod = PyDict_GetItemString(otfmi_fmiDict, "get_start_value");
   ScopedPyObjectPointer startDict(PyObject_CallFunctionObjArgs(get_start_valueMethod, model.get(), NULL)); // new reference
-  ScopedPyObjectPointer startKeys(PyObject_CallMethod(startDict.get(), const_cast<char*>("keys"),  NULL)); // new reference
-  ScopedPyObjectPointer startValues(PyObject_CallMethod(startDict.get(), const_cast<char*>("values"),  NULL)); // new reference
+  ScopedPyObjectPointer startKeys(PyDict_Keys(startDict.get())); // new reference
+  ScopedPyObjectPointer startValues(PyDict_Values(startDict.get())); // new reference
   startKeys_ = convert<_PySequence_, Description>(startKeys.get());
   startValues_ = convert<_PySequence_, Point>(startValues.get());
+  if (startKeys_.getSize() != startValues_.getSize())
+  {
+    throw InternalException(HERE) << "startKeys_.getSize() != startValues_.getSize()";
+  }
 
   ScopedPyObjectPointer authorStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_author"), NULL)); // new reference
-  author_ = convert<_PyString_, String>(authorStr.get());
+  author_ = convert<_PyBytes_, String>(authorStr.get());
 
   ScopedPyObjectPointer copyrightStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_copyright"), NULL)); // new reference
-  copyright_ = convert<_PyString_, String>(copyrightStr.get());
+  copyright_ = convert<_PyBytes_, String>(copyrightStr.get());
 
   ScopedPyObjectPointer toolStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_generation_tool"), NULL)); // new reference
-  tool_ = convert<_PyString_, String>(toolStr.get());
+  tool_ = convert<_PyBytes_, String>(toolStr.get());
 
   ScopedPyObjectPointer dateTimeStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_generation_date_and_time"), NULL)); // new reference
-  dateTime_ = convert<_PyString_, String>(dateTimeStr.get());
+  dateTime_ = convert<_PyBytes_, String>(dateTimeStr.get());
 
   ScopedPyObjectPointer guidStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_guid"), NULL)); // new reference
   guid_ = convert<_PyString_, String>(guidStr.get());
@@ -111,26 +123,13 @@ void FMUInfo::initialize()
   identifier_ = convert<_PyString_, String>(identifierStr.get());
 
   ScopedPyObjectPointer platformStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_model_types_platform"), NULL)); // new reference
-  platform_ = convert<_PyString_, String>(platformStr.get());
+  platform_ = convert<_PyBytes_, String>(platformStr.get());
 
   ScopedPyObjectPointer versionStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_model_version"), NULL)); // new reference
-  version_ = convert<_PyString_, String>(versionStr.get());
+  version_ = convert<_PyBytes_, String>(versionStr.get());
 
   ScopedPyObjectPointer fmiVersionStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_version"), NULL)); // new reference
-  fmiVersion_ = convert<_PyString_, String>(fmiVersionStr.get());
-
-  if (variableNames_.getSize() != causality_.getSize())
-  {
-    throw InternalException(HERE) << "variableNames_.getSize() != causality_.getSize()";
-  }
-  if (variableNames_.getSize() != variability_.getSize())
-  {
-    throw InternalException(HERE) << "variableNames_.getSize() != variability_.getSize()";
-  }
-  if (startKeys_.getSize() != startValues_.getSize())
-  {
-    throw InternalException(HERE) << "startKeys_.getSize() != startValues_.getSize()";
-  }
+  fmiVersion_ = convert<_PyBytes_, String>(fmiVersionStr.get());
 }
 
 
@@ -139,7 +138,16 @@ String FMUInfo::__repr__() const
   return OSS() << "class=" << getClassName()
          << " variables=" << variableNames_
          << " causality=" << causality_
-         << " variability_=" << variability_;
+         << " variability_=" << variability_
+         << " author_=" << author_
+         << " copyright_=" << copyright_
+         << " tool_=" << tool_
+         << " dateTime_=" << dateTime_
+         << " guid_=" << guid_
+         << " identifier_=" << identifier_
+         << " platform_=" << platform_
+         << " version_=" << version_
+         << " fmiVersion_=" << fmiVersion_;
 }
 
 

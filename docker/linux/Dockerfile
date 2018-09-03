@@ -177,6 +177,13 @@ RUN git clone https://github.com/openturns/otfmi.git && cd otfmi && python3 setu
 RUN localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG "C.UTF-8"
 
+# openmodelica
+RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel libtool gettext zip
+RUN git clone --recursive https://github.com/OpenModelica/OMCompiler.git && cd OMCompiler && git checkout v1.12.0 \
+ && git submodule sync && git submodule update --init --recursive \
+ && git cherry-pick 63848be39fe6ff0bb7096c8fad3f68b8078286db \
+ && autoconf && ./configure --prefix=/usr/local && make && make install
+
 # devel user
 RUN yum -y install sudo
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel

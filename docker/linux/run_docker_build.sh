@@ -11,13 +11,15 @@ cd /tmp
 mkdir -p build && cd build
 cmake -DUSE_COTIRE=ON \
 -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
--DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" \
+-DCMAKE_CXX_FLAGS="-Wall -Werror -D_GLIBCXX_ASSERTIONS" \
 -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
 ../otgui
 make
 sudo make install
 make tests
-xvfb-run ctest --output-on-failure --timeout 100 -j8 -E FMI
+xvfb-run ctest --output-on-failure --timeout 100 -j8
+
+cd /usr/local/share/otgui/doc/ && zip -r /tmp/build/otgui-doc.zip ./html/* && cd -
 
 mkdir -p otgui.AppDir/usr/{bin,lib,share}
 
@@ -88,6 +90,7 @@ do
   cp -v /usr/lib64/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
 done
 cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 otgui.AppDir/usr/lib
+cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so otgui.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/otgui.AppDir/usr/lib ldd otgui.AppDir/usr/bin/otgui
 
@@ -96,6 +99,6 @@ appimagetool -v otgui.AppDir
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"
 then
-  sudo cp otgui*.AppImage /tmp/otgui
-  sudo chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage
+  sudo cp otgui*.AppImage otgui-doc.zip /tmp/otgui
+  sudo chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage /tmp/otgui/otgui-doc.zip
 fi
