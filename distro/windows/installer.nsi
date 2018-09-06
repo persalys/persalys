@@ -337,6 +337,8 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}base\*.*"
   SetOutPath "$MODULE_INSTALL_PATH\platforms"
   File /r "${MODULE_PREFIX}\lib\platforms\"
+  SetOutPath "$MODULE_INSTALL_PATH\imageformats"
+  File /r "${MODULE_PREFIX}\lib\imageformats\"
 
   SetOutPath "$MODULE_INSTALL_PATH"
   File "README.txt"
