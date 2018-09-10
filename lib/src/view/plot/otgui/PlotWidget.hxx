@@ -53,6 +53,8 @@ public:
 
   void plotPDFCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
   void plotCDFCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
+  void plotQuantileCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
+  void plotSurvivalCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
   void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType = 0, int barNumber = 0, QString title = "");
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");

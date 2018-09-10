@@ -114,6 +114,9 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
         return QString::fromUtf8(input.getName().c_str());
       case 1:
       {
+        if (!input.isStochastic())
+          return QVariant();
+
         String distributionName = input.getDistribution().getImplementation()->getClassName();
         if (distributionName == "TruncatedNormal")
         {
@@ -121,7 +124,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
         }
         else if (distributionName == "TruncatedDistribution")
         {
-          TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get());
+          const TruncatedDistribution dist(*dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get()));
           distributionName = dist.getDistribution().getImplementation()->getClassName();
         }
         return TranslationManager::GetTranslatedDistributionName(distributionName);
@@ -133,8 +136,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
   else if (role == Qt::UserRole + 1)
   {
     const Input input(physicalModel_.getInputs()[index.row()]);
-    const String distributionName = input.getDistribution().getImplementation()->getClassName();
-    return distributionName == "Dirac" ? QStringList() : TranslationManager::GetAvailableDistributions() << tr("Inference result");
+    return input.isStochastic() ? TranslationManager::GetAvailableDistributions() << tr("Inference result") : QStringList();
   }
   else if (role == Qt::BackgroundRole)
   {
@@ -152,18 +154,10 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
   if (role == Qt::CheckStateRole && index.column() == 0)
   {
     const Input input(physicalModel_.getInputs()[index.row()]);
-    Distribution distribution;
-
-    if (value.toInt() == Qt::Checked)
-      distribution = DistributionDictionary::BuildDistribution("Normal", input.getValue());
-    else if (value.toInt() == Qt::Unchecked)
-      distribution = Dirac(input.getValue());
-    else
-      return false;
 
     // update the input
     physicalModel_.blockNotification("ProbabilisticModel");
-    physicalModel_.setDistribution(input.getName(), distribution);
+    physicalModel_.setInputStochastic(input.getName(), value.toInt() == Qt::Checked);
     physicalModel_.setDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
@@ -186,23 +180,15 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
       }
       else if (distributionName == "TruncatedDistribution")
       {
-        TruncatedDistribution dist = *dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get());
+        const TruncatedDistribution dist(*dynamic_cast<TruncatedDistribution*>(input.getDistribution().getImplementation().get()));
         distributionName = dist.getDistribution().getImplementation()->getClassName();
       }
 
       if (newName != TranslationManager::GetTranslatedDistributionName(distributionName))
       {
-        Distribution distribution;
-        if (newName.isEmpty())
-        {
-          distribution = Dirac(input.getValue());
-        }
-        else
-        {
-          // search the distribution corresponding to 'value'
-          const String newDist = TranslationManager::GetDistributionName(newName);
-          distribution = DistributionDictionary::BuildDistribution(newDist, input.getValue());
-        }
+        // search the distribution corresponding to 'value'
+        const String newDist = TranslationManager::GetDistributionName(newName);
+        Distribution distribution(DistributionDictionary::BuildDistribution(newDist, input.getValue()));
         // update the input
         physicalModel_.blockNotification("ProbabilisticModel");
         physicalModel_.setDistribution(input.getName(), distribution);

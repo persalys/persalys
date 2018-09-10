@@ -348,6 +348,47 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
 }
 
 
+void PlotWidget::plotQuantileCurve(const Distribution & distribution, const QPen pen)
+{
+  setTitle(tr("Quantile"));
+  setAxisTitle(QwtPlot::yLeft, tr("Quantile"));
+  setAxisTitle(QwtPlot::xBottom, tr("X"));
+
+  updateScaleParameters(distribution);
+  const Sample dataQuantile = distribution.drawQuantile().getDrawable(0).getData();
+  plotCurve(dataQuantile, pen);
+  // Add margin at the top to avoid to cut the curve
+  double yMax = dataQuantile.getMax()[1];
+  if (axisInterval(QwtPlot::yLeft).maxValue() < (yMax * (1 + 0.02)))
+    yMax = yMax * (1 + 0.02);
+  setAxisScale(QwtPlot::yLeft, dataQuantile.getMin()[1], yMax * (1 + 0.02));
+  setAxisScale(QwtPlot::xBottom, -0.01, 1.01);
+  replot();
+}
+
+
+void PlotWidget::plotSurvivalCurve(const Distribution & distribution, const QPen pen)
+{
+  setTitle(tr("Survival function"));
+  setAxisTitle(QwtPlot::yLeft, tr("Survival function"));
+  setAxisTitle(QwtPlot::xBottom, tr("X"));
+
+  updateScaleParameters(distribution);
+  const Scalar xMin = distribution.computeQuantile(ResourceMap::GetAsScalar("Distribution-QMin"))[0];
+  const Scalar xMax = distribution.computeQuantile(ResourceMap::GetAsScalar("Distribution-QMax"))[0];
+  const UnsignedInteger pointNumber = ResourceMap::GetAsUnsignedInteger("Distribution-DefaultPointNumber");
+  const Scalar delta = 2.0 * (xMax - xMin) * (1.0 - 0.5 * (ResourceMap::GetAsScalar("Distribution-QMax" ) - ResourceMap::GetAsScalar("Distribution-QMin")));
+  const Sample data = distribution.computeComplementaryCDF(xMin - delta, xMax + delta, pointNumber);
+  plotCurve(data, pen);
+  // Add margin at the top to avoid to cut the curve
+  double yMax = data.getMax()[1];
+  if (axisInterval(QwtPlot::yLeft).maxValue() < (yMax * (1 + 0.02)))
+    yMax = yMax * (1 + 0.02);
+  setAxisScale(QwtPlot::yLeft, data.getMin()[1], yMax * (1 + 0.02));
+  replot();
+}
+
+
 // graphType = 0 -> PDF
 // graphType = 1 -> CDF
 // graphType = 2 -> other

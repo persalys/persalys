@@ -77,6 +77,8 @@ private:
   ValueLineEdit * valueForDeterministicVariable_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
+  PlotWidget * quantilePlot_;
+  PlotWidget * survivalPlot_;
   QGroupBox * paramEditor_;
   QVBoxLayout * parameterLayout_;
   QLabel * parameterValuesLabel_[5];

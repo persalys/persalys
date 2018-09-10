@@ -20,6 +20,8 @@
  */
 #include "otgui/Input.hxx"
 
+#include "otgui/DistributionDictionary.hxx"
+
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/Dirac.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -36,6 +38,7 @@ static Factory<Input> Factory_Input;
 /* Default constructor */
 Input::Input()
   : Variable()
+  , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
@@ -46,6 +49,7 @@ Input::Input()
 /* Constructor with parameters */
 Input::Input(const String& name)
   : Variable(name)
+  , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
@@ -56,6 +60,7 @@ Input::Input(const String& name)
 /* Constructor with parameters */
 Input::Input(const String& name, const double& value, const Distribution& distribution, const String& description)
   : Variable(name, value, description)
+  , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
@@ -67,6 +72,7 @@ Input::Input(const String& name, const double& value, const Distribution& distri
 /* Constructor with parameters */
 Input::Input(const String& name, const Distribution& distribution, const String& description)
   : Variable(name, 0., description)
+  , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
@@ -78,6 +84,7 @@ Input::Input(const String& name, const Distribution& distribution, const String&
 /* Constructor with parameters */
 Input::Input(const String& name, const double& value, const String& description)
   : Variable(name, value, description)
+  , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
@@ -103,6 +110,12 @@ void Input::setDistribution(const Distribution & distribution)
   if (distribution.getDimension() > 1)
     throw InvalidDimensionException(HERE) << "The input distribution has to be of dimension 1. Here the dimension is " << distribution.getDimension();
 
+  if (distribution.getImplementation()->getClassName() == "Dirac")
+  {
+    isStochastic_ = false;
+    return;
+  }
+  isStochastic_ = true;
   distribution_ = distribution;
 }
 
@@ -133,9 +146,15 @@ void Input::setFiniteDifferenceStep(const double& step)
 
 bool Input::isStochastic() const
 {
-  if (distribution_.getImplementation()->getClassName() != "Dirac")
-    return true;
-  return false;
+  return isStochastic_;
+}
+
+
+void Input::setStochastic(const bool stoch)
+{
+  isStochastic_ = stoch;
+  if (isStochastic_ && distribution_.getImplementation()->getClassName() == "Dirac")
+    distribution_ = DistributionDictionary::BuildDistribution("Normal", getValue());
 }
 
 
@@ -217,9 +236,10 @@ String Input::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " value=" << getValue()
-      << " description=" << getDescription()
-      << " distribution=" << getDistribution()
-      << " finiteDifferenceStep=" << getFiniteDifferenceStep();
+      << " description=" << getDescription();
+  if (isStochastic())
+    oss << " distribution=" << getDistribution();
+  oss << " finiteDifferenceStep=" << getFiniteDifferenceStep();
   return oss;
 }
 
@@ -228,6 +248,7 @@ String Input::__repr__() const
 void Input::save(Advocate & adv) const
 {
   Variable::save(adv);
+  adv.saveAttribute("isStochastic_", isStochastic_);
   adv.saveAttribute("distribution_", distribution_);
   adv.saveAttribute("distributionParametersType_", distributionParametersType_);
   adv.saveAttribute("finiteDifferenceStep_", finiteDifferenceStep_);
@@ -238,6 +259,7 @@ void Input::save(Advocate & adv) const
 void Input::load(Advocate & adv)
 {
   Variable::load(adv);
+  adv.loadAttribute("isStochastic_", isStochastic_);
   adv.loadAttribute("distribution_", distribution_);
   adv.loadAttribute("distributionParametersType_", distributionParametersType_);
   adv.loadAttribute("finiteDifferenceStep_", finiteDifferenceStep_);

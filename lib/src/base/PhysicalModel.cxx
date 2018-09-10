@@ -140,6 +140,12 @@ void PhysicalModel::setInputValue(const String & inputName, const double & value
 }
 
 
+void PhysicalModel::setInputStochastic(const String & inputName, const bool & stoch)
+{
+  getImplementation()->setInputStochastic(inputName, stoch);
+}
+
+
 void PhysicalModel::setDistribution(const String & inputName, const Distribution & distribution)
 {
   getImplementation()->setDistribution(inputName, distribution);

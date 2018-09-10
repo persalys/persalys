@@ -59,6 +59,7 @@ public:
   void setInputName(const OT::String & inputName, const OT::String & newName);
   void setInputDescription(const OT::String & inputName, const OT::String & description);
   void setInputValue(const OT::String & inputName, const double & value);
+  void setInputStochastic(const OT::String & inputName, const bool & stoch);
   void setDistribution(const OT::String & inputName, const OT::Distribution & distribution);
   void setDistributionParametersType(const OT::String & inputName, const OT::UnsignedInteger & distributionParametersType);
   void setFiniteDifferenceStep(const OT::String& inputName, const double& step);
