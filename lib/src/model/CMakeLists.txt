@@ -70,6 +70,7 @@ endif ()
 qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/InputTableProbabilisticModel.hxx
                                     otgui/OutputTableModel.hxx
+                                    otgui/SampleTableModel.hxx
                                     otgui/ExperimentTableModel.hxx
                                     otgui/CorrelationTableModel.hxx
                                     otgui/DifferentiationTableModel.hxx
