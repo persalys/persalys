@@ -13,7 +13,7 @@ ENV PYMAJMIN 36
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
-  && git checkout 11c7f774521f9179985ae3515bc9f88cd2f5eb15 \
+  && git checkout 1af097def60706ef8d22880c714dde16f99fb441 \
   && CXXFLAGS="-D_hypot=hypot -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake \
   -DUSE_SPHINX=OFF \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \

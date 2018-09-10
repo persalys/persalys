@@ -53,16 +53,18 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
   list ( APPEND PYTHON_MODULES ${MODULENAME} )
 endmacro ( ot_add_python_module )
 
-if (SalomeYACS_FOUND)
-  list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_YACS=1)
-endif ()
+if (CMAKE_VERSION VERSION_LESS 3.12)
+  if (SalomeYACS_FOUND)
+    list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_YACS=1)
+  endif ()
 
-if (OTFMI_FOUND)
-  list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_OTFMI=1)
-endif ()
+  if (OTFMI_FOUND)
+    list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_OTFMI=1)
+  endif ()
 
-if (OTMORRIS_FOUND)
-  list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_OTMORRIS=1)
+  if (OTMORRIS_FOUND)
+    list (APPEND SWIG_MODULE_otguibase_EXTRA_FLAGS -DOTGUI_HAVE_OTMORRIS=1)
+  endif ()
 endif ()
 
 ot_add_python_module (otguibase otguibase_module.i
@@ -134,6 +136,20 @@ ot_add_python_module (otguibase otguibase_module.i
                       OTStudyImplementation.i
                       OTStudy.i OTStudy_doc.i.in
                     )
+
+if (NOT CMAKE_VERSION VERSION_LESS 3.12)
+  if (SalomeYACS_FOUND)
+    set_property (TARGET ${SWIG_MODULE_otguibase_REAL_NAME} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_YACS=1)
+  endif ()
+
+  if (OTFMI_FOUND)
+    set_property (TARGET ${SWIG_MODULE_otguibase_REAL_NAME} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTFMI=1)
+  endif ()
+
+  if (OTMORRIS_FOUND)
+    set_property (TARGET ${SWIG_MODULE_otguibase_REAL_NAME} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTMORRIS=1)
+  endif ()
+endif ()
 
 
 foreach ( module ${PYTHON_MODULES} )

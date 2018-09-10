@@ -24,8 +24,8 @@ RUN wget --no-check-certificate http://prdownloads.sourceforge.net/swig/swig-3.0
  && cd swig-3.0.12 && ./configure --without-alllang && make && make install && swig -version
 
 # cmake
-RUN wget --no-check-certificate https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz && tar xzf cmake-3.9.6.tar.gz \
- && cd cmake-3.9.6 && ./bootstrap --parallel=8 && make install
+RUN wget --no-check-certificate https://cmake.org/files/v3.12/cmake-3.12.1.tar.gz && tar xzf cmake-3.12.1.tar.gz \
+ && cd cmake-3.12.1 && ./bootstrap --parallel=8 && make install
 
 # nlopt
 RUN git clone https://github.com/stevengj/nlopt.git && cd nlopt \
@@ -132,7 +132,7 @@ RUN wget --no-check-certificate http://downloads.sourceforge.net/qwt/qwt-6.1.3.t
 # paraview
 RUN wget --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.2.tar.gz \
   && tar xzf ParaView-v5.5.2.tar.gz && cd ParaView-v5.5.2 \
-  && wget https://gitlab.kitware.com/paraview/paraview/merge_requests/2474.patch && patch -p1 -i 2474.patch \
+  && curl -L https://gitlab.kitware.com/paraview/paraview/merge_requests/2474.patch | patch -p1 \
   && mkdir build && cd build && cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
@@ -141,6 +141,7 @@ RUN wget --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.2.t
   -DVTK_PYTHON_FULL_THREADSAFE=ON \
   -DPARAVIEW_ENABLE_PYTHON=ON \
   -DBUILD_DOCUMENTATION=OFF \
+  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF \
   -DVTK_USE_OGGTHEORA_ENCODER=ON \
   -DPARAVIEW_ENABLE_CATALYST:BOOL=ON \
   -DPARAVIEW_BUILD_QT_GUI:BOOL=ON \
@@ -163,7 +164,7 @@ RUN wget --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.2.t
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 11c7f774521f9179985ae3515bc9f88cd2f5eb15 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 1af097def60706ef8d22880c714dde16f99fb441 \
  && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 . && make install
 
 # otmorris
