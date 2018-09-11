@@ -22,8 +22,6 @@
 
 #include "otgui/StudyTreeViewModel.hxx"
 
-#include <openturns/SpecFunc.hxx>
-
 #include <QColor>
 #include <QHeaderView>
 
@@ -33,8 +31,9 @@ namespace OTGUI
 {
 
 DataModelTableModel::DataModelTableModel(DataModel* dataModel, QObject* parent)
-  : SampleTableModel(Sample(), parent)
+  : QAbstractTableModel(parent)
   , dataModel_(dataModel)
+  , names_()
   , inputColumns_()
   , outputColumns_()
 {
@@ -45,13 +44,13 @@ void DataModelTableModel::updateData(const bool useColumns)
 {
   beginResetModel();
 
-  // update data_
+  // update names_
   if (useColumns)
-    data_ = dataModel_->getSampleFromFile();
+    names_ = dataModel_->getSampleFromFile().getDescription();
   else
-    data_ = dataModel_->getSample();
+    names_ = dataModel_->getSample().getDescription();
 
-  // data_ is the sample of dataModel which can be smaller than the sample from the file
+  // the sample of dataModel can be smaller than the sample from the file
   // so we can not use getIn/OutputColumns()
   if (!useColumns)
   {
@@ -66,13 +65,13 @@ void DataModelTableModel::updateData(const bool useColumns)
   }
   else
   {
-    // data_ is the sample from the file
+    // the sample comes from the file
     // so we can use getIn/OutputColumns()
     inputColumns_ = dataModel_->getInputColumns();
     outputColumns_ = dataModel_->getOutputColumns();
 
-    // update data_ description
-    Description dataDescription(data_.getDescription());
+    // update sample description
+    Description dataDescription(names_);
     if (inputColumns_.getSize())
     {
       if (dataModel_->getInputNames().getSize() == inputColumns_.getSize())
@@ -89,7 +88,13 @@ void DataModelTableModel::updateData(const bool useColumns)
           dataDescription[outputColumns_[i]] = dataModel_->getOutputNames()[i];
       }
     }
-    data_.setDescription(dataDescription);
+    names_ = dataDescription;
+
+    // emit signal to update the sample table
+    Sample sample(dataModel_->getSampleFromFile().getSize() ? dataModel_->getSampleFromFile() : dataModel_->getSample());
+    sample.setDescription(names_);
+
+    emit sampleChanged(sample);
   }
 
   if (!dataModel_->isValid())
@@ -103,35 +108,60 @@ void DataModelTableModel::updateData(const bool useColumns)
 
 int DataModelTableModel::rowCount(const QModelIndex& parent) const
 {
-  if (data_.getSize())
-    return data_.getSize() + 2;
-  return 0;
+  return 2;
+}
+
+
+int DataModelTableModel::columnCount(const QModelIndex& parent) const
+{
+  return names_.getSize();
 }
 
 
 Qt::ItemFlags DataModelTableModel::flags(const QModelIndex & index) const
 {
-  if (index.row() == 0) // variables names
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+  Qt::ItemFlags result = QAbstractTableModel::flags(index);
 
-  if (index.row() == 1)
-    return QAbstractTableModel::flags(index) & ~Qt::ItemIsSelectable;
+  // variables names
+  if (index.row() == 0)
+  {
+    if (dataModel_->getSampleFromFile().getSize())
+      result |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+    else
+      result |= Qt::ItemIsEditable;
+  }
+  // variables types
+  else if (index.row() == 1 && !outputColumns_.contains(index.column()) && !inputColumns_.contains(index.column()))
+  {
+    result &= ~Qt::ItemIsSelectable;
+    result &= ~Qt::ItemIsEnabled;
+    result &= ~Qt::ItemIsEditable;
+  }
 
-  return QAbstractTableModel::flags(index);
+  return result;
 }
 
 
 QVariant DataModelTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (orientation == Qt::Vertical && role == Qt::DisplayRole)
+  if (orientation == Qt::Vertical)
   {
-    if (section == 0)
-      return tr("Name");
-    else if (section == 1)
-      return tr("Type");
-    else
-      return section - 1;
+    // text
+    if (role == Qt::DisplayRole)
+    {
+      if (section == 0)
+        return tr("Variable");
+      else
+        return tr("Type");
+    }
+    // alignment
+    else if (role == Qt::TextAlignmentRole)
+      return Qt::AlignCenter;
+    // toolTip
+    else if (role == Qt::ToolTipRole && section == 0 && dataModel_->getSampleFromFile().getSize())
+      return (outputColumns_.isEmpty() && inputColumns_.isEmpty()) ? tr("Enable all") : tr("Disable all");
   }
+
   return QAbstractTableModel::headerData(section, orientation, role);
 }
 
@@ -147,9 +177,13 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
     // text
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-      return QString::fromUtf8(data_.getDescription()[index.column()].c_str());
+      return QString::fromUtf8(names_[index.column()].c_str());
     }
-
+    // check state
+    else if (role == Qt::CheckStateRole && dataModel_->getSampleFromFile().getSize())
+    {
+      return (inputColumns_.contains(index.column()) || outputColumns_.contains(index.column())) ? Qt::Checked : Qt::Unchecked;
+    }
     // alignment
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
@@ -164,13 +198,11 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
         return tr("Input");
       else if (outputColumns_.contains(index.column()))
         return tr("Output");
-      else
-        return tr("Disable");
     }
 
     // combobox content
     else if (role == Qt::UserRole + 1)
-      return QStringList() << tr("Input") << tr("Output") << tr("Disable");
+      return QStringList() << tr("Input") << tr("Output");
 
     // alignment
     else if (role == Qt::TextAlignmentRole)
@@ -186,28 +218,7 @@ QVariant DataModelTableModel::data(const QModelIndex & index, int role) const
 
     // background
     else if (role == Qt::BackgroundRole)
-    {
       return QHeaderView(Qt::Horizontal).palette().color(QPalette::Window);
-    }
-  }
-  // variable value
-  else
-  {
-    // text
-    if (role == Qt::DisplayRole || role == Qt::EditRole)
-      return QString::number(data_(index.row() - 2, index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
-
-    if (role == Qt::UserRole)
-      return data_(index.row() - 2, index.column());
-
-    // alignment
-    else if (role == Qt::TextAlignmentRole)
-      return int(Qt::AlignRight | Qt::AlignVCenter);
-
-    // background
-    else if (role == Qt::BackgroundRole)
-      if (!SpecFunc::IsNormal(data_(index.row() - 2, index.column())))
-        return QColor(Qt::red);
   }
   return QVariant();
 }
@@ -218,34 +229,73 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
   if (!index.isValid())
     return false;
 
-  if (role != Qt::EditRole)
-    return true;
-
-  // change name
   if (index.row() == 0)
   {
-    // if name not valid : reset
-    if (value.toString().isEmpty())
-      return false;
-
-    // if the variable is already named like value : do nothing
-    Description description = data_.getDescription();
-    if (description[index.column()] == value.toString().toUtf8().constData())
-      return true;
-
-    // if another variable is named like value : reset
-    if (description.contains(value.toString().toUtf8().constData()))
+    // update variable name
+    if (role == Qt::EditRole)
     {
-      emit temporaryErrorMessageChanged(tr("The name %2 is already used by another variable").arg(value.toString()));
-      return false;
-    }
-    // update the variable name
-    description[index.column()] = value.toString().toUtf8().constData();
-    data_.setDescription(description);
-  }
+      // if name not valid : reset
+      if (value.toString().isEmpty())
+        return false;
 
+      // if the variable is already named like value : do nothing
+      if (names_[index.column()] == value.toString().toUtf8().constData())
+        return true;
+      // if another variable is named like value : reset
+      if (names_.contains(value.toString().toUtf8().constData()))
+      {
+        emit temporaryErrorMessageChanged(tr("The name %2 is already used by another variable").arg(value.toString()));
+        return false;
+      }
+      names_[index.column()] = value.toString().toUtf8().constData();
+
+      // update dataModel_ variables names
+      Description inNames;
+      for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+        inNames.add(names_[inputColumns_[i]]);
+
+      Description outNames;
+      for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+        outNames.add(names_[outputColumns_[i]]);
+
+      dataModel_->blockNotification("DataModelDefinition");
+      dataModel_->setNames(inNames, outNames);
+      dataModel_->blockNotification();
+
+      emit sampleDescriptionChanged(names_);
+      return true;
+    }
+    // update list of variables
+    else if (role == Qt::CheckStateRole)
+    {
+      if (value.toInt() == Qt::Unchecked)
+      {
+        // if it was an input before : rm index from inputColumns_
+        if (inputColumns_.contains(index.column()))
+        {
+          for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+            if ((int)inputColumns_[i] == index.column())
+              inputColumns_.erase(inputColumns_.begin() + i);
+        }
+        // if it was an output before : rm index from outputColumns_
+        else if (outputColumns_.contains(index.column()))
+        {
+          for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+            if ((int)outputColumns_[i] == index.column())
+              outputColumns_.erase(outputColumns_.begin() + i);
+        }
+      }
+      else
+      {
+        // by default the variable is an input
+        inputColumns_.add(index.column());
+      }
+      // emit signal to update the sample table header
+      emit headerDataChanged(Qt::Vertical, 0, 0);
+    }
+  }
   // change type
-  else if (index.row() == 1)
+  else if (index.row() == 1 && role == Qt::EditRole)
   {
     // Input
     if (value.toString() == tr("Input"))
@@ -279,33 +329,15 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
       // update outputColumns_
       outputColumns_.add(index.column());
     }
-    // Disable
-    else
-    {
-      // if it was an input before : rm index from inputColumns_
-      if (inputColumns_.contains(index.column()))
-      {
-        for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
-          if ((int)inputColumns_[i] == index.column())
-            inputColumns_.erase(inputColumns_.begin() + i);
-      }
-      // if it was an output before : rm index from outputColumns_
-      else if (outputColumns_.contains(index.column()))
-      {
-        for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
-          if ((int)outputColumns_[i] == index.column())
-            outputColumns_.erase(outputColumns_.begin() + i);
-      }
-    }
   }
-
   // update dataModel_
   Description inNames;
-  if (inputColumns_.getSize())
-    inNames = data_.getMarginal(inputColumns_).getDescription();
+  for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
+    inNames.add(names_[inputColumns_[i]]);
+
   Description outNames;
-  if (outputColumns_.getSize())
-    outNames = data_.getMarginal(outputColumns_).getDescription();
+  for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
+    outNames.add(names_[outputColumns_[i]]);
 
   dataModel_->blockNotification("DataModelDefinition");
   dataModel_->setColumns(inputColumns_, outputColumns_, inNames, outNames);
@@ -316,13 +348,11 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
     emit errorMessageChanged(tr("Define at least one variable"));
 
   if (!dataModel_->isValid())
-  {
     emit errorMessageChanged(tr("The sample contains invalid values"));
-  }
 
   dataModel_->blockNotification();
 
-  // do not emit dataChanged : otherwise there is a display error because of QSortFilterProxyModel
+  emit dataChanged(index, this->index(1, index.column()));
 
   return true;
 }
