@@ -28,3 +28,11 @@ try:
     print('OK')
 except:
     print('no')
+
+# check for YACS support
+print('4: YACS (salome)'.ljust(width), end=' ')
+try:
+    fmu = otg.YACSPhysicalMode()
+    print('OK')
+except:
+    print('no')
