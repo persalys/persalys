@@ -43,8 +43,8 @@ RUN wget https://github.com/AppImage/AppImageKit/releases/download/10/appimageto
  && appimagetool -h
 
 # glibc 2.14
-RUN wget http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz && tar zxvf glibc-2.14.tar.gz \
- && cd glibc-2.14 && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make > /dev/null && make install
+RUN wget -q http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz && tar zxf glibc-2.14.tar.gz \
+ && cd glibc-2.14 && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # texlive: see https://github.com/leodido/dockerfiles/blob/master/texlive:latest/Dockerfile
 RUN yum install -y perl fontconfig
@@ -75,8 +75,8 @@ RUN fc-cache -fsv
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg openssl-devel
-RUN wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz && tar xzf Python-3.6.5.tgz && cd Python-3.6.5 \
- && ./configure --enable-shared --enable-unicode=ucs4 LDFLAGS="-Wl,-rpath /usr/local/lib" && make && make install
+RUN wget -q https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz && tar xzf Python-3.6.5.tgz && cd Python-3.6.5 \
+ && ./configure --enable-shared --enable-unicode=ucs4 LDFLAGS="-Wl,-rpath /usr/local/lib" && make && make install > /dev/null 2>&1
 
 # pip
 RUN curl -sSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
@@ -108,8 +108,8 @@ RUN pip install sphinx numpydoc --upgrade
 # boost
 # https://svn.boost.org/trac10/ticket/11120
 RUN ln -s /usr/local/include/python3.6m /usr/local/include/python3.6
-RUN wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 && tar xjf boost_1_64_0.tar.bz2 && cd boost_1_64_0 \
- && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install
+RUN wget -q https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2 && tar xjf boost_1_64_0.tar.bz2 && cd boost_1_64_0 \
+ && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install > /dev/null 2>&1
 
 # X11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
@@ -118,11 +118,11 @@ RUN yum -y install freetype-devel libjpeg-turbo-devel libxcb-devel xcb-util xcb-
 RUN xvfb-run -h
 
 # qt
-RUN wget --no-check-certificate https://download.qt.io/archive/qt/5.11/5.11.1/single/qt-everywhere-src-5.11.1.tar.xz \
+RUN wget -q --no-check-certificate https://download.qt.io/archive/qt/5.11/5.11.1/single/qt-everywhere-src-5.11.1.tar.xz \
  && unxz qt-everywhere-src-5.11.1.tar.xz && tar xf qt-everywhere-src-5.11.1.tar && cd qt-everywhere-src-5.11.1 \
  && ./configure -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
- -nomake tests -nomake examples && make && make install
+ -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # qwt
 RUN wget --no-check-certificate http://downloads.sourceforge.net/qwt/qwt-6.1.3.tar.bz2 && tar xjf qwt-6.1.3.tar.bz2 \
@@ -130,7 +130,7 @@ RUN wget --no-check-certificate http://downloads.sourceforge.net/qwt/qwt-6.1.3.t
  && qmake && make && make install
 
 # paraview
-RUN wget --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.2.tar.gz \
+RUN wget -q --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.2.tar.gz \
   && tar xzf ParaView-v5.5.2.tar.gz && cd ParaView-v5.5.2 \
   && curl -L https://gitlab.kitware.com/paraview/paraview/merge_requests/2474.patch | patch -p1 \
   && mkdir build && cd build && cmake \
@@ -160,6 +160,7 @@ RUN wget --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.2.t
   -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON \
   -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
   -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+  -DCMAKE_RULE_MESSAGES=OFF \
   .. && make install
 
 # openturns
