@@ -47,7 +47,7 @@ endif ()
 set_target_properties ( otguiplotparaview PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otguiplotparaview PROPERTIES SOVERSION ${LIB_SOVERSION} )
 target_link_libraries ( otguiplotparaview otguiutils )
-target_link_libraries (otguiplotparaview pqApplicationComponents vtkRenderingFreeType)
+target_link_libraries (otguiplotparaview pqApplicationComponents vtkPVServerManagerRendering vtkRenderingFreeType)
 target_link_libraries (otguiplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
 
 install ( TARGETS otguiplotparaview

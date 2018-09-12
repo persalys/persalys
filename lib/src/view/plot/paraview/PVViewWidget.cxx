@@ -23,6 +23,8 @@
 #include <vtkAbstractContextItem.h>
 #include <vtkContextScene.h>
 #include <vtkCommand.h>
+#include <vtkSMViewProxy.h>
+#include <vtkPVConfig.h>
 
 #include <QVBoxLayout>
 #include <QMenu>
@@ -146,6 +148,9 @@ void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByCol
   mySourceProducer->updatePipeline();
   // create a new representation
   pqDataRepresentation * newRepr(builder->createDataRepresentation(mySourceProducer->getOutputPort(0), getView(), getRepresentationName()));
+#if PARAVIEW_VERSION_MAJOR == 5 && PARAVIEW_VERSION_MINOR >= 6
+  vtkSMViewProxy::RepresentationVisibilityChanged(newRepr->getViewProxy(), newRepr->getProxy(), true);
+#endif
   newRepr->setVisible(1);
   // update view
   getView()->resetDisplay();
