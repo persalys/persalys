@@ -654,6 +654,10 @@ Designs of experiments
 
           - a list view with a variable appears at the left side of the window
 
+        - Table tab has 3 tabs: Table - Failed points - Cobweb plot
+
+          - check the cobweb plot has 4 columns. The fourth one is named 'Status\n0: failed; 1: ok'.
+
 
 Analyses
 `````````````
