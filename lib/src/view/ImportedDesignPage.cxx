@@ -168,7 +168,7 @@ void ImportedDesignPage::setTable(const QString& fileName)
   sample.setDescription(desc);
 
   // set table model
-  dataPreviewTableView_->setModel(new SampleTableModel(sample, dataPreviewTableView_));
+  dataPreviewTableView_->setModel(new SampleTableModel(sample, false, dataPreviewTableView_));
   connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SLOT(columnNameChanged()));
 
   // set comboboxes items: each of them contains the input Names and an empty item
