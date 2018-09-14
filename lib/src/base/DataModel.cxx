@@ -220,6 +220,50 @@ void DataModel::setColumns(const Indices& inputColumns,
 }
 
 
+void DataModel::setNames(const Description & inputNames, const Description & outputNames)
+{
+  // check names
+  // - check input
+  if (inputNames.getSize())
+  {
+    if (inputColumns_.getSize() != inputNames.getSize())
+      throw InvalidArgumentException(HERE) << "The dimension of the inputs names list has to be equal to the dimension of the inputs columns list.";
+  }
+  // - check output
+  if (outputNames.getSize())
+  {
+    if (outputColumns_.getSize() != outputNames.getSize())
+      throw InvalidArgumentException(HERE) << "The dimension of the outputs names list has to be equal to the dimension of the outputs columns list.";
+  }
+  // - check unicity of the variables names
+  if ((inputNames.getSize() + outputNames.getSize()) > 0)
+  {
+    std::set<String> variableNamesSet;
+    for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
+      variableNamesSet.insert(inputNames[i]);
+    for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
+      variableNamesSet.insert(outputNames[i]);
+
+    if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
+      throw InvalidArgumentException(HERE) << "Two variables can not have the same name.";
+  }
+  // set attributs
+  inputNames_ = inputNames;
+  outputNames_ = outputNames;
+
+  // set samples
+  Sample inS(getInputSample());
+  if (inS.getSize())
+    inS.setDescription(getInputNames());
+  setInputSample(inS);
+
+  Sample outS(getOutputSample());
+  if (outS.getSize())
+    outS.setDescription(getOutputNames());
+  setOutputSample(outS);
+}
+
+
 Description DataModel::getInputNames()
 {
   if (!inputNames_.getSize())

@@ -61,6 +61,7 @@ public:
 
   OT::Description getInputNames();
   OT::Description getOutputNames();
+  void setNames(const OT::Description & inputNames, const OT::Description & outputNames);
 
   OT::Sample getSampleFromFile() const;
 

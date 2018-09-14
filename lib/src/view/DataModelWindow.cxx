@@ -22,6 +22,10 @@
 
 #include "otgui/ComboBoxDelegate.hxx"
 #include "otgui/FileTools.hxx"
+#include "otgui/LineEditWithQValidatorDelegate.hxx"
+#include "otgui/CheckableHeaderView.hxx"
+#include "otgui/SampleTableModel.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -30,6 +34,9 @@
 #include <QGroupBox>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSortFilterProxyModel>
+#include <QScrollBar>
+#include <QApplication>
 
 using namespace OT;
 
@@ -39,12 +46,13 @@ namespace OTGUI
 DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
   , dataModel_(0)
+  , tableView_(0)
+  , tableModel_(0)
+  , dataTableView1_(0)
+  , dataTableView2_(0)
   , filePathLineEdit_(0)
   , defaultLineEditPalette_()
   , sampleSizeLabel_(0)
-  , dataTableView_(0)
-  , dataTableModel_(0)
-  , proxyModel_(0)
 {
   dataModel_ = dynamic_cast<DataModel*>(item->getDesignOfExperiment().getImplementation().get());
   if (!dataModel_)
@@ -93,16 +101,37 @@ void DataModelWindow::buildInterface()
   connect(reloadButton, SIGNAL(clicked()), this, SLOT(refreshTable()));
   hboxLayout->addWidget(reloadButton);
 
-  mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
+  mainGridLayout->addLayout(hboxLayout, 0, 0);
 
   // error message
   errorMessageLabel_ = new QLabel;
   errorMessageLabel_->setWordWrap(true);
-  mainGridLayout->addWidget(errorMessageLabel_, 1, 0, 1, 1);
+  mainGridLayout->addWidget(errorMessageLabel_, 1, 0);
+
+  // variables table
+  QGroupBox * groupBox = new QGroupBox(tr("Variables"));
+  QGridLayout * gridLayout = new QGridLayout(groupBox);
+  gridLayout->setSpacing(6);
+  gridLayout->setContentsMargins(11, 11, 11, 11);
+
+  tableView_ = new ResizableHeaderlessTableView;
+  tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  tableView_->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+  tableView_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  tableView_->setItemDelegateForRow(0, new LineEditWithQValidatorDelegate(false, tableView_));
+  tableView_->setItemDelegateForRow(1, new ComboBoxDelegate(tableView_));
+
+  tableModel_ = new DataModelTableModel(dataModel_, tableView_);
+  tableView_->setModel(tableModel_);
+
+  gridLayout->addWidget(tableView_, 0, 0);
+
+  mainGridLayout->addWidget(groupBox, 2, 0);
 
   // file preview
-  QGroupBox * groupBox = new QGroupBox(tr("Sample"));
-  QGridLayout * gridLayout = new QGridLayout(groupBox);
+  groupBox = new QGroupBox(tr("Sample"));
+  gridLayout = new QGridLayout(groupBox);
   gridLayout->setSpacing(6);
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
@@ -114,39 +143,134 @@ void DataModelWindow::buildInterface()
   sizeLayout->addWidget(sampleSizeLabel_, 0, 1);
   sizeLayout->setColumnStretch(1, 1);
   sizeLayout->setSizeConstraint(QLayout::SetFixedSize);
-  gridLayout->addLayout(sizeLayout, 0, 0, 1, 1);
+  gridLayout->addLayout(sizeLayout, 0, 0);
 
-  // - table view
-  dataTableView_ = new ExportableTableView(groupBox);
-  dataTableView_->setSortingEnabled(true);
-  dataTableView_->setEditTriggers(QTableView::SelectedClicked);
-  dataTableView_->setItemDelegateForRow(1, new ComboBoxDelegate(dataTableView_));
+  // - data table model
+  SampleTableModel * dataTableModel = new SampleTableModel(dataModel_->getSample(), this);
 
-  // - table model
-  dataTableModel_ = new DataModelTableModel(dataModel_, dataTableView_);
-  connect(dataTableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
-  connect(dataTableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+  // - data QSortFilterProxyModel
+  SampleTableProxyModel * proxyModel = new SampleTableProxyModel(this);
+  proxyModel->setSourceModel(dataTableModel);
+  proxyModel->setSortRole(Qt::UserRole);
 
-  // - QSortFilterProxyModel
-  proxyModel_ = new DataModelProxModel(dataTableView_);
-  proxyModel_->setSourceModel(dataTableModel_);
-  proxyModel_->setSortRole(Qt::UserRole);
+  // - data table view
+  QFrame * frame = new QFrame;
+  QHBoxLayout * tableLayout = new QHBoxLayout(frame);
+  tableLayout->setMargin(0);
 
-  // - set model
-  dataTableView_->setModel(proxyModel_);
+  // -- first part: row ID
+  dataTableView1_ = new ExportableTableView;
+  dataTableView1_->setModel(proxyModel);
+  dataTableView1_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  dataTableView1_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  dataTableView1_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  dataTableView1_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  dataTableView1_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  dataTableView1_->setSortingEnabled(true);
+  tableLayout->addWidget(dataTableView1_);
 
-  gridLayout->addWidget(dataTableView_, 1, 0, 1, 1);
+  // -- second part: sample
+  dataTableView2_ = new ExportableTableView;
+  dataTableView2_->setModel(proxyModel);
+  dataTableView2_->setFrameShape(QFrame::NoFrame);
+  dataTableView2_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  dataTableView2_->setSelectionModel(dataTableView1_->selectionModel());
+  dataTableView2_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  dataTableView2_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  dataTableView2_->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+  dataTableView2_->verticalHeader()->hide();
+  dataTableView2_->setSortingEnabled(true);
+  tableLayout->addWidget(dataTableView2_);
 
-  mainGridLayout->addWidget(groupBox, 2, 0, 1, 1);
+  // use QTableView style
+  frame->setFrameShadow(dataTableView1_->frameShadow());
+  frame->setFrameStyle(dataTableView1_->frameStyle());
+  frame->setFrameShape(dataTableView1_->frameShape());
+  frame->setLineWidth(dataTableView1_->frameWidth());
+  dataTableView1_->setFrameShape(QFrame::NoFrame);
 
-  // if the model has a sample: fill the table
+  tableLayout->setSpacing(0);
+  gridLayout->addWidget(frame, 1, 0);
+  mainGridLayout->addWidget(groupBox, 3, 0);
+  mainGridLayout->setRowStretch(3, 10);
+
+  // fix Windows color of selection if no focus (==Inactive status)
+  QPalette p = dataTableView2_->palette();
+  p.setColor(QPalette::Inactive, QPalette::Highlight, p.color(QPalette::Active, QPalette::Highlight));
+  p.setColor(QPalette::Inactive, QPalette::HighlightedText, p.color(QPalette::Active, QPalette::HighlightedText));
+  dataTableView2_->setPalette(p);
+  dataTableView1_->setPalette(p);
+
+  // fill tables if dataModel_ not empty
   if (dataModel_->getSample().getSize())
-  {
-    // table view
     updateTableView(false);
-  }
+  else
+    resizeTable();
+
+  // connections
+  connect(tableModel_, SIGNAL(sampleChanged(OT::Sample)), dataTableModel, SLOT(updateData(OT::Sample)));
+  connect(tableModel_, SIGNAL(sampleDescriptionChanged(OT::Description)), dataTableModel, SLOT(updateHeaderData(OT::Description)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+
+  connect(tableView_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeDataTableColumn(int, int, int)));
+  connect(tableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), dataTableView2_->horizontalScrollBar(), SLOT(setValue(int)));
+
+  connect(dataTableView1_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sortSectionChanged(int, Qt::SortOrder)));
+  connect(dataTableView1_->verticalScrollBar(), SIGNAL(valueChanged(int)), dataTableView2_->verticalScrollBar(), SLOT(setValue(int)));
+
+  connect(dataTableView2_->horizontalScrollBar(), SIGNAL(valueChanged(int)), tableView_->horizontalScrollBar(), SLOT(setValue(int)));
+  connect(dataTableView2_->verticalScrollBar(), SIGNAL(valueChanged(int)), dataTableView1_->verticalScrollBar(), SLOT(setValue(int)));
+  connect(dataTableView2_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeVariablesTableColumn(int, int, int)));
+  connect(dataTableView2_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sortSectionChanged(int, Qt::SortOrder)));
 
   setWidget(mainWidget);
+}
+
+
+void DataModelWindow::resizeEvent(QResizeEvent* event)
+{
+  OTguiSubWindow::resizeEvent(event);
+  if (isVisible())
+    resizeTable();
+}
+
+
+void DataModelWindow::resizeTable()
+{
+  int h = tableView_->verticalHeader()->length() + tableView_->horizontalHeader()->height();
+  if (tableView_->horizontalScrollBar()->maximum())
+    h += tableView_->horizontalScrollBar()->sizeHint().height();
+  int x1, y1, x2, y2;
+  tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
+  tableView_->setFixedHeight(h + y1 + y2);
+}
+
+
+void DataModelWindow::sortSectionChanged(int section, Qt::SortOrder order)
+{
+  if (section)
+  {
+    SignalBlocker blocker(dataTableView1_->horizontalHeader());
+    dataTableView1_->horizontalHeader()->setSortIndicator(section, order);
+  }
+  else
+  {
+    SignalBlocker blocker(dataTableView2_->horizontalHeader());
+    dataTableView2_->horizontalHeader()->setSortIndicator(section, order);
+  }
+}
+
+
+void DataModelWindow::resizeDataTableColumn(int column, int /*oldWidth*/, int newWidth)
+{
+  dataTableView2_->horizontalHeader()->resizeSection(column + 1, newWidth);
+}
+
+
+void DataModelWindow::resizeVariablesTableColumn(int column, int /*oldWidth*/, int newWidth)
+{
+  tableView_->horizontalHeader()->resizeSection(column - 1, newWidth);
 }
 
 
@@ -209,33 +333,66 @@ void DataModelWindow::refreshTable()
 
 void DataModelWindow::updateTableView(const bool useSampleFromFile)
 {
-  // clear table
-  dataTableView_->clearSpans();
-  dataTableView_->clearSelection();
+  // update variables table
+  tableModel_->updateData(useSampleFromFile);
 
-  // block signal of the selection model to avoid a crash in DataModelTableModel::endResetModel()
-  const bool block = dataTableView_->selectionModel()->blockSignals(true);
-  dataTableModel_->updateData(useSampleFromFile);
-  dataTableView_->selectionModel()->blockSignals(block);
+  dataTableView1_->sortByColumn(0, Qt::AscendingOrder);
 
-  dataTableView_->sortByColumn(0, Qt::AscendingOrder);
-
-  // use comboboxes to define the variable type
   if (useSampleFromFile)
   {
-    for (int i = 0; i < proxyModel_->columnCount(); ++i)
-      dataTableView_->openPersistentEditor(proxyModel_->index(1, i));
-  }
-  else
-  {
-    // table span
-    const UnsignedInteger nbInputs = dataModel_->getInputSample().getSize() ? dataModel_->getInputSample().getDimension() : 0;
-    if (nbInputs > 1)
-      dataTableView_->setSpan(1, 0, 1, nbInputs);
+    // use comboboxes to define the variable type
+    for (int i = 0; i < tableModel_->columnCount(); ++i)
+      tableView_->openPersistentEditor(tableModel_->index(1, i));
 
-    if (dataModel_->getOutputSample().getSize() && dataModel_->getOutputSample().getDimension() > 1)
-      dataTableView_->setSpan(1, nbInputs, 1, dataModel_->getSample().getDimension());
+    // if first time here
+    if (!dynamic_cast<CheckableHeaderView*>(tableView_->verticalHeader()))
+    {
+      // make tableView_ checkable if not done yet
+      // table header view
+      CheckableHeaderView * tableHeaderView = new CheckableHeaderView(Qt::Vertical);
+      tableHeaderView->setSectionResizeMode(QHeaderView::Fixed);
+      tableView_->setVerticalHeader(tableHeaderView);
+      tableView_->verticalHeader()->show();
+
+      // use a LineEditWithQValidatorDelegate with an offset to see the checkbox
+      tableView_->setItemDelegateForRow(0, new LineEditWithQValidatorDelegate(true, tableView_));
+    }
   }
+
+  // hide data table columns if not done yet
+  if (!dataTableView2_->isColumnHidden(0))
+  {
+    dataTableView2_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed); // fix bug on Windows (possible to resize the hidden column!)
+    dataTableView2_->hideColumn(0);
+  }
+  for (int i = 1; i < dataTableView1_->model()->columnCount(); ++i)
+    if (!dataTableView1_->isColumnHidden(i))
+      dataTableView1_->hideColumn(i);
+
+  // resize correctly tables to have their columns face to face
+
+  // - get dataTableView1_ width
+  dataTableView1_->resizeColumnToContents(0);
+  int w = dataTableView1_->horizontalHeader()->length() + dataTableView1_->verticalHeader()->sizeHint().width();
+  int x1, y1, x2, y2;
+  dataTableView1_->getContentsMargins(&x1, &y1, &x2, &y2);
+  w += x1 + x2;
+
+  // - get optimal tableView_ vertical header width
+  const int optiHeaderWidth = std::max(w, tableView_->verticalHeader()->minimumWidth());
+
+  dataTableView1_->horizontalHeader()->resizeSection(0, optiHeaderWidth - dataTableView1_->verticalHeader()->sizeHint().width());
+  dataTableView1_->setFixedWidth(optiHeaderWidth);
+
+  tableView_->verticalHeader()->setFixedWidth(optiHeaderWidth);
+
+  // - hack to avoid problem of column resizing
+  tableView_->horizontalHeader()->show();
+  tableView_->horizontalHeader()->hide();
+
+  resizeTable();
+
+  // update sample size label
   sampleSizeLabel_->setText(QString::number(dataModel_->getSample().getSize()));
 }
 }

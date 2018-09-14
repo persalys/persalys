@@ -1138,48 +1138,52 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DataModelTableModel</name>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="97"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="320"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="102"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="351"/>
         <source>The sample contains invalid values</source>
         <translation>L&apos;échantillon contient des valeurs invalides</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="129"/>
-        <source>Name</source>
-        <translation>Nom</translation>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="153"/>
+        <source>Variable</source>
+        <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="131"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="155"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="164"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="173"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="251"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="162"/>
+        <source>Enable all</source>
+        <translation>Activer tout</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="162"/>
+        <source>Disable all</source>
+        <translation>Désactiver tout</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="198"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="205"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="301"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="166"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="173"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="267"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="200"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="205"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="317"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="168"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="173"/>
-        <source>Disable</source>
-        <translation>Désactiver</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="239"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="247"/>
         <source>The name %2 is already used by another variable</source>
         <translation>Le nom %2 est déjà utilisé par une autre variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="316"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="348"/>
         <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
@@ -1187,50 +1191,55 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DataModelWindow</name>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="67"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="75"/>
         <source>Data model definition</source>
         <translation>Définition du modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="74"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="82"/>
         <source>Data file</source>
         <translation>Fichier de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="104"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="112"/>
+        <source>Variables</source>
+        <translation>Variables</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="133"/>
         <source>Sample</source>
         <translation>Echantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="177"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="301"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="179"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="303"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="168"/>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="190"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="292"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="314"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="111"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="140"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="169"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="293"/>
         <source>Cannot update the table.
 %1</source>
         <translation>Impossible de mettre à jour la table.
 %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="191"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="315"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -2959,7 +2968,7 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="88"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="89"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>

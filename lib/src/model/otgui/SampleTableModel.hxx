@@ -25,12 +25,32 @@
 
 #include <openturns/Sample.hxx>
 
-#include <QAbstractTableModel>
+#include <QSortFilterProxyModel>
 
 namespace OTGUI
 {
+
+class SampleTableProxyModel : public QSortFilterProxyModel
+{
+public:
+  SampleTableProxyModel(QObject *parent = 0)
+  : QSortFilterProxyModel(parent)
+  {}
+
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+  {
+    // do not sort the vertical header items
+    if (orientation == Qt::Vertical && role == Qt::DisplayRole)
+      return section;
+    return QSortFilterProxyModel::headerData(section, orientation, role);
+  }
+};
+
+
 class OTGUI_API SampleTableModel : public QAbstractTableModel
 {
+  Q_OBJECT
+
 public:
   SampleTableModel(const OT::Sample & data, QObject * parent = 0);
 
@@ -38,11 +58,12 @@ public:
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   QVariant data(const QModelIndex & index, int role) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
 
   virtual void exportData(const QString & fileName);
 
-  bool sampleIsValid();
+public slots:
+  void updateHeaderData(const OT::Description & header);
+  void updateData(const OT::Sample & data);
 
 protected:
   OT::Sample data_;

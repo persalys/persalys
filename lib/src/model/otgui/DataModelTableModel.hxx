@@ -22,11 +22,12 @@
 #define OTGUI_DATAMODELTABLEMODEL_HXX
 
 #include "otgui/DataModel.hxx"
-#include "otgui/SampleTableModel.hxx"
+
+#include <QAbstractTableModel>
 
 namespace OTGUI
 {
-class OTGUI_API DataModelTableModel : public SampleTableModel
+class OTGUI_API DataModelTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
@@ -34,6 +35,7 @@ public:
   DataModelTableModel(DataModel* dataModel, QObject* parent = 0);
 
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const;
   Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex & index, int role) const;
@@ -41,11 +43,14 @@ public:
   void updateData(const bool useColumns);
 
 signals:
+  void sampleChanged(const OT::Sample& sample);
+  void sampleDescriptionChanged(const OT::Description& description);
   void errorMessageChanged(const QString & message);
   void temporaryErrorMessageChanged(const QString & message);
 
 private:
   DataModel * dataModel_;
+  OT::Description names_;
   OT::Indices inputColumns_;
   OT::Indices outputColumns_;
 };

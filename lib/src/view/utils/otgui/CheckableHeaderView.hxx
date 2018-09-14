@@ -34,7 +34,7 @@ class OTGUI_API CheckableHeaderView : public QHeaderView
   Q_OBJECT
 
 public:
-  CheckableHeaderView(QWidget* parent = 0);
+  CheckableHeaderView(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent = 0);
 
   virtual void setModel(QAbstractItemModel* model);
 

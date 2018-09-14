@@ -25,31 +25,13 @@
 #include "otgui/DataModelTableModel.hxx"
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/OTguiSubWindow.hxx"
+#include "otgui/ResizableHeaderlessTableView.hxx"
 
 #include <QLineEdit>
-#include <QSortFilterProxyModel>
+#include <QResizeEvent>
 
 namespace OTGUI
 {
-
-// custom QSortFilterProxyModel
-class OTGUI_API DataModelProxModel : public QSortFilterProxyModel
-{
-public:
-  DataModelProxModel(QObject * parent = 0)
-    : QSortFilterProxyModel(parent)
-  {
-  }
-
-  bool lessThan(const QModelIndex& left, const QModelIndex& right) const
-  {
-    if (left.row() < 2 || right.row() < 2)
-      return false;
-    else
-      return QSortFilterProxyModel::lessThan(left, right);
-  }
-};
-
 
 class OTGUI_API DataModelWindow : public OTguiSubWindow
 {
@@ -62,21 +44,27 @@ public:
 
 protected:
   void buildInterface();
+  void resizeEvent(QResizeEvent* event);
   void updateTable(const QString& fileName);
+  void resizeTable();
 
 public slots:
   void openFileRequested();
   void refreshTable();
   void updateTableView(const bool useSampleFromFile = true);
+  void resizeDataTableColumn(int column, int oldWidth, int newWidth);
+  void resizeVariablesTableColumn(int column, int oldWidth, int newWidth);
+  void sortSectionChanged(int, Qt::SortOrder);
 
 private:
   DataModel * dataModel_;
+  ResizableHeaderlessTableView * tableView_;
+  DataModelTableModel * tableModel_;
+  ExportableTableView * dataTableView1_;
+  ExportableTableView * dataTableView2_;
   QLineEdit * filePathLineEdit_;
   QPalette defaultLineEditPalette_;
   QLabel * sampleSizeLabel_;
-  ExportableTableView * dataTableView_;
-  DataModelTableModel * dataTableModel_;
-  DataModelProxModel * proxyModel_;
 };
 }
 #endif

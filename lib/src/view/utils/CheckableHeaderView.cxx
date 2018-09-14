@@ -23,8 +23,8 @@
 namespace OTGUI
 {
 
-CheckableHeaderView::CheckableHeaderView(QWidget* parent)
-  : QHeaderView(Qt::Horizontal, parent)
+CheckableHeaderView::CheckableHeaderView(Qt::Orientation orientation, QWidget* parent)
+  : QHeaderView(orientation, parent)
   , isChecked_(false)
   , modelSignalBlocked_(false)
 {
@@ -40,10 +40,13 @@ void CheckableHeaderView::setModel(QAbstractItemModel* model)
 {
   QHeaderView::setModel(model);
   connect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SLOT(updateCheckState(Qt::Orientation)));
-  updateCheckState();
+  updateCheckState(orientation());
   // we need to define a minimum section size
   // to avoid that the text takes place under the indicator when resizing the section 0
-  setMinimumSectionSize(getMinimumSectionSize());
+  if (orientation() == Qt::Horizontal)
+    setMinimumSectionSize(getMinimumSectionSize());
+  else
+    setMinimumWidth(getMinimumSectionSize());
 }
 
 
@@ -54,15 +57,12 @@ int CheckableHeaderView::getMinimumSectionSize() const
   QStyleOptionButton option;
   QString textContent;
   if (model())
-    textContent = model()->headerData(0, Qt::Horizontal).toString();
+    textContent = model()->headerData(0, orientation()).toString();
 
   const int textWidth = style()->itemTextRect(option.fontMetrics, QRect(), Qt::TextShowMnemonic, true, textContent).size().width();
   const int buttonMargin = 3;
   const int labelSpacing = style()->pixelMetric(QStyle::PM_CheckBoxLabelSpacing);
   const int indicatorWidth = style()->subElementRect(QStyle::SE_CheckBoxIndicator, &option).width();
-
-  const int sortIndicatorSize = style()->pixelMetric(QStyle::PM_HeaderMarkSize);
-  const int sortIndicatorMargin = style()->pixelMetric(QStyle::PM_HeaderMargin);
 
   // before the text we need the size: (buttonMargin + labelSpacing + indicatorWidth)
   // the text is at the middle of the cell
@@ -70,7 +70,14 @@ int CheckableHeaderView::getMinimumSectionSize() const
   const int minSectionSize = textWidth + 2 * (buttonMargin + labelSpacing + indicatorWidth);
 
   // if the sort indicator is shown: add sortIndicatorSize + sortIndicatorMargin
-  return isSortIndicatorShown() ? (minSectionSize + sortIndicatorSize + sortIndicatorMargin) : minSectionSize;
+  if (orientation() == Qt::Horizontal)
+  {
+    const int sortIndicatorSize = style()->pixelMetric(QStyle::PM_HeaderMarkSize);
+    const int sortIndicatorMargin = style()->pixelMetric(QStyle::PM_HeaderMargin);
+    return isSortIndicatorShown() ? (minSectionSize + sortIndicatorSize + sortIndicatorMargin) : minSectionSize;
+  }
+  else
+    return minSectionSize;
 }
 
 
@@ -114,12 +121,26 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
       updateSection(0);
       // update model Qt::CheckStateRole
       modelSignalBlocked_ = true;
-      for (int i = 0; i < model()->rowCount(); ++i)
+      if (orientation() == Qt::Horizontal)
       {
-        if ((model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() != (isChecked_ ? Qt::Checked : Qt::Unchecked)) &&
-            model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
+        for (int i = 0; i < model()->rowCount(); ++i)
         {
-          model()->setData(model()->index(i, 0), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
+          if ((model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() != (isChecked_ ? Qt::Checked : Qt::Unchecked)) &&
+              model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
+          {
+            model()->setData(model()->index(i, 0), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
+          }
+        }
+      }
+      else
+      {
+        for (int i = 0; i < model()->columnCount(); ++i)
+        {
+          if ((model()->data(model()->index(0, i), Qt::CheckStateRole).toInt() != (isChecked_ ? Qt::Checked : Qt::Unchecked)) &&
+              model()->flags(model()->index(0, i)) & Qt::ItemIsEnabled)
+          {
+            model()->setData(model()->index(0, i), isChecked_ ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
+          }
         }
       }
       modelSignalBlocked_ = false;
@@ -133,14 +154,25 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
 
 void CheckableHeaderView::updateCheckState(const Qt::Orientation orientation)
 {
-  if (orientation == Qt::Vertical || modelSignalBlocked_ || !model())
+  if (modelSignalBlocked_ || !model())
     return;
 
   bool checkState = true;
-  for (int i = 0; i < model()->rowCount(); ++i)
+  if (orientation == Qt::Horizontal)
   {
-    if (model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
-      checkState = checkState && (model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() == Qt::Checked);
+    for (int i = 0; i < model()->rowCount(); ++i)
+    {
+      if (model()->flags(model()->index(i, 0)) & Qt::ItemIsEnabled)
+        checkState = checkState && (model()->data(model()->index(i, 0), Qt::CheckStateRole).toInt() == Qt::Checked);
+    }
+  }
+  else
+  {
+    for (int i = 0; i < model()->columnCount(); ++i)
+    {
+      if (model()->flags(model()->index(0, i)) & Qt::ItemIsEnabled)
+        checkState = checkState && (model()->data(model()->index(0, i), Qt::CheckStateRole).toInt() == Qt::Checked);
+    }
   }
   if (isEnabled() && isChecked_ != checkState)
   {

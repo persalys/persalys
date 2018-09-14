@@ -56,6 +56,8 @@ MainWindow::MainWindow()
 #ifdef OTGUI_HAVE_PARAVIEW
   if (OTguiSubWindow::HaveOpenGL32())
   {
+    // from ParaView 5.6 the toolBar is hidden if PersistentMainWindowStateBehavior is enabled
+    pqParaViewBehaviors::setEnablePersistentMainWindowStateBehavior(false);
     new pqParaViewBehaviors(this, this);
     // UpdateAvailableWriters : to be able to export the data from spread sheets
     vtkSMProxyManager::GetProxyManager()->GetWriterFactory()->UpdateAvailableWriters();

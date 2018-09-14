@@ -34,22 +34,14 @@ namespace OTGUI
 SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
   : QAbstractTableModel(parent)
   , data_(data)
-  , sampleIsValid_(true)
 {
-  for (UnsignedInteger j = 0; j < data_.getSize(); ++j)
-    for (UnsignedInteger i = 0; i < data_.getDimension(); ++i)
-      if (!SpecFunc::IsNormal(data_(j, i)))
-      {
-        sampleIsValid_ = false;
-        break;
-      }
 }
 
 
 int SampleTableModel::columnCount(const QModelIndex& parent) const
 {
   if (data_.getSize())
-    return data_.getDimension();
+    return data_.getDimension() + 1;
   return 0;
 }
 
@@ -62,27 +54,22 @@ int SampleTableModel::rowCount(const QModelIndex& parent) const
 
 QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-    return QString::fromUtf8(data_.getDescription()[section].c_str());
-
-  if (orientation == Qt::Horizontal && role == Qt::TextAlignmentRole)
-    return Qt::AlignCenter;
+  if (orientation == Qt::Horizontal)
+  {
+    if (role == Qt::DisplayRole)
+    {
+      if (!section)
+        return "Row ID";
+      else
+        return QString::fromUtf8(data_.getDescription()[section - 1].c_str());
+    }
+    else if (role == Qt::TextAlignmentRole)
+      return Qt::AlignCenter;
+  }
+  else if (orientation == Qt::Vertical && role == Qt::DisplayRole)
+    return section;
 
   return QAbstractTableModel::headerData(section, orientation, role);
-}
-
-
-bool SampleTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
-{
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-  {
-    Description description = data_.getDescription();
-    description[section] = value.toString().toStdString();
-    data_.setDescription(description);
-    emit headerDataChanged(Qt::Horizontal, section, section);
-    return true;
-  }
-  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
 }
 
 
@@ -93,16 +80,26 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
 
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
+
   else if (role == Qt::DisplayRole)
-    return QString::number(data_(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
-  else if (role == Qt::UserRole)
-    return data_(index.row(), index.column());
-  else if (role == Qt::BackgroundRole)
   {
-    if (!SpecFunc::IsNormal(data_(index.row(), index.column())))
-      return QColor(Qt::red);
-    return QVariant();
+    if (!index.column())
+      return QString::number(index.row());
+    else
+      return QString::number(data_(index.row(), index.column() - 1), 'g', StudyTreeViewModel::DefaultSignificantDigits);
   }
+
+  else if (role == Qt::UserRole)
+  {
+    if (!index.column())
+      return index.row();
+    else
+      return data_(index.row(), index.column() - 1);
+  }
+
+  else if (role == Qt::BackgroundRole && index.column() && !SpecFunc::IsNormal(data_(index.row(), index.column() - 1)))
+    return QColor(Qt::red);
+
   return QVariant();
 }
 
@@ -114,8 +111,18 @@ void SampleTableModel::exportData(const QString & fileName)
 }
 
 
-bool SampleTableModel::sampleIsValid()
+void SampleTableModel::updateHeaderData(const Description& header)
 {
-  return sampleIsValid_;
+  Q_ASSERT(header.getSize() == data_.getDimension());
+  data_.setDescription(header);
+  emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
+}
+
+
+void SampleTableModel::updateData(const Sample& data)
+{
+  beginResetModel();
+  data_ = data;
+  endResetModel();
 }
 }
