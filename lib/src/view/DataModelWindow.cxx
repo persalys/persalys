@@ -146,7 +146,7 @@ void DataModelWindow::buildInterface()
   gridLayout->addLayout(sizeLayout, 0, 0);
 
   // - data table model
-  SampleTableModel * dataTableModel = new SampleTableModel(dataModel_->getSample(), this);
+  SampleTableModel * dataTableModel = new SampleTableModel(Sample(), this);
 
   // - data QSortFilterProxyModel
   SampleTableProxyModel * proxyModel = new SampleTableProxyModel(this);
@@ -201,12 +201,6 @@ void DataModelWindow::buildInterface()
   dataTableView2_->setPalette(p);
   dataTableView1_->setPalette(p);
 
-  // fill tables if dataModel_ not empty
-  if (dataModel_->getSample().getSize())
-    updateTableView(false);
-  else
-    resizeTable();
-
   // connections
   connect(tableModel_, SIGNAL(sampleChanged(OT::Sample)), dataTableModel, SLOT(updateData(OT::Sample)));
   connect(tableModel_, SIGNAL(sampleDescriptionChanged(OT::Description)), dataTableModel, SLOT(updateHeaderData(OT::Description)));
@@ -223,6 +217,9 @@ void DataModelWindow::buildInterface()
   connect(dataTableView2_->verticalScrollBar(), SIGNAL(valueChanged(int)), dataTableView1_->verticalScrollBar(), SLOT(setValue(int)));
   connect(dataTableView2_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeVariablesTableColumn(int, int, int)));
   connect(dataTableView2_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sortSectionChanged(int, Qt::SortOrder)));
+
+  // fill tables
+  updateTableView();
 
   setWidget(mainWidget);
 }
@@ -331,14 +328,20 @@ void DataModelWindow::refreshTable()
 }
 
 
-void DataModelWindow::updateTableView(const bool useSampleFromFile)
+void DataModelWindow::updateTableView()
 {
+  if (!dataModel_->getSample().getSize())
+  {
+    resizeTable();
+    return;
+  }
+
   // update variables table
-  tableModel_->updateData(useSampleFromFile);
+  tableModel_->updateData();
 
   dataTableView1_->sortByColumn(0, Qt::AscendingOrder);
 
-  if (useSampleFromFile)
+  if (dataModel_->getSampleFromFile().getSize())
   {
     // use comboboxes to define the variable type
     for (int i = 0; i < tableModel_->columnCount(); ++i)

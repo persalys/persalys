@@ -40,7 +40,7 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex & index, int role) const;
   bool setData(const QModelIndex & index, const QVariant & value, int role);
-  void updateData(const bool useColumns);
+  void updateData();
 
 signals:
   void sampleChanged(const OT::Sample& sample);

@@ -51,7 +51,7 @@ protected:
 public slots:
   void openFileRequested();
   void refreshTable();
-  void updateTableView(const bool useSampleFromFile = true);
+  void updateTableView();
   void resizeDataTableColumn(int column, int oldWidth, int newWidth);
   void resizeVariablesTableColumn(int column, int oldWidth, int newWidth);
   void sortSectionChanged(int, Qt::SortOrder);
