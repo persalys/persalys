@@ -1450,12 +1450,11 @@ Analyses
 
     - right click on the item 'copulaInference' and choose 'Modify'. Check the wizard behavior :
 
-      - check all / uncheck all
+      - check all / uncheck all + left/right arrow buttons
       - no wheel event on Add button
-      - an uncheck line == right side of the wizard disabled
       - choose item 'All' in the list of Add button => add all copulas in the list
       - remove items in the copulas table : use ctrl key (to select items one by one), use shift key (to select adjacent items)
-      - add/remove groups with tha arrows
+      - add/remove groups with the arrows
       - if there are at least 3 variables in a group : only the Normal copula is proposed
       - select a variable + empty the copulas list + click on Finish
 
@@ -1520,7 +1519,7 @@ Diagrams
 
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
     - add an input and an output, set the formula of y0 to X0
-    - the 'Model evaluation', 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
+    - the 'Model evaluation', 'Optimization', 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
 
 - click on the 'Model evaluation' button of the diagram
     - a wizard appears, click on Cancel
@@ -1574,9 +1573,9 @@ Diagrams
     - click on the '...' button, import the file data.csv
     - the first three columns are inputs and the last one is an output
     - all the buttons are enabled in the diagram
-    - check that 'Dependence inference' button is enabled only if there are more than one input
+    - check that 'Dependence inference' button is enabled only if there are more than one variable
     - check that 'Metamodel creation' button is enabled only if there are at least one output and one input
-    - if all the combo boxes are set to 'Disable', all the buttons of the diagram are disabled
+    - if all the columns are disabled, all the buttons of the diagram are disabled
 
 - save the current study, reopen
     - in the window of the 'Definition' item of the data model : click on the reload button
