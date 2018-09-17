@@ -357,6 +357,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   // -- set scene --
   graphView->setScene(scene);
+  graphView->ensureVisible(modelDefinitionButtonProxy);
   splitter->addWidget(graphView);
   splitter->setStretchFactor(0, 3);
 
