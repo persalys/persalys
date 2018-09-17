@@ -224,7 +224,7 @@ void FunctionalChaosResultWindow::buildInterface()
       // compute part of contribution of each basis term
       for (UnsignedInteger i = 1; i < basisSize; ++ i)
       {
-        Scalar coefI = coefficients(i, outputIndex);
+        const Scalar coefI = coefficients(i, outputIndex);
         Indices multiIndices(enumerateFunction(indices[i]));
         UnsignedInteger degreeI = 0;
         for (UnsignedInteger k = 0; k < multiIndices.getSize(); ++ k)
@@ -254,12 +254,12 @@ void FunctionalChaosResultWindow::buildInterface()
       // first coefficient
       tableModel->setNotEditableItem(1, 0, indices[0]);
       tableModel->setNotEditableItem(1, 1, enumerateFunction(indices[0]).__str__().c_str());
-      tableModel->setNotEditableItem(1, 2, coefficients(indices[0], outputIndex));
+      tableModel->setNotEditableItem(1, 2, coefficients(0, outputIndex));
       tableModel->setNotEditableItem(1, 3, "-");
 
       // part of variance
       Scalar varPartSum = 0;
-      for (UnsignedInteger i = 0; i < basisSize; ++ i)
+      for (UnsignedInteger i = 0; i < basisSize - 1; ++ i)
       {
         // stop when the variance contribution becomes less than epsilon
         if (varianceOrder[i].second < ResourceMap::GetAsScalar("FunctionalChaosSobolIndices-VariancePartThreshold"))
@@ -269,7 +269,7 @@ void FunctionalChaosResultWindow::buildInterface()
 
         tableModel->setNotEditableItem(i+2, 0, varianceOrder[i].first);
         tableModel->setNotEditableItem(i+2, 1, multiIndices.__str__().c_str());
-        tableModel->setNotEditableItem(i+2, 2, coefficients(indices[varianceOrder[i].first], outputIndex));
+        tableModel->setNotEditableItem(i+2, 2, coefficients(i+1, outputIndex));
         tableModel->setNotEditableItem(i+2, 3, QString("%1 %").arg(varianceOrder[i].second * 100, 0, 'f', 2));
         varPartSum += varianceOrder[i].second * 100;
       }
