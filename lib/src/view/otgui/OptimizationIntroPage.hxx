@@ -48,9 +48,6 @@ public:
 
   virtual bool validatePage();
 
-protected slots:
-  void openUrl();
-
 private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;

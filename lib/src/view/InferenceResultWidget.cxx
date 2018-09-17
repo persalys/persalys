@@ -35,7 +35,6 @@
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QDesktopServices>
-#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -147,6 +146,9 @@ void InferenceResultWidget::buildInterface()
     plotWidget = new WidgetBoundToDockWidget(this);
     plotWidgetLayout = new QVBoxLayout(plotWidget);
 
+    DocumentationToolButton * infoQQPlotButton = new DocumentationToolButton(DocumentationToolButton::OpenTURNSUrlLink + "theory/data_analysis/graphical_fitting_test.html");
+    plotWidgetLayout->addWidget(infoQQPlotButton);
+
     // --- qq plot
     qqPlot_ = new PlotWidget(tr("qqPlot"));
     plotWidgetLayout->addWidget(qqPlot_);
@@ -166,9 +168,7 @@ void InferenceResultWidget::buildInterface()
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
     paramGroupBoxLayout->addWidget(distParamTableView_);
     // button to open the OT documentation
-    infoButton_ = new QToolButton;
-    infoButton_->setIcon(QIcon(":/images/documentinfo.png"));
-    infoButton_->setToolTip(tr("Open the OpenTURNS documentation"));
+    infoButton_ = new DocumentationToolButton;
     connect(infoButton_, SIGNAL(clicked()), this, SLOT(openUrl()));
     paramGroupBoxLayout->addWidget(infoButton_);
     analysisErrorMessageLabel_ = new QLabel;
@@ -554,9 +554,9 @@ void InferenceResultWidget::openUrl()
     return;
 
   const String distName = getDistribution().getImplementation()->getClassName();
+  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
 
   // open url
-  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 }
