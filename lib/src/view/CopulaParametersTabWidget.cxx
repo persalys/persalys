@@ -27,6 +27,7 @@
 #include "otgui/WidgetBoundToDockWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/TranslationManager.hxx"
+#include "otgui/DocumentationToolButton.hxx"
 
 #include <openturns/NormalCopula.hxx>
 #include <openturns/VisualTest.hxx>
@@ -35,9 +36,7 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
-#include <QToolButton>
 #include <QDesktopServices>
-#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -138,6 +137,9 @@ void CopulaParametersTabWidget::buildInterface()
   plotWidget = new WidgetBoundToDockWidget(this);
   plotWidgetLayout = new QVBoxLayout(plotWidget);
 
+  DocumentationToolButton * infoKendallPlotButton = new DocumentationToolButton(DocumentationToolButton::OpenTURNSUrlLink + "theory/data_analysis/graphical_fitting_test.html");
+  plotWidgetLayout->addWidget(infoKendallPlotButton);
+
   ResizableStackedWidget * kendall_StackedWidget = new ResizableStackedWidget;
 
   // -- plots creation
@@ -224,9 +226,7 @@ void CopulaParametersTabWidget::buildInterface()
   paramGroupBoxLayout->addWidget(distParamTableView);
 
   // button to open the OT documentation
-  QToolButton * infoButton = new QToolButton;
-  infoButton->setIcon(QIcon(":/images/documentinfo.png"));
-  infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
+  DocumentationToolButton * infoButton = new DocumentationToolButton;
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
   paramGroupBoxLayout->addWidget(infoButton);
 
@@ -238,9 +238,9 @@ void CopulaParametersTabWidget::buildInterface()
 void CopulaParametersTabWidget::openUrl()
 {
   const String distName = distribution_.getImplementation()->getClassName();
+  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
 
   // open url
-  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 

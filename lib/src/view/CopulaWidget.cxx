@@ -28,12 +28,11 @@
 #include "otgui/QtTools.hxx"
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
+#include "otgui/DocumentationToolButton.hxx"
 
 #include <QSplitter>
-#include <QToolButton>
 #include <QScrollArea>
 #include <QDesktopServices>
-#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -115,9 +114,7 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   parameterLayout_ = new QVBoxLayout(subWidget);
 
   // button to open the OT documentation
-  QToolButton * infoButton = new QToolButton;
-  infoButton->setIcon(QIcon(":/images/documentinfo.png"));
-  infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
+  DocumentationToolButton * infoButton = new DocumentationToolButton;
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openDocUrl()));
   parameterLayout_->addWidget(infoButton);
 
@@ -263,7 +260,7 @@ void CopulaWidget::openDocUrl()
   const String copulaName = copula_.getImplementation()->getClassName();
 
   // open url
-  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(copulaName.c_str()) + ".html";
+  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(copulaName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 }

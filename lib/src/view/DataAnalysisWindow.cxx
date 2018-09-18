@@ -661,6 +661,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       Description desc(designOfExperiment_.getInputSample().getDescription());
       desc.add(tr("Status\n0: failed; 1: ok").toUtf8().constData());
       succeedAndFailedInS.setDescription(desc);
+      succeedAndFailedInSRank.setDescription(desc);
 
       cobwebWidget->setData(succeedAndFailedInSRank);
       cobwebWidget->setAxisToShow(desc);

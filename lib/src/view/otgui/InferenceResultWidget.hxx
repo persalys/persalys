@@ -25,10 +25,10 @@
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/PlotWidget.hxx"
+#include "otgui/DocumentationToolButton.hxx"
 
 #include <QTabWidget>
 #include <QLabel>
-#include <QToolButton>
 
 Q_DECLARE_METATYPE(OT::Distribution)
 
@@ -64,7 +64,7 @@ private:
   CustomStandardItemModel * distTableModel_;
   ResizableTableViewWithoutScrollBar * distParamTableView_;
   CustomStandardItemModel * distParamTableModel_;
-  QToolButton * infoButton_;
+  DocumentationToolButton * infoButton_;
   QLabel * analysisErrorMessageLabel_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;

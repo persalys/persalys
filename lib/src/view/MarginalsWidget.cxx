@@ -30,6 +30,7 @@
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/InferenceResultWizard.hxx"
 #include "otgui/OTStudyItem.hxx"
+#include "otgui/DocumentationToolButton.hxx"
 
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/ScreeningResultWizard.hxx"
@@ -43,9 +44,7 @@
 #include <QScrollArea>
 #include <QPushButton>
 #include <QMessageBox>
-#include <QToolButton>
 #include <QDesktopServices>
-#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -181,9 +180,7 @@ void MarginalsWidget::buildInterface()
   rightFrameLayout->addWidget(plotWidget, 1);
 
   // button to open the OT documentation
-  QToolButton * infoButton = new QToolButton;
-  infoButton->setIcon(QIcon(":/images/documentinfo.png"));
-  infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
+  DocumentationToolButton * infoButton = new DocumentationToolButton;
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
   rightFrameLayout->addWidget(infoButton);
 
@@ -244,7 +241,7 @@ void MarginalsWidget::openUrl()
   const String distName = input.getDistribution().getImplementation()->getClassName();
 
   // open url
-  const QString link = "http://openturns.github.io/openturns/master/user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
+  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 

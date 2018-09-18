@@ -53,11 +53,13 @@ class OTGUI_API SampleTableModel : public QAbstractTableModel
 
 public:
   SampleTableModel(const OT::Sample & data, QObject * parent = 0);
+  SampleTableModel(const OT::Sample & data, const bool isSortable, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   QVariant data(const QModelIndex & index, int role) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
 
   virtual void exportData(const QString & fileName);
 
@@ -67,7 +69,7 @@ public slots:
 
 protected:
   OT::Sample data_;
-  mutable bool sampleIsValid_;
+  bool sampleIsSortable_;
 };
 }
 #endif

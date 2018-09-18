@@ -40,24 +40,19 @@ DataModelTableModel::DataModelTableModel(DataModel* dataModel, QObject* parent)
 }
 
 
-void DataModelTableModel::updateData(const bool useColumns)
+void DataModelTableModel::updateData()
 {
   beginResetModel();
 
-  // update names_
-  if (useColumns)
-    names_ = dataModel_->getSampleFromFile().getDescription();
-  else
-    names_ = dataModel_->getSample().getDescription();
-
   // the sample of dataModel can be smaller than the sample from the file
   // so we can not use getIn/OutputColumns()
-  if (!useColumns)
+  if (!dataModel_->getSampleFromFile().getSize())
   {
     // when opening a data model: we use dataModel.getSample() and not the sample from the file
     // so we can not use getInputColumns and getOutputColumns.
     // In dataModel.getSample(): we put first the input sample, then the output sample
     // so we can retrieve easily the indices
+    names_ = dataModel_->getSample().getDescription();
     inputColumns_ = Indices(dataModel_->getInputSample().getSize() > 0 ? dataModel_->getInputSample().getDimension() : 0);
     inputColumns_.fill();
     outputColumns_ = Indices(dataModel_->getOutputSample().getSize() > 0 ? dataModel_->getOutputSample().getDimension() : 0);
@@ -67,6 +62,7 @@ void DataModelTableModel::updateData(const bool useColumns)
   {
     // the sample comes from the file
     // so we can use getIn/OutputColumns()
+    names_ = dataModel_->getSampleFromFile().getDescription();
     inputColumns_ = dataModel_->getInputColumns();
     outputColumns_ = dataModel_->getOutputColumns();
 
@@ -89,13 +85,13 @@ void DataModelTableModel::updateData(const bool useColumns)
       }
     }
     names_ = dataDescription;
-
-    // emit signal to update the sample table
-    Sample sample(dataModel_->getSampleFromFile().getSize() ? dataModel_->getSampleFromFile() : dataModel_->getSample());
-    sample.setDescription(names_);
-
-    emit sampleChanged(sample);
   }
+
+  // emit signal to update the sample table
+  Sample sample(dataModel_->getSampleFromFile().getSize() ? dataModel_->getSampleFromFile() : dataModel_->getSample());
+  sample.setDescription(names_);
+
+  emit sampleChanged(sample);
 
   if (!dataModel_->isValid())
   {

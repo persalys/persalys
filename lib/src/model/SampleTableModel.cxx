@@ -34,19 +34,28 @@ namespace OTGUI
 SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
   : QAbstractTableModel(parent)
   , data_(data)
+  , sampleIsSortable_(true)
 {
 }
 
 
-int SampleTableModel::columnCount(const QModelIndex& parent) const
+SampleTableModel::SampleTableModel(const Sample & data, const bool isSortable, QObject * parent)
+  : QAbstractTableModel(parent)
+  , data_(data)
+  , sampleIsSortable_(isSortable)
+{
+}
+
+
+int SampleTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
   if (data_.getSize())
-    return data_.getDimension() + 1;
+    return sampleIsSortable_ ? data_.getDimension() + 1 : data_.getDimension();
   return 0;
 }
 
 
-int SampleTableModel::rowCount(const QModelIndex& parent) const
+int SampleTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
   return data_.getSize();
 }
@@ -58,10 +67,10 @@ QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, 
   {
     if (role == Qt::DisplayRole)
     {
-      if (!section)
+      if (!section && sampleIsSortable_)
         return "Row ID";
       else
-        return QString::fromUtf8(data_.getDescription()[section - 1].c_str());
+        return QString::fromUtf8(data_.getDescription()[sampleIsSortable_ ? section - 1 : section].c_str());
     }
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
@@ -73,31 +82,47 @@ QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, 
 }
 
 
+bool SampleTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+{
+  if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+  {
+    Description description = data_.getDescription();
+    description[section] = value.toString().toStdString();
+    data_.setDescription(description);
+    emit headerDataChanged(Qt::Horizontal, section, section);
+    return true;
+  }
+  return QAbstractTableModel::setHeaderData(section, orientation, value, role);
+}
+
+
 QVariant SampleTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
     return QVariant();
+
+  const int dataIndex = sampleIsSortable_ ? index.column() - 1 : index.column();
 
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
 
   else if (role == Qt::DisplayRole)
   {
-    if (!index.column())
+    if (!index.column() && sampleIsSortable_)
       return QString::number(index.row());
     else
-      return QString::number(data_(index.row(), index.column() - 1), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      return QString::number(data_(index.row(), dataIndex), 'g', StudyTreeViewModel::DefaultSignificantDigits);
   }
 
   else if (role == Qt::UserRole)
   {
-    if (!index.column())
+    if (!index.column() && sampleIsSortable_)
       return index.row();
     else
-      return data_(index.row(), index.column() - 1);
+      return data_(index.row(), dataIndex);
   }
 
-  else if (role == Qt::BackgroundRole && index.column() && !SpecFunc::IsNormal(data_(index.row(), index.column() - 1)))
+  else if (role == Qt::BackgroundRole && index.column() && !SpecFunc::IsNormal(data_(index.row(), dataIndex)))
     return QColor(Qt::red);
 
   return QVariant();

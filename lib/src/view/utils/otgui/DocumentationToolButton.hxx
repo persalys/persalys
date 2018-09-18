@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define the method of optimization
+ *  @brief QToolButton to open documentation url
  *
- *  Copyright 2015-2017 EDF-Phimeca
+ *  Copyright 2015-2018 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,40 +18,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_INTROOPTIMIZATIONPAGE_HXX
-#define OTGUI_INTROOPTIMIZATIONPAGE_HXX
+#ifndef OTGUI_DOCUMENTATIONTOOLBUTTON_HXX
+#define OTGUI_DOCUMENTATIONTOOLBUTTON_HXX
 
-#include "otgui/Analysis.hxx"
-#include "otgui/OutputsSelectionGroupBox.hxx"
-#include "otgui/TemporaryLabel.hxx"
+#include "otgui/OTGuiprivate.hxx"
 
-#include <QWizardPage>
-#include <QButtonGroup>
+#include <QToolButton>
 
 namespace OTGUI
 {
-
-class OTGUI_API OptimizationIntroPage : public QWizardPage
+class OTGUI_API DocumentationToolButton : public QToolButton
 {
   Q_OBJECT
 
 public:
-  enum OptimAlgo {AbdoRackwitzAlgo, CobylaAlgo, SQPAlgo, NLoptAlgo};
+  DocumentationToolButton(const QString& urlLink = "", const QString& toolTip = tr("Open the OpenTURNS documentation"), QWidget *parent = 0);
 
-  OptimizationIntroPage(QWidget* parent = 0);
+public slots:
+  void openUrl();
 
-  void initialize(const Analysis& analysis);
-
-  OT::Description getInterestVariables() const;
-
-  OT::String getSolverName() const;
-
-  virtual bool validatePage();
-
+public:
+  static const QString OpenTURNSUrlLink;
 private:
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  QButtonGroup * methodGroup_;
-  TemporaryLabel * errorMessageLabel_;
+  QString urlLink_;
 };
 }
 #endif

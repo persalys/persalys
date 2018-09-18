@@ -22,15 +22,13 @@
 
 #include "otgui/OptimizationAnalysis.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/DocumentationToolButton.hxx"
 
 #include <openturns/NLopt.hxx>
 
 #include <QVBoxLayout>
 #include <QRadioButton>
 #include <QScrollArea>
-#include <QToolButton>
-#include <QDesktopServices>
-#include <QUrl> // for qt4
 
 using namespace OT;
 
@@ -51,15 +49,9 @@ OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
   outputsSelectionGroupBox_ = new OutputsSelectionGroupBox(false, this);
   pageLayout->addWidget(outputsSelectionGroupBox_);
 
-  // button to open the NLopt documentation
-  if (NLopt::IsAvailable())
-  {
-    QToolButton * infoButton = new QToolButton;
-    infoButton->setIcon(QIcon(":/images/documentinfo.png"));
-    infoButton->setToolTip(tr("Open the OpenTURNS documentation"));
-    connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
-    pageLayout->addWidget(infoButton);
-  }
+  // button to open OT documentation
+  DocumentationToolButton * infoButton = new DocumentationToolButton(DocumentationToolButton::OpenTURNSUrlLink + "user_manual/optimization.html");
+  pageLayout->addWidget(infoButton);
 
   // optimization algorithm
   methodGroup_ = new QButtonGroup(this);
@@ -123,14 +115,6 @@ void OptimizationIntroPage::initialize(const Analysis& analysis)
 Description OptimizationIntroPage::getInterestVariables() const
 {
   return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
-}
-
-
-void OptimizationIntroPage::openUrl()
-{
-  // open url
-  const QString link = "http://openturns.github.io/openturns/master/user_manual/optimization.html";
-  QDesktopServices::openUrl(QUrl(link));
 }
 
 
