@@ -5,24 +5,28 @@
 
 set -e
 
+# Usage: ./utils/build_pv.sh installs into ../pv-linux-install
+
 export QT_SELECT=qt5
 
 
-git clone https://gitlab.kitware.com/paraview/paraview.git || echo "ok" 
+git clone https://gitlab.kitware.com/paraview/paraview.git
 cd paraview
-git checkout v5.5.1
+git checkout 7bafc2be161cf8f4870aaad35759a0dd096ea55f
 git submodule init
 git submodule update
 
 mkdir -p build && cd build
 
 cmake \
+  -DCMAKE_RULE_MESSAGES=OFF \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DVTK_USE_64BIT_IDS=OFF \
   -DVTK_NO_PYTHON_THREADS=OFF \
   -DVTK_PYTHON_FULL_THREADSAFE=ON \
   -DPARAVIEW_ENABLE_PYTHON=ON \
+  -DPYTHON_EXECUTABLE=/usr/bin/python3 \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF \
   -DBUILD_DOCUMENTATION=OFF \
   -DVTK_USE_OGGTHEORA_ENCODER=ON \
