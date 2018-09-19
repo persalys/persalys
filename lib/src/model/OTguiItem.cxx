@@ -72,7 +72,8 @@ QList< QAction* > OTguiItem::getActions()
 
 void OTguiItem::appendAction(QAction* action)
 {
-  menuActions_.append(action);
+  if (action)
+    menuActions_.append(action);
 }
 
 
@@ -88,7 +89,8 @@ void OTguiItem::appendSeparator(const QString& text)
 
 void OTguiItem::insertAction(int i, QAction* action)
 {
-  menuActions_.insert(i, action);
+  if (action)
+    menuActions_.insert(i, action);
 }
 
 

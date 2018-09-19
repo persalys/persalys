@@ -45,9 +45,12 @@ ResultWindow::ResultWindow(OTguiItem * item, QWidget * parent)
   , modelDescriptionWidget_(0)
 {
   // model description widget
-  AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(item);
-  if (analysisItem)
-    setModelDescription(analysisItem->getAnalysis());
+  if (item)
+  {
+    AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(item);
+    if (analysisItem)
+      setModelDescription(analysisItem->getAnalysis());
+  }
 }
 
 

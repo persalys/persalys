@@ -119,12 +119,9 @@ Qt::ItemFlags DataModelTableModel::flags(const QModelIndex & index) const
   Qt::ItemFlags result = QAbstractTableModel::flags(index);
 
   // variables names
-  if (index.row() == 0)
+  if (index.row() == 0 && dataModel_->getSampleFromFile().getSize())
   {
-    if (dataModel_->getSampleFromFile().getSize())
-      result |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
-    else
-      result |= Qt::ItemIsEditable;
+    result |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
   }
   // variables types
   else if (index.row() == 1 && !outputColumns_.contains(index.column()) && !inputColumns_.contains(index.column()))
