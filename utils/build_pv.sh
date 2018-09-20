@@ -2,6 +2,7 @@
 
 # installs paraview in ./pv-linux-install
 # sudo apt install qttools5-dev lzma-dev libxt-dev libqt5x11extras5-dev qtxmlpatterns5-dev-tools 
+# sudo aptitude install libhdf5-dev libtheora-dev libnetcdf-dev libglew-dev libexpat-dev libfreetype6-dev libjpeg8-dev libqt5x11extras5-dev libtiff-dev qttools5-dev protobuf-c-compiler protobuf-compiler
 
 set -e
 
