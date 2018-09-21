@@ -51,6 +51,10 @@ ResultWindow::ResultWindow(OTguiItem * item, QWidget * parent)
     if (analysisItem)
       setModelDescription(analysisItem->getAnalysis());
   }
+#ifdef OTGUI_HAVE_PARAVIEW
+  // FIXME: PV widgets wont draw at first, due to use of MDI area
+  setAttribute(Qt::WA_NativeWindow);
+#endif
 }
 
 
