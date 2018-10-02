@@ -109,6 +109,7 @@ ot_add_source_file ( AboutDialog.cxx )
 ot_add_source_file ( MeshDefinitionWizard.cxx )
 ot_add_source_file ( FieldModelEvaluationResultWindow.cxx )
 ot_add_source_file ( FieldMonteCarloWizard.cxx )
+ot_add_source_file ( ExtractDataFieldWizard.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -219,6 +220,7 @@ ot_install_header_file ( AboutDialog.hxx )
 ot_install_header_file ( MeshDefinitionWizard.hxx )
 ot_install_header_file ( FieldModelEvaluationResultWindow.hxx )
 ot_install_header_file ( FieldMonteCarloWizard.hxx )
+ot_install_header_file ( ExtractDataFieldWizard.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -322,6 +324,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/MeshDefinitionWizard.hxx
                                   otgui/FieldModelEvaluationResultWindow.hxx
                                   otgui/FieldMonteCarloWizard.hxx
+                                  otgui/ExtractDataFieldWizard.hxx
                                   )
 
 
