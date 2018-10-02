@@ -204,9 +204,9 @@ DesignOfExperiment& Study::getDataModelByName(const String& dataModelName)
 }
 
 
-String Study::getAvailableDataModelName() const
+String Study::getAvailableDataModelName(const String& modelRootName) const
 {
-  return getImplementation()->getAvailableDataModelName();
+  return getImplementation()->getAvailableDataModelName(modelRootName);
 }
 
 

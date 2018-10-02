@@ -62,7 +62,7 @@ public:
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment & getDataModelByName(const OT::String & dataModelName);
   bool hasDataModelNamed(const OT::String & dataModelName) const;
-  OT::String getAvailableDataModelName() const;
+  OT::String getAvailableDataModelName(const OT::String& modelRootName = "DataModel_") const;
   void add(const DesignOfExperiment & designOfExperiment);
   void remove(const DesignOfExperiment & designOfExperiment);
 
