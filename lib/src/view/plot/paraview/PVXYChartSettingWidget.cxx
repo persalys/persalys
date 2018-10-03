@@ -21,7 +21,7 @@
 #include "otgui/PVXYChartSettingWidget.hxx"
 
 #include "otgui/QtTools.hxx"
-#include "otgui/NoWheelEventComboBox.hxx"
+#include "otgui/TitledComboBox.hxx"
 
 #include <vtkPlotPoints.h>
 
@@ -184,7 +184,7 @@ void PVXYChartSettingWidget::buildInterface()
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
     // combobox to select the reprensations to display
-    NoWheelEventComboBox * reprComboBox = new NoWheelEventComboBox;
+    TitledComboBox * reprComboBox = new TitledComboBox("-- " + tr("Select") + " --");
     QStringList reprNames;
     for (int i = 0; i < pvViewWidget_->getNumberOfRepresentations(); ++i)
     {

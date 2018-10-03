@@ -22,7 +22,7 @@
 
 #include "otgui/ListWidgetWithCheckBox.hxx"
 #include "otgui/QtTools.hxx"
-#include "otgui/NoWheelEventComboBox.hxx"
+#include "otgui/TitledComboBox.hxx"
 
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -64,7 +64,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   // combobox to select the columns to display
-  NoWheelEventComboBox * inputsComboBox = new NoWheelEventComboBox;
+  TitledComboBox * inputsComboBox = new TitledComboBox("-- " + tr("Select variables") + " --");
   columnsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getColumnsNames(), this);
   connect(columnsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setColumnsToDisplay(QStringList)));
   inputsComboBox->setModel(columnsListWidget_->model());
@@ -76,7 +76,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   // combobox to select the rows to display
-  NoWheelEventComboBox * outputsComboBox = new NoWheelEventComboBox;
+  TitledComboBox * outputsComboBox = new TitledComboBox("-- " + tr("Select variables") + " --");
   rowsListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select variables") + " --", plotMatrix_->getRowsNames(), this);
   connect(rowsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setRowsToDisplay(QStringList)));
   outputsComboBox->setModel(rowsListWidget_->model());

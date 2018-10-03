@@ -20,8 +20,6 @@
  */
 #include "otgui/OutputsSelectionGroupBox.hxx"
 
-#include "otgui/NoWheelEventComboBox.hxx"
-
 #include <QVBoxLayout>
 
 using namespace OT;
@@ -38,7 +36,7 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
   // custom combobox to choose output to analyse
-  outputsComboBox_ = new NoWheelEventComboBox;
+  outputsComboBox_ = new TitledComboBox("-- " + tr("Select outputs") + " --");
   outputLayout->addWidget(outputsComboBox_);
 }
 
@@ -52,7 +50,7 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* par
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
   // custom combobox to choose output to analyse
-  outputsComboBox_ = new NoWheelEventComboBox;
+  outputsComboBox_ = new TitledComboBox("-- " + (pluralText_ ? tr("Select outputs") : tr("Select output")) + " --");
   outputLayout->addWidget(outputsComboBox_);
 }
 
@@ -66,7 +64,7 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
   // custom combobox to choose output to analyse
-  outputsComboBox_ = new NoWheelEventComboBox;
+  outputsComboBox_ = new TitledComboBox("-- " + tr("Select outputs") + " --");
   outputLayout->addWidget(outputsComboBox_);
 
   updateComboBoxModel(outputsNames, interestVariables);
