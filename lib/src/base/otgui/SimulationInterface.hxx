@@ -23,29 +23,29 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <openturns/Simulation.hxx>
+#include <openturns/ProbabilitySimulationAlgorithm.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API SimulationInterface : public OT::TypedInterfaceObject<OT::Simulation>
+class OTGUI_API SimulationInterface : public OT::TypedInterfaceObject<OT::ProbabilitySimulationAlgorithm>
 {
 public:
-  typedef OT::Pointer<OT::Simulation> Implementation;
+  typedef OT::Pointer<OT::ProbabilitySimulationAlgorithm> Implementation;
 
   /** Default constructor */
   SimulationInterface();
   /** Default constructor */
-  SimulationInterface(const OT::Simulation & implementation);
+  SimulationInterface(const OT::ProbabilitySimulationAlgorithm & implementation);
   /** Constructor from implementation */
   SimulationInterface(const Implementation & p_implementation);
   /** Constructor from implementation pointer */
-  SimulationInterface(OT::Simulation * p_implementation);
+  SimulationInterface(OT::ProbabilitySimulationAlgorithm * p_implementation);
 
   /** Virtual constructor */
   virtual SimulationInterface * clone() const;
 
   /** Result accessor */
-  OT::SimulationResult getResult() const;
+  OT::ProbabilitySimulationResult getResult() const;
 
   /** Maximum sample size accessor */
   void setMaximumOuterSampling(const OT::UnsignedInteger maximumOuterSampling);
@@ -63,7 +63,7 @@ public:
   void run();
 
   /** Draw the probability convergence at the given level */
-  OT::Graph drawProbabilityConvergence(const OT::Scalar level = OT::ResourceMap::GetAsScalar("SimulationResult-DefaultConfidenceLevel")) const;
+  OT::Graph drawProbabilityConvergence(const OT::Scalar level = OT::ResourceMap::GetAsScalar("ProbabilitySimulationResult-DefaultConfidenceLevel")) const;
 
   /** Progress callback */
   typedef void (*ProgressCallback)(OT::Scalar, void * data);

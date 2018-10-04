@@ -21,6 +21,7 @@
 #include "otgui/SimulationReliabilityAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
+#include <openturns/CompositeRandomVector.hxx>
 #include <openturns/MemoizeFunction.hxx>
 
 using namespace OT;
@@ -33,7 +34,7 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
   : ReliabilityAnalysis()
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , blockSize_(ResourceMap::GetAsScalar("Simulation-DefaultBlockSize"))
+  , blockSize_(ResourceMap::GetAsUnsignedInteger("SimulationAlgorithm-DefaultBlockSize"))
   , timeCriteria_()
 {
 }
@@ -45,7 +46,7 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis(const String& name,
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , blockSize_(ResourceMap::GetAsScalar("Simulation-DefaultBlockSize"))
+  , blockSize_(ResourceMap::GetAsUnsignedInteger("SimulationAlgorithm-DefaultBlockSize"))
   , timeCriteria_()
 {
 }
@@ -151,7 +152,7 @@ void SimulationReliabilityAnalysis::launch()
   function.clearHistory();
 
   // create OT::Event
-  Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  Event event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
   // create OT::Simulation

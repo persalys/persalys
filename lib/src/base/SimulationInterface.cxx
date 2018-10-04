@@ -20,8 +20,6 @@
  */
 #include "otgui/SimulationInterface.hxx"
 
-#include <openturns/ProbabilitySimulationAlgorithm.hxx>
-
 using namespace OT;
 
 namespace OTGUI
@@ -29,14 +27,14 @@ namespace OTGUI
 
 /* Default constructor */
 SimulationInterface::SimulationInterface()
-  : TypedInterfaceObject<Simulation>(new OT::ProbabilitySimulationAlgorithm())
+  : TypedInterfaceObject<ProbabilitySimulationAlgorithm>(new OT::ProbabilitySimulationAlgorithm())
 {
 }
 
 
 /* Default constructor */
-SimulationInterface::SimulationInterface(const Simulation & implementation)
-  : TypedInterfaceObject<Simulation>(implementation.clone())
+SimulationInterface::SimulationInterface(const ProbabilitySimulationAlgorithm & implementation)
+  : TypedInterfaceObject<ProbabilitySimulationAlgorithm>(implementation.clone())
 {
 
 }
@@ -44,15 +42,15 @@ SimulationInterface::SimulationInterface(const Simulation & implementation)
 
 /* Constructor from implementation */
 SimulationInterface::SimulationInterface(const Implementation & p_implementation)
-  : TypedInterfaceObject<Simulation>(p_implementation)
+  : TypedInterfaceObject<ProbabilitySimulationAlgorithm>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
 }
 
 /* Constructor from implementation pointer */
-SimulationInterface::SimulationInterface(Simulation * p_implementation)
-  : TypedInterfaceObject<Simulation>(p_implementation)
+SimulationInterface::SimulationInterface(ProbabilitySimulationAlgorithm * p_implementation)
+  : TypedInterfaceObject<ProbabilitySimulationAlgorithm>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -65,7 +63,7 @@ SimulationInterface* SimulationInterface::clone() const
 }
 
 
-SimulationResult SimulationInterface::getResult() const
+ProbabilitySimulationResult SimulationInterface::getResult() const
 {
   return getImplementation()->getResult();
 }

@@ -23,7 +23,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <openturns/SimulationResult.hxx>
+#include <openturns/ProbabilitySimulationResult.hxx>
 
 namespace OTGUI
 {
@@ -37,7 +37,7 @@ public:
   /** Default constructor */
   SimulationReliabilityResult();
   /** Constructor with parameters */
-  SimulationReliabilityResult(const OT::SimulationResult& simulationResults,
+  SimulationReliabilityResult(const OT::ProbabilitySimulationResult& simulationResults,
                               const OT::Sample& outputSample,
                               const OT::Sample& convergenceSample,
                               const OT::Sample& convergenceSampleLowerBound,
@@ -46,7 +46,7 @@ public:
   /** Virtual constructor */
   virtual SimulationReliabilityResult * clone() const;
 
-  OT::SimulationResult getSimulationResult() const;
+  OT::ProbabilitySimulationResult getSimulationResult() const;
   OT::Sample getOutputSample() const;
   OT::Sample getConvergenceSample() const;
   OT::Sample getConvergenceSampleLowerBound() const;
@@ -64,7 +64,7 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::SimulationResult simulationResult_;
+  OT::ProbabilitySimulationResult simulationResult_;
   OT::Sample outputSample_;
   OT::Sample convergenceSample_;
   OT::Sample convergenceSampleLowerBound_;

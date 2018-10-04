@@ -40,7 +40,7 @@ SimulationReliabilityResult::SimulationReliabilityResult()
 
 
 /* Constructor with parameters */
-SimulationReliabilityResult::SimulationReliabilityResult(const SimulationResult& simulationResults,
+SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimulationResult& simulationResults,
     const Sample& outputSample,
     const Sample& convergenceSample,
     const Sample& convergenceSampleLowerBound,
@@ -64,7 +64,7 @@ SimulationReliabilityResult* SimulationReliabilityResult::clone() const
 }
 
 
-SimulationResult SimulationReliabilityResult::getSimulationResult() const
+ProbabilitySimulationResult SimulationReliabilityResult::getSimulationResult() const
 {
   return simulationResult_;
 }

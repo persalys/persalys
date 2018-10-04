@@ -21,6 +21,7 @@
 #include "otgui/SORMAnalysis.hxx"
 
 #include <openturns/SORM.hxx>
+#include <openturns/CompositeRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -72,7 +73,7 @@ void SORMAnalysis::launch()
   Function function(getPhysicalModel().getRestrictedFunction(outputName));
 
   // create OT::Event
-  Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  Event event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
   // create OT::FORM
