@@ -22,7 +22,7 @@
 #define OTGUI_OUTPUTSSELECTIONGROUPBOX_HXX
 
 #include "otgui/ListWidgetWithCheckBox.hxx"
-#include "otgui/NoWheelEventComboBox.hxx"
+#include "otgui/TitledComboBox.hxx"
 
 #include <openturns/Description.hxx>
 
@@ -48,7 +48,7 @@ signals:
 private:
   bool pluralText_;
   ListWidgetWithCheckBox * outputsListWidget_;
-  NoWheelEventComboBox * outputsComboBox_;
+  TitledComboBox * outputsComboBox_;
 };
 }
 #endif

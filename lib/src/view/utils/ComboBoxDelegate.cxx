@@ -20,11 +20,10 @@
  */
 #include "otgui/ComboBoxDelegate.hxx"
 
-#include <otgui/NoWheelEventComboBox.hxx>
-
 #include <QStandardItemModel>
 #include <QWheelEvent>
 #include <QLineEdit>
+#include <QComboBox>
 
 namespace OTGUI
 {
@@ -33,16 +32,22 @@ namespace OTGUI
 class CustomComboBox : public QComboBox
 {
 public:
-  CustomComboBox(QWidget *parent)
-    : QComboBox(parent) {}
+  CustomComboBox(const bool neverWheelEvent, QWidget *parent)
+    : QComboBox(parent)
+    , neverWheelEvent_(neverWheelEvent)
+  {
+    setFocusPolicy(Qt::ClickFocus);
+  }
 
   virtual void wheelEvent(QWheelEvent *e)
   {
     // if no focus : no signal currentIndexChanged emitted -> wrong behavior
     // so if no focus : do nothing
-    if (hasFocus())
+    if (hasFocus() && !neverWheelEvent_)
       QComboBox::wheelEvent(e);
   }
+private:
+  bool neverWheelEvent_;
 };
 
 
@@ -74,11 +79,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
     if (index.row() != cell_.first || index.column() != cell_.second)
       return QItemDelegate::createEditor(parent, option, index);
 
-  QComboBox * editor = 0;
-  if (noWheelEvent_)
-    editor = new NoWheelEventComboBox(parent);
-  else
-    editor = new CustomComboBox(parent);
+  QComboBox * editor = new CustomComboBox(noWheelEvent_, parent);
   const QStringList items(index.model()->data(index, Qt::UserRole + 1).toStringList());
   editor->addItems(items);
   editor->setEnabled(items.size() > 0);

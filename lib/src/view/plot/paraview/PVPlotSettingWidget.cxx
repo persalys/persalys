@@ -22,7 +22,7 @@
 
 #include "otgui/ListWidgetWithCheckBox.hxx"
 #include "otgui/QtTools.hxx"
-#include "otgui/NoWheelEventComboBox.hxx"
+#include "otgui/TitledComboBox.hxx"
 
 #include <vtkSMProperty.h>
 #include <pqSMAdaptor.h>
@@ -88,7 +88,7 @@ void PVPlotSettingWidget::buildInterface()
   mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
   // combobox to select the variables to display
-  NoWheelEventComboBox * varComboBox = new NoWheelEventComboBox;
+  TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
   ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", names, this);
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
   varComboBox->setModel(varListWidget->model());

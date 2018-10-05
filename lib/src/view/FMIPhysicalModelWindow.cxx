@@ -27,7 +27,7 @@
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/FMUInfo.hxx"
 #include "otgui/ParametersTableView.hxx"
-#include "otgui/NoWheelEventComboBox.hxx"
+#include "otgui/TitledComboBox.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
 #include "otgui/DifferentiationTableModel.hxx"
 
@@ -125,7 +125,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   QStringList variabilityFields;
   variabilityFields << tr("Constant") << tr("Fixed") << tr("Tunable") << tr("Discrete") << tr("Continuous") << tr("Unknown");
   variabilityField_ = new ListWidgetWithCheckBox(tr("Variability") + QString("     "), variabilityFields);
-  NoWheelEventComboBox * variabilityFieldComboBox = new NoWheelEventComboBox;
+  TitledComboBox * variabilityFieldComboBox = new TitledComboBox(tr("Variability") + QString("     "));
   variabilityFieldComboBox->setModel(variabilityField_->model());
   variabilityFieldComboBox->setView(variabilityField_);
   filterLayout->addWidget(variabilityFieldComboBox, 0, 3);
@@ -135,7 +135,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   QStringList causalityFields;
   causalityFields << tr("Parameter") << tr("Calculated") << tr("Input") << tr("Output") << tr("Local") << tr("Independent") << tr("Unknown");
   causalityField_ = new ListWidgetWithCheckBox(tr("Causality") + QString("         "), causalityFields);
-  NoWheelEventComboBox * causalityFieldComboBox = new NoWheelEventComboBox;
+  TitledComboBox * causalityFieldComboBox = new TitledComboBox(tr("Causality") + QString("         "));
   causalityFieldComboBox->setModel(causalityField_->model());
   causalityFieldComboBox->setView(causalityField_);
   filterLayout->addWidget(causalityFieldComboBox, 0, 4);
@@ -145,7 +145,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   QStringList ioFields;
   ioFields << tr("Disabled") << tr("Input") << tr("Output");
   ioField_ = new ListWidgetWithCheckBox(tr("I/O") + QString("            "), ioFields);
-  NoWheelEventComboBox * ioFieldComboBox = new NoWheelEventComboBox;
+  TitledComboBox * ioFieldComboBox = new TitledComboBox(tr("I/O") + QString("            "));
   ioFieldComboBox->setModel(ioField_->model());
   ioFieldComboBox->setView(ioField_);
   filterLayout->addWidget(ioFieldComboBox, 0, 5);
