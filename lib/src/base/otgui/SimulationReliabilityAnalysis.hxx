@@ -26,7 +26,7 @@
 #include "SimulationReliabilityResult.hxx"
 #include "SimulationInterface.hxx"
 
-#include <openturns/Simulation.hxx>
+#include <openturns/SimulationAlgorithm.hxx>
 
 namespace OTGUI
 {

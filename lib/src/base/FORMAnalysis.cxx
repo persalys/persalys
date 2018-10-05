@@ -21,6 +21,7 @@
 #include "otgui/FORMAnalysis.hxx"
 
 #include <openturns/FORM.hxx>
+#include <openturns/CompositeRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -72,7 +73,7 @@ void FORMAnalysis::launch()
   Function function(getPhysicalModel().getRestrictedFunction(outputName));
 
   // create OT::Event
-  Event event(RandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  Event event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
   // create OT::FORM

@@ -56,7 +56,7 @@ macro (otgui_add_library name)
   endif ()
 endmacro ()
 
-find_package (OpenTURNS 1.10 NO_MODULE REQUIRED)
+find_package (OpenTURNS 1.12 NO_MODULE REQUIRED)
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 include ( ${OPENTURNS_USE_FILE} )
 set ( OTGUI_DEFINITIONS ${OPENTURNS_DEFINITIONS} )

@@ -200,7 +200,7 @@ void InferenceAnalysis::launch()
         Distribution distribution(distFactory.build(sample.getMarginal(i)));
 
         // Kolmogorov test
-        TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, 1 - level_, distribution.getParameterDimension()));
+        TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_));
 
         // BIC test
         const Scalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
