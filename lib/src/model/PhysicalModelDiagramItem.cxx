@@ -138,22 +138,10 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     emit showErrorMessageRequested(tr("There is no design of experiments."));
     return;
   }
-  // check if there is already an Evaluation item
+  // get an analysis to launch signal
   QStandardItem * doeTitleItem = this->model()->itemFromIndex(listIndexes[0]);
-  for (int i = 0; i < doeTitleItem->rowCount(); ++i)
-  {
-    if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
-    {
-      DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      if (!analysisItem->getAnalysis().hasValidResult())
-      {
-        emit designOfExperimentEvaluationRequested(analysisItem->getAnalysis(), true);
-        return;
-      }
-    }
-  }
-  // emit error message
-  emit showErrorMessageRequested(tr("All the designs of experiments have already been evaluated.\n"));
+  DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(0));
+  emit designOfExperimentEvaluationRequested(analysisItem->getAnalysis(), true);
 }
 
 

@@ -44,39 +44,6 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   , blockSizeGroupBox_(0)
   , errorMessageLabel_(0)
 {
-  // get list of DesignOfExperimentDefinitionItem of the current physical model
-  QList < DesignOfExperimentDefinitionItem* > doeList;
-  if (isGeneralWizard)
-  {
-    PhysicalModel model(dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel());
-    PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram"));
-    Q_ASSERT(pmItem);
-
-    QModelIndexList listIndexes = pmItem->model()->match(pmItem->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
-    Q_ASSERT(listIndexes.size() == 1);
-
-    QStandardItem * doeTitleItem = pmItem->model()->itemFromIndex(listIndexes[0]);
-    Q_ASSERT(doeTitleItem);
-    for (int i = 0; i < doeTitleItem->rowCount(); ++i)
-    {
-      QStandardItem * doeItem = doeTitleItem->child(i);
-      Q_ASSERT(doeItem);
-      if (doeItem->data(Qt::UserRole).toString().contains("DesignOfExperiment"))
-      {
-        DesignOfExperimentDefinitionItem * doeDefItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeItem);
-        Q_ASSERT(doeDefItem);
-        if (!doeDefItem->getAnalysis().hasValidResult())
-          doeList.append(doeDefItem);
-      }
-    }
-  }
-  if (!doeList.size())
-  {
-    DesignOfExperimentDefinitionItem * doeDefItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(analysis.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
-    Q_ASSERT(doeDefItem);
-    doeList.append(doeDefItem);
-  }
-
   // set window title
   setWindowTitle(tr("Design of experiments evaluation"));
 
@@ -94,12 +61,30 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   doesComboBox_ = new QComboBox;
   doesComboBoxModel_ = new QStandardItemModel(doesComboBox_);
 
-  for (int i = 0; i < doeList.count(); ++i)
+  // - fill combo box
+  DesignOfExperimentDefinitionItem * doeDefItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(analysis.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
+  Q_ASSERT(doeDefItem);
+  // get list of DesignOfExperimentDefinitionItem of the current physical model
+  if (isGeneralWizard)
   {
-    QStandardItem * item = new QStandardItem(QString::fromUtf8(doeList[i]->getAnalysis().getName().c_str()));
-    item->setData(qVariantFromValue(doeList[i]));
-    doesComboBoxModel_->appendRow(item);
+    QStandardItem * doeTitleItem = doeDefItem->QStandardItem::parent();
+    Q_ASSERT(doeTitleItem);
+    for (int i = 0; i < doeTitleItem->rowCount(); ++i)
+    {
+      doeDefItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
+      Q_ASSERT(doeDefItem);
+      QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(doeDefItem->getAnalysis().getName().c_str()));
+      comboItem->setData(qVariantFromValue(doeDefItem));
+      doesComboBoxModel_->appendRow(comboItem);
+    }
   }
+  else
+  {
+    QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(analysis.getName().c_str()));
+    comboItem->setData(qVariantFromValue(doeDefItem));
+    doesComboBoxModel_->appendRow(comboItem);
+  }
+
   doesComboBox_->setModel(doesComboBoxModel_);
   groupBoxLayout->addWidget(doesComboBox_);
   connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWidgets()));
