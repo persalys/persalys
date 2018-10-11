@@ -54,9 +54,9 @@ public:
 
   OT::UnsignedInteger getCallsNumber() const;
 
-  double getElapsedTime() const;
+  OT::Scalar getElapsedTime() const;
 
-  double getCoefficientOfVariation() const;
+  OT::Scalar getConfidenceIntervalLength() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -74,8 +74,8 @@ private:
   OT::PersistentCollection<OT::Interval> firstOrderIndicesInterval_;
   OT::PersistentCollection<OT::Interval> totalIndicesInterval_;
   OT::UnsignedInteger callsNumber_;
-  double elapsedTime_;
-  double coefficientOfVariation_;
+  OT::Scalar elapsedTime_;
+  OT::Scalar confidenceIntervalLength_;
 };
 }
 #endif

@@ -145,8 +145,8 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Kolmogorov-Smirnov", tr("Kolmogorov-Smirnov")));
   ParametersNames_.insert(type("Number of folds", tr("Number of folds")));
   ParametersNames_.insert(type("Percentage", tr("Percentage")));
-  ParametersNames_.insert(type("Bootstrap size", tr("Bootstrap size")));
-  ParametersNames_.insert(type("Bootstrap confidence level", tr("Bootstrap confidence level")));
+  ParametersNames_.insert(type("Maximum confidence interval length", tr("Maximum confidence interval length")));
+  ParametersNames_.insert(type("Replication size", tr("Replication size")));
   ParametersNames_.insert(type("Bounds", tr("Bounds")));
   ParametersNames_.insert(type("Design type", tr("Design type")));
   ParametersNames_.insert(type("Grid", tr("Grid")));

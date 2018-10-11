@@ -23,10 +23,11 @@ myStudy.add(model)
 # Sobol ##
 analysis = otguibase.SobolAnalysis('aSobol', model)
 analysis.setMaximumCalls(1000)
-analysis.setMaximumCoefficientOfVariation(-1)
+analysis.setMaximumConfidenceIntervalLength(-1)
 analysis.setMaximumElapsedTime(30)
 analysis.setSeed(2)
-analysis.setBlockSize(250)
+analysis.setReplicationSize(250)
+analysis.setBlockSize(4)
 myStudy.add(analysis)
 print(analysis)
 
@@ -36,7 +37,7 @@ print("result=", analysis.getResult())
 
 # Sobol ##
 analysis2 = otguibase.SobolAnalysis('aSobol2', model)
-analysis2.setMaximumCoefficientOfVariation(0.02)
+analysis2.setMaximumConfidenceIntervalLength(0.02)
 analysis2.setMaximumElapsedTime(100000)
 myStudy.add(analysis2)
 print(analysis2)
@@ -53,9 +54,10 @@ model.setFormula('y1', '3*x0 + x1 + x2')
 
 analysis3 = otguibase.SobolAnalysis('aSobol3', model)
 analysis3.setMaximumCalls(1000)
-analysis3.setBlockSize(250)
+analysis3.setReplicationSize(200)
+analysis3.setBlockSize(4)
 analysis3.setSeed(2)
-analysis3.setInterestVariables(['y0', 'y1'])
+analysis3.setInterestVariables(['y1'])
 myStudy.add(analysis3)
 print(analysis3)
 
@@ -63,7 +65,7 @@ analysis3.run()
 
 result3 = analysis3.getResult()
 print("result=", result3)
-
+otguibase.OTStudy.Add(myStudy)
 # script
 script = myStudy.getPythonScript()
 print(script)

@@ -36,7 +36,6 @@ SobolPage::SobolPage(QWidget* parent)
   , stopCriteriaGroupBox_(0)
   , blockSizeGroupBox_(0)
   , totalNbSimuLabel_(0)
-  , bootstrapSizeSpinBox_(0)
   , confidenceLevelSpinbox_(0)
   , seedSpinbox_(0)
   , errorMessageLabel_(0)
@@ -54,21 +53,21 @@ void SobolPage::buildInterface()
   /// simulation widgets
 
   // stop criteria
-  stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(clearErrorMessageLabel()));
+  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(StopCriteriaGroupBox::Time_Calls_CILength);
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCILengthChanged(double)), this, SLOT(clearErrorMessageLabel()));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(clearErrorMessageLabel()));
   connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(double)), this, SLOT(clearErrorMessageLabel()));
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
-  blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), this, SLOT(updateNumberSimulations(double)));
+  blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameters"), true);
+  connect(blockSizeGroupBox_, SIGNAL(replicationSizeChanged(double)), this, SLOT(updateNumberSimulations(double)));
   pageLayout->addWidget(blockSizeGroupBox_);
 
   // nb simu
   QHBoxLayout * nbSimuLayout = new QHBoxLayout;
   QLabel * totalNbSimuTitleLabel = new QLabel(tr("Number of calls by iteration"));
-  totalNbSimuTitleLabel->setToolTip(tr("= block_size * ( number_of_inputs + 2 )"));
+  totalNbSimuTitleLabel->setToolTip(tr("= replication_size * ( number_of_inputs + 2 )"));
   nbSimuLayout->addWidget(totalNbSimuTitleLabel);
 
   // total nb simu/iteration: N=blockSize*(nb_inputs+2)
@@ -82,26 +81,21 @@ void SobolPage::buildInterface()
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
 
-  // bootstrap size
-  advancedWidgetsLayout->addWidget(new QLabel(tr("Bootstrap sampling size")), 0, 0);
-  bootstrapSizeSpinBox_ = new UIntSpinBox;
-  advancedWidgetsLayout->addWidget(bootstrapSizeSpinBox_, 0, 1);
-
   // confidence interval level
-  advancedWidgetsLayout->addWidget(new QLabel(tr("Confidence level")), 1, 0);
+  advancedWidgetsLayout->addWidget(new QLabel(tr("Confidence level")), 0, 0);
   confidenceLevelSpinbox_ = new DoubleSpinBox;
   confidenceLevelSpinbox_->setRange(0.0, 0.99);
   confidenceLevelSpinbox_->setSingleStep(0.01);
-  advancedWidgetsLayout->addWidget(confidenceLevelSpinbox_, 1, 1);
+  advancedWidgetsLayout->addWidget(confidenceLevelSpinbox_, 0, 1);
 
   // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
-  advancedWidgetsLayout->addWidget(seedLabel, 2, 0);
+  advancedWidgetsLayout->addWidget(seedLabel, 1, 0);
 
   seedSpinbox_ = new QSpinBox;
   seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
+  advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
 
   pageLayout->addWidget(advancedParamGroupBox);
 
@@ -124,23 +118,23 @@ void SobolPage::initialize(const Analysis& analysis)
     return;
 
   numberStochasticVariables_ = analysis_ptr->getPhysicalModel().getStochasticInputNames().getSize() + 2;
-  stopCriteriaGroupBox_->setMaximumCoefficientOfVariation(analysis_ptr->getMaximumCoefficientOfVariation());
+  stopCriteriaGroupBox_->setMaximumConfidenceIntervalLength(analysis_ptr->getMaximumConfidenceIntervalLength());
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
   stopCriteriaGroupBox_->setMaximumCalls(analysis_ptr->getMaximumCalls());
   blockSizeGroupBox_->setBlockSizeValue(analysis_ptr->getBlockSize());
-  bootstrapSizeSpinBox_->setValue(analysis_ptr->getBootstrapSize());
-  confidenceLevelSpinbox_->setValue(analysis_ptr->getBootstrapConfidenceLevel());
+  blockSizeGroupBox_->setReplicationSizeValue(analysis_ptr->getReplicationSize());
+  confidenceLevelSpinbox_->setValue(analysis_ptr->getConfidenceLevel());
   seedSpinbox_->setValue(analysis_ptr->getSeed());
 
-  updateNumberSimulations(analysis_ptr->getBlockSize());
+  updateNumberSimulations(analysis_ptr->getReplicationSize());
 }
 
 
-void SobolPage::updateNumberSimulations(double blockSize)
+void SobolPage::updateNumberSimulations(double replicationSize)
 {
   errorMessageLabel_->setText("");
-  // total nb simu/iteration: N=blockSize*(nb_inputs+2)
-  const int nbSimu = blockSize * numberStochasticVariables_;
+  // total nb simu/iteration: N=replicationSize*(nb_inputs+2)
+  const int nbSimu = replicationSize * numberStochasticVariables_;
   totalNbSimuLabel_->setText(QString::number(nbSimu));
 }
 
@@ -149,11 +143,11 @@ Analysis SobolPage::getAnalysis(const String& name, const PhysicalModel& physica
 {
   SobolAnalysis analysis(name, physicalModel);
   analysis.setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
-  analysis.setMaximumCoefficientOfVariation(stopCriteriaGroupBox_->getMaximumCoefficientOfVariation());
+  analysis.setMaximumConfidenceIntervalLength(stopCriteriaGroupBox_->getMaximumConfidenceIntervalLength());
   analysis.setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
   analysis.setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
-  analysis.setBootstrapSize(bootstrapSizeSpinBox_->value());
-  analysis.setBootstrapConfidenceLevel(confidenceLevelSpinbox_->value());
+  analysis.setReplicationSize(blockSizeGroupBox_->getReplicationSizeValue());
+  analysis.setConfidenceLevel(confidenceLevelSpinbox_->value());
   analysis.setSeed(seedSpinbox_->value());
 
   return analysis;
@@ -178,14 +172,17 @@ bool SobolPage::validatePage()
   QString errorMessage;
 
   if (!stopCriteriaGroupBox_->isValid())
-    errorMessage = tr("Please select at least one stop criteria");
+    errorMessage = tr("Please select at least one stop criterion");
   else
   {
     if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
       errorMessage = tr("The maximum time must not be null");
     if (stopCriteriaGroupBox_->isMaxCallsRequired())
-      if (stopCriteriaGroupBox_->getMaximumCalls() < (blockSizeGroupBox_->getBlockSizeValue()*numberStochasticVariables_))
-        errorMessage = tr("The maximum calls can not be lesser than: block_size*(number_of_inputs + 2)");
+    {
+      const UnsignedInteger maxSize = blockSizeGroupBox_->getReplicationSizeValue() * numberStochasticVariables_;
+      if (stopCriteriaGroupBox_->getMaximumCalls() < maxSize)
+        errorMessage = tr("The maximum calls (%1) can not be lesser than: replication_size(%2)*(number_of_inputs (%3) + 2)=%4").arg(stopCriteriaGroupBox_->getMaximumCalls()).arg(blockSizeGroupBox_->getReplicationSizeValue()).arg(numberStochasticVariables_-2).arg(maxSize);
+    }
   }
 
   errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));

@@ -132,12 +132,12 @@ void SobolResultWindow::buildInterface()
     QStringList namesList;
     namesList << tr("Elapsed time")
               << tr("Number of calls")
-              << tr("Coefficient of variation");
+              << tr("Confidence interval length");
 
     QStringList valuesList;
     valuesList << QString::number(result_.getElapsedTime()) + " s"
                << QString::number(result_.getCallsNumber())
-               << QString::number(result_.getCoefficientOfVariation());
+               << QString::number(result_.getConfidenceIntervalLength());
 
     ParametersWidget * parametersWidget = new ParametersWidget(tr("Stop criteria"), namesList, valuesList, true, true);
     paramWidgetLayout->addWidget(parametersWidget);

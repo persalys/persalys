@@ -63,13 +63,13 @@ interval : sequence of :py:class:`openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getCoefficientOfVariation
-"Coefficient of variation accessor.
+%feature("docstring") OTGUI::SobolResult::getConfidenceIntervalLength
+"Confidence interval length accessor.
 
 Returns
 -------
-result : :py:class:`openturns.Point`
-    Coefficient of variation"
+length : float
+    Maximum confidence interval length of all components and both indices"
 
 // ---------------------------------------------------------------------
 
