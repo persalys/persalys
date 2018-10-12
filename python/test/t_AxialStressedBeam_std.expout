@@ -13,13 +13,10 @@ R = otguibase.Input('R', 300, dist_R, 'Yield stress (Pa)')
 dist_F = ot.Normal(75000, 5000)
 F = otguibase.Input('F', 75000, dist_F, 'Traction force (N)')
 G = otguibase.Output('G', 'Stress difference (Pa)')
-inputCollection = []
-inputCollection.append(R)
-inputCollection.append(F)
-outputCollection = []
-outputCollection.append(G)
-code='from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return G\n'
-myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputCollection, outputCollection, code)
+inputs = [R, F]
+outputs = [G]
+code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return G\n'
+myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myStudy.add(myPhysicalModel)
 values = [300,75000]
 lowerBounds = [0,66775.7]

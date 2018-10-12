@@ -23,7 +23,7 @@ def _exec(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16,
         for j in range(6):
             b2[i][j] = -15.0
 
-    # Tae into account beta
+    # Take into account beta
     k = 0
     for i in range(6):
         for j in range(14):
