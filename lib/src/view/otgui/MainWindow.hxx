@@ -30,6 +30,26 @@
 
 namespace OTGUI
 {
+
+class CustomDockWidget : public QDockWidget
+{
+  Q_OBJECT
+
+public:
+  CustomDockWidget(QString title, QWidget * parent=0)
+  : QDockWidget(title, parent)
+  {}
+
+  void setVisible(bool visible) override
+  {
+    emit customVisibilityChanged(visible);
+    QDockWidget::setVisible(visible);
+  }
+signals:
+  void customVisibilityChanged(bool);
+};
+
+
 class OTGUI_API MainWindow : public QMainWindow
 {
   Q_OBJECT

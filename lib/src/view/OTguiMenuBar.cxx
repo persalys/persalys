@@ -86,12 +86,9 @@ void OTguiMenuBar::buildActions(const OTguiActions* actions)
   // View menu
   QMenu * viewMenu = new QMenu(tr("&View"));
   QMenu * windowMenu = new QMenu(tr("W&indow"));
-  action = new QAction(tr("Python Console"), this);
-  action->setCheckable(true);
-  action->setChecked(true);
-  connect(action, SIGNAL(triggered(bool)), this, SIGNAL(showHidePythonConsole(bool)));
-  connect(this, SIGNAL(pythonConsoleVisibilityChanged(bool)), action, SLOT(setChecked(bool)));
-  windowMenu->addAction(action);
+  pythonConsoleDisplayAction_ = new QAction(tr("Python Console"), this);
+  pythonConsoleDisplayAction_->setCheckable(true);
+  windowMenu->addAction(pythonConsoleDisplayAction_);
   viewMenu->addMenu(windowMenu);
 
   addMenu(viewMenu);
@@ -110,6 +107,12 @@ void OTguiMenuBar::buildActions(const OTguiActions* actions)
   helpMenu->addAction(action);
 
   addMenu(helpMenu);
+}
+
+
+QAction * OTguiMenuBar::pythonConsoleDisplayAction() const
+{
+  return pythonConsoleDisplayAction_;
 }
 
 
@@ -203,5 +206,12 @@ void OTguiMenuBar::openAboutDialog()
 {
   OTguiAboutDialog aboutDialog(this);
   aboutDialog.exec();
+}
+
+
+void OTguiMenuBar::updateConsoleStatus(const bool visibility)
+{
+  QSettings settings;
+  settings.setValue("pythonConsoleVisibility", visibility);
 }
 }

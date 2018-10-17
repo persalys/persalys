@@ -34,6 +34,7 @@ class OTGUI_API OTguiMenuBar : public QMenuBar
 public:
   enum { NbMaxRecentFiles = 5 };
   OTguiMenuBar(const OTguiActions* actions);
+  QAction * pythonConsoleDisplayAction() const;
 
 protected:
   void buildActions(const OTguiActions* actions);
@@ -45,6 +46,7 @@ public slots:
   void clearRecentFilesActions();
   void openUserManual();
   void openAboutDialog();
+  void updateConsoleStatus(const bool visibility);
 signals:
   void openOTStudy(QString);
   void showHidePythonConsole(bool);
@@ -53,6 +55,7 @@ signals:
 private:
   QMenu * recentFilesMenu_;
   QAction * recentFileActions_[NbMaxRecentFiles];
+  QAction * pythonConsoleDisplayAction_;
 };
 }
 #endif
