@@ -99,12 +99,6 @@ String PythonScriptEvaluation::__str__(const String & offset) const
 }
 
 
-void PythonScriptEvaluation::initialize()
-{
-//   Py_CompileStringFlags
-}
-
-
 UnsignedInteger PythonScriptEvaluation::getInputDimension() const
 {
   return inputDimension_;
@@ -196,15 +190,20 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << code_ << "\n";
   oss << "from concurrent.futures import ThreadPoolExecutor, as_completed\n";
   oss << "import openturns as ot\n";
+  oss << "import sys\n";
   oss << "def _exec_sample():\n";
   oss << "    X = " << sampleOss.str() << "\n";
-  oss << "    Y = []\n";
   oss << "    with ThreadPoolExecutor() as executor:\n";
   oss << "        resu = {executor.submit(_exec, *x): x for x in X}\n";
   oss << "        for future in as_completed(resu):\n";
-  oss << "            Y.append(future.result())\n";
+  oss << "            try:\n";
+  oss << "                y = future.result()\n";
+  oss << "            except Exception as exc:\n";
+  oss << "                raise Exception('Error when evaluating %r. ' % resu[future])\n";
   if (outDim < 2)
-    oss << "    Y = [[y] for y in Y]\n";
+    oss << "        Y = [[task.result()] for task in resu]\n";
+  else
+    oss << "        Y = [task.result() for task in resu]\n";
   oss << "    return Y\n";
 
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
