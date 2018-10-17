@@ -34,6 +34,16 @@ f = model.getFunction()
 print(f([[300., 75000.]]))
 print(f([[300., 75000.], [400., 74000.]]))
 
+# test operator() (sample)
+model.setCode(
+    'from math import pi\nimport time\ndef _exec(R, F):\n    if R == 300.:\n      time.sleep(0.5)\n    G = 2*R-F/(pi*100.0)\n    return G\n')
+
+plan_0 = otguibase.FixedDesignOfExperiment('plan_0', model, [[300., 75000.], [400., 74000.]])
+plan_0.setBlockSize(2)
+myStudy.add(plan_0)
+plan_0.run()
+print("Sample :\n %s" % plan_0.getDesignOfExperiment().getSample())
+
 # model with an error
 model.setCode(
     'from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)/0.\n    return G\n')

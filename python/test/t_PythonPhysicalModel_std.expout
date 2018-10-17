@@ -5,6 +5,10 @@
     [ G       ]
 0 : [ 361.268 ]
 1 : [ 564.451 ]
+Sample :
+     [ R         F         G         ]
+0 : [   300     75000       361.268 ]
+1 : [   400     74000       564.451 ]
 ZeroDivisionError occured: True
 Error on the line 4 : True
 #!/usr/bin/env python
@@ -30,4 +34,13 @@ code='from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)/0.\n    
 myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputCollection, outputCollection, code)
 myPhysicalModel.setParallel(True)
 myStudy.add(myPhysicalModel)
+plan_0 = otguibase.FixedDesignOfExperiment('plan_0', myPhysicalModel)
+inputSample = [
+[300, 75000],
+[400, 74000]]
+plan_0.setOriginalInputSample(inputSample)
+plan_0.setBlockSize(2)
+interestVariables = ['G']
+plan_0.setInterestVariables(interestVariables)
+myStudy.add(plan_0)
 
