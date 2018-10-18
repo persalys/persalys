@@ -54,10 +54,11 @@ void handleExceptionTraceback()
   {
     PyObject *ptype = NULL, *pvalue = NULL, *ptraceback = NULL;
     PyErr_Fetch(&ptype, &pvalue, &ptraceback);
+    PyErr_NormalizeException(&ptype, &pvalue, &ptraceback);
 
-    String exceptionMessage("Python exception");
+    String exceptionMessage;
 
-    if (ptraceback != NULL)
+    if (ptraceback)
     {
       // See if we can get a full traceback
       ScopedPyObjectPointer pyth_module(PyImport_ImportModule("traceback"));
@@ -71,7 +72,7 @@ void handleExceptionTraceback()
         {
           // The return value of format_exception() is a list of strings
           const Description desc = checkAndConvert< _PySequence_, Description >(pyth_val.get());
-          exceptionMessage += ":\n";
+          exceptionMessage += "Python exception:\n";
           for (UnsignedInteger i = 0; i < desc.getSize(); i++)
           {
             exceptionMessage += desc[i];
@@ -79,8 +80,9 @@ void handleExceptionTraceback()
         }
       }
     }
-    else
+    if (!ptraceback || exceptionMessage.empty())
     {
+      exceptionMessage = "Python exception";
       // get the name of the exception
       if (ptype)
       {
