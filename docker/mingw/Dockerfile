@@ -2,10 +2,10 @@ FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
 # https://github.com/docker/for-linux/issues/208
-RUN aurman -S --noconfirm --noedit mingw-w64-qt5-base-nostatx
+RUN aurman -Syu --noconfirm --noedit mingw-w64-qt5-base-nostatx
 
 RUN aurman -S --noconfirm --noedit mingw-w64-qwt
-RUN aurman -Syu --noconfirm --noedit mingw-w64-paraview
+RUN aurman -S --noconfirm --noedit mingw-w64-paraview
 
 ENV ARCH x86_64
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
@@ -28,7 +28,7 @@ RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/Lib/site-pac
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
-  && git checkout v0.4 \
+  && git checkout 1c234e10cfb2ffcbbe6c3b6cb49bfa973a13aeb5 \
   && CXXFLAGS="-D_hypot=hypot -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
   -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
