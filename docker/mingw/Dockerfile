@@ -11,6 +11,10 @@ ENV ARCH x86_64
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 ENV PYMAJMIN 36
 
+# out of sync ?
+RUN git clone https://aur.archlinux.org/mingw-w64-netcdf-cxx-legacy.git /tmp/ncdf && cd /tmp/ncdf \
+ && makepkg -sfi --skippgpcheck --noconfirm
+
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
   && git checkout 904796b1b1cda94b273930b7afb9a0e323c71a7f \
@@ -41,3 +45,4 @@ RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/Lib/site-pac
 # fake otfmi
 RUN echo "__version__= '0.0'" > /tmp/otfmi.py \
  && sudo mv /tmp/otfmi.py ${MINGW_PREFIX}/lib/python${PYMAJMIN}/otfmi.py
+
