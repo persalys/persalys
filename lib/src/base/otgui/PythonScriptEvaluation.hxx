@@ -55,11 +55,6 @@ public:
   virtual OT::String __repr__() const;
   virtual OT::String __str__(const OT::String & offset = "") const;
 
-protected:
-
-  void initialize();
-
-public:
   void resetCallsNumber();
 
   /** Operator () */

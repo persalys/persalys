@@ -19,7 +19,9 @@
  *
  */
 #include "otgui/PythonPhysicalModel.hxx"
+
 #include "otgui/PythonScriptEvaluation.hxx"
+#include "otgui/OTTools.hxx"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
@@ -173,6 +175,7 @@ void PythonPhysicalModel::resetCallsNumber()
 String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
+
   oss << PhysicalModelImplementation::getHtmlDescription(deterministic);
 
   oss << "<h3>Outputs</h3><p>";
@@ -209,38 +212,29 @@ String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
 
 String PythonPhysicalModel::getPythonScript() const
 {
-  String result;
+  OSS oss;
 
   for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
-    result += getInputs()[i].getPythonScript();
+    oss << getInputs()[i].getPythonScript();
 
   for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
-    result += getOutputs()[i].getPythonScript();
+    oss << getOutputs()[i].getPythonScript();
 
-  result += "inputCollection = []\n";
-  for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
-  {
-    result += "inputCollection.append(" + getInputs()[i].getName() + ")\n";
-  }
-
-  result += "outputCollection = []\n";
-  for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
-  {
-    result += "outputCollection.append(" + getOutputs()[i].getName() + ")\n";
-  }
+  oss << "inputs = " << Parameters::GetOTDescriptionStr(getInputNames(), false) << "\n";
+  oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
 
   // escape quotes, eols
   String escaped_code = boost::regex_replace(getCode(), boost::regex("'"), "\\\\'");
   escaped_code = boost::regex_replace(escaped_code, boost::regex("\n"), "\\\\n");
-  result += "code='" + escaped_code + "'\n";
+  oss << "code = '" + escaped_code + "'\n";
 
-  result += getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputCollection, outputCollection, code)\n";
+  oss << getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
   if (isParallel())
-    result += getName() + ".setParallel(True)\n";
+    oss << getName() + ".setParallel(True)\n";
 
-  result += PhysicalModelImplementation::getCopulaPythonScript();
+  oss << PhysicalModelImplementation::getCopulaPythonScript();
 
-  return result;
+  return oss;
 }
 
 

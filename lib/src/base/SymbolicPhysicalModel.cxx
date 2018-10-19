@@ -181,6 +181,7 @@ Function SymbolicPhysicalModel::generateFunction(const Description & outputNames
 String SymbolicPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
+
   oss << PhysicalModelImplementation::getHtmlDescription(deterministic);
   oss << "<h3>Outputs</h3><p>";
   oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
@@ -214,24 +215,8 @@ String SymbolicPhysicalModel::getPythonScript() const
   for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
     oss << getOutputs()[i].getPythonScript();
 
-  oss << "inputs = [";
-  for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
-  {
-    oss << getInputs()[i].getName();
-    if (i < getInputDimension() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-
-  oss << "outputs = [";
-  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
-  {
-    oss << getOutputs()[i].getName();
-    if (i < getOutputDimension() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-
+  oss << "inputs = " << Parameters::GetOTDescriptionStr(getInputNames(), false) << "\n";
+  oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
   oss << "formulas = " << Parameters::GetOTDescriptionStr(getFormulas()) << "\n";
 
   oss << getName() + " = otguibase.SymbolicPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";

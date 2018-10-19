@@ -20,6 +20,8 @@
  */
 #include "otgui/DesignOfExperimentImplementation.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 
@@ -136,21 +138,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
 
   oss << getName() << " = otguibase.DesignOfExperimentImplementation('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
 
-  oss << "inputSample = [\n";
-  for (UnsignedInteger i = 0; i < getInputSample().getSize(); ++i)
-  {
-    oss << "[";
-    for (UnsignedInteger j = 0; j < getInputSample().getDimension(); ++j)
-    {
-      oss << getInputSample()(i, j);
-      if (j < (getInputSample().getDimension() - 1))
-        oss << ", ";
-    }
-    oss << "]";
-    if (i < (getInputSample().getSize() - 1))
-      oss << ",\n";
-  }
-  oss << "]\n";
+  oss << "inputSample = " << Parameters::GetOTSampleStr(getInputSample());
 
   oss << getName() << ".setInputSample(inputSample)\n";
 

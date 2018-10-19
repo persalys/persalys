@@ -25,9 +25,9 @@
 #include "otgui/OTguiMenuBar.hxx"
 #include "otgui/OTguiToolBar.hxx"
 #include "otgui/OTguiStatusBar.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QSplitter>
-#include <QDockWidget>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -44,6 +44,8 @@
 
 namespace OTGUI
 {
+
+
 
 MainWindow::MainWindow()
   : QMainWindow()
@@ -87,9 +89,10 @@ void MainWindow::buildInterface()
   pythonConsole_->setIsShowBanner(false);
   pythonConsole_->setAutoCompletion(true);
 
-  QDockWidget * pythonConsoleDock = new QDockWidget(tr("Python Console"));
+  CustomDockWidget * pythonConsoleDock = new CustomDockWidget(tr("Python Console"));
   pythonConsoleDock->setWidget(pythonConsole_);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
+  pythonConsoleDock->setVisible(QSettings().value("pythonConsoleVisibility", true).toBool());
   mainSplitter->addWidget(pythonConsoleDock);
 
   setCentralWidget(mainSplitter);
@@ -100,8 +103,11 @@ void MainWindow::buildInterface()
 
   // menu bar
   OTguiMenuBar * menuBar = new OTguiMenuBar(actions);
-  connect(pythonConsoleDock, SIGNAL(visibilityChanged(bool)), menuBar, SIGNAL(pythonConsoleVisibilityChanged(bool)));
-  connect(menuBar, SIGNAL(showHidePythonConsole(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
+
+  connect(menuBar->pythonConsoleDisplayAction(), SIGNAL(triggered(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
+  connect(pythonConsoleDock, SIGNAL(customVisibilityChanged(bool)), menuBar, SLOT(updateConsoleStatus(bool)));
+  connect(pythonConsoleDock, SIGNAL(customVisibilityChanged(bool)), menuBar->pythonConsoleDisplayAction(), SLOT(setChecked(bool)));
+
   connect(menuBar, SIGNAL(openOTStudy(QString)), manager_, SLOT(open(QString)));
   connect(manager_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
   setMenuBar(menuBar);

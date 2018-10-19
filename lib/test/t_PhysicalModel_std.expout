@@ -28,13 +28,9 @@ E = otguibase.Input('E', 0, dist_E, 'Produced electric energy')
 dist_C = ot.Normal(4000, 60)
 C = otguibase.Input('C', 0, dist_C, 'Valued thermal energy')
 Ep = otguibase.Output('Ep', 'Primary energy savings')
-inputCollection = []
-inputCollection.append(Q)
-inputCollection.append(E)
-inputCollection.append(C)
-outputCollection = []
-outputCollection.append(Ep)
-code='def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return Ep'
-pythonModel1 = otguibase.PythonPhysicalModel('pythonModel1', inputCollection, outputCollection, code)
+inputs = [Q, E, C]
+outputs = [Ep]
+code = 'def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return Ep'
+pythonModel1 = otguibase.PythonPhysicalModel('pythonModel1', inputs, outputs, code)
 study1.add(pythonModel1)
 

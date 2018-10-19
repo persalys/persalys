@@ -75,6 +75,25 @@ std::pair<String, String> Parameters::operator[](const UnsignedInteger index) co
 }
 
 
+String Parameters::GetOTSampleStr(const Sample& values)
+{
+  OSS sampleOss;
+  sampleOss << "[";
+  for (UnsignedInteger i = 0; i < values.getSize(); ++i)
+  {
+    sampleOss << "[";
+    Point pt(values[i]);
+    std::copy(pt.begin(), pt.end(), OSS_iterator<Scalar>(sampleOss, ","));
+    sampleOss << "]";
+    if (i < (values.getSize() - 1))
+      sampleOss << ",\n";
+  }
+  sampleOss << "]\n";
+
+  return sampleOss;
+}
+
+
 String Parameters::GetOTPointStr(const Point& values, const String& separator)
 {
   String valuesStr = "[";
@@ -89,12 +108,12 @@ String Parameters::GetOTPointStr(const Point& values, const String& separator)
 }
 
 
-String Parameters::GetOTDescriptionStr(const Description& values)
+String Parameters::GetOTDescriptionStr(const Description& values, const bool quote)
 {
   String valuesStr = "[";
   for (UnsignedInteger i = 0; i < values.getSize(); ++i)
   {
-    valuesStr += OSS() << "'" << values[i] << "'";
+    valuesStr += OSS() << (quote ? "'" : "") << values[i] << (quote ? "'" : "");
     if (i < values.getSize() - 1)
       valuesStr += ", ";
   }
