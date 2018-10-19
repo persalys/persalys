@@ -332,6 +332,14 @@ Console Python
 
   - console shown
 
+Open documentation
+``````````````````
+
+- click Menu->Help->User's manual
+
+  - the documentation is opened in a web browser
+
+
 New OTStudy
 ```````````
 

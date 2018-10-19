@@ -46,5 +46,6 @@
         <file>images/dialog-ok-apply.png</file>
         <file>images/optimize.png</file>
         <file>images/otgui.ico</file>
+        <file>images/help-contents.png</file>
     </qresource>
 </RCC>

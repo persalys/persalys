@@ -22,10 +22,12 @@ ${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/Lib/site-packages/otgui
 make tests
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
 cp -r ${MINGW_PREFIX}/lib/qt/plugins/platforms ${MOD_PREFIX}/lib
+cp -r ${MINGW_PREFIX}/lib/qt/plugins/imageformats ${MOD_PREFIX}/lib
 export WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin"
 xvfb-run ctest --output-on-failure --timeout 100 -j8 -E FMI
 VERSION=`cat ../otgui/VERSION`
 cp /tmp/otgui/distro/windows/* .
+unzip otgui-doc.zip -d .
 makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.11 -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DPYBASEVER_NODOT=${PYMAJMIN} -DARCH=${ARCH} installer.nsi
 
 # copy to host with same permission

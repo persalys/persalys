@@ -337,15 +337,17 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   File /r "${MODULE_PREFIX}\Lib\site-packages\${MODULE_NAME_LOWERCASE}base\*.*"
   SetOutPath "$MODULE_INSTALL_PATH\platforms"
   File /r "${MODULE_PREFIX}\lib\platforms\"
+  SetOutPath "$MODULE_INSTALL_PATH\imageformats"
+  File /r "${MODULE_PREFIX}\lib\imageformats\"
 
   SetOutPath "$MODULE_INSTALL_PATH"
   File "README.txt"
   File "otgui.ico"
   File "otgui.vbs"
 
-  ;!insertmacro PRINT "Install doc example in $MODULE_INSTALL_PATH\doc\pdf."
-  ;SetOutPath "$MODULE_INSTALL_PATH\doc\pdf"
-  ;File "${MODULE_PREFIX}\share\doc\${MODULE_NAME_LOWERCASE}\pdf\${MODULE_NAME}_Documentation.pdf"
+  !insertmacro PRINT "Install doc in $MODULE_INSTALL_PATH\doc\."
+  SetOutPath "$MODULE_INSTALL_PATH\doc\"
+  File /r "html"
 
   ; create a version file
   ClearErrors
