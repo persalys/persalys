@@ -259,6 +259,32 @@ OTGUI_PhysicalModel_getOutputByName_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_getInputDimension_doc
+"Number of input variables accessor.
+
+Returns
+-------
+dimension : int
+    Number of input variables"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getInputDimension
+OTGUI_PhysicalModel_getInputDimension_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getOutputDimension_doc
+"Number of input variables accessor.
+
+Returns
+-------
+dimension : int
+    Number of output variables"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputDimension
+OTGUI_PhysicalModel_getOutputDimension_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_PhysicalModel_getInputNames_doc
 "Input variable names accessor.
 
@@ -448,6 +474,21 @@ OTGUI_PhysicalModel_setDistribution_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_setInputStochastic_doc
+"Whether the input variable is stochastic.
+
+Parameters
+----------
+name : str
+    Variable name
+isStochastic : bool
+    Whether the input variable is stochastic"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setInputStochastic
+OTGUI_PhysicalModel_setInputStochastic_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_PhysicalModel_setDistributionParametersType_doc
 "Input distribution parameter type accessor.
 
@@ -531,3 +572,29 @@ OTGUI_PhysicalModel_selectOutput_doc
 
 %feature("docstring") OTGUI::PhysicalModelImplementation::clearOutputs
 "Remove all the output variables."
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_isParallel_doc
+"Whether the evaluations of the model are parallelized.
+
+Returns
+-------
+isParallel : bool
+    Whether the evaluations of the model are parallelized (available only for the Python model)"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::isParallel
+OTGUI_PhysicalModel_isParallel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setParallel_doc
+"Whether the evaluations of the model are parallelized.
+
+Parameters
+----------
+isParallel : bool
+    Whether the evaluations of the model are parallelized (available only for the Python model)"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setParallel
+OTGUI_PhysicalModel_setParallel_doc

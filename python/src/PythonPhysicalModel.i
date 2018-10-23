@@ -6,6 +6,8 @@
 
 %include PythonPhysicalModel_doc.i
 
+%ignore *::resetCallsNumber;
+
 %include otgui/PythonPhysicalModel.hxx
 namespace OTGUI {
 

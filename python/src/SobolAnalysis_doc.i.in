@@ -41,3 +41,43 @@ Returns
 -------
 result : :class:`~otguibase.SobolResult`
     Result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolAnalysis::getBootstrapConfidenceLevel
+"Bootstrap confidence level accessor.
+
+Returns
+-------
+level : float
+    Bootstrap confidence level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolAnalysis::setBootstrapConfidenceLevel
+"Bootstrap confidence level accessor.
+
+Parameters
+----------
+level : float in ]0,1[
+    Bootstrap confidence level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolAnalysis::getBootstrapSize
+"Bootstrap size accessor.
+
+Returns
+-------
+size : int
+    Bootstrap size"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolAnalysis::setBootstrapSize
+"Bootstrap size accessor.
+
+Parameters
+----------
+size : int > 1
+    Bootstrap size"

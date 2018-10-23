@@ -18,6 +18,8 @@ OTGUI_PhysicalModel_setCopula_doc
 OTGUI_PhysicalModel_getCopula_doc
 %feature("docstring") OTGUI::PhysicalModel::getDistribution
 OTGUI_PhysicalModel_getDistribution_doc
+%feature("docstring") OTGUI::PhysicalModel::setInputStochastic
+OTGUI_PhysicalModel_setInputStochastic_doc
 %feature("docstring") OTGUI::PhysicalModel::setInputDescription
 OTGUI_PhysicalModel_setInputDescription_doc
 %feature("docstring") OTGUI::PhysicalModel::setOutputDescription
@@ -34,6 +36,10 @@ OTGUI_PhysicalModel_getOutputs_doc
 OTGUI_PhysicalModel_getInputByName_doc
 %feature("docstring") OTGUI::PhysicalModel::getOutputByName
 OTGUI_PhysicalModel_getOutputByName_doc
+%feature("docstring") OTGUI::PhysicalModel::getInputDimension
+OTGUI_PhysicalModel_getInputDimension_doc
+%feature("docstring") OTGUI::PhysicalModel::getOutputDimension
+OTGUI_PhysicalModel_getOutputDimension_doc
 %feature("docstring") OTGUI::PhysicalModel::getStochasticInputNames
 OTGUI_PhysicalModel_getStochasticInputNames_doc
 %feature("docstring") OTGUI::PhysicalModel::getInputNames
@@ -74,3 +80,7 @@ OTGUI_PhysicalModel_getRestrictedFunction_doc
 OTGUI_PhysicalModel_getSelectedOutputsNames_doc
 %feature("docstring") OTGUI::PhysicalModel::selectOutput
 OTGUI_PhysicalModel_selectOutput_doc
+%feature("docstring") OTGUI::PhysicalModel::isParallel
+OTGUI_PhysicalModel_isParallel_doc
+%feature("docstring") OTGUI::PhysicalModel::setParallel
+OTGUI_PhysicalModel_setParallel_doc

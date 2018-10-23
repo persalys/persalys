@@ -9,7 +9,7 @@ See :class:`~otguibase.FunctionalChaosAnalysis`,
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::isLeaveOneOutValidation
+%feature("docstring") OTGUI::MetaModelAnalysis::leaveOneOutValidation
 "Whether a validation by leave-one-out is requested.
 
 Returns
@@ -26,6 +26,158 @@ Parameters
 ----------
 validation : bool
     Whether a validation by leave-one-out is requested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::kFoldValidation
+"Whether a k-Fold cross-validation is requested.
+
+Returns
+-------
+validation : bool
+    Whether a k-Fold cross-validation is requested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setKFoldValidation
+"Whether a k-Fold cross-validation is requested.
+
+Parameters
+----------
+validation : bool
+    Whether a k-Fold cross-validation is requested"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::analyticalValidation
+"Whether an analytical validation is requested.
+
+Returns
+-------
+validation : bool
+    Whether an analytical validation is requested.
+    This method corresponds to an approximation of the Leave-one-out method result."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setAnalyticalValidation
+"Whether an analytical validation is requested.
+
+Parameters
+----------
+validation : bool
+    Whether an analytical validation is requested.
+    This method corresponds to an approximation of the Leave-one-out method result."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::testSampleValidation
+"Whether a validation with a test sample is requested.
+
+Returns
+-------
+validation : bool
+    Whether a validation with a test sample is requested.
+    The data sample is dividing into two sub-samples: a training sample
+    (by default 80% of the sample points) and a test sample (by default
+    20% of the sample points). That is to say a new metamodel is building
+    with the training sample and it is validating with the test sample.
+    The points are randomly picked in the data sample (by default the seed is 1)."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setTestSampleValidation
+"Whether a validation with a test sample is requested.
+
+Parameters
+----------
+validation : bool
+    Whether a validation with a test sample is requested.
+    The data sample is dividing into two sub-samples: a training sample
+    (by default 80% of the sample points) and a test sample (by default
+    20% of the sample points). That is to say a new metamodel is building
+    with the training sample and it is validating with the test sample.
+    The points are randomly picked in the data sample (by default the seed is 1)."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getKFoldValidationNumberOfFolds
+"Number of folds accessor.
+
+Returns
+-------
+folds : int
+    Number of folds. By default it is 3."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setKFoldValidationNumberOfFolds
+"Number of folds accessor.
+
+Parameters
+----------
+folds : int
+    Number of folds. By default it is 3."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getKFoldValidationSeed
+"Seed accessor.
+
+Returns
+-------
+seed : int
+    Seed value for k-Fold cross-validation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setKFoldValidationSeed
+"Seed accessor.
+
+Parameters
+----------
+seed : int
+    Seed value for k-Fold cross-validation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getTestSampleValidationSeed
+"Seed accessor.
+
+Returns
+-------
+seed : int
+    Seed value for the validation with a test sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setTestSampleValidationSeed
+"Seed accessor.
+
+Parameters
+----------
+seed : int
+    Seed value for the validation with a test sample"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::getTestSampleValidationPercentageOfPoints
+"Percentage of points accessor.
+
+Returns
+-------
+percentage : int
+    Percentage of points used to validate the metamodel. By default it is 20%."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysis::setTestSampleValidationPercentageOfPoints
+"Percentage of points accessor.
+
+Parameters
+----------
+percentage : int
+    Percentage of points used to validate the metamodel. By default it is 20%."
 
 // ---------------------------------------------------------------------
 

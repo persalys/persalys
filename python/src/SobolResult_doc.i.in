@@ -43,6 +43,26 @@ indices : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::SobolResult::getFirstOrderIndicesInterval
+"First order indices interval accessor.
+
+Returns
+-------
+interval : sequence of :py:class:`openturns.Interval`
+    First order indices interval"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::SobolResult::getTotalIndicesInterval
+"Total indices interval accessor.
+
+Returns
+-------
+interval : sequence of :py:class:`openturns.Interval`
+    Total indices interval"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::SobolResult::getCoefficientOfVariation
 "Coefficient of variation accessor.
 

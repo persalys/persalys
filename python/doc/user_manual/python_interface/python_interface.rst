@@ -160,6 +160,7 @@ Metamodel
     MetaModelAnalysisResult
     FunctionalChaosAnalysisResult
     KrigingAnalysisResult
+    MetaModelValidationResult
 
 Study storage
 -------------
