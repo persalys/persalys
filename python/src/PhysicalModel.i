@@ -31,6 +31,8 @@ template <>
 %ignore *::addObserver;
 %ignore *::blockNotification;
 %ignore *::acceptLaunchParameters;
+%ignore *::getHtmlDescription;
+%ignore *::getCopulaCollection;
 
 %include PhysicalModel_doc.i
 

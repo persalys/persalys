@@ -94,6 +94,18 @@ names : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::DataModel::setNames
+"Names of the variables accessor.
+
+Parameters
+----------
+inNames : sequence of str
+   Names of the input variables
+outNames : sequence of str
+   Names of the output variables"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::DataModel::getFileName
 "File name accessor.
 

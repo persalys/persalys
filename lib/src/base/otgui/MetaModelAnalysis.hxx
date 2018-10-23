@@ -50,13 +50,11 @@ public:
 
   void setTestSampleValidationSeed(const OT::UnsignedInteger seed);
   void setTestSampleValidationPercentageOfPoints(const OT::UnsignedInteger percentage);
-  OT::PointWithDescription getTestSampleValidationParameters() const;
   OT::UnsignedInteger getTestSampleValidationPercentageOfPoints() const;
   OT::UnsignedInteger getTestSampleValidationSeed() const;
 
   void setKFoldValidationNumberOfFolds(const OT::UnsignedInteger nbFolds);
   void setKFoldValidationSeed(const OT::UnsignedInteger seed);
-  OT::PointWithDescription getKFoldValidationParameters() const;
   OT::UnsignedInteger getKFoldValidationNumberOfFolds() const;
   OT::UnsignedInteger getKFoldValidationSeed() const;
 
@@ -83,6 +81,8 @@ protected:
   void computeTestSampleValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
   void computeKFoldValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
   void computeLOOValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
+  OT::PointWithDescription getTestSampleValidationParameters() const;
+  OT::PointWithDescription getKFoldValidationParameters() const;
 
 protected:
   OT::Distribution distribution_;

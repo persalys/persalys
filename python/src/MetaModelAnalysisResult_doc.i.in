@@ -29,42 +29,55 @@ sample : :py:class:`openturns.Sample`
 Returns
 -------
 sample : :py:class:`openturns.Sample`
-    Output sample evaluate with the metamodel"
+    Output sample evaluated with the metamodel"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getMetaModelOutputSampleLeaveOneOut
-"Output sample accessor.
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getLeaveOneOutValidation
+"Leave-one-out validation result accessor.
 
 Returns
 -------
-sample : :py:class:`openturns.Sample`
-    All the approximation :math:`\hat{y_i}^{(-i)}`
-    that has been built from the data sample without the i-th observation."
+validation : :class:`otguibase.MetaModelValidationResult`
+    Leave-one-out validation result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getErrorQ2LeaveOneOut
-"Leave-one-out validation errors accessor.
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getKFoldValidation
+"K-Fold validation result accessor.
 
 Returns
 -------
-error : :py:class:`openturns.Point`
-    The Leave-one-out validation errors defined as follows for each output of the model:
-    :math:`\displaystyle \frac{\sqrt{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}}{N}`
-    with :math:`y_i` the :math:`N` model's values and :math:`\hat{y_i}^{(-i)}` the
-    approximation that has been built from the data sample without the i-th observation."
+validation : :class:`otguibase.MetaModelValidationResult`
+    K-Fold validation result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getQ2LeaveOneOut
-"Leave-one-out validation Q2 accessor.
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getTestSampleValidation
+"Test sample validation result accessor.
 
 Returns
 -------
-q2 : :py:class:`openturns.Point`
-    Leave-one-out validation Q2 defined as follows for each output of the model:
-    :math:`1 - \displaystyle \frac{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}{(N-1) {\rm Var}\left[ \underline{Y} \right]}`
-    with :math:`\underline{Y}` the vector of the :math:`N` model's values
-    :math:`y_i` and :math:`\hat{y_i}^{(-i)}` the
-    approximation that has been built from the data sample without the i-th observation."
+validation : :class:`otguibase.MetaModelValidationResult`
+    Test sample validation result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getAnalyticalValidation
+"Analytical validation result accessor.
+
+Returns
+-------
+validation : :class:`otguibase.MetaModelValidationResult`
+    Analytical validation result"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::MetaModelAnalysisResult::getValidations
+"Validation results accessor.
+
+Returns
+-------
+validations : sequence of :class:`otguibase.MetaModelValidationResult`
+    All the validation results"
+

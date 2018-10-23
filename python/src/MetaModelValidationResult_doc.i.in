@@ -3,17 +3,17 @@
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelValidationResult::getOutputSample
-"Output sample accessor.
+%feature("docstring") OTGUI::MetaModelValidationResult::getName
+"Validation method name accessor.
 
 Returns
 -------
-sample : :py:class:`openturns.Sample`
-    Output sample"
+name : str
+    Validation method name"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelValidationResult::getMetaModelSample
+%feature("docstring") OTGUI::MetaModelValidationResult::getMetaModelOutputSample
 "Output sample accessor.
 
 Returns
@@ -23,38 +23,27 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelValidationResult::getMetaModelOutputSampleLeaveOneOut
-"Output sample accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    All the approximation :math:`\hat{y_i}^{(-i)}`
-    that has been built from the data sample without the i-th observation."
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") OTGUI::MetaModelValidationResult::getResiduals
 "Residuals accessor.
 
 Returns
 -------
 error : :py:class:`openturns.Point`
-    The Leave-one-out validation errors defined as follows for each output of the model:
-    :math:`\displaystyle \frac{\sqrt{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}}{N}`
-    with :math:`y_i` the :math:`N` model's values and :math:`\hat{y_i}^{(-i)}` the
-    approximation that has been built from the data sample without the i-th observation."
+    The errors are defined as follows for each output of the model:
+    :math:`\displaystyle \frac{\sqrt{\sum_{i=1}^N (y_i - \hat{y_i})^2}}{N}`
+    with :math:`y_i` the :math:`N` model's values and :math:`\hat{y_i}` the
+    prediction."
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::MetaModelValidationResult::getQ2
-"Validation Q2 accessor.
+"Q2 accessor.
 
 Returns
 -------
 q2 : :py:class:`openturns.Point`
-    Leave-one-out validation Q2 defined as follows for each output of the model:
-    :math:`1 - \displaystyle \frac{\sum_{i=1}^N (y_i - \hat{y_i}^{(-i)})^2}{(N-1) {\rm Var}\left[ \underline{Y} \right]}`
+    The predictive squared correlation coefficient Q2 is defined as follows for
+    each output of the model:
+    :math:`1 - \displaystyle \frac{\sum_{i=1}^N (y_i - \hat{y_i})^2}{(N-1) {\rm Var}\left[ \underline{Y} \right]}`
     with :math:`\underline{Y}` the vector of the :math:`N` model's values
-    :math:`y_i` and :math:`\hat{y_i}^{(-i)}` the
-    approximation that has been built from the data sample without the i-th observation."
+    :math:`y_i` and :math:`\hat{y_i}` the prediction."

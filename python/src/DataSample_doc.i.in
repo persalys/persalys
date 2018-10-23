@@ -72,3 +72,13 @@ Returns
 -------
 list : SampleCollection
     List of input values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::DataSample::isValid
+"Whether the model is valid.
+
+Returns
+-------
+isValid : bool
+   Whether the model is valid"

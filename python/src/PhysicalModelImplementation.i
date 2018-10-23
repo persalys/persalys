@@ -8,6 +8,8 @@
 %include PhysicalModelImplementation_doc.i
 
 %ignore OTGUI::PhysicalModelImplementation::getRestrictedFunction;
+%ignore *::getHtmlDescription;
+%ignore *::getCopulaCollection;
 
 %include otgui/PhysicalModelImplementation.hxx
 namespace OTGUI {

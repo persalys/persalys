@@ -4,6 +4,8 @@
 #include "otgui/MetaModelValidationResult.hxx"
 %}
 
+%ignore *::getParameters;
+
 %include MetaModelValidationResult_doc.i
 
 %include otgui/MetaModelValidationResult.hxx
