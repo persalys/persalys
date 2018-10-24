@@ -5,15 +5,11 @@ MAINTAINER jschueller
 RUN aurman -Syu --noconfirm --noedit mingw-w64-qt5-base-nostatx
 
 RUN aurman -S --noconfirm --noedit mingw-w64-qwt
-RUN aurman -S --noconfirm --noedit mingw-w64-paraview
+RUN aurman -Syu --noconfirm --noedit mingw-w64-paraview
 
 ENV ARCH x86_64
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 ENV PYMAJMIN 36
-
-# out of sync ?
-RUN git clone https://aur.archlinux.org/mingw-w64-netcdf-cxx-legacy.git /tmp/ncdf && cd /tmp/ncdf \
- && makepkg -sfi --skippgpcheck --noconfirm
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
