@@ -19,6 +19,10 @@ endif ()
 
 project (OTGui CXX)
 
+# for std::chrono
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 if (POLICY CMP0020)
   cmake_policy (SET CMP0020 NEW)
 endif ()
