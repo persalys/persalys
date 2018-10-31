@@ -116,9 +116,7 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
   {
     designsGroup_->button(ProbabilisticDesignPage::LHS)->setEnabled(false);
     designsGroup_->button(ProbabilisticDesignPage::LHS)->setToolTip(tr("The physical model does not have an independent copula"));
-    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setEnabled(false);
-    designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->setToolTip(tr("The physical model does not have an independent copula"));
-    designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
+    designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click(); // default
   }
 
   // initialize widgets if the analysis is already a ProbabilisticDesignOfExperiment
@@ -128,7 +126,7 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
 
   if (probaDoe_ptr->getDesignName() == "LHS" && independentCopula)
     designsGroup_->button(ProbabilisticDesignPage::LHS)->click();
-  else if (probaDoe_ptr->getDesignName() == "QUASI_MONTE_CARLO" && independentCopula)
+  else if (probaDoe_ptr->getDesignName() == "QUASI_MONTE_CARLO")
     designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->click();
   else
     designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
