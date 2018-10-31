@@ -39,6 +39,7 @@ protected:
 
 private:
   FunctionalChaosAnalysisResult result_;
+  bool hasValidSobolResult_;
   OT::UnsignedInteger maxDegree_;
   bool sparse_;
   QString errorMessage_;
