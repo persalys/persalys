@@ -61,8 +61,6 @@ public:
   OT::Sample getEffectiveInputSample() const;
   OT::Sample getEffectiveOutputSample() const;
 
-  OT::Distribution getDistribution();
-
   /** String converter */
   virtual OT::String __repr__() const;
 

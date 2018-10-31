@@ -49,6 +49,8 @@ public:
   bool getSparseChaos() const;
   void setSparseChaos(const bool sparse);
 
+  OT::Distribution getDistribution();
+
   FunctionalChaosAnalysisResult getResult() const;
 
   virtual Parameters getParameters() const;
