@@ -46,15 +46,17 @@ namespace OTGUI
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
+  , hasValidSobolResult_(true)
   , maxDegree_(0)
   , sparse_(false)
   , errorMessage_(item->getAnalysis().getWarningMessage().c_str())
 {
-  const FunctionalChaosAnalysis * chaos(dynamic_cast<const FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get()));
+  FunctionalChaosAnalysis * chaos(dynamic_cast<FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get()));
   if (!chaos)
     throw InvalidArgumentException(HERE) << "FunctionalChaosResultWindow: the analysis is not a FunctionalChaosAnalysis";
 
   result_ = chaos->getResult();
+  hasValidSobolResult_ = chaos->getDistribution().hasIndependentCopula();
   maxDegree_ = chaos->getChaosDegree();
   sparse_ = chaos->getSparseChaos();
 
@@ -295,6 +297,7 @@ void FunctionalChaosResultWindow::buildInterface()
       QWidget * summaryWidget = new QWidget;
       QVBoxLayout * summaryWidgetLayout = new QVBoxLayout(summaryWidget);
       QLabel * errorLabel = new QLabel(errorMessage_);
+      errorLabel->setWordWrap(true);
       summaryWidgetLayout->addWidget(errorLabel);
       summaryWidgetLayout->addStretch();
       tabWidget->addTab(summaryWidget, tr("Results"));
@@ -302,7 +305,7 @@ void FunctionalChaosResultWindow::buildInterface()
   }
 
   // third tab : SOBOL INDICES --------------------------------
-  if (result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
+  if (hasValidSobolResult_ && result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
   {
     QScrollArea * sobolScrollArea = new QScrollArea;
     sobolScrollArea->setWidgetResizable(true);
@@ -386,11 +389,12 @@ void FunctionalChaosResultWindow::buildInterface()
   }
 
   // tab : ERRORS --------------------------------
-  if (!errorMessage_.isEmpty())
+  if (!errorMessage_.isEmpty() || !hasValidSobolResult_)
   {
     QWidget * indicesWidget = new QWidget;
     QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
-    QLabel * errorLabel = new QLabel(errorMessage_);
+    QLabel * errorLabel = new QLabel((!errorMessage_.isEmpty() ? errorMessage_ + "\n" : "") + tr("The interpretation of the Sobol indices may be misleading due to the fact the model has not an independent copula. So the indices are not displayed."));
+    errorLabel->setWordWrap(true);
     indicesWidgetLayout->addWidget(errorLabel);
     indicesWidgetLayout->addStretch();
     tabWidget->addTab(indicesWidget, tr("Error"));

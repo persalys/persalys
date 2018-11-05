@@ -109,12 +109,35 @@ void FunctionalChaosAnalysis::setSparseChaos(const bool sparse)
 }
 
 
+Distribution FunctionalChaosAnalysis::getDistribution()
+{
+  if (!isDistributionComputed_)
+  {
+    // use the composed distribution of the physical model:
+    // if the physical model has stochastic variables
+    if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
+    {
+      distribution_ = designOfExperiment_.getPhysicalModel().getDistribution();
+    }
+    // build distribution from sample:
+    // if the physical model has no distribution
+    // or if data model
+    else
+    {
+      distribution_ = FunctionalChaosAlgorithm::BuildDistribution(designOfExperiment_.getInputSample());
+    }
+    isDistributionComputed_ = true;
+  }
+  return distribution_;
+}
+
+
 OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAnalysis::getPolynomialFamilyCollection()
 {
   if (polynomialFamilyCollection_.isEmpty())
   {
     // distribution:
-    Distribution distribution(getDistribution());
+    const Distribution distribution(getDistribution());
 
     // adaptiveStrategy
     for (UnsignedInteger i = 0; i < distribution.getDimension(); ++i)
@@ -130,6 +153,8 @@ OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAn
 void FunctionalChaosAnalysis::initialize()
 {
   AnalysisImplementation::initialize();
+  isDistributionComputed_ = false;
+  polynomialFamilyCollection_.clear();
   result_ = FunctionalChaosAnalysisResult();
 }
 

@@ -278,40 +278,6 @@ Sample MetaModelAnalysis::getEffectiveOutputSample() const
 }
 
 
-Distribution MetaModelAnalysis::getDistribution()
-{
-  if (!isDistributionComputed_)
-  {
-    // use the composed distribution of the physical model:
-    // if the physical model has stochastic variables
-    if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
-    {
-      distribution_ = designOfExperiment_.getPhysicalModel().getDistribution();
-    }
-    // use Uniform distributions:
-    // if the physical model has only deterministic variables
-    // or if data model
-    else
-    {
-      // get min/max inputSample
-      const Point min(designOfExperiment_.getInputSample().getMin());
-      const Point max(designOfExperiment_.getInputSample().getMax());
-      if (min == max)
-        throw InvalidValueException(HERE) << "The input sample has only one point";
-
-      // build Uniform
-      ComposedDistribution::DistributionCollection distributionCollection;
-      for (UnsignedInteger i = 0; i < designOfExperiment_.getInputSample().getDimension(); ++i)
-        distributionCollection.add(Uniform(min[i], max[i]));
-
-      distribution_ = ComposedDistribution(distributionCollection);
-    }
-    isDistributionComputed_ = true;
-  }
-  return distribution_;
-}
-
-
 void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Function& function)
 {
   MetaModel metaModel("MetaModel_", function);
