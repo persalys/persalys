@@ -309,6 +309,7 @@ void GraphConfigurationWidget::updateYComboBox()
   if (!xAxisComboBox_ || !yAxisComboBox_)
     return;
 
+  const QString currentYText = yAxisComboBox_->currentText();
   SignalBlocker blocker(yAxisComboBox_);
   yAxisComboBox_->clear();
 
@@ -332,6 +333,7 @@ void GraphConfigurationWidget::updateYComboBox()
     yAxisComboBox_->addItems(outputNames + inputNames);
   else if (plotType_ == GraphConfigurationWidget::Copula)
     yAxisComboBox_->addItems(inputNames + outputNames);
+  yAxisComboBox_->setCurrentText(currentYText);
 
   plotChanged();
 }
