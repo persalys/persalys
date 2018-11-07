@@ -26,6 +26,7 @@
 #include "otgui/ExportableTableView.hxx"
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/ResizableHeaderlessTableView.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QLineEdit>
 #include <QResizeEvent>
@@ -65,6 +66,7 @@ private:
   QLineEdit * filePathLineEdit_;
   QPalette defaultLineEditPalette_;
   QLabel * sampleSizeLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

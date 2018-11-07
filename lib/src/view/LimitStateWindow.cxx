@@ -36,6 +36,7 @@ namespace OTGUI
 LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
   , limitState_(item->getLimitState())
+  , errorMessageLabel_(0)
 {
   buildInterface();
 
@@ -85,8 +86,7 @@ void LimitStateWindow::buildInterface()
   connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
   gridLayout->addWidget(thresholdLineEdit_, 2, 2);
 
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
   gridLayout->addWidget(errorMessageLabel_, 3, 0, 1, 3);
 
   gridLayout->setRowStretch(4, 2);
@@ -109,7 +109,7 @@ void LimitStateWindow::updateOutputsList()
 
   if (index == -1)
   {
-    setErrorMessage(tr("The output name is not valid."));
+    errorMessageLabel_->setErrorMessage(tr("The output name is not valid."));
   }
   outputsComboBox_->setCurrentIndex(index);
 }
@@ -147,7 +147,7 @@ void LimitStateWindow::updateThresholdWidget()
 
 void LimitStateWindow::updateOutput(int index)
 {
-  setErrorMessage("");
+  errorMessageLabel_->reset();
   limitState_.blockNotification("LimitState");
   limitState_.setOutputName(outputsComboBox_->itemText(index).toStdString());
   limitState_.blockNotification();
@@ -185,11 +185,12 @@ void LimitStateWindow::updateThreshold()
     limitState_.blockNotification("LimitState");
     limitState_.setThreshold(thresholdLineEdit_->value());
     limitState_.blockNotification();
+    errorMessageLabel_->reset();
   }
   catch(std::exception & ex)
   {
     updateThresholdWidget();
-    setTemporaryErrorMessage(ex.what());
+    errorMessageLabel_->setTemporaryErrorMessage(ex.what());
   }
 }
 }
