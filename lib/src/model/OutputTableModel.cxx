@@ -188,10 +188,13 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
 
 Qt::ItemFlags OutputTableModel::flags(const QModelIndex & index) const
 {
-  if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
-  else if (index.column() == 0 && physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
-    return QAbstractTableModel::flags(index) | Qt::ItemIsUserCheckable;
+  if (index.column() == 0)
+  {
+    if (physicalModel_.getImplementation()->getClassName().find("Symbolic") != std::string::npos)
+      return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+    else
+      return QAbstractTableModel::flags(index) | Qt::ItemIsUserCheckable;
+  }
   else if (index.column() == 3)
     return QAbstractTableModel::flags(index);
   else
