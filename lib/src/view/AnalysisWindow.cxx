@@ -55,6 +55,12 @@ AnalysisWindow::~AnalysisWindow()
 }
 
 
+void AnalysisWindow::setErrorMessage(QString message)
+{
+  messageLabel_->setErrorMessage(message);
+}
+
+
 void AnalysisWindow::buildInterface()
 {
   setWindowTitle(tr("Analysis window"));
@@ -99,8 +105,7 @@ void AnalysisWindow::buildInterface()
   mainLayout->addLayout(hLayout, 2, 0);
 
   // information message
-  messageLabel_ = new QLabel;
-  messageLabel_->setWordWrap(true);
+  messageLabel_ = new TemporaryLabel;
   messageLabel_->setTextFormat(Qt::PlainText);
   mainLayout->addWidget(messageLabel_, 3, 0);
   connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
@@ -128,18 +133,16 @@ void AnalysisWindow::initializeWidgets()
   QString informationMessage;
   QString statusBarMessage;
 
-  // if an error has occured
+  // if an error has occurred
   if (!analysisItem_->getAnalysis().getErrorMessage().empty())
   {
     // progress bar value
     progressBar_->setValue(100);
 
     // messages
-    QString errorMessage = tr("No results are available. An error has occured during the execution of the analysis.") + "\n";
+    QString errorMessage = tr("No results are available. An error has occurred during the execution of the analysis.") + "\n";
     errorMessage += analysisItem_->getAnalysis().getErrorMessage().c_str();
-    informationMessage = errorMessage;
-    messageLabel_->setStyleSheet("color: red;");
-    statusBarMessage = tr("An error has occured during the execution of the analysis");
+    messageLabel_->setErrorMessage(errorMessage);
   }
   else // if no error
   {
@@ -150,13 +153,9 @@ void AnalysisWindow::initializeWidgets()
       progressBar_->setValue(0);
 
       // messages
-      informationMessage = tr("The analysis is ready to be launched.") + "\n";
-
-      statusBarMessage = tr("Ready to be launched");
+      messageLabel_->setMessage(tr("The analysis is ready to be launched.") + "\n");
     }
   }
-  messageLabel_->setText(informationMessage);
-  setErrorMessage(statusBarMessage);
 }
 
 
@@ -179,9 +178,7 @@ void AnalysisWindow::launchAnalysis()
   progressBar_->setRange(0, 0);
   progressBar_->setValue(10);
   // messages
-  messageLabel_->setText(tr("The analysis is running"));
-  messageLabel_->setStyleSheet("");
-  setErrorMessage("");
+  messageLabel_->setMessage(tr("The analysis is running"));
 
   // create controller
   Controller * controller = new Controller;

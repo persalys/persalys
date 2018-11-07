@@ -24,6 +24,7 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/LaunchParametersVisitor.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QPushButton>
 #include <QProgressBar>
@@ -38,6 +39,8 @@ public:
   AnalysisWindow(AnalysisItem* item, const bool analysisInProgress = false, QWidget * parent = 0);
 
   virtual ~AnalysisWindow();
+
+  void setErrorMessage(QString message);
 
 protected:
   void buildInterface();
@@ -60,7 +63,7 @@ private:
   QProgressBar * progressBar_;
   QPushButton * runButton_;
   QPushButton * stopButton_;
-  QLabel * messageLabel_;
+  TemporaryLabel * messageLabel_;
   QWidget * launchParameters_;
 };
 }
