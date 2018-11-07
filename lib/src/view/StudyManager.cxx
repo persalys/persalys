@@ -532,7 +532,7 @@ void StudyManager::open(const QString& recentFileName)
   }
   catch (std::exception & ex)
   {
-    showErrorMessage(tr("An error has occured when reading the file '%1'. \nMaybe objects are not opened.\n").arg(fileName) + ex.what());
+    showErrorMessage(tr("An error has occurred when reading the file '%1'. \nMaybe objects are not opened.\n").arg(fileName) + ex.what());
   }
   QApplication::restoreOverrideCursor();
 
