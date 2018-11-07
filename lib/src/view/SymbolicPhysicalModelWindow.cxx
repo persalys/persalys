@@ -22,10 +22,6 @@
 
 #include "otgui/PhysicalModelWindowWidget.hxx"
 
-#include <QVBoxLayout>
-
-using namespace OT;
-
 namespace OTGUI
 {
 
@@ -35,18 +31,6 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinition
   setWindowTitle(tr("Symbolic physical model"));
 
   // Widgets
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
-
-  PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
-  connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
-  mainLayout->addWidget(widget);
-
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  mainLayout->addWidget(errorMessageLabel_);
-
-  ////////////////
-  setWidget(mainWidget);
+  setWidget(new PhysicalModelWindowWidget(item));
 }
 }

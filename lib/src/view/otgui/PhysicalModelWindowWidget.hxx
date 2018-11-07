@@ -23,6 +23,7 @@
 
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 #include "otgui/CopyableTableView.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 namespace OTGUI
 {
@@ -44,20 +45,22 @@ public slots:
   void evaluateOutputs();
   void resizeInputTable();
   void resizeOutputTable();
+  void updateMultiprocessingStatus(int);
 
 signals:
-  void errorMessageChanged(QString);
   void updateInputTableData();
   void updateOutputTableData();
   void updateDifferentiationTableData();
   void removeInputLine(QModelIndex);
   void removeOutputLine(QModelIndex);
+  void resetMessageLabel();
 
 private:
   PhysicalModel physicalModel_;
   bool isFirstPaint_;
   CopyableTableView * inputTableView_;
   CopyableTableView * outputTableView_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

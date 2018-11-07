@@ -27,16 +27,12 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QSplitter>
-#include <QCheckBox>
-
-using namespace OT;
 
 namespace OTGUI
 {
 
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
-  , physicalModel_(item->getPhysicalModel())
 {
   setWindowTitle(tr("Python physical model"));
 
@@ -53,7 +49,7 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   codeView->verticalHeader()->hide();
   codeView->setItemDelegate(new CodeDelegate(codeView));
 
-  CodeModel * codeModel = new CodeModel(physicalModel_, codeView);
+  CodeModel * codeModel = new CodeModel(item->getPhysicalModel(), codeView);
   codeView->setModel(codeModel);
   codeView->openPersistentEditor(codeModel->index(0, 0));
   connect(item, SIGNAL(codeChanged()), codeModel, SLOT(updateData()));
@@ -66,32 +62,14 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
 
   PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
-  connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateInputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
+  connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(resetMessageLabel()));
   vBoxLayout->addWidget(tablesWidget);
-
-  // - parallelize
-  QCheckBox * checkBox = new QCheckBox(tr("Enable multiprocessing"));
-  checkBox->setChecked(physicalModel_.isParallel());
-  checkBox->setToolTip(tr("Warning: the parallelization operation must be significantly faster than the code execution"));
-  connect(checkBox, SIGNAL(stateChanged(int)), this, SLOT(parallelizationRequested(int)));
-  vBoxLayout->addWidget(checkBox);
-
-  // - error message label
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  vBoxLayout->addWidget(errorMessageLabel_);
 
   horizontalSplitter->addWidget(rightSideWidget);
 
   ////////////////
   setWidget(horizontalSplitter);
-}
-
-
-void PythonPhysicalModelWindow::parallelizationRequested(int state)
-{
-  physicalModel_.setParallel(state == Qt::Checked);
 }
 }

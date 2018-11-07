@@ -20,7 +20,6 @@
  */
 #include "otgui/PhysicalModelWindowWidget.hxx"
 
-#include "otgui/SymbolicPhysicalModel.hxx"
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
 #include "otgui/CheckableHeaderView.hxx"
@@ -34,8 +33,8 @@
 #include <QScrollBar>
 #include <QGroupBox>
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QPushButton>
+#include <QCheckBox>
 
 using namespace OT;
 
@@ -48,6 +47,7 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem
   , isFirstPaint_(true)
   , inputTableView_(0)
   , outputTableView_(0)
+  , errorMessageLabel_(0)
 {
   connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateInputTableData()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SIGNAL(updateInputTableData()));
@@ -83,12 +83,11 @@ void PhysicalModelWindowWidget::buildInterface()
 
   // connections
   connect(this, SIGNAL(updateInputTableData()), inputTableModel, SLOT(updateData()));
-  connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 
   inputsLayout->addWidget(inputTableView_);
 
   // buttons Add/Remove input
-  if (physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName().find("Symbolic") != std::string::npos)
   {
     QPushButton * addInputLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addInputLineButton->setToolTip(tr("Add an input"));
@@ -127,7 +126,6 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setHorizontalHeader(outputTableHeaderView);
 
   // connections
-  connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(this, SIGNAL(updateOutputTableData()), outputTableModel, SLOT(updateData()));
 
   outputsLayout->addWidget(outputTableView_);
@@ -136,7 +134,7 @@ void PhysicalModelWindowWidget::buildInterface()
   QHBoxLayout * outputButtonsLayout = new QHBoxLayout;
   outputButtonsLayout->addStretch();
 
-  if (physicalModel_.getImplementation()->getClassName() == "SymbolicPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName().find("Symbolic") != std::string::npos)
   {
     QPushButton * addOutputLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addOutputLineButton->setToolTip(tr("Add an output"));
@@ -163,6 +161,23 @@ void PhysicalModelWindowWidget::buildInterface()
   verticalSplitter->setStretchFactor(1, 3);
 
   vbox->addWidget(verticalSplitter);
+
+  // - multiprocessing
+  if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos)
+  {
+    QCheckBox * checkBox = new QCheckBox(tr("Enable multiprocessing"));
+    checkBox->setChecked(physicalModel_.isParallel());
+    checkBox->setToolTip(tr("Warning: the parallelization operation must be significantly faster than the code execution"));
+    connect(checkBox, SIGNAL(stateChanged(int)), this, SLOT(updateMultiprocessingStatus(int)));
+    vbox->addWidget(checkBox);
+  }
+
+  // - error message label
+  errorMessageLabel_ = new TemporaryLabel;
+  vbox->addWidget(errorMessageLabel_);
+  connect(this, SIGNAL(resetMessageLabel()), errorMessageLabel_, SLOT(reset()));
+  connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
+  connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
 
   addTab(tab, tr("Definition"));
 
@@ -243,7 +258,7 @@ void PhysicalModelWindowWidget::resizeOutputTable()
   const int minSectionSize = outputTableView_->horizontalHeader()->minimumSectionSize();
   outputTableView_->horizontalHeader()->resizeSection(0, minSectionSize);
 
-  if (physicalModel_.getImplementation()->getClassName() != "SymbolicPhysicalModel")
+  if (physicalModel_.getImplementation()->getClassName().find("Symbolic") == std::string::npos)
   {
     outputTableView_->setColumnHidden(2, true); // hide formula section
     outputTableView_->horizontalHeader()->resizeSection(1, width - 2 * minSectionSize);
@@ -301,12 +316,12 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   // check
   if (!eval.getErrorMessage().empty())
   {
-    emit errorMessageChanged(eval.getErrorMessage().c_str());
+    errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
     return;
   }
   if (!outputSample.getSize())
   {
-    emit errorMessageChanged(tr("Not possible to evaluate the outputs"));
+    errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
     return;
   }
 
@@ -314,6 +329,12 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
     physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
 
-  emit errorMessageChanged("");
+  errorMessageLabel_->reset();
+}
+
+
+void PhysicalModelWindowWidget::updateMultiprocessingStatus(int state)
+{
+  physicalModel_.setParallel(state == Qt::Checked);
 }
 }
