@@ -204,6 +204,7 @@ void InferenceWizard::selectedVarChanged(QModelIndex current, QModelIndex /*prev
 
 void InferenceWizard::updateDistListForVar(QStringList dist)
 {
+  errorMessageLabel_->reset();
   FittingTest::DistributionFactoryCollection distCollection;
   for (int i = 0; i < dist.size(); ++i)
   {
@@ -224,6 +225,7 @@ void InferenceWizard::updateDistListForVar(QStringList dist)
 
 void InferenceWizard::updateInterestVar(Description interestVar, String varName)
 {
+  errorMessageLabel_->reset();
   pageValidity_ = true;
 
   interestVar_ = interestVar;
