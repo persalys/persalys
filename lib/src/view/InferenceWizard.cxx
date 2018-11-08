@@ -101,11 +101,12 @@ void InferenceWizard::buildInterface()
   QWidget * leftWidget = new QWidget;
   QVBoxLayout * leftWidgetLayout = new QVBoxLayout(leftWidget);
   // table view
-  QTableView * varTableView = new QTableView;
+  VariablesTableView * varTableView = new VariablesTableView;
   varTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
   varTableView->setSelectionMode(QAbstractItemView::SingleSelection);
   varTableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   varTableView->setShowGrid(false);
+  connect(varTableView, SIGNAL(applyToAllRequested()), this, SLOT(applyCurrentDistToAll()));
 
   // - model
   const Description varNames(inference_.getDesignOfExperiment().getSample().getDescription());
@@ -139,7 +140,7 @@ void InferenceWizard::buildInterface()
   splitter->addWidget(leftWidget);
 
   // list dist
-  ResizableStackedWidget * stackWidget = new ResizableStackedWidget;
+  stackWidget_ = new ResizableStackedWidget;
   for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
   {
     QStringList dist;
@@ -156,11 +157,11 @@ void InferenceWizard::buildInterface()
     DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, Description(1, varNames[i]), this);
     connect(distWidget, SIGNAL(distributionsListChanged(QStringList)), this, SLOT(updateDistListForVar(QStringList)));
 
-    stackWidget->addWidget(distWidget);
+    stackWidget_->addWidget(distWidget);
   }
-  splitter->addWidget(stackWidget, 1);
-  connect(this, SIGNAL(currentVarChanged(int)), stackWidget, SLOT(setCurrentIndex(int)));
-  connect(this, SIGNAL(currentVarChecked(bool)), stackWidget, SLOT(setEnabled(bool)));
+  splitter->addWidget(stackWidget_, 1);
+  connect(this, SIGNAL(currentVarChanged(int)), stackWidget_, SLOT(setCurrentIndex(int)));
+  connect(this, SIGNAL(currentVarChecked(bool)), stackWidget_, SLOT(setEnabled(bool)));
 
   pageLayout->addLayout(splitter);
 
@@ -219,6 +220,31 @@ void InferenceWizard::updateDistListForVar(QStringList dist)
     Description vars = inference_.getDesignOfExperiment().getSample().getDescription();
     const Description::const_iterator it = std::find(vars.begin(), vars.end(), currentVarName_);
     varTableModel_->setData(varTableModel_->index(it - vars.begin(), 0), Qt::Unchecked, Qt::CheckStateRole);
+  }
+}
+
+
+void InferenceWizard::applyCurrentDistToAll()
+{
+  if (!interestVar_.contains(currentVarName_))
+    return;
+
+  const Description varNames(inference_.getDesignOfExperiment().getSample().getDescription());
+  FittingTest::DistributionFactoryCollection distCollection(distFactoriesForEachInterestVar_[currentVarName_]);
+  for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
+  {
+    if (interestVar_.contains(varNames[i]))
+    {
+      distFactoriesForEachInterestVar_[interestVar_[i]] = distCollection;
+      QStringList dist;
+      for (UnsignedInteger j = 0; j < distCollection.getSize(); ++j)
+      {
+        String str = distCollection[j].getImplementation()->getClassName();
+        dist << TranslationManager::GetTranslatedDistributionName(str.substr(0, str.find("Factory")));
+      }
+      DistributionsForInferenceWidget * distWidget = static_cast<DistributionsForInferenceWidget *>(stackWidget_->widget(i));
+      distWidget->updateDistributions(dist);
+    }
   }
 }
 
