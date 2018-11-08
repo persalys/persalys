@@ -64,9 +64,11 @@ void ResultWindow::setParameters(const Analysis& analysis, const QString& title)
   if (!analysisParameters.getSize())
     return;
 
-  parametersWidget_ = new QWidget;
-  QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(parametersWidget_);
+  parametersWidget_ = new QScrollArea;
+  QWidget * paramWidget = new QWidget;
+  QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(paramWidget);
   parametersWidgetLayout->addWidget(new ParametersWidget(title, analysisParameters), 0, Qt::AlignTop);
+  parametersWidget_->setWidget(paramWidget);
 }
 
 
