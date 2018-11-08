@@ -165,7 +165,7 @@ RUN wget -q --no-check-certificate http://paraview.org/files/v5.5/ParaView-v5.5.
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 904796b1b1cda94b273930b7afb9a0e323c71a7f \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.12 \
  && cmake -DLINK_PYTHON_LIBRARY=OFF -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 . && make install
 
 # otmorris
