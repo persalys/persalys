@@ -245,14 +245,10 @@ void ImportedDesignPage::initialize(const Analysis& analysis)
 {
   ImportedDesignOfExperiment * analysis_ptr = dynamic_cast<ImportedDesignOfExperiment*>(analysis.getImplementation().get());
 
-  // if already a ImportedDesignOfExperiment
+  // if already an ImportedDesignOfExperiment
   if (analysis_ptr)
   {
-    designOfExperiment_ = ImportedDesignOfExperiment(analysis.getName(),
-                                                     analysis_ptr->getPhysicalModel(),
-                                                     analysis_ptr->getFileName(),
-                                                     analysis_ptr->getInputColumns()
-                                                    );
+    designOfExperiment_ = *analysis_ptr;
     setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
   }
   else
