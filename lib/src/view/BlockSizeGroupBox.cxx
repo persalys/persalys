@@ -20,25 +20,34 @@
  */
 #include "otgui/BlockSizeGroupBox.hxx"
 
-#include "otgui/UIntSpinBox.hxx"
-
 #include <QLabel>
-#include <QHBoxLayout>
+#include <QGridLayout>
 
 using namespace OT;
 
 namespace OTGUI
 {
 
-BlockSizeGroupBox::BlockSizeGroupBox(const QString &title, QWidget* parent)
+BlockSizeGroupBox::BlockSizeGroupBox(const QString &title, const bool withReplicationSize, QWidget* parent)
   : QGroupBox(title, parent)
 {
-  QHBoxLayout * layout = new QHBoxLayout(this);
+  QGridLayout * layout = new QGridLayout(this);
+
+  if (withReplicationSize)
+  {
+    QLabel * replicationSizeLabel = new QLabel(tr("Replication size"));
+    layout->addWidget(replicationSizeLabel, 0, 0);
+    replicationSizeSpinbox_ = new LogSpinBox;
+    replicationSizeSpinbox_->setMinimum(2.);
+    layout->addWidget(replicationSizeSpinbox_, 0, 1);
+    connect(replicationSizeSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(replicationSizeChanged(double)));
+  }
+
   QLabel * blockSizeLabel = new QLabel(tr("Block size"));
-  layout->addWidget(blockSizeLabel);
+  layout->addWidget(blockSizeLabel, 1, 0);
   blockSizeSpinbox_ = new UIntSpinBox;
   blockSizeLabel->setBuddy(blockSizeSpinbox_);
-  layout->addWidget(blockSizeSpinbox_);
+  layout->addWidget(blockSizeSpinbox_, 1, 1);
 
   connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(blockSizeChanged(double)));
 }
@@ -53,5 +62,17 @@ UnsignedInteger BlockSizeGroupBox::getBlockSizeValue() const
 void BlockSizeGroupBox::setBlockSizeValue(const UnsignedInteger value)
 {
   blockSizeSpinbox_->setValue(value);
+}
+
+
+UnsignedInteger BlockSizeGroupBox::getReplicationSizeValue() const
+{
+  return (UnsignedInteger) replicationSizeSpinbox_->value();
+}
+
+
+void BlockSizeGroupBox::setReplicationSizeValue(const UnsignedInteger value)
+{
+  replicationSizeSpinbox_->setValue(value);
 }
 }

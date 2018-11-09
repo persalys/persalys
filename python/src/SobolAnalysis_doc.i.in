@@ -24,7 +24,7 @@ Create the Sobol analysis:
 
 >>> analysis = otguibase.SobolAnalysis('anAnalysis', myPhysicalModel)
 >>> analysis.setMaximumCalls(500)
->>> analysis.setBlockSize(125)
+>>> analysis.setReplicationSize(125)
 >>> analysis.run()
 
 Get the result:
@@ -44,40 +44,40 @@ result : :class:`~otguibase.SobolResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::getBootstrapConfidenceLevel
-"Bootstrap confidence level accessor.
+%feature("docstring") OTGUI::SobolAnalysis::getConfidenceLevel
+"Confidence level accessor.
 
 Returns
 -------
 level : float
-    Bootstrap confidence level"
+    Confidence level"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::setBootstrapConfidenceLevel
-"Bootstrap confidence level accessor.
+%feature("docstring") OTGUI::SobolAnalysis::setConfidenceLevel
+"Confidence level accessor.
 
 Parameters
 ----------
 level : float in ]0,1[
-    Bootstrap confidence level"
+    Confidence level"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::getBootstrapSize
-"Bootstrap size accessor.
+%feature("docstring") OTGUI::SobolAnalysis::getReplicationSize
+"Replication size accessor.
 
 Returns
 -------
 size : int
-    Bootstrap size"
+    Replication size"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::setBootstrapSize
-"Bootstrap size accessor.
+%feature("docstring") OTGUI::SobolAnalysis::setReplicationSize
+"Replication size accessor.
 
 Parameters
 ----------
 size : int > 1
-    Bootstrap size"
+    Replication size"

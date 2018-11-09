@@ -20,6 +20,8 @@
  */
 #include "otgui/StopCriteriaGroupBox.hxx"
 
+#include <openturns/ResourceMap.hxx>
+
 #include <QGridLayout>
 #include <QCheckBox>
 
@@ -30,8 +32,17 @@ using namespace OT;
 namespace OTGUI
 {
 
-StopCriteriaGroupBox::StopCriteriaGroupBox(QWidget* parent)
+StopCriteriaGroupBox::StopCriteriaGroupBox(const Criteria criteria, QWidget* parent)
   : QGroupBox(tr("Stop criteria"), parent)
+  , criteria_(criteria)
+  , maxiCoefOfVarCheckBox_(0)
+  , maxiCoefficientOfVariationSpinbox_(0)
+  , maxiCILengthCheckBox_(0)
+  , maxiCILengthSpinbox_(0)
+  , maxiTimeCheckBox_(0)
+  , maxTimeLineEdit_(0)
+  , maxiCallsCheckBox_(0)
+  , maxiCallsSpinbox_(0)
 {
   buildInterface();
 }
@@ -41,19 +52,38 @@ void StopCriteriaGroupBox::buildInterface()
 {
   QGridLayout * groupBoxLayout = new QGridLayout(this);
 
-  // Maximum coefficient of variation
-  maxiCoefOfVarCheckBox_ = new QCheckBox(tr("Accuracy - coefficient of variation"));
-  maxiCoefficientOfVariationSpinbox_ = new DoubleSpinBox;
-  maxiCoefficientOfVariationSpinbox_->setMinimum(0.);
-  maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
-  maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
+  if (criteria_ == Time_Calls_CoefVar)
+  {
+    // Maximum coefficient of variation
+    maxiCoefOfVarCheckBox_ = new QCheckBox(tr("Accuracy - coefficient of variation"));
+    maxiCoefficientOfVariationSpinbox_ = new DoubleSpinBox;
+    maxiCoefficientOfVariationSpinbox_->setMinimum(0.);
+    maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
+    maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
 
-  connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCoefficientOfVariationChanged(double)));
-  connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
-  connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCoefficientOfVariationRequired(bool)));
+    connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCoefficientOfVariationChanged(double)));
+    connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
+    connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCoefficientOfVariationRequired(bool)));
 
-  groupBoxLayout->addWidget(maxiCoefOfVarCheckBox_, 0, 0);
-  groupBoxLayout->addWidget(maxiCoefficientOfVariationSpinbox_, 0, 1);
+    groupBoxLayout->addWidget(maxiCoefOfVarCheckBox_, 0, 0);
+    groupBoxLayout->addWidget(maxiCoefficientOfVariationSpinbox_, 0, 1);
+  }
+  else if (criteria_ == Time_Calls_CILength)
+  {
+    // Maximum confidence interval length
+    maxiCILengthCheckBox_ = new QCheckBox(tr("Maximum confidence interval length"));
+    maxiCILengthSpinbox_ = new DoubleSpinBox;
+    maxiCILengthSpinbox_->setMinimum(0.);
+    maxiCILengthSpinbox_->setMaximum(1.);
+    maxiCILengthSpinbox_->setSingleStep(0.01);
+
+    connect(maxiCILengthSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCILengthChanged(double)));
+    connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)), maxiCILengthSpinbox_, SLOT(setEnabled(bool)));
+    connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCILengthRequired(bool)));
+
+    groupBoxLayout->addWidget(maxiCILengthCheckBox_, 0, 0);
+    groupBoxLayout->addWidget(maxiCILengthSpinbox_, 0, 1);
+  }
 
   // Maximum time
   maxiTimeCheckBox_ = new QCheckBox(tr("Maximum time"));
@@ -95,7 +125,7 @@ void StopCriteriaGroupBox::setMaximumCalls(const UnsignedInteger maxCalls)
 }
 
 
-double StopCriteriaGroupBox::getMaximumCoefficientOfVariation() const
+Scalar StopCriteriaGroupBox::getMaximumCoefficientOfVariation() const
 {
   if (maxiCoefOfVarCheckBox_->isChecked())
     return maxiCoefficientOfVariationSpinbox_->value();
@@ -103,11 +133,27 @@ double StopCriteriaGroupBox::getMaximumCoefficientOfVariation() const
 }
 
 
-void StopCriteriaGroupBox::setMaximumCoefficientOfVariation(const double maxCoef)
+void StopCriteriaGroupBox::setMaximumCoefficientOfVariation(const Scalar maxCoef)
 {
   maxiCoefficientOfVariationSpinbox_->setValue((maxCoef >= 0. && maxCoef <= 1.) ? maxCoef : 0.01);
   maxiCoefOfVarCheckBox_->setChecked(maxCoef >= 0. && maxCoef <= 1.);
   maxiCoefficientOfVariationSpinbox_->setEnabled(maxCoef >= 0. && maxCoef <= 1.);
+}
+
+Scalar StopCriteriaGroupBox::getMaximumConfidenceIntervalLength() const
+{
+  if (maxiCILengthCheckBox_->isChecked())
+    return maxiCILengthSpinbox_->value();
+  return -1.0;
+}
+
+
+void StopCriteriaGroupBox::setMaximumConfidenceIntervalLength(const Scalar length)
+{
+  const Scalar defaultValue = ResourceMap::GetAsScalar("SobolSimulationAlgorithm-DefaultIndexQuantileEpsilon");
+  maxiCILengthSpinbox_->setValue(length <= 0. ? defaultValue : length);
+  maxiCILengthCheckBox_->setChecked(length > 0.);
+  maxiCILengthSpinbox_->setEnabled(length > 0.);
 }
 
 
@@ -141,8 +187,15 @@ bool StopCriteriaGroupBox::isMaxCallsRequired() const
 
 void StopCriteriaGroupBox::maxiCoefficientOfVariationRequired(bool checkboxClicked)
 {
-  double value = checkboxClicked ? maxiCoefficientOfVariationSpinbox_->value() : -1.;
+  Scalar value = checkboxClicked ? maxiCoefficientOfVariationSpinbox_->value() : -1.;
   emit maxiCoefficientOfVariationChanged(value);
+}
+
+
+void StopCriteriaGroupBox::maxiCILengthRequired(bool checkboxClicked)
+{
+  Scalar value = checkboxClicked ? maxiCILengthSpinbox_->value() : -1.;
+  emit maxiCILengthChanged(value);
 }
 
 
@@ -171,8 +224,14 @@ void StopCriteriaGroupBox::maxiTimeRequired(bool checkboxClicked)
 
 bool StopCriteriaGroupBox::isValid() const
 {
-  return (maxiCoefficientOfVariationSpinbox_->isEnabled() ||
-          maxTimeLineEdit_->isEnabled() ||
-          maxiCallsSpinbox_->isEnabled());
+  if (criteria_ == Time_Calls_CoefVar)
+    return (maxiCoefficientOfVariationSpinbox_->isEnabled() ||
+            maxTimeLineEdit_->isEnabled() ||
+            maxiCallsSpinbox_->isEnabled());
+  else if (criteria_ == Time_Calls_CILength)
+    return (maxiCILengthSpinbox_->isEnabled() ||
+            maxTimeLineEdit_->isEnabled() ||
+            maxiCallsSpinbox_->isEnabled());
+  return false;
 }
 }

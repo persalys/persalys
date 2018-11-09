@@ -42,7 +42,7 @@ SobolResult::SobolResult()
   , totalIndicesInterval_()
   , callsNumber_(0)
   , elapsedTime_(0.)
-  , coefficientOfVariation_(-1.)
+  , confidenceIntervalLength_(-1.)
 {
 }
 
@@ -59,7 +59,7 @@ SobolResult::SobolResult(const Sample& firstOrderIndices,
   , totalIndicesInterval_()
   , callsNumber_(0)
   , elapsedTime_(0.)
-  , coefficientOfVariation_(-1.)
+  , confidenceIntervalLength_(-1.)
 {
   if (!(firstOrderIndices.getDimension() && totalIndices.getDimension() && outputNames.getSize()))
     throw InvalidArgumentException(HERE) << "SobolResult: All the arguments must have the same non-zero dimension";
@@ -121,15 +121,15 @@ UnsignedInteger SobolResult::getCallsNumber() const
 }
 
 
-double SobolResult::getElapsedTime() const
+Scalar SobolResult::getElapsedTime() const
 {
   return elapsedTime_;
 }
 
 
-double SobolResult::getCoefficientOfVariation() const
+Scalar SobolResult::getConfidenceIntervalLength() const
 {
-  return coefficientOfVariation_;
+  return confidenceIntervalLength_;
 }
 
 
@@ -145,7 +145,7 @@ String SobolResult::__repr__() const
       << " firstOrderIndicesInterval=" << getFirstOrderIndicesInterval()
       << " totalIndicesInterval=" << getTotalIndicesInterval()
       << " callsNumber=" << getCallsNumber()
-      << " coefficientOfVariation=" << getCoefficientOfVariation();
+      << " confidenceIntervalLength=" << getConfidenceIntervalLength();
   return oss;
 }
 
@@ -161,7 +161,7 @@ void SobolResult::save(Advocate & adv) const
   adv.saveAttribute("totalIndicesInterval_", totalIndicesInterval_);
   adv.saveAttribute("elapsedTime_", elapsedTime_);
   adv.saveAttribute("callsNumber_", callsNumber_);
-  adv.saveAttribute("coefficientOfVariation_", coefficientOfVariation_);
+  adv.saveAttribute("confidenceIntervalLength_", confidenceIntervalLength_);
 }
 
 
@@ -176,6 +176,6 @@ void SobolResult::load(Advocate & adv)
   adv.loadAttribute("totalIndicesInterval_", totalIndicesInterval_);
   adv.loadAttribute("elapsedTime_", elapsedTime_);
   adv.loadAttribute("callsNumber_", callsNumber_);
-  adv.loadAttribute("coefficientOfVariation_", coefficientOfVariation_);
+  adv.loadAttribute("confidenceIntervalLength_", confidenceIntervalLength_);
 }
 }

@@ -40,17 +40,22 @@ public:
   /** Virtual constructor */
   virtual SobolAnalysis * clone() const;
 
-  OT::UnsignedInteger getBootstrapSize() const;
-  void setBootstrapSize(const OT::UnsignedInteger size);
+  OT::Scalar getMaximumConfidenceIntervalLength() const;
+  void setMaximumConfidenceIntervalLength(const OT::Scalar length);
 
-  double getBootstrapConfidenceLevel() const;
-  void setBootstrapConfidenceLevel(const double level);
+  OT::UnsignedInteger getReplicationSize() const;
+  void setReplicationSize(const OT::UnsignedInteger size);
+
+  OT::Scalar getConfidenceLevel() const;
+  void setConfidenceLevel(const OT::Scalar level);
 
   SobolResult getResult() const;
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
+
+  virtual void stop();
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -62,12 +67,15 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  static void UpdateProgressValue(double percent, void* data);
   virtual void initialize();
   virtual void launch();
 
 private:
-  OT::UnsignedInteger bootstrapSize_;
-  double bootstrapConfidenceLevel_;
+  TimeCriteria timeCriteria_;
+  OT::Scalar maximumConfidenceIntervalLength_;
+  OT::UnsignedInteger replicationSize_;
+  OT::Scalar confidenceLevel_;
   SobolResult result_;
 };
 }

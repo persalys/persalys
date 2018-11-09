@@ -55,7 +55,6 @@ private:
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
   QLabel * totalNbSimuLabel_;
-  UIntSpinBox * bootstrapSizeSpinBox_;
   DoubleSpinBox * confidenceLevelSpinbox_;
   QSpinBox * seedSpinbox_;
   QLabel * errorMessageLabel_;

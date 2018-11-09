@@ -36,14 +36,19 @@ class OTGUI_API StopCriteriaGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
+  enum Criteria {Time_Calls_CoefVar, Time_Calls_CILength};
+
   // constructor
-  StopCriteriaGroupBox(QWidget* parent = 0);
+  StopCriteriaGroupBox(const Criteria criteria = Time_Calls_CoefVar, QWidget* parent = 0);
 
   OT::UnsignedInteger getMaximumCalls() const;
   void setMaximumCalls(const OT::UnsignedInteger maxi);
 
-  double getMaximumCoefficientOfVariation() const;
-  void setMaximumCoefficientOfVariation(const double coef);
+  OT::Scalar getMaximumCoefficientOfVariation() const;
+  void setMaximumCoefficientOfVariation(const OT::Scalar coef);
+
+  OT::Scalar getMaximumConfidenceIntervalLength() const;
+  void setMaximumConfidenceIntervalLength(const OT::Scalar length);
 
   OT::UnsignedInteger getMaximumElapsedTime() const;
   void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
@@ -57,19 +62,24 @@ protected:
 
 public slots:
   void maxiCoefficientOfVariationRequired(bool);
+  void maxiCILengthRequired(bool);
   void maxiTimeRequired(bool);
   void maxiTimeChanged();
   void maxiCallsRequired(bool);
 
 signals:
   void maxiCoefficientOfVariationChanged(double);
+  void maxiCILengthChanged(double);
   void maxiTimeChanged(int);
   void maxiCallsChanged(double);
   void clearErrorMessageLabel();
 
 private:
+  Criteria criteria_;
   QCheckBox * maxiCoefOfVarCheckBox_;
   DoubleSpinBox * maxiCoefficientOfVariationSpinbox_;
+  QCheckBox * maxiCILengthCheckBox_;
+  DoubleSpinBox * maxiCILengthSpinbox_;
   QCheckBox * maxiTimeCheckBox_;
   TimeLineEdit * maxTimeLineEdit_;
   QCheckBox * maxiCallsCheckBox_;

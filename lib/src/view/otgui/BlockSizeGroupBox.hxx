@@ -21,7 +21,7 @@
 #ifndef OTGUI_BLOCKSIZEGROUPBOX_HXX
 #define OTGUI_BLOCKSIZEGROUPBOX_HXX
 
-#include "otgui/UIntSpinBox.hxx"
+#include "otgui/LogSpinBox.hxx"
 
 #include <openturns/OTtypes.hxx>
 
@@ -34,17 +34,21 @@ class OTGUI_API BlockSizeGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
-  BlockSizeGroupBox(const QString &title, QWidget* parent = 0);
+  BlockSizeGroupBox(const QString &title, const bool withReplicationSize = false, QWidget* parent = 0);
 
   OT::UnsignedInteger getBlockSizeValue() const;
   void setBlockSizeValue(const OT::UnsignedInteger value);
 
-public slots:
+  OT::UnsignedInteger getReplicationSizeValue() const;
+  void setReplicationSizeValue(const OT::UnsignedInteger value);
+
 signals:
   void blockSizeChanged(double);
+  void replicationSizeChanged(double);
 
 private:
   UIntSpinBox * blockSizeSpinbox_;
+  LogSpinBox * replicationSizeSpinbox_;
 };
 }
 #endif

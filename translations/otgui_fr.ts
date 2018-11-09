@@ -394,7 +394,12 @@
 <context>
     <name>OTGUI::BlockSizeGroupBox</name>
     <message>
-        <location filename="../lib/src/view/BlockSizeGroupBox.cxx" line="37"/>
+        <location filename="../lib/src/view/BlockSizeGroupBox.cxx" line="40"/>
+        <source>Replication size</source>
+        <translation>Taille de réplication</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/BlockSizeGroupBox.cxx" line="47"/>
         <source>Block size</source>
         <translation>Taille de bloc</translation>
     </message>
@@ -1491,33 +1496,33 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DesignOfExperimentEvaluationWizard</name>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="81"/>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="85"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="48"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="52"/>
         <source>Design of experiments evaluation</source>
         <translation>Évaluation du plan d&apos;experience</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="89"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="56"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="117"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="102"/>
         <source>Evaluation parameter</source>
         <translation>Paramètre d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="150"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="135"/>
         <source>Input sample size = </source>
         <translation>Taille de l&apos;échantillon d&apos;entrée = </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="194"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="179"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="198"/>
+        <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="183"/>
         <source>The block size must be lesser or equal to the size of the input sample</source>
         <translation>La taille de bloc doit être inférieure ou égale à la taille de l&apos;échantillon d&apos;entrée</translation>
     </message>
@@ -1844,6 +1849,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="86"/>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="137"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="138"/>
         <source>Causality</source>
         <translation>Causalité</translation>
     </message>
@@ -1905,6 +1911,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="127"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="128"/>
         <source>Variability</source>
         <translation>Variabililité</translation>
     </message>
@@ -1950,6 +1957,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="147"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="148"/>
         <source>I/O</source>
         <translation>E/S</translation>
     </message>
@@ -2961,7 +2969,7 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="90"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="92"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>
@@ -4058,27 +4066,27 @@ ou interaction</translation>
         <translation>Console Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="100"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="97"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="102"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="99"/>
         <source>User&apos;s manual</source>
         <translation>Manuel utilisateur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="108"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="105"/>
         <source>About OTGui</source>
         <translation>À propos d&apos;OTGui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="201"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="199"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="202"/>
+        <location filename="../lib/src/view/OTguiMenuBar.cxx" line="200"/>
         <source>Impossible to open the documentation. The requested file &apos;%1&apos; is not available.</source>
         <translation>Impossible d&apos;ouvrir la documentation. Le fichier demandé &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
@@ -4388,24 +4396,28 @@ ou interaction</translation>
 <context>
     <name>OTGUI::OutputsSelectionGroupBox</name>
     <message>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="33"/>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="47"/>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="61"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="31"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="45"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="59"/>
         <source>Outputs to analyse</source>
         <translation>Sorties à analyser</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="47"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="45"/>
         <source>Output to analyse</source>
         <translation>Sortie à analyser</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="103"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="39"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="53"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="67"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="101"/>
         <source>Select outputs</source>
         <translation>Sélectionner des sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="103"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="53"/>
+        <location filename="../lib/src/view/OutputsSelectionGroupBox.cxx" line="101"/>
         <source>Select output</source>
         <translation>Sélectionner une sortie</translation>
     </message>
@@ -4418,6 +4430,7 @@ ou interaction</translation>
         <translation>Variables</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="91"/>
         <location filename="../lib/src/view/plot/paraview/PVPlotSettingWidget.cxx" line="92"/>
         <source>Select</source>
         <translation>Sélectionner</translation>
@@ -4473,6 +4486,7 @@ ou interaction</translation>
         <translation>Données</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="187"/>
         <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="193"/>
         <source>Select</source>
         <translation>Sélectionner</translation>
@@ -4717,129 +4731,122 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="138"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="166"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="154"/>
         <source>There is no design of experiments.</source>
         <translation>Il n&apos;y a aucun plan d&apos;expériences.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="180"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="168"/>
         <source>metamodel_</source>
         <translation>metamodele_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="190"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="178"/>
         <source>We have not found a design of experiments with an output sample.
 </source>
         <translation>Nous n&apos;avons pas trouvé de plan d&apos;expériences avec un échantillon de sortie.
 </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="207"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="195"/>
         <source>reliability_</source>
         <translation>fiabilite_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="219"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="207"/>
         <source>Can not remove a physical model when an analysis is running.</source>
         <translation>Impossible de supprimer un modèle physique lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="385"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="373"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="390"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="378"/>
         <source>New evaluation</source>
         <translation>Nouvelle évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="405"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="420"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="434"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="448"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="393"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="408"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="422"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="436"/>
         <source>New analysis</source>
         <translation>Nouvelle analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="391"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="379"/>
         <source>Create a new model evaluation</source>
         <translation>Créer une nouvelle évaluation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="156"/>
-        <source>All the designs of experiments have already been evaluated.
-</source>
-        <translation>Tous les plans d&apos;expériences ont déjà été évalués.
-</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="400"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="388"/>
         <source>Central tendency</source>
         <translation>Tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="406"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="394"/>
         <source>Create a new central tendency</source>
         <translation>Créer une nouvelle analyse en tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="415"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="403"/>
         <source>Sensitivity</source>
         <translation>Sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="421"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="409"/>
         <source>Create a new sensitivity analysis</source>
         <translation>Créer une nouvelle analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="429"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="417"/>
         <source>Screening</source>
         <translation>Criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="435"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="423"/>
         <source>Create a new screening analysis</source>
         <translation>Créer un nouveau criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="443"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="431"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="449"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="437"/>
         <source>Create a new optimization analysis</source>
         <translation>Créer une nouvelle optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="480"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="468"/>
         <source>Reliability</source>
         <translation>Fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="485"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="473"/>
         <source>New limit state</source>
         <translation>Nouvel état limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="486"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="474"/>
         <source>Create a new limit state</source>
         <translation>Créer un nouvel état limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="340"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="328"/>
         <source>Designs of experiments</source>
         <translation>Plans d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="345"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="333"/>
         <source>New design of experiments</source>
         <translation>Nouveau plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="346"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="334"/>
         <source>Create a new design of experiments</source>
         <translation>Créer un nouveau plan d&apos;expériences</translation>
     </message>
@@ -5170,7 +5177,9 @@ métamodèle</translation>
         <translation>Colonnes</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/plot/PlotMatrixConfigurationWidget.cxx" line="67"/>
         <location filename="../lib/src/view/plot/PlotMatrixConfigurationWidget.cxx" line="68"/>
+        <location filename="../lib/src/view/plot/PlotMatrixConfigurationWidget.cxx" line="79"/>
         <location filename="../lib/src/view/plot/PlotMatrixConfigurationWidget.cxx" line="80"/>
         <source>Select variables</source>
         <translation>Sélectionner des variables</translation>
@@ -5787,67 +5796,69 @@ métamodèle</translation>
 <context>
     <name>OTGUI::SensitivityResultWidget</name>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="62"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="61"/>
         <source>Sobol sensitivity indices:</source>
         <translation>Indices de sensibilité Sobol :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="63"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="62"/>
         <source>sensitivitySobol</source>
         <translation>sensibilitéSobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="64"/>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="79"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="63"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="78"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="64"/>
-        <source>First order index</source>
-        <translation>Indice du premier ordre</translation>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="63"/>
+        <source>First order
+index</source>
+        <translation>Indice du
+premier ordre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="67"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="66"/>
         <source>First order index
 confidence interval</source>
         <translation>Intervalle de confiance
 de l&apos;indice du premier ordre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="69"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="68"/>
         <source>Total index</source>
         <translation>Indice total</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="72"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="71"/>
         <source>Total index
 confidence interval</source>
         <translation>Intervalle de confiance
 de l&apos;indice total</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="77"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="76"/>
         <source>SRC sensitivity indices:</source>
         <translation>Indices de sensibilité SRC :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="78"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="77"/>
         <source>sensitivitySRC</source>
         <translation>sensibilitéSRC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="79"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="78"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="142"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="141"/>
         <source>Warning: The total index is lesser than the first order index.</source>
         <translation>Attention : L&apos;indice total est inférieur à l&apos;indice du premier ordre.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="184"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="183"/>
         <source>Interactions</source>
         <translation>Interactions</translation>
     </message>
@@ -6049,59 +6060,54 @@ de l&apos;indice total</translation>
 <context>
     <name>OTGUI::SobolPage</name>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="50"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="49"/>
         <source>Sobol parameters</source>
         <translation>Paramètres de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="64"/>
-        <source>Evaluation parameter</source>
-        <translation>Paramètre d&apos;évaluation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="70"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="69"/>
         <source>Number of calls by iteration</source>
         <translation>Nombre d&apos;appels par itération</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="71"/>
-        <source>= block_size * ( number_of_inputs + 2 )</source>
-        <translation>= taille_bloc * (nombre_d_entrées + 2 )</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="82"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="81"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="86"/>
-        <source>Bootstrap sampling size</source>
-        <translation>Taille de rééchantillonnage Bootstrap</translation>
+        <location filename="../lib/src/view/SobolPage.cxx" line="63"/>
+        <source>Evaluation parameters</source>
+        <translation>Paramètres d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="91"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="70"/>
+        <source>= replication_size * ( number_of_inputs + 2 )</source>
+        <translation>= taille_réplication * (nombre_entrées + 2)</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SobolPage.cxx" line="85"/>
         <source>Confidence level</source>
         <translation>Niveau de l&apos;intervalle de confiance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="98"/>
+        <location filename="../lib/src/view/SobolPage.cxx" line="92"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="181"/>
-        <source>Please select at least one stop criteria</source>
+        <location filename="../lib/src/view/SobolPage.cxx" line="175"/>
+        <source>Please select at least one stop criterion</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="185"/>
-        <source>The maximum time must not be null</source>
-        <translation>Le temps maximum ne doit pas être nul</translation>
+        <location filename="../lib/src/view/SobolPage.cxx" line="184"/>
+        <source>The maximum calls (%1) can not be lesser than: replication_size(%2)*(number_of_inputs (%3) + 2)=%4</source>
+        <translation>Le maximal d&apos;appels (%1) ne peut pas être inférieur à : taille_réplication(%2)*(nombre_entrées (%3) + 2)=%4</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolPage.cxx" line="188"/>
-        <source>The maximum calls can not be lesser than: block_size*(number_of_inputs + 2)</source>
-        <translation>Le nombre d&apos;appels ne peut pas être inférieur à : taille_bloc*(nombre_entrées + 2)</translation>
+        <location filename="../lib/src/view/SobolPage.cxx" line="179"/>
+        <source>The maximum time must not be null</source>
+        <translation>Le temps maximum ne doit pas être nul</translation>
     </message>
 </context>
 <context>
@@ -6132,11 +6138,6 @@ de l&apos;indice total</translation>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="135"/>
-        <source>Coefficient of variation</source>
-        <translation>Coefficient de variation</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="142"/>
         <source>Stop criteria</source>
         <translation>Critère d&apos;arrêt</translation>
@@ -6157,6 +6158,11 @@ de l&apos;indice total</translation>
         <translation>Sorties</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="135"/>
+        <source>Confidence interval length</source>
+        <translation>Taille de l&apos;intervalle de confiance</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="146"/>
         <source>Summary</source>
         <translation>Résumé</translation>
@@ -6170,22 +6176,27 @@ de l&apos;indice total</translation>
 <context>
     <name>OTGUI::StopCriteriaGroupBox</name>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="34"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="36"/>
         <source>Stop criteria</source>
         <translation>Critère d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="45"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="58"/>
         <source>Accuracy - coefficient of variation</source>
         <translation>Précision - coefficient de variation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="59"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="74"/>
+        <source>Maximum confidence interval length</source>
+        <translation>Taille d&apos;intervalle de confiance maximale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="89"/>
         <source>Maximum time</source>
         <translation>Durée maximale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="70"/>
+        <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="100"/>
         <source>Maximum calls</source>
         <translation>Nombre d&apos;appels maximum</translation>
     </message>
@@ -6762,13 +6773,13 @@ Des objets ne sont peut être pas ouverts.
     </message>
     <message>
         <location filename="../lib/src/model/TranslationManager.cxx" line="148"/>
-        <source>Bootstrap size</source>
-        <translation>Taille Bootstrap</translation>
+        <source>Maximum confidence interval length</source>
+        <translation>Taille d&apos;intervalle de confiance maximale</translation>
     </message>
     <message>
         <location filename="../lib/src/model/TranslationManager.cxx" line="149"/>
-        <source>Bootstrap confidence level</source>
-        <translation>Niveau de l&apos;intervalle de confiance Bootstrap</translation>
+        <source>Replication size</source>
+        <translation>Taille de réplication</translation>
     </message>
     <message>
         <location filename="../lib/src/model/TranslationManager.cxx" line="150"/>

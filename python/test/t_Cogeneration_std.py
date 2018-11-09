@@ -79,22 +79,21 @@ openturns.testing.assert_almost_equal(
 
 # Sobol ##
 sobol = otguibase.SobolAnalysis('mySobol', model)
-sobol.setMaximumCoefficientOfVariation(-1)
+sobol.setReplicationSize(200)
 sobol.setMaximumCalls(1000)
-sobol.setBlockSize(200)
 myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()
 
 # Comparaison
 firstOrderIndicesValues = [
-    [ 0.5288606874811134, 0.01588291900561789, 0.2153929775998618 ]]
+    [ 0.643987, 0.0183602, 0.255834 ]]
 totalIndicesValues = [
-    [ 0.6301285930316392, 0.05907535876023369, 0.3034483699897979 ]]
+    [ 0.610267, 0.0494237, 0.280706 ]]
 openturns.testing.assert_almost_equal(
-    firstOrderIndicesValues, sobolResult.getFirstOrderIndices(), 1e-16)
+    firstOrderIndicesValues, sobolResult.getFirstOrderIndices(), 1e-6)
 openturns.testing.assert_almost_equal(
-    totalIndicesValues, sobolResult.getTotalIndices(), 1e-16)
+    totalIndicesValues, sobolResult.getTotalIndices(), 1e-6)
 
 # SRC ##
 src = otguibase.SRCAnalysis('mySRC', model)

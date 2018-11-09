@@ -28,9 +28,9 @@ print(f([3e7, 3e4, 250, 400]))
 
 # Sobol ##
 sobol = otguibase.SobolAnalysis('mySobol', model)
-sobol.setMaximumCoefficientOfVariation(-1)
+sobol.setMaximumConfidenceIntervalLength(-1)
 sobol.setMaximumCalls(1000)
-sobol.setBlockSize(166)
+sobol.setReplicationSize(166)
 myStudy.add(sobol)
 sobol.run()
 sobolResult = sobol.getResult()

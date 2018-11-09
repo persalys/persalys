@@ -20,7 +20,10 @@
  */
 #include "otgui/WithStopCriteriaAnalysis.hxx"
 
+#include "otgui/AnalysisImplementation.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
+
 #include <chrono>
 
 using namespace OT;
@@ -45,7 +48,8 @@ WithStopCriteriaAnalysis::~WithStopCriteriaAnalysis()
 bool WithStopCriteriaAnalysis::Stop(void * p)
 {
   TimeCriteria * arg = (TimeCriteria*)p;
-  return arg->askStop();
+  arg->elapsedTime_ = arg->Now() - arg->startTime_;
+  return arg->stopRequested_ || (arg->elapsedTime_ > arg->maximumElapsedTime_);
 }
 
 
@@ -90,13 +94,6 @@ void WithStopCriteriaAnalysis::setMaximumElapsedTime(const UnsignedInteger secon
 }
 
 
-Scalar WithStopCriteriaAnalysis::TimeCriteria::Now()
-{
-  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-  return 1e-3 * std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-}
-
-
 /* String converter */
 String WithStopCriteriaAnalysis::__repr__() const
 {
@@ -132,5 +129,12 @@ void WithStopCriteriaAnalysis::load(Advocate & adv)
   adv.loadAttribute("maximumCalls_", maximumCalls_);
   adv.loadAttribute("maximumCoefficientOfVariation_", maximumCoefficientOfVariation_);
   adv.loadAttribute("maximumElapsedTime_", maximumElapsedTime_);
+}
+
+
+Scalar TimeCriteria::Now()
+{
+  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+  return 1e-3 * std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 }
 }

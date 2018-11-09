@@ -52,41 +52,6 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  class TimeCriteria
-  {
-  public:
-    TimeCriteria() : startTime_(0.), maxElapsedTime_(0.), stopRequested_(false) {};
-    virtual ~TimeCriteria() {};
-
-    void setStartTime(const OT::Scalar startTime)
-    {
-      startTime_ = startTime;
-    }
-    void setMaxElapsedTime(const OT::Scalar seconds)
-    {
-      maxElapsedTime_ = seconds;
-    }
-    void stop()
-    {
-      stopRequested_ = true;
-    }
-    OT::Scalar getElapsedTime() const
-    {
-      return elapsedTime_;
-    }
-    bool askStop() const
-    {
-      elapsedTime_ = Now() - startTime_;
-      return stopRequested_ || (elapsedTime_ > maxElapsedTime_);
-    }
-    /** System time in seconds */
-    static OT::Scalar Now();
-  private:
-    OT::Scalar startTime_;
-    mutable OT::Scalar elapsedTime_;
-    OT::Scalar maxElapsedTime_;
-    bool stopRequested_;
-  };
   /** Stop callback */
   static OT::Bool Stop(void * p);
 
@@ -94,6 +59,46 @@ private:
   OT::UnsignedInteger maximumCalls_;
   double maximumCoefficientOfVariation_;
   OT::UnsignedInteger maximumElapsedTime_;
+};
+
+
+class OTGUI_API TimeCriteria
+{
+  friend WithStopCriteriaAnalysis;
+public:
+  TimeCriteria() : startTime_(0.), maximumElapsedTime_(0.), stopRequested_(false)
+  {};
+  virtual ~TimeCriteria()
+  {};
+  void setStartTime(const OT::Scalar startTime)
+  {
+    stopRequested_ = false;
+    startTime_ = startTime;
+  }
+  OT::Scalar getStartTime() const
+  {
+    return startTime_;
+  }
+  void setMaxElapsedTime(const OT::Scalar seconds)
+  {
+    maximumElapsedTime_ = seconds;
+  }
+  void stop()
+  {
+    stopRequested_ = true;
+  }
+  OT::Scalar getElapsedTime() const
+  {
+    return elapsedTime_;
+  }
+  /** System time in seconds */
+  static OT::Scalar Now();
+
+private:
+  OT::Scalar startTime_;
+  mutable OT::Scalar elapsedTime_;
+  OT::Scalar maximumElapsedTime_;
+  bool stopRequested_;
 };
 }
 #endif

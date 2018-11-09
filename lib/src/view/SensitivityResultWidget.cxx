@@ -44,8 +44,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     const Description& inputNames,
     const String& outputName,
     const Type type,
-    QWidget * parent
-                                                )
+    QWidget * parent)
   : QWidget(parent)
   , plot_(0)
   , proxyModel_(0)
@@ -61,7 +60,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   {
     graphTitle = tr("Sobol sensitivity indices:");
     defaultFileName = tr("sensitivitySobol");
-    tableTitles << tr("Input") << tr("First order index");
+    tableTitles << tr("Input") << tr("First order\nindex");
     if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
     {
       tableTitles << tr("First order index\nconfidence interval");
