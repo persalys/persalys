@@ -393,7 +393,7 @@ void FunctionalChaosResultWindow::buildInterface()
   {
     QWidget * indicesWidget = new QWidget;
     QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
-    QLabel * errorLabel = new QLabel((!errorMessage_.isEmpty() ? errorMessage_ + "\n" : "") + tr("The interpretation of the Sobol indices may be misleading due to the fact the model has not an independent copula. So the indices are not displayed."));
+    QLabel * errorLabel = new QLabel((!errorMessage_.isEmpty() ? errorMessage_ + "\n" : "") + tr("As the model has not an independent copula, the interpretation of the Sobol indices may be misleading. So they are not displayed."));
     errorLabel->setWordWrap(true);
     indicesWidgetLayout->addWidget(errorLabel);
     indicesWidgetLayout->addStretch();
