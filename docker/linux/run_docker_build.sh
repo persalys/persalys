@@ -55,8 +55,8 @@ cp -rv /usr/local/lib/qt/plugins otgui.AppDir/usr/lib
 cp -rv /usr/local/etc/ otgui.AppDir/etc
 cp -rv /usr/local/share/otgui otgui.AppDir/usr/share
 
-cp -v /usr/local/bin/python3.6 otgui.AppDir/usr/bin
-cp -r /usr/local/lib/python3.6 otgui.AppDir/usr/lib
+cp -v /usr/local/bin/python3.7 otgui.AppDir/usr/bin
+cp -r /usr/local/lib/python3.7 otgui.AppDir/usr/lib
 
 cp -v ../otgui/images/OT_icon32x32.png otgui.AppDir/otgui.png
 
