@@ -53,7 +53,8 @@ ResultWindow::ResultWindow(OTguiItem * item, QWidget * parent)
   }
 #ifdef OTGUI_HAVE_PARAVIEW
   // FIXME: PV widgets wont draw at first, due to use of MDI area
-  setAttribute(Qt::WA_NativeWindow);
+  if (OTguiSubWindow::HaveOpenGL32())
+    setAttribute(Qt::WA_NativeWindow);
 #endif
 }
 
