@@ -1,6 +1,5 @@
 dim fso: set fso = CreateObject("Scripting.FileSystemObject")
-dim CurrentDirectory
-CurrentDirectory = fso.GetAbsolutePathName(".")
+dim currentDirectory: currentDirectory = fso.GetParentFolderName(WScript.ScriptFullName)
 Set wshShell = CreateObject("WScript.Shell")
 Set wshEnv = wshShell.Environment("Process")
 
@@ -8,6 +7,7 @@ rem override default Qt5Agg backend (on conda) to avoid conflicts with newer Min
 wshEnv("MPLBACKEND") = "TkAgg"
 
 rem add Python directory in Environment variable PATH
-WshEnv("PATH") = WshEnv("PATH") & ";" + fso.GetAbsolutePathName(CurrentDirectory + "\..\..\..")
+wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory + "\..\..\..")
 
-wshShell.run fso.BuildPath(CurrentDirectory, "otgui.exe")
+rem need quotes if contains spaces (C:\Program Files)
+wshShell.run Chr(34) & fso.BuildPath(currentDirectory, "otgui.exe") & Chr(34)
