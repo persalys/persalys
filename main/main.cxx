@@ -51,8 +51,11 @@ int main(int argc, char *argv[])
 #endif
 
   // Settings
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EDF_Phimeca", "OTgui");
-  settings.setValue("currentDir", QSettings().fileName());
+  QCoreApplication::setOrganizationName("EDF_Phimeca");
+  QCoreApplication::setApplicationName("otgui");
+  QSettings::setDefaultFormat(QSettings::IniFormat);
+  if (!QSettings().contains("currentDir"))
+    QSettings().setValue("currentDir", QSettings().fileName());
 
   // translations
   QTranslator qtTranslator;

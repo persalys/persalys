@@ -28,7 +28,6 @@ namespace OTGUI
 
 QString FileTools::GetCurrentDir()
 {
-  QSettings::setDefaultFormat(QSettings::IniFormat);
   QSettings settings;
   QString result = settings.value("currentDir", QDir::homePath()).toString();
   QDir dir(result);
@@ -45,7 +44,6 @@ void FileTools::SetCurrentDir(const QString &fileName)
   QFileInfo info(fileName);
   if (info.exists())
   {
-    QSettings::setDefaultFormat(QSettings::IniFormat);
     QSettings settings;
     settings.setValue("currentDir", info.absolutePath());
   }
