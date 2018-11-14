@@ -28,7 +28,8 @@ RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/Lib/site-pac
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
-  && git checkout 1c234e10cfb2ffcbbe6c3b6cb49bfa973a13aeb5 \
+  && git config user.email devel@a.b && git config user.name devel \
+  && git checkout v0.5 && git cherry-pick 721afcf4db5b5d372a3b9af99f730eff8a447dc0 \
   && CXXFLAGS="-D_hypot=hypot -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
   -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
