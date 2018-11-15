@@ -107,7 +107,7 @@ void OTStudy::Remove(const OTStudy& otstudy)
 }
 
 
-void OTStudy::Open(const String & xmlFileName)
+OTStudy OTStudy::Open(const String & xmlFileName)
 {
   // check path
   boost::filesystem::path canonicalPath = boost::filesystem::canonical(xmlFileName);
@@ -124,8 +124,9 @@ void OTStudy::Open(const String & xmlFileName)
   study.load();
   OTStudy openedStudy;
   study.fillObject("otstudy", openedStudy);
-  openedStudy.getImplementation()->setFileName(fileName);
-  Add(openedStudy);
+  openedStudy.getImplementation()->setFileName(fileName); // use canonical path
+
+  return openedStudy;
 }
 
 

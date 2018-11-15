@@ -527,7 +527,8 @@ void StudyManager::open(const QString& recentFileName)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   try
   {
-    OTStudy::Open(fileName.toLocal8Bit().constData());
+    OTStudy newStudy(OTStudy::Open(fileName.toLocal8Bit().constData()));
+    OTStudy::Add(newStudy);
     emit recentFilesListChanged(fileName);
   }
   catch (std::exception & ex)
