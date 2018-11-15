@@ -48,7 +48,6 @@ OTStudyItem::OTStudyItem(const OTStudy& otStudy)
 {
   parentOTStudyItem_ = this;
   otStudy_.addObserver(this);
-  update(0, "fileNameChanged");
 
   buildActions();
   connect(this, SIGNAL(statusChanged()), this, SLOT(updateIcon()));
@@ -136,11 +135,6 @@ void OTStudyItem::update(Observable * source, const String & message)
   else if (message == "otStudyRemoved")
   {
     requestRemove();
-  }
-  else if (message == "fileNameChanged")
-  {
-    if (!otStudy_.getFileName().empty())
-      setToolTip(QString::fromUtf8(otStudy_.getFileName().c_str()));
   }
   else if (message == "statusChanged")
   {
@@ -416,6 +410,10 @@ QVariant OTStudyItem::data(int role) const
     else
       return QIcon();
   }
+  // tooltip
+  if (role == Qt::ToolTipRole && !otStudy_.getFileName().empty())
+    return QFileInfo(otStudy_.getFileName().c_str()).absoluteFilePath();
+
   return OTguiItem::data(role);
 }
 

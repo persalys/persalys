@@ -178,7 +178,6 @@ String OTStudyImplementation::getFileName() const
 void OTStudyImplementation::setFileName(const String& fileName)
 {
   fileName_ = fileName;
-  notify("fileNameChanged");
 }
 
 
