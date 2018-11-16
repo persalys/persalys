@@ -178,7 +178,6 @@ String OTStudyImplementation::getFileName() const
 void OTStudyImplementation::setFileName(const String& fileName)
 {
   fileName_ = fileName;
-  notify("fileNameChanged");
 }
 
 
@@ -653,10 +652,7 @@ void OTStudyImplementation::save(const String& xmlFileName)
   study.add("otstudy", this->clone());
   study.save();
 
-  // TODO convert to utf-8
-  const String fileName = xmlFileName;
-
-  setFileName(fileName);
+  setFileName(xmlFileName);
   modified_ = false;
   notify("statusChanged");
 }

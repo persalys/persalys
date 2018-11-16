@@ -24,12 +24,17 @@ filesNames : :py:class:`openturns.Description`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::OTStudy::Open
-"Open a study and add it in the tree view.
+"Open a study.
 
 Parameters
 ----------
 fileName : str
-    The file name"
+    The file name
+
+Returns
+-------
+study : :class:`~otguibase.OTStudy`
+    The study saved in fileName"
 
 // ---------------------------------------------------------------------
 

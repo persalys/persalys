@@ -55,7 +55,6 @@ void OTguiMdiArea::addSubWindow(OTguiSubWindow * win)
 
   // connections
   connect(win, SIGNAL(showWindowRequested()), this, SLOT(changeActiveSubWindow()));
-  connect(win, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(win, SIGNAL(removeWindowRequested()), this, SLOT(removeSubWindow()));
 }
 
@@ -71,13 +70,11 @@ void OTguiMdiArea::changeActiveSubWindow()
   }
   win->widget()->showMaximized();
   setActiveSubWindow(win);
-  emit errorMessageChanged(win->getErrorMessage());
 }
 
 
 void OTguiMdiArea::removeSubWindow(OTguiSubWindow* win)
 {
-  emit errorMessageChanged("");
   QMdiArea::removeSubWindow(win);
   win->deleteLater();
 

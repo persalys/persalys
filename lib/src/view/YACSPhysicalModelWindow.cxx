@@ -44,6 +44,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
   : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , XMLfileNameEdit_(0)
+  , errorMessageLabel_(0)
 {
   setWindowTitle(tr("YACS physical model"));
 
@@ -71,12 +72,10 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
 
   // variables tables
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
-  connect(widget, SIGNAL(errorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
   mainLayout->addWidget(widget);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
   mainLayout->addWidget(errorMessageLabel_);
 
   ////////////////
@@ -110,11 +109,11 @@ void YACSPhysicalModelWindow::selectImportFileDialogRequested()
       {
         dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->setXMLFileName(fileName.toLocal8Bit().data());
 
-        setErrorMessage("");
+        errorMessageLabel_->reset();
       }
       catch (std::exception & ex)
       {
-        setErrorMessage(ex.what());
+        errorMessageLabel_->setErrorMessage(ex.what());
       }
     }
   }
@@ -144,11 +143,11 @@ void YACSPhysicalModelWindow::buildSchemaDialogRequested()
       {
         dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->setXMLFileName(fileName.toLocal8Bit().data());
 
-        setErrorMessage("");
+        errorMessageLabel_->reset();
       }
       catch (std::exception & ex)
       {
-        setErrorMessage(ex.what());
+        errorMessageLabel_->setErrorMessage(ex.what());
       }
     }
   }

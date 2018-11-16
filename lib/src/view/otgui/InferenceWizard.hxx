@@ -26,8 +26,12 @@
 #include "otgui/VariablesSelectionTableModel.hxx"
 #include "otgui/TemporaryLabel.hxx"
 #include "otgui/DoubleSpinBox.hxx"
+#include "otgui/CopyableTableView.hxx"
+#include "otgui/ResizableStackedWidget.hxx"
 
 #include <openturns/FittingTest.hxx>
+
+#include <QMenu>
 
 namespace OTGUI
 {
@@ -48,6 +52,7 @@ protected:
 public slots:
   void selectedVarChanged(QModelIndex, QModelIndex);
   void updateDistListForVar(QStringList);
+  void applyCurrentDistToAll();
   void updateInterestVar(OT::Description, OT::String);
 signals:
   void currentVarChanged(int);
@@ -58,10 +63,40 @@ private:
   InferenceAnalysis inference_;
   OT::Description interestVar_;
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
+  ResizableStackedWidget * stackWidget_;
   DoubleSpinBox * levelSpinbox_;
   TemporaryLabel * errorMessageLabel_;
   bool pageValidity_;
   VariablesSelectionTableModel * varTableModel_;
+};
+
+class VariablesTableView : public CopyableTableView
+{
+  Q_OBJECT
+
+public:
+  VariablesTableView(QWidget* parent = 0)
+    : CopyableTableView(parent)
+  {
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+  }
+
+public slots:
+  // show the context menu when right clicking
+  void contextMenu(const QPoint & pos)
+  {
+    QMenu * contextMenu(new QMenu(this));
+    //Use the same list of distributions for all the variables
+    QAction * applyToAllAction = new QAction(tr("Apply the list of distributions to all variables"), this);
+    applyToAllAction->setStatusTip(tr("Export the data"));
+    connect(applyToAllAction, SIGNAL(triggered()), this, SIGNAL(applyToAllRequested()));
+    contextMenu->addAction(applyToAllAction);
+    contextMenu->popup(this->mapToGlobal(pos));
+  }
+
+signals:
+  void applyToAllRequested();
 };
 }
 #endif

@@ -47,7 +47,7 @@ void DesignOfExperimentItem::setData(const QVariant & value, int role)
 {
   // rename
   if (role == Qt::EditRole)
-    designOfExperiment_.getImplementation()->setName(value.toString().toLocal8Bit().data());
+    designOfExperiment_.getImplementation()->setName(value.toString().toUtf8().data());
 
   QStandardItem::setData(value, role);
 }

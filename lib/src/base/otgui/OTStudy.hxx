@@ -39,7 +39,7 @@ public:
   static OT::String GetAvailableName();
   static void Add(const OTStudy& otstudy);
   static void Remove(const OTStudy& otstudy);
-  static void Open(const OT::String& xmlFileName);
+  static OTStudy Open(const OT::String& xmlFileName);
   static void SetInstanceObserver(Observer * observer);
 
   /** Default constructor */

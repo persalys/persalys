@@ -28,18 +28,42 @@ TemporaryLabel::TemporaryLabel(QWidget *parent)
   , qtimelineList_()
 {
   setWordWrap(true);
+  setTextInteractionFlags(Qt::TextSelectableByMouse);
+}
+
+
+void TemporaryLabel::reset()
+{
+  // clear() method does not work!
+  setText("");
+}
+
+
+void TemporaryLabel::setMessage(const QString& message)
+{
+  setStyleSheet("");
+  setText(message);
+}
+
+
+void TemporaryLabel::setErrorMessage(const QString& message)
+{
+  setStyleSheet("color: red;");
+  setText(message);
 }
 
 
 void TemporaryLabel::setTemporaryErrorMessage(const QString& message)
 {
-  if (message.isEmpty())
-    return;
-  setText(QString("<font color=red>%1</font>").arg(message));
-  QTimeLine * time = new QTimeLine(7000, this);
-  qtimelineList_.push_back(time);
-  connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitErrorMessage(QTimeLine::State)));
-  time->start();
+  setStyleSheet("color: red;");
+  setText(message);
+  if (!message.isEmpty())
+  {
+    QTimeLine * time = new QTimeLine(8000, this);
+    qtimelineList_.push_back(time);
+    connect(time, SIGNAL(stateChanged(QTimeLine::State)), this, SLOT(reInitErrorMessage(QTimeLine::State)));
+    time->start();
+  }
 }
 
 

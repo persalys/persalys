@@ -20,6 +20,8 @@
  */
 #include "otgui/OTTools.hxx"
 
+#include <boost/locale.hpp>
+
 using namespace OT;
 
 namespace OTGUI
@@ -159,5 +161,15 @@ Description Parameters::GetOTIntervalDescription(const Interval& interval)
     resu[i] = intervalStr_i;
   }
   return resu;
+}
+
+
+String Tools::GetLocaleString(const String& str)
+{
+  boost::locale::generator g;
+  g.locale_cache_enabled(true);
+  std::locale loc = g(boost::locale::util::get_system_locale());
+
+  return boost::locale::conv::from_utf<char>(str, loc);;
 }
 }

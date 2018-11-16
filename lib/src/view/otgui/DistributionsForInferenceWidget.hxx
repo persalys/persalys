@@ -40,6 +40,8 @@ class OTGUI_API DistributionsForInferenceWidget : public QWidget
 public :
   DistributionsForInferenceWidget(const QStringList & distributions, const OT::Description &variables, QWidget* parent = 0);
 
+  void updateDistributions(const QStringList& distributions);
+
 protected:
   void buildInterface();
 

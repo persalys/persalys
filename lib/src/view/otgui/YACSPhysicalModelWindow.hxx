@@ -23,10 +23,9 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QLineEdit>
-#include <QCheckBox>
-#include <QComboBox>
 
 namespace OTGUI
 {
@@ -45,6 +44,7 @@ public slots:
 private:
   PhysicalModel physicalModel_;
   QLineEdit * XMLfileNameEdit_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

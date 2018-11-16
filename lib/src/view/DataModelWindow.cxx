@@ -53,6 +53,7 @@ DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * paren
   , filePathLineEdit_(0)
   , defaultLineEditPalette_()
   , sampleSizeLabel_(0)
+  , errorMessageLabel_(0)
 {
   dataModel_ = dynamic_cast<DataModel*>(item->getDesignOfExperiment().getImplementation().get());
   if (!dataModel_)
@@ -104,8 +105,7 @@ void DataModelWindow::buildInterface()
   mainGridLayout->addLayout(hboxLayout, 0, 0);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
   mainGridLayout->addWidget(errorMessageLabel_, 1, 0);
 
   // variables table
@@ -204,8 +204,8 @@ void DataModelWindow::buildInterface()
   // connections
   connect(tableModel_, SIGNAL(sampleChanged(OT::Sample)), dataTableModel, SLOT(updateData(OT::Sample)));
   connect(tableModel_, SIGNAL(sampleDescriptionChanged(OT::Description)), dataTableModel, SLOT(updateHeaderData(OT::Description)));
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), this, SLOT(setErrorMessage(QString)));
-  connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), this, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
 
   connect(tableView_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeDataTableColumn(int, int, int)));
   connect(tableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), dataTableView2_->horizontalScrollBar(), SLOT(setValue(int)));
@@ -274,13 +274,13 @@ void DataModelWindow::resizeVariablesTableColumn(int column, int /*oldWidth*/, i
 void DataModelWindow::updateTable(const QString& fileName)
 {
   // re-initialization
-  setErrorMessage("");
+  errorMessageLabel_->reset();
 
   // try to retrieve data from the selected file
   try
   {
     // update file name
-    dataModel_->setFileName(fileName.toLocal8Bit().data());
+    dataModel_->setFileName(fileName.toUtf8().data());
     filePathLineEdit_->setText(fileName);
   }
   catch (std::exception& ex)

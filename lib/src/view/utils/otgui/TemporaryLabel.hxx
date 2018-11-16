@@ -36,6 +36,9 @@ public:
   TemporaryLabel(QWidget *parent = 0);
 
 public slots:
+  void reset();
+  void setMessage(const QString& message);
+  void setErrorMessage(const QString& message);
   void setTemporaryErrorMessage(const QString& message);
   void reInitErrorMessage(QTimeLine::State);
 

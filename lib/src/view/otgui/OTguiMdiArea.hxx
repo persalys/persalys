@@ -24,7 +24,6 @@
 #include "WelcomeWindow.hxx"
 
 #include <QMdiArea>
-#include <QStandardItem>
 
 namespace OTGUI
 {
@@ -42,8 +41,6 @@ public slots:
   void changeActiveSubWindow();
   void removeSubWindow(OTguiSubWindow * win);
   void removeSubWindow();
-signals:
-  void errorMessageChanged(QString);
 
 private:
   QMdiSubWindow * welcomeWindow_;

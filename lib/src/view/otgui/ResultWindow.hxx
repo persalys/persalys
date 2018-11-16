@@ -25,6 +25,7 @@
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/ParametersWidget.hxx"
 
+#include <QScrollArea>
 #include <QListWidget>
 #include <QStyledItemDelegate>
 
@@ -79,7 +80,7 @@ protected:
 //   QString getModelDescription(const Analysis& analysis);
 
 protected:
-  QWidget * parametersWidget_;
+  QScrollArea * parametersWidget_;
   QWidget * modelDescriptionWidget_;
 };
 }

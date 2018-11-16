@@ -49,6 +49,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , variablesTableModel_(0)
+  , errorMessageLabel_(0)
 {
   setWindowTitle(tr("FMI physical model"));
 
@@ -185,8 +186,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   variablesLayout->addLayout(evaluationLayout);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
   variablesLayout->addWidget(errorMessageLabel_);
 
   tabWidget_->addTab(variablesWidget, tr("Variables"));
@@ -239,14 +239,14 @@ void FMIPhysicalModelWindow::evaluateOutputs()
 {
   if (!physicalModel_.getInputDimension())
   {
-    errorMessageChanged(tr("No inputs"));
+    errorMessageLabel_->setErrorMessage(tr("No inputs"));
     return;
   }
 
   // if no outputs do nothing
   if (!physicalModel_.getSelectedOutputsNames().getSize())
   {
-    errorMessageChanged(tr("No outputs"));
+    errorMessageLabel_->setErrorMessage(tr("No outputs"));
     return;
   }
 
@@ -260,12 +260,12 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   // check
   if (!eval.getErrorMessage().empty())
   {
-    errorMessageChanged(eval.getErrorMessage().c_str());
+    errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
     return;
   }
   if (!outputSample.getSize())
   {
-    errorMessageChanged(tr("Not possible to evaluate the outputs"));
+    errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
     return;
   }
 
@@ -274,7 +274,7 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   {
     physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
   }
-  errorMessageChanged("");
+  errorMessageLabel_->reset();
 }
 
 
@@ -302,12 +302,12 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
       QApplication::setOverrideCursor(Qt::WaitCursor);
       try
       {
-        fmiModel->setFMUFileName(fileName.toLocal8Bit().data());
-        setErrorMessage("");
+        fmiModel->setFMUFileName(fileName.toUtf8().data());
+        errorMessageLabel_->reset();
       }
       catch (std::exception & ex)
       {
-        setErrorMessage(ex.what());
+        errorMessageLabel_->setErrorMessage(ex.what());
       }
       loadModel(fmiModel->getFMUInfo());
       QApplication::restoreOverrideCursor();

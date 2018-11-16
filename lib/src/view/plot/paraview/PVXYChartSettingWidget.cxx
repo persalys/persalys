@@ -394,6 +394,7 @@ void PVXYChartSettingWidget::updateYComboBox()
 {
   Q_ASSERT(xAxisComboBox_ && yAxisComboBox_);
 
+  const QString currentYText = yAxisComboBox_->currentText();
   SignalBlocker blocker(yAxisComboBox_);
   yAxisComboBox_->clear();
 
@@ -415,6 +416,7 @@ void PVXYChartSettingWidget::updateYComboBox()
 
   if (plotType_ == PVXYChartSettingWidget::Scatter)
     yAxisComboBox_->addItems(outputNames + inputNames);
+  yAxisComboBox_->setCurrentText(currentYText);
 
   plotChanged();
 }

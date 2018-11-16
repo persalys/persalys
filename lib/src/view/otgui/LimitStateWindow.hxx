@@ -24,6 +24,7 @@
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/LimitStateItem.hxx"
 #include "otgui/ValueLineEdit.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QComboBox>
 
@@ -58,6 +59,7 @@ private:
   QComboBox * outputsComboBox_;
   QComboBox * failureComboBox_;
   ValueLineEdit * thresholdLineEdit_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

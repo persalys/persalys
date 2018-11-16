@@ -53,7 +53,8 @@ ResultWindow::ResultWindow(OTguiItem * item, QWidget * parent)
   }
 #ifdef OTGUI_HAVE_PARAVIEW
   // FIXME: PV widgets wont draw at first, due to use of MDI area
-  setAttribute(Qt::WA_NativeWindow);
+  if (OTguiSubWindow::HaveOpenGL32())
+    setAttribute(Qt::WA_NativeWindow);
 #endif
 }
 
@@ -64,9 +65,11 @@ void ResultWindow::setParameters(const Analysis& analysis, const QString& title)
   if (!analysisParameters.getSize())
     return;
 
-  parametersWidget_ = new QWidget;
-  QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(parametersWidget_);
+  parametersWidget_ = new QScrollArea;
+  QWidget * paramWidget = new QWidget;
+  QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(paramWidget);
   parametersWidgetLayout->addWidget(new ParametersWidget(title, analysisParameters), 0, Qt::AlignTop);
+  parametersWidget_->setWidget(paramWidget);
 }
 
 

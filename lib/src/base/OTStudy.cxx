@@ -20,6 +20,8 @@
  */
 #include "otgui/OTStudy.hxx"
 
+#include "otgui/OTTools.hxx"
+
 #include <openturns/Study.hxx>
 #include <openturns/XMLStorageManager.hxx>
 
@@ -77,7 +79,7 @@ void OTStudy::Add(const OTStudy& otstudy)
   if (OTStudyObserver_)
   {
     if (OTStudies_.contains(otstudy))
-      throw InvalidArgumentException(HERE) << "The OTStudy already exists\n";
+      throw InvalidArgumentException(HERE) << "The study already exists\n";
     OTStudies_.add(otstudy);
     OTStudyObserver_->update(otstudy.getImplementation().get(), "addStudy");
   }
@@ -107,25 +109,17 @@ void OTStudy::Remove(const OTStudy& otstudy)
 }
 
 
-void OTStudy::Open(const String & xmlFileName)
+OTStudy OTStudy::Open(const String & xmlFileName)
 {
-  // check path
-  boost::filesystem::path canonicalPath = boost::filesystem::canonical(xmlFileName);
-
-  // TODO convert to utf-8
-  const String fileName = canonicalPath.string();
-
-  if (GetFileNames().contains(fileName))
-    throw InvalidArgumentException (HERE) << "This study is already opened";
-
   // open study
   Study study;
   study.setStorageManager(XMLStorageManager(xmlFileName));
   study.load();
   OTStudy openedStudy;
   study.fillObject("otstudy", openedStudy);
-  openedStudy.getImplementation()->setFileName(fileName);
-  Add(openedStudy);
+  openedStudy.getImplementation()->setFileName(xmlFileName);
+
+  return openedStudy;
 }
 
 

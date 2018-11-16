@@ -23,10 +23,8 @@
 
 #include "otgui/OTguiItem.hxx"
 
-#include <QStandardItem>
 #include <QMdiSubWindow>
 #include <QLabel>
-#include <QTimeLine>
 
 namespace OTGUI
 {
@@ -41,28 +39,16 @@ public:
 
   OTguiItem * getItem() const;
 
-  QString getErrorMessage() const;
-
   static bool HaveOpenGL32();
 
-public slots:
-  void setErrorMessage(QString message);
-  void setTemporaryErrorMessage(QString message);
-  void reInitErrorMessage(QTimeLine::State);
 signals:
   void showWindowRequested();
   void removeWindowRequested();
-  void errorMessageChanged(QString);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated();
 
-protected:
-  QLabel * errorMessageLabel_;
-
 private:
   OTguiItem * item_;
-  QString errorMessage_;
-  QList<QTimeLine*> qtimelineList_;
 };
 }
 #endif

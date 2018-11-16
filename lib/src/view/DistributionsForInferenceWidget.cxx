@@ -103,35 +103,44 @@ void DistributionsForInferenceWidget::buildInterface()
 }
 
 
-void DistributionsForInferenceWidget::removeSelectedDistribution()
+void DistributionsForInferenceWidget::updateDistributions(const QStringList& distributions)
 {
-  const QModelIndexList indexList = tableView_->selectionModel()->selectedRows();
-
   QStringList allDistributions;
   if (variables_.getSize() == 1)
     allDistributions = TranslationManager::GetAvailableDistributions();
   else
     allDistributions = TranslationManager::GetAvailableCopulas();
 
-  // update Add button items
-  addComboBox_->removeItem(addComboBox_->count() - 1);
-  for (int i = indexList.size() - 1; i >= 0; --i)
+  QStringList notUsedDistributions;
+  for (int i = 0; i < allDistributions.size(); ++i)
   {
-    QString selectedDistribution = tableModel_->data(indexList[i], Qt::DisplayRole).toString();
-    if (allDistributions.contains(selectedDistribution))
-      addComboBox_->addItem(selectedDistribution);
+    if (!distributions.contains(allDistributions[i]))
+      notUsedDistributions << allDistributions[i];
   }
-  addComboBox_->model()->sort(0);
-  addComboBox_->addItem(tr("All"));
+  notUsedDistributions << tr("All");
+
+  // update Add button items
+  addComboBox_->clear();
+  addComboBox_->addItems(notUsedDistributions);
 
   // update distributions table model
-  QStringList distributions;
-  for (int i = 0; i < allDistributions.size(); ++i)
-    if (addComboBox_->findText(allDistributions[i]) == -1)
-      distributions << allDistributions[i];
-
   tableModel_->updateData(distributions);
   tableView_->selectRow(0);
+}
+
+
+void DistributionsForInferenceWidget::removeSelectedDistribution()
+{
+  // update list of distributions
+  const QModelIndexList indexList = tableView_->selectionModel()->selectedRows();
+  QStringList distributions = tableModel_->getDistributions();
+  for (int i = indexList.size() - 1; i >= 0; --i)
+  {
+    const QString selectedDistribution = tableModel_->data(indexList[i], Qt::DisplayRole).toString();
+    distributions.removeOne(selectedDistribution);
+  }
+  // update widgets
+  updateDistributions(distributions);
 
   // emit signal to parent widget
   emit distributionsListChanged(distributions);
@@ -141,10 +150,12 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
 
 void DistributionsForInferenceWidget::addSelectedDistribution(int index)
 {
+  // "Distribution name" item
   if (index < addComboBox_->count() - 1)
   {
     addComboBox_->removeItem(index);
   }
+  // "All" item
   else
   {
     addComboBox_->clear();

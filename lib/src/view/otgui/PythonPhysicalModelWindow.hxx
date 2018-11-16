@@ -23,10 +23,6 @@
 
 #include "otgui/OTguiSubWindow.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
-#include "otgui/PhysicalModelWindowWidget.hxx"
-#include "otgui/CodeModel.hxx"
-
-#include <QTableView>
 
 namespace OTGUI
 {
@@ -36,12 +32,6 @@ class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
 
 public:
   PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
-
-public slots:
-  void parallelizationRequested(int);
-
-private:
-  PhysicalModel physicalModel_;
 };
 }
 #endif

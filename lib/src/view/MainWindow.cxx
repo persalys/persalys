@@ -118,7 +118,6 @@ void MainWindow::buildInterface()
 
   // status bar
   OTguiStatusBar * statusBar = new OTguiStatusBar;
-  connect(mainWidget->getMdiArea(), SIGNAL(errorMessageChanged(QString)), statusBar, SLOT(showErrorMessage(QString)));
   setStatusBar(statusBar);
 }
 
@@ -134,9 +133,7 @@ void MainWindow::executePythonCommand(const QString& command)
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-  const int notCanceled = manager_->closeAll();
-
-  if (notCanceled)
+  if (manager_->closeAll())
   {
     event->accept();
     QMainWindow::closeEvent(event);

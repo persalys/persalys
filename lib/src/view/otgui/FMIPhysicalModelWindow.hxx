@@ -28,6 +28,7 @@
 #include "otgui/FMUInfo.hxx"
 #include "otgui/FMIPhysicalModel.hxx"
 #include "otgui/DoubleSpinBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QLineEdit>
 #include <QCheckBox>
@@ -290,6 +291,7 @@ private:
   QTabWidget * tabWidget_;
 
   CopyableTableView * differentiationTableView_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
