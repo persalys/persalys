@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiArea
+ *  @brief QStackedWidget containing all sub windows
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,32 +18,35 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_OTGUIMDIAREA_HXX
-#define OTGUI_OTGUIMDIAREA_HXX
+#include "otgui/SubWindowsStackedWidget.hxx"
 
-#include "WelcomeWindow.hxx"
-
-#include <QMdiArea>
+#include <QDebug>
 
 namespace OTGUI
 {
-class OTGUI_API OTguiMdiArea : public QMdiArea
+
+SubWindowsStackedWidget::SubWindowsStackedWidget(QWidget * parent)
+  : QStackedWidget(parent)
 {
-  Q_OBJECT
-
-public:
-  OTguiMdiArea(QWidget *parent = 0);
-
-  void addWelcomeWindow(WelcomeWindow * win);
-
-public slots:
-  void addSubWindow(OTguiSubWindow * win);
-  void changeActiveSubWindow();
-  void removeSubWindow(OTguiSubWindow * win);
-  void removeSubWindow();
-
-private:
-  QMdiSubWindow * welcomeWindow_;
-};
 }
-#endif
+
+
+int SubWindowsStackedWidget::addSubWindow(OTguiSubWindow * win)
+{
+  // connections
+  connect(win, SIGNAL(showWindowRequested(QWidget*)), this, SLOT(setCurrentWidget(QWidget*)));
+  connect(win, SIGNAL(removeWindowRequested(QWidget*)), this, SLOT(removeSubWindow(QWidget*)));
+
+  int ret = QStackedWidget::addWidget(win);
+  setCurrentWidget(win);
+
+  return ret;
+}
+
+
+void SubWindowsStackedWidget::removeSubWindow(QWidget* win)
+{
+  QStackedWidget::removeWidget(win);
+  win->deleteLater();
+}
+}

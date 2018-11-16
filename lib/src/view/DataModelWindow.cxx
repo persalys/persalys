@@ -73,10 +73,7 @@ DataModelWindow::~DataModelWindow()
 
 void DataModelWindow::buildInterface()
 {
-  setWindowTitle(tr("Data model definition"));
-
-  QWidget * mainWidget = new QWidget;
-  QGridLayout * mainGridLayout = new QGridLayout(mainWidget);
+  QGridLayout * mainGridLayout = new QGridLayout(this);
 
   // first row
   QHBoxLayout * hboxLayout = new QHBoxLayout;
@@ -220,8 +217,6 @@ void DataModelWindow::buildInterface()
 
   // fill tables
   updateTableView();
-
-  setWidget(mainWidget);
 }
 
 

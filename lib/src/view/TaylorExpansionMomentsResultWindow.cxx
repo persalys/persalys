@@ -46,7 +46,7 @@ TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisI
 
 void TaylorExpansionMomentsResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Taylor expansion moments results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
@@ -126,6 +126,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
-  setWidget(mainWidget);
+
+  widgetLayout->addWidget(mainWidget);
 }
 }

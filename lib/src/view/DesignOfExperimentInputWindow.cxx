@@ -31,8 +31,6 @@ DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentD
   // parameters widget
   setParameters(item->getAnalysis(), tr("Design of experiments creation parameters"));
 
-  setWindowTitle(tr("Design of experiments"));
-
   buildInterface();
 }
 

@@ -63,7 +63,7 @@ void AnalysisWindow::setErrorMessage(QString message)
 
 void AnalysisWindow::buildInterface()
 {
-  setWindowTitle(tr("Analysis window"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   QWidget * mainWidget = new QWidget;
   QGridLayout * mainLayout = new QGridLayout(mainWidget);
@@ -124,7 +124,7 @@ void AnalysisWindow::buildInterface()
   // initialization
   initializeWidgets();
 
-  setWidget(scrollArea);
+  widgetLayout->addWidget(scrollArea);
 }
 
 

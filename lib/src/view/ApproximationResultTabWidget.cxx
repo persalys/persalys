@@ -124,8 +124,6 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
 
 void ApproximationResultTabWidget::buildInterface()
 {
-  setWindowTitle(tr("Threshold exceedance results"));
-
   // first tab summary --------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);

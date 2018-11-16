@@ -22,8 +22,8 @@
 #define OTGUI_MAINWIDGET_HXX
 
 #include "otgui/StudyTreeView.hxx"
-#include "otgui/OTguiMdiArea.hxx"
 #include "otgui/OTguiActions.hxx"
+#include "otgui/SubWindowsStackedWidget.hxx"
 
 #include <QDockWidget>
 
@@ -36,7 +36,7 @@ class OTGUI_API MainWidget : public QWidget
 public:
   MainWidget(QWidget * parent = 0);
   StudyTreeView * getStudyTree() const;
-  OTguiMdiArea * getMdiArea() const;
+  SubWindowsStackedWidget * getSubWindowsStackedWidget() const;
   OTguiActions * getActions() const;
 
 public slots:
@@ -48,7 +48,7 @@ protected:
 
 private:
   StudyTreeView * studyTree_;
-  OTguiMdiArea * mdiArea_;
+  SubWindowsStackedWidget * subWindowsStackedWidget_;
   QDockWidget * graphSettingDockWidget_;
   OTguiActions * actions_;
 };

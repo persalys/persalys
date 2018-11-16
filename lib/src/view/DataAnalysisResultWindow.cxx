@@ -43,8 +43,6 @@ DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item, QWidget 
   initialize(item);
 
   buildInterface();
-
-  setWindowTitle(tr("Data analysis results"));
 }
 
 

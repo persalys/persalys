@@ -38,10 +38,7 @@ ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item
 
 void ProbabilisticModelWindow::buildInterface()
 {
-  setWindowTitle(tr("Probabilistic model"));
-
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
+  QVBoxLayout * mainWidgetLayout = new QVBoxLayout(this);
 
   QTabWidget * rootTab = new QTabWidget;
 
@@ -53,7 +50,5 @@ void ProbabilisticModelWindow::buildInterface()
   connect(marginalsWidget_, SIGNAL(updateDependenciesRequested()), dependenciesWidget_, SLOT(updateWidgets()));
 
   mainWidgetLayout->addWidget(rootTab);
-
-  setWidget(mainWidget);
 }
 }

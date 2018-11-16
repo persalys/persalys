@@ -30,12 +30,9 @@ namespace OTGUI
 {
 
 WelcomeWindow::WelcomeWindow(const OTguiActions* actions, QWidget * parent)
-  : QMdiSubWindow(parent)
+  : QWidget(parent)
 {
-  setWindowFlags(Qt::FramelessWindowHint);
-
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
   // text
   QLabel * textLabel = new QLabel(tr("To get started, select one action by pressing the corresponding button below."));
@@ -49,13 +46,13 @@ WelcomeWindow::WelcomeWindow(const OTguiActions* actions, QWidget * parent)
 
   DiagramPushButton * button = new DiagramPushButton(tr("New study"));
   button->setIcon(QIcon(":/images/document-new22x22.png"));
-  button->setStatusTip(tr("Create a new OTStudy"));
+  button->setStatusTip(tr("Create a new study"));
   connect(button, SIGNAL(clicked(bool)), actions->newAction(), SIGNAL(triggered()));
   layout->addWidget(button, 0, 0);
 
   button = new DiagramPushButton(tr("Open study"));
   button->setIcon(QIcon(":/images/document-open22x22.png"));
-  button->setStatusTip(tr("Open an existing OTStudy"));
+  button->setStatusTip(tr("Open an existing study"));
   connect(button, SIGNAL(clicked(bool)), actions->openAction(), SIGNAL(triggered()));
   layout->addWidget(button, 1, 0);
 
@@ -84,7 +81,5 @@ WelcomeWindow::WelcomeWindow(const OTguiActions* actions, QWidget * parent)
   imageLabel->setPixmap(imagePixmap);
 
   mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
-
-  setWidget(mainWidget);
 }
 }

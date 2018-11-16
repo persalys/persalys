@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget bound to a dock widget
+ *  @brief QWidget bounds to a dock widget
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -30,8 +30,6 @@ namespace OTGUI
 WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
   : QWidget(parent)
   , dockWidget_(0)
-  , dockWidgetAlreadyShown_(false)
-  , parentSubWindow_(0)
 {
   MainWidget * mainWidget = findMainWidgetInHierachy();
   if (!mainWidget)
@@ -39,11 +37,6 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
 
   connect(this, SIGNAL(showDockWidgetRequested(QWidget*)), mainWidget, SLOT(showGraphSettingDockWidget(QWidget*)));
   connect(this, SIGNAL(hideDockWidgetRequested(QWidget*)), mainWidget, SLOT(hideGraphSettingDockWidget(QWidget*)));
-
-  parentSubWindow_ = findSubWindowInHierachy();
-  if (!parentSubWindow_)
-    throw InvalidArgumentException(HERE) << "Internal error : No mdi sub window found !";
-  connect(parentSubWindow_, SIGNAL(windowStateChanged(Qt::WindowStates, Qt::WindowStates)), this, SLOT(updateDockWidgetVisibility(Qt::WindowStates, Qt::WindowStates)));
 }
 
 
@@ -53,20 +46,6 @@ MainWidget * WidgetBoundToDockWidget::findMainWidgetInHierachy()
   while (curPar)
   {
     MainWidget * isMW(qobject_cast<MainWidget *>(curPar));
-    if (isMW)
-      return isMW;
-    curPar = curPar->parent();
-  }
-  return 0;
-}
-
-
-QMdiSubWindow * WidgetBoundToDockWidget::findSubWindowInHierachy()
-{
-  QObject * curPar(parent());
-  while (curPar)
-  {
-    QMdiSubWindow * isMW(dynamic_cast<QMdiSubWindow *>(curPar));
     if (isMW)
       return isMW;
     curPar = curPar->parent();
@@ -97,38 +76,14 @@ void WidgetBoundToDockWidget::showDockWidget()
 {
   if (!dockWidget_)
     return;
-
-  if (parentSubWindow_->windowState() == Qt::WindowActive ||
-      parentSubWindow_->windowState() == (Qt::WindowActive | Qt::WindowMaximized))
-  {
-    dockWidgetAlreadyShown_ = true;
-    emit showDockWidgetRequested(dockWidget_);
-  }
+  emit showDockWidgetRequested(dockWidget_);
 }
 
 
 void WidgetBoundToDockWidget::hideDockWidget()
 {
-  if (!dockWidget_ || !dockWidgetAlreadyShown_)
+  if (!dockWidget_)
     return;
-
-  dockWidgetAlreadyShown_ = false;
   emit hideDockWidgetRequested(dockWidget_);
-}
-
-
-void WidgetBoundToDockWidget::updateDockWidgetVisibility(Qt::WindowStates /*oldState*/, Qt::WindowStates newState)
-{
-  if ((newState == Qt::WindowActive || newState == (Qt::WindowActive | Qt::WindowMaximized)) &&
-      !dockWidgetAlreadyShown_ &&
-      isVisible())
-  {
-    showDockWidget();
-  }
-  else if (newState == Qt::WindowNoState &&
-           dockWidgetAlreadyShown_)
-  {
-    hideDockWidget();
-  }
 }
 }

@@ -51,7 +51,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   , variablesTableModel_(0)
   , errorMessageLabel_(0)
 {
-  setWindowTitle(tr("FMI physical model"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   tabWidget_ = new QTabWidget;
 
@@ -217,7 +217,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   tabWidget_->addTab(diff_tab, tr("Differentiation"));
 
   ////////////////
-  setWidget(tabWidget_);
+  widgetLayout->addWidget(tabWidget_);
 
   updateVariablesTableModel();
 

@@ -131,6 +131,8 @@ void DataAnalysisWindow::buildInterface()
   initializeVariablesNames();
   QStringList variablesNames = outputNames_ + inputNames_;
 
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -151,7 +153,7 @@ void DataAnalysisWindow::buildInterface()
   mainWidget->addWidget(tabWidget_);
   mainWidget->setStretchFactor(1, 10);
 
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 
 

@@ -22,15 +22,16 @@
 
 #include "otgui/PhysicalModelWindowWidget.hxx"
 
+#include <QVBoxLayout>
+
 namespace OTGUI
 {
 
 SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : OTguiSubWindow(item, parent)
 {
-  setWindowTitle(tr("Symbolic physical model"));
-
   // Widgets
-  setWidget(new PhysicalModelWindowWidget(item));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  widgetLayout->addWidget(new PhysicalModelWindowWidget(item));
 }
 }

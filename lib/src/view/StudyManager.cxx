@@ -38,8 +38,6 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include <iostream>
-
 using namespace OT;
 
 namespace OTGUI
@@ -81,7 +79,7 @@ void StudyManager::showErrorMessage(QString message)
 
 void StudyManager::updateView(OTguiSubWindow * window)
 {
-  mainWidget_->getMdiArea()->addSubWindow(window);
+  mainWidget_->getSubWindowsStackedWidget()->addSubWindow(window);
   mainWidget_->getStudyTree()->setCurrentIndex(window->getItem()->index());
   mainWidget_->getStudyTree()->setExpanded(window->getItem()->index(), true);
 }
@@ -481,7 +479,7 @@ bool StudyManager::saveAs(OTStudyItem* studyItem)
   }
 
   const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
-                           tr("Save OTStudy..."),
+                           tr("Save study..."),
                            FileTools::GetCurrentDir() + QDir::separator() + studyItem->data(Qt::DisplayRole).toString(),
                            tr("XML files (*.xml)"));
 
@@ -500,7 +498,7 @@ void StudyManager::open(const QString& recentFileName)
   if (fileName.isEmpty())
   {
     fileName = QFileDialog::getOpenFileName(mainWidget_,
-                                            tr("Open an existing OTStudy"),
+                                            tr("Open an existing study"),
                                             FileTools::GetCurrentDir(),
                                             tr("XML files (*.xml)"));
     if (fileName.isEmpty())
@@ -561,7 +559,7 @@ bool StudyManager::close(OTStudyItem* studyItem)
   {
     const int ret = QMessageBox::warning(mainWidget_,
                                          tr("Warning"),
-                                         tr("Do you want to save the OTStudy '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
+                                         tr("Do you want to save the study '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
                                          .arg(studyItem->getOTStudy().getFileName().c_str()),
                                          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                          QMessageBox::Save);

@@ -22,6 +22,8 @@
 
 #include "otgui/PhysicalModelWindowWidget.hxx"
 
+#include <QVBoxLayout>
+
 namespace OTGUI
 {
 
@@ -29,8 +31,9 @@ MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * p
   : OTguiSubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
 {
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
 
-  setWidget(widget);
+  widgetLayout->addWidget(widget);
 }
 }

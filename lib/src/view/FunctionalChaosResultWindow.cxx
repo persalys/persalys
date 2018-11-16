@@ -37,6 +37,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QLabel>
 
 using namespace OT;
 
@@ -75,7 +76,7 @@ inline bool varianceComparison(const std::pair<UnsignedInteger, Scalar> &a, cons
 
 void FunctionalChaosResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Functional chaos results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDescription().getSize();
@@ -412,6 +413,7 @@ void FunctionalChaosResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
-  setWidget(mainWidget);
+
+  widgetLayout->addWidget(mainWidget);
 }
 }

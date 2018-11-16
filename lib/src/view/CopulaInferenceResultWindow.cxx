@@ -43,7 +43,7 @@ CopulaInferenceResultWindow::CopulaInferenceResultWindow(AnalysisItem* item, QWi
 
 void CopulaInferenceResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Dependencies inference results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -96,6 +96,6 @@ void CopulaInferenceResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 }

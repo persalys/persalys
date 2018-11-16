@@ -28,6 +28,7 @@
 #include <QGraphicsProxyWidget>
 #include <QSplitter>
 #include <QTextEdit>
+#include <QLabel>
 
 using namespace OT;
 
@@ -37,10 +38,7 @@ namespace OTGUI
 DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem, QWidget * parent)
   : OTguiSubWindow(dataModelDiagramItem, parent)
 {
-  setWindowTitle(tr("Data model diagram"));
-
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
   QLabel * title = new QLabel(tr("Use pattern"));
   title->setStyleSheet("font: bold");
@@ -198,8 +196,5 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   splitter->setStretchFactor(1, 1);
 
   mainLayout->addWidget(splitter);
-
-  ////////////////
-  setWidget(mainWidget);
 }
 }

@@ -23,12 +23,9 @@
 
 #include "otgui/OTguiItem.hxx"
 
-#include <QMdiSubWindow>
-#include <QLabel>
-
 namespace OTGUI
 {
-class OTGUI_API OTguiSubWindow : public QMdiSubWindow
+class OTGUI_API OTguiSubWindow : public QWidget
 {
   Q_OBJECT
 
@@ -41,9 +38,12 @@ public:
 
   static bool HaveOpenGL32();
 
+public slots:
+  void showRequest();
+  void removeRequest();
 signals:
-  void showWindowRequested();
-  void removeWindowRequested();
+  void showWindowRequested(QWidget*);
+  void removeWindowRequested(QWidget*);
   void graphWindowActivated(QWidget*);
   void graphWindowDeactivated();
 

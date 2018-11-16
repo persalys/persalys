@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget bounds to a dock widget
+ *  @brief QStackedWidget containing all sub windows
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -18,39 +18,25 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_WIDGETBOUNDTODOCKWIDGET_HXX
-#define OTGUI_WIDGETBOUNDTODOCKWIDGET_HXX
+#ifndef OTGUI_SUBWINDOWSSTACKEDWIDGET_HXX
+#define OTGUI_SUBWINDOWSSTACKEDWIDGET_HXX
 
-#include "otgui/MainWidget.hxx"
+#include "otgui/OTguiSubWindow.hxx"
 
-#include <QWidget>
+#include <QStackedWidget>
 
 namespace OTGUI
 {
-class OTGUI_API WidgetBoundToDockWidget : public QWidget
+class OTGUI_API SubWindowsStackedWidget : public QStackedWidget
 {
   Q_OBJECT
 
 public:
-  WidgetBoundToDockWidget(QWidget* parent = 0);
+  SubWindowsStackedWidget(QWidget * parent = 0);
 
-  MainWidget * findMainWidgetInHierachy();
-
-  void setDockWidget(QWidget*);
-
-  virtual void showEvent(QShowEvent*);
-  virtual void hideEvent(QHideEvent*);
-
-protected:
-  void showDockWidget();
-  void hideDockWidget();
-
-signals:
-  void showDockWidgetRequested(QWidget*);
-  void hideDockWidgetRequested(QWidget*);
-
-private:
-  QWidget * dockWidget_;
+public slots:
+  int addSubWindow(OTguiSubWindow * win);
+  void removeSubWindow(QWidget*);
 };
 }
 #endif

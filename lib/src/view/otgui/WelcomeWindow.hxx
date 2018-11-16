@@ -26,7 +26,7 @@
 
 namespace OTGUI
 {
-class OTGUI_API WelcomeWindow : public QMdiSubWindow
+class OTGUI_API WelcomeWindow : public QWidget
 {
   Q_OBJECT
 

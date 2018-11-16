@@ -21,20 +21,9 @@
 #include "otgui/ResultWindow.hxx"
 
 #include "otgui/TranslationManager.hxx"
-#include "otgui/ReliabilityAnalysis.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
-#include "otgui/PythonPhysicalModel.hxx"
-#ifdef OTGUI_HAVE_YACS
-#include "otgui/YACSPhysicalModel.hxx"
-#endif
-#ifdef OTGUI_HAVE_OTFMI
-#include "otgui/FMIPhysicalModel.hxx"
-#endif
 
 #include <QVBoxLayout>
 #include <QTextEdit>
-
-using namespace OT;
 
 namespace OTGUI
 {
@@ -51,11 +40,6 @@ ResultWindow::ResultWindow(OTguiItem * item, QWidget * parent)
     if (analysisItem)
       setModelDescription(analysisItem->getAnalysis());
   }
-#ifdef OTGUI_HAVE_PARAVIEW
-  // FIXME: PV widgets wont draw at first, due to use of MDI area
-  if (OTguiSubWindow::HaveOpenGL32())
-    setAttribute(Qt::WA_NativeWindow);
-#endif
 }
 
 

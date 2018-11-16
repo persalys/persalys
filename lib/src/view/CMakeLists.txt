@@ -15,6 +15,7 @@ ot_add_source_file ( OTguiMenuBar.cxx )
 ot_add_source_file ( OTguiStatusBar.cxx )
 ot_add_source_file ( OTguiSubWindow.cxx )
 ot_add_source_file ( OTguiWizard.cxx )
+ot_add_source_file ( SubWindowsStackedWidget.cxx )
 ot_add_source_file ( StudyManager.cxx )
 ot_add_source_file ( WindowFactory.cxx )
 ot_add_source_file ( Controller.cxx )
@@ -24,7 +25,6 @@ ot_add_source_file ( DataModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
-ot_add_source_file ( OTguiMdiArea.cxx )
 ot_add_source_file ( WelcomeWindow.cxx )
 ot_add_source_file ( OTStudyWindow.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
@@ -120,10 +120,10 @@ ot_install_header_file ( OTguiToolBar.hxx )
 ot_install_header_file ( OTguiMenuBar.hxx )
 ot_install_header_file ( OTguiStatusBar.hxx )
 ot_install_header_file ( OTguiWizard.hxx )
+ot_install_header_file ( SubWindowsStackedWidget.hxx )
 ot_install_header_file ( StudyManager.hxx )
 ot_install_header_file ( WindowFactory.hxx )
 ot_install_header_file ( AnalysisWizard.hxx )
-ot_install_header_file ( OTguiMdiArea.hxx )
 ot_install_header_file ( WelcomeWindow.hxx )
 ot_install_header_file ( OTStudyWindow.hxx )
 ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
@@ -226,7 +226,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/OTguiStatusBar.hxx
                                   otgui/OTguiSubWindow.hxx
                                   otgui/OTguiWizard.hxx
-                                  otgui/OTguiMdiArea.hxx
+                                  otgui/SubWindowsStackedWidget.hxx
                                   otgui/StudyManager.hxx
                                   otgui/WelcomeWindow.hxx
                                   otgui/OTStudyWindow.hxx

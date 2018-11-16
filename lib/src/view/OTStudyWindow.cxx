@@ -34,14 +34,12 @@ OTStudyWindow::OTStudyWindow(OTStudyItem * item, QWidget * parent)
   , otStudyItem_(item)
 {
   buildInterface();
-  setWindowFlags(Qt::FramelessWindowHint);
 }
 
 
 void OTStudyWindow::buildInterface()
 {
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
   // title
   QLabel * title = new QLabel(tr("Select a physical model to add in the current study"));
@@ -147,7 +145,5 @@ void OTStudyWindow::buildInterface()
   imageLabel->setPixmap(imagePixmap);
 
   mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
-
-  setWidget(mainWidget);
 }
 }

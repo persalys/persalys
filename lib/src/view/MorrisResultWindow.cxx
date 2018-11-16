@@ -36,8 +36,6 @@ MorrisResultWindow::MorrisResultWindow(AnalysisItem * item, QWidget * parent)
 {
   initialize(item);
 
-  setWindowTitle(tr("Morris analysis results"));
-
   buildInterface();
 }
 

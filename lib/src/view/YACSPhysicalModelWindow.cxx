@@ -46,10 +46,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
   , XMLfileNameEdit_(0)
   , errorMessageLabel_(0)
 {
-  setWindowTitle(tr("YACS physical model"));
-
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
   // Widgets to load XML file
   QHBoxLayout * fieldsLayout = new QHBoxLayout;
@@ -77,9 +74,6 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
   // error message
   errorMessageLabel_ = new TemporaryLabel;
   mainLayout->addWidget(errorMessageLabel_);
-
-  ////////////////
-  setWidget(mainWidget);
 }
 
 

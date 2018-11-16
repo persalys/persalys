@@ -29,23 +29,34 @@ namespace OTGUI
 {
 
 OTguiSubWindow::OTguiSubWindow(OTguiItem * item, QWidget * parent)
-  : QMdiSubWindow(parent)
+  : QWidget(parent)
   , item_(item)
 {
-  setWindowIcon(QIcon(":/images/otgui.ico"));
-
-  // connections: signal for mdiArea
+  // connections: signal for SubWindowsStackedWidget
   if (item)
   {
-    connect(item, SIGNAL(removeWindowRequested()), this, SIGNAL(removeWindowRequested()));
-    connect(item, SIGNAL(showWindowRequested()), this, SIGNAL(showWindowRequested()));
+    connect(item, SIGNAL(showWindowRequested()), this, SLOT(showRequest()));
+    connect(item, SIGNAL(removeWindowRequested()), this, SLOT(removeRequest()));
   }
 }
 
 
 OTguiSubWindow::~OTguiSubWindow()
 {
+  item_ = 0;
   emit graphWindowDeactivated();
+}
+
+
+void OTguiSubWindow::showRequest()
+{
+  emit showWindowRequested(this);
+}
+
+
+void OTguiSubWindow::removeRequest()
+{
+  emit removeWindowRequested(this);
 }
 
 

@@ -33,8 +33,6 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget *
 {
   initialize(item);
 
-  setWindowTitle(tr("Design of experiments"));
-
   buildInterface();
 }
 
