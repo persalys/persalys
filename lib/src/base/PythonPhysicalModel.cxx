@@ -21,7 +21,7 @@
 #include "otgui/PythonPhysicalModel.hxx"
 
 #include "otgui/PythonScriptEvaluation.hxx"
-#include "otgui/OTTools.hxx"
+#include "otgui/BaseTools.hxx"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>

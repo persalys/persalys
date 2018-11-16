@@ -31,7 +31,7 @@ SubWindowsStackedWidget::SubWindowsStackedWidget(QWidget * parent)
 }
 
 
-int SubWindowsStackedWidget::addSubWindow(OTguiSubWindow * win)
+int SubWindowsStackedWidget::addSubWindow(SubWindow * win)
 {
   // connections
   connect(win, SIGNAL(showWindowRequested(QWidget*)), this, SLOT(setCurrentWidget(QWidget*)));

@@ -35,8 +35,8 @@ using namespace OT;
 namespace OTGUI
 {
 
-InferenceResultWizard::InferenceResultWizard(const OTStudy& otStudy, QWidget* parent)
-  : OTguiWizard(parent)
+InferenceResultWizard::InferenceResultWizard(const Study& otStudy, QWidget* parent)
+  : Wizard(parent)
   , otStudy_(otStudy)
   , inferenceResultsComboBox_(0)
   , variablesComboBox_(0)

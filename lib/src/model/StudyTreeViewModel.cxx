@@ -54,14 +54,14 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 {
   if (message == "addStudy")
   {
-    appendItem(OTStudy::GetInstances()[OTStudy::GetInstances().getSize() - 1]);
+    appendItem(Study::GetInstances()[Study::GetInstances().getSize() - 1]);
   }
 }
 
 
-void StudyTreeViewModel::appendItem(const OTStudy & otStudy)
+void StudyTreeViewModel::appendItem(const Study & otStudy)
 {
-  OTStudyItem * otStudyItem = new OTStudyItem(otStudy);
+  StudyItem * otStudyItem = new StudyItem(otStudy);
 
   // append the item
   invisibleRootItem()->appendRow(otStudyItem);

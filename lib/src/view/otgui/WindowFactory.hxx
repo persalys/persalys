@@ -21,7 +21,7 @@
 #ifndef OTGUI_WINDOWFACTORY_HXX
 #define OTGUI_WINDOWFACTORY_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 #include "otgui/AnalysisItem.hxx"
@@ -33,9 +33,9 @@ namespace OTGUI
 class OTGUI_API WindowFactory
 {
 public:
-  static OTguiSubWindow * GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent = 0);
+  static SubWindow * GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent = 0);
   static AnalysisWizard * GetAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget * parent = 0);
-  static OTguiSubWindow * GetAnalysisWindow(AnalysisItem* item, QWidget * parent = 0);
+  static SubWindow * GetAnalysisWindow(AnalysisItem* item, QWidget * parent = 0);
 };
 }
 #endif

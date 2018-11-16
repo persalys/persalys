@@ -28,8 +28,8 @@
 namespace OTGUI
 {
 
-ResultWindow::ResultWindow(OTguiItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+ResultWindow::ResultWindow(Item * item, QWidget * parent)
+  : SubWindow(item, parent)
   , parametersWidget_(0)
   , modelDescriptionWidget_(0)
 {

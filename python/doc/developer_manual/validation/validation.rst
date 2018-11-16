@@ -340,12 +340,12 @@ Open documentation
   - the documentation is opened in a web browser
 
 
-New OTStudy
+New Study
 ```````````
 
 - click on button New study in the mdiArea
 
-  - item OTStudy_0 appears in the tree view
+  - item Study_0 appears in the tree view
 
   - a 'study' window with 3(+2) buttons appears:
     - Symbolic model
@@ -356,34 +356,34 @@ New OTStudy
 
 - click Menu->File->New
 
-  - item OTStudy_1 appears in the tree view
+  - item Study_1 appears in the tree view
     - the item is associated with a 'study' window
 
-- click icon New OTStudy in the Tool bar
+- click icon New Study in the Tool bar
 
-  - item OTStudy_2 appears in the tree view
+  - item Study_2 appears in the tree view
     - the item is associated with a 'study' window
 
 - press keys CTRL + N
 
-  - item OTStudy_3 appears in the tree view
+  - item Study_3 appears in the tree view
     - the item is associated with a 'study' window
 
   .. image:: /developer_manual/validation/otstudyWindow.png
       :align: center
 
-Rename OTStudy
+Rename Study
 ``````````````
 
-- double click on OTStudy_2 item, rename OTStudy_2 by myOTStudy, press enter
+- double click on Study_2 item, rename Study_2 by myOTStudy, press enter
 
   - the item is renamed
 
-- right click on OTStudy_3 item, on the context menu which appears click on Rename, rename OTStudy_2 by myOTStudy2, press enter
+- right click on Study_3 item, on the context menu which appears click on Rename, rename Study_2 by myOTStudy2, press enter
 
   - the item is renamed
 
-Save/open OTStudy
+Save/open Study
 ````````````````````
 
 - save myOTStudy with Menu->File->save, close with Menu->File->close, reopen with Menu->File->open
@@ -394,7 +394,7 @@ Save/open OTStudy
 
 - rename myOTStudy2 by myOTStudy3, save myOTStudy3 with right click + save, close with right click + close, reopen with press keys CTRL + O
 
-Export/Import OTStudy
+Export/Import Study
 `````````````````````
 
 - export myOTStudy3 with right click + Export Python, name the file test.py
@@ -1516,7 +1516,7 @@ Diagrams
 `````````
 
 - open the interface
-- create a new OTStudy
+- create a new Study
 - click on 'Symbolic model' button of the window of myOTStudy
     - the item PhysicalModel_0 appears in the tree view
     - a new Physical model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)

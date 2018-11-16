@@ -55,7 +55,7 @@ void CopulaInferenceResultWindow::buildInterface()
   QGroupBox * variablesGroupBox = new QGroupBox(tr("Groups of variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
-  OTguiListWidget * listSetOfVariables = new OTguiListWidget;
+  VariablesListWidget * listSetOfVariables = new VariablesListWidget;
   listSetOfVariables->addItems(setOfVariablesNames);
   variablesLayoutGroupBox->addWidget(listSetOfVariables);
 

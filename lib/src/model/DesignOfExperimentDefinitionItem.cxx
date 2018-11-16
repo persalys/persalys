@@ -22,7 +22,7 @@
 
 #include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 #include <QDebug>
 
@@ -32,7 +32,7 @@ namespace OTGUI
 {
 
 DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysis& analysis)
-  : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), "DesignOfExperimentDefinitionItem")
+  : Item(QString::fromUtf8(analysis.getName().c_str()), "DesignOfExperimentDefinitionItem")
   , Observer("DesignOfExperimentDefinition")
   , analysis_(analysis)
   , newMetaModelAction_(0)
@@ -42,7 +42,7 @@ DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysi
   analysis_.addObserver(this);
 
   // this item must be an observer of the design of experiments:
-  // it is used in OTStudyItem to know where adding a DesignOfExperimentAnalysis based
+  // it is used in StudyItem to know where adding a DesignOfExperimentAnalysis based
   // on this design of experiments
   const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
   Q_ASSERT(doeEval);
@@ -216,7 +216,7 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
 {
   // remove Evaluation item
   analysis_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-  analysis_.getImplementation().get()->removeObserver("OTStudy");
+  analysis_.getImplementation().get()->removeObserver("Study");
 
   evaluateAction_->setEnabled(true);
   // remove last observer
@@ -227,7 +227,7 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_.addObserver(this);
   analysis_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
 
-  // update the implementation of the design of experiments stored in OTStudy
+  // update the implementation of the design of experiments stored in Study
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 }
 

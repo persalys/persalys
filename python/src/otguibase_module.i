@@ -162,6 +162,6 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include CopulaInferenceResult.i
 %include CopulaInferenceAnalysis.i
 %include OptimizationAnalysis.i
-%include OTStudyImplementation.i
-%include OTStudy.i
+%include StudyImplementation.i
+%include Study.i
 

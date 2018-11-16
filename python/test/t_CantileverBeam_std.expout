@@ -6,8 +6,8 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.Add(myStudy)
+myStudy = otguibase.Study('myStudy')
+otguibase.Study.Add(myStudy)
 dist_E = ot.Beta(0.93, 3.2, 2.8e+07, 4.8e+07)
 E = otguibase.Input('E', 30000000, dist_E, 'Young\'s modulus (Pa)')
 dist_F = ot.LogNormal(9.46206, 0.554513, 15000)

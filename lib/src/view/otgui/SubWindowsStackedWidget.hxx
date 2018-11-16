@@ -21,7 +21,7 @@
 #ifndef OTGUI_SUBWINDOWSSTACKEDWIDGET_HXX
 #define OTGUI_SUBWINDOWSSTACKEDWIDGET_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 
 #include <QStackedWidget>
 
@@ -35,7 +35,7 @@ public:
   SubWindowsStackedWidget(QWidget * parent = 0);
 
 public slots:
-  int addSubWindow(OTguiSubWindow * win);
+  int addSubWindow(SubWindow * win);
   void removeSubWindow(QWidget*);
 };
 }

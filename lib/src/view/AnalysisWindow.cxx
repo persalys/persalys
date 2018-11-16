@@ -37,7 +37,7 @@ namespace OTGUI
 {
 
 AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , analysisInProgress_(analysisInProgress)
   , analysisItem_(item)
   , progressBar_(0)

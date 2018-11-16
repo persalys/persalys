@@ -22,7 +22,7 @@
 #define OTGUI_DESIGNOFEXPERIMENTEVALUATIONWIZARD_HXX
 
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
-#include "otgui/OTguiWizard.hxx"
+#include "otgui/Wizard.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
 #include "otgui/Analysis.hxx"
@@ -34,7 +34,7 @@
 namespace OTGUI
 {
 
-class OTGUI_API DesignOfExperimentEvaluationWizard : public OTguiWizard
+class OTGUI_API DesignOfExperimentEvaluationWizard : public Wizard
 {
   Q_OBJECT
 

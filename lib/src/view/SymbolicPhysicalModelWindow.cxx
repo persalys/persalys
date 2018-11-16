@@ -28,7 +28,7 @@ namespace OTGUI
 {
 
 SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
 {
   // Widgets
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);

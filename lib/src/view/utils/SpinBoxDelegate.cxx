@@ -21,7 +21,7 @@
 #include "otgui/SpinBoxDelegate.hxx"
 
 #include "otgui/LogDoubleSpinBox.hxx"
-#include "otgui/OTguiException.hxx"
+#include "otgui/AppliException.hxx"
 
 namespace OTGUI
 {

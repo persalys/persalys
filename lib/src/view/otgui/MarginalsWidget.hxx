@@ -27,7 +27,7 @@
 #include "otgui/CollapsibleGroupBox.hxx"
 #include "otgui/ValueLineEdit.hxx"
 #include "otgui/TemporaryLabel.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Study.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 
 #include <QGroupBox>
@@ -69,7 +69,7 @@ signals:
   void updateDependenciesRequested();
 
 private:
-  OTStudy study_;
+  Study study_;
   PhysicalModel physicalModel_;
   QTableView * inputTableView_;
   InputTableProbabilisticModel * inputTableModel_;

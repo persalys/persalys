@@ -5,7 +5,7 @@ import openturns as ot
 import openturns.testing
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # Model
 dist_E = ot.Beta(0.93, 3.2, 2.8e7, 4.8e7)

@@ -21,8 +21,8 @@
 #ifndef OTGUI_INFERENCERESULTWIZARD_HXX
 #define OTGUI_INFERENCERESULTWIZARD_HXX
 
-#include "otgui/OTguiWizard.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Wizard.hxx"
+#include "otgui/Study.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/InferenceResultWidget.hxx"
@@ -32,12 +32,12 @@
 
 namespace OTGUI
 {
-class OTGUI_API InferenceResultWizard : public OTguiWizard
+class OTGUI_API InferenceResultWizard : public Wizard
 {
   Q_OBJECT
 
 public:
-  InferenceResultWizard(const OTStudy& otStudy, QWidget* parent = 0);
+  InferenceResultWizard(const Study& otStudy, QWidget* parent = 0);
 
   OT::Distribution getDistribution() const;
 
@@ -52,7 +52,7 @@ public slots:
   void updateInferenceResultWidget(QString);
 
 private:
-  OTStudy otStudy_;
+  Study otStudy_;
   QComboBox * inferenceResultsComboBox_;
   QComboBox * variablesComboBox_;
   InferenceResultWidget * inferenceResultWidget_;

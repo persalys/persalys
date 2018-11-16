@@ -39,7 +39,7 @@
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/DesignOfExperimentItem.hxx"
 #include "otgui/LimitStateItem.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 #include <openturns/OTBase.hxx>
 
@@ -51,7 +51,7 @@ namespace OTGUI
 {
 
 AnalysisItem::AnalysisItem(const Analysis & analysis)
-  : OTguiItem(QString::fromUtf8(analysis.getName().c_str()), analysis.getImplementation()->getClassName().c_str())
+  : Item(QString::fromUtf8(analysis.getName().c_str()), analysis.getImplementation()->getClassName().c_str())
   , Observer("Analysis")
   , analysis_(analysis)
   , convertAction_(0)
@@ -119,7 +119,7 @@ QVariant AnalysisItem::data(int role) const
       return QIcon(":/images/run-build.png");
   }
   else
-    return OTguiItem::data(role);
+    return Item::data(role);
 }
 
 
@@ -142,7 +142,7 @@ Analysis AnalysisItem::getAnalysis() const
 void AnalysisItem::updateAnalysis(const Analysis & analysis)
 {
   // update analysis_
-  analysis_.getImplementation().get()->removeObserver("OTStudy");
+  analysis_.getImplementation().get()->removeObserver("Study");
   analysis_.getImplementation().get()->removeObserver(this);
   analysis_ = analysis;
   if (!analysis_.getImplementation().get()->getObservers().size())
@@ -152,7 +152,7 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   // update analysis type
   setData(analysis_.getImplementation()->getClassName().c_str(), Qt::UserRole);
 
-  // update the implementation of the analysis stored in OTStudy
+  // update the implementation of the analysis stored in Study
   getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable convertAction_ action

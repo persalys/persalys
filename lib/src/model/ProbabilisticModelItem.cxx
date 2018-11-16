@@ -23,7 +23,7 @@
 #include "otgui/LimitState.hxx"
 #include "otgui/SobolAnalysis.hxx"
 #include "otgui/MonteCarloAnalysis.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 using namespace OT;
 

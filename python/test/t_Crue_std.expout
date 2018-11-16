@@ -5,8 +5,8 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.Add(myStudy)
+myStudy = otguibase.Study('myStudy')
+otguibase.Study.Add(myStudy)
 dist_Q = ot.Gumbel(0.00179211, 1013)
 dist_Q = ot.TruncatedDistribution(dist_Q, 0)
 Q = otguibase.Input('Q', 1000, dist_Q, 'Débit maximal annuel (m3/s)')

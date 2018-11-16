@@ -22,7 +22,7 @@
 #define OTGUI_STUDYTREEVIEW_HXX
 
 #include "otgui/StudyTreeViewModel.hxx"
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/AnalysisWizard.hxx"
 #include "otgui/DataModelDefinitionItem.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
@@ -39,7 +39,7 @@ class OTGUI_API StudyTreeView : public QTreeView
 public:
   StudyTreeView(QWidget * parent = 0);
 
-  OTguiItem * getCurrentItem() const;
+  Item * getCurrentItem() const;
 
   virtual void mousePressEvent(QMouseEvent*);
 
@@ -47,10 +47,10 @@ public slots:
   void onCustomContextMenu(const QPoint& point);
   void selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& previousIndex);
 
-  void modifyStudySubItemsExpansion(OTStudyItem* item);
+  void modifyStudySubItemsExpansion(StudyItem* item);
 
 signals:
-  void studyCreated(OTStudyItem*);
+  void studyCreated(StudyItem*);
   void itemSelectionChanged(QStandardItem*);
 
 private:

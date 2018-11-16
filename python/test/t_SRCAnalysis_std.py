@@ -5,7 +5,7 @@ import openturns as ot
 import otguibase
 from math import pi
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # Model
 x0 = otguibase.Input('x0', ot.Normal())

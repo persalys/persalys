@@ -20,7 +20,7 @@
  */
 #include "otgui/DataModelDefinitionItem.hxx"
 
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 #include "otgui/InferenceAnalysis.hxx"
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/CopulaInferenceAnalysis.hxx"

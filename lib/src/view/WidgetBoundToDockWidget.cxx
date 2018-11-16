@@ -20,7 +20,7 @@
  */
 #include "otgui/WidgetBoundToDockWidget.hxx"
 
-#include "otgui/OTguiException.hxx"
+#include "otgui/AppliException.hxx"
 
 using namespace OT;
 

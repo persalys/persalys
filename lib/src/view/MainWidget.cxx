@@ -33,7 +33,7 @@ MainWidget::MainWidget(QWidget* parent)
   , studyTree_(new StudyTreeView(this))
   , subWindowsStackedWidget_(new SubWindowsStackedWidget(this))
   , graphSettingDockWidget_(new QDockWidget(tr("Graph setting"), this))
-  , actions_(new OTguiActions(this))
+  , actions_(new Actions(this))
 {
   buildInterface();
 }
@@ -85,7 +85,7 @@ SubWindowsStackedWidget * MainWidget::getSubWindowsStackedWidget() const
 }
 
 
-OTguiActions * MainWidget::getActions() const
+Actions * MainWidget::getActions() const
 {
   return actions_;
 }

@@ -59,7 +59,7 @@ void InferenceResultWindow::buildInterface()
   QGroupBox * variablesGroupBox = new QGroupBox(tr("Variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
-  OTguiListWidget * listVariables = new OTguiListWidget;
+  VariablesListWidget * listVariables = new VariablesListWidget;
   listVariables->addItems(variablesNames);
   connect(listVariables, SIGNAL(currentTextChanged(QString)), this, SLOT(updateInferenceResultWidget(QString)));
   variablesLayoutGroupBox->addWidget(listVariables);

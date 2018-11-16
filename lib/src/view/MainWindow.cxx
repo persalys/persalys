@@ -22,9 +22,9 @@
 
 #include "otgui/MainWindow.hxx"
 
-#include "otgui/OTguiMenuBar.hxx"
-#include "otgui/OTguiToolBar.hxx"
-#include "otgui/OTguiStatusBar.hxx"
+#include "otgui/MenuBar.hxx"
+#include "otgui/ToolBar.hxx"
+#include "otgui/StatusBar.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QSplitter>
@@ -56,7 +56,7 @@ MainWindow::MainWindow()
   setWindowIcon(QIcon(":/images/otgui.ico"));
 
 #ifdef OTGUI_HAVE_PARAVIEW
-  if (OTguiSubWindow::HaveOpenGL32())
+  if (SubWindow::HaveOpenGL32())
   {
     // from ParaView 5.6 the toolBar is hidden if PersistentMainWindowStateBehavior is enabled
     pqParaViewBehaviors::setEnablePersistentMainWindowStateBehavior(false);
@@ -98,11 +98,11 @@ void MainWindow::buildInterface()
   setCentralWidget(mainSplitter);
 
   // get actions
-  OTguiActions * actions = mainWidget->getActions();
+  Actions * actions = mainWidget->getActions();
   connect(actions->exitAction(), SIGNAL(triggered()), this, SLOT(close()));
 
   // menu bar
-  OTguiMenuBar * menuBar = new OTguiMenuBar(actions);
+  MenuBar * menuBar = new MenuBar(actions);
 
   connect(menuBar->pythonConsoleDisplayAction(), SIGNAL(triggered(bool)), pythonConsoleDock, SLOT(setVisible(bool)));
   connect(pythonConsoleDock, SIGNAL(customVisibilityChanged(bool)), menuBar, SLOT(updateConsoleStatus(bool)));
@@ -113,11 +113,11 @@ void MainWindow::buildInterface()
   setMenuBar(menuBar);
 
   // tool bar
-  OTguiToolBar * toolBar = new OTguiToolBar(actions);
+  ToolBar * toolBar = new ToolBar(actions);
   addToolBar(toolBar);
 
   // status bar
-  OTguiStatusBar * statusBar = new OTguiStatusBar;
+  StatusBar * statusBar = new StatusBar;
   setStatusBar(statusBar);
 }
 

@@ -21,12 +21,12 @@
 #ifndef OTGUI_METAMODELWINDOW_HXX
 #define OTGUI_METAMODELWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API MetaModelWindow : public OTguiSubWindow
+class OTGUI_API MetaModelWindow : public SubWindow
 {
   Q_OBJECT
 

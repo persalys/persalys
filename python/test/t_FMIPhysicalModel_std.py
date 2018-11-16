@@ -7,7 +7,7 @@ import otguibase
 import os
 import platform
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 key_platform = (platform.system(), platform.architecture()[0])
 # Call to either 'platform.system' or 'platform.architecture' *after*

@@ -51,7 +51,7 @@ windows (model definition or result window) open, surrounded by:
     :align: center
 
 A window appears when the OTGui is started. It contains 3 items:
-  - **New study**: Create a new OTStudy
+  - **New study**: Create a new Study
   - **Open study**: Display a dialog box for choosing a study
     to load. The loaded study will become the current
     study.
@@ -84,8 +84,8 @@ The file menu gathers the following shortcuts:
 
 - **Import Python...**: Display a dialog box for loading an OTGui Python script.
 
-- **Close**: Close the current OTStudy. A pop-up dialog window will appear if the current OTStudy has not been saved.
-  Any OTStudy may also be closed through its context menu.
+- **Close**: Close the current Study. A pop-up dialog window will appear if the current Study has not been saved.
+  Any Study may also be closed through its context menu.
 
 - **Exit**: Quit OTGui
 
@@ -104,7 +104,7 @@ The view menu allows the user to display/hide the Python console.
 
 There are three ways to create a new study:
 
-- Use the button **New OTStudy** of the window which appears when the OTGui is launched;
+- Use the button **New Study** of the window which appears when the OTGui is launched;
 
 - Click on |newButton| in the tool bar;
 

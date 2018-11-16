@@ -18,8 +18,8 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.Add(myStudy)
+myStudy = otguibase.Study('myStudy')
+otguibase.Study.Add(myStudy)
 dist_R = ot.LogNormal(5.69881, 0.0997513, 0)
 R = otguibase.Input('R', 0, dist_R, 'Yield strength')
 dist_F = ot.Normal(75000, 5000)

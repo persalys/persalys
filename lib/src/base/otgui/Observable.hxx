@@ -22,7 +22,7 @@
 #define OTGUI_OBSERVABLE_HXX
 
 #include "Observer.hxx"
-#include "OTguiException.hxx"
+#include "AppliException.hxx"
 
 #include <vector>
 

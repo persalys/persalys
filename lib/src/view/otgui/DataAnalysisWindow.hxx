@@ -38,7 +38,7 @@ class OTGUI_API DataAnalysisWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  DataAnalysisWindow(OTguiItem * item, QWidget * parent = 0);
+  DataAnalysisWindow(Item * item, QWidget * parent = 0);
 
 protected:
   void initializeVariablesNames();
@@ -81,7 +81,7 @@ protected:
   double levelConfidenceInterval_;
   bool showTable_;
   QGroupBox * variablesGroupBox_;
-  OTguiListWidget * variablesListWidget_;
+  VariablesListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
 private:
   DoubleSpinBox * probaSpinBox_;

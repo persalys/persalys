@@ -34,7 +34,7 @@ namespace OTGUI
 {
 
 LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , limitState_(item->getLimitState())
   , errorMessageLabel_(0)
 {

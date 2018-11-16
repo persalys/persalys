@@ -46,7 +46,7 @@ namespace OTGUI
 {
 
 FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , variablesTableModel_(0)
   , errorMessageLabel_(0)

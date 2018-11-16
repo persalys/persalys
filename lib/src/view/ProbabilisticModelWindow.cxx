@@ -28,7 +28,7 @@ namespace OTGUI
 {
 
 ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , marginalsWidget_(new MarginalsWidget(item, this))
   , dependenciesWidget_(new DependenciesWidget(item, this))
 {

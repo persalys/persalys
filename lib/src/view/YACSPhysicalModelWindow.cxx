@@ -41,7 +41,7 @@ namespace OTGUI
 {
 
 YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , XMLfileNameEdit_(0)
   , errorMessageLabel_(0)

@@ -27,7 +27,7 @@
 #include "otgui/VariablesSelectionTableModel.hxx"
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/CopulaInferenceResultWizard.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 #include <openturns/NormalCopula.hxx>
 

@@ -22,7 +22,7 @@
 #define OTGUI_MAINWIDGET_HXX
 
 #include "otgui/StudyTreeView.hxx"
-#include "otgui/OTguiActions.hxx"
+#include "otgui/Actions.hxx"
 #include "otgui/SubWindowsStackedWidget.hxx"
 
 #include <QDockWidget>
@@ -37,7 +37,7 @@ public:
   MainWidget(QWidget * parent = 0);
   StudyTreeView * getStudyTree() const;
   SubWindowsStackedWidget * getSubWindowsStackedWidget() const;
-  OTguiActions * getActions() const;
+  Actions * getActions() const;
 
 public slots:
   void showGraphSettingDockWidget(QWidget*);
@@ -50,7 +50,7 @@ private:
   StudyTreeView * studyTree_;
   SubWindowsStackedWidget * subWindowsStackedWidget_;
   QDockWidget * graphSettingDockWidget_;
-  OTguiActions * actions_;
+  Actions * actions_;
 };
 }
 #endif

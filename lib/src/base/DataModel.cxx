@@ -21,7 +21,7 @@
 #include "otgui/DataModel.hxx"
 
 #include "otgui/ImportedDesignOfExperiment.hxx"
-#include "otgui/OTTools.hxx"
+#include "otgui/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 

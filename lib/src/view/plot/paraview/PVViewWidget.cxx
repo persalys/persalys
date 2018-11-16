@@ -1,6 +1,6 @@
 #include "otgui/PVViewWidget.hxx"
 
-#include "otgui/OTguiException.hxx"
+#include "otgui/AppliException.hxx"
 #include "otgui/PVServerManagerInterface.hxx"
 
 #include <pqApplicationCore.h>

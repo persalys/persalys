@@ -36,7 +36,7 @@ namespace OTGUI
 {
 
 PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem * physicalModelDiagramItem, QWidget * parent)
-  : OTguiSubWindow(physicalModelDiagramItem, parent)
+  : SubWindow(physicalModelDiagramItem, parent)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 

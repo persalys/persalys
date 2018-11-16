@@ -21,7 +21,7 @@
 #include "otgui/DesignOfExperimentItem.hxx"
 
 #include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI
 {
 
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType)
-  : OTguiItem(QString::fromUtf8(designOfExperiment.getName().c_str()), observerType.c_str())
+  : Item(QString::fromUtf8(designOfExperiment.getName().c_str()), observerType.c_str())
   , Observer(observerType)
   , designOfExperiment_(designOfExperiment)
 {

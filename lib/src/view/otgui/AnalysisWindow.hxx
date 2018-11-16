@@ -21,7 +21,7 @@
 #ifndef OTGUI_ANALYSISWINDOW_HXX
 #define OTGUI_ANALYSISWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/LaunchParametersVisitor.hxx"
 #include "otgui/TemporaryLabel.hxx"
@@ -31,7 +31,7 @@
 
 namespace OTGUI
 {
-class OTGUI_API AnalysisWindow : public OTguiSubWindow, LaunchParametersVisitor
+class OTGUI_API AnalysisWindow : public SubWindow, LaunchParametersVisitor
 {
   Q_OBJECT
 

@@ -72,7 +72,7 @@ void SobolResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  VariablesListWidget * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 

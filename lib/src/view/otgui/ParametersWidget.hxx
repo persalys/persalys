@@ -21,7 +21,7 @@
 #ifndef OTGUI_PARAMETERSWIDGET_HXX
 #define OTGUI_PARAMETERSWIDGET_HXX
 
-#include "otgui/OTTools.hxx"
+#include "otgui/BaseTools.hxx"
 
 #include <QGroupBox>
 

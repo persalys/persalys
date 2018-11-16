@@ -22,7 +22,7 @@
 
 #include "otgui/ModelEvaluation.hxx"
 #include "otgui/GridDesignOfExperiment.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/MorrisAnalysis.hxx"
 #endif

@@ -32,8 +32,8 @@ using namespace OT;
 namespace OTGUI
 {
 
-ScreeningResultWizard::ScreeningResultWizard(const OTStudy& otStudy, const PhysicalModel& model, QWidget* parent)
-  : OTguiWizard(parent)
+ScreeningResultWizard::ScreeningResultWizard(const Study& otStudy, const PhysicalModel& model, QWidget* parent)
+  : Wizard(parent)
   , otStudy_(otStudy)
   , model_(model)
   , screeningResultsComboBox_(0)

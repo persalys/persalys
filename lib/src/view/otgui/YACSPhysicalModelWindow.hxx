@@ -21,7 +21,7 @@
 #ifndef OTGUI_YACSPHYSICALMODELWINDOW_HXX
 #define OTGUI_YACSPHYSICALMODELWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 #include "otgui/TemporaryLabel.hxx"
 
@@ -30,7 +30,7 @@
 namespace OTGUI
 {
 
-class OTGUI_API YACSPhysicalModelWindow : public OTguiSubWindow
+class OTGUI_API YACSPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

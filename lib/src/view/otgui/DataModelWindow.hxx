@@ -24,7 +24,7 @@
 #include "otgui/DataModelDefinitionItem.hxx"
 #include "otgui/DataModelTableModel.hxx"
 #include "otgui/ExportableTableView.hxx"
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/ResizableHeaderlessTableView.hxx"
 #include "otgui/TemporaryLabel.hxx"
 
@@ -34,7 +34,7 @@
 namespace OTGUI
 {
 
-class OTGUI_API DataModelWindow : public OTguiSubWindow
+class OTGUI_API DataModelWindow : public SubWindow
 {
   Q_OBJECT
 

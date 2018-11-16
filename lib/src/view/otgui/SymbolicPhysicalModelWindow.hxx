@@ -21,13 +21,13 @@
 #ifndef OTGUI_SYMBOLICPHYSICALMODELWINDOW_HXX
 #define OTGUI_SYMBOLICPHYSICALMODELWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
 namespace OTGUI
 {
 
-class OTGUI_API SymbolicPhysicalModelWindow : public OTguiSubWindow
+class OTGUI_API SymbolicPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

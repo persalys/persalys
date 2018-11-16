@@ -21,7 +21,7 @@
 #ifndef OTGUI_RESULTWINDOW_HXX
 #define OTGUI_RESULTWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/ParametersWidget.hxx"
 
@@ -32,7 +32,7 @@
 namespace OTGUI
 {
 
-// custom QStyledItemDelegate for OTguiListWidget
+// custom QStyledItemDelegate for VariablesListWidget
 class OTGUI_API ListWidgetItemDelegate : public QStyledItemDelegate
 {
   public:
@@ -49,10 +49,10 @@ class OTGUI_API ListWidgetItemDelegate : public QStyledItemDelegate
 };
 
 // custom QListWidget for all result windows
-class OTGUI_API OTguiListWidget : public QListWidget
+class OTGUI_API VariablesListWidget : public QListWidget
 {
 public:
-  OTguiListWidget(QWidget * parent = 0)
+  VariablesListWidget(QWidget * parent = 0)
     : QListWidget(parent)
   {
     // style sheet
@@ -67,12 +67,12 @@ public:
 
 
 // base class for all result windows
-class OTGUI_API ResultWindow : public OTguiSubWindow
+class OTGUI_API ResultWindow : public SubWindow
 {
   Q_OBJECT
 
 public:
-  ResultWindow(OTguiItem * item, QWidget * parent = 0);
+  ResultWindow(Item * item, QWidget * parent = 0);
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title);

@@ -28,7 +28,7 @@ namespace OTGUI
 {
 
 MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);

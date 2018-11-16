@@ -4,7 +4,7 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # Model
 X0 = otguibase.Input('X0', 1, ot.Normal(), 'aDescription')

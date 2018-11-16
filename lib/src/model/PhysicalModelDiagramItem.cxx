@@ -20,7 +20,7 @@
  */
 #include "otgui/PhysicalModelDiagramItem.hxx"
 
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/DesignOfExperimentEvaluation.hxx"
@@ -314,7 +314,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
   /// append a sub-item (title) if it does not exist yet
 
   // parent item of the new analysis item
-  OTguiItem * titleItem = 0;
+  Item * titleItem = 0;
 
   const QString analysisName = analysis.getImplementation()->getClassName().c_str();
 
@@ -465,7 +465,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
 void PhysicalModelDiagramItem::appendItem(const LimitState& limitState)
 {
   // parent item of the new limit state item
-  OTguiItem * titleItem = getTitleItemNamed(tr("Reliability"), "ReliabilityTitle");
+  Item * titleItem = getTitleItemNamed(tr("Reliability"), "ReliabilityTitle");
 
   if (!titleItem->getActions().size())
   {

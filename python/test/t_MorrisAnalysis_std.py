@@ -83,7 +83,7 @@ def _exec(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16,
 """
 
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 inputs = []
 for i in range(20):
@@ -112,6 +112,6 @@ print("meanAbsEE =", analysis.getResult().getMeanAbsoluteElementaryEffects())
 # script
 script = myStudy.getPythonScript()
 
-otguibase.OTStudy.Add(myStudy)
+otguibase.Study.Add(myStudy)
 print(script)
 exec(script)

@@ -21,7 +21,7 @@
 #include "otgui/LimitStateItem.hxx"
 
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 using namespace OT;
 
@@ -29,7 +29,7 @@ namespace OTGUI
 {
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
-  : OTguiItem(QString::fromUtf8(limitState.getName().c_str()), "LimitState")
+  : Item(QString::fromUtf8(limitState.getName().c_str()), "LimitState")
   , Observer("LimitState")
   , limitState_(limitState)
 {

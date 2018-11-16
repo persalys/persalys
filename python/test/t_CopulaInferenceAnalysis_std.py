@@ -6,7 +6,7 @@ import openturns.testing
 import otguibase
 import os
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # Model
 filename = 'data2.csv'

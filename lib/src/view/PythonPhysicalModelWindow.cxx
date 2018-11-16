@@ -32,7 +32,7 @@ namespace OTGUI
 {
 
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
 {
 //  setFocusPolicy(Qt::ClickFocus);
 

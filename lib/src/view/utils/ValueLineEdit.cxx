@@ -21,7 +21,7 @@
 
 #include "otgui/ValueLineEdit.hxx"
 
-#include "otgui/OTguiException.hxx"
+#include "otgui/AppliException.hxx"
 #include "otgui/StudyTreeViewModel.hxx"
 
 #include <QDoubleValidator>

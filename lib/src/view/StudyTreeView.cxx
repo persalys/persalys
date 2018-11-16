@@ -62,7 +62,7 @@ public:
 #endif
 
     // draw a line at the bottom of items
-    if (index.data(Qt::UserRole).toString() == "OTStudy" ||
+    if (index.data(Qt::UserRole).toString() == "Study" ||
         index.data(Qt::UserRole).toString().contains("ModelDiagram") ||
         index.data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem" ||
         index.data(Qt::UserRole).toString() == "LimitState"
@@ -86,14 +86,14 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   , analysisInProgress_(false)
 {
   // set model
-  OTStudy::SetInstanceObserver(treeViewModel_);
+  Study::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
-  connect(treeViewModel_, SIGNAL(studyCreated(OTStudyItem*)), this, SIGNAL(studyCreated(OTStudyItem*)));
-  connect(treeViewModel_, SIGNAL(studySubItemsAdded(OTStudyItem*)), this, SLOT(modifyStudySubItemsExpansion(OTStudyItem*)));
+  connect(treeViewModel_, SIGNAL(studyCreated(StudyItem*)), this, SIGNAL(studyCreated(StudyItem*)));
+  connect(treeViewModel_, SIGNAL(studySubItemsAdded(StudyItem*)), this, SLOT(modifyStudySubItemsExpansion(StudyItem*)));
 
   // forbid the user to define not valid item's name
 #if QT_VERSION >= 0x050000
-  // draw a line at the bottom of the OTStudyItem
+  // draw a line at the bottom of the StudyItem
   setItemDelegate(new TreeItemDelegate(this));
 #else
   setItemDelegate(new LineEditWithQValidatorDelegate(QString("[a-zA-Z_][a-zA-Z_0-9]*"), this));
@@ -146,9 +146,9 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 }
 
 
-OTguiItem * StudyTreeView::getCurrentItem() const
+Item * StudyTreeView::getCurrentItem() const
 {
-  return dynamic_cast<OTguiItem*>(treeViewModel_->itemFromIndex(selectionModel()->currentIndex()));
+  return dynamic_cast<Item*>(treeViewModel_->itemFromIndex(selectionModel()->currentIndex()));
 }
 
 
@@ -185,7 +185,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   QList<QAction*> actions;
 
   // get actions defined in the current item
-  OTguiItem * otguiItem = dynamic_cast<OTguiItem*>(currentItem);
+  Item * otguiItem = dynamic_cast<Item*>(currentItem);
   if (otguiItem)
     actions = otguiItem->getActions();
 
@@ -222,7 +222,7 @@ void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex, const Q
   if (!selectedItem)
     return;
 
-  OTguiItem * otguiItem = dynamic_cast<OTguiItem*>(selectedItem);
+  Item * otguiItem = dynamic_cast<Item*>(selectedItem);
   if (!otguiItem)
     return;
 
@@ -236,7 +236,7 @@ void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex, const Q
 }
 
 
-void StudyTreeView::modifyStudySubItemsExpansion(OTStudyItem* item)
+void StudyTreeView::modifyStudySubItemsExpansion(StudyItem* item)
 {
   setCurrentIndex(item->index());
   setExpanded(item->index(), true);

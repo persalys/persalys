@@ -5,7 +5,7 @@ import openturns as ot
 import openturns.testing
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # Model
 dist_R = ot.LogNormalMuSigma(300., 30.).getDistribution()

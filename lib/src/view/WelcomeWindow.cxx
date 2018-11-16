@@ -29,7 +29,7 @@
 namespace OTGUI
 {
 
-WelcomeWindow::WelcomeWindow(const OTguiActions* actions, QWidget * parent)
+WelcomeWindow::WelcomeWindow(const Actions* actions, QWidget * parent)
   : QWidget(parent)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);

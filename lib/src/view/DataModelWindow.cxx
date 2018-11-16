@@ -44,7 +44,7 @@ namespace OTGUI
 {
 
 DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , dataModel_(0)
   , tableView_(0)
   , tableModel_(0)
@@ -222,7 +222,7 @@ void DataModelWindow::buildInterface()
 
 void DataModelWindow::resizeEvent(QResizeEvent* event)
 {
-  OTguiSubWindow::resizeEvent(event);
+  SubWindow::resizeEvent(event);
   if (isVisible())
     resizeTable();
 }

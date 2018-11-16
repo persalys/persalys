@@ -22,11 +22,11 @@
 #define OTGUI_PHYSICALMODELITEM_HXX
 
 #include "otgui/PhysicalModel.hxx"
-#include "otgui/OTguiItem.hxx"
+#include "otgui/Item.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API PhysicalModelItem : public OTguiItem, public Observer
+class OTGUI_API PhysicalModelItem : public Item, public Observer
 {
   Q_OBJECT
 

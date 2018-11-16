@@ -21,13 +21,13 @@
 #ifndef OTGUI_PROBABILISTICMODELWINDOW_HXX
 #define OTGUI_PROBABILISTICMODELWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/MarginalsWidget.hxx"
 #include "otgui/DependenciesWidget.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API ProbabilisticModelWindow : public OTguiSubWindow
+class OTGUI_API ProbabilisticModelWindow : public SubWindow
 {
   Q_OBJECT
 

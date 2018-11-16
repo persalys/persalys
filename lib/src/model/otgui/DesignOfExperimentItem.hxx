@@ -21,12 +21,12 @@
 #ifndef OTGUI_DESIGNOFEXPERIMENTITEM_HXX
 #define OTGUI_DESIGNOFEXPERIMENTITEM_HXX
 
-#include "otgui/OTguiItem.hxx"
+#include "otgui/Item.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API DesignOfExperimentItem : public OTguiItem, public Observer
+class OTGUI_API DesignOfExperimentItem : public Item, public Observer
 {
   Q_OBJECT
 

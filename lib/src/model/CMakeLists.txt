@@ -11,7 +11,7 @@ ot_add_source_file ( CorrelationTableModel.cxx )
 ot_add_source_file ( DifferentiationTableModel.cxx )
 ot_add_source_file ( DataModelTableModel.cxx )
 ot_add_source_file ( DistributionsTableModel.cxx )
-ot_add_source_file ( OTguiItem.cxx )
+ot_add_source_file ( Item.cxx )
 ot_add_source_file ( PhysicalModelDiagramItem.cxx )
 ot_add_source_file ( PhysicalModelDefinitionItem.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
@@ -21,7 +21,7 @@ ot_add_source_file ( DataModelDiagramItem.cxx )
 ot_add_source_file ( DataModelDefinitionItem.cxx )
 ot_add_source_file ( ProbabilisticModelItem.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
-ot_add_source_file ( OTStudyItem.cxx )
+ot_add_source_file ( StudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 ot_add_source_file ( CodeModel.cxx)
@@ -43,7 +43,7 @@ ot_install_header_file ( OutputTableModel.hxx )
 ot_install_header_file ( ExperimentTableModel.hxx )
 ot_install_header_file ( CorrelationTableModel.hxx )
 ot_install_header_file ( DifferentiationTableModel.hxx )
-ot_install_header_file ( OTguiItem.hxx )
+ot_install_header_file ( Item.hxx )
 ot_install_header_file ( PhysicalModelDiagramItem.hxx )
 ot_install_header_file ( PhysicalModelDefinitionItem.hxx )
 ot_install_header_file ( AnalysisItem.hxx )
@@ -54,7 +54,7 @@ ot_install_header_file ( DataModelDiagramItem.hxx )
 ot_install_header_file ( DataModelDefinitionItem.hxx )
 ot_install_header_file ( ProbabilisticModelItem.hxx )
 ot_install_header_file ( PhysicalModelItem.hxx )
-ot_install_header_file ( OTStudyItem.hxx )
+ot_install_header_file ( StudyItem.hxx )
 ot_install_header_file ( StudyTreeViewModel.hxx )
 ot_install_header_file ( VariablesSelectionTableModel.hxx )
 ot_install_header_file ( CustomStandardItemModel.hxx )
@@ -76,7 +76,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/DifferentiationTableModel.hxx
                                     otgui/DataModelTableModel.hxx
                                     otgui/DistributionsTableModel.hxx
-                                    otgui/OTguiItem.hxx
+                                    otgui/Item.hxx
                                     otgui/PhysicalModelDiagramItem.hxx
                                     otgui/PhysicalModelDefinitionItem.hxx
                                     otgui/AnalysisItem.hxx
@@ -88,7 +88,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/DataModelDefinitionItem.hxx
                                     otgui/ProbabilisticModelItem.hxx
                                     otgui/PhysicalModelItem.hxx
-                                    otgui/OTStudyItem.hxx
+                                    otgui/StudyItem.hxx
                                     otgui/CodeModel.hxx
                                     otgui/VariablesSelectionTableModel.hxx
                                     otgui/CustomStandardItemModel.hxx

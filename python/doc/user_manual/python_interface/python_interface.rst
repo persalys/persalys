@@ -171,4 +171,4 @@ Study storage
     :toctree: _generated/
     :template: class.rst_t
 
-    OTStudy
+    Study

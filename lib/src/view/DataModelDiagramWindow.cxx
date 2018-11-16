@@ -36,7 +36,7 @@ namespace OTGUI
 {
 
 DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem, QWidget * parent)
-  : OTguiSubWindow(dataModelDiagramItem, parent)
+  : SubWindow(dataModelDiagramItem, parent)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 

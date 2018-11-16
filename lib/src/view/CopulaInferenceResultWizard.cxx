@@ -33,8 +33,8 @@ using namespace OT;
 namespace OTGUI
 {
 
-CopulaInferenceResultWizard::CopulaInferenceResultWizard(const OTStudy &otStudy, const Description &variables, QWidget *parent)
-  : OTguiWizard(parent)
+CopulaInferenceResultWizard::CopulaInferenceResultWizard(const Study &otStudy, const Description &variables, QWidget *parent)
+  : Wizard(parent)
   , otStudy_(otStudy)
   , variables_(variables)
   , inferenceResultsComboBox_(0)

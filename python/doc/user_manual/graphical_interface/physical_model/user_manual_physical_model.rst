@@ -9,7 +9,7 @@ A physical model can be created through:
   - the context menu of the study item;
   - a button of the study window.
 
-The context menu of the OTStudy or its window provides three types of physical model:
+The context menu of the Study or its window provides three types of physical model:
   - Symbolic model
   - Python model
   - YACS model
