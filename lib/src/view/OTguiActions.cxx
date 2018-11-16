@@ -36,26 +36,26 @@ OTguiActions::OTguiActions(QObject * parent)
   new_ = new QAction(QIcon(":/images/document-new.png"), tr("&New"), parent);
   new_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
   new_->setShortcutContext(Qt::ApplicationShortcut);
-  new_->setStatusTip(tr("Create a new OTStudy"));
+  new_->setStatusTip(tr("Create a new study"));
 
   open_ = new QAction(QIcon(":/images/document-open.png"), tr("&Open..."), parent);
   open_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_O));
   open_->setShortcutContext(Qt::ApplicationShortcut);
-  open_->setStatusTip(tr("Open an existing OTStudy"));
+  open_->setStatusTip(tr("Open an existing study"));
 
   save_ = new QAction(QIcon(":/images/document-save.png"), tr("Save"), parent);
   save_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
   save_->setShortcutContext(Qt::ApplicationShortcut);
-  save_->setStatusTip(tr("Save the current OTStudy"));
+  save_->setStatusTip(tr("Save the current study"));
 
   saveAs_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), parent);
-  saveAs_->setStatusTip(tr("Save the current OTStudy with a new name"));
+  saveAs_->setStatusTip(tr("Save the current study with a new name"));
 
   importPy_ = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), parent);
   importPy_->setStatusTip(tr("Import a Python Script"));
 
   close_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), parent);
-  close_->setStatusTip(tr("Close the current OTStudy"));
+  close_->setStatusTip(tr("Close the current study"));
 
   exit_ = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), parent);
   exit_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
