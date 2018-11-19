@@ -218,7 +218,7 @@ void SobolAnalysis::launch()
   // set callbacks
   timeCriteria_.setStartTime(TimeCriteria::Now());
   timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
-  algo.setStopCallback(&Stop, &timeCriteria_);
+  algo.setStopCallback(&WithStopCriteriaAnalysis::Stop, &timeCriteria_);
   AnalysisStruct analysisStruc(this, &algo);
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 

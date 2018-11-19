@@ -222,6 +222,13 @@ void AnalysisImplementation::stop()
 }
 
 
+bool AnalysisImplementation::Stop(void * p)
+{
+  AnalysisImplementation * arg = (AnalysisImplementation*)p;
+  return arg->stopRequested_;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void AnalysisImplementation::save(Advocate & adv) const
 {

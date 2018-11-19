@@ -257,6 +257,7 @@ void OptimizationAnalysis::launch()
   // set OptimizationProblem
   OptimizationProblem problem(objective, Function(), Function(), bounds);
   problem.setMinimization(isMinimization_);
+
   // build solver
   OptimizationAlgorithm solver(OptimizationAlgorithm::Build(solverName_));
   solver.setProblem(problem);
@@ -266,6 +267,7 @@ void OptimizationAnalysis::launch()
   solver.setMaximumRelativeError(getMaximumRelativeError());
   solver.setMaximumResidualError(getMaximumResidualError());
   solver.setMaximumConstraintError(getMaximumConstraintError());
+  solver.setStopCallback(&AnalysisImplementation::Stop, this);
 
   // run solver
   solver.run();
