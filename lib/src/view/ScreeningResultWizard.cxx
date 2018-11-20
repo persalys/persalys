@@ -32,9 +32,9 @@ using namespace OT;
 namespace OTGUI
 {
 
-ScreeningResultWizard::ScreeningResultWizard(const Study& otStudy, const PhysicalModel& model, QWidget* parent)
+ScreeningResultWizard::ScreeningResultWizard(const Study& study, const PhysicalModel& model, QWidget* parent)
   : Wizard(parent)
-  , otStudy_(otStudy)
+  , study_(study)
   , model_(model)
   , screeningResultsComboBox_(0)
   , variablesComboBox_(0)
@@ -57,10 +57,10 @@ void ScreeningResultWizard::buildInterface()
   mainLayout->addWidget(new QLabel(tr("Morris analysis")), 0, 0);
   mainLayout->addWidget(screeningResultsComboBox_ , 0, 1);
 
-  for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
-    if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "MorrisAnalysis")
-      if (dynamic_cast<MorrisAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->hasValidResult())
-        screeningResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
+  for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
+    if (study_.getAnalyses()[i].getImplementation()->getClassName() == "MorrisAnalysis")
+      if (dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[i].getImplementation().get())->hasValidResult())
+        screeningResultsComboBox_->addItem(QString::fromUtf8(study_.getAnalyses()[i].getName().c_str()), (int)i);
 
   // choose variable
   variablesComboBox_ = new QComboBox;
@@ -75,7 +75,7 @@ void ScreeningResultWizard::buildInterface()
   if (screeningResultsComboBox_->count())
   {
     const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
-    MorrisResult& result(dynamic_cast<MorrisAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+    MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
     tableModel_ = new MorrisResultTableModel(result, variablesComboBox_->currentIndex(), MorrisResultTableModel::Display, tableView);
     tableView->setModel(tableModel_);
     tableView->resizeColumnsToContents();
@@ -107,7 +107,7 @@ void ScreeningResultWizard::updateVariablesComboBox(const int currentAnalysis)
   if (screeningResultsComboBox_->count())
   {
     const int analysisIndex = screeningResultsComboBox_->itemData(currentAnalysis).toInt();
-    MorrisResult& result(dynamic_cast<MorrisAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+    MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
     variablesNames = QtOT::DescriptionToStringList(result.getOutputSample().getDescription());
   }
@@ -123,7 +123,7 @@ void ScreeningResultWizard::updateTableModel(const QString& variableName)
   clearErrorMessage();
 
   const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
-  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
   tableModel_->updateData(result, variablesComboBox_->currentIndex());
 }
@@ -135,7 +135,7 @@ Indices ScreeningResultWizard::getInputsSelection() const
     return Indices();
 
   const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
-  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
   return result.getInputsSelection(variablesComboBox_->currentIndex());
 }
@@ -157,7 +157,7 @@ bool ScreeningResultWizard::validateCurrentPage()
   }
 
   const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
-  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
   if (result.getInputSample().getDimension() != model_.getInputDimension())
   {

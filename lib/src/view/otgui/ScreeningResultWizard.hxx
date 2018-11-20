@@ -35,7 +35,7 @@ class OTGUI_API ScreeningResultWizard : public Wizard
   Q_OBJECT
 
 public:
-  ScreeningResultWizard(const Study& otStudy, const PhysicalModel& model, QWidget* parent = 0);
+  ScreeningResultWizard(const Study& study, const PhysicalModel& model, QWidget* parent = 0);
 
   OT::Indices getInputsSelection() const;
 
@@ -50,7 +50,7 @@ public slots:
   void updateTableModel(const QString&);
 
 private:
-  Study otStudy_;
+  Study study_;
   PhysicalModel model_;
   QComboBox * screeningResultsComboBox_;
   QComboBox * variablesComboBox_;

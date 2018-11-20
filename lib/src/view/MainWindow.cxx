@@ -108,7 +108,7 @@ void MainWindow::buildInterface()
   connect(pythonConsoleDock, SIGNAL(customVisibilityChanged(bool)), menuBar, SLOT(updateConsoleStatus(bool)));
   connect(pythonConsoleDock, SIGNAL(customVisibilityChanged(bool)), menuBar->pythonConsoleDisplayAction(), SLOT(setChecked(bool)));
 
-  connect(menuBar, SIGNAL(openOTStudy(QString)), manager_, SLOT(open(QString)));
+  connect(menuBar, SIGNAL(openStudy(QString)), manager_, SLOT(open(QString)));
   connect(manager_, SIGNAL(recentFilesListChanged(QString)), menuBar, SLOT(updateRecentFilesList(QString)));
   setMenuBar(menuBar);
 

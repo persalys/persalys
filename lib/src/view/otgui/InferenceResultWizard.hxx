@@ -37,7 +37,7 @@ class OTGUI_API InferenceResultWizard : public Wizard
   Q_OBJECT
 
 public:
-  InferenceResultWizard(const Study& otStudy, QWidget* parent = 0);
+  InferenceResultWizard(const Study& study, QWidget* parent = 0);
 
   OT::Distribution getDistribution() const;
 
@@ -52,7 +52,7 @@ public slots:
   void updateInferenceResultWidget(QString);
 
 private:
-  Study otStudy_;
+  Study study_;
   QComboBox * inferenceResultsComboBox_;
   QComboBox * variablesComboBox_;
   InferenceResultWidget * inferenceResultWidget_;

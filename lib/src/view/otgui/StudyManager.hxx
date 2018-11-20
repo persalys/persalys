@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QObject managing otStudy objects
+ *  @brief QObject managing study objects
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -42,12 +42,12 @@ public slots:
   void showErrorMessage(QString);
 
   // create objects
-  void createOTStudy();
+  void createStudy();
   void openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard = false);
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
 
   // create windows
-  void createOTStudyWindow(StudyItem* item);
+  void createStudyWindow(StudyItem* item);
   void createDataModelDiagramWindow(DataModelDiagramItem*);
   void createDataModelWindow(DataModelDefinitionItem* item);
   void createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
@@ -61,7 +61,7 @@ public slots:
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
   void modifyAnalysis(AnalysisItem* item);
 
-  // import/export/save/open/close otstudy
+  // import/export/save/open/close study
   void importPythonScript();
   void exportPythonScript();
   void saveCurrent();

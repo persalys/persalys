@@ -115,9 +115,9 @@ void DataModelDefinitionItem::createDataAnalysis()
     return;
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("dataAnalysis_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("dataAnalysis_").toStdString()));
   DataAnalysis analysis(analysisName, designOfExperiment_);
-  getParentOTStudyItem()->getOTStudy().add(analysis);
+  getParentStudyItem()->getStudy().add(analysis);
 }
 
 
@@ -128,7 +128,7 @@ void DataModelDefinitionItem::createInferenceAnalysis()
     return;
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("marginalsInference_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("marginalsInference_").toStdString()));
   InferenceAnalysis analysis(analysisName, designOfExperiment_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
@@ -148,7 +148,7 @@ void DataModelDefinitionItem::createCopulaInferenceAnalysis()
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("dependenceInference_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("dependenceInference_").toStdString()));
   CopulaInferenceAnalysis analysis(analysisName, designOfExperiment_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
@@ -167,7 +167,7 @@ void DataModelDefinitionItem::createMetaModel()
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
   FunctionalChaosAnalysis analysis(analysisName, designOfExperiment_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);

@@ -36,7 +36,7 @@ class OTGUI_API CopulaInferenceResultWizard : public Wizard
   Q_OBJECT
 
 public:
-  CopulaInferenceResultWizard(const Study &otStudy, const OT::Description &variables, QWidget *parent = 0);
+  CopulaInferenceResultWizard(const Study &study, const OT::Description &variables, QWidget *parent = 0);
 
   OT::Copula getCopula() const;
 
@@ -50,7 +50,7 @@ public slots:
   void updateVariablesTable(const QString &text);
 
 private:
-  Study otStudy_;
+  Study study_;
   OT::Description variables_;
   QComboBox * inferenceResultsComboBox_;
   QComboBox * variablesComboBox_;

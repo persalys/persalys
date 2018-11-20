@@ -147,13 +147,13 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   analysis_ = analysis;
   if (!analysis_.getImplementation().get()->getObservers().size())
     analysis_.addObserver(this);
-  analysis_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
+  analysis_.addObserver(getParentStudyItem()->getStudy().getImplementation().get());
 
   // update analysis type
   setData(analysis_.getImplementation()->getClassName().c_str(), Qt::UserRole);
 
   // update the implementation of the analysis stored in Study
-  getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+  getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable convertAction_ action
   if (convertAction_)
@@ -263,11 +263,11 @@ void AnalysisItem::appendMetaModelItem()
   KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
   if (chaos)
   {
-    getParentOTStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());
+    getParentStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());
   }
   else if (kriging)
   {
-    getParentOTStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());
+    getParentStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());
   }
 }
 
@@ -282,8 +282,8 @@ void AnalysisItem::removeAnalysis()
   }
 
   // remove
-  if (getParentOTStudyItem())
-    getParentOTStudyItem()->getOTStudy().remove(Analysis(analysis_));
+  if (getParentStudyItem())
+    getParentStudyItem()->getStudy().remove(Analysis(analysis_));
 }
 
 

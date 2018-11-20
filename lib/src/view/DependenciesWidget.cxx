@@ -45,7 +45,7 @@ namespace OTGUI
 
 DependenciesWidget::DependenciesWidget(ProbabilisticModelItem * item, QWidget *parent)
   : QWidget(parent)
-  , study_(item->getParentOTStudyItem()->getOTStudy())
+  , study_(item->getParentStudyItem()->getStudy())
   , physicalModel_(item->getPhysicalModel())
 {
   connect(item, SIGNAL(copulaChanged()), this, SLOT(updateWidgets()));

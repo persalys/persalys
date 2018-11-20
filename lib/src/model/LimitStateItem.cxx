@@ -111,8 +111,8 @@ void LimitStateItem::appendItem(Analysis& analysis)
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
   // - signal for the PhysicalModelDiagramItem
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentOTStudyItem())
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  if (getParentStudyItem())
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
 
   // append item
   appendRow(newItem);
@@ -142,7 +142,7 @@ void LimitStateItem::createThresholdExceedance()
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
   MonteCarloReliabilityAnalysis analysis(analysisName, limitState_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
@@ -158,7 +158,7 @@ void LimitStateItem::removeLimitState()
     return;
   }
   // remove
-  if (getParentOTStudyItem())
-    getParentOTStudyItem()->getOTStudy().remove(LimitState(limitState_));
+  if (getParentStudyItem())
+    getParentStudyItem()->getStudy().remove(LimitState(limitState_));
 }
 }

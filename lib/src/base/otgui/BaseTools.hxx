@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief OT tools
+ *  @brief base tools
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *

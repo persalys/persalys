@@ -127,8 +127,8 @@ void ProbabilisticModelItem::createLimitState()
     return;
 
   // new limit state
-  LimitState newLimitState(getParentOTStudyItem()->getOTStudy().getAvailableLimitStateName(), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
-  getParentOTStudyItem()->getOTStudy().add(newLimitState);
+  LimitState newLimitState(getParentStudyItem()->getStudy().getAvailableLimitStateName(), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
+  getParentStudyItem()->getStudy().add(newLimitState);
 }
 
 
@@ -139,7 +139,7 @@ void ProbabilisticModelItem::createCentralTendency()
     return;
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("centralTendency_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("centralTendency_").toStdString()));
   MonteCarloAnalysis analysis(analysisName, physicalModel_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);
@@ -160,7 +160,7 @@ void ProbabilisticModelItem::createSensitivityAnalysis()
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("sensitivity_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("sensitivity_").toStdString()));
   SobolAnalysis analysis(analysisName, physicalModel_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);

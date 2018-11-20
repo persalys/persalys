@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Abstract top-level class for otstudies
+ *  @brief Abstract top-level class for studies
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -35,10 +35,10 @@ public:
   // static methods
   static OT::Collection<OTGUI::Study> GetInstances();
   static OT::Description GetFileNames();
-  static bool HasInstanceNamed(const OT::String& otStudyName);
+  static bool HasInstanceNamed(const OT::String& studyName);
   static OT::String GetAvailableName();
-  static void Add(const Study& otstudy);
-  static void Remove(const Study& otstudy);
+  static void Add(const Study& study);
+  static void Remove(const Study& study);
   static Study Open(const OT::String& xmlFileName);
   static void SetInstanceObserver(Observer * observer);
 
@@ -96,8 +96,8 @@ public:
   void load(OT::Advocate& adv);
 
 private:
-  static OT::PersistentCollection<Study > OTStudies_;
-  static Observer * OTStudyObserver_;
+  static OT::PersistentCollection<Study > studies_;
+  static Observer * studyObserver_;
 };
 }
 #endif

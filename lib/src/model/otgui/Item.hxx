@@ -51,7 +51,7 @@ public:
   virtual void insertRow(int row, Item * item);
   virtual void removeRow(int row);
 
-  StudyItem * getParentOTStudyItem();
+  StudyItem * getParentStudyItem();
   bool analysisInProgress() const;
 
 protected slots:
@@ -70,7 +70,7 @@ protected:
   Item * getTitleItemNamed(const QString& name, const QString& typeName);
 
 protected:
-  StudyItem * parentOTStudyItem_;
+  StudyItem * parentStudyItem_;
   bool analysisInProgress_;
 
 private:

@@ -133,9 +133,9 @@ void DataModelDiagramItem::appendItem(Analysis& analysis)
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
   // - signal for the PhysicalModelDiagramItem
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentOTStudyItem())
+  if (getParentStudyItem())
   {
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
   }
 
   // append item
@@ -155,7 +155,7 @@ void DataModelDiagramItem::removeDesignOfExperiment()
     return;
   }
   // remove
-  if (getParentOTStudyItem())
-    getParentOTStudyItem()->getOTStudy().remove(DesignOfExperiment(designOfExperiment_));
+  if (getParentStudyItem())
+    getParentStudyItem()->getStudy().remove(DesignOfExperiment(designOfExperiment_));
 }
 }
