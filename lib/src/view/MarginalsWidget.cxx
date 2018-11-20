@@ -53,7 +53,7 @@ namespace OTGUI
 
 MarginalsWidget::MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent)
   : QWidget(parent)
-  , study_(item->getParentOTStudyItem()->getOTStudy())
+  , study_(item->getParentStudyItem()->getStudy())
   , physicalModel_(item->getPhysicalModel())
   , paramEditor_(0)
 {

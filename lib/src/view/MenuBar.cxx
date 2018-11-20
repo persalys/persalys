@@ -120,7 +120,7 @@ void MenuBar::openRecentFile()
 {
   QAction * action = qobject_cast<QAction *>(sender());
   if (action)
-    emit openOTStudy(action->data().toString());
+    emit openStudy(action->data().toString());
 }
 
 

@@ -165,7 +165,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
       {
         // new analysis
         DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
-        const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("metamodel_").toStdString()));
+        const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("metamodel_").toStdString()));
         FunctionalChaosAnalysis analysis(analysisName, *doeEval);
         // emit signal to StudyManager to open a 'general' wizard (with a list of designs of experiments)
         emit analysisRequested(this, analysis, true);
@@ -182,17 +182,17 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
 void PhysicalModelDiagramItem::requestReliabilityCreation()
 {
   LimitState limitState;
-  for (UnsignedInteger i = 0; i < getParentOTStudyItem()->getOTStudy().getLimitStates().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getParentStudyItem()->getStudy().getLimitStates().getSize(); ++i)
   {
-    if (getParentOTStudyItem()->getOTStudy().getLimitStates()[i].getPhysicalModel() == physicalModel_)
+    if (getParentStudyItem()->getStudy().getLimitStates()[i].getPhysicalModel() == physicalModel_)
     {
-      limitState = getParentOTStudyItem()->getOTStudy().getLimitStates()[i];
+      limitState = getParentStudyItem()->getStudy().getLimitStates()[i];
       break;
     }
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
   MonteCarloReliabilityAnalysis analysis(analysisName, limitState);
   // emit signal to StudyManager to open a 'general' wizard (with a list of limit states)
   emit analysisRequested(this, analysis, true);
@@ -208,8 +208,8 @@ void PhysicalModelDiagramItem::removePhysicalModel()
     return;
   }
   // remove
-  if (getParentOTStudyItem())
-    getParentOTStudyItem()->getOTStudy().remove(PhysicalModel(physicalModel_));
+  if (getParentStudyItem())
+    getParentStudyItem()->getStudy().remove(PhysicalModel(physicalModel_));
 }
 
 
@@ -451,8 +451,8 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
 
   // connections
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-  if (getParentOTStudyItem())
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+  if (getParentStudyItem())
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
 
   // append item
   titleItem->appendRow(newItem);

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of an otStudy
+ *  @brief QStandardItem, observer of a study
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -32,7 +32,7 @@ class OTGUI_API StudyItem : public Item, public Observer
   Q_OBJECT
 
 public:
-  StudyItem(const Study & otStudy);
+  StudyItem(const Study & study);
 
   void update(Observable * source, const OT::String & message);
 
@@ -43,7 +43,7 @@ public:
 
   virtual QVariant data(int role) const;
   void setData(const QVariant & value, int role);
-  Study getOTStudy() const;
+  Study getStudy() const;
 
   void exportPythonScript(const QString& fileName);
 
@@ -81,7 +81,7 @@ protected:
   void buildActions();
 
 private:
-  Study otStudy_;
+  Study study_;
   QAction * newSymbolicModel_;
   QAction * newPythonModel_;
 #ifdef OTGUI_HAVE_YACS

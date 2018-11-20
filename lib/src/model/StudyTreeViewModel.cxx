@@ -59,41 +59,41 @@ void StudyTreeViewModel::update(Observable * source, const String & message)
 }
 
 
-void StudyTreeViewModel::appendItem(const Study & otStudy)
+void StudyTreeViewModel::appendItem(const Study & study)
 {
-  StudyItem * otStudyItem = new StudyItem(otStudy);
+  StudyItem * studyItem = new StudyItem(study);
 
   // append the item
-  invisibleRootItem()->appendRow(otStudyItem);
+  invisibleRootItem()->appendRow(studyItem);
 
   // signal for StudyTreeView to create the window
-  emit studyCreated(otStudyItem);
+  emit studyCreated(studyItem);
 
   // add sub items
-  for (UnsignedInteger i = 0; i < otStudy.getDataModels().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < study.getDataModels().getSize(); ++i)
   {
-    otStudyItem->appendItem(otStudy.getDataModels()[i]);
-    otStudy.getDataModels()[i].addObserver(otStudy.getImplementation().get());
+    studyItem->appendItem(study.getDataModels()[i]);
+    study.getDataModels()[i].addObserver(study.getImplementation().get());
   }
 
-  for (UnsignedInteger i = 0; i < otStudy.getPhysicalModels().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < study.getPhysicalModels().getSize(); ++i)
   {
-    otStudyItem->appendItem(otStudy.getPhysicalModels()[i]);
-    otStudy.getPhysicalModels()[i].addObserver(otStudy.getImplementation().get());
+    studyItem->appendItem(study.getPhysicalModels()[i]);
+    study.getPhysicalModels()[i].addObserver(study.getImplementation().get());
   }
 
-  for (UnsignedInteger i = 0; i < otStudy.getLimitStates().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < study.getLimitStates().getSize(); ++i)
   {
-    otStudyItem->appendItem(otStudy.getLimitStates()[i]);
-    otStudy.getLimitStates()[i].addObserver(otStudy.getImplementation().get());
+    studyItem->appendItem(study.getLimitStates()[i]);
+    study.getLimitStates()[i].addObserver(study.getImplementation().get());
   }
 
-  for (UnsignedInteger i = 0; i < otStudy.getAnalyses().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
   {
-    otStudyItem->appendItem(otStudy.getAnalyses()[i]);
-    otStudy.getAnalyses()[i].addObserver(otStudy.getImplementation().get());
+    studyItem->appendItem(study.getAnalyses()[i]);
+    study.getAnalyses()[i].addObserver(study.getImplementation().get());
   }
   // signal for StudyTreeView to collapse models items
-  emit studySubItemsAdded(otStudyItem);
+  emit studySubItemsAdded(studyItem);
 }
 }

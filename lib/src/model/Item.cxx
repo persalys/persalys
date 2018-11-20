@@ -26,7 +26,7 @@ namespace OTGUI
 Item::Item(const QString& name, const QString& type)
   : QObject()
   , QStandardItem(name)
-  , parentOTStudyItem_(0)
+  , parentStudyItem_(0)
   , analysisInProgress_(false)
   , menuActions_()
 {
@@ -42,7 +42,7 @@ Item::Item(const QString& name, const QString& type)
 
 Item::~Item()
 {
-  parentOTStudyItem_ = 0;
+  parentStudyItem_ = 0;
 }
 
 
@@ -58,9 +58,9 @@ void Item::emitRemoveWindowRequested()
 }
 
 
-StudyItem* Item::getParentOTStudyItem()
+StudyItem* Item::getParentStudyItem()
 {
-  return parentOTStudyItem_;
+  return parentStudyItem_;
 }
 
 
@@ -134,7 +134,7 @@ QVariant Item::data(int role) const
 
 void Item::appendRow(Item* item)
 {
-  item->parentOTStudyItem_ = this->parentOTStudyItem_;
+  item->parentStudyItem_ = this->parentStudyItem_;
   connect(item, SIGNAL(removeRequested(int)), item, SIGNAL(removeWindowRequested()));
   connect(item, SIGNAL(removeRequested(int)), this, SLOT(requestRemoveChild(int)));
   QStandardItem::appendRow(item);
@@ -143,7 +143,7 @@ void Item::appendRow(Item* item)
 
 void Item::insertRow(int row, Item* item)
 {
-  item->parentOTStudyItem_ = this->parentOTStudyItem_;
+  item->parentStudyItem_ = this->parentStudyItem_;
   connect(item, SIGNAL(removeRequested(int)), item, SIGNAL(removeWindowRequested()));
   connect(item, SIGNAL(removeRequested(int)), this, SLOT(requestRemoveChild(int)));
   QStandardItem::insertRow(row, item);

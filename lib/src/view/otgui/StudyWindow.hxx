@@ -36,7 +36,7 @@ public:
   void buildInterface();
 
 private:
-  StudyItem * otStudyItem_;
+  StudyItem * studyItem_;
 };
 }
 #endif

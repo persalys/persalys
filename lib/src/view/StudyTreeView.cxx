@@ -185,9 +185,9 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   QList<QAction*> actions;
 
   // get actions defined in the current item
-  Item * otguiItem = dynamic_cast<Item*>(currentItem);
-  if (otguiItem)
-    actions = otguiItem->getActions();
+  Item * item = dynamic_cast<Item*>(currentItem);
+  if (item)
+    actions = item->getActions();
 
   if (!actions.size())
     return;
@@ -195,7 +195,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   // if the item is editable:
   // add rename action at the first position
   QAction * renameAction = 0;
-  if (otguiItem->isEditable())
+  if (item->isEditable())
   {
     renameAction = new QAction(tr("Rename"), this);
     actions.insert(0, renameAction);
@@ -222,17 +222,17 @@ void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex, const Q
   if (!selectedItem)
     return;
 
-  Item * otguiItem = dynamic_cast<Item*>(selectedItem);
-  if (!otguiItem)
+  Item * item = dynamic_cast<Item*>(selectedItem);
+  if (!item)
     return;
 
   if (selectedItem->data(Qt::UserRole).toString().contains("Title") && selectedItem->hasChildren())
   {
-    setCurrentIndex(otguiItem->getParentOTStudyItem()->index());
+    setCurrentIndex(item->getParentStudyItem()->index());
     return;
   }
 
-  otguiItem->emitShowWindowRequested();
+  item->emitShowWindowRequested();
 }
 
 

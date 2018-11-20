@@ -167,9 +167,9 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   // connections
   // - signal for the PhysicalModelDiagramItem
   connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentOTStudyItem())
+  if (getParentStudyItem())
   {
-    connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+    connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
   }
 
   // insert item
@@ -192,9 +192,9 @@ void DesignOfExperimentDefinitionItem::appendItem(Analysis& analysis)
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
   // - signal for the PhysicalModelDiagramItem
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentOTStudyItem())
+  if (getParentStudyItem())
   {
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentOTStudyItem(), SLOT(setAnalysisInProgress(bool)));
+    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
   }
 
   // append item
@@ -225,10 +225,10 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   // update analysis_
   analysis_ = analysis;
   analysis_.addObserver(this);
-  analysis_.addObserver(getParentOTStudyItem()->getOTStudy().getImplementation().get());
+  analysis_.addObserver(getParentStudyItem()->getStudy().getImplementation().get());
 
   // update the implementation of the design of experiments stored in Study
-  getParentOTStudyItem()->getOTStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+  getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 }
 
 
@@ -262,8 +262,8 @@ void DesignOfExperimentDefinitionItem::removeAnalysis()
   }
 
   // remove
-  if (getParentOTStudyItem())
-    getParentOTStudyItem()->getOTStudy().remove(Analysis(analysis_));
+  if (getParentStudyItem())
+    getParentStudyItem()->getStudy().remove(Analysis(analysis_));
 }
 
 
@@ -284,7 +284,7 @@ void DesignOfExperimentDefinitionItem::createMetaModel()
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
   FunctionalChaosAnalysis analysis(analysisName, getAnalysis());
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, analysis);

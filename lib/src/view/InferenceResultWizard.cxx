@@ -35,9 +35,9 @@ using namespace OT;
 namespace OTGUI
 {
 
-InferenceResultWizard::InferenceResultWizard(const Study& otStudy, QWidget* parent)
+InferenceResultWizard::InferenceResultWizard(const Study& study, QWidget* parent)
   : Wizard(parent)
-  , otStudy_(otStudy)
+  , study_(study)
   , inferenceResultsComboBox_(0)
   , variablesComboBox_(0)
   , inferenceResultWidget_(0)
@@ -63,10 +63,10 @@ void InferenceResultWizard::buildInterface()
   topWidgetLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
   topWidgetLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
 
-  for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
-    if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
-      if (dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->hasValidResult())
-        inferenceResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
+  for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
+    if (study_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")
+      if (dynamic_cast<InferenceAnalysis*>(study_.getAnalyses()[i].getImplementation().get())->hasValidResult())
+        inferenceResultsComboBox_->addItem(QString::fromUtf8(study_.getAnalyses()[i].getName().c_str()), (int)i);
 
   // choose variable
   variablesComboBox_ = new QComboBox;
@@ -107,7 +107,7 @@ void InferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
   if (inferenceResultsComboBox_->count())
   {
     const int analysisIndex = inferenceResultsComboBox_->itemData(currentAnalysis).toInt();
-    InferenceResult result(dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+    InferenceResult result(dynamic_cast<InferenceAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
     Collection< FittingTestResult > fittingTestResultCollection(result.getFittingTestResultCollection());
 
     for (UnsignedInteger i = 0; i < fittingTestResultCollection.getSize(); ++i)
@@ -127,7 +127,7 @@ void InferenceResultWizard::updateInferenceResultWidget(QString variableName)
   if (inferenceResultsComboBox_->count())
   {
     const int analysisIndex = inferenceResultsComboBox_->itemData(inferenceResultsComboBox_->currentIndex()).toInt();
-    InferenceAnalysis * analysis = dynamic_cast<InferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get());
+    InferenceAnalysis * analysis = dynamic_cast<InferenceAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get());
 
     inferenceResultWidget_->updateDistributionTable(analysis->getLevel(), analysis->getResult(), variableName);
   }

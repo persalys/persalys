@@ -33,9 +33,9 @@ using namespace OT;
 namespace OTGUI
 {
 
-CopulaInferenceResultWizard::CopulaInferenceResultWizard(const Study &otStudy, const Description &variables, QWidget *parent)
+CopulaInferenceResultWizard::CopulaInferenceResultWizard(const Study &study, const Description &variables, QWidget *parent)
   : Wizard(parent)
-  , otStudy_(otStudy)
+  , study_(study)
   , variables_(variables)
   , inferenceResultsComboBox_(0)
   , variablesComboBox_(0)
@@ -64,10 +64,10 @@ void CopulaInferenceResultWizard::buildInterface()
   topWidgetLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
   topWidgetLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
 
-  for (UnsignedInteger i = 0; i < otStudy_.getAnalyses().getSize(); ++i)
-    if (otStudy_.getAnalyses()[i].getImplementation()->getClassName() == "CopulaInferenceAnalysis")
-      if (dynamic_cast<CopulaInferenceAnalysis*>(otStudy_.getAnalyses()[i].getImplementation().get())->hasValidResult())
-        inferenceResultsComboBox_->addItem(QString::fromUtf8(otStudy_.getAnalyses()[i].getName().c_str()), (int)i);
+  for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
+    if (study_.getAnalyses()[i].getImplementation()->getClassName() == "CopulaInferenceAnalysis")
+      if (dynamic_cast<CopulaInferenceAnalysis*>(study_.getAnalyses()[i].getImplementation().get())->hasValidResult())
+        inferenceResultsComboBox_->addItem(QString::fromUtf8(study_.getAnalyses()[i].getName().c_str()), (int)i);
 
   // choose variable
   variablesComboBox_ = new QComboBox;
@@ -148,7 +148,7 @@ void CopulaInferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
     return;
 
   const int analysisIndex = inferenceResultsComboBox_->itemData(currentAnalysis).toInt();
-  CopulaInferenceResult result(dynamic_cast<CopulaInferenceAnalysis*>(otStudy_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+  CopulaInferenceResult result(dynamic_cast<CopulaInferenceAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
   const Description variablesDOE = result.getDesignOfExperiment().getSample().getDescription();
 

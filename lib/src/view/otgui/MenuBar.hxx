@@ -48,7 +48,7 @@ public slots:
   void openAboutDialog();
   void updateConsoleStatus(const bool visibility);
 signals:
-  void openOTStudy(QString);
+  void openStudy(QString);
   void showHidePythonConsole(bool);
   void pythonConsoleVisibilityChanged(bool);
 

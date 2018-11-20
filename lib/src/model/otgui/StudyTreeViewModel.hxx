@@ -36,7 +36,7 @@ public:
 
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-  void appendItem(const Study & otStudy);
+  void appendItem(const Study & study);
 
   virtual void update(Observable * source, const OT::String & message);
 

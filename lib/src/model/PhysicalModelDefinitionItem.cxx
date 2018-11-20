@@ -171,7 +171,7 @@ void PhysicalModelDefinitionItem::createModelEvaluation()
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("evaluation_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("evaluation_").toStdString()));
   ModelEvaluation evaluation(analysisName, physicalModel_);
   // emit signal to StudyManager to open a wizard
   emit analysisRequested(this, evaluation);
@@ -189,7 +189,7 @@ void PhysicalModelDefinitionItem::createScreening()
   }
 
   // new analysis
-  const String analysisName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("screening_").toStdString()));
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("screening_").toStdString()));
   MorrisAnalysis analysis(analysisName, physicalModel_);
   // emit signal to StudyManager to open a wizard
   emit analysisRequested(this, analysis);
@@ -207,7 +207,7 @@ void PhysicalModelDefinitionItem::createOptimization()
   }
 
   // new analysis
-  OptimizationAnalysis optimization(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("optimization_").toStdString()), physicalModel_);
+  OptimizationAnalysis optimization(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("optimization_").toStdString()), physicalModel_);
   // emit signal to StudyTreeView to open a wizard
   emit analysisRequested(this, optimization);
 }
@@ -223,7 +223,7 @@ void PhysicalModelDefinitionItem::createDesignOfExperiment()
   }
 
   // new design
-  const String doeName(getParentOTStudyItem()->getOTStudy().getAvailableAnalysisName(tr("design_").toStdString()));
+  const String doeName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("design_").toStdString()));
   GridDesignOfExperiment design(doeName, physicalModel_);
   // emit signal to StudyManager to open a wizard
   emit analysisRequested(this, design);

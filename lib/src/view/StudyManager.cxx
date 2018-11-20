@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QObject managing otStudy objects
+ *  @brief QObject managing study objects
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -48,9 +48,9 @@ StudyManager::StudyManager(MainWidget * mainWidget, QObject * parent)
   , mainWidget_(mainWidget)
   , analysisInProgress_(false)
 {
-  connect(mainWidget_->getStudyTree(), SIGNAL(studyCreated(StudyItem*)), this, SLOT(createOTStudyWindow(StudyItem*)));
+  connect(mainWidget_->getStudyTree(), SIGNAL(studyCreated(StudyItem*)), this, SLOT(createStudyWindow(StudyItem*)));
 
-  connect(mainWidget_->getActions()->newAction(), SIGNAL(triggered()), this, SLOT(createOTStudy()));
+  connect(mainWidget_->getActions()->newAction(), SIGNAL(triggered()), this, SLOT(createStudy()));
   connect(mainWidget_->getActions()->openAction(), SIGNAL(triggered()), this, SLOT(open()));
   connect(mainWidget_->getActions()->saveAction(), SIGNAL(triggered()), this, SLOT(saveCurrent()));
   connect(mainWidget_->getActions()->saveAsAction(), SIGNAL(triggered()), this, SLOT(saveAsCurrent()));
@@ -85,11 +85,11 @@ void StudyManager::updateView(SubWindow * window)
 }
 
 
-void StudyManager::createOTStudy()
+void StudyManager::createStudy()
 {
   // create a new study with an available name
-  Study otstudy(Study::GetAvailableName());
-  Study::Add(otstudy);
+  Study study(Study::GetAvailableName());
+  Study::Add(study);
 }
 
 
@@ -107,20 +107,20 @@ void StudyManager::openDesignOfExperimentEvaluationWizard(const Analysis& analys
 
 void StudyManager::openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard)
 {
-  if (!item || !item->getParentOTStudyItem())
+  if (!item || !item->getParentStudyItem())
     return;
 
   AnalysisWizard * wizard = WindowFactory::GetAnalysisWizard(analysis, isGeneralWizard, mainWidget_);
 
   if (wizard && wizard->exec())
   {
-    item->getParentOTStudyItem()->getOTStudy().add(wizard->getAnalysis());
+    item->getParentStudyItem()->getStudy().add(wizard->getAnalysis());
     delete wizard;
   }
 }
 
 
-void StudyManager::createOTStudyWindow(StudyItem* item)
+void StudyManager::createStudyWindow(StudyItem* item)
 {
   if (!item)
     return;
@@ -217,7 +217,7 @@ void StudyManager::createPhysicalModelWindow(PhysicalModelDefinitionItem* item)
 
 void StudyManager::createProbabilisticModelWindow(ProbabilisticModelItem* item)
 {
-  if (!item || !item->getParentOTStudyItem())
+  if (!item || !item->getParentStudyItem())
     return;
 
   // connections
@@ -429,7 +429,7 @@ void StudyManager::saveCurrent()
     return;
   }
 
-  save(item->getParentOTStudyItem());
+  save(item->getParentStudyItem());
 }
 
 
@@ -442,7 +442,7 @@ void StudyManager::saveAsCurrent()
     return;
   }
 
-  saveAs(item->getParentOTStudyItem());
+  saveAs(item->getParentStudyItem());
 }
 
 
@@ -454,11 +454,11 @@ bool StudyManager::save(StudyItem* studyItem)
     showErrorMessage(tr("Can not save the current study"));
     return false;
   }
-  const QFileInfo file(QString::fromUtf8(studyItem->getOTStudy().getFileName().c_str()));
+  const QFileInfo file(QString::fromUtf8(studyItem->getStudy().getFileName().c_str()));
   if (file.exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    studyItem->getOTStudy().save(file.absoluteFilePath().toUtf8().data());
+    studyItem->getStudy().save(file.absoluteFilePath().toUtf8().data());
     QApplication::restoreOverrideCursor();
     return true;
   }
@@ -555,12 +555,12 @@ bool StudyManager::close(StudyItem* studyItem)
   }
 
   // if study has been modified: ask to save it before closing it
-  if (studyItem->getOTStudy().getImplementation().get()->hasBeenModified())
+  if (studyItem->getStudy().getImplementation().get()->hasBeenModified())
   {
     const int ret = QMessageBox::warning(mainWidget_,
                                          tr("Warning"),
-                                         tr("Do you want to save the study '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
-                                         .arg(studyItem->getOTStudy().getFileName().c_str()),
+                                         tr("Do you want to save the study '%1' [%2]?").arg(studyItem->getStudy().getName().c_str())
+                                         .arg(studyItem->getStudy().getFileName().c_str()),
                                          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                          QMessageBox::Save);
     if (ret == QMessageBox::Cancel)
@@ -576,7 +576,7 @@ bool StudyManager::close(StudyItem* studyItem)
     }
   }
   // remove instance
-  Study::Remove(studyItem->getOTStudy());
+  Study::Remove(studyItem->getStudy());
 
   return true;
 }
@@ -591,7 +591,7 @@ bool StudyManager::closeCurrent()
     return false;
   }
 
-  return close(item->getParentOTStudyItem());
+  return close(item->getParentStudyItem());
 }
 
 

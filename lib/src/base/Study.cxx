@@ -34,31 +34,31 @@ namespace OTGUI
 
 CLASSNAMEINIT(Study)
 
-PersistentCollection<Study > Study::OTStudies_;
-Observer * Study::OTStudyObserver_ = 0;
+PersistentCollection<Study > Study::studies_;
+Observer * Study::studyObserver_ = 0;
 
 
 Collection<OTGUI::Study> Study::GetInstances()
 {
-  return OTStudies_;
+  return studies_;
 }
 
 
 Description Study::GetFileNames()
 {
-  Description otStudiesFileNames;
-  for (UnsignedInteger i = 0; i < OTStudies_.getSize(); ++ i)
-    if (!OTStudies_[i].getFileName().empty())
-      otStudiesFileNames.add(OTStudies_[i].getFileName());
+  Description studiesFileNames;
+  for (UnsignedInteger i = 0; i < studies_.getSize(); ++ i)
+    if (!studies_[i].getFileName().empty())
+      studiesFileNames.add(studies_[i].getFileName());
 
-  return otStudiesFileNames;
+  return studiesFileNames;
 }
 
 
-bool Study::HasInstanceNamed(const String & otStudyName)
+bool Study::HasInstanceNamed(const String & studyName)
 {
-  for (PersistentCollection<Study >::iterator it = OTStudies_.begin(); it != OTStudies_.end(); ++it)
-    if ((*it).getImplementation().get()->getName() == otStudyName)
+  for (PersistentCollection<Study >::iterator it = studies_.begin(); it != studies_.end(); ++it)
+    if ((*it).getImplementation().get()->getName() == studyName)
       return true;
   return false;
 }
@@ -74,34 +74,34 @@ String Study::GetAvailableName()
 }
 
 
-void Study::Add(const Study& otstudy)
+void Study::Add(const Study& study)
 {
-  if (OTStudyObserver_)
+  if (studyObserver_)
   {
-    if (OTStudies_.contains(otstudy))
+    if (studies_.contains(study))
       throw InvalidArgumentException(HERE) << "The study already exists\n";
-    OTStudies_.add(otstudy);
-    OTStudyObserver_->update(otstudy.getImplementation().get(), "addStudy");
+    studies_.add(study);
+    studyObserver_->update(study.getImplementation().get(), "addStudy");
   }
 }
 
 
-void Study::Remove(const Study& otstudy)
+void Study::Remove(const Study& study)
 {
-  if (!OTStudies_.contains(otstudy))
+  if (!studies_.contains(study))
     return;
 
-  otstudy.getImplementation().get()->clear();
+  study.getImplementation().get()->clear();
 
-  if (OTStudyObserver_)
+  if (studyObserver_)
   {
-    otstudy.getImplementation().get()->notifyAndRemove("otStudyRemoved", "Study");
+    study.getImplementation().get()->notifyAndRemove("studyRemoved", "Study");
 
-    for (UnsignedInteger i = 0; i < OTStudies_.getSize(); ++ i)
+    for (UnsignedInteger i = 0; i < studies_.getSize(); ++ i)
     {
-      if (OTStudies_[i] == otstudy)
+      if (studies_[i] == study)
       {
-        OTStudies_.erase(OTStudies_.begin() + i);
+        studies_.erase(studies_.begin() + i);
         break;
       }
     }
@@ -125,7 +125,7 @@ Study Study::Open(const String & xmlFileName)
 
 void Study::SetInstanceObserver(Observer * observer)
 {
-  OTStudyObserver_ = observer;
+  studyObserver_ = observer;
 }
 
 

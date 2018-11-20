@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of an otStudy
+ *  @brief QStandardItem, observer of a study
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -41,13 +41,13 @@ using namespace OT;
 namespace OTGUI
 {
 
-StudyItem::StudyItem(const Study& otStudy)
-  : Item(QString::fromUtf8(otStudy.getName().c_str()), "Study")
+StudyItem::StudyItem(const Study& study)
+  : Item(QString::fromUtf8(study.getName().c_str()), "Study")
   , Observer("Study")
-  , otStudy_(otStudy)
+  , study_(study)
 {
-  parentOTStudyItem_ = this;
-  otStudy_.addObserver(this);
+  parentStudyItem_ = this;
+  study_.addObserver(this);
 
   buildActions();
   connect(this, SIGNAL(statusChanged()), this, SLOT(updateIcon()));
@@ -114,25 +114,25 @@ void StudyItem::update(Observable * source, const String & message)
 {
   if (message == "addDataModel")
   {
-    DesignOfExperiment addedDataModel = otStudy_.getDataModels()[otStudy_.getDataModels().getSize() - 1];
+    DesignOfExperiment addedDataModel = study_.getDataModels()[study_.getDataModels().getSize() - 1];
     appendItem(addedDataModel);
   }
   else if (message == "addPhysicalModel")
   {
-    PhysicalModel addedPhysicalModel = otStudy_.getPhysicalModels()[otStudy_.getPhysicalModels().getSize() - 1];
+    PhysicalModel addedPhysicalModel = study_.getPhysicalModels()[study_.getPhysicalModels().getSize() - 1];
     appendItem(addedPhysicalModel);
   }
   else if (message == "addLimitState")
   {
-    LimitState addedLimitState = otStudy_.getLimitStates()[otStudy_.getLimitStates().getSize() - 1];
+    LimitState addedLimitState = study_.getLimitStates()[study_.getLimitStates().getSize() - 1];
     appendItem(addedLimitState);
   }
   else if (message == "addAnalysis")
   {
-    Analysis addedAnalysis = otStudy_.getAnalyses()[otStudy_.getAnalyses().getSize() - 1];
+    Analysis addedAnalysis = study_.getAnalyses()[study_.getAnalyses().getSize() - 1];
     appendItem(addedAnalysis);
   }
-  else if (message == "otStudyRemoved")
+  else if (message == "studyRemoved")
   {
     requestRemove();
   }
@@ -158,23 +158,23 @@ void StudyItem::updateIcon()
 
 void StudyItem::createSymbolicModel()
 {
-  SymbolicPhysicalModel * newModel = new SymbolicPhysicalModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newModel);
+  SymbolicPhysicalModel * newModel = new SymbolicPhysicalModel(study_.getAvailablePhysicalModelName());
+  study_.add(newModel);
 }
 
 
 void StudyItem::createPythonModel()
 {
-  PythonPhysicalModel * newModel = new PythonPhysicalModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newModel);
+  PythonPhysicalModel * newModel = new PythonPhysicalModel(study_.getAvailablePhysicalModelName());
+  study_.add(newModel);
 }
 
 
 #ifdef OTGUI_HAVE_YACS
 void StudyItem::createYACSModel()
 {
-  YACSPhysicalModel * newModel = new YACSPhysicalModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newModel);
+  YACSPhysicalModel * newModel = new YACSPhysicalModel(study_.getAvailablePhysicalModelName());
+  study_.add(newModel);
 }
 #endif
 
@@ -182,16 +182,16 @@ void StudyItem::createYACSModel()
 #ifdef OTGUI_HAVE_OTFMI
 void StudyItem::createFMIModel()
 {
-  FMIPhysicalModel newModel(otStudy_.getAvailablePhysicalModelName());
-  otStudy_.add(newModel);
+  FMIPhysicalModel newModel(study_.getAvailablePhysicalModelName());
+  study_.add(newModel);
 }
 #endif
 
 
 void StudyItem::createDataModel()
 {
-  DesignOfExperiment newDataModel(DataModel(otStudy_.getAvailableDataModelName()));
-  otStudy_.add(newDataModel);
+  DesignOfExperiment newDataModel(DataModel(study_.getAvailableDataModelName()));
+  study_.add(newDataModel);
 }
 
 
@@ -221,7 +221,7 @@ void StudyItem::exportPythonScript(const QString& filename)
   // write file
   QTextStream out(&file);
   out.setCodec("UTF-8");
-  out << QString::fromUtf8(otStudy_.getPythonScript().c_str());
+  out << QString::fromUtf8(study_.getPythonScript().c_str());
   file.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::ExeGroup | QFile::ReadOther | QFile::ExeOther);
   file.close();
 
@@ -248,7 +248,7 @@ bool StudyItem::save(const QString& filename)
 
   if (fileName.isEmpty())
   {
-    qDebug() << "StudyItem::saveOTStudy : file name empty\n";
+    qDebug() << "StudyItem::saveStudy : file name empty\n";
     return false;
   }
 
@@ -260,14 +260,14 @@ bool StudyItem::save(const QString& filename)
   // check
   if (!file.open(QFile::WriteOnly))
   {
-    qDebug() << "StudyItem::saveOTStudy : cannot open the file " << file.fileName() << "\n";
+    qDebug() << "StudyItem::saveStudy : cannot open the file " << file.fileName() << "\n";
     emit showErrorMessageRequested(tr("Cannot save file %1:\n%2").arg(fileName).arg(file.errorString()));
     return false;
   }
 
   // write file
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  otStudy_.save(fileName.toUtf8().constData());
+  study_.save(fileName.toUtf8().constData());
   QApplication::restoreOverrideCursor();
 
   // update QSettings
@@ -394,9 +394,9 @@ void StudyItem::appendItem(Analysis & analysis)
 
 void StudyItem::appendMetaModelItem(PhysicalModel metaModel)
 {
-  const String availableName = otStudy_.getAvailablePhysicalModelName(metaModel.getName());
+  const String availableName = study_.getAvailablePhysicalModelName(metaModel.getName());
   metaModel.setName(availableName);
-  otStudy_.add(metaModel);
+  study_.add(metaModel);
 }
 
 
@@ -405,14 +405,14 @@ QVariant StudyItem::data(int role) const
   // set icon
   if (role == Qt::DecorationRole)
   {
-    if (otStudy_.getImplementation()->hasBeenModified())
+    if (study_.getImplementation()->hasBeenModified())
       return QIcon(":/images/document-save.png");
     else
       return QIcon();
   }
   // tooltip
-  if (role == Qt::ToolTipRole && !otStudy_.getFileName().empty())
-    return QFileInfo(otStudy_.getFileName().c_str()).absoluteFilePath();
+  if (role == Qt::ToolTipRole && !study_.getFileName().empty())
+    return QFileInfo(study_.getFileName().c_str()).absoluteFilePath();
 
   return Item::data(role);
 }
@@ -420,20 +420,20 @@ QVariant StudyItem::data(int role) const
 
 void StudyItem::setData(const QVariant & value, int role)
 {
-  // do NOT use otStudy_.setName otherwise otStudy_ is duplicated!!
+  // do NOT use study_.setName otherwise study_ is duplicated!!
   // when copying an Observable, the list of observers is not duplicated...
   // when an observable has no observer, otgui is lost
   // for example is not possible to remove the items...
   if (role == Qt::EditRole)
-    otStudy_.getImplementation()->setName(value.toString().toUtf8().data());
+    study_.getImplementation()->setName(value.toString().toUtf8().data());
 
   QStandardItem::setData(value, role);
 }
 
 
-Study StudyItem::getOTStudy() const
+Study StudyItem::getStudy() const
 {
-  return otStudy_;
+  return study_;
 }
 
 
