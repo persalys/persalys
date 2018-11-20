@@ -35,6 +35,7 @@
 #include <QScrollArea>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QLabel>
 
 using namespace OT;
 
@@ -63,7 +64,7 @@ KrigingResultWindow::KrigingResultWindow(AnalysisItem * item, QWidget * parent)
 
 void KrigingResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Kriging results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDimension();
@@ -75,7 +76,7 @@ void KrigingResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  VariablesListWidget * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputSample().getDescription()));
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
@@ -231,6 +232,7 @@ void KrigingResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
-  setWidget(mainWidget);
+
+  widgetLayout->addWidget(mainWidget);
 }
 }

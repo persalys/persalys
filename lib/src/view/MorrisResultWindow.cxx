@@ -36,8 +36,6 @@ MorrisResultWindow::MorrisResultWindow(AnalysisItem * item, QWidget * parent)
 {
   initialize(item);
 
-  setWindowTitle(tr("Morris analysis results"));
-
   buildInterface();
 }
 
@@ -80,7 +78,7 @@ void MorrisResultWindow::fillTabWidget()
   // -- graph tabs
   bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  if (OTguiSubWindow::HaveOpenGL32())
+  if (SubWindow::HaveOpenGL32())
   {
     addParaviewWidgetsTabs();
     canUseParaview = true;

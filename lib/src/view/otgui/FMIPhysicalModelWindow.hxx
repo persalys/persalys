@@ -21,7 +21,7 @@
 #ifndef OTGUI_FMIPHYSICALMODELWINDOW_HXX
 #define OTGUI_FMIPHYSICALMODELWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/PhysicalModelItem.hxx"
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/ListWidgetWithCheckBox.hxx"
@@ -253,7 +253,7 @@ private:
 
 
 
-class OTGUI_API FMIPhysicalModelWindow : public OTguiSubWindow
+class OTGUI_API FMIPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

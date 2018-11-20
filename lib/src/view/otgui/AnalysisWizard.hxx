@@ -21,12 +21,12 @@
 #ifndef OTGUI_ANALYSISWIZARD_HXX
 #define OTGUI_ANALYSISWIZARD_HXX
 
-#include "otgui/OTguiWizard.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Wizard.hxx"
+#include "otgui/Study.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API AnalysisWizard : public OTguiWizard
+class OTGUI_API AnalysisWizard : public Wizard
 {
 public:
   AnalysisWizard(const Analysis & analysis, QWidget * parent = 0);

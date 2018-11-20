@@ -8,8 +8,8 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.Add(myStudy)
+myStudy = otguibase.Study('myStudy')
+otguibase.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
 X0 = otguibase.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)

@@ -20,7 +20,7 @@
  */
 #include "otgui/PhysicalModelImplementation.hxx"
 
-#include "otgui/OTTools.hxx"
+#include "otgui/BaseTools.hxx"
 
 #include <openturns/NonCenteredFiniteDifferenceGradient.hxx>
 #include <openturns/CenteredFiniteDifferenceHessian.hxx>

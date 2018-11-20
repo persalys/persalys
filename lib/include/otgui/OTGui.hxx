@@ -24,7 +24,7 @@
 
 #include "otgui/SymbolicPhysicalModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Study.hxx"
 #include "otgui/PythonEnvironment.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 #include "otgui/DataModel.hxx"

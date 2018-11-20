@@ -5,8 +5,8 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.Add(myStudy)
+myStudy = otguibase.Study('myStudy')
+otguibase.Study.Add(myStudy)
 dist_Q = ot.Normal(10200, 100)
 Q = otguibase.Input('Q', 10200, dist_Q, 'Primary energy (W.h)')
 dist_E = ot.Normal(3000, 15)

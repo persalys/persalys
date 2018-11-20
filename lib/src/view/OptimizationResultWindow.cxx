@@ -62,7 +62,7 @@ OptimizationResultWindow::OptimizationResultWindow(AnalysisItem * item, QWidget 
 
 void OptimizationResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Optimization result"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // get output info
   const QString outputName(QString::fromUtf8(result_.getProblem().getObjective().getOutputDescription()[0].c_str()));
@@ -74,7 +74,7 @@ void OptimizationResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  VariablesListWidget * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QStringList() << outputName);
   outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
@@ -236,6 +236,6 @@ void OptimizationResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 }

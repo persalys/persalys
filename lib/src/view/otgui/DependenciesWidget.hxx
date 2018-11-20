@@ -26,7 +26,7 @@
 #include "otgui/VariablesSelectionTableModel.hxx"
 #include "otgui/DependenciesTableModel.hxx"
 #include "otgui/TemporaryLabel.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Study.hxx"
 
 #include <QTableView>
 
@@ -54,7 +54,7 @@ protected:
   void updateVariablesList();
 
 private:
-  OTStudy study_;
+  Study study_;
   PhysicalModel physicalModel_;
   VariablesSelectionTableModel * varTableModel_;
   ResizableStackedWidget * rightSideOfSplitterStackedWidget_;

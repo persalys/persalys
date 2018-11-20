@@ -47,7 +47,7 @@ InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * paren
 
 void InferenceResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Marginals inference results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -59,7 +59,7 @@ void InferenceResultWindow::buildInterface()
   QGroupBox * variablesGroupBox = new QGroupBox(tr("Variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
-  OTguiListWidget * listVariables = new OTguiListWidget;
+  VariablesListWidget * listVariables = new VariablesListWidget;
   listVariables->addItems(variablesNames);
   connect(listVariables, SIGNAL(currentTextChanged(QString)), this, SLOT(updateInferenceResultWidget(QString)));
   variablesLayoutGroupBox->addWidget(listVariables);
@@ -79,7 +79,7 @@ void InferenceResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 
 

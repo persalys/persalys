@@ -21,17 +21,17 @@
 #ifndef OTGUI_WELCOMEWINDOW_HXX
 #define OTGUI_WELCOMEWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
-#include "otgui/OTguiActions.hxx"
+#include "otgui/SubWindow.hxx"
+#include "otgui/Actions.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API WelcomeWindow : public QMdiSubWindow
+class OTGUI_API WelcomeWindow : public QWidget
 {
   Q_OBJECT
 
 public:
-  WelcomeWindow(const OTguiActions* actions, QWidget * parent = 0);
+  WelcomeWindow(const Actions* actions, QWidget * parent = 0);
 };
 }
 #endif

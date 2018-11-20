@@ -29,7 +29,7 @@
 #include "otgui/TranslationManager.hxx"
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/InferenceResultWizard.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 #include "otgui/DocumentationToolButton.hxx"
 
 #ifdef OTGUI_HAVE_OTMORRIS

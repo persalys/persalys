@@ -10,7 +10,7 @@ XMLfilename = 'example.xml'
 if len(sys.argv) > 1:
     XMLfilename = sys.argv[1]
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 myPhysicalModel = otguibase.YACSPhysicalModel('myPhysicalModel', XMLfilename)
 

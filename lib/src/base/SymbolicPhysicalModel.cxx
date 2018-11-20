@@ -20,7 +20,7 @@
  */
 #include "otgui/SymbolicPhysicalModel.hxx"
 
-#include "otgui/OTTools.hxx"
+#include "otgui/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SymbolicFunction.hxx>

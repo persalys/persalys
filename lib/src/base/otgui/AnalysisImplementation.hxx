@@ -22,7 +22,7 @@
 #define OTGUI_ANALYSISIMPLEMENTATION_HXX
 
 #include "PhysicalModel.hxx"
-#include "OTTools.hxx"
+#include "BaseTools.hxx"
 #include "LaunchParametersVisitor.hxx"
 
 namespace OTGUI

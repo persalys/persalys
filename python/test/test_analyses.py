@@ -9,8 +9,8 @@ import numpy as np
 ot.RandomGenerator.SetSeed(0)
 ot.TBB_Disable()
 
-myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.Add(myStudy)
+myStudy = otguibase.Study('myStudy')
+otguibase.Study.Add(myStudy)
 
 # Models
 x1 = otguibase.Input('x1', 0.2, ot.Uniform(0., 10.))

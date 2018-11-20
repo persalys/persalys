@@ -4,9 +4,9 @@ include_directories (${PYTHON_INCLUDE_DIRS})
 ot_add_current_dir_to_include_dirs ()
 
 set(BASE_SOURCEFILES DistributionDictionary.cxx
-                     OTTools.cxx
-                     OTguiException.cxx
-                     Observer.cxx Observable.cxx OTStudy.cxx OTStudyImplementation.cxx
+                     BaseTools.cxx
+                     AppliException.cxx
+                     Observer.cxx Observable.cxx Study.cxx StudyImplementation.cxx
                      Variable.cxx Input.cxx Output.cxx
                      DataSample.cxx
                      DataModel.cxx
@@ -67,8 +67,8 @@ if (OTMORRIS_FOUND)
 endif ()
 
 ot_install_header_file ( DistributionDictionary.hxx )
-ot_install_header_file ( OTTools.hxx )
-ot_install_header_file ( OTguiException.hxx )
+ot_install_header_file ( BaseTools.hxx )
+ot_install_header_file ( AppliException.hxx )
 ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
@@ -103,8 +103,8 @@ ot_install_header_file ( SobolAnalysis.hxx )
 ot_install_header_file ( SobolResult.hxx )
 ot_install_header_file ( SRCAnalysis.hxx )
 ot_install_header_file ( SRCResult.hxx )
-ot_install_header_file ( OTStudy.hxx )
-ot_install_header_file ( OTStudyImplementation.hxx )
+ot_install_header_file ( Study.hxx )
+ot_install_header_file ( StudyImplementation.hxx )
 ot_install_header_file ( Observable.hxx )
 ot_install_header_file ( Observer.hxx )
 ot_install_header_file ( LimitStateImplementation.hxx )

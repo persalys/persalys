@@ -108,7 +108,7 @@ if (OTMORRIS_FOUND)
 ot_pyinstallcheck_test (MorrisAnalysis_std)
 endif ()
 ot_pyinstallcheck_test (OptimizationAnalysis_std)
-ot_pyinstallcheck_test (OTStudy_refCount)
+ot_pyinstallcheck_test (Study_refCount)
 ot_pyinstallcheck_test (Encoding_std)
 ot_pyinstallcheck_test (docstring)
 

@@ -34,7 +34,7 @@ namespace OTGUI
 {
 
 LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , limitState_(item->getLimitState())
   , errorMessageLabel_(0)
 {
@@ -49,10 +49,7 @@ LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
 
 void LimitStateWindow::buildInterface()
 {
-  setWindowTitle(tr("Limit state"));
-
-  QWidget * mainWidget = new QWidget;
-  QGridLayout * gridLayout = new QGridLayout(mainWidget);
+  QGridLayout * gridLayout = new QGridLayout(this);
 
   QLabel * label = new QLabel(tr("Definition of the failure event :"));
   gridLayout->addWidget(label, 0, 0, 1, 3);
@@ -90,8 +87,6 @@ void LimitStateWindow::buildInterface()
   gridLayout->addWidget(errorMessageLabel_, 3, 0, 1, 3);
 
   gridLayout->setRowStretch(4, 2);
-
-  setWidget(mainWidget);
 }
 
 

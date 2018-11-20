@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 {
   PythonEnvironment pyEnv;
 
-  OTStudy study("study1");
+  OTGUI::Study study("study1");
   Input Q("Q", 0., Normal(10200, 100), "Primary energy");
   Input E("E", 0., Normal(3000, 15), "Produced electric energy");
   Input C("C", 0., Normal(4000, 60), "Valued thermal energy");

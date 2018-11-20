@@ -43,7 +43,7 @@ CopulaInferenceResultWindow::CopulaInferenceResultWindow(AnalysisItem* item, QWi
 
 void CopulaInferenceResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Dependencies inference results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -55,7 +55,7 @@ void CopulaInferenceResultWindow::buildInterface()
   QGroupBox * variablesGroupBox = new QGroupBox(tr("Groups of variables"));
   QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
-  OTguiListWidget * listSetOfVariables = new OTguiListWidget;
+  VariablesListWidget * listSetOfVariables = new VariablesListWidget;
   listSetOfVariables->addItems(setOfVariablesNames);
   variablesLayoutGroupBox->addWidget(listSetOfVariables);
 
@@ -96,6 +96,6 @@ void CopulaInferenceResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 }

@@ -21,9 +21,9 @@
 #ifndef OTGUI_STUDYMANAGER_HXX
 #define OTGUI_STUDYMANAGER_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/AnalysisWizard.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 #include "otgui/DataModelDefinitionItem.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
 #include "otgui/MainWidget.hxx"
@@ -43,11 +43,11 @@ public slots:
 
   // create objects
   void createOTStudy();
-  void openAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
+  void openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard = false);
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
 
   // create windows
-  void createOTStudyWindow(OTStudyItem* item);
+  void createOTStudyWindow(StudyItem* item);
   void createDataModelDiagramWindow(DataModelDiagramItem*);
   void createDataModelWindow(DataModelDefinitionItem* item);
   void createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
@@ -66,10 +66,10 @@ public slots:
   void exportPythonScript();
   void saveCurrent();
   void saveAsCurrent();
-  bool save(OTStudyItem* item);
-  bool saveAs(OTStudyItem* item);
+  bool save(StudyItem* item);
+  bool saveAs(StudyItem* item);
   void open(const QString& fileName = "");
-  bool close(OTStudyItem* item);
+  bool close(StudyItem* item);
   bool closeCurrent();
   bool closeAll();
 signals:
@@ -78,7 +78,7 @@ signals:
   void commandExecutionRequested(const QString& command);
 
 protected:
-  void updateView(OTguiSubWindow * window);
+  void updateView(SubWindow * window);
 
 private:
   MainWidget * mainWidget_;

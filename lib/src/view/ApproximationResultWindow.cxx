@@ -66,7 +66,7 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
   if (modelDescriptionWidget_)
     tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
 
-  setWindowTitle(tr("Threshold exceedance results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
@@ -75,7 +75,7 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  VariablesListWidget * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QStringList() << outputName);
   outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
@@ -88,6 +88,6 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
     mainWidget->addWidget(tabWidget);
     mainWidget->setStretchFactor(1, 10);
   }
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 }

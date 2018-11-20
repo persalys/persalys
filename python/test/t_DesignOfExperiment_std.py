@@ -5,7 +5,7 @@ import openturns as ot
 import otguibase
 import os
 
-anOTStudy = otguibase.OTStudy('anOTStudy')
+anOTStudy = otguibase.Study('anOTStudy')
 
 # Model
 X0 = otguibase.Input('X0', 1, ot.Normal())

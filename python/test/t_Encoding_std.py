@@ -7,7 +7,7 @@ import openturns.testing
 import otguibase
 import os
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # data
 filename = 'données.csv'
@@ -35,7 +35,7 @@ xmlFileName = 'file_with_données.xml'
 myStudy.save(xmlFileName)
 
 # open
-s = otguibase.OTStudy.Open('file_with_données.xml')
+s = otguibase.Study.Open('file_with_données.xml')
 print(s.getPythonScript())
 
 os.remove(filename)

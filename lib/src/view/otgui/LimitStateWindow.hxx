@@ -21,7 +21,7 @@
 #ifndef OTGUI_LIMITSTATEWINDOW_HXX
 #define OTGUI_LIMITSTATEWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/LimitStateItem.hxx"
 #include "otgui/ValueLineEdit.hxx"
 #include "otgui/TemporaryLabel.hxx"
@@ -30,7 +30,7 @@
 
 namespace OTGUI
 {
-class OTGUI_API LimitStateWindow : public OTguiSubWindow
+class OTGUI_API LimitStateWindow : public SubWindow
 {
   Q_OBJECT
 

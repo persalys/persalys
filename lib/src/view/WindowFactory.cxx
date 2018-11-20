@@ -62,9 +62,9 @@
 namespace OTGUI
 {
 
-OTguiSubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent)
+SubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent)
 {
-  OTguiSubWindow * window = 0;
+  SubWindow * window = 0;
 
   const QString physicalModelType = item->getPhysicalModel().getImplementation()->getClassName().c_str();
 
@@ -167,9 +167,9 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
 }
 
 
-OTguiSubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent)
+SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent)
 {
-  OTguiSubWindow * resultWindow = 0;
+  SubWindow * resultWindow = 0;
 
   const QString analysisType = item->data(Qt::UserRole).toString();
 

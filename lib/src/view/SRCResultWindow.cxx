@@ -29,6 +29,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QSplitter>
+#include <QLabel>
 
 using namespace OT;
 
@@ -58,7 +59,7 @@ SRCResultWindow::SRCResultWindow(AnalysisItem * item, QWidget * parent)
 
 void SRCResultWindow::buildInterface()
 {
-  setWindowTitle(tr("SRC analysis results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
@@ -70,7 +71,7 @@ void SRCResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  VariablesListWidget * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
@@ -124,6 +125,7 @@ void SRCResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
-  setWidget(mainWidget);
+
+  widgetLayout->addWidget(mainWidget);
 }
 }

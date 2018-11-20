@@ -26,7 +26,7 @@
 
 namespace OTGUI
 {
-class OTGUI_API LimitStateItem : public OTguiItem, public Observer
+class OTGUI_API LimitStateItem : public Item, public Observer
 {
   Q_OBJECT
 

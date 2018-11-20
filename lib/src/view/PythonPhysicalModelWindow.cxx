@@ -32,12 +32,11 @@ namespace OTGUI
 {
 
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
 {
-  setWindowTitle(tr("Python physical model"));
+//  setFocusPolicy(Qt::ClickFocus);
 
-  setFocusPolicy(Qt::ClickFocus);
-
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
   QSplitter * horizontalSplitter = new QSplitter(Qt::Horizontal);
 
   // left side: code editor
@@ -70,6 +69,6 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   horizontalSplitter->addWidget(rightSideWidget);
 
   ////////////////
-  setWidget(horizontalSplitter);
+  widgetLayout->addWidget(horizontalSplitter);
 }
 }

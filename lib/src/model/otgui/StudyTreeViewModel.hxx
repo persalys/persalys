@@ -21,7 +21,7 @@
 #ifndef OTGUI_STUDYTREEVIEWMODEL_HXX
 #define OTGUI_STUDYTREEVIEWMODEL_HXX
 
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 #include <QStandardItemModel>
 
@@ -36,13 +36,13 @@ public:
 
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-  void appendItem(const OTStudy & otStudy);
+  void appendItem(const Study & otStudy);
 
   virtual void update(Observable * source, const OT::String & message);
 
 signals:
-  void studyCreated(OTStudyItem*);
-  void studySubItemsAdded(OTStudyItem*);
+  void studyCreated(StudyItem*);
+  void studySubItemsAdded(StudyItem*);
 
 public:
   static const int DefaultSignificantDigits;

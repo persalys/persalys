@@ -28,6 +28,7 @@
 #include <QGraphicsProxyWidget>
 #include <QSplitter>
 #include <QTextEdit>
+#include <QLabel>
 
 using namespace OT;
 
@@ -35,12 +36,9 @@ namespace OTGUI
 {
 
 PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem * physicalModelDiagramItem, QWidget * parent)
-  : OTguiSubWindow(physicalModelDiagramItem, parent)
+  : SubWindow(physicalModelDiagramItem, parent)
 {
-  setWindowTitle(tr("Physical model diagram"));
-
-  QWidget * mainWidget = new QWidget;
-  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
   QLabel * title = new QLabel(tr("Use pattern"));
   title->setStyleSheet("font: bold");
@@ -381,8 +379,5 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   splitter->setStretchFactor(1, 1);
 
   mainLayout->addWidget(splitter);
-
-  ////////////////
-  setWidget(mainWidget);
 }
 }

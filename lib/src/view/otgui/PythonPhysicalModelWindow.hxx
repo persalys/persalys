@@ -21,12 +21,12 @@
 #ifndef OTGUI_PYTHONPHYSICALMODELWINDOW_HXX
 #define OTGUI_PYTHONPHYSICALMODELWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API PythonPhysicalModelWindow : public OTguiSubWindow
+class OTGUI_API PythonPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

@@ -21,8 +21,8 @@
 #ifndef OTGUI_SCREENINGRESULTWIZARD_HXX
 #define OTGUI_SCREENINGRESULTWIZARD_HXX
 
-#include "otgui/OTguiWizard.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Wizard.hxx"
+#include "otgui/Study.hxx"
 #include "otgui/MorrisResultTableModel.hxx"
 
 #include <QComboBox>
@@ -30,12 +30,12 @@
 
 namespace OTGUI
 {
-class OTGUI_API ScreeningResultWizard : public OTguiWizard
+class OTGUI_API ScreeningResultWizard : public Wizard
 {
   Q_OBJECT
 
 public:
-  ScreeningResultWizard(const OTStudy& otStudy, const PhysicalModel& model, QWidget* parent = 0);
+  ScreeningResultWizard(const Study& otStudy, const PhysicalModel& model, QWidget* parent = 0);
 
   OT::Indices getInputsSelection() const;
 
@@ -50,7 +50,7 @@ public slots:
   void updateTableModel(const QString&);
 
 private:
-  OTStudy otStudy_;
+  Study otStudy_;
   PhysicalModel model_;
   QComboBox * screeningResultsComboBox_;
   QComboBox * variablesComboBox_;

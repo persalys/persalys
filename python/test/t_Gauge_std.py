@@ -5,7 +5,7 @@ import sys
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 XMLfilename = 'gauge.xml'
 if len(sys.argv) > 1:

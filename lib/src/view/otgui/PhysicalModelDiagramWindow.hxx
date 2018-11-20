@@ -21,12 +21,12 @@
 #ifndef OTGUI_PHYSICALMODELDIAGRAMWINDOW_HXX
 #define OTGUI_PHYSICALMODELDIAGRAMWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/PhysicalModelDiagramItem.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API PhysicalModelDiagramWindow : public OTguiSubWindow
+class OTGUI_API PhysicalModelDiagramWindow : public SubWindow
 {
   Q_OBJECT
 

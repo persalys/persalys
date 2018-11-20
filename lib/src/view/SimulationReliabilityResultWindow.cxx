@@ -63,7 +63,7 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
 
 void SimulationReliabilityResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Threshold exceedance results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // get output info
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
@@ -75,7 +75,7 @@ void SimulationReliabilityResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  VariablesListWidget * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QStringList() << outputName);
   outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
@@ -111,7 +111,7 @@ void SimulationReliabilityResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 
 

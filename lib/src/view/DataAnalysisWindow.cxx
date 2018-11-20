@@ -55,7 +55,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-DataAnalysisWindow::DataAnalysisWindow(OTguiItem * item, QWidget * parent)
+DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
   : ResultWindow(item, parent)
   , designOfExperiment_()
   , result_()
@@ -131,6 +131,8 @@ void DataAnalysisWindow::buildInterface()
   initializeVariablesNames();
   QStringList variablesNames = outputNames_ + inputNames_;
 
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -138,7 +140,7 @@ void DataAnalysisWindow::buildInterface()
   variablesGroupBox_ = new QGroupBox(tr("Variables"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(variablesGroupBox_);
 
-  variablesListWidget_ = new OTguiListWidget;
+  variablesListWidget_ = new VariablesListWidget;
   fillListWidget();
   groupBoxLayout->addWidget(variablesListWidget_);
 
@@ -151,7 +153,7 @@ void DataAnalysisWindow::buildInterface()
   mainWidget->addWidget(tabWidget_);
   mainWidget->setStretchFactor(1, 10);
 
-  setWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget);
 }
 
 
@@ -181,7 +183,7 @@ void DataAnalysisWindow::fillTabWidget()
   }
   bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  if (OTguiSubWindow::HaveOpenGL32())
+  if (SubWindow::HaveOpenGL32())
   {
     addParaviewWidgetsTabs();
     canUseParaview = true;

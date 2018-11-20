@@ -25,7 +25,7 @@
 
 namespace OTGUI
 {
-class OTGUI_API DesignOfExperimentDefinitionItem : public OTguiItem, public Observer
+class OTGUI_API DesignOfExperimentDefinitionItem : public Item, public Observer
 {
   Q_OBJECT
 

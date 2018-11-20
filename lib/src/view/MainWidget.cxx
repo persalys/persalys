@@ -20,6 +20,8 @@
  */
 #include "otgui/MainWidget.hxx"
 
+#include "otgui/WelcomeWindow.hxx"
+
 #include <QSplitter>
 #include <QVBoxLayout>
 
@@ -29,9 +31,9 @@ namespace OTGUI
 MainWidget::MainWidget(QWidget* parent)
   : QWidget(parent)
   , studyTree_(new StudyTreeView(this))
-  , mdiArea_(new OTguiMdiArea(this))
+  , subWindowsStackedWidget_(new SubWindowsStackedWidget(this))
   , graphSettingDockWidget_(new QDockWidget(tr("Graph setting"), this))
-  , actions_(new OTguiActions(this))
+  , actions_(new Actions(this))
 {
   buildInterface();
 }
@@ -39,6 +41,8 @@ MainWidget::MainWidget(QWidget* parent)
 
 void MainWidget::buildInterface()
 {
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
   // main widget
   QSplitter * mainSplitter = new QSplitter(Qt::Horizontal);
 
@@ -60,14 +64,12 @@ void MainWidget::buildInterface()
   // right side of the mainSplitter
   // - welcome page
   WelcomeWindow * welcomeWindow = new WelcomeWindow(actions_, this);
-  // - MdiArea
-  mdiArea_->addWelcomeWindow(welcomeWindow);
-  mainSplitter->addWidget(mdiArea_);
+  subWindowsStackedWidget_->addWidget(welcomeWindow);
+
+  mainSplitter->addWidget(subWindowsStackedWidget_);
   mainSplitter->setStretchFactor(1, 3);
 
-  QVBoxLayout *layout = new QVBoxLayout;
-  layout->addWidget(mainSplitter);
-  setLayout(layout);
+  widgetLayout->addWidget(mainSplitter);
 }
 
 
@@ -77,13 +79,13 @@ StudyTreeView * MainWidget::getStudyTree() const
 }
 
 
-OTguiMdiArea * MainWidget::getMdiArea() const
+SubWindowsStackedWidget * MainWidget::getSubWindowsStackedWidget() const
 {
-  return mdiArea_;
+  return subWindowsStackedWidget_;
 }
 
 
-OTguiActions * MainWidget::getActions() const
+Actions * MainWidget::getActions() const
 {
   return actions_;
 }

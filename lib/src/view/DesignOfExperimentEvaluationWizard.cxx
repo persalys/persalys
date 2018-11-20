@@ -21,7 +21,7 @@
 #include "otgui/DesignOfExperimentEvaluationWizard.hxx"
 
 #include "otgui/DesignOfExperimentEvaluation.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QVBoxLayout>
@@ -36,7 +36,7 @@ namespace OTGUI
 DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis,
     const bool isGeneralWizard,
     QWidget* parent)
-  : OTguiWizard(parent)
+  : Wizard(parent)
   , doesComboBox_(0)
   , doesComboBoxModel_(0)
   , doeLabel_(0)

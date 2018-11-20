@@ -134,8 +134,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       CopulaInferenceResult.i CopulaInferenceResult_doc.i.in
                       CopulaInferenceAnalysis.i CopulaInferenceAnalysis_doc.i.in
                       OptimizationAnalysis.i OptimizationAnalysis_doc.i.in
-                      OTStudyImplementation.i
-                      OTStudy.i OTStudy_doc.i.in
+                      StudyImplementation.i
+                      Study.i Study_doc.i.in
                     )
 
 if (NOT CMAKE_VERSION VERSION_LESS 3.12)

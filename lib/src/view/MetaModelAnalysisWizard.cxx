@@ -20,7 +20,7 @@
  */
 #include "otgui/MetaModelAnalysisWizard.hxx"
 
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 #include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 

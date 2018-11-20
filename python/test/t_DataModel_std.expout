@@ -556,8 +556,8 @@ from __future__ import print_function
 import openturns as ot
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
-otguibase.OTStudy.Add(myStudy)
+myStudy = otguibase.Study('myStudy')
+otguibase.Study.Add(myStudy)
 inputColumns = [0, 2]
 outputColumns = []
 inputNames = ['X0', 'X2']

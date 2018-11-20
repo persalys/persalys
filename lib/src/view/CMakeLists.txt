@@ -9,12 +9,13 @@ ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( MainWindow.cxx )
 ot_add_source_file ( MainWidget.cxx )
-ot_add_source_file ( OTguiToolBar.cxx )
-ot_add_source_file ( OTguiActions.cxx )
-ot_add_source_file ( OTguiMenuBar.cxx )
-ot_add_source_file ( OTguiStatusBar.cxx )
-ot_add_source_file ( OTguiSubWindow.cxx )
-ot_add_source_file ( OTguiWizard.cxx )
+ot_add_source_file ( ToolBar.cxx )
+ot_add_source_file ( Actions.cxx )
+ot_add_source_file ( MenuBar.cxx )
+ot_add_source_file ( StatusBar.cxx )
+ot_add_source_file ( SubWindow.cxx )
+ot_add_source_file ( Wizard.cxx )
+ot_add_source_file ( SubWindowsStackedWidget.cxx )
 ot_add_source_file ( StudyManager.cxx )
 ot_add_source_file ( WindowFactory.cxx )
 ot_add_source_file ( Controller.cxx )
@@ -24,9 +25,8 @@ ot_add_source_file ( DataModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
-ot_add_source_file ( OTguiMdiArea.cxx )
 ot_add_source_file ( WelcomeWindow.cxx )
-ot_add_source_file ( OTStudyWindow.cxx )
+ot_add_source_file ( StudyWindow.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
 ot_add_source_file ( MinMaxTableGroupBox.cxx )
 ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
@@ -103,7 +103,7 @@ ot_add_source_file ( DependenciesWidget.cxx )
 ot_add_source_file ( CopulaWidget.cxx )
 ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
-ot_add_source_file ( OTguiAboutDialog.cxx )
+ot_add_source_file ( AboutDialog.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -115,17 +115,17 @@ endif ()
 
 ot_install_header_file ( MainWindow.hxx )
 ot_install_header_file ( MainWidget.hxx )
-ot_install_header_file ( OTguiActions.hxx )
-ot_install_header_file ( OTguiToolBar.hxx )
-ot_install_header_file ( OTguiMenuBar.hxx )
-ot_install_header_file ( OTguiStatusBar.hxx )
-ot_install_header_file ( OTguiWizard.hxx )
+ot_install_header_file ( Actions.hxx )
+ot_install_header_file ( ToolBar.hxx )
+ot_install_header_file ( MenuBar.hxx )
+ot_install_header_file ( StatusBar.hxx )
+ot_install_header_file ( Wizard.hxx )
+ot_install_header_file ( SubWindowsStackedWidget.hxx )
 ot_install_header_file ( StudyManager.hxx )
 ot_install_header_file ( WindowFactory.hxx )
 ot_install_header_file ( AnalysisWizard.hxx )
-ot_install_header_file ( OTguiMdiArea.hxx )
 ot_install_header_file ( WelcomeWindow.hxx )
-ot_install_header_file ( OTStudyWindow.hxx )
+ot_install_header_file ( StudyWindow.hxx )
 ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
 ot_install_header_file ( DataModelDiagramWindow.hxx )
 ot_install_header_file ( ResultWindow.hxx )
@@ -151,7 +151,7 @@ ot_install_header_file ( ReliabilityIntroPage.hxx )
 ot_install_header_file ( SimulationReliabilityPage.hxx )
 ot_install_header_file ( ApproximationReliabilityPage.hxx )
 ot_install_header_file ( ReliabilityAnalysisWizard.hxx )
-ot_install_header_file ( OTguiSubWindow.hxx )
+ot_install_header_file ( SubWindow.hxx )
 ot_install_header_file ( PhysicalModelWindowWidget.hxx )
 ot_install_header_file ( SymbolicPhysicalModelWindow.hxx )
 ot_install_header_file ( PythonPhysicalModelWindow.hxx )
@@ -208,7 +208,7 @@ ot_install_header_file ( DependenciesWidget.hxx )
 ot_install_header_file ( CopulaWidget.hxx )
 ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
-ot_install_header_file ( OTguiAboutDialog.hxx )
+ot_install_header_file ( AboutDialog.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -220,16 +220,16 @@ endif ()
 
 qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/MainWidget.hxx
-                                  otgui/OTguiActions.hxx
-                                  otgui/OTguiToolBar.hxx
-                                  otgui/OTguiMenuBar.hxx
-                                  otgui/OTguiStatusBar.hxx
-                                  otgui/OTguiSubWindow.hxx
-                                  otgui/OTguiWizard.hxx
-                                  otgui/OTguiMdiArea.hxx
+                                  otgui/Actions.hxx
+                                  otgui/ToolBar.hxx
+                                  otgui/MenuBar.hxx
+                                  otgui/StatusBar.hxx
+                                  otgui/SubWindow.hxx
+                                  otgui/Wizard.hxx
+                                  otgui/SubWindowsStackedWidget.hxx
                                   otgui/StudyManager.hxx
                                   otgui/WelcomeWindow.hxx
-                                  otgui/OTStudyWindow.hxx
+                                  otgui/StudyWindow.hxx
                                   otgui/PhysicalModelDiagramWindow.hxx
                                   otgui/DataModelDiagramWindow.hxx
                                   otgui/ResultWindow.hxx
@@ -306,7 +306,7 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaWidget.hxx
                                   otgui/CopulaInferenceWizard.hxx
                                   otgui/CopulaInferenceResultWizard.hxx
-                                  otgui/OTguiAboutDialog.hxx
+                                  otgui/AboutDialog.hxx
                                   )
 
 

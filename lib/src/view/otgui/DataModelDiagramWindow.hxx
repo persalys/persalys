@@ -21,12 +21,12 @@
 #ifndef OTGUI_DATAMODELDIAGRAMWINDOW_HXX
 #define OTGUI_DATAMODELDIAGRAMWINDOW_HXX
 
-#include "otgui/OTguiSubWindow.hxx"
+#include "otgui/SubWindow.hxx"
 #include "otgui/DataModelDiagramItem.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API DataModelDiagramWindow : public OTguiSubWindow
+class OTGUI_API DataModelDiagramWindow : public SubWindow
 {
   Q_OBJECT
 

@@ -37,7 +37,7 @@ namespace OTGUI
 {
 
 AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress, QWidget * parent)
-  : OTguiSubWindow(item, parent)
+  : SubWindow(item, parent)
   , analysisInProgress_(analysisInProgress)
   , analysisItem_(item)
   , progressBar_(0)
@@ -63,7 +63,7 @@ void AnalysisWindow::setErrorMessage(QString message)
 
 void AnalysisWindow::buildInterface()
 {
-  setWindowTitle(tr("Analysis window"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   QWidget * mainWidget = new QWidget;
   QGridLayout * mainLayout = new QGridLayout(mainWidget);
@@ -124,7 +124,7 @@ void AnalysisWindow::buildInterface()
   // initialization
   initializeWidgets();
 
-  setWidget(scrollArea);
+  widgetLayout->addWidget(scrollArea);
 }
 
 

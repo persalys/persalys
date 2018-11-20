@@ -132,7 +132,7 @@
         <UML:AssociationEnd changeability="changeable" type="7Pxx9iHUaf7G" visibility="public" name="" xmi.id="vcPEoZfkyYC3" aggregation="none" isSpecification="false" isNavigable="true"/>
        </UML:Association.connection>
       </UML:Association>
-      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="OTStudyImplementation" xmi.id="G2pZVm4AWYkd" isSpecification="false" isAbstract="false">
+      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="StudyImplementation" xmi.id="G2pZVm4AWYkd" isSpecification="false" isAbstract="false">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="FCFvL5x88vGg"/>
        </UML:GeneralizableElement.generalization>
@@ -287,7 +287,7 @@
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="QStandardItemModel" xmi.id="OfAGd6J9EiMb" isSpecification="false" isAbstract="false"/>
-      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="list OTStudy" xmi.id="bLxw3GqsssqB" isSpecification="false" isAbstract="false"/>
+      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="list Study" xmi.id="bLxw3GqsssqB" isSpecification="false" isAbstract="false"/>
       <UML:Generalization namespace="Logical View" visibility="public" name="" xmi.id="JSQTOALxTJrX" parent="OfAGd6J9EiMb" isSpecification="false" discriminator="" child="Y8RCPJde4fpv"/>
       <UML:Association namespace="Logical View" visibility="public" name="" xmi.id="Sk10RfBOoqTX" isSpecification="false">
        <UML:Association.connection>
@@ -478,7 +478,7 @@
         <UML:AssociationEnd changeability="changeable" type="manxTvcGSF7O" visibility="public" name="" xmi.id="AUCR82zFaxHu" aggregation="none" isSpecification="false" isNavigable="true"/>
        </UML:Association.connection>
       </UML:Association>
-      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="OTStudyItem" xmi.id="Sem8rv6prbx0" isSpecification="false" isAbstract="false">
+      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="StudyItem" xmi.id="Sem8rv6prbx0" isSpecification="false" isAbstract="false">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="2oi1qf08iSEh"/>
         <UML:Generalization xmi.idref="53QQRx974WSE"/>
@@ -488,7 +488,7 @@
         <UML:Generalization xmi.idref="3m91AcfQQyqF"/>
        </UML:GeneralizableElement.generalization>
        <UML:Classifier.feature>
-        <UML:Attribute type="G2pZVm4AWYkd" visibility="private" name="OTStudy_" xmi.id="ejIchSdZcxqN" isSpecification="false"/>
+        <UML:Attribute type="G2pZVm4AWYkd" visibility="private" name="Study_" xmi.id="ejIchSdZcxqN" isSpecification="false"/>
        </UML:Classifier.feature>
       </UML:Class>
       <UML:Generalization namespace="Logical View" visibility="public" name="" xmi.id="2oi1qf08iSEh" parent="noseSVSax0lV" isSpecification="false" discriminator="" child="Sem8rv6prbx0"/>
@@ -565,7 +565,7 @@
       <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="QPoint" xmi.id="MFMaSJs53m3y" isSpecification="false" isAbstract="false"/>
       <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="QMdiArea" xmi.id="SQuwRKM5Bxon" isSpecification="false" isAbstract="false"/>
       <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="QMenu" xmi.id="Fz5F0w9QL3Mm" isSpecification="false" isAbstract="false"/>
-      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="OTguiSubWindow" xmi.id="LhqWeeJ1FdIE" isSpecification="false" isAbstract="false">
+      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="SubWindow" xmi.id="LhqWeeJ1FdIE" isSpecification="false" isAbstract="false">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="uHsFIDzdup9W"/>
        </UML:GeneralizableElement.generalization>
@@ -585,7 +585,7 @@
       <UML:Package isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="std" xmi.id="tLC0IsSVz5ey" isSpecification="false" isAbstract="false">
        <UML:Namespace.ownedElement>
         <UML:Class isRoot="false" isLeaf="false" namespace="tLC0IsSVz5ey" visibility="public" name="vector" xmi.id="p8bxREvxp5Cv" isSpecification="false" isAbstract="false"/>
-        <UML:Class isRoot="false" isLeaf="false" namespace="tLC0IsSVz5ey" visibility="public" name="vector OTStudy" xmi.id="rnQOq1zFH3A8" isSpecification="false" isAbstract="false"/>
+        <UML:Class isRoot="false" isLeaf="false" namespace="tLC0IsSVz5ey" visibility="public" name="vector Study" xmi.id="rnQOq1zFH3A8" isSpecification="false" isAbstract="false"/>
         <UML:Class isRoot="false" isLeaf="false" namespace="tLC0IsSVz5ey" visibility="public" name="vector PhysicalModel" xmi.id="T8Qq0LXRE5tM" isSpecification="false" isAbstract="false"/>
         <UML:Class isRoot="false" isLeaf="false" namespace="tLC0IsSVz5ey" visibility="public" name="vector Analysis" xmi.id="CSDMpz4gmV3a" isSpecification="false" isAbstract="false"/>
         <UML:Class isRoot="false" isLeaf="false" namespace="tLC0IsSVz5ey" visibility="public" name="vector Input" xmi.id="4avTCrz3Xu9t" isSpecification="false" isAbstract="false"/>
@@ -1194,7 +1194,7 @@
         <UML:Generalization xmi.idref="iosNbgk3MfZ3"/>
        </UML:GeneralizableElement.generalization>
       </UML:Class>
-      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="OTguiWizard" xmi.id="Bb0exjOLLbw2" isSpecification="false" isAbstract="false">
+      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="Wizard" xmi.id="Bb0exjOLLbw2" isSpecification="false" isAbstract="false">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="4DfAYveC4GaY"/>
        </UML:GeneralizableElement.generalization>
@@ -1440,7 +1440,7 @@
       <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="ApproximationAnalysis" xmi.id="RPTNuUzAVspU" isSpecification="false" isAbstract="false"/>
       <UML:Generalization namespace="Logical View" visibility="public" name="" xmi.id="P3m82PORppoh" parent="RPTNuUzAVspU" isSpecification="false" discriminator="" child="nBCSubSqkUJE"/>
       <UML:Generalization namespace="Logical View" visibility="public" name="" xmi.id="eZvTMh8cTyN6" parent="4QPkmf0luVWG" isSpecification="false" discriminator="" child="nBCSubSqkUJE"/>
-      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="OTguiItem" xmi.id="RACyIHEoWd9k" isSpecification="false" isAbstract="false">
+      <UML:Class isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="Item" xmi.id="RACyIHEoWd9k" isSpecification="false" isAbstract="false">
        <UML:GeneralizableElement.generalization>
         <UML:Generalization xmi.idref="JKMXQ4EpCOoV"/>
         <UML:Generalization xmi.idref="27MFV8iB8xLk"/>
@@ -1495,7 +1495,7 @@
       <UML:Dependency namespace="Logical View" visibility="public" name="" xmi.id="5eMFIV9qGhxq" client="G2pZVm4AWYkd" isSpecification="false" supplier="ORi3zSmqqDmO"/>
       <UML:Dependency namespace="Logical View" visibility="public" name="" xmi.id="v15Ag00F87Ww" client="G2pZVm4AWYkd" isSpecification="false" supplier="sssBqjKC3yGZ"/>
       <UML:Dependency namespace="Logical View" visibility="public" name="" xmi.id="BLsKQPG2dZdD" client="G2pZVm4AWYkd" isSpecification="false" supplier="ORi3zSmqqDmO"/>
-      <UML:Interface isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="OTStudy" xmi.id="fYDH7qUSkTlJ" isSpecification="false" stereotype="interface" isAbstract="true"/>
+      <UML:Interface isRoot="false" isLeaf="false" namespace="Logical View" visibility="public" name="Study" xmi.id="fYDH7qUSkTlJ" isSpecification="false" stereotype="interface" isAbstract="true"/>
       <UML:Association namespace="Logical View" visibility="public" name="" xmi.id="TWdEmvPSTcjZ" isSpecification="false">
        <UML:Association.connection>
         <UML:AssociationEnd changeability="changeable" type="fYDH7qUSkTlJ" visibility="public" name="" xmi.id="RB19cmSrLHmn" aggregation="none" isSpecification="false" isNavigable="true"/>
@@ -1725,7 +1725,7 @@
            <startpoint starty="-1994.48" startx="-819.894"/>
            <endpoint endx="-1396.59" endy="-1242.9"/>
           </linepath>
-          <floatingtext usefillcolor="1" posttext="" width="70" linewidth="none" height="18" xmi.id="Iufq36BipUKV" textcolor="none" usesdiagramfillcolor="1" y="-1203.8" text="OTStudy_" font="Sans Serif,9,-1,0,50,0,0,0,0,0" showstereotype="1" linecolor="none" localid="bjSuRGhKthrG" usesdiagramusefillcolor="1" pretext="-" fillcolor="none" x="-1374.08" role="710" isinstance="0"/>
+          <floatingtext usefillcolor="1" posttext="" width="70" linewidth="none" height="18" xmi.id="Iufq36BipUKV" textcolor="none" usesdiagramfillcolor="1" y="-1203.8" text="Study_" font="Sans Serif,9,-1,0,50,0,0,0,0,0" showstereotype="1" linecolor="none" localid="bjSuRGhKthrG" usesdiagramusefillcolor="1" pretext="-" fillcolor="none" x="-1374.08" role="710" isinstance="0"/>
          </assocwidget>
          <assocwidget linewidth="none" font="Sans Serif,9,-1,0,50,0,0,0,0,0" indexa="1" totalcounta="2" type="500" linecolor="none" widgetbid="aWqceOzXOzC3" widgetaid="LhqWeeJ1FdIE" indexb="1" xmi.id="uHsFIDzdup9W" usesdiagramfillcolor="0" textcolor="none" usefillcolor="1" fillcolor="#ffff00" usesdiagramusefillcolor="0" totalcountb="2" seqnum="">
           <linepath layout="Polyline">

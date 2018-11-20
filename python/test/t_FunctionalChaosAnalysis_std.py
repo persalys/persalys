@@ -7,7 +7,7 @@ import otguibase
 
 ot.RandomGenerator.SetSeed(0)
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # Model
 xi1 = otguibase.Input('xi1', ot.Uniform(0., 10.))

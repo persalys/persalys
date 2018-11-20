@@ -26,7 +26,7 @@ namespace OTGUI
 {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel, const String observerType)
-  : OTguiItem("Unnamed", "NoUserRole")
+  : Item("Unnamed", "NoUserRole")
   , Observer(observerType)
   , physicalModel_(physicalModel)
 {

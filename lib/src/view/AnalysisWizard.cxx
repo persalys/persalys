@@ -24,7 +24,7 @@ namespace OTGUI
 {
 
 AnalysisWizard::AnalysisWizard(const Analysis & analysis, QWidget * parent)
-  : OTguiWizard(parent)
+  : Wizard(parent)
   , analysis_(analysis)
 {
 }

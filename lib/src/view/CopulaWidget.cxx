@@ -33,6 +33,7 @@
 #include <QSplitter>
 #include <QScrollArea>
 #include <QDesktopServices>
+#include <QLabel>
 
 using namespace OT;
 

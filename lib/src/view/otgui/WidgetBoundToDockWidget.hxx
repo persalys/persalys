@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget bound to a dock widget
+ *  @brief QWidget bounds to a dock widget
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -22,9 +22,8 @@
 #define OTGUI_WIDGETBOUNDTODOCKWIDGET_HXX
 
 #include "otgui/MainWidget.hxx"
-#include "otgui/OTGuiprivate.hxx"
 
-#include <QMdiSubWindow>
+#include <QWidget>
 
 namespace OTGUI
 {
@@ -36,7 +35,6 @@ public:
   WidgetBoundToDockWidget(QWidget* parent = 0);
 
   MainWidget * findMainWidgetInHierachy();
-  QMdiSubWindow * findSubWindowInHierachy();
 
   void setDockWidget(QWidget*);
 
@@ -47,16 +45,12 @@ protected:
   void showDockWidget();
   void hideDockWidget();
 
-public slots:
-  void updateDockWidgetVisibility(Qt::WindowStates, Qt::WindowStates);
 signals:
   void showDockWidgetRequested(QWidget*);
   void hideDockWidgetRequested(QWidget*);
 
 private:
   QWidget * dockWidget_;
-  bool dockWidgetAlreadyShown_;
-  QMdiSubWindow * parentSubWindow_;
 };
 }
 #endif

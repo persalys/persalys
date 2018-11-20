@@ -31,8 +31,6 @@ DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentD
   // parameters widget
   setParameters(item->getAnalysis(), tr("Design of experiments creation parameters"));
 
-  setWindowTitle(tr("Design of experiments"));
-
   buildInterface();
 }
 
@@ -43,7 +41,7 @@ void DesignOfExperimentInputWindow::fillTabWidget()
 
   bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  if (OTguiSubWindow::HaveOpenGL32())
+  if (SubWindow::HaveOpenGL32())
   {
     addParaviewWidgetsTabs();
     canUseParaview = true;

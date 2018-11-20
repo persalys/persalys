@@ -21,7 +21,7 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 using namespace OT;
 
@@ -40,9 +40,9 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, c
 
   if (isGeneralWizard)
   {
-    if (Observer * obs = limitState.getImplementation().get()->getObserver("OTStudy"))
+    if (Observer * obs = limitState.getImplementation().get()->getObserver("Study"))
     {
-      OTStudyImplementation * study = dynamic_cast<OTStudyImplementation*>(obs);
+      StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
       Q_ASSERT(study);
       for (UnsignedInteger i = 0; i < study->getLimitStates().getSize(); ++i)
       {

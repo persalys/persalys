@@ -43,7 +43,7 @@ ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item, QW
 
 void ModelEvaluationResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Model evaluation result"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   QTabWidget * tabWidget = new QTabWidget;
 
@@ -103,6 +103,6 @@ void ModelEvaluationResultWindow::buildInterface()
   if (modelDescriptionWidget_)
     tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
 
-  setWidget(tabWidget);
+  widgetLayout->addWidget(tabWidget);
 }
 }

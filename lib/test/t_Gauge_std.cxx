@@ -20,7 +20,7 @@
  */
 #include "openturns/OT.hxx"
 #include "openturns/OTtestcode.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Study.hxx"
 #include "otgui/YACSPhysicalModel.hxx"
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/ModelEvaluation.hxx"
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
   }
   try
   {
-    OTStudy myStudy("myStudy");
+    Study myStudy("myStudy");
 
     YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
     myPhysicalModel.setInputDistribution("Conductivity", Normal(0.5, 0.01));

@@ -20,7 +20,7 @@
  */
 #include "otgui/CustomStandardItemModel.hxx"
 
-#include "otgui/OTguiException.hxx"
+#include "otgui/AppliException.hxx"
 
 #include <QFile>
 

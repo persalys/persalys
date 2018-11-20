@@ -21,8 +21,8 @@
 #ifndef OTGUI_COPULAINFERENCERESULTWIZARD_HXX
 #define OTGUI_COPULAINFERENCERESULTWIZARD_HXX
 
-#include "otgui/OTguiWizard.hxx"
-#include "otgui/OTStudy.hxx"
+#include "otgui/Wizard.hxx"
+#include "otgui/Study.hxx"
 #include "otgui/TemporaryLabel.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 
@@ -31,12 +31,12 @@
 
 namespace OTGUI
 {
-class OTGUI_API CopulaInferenceResultWizard : public OTguiWizard
+class OTGUI_API CopulaInferenceResultWizard : public Wizard
 {
   Q_OBJECT
 
 public:
-  CopulaInferenceResultWizard(const OTStudy &otStudy, const OT::Description &variables, QWidget *parent = 0);
+  CopulaInferenceResultWizard(const Study &otStudy, const OT::Description &variables, QWidget *parent = 0);
 
   OT::Copula getCopula() const;
 
@@ -50,7 +50,7 @@ public slots:
   void updateVariablesTable(const QString &text);
 
 private:
-  OTStudy otStudy_;
+  Study otStudy_;
   OT::Description variables_;
   QComboBox * inferenceResultsComboBox_;
   QComboBox * variablesComboBox_;

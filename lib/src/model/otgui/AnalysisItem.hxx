@@ -21,14 +21,14 @@
 #ifndef OTGUI_ANALYSISITEM_HXX
 #define OTGUI_ANALYSISITEM_HXX
 
-#include "otgui/OTguiItem.hxx"
+#include "otgui/Item.hxx"
 #include "otgui/Analysis.hxx"
 #include "otgui/MetaModel.hxx"
 #include "otgui/DesignOfExperiment.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API AnalysisItem : public OTguiItem, public Observer
+class OTGUI_API AnalysisItem : public Item, public Observer
 {
   Q_OBJECT
 

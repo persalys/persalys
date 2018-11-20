@@ -6,7 +6,7 @@ import openturns as ot
 import openturns.testing
 import otguibase
 
-myStudy = otguibase.OTStudy('myStudy')
+myStudy = otguibase.Study('myStudy')
 
 # Model
 dist_Q = ot.TruncatedDistribution(

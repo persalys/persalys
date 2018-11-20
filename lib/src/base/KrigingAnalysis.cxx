@@ -21,7 +21,7 @@
 #include "otgui/KrigingAnalysis.hxx"
 
 #include "otgui/SimulationAnalysis.hxx"
-#include "otgui/OTTools.hxx"
+#include "otgui/BaseTools.hxx"
 
 #include <openturns/OTBase.hxx>
 

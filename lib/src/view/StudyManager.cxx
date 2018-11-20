@@ -22,7 +22,7 @@
 
 #include "otgui/WindowFactory.hxx"
 
-#include "otgui/OTStudyWindow.hxx"
+#include "otgui/StudyWindow.hxx"
 #include "otgui/DataModelDiagramWindow.hxx"
 #include "otgui/PhysicalModelDiagramWindow.hxx"
 #include "otgui/ProbabilisticModelWindow.hxx"
@@ -38,8 +38,6 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include <iostream>
-
 using namespace OT;
 
 namespace OTGUI
@@ -50,7 +48,7 @@ StudyManager::StudyManager(MainWidget * mainWidget, QObject * parent)
   , mainWidget_(mainWidget)
   , analysisInProgress_(false)
 {
-  connect(mainWidget_->getStudyTree(), SIGNAL(studyCreated(OTStudyItem*)), this, SLOT(createOTStudyWindow(OTStudyItem*)));
+  connect(mainWidget_->getStudyTree(), SIGNAL(studyCreated(StudyItem*)), this, SLOT(createOTStudyWindow(StudyItem*)));
 
   connect(mainWidget_->getActions()->newAction(), SIGNAL(triggered()), this, SLOT(createOTStudy()));
   connect(mainWidget_->getActions()->openAction(), SIGNAL(triggered()), this, SLOT(open()));
@@ -79,9 +77,9 @@ void StudyManager::showErrorMessage(QString message)
 }
 
 
-void StudyManager::updateView(OTguiSubWindow * window)
+void StudyManager::updateView(SubWindow * window)
 {
-  mainWidget_->getMdiArea()->addSubWindow(window);
+  mainWidget_->getSubWindowsStackedWidget()->addSubWindow(window);
   mainWidget_->getStudyTree()->setCurrentIndex(window->getItem()->index());
   mainWidget_->getStudyTree()->setExpanded(window->getItem()->index(), true);
 }
@@ -90,8 +88,8 @@ void StudyManager::updateView(OTguiSubWindow * window)
 void StudyManager::createOTStudy()
 {
   // create a new study with an available name
-  OTStudy otstudy(OTStudy::GetAvailableName());
-  OTStudy::Add(otstudy);
+  Study otstudy(Study::GetAvailableName());
+  Study::Add(otstudy);
 }
 
 
@@ -107,7 +105,7 @@ void StudyManager::openDesignOfExperimentEvaluationWizard(const Analysis& analys
 }
 
 
-void StudyManager::openAnalysisWizard(OTguiItem* item, const Analysis& analysis, const bool isGeneralWizard)
+void StudyManager::openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard)
 {
   if (!item || !item->getParentOTStudyItem())
     return;
@@ -122,7 +120,7 @@ void StudyManager::openAnalysisWizard(OTguiItem* item, const Analysis& analysis,
 }
 
 
-void StudyManager::createOTStudyWindow(OTStudyItem* item)
+void StudyManager::createOTStudyWindow(StudyItem* item)
 {
   if (!item)
     return;
@@ -132,12 +130,12 @@ void StudyManager::createOTStudyWindow(OTStudyItem* item)
   connect(item, SIGNAL(dataModelItemCreated(DataModelDiagramItem*)), this, SLOT(createDataModelDiagramWindow(DataModelDiagramItem*)));
   connect(item, SIGNAL(physicalModelItemCreated(PhysicalModelDiagramItem*)), this, SLOT(createPhysicalModelDiagramWindow(PhysicalModelDiagramItem*)));
   connect(item, SIGNAL(exportRequested()), this, SLOT(exportPythonScript()));
-  connect(item, SIGNAL(saveRequested(OTStudyItem*)), this, SLOT(save(OTStudyItem*)));
-  connect(item, SIGNAL(saveAsRequested(OTStudyItem*)), this, SLOT(saveAs(OTStudyItem*)));
-  connect(item, SIGNAL(closeRequested(OTStudyItem*)), this, SLOT(close(OTStudyItem*)));
+  connect(item, SIGNAL(saveRequested(StudyItem*)), this, SLOT(save(StudyItem*)));
+  connect(item, SIGNAL(saveAsRequested(StudyItem*)), this, SLOT(saveAs(StudyItem*)));
+  connect(item, SIGNAL(closeRequested(StudyItem*)), this, SLOT(close(StudyItem*)));
 
   // window
-  OTStudyWindow * window = new OTStudyWindow(item, mainWidget_);
+  StudyWindow * window = new StudyWindow(item, mainWidget_);
 
   updateView(window);
 }
@@ -153,7 +151,7 @@ void StudyManager::createDataModelDiagramWindow(DataModelDiagramItem* item)
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), mainWidget_->getStudyTree(), SLOT(setCurrentIndex(QModelIndex)));
   connect(item, SIGNAL(modelDefinitionWindowRequested(DataModelDefinitionItem*)), this, SLOT(createDataModelWindow(DataModelDefinitionItem*)));
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis, bool)));
+  connect(item, SIGNAL(analysisRequested(Item*, Analysis, bool)), this, SLOT(openAnalysisWizard(Item*, Analysis, bool)));
 
   // window
   DataModelDiagramWindow * window = new DataModelDiagramWindow(item, mainWidget_);
@@ -169,7 +167,7 @@ void StudyManager::createDataModelWindow(DataModelDefinitionItem* item)
 
   // connections
   connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis)));
+  connect(item, SIGNAL(analysisRequested(Item*, Analysis)), this, SLOT(openAnalysisWizard(Item*, Analysis)));
 
   // window
   DataModelWindow * window = new DataModelWindow(item, mainWidget_);
@@ -192,7 +190,7 @@ void StudyManager::createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* it
   connect(item, SIGNAL(limitStateCreated(LimitStateItem*)), this, SLOT(createLimitStateWindow(LimitStateItem*)));
   connect(item, SIGNAL(designOfExperimentEvaluationRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
   connect(item, SIGNAL(doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis, bool)));
+  connect(item, SIGNAL(analysisRequested(Item*, Analysis, bool)), this, SLOT(openAnalysisWizard(Item*, Analysis, bool)));
 
   // window
   PhysicalModelDiagramWindow * window = new PhysicalModelDiagramWindow(item, mainWidget_);
@@ -208,10 +206,10 @@ void StudyManager::createPhysicalModelWindow(PhysicalModelDefinitionItem* item)
 
   // connections
   connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(openAnalysisWizard(OTguiItem*, const Analysis&)));
+  connect(item, SIGNAL(analysisRequested(Item*, const Analysis&)), this, SLOT(openAnalysisWizard(Item*, const Analysis&)));
 
   // window
-  OTguiSubWindow * window = WindowFactory::GetPhysicalModelWindow(item, mainWidget_);
+  SubWindow * window = WindowFactory::GetPhysicalModelWindow(item, mainWidget_);
 
   updateView(window);
 }
@@ -224,7 +222,7 @@ void StudyManager::createProbabilisticModelWindow(ProbabilisticModelItem* item)
 
   // connections
   connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(openAnalysisWizard(OTguiItem*, const Analysis&)));
+  connect(item, SIGNAL(analysisRequested(Item*, const Analysis&)), this, SLOT(openAnalysisWizard(Item*, const Analysis&)));
 
   // window
   ProbabilisticModelWindow * window = new ProbabilisticModelWindow(item, mainWidget_);
@@ -239,7 +237,7 @@ void StudyManager::createLimitStateWindow(LimitStateItem* item)
     return;
 
   // connections
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, const Analysis&)), this, SLOT(openAnalysisWizard(OTguiItem*, const Analysis&)));
+  connect(item, SIGNAL(analysisRequested(Item*, const Analysis&)), this, SLOT(openAnalysisWizard(Item*, const Analysis&)));
   connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
 
@@ -263,7 +261,7 @@ void StudyManager::createDesignOfExperimentWindow(DesignOfExperimentDefinitionIt
     connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
     connect(item, SIGNAL(modifyAnalysisRequested(DesignOfExperimentDefinitionItem*)), this, SLOT(modifyDesignOfExperiment(DesignOfExperimentDefinitionItem*)));
     connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
-    connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis)));
+    connect(item, SIGNAL(analysisRequested(Item*, Analysis)), this, SLOT(openAnalysisWizard(Item*, Analysis)));
     connect(item, SIGNAL(DOEEvaluationRequested(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
     connect(item, SIGNAL(updateEvaluationWindowRequested(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
   }
@@ -293,7 +291,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
   // do removeSubWindow if the analysis run method has been launched from a Python script
   item->emitRemoveWindowRequested();
 
-  OTguiSubWindow * window = 0;
+  SubWindow * window = 0;
   QString message = "";
 
   // if analysis has valid result
@@ -403,7 +401,7 @@ void StudyManager::importPythonScript()
 
 void StudyManager::exportPythonScript()
 {
-  OTStudyItem * item = qobject_cast<OTStudyItem *>(sender());
+  StudyItem * item = qobject_cast<StudyItem *>(sender());
 
   if (!item)
   {
@@ -424,7 +422,7 @@ void StudyManager::exportPythonScript()
 
 void StudyManager::saveCurrent()
 {
-  OTguiItem * item = mainWidget_->getStudyTree()->getCurrentItem();
+  Item * item = mainWidget_->getStudyTree()->getCurrentItem();
   if (!item)
   {
     qDebug() << "StudyManager::saveCurrent : item NULL\n";
@@ -437,7 +435,7 @@ void StudyManager::saveCurrent()
 
 void StudyManager::saveAsCurrent()
 {
-  OTguiItem * item = mainWidget_->getStudyTree()->getCurrentItem();
+  Item * item = mainWidget_->getStudyTree()->getCurrentItem();
   if (!item)
   {
     qDebug() << "StudyManager::saveCurrent : item NULL\n";
@@ -448,7 +446,7 @@ void StudyManager::saveAsCurrent()
 }
 
 
-bool StudyManager::save(OTStudyItem* studyItem)
+bool StudyManager::save(StudyItem* studyItem)
 {
   if (!studyItem)
   {
@@ -471,7 +469,7 @@ bool StudyManager::save(OTStudyItem* studyItem)
 }
 
 
-bool StudyManager::saveAs(OTStudyItem* studyItem)
+bool StudyManager::saveAs(StudyItem* studyItem)
 {
   if (!studyItem)
   {
@@ -481,7 +479,7 @@ bool StudyManager::saveAs(OTStudyItem* studyItem)
   }
 
   const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
-                           tr("Save OTStudy..."),
+                           tr("Save study..."),
                            FileTools::GetCurrentDir() + QDir::separator() + studyItem->data(Qt::DisplayRole).toString(),
                            tr("XML files (*.xml)"));
 
@@ -500,7 +498,7 @@ void StudyManager::open(const QString& recentFileName)
   if (fileName.isEmpty())
   {
     fileName = QFileDialog::getOpenFileName(mainWidget_,
-                                            tr("Open an existing OTStudy"),
+                                            tr("Open an existing study"),
                                             FileTools::GetCurrentDir(),
                                             tr("XML files (*.xml)"));
     if (fileName.isEmpty())
@@ -515,7 +513,7 @@ void StudyManager::open(const QString& recentFileName)
     showErrorMessage(tr("The file '%1' does not exist.").arg(fileName));
     return;
   }
-  else if (OTStudy::GetFileNames().contains(file.absoluteFilePath().toUtf8().constData()))
+  else if (Study::GetFileNames().contains(file.absoluteFilePath().toUtf8().constData()))
   {
     showErrorMessage(tr("The file '%1' is already opened.").arg(fileName));
     return;
@@ -525,8 +523,8 @@ void StudyManager::open(const QString& recentFileName)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   try
   {
-    OTStudy newStudy(OTStudy::Open(fileName.toUtf8().constData()));
-    OTStudy::Add(newStudy);
+    Study newStudy(Study::Open(fileName.toUtf8().constData()));
+    Study::Add(newStudy);
     emit recentFilesListChanged(fileName);
   }
   catch (std::exception & ex)
@@ -540,7 +538,7 @@ void StudyManager::open(const QString& recentFileName)
 }
 
 
-bool StudyManager::close(OTStudyItem* studyItem)
+bool StudyManager::close(StudyItem* studyItem)
 {
   if (!studyItem)
   {
@@ -561,7 +559,7 @@ bool StudyManager::close(OTStudyItem* studyItem)
   {
     const int ret = QMessageBox::warning(mainWidget_,
                                          tr("Warning"),
-                                         tr("Do you want to save the OTStudy '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
+                                         tr("Do you want to save the study '%1' [%2]?").arg(studyItem->getOTStudy().getName().c_str())
                                          .arg(studyItem->getOTStudy().getFileName().c_str()),
                                          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                          QMessageBox::Save);
@@ -578,7 +576,7 @@ bool StudyManager::close(OTStudyItem* studyItem)
     }
   }
   // remove instance
-  OTStudy::Remove(studyItem->getOTStudy());
+  Study::Remove(studyItem->getOTStudy());
 
   return true;
 }
@@ -586,7 +584,7 @@ bool StudyManager::close(OTStudyItem* studyItem)
 
 bool StudyManager::closeCurrent()
 {
-  OTguiItem * item = mainWidget_->getStudyTree()->getCurrentItem();
+  Item * item = mainWidget_->getStudyTree()->getCurrentItem();
   if (!item)
   {
     qDebug() << "StudyManager::closeCurrent : item NULL\n";

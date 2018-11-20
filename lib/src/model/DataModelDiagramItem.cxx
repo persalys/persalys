@@ -20,7 +20,7 @@
  */
 #include "otgui/DataModelDiagramItem.hxx"
 
-#include "otgui/OTStudyItem.hxx"
+#include "otgui/StudyItem.hxx"
 
 #include <QDebug>
 

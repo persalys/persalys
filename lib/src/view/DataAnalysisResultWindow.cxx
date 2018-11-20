@@ -43,8 +43,6 @@ DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item, QWidget 
   initialize(item);
 
   buildInterface();
-
-  setWindowTitle(tr("Data analysis results"));
 }
 
 
@@ -75,7 +73,7 @@ void DataAnalysisResultWindow::fillTabWidget()
   }
   bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  if (OTguiSubWindow::HaveOpenGL32())
+  if (SubWindow::HaveOpenGL32())
   {
     addParaviewWidgetsTabs();
     canUseParaview = true;

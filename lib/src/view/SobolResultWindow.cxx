@@ -29,6 +29,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QSplitter>
+#include <QLabel>
 
 using namespace OT;
 
@@ -59,7 +60,7 @@ SobolResultWindow::SobolResultWindow(AnalysisItem * item, QWidget * parent)
 
 void SobolResultWindow::buildInterface()
 {
-  setWindowTitle(tr("Sobol' analysis results"));
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
@@ -71,7 +72,7 @@ void SobolResultWindow::buildInterface()
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  OTguiListWidget * outputsListWidget = new OTguiListWidget;
+  VariablesListWidget * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
@@ -92,7 +93,7 @@ void SobolResultWindow::buildInterface()
 
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    // get indices confodence interval
+    // get indices confidence interval
     Interval foIndicesInterval;
     if (result_.getFirstOrderIndicesInterval().getSize() == nbOutputs)
       foIndicesInterval = result_.getFirstOrderIndicesInterval()[i];
@@ -158,6 +159,7 @@ void SobolResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
-  setWidget(mainWidget);
+
+  widgetLayout->addWidget(mainWidget);
 }
 }

@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
   try
   {
-    OTStudy myStudy("myStudy");
+    OTGUI::Study myStudy("myStudy");
 
     Input Q("Q", 10200., Normal(10200, 100), "Primary energy");
     Input E("E", 3000., Normal(3000, 15), "Produced electric energy");

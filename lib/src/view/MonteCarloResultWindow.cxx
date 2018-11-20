@@ -38,8 +38,6 @@ MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item, QWidget * pa
     throw InvalidArgumentException (HERE) << "Can NOT build the MonteCarloResultWindow: The analysis of the item is not valid";
 
   buildInterface();
-
-  setWindowTitle(tr("Monte Carlo analysis results"));
 }
 
 
