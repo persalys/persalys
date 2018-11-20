@@ -86,9 +86,18 @@ MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationRe
     Sample lineSample(outputSample);
     lineSample.stack(lineSample);
     plot->plotCurve(lineSample, QPen(Qt::black, 1));
-    plot->setTitle(tr("Metamodel:") + " " + QString::fromUtf8(outputSample.getDescription()[0].c_str()));
-    plot->setAxisTitle(QwtPlot::xBottom, tr("Physical model"));
-    plot->setAxisTitle(QwtPlot::yLeft, tr("Metamodel"));
+
+    if (result.getName() == "K-Fold")
+      plot->setTitle(tr("Curve fitting of K-Fold cross-validation"));
+    else if (result.getName() == "Test sample")
+      plot->setTitle(tr("Curve fitting of the test sample"));
+    else if (result.getName() == "Analytical")
+      plot->setTitle(tr("Curve fitting of the analytical values"));
+    else
+      plot->setTitle(tr("Curve fitting of %1").arg(QString::fromUtf8(outputSample.getDescription()[0].c_str())));
+
+    plot->setAxisTitle(QwtPlot::xBottom, tr("Real output value"));
+    plot->setAxisTitle(QwtPlot::yLeft, tr("Prediction"));
     mainWidgetLayout->addWidget(plot);
 
     // GraphConfigurationWidget
