@@ -187,6 +187,7 @@ void KrigingResultWindow::buildInterface()
         const UnsignedInteger testSampleSize = result_.getValidations()[i].getMetaModelOutputSample().getSize();
         Point indicesTestSample(KPermutationsDistribution(testSampleSize, outputSample.getSize()).getRealization());
         outputSample = Sample(testSampleSize, nbOutputs);
+        outputSample.setDescription(result_.getOutputSample().getDescription());
         std::sort(indicesTestSample.begin(), indicesTestSample.end());
 
         for (UnsignedInteger j = 0; j < testSampleSize; ++j)

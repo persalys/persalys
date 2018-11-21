@@ -114,7 +114,7 @@ void FunctionalChaosResultWindow::buildInterface()
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
         result_.getOutputSample(),
         i,
-        tr("Relative error"),
+        tr("Relative error") + " (1 - R2)",
         this);
 
     plotsStackedWidget->addWidget(validationWidget);
@@ -366,6 +366,7 @@ void FunctionalChaosResultWindow::buildInterface()
         const UnsignedInteger testSampleSize = result_.getValidations()[i].getMetaModelOutputSample().getSize();
         Point indicesTestSample(KPermutationsDistribution(testSampleSize, outputSample.getSize()).getRealization());
         outputSample = Sample(testSampleSize, nbOutputs);
+        outputSample.setDescription(result_.getOutputSample().getDescription());
         std::sort(indicesTestSample.begin(), indicesTestSample.end());
 
         for (UnsignedInteger j = 0; j < testSampleSize; ++j)
