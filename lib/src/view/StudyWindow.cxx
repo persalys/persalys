@@ -51,19 +51,19 @@ void StudyWindow::buildInterface()
 
   QPushButton * button = new DiagramPushButton(tr("Symbolic model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
-  connect(button, SIGNAL(pressed()), studyItem_, SLOT(createSymbolicModel()));
+  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createSymbolicModel()));
   layout->addWidget(button, 0, 0);
 
   button = new DiagramPushButton(tr("Python model"));
   button->setStatusTip(tr("Create a physical model defined with a Python script"));
-  connect(button, SIGNAL(pressed()), studyItem_, SLOT(createPythonModel()));
+  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createPythonModel()));
   layout->addWidget(button, 1, 0);
 
   int row = 2;
 #ifdef OTGUI_HAVE_YACS
   button = new DiagramPushButton(tr("YACS model"));
   button->setStatusTip(tr("Create a physical model defined with an YACS file"));
-  connect(button, SIGNAL(pressed()), studyItem_, SLOT(createYACSModel()));
+  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createYACSModel()));
   layout->addWidget(button, row, 0);
   ++row;
 #endif
@@ -71,7 +71,7 @@ void StudyWindow::buildInterface()
 #ifdef OTGUI_HAVE_OTFMI
   button = new DiagramPushButton(tr("FMI model"));
   button->setStatusTip(tr("Create a physical model defined with a FMU file"));
-  connect(button, SIGNAL(pressed()), studyItem_, SLOT(createFMIModel()));
+  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createFMIModel()));
   layout->addWidget(button, row, 0);
   ++ row;
 #endif
@@ -106,7 +106,7 @@ void StudyWindow::buildInterface()
 
   button = new DiagramPushButton(tr("Data model"));
   button->setStatusTip(tr("Import a sample to create a model"));
-  connect(button, SIGNAL(pressed()), studyItem_, SLOT(createDataModel()));
+  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createDataModel()));
   layout->addWidget(button, 0, 2);
 
   textEdit = new QLabel;
