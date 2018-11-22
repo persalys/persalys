@@ -62,6 +62,8 @@ void SobolResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(new TitleLabel(tr("Sobol' indices")));
+
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
 
@@ -160,6 +162,6 @@ void SobolResultWindow::buildInterface()
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 }

@@ -49,25 +49,38 @@ LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
 
 void LimitStateWindow::buildInterface()
 {
-  QGridLayout * gridLayout = new QGridLayout(this);
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  QLabel * label = new QLabel(tr("Definition of the failure event :"));
-  gridLayout->addWidget(label, 0, 0, 1, 3);
+  mainLayout->addWidget(new TitleLabel(tr("Limit state")));
+
+  // spacer
+  mainLayout->addSpacing(30);
+
+  QLabel * label = new QLabel(tr("Definition of the failure event"));
+  label->setStyleSheet("font: bold");
+  mainLayout->addWidget(label);
+
+  // spacer
+  mainLayout->addSpacing(5);
+
+  // definition widgets
+  QGridLayout * gridLayout = new QGridLayout;
+  int row = 0;
 
   label = new QLabel(tr("Output"));
-  gridLayout->addWidget(label, 1, 0);
+  gridLayout->addWidget(label, row, 0);
 
   label = new QLabel(tr("Operator"));
-  gridLayout->addWidget(label, 1, 1);
+  gridLayout->addWidget(label, row, 1);
 
   label = new QLabel(tr("Threshold"));
-  gridLayout->addWidget(label, 1, 2);
+  gridLayout->addWidget(label, row, 2);
 
   outputsComboBox_ = new QComboBox;
   updateOutputsList();
   outputsComboBox_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOutput(int)));
-  gridLayout->addWidget(outputsComboBox_, 2, 0);
+  gridLayout->addWidget(outputsComboBox_, ++row, 0);
 
   failureComboBox_ = new QComboBox;
   failureComboBox_->addItem(tr("<"), LimitStateWindow::LessOperator);
@@ -76,17 +89,19 @@ void LimitStateWindow::buildInterface()
   failureComboBox_->addItem(tr(">="), LimitStateWindow::GreaterOrEqualOperator);
   updateOperatorWidget();
   connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
-  gridLayout->addWidget(failureComboBox_, 2, 1);
+  gridLayout->addWidget(failureComboBox_, row, 1);
 
   thresholdLineEdit_ = new ValueLineEdit;
   updateThresholdWidget();
   connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
-  gridLayout->addWidget(thresholdLineEdit_, 2, 2);
+  gridLayout->addWidget(thresholdLineEdit_, row, 2);
 
   errorMessageLabel_ = new TemporaryLabel;
-  gridLayout->addWidget(errorMessageLabel_, 3, 0, 1, 3);
+  gridLayout->addWidget(errorMessageLabel_, ++row, 0, 1, 3);
 
-  gridLayout->setRowStretch(4, 2);
+  gridLayout->setRowStretch(++row, 2);
+
+  mainLayout->addLayout(gridLayout, 1);
 }
 
 

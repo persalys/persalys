@@ -72,6 +72,7 @@ DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
   , isConfidenceIntervalRequired_(false)
   , levelConfidenceInterval_(0.)
   , showTable_(false)
+  , titleLabel_(new TitleLabel)
   , variablesGroupBox_(0)
   , variablesListWidget_(0)
   , tabWidget_(0)
@@ -133,6 +134,8 @@ void DataAnalysisWindow::buildInterface()
 
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(titleLabel_);
+
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -153,7 +156,7 @@ void DataAnalysisWindow::buildInterface()
   mainWidget->addWidget(tabWidget_);
   mainWidget->setStretchFactor(1, 10);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 
 

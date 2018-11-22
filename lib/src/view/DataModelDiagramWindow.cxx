@@ -40,9 +40,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  QLabel * title = new QLabel(tr("Use pattern"));
-  title->setStyleSheet("font: bold");
-  mainLayout->addWidget(title, 0, Qt::AlignHCenter);
+  mainLayout->addWidget(new TitleLabel(tr("Study workflow")));
 
   // optimal button size
   int boxWidth = 0;

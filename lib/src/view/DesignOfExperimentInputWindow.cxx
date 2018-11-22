@@ -28,6 +28,8 @@ DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentD
 {
   designOfExperiment_.setInputSample(item->getOriginalInputSample());
 
+  titleLabel_->setText(tr("Design of experiments input sample"));
+
   // parameters widget
   setParameters(item->getAnalysis(), tr("Design of experiments creation parameters"));
 

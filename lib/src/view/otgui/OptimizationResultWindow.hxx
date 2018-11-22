@@ -41,6 +41,7 @@ protected:
 
 private:
   OT::OptimizationResult result_;
+  TitleLabel * titleLabel_;
 };
 }
 #endif

@@ -66,6 +66,8 @@ void KrigingResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(new TitleLabel(tr("Kriging")));
+
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDimension();
 
@@ -233,6 +235,6 @@ void KrigingResultWindow::buildInterface()
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 }

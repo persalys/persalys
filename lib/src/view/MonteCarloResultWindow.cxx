@@ -71,6 +71,8 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
 
   sampleSizeTitle_ = tr("Number of calls") + " ";
 
+  titleLabel_->setText(tr("Monte Carlo method"));
+
   // parameters widget
   setParameters(item->getAnalysis(), tr("Central tendency parameters"));
 

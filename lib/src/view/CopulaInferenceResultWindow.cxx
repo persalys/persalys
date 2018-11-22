@@ -45,6 +45,8 @@ void CopulaInferenceResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(new TitleLabel(tr("Dependence inference")));
+
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // list of the set of variables
@@ -96,6 +98,6 @@ void CopulaInferenceResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 }

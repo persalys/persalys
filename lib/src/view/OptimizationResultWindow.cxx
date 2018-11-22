@@ -46,12 +46,18 @@ namespace OTGUI
 OptimizationResultWindow::OptimizationResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
+  , titleLabel_(0)
 {
   const OptimizationAnalysis * analysis = dynamic_cast<const OptimizationAnalysis*>(item->getAnalysis().getImplementation().get());
   if (!analysis)
     throw InvalidArgumentException(HERE) << "OptimizationResultWindow: the analysis is not a OptimizationAnalysis";
 
   result_ = analysis->getResult();
+
+  // title
+  const QString type = item->getAnalysis().getImplementation()->getParameters()[3].second.c_str();
+  const QString methodName = item->getAnalysis().getImplementation()->getParameters()[2].second.c_str();
+  titleLabel_ = new TitleLabel(type + " - " + methodName);
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Optimization parameters"));
@@ -63,6 +69,8 @@ OptimizationResultWindow::OptimizationResultWindow(AnalysisItem * item, QWidget 
 void OptimizationResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
+  widgetLayout->addWidget(titleLabel_);
 
   // get output info
   const QString outputName(QString::fromUtf8(result_.getProblem().getObjective().getOutputDescription()[0].c_str()));
@@ -236,6 +244,6 @@ void OptimizationResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 }

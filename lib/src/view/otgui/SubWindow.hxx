@@ -23,8 +23,25 @@
 
 #include "otgui/Item.hxx"
 
+#include <QLabel>
+
 namespace OTGUI
 {
+
+// custom QLAbel for all result windows
+class OTGUI_API TitleLabel : public QLabel
+{
+public:
+  TitleLabel(const QString &text = "", QWidget * parent = 0)
+    : QLabel(text, parent)
+  {
+    setFrameStyle(QFrame::StyledPanel);
+    setMargin(5);
+    setStyleSheet("font: bold; background-color: white;");
+  }
+};
+
+
 class OTGUI_API SubWindow : public QWidget
 {
   Q_OBJECT

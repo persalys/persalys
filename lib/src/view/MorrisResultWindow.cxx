@@ -57,6 +57,8 @@ void MorrisResultWindow::initialize(AnalysisItem* item)
     designOfExperiment_.setOutputSample(morrisResult_.getOutputSample());
   }
 
+  titleLabel_->setText(tr("Morris method"));
+
   // parameters widget
   setParameters(item->getAnalysis(), tr("Morris analysis parameters"));
 }

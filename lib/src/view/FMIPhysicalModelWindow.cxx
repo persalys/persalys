@@ -53,6 +53,8 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(new TitleLabel(tr("FMI model")));
+
   tabWidget_ = new QTabWidget;
 
   QWidget * propertiesWidget = new QWidget;

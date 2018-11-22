@@ -28,6 +28,7 @@
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/WidgetBoundToDockWidget.hxx"
+#include "otgui/TranslationManager.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -45,6 +46,7 @@ namespace OTGUI
 SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_(dynamic_cast<SimulationReliabilityAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
+  , titleLabel_(0)
   , formTabWidget_(0)
 {
   // FORM result widget
@@ -53,6 +55,10 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
     FORMImportanceSamplingAnalysis analysis = *dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get());
     formTabWidget_ = new ApproximationResultTabWidget(analysis.getFORMResult(), analysis, this);
   }
+
+  // title
+  const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
+  titleLabel_ = new TitleLabel(methodName);
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Threshold exceedance parameters"));
@@ -64,6 +70,8 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
 void SimulationReliabilityResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
+  widgetLayout->addWidget(titleLabel_);
 
   // get output info
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
@@ -111,7 +119,7 @@ void SimulationReliabilityResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 
 

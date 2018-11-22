@@ -80,6 +80,7 @@ protected:
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
   bool showTable_;
+  TitleLabel * titleLabel_;
   QGroupBox * variablesGroupBox_;
   VariablesListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;

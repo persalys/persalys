@@ -22,8 +22,6 @@
 #include "otgui/DiagramPushButton.hxx"
 
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QPushButton>
 #include <QPainter>
 
 namespace OTGUI
@@ -41,15 +39,12 @@ void StudyWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  // title
-  QLabel * title = new QLabel(tr("Select a physical model to add in the current study"));
-  title->setStyleSheet("font: bold;");
-  mainLayout->addWidget(title);
+  mainLayout->addWidget(new TitleLabel(tr("Model creation")));
 
   // spacer
-  mainLayout->addSpacing(30);
+  mainLayout->addSpacing(10);
 
-
+  // buttons
   QGridLayout * layout = new QGridLayout;
 
   // left side
@@ -75,7 +70,7 @@ void StudyWindow::buildInterface()
 
 #ifdef OTGUI_HAVE_OTFMI
   button = new DiagramPushButton(tr("FMI model"));
-  button->setStatusTip(tr("Create a physical model defined with an FMU file"));
+  button->setStatusTip(tr("Create a physical model defined with a FMU file"));
   connect(button, SIGNAL(pressed()), studyItem_, SLOT(createFMIModel()));
   layout->addWidget(button, row, 0);
   ++ row;
