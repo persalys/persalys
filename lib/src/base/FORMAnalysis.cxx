@@ -76,6 +76,8 @@ void FORMAnalysis::launch()
   Event event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
+  optimizationAlgorithm_.setStopCallback(&AnalysisImplementation::Stop, this);
+
   // create OT::FORM
   FORM algo(getOptimizationAlgorithm(), event, getPhysicalStartingPoint());
 

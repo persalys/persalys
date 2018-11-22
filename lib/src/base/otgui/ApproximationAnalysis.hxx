@@ -50,8 +50,9 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-private:
+protected:
   OT::OptimizationAlgorithm optimizationAlgorithm_;
+private:
   OT::Point physicalStartingPoint_;
 };
 }

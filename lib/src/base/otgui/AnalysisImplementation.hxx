@@ -77,6 +77,7 @@ public:
 protected:
   virtual void initialize();
   virtual void launch();
+  static bool Stop(void * p);
 
 protected:
   bool isReliabilityAnalysis_;
