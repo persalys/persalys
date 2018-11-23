@@ -28,9 +28,6 @@
 #include "otgui/QtTools.hxx"
 
 #include <QSplitter>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QFileInfo>
 #include <QSettings>
 #include <QApplication>
 
@@ -75,6 +72,8 @@ void MainWindow::buildInterface()
 {
   // main widget
   QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
+  mainSplitter->setObjectName("splitterMainWindow");
+  mainSplitter->setStyleSheet("QSplitter::handle:vertical#splitterMainWindow {height: 2px; background: lightGray;}");
 
   // Main widget
   MainWidget * mainWidget = new MainWidget(this);

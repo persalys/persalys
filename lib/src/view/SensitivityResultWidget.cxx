@@ -50,6 +50,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   , proxyModel_(0)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+
   QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
 
   // set info
