@@ -23,7 +23,6 @@
 #include "otgui/DiagramPushButton.hxx"
 
 #include <QVBoxLayout>
-#include <QPainter>
 
 namespace OTGUI
 {
@@ -66,19 +65,5 @@ WelcomeWindow::WelcomeWindow(const Actions* actions, QWidget * parent)
   hlayout->addStretch();
 
   mainLayout->addLayout(hlayout);
-
-  // OT image
-  QLabel * imageLabel = new QLabel;
-  QPixmap pixmap(":/images/OT_image256x256.png");
-  QImage image(pixmap.size(), QImage::Format_ARGB32_Premultiplied);
-  image.fill(Qt::transparent);
-  QPainter p(&image);
-  p.setOpacity(0.4);
-  p.drawPixmap(0, 0, pixmap);
-  p.end();
-  QPixmap imagePixmap = QPixmap::fromImage(image);
-  imageLabel->setPixmap(imagePixmap);
-
-  mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
 }
 }

@@ -30,7 +30,7 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QSplitter>
-#include <QLabel>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -79,6 +79,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     tableTitles << tr("Input") << tr("Index");
   }
   // plot
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
@@ -93,8 +95,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       GraphConfigurationWidget::SensitivityIndices,
       this);
   plotWidget->setDockWidget(graphSetting);
-
-  mainSplitter->addWidget(plotWidget);
+  scrollArea->setWidget(plotWidget);
+  mainSplitter->addWidget(scrollArea);
   mainSplitter->setStretchFactor(0, 2);
 
   QWidget * subWidget = new QWidget;

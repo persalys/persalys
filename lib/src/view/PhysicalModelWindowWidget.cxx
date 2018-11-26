@@ -35,6 +35,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -64,8 +65,12 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem
 
 void PhysicalModelWindowWidget::buildInterface()
 {
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
   QWidget * tab = new QWidget;
   QVBoxLayout * vbox = new QVBoxLayout(tab);
+  scrollArea->setWidget(tab);
 
   QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
@@ -179,7 +184,7 @@ void PhysicalModelWindowWidget::buildInterface()
   connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
   connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
 
-  addTab(tab, tr("Definition"));
+  addTab(scrollArea, tr("Definition"));
 
   // differentiation
   if (physicalModel_.getImplementation()->getClassName() != "MetaModel")

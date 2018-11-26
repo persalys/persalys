@@ -34,6 +34,7 @@
 #include <openturns/Combinations.hxx>
 
 #include <QVBoxLayout>
+#include <QScrollArea>
 #include <QHeaderView>
 #include <QLabel>
 #include <QDesktopServices>
@@ -74,6 +75,9 @@ void CopulaParametersTabWidget::buildInterface()
   const QPen pen(Qt::blue, 2);
 
   // tab PDF/CDF
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
@@ -131,9 +135,13 @@ void CopulaParametersTabWidget::buildInterface()
   }
 
   plotWidgetLayout->addWidget(pdf_StackedWidget);
-  addTab(plotWidget, tr("PDF/CDF"));
+  scrollArea->setWidget(plotWidget);
+  addTab(scrollArea, tr("PDF/CDF"));
 
   // tab Kendall plot
+  scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
   plotWidget = new WidgetBoundToDockWidget(this);
   plotWidgetLayout = new QVBoxLayout(plotWidget);
 
@@ -182,9 +190,13 @@ void CopulaParametersTabWidget::buildInterface()
   }
 
   plotWidgetLayout->addWidget(kendall_StackedWidget);
-  addTab(plotWidget, tr("Kendall plot"));
+  scrollArea->setWidget(plotWidget);
+  addTab(scrollArea, tr("Kendall plot"));
 
   // tab Parameters
+  scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
   QWidget * paramWidget = new QWidget;
   QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
 
@@ -231,7 +243,8 @@ void CopulaParametersTabWidget::buildInterface()
   paramGroupBoxLayout->addWidget(infoButton);
 
   paramGroupBoxLayout->addStretch();
-  addTab(paramWidget, tr("Parameters"));
+  scrollArea->setWidget(paramWidget);
+  addTab(scrollArea, tr("Parameters"));
 }
 
 

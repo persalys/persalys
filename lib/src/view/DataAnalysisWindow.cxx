@@ -328,6 +328,8 @@ void DataAnalysisWindow::addSummaryTab()
 
 void DataAnalysisWindow::addPDF_CDFTab()
 {
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
@@ -390,12 +392,15 @@ void DataAnalysisWindow::addPDF_CDFTab()
     tabStackedWidget->addWidget(plotWidget);
   }
 
-  tabWidget_->addTab(tabStackedWidget, tr("PDF/CDF"));
+  scrollArea->setWidget(tabStackedWidget);
+  tabWidget_->addTab(scrollArea, tr("PDF/CDF"));
 }
 
 
 void DataAnalysisWindow::addBoxPlotTab()
 {
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
   connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
 
@@ -439,7 +444,8 @@ void DataAnalysisWindow::addBoxPlotTab()
     tabStackedWidget->addWidget(boxPlotWidget);
   }
 
-  tabWidget_->addTab(tabStackedWidget, tr("Box plots"));
+  scrollArea->setWidget(tabStackedWidget);
+  tabWidget_->addTab(scrollArea, tr("Box plots"));
 }
 
 

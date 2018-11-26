@@ -28,6 +28,7 @@
 #include <openturns/SORMResult.hxx>
 
 #include <QTabWidget>
+#include <QScrollArea>
 
 namespace OTGUI
 {
@@ -51,7 +52,7 @@ private:
   OT::FORMResult formResult_;
   OT::SORMResult sormResult_;
   OT::AnalyticalResult result_;
-  QWidget * parametersWidget_;
+  QScrollArea * parametersWidget_;
   OT::UnsignedInteger maximumEvaluationNumber_;
 };
 }

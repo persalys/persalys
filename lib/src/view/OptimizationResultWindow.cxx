@@ -178,6 +178,8 @@ void OptimizationResultWindow::buildInterface()
   // tab : convergence
   QTabWidget * convTab = new QTabWidget;
 
+  scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
@@ -200,9 +202,12 @@ void OptimizationResultWindow::buildInterface()
       this);
   plotWidget->setDockWidget(graphSettingWidget1);
 
-  convTab->addTab(plotWidget, tr("Optimal value"));
+  scrollArea->setWidget(plotWidget);
+  convTab->addTab(scrollArea, tr("Optimal value"));
 
   // error
+  scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   QVector<PlotWidget*> listPlotWidget2;
   plotWidget = new WidgetBoundToDockWidget(this);
   plotWidgetLayout = new QVBoxLayout(plotWidget);
@@ -228,7 +233,8 @@ void OptimizationResultWindow::buildInterface()
       this);
   plotWidget->setDockWidget(graphSettingWidget2);
 
-  convTab->addTab(plotWidget, tr("Error"));
+  scrollArea->setWidget(plotWidget);
+  convTab->addTab(scrollArea, tr("Error"));
 
   tabWidget->addTab(convTab, tr("Convergence"));
 

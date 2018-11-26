@@ -32,6 +32,7 @@
 #include <QGroupBox>
 #include <QSplitter>
 #include <QSortFilterProxyModel>
+#include <QScrollArea>
 
 #include <qwt_legend.h>
 
@@ -122,6 +123,8 @@ void MorrisResultWidget::buildInterface()
   QTabWidget * tabWidget = new QTabWidget;
 
   // tab plot (µ*, σ)
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   WidgetBoundToDockWidget * tab = new WidgetBoundToDockWidget(this);
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
@@ -175,10 +178,13 @@ void MorrisResultWidget::buildInterface()
       this);
 
   tab->setDockWidget(graphSetting);
+  scrollArea->setWidget(tab);
 
-  tabWidget->addTab(tab, tr("Graph (µ*, σ)"));
+  tabWidget->addTab(scrollArea, tr("Graph (µ*, σ)"));
 
   // tab plot (µ*, µ)
+  scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   tab = new WidgetBoundToDockWidget(this);
   tabLayout = new QVBoxLayout(tab);
 
@@ -235,8 +241,9 @@ void MorrisResultWidget::buildInterface()
       this);
 
   tab->setDockWidget(graphSetting);
+  scrollArea->setWidget(tab);
 
-  tabWidget->addTab(tab, tr("Graph (µ*, µ)"));
+  tabWidget->addTab(scrollArea, tr("Graph (µ*, µ)"));
   tabLayout->addStretch();
 
   // update labels with number of un/selected points

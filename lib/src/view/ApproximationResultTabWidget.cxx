@@ -78,9 +78,11 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   // set parameters widget
   if (analysisParameters.getSize())
   {
-    parametersWidget_ = new QWidget;
-    QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(parametersWidget_);
+    parametersWidget_ = new QScrollArea;
+    QWidget * paramWidget = new QWidget;
+    QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(paramWidget);
     parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters), 0, Qt::AlignTop);
+    parametersWidget_->setWidget(paramWidget);
   }
 
   buildInterface();
@@ -113,9 +115,11 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
   // set parameters widget
   if (analysisParameters.getSize())
   {
-    parametersWidget_ = new QWidget;
-    QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(parametersWidget_);
+    parametersWidget_ = new QScrollArea;
+    QWidget * paramWidget = new QWidget;
+    QVBoxLayout * parametersWidgetLayout = new QVBoxLayout(paramWidget);
     parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters), 0, Qt::AlignTop);
+    parametersWidget_->setWidget(paramWidget);
   }
 
   buildInterface();

@@ -208,6 +208,8 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
 QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 {
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
@@ -239,13 +241,16 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
       GraphConfigurationWidget::NoType,
       this);
   plotWidget->setDockWidget(histogramSettingWidget);
+  scrollArea->setWidget(plotWidget);
 
-  return plotWidget;
+  return scrollArea;
 }
 
 
 QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
 {
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
@@ -282,7 +287,8 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
       this);
   plotWidget->setDockWidget(convergenceGraphSettingWidget);
   plotWidgetLayout->addWidget(stackedWidget);
+  scrollArea->setWidget(plotWidget);
 
-  return plotWidget;
+  return scrollArea;
 }
 }
