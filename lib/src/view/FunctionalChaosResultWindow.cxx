@@ -78,6 +78,8 @@ void FunctionalChaosResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(new TitleLabel(tr("Functional chaos")));
+
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDescription().getSize();
 
@@ -414,6 +416,6 @@ void FunctionalChaosResultWindow::buildInterface()
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 }

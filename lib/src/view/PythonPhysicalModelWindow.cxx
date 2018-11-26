@@ -37,6 +37,9 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 //  setFocusPolicy(Qt::ClickFocus);
 
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
+  widgetLayout->addWidget(new TitleLabel(tr("Python model")));
+
   QSplitter * horizontalSplitter = new QSplitter(Qt::Horizontal);
 
   // left side: code editor
@@ -69,6 +72,6 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   horizontalSplitter->addWidget(rightSideWidget);
 
   ////////////////
-  widgetLayout->addWidget(horizontalSplitter);
+  widgetLayout->addWidget(horizontalSplitter, 1);
 }
 }

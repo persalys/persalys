@@ -29,7 +29,6 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QSplitter>
-#include <QLabel>
 
 using namespace OT;
 
@@ -60,6 +59,8 @@ SRCResultWindow::SRCResultWindow(AnalysisItem * item, QWidget * parent)
 void SRCResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
+  widgetLayout->addWidget(new TitleLabel(tr("Standardized Regression Coefficients")));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
@@ -126,6 +127,6 @@ void SRCResultWindow::buildInterface()
   mainWidget->setStretchFactor(1, 10);
   outputsListWidget->setCurrentRow(0);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 }

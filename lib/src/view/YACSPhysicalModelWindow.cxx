@@ -48,6 +48,8 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
+  mainLayout->addWidget(new TitleLabel(tr("YACS model")));
+
   // Widgets to load XML file
   QHBoxLayout * fieldsLayout = new QHBoxLayout;
 

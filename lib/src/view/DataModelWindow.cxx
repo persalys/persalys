@@ -74,6 +74,9 @@ DataModelWindow::~DataModelWindow()
 void DataModelWindow::buildInterface()
 {
   QGridLayout * mainGridLayout = new QGridLayout(this);
+  int row = 0;
+
+  mainGridLayout->addWidget(new TitleLabel(tr("Data model")), row, 0);
 
   // first row
   QHBoxLayout * hboxLayout = new QHBoxLayout;
@@ -99,11 +102,11 @@ void DataModelWindow::buildInterface()
   connect(reloadButton, SIGNAL(clicked()), this, SLOT(refreshTable()));
   hboxLayout->addWidget(reloadButton);
 
-  mainGridLayout->addLayout(hboxLayout, 0, 0);
+  mainGridLayout->addLayout(hboxLayout, ++row, 0);
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
-  mainGridLayout->addWidget(errorMessageLabel_, 1, 0);
+  mainGridLayout->addWidget(errorMessageLabel_, ++row, 0);
 
   // variables table
   QGroupBox * groupBox = new QGroupBox(tr("Variables"));
@@ -124,7 +127,7 @@ void DataModelWindow::buildInterface()
 
   gridLayout->addWidget(tableView_, 0, 0);
 
-  mainGridLayout->addWidget(groupBox, 2, 0);
+  mainGridLayout->addWidget(groupBox, ++row, 0);
 
   // file preview
   groupBox = new QGroupBox(tr("Sample"));
@@ -188,8 +191,8 @@ void DataModelWindow::buildInterface()
 
   tableLayout->setSpacing(0);
   gridLayout->addWidget(frame, 1, 0);
-  mainGridLayout->addWidget(groupBox, 3, 0);
-  mainGridLayout->setRowStretch(3, 10);
+  mainGridLayout->addWidget(groupBox, ++row, 0);
+  mainGridLayout->setRowStretch(row, 10);
 
   // fix Windows color of selection if no focus (==Inactive status)
   QPalette p = dataTableView2_->palette();

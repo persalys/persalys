@@ -55,6 +55,8 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
 
   result_ = analysis.getResult();
   designOfExperiment_ = result_.getDesignOfExperiment();
+
+  titleLabel_->setText(tr("Data analysis"));
 }
 
 

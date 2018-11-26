@@ -40,6 +40,8 @@ void ProbabilisticModelWindow::buildInterface()
 {
   QVBoxLayout * mainWidgetLayout = new QVBoxLayout(this);
 
+  mainWidgetLayout->addWidget(new TitleLabel(tr("Probabilistic model")));
+
   QTabWidget * rootTab = new QTabWidget;
 
   // First Tab: marginals
@@ -49,6 +51,6 @@ void ProbabilisticModelWindow::buildInterface()
   rootTab->addTab(dependenciesWidget_, tr("Dependence"));
   connect(marginalsWidget_, SIGNAL(updateDependenciesRequested()), dependenciesWidget_, SLOT(updateWidgets()));
 
-  mainWidgetLayout->addWidget(rootTab);
+  mainWidgetLayout->addWidget(rootTab, 1);
 }
 }

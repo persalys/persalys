@@ -21,6 +21,7 @@
 #include "otgui/ApproximationResultWindow.hxx"
 
 #include "otgui/ApproximationResultTabWidget.hxx"
+#include "otgui/TranslationManager.hxx"
 #include "otgui/FORMAnalysis.hxx"
 #include "otgui/SORMAnalysis.hxx"
 
@@ -68,6 +69,10 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
 
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  // title
+  const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
+  widgetLayout->addWidget(new TitleLabel(methodName));
+
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
@@ -88,6 +93,6 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
     mainWidget->addWidget(tabWidget);
     mainWidget->setStretchFactor(1, 10);
   }
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 }

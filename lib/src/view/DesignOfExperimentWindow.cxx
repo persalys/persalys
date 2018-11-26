@@ -45,6 +45,8 @@ void DesignOfExperimentWindow::initialize(AnalysisItem* item)
   failedInputSample_ = analysis.getFailedInputSample();
   notEvaluatedInputSample_ = analysis.getNotEvaluatedInputSample();
 
+  titleLabel_->setText(tr("Design of experiments"));
+
   // parameters widget
   setParameters(item->getAnalysis(), tr("Design of experiments evaluation parameters"));
 }

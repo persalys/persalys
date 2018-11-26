@@ -49,6 +49,8 @@ void InferenceResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(new TitleLabel(tr("Marginals inference")));
+
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // table variables
@@ -79,7 +81,7 @@ void InferenceResultWindow::buildInterface()
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
-  widgetLayout->addWidget(mainWidget);
+  widgetLayout->addWidget(mainWidget, 1);
 }
 
 

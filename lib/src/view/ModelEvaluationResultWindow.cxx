@@ -45,6 +45,8 @@ void ModelEvaluationResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
+  widgetLayout->addWidget(new TitleLabel(tr("Model evaluation")));
+
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------

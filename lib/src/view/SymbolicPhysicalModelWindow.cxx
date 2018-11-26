@@ -32,6 +32,9 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinition
 {
   // Widgets
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+
+  widgetLayout->addWidget(new TitleLabel(tr("Symbolic model")));
+
   widgetLayout->addWidget(new PhysicalModelWindowWidget(item));
 }
 }

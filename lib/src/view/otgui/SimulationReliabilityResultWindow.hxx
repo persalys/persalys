@@ -41,6 +41,7 @@ protected:
 
 private:
   SimulationReliabilityResult result_;
+  TitleLabel * titleLabel_;
   QTabWidget * formTabWidget_;
 };
 }

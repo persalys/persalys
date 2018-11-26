@@ -77,6 +77,22 @@ public:
 
     painter->restore();
   }
+
+
+  QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const
+  {
+    QSize result = QStyledItemDelegate::sizeHint(option, index);
+    if (index.data(Qt::UserRole).toString().contains("Title") ||
+        index.data(Qt::UserRole).toString() == "Study" ||
+        index.data(Qt::UserRole).toString().contains("ModelDiagram") ||
+        index.data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem" ||
+        index.data(Qt::UserRole).toString() == "LimitState"
+       )
+    {
+      result.setHeight(result.height() * 1.5);
+    }
+    return result;
+  }
 };
 
 

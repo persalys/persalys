@@ -32,8 +32,9 @@ MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * p
   , physicalModel_(item->getPhysicalModel())
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
-  PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
 
-  widgetLayout->addWidget(widget);
+  widgetLayout->addWidget(new TitleLabel(tr("Metamodel")));
+
+  widgetLayout->addWidget(new PhysicalModelWindowWidget(item));
 }
 }
