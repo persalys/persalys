@@ -62,11 +62,7 @@ public:
 #endif
 
     // draw a line at the bottom of items
-    if (index.data(Qt::UserRole).toString() == "Study" ||
-        index.data(Qt::UserRole).toString().contains("ModelDiagram") ||
-        index.data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem" ||
-        index.data(Qt::UserRole).toString() == "LimitState"
-       )
+    if (index.data(Qt::UserRole).toString() == "Study")
     {
       QLineF aLine(optionButton.rect.bottomLeft(), optionButton.rect.bottomRight());
       QPen pen("#0a5205");
