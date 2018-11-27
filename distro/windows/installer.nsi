@@ -58,13 +58,14 @@ RequestExecutionLevel user
 !define MUI_LANGDLL_REGISTRY_VALUENAME "NSIS:Language"
 
 ; Welcome page
-!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of ${PRODUCT_NAME} ${PRODUCT_VERSION}.\r\rThis installer has been tested on Windows 2000, XP and Vista. Although OpenTURNS may work on it, other operating systems are not supported."
+!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of ${PRODUCT_NAME} ${PRODUCT_VERSION}.\r\rThis installer has been tested on Windows 2007, 2000, XP and Vista. Although OpenTURNS may work on it, other operating systems are not supported."
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 ;!insertmacro MUI_PAGE_LICENSE "COPYING.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "DirectoryLeave"
 !define MUI_DIRECTORYPAGE_TEXT_TOP "Setup will install ${PRODUCT_NAME} ${PRODUCT_VERSION} in the following folder. To install in a different folder, click Browse and select another folder."
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -80,6 +81,42 @@ RequestExecutionLevel user
 !insertmacro MUI_LANGUAGE "English"
 
 ; MUI end ------
+
+Function DirectoryLeave
+  ; check if python.exe exists
+  IfFileExists "$INSTDIR\python.exe" End
+    MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. It must contain a python.exe file."
+    Abort
+  End:
+
+  ; check the Python version
+  nsExec::ExectoStack 'cmd.exe /c if 1==1 "$INSTDIR\python.exe" -c "from distutils import sysconfig; assert(sysconfig.get_python_version() == \"${PYBASEVER}\")"'
+  pop $0
+
+  ${If} $0 != 0
+    MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. The expected Python version is ${PYBASEVER}" /SD IDOK
+    Abort
+  ${EndIf}
+
+  ; check if the OpenTURNS module exists
+  nsExec::ExectoStack 'cmd.exe /c if 1==1 "$INSTDIR\python.exe" -c "import openturns"'
+  pop $0
+
+  ${If} $0 != 0
+    MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. Python directory must contain an OpenTURNS module" /SD IDOK
+    Abort
+  ${EndIf}
+
+  ; check the OpenTURNS version
+  nsExec::ExectoStack 'cmd.exe /c if 1==1 "$INSTDIR\python.exe" -c "import openturns; from distutils.version import LooseVersion; assert(LooseVersion(openturns.__version__) >= \"${OPENTURNS_VERSION}\")"'
+  pop $0
+
+  ${If} $0 != 0
+    MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. The expected OpenTURNS module version is ${OPENTURNS_VERSION}" /SD IDOK
+    Abort
+  ${EndIf}
+
+FunctionEnd
 
 Name "${MODULE_NAME} ${PRODUCT_VERSION}"
 OutFile "${MODULE_NAME_LOWERCASE}-${PRODUCT_VERSION}-py${PYBASEVER}-${ARCH}.exe"
