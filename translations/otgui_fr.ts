@@ -2282,32 +2282,32 @@ métamodèle</translation>
         <translation>Indices de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="382"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="383"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="391"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="392"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="399"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="400"/>
         <source>As the model has not an independent copula, the interpretation of the Sobol indices may be misleading. So they are not displayed.</source>
         <translation>Comme le modèle n&apos;a pas de copule indépendante, les indices de Sobol&apos; pourraient être erronés. Ils ne sont donc pas affichés.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="403"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="404"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="408"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="409"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="412"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="413"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
@@ -2887,27 +2887,27 @@ bayésien (BIC)</translation>
         <translation>Résultats</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="203"/>
+        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="204"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="211"/>
+        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="212"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="222"/>
+        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="223"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="227"/>
+        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="228"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="231"/>
+        <location filename="../lib/src/view/KrigingResultWindow.cxx" line="232"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
@@ -3326,19 +3326,34 @@ bayésien (BIC)</translation>
         <translation>métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="90"/>
-        <source>Metamodel:</source>
-        <translation>Métamodèle :</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="91"/>
-        <source>Physical model</source>
-        <translation>Modèle physique</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="92"/>
-        <source>Metamodel</source>
-        <translation>Métamodèle</translation>
+        <source>Curve fitting of K-Fold cross-validation</source>
+        <translation>Courbe d&apos;ajustement de la validation croisée K-Fold</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="94"/>
+        <source>Curve fitting of the test sample</source>
+        <translation>Courbe d&apos;ajustement de l&apos;échantillon de test</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="96"/>
+        <source>Curve fitting of the analytical values</source>
+        <translation>Courbe d&apos;ajustement des valeurs analytiques</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="98"/>
+        <source>Curve fitting of %1</source>
+        <translation>Courbe d&apos;ajustement de %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="100"/>
+        <source>Real output value</source>
+        <translation>Valeur de sortie réelle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MetaModelValidationWidget.cxx" line="101"/>
+        <source>Prediction</source>
+        <translation>Prédiction</translation>
     </message>
 </context>
 <context>
