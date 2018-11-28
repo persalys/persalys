@@ -42,7 +42,7 @@ MetaModelAnalysis::MetaModelAnalysis()
   , leaveOneOutValidation_(false)
   , percentageTestSample_(20)
   , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , nbFolds_(3)
+  , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
@@ -58,7 +58,7 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
   , leaveOneOutValidation_(false)
   , percentageTestSample_(20)
   , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , nbFolds_(3)
+  , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
   if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
@@ -78,7 +78,7 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
   , leaveOneOutValidation_(false)
   , percentageTestSample_(20)
   , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , nbFolds_(3)
+  , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
   SimulationAnalysis * analysis_ptr = dynamic_cast<SimulationAnalysis*>(analysis.getImplementation().get());
