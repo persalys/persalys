@@ -29,8 +29,6 @@
 
 #include <openturns/VisualTest.hxx>
 
-#include <QSplitter>
-#include <QScrollArea>
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QHeaderView>
@@ -42,7 +40,7 @@ namespace OTGUI
 {
 
 InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidget* parent)
-  : QWidget(parent)
+  : QScrollArea(parent)
   , displayPDF_QQPlot_(displayPDF_QQPlot)
   , tabWidget_(0)
   , currentFittingTestResult_()
@@ -62,15 +60,10 @@ InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidg
 
 void InferenceResultWidget::buildInterface()
 {
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  setWidgetResizable(true);
 
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-
-  QSplitter * splitter = new QSplitter;
-
-  QWidget * distTabListWidget = new QWidget;
-  QHBoxLayout * distTabListWidgetLayout = new QHBoxLayout(distTabListWidget);
+  QWidget * rightWidget = new QWidget;
+  QHBoxLayout * rightWidgetLayout = new QHBoxLayout(rightWidget);
 
   // -- distributions table
   QGroupBox * distGroupBox = new QGroupBox(tr("Distributions"));
@@ -93,10 +86,8 @@ void InferenceResultWidget::buildInterface()
   distTableView_->setModel(distTableModel_);
 
   distGroupBoxLayout->addWidget(distTableView_);
-  distGroupBoxLayout->addStretch();
 
-  distTabListWidgetLayout->addWidget(distGroupBox);
-  splitter->addWidget(distTabListWidget);
+  rightWidgetLayout->addWidget(distGroupBox, 0, Qt::AlignLeft|Qt::AlignTop);
 
   // -- distribution parameters table
   // --- table view
@@ -115,6 +106,9 @@ void InferenceResultWidget::buildInterface()
   if (displayPDF_QQPlot_)
   {
     tabWidget_ = new QTabWidget;
+
+    QScrollArea * scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
 
     // tab PDF/CDF
     WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
@@ -140,9 +134,12 @@ void InferenceResultWidget::buildInterface()
     connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
     plotWidgetLayout->addWidget(pdf_cdfStackedWidget);
-    tabWidget_->addTab(plotWidget, tr("PDF/CDF"));
+    scrollArea->setWidget(plotWidget);
+    tabWidget_->addTab(scrollArea, tr("PDF/CDF"));
 
     // tab QQ plot
+    scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
     plotWidget = new WidgetBoundToDockWidget(this);
     plotWidgetLayout = new QVBoxLayout(plotWidget);
 
@@ -161,9 +158,12 @@ void InferenceResultWidget::buildInterface()
     qqPlotSettingWidget->hide();
     plotWidget->setDockWidget(qqPlotSettingWidget);
 
-    tabWidget_->addTab(plotWidget, tr("Q-Q Plot"));
+    scrollArea->setWidget(plotWidget);
+    tabWidget_->addTab(scrollArea, tr("Q-Q Plot"));
 
     // tab Parameters
+    scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
     QWidget * paramWidget = new QWidget;
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
     paramGroupBoxLayout->addWidget(distParamTableView_);
@@ -176,9 +176,10 @@ void InferenceResultWidget::buildInterface()
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addStretch();
 
-    tabWidget_->addTab(paramWidget, tr("Parameters"));
+    scrollArea->setWidget(paramWidget);
+    tabWidget_->addTab(scrollArea, tr("Parameters"));
 
-    splitter->addWidget(tabWidget_);
+    rightWidgetLayout->addWidget(tabWidget_);
   }
   else
   {
@@ -190,11 +191,9 @@ void InferenceResultWidget::buildInterface()
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
-    splitter->addWidget(paramGroupBox);
+    rightWidgetLayout->addWidget(paramGroupBox);
   }
-
-  scrollArea->setWidget(splitter);
-  mainLayout->addWidget(scrollArea);
+  setWidget(rightWidget);
 }
 
 

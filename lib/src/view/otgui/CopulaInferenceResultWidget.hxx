@@ -27,9 +27,11 @@
 
 #include <openturns/Copula.hxx>
 
+#include <QScrollArea>
+
 namespace OTGUI
 {
-class OTGUI_API CopulaInferenceResultWidget : public QWidget
+class OTGUI_API CopulaInferenceResultWidget : public QScrollArea
 {
   Q_OBJECT
 

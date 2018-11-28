@@ -57,6 +57,7 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   QVBoxLayout * rightFrameLayout = new QVBoxLayout(rightFrame);
 
   QSplitter * vSplitter = new QSplitter(Qt::Vertical);
+  vSplitter->setStyleSheet("QSplitter::handle:vertical {height: 2px; background: lightGray;}");
 
   // -- plots creation
   WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);

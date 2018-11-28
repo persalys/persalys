@@ -25,11 +25,11 @@
 
 #include <openturns/Sample.hxx>
 
-#include <QWidget>
+#include <QScrollArea>
 
 namespace OTGUI
 {
-class OTGUI_API MetaModelValidationWidget : public QWidget
+class OTGUI_API MetaModelValidationWidget : public QScrollArea
 {
   Q_OBJECT
 

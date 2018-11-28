@@ -128,6 +128,15 @@ QVariant Item::data(int role) const
         return QIcon(":/images/optimize.png");
     }
   }
+  else if (QStandardItem::data(Qt::UserRole).toString().contains("Diagram"))
+  {
+    if (role == Qt::FontRole)
+    {
+      QFont font;
+      font.setUnderline(true);
+      return font;
+    }
+  }
   return QStandardItem::data(role);
 }
 

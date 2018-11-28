@@ -26,7 +26,6 @@
 #include "otgui/InferenceResultWidget.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 #include "otgui/TranslationManager.hxx"
 
-#include <QScrollArea>
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -41,7 +40,7 @@ CopulaInferenceResultWidget::CopulaInferenceResultWidget(const CopulaInferenceSe
     const Sample& sample,
     const bool displaySetting,
     QWidget* parent)
-  : QWidget(parent)
+  : QScrollArea(parent)
   , currentSetResult_(currentSetResult)
   , sample_(sample)
   , displaySetting_(displaySetting)
@@ -54,15 +53,10 @@ CopulaInferenceResultWidget::CopulaInferenceResultWidget(const CopulaInferenceSe
 
 void CopulaInferenceResultWidget::buildInterface()
 {
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  setWidgetResizable(true);
 
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-
-  QSplitter * splitter = new QSplitter;
-
-  QWidget * distTabListWidget = new QWidget;
-  QHBoxLayout * distTabListWidgetLayout = new QHBoxLayout(distTabListWidget);
+  QWidget * rightWidget = new QWidget;
+  QHBoxLayout * rightWidgetLayout = new QHBoxLayout(rightWidget);
 
   // -- copulas table
   QGroupBox * distGroupBox = new QGroupBox(tr("Copulas"));
@@ -130,10 +124,8 @@ void CopulaInferenceResultWidget::buildInterface()
   distTableView_->selectRow(0 + 1);
 
   distGroupBoxLayout->addWidget(distTableView_);
-  distGroupBoxLayout->addStretch();
 
-  distTabListWidgetLayout->addWidget(distGroupBox);
-  splitter->addWidget(distTabListWidget);
+  rightWidgetLayout->addWidget(distGroupBox, 0, Qt::AlignLeft|Qt::AlignTop);
 
   // -- for each copula, display PDF-CDF/parameters
   ResizableStackedWidget * paramStackWidget = new ResizableStackedWidget;
@@ -180,11 +172,9 @@ void CopulaInferenceResultWidget::buildInterface()
   }
   connect(this, SIGNAL(distributionChanged(int)), paramStackWidget, SLOT(setCurrentIndex(int)));
 
-  splitter->addWidget(paramStackWidget);
-  splitter->setStretchFactor(1, 3);
+  rightWidgetLayout->addWidget(paramStackWidget);
 
-  scrollArea->setWidget(splitter);
-  mainLayout->addWidget(scrollArea);
+  setWidget(rightWidget);
 }
 
 

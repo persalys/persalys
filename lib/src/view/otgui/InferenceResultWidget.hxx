@@ -29,12 +29,13 @@
 
 #include <QTabWidget>
 #include <QLabel>
+#include <QScrollArea>
 
 Q_DECLARE_METATYPE(OT::Distribution)
 
 namespace OTGUI
 {
-class OTGUI_API InferenceResultWidget : public QWidget
+class OTGUI_API InferenceResultWidget : public QScrollArea
 {
   Q_OBJECT
 

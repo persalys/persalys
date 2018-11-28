@@ -37,6 +37,7 @@
 #include <QSortFilterProxyModel>
 #include <QScrollBar>
 #include <QApplication>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -73,10 +74,17 @@ DataModelWindow::~DataModelWindow()
 
 void DataModelWindow::buildInterface()
 {
-  QGridLayout * mainGridLayout = new QGridLayout(this);
-  int row = 0;
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  mainLayout->addWidget(new TitleLabel(tr("Data model")));
 
-  mainGridLayout->addWidget(new TitleLabel(tr("Data model")), row, 0);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  mainLayout->addWidget(scrollArea, 1);
+
+  QWidget * mainWidget = new QWidget;
+  QGridLayout * mainGridLayout = new QGridLayout(mainWidget);
+  scrollArea->setWidget(mainWidget);
+  int row = 0;
 
   // first row
   QHBoxLayout * hboxLayout = new QHBoxLayout;

@@ -38,10 +38,9 @@ MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationRe
     const QString measure,
     QWidget * parent
                                                     )
-  : QWidget(parent)
+  : QScrollArea(parent)
 {
-
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  setWidgetResizable(true);
 
   WidgetBoundToDockWidget * mainWidget = new WidgetBoundToDockWidget(this);
   QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
@@ -100,6 +99,6 @@ MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationRe
         this);
     mainWidget->setDockWidget(graphSettingWidget);
   }
-  widgetLayout->addWidget(mainWidget);
+  setWidget(mainWidget);
 }
 }
