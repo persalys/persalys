@@ -26,6 +26,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/TranslationManager.hxx"
 #include "otgui/DistributionDictionary.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <openturns/VisualTest.hxx>
 
@@ -70,7 +71,8 @@ void InferenceResultWidget::buildInterface()
   QVBoxLayout * distGroupBoxLayout = new QVBoxLayout(distGroupBox);
 
   // --- table view
-  distTableView_ = new ResizableTableViewWithoutScrollBar;
+  distTableView_ = new ExportableTableView;
+
   RadioButtonDelegate * delegate = new RadioButtonDelegate(2, distTableView_);
   distTableView_->setItemDelegateForColumn(0, delegate);
   distTableView_->setSelectionMode(QAbstractItemView::NoSelection);
@@ -91,7 +93,7 @@ void InferenceResultWidget::buildInterface()
 
   // -- distribution parameters table
   // --- table view
-  distParamTableView_ = new ResizableTableViewWithoutScrollBar;
+  distParamTableView_ = new CopyableTableView;
   distParamTableView_->horizontalHeader()->hide();
   distParamTableView_->verticalHeader()->hide();
   distParamTableView_->setTabKeyNavigation(false);
@@ -245,10 +247,14 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
     const QString distName = TranslationManager::GetTranslatedDistributionName(currentFittingTestResult_.getTestedDistributions()[indices[i]].getImplementation()->getClassName());
     distTableModel_->setNotEditableItem(cellRow, 0, distName);
     distTableModel_->setData(distTableModel_->index(cellRow, 0), (int)indices[i], Qt::UserRole);
+
     if (currentFittingTestResult_.getErrorMessages()[indices[i]].empty())
     {
       distTableModel_->setNotEditableItem(cellRow, 1, bicValues[indices[i]], 3);
-      distTableModel_->setNotEditableItem(cellRow, 2, currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getPValue(), 3);
+
+      const Scalar pValue = currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getPValue();
+      distTableModel_->setNotEditableItem(cellRow, 2, pValue, 3);
+
       // if accepted
       if (currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure())
       {

@@ -64,7 +64,8 @@ void CopulaInferenceResultWidget::buildInterface()
   QVBoxLayout * distGroupBoxLayout = new QVBoxLayout(distGroupBox);
 
   // --- table view
-  distTableView_ = new ResizableTableViewWithoutScrollBar;
+  distTableView_ = new ExportableTableView;
+
   RadioButtonDelegate * delegate = new RadioButtonDelegate(1, distTableView_);
   distTableView_->setItemDelegateForColumn(0, delegate);
   distTableView_->setSelectionMode(QAbstractItemView::NoSelection);
@@ -108,13 +109,9 @@ void CopulaInferenceResultWidget::buildInterface()
     distTableModel_->setData(distTableModel_->index(i + 1, 0), aVariant, Qt::UserRole);
 
     if (currentSetResult_.getErrorMessages()[indices[i]].empty())
-    {
       distTableModel_->setNotEditableItem(i + 1, 1, bicValues[indices[i]], 6);
-    }
     else
-    {
       distTableModel_->setNotEditableItem(i + 1, 1, "-");
-    }
   }
   distTableView_->setModel(distTableModel_);
   distTableModel_->setData(distTableModel_->index(0 + 1, 0), true, Qt::CheckStateRole);

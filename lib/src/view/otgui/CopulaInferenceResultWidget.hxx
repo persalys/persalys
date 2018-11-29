@@ -23,7 +23,7 @@
 
 #include "otgui/CopulaInferenceSetResult.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/ExportableTableView.hxx"
 
 #include <openturns/Copula.hxx>
 
@@ -58,7 +58,7 @@ private:
   CopulaInferenceSetResult currentSetResult_;
   OT::Sample sample_;
   bool displaySetting_;
-  ResizableTableViewWithoutScrollBar * distTableView_;
+  ExportableTableView * distTableView_;
   CustomStandardItemModel * distTableModel_;
 };
 }
