@@ -198,7 +198,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   QVBoxLayout * vbox = new QVBoxLayout(diff_tab);
 
   QLabel * label = new QLabel(tr("Finite difference step definition"));
-  label->setStyleSheet("font: bold;");
+  label->setStyleSheet("QLabel {font: bold;}");
   vbox->addWidget(label);
 
   CopyableTableView * differentiationTableView = new CopyableTableView;

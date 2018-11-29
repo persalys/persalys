@@ -184,7 +184,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     QWidget * interactionWidget = new QWidget;
     QHBoxLayout * hbox = new QHBoxLayout(interactionWidget);
     QLabel * interactionsLabel = new QLabel(tr("Interactions"));
-    interactionsLabel->setStyleSheet("font: bold;");
+    interactionsLabel->setStyleSheet("QLabel {font: bold;}");
     hbox->addWidget(interactionsLabel);
     interactionsLabel = new QLabel(QString::number(interactionsValue, 'g', 4));
     hbox->addWidget(interactionsLabel);

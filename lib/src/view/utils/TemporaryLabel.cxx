@@ -48,14 +48,14 @@ void TemporaryLabel::setMessage(const QString& message)
 
 void TemporaryLabel::setErrorMessage(const QString& message)
 {
-  setStyleSheet("color: red;");
+  setStyleSheet("QLabel {color: red;}");
   setText(message);
 }
 
 
 void TemporaryLabel::setTemporaryErrorMessage(const QString& message)
 {
-  setStyleSheet("color: red;");
+  setStyleSheet("QLabel {color: red;}");
   setText(message);
   if (!message.isEmpty())
   {

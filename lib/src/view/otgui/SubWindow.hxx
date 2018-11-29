@@ -37,7 +37,7 @@ public:
   {
     setFrameStyle(QFrame::StyledPanel);
     setMargin(5);
-    setStyleSheet("font: bold; background-color: white;");
+    setStyleSheet("QLabel { font: bold; background-color: white; }");
   }
 };
 

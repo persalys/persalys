@@ -62,11 +62,11 @@ ReliabilityIntroPage::ReliabilityIntroPage(QWidget * parent)
 
   methodGroup_ = new QButtonGroup(this);
   OSS styleText;
-  styleText << "margin-left: " << style()->pixelMetric(QStyle::PM_LayoutLeftMargin) << "px;";
+  styleText << "QRadioButton { margin-left: " << style()->pixelMetric(QStyle::PM_LayoutLeftMargin) << "px;}";
 
   // Simulation methods
   QLabel * simuLabel = new QLabel(tr("Simulation methods"));
-  simuLabel->setStyleSheet("font: bold;");
+  simuLabel->setStyleSheet("QLabel {font: bold;}");
   methodLayout->addWidget(simuLabel);
 
   // - Monte carlo
@@ -83,7 +83,7 @@ ReliabilityIntroPage::ReliabilityIntroPage(QWidget * parent)
 
   // Approximation method
   QLabel * approxLabel = new QLabel(tr("Approximation methods"));
-  approxLabel->setStyleSheet("font: bold;");
+  approxLabel->setStyleSheet("QLabel {font: bold;}");
   methodLayout->addWidget(approxLabel);
 
   // - FORM
