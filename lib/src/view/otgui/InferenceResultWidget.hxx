@@ -26,9 +26,9 @@
 #include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/PlotWidget.hxx"
 #include "otgui/DocumentationToolButton.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QTabWidget>
-#include <QLabel>
 #include <QScrollArea>
 
 Q_DECLARE_METATYPE(OT::Distribution)
@@ -66,7 +66,7 @@ private:
   ResizableTableViewWithoutScrollBar * distParamTableView_;
   CustomStandardItemModel * distParamTableModel_;
   DocumentationToolButton * infoButton_;
-  QLabel * analysisErrorMessageLabel_;
+  TemporaryLabel * analysisErrorMessageLabel_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   PlotWidget * qqPlot_;

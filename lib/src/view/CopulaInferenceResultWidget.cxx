@@ -25,6 +25,7 @@
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/InferenceResultWidget.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 #include "otgui/TranslationManager.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -157,11 +158,11 @@ void CopulaInferenceResultWidget::buildInterface()
       paramWidget->addTab(aWidget, tr("Kendall plot"));
       paramWidget->setTabEnabled(1, false);
       // Parameters tab
-      const QString message = QString("<font color=red>%1</font>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[indices[i]].c_str()));
+      const QString message(QString::fromUtf8(currentSetResult_.getErrorMessages()[indices[i]].c_str()));
       aWidget = new QWidget;
       QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
-      QLabel * errorMessageLabel = new QLabel(message);
-      errorMessageLabel->setWordWrap(true);
+      TemporaryLabel * errorMessageLabel = new TemporaryLabel;
+      errorMessageLabel->setErrorMessage(message);
       aWidgetLayout->addWidget(errorMessageLabel);
       aWidgetLayout->addStretch();
       paramWidget->addTab(aWidget, tr("Parameters"));

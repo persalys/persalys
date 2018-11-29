@@ -171,8 +171,7 @@ void InferenceResultWidget::buildInterface()
     infoButton_ = new DocumentationToolButton;
     connect(infoButton_, SIGNAL(clicked()), this, SLOT(openUrl()));
     paramGroupBoxLayout->addWidget(infoButton_);
-    analysisErrorMessageLabel_ = new QLabel;
-    analysisErrorMessageLabel_->setWordWrap(true);
+    analysisErrorMessageLabel_ = new TemporaryLabel;
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addStretch();
 
@@ -186,8 +185,7 @@ void InferenceResultWidget::buildInterface()
     QGroupBox * paramGroupBox = new QGroupBox(tr("Distribution parameters"));
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramGroupBox);
     paramGroupBoxLayout->addWidget(distParamTableView_);
-    analysisErrorMessageLabel_ = new QLabel;
-    analysisErrorMessageLabel_->setWordWrap(true);
+    analysisErrorMessageLabel_ = new TemporaryLabel;
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
@@ -338,8 +336,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     const String testResultMessage = currentFittingTestResult_.getErrorMessages()[resultIndex];
     if (!testResultMessage.empty())
     {
-      const QString message = QString("<font color=red>%1</font>").arg(QString::fromUtf8(testResultMessage.c_str()));
-      analysisErrorMessageLabel_->setText(message);
+      analysisErrorMessageLabel_->setErrorMessage(QString::fromUtf8(testResultMessage.c_str()));
       analysisErrorMessageLabel_->show();
       distParamTableView_->hide();
       if (infoButton_)
