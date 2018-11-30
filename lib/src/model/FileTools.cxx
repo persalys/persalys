@@ -22,6 +22,10 @@
 
 #include <QSettings>
 #include <QDir>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QApplication>
+#include <QTextStream>
 
 namespace OTGUI
 {
@@ -46,6 +50,62 @@ void FileTools::SetCurrentDir(const QString &fileName)
   {
     QSettings settings;
     settings.setValue("currentDir", info.absolutePath());
+  }
+}
+
+
+void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
+{
+  QString fileName = QFileDialog::getSaveFileName(parent,
+                     tr("Export data..."),
+                     GetCurrentDir() + QDir::separator() + tr("data"),
+                     tr("CSV source files (*.csv)"));
+
+  if (!fileName.isEmpty())
+  {
+    if (!fileName.endsWith(".csv"))
+      fileName += ".csv";
+
+    SetCurrentDir(fileName);
+
+    try
+    {
+      sample.exportToCSVFile(fileName.toLocal8Bit().data(), ",");
+    }
+    catch (std::exception & ex)
+    {
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ") + ex.what());
+    }
+  }
+}
+
+
+void FileTools::ExportData(const QString& text, QWidget * parent)
+{
+  QString fileName = QFileDialog::getSaveFileName(parent,
+                     tr("Export data..."),
+                     GetCurrentDir() + QDir::separator() + tr("data"),
+                     tr("CSV source files (*.csv)"));
+
+  if (!fileName.isEmpty())
+  {
+    if (!fileName.endsWith(".csv"))
+      fileName += ".csv";
+
+    SetCurrentDir(fileName);
+
+    QFile file(fileName.toLocal8Bit().data());
+    try
+    {
+      file.open(QIODevice::WriteOnly);
+      QTextStream stream(&file);
+      stream << text;
+    }
+    catch (std::exception & ex)
+    {
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ") + ex.what());
+    }
+    file.close();
   }
 }
 }

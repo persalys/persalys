@@ -23,15 +23,21 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
-#include <QString>
+#include <openturns/Sample.hxx>
+
+#include <QObject>
 
 namespace OTGUI
 {
-class OTGUI_API FileTools
+class OTGUI_API FileTools : public QObject
 {
+  Q_OBJECT
+
 public:
   static void SetCurrentDir(const QString &fileName);
   static QString GetCurrentDir();
+  static void ExportData(const OT::Sample& sample, QWidget * parent);
+  static void ExportData(const QString& text, QWidget * parent);
 };
 }
 #endif
