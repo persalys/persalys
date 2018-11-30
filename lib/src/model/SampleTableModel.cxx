@@ -129,10 +129,9 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
 }
 
 
-void SampleTableModel::exportData(const QString & fileName)
+Sample SampleTableModel::getSample() const
 {
-  // write
-  data_.exportToCSVFile(fileName.toLocal8Bit().data(), ",");
+  return data_;
 }
 
 

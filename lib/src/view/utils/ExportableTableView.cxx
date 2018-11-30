@@ -21,21 +21,28 @@
 #include "otgui/ExportableTableView.hxx"
 
 #include "otgui/SampleTableModel.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/FileTools.hxx"
 
-#include <QFileDialog>
 #include <QMenu>
-#include <QMessageBox>
-#include <QApplication>
 #include <QSortFilterProxyModel>
 
 namespace OTGUI
 {
 
-ExportableTableView::ExportableTableView(QWidget* parent)
+ExportableTableView::ExportableTableView(QAction * exportAction, QWidget* parent)
   : CopyableTableView(parent)
+  , exportAction_(exportAction)
 {
+  // default action
+  if (!exportAction)
+  {
+    exportAction_ = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
+    connect(exportAction_, SIGNAL(triggered()), this, SLOT(exportData()));
+  }
+  exportAction_->setStatusTip(tr("Export the data"));
+
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
 }
@@ -45,51 +52,36 @@ ExportableTableView::ExportableTableView(QWidget* parent)
 void ExportableTableView::contextMenu(const QPoint & pos)
 {
   QMenu * contextMenu(new QMenu(this));
-  QAction * exportData = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
-  exportData->setStatusTip(tr("Export the data"));
-  connect(exportData, SIGNAL(triggered()), this, SLOT(exportData()));
-  contextMenu->addAction(exportData);
+  contextMenu->addAction(exportAction_);
   contextMenu->popup(this->mapToGlobal(pos));
 }
 
 
 void ExportableTableView::exportData()
 {
-  QString fileName = QFileDialog::getSaveFileName(this,
-                     tr("Export model as..."),
-                     FileTools::GetCurrentDir() + QDir::separator() + tr("data"),
-                     tr("CSV source files (*.csv)"));
+  OT::Sample sample;
+  QString text;
 
-  if (!fileName.isEmpty())
+  if (dynamic_cast<SampleTableModel*>(model()))
   {
-    if (!fileName.endsWith(".csv"))
-      fileName += ".csv";
-
-    FileTools::SetCurrentDir(fileName);
-
-    try
-    {
-      if (dynamic_cast<SampleTableModel*>(model()))
-      {
-        dynamic_cast<SampleTableModel*>(model())->exportData(fileName);
-      }
-      else if (dynamic_cast<QSortFilterProxyModel*>(model()))
-      {
-        QAbstractItemModel * sourceModel = dynamic_cast<QSortFilterProxyModel*>(model())->sourceModel();
-        if (dynamic_cast<SampleTableModel*>(sourceModel))
-          dynamic_cast<SampleTableModel*>(sourceModel)->exportData(fileName);
-        else
-          throw SimpleException(tr("Internal exception"));
-      }
-      else
-      {
-        throw SimpleException(tr("Internal exception"));
-      }
-    }
-    catch (std::exception & ex)
-    {
-      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ") + ex.what());
-    }
+    sample = dynamic_cast<SampleTableModel*>(model())->getSample();
   }
+  else if (dynamic_cast<QSortFilterProxyModel*>(model()))
+  {
+    QAbstractItemModel * sourceModel = dynamic_cast<QSortFilterProxyModel*>(model())->sourceModel();
+    if (dynamic_cast<SampleTableModel*>(sourceModel))
+      sample = dynamic_cast<SampleTableModel*>(sourceModel)->getSample();
+  }
+  else if (dynamic_cast<CustomStandardItemModel*>(model()))
+  {
+    text = dynamic_cast<CustomStandardItemModel*>(model())->getFormattedText();
+  }
+
+  if (sample.getSize())
+    FileTools::ExportData(sample, this);
+  else if (!text.isEmpty())
+    FileTools::ExportData(text, this);
+  else
+    throw SimpleException(tr("Internal exception: can not get the sample"));
 }
 }
