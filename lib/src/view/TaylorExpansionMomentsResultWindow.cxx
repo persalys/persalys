@@ -22,7 +22,7 @@
 
 #include "otgui/TaylorExpansionMomentsAnalysis.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/QtTools.hxx"
 
@@ -86,7 +86,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   // loop on all the outputs
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    ResizableTableViewWithoutScrollBar * momentsEstimationsTable = new ResizableTableViewWithoutScrollBar;
+    CopyableTableView * momentsEstimationsTable = new CopyableTableView;
     momentsEstimationsTable->horizontalHeader()->hide();
     momentsEstimationsTable->verticalHeader()->hide();
     CustomStandardItemModel * momentsEstimationsTableModel = new CustomStandardItemModel(5, 2, momentsEstimationsTable);

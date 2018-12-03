@@ -21,7 +21,7 @@
 #ifndef OTGUI_PARAMETERSTABLEVIEW_HXX
 #define OTGUI_PARAMETERSTABLEVIEW_HXX
 
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 
 #include <openturns/Exception.hxx>
@@ -30,7 +30,7 @@
 
 namespace OTGUI
 {
-class OTGUI_API ParametersTableView : public ResizableTableViewWithoutScrollBar
+class OTGUI_API ParametersTableView : public CopyableTableView
 {
 public:
   ParametersTableView(const QStringList names,             // parameters names
@@ -39,7 +39,7 @@ public:
                       const bool namesHasHeaderType = false, // parameters names display has table header
                       QWidget * parent = 0
                      )
-    : ResizableTableViewWithoutScrollBar(parent)
+    : CopyableTableView(parent)
   {
     if (!names.size() * values.size() > 0)
       throw OT::InvalidArgumentException(HERE) << "To build the ParametersTableView, the data vectors must have the same (not null) dimension\n";

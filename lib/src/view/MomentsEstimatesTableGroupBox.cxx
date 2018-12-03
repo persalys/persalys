@@ -20,7 +20,7 @@
  */
 #include "otgui/MomentsEstimatesTableGroupBox.hxx"
 
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 
 #include <QVBoxLayout>
@@ -59,7 +59,7 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
   const int nbRows = isConfidenceIntervalRequired_ ? 9 : 8;
 
   // table view
-  ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
+  CopyableTableView * momentsEstimationsTableView = new CopyableTableView;
   momentsEstimationsTableView->horizontalHeader()->hide();
   momentsEstimationsTableView->verticalHeader()->hide();
   // table model

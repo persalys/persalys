@@ -138,7 +138,7 @@ void FunctionalChaosResultWindow::buildInterface()
 
     for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
     {
-      ResizableTableViewWithoutScrollBar * momentsEstimationsTableView = new ResizableTableViewWithoutScrollBar;
+      CopyableTableView * momentsEstimationsTableView = new CopyableTableView;
       momentsEstimationsTableView->horizontalHeader()->hide();
       momentsEstimationsTableView->verticalHeader()->hide();
       CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(3, 2, momentsEstimationsTableView);
@@ -244,7 +244,7 @@ void FunctionalChaosResultWindow::buildInterface()
       std::sort(varianceOrder.begin(), varianceOrder.end(), varianceComparison);
 
       // table of part of variance for each basis term
-      ResizableTableViewWithoutScrollBar * tableView = new ResizableTableViewWithoutScrollBar;
+      CopyableTableView * tableView = new CopyableTableView;
       tableView->verticalHeader()->hide();
       tableView->horizontalHeader()->hide();
       CustomStandardItemModel * tableModel = new CustomStandardItemModel(1, 4, tableView);
