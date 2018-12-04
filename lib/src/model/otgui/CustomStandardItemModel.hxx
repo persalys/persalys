@@ -37,7 +37,7 @@ public:
   void setNotEditableItem(const int row, const int column, const QString text, const QColor color = QColor());
   void setNotEditableItem(const int row, const int column, const double value, const int prec = 6);
   void setNotEditableHeaderItem(const int row, const int column, const QString text);
-  virtual void exportData(const QString & fileName);
+  QString getFormattedText() const;
 };
 }
 #endif

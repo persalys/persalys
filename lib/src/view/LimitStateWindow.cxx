@@ -57,7 +57,7 @@ void LimitStateWindow::buildInterface()
   mainLayout->addSpacing(30);
 
   QLabel * label = new QLabel(tr("Definition of the failure event"));
-  label->setStyleSheet("font: bold");
+  label->setStyleSheet("QLabel {font: bold;}");
   mainLayout->addWidget(label);
 
   // spacer

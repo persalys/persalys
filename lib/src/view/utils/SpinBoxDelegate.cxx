@@ -54,7 +54,7 @@ QWidget* SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
       editor->setFrame(false);
       editor->setDecimals(15);
       // fix transparency of the spinbox in GridDesignPage
-      editor->setStyleSheet("background-color: white;");
+      editor->setStyleSheet("QDoubleSpinBox { background-color: white; }");
       return editor;
     }
     case SpinBoxDelegate::correlation:

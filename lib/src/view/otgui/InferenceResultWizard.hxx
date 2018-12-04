@@ -24,7 +24,6 @@
 #include "otgui/Wizard.hxx"
 #include "otgui/Study.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/InferenceResultWidget.hxx"
 
 #include <QComboBox>

@@ -21,7 +21,7 @@
 #include "otgui/CopulaParametersTabWidget.hxx"
 
 #include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/WidgetBoundToDockWidget.hxx"
@@ -202,7 +202,7 @@ void CopulaParametersTabWidget::buildInterface()
 
   // -- show parameters values
   // --- table creation
-  ResizableTableViewWithoutScrollBar * distParamTableView = new ResizableTableViewWithoutScrollBar;
+  CopyableTableView * distParamTableView = new CopyableTableView;
   CustomStandardItemModel * distParamTableModel = new CustomStandardItemModel(0, 0, distParamTableView);
   distParamTableView->setModel(distParamTableModel);
 

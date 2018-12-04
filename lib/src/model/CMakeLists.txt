@@ -94,7 +94,8 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/CustomStandardItemModel.hxx
                                     otgui/DependenciesTableModel.hxx
                                     otgui/OptimizationTableModel.hxx
-                                    otgui/TranslationManager.hxx)
+                                    otgui/TranslationManager.hxx
+                                    otgui/FileTools.hxx)
 
 if (OTMORRIS_FOUND)
   qt5_wrap_cpp (OTGUI_MODEL_MOC_SRCS otgui/MorrisTableModel.hxx)

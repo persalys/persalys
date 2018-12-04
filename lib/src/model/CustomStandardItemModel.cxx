@@ -21,6 +21,7 @@
 #include "otgui/CustomStandardItemModel.hxx"
 
 #include "otgui/AppliException.hxx"
+#include "otgui/StudyTreeViewModel.hxx"
 
 #include <QFile>
 
@@ -45,7 +46,10 @@ void CustomStandardItemModel::setNotEditableItem(const int row, const int column
 
 void CustomStandardItemModel::setNotEditableItem(const int row, const int column, const double value, const int prec)
 {
-  setNotEditableItem(row, column, QString::number(value, 'g', prec));
+  QStandardItem * item = new QStandardItem(QString::number(value, 'g', prec));
+  item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+  item->setData(value, Qt::UserRole + 10);
+  setItem(row, column, item);
 }
 
 
@@ -59,27 +63,21 @@ void CustomStandardItemModel::setNotEditableHeaderItem(const int row, const int 
 }
 
 
-void CustomStandardItemModel::exportData(const QString & fileName)
+QString CustomStandardItemModel::getFormattedText() const
 {
-  QFile file(fileName);
-
-  // check
-  if (!file.open(QFile::WriteOnly))
-    throw IOException(HERE) << tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()).toStdString();
-
   QString result;
 
-  for(int i = 0; i < rowCount(); ++i)
+  for (int i = 0; i < rowCount(); ++i)
   {
-    for (int j = 0; j < columnCount() - 1; ++j)
+    for (int j = 0; j < columnCount(); ++j)
     {
-      result.append(data(index(i, j)).toString());
-      result.append('\t');
+      if (data(index(i, j), Qt::UserRole + 10).isNull())
+        result.append(data(index(i, j)).toString().simplified()); // simplified() = rm '\t', '\n', '\v', '\f', '\r', ' '
+      else
+        result.append(QString::number(data(index(i, j), Qt::UserRole + 10).toDouble(), 'g', StudyTreeViewModel::DefaultSignificantDigits));
+      result.append(j < columnCount() - 1 ? ',' : '\n');
     }
-    result.append(data(index(i, columnCount() - 1)).toString());
-    result.append('\n');
   }
-  file.write(result.toStdString().c_str());
-  file.close();
+  return result;
 }
 }

@@ -20,7 +20,7 @@
  */
 #include "otgui/MinMaxTableGroupBox.hxx"
 
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 
 #include <QVBoxLayout>
@@ -54,7 +54,7 @@ MinMaxTableGroupBox::MinMaxTableGroupBox(const DesignOfExperiment& doe, const bo
 QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DesignOfExperiment& doe, const UnsignedInteger inputIndex)
 {
   // table view
-  ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
+  CopyableTableView * minMaxTableView = new CopyableTableView;
   minMaxTableView->verticalHeader()->hide();
   // table model
   CustomStandardItemModel * minMaxTable = new CustomStandardItemModel(1, 4, minMaxTableView);
@@ -85,7 +85,7 @@ QWidget* MinMaxTableGroupBox::getForInputMinMaxTableView(const DesignOfExperimen
 QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DesignOfExperiment& doe, const UnsignedInteger outputIndex)
 {
   // table view
-  ResizableTableViewWithoutScrollBar * minMaxTableView = new ResizableTableViewWithoutScrollBar;
+  CopyableTableView * minMaxTableView = new CopyableTableView;
   minMaxTableView->verticalHeader()->hide();
   // table model
   const UnsignedInteger nbInputs = doe.getInputSample().getSize() > 0 ? doe.getInputSample().getDimension() : 0;

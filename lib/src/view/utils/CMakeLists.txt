@@ -14,7 +14,6 @@ ot_add_source_file (HorizontalHeaderViewWithCombobox.cxx)
 ot_add_source_file (ExportableTableView.cxx)
 ot_add_source_file (CopyableTableView.cxx)
 ot_add_source_file (QtTools.cxx)
-ot_add_source_file (ResizableTableViewWithoutScrollBar.cxx)
 ot_add_source_file (DoubleSpinBox.cxx)
 ot_add_source_file (UIntSpinBox.cxx)
 ot_add_source_file (LogSpinBox.cxx)
@@ -40,7 +39,6 @@ ot_install_header_file ( HorizontalHeaderViewWithCombobox.hxx )
 ot_install_header_file ( ExportableTableView.hxx )
 ot_install_header_file ( CopyableTableView.hxx )
 ot_install_header_file ( QtTools.hxx )
-ot_install_header_file ( ResizableTableViewWithoutScrollBar.hxx )
 ot_install_header_file ( DoubleSpinBox.hxx )
 ot_install_header_file ( UIntSpinBox.hxx )
 ot_install_header_file ( LogSpinBox.hxx )
@@ -67,7 +65,6 @@ qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
               otgui/HorizontalHeaderViewWithCombobox.hxx
               otgui/ExportableTableView.hxx
               otgui/CopyableTableView.hxx
-              otgui/ResizableTableViewWithoutScrollBar.hxx
               otgui/DoubleSpinBox.hxx
               otgui/UIntSpinBox.hxx
               otgui/LogSpinBox.hxx

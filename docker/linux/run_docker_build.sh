@@ -75,6 +75,7 @@ cp -v /usr/local/lib/libpython*.so.* otgui.AppDir/usr/lib
 cp -v /usr/local/lib/libtbb.so otgui.AppDir/usr/lib
 
 # boost libs
+cp -v /usr/local/lib/libboost_locale.so.1.*.0 otgui.AppDir/usr/lib
 cp -v /usr/local/lib/libboost_regex.so.1.*.0 otgui.AppDir/usr/lib
 cp -v /usr/local/lib/libboost_filesystem.so.1.*.0 otgui.AppDir/usr/lib
 cp -v /usr/local/lib/libboost_system.so.1.*.0 otgui.AppDir/usr/lib

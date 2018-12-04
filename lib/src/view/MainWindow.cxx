@@ -78,6 +78,7 @@ void MainWindow::buildInterface()
   // Main widget
   MainWidget * mainWidget = new MainWidget(this);
   mainSplitter->addWidget(mainWidget);
+  mainSplitter->setStretchFactor(0, 10);
 
   // set manager_
   manager_ = new StudyManager(mainWidget, this);
@@ -93,6 +94,7 @@ void MainWindow::buildInterface()
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
   pythonConsoleDock->setVisible(QSettings().value("pythonConsoleVisibility", true).toBool());
   mainSplitter->addWidget(pythonConsoleDock);
+  mainSplitter->setStretchFactor(1, 1);
 
   setCentralWidget(mainSplitter);
 

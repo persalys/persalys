@@ -294,7 +294,7 @@ void DataAnalysisWindow::addSummaryTab()
 
     // Probability
     QLabel * label = new QLabel(tr("Probability"));
-    label->setStyleSheet("font: bold;");
+    label->setStyleSheet("QLabel {font: bold;}");
     quantLayout->addWidget(label, 0, 0);
     probaSpinBox_ = new DoubleSpinBox;
     label->setBuddy(probaSpinBox_);
@@ -304,7 +304,7 @@ void DataAnalysisWindow::addSummaryTab()
     quantLayout->addWidget(probaSpinBox_, 0, 1);
     // Quantile
     label = new QLabel(tr("Empirical quantile"));
-    label->setStyleSheet("font: bold;");
+    label->setStyleSheet("QLabel {font: bold;}");
     quantLayout->addWidget(label, 1, 0);
     quantileSpinBox_ = new DoubleSpinBox;
     label->setBuddy(quantileSpinBox_);

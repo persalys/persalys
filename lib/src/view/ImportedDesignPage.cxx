@@ -86,7 +86,7 @@ void ImportedDesignPage::buildInterface()
   sizeLayout->addStretch();
   gridLayout->addLayout(sizeLayout, 0, 0);
 
-  dataPreviewTableView_ = new ExportableTableView(groupBox);
+  dataPreviewTableView_ = new ExportableTableView(0, groupBox);
   gridLayout->addWidget(dataPreviewTableView_, 1, 0, 1, 1);
 
   mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);

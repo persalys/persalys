@@ -22,6 +22,7 @@
 #define OTGUI_DATAANALYSISRESULTWINDOW_HXX
 
 #include "otgui/DataAnalysisWindow.hxx"
+#include "otgui/ExportableTableView.hxx"
 
 namespace OTGUI
 {
@@ -36,6 +37,10 @@ protected:
   void initialize(AnalysisItem* item);
   virtual void fillTabWidget();
   void addDependenceTab();
+
+private:
+  OT::CorrelationMatrix C_;
+  ExportableTableView * tableView_;
 };
 }
 #endif

@@ -77,7 +77,7 @@ void StudyWindow::buildInterface()
 
   QLabel * textEdit = new QLabel;
   textEdit->setText(tr("Available functionalities :"));
-  textEdit->setStyleSheet("font: bold;");
+  textEdit->setStyleSheet("QLabel {font: bold;}");
   layout->addWidget(textEdit, row, 0);
 
   textEdit = new QLabel;
@@ -110,7 +110,7 @@ void StudyWindow::buildInterface()
 
   textEdit = new QLabel;
   textEdit->setText(tr("Available functionalities :"));
-  textEdit->setStyleSheet("font: bold;");
+  textEdit->setStyleSheet("QLabel {font: bold;}");
   layout->addWidget(textEdit, row, 2);
 
   textEdit = new QLabel;

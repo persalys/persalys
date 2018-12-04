@@ -21,11 +21,11 @@
 #include "otgui/ScreeningResultWizard.hxx"
 
 #include "otgui/MorrisAnalysis.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QGridLayout>
 #include <QHeaderView>
+#include <QTableView>
 
 using namespace OT;
 

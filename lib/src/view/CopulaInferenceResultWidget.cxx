@@ -25,6 +25,7 @@
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/InferenceResultWidget.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 #include "otgui/TranslationManager.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -63,7 +64,8 @@ void CopulaInferenceResultWidget::buildInterface()
   QVBoxLayout * distGroupBoxLayout = new QVBoxLayout(distGroupBox);
 
   // --- table view
-  distTableView_ = new ResizableTableViewWithoutScrollBar;
+  distTableView_ = new ExportableTableView;
+
   RadioButtonDelegate * delegate = new RadioButtonDelegate(1, distTableView_);
   distTableView_->setItemDelegateForColumn(0, delegate);
   distTableView_->setSelectionMode(QAbstractItemView::NoSelection);
@@ -107,13 +109,9 @@ void CopulaInferenceResultWidget::buildInterface()
     distTableModel_->setData(distTableModel_->index(i + 1, 0), aVariant, Qt::UserRole);
 
     if (currentSetResult_.getErrorMessages()[indices[i]].empty())
-    {
       distTableModel_->setNotEditableItem(i + 1, 1, bicValues[indices[i]], 6);
-    }
     else
-    {
       distTableModel_->setNotEditableItem(i + 1, 1, "-");
-    }
   }
   distTableView_->setModel(distTableModel_);
   distTableModel_->setData(distTableModel_->index(0 + 1, 0), true, Qt::CheckStateRole);
@@ -157,11 +155,11 @@ void CopulaInferenceResultWidget::buildInterface()
       paramWidget->addTab(aWidget, tr("Kendall plot"));
       paramWidget->setTabEnabled(1, false);
       // Parameters tab
-      const QString message = QString("<font color=red>%1</font>").arg(QString::fromUtf8(currentSetResult_.getErrorMessages()[indices[i]].c_str()));
+      const QString message(QString::fromUtf8(currentSetResult_.getErrorMessages()[indices[i]].c_str()));
       aWidget = new QWidget;
       QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
-      QLabel * errorMessageLabel = new QLabel(message);
-      errorMessageLabel->setWordWrap(true);
+      TemporaryLabel * errorMessageLabel = new TemporaryLabel;
+      errorMessageLabel->setErrorMessage(message);
       aWidgetLayout->addWidget(errorMessageLabel);
       aWidgetLayout->addStretch();
       paramWidget->addTab(aWidget, tr("Parameters"));

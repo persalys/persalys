@@ -23,12 +23,12 @@
 
 #include "otgui/InferenceResult.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/ExportableTableView.hxx"
 #include "otgui/PlotWidget.hxx"
 #include "otgui/DocumentationToolButton.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QTabWidget>
-#include <QLabel>
 #include <QScrollArea>
 
 Q_DECLARE_METATYPE(OT::Distribution)
@@ -61,12 +61,12 @@ private:
   bool displayPDF_QQPlot_;
   QTabWidget * tabWidget_;
   FittingTestResult currentFittingTestResult_;
-  ResizableTableViewWithoutScrollBar * distTableView_;
+  ExportableTableView * distTableView_;
   CustomStandardItemModel * distTableModel_;
-  ResizableTableViewWithoutScrollBar * distParamTableView_;
+  CopyableTableView * distParamTableView_;
   CustomStandardItemModel * distParamTableModel_;
   DocumentationToolButton * infoButton_;
-  QLabel * analysisErrorMessageLabel_;
+  TemporaryLabel * analysisErrorMessageLabel_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   PlotWidget * qqPlot_;

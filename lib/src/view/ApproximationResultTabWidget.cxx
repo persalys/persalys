@@ -292,7 +292,7 @@ void ApproximationResultTabWidget::buildInterface()
   groupBox = new QGroupBox(tr("Design point"));
   groupBoxLayout = new QVBoxLayout(groupBox);
 
-  ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
+  CopyableTableView * resultsTable = new CopyableTableView;
   resultsTable->horizontalHeader()->hide();
   resultsTable->verticalHeader()->hide();
 
@@ -368,7 +368,7 @@ void ApproximationResultTabWidget::buildInterface()
     groupBox = new QGroupBox(tr("Sensitivities"));
     groupBoxLayout = new QVBoxLayout(groupBox);
 
-    resultsTable = new ResizableTableViewWithoutScrollBar;
+    resultsTable = new CopyableTableView;
     resultsTable->horizontalHeader()->hide();
     resultsTable->verticalHeader()->hide();
 

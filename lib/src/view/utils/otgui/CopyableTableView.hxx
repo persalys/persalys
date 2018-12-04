@@ -35,6 +35,10 @@ public:
   /** Default constructor */
   CopyableTableView(QWidget * parent = 0);
 
+  QSize sizeHint() const;
+  QSize minimumSizeHint() const;
+  void resizeToContents();
+
 public slots:
   void copy();
 

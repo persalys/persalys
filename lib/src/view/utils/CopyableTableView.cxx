@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QAction>
 #include <QClipboard>
+#include <QHeaderView>
 
 namespace OTGUI
 {
@@ -31,6 +32,45 @@ CopyableTableView::CopyableTableView(QWidget * parent)
   : QTableView(parent)
 {
   buildActions();
+}
+
+
+QSize CopyableTableView::sizeHint() const
+{
+  if (verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff &&
+      horizontalScrollBarPolicy() == Qt::ScrollBarAlwaysOff)
+    return minimumSize();
+  return QTableView::sizeHint();
+}
+
+
+QSize CopyableTableView::minimumSizeHint() const
+{
+  if (verticalScrollBarPolicy() == Qt::ScrollBarAlwaysOff &&
+      horizontalScrollBarPolicy() == Qt::ScrollBarAlwaysOff)
+    return minimumSize();
+  return QTableView::minimumSizeHint();
+}
+
+
+void CopyableTableView::resizeToContents()
+{
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+
+  // resize columns To Contents: set optimal size
+  resizeColumnsToContents();
+  verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+
+  // resize table
+  const int w = horizontalHeader()->length() + (verticalHeader()->isHidden() ? 0 : verticalHeader()->sizeHint().width());
+  const int h = verticalHeader()->length() + horizontalHeader()->height();
+  int x1, y1, x2, y2;
+  getContentsMargins(&x1, &y1, &x2, &y2);
+  setFixedSize(w + x1 + x2, h + y1 + y2);
 }
 
 

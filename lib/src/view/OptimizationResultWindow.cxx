@@ -20,7 +20,7 @@
  */
 #include "otgui/OptimizationResultWindow.hxx"
 #include "otgui/OptimizationAnalysis.hxx"
-#include "otgui/ResizableTableViewWithoutScrollBar.hxx"
+#include "otgui/CopyableTableView.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
 #include "otgui/StudyTreeViewModel.hxx"
 #include "otgui/ParametersWidget.hxx"
@@ -105,7 +105,7 @@ void OptimizationResultWindow::buildInterface()
   QVBoxLayout * optimGroupBoxLayout = new QVBoxLayout(optimGroupBox);
 
   // table view
-  ResizableTableViewWithoutScrollBar * optimTableView = new ResizableTableViewWithoutScrollBar;
+  CopyableTableView * optimTableView = new CopyableTableView;
   optimTableView->verticalHeader()->hide();
   // table model
   const UnsignedInteger nbInputs = result_.getOptimalPoint().getSize();

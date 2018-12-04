@@ -61,7 +61,7 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
 
-  virtual void exportData(const QString & fileName);
+  OT::Sample getSample() const;
 
 public slots:
   void updateHeaderData(const OT::Description & header);

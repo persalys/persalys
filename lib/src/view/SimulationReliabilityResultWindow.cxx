@@ -155,7 +155,7 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   QGroupBox * groupBox = new QGroupBox(tr("Failure probability estimate"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
-  ResizableTableViewWithoutScrollBar * resultsTable = new ResizableTableViewWithoutScrollBar;
+  CopyableTableView * resultsTable = new CopyableTableView;
   resultsTable->horizontalHeader()->hide();
   resultsTable->verticalHeader()->hide();
   CustomStandardItemModel * resultsTableModel = new CustomStandardItemModel(4, 4, resultsTable);

@@ -22,6 +22,7 @@
 
 #include "otgui/DataAnalysis.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/CustomStandardItemModel.hxx"
 
 #include <openturns/Normal.hxx>
 
@@ -55,6 +56,7 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
 
   result_ = analysis.getResult();
   designOfExperiment_ = result_.getDesignOfExperiment();
+  C_ = designOfExperiment_.getSample().computeSpearmanCorrelation();
 
   titleLabel_->setText(tr("Data analysis"));
 }
@@ -105,9 +107,6 @@ void DataAnalysisResultWindow::fillTabWidget()
 
 void DataAnalysisResultWindow::addDependenceTab()
 {
-  // compute correlation
-  CorrelationMatrix C(designOfExperiment_.getSample().computeSpearmanCorrelation());
-
   const UnsignedInteger dim = designOfExperiment_.getSample().getDimension();
 
   // consider only significantly non-zero correlations
@@ -121,48 +120,54 @@ void DataAnalysisResultWindow::addDependenceTab()
   QHBoxLayout * gpBoxLayout = new QHBoxLayout(gpBox);
 
   // table widget
-  QTableWidget * table = new QTableWidget(dim, dim);
-  table->setFocusPolicy(Qt::NoFocus);
-  table->setSelectionMode(QAbstractItemView::NoSelection);
+  tableView_ = new ExportableTableView;
+
+  CustomStandardItemModel * tableModel = new CustomStandardItemModel(dim, dim, tableView_);
 
   for (UnsignedInteger i = 0; i < dim; ++i)
   {
     for (UnsignedInteger j = 0; j < dim; ++j)
     {
-      QTableWidgetItem * item = new QTableWidgetItem;
+      QStandardItem * item = new QStandardItem;
+      item->setData(C_(i, j), Qt::UserRole + 10);
       item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-      item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
+      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 
       if (i != j)
       {
-        if (std::abs(C(i, j)) > epsilon)
+        item->setText(QString::number(C_(i, j), 'g', 3));
+        // set Background color
+        if (std::abs(C_(i, j)) > epsilon)
         {
-          if (C(i, j) < -0.7)
-            item->setBackgroundColor("#7caef4");  //dark blue
-          else if (C(i, j) >= -0.7 && C(i, j) < -0.3)
-            item->setBackgroundColor("#b0cef8");  //blue
-          else if (C(i, j) >= -0.3 && C(i, j) < 0.)
-            item->setBackgroundColor("#e4eefc");  //light blue
-          else if (C(i, j) > 0. && C(i, j) <= 0.3)
-            item->setBackgroundColor("#fadec3");  //light orange
-          else if (C(i, j) > 0.3 && C(i, j) <= 0.7)
-            item->setBackgroundColor("#f4b87c");  //orange
-          else if (C(i, j) > 0.7)
-            item->setBackgroundColor("#ee9235");  //dark orange
+          if (C_(i, j) < -0.7)
+            item->setBackground(QBrush("#7caef4"));  //dark blue
+          else if (C_(i, j) >= -0.7 && C_(i, j) < -0.3)
+            item->setBackground(QBrush("#b0cef8"));  //blue
+          else if (C_(i, j) >= -0.3 && C_(i, j) < 0.)
+            item->setBackground(QBrush("#e4eefc"));  //light blue
+          else if (C_(i, j) > 0. && C_(i, j) <= 0.3)
+            item->setBackground(QBrush("#fadec3"));  //light orange
+          else if (C_(i, j) > 0.3 && C_(i, j) <= 0.7)
+            item->setBackground(QBrush("#f4b87c"));  //orange
+          else if (C_(i, j) > 0.7)
+            item->setBackground(QBrush("#ee9235"));  //dark orange
         }
       }
       else
       {
-        item->setBackgroundColor(Qt::black);
+        item->setText("1.");
+        item->setBackground(Qt::black);
       }
-      table->setItem(i, j, item);
+      tableModel->setItem(i, j, item);
     }
   }
   QStringList headers(QtOT::DescriptionToStringList(designOfExperiment_.getSample().getDescription()));
-  table->setHorizontalHeaderLabels(headers);
-  table->setVerticalHeaderLabels(headers);
-  table->resizeColumnsToContents();
-  gpBoxLayout->addWidget(table);
+  tableModel->setHorizontalHeaderLabels(headers);
+  tableModel->setVerticalHeaderLabels(headers);
+
+  tableView_->setModel(tableModel);
+  tableView_->resizeColumnsToContents();
+  gpBoxLayout->addWidget(tableView_);
 
   // color bar
   QStringList labels;
