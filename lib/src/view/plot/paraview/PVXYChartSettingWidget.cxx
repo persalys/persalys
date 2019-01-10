@@ -429,6 +429,7 @@ void PVXYChartSettingWidget::plotChanged()
   ylogScaleCheckBox_->setChecked(false);
 
   pvViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
+  updateLineEdits();
 }
 
 
