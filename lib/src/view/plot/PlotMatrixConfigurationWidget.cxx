@@ -54,10 +54,13 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
   // show Outputs vs Inputs
-  QCheckBox * outputVsInputCheckBox = new QCheckBox(tr("Outputs vs inputs"));
-  outputVsInputCheckBox->setChecked(false);
-  connect(outputVsInputCheckBox, SIGNAL(clicked(bool)), this, SLOT(showXY(bool)));
-  mainGridLayout->addWidget(outputVsInputCheckBox, ++rowGrid, 0, 1, 2);
+  if (plotMatrix_->getOutputNames().size())
+  {
+    QCheckBox * outputVsInputCheckBox = new QCheckBox(tr("Outputs vs inputs"));
+    outputVsInputCheckBox->setChecked(false);
+    connect(outputVsInputCheckBox, SIGNAL(clicked(bool)), this, SLOT(showXY(bool)));
+    mainGridLayout->addWidget(outputVsInputCheckBox, ++rowGrid, 0, 1, 2);
+  }
 
   // columns label
   label = new QLabel(tr("Columns"));
