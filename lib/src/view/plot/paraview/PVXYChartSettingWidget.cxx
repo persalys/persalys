@@ -328,7 +328,7 @@ void PVXYChartSettingWidget::buildInterface()
   // export button
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
   hboxForBottomButtons->addStretch();
-  QPushButton * button = new QPushButton(tr("Export"));
+  QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(button, SIGNAL(clicked()), pvViewWidget_, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
 

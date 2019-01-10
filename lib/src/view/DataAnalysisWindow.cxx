@@ -49,6 +49,7 @@
 #include <QHeaderView>
 #include <QSplitter>
 #include <QSortFilterProxyModel>
+#include <QPushButton>
 
 using namespace OT;
 
@@ -513,9 +514,18 @@ void DataAnalysisWindow::addTableTab()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
+  QHBoxLayout * hLayout = new QHBoxLayout;
   // sample size
   QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(designOfExperiment_.getSample().getSize()));
-  tabLayout->addWidget(sizeLabel);
+  hLayout->addWidget(sizeLabel);
+  hLayout->addStretch();
+  // export button
+  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
+  hLayout->addWidget(exportButton);
+  connect(exportButton, SIGNAL(clicked()), tableView, SLOT(exportData()));
+  tabLayout->addLayout(hLayout);
+
+  // table
   tabLayout->addWidget(tableView);
 
   // if no failed points and no not evaluated points:
@@ -597,9 +607,16 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
   connect(getItem(), SIGNAL(dataExportRequested()), pvSpreadSheetWidget, SLOT(exportData()));
 
+  QHBoxLayout * hLayout = new QHBoxLayout;
   // sample size
   QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(designOfExperiment_.getSample().getSize()));
-  tableWidgetLayout->addWidget(sizeLabel);
+  hLayout->addWidget(sizeLabel);
+  hLayout->addStretch();
+  // export button
+  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
+  hLayout->addWidget(exportButton);
+  connect(exportButton, SIGNAL(clicked()), pvSpreadSheetWidget, SLOT(exportData()));
+  tableWidgetLayout->addLayout(hLayout);
 
   tableWidgetLayout->addWidget(pvSpreadSheetWidget);
 

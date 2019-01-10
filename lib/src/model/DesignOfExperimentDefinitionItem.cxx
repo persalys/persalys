@@ -70,7 +70,7 @@ void DesignOfExperimentDefinitionItem::buildActions()
 
   appendAction(modifyAction_);
 
-  exportAction_ = new QAction(QIcon(":/images/document-export.png"), tr("Export data"), this);
+  exportAction_ = new QAction(QIcon(":/images/document-export-table.png"), tr("Export data"), this);
   exportAction_->setStatusTip(tr("Export the data in a file"));
   connect(exportAction_, SIGNAL(triggered()), this, SIGNAL(dataExportRequested()));
   appendAction(exportAction_);

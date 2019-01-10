@@ -86,7 +86,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   // pushbutton to export the plot
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
   hboxForBottomButtons->addStretch();
-  QPushButton * button = new QPushButton(tr("Export"));
+  QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
 
