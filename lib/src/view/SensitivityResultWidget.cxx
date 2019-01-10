@@ -117,6 +117,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     int col = 0;
     indicesTableModel->setNotEditableItem(j, col, QString::fromUtf8(inputNames[j].c_str()));
     indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
+    indicesTableModel->setData(indicesTableModel->index(j, col), QString::fromUtf8(inputNames[j].c_str()), Qt::UserRole + 1);
 
     // first order index
     indicesTableModel->setNotEditableItem(j, ++col, firstIndices[j]);
