@@ -77,7 +77,6 @@ void LimitStateWindow::buildInterface()
   gridLayout->addWidget(label, row, 2);
 
   outputsComboBox_ = new QComboBox;
-  updateOutputsList();
   outputsComboBox_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
   connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOutput(int)));
   gridLayout->addWidget(outputsComboBox_, ++row, 0);
@@ -87,12 +86,10 @@ void LimitStateWindow::buildInterface()
   failureComboBox_->addItem(tr("<="), LimitStateWindow::LessOrEqualOperator);
   failureComboBox_->addItem(tr(">"), LimitStateWindow::GreaterOperator);
   failureComboBox_->addItem(tr(">="), LimitStateWindow::GreaterOrEqualOperator);
-  updateOperatorWidget();
   connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
   gridLayout->addWidget(failureComboBox_, row, 1);
 
   thresholdLineEdit_ = new ValueLineEdit;
-  updateThresholdWidget();
   connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
   gridLayout->addWidget(thresholdLineEdit_, row, 2);
 
@@ -102,12 +99,17 @@ void LimitStateWindow::buildInterface()
   gridLayout->setRowStretch(++row, 2);
 
   mainLayout->addLayout(gridLayout, 1);
+
+  updateOutputsList();
+  updateOperatorWidget();
+  updateThresholdWidget();
 }
 
 
 
 void LimitStateWindow::updateOutputsList()
 {
+  errorMessageLabel_->reset();
   SignalBlocker blocker(outputsComboBox_);
   outputsComboBox_->clear();
   QStringList items;
