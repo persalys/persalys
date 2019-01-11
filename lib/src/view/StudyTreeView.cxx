@@ -37,7 +37,7 @@ class TreeItemDelegate : public LineEditWithQValidatorDelegate
 {
 public:
   TreeItemDelegate(QObject* parent)
-    : LineEditWithQValidatorDelegate(QString("[a-zA-Z_][a-zA-Z_0-9]*"), parent)
+    : LineEditWithQValidatorDelegate(QString("[a-zA-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ_][a-zA-Z_0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ]*"), parent)
   {
   }
 

@@ -538,10 +538,9 @@ bool StudyImplementation::hasLimitStateNamed(const String& limitStateName) const
 }
 
 
-String StudyImplementation::getAvailableLimitStateName() const
+String StudyImplementation::getAvailableLimitStateName(const String & rootName) const
 {
   int i = 0;
-  String rootName = "limitState_";
   while (hasLimitStateNamed(rootName + (OSS() << i).str()))
     ++i;
   return rootName + (OSS() << i).str();

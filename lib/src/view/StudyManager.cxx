@@ -88,7 +88,7 @@ void StudyManager::updateView(SubWindow * window)
 void StudyManager::createStudy()
 {
   // create a new study with an available name
-  Study study(Study::GetAvailableName());
+  Study study(Study::GetAvailableName(tr("Study_").toStdString()));
   Study::Add(study);
 }
 

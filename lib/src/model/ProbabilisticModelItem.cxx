@@ -127,7 +127,7 @@ void ProbabilisticModelItem::createLimitState()
     return;
 
   // new limit state
-  LimitState newLimitState(getParentStudyItem()->getStudy().getAvailableLimitStateName(), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
+  LimitState newLimitState(getParentStudyItem()->getStudy().getAvailableLimitStateName(tr("limitState_").toStdString()), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
   getParentStudyItem()->getStudy().add(newLimitState);
 }
 
