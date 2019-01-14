@@ -48,6 +48,7 @@ protected:
   virtual void addSummaryTab();
   void addPDF_CDFTab();
   void addBoxPlotTab();
+  void addDependenceTab();
 #ifdef OTGUI_HAVE_PARAVIEW
   virtual void addParaviewWidgetsTabs();
   virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet = 0);

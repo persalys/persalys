@@ -35,7 +35,6 @@ public:
 protected:
   void initialize(AnalysisItem* item);
   virtual void fillListWidget();
-  virtual void fillTabWidget();
 
 public slots:
   virtual void updateVariablesListVisibility(int indexTab);

@@ -60,41 +60,6 @@ void DesignOfExperimentWindow::fillListWidget()
 }
 
 
-void DesignOfExperimentWindow::fillTabWidget()
-{
-  // -- min/max tab --------------------------------
-  addSummaryTab();
-
-  // -- other tabs
-  bool canUseParaview = false;
-#ifdef OTGUI_HAVE_PARAVIEW
-  if (SubWindow::HaveOpenGL32())
-  {
-    addParaviewWidgetsTabs();
-    canUseParaview = true;
-  }
-#endif
-  if (!canUseParaview)
-  {
-    addTableTab();
-    if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
-    {
-      addPlotMatrixTab();
-      addScatterPlotsTab();
-    }
-  }
-
-  if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
-
-  // tab : model description
-  if (modelDescriptionWidget_)
-    tabWidget_->addTab(modelDescriptionWidget_, tr("Model"));
-
-  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
-}
-
-
 void DesignOfExperimentWindow::updateVariablesListVisibility(int indexTab)
 {
   // if indextab == summary : variablesGroupBox_ is visible
