@@ -120,6 +120,8 @@ QVariant MorrisTableModel::data(const QModelIndex & index, int role) const
 
 bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+  emit errorMessageChanged("");
+
   // when user edit a value
   if (role == Qt::EditRole)
   {
@@ -135,16 +137,11 @@ bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value
         if (lowerBounds[inIndex] == value.toDouble())
           return false;
         lowerBounds[inIndex] = value.toDouble();
-        try
-        {
-          Interval interval = analysis_.getBounds();
-          interval.setLowerBound(lowerBounds);
-          analysis_.setBounds(interval);
-        }
-        catch (std::exception & ex)
-        {
-          emit errorMessageChanged(ex.what());
-        }
+
+        Interval interval = analysis_.getBounds();
+        interval.setLowerBound(lowerBounds);
+        analysis_.setBounds(interval);
+
         break;
       }
       case 3: // upper bounds
@@ -153,16 +150,11 @@ bool MorrisTableModel::setData(const QModelIndex & index, const QVariant & value
         if (upperBounds[inIndex] == value.toDouble())
           return false;
         upperBounds[inIndex] = value.toDouble();
-        try
-        {
-          Interval interval = analysis_.getBounds();
-          interval.setUpperBound(upperBounds);
-          analysis_.setBounds(interval);
-        }
-        catch (std::exception & ex)
-        {
-          emit errorMessageChanged(ex.what());
-        }
+
+        Interval interval = analysis_.getBounds();
+        interval.setUpperBound(upperBounds);
+        analysis_.setBounds(interval);
+
         break;
       }
       default:

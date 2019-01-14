@@ -114,11 +114,27 @@ int MorrisPage::nextId() const
 
 bool MorrisPage::validatePage()
 {
+  // check bounds
   if (tableModel_->getAnalysis().getBounds().isEmpty())
   {
     errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
     return false;
   }
+  // check number of variables which vary
+  UnsignedInteger counter = 0;
+  for (UnsignedInteger i = 0; i < tableModel_->getAnalysis().getBounds().getDimension(); ++i)
+  {
+    if (!tableModel_->getAnalysis().getBounds().getMarginal(i).isNumericallyEmpty())
+      ++counter;
+    if (counter == 2)
+      break;
+  }
+  if (counter < 2)
+  {
+    errorMessageLabel_->setTemporaryErrorMessage(tr("At least two variables must vary."));
+    return false;
+  }
+
   return true;
 }
 
