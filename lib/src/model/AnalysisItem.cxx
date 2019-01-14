@@ -190,6 +190,11 @@ void AnalysisItem::modifyAnalysis()
       emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
       return;
     }
+    if (analysisType == "MorrisAnalysis" && pmAnalysis_ptr->getPhysicalModel().getInputDimension() < 2)
+    {
+      emit showErrorMessageRequested(tr("The physical model must have at least two inputs"));
+      return;
+    }
     // if proba analysis
     if (analysisType != "ModelEvaluation" &&
         analysisType != "MorrisAnalysis" &&
