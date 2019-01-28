@@ -99,7 +99,7 @@ RUN pip install lxml cython \
  && sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python*/site-packages/assimulo/solvers/glimda.py \
  && cd .. && python3 -c "import assimulo; import assimulo.solvers" \
  && wget -q https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip && unzip PyFMI-2.4.0.zip && cd PyFMI-2.4 \
- && curl -SsL https://github.com/conda-forge/pyfmi-feedstock/raw/master/recipe/get_temp_location-keyerror.patch | patch -p1 \
+ && curl -SsL https://raw.githubusercontent.com/conda-forge/pyfmi-feedstock/8e183edf2c17a4f58cc2daad3d5f118fe5fdd9d5/recipe/get_temp_location-keyerror.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
 # sphinx
