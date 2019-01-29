@@ -58,11 +58,7 @@ MorrisResultWidget::MorrisResultWidget(MorrisResult &result, const int outIndex,
 
 void MorrisResultWidget::buildInterface()
 {
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
-
-  // right splitter
-  QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
-
+  // get result info
   const UnsignedInteger nbInVar = result_.getMeanElementaryEffects(outpuIndex_).getSize();
 
   Point a = result_.getMeanAbsoluteElementaryEffects(outpuIndex_);
@@ -79,26 +75,151 @@ void MorrisResultWidget::buildInterface()
 
   const Scalar noEffectBoundary = result_.getNoEffectBoundary(outpuIndex_);
 
-  // var names
+  // - var names
   const QStringList names(QtOT::DescriptionToStringList(result_.getInputSample().getDescription()));
 
-  // plots
+  // main layout
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+
+  // right splitter
+  QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
+  mainLayout->addWidget(mainSplitter);
+
+  // first widget of mainSplitter : tabWidget
+  QTabWidget * tabWidget = new QTabWidget;
+  mainSplitter->addWidget(tabWidget);
+  mainSplitter->setStretchFactor(0, 3);
+
+  // tab plot (µ*, σ)
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  WidgetBoundToDockWidget * tab = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
   PlotWidget * plotMuStarSigma = new PlotWidget(tr("morrisResult"));
-  plotMuStarSigma->setContextMenuPolicy(Qt::NoContextMenu);
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarSigma, SLOT(replot()));
 
+  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotMuStarSigma,
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
+
+  tab->setDockWidget(graphSetting);
+
+  tabLayout->addWidget(plotMuStarSigma);
+  scrollArea->setWidget(tab);
+  tabWidget->addTab(scrollArea, tr("Graph (µ*, σ)"));
+
+  // tab plot (µ*, µ)
+  scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  tab = new WidgetBoundToDockWidget(this);
+  tabLayout = new QVBoxLayout(tab);
+
   PlotWidget * plotMuStarMu = new PlotWidget(tr("morrisResultMuStarMu"));
-  plotMuStarMu->setContextMenuPolicy(Qt::NoContextMenu);
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarMu, SLOT(replot()));
 
-  // markers
+  graphSetting = new GraphConfigurationWidget(plotMuStarMu,
+      QStringList(),
+      QStringList(),
+      GraphConfigurationWidget::NoType,
+      this);
+  tab->setDockWidget(graphSetting);
+
+  tabLayout->addWidget(plotMuStarMu);
+  scrollArea->setWidget(tab);
+  tabWidget->addTab(scrollArea, tr("Graph (µ*, µ)"));
+
+  // set plot (µ*, σ)
+  plotMuStarSigma->setTitle(tr("Standard deviation (σ) and mean of the absolute value (µ*) of the elementary effects"));
+  plotMuStarSigma->setAxisTitle(QwtPlot::xBottom, tr("µ*"));
+  plotMuStarSigma->setAxisTitle(QwtPlot::yLeft, tr("σ"));
+  plotMuStarSigma->setMorrisPlotType(QPointF(noEffectBoundary, 0));
+  QwtLegend * legend = new QwtLegend;
+  legend->setToolTip(tr("Coefficient of variation cv = σ / µ*"));
+  plotMuStarSigma->insertLegend(legend, QwtPlot::RightLegend);
+  plotMuStarSigma->setContextMenuPolicy(Qt::NoContextMenu);
+  connect(plotMuStarSigma, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuSigma()));
+  connect(plotMuStarSigma, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
+  connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarSigma, SLOT(updateVerticalMarkerValue(QPointF)));
+
+  // - curve cv = 1
+  QVector<QPointF> points1(2);
+  const Scalar maxPoint = std::max(maxStdEffect, maxMeanStarEffect) * 1.02;
+  points1[0] = QPointF(0., 0.);
+  points1[1] = QPointF(maxPoint, maxPoint);
+  plotMuStarSigma->plotCurve(points1, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("cv = 1"), true);
+  // - curve cv = 0.5
+  points1[1] = QPointF(maxPoint, maxPoint);
+  plotMuStarSigma->plotCurve(points1, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("cv = 0.5"), true);
+
+  // - two fake markers to add items in the legend
+  // -- first fake blue marker
+  QwtPlotMarker * fakeMarker = new QwtPlotMarker;
+  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
+  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
+  fakeMarker->attach(plotMuStarSigma);
+  fakeMarker->setVisible(false);
+  fakeSelectedMarkers_[0] = fakeMarker;
+  // -- second fake red marker
+  fakeMarker = new QwtPlotMarker;
+  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
+  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
+  fakeMarker->attach(plotMuStarSigma);
+  fakeMarker->setVisible(false);
+  fakeUnselectedMarkers_[0] = fakeMarker;
+
+  // set plot (µ*, µ)
+  plotMuStarMu->setTitle(tr("Mean (µ) and mean of the absolute value (µ*) of the elementary effects"));
+  plotMuStarMu->setAxisTitle(QwtPlot::xBottom, tr("µ*"));
+  plotMuStarMu->setAxisTitle(QwtPlot::yLeft, tr("µ"));
+  plotMuStarMu->setMorrisPlotType(QPointF(noEffectBoundary, 0));
+  plotMuStarMu->insertLegend(new QwtLegend, QwtPlot::RightLegend);
+  plotMuStarMu->setContextMenuPolicy(Qt::NoContextMenu);
+  connect(plotMuStarMu, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuMu()));
+  connect(plotMuStarMu, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
+  connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarMu, SLOT(updateVerticalMarkerValue(QPointF)));
+
+  // - curve µ = µ*
+  QVector<QPointF> points(2);
+  const Scalar maxPoint2 = std::max(maxMeanEffect, maxMeanStarEffect) * 1.02;
+  points[0] = QPointF(0., 0.);
+  points[1] = QPointF(maxPoint2, maxPoint2);
+  plotMuStarMu->plotCurve(points, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("µ = ± µ*"), true);
+  // - curve µ = 0.5 µ*
+  points[1] = QPointF(maxPoint2, maxPoint2 * 0.5);
+  plotMuStarMu->plotCurve(points, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("µ = ± 0.5 µ*"), true);
+  // - curve µ = -µ*
+  points[1] = QPointF(maxPoint2, - maxPoint2);
+  plotMuStarMu->plotCurve(points, QPen(Qt::blue), QwtPlotCurve::Lines, 0, "", true);
+  // - curve µ = -0.5 µ*
+  points[1] = QPointF(maxPoint2, - maxPoint2 * 0.5);
+  plotMuStarMu->plotCurve(points, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, "", true);
+
+  // - two fake markers to add items in the legend
+  // -- first fake blue marker
+  fakeMarker = new QwtPlotMarker;
+  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
+  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
+  fakeMarker->attach(plotMuStarMu);
+  fakeMarker->setVisible(false);
+  fakeSelectedMarkers_[1] = fakeMarker;
+  // -- second fake red marker
+  fakeMarker = new QwtPlotMarker;
+  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
+  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
+  fakeMarker->attach(plotMuStarMu);
+  fakeMarker->setVisible(false);
+  fakeUnselectedMarkers_[1] = fakeMarker;
+
+  // points markers for plot (µ*, σ) and (µ*, µ)
   for (UnsignedInteger i = 0; i < nbInVar; ++i)
   {
     const QPen markerPen = (result_.getInputsSelection(outpuIndex_)[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
 
-    const QPointF pt(result_.getMeanAbsoluteElementaryEffects(outpuIndex_)[i], result_.getStandardDeviationElementaryEffects(outpuIndex_)[i]);
-
     // markers graph (µ*, σ)
+    const QPointF pt(result_.getMeanAbsoluteElementaryEffects(outpuIndex_)[i], result_.getStandardDeviationElementaryEffects(outpuIndex_)[i]);
     QwtPlotMarker * marker = new QwtPlotMarker;
     markersMuSigma_.append(marker);
     marker->setLabelAlignment(Qt::AlignRight | Qt::AlignBottom);
@@ -109,7 +230,6 @@ void MorrisResultWidget::buildInterface()
 
     // markers graph (µ*, µ)
     const QPointF pt2(result_.getMeanAbsoluteElementaryEffects(outpuIndex_)[i], result_.getMeanElementaryEffects(outpuIndex_)[i]);
-
     QwtPlotMarker * marker2 = new QwtPlotMarker;
     markersMuMu_.append(marker2);
     marker2->setLabelAlignment(Qt::AlignRight | Qt::AlignBottom);
@@ -119,140 +239,25 @@ void MorrisResultWidget::buildInterface()
     marker2->attach(plotMuStarMu);
   }
 
-  // graphs
-  QTabWidget * tabWidget = new QTabWidget;
-
-  // tab plot (µ*, σ)
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  WidgetBoundToDockWidget * tab = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-
-  plotMuStarSigma->setTitle(tr("Standard deviation (σ) and mean of the absolute value (µ*) of the elementary effects"));
-  plotMuStarSigma->setAxisTitle(QwtPlot::xBottom, tr("µ*"));
-  plotMuStarSigma->setAxisTitle(QwtPlot::yLeft, tr("σ"));
-  plotMuStarSigma->setMorrisPlotType(QPointF(noEffectBoundary, 0));
-  connect(plotMuStarSigma, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuSigma()));
-  connect(plotMuStarSigma, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
-  connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarSigma, SLOT(updateVerticalMarkerValue(QPointF)));
-
-  // curve A
-  QVector<QPointF> points1(2);
-  const Scalar maxPoint = std::max(maxStdEffect, maxMeanStarEffect) * 1.02;
-  points1[0] = QPointF(0., 0.);
-  points1[1] = QPointF(maxPoint, maxPoint);
-  plotMuStarSigma->plotCurve(points1, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("cv = 1"), true);
-  // curve B
-  points1[1] = QPointF(maxPoint, 0.5 * maxPoint);
-  plotMuStarSigma->plotCurve(points1, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("cv = 0.5"), true);
-
-  // legend
-  QwtLegend * legend = new QwtLegend;
-  legend->setToolTip(tr("Coefficient of variation cv = σ / µ*"));
-  plotMuStarSigma->insertLegend(legend, QwtPlot::RightLegend);
-
-  tabLayout->addWidget(plotMuStarSigma);
-  tabLayout->addStretch();
-
-  // two fake markers to add items in the legend
-  // first fake marker
-  QwtPlotMarker * fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarSigma);
-  fakeMarker->setVisible(false);
-  fakeSelectedMarkers_[0] = fakeMarker;
-  // second fake marker
-  fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarSigma);
-  fakeMarker->setVisible(false);
-  fakeUnselectedMarkers_[0] = fakeMarker;
-
-  // Graph Setting
-  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotMuStarSigma,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
-
-  tab->setDockWidget(graphSetting);
-  scrollArea->setWidget(tab);
-
-  tabWidget->addTab(scrollArea, tr("Graph (µ*, σ)"));
-
-  // tab plot (µ*, µ)
-  scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  tab = new WidgetBoundToDockWidget(this);
-  tabLayout = new QVBoxLayout(tab);
-
-  plotMuStarMu->setTitle(tr("Mean (µ) and mean of the absolute value (µ*) of the elementary effects"));
-  plotMuStarMu->setAxisTitle(QwtPlot::xBottom, tr("µ*"));
-  plotMuStarMu->setAxisTitle(QwtPlot::yLeft, tr("µ"));
-  plotMuStarMu->setMorrisPlotType(QPointF(noEffectBoundary, 0));
-  connect(plotMuStarMu, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuMu()));
-  connect(plotMuStarMu, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
-  connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarMu, SLOT(updateVerticalMarkerValue(QPointF)));
-
-  // curve A
-  QVector<QPointF> points(2);
-  const Scalar maxPoint2 = std::max(maxMeanEffect, maxMeanStarEffect) * 1.02;
-  points[0] = QPointF(0., 0.);
-  points[1] = QPointF(maxPoint2, maxPoint2);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("µ = ± µ*"), true);
-  // curve B
-  points[1] = QPointF(maxPoint2, maxPoint2 * 0.5);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("µ = ± 0.5 µ*"), true);
-  // curve C
-  points[1] = QPointF(maxPoint2, - maxPoint2);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue), QwtPlotCurve::Lines, 0, "", true);
-  // curve D
-  points[1] = QPointF(maxPoint2, - maxPoint2 * 0.5);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, "", true);
-
-  // legend
-  plotMuStarMu->insertLegend(new QwtLegend, QwtPlot::RightLegend);
-
-  tabLayout->addWidget(plotMuStarMu);
-
-  // two fake markers to add items in the legend
-  // first fake marker
-  fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarMu);
-  fakeMarker->setVisible(false);
-  fakeSelectedMarkers_[1] = fakeMarker;
-  // second fake marker
-  fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarMu);
-  fakeMarker->setVisible(false);
-  fakeUnselectedMarkers_[1] = fakeMarker;
-
-  // Graph Setting
-  graphSetting = new GraphConfigurationWidget(plotMuStarMu,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
-
-  tab->setDockWidget(graphSetting);
-  scrollArea->setWidget(tab);
-
-  tabWidget->addTab(scrollArea, tr("Graph (µ*, µ)"));
-  tabLayout->addStretch();
-
   // update labels with number of un/selected points
   updateLabels();
 
-  //
-  mainSplitter->addWidget(tabWidget);
+  // rescale plots
+  QList<double> minorTicks(plotMuStarSigma->axisScaleDiv(QwtPlot::yLeft).ticks(QwtScaleDiv::MinorTick));
+  double step = minorTicks[1] - minorTicks[0];
+  plotMuStarSigma->setAxisScale(QwtPlot::yLeft, - 2 * step, maxPoint);
 
-  // second widget of the splitter
+  minorTicks = plotMuStarSigma->axisScaleDiv(QwtPlot::xBottom).ticks(QwtScaleDiv::MinorTick);
+  step = minorTicks[1] - minorTicks[0];
+  plotMuStarSigma->setAxisScale(QwtPlot::xBottom, - 1 * step, maxMeanStarEffect + 3 * step);
+
+  plotMuStarMu->setAxisScale(QwtPlot::xBottom, - 1 * step, maxMeanStarEffect + 3 * step);
+
+  minorTicks = plotMuStarMu->axisScaleDiv(QwtPlot::yLeft).ticks(QwtScaleDiv::MinorTick);
+  step = minorTicks[1] - minorTicks[0];
+  plotMuStarMu->setAxisScale(QwtPlot::yLeft, - maxMeanEffect - 1 * step, maxMeanEffect + 1 * step);
+
+  // second widget of the splitter : tableView
 
   // table view
   CopyableTableView * tableView = new CopyableTableView;
@@ -276,10 +281,7 @@ void MorrisResultWidget::buildInterface()
   tableView->resizeColumnsToContents();
 
   mainSplitter->addWidget(tableView);
-  mainSplitter->setStretchFactor(1, 3);
-
-  //
-  mainLayout->addWidget(mainSplitter);
+  mainSplitter->setStretchFactor(1, 2);
 }
 
 
