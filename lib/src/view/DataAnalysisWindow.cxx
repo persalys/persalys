@@ -478,6 +478,7 @@ void DataAnalysisWindow::addDependenceTab()
 
   // table widget
   ExportableTableView * tableView = new ExportableTableView;
+  tableView->setExportableAsImage(true);
 
   CustomStandardItemModel * tableModel = new CustomStandardItemModel(dim, dim, tableView);
 
@@ -538,19 +539,23 @@ void DataAnalysisWindow::addDependenceTab()
   QStringList colors;
   colors << "#ee9235" << "#f4b87c" << "#fadec3" << "#ffffff" << "#e4eefc" << "#b0cef8" << "#7caef4";
 
-  QTableWidget * colorTable = new QTableWidget(labels.size(), 1);
+  QTableView * colorTable = new QTableView;
   colorTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   colorTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   colorTable->setFocusPolicy(Qt::NoFocus);
   colorTable->setSelectionMode(QAbstractItemView::NoSelection);
   colorTable->setShowGrid(false);
+
+  QStandardItemModel * colorTableModel = new QStandardItemModel(labels.size(), 1);
   for (int i = 0; i < labels.size(); ++i)
   {
     QPixmap px(20, 20);
     px.fill(colors[i]);
-    colorTable->setItem(i, 0, new QTableWidgetItem(px, labels[i]));
+    colorTableModel->setItem(i, 0, new QStandardItem(px, labels[i]));
   }
-  colorTable->setHorizontalHeaderLabels(QStringList() << tr("Spearman's coefficient"));
+  colorTableModel->setHorizontalHeaderLabels(QStringList() << tr("Spearman's coefficient"));
+  colorTable->setModel(colorTableModel);
+
   colorTable->resizeColumnsToContents();
   colorTable->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   const int w = colorTable->horizontalHeader()->length();
