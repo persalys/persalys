@@ -322,23 +322,8 @@ String DataModel::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = [";
-  for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++ i)
-  {
-    oss << inputColumns_[i];
-    if (i < inputColumns_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
-
-  oss << "outputColumns = [";
-  for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++ i)
-  {
-    oss << outputColumns_[i];
-    if (i < outputColumns_.getSize() - 1)
-      oss << ", ";
-  }
-  oss << "]\n";
+  oss << "inputColumns = " << inputColumns_.__str__() << "\n";
+  oss << "outputColumns = " << outputColumns_.__str__() << "\n";
 
   oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
   oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
@@ -346,7 +331,7 @@ String DataModel::getPythonScript() const
   oss << getName() + " = otguibase.DataModel('" + getName() + "', ";
   oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
 
-  return oss.str();
+  return oss;
 }
 
 

@@ -11,7 +11,7 @@ import otguibase
 
 myStudy = otguibase.Study('myStudy')
 otguibase.Study.Add(myStudy)
-inputColumns = [0, 2, 3]
+inputColumns = [0,2,3]
 outputColumns = []
 inputNames = ['X0', 'X2', 'X3']
 outputNames = []
