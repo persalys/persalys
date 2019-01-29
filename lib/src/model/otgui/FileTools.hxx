@@ -26,6 +26,7 @@
 #include <openturns/Sample.hxx>
 
 #include <QObject>
+#include <QImage>
 
 namespace OTGUI
 {
@@ -38,6 +39,7 @@ public:
   static QString GetCurrentDir();
   static void ExportData(const OT::Sample& sample, QWidget * parent);
   static void ExportData(const QString& text, QWidget * parent);
+  static void ExportImage(const QImage& imgae, QWidget * parent);
 };
 }
 #endif
