@@ -164,6 +164,28 @@ Description Parameters::GetOTIntervalDescription(const Interval& interval)
 }
 
 
+Sample Tools::ImportSample(const String& fileName)
+{
+  std::vector< String > separatorsList(3);
+  separatorsList[0] = " ";
+  separatorsList[1] = ",";
+  separatorsList[2] = ";";
+  Sample sampleFromFile;
+
+  for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
+  {
+    // import sample from the file
+    sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i]);
+    if (sampleFromFile.getSize())
+      break;
+  }
+  if (!sampleFromFile.getSize())
+    throw InvalidArgumentException(HERE) << "The file " << fileName << " does not contain a sample.";
+
+  return sampleFromFile;
+}
+
+
 String Tools::GetLocaleString(const String& str)
 {
   boost::locale::generator g;

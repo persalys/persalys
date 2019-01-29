@@ -166,7 +166,7 @@ Sample ImportedDesignOfExperiment::getSampleFromFile() const
 
 Sample ImportedDesignOfExperiment::getSampleFromFile(const String& fileName) const
 {
-  Sample sampleFromFile(ImportSample(fileName));
+  Sample sampleFromFile(Tools::ImportSample(fileName));
 
   // check sampleFromFile dimension
   const Description inputNames = getPhysicalModel().getInputNames();
@@ -184,28 +184,6 @@ Sample ImportedDesignOfExperiment::getSampleFromFile(const String& fileName) con
   // if empty name or at least two same names
   if (descriptionToCheck.getSize() != sampleDescription.getSize())
     sampleFromFile.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
-
-  return sampleFromFile;
-}
-
-
-Sample ImportedDesignOfExperiment::ImportSample(const String& fileName)
-{
-  std::vector< String > separatorsList(3);
-  separatorsList[0] = " ";
-  separatorsList[1] = ",";
-  separatorsList[2] = ";";
-  Sample sampleFromFile;
-
-  for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
-  {
-    // import sample from the file
-    sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i]);
-    if (sampleFromFile.getSize())
-      break;
-  }
-  if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "The file " << fileName << " does not contain a sample.";
 
   return sampleFromFile;
 }

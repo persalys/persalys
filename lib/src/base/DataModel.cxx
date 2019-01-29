@@ -301,7 +301,7 @@ Sample DataModel::getSampleFromFile() const
 
 Sample DataModel::getSampleFromFile(const String& fileName)
 {
-  Sample sampleFromFile(ImportedDesignOfExperiment::ImportSample(fileName));
+  Sample sampleFromFile(Tools::ImportSample(fileName));
 
   // check the sample description
   const Description sampleDescription(sampleFromFile.getDescription());
