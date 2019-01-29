@@ -27,24 +27,34 @@
 
 #include <QMenu>
 #include <QSortFilterProxyModel>
+#include <QHeaderView>
 
 namespace OTGUI
 {
 
-ExportableTableView::ExportableTableView(QAction * exportAction, QWidget* parent)
+ExportableTableView::ExportableTableView(QWidget* parent)
   : CopyableTableView(parent)
-  , exportAction_(exportAction)
+  , exportAction_(0)
+  , exportableAsImageAction_(0)
 {
   // default action
-  if (!exportAction)
-  {
-    exportAction_ = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
-    connect(exportAction_, SIGNAL(triggered()), this, SLOT(exportData()));
-  }
+  exportAction_ = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
   exportAction_->setStatusTip(tr("Export the data"));
+  connect(exportAction_, SIGNAL(triggered()), this, SLOT(exportData()));
 
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+}
+
+
+void ExportableTableView::setExportableAsImage(const bool exportable)
+{
+  if (exportable)
+  {
+    exportableAsImageAction_ = new QAction(QIcon(":/images/document-export-table.png"), tr("Export as Image"), this);
+    exportableAsImageAction_->setStatusTip(tr("Export table as image"));
+    connect(exportableAsImageAction_, SIGNAL(triggered()), this, SLOT(exportImage()));
+  }
 }
 
 
@@ -53,6 +63,8 @@ void ExportableTableView::contextMenu(const QPoint & pos)
 {
   QMenu * contextMenu(new QMenu(this));
   contextMenu->addAction(exportAction_);
+  if (exportableAsImageAction_)
+    contextMenu->addAction(exportableAsImageAction_);
   contextMenu->popup(this->mapToGlobal(pos));
 }
 
@@ -83,5 +95,19 @@ void ExportableTableView::exportData()
     FileTools::ExportData(text, this);
   else
     throw SimpleException(tr("Internal exception: can not get the sample"));
+}
+
+
+void ExportableTableView::exportImage()
+{
+  int x1, y1, x2, y2;
+  getContentsMargins(&x1, &y1, &x2, &y2);
+  const int w = horizontalHeader()->length() + verticalHeader()->width();
+  const int h = verticalHeader()->length() + horizontalHeader()->height();
+
+  QImage image(QSize(w + x1 + x2, h + y1 + y2), QImage::Format_ARGB32_Premultiplied);
+  render(&image);
+
+  FileTools::ExportImage(image, this);
 }
 }
