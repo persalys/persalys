@@ -1,0 +1,13 @@
+%feature("docstring") OTGUI::EvaluationResult
+"Class containing results of the simulation analysis."
+
+// ---------------------------------------------------------------------
+
+
+%feature("docstring") OTGUI::EvaluationResult::getDesignOfExperiment
+"Design of experiments accessor.
+
+Returns
+-------
+design : :class:`~otguibase.DesignOfExperiment`
+    Design of experiments containing the analysed points"

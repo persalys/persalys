@@ -118,6 +118,7 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
 %include DataModel.i
+%include EvaluationResult.i
 %include DesignOfExperimentAnalysis.i
 %include ModelEvaluation.i
 %include SimulationAnalysis.i
