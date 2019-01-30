@@ -104,6 +104,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       FMUInfo.i FMUInfo_doc.i.in
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in
                       LimitState.i LimitState_doc.i.in
+                      AnalysisResult.i AnalysisResult_doc.i.in
                       AnalysisImplementation.i AnalysisImplementation_doc.i.in
                       DesignOfExperimentAnalysis.i DesignOfExperimentAnalysis_doc.i.in
                       PhysicalModelAnalysis.i PhysicalModelAnalysis_doc.i.in

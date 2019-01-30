@@ -19,6 +19,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      GridDesignOfExperiment.cxx
                      ImportedDesignOfExperiment.cxx
                      ProbabilisticDesignOfExperiment.cxx
+                     AnalysisResult.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      PhysicalModelAnalysis.cxx DesignOfExperimentAnalysis.cxx
                      WithStopCriteriaAnalysis.cxx
@@ -86,6 +87,7 @@ ot_install_header_file ( GridDesignOfExperiment.hxx )
 ot_install_header_file ( ImportedDesignOfExperiment.hxx )
 ot_install_header_file ( ProbabilisticDesignOfExperiment.hxx )
 ot_install_header_file ( DataModel.hxx )
+ot_install_header_file ( AnalysisResult.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )
 ot_install_header_file ( PhysicalModelAnalysis.hxx )
 ot_install_header_file ( DesignOfExperimentAnalysis.hxx )
