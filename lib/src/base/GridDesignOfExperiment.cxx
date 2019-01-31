@@ -37,6 +37,8 @@ static Factory<GridDesignOfExperiment> Factory_GridDesignOfExperiment;
 /* Default constructor */
 GridDesignOfExperiment::GridDesignOfExperiment()
   : DesignOfExperimentEvaluation()
+  , inputNames_()
+  , values_()
   , type_(GridDesignOfExperiment::FromBoundsAndLevels)
 {
 }
@@ -45,6 +47,8 @@ GridDesignOfExperiment::GridDesignOfExperiment()
 /* Constructor with parameters */
 GridDesignOfExperiment::GridDesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
   : DesignOfExperimentEvaluation(name, physicalModel)
+  , inputNames_()
+  , values_()
   , type_(GridDesignOfExperiment::FromBoundsAndLevels)
 {
   initializeParameters();
@@ -59,9 +63,9 @@ GridDesignOfExperiment::GridDesignOfExperiment(const String& name,
     const Indices& levels,
     const Point& values)
   : DesignOfExperimentEvaluation(name, physicalModel)
-  , type_(GridDesignOfExperiment::FromBoundsAndLevels)
   , inputNames_(physicalModel.getInputNames())
   , values_(values)
+  , type_(GridDesignOfExperiment::FromBoundsAndLevels)
 {
   const UnsignedInteger nbInputs = physicalModel.getInputDimension();
   if (!nbInputs)

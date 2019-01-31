@@ -29,46 +29,4 @@ Create the Model evaluation:
 
 Get the result:
 
->>> outputValues = analysis.getOutputValues()"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::ModelEvaluation::getInputValues
-"Input values accessor.
-
-Returns
--------
-values : :py:class:`openturns.Point`
-    Input values."
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::ModelEvaluation::getOutputValues
-"Output values accessor.
-
-Returns
--------
-values : :py:class:`openturns.Point`
-    Output values."
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::ModelEvaluation::setInputValue
-"Input values accessor.
-
-Parameters
-----------
-index : int
-    Input index
-value : float
-    Input value"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::ModelEvaluation::getDesignOfExperiment
-"DesignOfExperiment accessor.
-
-Returns
--------
-design : :class:`~otguibase.DesignOfExperiment`
-    Contains input and output values."
+>>> outputValues = analysis.getResult().getDesignOfExperiment.getOutputSample()"

@@ -316,7 +316,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   }
 
   // get result
-  Sample outputSample(eval.getDesignOfExperiment().getOutputSample());
+  Sample outputSample(eval.getResult().getDesignOfExperiment().getOutputSample());
 
   // check
   if (!eval.getErrorMessage().empty())

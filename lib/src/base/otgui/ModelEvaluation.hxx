@@ -21,12 +21,11 @@
 #ifndef OTGUI_MODELEVALUATION_HXX
 #define OTGUI_MODELEVALUATION_HXX
 
-#include "PhysicalModelAnalysis.hxx"
-#include "DesignOfExperiment.hxx"
+#include "GridDesignOfExperiment.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API ModelEvaluation : public PhysicalModelAnalysis
+class OTGUI_API ModelEvaluation : public GridDesignOfExperiment
 {
   CLASSNAME
 
@@ -41,17 +40,8 @@ public:
   /** Virtual constructor */
   virtual ModelEvaluation * clone() const;
 
-  void updateParameters();
-
-  OT::Point getInputValues() const;
-  void setInputValue(const OT::UnsignedInteger index, const double value);
-
-  DesignOfExperiment getDesignOfExperiment() const;
-  OT::Point getOutputValues() const;
-
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -63,14 +53,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual void initialize();
   virtual void launch();
-  void initializeParameters();
-
-private:
-  OT::Description inputNames_;
-  OT::Point inputValues_;
-  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

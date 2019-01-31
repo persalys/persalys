@@ -79,10 +79,11 @@ protected:
   void initializeParameters();
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
 
-private:
-  Type type_;
+protected:
   OT::Description inputNames_;
   OT::Point values_;
+private:
+  Type type_;
   OT::Point lowerBounds_;
   OT::Point upperBounds_;
   OT::Indices levels_;

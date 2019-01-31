@@ -32,6 +32,7 @@ class OTGUI_API EvaluationResult : public AnalysisResult
 
 public:
   friend class DesignOfExperimentEvaluation;
+  friend class ModelEvaluation;
 
   /** Default constructor */
   EvaluationResult();
