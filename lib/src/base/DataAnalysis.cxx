@@ -66,7 +66,7 @@ DataAnalysis* DataAnalysis::clone() const
 void DataAnalysis::initialize()
 {
   AnalysisImplementation::initialize();
-  result_ = DataAnalysisResult();
+  result_ = DataAnalysisResult(designOfExperiment_);
 }
 
 

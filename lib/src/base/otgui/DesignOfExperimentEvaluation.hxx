@@ -22,6 +22,7 @@
 #define OTGUI_DESIGNOFEXPERIMENTEVALUATION_HXX
 
 #include "SimulationAnalysis.hxx"
+#include "DataAnalysisResult.hxx"
 
 namespace OTGUI
 {
@@ -43,11 +44,14 @@ public:
   virtual void setName(const OT::String& name);
 
   virtual OT::Sample getOriginalInputSample() const;
-  void setDesignOfExperiment(const DesignOfExperiment & designOfExperiment);
 
   OT::Sample getNotEvaluatedInputSample() const;
 
+  void resetResult();
+  DataAnalysisResult getResult() const;
+
   virtual Parameters getParameters() const;
+  virtual bool hasValidResult() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -56,10 +60,12 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual void initialize();
   virtual void launch();
 
 protected:
   mutable OT::Sample originalInputSample_;
+  DataAnalysisResult result_;
 };
 }
 #endif

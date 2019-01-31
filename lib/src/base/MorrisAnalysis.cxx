@@ -67,9 +67,7 @@ MorrisAnalysis::MorrisAnalysis(const String& name, const PhysicalModel& physical
 /* Virtual constructor */
 MorrisAnalysis* MorrisAnalysis::clone() const
 {
-  MorrisAnalysis * newAnalysis = new MorrisAnalysis(*this);
-  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
-  return newAnalysis;
+  return new MorrisAnalysis(*this);
 }
 
 

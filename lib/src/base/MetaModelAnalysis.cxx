@@ -81,13 +81,13 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
   , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
-  SimulationAnalysis * analysis_ptr = dynamic_cast<SimulationAnalysis*>(analysis.getImplementation().get());
+  DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
 
   if (!analysis_ptr)
   {
     throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiments";
   }
-  designOfExperiment_ = analysis_ptr->getDesignOfExperiment();
+  designOfExperiment_ = analysis_ptr->getResult().getDesignOfExperiment();
   if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
     isDeterministicAnalysis_ = false;
   setInterestVariables(analysis_ptr->getInterestVariables());
