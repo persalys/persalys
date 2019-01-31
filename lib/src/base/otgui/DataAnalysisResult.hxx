@@ -21,13 +21,13 @@
 #ifndef OTGUI_DATAANALYSISRESULT_HXX
 #define OTGUI_DATAANALYSISRESULT_HXX
 
-#include "DesignOfExperiment.hxx"
+#include "EvaluationResult.hxx"
 
 #include <openturns/Distribution.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API DataAnalysisResult : public OT::PersistentObject
+class OTGUI_API DataAnalysisResult : public EvaluationResult
 {
   CLASSNAME
 
@@ -41,10 +41,12 @@ public:
   /** Default constructor */
   DataAnalysisResult();
 
+  /** Constructor with parameters */
+  DataAnalysisResult(const DesignOfExperiment& design);
+
   /** Virtual constructor */
   virtual DataAnalysisResult * clone() const;
 
-  DesignOfExperiment getDesignOfExperiment() const;
   PointCollection getMin() const;
   PointCollection getMax() const;
 
@@ -64,8 +66,6 @@ public:
   DataSample::SampleCollection getPDF() const;
   DataSample::SampleCollection getCDF() const;
 
-  double getElapsedTime() const;
-
   /** String converter */
   virtual OT::String __repr__() const;
 
@@ -76,7 +76,6 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  DesignOfExperiment designOfExperiment_;
   OT::PersistentCollection<OT::Point> min_;
   OT::PersistentCollection<OT::Point> max_;
   OT::PersistentCollection<OT::Point> mean_;
@@ -93,7 +92,6 @@ private:
   OT::PersistentCollection<OT::Point> outliers_;
   OT::PersistentCollection<OT::Sample> pdf_;
   OT::PersistentCollection<OT::Sample> cdf_;
-  double elapsedTime_;
 };
 }
 #endif

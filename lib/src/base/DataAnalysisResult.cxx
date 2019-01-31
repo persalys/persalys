@@ -33,8 +33,7 @@ static Factory<DataAnalysisResult> Factory_DataAnalysisResult;
 
 /* Default constructor */
 DataAnalysisResult::DataAnalysisResult()
-  : PersistentObject()
-  , designOfExperiment_()
+  : EvaluationResult()
   , min_()
   , max_()
   , mean_()
@@ -51,7 +50,30 @@ DataAnalysisResult::DataAnalysisResult()
   , outliers_()
   , pdf_()
   , cdf_()
-  , elapsedTime_(0.)
+{
+
+}
+
+
+/* Constructor with parameters */
+DataAnalysisResult::DataAnalysisResult(const DesignOfExperiment& design)
+  : EvaluationResult(design)
+  , min_()
+  , max_()
+  , mean_()
+  , coefficientOfVariation_()
+  , median_()
+  , standardDeviation_()
+  , variance_()
+  , skewness_()
+  , kurtosis_()
+  , firstQuartile_()
+  , thirdQuartile_()
+  , meanConfidenceInterval_()
+  , stdConfidenceInterval_()
+  , outliers_()
+  , pdf_()
+  , cdf_()
 {
 
 }
@@ -60,12 +82,6 @@ DataAnalysisResult::DataAnalysisResult()
 DataAnalysisResult* DataAnalysisResult::clone() const
 {
   return new DataAnalysisResult(*this);
-}
-
-
-DesignOfExperiment DataAnalysisResult::getDesignOfExperiment() const
-{
-  return designOfExperiment_;
 }
 
 
@@ -165,12 +181,6 @@ DataSample::SampleCollection DataAnalysisResult::getCDF() const
 }
 
 
-double DataAnalysisResult::getElapsedTime() const
-{
-  return elapsedTime_;
-}
-
-
 /* String converter */
 String DataAnalysisResult::__repr__() const
 {
@@ -197,8 +207,7 @@ String DataAnalysisResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void DataAnalysisResult::save(Advocate & adv) const
 {
-  PersistentObject::save(adv);
-  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
+  EvaluationResult::save(adv);
   adv.saveAttribute("min_", min_);
   adv.saveAttribute("max_", max_);
   adv.saveAttribute("mean_", mean_);
@@ -215,16 +224,14 @@ void DataAnalysisResult::save(Advocate & adv) const
   adv.saveAttribute("outliers_", outliers_);
   adv.saveAttribute("pdf_", pdf_);
   adv.saveAttribute("cdf_", cdf_);
-  adv.saveAttribute("elapsedTime_", elapsedTime_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void DataAnalysisResult::load(Advocate & adv)
 {
-  PersistentObject::load(adv);
+  EvaluationResult::load(adv);
   adv.loadAttribute("min_", min_);
-  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
   adv.loadAttribute("max_", max_);
   adv.loadAttribute("mean_", mean_);
   adv.loadAttribute("median_", median_);
@@ -240,6 +247,5 @@ void DataAnalysisResult::load(Advocate & adv)
   adv.loadAttribute("outliers_", outliers_);
   adv.loadAttribute("pdf_", pdf_);
   adv.loadAttribute("cdf_", cdf_);
-  adv.loadAttribute("elapsedTime_", elapsedTime_);
 }
 }

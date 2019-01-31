@@ -63,9 +63,7 @@ MonteCarloAnalysis::MonteCarloAnalysis(const String& name, const PhysicalModel& 
 /* Virtual constructor */
 MonteCarloAnalysis* MonteCarloAnalysis::clone() const
 {
-  MonteCarloAnalysis * newAnalysis = new MonteCarloAnalysis(*this);
-  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
-  return newAnalysis;
+  return new MonteCarloAnalysis(*this);
 }
 
 
@@ -211,11 +209,11 @@ void MonteCarloAnalysis::launch()
     throw InvalidValueException(HERE) << "Monte Carlo Analysis failed. The output sample is empty. " << warningMessage_;
 
   // set design of experiments
-  designOfExperiment_.setInputSample(effectiveInputSample);
-  designOfExperiment_.setOutputSample(outputSample);
+  result_.designOfExperiment_.setInputSample(effectiveInputSample);
+  result_.designOfExperiment_.setOutputSample(outputSample);
 
   // compute data analysis
-  DataAnalysis dataAnalysis("", designOfExperiment_);
+  DataAnalysis dataAnalysis("", result_.designOfExperiment_);
   dataAnalysis.setIsConfidenceIntervalRequired(isConfidenceIntervalRequired());
   dataAnalysis.setLevelConfidenceInterval(levelConfidenceInterval_);
   dataAnalysis.run();
@@ -278,6 +276,12 @@ String MonteCarloAnalysis::getPythonScript() const
 }
 
 
+bool MonteCarloAnalysis::hasValidResult() const
+{
+  return result_.getDesignOfExperiment().getSample().getSize() != 0;
+}
+
+
 /* String converter */
 String MonteCarloAnalysis::__repr__() const
 {
@@ -311,5 +315,12 @@ void MonteCarloAnalysis::load(Advocate & adv)
   adv.loadAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
   adv.loadAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
   adv.loadAttribute("result_", result_);
+  // can open older xml files
+  if (!result_.getDesignOfExperiment().getSample().getSize())
+  {
+    DesignOfExperiment experiment;
+    adv.loadAttribute("designOfExperiment_", experiment);
+    result_.designOfExperiment_ = experiment;
+  }
 }
 }
