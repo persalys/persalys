@@ -35,4 +35,11 @@ DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentD
 
   buildInterface();
 }
+
+
+void DesignOfExperimentInputWindow::updateVariablesListVisibility(int indexTab)
+{
+  // if indextab == summary : variablesGroupBox_ is visible
+  variablesGroupBox_->setVisible(indexTab == 0);
+}
 }

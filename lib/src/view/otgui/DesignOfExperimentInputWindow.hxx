@@ -32,6 +32,9 @@ class OTGUI_API DesignOfExperimentInputWindow : public DataAnalysisWindow
 
 public:
   DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent = 0);
+
+public slots:
+  virtual void updateVariablesListVisibility(int indexTab);
 };
 }
 #endif
