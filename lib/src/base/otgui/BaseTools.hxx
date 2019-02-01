@@ -57,5 +57,30 @@ public:
   static OT::String GetLocaleString(const OT::String& str);
   static int IsUTF8(const char *data, size_t size);
 };
+
+
+class OTGUI_API TimeCriteria
+{
+  friend class WithStopCriteriaAnalysis;
+
+public:
+  TimeCriteria() : startTime_(Now()), elapsedTime_(0.), maximumElapsedTime_(0.), stopRequested_(false)
+  {};
+  virtual ~TimeCriteria() {};
+  void setStartTime(const OT::Scalar startTime);
+  OT::Scalar getStartTime() const;
+  void setMaxElapsedTime(const OT::Scalar seconds);
+  void stop();
+  void incrementElapsedTime();
+  OT::Scalar getElapsedTime() const;
+  /** System time in seconds */
+  static OT::Scalar Now();
+
+private:
+  OT::Scalar startTime_;
+  mutable OT::Scalar elapsedTime_;
+  OT::Scalar maximumElapsedTime_;
+  bool stopRequested_;
+};
 }
 #endif
