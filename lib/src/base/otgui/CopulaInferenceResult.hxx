@@ -22,11 +22,11 @@
 #define OTGUI_COPULAINFERENCERESULT_HXX
 
 #include "CopulaInferenceSetResult.hxx"
-#include "DesignOfExperiment.hxx"
+#include "EvaluationResult.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API CopulaInferenceResult : public OT::PersistentObject
+class OTGUI_API CopulaInferenceResult : public EvaluationResult
 {
   CLASSNAME
 
@@ -44,8 +44,6 @@ public:
   CopulaInferenceSetResultCollection getCopulaInferenceSetResultCollection() const;
   CopulaInferenceSetResult getCopulaInferenceSetResult(const OT::Description& variablesNames) const;
 
-  DesignOfExperiment getDesignOfExperiment() const;
-
   /** String converter */
   virtual OT::String __repr__() const;
 
@@ -57,7 +55,6 @@ public:
 
 private:
   OT::PersistentCollection< CopulaInferenceSetResult > copulaInferenceSetResultCollection_;
-  DesignOfExperiment designOfExperiment_;
 };
 }
 #endif

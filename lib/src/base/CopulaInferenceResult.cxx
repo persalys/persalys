@@ -34,7 +34,7 @@ static Factory<PersistentCollection<CopulaInferenceSetResult> > Factory_Persiste
 
 /* Default constructor */
 CopulaInferenceResult::CopulaInferenceResult()
-  : PersistentObject()
+  : EvaluationResult()
 {
 }
 
@@ -65,12 +65,6 @@ CopulaInferenceSetResult CopulaInferenceResult::getCopulaInferenceSetResult(cons
 }
 
 
-DesignOfExperiment CopulaInferenceResult::getDesignOfExperiment() const
-{
-  return designOfExperiment_;
-}
-
-
 /* String converter */
 String CopulaInferenceResult::__repr__() const
 {
@@ -84,17 +78,15 @@ String CopulaInferenceResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void CopulaInferenceResult::save(Advocate& adv) const
 {
-  PersistentObject::save(adv);
+  EvaluationResult::save(adv);
   adv.saveAttribute("copulaInferenceSetResultCollection_", copulaInferenceSetResultCollection_);
-  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void CopulaInferenceResult::load(Advocate& adv)
 {
-  PersistentObject::load(adv);
+  EvaluationResult::load(adv);
   adv.loadAttribute("copulaInferenceSetResultCollection_", copulaInferenceSetResultCollection_);
-  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
 }
 }
