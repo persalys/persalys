@@ -25,11 +25,7 @@
 
 #include <QVBoxLayout>
 #include <QHeaderView>
-#include <QFileDialog>
-#include <QImageWriter>
 #include <QPainter>
-#include <QMessageBox>
-#include <QApplication>
 
 #include <qwt_plot_renderer.h>
 #include <qwt_plot_canvas.h>
@@ -294,31 +290,6 @@ void PlotMatrixWidget::setRowsToDisplay(QStringList rows)
 
 void PlotMatrixWidget::exportPlot()
 {
-  QString fileName = QFileDialog::getSaveFileName(this,
-                     tr("Export plot"),
-                     FileTools::GetCurrentDir(),
-                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
-
-  if (!fileName.isEmpty())
-  {
-    QString format = QFileInfo(fileName).suffix().toLower();
-    FileTools::SetCurrentDir(fileName);
-
-    if (format.isEmpty())
-    {
-      fileName += ".png";
-      format = "png";
-    }
-    if (QImageWriter::supportedImageFormats().indexOf(format.toLatin1()) >= 0)
-    {
-      bool saveOperationSucceed = getMatrixImage().save(fileName, format.toLatin1());
-      if (!saveOperationSucceed)
-        QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the plot."));
-    }
-    else
-    {
-      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Format not supported."));
-    }
-  }
+  FileTools::ExportImage(getMatrixImage(), this);
 }
 }

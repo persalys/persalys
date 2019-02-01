@@ -44,11 +44,14 @@
 #include <pqApplicationCore.h>
 #endif
 
+#include <openturns/Normal.hxx>
+
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QHeaderView>
 #include <QSplitter>
 #include <QSortFilterProxyModel>
+#include <QPushButton>
 
 using namespace OT;
 
@@ -183,6 +186,8 @@ void DataAnalysisWindow::fillTabWidget()
     addPDF_CDFTab();
     // tab: box plots
     addBoxPlotTab();
+    // tab: correlation
+    addDependenceTab();
   }
   bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
@@ -328,6 +333,9 @@ void DataAnalysisWindow::addSummaryTab()
 
 void DataAnalysisWindow::addPDF_CDFTab()
 {
+  if (!result_.getPDF().getSize() || !result_.getCDF().getSize())
+    return;
+
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
@@ -399,6 +407,10 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
 void DataAnalysisWindow::addBoxPlotTab()
 {
+  if (!result_.getMedian().getSize() || !result_.getFirstQuartile().getSize() ||
+      !result_.getThirdQuartile().getSize() || !result_.getOutliers().getSize())
+    return;
+
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
@@ -446,6 +458,118 @@ void DataAnalysisWindow::addBoxPlotTab()
 
   scrollArea->setWidget(tabStackedWidget);
   tabWidget_->addTab(scrollArea, tr("Box plots"));
+}
+
+
+void DataAnalysisWindow::addDependenceTab()
+{
+  const CorrelationMatrix C(designOfExperiment_.getSample().computeSpearmanCorrelation());
+  const UnsignedInteger dim = designOfExperiment_.getSample().getDimension();
+
+  // consider only significantly non-zero correlations
+  const double alpha = 0.05;
+  const double epsilon = Normal().computeQuantile(1 - alpha)[0] / std::sqrt(designOfExperiment_.getSample().getSize() - 1);
+
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+
+  QGroupBox * gpBox = new QGroupBox(tr("Spearman's matrix estimate"));
+  QHBoxLayout * gpBoxLayout = new QHBoxLayout(gpBox);
+
+  // table widget
+  ExportableTableView * tableView = new ExportableTableView;
+  tableView->setExportableAsImage(true);
+
+  CustomStandardItemModel * tableModel = new CustomStandardItemModel(dim, dim, tableView);
+
+  for (UnsignedInteger i = 0; i < dim; ++i)
+  {
+    for (UnsignedInteger j = 0; j < dim; ++j)
+    {
+      QStandardItem * item = new QStandardItem;
+      item->setData(C(i, j), Qt::UserRole + 10);
+      item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+      item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+
+      if (i != j)
+      {
+        item->setText(QString::number(C(i, j), 'g', 3));
+        // set Background color
+        if (std::abs(C(i, j)) > epsilon)
+        {
+          if (C(i, j) < -0.7)
+            item->setBackground(QBrush("#7caef4"));  //dark blue
+          else if (C(i, j) >= -0.7 && C(i, j) < -0.3)
+            item->setBackground(QBrush("#b0cef8"));  //blue
+          else if (C(i, j) >= -0.3 && C(i, j) < 0.)
+            item->setBackground(QBrush("#e4eefc"));  //light blue
+          else if (C(i, j) > 0. && C(i, j) <= 0.3)
+            item->setBackground(QBrush("#fadec3"));  //light orange
+          else if (C(i, j) > 0.3 && C(i, j) <= 0.7)
+            item->setBackground(QBrush("#f4b87c"));  //orange
+          else if (C(i, j) > 0.7)
+            item->setBackground(QBrush("#ee9235"));  //dark orange
+        }
+      }
+      else
+      {
+        item->setText("1.");
+        item->setBackground(Qt::black);
+      }
+      tableModel->setItem(i, j, item);
+    }
+  }
+  QStringList headers(QtOT::DescriptionToStringList(designOfExperiment_.getSample().getDescription()));
+  tableModel->setHorizontalHeaderLabels(headers);
+  tableModel->setVerticalHeaderLabels(headers);
+
+  tableView->setModel(tableModel);
+  tableView->resizeColumnsToContents();
+  gpBoxLayout->addWidget(tableView);
+
+  // color bar
+  QStringList labels;
+  labels << "ρ > 0.7"
+         << "0.3 < ρ ≤ 0.7"
+         << "ε < ρ ≤ 0.3"
+         << "-ε ≤ ρ ≤ ε"
+         << "-0.3 ≤ ρ < -ε"
+         << "-0.7 ≤ ρ < -0.3"
+         << "ρ < -0.7";
+  QStringList colors;
+  colors << "#ee9235" << "#f4b87c" << "#fadec3" << "#ffffff" << "#e4eefc" << "#b0cef8" << "#7caef4";
+
+  QTableView * colorTable = new QTableView;
+  colorTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  colorTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  colorTable->setFocusPolicy(Qt::NoFocus);
+  colorTable->setSelectionMode(QAbstractItemView::NoSelection);
+  colorTable->setShowGrid(false);
+
+  QStandardItemModel * colorTableModel = new QStandardItemModel(labels.size(), 1);
+  for (int i = 0; i < labels.size(); ++i)
+  {
+    QPixmap px(20, 20);
+    px.fill(colors[i]);
+    colorTableModel->setItem(i, 0, new QStandardItem(px, labels[i]));
+  }
+  colorTableModel->setHorizontalHeaderLabels(QStringList() << tr("Spearman's coefficient"));
+  colorTable->setModel(colorTableModel);
+
+  colorTable->resizeColumnsToContents();
+  colorTable->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
+  const int w = colorTable->horizontalHeader()->length();
+  const int h = colorTable->verticalHeader()->length() + colorTable->horizontalHeader()->height();
+  int x1, y1, x2, y2;
+  colorTable->getContentsMargins(&x1, &y1, &x2, &y2);
+  colorTable->setFixedSize(w + x1 + x2, h + y1 + y2);
+  colorTable->verticalHeader()->hide();
+
+  gpBoxLayout->addWidget(colorTable, 0, Qt::AlignTop);
+
+  mainLayout->addWidget(gpBox);
+
+  tabWidget_->addTab(mainWidget, tr("Dependence"));
 }
 
 
@@ -513,9 +637,18 @@ void DataAnalysisWindow::addTableTab()
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
+  QHBoxLayout * hLayout = new QHBoxLayout;
   // sample size
   QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(designOfExperiment_.getSample().getSize()));
-  tabLayout->addWidget(sizeLabel);
+  hLayout->addWidget(sizeLabel);
+  hLayout->addStretch();
+  // export button
+  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
+  hLayout->addWidget(exportButton);
+  connect(exportButton, SIGNAL(clicked()), tableView, SLOT(exportData()));
+  tabLayout->addLayout(hLayout);
+
+  // table
   tabLayout->addWidget(tableView);
 
   // if no failed points and no not evaluated points:
@@ -597,9 +730,16 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
   connect(getItem(), SIGNAL(dataExportRequested()), pvSpreadSheetWidget, SLOT(exportData()));
 
+  QHBoxLayout * hLayout = new QHBoxLayout;
   // sample size
   QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(designOfExperiment_.getSample().getSize()));
-  tableWidgetLayout->addWidget(sizeLabel);
+  hLayout->addWidget(sizeLabel);
+  hLayout->addStretch();
+  // export button
+  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
+  hLayout->addWidget(exportButton);
+  connect(exportButton, SIGNAL(clicked()), pvSpreadSheetWidget, SLOT(exportData()));
+  tableWidgetLayout->addLayout(hLayout);
 
   tableWidgetLayout->addWidget(pvSpreadSheetWidget);
 
@@ -835,6 +975,9 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
 
 void DataAnalysisWindow::updateSpinBoxes(int indexList)
 {
+  if (!quantileSpinBox_)
+    return;
+
   SignalBlocker blocker(quantileSpinBox_);
 
   // index of the variable in result_

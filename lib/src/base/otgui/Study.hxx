@@ -36,7 +36,7 @@ public:
   static OT::Collection<OTGUI::Study> GetInstances();
   static OT::Description GetFileNames();
   static bool HasInstanceNamed(const OT::String& studyName);
-  static OT::String GetAvailableName();
+  static OT::String GetAvailableName(const OT::String& rootName);
   static void Add(const Study& study);
   static void Remove(const Study& study);
   static Study Open(const OT::String& xmlFileName);
@@ -64,13 +64,13 @@ public:
 
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);
-  OT::String getAvailableDataModelName() const;
+  OT::String getAvailableDataModelName(const OT::String& modelRootName) const;
   void add(const DesignOfExperiment& designOfExperiment);
   void remove(const DesignOfExperiment& designOfExperiment);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
-  OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName = "PhysicalModel_") const;
+  OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName) const;
   void add(const PhysicalModel& physicalModel);
   void remove(const PhysicalModel& physicalModel);
 
@@ -81,7 +81,7 @@ public:
   void remove(const Analysis& analysis);
 
   OT::Collection<LimitState> getLimitStates() const;
-  OT::String getAvailableLimitStateName() const;
+  OT::String getAvailableLimitStateName(const OT::String & rootName) const;
   void add(const LimitState& limitState);
   void remove(const LimitState& limitState);
 

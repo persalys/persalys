@@ -214,10 +214,12 @@ void OptimizationAnalysis::launch()
     throw InvalidArgumentException(HERE) << "Invalid starting point";
   if (!variableInputs_.getSize())
     throw InvalidArgumentException(HERE) << "At least one variable must vary";
-  for (UnsignedInteger i = 0; i < variableInputs_.getSize(); ++i)
+  Description allVar(variableInputs_);
+  allVar.add(inputNames_);
+  for (UnsignedInteger i = 0; i < allVar.getSize(); ++i)
   {
-    if (!getPhysicalModel().hasInputNamed(variableInputs_[i]))
-      throw InvalidArgumentException(HERE) << "The physical model does not contain an input variable named " << variableInputs_[i];
+    if (!getPhysicalModel().hasInputNamed(allVar[i]))
+      throw InvalidArgumentException(HERE) << "The physical model does not contain an input variable named " << allVar[i];
   }
 
   // get bounds and fixed inputs values

@@ -62,14 +62,14 @@ public:
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment & getDataModelByName(const OT::String & dataModelName);
   bool hasDataModelNamed(const OT::String & dataModelName) const;
-  OT::String getAvailableDataModelName() const;
+  OT::String getAvailableDataModelName(const OT::String& modelRootName) const;
   void add(const DesignOfExperiment & designOfExperiment);
   void remove(const DesignOfExperiment & designOfExperiment);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel & getPhysicalModelByName(const OT::String & physicalModelName);
   bool hasPhysicalModelNamed(const OT::String & physicalModelName) const;
-  OT::String getAvailablePhysicalModelName(const OT::String & physicalModelRootName = "PhysicalModel_") const;
+  OT::String getAvailablePhysicalModelName(const OT::String & physicalModelRootName) const;
   void add(const PhysicalModel & physicalModel);
   void remove(const PhysicalModel & physicalModel);
 
@@ -82,7 +82,7 @@ public:
 
   OT::Collection<LimitState> getLimitStates() const;
   bool hasLimitStateNamed(const OT::String & limitStateName) const;
-  OT::String getAvailableLimitStateName() const;
+  OT::String getAvailableLimitStateName(const OT::String & rootName) const;
   void add(const LimitState & limitState);
   void remove(const LimitState & limitState);
 

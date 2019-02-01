@@ -64,10 +64,9 @@ bool Study::HasInstanceNamed(const String & studyName)
 }
 
 
-String Study::GetAvailableName()
+String Study::GetAvailableName(const String& rootName)
 {
   int i = 0;
-  String rootName = "Study_";
   while (HasInstanceNamed(rootName + (OSS() << i).str()))
     ++i;
   return rootName + (OSS() << i).str();
@@ -204,9 +203,9 @@ DesignOfExperiment& Study::getDataModelByName(const String& dataModelName)
 }
 
 
-String Study::getAvailableDataModelName() const
+String Study::getAvailableDataModelName(const String& modelRootName) const
 {
-  return getImplementation()->getAvailableDataModelName();
+  return getImplementation()->getAvailableDataModelName(modelRootName);
 }
 
 
@@ -291,9 +290,9 @@ Collection<LimitState> Study::getLimitStates() const
 }
 
 
-String Study::getAvailableLimitStateName() const
+String Study::getAvailableLimitStateName(const String & rootName) const
 {
-  return getImplementation()->getAvailableLimitStateName();
+  return getImplementation()->getAvailableLimitStateName(rootName);
 }
 
 

@@ -22,8 +22,6 @@
 
 #include "otgui/MonteCarloAnalysis.hxx"
 
-#include <QVBoxLayout>
-
 using namespace OT;
 
 namespace OTGUI

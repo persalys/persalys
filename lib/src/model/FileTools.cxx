@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QTextStream>
+#include <QImageWriter>
 
 namespace OTGUI
 {
@@ -106,6 +107,37 @@ void FileTools::ExportData(const QString& text, QWidget * parent)
       QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ") + ex.what());
     }
     file.close();
+  }
+}
+
+
+void FileTools::ExportImage(const QImage& image, QWidget * parent)
+{
+  QString fileName = QFileDialog::getSaveFileName(parent,
+                     tr("Export image"),
+                     GetCurrentDir() + QDir::separator() + tr("image"),
+                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
+
+  if (!fileName.isEmpty())
+  {
+    QString format = QFileInfo(fileName).suffix().toLower();
+    FileTools::SetCurrentDir(fileName);
+
+    if (format.isEmpty())
+    {
+      fileName += ".png";
+      format = "png";
+    }
+    if (QImageWriter::supportedImageFormats().indexOf(format.toLocal8Bit()) >= 0)
+    {
+      bool saveOperationSucceed = image.save(fileName.toLocal8Bit().data(), format.toLocal8Bit());
+      if (!saveOperationSucceed)
+        QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the image."));
+    }
+    else
+    {
+      QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Format not supported."));
+    }
   }
 }
 }

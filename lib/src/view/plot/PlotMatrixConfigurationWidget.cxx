@@ -54,10 +54,13 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
   // show Outputs vs Inputs
-  QCheckBox * outputVsInputCheckBox = new QCheckBox(tr("Outputs vs inputs"));
-  outputVsInputCheckBox->setChecked(false);
-  connect(outputVsInputCheckBox, SIGNAL(clicked(bool)), this, SLOT(showXY(bool)));
-  mainGridLayout->addWidget(outputVsInputCheckBox, ++rowGrid, 0, 1, 2);
+  if (plotMatrix_->getOutputNames().size())
+  {
+    QCheckBox * outputVsInputCheckBox = new QCheckBox(tr("Outputs vs inputs"));
+    outputVsInputCheckBox->setChecked(false);
+    connect(outputVsInputCheckBox, SIGNAL(clicked(bool)), this, SLOT(showXY(bool)));
+    mainGridLayout->addWidget(outputVsInputCheckBox, ++rowGrid, 0, 1, 2);
+  }
 
   // columns label
   label = new QLabel(tr("Columns"));
@@ -86,7 +89,7 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   // pushbutton to export the plot
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
   hboxForBottomButtons->addStretch();
-  QPushButton * button = new QPushButton(tr("Export"));
+  QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
 

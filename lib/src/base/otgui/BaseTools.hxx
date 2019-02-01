@@ -53,7 +53,9 @@ private:
 class OTGUI_API Tools
 {
 public:
+  static OT::Sample ImportSample(const OT::String& fileName);
   static OT::String GetLocaleString(const OT::String& str);
+  static int IsUTF8(const char *data, size_t size);
 };
 }
 #endif

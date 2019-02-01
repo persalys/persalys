@@ -123,8 +123,6 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   parameterLayout_->addStretch(1);
 
   vSplitter->addWidget(subWidget);
-  vSplitter->setStretchFactor(0, 5);
-  vSplitter->setStretchFactor(1, 2);
   rightFrameLayout->addWidget(vSplitter);
 
   rightScrollArea->setWidget(rightFrame);

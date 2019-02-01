@@ -158,14 +158,14 @@ void StudyItem::updateIcon()
 
 void StudyItem::createSymbolicModel()
 {
-  SymbolicPhysicalModel * newModel = new SymbolicPhysicalModel(study_.getAvailablePhysicalModelName());
+  SymbolicPhysicalModel * newModel = new SymbolicPhysicalModel(study_.getAvailablePhysicalModelName(tr("SymbolicModel_").toStdString()));
   study_.add(newModel);
 }
 
 
 void StudyItem::createPythonModel()
 {
-  PythonPhysicalModel * newModel = new PythonPhysicalModel(study_.getAvailablePhysicalModelName());
+  PythonPhysicalModel * newModel = new PythonPhysicalModel(study_.getAvailablePhysicalModelName(tr("PythonModel_").toStdString()));
   study_.add(newModel);
 }
 
@@ -173,7 +173,7 @@ void StudyItem::createPythonModel()
 #ifdef OTGUI_HAVE_YACS
 void StudyItem::createYACSModel()
 {
-  YACSPhysicalModel * newModel = new YACSPhysicalModel(study_.getAvailablePhysicalModelName());
+  YACSPhysicalModel * newModel = new YACSPhysicalModel(study_.getAvailablePhysicalModelName(tr("YACSModel_").toStdString()));
   study_.add(newModel);
 }
 #endif
@@ -182,7 +182,7 @@ void StudyItem::createYACSModel()
 #ifdef OTGUI_HAVE_OTFMI
 void StudyItem::createFMIModel()
 {
-  FMIPhysicalModel newModel(study_.getAvailablePhysicalModelName());
+  FMIPhysicalModel newModel(study_.getAvailablePhysicalModelName(tr("FMIModel_").toStdString()));
   study_.add(newModel);
 }
 #endif
@@ -190,7 +190,7 @@ void StudyItem::createFMIModel()
 
 void StudyItem::createDataModel()
 {
-  DesignOfExperiment newDataModel(DataModel(study_.getAvailableDataModelName()));
+  DesignOfExperiment newDataModel(DataModel(study_.getAvailableDataModelName(tr("DataModel_").toStdString())));
   study_.add(newDataModel);
 }
 

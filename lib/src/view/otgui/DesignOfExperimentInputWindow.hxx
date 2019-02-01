@@ -32,9 +32,6 @@ class OTGUI_API DesignOfExperimentInputWindow : public DataAnalysisWindow
 
 public:
   DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent = 0);
-
-protected:
-  virtual void fillTabWidget();
 };
 }
 #endif

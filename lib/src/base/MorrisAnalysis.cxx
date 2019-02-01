@@ -164,14 +164,6 @@ Interval MorrisAnalysis::getBounds() const
 
 void MorrisAnalysis::setBounds(const Interval & bounds)
 {
-  if (bounds.getDimension() != getPhysicalModel().getInputDimension())
-  {
-    OSS oss;
-    oss << "The dimension of the interval has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputDimension();
-    throw InvalidArgumentException(HERE) << oss.str();
-  }
-
   bounds_ = bounds;
 }
 
@@ -213,6 +205,16 @@ void MorrisAnalysis::launch()
     oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
+  UnsignedInteger counter = 0;
+  for (UnsignedInteger i = 0; i < bounds_.getDimension(); ++i)
+  {
+    if (!bounds_.getMarginal(i).isNumericallyEmpty())
+      ++counter;
+    if (counter == 2)
+      break;
+  }
+  if (counter < 2)
+    throw InvalidArgumentException(HERE) << "At least two variables must vary.";
 
   // build a Morris experiment
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();

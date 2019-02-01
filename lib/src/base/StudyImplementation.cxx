@@ -206,13 +206,12 @@ bool StudyImplementation::hasDataModelNamed(const String& dataModelName) const
 }
 
 
-String StudyImplementation::getAvailableDataModelName() const
+String StudyImplementation::getAvailableDataModelName(const String& modelRootName) const
 {
   int i = 0;
-  String rootName = "dataModel_";
-  while (hasDataModelNamed(rootName + (OSS() << i).str()))
+  while (hasDataModelNamed(modelRootName + (OSS() << i).str()))
     ++i;
-  return rootName + (OSS() << i).str();
+  return modelRootName + (OSS() << i).str();
 }
 
 
@@ -539,10 +538,9 @@ bool StudyImplementation::hasLimitStateNamed(const String& limitStateName) const
 }
 
 
-String StudyImplementation::getAvailableLimitStateName() const
+String StudyImplementation::getAvailableLimitStateName(const String & rootName) const
 {
   int i = 0;
-  String rootName = "limitState_";
   while (hasLimitStateNamed(rootName + (OSS() << i).str()))
     ++i;
   return rootName + (OSS() << i).str();
