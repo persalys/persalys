@@ -130,7 +130,8 @@ void SRCAnalysis::launch()
 
   indices.setDescription(inputSample.getDescription());
   // set results
-  result_ = SRCResult(indices, getInterestVariables());
+  result_.indices_ = indices;
+  result_.outputNames_ = getInterestVariables();
 
   // add warning if the model does not have an independent copula
   if (!getPhysicalModel().getCopula().hasIndependentCopula())

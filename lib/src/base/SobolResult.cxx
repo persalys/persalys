@@ -34,14 +34,13 @@ static Factory<PersistentCollection<Interval> > Factory_IntervalColl;
 
 /* Default constructor */
 SobolResult::SobolResult()
-  : PersistentObject()
+  : EvaluationResult()
   , outputNames_()
   , firstOrderIndices_()
   , totalIndices_()
   , firstOrderIndicesInterval_()
   , totalIndicesInterval_()
   , callsNumber_(0)
-  , elapsedTime_(0.)
   , confidenceIntervalLength_(-1.)
 {
 }
@@ -51,14 +50,13 @@ SobolResult::SobolResult()
 SobolResult::SobolResult(const Sample& firstOrderIndices,
                          const Sample& totalIndices,
                          const Description& outputNames)
-  : PersistentObject()
+  : EvaluationResult()
   , outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
   , totalIndices_(totalIndices)
   , firstOrderIndicesInterval_()
   , totalIndicesInterval_()
   , callsNumber_(0)
-  , elapsedTime_(0.)
   , confidenceIntervalLength_(-1.)
 {
   if (!(firstOrderIndices.getDimension() && totalIndices.getDimension() && outputNames.getSize()))
@@ -121,12 +119,6 @@ UnsignedInteger SobolResult::getCallsNumber() const
 }
 
 
-Scalar SobolResult::getElapsedTime() const
-{
-  return elapsedTime_;
-}
-
-
 Scalar SobolResult::getConfidenceIntervalLength() const
 {
   return confidenceIntervalLength_;
@@ -153,13 +145,12 @@ String SobolResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void SobolResult::save(Advocate & adv) const
 {
-  PersistentObject::save(adv);
+  EvaluationResult::save(adv);
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("firstOrderIndices_", firstOrderIndices_);
   adv.saveAttribute("totalIndices_", totalIndices_);
   adv.saveAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
   adv.saveAttribute("totalIndicesInterval_", totalIndicesInterval_);
-  adv.saveAttribute("elapsedTime_", elapsedTime_);
   adv.saveAttribute("callsNumber_", callsNumber_);
   adv.saveAttribute("confidenceIntervalLength_", confidenceIntervalLength_);
 }
@@ -168,13 +159,12 @@ void SobolResult::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void SobolResult::load(Advocate & adv)
 {
-  PersistentObject::load(adv);
+  EvaluationResult::load(adv);
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("firstOrderIndices_", firstOrderIndices_);
   adv.loadAttribute("totalIndices_", totalIndices_);
   adv.loadAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
   adv.loadAttribute("totalIndicesInterval_", totalIndicesInterval_);
-  adv.loadAttribute("elapsedTime_", elapsedTime_);
   adv.loadAttribute("callsNumber_", callsNumber_);
   adv.loadAttribute("confidenceIntervalLength_", confidenceIntervalLength_);
 }

@@ -33,14 +33,14 @@ static Factory<SRCResult> Factory_SRCResult;
 
 /* Default constructor */
 SRCResult::SRCResult()
-  : PersistentObject()
+  : EvaluationResult()
 {
 }
 
 
 /* Constructor with parameters */
-SRCResult::SRCResult(const Sample indices, const Description & outputNames)
-  : PersistentObject()
+SRCResult::SRCResult(const Sample& indices, const Description & outputNames)
+  : EvaluationResult()
   , outputNames_(outputNames)
   , indices_(indices)
 {
@@ -87,7 +87,7 @@ String SRCResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void SRCResult::save(Advocate & adv) const
 {
-  PersistentObject::save(adv);
+  EvaluationResult::save(adv);
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("indices_", indices_);
 }
@@ -96,7 +96,7 @@ void SRCResult::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void SRCResult::load(Advocate & adv)
 {
-  PersistentObject::load(adv);
+  EvaluationResult::load(adv);
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("indices_", indices_);
 }

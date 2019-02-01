@@ -117,15 +117,15 @@ void SobolAnalysis::initialize()
 }
 
 
-struct AnalysisStruct
+struct SobolAnalysisStruct
 {
-  AnalysisStruct(SobolAnalysis* analysis, SobolSimulationAlgorithm* simulation)
+  SobolAnalysisStruct(SobolAnalysis* analysis, SobolSimulationAlgorithm* simulation)
     : analysis_(analysis)
     , simulation_(simulation)
   {
   };
 
-  virtual ~AnalysisStruct() {};
+  virtual ~SobolAnalysisStruct() {};
 
   SobolAnalysis * analysis_;
   SobolSimulationAlgorithm * simulation_;
@@ -134,7 +134,7 @@ struct AnalysisStruct
 
 void SobolAnalysis::UpdateProgressValue(double percent, void * data)
 {
-  AnalysisStruct * analysisStruct = static_cast<AnalysisStruct*>(data);
+  SobolAnalysisStruct * analysisStruct = static_cast<SobolAnalysisStruct*>(data);
   if (!analysisStruct)
     return;
 
@@ -217,14 +217,13 @@ void SobolAnalysis::launch()
   timeCriteria_.setStartTime(TimeCriteria::Now());
   timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
   algo.setStopCallback(&WithStopCriteriaAnalysis::Stop, &timeCriteria_);
-  AnalysisStruct analysisStruc(this, &algo);
+  SobolAnalysisStruct analysisStruc(this, &algo);
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 
   // run algo
   algo.run();
 
   // set results
-  result_ = SobolResult();
   result_.outputNames_ = getInterestVariables();
   result_.callsNumber_ = function.getOutputHistory().getSize();
   result_.elapsedTime_ = timeCriteria_.getElapsedTime();
