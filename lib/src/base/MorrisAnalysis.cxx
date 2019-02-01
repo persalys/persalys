@@ -229,21 +229,36 @@ void MorrisAnalysis::launch()
   outSample.setDescription(getInterestVariables());
 
   // Compute effects
-  // set result
-  result_ = MorrisResult(inSample, outSample, bounds_);
+  Morris morris(inSample, outSample, bounds_);
 
-  for (UnsignedInteger i = 0; i < outSample.getDimension(); ++i)
+  // set result
+  const UnsignedInteger nbOutputs = outSample.getDimension();
+
+  result_.designOfExperiment_ = DesignOfExperiment("name", getPhysicalModel());
+  result_.designOfExperiment_.setInputSample(inSample);
+  result_.designOfExperiment_.setOutputSample(outSample);
+  result_.inputsSelection_ = PersistentCollection<Indices >(nbOutputs, Indices(nbInputs, 1));
+  result_.noEffectBoundary_ = Point(nbOutputs);
+  result_.elementaryEffectsMean_ = Sample(nbOutputs, nbInputs);
+  result_.elementaryEffectsStandardDeviation_ = Sample(nbOutputs, nbInputs);
+  result_.absoluteElementaryEffectsMean_ = Sample(nbOutputs, nbInputs);
+
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
+    result_.elementaryEffectsMean_[i] = morris.getMeanElementaryEffects(i);
+    result_.elementaryEffectsStandardDeviation_[i] = morris.getStandardDeviationElementaryEffects(i);
+    Point meanAee(morris.getMeanAbsoluteElementaryEffects(i));
+    result_.absoluteElementaryEffectsMean_[i] = meanAee;
+
     // no effect boundary
-    Point a = result_.getMeanAbsoluteElementaryEffects(i);
-    std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(a.begin(), a.end());
+    std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(meanAee.begin(), meanAee.end());
     const Scalar minMeanAbsoluteEffect = (*p.first);
     const Scalar maxMeanAbsoluteEffect = (*p.second);
     result_.noEffectBoundary_[i] = (minMeanAbsoluteEffect + maxMeanAbsoluteEffect) * 0.5;
     // selected inputs
-    for (UnsignedInteger j = 0; j < a.getDimension(); ++j)
+    for (UnsignedInteger j = 0; j < meanAee.getDimension(); ++j)
     {
-      if (a[j] < result_.noEffectBoundary_[i])
+      if (meanAee[j] < result_.noEffectBoundary_[i])
         result_.inputsSelection_[i][j] = 0;
     }
   }
@@ -310,7 +325,7 @@ String MorrisAnalysis::getPythonScript() const
 
 bool MorrisAnalysis::hasValidResult() const
 {
-  return result_.getInputSample().getSize() != 0;
+  return result_.getDesignOfExperiment().getSample().getSize() != 0;
 }
 
 

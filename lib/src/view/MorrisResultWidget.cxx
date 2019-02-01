@@ -76,7 +76,7 @@ void MorrisResultWidget::buildInterface()
   const Scalar noEffectBoundary = result_.getNoEffectBoundary(outpuIndex_);
 
   // - var names
-  const QStringList names(QtOT::DescriptionToStringList(result_.getInputSample().getDescription()));
+  const QStringList names(QtOT::DescriptionToStringList(result_.getDesignOfExperiment().getInputSample().getDescription()));
 
   // main layout
   QVBoxLayout * mainLayout = new QVBoxLayout(this);

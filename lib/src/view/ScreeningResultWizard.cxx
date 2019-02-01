@@ -109,7 +109,7 @@ void ScreeningResultWizard::updateVariablesComboBox(const int currentAnalysis)
     const int analysisIndex = screeningResultsComboBox_->itemData(currentAnalysis).toInt();
     MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
-    variablesNames = QtOT::DescriptionToStringList(result.getOutputSample().getDescription());
+    variablesNames = QtOT::DescriptionToStringList(result.getDesignOfExperiment().getOutputSample().getDescription());
   }
   variablesComboBox_->addItems(variablesNames);
 }
@@ -159,7 +159,7 @@ bool ScreeningResultWizard::validateCurrentPage()
   const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
   MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
-  if (result.getInputSample().getDimension() != model_.getInputDimension())
+  if (result.getDesignOfExperiment().getInputSample().getDimension() != model_.getInputDimension())
   {
     errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(tr("The selected analysis must contain as many results as there are inputs in the model %1.").arg(model_.getInputDimension())));
     return false;

@@ -21,13 +21,11 @@
 #ifndef OTGUI_MORRISRESULT_HXX
 #define OTGUI_MORRISRESULT_HXX
 
-#include "otgui/OTGuiprivate.hxx"
-
-#include <otmorris/Morris.hxx>
+#include "EvaluationResult.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API MorrisResult : public OTMORRIS::Morris
+class OTGUI_API MorrisResult : public EvaluationResult
 {
   CLASSNAME
 
@@ -37,8 +35,6 @@ public:
 
   /** Default constructor */
   MorrisResult();
-  /** Standard constructor with in/out designs */
-  MorrisResult(const OT::Sample & inputSample, const OT::Sample & outputSample, const OT::Interval & interval);
 
   /** Virtual constructor */
   virtual MorrisResult * clone() const;
@@ -48,6 +44,11 @@ public:
 
   OT::Scalar getNoEffectBoundary(const OT::UnsignedInteger marginal) const;
   void setNoEffectBoundary(const OT::UnsignedInteger marginal, const OT::Scalar value);
+
+  // Get Mean/Standard deviation
+  OT::Point getMeanAbsoluteElementaryEffects(const OT::UnsignedInteger outputMarginal) const;
+  OT::Point getMeanElementaryEffects(const OT::UnsignedInteger outputMarginal) const;
+  OT::Point getStandardDeviationElementaryEffects(const OT::UnsignedInteger outputMarginal) const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -61,6 +62,10 @@ public:
 private:
   OT::PersistentCollection<OT::Indices > inputsSelection_;
   OT::Point noEffectBoundary_;
+  // Elementary effects ==> N x (p*q) sample
+  OT::Sample elementaryEffectsMean_;
+  OT::Sample elementaryEffectsStandardDeviation_;
+  OT::Sample absoluteElementaryEffectsMean_;
 };
 }
 #endif

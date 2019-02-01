@@ -44,7 +44,7 @@ int MorrisResultTableModel::columnCount(const QModelIndex & parent) const
 
 int MorrisResultTableModel::rowCount(const QModelIndex & parent) const
 {
-  return result_.getInputSample().getDimension();
+  return result_.getDesignOfExperiment().getInputSample().getDimension();
 }
 
 
@@ -120,7 +120,7 @@ QVariant MorrisResultTableModel::data(const QModelIndex & index, int role) const
     switch (index.column())
     {
       case 0:
-        return QString::fromUtf8(result_.getInputSample().getDescription()[inIndex].c_str());
+        return QString::fromUtf8(result_.getDesignOfExperiment().getInputSample().getDescription()[inIndex].c_str());
       case 1:
       {
         if (meanAbsEE < result_.getNoEffectBoundary(outputIndex_))
