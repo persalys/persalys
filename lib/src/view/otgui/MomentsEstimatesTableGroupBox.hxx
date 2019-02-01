@@ -23,6 +23,7 @@
 
 #include "otgui/DataAnalysisResult.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
+#include "otgui/DoubleSpinBox.hxx"
 
 #include <QGroupBox>
 
@@ -40,15 +41,22 @@ public:
                                 QWidget* parent = 0);
 
 protected:
-  QWidget * getMomentsEstimateTableView(const DataAnalysisResult& result, const OT::UnsignedInteger outputIndex);
+  QWidget * getMomentsEstimateTableView(const OT::UnsignedInteger variableIndex);
 
 public slots:
+  void updateSpinBoxes();
+  void probaValueChanged(double proba);
+  void quantileValueChanged(double quantile);
   void setCurrentIndexStackedWidget(int index);
 
 private:
+  DataAnalysisResult result_;
   ResizableStackedWidget * stackedWidget_;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
+  OT::Indices variablesIndices_;
+  DoubleSpinBox * probaSpinBox_;
+  DoubleSpinBox * quantileSpinBox_;
 };
 }
 #endif
