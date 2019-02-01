@@ -33,8 +33,7 @@ static Factory<SimulationReliabilityResult> Factory_SimulationReliabilityResult;
 
 /* Default constructor */
 SimulationReliabilityResult::SimulationReliabilityResult()
-  : PersistentObject()
-  , elapsedTime_(0.)
+  : EvaluationResult()
 {
 }
 
@@ -46,14 +45,13 @@ SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimula
     const Sample& convergenceSampleLowerBound,
     const Sample& convergenceSampleUpperBound
                                                         )
-  : PersistentObject()
+  : EvaluationResult()
   , simulationResult_(simulationResults)
-  , outputSample_(outputSample)
   , convergenceSample_(convergenceSample)
   , convergenceSampleLowerBound_(convergenceSampleLowerBound)
   , convergenceSampleUpperBound_(convergenceSampleUpperBound)
-  , elapsedTime_(0.)
 {
+  designOfExperiment_.setOutputSample(outputSample);
 }
 
 
@@ -67,12 +65,6 @@ SimulationReliabilityResult* SimulationReliabilityResult::clone() const
 ProbabilitySimulationResult SimulationReliabilityResult::getSimulationResult() const
 {
   return simulationResult_;
-}
-
-
-Sample SimulationReliabilityResult::getOutputSample() const
-{
-  return outputSample_;
 }
 
 
@@ -94,12 +86,6 @@ Sample SimulationReliabilityResult::getConvergenceSampleUpperBound() const
 }
 
 
-Scalar SimulationReliabilityResult::getElapsedTime() const
-{
-  return elapsedTime_;
-}
-
-
 /* String converter */
 String SimulationReliabilityResult::__repr__() const
 {
@@ -114,25 +100,28 @@ String SimulationReliabilityResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void SimulationReliabilityResult::save(Advocate& adv) const
 {
-  PersistentObject::save(adv);
+  EvaluationResult::save(adv);
   adv.saveAttribute("simulationResult_", simulationResult_);
-  adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("convergenceSample_", convergenceSample_);
   adv.saveAttribute("convergenceSampleLowerBound_", convergenceSampleLowerBound_);
   adv.saveAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
-  adv.saveAttribute("elapsedTime_", elapsedTime_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void SimulationReliabilityResult::load(Advocate& adv)
 {
-  PersistentObject::load(adv);
+  EvaluationResult::load(adv);
   adv.loadAttribute("simulationResult_", simulationResult_);
-  adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("convergenceSample_", convergenceSample_);
   adv.loadAttribute("convergenceSampleLowerBound_", convergenceSampleLowerBound_);
   adv.loadAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
-  adv.loadAttribute("elapsedTime_", elapsedTime_);
+  // can open older xml files
+  if (!designOfExperiment_.getSample().getSize())
+  {
+    Sample outS;
+    adv.loadAttribute("outputSample_", outS);
+    designOfExperiment_.setOutputSample(outS);
+  }
 }
 }
