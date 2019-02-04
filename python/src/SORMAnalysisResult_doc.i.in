@@ -1,0 +1,13 @@
+%feature("docstring") OTGUI::SORMAnalysisResult
+"Class containing results of the SORM analysis."
+
+// ---------------------------------------------------------------------
+
+
+%feature("docstring") OTGUI::SORMAnalysisResult::getSORMResult
+"SORM result accessor.
+
+Returns
+-------
+sormResu : :py:class:`openturns.SORMResult`
+    SORM result"

@@ -1,0 +1,13 @@
+%feature("docstring") OTGUI::FORMAnalysisResult
+"Class containing results of the FORM analysis."
+
+// ---------------------------------------------------------------------
+
+
+%feature("docstring") OTGUI::FORMAnalysisResult::getFORMResult
+"FORM result accessor.
+
+Returns
+-------
+formResu : :py:class:`openturns.FORMResult`
+    FORM result"

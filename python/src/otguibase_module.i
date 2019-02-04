@@ -147,7 +147,9 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include MonteCarloReliabilityAnalysis.i
 %include ImportanceSamplingAnalysis.i
 %include ApproximationAnalysis.i
+%include FORMAnalysisResult.i
 %include FORMAnalysis.i
+%include SORMAnalysisResult.i
 %include SORMAnalysis.i
 %include FORMImportanceSamplingAnalysis.i
 %include MetaModelValidationResult.i

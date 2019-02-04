@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Analysis FORM
+ *  @brief Results of a FORM analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,33 +18,32 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTGUI_FORMANALYSIS_HXX
-#define OTGUI_FORMANALYSIS_HXX
+#ifndef OTGUI_FORMANALYSISRESULT_HXX
+#define OTGUI_FORMANALYSISRESULT_HXX
 
-#include "ApproximationAnalysis.hxx"
-#include "ReliabilityAnalysis.hxx"
-#include "FORMAnalysisResult.hxx"
+#include "AnalysisResult.hxx"
+
+#include <openturns/FORMResult.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API FORMAnalysis : public ReliabilityAnalysis, public ApproximationAnalysis
+class OTGUI_API FORMAnalysisResult : public AnalysisResult
 {
   CLASSNAME
 
 public:
+  friend class FORMAnalysis;
+
   /** Default constructor */
-  FORMAnalysis();
+  FORMAnalysisResult();
+
   /** Constructor with parameters */
-  FORMAnalysis(const OT::String& name, const LimitState& limitState);
+  FORMAnalysisResult(const OT::FORMResult& formResult);
 
   /** Virtual constructor */
-  virtual FORMAnalysis * clone() const;
+  virtual FORMAnalysisResult * clone() const;
 
-  FORMAnalysisResult getResult() const;
-
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
+  OT::FORMResult getFORMResult() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -56,11 +55,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual void initialize();
-  virtual void launch();
-
-private:
-  FORMAnalysisResult result_;
+  OT::FORMResult formResult_;
 };
 }
 #endif

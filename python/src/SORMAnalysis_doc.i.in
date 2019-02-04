@@ -31,7 +31,7 @@ Process a reliability analysis using the SORM method:
 
 Get the result:
 
->>> result = analysis.getResult()
+>>> result = analysis.getResult().getSORMResult()
 >>> pf = result.getEventProbabilityBreitung()
 >>> designPoint = result.getStandardSpaceDesignPoint()"
 

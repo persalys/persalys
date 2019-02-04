@@ -81,7 +81,7 @@ void FORMImportanceSamplingAnalysis::launch()
       throw InternalException(HERE) << "FORM result empty.\n";
 
     // set FORM result
-    FORMResult_ = formAnalysis.getResult();
+    FORMResult_ = formAnalysis.getResult().getFORMResult();
   }
   catch (std::exception &ex)
   {

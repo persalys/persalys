@@ -31,7 +31,7 @@ Process a reliability analysis using the FORM method:
 
 Get the result:
 
->>> result = analysis.getResult()
+>>> result = analysis.getResult().getFORMResult()
 >>> pf = result.getEventProbability()
 >>> designPoint = result.getStandardSpaceDesignPoint()"
 

@@ -61,7 +61,7 @@ void FORMAnalysis::initialize()
 {
   // clear result
   AnalysisImplementation::initialize();
-  result_ = FORMResult();
+  result_ = FORMAnalysisResult();
 }
 
 
@@ -85,14 +85,14 @@ void FORMAnalysis::launch()
   algo.run();
 
   // set result
-  result_ = algo.getResult();
+  result_.formResult_ = algo.getResult();
 
   // compute event probability sensitivity (not computed by default)
-  result_.getEventProbabilitySensitivity();
+  result_.formResult_.getEventProbabilitySensitivity();
 }
 
 
-FORMResult FORMAnalysis::getResult() const
+FORMAnalysisResult FORMAnalysis::getResult() const
 {
   return result_;
 }
@@ -137,7 +137,7 @@ String FORMAnalysis::getPythonScript() const
 
 bool FORMAnalysis::hasValidResult() const
 {
-  return result_.getStandardSpaceDesignPoint().getDimension() != 0;
+  return result_.getFORMResult().getStandardSpaceDesignPoint().getDimension() != 0;
 }
 
 
@@ -166,5 +166,12 @@ void FORMAnalysis::load(Advocate & adv)
   ReliabilityAnalysis::load(adv);
   ApproximationAnalysis::load(adv);
   adv.loadAttribute("result_", result_);
+  // can open older xml files
+  if (!result_.getFORMResult().getStandardSpaceDesignPoint().getDimension())
+  {
+    FORMResult formResu;
+    adv.loadAttribute("result_", formResu);
+    result_.formResult_ = formResu;
+  }
 }
 }

@@ -27,7 +27,7 @@ print(analysis)
 
 analysis.run()
 
-print("result=", analysis.getResult())
+print("result=", analysis.getResult().getFORMResult())
 
 # FORM ##
 X2 = otguibase.Input('X2', 2)
@@ -40,7 +40,7 @@ print(analysis2)
 
 analysis2.run()
 
-result2 = analysis2.getResult()
+result2 = analysis2.getResult().getFORMResult()
 print("result=", result2)
 
 # FORM ##
@@ -52,7 +52,7 @@ print(analysis3)
 
 analysis3.run()
 
-result3 = analysis3.getResult()
+result3 = analysis3.getResult().getFORMResult()
 print("result=", result3)
 
 # script
