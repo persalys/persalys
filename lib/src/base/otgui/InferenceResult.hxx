@@ -22,10 +22,11 @@
 #define OTGUI_INFERENCERESULT_HXX
 
 #include "FittingTestResult.hxx"
+#include "AnalysisResult.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API InferenceResult : public OT::PersistentObject
+class OTGUI_API InferenceResult : public AnalysisResult
 {
   CLASSNAME
 
