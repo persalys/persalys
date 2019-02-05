@@ -34,7 +34,7 @@ RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
   -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
-  -DPYTHON_SITE_PACKAGES=Lib/site-packages \
+  -DPYTHON_SITE_PACKAGES=Lib/site-packages . \
   && make && sudo make install
 RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libotmorris.dll
 RUN sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/Lib/site-packages/otmorris/*.pyd
