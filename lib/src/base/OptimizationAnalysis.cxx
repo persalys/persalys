@@ -210,7 +210,7 @@ void OptimizationAnalysis::launch()
   // check
   if (getInterestVariables().getSize() != 1)
     throw InvalidArgumentException(HERE) << "Specify one variable to optimize";
-  if (startingPoint_.getDimension() != getPhysicalModel().getInputs().getSize())
+  if (startingPoint_.getDimension() != nbInputs)
     throw InvalidArgumentException(HERE) << "Invalid starting point";
   if (!variableInputs_.getSize())
     throw InvalidArgumentException(HERE) << "At least one variable must vary";
@@ -223,6 +223,8 @@ void OptimizationAnalysis::launch()
   }
 
   // get bounds and fixed inputs values
+  if (getBounds().getDimension() != nbInputs)
+    throw InvalidArgumentException(HERE) << "The interval's dimension must be equal to the number of model's inputs";
   Indices fixedInputsIndices;
   Point fixedInputsValues;
   Point variableInputsValues;
@@ -308,6 +310,8 @@ Bool OptimizationAnalysis::getMinimization() const
 
 void OptimizationAnalysis::setBounds(const Interval & bounds)
 {
+  if (bounds.getDimension() != getPhysicalModel().getInputDimension())
+    throw InvalidArgumentException(HERE) << "The interval's dimension must be equal to the number of model's inputs";
   bounds_ = bounds;
 }
 
@@ -326,6 +330,8 @@ Point OptimizationAnalysis::getStartingPoint() const
 
 void OptimizationAnalysis::setStartingPoint(const Point & startingPoint)
 {
+  if (startingPoint.getSize() != getPhysicalModel().getInputDimension())
+    throw InvalidArgumentException(HERE) << "The point's dimension must be equal to the number of model's inputs";
   startingPoint_ = startingPoint;
 }
 
