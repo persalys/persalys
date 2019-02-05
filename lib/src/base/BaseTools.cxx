@@ -80,6 +80,22 @@ std::pair<String, String> Parameters::operator[](const UnsignedInteger index) co
 }
 
 
+bool Parameters::operator==(const Parameters& other) const
+{
+  if (getSize() != other.getSize())
+    return false;
+  bool equality = true;
+  for (UnsignedInteger i = 0; i < getSize(); ++i)
+  {
+    equality &= (pairsCollection_[i].first == other[i].first);
+    equality &= (pairsCollection_[i].second == other[i].second);
+    if (!equality)
+      return false;
+  }
+  return true;
+}
+
+
 String Parameters::GetOTSampleStr(const Sample& values)
 {
   OSS sampleOss;
