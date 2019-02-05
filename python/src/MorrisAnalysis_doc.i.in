@@ -30,7 +30,7 @@ Create the Morris analysis:
 Get the result:
 
 >>> result = analysis.getResult()
->>> meanAbsEE = result.getMeanAbsoluteElementaryEffects()"
+>>> meanAbsEE = result.getMeanAbsoluteElementaryEffects(0)"
 
 // ---------------------------------------------------------------------
 

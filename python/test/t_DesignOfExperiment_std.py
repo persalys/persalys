@@ -25,7 +25,7 @@ aDesign = otguibase.GridDesignOfExperiment(
 anOTStudy.add(aDesign)
 
 aDesign.run()
-print('outs=', aDesign.getDesignOfExperiment().getOutputSample())
+print('outs=', aDesign.getResult().getDesignOfExperiment().getOutputSample())
 
 # Design of Experiment ##
 filename = 'normal.csv'
@@ -35,7 +35,7 @@ aDesign2 = otguibase.ImportedDesignOfExperiment(
 anOTStudy.add(aDesign2)
 
 aDesign2.run()
-print('outs=', aDesign2.getDesignOfExperiment().getOutputSample())
+print('outs=', aDesign2.getResult().getDesignOfExperiment().getOutputSample())
 
 # Design of Experiment ##
 aDesign3 = otguibase.ProbabilisticDesignOfExperiment(
@@ -43,7 +43,7 @@ aDesign3 = otguibase.ProbabilisticDesignOfExperiment(
 anOTStudy.add(aDesign3)
 
 aDesign3.run()
-print('outs=', aDesign3.getDesignOfExperiment().getOutputSample())
+print('outs=', aDesign3.getResult().getDesignOfExperiment().getOutputSample())
 
 # Design of Experiment ##
 aDesign4 = otguibase.FixedDesignOfExperiment('aDesign_4', model)
@@ -54,7 +54,7 @@ anOTStudy.add(aDesign4)
 
 aDesign4.run()
 
-print('outs=', aDesign4.getDesignOfExperiment().getOutputSample())
+print('outs=', aDesign4.getResult().getDesignOfExperiment().getOutputSample())
 
 # script
 script = anOTStudy.getPythonScript()

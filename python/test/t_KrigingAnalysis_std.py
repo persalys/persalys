@@ -45,7 +45,7 @@ print(analysis)
 analysis.run()
 metaModel = analysis.getResult().getResultForVariable('y0').getMetaModel()
 openturns.testing.assert_almost_equal(
-    aDesign.getDesignOfExperiment().getOutputSample(), metaModel(validationInputSample), 3.0e-5, 3.0e-5)
+    aDesign.getResult().getDesignOfExperiment().getOutputSample(), metaModel(validationInputSample), 3.0e-5, 3.0e-5)
 
 # Design of Experiment ##
 model.addOutput(otguibase.Output('y1'))
@@ -65,7 +65,7 @@ analysis2.run()
 result2 = analysis2.getResult()
 metaModel2 = result2.getResultForVariable('y1').getMetaModel()
 openturns.testing.assert_almost_equal(
-    aDesign.getDesignOfExperiment().getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
+    aDesign.getResult().getDesignOfExperiment().getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
 openturns.testing.assert_almost_equal(
     result2.getAnalyticalValidation().getQ2(), [0.685791,0.685791], 1e-6, 1e-6)
 
@@ -83,7 +83,7 @@ print("result=", result3)
 
 metaModel3 = result3.getResultForVariable('y0').getMetaModel()
 openturns.testing.assert_almost_equal(
-    aDesign.getDesignOfExperiment().getOutputSample().getMarginal(0), metaModel3(validationInputSample), 3.0e-5, 3.0e-5)
+    aDesign.getResult().getDesignOfExperiment().getOutputSample().getMarginal(0), metaModel3(validationInputSample), 3.0e-5, 3.0e-5)
 
 # script
 script = myStudy.getPythonScript()

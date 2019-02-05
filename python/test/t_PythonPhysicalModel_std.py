@@ -42,7 +42,7 @@ plan_0 = otguibase.FixedDesignOfExperiment('plan_0', model, [[300., 75000.], [40
 plan_0.setBlockSize(2)
 myStudy.add(plan_0)
 plan_0.run()
-print("Sample :\n %s" % plan_0.getDesignOfExperiment().getSample())
+print("Sample :\n %s" % plan_0.getResult().getDesignOfExperiment().getSample())
 
 # model with an error
 model.setCode(
