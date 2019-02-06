@@ -31,6 +31,8 @@ class OTGUI_API ScreeningAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestScreeningAnalysisWizard;
+
 public:
   enum {Page_Intro, Page_Morris, Page_Morris2};
   enum Method {Morris};

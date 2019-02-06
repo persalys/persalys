@@ -40,6 +40,8 @@ class OTGUI_API DesignOfExperimentEvaluationWizard : public Wizard
 {
   Q_OBJECT
 
+  friend class TestDesignOfExperimentEvaluationWizard;
+
 public:
   DesignOfExperimentEvaluationWizard(const Analysis& analysis, QWidget* parent = 0);
   DesignOfExperimentEvaluationWizard(const PhysicalModel& model, QWidget* parent = 0);

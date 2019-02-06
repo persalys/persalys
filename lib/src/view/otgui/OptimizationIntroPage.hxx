@@ -35,6 +35,8 @@ class OTGUI_API OptimizationIntroPage : public QWizardPage
 {
   Q_OBJECT
 
+  friend class TestOptimizationWizard;
+
 public:
   enum OptimAlgo {AbdoRackwitzAlgo, CobylaAlgo, SQPAlgo, NLoptAlgo};
 

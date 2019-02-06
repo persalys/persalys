@@ -33,6 +33,8 @@ class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestMetaModelAnalysisWizard;
+
 public:
   enum {Page_Intro, Page_ChaosMethod, Page_KrigingMethod, Page_Validation};
 

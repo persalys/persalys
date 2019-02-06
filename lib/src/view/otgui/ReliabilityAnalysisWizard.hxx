@@ -32,6 +32,8 @@ class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestReliabilityAnalysisWizard;
+
 public:
   enum {Page_Intro, Page_SimuMethod, Page_ApproxMethod, Page_FORM};
 

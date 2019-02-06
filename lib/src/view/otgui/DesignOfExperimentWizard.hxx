@@ -35,9 +35,11 @@ class OTGUI_API DesignOfExperimentWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestDesignOfExperimentWizard;
+
 public:
 
-  enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import, Page_Evaluation};
+  enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import};
 
   DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent = 0);
 
