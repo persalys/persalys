@@ -27,7 +27,6 @@
 #include <QScrollBar>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QToolButton>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -92,8 +91,7 @@ void ImportedDesignPage::buildInterface()
   mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
   mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
 }
 
@@ -130,7 +128,7 @@ void ImportedDesignPage::setData(const QString& fileName)
   filePathLineEdit_->setText(fileName);
   try
   {
-    errorMessageLabel_->setText("");
+    errorMessageLabel_->reset();
     setTable(fileName);
     pageValidity_ = true;
   }
@@ -139,9 +137,7 @@ void ImportedDesignPage::setData(const QString& fileName)
     dataPreviewTableView_->setModel(0);
     // DOE size
     DOESizeLabel_->setText("");
-    QString message = tr("Impossible to load the file.") + "\n";
-    message = QString("<font color=red>%1%2</font>").arg(message).arg(ex.what());
-    errorMessageLabel_->setText(message);
+    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(ex.what()));
     pageValidity_ = false;
   }
 }
@@ -217,9 +213,7 @@ void ImportedDesignPage::columnNameChanged()
 
   if (columns != columns2)
   {
-    QString message = tr("Each variable must be associated with one column.");
-    message = QString("<font color=red>%1</font>").arg(message);
-    errorMessageLabel_->setText(message);
+    errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
     pageValidity_ = false;
     return;
   }
@@ -229,13 +223,11 @@ void ImportedDesignPage::columnNameChanged()
   {
     designOfExperiment_.setInputColumns(columns);
     pageValidity_ = true;
-    errorMessageLabel_->setText("");
+    errorMessageLabel_->reset();
   }
   catch(InvalidArgumentException & ex)
   {
-    QString message = tr("Each variable must be associated with one column.");
-    message = QString("<font color=red>%1</font>").arg(message);
-    errorMessageLabel_->setText(message);
+    errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
     pageValidity_ = false;
   }
 }

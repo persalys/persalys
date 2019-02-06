@@ -54,9 +54,6 @@ void SobolPage::buildInterface()
 
   // stop criteria
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox(StopCriteriaGroupBox::Time_Calls_CILength);
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCILengthChanged(double)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(double)), this, SLOT(clearErrorMessageLabel()));
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
@@ -102,8 +99,9 @@ void SobolPage::buildInterface()
   pageLayout->addStretch();
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
+  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorMessageLabel_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
   pageLayout->addWidget(errorMessageLabel_);
 
   initialize(SobolAnalysis());
@@ -132,7 +130,7 @@ void SobolPage::initialize(const Analysis& analysis)
 
 void SobolPage::updateNumberSimulations(double replicationSize)
 {
-  errorMessageLabel_->setText("");
+  errorMessageLabel_->reset();
   // total nb simu/iteration: N=replicationSize*(nb_inputs+2)
   const int nbSimu = replicationSize * numberStochasticVariables_;
   totalNbSimuLabel_->setText(QString::number(nbSimu));
@@ -160,13 +158,6 @@ int SobolPage::nextId() const
 }
 
 
-void SobolPage::clearErrorMessageLabel()
-{
-  // the slot clear() of QLabel does not work...
-  errorMessageLabel_->setText("");
-}
-
-
 bool SobolPage::validatePage()
 {
   QString errorMessage;
@@ -185,7 +176,7 @@ bool SobolPage::validatePage()
     }
   }
 
-  errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+  errorMessageLabel_->setErrorMessage(errorMessage);
   if (!errorMessage.isEmpty())
     return false;
 

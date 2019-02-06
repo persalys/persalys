@@ -23,6 +23,7 @@
 
 #include "otgui/Analysis.hxx"
 #include "otgui/DesignOfExperiment.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
 #include <QLabel>
@@ -55,7 +56,7 @@ private:
   OT::UnsignedInteger inputSampleDimension_;
   QSpinBox * chaosDegreeSpinbox_;
   QCheckBox * sparseCheckBox_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

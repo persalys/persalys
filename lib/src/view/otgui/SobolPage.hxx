@@ -24,9 +24,9 @@
 #include "otgui/Analysis.hxx"
 #include "otgui/StopCriteriaGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 
 namespace OTGUI
 {
@@ -48,7 +48,6 @@ protected:
 
 public slots:
   void updateNumberSimulations(double);
-  void clearErrorMessageLabel();
 
 private:
   OT::UnsignedInteger numberStochasticVariables_;
@@ -57,7 +56,7 @@ private:
   QLabel * totalNbSimuLabel_;
   DoubleSpinBox * confidenceLevelSpinbox_;
   QSpinBox * seedSpinbox_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

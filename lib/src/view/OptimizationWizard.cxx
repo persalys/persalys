@@ -46,7 +46,6 @@ void OptimizationWizard::buildInterface()
 
   // -- intro page
   introPage_ = new OptimizationIntroPage(this);
-  introPage_->initialize(analysis_);
   setPage(0, introPage_);
 
   // -- second page
@@ -92,7 +91,7 @@ void OptimizationWizard::buildInterface()
 
   errorMessageLabel_ = new TemporaryLabel;
   pageLayout->addWidget(errorMessageLabel_);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
 
   setPage(1, page);
 
@@ -175,6 +174,7 @@ void OptimizationWizard::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
+  introPage_->initialize(analysis_);
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
   evaluationSpinBox_->setValue(analysis_ptr->getMaximumEvaluationNumber());
   absoluteErrSpinBox_->setValue(analysis_ptr->getMaximumAbsoluteError());
@@ -244,18 +244,18 @@ bool OptimizationWizard::validateCurrentPage()
     }
     if (!variableInputsValues.getSize())
     {
-      errorMessageLabel_->setTemporaryErrorMessage(tr("At least one variable must vary"));
+      errorMessageLabel_->setErrorMessage(tr("At least one variable must vary"));
       return false;
     }
     Interval varBounds(lowerB, upperB, finiteLowerB, finiteUpperB);
     if (varBounds.isEmpty())
     {
-      errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
+      errorMessageLabel_->setErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
       return false;
     }
     if (!varBounds.contains(variableInputsValues))
     {
-      errorMessageLabel_->setTemporaryErrorMessage(tr("The interval must contain the starting point"));
+      errorMessageLabel_->setErrorMessage(tr("The interval must contain the starting point"));
       return false;
     }
   }

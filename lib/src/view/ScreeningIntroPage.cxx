@@ -62,8 +62,8 @@ ScreeningIntroPage::ScreeningIntroPage(QWidget* parent)
   pageLayout->addWidget(methodBox);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
 
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
@@ -102,11 +102,9 @@ Description ScreeningIntroPage::getInterestVariables() const
 
 bool ScreeningIntroPage::validatePage()
 {
-  errorMessageLabel_->setText("");
-
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(tr("At least one output must be selected")));
+    errorMessageLabel_->setErrorMessage(tr("At least one output must be selected"));
     return false;
   }
   return QWizardPage::validatePage();

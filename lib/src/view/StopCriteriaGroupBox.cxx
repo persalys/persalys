@@ -61,9 +61,9 @@ void StopCriteriaGroupBox::buildInterface()
     maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
     maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
 
-    connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCoefficientOfVariationChanged(double)));
+    connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(criteriaChanged()));
     connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
-    connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCoefficientOfVariationRequired(bool)));
+    connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
     groupBoxLayout->addWidget(maxiCoefOfVarCheckBox_, 0, 0);
     groupBoxLayout->addWidget(maxiCoefficientOfVariationSpinbox_, 0, 1);
@@ -77,9 +77,9 @@ void StopCriteriaGroupBox::buildInterface()
     maxiCILengthSpinbox_->setMaximum(1.);
     maxiCILengthSpinbox_->setSingleStep(0.01);
 
-    connect(maxiCILengthSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCILengthChanged(double)));
+    connect(maxiCILengthSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(criteriaChanged()));
     connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)), maxiCILengthSpinbox_, SLOT(setEnabled(bool)));
-    connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCILengthRequired(bool)));
+    connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
     groupBoxLayout->addWidget(maxiCILengthCheckBox_, 0, 0);
     groupBoxLayout->addWidget(maxiCILengthSpinbox_, 0, 1);
@@ -89,9 +89,9 @@ void StopCriteriaGroupBox::buildInterface()
   maxiTimeCheckBox_ = new QCheckBox(tr("Maximum time"));
   maxTimeLineEdit_ = new TimeLineEdit("");
 
-  connect(maxTimeLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(maxiTimeChanged()));
+  connect(maxTimeLineEdit_, SIGNAL(textChanged(QString)), this, SIGNAL(criteriaChanged()));
   connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), maxTimeLineEdit_, SLOT(setEnabled(bool)));
-  connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiTimeRequired(bool)));
+  connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
   groupBoxLayout->addWidget(maxiTimeCheckBox_, 1, 0);
   groupBoxLayout->addWidget(maxTimeLineEdit_, 1, 1);
@@ -100,9 +100,9 @@ void StopCriteriaGroupBox::buildInterface()
   maxiCallsCheckBox_ = new QCheckBox(tr("Maximum calls"));
   maxiCallsSpinbox_ = new LogSpinBox;
 
-  connect(maxiCallsSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(maxiCallsChanged(double)));
+  connect(maxiCallsSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(criteriaChanged()));
   connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), maxiCallsSpinbox_, SLOT(setEnabled(bool)));
-  connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), this, SLOT(maxiCallsRequired(bool)));
+  connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
   groupBoxLayout->addWidget(maxiCallsCheckBox_, 2, 0);
   groupBoxLayout->addWidget(maxiCallsSpinbox_, 2, 1);
@@ -182,43 +182,6 @@ bool StopCriteriaGroupBox::isMaxElapsedTimeValid() const
 bool StopCriteriaGroupBox::isMaxCallsRequired() const
 {
   return maxiCallsSpinbox_->isEnabled();
-}
-
-
-void StopCriteriaGroupBox::maxiCoefficientOfVariationRequired(bool checkboxClicked)
-{
-  Scalar value = checkboxClicked ? maxiCoefficientOfVariationSpinbox_->value() : -1.;
-  emit maxiCoefficientOfVariationChanged(value);
-}
-
-
-void StopCriteriaGroupBox::maxiCILengthRequired(bool checkboxClicked)
-{
-  Scalar value = checkboxClicked ? maxiCILengthSpinbox_->value() : -1.;
-  emit maxiCILengthChanged(value);
-}
-
-
-void StopCriteriaGroupBox::maxiCallsRequired(bool checkboxClicked)
-{
-  const int value = checkboxClicked ? maxiCallsSpinbox_->value() : std::numeric_limits<int>::max();
-  emit maxiCallsChanged(value);
-}
-
-
-void StopCriteriaGroupBox::maxiTimeChanged()
-{
-  const int value = maxTimeLineEdit_->getSeconds() ? maxTimeLineEdit_->getSeconds() : std::numeric_limits<int>::max();
-  emit maxiTimeChanged(value);
-}
-
-
-void StopCriteriaGroupBox::maxiTimeRequired(bool checkboxClicked)
-{
-  if (!maxTimeLineEdit_->getSeconds())
-    maxTimeLineEdit_->setText("dh1ms");
-  const int value = checkboxClicked ? maxTimeLineEdit_->getSeconds() : std::numeric_limits<int>::max();
-  emit maxiTimeChanged(value);
 }
 
 

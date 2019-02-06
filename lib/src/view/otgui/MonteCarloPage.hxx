@@ -24,9 +24,9 @@
 #include "otgui/Analysis.hxx"
 #include "otgui/StopCriteriaGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 
 namespace OTGUI
 {
@@ -46,16 +46,13 @@ public:
 protected:
   void buildInterface();
 
-public slots:
-  void clearErrorMessageLabel();
-
 private:
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
   QCheckBox * confidenceIntervalCheckBox_;
   DoubleSpinBox * levelConfidenceIntervalSpinbox_;
   QSpinBox * seedSpinbox_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

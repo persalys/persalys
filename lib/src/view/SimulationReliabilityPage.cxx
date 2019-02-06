@@ -54,9 +54,6 @@ void SimulationReliabilityPage::buildInterface()
 
   // stop criteria
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(double)), this, SLOT(clearErrorMessageLabel()));
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
@@ -80,8 +77,10 @@ void SimulationReliabilityPage::buildInterface()
   pageLayout->addWidget(advancedParamGroupBox);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
+  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorMessageLabel_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
+
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
 
@@ -152,13 +151,6 @@ int SimulationReliabilityPage::nextId() const
 }
 
 
-void SimulationReliabilityPage::clearErrorMessageLabel()
-{
-  // the slot clear() of QLabel does not work...
-  errorMessageLabel_->setText("");
-}
-
-
 bool SimulationReliabilityPage::validatePage()
 {
   QString errorMessage;
@@ -177,7 +169,7 @@ bool SimulationReliabilityPage::validatePage()
     }
   }
 
-  errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+  errorMessageLabel_->setErrorMessage(errorMessage);
   if (!errorMessage.isEmpty())
     return false;
 

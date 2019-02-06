@@ -75,8 +75,7 @@ void FunctionalChaosPage::buildInterface()
   pageLayout->addWidget(advancedParamGroupBox);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
 
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
@@ -121,15 +120,13 @@ Analysis FunctionalChaosPage::getAnalysis(const String& name, const DesignOfExpe
 
 void FunctionalChaosPage::updateInputSampleSize(DesignOfExperiment doe)
 {
-  errorMessageLabel_->setText("");
+  errorMessageLabel_->reset();
   inputSampleSize_ = doe.getInputSample().getSize();
 }
 
 
 bool FunctionalChaosPage::validatePage()
 {
-  errorMessageLabel_->setText("");
-
   if (!sparseCheckBox_->isChecked())
   {
     const UnsignedInteger degree = chaosDegreeSpinbox_->value();
@@ -141,7 +138,7 @@ bool FunctionalChaosPage::validatePage()
       const QString errorMessage = tr("Design of experiments size too small : %1. It must be greater or equal to C(degree+nbInputs, degree) = %2")
                                    .arg(inputSampleSize_)
                                    .arg(minimumSize);
-      errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+      errorMessageLabel_->setErrorMessage(errorMessage);
       return false;
     }
   }

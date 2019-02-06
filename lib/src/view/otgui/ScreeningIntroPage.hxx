@@ -23,9 +23,9 @@
 
 #include "otgui/Analysis.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 #include <QButtonGroup>
 
 namespace OTGUI
@@ -49,7 +49,7 @@ public:
 private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
 //   QButtonGroup * methodGroup_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

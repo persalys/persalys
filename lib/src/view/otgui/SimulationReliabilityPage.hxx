@@ -25,9 +25,9 @@
 #include "otgui/LimitState.hxx"
 #include "otgui/StopCriteriaGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 
 namespace OTGUI
 {
@@ -51,7 +51,6 @@ protected:
 
 public slots:
   void updateMethod(int);
-  void clearErrorMessageLabel();
 signals:
   void methodChanged(int);
 
@@ -60,7 +59,7 @@ private:
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
   QSpinBox * seedSpinbox_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

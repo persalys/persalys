@@ -24,9 +24,9 @@
 #include "otgui/DesignOfExperiment.hxx"
 #include "otgui/Analysis.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 #include <QComboBox>
 #include <QStandardItemModel>
 #include <QButtonGroup>
@@ -61,7 +61,7 @@ private:
   QLabel * doeLabel_;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
   OT::Description interestVariables_;
 };
 }

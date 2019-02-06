@@ -60,19 +60,8 @@ public:
 protected:
   void buildInterface();
 
-public slots:
-  void maxiCoefficientOfVariationRequired(bool);
-  void maxiCILengthRequired(bool);
-  void maxiTimeRequired(bool);
-  void maxiTimeChanged();
-  void maxiCallsRequired(bool);
-
 signals:
-  void maxiCoefficientOfVariationChanged(double);
-  void maxiCILengthChanged(double);
-  void maxiTimeChanged(int);
-  void maxiCallsChanged(double);
-  void clearErrorMessageLabel();
+  void criteriaChanged();
 
 private:
   Criteria criteria_;

@@ -26,10 +26,10 @@
 #include "otgui/OutputsSelectionGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
 #include "otgui/Analysis.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QStandardItemModel>
 #include <QComboBox>
-#include <QLabel>
 
 namespace OTGUI
 {
@@ -45,7 +45,6 @@ public:
   virtual bool validateCurrentPage();
 
 protected slots:
-  void clearErrorMessage();
   void updateWidgets();
 
 private:
@@ -54,7 +53,7 @@ private:
   QLabel * doeLabel_;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

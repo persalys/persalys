@@ -86,6 +86,7 @@ OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
 
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
@@ -127,11 +128,9 @@ String OptimizationIntroPage::getSolverName() const
 
 bool OptimizationIntroPage::validatePage()
 {
-  errorMessageLabel_->setText("");
-
   if (outputsSelectionGroupBox_->getSelectedOutputsNames().size() != 1)
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("Only one output must be selected"));
+    errorMessageLabel_->setErrorMessage(tr("Only one output must be selected"));
     return false;
   }
   return QWizardPage::validatePage();

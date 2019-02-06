@@ -60,6 +60,7 @@ void ModelEvaluationWizard::buildInterface()
 
   // output selection
   outputsGroupBox_ = new OutputsSelectionGroupBox(model.getSelectedOutputsNames(), analysis.getInterestVariables(), this);
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
   pageLayout->addWidget(outputsGroupBox_, 0, Qt::AlignTop);
 
   // table
@@ -119,9 +120,10 @@ void ModelEvaluationWizard::buildInterface()
 
 bool ModelEvaluationWizard::validateCurrentPage()
 {
+  errorMessageLabel_->reset();
   if (!outputsGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("At least one output must be selected"));
+    errorMessageLabel_->setErrorMessage(tr("At least one output must be selected"));
     return false;
   }
 

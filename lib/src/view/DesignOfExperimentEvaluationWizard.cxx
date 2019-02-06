@@ -95,17 +95,16 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
 
   // output selection
   outputsSelectionGroupBox_ = new OutputsSelectionGroupBox(this);
-  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), this, SLOT(clearErrorMessage()));
   pageLayout->addWidget(outputsSelectionGroupBox_);
 
   // block size
   blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), this, SLOT(clearErrorMessage()));
   pageLayout->addWidget(blockSizeGroupBox_);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
 
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
@@ -159,17 +158,8 @@ DesignOfExperimentDefinitionItem * DesignOfExperimentEvaluationWizard::getDesign
 }
 
 
-void DesignOfExperimentEvaluationWizard::clearErrorMessage()
-{
-  // clear() method does not work...
-  errorMessageLabel_->setText("");
-}
-
-
 bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
 {
-  errorMessageLabel_->setText("");
-
   DesignOfExperimentDefinitionItem * doeItem = getDesignOfExperimentDefinitionItem();
   Q_ASSERT(doeItem);
 
@@ -182,11 +172,9 @@ bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
   {
     message = tr("The block size must be lesser or equal to the size of the input sample");
   }
+  errorMessageLabel_->setErrorMessage(message);
   if (!message.isEmpty())
-  {
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(message));
     return false;
-  }
 
   // update selected DesignOfExperimentEvaluation
   DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(doeItem->getAnalysis().getImplementation().get());

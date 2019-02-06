@@ -24,9 +24,9 @@
 #include "otgui/Analysis.hxx"
 #include "otgui/ImportedDesignOfExperiment.hxx"
 #include "otgui/ExportableTableView.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 #include <QLineEdit>
 
 namespace OTGUI
@@ -57,7 +57,7 @@ private:
   QLineEdit * filePathLineEdit_;
   ExportableTableView * dataPreviewTableView_;
   QLabel * DOESizeLabel_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
