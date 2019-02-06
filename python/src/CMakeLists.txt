@@ -1,5 +1,6 @@
 
-include ( ${SWIG_USE_FILE} )
+include (${SWIG_USE_FILE})
+include (TargetLinkLibrariesWithDynamicLookup)
 
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
 add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
@@ -38,20 +39,38 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
 
   # swig_add_module is deprecated
   if (CMAKE_VERSION VERSION_LESS 3.8)
-    swig_add_module (${MODULENAME} python ${SOURCEFILE} ${swig_other_sources} )
+    swig_add_module (${MODULENAME}_python python ${SOURCEFILE} ${swig_other_sources} )
   else ()
-    swig_add_library (${MODULENAME} LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
+    swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
   endif ()
 
-  add_dependencies ( ${SWIG_MODULE_${MODULENAME}_REAL_NAME} generate_docstrings )
-  swig_link_libraries ( ${MODULENAME} otguibase )
-  if ( LINK_PYTHON_LIBRARY )
-    swig_link_libraries ( ${MODULENAME} ${PYTHON_LIBRARIES} )
+  # UseSWIG generates now standard target names
+  if (CMAKE_VERSION VERSION_LESS 3.13)
+    set (module_target ${SWIG_MODULE_${MODULENAME}_python_REAL_NAME})
+  else ()
+    set (module_target ${MODULENAME}_python)
   endif ()
 
-  set_target_properties ( ${SWIG_MODULE_${MODULENAME}_REAL_NAME} PROPERTIES NO_SONAME ON )
+  swig_link_libraries (${MODULENAME}_python otguibase)
 
-  list ( APPEND PYTHON_MODULES ${MODULENAME} )
+  target_link_libraries_with_dynamic_lookup (${module_target} ${PYTHON_LIBRARIES})
+
+  set_target_properties (${module_target} PROPERTIES OUTPUT_NAME ${MODULENAME})
+
+  if (CMAKE_VERSION VERSION_LESS 3.13)
+    set_target_properties (${module_target} PROPERTIES PREFIX "_")
+  endif ()
+
+  if (CMAKE_VERSION VERSION_LESS 3.1)
+    set_target_properties (${module_target} PROPERTIES NO_SONAME ON)
+  endif ()
+
+  install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
+            DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/${MODULENAME})
+  install ( TARGETS ${module_target}
+            LIBRARY DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/${MODULENAME})
+
+  list ( APPEND OTGUI_PYTHON_MODULES ${MODULENAME} )
 endmacro ( ot_add_python_module )
 
 if (CMAKE_VERSION VERSION_LESS 3.12)
@@ -139,28 +158,26 @@ ot_add_python_module (otguibase otguibase_module.i
                     )
 
 if (NOT CMAKE_VERSION VERSION_LESS 3.12)
+  # UseSWIG generates now standard target names
+  if (CMAKE_VERSION VERSION_LESS 3.13)
+    set (otguibase_target ${SWIG_MODULE_otguibase_python_REAL_NAME})
+  else ()
+    set (otguibase_target otguibase_python)
+  endif ()
+
   if (SalomeYACS_FOUND)
-    set_property (TARGET ${SWIG_MODULE_otguibase_REAL_NAME} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_YACS=1)
+    set_property (TARGET ${otguibase_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_YACS=1)
   endif ()
 
   if (OTFMI_FOUND)
-    set_property (TARGET ${SWIG_MODULE_otguibase_REAL_NAME} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTFMI=1)
+    set_property (TARGET ${otguibase_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTFMI=1)
   endif ()
 
   if (OTMORRIS_FOUND)
-    set_property (TARGET ${SWIG_MODULE_otguibase_REAL_NAME} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTMORRIS=1)
+    set_property (TARGET ${otguibase_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTMORRIS=1)
   endif ()
 endif ()
 
-
-foreach ( module ${PYTHON_MODULES} )
-  install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${module}.py
-            DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/otguibase
-            )
-  install ( TARGETS _${module}
-            LIBRARY DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/otguibase
-          )
-endforeach ( module )
 
 install ( FILES __init__.py
           DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/otguibase
@@ -175,7 +192,7 @@ if (SPHINX_FOUND)
   # create a build site-package from which sphinx can import
   set (OTGUI_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}/site-packages)
   execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase)
-  foreach (module ${PYTHON_MODULES})
+  foreach (module ${OTGUI_PYTHON_MODULES})
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/${module}.py)
     # FIXME: get_target_property (suffix ${SWIG_MODULE_${module}_REAL_NAME} SUFFIX)
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/_${module}.so)
@@ -218,6 +235,7 @@ if (SPHINX_FOUND)
     ${SPHINX_SOURCE_DIR}/*.sty
     ${SPHINX_SOURCE_DIR}/*.txt
     ${SPHINX_SOURCE_DIR}/*.in
+    ${SPHINX_SOURCE_DIR}/*.inv
   )
 
   # copy sphinx sources
@@ -253,20 +271,26 @@ if (SPHINX_FOUND)
   endforeach()
 
   set (SPHINX_FLAGS "-W" CACHE STRING "sphinx flags")
-  string (REPLACE " " ";" SPHINX_FLAGS ${SPHINX_FLAGS})
+  separate_arguments (SPHINX_FLAGS)
 
   # generate sphinx rule for each format
   foreach (format ${doc_formats})
     add_custom_target ( sphinx_${format}
                         COMMAND ${SPHINX_EXECUTABLE}
                                   -b ${format}
+                                  -d ${SPHINX_BINARY_DIR}/.doctrees
                                   ${SPHINX_FLAGS}
                                   ${SPHINX_BINARY_DIR}
                                   ${SPHINX_BINARY_DIR}/${format}
                         DEPENDS ${sphinx_clones}
                       )
-    foreach (module ${PYTHON_MODULES})
-      add_dependencies (sphinx_${format} _${module})
+    foreach (MODULENAME ${OTGUI_PYTHON_MODULES})
+      if (CMAKE_VERSION VERSION_LESS 3.13)
+        set (module_target ${SWIG_MODULE_${MODULENAME}_python_REAL_NAME})
+      else ()
+        set (module_target ${MODULENAME}_python)
+      endif ()
+      add_dependencies (sphinx_${format} ${module_target})
     endforeach ()
   endforeach ()
 

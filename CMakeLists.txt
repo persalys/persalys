@@ -2,7 +2,6 @@ cmake_minimum_required (VERSION 3.1)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option ( BUILD_GUI                    "Build the GUI"                                                         ON )
-option ( LINK_PYTHON_LIBRARY          "Link python modules against python library"                            ON )
 option ( BUILD_SHARED_LIBS            "Build shared libraries"                                                ON )
 option (USE_SALOME "use salome" ON)
 option (USE_OTFMI "use otfmi" ON)
@@ -17,7 +16,7 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
-project (OTGui CXX)
+project (OTGui)
 
 if (POLICY CMP0020)
   cmake_policy (SET CMP0020 NEW)
@@ -231,9 +230,17 @@ endforeach ( _var )
 # RPATH settings
 set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH} ${OTMORRIS_LIBRARY_DIRS})
 set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-if(POLICY CMP0042)
-  # Set MACOSX_RPATH to ON
+if (POLICY CMP0042)
+  # MACOSX_RPATH is enabled by default
   cmake_policy(SET CMP0042 NEW)
+endif()
+if (POLICY CMP0078)
+  # UseSWIG generates standard target names
+  cmake_policy(SET CMP0078 NEW)
+endif()
+if (POLICY CMP0086)
+  # UseSWIG honors SWIG_MODULE_NAME via -module flag
+  cmake_policy(SET CMP0086 NEW)
 endif()
 
 # Some useful macros to ease CMakeLists.txt file writing
