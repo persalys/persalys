@@ -42,6 +42,7 @@ public:
 
   void initialize(const Analysis& analysis);
   OT::Description getInterestVariables() const;
+  int getMethodId() const;
 
   virtual int nextId() const;
   virtual bool validatePage();

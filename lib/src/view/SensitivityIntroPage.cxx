@@ -110,6 +110,12 @@ Description SensitivityIntroPage::getInterestVariables() const
 }
 
 
+int SensitivityIntroPage::getMethodId() const
+{
+  return methodGroup_->checkedId();
+}
+
+
 bool SensitivityIntroPage::validatePage()
 {
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())

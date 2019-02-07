@@ -71,7 +71,7 @@ Analysis CentralTendencyWizard::getAnalysis() const
   // get the physical model
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel();
 
-  if (currentId() == Page_MonteCarlo)
+  if (introPage_->getMethodId() == CentralTendencyIntroPage::MonteCarlo)
   {
     Analysis analysis = monteCarloPage_->getAnalysis(analysis_.getName(), model);
     analysis.getImplementation()->setInterestVariables(introPage_->getInterestVariables());

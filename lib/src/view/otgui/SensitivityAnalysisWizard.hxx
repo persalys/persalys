@@ -32,6 +32,8 @@ class OTGUI_API SensitivityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestSensitivityAnalysisWizard;
+
 public:
   enum {Page_Intro, Page_Sobol, Page_SRC};
   enum Method {Sobol, SRC};

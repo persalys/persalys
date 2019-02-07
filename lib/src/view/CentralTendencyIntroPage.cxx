@@ -121,6 +121,12 @@ Description CentralTendencyIntroPage::getInterestVariables() const
 }
 
 
+int CentralTendencyIntroPage::getMethodId() const
+{
+  return methodGroup_->checkedId();
+}
+
+
 bool CentralTendencyIntroPage::validatePage()
 {
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
