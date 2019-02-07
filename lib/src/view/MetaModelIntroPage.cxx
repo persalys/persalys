@@ -55,6 +55,7 @@ MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
   doesComboBox_->setModel(doesComboBoxModel_);
 
   doeLabel_ = new QLabel;
+  doeLabel_->setObjectName("doeLabel_");
   doeLayout->addWidget(doeLabel_);
 
   pageLayout->addWidget(doeBox);
@@ -72,12 +73,12 @@ MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
 
   // Chaos
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Functional Chaos"));
-  methodGroup_->addButton(buttonToChooseMethod, MetaModelAnalysisWizard::chaos);
+  methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::Chaos);
   methodLayout->addWidget(buttonToChooseMethod);
 
   // Kriging
   buttonToChooseMethod = new QRadioButton(tr("Kriging"));
-  methodGroup_->addButton(buttonToChooseMethod, MetaModelAnalysisWizard::kriging);
+  methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::Kriging);
   methodLayout->addWidget(buttonToChooseMethod);
 
   pageLayout->addWidget(methodBox);
@@ -110,9 +111,9 @@ void MetaModelIntroPage::initialize(const Analysis& analysis, QList< DesignOfExp
   const String analysisName = analysis.getImplementation()->getClassName();
 
   if (analysisName == "FunctionalChaosAnalysis")
-    methodGroup_->button(MetaModelAnalysisWizard::chaos)->click();
+    methodGroup_->button(MetaModelIntroPage::Chaos)->click();
   else if (analysisName == "KrigingAnalysis")
-    methodGroup_->button(MetaModelAnalysisWizard::kriging)->click();
+    methodGroup_->button(MetaModelIntroPage::Kriging)->click();
 }
 
 
@@ -120,9 +121,9 @@ int MetaModelIntroPage::nextId() const
 {
   switch (methodGroup_->checkedId())
   {
-    case MetaModelAnalysisWizard::chaos:
+    case MetaModelIntroPage::Chaos:
       return MetaModelAnalysisWizard::Page_ChaosMethod;
-    case MetaModelAnalysisWizard::kriging:
+    case MetaModelIntroPage::Kriging:
       return MetaModelAnalysisWizard::Page_KrigingMethod;
     default:
       return -1;
@@ -134,7 +135,7 @@ DesignOfExperiment MetaModelIntroPage::getDesignOfExperiment() const
 {
   const int itemRow = doesComboBox_->currentIndex();
   if (itemRow < 0)
-    return 0;
+    return DesignOfExperiment();
   const QVariant variant = doesComboBoxModel_->item(itemRow)->data();
   if (variant.canConvert<DesignOfExperiment>())
     return variant.value<DesignOfExperiment>();
@@ -151,6 +152,12 @@ Description MetaModelIntroPage::getInterestVariables() const
     desc[i] = outputsList[i].toUtf8().constData();
 
   return desc;
+}
+
+
+int MetaModelIntroPage::getMethodId() const
+{
+  return methodGroup_->checkedId();
 }
 
 

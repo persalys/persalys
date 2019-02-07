@@ -39,6 +39,8 @@ class OTGUI_API MetaModelIntroPage : public QWizardPage
   Q_OBJECT
 
 public:
+  enum Method {Chaos, Kriging};
+
   MetaModelIntroPage(QWidget* parent = 0);
 
   virtual int nextId() const;
@@ -46,6 +48,7 @@ public:
   void initialize(const Analysis& analysis, QList<DesignOfExperiment> doesList);
   DesignOfExperiment getDesignOfExperiment() const;
   OT::Description getInterestVariables() const;
+  int getMethodId() const;
 
   virtual bool validatePage();
 
