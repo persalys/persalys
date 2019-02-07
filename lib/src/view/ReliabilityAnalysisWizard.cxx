@@ -21,6 +21,9 @@
 #include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include "otgui/FORMImportanceSamplingAnalysis.hxx"
+#include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "otgui/FORMAnalysis.hxx"
+#include "otgui/SORMAnalysis.hxx"
 #include "otgui/StudyItem.hxx"
 
 using namespace OT;
@@ -73,13 +76,11 @@ void ReliabilityAnalysisWizard::buildInterface()
   simulationPage_ = new SimulationReliabilityPage(this);
   simulationPage_->initialize(analysis_);
   setPage(Page_SimuMethod, simulationPage_);
-  connect(introPage_, SIGNAL(methodChanged(int)), simulationPage_, SLOT(updateMethod(int)));
 
   // Second Page: approximation methods
   approximationPage_ = new ApproximationReliabilityPage(this);
   approximationPage_->initialize(analysis_);
   setPage(Page_ApproxMethod, approximationPage_);
-  connect(introPage_, SIGNAL(methodChanged(int)), approximationPage_, SLOT(updateMethod(int)));
 
   // third page: FORM page
   formPage_ = new ApproximationReliabilityPage(this);
@@ -97,36 +98,42 @@ int ReliabilityAnalysisWizard::nextId() const
     case Page_Intro:
       return introPage_->nextId();
     case Page_SimuMethod:
-      return simulationPage_->nextId();
+    {
+      if (introPage_->getMethodId() == ReliabilityIntroPage::FORM_IS)
+        return ReliabilityAnalysisWizard::Page_FORM;
+      return -1;
+    }
     default:
       return -1;
   }
 }
 
 
-bool ReliabilityAnalysisWizard::validateCurrentPage()
+Analysis ReliabilityAnalysisWizard::getAnalysis() const
 {
-  if (currentId() == Page_SimuMethod || currentId() == Page_ApproxMethod)
-  {
-    const LimitState limitState = introPage_->getLimitState();
+  const String analysisName = analysis_.getName();
+  const LimitState limitState = introPage_->getLimitState();
 
-    if (currentId() == Page_SimuMethod)
-      analysis_ = simulationPage_->getAnalysis(analysis_.getName(), limitState);
-    else
-      analysis_ = approximationPage_->getAnalysis(analysis_.getName(), limitState);
-  }
-  else if (currentId() == Page_FORM)
+  Analysis analysis;
+  switch (introPage_->getMethodId())
   {
-    FORMImportanceSamplingAnalysis * formIS_ptr = dynamic_cast<FORMImportanceSamplingAnalysis*>(analysis_.getImplementation().get());
-    if (formIS_ptr)
-    {
-      FORMImportanceSamplingAnalysis analysis(*formIS_ptr);
-      analysis.setOptimizationAlgorithm(formPage_->getOptimizationAlgorithm());
-      analysis.setPhysicalStartingPoint(formPage_->getOptimizationAlgorithm().getStartingPoint());
-      analysis_ = analysis;
-    }
+    case ReliabilityIntroPage::MonteCarlo:
+      analysis = MonteCarloReliabilityAnalysis(analysisName, limitState);
+      break;
+    case ReliabilityIntroPage::FORM_IS:
+      analysis = FORMImportanceSamplingAnalysis(analysisName, limitState);
+      break;
+    case ReliabilityIntroPage::FORM:
+      analysis = FORMAnalysis(analysisName, limitState);
+      break;
+    case ReliabilityIntroPage::SORM:
+      analysis = SORMAnalysis(analysisName, limitState);
+      break;
+    default:
+      throw InvalidValueException(HERE) << "ReliabilityAnalysisWizard::getAnalysis no analysis";
   }
-
-  return QWizard::validateCurrentPage();
+  simulationPage_->updateAnalysis(analysis);
+  approximationPage_->updateAnalysis(analysis);
+  return analysis;
 }
 }

@@ -41,12 +41,15 @@ class OTGUI_API ReliabilityIntroPage : public QWizardPage
   Q_OBJECT
 
 public:
+  enum Method {MonteCarlo, FORM_IS, FORM, SORM};
+
   ReliabilityIntroPage(QWidget* parent = 0);
 
   virtual int nextId() const;
 
   void initialize(const Analysis& analysis, QList<LimitState> limitStatesList);
   LimitState getLimitState() const;
+  int getMethodId() const;
 
 public slots:
   void changeLimitStateLabel(int);

@@ -36,26 +36,17 @@ class OTGUI_API SimulationReliabilityPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {MonteCarlo = 1, FORM_IS = 2};
-
   SimulationReliabilityPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
-  Analysis getAnalysis(const OT::String& name, const LimitState& limitState) const;
+  void updateAnalysis(const Analysis& analysis);
 
-  virtual int nextId() const;
   virtual bool validatePage();
 
 protected:
   void buildInterface();
 
-public slots:
-  void updateMethod(int);
-signals:
-  void methodChanged(int);
-
 private:
-  Method method_;
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
   QSpinBox * seedSpinbox_;
