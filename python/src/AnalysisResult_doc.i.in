@@ -1,0 +1,15 @@
+%feature("docstring") OTGUI::AnalysisResult
+"Class containing results of the analysis."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::AnalysisResult::getElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Returns
+-------
+time : double
+    Elapsed time in seconds to perform the analysis"
+
+// ---------------------------------------------------------------------
+

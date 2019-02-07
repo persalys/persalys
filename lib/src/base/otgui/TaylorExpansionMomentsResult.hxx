@@ -21,13 +21,13 @@
 #ifndef OTGUI_TAYLOREXPANSIONMOMENTSRESULT_HXX
 #define OTGUI_TAYLOREXPANSIONMOMENTSRESULT_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "AnalysisResult.hxx"
 
 #include <openturns/OTType.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API TaylorExpansionMomentsResult : public OT::PersistentObject
+class OTGUI_API TaylorExpansionMomentsResult : public AnalysisResult
 {
   CLASSNAME
 

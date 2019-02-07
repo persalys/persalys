@@ -21,21 +21,24 @@
 #ifndef OTGUI_SRCRESULT_HXX
 #define OTGUI_SRCRESULT_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "EvaluationResult.hxx"
 
 #include <openturns/OTType.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API SRCResult : public OT::PersistentObject
+class OTGUI_API SRCResult : public EvaluationResult
 {
   CLASSNAME
 
 public:
+
+  friend class SRCAnalysis;
+
   /** Default constructor */
   SRCResult();
   /** Constructor with parameters */
-  SRCResult(const OT::Sample indices, const OT::Description & outputNames);
+  SRCResult(const OT::Sample& indices, const OT::Description & outputNames);
 
   /** Virtual constructor */
   virtual SRCResult * clone() const;

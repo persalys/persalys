@@ -104,6 +104,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       FMUInfo.i FMUInfo_doc.i.in
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in
                       LimitState.i LimitState_doc.i.in
+                      AnalysisResult.i AnalysisResult_doc.i.in
+                      EvaluationResult.i EvaluationResult_doc.i.in
                       AnalysisImplementation.i AnalysisImplementation_doc.i.in
                       DesignOfExperimentAnalysis.i DesignOfExperimentAnalysis_doc.i.in
                       PhysicalModelAnalysis.i PhysicalModelAnalysis_doc.i.in
@@ -136,7 +138,9 @@ ot_add_python_module (otguibase otguibase_module.i
                       MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
                       ImportanceSamplingAnalysis.i ImportanceSamplingAnalysis_doc.i.in
                       ApproximationAnalysis.i ApproximationAnalysis_doc.i.in
+                      FORMAnalysisResult.i FORMAnalysisResult_doc.i.in
                       FORMAnalysis.i FORMAnalysis_doc.i.in
+                      SORMAnalysisResult.i SORMAnalysisResult_doc.i.in
                       SORMAnalysis.i SORMAnalysis_doc.i.in
                       FORMImportanceSamplingAnalysis.i FORMImportanceSamplingAnalysis_doc.i.in
                       MetaModelValidationResult.i MetaModelValidationResult_doc.i.in

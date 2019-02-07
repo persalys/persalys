@@ -23,7 +23,6 @@
 
 #include "otgui/ResultWindow.hxx"
 #include "otgui/DataAnalysisResult.hxx"
-#include "otgui/DoubleSpinBox.hxx"
 
 #ifdef OTGUI_HAVE_PARAVIEW
 #include "otgui/PVSpreadSheetViewWidget.hxx"
@@ -58,9 +57,6 @@ protected:
   virtual void addTableTab();
 
 public slots:
-  void updateSpinBoxes(int indexOutput = 0);
-  void probaValueChanged(double proba);
-  void quantileValueChanged(double quantile);
   virtual void updateVariablesListVisibility(int indexTab);
 signals:
   void stateChanged(int);
@@ -85,9 +81,6 @@ protected:
   QGroupBox * variablesGroupBox_;
   VariablesListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
-private:
-  DoubleSpinBox * probaSpinBox_;
-  DoubleSpinBox * quantileSpinBox_;
 };
 }
 #endif

@@ -79,8 +79,6 @@ DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
   , variablesGroupBox_(0)
   , variablesListWidget_(0)
   , tabWidget_(0)
-  , probaSpinBox_(0)
-  , quantileSpinBox_(0)
 {
 }
 
@@ -172,7 +170,6 @@ void DataAnalysisWindow::fillListWidget()
     variablesListWidget_->item(outputNames_.size() + i)->setData(Qt::UserRole, i);
 
   variablesListWidget_->setCurrentRow(0);
-  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), this, SLOT(updateSpinBoxes(int)));
 }
 
 
@@ -229,9 +226,10 @@ void DataAnalysisWindow::addSummaryTab()
   scrollArea->setWidgetResizable(true);
 
   QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+  QGridLayout * tabLayout = new QGridLayout(tab);
 
   // -- results --
+  int row = 0;
 
   // stop criteria
   const QString groupBoxTitle = (analysisStopCriteriaMessage_.isEmpty()) ? tr("") : tr("Stop criteria");
@@ -267,21 +265,16 @@ void DataAnalysisWindow::addSummaryTab()
 
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
   parametersGroupBoxLayout->addWidget(table);
-  tabLayout->addWidget(parametersGroupBox, 0, Qt::AlignTop);
+  tabLayout->addWidget(parametersGroupBox, row, 0);
 
-  // min/max table
-  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(designOfExperiment_, false);
-  tabLayout->addWidget(minMaxTableGroupBox, 0, Qt::AlignTop);
-  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
-
+  // moments estimation
   if (result_.getMean().getSize())
   {
-    // moments estimation
     // we want to display output results before the input results
     // input indices
     Indices inInd(inputNames_.size());
     inInd.fill();
-    // ouput indices
+    // output indices
     Indices ind(outputNames_.size());
     ind.fill(inputNames_.size());
     // indices with good order
@@ -291,41 +284,17 @@ void DataAnalysisWindow::addSummaryTab()
         isConfidenceIntervalRequired_,
         levelConfidenceInterval_,
         ind);
-    tabLayout->addWidget(estimatesGroupBox, 0, Qt::AlignTop);
+
+    tabLayout->addWidget(estimatesGroupBox, ++row, 0);
     connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
-
-    // quantiles
-    QGridLayout * quantLayout = new QGridLayout;
-
-    // Probability
-    QLabel * label = new QLabel(tr("Probability"));
-    label->setStyleSheet("QLabel {font: bold;}");
-    quantLayout->addWidget(label, 0, 0);
-    probaSpinBox_ = new DoubleSpinBox;
-    label->setBuddy(probaSpinBox_);
-    probaSpinBox_->setMinimum(0.0);
-    probaSpinBox_->setMaximum(1.0);
-    probaSpinBox_->setSingleStep(0.01);
-    quantLayout->addWidget(probaSpinBox_, 0, 1);
-    // Quantile
-    label = new QLabel(tr("Empirical quantile"));
-    label->setStyleSheet("QLabel {font: bold;}");
-    quantLayout->addWidget(label, 1, 0);
-    quantileSpinBox_ = new DoubleSpinBox;
-    label->setBuddy(quantileSpinBox_);
-    quantileSpinBox_->setDecimals(8);
-    quantLayout->addWidget(quantileSpinBox_, 1, 1);
-    quantLayout->setColumnStretch(1, 1);
-
-    connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
-    connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
-
-    tabLayout->addLayout(quantLayout);
-    updateSpinBoxes();
   }
 
-  tabLayout->addStretch();
+  // min/max table
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(designOfExperiment_, false);
+  tabLayout->addWidget(minMaxTableGroupBox, ++row, 0);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
 
+  tabLayout->setRowStretch(++row, 1);
   scrollArea->setWidget(tab);
   tabWidget_->addTab(scrollArea, tr("Summary"));
 }
@@ -971,63 +940,6 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   linksModel->addSelectionLink(aStr.c_str(), sampleScatterPlotWidget->getProxy(), pvSpreadSheet->getProxy());
 }
 #endif
-
-
-void DataAnalysisWindow::updateSpinBoxes(int indexList)
-{
-  if (!quantileSpinBox_)
-    return;
-
-  SignalBlocker blocker(quantileSpinBox_);
-
-  // index of the variable in result_
-  const UnsignedInteger indexVar = variablesListWidget_->item(indexList)->data(Qt::UserRole).toInt();
-
-  // check
-  if (indexVar >= result_.getMin().getSize() || indexVar >= result_.getMax().getSize())
-    throw InvalidArgumentException(HERE) << "The result dimension does not match the sample dimension";
-
-  if (result_.getMin().getSize() && result_.getMax().getSize())
-  {
-    const double min = result_.getMin()[indexVar][0];
-    const double max = result_.getMax()[indexVar][0];
-
-    quantileSpinBox_->setMinimum(min);
-    quantileSpinBox_->setMaximum(max);
-    quantileSpinBox_->setSingleStep((max - min) / 100);
-  }
-  probaSpinBox_->setValue(0.5);
-  // if the previous value of probaSpinBox_ was 0.5, the signal valueChanged is not emitted
-  probaValueChanged(0.5);
-}
-
-
-void DataAnalysisWindow::probaValueChanged(double proba)
-{
-  SignalBlocker blocker(quantileSpinBox_);
-
-  // index of the variable in result_
-  const UnsignedInteger indexVar = variablesListWidget_->item(variablesListWidget_->currentRow())->data(Qt::UserRole).toInt();
-  quantileSpinBox_->setValue(designOfExperiment_.getSample().getMarginal(indexVar).computeQuantile(proba)[0]);
-}
-
-
-void DataAnalysisWindow::quantileValueChanged(double quantile)
-{
-  SignalBlocker blocker(probaSpinBox_);
-
-  // index of the variable in result_
-  const UnsignedInteger indexVar = variablesListWidget_->item(variablesListWidget_->currentRow())->data(Qt::UserRole).toInt();
-
-  double cdf = 0.0;
-  const double p = 1.0 / double(designOfExperiment_.getSample().getSize());
-
-  for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getSize(); ++j)
-    if (designOfExperiment_.getSample()[j][indexVar] < quantile)
-      cdf += p;
-
-  probaSpinBox_->setValue(cdf);
-}
 
 
 void DataAnalysisWindow::updateVariablesListVisibility(int indexTab)

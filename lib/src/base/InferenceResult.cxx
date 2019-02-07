@@ -34,7 +34,7 @@ static Factory<PersistentCollection<FittingTestResult> > Factory_PersistentColle
 
 /* Default constructor */
 InferenceResult::InferenceResult()
-  : PersistentObject()
+  : AnalysisResult()
 {
 }
 
@@ -79,7 +79,7 @@ String InferenceResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void InferenceResult::save(Advocate& adv) const
 {
-  PersistentObject::save(adv);
+  AnalysisResult::save(adv);
   adv.saveAttribute("fittingTestResultCollection_", fittingTestResultCollection_);
 }
 
@@ -87,7 +87,7 @@ void InferenceResult::save(Advocate& adv) const
 /* Method load() reloads the object from the StorageManager */
 void InferenceResult::load(Advocate& adv)
 {
-  PersistentObject::load(adv);
+  AnalysisResult::load(adv);
   adv.loadAttribute("fittingTestResultCollection_", fittingTestResultCollection_);
 }
 }

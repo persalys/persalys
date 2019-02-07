@@ -40,13 +40,13 @@ DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysi
   , removeAction_(0)
 {
   analysis_.addObserver(this);
-
   // this item must be an observer of the design of experiments:
   // it is used in StudyItem to know where adding a DesignOfExperimentAnalysis based
   // on this design of experiments
   const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
   Q_ASSERT(doeEval);
-  doeEval->getDesignOfExperiment().addObserver(this);
+
+  doeEval->getResult().getDesignOfExperiment().addObserver(this);
 
   buildActions();
 }
@@ -187,6 +187,7 @@ void DesignOfExperimentDefinitionItem::appendItem(Analysis& analysis)
 {
   // new item
   AnalysisItem * newItem = new AnalysisItem(analysis);
+  Q_ASSERT(newItem);
 
   // connections
   connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
@@ -277,7 +278,7 @@ void DesignOfExperimentDefinitionItem::createMetaModel()
   }
   const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
   Q_ASSERT(doeEval);
-  if (doeEval->getDesignOfExperiment().getSample().getSize() < 2)
+  if (doeEval->getResult().getDesignOfExperiment().getSample().getSize() < 2)
   {
     emit showErrorMessageRequested(tr("The design of experiments must contain at least two points."));
     return;

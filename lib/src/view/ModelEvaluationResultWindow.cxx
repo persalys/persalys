@@ -35,7 +35,7 @@ namespace OTGUI
 
 ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
-  , designOfExperiment_(dynamic_cast<ModelEvaluation*>(item->getAnalysis().getImplementation().get())->getDesignOfExperiment())
+  , designOfExperiment_(dynamic_cast<ModelEvaluation*>(item->getAnalysis().getImplementation().get())->getResult().getDesignOfExperiment())
 {
   buildInterface();
 }

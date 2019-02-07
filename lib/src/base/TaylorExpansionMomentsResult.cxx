@@ -33,7 +33,7 @@ static Factory<TaylorExpansionMomentsResult> Factory_TaylorExpansionMomentsResul
 
 /* Default constructor */
 TaylorExpansionMomentsResult::TaylorExpansionMomentsResult()
-  : PersistentObject()
+  : AnalysisResult()
 {
 }
 
@@ -44,7 +44,7 @@ TaylorExpansionMomentsResult::TaylorExpansionMomentsResult(const OT::Description
     const OT::Point & meanSecondOrder,
     const OT::Point & standardDeviation,
     const OT::Point & variance)
-  : PersistentObject()
+  : AnalysisResult()
   , outputNames_(outputNames)
   , meanFirstOrder_(meanFirstOrder)
   , meanSecondOrder_(meanSecondOrder)
@@ -109,7 +109,7 @@ String TaylorExpansionMomentsResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void TaylorExpansionMomentsResult::save(Advocate & adv) const
 {
-  PersistentObject::save(adv);
+  AnalysisResult::save(adv);
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("meanFirstOrder_", meanFirstOrder_);
   adv.saveAttribute("meanSecondOrder_", meanSecondOrder_);
@@ -121,7 +121,7 @@ void TaylorExpansionMomentsResult::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void TaylorExpansionMomentsResult::load(Advocate & adv)
 {
-  PersistentObject::load(adv);
+  AnalysisResult::load(adv);
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("meanFirstOrder_", meanFirstOrder_);
   adv.loadAttribute("meanSecondOrder_", meanSecondOrder_);

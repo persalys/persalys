@@ -110,6 +110,7 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 #endif
 %include LimitStateImplementation.i
 %include LimitState.i
+%include AnalysisResult.i
 %include AnalysisImplementation.i
 %include PhysicalModelAnalysis.i
 %include Analysis.i
@@ -117,15 +118,16 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
 %include DataModel.i
+%include EvaluationResult.i
+%include DataAnalysisResult.i
 %include DesignOfExperimentAnalysis.i
-%include ModelEvaluation.i
 %include SimulationAnalysis.i
 %include DesignOfExperimentEvaluation.i
 %include FixedDesignOfExperiment.i
 %include GridDesignOfExperiment.i
 %include ImportedDesignOfExperiment.i
 %include ProbabilisticDesignOfExperiment.i
-%include DataAnalysisResult.i
+%include ModelEvaluation.i
 %include DataAnalysis.i
 %include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i
@@ -145,7 +147,9 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include MonteCarloReliabilityAnalysis.i
 %include ImportanceSamplingAnalysis.i
 %include ApproximationAnalysis.i
+%include FORMAnalysisResult.i
 %include FORMAnalysis.i
+%include SORMAnalysisResult.i
 %include SORMAnalysis.i
 %include FORMImportanceSamplingAnalysis.i
 %include MetaModelValidationResult.i

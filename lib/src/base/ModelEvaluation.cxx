@@ -33,20 +33,14 @@ static Factory<ModelEvaluation> Factory_ModelEvaluation;
 
 /* Default constructor */
 ModelEvaluation::ModelEvaluation()
-  : PhysicalModelAnalysis()
-  , inputNames_()
-  , inputValues_()
-  , designOfExperiment_()
+  : GridDesignOfExperiment()
 {
 }
 
 
 /* Constructor with parameters */
 ModelEvaluation::ModelEvaluation(const String& name, const PhysicalModel& physicalModel)
-  : PhysicalModelAnalysis(name, physicalModel)
-  , inputNames_()
-  , inputValues_()
-  , designOfExperiment_(name, physicalModel)
+  : GridDesignOfExperiment(name, physicalModel)
 {
   initializeParameters();
   setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
@@ -57,11 +51,10 @@ ModelEvaluation::ModelEvaluation(const String& name, const PhysicalModel& physic
 ModelEvaluation::ModelEvaluation(const String& name,
                                  const PhysicalModel& physicalModel,
                                  const Point& inputsValues)
-  : PhysicalModelAnalysis(name, physicalModel)
-  , inputNames_(getPhysicalModel().getInputNames())
-  , inputValues_(inputsValues)
-  , designOfExperiment_(name, physicalModel)
+  : GridDesignOfExperiment(name, physicalModel)
 {
+  inputNames_ = getPhysicalModel().getInputNames();
+  setValues(inputsValues);
   setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
 
@@ -69,94 +62,27 @@ ModelEvaluation::ModelEvaluation(const String& name,
 /* Virtual constructor */
 ModelEvaluation* ModelEvaluation::clone() const
 {
-  ModelEvaluation * newAnalysis = new ModelEvaluation(*this);
-  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
-  return newAnalysis;
-}
-
-
-void ModelEvaluation::initializeParameters()
-{
-  inputValues_.clear();
-  inputNames_ = getPhysicalModel().getInputNames();
-
-  const UnsignedInteger inputSize = inputNames_.getSize();
-  inputValues_ = Point(inputSize);
-
-  for (UnsignedInteger i = 0; i < inputSize; ++i)
-    inputValues_[i] = getPhysicalModel().getInputs()[i].getValue();
-}
-
-
-void ModelEvaluation::updateParameters()
-{
-  Description inputNames(inputNames_);
-  Point values(inputValues_);
-
-  initializeParameters();
-
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
-  {
-    const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
-    if (it != inputNames.end())
-      inputValues_[i] = values[it - inputNames.begin()];
-  }
-}
-
-
-void ModelEvaluation::initialize()
-{
-  AnalysisImplementation::initialize();
-  designOfExperiment_.getImplementation()->initialize();
+  return new ModelEvaluation(*this);
 }
 
 
 void ModelEvaluation::launch()
 {
-  if (getInputValues().getSize() != getPhysicalModel().getInputDimension())
+  if (getValues().getSize() != getPhysicalModel().getInputDimension())
     throw InvalidArgumentException(HERE) << "Wrong input point dimension";
 
   // output = f(input)
-  const Point outputP(getPhysicalModel().getFunction(getInterestVariables())(getInputValues()));
+  const Point outputP(getPhysicalModel().getFunction(getInterestVariables())(getValues()));
 
   // set design of experiments
   // input sample
-  Sample inputSample(1, getInputValues());
+  Sample inputSample(1, getValues());
   inputSample.setDescription(inputNames_);
-  designOfExperiment_.setInputSample(inputSample);
+  result_.designOfExperiment_.setInputSample(inputSample);
   // output sample
   Sample outputSample(1, outputP);
   outputSample.setDescription(getInterestVariables());
-  designOfExperiment_.setOutputSample(outputSample);
-}
-
-
-Point ModelEvaluation::getInputValues() const
-{
-  return inputValues_;
-}
-
-
-void ModelEvaluation::setInputValue(const UnsignedInteger index, const double value)
-{
-  if (index >= inputValues_.getSize())
-    throw InvalidArgumentException(HERE) << "Wrong index value. Must be lesser than " << inputValues_.getSize();
-
-  inputValues_[index] = value;
-}
-
-
-DesignOfExperiment ModelEvaluation::getDesignOfExperiment() const
-{
-  return designOfExperiment_;
-}
-
-
-Point ModelEvaluation::getOutputValues() const
-{
-  if (hasValidResult())
-    return getDesignOfExperiment().getOutputSample()[0];
-  return Point();
+  result_.designOfExperiment_.setOutputSample(outputSample);
 }
 
 
@@ -168,7 +94,7 @@ Parameters ModelEvaluation::getParameters() const
   OSS values;
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
   {
-    values << inputNames_[i] << " : " << inputValues_[i];
+    values << inputNames_[i] << " : " << values_[i];
     if (i < inputNames_.getSize() - 1)
       values << "\n";
   }
@@ -183,7 +109,7 @@ String ModelEvaluation::getPythonScript() const
   String result;
 
   OSS oss;
-  oss << "values = " << inputValues_.__str__() << "\n";
+  oss << "values = " << values_.__str__() << "\n";
   oss << getName() << " = otguibase.ModelEvaluation('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", values)\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
@@ -196,12 +122,6 @@ String ModelEvaluation::getPythonScript() const
 }
 
 
-bool ModelEvaluation::hasValidResult() const
-{
-  return getDesignOfExperiment().getOutputSample().getSize() != 0;
-}
-
-
 /* String converter */
 String ModelEvaluation::__repr__() const
 {
@@ -209,7 +129,7 @@ String ModelEvaluation::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
-      << " inputValues=" << getInputValues();
+      << " inputValues=" << getValues();
   return oss;
 }
 
@@ -217,19 +137,13 @@ String ModelEvaluation::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void ModelEvaluation::save(Advocate & adv) const
 {
-  PhysicalModelAnalysis::save(adv);
-  adv.saveAttribute("inputNames_", inputNames_);
-  adv.saveAttribute("inputValues_", inputValues_);
-  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
+  GridDesignOfExperiment::save(adv);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void ModelEvaluation::load(Advocate & adv)
 {
-  PhysicalModelAnalysis::load(adv);
-  adv.loadAttribute("inputNames_", inputNames_);
-  adv.loadAttribute("inputValues_", inputValues_);
-  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
+  GridDesignOfExperiment::load(adv);
 }
 }

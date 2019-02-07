@@ -59,15 +59,15 @@ SimulationReliabilityAnalysis* SimulationReliabilityAnalysis::clone() const
 }
 
 
-struct AnalysisStruct
+struct SimuReliabilityAnalysisStruct
 {
-  AnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
+  SimuReliabilityAnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
     : analysis_(analysis)
     , simulation_(simulation)
   {
   };
 
-  virtual ~AnalysisStruct() {};
+  virtual ~SimuReliabilityAnalysisStruct() {};
 
   SimulationReliabilityAnalysis * analysis_;
   SimulationInterface simulation_;
@@ -75,7 +75,7 @@ struct AnalysisStruct
 
 void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * data)
 {
-  AnalysisStruct * analysisStruct = static_cast<AnalysisStruct*>(data);
+  SimuReliabilityAnalysisStruct * analysisStruct = static_cast<SimuReliabilityAnalysisStruct*>(data);
   if (!analysisStruct)
     return;
 
@@ -172,7 +172,7 @@ void SimulationReliabilityAnalysis::launch()
   timeCriteria_.setStartTime(TimeCriteria::Now());
   timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
   algo.setStopCallback(&WithStopCriteriaAnalysis::Stop, &timeCriteria_);
-  AnalysisStruct analysisStruc(this, algo);
+  SimuReliabilityAnalysisStruct analysisStruc(this, algo);
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 
   // run algo

@@ -23,8 +23,7 @@
 
 #include "ApproximationAnalysis.hxx"
 #include "ReliabilityAnalysis.hxx"
-
-#include <openturns/FORMResult.hxx>
+#include "FORMAnalysisResult.hxx"
 
 namespace OTGUI
 {
@@ -41,7 +40,7 @@ public:
   /** Virtual constructor */
   virtual FORMAnalysis * clone() const;
 
-  OT::FORMResult getResult() const;
+  FORMAnalysisResult getResult() const;
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
@@ -61,7 +60,7 @@ protected:
   virtual void launch();
 
 private:
-  OT::FORMResult result_;
+  FORMAnalysisResult result_;
 };
 }
 #endif

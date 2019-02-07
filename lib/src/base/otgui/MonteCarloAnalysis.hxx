@@ -50,6 +50,7 @@ public:
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
+  virtual bool hasValidResult() const;
 
   /** String converter */
   virtual OT::String __repr__() const;

@@ -23,6 +23,7 @@
 #include <boost/locale.hpp>
 
 #include <stdint.h>
+#include <chrono>
 
 using namespace OT;
 
@@ -283,5 +284,39 @@ int Tools::IsUTF8(const char *data, size_t size)
     str += code_length;
   }
   return 1;
+}
+
+
+// TimeCriteria methods
+
+void TimeCriteria::setStartTime(const Scalar startTime)
+{
+  stopRequested_ = false;
+  startTime_ = startTime;
+}
+Scalar TimeCriteria::getStartTime() const
+{
+  return startTime_;
+}
+void TimeCriteria::setMaxElapsedTime(const Scalar seconds)
+{
+  maximumElapsedTime_ = seconds;
+}
+void TimeCriteria::stop()
+{
+  stopRequested_ = true;
+}
+void TimeCriteria::incrementElapsedTime()
+{
+  elapsedTime_ = Now() - startTime_;
+}
+Scalar TimeCriteria::getElapsedTime() const
+{
+  return elapsedTime_;
+}
+Scalar TimeCriteria::Now()
+{
+  std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+  return 1e-3 * std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 }
 }

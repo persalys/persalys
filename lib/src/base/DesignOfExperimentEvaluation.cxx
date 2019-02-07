@@ -20,6 +20,9 @@
  */
 #include "otgui/DesignOfExperimentEvaluation.hxx"
 
+#include "otgui/BaseTools.hxx"
+#include "otgui/DataAnalysis.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 
@@ -36,6 +39,7 @@ static Factory<DesignOfExperimentEvaluation> Factory_DesignOfExperimentEvaluatio
 DesignOfExperimentEvaluation::DesignOfExperimentEvaluation()
   : SimulationAnalysis()
   , originalInputSample_()
+  , result_()
 {
 }
 
@@ -44,17 +48,15 @@ DesignOfExperimentEvaluation::DesignOfExperimentEvaluation()
 DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
   , originalInputSample_()
+  , result_(DesignOfExperiment(name, physicalModel))
 {
-
 }
 
 
 /* Virtual constructor */
 DesignOfExperimentEvaluation* DesignOfExperimentEvaluation::clone() const
 {
-  DesignOfExperimentEvaluation * newAnalysis = new DesignOfExperimentEvaluation(*this);
-  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
-  return newAnalysis;
+  return new DesignOfExperimentEvaluation(*this);
 }
 
 
@@ -63,15 +65,8 @@ void DesignOfExperimentEvaluation::setName(const String& name)
 {
   PersistentObject::setName(name);
   // the analysis and designOfExperiment_ must have the same name
-  designOfExperiment_.getImplementation()->setName(name);
+  result_.designOfExperiment_.getImplementation()->setName(name);
   notify("nameChanged");
-}
-
-
-void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
-{
-  designOfExperiment_ = designOfExperiment;
-  initialize();
 }
 
 
@@ -83,12 +78,28 @@ Sample DesignOfExperimentEvaluation::getOriginalInputSample() const
 }
 
 
+void DesignOfExperimentEvaluation::resetResult()
+{
+  // we want to keep the same result_.designOfExperiment_ pointer
+  result_.designOfExperiment_.getImplementation()->initialize();
+  result_ = DataAnalysisResult(result_.designOfExperiment_);
+}
+
+
+void DesignOfExperimentEvaluation::initialize()
+{
+  SimulationAnalysis::initialize();
+  resetResult();
+}
+
+
 void DesignOfExperimentEvaluation::launch()
 {
   // check
   if (!getInterestVariables().getSize())
     throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set interest variables.";
 
+  const UnsignedInteger inputSampleDimension = getOriginalInputSample().getDimension();
   const UnsignedInteger inputSampleSize = getOriginalInputSample().getSize();
   if (!inputSampleSize)
     throw InvalidArgumentException(HERE) << "The design of experiments input sample is empty";
@@ -98,12 +109,13 @@ void DesignOfExperimentEvaluation::launch()
                                       << ") can not be greater than the input sample size (" << inputSampleSize << ")";
 
   // input sample
-  Sample inputSample = Sample(0, getOriginalInputSample().getDimension());
-  inputSample.setDescription(getOriginalInputSample().getDescription());
+  const Description inDescription(getOriginalInputSample().getDescription());
+  Sample inputSample = Sample(0, inputSampleDimension);
+  inputSample.setDescription(inDescription);
 
   // failed input sample
-  failedInputSample_ = Sample(0, getOriginalInputSample().getDimension());
-  failedInputSample_.setDescription(getOriginalInputSample().getDescription());
+  failedInputSample_ = Sample(0, inputSampleDimension);
+  failedInputSample_.setDescription(inDescription);
 
   // number of iterations
   const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
@@ -115,14 +127,22 @@ void DesignOfExperimentEvaluation::launch()
   Sample outputSample(0, getInterestVariables().getSize());
   outputSample.setDescription(getInterestVariables());
 
+  // time
+  TimeCriteria timeCriteria;
+
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
     if (stopRequested_)
       break;
 
+    // progress
     progressValue_ = (int) (i * 100 / nbIter);
     notify("progressValueChanged");
+
+    // information message
+    informationMessage_ = OSS() << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notify("informationMessageUpdated");
 
     // the last block can be smaller
     const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
@@ -153,26 +173,43 @@ void DesignOfExperimentEvaluation::launch()
     {
       failedInputSample_.add(failedSample);
     }
+    timeCriteria.incrementElapsedTime();
   }
 
   if (!outputSample.getSize())
     throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model. " << warningMessage_;
 
   // set design of experiments
-  designOfExperiment_.setInputSample(inputSample);
-  designOfExperiment_.setOutputSample(outputSample);
+  result_.designOfExperiment_.setInputSample(inputSample);
+  result_.designOfExperiment_.setOutputSample(outputSample);
+
+  // compute data analysis
+  DataAnalysis dataAnalysis("", result_.designOfExperiment_);
+  dataAnalysis.setIsConfidenceIntervalRequired(false);
+  dataAnalysis.run();
+
+  // set result
+  result_ = dataAnalysis.getResult();
+  timeCriteria.incrementElapsedTime();
+  result_.elapsedTime_ = timeCriteria.getElapsedTime();
 }
 
 
 Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 {
   const UnsignedInteger originalInputSampleSize = originalInputSample_.getSize();
-  const UnsignedInteger inputSampleSize = designOfExperiment_.getInputSample().getSize();
+  const UnsignedInteger inputSampleSize = result_.designOfExperiment_.getInputSample().getSize();
   const UnsignedInteger failedInputSampleSize = failedInputSample_.getSize();
   if ((inputSampleSize + failedInputSampleSize) < originalInputSampleSize)
     return Sample(originalInputSample_, inputSampleSize + failedInputSampleSize, originalInputSampleSize);
 
   return Sample();
+}
+
+
+DataAnalysisResult DesignOfExperimentEvaluation::getResult() const
+{
+  return result_;
 }
 
 
@@ -188,11 +225,18 @@ Parameters DesignOfExperimentEvaluation::getParameters() const
 }
 
 
+bool DesignOfExperimentEvaluation::hasValidResult() const
+{
+  return result_.getDesignOfExperiment().getSample().getSize() != 0;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void DesignOfExperimentEvaluation::save(Advocate& adv) const
 {
   SimulationAnalysis::save(adv);
   adv.saveAttribute("originalInputSample_", originalInputSample_);
+  adv.saveAttribute("result_", result_);
 }
 
 
@@ -201,5 +245,13 @@ void DesignOfExperimentEvaluation::load(Advocate& adv)
 {
   SimulationAnalysis::load(adv);
   adv.loadAttribute("originalInputSample_", originalInputSample_);
+  adv.loadAttribute("result_", result_);
+  // can open older xml files
+  if (!result_.getDesignOfExperiment().getSample().getSize())
+  {
+    DesignOfExperiment experiment;
+    adv.loadAttribute("designOfExperiment_", experiment);
+    result_.designOfExperiment_ = experiment;
+  }
 }
 }

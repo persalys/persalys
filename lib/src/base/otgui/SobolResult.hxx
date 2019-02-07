@@ -21,13 +21,13 @@
 #ifndef OTGUI_SOBOLRESULT_HXX
 #define OTGUI_SOBOLRESULT_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "EvaluationResult.hxx"
 
 #include <openturns/OTType.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API SobolResult : public OT::PersistentObject
+class OTGUI_API SobolResult : public EvaluationResult
 {
   CLASSNAME
 
@@ -53,8 +53,6 @@ public:
   OT::Collection<OT::Interval> getTotalIndicesInterval() const;
 
   OT::UnsignedInteger getCallsNumber() const;
-
-  OT::Scalar getElapsedTime() const;
 
   OT::Scalar getConfidenceIntervalLength() const;
 

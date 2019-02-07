@@ -83,7 +83,7 @@ void ModelEvaluationWizard::buildInterface()
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
     // input value
-    const double defaultValue = analysis.getInputValues()[i];
+    const double defaultValue = analysis.getValues()[i];
     const double delta(0.1 * fabs(defaultValue));
     const double step(delta > 1e-12 ? 0.5 * delta : 0.1);
 
@@ -131,12 +131,16 @@ bool ModelEvaluationWizard::validateCurrentPage()
   // update analysis_
   ModelEvaluation eval(analysis_.getName(), model);
   eval.setInterestVariables(QtOT::StringListToDescription(outputsGroupBox_->getSelectedOutputsNames()));
+
+  Point inputValues(table_->rowCount());
   for (int i = 0; i < table_->rowCount(); ++i)
   {
     QWidget * cellWidget = table_->cellWidget(i, 2);
     DoubleSpinBox * spinBox = qobject_cast<DoubleSpinBox *>(cellWidget);
-    eval.setInputValue(i, spinBox->value());
+    inputValues[i] = spinBox->value();
   }
+  eval.setValues(inputValues);
+
   analysis_ = eval;
 
   return QWizard::validateCurrentPage();

@@ -19,6 +19,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      GridDesignOfExperiment.cxx
                      ImportedDesignOfExperiment.cxx
                      ProbabilisticDesignOfExperiment.cxx
+                     AnalysisResult.cxx
+                     EvaluationResult.cxx
                      AnalysisImplementation.cxx Analysis.cxx SimulationAnalysis.cxx
                      PhysicalModelAnalysis.cxx DesignOfExperimentAnalysis.cxx
                      WithStopCriteriaAnalysis.cxx
@@ -36,8 +38,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      MonteCarloReliabilityAnalysis.cxx
                      ImportanceSamplingAnalysis.cxx
                      ApproximationAnalysis.cxx
-                     FORMAnalysis.cxx
-                     SORMAnalysis.cxx
+                     FORMAnalysisResult.cxx FORMAnalysis.cxx
+                     SORMAnalysisResult.cxx SORMAnalysis.cxx
                      FORMImportanceSamplingAnalysis.cxx
                      MetaModelAnalysis.cxx
                      MetaModelValidationResult.cxx
@@ -86,6 +88,8 @@ ot_install_header_file ( GridDesignOfExperiment.hxx )
 ot_install_header_file ( ImportedDesignOfExperiment.hxx )
 ot_install_header_file ( ProbabilisticDesignOfExperiment.hxx )
 ot_install_header_file ( DataModel.hxx )
+ot_install_header_file ( AnalysisResult.hxx )
+ot_install_header_file ( EvaluationResult.hxx )
 ot_install_header_file ( AnalysisImplementation.hxx )
 ot_install_header_file ( PhysicalModelAnalysis.hxx )
 ot_install_header_file ( DesignOfExperimentAnalysis.hxx )
@@ -117,7 +121,9 @@ ot_install_header_file ( MonteCarloReliabilityAnalysis.hxx )
 ot_install_header_file ( ImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( ApproximationAnalysis.hxx )
 ot_install_header_file ( FORMAnalysis.hxx )
+ot_install_header_file ( FORMAnalysisResult.hxx )
 ot_install_header_file ( SORMAnalysis.hxx )
+ot_install_header_file ( SORMAnalysisResult.hxx )
 ot_install_header_file ( FORMImportanceSamplingAnalysis.hxx )
 ot_install_header_file ( MetaModelValidationResult.hxx )
 ot_install_header_file ( MetaModelAnalysisResult.hxx )

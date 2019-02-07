@@ -108,7 +108,7 @@ analysis.run()
 
 print("error message=", analysis.getErrorMessage())
 print("result=", analysis.getResult())
-print("meanAbsEE =", analysis.getResult().getMeanAbsoluteElementaryEffects())
+print("meanAbsEE =", analysis.getResult().getMeanAbsoluteElementaryEffects(0))
 # script
 script = myStudy.getPythonScript()
 

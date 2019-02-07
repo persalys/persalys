@@ -32,7 +32,7 @@ CLASSNAMEINIT(MetaModelAnalysisResult)
 static Factory<MetaModelAnalysisResult> Factory_MetaModelAnalysisResult;
 
 MetaModelAnalysisResult::MetaModelAnalysisResult()
-  : PersistentObject()
+  : AnalysisResult()
   , metaModel_()
   , analyticalValidation_("Analytical")
   , testSampleValidation_("Test sample")
@@ -119,7 +119,7 @@ String MetaModelAnalysisResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void MetaModelAnalysisResult::save(Advocate& adv) const
 {
-  PersistentObject::save(adv);
+  AnalysisResult::save(adv);
   adv.saveAttribute("metaModel_", metaModel_);
   adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("metaModelOutputSample_", metaModelOutputSample_);
@@ -133,7 +133,7 @@ void MetaModelAnalysisResult::save(Advocate& adv) const
 /* Method load() reloads the object from the StorageManager */
 void MetaModelAnalysisResult::load(Advocate& adv)
 {
-  PersistentObject::load(adv);
+  AnalysisResult::load(adv);
   adv.loadAttribute("metaModel_", metaModel_);
   adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("metaModelOutputSample_", metaModelOutputSample_);

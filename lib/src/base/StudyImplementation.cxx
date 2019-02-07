@@ -445,7 +445,7 @@ void StudyImplementation::add(const Analysis& analysis)
         DesignOfExperimentEvaluation * doe_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analyses_[i].getImplementation().get());
         if (doe_ptr)
         {
-          if (doe_ptr->getDesignOfExperiment() == dm_analysis_ptr->getDesignOfExperiment())
+          if (doe_ptr->getResult().getDesignOfExperiment() == dm_analysis_ptr->getDesignOfExperiment())
           {
             doeFound = true;
             break;
@@ -503,7 +503,7 @@ void StudyImplementation::clear(const Analysis& analysis)
     DesignOfExperimentAnalysis * analysis_ptr = dynamic_cast<DesignOfExperimentAnalysis*>((*iterAnalysis).getImplementation().get());
     if (analysis_ptr)
     {
-      if (analysis_ptr->getDesignOfExperiment() == doeEval->getDesignOfExperiment())
+      if (analysis_ptr->getDesignOfExperiment() == doeEval->getResult().getDesignOfExperiment())
       {
         analysis_ptr->notifyAndRemove("analysisRemoved", "Analysis");
         analysis_ptr->notifyAndRemove("analysisRemoved", "Study");

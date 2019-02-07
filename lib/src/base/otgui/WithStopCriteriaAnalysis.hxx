@@ -60,45 +60,5 @@ private:
   double maximumCoefficientOfVariation_;
   OT::UnsignedInteger maximumElapsedTime_;
 };
-
-
-class OTGUI_API TimeCriteria
-{
-  friend WithStopCriteriaAnalysis;
-public:
-  TimeCriteria() : startTime_(0.), maximumElapsedTime_(0.), stopRequested_(false)
-  {};
-  virtual ~TimeCriteria()
-  {};
-  void setStartTime(const OT::Scalar startTime)
-  {
-    stopRequested_ = false;
-    startTime_ = startTime;
-  }
-  OT::Scalar getStartTime() const
-  {
-    return startTime_;
-  }
-  void setMaxElapsedTime(const OT::Scalar seconds)
-  {
-    maximumElapsedTime_ = seconds;
-  }
-  void stop()
-  {
-    stopRequested_ = true;
-  }
-  OT::Scalar getElapsedTime() const
-  {
-    return elapsedTime_;
-  }
-  /** System time in seconds */
-  static OT::Scalar Now();
-
-private:
-  OT::Scalar startTime_;
-  mutable OT::Scalar elapsedTime_;
-  OT::Scalar maximumElapsedTime_;
-  bool stopRequested_;
-};
 }
 #endif

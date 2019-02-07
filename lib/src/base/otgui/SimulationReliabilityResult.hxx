@@ -21,13 +21,13 @@
 #ifndef OTGUI_SIMULATIONRELIABILITYRESULT_HXX
 #define OTGUI_SIMULATIONRELIABILITYRESULT_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "EvaluationResult.hxx"
 
 #include <openturns/ProbabilitySimulationResult.hxx>
 
 namespace OTGUI
 {
-class OTGUI_API SimulationReliabilityResult : public OT::PersistentObject
+class OTGUI_API SimulationReliabilityResult : public EvaluationResult
 {
   CLASSNAME
 
@@ -47,12 +47,9 @@ public:
   virtual SimulationReliabilityResult * clone() const;
 
   OT::ProbabilitySimulationResult getSimulationResult() const;
-  OT::Sample getOutputSample() const;
   OT::Sample getConvergenceSample() const;
   OT::Sample getConvergenceSampleLowerBound() const;
   OT::Sample getConvergenceSampleUpperBound() const;
-
-  OT::Scalar getElapsedTime() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -65,11 +62,9 @@ public:
 
 private:
   OT::ProbabilitySimulationResult simulationResult_;
-  OT::Sample outputSample_;
   OT::Sample convergenceSample_;
   OT::Sample convergenceSampleLowerBound_;
   OT::Sample convergenceSampleUpperBound_;
-  OT::Scalar elapsedTime_;
 };
 }
 #endif

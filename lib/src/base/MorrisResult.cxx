@@ -23,7 +23,6 @@
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
-using namespace OTMORRIS;
 
 namespace OTGUI
 {
@@ -35,17 +34,12 @@ static Factory<PersistentCollection<Indices > > Factory_PersistentCollection_Ind
 
 /* Default constructor */
 MorrisResult::MorrisResult()
-  : Morris()
+  : EvaluationResult()
   , inputsSelection_()
   , noEffectBoundary_()
-{
-}
-
-/** Standard constructor */
-MorrisResult::MorrisResult(const Sample& inputSample, const Sample& outputSample, const Interval& interval)
-  : Morris(inputSample, outputSample, interval)
-  , inputsSelection_(outputSample.getDimension(), Indices(inputSample.getDimension(), 1))
-  , noEffectBoundary_(outputSample.getDimension())
+  , elementaryEffectsMean_()
+  , elementaryEffectsStandardDeviation_()
+  , absoluteElementaryEffectsMean_()
 {
 }
 
@@ -59,9 +53,9 @@ MorrisResult* MorrisResult::clone() const
 
 Indices MorrisResult::getInputsSelection(const UnsignedInteger marginal) const
 {
-  if (marginal < inputsSelection_.getSize())
-    return inputsSelection_[marginal];
-  return Indices();
+  if (marginal >= inputsSelection_.getSize())
+    throw InvalidArgumentException(HERE) << "Cannot exceed dimension";
+  return inputsSelection_[marginal];
 }
 
 
@@ -74,16 +68,42 @@ void MorrisResult::setInputsSelection(const UnsignedInteger marginal, const Indi
 
 Scalar MorrisResult::getNoEffectBoundary(const UnsignedInteger marginal) const
 {
-  if (marginal < noEffectBoundary_.getSize())
-    return noEffectBoundary_[marginal];
-  return 0.;
+  if (marginal >= noEffectBoundary_.getSize())
+    throw InvalidArgumentException(HERE) << "Cannot exceed dimension";
+  return noEffectBoundary_[marginal];
 }
 
 
 void MorrisResult::setNoEffectBoundary(const UnsignedInteger marginal, const Scalar value)
 {
-  if (marginal < noEffectBoundary_.getSize())
-    noEffectBoundary_[marginal] = value;
+  if (marginal >= noEffectBoundary_.getSize())
+    throw InvalidArgumentException(HERE) << "Cannot exceed dimension";
+  noEffectBoundary_[marginal] = value;
+}
+
+
+/* Mean effects */
+Point MorrisResult::getMeanAbsoluteElementaryEffects(const UnsignedInteger marginal) const
+{
+  if (marginal >= absoluteElementaryEffectsMean_.getSize())
+    throw InvalidArgumentException(HERE) << "Cannot exceed dimension";
+  return absoluteElementaryEffectsMean_[marginal];
+}
+
+/* Mean effects */
+Point MorrisResult::getMeanElementaryEffects(const UnsignedInteger marginal) const
+{
+  if (marginal >= elementaryEffectsMean_.getSize())
+    throw InvalidArgumentException(HERE) << "Cannot exceed dimension";
+  return elementaryEffectsMean_[marginal];
+}
+
+/* Standard deviation effects */
+Point MorrisResult::getStandardDeviationElementaryEffects(const UnsignedInteger marginal) const
+{
+  if (marginal >= elementaryEffectsStandardDeviation_.getSize())
+    throw InvalidArgumentException(HERE) << "Cannot exceed dimension";
+  return elementaryEffectsStandardDeviation_[marginal];
 }
 
 
@@ -94,7 +114,10 @@ String MorrisResult::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " inputs selections =" << inputsSelection_
-      << " no effect boundaries=" << noEffectBoundary_;
+      << " no effect boundaries =" << noEffectBoundary_
+      << " ee mean= " << elementaryEffectsMean_
+      << " absolute ee mean= " << absoluteElementaryEffectsMean_
+      << " ee std= " << elementaryEffectsStandardDeviation_;
   return oss;
 }
 
@@ -102,17 +125,33 @@ String MorrisResult::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void MorrisResult::save(Advocate & adv) const
 {
-  Morris::save(adv);
+  EvaluationResult::save(adv);
   adv.saveAttribute("inputsSelection_", inputsSelection_);
   adv.saveAttribute("noEffectBoundary_", noEffectBoundary_);
+  adv.saveAttribute("elementaryEffectsMean_", elementaryEffectsMean_ );
+  adv.saveAttribute("elementaryEffectsStandardDeviation_", elementaryEffectsStandardDeviation_ );
+  adv.saveAttribute("absoluteElementaryEffectsMean_", absoluteElementaryEffectsMean_ );
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void MorrisResult::load(Advocate & adv)
 {
-  Morris::load(adv);
+  EvaluationResult::load(adv);
   adv.loadAttribute("inputsSelection_", inputsSelection_);
   adv.loadAttribute("noEffectBoundary_", noEffectBoundary_);
+  adv.loadAttribute("elementaryEffectsMean_", elementaryEffectsMean_ );
+  adv.loadAttribute("elementaryEffectsStandardDeviation_", elementaryEffectsStandardDeviation_ );
+  adv.loadAttribute("absoluteElementaryEffectsMean_", absoluteElementaryEffectsMean_ );
+  // can open older xml files
+  if (!designOfExperiment_.getSample().getSize())
+  {
+    Sample inS;
+    Sample outS;
+    adv.loadAttribute("inputSample_", inS);
+    adv.loadAttribute("outputSample_", outS);
+    designOfExperiment_.setInputSample(inS);
+    designOfExperiment_.setOutputSample(outS);
+  }
 }
 }

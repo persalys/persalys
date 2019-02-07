@@ -39,7 +39,7 @@ aDesign.run()
 
 # Comparaison
 openturns.testing.assert_almost_equal(
-    outputSample, aDesign.getDesignOfExperiment().getOutputSample(), 1e-16)
+    outputSample, aDesign.getResult().getDesignOfExperiment().getOutputSample(), 1e-16)
 
 # Taylor Expansions ##
 taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis(

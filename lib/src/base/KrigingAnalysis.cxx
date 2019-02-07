@@ -20,7 +20,7 @@
  */
 #include "otgui/KrigingAnalysis.hxx"
 
-#include "otgui/SimulationAnalysis.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/BaseTools.hxx"
 
 #include <openturns/OTBase.hxx>
@@ -78,15 +78,16 @@ KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
   , result_()
   , optimizeParameters_(true)
 {
-  SimulationAnalysis * analysis_ptr = dynamic_cast<SimulationAnalysis*>(analysis.getImplementation().get());
+  DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
 
-  UnsignedInteger inputDimension = analysis_ptr->getDesignOfExperiment().getInputSample().getDimension();
-  if (analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
+  DesignOfExperiment experiment(analysis_ptr->getResult().getDesignOfExperiment());
+  UnsignedInteger inputDimension = experiment.getInputSample().getDimension();
+  if (experiment.hasPhysicalModel())
   {
-    if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
-      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames().getSize();
+    if (experiment.getPhysicalModel().hasStochasticInputs())
+      inputDimension = experiment.getPhysicalModel().getStochasticInputNames().getSize();
     else
-      inputDimension = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputDimension();
+      inputDimension = experiment.getPhysicalModel().getInputDimension();
   }
 
   // basis

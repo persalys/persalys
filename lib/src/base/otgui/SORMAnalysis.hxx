@@ -23,8 +23,7 @@
 
 #include "ApproximationAnalysis.hxx"
 #include "ReliabilityAnalysis.hxx"
-
-#include <openturns/SORMResult.hxx>
+#include "SORMAnalysisResult.hxx"
 
 namespace OTGUI
 {
@@ -41,7 +40,7 @@ public:
   /** Virtual constructor */
   virtual SORMAnalysis * clone() const;
 
-  OT::SORMResult getResult() const;
+  SORMAnalysisResult getResult() const;
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
@@ -61,7 +60,7 @@ protected:
   virtual void launch();
 
 private:
-  OT::SORMResult result_;
+  SORMAnalysisResult result_;
 };
 }
 #endif

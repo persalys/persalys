@@ -49,13 +49,13 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
   if (formAnalysis_ptr)
   {
     outputName = QString::fromUtf8(formAnalysis_ptr->getLimitState().getOutputName().c_str());
-    tabWidget = new ApproximationResultTabWidget(formAnalysis_ptr->getResult(), *formAnalysis_ptr, this);
+    tabWidget = new ApproximationResultTabWidget(formAnalysis_ptr->getResult().getFORMResult(), *formAnalysis_ptr, this);
   }
   // SORM result widget
   else if (sormAnalysis_ptr)
   {
     outputName = QString::fromUtf8(sormAnalysis_ptr->getLimitState().getOutputName().c_str());
-    tabWidget = new ApproximationResultTabWidget(sormAnalysis_ptr->getResult(), *sormAnalysis_ptr, this);
+    tabWidget = new ApproximationResultTabWidget(sormAnalysis_ptr->getResult().getSORMResult(), *sormAnalysis_ptr, this);
   }
   else
   {

@@ -61,7 +61,7 @@ void SORMAnalysis::initialize()
 {
   // clear result
   AnalysisImplementation::initialize();
-  result_ = SORMResult();
+  result_ = SORMAnalysisResult();
 }
 
 
@@ -85,14 +85,14 @@ void SORMAnalysis::launch()
   algo.run();
 
   // set result
-  result_ = algo.getResult();
+  result_.sormResult_ = algo.getResult();
 
   // compute Hasofer reliability index sensitivity (not computed by default)
-  result_.getHasoferReliabilityIndexSensitivity();
+  result_.sormResult_.getHasoferReliabilityIndexSensitivity();
 }
 
 
-SORMResult SORMAnalysis::getResult() const
+SORMAnalysisResult SORMAnalysis::getResult() const
 {
   return result_;
 }
@@ -137,7 +137,7 @@ String SORMAnalysis::getPythonScript() const
 
 bool SORMAnalysis::hasValidResult() const
 {
-  return result_.getStandardSpaceDesignPoint().getDimension() != 0;
+  return result_.getSORMResult().getStandardSpaceDesignPoint().getDimension() != 0;
 }
 
 
@@ -166,5 +166,12 @@ void SORMAnalysis::load(Advocate & adv)
   ReliabilityAnalysis::load(adv);
   ApproximationAnalysis::load(adv);
   adv.loadAttribute("result_", result_);
+  // can open older xml files
+  if (!result_.getSORMResult().getStandardSpaceDesignPoint().getDimension())
+  {
+    SORMResult sormResu;
+    adv.loadAttribute("result_", sormResu);
+    result_.sormResult_ = sormResu;
+  }
 }
 }

@@ -44,18 +44,7 @@ void MorrisResultWindow::initialize(AnalysisItem* item)
 {
   MorrisAnalysis analysis(*dynamic_cast<MorrisAnalysis*>(item->getAnalysis().getImplementation().get()));
 
-  try
-  {
-    designOfExperiment_ = DesignOfExperiment("fakeName", analysis.getPhysicalModel());
-    designOfExperiment_.setInputSample(morrisResult_.getInputSample());
-    designOfExperiment_.setOutputSample(morrisResult_.getOutputSample());
-  }
-  catch (std::exception& ex)
-  {
-    designOfExperiment_ = DesignOfExperiment();
-    designOfExperiment_.setInputSample(morrisResult_.getInputSample());
-    designOfExperiment_.setOutputSample(morrisResult_.getOutputSample());
-  }
+  designOfExperiment_ = morrisResult_.getDesignOfExperiment();
 
   titleLabel_->setText(tr("Morris method"));
 
@@ -106,7 +95,7 @@ void MorrisResultWindow::fillTabWidget()
 void MorrisResultWindow::addEffectsTab()
 {
   ResizableStackedWidget * stackWidget = new ResizableStackedWidget;
-  for (UnsignedInteger i = 0; i < morrisResult_.getOutputSample().getDimension(); ++i)
+  for (UnsignedInteger i = 0; i < morrisResult_.getDesignOfExperiment().getOutputSample().getDimension(); ++i)
   {
     MorrisResultWidget * morrisWidget = new MorrisResultWidget(morrisResult_, i, this);
     stackWidget->addWidget(morrisWidget);

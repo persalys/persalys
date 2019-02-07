@@ -91,7 +91,7 @@ Analysis DesignOfExperimentWizard::getAnalysis() const
   {
     analysis = importPage_->getAnalysis();
   }
-  dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get())->setDesignOfExperiment(dynamic_cast<const DesignOfExperimentEvaluation*>(analysis_.getImplementation().get())->getDesignOfExperiment());
+  dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get())->resetResult();
 
   return analysis;
 }

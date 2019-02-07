@@ -22,9 +22,11 @@
 
 #include "otgui/CopyableTableView.hxx"
 #include "otgui/CustomStandardItemModel.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QLabel>
 
 using namespace OT;
 
@@ -37,43 +39,71 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
     const Indices& variablesIndices,
     QWidget* parent)
   : QGroupBox(tr("Moments estimates"), parent)
+  , result_(result)
   , isConfidenceIntervalRequired_(isConfidenceIntervalRequired)
   , levelConfidenceInterval_(levelConfidenceInterval)
+  , variablesIndices_(variablesIndices)
 {
-  if (!variablesIndices.check(result.getMean().getSize()))
+  if (!variablesIndices.check(result_.getMean().getSize()))
     throw InvalidArgumentException(HERE) << "The result dimension does not match the sample dimension";
 
   QVBoxLayout * estimatesGroupBoxLayout = new QVBoxLayout(this);
   stackedWidget_ = new ResizableStackedWidget;
 
   for (UnsignedInteger i = 0; i < variablesIndices.getSize(); ++i)
-    stackedWidget_->addWidget(getMomentsEstimateTableView(result, variablesIndices[i]));
+    stackedWidget_->addWidget(getMomentsEstimateTableView(variablesIndices[i]));
 
   estimatesGroupBoxLayout->addWidget(stackedWidget_);
+
+  // quantiles
+  QGridLayout * quantLayout = new QGridLayout;
+
+  // Probability
+  QLabel * label = new QLabel(tr("Probability"));
+  quantLayout->addWidget(label, 0, 0);
+
+  probaSpinBox_ = new DoubleSpinBox;
+  label->setBuddy(probaSpinBox_);
+  probaSpinBox_->setMinimum(0.0);
+  probaSpinBox_->setMaximum(1.0);
+  probaSpinBox_->setSingleStep(0.01);
+  quantLayout->addWidget(probaSpinBox_, 0, 1);
+
+  // Quantile
+  label = new QLabel(tr("Empirical quantile"));
+  quantLayout->addWidget(label, 0, 2);
+
+  quantileSpinBox_ = new DoubleSpinBox;
+  label->setBuddy(quantileSpinBox_);
+  quantileSpinBox_->setDecimals(8);
+  quantLayout->addWidget(quantileSpinBox_, 0, 3);
+
+  quantLayout->setColumnStretch(1, 2);
+  quantLayout->setColumnStretch(3, 2);
+
+  connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
+  connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
+
+  estimatesGroupBoxLayout->addLayout(quantLayout);
+  updateSpinBoxes();
 }
 
 
-QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAnalysisResult& result, const UnsignedInteger variableIndex)
+QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const UnsignedInteger variableIndex)
 {
-  const int nbColumns = isConfidenceIntervalRequired_ ? 4 : 2;
-  const int nbRows = isConfidenceIntervalRequired_ ? 9 : 8;
-
   // table view
   CopyableTableView * momentsEstimationsTableView = new CopyableTableView;
   momentsEstimationsTableView->horizontalHeader()->hide();
   momentsEstimationsTableView->verticalHeader()->hide();
+
   // table model
+  const int nbColumns = isConfidenceIntervalRequired_ ? 3 : 2;
+  const int nbRows = 8;
   CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(nbRows, nbColumns, momentsEstimationsTableView);
   momentsEstimationsTableView->setModel(momentsEstimationsTable);
 
   // vertical header
   int row = 0;
-  momentsEstimationsTable->setNotEditableHeaderItem(row, 0, tr("Estimate"));
-  if (isConfidenceIntervalRequired_)
-  {
-    momentsEstimationsTableView->setSpan(row, 0, 2, 1);
-    ++row;
-  }
   momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Mean"));
   momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Standard deviation"));
   momentsEstimationsTable->setNotEditableHeaderItem(++row, 0, tr("Coefficient of variation"));
@@ -84,116 +114,127 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const DataAn
 
   // horizontal header
   row = 0;
+  momentsEstimationsTable->setNotEditableHeaderItem(row, 0, tr("Estimate"));
   momentsEstimationsTable->setNotEditableHeaderItem(row, 1, tr("Value"));
   if (isConfidenceIntervalRequired_)
-  {
-    momentsEstimationsTableView->setSpan(row, 1, 2, 1);
-    momentsEstimationsTable->setNotEditableHeaderItem(++row, 2, tr("Lower bound"));
-    momentsEstimationsTable->setNotEditableHeaderItem(row, 3, tr("Upper bound"));
-  }
+    momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval\nat") + " " + QString::number(levelConfidenceInterval_ * 100) + "%");
 
   // moments values
 
   // Mean
-  momentsEstimationsTable->setNotEditableItem(++row, 1, result.getMean()[variableIndex][0]);
+  momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getMean()[variableIndex][0]);
 
   if (isConfidenceIntervalRequired_)
   {
-    if (result.getMeanConfidenceInterval().getFiniteLowerBound()[variableIndex])
-    {
-      momentsEstimationsTable->setNotEditableItem(row, 2, result.getMeanConfidenceInterval().getLowerBound()[variableIndex]);
-      momentsEstimationsTable->setNotEditableItem(row, 3, result.getMeanConfidenceInterval().getUpperBound()[variableIndex]);
-    }
+    if (result_.getMeanConfidenceInterval().getFiniteLowerBound()[variableIndex])
+      momentsEstimationsTable->setNotEditableItem(row, 2, result_.getMeanConfidenceInterval().getMarginal(variableIndex).__str__().c_str());
     else
-    {
       momentsEstimationsTable->setNotEditableItem(row, 2, "-");
-      momentsEstimationsTable->setNotEditableItem(row, 3, "-");
-    }
   }
 
   // Standard Deviation
-  if (result.getStandardDeviation()[variableIndex].getSize() > 0)
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getStandardDeviation()[variableIndex][0]);
+  if (result_.getStandardDeviation()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getStandardDeviation()[variableIndex][0]);
   else
     momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
 
   if (isConfidenceIntervalRequired_)
   {
-    if (result.getStdConfidenceInterval().getFiniteLowerBound()[variableIndex])
-    {
-      momentsEstimationsTable->setNotEditableItem(row, 2, result.getStdConfidenceInterval().getLowerBound()[variableIndex]);
-      momentsEstimationsTable->setNotEditableItem(row, 3, result.getStdConfidenceInterval().getUpperBound()[variableIndex]);
-    }
+    if (result_.getStdConfidenceInterval().getFiniteLowerBound()[variableIndex])
+      momentsEstimationsTable->setNotEditableItem(row, 2, result_.getStdConfidenceInterval().getMarginal(variableIndex).__str__().c_str());
     else
-    {
       momentsEstimationsTable->setNotEditableItem(row, 2, "-");
-      momentsEstimationsTable->setNotEditableItem(row, 3, "-");
-    }
   }
 
   // Coefficient of variation
-  if (result.getCoefficientOfVariation()[variableIndex].getSize() > 0)
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getCoefficientOfVariation()[variableIndex][0]);
+  if (result_.getCoefficientOfVariation()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getCoefficientOfVariation()[variableIndex][0]);
   else
     momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
   // Skewness
-  if (result.getSkewness()[variableIndex].getSize() > 0)
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getSkewness()[variableIndex][0]);
+  if (result_.getSkewness()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getSkewness()[variableIndex][0]);
   else
     momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
   // Kurtosis
-  if (result.getKurtosis()[variableIndex].getSize() > 0)
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getKurtosis()[variableIndex][0]);
+  if (result_.getKurtosis()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getKurtosis()[variableIndex][0]);
   else
     momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
   // First quartile
-  if (result.getFirstQuartile()[variableIndex].getSize() > 0)
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getFirstQuartile()[variableIndex][0]);
+  if (result_.getFirstQuartile()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getFirstQuartile()[variableIndex][0]);
   // Third quartile
-  if (result.getThirdQuartile()[variableIndex].getSize() > 0)
-    momentsEstimationsTable->setNotEditableItem(++row, 1, result.getThirdQuartile()[variableIndex][0]);
+  if (result_.getThirdQuartile()[variableIndex].getSize() > 0)
+    momentsEstimationsTable->setNotEditableItem(++row, 1, result_.getThirdQuartile()[variableIndex][0]);
 
   // resize table
-  int titleWidth = 0;
-  if (isConfidenceIntervalRequired_)
-  {
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at") + " " + QString::number(levelConfidenceInterval_ * 100) + "%");
-    momentsEstimationsTableView->resizeColumnsToContents();
-    titleWidth = momentsEstimationsTableView->horizontalHeader()->sectionSize(2);
-
-    // first: clear item at (0,2) because the text is to wide:
-    // resizeColumnsToContents takes into account the text of item at (0,2)
-    // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
-    momentsEstimationsTable->setItem(0, 2, new QStandardItem);
-  }
-
   momentsEstimationsTableView->resizeToContents();
 
-  const int section2Size = momentsEstimationsTableView->horizontalHeader()->sectionSize(2);
-
-  if (isConfidenceIntervalRequired_)
-  {
-    momentsEstimationsTable->setNotEditableHeaderItem(0, 2, tr("Confidence interval at") + " " + QString::number(levelConfidenceInterval_ * 100) + "%");
-    momentsEstimationsTableView->setSpan(0, 2, 1, 2);
-    const int subTitlesWidth = momentsEstimationsTableView->horizontalHeader()->sectionSize(2) + momentsEstimationsTableView->horizontalHeader()->sectionSize(3);
-    const int widthCorrection = titleWidth - subTitlesWidth;
-    if (widthCorrection > 0)
-    {
-      // correct the table width
-      momentsEstimationsTableView->horizontalHeader()->resizeSection(3, momentsEstimationsTableView->horizontalHeader()->sectionSize(3) + widthCorrection);
-      momentsEstimationsTableView->setMinimumWidth(momentsEstimationsTableView->minimumWidth() + widthCorrection);
-    }
-
-    // fix wrong behavior on Windows
-    momentsEstimationsTableView->horizontalHeader()->resizeSection(2, section2Size);
-  }
-
   return momentsEstimationsTableView;
+}
+
+
+void MomentsEstimatesTableGroupBox::updateSpinBoxes()
+{
+  if (!quantileSpinBox_)
+    return;
+
+  SignalBlocker blocker(quantileSpinBox_);
+
+  // index of the variable in result_
+  const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
+
+  // check
+  if (indexVar >= result_.getMin().getSize() || indexVar >= result_.getMax().getSize())
+    throw InvalidArgumentException(HERE) << "The result dimension does not match the sample dimension";
+
+  if (result_.getMin().getSize() && result_.getMax().getSize())
+  {
+    const double min = result_.getMin()[indexVar][0];
+    const double max = result_.getMax()[indexVar][0];
+
+    quantileSpinBox_->setMinimum(min);
+    quantileSpinBox_->setMaximum(max);
+    quantileSpinBox_->setSingleStep((max - min) / 100);
+  }
+  probaSpinBox_->setValue(0.5);
+  // if the previous value of probaSpinBox_ was 0.5, the signal valueChanged is not emitted
+  probaValueChanged(0.5);
+}
+
+
+void MomentsEstimatesTableGroupBox::probaValueChanged(double proba)
+{
+  SignalBlocker blocker(quantileSpinBox_);
+
+  // index of the variable in result_
+  const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
+  quantileSpinBox_->setValue(result_.getDesignOfExperiment().getSample().getMarginal(indexVar).computeQuantile(proba)[0]);
+}
+
+
+void MomentsEstimatesTableGroupBox::quantileValueChanged(double quantile)
+{
+  SignalBlocker blocker(probaSpinBox_);
+
+  // index of the variable in result_
+  const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
+
+  double cdf = 0.0;
+  const double p = 1.0 / double(result_.getDesignOfExperiment().getSample().getSize());
+
+  for (UnsignedInteger j = 0; j < result_.getDesignOfExperiment().getSample().getSize(); ++j)
+    if (result_.getDesignOfExperiment().getSample()[j][indexVar] < quantile)
+      cdf += p;
+
+  probaSpinBox_->setValue(cdf);
 }
 
 
 void MomentsEstimatesTableGroupBox::setCurrentIndexStackedWidget(int index)
 {
   stackedWidget_->setCurrentIndex(index);
+  updateSpinBoxes();
 }
 }

@@ -28,7 +28,6 @@ namespace OTGUI
 /* Default constructor */
 SimulationAnalysis::SimulationAnalysis()
   : PhysicalModelAnalysis()
-  , designOfExperiment_()
   , failedInputSample_()
   , blockSize_(1)
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
@@ -39,17 +38,10 @@ SimulationAnalysis::SimulationAnalysis()
 /* Constructor with parameters */
 SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
-  , designOfExperiment_(name, physicalModel)
   , failedInputSample_()
   , blockSize_(1)
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
-}
-
-
-DesignOfExperiment SimulationAnalysis::getDesignOfExperiment() const
-{
-  return designOfExperiment_;
 }
 
 
@@ -110,14 +102,7 @@ Sample SimulationAnalysis::computeOutputSample(const Point& inputValues) const
 void SimulationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
-  designOfExperiment_.getImplementation()->initialize();
   failedInputSample_.clear();
-}
-
-
-bool SimulationAnalysis::hasValidResult() const
-{
-  return designOfExperiment_.getOutputSample().getSize() != 0;
 }
 
 
@@ -125,7 +110,6 @@ bool SimulationAnalysis::hasValidResult() const
 void SimulationAnalysis::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
-  adv.saveAttribute("designOfExperiment_", designOfExperiment_);
   adv.saveAttribute("failedInputSample_", failedInputSample_);
   adv.saveAttribute("blockSize_", blockSize_);
   adv.saveAttribute("seed_", seed_);
@@ -136,7 +120,6 @@ void SimulationAnalysis::save(Advocate & adv) const
 void SimulationAnalysis::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
-  adv.loadAttribute("designOfExperiment_", designOfExperiment_);
   adv.loadAttribute("failedInputSample_", failedInputSample_);
   adv.loadAttribute("blockSize_", blockSize_);
   adv.loadAttribute("seed_", seed_);

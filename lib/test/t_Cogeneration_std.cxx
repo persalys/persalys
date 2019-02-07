@@ -57,15 +57,15 @@ int main(int argc, char *argv[])
     aDesign.setLevels(levels);
     myStudy.add(aDesign);
     aDesign.run();
-    Sample resultSample1(aDesign.getDesignOfExperiment().getOutputSample());
+    Sample resultSample1(aDesign.getResult().getDesignOfExperiment().getOutputSample());
 
     // Second parametric analysis
-    aDesign.getDesignOfExperiment().getInputSample().exportToCSVFile("sample.csv");
+    aDesign.getResult().getDesignOfExperiment().getInputSample().exportToCSVFile("sample.csv");
     Indices inputIndices(3);
     inputIndices.fill();
     ImportedDesignOfExperiment anotherdesign("anotherDesign", myPhysicalModel, "sample.csv", inputIndices);
     anotherdesign.run();
-    Sample resultSample2(anotherdesign.getDesignOfExperiment().getOutputSample());
+    Sample resultSample2(anotherdesign.getResult().getDesignOfExperiment().getOutputSample());
 
     // Reference
 

@@ -23,11 +23,12 @@
 
 #include "PhysicalModel.hxx"
 
+#include "AnalysisResult.hxx"
 #include "MetaModelValidationResult.hxx"
 
 namespace OTGUI
 {
-class OTGUI_API MetaModelAnalysisResult : public OT::PersistentObject
+class OTGUI_API MetaModelAnalysisResult : public AnalysisResult
 {
   CLASSNAME
 

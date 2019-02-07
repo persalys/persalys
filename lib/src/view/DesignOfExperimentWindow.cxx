@@ -21,7 +21,6 @@
 #include "otgui/DesignOfExperimentWindow.hxx"
 
 #include "otgui/DesignOfExperimentEvaluation.hxx"
-#include "otgui/QtTools.hxx"
 
 using namespace OT;
 
@@ -41,7 +40,8 @@ void DesignOfExperimentWindow::initialize(AnalysisItem* item)
 {
   DesignOfExperimentEvaluation analysis(*dynamic_cast<DesignOfExperimentEvaluation*>(item->getAnalysis().getImplementation().get()));
 
-  designOfExperiment_ = analysis.getDesignOfExperiment();
+  result_ = analysis.getResult();
+  designOfExperiment_ = analysis.getResult().getDesignOfExperiment();
   failedInputSample_ = analysis.getFailedInputSample();
   notEvaluatedInputSample_ = analysis.getNotEvaluatedInputSample();
 
@@ -49,20 +49,5 @@ void DesignOfExperimentWindow::initialize(AnalysisItem* item)
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Design of experiments evaluation parameters"));
-}
-
-
-void DesignOfExperimentWindow::fillListWidget()
-{
-  variablesGroupBox_->setTitle(tr("Outputs"));
-  variablesListWidget_->addItems(QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription()));
-  variablesListWidget_->setCurrentRow(0);
-}
-
-
-void DesignOfExperimentWindow::updateVariablesListVisibility(int indexTab)
-{
-  // if indextab == summary : variablesGroupBox_ is visible
-  variablesGroupBox_->setVisible(indexTab == 0);
 }
 }

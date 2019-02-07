@@ -56,9 +56,7 @@ SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalMode
 /* Virtual constructor */
 SRCAnalysis* SRCAnalysis::clone() const
 {
-  SRCAnalysis * newAnalysis = new SRCAnalysis(*this);
-  newAnalysis->designOfExperiment_ = designOfExperiment_.getImplementation()->clone();
-  return newAnalysis;
+  return new SRCAnalysis(*this);
 }
 
 
@@ -132,7 +130,8 @@ void SRCAnalysis::launch()
 
   indices.setDescription(inputSample.getDescription());
   // set results
-  result_ = SRCResult(indices, getInterestVariables());
+  result_.indices_ = indices;
+  result_.outputNames_ = getInterestVariables();
 
   // add warning if the model does not have an independent copula
   if (!getPhysicalModel().getCopula().hasIndependentCopula())
