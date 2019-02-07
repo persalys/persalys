@@ -34,11 +34,12 @@ class OTGUI_API DesignOfExperimentIntroPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {deterministic, probabilistic, import};
+  enum Method {Deterministic, Probabilistic, Import};
 
   DesignOfExperimentIntroPage(QWidget* parent = 0);
 
   virtual int nextId() const;
+  int getMethodId() const;
 
   void initialize(const Analysis& analysis);
 

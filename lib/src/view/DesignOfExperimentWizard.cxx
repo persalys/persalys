@@ -77,20 +77,25 @@ int DesignOfExperimentWizard::nextId() const
 Analysis DesignOfExperimentWizard::getAnalysis() const
 {
   Analysis analysis;
-  if (hasVisitedPage(Page_Deterministic))
+  switch (introPage_->getMethodId())
   {
-    analysis = gridPage_->getAnalysis();
+    case DesignOfExperimentIntroPage::Deterministic:
+      analysis = gridPage_->getAnalysis();
+      break;
+    case DesignOfExperimentIntroPage::Probabilistic:
+    {
+      // get the physical model
+      PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel();
+      analysis = probaPage_->getAnalysis(analysis_.getName(), model);
+      break;
+    }
+    case DesignOfExperimentIntroPage::Import:
+      analysis = importPage_->getAnalysis();
+      break;
+    default:
+      throw InvalidValueException(HERE) << "ReliabilityAnalysisWizard::getAnalysis no analysis";
   }
-  else if (hasVisitedPage(Page_Probabilistic))
-  {
-    // get the physical model
-    PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel();
-    analysis = probaPage_->getAnalysis(analysis_.getName(), model);
-  }
-  else if (hasVisitedPage(Page_Import))
-  {
-    analysis = importPage_->getAnalysis();
-  }
+
   dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get())->resetResult();
 
   return analysis;
