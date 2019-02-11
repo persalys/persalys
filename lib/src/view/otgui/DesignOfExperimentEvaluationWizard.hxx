@@ -31,6 +31,8 @@
 #include <QStandardItemModel>
 #include <QComboBox>
 
+Q_DECLARE_METATYPE(OTGUI::Analysis)
+
 namespace OTGUI
 {
 
@@ -39,12 +41,14 @@ class OTGUI_API DesignOfExperimentEvaluationWizard : public Wizard
   Q_OBJECT
 
 public:
-  DesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent = 0);
+  DesignOfExperimentEvaluationWizard(const Analysis& analysis, QWidget* parent = 0);
+  DesignOfExperimentEvaluationWizard(const PhysicalModel& model, QWidget* parent = 0);
 
-  DesignOfExperimentDefinitionItem * getDesignOfExperimentDefinitionItem() const;
+  Analysis getAnalysis() const;
   virtual bool validateCurrentPage();
 
 protected slots:
+  void buildInterface();
   void updateWidgets();
 
 private:

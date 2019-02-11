@@ -93,13 +93,25 @@ void StudyManager::createStudy()
 }
 
 
-void StudyManager::openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard)
+void StudyManager::openDesignOfExperimentEvaluationWizard(const PhysicalModel& model)
 {
-  DesignOfExperimentEvaluationWizard * wizard = new DesignOfExperimentEvaluationWizard(analysis, isGeneralWizard, mainWidget_);
+  DesignOfExperimentEvaluationWizard * wizard = new DesignOfExperimentEvaluationWizard(model, mainWidget_);
 
   if (wizard && wizard->exec())
   {
-    wizard->getDesignOfExperimentDefinitionItem()->appendEvaluationItem();
+    wizard->getAnalysis().getImplementation().get()->notify("EvaluationItemRequested");
+    delete wizard;
+  }
+}
+
+
+void StudyManager::openDesignOfExperimentEvaluationWizard(const Analysis& analysis)
+{
+  DesignOfExperimentEvaluationWizard * wizard = new DesignOfExperimentEvaluationWizard(analysis, mainWidget_);
+
+  if (wizard && wizard->exec())
+  {
+    wizard->getAnalysis().getImplementation().get()->notify("EvaluationItemRequested");
     delete wizard;
   }
 }
@@ -188,7 +200,7 @@ void StudyManager::createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* it
   connect(item, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(limitStateCreated(LimitStateItem*)), this, SLOT(createLimitStateWindow(LimitStateItem*)));
-  connect(item, SIGNAL(designOfExperimentEvaluationRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
+  connect(item, SIGNAL(designOfExperimentEvaluationRequested(PhysicalModel)), this, SLOT(openDesignOfExperimentEvaluationWizard(PhysicalModel)));
   connect(item, SIGNAL(doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
   connect(item, SIGNAL(analysisRequested(Item*, Analysis, bool)), this, SLOT(openAnalysisWizard(Item*, Analysis, bool)));
 
@@ -285,7 +297,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     connect(item, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
     connect(item, SIGNAL(analysisFinished(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
     connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
-    connect(item, SIGNAL(modifyDesignOfExperimentEvaluation(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
+    connect(item, SIGNAL(modifyDesignOfExperimentEvaluation(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
   }
 
   // do removeSubWindow if the analysis run method has been launched from a Python script

@@ -21,6 +21,7 @@
 #include "otgui/DesignOfExperimentEvaluationWizard.hxx"
 
 #include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "otgui/ModelEvaluation.hxx"
 #include "otgui/StudyItem.hxx"
 #include "otgui/QtTools.hxx"
 
@@ -33,9 +34,7 @@ using namespace OT;
 namespace OTGUI
 {
 
-DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis,
-    const bool isGeneralWizard,
-    QWidget* parent)
+DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis, QWidget* parent)
   : Wizard(parent)
   , doesComboBox_(0)
   , doesComboBoxModel_(0)
@@ -43,6 +42,67 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   , outputsSelectionGroupBox_(0)
   , blockSizeGroupBox_(0)
   , errorMessageLabel_(0)
+{
+  // check analysis
+  DesignOfExperimentEvaluation * currentDoe = dynamic_cast<DesignOfExperimentEvaluation *>(analysis.getImplementation().get());
+  Q_ASSERT(currentDoe);
+
+  // build interface
+  buildInterface();
+
+  // - fill combo box
+  QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(analysis.getName().c_str()));
+  comboItem->setData(qVariantFromValue(analysis));
+  doesComboBoxModel_->appendRow(comboItem);
+
+  connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWidgets()));
+
+  // update widgets
+  updateWidgets();
+}
+
+
+DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const PhysicalModel& model, QWidget* parent)
+  : Wizard(parent)
+  , doesComboBox_(0)
+  , doesComboBoxModel_(0)
+  , doeLabel_(0)
+  , outputsSelectionGroupBox_(0)
+  , blockSizeGroupBox_(0)
+  , errorMessageLabel_(0)
+{
+  // build interface
+  buildInterface();
+
+  // - fill combo box
+  // get list of DesignOfExperimentDefinitionItem of the current physical model
+  if (Observer * obs = model.getImplementation().get()->getObserver("Study"))
+  {
+    StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
+    Q_ASSERT(study);
+    for (UnsignedInteger i = 0; i < study->getAnalyses().getSize(); ++i)
+    {
+      DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+      ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+      if (doeEval && !modelEval)
+      {
+        if (doeEval->getPhysicalModel() == model)
+        {
+          QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(doeEval->getName().c_str()));
+          comboItem->setData(qVariantFromValue(study->getAnalyses()[i]));
+          doesComboBoxModel_->appendRow(comboItem);
+        }
+      }
+    }
+  }
+  connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWidgets()));
+
+  // update widgets
+  updateWidgets();
+}
+
+
+void DesignOfExperimentEvaluationWizard::buildInterface()
 {
   // set window title
   setWindowTitle(tr("Design of experiments evaluation"));
@@ -61,33 +121,8 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   doesComboBox_ = new QComboBox;
   doesComboBoxModel_ = new QStandardItemModel(doesComboBox_);
 
-  // - fill combo box
-  DesignOfExperimentDefinitionItem * doeDefItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(analysis.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
-  Q_ASSERT(doeDefItem);
-  // get list of DesignOfExperimentDefinitionItem of the current physical model
-  if (isGeneralWizard)
-  {
-    QStandardItem * doeTitleItem = doeDefItem->QStandardItem::parent();
-    Q_ASSERT(doeTitleItem);
-    for (int i = 0; i < doeTitleItem->rowCount(); ++i)
-    {
-      doeDefItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      Q_ASSERT(doeDefItem);
-      QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(doeDefItem->getAnalysis().getName().c_str()));
-      comboItem->setData(qVariantFromValue(doeDefItem));
-      doesComboBoxModel_->appendRow(comboItem);
-    }
-  }
-  else
-  {
-    QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(analysis.getName().c_str()));
-    comboItem->setData(qVariantFromValue(doeDefItem));
-    doesComboBoxModel_->appendRow(comboItem);
-  }
-
   doesComboBox_->setModel(doesComboBoxModel_);
   groupBoxLayout->addWidget(doesComboBox_);
-  connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWidgets()));
 
   // doe description
   doeLabel_ = new QLabel;
@@ -110,19 +145,15 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   pageLayout->addWidget(errorMessageLabel_);
 
   addPage(page);
-
-  // update widgets
-  updateWidgets();
 }
 
 
 void DesignOfExperimentEvaluationWizard::updateWidgets()
 {
-  // get current DesignOfExperimentDefinitionItem
-  DesignOfExperimentDefinitionItem * doeItem = getDesignOfExperimentDefinitionItem();
-  if (!doeItem)
+  if (!doesComboBox_->count())
     return;
-  const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(doeItem->getAnalysis().getImplementation().get());
+  // get current Analysis
+  const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(getAnalysis().getImplementation().get());
   if (!analysis_ptr)
   {
     qDebug() << "DesignOfExperimentEvaluationWizard::updateWidgets: The analysis is not a DesignOfExperimentEvaluation";
@@ -142,33 +173,37 @@ void DesignOfExperimentEvaluationWizard::updateWidgets()
 }
 
 
-DesignOfExperimentDefinitionItem * DesignOfExperimentEvaluationWizard::getDesignOfExperimentDefinitionItem() const
+
+Analysis DesignOfExperimentEvaluationWizard::getAnalysis() const
 {
   Q_ASSERT(doesComboBox_);
   Q_ASSERT(doesComboBoxModel_);
 
   const int itemRow = doesComboBox_->currentIndex();
   if (itemRow < 0)
-    return 0;
+    return Analysis();
 
   QVariant variant = doesComboBoxModel_->item(itemRow)->data();
-  if (variant.canConvert<DesignOfExperimentDefinitionItem*>())
-    return variant.value<DesignOfExperimentDefinitionItem*>();
-  return 0;
+  if (variant.canConvert<Analysis>())
+    return variant.value<Analysis>();
+  return Analysis();
 }
 
 
 bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
 {
-  DesignOfExperimentDefinitionItem * doeItem = getDesignOfExperimentDefinitionItem();
-  Q_ASSERT(doeItem);
+  if (!doesComboBox_->count())
+    return false;
+
+  DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(getAnalysis().getImplementation().get());
+  Q_ASSERT(analysis_ptr);
 
   QString message;
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
   {
     message = tr("At least one output must be selected");
   }
-  if (blockSizeGroupBox_->getBlockSizeValue() > getDesignOfExperimentDefinitionItem()->getOriginalInputSample().getSize())
+  if (blockSizeGroupBox_->getBlockSizeValue() > analysis_ptr->getOriginalInputSample().getSize())
   {
     message = tr("The block size must be lesser or equal to the size of the input sample");
   }
@@ -177,9 +212,6 @@ bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
     return false;
 
   // update selected DesignOfExperimentEvaluation
-  DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(doeItem->getAnalysis().getImplementation().get());
-  Q_ASSERT(analysis_ptr);
-
   analysis_ptr->resetResult();
   analysis_ptr->setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
   analysis_ptr->setInterestVariables(QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames()));
