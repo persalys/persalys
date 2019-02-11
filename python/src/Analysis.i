@@ -28,6 +28,8 @@ template <>
 }
 %}
 
+%ignore OTGUI::Analysis::getParameters;
+
 %include Analysis_doc.i
 
 OTGUITypedInterfaceObjectHelper(Analysis)

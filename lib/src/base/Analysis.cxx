@@ -131,6 +131,12 @@ bool Analysis::hasValidResult() const
 }
 
 
+Parameters Analysis::getParameters() const
+{
+  return getImplementation()->getParameters();
+}
+
+
 String Analysis::getPythonScript() const
 {
   return getImplementation()->getPythonScript();
