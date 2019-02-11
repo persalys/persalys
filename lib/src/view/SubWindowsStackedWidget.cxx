@@ -47,6 +47,6 @@ int SubWindowsStackedWidget::addSubWindow(SubWindow * win)
 void SubWindowsStackedWidget::removeSubWindow(QWidget* win)
 {
   QStackedWidget::removeWidget(win);
-  win->deleteLater();
+  delete win;
 }
 }
