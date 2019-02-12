@@ -20,28 +20,10 @@
  */
 #include "otgui/AnalysisItem.hxx"
 
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/GridDesignOfExperiment.hxx"
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
-#include "otgui/ImportedDesignOfExperiment.hxx"
+#include "otgui/PhysicalModelAnalysis.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/KrigingAnalysis.hxx"
-#include "otgui/SobolAnalysis.hxx"
-#include "otgui/SRCAnalysis.hxx"
-#include "otgui/FORMAnalysis.hxx"
-#include "otgui/MonteCarloAnalysis.hxx"
-#include "otgui/SimulationReliabilityAnalysis.hxx"
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/InferenceAnalysis.hxx"
-#include "otgui/TranslationManager.hxx"
-
-#include "otgui/PhysicalModelItem.hxx"
-#include "otgui/DesignOfExperimentItem.hxx"
-#include "otgui/LimitStateItem.hxx"
 #include "otgui/StudyItem.hxx"
-
-#include <openturns/OTBase.hxx>
 
 #include <QDebug>
 
@@ -55,6 +37,7 @@ AnalysisItem::AnalysisItem(const Analysis & analysis)
   , Observer("Analysis")
   , analysis_(analysis)
   , convertAction_(0)
+  , extractDataAction_(0)
   , modifyAction_(0)
   , removeAction_(0)
 {
@@ -87,6 +70,14 @@ void AnalysisItem::buildActions()
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
 
     appendAction(convertAction_);
+  }
+  if (analysisType == "FieldMonteCarloAnalysis")
+  {
+    extractDataAction_ = new QAction(tr("Extract data at nodes"), this);
+    connect(extractDataAction_, SIGNAL(triggered()), this, SLOT(extractData()));
+    appendAction(extractDataAction_);
+    if (!analysis_.getImplementation()->hasValidResult())
+      extractDataAction_->setEnabled(false);
   }
 
   // no remove action for these analyses
@@ -155,9 +146,11 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   // update the implementation of the analysis stored in Study
   getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
-  // the analysis has not result: disable convertAction_ action
+  // the analysis has not result: disable convertAction_ action and extractDataAction_
   if (convertAction_)
     convertAction_->setEnabled(analysis_.hasValidResult());
+  if (extractDataAction_)
+    extractDataAction_->setEnabled(analysis_.hasValidResult());
 }
 
 
@@ -324,6 +317,8 @@ void AnalysisItem::update(Observable* source, const String& message)
     // if MetaModelAnalysis : enable convertAction_ action
     if (convertAction_)
       convertAction_->setEnabled(true);
+    if (extractDataAction_)
+      extractDataAction_->setEnabled(true);
   }
   else if (message == "analysisBadlyFinished")
   {
@@ -346,5 +341,11 @@ void AnalysisItem::update(Observable* source, const String& message)
       qDebug() << "AnalysisItem::update(analysisRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
+}
+
+
+void AnalysisItem::extractData()
+{
+  emit dataExtractionRequested(analysis_);
 }
 }

@@ -35,6 +35,7 @@
 #include "otgui/FileTools.hxx"
 
 #include "otgui/DesignOfExperimentEvaluationWizard.hxx"
+#include "otgui/ExtractDataFieldWizard.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -134,6 +135,19 @@ void StudyManager::openAnalysisWizard(Item* item, const Analysis& analysis, cons
   if (wizard && wizard->exec())
   {
     item->getParentStudyItem()->getStudy().add(wizard->getAnalysis());
+    delete wizard;
+  }
+}
+
+
+void StudyManager::openExtractDataFieldWizard(const Analysis& analysis)
+{
+  ExtractDataFieldWizard * wizard = new ExtractDataFieldWizard(analysis, mainWidget_);
+
+  if (wizard && wizard->exec())
+  {
+    Item * item = mainWidget_->getStudyTree()->getCurrentItem();
+    item->getParentStudyItem()->getStudy().add(wizard->getDataModel());
     delete wizard;
   }
 }
@@ -245,7 +259,7 @@ void StudyManager::createFieldModelDiagramWindow(PhysicalModelDiagramItem* item)
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
   connect(item, SIGNAL(designOfExperimentEvaluationRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
   connect(item, SIGNAL(doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
-  connect(item, SIGNAL(analysisRequested(OTguiItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(OTguiItem*, Analysis, bool)));
+  connect(item, SIGNAL(analysisRequested(Item*, Analysis, bool)), this, SLOT(openAnalysisWizard(Item*, Analysis, bool)));
 
   // window
   FieldModelDiagramWindow * window = new FieldModelDiagramWindow(item, mainWidget_);
@@ -341,6 +355,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     connect(item, SIGNAL(analysisFinished(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
     connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
     connect(item, SIGNAL(modifyDesignOfExperimentEvaluation(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
+    connect(item, SIGNAL(dataExtractionRequested(Analysis)), this, SLOT(openExtractDataFieldWizard(Analysis)));
   }
 
   // do removeSubWindow if the analysis run method has been launched from a Python script
