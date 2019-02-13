@@ -47,8 +47,14 @@ endif ()
 set_target_properties ( otguiplotparaview PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otguiplotparaview PROPERTIES SOVERSION ${LIB_SOVERSION} )
 target_link_libraries ( otguiplotparaview otguiutils )
-target_link_libraries (otguiplotparaview pqApplicationComponents vtkPVServerManagerRendering vtkRenderingFreeType)
-target_link_libraries (otguiplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
+
+if (TARGET ParaView::pqApplicationComponents)
+  target_link_libraries (otguiplotparaview ParaView::pqApplicationComponents ParaView::vtkPVServerManagerRenderingCS ParaView::vtkRenderingFreeTypeCS)
+  target_link_libraries (otguiplotparaview ParaView::vtkRenderingContext2DCS) # for vtkContextScene::SetDirty(bool)
+else ()
+  target_link_libraries (otguiplotparaview pqApplicationComponents vtkPVServerManagerRendering vtkRenderingFreeType)
+  target_link_libraries (otguiplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
+endif ()
 
 install ( TARGETS otguiplotparaview
   RUNTIME DESTINATION bin
