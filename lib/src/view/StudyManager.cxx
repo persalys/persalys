@@ -257,7 +257,7 @@ void StudyManager::createFieldModelDiagramWindow(PhysicalModelDiagramItem* item)
   connect(item, SIGNAL(meshWindowRequested(MeshItem*)), this, SLOT(createMeshWindow(MeshItem*)));
   connect(item, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), this, SLOT(createProbabilisticModelWindow(ProbabilisticModelItem*)));
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
-  connect(item, SIGNAL(designOfExperimentEvaluationRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
+  connect(item, SIGNAL(designOfExperimentEvaluationRequested(PhysicalModel)), this, SLOT(openDesignOfExperimentEvaluationWizard(PhysicalModel)));
   connect(item, SIGNAL(doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
   connect(item, SIGNAL(analysisRequested(Item*, Analysis, bool)), this, SLOT(openAnalysisWizard(Item*, Analysis, bool)));
 
