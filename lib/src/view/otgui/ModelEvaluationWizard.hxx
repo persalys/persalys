@@ -34,6 +34,8 @@ class OTGUI_API ModelEvaluationWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestModelEvaluationWizard;
+
 public:
   ModelEvaluationWizard(const Analysis& analysis, QWidget* parent = 0);
 

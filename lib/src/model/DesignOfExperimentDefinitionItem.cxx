@@ -130,6 +130,10 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String& 
 
     emit removeRequested(row());
   }
+  else if (message == "EvaluationItemRequested")
+  {
+    appendEvaluationItem();
+  }
 }
 
 
@@ -177,9 +181,6 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
 
   // emit signal to StudyTreeView to create a window
   emit analysisItemCreated(evaluationItem);
-
-  // disable the evaluation action
-  evaluateAction_->setDisabled(true);
 }
 
 
@@ -219,7 +220,6 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
   analysis_.getImplementation().get()->removeObserver("Study");
 
-  evaluateAction_->setEnabled(true);
   // remove last observer
   analysis_.getImplementation().get()->removeObserver(this);
 

@@ -138,10 +138,8 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     emit showErrorMessageRequested(tr("There is no design of experiments."));
     return;
   }
-  // get an analysis to launch signal
-  QStandardItem * doeTitleItem = this->model()->itemFromIndex(listIndexes[0]);
-  DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(0));
-  emit designOfExperimentEvaluationRequested(analysisItem->getAnalysis(), true);
+  // emit signal to StudyManager to open a wizard
+  emit designOfExperimentEvaluationRequested(physicalModel_);
 }
 
 
@@ -154,7 +152,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
     emit showErrorMessageRequested(tr("There is no design of experiments."));
     return;
   }
-  // check if there is already an Evaluation item
+  // find designs of experiments
   QStandardItem * doeTitleItem = this->model()->itemFromIndex(listIndexes[0]);
   for (int i = 0; i < doeTitleItem->rowCount(); ++i)
   {
@@ -164,9 +162,8 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
       if (analysisItem->getAnalysis().hasValidResult())
       {
         // new analysis
-        DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysisItem->getAnalysis().getImplementation().get());
         const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("metamodel_").toStdString()));
-        FunctionalChaosAnalysis analysis(analysisName, *doeEval);
+        FunctionalChaosAnalysis analysis(analysisName, analysisItem->getAnalysis());
         // emit signal to StudyManager to open a 'general' wizard (with a list of designs of experiments)
         emit analysisRequested(this, analysis, true);
         return;

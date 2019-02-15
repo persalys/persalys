@@ -31,6 +31,8 @@ class OTGUI_API CentralTendencyWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestCentralTendencyWizard;
+
 public:
   enum {Page_Intro, Page_MonteCarlo};
 

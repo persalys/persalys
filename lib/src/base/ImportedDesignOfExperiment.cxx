@@ -77,6 +77,8 @@ ImportedDesignOfExperiment* ImportedDesignOfExperiment::clone() const
 
 Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSimu*/) const
 {
+  if (!getSampleFromFile().getSize())
+    return Sample();
   Sample inS(getSampleFromFile().getMarginal(inputColumns_));
   inS.setDescription(getPhysicalModel().getInputNames());
   return inS;
@@ -198,11 +200,14 @@ Parameters ImportedDesignOfExperiment::getParameters() const
   param.add("Sample size", getOriginalInputSample().getSize());
   param.add("File", getFileName());
   OSS columns;
-  for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
+  if (getOriginalInputSample().getSize())
   {
-    columns << getOriginalInputSample().getDescription()[i] << " : " << getInputColumns()[i];
-    if (i < getOriginalInputSample().getDimension() - 1)
-      columns << "\n";
+    for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
+    {
+      columns << getOriginalInputSample().getDescription()[i] << " : " << getInputColumns()[i];
+      if (i < getOriginalInputSample().getDimension() - 1)
+        columns << "\n";
+    }
   }
   param.add("Columns", columns);
   param.add("Block size", getBlockSize());

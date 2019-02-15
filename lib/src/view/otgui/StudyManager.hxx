@@ -44,7 +44,8 @@ public slots:
   // create objects
   void createStudy();
   void openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard = false);
-  void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
+  void openDesignOfExperimentEvaluationWizard(const Analysis& analysis);
+  void openDesignOfExperimentEvaluationWizard(const PhysicalModel& model);
 
   // create windows
   void createStudyWindow(StudyItem* item);

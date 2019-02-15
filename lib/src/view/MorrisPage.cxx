@@ -117,7 +117,7 @@ bool MorrisPage::validatePage()
   // check bounds
   if (tableModel_->getAnalysis().getBounds().isEmpty())
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
+    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
     return false;
   }
   // check number of variables which vary
@@ -131,7 +131,7 @@ bool MorrisPage::validatePage()
   }
   if (counter < 2)
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("At least two variables must vary."));
+    errorMessageLabel_->setErrorMessage(tr("At least two variables must vary."));
     return false;
   }
 

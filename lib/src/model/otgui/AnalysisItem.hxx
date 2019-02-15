@@ -59,7 +59,7 @@ signals:
   void messageChanged(QString);
   void progressValueChanged(int);
   void modifyAnalysisRequested(AnalysisItem*);
-  void modifyDesignOfExperimentEvaluation(Analysis, bool);
+  void modifyDesignOfExperimentEvaluation(Analysis);
 
 private:
   Analysis analysis_;

@@ -32,13 +32,15 @@ class OTGUI_API ReliabilityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestReliabilityAnalysisWizard;
+
 public:
   enum {Page_Intro, Page_SimuMethod, Page_ApproxMethod, Page_FORM};
 
   ReliabilityAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
+  virtual Analysis getAnalysis() const;
   virtual int nextId() const;
-  virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();

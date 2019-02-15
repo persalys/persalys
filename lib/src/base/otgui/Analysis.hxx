@@ -60,6 +60,7 @@ public:
   OT::String getHtmlDescription() const;
 
   void run();
+  Parameters getParameters() const;
   OT::String getPythonScript() const;
   bool hasValidResult() const;
 

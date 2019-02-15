@@ -52,9 +52,6 @@ void MonteCarloPage::buildInterface()
 
   // stop criteria
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(double)), this, SLOT(clearErrorMessageLabel()));
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
@@ -91,8 +88,10 @@ void MonteCarloPage::buildInterface()
   pageLayout->addStretch();
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
+  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorMessageLabel_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
+
   pageLayout->addWidget(errorMessageLabel_);
 
   initialize(MonteCarloAnalysis());
@@ -138,13 +137,6 @@ int MonteCarloPage::nextId() const
 }
 
 
-void MonteCarloPage::clearErrorMessageLabel()
-{
-  // the slot clear() of QLabel does not work...
-  errorMessageLabel_->setText("");
-}
-
-
 bool MonteCarloPage::validatePage()
 {
   QString errorMessage;
@@ -163,7 +155,7 @@ bool MonteCarloPage::validatePage()
     }
   }
 
-  errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+  errorMessageLabel_->setErrorMessage(errorMessage);
   if (!errorMessage.isEmpty())
     return false;
 

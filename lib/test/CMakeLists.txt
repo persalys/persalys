@@ -107,6 +107,15 @@ ot_check_test ( Cogeneration_std )
 if (BUILD_GUI)
   include_directories (${CMAKE_CURRENT_BINARY_DIR}) # for mocs
   ot_qt_check_test (WelcomeWindow_std)
+  ot_qt_check_test (OptimizationWizard_std)
+  ot_qt_check_test (CentralTendencyWizard_std)
+  ot_qt_check_test (SensitivityAnalysisWizard_std)
+  ot_qt_check_test (ScreeningAnalysisWizard_std)
+  ot_qt_check_test (ModelEvaluationWizard_std)
+  ot_qt_check_test (DesignOfExperimentEvaluationWizard_std)
+  ot_qt_check_test (ReliabilityAnalysisWizard_std)
+  ot_qt_check_test (MetaModelAnalysisWizard_std)
+  ot_qt_check_test (DesignOfExperimentWizard_std)
 endif ()
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"

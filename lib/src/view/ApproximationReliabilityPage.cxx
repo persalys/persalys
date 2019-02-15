@@ -45,7 +45,6 @@ namespace OTGUI
 
 ApproximationReliabilityPage::ApproximationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)
-  , method_(ApproximationReliabilityPage::FORM)
   , inputNames_()
   , startingPoint_()
   , pointLineEdit_(0)
@@ -177,11 +176,6 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
   if (!approxAnalysis_ptr)
     return;
 
-  if (dynamic_cast<const FORMAnalysis*>(analysis_ptr) || dynamic_cast<const FORMImportanceSamplingAnalysis*>(analysis_ptr))
-    method_ = ApproximationReliabilityPage::FORM;
-  else if (dynamic_cast<const SORMAnalysis*>(analysis_ptr))
-    method_ = ApproximationReliabilityPage::SORM;
-
   OptimizationAlgorithm solver = approxAnalysis_ptr->getOptimizationAlgorithm();
 
   // if solver.getStartingPoint is valid, we use it
@@ -256,34 +250,13 @@ OptimizationAlgorithm ApproximationReliabilityPage::getOptimizationAlgorithm() c
 }
 
 
-Analysis ApproximationReliabilityPage::getAnalysis(const String& name, const LimitState& limitState) const
+void ApproximationReliabilityPage::updateAnalysis(const Analysis& analysis)
 {
-  if (method_ == ApproximationReliabilityPage::FORM)
-  {
-    FORMAnalysis analysis(name, limitState);
-    analysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
-    analysis.setPhysicalStartingPoint(startingPoint_);
-    return analysis;
-  }
-  else
-  {
-    SORMAnalysis analysis(name, limitState);
-    analysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
-    analysis.setPhysicalStartingPoint(startingPoint_);
-    return analysis;
-  }
-}
-
-
-void ApproximationReliabilityPage::updateMethod(int id)
-{
-  method_ = Method(id);
-}
-
-
-int ApproximationReliabilityPage::nextId() const
-{
-  return -1;
+  ApproximationAnalysis * analysis_ptr = dynamic_cast<ApproximationAnalysis*>(analysis.getImplementation().get());
+  if (!analysis_ptr)
+    return;
+  analysis_ptr->setOptimizationAlgorithm(getOptimizationAlgorithm());
+  analysis_ptr->setPhysicalStartingPoint(startingPoint_);
 }
 
 

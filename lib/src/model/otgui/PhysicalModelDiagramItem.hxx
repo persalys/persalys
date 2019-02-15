@@ -75,7 +75,7 @@ signals:
   void sensitivityRequested();
   void limitStateRequested();
   void designOfExperimentRequested();
-  void designOfExperimentEvaluationRequested(const Analysis&, const bool isGeneralWizard = false);
+  void designOfExperimentEvaluationRequested(const PhysicalModel&);
 
   void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
   void probabilisticModelItemCreated(ProbabilisticModelItem*);

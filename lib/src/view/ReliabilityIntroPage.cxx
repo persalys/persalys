@@ -52,6 +52,7 @@ ReliabilityIntroPage::ReliabilityIntroPage(QWidget * parent)
   limitStatesComboBox_->setModel(limitStatesComboBoxModel_);
 
   limitStateLabel_ = new QLabel;
+  limitStateLabel_->setObjectName("limitStateLabel_");
   limitStateLayout->addWidget(limitStateLabel_);
 
   pageLayout->addWidget(limitStateBox);
@@ -72,12 +73,12 @@ ReliabilityIntroPage::ReliabilityIntroPage(QWidget * parent)
   // - Monte carlo
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Monte Carlo"));
   buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, SimulationReliabilityPage::MonteCarlo);
+  methodGroup_->addButton(buttonToChooseMethod, ReliabilityIntroPage::MonteCarlo);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod->setStyleSheet(styleText.str().c_str());
   // - FORM - IS
   buttonToChooseMethod = new QRadioButton(tr("FORM - Importance sampling"));
-  methodGroup_->addButton(buttonToChooseMethod, SimulationReliabilityPage::FORM_IS);
+  methodGroup_->addButton(buttonToChooseMethod, ReliabilityIntroPage::FORM_IS);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod->setStyleSheet(styleText.str().c_str());
 
@@ -89,13 +90,13 @@ ReliabilityIntroPage::ReliabilityIntroPage(QWidget * parent)
   // - FORM
   buttonToChooseMethod = new QRadioButton(tr("First Order Reliability Method (FORM)"));
   buttonToChooseMethod->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethod, ApproximationReliabilityPage::FORM);
+  methodGroup_->addButton(buttonToChooseMethod, ReliabilityIntroPage::FORM);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod->setStyleSheet(styleText.str().c_str());
 
   // - SORM
   buttonToChooseMethod = new QRadioButton(tr("Second Order Reliability Method (SORM)"));
-  methodGroup_->addButton(buttonToChooseMethod, ApproximationReliabilityPage::SORM);
+  methodGroup_->addButton(buttonToChooseMethod, ReliabilityIntroPage::SORM);
   methodLayout->addWidget(buttonToChooseMethod);
   buttonToChooseMethod->setStyleSheet(styleText.str().c_str());
 
@@ -119,13 +120,13 @@ void ReliabilityIntroPage::initialize(const Analysis& analysis, QList<LimitState
   const String analysisName = analysis.getImplementation()->getClassName();
 
   if (analysisName == "MonteCarloReliabilityAnalysis")
-    methodGroup_->button(SimulationReliabilityPage::MonteCarlo)->click();
+    methodGroup_->button(ReliabilityIntroPage::MonteCarlo)->click();
   else if (analysisName == "FORMImportanceSamplingAnalysis")
-    methodGroup_->button(SimulationReliabilityPage::FORM_IS)->click();
+    methodGroup_->button(ReliabilityIntroPage::FORM_IS)->click();
   else if (analysisName == "FORMAnalysis")
-    methodGroup_->button(ApproximationReliabilityPage::FORM)->click();
+    methodGroup_->button(ReliabilityIntroPage::FORM)->click();
   else if (analysisName == "SORMAnalysis")
-    methodGroup_->button(ApproximationReliabilityPage::SORM)->click();
+    methodGroup_->button(ReliabilityIntroPage::SORM)->click();
 }
 
 
@@ -133,11 +134,11 @@ int ReliabilityIntroPage::nextId() const
 {
   switch (methodGroup_->checkedId())
   {
-    case SimulationReliabilityPage::MonteCarlo:
-    case SimulationReliabilityPage::FORM_IS:
+    case ReliabilityIntroPage::MonteCarlo:
+    case ReliabilityIntroPage::FORM_IS:
       return ReliabilityAnalysisWizard::Page_SimuMethod;
-    case ApproximationReliabilityPage::FORM:
-    case ApproximationReliabilityPage::SORM:
+    case ReliabilityIntroPage::FORM:
+    case ReliabilityIntroPage::SORM:
       return ReliabilityAnalysisWizard::Page_ApproxMethod;
     default:
       return -1;
@@ -149,12 +150,18 @@ LimitState ReliabilityIntroPage::getLimitState() const
 {
   const int itemRow = limitStatesComboBox_->currentIndex();
   if (itemRow < 0)
-    return 0;
+    return LimitState();
 
   const QVariant variant = limitStatesComboBoxModel_->item(itemRow)->data();
   if (variant.canConvert<LimitState>())
     return variant.value<LimitState>();
   return LimitState();
+}
+
+
+int ReliabilityIntroPage::getMethodId() const
+{
+  return methodGroup_->checkedId();
 }
 
 

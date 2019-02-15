@@ -33,14 +33,15 @@ class OTGUI_API MetaModelAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestMetaModelAnalysisWizard;
+
 public:
-  enum Method {chaos, kriging};
-  enum {Page_Intro, Page_KrigingMethod, Page_ChaosMethod, Page_Validation};
+  enum {Page_Intro, Page_ChaosMethod, Page_KrigingMethod, Page_Validation};
 
   MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
+  virtual Analysis getAnalysis() const;
   virtual int nextId() const;
-  virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();

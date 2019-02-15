@@ -43,7 +43,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
     const ReliabilityAnalysis& analysis,
     QWidget* parent)
   : QTabWidget(parent)
-  , method_(ApproximationReliabilityPage::FORM)
+  , method_(FORM)
   , formResult_(result)
   , sormResult_()
   , result_(result)
@@ -93,7 +93,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
     const ReliabilityAnalysis& analysis,
     QWidget* parent)
   : QTabWidget(parent)
-  , method_(ApproximationReliabilityPage::SORM)
+  , method_(SORM)
   , formResult_()
   , sormResult_(result)
   , result_(result)
@@ -139,7 +139,7 @@ void ApproximationResultTabWidget::buildInterface()
   QStringList valuesList;
 
   // FORM
-  if (method_ == ApproximationReliabilityPage::FORM)
+  if (method_ == FORM)
   {
     // failure probability table
     namesList << tr("Failure probability")
@@ -358,7 +358,7 @@ void ApproximationResultTabWidget::buildInterface()
   {
     // compute sensitivities
     AnalyticalResult::Sensitivity eventProbaSensitivity;
-    if (method_ == ApproximationReliabilityPage::FORM)
+    if (method_ == FORM)
       eventProbaSensitivity = formResult_.getEventProbabilitySensitivity();
     AnalyticalResult::Sensitivity hasoferIndexSensitivity(result_.getHasoferReliabilityIndexSensitivity());
 
@@ -379,7 +379,7 @@ void ApproximationResultTabWidget::buildInterface()
     resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Variable"));
     resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Distribution parameters"));
     resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Reliability index"));
-    if (method_ == ApproximationReliabilityPage::FORM)
+    if (method_ == FORM)
       resultsTableModel->setNotEditableHeaderItem(0, 3, tr("Failure probability"));
 
     // set values
@@ -391,7 +391,7 @@ void ApproximationResultTabWidget::buildInterface()
       resultsTableModel->setNotEditableItem(row, 0, inDescription[i].c_str());
 
       PointWithDescription pfSensitivity;
-      if (method_ == ApproximationReliabilityPage::FORM)
+      if (method_ == FORM)
         pfSensitivity = eventProbaSensitivity[i];
       const PointWithDescription betaSensitivity(hasoferIndexSensitivity[i]);
 

@@ -24,9 +24,9 @@
 #include "otgui/DesignOfExperiment.hxx"
 #include "otgui/Analysis.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 #include <QComboBox>
 #include <QStandardItemModel>
 #include <QButtonGroup>
@@ -39,6 +39,8 @@ class OTGUI_API MetaModelIntroPage : public QWizardPage
   Q_OBJECT
 
 public:
+  enum Method {Chaos, Kriging};
+
   MetaModelIntroPage(QWidget* parent = 0);
 
   virtual int nextId() const;
@@ -46,6 +48,7 @@ public:
   void initialize(const Analysis& analysis, QList<DesignOfExperiment> doesList);
   DesignOfExperiment getDesignOfExperiment() const;
   OT::Description getInterestVariables() const;
+  int getMethodId() const;
 
   virtual bool validatePage();
 
@@ -61,7 +64,7 @@ private:
   QLabel * doeLabel_;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
   OT::Description interestVariables_;
 };
 }

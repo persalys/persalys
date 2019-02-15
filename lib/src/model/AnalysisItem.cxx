@@ -252,7 +252,7 @@ void AnalysisItem::modifyAnalysis()
 
   if (analysisType.contains("DesignOfExperiment"))
   {
-    emit modifyDesignOfExperimentEvaluation(getAnalysis(), false);
+    emit modifyDesignOfExperimentEvaluation(getAnalysis());
   }
   else
   {

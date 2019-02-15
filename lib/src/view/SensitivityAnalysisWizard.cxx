@@ -81,7 +81,7 @@ Analysis SensitivityAnalysisWizard::getAnalysis() const
   // get the physical model
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel();
 
-  if (currentId() == Page_Sobol)
+  if (introPage_->getMethodId() == SensitivityIntroPage::Sobol)
   {
     Analysis analysis = sobolPage_->getAnalysis(analysis_.getName(), model);
     analysis.getImplementation()->setInterestVariables(introPage_->getInterestVariables());

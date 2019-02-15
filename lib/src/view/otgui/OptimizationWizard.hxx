@@ -37,6 +37,8 @@ class OTGUI_API OptimizationWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestOptimizationWizard;
+
 public:
   OptimizationWizard(const Analysis& analysis, QWidget* parent = 0);
 

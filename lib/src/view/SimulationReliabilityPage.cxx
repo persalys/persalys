@@ -21,9 +21,7 @@
 #include "otgui/SimulationReliabilityPage.hxx"
 
 #include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
 #include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/ReliabilityAnalysisWizard.hxx"
 
 #include <QVBoxLayout>
 
@@ -34,7 +32,6 @@ namespace OTGUI
 
 SimulationReliabilityPage::SimulationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)
-  , method_(SimulationReliabilityPage::MonteCarlo)
   , stopCriteriaGroupBox_(0)
   , blockSizeGroupBox_(0)
   , seedSpinbox_(0)
@@ -54,9 +51,6 @@ void SimulationReliabilityPage::buildInterface()
 
   // stop criteria
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCoefficientOfVariationChanged(double)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiTimeChanged(int)), this, SLOT(clearErrorMessageLabel()));
-  connect(stopCriteriaGroupBox_, SIGNAL(maxiCallsChanged(double)), this, SLOT(clearErrorMessageLabel()));
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
@@ -80,8 +74,10 @@ void SimulationReliabilityPage::buildInterface()
   pageLayout->addWidget(advancedParamGroupBox);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorMessageLabel_ = new TemporaryLabel;
+  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorMessageLabel_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
+
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
 
@@ -96,11 +92,6 @@ void SimulationReliabilityPage::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
-  if (dynamic_cast<const MonteCarloReliabilityAnalysis*>(analysis_ptr))
-    method_ = SimulationReliabilityPage::MonteCarlo;
-  else
-    method_ = SimulationReliabilityPage::FORM_IS;
-
   stopCriteriaGroupBox_->setMaximumCoefficientOfVariation(analysis_ptr->getMaximumCoefficientOfVariation());
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
   stopCriteriaGroupBox_->setMaximumCalls(analysis_ptr->getMaximumCalls());
@@ -111,51 +102,16 @@ void SimulationReliabilityPage::initialize(const Analysis& analysis)
 }
 
 
-Analysis SimulationReliabilityPage::getAnalysis(const String& name, const LimitState& limitState) const
+void SimulationReliabilityPage::updateAnalysis(const Analysis& analysis)
 {
-  if (method_ == SimulationReliabilityPage::MonteCarlo)
-  {
-    MonteCarloReliabilityAnalysis analysis(name, limitState);
-    analysis.setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
-    analysis.setMaximumCoefficientOfVariation(stopCriteriaGroupBox_->getMaximumCoefficientOfVariation());
-    analysis.setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
-    analysis.setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
-    analysis.setSeed(seedSpinbox_->value());
-    return analysis;
-  }
-  else
-  {
-    FORMImportanceSamplingAnalysis analysis(name, limitState);
-    analysis.setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
-    analysis.setMaximumCoefficientOfVariation(stopCriteriaGroupBox_->getMaximumCoefficientOfVariation());
-    analysis.setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
-    analysis.setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
-    analysis.setSeed(seedSpinbox_->value());
-    return analysis;
-  }
-}
-
-
-void SimulationReliabilityPage::updateMethod(int id)
-{
-  method_ = Method(id);
-  setFinalPage(id == SimulationReliabilityPage::MonteCarlo);
-}
-
-
-int SimulationReliabilityPage::nextId() const
-{
-  if (method_ == SimulationReliabilityPage::MonteCarlo)
-    return -1;
-  else
-    return ReliabilityAnalysisWizard::Page_FORM;
-}
-
-
-void SimulationReliabilityPage::clearErrorMessageLabel()
-{
-  // the slot clear() of QLabel does not work...
-  errorMessageLabel_->setText("");
+  SimulationReliabilityAnalysis * analysis_ptr = dynamic_cast<SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
+  if (!analysis_ptr)
+    return;
+  analysis_ptr->setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
+  analysis_ptr->setMaximumCoefficientOfVariation(stopCriteriaGroupBox_->getMaximumCoefficientOfVariation());
+  analysis_ptr->setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
+  analysis_ptr->setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
+  analysis_ptr->setSeed(seedSpinbox_->value());
 }
 
 
@@ -177,7 +133,7 @@ bool SimulationReliabilityPage::validatePage()
     }
   }
 
-  errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+  errorMessageLabel_->setErrorMessage(errorMessage);
   if (!errorMessage.isEmpty())
     return false;
 

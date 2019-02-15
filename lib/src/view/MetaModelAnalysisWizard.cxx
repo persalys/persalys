@@ -21,7 +21,7 @@
 #include "otgui/MetaModelAnalysisWizard.hxx"
 
 #include "otgui/StudyItem.hxx"
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "otgui/ModelEvaluation.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 
 using namespace OT;
@@ -37,7 +37,9 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
   , functionalChaosPage_(0)
   , validationPage_(0)
 {
-  const DesignOfExperiment doe = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get())->getDesignOfExperiment();
+  DesignOfExperimentAnalysis * doeAnalysis = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get());
+  Q_ASSERT(doeAnalysis);
+  const DesignOfExperiment doe = doeAnalysis->getDesignOfExperiment();
 
   // set list of design of experiments items
   QList < DesignOfExperimentDefinitionItem* > doeList;
@@ -45,27 +47,21 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
   {
     PhysicalModel model(doe.getPhysicalModel());
 
-    PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram"));
-    Q_ASSERT(pmItem);
-
-    QModelIndexList listIndexes = pmItem->model()->match(pmItem->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
-    Q_ASSERT(listIndexes.size() == 1);
-
-    QStandardItem * doeTitleItem = pmItem->model()->itemFromIndex(listIndexes[0]);
-
-    for (int i = 0; i < doeTitleItem->rowCount(); ++i)
+    // get list of Designs Of Experiment of the current physical model
+    if (Observer * obs = model.getImplementation().get()->getObserver("Study"))
     {
-      QStandardItem * doeItem = doeTitleItem->child(i);
-
-      if (doeItem->data(Qt::UserRole).toString().contains("DesignOfExperiment"))
+      StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
+      Q_ASSERT(study);
+      for (UnsignedInteger i = 0; i < study->getAnalyses().getSize(); ++i)
       {
-        DesignOfExperimentDefinitionItem * doeEvalItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeItem);
-
-        if (doeEvalItem && doeEvalItem->getAnalysis().hasValidResult())
+        DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+        ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+        if (doeEval && !modelEval)
         {
-          const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(doeEvalItem->getAnalysis().getImplementation().get());
-          Q_ASSERT(analysis_ptr);
-          doeList_.append(analysis_ptr->getResult().getDesignOfExperiment());
+          if (doeEval->getPhysicalModel() == model && doeEval->hasValidResult())
+          {
+            doeList_.append(doeEval->getResult().getDesignOfExperiment());
+          }
         }
       }
     }
@@ -128,22 +124,25 @@ int MetaModelAnalysisWizard::nextId() const
 }
 
 
-bool MetaModelAnalysisWizard::validateCurrentPage()
+Analysis MetaModelAnalysisWizard::getAnalysis() const
 {
-  if (currentId() == Page_ChaosMethod || currentId() == Page_KrigingMethod)
+  const String analysisName = analysis_.getName();
+  const DesignOfExperiment design = introPage_->getDesignOfExperiment();
+
+  Analysis analysis;
+  switch (introPage_->getMethodId())
   {
-    const DesignOfExperiment design = introPage_->getDesignOfExperiment();
-
-    if (currentId() == Page_ChaosMethod)
-      analysis_ = functionalChaosPage_->getAnalysis(analysis_.getName(), design);
-    else
-      analysis_ = krigingPage_->getAnalysis(analysis_.getName(), design);
-
-    analysis_.getImplementation()->setInterestVariables(introPage_->getInterestVariables());
+    case MetaModelIntroPage::Chaos:
+      analysis = functionalChaosPage_->getAnalysis(analysisName, design);
+      break;
+    case MetaModelIntroPage::Kriging:
+      analysis = krigingPage_->getAnalysis(analysisName, design);
+      break;
+    default:
+      throw InvalidValueException(HERE) << "MetaModelAnalysisWizard::getAnalysis no analysis";
   }
-  if (currentId() == Page_Validation)
-    validationPage_->updateMetamodelValidation(analysis_);
-
-  return QWizard::validateCurrentPage();
+  analysis.getImplementation()->setInterestVariables(introPage_->getInterestVariables());
+  validationPage_->updateMetamodelValidation(analysis);
+  return analysis;
 }
 }

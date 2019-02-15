@@ -23,9 +23,9 @@
 
 #include "otgui/Analysis.hxx"
 #include "otgui/OutputsSelectionGroupBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
-#include <QLabel>
 #include <QButtonGroup>
 
 namespace OTGUI
@@ -42,6 +42,7 @@ public:
 
   void initialize(const Analysis& analysis);
   OT::Description getInterestVariables() const;
+  int getMethodId() const;
 
   virtual int nextId() const;
   virtual bool validatePage();
@@ -52,7 +53,7 @@ public slots:
 private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
   OT::Description interestVariables_;
 };
 }

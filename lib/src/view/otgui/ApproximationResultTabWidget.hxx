@@ -22,7 +22,6 @@
 #define OTGUI_APPROXIMATIONRESULTTABWIDGET_HXX
 
 #include "otgui/ReliabilityAnalysis.hxx"
-#include "otgui/ApproximationReliabilityPage.hxx"
 
 #include <openturns/FORMResult.hxx>
 #include <openturns/SORMResult.hxx>
@@ -37,6 +36,8 @@ class OTGUI_API ApproximationResultTabWidget : public QTabWidget
   Q_OBJECT
 
 public:
+  enum Method {FORM, SORM};
+
   ApproximationResultTabWidget(const OT::FORMResult& result,
                                const ReliabilityAnalysis& analysis,
                                QWidget* parent = 0);
@@ -48,7 +49,7 @@ protected:
   void buildInterface();
 
 private:
-  ApproximationReliabilityPage::Method method_;
+  Method method_;
   OT::FORMResult formResult_;
   OT::SORMResult sormResult_;
   OT::AnalyticalResult result_;

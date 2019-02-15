@@ -47,17 +47,17 @@ DesignOfExperimentIntroPage::DesignOfExperimentIntroPage(QWidget* parent)
 
   // Deterministic
   QRadioButton * deterministicButton = new QRadioButton(tr("Deterministic"));
-  methodGroup_->addButton(deterministicButton, DesignOfExperimentIntroPage::deterministic);
+  methodGroup_->addButton(deterministicButton, DesignOfExperimentIntroPage::Deterministic);
   methodLayout->addWidget(deterministicButton);
 
   // Probabilistic
   QRadioButton * probaButton = new QRadioButton(tr("Probabilistic"));
-  methodGroup_->addButton(probaButton, DesignOfExperimentIntroPage::probabilistic);
+  methodGroup_->addButton(probaButton, DesignOfExperimentIntroPage::Probabilistic);
   methodLayout->addWidget(probaButton);
 
   // import
   QRadioButton * importButton = new QRadioButton(tr("Import data"));
-  methodGroup_->addButton(importButton, DesignOfExperimentIntroPage::import);
+  methodGroup_->addButton(importButton, DesignOfExperimentIntroPage::Import);
   methodLayout->addWidget(importButton);
 
   pageLayout->addWidget(methodBox);
@@ -77,19 +77,25 @@ void DesignOfExperimentIntroPage::initialize(const Analysis& analysis)
 
   if (!analysis_ptr->getPhysicalModel().hasStochasticInputs())
   {
-    methodGroup_->button(DesignOfExperimentIntroPage::probabilistic)->setToolTip(tr("The physical model has no stochastic inputs"));
-    methodGroup_->button(DesignOfExperimentIntroPage::probabilistic)->setEnabled(false);
+    methodGroup_->button(DesignOfExperimentIntroPage::Probabilistic)->setToolTip(tr("The physical model has no stochastic inputs"));
+    methodGroup_->button(DesignOfExperimentIntroPage::Probabilistic)->setEnabled(false);
   }
 
   // method
   const String analysisName = analysis.getImplementation()->getClassName();
 
   if (analysisName == "ProbabilisticDesignOfExperiment" && analysis_ptr->getPhysicalModel().hasStochasticInputs())
-    methodGroup_->button(DesignOfExperimentIntroPage::probabilistic)->click();
+    methodGroup_->button(DesignOfExperimentIntroPage::Probabilistic)->click();
   else if (analysisName == "ImportedDesignOfExperiment")
-    methodGroup_->button(DesignOfExperimentIntroPage::import)->click();
+    methodGroup_->button(DesignOfExperimentIntroPage::Import)->click();
   else
-    methodGroup_->button(DesignOfExperimentIntroPage::deterministic)->click();
+    methodGroup_->button(DesignOfExperimentIntroPage::Deterministic)->click();
+}
+
+
+int DesignOfExperimentIntroPage::getMethodId() const
+{
+  return methodGroup_->checkedId();
 }
 
 
@@ -97,15 +103,15 @@ int DesignOfExperimentIntroPage::nextId() const
 {
   switch (DesignOfExperimentIntroPage::Method(methodGroup_->checkedId()))
   {
-    case DesignOfExperimentIntroPage::deterministic:
+    case DesignOfExperimentIntroPage::Deterministic:
     {
       return DesignOfExperimentWizard::Page_Deterministic;
     }
-    case DesignOfExperimentIntroPage::probabilistic:
+    case DesignOfExperimentIntroPage::Probabilistic:
     {
       return DesignOfExperimentWizard::Page_Probabilistic;
     }
-    case DesignOfExperimentIntroPage::import:
+    case DesignOfExperimentIntroPage::Import:
     {
       return DesignOfExperimentWizard::Page_Import;
     }

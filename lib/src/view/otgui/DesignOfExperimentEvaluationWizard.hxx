@@ -26,10 +26,12 @@
 #include "otgui/OutputsSelectionGroupBox.hxx"
 #include "otgui/BlockSizeGroupBox.hxx"
 #include "otgui/Analysis.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QStandardItemModel>
 #include <QComboBox>
-#include <QLabel>
+
+Q_DECLARE_METATYPE(OTGUI::Analysis)
 
 namespace OTGUI
 {
@@ -38,14 +40,17 @@ class OTGUI_API DesignOfExperimentEvaluationWizard : public Wizard
 {
   Q_OBJECT
 
-public:
-  DesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent = 0);
+  friend class TestDesignOfExperimentEvaluationWizard;
 
-  DesignOfExperimentDefinitionItem * getDesignOfExperimentDefinitionItem() const;
+public:
+  DesignOfExperimentEvaluationWizard(const Analysis& analysis, QWidget* parent = 0);
+  DesignOfExperimentEvaluationWizard(const PhysicalModel& model, QWidget* parent = 0);
+
+  Analysis getAnalysis() const;
   virtual bool validateCurrentPage();
 
 protected slots:
-  void clearErrorMessage();
+  void buildInterface();
   void updateWidgets();
 
 private:
@@ -54,7 +59,7 @@ private:
   QLabel * doeLabel_;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;
-  QLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
