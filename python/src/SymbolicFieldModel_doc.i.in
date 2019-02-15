@@ -1,0 +1,39 @@
+%feature("docstring") OTGUI::SymbolicFieldModel
+"Physical model defined by analytical formulas and a mesh.
+
+Parameters
+----------
+name : str
+    Name
+mesh : :class:`~otguibase.MeshModel`
+    Mesh
+inputs : sequence of :class:`~otguibase.Input`
+    Input variables (optional)
+outputs : sequence of :class:`~otguibase.Output`
+    Output variables (optional)
+formulas : sequence of str
+    List of analytical formulas between the inputs and the outputs (optional).
+    The function is defined by ouputs = formulas(inputs).
+
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the mesh model:
+
+>>> meshModel = otguibase.GridMeshModel([otguibase.Variable('x', 'aDescription')], ot.Interval(0., 12.), [10])
+
+Create the model:
+
+>>> z0 = otguibase.Input('z0', 100)
+>>> v0 = otguibase.Input('v0', 55)
+>>> m = otguibase.Input('m', 80)
+>>> c = otguibase.Input('c', 15)
+>>> z = otguibase.Output('z')
+>>> formula = ['max(0, z0 + (m * 9.81 / c) * x + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-x * c / m)))']
+>>> model = otguibase.SymbolicFieldModel('model', meshModel, [z0, v0, m, c], [z], formula)
+
+>>> y = model.getPointToFieldFunction()([100, 55, 80, 15])"
+

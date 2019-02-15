@@ -36,6 +36,7 @@ Create the model:
 >>> z = otguibase.Output('z')
 >>> formula = ['max(0, z0 + (m * 9.81 / c) * x + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-x * c / m)))']
 >>> model = otguibase.SymbolicFieldModel('model',meshModel , [z0, v0, m, c], [z], formula)
+
 >>> y = model.getPointToFieldFunction()([100, 55, 80, 15])"
 
 

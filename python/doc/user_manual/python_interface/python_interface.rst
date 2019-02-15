@@ -11,6 +11,7 @@ Model creation
     :toctree: _generated/
     :template: class.rst_t
 
+    Variable
     Input
     Output
     MeshModel

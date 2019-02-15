@@ -101,8 +101,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       SymbolicPhysicalModel.i SymbolicPhysicalModel_doc.i.in
                       PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
-                      SymbolicFieldModel.i
-                      PythonFieldModel.i
+                      SymbolicFieldModel.i SymbolicFieldModel_doc.i.in
+                      PythonFieldModel.i PythonFieldModel_doc.i.in
                       MetaModel.i MetaModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i YACSPhysicalModel_doc.i.in

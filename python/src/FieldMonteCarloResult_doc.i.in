@@ -10,17 +10,7 @@
 Returns
 -------
 functions : sequence of :py:class:`openturns.Function`
-    "
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") OTGUI::FieldMonteCarloResult::getElapsedTime
-"Elapsed time accessor.
-
-Returns
--------
-time : float
-    Elapsed time"
+    Correlation function for each output"
 
 // ---------------------------------------------------------------------
 
@@ -50,7 +40,7 @@ sample : :py:class:`openturns.Sample`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::FieldMonteCarloResult::getProcessSample
-" accessor.
+"Output values accessor.
 
 Returns
 -------

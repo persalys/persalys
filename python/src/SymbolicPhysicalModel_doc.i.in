@@ -17,10 +17,12 @@ Examples
 --------
 >>> import openturns as ot
 >>> import otguibase
+
 >>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
 >>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
 >>> G = otguibase.Output('G', 'deviation')
 >>> model = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+
 >>> y = model.getFunction()([300.0,75000.0])"
 
 // ---------------------------------------------------------------------

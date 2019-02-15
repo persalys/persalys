@@ -1,5 +1,19 @@
 %feature("docstring") OTGUI::Variable
-"Variable base class."
+"Variable base class.
+
+Represents a variable.
+
+Parameters
+----------
+name : str
+    Name
+description : str
+    Description text (optional)
+
+Examples
+--------
+>>> import otguibase
+>>> G = otguibase.Variable('G', 'deviation')"
 
 // ---------------------------------------------------------------------
 
@@ -8,7 +22,7 @@
 
 Parameters
 ----------
-description : :py:class:`openturns.Description`
+description : str
     Text descripting the variable"
 
 // ---------------------------------------------------------------------
@@ -29,7 +43,7 @@ description : :py:class:`openturns.Description`
 Returns
 -------
 script : str
-    Python script to replay the calculus"
+    Python script to replay the analysis"
 
 // ---------------------------------------------------------------------
 
