@@ -73,6 +73,13 @@ void StudyItem::buildActions()
   newFMIModel_ = new QAction(tr("FMI model"), this);
   connect(newFMIModel_, SIGNAL(triggered()), this, SLOT(createFMIModel()));
 #endif
+  // new model actions
+  newSymbolicFieldModel_ = new QAction(tr("Symbolic Field model"), this);
+  connect(newSymbolicFieldModel_, SIGNAL(triggered()), this, SLOT(createSymbolicFieldModel()));
+
+  newPythonFieldModel_ = new QAction(tr("Python Field model"), this);
+  connect(newPythonFieldModel_, SIGNAL(triggered()), this, SLOT(createPythonFieldModel()));
+
 
   newDataModel_ = new QAction(tr("Data model"), this);
   connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createDataModel()));
@@ -103,6 +110,8 @@ void StudyItem::buildActions()
 #ifdef OTGUI_HAVE_OTFMI
   appendAction(newFMIModel_);
 #endif
+  appendAction(newSymbolicFieldModel_);
+  appendAction(newPythonFieldModel_);
   appendAction(newDataModel_);
   appendSeparator();
   appendAction(exportAction_);

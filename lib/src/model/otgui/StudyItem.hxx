@@ -93,6 +93,8 @@ private:
 #ifdef OTGUI_HAVE_OTFMI
   QAction * newFMIModel_;
 #endif
+  QAction * newSymbolicFieldModel_;
+  QAction * newPythonFieldModel_;
   QAction * newDataModel_;
   QAction * exportAction_;
   QAction * saveAction_;
