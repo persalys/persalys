@@ -322,14 +322,25 @@ String DataModel::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = " << inputColumns_.__str__() << "\n";
-  oss << "outputColumns = " << outputColumns_.__str__() << "\n";
+  if (getFileName().empty())
+  {
+    oss << "inputSample = ot.Sample(" << Parameters::GetOTSampleStr(getInputSample()) << ")\n";
+    oss << "inputSample.setDescription(" << Parameters::GetOTDescriptionStr(inputNames_) << ")\n";
+    oss << "outputSample = ot.Sample(" << Parameters::GetOTSampleStr(getOutputSample()) << ")\n";
+    oss << "outputSample.setDescription(" << Parameters::GetOTDescriptionStr(outputNames_) << ")\n";
+    oss << getName() << " = otguibase.DataModel('" << getName() << "', inputSample, outputSample)\n";
+  }
+  else
+  {
+    oss << "inputColumns = " << inputColumns_.__str__() << "\n";
+    oss << "outputColumns = " << outputColumns_.__str__() << "\n";
 
-  oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
-  oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
+    oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
+    oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
 
-  oss << getName() + " = otguibase.DataModel('" + getName() + "', ";
-  oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
+    oss << getName() << " = otguibase.DataModel('" << getName() << "', ";
+    oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
+  }
 
   return oss;
 }
