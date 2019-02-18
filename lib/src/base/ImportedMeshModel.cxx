@@ -161,7 +161,7 @@ String ImportedMeshModel::__repr__() const
   OSS oss;
   oss << "class=" << GetClassName()
       << " name=" << getName()
-      << " file name⁼" << getFileName()
+      << " file name=" << getFileName()
       << " columns=" << getColumns()
       << " index parameters=" << getIndexParameters()
       << " mesh=" << getMesh();
