@@ -547,7 +547,7 @@ void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, 
     const Sample testOutputSample(shuffledOutSample, beginIndex, endIndex);
 
     // fill result
-    const Sample tempMetaModelSample = function(testInputSample);
+    const Sample tempMetaModelSample(function(testInputSample));
     for (UnsignedInteger j = 0; j < (endIndex - beginIndex); ++j)
     {
       metaModelSample[indices[beginIndex + j]] = tempMetaModelSample[j];

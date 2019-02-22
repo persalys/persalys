@@ -321,7 +321,7 @@ void PlotWidget::plotPDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  const Sample dataPDF = distribution.drawPDF().getDrawable(0).getData();
+  const Sample dataPDF(distribution.drawPDF().getDrawable(0).getData());
   plotCurve(dataPDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataPDF.getMax()[1];
@@ -338,7 +338,7 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  const Sample dataCDF = distribution.drawCDF().getDrawable(0).getData();
+  const Sample dataCDF(distribution.drawCDF().getDrawable(0).getData());
   plotCurve(dataCDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataCDF.getMax()[1];
@@ -355,7 +355,7 @@ void PlotWidget::plotQuantileCurve(const Distribution & distribution, const QPen
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  const Sample dataQuantile = distribution.drawQuantile().getDrawable(0).getData();
+  const Sample dataQuantile(distribution.drawQuantile().getDrawable(0).getData());
   plotCurve(dataQuantile, pen);
   // Add margin at the top to avoid to cut the curve
   double yMax = dataQuantile.getMax()[1];
@@ -378,7 +378,7 @@ void PlotWidget::plotSurvivalCurve(const Distribution & distribution, const QPen
   const Scalar xMax = distribution.computeQuantile(ResourceMap::GetAsScalar("Distribution-QMax"))[0];
   const UnsignedInteger pointNumber = ResourceMap::GetAsUnsignedInteger("Distribution-DefaultPointNumber");
   const Scalar delta = 2.0 * (xMax - xMin) * (1.0 - 0.5 * (ResourceMap::GetAsScalar("Distribution-QMax" ) - ResourceMap::GetAsScalar("Distribution-QMin")));
-  const Sample data = distribution.computeComplementaryCDF(xMin - delta, xMax + delta, pointNumber);
+  const Sample data(distribution.computeComplementaryCDF(xMin - delta, xMax + delta, pointNumber));
   plotCurve(data, pen);
   // Add margin at the top to avoid to cut the curve
   double yMax = data.getMax()[1];
