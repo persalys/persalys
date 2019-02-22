@@ -1,0 +1,326 @@
+<ServerManagerConfiguration>
+  <ProxyGroup name="views">
+    <ContextViewProxy base_proxygroup="internal_views"
+                      base_proxyname="XYChartViewBase4Axes"
+                      class="vtkPVXYChartView"
+                      name="XYChartViewColumns"
+                      label="Line Chart View Columns"
+                      processes="client|renderserver|dataserver"
+                      representation_name="XYChartRepresentationColumns"
+                      post_creation="SetChartTypeToLine" >
+      <Documentation>This is the proxy for the XY line chart 
+      view that support column selection.</Documentation>
+    </ContextViewProxy>
+  </ProxyGroup>
+  <ProxyGroup name="representations">
+    <ChartRepresentationProxy base_proxygroup="representations"
+                              class="vtkXYChartRepresentationColumns"
+                              name="XYChartRepresentationColumns"
+                              processes="client|dataserver|renderserver">
+      <Documentation>API for representations used by XYChartView and XYBarChartView.
+      </Documentation>
+      <InputProperty command="SetInputConnection"
+                     name="Input">
+        <Documentation>Data input for the representation.</Documentation>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkDataObject" />
+        </DataTypeDomain>
+      </InputProperty>
+      <IntVectorProperty command="SetVisibility"
+                         default_values="1"
+                         name="Visibility"
+                         number_of_elements="1"
+                         panel_visibility="never">
+        <BooleanDomain name="bool" />
+        <Documentation>Visibility of the representation.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetForceUseCache"
+                         default_values="0"
+                         is_internal="1"
+                         name="ForceUseCache"
+                         number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>Typically UseCache and CacheKey are updated by the View
+        and representations cache based on what the view tells it. However in
+        some cases we may want to force a representation to cache irrespective
+        of the view (e.g. comparative views). In which case these ivars can up
+        set. If ForcedCacheKey is true, it overrides UseCache and CacheKey.
+        Instead, ForcedCacheKey is used.</Documentation>
+      </IntVectorProperty>
+      <DoubleVectorProperty command="SetForcedCacheKey"
+                            default_values="none"
+                            is_internal="1"
+                            name="ForcedCacheKey"
+                            number_of_elements="1">
+        <DoubleRangeDomain name="range" />
+        <Documentation>Typically UseCache and CacheKey are updated by the View
+        and representations cache based on what the view tells it. However in
+        some cases we may want to force a representation to cache irrespective
+        of the view (e.g. comparative views). In which case these ivars can up
+        set. If ForcedCacheKey is true, it overrides UseCache and CacheKey.
+        Instead, ForcedCacheKey is used.</Documentation>
+      </DoubleVectorProperty>
+      <IntVectorProperty clean_command="ResetCompositeDataSetIndices"
+                         command="AddCompositeDataSetIndex"
+                         default_values="1"
+                         number_of_elements="1"
+                         name="CompositeDataSetIndex"
+                         number_of_elements_per_command="1"
+                         panel_visibility="default"
+                         repeat_command="1">
+        <CompositeTreeDomain mode="leaves" name="tree">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </CompositeTreeDomain>
+        <Documentation>This property lists the ids of the blocks to extract
+        from the input multiblock dataset.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetFieldAssociation"
+                         default_values="0"
+                         name="AttributeType"
+                         number_of_elements="1">
+        <Documentation>Select the attribute data to render.</Documentation>
+        <FieldDataDomain enable_field_data="1"
+                         name="enum">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </FieldDataDomain>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetUseIndexForXAxis"
+                         default_values="1"
+                         name="UseIndexForXAxis"
+                         number_of_elements="1">
+        <ChartUseIndexForAxisDomain name="bool">
+          <RequiredProperties>
+            <Property function="ArraySelection" name="XArrayName" />
+          </RequiredProperties>
+        </ChartUseIndexForAxisDomain>
+        <Documentation>When set, the array index will be used for X axis,
+        otherwise the array identified by XArrayName will be
+        used.</Documentation>
+      </IntVectorProperty>
+      <StringVectorProperty command="SetXAxisSeriesName"
+                            default_values=""
+                            name="XArrayName"
+                            number_of_elements="1">
+        <Documentation>Set the array to use on X axis. This is used only when
+        UseIndexForXAxis is set to 0.</Documentation>
+        <ChartSeriesListDomain name="array_list"
+                              hide_partial_arrays="1">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+          </RequiredProperties>
+        </ChartSeriesListDomain>
+        <Hints>
+          <!-- the widget for this property is only enabled, when
+          UseIndexForXAxis is unchecked. -->
+          <PropertyWidgetDecorator type="EnableWidgetDecorator">
+            <Property name="UseIndexForXAxis" function="boolean_invert" />
+          </PropertyWidgetDecorator>
+        </Hints>
+      </StringVectorProperty>
+      <PropertyGroup label="X Axis Parameters">
+        <Property name="UseIndexForXAxis" />
+        <Property name="XArrayName" />
+      </PropertyGroup>
+      <StringVectorProperty command="SetSeriesVisibility"
+                            element_types="2 0"
+                            name="SeriesVisibility"
+                            number_of_elements_per_command="2"
+                            repeat_command="1"
+                            clean_command="ClearSeriesVisibilities">
+        <Documentation>Set the series visibility.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="visibility">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+        <Hints>
+          <!-- when present, the SeriesEditor widget will allow user to
+          re-order the series which will affect the rendered plot -->
+          <SeriesEditor supports_reordering="1" />
+        </Hints>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetLabel"
+                            clean_command="ClearLabels"
+                            element_types="2 2"
+                            name="SeriesLabel"
+                            number_of_elements_per_command="2"
+                            repeat_command="1">
+        <Documentation>Set the series labels.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="label">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetColor"
+                            clean_command="ClearColors"
+                            element_types="2 1 1 1"
+                            name="SeriesColor"
+                            number_of_elements_per_command="4"
+                            repeat_command="1">
+        <Documentation>Set the series line/bar color.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="color">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetAxisCorner"
+                            clean_command="ClearAxisCorners"
+                            element_types="2 0"
+                            name="SeriesPlotCorner"
+                            number_of_elements_per_command="2"
+                            repeat_command="1">
+        <Documentation>Set the series axis corner.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="value"
+                                    default_value="0">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+      </StringVectorProperty>
+      <!--
+          Set the palette SelectionColor color to all the plots in the chart.
+        -->
+      <DoubleVectorProperty command="SetSelectionColor"
+                            default_values="1.0 0.0 1.0"
+                            name="Color"
+                            number_of_elements="3"
+                            panel_visibility="never">
+        <DoubleRangeDomain max="1 1 1"
+                           min="0 0 0"
+                           name="range" />
+        <Hints>
+          <GlobalPropertyLink type="ColorPalette" property="SelectionColor" />
+        </Hints>
+      </DoubleVectorProperty>
+      <SubProxy command="SetSelectionRepresentation">
+        <!--
+          SelectionRepresentation proxy is used to convey the selection to view.
+          We keep this separate as subproxy so that when the selection is
+          modified, we don't have to update the representation as well, we can
+          only update the SelectionRepresentation.
+        -->
+        <RepresentationProxy name="SelectionRepresentation"
+               class="vtkChartSelectionRepresentation"
+               processes="client|dataserver|renderserver">
+          <InputProperty command="SetInputConnection"
+                         name="OriginalSelectionInput"/>
+        </RepresentationProxy>
+      </SubProxy>
+
+      <StringVectorProperty command="SetSeriesLabelPrefix"
+                            name="SeriesLabelPrefix"
+                            number_of_elements="1"
+                            default_value=""
+                            panel_visibility="advanced">
+      <Documentation>
+        Specify a string to prefix to the **SeriesLabel** (**Legend Name**) for each
+        of series being plotted. This will get prefixed to the labels (legend names) specified
+        for each of the series individually via the **Series Parameters**.
+      </Documentation>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetLineStyle"
+                            clean_command="ClearLineStyles"
+                            element_types="2 0"
+                            name="SeriesLineStyle"
+                            number_of_elements_per_command="2"
+                            repeat_command="1">
+        <Documentation>Set the series line style.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="value"
+                                    default_value="1">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetLineThickness"
+                            clean_command="ClearLineThicknesses"
+                            element_types="2 0"
+                            name="SeriesLineThickness"
+                            number_of_elements_per_command="2"
+                            repeat_command="1">
+        <Documentation>Set the series line thickness.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="value"
+                                    default_value="2">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetMarkerStyle"
+                            clean_command="ClearMarkerStyles"
+                            element_types="2 0"
+                            name="SeriesMarkerStyle"
+                            number_of_elements_per_command="2"
+                            repeat_command="1">
+        <Documentation>Set the series marker style.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="value"
+                                    default_value="0">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+      </StringVectorProperty>
+
+      <PropertyGroup label="Series Parameters"
+                     panel_widget="SeriesEditor"
+                     panel_visibility="default" >
+        <Property name="SeriesVisibility"
+                  function="SeriesVisibility" />
+        <Property name="SeriesColor"
+                  function="SeriesColor" />
+        <Property name="SeriesLineThickness"
+                  function="SeriesLineThickness" />
+        <Property name="SeriesLineStyle"
+                  function="SeriesLineStyle" />
+        <Property name="SeriesLabel"
+                  function="SeriesLabel" />
+        <Property name="SeriesMarkerStyle"
+                  function="SeriesMarkerStyle" />
+        <Property name="SeriesPlotCorner"
+                  function="SeriesPlotCorner"/>
+      </PropertyGroup>
+
+      <Hints>
+        <InitializationHelper class="vtkSMXYChartRepresentationInitializationHelper" />
+      </Hints>
+
+      <!-- End of XYChartRepresentationBase -->
+    </ChartRepresentationProxy>
+
+  </ProxyGroup>
+</ServerManagerConfiguration>

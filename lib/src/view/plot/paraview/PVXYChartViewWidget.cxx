@@ -12,7 +12,6 @@
 #include <vtkCommand.h>
 #include <vtkAxis.h>
 #include <vtkContextScene.h>
-
 #include <vtkXYChartRepresentation.h>
 
 #include "otgui/ListWidgetWithCheckBox.hxx"
@@ -31,7 +30,7 @@ const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_VIEW_
 
 const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_REPRESENTATION_TYPE{
   {PVXYChartViewWidget::Scatter, "XYChartRepresentation"},
-  {PVXYChartViewWidget::Trajectories, "XYChartRepresentation"},
+  {PVXYChartViewWidget::Trajectories, "XYChartRepresentationColumns"},
   {PVXYChartViewWidget::BagChart, "XYBagChartRepresentation"},
   {PVXYChartViewWidget::FunctionalBagChart, "XYFunctionalBagChartRepresentation"}};
 
@@ -57,23 +56,12 @@ PVXYChartViewWidget::PVXYChartViewWidget(QWidget *parent, PVServerManagerInterfa
   int selectionModifier(vtkContextScene::SELECTION_DEFAULT);
   chartXY_->SetActionToButton(selectionType, vtkContextMouseEvent::RIGHT_BUTTON);
   chartXY_->SetSelectionMode(selectionModifier);
-  if (type_ == Trajectories)
-    chartXY_->SetSelectionMethod(vtkChart::SELECTION_COLUMNS);
 }
 
 
 PVXYChartViewWidget::~PVXYChartViewWidget()
 {
   chartXY_ = 0;
-}
-
-
-// TODO : rm
-bool PVXYChartViewWidget::eventFilter(QObject *obj, QEvent *event)
-{
-  if (obj == getView()->widget() && event->type() == QEvent::Paint && type_ == Trajectories)
-    chartXY_->SetSelectionMethod(vtkChart::SELECTION_COLUMNS);
-  return PVViewWidget::eventFilter(obj, event);
 }
 
 

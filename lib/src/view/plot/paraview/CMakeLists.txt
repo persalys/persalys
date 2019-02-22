@@ -13,7 +13,6 @@ ot_add_source_file (PVServerManagerSingleton.cxx)
 ot_add_source_file (PVBagChartViewWidget.cxx)
 
 ot_install_header_file (PVMatrixPlotViewWidget.hxx)
-ot_install_header_file (PVMatrixPlotViewWidget.hxx)
 ot_install_header_file (PVParCooViewWidget.hxx)
 ot_install_header_file (PVSpreadSheetViewWidget.hxx)
 ot_install_header_file (PVViewWidget.hxx)
@@ -38,6 +37,11 @@ qt5_wrap_cpp (OTGUI_PLOTPARAVIEW_MOC_SRCS
 include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library (otguiplotparaview ${SOURCEFILES} ${OTGUI_PLOTPARAVIEW_MOC_SRCS})
 
+ADD_PARAVIEW_PLUGIN(XYChartRepresentationColumns "1.0"
+  SERVER_MANAGER_XML XYChartRepresentationColumns.xml
+  SERVER_MANAGER_SOURCES
+  vtkXYChartRepresentationColumns.cxx)
+
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( otguiplotparaview PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
 endif ()
@@ -60,7 +64,9 @@ else ()
   target_link_libraries (otguiplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
 endif ()
 
-install ( TARGETS otguiplotparaview
+target_link_libraries (otguiplotparaview XYChartRepresentationColumns)
+
+install ( TARGETS otguiplotparaview XYChartRepresentationColumns
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}
   ARCHIVE DESTINATION ${OTGUI_LIBRARY_PATH}

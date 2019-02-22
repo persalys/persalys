@@ -37,6 +37,8 @@
 #include <pqParaViewBehaviors.h>
 #include "otgui/PVServerManagerInterface.hxx"
 #include "otgui/PVServerManagerSingleton.hxx"
+#include "vtkPVPlugin.h"
+PV_PLUGIN_IMPORT_INIT(XYChartRepresentationColumns)
 #endif
 
 namespace OTGUI
@@ -61,6 +63,9 @@ MainWindow::MainWindow()
     // UpdateAvailableWriters : to be able to export the data from spread sheets
     vtkSMProxyManager::GetProxyManager()->GetWriterFactory()->UpdateAvailableWriters();
     PVServerManagerSingleton::Init(new PVServerManagerInterface);
+    // import XYChartRepresentationColumns plugin
+    // It is used to plot trajectories which can be selected
+    PV_PLUGIN_IMPORT(XYChartRepresentationColumns);
   }
 #endif
 

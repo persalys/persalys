@@ -2,7 +2,6 @@
 #define __PV_XYCHARTVIEW_WIDGET_HXX__
 
 #include "PVViewWidget.hxx"
-#include "otgui/OTGuiprivate.hxx"
 
 #include <vtkChartXY.h>
 
@@ -53,7 +52,6 @@ public:
   bool getRepresentationVisibility(const int reprIndex = 0);
 
 protected:
-  bool eventFilter(QObject *obj, QEvent *event);
   void setPlotStyle();
 
 public slots:
