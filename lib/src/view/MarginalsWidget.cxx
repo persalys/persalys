@@ -467,9 +467,7 @@ void MarginalsWidget::distributionParametersChanged()
       DistributionDictionary::UpdateDistribution(distribution, parameters, parametersType);
 
       // create a new TruncatedDistribution
-      TruncatedDistribution newTruncatedDistribution;
-      newTruncatedDistribution.setDistribution(distribution);
-      newTruncatedDistribution.setBounds(truncatedDistribution.getBounds());
+      TruncatedDistribution newTruncatedDistribution(distribution, truncatedDistribution.getBounds());
 
       // update input distribution
       physicalModel_.blockNotification("ProbabilisticModel");
