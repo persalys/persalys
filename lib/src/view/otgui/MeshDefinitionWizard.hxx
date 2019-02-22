@@ -36,6 +36,8 @@ class OTGUI_API MeshDefinitionWizard : public Wizard
 {
   Q_OBJECT
 
+  friend class TestMeshDefinitionWizard;
+
 public:
   enum Method {Grid, Import};
   MeshDefinitionWizard(const MeshModel& mesh, QWidget* parent = 0);

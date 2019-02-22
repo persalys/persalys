@@ -33,6 +33,8 @@ class OTGUI_API FieldMonteCarloWizard : public AnalysisWizard
 {
   Q_OBJECT
 
+  friend class TestFieldMonteCarloWizard;
+
 public:
   FieldMonteCarloWizard(const Analysis& analysis, QWidget* parent = 0);
 
