@@ -29,6 +29,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ParametricFunction.hxx>
 #include <openturns/IndependentCopula.hxx>
+#include <openturns/CompositeRandomVector.hxx>
 
 using namespace OT;
 
@@ -595,7 +596,7 @@ RandomVector PhysicalModelImplementation::getInputRandomVector() const
 
 RandomVector PhysicalModelImplementation::getOutputRandomVector(const Description & outputNames) const
 {
-  return RandomVector(getRestrictedFunction(outputNames), getInputRandomVector());
+  return CompositeRandomVector(getRestrictedFunction(outputNames), getInputRandomVector());
 }
 
 
