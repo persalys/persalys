@@ -148,10 +148,19 @@ void PhysicalModelWindowWidget::buildInterface()
 
   outputsLayout->addWidget(outputTableView_);
 
-  // buttons Add/Remove output
+  // buttons
   QHBoxLayout * outputButtonsLayout = new QHBoxLayout;
+
+  // button Evaluate outputs -------------------------------------------
+  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate"));
+  evaluateOutputsButton->setToolTip(tr("Evaluate the value of the outputs"));
+  connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
+  outputButtonsLayout->addWidget(evaluateOutputsButton);
+
+  outputsLayout->addLayout(outputButtonsLayout);
   outputButtonsLayout->addStretch();
 
+  // buttons Add/Remove output
   if (physicalModel_.getImplementation()->getClassName().find("Symbolic") != std::string::npos)
   {
     QPushButton * addOutputLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
@@ -166,14 +175,6 @@ void PhysicalModelWindowWidget::buildInterface()
     outputButtonsLayout->addWidget(addOutputLineButton);
     outputButtonsLayout->addWidget(removeOutputLineButton);
   }
-
-  // button Evaluate outputs -------------------------------------------
-  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate"));
-  evaluateOutputsButton->setToolTip(tr("Evaluate the value of the outputs"));
-  connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
-  outputButtonsLayout->addWidget(evaluateOutputsButton);
-
-  outputsLayout->addLayout(outputButtonsLayout);
 
   verticalSplitter->addWidget(outputsBox);
   verticalSplitter->setStretchFactor(1, 3);
@@ -264,7 +265,7 @@ void PhysicalModelWindowWidget::resizeInputTable()
   const int width = inputTableView_->horizontalHeader()->width();
   const int minSectionSize = outputTableView_->horizontalHeader()->minimumSectionSize();
   inputTableView_->horizontalHeader()->resizeSection(0, minSectionSize);
-  inputTableView_->horizontalHeader()->resizeSection(1, width - 2 * minSectionSize);
+  inputTableView_->horizontalHeader()->resizeSection(1, width - 2.4 * minSectionSize);
   inputTableView_->horizontalHeader()->resizeSection(2, minSectionSize);
 }
 
@@ -285,8 +286,9 @@ void PhysicalModelWindowWidget::resizeOutputTable()
   }
   else
   {
-    outputTableView_->horizontalHeader()->resizeSection(1, width * 3 / 10);
-    outputTableView_->horizontalHeader()->resizeSection(2, width * 4 / 10);
+    const int width2 = width - 2 * minSectionSize;
+    outputTableView_->horizontalHeader()->resizeSection(1, width2 * 4 / 10);
+    outputTableView_->horizontalHeader()->resizeSection(2, width2 * 5 / 10);
   }
 }
 
