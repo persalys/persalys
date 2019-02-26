@@ -24,6 +24,7 @@
 #include "otgui/Analysis.hxx"
 #include "otgui/LogSpinBox.hxx"
 #include "otgui/UIntSpinBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
 
@@ -49,6 +50,7 @@ private:
   LogSpinBox * sampleSizeSpinbox_;
   UIntSpinBox * blockSizeSpinbox_;
   QSpinBox * seedSpinbox_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
