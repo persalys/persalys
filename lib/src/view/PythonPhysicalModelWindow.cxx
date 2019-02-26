@@ -60,16 +60,12 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 
   // right side:
   // - tables
-  QWidget * rightSideWidget = new QWidget;
-  QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
-
   PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateInputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(resetMessageLabel()));
-  vBoxLayout->addWidget(tablesWidget);
 
-  horizontalSplitter->addWidget(rightSideWidget);
+  horizontalSplitter->addWidget(tablesWidget);
 
   ////////////////
   widgetLayout->addWidget(horizontalSplitter, 1);
