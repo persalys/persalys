@@ -36,6 +36,9 @@ class OTGUI_API PlotMatrixConfigurationWidget : public QWidget
 public:
   PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent = 0);
 
+  virtual QSize sizeHint() const;
+  virtual QSize minimumSizeHint() const;
+
 public slots:
   void showXY(bool);
   void updateLineEdits();

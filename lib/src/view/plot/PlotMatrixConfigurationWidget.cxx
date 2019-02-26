@@ -138,4 +138,21 @@ void PlotMatrixConfigurationWidget::exportPlot()
 {
   plotMatrix_->exportPlot();
 }
+
+
+QSize PlotMatrixConfigurationWidget::sizeHint() const
+{
+  QSize size = QWidget::sizeHint();
+  const int hScrollBarHeight = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+  size.setHeight(size.height() + hScrollBarHeight);
+  return size;
+}
+
+
+QSize PlotMatrixConfigurationWidget::minimumSizeHint() const
+{
+  QSize size = QWidget::minimumSizeHint();
+  size.setHeight(10);
+  return size;
+}
 }

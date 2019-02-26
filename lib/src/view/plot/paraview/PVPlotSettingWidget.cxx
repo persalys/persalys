@@ -134,6 +134,15 @@ void PVPlotSettingWidget::exportPlot()
 }
 
 
+QSize PVPlotSettingWidget::sizeHint() const
+{
+  QSize size = QWidget::sizeHint();
+  const int hScrollBarHeight = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+  size.setHeight(size.height() + hScrollBarHeight);
+  return size;
+}
+
+
 QSize PVPlotSettingWidget::minimumSizeHint() const
 {
   QSize size = QWidget::minimumSizeHint();
