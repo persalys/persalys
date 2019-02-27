@@ -829,183 +829,183 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::DataAnalysisWindow</name>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="70"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="71"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="144"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="145"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="235"/>
-        <source>Stop criteria</source>
-        <translation>Critère d&apos;arrêt</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="262"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="263"/>
         <source>Elapsed time</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="299"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="300"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="373"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="374"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="429"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="430"/>
         <source>Box plots</source>
         <translation>Boîtes à moustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="557"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="904"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="558"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="908"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="587"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="854"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="926"/>
-        <source>Scatter plots</source>
-        <translation>Diagrammes de dispersion</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="626"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="679"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="718"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="725"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="857"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="627"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="680"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="719"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="726"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="858"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="212"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="213"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="216"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="217"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="334"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="236"/>
+        <source>Stopping criteria</source>
+        <translation>Critères d&apos;arrêt</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="335"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="338"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="339"/>
         <source>PDF:</source>
         <translation>PDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="340"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="341"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="345"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="346"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="349"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="350"/>
         <source>CDF:</source>
         <translation>CDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="351"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="352"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="406"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="407"/>
         <source>boxplot</source>
         <translation>boiteAmoustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="412"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="413"/>
         <source>Box plot:</source>
         <translation>Boîte à moustaches :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="445"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="446"/>
         <source>Spearman&apos;s matrix estimate</source>
         <translation>Estimation de la matrice de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="525"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="526"/>
         <source>Spearman&apos;s coefficient</source>
         <translation>Coefficient de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="541"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="542"/>
         <source>Dependence</source>
         <translation>Dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="611"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="641"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="663"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="704"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="733"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="748"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="588"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="855"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="930"/>
+        <source>Scatter plot</source>
+        <translation>Diagramme de dispersion</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="612"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="642"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="664"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="705"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="734"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="749"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="615"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="708"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="616"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="709"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="632"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="633"/>
         <source>Points</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="654"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="655"/>
         <source>Failed blocks</source>
         <translation>Blocs échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="676"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="755"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="820"/>
-        <source>Not evaluated points</source>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="677"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="756"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="821"/>
+        <source>Non-evaluated points</source>
         <translation>Points non évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="740"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="813"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="808"/>
+        <source>Evaluated points</source>
+        <translation>Points évalués</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="741"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="814"/>
         <source>Failed points</source>
         <translation>Points échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="782"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="783"/>
         <source>Status
 0: failed; 1: ok</source>
         <translation>Statut
 0: échoué; 1: ok</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="794"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="888"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="795"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="889"/>
         <source>Cobweb plot</source>
         <translation>Graphique Cobweb</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="807"/>
-        <source>Succeed points</source>
-        <translation>Points réussis</translation>
     </message>
 </context>
 <context>
@@ -1601,7 +1601,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DesignOfExperimentEvaluationWizard.cxx" line="208"/>
-        <source>The block size must be lesser or equal to the size of the input sample</source>
+        <source>The block size must be less than or equal to the size of the input sample</source>
         <translation>La taille de bloc doit être inférieure ou égale à la taille de l&apos;échantillon d&apos;entrée</translation>
     </message>
 </context>
@@ -1774,7 +1774,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="300"/>
-        <source>The lower bound must be lesser than the upper bound</source>
+        <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
@@ -1784,7 +1784,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="379"/>
-        <source>Delta must be lesser than (the upper bound - the lower bound)</source>
+        <source>Delta must be less than (the upper bound - the lower bound)</source>
         <translation>L&apos;incrément doit être inférieur à (la borne supérieure - la borne inférieure)</translation>
     </message>
 </context>
@@ -2501,7 +2501,7 @@ centrale</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldMonteCarloWizard.cxx" line="136"/>
-        <source>Please select at least one stop criteria</source>
+        <source>Select at least a stopping criterion</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
@@ -2511,7 +2511,7 @@ centrale</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldMonteCarloWizard.cxx" line="145"/>
-        <source>The maximum calls can not be lesser than the block size</source>
+        <source>The maximum calls can not be less than the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
 </context>
@@ -3509,7 +3509,7 @@ bayésien (BIC)</translation>
     <name>OTGUI::MainWidget</name>
     <message>
         <location filename="../lib/src/view/MainWidget.cxx" line="35"/>
-        <source>Graph setting</source>
+        <source>Graph settings</source>
         <translation>Configuration du graphique</translation>
     </message>
 </context>
@@ -3580,18 +3580,18 @@ bayésien (BIC)</translation>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="705"/>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="740"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="703"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="738"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="705"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="703"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="740"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="738"/>
         <source>The current study has not screening analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat de criblage.</translation>
     </message>
@@ -3746,7 +3746,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="314"/>
-        <source>The lower bound must be lesser than the upper bound</source>
+        <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
@@ -4231,7 +4231,7 @@ at</source>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloPage.cxx" line="145"/>
-        <source>Please select at least one stop criteria</source>
+        <source>Select at least a stopping criterion</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
@@ -4241,7 +4241,7 @@ at</source>
     </message>
     <message>
         <location filename="../lib/src/view/MonteCarloPage.cxx" line="154"/>
-        <source>The maximum calls can not be lesser than the block size</source>
+        <source>The maximum calls can not be less than the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
 </context>
@@ -4302,7 +4302,7 @@ at</source>
     </message>
     <message>
         <location filename="../lib/src/view/MorrisPage.cxx" line="120"/>
-        <source>The lower bounds must be lesser than the upper bounds</source>
+        <source>The lower bounds must be less than the upper bounds</source>
         <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
     </message>
     <message>
@@ -4532,7 +4532,7 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/MorrisTableModel.cxx" line="115"/>
-        <source>The lower bound must be lesser than the upper bound</source>
+        <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
 </context>
@@ -4699,7 +4699,7 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/OptimizationTableModel.cxx" line="201"/>
-        <source>The lower bound must be lesser than the upper bound</source>
+        <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
@@ -4741,11 +4741,6 @@ ou interaction</translation>
         <translation>Maximisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="116"/>
-        <source>Stop criteria</source>
-        <translation>Critère d&apos;arrêt</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="120"/>
         <source>Number of function evaluations</source>
         <translation>Nombre d&apos;évaluations</translation>
@@ -4757,7 +4752,7 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="253"/>
-        <source>The lower bounds must be lesser than the upper bounds</source>
+        <source>The lower bounds must be less than the upper bounds</source>
         <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
     </message>
     <message>
@@ -4769,6 +4764,11 @@ ou interaction</translation>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="129"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="116"/>
+        <source>Stopping criteria</source>
+        <translation>Critères d&apos;arrêt</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="137"/>
@@ -5492,7 +5492,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="102"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="157"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="166"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
@@ -5503,7 +5503,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="106"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="161"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="170"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
@@ -5518,67 +5518,67 @@ métamodèle</translation>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="158"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="167"/>
         <source>Add an output</source>
         <translation>Ajouter une sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="162"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="171"/>
         <source>Remove the selected output</source>
         <translation>Supprimer la sortie sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="171"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="155"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="172"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="156"/>
         <source>Evaluate the value of the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="186"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="187"/>
         <source>Enable multiprocessing</source>
         <translation>Parallélisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="188"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="189"/>
         <source>Warning: the parallelization operation must be significantly faster than the code execution</source>
         <translation>Attention: la parallélisation doit être significativement plus rapide que l&apos;exécution du code</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="200"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="201"/>
         <source>Definition</source>
         <translation>Définition</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="208"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="209"/>
         <source>Finite difference step definition</source>
         <translation>Définition du pas de différence finie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="231"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="232"/>
         <source>Differentiation</source>
         <translation>Différentiation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="346"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="348"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="364"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="366"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="369"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="371"/>
         <source>Not possible to evaluate the outputs %1</source>
         <translation>Impossible d&apos;évaluer les sorties %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="385"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="387"/>
         <source>Index parameter : %1</source>
         <translation>Paramètre d&apos;indexation : %1</translation>
     </message>
@@ -6052,34 +6052,39 @@ métamodèle</translation>
 <context>
     <name>OTGUI::SRCPage</name>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="46"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="48"/>
         <source>SRC parameters</source>
         <translation>Paramètres de SRC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="51"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="53"/>
         <source>Evaluation parameters</source>
         <translation>Paramètres d&apos;évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="55"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="57"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="65"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="67"/>
         <source>Block size</source>
         <translation>Taille de bloc</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="76"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="78"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCPage.cxx" line="80"/>
+        <location filename="../lib/src/view/SRCPage.cxx" line="82"/>
         <source>Seed</source>
         <translation>Graine</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SRCPage.cxx" line="140"/>
+        <source>The sample size can not be less than the block size</source>
+        <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
 </context>
 <context>
@@ -6276,7 +6281,7 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="145"/>
-        <source>Warning: The total index is lesser than the first order index.</source>
+        <source>Warning: The total index is less than the first order index.</source>
         <translation>Attention : L&apos;indice total est inférieur à l&apos;indice du premier ordre.</translation>
     </message>
     <message>
@@ -6309,7 +6314,7 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SimulationReliabilityPage.cxx" line="123"/>
-        <source>Please select at least one stop criteria</source>
+        <source>Select at least a stopping criterion</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
@@ -6319,7 +6324,7 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SimulationReliabilityPage.cxx" line="132"/>
-        <source>The maximum calls can not be lesser than the block size</source>
+        <source>The maximum calls can not be less than the block size</source>
         <translation>Le nombre d&apos;appels ne peut pas être inférieur à la taille de bloc</translation>
     </message>
 </context>
@@ -6367,8 +6372,8 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SimulationReliabilityResultWindow.cxx" line="135"/>
-        <source>Stop criteria</source>
-        <translation>Critère d&apos;arrêt</translation>
+        <source>Stopping criteria</source>
+        <translation>Critères d&apos;arrêt</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SimulationReliabilityResultWindow.cxx" line="141"/>
@@ -6513,12 +6518,12 @@ de l&apos;indice total</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolPage.cxx" line="166"/>
-        <source>Please select at least one stop criterion</source>
+        <source>Select at least a stopping criterion</source>
         <translation>Sélectionner au moins un critère d&apos;arrêt</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolPage.cxx" line="175"/>
-        <source>The maximum calls (%1) can not be lesser than: replication_size(%2)*(number_of_inputs (%3) + 2)=%4</source>
+        <source>The maximum calls (%1) can not be less than: replication_size(%2)*(number_of_inputs (%3) + 2)=%4</source>
         <translation>Le maximal d&apos;appels (%1) ne peut pas être inférieur à : taille_réplication(%2)*(nombre_entrées (%3) + 2)=%4</translation>
     </message>
     <message>
@@ -6540,11 +6545,6 @@ de l&apos;indice total</translation>
         <translation>Paramètres de l&apos;analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="65"/>
-        <source>Sobol&apos; indices</source>
-        <translation>Indices de Sobol</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="126"/>
         <source>Indices</source>
         <translation>Indices</translation>
@@ -6560,11 +6560,6 @@ de l&apos;indice total</translation>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SobolResultWindow.cxx" line="145"/>
-        <source>Stop criteria</source>
-        <translation>Critère d&apos;arrêt</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="158"/>
         <source>Model</source>
         <translation>Modèle</translation>
@@ -6575,9 +6570,19 @@ de l&apos;indice total</translation>
         <translation>Sorties</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="65"/>
+        <source>Sobol indices</source>
+        <translation>Indices de Sobol</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="138"/>
         <source>Confidence interval length</source>
         <translation>Taille de l&apos;intervalle de confiance</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SobolResultWindow.cxx" line="145"/>
+        <source>Stopping criteria</source>
+        <translation>Critères d&apos;arrêt</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SobolResultWindow.cxx" line="149"/>
@@ -6594,8 +6599,8 @@ de l&apos;indice total</translation>
     <name>OTGUI::StopCriteriaGroupBox</name>
     <message>
         <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="36"/>
-        <source>Stop criteria</source>
-        <translation>Critère d&apos;arrêt</translation>
+        <source>Stopping criteria</source>
+        <translation>Critères d&apos;arrêt</translation>
     </message>
     <message>
         <location filename="../lib/src/view/StopCriteriaGroupBox.cxx" line="58"/>

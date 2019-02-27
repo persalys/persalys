@@ -117,7 +117,7 @@ bool MorrisPage::validatePage()
   // check bounds
   if (tableModel_->getAnalysis().getBounds().isEmpty())
   {
-    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
+    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
     return false;
   }
   // check number of variables which vary

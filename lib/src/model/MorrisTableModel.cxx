@@ -112,7 +112,7 @@ QVariant MorrisTableModel::data(const QModelIndex & index, int role) const
     if (role == Qt::ForegroundRole && boundsIsEmpty)
       return QColor(Qt::red);
     else if (role == Qt::ToolTipRole && boundsIsEmpty)
-      return tr("The lower bound must be lesser than the upper bound");
+      return tr("The lower bound must be less than the upper bound");
   }
   return QVariant();
 }

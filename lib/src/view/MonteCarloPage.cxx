@@ -50,7 +50,7 @@ void MonteCarloPage::buildInterface()
 
   /// simulation widgets
 
-  // stop criteria
+  // stopping criteria
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
@@ -142,7 +142,7 @@ bool MonteCarloPage::validatePage()
   QString errorMessage;
 
   if (!stopCriteriaGroupBox_->isValid())
-    errorMessage = tr("Please select at least one stop criteria");
+    errorMessage = tr("Select at least a stopping criterion");
   else
   {
     if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
@@ -151,7 +151,7 @@ bool MonteCarloPage::validatePage()
     if (stopCriteriaGroupBox_->isMaxCallsRequired())
     {
       if (stopCriteriaGroupBox_->getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
-        errorMessage = tr("The maximum calls can not be lesser than the block size");
+        errorMessage = tr("The maximum calls can not be less than the block size");
     }
   }
 

@@ -311,7 +311,7 @@ bool MeshDefinitionWizard::validateCurrentPage()
   {
     const Interval bounds(tableModel_->item(0, 2)->data(Qt::DisplayRole).toDouble(), tableModel_->item(0, 3)->data(Qt::DisplayRole).toDouble());
     if (bounds.isNumericallyEmpty())
-      errorMessageLabel_->setErrorMessage(tr("The lower bound must be lesser than the upper bound"));
+      errorMessageLabel_->setErrorMessage(tr("The lower bound must be less than the upper bound"));
     if (tableModel_->item(0, 4)->data(Qt::DisplayRole).toInt() < 2)
       errorMessageLabel_->setErrorMessage(tr("The mesh must contain at least two nodes"));
   }

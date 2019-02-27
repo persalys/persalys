@@ -79,7 +79,7 @@ void GridMeshModel::setParameters(const Interval& bounds, const Indices& nbNodes
   if (nbNodes.getSize() != getIndexParameters().getSize())
     throw InvalidArgumentException(HERE) << "The list of number of nodes dimension must be equal to the dimension of the mesh " << getIndexParameters().getSize();
   if (bounds.isNumericallyEmpty())
-    throw InvalidArgumentException(HERE) << "The lower bounds must be lesser than the upper bounds";
+    throw InvalidArgumentException(HERE) << "The lower bounds must be less than the upper bounds";
   if (nbNodes[0] < 2)
     throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
 

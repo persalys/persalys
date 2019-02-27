@@ -131,8 +131,8 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  // stop criteria
-  QGroupBox * parametersGroupBox = new QGroupBox(tr("Stop criteria"));
+  // Stopping criteria
+  QGroupBox * parametersGroupBox = new QGroupBox(tr("Stopping criteria"));
   QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
 
   QStringList namesList;

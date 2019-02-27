@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QGroupBox for stop criteria
+ *  @brief QGroupBox for Stopping criteria
  *
  *  Copyright 2015-2018 EDF-Phimeca
  *
@@ -33,7 +33,7 @@ namespace OTGUI
 {
 
 StopCriteriaGroupBox::StopCriteriaGroupBox(const Criteria criteria, QWidget* parent)
-  : QGroupBox(tr("Stop criteria"), parent)
+  : QGroupBox(tr("Stopping criteria"), parent)
   , criteria_(criteria)
   , maxiCoefOfVarCheckBox_(0)
   , maxiCoefficientOfVariationSpinbox_(0)

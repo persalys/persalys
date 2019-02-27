@@ -112,8 +112,8 @@ void OptimizationWizard::buildInterface()
 
   pageLayout->addWidget(paramGroupBox);
 
-  // Stop criteria
-  QGroupBox * stopCriteriaGroupBox = new QGroupBox(tr("Stop criteria"));
+  // Stopping criteria
+  QGroupBox * stopCriteriaGroupBox = new QGroupBox(tr("Stopping criteria"));
   QGridLayout * stopCriteriaGroupBoxLayout = new QGridLayout(stopCriteriaGroupBox);
 
   // max number iterations
@@ -250,7 +250,7 @@ bool OptimizationWizard::validateCurrentPage()
     Interval varBounds(lowerB, upperB, finiteLowerB, finiteUpperB);
     if (varBounds.isEmpty())
     {
-      errorMessageLabel_->setErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
+      errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
       return false;
     }
     if (!varBounds.contains(variableInputsValues))

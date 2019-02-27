@@ -57,7 +57,7 @@ void FieldMonteCarloWizard::buildInterface()
   outputsGroupBox_ = new OutputsSelectionGroupBox(model.getSelectedOutputsNames(), analysis_ptr->getInterestVariables(), this);
   pageLayout->addWidget(outputsGroupBox_, 0, Qt::AlignTop);
 
-  // stop criteria
+  // Stopping criteria
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox(StopCriteriaGroupBox::Time_Calls);
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
   stopCriteriaGroupBox_->setMaximumCalls(analysis_ptr->getMaximumCalls());
@@ -133,7 +133,7 @@ bool FieldMonteCarloWizard::validateCurrentPage()
     errorMessage = tr("At least one output must be selected");
 
   if (!stopCriteriaGroupBox_->isValid())
-    errorMessage = tr("Please select at least one stop criteria");
+    errorMessage = tr("Select at least a stopping criterion");
   else
   {
     if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
@@ -142,7 +142,7 @@ bool FieldMonteCarloWizard::validateCurrentPage()
     if (stopCriteriaGroupBox_->isMaxCallsRequired())
     {
       if (stopCriteriaGroupBox_->getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
-        errorMessage = tr("The maximum calls can not be lesser than the block size");
+        errorMessage = tr("The maximum calls can not be less than the block size");
     }
   }
 

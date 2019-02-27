@@ -62,7 +62,7 @@ void SobolResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Sobol' indices")));
+  widgetLayout->addWidget(new TitleLabel(tr("Sobol indices")));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();
@@ -131,7 +131,7 @@ void SobolResultWindow::buildInterface()
     QWidget * paramWidget = new QWidget;
     QGridLayout * paramWidgetLayout = new QGridLayout(paramWidget);
 
-    // stop criteria
+    // stopping criteria
     QStringList namesList;
     namesList << tr("Elapsed time")
               << tr("Number of calls")
@@ -142,7 +142,7 @@ void SobolResultWindow::buildInterface()
                << QString::number(result_.getCallsNumber())
                << QString::number(result_.getConfidenceIntervalLength());
 
-    ParametersWidget * parametersWidget = new ParametersWidget(tr("Stop criteria"), namesList, valuesList, true, true);
+    ParametersWidget * parametersWidget = new ParametersWidget(tr("Stopping criteria"), namesList, valuesList, true, true);
     paramWidgetLayout->addWidget(parametersWidget);
     paramWidgetLayout->setRowStretch(1, 1);
 

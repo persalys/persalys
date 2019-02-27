@@ -205,7 +205,7 @@ bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
   }
   if (blockSizeGroupBox_->getBlockSizeValue() > analysis_ptr->getOriginalInputSample().getSize())
   {
-    message = tr("The block size must be lesser or equal to the size of the input sample");
+    message = tr("The block size must be less than or equal to the size of the input sample");
   }
   errorMessageLabel_->setErrorMessage(message);
   if (!message.isEmpty())

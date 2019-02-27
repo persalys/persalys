@@ -32,7 +32,7 @@ MainWidget::MainWidget(QWidget* parent)
   : QWidget(parent)
   , studyTree_(new StudyTreeView(this))
   , subWindowsStackedWidget_(new SubWindowsStackedWidget(this))
-  , graphSettingDockWidget_(new QDockWidget(tr("Graph setting"), this))
+  , graphSettingDockWidget_(new QDockWidget(tr("Graph settings"), this))
   , actions_(new Actions(this))
 {
   buildInterface();

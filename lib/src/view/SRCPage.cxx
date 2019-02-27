@@ -137,7 +137,7 @@ bool SRCPage::validatePage()
 {
   if (sampleSizeSpinbox_->value() < blockSizeSpinbox_->value())
   {
-    errorMessageLabel_->setErrorMessage(tr("The sample size can not be lesser than the block size"));
+    errorMessageLabel_->setErrorMessage(tr("The sample size can not be less than the block size"));
     return false;
   }
   return true;

@@ -145,7 +145,7 @@ void MetaModelAnalysis::setLeaveOneOutValidation(const bool validation)
 void MetaModelAnalysis::setTestSampleValidationPercentageOfPoints(const UnsignedInteger percentage)
 {
   if (percentage == 0 || percentage >= 100)
-    throw InvalidArgumentException(HERE) << "The percentage must be greater than 0 and lesser than 100";
+    throw InvalidArgumentException(HERE) << "The percentage must be greater than 0 and less than 100";
   percentageTestSample_ = percentage;
 }
 
