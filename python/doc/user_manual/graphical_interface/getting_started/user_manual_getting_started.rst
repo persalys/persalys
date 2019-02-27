@@ -14,48 +14,43 @@ User manual - First steps
 The main window of the graphical interface consists of a working space in which the other
 windows (model definition or result window) open, surrounded by:
 
-- The study tree (on the left),
+- The **study tree** displays the models and analyses performed in the studies. Elements are organized
+  in sections, in bold (ex: **Physical models**, **Evaluation**, **Definition**), in which the user can create analyses and models.
 
   .. image:: /user_manual/graphical_interface/getting_started/tree.png
       :align: center
 
-  It contains the study and all subsequent models defined and analysis performed.
-  The name of each element created by can be modified by the user by double-click on the element.
-  The elements in bold (such as **Physical models**, **Evaluation**, **Definition**, etc)
-  cannot be renamed.
-  The right click on these elements gives access to the context menu of the elements. Any element
-  can be removed through this context menu.
 
-- The main menubar and toolbar (on top).
+- The main **menu bar** and **tool bar**.
 
   .. image:: /user_manual/graphical_interface/getting_started/menuBar.png
       :align: center
 
 
-- The Python console (at the bottom) shown by default,
+- The **Python console** shown by default,
 
   .. image:: /user_manual/graphical_interface/getting_started/pythonConsole.png
       :align: center
 
 
-- The graphic settings (below the study tree) which is shown when figures are displayed.
+- The **graphic settings** window appears when figures are displayed in the main window. This window
+  allows to set up graphical parameters for all the graphs of the interface.
 
   .. image:: /user_manual/graphical_interface/getting_started/graphicConfiguration.png
       :align: center
 
 
-1-2 On start up
-'''''''''''''''
+1-2 On startup
+''''''''''''''
 
 .. image:: /user_manual/graphical_interface/getting_started/window_startUp.png
     :align: center
 
-A window appears when the OTGui is started. It contains 3 items:
-  - **New study**: Create a new Study
-  - **Open study**: Display a dialog box for choosing a study
-    to load. The loaded study will become the current
-    study.
-  - **Import Python script**: Display a dialog box for loading an OTGui Python script.
+The interface startup window shows 3 items:
+  - **New study**: Create a new study.
+  - **Open study**: Choose an existing study from a dialog box.
+    The loaded study becomes the current study.
+  - **Import Python script**: Load a Python Script from a dialog box.
     It is impossible to load a study when another one is already opened.
 
 
@@ -68,26 +63,25 @@ File Menu
 .. image:: /user_manual/graphical_interface/getting_started/fileMenu.png
     :align: center
 
-The file menu gathers the following shortcuts:
+The **File** menu gathers the following shortcuts:
 
-- **New**: Create a new study
+- **New**: Create a new study.
 
-- **Open...**: Display a dialog box for choosing a study
-  to load. The loaded study will become the current
-  study.
+- **Open...**: Choose an existing study from a dialog box.
+  The loaded study becomes the current study.
 
-- **Open Recent**: Display a list of studies recently used for opening quickly one of them
+- **Open Recent**: Quick access to recently loaded studies.
 
-- **Save**: Save the current study
+- **Save**: Save the current study.
 
-- **Save As...**: Display a dialog box for choosing the directory to save the current project.
+- **Save As...**: Choose the directory where to save the current project.
 
-- **Import Python...**: Display a dialog box for loading an OTGui Python script.
+- **Import Python...**: Load a Python Script from a dialog box.
 
-- **Close**: Close the current Study. A pop-up dialog window will appear if the current Study has not been saved.
+- **Close**: Close the current Study. A pop-up dialog window appears if the current Study has not been saved.
   Any Study may also be closed through its context menu.
 
-- **Exit**: Quit OTGui
+- **Exit**: Quit the interface.
 
 View Menu
 ~~~~~~~~~
@@ -95,20 +89,37 @@ View Menu
 .. image:: /user_manual/graphical_interface/getting_started/viewMenu.png
     :align: center
 
-The view menu allows the user to display/hide the Python console.
+The **View** menu allows the user to display/hide the Python console.
+
+Help Menu
+~~~~~~~~~
+
+.. image:: /user_manual/graphical_interface/getting_started/helpMenu.png
+    :align: center
+
+The **Help** menu gathers the following shortcuts:
+
+- **User's manual**: Open the user's manual in a Web browser.
+
+- **About OTGui**: Display information (version, license, libraries, etc.) about the interface in a pop-up dialog window.
 
 2- Create a study
 =================
 
 .. |newButton| image:: /user_manual/graphical_interface/getting_started/document-new22x22.png
 
-There are three ways to create a new study:
+There are several ways to create a new study:
 
-- Use the button **New Study** of the window which appears when the OTGui is launched;
+- Use the button **New Study** of the startup window
 
-- Click on |newButton| in the tool bar;
+  .. image:: /user_manual/graphical_interface/getting_started/startUpWindowButtons.png
+      :align: center
 
-- Click on **New** in the file menu.
+- Click on |newButton| in the tool bar
+
+- Click on **New** in the file menu
+
+- Press Ctrl+N
 
 When a study is created, an item appears in the study tree. This item is associated with a window
 which provides ways to define models:
@@ -117,12 +128,26 @@ which provides ways to define models:
     :align: center
 
 The context menu of study item gathers the same actions as the window:
-  - **Symbolic model**: Define a physical model with analytical formulas
-  - **Python model**: Define a physical model with a Python script
-  - **Data model**: Define a physical model with samples
 
-and the following actions:
-  - **Rename**: Rename the study;
-  - **Export Python**: Display a dialog box for choosing the directory to export the study as an OTGui Python script;
-  - **Save**: Save the study;
-  - **Close**: Close the study. A pop-up dialog window will appear if the study has not been saved.
+  .. image:: /user_manual/graphical_interface/getting_started/studyItemContextMenu.png
+      :align: center
+
+.. _modelsdefonstudywindow:
+
+It proposes to create models:
+  - Models defined with a vector function:
+     - **Symbolic model**: Physical model defined with analytical formulas
+     - **Python model**: Physical model defined with a Python script
+     - **YACS model**: Physical model defined with a YACS scheme (optional)
+     - **FMI model**: Physical model defined with a FMU file (optional)
+  - Models defined with a field function:
+     - **Symbolic Field model**: Physical model defined with analytical formulas and a mesh
+     - **Python Field model**: Physical model defined with a Python script and a mesh
+  - Models defined with a data sample:
+     - **Data model**: Physical model defined with a sample
+
+The context menu also allows the following actions:
+  - **Rename**: Rename the study
+  - **Export Python**: Choose a directory to export the study as a Python script
+  - **Save**: Save the study
+  - **Close**: Close the study. A pop-up dialog window appears if the study has not been saved

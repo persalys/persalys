@@ -7,70 +7,81 @@ User manual - Probabilistic analyses
 1- Probabilistic model
 ======================
 
-In order to perform probabilistic analysis, the user needs first to build a
-probabilistic model.
+In order to perform probabilistic analysis, build first a probabilistic model.
 
 New probabilistic model can be created through:
-  - the context menu of the **Definition** item of the relevant physical model in the study tree;
+  - the **Probabilistic model** item in the context menu of the relevant model in the study tree
+
+  .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+      :align: center
+
   - the **Probabilistic model definition** box of the model diagram
 
-A physical model can contain only one probabilistic model.
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/probaModelBox.png
+      :align: center
+
+A physical model contain only one probabilistic model.
 
 At the creation of a probabilistic model, a new item named **Probabilistic model** is added in the
 study tree below the physical model item.
 
-Its context menu contains four actions:
-  - **Design of experiments**: Create a new design of experiments;
-  - **Limit state**: Create a new limit state;
-  - **Central tendency**: Create a new central tendency analysis;
-  - **Sensitivity**: Create a new sensitivity analysis;
+Its context menu contains the following actions:
+  - **Design of experiments**: Create a new design of experiments
+  - **Limit state**: Create a new limit state
+  - **Central tendency**: Create a new central tendency analysis
+  - **Sensitivity**: Create a new sensitivity analysis
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
-    :align: center
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelMarginals.png
+     :align: center
 
 This item is associated with a window which has two tabs:
 
 - the **Marginals** tab:
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelMarginals.png
-        :align: center
 
-    The left side of the tab contains a table listing all the input variables defined in the physical model.
-    By default all of them are deterministic variables.
-    To make a variable stochastic the user has to check its corresponding line. By default the variable follows
-    the Gaussian distribution. To change its distribution the user can use the combo box of the
-    **Distribution** column.
+  - On the left, the user can choose stochastic input variables and their distribution.
+      - Variables are deterministic by default: To make a variable stochastic, check the
+        variable box.
+      - Variable distribution is Gaussian distribution by default. To change the distribution,
+        select one among the proposed distributions in the combo box of the **Distribution**
+        column.
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelDistributionsList.png
-        :align: center
+      .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelDistributionsList.png
+          :align: center
 
-    The right side of the probabilistic model window is updated depending of the selected variable and
-    its distribution. It shows the parameters of the distribution together with truncation parameters.
-    The values are expected to be floating points or integers, with respect to the distribution support.
-    If a wrong value is used, it will return to its previous value and an error message will appear at the bottom
-    of the window.
+      .. |infoButton| image:: /user_manual/graphical_interface/probabilistic_analysis/documentinfo.png
 
-    .. |infoButton| image:: /user_manual/graphical_interface/probabilistic_analysis/documentinfo.png
+  - The right side allows to:
+      - For a deterministic input:
+          - show its value (defined in the physical model)
+      - For a stochastic input:
+          - set up its distribution parameters:
+              - click on the icon |infoButton| to see the parameters definition
+              - Use floating points or integers, with respect to the distribution support to set up the parameters
+                (If a value is not valid: the previous value is used and an error message appears at the bottom
+                of the window)
+              - Check off **Lower bound** and/or **Upper bound** and set the bounds value
+                to truncate the distribution
+              - with the **Type** combo box, select the suitable set of parameters to configure the
+                distributions: LogNormal, Weibull and Gumbel
 
-    The icon |infoButton| is an hyperlink to the OpenTURNS documentation.
+              .. image:: /user_manual/graphical_interface/probabilistic_analysis/paramTypeProbaModel.png
+                  :align: center
 
-    There are different ways to set the parameters of the LogNormal, Weibull and Gumbel distributions.
-    To select the good one, click on the **Type** select button.
+          - show its distribution PDF/CDF
+              - The **Graphic settings** window (below the study tree) allows to:
+                  - Select the graphic type: PDF or CDF (default: PDF)
+                  - Export the figure
+                  - Set up parameters:
+                      - Graph title (expected: string)
+                      - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                        string), minimum/maximum bounds (expected: floating point)
 
-    The user can configure the plot of the distribution and choose between PDF/CDF with the graphic
-    settings below the study tree.
+              - Interactions:
+                  - Left-click to translate the graph
+                  - Mouse wheel up/down to zoom/zoom out
 
-    The user can define:
-      - The title of the graph, expected to be a string;
 
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point.
-
-    The **Export** button opens a dialog box for the user to select where the
-    figure has to be saved.
-
-    In the proposed distributions list, there is the item **Inference result**. If the current study has at least
+  - In the proposed distributions list, there is the item **Inference result**. If the current study has at least
     an :ref:`inference analysis result <inferenceAnalysis>`, when clicking on
     this item, the following window appears:
 
@@ -91,52 +102,65 @@ This item is associated with a window which has two tabs:
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelDependence.png
         :align: center
 
-    All the stochastic input variables are listed at the left side of this tab.
+    On the left, all the stochastic input variables are listed.
     By default no dependence is set between these variables.
 
-    To add dependence the user has to:
-      - create a group of at least two variables by selecting the variables in the list
-      - add this group in the table by clicking on the right arrow
-      - choose a copula in the list in the second column of the table.
-        If the group contains more than two variables only the normal copula is available.
+    To add dependence:
+      - Select at least two variables
 
-      .. image:: /user_manual/graphical_interface/probabilistic_analysis/copulasList.png
-          :align: center
+        .. image:: /user_manual/graphical_interface/probabilistic_analysis/selectVar_DependenceTab.png
+            :align: center
 
-      - parametrize the copula at the right side of the window
+      - Click on the right arrow:
+          - these variables are disabled in the first table (a variable can belong to only one group)
+          - the set of variables appears in the second table:
+              - the default copula is the Normal copula defined by a correlation matrix equal to
+                the identity matrix. So, at this step, the variables are still independent.
 
-    By default the dependence is modeled by a Normal copula defined by a correlation matrix equal to
-    the identity matrix (so the variables are independent...)
+              .. image:: /user_manual/graphical_interface/probabilistic_analysis/defaultCopula_DependenceTab.png
+                  :align: center
 
-    The user may define correlation between the variables by modifying the upper triangular
-    part of the Spearman correlation matrix. OTGui handles automatically the symmetry of the correlation
-    matrix. The values are expected to be floating points or integers,
-    included in the interval :math:`\left[-1; 1\right]`.
-    The Spearman correlation matrix must be definite positive. If a wrong value is used, it will return
-    to its previous value and an error message will appear at the bottom of the window.
+        - To change the copula, select one among the proposed copulas in the combo box of the **Copula**
+          column. The interface proposed bivariate copulas and the Normal copula.
 
-    Example:
+          .. image:: /user_manual/graphical_interface/probabilistic_analysis/copulasList.png
+            :align: center
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelCorrelation.png
-        :align: center
+        - On the right size, set up the copula parameters:
+            - click on the icon |infoButton| to see the parameters definition
+            - the bivariate copulas are defined with one parameter (expected: floating points or integers)
 
-    To remove dependence, select a group in the table and click on the left arrow.
+                .. image:: /user_manual/graphical_interface/probabilistic_analysis/bivariateCopulaParam.png
+                    :align: center
 
-    The icon |infoButton| is an hyperlink to the OpenTURNS documentation.
+            - the Normal copula is defined with a Spearman correlation matrix:
+                - modify values on the upper triangular part of the matrix
+                  (expected: floating points or integers in the interval :math:`\left[-1; 1\right]`)
+                - the symmetry of the correlation matrix is automatically handled
+                - the Spearman correlation matrix must be definite positive.
+                  If a value is not valid: the previous value is used and an error message appears at the bottom
+                  of the window
 
-    The user can configure the plot of the distribution and choose between PDF/CDF with the graphic
-    settings below the study tree.
+                .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelCorrelation.png
+                    :align: center
 
-    The user can define:
-      - The title of the graph, expected to be a string;
+            - view the copula PDF/CDF
+               - The **Graphic settings** window (below the study tree) allows to:
+                  - Select the graphic type: PDF or CDF (default: PDF)
+                  - Export the figure
+                  - Set up parameters:
+                      - Graph title (expected: string)
+                      - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                        string), minimum/maximum bounds (expected: floating point)
 
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point.
+               - Interactions:
+                  - Left-click to translate the graph
+                  - Mouse wheel up/down to zoom/zoom out
 
-    The **Export** button opens a dialog box for the user to select where the
-    figure has to be saved.
+    To remove dependence:
+      - Select a group of variables in the second table
+      - Click on the left arrow: these variables are enabled again in the first table
+
 
     In the copulas list, there is the item **Inference result**. If the current study has at least
     a :ref:`dependence inference result <dependenceInference>`, when clicking on
@@ -158,97 +182,106 @@ This item is associated with a window which has two tabs:
 2- Limit state
 ==============
 
-To perform a reliability analysis the user must define first a limit state.
-A limit state can be defined only if the model contains stochastic input variables.
+To perform a reliability analysis, define first a limit state
+(possible only if the model contains stochastic input variables).
 
 A new limit state can be created through:
-  - the context menu of the probabilistic model item;
-  - the **Limit state definition** box of the physical model diagram;
-  - the context menu of the **Reliability** item (if it already exists).
+  - the context menu of the probabilistic model item
 
-When creating a limit state a new element is added in the study tree below the item named
-**Reliability**.
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
+        :align: center
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateItem.png
-    :align: center
+  - the **Limit state definition** box of the model diagram
 
-Its context menu contains two actions:
-  - **Threshold exceedance**: Create a new threshold exceedance analysis;
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probaAnalysesBoxes.png
+        :align: center
+
+  - the context menu of the **Reliability** item (if it already exists)
+
+When a limit state is required, a new element is added in the study tree below **Reliability**.
+
+Its context menu contains the following actions:
+  - **Rename**: Rename the limit state
+  - **Threshold exceedance**: Create a new threshold exceedance analysis
   - **Remove**: Remove the limit state and all the analyses depending on it
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateContextMenu.png
-    :align: center
 
-This item is associated with the following window:
+This item is associated with a window which allows to:
+  - select the output to analyse
+  - define the failure event by:
+      - selecting an operator:
+          - <= (less or equal)
+          - >= (greater or equal)
+          - > (greater than)
+          - < (less than)
+      - setting up the threshold defining the failure domain (default:  0., expected: floating points or integers)
+
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitState.png
     :align: center
 
-In this window, the user has to define the threshold defining the
-failure domain corresponding to the selected output. By default it equals 0. The values are expected
-to be floating points or integers. The available operators to define the failure event are:
-
-- <= (less or equal);
-- >= (greater or equal);
-- > (greater than);
-- < (less than).
 
 3- Threshold exceedance analysis
 ================================
 
 The user can require a computation of the probability of failure relative to the limit state through:
-  - the context menu of the relevant limit state;
-  - the **Reliability** box of the physical model diagram.
+  - the context menu of the relevant limit state
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateContextMenu.png
+        :align: center
+
+  - the **Reliability** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/reliabilityBox.png
+        :align: center
 
 3-1 Definition
 ''''''''''''''
 
-When requiring this analysis the following window appears to define its parameters.
+When an analysis is required, the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityAnalysis.png
     :align: center
 
-The window proposes simulation methods:
-  - Monte Carlo
-  - FORM - Importance sampling : the FORM algorithm starts from the result of the Importance sampling analysis
+First, select a method:
+  - the simulation methods are:
+      - `Monte Carlo <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/monte_carlo_simulation.html>`_
+      - FORM - `Importance sampling <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_simulation.html>`_:
+        the FORM algorithm starts from the result of the Importance sampling analysis
 
-and approximation methods:
-  - First Order Reliability Method (FORM)
-  - Second Order Reliability Method (SORM)
+  - the approximation methods are:
+      - First Order Reliability Method (`FORM <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/form_approximation.html>`_)
+      - Second Order Reliability Method (`SORM <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sorm_approximation.html>`_)
+
+Then, according to the method set up the algorithm parameters:
 
 Simulation methods
 ~~~~~~~~~~~~~~~~~~
 
+The «Simulation methods» window allows to define:
+  - the stopping criteria of the algorithm (Select at least one criterion to validate the window):
+      - the maximum coefficient of variation for the probability, (default: 0.01,
+        expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
+      - the maximum computation time (default: one minute)
+        (d means days, h means hours, m means minutes, s means seconds)
+      - the maximum sampling size (default: 10000, expected: integer)
+  - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
+    purposes (default=1; expected= integer). It must be less than the maximum sampling size.
+  - **Advanced Parameters** (default: hidden): the seed of the random generator (default: 0,
+    positive integer expected)
+
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySimu.png
     :align: center
-
-For the two simulation methods the user has to define the stop criteria of the algorithm.
-  - The maximum coefficient of variation for the probability, by default equal to 0.01,
-    expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
-  - The maximum computation time, by default equal to one minute
-    (d means days, h means hours, m means minutes, s means seconds);
-  - The maximum sampling size, by default equal to 10000 if this criterion is chosen,
-    expected to be an integer.
-
-At least one criterion must be selected to validate the window.
-
-In the section **Evaluation parameter** the user can define:
-  - The block size (i.e. number of runs launched at the same time), for parallelization purpose
-    (default: 1; integer expected). It must be inferior to the maximum sampling size.
-
-In the advanced parameters (default: hidden), the user may also set:
-  - The seed of the random generator (default: 0, positive integer expected);
 
 Approximation methods
 ~~~~~~~~~~~~~~~~~~~~~
 
-For the approximation methods the user has to define optimization parameters:
-  - The algorithm method: Abdo-Rackwitz, Cobyla (default), SQP
-  - The starting point: by default it is the means of the distributions of the stochastic inputs
-
-In the advanced parameters (default: hidden), the user may also set the stop criteria of the optimization:
-  - The maximum number of iterations (default: 100, positive integer expected)
-  - The errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
+The window allows to define optimization parameters:
+    - the algorithm method: Abdo-Rackwitz, Cobyla (default), SQP
+    - the starting point (default: means of the distributions of the stochastic inputs)
+    - **Advanced Parameters** (default: hidden): the stopping criteria
+       - the maximum number of iterations (default: 100, positive integer expected)
+       - the errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityApprox.png
     :align: center
@@ -256,96 +289,120 @@ In the advanced parameters (default: hidden), the user may also set the stop cri
 3-2 Launch
 ''''''''''
 
-When validating the previous window, a new element appears in the study tree below an item
-named **Reliability**.
+When the window is validated, a new element appears in the study tree below the relevant
+limit state item in the **Reliability** section.
 
 Its context menu has the following actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Remove**: Remove the analysis from the study.
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analysisContextMenu.png
-    :align: center
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis from the study
 
 This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/reliabilityWindow.png
     :align: center
 
-Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
-on the **Stop** button.
 
 3-3 Results
 '''''''''''
 
-When the analysis is finished or stopped, a new result window appears.
+When the analysis is finished or stopped, a new result window appears which content depends
+of the algorithm.
+
+.. _reliamontecarloresult:
 
 Monte Carlo
 ~~~~~~~~~~~
 
-At the left of the result window the section **Output** reminds the user about the output used
-for the probability estimation.
-The result window has the following tabs:
+On the left, the section **Output** reminds the analysed output.
 
-- The **Summary** tab gathers:
-    - The elapsed computation time;
-    - The number of simulations (i.e. calls to the physical model) performed;
-    - The failure probability, its coefficient of variation and the corresponding
-      confidence interval at 95%.
+The results window gathers several tabs:
+
+- The **Summary** tab shows:
+    - the elapsed computation time
+    - the number of simulations (i.e. calls to the model) performed
+    - the failure probability estimate, its coefficient of variation and the corresponding
+      confidence interval at 95%
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySummary.png
         :align: center
     
-- The **Histogram** tab presents the histogram of the output sample.
+- The **Histogram** tab presents the histogram of the output sample. The red vertical line
+  represents the threshold of the failure event.
 
-  The user can configure the histogram plot with the graphic settings below the study tree.
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Export the figure
+      - Set up parameters:
+          - Graph title (expected: string)
+          - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+            string), minimum/maximum bounds (expected: floating point)
+
+  - Graph interactions:
+        - Left-click to translate the graph
+        - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityHistogram.png
       :align: center
 
-- The **Convergence graph** tab presents the convergence of the Monte Carlo
-  algorithm.
+- The **Convergence graph** tab presents the convergence of the probability estimate.
 
-  The user can configure the convergence plot with the graphic settings below the study tree.
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Export the figure
+      - Set up parameters:
+          - Graph title (expected: string)
+          - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+            string), minimum/maximum bounds (expected: floating point)
+
+  - Graph interactions:
+        - Left-click to translate the graph
+        - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityConvergence.png
           :align: center
 
 - The **Parameters** tab reminds the user all the parameters values to perform the analysis.
 
+
+.. _formresult:
+
 FORM
 ~~~~
 
-At the left of the result window the section **Output** reminds the user about the output used
-for the probability estimation.
-The result window has the following tabs:
+On the left, the section **Output** reminds the analysed output.
 
-- The **Summary** tab gathers:
-    - The failure probability and the Hasofer reliability index
-    - The optimization stop criteria value: 
-        - The number of iterations;
-        - The errors: absolute, relative, residual and constraint errors.
-    - The number of calls of the model
+The results window gathers several tabs:
+
+- The **Summary** tab shows:
+    - the failure probability and the Hasofer reliability index
+    - the optimization stopping criteria value: 
+        - the number of iterations
+        - the errors: absolute, relative, residual and constraint errors
+    - the number of calls of the model
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityFORMSummary.png
         :align: center
 
 - The **Design point** tab gathers:
-    - The coordinates of the design point in the standard space and in the physical space;
-    - The importance factors of each variable.
+    - the coordinates of the design point in the standard space and in the physical space
+    - the `importance factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_form.html>`_ of each variable
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityFORMDesignPoint.png
         :align: center
 
 - The **Sensitivities** tab gathers:
-    - The sensitivity of the failure probability and of the reliability index to the parameters
+    - the `sensitivity factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_form.html>`_
+      of the failure probability and of the reliability index to the parameters
       of the marginals of the stochastic input variables.
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityFORMSensitivities.png
         :align: center
 
 - The **Parameters** tab reminds the user all the parameters values to perform the analysis.
+
+- The **Model** tab shows the model content and the limit state used to perform the analysis.
+
+.. _sormresult:
 
 SORM
 ~~~~
@@ -360,6 +417,8 @@ However the **Summary** tab contains additional results:
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sormResultWindow.png
     :align: center
 
+.. _formisresult:
+
 FORM-IS
 ~~~~~~~
 
@@ -373,54 +432,49 @@ tab to display the tabs of a FORM result window.
 ============================
 
 New central tendency analysis can be created thanks to:
-  - the context menu of the probabilistic model item;
-  - the **Central tendency** box of the physical model diagram;
-  - the context menu of the **Central tendency** item (if it already exists).
+  - the context menu of the probabilistic model item
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
+        :align: center
+
+  - the **Central tendency** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probaAnalysesBoxes.png
+        :align: center
+
+  - the context menu of the **Central tendency** item (if it already exists)
 
 3-1 Definition
 ''''''''''''''
 
-When requiring this analysis the following window appears to define its parameters.
+When an analysis is required, a window appears, in order to set up:
+  - the outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - the method: `Monte Carlo sampling <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_ (default) or `Taylor Expansions <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/taylor_moments.html>`_ (second order)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendency.png
     :align: center
 
-Two methods are available:
-  - Monte Carlo sampling;
-  - Taylor expansions (second order).
-
-The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
-at the top of the window:
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
-    :align: center
-
-By default all the output variables are analyzed.
-
 Monte Carlo
 ~~~~~~~~~~~
 
+The «Monte Carlo parameters» window allows to define:
+  - the stopping criteria of the algorithm (Select at least one criterion to validate the window):
+      - the maximum coefficient of variation for the mean, (default: 0.01,
+        expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
+      - the maximum computation time (default: one minute)
+        (d means days, h means hours, m means minutes, s means seconds)
+      - the maximum sampling size (default: 10000, expected: integer)
+  - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
+    purposes (default=1; expected= integer). It must be less than the maximum sampling size.
+  - **Advanced Parameters** (default: hidden):
+      - the seed of the random generator (default: 0, positive integer expected)
+      - require the computation of the confidence interval (default: checked)
+        at a given level (default: 0.95, expected: floating point or integer,
+        in the interval :math:`\left[0;1 \right[`)
+
+
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyMC.png
     :align: center
-
-The user has to define the stop criteria of the algorithm.
-  - The maximum coefficient of variation for the mean, by default equal to 0.01,
-    expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
-  - The maximum computation time, by default equal to one minute
-    (d means days, h means hours, m means minutes, s means seconds);
-  - The maximum sampling size, by default equal to 10000 if this criterion is chosen,
-    expected to be an integer.
-
-At least one criterion must be selected to validate the window.
-
-In the section **Evaluation parameter** the user can define:
-  - The block size (i.e. number of runs launched at the same time), for parallelization purpose
-    (default: 1; integer expected). It must be inferior to the maximum sampling size.
-
-In the advanced parameters (default: hidden), the user can choose:
-  - To compute the confidence interval thanks to the checkbox (default: checked)
-    at the given level;
-  - To set the seed of the random generator (default: 0, positive integer expected).
 
 Taylor expansions
 ~~~~~~~~~~~~~~~~~
@@ -431,30 +485,26 @@ Taylor expansions
 3-2 Launch
 '''''''''''
 
-When validating the previous window, a new element appears in the study tree below an item
-named **Central tendency**.
+When the window is validated, a new element appears in the study tree below **Central tendency**.
 
 Its context menu has the following actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Remove**: Remove the analysis from the study.
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analysisContextMenu.png
-    :align: center
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis from the study
 
 This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyWindow.png
     :align: center
 
-Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
-on the **Stop** button.
 
 3-3 Results
 '''''''''''
 
 When the analysis is finished or stopped, a result window appears.
+
+.. _montecarloresult:
 
 Monte Carlo
 ~~~~~~~~~~~
@@ -463,133 +513,134 @@ The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Sc
 are linked. It means that when the user select some points on one of these representations,
 these points are automatically selected on the others.
 
-At the left of the result window the section **Variables** enables the user to choose the result to display.
-The results window gathers 6 tabs:
+The results window gathers the following tabs:
 
-- The **Summary** tab includes, for a selected variable:
-    - The elapsed computation time;
-    - The number of simulations (i.e. calls to the physical model) performed;
-    - The minimum and maximum variable values generated by the Monte Carlo sampling method;
-    - The coordinates of the input values which have generated the minimum and maximum
-      values of the selected output;
-    - Statistics of the output distribution:
-        - Mean and corresponding confidence interval;
-        - Standard deviation and corresponding confidence interval;
-        - Skewness;
-        - Kurtosis;
-        - First quartile;
-        - Third quartile;
-    - The probability (resp. quantile) can be defined to compute the corresponding
-      quantile (resp. probability) of the output sample distribution.
+- The **Summary** tab summarizes the results of the analysis, for a selected variable (left column):
+  sample size, minimum/maximum values, input values at
+  the extrema of the outputs, moments estimates and empirical quantiles.
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencySummary.png
       :align: center
 
-- The **PDF/CDF** tab presents the PDF/CDF (default: PDF) of the variable sample
-  together with a kernel smoothing representation.
+- The **PDF/CDF** tab presents the PDF/CDF of the variables
+  together with a `kernel smoothing <http://openturns.github.io/openturns/latest/theory/data_analysis/kernel_smoothing.html>`_ representation.
+
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the graphic type: PDF or CDF (default: PDF)
+      - Export the figure
+      - Set up parameters:
+
+        - Graph title (expected: string)
+        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+          string), minimum/maximum bounds (expected: floating point)
+
+  - Interactions:
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyPDF.png
       :align: center
 
-  The user can configure the plot and choose between PDF/CDF with the graphic
-  settings below the study tree.
+- The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
+  of the variables.
 
-  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyPDFConfig.png
-      :align: center
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Export the figure
+      - Set up parameters:
 
-  The user can define:
-    - The title of the graph, expected to be a string;
+        - Graph title (expected: string)
+        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+          string), minimum/maximum bounds (expected: floating point)
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
-
-- The **Box plots** tab presents the box plot of the variable sample.
+  - Interactions:
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyBoxplot.png
       :align: center
 
-  The user can configure the box plot with the graphic settings below the study tree.
+- The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
 
-  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyBoxplotConfig.png
+    - The cells are colored according to the value of the Spearman's coefficient.
+    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Select cells and Press Ctrl+C to copy values in the clipboard
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_dependence.png
       :align: center
-
-  The user can define:
-    - The title of the graph, expected to be a string;
-
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
 
 - The **Table** tab presents the sample generated by the Monte Carlo sampling
-  method and the resulting output values.
+  method and the resulting output values. The table can be exported (**Export** button).
 
-  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyTable.png
+  - Interactions:
+      - Left-click (optional: + Ctrl) on lines to select them
+      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on a column header and drag it in another place to change columns order
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
       :align: center
 
 
-- The **Cobweb plot** tab displays the Cobweb plot containing the input and output variables.
+- The **Cobweb plot** tab displays all the points generated by the analysis.
+
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the variables to display and the axis order
+      - Modify the space where the values are plotted with the **Ranks** check button
+        (default: physical space). Check off the button to display the rank of the values
+      - Export the figure
+
+  - Interaction:
+      - Left-click on columns to select curves (multiple selection possible)
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyCobweb.png
       :align: center
 
-  The user can select the variables to show and the order of the axes with the graphic settings
-  below the study tree. The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+- The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
+  scatter plots between each couple of input/output variables (off-diagonal).
 
-- The **Plot matrix** tab displays the plot matrix which gathers:
-    - Out of the diagonal: the scatter plot of each couple of variables (inputs and outputs);
-    - On the diagonal: the histogram of the distribution of each variable.
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the variables to display and the columns order
+      - Export the figure
 
-  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyYX.png
+  - Interactions:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
+
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyPlotmatrix.png
       :align: center
 
-  The user can select the variables to show and the order of the lines with the graphic settings
-  below the study tree. The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+- The **Scatter plots** tab displays the scatter plot of two parameters.
 
-- The **Scatter plots** tab presents the scatter plot of two parameters (Default: first output vs first input).
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+      - Modify the space where the values are plotted with the **Ranks** check button
+        (default: physical space). Check off the button to display the rank of the values.
+      - Export the figure
+      - Set up parameters:
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyScatter.png
-        :align: center
+        - Graph title (expected: string)
+        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+          string), minimum/maximum bounds (expected: floating point), log
+          scale (check button only available if axis values are positive)
+        - Plot style: color, marker size and style (cross, circle, diamond, square, plus)
 
-    The user can configure the scatter plot with the graphic settings below the study tree.
+  - Interactions:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyScatterConfig.png
-        :align: center
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyScatter.png
+      :align: center
 
-    The user can define:
-      - The title of the graph, expected to be a string;
-      - The variable plotted on the X-axis, by default the first input;
-      - The variable plotted on the Y-axis, by default the first output.
-
-    The scatter plot is plotted in the ranks space when the user checks **Ranks**.
-
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point;
-      - A log scale (the checkbutton is available only if the values of the axis are positive).
-    The **Plot style** tab enables to define:
-      - the plot color;
-      - the marker style (Cross, Circle, Diamond, Square, Plus);
-      - the marker size.
-
-    The **Export** button opens a dialog box for the user to select where the
-    figure has to be saved.
 
 - The **Parameters** tab reminds the user all the parameters values to perform the analysis.
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendency_MC_tab_Parameters.png
-    :align: center
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendency_MC_tab_Parameters.png
+      :align: center
+
+- The **Model** tab shows the model content used to perform the analysis.
+
+.. _taylorresult:
 
 Taylor expansions
 ~~~~~~~~~~~~~~~~~
@@ -597,177 +648,152 @@ Taylor expansions
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyTaylorResults.png
     :align: center
 
-At the left of the result window the section **Outputs** enables the user to choose the result to display.
-
-The results window gathers, for the selected output:
-
-- The output mean corresponding to the first and second order expansions;
-- The standard deviation of the output;
-- The variance of the output.
+The results window gathers, for a selected output (left column):
+  - the output mean corresponding to the first and second order expansions
+  - the standard deviation of the output
+  - the variance of the output
 
 4- Sensitivity analysis
 =======================
 
 New sensitivity analysis can be created thanks to:
   - the context menu of the probabilistic model item
-  - the **Sensitivity** box of the physical model diagram
-  - the context menu of the **Sensitivity** item (if it already exists).
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
+        :align: center
+
+  - the **Sensitivity** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probaAnalysesBoxes.png
+        :align: center
+
+  - the context menu of the **Sensitivity** item (if it already exists)
 
 The input variables must be independent to perform a sensitivity analysis.
 
 4-1 Definition
 ''''''''''''''
 
-When requiring this analysis the following window appears to define its parameters.
+When an analysis is required, a window appears, in order to set up:
+  - the outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - the method: `Sobol <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/sensitivity_sobol.html>`_ (default), SRC (= `Standardised Regression Coefficient <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisMethods.png
     :align: center
 
-Two types of sensitivity indices are available:
-  - Sobol
-  - SRC (Standardised Regression Coefficient)
+Sobol indices
+~~~~~~~~~~~~~
 
-The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
-at the top of the window:
+The «Sobol parameters» window allows to define:
+  - the stopping criteria of the algorithm (Select at least one criterion to validate the window):
+      - the maximum confidence interval length of the first order indices (default: 0.01,
+        expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
+      - the maximum computation time (default: one minute)
+        (d means days, h means hours, m means minutes, s means seconds)
+      - the maximum calls (default: 10000, expected: integer)
+  - **Evaluation parameters**:
+      - the replication size (default=1000; expected= integer).
+          - The label **Number of calls by iteration** is updated according to its value.
+          - At each iteration of the algorithm, the model is evaluated *nbEval* times:
+              :math:`nbEval = (nbInputs + 2) * replicationSize`
+              with *nbInputs*, the number of stochastic input variables
+          - The maximum calls must be greater than *nbEval*
+      - the block size – the number of runs launched simultaneously – for parallelization
+        purposes (default=1; expected= integer).
+  - **Advanced Parameters** (default: hidden):
+      - the confidence level (default: 0.95; float expected).
+      - the seed of the random generator (default: 0, positive integer expected)
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
-    :align: center
-
-Sobol' indices
-~~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSobol.png
     :align: center
 
-The user has to define the stop criteria of the algorithm:
-  - The maximum coefficient of variation for the first order indices, by default equal to 0.01,
-    expected to be a floating point or an integer, in the interval :math:`\left[0;1 \right]`;
-  - The maximum computation time, by default equal to one minute
-    (d means days, h means hours, m means minutes, s means seconds);
-  - The maximum calls, by default equal to 10000 if this criterion is chosen, expected to be an integer.
-
-At least one criterion must be selected to validate the window.
-
-In the section **Evaluation parameter** the user can define:
-  - The block size (i.e. number of runs launched at the same time), for parallelization purpose
-    (default: 1; integer expected). It must be inferior to the maximum sampling size.
-    The resulting number of simulations (i.e. calls to the physical model) by iteration is given below;
-
-In the advanced parameters (default: hidden), the user can set:
-  - The Bootstrap sampling size (default: 100, positive integer expected) use
-    to compute the confidence intervals.
-  - The confidence level (default: 0.95; float expected).
-  - The seed of the random generator (default: 0, positive integer expected).
-
-The label number of calls by iteration is updated according to the given value
-of the block size.
-The algorithm generates two input samples with a size equal to the block size value
-and combined these samples to build nbInputs other samples
-(nbInputs is the number of input variables).
-
-Number of calls by iteration = (nbInputs + 2) * blockSize
-
-If the maximum calls is a stop criteria, at the last iteration we compute a value of the
-block size according to not exceed the maximum calls.
 See the :ref:`Sensitivity <SobolExample>` section in the example guide.
 
 SRC indices
 ~~~~~~~~~~~
 
+The «SRC parameters» window allows to define:
+  - **Evaluation parameters**:
+     - the sample size (default: 10000, integer expected)
+     - the block size – the number of runs launched simultaneously – for parallelization
+       purposes (default=1; expected= integer). It must be less than the sample size.
+  - **Advanced Parameters** (default: hidden): the seed of the random generator
+    (default: 0, positive integer expected)
+
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSRC.png
     :align: center
-
-In the section **Evaluation parameters** the user can define:
-
-- The sample size (default: 10000, integer expected);
-- The block size (i.e. number of runs launched at the same time), for parallelization purpose
-  (default: 1; integer expected). It must be inferior to the maximum sampling size.
-
-In the advanced parameters (default: hidden), the user can set:
-
-- The seed of the random generator (default: 0, positive integer expected).
-
 
 4-2 Launch
 ''''''''''
 
-When validating the previous window, a new element appears in the study tree below an item
-named **Sensitivity**.
+When the window is validated, a new element appears in the study tree below **Sensitivity**.
 
 Its context menu has the following actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Remove**: Remove the analysis from the study.
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analysisContextMenu.png
-    :align: center
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis from the study
 
 This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisWindow.png
     :align: center
 
-Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
-on the **Stop** button.
 
 4-3 Results
 '''''''''''
 
 When the analysis is finished or stopped, a result window appears.
 
-Sobol' indices
-~~~~~~~~~~~~~~
+.. _sobolresult:
+
+Sobol indices
+~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobol.png
     :align: center
 
-At the left of the result window the section **Outputs** enables the user to choose the result to display.
 The results window gathers these tabs:
 
-- The **Indices** tab includes, for a selected output:
+- The **Indices** tab includes, for a selected output (left column):
 
-  - The first and total order indices and there confidence intervals plotted
-    for each input variable.
-    The user can configure the plot with the graphic settings (below the 
-    study tree);
+  - the graph of the input variables first and total order indices and there confidence intervals.
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobolConfig.png
-        :align: center
+    - The **Graphic settings** window (below the study tree) allows to:
+       - Export the figure
+       - Set up parameters:
+          - Graph title (expected: string)
+          - X-axis labels orientation
+          - Axes title (expected: string)
 
-    The user can define:
-      - The title of the graph, expected to be a string;
+  - the table of the input variables first and total order indices and there confidence intervals.
 
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point.
+      - Interactions:
+          - Select cells and Press Ctrl+C to copy values in the clipboard
+          - Left-click on column header to sort values in ascending or descending order.
+            When sorting the table, the indices are also sorted on the graph.
 
-    The **Export** button opens a dialog box for the user to select where the
-    figure has to be saved;
-
-  - A table with the first and total order indices value and there confidence
-    intervals for each variable. Each column of indices can be sorted by clicking
-    on its header. When sorting the table, the points on the graph are also sorted;
-
-  - The index corresponding to the interactions;
+  - The index corresponding to the interactions.
 
   .. |attentionButton| image:: /user_manual/graphical_interface/probabilistic_analysis/task-attention.png
 
   If the Sobol's indices estimates are incoherent, refer to the warning message in the tooltip of |attentionButton|,
   and try to perform the analysis with a greater sample size.
-  If the analysis has been launched while the physical model has correlated input variables, a warning
-  is added at the bottom of the window.
+  If the analysis has been launched while the physical model has correlated input variables, a message
+  is added at the bottom of the window to warn the user the result can be false.
 
-- The **Summary** tab includes the values of the stop criteria.
+- The **Summary** tab includes the values of the stopping criteria.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobol_tab_summary.png
     :align: center
 
 - The **Parameters** tab reminds the user all the parameters values to perform the analysis.
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobol_tab_parameters1.png
-    :align: center
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobol_tab_parameters1.png
+      :align: center
+
+.. _srcresult:
 
 SRC indices
 ~~~~~~~~~~~
@@ -775,37 +801,31 @@ SRC indices
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRC.png
     :align: center
 
-At the left of the result window the section **Outputs** enables the user to choose the result to display.
-The results window gathers 2 tabs:
+The results window gathers these tabs:
 
-- The **Indices** tab includes, for a selected output:
+- The **Indices** tab includes, for a selected output (left column):
 
-  - The SRC index plotted for each input variable.
-    The user can configure the plot with the graphic settings below the study tree;
+  - the graph of the input variables SRC indices.
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRCConfig.png
-        :align: center
+     - The **Graphic settings** window (below the study tree) allows to:
+         - Export the figure
+         - Set up parameters:
+             - Graph title (expected: string)
+             - X-axis labels orientation
+             - Axes title (expected: string)
 
-    The user can define:
-      - The title of the graph, expected to be a string;
+  - the table of the input variables SRC indices.
 
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point.
+      - Interactions:
+          - Select cells and Press Ctrl+C to copy values in the clipboard
+          - Left-click on column header to sort values in ascending or descending order.
+            When sorting the table, the indices are also sorted on the graph.
 
-    The **Export** button opens a dialog box for the user to select where the
-    figure has to be saved;
-
-  - A table with the SRC index value for each variable. Each
-    column can be sorted by clicking on its header. When sorting the table, the
-    points on the graphic are also sorted.
-
-  If the analysis has been launched while the physical model has correlated input variables, a warning
-  is added at the bottom of the window.
+  If the analysis has been launched while the physical model has correlated input variables, a message
+  is added at the bottom of the window to warn the user the result can be false.
 
 - The **Parameters** tab reminds the user all the parameters values to perform the analysis.
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRC_tab_parameters.png
-    :align: center
+  .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRC_tab_parameters.png
+      :align: center
 

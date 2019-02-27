@@ -2,12 +2,11 @@
 User manual - Data analyses
 ===========================
 
-The OTGui allows the user to launch the following types of data analyses:
-
-- Data analyses to get moments, minimum, maximum, PDF, etc;
-- Marginals inferences;
-- Dependence inferences;
-- Metamodels creation
+The interface allows to perform the following types of data analyses:
+  - Data analyses to get moments, minimum, maximum, PDF, etc.
+  - Marginals inferences
+  - Dependence inferences
+  - Metamodels creation
 
 1- Data analysis
 ================
@@ -16,24 +15,29 @@ The OTGui allows the user to launch the following types of data analyses:
 ''''''''''''
 
 New sample analysis can be created through:
+  - the context menu of the **Definition** item of the data model
 
-- the context menu of the **Definition** item of the relevant data model;
-- the **Data analysis** box of the model diagram
+    .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
+        :align: center
+
+  - the **Data analysis** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
+        :align: center
 
 When the analysis is required, a new item is added in the study tree below the data model item.
 
 Its context menu has the following actions:
-  - **Rename**: Rename the analysis;
-  - **Remove**: Remove the analysis from the study.
+  - **Rename**: Rename the analysis
+  - **Remove**: Remove the analysis from the study
 
-This item is associated with a window displaying a progress bar and the buttons
-**Start** (enabled) and **Stop** (disabled).
+This item is associated with a window displaying a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisWindow.png
     :align: center
 
-Click on the **Start** button enables to launch the analysis. The user can stop the evaluation by
-clicking on the **Stop** button.
+.. _dataanalysisresult:
 
 1-2 Results
 '''''''''''
@@ -43,173 +47,182 @@ When the analysis is finished or stopped, the below window appears.
 .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_summary.png
     :align: center
 
-At the left of the result window the section **Variables** enables the user to choose the result to display.
 The right side of the window contains 4 tabs presenting the analysis of the outputs.
 The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
 are linked. It means that when the user select some points on one of these representations,
 these points are automatically selected on the others.
 
-- The **Summary** tab includes, for a selected variable:
-    - The number of values;
-    - The minimum and maximum values;
-    - If the variable is an output, the coordinates of the input values which have generated
-      the minimum and maximum values;
-    - Statistics of the variable distribution:
-        - Mean;
-        - Standard deviation;
-        - Coefficient of variation;
-        - Skewness;
-        - Kurtosis;
-        - First quartile;
-        - Third quartile;
-    - The probability (resp. quantile) can be defined to compute the corresponding
-      quantile (resp. probability) of the sample distribution.
+- The **Summary** tab summarizes the results of the analysis, for a selected variable (left column):
+  sample size, minimum/maximum values, input values at
+  the extrema of the outputs, moments estimates and empirical quantiles.
 
-- The **PDF/CDF** tab presents the PDF/CDF (default: PDF) of the sample
-  together with a kernel smoothing representation.
+- The **PDF/CDF** tab presents the PDF/CDF of the variables
+  together with a `kernel smoothing <http://openturns.github.io/openturns/latest/theory/data_analysis/kernel_smoothing.html>`_ representation.
+
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the graphic type: PDF or CDF (default: PDF)
+      - Export the figure
+      - Set up parameters:
+
+        - Graph title (expected: string)
+        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+          string), minimum/maximum bounds (expected: floating point)
+
+  - Interactions:
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_PDF.png
       :align: center
 
-  The user can configure the plot and choose between PDF/CDF with the graphic
-  settings below the study tree.
+- The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
+  of the variables.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_PDF_setting.png
-      :align: center
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Export the figure
+      - Set up parameters:
 
-  The user can define:
-    - The title of the graph, expected to be a string;
+        - Graph title (expected: string)
+        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+          string), minimum/maximum bounds (expected: floating point)
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
-
-- The **Box plots** tab presents the box plot of the sample.
+  - Interactions:
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_boxplot.png
       :align: center
 
-  The user can configure the box plot with the graphic settings below the study tree.
-
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_boxplot_setting.png
-      :align: center
-
-  The user can define:
-    - The title of the graph, expected to be a string;
-
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
-
 .. _dependenceTab:
 
-- The **Dependence** tab displays the estimate of the Spearman's matrix.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_dependence.png
+- The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
+
+    - The cells are colored according to the value of the Spearman's coefficient.
+    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Select cells and Press Ctrl+C to copy values in the clipboard
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_dependence.png
       :align: center
 
-- The **Table** tab:
+- The **Table** tab shows the input/output samples. The table can be exported (**Export** button).
 
-  .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_Table.png
+  - Interactions:
+      - Left-click (optional: + Ctrl) on lines to select them
+      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on a column header and drag it in another place to change columns order
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
       :align: center
 
-- The **Cobweb plot** tab:
+
+- The **Cobweb plot** tab displays the sample points.
+
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the variables to display and the axis order
+      - Modify the space where the values are plotted with the **Ranks** check button
+        (default: physical space). Check off the button to display the rank of the values
+      - Export the figure
+
+  - Interaction:
+      - Left-click on columns to select curves (multiple selection possible)
 
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_Cobweb.png
       :align: center
 
-  The user can select the variables to show and the order of the axes with the graphic settings
-  below the study tree. The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
 
-- The **Plot matrix** tab displays the plot matrix which gathers:
-  - Out of the diagonal: the scatter plot of each couple of variables (inputs and outputs);
-  - On the diagonal: the histogram of the distribution of each variable.
+- The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
+  scatter plots between each couple of input/output variables (off-diagonal).
+
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the variables to display and the columns order
+      - Export the figure
+
+  - Interactions:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_plotmatrixYX.png
       :align: center
 
-- The **Scatter plots** tab presents the scatter plot of two parameters (Default:
-  first output vs first input).
+- The **Scatter plots** tab displays the scatter plot of two parameters.
+
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+      - Modify the space where the values are plotted with the **Ranks** check button
+        (default: physical space). Check off the button to display the rank of the values.
+      - Export the figure
+      - Set up parameters:
+
+        - Graph title (expected: string)
+        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+          string), minimum/maximum bounds (expected: floating point), log
+          scale (check button only available if axis values are positive)
+        - Plot style: color, marker size and style (cross, circle, diamond, square, plus)
+
+  - Interactions:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom/zoom out
 
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_scatterplot.png
       :align: center
-
-  The user can configure the scatter plot with the graphic settings below the study tree.
-
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/scatterGraphSetting.png
-    :align: center
-
-  The user can define:
-    - The title of the graph, expected to be a string;
-    - The variable plotted on the X-axis, by default the first input;
-    - The variable plotted on the Y-axis, by default the first output.
-
-  The scatter plot is plotted in the ranks space when the user checks **Ranks**.
-
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point;
-    - A log scale (the checkbutton is available only if the values of the axis are positive).
-  The **Plot style** tab enables to define:
-    - the plot color;
-    - the marker style (Cross, Circle, Diamond, Square, Plus);
-    - the marker size.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
 
 .. _inferenceAnalysis:
 
 2- Marginals inference
 ======================
 
-The inference analysis allows to perform a Bayesian Information Criterion (BIC) and
-a Kolmogorov goodness-of-fit tests for 1-d continuous distributions.
+The inference analysis allows to perform a Bayesian Information Criterion
+(`BIC <http://openturns.github.io/openturns/latest/theory/data_analysis/bic.html>`_) and
+a `Kolmogorov-Smirnov <http://openturns.github.io/openturns/latest/theory/data_analysis/kolmogorov_test.html>`_
+goodness-of-fit tests for 1-d continuous distributions.
 
 New marginals inference can be created thanks to:
-  - the context menu of the data model **Definition** item
-  - the **Marginals inference** box of the data model diagram
+  - the context menu of the **Definition** item of the data model
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
+        :align: center
+
+  - the **Marginals inference** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
+        :align: center
 
 2-1 Definition
 ''''''''''''''
 
-When requiring this analysis the following window appears to define its parameters.
-
 .. image:: /user_manual/graphical_interface/data_analysis/inference_wizard.png
     :align: center
 
-The user needs to choose the variables of interest of the design of experiments by checking
-the corresponding lines in the table at the left side of the window. By default, all of them
-are selected. To validate the window, at least one variable must be selected.
+When an analysis is required, a window appears, in order to set up:
+  - the variables of interest (default: all variables are analysed) by checking off
+    the corresponding line in the first table
+  - the list of distributions to infer for each variable (default: Normal distribution):
+      - The list of distributions can be different for each variable.
+      - Click on **Apply the list of distributions to all variables**
+        in the context menu of a variable to set up the same list of distributions
+        to the other checked variables.
 
-The table at the right side of the window is used to list the distributions
-to test for each variable. By default, only the Normal distribution is tested.
-The list of distributions can be different for each variable.
+        .. image:: /user_manual/graphical_interface/data_analysis/inference_wizard_applyToAll.png
+            :align: center
 
-To choose the distributions to test for each variable:
-  - In the table at the left side of the window, select the variable.
-  - To add a distribution to test, click on the combobox **Add** and choose a distribution.
-    Then, the distribution appears in the table at the right side of the window and
-    disappears from the combobox.
-    The last item **All** of the combobox allows to add at the same time all the
-    distributions in the table.
-  - To remove a distribution, select it in the table and click on **Remove**.
-    Several distributions can be selected by pressing the Ctrl key or the Shift key.
+      - To add a distribution, click on the **Add** combo box and select a distribution of the list
+        which appears (or all of them with the **All** item):
 
-At the bottom of the page, the user can specify the value of the level. The level is
-the value such that :math:`\alpha = 1 - {\rm level}` is the risk of
-committing a Type I error, that is an incorrect rejection of a true
-null hypothesis. Its value is a float in the range :math:`]0, 1[` and is by default 0.05.
+        - the distribution is added in the table
+        - the distribution is removed from the combo box
+
+        .. image:: /user_manual/graphical_interface/data_analysis/inference_wizard_distributions_list.png
+            :align: center
+
+      - To remove a distribution, select it in the table and click on **Remove**.
+        Press the Ctrl or Shift key to select multiple lines.
+  - the Kolmogorov-Smirnov level such that :math:`\alpha = 1 - {\rm level}` is the risk of
+    committing a Type I error, that is an incorrect rejection of a true null hypothesis
+    (default: 0.05., expected: float in the range :math:`]0, 1[`)
+
 
 
 2-2 Launch
@@ -218,92 +231,78 @@ null hypothesis. Its value is a float in the range :math:`]0, 1[` and is by defa
 When the analysis is required, a new item is added in the study tree below the data model item.
 
 Its context menu has two actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Remove**: Remove the analysis from the study.
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analysisContextMenu.png
-    :align: center
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis from the study
 
 This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/data_analysis/inferenceWindow.png
     :align: center
 
-Click on the **Start** button enables to launch the analysis. The user can stop the evaluation by
-clicking on the **Stop** button.
+.. _marginalsinferenceresult:
 
 2-3 Results
 '''''''''''
 
-When the analysis is finished or stopped, the below window appears.
+When the analysis is finished or stopped, a window appears.
 
 .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_PDF.png
     :align: center
 
-The results window gathers two tabs for each variable:
+The results window gathers:
 
-- The **Summary** tab includes, for a selected variable, a table of all the tested
-  distributions, the associated Bayesian Information Criterion value and the p-value. The last column
-  indicates whether the distribution is accepted or not according to the given level.
-  The distributions are sorted in increasing order of BIC values.
-  The right side of this table is updated according to the distribution which is selected.
+- The **Summary** tab includes, for a selected variable (left column):
+   - a table of all the tested distributions, the associated Bayesian Information Criterion value and the p-value. 
+       - The last column indicates whether the distribution is accepted or not according to the given level.
+       - The distributions are sorted in increasing order of BIC values.
+   - for the selected distribution:
+      - The **PDF/CDF** tab presents the PDF/CDF (default: PDF) of the sample
+        together with the distribution PDF.
 
-  This section contains 3 tabs:
+        - The **Graphic settings** window (below the study tree) allows to:
+            - Select the graphic type: PDF or CDF (default: PDF)
+            - Export the figure
+            - Set up parameters:
+                - Graph title (expected: string)
+                - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                  string), minimum/maximum bounds (expected: floating point)
 
-  - The **PDF/CDF** tab presents the PDF/CDF (default: PDF) of the sample
-    together with the distribution PDF.
+        - Interactions:
+            - Left-click to translate the graph
+            - Mouse wheel up/down to zoom/zoom out
 
-  The user can configure the plot and choose between PDF/CDF with the graphic
-  settings (below the study tree).
+      - The **Q-Q plot** tab presents the `Q-Q plot <http://openturns.github.io/openturns/latest/theory/data_analysis/graphical_fitting_test.html>`_
+        which opposes the data quantiles to the quantiles of the tested distribution.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_PDF_setting.png
-      :align: center
+        .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_QQplot.png
+           :align: center
 
-  The user can define:
-    - The title of the graph, expected to be a string;
+        - The **Graphic settings** window (below the study tree) allows to:
+            - Export the figure
+            - Set up parameters:
+                - Graph title (expected: string)
+                - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                  string), minimum/maximum bounds (expected: floating point)
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
+        - Interactions:
+            - Left-click to translate the graph
+            - Mouse wheel up/down to zoom/zoom out
 
-  - The **Q-Q plot** tab presents the Q-Q plot which opposes the data quantiles to the quantiles
-    of the tested distribution.
+      - The **Parameters** tab includes a table with the moments of the selected distribution
+        and the values
+        `estimate <http://openturns.github.io/openturns/latest/theory/data_analysis/parametric_estimation.html>`_
+        of its native parameters.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_QQplot.png
-      :align: center
+        .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters.png
+           :align: center
 
-  The user can configure the Q-Q plot with the graphic settings below the study tree.
+        *failed* in the **Acceptation** column means that an error occured when building a distribution
+        with the given sample. Then, the **Parameters** tab shows the error message.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_qqplot_setting.png
-      :align: center
-
-  The user can define:
-    - The title of the graph, expected to be a string;
-
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  - The tab **Parameters** includes a table with the moments of the selected distribution
-    and the values of its native parameters.
-
-  .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters.png
-      :align: center
-
-  - If an error occured when building a distribution with the given sample, 'failed' is indicated in the
-    acceptance column, the first two tabs are disabled and the **Parameters** tab displays the error message.
-
-  .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters_error_message.png
-      :align: center
-
-- The tab **Parameters** indicates the level used to perform the inference.
-
-  .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_parameters.png
-      :align: center
+        .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters_error_message.png
+            :align: center
 
 
 .. _dependenceInference:
@@ -311,51 +310,57 @@ The results window gathers two tabs for each variable:
 3- Dependence inference
 =======================
 
-The dependence inference allows to infer copulas on the input sample
-of the data model.
+The dependence inference allows to infer copulas on the sample of the data model.
 
 This analysis can be created thanks to:
-  - the context menu of a data model **Definition** item
-  - the **Dependence inference** box of the model diagram.
+  - the context menu of the **Definition** item of the relevant data model
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
+        :align: center
+
+  - the **Dependence inference** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
+        :align: center
 
 3-1 Definition
 ''''''''''''''
 
-When requiring this analysis the following window appears to define its parameters.
+When an analysis is required, a window appears:
 
 .. image:: /user_manual/graphical_interface/data_analysis/dependenceInference_wizard.png
     :align: center
 
-This window enables to define group of variables and the copulas to test for each of them.
+The windows allows to set up:
+  - the groups of variables to test:
+      - Select at least two variables of the model (left table):
+          - Refer to the estimate of the :ref:`Spearman's matrix <dependenceTab>` in
+            the data analysis result window to create groups
+          - For convenience, the list of groups may be set by default thanks to this estimate
+            (if correlation between variables exists)
+      - Click on the right arrow:
+          - the group is added in the second table
+          - a third table appears with the default item *Normal*
 
-The left side of the window lists all the variables of the model in a table.
-The right side list the groups of variables.
-
-To add a group, select at least two variables in the first table and click on the right arrow.
-To remove a group, select a group in the second table and click on the left arrow.
-
-The user can refer to the estimate of the :ref:`Spearman's matrix <dependenceTab>`
-in the result window of the data analysis to create the groups.
-For convenience the list of groups may be set by default thanks to this estimate
-if correlation between variables exists.
-
-.. image:: /user_manual/graphical_interface/data_analysis/dependenceInference_wizardOneGroup.png
+  .. image:: /user_manual/graphical_interface/data_analysis/dependenceInference_wizardOneGroup.png
     :align: center
 
-When the group is adding, a new table appears with the **Normal** item.
-Below this table there are two buttons **Add** and **Remove** to add and remove items from
-the list.
+  - the copulas to infer on the groups:
+    - Click on the **Add** combo box
+    - Select a copula in the list (or all of them with the **All** item):
 
-If the group has two variables the `available copulas <http://openturns.github.io/openturns/master/user_manual/_generated/openturns.Copula.html>`_ are:
-  - Ali-Mikhail-Haq
-  - Clayton
-  - Farlie-Gumbel-Morgenstern
-  - Frank
-  - Gumbel
-  - Normal
+        - *For a pair of variables* : bivariate
+          `copulas <http://openturns.github.io/openturns/master/user_manual/_generated/openturns.Copula.html>`_
+          are available (Ali-Mikhail-Haq, Clayton, Farlie-Gumbel-Morgenstern, Frank, Gumbel, Normal)
+        - *For a group with more than two variables*: only the Normal copula is available
+          (**Add** and **Remove** buttons are then disabled)
 
-If the group has more than two variables only the Normal copula is available. That is why the
-buttons **Add** and **Remove** are disabled in this case.
+    .. image:: /user_manual/graphical_interface/data_analysis/dependenceInference_wizard_copulaList.png
+      :align: center
+
+To remove a group:
+  - Select a group in the second table
+  - Click on the left arrow
 
 3-2 Launch
 '''''''''''
@@ -367,100 +372,109 @@ Its context menu has the following actions:
   - **Modify**: Reopen the setting window to change the analysis parameters;
   - **Remove**: Remove the analysis from the study.
 
-This item is associated with a window displaying a progress bar and the buttons
-**Start** (enabled) and **Stop** (disabled).
+This item is associated with a window displaying the list of the parameters, a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
-.. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisWindow.png
+.. image:: /user_manual/graphical_interface/data_analysis/copulaInferenceWindow.png
     :align: center
 
-Click on the **Start** button enables to launch the analysis. The user can stop the evaluation by
-clicking on the **Stop** button.
+.. _dependenceinferenceresult:
 
 3-3 Results
 '''''''''''
 
-The results window gathers the **Summary** tab for each set of variables.
+When the analysis is finished or stopped, a window appears:
 
-- The **Summary** tab includes, for a selected set of variables, a table of all the tested
-  copulas. The right side of this tab is updated according to the copula which is selected.
+.. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_PDF.png
+    :align: center
 
-  This section contains the following tabs:
+The window gathers:
 
-  - The **PDF/CDF** tab presents for each pair of variables the PDF/CDF (default: PDF) of the sample
-    together with the distribution PDF.
+- The **Summary** tab includes, for a selected set of variables:
+    - a table of all the tested copulas
+    - for the selected copula:
+        - the **PDF/CDF** tab presents, for each pair of variables, the PDF/CDF (default: PDF) of the sample
+          together with the distribution PDF.
 
-    .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_PDF.png
-        :align: center
+            - The **Graphic settings** window (below the study tree) allows to:
+                - Select the graphic type: PDF or CDF (default: PDF)
+                - Export the figure
+                - Set up parameters:
+                    - Graph title (expected: string)
+                    - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                      string), minimum/maximum bounds (expected: floating point)
 
-    With the graphic settings below the study tree, the user can configure the plot, choose the pair of
-    variables to analyze and choose between PDF/CDF.
+            - Interactions:
+                - Left-click to translate the graph
+                - Mouse wheel up/down to zoom/zoom out
 
-    .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_PDF_setting.png
-        :align: center
+        - the **Kendall** tab presents for each pair of variables a visual fitting test using the
+          `Kendall plot <http://openturns.github.io/openturns/latest/theory/data_analysis/graphical_fitting_test.html>`_.
+          This plot can be interprated as for QQ-plot (for marginals): more the curve fit the dialgonal, more
+          the dependence model is adequate.
 
-    The user can define:
-      - The title of the graph, expected to be a string;
+            - The **Graphic settings** window (below the study tree) allows to:
+                - Export the figure
+                - Set up parameters:
+                    - Graph title (expected: string)
+                    - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                      string), minimum/maximum bounds (expected: floating point)
 
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point.
+            - Interactions:
+                - Left-click to translate the graph
+                - Mouse wheel up/down to zoom/zoom out
 
-  - The **Kendall** tab:
+        .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_Kendall.png
+            :align: center
 
-    .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_Kendall.png
-        :align: center
+        - the **Parameters** tab includes the parameters `estimate <http://openturns.github.io/openturns/latest/theory/data_analysis/parametric_estimation.html>`_ of the selected copula.
+            - *For the Gaussian copula*: the tab displays the `Spearman's coefficients <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_.
 
-    With the graphic settings below the study tree, the user can configure the plot and choose the pair of
-    variables to analyze.
+            .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters.png
+                :align: center
 
-    The user can define:
-      - The title of the graph, expected to be a string;
+            - *'-'* in the **BIC** column means that an error occured when building a copula
+              with the given sample. Then, the **Parameters** tab shows the error message.
 
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point.
-
-  - The **Parameters** tab includes the parameters of the selected copula. For the Gaussian copula, the
-    tab displays the Spearman's coefficients.
-
-  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters.png
-      :align: center
-
-  - If an error occured when building a copula with the given sample, '-' is indicated in the
-    BIC column, the first two tabs are disabled and the **Parameters** tab displays the error message.
-
-  .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters_ErrorMessage.png
-      :align: center
+            .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters_ErrorMessage.png
+                :align: center
 
 4- Metamodel creation
 ======================
+
+To perform this analysis, the data model or the design of experiments must contain an output sample.
 
 4-1 Definition
 ''''''''''''''
 
 A new metamodel can be created thanks to:
-  - the context menu of a data model **Definition** item;
-  - the context menu of a design of experiments item;
-  - the **Metamodel creation** box of a model diagram.
+  - the context menu of a design of experiments item
 
-The data model or the design of experiments must contain an output sample.
+    .. image:: /user_manual/graphical_interface/data_analysis/doe_eval_ContextMenu.png
+        :align: center
+
+  - the **Metamodel creation** box of a physical model diagram
+
+    .. image:: /user_manual/graphical_interface/data_analysis/physicalModel_Diagram_metamodelBox.png
+        :align: center
+
+  - the context menu of the **Definition** item of a data model
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
+        :align: center
+
+  - the **Metamodel creation** box of a data model diagram
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
+        :align: center
+
+
+When an analysis is required, a window appears, in order to set up:
+  - the outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - the method: `Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_ (default) or `Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_wizard.png
     :align: center
-
-Two methods are available:
-  - Functional chaos
-  - Kriging
-
-The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
-at the top of the window:
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
-    :align: center
-
-By default all the output variables are analyzed.
 
 Functional chaos
 ~~~~~~~~~~~~~~~~
@@ -468,10 +482,9 @@ Functional chaos
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_functional_chaos_wizard.png
     :align: center
 
-- In the **Parameters** section the user can specify the needed chaos degree. The
-  degree must superior or equal to 1. By default, it is equal to 2.
-
-- In the advanced parameters (default: hidden), the user can choose to use a sparse chaos.
+The «Functional chaos parameters» window allows to define:
+  - **Parameters**: chaos degree (default: 2, expected: integer greater or equal to 1)
+  - **Advanced Parameters** (default: hidden): sparse chaos (default: not sparse)
 
 Kriging
 ~~~~~~~
@@ -479,55 +492,43 @@ Kriging
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_kriging_wizard.png
     :align: center
 
-- In the **Parameters** section the user can choose:
+The «Kriging parameters» window allows to define:
+  - **Parameters**:
+     - the covariance model: Squared exponential (default), Absolute exponential,
+       Generalized exponential, Matérn model
+     - the parameters of covariance models:
+         - **Generalized exponential**: parameter **p**,
+           exponent of the euclidean norm (default: 1., positive float expected)
 
-  - The covariance model (default: Squared exponential) between:
-      - Squared exponential,
-      - Absolute exponential,
-      - Generalized exponential,
-      - Matérn model
+         .. image:: /user_manual/graphical_interface/data_analysis/kriging_p_parameter.png
+              :align: center
 
-    To parametrize these models the user can defined:
+         - **Matérn**: coefficient **nu** (default: 1.5, positive float expected)
 
-    - The scale for each input by clicking on the button "**...**" on the
-      **Scale** line. A wizard appears with a table containing a column to list
-      the input variables and a column to display and edit the scales
-      (default: 1.). 
+         .. image:: /user_manual/graphical_interface/data_analysis/kriging_nu_parameter.png
+              :align: center
 
-      .. image:: /user_manual/graphical_interface/data_analysis/kriging_scale_wizard.png
+     - the trend basis type: Constant (default), Linear or Quadratic
+  - **Advanced Parameters** (default: hidden) for the covariance models:
+     - Require the optimization of the covariance model parameters
+     - the scale for each input by clicking on the button "**...**" on the
+       **Scale** line. A wizard appears with a table containing a column to list
+       the input variables and a column to display and edit the scales
+       (default: 1.).
+
+     .. image:: /user_manual/graphical_interface/data_analysis/kriging_scale_wizard.png
           :align: center
 
-    - The amplitude of the process (default: 1., positive float expected).
+     - the amplitude of the process (default: 1., positive float expected)
 
-    - The parameter **p**, exponent of the euclidean norm (default: 1., positive float expected),
-      if the **Generalized exponential** model is chosen..
-
-      .. image:: /user_manual/graphical_interface/data_analysis/kriging_p_parameter.png
-          :align: center
-
-    - The coefficient **nu** (default: 1.5, positive float expected), if the **Matérn**
-      model is chosen.
-
-      .. image:: /user_manual/graphical_interface/data_analysis/kriging_nu_parameter.png
-          :align: center
-
-  - The trend basis (default: Constant) between:
-      - Constant,
-      - Linear,
-      - Quadratic
 
 Validation
 ~~~~~~~~~~
 
-For both analyses it is possible to validate the generated metamodel.
-The following page enables to parametrize the validation.
-By default the metamodel is validating analytically.
+The generated metamodel can be validated. By default, the metamodel is validating analytically.
 
-.. image:: /user_manual/graphical_interface/data_analysis/metaModel_validation_page.png
-    :align: center
-
-Four methods are available:
-  - Analytically. This method correspond to an approximation of the Leave-one-out method result.
+The following windows allows to set up the validation. Four methods are available:
+  - Analytically: This method correspond to an approximation of the Leave-one-out method result.
       - Kriging: cf O. Dubrule, Cross Validation of Kriging in a Unique Neighborhood,
         Mathematical Geology,1983.
       - Functional chaos: cf G. Blatman, Adaptive sparse polynomial chaos
@@ -539,37 +540,33 @@ Four methods are available:
     That is to say a new metamodel is building with the training sample
     and it is validating with the test sample.
     The points are randomly picked in the data sample (by default the seed is 1).
-  - `K-Fold <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_
-  - `Leave-one-out <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_.
-    Be careful, this method is very time consuming.
-
+  - `K-Fold <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_:
+     - Define the number of folds (default: 5, expected: integer greater than 1)
+     - The folds are generated randomly (by default the seed is 1)
+    
+.. image:: /user_manual/graphical_interface/data_analysis/metaModel_validation_page.png
+    :align: center
 
 4-2 Results
 '''''''''''
 
-When validating the previous window, a new element appears in the study tree below the
+When the window is validated, a new element appears in the study tree below the
 data model item or the design of experiments item.
 
 The context menu of this item contains these actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Convert metamodel into physical model** (Default: disabled): When the analysis
-    is finished or stopped successfully, add the metamodel in the study tree;
-  - **Remove**: Remove the analysis from the study.
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Convert metamodel into physical model** (default: disabled, enabled when the analysis
+    is successfully finished): Add the metamodel in the study tree
+  - **Remove**: Remove the analysis from the study
 
-.. image:: /user_manual/graphical_interface/data_analysis/metamodel_contextMenu.png
-    :align: center
-
-The item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+This item is associated with a window displaying the list of the parameters, a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModelWindow.png
     :align: center
 
-Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
-on the **Stop** button.
-
-When the analysis is finished or stopped, a result window appears.
+.. _functionalchaosresult:
 
 Functional chaos
 ~~~~~~~~~~~~~~~~
@@ -579,100 +576,93 @@ Functional chaos
 
 The results window gathers:
 
-- The **Metamodel** tab which contains for each output:
+- The **Metamodel** tab which contains for the selected output (left column):
+    - the number of points
     - the relative error: :math:`\displaystyle rel = \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(y_i - \bar{y})^2}}`
     - the residual: :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
+    - a plot opposing the metamodel values (**Prediction**) to the physical model output values
+      (**Real output values**). The diagonal (in black) is built with the physical model output values.
 
-  It contains also a plot opposing the metamodel values to the physical model output values.
-  A diagonal is built with the physical model output values.
+        - The **Graphic settings** window (below the study tree) allows to:
+            - Export the figure
+            - Set up parameters:
+                - Graph title (expected: string)
+                - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                  string), minimum/maximum bounds (expected: floating point)
 
-  The user can configure the plot with the graphic settings below the study tree.
+        - Graph interactions:
+           - Left-click to translate the graph
+           - Mouse wheel up/down to zoom/zoom out
 
-  The user can define:
-    - The title of the graph, expected to be a string;
+- The **Results** tab presents, for a selected output (left column):
+    - the first and second order moments
+    - the polynomial basis dimension, maximum degree, full and truncated size
+    - the part of variance explains by each polynom
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
+    .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_moments.png
+        :align: center
 
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved;
+- The **Sobol indices** tab includes, for a selected output (left column):
 
-- The **Summary** tab presents:
-    - the first and second order moments;
-    - the polynomial basis size, dimension and maximum degree.
+  - the graph of the input variables first and total order indices.
 
-  .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_moments.png
-      :align: center
+    - The **Graphic settings** window (below the study tree) allows to:
+       - Export the figure
+       - Set up parameters:
+          - Graph title (expected: string)
+          - X-axis labels orientation
+          - Axes title (expected: string)
 
-- The **Sobol indices** tab contains the first and total order indices plotted for each input variable.
+  - the table of the input variables first and total order indices.
+
+      - Interactions:
+          - Select cells and Press Ctrl+C to copy values in the clipboard
+          - Left-click on column header to sort values in ascending or descending order.
+            When sorting the table, the indices are also sorted on the graph.
+
+  - The index corresponding to the interactions.
+
+  .. |attentionButton| image:: /user_manual/graphical_interface/probabilistic_analysis/task-attention.png
+
+  If the Sobol's indices estimates are incoherent, refer to the warning message in the tooltip of |attentionButton|,
+  and try to perform the analysis with another sample size.
 
   .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_sobol_indices.png
     :align: center
 
-  The user can configure the plot with the graphic settings below the study tree;
-
-  .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_sobol_indices_graph_setting.png
-      :align: center
-
-  The user can define:
-    - The title of the graph, expected to be a string;
-
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved;
-
-  - The tab has a table with the first and total order indices value for each variable. Each
-    column can be sorted by clicking on its header. When sorting the table, the
-    points on the graphic are also sorted;
-
-  - The index corresponding to the interactions;
-
-  .. |attentionButton| image:: /user_manual/graphical_interface/probabilistic_analysis/task-attention.png
-
-If the Sobol's indices estimates are incoherent, refer to the warning message in the tooltip of |attentionButton|,
-and try to perform the analysis with a greater sample size.
-
-- If the user requested a metamodel validation, the window contains a **Validation** tab.
-  This tab presents for each methods and for each output:
-
+- The **Validation** tab (if a metamodel validation required) shows for each method and for the selected output:
     - the metamodel predictivity coefficient: :math:`\displaystyle Q2 = 1 - \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(\bar{y} - y_i)^2}}`
     - the residual: :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
+    - *K-Fold* and *Test sample*: A plot which opposes the predicted metamodel values
+      to the physical model output value. A diagonal is built
+      with the physical model output values.
 
-  It contains also a plot which opposes the predicted metamodel values
-  to the physical model output values (except for the analytical validation of
-  the metamodel built with the functional chaos method). A diagonal is built
-  with the physical model output values.
+        - The **Graphic settings** window (below the study tree) allows to:
+            - Export the figure
+            - Set up parameters:
+                - Graph title (expected: string)
+                - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                  string), minimum/maximum bounds (expected: floating point)
 
-  .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_LOO_plot.png
-      :align: center
+        - Graph interactions:
+           - Left-click to translate the graph
+           - Mouse wheel up/down to zoom/zoom out
 
-  The user can configure the plot with the graphic settings below the study tree:
+      .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_LOO_plot.png
+         :align: center
 
-  .. image:: /user_manual/graphical_interface/data_analysis/metaModel_graph_setting.png
-      :align: center
+    - *Analytical*: the Q2 value
 
-  The user can define:
-    - The title of the graph, expected to be a string;
+      .. image:: /user_manual/graphical_interface/data_analysis/FC_analyticalValidation.png
+         :align: center
 
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved;
 
 - The **Parameters** tab which contains the analysis' parameters' values.
 
   .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_parameters.png
       :align: center
 
+.. _krigingresult:
 
 Kriging
 ~~~~~~~
@@ -682,31 +672,46 @@ Kriging
 
 The results window gathers:
 
-- The **Metamodel** tab which contains a plot opposing the metamodel values to the physical
-  model output values. A diagonal is built with the physical model output values.
+- The **Metamodel** tab which contains for the selected output (left column)
+  a plot opposing the metamodel values (**Prediction**) to the physical model output values
+  (**Real output values**). The diagonal (in black) is built with the physical model output values.
 
-  The user can configure the plot with the graphic settings below the study tree.
+  - The **Graphic settings** window (below the study tree) allows to:
+      - Export the figure
+      - Set up parameters:
+          - Graph title (expected: string)
+          - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+            string), minimum/maximum bounds (expected: floating point)
 
-  .. image:: /user_manual/graphical_interface/data_analysis/metaModel_graph_setting.png
-      :align: center
-
-  The user can define:
-    - The title of the graph, expected to be a string;
-
-  It has two tabs, **X-axis** and **Y-axis** where the user can define:
-    - The axis title, expected to be a string;
-    - The minimum bound of the axis, expected to be a floating point;
-    - The maximum bound of the axis, expected to be a floating point.
-
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved;
+      - Graph interactions:
+         - Left-click to translate the graph
+         - Mouse wheel up/down to zoom/zoom out
 
 - The **Results** tab presents the optimized covariance model parameters and the trend coefficients.
 
   .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_kriging_results.png
       :align: center
 
-- As for the functional chaos result window, if the user requested a metamodel validation,
-  the window contains a **Validation** tab.
+- If a metamodel validation is required, the window contains a **Validation** tab which shows for each method and for the selected output:
+    - the residual: :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
+    - the metamodel predictivity coefficient: :math:`\displaystyle Q2 = 1 - \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(\bar{y} - y_i)^2}}`
+    - a plot which opposes the predicted metamodel values
+      to the physical model output value. A diagonal is built
+      with the physical model output values.
+
+      - The **Graphic settings** window (below the study tree) allows to:
+            - Export the figure
+            - Set up parameters:
+                - Graph title (expected: string)
+                - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
+                  string), minimum/maximum bounds (expected: floating point)
+
+      - Graph interactions:
+           - Left-click to translate the graph
+           - Mouse wheel up/down to zoom/zoom out
+
+      .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_LOO_plot.png
+         :align: center
 
 - The **Parameters** tab which contains the analysis' parameters' values.
+

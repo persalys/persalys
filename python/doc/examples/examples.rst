@@ -160,7 +160,7 @@ change the value in the corresponding cell.
 '''''''''''''''''''''
 
 For more details on the
-`Linear Taylor Expansions <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid6.xhtml#uid1006>`_
+`Linear Taylor Expansions <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/taylor_moments.html>`_
 see the OpenTURNS documentation.
 
 3-1-1 Definition
@@ -198,7 +198,7 @@ The results window contains a table.
 3-2 Monte Carlo
 '''''''''''''''
 
-For more details on the `Monte Carlo method <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#uid626>`_
+For more details on the `Monte Carlo method <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_
 see the OpenTURNS documentation.
 
 3-2-1 Definition
@@ -244,7 +244,7 @@ values :
 4- Min/Max study with deterministic design of experiments
 `````````````````````````````````````````````````````````
 
-For more details on the `Min/Max approach <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#uid599>`_
+For more details on the `Min/Max approach <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_
 see the OpenTURNS documentation.
 
 4-1 Definition
@@ -404,7 +404,7 @@ a table.
 '''''''''''''''
 
 For more details on the computation of the
-`Standard Regression Coefficients <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid5.xhtml#uid916>`_
+`Standard Regression Coefficients <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_
 see the OpenTURNS documentation.
 
 5-1-1 Definition
@@ -534,7 +534,7 @@ This graph shows the value of the probability estimate at each iteration.
 ''''''''
 
 For more details on the computation of the failure probability by the method of
-`FORM <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#docref_C311_Form>`_
+`FORM <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/form_approximation.html>`_
 see the OpenTURNS documentation.
 
 6-3-1 Definition
@@ -573,18 +573,18 @@ the pie chart.
 .. image:: FORM_designPoint_result.png
     :align: center
 
-For more details on the `Importance factors <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid5.xhtml#uid964>`_
+For more details on the `Importance factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_form.html>`_
 see the OpenTURNS documentation.
 
 The **Sensitivity** tab indicates the sensitivity factors.
-For more details on the `Sensitivity factors <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid5.xhtml#uid976>`_
+For more details on the `Sensitivity factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_form.html>`_
 see the OpenTURNS documentation.
 
 6-4 FORM-Importance sampling
 ''''''''''''''''''''''''''''
 
 For more details on the computation of the failure probability by the method of
-`Importance sampling <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid4.xhtml#docref_C322_TI>`_
+`Importance sampling <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_simulation.html>`_
 see the OpenTURNS documentation.
 
 6-4-1 Definition
@@ -661,7 +661,7 @@ appears.
 ''''''''''''''''''''
 
 For more details on the computation of a metamodel by the method of
-`Functional chaos <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid6.xhtml#docref_SurfRep_PCBasis>`_
+`Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_
 see the OpenTURNS documentation.
 
 The functional chaos enables to compute the Sobol indices.
@@ -728,7 +728,7 @@ The value is close to the value obtained thanks to the :ref:`analytical formula 
 '''''''''''
 
 For more details on the computation of a metamodel by the method of
-`Kriging <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid6.xhtml#docref_SurfRep_Kriging>`_
+`Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_
 see the OpenTURNS documentation.
 
 7-3-1 Definition

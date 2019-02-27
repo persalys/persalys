@@ -2,92 +2,117 @@
 User manual - Define a physical model
 =====================================
 
+This section introduces the models defined with a vectorial function.
+
+Several types of physical models are available:
+  - **Symbolic model**: Physical model defined with analytical formulas
+  - **Python model**: Physical model defined with a Python script
+  - **YACS model**: Physical model defined with a YACS scheme (optional)
+  - **FMI model**: Physical model defined with a FMU file (optional)
+
 1- Creation
 ===========
 
-A physical model can be created through:
-  - the context menu of the study item;
-  - a button of the study window.
+There are several ways to create a new model:
+  - Select an item in the context menu of the study item
 
-The context menu of the Study or its window provides three types of physical model:
-  - Symbolic model
-  - Python model
-  - YACS model
+    .. image:: /user_manual/graphical_interface/getting_started/studyItemContextMenu.png
+        :align: center
 
-The creation of a physical model adds a new element in the study tree below an item named **Physical models**.
+  - Click on a button of the study window
 
-Its context menu has the following actions:
-  - **Rename**: Rename the model;
-  - **Define the model**: Open a new window to define the model;
-  - **Remove**: Remove the model from the study.
+    .. image:: /user_manual/graphical_interface/physical_model/studyWindowButtons.png
+        :align: center
+
+The creation of a physical model adds a new element in the study tree, below the **Physical models** section.
+
+Different actions are available through the context menu of the model (by right click):
+  - **Rename**: Rename the model
+  - **Define the model**: Open a new window to define the model
+  - **Remove**: Remove the model and all the analyses depending on it
 
 .. image:: /user_manual/graphical_interface/physical_model/physicalModelNameContextMenu.png
     :align: center
 
-The item is associated with a 'Physical model diagram' window containing an **Use pattern**.
+.. _vectmodeldiagram:
+
+The item is associated with a **Study workflow** window.
 
 .. image:: /user_manual/graphical_interface/physical_model/physicalModelDiagram.png
     :align: center
 
-This diagram displays the possible actions that the user can perform in real time.
-An action is active when its box is in dark green and disabled when its box is in light green.
-A box is active when the previous one is valid.
-When passing the cursor on each box, an information message appears at the bottom of the window
-in order to specify what sort of actions the box proposes. If the box is disabled the message
-indicates why the previous one is not valid.
+This diagram displays the possible actions an user can perform in real time. An action
+is active when its box is in dark green and when a previous one is valid. A box is disabled when its box
+is in light green, and the previous one is not valid.
+When the mouse pointer is hovered over a box, an information message appears at the bottom of
+the window in order to specify what sort of actions the box proposes. If the box is disabled the
+message indicates why the previous one is not valid.
 
-On the above screenshot, the cursor is on the **Probabilistic model definition** box.
-The text explains that this box enables to define stochastic input variables and dependence,
-but these actions are possible only if the user has defined at least one input variable in the
-physical model.
-So, here the only option of the user is to complete the model.
+On the screenshot above, the mouse points over the **Probabilistic model definition** box: here the
+action is **Define stochastic input variables and the dependence** (below the main window), but
+this action is available only if the user defines at least one input variable in the physical model. So,
+here the only option of the user is to complete the model.
 
 2- Definition
 =============
 
-New physical model can be defined through:
-  - the context menu of the physical model item;
-  - the **Model definition** box of the model diagram.
+To define a physical model:
+  - Select **Define the model** in the context menu of the model item
 
-When the definition is requiring, a new item named **Definition** appears in the study tree.
+    .. image:: /user_manual/graphical_interface/physical_model/physicalModelNameContextMenu.png
+        :align: center
+
+  - Click on the **Model definition** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/physical_model/modeldefBox.png
+        :align: center
+
+When the definition is required, a new item named **Definition** appears in the study tree.
 
 Its context menu proposes these actions:
   - **Probabilistic model**: Create stochastic input variables and dependence
-  - **Evaluation**: Evaluate the model at a point
   - **Design of experiments**: Create a new design of experiments
+  - **Evaluation**: Evaluate the model at a point
+  - **Screening**: Perform a screening analysis
+  - **Optimization**: Perform an optimization
 
 .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
     :align: center
 
-This item is associated with a window depending of the type of the chosen physical model.
+The new item **Definition** is associated with a window in the main frame, whose title is the name of
+the chosen physical model. In this window, the user can specify the model variables (**Definition** tab)
+and the finite difference step of each variable (**Differentiation** tab).
 
-2-1 "Symbolic physical model": define a physical model with analytical formulas
+.. _vectsymbolicmodel:
+
+2-1 *Symbolic model*: define a physical model with analytical formulas
 -------------------------------------------------------------------------------
-
-It consists in listing manually all the input and output variables by adding
-lines in the two tables "Inputs" and "Outputs".
-By default the inputs are deterministic variables equal to 0. Values are expected
-to be floating points or integers.
 
 .. image:: /user_manual/graphical_interface/physical_model/symbolicPhysicalModel.png
     :align: center
 
-Names of the variables are strings. Only alphanumeric characters are allowed. Default set the name of the variable
-to X0 for the first input, X1 for the second, Y0 for the first output, etc...
-A label can be assigned to each input and output variable in the **Description** column. There is no restriction
-on the label value (floating point, integer, string, etc...).
+Define variables in the **Definition** tab:
+  - the **Inputs** section allows to:
+      - Add/remove inputs (**Add**/**Remove** button)
+      - *Name column*: Rename variables (default: (X0, X1, ...), expected: string (alphanumeric characters only))
+      - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
+        the label format: floating point, integer, string, etc...))
+      - *Value column*: Assign a value to the inputs (default: 0, expected: floating points or integers)
+  - the **Outputs** section allows to:
+      - Add/remove outputs (**Add**/**Remove** button)
+      - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
+        To perform the analyses, at least one output must be selected.
+      - *Name column*: Rename variables (default: (Y0, Y1, ...), expected: string (alphanumeric characters only))
+      - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
+        the label format: floating point, integer, string, etc...))
+      - *Formula column*: Define the mathematical relationships between the input and output variables.
+        Note that the language used here differs from Python (see corresponding syntax for operators,
+        mathematical functions and constants below).
+      - **Evaluate** *button*: Launch the compututation of the selected output values based on inputs and formula.
+        It shall be used to test the physical model. For these output values to be saved, the user
+        should use a :ref:`Model evaluation <modelEvaluation>`.
 
-Each line of the "Outputs" table is checkable to allow the user to enable or disable one or several variables.
-By default all of the outputs are checked. The model must have at least one selected output to perform
-analyses.
-
-The relationships between the inputs and the outputs have to be defined in the **Formula** column.
-The language used here is different from Python. Syntaxes for the operators, mathematical functions
-and constants are listed below.
-
-The **Evaluate** button computes the value of the outputs based on the input values
-and the formula. It shall be used to test the physical model. In order to get evaluations which can be saved,
-the user should use :ref:`the Deterministic Study <deterministicStudy>`.
+.. _AvailableSymbolsModel:
 
 Available operators
 ~~~~~~~~~~~~~~~~~~~
@@ -154,29 +179,50 @@ Available constants
 - pi\_
 
 
-2-2 "Python physical model": define a physical model with a Python editor
+.. _vectpythonmodel:
+
+2-2 *Python model*: define a physical model with a Python editor
 -------------------------------------------------------------------------
 
-It consists in defining the physical model as a Python function **_exec**
+.. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel_default.png
+    :align: center
+
+The model definition window contains:
+ - the **Python editor** allows to define the model with the function **_exec** which:
+    - takes floating point arguments (detected as the inputs of the model) (default: X0)
+    - returns a float or a sequence of floats (detected as the outputs of the model) (default: Y0 = X0)
+    - can used other statements defined in the Python editor
+
+ - the **Inputs** section allows to:
+    - List the inputs detected from the function **_exec**
+    - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
+      the label format: floating point, integer, string, etc...))
+    - *Value column*: Assign a value to the inputs (default: 0, expected: floating points or integers)
+
+ - the **Outputs** section allows to:
+    - List the outputs detected from the function **_exec**
+    - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
+      To perform the analyses, at least one output must be selected.
+    - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
+      the label format: floating point, integer, string, etc...))
+    - Require the parallelization of the computations (**Enable multiprocessing** button)
+    - **Evaluate** *button*: Launch the computation of the selected output values based on inputs, and the Python function.
+      It shall be used to test the physical model. For these output values to be saved, the user
+      should use a :ref:`Model evaluation <modelEvaluation>`.
+
+Here is an example of a more complex model definition:
 
 .. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel.png
     :align: center
 
-This function takes floating point arguments and returns a float or a sequence of floats.
+Here is an example of an error message transmission, when we tried to compute sqrt(C=-450):
 
-Input variables names are detected from the function definition.
-The value of the input variables can be set by the user and are expected
-to be floating points or integers. By default they are equal to 0.
+.. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel_error.png
+    :align: center
 
-The variables listed in the return are detected as output variables.
+.. _vectyacsmodel:
 
-Other statements which may be used by the **_exec** function can be defined in the Python editor.
-
-The **Evaluate** button calculates the value of the outputs based on the input values
-and the Python code. It shall be used to test the physical model. In order to get evaluations which can be saved,
-the user should use :ref:`the deterministic study <deterministicStudy>`.
-
-2-3 "YACS physical model": define a physical model with an XML file
+2-3 *YACS model*: define a physical model with an XML file
 -------------------------------------------------------------------
 
 A physical model can be defined by loading an XML file, previously generated for example with Salome,
@@ -191,35 +237,27 @@ which contains:
 .. image:: /user_manual/graphical_interface/physical_model/YACSPhysicalModel.png
     :align: center
 
-The user requires the parallelization of the computation when checking the check box
-**Parallelize status**.
-Because of a temporary problem with the module of Code_Aster, it is necessary to
-uncheck **Parallelize status** before launching analyses using Code_Aster solver.
+The **Evaluate** button computes the output values based on inputs and the YACS scheme. It shall be
+used to test the physical model. For these output values to be saved, the user should use the :ref:`Model evaluation <modelEvaluation>`.
 
-The combo box **Fitting machines** lists all the machines defined in the xml file where the computation
-can be realized.
+.. _vectfmimodel:
 
-The **Evaluate** button calculates the value of the outputs based on the input values
-and the YACS scheme. It shall be used to test the physical model. In order to get evaluations which can be saved,
-the user should use :ref:`the deterministic study <deterministicStudy>`.
-
-2-4 "FMI physical model": define a physical model from an FMU file
+2-4 *FMI model*: define a physical model from an FMU file
 ------------------------------------------------------------------
 
-A physical model can be defined by loading an FMU file, previously generated 
+A physical model can be defined by loading a FMU file, previously generated 
 by OpenModelica for example.
-
-The first tab allows to select the fmu file and display some properties of the
-file.
 
 .. image:: /user_manual/graphical_interface/physical_model/FMIPhysicalModel1.png
     :align: center
 
-Then a second tab is open and describes the model variables.
-The variables exposed by the model are listed in the main array.
+The **Properties** tab allows to select the FMU file and to display its properties.
+
+The **Variables** tab describes the model variables.
+The main array shows the list of the variables.
 While the variability and causality are read-only FMI attributes,
 one may want to change whether how variables are used regarding the physical
-model: disabled, input or output in the *I/O* column under these constraints:
+model: disabled, input or output in the *I/O* column under the following constraints:
 
 - A variable of causality *Input* cannot be disabled
 - A variable of causality *Output* or *Local* cannot be used as input
@@ -228,11 +266,13 @@ model: disabled, input or output in the *I/O* column under these constraints:
 .. image:: /user_manual/graphical_interface/physical_model/FMIPhysicalModel2.png
     :align: center
 
-By default all the variables appear in the array and some filters allow
-to alter the currently listed variables.
+By default, all the variables appear in the array and some filters allow
+to modify the currently listed variables.
 
-The **Evaluate** runs the model once.
-The output values are displayed in the *value* column.
+The **Evaluate** button runs the model once.
+The output values are displayed in the **Value** column.
+
+.. _DifferentiationTab:
 
 2-5 Differentiation tab
 -----------------------
