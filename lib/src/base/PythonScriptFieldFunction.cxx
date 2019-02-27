@@ -36,6 +36,20 @@ CLASSNAMEINIT(PythonScriptFieldFunction)
 
 static Factory<PythonScriptFieldFunction> Factory_PythonScriptFieldFunction;
 
+// add conversion method
+template <class Sample, class _PySequence_> static inline PyObject * customConvert(Sample);
+template <>
+inline
+PyObject *
+customConvert< Sample, _PySequence_ >(Sample inS)
+{
+  UnsignedInteger size = inS.getSize();
+  PyObject * sample = PyTuple_New(size);
+  for (UnsignedInteger i = 0; i < size; ++ i)
+    PyTuple_SetItem(sample, i, convert< Point, _PySequence_ >(inS[i]));
+  return sample;
+}
+
 // Temporary template to overwrite the convert template of OT defined in PythonWrappingFunctions.hxx
 // We replace throw; with throw InvalidArgumentException(HERE)
 // TODO: rm this template with the next OT version
@@ -220,7 +234,9 @@ PythonScriptFieldFunction::PythonScriptFieldFunction(const Description& inputVar
   InterpreterUnlocker iul;
   PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
   PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
-  String meshCode = "import openturns as ot\ndef getMesh():\n    return ot.Mesh(" + Parameters::GetOTSampleStr(mesh.getVertices()) + ")\n";
+  PyObject * meshVerticesTuple(customConvert< Sample, _PySequence_ >(mesh.getVertices()));
+  PyModule_AddObject(module, "mesh_vertices_sample_converted_in_Python_Object", meshVerticesTuple);
+  const String meshCode("import openturns as ot\ndef getMesh():\n    return ot.Mesh(mesh_vertices_sample_converted_in_Python_Object)\n");
   ScopedPyObjectPointer retValue(PyRun_String(meshCode.c_str(), Py_file_input, dict, dict));
   handleException();
 }
