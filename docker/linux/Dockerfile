@@ -82,7 +82,7 @@ RUN curl -SsL https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz | tar xz 
 
 # pip
 RUN curl -sSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
- && pip install -U pip wheel setuptools && pip install scipy matplotlib ipython --upgrade
+ && pip install -U pip wheel setuptools && pip install scipy pandas matplotlib ipython --upgrade
 
 # sundials
 RUN curl -kL https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz | tar xz && cd sundials-2.7.0 \
