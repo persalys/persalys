@@ -65,6 +65,8 @@ do
   cp -v /usr/local/lib/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
 done
 
+cp -v /usr/local/lib/libXYChartRepresentationColumns.so otgui.AppDir/usr/lib
+
 # qt libs
 for libname in Qt5XcbQpa Qt5DBus Qt5Widgets Qt5Gui Qt5Test Qt5Core qwt Qt5PrintSupport Qt5OpenGL Qt5Svg Qt5Concurrent Qt5Help Qt5Network Qt5X11Extras Qt5Sql
 do
