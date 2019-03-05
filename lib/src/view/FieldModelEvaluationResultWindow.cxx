@@ -33,6 +33,7 @@
 #include "otgui/ParametersTableView.hxx"
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
+#include "otgui/PlotMatrixConfigurationWidget.hxx"
 
 #ifdef OTGUI_HAVE_PARAVIEW
 #include "otgui/PVServerManagerInterface.hxx"
@@ -49,6 +50,8 @@
 #endif
 
 #include <openturns/KernelSmoothing.hxx>
+
+#include <qwt_legend.h>
 
 #include <QHBoxLayout>
 #include <QGroupBox>
@@ -155,6 +158,12 @@ void FieldCentralTendencyResultWindow::buildInterface()
 
 void FieldCentralTendencyResultWindow::addDecompositionTab()
 {
+  bool canUseParaview = false;
+#ifdef OTGUI_HAVE_PARAVIEW
+  if (SubWindow::HaveOpenGL32())
+    canUseParaview = true;
+#endif
+
   // display Karhunen-Loeve Result
   const UnsignedInteger nbOutput = result_.getProcessSample().getDimension();
   if (result_.getKarhunenLoeveResults().getSize() != nbOutput)
@@ -185,11 +194,9 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
     connect(mainWidget_->getOutListWidget(), SIGNAL(currentRowChanged(int)), xiPDFStackedWidget, SLOT(setCurrentIndex(int)));
     xiTab->addTab(xiPDFStackedWidget, tr("PDF"));
 
-#ifdef OTGUI_HAVE_PARAVIEW
     xiMatrixStackedWidget = new ResizableStackedWidget;
     connect(mainWidget_->getOutListWidget(), SIGNAL(currentRowChanged(int)), xiMatrixStackedWidget, SLOT(setCurrentIndex(int)));
     xiTab->addTab(xiMatrixStackedWidget, tr("Plot matrix"));
-#endif
   }
 
   // for each output
@@ -199,7 +206,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
     const QStringList currentOutName = QStringList() << outNames[out];
     const UnsignedInteger nbModes = result_.getKarhunenLoeveResults()[out].getEigenValues().getSize();
     ProcessSample scaledModes = result_.getKarhunenLoeveResults()[out].getScaledModesAsProcessSample();
-    const Description colors(Drawable().BuildDefaultPalette(nbModes));
+
     // compute Cumulative eigen value sum
     Sample cumulEigenSample(nbModes, 2);
     Point sumEigenValues(2, 0);
@@ -244,9 +251,64 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
 
     klWidget->addWidget(eigenWidget);
 
+    // 2- modes graph
+    WidgetBoundToDockWidget * modesWidget = new WidgetBoundToDockWidget(this);
+    QVBoxLayout * modesWidgetLayout = new QVBoxLayout(modesWidget);
+    modesStackedWidget->addWidget(modesWidget);
+
 #ifdef OTGUI_HAVE_PARAVIEW
-    // 2- Cumulative eigen value sum graph
-    if (nbModes > 1)
+    if (canUseParaview)
+    {
+      PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
+      modesWidgetLayout->addWidget(outPVGraph);
+
+      Sample sample(scaledModes.getMesh().getVertices());
+      QStringList labels;
+      for (UnsignedInteger i = 0; i < nbModes; ++i)
+      {
+        sample.stack(scaledModes.getField(i).getValues().getMarginal(0));
+        labels << tr("Mode %1").arg(i);
+      }
+      sample.setDescription(QtOT::StringListToDescription(meshParamName + labels));
+      outPVGraph->PVViewWidget::setData(sample);
+      outPVGraph->setChartTitle("", "", tr("Modes"));
+      outPVGraph->setXAxisTitle("", "", meshParamName[0]);
+      outPVGraph->setYAxisTitle("", "", currentOutName[0]);
+      outPVGraph->setXAxisData(meshParamName[0]);
+      outPVGraph->setAxisToShow(labels);
+
+      PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph, labels, PVXYChartSettingWidget::Trajectories, this);
+      modesWidget->setDockWidget(scatterSettingWidget);
+    }
+#endif
+    if (!canUseParaview)
+    {
+      PlotWidget * plotWidget = new PlotWidget;
+      modesWidgetLayout->addWidget(plotWidget);
+      const Description colors(Drawable().BuildDefaultPalette(nbModes));
+
+      for (UnsignedInteger i = 0; i < nbModes; ++i)
+      {
+        Sample sample(scaledModes.getMesh().getVertices());
+        sample.stack(scaledModes.getField(i).getValues().getMarginal(0));
+        plotWidget->plotCurve(sample, QPen(colors[i].c_str()).color(), QwtPlotCurve::Lines, 0, tr("Mode %1").arg(i));
+      }
+      plotWidget->setTitle(tr("Modes"));
+      plotWidget->setAxisTitle(QwtPlot::yLeft, currentOutName[0]);
+      plotWidget->setAxisTitle(QwtPlot::xBottom, meshParamName[0]);
+      plotWidget->insertLegend(new QwtLegend, QwtPlot::RightLegend);
+      // Graph Setting
+      GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotWidget,
+          QStringList(),
+          QStringList(),
+          GraphConfigurationWidget::NoType,
+          this);
+      modesWidget->setDockWidget(graphSetting);
+    }
+
+    // 3- Cumulative eigen value sum graph
+#ifdef OTGUI_HAVE_PARAVIEW
+    if (canUseParaview && nbModes > 1)
     {
       WidgetBoundToDockWidget * cumulWidget = new WidgetBoundToDockWidget(this);
       QVBoxLayout * cumulWidgetLayout = new QVBoxLayout(cumulWidget);
@@ -269,33 +331,6 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       klWidget->setCollapsible(0, false);
       klWidget->setStretchFactor(1, 5);
     }
-
-    // 3- modes graph
-    WidgetBoundToDockWidget * modesWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * modesWidgetLayout = new QVBoxLayout(modesWidget);
-
-    PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
-    modesWidgetLayout->addWidget(outPVGraph);
-
-    Sample sample(scaledModes.getMesh().getVertices());
-    QStringList labels;
-    for (UnsignedInteger i = 0; i < nbModes; ++i)
-    {
-      sample.stack(scaledModes.getField(i).getValues().getMarginal(0));
-      labels << tr("Mode %1").arg(i);
-    }
-    sample.setDescription(QtOT::StringListToDescription(meshParamName + labels));
-    outPVGraph->PVViewWidget::setData(sample);
-    outPVGraph->setChartTitle("", "", tr("Modes"));
-    outPVGraph->setXAxisTitle("", "", meshParamName[0]);
-    outPVGraph->setYAxisTitle("", "", currentOutName[0]);
-    outPVGraph->setXAxisData(meshParamName[0]);
-    outPVGraph->setAxisToShow(labels);
-
-    PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph, labels, PVXYChartSettingWidget::Trajectories, this);
-    modesWidget->setDockWidget(scatterSettingWidget);
-
-    modesStackedWidget->addWidget(modesWidget);
 #endif
 
     // xi variables distributions
@@ -352,23 +387,32 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
 
       xiPDFStackedWidget->addWidget(plotWidget);
 
-#ifdef OTGUI_HAVE_PARAVIEW
       // Plot matrix
       WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
       QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
-
-      PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
-      pvmatrixWidget->setData(xi_sample);
-      // the variables are automatically sorted : use setAxisToShow with the order of the sample
-      pvmatrixWidget->setAxisToShow(xi_sample.getDescription());
-      matrixTabWidgetLayout->addWidget(pvmatrixWidget);
-
-      // setting widget
-      PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
-      matrixTabWidget->setDockWidget(matrixSettingWidget);
-
       xiMatrixStackedWidget->addWidget(matrixTabWidget);
+#ifdef OTGUI_HAVE_PARAVIEW
+      if (canUseParaview)
+      {
+        PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
+        pvmatrixWidget->setData(xi_sample);
+        // the variables are automatically sorted : use setAxisToShow with the order of the sample
+        pvmatrixWidget->setAxisToShow(xi_sample.getDescription());
+        matrixTabWidgetLayout->addWidget(pvmatrixWidget);
+
+        // setting widget
+        PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
+        matrixTabWidget->setDockWidget(matrixSettingWidget);
+      }
 #endif
+      if (!canUseParaview)
+      {
+        PlotMatrixWidget * matrixWidget = new PlotMatrixWidget(xi_sample, xi_sample);
+
+        PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(matrixWidget, this);
+        matrixTabWidget->setDockWidget(plotMatrixSettingWidget);
+        matrixTabWidgetLayout->addWidget(matrixWidget);
+      }
     }
   }
 
@@ -478,11 +522,17 @@ void FieldModelEvaluationResultWidget::buildInterface()
   mainSplitter->addWidget(outGroupBox);
 
   tabWidget_ = new QTabWidget;
+  bool canUseParaview = false;
 #ifdef OTGUI_HAVE_PARAVIEW
-  addParaviewWidgetsTabs();
-#else
-  addWidgetsTabs();
+  if (SubWindow::HaveOpenGL32())
+  {
+    addParaviewWidgetsTabs();
+    canUseParaview = true;
+  }
 #endif
+  if (!canUseParaview)
+    addWidgetsTabs();
+
   mainSplitter->addWidget(tabWidget_);
   mainSplitter->setStretchFactor(0, 2);
   mainSplitter->setStretchFactor(1, 10);
@@ -509,7 +559,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
   const UnsignedInteger nbInputPt = inputSample_.getSize();
   const UnsignedInteger nbNodes = processSample_.getMesh().getVerticesNumber();
   const QStringList outNames(QtOT::DescriptionToStringList(processSample_.getField(0).getValues().getDescription()));
-  const QStringList meshParamName = QStringList() << QString::fromUtf8(processSample_.getMesh().getDescription()[0].c_str());
+  const QString meshParamName = QString::fromUtf8(processSample_.getMesh().getDescription()[0].c_str());
   const Description meshNodesNames(Description::BuildDefault(nbNodes, processSample_.getMesh().getDescription()[0]));
   const Description colors(Drawable().BuildDefaultPalette(nbInputPt));
 
@@ -517,53 +567,12 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
   QWidget * tab = new QWidget;
   QHBoxLayout * tabLayout = new QHBoxLayout(tab);
 
-  // inputs table
-  ExportableTableView * tableView = new ExportableTableView;
-  SampleTableModel * tableModel = new SampleTableModel(inputSample_, tableView);
-  tableView->setModel(tableModel);
-  tabLayout->addWidget(tableView);
-
-  tabWidget_->addTab(tab, tr("Input"));
-
-  // outputs table tab
-  QSplitter * outWidget = new QSplitter(Qt::Horizontal);
-
-  // - list outputs
-  QGroupBox * outGroupBox = new QGroupBox(tr("Outputs"));
-  QVBoxLayout * groupBoxLayout = new QVBoxLayout(outGroupBox);
-
-  VariablesListWidget * outListWidget = new VariablesListWidget;
-  outListWidget->addItems(outNames);
-  groupBoxLayout->addWidget(outListWidget);
-
-  outWidget->addWidget(outGroupBox);
-  outWidget->setStretchFactor(0, 1);
-
-  // outputs table
-  tab = new QWidget;
-  tabLayout = new QHBoxLayout(tab);
-
+  // outputs tab
   QTabWidget * outTabWidget = new QTabWidget;
 
   for (UnsignedInteger out = 0; out < nbOutput; ++out)
   {
-    Sample fieldSample(nbInputPt, nbNodes);
-    fieldSample.setDescription(meshNodesNames);
-
-    for (UnsignedInteger in = 0; in < nbInputPt; ++in)
-    {
-      fieldSample[in] = processSample_.getField(in).getValues().getMarginal(out).asPoint();
-    }
-
-    QWidget * outTab = new QWidget;
-    QHBoxLayout * outTabLayout = new QHBoxLayout(outTab);
-    tableView = new ExportableTableView;
-    tableModel = new SampleTableModel(fieldSample, tableView);
-    tableView->setModel(tableModel);
-    outTabLayout->addWidget(tableView);
-    outTabWidget->addTab(outTab, tr("Table"));
-
-    // graph tab --------------------------------
+    // trajectories tab --------------------------------
     WidgetBoundToDockWidget * graphTabWidget = new WidgetBoundToDockWidget(this);
     QVBoxLayout * graphTabWidgetLayout = new QVBoxLayout(graphTabWidget);
 
@@ -574,16 +583,89 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
     {
       Sample sample(processSample_.getMesh().getVertices());
       sample.stack(processSample_.getField(in).getValues().getMarginal(out));
-      plotWidget->plotCurve(sample, QBrush(colors[in].c_str()).color());
+      plotWidget->plotCurve(sample, QPen(colors[in].c_str()).color(), QwtPlotCurve::Lines, 0, tr("Input %1").arg(in));
+    }
+    plotWidget->setTitle(tr("Trajectories"));
+    plotWidget->setAxisTitle(QwtPlot::yLeft, outNames[out]);
+    plotWidget->setAxisTitle(QwtPlot::xBottom, meshParamName);
+    plotWidget->insertLegend(new QwtLegend, QwtPlot::RightLegend);
+    // Graph Setting
+    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotWidget,
+        QStringList(),
+        QStringList(),
+        GraphConfigurationWidget::NoType,
+        this);
+    graphTabWidget->setDockWidget(graphSetting);
+
+    outTabWidget->addTab(graphTabWidget, nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
+
+    Sample fieldSample(nbInputPt, nbNodes);
+    fieldSample.setDescription(meshNodesNames);
+
+    for (UnsignedInteger in = 0; in < nbInputPt; ++in)
+    {
+      fieldSample[in] = processSample_.getField(in).getValues().getMarginal(out).asPoint();
     }
 
-    outTabWidget->addTab(graphTabWidget, tr("Graph"));
+    // table tab --------------------------------
+    QWidget * outTab = new QWidget;
+    QHBoxLayout * outTabLayout = new QHBoxLayout(outTab);
+    ExportableTableView * tableView = new ExportableTableView;
+    SampleTableModel * tableModel = new SampleTableModel(fieldSample, tableView);
+    tableView->setModel(tableModel);
+    outTabLayout->addWidget(tableView);
+    outTabWidget->addTab(outTab, tr("Table"));
+
+    // quantiles tab ----------------
+    if (meanSample_.getSize())
+    {
+      graphTabWidget = new WidgetBoundToDockWidget(this);
+      graphTabWidgetLayout = new QVBoxLayout(graphTabWidget);
+
+      plotWidget = new PlotWidget;
+      graphTabWidgetLayout->addWidget(plotWidget);
+      // mean
+      Sample sample(processSample_.getMesh().getVertices());
+      sample.stack(meanSample_.getMarginal(out));
+      plotWidget->plotCurve(sample, QPen(Qt::black), QwtPlotCurve::Lines, 0, tr("Mean"));
+      // quantile sup
+      sample = processSample_.getMesh().getVertices();
+      sample.stack(upperQuantileSample_.getMarginal(out));
+      plotWidget->plotCurve(sample, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("Quantile 95%"));
+      // quantile inf
+      sample = processSample_.getMesh().getVertices();
+      sample.stack(lowerQuantileSample_.getMarginal(out));
+      plotWidget->plotCurve(sample, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Quantile 5%"));
+
+      outTabWidget->addTab(graphTabWidget, tr("Mean trajectory"));
+
+      plotWidget->setTitle(tr("Quantiles"));
+      plotWidget->setAxisTitle(QwtPlot::yLeft, outNames[out]);
+      plotWidget->setAxisTitle(QwtPlot::xBottom, meshParamName);
+      plotWidget->insertLegend(new QwtLegend, QwtPlot::RightLegend);
+
+      // Graph Setting
+      graphSetting = new GraphConfigurationWidget(plotWidget,
+          QStringList(),
+          QStringList(),
+          GraphConfigurationWidget::NoType,
+          this);
+      graphTabWidget->setDockWidget(graphSetting);
+    }
   }
 
-  outWidget->addWidget(outTabWidget);
-  outWidget->setStretchFactor(1, 10);
+  tabWidget_->addTab(outTabWidget, tr("Result"));
 
-  tabWidget_->addTab(outWidget, tr("Result"));
+  // input tab
+  tab = new QWidget;
+  tabLayout = new QHBoxLayout(tab);
+  // -- inputs table
+  ExportableTableView * tableView = new ExportableTableView;
+  SampleTableModel * tableModel = new SampleTableModel(inputSample_, tableView);
+  tableView->setModel(tableModel);
+  tabLayout->addWidget(tableView);
+
+  tabWidget_->addTab(tab, tr("Input"));
 }
 
 
@@ -781,7 +863,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     outPVGraph->setAxisToShow(fieldSamplet.getDescription());
 
     PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph,
-                                                                               QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
+        QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
                                                                                PVXYChartSettingWidget::Trajectories,
                                                                                this);
     graphTabWidget->setDockWidget(scatterSettingWidget);
