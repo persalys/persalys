@@ -893,13 +893,16 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
 
   PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
-  pvmatrixWidget->setData(designOfExperiment_.getSample());
+  pvmatrixWidget->setData(sampleRank);
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
   pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
   matrixTabWidgetLayout->addWidget(pvmatrixWidget);
 
   // setting widget
-  PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
+  PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget,
+      designOfExperiment_.getSample(),
+      sampleRank,
+      this);
   matrixTabWidget->setDockWidget(matrixSettingWidget);
 
   tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
