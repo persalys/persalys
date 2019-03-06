@@ -2112,81 +2112,82 @@ métamodèle</translation>
 <context>
     <name>OTGUI::FieldCentralTendencyResultWindow</name>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="108"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="111"/>
         <source>Central tendency parameters</source>
         <translation>Paramètres de l&apos;analyse en tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="118"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="121"/>
         <source>Monte Carlo method</source>
         <translation>Méthode de Monte-Carlo</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="138"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="141"/>
         <source>An error has occurred during the execution of the analysis</source>
         <translation>Une erreur est survenue durant l&apos;exécution de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="141"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="144"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="146"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="149"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="150"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="153"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="169"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="289"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="178"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="274"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="296"/>
         <source>Modes</source>
         <translation>Modes</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="173"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="182"/>
         <source>Eigenvalues</source>
         <translation>Valeurs propres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="182"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="191"/>
         <source>ξi</source>
         <translation>ξi</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="195"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="191"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="199"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="227"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="234"/>
         <source>Number of modes</source>
         <translation>Nombre de modes</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="233"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="255"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="258"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="259"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="240"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="317"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="320"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="321"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="233"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="240"/>
         <source>Eigenvalue</source>
         <translation>Valeur propre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="233"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="240"/>
         <source>Cumulative
 eigenvalue
 sum</source>
@@ -2195,69 +2196,70 @@ cumulée des
 valeurs propres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="255"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="258"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="259"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="317"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="320"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="321"/>
         <source>Cumulative sum</source>
         <translation>Somme cumulée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="259"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="321"/>
         <source>Cumulative eigenvalue sum</source>
         <translation>Somme cumulée des valeurs propres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="285"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="270"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="294"/>
         <source>Mode %1</source>
         <translation>Mode %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="318"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="353"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="323"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="358"/>
         <source>PDF:</source>
         <translation>PDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="325"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="360"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="330"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="365"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="333"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="368"/>
         <source>CDF:</source>
         <translation>CDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="335"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="370"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="375"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="419"/>
         <source>Decomposition</source>
         <translation>Décomposition</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="403"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="447"/>
         <source>correlation</source>
         <translation>corrélation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="406"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="450"/>
         <source>Empirical correlation</source>
         <translation>Corrélation empirique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="422"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="466"/>
         <source>Correlation</source>
         <translation>Corrélation</translation>
     </message>
@@ -2341,96 +2343,103 @@ centrale</translation>
 <context>
     <name>OTGUI::FieldModelEvaluationResultWidget</name>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="469"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="532"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="513"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="526"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="840"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="668"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="922"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="564"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="624"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="659"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="617"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="706"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="741"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="580"/>
-        <source>Graph</source>
-        <translation>Graphique</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="586"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="839"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="657"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="921"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="610"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="744"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="692"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="826"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="614"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="748"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="696"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="830"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="645"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="727"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="655"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="600"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="737"/>
         <source>Trajectory</source>
         <translation>Trajectoire</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="655"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="777"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="586"/>
+        <source>Input %1</source>
+        <translation>Entrée %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="588"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="600"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="737"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="859"/>
         <source>Trajectories</source>
         <translation>Trajectoires</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="667"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="749"/>
         <source>Bag chart</source>
         <translation>Bag chart</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="671"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="753"/>
         <source>Functional bag chart</source>
         <translation>Functional bag chart</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="731"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="826"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="642"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="813"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="908"/>
         <source>Quantiles</source>
         <translation>Quantiles</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="802"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="640"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="884"/>
         <source>Mean trajectory</source>
         <translation>Trajectoire moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="822"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="630"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="904"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="822"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="634"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="904"/>
         <source>Quantile 95%</source>
         <translation>Quantile 95%</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="822"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="638"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="904"/>
         <source>Quantile 5%</source>
         <translation>Quantile 5%</translation>
     </message>
@@ -2438,22 +2447,22 @@ centrale</translation>
 <context>
     <name>OTGUI::FieldModelEvaluationResultWindow</name>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="72"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="75"/>
         <source>Model evaluation parameters</source>
         <translation>Paramètres d&apos;évaluation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="82"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="85"/>
         <source>Model evaluation</source>
         <translation>Évaluation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="89"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="92"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="93"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="96"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
@@ -3515,74 +3524,74 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::MarginalsWidget</name>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="106"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="108"/>
         <source>Import Morris result</source>
         <translation>Importer un résultat de Morris</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="127"/>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="354"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="130"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="357"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="129"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="132"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="155"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="158"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="159"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="162"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="163"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="166"/>
         <source>distributionQuantile</source>
         <translation>distributionQuantile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="167"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="170"/>
         <source>distributionSurvivalFunction</source>
         <translation>distributionFonctionSurvie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="193"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="196"/>
         <source>Truncation parameters</source>
         <translation>Paramètres de troncature</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="196"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="199"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="198"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="201"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="358"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="361"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="700"/>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="735"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="705"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="740"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="700"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="705"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="735"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="740"/>
         <source>The current study has not screening analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat de criblage.</translation>
     </message>
@@ -3688,72 +3697,72 @@ bayésien (BIC)</translation>
         <translation>Nombre de noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="110"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="114"/>
         <source>Import mesh</source>
         <translatorcomment>Importer le maillage</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="119"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="123"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="133"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="137"/>
         <source>File Preview</source>
         <translation>Prévisualisation du fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="140"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="144"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="186"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="189"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="188"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="191"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="199"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="202"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="200"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="203"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="223"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="226"/>
         <source>Impossible to load the file.%1%2</source>
         <translation>Impossible de charger le fichier.%1%2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="306"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="314"/>
         <source>The lower bound must be lesser than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="308"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="316"/>
         <source>The mesh must contain at least two nodes</source>
         <translation>Le maillage doit contenir au moins deux noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="313"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="321"/>
         <source>The file name is empty</source>
         <translation>Le nom du fichier est vide</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="328"/>
-        <source>Choose at least a column</source>
-        <translation>Choisir au moins une colonne</translation>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="333"/>
+        <source>Choose a column</source>
+        <translation>Choisir une colonne</translation>
     </message>
 </context>
 <context>
@@ -4996,7 +5005,7 @@ ou interaction</translation>
         <translation>Les bornes de l&apos;axe Y doivent être positives</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="567"/>
+        <location filename="../lib/src/view/plot/paraview/PVXYChartSettingWidget.cxx" line="566"/>
         <source>Select Color</source>
         <translation>Sélectionner une couleur</translation>
     </message>
