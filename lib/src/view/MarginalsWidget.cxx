@@ -102,10 +102,13 @@ void MarginalsWidget::buildInterface()
   leftSideLayout->addWidget(inputTableView_);
 
 #ifdef OTGUI_HAVE_OTMORRIS
-  // import Morris result button
-  QPushButton * importButton = new QPushButton(tr("Import Morris result"));
-  connect(importButton, SIGNAL(clicked(bool)), this, SLOT(openWizardToChooseScreeningResult()));
-  leftSideLayout->addWidget(importButton);
+  if (!physicalModel_.hasMesh())
+  {
+    // import Morris result button
+    QPushButton * importButton = new QPushButton(tr("Import Morris result"));
+    connect(importButton, SIGNAL(clicked(bool)), this, SLOT(openWizardToChooseScreeningResult()));
+    leftSideLayout->addWidget(importButton);
+  }
 #endif
 
   hSplitter->addWidget(leftSideWidget);

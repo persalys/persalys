@@ -22,6 +22,7 @@
 #define OTGUI_PHYSICALMODELDIAGRAMITEM_HXX
 
 #include "otgui/PhysicalModelDefinitionItem.hxx"
+#include "otgui/MeshItem.hxx"
 #include "otgui/ProbabilisticModelItem.hxx"
 #include "otgui/LimitStateItem.hxx"
 #include "otgui/DesignOfExperimentDefinitionItem.hxx"
@@ -78,6 +79,7 @@ signals:
   void designOfExperimentEvaluationRequested(const PhysicalModel&);
 
   void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
+  void meshWindowRequested(MeshItem*);
   void probabilisticModelItemCreated(ProbabilisticModelItem*);
   void doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*);
   void analysisItemCreated(AnalysisItem*);

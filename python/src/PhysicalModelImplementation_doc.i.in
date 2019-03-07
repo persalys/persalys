@@ -79,13 +79,36 @@ OTGUI_PhysicalModel_removeOutput_doc
 %define OTGUI_PhysicalModel_getFunction_doc
 "Accessor to the underlying function.
 
+Parameters
+----------
+outputNames : sequence of str
+    Names of the outputs to be evaluated (optional)
+
 Returns
 -------
 function : :py:class:`openturns.Function`
-    New variable"
+    Function evaluating the outputs"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getFunction
 OTGUI_PhysicalModel_getFunction_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getPointToFieldFunction_doc
+"Accessor to the underlying function.
+
+Parameters
+----------
+outputNames : sequence of str
+    Names of the outputs to be evaluated (optional)
+
+Returns
+-------
+function : :py:class:`openturns.PointToFieldFunction`
+    Function evaluating the outputs along the mesh nodes"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getPointToFieldFunction
+OTGUI_PhysicalModel_getPointToFieldFunction_doc
 
 // ---------------------------------------------------------------------
 
@@ -176,7 +199,7 @@ OTGUI_PhysicalModel_setOutputDescription_doc
 
 Parameters
 ----------
-inputs : sequence of :class:`~otguibase.Intput`
+inputs : sequence of :class:`~otguibase.Input`
     Input variables"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::setInputs
@@ -189,7 +212,7 @@ OTGUI_PhysicalModel_setInputs_doc
 
 Returns
 -------
-inputs : sequence of :class:`~otguibase.Intput`
+inputs : sequence of :class:`~otguibase.Input`
     Input variables"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getInputs
@@ -213,8 +236,8 @@ OTGUI_PhysicalModel_setOutputs_doc
 %define OTGUI_PhysicalModel_getOutputs_doc
 "Output variables accessor.
 
-Parameters
-----------
+Returns
+-------
 outputs : sequence of :class:`~otguibase.Output`
     Output variables"
 %enddef
@@ -233,7 +256,7 @@ name : str
 
 Returns
 -------
-input : :class:`~otguibase.Intput`
+input : :class:`~otguibase.Input`
     Input variable"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getInputByName
@@ -416,7 +439,7 @@ OTGUI_PhysicalModel_hasInputNamed_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_hasOutputNamed_doc
-"Whether an input name matches.
+"Whether an output name matches.
 
 Parameters
 ----------
@@ -537,6 +560,24 @@ OTGUI_PhysicalModel_getRestrictedFunction_doc
 
 // ---------------------------------------------------------------------
 
+%define OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
+"Accessor to the function restricted to it's stochastic inputs.
+
+Parameters
+----------
+outputNames : sequence of str
+    Output variables (optional)
+
+Returns
+-------
+restricted : :py:class:`openturns.PointToFieldFunction`
+    Stochastic function"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedPointToFieldFunction
+OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
+
+// ---------------------------------------------------------------------
+
 %define OTGUI_PhysicalModel_getSelectedOutputsNames_doc
 "Accessor to the selected outputs names.
 
@@ -598,3 +639,42 @@ isParallel : bool
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::setParallel
 OTGUI_PhysicalModel_setParallel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_hasMesh_doc
+"Whether the model has a mesh.
+
+Returns
+-------
+hasMesh : bool
+    Whether the model has a mesh"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::hasMesh
+OTGUI_PhysicalModel_hasMesh_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_setMeshModel_doc
+"Mesh model accessor.
+
+Parameters
+----------
+mesh : :class:`~otguibase.MeshModel`
+    Mesh model"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::setMeshModel
+OTGUI_PhysicalModel_setMeshModel_doc
+
+// ---------------------------------------------------------------------
+
+%define OTGUI_PhysicalModel_getMeshModel_doc
+"Mesh model accessor.
+
+Returns
+-------
+mesh : :class:`~otguibase.MeshModel`
+    Mesh model"
+%enddef
+%feature("docstring") OTGUI::PhysicalModelImplementation::getMeshModel
+OTGUI_PhysicalModel_getMeshModel_doc

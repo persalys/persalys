@@ -118,6 +118,8 @@ if (BUILD_GUI)
   ot_qt_check_test (ReliabilityAnalysisWizard_std)
   ot_qt_check_test (MetaModelAnalysisWizard_std)
   ot_qt_check_test (DesignOfExperimentWizard_std)
+  ot_qt_check_test (FieldMonteCarloWizard_std)
+  ot_qt_check_test (MeshDefinitionWizard_std)
 endif ()
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"

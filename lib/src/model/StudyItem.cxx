@@ -24,7 +24,9 @@
 #include "otgui/PhysicalModelAnalysis.hxx"
 #include "otgui/DesignOfExperimentAnalysis.hxx"
 #include "otgui/SymbolicPhysicalModel.hxx"
+#include "otgui/SymbolicFieldModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
+#include "otgui/PythonFieldModel.hxx"
 #ifdef OTGUI_HAVE_YACS
 #include "otgui/YACSPhysicalModel.hxx"
 #endif
@@ -71,6 +73,13 @@ void StudyItem::buildActions()
   newFMIModel_ = new QAction(tr("FMI model"), this);
   connect(newFMIModel_, SIGNAL(triggered()), this, SLOT(createFMIModel()));
 #endif
+  // new model actions
+  newSymbolicFieldModel_ = new QAction(tr("Symbolic Field model"), this);
+  connect(newSymbolicFieldModel_, SIGNAL(triggered()), this, SLOT(createSymbolicFieldModel()));
+
+  newPythonFieldModel_ = new QAction(tr("Python Field model"), this);
+  connect(newPythonFieldModel_, SIGNAL(triggered()), this, SLOT(createPythonFieldModel()));
+
 
   newDataModel_ = new QAction(tr("Data model"), this);
   connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createDataModel()));
@@ -101,6 +110,8 @@ void StudyItem::buildActions()
 #ifdef OTGUI_HAVE_OTFMI
   appendAction(newFMIModel_);
 #endif
+  appendAction(newSymbolicFieldModel_);
+  appendAction(newPythonFieldModel_);
   appendAction(newDataModel_);
   appendSeparator();
   appendAction(exportAction_);
@@ -163,9 +174,23 @@ void StudyItem::createSymbolicModel()
 }
 
 
+void StudyItem::createSymbolicFieldModel()
+{
+  SymbolicFieldModel * newModel = new SymbolicFieldModel(study_.getAvailablePhysicalModelName(tr("SymbolicModel_").toStdString()));
+  study_.add(newModel);
+}
+
+
 void StudyItem::createPythonModel()
 {
   PythonPhysicalModel * newModel = new PythonPhysicalModel(study_.getAvailablePhysicalModelName(tr("PythonModel_").toStdString()));
+  study_.add(newModel);
+}
+
+
+void StudyItem::createPythonFieldModel()
+{
+  PythonFieldModel * newModel = new PythonFieldModel(study_.getAvailablePhysicalModelName(tr("PythonModel_").toStdString()));
   study_.add(newModel);
 }
 
@@ -329,7 +354,10 @@ void StudyItem::appendItem(PhysicalModel & physicalModel)
   item->appendRow(newModelItem);
 
   // signal for StudyTreeView to create the window
-  emit physicalModelItemCreated(newModelItem);
+  if (!physicalModel.hasMesh())
+    emit physicalModelItemCreated(newModelItem);
+  else
+    emit fieldModelItemCreated(newModelItem);
 
   // Add sub items
   newModelItem->fill();

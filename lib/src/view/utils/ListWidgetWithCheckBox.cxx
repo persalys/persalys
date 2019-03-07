@@ -21,6 +21,7 @@
 #include "otgui/ListWidgetWithCheckBox.hxx"
 
 #include <QCheckBox>
+#include <iostream>
 
 namespace OTGUI
 {
@@ -56,21 +57,19 @@ void ListWidgetWithCheckBox::buildInterface()
   setSelectionMode(QAbstractItemView::NoSelection);
 
   // first item
-  QListWidgetItem * item_0 = new QListWidgetItem;
-  item_0->setData(Qt::DisplayRole, title_);
-  item_0->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+  QListWidgetItem * item_0 = new QListWidgetItem(title_, this);
+  item_0->setFlags(Qt::ItemIsEnabled);
   addItem(item_0);
 
   // other items
   for (int i = 0; i < itemNames_.size(); ++i)
   {
-    QListWidgetItem * item = new QListWidgetItem;
-    item->setData(Qt::DisplayRole, itemNames_[i]);
-    item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    QListWidgetItem * item = new QListWidgetItem(itemNames_[i], this);
+    item->setFlags(Qt::ItemIsEnabled);
     addItem(item);
   }
   setCheckedNames(checkedItemNames_);
-  connect(this, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(updateCheckState(QListWidgetItem *)));
+  connect(this, SIGNAL(itemPressed(QListWidgetItem *)), this, SLOT(updateCheckState(QListWidgetItem *)));
 }
 
 
@@ -79,7 +78,8 @@ void ListWidgetWithCheckBox::setCheckedNames(const QStringList &selectedItemName
   blockSignals(true);
   for (int i = 0; i < itemNames_.size(); ++ i)
   {
-    item(i + 1)->setData(Qt::CheckStateRole, selectedItemNames.contains(itemNames_[i]) ? Qt::Checked : Qt::Unchecked);
+    const bool isChecked = selectedItemNames.contains(itemNames_[i]);
+    item(i + 1)->setCheckState(isChecked ? Qt::Checked : Qt::Unchecked);
   }
   checkedItemNames_ = selectedItemNames;
   updateTitleItem();
@@ -104,9 +104,8 @@ QStringList ListWidgetWithCheckBox::getItemNames() const
 void ListWidgetWithCheckBox::updateTitleItem()
 {
   blockSignals(true);
-  QListWidgetItem * item_0 = item(0);
-  item_0->setData(Qt::CheckStateRole, itemNames_.size() == checkedItemNames_.size() ? Qt::Checked : Qt::Unchecked);
-  item_0->setData(Qt::ToolTipRole, itemNames_.size() == checkedItemNames_.size() ? tr("Deselect all") : tr("Select all"));
+  item(0)->setCheckState(itemNames_.size() == checkedItemNames_.size() ? Qt::Checked : Qt::Unchecked);
+  item(0)->setToolTip(itemNames_.size() == checkedItemNames_.size() ? tr("Deselect all") : tr("Select all"));
   blockSignals(false);
 }
 
@@ -115,26 +114,33 @@ void ListWidgetWithCheckBox::updateCheckState(QListWidgetItem * currentItem)
 {
   const int row = this->row(currentItem);
 
+  currentItem->setCheckState(currentItem->checkState() == Qt::Checked ? Qt::Unchecked : Qt::Checked);
+
   if (row == 0)
   {
-    setCheckedNames(currentItem->data(Qt::CheckStateRole).toInt() == Qt::Checked ? itemNames_ : QStringList());
+    setCheckedNames(currentItem->checkState() == Qt::Checked ? itemNames_ : QStringList());
   }
   else
   {
-    if (currentItem->data(Qt::CheckStateRole).toInt() == Qt::Checked)
+    if (currentItem->checkState() == Qt::Checked)
     {
-      if (checkedItemNames_.contains(currentItem->data(Qt::DisplayRole).toString()))
-        return;
-      checkedItemNames_.append(currentItem->data(Qt::DisplayRole).toString());
+      if (!checkedItemNames_.contains(currentItem->text()))
+        checkedItemNames_.append(currentItem->text());
     }
     else
     {
-      if (!checkedItemNames_.contains(currentItem->data(Qt::DisplayRole).toString()))
-        return;
-      checkedItemNames_.removeAt(checkedItemNames_.indexOf(currentItem->data(Qt::DisplayRole).toString()));
+      if (checkedItemNames_.contains(currentItem->text()))
+        checkedItemNames_.removeAt(checkedItemNames_.indexOf(currentItem->text()));
     }
     updateTitleItem();
     emit checkedItemsChanged(checkedItemNames_);
   }
+  QList<int> checkedItemIndices;
+  for (int i = 0; i < itemNames_.size(); ++ i)
+  {
+    if (item(i + 1)->checkState())
+      checkedItemIndices.append(i);
+  }
+  emit checkedItemsChanged(checkedItemIndices);
 }
 }

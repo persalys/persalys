@@ -7,7 +7,6 @@
 
 %include PhysicalModelImplementation_doc.i
 
-%ignore OTGUI::PhysicalModelImplementation::getRestrictedFunction;
 %ignore *::getHtmlDescription;
 %ignore *::getCopulaCollection;
 

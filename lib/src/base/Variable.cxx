@@ -20,6 +20,8 @@
  */
 #include "otgui/Variable.hxx"
 
+#include <openturns/PersistentObjectFactory.hxx>
+
 using namespace OT;
 
 namespace OTGUI
@@ -27,9 +29,14 @@ namespace OTGUI
 
 CLASSNAMEINIT(Variable)
 
+static Factory<PersistentCollection<Variable> > Factory_PersistentCollectionVariable;
+static Factory<Variable> Factory_Variable;
+
 /* Default constructor */
 Variable::Variable()
   : PersistentObject()
+  , value_(0.)
+  , description_("")
 {
 }
 
@@ -44,9 +51,26 @@ Variable::Variable(const String & name, const double & value, const String & des
 }
 
 
+/* Constructor with parameters */
+Variable::Variable(const String & name, const String & description)
+  : PersistentObject()
+  , value_(0.)
+  , description_(description)
+{
+  setName(name);
+}
+
+
+/* Virtual constructor */
+Variable* Variable::clone() const
+{
+  return new Variable(*this);
+}
+
+
 String Variable::__repr__() const
 {
-  return OSS() << "class=" << getClassName() << " name=" << getName();
+  return OSS() << "class=" << getClassName() << " name=" << getName() << " description=" << getDescription();
 }
 
 
@@ -91,6 +115,20 @@ String Variable::getEscapedDescription() const
 void Variable::setDescription(const String & description)
 {
   description_ = description;
+}
+
+
+String Variable::getPythonScript() const
+{
+  OSS oss;
+  oss.setPrecision(12);
+
+  String pythonName(getName());
+  std::replace(pythonName.begin(), pythonName.end(), '.', '_');
+
+  oss << pythonName << " = otguibase.Variable('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
+
+  return oss;
 }
 
 

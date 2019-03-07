@@ -21,8 +21,9 @@
 #ifndef OTGUI_VARIABLE_HXX
 #define OTGUI_VARIABLE_HXX
 
-#include <openturns/PersistentObject.hxx>
 #include "otgui/OTGuiprivate.hxx"
+
+#include <openturns/OTType.hxx>
 
 namespace OTGUI
 {
@@ -34,7 +35,11 @@ public:
   /** Default constructor */
   Variable();
   /** Constructor with parameters */
-  Variable(const OT::String & name, const double & value = 0., const OT::String & description = "");
+  Variable(const OT::String & name, const double & value, const OT::String & description);
+  Variable(const OT::String & name, const OT::String & description = "");
+
+  /** Virtual constructor */
+  virtual Variable * clone() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -47,20 +52,21 @@ public:
   OT::String getDescription() const;
   void setDescription(const OT::String & description);
 
-  virtual OT::String getPythonScript() const = 0;
+  virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   virtual void save(OT::Advocate & adv) const;
 
   /** Method load() reloads the object from the StorageManager */
   virtual void load(OT::Advocate & adv);
+
 protected:
   OT::String getEscapedDescription() const;
 
 private:
-
   double value_;
   OT::String description_;
 };
+typedef OT::Collection<Variable> VariableCollection;
 }
 #endif

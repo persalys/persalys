@@ -621,31 +621,42 @@ void PlotWidget::plotContour(const Distribution& distribution, const bool isPdf)
     qDebug() << "In plotContour: distribution dimension must be 2";
     return;
   }
-
-  QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;
-
-  spectrogram->setRenderThreadCount(0); // use system specific thread count
-  spectrogram->setCachePolicy(QwtPlotRasterItem::PaintCache);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ContourMode, true);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ImageMode, true);
-
   // drawable
   Drawable aDrawable;
   if (isPdf)
     aDrawable = distribution.drawPDF(Indices(2, 70)).getDrawable(1);
   else
     aDrawable = distribution.drawCDF(Indices(2, 70)).getDrawable(0);
-  Contour contour = *dynamic_cast<Contour*>(aDrawable.getImplementation().get());
+  plotContour(aDrawable);
+}
+
+
+void PlotWidget::plotContour(const Drawable& drawable, const bool displayContour)
+{
+  // contour
+  Contour * contour = dynamic_cast<Contour*>(drawable.getImplementation().get());
+  if (!contour)
+  {
+    qDebug() << "In plotContour: the drawable is not a Contour";
+    return;
+  }
+  // spectrogram
+  QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;
+
+  spectrogram->setRenderThreadCount(0); // use system specific thread count
+  spectrogram->setCachePolicy(QwtPlotRasterItem::PaintCache);
+  spectrogram->setDisplayMode(QwtPlotSpectrogram::ContourMode, displayContour);
+  spectrogram->setDisplayMode(QwtPlotSpectrogram::ImageMode, true);
 
   // data
   ContourData * contourData = new ContourData;
-  contourData->setData(contour);
+  contourData->setData(*contour);
   spectrogram->setData(contourData);
 
   const QwtInterval zInterval = contourData->interval(Qt::ZAxis);
 
   // build levels
-  const Sample sortedData(contour.getData().sort(0));
+  const Sample sortedData(contour->getData().sort(0));
   const UnsignedInteger size = sortedData.getSize();
   QList<double> rank = QList<double>() << 0.1 << 0.2 << 0.3 << 0.4 << 0.5 << 0.6 << 0.7 << 0.8 << 0.9 << 0.95 << 0.97 << 0.99;
 

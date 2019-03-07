@@ -20,6 +20,8 @@
  */
 #include "otgui/PVXYChartSettingWidget.hxx"
 
+#include "otgui/PVBagChartViewWidget.hxx"
+
 #include "otgui/QtTools.hxx"
 #include "otgui/TitledComboBox.hxx"
 
@@ -44,7 +46,7 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
     const Sample& sampleRank,
     QStringList inputNames,
     QStringList outputNames,
-    PVXYChartSettingWidget::Type plotType,
+    Type plotType,
     QWidget * parent)
   : QWidget(parent)
   , pvViewWidget_(pvViewWidget)
@@ -72,7 +74,6 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
   , markerStyles_(0)
   , reprListWidget_(0)
 {
-  Q_ASSERT(sample.getSize());
   if (!pvViewWidget_)
     throw InvalidArgumentException(HERE) << "PVXYChartSettingWidget: No pvViewWidget !";
 
@@ -113,12 +114,49 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget* pvViewWidget
   , ymin_(0)
   , ymax_(0)
   , ylogScaleCheckBox_(0)
+  , quantileSpinBox_(0)
   , colorButton_(0)
   , markerStyles_(0)
   , reprListWidget_(0)
 {
   inputNames_ = QtOT::DescriptionToStringList(sample_.getDescription());
   connect(pvViewWidget_, SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
+  buildInterface();
+}
+
+
+PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget, const QStringList& outputNames, Type plotType, QWidget * parent)
+  : QWidget(parent)
+  , pvViewWidget_(pvViewWidget)
+  , sample_()
+  , sampleRank_()
+  , failedSample_()
+  , failedSampleRank_()
+  , notEvalSample_()
+  , notEvalSampleRank_()
+  , inputNames_()
+  , outputNames_(outputNames)
+  , plotType_(plotType)
+  , xAxisComboBox_(0)
+  , yAxisComboBox_(0)
+  , titleLineEdit_(0)
+  , xlabelLineEdit_(0)
+  , xmin_(0)
+  , xmax_(0)
+  , xlogScaleCheckBox_(0)
+  , ylabelLineEdit_(0)
+  , ymin_(0)
+  , ymax_(0)
+  , ylogScaleCheckBox_(0)
+  , colorButton_(0)
+  , markerStyles_(0)
+  , reprListWidget_(0)
+{
+  if (!pvViewWidget_)
+    throw InvalidArgumentException(HERE) << "PVXYChartSettingWidget: No pvViewWidget !";
+
+  connect(pvViewWidget_, SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
+
   buildInterface();
 }
 
@@ -143,13 +181,13 @@ void PVXYChartSettingWidget::buildInterface()
   mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
   // Axis comboboxes
+  xAxisComboBox_ = new QComboBox(this);
+  yAxisComboBox_ = new QComboBox(this);
   if (plotType_ == PVXYChartSettingWidget::Scatter)
   {
     // X-axis combobox
     label = new QLabel(tr("X-axis"));
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
-
-    xAxisComboBox_ = new QComboBox;
 
     for (int i = 0; i < inputNames_.size(); ++i)
       xAxisComboBox_->addItem(inputNames_[i], true);
@@ -164,9 +202,15 @@ void PVXYChartSettingWidget::buildInterface()
     label = new QLabel(tr("Y-axis"));
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
-    yAxisComboBox_ = new QComboBox;
     mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
     connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
+  }
+  else
+  {
+    xAxisComboBox_->addItem("");
+    yAxisComboBox_->addItem("");
+    xAxisComboBox_->setVisible(false);
+    yAxisComboBox_->setVisible(false);
   }
 
   // rank checkbox
@@ -183,20 +227,53 @@ void PVXYChartSettingWidget::buildInterface()
     label = new QLabel(tr("Data"));
     mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
-    // combobox to select the reprensations to display
+    // combobox to select the representations to display
     TitledComboBox * reprComboBox = new TitledComboBox("-- " + tr("Select") + " --");
     QStringList reprNames;
+    QStringList visibleReprNames;
     for (int i = 0; i < pvViewWidget_->getNumberOfRepresentations(); ++i)
     {
       reprNames << pvViewWidget_->getRepresentationLabels(i)[0];
+      if (pvViewWidget_->getRepresentationVisibility(i))
+        visibleReprNames << pvViewWidget_->getRepresentationLabels(i)[0];
     }
-    reprListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, this);
-    connect(reprListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(setRepresentationToDisplay()));
+    reprListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, visibleReprNames, this);
+    connect(reprListWidget_, SIGNAL(checkedItemsChanged(QList<int>)), pvViewWidget_, SLOT(setRepresentationVisibility(QList<int>)));
+    connect(pvViewWidget_, SIGNAL(selectedReprChanged(QStringList)), reprListWidget_, SLOT(setCheckedNames(QStringList)));
     reprComboBox->setModel(reprListWidget_->model());
     reprComboBox->setView(reprListWidget_);
 
     mainGridLayout->addWidget(reprComboBox, rowGrid, 1, 1, 1);
   }
+
+  if (plotType_ == PVXYChartSettingWidget::Trajectories)
+  {
+    label = new QLabel(tr("Data"));
+    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+
+    // combobox to select the representations to display
+    TitledComboBox * dataComboBox = new TitledComboBox("-- " + tr("Select") + " --");
+
+    reprListWidget_ = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", outputNames_, outputNames_, this);
+    connect(reprListWidget_, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
+    dataComboBox->setModel(reprListWidget_->model());
+    dataComboBox->setView(reprListWidget_);
+    reprListWidget_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    mainGridLayout->addWidget(dataComboBox, rowGrid, 1, 1, 1);
+  }
+
+  // TODO: does not work for now
+//  if (plotType_ == PVXYChartSettingWidget::BagChart)
+//  {
+//    mainGridLayout->addWidget(new QLabel(tr("Quantile")), ++rowGrid, 0);
+//    quantileSpinBox_ = new UIntSpinBox;
+//    quantileSpinBox_->setMinimum(10);
+//    quantileSpinBox_->setMaximum(100);
+//    quantileSpinBox_->setValue(dynamic_cast<PVBagChartViewWidget*>(pvViewWidget_)->getUserQuantile());
+//    connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateQuantile()));
+//    mainGridLayout->addWidget(quantileSpinBox_, rowGrid, 1);
+//  }
 
   // axis - style
   QTabWidget * tabWidget = new QTabWidget;
@@ -274,53 +351,60 @@ void PVXYChartSettingWidget::buildInterface()
   tabWidget->addTab(tabVerticalAxis, tr("Y-axis"));
 
   // --- tab Properties
-  QWidget * propertiesTab = new QWidget;
-  QGridLayout * propertiesTabLayout = new QGridLayout(propertiesTab);
-
-  // color
-  // if only one representation
-  if (pvViewWidget_->getNumberOfRepresentations() == 1)
+  if (plotType_ == PVXYChartSettingWidget::Scatter ||
+      plotType_ == PVXYChartSettingWidget::Trajectories ||
+      plotType_ == PVXYChartSettingWidget::Simple)
   {
-    label = new QLabel(tr("Plot color"));
-    propertiesTabLayout->addWidget(label, 0, 0, 1, 1);
+    QWidget * propertiesTab = new QWidget;
+    QGridLayout * propertiesTabLayout = new QGridLayout(propertiesTab);
 
-    colorButton_ = new QToolButton;
-    QPixmap px(20, 20);
-    px.fill(pvViewWidget_->getRepresentationColor());
-    colorButton_->setIcon(px);
-    connect(colorButton_, SIGNAL(clicked()), this, SLOT(setColor()));
-    propertiesTabLayout->addWidget(colorButton_, 0, 1, 1, 1);
+    // color
+    // if only one representation
+    if (pvViewWidget_->getNumberOfRepresentations() == 1 &&
+        (plotType_ == PVXYChartSettingWidget::Scatter || plotType_ == PVXYChartSettingWidget::Simple))
+    {
+      label = new QLabel(tr("Plot color"));
+      propertiesTabLayout->addWidget(label, 0, 0, 1, 1);
+
+      colorButton_ = new QToolButton;
+      QPixmap px(20, 20);
+      px.fill(pvViewWidget_->getRepresentationColor());
+      colorButton_->setIcon(px);
+      connect(colorButton_, SIGNAL(clicked()), this, SLOT(setColor()));
+      propertiesTabLayout->addWidget(colorButton_, 0, 1, 1, 1);
+    }
+
+    // marker style
+    label = new QLabel(tr("Marker style"));
+    propertiesTabLayout->addWidget(label, 1, 0, 1, 1);
+
+    markerStyles_ = new QComboBox;
+    markerStyles_->addItem(tr("None"), vtkPlotPoints::NONE);
+    markerStyles_->addItem(tr("Cross"), vtkPlotPoints::CROSS);
+    markerStyles_->addItem(tr("Plus"), vtkPlotPoints::PLUS);
+    markerStyles_->addItem(tr("Square"), vtkPlotPoints::SQUARE);
+    markerStyles_->addItem(tr("Circle"), vtkPlotPoints::CIRCLE);
+    markerStyles_->addItem(tr("Diamond"), vtkPlotPoints::DIAMOND);
+    markerStyles_->setCurrentIndex(pvViewWidget_->getMarkerStyle());
+    connect(markerStyles_, SIGNAL(currentIndexChanged(int)), this, SLOT(setMarkerStyle(int)));
+    propertiesTabLayout->addWidget(markerStyles_, 1, 1, 1, 1);
+
+    tabWidget->addTab(propertiesTab, tr("Plot style"));
+
+    // marker size
+    label = new QLabel(tr("Marker size"));
+    propertiesTabLayout->addWidget(label, 2, 0, 1, 1);
+
+    QSpinBox * markerSize = new QSpinBox;
+    markerSize->setMinimum(1);
+    markerSize->setMaximum(10);
+    markerSize->setValue(2);
+    connect(markerSize, SIGNAL(valueChanged(int)), pvViewWidget_, SLOT(setMarkerSize(int)));
+    propertiesTabLayout->addWidget(markerSize, 2, 1, 1, 1);
+
+    propertiesTabLayout->setRowStretch(3, 1);
+    tabWidget->addTab(propertiesTab, tr("Plot style"));
   }
-
-  // marker style
-  label = new QLabel(tr("Marker style"));
-  propertiesTabLayout->addWidget(label, 1, 0, 1, 1);
-
-  markerStyles_ = new QComboBox;
-  markerStyles_->addItem(tr("Cross"), vtkPlotPoints::CROSS);
-  markerStyles_->addItem(tr("Plus"), vtkPlotPoints::PLUS);
-  markerStyles_->addItem(tr("Square"), vtkPlotPoints::SQUARE);
-  markerStyles_->addItem(tr("Circle"), vtkPlotPoints::CIRCLE);
-  markerStyles_->addItem(tr("Diamond"), vtkPlotPoints::DIAMOND);
-  markerStyles_->setCurrentIndex(3);
-  connect(markerStyles_, SIGNAL(currentIndexChanged(int)), this, SLOT(setMarkerStyle(int)));
-  propertiesTabLayout->addWidget(markerStyles_, 1, 1, 1, 1);
-
-  tabWidget->addTab(propertiesTab, tr("Plot style"));
-
-  // marker size
-  label = new QLabel(tr("Marker size"));
-  propertiesTabLayout->addWidget(label, 2, 0, 1, 1);
-
-  QSpinBox * markerSize = new QSpinBox;
-  markerSize->setMinimum(1);
-  markerSize->setMaximum(10);
-  markerSize->setValue(2);
-  connect(markerSize, SIGNAL(valueChanged(int)), pvViewWidget_, SLOT(setMarkerSize(int)));
-  propertiesTabLayout->addWidget(markerSize, 2, 1, 1, 1);
-
-  propertiesTabLayout->setRowStretch(3, 1);
-  tabWidget->addTab(propertiesTab, tr("Plot style"));
 
   mainGridLayout->addWidget(tabWidget, ++rowGrid, 0, 1, 2);
 
@@ -337,7 +421,8 @@ void PVXYChartSettingWidget::buildInterface()
   mainGridLayout->setRowStretch(++rowGrid, 1);
 
   // update widgets
-  updateYComboBox();
+  if (plotType_ == PVXYChartSettingWidget::Scatter)
+    updateYComboBox();
 
   //
   scrollArea->setWidget(frame);
@@ -392,7 +477,8 @@ void PVXYChartSettingWidget::updateLineEdits()
 
 void PVXYChartSettingWidget::updateYComboBox()
 {
-  Q_ASSERT(xAxisComboBox_ && yAxisComboBox_);
+  if (!xAxisComboBox_ || !yAxisComboBox_)
+    return;
 
   const QString currentYText = yAxisComboBox_->currentText();
   SignalBlocker blocker(yAxisComboBox_);
@@ -468,6 +554,13 @@ void PVXYChartSettingWidget::updateYrange()
 }
 
 
+void PVXYChartSettingWidget::updateQuantile()
+{
+  Q_ASSERT(quantileSpinBox_);
+  dynamic_cast<PVBagChartViewWidget*>(pvViewWidget_)->setUserQuantile(quantileSpinBox_->value());
+}
+
+
 void PVXYChartSettingWidget::setColor()
 {
   const QColor color = QColorDialog::getColor(pvViewWidget_->getRepresentationColor(), this, tr("Select Color"));
@@ -488,16 +581,5 @@ void PVXYChartSettingWidget::setMarkerStyle(const int index)
 {
   const int style = markerStyles_->itemData(index).toInt();
   pvViewWidget_->setMarkerStyle(style);
-}
-
-
-void PVXYChartSettingWidget::setRepresentationToDisplay()
-{
-  QStringList checkedItemNames = reprListWidget_->getCheckedItemNames();
-  for (int i = 0; i < reprListWidget_->getItemNames().size(); ++i)
-  {
-    const QString itemName = reprListWidget_->getItemNames()[i];
-    pvViewWidget_->setRepresentationVisibility(checkedItemNames.contains(itemName), i);
-  }
 }
 }

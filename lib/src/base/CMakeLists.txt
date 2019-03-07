@@ -10,10 +10,16 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      Variable.cxx Input.cxx Output.cxx
                      DataSample.cxx
                      DataModel.cxx
+                     MeshModel.cxx MeshModelImplementation.cxx
+                     GridMeshModel.cxx
+                     ImportedMeshModel.cxx
                      PhysicalModel.cxx PhysicalModelImplementation.cxx SymbolicPhysicalModel.cxx 
                      PythonPhysicalModel.cxx
                      MetaModel.cxx
+                     SymbolicFieldModel.cxx
                      PythonScriptEvaluation.cxx
+                     PythonScriptFieldFunction.cxx
+                     PythonFieldModel.cxx
                      DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      FixedDesignOfExperiment.cxx
                      GridDesignOfExperiment.cxx
@@ -26,8 +32,10 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      WithStopCriteriaAnalysis.cxx
                      DataAnalysisResult.cxx DataAnalysis.cxx
                      ModelEvaluation.cxx
+                     FieldModelEvaluation.cxx
                      DesignOfExperimentEvaluation.cxx
                      MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
+                     FieldMonteCarloAnalysis.cxx FieldMonteCarloResult.cxx
                      TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
                      SRCResult.cxx SRCAnalysis.cxx
                      LimitStateImplementation.cxx LimitState.cxx
@@ -55,7 +63,9 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      CopulaInferenceResult.cxx
                      CopulaInferenceAnalysis.cxx
                      OptimizationAnalysis.cxx
-                     PythonEnvironment.cxx)
+                     PythonEnvironment.cxx
+                     ParametricPointToFieldFunction.cxx
+                     )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSEvalSessionSingleton.cxx)
 endif ()
@@ -75,11 +85,18 @@ ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
 ot_install_header_file ( DataSample.hxx )
+ot_install_header_file ( MeshModel.hxx )
+ot_install_header_file ( MeshModelImplementation.hxx )
+ot_install_header_file ( GridMeshModel.hxx )
+ot_install_header_file ( ImportedMeshModel.hxx )
 ot_install_header_file ( PhysicalModel.hxx )
 ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( SymbolicPhysicalModel.hxx )
 ot_install_header_file ( PythonPhysicalModel.hxx )
+ot_install_header_file ( SymbolicFieldModel.hxx )
 ot_install_header_file ( PythonScriptEvaluation.hxx )
+ot_install_header_file ( PythonScriptFieldFunction.hxx )
+ot_install_header_file ( PythonFieldModel.hxx )
 ot_install_header_file ( MetaModel.hxx )
 ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
@@ -100,7 +117,10 @@ ot_install_header_file ( DataAnalysisResult.hxx )
 ot_install_header_file ( DataAnalysis.hxx )
 ot_install_header_file ( DesignOfExperimentEvaluation.hxx )
 ot_install_header_file ( ModelEvaluation.hxx )
+ot_install_header_file ( FieldModelEvaluation.hxx )
 ot_install_header_file ( MonteCarloAnalysis.hxx )
+ot_install_header_file ( FieldMonteCarloResult.hxx )
+ot_install_header_file ( FieldMonteCarloAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsAnalysis.hxx )
 ot_install_header_file ( TaylorExpansionMomentsResult.hxx )
 ot_install_header_file ( SobolAnalysis.hxx )
@@ -141,6 +161,7 @@ ot_install_header_file ( CopulaInferenceAnalysis.hxx )
 ot_install_header_file ( OptimizationAnalysis.hxx )
 ot_install_header_file ( PythonEnvironment.hxx )
 ot_install_header_file ( LaunchParametersVisitor.hxx )
+ot_install_header_file ( ParametricPointToFieldFunction.hxx )
 
 if (USE_OTFMI)
   ot_install_header_file (FMIPhysicalModel.hxx)

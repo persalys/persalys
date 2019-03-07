@@ -53,6 +53,7 @@ public slots:
   void modifyAnalysis();
   void appendMetaModelItem();
   void removeAnalysis();
+  void extractData();
 signals:
   void analysisFinished(AnalysisItem*, bool);
   void analysisRemoved(QStandardItem*);
@@ -60,10 +61,12 @@ signals:
   void progressValueChanged(int);
   void modifyAnalysisRequested(AnalysisItem*);
   void modifyDesignOfExperimentEvaluation(Analysis);
+  void dataExtractionRequested(Analysis);
 
 private:
   Analysis analysis_;
   QAction * convertAction_;
+  QAction * extractDataAction_;
   QAction * modifyAction_;
   QAction * removeAction_;
 };

@@ -1,0 +1,16 @@
+// MeshModel docstrings are defined in MeshModelImplementation_doc.i.in
+
+%feature("docstring") OTGUI::MeshModel
+OTGUI_MeshModel_doc
+%feature("docstring") OTGUI::MeshModel::getMesh
+OTGUI_MeshModel_getMesh_doc
+%feature("docstring") OTGUI::MeshModel::getBounds
+OTGUI_MeshModel_getBounds_doc
+%feature("docstring") OTGUI::MeshModel::getNumberOfNodes
+OTGUI_MeshModel_getNumberOfNodes_doc
+%feature("docstring") OTGUI::MeshModel::getIndexParameters
+OTGUI_MeshModel_getIndexParameters_doc
+%feature("docstring") OTGUI::MeshModel::setIndexParameters
+OTGUI_MeshModel_setIndexParameters_doc
+%feature("docstring") OTGUI::MeshModel::getPythonScript
+OTGUI_MeshModel_getPythonScript_doc

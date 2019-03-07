@@ -1,0 +1,73 @@
+%feature("docstring") OTGUI::ImportedMeshModel
+"Class to build meshes
+
+Available constructors:
+    ImportedMeshModel(*parameters, fileName, columns*)
+
+Parameters
+----------
+parameters : sequence of :class:`otguibase.Variable`
+    Sequence of index parameters (optional). By default
+    the index parameter is named **t**
+fileName : str
+    Name of a data file to load
+columns : sequence of int
+    Indices of columns in files to consider. The sequence dimension
+    must have a dimension equal to the number of index parameters
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otguibase
+
+Create the mesh model:
+
+>>> mesh = ot.IntervalMesher(ot.Indices(1, 20)).build(ot.Interval(0., 12.))
+>>> mesh.getVertices().exportToCSVFile('mesh.csv')
+
+>>> meshModel = otguibase.ImportedMeshModel([otguibase.Variable('x', 'aDescription')], 'mesh.csv', [0])
+
+Create the model:
+
+>>> z0 = otguibase.Input('z0', 100)
+>>> v0 = otguibase.Input('v0', 55)
+>>> m = otguibase.Input('m', 80)
+>>> c = otguibase.Input('c', 15)
+>>> z = otguibase.Output('z')
+>>> formula = ['max(0, z0 + (m * 9.81 / c) * x + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-x * c / m)))']
+>>> model = otguibase.SymbolicFieldModel('model',meshModel , [z0, v0, m, c], [z], formula)
+
+>>> y = model.getPointToFieldFunction()([100, 55, 80, 15])"
+
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ImportedMeshModel::setParameters
+"Parameters accessor.
+
+Parameters
+----------
+fileName : str
+    Name of a data file to load
+columns : sequence of int
+    Indices of columns in files to consider"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ImportedMeshModel::getFileName
+"File name accessor.
+
+Returns
+-------
+fileName : str
+   Name of a data file to load"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTGUI::ImportedMeshModel::getColumns
+"Columns accessor.
+
+Returns
+-------
+columns : :py:class:`openturns.Indices`
+   Columns of the index parameters"

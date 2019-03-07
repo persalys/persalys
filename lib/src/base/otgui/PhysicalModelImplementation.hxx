@@ -24,9 +24,11 @@
 #include "Input.hxx"
 #include "Output.hxx"
 #include "Observable.hxx"
+#include "MeshModel.hxx"
 #include "LaunchParametersVisitor.hxx"
 
 #include <openturns/Function.hxx>
+#include <openturns/PointToFieldFunction.hxx>
 #include <openturns/RandomVector.hxx>
 #include <openturns/ComposedDistribution.hxx>
 #include <openturns/ComposedCopula.hxx>
@@ -58,7 +60,7 @@ public:
   Input & getInputByName(const OT::String & inputName);
   Input getInputByName(const OT::String & inputName) const;
   virtual void setInputs(const InputCollection & inputs);
-  void setInputName(const OT::String & inputName, const OT::String & newName);
+  virtual void setInputName(const OT::String & inputName, const OT::String & newName);
   void setInputDescription(const OT::String & inputName, const OT::String & description);
   void setInputValue(const OT::String & inputName, const double & value);
   void setInputStochastic(const OT::String & inputName, const bool & stoch);
@@ -98,10 +100,17 @@ public:
   OT::Function getFunction(const OT::String & outputName) const;
   OT::Function getRestrictedFunction() const;
   OT::Function getRestrictedFunction(const OT::Description & outputNames) const;
+  OT::PointToFieldFunction getPointToFieldFunction() const;
+  OT::PointToFieldFunction getPointToFieldFunction(const OT::Description & outputNames) const;
+  OT::PointToFieldFunction getRestrictedPointToFieldFunction(const OT::Description & outputNames) const;
 
   OT::Copula getCopula() const;
   OT::Collection<OT::Copula> getCopulaCollection() const;
   void setCopula(const OT::Description& inputNames, const OT::Copula & copula);
+
+  bool hasMesh() const;
+  MeshModel getMeshModel() const;
+  void setMeshModel(const MeshModel& meshModel);
 
   OT::Bool isParallel() const;
   virtual void setParallel(const OT::Bool flag);
@@ -124,6 +133,7 @@ public:
 
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  virtual OT::PointToFieldFunction generatePointToFieldFunction(const OT::Description & outputNames) const;
 
   void updateCopula();
   OT::String getProbaModelPythonScript() const;
@@ -134,10 +144,13 @@ protected:
 private:
   void inputsChanged();
 
+protected:
+  bool hasMesh_;
 private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
   mutable OT::ComposedCopula composedCopula_;
+  MeshModel meshModel_;
   mutable OT::Point finiteDifferenceSteps_;
   OT::Bool isParallel_;
 };

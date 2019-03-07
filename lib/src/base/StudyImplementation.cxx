@@ -155,6 +155,7 @@ void StudyImplementation::clear()
   {
     physicalModels_[i].getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDefinition");
+    physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Mesh");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDiagram");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Study");
   }
@@ -380,6 +381,7 @@ void StudyImplementation::remove(const PhysicalModel& physicalModel)
   // remove physicalModel
   physicalModel.getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
   physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDefinition");
+  physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Mesh");
   physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDiagram");
   physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Study");
 

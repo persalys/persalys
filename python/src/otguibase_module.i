@@ -96,6 +96,10 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include Input.i
 %include Output.i
 %include DataSample.i
+%include MeshModelImplementation.i
+%include MeshModel.i
+%include GridMeshModel.i
+%include ImportedMeshModel.i
 %include PhysicalModelImplementation.i
 %include SymbolicPhysicalModel.i
 %include PythonPhysicalModel.i
@@ -108,6 +112,8 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include FMUInfo.i
 %include FMIPhysicalModel.i
 #endif
+%include SymbolicFieldModel.i
+%include PythonFieldModel.i
 %include LimitStateImplementation.i
 %include LimitState.i
 %include AnalysisResult.i
@@ -128,9 +134,12 @@ OTGUITypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collect
 %include ImportedDesignOfExperiment.i
 %include ProbabilisticDesignOfExperiment.i
 %include ModelEvaluation.i
+%include FieldModelEvaluation.i
 %include DataAnalysis.i
 %include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i
+%include FieldMonteCarloResult.i
+%include FieldMonteCarloAnalysis.i
 %include TaylorExpansionMomentsAnalysis.i
 %include SobolResult.i
 %include SobolAnalysis.i

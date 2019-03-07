@@ -44,6 +44,8 @@
 #include "otgui/KrigingResultWindow.hxx"
 #include "otgui/InferenceResultWindow.hxx"
 #include "otgui/CopulaInferenceResultWindow.hxx"
+#include "otgui/FieldModelEvaluationResultWindow.hxx"
+#include "otgui/FieldMonteCarloWizard.hxx"
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/ScreeningAnalysisWizard.hxx"
 #include "otgui/MorrisResultWindow.hxx"
@@ -68,11 +70,11 @@ SubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* it
 
   const QString physicalModelType = item->getPhysicalModel().getImplementation()->getClassName().c_str();
 
-  if (physicalModelType == "SymbolicPhysicalModel")
+  if (physicalModelType == "SymbolicPhysicalModel" || physicalModelType == "SymbolicFieldModel")
   {
     window = new SymbolicPhysicalModelWindow(item, parent);
   }
-  else if (physicalModelType == "PythonPhysicalModel")
+  else if (physicalModelType == "PythonPhysicalModel" || physicalModelType == "PythonFieldModel")
   {
     window = new PythonPhysicalModelWindow(item, parent);
   }
@@ -107,7 +109,7 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
 
   const QString analysisType = analysis.getImplementation()->getClassName().c_str();
 
-  if (analysisType == "ModelEvaluation")
+  if (analysisType.contains("ModelEvaluation"))
   {
     wizard = new ModelEvaluationWizard(analysis, parent);
   }
@@ -138,6 +140,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
            analysisType == "TaylorExpansionMomentsAnalysis")
   {
     wizard = new CentralTendencyWizard(analysis, parent);
+  }
+  else if (analysisType == "FieldMonteCarloAnalysis")
+  {
+    wizard = new FieldMonteCarloWizard(analysis, parent);
   }
   else if (analysisType == "SobolAnalysis" ||
            analysisType == "SRCAnalysis")
@@ -177,6 +183,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   {
     resultWindow = new ModelEvaluationResultWindow(item, parent);
   }
+  else if (analysisType == "FieldModelEvaluation")
+  {
+    resultWindow = new FieldModelEvaluationResultWindow(item, parent);
+  }
 #ifdef OTGUI_HAVE_OTMORRIS
   else if (analysisType == "MorrisAnalysis")
   {
@@ -190,6 +200,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   else if (analysisType == "MonteCarloAnalysis")
   {
     resultWindow = new MonteCarloResultWindow(item, parent);
+  }
+  else if (analysisType == "FieldMonteCarloAnalysis")
+  {
+    resultWindow = new FieldCentralTendencyResultWindow(item, parent);
   }
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
   {
@@ -242,7 +256,8 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   }
   else
   {
-    qDebug() << "Error: In GetAnalysisWindow: analysisType " << analysisType << " not recognized.\n";
+    qDebug() << "Error: In WindowFactory::GetAnalysisWindow: analysisType " << analysisType << " not recognized.\n";
+    throw OT::InvalidArgumentException(HERE) << "Analysis type " << analysisType.toStdString() << " not recognized.\n";
   }
 
   return resultWindow;

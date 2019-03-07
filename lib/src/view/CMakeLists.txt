@@ -20,6 +20,7 @@ ot_add_source_file ( StudyManager.cxx )
 ot_add_source_file ( WindowFactory.cxx )
 ot_add_source_file ( Controller.cxx )
 ot_add_source_file ( PhysicalModelDiagramWindow.cxx )
+ot_add_source_file ( FieldModelDiagramWindow.cxx )
 ot_add_source_file ( DataModelDiagramWindow.cxx )
 ot_add_source_file ( DataModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
@@ -27,6 +28,7 @@ ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
 ot_add_source_file ( WelcomeWindow.cxx )
 ot_add_source_file ( StudyWindow.cxx )
+ot_add_source_file ( MeshWindow.cxx )
 ot_add_source_file ( BlockSizeGroupBox.cxx )
 ot_add_source_file ( MinMaxTableGroupBox.cxx )
 ot_add_source_file ( MomentsEstimatesTableGroupBox.cxx )
@@ -104,6 +106,10 @@ ot_add_source_file ( CopulaWidget.cxx )
 ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
 ot_add_source_file ( AboutDialog.cxx )
+ot_add_source_file ( MeshDefinitionWizard.cxx )
+ot_add_source_file ( FieldModelEvaluationResultWindow.cxx )
+ot_add_source_file ( FieldMonteCarloWizard.cxx )
+ot_add_source_file ( ExtractDataFieldWizard.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -126,7 +132,9 @@ ot_install_header_file ( WindowFactory.hxx )
 ot_install_header_file ( AnalysisWizard.hxx )
 ot_install_header_file ( WelcomeWindow.hxx )
 ot_install_header_file ( StudyWindow.hxx )
+ot_install_header_file ( MeshWindow.hxx )
 ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
+ot_install_header_file ( FieldModelDiagramWindow.hxx )
 ot_install_header_file ( DataModelDiagramWindow.hxx )
 ot_install_header_file ( ResultWindow.hxx )
 ot_install_header_file ( BlockSizeGroupBox.hxx )
@@ -209,6 +217,10 @@ ot_install_header_file ( CopulaWidget.hxx )
 ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
 ot_install_header_file ( AboutDialog.hxx )
+ot_install_header_file ( MeshDefinitionWizard.hxx )
+ot_install_header_file ( FieldModelEvaluationResultWindow.hxx )
+ot_install_header_file ( FieldMonteCarloWizard.hxx )
+ot_install_header_file ( ExtractDataFieldWizard.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -230,7 +242,9 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/StudyManager.hxx
                                   otgui/WelcomeWindow.hxx
                                   otgui/StudyWindow.hxx
+                                  otgui/MeshWindow.hxx
                                   otgui/PhysicalModelDiagramWindow.hxx
+                                  otgui/FieldModelDiagramWindow.hxx
                                   otgui/DataModelDiagramWindow.hxx
                                   otgui/ResultWindow.hxx
                                   otgui/AnalysisWindow.hxx
@@ -307,6 +321,10 @@ qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
                                   otgui/CopulaInferenceWizard.hxx
                                   otgui/CopulaInferenceResultWizard.hxx
                                   otgui/AboutDialog.hxx
+                                  otgui/MeshDefinitionWizard.hxx
+                                  otgui/FieldModelEvaluationResultWindow.hxx
+                                  otgui/FieldMonteCarloWizard.hxx
+                                  otgui/ExtractDataFieldWizard.hxx
                                   )
 
 

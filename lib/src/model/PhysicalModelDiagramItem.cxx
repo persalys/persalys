@@ -212,6 +212,13 @@ void PhysicalModelDiagramItem::removePhysicalModel()
 
 void PhysicalModelDiagramItem::fill()
 {
+  // mesh definition item
+  if (physicalModel_.hasMesh())
+  {
+    MeshItem * meshItem = new MeshItem(getPhysicalModel());
+    appendRow(meshItem);
+    emit meshWindowRequested(meshItem);
+  }
   // model definition item
   if (physicalModel_.getInputDimension() || physicalModel_.getOutputDimension())
     appendPhysicalModelItem();
@@ -233,9 +240,12 @@ void PhysicalModelDiagramItem::fill()
 
 void PhysicalModelDiagramItem::appendPhysicalModelItem()
 {
-  if (hasChildren())
+  // do nothing if the item already exists
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "PhysicalModelDefinition", 1, Qt::MatchRecursive);
+  if (listIndexes.size() == 1 && listIndexes[0].parent() == this->index())
   {
-    emit changeCurrentItemRequested(child(0)->index());
+    // emit signal to the study tree to display the window
+    emit changeCurrentItemRequested(listIndexes[0]);
     return;
   }
 
@@ -278,16 +288,22 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
   ProbabilisticModelItem * probaItem = new ProbabilisticModelItem(getPhysicalModel());
 
   // insert the item after the model definition item
-  insertRow(1, probaItem);
+  listIndexes = model()->match(this->index(), Qt::UserRole, "PhysicalModelDefinition", 1, Qt::MatchRecursive);
+  if (listIndexes.size() == 1 && listIndexes[0].parent() == this->index())
+  {
+    insertRow(listIndexes[0].row() + 1, probaItem);
 
-  // connections
-  connect(probaItem, SIGNAL(designOfExperimentRequested()), this, SIGNAL(designOfExperimentRequested()));
-  connect(this, SIGNAL(limitStateRequested()), probaItem, SLOT(createLimitState()));
-  connect(this, SIGNAL(centralTendencyRequested()), probaItem, SLOT(createCentralTendency()));
-  connect(this, SIGNAL(sensitivityRequested()), probaItem, SLOT(createSensitivityAnalysis()));
+    // connections
+    connect(probaItem, SIGNAL(designOfExperimentRequested()), this, SIGNAL(designOfExperimentRequested()));
+    connect(this, SIGNAL(limitStateRequested()), probaItem, SLOT(createLimitState()));
+    connect(this, SIGNAL(centralTendencyRequested()), probaItem, SLOT(createCentralTendency()));
+    connect(this, SIGNAL(sensitivityRequested()), probaItem, SLOT(createSensitivityAnalysis()));
 
-  // emit signal to the StudyManager to create a window
-  emit probabilisticModelItemCreated(probaItem);
+    // emit signal to the StudyManager to create a window
+    emit probabilisticModelItemCreated(probaItem);
+    return;
+  }
+  qDebug() << "In PhysicalModelDiagramItem::appendProbabilisticModelItem: No item added for the proba model\n";
 }
 
 
@@ -365,7 +381,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
   // If not a DesignOfExperimentEvaluation
 
   // Evaluation title
-  if (analysisName == "ModelEvaluation")
+  if (analysisName.contains("ModelEvaluation"))
   {
     titleItem = getTitleItemNamed(tr("Evaluation"), "ModelEvaluationTitle");
 
@@ -379,7 +395,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
     }
   }
   // Central tendency title
-  else if (analysisName == "MonteCarloAnalysis" ||
+  else if (analysisName.contains("MonteCarloAnalysis") ||
            analysisName == "TaylorExpansionMomentsAnalysis")
   {
     titleItem = getTitleItemNamed(tr("Central tendency"), "CentralTendencyTitle");

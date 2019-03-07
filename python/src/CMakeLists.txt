@@ -3,7 +3,7 @@ include (${SWIG_USE_FILE})
 include (TargetLinkLibrariesWithDynamicLookup)
 
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
-add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
+add_definitions ( ${OPENTURNS_SWIG_DEFINITIONS} )
 include_directories ( ${OTMORRIS_INCLUDE_DIR}/otmorris/swig )
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 include_directories ( ${PYTHON_INCLUDE_DIRS} )
@@ -94,9 +94,15 @@ ot_add_python_module (otguibase otguibase_module.i
                       Input.i Input_doc.i.in
                       Output.i Output_doc.i.in
                       DataSample.i DataSample_doc.i.in
+                      MeshModelImplementation.i MeshModelImplementation_doc.i.in
+                      MeshModel.i MeshModel_doc.i.in
+                      GridMeshModel.i GridMeshModel_doc.i.in
+                      ImportedMeshModel.i ImportedMeshModel_doc.i.in
                       PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
                       SymbolicPhysicalModel.i SymbolicPhysicalModel_doc.i.in
                       PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
+                      SymbolicFieldModel.i SymbolicFieldModel_doc.i.in
+                      PythonFieldModel.i PythonFieldModel_doc.i.in
                       MetaModel.i MetaModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i YACSPhysicalModel_doc.i.in
@@ -116,6 +122,7 @@ ot_add_python_module (otguibase otguibase_module.i
                       DataAnalysisResult.i DataAnalysisResult_doc.i.in
                       DataAnalysis.i DataAnalysis_doc.i.in
                       ModelEvaluation.i ModelEvaluation_doc.i.in
+                      FieldModelEvaluation.i FieldModelEvaluation_doc.i.in
                       DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i.in
                       DesignOfExperiment.i DesignOfExperiment_doc.i.in
                       FixedDesignOfExperiment.i FixedDesignOfExperiment_doc.i.in
@@ -124,6 +131,8 @@ ot_add_python_module (otguibase otguibase_module.i
                       ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i.in
                       DataModel.i DataModel_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
+                      FieldMonteCarloResult.i FieldMonteCarloResult_doc.i.in
+                      FieldMonteCarloAnalysis.i FieldMonteCarloAnalysis_doc.i.in
                       TaylorExpansionMomentsResult.i TaylorExpansionMomentsResult_doc.i.in
                       TaylorExpansionMomentsAnalysis.i TaylorExpansionMomentsAnalysis_doc.i.in
                       SobolResult.i SobolResult_doc.i.in

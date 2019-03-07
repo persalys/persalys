@@ -56,14 +56,14 @@ private slots:
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
 
     QTest::mouseClick(comboBox, Qt::LeftButton); // open listwidget
-    QTest::keyClick(listWidget, Qt::Key_Space); // deselect all
+    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // deselect all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
 
     wizard.next();
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0"); // can not go to next page
 
-    QTest::keyClick(listWidget, Qt::Key_Space); // select all
+    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // select all
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
   }

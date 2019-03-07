@@ -46,12 +46,15 @@ public slots:
   void openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard = false);
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis);
   void openDesignOfExperimentEvaluationWizard(const PhysicalModel& model);
+  void openExtractDataFieldWizard(const Analysis& analysis);
 
   // create windows
   void createStudyWindow(StudyItem* item);
   void createDataModelDiagramWindow(DataModelDiagramItem*);
   void createDataModelWindow(DataModelDefinitionItem* item);
   void createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
+  void createMeshWindow(MeshItem* item);
+  void createFieldModelDiagramWindow(PhysicalModelDiagramItem* item);
   void createPhysicalModelWindow(PhysicalModelDefinitionItem* item);
   void createProbabilisticModelWindow(ProbabilisticModelItem* item);
   void createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);

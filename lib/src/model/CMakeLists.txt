@@ -12,6 +12,7 @@ ot_add_source_file ( DifferentiationTableModel.cxx )
 ot_add_source_file ( DataModelTableModel.cxx )
 ot_add_source_file ( DistributionsTableModel.cxx )
 ot_add_source_file ( Item.cxx )
+ot_add_source_file ( MeshItem.cxx )
 ot_add_source_file ( PhysicalModelDiagramItem.cxx )
 ot_add_source_file ( PhysicalModelDefinitionItem.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
@@ -44,6 +45,7 @@ ot_install_header_file ( ExperimentTableModel.hxx )
 ot_install_header_file ( CorrelationTableModel.hxx )
 ot_install_header_file ( DifferentiationTableModel.hxx )
 ot_install_header_file ( Item.hxx )
+ot_install_header_file ( MeshItem.hxx )
 ot_install_header_file ( PhysicalModelDiagramItem.hxx )
 ot_install_header_file ( PhysicalModelDefinitionItem.hxx )
 ot_install_header_file ( AnalysisItem.hxx )
@@ -77,6 +79,7 @@ qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
                                     otgui/DataModelTableModel.hxx
                                     otgui/DistributionsTableModel.hxx
                                     otgui/Item.hxx
+                                    otgui/MeshItem.hxx
                                     otgui/PhysicalModelDiagramItem.hxx
                                     otgui/PhysicalModelDefinitionItem.hxx
                                     otgui/AnalysisItem.hxx

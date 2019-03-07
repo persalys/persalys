@@ -21,6 +21,7 @@
 #include "otgui/PhysicalModelImplementation.hxx"
 
 #include "otgui/BaseTools.hxx"
+#include "otgui/ParametricPointToFieldFunction.hxx"
 
 #include <openturns/NonCenteredFiniteDifferenceGradient.hxx>
 #include <openturns/CenteredFiniteDifferenceHessian.hxx>
@@ -43,6 +44,7 @@ static Factory<PersistentCollection<Output> > Factory_PersistentCollectionOutput
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   : PersistentObject()
   , Observable()
+  , hasMesh_(false)
   , inputs_()
   , outputs_()
   , composedCopula_()
@@ -61,6 +63,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
     const OutputCollection & outputs)
   : PersistentObject()
   , Observable()
+  , hasMesh_(false)
   , inputs_()
   , outputs_()
   , composedCopula_()
@@ -689,7 +692,60 @@ Function PhysicalModelImplementation::getRestrictedFunction(const Description& o
   // if there are deterministic inputs
   const ParametricFunction restricted(function, deterministicInputsIndices, inputsValues);
   return restricted;
+}
 
+
+PointToFieldFunction PhysicalModelImplementation::generatePointToFieldFunction(const Description & /*outputNames*/) const
+{
+  throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::generatePointToFieldFunction(Description)";
+}
+
+
+PointToFieldFunction PhysicalModelImplementation::getPointToFieldFunction() const
+{
+  return getPointToFieldFunction(getOutputNames());
+}
+
+
+PointToFieldFunction PhysicalModelImplementation::getPointToFieldFunction(const Description& outputNames) const
+{
+  if (!getInputDimension())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
+  if (!getOutputDimension())
+    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
+
+  PointToFieldFunction function(generatePointToFieldFunction(outputNames));
+
+  if (function.getOutputDimension() != outputNames.getSize())
+    throw PhysicalModelNotValidException(HERE) << "Error when building the function.";
+
+  return function;
+}
+
+
+PointToFieldFunction PhysicalModelImplementation::getRestrictedPointToFieldFunction(const Description& outputNames) const
+{
+  // search deterministic inputs
+  Indices deterministicInputsIndices;
+  Point inputsValues;
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
+  {
+    if (!getInputs()[i].isStochastic())
+    {
+      deterministicInputsIndices.add(i);
+      inputsValues.add(getInputs()[i].getValue());
+    }
+  }
+
+  const PointToFieldFunction function(getPointToFieldFunction(outputNames));
+
+  // if there is no deterministic inputs
+  if (!deterministicInputsIndices.getSize())
+    return function;
+
+  // if there are deterministic inputs
+  const ParametricPointToFieldFunction restricted(function, deterministicInputsIndices, inputsValues);
+  return restricted;
 }
 
 
@@ -801,6 +857,29 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
 }
 
 
+bool PhysicalModelImplementation::hasMesh() const
+{
+  return hasMesh_;
+}
+
+
+MeshModel PhysicalModelImplementation::getMeshModel() const
+{
+  if (!hasMesh_)
+    throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getMeshModel()";
+  return meshModel_;
+}
+
+
+void PhysicalModelImplementation::setMeshModel(const MeshModel& meshModel)
+{
+  if (!hasMesh_)
+    throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::setMeshModel()";
+  meshModel_ = meshModel;
+  notify("meshChanged");
+}
+
+
 Bool PhysicalModelImplementation::isParallel() const
 {
   return isParallel_;
@@ -825,6 +904,9 @@ String PhysicalModelImplementation::getHtmlDescription(const bool deterministic)
   OSS oss;
 
   oss << "<h2><center>Physical model</center></h2>";
+
+  if (hasMesh_)
+    oss << meshModel_.getHtmlDescription();
 
   if (deterministic)
   {
@@ -1050,6 +1132,8 @@ String PhysicalModelImplementation::__repr__() const
       << " outputs=" << getOutputs()
       << " copula=" << getCopula()
       << " isParallel=" << isParallel();
+  if (hasMesh())
+    oss << meshModel_.__repr__();
   return oss;
 }
 
@@ -1058,9 +1142,11 @@ String PhysicalModelImplementation::__repr__() const
 void PhysicalModelImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
+  adv.saveAttribute("hasMesh_", hasMesh_);
   adv.saveAttribute("inputs_", inputs_);
   adv.saveAttribute("outputs_", outputs_);
   adv.saveAttribute("composedCopula_", composedCopula_);
+  adv.saveAttribute("meshModel_", meshModel_);
   adv.saveAttribute("isParallel_", isParallel_);
 }
 
@@ -1069,9 +1155,11 @@ void PhysicalModelImplementation::save(Advocate & adv) const
 void PhysicalModelImplementation::load(Advocate & adv)
 {
   PersistentObject::load(adv);
+  adv.loadAttribute("hasMesh_", hasMesh_);
   adv.loadAttribute("inputs_", inputs_);
   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("composedCopula_", composedCopula_);
+  adv.loadAttribute("meshModel_", meshModel_);
   adv.loadAttribute("isParallel_", isParallel_);
   updateCopula();
 }
