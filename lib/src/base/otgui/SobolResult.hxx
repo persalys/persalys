@@ -72,7 +72,6 @@ private:
   OT::PersistentCollection<OT::Interval> firstOrderIndicesInterval_;
   OT::PersistentCollection<OT::Interval> totalIndicesInterval_;
   OT::UnsignedInteger callsNumber_;
-  OT::Scalar elapsedTime_;
   OT::Scalar confidenceIntervalLength_;
 };
 }
