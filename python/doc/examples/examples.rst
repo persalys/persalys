@@ -13,6 +13,8 @@ concentrated bending load F at the other side.
 1- Problem statement
 ````````````````````
 
+.. _Inputs:
+
 a- Inputs
 '''''''''
 
@@ -60,11 +62,11 @@ The deviation :math:`y` of the free end of the beam equals to:
 
 Click on |newButton| in the tool bar to create a new study.
 
-.. image:: new_study.png
+.. image:: /user_manual/graphical_interface/getting_started/window_OTStudy_startUp.png
     :align: center
 
 
-2-1 Create the analytical physical model
+2-2 Create the analytical physical model
 ''''''''''''''''''''''''''''''''''''''''
 
 To define the physical model, click on the button **Symbolic model**
@@ -72,8 +74,9 @@ of the window shown above.
 
 The following window appears and a physicalModel item is added in the study tree:
 
-.. image:: new_analyticalPhysicalModel.png
+.. image:: /user_manual/graphical_interface/physical_model/physicalModelDiagram.png
     :align: center
+
 
 Click on the **Model definition** box of the model diagram to create the
 following window.
@@ -82,7 +85,7 @@ following window.
     :align: center
 
 Use the **Add** buttons below the tables to add as many lines as number of variables
-in the physical model.
+in the :ref:`physical model <Inputs>`.
 
 .. image:: add_variables_in_tables.png
     :align: center
@@ -91,7 +94,7 @@ Fill the tables and rename variables to correspond to the physical model.
 Click on the **Evaluate** button below the output variables table in order to check
 if the formula is not badly defined.
 
-.. _evaluationresult:
+.. _exevaluationresult:
 
 .. image:: good_defined_physicalModel.png
     :align: center
@@ -106,48 +109,60 @@ E       F       L       I
 ======= ======= ======= =======
 
 
-2-1 Create the probabilistic model
+2-3 Create the probabilistic model
 ''''''''''''''''''''''''''''''''''
 
 To define the probabilistic model, choose **Probabilistic model** in the
 context menu of the sub item **Definition** of the model in the study tree.
-Only one probabilistic model can be defined by physical model.
+Only one probabilistic model by physical model can be defined.
 
-.. image:: contextual_menu_proba_study.png
-    :align: center
+  .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+      :align: center
 
 The probabilistic model is defined by associating a distribution to input variables
-and specifying correlation between them if needed.
+(**Marginals** tab) and specifying dependence between them if necessary (**Dependence** tab).
 
 .. image:: proba_model_default.png
     :align: center
 
-The first tab **Marginals** list automatically all the input variables defined
+The **Marginals** tab lists automatically all the input variables defined
 in the physical model window.
-By default all the lines are unchecked which means all the inputs
-variables are deterministic. In the right side of the window the variable value
-is the value mentioned in the physical model window.
+By default, all the lines are unchecked (then all the inputs
+variables are deterministic) and the right side shows the variable value
+(the one defined in the model window).
 
 To make a variable stochastic, check its line. Then the combobox in the second
 column of the table is available and the current text is **Normal**.
-By default the Normal distribution is used with a mean value :math:`E[Input]`
+By default, the Normal distribution is used with a mean value :math:`E[Input]`
 equal to the value defined in the physical model window and with a standard
-deviation equal to :math:`0.1 |E[Input]|`
+deviation equal to :math:`0.1 * |E[Input]|`
 
 .. image:: proba_model_default_distribution.png
     :align: center
 
-Check all the lines and choose the good distribution in the list and change
-the parameters values in the right side of the window.
+- Check all the lines
+- Choose the right distribution for each input (**Distribution** column)
+- Change the distribution parameters values (right side)
+  (Refer to the :ref:`Inputs <Inputs>` section).
+
+.. _probaModelExample:
 
 .. image:: proba_model.png
     :align: center
 
-The second tab **Correlation** show the Spearman correlation matrix.
-The symmetry of the correlation matrix is automatically handled. The Gaussian
-copula is used to model the dependency. By default all variables are independent.
-To specify the correlation between the variables :math:`L` and :math:`I`
-change the value in the corresponding cell.
+.. _dependenceTab:
+
+On the left of the **Dependence** tab, all the stochastic input variables are listed.
+By default, no dependence is set between these variables.
+
+To add dependence between the variables :math:`L` and :math:`I`:
+  - Select :math:`L` and :math:`I` in the list
+  - Click on the right arrow:
+     - these variables are disabled in the first table (a variable can belong to only one group)
+     - [I, L] appears in the second table:
+        - the default copula is the Normal copula defined by a correlation matrix equal to
+          the identity matrix. So, at this step, :math:`L` and :math:`I` are still independent.
+        - on the right side: set the correlation matrix
 
 .. image:: correlation.png
     :align: center
@@ -160,8 +175,8 @@ change the value in the corresponding cell.
 '''''''''''''''''''''
 
 For more details on the
-`Linear Taylor Expansions <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/taylor_moments.html>`_
-see the OpenTURNS documentation.
+`Linear Taylor Expansions <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/taylor_moments.html>`_,
+you can consult the OpenTURNS documentation.
 
 3-1-1 Definition
 ****************
@@ -170,8 +185,8 @@ To perform a central tendency analysis with the Taylor expansions for the
 estimation of moments, choose **New central tendency** in the
 context menu of the probabilistic model item in the study tree.
 
-.. image:: contextual_menu_proba_model.png
-    :align: center
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
+        :align: center
 
 Check the radio button **Taylor expansions** in the wizard which appears.
 
@@ -198,8 +213,8 @@ The results window contains a table.
 3-2 Monte Carlo
 '''''''''''''''
 
-For more details on the `Monte Carlo method <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_
-see the OpenTURNS documentation.
+For more details on the `Monte Carlo method <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_,
+you can consult the OpenTURNS documentation.
 
 3-2-1 Definition
 ****************
@@ -231,10 +246,12 @@ tree and a window is created.
 Click on **Run** button to launch the analysis. When the analysis is finished
 a result window is created.
 
+.. _exmonteCarloResult:
+
 3-2-2 Results
 *************
 
-The results window contains 8 tabs. The first tab must contain the following
+There are 8 tabs in the result window. The first tab must contain the following
 values :
 
 .. image:: MonteCarlo_results_window.png
@@ -244,8 +261,8 @@ values :
 4- Min/Max study with deterministic design of experiments
 `````````````````````````````````````````````````````````
 
-For more details on the `Min/Max approach <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_
-see the OpenTURNS documentation.
+For more details on the `Min/Max approach <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_,
+you can consult the OpenTURNS documentation.
 
 4-1 Definition
 ''''''''''''''
@@ -262,21 +279,17 @@ Check the radio button **Deterministic** in the wizard which appears and click o
 .. image:: DOE_wizard.png
     :align: center
 
-After clicking a table appears.
-
-By default all the lines are unchecked. Thus the design of experiments contains
-only one point. Check the **Name** column to make all the inputs variable.
+In the next table, you can set the grid parameters. By default, all lines are unchecked: the design of experiments contains only point. Check the **Name** column to make all the inputs variable.
 
 .. image:: deterministic_design_of_experiment.png
     :align: center
 
-The minimum and the maximum values are computed automatically thanks to
-the distribution of the variables. The minimum value is the quantile at the
-probability of 0.05 and the maximum one is the quantile at the probability of
-0.95. The number of used values per variable is by default 2.
+The minimum and the maximum values are computed automatically from
+the range of the distribution of the variables.
+The number of used values per variable is by default 2.
 
 Click on **Finish** button. A new item with a default name appears in the study
-tree and a window with a table is created.
+tree and a window is created.
 
 4-2 Results
 '''''''''''
@@ -284,15 +297,16 @@ tree and a window with a table is created.
 4-2-1 Input variables
 *********************
 
-The results window contains the design of experiments.
+The result window shows the input sample of the design of experiments and an analysis of this sample.
 
 .. image:: DOE_inputs.png
     :align: center
 
 The points are generated according to the structure of a box design of experiments.
 This deterministic design of experiments has 16 points obtained by regularly discretizing
-the pavement
-:math:`[28350160, 42414817] \times [20166.601, 47021.278] \times [250.5, 259.5] \times [342.97477, 441.26225]`.
+the pavement:
+
+:math:`[2.8e7, 4.8e7] \times [15000, 47021.278] \times [250, 260] \times [310, 450]`.
 
 Click on **Evaluate** in the context menu of the design of experiments item.
 Click on the **Finish** button of the window which appears.
@@ -322,67 +336,62 @@ The first tab must contain the following values:
 
 .. _SobolExample:
 
-5-1 Sobol' indices
+5-1 Sobol indices
 ''''''''''''''''''
 
-For more details on the computation of the `Sobol' indices <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/sensitivity_sobol.html>`_
-see the OpenTURNS documentation.
+For more details on the computation of the `Sobol indices <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/sensitivity_sobol.html>`_,
+check the OpenTURNS documentation.
 
 5-1-1 Definition
 ****************
 
 To perform a sensitivity analysis with the Sobol method, the input variables must
-be independent (In the Correlation tab of the probabilistic model window replace
--0.2 by 0). Choose **Sensitivity** in the
+be independent (In the **Dependence** :ref:`tab <dependenceTab>`
+of the probabilistic model window replace -0.2 by 0). Choose **Sensitivity** in the
 context menu of the probabilistic model item in the study tree.
 
-.. image:: contextual_menu_proba_model.png
-    :align: center
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
+        :align: center
 
 Check the radio button **Sobol** in the wizard which appears.
 
 .. image:: sensibilityAnalysis_defaultWizard.png
     :align: center
 
-Click on **Continue** button. The new page enables to parametrize the Sobol
-method. To see advanced parameters, expand the **Advanced parameters** group.
+Click on **Continue** button. On the new page, you can parametrize the Sobol
+method. To access advanced parameters, expand the **Advanced parameters** group.
 
 .. image:: sobol_parameters.png
     :align: center
 
-The user has to define at least one criterion to stop the algorithm.
+Define at least one criterion to stop the algorithm.
 
-Add the third criterion by selecting the check button **Maximum calls**.
-Thus the algorithm will call the model function at the most 10000 times.
-Set the block size to 1000.
+In the current example, add a third criterion by selecting the **Maximum calls**
+check button. 
 
-The maximum number of calls by iteration is updated to 6000.
+Changing **Replication size** will update the max number of calls by iteration:
 Indeed the algorithm build two input samples with a size equal to the block size value
-and combined these samples to build nbInputs other samples
-(nbInputs is the number of input variables).
+and combines these samples to build *nbInputs* other samples
+(*nbInputs* is the number of input variables).
 Thus, the maximum number of calls by iteration is computed with the formula:
 :math:`(nbInputs + 2) * blockSize`.
 
-In that case the algorithm will perform two iterations. The second block size
-is computed to not exceed the maximum number of calls (10000).
+If the Replication size is 1000: the maximum number of calls by iteration is 6000.
 
-First iteration: (4 + 2) * 1000 = 6000 calls
-
-Second iteration: (4 + 2) * 666 = 3996 calls
-
-Effective maximum total number of calls: 9996
-
-If the maximum number of calls is not given, the block size is always equal to 1000.
+In that case the algorithm will perform two iterations. Indeed, at the second iteration
+the maximum number of calls will not be reached yet.
+The effective maximum total number of calls will be 12000.
 
 Click on **Finish** button. A new item with a default name appears in the study
 tree and a results window is created.
 
+.. _exsobolResult:
+
 5-1-2 Results
 *************
 
-The results window contains a table with the first and total order indices value
-for each variable. These values are plotted in a graphic.
-The values must be:
+The result window shows a table with the first and total order indices
+for each variable. Values must correspond to the values of the table below.
 
 .. image:: sobol_results_window.png
     :align: center
@@ -394,37 +403,37 @@ the distances between the first order indices and the total order indices.
 The warnings inform the user that a total order index is smaller than the first
 order index. When increasing the sample size, these warnings disappear.
 
-On the **Summary** tab the value of the effective stop criteria are written in
+On the **Summary** tab the value of the effective stopping criteria is written in
 a table.
 
 .. image:: sobol_results_window_summary.png
     :align: center
 
-5-1 SRC indices
+5-2 SRC indices
 '''''''''''''''
 
-For more details on the computation of the
-`Standard Regression Coefficients <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_
-see the OpenTURNS documentation.
+For more details on the computation of the SRC indices (
+`Standard Regression Coefficients <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_),
+you can consult the OpenTURNS documentation.
 
-5-1-1 Definition
+5-2-1 Definition
 ****************
 
 To perform a sensitivity analysis with the SRC method, the input variables must
-be independent (In the Correlation tab of the probabilistic model window replace
+be independent (In the **Dependence** :ref:`tab <dependenceTab>` of the probabilistic model window replace
 -0.2 by 0), then choose **Sensitivity** in the
 context menu of the probabilistic model item in the study tree.
 
-.. image:: contextual_menu_proba_model.png
-    :align: center
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
+        :align: center
 
 Check the radio button **SRC** in the wizard which appears.
 
 .. image:: sensibilityAnalysis_defaultWizard.png
     :align: center
 
-Click on **Continue** button. The new page enables to parametrize the SRC
-method. To see advanced parameters, expand the **Advanced parameters** group.
+Click on **Continue** button. On the new page, you can parametrize the SRC
+method. To access advanced parameters, expand the **Advanced parameters** group.
 
 .. image:: SRC_parameters.png
     :align: center
@@ -436,11 +445,11 @@ a size of 100).
 Click on **Finish** button. A new item with a default name appears in the study
 tree and a results window is created.
 
-5-1-2 Results
+5-2-2 Results
 *************
 
-The results window contains a table with the SRC indices values
-for each variable. These values are plotted in a graphic.
+The result window contains a table with the SRC indices values
+for each variable. These values are plotted in a graph.
 
 .. image:: SRC_results_window.png
     :align: center
@@ -448,7 +457,9 @@ for each variable. These values are plotted in a graphic.
 6- Threshold exceedance
 ```````````````````````
 
-To perform the following analyses use again a Gaussian copula.
+To perform the following analyses use again a Gaussian copula
+(In the **Dependence** :ref:`tab <dependenceTab>`
+of the probabilistic model window replace 0 by -0.2).
 
 6-1 Limit state
 '''''''''''''''
@@ -457,8 +468,8 @@ To create the limit state function which enables the definition of the failure
 event, choose **Limit state** in the context menu of the
 probabilistic model item in the study tree.
 
-.. image:: contextual_menu_proba_model.png
-    :align: center
+    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
+        :align: center
 
 After clicking, a new item with a default name appears in the study
 tree and the following window appears:
@@ -466,7 +477,7 @@ tree and the following window appears:
 .. image:: default_limitState.png
     :align: center
 
-We consider the event where the deviation exceeds :math:`30cm`. Choose the good
+We consider the event where the deviation exceeds :math:`30cm`. Choose the right
 operator in the combobox and set the value of the threshold in order to obtain
 the following limit state window:
 
@@ -477,8 +488,8 @@ the following limit state window:
 '''''''''''''''
 
 For more details on the computation of the failure probability by the method of
-`Monte Carlo <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/monte_carlo_simulation.html>`_
-see the OpenTURNS documentation.
+`Monte Carlo <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/monte_carlo_simulation.html>`_,
+you can consult the OpenTURNS documentation.
 
 6-2-1 Definition
 ****************
@@ -498,7 +509,7 @@ The new page enables to change the parameters of the analysis.
 The user has to define at least one criterion to stop the algorithm.
 
 Add the third criterion by selecting the check button **Maximum calls**.
-The maximum calls is 10000. Set the block size to 300.
+The maximum number of calls is 10000. Set the block size to 300.
 
 In that case the algorithm will perform 34 iterations with 300 calls to the
 model function.
@@ -508,10 +519,12 @@ Effective maximum total number of calls: 10200
 Click on **Finish** button. A new item with a default name appears in the study
 tree and a results window is created.
 
+.. _exmonteCarloReliabilityResult:
+
 6-2-2 Results
 *************
 
-The results window must contain the following table:
+The result window contains the following table:
 
 .. image:: FailureProbabilityTable.png
     :align: center
@@ -534,8 +547,8 @@ This graph shows the value of the probability estimate at each iteration.
 ''''''''
 
 For more details on the computation of the failure probability by the method of
-`FORM <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/form_approximation.html>`_
-see the OpenTURNS documentation.
+`FORM <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/form_approximation.html>`_,
+you can consult the OpenTURNS documentation.
 
 6-3-1 Definition
 ****************
@@ -558,13 +571,13 @@ The starting point is defined by default with the means of the distributions of 
 6-3-2 Results
 *************
 
-The results window contains these tables.
+The result window includes the following tables.
 
 .. image:: FORM_summary_result.png
     :align: center
 
-The icon nearby the iterations number value warns the user that the maximum of iterations has been
-reached and maybe the optimisation result is not accurate enough.
+When the maximum number of iterations has been reached, an warning icon appears
+nearby the iterations number value: it warns the user that the optimisation result may not be accurate enough.
 
 The **Design point** tab indicates the value of the design point in the standard space and in
 the physical space. The table contains the importance factors which are displayed in
@@ -573,19 +586,19 @@ the pie chart.
 .. image:: FORM_designPoint_result.png
     :align: center
 
-For more details on the `Importance factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_form.html>`_
-see the OpenTURNS documentation.
+For more details on the `Importance factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_form.html>`_,
+you can consult the OpenTURNS documentation.
 
 The **Sensitivity** tab indicates the sensitivity factors.
-For more details on the `Sensitivity factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_form.html>`_
-see the OpenTURNS documentation.
+For more details on the `Sensitivity factors <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_form.html>`_,
+you can consult the OpenTURNS documentation.
 
 6-4 FORM-Importance sampling
 ''''''''''''''''''''''''''''
 
 For more details on the computation of the failure probability by the method of
-`Importance sampling <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_simulation.html>`_
-see the OpenTURNS documentation.
+`Importance sampling <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_simulation.html>`_,
+you can consult the OpenTURNS documentation.
 
 6-4-1 Definition
 ****************
@@ -597,12 +610,12 @@ choose **Threshold exceedance** in the context menu of the limit state item in t
     :align: center
 
 Select the **FORM-Importance sampling** method and click on **Continue** button.
-The following page enables to change the parameters of the Importance sampling analysis.
-Its the same page as for Monte Carlo method.
+The following page allows to change the parameters of the Importance sampling analysis.
+It’s the same page as the one for the Monte Carlo method.
 
 Click on **Continue** button.
-The following page enables to change the parameters of the FORM analysis.
-Its the same page as for FORM method.
+The following page enables setting the parameters of the FORM analysis.
+It’s the same page as the one for the FORM method.
 
 The analysis consists in performing firstly a FORM analysis, then the computed design point
 is used to initialize the Importance sampling analysis.
@@ -610,8 +623,9 @@ is used to initialize the Importance sampling analysis.
 6-4-2 Results
 *************
 
-The FORM-IS result window contains the same tabs as the Monte Carlo result window and a **FORM results**
-tab to display the tabs of a FORM result window.
+The FORM-IS result window contains the same tabs as the Monte Carlo result window
+as well as a **FORM result**
+tab, which displays the tabs of a FORM result window.
 
 .. image:: FORM-IS_FORMresult.png
     :align: center
@@ -621,8 +635,8 @@ We can see in the following table, the design point from the FORM analysis resul
 .. image:: FORM-IS_ParametersResult.png
     :align: center
 
-The following histogram shows that on the contrary of the Monte Carlo method,
-the sampling is centered at the threshold of the event failure with the Importance sampling method.
+The following histogram shows that, by contrast of the :ref:`Monte Carlo method <exmonteCarloReliabilityResult>`,
+the sampling is centered on the threshold of the event failure with the Importance sampling method.
 
 .. image:: FORM-IS_HitogramResult.png
     :align: center
@@ -661,12 +675,12 @@ appears.
 ''''''''''''''''''''
 
 For more details on the computation of a metamodel by the method of
-`Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_
-see the OpenTURNS documentation.
+`Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_,
+you can consult the OpenTURNS documentation.
 
-The functional chaos enables to compute the Sobol indices.
-But these indices are not usable if the stochastic variables are correlated.
-So in the Correlation tab of the probabilistic model window replace -0.2 by 0.
+The functional chaos allows to compute the Sobol indices. Beware that these indices
+cannot be used for correlated stochastic variables. In order to use these indices,
+replace the value -0.2 by 0 in the **Dependence** :ref:`tab <dependenceTab>` of the probabilistic model window.
 
 7-2-1 Definition
 ****************
@@ -682,7 +696,8 @@ Select the **Functional chaos** method and click on **Continue** button.
 .. image:: chaos_page.png
     :align: center
 
-Set the chaos degree to 4 and click on **Finish** button.
+Set the chaos degree to 4 and click on **Continue** and then on **Finish** button
+in the next page.
 
 Launch the analysis.
 
@@ -690,46 +705,44 @@ Launch the analysis.
 *************
 
 The first tab of the result window displays the metamodel.
-The relative error enable to check the quality of the metamodel.
+The relative error expresses the quality of the metamodel.
 
 .. image:: chaos_result_metamodel.png
     :align: center
 
 The moments retrieved from the polynomial basis correspond to the result of
-the central tendency analyses.
+the :ref:`central tendency analyses <exmonteCarloResult>`.
 
 .. image:: chaos_result_summary.png
     :align: center
 
-The windows proposes the Sobol indices.
+The windows shows the Sobol indices.
+We can see that the values are similar to the ones obtained with the :ref:`sensitivity analysis <exsobolResult>`.
 
 .. image:: chaos_result_sobol.png
     :align: center
 
-We can see that the values are similar to the ones obtained with the sensitivity analyses.
+The analysis computes a surrogate model which can be retrieved and checked:
+ - Click on the context menu of the metamodel item.
 
-Click on the context menu of the metamodel item.
+    .. image:: metamodel_contextMenu.png
+        :align: center
 
-.. image:: metamodel_contextMenu.png
-    :align: center
+    - Choose **Convert metamodel into physical model**.
+      A new item **MetaModel_0** appears in the study tree.
+ - Click on its sub-item **Definition**. A model definition window appears:
+    - Evaluate the model by clicking on the **Evaluate** button.
+      The output value is close to the value obtained with the :ref:`analytical formula <exevaluationresult>`.
 
-Choose **Convert metamodel into physical model**.
-A new item **MetaModel_0** appears in the study tree.
-Click on its sub-item **Definition**. A model definition window appears.
-Evaluate the model by clicking on the **Evaluate** button.
-
-.. image:: metamodel_definition.png
-    :align: center
-
-The value is close to the value obtained thanks to the :ref:`analytical formula <evaluationresult>`.
-
+      .. image:: metamodel_definition.png
+          :align: center
 
 7-3 Kriging
 '''''''''''
 
 For more details on the computation of a metamodel by the method of
-`Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_
-see the OpenTURNS documentation.
+`Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_,
+you can consult the OpenTURNS documentation.
 
 7-3-1 Definition
 ****************
@@ -745,7 +758,15 @@ Select the **Kriging** method and click on **Continue** button.
 .. image:: kriging_page.png
     :align: center
 
-Check the button **Compute Q2 by Leave-one-out**.
+Check the button **By K-Fold method**.
+For more details on the
+`K-Fold <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_
+method, check the OpenTURNS documentation.
+Beware the computation may be expensive: In the current example, the K-Fold method builds a metamodel five times.
+
+.. image:: kriging_validation_page.png
+    :align: center
+
 Click on **Finish** button.
 
 Launch the analysis.
@@ -753,21 +774,18 @@ Launch the analysis.
 7-3-2 Results
 *************
 
-The computation is expensive because of the Leave-one-out method. Indeed the
-algorithm build a metamodel as many times there are input variables.
-For more details on the method of
-`Leave-one-out <http://doc.openturns.org/openturns-latest/html/ReferenceGuide/cid6.xhtml#uid1063>`_
-see the OpenTURNS documentation.
 
-The window contains a tab **Validation** which presents:
+The window contains a **Validation** tab, which presents:
 
     - the metamodel predictivity coefficient: :math:`\displaystyle Q2 = 1 - \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(\bar{y} - y_i)^2}}`
     - the residual: :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
 
+    with :math:`N`, the sample size; :math:`y_i`, the real values and :math:`\hat{y_i}`, the predicted values.
+
 .. image:: kriging_LOO_result.png
     :align: center
 
-Here the Q2 value is nearby 1, so we can deduce that the metamodel is valid.
+Here the Q2 value is nearly equal to 1, so we can conclude that the metamodel is valid.
 
 The **Results** tab displays the optimized covariance model parameters and
 the trend coefficients.
@@ -779,30 +797,39 @@ the trend coefficients.
 8- Data analysis
 ````````````````
 
+To perform the following analyses use again a Gaussian copula
+(In the **Dependence** :ref:`tab <dependenceTab>`
+of the probabilistic model window replace 0 by -0.2).
+
 8-1 Data
 ''''''''
 
-Use again a Gaussian copula.
-Create a design of experiments by choosing **New design of experiments** in the
-context menu of the **Designs of experiments** item.
+We first create a sample for our example:
 
-.. image:: DOE_proba_wizard.png
-    :align: center
+- Create a design of experiments by choosing **New design of experiments** in the
+  context menu of the **Designs of experiments** item.
 
-Select **Probabilistic** and click on **Continue** button.
+  .. image:: DOE_proba_wizard.png
+      :align: center
+
+.. _probaExperimentExample:
+
+- Select **Probabilistic** and click on **Continue** button.
+  Note the probabilistic experiment uses the distribution of the model to generate the sample (marginals and copula).
 
 .. image:: DOE_probaParamPage.png
     :align: center
 
-Set the sample size to 1000. Click on **Finish** button 
+- Set the sample size to 1000. Click on **Finish** button.
 
-Right click on the generated table. Choose on **Export** on the context menu which appears.
-Save the data.
+- In the **Table** tab of the window click on **Export** button.
+- Save the sample in a file.
+
 
 8-2 Data model
 ''''''''''''''
 
-On the study window (or in the context menu of the study item), click on **Data model**.
+On the study window click on **Data model**.
 
 A new item and a new window appear:
 
@@ -812,7 +839,7 @@ A new item and a new window appear:
 Click on the **Model definition** box of the diagram.
 
 A window is created to define the model. Click on the **...** button and load
-the file. Define the last variable as an input by finding the right item
+the file created in the previous part. Define the last variable as an input by finding the right item
 in the combo box on the line **Type**.
 
 .. image:: dataModel_definition.png
@@ -830,6 +857,15 @@ The following window appears.
 .. image:: dataAnalysisResult.png
     :align: center
 
+.. _correlationEstimate:
+
+In the **dependence** tab, we can see that the variables L and I are correlated:
+this is in agreement with the :ref:`distribution <probaModelExample>` used to
+:ref:`generate <probaExperimentExample>` this variable.
+
+.. image:: dataAnalysisResult_dependence.png
+    :align: center
+
 
 9- Inference
 ````````````
@@ -839,13 +875,13 @@ The following window appears.
 
 Choose **Inference** in the context menu of the sub-item **Definition** of the model.
 
-In the window, uncheck the variable **L**. Add all the distributions for the other
-variables by choosing the **All** item in the combo box **Add**.
+A window appears:
+  - In the current example, we choose to select 3 variables (E,F,I) : uncheck L.
+  - Add all the distributions for the other variables by choosing the **All** item in the combo box **Add**.
+  - Click on the **Finish** button.
 
 .. image:: inferenceWizard.png
     :align: center
-
-Click on the **Finish** button.
 
 Launch the analysis.
 
@@ -855,21 +891,48 @@ Launch the analysis.
 .. image:: inferenceResultWindow.png
     :align: center
 
-We can see the Beta distribution is the first accepted distribution for the variable **E**.
-(and its the distribution which has enabled to generate the sample of **E**)
+The inference analysis recognized a Beta distribution for the variable E:
+this is in agreement with the :ref:`distribution <probaModelExample>` used to
+:ref:`generate <probaExperimentExample>` this variable.
 
 
-10- Dependencies inference
-``````````````````````````
+10- Dependence inference
+````````````````````````
 
-Choose **Dependencies inference** in the context menu of the sub-item **Definition** of the model.
+To explore dependence between variables, the user can use dependence inference analysis.
+
+10-1 Definition
+'''''''''''''''
+
+Choose **Dependence inference** in the context menu of the sub-item **Definition** of the model.
+
+The window which appears, may have default defined groups.
+There are detected from the Spearman's matrix estimate. In the current example,
+the variables **L** and **I** are :ref:`dependent <correlationEstimate>`.
+
+By default, the Normal copula is tested.
+Add all the copulas by choosing the **All** item in the combo box **Add**.
+
+.. image:: dependenceWizard.png
+    :align: center
+
+Launch the analysis.
+
+10-2 Results
+''''''''''''
+
+The dependence inference analysis recognized a Normal copula for the group [L, I]:
+this is in agreement with the :ref:`distribution <probaModelExample>` used to
+:ref:`generate <probaExperimentExample>` this variable.
+The Spearman coefficient is not exactly equal to -0.2 because the sample is not
+large enough.
 
 .. image:: dep_inferenceResultWindow.png
     :align: center
 
+
 .. image:: dep_inferenceParamResult.png
     :align: center
 
-We can see in the **Parameters** tab that the variables **L** and **I** are correlated.
 
 
