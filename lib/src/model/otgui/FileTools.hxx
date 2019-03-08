@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QImage>
+#include <QUrl>
 
 namespace OTGUI
 {
@@ -35,11 +36,15 @@ class OTGUI_API FileTools : public QObject
   Q_OBJECT
 
 public:
+  enum docType {docGUI, docOT};
   static void SetCurrentDir(const QString &fileName);
   static QString GetCurrentDir();
   static void ExportData(const OT::Sample& sample, QWidget * parent);
   static void ExportData(const QString& text, QWidget * parent);
   static void ExportImage(const QImage& imgae, QWidget * parent);
+  static QString GetDocumentationDirectoryPath();
+  static QUrl GetDocumentationUrl(const QString &urlLink, const docType type);
+  static const QString OpenTURNSUrlLink;
 };
 }
 #endif
