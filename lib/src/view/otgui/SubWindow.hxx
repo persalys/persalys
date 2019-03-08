@@ -28,17 +28,17 @@
 namespace OTGUI
 {
 
-// custom QLAbel for all result windows
-class OTGUI_API TitleLabel : public QLabel
+// custom QLabel for all result windows
+class OTGUI_API TitleLabel : public QWidget
 {
 public:
-  TitleLabel(const QString &text = "", QWidget * parent = 0)
-    : QLabel(text, parent)
-  {
-    setFrameStyle(QFrame::StyledPanel);
-    setMargin(5);
-    setStyleSheet("QLabel { font: bold; background-color: white; }");
-  }
+  TitleLabel(const QString &text = "", const QString &docLink = "", QWidget * parent = 0);
+
+  void setText(const QString& text);
+  void setDocLink(const QString& link);
+
+private:
+  QLabel * label_;
 };
 
 
