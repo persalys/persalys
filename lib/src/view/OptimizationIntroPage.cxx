@@ -50,7 +50,7 @@ OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
   pageLayout->addWidget(outputsSelectionGroupBox_);
 
   // button to open OT documentation
-  DocumentationToolButton * infoButton = new DocumentationToolButton(DocumentationToolButton::OpenTURNSUrlLink + "user_manual/optimization.html");
+  DocumentationToolButton * infoButton = new DocumentationToolButton("user_manual/optimization.html", FileTools::docOT);
   pageLayout->addWidget(infoButton);
 
   // optimization algorithm

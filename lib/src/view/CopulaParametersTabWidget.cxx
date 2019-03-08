@@ -28,6 +28,7 @@
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/TranslationManager.hxx"
 #include "otgui/DocumentationToolButton.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <openturns/NormalCopula.hxx>
 #include <openturns/VisualTest.hxx>
@@ -145,7 +146,7 @@ void CopulaParametersTabWidget::buildInterface()
   plotWidget = new WidgetBoundToDockWidget(this);
   plotWidgetLayout = new QVBoxLayout(plotWidget);
 
-  DocumentationToolButton * infoKendallPlotButton = new DocumentationToolButton(DocumentationToolButton::OpenTURNSUrlLink + "theory/data_analysis/graphical_fitting_test.html");
+  DocumentationToolButton * infoKendallPlotButton = new DocumentationToolButton("theory/data_analysis/graphical_fitting_test.html", FileTools::docOT);
   plotWidgetLayout->addWidget(infoKendallPlotButton);
 
   ResizableStackedWidget * kendall_StackedWidget = new ResizableStackedWidget;
@@ -238,7 +239,7 @@ void CopulaParametersTabWidget::buildInterface()
   paramGroupBoxLayout->addWidget(distParamTableView);
 
   // button to open the OT documentation
-  DocumentationToolButton * infoButton = new DocumentationToolButton;
+  DocumentationToolButton * infoButton = new DocumentationToolButton("", FileTools::docOT);
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
   paramGroupBoxLayout->addWidget(infoButton);
 
@@ -251,7 +252,7 @@ void CopulaParametersTabWidget::buildInterface()
 void CopulaParametersTabWidget::openUrl()
 {
   const String distName = distribution_.getImplementation()->getClassName();
-  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
+  const QString link = FileTools::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
 
   // open url
   QDesktopServices::openUrl(QUrl(link));

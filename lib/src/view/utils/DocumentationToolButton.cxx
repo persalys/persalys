@@ -21,25 +21,31 @@
 #include "otgui/DocumentationToolButton.hxx"
 
 #include <QDesktopServices>
-#include <QUrl>
 
 namespace OTGUI
 {
-const QString DocumentationToolButton::OpenTURNSUrlLink = "http://openturns.github.io/openturns/master/";
 
-DocumentationToolButton::DocumentationToolButton(const QString& urlLink, const QString& toolTip, QWidget *parent)
+DocumentationToolButton::DocumentationToolButton(const QString& urlLink, const FileTools::docType type, QWidget *parent)
   : QToolButton(parent)
-  , urlLink_(urlLink)
+  , urlLink_()
 {
   setIcon(QIcon(":/images/documentinfo.png"));
+  QString toolTip = tr("Open documentation");
+  if (type == FileTools::docOT)
+    toolTip = tr("Open the OpenTURNS documentation");
   setToolTip(toolTip);
-  connect(this, SIGNAL(clicked()), this, SLOT(openUrl()));
+
+  if (!urlLink.isEmpty())
+  {
+    urlLink_ = FileTools::GetDocumentationUrl(urlLink, type);
+
+    connect(this, SIGNAL(clicked()), this, SLOT(openUrl()));
+  }
 }
 
 
 void DocumentationToolButton::openUrl()
 {
-  if (!urlLink_.isEmpty())
-    QDesktopServices::openUrl(QUrl(urlLink_));
+  QDesktopServices::openUrl(urlLink_);
 }
 }

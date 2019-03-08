@@ -31,6 +31,7 @@
 #include "otgui/InferenceResultWizard.hxx"
 #include "otgui/StudyItem.hxx"
 #include "otgui/DocumentationToolButton.hxx"
+#include "otgui/FileTools.hxx"
 
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/ScreeningResultWizard.hxx"
@@ -183,7 +184,7 @@ void MarginalsWidget::buildInterface()
   rightFrameLayout->addWidget(plotWidget, 1);
 
   // button to open the OT documentation
-  DocumentationToolButton * infoButton = new DocumentationToolButton;
+  DocumentationToolButton * infoButton = new DocumentationToolButton("", FileTools::docOT);
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
   rightFrameLayout->addWidget(infoButton);
 
@@ -244,7 +245,7 @@ void MarginalsWidget::openUrl()
   const String distName = input.getDistribution().getImplementation()->getClassName();
 
   // open url
-  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
+  const QString link = FileTools::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 
