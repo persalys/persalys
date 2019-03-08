@@ -48,7 +48,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Taylor expansion")));
+  widgetLayout->addWidget(new TitleLabel(tr("Taylor expansion"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#taylorresult"));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();

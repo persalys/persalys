@@ -51,7 +51,7 @@ void LimitStateWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Limit state")));
+  mainLayout->addWidget(new TitleLabel(tr("Limit state"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#limit-state"));
 
   // spacer
   mainLayout->addSpacing(30);

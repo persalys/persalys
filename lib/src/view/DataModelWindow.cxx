@@ -75,7 +75,7 @@ DataModelWindow::~DataModelWindow()
 void DataModelWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  mainLayout->addWidget(new TitleLabel(tr("Data model")));
+  mainLayout->addWidget(new TitleLabel(tr("Data model"), "user_manual/graphical_interface/data_model/user_manual_data_model.html#datamodeldefinition"));
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);

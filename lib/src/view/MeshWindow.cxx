@@ -66,7 +66,7 @@ void MeshWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Mesh")));
+  mainLayout->addWidget(new TitleLabel(tr("Mesh"), "user_manual/graphical_interface/field_model/user_manual_field_model.html#meshdefinition"));
 
   // Index parameter
   QGroupBox * groupBox = new QGroupBox(tr("Index parameter"));

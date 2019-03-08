@@ -49,16 +49,21 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
   , titleLabel_(0)
   , formTabWidget_(0)
 {
+  // title
+  const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
+  titleLabel_ = new TitleLabel(methodName);
+
   // FORM result widget
   if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get()))
   {
     FORMImportanceSamplingAnalysis analysis = *dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get());
     formTabWidget_ = new ApproximationResultTabWidget(analysis.getFORMResult(), analysis, this);
+    titleLabel_->setDocLink("user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#formisresult");
   }
-
-  // title
-  const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
-  titleLabel_ = new TitleLabel(methodName);
+  else
+  {
+    titleLabel_->setDocLink("user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#reliamontecarloresult");
+  }
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Threshold exceedance parameters"));

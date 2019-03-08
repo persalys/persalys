@@ -57,7 +57,7 @@ OptimizationResultWindow::OptimizationResultWindow(AnalysisItem * item, QWidget 
   // title
   const QString type = item->getAnalysis().getImplementation()->getParameters()[3].second.c_str();
   const QString methodName = item->getAnalysis().getImplementation()->getParameters()[2].second.c_str();
-  titleLabel_ = new TitleLabel(type + " - " + methodName);
+  titleLabel_ = new TitleLabel(type + " - " + methodName, "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#optimresult");
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Optimization parameters"));

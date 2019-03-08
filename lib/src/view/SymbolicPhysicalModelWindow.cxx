@@ -33,7 +33,10 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinition
   // Widgets
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Symbolic model")));
+  QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectsymbolicmodel");
+  if (item->getPhysicalModel().hasMesh())
+    docLink = "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldsymbolicmodel";
+  widgetLayout->addWidget(new TitleLabel(tr("Symbolic model"), docLink));
 
   widgetLayout->addWidget(new PhysicalModelWindowWidget(item));
 }

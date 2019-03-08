@@ -38,7 +38,7 @@ StudyWindow::StudyWindow(StudyItem * item, QWidget * parent)
 void StudyWindow::buildInterface()
 {
   QVBoxLayout * subWinowLayout = new QVBoxLayout(this);
-  subWinowLayout->addWidget(new TitleLabel(tr("Model creation")));
+  subWinowLayout->addWidget(new TitleLabel(tr("Model creation"), "user_manual/graphical_interface/getting_started/user_manual_getting_started.html#modelsdefonstudywindow"));
 
   // buttons
   QScrollArea * scrollArea = new QScrollArea;

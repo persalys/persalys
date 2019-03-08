@@ -82,7 +82,7 @@ void FieldModelEvaluationResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Model evaluation")));
+  widgetLayout->addWidget(new TitleLabel(tr("Model evaluation"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmodelevalresult"));
 
   // main splitter
   FieldModelEvaluationResultWidget * mainWidget = new FieldModelEvaluationResultWidget(inputSample_, result_, this);
@@ -118,7 +118,7 @@ void FieldCentralTendencyResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Monte Carlo method")));
+  widgetLayout->addWidget(new TitleLabel(tr("Monte Carlo method"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmontecarloresult"));
 
   // main splitter
   mainWidget_ = new FieldModelEvaluationResultWidget(inputSample_,

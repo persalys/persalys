@@ -45,7 +45,7 @@ void CopulaInferenceResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Dependence inference")));
+  widgetLayout->addWidget(new TitleLabel(tr("Dependence inference"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#dependenceinferenceresult"));
 
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 

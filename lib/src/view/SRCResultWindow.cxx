@@ -60,7 +60,7 @@ void SRCResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Standardized Regression Coefficients")));
+  widgetLayout->addWidget(new TitleLabel(tr("Standardized Regression Coefficients"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#srcresult"));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();

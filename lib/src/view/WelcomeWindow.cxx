@@ -32,7 +32,7 @@ WelcomeWindow::WelcomeWindow(const Actions* actions, QWidget * parent)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Study creation")));
+  mainLayout->addWidget(new TitleLabel(tr("Study creation"), "user_manual/graphical_interface/getting_started/user_manual_getting_started.html#create-a-study"));
 
   // spacer
   mainLayout->addSpacing(10);

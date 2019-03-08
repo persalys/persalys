@@ -40,7 +40,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Study workflow")));
+  mainLayout->addWidget(new TitleLabel(tr("Study workflow"), "user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectmodeldiagram"));
 
   // optimal button size
   int boxWidth = 0;

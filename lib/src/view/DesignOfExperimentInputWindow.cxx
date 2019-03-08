@@ -29,6 +29,7 @@ DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentD
   designOfExperiment_.setInputSample(item->getOriginalInputSample());
 
   titleLabel_->setText(tr("Design of experiments input sample"));
+  titleLabel_->setDocLink("user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#doeinputwindow");
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Design of experiments creation parameters"));

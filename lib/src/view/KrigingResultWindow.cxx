@@ -66,7 +66,7 @@ void KrigingResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Kriging")));
+  widgetLayout->addWidget(new TitleLabel(tr("Kriging"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#krigingresult"));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDimension();

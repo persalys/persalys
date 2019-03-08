@@ -46,6 +46,7 @@ void DesignOfExperimentWindow::initialize(AnalysisItem* item)
   notEvaluatedInputSample_ = analysis.getNotEvaluatedInputSample();
 
   titleLabel_->setText(tr("Design of experiments"));
+  titleLabel_->setDocLink("user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#doeevalresult");
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Design of experiments evaluation parameters"));

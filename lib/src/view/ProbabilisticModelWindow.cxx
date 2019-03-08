@@ -40,7 +40,7 @@ void ProbabilisticModelWindow::buildInterface()
 {
   QVBoxLayout * mainWidgetLayout = new QVBoxLayout(this);
 
-  mainWidgetLayout->addWidget(new TitleLabel(tr("Probabilistic model")));
+  mainWidgetLayout->addWidget(new TitleLabel(tr("Probabilistic model"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#probamodel"));
 
   QTabWidget * rootTab = new QTabWidget;
 

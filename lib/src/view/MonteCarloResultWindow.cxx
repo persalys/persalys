@@ -70,6 +70,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
   sampleSizeTitle_ = tr("Number of calls") + " ";
 
   titleLabel_->setText(tr("Monte Carlo method"));
+  titleLabel_->setDocLink("user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#montecarloresult");
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Central tendency parameters"));

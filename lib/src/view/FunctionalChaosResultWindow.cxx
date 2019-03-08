@@ -78,7 +78,7 @@ void FunctionalChaosResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Functional chaos")));
+  widgetLayout->addWidget(new TitleLabel(tr("Functional chaos"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#functionalchaosresult"));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDescription().getSize();

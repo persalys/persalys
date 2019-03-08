@@ -50,5 +50,6 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
   designOfExperiment_ = result_.getDesignOfExperiment();
 
   titleLabel_->setText(tr("Data analysis"));
+  titleLabel_->setDocLink("user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#dataanalysisresult");
 }
 }

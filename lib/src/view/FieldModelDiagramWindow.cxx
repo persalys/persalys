@@ -39,7 +39,7 @@ FieldModelDiagramWindow::FieldModelDiagramWindow(PhysicalModelDiagramItem * phys
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Study workflow")));
+  mainLayout->addWidget(new TitleLabel(tr("Study workflow"), "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldmodeldiagram"));
 
   // optimal button size
   int boxWidth = 0;

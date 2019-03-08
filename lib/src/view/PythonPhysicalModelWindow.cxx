@@ -37,8 +37,10 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 //  setFocusPolicy(Qt::ClickFocus);
 
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
-
-  widgetLayout->addWidget(new TitleLabel(tr("Python model")));
+  QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectpythonmodel");
+  if (item->getPhysicalModel().hasMesh())
+    docLink = "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldpythonmodel";
+  widgetLayout->addWidget(new TitleLabel(tr("Python model"), docLink));
 
   QSplitter * horizontalSplitter = new QSplitter(Qt::Horizontal);
 

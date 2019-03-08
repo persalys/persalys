@@ -45,7 +45,7 @@ void ModelEvaluationResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Model evaluation")));
+  widgetLayout->addWidget(new TitleLabel(tr("Model evaluation"), "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#modelevalresult"));
 
   QTabWidget * tabWidget = new QTabWidget;
 

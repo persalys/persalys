@@ -71,7 +71,7 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
 
   // title
   const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
-  widgetLayout->addWidget(new TitleLabel(methodName));
+  widgetLayout->addWidget(new TitleLabel(methodName, "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#" + methodName.toLower() + "result"));
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);

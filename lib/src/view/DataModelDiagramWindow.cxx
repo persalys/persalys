@@ -40,7 +40,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Study workflow")));
+  mainLayout->addWidget(new TitleLabel(tr("Study workflow"), "user_manual/graphical_interface/data_model/user_manual_data_model.html#datamodeldiagram"));
 
   // optimal button size
   int boxWidth = 0;
