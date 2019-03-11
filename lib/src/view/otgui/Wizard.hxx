@@ -41,8 +41,14 @@ public:
   Wizard(QWidget * parent = 0);
 
 public slots:
+  void showHelp();
 signals:
   void analysisChanged(const Analysis & analysis);
+
+private:
+  static std::map<QString, QString> DocLinks_;
+  static void InitializeDocLInks();
+  QString getDocLink();
 };
 }
 #endif
