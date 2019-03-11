@@ -2,7 +2,7 @@
 User manual - Data analyses
 ===========================
 
-The interface allows to perform the following types of data analyses:
+The interface allows to perform the following types of data analysis:
   - Data analyses to get moments, minimum, maximum, PDF, etc.
   - Marginals inferences
   - Dependence inferences
@@ -416,7 +416,7 @@ The window gathers:
 
         - the **Kendall** tab presents for each pair of variables a visual fitting test using the
           `Kendall plot <http://openturns.github.io/openturns/latest/theory/data_analysis/graphical_fitting_test.html>`_.
-          This plot can be interprated as for QQ-plot (for marginals): more the curve fit the dialgonal, more
+          This plot can be interpreted as for QQ-plot (for marginals): more the curve fit the diagonal, more
           the dependence model is adequate.
 
             - The **Graphic settings** window (below the study tree) allows to:
@@ -434,10 +434,12 @@ The window gathers:
             :align: center
 
         - the **Parameters** tab includes the parameters `estimate <http://openturns.github.io/openturns/latest/theory/data_analysis/parametric_estimation.html>`_ of the selected copula.
-            - *For the Gaussian copula*: the tab displays the `Spearman's coefficients <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_.
 
             .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters.png
                 :align: center
+
+            - *For the Gaussian copula*: the tab displays the `Spearman's coefficients <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_.
+
 
             - *'-'* in the **BIC** column means that an error occured when building a copula
               with the given sample. Then, the **Parameters** tab shows the error message.
@@ -536,7 +538,7 @@ Validation
 
 The generated metamodel can be validated. By default, the metamodel is validating analytically.
 
-The following windows allows to set up the validation. Four methods are available:
+The following windows allows to set up the validation. Three methods are available:
   - Analytically: This method correspond to an approximation of the Leave-one-out method result.
       - Kriging: cf O. Dubrule, Cross Validation of Kriging in a Unique Neighborhood,
         Mathematical Geology,1983.

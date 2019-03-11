@@ -2,7 +2,7 @@
 User manual - Deterministic analyses
 ====================================
 
-The interface allows the user to launch the following types of deterministic analyses:
+The interface allows the user to launch the following types of deterministic analysis:
   - Designs of experiments for model evaluations on a set of input values
   - Model evaluations
   - Screening
@@ -392,7 +392,7 @@ on the others.
 - The **Model** tab shows the model content used to perform the analysis.
 
 Particular situations:
-  - In some cases, points can fail (i.e. impossible division by zero):
+  - In some cases, points can fail (i.e. division by zero):
     the **Table** tab will then show additional tabs:
 
     .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableIfFailedPoints.png

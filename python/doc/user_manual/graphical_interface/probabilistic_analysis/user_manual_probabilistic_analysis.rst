@@ -2,12 +2,12 @@
 User manual - Probabilistic analyses
 ====================================
 
+In order to perform probabilistic analysis, build first a probabilistic model.
+
 .. _probaModel:
 
 1- Probabilistic model
 ======================
-
-In order to perform probabilistic analysis, build first a probabilistic model.
 
 New probabilistic model can be created through:
   - the **Probabilistic model** item in the context menu of the relevant model in the study tree
@@ -20,7 +20,7 @@ New probabilistic model can be created through:
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/probaModelBox.png
       :align: center
 
-A physical model contain only one probabilistic model.
+A physical model contains only one probabilistic model.
 
 At the creation of a probabilistic model, a new item named **Probabilistic model** is added in the
 study tree below the physical model item.
@@ -99,7 +99,8 @@ This item is associated with a window which has two tabs:
 
     When clicking on the **Finish** button, the chosen distribution is defined for the selected variable.
 
-- the **Dependence** tab:
+- the **Dependence** tab allows to set up dependence between variables. It is represented
+  by `copulas <http://openturns.github.io/openturns/latest/theory/probabilistic_modeling/copulas.html>`_.
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelDependence.png
         :align: center
@@ -251,7 +252,7 @@ When an analysis is required, the following window appears to define its paramet
 
 First, select a method:
   - the simulation methods are:
-      - `Monte Carlo <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/monte_carlo_simulation.html>`_
+      - `Monte Carlo <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_simulation.html>`_
       - FORM - `Importance sampling <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/importance_simulation.html>`_:
         the FORM algorithm starts from the result of the Importance sampling analysis
 

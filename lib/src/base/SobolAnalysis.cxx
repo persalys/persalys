@@ -183,7 +183,7 @@ void SobolAnalysis::launch()
   // check
   if (getMaximumCalls() < (getReplicationSize() * (getPhysicalModel().getStochasticInputNames().getSize() + 2)))
     throw InvalidValueException(HERE) << "The replication size (" << getReplicationSize()
-                                      << ") can not be greater than: max_calls (" << getMaximumCalls()
+                                      << ") cannot be greater than: max_calls (" << getMaximumCalls()
                                       << ") / (number_of_inputs (" << getPhysicalModel().getStochasticInputNames().getSize()
                                       << ") + 2)="
                                       << (getMaximumCalls() / (getPhysicalModel().getStochasticInputNames().getSize() + 2));

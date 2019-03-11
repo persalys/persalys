@@ -133,7 +133,7 @@ bool FieldMonteCarloWizard::validateCurrentPage()
     errorMessage = tr("At least one output must be selected");
 
   if (!stopCriteriaGroupBox_->isValid())
-    errorMessage = tr("Select at least a stopping criterion");
+    errorMessage = tr("Select at least one stopping criterion");
   else
   {
     if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
@@ -142,7 +142,7 @@ bool FieldMonteCarloWizard::validateCurrentPage()
     if (stopCriteriaGroupBox_->isMaxCallsRequired())
     {
       if (stopCriteriaGroupBox_->getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
-        errorMessage = tr("The maximum calls can not be less than the block size");
+        errorMessage = tr("The maximum calls cannot be less than the block size");
     }
   }
 

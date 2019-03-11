@@ -576,8 +576,8 @@ The result window includes the following tables.
 .. image:: FORM_summary_result.png
     :align: center
 
-When the maximum number of iterations has been reached, an warning icon appears
-nearby the iterations number value: it warns the user that the optimisation result may not be accurate enough.
+When the maximum number of iterations has been reached, a warning icon appears
+nearby the iterations number value: it warns the user that the optimization result may not be accurate enough.
 
 The **Design point** tab indicates the value of the design point in the standard space and in
 the physical space. The table contains the importance factors which are displayed in

@@ -61,7 +61,7 @@ UnsignedInteger WithStopCriteriaAnalysis::getMaximumCalls() const
 void WithStopCriteriaAnalysis::setMaximumCalls(const UnsignedInteger maxi)
 {
   if (maxi < 1)
-    throw InvalidValueException(HERE) << "The maximum calls number can not be null";
+    throw InvalidValueException(HERE) << "The maximum calls number cannot be null";
 
   maximumCalls_ = maxi;
 }

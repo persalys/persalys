@@ -141,7 +141,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   for (UnsignedInteger i = 0; i < inputs.getSize(); ++i)
     inputNames.insert(inputs[i].getName());
   if (inputNames.size() != inputs.getSize())
-    throw InvalidArgumentException(HERE) << "Two inputs can not have the same name.";
+    throw InvalidArgumentException(HERE) << "Two inputs cannot have the same name.";
 
   inputs_ = inputs;
 
@@ -461,7 +461,7 @@ void PhysicalModelImplementation::setOutputs(const OutputCollection & outputs)
   for (UnsignedInteger i = 0; i < outputs.getSize(); ++i)
     outputNames.insert(outputs[i].getName());
   if (outputNames.size() != outputs.getSize())
-    throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
+    throw InvalidArgumentException(HERE) << "Two outputs cannot have the same name.";
 
   outputs_ = outputs;
   notify("outputNumberChanged");
@@ -581,7 +581,7 @@ Distribution PhysicalModelImplementation::getDistribution() const
     }
   }
 
-  // we can not build a ComposedDistribution with an empty collection
+  // we cannot build a ComposedDistribution with an empty collection
   if (!marginals.getSize())
     return Distribution();
 

@@ -2,7 +2,7 @@
 User manual - Field analyses
 ============================
 
-The interface allows to launch the following types of field analyses:
+The interface allows to launch the following types of field analysis:
   - Model evaluations
   - Central tendency analysis
 

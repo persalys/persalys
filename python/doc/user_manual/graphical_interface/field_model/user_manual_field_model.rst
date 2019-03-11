@@ -148,7 +148,7 @@ Define variables in the **Definition** tab:
       - *Formula column*: Define the mathematical relationships between the **index parameter** and the input and output variables.
         Note that the language used here differs from Python (see corresponding syntax for operators,
         mathematical functions and constants in the previous :ref:`section <AvailableSymbolsModel>`).
-      - **Evaluate** *button*: Launch the compututation of the selected output values based on inputs, index parameter and formula.
+      - **Evaluate** *button*: Launch the computation of the selected output values based on inputs, index parameter and formula.
         It shall be used to test the physical model. For these output values to be saved, the user
         should use a :ref:`Model evaluation <fieldModelEval>`.
         The evaluation add a new tab. Its content is described in a next :ref:`section <fieldmodelevalresult>`.
@@ -169,8 +169,8 @@ The model definition window contains:
     - takes floating point arguments (detected as the inputs of the model) (default: X0)
     - returns sequences of floats (detected as the outputs of the model) (default: Y0 = X0 + t)
       These sequences dimension must be equal to the number of nodes of the mesh.
-    - can used other statements defined in the Python editor
-    - can used the mesh as an OpenTURNS object `Mesh <http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Mesh.html>`_
+    - can use other statements defined in the Python editor
+    - can use the mesh as an OpenTURNS object `Mesh <http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Mesh.html>`_
       using **getMesh()** method.
 
  - the **Inputs** section allows to:

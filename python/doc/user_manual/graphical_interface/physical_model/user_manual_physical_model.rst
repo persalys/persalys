@@ -108,7 +108,7 @@ Define variables in the **Definition** tab:
       - *Formula column*: Define the mathematical relationships between the input and output variables.
         Note that the language used here differs from Python (see corresponding syntax for operators,
         mathematical functions and constants below).
-      - **Evaluate** *button*: Launch the compututation of the selected output values based on inputs and formula.
+      - **Evaluate** *button*: Launch the computation of the selected output values based on inputs and formula.
         It shall be used to test the physical model. For these output values to be saved, the user
         should use a :ref:`Model evaluation <modelEvaluation>`.
 
@@ -191,7 +191,7 @@ The model definition window contains:
  - the **Python editor** allows to define the model with the function **_exec** which:
     - takes floating point arguments (detected as the inputs of the model) (default: X0)
     - returns a float or a sequence of floats (detected as the outputs of the model) (default: Y0 = X0)
-    - can used other statements defined in the Python editor
+    - can use other statements defined in the Python editor
 
  - the **Inputs** section allows to:
     - List the inputs detected from the function **_exec**

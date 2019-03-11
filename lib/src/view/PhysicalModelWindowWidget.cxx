@@ -153,7 +153,7 @@ void PhysicalModelWindowWidget::buildInterface()
 
   // button Evaluate outputs -------------------------------------------
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate"));
-  evaluateOutputsButton->setToolTip(tr("Evaluate the value of the outputs"));
+  evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
   outputButtonsLayout->addWidget(evaluateOutputsButton);
 

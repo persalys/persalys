@@ -73,7 +73,7 @@ void ImportedMeshModel::setParameters(const String& fileName, const Indices& col
 {
   // check
   if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
 
   // import sample
   Sample sampleFromFile(Tools::ImportSample(fileName));

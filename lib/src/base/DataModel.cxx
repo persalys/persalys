@@ -99,7 +99,7 @@ String DataModel::getFileName() const
 void DataModel::setFileName(const String& fileName)
 {
   if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
 
   // get sample from file
   sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));
@@ -164,7 +164,7 @@ void DataModel::setColumns(const Indices& inputColumns,
   indices.add(outputColumns);
 
   if (!indices.check(getSampleFromFile().getDimension()))
-    throw InvalidArgumentException(HERE) << "A value can not be in the two columns lists at the same time.";
+    throw InvalidArgumentException(HERE) << "A value cannot be in the two columns lists at the same time.";
 
   // check names
   // - check input
@@ -189,7 +189,7 @@ void DataModel::setColumns(const Indices& inputColumns,
       variableNamesSet.insert(outputNames[i]);
 
     if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
-      throw InvalidArgumentException(HERE) << "Two variables can not have the same name.";
+      throw InvalidArgumentException(HERE) << "Two variables cannot have the same name.";
   }
 
   // set attributs
@@ -244,7 +244,7 @@ void DataModel::setNames(const Description & inputNames, const Description & out
       variableNamesSet.insert(outputNames[i]);
 
     if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
-      throw InvalidArgumentException(HERE) << "Two variables can not have the same name.";
+      throw InvalidArgumentException(HERE) << "Two variables cannot have the same name.";
   }
   // set attributs
   inputNames_ = inputNames;

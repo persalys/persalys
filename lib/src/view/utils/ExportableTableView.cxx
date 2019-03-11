@@ -94,7 +94,7 @@ void ExportableTableView::exportData()
   else if (!text.isEmpty())
     FileTools::ExportData(text, this);
   else
-    throw SimpleException(tr("Internal exception: can not get the sample"));
+    throw SimpleException(tr("Internal exception: cannot get the sample"));
 }
 
 

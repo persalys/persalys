@@ -28,42 +28,42 @@ namespace OTGUI
 {
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
-  : QGroupBox(tr("Outputs to analyse"), parent)
+  : QGroupBox(tr("Outputs of interest"), parent)
   , pluralText_(true)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
-  // custom combobox to choose output to analyse
+  // custom combobox to choose output of interest
   outputsComboBox_ = new TitledComboBox("-- " + tr("Select outputs") + " --");
   outputLayout->addWidget(outputsComboBox_);
 }
 
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* parent)
-  : QGroupBox((pluralText ? tr("Outputs to analyse") : tr("Output to analyse")), parent)
+  : QGroupBox((pluralText ? tr("Outputs of interest") : tr("Output of interest")), parent)
   , pluralText_(pluralText)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
-  // custom combobox to choose output to analyse
+  // custom combobox to choose output of interest
   outputsComboBox_ = new TitledComboBox("-- " + (pluralText_ ? tr("Select outputs") : tr("Select output")) + " --");
   outputLayout->addWidget(outputsComboBox_);
 }
 
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNames, const Description& interestVariables, QWidget* parent)
-  : QGroupBox(tr("Outputs to analyse"), parent)
+  : QGroupBox(tr("Outputs of interest"), parent)
   , pluralText_(true)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
-  // custom combobox to choose output to analyse
+  // custom combobox to choose output of interest
   outputsComboBox_ = new TitledComboBox("-- " + tr("Select outputs") + " --");
   outputLayout->addWidget(outputsComboBox_);
 

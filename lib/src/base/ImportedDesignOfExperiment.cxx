@@ -94,7 +94,7 @@ String ImportedDesignOfExperiment::getFileName() const
 void ImportedDesignOfExperiment::setFileName(const String& fileName)
 {
   if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
 
   // get sample from file
   sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));

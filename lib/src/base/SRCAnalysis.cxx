@@ -84,7 +84,7 @@ void SRCAnalysis::launch()
   // check
   if (getBlockSize() > getSimulationsNumber())
     throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                      << ") can not be greater than the input sample size (" << getSimulationsNumber() << ")";
+                                      << ") cannot be greater than the input sample size (" << getSimulationsNumber() << ")";
 
   // initialization
   RandomGenerator::SetSeed(getSeed());

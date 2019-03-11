@@ -55,7 +55,7 @@ void ReliabilityAnalysis::setInterestVariables(const Description& outputsNames)
   if (outputsNames.getSize() == 1)
     if (outputsNames[0] == limitState_.getOutputName())
       return;
-  throw InvalidArgumentException(HERE) << "The output to be analysed " << limitState_.getOutputName() << "is already defined in the limit state";
+  throw InvalidArgumentException(HERE) << "The output of interest " << limitState_.getOutputName() << "is already defined in the limit state";
 }
 
 
