@@ -79,6 +79,9 @@ The two first columns allows to set its name and description (double click to ed
   .. image:: /user_manual/graphical_interface/field_model/indexParamTable.png
       :align: center
 
+
+.. _meshdefinitionwizard:
+
 To modify the mesh click on **...** button. The window which appears,
 proposes two ways to define a mesh:
 
@@ -91,7 +94,6 @@ proposes two ways to define a mesh:
 
   .. image:: /user_manual/graphical_interface/field_model/importMeshWizard.png
       :align: center
-
 
 3- Model definition
 ===================

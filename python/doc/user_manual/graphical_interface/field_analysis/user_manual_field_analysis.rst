@@ -29,6 +29,8 @@ Create a new model evaluation through:
     .. image:: /user_manual/graphical_interface/field_analysis/evaluation_contextMenu.png
         :align: center
 
+.. _fieldmodelevalwizard:
+
 1-1 Definition
 ''''''''''''''
 
@@ -39,7 +41,7 @@ When this analysis is required, the following window appears to set its paramete
 
 
 When an evaluation is required, a window appears, in order to set up:
-  - The outputs to be analyzed (**Select outputs** - default: all outputs are evaluated).
+  - The outputs of interest (**Select outputs** - default: all outputs are evaluated).
     At least one variable must be selected to validate the window.
   - The value of the input variables (default: value in the physical model definition).
     The values are expected to be floating points or integer.
@@ -137,11 +139,13 @@ New central tendency analysis can be created thanks to:
 
   - the context menu of the **Central tendency** item (if it already exists)
 
+.. _fieldcentraltendencywizard:
+
 2-1 Definition
 ''''''''''''''
 
 When an analysis is required, a window appears, in order to set up:
-  - the outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
   - the stopping criteria of the algorithm (Select at least one criterion to validate the window):
       - the maximum computation time (default: one minute)
         (d means days, h means hours, m means minutes, s means seconds)

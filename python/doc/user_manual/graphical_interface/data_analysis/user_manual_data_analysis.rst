@@ -190,6 +190,8 @@ New marginals inference can be created thanks to:
     .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
         :align: center
 
+.. _marginalsinferencewizard:
+
 2-1 Definition
 ''''''''''''''
 
@@ -305,6 +307,8 @@ The results window gathers:
             :align: center
 
 
+The result can be used in the :ref:`Probabilistic model window <inferenceresultwizard>`.
+
 .. _dependenceInference:
 
 3- Dependence inference
@@ -322,6 +326,8 @@ This analysis can be created thanks to:
 
     .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
         :align: center
+
+.. _dependenceinferencewizard:
 
 3-1 Definition
 ''''''''''''''
@@ -439,13 +445,12 @@ The window gathers:
             .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters_ErrorMessage.png
                 :align: center
 
+The result can be used in the :ref:`Probabilistic model window <dependenceinferenceresultwizard>`.
+
 4- Metamodel creation
 ======================
 
 To perform this analysis, the data model or the design of experiments must contain an output sample.
-
-4-1 Definition
-''''''''''''''
 
 A new metamodel can be created thanks to:
   - the context menu of a design of experiments item
@@ -468,9 +473,13 @@ A new metamodel can be created thanks to:
     .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
         :align: center
 
+.. _metamodelwizard:
+
+4-1 Definition
+''''''''''''''
 
 When an analysis is required, a window appears, in order to set up:
-  - the outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
   - the method: `Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_ (default) or `Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_wizard.png

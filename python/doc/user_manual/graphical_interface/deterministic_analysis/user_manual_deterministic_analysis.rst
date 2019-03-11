@@ -35,6 +35,8 @@ Create a new design of experiment through:
     .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_contextMenu.png
         :align: center
 
+.. _doeinputwizard:
+
 In the resulting window, the user has to choose between three types of design prior to
 click on the **Continue** button:
 
@@ -221,6 +223,7 @@ New design of experiments can be evaluated through:
     .. image:: /user_manual/graphical_interface/deterministic_analysis/doeEvalBox.png
         :align: center
 
+.. _doeevalwizard:
 
 1-2-1 Definition
 ~~~~~~~~~~~~~~~~
@@ -482,6 +485,8 @@ Create a new model evaluation through:
     .. image:: /user_manual/graphical_interface/deterministic_analysis/evaluation_contextMenu.png
         :align: center
 
+.. _vectmodelevalwizard:
+
 2-1 Definition
 ''''''''''''''
 
@@ -489,7 +494,7 @@ Create a new model evaluation through:
     :align: center
 
 When an evaluation is required, a window appears, in order to set up:
-  - The outputs to be analyzed (**Select outputs** - default: all outputs are evaluated).
+  - The outputs of interest (**Select outputs** - default: all outputs are evaluated).
     At least one variable must be selected to validate the window.
   - The value of the input variables (default: value in the physical model definition).
     The values are expected to be floating points or integer.
@@ -540,11 +545,13 @@ New screening analysis can be created thanks to:
 
   - the **New Analysis** item in the context menu of the **Screening** section
 
+.. _screeningwizard:
+
 3-1 Definition
 ''''''''''''''
 
 When the analysis is required, the following window appears, in order to set up:
-  - The outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - The outputs of interest (**Select outputs** - default: all outputs are analyzed)
   - The screening **Method** (only the Morris method is available for now)
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisWizard_FirstPage.png
@@ -708,6 +715,8 @@ The results window gathers several tabs:
 
 - The **Model** tab shows the model content used to perform the analysis.
 
+.. _screeningresultwizard:
+
 3-4 Use results
 ''''''''''''''''''
 
@@ -748,11 +757,13 @@ New model optimization can be created through:
 
   - the **New Analysis** context menu of the **Optimization** section
 
+.. _optimizationwizard:
+
 4-1 Definition
 ''''''''''''''
 
 When this analysis is required, the following window appears, in order to set up:
-  - The output to be optimized (**Select output** - default: the first output is analyzed)
+  - The output of interest (**Select output** - default: the first output is analyzed)
   - The method of optimization (default: Cobyla).
     The two first methods **Cobyla** and **TNC** are proposed by OpenTURNS.
     The other methods are solvers from the non-linear optimization library

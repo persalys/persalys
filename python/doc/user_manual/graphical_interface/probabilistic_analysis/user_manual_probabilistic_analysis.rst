@@ -80,20 +80,22 @@ This item is associated with a window which has two tabs:
                   - Left-click to translate the graph
                   - Mouse wheel up/down to zoom/zoom out
 
+.. _inferenceresultwizard:
 
-  - In the proposed distributions list, there is the item **Inference result**. If the current study has at least
+  - The proposed distributions list contains the **Inference result** item. If the current study has at least
     an :ref:`inference analysis result <inferenceAnalysis>`, when clicking on
     this item, the following window appears:
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/inference_resultWizard.png
         :align: center
 
-    The user can look for an analysis result with the **Inference analysis** combo box.
-    Then the user can choose a result of a variable with the **Variable** combo box.
-    The user can choose one distribution in the displayed list. The right side of the window displays
-    the current distribution parameters.
-    The distributions with which the inference analysis failed ('failed' indicated in the acceptance column) are
-    listed for convenience but it is not possible to validate the window when selecting one of them.
+    To get a distribution from an inference analysis:
+      - look for an analysis result (**Inference analysis** combo box)
+      - select a result of a variable (**Variable** combo box)
+      - select one distribution in the displayed list. The right side of the window displays
+        the current distribution parameters.
+        The distributions with which the inference analysis failed (*failed* indicated in the **Acceptation** column) are
+        listed for convenience but it is not possible to validate the window when selecting one of them.
 
     When clicking on the **Finish** button, the chosen distribution is defined for the selected variable.
 
@@ -162,20 +164,22 @@ This item is associated with a window which has two tabs:
       - Click on the left arrow: these variables are enabled again in the first table
 
 
-    In the copulas list, there is the item **Inference result**. If the current study has at least
+.. _dependenceinferenceresultwizard:
+
+    The copulas list contains the **Inference result** item. If the current study has at least
     a :ref:`dependence inference result <dependenceInference>`, when clicking on
     this item, the following window appears:
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/dependenceInference_resultWizard.png
         :align: center
 
-    The user can look for an analysis result with the **Inference analysis** combo box.
-    Then the user can choose a result of a group of variables with the **Group of variables** combo box.
-    The user can choose one copula in the displayed list. The right side of the window displays
-    the current copula PDF, Kendall plot and parameters.
-    The copulas with which the inference analysis failed ('-' indicated in the
-    **Bayesian Information Criterion** column) are
-    listed for convenience but it is not possible to validate the window when selecting one of them.
+    To get a copula from an dependence inference analysis:
+      - look for an analysis result (**Inference analysis** combo box)
+      - select a result of a group of variables (**Group of variables** combo box)
+      - select one coula in the displayed list. The right side of the window displays
+        the current copula PDF, Kendall plot and parameters.
+        The copulas with which the inference analysis failed ('-' indicated in the **Bayesian Information Criterion** column) are
+        listed for convenience but it is not possible to validate the window when selecting one of them.
 
     When clicking on the **Finish** button, the chosen copula is defined for the selected group of variables.
 
@@ -234,6 +238,8 @@ The user can require a computation of the probability of failure relative to the
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/reliabilityBox.png
         :align: center
+
+.. _thresholdexceedancewizard:
 
 3-1 Definition
 ''''''''''''''
@@ -428,7 +434,7 @@ tab to display the tabs of a FORM result window.
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilityFORMIS.png
     :align: center
 
-3- Central tendency analysis
+4- Central tendency analysis
 ============================
 
 New central tendency analysis can be created thanks to:
@@ -444,11 +450,13 @@ New central tendency analysis can be created thanks to:
 
   - the context menu of the **Central tendency** item (if it already exists)
 
-3-1 Definition
+.. _centraltendencywizard:
+
+4-1 Definition
 ''''''''''''''
 
 When an analysis is required, a window appears, in order to set up:
-  - the outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
   - the method: `Monte Carlo sampling <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_moments.html>`_ (default) or `Taylor Expansions <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/taylor_moments.html>`_ (second order)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendency.png
@@ -482,7 +490,7 @@ Taylor expansions
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyTaylor.png
     :align: center
 
-3-2 Launch
+4-2 Launch
 '''''''''''
 
 When the window is validated, a new element appears in the study tree below **Central tendency**.
@@ -499,7 +507,7 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
     :align: center
 
 
-3-3 Results
+4-3 Results
 '''''''''''
 
 When the analysis is finished or stopped, a result window appears.
@@ -653,7 +661,7 @@ The results window gathers, for a selected output (left column):
   - the standard deviation of the output
   - the variance of the output
 
-4- Sensitivity analysis
+5- Sensitivity analysis
 =======================
 
 New sensitivity analysis can be created thanks to:
@@ -671,11 +679,13 @@ New sensitivity analysis can be created thanks to:
 
 The input variables must be independent to perform a sensitivity analysis.
 
-4-1 Definition
+.. _sensitivitywizard:
+
+5-1 Definition
 ''''''''''''''
 
 When an analysis is required, a window appears, in order to set up:
-  - the outputs to be analyzed (**Select outputs** - default: all outputs are analyzed)
+  - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
   - the method: `Sobol <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/sensitivity_sobol.html>`_ (default), SRC (= `Standardised Regression Coefficient <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisMethods.png
@@ -724,7 +734,7 @@ The «SRC parameters» window allows to define:
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSRC.png
     :align: center
 
-4-2 Launch
+5-2 Launch
 ''''''''''
 
 When the window is validated, a new element appears in the study tree below **Sensitivity**.
@@ -741,7 +751,7 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
     :align: center
 
 
-4-3 Results
+5-3 Results
 '''''''''''
 
 When the analysis is finished or stopped, a result window appears.
