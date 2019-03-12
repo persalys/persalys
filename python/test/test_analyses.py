@@ -45,7 +45,7 @@ cDist = ot.ComposedDistribution(
     [ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
                                 ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
-sample.exportToCSVFile(filename, ',')
+sample.exportToCSVFile(filename, ' ')
 model3 = otguibase.DataModel(
     'model3', 'data.csv', [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
 myStudy.add(model3)
@@ -97,7 +97,7 @@ myStudy.add(design_6)
 
 # model 4 ##
 model4 = otguibase.DataModel(
-    'model4', inputSample, design_1.getDesignOfExperiment().getOutputSample())
+    'model4', inputSample, design_1.getResult().getDesignOfExperiment().getOutputSample())
 myStudy.add(model4)
 
 # 0- models evaluations
@@ -153,7 +153,6 @@ myStudy.add(monteCarlo)
 taylor = otguibase.TaylorExpansionMomentsAnalysis('Taylor', model1)
 taylor.setInterestVariables(['y0', 'y1'])
 myStudy.add(taylor)
-print(taylor)
 
 # 3- reliability ##
 
@@ -200,9 +199,10 @@ myStudy.add(sorm)
 
 # 4-a Sobol ##
 sobol = otguibase.SobolAnalysis('Sobol', model1)
-sobol.setMaximumCoefficientOfVariation(-1)
+sobol.setMaximumConfidenceIntervalLength(-1)
 sobol.setMaximumElapsedTime(1000)
 sobol.setMaximumCalls(1000)
+sobol.setReplicationSize(100)
 sobol.setBlockSize(100)
 sobol.setSeed(2)
 sobol.setInterestVariables(['y0', 'y1'])
@@ -210,7 +210,7 @@ myStudy.add(sobol)
 
 # 4-b SRC ##
 src = otguibase.SRCAnalysis('SRC', model1)
-src.setSimulationsNumber(1000)
+src.setSimulationsNumber(200)
 src.setSeed(2)
 src.setInterestVariables(['y0', 'y1'])
 myStudy.add(src)
