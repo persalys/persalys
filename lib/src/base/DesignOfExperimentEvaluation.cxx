@@ -251,7 +251,8 @@ void DesignOfExperimentEvaluation::load(Advocate& adv)
   {
     DesignOfExperiment experiment;
     adv.loadAttribute("designOfExperiment_", experiment);
-    result_.designOfExperiment_ = experiment;
+    if (experiment.getSample().getSize())
+      result_.designOfExperiment_ = experiment;
   }
 }
 }
