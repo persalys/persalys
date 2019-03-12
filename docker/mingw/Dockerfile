@@ -1,10 +1,8 @@
 FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
-# https://github.com/docker/for-linux/issues/208
-RUN aurman -Syu --noconfirm --noedit mingw-w64-qt5-base-nostatx
-
-RUN aurman -S --noconfirm --noedit mingw-w64-qwt
+RUN aurman -Syu --noconfirm --noedit mingw-w64-qwt
+RUN sudo pacman -Sy && git clone https://aur.archlinux.org/mingw-w64-protobuf.git /tmp/mingw-w64-protobuf && cd /tmp/mingw-w64-protobuf && makepkg -sfi --skippgpcheck --noconfirm
 RUN aurman -Syu --noconfirm --noedit mingw-w64-paraview
 
 ENV ARCH x86_64
