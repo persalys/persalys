@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FieldMonteCarloAnalysis
-"Monte Carlo analysis for models with mesh.
+"Run a Monte Carlo analysis for models with mesh.
 
 Parameters
 ----------

@@ -3,7 +3,7 @@
 
 Notes
 -----
-Can only be used through it's derived classes.
+Can only be used through its derived classes.
 See :class:`~otguibase.SymbolicPhysicalModel`, :class:`~otguibase.PythonPhysicalModel`"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation
@@ -118,7 +118,7 @@ OTGUI_PhysicalModel_getPointToFieldFunction_doc
 Returns
 -------
 script : str
-    Python script to replay the calculus"
+    Python script to replay the model"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getPythonScript
 OTGUI_PhysicalModel_getPythonScript_doc
@@ -139,12 +139,12 @@ OTGUI_PhysicalModel_setCopula_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_getDistribution_doc
-"Copula accessor.
+"Distribution accessor.
 
 Parameters
 ----------
 Distribution : :py:class:`openturns.ComposedDistribution`
-    The composed distribution"
+    The composed distribution (marginals and dependence)"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getDistribution
 OTGUI_PhysicalModel_getDistribution_doc
@@ -296,7 +296,7 @@ OTGUI_PhysicalModel_getInputDimension_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_getOutputDimension_doc
-"Number of input variables accessor.
+"Number of output variables accessor.
 
 Returns
 -------
@@ -322,12 +322,12 @@ OTGUI_PhysicalModel_getInputNames_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_getStochasticInputNames_doc
-"Stochastic input variable names accessor.
+"Accessor to the names of the stochastic input variables.
 
 Returns
 -------
 names : :py:class:`openturns.Description`
-    Stochastic input variable names"
+    Names of the stochastic input variables"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getStochasticInputNames
 OTGUI_PhysicalModel_getStochasticInputNames_doc
@@ -391,7 +391,7 @@ OTGUI_PhysicalModel_setOutputName_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_setInputValue_doc
-"Input variable name accessor.
+"Input variable value accessor.
 
 Parameters
 ----------
@@ -421,7 +421,7 @@ OTGUI_PhysicalModel_setOutputValue_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_hasInputNamed_doc
-"Whether an input name matches.
+"Check if an input has the given name.
 
 Parameters
 ----------
@@ -431,7 +431,7 @@ name : str
 Returns
 -------
 has : bool
-    Whether a variable name matches"
+    Whether an input has the given name"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::hasInputNamed
 OTGUI_PhysicalModel_hasInputNamed_doc
@@ -439,7 +439,7 @@ OTGUI_PhysicalModel_hasInputNamed_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_hasOutputNamed_doc
-"Whether an output name matches.
+"Check if an output has the given name.
 
 Parameters
 ----------
@@ -449,7 +449,7 @@ name : str
 Returns
 -------
 has : bool
-    Whether a variable name matches"
+    Whether an output has the given name"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::hasOutputNamed
 OTGUI_PhysicalModel_hasOutputNamed_doc
@@ -543,7 +543,7 @@ OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_getRestrictedFunction_doc
-"Accessor to the function restricted to it's stochastic inputs.
+"Accessor to the function restricted to its stochastic inputs.
 
 Parameters
 ----------
@@ -561,7 +561,7 @@ OTGUI_PhysicalModel_getRestrictedFunction_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
-"Accessor to the function restricted to it's stochastic inputs.
+"Accessor to the field function restricted to its stochastic inputs.
 
 Parameters
 ----------
@@ -571,7 +571,7 @@ outputNames : sequence of str
 Returns
 -------
 restricted : :py:class:`openturns.PointToFieldFunction`
-    Stochastic function"
+    Stochastic field function (for model with mesh)"
 %enddef
 %feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedPointToFieldFunction
 OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc

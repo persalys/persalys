@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FieldModelEvaluation
-"Evaluation of a model with mesh.
+"Generate the evaluation of a model with mesh.
 
 Parameters
 ----------

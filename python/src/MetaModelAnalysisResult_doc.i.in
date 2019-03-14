@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::MetaModelAnalysisResult
-"Base class for metamodel result."
+"Create the base class for a metamodel analysis result."
 
 // ---------------------------------------------------------------------
 

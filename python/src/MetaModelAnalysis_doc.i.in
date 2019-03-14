@@ -1,9 +1,9 @@
 %feature("docstring") OTGUI::MetaModelAnalysis
-"Base class for the creation of meta models.
+"Create a base class for the creation of meta models.
 
 Notes
 -----
-Can only be used through it's derived classes.
+Can only be used through its derived classes.
 See :class:`~otguibase.FunctionalChaosAnalysis`,
 :class:`~otguibase.KrigingAnalysis`"
 
@@ -79,9 +79,9 @@ Returns
 validation : bool
     Whether a validation with a test sample is requested.
     The data sample is dividing into two sub-samples: a training sample
-    (by default 80% of the sample points) and a test sample (by default
-    20% of the sample points). That is to say a new metamodel is building
-    with the training sample and it is validating with the test sample.
+    (default: 80% of the sample points) and a test sample (default:
+    20% of the sample points). A new metamodel is built
+    with the training sample and is validated with the test sample.
     The points are randomly picked in the data sample (by default the seed is 1)."
 
 // ---------------------------------------------------------------------
@@ -94,9 +94,9 @@ Parameters
 validation : bool
     Whether a validation with a test sample is requested.
     The data sample is dividing into two sub-samples: a training sample
-    (by default 80% of the sample points) and a test sample (by default
-    20% of the sample points). That is to say a new metamodel is building
-    with the training sample and it is validating with the test sample.
+    (default: 80% of the sample points) and a test sample (default:
+    20% of the sample points). A new metamodel is built
+    with the training sample and is validated with the test sample.
     The points are randomly picked in the data sample (by default the seed is 1)."
 
 // ---------------------------------------------------------------------

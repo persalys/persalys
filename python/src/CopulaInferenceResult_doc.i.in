@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::CopulaInferenceResult
-"Dependencies inference result.
+"Get the results of a dependence inference analysis.
 
 Notes
 -----

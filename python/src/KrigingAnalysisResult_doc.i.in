@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::KrigingAnalysisResult
-"Kriging result.
+"Get the results of a Kriging analysis.
 
 Notes
 -----
@@ -15,7 +15,7 @@ getResult()."
 Returns
 -------
 results : sequence of :class:`openturns.KrigingResult`
-    The kriging results of all the interest outputs"
+    The kriging results of all the outputs of interest"
 
 // ---------------------------------------------------------------------
 

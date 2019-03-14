@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::ImportanceSamplingAnalysis
-"Importance sampling for reliability analysis.
+"Run importance sampling for reliability analysis.
 
 Parameters
 ----------
@@ -38,7 +38,7 @@ Get the result:
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::ImportanceSamplingAnalysis::getStandardSpaceDesignPoint
-"Standard space design point accessor.
+"Accessor to standard space design point.
 
 Returns
 -------
@@ -48,7 +48,7 @@ point : :py:class:`openturns.Point`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::ImportanceSamplingAnalysis::setStandardSpaceDesignPoint
-"Standard space design point accessor.
+"Accessor to standard space design point.
 
 Parameters
 ----------

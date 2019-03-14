@@ -1,5 +1,5 @@
 %define OTGUI_LimitState_doc
-"Limit-state definition.
+"Create a limit state.
 
 Parameters
 ----------
@@ -36,7 +36,7 @@ OTGUI_LimitState_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_LimitState_setOutputName_doc
-"Interest variable name accessor.
+"Accessor to the name of output variable of interest in limit state.
 
 Parameters
 ----------
@@ -49,7 +49,7 @@ OTGUI_LimitState_setOutputName_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_LimitState_getOutputName_doc
-"Interest variable name accessor.
+"Accessor to the name of output variable of interest in limit state.
 
 Returns
 -------
@@ -62,7 +62,7 @@ OTGUI_LimitState_getOutputName_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_LimitState_setThreshold_doc
-"Threshold value accessor.
+"Threshold value for limit state accessor.
 
 Parameters
 ----------
@@ -75,7 +75,7 @@ OTGUI_LimitState_setThreshold_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_LimitState_getThreshold_doc
-"Threshold value accessor.
+"Threshold value for limit state accessor.
 
 Returns
 -------
@@ -88,7 +88,7 @@ OTGUI_LimitState_getThreshold_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_LimitState_getPythonScript_doc
-"Python script accessor.
+"Python script for limit state accessor.
 
 Returns
 -------
@@ -101,7 +101,7 @@ OTGUI_LimitState_getPythonScript_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_LimitState_getPhysicalModel_doc
-"Physical model accessor.
+"Physical model for limit state accessor.
 
 Returns
 -------
@@ -140,7 +140,7 @@ OTGUI_LimitState_getOperator_doc
 // ---------------------------------------------------------------------
 
 %define OTGUI_LimitState_isValid_doc
-"Whether it is valid.
+"Whether limit state is valid.
 
 Returns
 -------

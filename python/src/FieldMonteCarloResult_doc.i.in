@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FieldMonteCarloResult
-"Class containing results of the Monte Carlo analysis."
+"Get the results of a Monte Carlo analysis with mesh."
 
 
 // ---------------------------------------------------------------------

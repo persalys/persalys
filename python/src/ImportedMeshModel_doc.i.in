@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::ImportedMeshModel
-"Class to build meshes
+"Create a model with imported meshes
 
 Available constructors:
     ImportedMeshModel(*parameters, fileName, columns*)

@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SobolResult
-"Sobol' sensitivity analysis results."
+"Get the results of a Sobol sensitivity analysis."
 
 // ---------------------------------------------------------------------
 

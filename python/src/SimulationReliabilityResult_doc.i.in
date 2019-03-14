@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SimulationReliabilityResult
-"Monte Carlo for reliability analysis result."
+"Get simulation results from a reliability analysis using Monte Carlo or Importance Sampling method."
 
 // ---------------------------------------------------------------------
 

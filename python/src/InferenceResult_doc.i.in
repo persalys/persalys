@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::InferenceResult
-"Inference result.
+"Get the results of an inference analysis.
 
 Notes
 -----

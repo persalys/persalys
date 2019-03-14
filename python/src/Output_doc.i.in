@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::Output
-"Output variable.
+"Create an output variable.
 
 Represents an output variable.
 

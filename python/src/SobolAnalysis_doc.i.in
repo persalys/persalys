@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SobolAnalysis
-"Sobol' sensitivity analysis.
+"Run a Sobol sensitivity analysis.
 
 Parameters
 ----------

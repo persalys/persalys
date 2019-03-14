@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::MonteCarloReliabilityAnalysis
-"Monte Carlo for reliability analysis.
+"Run a reliability analysis using the Monte Carlo method.
 
 Parameters
 ----------

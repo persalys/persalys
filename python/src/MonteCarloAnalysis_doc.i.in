@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::MonteCarloAnalysis
-"Monte Carlo central tendency analysis.
+"Perform a Monte Carlo central tendency analysis.
 
 Parameters
 ----------

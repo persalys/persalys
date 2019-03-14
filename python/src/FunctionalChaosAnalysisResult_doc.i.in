@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FunctionalChaosAnalysisResult
-"Functional chaos result.
+"Get the results for a Functional chaos analysis.
 
 Notes
 -----

@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::MetaModelValidationResult
-"Base class for metamodel validation result."
+"Create the base class for the results of a metamodel validation."
 
 // ---------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ name : str
 Returns
 -------
 sample : :py:class:`openturns.Sample`
-    Output sample evaluate with the metamodel"
+    Output sample evaluated with the metamodel"
 
 // ---------------------------------------------------------------------
 

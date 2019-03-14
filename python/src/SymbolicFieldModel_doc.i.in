@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SymbolicFieldModel
-"Physical model defined by analytical formulas and a mesh.
+"Create a physical model defined by analytical formulas and a mesh.
 
 Parameters
 ----------
@@ -13,7 +13,7 @@ outputs : sequence of :class:`~otguibase.Output`
     Output variables (optional)
 formulas : sequence of str
     List of analytical formulas between the inputs and the outputs (optional).
-    The function is defined by ouputs = formulas(inputs).
+    The function is defined by outputs = formulas(inputs).
 
 
 Examples

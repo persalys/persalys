@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::Variable
-"Variable base class.
+"Create a variable base class.
 
 Represents a variable.
 
@@ -23,7 +23,7 @@ Examples
 Parameters
 ----------
 description : str
-    Text descripting the variable"
+    Text describing the variable"
 
 // ---------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ description : str
 Returns
 -------
 description : :py:class:`openturns.Description`
-    Text descripting the variable"
+    Text describing the variable"
 
 // ---------------------------------------------------------------------
 

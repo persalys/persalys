@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SRCResult
-"SRC sensitivity analysis results."
+"Get the results of a SRC sensitivity analysis."
 
 // ---------------------------------------------------------------------
 

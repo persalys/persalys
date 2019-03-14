@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::OptimizationAnalysis
-"Optimization of a model.
+"Perform the optimization analysis of a model.
 
 Parameters
 ----------

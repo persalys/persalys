@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::DataAnalysisResult
-"Class containing results of the analysis of the data."
+"Get the results of a data analysis."
 
 // ---------------------------------------------------------------------
 

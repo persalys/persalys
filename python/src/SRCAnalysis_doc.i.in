@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SRCAnalysis
-"SRC sensitivity analysis.
+"Run a SRC sensitivity analysis.
 
 Parameters
 ----------

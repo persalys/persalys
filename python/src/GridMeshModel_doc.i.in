@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::GridMeshModel
-"Class to build regular meshes.
+"Create a model to build regular meshes.
 
 Available constructors:
     GridMeshModel(*parameters, bounds, nbNodes*)

@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FORMImportanceSamplingAnalysis
-"FORM analysis followed by an importance sampling for reliability analysis.
+"Run a FORM analysis followed by an importance sampling for reliability analysis.
 
 Parameters
 ----------

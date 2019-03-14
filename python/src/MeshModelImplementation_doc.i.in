@@ -1,9 +1,9 @@
 %define OTGUI_MeshModel_doc
-"Mesh model base class.
+"Create a mesh model base class.
 
 Notes
 -----
-Can only be used through it's derived classes.
+Can only be used through its derived classes.
 See :class:`~otguibase.GridMeshModel`, :class:`~otguibase.ImportedMeshModel`"
 %enddef
 %feature("docstring") OTGUI::MeshModelImplementation
