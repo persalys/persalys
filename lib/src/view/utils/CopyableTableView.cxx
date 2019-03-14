@@ -88,21 +88,25 @@ QString CopyableTableView::getFormattedText() const
 
   list.removeFirst();
 
-  for(int i = 0; i < list.size(); ++i)
+  if (list.isEmpty())
+    result.append(model()->data(previous).toString());
+
+  for (int i = 0; i < list.size(); ++i)
   {
     QVariant data = model()->data(previous);
     QString text = data.toString();
-    QModelIndex index = list.at(i);
     result.append(text);
 
-    if(index.row() != previous.row())
+    QModelIndex index = list.at(i);
+    if (index.row() != previous.row())
       result.append('\n');
     else
       result.append('\t');
     previous = index;
   }
 
-  result.append(model()->data(list.last()).toString());
+  if (!list.isEmpty())
+    result.append(model()->data(list.last()).toString());
   result.append('\n');
 
   return result;
