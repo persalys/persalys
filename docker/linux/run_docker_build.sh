@@ -89,7 +89,7 @@ cp /usr/local/lib/paraview/libprotobuf*.so otgui.AppDir/usr/lib
 
 
 # system libs
-for libname in lapack blas xml2 png12 gfortran
+for libname in lapack blas xml2 png12 gfortran ffi
 do
   cp -v /usr/lib64/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
 done

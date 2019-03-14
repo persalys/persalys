@@ -1,19 +1,18 @@
 #!/bin/sh
 
-# installs paraview in ./pv-linux-install
+# installs paraview in ./paraview/build/install
+
 # sudo apt install qttools5-dev lzma-dev libxt-dev libqt5x11extras5-dev qtxmlpatterns5-dev-tools 
 # sudo aptitude install libhdf5-dev libtheora-dev libnetcdf-dev libglew-dev libexpat-dev libfreetype6-dev libjpeg8-dev libqt5x11extras5-dev libtiff-dev qttools5-dev protobuf-c-compiler protobuf-compiler
 
 set -e
-
-# Usage: ./utils/build_pv.sh installs into ../pv-linux-install
 
 export QT_SELECT=qt5
 
 
 git clone https://gitlab.kitware.com/paraview/paraview.git
 cd paraview
-git checkout 7bafc2be161cf8f4870aaad35759a0dd096ea55f
+git checkout v5.6.0
 git submodule init
 git submodule update
 
@@ -30,8 +29,6 @@ cmake \
   -DPYTHON_EXECUTABLE=/usr/bin/python3 \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF \
   -DBUILD_DOCUMENTATION=OFF \
-  -DVTK_USE_OGGTHEORA_ENCODER=ON \
-  -DVTK_USE_SYSTEM_OGGTHEORA=ON \
   -DVTK_USE_SYSTEM_FREETYPE=ON \
   -DVTK_USE_SYSTEM_GL2PS=OFF \
   -DVTK_USE_SYSTEM_JPEG=ON \
@@ -48,11 +45,11 @@ cmake \
   -DPARAVIEW_QT_VERSION=5 \
   -DVTK_BUILD_QT_DESIGNER_PLUGIN:BOOL=OFF \
   -DPARAVIEW_ENABLE_MATPLOTLIB:BOOL=ON \
-  -DCMAKE_INSTALL_RPATH=$PWD/../../pv-linux-install/lib/paraview \
+  -DCMAKE_INSTALL_RPATH=$PWD/install/lib/paraview \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF  \
   -DCMAKE_SKIP_RPATH=OFF \
   -DVTK_CUSTOM_LIBRARY_SUFFIX="" \
-  -DCMAKE_INSTALL_PREFIX=$PWD/../../pv-linux-install \
+  -DCMAKE_INSTALL_PREFIX=$PWD/install \
   -DVTK_INSTALL_LIBRARY_DIR="lib/paraview" \
   -DVTK_INSTALL_ARCHIVE_DIR="lib/paraview" \
   -DVTK_INSTALL_INCLUDE_DIR="include/paraview" \
