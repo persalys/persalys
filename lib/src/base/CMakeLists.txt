@@ -67,7 +67,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      ParametricPointToFieldFunction.cxx
                      )
 if (SalomeYACS_FOUND)
-  list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSEvalSessionSingleton.cxx)
+  list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx )
 endif ()
 
 if (USE_OTFMI)
@@ -176,7 +176,6 @@ endif ()
 if (SalomeYACS_FOUND)
   ot_install_header_file (YACSPhysicalModel.hxx)
   ot_install_header_file (YACSEvaluation.hxx)
-  ot_install_header_file (YACSEvalSessionSingleton.hxx)
 endif ()
 
 
@@ -203,7 +202,7 @@ if (OTMORRIS_FOUND)
 endif ()
 
 if (SalomeYACS_FOUND)
-  target_link_libraries ( otguibase YACSevalYFX py2yacsguilib ydfxwidgets)
+  target_link_libraries ( otguibase ydefx)
 endif ()
 
 target_link_libraries (otguibase ${PYTHON_LIBRARIES})

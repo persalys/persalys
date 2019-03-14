@@ -18,6 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifdef OTGUI_HAVE_YACS
+#include "otgui/YACSPhysicalModel.hxx"
+#endif
 #include "otgui/StudyItem.hxx"
 
 #include "otgui/FileTools.hxx"
@@ -27,9 +30,7 @@
 #include "otgui/SymbolicFieldModel.hxx"
 #include "otgui/PythonPhysicalModel.hxx"
 #include "otgui/PythonFieldModel.hxx"
-#ifdef OTGUI_HAVE_YACS
-#include "otgui/YACSPhysicalModel.hxx"
-#endif
+
 #ifdef OTGUI_HAVE_OTFMI
 #include "otgui/FMIPhysicalModel.hxx"
 #endif

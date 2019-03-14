@@ -131,6 +131,8 @@ if (USE_SALOME)
     list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_YACS)
     include_directories (${YACS_INCLUDE_DIRS}) 
   endif ()
+  find_package (Py2cpp NO_MODULE)
+  find_package (ydefx NO_MODULE)
 endif ()
 
 if (USE_OTFMI)

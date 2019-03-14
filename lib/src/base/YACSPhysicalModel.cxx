@@ -36,15 +36,16 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
   , evaluation_()
 {
+  updateData();
 }
 
 
 /* Constructor with parameters */
-YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & fileName)
+YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & script)
   : PhysicalModelImplementation(name)
-  , evaluation_(fileName)
+  , evaluation_(script)
 {
-  setXMLFileName(fileName);
+  updateData();
 }
 
 
@@ -57,66 +58,67 @@ YACSPhysicalModel* YACSPhysicalModel::clone() const
 
 void YACSPhysicalModel::setInputs(const InputCollection & inputs)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::addInput(const Input & input)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::removeInput(const String & inputName)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::setOutputs(const OutputCollection & outputs)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::addOutput(const Output & output)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::removeOutput(const String & outputName)
 {
-  throw NotYetImplementedException(HERE) << "Use setXMLFileName to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
 }
 
 
-AbstractResourceModel* YACSPhysicalModel::getResourceModel()
+ydefx::JobParametersProxy& YACSPhysicalModel::jobParameters()
 {
-  return evaluation_.getResourceModel();
+  return evaluation_.jobParameters();
 }
 
 
-String YACSPhysicalModel::getXMLFileName() const
+const ydefx::JobParametersProxy& YACSPhysicalModel::jobParameters()const
 {
-  return xmlFileName_;
+  return evaluation_.jobParameters();
 }
 
 
-void YACSPhysicalModel::setXMLFileName(const String & fileName)
+String YACSPhysicalModel::getContent() const
 {
-  if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "Impossible to create a model from an empty file";
+  return evaluation_.getContent();
+}
 
+
+void YACSPhysicalModel::setContent(const String & script)
+{
   try
   {
-    evaluation_.setXMLFileName(fileName);
-    evaluation_.loadData();
-    xmlFileName_ = fileName;
+    evaluation_.setContent(script);
   }
   catch (std::exception & ex)
   {
-    throw InvalidArgumentException(HERE) << "Impossible to load the xml file.\n" << ex.what();
+    throw InvalidArgumentException(HERE) << "Error in the script.\n" << ex.what();
   }
   updateData();
 }
@@ -149,6 +151,18 @@ Function YACSPhysicalModel::generateFunction(const Description & outputNames) co
 }
 
 
+static void replaceInString(String& workString,
+                            const String& strToReplace,
+                            const String& newValue)
+{
+  std::size_t pos = workString.find(strToReplace);
+  while( pos != std::string::npos)
+  {
+    workString.replace(pos, strToReplace.size(), newValue);
+    pos = workString.find(strToReplace, pos+newValue.size());
+  }
+}
+
 String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
@@ -169,10 +183,13 @@ String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
   }
   oss << "</table></p>";
   oss << "</table></p>";
-  oss << "<h3>File name</h3>";
-  oss << "<section><p>";
-  oss << getXMLFileName();
-  oss << "</p></section>";
+  oss << "<h3>Content</h3>";
+  oss << "<pre>";
+  String code = getContent();
+  // replace all "<" by "&lt;"
+  replaceInString(code, "<", "&lt;");
+  oss << code;
+  oss << "</pre>";
 
   return oss;
 }
@@ -180,15 +197,39 @@ String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
 
 String YACSPhysicalModel::getPythonScript() const
 {
-  String result;
+  OSS oss;
 
-  result += getName() + " = otguibase.YACSPhysicalModel('" + getName() + "', '";
-  result += getXMLFileName() + "')\n";
+  // replace ''' by """
+  std::string myString = getContent();
+  replaceInString(myString, "'''", "\"\"\"");
 
-  result += getProbaModelPythonScript();
-  result += PhysicalModelImplementation::getCopulaPythonScript();
+  oss << "code = '''" << myString << "'''\n";
+  oss << getName()
+      << " = otguibase.YACSPhysicalModel('" << getName() <<"', code)\n";
+  oss << getJobParamsPythonScript();
 
-  return result;
+  oss << getProbaModelPythonScript();
+  oss << PhysicalModelImplementation::getCopulaPythonScript();
+
+  return oss;
+}
+
+
+OT::String YACSPhysicalModel::getJobParamsPythonScript() const
+{
+  OSS oss;
+  std::list<std::string> inFiles = jobParameters().in_files();
+  if(!inFiles.empty())
+  {
+    String filesListName = getName() + "_infiles";
+    oss << filesListName << " = [";
+    for(const std::string& fileName : inFiles)
+      oss << "'" << fileName << "',\n";
+    oss << "]\n";
+    oss << getName() << ".jobParameters().salome_parameters.in_files = "
+        << filesListName << "\n";
+  }
+  return oss;
 }
 
 
@@ -197,7 +238,6 @@ String YACSPhysicalModel::__repr__() const
 {
   OSS oss;
   oss << PhysicalModelImplementation::__repr__()
-      << " xmlFileName=" << getXMLFileName()
       << " evaluation=" << evaluation_;
   return oss;
 }
@@ -207,7 +247,6 @@ String YACSPhysicalModel::__repr__() const
 void YACSPhysicalModel::save(Advocate & adv) const
 {
   PhysicalModelImplementation::save(adv);
-  adv.saveAttribute("xmlFileName_", xmlFileName_);
   adv.saveAttribute("evaluation_", evaluation_);
 }
 
@@ -216,7 +255,6 @@ void YACSPhysicalModel::save(Advocate & adv) const
 void YACSPhysicalModel::load(Advocate & adv)
 {
   PhysicalModelImplementation::load(adv);
-  adv.loadAttribute("xmlFileName_", xmlFileName_);
   adv.loadAttribute("evaluation_", evaluation_);
 }
 

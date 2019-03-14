@@ -18,9 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/YACSPhysicalModelWindow.hxx"
-
 #include "otgui/YACSPhysicalModel.hxx"
+#include "otgui/YACSPhysicalModelWindow.hxx"
 #include "otgui/PhysicalModelWindowWidget.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/FileTools.hxx"
@@ -43,7 +42,6 @@ namespace OTGUI
 YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
-  , XMLfileNameEdit_(0)
   , errorMessageLabel_(0)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
@@ -55,15 +53,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
 
   fieldsLayout->addWidget(new QLabel("Data file"));
 
-  XMLfileNameEdit_ = new QLineEdit;
-  XMLfileNameEdit_->setText(QString::fromUtf8(dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->getXMLFileName().c_str()));
-  fieldsLayout->addWidget(XMLfileNameEdit_);
-
-  QPushButton * selectFileButton = new QPushButton(tr("Search file"));
-  connect(selectFileButton, SIGNAL(clicked()), this, SLOT(selectImportFileDialogRequested()));
-  fieldsLayout->addWidget(selectFileButton);
-
-  QPushButton * buildSchemaButton = new QPushButton(tr("Build YACS schema"));
+  QPushButton * buildSchemaButton = new QPushButton(tr("Edit"));
   connect(buildSchemaButton, SIGNAL(clicked()), this, SLOT(buildSchemaDialogRequested()));
   fieldsLayout->addWidget(buildSchemaButton);
 
@@ -79,73 +69,17 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * i
 }
 
 
-void YACSPhysicalModelWindow::selectImportFileDialogRequested()
-{
-  QString fileName = QFileDialog::getOpenFileName(this,
-                     tr("Data to import..."),
-                     FileTools::GetCurrentDir(),
-                     tr("Data files (*.xml);;"));
-
-  if (!fileName.isEmpty())
-  {
-    QFile file(fileName);
-    FileTools::SetCurrentDir(fileName);
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this,
-                           tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    else
-    {
-      XMLfileNameEdit_->setText(fileName);
-      try
-      {
-        dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->setXMLFileName(fileName.toLocal8Bit().data());
-
-        errorMessageLabel_->reset();
-      }
-      catch (std::exception & ex)
-      {
-        errorMessageLabel_->setErrorMessage(ex.what());
-      }
-    }
-  }
-}
-
-
 void YACSPhysicalModelWindow::buildSchemaDialogRequested()
 {
-  Py2YacsDialog yacsDialog;
+  Py2YacsDialog yacsDialog(this);
+  yacsDialog.setExportXml(false);
+  YACSPhysicalModel* model = dynamic_cast<YACSPhysicalModel*>
+                                     (physicalModel_.getImplementation().get());
+  yacsDialog.setScriptText(model->getContent());
   if (yacsDialog.exec())
   {
-    QString fileName = yacsDialog.getYacsFile();
-    QFile file(fileName);
-    FileTools::SetCurrentDir(fileName);
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this,
-                           tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    else
-    {
-      XMLfileNameEdit_->setText(fileName);
-      try
-      {
-        dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get())->setXMLFileName(fileName.toLocal8Bit().data());
-
-        errorMessageLabel_->reset();
-      }
-      catch (std::exception & ex)
-      {
-        errorMessageLabel_->setErrorMessage(ex.what());
-      }
-    }
+    model->setContent(yacsDialog.getScriptText());
+    errorMessageLabel_->reset();
   }
 }
 }
