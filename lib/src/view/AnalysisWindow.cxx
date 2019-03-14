@@ -18,6 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifdef OTGUI_HAVE_YACS
+#include "otgui/YACSPhysicalModel.hxx" //includes python.h. Has to be done before any Qt include
+#include <ydefx/ResourceWidget.hxx>
+#endif
+
 #include "otgui/Controller.hxx"   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 
 #include "otgui/AnalysisWindow.hxx"
@@ -27,11 +32,6 @@
 
 #include <QHBoxLayout>
 #include <QScrollArea>
-
-#ifdef OTGUI_HAVE_YACS
-#include "otgui/YACSPhysicalModel.hxx"
-#include <ResourceWidget.hxx>
-#endif
 
 namespace OTGUI
 {
@@ -174,6 +174,11 @@ void AnalysisWindow::launchAnalysis()
 
   // enable stop button
   stopButton_->setEnabled(true);
+
+  // launchParameters_ should never be enabled again after the analysis is launched
+  if (launchParameters_)
+    launchParameters_->setEnabled(false);
+
   // start indefinite/busy progress bar
   progressBar_->setRange(0, 0);
   progressBar_->setValue(10);
@@ -214,7 +219,7 @@ void AnalysisWindow::updateProgressBar(const int value)
 #ifdef OTGUI_HAVE_YACS
 void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
 {
-  ResourceWidget* rw = new ResourceWidget(model->getResourceModel());
+  ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
   launchParameters_ = rw;
 }
 #endif

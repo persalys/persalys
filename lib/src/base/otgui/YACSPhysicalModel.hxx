@@ -47,12 +47,13 @@ public:
   void addOutput(const Output & output);
   void removeOutput(const OT::String & outputName);
 
-  /** Accessor to the xml file name */
-  OT::String getXMLFileName() const;
-  void setXMLFileName(const OT::String & fileName);
+  /** Accessor to the text script of the model (python, xml, whatever). */
+  OT::String getContent() const;
+  void setContent(const OT::String & script);
 
   /** Accesor to launching resource properties */
-  AbstractResourceModel* getResourceModel();
+  ydefx::JobParametersProxy& jobParameters();
+  const ydefx::JobParametersProxy& jobParameters()const;
 
   virtual OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
@@ -72,10 +73,10 @@ protected:
   void updateData();
 
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  virtual OT::String getJobParamsPythonScript() const;
 
 private:
   YACSEvaluation evaluation_;
-  OT::String xmlFileName_;
 };
 }
 #endif

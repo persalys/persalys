@@ -25,10 +25,6 @@
 #include "otgui/MainWindow.hxx"
 #include "otgui/PythonEnvironment.hxx"
 
-#ifdef OTGUI_HAVE_YACS
-#include "otgui/YACSEvalSessionSingleton.hxx"
-#endif
-
 #ifdef OTGUI_HAVE_PARAVIEW
 #include <pqPVApplicationCore.h>
 #endif
@@ -76,9 +72,6 @@ int main(int argc, char *argv[])
   window.show();
 
   ret = app.exec();
-#ifdef OTGUI_HAVE_YACS
-  YACSEvalSessionSingleton::Reset();
-#endif
   }
   return ret;
 }

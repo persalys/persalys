@@ -20,14 +20,10 @@
  */
 #include "otgui/YACSEvaluation.hxx"
 
-#include "otgui/YACSEvalSessionSingleton.hxx"
-
 #include <openturns/PersistentObjectFactory.hxx>
-
-#include <YACSEvalPort.hxx>
-#include <YACSEvalSeqAny.hxx>
-#include <YACSEvalResource.hxx>
-#include <YACSEvalSession.hxx>
+#include "otgui/InterpreterUnlocker.hxx"
+#include <memory> //std::unique_ptr
+#include <cmath> //std::nan
 
 using namespace OT;
 
@@ -36,37 +32,21 @@ namespace OTGUI
 
 CLASSNAMEINIT(YACSEvaluation)
 
-class AutoYELocker
-{
-public:
-  AutoYELocker(YACSEvalYFX *efx, const std::vector< YACSEvalInputPort * >& inps, const std::vector< YACSEvalOutputPort * >& outps): _efx(efx)
-  {
-    _efx->lockPortsForEvaluation(inps, outps);
-  }
-  ~AutoYELocker()
-  {
-    _efx->unlockAll();
-  }
-private:
-  YACSEvalYFX *_efx;
-};
-
 static Factory<YACSEvaluation> Factory_YACSEvaluation;
 
 /* Default constructor */
-YACSEvaluation::YACSEvaluation(const String & fileName)
+YACSEvaluation::YACSEvaluation(const String & script)
   : EvaluationImplementation()
-  , xmlFileName_(fileName)
-  , efx_(0)
-  , resourceModel_()
+  , inputValues_()
+  , inDescription_()
+  , outDescription_()
+  , jobParams_()
+  , studyFunction_()
 {
-  // Always initialize the session.
-  YACSEvalSession * session = YACSEvalSessionSingleton::Get();
-  if (!session->isLaunched())
-    session->launch();
-
-  if (!xmlFileName_.empty())
-    loadData();
+  if (!script.empty())
+    setContent(script);
+  jobParams_.configureResource("localhost");
+  jobParams_.createTmpResultDirectory();
 }
 
 
@@ -80,7 +60,7 @@ YACSEvaluation* YACSEvaluation::clone() const
 /* Comparison operator */
 Bool YACSEvaluation::operator ==(const YACSEvaluation & other) const
 {
-  return (xmlFileName_ == other.xmlFileName_);
+  return (studyFunction_.content() == other.studyFunction_.content());
 }
 
 
@@ -90,7 +70,7 @@ String YACSEvaluation::__repr__() const
   OSS oss(true);
   oss << "class=" << YACSEvaluation::GetClassName()
       << " name=" << getName()
-      << " xml=" << xmlFileName_;
+      << " code=" << studyFunction_.content();
   return oss;
 }
 
@@ -99,36 +79,8 @@ String YACSEvaluation::__repr__() const
 String YACSEvaluation::__str__(const String & offset) const
 {
   OSS oss(false);
-  oss << offset << getInputDescription() << " xml=" << xmlFileName_;
+  oss << offset << getInputDescription() << " code=" << studyFunction_.content();
   return oss;
-}
-
-
-/* Method loadData() loads the data from the xmlFileName */
-void YACSEvaluation::loadData()
-{
-  // read file
-  efx_ = YACSEvalYFX::BuildFromFile(xmlFileName_);
-
-  // get variables information
-  std::vector< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
-  std::vector< YACSEvalOutputPort * > outps(efx_->getFreeOutputPorts());
-
-  inputValues_ = Point(inps.size());
-  inDescription_ = Description(inps.size());
-  outDescription_ = Description(outps.size());
-
-  for (int i = 0; i < inps.size(); ++i)
-  {
-    inputValues_[i] = inps[i]->getDefaultValueDefined()->toDouble();
-    inDescription_[i] = inps[i]->getName();
-  }
-
-  for (int i = 0; i < outps.size(); ++i)
-    outDescription_[i] = outps[i]->getName();
-
-  setInputDescription(inDescription_);
-  setOutputDescription(outDescription_);
 }
 
 
@@ -142,81 +94,79 @@ Point YACSEvaluation::operator() (const Point & inP) const
 /* Operator () */
 Sample YACSEvaluation::operator() (const Sample & inS) const
 {
-  std::vector< YACSEvalInputPort * > inps(efx_->getFreeInputPorts());
-
-  if (inps.size() != inS.getDimension())
+  InterpreterUnlocker iul;
+  if(!studyFunction_.isValid())
   {
-    Log::Error(OSS() << "In YACSEvaluation::operator(): inps.size() != inS.getDimension()\n");
-    throw InvalidArgumentException(HERE) << "The dimension of the input sample " << inS.getDimension() << " is not valid";
+    Log::Error(OSS() << "Invalid study function: " << studyFunction_.errors() 
+                     << "\n");
+    throw InvalidArgumentException(HERE) << "The study function is incorrect: "
+                                         << studyFunction_.errors() ;
   }
 
-  std::vector< YACSEvalOutputPort * > outps0(efx_->getFreeOutputPorts());
-  std::vector< YACSEvalOutputPort * > outps;
-
-  if (getOutputDimension() == outps0.size())
-    outps = outps0;
-  else
-    for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
-      for (std::vector<YACSEvalOutputPort *>::iterator it = outps0.begin(); it != outps0.end(); it++)
-        if (getOutputVariablesNames()[i] == (*it)->getName())
-        {
-          outps.push_back(*it);
-          break;
-        }
-
-  if (outps.size() != getOutputDimension())
+  std::list<std::string> inputNames = studyFunction_.inputNames();
+  std::list<std::string> outputNames = studyFunction_.outputNames();
+  if (inputNames.size() != inS.getDimension())
   {
-    Log::Error(OSS() << "In YACSEvaluation::operator(): outps.size() != getOutputDimension()\n");
-    throw InvalidArgumentException(HERE) << "The dimension of the output sample " << getOutputDimension() << " is not valid";
+    Log::Error(OSS() << 
+    "In YACSEvaluation::operator(): inputNames.size() != inS.getDimension()\n");
+    throw InvalidArgumentException(HERE) << "The dimension of the input sample "
+                                       << inS.getDimension() << " is not valid";
+  }
+  ydefx::Sample<double> jobSample;
+  // set default value for not computed and failed points
+  jobSample.outputs<double>().setDefault(std::nan("1"));
+  UnsignedInteger nameIdx = 0;
+  // ydefx identifies variables by their name, but ot does by index.
+  for(const std::string& name : inputNames)
+  {
+    jobSample.inputs<double>().addName(name);
+    for (UnsignedInteger valueIdx = 0; valueIdx < inS.getSize(); ++valueIdx)
+      jobSample.inputs<double>().set(name, valueIdx, inS(valueIdx, nameIdx));
+    ++ nameIdx;
   }
 
-  for (UnsignedInteger i = 0; i < inS.getDimension(); ++i)
-  {
-    std::vector<double> tab(inS.getSize());
-    for (UnsignedInteger j = 0; j < inS.getSize(); ++j)
-      tab[j] = inS(j, i);
+  // specify that all the outputs are of type double
+  for(const std::string& name : outputNames)
+    jobSample.outputs<double>().addName(name);
 
-    YACSEvalSeqAnyDouble ds(tab);
-    inps[i]->setSequenceOfValuesToEval(&ds);
-  }
-
-  // launch analysis
   Sample result(inS.getSize(), getOutputDimension());
   result.setDescription(getOutputVariablesNames());
 
-  AutoYELocker ayel(efx_.get(), inps, outps);
-  efx_.get()->setParallelizeStatus(resourceModel_.getParallelizeStatus());
-  YACSEvalListOfResources * resources = efx_.get()->giveResources();
-  std::string wantedMachine = resourceModel_.getWantedMachine();
-  resources->setWantedMachine(wantedMachine);
-  if(!resources->isMachineInteractive(wantedMachine))
+  ydefx::Launcher l;
+  std::unique_ptr<ydefx::Job> myJob;
+  try
   {
-    YACSEvalParamsForCluster& clp(resources->getAddParamsForCluster());
-    clp.setRemoteWorkingDir(resourceModel_.getRemoteDir());
-    clp.setLocalWorkingDir(resourceModel_.getLocalDir());
-    clp.setWCKey(resourceModel_.getWckey());
-    clp.setMaxDuration(resourceModel_.getMaxDuration());
-    clp.setNbProcs(resourceModel_.getNbprocs());
-    clp.getInFiles().assign(resourceModel_.getInFiles().begin(),
-                            resourceModel_.getInFiles().end());
+    myJob.reset(l.submitMonoPyJob(studyFunction_, jobSample, jobParams_));
+    if(myJob)
+    {
+      myJob->wait();
+      if(!myJob->fetch())
+        throw NotDefinedException(HERE) << myJob->lastError();
+
+      // get results
+      UnsignedInteger sampleSize = jobSample.maxSize();
+      for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
+      {
+        std::string name = getOutputVariablesNames()[i];
+        for(UnsignedInteger j = 0; j < sampleSize; ++j)
+          if(ydefx::ExecutionState::DONE == jobSample.pointState(j))
+            result(j, i) = jobSample.outputs<double>().get(name, j);
+          else // the point could not have been evaluated
+            throw InternalException(HERE)
+                  << "The evaluation of the point number " << j
+                  << " is in error:" << jobSample.getError(j);
+      }
+    }
+    else
+      throw NotDefinedException(HERE) << l.lastError();
   }
-
-  int b = 0;
-  bool a(efx_.get()->run(YACSEvalSessionSingleton::Get(), b));
-  if (!a)
+  catch (InternalException& e)
   {
-    std::string err(efx_.get()->getErrorDetailsInCaseOfFailure());
-    throw NotDefinedException(HERE) << "Error when executing YACS scheme. " << err;
+    throw;
   }
-
-  // get results
-  std::vector<YACSEvalSeqAny *> res(efx_->getResults());
-
-  for (int k = 0; k < outps.size(); ++k)
+  catch (std::exception& e)
   {
-    YACSEvalSeqAnyDouble *res_k(dynamic_cast<YACSEvalSeqAnyDouble *>(res[k]));
-    for (int h = 0; h < res_k->size(); ++h)
-      result(h, k) = res_k->getInternal()->at(h);
+    throw NotDefinedException(HERE) << e.what();
   }
   return result;
 }
@@ -268,23 +218,15 @@ UnsignedInteger YACSEvaluation::getOutputDimension() const
 }
 
 
-/* Accessor to launching resource properties */
-AbstractResourceModel* YACSEvaluation::getResourceModel()
+ydefx::JobParametersProxy& YACSEvaluation::jobParameters()
 {
-  return &resourceModel_;
+  return jobParams_;
 }
 
 
-/* Accessor to the formulas */
-String YACSEvaluation::getXMLFileName() const
+const ydefx::JobParametersProxy& YACSEvaluation::jobParameters()const
 {
-  return xmlFileName_;
-}
-
-
-void YACSEvaluation::setXMLFileName(const String & xmlFileName)
-{
-  xmlFileName_ = xmlFileName;
+  return jobParams_;
 }
 
 
@@ -292,7 +234,12 @@ void YACSEvaluation::setXMLFileName(const String & xmlFileName)
 void YACSEvaluation::save(Advocate & adv) const
 {
   EvaluationImplementation::save(adv);
-  adv.saveAttribute("xmlFileName_", xmlFileName_);
+  adv.saveAttribute("code_", studyFunction_.content());
+  Description listInputFiles;
+  std::list<std::string> inFiles = jobParams_.in_files();
+  for(const std::string& f : inFiles)
+    listInputFiles.add(f);
+  adv.saveAttribute("inputFiles_", listInputFiles);
 }
 
 
@@ -300,8 +247,49 @@ void YACSEvaluation::save(Advocate & adv) const
 void YACSEvaluation::load(Advocate & adv)
 {
   EvaluationImplementation::load(adv);
-  adv.loadAttribute("xmlFileName_", xmlFileName_);
-  if (!xmlFileName_.empty())
-    loadData();
+  std::string value;
+  adv.loadAttribute("code_", value);
+  setContent(value);
+  Description listInputFiles;
+  adv.loadAttribute("inputFiles_", listInputFiles);
+  std::list<std::string> inFiles;
+  for(const std::string& f : listInputFiles)
+    inFiles.push_back(f);
+  jobParams_.in_files(inFiles);
 }
+
+
+/* Accessor to the formulas */
+OT::String YACSEvaluation::getContent() const
+{
+  return studyFunction_.content();
+}
+
+
+void YACSEvaluation::setContent(const OT::String & pyScript)
+{
+  inputValues_.clear();
+  inDescription_.clear();
+  outDescription_.clear();
+
+  studyFunction_.loadString(pyScript);
+  if(!studyFunction_.isValid())
+    return;
+
+  std::list<std::string> inputNames = studyFunction_.inputNames();
+  std::list<std::string> outputNames = studyFunction_.outputNames();
+
+  for(const std::string& name : inputNames)
+  {
+    inputValues_.add(0.0);
+    inDescription_.add(name);
+  }
+
+  for(const std::string& name : outputNames)
+    outDescription_.add(name);
+
+  setInputDescription(inDescription_);
+  setOutputDescription(outDescription_);
+}
+
 }

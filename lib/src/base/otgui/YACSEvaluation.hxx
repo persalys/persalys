@@ -25,8 +25,7 @@
 
 #include <openturns/EvaluationImplementation.hxx>
 
-#include <YACSEvalYFX.hxx>
-#include <SalomeResourceModel.hxx>
+#include <ydefx/Launcher.hxx>
 
 namespace OTGUI
 {
@@ -42,7 +41,8 @@ class OTGUI_API YACSEvaluation : public OT::EvaluationImplementation
 
 public:
   /** Default constructor */
-  YACSEvaluation(const OT::String & xmlFileName = "");
+  YACSEvaluation(const OT::String & script = "");
+
 
   /** Virtual constructor */
   virtual YACSEvaluation * clone() const;
@@ -53,9 +53,6 @@ public:
   /** String converter */
   virtual OT::String __repr__() const;
   virtual OT::String __str__(const OT::String & offset = "") const;
-
-  /** Method loadData() loads the data from the xmlFileName */
-  void loadData();
 
   /** Operator () */
   virtual OT::Point operator() (const OT::Point & inP) const;
@@ -75,12 +72,13 @@ public:
   /** Accessor for output point dimension */
   OT::UnsignedInteger getOutputDimension() const;
 
-  /** Accessor to the xmlFileName */
-  OT::String getXMLFileName() const;
-  void setXMLFileName(const OT::String & xmlFileName);
+  /** Accessor to the formulas */
+  OT::String getContent() const;
+  void setContent(const OT::String & pyScript);
 
   /** Accessor to launching resource properties */
-  AbstractResourceModel* getResourceModel();
+  ydefx::JobParametersProxy& jobParameters();
+  const ydefx::JobParametersProxy& jobParameters()const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -89,12 +87,11 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  OT::String xmlFileName_;
-  OT::Pointer<YACSEvalYFX> efx_;
-  SalomeResourceModel resourceModel_;
   OT::Point inputValues_;
   OT::Description inDescription_;
   OT::Description outDescription_;
+  ydefx::JobParametersProxy jobParams_;
+  ydefx::PyStudyFunction studyFunction_;
 };
 }
 #endif

@@ -38,12 +38,10 @@ public :
   YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
 
 public slots:
-  void selectImportFileDialogRequested();
   void buildSchemaDialogRequested();
 
 private:
   PhysicalModel physicalModel_;
-  QLineEdit * XMLfileNameEdit_;
   TemporaryLabel * errorMessageLabel_;
 };
 }
