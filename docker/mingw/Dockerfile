@@ -4,6 +4,7 @@ MAINTAINER jschueller
 RUN aurman -Syu --noconfirm --noedit mingw-w64-qwt
 RUN sudo pacman -Sy && git clone https://aur.archlinux.org/mingw-w64-protobuf.git /tmp/mingw-w64-protobuf && cd /tmp/mingw-w64-protobuf && makepkg -sfi --skippgpcheck --noconfirm
 RUN aurman -Syu --noconfirm --noedit mingw-w64-paraview
+RUN sudo chmod 644 /usr/x86_64-w64-mingw32/include/qwt/*
 
 ENV ARCH=x86_64 PYMAJMIN=36
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
