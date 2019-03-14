@@ -94,22 +94,22 @@ and the finite difference step of each variable (**Differentiation** tab).
 Define variables in the **Definition** tab:
   - the **Inputs** section allows to:
       - Add/remove inputs (**Add**/**Remove** button)
-      - *Name column*: Rename variables (default: (X0, X1, ...), expected: string (alphanumeric characters only))
-      - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-        the label format: floating point, integer, string, etc...))
-      - *Value column*: Assign a value to the inputs (default: 0, expected: floating points or integers)
+      - Rename variables (default: (X0, X1, ...), expected: string (alphanumeric characters only)) (**Name** column)
+      - Describe variables (default: empty string, expected: string (no restriction on
+        the label format: floating point, integer, string, etc...)) (**Description** column)
+      - Assign a value to the inputs (default: 0, expected: floating points or integers) (**Value** column)
   - the **Outputs** section allows to:
       - Add/remove outputs (**Add**/**Remove** button)
       - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
         To perform the analyses, at least one output must be selected.
-      - *Name column*: Rename variables (default: (Y0, Y1, ...), expected: string (alphanumeric characters only))
-      - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-        the label format: floating point, integer, string, etc...))
-      - *Formula column*: Define the mathematical relationships between the input and output variables.
+      - Rename variables (default: (Y0, Y1, ...), expected: string (alphanumeric characters only)) (**Name** column)
+      - Describe variables (default: empty string, expected: string (no restriction on
+        the label format: floating point, integer, string, etc...)) (**Description** column)
+      - Define the mathematical relationships between the input and output variables (**Formula** column).
         Note that the language used here differs from Python (see corresponding syntax for operators,
         mathematical functions and constants below).
-      - **Evaluate** *button*: Launch the computation of the selected output values based on inputs and formula.
-        It shall be used to test the physical model. For these output values to be saved, the user
+      - Launch the computation of the selected output values based on inputs and formula (**Evaluate** button).
+        It shall be used to test the physical model. To save the output values, the user
         should use a :ref:`Model evaluation <modelEvaluation>`.
 
 .. _AvailableSymbolsModel:
@@ -195,19 +195,19 @@ The model definition window contains:
 
  - the **Inputs** section allows to:
     - List the inputs detected from the function **_exec**
-    - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-      the label format: floating point, integer, string, etc...))
-    - *Value column*: Assign a value to the inputs (default: 0, expected: floating points or integers)
+    - Describe variables (default: empty string, expected: string (no restriction on
+      the label format: floating point, integer, string, etc...)) (**Description** column)
+    - Assign a value to the inputs (default: 0, expected: floating points or integers) (**Value** column)
 
  - the **Outputs** section allows to:
     - List the outputs detected from the function **_exec**
     - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
       To perform the analyses, at least one output must be selected.
-    - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-      the label format: floating point, integer, string, etc...))
+    - Describe variables (default: empty string, expected: string (no restriction on
+      the label format: floating point, integer, string, etc...)) (**Description** column)
     - Require the parallelization of the computations (**Enable multiprocessing** button)
-    - **Evaluate** *button*: Launch the computation of the selected output values based on inputs, and the Python function.
-      It shall be used to test the physical model. For these output values to be saved, the user
+    - Launch the computation of the selected output values based on inputs, and the Python function (**Evaluate** button).
+      It shall be used to test the physical model. To save the output values, the user
       should use a :ref:`Model evaluation <modelEvaluation>`.
 
 Here is an example of a more complex model definition:
@@ -238,7 +238,7 @@ which contains:
     :align: center
 
 The **Evaluate** button computes the output values based on inputs and the YACS scheme. It shall be
-used to test the physical model. For these output values to be saved, the user should use the :ref:`Model evaluation <modelEvaluation>`.
+used to test the physical model. To save the output values, the user should use the :ref:`Model evaluation <modelEvaluation>`.
 
 .. _vectfmimodel:
 

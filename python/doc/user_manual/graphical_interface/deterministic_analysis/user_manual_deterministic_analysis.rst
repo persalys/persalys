@@ -127,11 +127,10 @@ A new window also appears:
 .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_inputWindow.png
     :align: center
 
-
-Tabs present the design of experiments input sample.
-The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
-are linked: when points are selected on one of these representations, they are automatically selected
-on the others.
+The window shows numerous tabs, some of which are interactively linked (**Table**,
+**Cobweb plot**, **Plot matrix** and **Scatter plot** tabs):
+when the user selects points on one of these representations, the same points are
+automatically selected in the other tabs.
 
 - The **Summary** tab describes the input sample: sample size,
   minimum/maximum values of the selected variable (left column)
@@ -147,7 +146,7 @@ on the others.
 
 - The **Table** tab contains all the points of the input sample. The table can be exported (**Export** button).
 
-  - Interactions:
+  - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
       - Left-click on column header to sort values in ascending or descending order 
       - Left-click on a column header and drag it in another place to change columns order
@@ -157,13 +156,8 @@ on the others.
 
 - The **Cobweb plot** tab displays all the points of the input sample.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the variables to display and the axis order
-      - Modify the space where the values are plotted with the **Ranks** check button
-        (default: physical space). Check off the button to display the rank of the values
-      - Export the figure
-
-  - Interaction:
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Left-click on columns to select curves (multiple selection possible)
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_cobweb.png
@@ -172,37 +166,23 @@ on the others.
 - The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
   scatter plots between each couple of input variables (off-diagonal).
 
-  - The **Graphic settings** window (below the study tree) allows to:
-     - Select the variables to display and the columns order
-     - Export the figure
-
-  - Interactions:
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Right-click to select points
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_plotMatrix.png
       :align: center
 
 - The **Scatter plots** tab displays the scatter plot of two parameters.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the variables to plot on X-axis and Y-axis (default: first versus second input)
-      - Modify the space where the values are plotted with the **Ranks** check button
-        (default: physical space). Check off the button to display the rank of the values.
-      - Export the figure
-      - Set up parameters:
-
-        - Graph title (expected: string)
-        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-          string), minimum/maximum bounds (expected: floating point), log
-          scale (check button only available if axis values are positive)
-        - Plot style: color, marker size and style (cross, circle, diamond, square, plus)
-
-  - Interactions:
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the variables to plot on X-axis and Y-axis (default: first versus second input)
+  - Graph interactivity:
       - Right-click to select points
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_scatterPlot.png
       :align: center
@@ -243,14 +223,14 @@ it lists all the designs of experiments of the model in the combo box of the
 1-2-2 Launch
 ~~~~~~~~~~~~~
 
-When the «Design of experiment: Evaluation» window is validated, a new element **Evaluation** appears
+When the **Design of experiment: Evaluation** window is validated, a new element **Evaluation** appears
 in the study tree, below the relevant design of experiments item.
 
 Its context menu has the following actions:
   - **Modify**: Reopen the setting window to change the evaluation parameters;
   - **Metamodel**: Create a new metamodel.
 
-The item is associated with a window displaying the list of the parameters, a progress bar
+This item is associated with a window showing the parameter list, a progress bar
 and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/analysisWindow.png
@@ -267,10 +247,10 @@ When the analysis is finished or stopped, the following window appears.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentMinMax.png
     :align: center
 
-Tabs present the design of experiments and the analysis of the outputs.
-The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
-are linked: when points are selected on one of these representations, they are automatically selected
-on the others.
+The window shows numerous tabs, some of which are interactively linked (**Table**,
+**Cobweb plot**, **Plot matrix** and **Scatter plot** tabs):
+when the user selects points on one of these representations, the same points are
+automatically selected in the other tabs.
 
 - The **Summary** tab summarizes the results of the design, for a selected variable (left column):
   sample size, minimum/maximum values, input values at
@@ -279,35 +259,22 @@ on the others.
 - The **PDF/CDF** tab presents the PDF/CDF of the variables
   together with a `kernel smoothing <http://openturns.github.io/openturns/latest/theory/data_analysis/kernel_smoothing.html>`_ representation.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the graphic type: PDF or CDF (default: PDF)
-      - Export the figure
-      - Set up parameters:
-
-        - Graph title (expected: string)
-        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-          string), minimum/maximum bounds (expected: floating point)
-
-  - Interactions:
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the graphic type: PDF (default) or CDF
+  - Graph interactivity:
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
-    .. image:: /user_manual/graphical_interface/deterministic_analysis/doePDF.png
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/doePDF.png
         :align: center
 
 - The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
   of the variables.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Export the figure
-      - Set up parameters:
-          - Graph title (expected: string)
-          - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-            string), minimum/maximum bounds (expected: floating point)
-
-  - Interactions:
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/deterministic_analysis/doeBoxPlot.png
         :align: center
@@ -324,7 +291,7 @@ on the others.
 - The **Table** tab shows the input/output samples and additional tabs, if some points
   failed or were not evaluated (see below). The table can be exported (**Export** button).
 
-  - Interactions:
+  - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
       - Left-click on column header to sort values in ascending or descending order 
       - Left-click on a column header and drag it in another place to change columns order
@@ -334,13 +301,8 @@ on the others.
 
 - The **Cobweb plot** tab displays all the points of the design of experiments.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the variables to display and the axis order
-      - Modify the space where the values are plotted with the **Ranks** check button
-        (default: physical space). Check off the button to display the rank of the values
-      - Export the figure
-
-  - Interaction:
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Left-click on columns to select curves (multiple selection possible)
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentCobweb.png
@@ -349,37 +311,23 @@ on the others.
 - The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
   scatter plots between each couple of input/output variables (off-diagonal).
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the variables to display and the columns order
-      - Export the figure
-
-  - Interactions:
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Right-click to select points
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentPlotMatrix.png
       :align: center
 
 - The **Scatter plots** tab displays the scatter plot of two parameters.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the variables to plot on X-axis and Y-axis (default: first output versus first input)
-      - Modify the space where the values are plotted with the **Ranks** check button
-        (default: physical space). Check off the button to display the rank of the values.
-      - Export the figure
-      - Set up parameters:
-
-        - Graph title (expected: string)
-        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-          string), minimum/maximum bounds (expected: floating point), log
-          scale (check button only available if axis values are positive)
-        - Plot style: color, marker size and style (cross, circle, diamond, square, plus)
-
-  - Interactions:
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+  - Graph interactivity:
       - Right-click to select points
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatter.png
       :align: center
@@ -400,7 +348,7 @@ Particular situations:
 
     - The **Table** tab shows the input/output samples
 
-      - Interactions:
+      - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
           - Left-click on column header to sort values in ascending or descending order 
           - Left-click on a column header and drag it in another place to change columns order
@@ -409,13 +357,8 @@ Particular situations:
     - The **Cobweb plot** tab displays all the input points. The status
       of each point is shown in the last column **Status** (failed points=0; evaluated points=1).
 
-      - The **Graphic settings** window (below the study tree) allows to:
-          - Select the variables to display and the axis order
-          - Modify the space where the values are plotted with the **Ranks** check button
-            (default: physical space). Check off the button to display the rank of the values
-          - Export the figure
-
-      - Interaction:
+      - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+      - Graph interactivity:
           - Left-click on columns to select curves (multiple selection possible)
 
       .. image:: /user_manual/graphical_interface/deterministic_analysis/failedPointsCobweb.png
@@ -427,23 +370,12 @@ Particular situations:
     - The **Scatter plot** tab displays the scatter plot of two parameters (default: first
       versus second input), with failed points in red and evaluated points in green.
 
-      - The **Graphic settings** window (below the study tree) allows to:
-          - Select the variables to plot on X-axis and Y-axis (default: first output versus first input)
-          - Modify the space where the values are plotted with the **Ranks** check button
-            (default: physical space). Check off the button to display the rank of the values.
-          - Export the figure
-          - Set up parameters:
-
-            - Graph title (expected: string)
-            - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-              string), minimum/maximum bounds (expected: floating point), log
-              scale (check button only available if axis values are positive)
-            - Plot style: color, marker size and style (cross, circle, diamond, square, plus)
-
-      - Interactions:
+      - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+        select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+      - Graph interactivity:
           - Right-click to select points
           - Left-click to translate the graph
-          - Mouse wheel up/down to zoom/zoom out
+          - Mouse wheel up/down to zoom in/zoom out
 
       .. image:: /user_manual/graphical_interface/deterministic_analysis/failedPointsScatter.png
           :align: center
@@ -457,7 +389,7 @@ Particular situations:
     - The list of these points in the **Non-evaluated points** tab
     - The position of these points (non-evaluated points in blue and evaluated ones in green)
       in the **Scatter plot** tab (default: first vs second input plot).
-      Graph parameters can be set up in the **Graph settings** window.
+      Graph parameters can be set up in the :ref:`Graph settings <secondgraphsettings>` window.
 
       .. image:: /user_manual/graphical_interface/deterministic_analysis/notEvaluatedPointsScatter.png
           :align: center
@@ -502,7 +434,7 @@ When an evaluation is required, a window appears, in order to set up:
 2-2 Launch
 '''''''''''
 
-When the «Model Evaluation» window is validated, a new element appears in the study
+When the **Model Evaluation** window is validated, a new element appears in the study
 tree, below **Evaluation**.
 
 Its context menu has the following actions:
@@ -510,7 +442,7 @@ Its context menu has the following actions:
   - **Modify**: Reopen the setting window to change the analysis parameters
   - **Remove**: Remove the analysis from the study
 
-This item is associated with a window displaying the list of the parameters, a
+This item is associated with a window showing the parameter list, a
 progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/evaluationWindow.png
@@ -585,7 +517,7 @@ Its context menu has the following actions:
   - **Modify**: Reopen the setting window to change the analysis parameters
   - **Remove**: Remove the analysis from the study
 
-This item is associated with a window displaying the list of the parameters, a
+This item is associated with a window showing the parameter list, a
 progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisWindow.png
@@ -654,20 +586,15 @@ The results window gathers several tabs:
 
 - The **Table** tab shows the sample generated by the Morris method and the resulting output values.
 
-  - Interactions:
+  - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
       - Left-click on column header to sort values in ascending or descending order 
       - Left-click on a column header and drag it in another place to change columns order
 
 - The **Cobweb plot** tab displays the sample.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-        - Select the variables to display and the axis order
-        - Modify the space where the values are plotted with the **Ranks** check button
-          (default: physical space). Check off the button to display the rank of the values
-        - Export the figure
-
-  - Interaction:
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Left-click on columns to select curves (multiple selection possible)
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisCobweb.png
@@ -676,42 +603,28 @@ The results window gathers several tabs:
 - The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
   scatter plots between each couple of input/output variables (off-diagonal).
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the variables to display and the columns order
-      - Export the figure
-
-  - Interactions:
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Right-click to select points
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisPlotMatrix.png
       :align: center
 
 - The **Scatter plots** tab displays the scatter plot of two parameters.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Select the variables to plot on X-axis and Y-axis (default: first output versus first input)
-      - Modify the space where the values are plotted with the **Ranks** check button
-        (default: physical space). Check off the button to display the rank of the values.
-      - Export the figure
-      - Set up parameters:
-
-        - Graph title (expected: string)
-        - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-          string), minimum/maximum bounds (expected: floating point), log
-          scale (check button only available if axis values are positive)
-        - Plot style: color, marker size and style (cross, circle, diamond, square, plus)
-
-  - Interactions:
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+  - Graph interactivity:
       - Right-click to select points
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisScatter.png
         :align: center
 
-- The **Parameters** tab reminds the user all the parameters values used to perform the analysis.
+- The **Parameters** tab reminds the user of all the parameters values used to perform the analysis.
 
 - The **Model** tab shows the model content used to perform the analysis.
 
@@ -816,7 +729,7 @@ Its context menu has the following actions:
   - **Modify**: Reopen the setting window to change the analysis parameters
   - **Remove**: Remove the analysis
 
-This item is associated with a window displaying the list of the parameters, a
+This item is associated with a window showing the parameter list, a
 progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWindow.png
@@ -847,14 +760,14 @@ The results window gathers the following tabs:
     - The optimal value convergence graph
     - The convergence graph of the errors
 
-    - Graph interactions:
+    - Graph interactivity:
         - Left-click to translate the graph
-        - Mouse wheel up/down to zoom/zoom out
+        - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationResultWindowConvergence.png
       :align: center
 
-- The **Parameters** tab reminds the user all the parameters values to perform the analysis.
+- The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
 
 - The **Model** tab shows the model content used to perform the analysis.
 

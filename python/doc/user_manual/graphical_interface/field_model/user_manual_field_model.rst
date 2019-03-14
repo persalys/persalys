@@ -65,7 +65,7 @@ The model item is associated with a **Mesh** window.
 .. image:: /user_manual/graphical_interface/field_model/defaultMeshWindow.png
     :align: center
 
-This window allows to define an 1D mesh. The default mesh contains *10 nodes* in the range *[0, 1]*.
+This window allows to define a 1D mesh. The default mesh contains *10 nodes* in the range *[0, 1]*.
 
 .. _meshdefinition:
 
@@ -74,7 +74,7 @@ This window allows to define an 1D mesh. The default mesh contains *10 nodes* in
 
 The window shows the index parameter name, description, bounds and number.
 
-The two first columns allows to set its name and description (double click to edit).
+To edit the index parameters, double-click on the column of interest (ex: name, description).
 
   .. image:: /user_manual/graphical_interface/field_model/indexParamTable.png
       :align: center
@@ -82,15 +82,15 @@ The two first columns allows to set its name and description (double click to ed
 
 .. _meshdefinitionwizard:
 
-To modify the mesh click on **...** button. The window which appears,
-proposes two ways to define a mesh:
+To modify the mesh click on **...** button: The window shows
+two ways to define a mesh:
 
- - For *Regular mesh*: define the bounds (default: [0, 1], expected: floats) and the number of nodes (default: 10, expected: positive integer)
+ - *Regular mesh*: define the bounds (default: [0, 1], expected: floats) and the number of nodes (default: 10, expected: positive integer)
 
   .. image:: /user_manual/graphical_interface/field_model/meshWizard.png
       :align: center
 
- - For *Import mesh*: load a file and choose one of its columns (default: first column)
+ - *Imported mesh*: load a file and choose one of its columns (default: first column)
 
   .. image:: /user_manual/graphical_interface/field_model/importMeshWizard.png
       :align: center
@@ -118,7 +118,7 @@ Its context menu proposes these actions:
 .. image:: /user_manual/graphical_interface/field_model/fieldModelDefContextMenu.png
     :align: center
 
-The new item **Definition** is associated with a window in the main frame, whose title is the name of
+The new **Definition** item is associated with a window, whose title is the name of
 the chosen physical model. In this window, the user can specify the model variables (**Definition** tab)
 and the finite difference step of each variable (:ref:`Differentiation <DifferentiationTab>` tab).
 
@@ -133,25 +133,26 @@ and the finite difference step of each variable (:ref:`Differentiation <Differen
 Define variables in the **Definition** tab:
   - the **Inputs** section allows to:
       - Add/remove inputs (**Add**/**Remove** button)
-      - *Name column*: Rename variables (default: (X0, X1, ...), expected: string (alphanumeric characters only))
-      - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-        the label format: floating point, integer, string, etc...))
-      - *Value column*: Assign a value to the inputs (default: 0, expected: floating points or integers)
-      - For convenience, the windows reminds **Index parameter** name defined previously in the :ref:`Mesh window <meshdefinition>`.
+      - Rename variables (default: (X0, X1, ...), expected: string (alphanumeric characters only)) (**Name** column)
+      - Describe variables (default: empty string, expected: string (no restriction on
+        the label format: floating point, integer, string, etc...))(**Description** column)
+      - Assign a value to the inputs (default: 0, expected: floating points or integers)(**Value** column)
+      - For convenience, the **Index parameter** name (previously defined in the :ref:`Mesh window <meshdefinition>`) is recalled here.
   - the **Outputs** section allows to:
       - Add/remove outputs (**Add**/**Remove** button)
       - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
         To perform the analyses, at least one output must be selected.
-      - *Name column*: Rename variables (default: (Y0, Y1, ...), expected: string (alphanumeric characters only))
-      - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-        the label format: floating point, integer, string, etc...))
-      - *Formula column*: Define the mathematical relationships between the **index parameter** and the input and output variables.
+      - Rename variables (default: (Y0, Y1, ...), expected: string (alphanumeric characters only)) (**Name** column)
+      - Describe variables (default: empty string, expected: string (no restriction on
+        the label format: floating point, integer, string, etc...))(**Description** column)
+      - Define the mathematical relationships between the **index parameter** and the input and output variables (**Formula** column).
         Note that the language used here differs from Python (see corresponding syntax for operators,
         mathematical functions and constants in the previous :ref:`section <AvailableSymbolsModel>`).
-      - **Evaluate** *button*: Launch the computation of the selected output values based on inputs, index parameter and formula.
-        It shall be used to test the physical model. For these output values to be saved, the user
+      - Launch the computation of the selected output values based on inputs, index parameter and formula (**Evaluate** button).
+        It shall be used to test the physical model: this will
+        add a new tab, described :ref:`below <fieldmodelevalresult>`.
+        To save the output values, the user
         should use a :ref:`Model evaluation <fieldModelEval>`.
-        The evaluation add a new tab. Its content is described in a next :ref:`section <fieldmodelevalresult>`.
 
       .. image:: /user_manual/graphical_interface/field_model/modelEvalTab.png
           :align: center
@@ -175,22 +176,23 @@ The model definition window contains:
 
  - the **Inputs** section allows to:
     - List the inputs detected from the function **_exec**
-    - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-      the label format: floating point, integer, string, etc...))
-    - *Value column*: Assign a value to the inputs (default: 0, expected: floating points or integers)
+    - Describe variables (default: empty string, expected: string (no restriction on
+      the label format: floating point, integer, string, etc...))(**Description** column)
+    - Assign a value to the inputs (default: 0, expected: floating points or integers) (**Value** column)
     - For convenience, the windows reminds **Index parameter** name defined previously in the :ref:`Mesh window <meshdefinition>`.
 
  - the **Outputs** section allows to:
     - List the outputs detected from the function **_exec**
     - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
       To perform the analyses, at least one output must be selected.
-    - *Description column*: Describe variables (default: empty string, expected: string (no restriction on
-      the label format: floating point, integer, string, etc...))
+    - Describe variables (default: empty string, expected: string (no restriction on
+      the label format: floating point, integer, string, etc...))(**Description** column)
     - Require the parallelization of the computations (**Enable multiprocessing** button)
-    - **Evaluate** *button*: Launch the computation of the selected output values based on inputs, and the Python function.
-      It shall be used to test the physical model. For these output values to be saved, the user
+    - Launch the computation of the selected output values based on inputs, and the Python function (**Evaluate** button).
+      It shall be used to test the physical model: this will
+      add a new tab, described :ref:`below <fieldmodelevalresult>`.
+      To save the output values, the user
       should use a :ref:`Model evaluation <fieldModelEval>`.
-      The evaluation add a new tab. Its content is described in a next :ref:`section <fieldmodelevalresult>`.
 
 Here is an example of a more complex model definition:
 

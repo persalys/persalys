@@ -33,11 +33,39 @@ windows (model definition or result window) open, surrounded by:
       :align: center
 
 
-- The **graphic settings** window appears when figures are displayed in the main window. This window
-  allows to set up graphical parameters for all the graphs of the interface.
+- The **Graph settings** window appears when a figure is displayed in the main window to set up graphical parameters.
+  Its content varies according to the type of graph:
 
-  .. image:: /user_manual/graphical_interface/getting_started/graphicConfiguration.png
-      :align: center
+.. _firstgraphsettings:
+
+    - for the **Cobweb plots** and the **Plot matrix**, the window allows to:
+       - Select the variables to display and the axis order
+       - Modify the space where the values are plotted with the **Ranks** check button
+         (default: physical space). Check off the button to display the rank of the values
+       - Export the figure
+
+       .. image:: /user_manual/graphical_interface/getting_started/cobweb_plotMatrix_Graph_settings.png
+         :align: center
+
+
+.. _secondgraphsettings:
+
+    - for the charts, the window allows to:
+       - Export the figure
+       - Specify the graph title (expected: string)
+       - Specify axis title (expected: string) in the **X-axis** and **Y-axis** tabs
+       - Depending on the graph:
+           - Select data to plot
+           - Modify the space where the values are plotted with the **Ranks** check button
+             (default: physical space). Check off the button to display the rank of the values
+           - Specify X-axis label orientation
+           - Specify other axis parameters in the **X-axis** and **Y-axis** tabs:
+               - minimum/maximum bounds (expected: floating point)
+               - log scale (check button only available if axis values are positive)
+           - Specify the **plot style**: color, marker size and style (cross, circle, diamond, square, plus)
+
+      .. image:: /user_manual/graphical_interface/getting_started/graphicConfiguration.png
+        :align: center
 
 
 1-2 On startup

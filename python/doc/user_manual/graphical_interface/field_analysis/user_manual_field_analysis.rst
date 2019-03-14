@@ -57,7 +57,7 @@ Its context menu has the following actions:
   - **Modify**: Reopen the setting window to change the analysis parameters
   - **Remove**: Remove the analysis from the study
 
-This item is associated with a window displaying the list of the parameters, a
+This item is associated with a window showing the parameter list, a
 progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/field_analysis/evaluationWindow.png
@@ -74,20 +74,11 @@ This window gathers the following tabs:
 - The **Result** tab shows for the selected output (left column):
 
     - the **Trajectory** tab shows the output values versus the mesh vertices.
-
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point), log
-                 scale (check button only available if axis values are positive)
-            - Plot style: marker size and style (cross, circle, diamond, square, plus)
-
-        - Interactions:
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
+        - Graph interactivity:
             - Right-click to select the points of trajectories
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/field_analysis/eval_window_trajectory.png
         :align: center
@@ -95,7 +86,7 @@ This window gathers the following tabs:
     - The **Table** tab presents the resulting output values for each mesh nodes.
       The table can be exported (**Export** button).
 
-      - Interactions:
+      - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
           - Left-click on column header to sort values in ascending or descending order 
           - Left-click on a column header and drag it in another place to change columns order
@@ -107,7 +98,7 @@ This window gathers the following tabs:
 
     - The **Table** tab reminds the input point. The table can be exported (**Export** button).
 
-      - Interactions:
+      - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
           - Left-click on column header to sort values in ascending or descending order 
           - Left-click on a column header and drag it in another place to change columns order
@@ -115,7 +106,7 @@ This window gathers the following tabs:
       .. image:: /user_manual/graphical_interface/field_analysis/eval_window_table_input.png
           :align: center
 
-- The **Parameters** tab reminds the user all the parameters values to perform the analysis.
+- The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
 
 - The **Model** tab shows the model content used to perform the analysis.
 
@@ -123,7 +114,7 @@ This window gathers the following tabs:
 2- Central tendency analysis
 ============================
 
-Only the Monte Carlo sampling method is available.
+The central tendency analysis can only be performed with the MonteCarlo sampling method.
 In order to perform a central tendency analysis, build first a :ref:`probabilistic model <probaModel>`.
 
 New central tendency analysis can be created thanks to:
@@ -146,9 +137,8 @@ New central tendency analysis can be created thanks to:
 
 When an analysis is required, a window appears, in order to set up:
   - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
-  - the stopping criteria of the algorithm (Select at least one criterion to validate the window):
-      - the maximum computation time (default: one minute)
-        (d means days, h means hours, m means minutes, s means seconds)
+  - **Stopping criteria** of the algorithm (Select at least one criterion to validate the window):
+      - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
       - the maximum sampling size (default: 10000, expected: integer)
   - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
     purposes (default=1; expected= integer). It must be less than the maximum sampling size.
@@ -165,7 +155,7 @@ When an analysis is required, a window appears, in order to set up:
 2-2 Launch
 '''''''''''
 
-When the «Central tendency» window is validated, a new element appears in the study
+When the **Central tendency** window is validated, a new element appears in the study
 tree, below **Central tendency**.
 
 Its context menu has the following actions:
@@ -173,7 +163,7 @@ Its context menu has the following actions:
   - **Modify**: Reopen the setting window to change the analysis parameters
   - **Remove**: Remove the analysis from the study
 
-This item is associated with a window displaying the list of the parameters, a
+This item is associated with a window showing the parameter list, a
 progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/field_analysis/MC_window.png
@@ -188,29 +178,20 @@ When the analysis is finished or stopped, a result window appears.
 
 The **Trajectories** tab, the **Result/Table** tab, the **Bag chart** tab, the **Functional bag chart** tab,
 the **Input/Table** tab and the **Plot matrix** tab
-are linked. It means that when the user select some points on one of these representations,
-these points are automatically selected on the others.
+are linked: when the user selects some points in one of these
+tabs, they are automatically selected in the other tabs.
 
 The results window gathers the following tabs:
 
 - The **Result** tab shows for the selected output (left column):
 
     - the **Trajectories** tab shows for each input point, the output values versus the mesh vertices.
-
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Select the trajectories to display
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point), log
-                 scale (check button only available if axis values are positive)
-            - Plot style: marker size and style (cross, circle, diamond, square, plus)
-
-        - Interactions:
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+          select the trajectories to display
+        - Graph interactivity:
             - Right-click to select the points of trajectories
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/field_analysis/MC_window_trajectories.png
         :align: center
@@ -218,7 +199,7 @@ The results window gathers the following tabs:
     - The **Table** tab presents the resulting output values for each input values (lines) and each mesh nodes (columns).
       The table can be exported (**Export** button).
 
-      - Interactions:
+      - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
           - Left-click on column header to sort values in ascending or descending order 
           - Left-click on a column header and drag it in another place to change columns order
@@ -227,55 +208,31 @@ The results window gathers the following tabs:
           :align: center
 
     - the **Bag chart** tab shows the explained variance (PC2 (=second principal component) versus PC1 (=first principal component)).
-
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point)
-
-        - Interactions:
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
+        - Graph interactivity:
             - Right-click to select points
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/field_analysis/MC_window_bagChart.png
         :align: center
 
-    - the **Functional bag chart** tab shows the quantiles (50% and 95%) .
-
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point), log
-                 scale (check button only available if axis values are positive)
-
-        - Interactions:
+    - the **Functional bag chart** tab shows the 50% and 95% quantiles.
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
+        - Graph interactivity:
             - Right-click to select trajectories
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/field_analysis/MC_window_FunctionalBagChart.png
         :align: center
 
-    - the **Mean trajectory** tab shows the mean and quantiles (5% and 95%) of the trajectories.
-
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Select the trajectories to display
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point), log
-                 scale (check button only available if axis values are positive)
-            - Plot style: marker size and style (cross, circle, diamond, square, plus)
-
-        - Interactions:
+    - the **Mean trajectory** tab shows the mean and 5% and 95% quantiles of the trajectories.
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+          select the trajectories to display
+        - Graph interactivity:
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/field_analysis/MC_window_meanTrajectories.png
         :align: center
@@ -286,7 +243,7 @@ The results window gathers the following tabs:
     - The **Table** tab presents the input sample generated by the Monte Carlo sampling method.
       The table can be exported (**Export** button).
 
-      - Interactions:
+      - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
           - Left-click on column header to sort values in ascending or descending order 
           - Left-click on a column header and drag it in another place to change columns order
@@ -297,57 +254,38 @@ The results window gathers the following tabs:
     - The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
       scatter plots between each couple of input variables (off-diagonal).
 
-      - The **Graphic settings** window (below the study tree) allows to:
-          - Select the variables to display and the columns order
-          - Export the figure
-
-      - Interactions:
+      - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+      - Graph interactivity:
           - Right-click to select points
           - Left-click to translate the graph
-          - Mouse wheel up/down to zoom/zoom out
+          - Mouse wheel up/down to zoom in/zoom out
 
       .. image:: /user_manual/graphical_interface/field_analysis/MC_window_plotMatrix_input.png
           :align: center
 
 
-- The **Decomposition** tab shows for the selected output (left column), the result of the
-  Karhunen-Loeve decomposition:
+- The **Decomposition** tab shows the result of the Karhunen-Loeve decomposition, for the selected
+  output (left column):
 
     - the **Modes** tab shows the modes of the Karhunen Loeve decomposition.
 
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Select the trajectories to display
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point), log
-                 scale (check button only available if axis values are positive)
-            - Plot style: marker size and style (cross, circle, diamond, square, plus)
-
-        - Interactions:
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+          select the trajectories to display
+        - Graph interactivity:
             - Right-click to select the points of trajectories
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/field_analysis/MC_window_modes.png
         :align: center
 
     - The **Eigenvalues** tab presents the eigenvalues of the modes and a plot of the cumulative eigenvalue sum.
 
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Select the trajectories to display
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point), log
-                 scale (check button only available if axis values are positive)
-            - Plot style: color, marker size and style (cross, circle, diamond, square, plus)
-
-        - Interactions:
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+          select the trajectories to display
+        - Graph interactivity:
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
         .. image:: /user_manual/graphical_interface/field_analysis/MC_window_eigenvalues.png
             :align: center
@@ -357,21 +295,12 @@ The results window gathers the following tabs:
       - the **PDF/CDF** tab presents the PDF/CDF of the **ξi** sample
         together with the distribution PDF
 
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Export the figure
-            - Select the graphic type: PDF or CDF (default: PDF)
-            - Select the **ξi**
-            - Set up parameters:
-               - Graph title (expected: string)
-               - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-                 string), minimum/maximum bounds (expected: floating point), log
-                 scale (check button only available if axis values are positive)
-            - Plot style: marker size and style (cross, circle, diamond, square, plus)
-
-        - Interactions:
+        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+          select the **ξi** and the graphic type: PDF or CDF (default: PDF)
+        - Graph interactivity:
             - Right-click to select the points of trajectories
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
         .. image:: /user_manual/graphical_interface/field_analysis/MC_window_ksi_pdf.png
             :align: center
@@ -379,36 +308,27 @@ The results window gathers the following tabs:
       - The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
         scatter plots between each couple of **ξi** variables (off-diagonal).
 
-        - The **Graphic settings** window (below the study tree) allows to:
-            - Select the variables to display and the columns order
-            - Export the figure
-
-        - Interactions:
+        - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+        - Graph interactivity:
             - Right-click to select points
             - Left-click to translate the graph
-            - Mouse wheel up/down to zoom/zoom out
+            - Mouse wheel up/down to zoom in/zoom out
 
       .. image:: /user_manual/graphical_interface/field_analysis/MC_window_ksi_plotMatrix.png
           :align: center
 
 - The **Correlation** tab presents the empirical correlation of the output between the nodes of the mesh.
 
-  - The **Graphic settings** window (below the study tree) allows to:
-      - Export the figure
-      - Set up parameters:
-          - Graph title (expected: string)
-          - Specific parameters for the axes (**X-axis** and **Y-axis** tab): title (expected:
-            string), minimum/maximum bounds (expected: floating point)
-
-  - Interactions:
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
       - Left-click to translate the graph
-      - Mouse wheel up/down to zoom/zoom out
+      - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/field_analysis/MC_window_correlation.png
       :align: center
 
 
-- The **Parameters** tab reminds the user all the parameters values to perform the analysis.
+- The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
 
 - The **Model** tab shows the model content used to perform the analysis.
 
