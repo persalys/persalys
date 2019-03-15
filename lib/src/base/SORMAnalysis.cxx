@@ -156,7 +156,7 @@ void SORMAnalysis::save(Advocate & adv) const
 {
   ReliabilityAnalysis::save(adv);
   ApproximationAnalysis::save(adv);
-  adv.saveAttribute("result_", result_);
+  adv.saveAttribute("sormanalysisresult_", result_);
 }
 
 
@@ -165,7 +165,7 @@ void SORMAnalysis::load(Advocate & adv)
 {
   ReliabilityAnalysis::load(adv);
   ApproximationAnalysis::load(adv);
-  adv.loadAttribute("result_", result_);
+  adv.loadAttribute("sormanalysisresult_", result_);
   // can open older xml files
   if (!result_.getSORMResult().getStandardSpaceDesignPoint().getDimension())
   {
