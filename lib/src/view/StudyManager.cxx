@@ -596,12 +596,13 @@ void StudyManager::open(const QString& recentFileName)
     Study newStudy(Study::Open(fileName.toUtf8().constData()));
     Study::Add(newStudy);
     emit recentFilesListChanged(fileName);
+    QApplication::restoreOverrideCursor();
   }
   catch (std::exception & ex)
   {
+    QApplication::restoreOverrideCursor();
     showErrorMessage(tr("An error has occurred when reading the file '%1'. \nMaybe objects are not opened.\n").arg(fileName) + ex.what());
   }
-  QApplication::restoreOverrideCursor();
 
   // update QSettings
   FileTools::SetCurrentDir(fileName);
