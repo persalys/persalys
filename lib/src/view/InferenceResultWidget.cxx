@@ -438,6 +438,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // reset
+  pdfPlot_->show();
   pdfPlot_->clear();
   if (cdfPlot_ && qqPlot_)
   {
@@ -458,7 +459,10 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   }
 
   if (!isInferredDistribution)
+  {
+    pdfPlot_->hide();
     return;
+  }
 
   // -- get distribution
   const Distribution distribution = currentFittingTestResult_.getTestedDistributions()[resultIndex];
