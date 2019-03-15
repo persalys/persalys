@@ -88,7 +88,16 @@ void FORMAnalysis::launch()
   result_.formResult_ = algo.getResult();
 
   // compute event probability sensitivity (not computed by default)
-  result_.formResult_.getEventProbabilitySensitivity();
+  try
+  {
+    result_.formResult_.getEventProbabilitySensitivity();
+  }
+  catch (InvalidArgumentException & ex)
+  {
+    // do nothing
+    // http://trac.openturns.org/ticket/916
+    LOGWARN(" Error when computing the event probability sensitivity");
+  }
 }
 
 
