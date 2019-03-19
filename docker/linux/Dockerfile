@@ -183,8 +183,13 @@ RUN git clone --recursive https://github.com/OpenModelica/OMCompiler.git && cd O
  && git cherry-pick 63848be39fe6ff0bb7096c8fad3f68b8078286db \
  && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
+# TODO: replace dvipng in the lines above
+RUN yum install -y dvisvgm &&  dvisvgm -V
+
 # devel user
 RUN yum -y install sudo
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel
+
+

@@ -83,5 +83,5 @@ level : float, :math:`0 < p < 1`
 
 Returns
 -------
-result : :class:`otguibase.FieldMontecarloResult`
+result : :class:`otguibase.FieldMonteCarloResult`
     Result"
