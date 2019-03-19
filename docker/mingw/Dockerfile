@@ -11,7 +11,7 @@ ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
-  && git checkout v1.12 \
+  && git checkout 1.12 \
   && ${ARCH}-w64-mingw32-cmake-py${PYMAJMIN} -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
   -DUSE_SPHINX=OFF -DUSE_TBB=OFF . \
@@ -19,7 +19,7 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
-  && git checkout v0.5 && git cherry-pick 721afcf4db5b5d372a3b9af99f730eff8a447dc0 29d7aafe8eadd2fae3e497ecbd3a6f29315a5f8b \
+  && git checkout v0.5 && git cherry-pick 29d7aafe8eadd2fae3e497ecbd3a6f29315a5f8b \
   && ${ARCH}-w64-mingw32-cmake-py${PYMAJMIN} -DPYTHON_SITE_PACKAGES=Lib/site-packages . \
   && make && sudo make install && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libotmorris.dll ${MINGW_PREFIX}/Lib/site-packages/otmorris/*.pyd
 
