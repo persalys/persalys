@@ -5,7 +5,7 @@ Qt GUI module for OpenTURNS
 Dependencies
 ------------
 - OpenTURNS >=1.12
-- Qt >=4
+- Qt >=5
 - Qwt >=6
 - Python >=3.2
 - Boost.locale
@@ -21,9 +21,9 @@ Dependencies
 Installation
 ------------
 - Python libs found must of same version as interpreter (else adjust PYTHON_INCLUDE_DIR, PYTHON_LIBRARY)
-- The Qwt library found must be linked to the qt libs found (else adjust QWT_LIBRARY, or use USE_QT5=OFF)
+- The Qwt library found must be linked to the qt libs found (else adjust QWT_LIBRARY)
 - otfmi must be importable at configure time, so both openturns & otfmi should be reachable via PYTHONPATH or a default location
-- ParaView must be linked to the same qt libs, and built with PARAVIEW_BUILD_QT_GUI=ON and VTK_PYTHON_FULL_THREADSAFE=ON
+- ParaView must be linked to the same qt libs, and built with PARAVIEW_BUILD_QT_GUI=ON
 
 Compile OTGui::
 

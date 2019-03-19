@@ -265,11 +265,7 @@ void MeshDefinitionWizard::setTable(const QString& fileName)
   dataPreviewTableView_->setHorizontalHeader(header);
   connect(dataPreviewTableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), header, SLOT(fixComboPositions()));
   dataPreviewTableView_->horizontalHeader()->show();
-#if QT_VERSION >= 0x050000
   dataPreviewTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-#else
-  dataPreviewTableView_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-#endif
 
   // size
   sizeLabel_->setText(QString::number(sample.getSize()));

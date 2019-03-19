@@ -7,7 +7,6 @@ option (USE_SALOME "use salome" ON)
 option (USE_OTFMI "use otfmi" ON)
 option (USE_OTMORRIS "use otmorris" ON)
 option (USE_SPHINX "use sphinx" ON)
-option (USE_QT5 "use Qt5" ON)
 option (USE_COTIRE "Use cotire for unity builds" OFF)
 option (USE_PARAVIEW "use ParaView" ON)
 
@@ -70,30 +69,11 @@ find_package (PythonLibs 3.2 REQUIRED)
 
 if (BUILD_GUI)
 
-  if (USE_QT5)
-    find_package (Qt5Widgets NO_MODULE)
-    find_package (Qt5Test NO_MODULE)
-    set (QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Test_LIBRARIES})
-    set (CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
-    include_directories (${Qt5Widgets_INCLUDE_DIRS} ${Qt5Test_INCLUDE_DIRS})
-  endif ()
-
-  if (NOT Qt5Gui_FOUND)
-    find_package (Qt4 COMPONENTS QtCore QtGui QtTest REQUIRED)
-    include (${QT_USE_FILE})
-
-    macro (qt5_wrap_cpp)
-      qt4_wrap_cpp (${ARGN})
-    endmacro ()
-
-    macro (qt5_add_resources)
-      qt4_add_resources (${ARGN})
-    endmacro ()
-
-    macro (qt5_generate_moc)
-      qt4_generate_moc (${ARGN})
-    endmacro ()
-  endif ()
+  find_package (Qt5Widgets NO_MODULE)
+  find_package (Qt5Test NO_MODULE)
+  set (QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Test_LIBRARIES})
+  set (CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
+  include_directories (${Qt5Widgets_INCLUDE_DIRS} ${Qt5Test_INCLUDE_DIRS})
 
   find_package (Qwt 6 REQUIRED)
 

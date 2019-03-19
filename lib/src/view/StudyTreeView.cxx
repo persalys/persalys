@@ -51,15 +51,11 @@ public:
     QStyleOptionViewItem optionButton = option;
     initStyleOption(&optionButton, index);
 
-#if QT_VERSION >= 0x050000
     // use optionButton.widget to keep information from style sheet
     if (optionButton.widget)
       optionButton.widget->style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter, optionButton.widget);
     else
       QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
-#else
-    QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &optionButton, painter);
-#endif
 
     // draw a line at the bottom of items
     if (index.data(Qt::UserRole).toString() == "Study")
@@ -104,12 +100,8 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   connect(treeViewModel_, SIGNAL(studySubItemsAdded(StudyItem*)), this, SLOT(modifyStudySubItemsExpansion(StudyItem*)));
 
   // forbid the user to define not valid item's name
-#if QT_VERSION >= 0x050000
   // draw a line at the bottom of the StudyItem
   setItemDelegate(new TreeItemDelegate(this));
-#else
-  setItemDelegate(new LineEditWithQValidatorDelegate(QString("[a-zA-Z_][a-zA-Z_0-9]*"), this));
-#endif
 
   // context menu
   setContextMenuPolicy(Qt::CustomContextMenu);

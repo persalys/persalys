@@ -59,11 +59,7 @@ void ModelEvaluationResultWindow::buildInterface()
   QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
 
   CopyableTableView * inputTable = new CopyableTableView;
-#if QT_VERSION >= 0x050000
   inputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  inputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
   CustomStandardItemModel * model = new CustomStandardItemModel(inputDimension, 2, inputTable);
   model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   inputTable->setModel(model);
@@ -82,11 +78,7 @@ void ModelEvaluationResultWindow::buildInterface()
   QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
 
   CopyableTableView * outputTable = new CopyableTableView;
-#if QT_VERSION >= 0x050000
   outputTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-#else
-  outputTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
-#endif
   model = new CustomStandardItemModel(nbOutputs, 2, outputTable);
   model->setHorizontalHeaderLabels(QStringList() << tr("Name") << tr("Value"));
   outputTable->setModel(model);

@@ -77,13 +77,8 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample 
   tableWidget_->setSelectionMode(QAbstractItemView::NoSelection);
   tableWidget_->setHorizontalHeaderLabels(columnsNames_);
   tableWidget_->setVerticalHeaderLabels(rowsNames_);
-#if QT_VERSION >= 0x050000
   tableWidget_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
   tableWidget_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-#else
-  tableWidget_->horizontalHeader()->setResizeMode(QHeaderView::Fixed);
-  tableWidget_->verticalHeader()->setResizeMode(QHeaderView::Fixed);
-#endif
   tableWidget_->horizontalHeader()->setDefaultSectionSize(sizePixmap);
   tableWidget_->verticalHeader()->setDefaultSectionSize(sizePixmap);
 
