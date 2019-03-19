@@ -2,7 +2,7 @@
 /**
  *  @brief SRCAnalysis computes the Standard Regression Coefficients
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -84,7 +84,7 @@ void SRCAnalysis::launch()
   // check
   if (getBlockSize() > getSimulationsNumber())
     throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                      << ") can not be greater than the input sample size (" << getSimulationsNumber() << ")";
+                                      << ") cannot be greater than the input sample size (" << getSimulationsNumber() << ")";
 
   // initialization
   RandomGenerator::SetSeed(getSeed());

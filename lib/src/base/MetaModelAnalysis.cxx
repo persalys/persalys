@@ -2,7 +2,7 @@
 /**
  *  @brief Class to define functional chaos
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -145,7 +145,7 @@ void MetaModelAnalysis::setLeaveOneOutValidation(const bool validation)
 void MetaModelAnalysis::setTestSampleValidationPercentageOfPoints(const UnsignedInteger percentage)
 {
   if (percentage == 0 || percentage >= 100)
-    throw InvalidArgumentException(HERE) << "The percentage must be greater than 0 and lesser than 100";
+    throw InvalidArgumentException(HERE) << "The percentage must be greater than 0 and less than 100";
   percentageTestSample_ = percentage;
 }
 
@@ -547,7 +547,7 @@ void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, 
     const Sample testOutputSample(shuffledOutSample, beginIndex, endIndex);
 
     // fill result
-    const Sample tempMetaModelSample = function(testInputSample);
+    const Sample tempMetaModelSample(function(testInputSample));
     for (UnsignedInteger j = 0; j < (endIndex - beginIndex); ++j)
     {
       metaModelSample[indices[beginIndex + j]] = tempMetaModelSample[j];

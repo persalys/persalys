@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to define a FMI physical model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -179,7 +179,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   // button Evaluate outputs
   ioCountLabel_ = new QLabel;
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/run-build.png"), tr("Evaluate"));
-  evaluateOutputsButton->setToolTip(tr("Evaluate the value of the outputs"));
+  evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
   QHBoxLayout * evaluationLayout = new QHBoxLayout;
   evaluationLayout->addWidget(ioCountLabel_);

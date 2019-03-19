@@ -2,7 +2,7 @@
 /**
  *  @brief Exportable QTableView
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -94,7 +94,7 @@ void ExportableTableView::exportData()
   else if (!text.isEmpty())
     FileTools::ExportData(text, this);
   else
-    throw SimpleException(tr("Internal exception: can not get the sample"));
+    throw SimpleException(tr("Internal exception: cannot get the sample"));
 }
 
 

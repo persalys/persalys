@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::TaylorExpansionMomentsAnalysis
-"Taylor expansions for moments estimation.
+"Get the Taylor expansions for moments estimation.
 
 Parameters
 ----------
@@ -20,7 +20,7 @@ Create the model:
 >>> G = otguibase.Output('G', 'deviation')
 >>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
-Create the Taylor expansions analysis:
+Create the Taylor expansion analysis:
 
 >>> analysis = otguibase.TaylorExpansionMomentsAnalysis('anAnalysis', myPhysicalModel)
 >>> analysis.run()

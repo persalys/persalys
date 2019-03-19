@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::PythonFieldModel
-"Physical model defined by Python code and a mesh.
+"Create a physical model defined by Python code and a mesh.
 
 Parameters
 ----------

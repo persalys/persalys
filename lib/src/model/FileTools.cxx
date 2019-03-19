@@ -2,7 +2,7 @@
 /**
  *  @brief File tools
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -27,9 +27,11 @@
 #include <QApplication>
 #include <QTextStream>
 #include <QImageWriter>
+#include <QCoreApplication>
 
 namespace OTGUI
 {
+const QString FileTools::OpenTURNSUrlLink = "http://openturns.github.io/openturns/master/";
 
 QString FileTools::GetCurrentDir()
 {
@@ -139,5 +141,48 @@ void FileTools::ExportImage(const QImage& image, QWidget * parent)
       QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Format not supported."));
     }
   }
+}
+
+
+QString FileTools::GetDocumentationDirectoryPath()
+{
+  // search the path of the documentation
+  const QString appliDirPath(QCoreApplication::applicationDirPath());
+  QDir dirPath(appliDirPath);
+  dirPath.cdUp();
+
+  // case 1: on Linux when the documentation is built and put in the install directory
+  QString userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(INSTALL_PATH).arg(DOCUMENTATION_INSTALL_PATH));
+
+  // case 2: on Linux when using the AppImage
+  if (!QDir(userManualDir).exists())
+  {
+    userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(dirPath.path()).arg(DOCUMENTATION_INSTALL_PATH));
+  }
+  // case 3: on Windows
+  if (!QDir(userManualDir).exists())
+  {
+    userManualDir = QDir::toNativeSeparators(QString("%1/doc/html/").arg(appliDirPath));
+  }
+  return QDir(userManualDir).exists()? userManualDir : "";
+}
+
+
+QUrl FileTools::GetDocumentationUrl(const QString &urlLink, const docType type)
+{
+  QUrl url;
+
+  QStringList pathAndFragment(urlLink.split("#"));
+
+  if (type == docGUI)
+    url = QUrl(QUrl::fromLocalFile(QDir::toNativeSeparators(GetDocumentationDirectoryPath() + pathAndFragment[0])));
+  else
+    url = QUrl(QDir::toNativeSeparators(OpenTURNSUrlLink + pathAndFragment[0]));
+
+  // set url fragment (text after #)
+  if (pathAndFragment.size() == 2)
+    url.setFragment(pathAndFragment[1]);
+
+  return url;
 }
 }

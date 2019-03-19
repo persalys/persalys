@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::InferenceAnalysis
-"Perform a Kolmogorov goodness-of-fit test for 1-d continuous distributions.
+"Perform a Kolmogorov goodness-of-fit test for 1-D continuous distributions.
 
 Parameters
 ----------

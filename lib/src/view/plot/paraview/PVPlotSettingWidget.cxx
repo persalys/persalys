@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure paraview plot matrices
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -131,6 +131,15 @@ void PVPlotSettingWidget::modifyData(bool isRankRequired)
 void PVPlotSettingWidget::exportPlot()
 {
   pvViewWidget_->exportPlot();
+}
+
+
+QSize PVPlotSettingWidget::sizeHint() const
+{
+  QSize size = QWidget::sizeHint();
+  const int hScrollBarHeight = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+  size.setHeight(size.height() + hScrollBarHeight);
+  return size;
 }
 
 

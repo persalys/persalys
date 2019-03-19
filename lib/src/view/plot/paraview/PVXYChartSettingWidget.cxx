@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure XYChart
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -581,5 +581,22 @@ void PVXYChartSettingWidget::setMarkerStyle(const int index)
 {
   const int style = markerStyles_->itemData(index).toInt();
   pvViewWidget_->setMarkerStyle(style);
+}
+
+
+QSize PVXYChartSettingWidget::sizeHint() const
+{
+  QSize size = QWidget::sizeHint();
+  const int hScrollBarHeight = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+  size.setHeight(size.height() + hScrollBarHeight);
+  return size;
+}
+
+
+QSize PVXYChartSettingWidget::minimumSizeHint() const
+{
+  QSize size = QWidget::minimumSizeHint();
+  size.setHeight(10);
+  return size;
 }
 }

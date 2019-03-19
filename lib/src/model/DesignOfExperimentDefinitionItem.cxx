@@ -2,7 +2,7 @@
 /**
  *  @brief QStandardItem, observer of a design of experiments
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -119,7 +119,7 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String& 
   if (message == "analysisFinished")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
-    emit designEvaluationAppended();
+    emit designEvaluationUpdated(true);
   }
   else if (message == "analysisRemoved")
   {
@@ -227,6 +227,8 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_ = analysis;
   analysis_.addObserver(this);
   analysis_.addObserver(getParentStudyItem()->getStudy().getImplementation().get());
+
+  emit designEvaluationUpdated(false);
 
   // update the implementation of the design of experiments stored in Study
   getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());

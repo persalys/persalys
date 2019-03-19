@@ -2,7 +2,7 @@
 /**
  *  @brief SobolAnalysis computes the Sobol indices
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -183,7 +183,7 @@ void SobolAnalysis::launch()
   // check
   if (getMaximumCalls() < (getReplicationSize() * (getPhysicalModel().getStochasticInputNames().getSize() + 2)))
     throw InvalidValueException(HERE) << "The replication size (" << getReplicationSize()
-                                      << ") can not be greater than: max_calls (" << getMaximumCalls()
+                                      << ") cannot be greater than: max_calls (" << getMaximumCalls()
                                       << ") / (number_of_inputs (" << getPhysicalModel().getStochasticInputNames().getSize()
                                       << ") + 2)="
                                       << (getMaximumCalls() / (getPhysicalModel().getStochasticInputNames().getSize() + 2));

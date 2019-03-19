@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to display the data model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -75,7 +75,7 @@ DataModelWindow::~DataModelWindow()
 void DataModelWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  mainLayout->addWidget(new TitleLabel(tr("Data model")));
+  mainLayout->addWidget(new TitleLabel(tr("Data model"), "user_manual/graphical_interface/data_model/user_manual_data_model.html#datamodeldefinition"));
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);

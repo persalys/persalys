@@ -2,7 +2,7 @@
 /**
  *  @brief QAbstractTableModel to list the inputs
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -112,7 +112,7 @@ QVariant MorrisTableModel::data(const QModelIndex & index, int role) const
     if (role == Qt::ForegroundRole && boundsIsEmpty)
       return QColor(Qt::red);
     else if (role == Qt::ToolTipRole && boundsIsEmpty)
-      return tr("The lower bound must be lesser than the upper bound");
+      return tr("The lower bound must be less than the upper bound");
   }
   return QVariant();
 }

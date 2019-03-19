@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure graphics
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,8 @@ public:
 
   int getCurrentPlotIndex() const;
 
-  QSize minimumSizeHint() const;
+  virtual QSize sizeHint() const;
+  virtual QSize minimumSizeHint() const;
 
 protected:
   void buildInterface();

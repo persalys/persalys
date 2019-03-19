@@ -2,7 +2,7 @@
 /**
  *  @brief QWizardPage to define simulation reliability analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -49,7 +49,7 @@ void SimulationReliabilityPage::buildInterface()
 
   /// simulation widgets
 
-  // stop criteria
+  // Stopping criteria
   stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
@@ -120,7 +120,7 @@ bool SimulationReliabilityPage::validatePage()
   QString errorMessage;
 
   if (!stopCriteriaGroupBox_->isValid())
-    errorMessage = tr("Please select at least one stop criteria");
+    errorMessage = tr("Select at least one stopping criterion");
   else
   {
     if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
@@ -129,7 +129,7 @@ bool SimulationReliabilityPage::validatePage()
     if (stopCriteriaGroupBox_->isMaxCallsRequired())
     {
       if (stopCriteriaGroupBox_->getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
-        errorMessage = tr("The maximum calls can not be lesser than the block size");
+        errorMessage = tr("The maximum calls cannot be less than the block size");
     }
   }
 

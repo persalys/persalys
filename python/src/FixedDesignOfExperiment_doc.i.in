@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FixedDesignOfExperiment
-"Design of experiments.
+"Create a fixed design of experiments.
 
 Available constructors:
     FixedDesignOfExperiment(*name, physicalModel*)

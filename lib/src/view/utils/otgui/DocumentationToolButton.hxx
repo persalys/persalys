@@ -2,7 +2,7 @@
 /**
  *  @brief QToolButton to open documentation url
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,9 +21,10 @@
 #ifndef OTGUI_DOCUMENTATIONTOOLBUTTON_HXX
 #define OTGUI_DOCUMENTATIONTOOLBUTTON_HXX
 
-#include "otgui/OTGuiprivate.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QToolButton>
+#include <QUrl>
 
 namespace OTGUI
 {
@@ -32,15 +33,13 @@ class OTGUI_API DocumentationToolButton : public QToolButton
   Q_OBJECT
 
 public:
-  DocumentationToolButton(const QString& urlLink = "", const QString& toolTip = tr("Open the OpenTURNS documentation"), QWidget *parent = 0);
+  DocumentationToolButton(const QString& urlLink, const FileTools::docType type = FileTools::docGUI, QWidget *parent = 0);
 
 public slots:
   void openUrl();
 
-public:
-  static const QString OpenTURNSUrlLink;
 private:
-  QString urlLink_;
+  QUrl urlLink_;
 };
 }
 #endif

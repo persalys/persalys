@@ -2,7 +2,7 @@
 /**
  *  @brief SobolResult contains the Sobol indices
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -72,7 +72,6 @@ private:
   OT::PersistentCollection<OT::Interval> firstOrderIndicesInterval_;
   OT::PersistentCollection<OT::Interval> totalIndicesInterval_;
   OT::UnsignedInteger callsNumber_;
-  OT::Scalar elapsedTime_;
   OT::Scalar confidenceIntervalLength_;
 };
 }

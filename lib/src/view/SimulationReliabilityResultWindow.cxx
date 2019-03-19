@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of the reliability analysis using simulation method
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -49,16 +49,21 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
   , titleLabel_(0)
   , formTabWidget_(0)
 {
+  // title
+  const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
+  titleLabel_ = new TitleLabel(methodName);
+
   // FORM result widget
   if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get()))
   {
     FORMImportanceSamplingAnalysis analysis = *dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get());
     formTabWidget_ = new ApproximationResultTabWidget(analysis.getFORMResult(), analysis, this);
+    titleLabel_->setDocLink("user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#formisresult");
   }
-
-  // title
-  const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
-  titleLabel_ = new TitleLabel(methodName);
+  else
+  {
+    titleLabel_->setDocLink("user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#reliamontecarloresult");
+  }
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Threshold exceedance parameters"));
@@ -131,8 +136,8 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  // stop criteria
-  QGroupBox * parametersGroupBox = new QGroupBox(tr("Stop criteria"));
+  // Stopping criteria
+  QGroupBox * parametersGroupBox = new QGroupBox(tr("Stopping criteria"));
   QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
 
   QStringList namesList;

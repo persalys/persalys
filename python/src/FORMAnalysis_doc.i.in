@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FORMAnalysis
-"FORM analysis.
+"Process a reliability analysis using the FORM method.
 
 Parameters
 ----------
@@ -42,5 +42,5 @@ Get the result:
 
 Returns
 -------
-result : :py:class:`openturns.FORMResult`
+result : :class:`~otguibase.FORMAnalysisResult`
     Result"

@@ -2,7 +2,7 @@
 /**
  *  @brief QObject managing study objects
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -596,12 +596,13 @@ void StudyManager::open(const QString& recentFileName)
     Study newStudy(Study::Open(fileName.toUtf8().constData()));
     Study::Add(newStudy);
     emit recentFilesListChanged(fileName);
+    QApplication::restoreOverrideCursor();
   }
   catch (std::exception & ex)
   {
+    QApplication::restoreOverrideCursor();
     showErrorMessage(tr("An error has occurred when reading the file '%1'. \nMaybe objects are not opened.\n").arg(fileName) + ex.what());
   }
-  QApplication::restoreOverrideCursor();
 
   // update QSettings
   FileTools::SetCurrentDir(fileName);

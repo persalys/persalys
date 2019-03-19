@@ -78,6 +78,8 @@ OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
 OTGUI_PhysicalModel_getRestrictedFunction_doc
 %feature("docstring") OTGUI::PhysicalModel::getRestrictedPointToFieldFunction
 OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
+%feature("docstring") OTGUI::PhysicalModel::getPointToFieldFunction
+OTGUI_PhysicalModel_getPointToFieldFunction_doc
 %feature("docstring") OTGUI::PhysicalModel::getSelectedOutputsNames
 OTGUI_PhysicalModel_getSelectedOutputsNames_doc
 %feature("docstring") OTGUI::PhysicalModel::selectOutput

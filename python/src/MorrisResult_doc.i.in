@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::MorrisResult
-"Morris analysis result.
+"Get the result of a Morris analysis.
 
 Notes
 -----
@@ -10,7 +10,7 @@ getResult()."
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::MorrisResult::getInputsSelection
-"Inputs selection accessor.
+"Input selection accessor.
 
 Parameters
 ----------
@@ -25,7 +25,7 @@ selection : :py:class:`openturns.Indices`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::MorrisResult::setInputsSelection
-"Inputs selection accessor.
+"Input selection accessor.
 
 Parameters
 ----------

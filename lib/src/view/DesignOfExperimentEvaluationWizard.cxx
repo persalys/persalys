@@ -2,7 +2,7 @@
 /**
  *  @brief QWizard to select a design of experiments
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -205,7 +205,7 @@ bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
   }
   if (blockSizeGroupBox_->getBlockSizeValue() > analysis_ptr->getOriginalInputSample().getSize())
   {
-    message = tr("The block size must be lesser or equal to the size of the input sample");
+    message = tr("The block size must be less than or equal to the size of the input sample");
   }
   errorMessageLabel_->setErrorMessage(message);
   if (!message.isEmpty())

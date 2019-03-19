@@ -2,7 +2,7 @@
 /**
  *  @brief QWizardPage to define Morris analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -117,7 +117,7 @@ bool MorrisPage::validatePage()
   // check bounds
   if (tableModel_->getAnalysis().getBounds().isEmpty())
   {
-    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be lesser than the upper bounds"));
+    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
     return false;
   }
   // check number of variables which vary

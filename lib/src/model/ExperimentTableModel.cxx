@@ -2,7 +2,7 @@
 /**
  *  @brief QAbstractTableModel to list the inputs
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -297,7 +297,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
         {
           if (value.toDouble() >= designOfExperiment_.getUpperBounds()[indexInput])
           {
-            emit errorMessageChanged(tr("The lower bound must be lesser than the upper bound"));
+            emit errorMessageChanged(tr("The lower bound must be less than the upper bound"));
             return false;
           }
           Point lowerBounds = designOfExperiment_.getLowerBounds();
@@ -376,7 +376,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             }
             else
             {
-              emit errorMessageChanged(tr("Delta must be lesser than (the upper bound - the lower bound)"));
+              emit errorMessageChanged(tr("Delta must be less than (the upper bound - the lower bound)"));
               return false;
             }
             break;

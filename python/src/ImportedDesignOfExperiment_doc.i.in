@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::ImportedDesignOfExperiment
-"Design of experiments.
+"Create a design of experiments, using an imported design.
 
 Available constructors:
     ImportedDesignOfExperiment(*name, physicalModel, fileName, columns*)

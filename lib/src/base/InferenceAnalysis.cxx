@@ -2,7 +2,7 @@
 /**
  *  @brief Inference analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -197,12 +197,11 @@ void InferenceAnalysis::launch()
       DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
       try
       {
-        Distribution distribution(distFactory.build(sample.getMarginal(i)));
-
         // Kolmogorov test
-        TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_));
+        TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distFactory, level_));
 
         // BIC test
+        Distribution distribution(distFactory.build(sample.getMarginal(i)));
         const Scalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
 
         // set fittingTestResult

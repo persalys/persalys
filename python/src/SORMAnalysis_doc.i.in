@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SORMAnalysis
-"SORM analysis.
+"Run a reliability analysis using the SORM method.
 
 Parameters
 ----------
@@ -42,5 +42,5 @@ Get the result:
 
 Returns
 -------
-result : :py:class:`openturns.SORMResult`
+result : :class:`~otguibase.SORMAnalysisResult`
     Result"

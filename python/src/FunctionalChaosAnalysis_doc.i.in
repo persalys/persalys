@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FunctionalChaosAnalysis
-"Functional chaos.
+"Create a Functional chaos analysis.
 
 Parameters
 ----------

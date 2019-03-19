@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget for the inference results
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -145,7 +145,7 @@ void InferenceResultWidget::buildInterface()
     plotWidget = new WidgetBoundToDockWidget(this);
     plotWidgetLayout = new QVBoxLayout(plotWidget);
 
-    DocumentationToolButton * infoQQPlotButton = new DocumentationToolButton(DocumentationToolButton::OpenTURNSUrlLink + "theory/data_analysis/graphical_fitting_test.html");
+    DocumentationToolButton * infoQQPlotButton = new DocumentationToolButton("theory/data_analysis/graphical_fitting_test.html", FileTools::docOT);
     plotWidgetLayout->addWidget(infoQQPlotButton);
 
     // --- qq plot
@@ -170,7 +170,7 @@ void InferenceResultWidget::buildInterface()
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
     paramGroupBoxLayout->addWidget(distParamTableView_);
     // button to open the OT documentation
-    infoButton_ = new DocumentationToolButton;
+    infoButton_ = new DocumentationToolButton("", FileTools::docOT);
     connect(infoButton_, SIGNAL(clicked()), this, SLOT(openUrl()));
     paramGroupBoxLayout->addWidget(infoButton_);
     analysisErrorMessageLabel_ = new TemporaryLabel;
@@ -438,6 +438,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // reset
+  pdfPlot_->show();
   pdfPlot_->clear();
   if (cdfPlot_ && qqPlot_)
   {
@@ -458,7 +459,10 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   }
 
   if (!isInferredDistribution)
+  {
+    pdfPlot_->hide();
     return;
+  }
 
   // -- get distribution
   const Distribution distribution = currentFittingTestResult_.getTestedDistributions()[resultIndex];
@@ -556,7 +560,7 @@ void InferenceResultWidget::openUrl()
     return;
 
   const String distName = getDistribution().getImplementation()->getClassName();
-  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
+  const QString link = FileTools::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
 
   // open url
   QDesktopServices::openUrl(QUrl(link));

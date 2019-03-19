@@ -2,7 +2,7 @@
 /**
  *  @brief Class to define data model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -99,7 +99,7 @@ String DataModel::getFileName() const
 void DataModel::setFileName(const String& fileName)
 {
   if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
 
   // get sample from file
   sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));
@@ -164,7 +164,7 @@ void DataModel::setColumns(const Indices& inputColumns,
   indices.add(outputColumns);
 
   if (!indices.check(getSampleFromFile().getDimension()))
-    throw InvalidArgumentException(HERE) << "A value can not be in the two columns lists at the same time.";
+    throw InvalidArgumentException(HERE) << "A value cannot be in the two columns lists at the same time.";
 
   // check names
   // - check input
@@ -189,7 +189,7 @@ void DataModel::setColumns(const Indices& inputColumns,
       variableNamesSet.insert(outputNames[i]);
 
     if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
-      throw InvalidArgumentException(HERE) << "Two variables can not have the same name.";
+      throw InvalidArgumentException(HERE) << "Two variables cannot have the same name.";
   }
 
   // set attributs
@@ -244,7 +244,7 @@ void DataModel::setNames(const Description & inputNames, const Description & out
       variableNamesSet.insert(outputNames[i]);
 
     if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
-      throw InvalidArgumentException(HERE) << "Two variables can not have the same name.";
+      throw InvalidArgumentException(HERE) << "Two variables cannot have the same name.";
   }
   // set attributs
   inputNames_ = inputNames;
@@ -322,14 +322,25 @@ String DataModel::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = " << inputColumns_.__str__() << "\n";
-  oss << "outputColumns = " << outputColumns_.__str__() << "\n";
+  if (getFileName().empty())
+  {
+    oss << "inputSample = ot.Sample(" << Parameters::GetOTSampleStr(getInputSample()) << ")\n";
+    oss << "inputSample.setDescription(" << Parameters::GetOTDescriptionStr(inputNames_) << ")\n";
+    oss << "outputSample = ot.Sample(" << Parameters::GetOTSampleStr(getOutputSample()) << ")\n";
+    oss << "outputSample.setDescription(" << Parameters::GetOTDescriptionStr(outputNames_) << ")\n";
+    oss << getName() << " = otguibase.DataModel('" << getName() << "', inputSample, outputSample)\n";
+  }
+  else
+  {
+    oss << "inputColumns = " << inputColumns_.__str__() << "\n";
+    oss << "outputColumns = " << outputColumns_.__str__() << "\n";
 
-  oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
-  oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
+    oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
+    oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
 
-  oss << getName() + " = otguibase.DataModel('" + getName() + "', ";
-  oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
+    oss << getName() << " = otguibase.DataModel('" << getName() << "', ";
+    oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
+  }
 
   return oss;
 }

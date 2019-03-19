@@ -198,7 +198,7 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
       if (role == Qt::ForegroundRole && (bounds.isEmpty() || !startPtInBounds))
         return QColor(Qt::red);
       if (role == Qt::ToolTipRole && bounds.isEmpty())
-        return tr("The lower bound must be lesser than the upper bound");
+        return tr("The lower bound must be less than the upper bound");
       else if (role == Qt::ToolTipRole && !startPtInBounds)
         return tr("The interval must contain the starting point");
     }

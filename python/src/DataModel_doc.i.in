@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::DataModel
-"Data model.
+"Create a data model from an imported dataset.
 
 The OTGui allows the user to load data samples and analyse them. They are considered as data models.
 

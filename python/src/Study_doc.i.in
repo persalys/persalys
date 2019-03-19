@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::Study
-"Study storage class."
+"Create the class to store a study."
 
 // ---------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ object : :class:`~otguibase.Study`
 Returns
 -------
 filesNames : :py:class:`openturns.Description`
-    The files names of all the opened studies"
+    The file names of all the opened studies"
 
 // ---------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ fileName : str
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::Study::Remove
-"Remove a study to the tree view.
+"Remove a study from the tree view.
 
 Parameters
 ----------
@@ -64,7 +64,7 @@ object : :class:`~otguibase.Study`
 Returns
 -------
 studies : sequence of :class:`~otguibase.Study`
-    Studies in the tree view"
+    Studies existing in the tree view"
 
 // ---------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ object : :class:`~otguibase.PhysicalModel`, :class:`~otguibase.LimitState`, :cla
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::Study::remove
-"Remove an object to the study.
+"Remove an object from the study.
 
 Parameters
 ----------
@@ -179,7 +179,7 @@ models : sequence of :class:`~otguibase.PhysicalModel`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::Study::getLimitStates
-"Limit states accessor.
+"Limit state accessor.
 
 Returns
 -------
@@ -189,7 +189,7 @@ states : sequence of :class:`~otguibase.LimitState`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::Study::getAnalyses
-"Analyses accessor.
+"Analysis accessor.
 
 Returns
 -------
@@ -209,7 +209,7 @@ designs : sequence of :class:`~otguibase.DesignOfExperiment`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::Study::getDataModels
-"Data models accessor.
+"Data model accessor.
 
 Returns
 -------

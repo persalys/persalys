@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of functional chaos
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -78,7 +78,7 @@ void FunctionalChaosResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Functional chaos")));
+  widgetLayout->addWidget(new TitleLabel(tr("Functional chaos"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#functionalchaosresult"));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDescription().getSize();

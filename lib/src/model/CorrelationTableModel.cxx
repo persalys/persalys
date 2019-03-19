@@ -2,7 +2,7 @@
 /**
  *  @brief QAbstractTableModel to define correlations
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -116,7 +116,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     {
       QString input1 = QString::fromUtf8(copula_.getDescription()[index.row()].c_str());
       QString input2 = QString::fromUtf8(copula_.getDescription()[index.column()].c_str());
-      emit errorMessageChanged(tr("The correlation between %1 and %2 can not be equal to '%3'.\n %4").arg(input1).arg(input2).arg(value.toString()).arg(ex.what()));
+      emit errorMessageChanged(tr("The correlation between %1 and %2 cannot be equal to '%3'.\n %4").arg(input1).arg(input2).arg(value.toString()).arg(ex.what()));
     }
     physicalModel_.blockNotification("");
   }

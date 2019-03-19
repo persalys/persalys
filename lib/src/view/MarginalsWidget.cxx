@@ -2,7 +2,7 @@
 /**
  *  @brief QStackedWidget to define marginals parameters
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +31,7 @@
 #include "otgui/InferenceResultWizard.hxx"
 #include "otgui/StudyItem.hxx"
 #include "otgui/DocumentationToolButton.hxx"
+#include "otgui/FileTools.hxx"
 
 #ifdef OTGUI_HAVE_OTMORRIS
 #include "otgui/ScreeningResultWizard.hxx"
@@ -183,7 +184,7 @@ void MarginalsWidget::buildInterface()
   rightFrameLayout->addWidget(plotWidget, 1);
 
   // button to open the OT documentation
-  DocumentationToolButton * infoButton = new DocumentationToolButton;
+  DocumentationToolButton * infoButton = new DocumentationToolButton("", FileTools::docOT);
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
   rightFrameLayout->addWidget(infoButton);
 
@@ -244,7 +245,7 @@ void MarginalsWidget::openUrl()
   const String distName = input.getDistribution().getImplementation()->getClassName();
 
   // open url
-  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
+  const QString link = FileTools::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 
@@ -467,9 +468,7 @@ void MarginalsWidget::distributionParametersChanged()
       DistributionDictionary::UpdateDistribution(distribution, parameters, parametersType);
 
       // create a new TruncatedDistribution
-      TruncatedDistribution newTruncatedDistribution;
-      newTruncatedDistribution.setDistribution(distribution);
-      newTruncatedDistribution.setBounds(truncatedDistribution.getBounds());
+      TruncatedDistribution newTruncatedDistribution(distribution, truncatedDistribution.getBounds());
 
       // update input distribution
       physicalModel_.blockNotification("ProbabilisticModel");

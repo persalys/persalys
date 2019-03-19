@@ -2,7 +2,7 @@
 /**
  *  @brief Class for analysis with stop criteria
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -61,7 +61,7 @@ UnsignedInteger WithStopCriteriaAnalysis::getMaximumCalls() const
 void WithStopCriteriaAnalysis::setMaximumCalls(const UnsignedInteger maxi)
 {
   if (maxi < 1)
-    throw InvalidValueException(HERE) << "The maximum calls number can not be null";
+    throw InvalidValueException(HERE) << "The maximum calls number cannot be null";
 
   maximumCalls_ = maxi;
 }

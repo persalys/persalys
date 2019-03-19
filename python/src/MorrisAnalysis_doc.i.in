@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::MorrisAnalysis
-"Morris analysis.
+"Perform a Morris analysis.
 
 Parameters
 ----------

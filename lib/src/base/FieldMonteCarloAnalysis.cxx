@@ -2,7 +2,7 @@
 /**
  *  @brief Computes Monte Carlo analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -85,9 +85,9 @@ void FieldMonteCarloAnalysis::launch()
   // check
   if (getMaximumCalls() < getBlockSize())
     throw InvalidValueException(HERE) << "The maximum calls number (" << getMaximumCalls()
-                                      << ") can not be lesser than the block size (" << getBlockSize() << ")";
+                                      << ") cannot be less than the block size (" << getBlockSize() << ")";
   if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
-    throw InvalidDimensionException(HERE) << "The outputs to be analysed "
+    throw InvalidDimensionException(HERE) << "The outputs of interest "
                                           << getInterestVariables() << " are not outputs of the model "
                                           << getPhysicalModel().getOutputNames();
 

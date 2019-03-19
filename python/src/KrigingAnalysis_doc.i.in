@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::KrigingAnalysis
-"Kriging.
+"Create a Kriging analysis.
 
 Parameters
 ----------

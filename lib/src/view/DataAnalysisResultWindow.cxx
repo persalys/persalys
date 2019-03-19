@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of data analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -50,5 +50,6 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
   designOfExperiment_ = result_.getDesignOfExperiment();
 
   titleLabel_->setText(tr("Data analysis"));
+  titleLabel_->setDocLink("user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#dataanalysisresult");
 }
 }

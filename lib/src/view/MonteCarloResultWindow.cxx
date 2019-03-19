@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of Monte Carlo
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -70,6 +70,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
   sampleSizeTitle_ = tr("Number of calls") + " ";
 
   titleLabel_->setText(tr("Monte Carlo method"));
+  titleLabel_->setDocLink("user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#montecarloresult");
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Central tendency parameters"));

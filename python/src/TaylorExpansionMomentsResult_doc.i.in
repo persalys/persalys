@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::TaylorExpansionMomentsResult
-"Taylor expansions for moments estimation results."
+"Get the results of Taylor expansions for moments estimation."
 
 // ---------------------------------------------------------------------
 

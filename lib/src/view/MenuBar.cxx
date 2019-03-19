@@ -2,7 +2,7 @@
 /**
  *  @brief QMenuBar
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 #include "otgui/MenuBar.hxx"
 
 #include "otgui/AboutDialog.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QSettings>
 #include <QFileInfo>
@@ -28,7 +29,6 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QMessageBox>
-#include <QCoreApplication>
 
 namespace OTGUI
 {
@@ -170,24 +170,8 @@ void MenuBar::clearRecentFilesActions()
 
 void MenuBar::openUserManual()
 {
-  // search the path of the documentation
-  const QString appliDirPath(QCoreApplication::applicationDirPath());
-  QDir dirPath(appliDirPath);
-  dirPath.cdUp();
+  const QString userManualFile(QDir::toNativeSeparators(FileTools::GetDocumentationDirectoryPath() + "/index.html"));
 
-  // case 1: on Linux when the documentation is built and put in the install directory
-  QString userManualFile = QDir::toNativeSeparators(QString("%1/%2/html/index.html").arg(INSTALL_PATH).arg(DOCUMENTATION_INSTALL_PATH));
-
-  // case 2: on Linux when using the AppImage
-  if (!QFileInfo(userManualFile).exists())
-  {
-    userManualFile = QDir::toNativeSeparators(QString("%1/%2/html/index.html").arg(dirPath.path()).arg(DOCUMENTATION_INSTALL_PATH));
-  }
-  // case 3: on Windows
-  if (!QFileInfo(userManualFile).exists())
-  {
-    userManualFile = QDir::toNativeSeparators(QString("%1/doc/html/index.html").arg(appliDirPath));
-  }
   // if file exists
   if (QFileInfo(userManualFile).exists())
   {

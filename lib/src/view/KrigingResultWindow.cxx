@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of functional chaos
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -66,7 +66,7 @@ void KrigingResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Kriging")));
+  widgetLayout->addWidget(new TitleLabel(tr("Kriging"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#krigingresult"));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDimension();

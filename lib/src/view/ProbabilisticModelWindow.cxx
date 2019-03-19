@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to define a probabilistic model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,7 @@ void ProbabilisticModelWindow::buildInterface()
 {
   QVBoxLayout * mainWidgetLayout = new QVBoxLayout(this);
 
-  mainWidgetLayout->addWidget(new TitleLabel(tr("Probabilistic model")));
+  mainWidgetLayout->addWidget(new TitleLabel(tr("Probabilistic model"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#probamodel"));
 
   QTabWidget * rootTab = new QTabWidget;
 

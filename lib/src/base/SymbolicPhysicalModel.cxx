@@ -2,7 +2,7 @@
 /**
  *  @brief Defines physical models thanks analytical formulas
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -85,7 +85,7 @@ void SymbolicPhysicalModel::setOutputs(const OutputCollection& outputs)
   for (UnsignedInteger i = 0; i < outputs.getSize(); ++i)
     outputNames.insert(outputs[i].getName());
   if (outputNames.size() != outputs.getSize())
-    throw InvalidArgumentException(HERE) << "Two outputs can not have the same name.";
+    throw InvalidArgumentException(HERE) << "Two outputs cannot have the same name.";
 
   for (UnsignedInteger i = 0; i < outputs.getSize(); ++i)
     formulaForEachOutput_[outputs[i].getName()] = "";
@@ -105,7 +105,7 @@ void SymbolicPhysicalModel::setOutputName(const String& outputName, const String
     if (getOutputNames()[i] != outputName)
       outputNames.insert(getOutputNames()[i]);
   if (outputNames.size() != getOutputDimension())
-    throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two outputs can not have the same name.";
+    throw InvalidArgumentException(HERE) << "The proposed name " << newName << " is not valid. Two outputs cannot have the same name.";
 
   const String outputFormula = formulaForEachOutput_[outputName];
   formulaForEachOutput_.erase(outputName);

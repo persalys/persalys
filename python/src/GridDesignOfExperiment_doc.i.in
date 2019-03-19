@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::GridDesignOfExperiment
-"Design of experiments.
+"Create a grid design of experiments.
 
 Available constructors:
     GridDesignOfExperiment(*name, physicalModel*)

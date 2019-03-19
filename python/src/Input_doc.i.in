@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::Input
-"Input Variable.
+"Create an input variable.
 
 Represents an input variable.
 

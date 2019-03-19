@@ -2,71 +2,455 @@
 User manual - Deterministic analyses
 ====================================
 
-The OTGui allows the user to launch the following types of deterministic analyses:
-  - Designs of experiments for model evaluations on a set of input values;
-  - Model evaluations;
-  - Screening;
-  - Optimization.
+The interface allows the user to launch the following types of deterministic analysis:
+  - Designs of experiments for model evaluations on a set of input values
+  - Model evaluations
+  - Screening
+  - Optimization
 
 .. _deterministicStudy:
 
-1- Model evaluation
+1- Designs of experiments
+=========================
+
+The user may defined a set of input values and then evaluate output variable at these points.
+
+1-1 Design of experiments creation
+''''''''''''''''''''''''''''''''''
+
+Create a new design of experiment through:
+  - The **Design of experiments** item in the context menu of the relevant model in the study tree
+    (item **Definition** and item **Probabilistic model** if it exists)
+
+    .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+        :align: center
+
+  - The **Design of experiments creation** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
+        :align: center
+
+  - The **New design of experiments** item in the context menu of the **Designs of experiments** item
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_contextMenu.png
+        :align: center
+
+.. _doeinputwizard:
+
+In the resulting window, the user has to choose between three types of design prior to
+click on the **Continue** button:
+
+  - Deterministic
+  - Probabilistic
+  - Import data
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperiment.png
+    :align: center
+
+If the model does not contain stochastic input variables the **Probabilistic** item is disabled.
+
+1-1-1 Deterministic design
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentDeterministic.png
+    :align: center
+
+This window enables to create a points grid by regularly discretizing a pavement with the number of
+points specified in each direction.
+
+The table lists all the input variables of the physical model.
+The user can choose the ones which vary and the ones which are fixed.
+A variable is fixed when the corresponding row is unselected (default: all variables
+are unselected and the grid contains only one point).
+
+- **Fixed input variables**:
+  The user can define the value of the variable (default: value in
+  the physical model definition). The values are expected to be floating points or integer.
+
+- **Varying input variables**:
+  The user has to define the lower and upper bound for the variable. The values
+  of the variable will be regularly spaced between the bounds. The bounds are always points of the grid.
+
+  The number of values is defined in the last column.
+  The combo box has two items **Levels** (default) and **Delta**.
+
+  - **Levels**: the user gives the number of points (default: 2).
+
+  - **Delta**: the user gives the space between two points (default: (upper bound - lower bound)). 
+
+
+1-1-2 Probabilistic design
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Define a probabilistic model to make this option available.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentProba.png
+    :align: center
+
+If stochastic input variables are present in the model, the **Probabilistic** item can be
+selected in the **Input Sample definition** window. Then the next window allows to specify:
+
+  - the type of the design: LHS (Latin Hyper Cube), Monte Carlo, Quasi-Monte Carlo.
+    If input variables are correlated, LHS design is not available
+  - the size of the design of experiments
+  - the seed of the random generator (default: 0, positive integer expected)
+
+1-1-3 Import data
+~~~~~~~~~~~~~~~~~
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentImport.png
+    :align: center
+
+The user can also import a design of experiments, from an external file. It is then necessary
+to set the link between the columns of the imported design and the input variables of the
+physical model, by clicking on the column name (default : first column for the first input
+variable, second column for the second input variable, etc...).
+
+
+.. _doeinputwindow:
+
+1-1-4 Design of experiments: input sample
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When the input sample is defined, a new element appears in the study
+tree, below **Designs of experiments**.
+
+Its context menu has the following actions:
+  - **Rename**: Rename the design of experiments
+  - **Modify**: Reopen the setting window to change the design of experiments parameters
+    (modify the inputs values leads to remove the output values from the design of experiments)
+  - **Export data**: Export the design of experiments into a file
+  - **Evaluate**: Open a setting window to evaluate the model at the input points
+    (if the design of experiments contains already output values, this item is disabled)
+  - **Remove**: Remove the design of experiments from the study
+
+A new window also appears:
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/doe_inputWindow.png
+    :align: center
+
+The window shows numerous tabs, some of which are interactively linked (**Table**,
+**Cobweb plot**, **Plot matrix** and **Scatter plot** tabs):
+when the user selects points on one of these representations, the same points are
+automatically selected in the other tabs.
+
+- The **Summary** tab describes the input sample: sample size,
+  minimum/maximum values of the selected variable (left column)
+
+- The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
+
+    - The cells are colored according to the value of the Spearman's coefficient.
+    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Select cells and Press Ctrl+C to copy values in the clipboard
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_dependence.png
+      :align: center
+
+- The **Table** tab contains all the points of the input sample. The table can be exported (**Export** button).
+
+  - Table interactivity:
+      - Left-click (optional: + Ctrl) on lines to select them
+      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on a column header and drag it in another place to change columns order
+ 
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableX.png
+        :align: center
+
+- The **Cobweb plot** tab displays all the points of the input sample.
+
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+      - Left-click on columns to select curves (multiple selection possible)
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_cobweb.png
+      :align: center
+
+- The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
+  scatter plots between each couple of input variables (off-diagonal).
+
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_plotMatrix.png
+      :align: center
+
+- The **Scatter plots** tab displays the scatter plot of two parameters.
+
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the variables to plot on X-axis and Y-axis (default: first versus second input)
+  - Graph interactivity:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_scatterPlot.png
+      :align: center
+
+- The **Parameters** tab lists the design parameters.
+
+1-2 Design of experiments: evaluation
+'''''''''''''''''''''''''''''''''''''
+
+New design of experiments can be evaluated through:
+  - the **Evaluate** item in the context menu of the relevant design in the study tree
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentContextMenu.png
+        :align: center
+
+  - the **Design of experiments evaluation** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/doeEvalBox.png
+        :align: center
+
+.. _doeevalwizard:
+
+1-2-1 Definition
+~~~~~~~~~~~~~~~~
+
+When an evaluation is required, a window appears, in order to set up:
+  - the output variables of interest: at least one must be selected to validate the window
+  - the block size – the number of runs launched simultaneously – for parallelization
+    purposes (default=1; expected= integer). It must be less than the input sample size.
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentEvaluationWizard.png
+      :align: center
+
+If the window is required by clicking on the box of the model diagram,
+it lists all the designs of experiments of the model in the combo box of the
+**Design of experiments** section.
+
+1-2-2 Launch
+~~~~~~~~~~~~~
+
+When the **Design of experiment: Evaluation** window is validated, a new element **Evaluation** appears
+in the study tree, below the relevant design of experiments item.
+
+Its context menu has the following actions:
+  - **Modify**: Reopen the setting window to change the evaluation parameters;
+  - **Metamodel**: Create a new metamodel.
+
+This item is associated with a window showing the parameter list, a progress bar
+and Run/Stop buttons, to launch or stop the analysis.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/analysisWindow.png
+    :align: center
+
+
+.. _doeevalresult:
+
+1-2-3 Results
+~~~~~~~~~~~~~
+
+When the analysis is finished or stopped, the following window appears.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentMinMax.png
+    :align: center
+
+The window shows numerous tabs, some of which are interactively linked (**Table**,
+**Cobweb plot**, **Plot matrix** and **Scatter plot** tabs):
+when the user selects points on one of these representations, the same points are
+automatically selected in the other tabs.
+
+- The **Summary** tab summarizes the results of the design, for a selected variable (left column):
+  sample size, minimum/maximum values, input values at
+  the extrema of the outputs, moments estimates and empirical quantiles.
+
+- The **PDF/CDF** tab presents the PDF/CDF of the variables
+  together with a `kernel smoothing <http://openturns.github.io/openturns/latest/theory/data_analysis/kernel_smoothing.html>`_ representation.
+
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the graphic type: PDF (default) or CDF
+  - Graph interactivity:
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/doePDF.png
+        :align: center
+
+- The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
+  of the variables.
+
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/doeBoxPlot.png
+        :align: center
+
+- The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
+
+    - The cells are colored according to the value of the Spearman's coefficient.
+    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Select cells and Press Ctrl+C to copy values in the clipboard
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_dependence.png
+      :align: center
+
+- The **Table** tab shows the input/output samples and additional tabs, if some points
+  failed or were not evaluated (see below). The table can be exported (**Export** button).
+
+  - Table interactivity:
+      - Left-click (optional: + Ctrl) on lines to select them
+      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on a column header and drag it in another place to change columns order
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
+      :align: center
+
+- The **Cobweb plot** tab displays all the points of the design of experiments.
+
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+      - Left-click on columns to select curves (multiple selection possible)
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentCobweb.png
+      :align: center
+
+- The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
+  scatter plots between each couple of input/output variables (off-diagonal).
+
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentPlotMatrix.png
+      :align: center
+
+- The **Scatter plots** tab displays the scatter plot of two parameters.
+
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+  - Graph interactivity:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatter.png
+      :align: center
+
+- The **Parameters** tab lists the evaluation parameters.
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentParameters.png
+        :align: center
+
+- The **Model** tab shows the model content used to perform the analysis.
+
+Particular situations:
+  - In some cases, points can fail (i.e. division by zero):
+    the **Table** tab will then show additional tabs:
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableIfFailedPoints.png
+        :align: center
+
+    - The **Table** tab shows the input/output samples
+
+      - Table interactivity:
+          - Left-click (optional: + Ctrl) on lines to select them
+          - Left-click on column header to sort values in ascending or descending order 
+          - Left-click on a column header and drag it in another place to change columns order
+
+    - The **Failed points** tab shows all the failed input points
+    - The **Cobweb plot** tab displays all the input points. The status
+      of each point is shown in the last column **Status** (failed points=0; evaluated points=1).
+
+      - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+      - Graph interactivity:
+          - Left-click on columns to select curves (multiple selection possible)
+
+      .. image:: /user_manual/graphical_interface/deterministic_analysis/failedPointsCobweb.png
+          :align: center
+
+      On the figure above, the failed values are due to null values
+      for the *Ks* input variable.
+
+    - The **Scatter plot** tab displays the scatter plot of two parameters (default: first
+      versus second input), with failed points in red and evaluated points in green.
+
+      - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+        select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+      - Graph interactivity:
+          - Right-click to select points
+          - Left-click to translate the graph
+          - Mouse wheel up/down to zoom in/zoom out
+
+      .. image:: /user_manual/graphical_interface/deterministic_analysis/failedPointsScatter.png
+          :align: center
+
+      On the figure above, the failed values are due to null values
+      for the *Ks* input variable.
+
+  - Some points can also end up not being evaluated (i.e. interrupted analysis). The **Table**
+    tab then displays informative tabs about these points:
+
+    - The list of these points in the **Non-evaluated points** tab
+    - The position of these points (non-evaluated points in blue and evaluated ones in green)
+      in the **Scatter plot** tab (default: first vs second input plot).
+      Graph parameters can be set up in the :ref:`Graph settings <secondgraphsettings>` window.
+
+      .. image:: /user_manual/graphical_interface/deterministic_analysis/notEvaluatedPointsScatter.png
+          :align: center
+
+.. _modelEvaluation:
+
+2- Model evaluation
 ===================
 
 The user may evaluate the physical model for defined input values.
 
-New model evaluations can be created through:
-  - the context menu of the **Definition** item of the relevant physical model in the study tree;
-  - the **Model evaluation** box of the model diagram
-  - the context menu of the **Evaluation** item (if it already exists).
+Create a new model evaluation through:
+  - The **Definition** item in the context menu of the relevant model in the study tree
 
-1-1 Definition
+    .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+        :align: center
+
+  - The **Model evaluation** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
+        :align: center
+ 
+  - The **New evaluation** item in the context menu of the **Evaluation** section
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/evaluation_contextMenu.png
+        :align: center
+
+.. _vectmodelevalwizard:
+
+2-1 Definition
 ''''''''''''''
-
-When requiring this analysis the following window appears to define its parameters.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluation.png
     :align: center
 
-The user has to define the value of each input variable
-for which the evaluation has to be performed. The values are expected
-to be floating points or integer. The default values are the ones defined in the physical
-model window.
+When an evaluation is required, a window appears, in order to set up:
+  - The outputs of interest (**Select outputs** - default: all outputs are evaluated).
+    At least one variable must be selected to validate the window.
+  - The value of the input variables (default: value in the physical model definition).
+    The values are expected to be floating points or integer.
 
-The user can choose the outputs to evaluate by clicking on the button **-- Select outputs --**
-at the top of the window:
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
-    :align: center
-
-By default all the output variables are evaluated.
-
-3-2 Launch
+2-2 Launch
 '''''''''''
 
-When validating this window, a new element appears in the study tree below an item
-**Evaluation**.
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluationItem.png
-    :align: center
+When the **Model Evaluation** window is validated, a new element appears in the study
+tree, below **Evaluation**.
 
 Its context menu has the following actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Remove**: Remove the analysis from the study.
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis from the study
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analysisContextMenu.png
-    :align: center
-
-This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+This item is associated with a window showing the parameter list, a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/evaluationWindow.png
     :align: center
 
-Click on the **Start** button launches the evaluation.
+.. _modelevalresult:
 
-3-3 Results
+2-3 Results
 '''''''''''
 
 When the evaluation is finished, a result window appears. It gathers the coordinates of
@@ -75,330 +459,48 @@ the evaluation point and the corresponding output values.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluationResults.png
     :align: center
 
-
-2- Designs of experiments
-=========================
-
-The user may defined a set of input values and then evaluate output variable at these points.
-
-2-1 Design of experiments creation
-''''''''''''''''''''''''''''''''''
-
-New design of experiments can be created through:
-  - the context menu of the relevant model in the study tree (item **Definition** and
-    item **Probabilistic model** if it exists);
-  - the **Design of experiments creation** box of the model diagram
-  - the context menu of the **Designs of experiments** item (if it already exists).
-
-In the resulting window, the user has to choose between three types of design prior to
-click on the **Continue** button:
-
-- Deterministic
-- Probabilistic
-- Import data
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperiment.png
-    :align: center
-
-If the model does not contain stochastic input variables the **Probabilistic** item is disabled.
-
-2-1-1 Deterministic design
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentDeterministic.png
-    :align: center
-
-To define a deterministic design, the user has to choose the input variables which
-will vary by selecting them with the corresponding check box (default: all variables
-are unselected).
-
-- **Varying input variables**:
-  The user has to define the lower and upper bound for the variable. The values
-  of the variable will be regularly spaced between the bounds.
-
-  If **Levels** is selected in the last column (selected by default),
-  the number of intermediate values is defined by the level value. 
-
-  If **Delta** is selected in the last column (click on the last column name),
-  the space between two points is defined by the delta parameter. The bounds are always added.
-
-- **Fixed input variables**:
-  The user has to define the value of the variable. By default it is set to its
-  value in the physical model definition. The values are expected to be floating points or integer.
-
-2-1-2 Probabilistic design
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-Define a probabilistic model to make this option available.
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentProba.png
-    :align: center
-
-Three types of designs are available:
-  - LHS (Latin Hyper Cube)
-  - Monte Carlo
-  - Quasi-Monte Carlo
-
-If input variables are correlated, only the Monte Carlo design is available.
-
-The user may set:
-  - the size of the design of experiments;
-  - the seed the random generator (default: 0, positive integer expected).
-
-2-1-3 Import data
-~~~~~~~~~~~~~~~~~
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentImport.png
-    :align: center
-
-The user may also use an external file to import a design of experiments.
-The user has to set the link between the columns of the imported design and
-the input variables of the physical model by clicking on the column name
-(default : first column for the first input
-variable, second column for the second input variable, etc...)
-
-2-1-4 Design of experiments input sample
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When validating the previous window, a new item is added in the study tree below an item named
-**Designs of experiments**. This item is associated with a window where the input sample of
-the design of experiments appears in a table.
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableX.png
-    :align: center
-
-Its context menu has the following actions:
-  - **Rename**: Rename the design of experiments;
-  - **Modify**: Reopen the setting window to change the design of experiments parameters
-    (modify the inputs values leads to remove the output values from the design of experiments);
-  - **Export data**: Export the design of experiments into a file;
-  - **Evaluate**: Open a setting window to evaluate the model at the input points
-    (if the design of experiments contains already output values, this item is disabled);
-  - **Remove**: Remove the design of experiments from the study.
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentContextMenu.png
-    :align: center
-
-2-2 Design of experiments evaluation
-''''''''''''''''''''''''''''''''''''
-
-New design of experiments can be evaluated through:
-  - the context menu of the relevant design in the study tree;
-  - the **Design of experiments evaluation** box of the model diagram
-
-2-2-1 Definition
-~~~~~~~~~~~~~~~~
-
-When requiring an evaluation a window appears to set:
-  - the interest output variables (at least one of the listed outputs to validate the window);
-  - the block size (i.e. number of runs launched at the same time), for parallelization purpose
-    (default: 1; integer expected). It must be inferior to the input sample size.
-
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentEvaluationWizard.png
-      :align: center
-
-When clicking on the box of the model diagram, if the physical model contains several
-not evaluated design of experiments, this window lists all of them in the combo box of the
-**Design of experiments** section.
-
-2-2-2 Launch
-~~~~~~~~~~~~~
-
-When validating this window, a new item named **Evaluation** is added in the study tree below
-the design of experiments item.
-
-Its context menu has two actions:
-  - **Modify**: Reopen the setting window to change the evaluation parameters;
-  - **Metamodel**: Create a new metamodel.
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentEvaluationContextMenu.png
-    :align: center
-
-This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/analysisWindow.png
-    :align: center
-
-Click on **Start** launches the model evaluation on all the points defined in the
-design of experiments. The user can stop the evaluation by clicking on the **Stop** button.
-
-2-2-3 Results
-~~~~~~~~~~~~~
-
-When the analysis is finished or stopped, the following window appears.
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentMinMax.png
-    :align: center
-
-Tabs present the design of experiments and the analysis of the outputs.
-The **Table** tab, the **Cobweb plot** tab, the **Plot matrix** tab and the **Scatter plots** tab
-are linked. It means that when the user select some points on one of these representations,
-these points are automatically selected on the others.
-
-- The **Summary** tab summarizes the result of the design. The minimum and maximum values
-  of the selected output (at the left of the window) are presented with the input values which has
-  led to these extrema.
-
-- The **Table** tab displays the input and output samples.
-
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
-      :align: center
-
-  This tab can also display other results:
-
-  - If the some points have failed, three tabs are added:
-
-    - The **Failed points** tab containing a table with all the failed points;
-
-    - The **Cobweb plot** tab displaying all the points of the design of experiments.
-      Its last column named **Status**, says if the point has failed (status=0) or not (status=1).
-
-      .. image:: /user_manual/graphical_interface/deterministic_analysis/failedPointsCobweb.png
-          :align: center
-
-      The user can select the variables to show and the order of the axes with the graphic settings
-      below the study tree.
-      The **Export** button opens a dialog box for the user to select where the
-      figure has to be saved.
-
-    - The **Scatter plots** tab presents the scatter plot of two parameters
-      (Default: first input vs second input). The succeeded points are in green and the failed ones in red.
-
-      .. image:: /user_manual/graphical_interface/deterministic_analysis/failedPointsScatter.png
-          :align: center
-
-      The user can configure the scatter plot with the graphic settings below the study tree.
-
-      .. image:: /user_manual/graphical_interface/deterministic_analysis/scatterGraphSetting.png
-          :align: center
-
-      The user can define:
-        - The title of the graph, expected to be a string;
-        - The variable plotted on the X-axis, by default the first input;
-        - The variable plotted on the Y-axis, by default the second input.
-
-      The scatter plot is plotted in the ranks space when the user checks **Ranks**.
-
-      It has two tabs, **X-axis** and **Y-axis** where the user can define:
-        - The axis title, expected to be a string;
-        - The minimum bound of the axis, expected to be a floating point;
-        - The maximum bound of the axis, expected to be a floating point;
-        - A log scale (the checkbutton is available only if the values of the axis are positive).
-      The **Plot style** tab enables to define:
-        - the plot color;
-        - the marker style (Cross, Circle, Diamond, Square, Plus);
-        - the marker size.
-
-      The **Export** button opens a dialog box for the user to select where the
-      figure has to be saved.
-
-  - If the some points have not been evaluated (the user stopped the analysis), two tabs are added:
-
-    - The **Not evaluated points** tab containing a table with all the points which have not been evaluated;
-
-    - The **Scatter plots** tab presents the scatter plot of two parameters
-      (Default: first input vs second input). The succeeded points are in green and the not evaluated ones in blue.
-
-      .. image:: /user_manual/graphical_interface/deterministic_analysis/notEvaluatedPointsScatter.png
-          :align: center
-
-      The user can configure the scatter plot with the graphic settings below the study tree.
-
-- The **Cobweb plot** tab displays the Cobweb plot containing the input and output variables.
-
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentCobweb.png
-      :align: center
-
-  The user can select the variables to show and the order of the axes with the graphic settings
-  below the study tree.
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
-
-- The **Plot matrix** tab displays the plot matrix which gathers:
-    - Out of the diagonal: the scatter plot of each couple of variables (inputs and outputs);
-    - On the diagonal: the histogram of the distribution of each variable.
-
-  .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentPlotMatrix.png
-      :align: center
-
-  The user can select the variables to show and the order of the lines with the graphic settings
-  below the study tree.
-  The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
-
-- The **Scatter plots** tab presents the scatter plot of two parameters (Default: first output vs first input).
-
-    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentScatter.png
-        :align: center
-
-    The user can configure the scatter plot with the graphic settings below the study tree.
-
-    The user can define:
-      - The title of the graph, expected to be a string;
-      - The variable plotted on the X-axis, by default the first input;
-      - The variable plotted on the Y-axis, by default the first output.
-
-    The scatter plot is plotted in the ranks space when the user checks **Ranks**.
-
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point;
-      - A log scale (the checkbutton is available only if the values of the axis are positive).
-    The **Plot style** tab enables to define:
-      - the plot color;
-      - the marker style (Cross, Circle, Diamond, Square, Plus);
-      - the marker size.
-
-    The **Export** button opens a dialog box for the user to select where the
-    figure has to be saved.
-
-- The **Parameters** tab lists the analysis parameters.
-
-    .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentParameters.png
-        :align: center
-
-
 3- Screening
 ===================
 
-OTGui proposes one method of screening, the `Morris method <http://openturns.github.io/otmorris/master/index.html>`_.
+The interface proposes one method of screening, the `Morris method <http://openturns.github.io/otmorris/master/user_manual/user_manual.html>`_.
 
 New screening analysis can be created thanks to:
-  - the context menu of the **Definition** item of the relevant physical model in the study tree;
-  - the **Screening** box of the physical model diagram.
+  - the **Screening** item in the context menu of the relevant model in the study tree
+
+    .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+        :align: center
+
+  - the **Screening** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
+        :align: center
+
+  - the **New Analysis** item in the context menu of the **Screening** section
+
+.. _screeningwizard:
 
 3-1 Definition
 ''''''''''''''
 
-When requiring this analysis the following window appears to define its parameters.
+When the analysis is required, the following window appears, in order to set up:
+  - The outputs of interest (**Select outputs** - default: all outputs are analyzed)
+  - The screening **Method** (only the Morris method is available for now)
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisWizard_FirstPage.png
     :align: center
 
-One method is available:
-  - Morris.
 
-The user can choose the outputs to analyze by clicking on the button **-- Select Outputs --**
-at the top of the window:
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
-    :align: center
-
-By default all the output variables are analyzed.
-
-On the second page, the user has to define the lower and upper bounds for each variable.
+The next window enables the user to define the lower and upper bounds of each variable.
 The values of the variables will be regularly spaced between these bounds.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisWizard_secondPage.png
     :align: center
 
-In the section **Parameters**, on the third page, the user can define:
-  - The number of trajectories (default: 10; integer expected)
-  - The level (default: 5; integer expected) to define a regular grid.
-
-In the advanced parameters (default: hidden), the user can define:
-
-- The seed of the random generator (default: 0, positive integer expected).
+In the third window (**Morris Parameters**), the user can set up:
+  - The number of trajectories (default:10; integer expected)
+  - The level to define a regular grid (default: 5; integer expected)
+  - **Advanced Parameters** (default: hidden): the seed of the random generator (default: 0,
+    positive integer expected)
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisWizard_thirdPage.png
     :align: center
@@ -407,22 +509,21 @@ In the advanced parameters (default: hidden), the user can define:
 3-2 Launch
 ''''''''''''''
 
-When validating the previous window, a new element appears in the study tree below an item
-named **Screening**.
+When the « Screening analysis » window is validated, a new element appears in
+the study tree, below **Screening**.
 
 Its context menu has the following actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Remove**: Remove the analysis from the study.
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis from the study
 
-This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+This item is associated with a window showing the parameter list, a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisWindow.png
     :align: center
 
-Click on the **Start** button launches the analysis. The user can stop the analysis by clicking
-on the **Stop** button.
+.. _morrisresult:
 
 3-3 Results
 ''''''''''''''
@@ -432,11 +533,11 @@ When the analysis is finished or stopped, a result window appears.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisResultWindow.png
     :align: center
 
-At the left of the result window the section **Outputs** enables the user to choose the result to display.
+On the left of the result window, the **Outputs** section allows the user to select the result to display.
 
-The results window gathers 6 tabs:
+The results window gathers several tabs:
 
-- The tab **Elementary effects** presents for a selected output:
+- The **Elementary effects** tab presents for a selected output (left column):
   a table with the effects of each input variable and the mean of the absolute value (:math:`\mu*`),
   the standard deviation (:math:`\sigma`) and the mean (:math:`\mu`) of the elementary effects.
   These values are plotted in the graphs :math:`(\mu*, \sigma)` and :math:`(\mu*, \mu)`.
@@ -447,96 +548,87 @@ The results window gathers 6 tabs:
   The types of effects are determined automatically according to two criteria
   modeled by two lines in the graph :math:`(\mu*, \sigma)`:
 
-  - the green vertical dotted line, called 'No effect boundary' is defined by:
+  - the green vertical dotted line, called *No effect boundary* is defined by:
 
     :math:`\mu_b* = \frac{max(\mu_i*) - min(\mu_i*)}{2}`, (with :math:`i` in :math:`[0, N]` and :math:`N` the number of inputs).
-    It separates the variables into two groups:
 
-    - the variables which have not an effect (:math:`\mu_i < \mu_b*`)
-    - the variables which have an effect (:math:`\mu_i < \mu_b*`)
+    It separates the variables into two groups:
+      - the variables which have no effect (:math:`\mu_i < \mu_b*`)
+      - the variables which have an effect (:math:`\mu_i < \mu_b*`)
 
     This boundary :math:`\mu_b*` can be changed by the user by clicking (left-click) on the X-axis.
 
   - the blue dotted line, called 'cv = 0.5' is defined by: :math:`cv = \frac{\sigma_i}{\mu_i*} = 0.5`.
-    It separates the variables into two groups:
 
-    - the variables which have a linear effect (:math:`\frac{\sigma_i}{\mu_i*} <= 0.5`)
-    - the variables which have a non-linear effect or interaction (:math:`\frac{\sigma_i}{\mu_i*} > 0.5`)
+    It separates the variables into two groups:
+        - the variables which have a linear effect (:math:`\frac{\sigma_i}{\mu_i*} <= 0.5`)
+        - the variables which have a non-linear effect or interaction (:math:`\frac{\sigma_i}{\mu_i*} > 0.5`)
 
   - On the graph :math:`(\mu*, \mu)`, the blue lines separate the variables into two groups:
-
-    - the monotonic variables (:math:`|\mu_i| \simeq \mu_i*`)
-    - the non-monotonic variables (:math:`|\mu_i| < \mu_i*`)
+      - the monotonic variables (:math:`|\mu_i| \simeq \mu_i*`)
+      - the non-monotonic variables (:math:`|\mu_i| < \mu_i*`)
 
     The sign of :math:`\mu_i` gives the direction of the effect.
 
-  By default, in the table, the variables with no effect are deselected.
-  The user can de/select variables manually:
+  By default, in the table, the variables with no effect are unselected.
 
-  - by changing the state of the checkbox associated with the variable in the table
-  - by de/selecting points in the graphs (select point with a right-click, then click on de/select
-    button of the context menu which appears).
+  The user can de/select variables manually by:
+      - changing the state of the check button associated with the variable in the table
+      - de/selecting points in the graphs (select point with a right-click, then click on de/select
+        button of the context menu which appears).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisGraph_selection.png
       :align: center
 
   The selection of the influential variables is saved. This result can be used in
-  the probabilistic model definition window to transform the non influential
+  the probabilistic model definition window to transform the non-influential
   stochastic variables into deterministic variables.
 
-- The **Table** tab presents the sample generated by the Morris method and the resulting output values.
+- The **Table** tab shows the sample generated by the Morris method and the resulting output values.
 
-- The **Cobweb plot** tab displays the Cobweb plot containing the input and output variables.
+  - Table interactivity:
+      - Left-click (optional: + Ctrl) on lines to select them
+      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on a column header and drag it in another place to change columns order
+
+- The **Cobweb plot** tab displays the sample.
+
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+      - Left-click on columns to select curves (multiple selection possible)
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisCobweb.png
       :align: center
 
-  The user can select the variables to show and the order of the axes with the graphic settings
-  below the study tree. The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+- The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
+  scatter plots between each couple of input/output variables (off-diagonal).
 
-- The **Plot matrix** tab displays the plot matrix which gathers:
-    - Out of the diagonal: the scatter plot of each couple of variables (inputs and outputs);
-    - On the diagonal: the histogram of the distribution of each variable.
+  - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisPlotMatrix.png
       :align: center
 
-  The user can select the variables to show and the order of the lines with the graphic settings
-  below the study tree. The **Export** button opens a dialog box for the user to select where the
-  figure has to be saved.
+- The **Scatter plots** tab displays the scatter plot of two parameters.
 
-- The **Scatter plots** tab presents the scatter plot of two parameters (Default: first output vs first input).
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+    select the variables to plot on X-axis and Y-axis (default: first output versus first input)
+  - Graph interactivity:
+      - Right-click to select points
+      - Left-click to translate the graph
+      - Mouse wheel up/down to zoom in/zoom out
 
     .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisScatter.png
         :align: center
 
-    The user can configure the scatter plot with the graphic settings below the study tree.
+- The **Parameters** tab reminds the user of all the parameters values used to perform the analysis.
 
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyScatterConfig.png
-        :align: center
+- The **Model** tab shows the model content used to perform the analysis.
 
-    The user can define:
-      - The title of the graph, expected to be a string;
-      - The variable plotted on the X-axis, by default the first input;
-      - The variable plotted on the Y-axis, by default the first output.
-
-    The scatter plot is plotted in the ranks space when the user checks **Ranks**.
-
-    It has two tabs, **X-axis** and **Y-axis** where the user can define:
-      - The axis title, expected to be a string;
-      - The minimum bound of the axis, expected to be a floating point;
-      - The maximum bound of the axis, expected to be a floating point;
-      - A log scale (the checkbutton is available only if the values of the axis are positive).
-    The **Plot style** tab enables to define:
-      - the plot color;
-      - the marker style (Cross, Circle, Diamond, Square, Plus);
-      - the marker size.
-
-    The **Export** button opens a dialog box for the user to select where the
-    figure has to be saved.
-
-- The **Parameters** tab reminds the user all the parameters values to perform the analysis.
+.. _screeningresultwizard:
 
 3-4 Use results
 ''''''''''''''''''
@@ -552,7 +644,7 @@ The followed window appears (only if a result exists):
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisResultWizard.png
     :align: center
 
-Choose the suitable result and click on the **Finish** button.
+Select the suitable result and click on the **Finish** button.
 The probabilistic model is modified as follows:
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/probaModelAfter.png
@@ -563,89 +655,90 @@ Of course loading a result while all the input variables are already determinist
 4- Optimization
 ===============
 
-The user may optimize the physical model.
+The user may `optimize <http://openturns.github.io/openturns/latest/theory/numerical_methods/optimization_algorithm.html>`_ the physical model.
 
 New model optimization can be created through:
-  - the context menu of the **Definition** item of the relevant physical model in the study tree;
+  - the **Optimization** item in the context menu of the relevant model in the study tree
+
+    .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+        :align: center
+
   - the **Optimization** box of the model diagram
-  - the context menu of the **Optimization** item (if it already exists).
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
+        :align: center
+
+  - the **New Analysis** context menu of the **Optimization** section
+
+.. _optimizationwizard:
 
 4-1 Definition
 ''''''''''''''
 
-When requiring this analysis the following window appears to define its parameters.
+When this analysis is required, the following window appears, in order to set up:
+  - The output of interest (**Select output** - default: the first output is analyzed)
+  - The method of optimization (default: Cobyla).
+    The two first methods **Cobyla** and **TNC** are proposed by OpenTURNS.
+    The other methods are solvers from the non-linear optimization library
+    `NLopt <https://nlopt.readthedocs.io/en/latest/>`_ (if it is installed).
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardFirstPage.png
     :align: center
 
-The first page enables to define the output to optimize
-by clicking on the button **-- Select outputs --** at the top of the window:
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analyses_selectionOutput.png
-    :align: center
-
-By default the first output variable is optimized.
-
-The user may also define the method of optimization. **Cobyla** is used by default.
-The two first methods **Cobyla** and **TNC** are proposed by OpenTURNS.
-The other methods are solvers from the non-linear optimization library NLopt (if it is installed).
-
-When clicking on the **Continue** button the following page appears:
+In the table of the next window:
+  - *First column*: Select the inputs which will vary by checking off the corresponding line
+    (default: all inputs vary)
+    At least one input must vary.
+  - *Second column*: description of the variables (defined in the model)
+  - *Third column*: Define the starting point of the optimization
+    (default: value in the physical model definition)
+  - *Fourth and Fifth columns*: Define the bounds of the variable inputs.
+    The lower bound must be less than the upper bound.
+    Check off/uncheck a cell to make the bound finite/infinite.
+    The interval must contain the initial value (third column).
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardSecondPage.png
     :align: center
 
-The user can choose the inputs which will vary by selecting the corresponding line
-in the first column of the table. At least one input must vary.
-
-The user has to define the starting point of the optimization in the third column
-of the table. The default values are the ones defined in the physical model window.
-
-The fourth and fifth columns enable to define the bounds of the variable inputs.
-The lower bound must be lesser than the upper bound.
-The fourth and fifth columns are checkable to specify if the bounds are finite or not.
-The interval of the variable inputs must contain the initial value written in the
-third column.
 
 The values of the table are expected to be floating points or integer.
 
-When a rule is not respected, the input name is colored in red, when clicking on
-the **Continue** button an error message appears and it is impossible to go to the next page.
+When a rule is not respected:
+  - the input name is colored in red
+  - an error message appears when clicking on the **Continue** button
+  - it is impossible to go to the next page
 
-When clicking on the **Continue** button the following page appears:
+In the third window set up:
+  - the type of the optimization: Minimization or Maximization (default: Minimization)
+  - the stopping criteria:
+      - the maximum number of function evaluations (default: 100, positive integer expected)
+      - the errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardThirdPage.png
     :align: center
-
-The user has to define the type of the optimization:
-  - Minimization or Maximization (default: Minimization)
-
-The user may also set the stop criteria of the optimization:
-  - The maximum number of functin evaluations (default: 100, positive integer expected)
-  - The errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
 
 
 4-2 Launch
 ''''''''''
 
-When validating this window, a new element appears in the study tree below an item
+When the « Optimization » window is validated, a new element appears in the study tree, below
 **Optimization**.
 
 Its context menu has the following actions:
-  - **Rename**: Rename the analysis;
-  - **Modify**: Reopen the setting window to change the analysis parameters;
-  - **Remove**: Remove the analysis from the study.
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis
 
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/analysisContextMenu.png
-    :align: center
-
-This item is associated with a window displaying the list of the parameters, a
-progress bar and the buttons **Start** (enabled) and **Stop** (disabled).
+This item is associated with a window showing the parameter list, a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWindow.png
     :align: center
 
-Click on the **Start** button launches the evaluation.
+Click on the **Start** button to launch the analysis.
+
+
+.. _optimresult:
 
 4-3 Results
 '''''''''''
@@ -659,7 +752,7 @@ The results window gathers the following tabs:
 
 - The **Result** tab includes
     - The optimal point
-    - The optimization stop criteria value:
+    - The optimization stopping criteria value:
         - The number of function evaluations;
         - The errors: absolute, relative, residual and constraint errors.
 
@@ -667,7 +760,14 @@ The results window gathers the following tabs:
     - The optimal value convergence graph
     - The convergence graph of the errors
 
+    - Graph interactivity:
+        - Left-click to translate the graph
+        - Mouse wheel up/down to zoom in/zoom out
+
   .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationResultWindowConvergence.png
       :align: center
 
-- The **Parameters** tab reminds the user all the parameters values to perform the analysis.
+- The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
+
+- The **Model** tab shows the model content used to perform the analysis.
+

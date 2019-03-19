@@ -2,7 +2,7 @@
 /**
  *  @brief Analysis FORM
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -88,7 +88,16 @@ void FORMAnalysis::launch()
   result_.formResult_ = algo.getResult();
 
   // compute event probability sensitivity (not computed by default)
-  result_.formResult_.getEventProbabilitySensitivity();
+  try
+  {
+    result_.formResult_.getEventProbabilitySensitivity();
+  }
+  catch (InvalidArgumentException & ex)
+  {
+    // do nothing
+    // http://trac.openturns.org/ticket/916
+    LOGWARN(" Error when computing the event probability sensitivity");
+  }
 }
 
 
@@ -156,7 +165,7 @@ void FORMAnalysis::save(Advocate & adv) const
 {
   ReliabilityAnalysis::save(adv);
   ApproximationAnalysis::save(adv);
-  adv.saveAttribute("result_", result_);
+  adv.saveAttribute("formanalysisresult_", result_);
 }
 
 
@@ -165,7 +174,7 @@ void FORMAnalysis::load(Advocate & adv)
 {
   ReliabilityAnalysis::load(adv);
   ApproximationAnalysis::load(adv);
-  adv.loadAttribute("result_", result_);
+  adv.loadAttribute("formanalysisresult_", result_);
   // can open older xml files
   if (!result_.getFORMResult().getStandardSpaceDesignPoint().getDimension())
   {

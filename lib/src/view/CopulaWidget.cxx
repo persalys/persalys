@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to define copula
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +29,7 @@
 #include "otgui/CorrelationTableModel.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
 #include "otgui/DocumentationToolButton.hxx"
+#include "otgui/FileTools.hxx"
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -116,7 +117,7 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   parameterLayout_ = new QVBoxLayout(subWidget);
 
   // button to open the OT documentation
-  DocumentationToolButton * infoButton = new DocumentationToolButton;
+  DocumentationToolButton * infoButton = new DocumentationToolButton("", FileTools::docOT);
   connect(infoButton, SIGNAL(clicked()), this, SLOT(openDocUrl()));
   parameterLayout_->addWidget(infoButton);
 
@@ -260,7 +261,7 @@ void CopulaWidget::openDocUrl()
   const String copulaName = copula_.getImplementation()->getClassName();
 
   // open url
-  const QString link = DocumentationToolButton::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(copulaName.c_str()) + ".html";
+  const QString link = FileTools::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(copulaName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
 }
 }

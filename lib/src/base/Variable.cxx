@@ -2,7 +2,7 @@
 /**
  *  @brief The class that implements the variable of the physical models
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -77,7 +77,7 @@ String Variable::__repr__() const
 void Variable::setName(const String &name)
 {
   if (name.empty() || name.find_first_not_of(" \t\n\v\f\r") == name.npos)
-    throw InvalidArgumentException(HERE) << "The variable name can not be empty";
+    throw InvalidArgumentException(HERE) << "The variable name cannot be empty";
   PersistentObject::setName(name);
 }
 

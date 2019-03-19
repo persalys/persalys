@@ -2,7 +2,7 @@
 /**
  *  @brief Class for Reliability Analysis using simulation methods
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -125,7 +125,7 @@ void SimulationReliabilityAnalysis::setBlockSize(const UnsignedInteger size)
   if (size < 1)
     throw InvalidValueException(HERE) << "The block size must be greater than 0";
   if (size > getMaximumCalls())
-    throw InvalidValueException(HERE) << "The block size can not be greater than the maximum calls " << getMaximumCalls();
+    throw InvalidValueException(HERE) << "The block size cannot be greater than the maximum calls " << getMaximumCalls();
   blockSize_ = size;
 }
 

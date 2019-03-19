@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the analysis of data
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -30,6 +30,7 @@
 #include "otgui/WidgetBoundToDockWidget.hxx"
 #include "otgui/GraphConfigurationWidget.hxx"
 #include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #ifdef OTGUI_HAVE_PARAVIEW
 #include "otgui/PVServerManagerInterface.hxx"
@@ -231,12 +232,12 @@ void DataAnalysisWindow::addSummaryTab()
   // -- results --
   int row = 0;
 
-  // stop criteria
-  const QString groupBoxTitle = (analysisStopCriteriaMessage_.isEmpty()) ? tr("") : tr("Stop criteria");
+  // Stopping criteria
+  const QString groupBoxTitle = (analysisStopCriteriaMessage_.isEmpty()) ? tr("") : tr("Stopping criteria");
   QGroupBox * parametersGroupBox = new QGroupBox(groupBoxTitle);
   QVBoxLayout * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
 
-  // - if algo with a stop criteria
+  // - if algo with a Stopping criteria
   if (!analysisStopCriteriaMessage_.isEmpty())
   {
     QLabel * stopCriteriaLabel = new QLabel(analysisStopCriteriaMessage_);
@@ -245,8 +246,8 @@ void DataAnalysisWindow::addSummaryTab()
   // - if algo with a error message
   if (!analysisErrorMessage_.isEmpty())
   {
-    QLabel * analysisErrorMessageLabel = new QLabel(QString("<font color=red>%1</font>").arg(analysisErrorMessage_));
-    analysisErrorMessageLabel->setWordWrap(true);
+    TemporaryLabel * analysisErrorMessageLabel = new TemporaryLabel;
+    analysisErrorMessageLabel->setErrorMessage(analysisErrorMessage_);
     parametersGroupBoxLayout->addWidget(analysisErrorMessageLabel);
   }
 
@@ -584,7 +585,7 @@ void DataAnalysisWindow::addScatterPlotsTab()
   connect(scatterSettingWidget, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   scatterWidgetLayout->addWidget(stackedWidget);
-  tabWidget_->addTab(scatterWidget, tr("Scatter plots"));
+  tabWidget_->addTab(scatterWidget, tr("Scatter plot"));
 }
 
 
@@ -673,7 +674,7 @@ void DataAnalysisWindow::addTableTab()
       tableView->sortByColumn(0, Qt::AscendingOrder);
       tabLayout->addWidget(tableView);
 
-      tablesTabWidget->addTab(tab, tr("Not evaluated points"));
+      tablesTabWidget->addTab(tab, tr("Non-evaluated points"));
     }
 
     tabWidget_->addTab(tablesTabWidget, tr("Table"));
@@ -752,7 +753,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       notEvaluatedPointsTable->setData(notEvaluatedInputSample_);
       tableWidgetLayout->addWidget(notEvaluatedPointsTable);
 
-      tablesTabWidget->addTab(tableWidget, tr("Not evaluated points"));
+      tablesTabWidget->addTab(tableWidget, tr("Non-evaluated points"));
     }
 
     // -- Cobweb plot tab
@@ -804,7 +805,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // input sample
       PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
       sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
-      std::list<QString> inSLabelsList(inSampleDim, tr("Succeed points"));
+      std::list<QString> inSLabelsList(inSampleDim, tr("Evaluated points"));
       sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(inSLabelsList), 0);
       // failed input sample
       if (failedInSampleSize)
@@ -817,7 +818,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       if (notEvalInSampleSize)
       {
         sampleScatterPlotWidget->setData(notEvaluatedInputSample_, Qt::blue);
-        std::list<QString> notEvaluatedInSLabelsList(inSampleDim, tr("Not evaluated points"));
+        std::list<QString> notEvaluatedInSLabelsList(inSampleDim, tr("Non-evaluated points"));
         sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
       }
       WidgetBoundToDockWidget * scatterTabWidget = new WidgetBoundToDockWidget(this);
@@ -851,7 +852,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
           this);
       scatterTabWidget->setDockWidget(inSampleSettingWidget);
 
-      tablesTabWidget->addTab(scatterTabWidget, tr("Scatter plots"));
+      tablesTabWidget->addTab(scatterTabWidget, tr("Scatter plot"));
     }
 
     tabWidget_->addTab(tablesTabWidget, tr("Table"));
@@ -892,13 +893,16 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
 
   PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
-  pvmatrixWidget->setData(designOfExperiment_.getSample());
+  pvmatrixWidget->setData(sampleRank);
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
   pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
   matrixTabWidgetLayout->addWidget(pvmatrixWidget);
 
   // setting widget
-  PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
+  PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget,
+      designOfExperiment_.getSample(),
+      sampleRank,
+      this);
   matrixTabWidget->setDockWidget(matrixSettingWidget);
 
   tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
@@ -923,7 +927,7 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
       this);
   scatterTabWidget->setDockWidget(scatterSettingWidget);
 
-  tabWidget_->addTab(scatterTabWidget, tr("Scatter plots"));
+  tabWidget_->addTab(scatterTabWidget, tr("Scatter plot"));
 
   // 4- links model --------------------------------
   pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();

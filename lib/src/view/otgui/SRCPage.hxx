@@ -2,7 +2,7 @@
 /**
  *  @brief QWizardPage to define src analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -24,6 +24,7 @@
 #include "otgui/Analysis.hxx"
 #include "otgui/LogSpinBox.hxx"
 #include "otgui/UIntSpinBox.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <QWizardPage>
 
@@ -49,6 +50,7 @@ private:
   LogSpinBox * sampleSizeSpinbox_;
   UIntSpinBox * blockSizeSpinbox_;
   QSpinBox * seedSpinbox_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

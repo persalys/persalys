@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::FittingTestResult
-"Fitting test result."
+"Get the results of a fitting test."
 
 // ---------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ distributions : sequence of :py:class:`openturns.Distribution`
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTGUI::FittingTestResult::getKolmogorovTestResults
-"Result of the Kolmogorov goodness-of-fit test.
+"Get the result of the Kolmogorov goodness-of-fit test.
 
 Returns
 -------

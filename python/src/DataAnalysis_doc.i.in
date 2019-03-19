@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::DataAnalysis
-"Data analysis.
+"Create a data analysis of a design of experiments.
 
 Parameters
 ----------

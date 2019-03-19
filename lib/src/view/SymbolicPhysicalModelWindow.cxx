@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to define a symbolic physical model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -33,7 +33,10 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinition
   // Widgets
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Symbolic model")));
+  QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectsymbolicmodel");
+  if (item->getPhysicalModel().hasMesh())
+    docLink = "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldsymbolicmodel";
+  widgetLayout->addWidget(new TitleLabel(tr("Symbolic model"), docLink));
 
   widgetLayout->addWidget(new PhysicalModelWindowWidget(item));
 }

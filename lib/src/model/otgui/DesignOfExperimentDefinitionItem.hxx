@@ -2,7 +2,7 @@
 /**
  *  @brief QStandardItem, observer of design of experiments
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -60,7 +60,7 @@ signals:
   void analysisItemCreated(AnalysisItem*);
 
   void numberDesignEvaluationChanged(bool);
-  void designEvaluationAppended();
+  void designEvaluationUpdated(bool);
 
 private:
   Analysis analysis_;

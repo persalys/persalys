@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of InferenceAnalysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -45,7 +45,7 @@ void CopulaInferenceResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Dependence inference")));
+  widgetLayout->addWidget(new TitleLabel(tr("Dependence inference"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#dependenceinferenceresult"));
 
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 

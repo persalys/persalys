@@ -2,7 +2,7 @@
 /**
  *  @brief Base class for all the windows of otgui
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -20,13 +20,51 @@
  */
 #include "otgui/SubWindow.hxx"
 
+#include "otgui/DocumentationToolButton.hxx"
+
 #include <QEventLoop>
 #include <QOpenGLContext>
 #include <QSurfaceFormat>
 #include <QOpenGLFunctions_3_2_Core>
+#include <QHBoxLayout>
 
 namespace OTGUI
 {
+
+// custom QLabel for all result windows
+TitleLabel::TitleLabel(const QString &text, const QString &docLink, QWidget * parent)
+  : QWidget(parent)
+{
+  QHBoxLayout * layout = new QHBoxLayout(this);
+  layout->setContentsMargins(0, 0, 0, 0);
+
+  label_ = new QLabel(text, this);
+  label_->setFrameStyle(QFrame::StyledPanel);
+  label_->setMargin(5);
+  label_->setStyleSheet("QLabel { font: bold; background-color: white; }");
+  layout->addWidget(label_, 1);
+  if (!docLink.isEmpty())
+  {
+    DocumentationToolButton * infoButton = new DocumentationToolButton(docLink);
+    layout->addWidget(infoButton);
+  }
+}
+
+
+void TitleLabel::setText(const QString& text)
+{
+  label_->setText(text);
+}
+
+
+void TitleLabel::setDocLink(const QString& link)
+{
+  if (!layout())
+    return;
+  DocumentationToolButton * infoButton = new DocumentationToolButton(link);
+  layout()->addWidget(infoButton);
+}
+
 
 SubWindow::SubWindow(Item * item, QWidget * parent)
   : QWidget(parent)

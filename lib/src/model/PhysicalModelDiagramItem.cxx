@@ -2,7 +2,7 @@
 /**
  *  @brief QStandardItem, observer of a physical model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -355,7 +355,7 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
 
     // connections
     connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)), this, SLOT(requestDesignOfExperimentRemoval(bool)));
-    connect(newItem, SIGNAL(designEvaluationAppended()), this , SLOT(incrementDesignEvaluationCounter()));
+    connect(newItem, SIGNAL(designEvaluationUpdated(bool)), this , SLOT(updateDesignEvaluationCounter(bool)));
     connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
 
     // append item
@@ -516,10 +516,13 @@ void PhysicalModelDiagramItem::requestLimitStateRemoval()
 }
 
 
-void PhysicalModelDiagramItem::incrementDesignEvaluationCounter()
+void PhysicalModelDiagramItem::updateDesignEvaluationCounter(bool increment)
 {
   // signal for diagram window : update diagram
-  ++doeCounter_[1];
+  if (increment)
+    ++doeCounter_[1];
+  else
+    --doeCounter_[1];
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
 }
 

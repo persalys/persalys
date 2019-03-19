@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of an evaluation of the model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -45,7 +45,7 @@ void ModelEvaluationResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Model evaluation")));
+  widgetLayout->addWidget(new TitleLabel(tr("Model evaluation"), "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#modelevalresult"));
 
   QTabWidget * tabWidget = new QTabWidget;
 

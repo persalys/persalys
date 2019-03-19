@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of ApproximationAnalysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -71,7 +71,7 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
 
   // title
   const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
-  widgetLayout->addWidget(new TitleLabel(methodName));
+  widgetLayout->addWidget(new TitleLabel(methodName, "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#" + methodName.toLower() + "result"));
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);

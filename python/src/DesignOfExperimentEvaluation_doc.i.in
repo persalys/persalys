@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::DesignOfExperimentEvaluation
-"Base class of design of experiments.
+"Create the base class of design of experiments.
 "
 
 // ----------------------------------------------------------------------

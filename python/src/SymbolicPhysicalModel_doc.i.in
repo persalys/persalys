@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::SymbolicPhysicalModel
-"Physical model defined by analytical formulas.
+"Create a physical model defined by analytical formulas.
 
 Parameters
 ----------

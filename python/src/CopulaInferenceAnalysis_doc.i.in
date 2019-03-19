@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::CopulaInferenceAnalysis
-"Perform a dependencies inference.
+"Perform a dependence inference analysis.
 
 Parameters
 ----------
@@ -20,7 +20,7 @@ Create the model:
 >>> sample.exportToCSVFile(filename)
 >>> model = otguibase.DataModel('myDataModel', 'data.csv', [0, 1, 2])
 
-Create the dependencies inference analysis:
+Create the dependence inference analysis:
 
 >>> analysis = otguibase.CopulaInferenceAnalysis('analysis', model)
 >>> analysis.run()

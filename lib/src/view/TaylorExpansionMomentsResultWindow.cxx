@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow for the results of TaylorExpansionMomentsAnalysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -48,7 +48,7 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
-  widgetLayout->addWidget(new TitleLabel(tr("Taylor expansion")));
+  widgetLayout->addWidget(new TitleLabel(tr("Taylor expansion"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#taylorresult"));
 
   // get number of outputs
   const UnsignedInteger nbOutputs = result_.getOutputNames().getSize();

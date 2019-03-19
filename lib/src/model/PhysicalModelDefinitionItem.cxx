@@ -2,7 +2,7 @@
 /**
  *  @brief QStandardItem, observer of a physical model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 #include "otgui/PhysicalModelDefinitionItem.hxx"
 
 #include "otgui/ModelEvaluation.hxx"
+#include "otgui/FieldModelEvaluation.hxx"
 #include "otgui/GridDesignOfExperiment.hxx"
 #include "otgui/StudyItem.hxx"
 #ifdef OTGUI_HAVE_OTMORRIS
@@ -182,9 +183,18 @@ void PhysicalModelDefinitionItem::createModelEvaluation()
 
   // new analysis
   const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("evaluation_").toStdString()));
-  ModelEvaluation evaluation(analysisName, physicalModel_);
-  // emit signal to StudyManager to open a wizard
-  emit analysisRequested(this, evaluation);
+  if (!physicalModel_.hasMesh())
+  {
+    ModelEvaluation evaluation(analysisName, physicalModel_);
+    // emit signal to StudyManager to open a wizard
+    emit analysisRequested(this, evaluation);
+  }
+  else
+  {
+    FieldModelEvaluation evaluation(analysisName, physicalModel_);
+    // emit signal to StudyManager to open a wizard
+    emit analysisRequested(this, evaluation);
+  }
 }
 
 

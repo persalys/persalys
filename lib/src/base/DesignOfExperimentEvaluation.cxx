@@ -2,7 +2,7 @@
 /**
  *  @brief Evaluates the design of experiments
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -106,7 +106,7 @@ void DesignOfExperimentEvaluation::launch()
 
   if (getBlockSize() > inputSampleSize)
     throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                      << ") can not be greater than the input sample size (" << inputSampleSize << ")";
+                                      << ") cannot be greater than the input sample size (" << inputSampleSize << ")";
 
   // input sample
   const Description inDescription(getOriginalInputSample().getDescription());
@@ -251,7 +251,8 @@ void DesignOfExperimentEvaluation::load(Advocate& adv)
   {
     DesignOfExperiment experiment;
     adv.loadAttribute("designOfExperiment_", experiment);
-    result_.designOfExperiment_ = experiment;
+    if (experiment.getSample().getSize())
+      result_.designOfExperiment_ = experiment;
   }
 }
 }

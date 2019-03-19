@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure plot matrices
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,9 @@ class OTGUI_API PlotMatrixConfigurationWidget : public QWidget
 
 public:
   PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent = 0);
+
+  virtual QSize sizeHint() const;
+  virtual QSize minimumSizeHint() const;
 
 public slots:
   void showXY(bool);

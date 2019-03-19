@@ -2,7 +2,7 @@
 /**
  *  @brief Class to build mesh with a file
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -73,7 +73,7 @@ void ImportedMeshModel::setParameters(const String& fileName, const Indices& col
 {
   // check
   if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
 
   // import sample
   Sample sampleFromFile(Tools::ImportSample(fileName));

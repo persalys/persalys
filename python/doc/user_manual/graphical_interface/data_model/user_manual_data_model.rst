@@ -2,62 +2,87 @@
 User manual - Define a data model
 =================================
 
-The OTGui allows the user to load data samples and analyze them. They are considered as data models.
+The interface allows the user to load data samples and analyze them. They are considered as data models.
 
 1- Creation
 ===========
 
 A data model can be created through:
-  - the context menu of the study item;
-  - the button **Data model** of the study window.
+  - the context menu of the study item
 
-The creation of a data model adds a new element in the study tree below an item named **Data models**.
+    .. image:: /user_manual/graphical_interface/getting_started/studyItemContextMenu.png
+        :align: center
 
-The new item context menu has the following actions:
-  - **Rename**: Rename the model;
-  - **Define the model**: Open a new window to define the model;
-  - **Remove**: Remove the model and all the analyses depending on it from the study.
+  - the **Data model** button of the study window
 
-.. image:: /user_manual/graphical_interface/physical_model/physicalModelNameContextMenu.png
+    .. image:: /user_manual/graphical_interface/physical_model/studyWindowButtons.png
+        :align: center
+
+The creation of a data model adds a new element in the study tree, below the **Data models** section.
+
+Different actions are available through the context menu of the model (by right click):
+  - **Rename**: Rename the model
+  - **Define the model**: Open a new window to define the model
+  - **Remove**: Remove the model and all the analyses depending on it
+
+.. image:: /user_manual/graphical_interface/data_model/dataModelNameContextMenu.png
     :align: center
 
-It is associated with a 'Data model diagram' window containing an **Use pattern**.
+.. _datamodeldiagram:
+
+The item is associated with a **Study workflow** window.
 
 .. image:: /user_manual/graphical_interface/data_model/dataModelDiagram.png
     :align: center
 
-This diagram displays the possible actions that the user can perform in real time.
-An action is active when its box is in dark green and disabled when its box is in light green.
-A box is active when the previous one is valid.
-When passing the cursor on each box, an information message appears at the bottom of the window
-in order to specify what sort of actions the box proposes. If the box is disabled the message
-indicates why the previous one is not valid.
+This diagram displays the possible actions an user can perform in real time. An action
+is active when its box is in dark green and when a previous one is valid. A box is disabled when its box
+is in light green, and the previous one is not valid.
+When the mouse pointer is hovered over a box, an information message appears at the bottom of
+the window in order to specify what sort of actions the box proposes. If the box is disabled the
+message indicates why the previous one is not valid.
 
-On the above screenshot, the cursor is on the **Data analysis** box.
-The text explains that this box enables to analyze the sample of the model,
+On the screenshot above, the mouse points over the **Data analysis** box: here
+the action is **Analyse each variable** (below the main window),
 but this action is available only if the user has defined at least one variable in the
-data model.
-So, here the only option of the user is to complete the model.
+data model. So, here the only option of the user is to complete the model.
+
+.. _datamodeldefinition:
 
 2- Definition
 =============
 
-New data model can be defined through:
-  - the context menu of the data model item;
-  - the **Model definition** box of the model diagram.
+A new data model can be defined through:
+  - the context menu of the data model item
 
-When the definition is requiring the following window appears:
+    .. image:: /user_manual/graphical_interface/data_model/dataModelNameContextMenu.png
+        :align: center
+
+  - the **Model definition** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/physical_model/modeldefBox.png
+        :align: center
+
+
+When the definition is required the following window appears:
 
 .. image:: /user_manual/graphical_interface/data_model/data_model_definition.png
     :align: center
 
 When clicking on the **...** button, a dialog box offers to select
-a file (.txt or .csv). Validate the dialog box, loads the file and its content is displayed in
+a file (.txt or .csv): validate the dialog box, load the file and its content is displayed in
 the **Sample** part of the window.
 
-Each column of this table corresponds to a variable and its name can be edited (by selecting the cell and doing a left click on it).
-If the file does not defined columns names, default names are used (data_0, data_1, ...).
-The line titled **Type** defines the type of each variable. By default, all of them are
-input variables except the last one which is considered as an output variable.
-The user can ignore columns by selecting **Disable** in the combobox.
-The model must contain at least one input to validate the model.
+The **Variables** part shows the variables of the model in columns.
+
+In **Variable** row, variable names can be edited (select the cell and left-double click);
+If no column names is specified in the file header, default names are used (data_0, data_1, ...).
+
+The **Type** row defines the type of each variable: by
+default, all variables are input except the last one, considered as an output variable.
+The user can enable/disable one or several variables, by checking off the corresponding column of the
+table. By default, all the columns are checked off. The model must contain at least one variable to
+validate the model.
+
+
+

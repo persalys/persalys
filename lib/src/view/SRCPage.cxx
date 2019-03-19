@@ -2,7 +2,7 @@
 /**
  *  @brief QWizardPage to define src analysis
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +35,9 @@ namespace OTGUI
 SRCPage::SRCPage(QWidget* parent)
   : QWizardPage(parent)
   , sampleSizeSpinbox_(0)
+  , blockSizeSpinbox_(0)
   , seedSpinbox_(0)
+  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -88,6 +90,15 @@ void SRCPage::buildInterface()
   advancedParamGroupBox->setExpanded(false);
   pageLayout->addWidget(advancedParamGroupBox);
 
+  pageLayout->addStretch();
+
+  // error message
+  errorMessageLabel_ = new TemporaryLabel;
+  connect(sampleSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(reset()));
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(reset()));
+
+  pageLayout->addWidget(errorMessageLabel_);
+
   initialize(SRCAnalysis());
 }
 
@@ -124,6 +135,11 @@ int SRCPage::nextId() const
 
 bool SRCPage::validatePage()
 {
+  if (sampleSizeSpinbox_->value() < blockSizeSpinbox_->value())
+  {
+    errorMessageLabel_->setErrorMessage(tr("The sample size cannot be less than the block size"));
+    return false;
+  }
   return true;
 }
 }

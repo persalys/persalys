@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to define limit states
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,7 @@ void LimitStateWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Limit state")));
+  mainLayout->addWidget(new TitleLabel(tr("Limit state"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#limit-state"));
 
   // spacer
   mainLayout->addSpacing(30);

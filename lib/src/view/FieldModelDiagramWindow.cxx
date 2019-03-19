@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to define the diagram of the physical model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ FieldModelDiagramWindow::FieldModelDiagramWindow(PhysicalModelDiagramItem * phys
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Study workflow")));
+  mainLayout->addWidget(new TitleLabel(tr("Study workflow"), "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldmodeldiagram"));
 
   // optimal button size
   int boxWidth = 0;

@@ -2,7 +2,7 @@
 /**
  *  @brief Class to define designs of experiments
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -94,7 +94,7 @@ String ImportedDesignOfExperiment::getFileName() const
 void ImportedDesignOfExperiment::setFileName(const String& fileName)
 {
   if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name can not be empty";
+    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
 
   // get sample from file
   sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));
@@ -173,7 +173,7 @@ Sample ImportedDesignOfExperiment::getSampleFromFile(const String& fileName) con
   // check sampleFromFile dimension
   const Description inputNames = getPhysicalModel().getInputNames();
   if (sampleFromFile.getDimension() < inputNames.getSize())
-    throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension lesser than the number of inputs of the physical model: "
+    throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension less than the number of inputs of the physical model: "
                                          << inputNames.getSize();
 
   // check the sample description

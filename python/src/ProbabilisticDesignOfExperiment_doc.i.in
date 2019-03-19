@@ -1,5 +1,5 @@
 %feature("docstring") OTGUI::ProbabilisticDesignOfExperiment
-"Probabilistic design of experiments.
+"Create a probabilistic design of experiments.
 
 Available constructors:
     ProbabilisticDesignOfExperiment(*name, physicalModel*)

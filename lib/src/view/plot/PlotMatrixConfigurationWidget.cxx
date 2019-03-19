@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure plot matrices
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -137,5 +137,22 @@ void PlotMatrixConfigurationWidget::showXY(bool isChecked)
 void PlotMatrixConfigurationWidget::exportPlot()
 {
   plotMatrix_->exportPlot();
+}
+
+
+QSize PlotMatrixConfigurationWidget::sizeHint() const
+{
+  QSize size = QWidget::sizeHint();
+  const int hScrollBarHeight = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+  size.setHeight(size.height() + hScrollBarHeight);
+  return size;
+}
+
+
+QSize PlotMatrixConfigurationWidget::minimumSizeHint() const
+{
+  QSize size = QWidget::minimumSizeHint();
+  size.setHeight(10);
+  return size;
 }
 }

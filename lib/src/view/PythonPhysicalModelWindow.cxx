@@ -2,7 +2,7 @@
 /**
  *  @brief QMdiSubWindow to define a physical model
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -37,8 +37,10 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 //  setFocusPolicy(Qt::ClickFocus);
 
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
-
-  widgetLayout->addWidget(new TitleLabel(tr("Python model")));
+  QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectpythonmodel");
+  if (item->getPhysicalModel().hasMesh())
+    docLink = "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldpythonmodel";
+  widgetLayout->addWidget(new TitleLabel(tr("Python model"), docLink));
 
   QSplitter * horizontalSplitter = new QSplitter(Qt::Horizontal);
 
@@ -60,16 +62,12 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
 
   // right side:
   // - tables
-  QWidget * rightSideWidget = new QWidget;
-  QVBoxLayout * vBoxLayout = new QVBoxLayout(rightSideWidget);
-
   PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateInputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(resetMessageLabel()));
-  vBoxLayout->addWidget(tablesWidget);
 
-  horizontalSplitter->addWidget(rightSideWidget);
+  horizontalSplitter->addWidget(tablesWidget);
 
   ////////////////
   widgetLayout->addWidget(horizontalSplitter, 1);

@@ -2,7 +2,7 @@
 /**
  *  @brief OTStudy
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -66,7 +66,7 @@ void MeshWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Mesh")));
+  mainLayout->addWidget(new TitleLabel(tr("Mesh"), "user_manual/graphical_interface/field_model/user_manual_field_model.html#meshdefinition"));
 
   // Index parameter
   QGroupBox * groupBox = new QGroupBox(tr("Index parameter"));

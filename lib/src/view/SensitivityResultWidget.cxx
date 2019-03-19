@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget for sensitivity analysis result
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -142,7 +142,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       indicesTableModel->setData(indicesTableModel->index(j, col), totalIndices[j], Qt::UserRole + 1);
       if (totalIndices[j] < firstIndices[j])
       {
-        indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is lesser than the first order index."), Qt::ToolTipRole);
+        indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is less than the first order index."), Qt::ToolTipRole);
         indicesTableModel->setData(indicesTableModel->index(j, col), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
       }
 

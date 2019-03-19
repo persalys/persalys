@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget for Morris analysis result
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -151,7 +151,7 @@ void MorrisResultWidget::buildInterface()
   points1[1] = QPointF(maxPoint, maxPoint);
   plotMuStarSigma->plotCurve(points1, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("cv = 1"), true);
   // - curve cv = 0.5
-  points1[1] = QPointF(maxPoint, maxPoint);
+  points1[1] = QPointF(maxPoint, 0.5 * maxPoint);
   plotMuStarSigma->plotCurve(points1, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("cv = 0.5"), true);
 
   // - two fake markers to add items in the legend
@@ -251,11 +251,11 @@ void MorrisResultWidget::buildInterface()
   step = minorTicks[1] - minorTicks[0];
   plotMuStarSigma->setAxisScale(QwtPlot::xBottom, - 1 * step, maxMeanStarEffect + 3 * step);
 
-  plotMuStarMu->setAxisScale(QwtPlot::xBottom, - 1 * step, maxMeanStarEffect + 3 * step);
-
   minorTicks = plotMuStarMu->axisScaleDiv(QwtPlot::yLeft).ticks(QwtScaleDiv::MinorTick);
+  plotMuStarMu->setAxisScale(QwtPlot::xBottom, - 1 * step, maxMeanStarEffect + 3 * step);
   step = minorTicks[1] - minorTicks[0];
-  plotMuStarMu->setAxisScale(QwtPlot::yLeft, - maxMeanEffect - 1 * step, maxMeanEffect + 1 * step);
+  const Scalar maxY = std::max(maxMeanEffect, maxMeanStarEffect);
+  plotMuStarMu->setAxisScale(QwtPlot::yLeft, -maxY - 1 * step, maxY + 1 * step);
 
   // second widget of the splitter : tableView
 

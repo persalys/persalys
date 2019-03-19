@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget to configure graphics
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -477,6 +477,15 @@ void GraphConfigurationWidget::exportPlot()
     return;
 
   plotWidgets_[currentPlotIndex_]->exportPlot();
+}
+
+
+QSize GraphConfigurationWidget::sizeHint() const
+{
+  QSize size = QWidget::sizeHint();
+  const int hScrollBarHeight = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
+  size.setHeight(size.height() + hScrollBarHeight);
+  return size;
 }
 
 

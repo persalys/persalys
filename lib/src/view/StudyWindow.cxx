@@ -2,7 +2,7 @@
 /**
  *  @brief Study
  *
- *  Copyright 2015-2018 EDF-Phimeca
+ *  Copyright 2015-2019 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +38,7 @@ StudyWindow::StudyWindow(StudyItem * item, QWidget * parent)
 void StudyWindow::buildInterface()
 {
   QVBoxLayout * subWinowLayout = new QVBoxLayout(this);
-  subWinowLayout->addWidget(new TitleLabel(tr("Model creation")));
+  subWinowLayout->addWidget(new TitleLabel(tr("Model creation"), "user_manual/graphical_interface/getting_started/user_manual_getting_started.html#modelsdefonstudywindow"));
 
   // buttons
   QScrollArea * scrollArea = new QScrollArea;
@@ -189,6 +189,6 @@ void StudyWindow::buildInterface()
   textEdit->setText(text);
   layout->addWidget(textEdit, row, 1, Qt::AlignLeft | Qt::AlignTop);
 
-  layout->setRowStretch(++row, 1);
+  layout->setRowStretch(++row, 4);
 }
 }

@@ -9,11 +9,13 @@ Welcome to OTGui's documentation!
 User documentation
 ------------------
 
-This documentation is made to guide the user to perform uncertainty studies thanks to the
-interface for OpenTURNS. The user manual aims at describing how the interface works.
-This manual explains also how the user can create and manipulate objects from the
-software thanks to the Python language. It lists all the objects and their methods.
-The examples guide provides several studies showing the use of the interface.
+This documentation aims to guide the user to perform uncertainty studies, using the
+interface. It includes 3 sections:
+
+ - The «User manual for graphical interface» section describes how the interface works.
+ - The «User manual for Python interface» explains how objects are created and manipulated in
+   a Python context. It lists all the objects and their methods.
+ - The «Examples» section provides practical examples analyzed in the interface.
 
 .. toctree::
    :maxdepth: 2
