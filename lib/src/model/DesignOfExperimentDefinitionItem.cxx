@@ -119,7 +119,7 @@ void DesignOfExperimentDefinitionItem::update(Observable* source, const String& 
   if (message == "analysisFinished")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
-    emit designEvaluationAppended();
+    emit designEvaluationUpdated(true);
   }
   else if (message == "analysisRemoved")
   {
@@ -227,6 +227,8 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_ = analysis;
   analysis_.addObserver(this);
   analysis_.addObserver(getParentStudyItem()->getStudy().getImplementation().get());
+
+  emit designEvaluationUpdated(false);
 
   // update the implementation of the design of experiments stored in Study
   getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());

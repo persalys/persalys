@@ -52,7 +52,7 @@ public slots:
   void requestReliabilityCreation();
   void requestLimitStateRemoval();
   void requestDesignOfExperimentRemoval(bool);
-  void incrementDesignEvaluationCounter();
+  void updateDesignEvaluationCounter(bool);
   void removePhysicalModel();
 
 signals:

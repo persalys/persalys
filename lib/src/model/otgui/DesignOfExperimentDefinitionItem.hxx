@@ -60,7 +60,7 @@ signals:
   void analysisItemCreated(AnalysisItem*);
 
   void numberDesignEvaluationChanged(bool);
-  void designEvaluationAppended();
+  void designEvaluationUpdated(bool);
 
 private:
   Analysis analysis_;
