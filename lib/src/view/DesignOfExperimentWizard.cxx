@@ -95,8 +95,8 @@ Analysis DesignOfExperimentWizard::getAnalysis() const
     default:
       throw InvalidValueException(HERE) << "ReliabilityAnalysisWizard::getAnalysis no analysis";
   }
-
-  dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get())->resetResult();
+  DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
+  doeEval->setDesignOfExperiment(dynamic_cast<const DesignOfExperimentEvaluation*>(analysis_.getImplementation().get())->getResult().getDesignOfExperiment());
 
   return analysis;
 }
