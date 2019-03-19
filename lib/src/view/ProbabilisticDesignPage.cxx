@@ -138,14 +138,12 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
 
 Analysis ProbabilisticDesignPage::getAnalysis(const String& name, const PhysicalModel& model) const
 {
-  ProbabilisticDesignOfExperiment design(name, model);
   String designType = "LHS";
   if (designsGroup_->checkedId() == ProbabilisticDesignPage::MonteCarlo)
     designType = "MONTE_CARLO";
   else if (designsGroup_->checkedId() == ProbabilisticDesignPage::QuasiMonteCarlo)
     designType = "QUASI_MONTE_CARLO";
-  design.setDesignName(designType);
-  design.setSize(sampleSizeSpinbox_->value());
+  ProbabilisticDesignOfExperiment design(name, model, sampleSizeSpinbox_->value(), designType);
   design.setSeed(seedSpinbox_->value());
 
   return design;

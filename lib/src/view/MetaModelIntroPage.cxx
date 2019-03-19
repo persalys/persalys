@@ -21,6 +21,7 @@
 #include "otgui/MetaModelIntroPage.hxx"
 
 #include "otgui/MetaModelAnalysisWizard.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QRadioButton>
@@ -94,6 +95,7 @@ MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
 
 void MetaModelIntroPage::initialize(const Analysis& analysis, QList< DesignOfExperiment > doesList)
 {
+  SignalBlocker blocker(doesComboBox_);
   // design of experiments
   for (int i = 0; i < doesList.count(); ++i)
   {
