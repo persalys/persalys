@@ -1,21 +1,15 @@
 
-set ( ADAPT_CHECK_TESTS_EXPONENT )
-set ( REPLACE_EOL " | cat " )
-if ( MINGW )
+set (REPLACE_EOL " | cat ")
+if (WIN32)
   # replace dos eols
-  set ( REPLACE_EOL " | tr -d '\\\\015' " )
-  # By default, Mingw-g++ puts 3 digits to real exponent whereas g++ puts 2.
-  set ( ADAPT_CHECK_TESTS_EXPONENT "PRINTF_EXPONENT_DIGITS=2" )
-  
-  add_library ( CRT_fp8 STATIC CRT_fp8.c )
-  set_target_properties ( CRT_fp8 PROPERTIES LINKER_LANGUAGE CXX )
+  set (REPLACE_EOL " | tr -d '\\\\015' ")
+
+  if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+    add_library (CRT_fp8 STATIC CRT_fp8.c)
+  endif ()
 endif ()
 
-set ( CHECK_ENVIRONMENT 
-      "LD_LIBRARY_PATH=${INSTALL_DESTDIR}${LIBRARY_PATH}:$ENV{LD_LIBRARY_PATH}"
-      ${ADAPT_CHECK_TESTS_EXPONENT} 
-    )
-
+set (CHECK_ENVIRONMENT)
 
 set ( CHECK_TO_BE_RUN )
 macro ( ot_check_test TESTNAME )
@@ -24,9 +18,9 @@ macro ( ot_check_test TESTNAME )
   set ( TESTNAME_SRCS ${TESTNAME_SRC} )
   add_executable ( ${TESTNAME_TGT} EXCLUDE_FROM_ALL ${TESTNAME_SRCS} )
   add_dependencies ( tests ${TESTNAME_TGT} )
-  target_link_libraries (${TESTNAME_TGT} otguibase)
-  if ( MINGW )
-    target_link_libraries ( ${TESTNAME_TGT} CRT_fp8 )
+  target_link_libraries ( ${TESTNAME_TGT} otguibase )
+  if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+    target_link_libraries (${TESTNAME_TGT} CRT_fp8)
   endif ()
   set_target_properties ( ${TESTNAME_TGT} PROPERTIES
                                           INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib/src;${CMAKE_INSTALL_RPATH}" )
