@@ -21,13 +21,13 @@ xvfb-run ctest --output-on-failure --timeout 100 -j8
 
 cd /usr/local/share/otgui/doc/ && zip -r /tmp/build/otgui-doc.zip ./html/* && cd -
 
-mkdir -p otgui.AppDir/usr/{bin,lib,share}
+mkdir -p otgui.AppDir/usr/{bin,lib,share,include}
 
 cat > otgui.AppDir/AppRun <<\EOF
 #!/bin/sh
 HERE=$(dirname $(readlink -f "${0}"))
 export PATH=${HERE}/usr/bin/:${PATH}
-export LD_LIBRARY_PATH=${HERE}/usr/lib/:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/lib/x86_64-linux-gnu/omc/:${LD_LIBRARY_PATH}
 export PYTHONHOME=${HERE}/usr/
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 
@@ -35,6 +35,9 @@ export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 export QT_QPA_FONTDIR=/usr/share/fonts/truetype
 
 export OPENTURNS_CONFIG_PATH=${HERE}/etc/openturns
+
+export OPENMODELICAHOME=${HERE}/usr
+
 ${HERE}/usr/bin/otgui
 EOF
 chmod a+x otgui.AppDir/AppRun
@@ -95,6 +98,17 @@ do
 done
 cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 otgui.AppDir/usr/lib
 cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so otgui.AppDir/usr/lib
+
+# modelica
+cp -rv /usr/local/lib/x86_64-linux-gnu otgui.AppDir/usr/lib
+cp -rv /usr/local/lib/omc otgui.AppDir/usr/lib
+cp -rv /usr/local/include/omc otgui.AppDir/usr/include
+cp -rv /usr/local/share/omc otgui.AppDir/usr/share
+cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 otgui.AppDir/usr/lib
+cp -v /usr/local/bin/omc otgui.AppDir/usr/bin
+cp -v /usr/local/src/otfmi/mo2fmu.sh otgui.AppDir/usr/bin/mo2fmu
+
+
 
 LD_LIBRARY_PATH=$PWD/otgui.AppDir/usr/lib ldd otgui.AppDir/usr/bin/otgui
 
