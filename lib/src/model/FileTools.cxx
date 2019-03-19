@@ -175,7 +175,7 @@ QUrl FileTools::GetDocumentationUrl(const QString &urlLink, const docType type)
   QStringList pathAndFragment(urlLink.split("#"));
 
   if (type == docGUI)
-    url = QUrl(QUrl::fromLocalFile(QDir::toNativeSeparators(GetDocumentationDirectoryPath() + pathAndFragment[0])));
+    url = QUrl::fromLocalFile(QDir::toNativeSeparators(GetDocumentationDirectoryPath() + pathAndFragment[0]));
   else
     url = QUrl(QDir::toNativeSeparators(OpenTURNSUrlLink + pathAndFragment[0]));
 

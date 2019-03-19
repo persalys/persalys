@@ -47,6 +47,7 @@ public:
 
   OT::Sample getNotEvaluatedInputSample() const;
 
+  void setDesignOfExperiment(const DesignOfExperiment& designOfExperiment);
   void resetResult();
   DataAnalysisResult getResult() const;
 

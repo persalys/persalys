@@ -70,6 +70,13 @@ void DesignOfExperimentEvaluation::setName(const String& name)
 }
 
 
+void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
+{
+  result_ = DataAnalysisResult(designOfExperiment);
+  result_.designOfExperiment_.getImplementation()->initialize();
+}
+
+
 Sample DesignOfExperimentEvaluation::getOriginalInputSample() const
 {
   if (!originalInputSample_.getSize())

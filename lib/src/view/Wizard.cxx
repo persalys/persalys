@@ -29,7 +29,7 @@
 
 namespace OTGUI
 {
-std::map<QString, QString> Wizard::DocLinks_;
+QMap<QString, QString> Wizard::DocLinks_;
 
 Wizard::Wizard(QWidget * parent)
   : QWizard(parent)
@@ -90,6 +90,6 @@ QString Wizard::getDocLink()
     if (analysisType.contains("Field"))
       wizardClassName = "FieldModelEvaluationWizard";
   }
-  return DocLinks_[wizardClassName];
+  return DocLinks_.contains(wizardClassName) ? DocLinks_[wizardClassName] : "";
 }
 }

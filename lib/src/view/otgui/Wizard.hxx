@@ -46,7 +46,7 @@ signals:
   void analysisChanged(const Analysis & analysis);
 
 private:
-  static std::map<QString, QString> DocLinks_;
+  static QMap<QString, QString> DocLinks_;
   static void InitializeDocLInks();
   QString getDocLink();
 };
