@@ -20,8 +20,8 @@
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="87"/>
-        <source>Copyright 2015-2018 EDF-Phimeca</source>
-        <translation>Copyright 2015-2018 EDF-Phimeca</translation>
+        <source>Copyright 2015-2019 EDF-Phimeca</source>
+        <translation>Copyright 2015-2019 EDF-Phimeca</translation>
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="90"/>
@@ -228,12 +228,12 @@
         <translation>L&apos;analyse est prête à être lancée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="181"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="186"/>
         <source>The analysis is running</source>
         <translation>L&apos;analyse est en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="196"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="201"/>
         <source>Stop in progress</source>
         <translation>Arrêt en cours</translation>
     </message>
@@ -798,12 +798,12 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::CopyableTableView</name>
     <message>
-        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="114"/>
+        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="118"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="115"/>
+        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="119"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
@@ -1274,23 +1274,23 @@ métamodèle</translation>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="141"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="136"/>
         <source>Sample</source>
         <translation>Echantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="304"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="306"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="306"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="308"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="295"/>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="317"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="297"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="319"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -1300,19 +1300,19 @@ métamodèle</translation>
         <translation>Modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="148"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="143"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="296"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="298"/>
         <source>Cannot update the table.
 %1</source>
         <translation>Impossible de mettre à jour la table.
 %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="318"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="320"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -1535,33 +1535,33 @@ métamodèle</translation>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="255"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="257"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="261"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="263"/>
         <source>Can not remove a design of experiments when an analysis is running.</source>
         <translation>Impossible de supprimer un plan d&apos;expériences lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="276"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="278"/>
         <source>The model must have at least one output. Evaluate the design of experiments</source>
         <translation>Le modèle doit avoir au moins une variable de sortie. Evaluer le plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="283"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="285"/>
         <source>The design of experiments must contain at least two points.</source>
         <translation>Le plan d&apos;expériences doit contenir au moins deux points.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="288"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="290"/>
         <source>metaModel_</source>
         <translation>métamodèle_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="145"/>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="241"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="243"/>
         <source>The input sample is empty.</source>
         <translation>L&apos;échantillon d&apos;entrée  est vide.</translation>
     </message>
@@ -2957,7 +2957,7 @@ orientation</source>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="164"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="501"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="505"/>
         <source>Q-Q Plot</source>
         <translation>Diagramme Q-Q</translation>
     </message>
@@ -3048,27 +3048,27 @@ bayésien (BIC)</translation>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="470"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="474"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="497"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="501"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="497"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="501"/>
         <source>(Kolmogorov–Smirnov statistic=%1)</source>
         <translation>(Statistique de Kolmogorov–Smirnov=%1)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="502"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="506"/>
         <source>Data quantiles</source>
         <translation>Quantiles des données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="503"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="507"/>
         <source>%1 theoretical quantiles</source>
         <translation>Quantiles théoriques de %1</translation>
     </message>
@@ -6631,118 +6631,118 @@ de l&apos;indice total</translation>
 <context>
     <name>OTGUI::StudyItem</name>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="62"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="63"/>
         <source>Symbolic model</source>
         <translation>Modèle symbolique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="65"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="66"/>
         <source>Python model</source>
         <translation>Modèle Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="69"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="70"/>
         <source>YACS model</source>
         <translation>Modèle YACS</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="73"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="74"/>
         <source>FMI model</source>
         <translation>Modèle FMI</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="77"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="78"/>
         <source>Symbolic Field model</source>
         <translation>Modèle de champ symbolique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="80"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="81"/>
         <source>Python Field model</source>
         <translation>Modèle de champ Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="84"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="85"/>
         <source>Data model</source>
         <translation>Modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="88"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="89"/>
         <source>Export Python</source>
         <translation>Export Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="92"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="93"/>
         <source>Save</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="96"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="97"/>
         <source>Save As...</source>
         <translation>Sauvegarder sous...</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="100"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="101"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="104"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="105"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="172"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="179"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="173"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="180"/>
         <source>SymbolicModel_</source>
         <translation>ModèleSymbolique_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="186"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="193"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="187"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="194"/>
         <source>PythonModel_</source>
         <translation>ModèlePython_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="201"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="202"/>
         <source>YACSModel_</source>
         <translation>ModèleYACS_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="210"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="211"/>
         <source>FMIModel_</source>
         <translation>ModèleFMI_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="218"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="219"/>
         <source>DataModel_</source>
         <translation>ModèleDonnées_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="242"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="243"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="289"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="290"/>
         <source>Cannot save file %1:
 %2</source>
         <translation>Impossible de sauvegarder le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="313"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="314"/>
         <source>Data models</source>
         <translation>Modèles de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="335"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="336"/>
         <source>Metamodels</source>
         <translation>Métamodèles</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="335"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="336"/>
         <source>Physical models</source>
         <translation>Modèles physiques</translation>
     </message>
@@ -6767,7 +6767,7 @@ de l&apos;indice total</translation>
     <message>
         <location filename="../lib/src/view/StudyManager.cxx" line="433"/>
         <location filename="../lib/src/view/StudyManager.cxx" line="460"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="631"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="632"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -6827,7 +6827,7 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="632"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="633"/>
         <source>Do you want to save the study &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
@@ -6848,7 +6848,7 @@ Voulez-vous continuer et fermer les autres études ?</translation>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="602"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="604"/>
         <source>An error has occurred when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
@@ -6857,12 +6857,12 @@ Des objets ne sont peut être pas ouverts.
 </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="616"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="617"/>
         <source>Can not close the current study</source>
         <translation>Impossible de fermer l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="623"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="624"/>
         <source>Can not remove a study when one of its analyses is running.</source>
         <translation>Impossible de supprimer une étude lorsqu&apos;une de ses analyses est en cours d&apos;exécution.</translation>
     </message>
@@ -7714,42 +7714,14 @@ Des objets ne sont peut être pas ouverts.
 <context>
     <name>OTGUI::YACSPhysicalModelWindow</name>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="51"/>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="49"/>
         <source>YACS model</source>
         <translation>Modèle YACS</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="62"/>
-        <source>Search file</source>
-        <translation>Chercher fichier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="66"/>
-        <source>Build YACS schema</source>
-        <translation>Création du schéma YACS</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="85"/>
-        <source>Data to import...</source>
-        <translation>Importer des données...</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="87"/>
-        <source>Data files (*.xml);;</source>
-        <translation>Fichiers de données (*.xml);;</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="98"/>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="132"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="99"/>
-        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="133"/>
-        <source>Cannot read file %1:
-%2</source>
-        <translation>Impossible de lire le fichier %1 : %2</translation>
+        <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="56"/>
+        <source>Edit</source>
+        <translation>Editer</translation>
     </message>
 </context>
 <context>
