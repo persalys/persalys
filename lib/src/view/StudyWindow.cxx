@@ -189,6 +189,6 @@ void StudyWindow::buildInterface()
   textEdit->setText(text);
   layout->addWidget(textEdit, row, 1, Qt::AlignLeft | Qt::AlignTop);
 
-  layout->setRowStretch(++row, 1);
+  layout->setRowStretch(++row, 4);
 }
 }
