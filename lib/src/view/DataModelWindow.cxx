@@ -66,6 +66,13 @@ DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * paren
 }
 
 
+void DataModelWindow::showEvent(QShowEvent* event)
+{
+  QWidget::showEvent(event);
+  layout()->invalidate();
+  adjustSize();
+}
+
 DataModelWindow::~DataModelWindow()
 {
   dataModel_ = 0;
@@ -124,7 +131,6 @@ void DataModelWindow::buildInterface()
 
   tableView_ = new ResizableHeaderlessTableView;
   tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   tableView_->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
   tableView_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
   tableView_->setItemDelegateForRow(0, new LineEditWithQValidatorDelegate(false, tableView_));

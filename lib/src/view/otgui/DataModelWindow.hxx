@@ -43,6 +43,8 @@ public:
 
   virtual ~DataModelWindow();
 
+  virtual void showEvent(QShowEvent*);
+
 protected:
   void buildInterface();
   void resizeEvent(QResizeEvent* event);
