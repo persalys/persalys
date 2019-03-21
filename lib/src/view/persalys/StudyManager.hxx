@@ -55,7 +55,7 @@ public slots:
   void createAnalysisWindow(AnalysisItem* item, const bool createConnections = true);
 
   // import/export/save/open/close study
-  void importPythonScript();
+  void importPythonScript(const QString& fileName="");
   void exportPythonScript();
   void saveCurrent();
   void saveAsCurrent();

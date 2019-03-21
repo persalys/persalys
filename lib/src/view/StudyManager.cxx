@@ -245,7 +245,7 @@ bool StudyManager::analysisInProgress() const
 }
 
 
-void StudyManager::importPythonScript()
+void StudyManager::importPythonScript(const QString &fileToImport)
 {
   // check if an analysis is running
   if (analysisInProgress())
@@ -253,7 +253,6 @@ void StudyManager::importPythonScript()
     showErrorMessage("Cannot import a Python script when an analysis is running.");
     return;
   }
-
   // if there are studies in the tree view : propose to close them
   if (mainWidget_->getStudyTree()->model()->rowCount())
   {
@@ -271,7 +270,9 @@ void StudyManager::importPythonScript()
       return;
   }
 
-  const QString fileName = QFileDialog::getOpenFileName(mainWidget_,
+  QString fileName = fileToImport;
+  if (fileName.isEmpty())
+    fileName = QFileDialog::getOpenFileName(mainWidget_,
                            tr("Import Python..."),
                            FileTools::GetCurrentDir(),
                            tr("Python source files (*.py)"));
@@ -360,6 +361,7 @@ bool StudyManager::save(StudyItem* studyItem)
     QApplication::setOverrideCursor(Qt::WaitCursor);
     studyItem->getStudy().save(file.absoluteFilePath().toUtf8().data());
     QApplication::restoreOverrideCursor();
+    emit recentFilesListChanged(file.absoluteFilePath().toUtf8().data());
     return true;
   }
   else
