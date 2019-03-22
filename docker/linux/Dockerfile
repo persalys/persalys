@@ -107,10 +107,8 @@ RUN yum -y install pandoc dvipng
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
-# https://svn.boost.org/trac10/ticket/11120
-RUN ln -s /usr/local/include/python3.7m /usr/local/include/python3.7
-RUN curl -SsL https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2 | tar xj && cd boost_1_68_0 \
- && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install > /dev/null 2>&1
+RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2 | tar xj && cd boost_1_69_0 \
+ && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
 
 # X11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
