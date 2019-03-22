@@ -106,8 +106,6 @@ cp -rv /usr/local/include/omc otgui.AppDir/usr/include
 cp -rv /usr/local/share/omc otgui.AppDir/usr/share
 cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 otgui.AppDir/usr/lib
 cp -v /usr/local/bin/omc otgui.AppDir/usr/bin
-cp -v /usr/local/src/otfmi/mo2fmu.sh otgui.AppDir/usr/bin/mo2fmu
-
 
 
 LD_LIBRARY_PATH=$PWD/otgui.AppDir/usr/lib ldd otgui.AppDir/usr/bin/otgui

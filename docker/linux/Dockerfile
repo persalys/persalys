@@ -162,7 +162,7 @@ RUN curl -SsL http://paraview.org/files/v5.6/ParaView-v5.6.0.tar.gz | tar xz && 
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 4105013fc0b7880e82d9359c1bbae684a3e81ce0 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.12.1 \
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris
@@ -170,7 +170,7 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi
-RUN git clone https://github.com/openturns/otfmi.git && cd otfmi && git checkout v0.2 && python3 setup.py install
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.2 && python3 -c "import otfmi"
 
 # locale
 RUN localedef -i en_US -f UTF-8 C.UTF-8
