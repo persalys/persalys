@@ -74,10 +74,10 @@ RUN fc-cache -fsv
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
-RUN curl -SsL https://www.openssl.org/source/openssl-1.0.2p.tar.gz | tar xz && cd openssl-1.0.2p \
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2r.tar.gz | tar xz && cd openssl-1.0.2r \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
-RUN curl -SsL https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz | tar xz && cd Python-3.7.1 \
- && ./configure --enable-shared --enable-unicode=ucs4 CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
+RUN curl -fSsL https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz | tar xz && cd Python-3.7.2 \
+ && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
 # pip
