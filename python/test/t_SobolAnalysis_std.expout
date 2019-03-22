@@ -2,10 +2,10 @@ class=SobolAnalysis name=aSobol physicalModel=aModel interestVariables=[y0] maxi
 result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.900967,0.0220335]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.985481,0.0912614]] firstOrderIndicesInterval=[[0.877526, 0.924408]
 [-0.108137, 0.152204]] totalIndicesInterval=[[0.844158, 1.1268]
 [0.0665421, 0.115981]] callsNumber=1000 confidenceIntervalLength=0.207877
-class=SobolAnalysis name=aSobol2 physicalModel=aModel interestVariables=[y0] maximumCalls=inf maximumCoefficientOfVariation=0.01 maximumElapsedTime=100000 seed=0 maximum confidence interval length=0.02 blockSize=1 replicationSize=1000 confidenceLevel=0.95
-result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.899476,0.102369]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.895727,0.100675]] firstOrderIndicesInterval=[[0.896866, 0.902087]
-[0.0889433, 0.115795]] totalIndicesInterval=[[0.882747, 0.908707]
-[0.0979899, 0.103359]] callsNumber=216000 confidenceIntervalLength=0.0197484
+class=SobolAnalysis name=aSobol2 physicalModel=aModel interestVariables=[y0] maximumCalls=inf maximumCoefficientOfVariation=0.01 maximumElapsedTime=100000 seed=0 maximum confidence interval length=0.2 blockSize=1 replicationSize=1000 confidenceLevel=0.95
+result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.892832,0.153005]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.870144,0.107257]] firstOrderIndicesInterval=[[0.878084, 0.907581]
+[0.0832421, 0.222768]] totalIndicesInterval=[[0.801019, 0.939269]
+[0.0924361, 0.122078]] callsNumber=4000 confidenceIntervalLength=0.102617
 class=SobolAnalysis name=aSobol3 physicalModel=aModel interestVariables=[y1] maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 seed=2 maximum confidence interval length=0.01 blockSize=4 replicationSize=200 confidenceLevel=0.95
 result= class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.90921,0.115756]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.92307,0.0973193]] firstOrderIndicesInterval=[[0.886406, 0.932014]
 [-0.00958092, 0.241092]] totalIndicesInterval=[[0.78735, 1.05879]
@@ -47,7 +47,7 @@ myStudy.add(aSobol)
 aSobol2 = otguibase.SobolAnalysis('aSobol2', aModel)
 interestVariables = ['y0']
 aSobol2.setInterestVariables(interestVariables)
-aSobol2.setMaximumConfidenceIntervalLength(0.02)
+aSobol2.setMaximumConfidenceIntervalLength(0.2)
 aSobol2.setMaximumElapsedTime(100000)
 aSobol2.setBlockSize(1)
 aSobol2.setReplicationSize(1000)
