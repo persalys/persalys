@@ -272,24 +272,23 @@ void SobolAnalysis::launch()
       RandomGenerator::SetSeed(getSeed());
 
       const Description outputName(1, getInterestVariables()[i]);
-      MartinezSensitivityAlgorithm estimator;
-      estimator.setUseAsymptoticDistribution(true);
-      SobolSimulationAlgorithm algo(getPhysicalModel().getDistribution(),
-                                    DatabaseFunction(function.getInputHistory(), function.getOutputHistory().getMarginal(i)),
-                                    estimator
-                                   );
+      MartinezSensitivityAlgorithm estimator_i;
+      estimator_i.setUseAsymptoticDistribution(true);
+      SobolSimulationAlgorithm algo_i(getPhysicalModel().getDistribution(),
+                                      DatabaseFunction(function.getInputHistory(), function.getOutputHistory().getMarginal(i)),
+                                      estimator_i);
 
-      algo.setMaximumOuterSampling(outerSampling);
-      algo.setBatchSize(getReplicationSize());
-      algo.setBlockSize(getReplicationSize());
-      algo.setIndexQuantileEpsilon(-1);
-      algo.setIndexQuantileLevel(1 - getConfidenceLevel());
+      algo_i.setMaximumOuterSampling(outerSampling);
+      algo_i.setBatchSize(getReplicationSize());
+      algo_i.setBlockSize(getReplicationSize());
+      algo_i.setIndexQuantileEpsilon(-1.0);
+      algo_i.setIndexQuantileLevel(1.0 - getConfidenceLevel());
 
       // run algo
-      algo.run();
+      algo_i.run();
 
       // set results
-      SobolSimulationResult sobolResult_i(algo.getResult());
+      SobolSimulationResult sobolResult_i(algo_i.getResult());
       result_.firstOrderIndices_.add(sobolResult_i.getFirstOrderIndicesEstimate());
       result_.totalIndices_.add(sobolResult_i.getTotalOrderIndicesEstimate());
       result_.firstOrderIndicesInterval_.add(sobolResult_i.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
