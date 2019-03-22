@@ -34,7 +34,7 @@ RUN curl -SsL https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz | tar xz &
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1
 
 # appimagetool
-RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/10/appimagetool-x86_64.AppImage \
+RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/11/appimagetool-x86_64.AppImage \
  && chmod a+rx appimagetool-x86_64.AppImage \
  && ./appimagetool-x86_64.AppImage --appimage-extract \
  && chmod -R a+rx squashfs-root \
@@ -59,7 +59,7 @@ RUN ln -s /usr/local/texlive/2014/bin/x86_64-linux /opt/texbin
 ENV PATH $PATH:/usr/local/texlive/2014/bin/x86_64-linux
 
 # relink texlive executables
-RUN wget http://springdale.math.ias.edu/data/puias/computational/6/x86_64/patchelf-0.8-2.sdl6.x86_64.rpm && rpm -Uvh patchelf*.rpm
+RUN yum install -y patchelf
 RUN patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/pdftex \
  && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/bibtex \
  && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/kpsewhich \
