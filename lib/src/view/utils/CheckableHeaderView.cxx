@@ -32,6 +32,12 @@ CheckableHeaderView::CheckableHeaderView(Qt::Orientation orientation, QWidget* p
 }
 
 
+bool CheckableHeaderView::isChecked() const
+{
+  return isChecked_;
+}
+
+
 void CheckableHeaderView::setModel(QAbstractItemModel* model)
 {
   QHeaderView::setModel(model);

@@ -37,6 +37,7 @@ public:
   CheckableHeaderView(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent = 0);
 
   virtual void setModel(QAbstractItemModel* model);
+  bool isChecked() const;
 
 protected:
   int getMinimumSectionSize() const;
