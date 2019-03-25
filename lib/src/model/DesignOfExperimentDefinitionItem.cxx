@@ -216,6 +216,11 @@ void DesignOfExperimentDefinitionItem::modifyAnalysis()
 
 void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
 {
+  DesignOfExperimentEvaluation * oldDoeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
+  DesignOfExperimentEvaluation * newDoeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
+  const bool wasValid = oldDoeEval->hasValidResult();
+  newDoeEval->setDesignOfExperiment(oldDoeEval->getResult().getDesignOfExperiment());
+
   // remove Evaluation item
   analysis_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
   analysis_.getImplementation().get()->removeObserver("Study");
@@ -228,7 +233,8 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_.addObserver(this);
   analysis_.addObserver(getParentStudyItem()->getStudy().getImplementation().get());
 
-  emit designEvaluationUpdated(false);
+  if (wasValid)
+    emit designEvaluationUpdated(false);
 
   // update the implementation of the design of experiments stored in Study
   getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());

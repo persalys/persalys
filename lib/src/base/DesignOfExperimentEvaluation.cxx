@@ -74,6 +74,7 @@ void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperimen
 {
   result_ = DataAnalysisResult(designOfExperiment);
   result_.designOfExperiment_.getImplementation()->initialize();
+  SimulationAnalysis::initialize();
 }
 
 
@@ -85,18 +86,12 @@ Sample DesignOfExperimentEvaluation::getOriginalInputSample() const
 }
 
 
-void DesignOfExperimentEvaluation::resetResult()
-{
-  // we want to keep the same result_.designOfExperiment_ pointer
-  result_.designOfExperiment_.getImplementation()->initialize();
-  result_ = DataAnalysisResult(result_.designOfExperiment_);
-}
-
-
 void DesignOfExperimentEvaluation::initialize()
 {
   SimulationAnalysis::initialize();
-  resetResult();
+  // we want to keep the same result_.designOfExperiment_ pointer
+  result_.designOfExperiment_.getImplementation()->initialize();
+  result_ = DataAnalysisResult(result_.designOfExperiment_);
 }
 
 

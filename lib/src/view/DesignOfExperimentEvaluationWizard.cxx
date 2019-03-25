@@ -212,7 +212,7 @@ bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
     return false;
 
   // update selected DesignOfExperimentEvaluation
-  analysis_ptr->resetResult();
+  analysis_ptr->setDesignOfExperiment(analysis_ptr->getResult().getDesignOfExperiment()); // reset result
   analysis_ptr->setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
   analysis_ptr->setInterestVariables(QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames()));
 
