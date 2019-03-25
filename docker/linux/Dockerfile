@@ -23,7 +23,7 @@ RUN curl -SsL http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
-RUN curl -SsL https://cmake.org/files/v3.12/cmake-3.12.1.tar.gz | tar xz && cd cmake-3.12.1 \
+RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz | tar xz && cd cmake-3.14.0 \
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # nlopt
@@ -164,7 +164,7 @@ RUN git clone https://github.com/openturns/openturns.git && cd openturns && git 
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.5 \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.5 && git cherry-pick 29d7aafe8eadd2fae3e497ecbd3a6f29315a5f8b \
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi
