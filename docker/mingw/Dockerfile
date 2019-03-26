@@ -6,7 +6,7 @@ RUN sudo pacman -Sy && git clone https://aur.archlinux.org/mingw-w64-protobuf.gi
 RUN aurman -Syu --noconfirm --noedit mingw-w64-paraview
 RUN sudo chmod 644 /usr/x86_64-w64-mingw32/include/qwt/*
 
-ENV ARCH=x86_64 PYMAJMIN=36
+ENV ARCH=x86_64 PYMAJMIN=37
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns

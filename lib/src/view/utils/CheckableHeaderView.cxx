@@ -28,11 +28,7 @@ CheckableHeaderView::CheckableHeaderView(Qt::Orientation orientation, QWidget* p
   , isChecked_(false)
   , modelSignalBlocked_(false)
 {
-#if QT_VERSION >= 0x050000
   setSectionsClickable(true);
-#else
-  setClickable(true);
-#endif
 }
 
 

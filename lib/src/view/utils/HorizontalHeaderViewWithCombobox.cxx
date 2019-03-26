@@ -33,11 +33,7 @@ HorizontalHeaderViewWithCombobox::HorizontalHeaderViewWithCombobox(QStringList c
 {
   connect(this, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleSectionResized(int)));
   connect(this, SIGNAL(sectionMoved(int, int, int)), this, SLOT(handleSectionMoved(int, int, int)));
-#if QT_VERSION >= 0x050000
   setSectionsMovable(true);
-#else
-  setMovable(true);
-#endif
 }
 
 

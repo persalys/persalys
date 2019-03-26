@@ -23,7 +23,7 @@ RUN curl -SsL http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
-RUN curl -SsL https://cmake.org/files/v3.12/cmake-3.12.1.tar.gz | tar xz && cd cmake-3.12.1 \
+RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz | tar xz && cd cmake-3.14.0 \
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # nlopt
@@ -34,7 +34,7 @@ RUN curl -SsL https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz | tar xz &
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1
 
 # appimagetool
-RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/10/appimagetool-x86_64.AppImage \
+RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/11/appimagetool-x86_64.AppImage \
  && chmod a+rx appimagetool-x86_64.AppImage \
  && ./appimagetool-x86_64.AppImage --appimage-extract \
  && chmod -R a+rx squashfs-root \
@@ -59,7 +59,7 @@ RUN ln -s /usr/local/texlive/2014/bin/x86_64-linux /opt/texbin
 ENV PATH $PATH:/usr/local/texlive/2014/bin/x86_64-linux
 
 # relink texlive executables
-RUN wget http://springdale.math.ias.edu/data/puias/computational/6/x86_64/patchelf-0.8-2.sdl6.x86_64.rpm && rpm -Uvh patchelf*.rpm
+RUN yum install -y patchelf
 RUN patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/pdftex \
  && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/bibtex \
  && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/kpsewhich \
@@ -74,10 +74,10 @@ RUN fc-cache -fsv
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
-RUN curl -SsL https://www.openssl.org/source/openssl-1.0.2p.tar.gz | tar xz && cd openssl-1.0.2p \
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2r.tar.gz | tar xz && cd openssl-1.0.2r \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
-RUN curl -SsL https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz | tar xz && cd Python-3.7.1 \
- && ./configure --enable-shared --enable-unicode=ucs4 CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
+RUN curl -fSsL https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz | tar xz && cd Python-3.7.2 \
+ && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
 # pip
@@ -107,10 +107,8 @@ RUN yum -y install pandoc dvipng
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
-# https://svn.boost.org/trac10/ticket/11120
-RUN ln -s /usr/local/include/python3.7m /usr/local/include/python3.7
-RUN curl -SsL https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2 | tar xj && cd boost_1_68_0 \
- && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install > /dev/null 2>&1
+RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2 | tar xj && cd boost_1_69_0 \
+ && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
 
 # X11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
@@ -162,15 +160,15 @@ RUN curl -SsL http://paraview.org/files/v5.6/ParaView-v5.6.0.tar.gz | tar xz && 
 
 # openturns
 RUN yum -y install blas-devel lapack-devel libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 4105013fc0b7880e82d9359c1bbae684a3e81ce0 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.12.1 \
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.5 \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.5 && git cherry-pick 29d7aafe8eadd2fae3e497ecbd3a6f29315a5f8b \
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi
-RUN git clone https://github.com/openturns/otfmi.git && cd otfmi && git checkout v0.2 && python3 setup.py install
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.2 && python3 -c "import otfmi"
 
 # locale
 RUN localedef -i en_US -f UTF-8 C.UTF-8

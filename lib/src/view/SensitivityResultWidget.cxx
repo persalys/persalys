@@ -168,13 +168,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
 
   // resize table
   tableView->resizeColumnsToContents();
-#if QT_VERSION >= 0x050000
   tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
   tableView->horizontalHeader()->setSectionResizeMode(proxyModel_->columnCount() - 1, QHeaderView::Stretch);
-#else
-  tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-  tableView->horizontalHeader()->setResizeMode(proxyModel_->columnCount() - 1, QHeaderView::Stretch);
-#endif
 
   // if the table is sorted : we sort the points in the graph too
   connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
