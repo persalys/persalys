@@ -1264,55 +1264,55 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DataModelWindow</name>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="91"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="98"/>
         <source>Data file</source>
         <translation>Fichier de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="120"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="127"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="136"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="147"/>
         <source>Sample</source>
         <translation>Echantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="306"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="310"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="308"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="312"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="297"/>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="319"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="301"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="323"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="78"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="85"/>
         <source>Data model</source>
         <translation>Modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="143"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="154"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="298"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="302"/>
         <source>Cannot update the table.
 %1</source>
         <translation>Impossible de mettre à jour la table.
 %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="320"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="324"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -1535,33 +1535,33 @@ métamodèle</translation>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="257"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="263"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="263"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="269"/>
         <source>Can not remove a design of experiments when an analysis is running.</source>
         <translation>Impossible de supprimer un plan d&apos;expériences lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="278"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="284"/>
         <source>The model must have at least one output. Evaluate the design of experiments</source>
         <translation>Le modèle doit avoir au moins une variable de sortie. Evaluer le plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="285"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="291"/>
         <source>The design of experiments must contain at least two points.</source>
         <translation>Le plan d&apos;expériences doit contenir au moins deux points.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="290"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="296"/>
         <source>metaModel_</source>
         <translation>métamodèle_</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="145"/>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="243"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="249"/>
         <source>The input sample is empty.</source>
         <translation>L&apos;échantillon d&apos;entrée  est vide.</translation>
     </message>
@@ -2616,159 +2616,164 @@ centrale</translation>
 <context>
     <name>OTGUI::FunctionalChaosResultWindow</name>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="65"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="66"/>
         <source>Metamodel creation parameters</source>
         <translation>Paramètres de création du métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="117"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="118"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="124"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="125"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="90"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="91"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="81"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="82"/>
         <source>Functional chaos</source>
         <translation>Chaos fonctionnel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="135"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="180"/>
         <source>Moments estimates</source>
         <translation>Estimations des moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="147"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="192"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="148"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="193"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="149"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="194"/>
         <source>Variance</source>
         <translation>Variance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="150"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="195"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="152"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="197"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="169"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="136"/>
         <source>Polynomial basis</source>
         <translation>Base polynômiale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="180"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="147"/>
         <source>Dimension</source>
         <translation>Dimension</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="181"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="148"/>
         <source>Maximum degree</source>
         <translation>Degré maximum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="182"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="149"/>
         <source>Full basis size</source>
         <translation>Taille de la base complète</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="182"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="149"/>
         <source>Basis size</source>
         <translation>Taille de la base</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="195"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="162"/>
         <source>Truncated basis size</source>
         <translation>Taille de la base tronquée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="214"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="257"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="215"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="258"/>
         <source>Part of variance</source>
         <translation>Part de variance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="254"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="255"/>
         <source>Index</source>
         <translation>Indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="255"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="256"/>
         <source>Multi-indice</source>
         <translation>Multi-indice</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="256"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="257"/>
         <source>Coefficient</source>
         <translation>Coefficient</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="257"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="258"/>
         <source>Threshold</source>
         <translation>Seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="281"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="282"/>
         <source>Sum</source>
         <translation>Somme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="294"/>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="306"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="297"/>
+        <source>The data distribution has not an independent copula, the results could be false.</source>
+        <translation>La distribution des données n&apos;a pas de copule indépendante, les résultats pourraient être faux.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="302"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="314"/>
         <source>Results</source>
         <translation>Résultats</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="333"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="344"/>
+        <source>The data distribution has not an independent copula, the Sobol indices could be false.</source>
+        <translation>La distribution des données n&apos;a pas de copule indépendante, les indices de Sobol pourraient être faux.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="348"/>
         <source>Sobol indices</source>
         <translation>Indices de Sobol</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="383"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="398"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="392"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="407"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="400"/>
-        <source>As the model has not an independent copula, the interpretation of the Sobol indices may be misleading. So they are not displayed.</source>
-        <translation>Comme le modèle n&apos;a pas de copule indépendante, les indices de Sobol&apos; pourraient être erronés. Ils ne sont donc pas affichés.</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="404"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="419"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="409"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="424"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="413"/>
+        <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="428"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
@@ -2922,8 +2927,8 @@ orientation</source>
         <translation>Impossible de charger le fichier.%1%2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="216"/>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="230"/>
+        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="212"/>
+        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="226"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
     </message>
@@ -3750,22 +3755,22 @@ bayésien (BIC)</translation>
         <translation>Impossible de charger le fichier.%1%2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="314"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="310"/>
         <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="316"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="312"/>
         <source>The mesh must contain at least two nodes</source>
         <translation>Le maillage doit contenir au moins deux noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="321"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="317"/>
         <source>The file name is empty</source>
         <translation>Le nom du fichier est vide</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="333"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="329"/>
         <source>Choose a column</source>
         <translation>Choisir une colonne</translation>
     </message>
@@ -3856,37 +3861,37 @@ bayésien (BIC)</translation>
 <context>
     <name>OTGUI::MetaModelIntroPage</name>
     <message>
-        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="43"/>
+        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="44"/>
         <source>Methods to create metamodels</source>
         <translation>Méthodes de création de métamodèles</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="48"/>
+        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="49"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="69"/>
+        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="70"/>
         <source>Method</source>
         <translation>Méthode</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="75"/>
+        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="76"/>
         <source>Functional Chaos</source>
         <translation>Chaos fonctionnel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="80"/>
+        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="81"/>
         <source>Kriging</source>
         <translation>Krigeage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="176"/>
+        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="178"/>
         <source>Sample size :</source>
         <translation>Taille d&apos;échantillon :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="197"/>
+        <location filename="../lib/src/view/MetaModelIntroPage.cxx" line="199"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
@@ -4077,29 +4082,29 @@ extremum</translation>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="68"/>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="91"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="64"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="83"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="68"/>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="91"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="64"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="83"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="81"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="77"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="102"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="94"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="106"/>
+        <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="98"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
@@ -5662,7 +5667,7 @@ métamodèle</translation>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotMatrixWidget.cxx" line="98"/>
+        <location filename="../lib/src/view/plot/PlotMatrixWidget.cxx" line="93"/>
         <source>plotmatrix</source>
         <translation>plotmatrix</translation>
     </message>
@@ -6290,7 +6295,7 @@ de l&apos;indice total</translation>
         <translation>Attention : L&apos;indice total est inférieur à l&apos;indice du premier ordre.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="187"/>
+        <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="182"/>
         <source>Interactions</source>
         <translation>Interactions</translation>
     </message>
@@ -6870,7 +6875,7 @@ Des objets ne sont peut être pas ouverts.
 <context>
     <name>OTGUI::StudyTreeView</name>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="212"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="204"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
