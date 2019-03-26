@@ -19,7 +19,7 @@ RUN git clone https://github.com/beltoforion/muparser.git && cd muparser && git 
 
 # swig
 RUN yum -y install pcre-devel
-RUN curl -SsL http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz | tar xz && cd swig-3.0.12 \
+RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz | tar xz && cd swig-3.0.12 \
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
@@ -27,7 +27,7 @@ RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz | tar xz && cd 
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # nlopt
-RUN curl -SsL https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz | tar xz && cd nlopt-2.5.0 \
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz | tar xz && cd nlopt-2.5.0 \
  && cmake -DINSTALL_LIB_DIR=/usr/local/lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1
 
 # tbb
@@ -42,7 +42,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/11/appimag
  && appimagetool -h
 
 # glibc 2.14
-RUN curl -SsL http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz | tar xz && cd glibc-2.14 \
+RUN curl -fSsL http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz | tar xz && cd glibc-2.14 \
  && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # texlive: see https://github.com/leodido/dockerfiles/blob/master/texlive:latest/Dockerfile
@@ -81,29 +81,32 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz | tar xz
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
 # pip
-RUN curl -sSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
+RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
  && pip install -U pip wheel setuptools && pip install scipy pandas matplotlib ipython --upgrade
 
 # sundials
-RUN curl -kL https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz | tar xz && cd sundials-2.7.0 \
- && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF \
-    -DEXAMPLES_INSTALL=OFF -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t .. && make install > /dev/null 2>&1
+RUN yum -y install blas-devel lapack-devel
+RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-3.2.1.tar.gz | tar xz && cd sundials-3.2.1 \
+ && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
+    -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t -DCMAKE_INSTALL_LIBDIR=lib .. && make install > /dev/null 2>&1
 
 # fmilib
-RUN wget -q https://jmodelica.org/FMILibrary/FMILibrary-2.0.3-src.zip && unzip FMILibrary-2.0.3-src.zip && cd FMILibrary-2.0.3 \
+RUN curl -fSsLO https://jmodelica.org/FMILibrary/FMILibrary-2.0.3-src.zip && unzip -q FMILibrary-2.0.3-src.zip && cd FMILibrary-2.0.3 \
  && mkdir build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1
 
-# pyfmi
+# assimulo
 RUN pip install lxml cython \
- && wget -q https://pypi.io/packages/source/A/Assimulo/Assimulo-2.9.zip && unzip Assimulo-2.9.zip && cd Assimulo-2.9 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local \
- && sed -i 's|print("Could not find GLIMDA")|pass|g' /usr/local/lib/python*/site-packages/assimulo/solvers/glimda.py \
- && cd .. && python3 -c "import assimulo; import assimulo.solvers" \
- && wget -q https://pypi.io/packages/source/P/PyFMI/PyFMI-2.4.0.zip && unzip PyFMI-2.4.0.zip && cd PyFMI-2.4 \
- && curl -SsL https://raw.githubusercontent.com/conda-forge/pyfmi-feedstock/8e183edf2c17a4f58cc2daad3d5f118fe5fdd9d5/recipe/get_temp_location-keyerror.patch | patch -p1 \
+ && curl -fSsL https://github.com/modelon/Assimulo/archive/Assimulo-3.0.tar.gz | tar xz && cd Assimulo-Assimulo-3.0 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
+ && cd .. && python3 -c "import assimulo; import assimulo.solvers"
+
+# pyfmi
+RUN curl -fSsL https://github.com/modelon/PyFMI/archive/PyFMI-2.5.tar.gz | tar xz && cd PyFMI-PyFMI-2.5 \
+ && curl -fSsL https://github.com/modelon/PyFMI/pull/11.patch | patch -p1 \
+ && curl -fSsL https://github.com/modelon/PyFMI/pull/13.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
 # sphinx
-RUN yum -y install pandoc dvipng
+RUN yum -y install pandoc dvisvgm
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
@@ -117,18 +120,18 @@ RUN yum -y install freetype-devel libjpeg-turbo-devel libxcb-devel xcb-util xcb-
 RUN xvfb-run -h
 
 # qt
-RUN curl -SsL https://download.qt.io/archive/qt/5.11/5.11.2/single/qt-everywhere-src-5.11.2.tar.xz | tar xJ && cd qt-everywhere-src-5.11.2 \
+RUN curl -fSsL https://download.qt.io/archive/qt/5.11/5.11.2/single/qt-everywhere-src-5.11.2.tar.xz | tar xJ && cd qt-everywhere-src-5.11.2 \
  && ./configure -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # qwt
-RUN curl -SsL http://downloads.sourceforge.net/qwt/qwt-6.1.3.tar.bz2 | tar xj && cd qwt-6.1.3 \
+RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.3.tar.bz2 | tar xj && cd qwt-6.1.3 \
  && sed -i "s|QWT_INSTALL_PREFIX    = /usr/local/qwt-\$\$QWT_VERSION|QWT_INSTALL_PREFIX = /usr/local|g" qwtconfig.pri \
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # paraview
-RUN curl -SsL http://paraview.org/files/v5.6/ParaView-v5.6.0.tar.gz | tar xz && cd ParaView-v5.6.0 \
+RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.0.tar.gz | tar xz && cd ParaView-v5.6.0 \
   && mkdir build && cd build && cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
@@ -159,7 +162,7 @@ RUN curl -SsL http://paraview.org/files/v5.6/ParaView-v5.6.0.tar.gz | tar xz && 
   .. && make install > /dev/null 2>&1
 
 # openturns
-RUN yum -y install blas-devel lapack-devel libxml2-devel
+RUN yum -y install libxml2-devel
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.12.1 \
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
@@ -176,13 +179,9 @@ ENV LANG "C.UTF-8"
 
 # openmodelica
 RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel libtool gettext zip
-RUN git clone --recursive https://github.com/OpenModelica/OMCompiler.git && cd OMCompiler && git checkout v1.12.0 \
+RUN git clone --recursive https://github.com/OpenModelica/OMCompiler.git && cd OMCompiler && git checkout v1.13.2 \
  && git submodule sync && git submodule update --init --recursive \
- && git cherry-pick 63848be39fe6ff0bb7096c8fad3f68b8078286db \
  && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
-
-# TODO: replace dvipng in the lines above
-RUN yum install -y dvisvgm &&  dvisvgm -V
 
 # devel user
 RUN yum -y install sudo
