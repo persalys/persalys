@@ -1322,94 +1322,94 @@ métamodèle</translation>
 <context>
     <name>OTGUI::DataTableModel</name>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="503"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="516"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="505"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="518"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="507"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="520"/>
         <source>Variability</source>
         <translation>Variablilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="509"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="522"/>
         <source>Causality</source>
         <translation>Causalité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="511"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="524"/>
         <source>I/O</source>
         <translation>E/S</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="513"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="526"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="550"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="563"/>
         <source>Constant</source>
         <translation>Constante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="553"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="566"/>
         <source>Fixed</source>
         <translation>Fixe</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="556"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="569"/>
         <source>Tunable</source>
         <translation>Ajustable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="559"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="572"/>
         <source>Discrete</source>
         <translation>Discrete</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="562"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="575"/>
         <source>Continuous</source>
         <translation>Continue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="565"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="578"/>
         <source>Unknown</source>
         <translation>Inconnue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="580"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="607"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="593"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="620"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="583"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="596"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="586"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="610"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="599"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="623"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="589"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="602"/>
         <source>Local</source>
         <translation>Locale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="604"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="617"/>
         <source>Disabled</source>
         <translation>Desactivé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="807"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="820"/>
         <source>parameter:%1, input:%2, output:%3, local:%4</source>
         <translation>paramètre :%1, entrée : %2, sortie : %3, locale : %4</translation>
     </message>
@@ -1863,253 +1863,248 @@ métamodèle</translation>
 <context>
     <name>OTGUI::FMIPhysicalModelWindow</name>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="56"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="58"/>
         <source>FMI model</source>
         <translation>Modèle FMI</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="66"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="68"/>
         <source>FMU file</source>
         <translation>Fichier FMU</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="72"/>
-        <source>Search file</source>
-        <translation>Chercher fichier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="79"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="83"/>
         <source>Identifier</source>
         <translation>Identitiant</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="80"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="84"/>
         <source>FMI version</source>
         <translation>Version FMI</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="81"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="85"/>
         <source>Tool</source>
         <translation>Outil</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="82"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="86"/>
         <source>Platform</source>
         <translation>Plateforme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="83"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="87"/>
         <source>Author</source>
         <translation>Auteur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="84"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="88"/>
         <source>Version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="85"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="89"/>
         <source>Copyright</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="86"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="90"/>
         <source>Date/Time</source>
         <translation>Date/Heure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="87"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="91"/>
         <source>GUID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="88"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="92"/>
         <source>Number of variables</source>
         <translation>Nombre de variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="89"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="140"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="141"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="93"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="144"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="145"/>
         <source>Causality</source>
         <translation>Causalité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="99"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="103"/>
         <source>Properties</source>
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="107"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="111"/>
         <source>Filters</source>
         <translation>Filtres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="117"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="117"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="123"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="127"/>
         <source>Match case</source>
         <translation>Casse</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="129"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="133"/>
         <source>Constant</source>
         <translation>Constante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="129"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="133"/>
         <source>Fixed</source>
         <translation>Fixée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="129"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="133"/>
         <source>Tunable</source>
         <translation>Ajustable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="129"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="133"/>
         <source>Discrete</source>
         <translation>Discrete</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="129"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="133"/>
         <source>Continuous</source>
         <translation>Continue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="129"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="133"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="143"/>
         <source>Unknown</source>
         <translation>Inconnue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="130"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="131"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="134"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="135"/>
         <source>Variability</source>
         <translation>Variabililité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="143"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="143"/>
         <source>Calculated</source>
         <translation>Calculé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="139"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="149"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="457"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="143"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="153"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="470"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="139"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="149"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="457"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="143"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="153"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="470"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="143"/>
         <source>Local</source>
         <translation>Locale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="143"/>
         <source>Independent</source>
         <translation>Indépendante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="149"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="457"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="153"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="470"/>
         <source>Disabled</source>
         <translation>Désactivé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="150"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="151"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="154"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="155"/>
         <source>I/O</source>
         <translation>E/S</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="158"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="162"/>
         <source>Clear</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="181"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="185"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="182"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="186"/>
         <source>Evaluate the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="194"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="198"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="200"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="204"/>
         <source>Finite difference step definition</source>
         <translation>Définition du pas de différence finie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="219"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="225"/>
         <source>Differentiation</source>
         <translation>Différentiation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="244"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="250"/>
         <source>No inputs</source>
         <translation>Pas d&apos;entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="251"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="257"/>
         <source>No outputs</source>
         <translation>Pas de sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="270"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="283"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="285"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="298"/>
         <source>Model to import...</source>
         <translation>Modèle à importer...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="287"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="300"/>
         <source>FMU files (*.fmu);;</source>
         <translation>Fichiers FMU (*.fmu);;</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="297"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="310"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="298"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="311"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 : %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="410"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="423"/>
         <source>Selected variables: input:%1, output:%2</source>
         <translation>Variables séléctionnées : entrée : %1, sortie : %2</translation>
     </message>
@@ -5114,39 +5109,39 @@ ou interaction</translation>
         <translation>Analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="167"/>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="241"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="166"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="240"/>
         <source>The physical model must have inputs.</source>
         <translation>Le modèle physique doit avoir des entrées.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="180"/>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="225"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="179"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="224"/>
         <source>The physical model must have inputs AND at least one selected output.</source>
         <translation>Le modèle physique doit avoir des entrées ET au moins une sortie sélectionnée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="185"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="184"/>
         <source>evaluation_</source>
         <translation>évaluation_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="207"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="206"/>
         <source>The physical model must have at least two inputs and at least one selected output.</source>
         <translation>Le modèle physique doit avoir au moins deux entrées et au moins une sortie sélectionnée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="212"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="211"/>
         <source>screening_</source>
         <translation>criblage_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="230"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="229"/>
         <source>optimization_</source>
         <translation>optimisation_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="246"/>
+        <location filename="../lib/src/model/PhysicalModelDefinitionItem.cxx" line="245"/>
         <source>design_</source>
         <translation>plan_</translation>
     </message>
@@ -5154,143 +5149,158 @@ ou interaction</translation>
 <context>
     <name>OTGUI::PhysicalModelDiagramItem</name>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="51"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="52"/>
         <source>Define the model</source>
         <translation>Définir le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="52"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="53"/>
         <source>Define the physical model</source>
         <translation>Définir le modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="56"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="57"/>
+        <source>Duplicate the model</source>
+        <translation>Dupliquer le modèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="62"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="57"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="63"/>
         <source>Remove the physical model</source>
         <translation>Supprimer le modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="138"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="152"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="145"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="159"/>
         <source>There is no design of experiments.</source>
         <translation>Il n&apos;y a aucun plan d&apos;expériences.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="165"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="172"/>
         <source>metamodel_</source>
         <translation>métamodèle_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="175"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="182"/>
         <source>We have not found a design of experiments with an output sample.
 </source>
         <translation>Nous n&apos;avons pas trouvé de plan d&apos;expériences avec un échantillon de sortie.
 </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="192"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="199"/>
         <source>reliability_</source>
         <translation>fiabilité_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="204"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="212"/>
+        <source>copy</source>
+        <translation>copie</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="223"/>
         <source>Can not remove a physical model when an analysis is running.</source>
         <translation>Impossible de supprimer un modèle physique lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="386"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="405"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="391"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="410"/>
         <source>New evaluation</source>
         <translation>Nouvelle évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="406"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="421"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="435"/>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="449"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="425"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="440"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="454"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="468"/>
         <source>New analysis</source>
         <translation>Nouvelle analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="392"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="411"/>
         <source>Create a new model evaluation</source>
         <translation>Créer une nouvelle évaluation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="401"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="58"/>
+        <source>Duplicate the physical model</source>
+        <translation>Dupliquer le modèle physique</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="420"/>
         <source>Central tendency</source>
         <translation>Tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="407"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="426"/>
         <source>Create a new central tendency</source>
         <translation>Créer une nouvelle analyse en tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="416"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="435"/>
         <source>Sensitivity</source>
         <translation>Sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="422"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="441"/>
         <source>Create a new sensitivity analysis</source>
         <translation>Créer une nouvelle analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="430"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="449"/>
         <source>Screening</source>
         <translation>Criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="436"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="455"/>
         <source>Create a new screening analysis</source>
         <translation>Créer un nouveau criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="444"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="463"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="450"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="469"/>
         <source>Create a new optimization analysis</source>
         <translation>Créer une nouvelle optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="481"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="500"/>
         <source>Reliability</source>
         <translation>Fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="486"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="505"/>
         <source>New limit state</source>
         <translation>Nouvel état limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="487"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="506"/>
         <source>Create a new limit state</source>
         <translation>Créer un nouvel état limite</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="341"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="360"/>
         <source>Designs of experiments</source>
         <translation>Plans d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="346"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="365"/>
         <source>New design of experiments</source>
         <translation>Nouveau plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="347"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="366"/>
         <source>Create a new design of experiments</source>
         <translation>Créer un nouveau plan d&apos;expériences</translation>
     </message>
@@ -5496,74 +5506,74 @@ métamodèle</translation>
 <context>
     <name>OTGUI::PhysicalModelWindowWidget</name>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="83"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="82"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="102"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="166"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="101"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="165"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="103"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="102"/>
         <source>Add an input</source>
         <translation>Ajouter une entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="106"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="170"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="105"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="169"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="107"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="106"/>
         <source>Remove the selected input</source>
         <translation>Supprimer l&apos;entrée sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="130"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="129"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="167"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="166"/>
         <source>Add an output</source>
         <translation>Ajouter une sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="171"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="170"/>
         <source>Remove the selected output</source>
         <translation>Supprimer la sortie sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="155"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="154"/>
         <source>Evaluate</source>
         <translation>Evaluer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="156"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="155"/>
         <source>Evaluate the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="187"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="186"/>
         <source>Enable multiprocessing</source>
         <translation>Parallélisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="189"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="188"/>
         <source>Warning: the parallelization operation must be significantly faster than the code execution</source>
         <translation>Attention: la parallélisation doit être significativement plus rapide que l&apos;exécution du code</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="201"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="200"/>
         <source>Definition</source>
         <translation>Définition</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="209"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="208"/>
         <source>Finite difference step definition</source>
         <translation>Définition du pas de différence finie</translation>
     </message>
@@ -7624,7 +7634,7 @@ Des objets ne sont peut être pas ouverts.
 <context>
     <name>OTGUI::TreeModel</name>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="959"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="972"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>

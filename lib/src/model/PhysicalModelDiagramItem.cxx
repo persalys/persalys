@@ -35,6 +35,7 @@ namespace OTGUI
 PhysicalModelDiagramItem::PhysicalModelDiagramItem(const PhysicalModel & physicalModel)
   : PhysicalModelItem(physicalModel, "PhysicalModelDiagram")
   , defineAction_(0)
+  , duplicateAction_(0)
   , removeAction_(0)
   , limitStateCounter_(0)
   , doeCounter_(Indices(2))
@@ -52,6 +53,11 @@ void PhysicalModelDiagramItem::buildActions()
   defineAction_->setStatusTip(tr("Define the physical model"));
   connect(defineAction_, SIGNAL(triggered()), this, SLOT(appendPhysicalModelItem()));
 
+  // duplicate physical model action
+  duplicateAction_ = new QAction(tr("Duplicate the model"), this);
+  duplicateAction_->setStatusTip(tr("Duplicate the physical model"));
+  connect(duplicateAction_, SIGNAL(triggered()), this, SLOT(duplicatePhysicalModel()));
+
   // remove physical model action
   removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeAction_->setStatusTip(tr("Remove the physical model"));
@@ -59,6 +65,7 @@ void PhysicalModelDiagramItem::buildActions()
 
   // add actions
   appendAction(defineAction_);
+  appendAction(duplicateAction_);
   appendSeparator();
   appendAction(removeAction_);
 }
@@ -193,6 +200,18 @@ void PhysicalModelDiagramItem::requestReliabilityCreation()
   MonteCarloReliabilityAnalysis analysis(analysisName, limitState);
   // emit signal to StudyManager to open a 'general' wizard (with a list of limit states)
   emit analysisRequested(this, analysis, true);
+}
+
+
+void PhysicalModelDiagramItem::duplicatePhysicalModel()
+{
+  if (!getParentStudyItem())
+    return;
+  // duplicate
+  PhysicalModelImplementation * newModel = physicalModel_.getImplementation()->clone();
+  String newName = getParentStudyItem()->getStudy().getAvailablePhysicalModelName((QString(physicalModel_.getName().c_str()) + "_" + tr("copy")).toStdString());
+  newModel->setName(newName);
+  getParentStudyItem()->getStudy().add(PhysicalModel(newModel));
 }
 
 

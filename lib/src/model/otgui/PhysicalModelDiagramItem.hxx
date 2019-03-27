@@ -53,6 +53,7 @@ public slots:
   void requestLimitStateRemoval();
   void requestDesignOfExperimentRemoval(bool);
   void updateDesignEvaluationCounter(bool);
+  void duplicatePhysicalModel();
   void removePhysicalModel();
 
 signals:
@@ -92,6 +93,7 @@ protected:
 
 private:
   QAction * defineAction_;
+  QAction * duplicateAction_;
   QAction * removeAction_;
   int limitStateCounter_;
   OT::Indices doeCounter_;
