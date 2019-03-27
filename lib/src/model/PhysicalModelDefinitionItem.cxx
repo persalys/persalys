@@ -108,7 +108,6 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
   }
   else if (message == "inputNameChanged")
   {
-    emit inputListDifferentiationChanged();
     emit inputListDefinitionChanged();
   }
   else if (message == "inputDescriptionChanged")
