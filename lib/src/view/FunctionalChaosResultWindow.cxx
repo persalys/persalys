@@ -27,6 +27,7 @@
 #include "otgui/SensitivityResultWidget.hxx"
 #include "otgui/QtTools.hxx"
 #include "otgui/TranslationManager.hxx"
+#include "otgui/TemporaryLabel.hxx"
 
 #include <openturns/SpecFunc.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -131,40 +132,6 @@ void FunctionalChaosResultWindow::buildInterface()
     QWidget * summaryWidget = new QWidget;
     QGridLayout * summaryWidgetLayout = new QGridLayout(summaryWidget);
 
-    // moments estimates
-    QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
-    QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
-    ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
-
-    for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
-    {
-      CopyableTableView * momentsEstimationsTableView = new CopyableTableView;
-      momentsEstimationsTableView->horizontalHeader()->hide();
-      momentsEstimationsTableView->verticalHeader()->hide();
-      CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(3, 2, momentsEstimationsTableView);
-      momentsEstimationsTableView->setModel(momentsEstimationsTable);
-      // - vertical header
-      momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));
-      momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Mean"));
-      momentsEstimationsTable->setNotEditableHeaderItem(2, 0, tr("Variance"));
-      momentsEstimationsTable->setNotEditableHeaderItem(3, 0, tr("Standard deviation"));
-      // - horizontal header
-      momentsEstimationsTable->setNotEditableHeaderItem(0, 1, tr("Value"));
-      // - moments values
-      momentsEstimationsTable->setNotEditableItem(1, 1, result_.getMean()[outputIndex]);
-      momentsEstimationsTable->setNotEditableItem(2, 1, result_.getVariance()[outputIndex]);
-      momentsEstimationsTable->setNotEditableItem(3, 1, std::sqrt(result_.getVariance()[outputIndex]));
-
-      momentsEstimationsTableView->resizeToContents();
-
-      momentsStackedWidget->addWidget(momentsEstimationsTableView);
-    }
-    momentsGroupBoxLayout->addWidget(momentsStackedWidget);
-
-    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
-
-    summaryWidgetLayout->addWidget(momentsGroupBox);
-
     // chaos result
     QGroupBox * basisGroupBox = new QGroupBox(tr("Polynomial basis"));
     QVBoxLayout * basisGroupBoxLayout = new QVBoxLayout(basisGroupBox);
@@ -208,6 +175,40 @@ void FunctionalChaosResultWindow::buildInterface()
     basisGroupBoxLayout->addWidget(basisStackedWidget);
     connect(outputsListWidget, SIGNAL(currentRowChanged(int)), basisStackedWidget, SLOT(setCurrentIndex(int)));
     summaryWidgetLayout->addWidget(basisGroupBox);
+
+    // moments estimates
+    QGroupBox * momentsGroupBox = new QGroupBox(tr("Moments estimates"));
+    QVBoxLayout * momentsGroupBoxLayout = new QVBoxLayout(momentsGroupBox);
+    ResizableStackedWidget * momentsStackedWidget = new ResizableStackedWidget;
+
+    for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
+    {
+      CopyableTableView * momentsEstimationsTableView = new CopyableTableView;
+      momentsEstimationsTableView->horizontalHeader()->hide();
+      momentsEstimationsTableView->verticalHeader()->hide();
+      CustomStandardItemModel * momentsEstimationsTable = new CustomStandardItemModel(3, 2, momentsEstimationsTableView);
+      momentsEstimationsTableView->setModel(momentsEstimationsTable);
+      // - vertical header
+      momentsEstimationsTable->setNotEditableHeaderItem(0, 0, tr("Estimate"));
+      momentsEstimationsTable->setNotEditableHeaderItem(1, 0, tr("Mean"));
+      momentsEstimationsTable->setNotEditableHeaderItem(2, 0, tr("Variance"));
+      momentsEstimationsTable->setNotEditableHeaderItem(3, 0, tr("Standard deviation"));
+      // - horizontal header
+      momentsEstimationsTable->setNotEditableHeaderItem(0, 1, tr("Value"));
+      // - moments values
+      momentsEstimationsTable->setNotEditableItem(1, 1, result_.getMean()[outputIndex]);
+      momentsEstimationsTable->setNotEditableItem(2, 1, result_.getVariance()[outputIndex]);
+      momentsEstimationsTable->setNotEditableItem(3, 1, std::sqrt(result_.getVariance()[outputIndex]));
+
+      momentsEstimationsTableView->resizeToContents();
+
+      momentsStackedWidget->addWidget(momentsEstimationsTableView);
+    }
+    momentsGroupBoxLayout->addWidget(momentsStackedWidget);
+
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), momentsStackedWidget, SLOT(setCurrentIndex(int)));
+
+    summaryWidgetLayout->addWidget(momentsGroupBox);
 
     // Part of variance
     // reuse of OT::FunctionalChaosSobolIndices::summary() content
@@ -290,6 +291,13 @@ void FunctionalChaosResultWindow::buildInterface()
 
     summaryWidgetLayout->setRowStretch(3, 1);
 
+    if (!hasValidSobolResult_)
+    {
+      TemporaryLabel * errorLabel = new TemporaryLabel;
+      errorLabel->setErrorMessage(tr("The data distribution has not an independent copula, the results could be false."));
+      summaryWidgetLayout->addWidget(errorLabel);
+    }
+
     scrollArea->setWidget(summaryWidget);
     tabWidget->addTab(scrollArea, tr("Results"));
   }
@@ -308,7 +316,7 @@ void FunctionalChaosResultWindow::buildInterface()
   }
 
   // third tab : SOBOL INDICES --------------------------------
-  if (hasValidSobolResult_ && result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
+  if (result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
   {
     QScrollArea * sobolScrollArea = new QScrollArea;
     sobolScrollArea->setWidgetResizable(true);
@@ -329,6 +337,13 @@ void FunctionalChaosResultWindow::buildInterface()
       sobolStackedWidget->addWidget(sobolResultWidget);
     }
     vbox->addWidget(sobolStackedWidget);
+    if (!hasValidSobolResult_)
+    {
+      vbox->addStretch();
+      TemporaryLabel * errorLabel = new TemporaryLabel;
+      errorLabel->setErrorMessage(tr("The data distribution has not an independent copula, the Sobol indices could be false."));
+      vbox->addWidget(errorLabel);
+    }
     sobolScrollArea->setWidget(widget);
     tabWidget->addTab(sobolScrollArea, tr("Sobol indices"));
   }
@@ -393,12 +408,12 @@ void FunctionalChaosResultWindow::buildInterface()
   }
 
   // tab : ERRORS --------------------------------
-  if (!errorMessage_.isEmpty() || !hasValidSobolResult_)
+  if (!errorMessage_.isEmpty())
   {
     QWidget * indicesWidget = new QWidget;
     QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
-    QLabel * errorLabel = new QLabel((!errorMessage_.isEmpty() ? errorMessage_ + "\n" : "") + tr("As the model has not an independent copula, the interpretation of the Sobol indices may be misleading. So they are not displayed."));
-    errorLabel->setWordWrap(true);
+    TemporaryLabel * errorLabel = new TemporaryLabel;
+    errorLabel->setErrorMessage(errorMessage_);
     indicesWidgetLayout->addWidget(errorLabel);
     indicesWidgetLayout->addStretch();
     tabWidget->addTab(indicesWidget, tr("Error"));

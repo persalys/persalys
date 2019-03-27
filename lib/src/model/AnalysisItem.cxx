@@ -100,12 +100,12 @@ QVariant AnalysisItem::data(int role) const
   // set icon
   if (role == Qt::DecorationRole)
   {
-    if (analysis_.hasValidResult())
+    if (analysis_.isRunning())
+      return QIcon(":/images/green-arrow-right.png");
+    else if (analysis_.hasValidResult())
       return QIcon(":/images/dialog-ok-apply.png");
     else if (!analysis_.getErrorMessage().empty())
       return QIcon(":/images/edit-delete.png");
-    else if (analysis_.isRunning())
-      return QIcon(":/images/green-arrow-right.png");
     else
       return QIcon(":/images/run-build.png");
   }
