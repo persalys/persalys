@@ -58,6 +58,7 @@ public:
   OT::String getPlatform() const;
   OT::String getVersion() const;
   OT::String getFMIVersion() const;
+  OT::String getModelType() const;
 
   // variables accessors
   OT::Description getVariableNames() const;
@@ -89,6 +90,7 @@ private:
   OT::String platform_;
   OT::String version_;
   OT::String fmiVersion_;
+  OT::String modelType_;
 
   // variables
   OT::Description variableNames_;

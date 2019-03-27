@@ -130,6 +130,14 @@ void FMUInfo::initialize()
 
   ScopedPyObjectPointer fmiVersionStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_version"), NULL)); // new reference
   fmiVersion_ = convert<_PyBytes_, String>(fmiVersionStr.get());
+
+  ScopedPyObjectPointer fmuClass(PyObject_GetAttrString(model.get(), const_cast<char*>("__class__"))); // new reference
+  ScopedPyObjectPointer fmuClassName(PyObject_GetAttrString(fmuClass.get(), const_cast<char*>("__name__"))); // new reference
+  modelType_ = convert<_PyString_, String>(fmuClassName.get());
+  if (modelType_.find("ModelME") != std::string::npos)
+    modelType_ = "Model Exchange";
+  else if (modelType_.find("ModelCS") != std::string::npos)
+    modelType_ = "Co-Simulation";
 }
 
 
@@ -211,6 +219,12 @@ String FMUInfo::getFMIVersion() const
 }
 
 
+String FMUInfo::getModelType() const
+{
+  return modelType_;
+}
+
+
 Description FMUInfo::getVariableNames() const
 {
   return variableNames_;
@@ -255,6 +269,7 @@ void FMUInfo::save(Advocate & adv) const
   adv.saveAttribute("platform_", platform_);
   adv.saveAttribute("version_", version_);
   adv.saveAttribute("fmiVersion_", fmiVersion_);
+  adv.saveAttribute("modelType_", modelType_);
   adv.saveAttribute("variableNames_", variableNames_);
   adv.saveAttribute("causality_", causality_);
   adv.saveAttribute("variability_", variability_);
@@ -277,6 +292,7 @@ void FMUInfo::load(Advocate & adv)
   adv.loadAttribute("platform_", platform_);
   adv.loadAttribute("version_", version_);
   adv.loadAttribute("fmiVersion_", fmiVersion_);
+  adv.loadAttribute("modelType_", modelType_);
   adv.loadAttribute("variableNames_", variableNames_);
   adv.loadAttribute("causality_", causality_);
   adv.loadAttribute("variability_", variability_);

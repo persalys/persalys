@@ -84,6 +84,16 @@ fmiVersion : str
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") OTGUI::FMUInfo::getModelType
+"Model type accessor.
+
+Returns
+-------
+model_type : str
+    Model type string: either `Model Exchange` or `Co-Simulation`"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") OTGUI::FMUInfo::getVersion
 "Model version accessor.
 

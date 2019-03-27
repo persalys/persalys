@@ -79,6 +79,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   namesList << tr("Identifier");
   namesList << tr("FMI version");
   namesList << tr("Tool");
+  namesList << tr("Model type");
   namesList << tr("Platform");
   namesList << tr("Author");
   namesList << tr("Version");
@@ -797,6 +798,7 @@ void DataTableModel::loadData(const FMUInfo & info)
   properties_.add(info.getIdentifier());
   properties_.add(info.getFMIVersion());
   properties_.add(info.getTool());
+  properties_.add(info.getModelType());
   properties_.add(info.getPlatform());
   properties_.add(info.getAuthor());
   properties_.add(info.getVersion());
