@@ -30,11 +30,13 @@
 #include "otgui/TitledComboBox.hxx"
 #include "otgui/SpinBoxDelegate.hxx"
 #include "otgui/DifferentiationTableModel.hxx"
+#include "otgui/StudyTreeViewModel.hxx"
 
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QToolButton>
 #include <QMessageBox>
 #include <QApplication>
 #include <QTreeView>
@@ -66,10 +68,12 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   fieldsLayout->addWidget(new QLabel(tr("FMU file")));
 
   FMUfileNameEdit_ = new QLineEdit;
+  FMUfileNameEdit_->setReadOnly(true);
   FMUfileNameEdit_->setText(QString::fromUtf8(getFMIPhysicalModel()->getFMUFileName().c_str()));
   fieldsLayout->addWidget(FMUfileNameEdit_);
 
-  QPushButton * selectFileButton = new QPushButton(tr("Search file"));
+  QToolButton * selectFileButton = new QToolButton;
+  selectFileButton->setText("...");
   connect(selectFileButton, SIGNAL(clicked()), this, SLOT(selectImportFileDialogRequested()));
   fieldsLayout->addWidget(selectFileButton);
 
@@ -178,7 +182,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   // button Evaluate outputs
   ioCountLabel_ = new QLabel;
-  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/run-build.png"), tr("Evaluate"));
+  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
   QHBoxLayout * evaluationLayout = new QHBoxLayout;
@@ -211,7 +215,9 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   DifferentiationTableModel * differentiationTableModel  = new DifferentiationTableModel(physicalModel_, differentiationTableView);
   connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
+  connect(item, SIGNAL(numberInputsChanged()), differentiationTableModel, SLOT(updateData()));
   connect(item, SIGNAL(inputListDefinitionChanged()), differentiationTableModel, SLOT(updateData()));
+  connect(item, SIGNAL(inputListDifferentiationChanged()), differentiationTableModel, SLOT(updateData()));
   differentiationTableView->setModel(differentiationTableModel);
 
   vbox->addWidget(differentiationTableView);
@@ -254,7 +260,14 @@ void FMIPhysicalModelWindow::evaluateOutputs()
 
   // evaluate
   ModelEvaluation eval("anEval", physicalModel_);
-  eval.run();
+  try
+  {
+    eval.run();
+  }
+  catch (std::exception& ex)
+  {
+    // do nothing
+  }
 
   // get result
   Sample outputSample(eval.getResult().getDesignOfExperiment().getOutputSample());
@@ -632,7 +645,7 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
               break;
             }
         }
-        return value;
+        return QString::number(value, 'g', StudyTreeViewModel::DefaultSignificantDigits);
       }
       default:
         break;
