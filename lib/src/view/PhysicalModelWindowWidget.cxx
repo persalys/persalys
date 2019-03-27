@@ -60,7 +60,6 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem
   connect(item, SIGNAL(outputChanged()), this, SIGNAL(updateOutputTableData()));
 
   connect(item, SIGNAL(inputListDifferentiationChanged()), this, SIGNAL(updateDifferentiationTableData()));
-  connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateDifferentiationTableData()));
 
   connect(item, SIGNAL(meshChanged()), this, SLOT(updateIndexParamLabel()));
 
@@ -224,6 +223,7 @@ void PhysicalModelWindowWidget::buildInterface()
     // connections
     connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
     connect(this, SIGNAL(updateInputTableData()), differentiationTableModel, SLOT(updateData()));
+    connect(this, SIGNAL(updateDifferentiationTableData()), differentiationTableModel, SLOT(updateData()));
     connect(inputTableModel, SIGNAL(inputNumberChanged()), differentiationTableModel, SLOT(updateData()));
     connect(inputTableModel, SIGNAL(inputNameChanged()), differentiationTableModel, SLOT(updateData()));
 
