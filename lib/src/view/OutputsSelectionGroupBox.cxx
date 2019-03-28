@@ -30,6 +30,7 @@ namespace OTGUI
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   : QGroupBox(tr("Outputs of interest"), parent)
   , pluralText_(true)
+  , namesLabel_(new QLabel)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
@@ -38,12 +39,15 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   // custom combobox to choose output of interest
   outputsComboBox_ = new TitledComboBox("-- " + tr("Select outputs") + " --");
   outputLayout->addWidget(outputsComboBox_);
+
+  outputLayout->addWidget(namesLabel_);
 }
 
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* parent)
   : QGroupBox((pluralText ? tr("Outputs of interest") : tr("Output of interest")), parent)
   , pluralText_(pluralText)
+  , namesLabel_(new QLabel)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
@@ -52,12 +56,15 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* par
   // custom combobox to choose output of interest
   outputsComboBox_ = new TitledComboBox("-- " + (pluralText_ ? tr("Select outputs") : tr("Select output")) + " --");
   outputLayout->addWidget(outputsComboBox_);
+
+  outputLayout->addWidget(namesLabel_);
 }
 
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNames, const Description& interestVariables, QWidget* parent)
   : QGroupBox(tr("Outputs of interest"), parent)
   , pluralText_(true)
+  , namesLabel_(new QLabel)
   , outputsListWidget_(0)
   , outputsComboBox_(0)
 {
@@ -68,6 +75,8 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
   outputLayout->addWidget(outputsComboBox_);
 
   updateComboBoxModel(outputsNames, interestVariables);
+
+  outputLayout->addWidget(namesLabel_);
 }
 
 
@@ -101,7 +110,16 @@ void OutputsSelectionGroupBox::updateComboBoxModel(const Description& outputsNam
   outputsListWidget_ = new ListWidgetWithCheckBox("-- " + (pluralText_ ? tr("Select outputs") : tr("Select output")) + " --", outputsList, variablesStringList, this);
 
   connect(outputsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SIGNAL(outputsSelectionChanged(QStringList)));
+  connect(outputsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(updateLabel(QStringList)));
   outputsComboBox_->setModel(outputsListWidget_->model());
   outputsComboBox_->setView(outputsListWidget_);
+
+  namesLabel_->setText(variablesStringList.join(", "));
+}
+
+
+void OutputsSelectionGroupBox::updateLabel(const QStringList& variables)
+{
+  namesLabel_->setText(variables.join(", "));
 }
 }
