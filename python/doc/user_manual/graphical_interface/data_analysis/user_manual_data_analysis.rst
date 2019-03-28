@@ -311,7 +311,7 @@ The windows allows to set up:
     - Select a copula in the list (or all of them with the **All** item):
 
         - *For a pair of variables* : bivariate
-          `copulas <http://openturns.github.io/openturns/master/user_manual/_generated/openturns.Copula.html>`_
+          `copulas <http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Copula.html>`_
           are available (Ali-Mikhail-Haq, Clayton, Farlie-Gumbel-Morgenstern, Frank, Gumbel, Normal)
         - *For a group with more than two variables*: only the Normal copula is available
           (**Add** and **Remove** buttons are then disabled)
@@ -488,7 +488,7 @@ In the following window, the generated metamodel can be validated, with three di
     training sample (default: 80% of the sample points) and test sample
     (default: 20% of the sample points).
     A new metamodel is built with the training sample and is validated with the test sample.
-  - *Using the* `K-Fold <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_ *method*:
+  - *Using the* `K-Fold <http://openturns.github.io/openturns/latest/theory/meta_modeling/cross_validation.html>`_ *method*:
     Define the number of folds (default: 5, expected: integer greater than 1) and specify how the
     folds are generated (default seed:1).
     

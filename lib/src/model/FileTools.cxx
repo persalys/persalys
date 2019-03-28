@@ -31,7 +31,7 @@
 
 namespace OTGUI
 {
-const QString FileTools::OpenTURNSUrlLink = "http://openturns.github.io/openturns/master/";
+const QString FileTools::OpenTURNSUrlLink = "http://openturns.github.io/openturns/latest/";
 
 QString FileTools::GetCurrentDir()
 {

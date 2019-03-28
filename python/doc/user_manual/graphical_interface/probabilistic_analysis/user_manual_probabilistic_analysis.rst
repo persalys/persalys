@@ -633,7 +633,7 @@ The input variables must be independent to perform a sensitivity analysis.
 
 When an analysis is required, a window appears, in order to set up:
   - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
-  - the method: `Sobol <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/sensitivity_sobol.html>`_ (default), SRC (= `Standardised Regression Coefficient <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_)
+  - the method: `Sobol <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_sobol.html>`_ (default), SRC (= `Standardised Regression Coefficient <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisMethods.png
     :align: center

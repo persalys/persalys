@@ -339,7 +339,7 @@ The first tab must contain the following values:
 5-1 Sobol indices
 ''''''''''''''''''
 
-For more details on the computation of the `Sobol indices <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/sensitivity_sobol.html>`_,
+For more details on the computation of the `Sobol indices <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_sobol.html>`_,
 check the OpenTURNS documentation.
 
 5-1-1 Definition
@@ -488,7 +488,7 @@ the following limit state window:
 '''''''''''''''
 
 For more details on the computation of the failure probability by the method of
-`Monte Carlo <http://openturns.github.io/openturns/master/theory/reliability_sensitivity/monte_carlo_simulation.html>`_,
+`Monte Carlo <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/monte_carlo_simulation.html>`_,
 you can consult the OpenTURNS documentation.
 
 6-2-1 Definition
@@ -760,7 +760,7 @@ Select the **Kriging** method and click on **Continue** button.
 
 Check the button **By K-Fold method**.
 For more details on the
-`K-Fold <http://openturns.github.io/openturns/master/theory/meta_modeling/cross_validation.html>`_
+`K-Fold <http://openturns.github.io/openturns/latest/theory/meta_modeling/cross_validation.html>`_
 method, check the OpenTURNS documentation.
 Beware the computation may be expensive: In the current example, the K-Fold method builds a metamodel five times.
 
