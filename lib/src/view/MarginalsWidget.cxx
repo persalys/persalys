@@ -603,11 +603,13 @@ void MarginalsWidget::truncationParametersStateChanged()
   try
   {
     // If the two checkboxes are unchecked : the distribution is not truncated
-    if (!lowerBoundCheckBox_->isChecked() && !upperBoundCheckBox_->isChecked() &&
-        distName != "TruncatedDistribution" && distName != "TruncatedNormal")
+    if (!lowerBoundCheckBox_->isChecked() && !upperBoundCheckBox_->isChecked())
     {
-      qDebug() << "Error: MarginalsWidget::truncationParametersStateChanged the distribution was not truncated!\n";
-      throw;
+      if (distName != "TruncatedDistribution" && distName != "TruncatedNormal")
+      {
+        qDebug() << "Error: MarginalsWidget::truncationParametersStateChanged the distribution was not truncated!\n";
+        throw;
+      }
     }
     // if at least one checkbox is checked : the distribution is truncated
     else
