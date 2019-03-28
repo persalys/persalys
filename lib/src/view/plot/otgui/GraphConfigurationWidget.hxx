@@ -36,7 +36,7 @@ class OTGUI_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Kendall, Scatter, PDF, PDF_Inference, PDFResult, SensitivityIndices, Copula, KSPDF};
+  enum Type {NoType, Kendall, Scatter, PDF, PDF_Inference, PDFResult, SensitivityIndices, Copula, KSPDF, Boxplot};
 
   GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
                            QStringList inputNames = QStringList(),
@@ -68,6 +68,7 @@ public slots:
   void updateXrange();
   void updateYrange();
   void changeLabelOrientation(int);
+  void setVariablesToShow(const QStringList&);
   void exportPlot();
 signals:
   void currentPlotChanged(int);

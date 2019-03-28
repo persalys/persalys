@@ -383,8 +383,8 @@ void DataAnalysisWindow::addBoxPlotTab()
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  ResizableStackedWidget * tabStackedWidget = new ResizableStackedWidget;
-  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), tabStackedWidget, SLOT(setCurrentIndex(int)));
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
 
   const QStringList variablesNames = outputNames_ + inputNames_;
   const QStringList variablesAxisTitles = outAxisTitles_ + inAxisTitles_;
@@ -399,34 +399,40 @@ void DataAnalysisWindow::addBoxPlotTab()
   // indices with good order
   ind.add(inInd);
 
+  WidgetBoundToDockWidget * boxPlotWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * boxPlotWidgetLayout = new QVBoxLayout(boxPlotWidget);
+
+  PlotWidget * plot = new PlotWidget(tr("boxplot"));
+
+  QList< double > ticks;
   for (int i = 0; i < variablesNames.size(); ++i)
   {
-    WidgetBoundToDockWidget * boxPlotWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * boxPlotWidgetLayout = new QVBoxLayout(boxPlotWidget);
 
-    PlotWidget * plot = new PlotWidget(tr("boxplot"));
-
+    const double mean = result_.getMean()[ind[i]][0];
+    const double std = result_.getStandardDeviation()[ind[i]][0];
     const double median = result_.getMedian()[ind[i]][0];
     const double Q1 = result_.getFirstQuartile()[ind[i]][0];
     const double Q3 = result_.getThirdQuartile()[ind[i]][0];
-    plot->plotBoxPlot(median, Q1, Q3, Q1 - 1.5 * (Q3 - Q1), Q3 + 1.5 * (Q3 - Q1), result_.getOutliers()[ind[i]]);
-    plot->setTitle(tr("Box plot:") + " " + variablesNames[i]);
-    plot->setAxisTitle(QwtPlot::yLeft, variablesAxisTitles[i]);
-
-    boxPlotWidgetLayout->addWidget(plot);
-
-    // Graph Setting
-    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot,
-        QStringList(),
-        QStringList(),
-        GraphConfigurationWidget::NoType,
-        this);
-    boxPlotWidget->setDockWidget(graphSetting);
-
-    tabStackedWidget->addWidget(boxPlotWidget);
+    plot->plotBoxPlot(mean, std, median, Q1, Q3, Q1 - 1.5 * (Q3 - Q1), Q3 + 1.5 * (Q3 - Q1), result_.getOutliers()[ind[i]], i);
+    ticks.append(i);
   }
 
-  scrollArea->setWidget(tabStackedWidget);
+  plot->setTitle(tr("Box plots"));
+  plot->setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(QtOT::StringListToDescription(variablesNames)));
+  plot->setAxisScaleEngine(QwtPlot::xBottom, new CustomScaleEngineForBoxplot(variablesNames.size()));
+  boxPlotWidgetLayout->addWidget(plot);
+
+  // Graph Setting
+  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot,
+      variablesNames,
+      QStringList(),
+      GraphConfigurationWidget::Boxplot,
+      this);
+  boxPlotWidget->setDockWidget(graphSetting);
+
+  mainLayout->addWidget(boxPlotWidget);
+
+  scrollArea->setWidget(mainWidget);
   tabWidget_->addTab(scrollArea, tr("Box plots"));
 }
 
@@ -948,6 +954,6 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
 
 void DataAnalysisWindow::updateVariablesListVisibility(int indexTab)
 {
-  variablesGroupBox_->setVisible(indexTab == 0 || indexTab == 1 || indexTab == 2);
+  variablesGroupBox_->setVisible(indexTab == 0 || indexTab == 1);
 }
 }
