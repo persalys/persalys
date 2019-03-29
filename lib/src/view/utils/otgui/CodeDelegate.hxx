@@ -41,8 +41,16 @@ signals:
 
 protected:
   virtual void keyPressEvent(QKeyEvent *e);
+  virtual void focusOutEvent(QFocusEvent *event);
+private  slots:
+  void updateVerticalScrollBarValue();
+  void updateHorizontalScrollBarValue();
 
+private:
+  int verticalScrollBarValue_;
+  int horizontalScrollBarValue_;
 };
+
 
 class OTGUI_API CodeDelegate : public QItemDelegate
 {
