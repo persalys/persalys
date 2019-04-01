@@ -2,8 +2,7 @@ FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
 RUN aurman -Syu --noconfirm --noedit   mingw-w64-qwt
-RUN cd /tmp && curl -fSsLO https://archive.archlinux.org/packages/c/cmake/cmake-3.13.4-1-x86_64.pkg.tar.xz && sudo pacman -U cmake-3.13.4-1-x86_64.pkg.tar.xz --noconfirm
-RUN aurman -S --noconfirm --noedit mingw-w64-paraview
+RUN aurman -Syu --noconfirm --noedit   mingw-w64-paraview
 
 
 ENV ARCH=x86_64 PYMAJMIN=37
