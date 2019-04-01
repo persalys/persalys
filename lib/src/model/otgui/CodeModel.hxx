@@ -44,6 +44,7 @@ public slots:
   void updateData();
 signals:
   void variablesChanged();
+  void errorMessageChanged(const QString&);
 
 private:
   PhysicalModel physicalModel_;
