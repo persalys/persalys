@@ -66,6 +66,8 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateInputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(resetMessageLabel()));
+  TemporaryLabel * errorMessageLabel = tablesWidget->findChild<TemporaryLabel *>();
+  connect(codeModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel, SLOT(setErrorMessage(QString)));
 
   horizontalSplitter->addWidget(tablesWidget);
 

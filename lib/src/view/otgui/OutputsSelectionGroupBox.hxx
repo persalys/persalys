@@ -27,6 +27,7 @@
 #include <openturns/Description.hxx>
 
 #include <QGroupBox>
+#include <QLabel>
 
 namespace OTGUI
 {
@@ -45,8 +46,12 @@ public:
 signals:
   void outputsSelectionChanged(QStringList);
 
+private slots:
+  void updateLabel(const QStringList& variables);
+
 private:
   bool pluralText_;
+  QLabel * namesLabel_;
   ListWidgetWithCheckBox * outputsListWidget_;
   TitledComboBox * outputsComboBox_;
 };

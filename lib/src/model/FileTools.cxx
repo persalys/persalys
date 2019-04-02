@@ -31,7 +31,7 @@
 
 namespace OTGUI
 {
-const QString FileTools::OpenTURNSUrlLink = "http://openturns.github.io/openturns/master/";
+const QString FileTools::OpenTURNSUrlLink = "http://openturns.github.io/openturns/latest/";
 
 QString FileTools::GetCurrentDir()
 {
@@ -177,7 +177,7 @@ QUrl FileTools::GetDocumentationUrl(const QString &urlLink, const docType type)
   if (type == docGUI)
     url = QUrl::fromLocalFile(QDir::toNativeSeparators(GetDocumentationDirectoryPath() + pathAndFragment[0]));
   else
-    url = QUrl(QDir::toNativeSeparators(OpenTURNSUrlLink + pathAndFragment[0]));
+    url = QUrl(OpenTURNSUrlLink + pathAndFragment[0]);
 
   // set url fragment (text after #)
   if (pathAndFragment.size() == 2)

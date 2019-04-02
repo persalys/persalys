@@ -25,15 +25,18 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QTextCursor>
+#include <QScrollBar>
 
 #include <iostream>
-
 
 namespace OTGUI
 {
 
+// CodeEditor
 CodeEditor::CodeEditor(QWidget * parent)
   : QPlainTextEdit(parent)
+  , verticalScrollBarValue_(0)
+  , horizontalScrollBarValue_(0)
 {
 #ifndef _WIN32
   QFont font("Monospace");
@@ -44,6 +47,9 @@ CodeEditor::CodeEditor(QWidget * parent)
   font.setFixedPitch(true);
   setWordWrapMode(QTextOption::NoWrap);
   setFont(font);
+
+  connect(verticalScrollBar(), SIGNAL(actionTriggered(int)), this, SLOT(updateVerticalScrollBarValue()));
+  connect(horizontalScrollBar(), SIGNAL(actionTriggered(int)), this, SLOT(updateHorizontalScrollBarValue()));
 }
 
 
@@ -66,9 +72,34 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
     cursor.setPosition(position);
     setTextCursor(cursor);
   }
+  // update scrollBar Values
+  updateVerticalScrollBarValue();
+  updateHorizontalScrollBarValue();
 }
 
 
+void CodeEditor::focusOutEvent(QFocusEvent *event)
+{
+  QPlainTextEdit::focusOutEvent(event);
+
+  verticalScrollBar()->setValue(verticalScrollBarValue_);
+  horizontalScrollBar()->setValue(horizontalScrollBarValue_);
+}
+
+
+void CodeEditor::updateVerticalScrollBarValue()
+{
+  verticalScrollBarValue_ = verticalScrollBar()->sliderPosition();
+}
+
+
+void CodeEditor::updateHorizontalScrollBarValue()
+{
+  horizontalScrollBarValue_ = horizontalScrollBar()->sliderPosition();
+}
+
+
+// CodeDelegate
 bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
 {
   if (event->type() == QEvent::KeyPress)

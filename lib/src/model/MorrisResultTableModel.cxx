@@ -95,18 +95,6 @@ QVariant MorrisResultTableModel::headerData(int section, Qt::Orientation orienta
 }
 
 
-bool MorrisResultTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-  if (role == Qt::CheckStateRole && orientation == Qt::Horizontal)
-  {
-    for (int i = 0; i < rowCount(); ++i)
-      if (data(index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
-        setData(index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
-  }
-  return QAbstractItemModel::setHeaderData(section, orientation, value, role);
-}
-
-
 QVariant MorrisResultTableModel::data(const QModelIndex & index, int role) const
 {
   if (!index.isValid())
@@ -185,6 +173,7 @@ bool MorrisResultTableModel::setData(const QModelIndex& index, const QVariant& v
     result_.setInputsSelection(outputIndex_, selection);
     emit selectionChanged();
     emit dataChanged(index, index);
+    emit headerDataChanged(Qt::Horizontal, 0, 0);
   }
   return true;
 }
