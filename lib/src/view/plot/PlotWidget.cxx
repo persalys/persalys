@@ -48,35 +48,12 @@
 #include <qwt_plot_spectrogram.h>
 #include <qwt_picker_machine.h>
 #include <qwt_scale_widget.h>
-#include <qwt_scale_draw.h>
 #include <qwt_color_map.h>
 
 using namespace OT;
 
 namespace OTGUI
 {
-
-// -- custom class CustomHorizontalScaleDraw --
-class CustomHorizontalScaleDraw: public QwtScaleDraw
-{
-public:
-  CustomHorizontalScaleDraw(const Description& labels)
-    : labels_(labels)
-  {
-  }
-
-  virtual QwtText label(double value) const
-  {
-    const int index = qRound(value);
-    if (index >= 0 && index < (int)labels_.getSize())
-      return QwtText(QString::fromUtf8(labels_[index].c_str()));
-    return QwtText();
-  }
-
-private:
-  const Description labels_;
-};
-
 
 // -- custom QwtPlotCurve with Rtti_PlotUserItem = 1001
 class OTGUI_API StaticPlotCurveItem : public QwtPlotCurve
@@ -87,6 +64,23 @@ public:
   {
     return 1001;
   };
+};
+
+
+// -- custom QwtPlotCurve with Rtti_PlotUserItem = 1000 + index_
+class OTGUI_API CustomPlotCurveItem : public QwtPlotCurve
+{
+public:
+  CustomPlotCurveItem(int index)
+  : QwtPlotCurve()
+  , index_(index)
+  {};
+  virtual int rtti() const
+  {
+    return QwtPlotItem::Rtti_PlotUserItem + index_;
+  };
+private:
+  int index_;
 };
 
 
@@ -262,6 +256,21 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
   {
     curve->setItemAttribute(QwtPlotItem::Legend, false);
   }
+  curve->attach(this);
+
+  replot();
+}
+
+
+void PlotWidget::plotCurve(const int index, double * x, double * y, int size, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol)
+{
+  CustomPlotCurveItem * curve = new CustomPlotCurveItem(index);
+  curve->setSamples(x, y, size);
+  curve->setPen(pen);
+  curve->setStyle(style);
+  if (symbol)
+    curve->setSymbol(symbol);
+  curve->setItemAttribute(QwtPlotItem::Legend, false);
   curve->attach(this);
 
   replot();
@@ -461,44 +470,57 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
 }
 
 
-void PlotWidget::plotBoxPlot(const double median,
-                             const double lowerQuartile,
-                             const double upperQuartile,
-                             const double lowerBound,
-                             const double upperBound,
-                             const Point& outliers)
+void PlotWidget::plotBoxPlot(const double mean,
+                             const double std_0,
+                             const double median_0,
+                             const double lowerQuartile_0,
+                             const double upperQuartile_0,
+                             const double lowerBound_0,
+                             const double upperBound_0,
+                             const Point& outliers_0,
+                             const int index)
 {
+  double x = index;
+  double std = std_0 > 0 ? std_0 : 1;
+
+  double median = (mean - median_0) / std;
+  double lowerQuartile = (mean - lowerQuartile_0) / std;
+  double upperQuartile = (mean - upperQuartile_0) / std;
+  double lowerBound = (mean - lowerBound_0) / std;
+  double upperBound = (mean - upperBound_0) / std;
+  Point outliers = (Point(outliers_0.getSize(), mean) - outliers_0) / std;
+
   // draw median
-  double xMedian[2] = {0.9, 1.1};
+  double xMedian[2] = {x - 0.1, x + 0.1};
   double yMedian[2] = {median, median};
-  plotCurve(xMedian, yMedian, 2, QPen(Qt::red));
+  plotCurve(index, xMedian, yMedian, 2, QPen(Qt::red));
 
   // draw box
   double yUpperQuartile[2] = {upperQuartile, upperQuartile};
-  plotCurve(xMedian, yUpperQuartile, 2, QPen(Qt::blue));
+  plotCurve(index, xMedian, yUpperQuartile, 2, QPen(Qt::blue));
   double yLowerQuartile[2] = {lowerQuartile, lowerQuartile};
-  plotCurve(xMedian, yLowerQuartile, 2, QPen(Qt::blue));
-  double xLeftSide[2] = {0.9, 0.9};
+  plotCurve(index, xMedian, yLowerQuartile, 2, QPen(Qt::blue));
+  double xLeftSide[2] = {x - 0.1, x - 0.1};
   double yBoxSides[2] = {lowerQuartile, upperQuartile};
-  plotCurve(xLeftSide, yBoxSides, 2, QPen(Qt::blue));
-  double xRightSide[2] = {1.1, 1.1};
-  plotCurve(xRightSide, yBoxSides, 2, QPen(Qt::blue));
+  plotCurve(index, xLeftSide, yBoxSides, 2, QPen(Qt::blue));
+  double xRightSide[2] = {x + 0.1, x + 0.1};
+  plotCurve(index, xRightSide, yBoxSides, 2, QPen(Qt::blue));
 
   // draw whiskers
-  double xWhiskers[2] = {1., 1.};
+  double xWhiskers[2] = {x, x};
   double yLower[2] = {lowerBound, lowerQuartile};
-  plotCurve(xWhiskers, yLower, 2, QPen(Qt::black, 2, Qt::DashLine));
+  plotCurve(index, xWhiskers, yLower, 2, QPen(Qt::black, 2, Qt::DashLine));
 
   double yUpper[2] = {upperQuartile, upperBound};
-  plotCurve(xWhiskers, yUpper, 2, QPen(Qt::black, 2, Qt::DashLine));
+  plotCurve(index, xWhiskers, yUpper, 2, QPen(Qt::black, 2, Qt::DashLine));
 
 
-  double xWhiskersBars[2] = {0.95, 1.05};
+  double xWhiskersBars[2] = {x - 0.05, x + 0.05};
   double yLowerWhiskersBar[2] = {lowerBound, lowerBound};
-  plotCurve(xWhiskersBars, yLowerWhiskersBar, 2);
+  plotCurve(index, xWhiskersBars, yLowerWhiskersBar, 2);
 
   double yUpperWhiskersBar[2] = {upperBound, upperBound};
-  plotCurve(xWhiskersBars, yUpperWhiskersBar, 2);
+  plotCurve(index, xWhiskersBars, yUpperWhiskersBar, 2);
 
   // draw outliers
   const int dim = outliers.getDimension();
@@ -507,21 +529,15 @@ void PlotWidget::plotBoxPlot(const double median,
 
   for (int i = 0; i < dim; ++i)
   {
-    xOutliers[i] = 1.;
+    xOutliers[i] = x;
     yOutliers[i] = outliers[i];
   }
 
-  plotCurve(xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
+  plotCurve(index, xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
   delete[] xOutliers;
   delete[] yOutliers;
 
-//   TODO think about:
-//   QwtScaleDiv scaleDiv(0.5, 1.5);
-//   QList< double > ticks;
-//   scaleDiv.setTicks(QwtScaleDiv::NoTick, ticks);
-//   setAxisScaleDiv(QwtPlot::xBottom, scaleDiv);
-
-  setAxisScale(QwtPlot::xBottom, 0.5, 1.5, 0.5);
+  setAxisMaxMinor(QwtPlot::xBottom, 0);
   replot();
 }
 

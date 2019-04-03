@@ -20,6 +20,8 @@
  */
 #include "otgui/GraphConfigurationWidget.hxx"
 
+#include "otgui/TitledComboBox.hxx"
+#include "otgui/ListWidgetWithCheckBox.hxx"
 #include "otgui/QtTools.hxx"
 
 #include <QGridLayout>
@@ -164,6 +166,20 @@ void GraphConfigurationWidget::buildInterface()
     else
       connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }
+  if (plotType_ == GraphConfigurationWidget::Boxplot)
+  {
+    // variables to display
+    QLabel * label = new QLabel(tr("Variables"));
+    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+
+    // combobox to select the variables to display
+    TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
+    ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames_, this);
+    connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(setVariablesToShow(QStringList)));
+    varComboBox->setModel(varListWidget->model());
+    varComboBox->setView(varListWidget);
+    mainGridLayout->addWidget(varComboBox, rowGrid, 1, 1, 1);
+  }
 
   // radio button ranks
   if (plotType_ == GraphConfigurationWidget::Scatter)
@@ -174,7 +190,7 @@ void GraphConfigurationWidget::buildInterface()
   }
 
   // label direction
-  if (plotType_ == GraphConfigurationWidget::SensitivityIndices)
+  if (plotType_ == GraphConfigurationWidget::SensitivityIndices || GraphConfigurationWidget::Boxplot)
   {
     label = new QLabel(tr("X-axis labels\norientation"));
     QComboBox * labelOrientation = new QComboBox;
@@ -369,7 +385,7 @@ void GraphConfigurationWidget::plotChanged()
     else
       currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
   }
-  else if (plotType_ == GraphConfigurationWidget::Kendall && xAxisComboBox_)
+  else if (xAxisComboBox_ && plotType_ == GraphConfigurationWidget::Kendall)
   {
     currentPlotIndex_ = xAxisComboBox_->currentIndex();
   }
@@ -468,6 +484,62 @@ void GraphConfigurationWidget::changeLabelOrientation(int index)
     plotWidgets_[currentPlotIndex_]->setAxisLabelRotation(QwtPlot::xBottom, -90);
   }
   plotWidgets_[currentPlotIndex_]->replot();
+}
+
+
+void GraphConfigurationWidget::setVariablesToShow(const QStringList& varNames)
+{
+  if (plotWidgets_.size() != 1)
+    return;
+
+  QStringList orderedVarList;
+  QList<int> indices;
+  int newX = -1;
+
+  for (int i = 0; i < inputNames_.size(); ++i)
+  {
+    if (varNames.contains(inputNames_[i]))
+    {
+      orderedVarList << inputNames_[i];
+      ++newX;
+      indices << newX;
+    }
+    // get current X axis coord
+    QwtPlotCurve * curve = dynamic_cast<QwtPlotCurve*>(plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i)[5]);
+    const int x = curve->data()->sample(0).x();
+
+    // update all curves of the i_th boxplot
+    for (int j = 0; j < plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i).size(); ++j)
+    {
+      // change visibility
+      plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i)[j]->setVisible(varNames.contains(inputNames_[i]));
+
+      // translate curve
+      if (varNames.contains(inputNames_[i]) && (x != newX))
+      {
+        QwtPlotCurve * curve = dynamic_cast<QwtPlotCurve*>(plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i)[j]);
+        QVector< QPointF > series(curve->data()->size());
+        for (size_t k = 0; k < curve->data()->size(); ++k)
+        {
+          QPointF pt = curve->data()->sample(k);
+          pt.setX(pt.x() + abs(x - newX) * (newX > x ? 1 : -1));
+          series[k] = pt;
+        }
+        curve->setSamples(series);
+      }
+    }
+  }
+  if (indices.size())
+  {
+    plotWidgets_[0]->setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(QtOT::StringListToDescription(orderedVarList)));
+    plotWidgets_[0]->setAxisScaleEngine(QwtPlot::xBottom, new CustomScaleEngineForBoxplot(indices));
+  }
+  else
+  {
+    plotWidgets_[0]->setAxisScaleDraw(QwtPlot::xBottom, 0);
+    plotWidgets_[0]->setAxisScaleEngine(QwtPlot::xBottom, 0);
+  }
+  plotWidgets_[0]->replot();
 }
 
 
