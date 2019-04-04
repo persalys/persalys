@@ -190,7 +190,7 @@ void GraphConfigurationWidget::buildInterface()
   }
 
   // label direction
-  if (plotType_ == GraphConfigurationWidget::SensitivityIndices || GraphConfigurationWidget::Boxplot)
+  if (plotType_ == GraphConfigurationWidget::SensitivityIndices || plotType_ == GraphConfigurationWidget::Boxplot)
   {
     label = new QLabel(tr("X-axis labels\norientation"));
     QComboBox * labelOrientation = new QComboBox;
