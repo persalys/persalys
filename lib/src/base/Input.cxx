@@ -117,6 +117,7 @@ void Input::setDistribution(const Distribution & distribution)
   }
   isStochastic_ = true;
   distribution_ = distribution;
+  distributionParametersType_ = 0;
 }
 
 
