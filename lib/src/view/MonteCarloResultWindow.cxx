@@ -30,6 +30,7 @@ namespace OTGUI
 MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item, QWidget * parent)
   : DataAnalysisWindow(item, parent)
 {
+  hasMaximumCV_ = true;
   if (dynamic_cast<MonteCarloAnalysis*>(item->getAnalysis().getImplementation().get()))
     initialize(item);
   else
@@ -57,7 +58,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
   const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
   for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
     if (result_.getCoefficientOfVariation()[i].getSize() == 1 &&
-        result_.getCoefficientOfVariation()[i][0] <= analysis.getMaximumCoefficientOfVariation())
+        result_.getCoefficientOfVariation()[i][0] / sqrt(nbInputs) <= analysis.getMaximumCoefficientOfVariation())
       analysisStopCriteriaMessage_ = tr("Maximum coefficient of variation reached");
 
   // if not one of the previous criteria

@@ -64,6 +64,7 @@ signals:
 protected:
   DesignOfExperiment designOfExperiment_;
   DataAnalysisResult result_;
+  bool hasMaximumCV_;
   QString analysisStopCriteriaMessage_;
   QString analysisErrorMessage_;
   OT::Sample failedInputSample_;

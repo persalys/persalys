@@ -103,7 +103,7 @@ void DataAnalysis::launch()
     {
       result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviationPerComponent();
       if (std::abs(result_.mean_[i][0]) > SpecFunc::Precision)
-        result_.coefficientOfVariation_[i] = result_.standardDeviation_[i] / sqrt(sample.getSize()) / std::abs(result_.mean_[i][0]);
+        result_.coefficientOfVariation_[i] = result_.standardDeviation_[i] / std::abs(result_.mean_[i][0]);
       result_.variance_[i] = sample.getMarginal(i).computeVariance();
       result_.skewness_[i] = sample.getMarginal(i).computeSkewness();
       result_.kurtosis_[i] = sample.getMarginal(i).computeKurtosis();

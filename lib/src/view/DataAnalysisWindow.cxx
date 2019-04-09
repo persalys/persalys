@@ -63,6 +63,7 @@ DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
   : ResultWindow(item, parent)
   , designOfExperiment_()
   , result_()
+  , hasMaximumCV_(false)
   , analysisStopCriteriaMessage_()
   , analysisErrorMessage_()
   , failedInputSample_()
@@ -243,7 +244,7 @@ void DataAnalysisWindow::addSummaryTab()
     QLabel * stopCriteriaLabel = new QLabel(analysisStopCriteriaMessage_);
     parametersGroupBoxLayout->addWidget(stopCriteriaLabel);
   }
-  // - if algo with a error message
+  // - if algo with an error message
   if (!analysisErrorMessage_.isEmpty())
   {
     TemporaryLabel * analysisErrorMessageLabel = new TemporaryLabel;
@@ -262,6 +263,17 @@ void DataAnalysisWindow::addSummaryTab()
   {
     namesList << tr("Elapsed time");
     valuesList << QString::number(result_.getElapsedTime()) + " s";
+  }
+  // - coef of variation
+  if (hasMaximumCV_)
+  {
+    namesList << tr("Sample mean CV");
+    const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
+    Scalar maxCoefOfVariation = 0.;
+    for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
+      if (result_.getCoefficientOfVariation()[i].getSize() == 1)
+        maxCoefOfVariation = std::max(result_.getCoefficientOfVariation()[i][0] / sqrt(nbInputs), maxCoefOfVariation);
+    valuesList << QString::number(maxCoefOfVariation);
   }
 
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
