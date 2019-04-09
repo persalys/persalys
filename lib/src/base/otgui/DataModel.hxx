@@ -21,7 +21,7 @@
 #ifndef OTGUI_DATAMODEL_HXX
 #define OTGUI_DATAMODEL_HXX
 
-#include "DesignOfExperimentImplementation.hxx"
+#include "DesignOfExperiment.hxx"
 
 namespace OTGUI
 {
@@ -45,6 +45,10 @@ public:
   DataModel(const OT::String & name,
             const OT::Sample & inSample,
             const OT::Sample & outSample);
+
+  /** Constructor with parameters */
+  DataModel(const OT::String & name,
+            const DesignOfExperiment & doe);
 
   /** Virtual constructor */
   virtual DataModel * clone() const;
