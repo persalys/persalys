@@ -27,7 +27,7 @@
 
 namespace OTGUI
 {
-class Actions : public QObject
+class OTGUI_API Actions : public QObject
 {
   Q_OBJECT
 
