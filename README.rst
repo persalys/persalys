@@ -16,7 +16,7 @@ Dependencies
 - Numpydoc (optional, for doc)
 - otfmi (optional, for FMI support)
 - ParaView >=5.4.0 (optional, for visualisation)
-- otmorris >=0.4 (optional, for Morris support)
+- otmorris >=0.5 (optional, for Morris support)
 
 Installation
 ------------
@@ -44,5 +44,5 @@ Run OTGui::
 
 Translation::
 
-    lupdate-qt4 -verbose lib/ -ts translations/otgui_fr.ts -no-obsolete
-    linguist-qt4 translations/otgui_fr.ts
+    lupdate -verbose lib/ -ts translations/otgui_fr.ts -no-obsolete
+    linguist translations/otgui_fr.ts
