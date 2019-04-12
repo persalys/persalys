@@ -62,6 +62,9 @@ if (NOT BUILD_SHARED_LIBS)
 endif ()
 
 find_package (Boost COMPONENTS regex filesystem locale REQUIRED)
+if (TARGET Boost::regex)
+  set (Boost_LIBRARIES Boost::regex Boost::filesystem Boost::locale)
+endif ()
 include_directories (${Boost_INCLUDE_DIRS})
 
 find_package (PythonInterp)
