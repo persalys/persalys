@@ -146,25 +146,27 @@ void FileTools::ExportImage(const QImage& image, QWidget * parent)
 
 QString FileTools::GetDocumentationDirectoryPath()
 {
-  // search the path of the documentation
+  // case 1: try to use an environment variable
+  QString userManualDir = std::getenv("OTGUI_HTML_DOCUMENTATION_PATH");
+  if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
+    return userManualDir;
+
+  // case 2: search the path of the documentation
   const QString appliDirPath(QCoreApplication::applicationDirPath());
   QDir dirPath(appliDirPath);
   dirPath.cdUp();
 
-  // case 1: on Linux when the documentation is built and put in the install directory
-  QString userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(INSTALL_PATH).arg(DOCUMENTATION_INSTALL_PATH));
+  // case 2-1: on Linux when the documentation is built and put in the install directory
+  userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(INSTALL_PATH).arg(DOCUMENTATION_INSTALL_PATH));
+  if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
+    return userManualDir;
 
-  // case 2: on Linux when using the AppImage
-  if (!QDir(userManualDir).exists())
-  {
-    userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(dirPath.path()).arg(DOCUMENTATION_INSTALL_PATH));
-  }
-  // case 3: on Windows
-  if (!QDir(userManualDir).exists())
-  {
-    userManualDir = QDir::toNativeSeparators(QString("%1/doc/html/").arg(appliDirPath));
-  }
-  return QDir(userManualDir).exists()? userManualDir : "";
+  // case 2-2: on Linux when using the AppImage
+  userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(dirPath.path()).arg(DOCUMENTATION_INSTALL_PATH));
+  if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
+    return userManualDir;
+
+  return "";
 }
 
 
