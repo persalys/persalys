@@ -51,8 +51,7 @@ Wizard::Wizard(QWidget * parent)
 
 void Wizard::showHelp()
 {
-  QUrl urlLink(FileTools::GetDocumentationUrl(getDocLink(), FileTools::docGUI));
-  QDesktopServices::openUrl(urlLink);
+  FileTools::OpenUrl(FileTools::GetDocumentationUrl(getDocLink(), FileTools::docGUI));
 }
 
 

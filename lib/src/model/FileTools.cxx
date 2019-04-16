@@ -28,6 +28,7 @@
 #include <QTextStream>
 #include <QImageWriter>
 #include <QCoreApplication>
+#include <QDesktopServices>
 
 namespace OTGUI
 {
@@ -186,5 +187,35 @@ QUrl FileTools::GetDocumentationUrl(const QString &urlLink, const docType type)
     url.setFragment(pathAndFragment[1]);
 
   return url;
+}
+
+
+void FileTools::OpenUrl(const QUrl& url)
+{
+  bool useWorkAround = false;
+
+  // workaround for Windows if the url has a fragment
+  // https://bugreports.qt.io/browse/QTBUG-14460
+#ifdef _WIN32
+  if (url.isLocalFile() && url.hasFragment())
+  {
+    // create a temporary html file which contains the right file path with fragment
+    const QString fileName(QDir::toNativeSeparators(QDir::tempPath() + "/otgui_html_temp_file.html"));
+    QFile file(fileName);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+      useWorkAround = true;
+      QTextStream stream(&file);
+      QString htmlText("<html><meta http-equiv=Refresh content=\"0; url=" + url.toString() + "\"><body></body></html>;");
+      stream << htmlText;
+      file.close();
+      // open the file
+      QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
+    }
+  }
+#endif
+  if (!useWorkAround)
+    QDesktopServices::openUrl(url);
 }
 }

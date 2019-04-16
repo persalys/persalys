@@ -20,8 +20,6 @@
  */
 #include "otgui/DocumentationToolButton.hxx"
 
-#include <QDesktopServices>
-
 namespace OTGUI
 {
 
@@ -46,6 +44,6 @@ DocumentationToolButton::DocumentationToolButton(const QString& urlLink, const F
 
 void DocumentationToolButton::openUrl()
 {
-  QDesktopServices::openUrl(urlLink_);
+  FileTools::OpenUrl(urlLink_);
 }
 }
