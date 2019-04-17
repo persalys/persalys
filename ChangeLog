@@ -1,3 +1,8 @@
+= 6.1 release (2019-04-17)
+
+ * Various bug fixes
+ * Allow to convert DOE to data model
+
 = 6.0 release (2019-03-22)
 
  * Open documentation from interface
