@@ -280,7 +280,7 @@ void CopulaInferenceAnalysis::launch()
 
         // get Kendall plot data
         Description description(2);
-        Collection<Sample> kendallPlotDataCollection;
+        ProcessSample kendallPlotDataCollection(Mesh(Sample(splitSample.getSize(), 1)), 0, 1);
         for (UnsignedInteger j = 0; j < pairs.getSize(); ++j)
         {
           Indices ind(pairs.cbegin_at(j), pairs.cend_at(j));
@@ -305,7 +305,7 @@ void CopulaInferenceAnalysis::launch()
                                << "\n";
         // set fittingTestResult
         inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
-        Collection<Sample> kendallPlotDataCollection;
+        ProcessSample kendallPlotDataCollection;
         inferenceSetResult.bicResults_.add(SpecFunc::MaxScalar);
         inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
         inferenceSetResult.errorMessages_[i] = message;

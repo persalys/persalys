@@ -24,6 +24,7 @@
 #include "otgui/DataSample.hxx"
 
 #include <openturns/Distribution.hxx>
+#include <openturns/ProcessSample.hxx>
 
 #include <QTabWidget>
 #include <QLabel>
@@ -37,7 +38,7 @@ class OTGUI_API CopulaParametersTabWidget : public QTabWidget
 public:
   CopulaParametersTabWidget(const OT::Distribution& distribution,
                             const OT::Sample& sample,
-                            const DataSample::SampleCollection& kendallPlotData,
+                            const OT::ProcessSample & kendallPlotData,
                             const bool displaySetting = true,
                             QWidget* parent = 0);
 
@@ -51,7 +52,7 @@ public slots:
 private:
   OT::Distribution distribution_;
   OT::Sample sample_;
-  OT::PersistentCollection<OT::Sample> kendallPlotData_;
+  OT::ProcessSample kendallPlotData_;
   bool displaySetting_;
   QLabel * analysisErrorMessageLabel_;
 };

@@ -47,7 +47,7 @@ namespace OTGUI
 
 CopulaParametersTabWidget::CopulaParametersTabWidget(const Distribution& distribution,
     const Sample& sample,
-    const DataSample::SampleCollection& kendallPlotData,
+    const OT::ProcessSample & kendallPlotData,
     const bool displaySetting,
     QWidget* parent)
   : QTabWidget(parent)
@@ -178,7 +178,7 @@ void CopulaParametersTabWidget::buildInterface()
     listKendallPlots.append(kendallPlot);
   }
 
-  if (displaySetting_)
+  if (displaySetting_ && kendallPlotData_.getSize())
   {
     // -- GraphConfigurationWidget
     GraphConfigurationWidget * kendallPlotSettingWidget = new GraphConfigurationWidget(listKendallPlots,
