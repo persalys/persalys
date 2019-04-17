@@ -83,6 +83,13 @@ DataModel::DataModel(const String& name,
 }
 
 
+/* Constructor with parameters */
+DataModel::DataModel(const String& name, const DesignOfExperiment & doe)
+  : DataModel(name, doe.getInputSample(), doe.getOutputSample())
+{
+}
+
+
 /* Virtual constructor */
 DataModel* DataModel::clone() const
 {

@@ -52,6 +52,7 @@ public slots:
   void stopAnalysis();
   void modifyAnalysis();
   void appendMetaModelItem();
+  void appendDataModelItem();
   void removeAnalysis();
   void extractData();
 signals:

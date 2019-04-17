@@ -23,7 +23,7 @@ cd /tmp/otgui.AppDir/usr/share/otgui/doc/; zip -r /tmp/otgui-doc.zip ./html/*; c
 
 cd /tmp
 
-rm -r otgui.AppDir/usr/{include,share}/otgui
+rm -r otgui.AppDir/usr/include/otgui
 
 cat > otgui.AppDir/AppRun <<\EOF
 #!/bin/sh

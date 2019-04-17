@@ -20,7 +20,7 @@
  */
 #include "otgui/AnalysisItem.hxx"
 
-#include "otgui/PhysicalModelAnalysis.hxx"
+#include "otgui/DesignOfExperimentEvaluation.hxx"
 #include "otgui/FunctionalChaosAnalysis.hxx"
 #include "otgui/KrigingAnalysis.hxx"
 #include "otgui/StudyItem.hxx"
@@ -76,13 +76,20 @@ void AnalysisItem::buildActions()
     extractDataAction_ = new QAction(tr("Extract data at nodes"), this);
     connect(extractDataAction_, SIGNAL(triggered()), this, SLOT(extractData()));
     appendAction(extractDataAction_);
-    if (!analysis_.getImplementation()->hasValidResult())
+    if (!analysis_.hasValidResult())
       extractDataAction_->setEnabled(false);
   }
 
   // no remove action for these analyses
   if (analysisType.contains("DesignOfExperiment"))
+  {
+    convertAction_ = new QAction(tr("Convert into data model"), this);
+    convertAction_->setStatusTip(tr("Add a data model in the study tree"));
+    connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendDataModelItem()));
+    convertAction_->setEnabled(analysis_.hasValidResult());
+    appendAction(convertAction_);
     return;
+  }
 
   appendSeparator();
 
@@ -270,6 +277,18 @@ void AnalysisItem::appendMetaModelItem()
 }
 
 
+void AnalysisItem::appendDataModelItem()
+{
+  DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
+  if (!getParentStudyItem() || !doeEval)
+    return;
+  // create the data model
+  const String newName = getParentStudyItem()->getStudy().getAvailableDataModelName((QString(doeEval->getName().c_str()) + "_").toStdString());
+  DataModel * newModel = new DataModel(newName, doeEval->getResult().getDesignOfExperiment());
+  getParentStudyItem()->getStudy().add(newModel);
+}
+
+
 void AnalysisItem::removeAnalysis()
 {
   // check if the analysis is running
@@ -334,6 +353,10 @@ void AnalysisItem::update(Observable* source, const String& message)
   {
     // emit signal to AnalysisWindow to upate the progress bar
     emit progressValueChanged(analysis_.getProgressValue());
+  }
+  else if (message == "doeChanged" && convertAction_)
+  {
+    convertAction_->setEnabled(analysis_.hasValidResult());
   }
   else if (message == "analysisRemoved")
   {

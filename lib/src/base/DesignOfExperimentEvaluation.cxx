@@ -75,6 +75,7 @@ void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperimen
   result_ = DataAnalysisResult(designOfExperiment);
   result_.designOfExperiment_.getImplementation()->initialize();
   SimulationAnalysis::initialize();
+  notify("doeChanged");
 }
 
 

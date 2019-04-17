@@ -194,6 +194,7 @@ void DataModelWindow::buildInterface()
   dataTableView2_->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
   dataTableView2_->verticalHeader()->hide();
   dataTableView2_->setSortingEnabled(true);
+  dataTableView2_->horizontalHeader()->setMinimumSectionSize(10);
   tableLayout->addWidget(dataTableView2_);
 
   // use QTableView style
@@ -274,12 +275,14 @@ void DataModelWindow::sortSectionChanged(int section, Qt::SortOrder order)
 void DataModelWindow::resizeDataTableColumn(int column, int /*oldWidth*/, int newWidth)
 {
   dataTableView2_->horizontalHeader()->resizeSection(column + 1, newWidth);
+  resizeTable();
 }
 
 
 void DataModelWindow::resizeVariablesTableColumn(int column, int /*oldWidth*/, int newWidth)
 {
   tableView_->horizontalHeader()->resizeSection(column - 1, newWidth);
+  resizeTable();
 }
 
 

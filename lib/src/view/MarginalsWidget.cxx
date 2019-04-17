@@ -467,8 +467,24 @@ void MarginalsWidget::distributionParametersChanged()
 
       DistributionDictionary::UpdateDistribution(distribution, parameters, parametersType);
 
+      // set truncated Distribution bounds: workaround to fix plots creation
+      // OT use the bounds to get plot points even if the bounds are not finite
+      Interval distInterval(truncatedDistribution.getBounds());
+      Interval truncatureInterval(distribution.getRange());
+
+      if (!distInterval.getFiniteLowerBound()[0])
+      {
+        distInterval.setLowerBound(Point(1, truncatureInterval.getLowerBound()[0]));
+        distInterval.setFiniteLowerBound(Interval::BoolCollection(1, false));
+      }
+      if (!distInterval.getFiniteUpperBound()[0])
+      {
+        distInterval.setUpperBound(Point(1, truncatureInterval.getUpperBound()[0]));
+        distInterval.setFiniteUpperBound(Interval::BoolCollection(1, false));
+      }
+
       // create a new TruncatedDistribution
-      TruncatedDistribution newTruncatedDistribution(distribution, truncatedDistribution.getBounds());
+      TruncatedDistribution newTruncatedDistribution(distribution, distInterval);
 
       // update input distribution
       physicalModel_.blockNotification("ProbabilisticModel");

@@ -176,6 +176,9 @@ bool ResizableHeaderlessTableView::eventFilter(QObject *obj, QEvent *event)
           if (columnWidth(column_index()) + delta < (int)minimumSectionsSizes_[column_index()])
             return false;
         }
+        // avoid to hide a column when resizing it
+        if (columnWidth(column_index()) + delta < 10)
+          return false;
         setColumnWidth(column_index(), columnWidth(column_index()) + delta);
         mouse_pos_ = e->pos();
         return true;
