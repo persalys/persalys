@@ -23,6 +23,7 @@
 
 #include "otgui/OTGuiprivate.hxx"
 
+#include <openturns/ProcessSample.hxx>
 #include <openturns/Distribution.hxx>
 
 namespace OTGUI
@@ -43,7 +44,7 @@ public:
   OT::Description getSetOfVariablesNames() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
   OT::Point getBICResults() const;
-  OT::PersistentCollection<OT::PersistentCollection<OT::Sample > > getKendallPlotData() const;
+  OT::PersistentCollection<OT::ProcessSample > getKendallPlotData() const;
   OT::Description getErrorMessages() const;
 
   /** String converter */
@@ -59,7 +60,7 @@ protected:
   OT::Description setOfVariablesNames_;
   OT::PersistentCollection< OT::Distribution > testedDistributions_;
   OT::Point bicResults_;
-  OT::PersistentCollection<OT::PersistentCollection<OT::Sample > > kendallPlotData_;
+  OT::PersistentCollection<OT::ProcessSample > kendallPlotData_;
   OT::Description errorMessages_;
 };
 }

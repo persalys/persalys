@@ -134,7 +134,7 @@ void CopulaInferenceResultWidget::buildInterface()
     {
       CopulaParametersTabWidget * paramWidget = new CopulaParametersTabWidget(currentSetResult_.getTestedDistributions()[indices[i]],
           sample_,
-          currentSetResult_.getKendallPlotData()[indices[i]],
+          currentSetResult_.getKendallPlotData().getSize() == nbTests ? currentSetResult_.getKendallPlotData()[indices[i]] : ProcessSample(),
           displaySetting_,
           this);
       connect(paramWidget, SIGNAL(currentChanged(int)), this, SIGNAL(currentTabChanged(int)));
