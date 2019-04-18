@@ -46,3 +46,9 @@ Translation::
 
     lupdate -verbose lib/ -ts translations/otgui_fr.ts -no-obsolete
     linguist translations/otgui_fr.ts
+
+Environment variables:
+
+- OTGUI_HTML_DOCUMENTATION_PATH: override path to the html documentation
+- OTGUI_NO_GL: if defined, this disables OpenGL (Paraview widgets) support for troubleshooting
+
