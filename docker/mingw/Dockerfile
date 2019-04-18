@@ -5,7 +5,7 @@ RUN aurman -Syu --noconfirm --noedit   mingw-w64-qwt
 RUN aurman -Syu --noconfirm --noedit   mingw-w64-paraview
 
 
-ENV ARCH=x86_64 PYMAJMIN=36
+ENV ARCH=x86_64 PYMAJMIN=37
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns

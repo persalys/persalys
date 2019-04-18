@@ -15,4 +15,4 @@ if sys.platform.startswith('win'):
 
 from .otguibase import *
 
-__version__ = '6.1'
+__version__ = '7.0dev'
