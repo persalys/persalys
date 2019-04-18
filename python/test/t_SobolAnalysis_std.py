@@ -37,7 +37,7 @@ print("result=", analysis.getResult())
 
 # Sobol ##
 analysis2 = otguibase.SobolAnalysis('aSobol2', model)
-analysis2.setMaximumConfidenceIntervalLength(0.02)
+analysis2.setMaximumConfidenceIntervalLength(0.2)
 analysis2.setMaximumElapsedTime(100000)
 myStudy.add(analysis2)
 print(analysis2)

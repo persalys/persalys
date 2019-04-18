@@ -56,8 +56,12 @@ MarginalsWidget::MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent
   : QWidget(parent)
   , study_(item->getParentStudyItem()->getStudy())
   , physicalModel_(item->getPhysicalModel())
-  , paramEditor_(0)
 {
+  for (UnsignedInteger i = 0; i < 5; ++i)
+  {
+    parameterValuesLabel_[i] = 0;
+    parameterValuesEdit_[i] = 0;
+  }
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
 
@@ -133,6 +137,7 @@ void MarginalsWidget::buildInterface()
   valueGroupBoxLayout->addWidget(new QLabel(tr("Value")), 0, 0);
   valueForDeterministicVariable_ = new ValueLineEdit;
   valueForDeterministicVariable_->setEnabled(false);
+  valueForDeterministicVariable_->setObjectName("valueDeterministicVar");
   valueGroupBoxLayout->addWidget(valueForDeterministicVariable_, 0, 1);
   valueGroupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
 
@@ -189,8 +194,30 @@ void MarginalsWidget::buildInterface()
   rightFrameLayout->addWidget(infoButton);
 
   // parameters
-  parameterLayout_ = new QVBoxLayout;
-  rightFrameLayout->addLayout(parameterLayout_);
+  QGroupBox * paramEditor = new QGroupBox(tr("Parameters"));
+  QGridLayout * lay = new QGridLayout(paramEditor);
+
+  // combobox to choose the type of distribution configuration
+  lay->addWidget(new QLabel(tr("Type")), 0, 0);
+
+  selectParametersTypeCombo_ = new QComboBox;
+  selectParametersTypeCombo_->setObjectName("paramTypeCombo");
+  connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
+  lay->addWidget(selectParametersTypeCombo_, 0, 1);
+
+  // lineEdits to set the distribution parameters
+  for (UnsignedInteger i = 0; i < 5; ++i)
+  {
+    parameterValuesLabel_[i] = new QLabel;
+    parameterValuesEdit_[i] = new ValueLineEdit;
+    parameterValuesEdit_[i]->setObjectName(QString("paramValueEdit_%1").arg(i));
+    connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(distributionParametersChanged()));
+    parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
+    lay->addWidget(parameterValuesLabel_[i], i + 1, 0);
+    lay->addWidget(parameterValuesEdit_[i], i + 1, 1);
+  }
+
+  rightFrameLayout->addWidget(paramEditor);
 
   // truncation parameters
   truncationParamGroupBox_ = new CollapsibleGroupBox;
@@ -203,8 +230,10 @@ void MarginalsWidget::buildInterface()
   truncationParamGroupBoxLayout->addWidget(upperBoundCheckBox_, 1, 0);
 
   lowerBoundLineEdit_ = new ValueLineEdit;
+  lowerBoundLineEdit_->setObjectName("lowerBound");
   truncationParamGroupBoxLayout->addWidget(lowerBoundLineEdit_, 0, 1);
   upperBoundLineEdit_ = new ValueLineEdit;
+  upperBoundLineEdit_->setObjectName("upperBound");
   truncationParamGroupBoxLayout->addWidget(upperBoundLineEdit_, 1, 1);
 
   connect(lowerBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
@@ -320,15 +349,14 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
   if (!index.isValid())
     return;
 
-  // update parameters widgets
-  if (paramEditor_)
+  // block signals
+  SignalBlocker comboBlocker(selectParametersTypeCombo_);
+  for (UnsignedInteger i = 0; i < 5; ++i)
   {
-    parameterLayout_->removeWidget(paramEditor_);
-    paramEditor_->disconnect();
-    paramEditor_->deleteLater();
-    paramEditor_ = 0;
+    SignalBlocker blocker(parameterValuesEdit_[i]);
   }
 
+  // get parameters
   const Input input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDist = input.getDistribution();
   Distribution::PointWithDescriptionCollection parameters = DistributionDictionary::GetParametersCollection(inputDist);
@@ -355,37 +383,34 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
     throw InternalException(HERE) << "Error: Number of parameters invalid :" << nbParameters;
 
   // fill parameters widgets
-  paramEditor_ = new QGroupBox(tr("Parameters"));
-  QGridLayout * lay = new QGridLayout(paramEditor_);
-
-  // combobox to choose the type of distribution configuration
-  lay->addWidget(new QLabel(tr("Type")), 0, 0);
-
-  QComboBox * selectParametersTypeCombo = new QComboBox;
+  selectParametersTypeCombo_->clear();
   for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
   {
     QStringList parametersNamesList;
     for (UnsignedInteger j = 0; j < parameters[i].getDescription().getSize(); ++j)
       parametersNamesList << TranslationManager::GetTranslatedDistributionParameterName(parameters[i].getDescription()[j]);
 
-    selectParametersTypeCombo->addItem(parametersNamesList.join(", "));
+    selectParametersTypeCombo_->addItem(parametersNamesList.join(", "));
   }
-  selectParametersTypeCombo->setCurrentIndex(parametersType);
-  connect(selectParametersTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
-  lay->addWidget(selectParametersTypeCombo, 0, 1);
+  selectParametersTypeCombo_->setCurrentIndex(parametersType);
 
   // lineEdits to set the distribution parameters
   const Description parametersName = parameters[parametersType].getDescription();
-  for (UnsignedInteger i = 0; i < nbParameters; ++i)
+  for (UnsignedInteger i = 0; i < 5; ++i)
   {
-    parameterValuesLabel_[i] = new QLabel(TranslationManager::GetTranslatedDistributionParameterName(parametersName[i]));
-    parameterValuesEdit_[i] = new ValueLineEdit(parameters[parametersType][i]);
-    connect(parameterValuesEdit_[i], SIGNAL(editingFinished()), this, SLOT(distributionParametersChanged()));
-    parameterValuesLabel_[i]->setBuddy(parameterValuesEdit_[i]);
-    lay->addWidget(parameterValuesLabel_[i], i + 1, 0);
-    lay->addWidget(parameterValuesEdit_[i], i + 1, 1);
+    if (i < nbParameters)
+    {
+      parameterValuesLabel_[i]->setText(TranslationManager::GetTranslatedDistributionParameterName(parametersName[i]));
+      parameterValuesLabel_[i]->show();
+      parameterValuesEdit_[i]->setValue(parameters[parametersType][i]);
+      parameterValuesEdit_[i]->show();
+    }
+    else
+    {
+      parameterValuesLabel_[i]->hide();
+      parameterValuesEdit_[i]->hide();
+    }
   }
-  parameterLayout_->insertWidget(0, paramEditor_);
 }
 
 
@@ -446,6 +471,7 @@ void MarginalsWidget::updatePlots()
 
 void MarginalsWidget::distributionParametersChanged()
 {
+  errorMessageLabel_->reset();
   const QModelIndex index = inputTableView_->currentIndex();
   const Input input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDist = input.getDistribution();
@@ -545,6 +571,7 @@ void MarginalsWidget::typeDistributionParametersChanged(int comboIndex)
 
 void MarginalsWidget::truncationParametersChanged()
 {
+  errorMessageLabel_->reset();
   const QModelIndex index = inputTableView_->currentIndex();
   const Input input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDist = input.getDistribution();
@@ -592,11 +619,13 @@ void MarginalsWidget::truncationParametersChanged()
 
 void MarginalsWidget::truncationParametersStateChanged()
 {
+  errorMessageLabel_->reset();
   const QModelIndex index = inputTableView_->currentIndex();
   const Input input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDist = input.getDistribution();
   String distName = inputDist.getImplementation()->getClassName();
 
+  truncationParamGroupBox_->setExpanded(true);
   // update lineEdit widgets
   if (!lowerBoundCheckBox_->isChecked())
     lowerBoundLineEdit_->deactivate();

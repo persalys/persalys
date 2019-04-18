@@ -269,10 +269,11 @@ void DataAnalysisWindow::addSummaryTab()
   {
     namesList << tr("Sample mean CV");
     const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
+    const Scalar sqrtSampleSize = sqrt(designOfExperiment_.getInputSample().getSize());
     Scalar maxCoefOfVariation = 0.;
     for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
       if (result_.getCoefficientOfVariation()[i].getSize() == 1)
-        maxCoefOfVariation = std::max(result_.getCoefficientOfVariation()[i][0] / sqrt(nbInputs), maxCoefOfVariation);
+        maxCoefOfVariation = std::max(result_.getCoefficientOfVariation()[i][0] / sqrtSampleSize, maxCoefOfVariation);
     valuesList << QString::number(maxCoefOfVariation);
   }
 

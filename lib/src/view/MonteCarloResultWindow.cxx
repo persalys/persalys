@@ -55,11 +55,17 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
     analysisStopCriteriaMessage_ = tr("Maximum calls reached");
   if (!analysis.getWarningMessage().empty())
     analysisStopCriteriaMessage_ = tr("An error has occurred during the execution of the analysis");
-  const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
-  for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
-    if (result_.getCoefficientOfVariation()[i].getSize() == 1 &&
-        result_.getCoefficientOfVariation()[i][0] / sqrt(nbInputs) <= analysis.getMaximumCoefficientOfVariation())
-      analysisStopCriteriaMessage_ = tr("Maximum coefficient of variation reached");
+  if (designOfExperiment_.getInputSample().getSize() > 1)
+  {
+    const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
+    const Scalar sqrtSampleSize = sqrt(designOfExperiment_.getInputSample().getSize());
+    for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
+    {
+      if (result_.getCoefficientOfVariation()[i].getSize() == 1 &&
+          result_.getCoefficientOfVariation()[i][0] / sqrtSampleSize <= analysis.getMaximumCoefficientOfVariation())
+        analysisStopCriteriaMessage_ = tr("Maximum coefficient of variation reached");
+    }
+  }
 
   // if not one of the previous criteria
   if (analysisStopCriteriaMessage_.isEmpty())
