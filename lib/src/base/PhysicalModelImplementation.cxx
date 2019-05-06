@@ -21,7 +21,6 @@
 #include "otgui/PhysicalModelImplementation.hxx"
 
 #include "otgui/BaseTools.hxx"
-#include "otgui/ParametricPointToFieldFunction.hxx"
 
 #include <openturns/NonCenteredFiniteDifferenceGradient.hxx>
 #include <openturns/CenteredFiniteDifferenceHessian.hxx>
@@ -31,6 +30,7 @@
 #include <openturns/ParametricFunction.hxx>
 #include <openturns/IndependentCopula.hxx>
 #include <openturns/CompositeRandomVector.hxx>
+#include <openturns/ParametricPointToFieldFunction.hxx>
 
 using namespace OT;
 
