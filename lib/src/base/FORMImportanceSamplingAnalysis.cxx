@@ -62,6 +62,8 @@ void FORMImportanceSamplingAnalysis::initialize()
 {
   ImportanceSamplingAnalysis::initialize();
   result_ = SimulationReliabilityResult();
+  FORMResult_ = FORMResult();
+  notify("progressValueChanged");
 }
 
 
@@ -69,13 +71,19 @@ void FORMImportanceSamplingAnalysis::launch()
 {
   // FORM analysis
   FORMAnalysis formAnalysis("aFORMAnalysis", getLimitState());
+  optimizationAlgorithm_.setStopCallback(&AnalysisImplementation::Stop, this);
+  optimizationAlgorithm_.setProgressCallback(&AnalysisImplementation::UpdateProgressValue, this);
   formAnalysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
   formAnalysis.setPhysicalStartingPoint(getPhysicalStartingPoint());
+
+  // information message
+  informationMessage_ = OSS() << "The FORM analysis is running";
+  notify("informationMessageUpdated");
 
   // launch FORM analysis
   try
   {
-    formAnalysis.run();
+    formAnalysis.launch();
 
     if (!formAnalysis.hasValidResult())
       throw InternalException(HERE) << "FORM result empty.\n";
@@ -86,6 +94,12 @@ void FORMImportanceSamplingAnalysis::launch()
   catch (std::exception &ex)
   {
     throw InternalException(HERE) << "Error when processing the FORM analysis.\n" << ex.what();
+  }
+
+  // if the FORM analysis has been stopped
+  if (stopRequested_)
+  {
+    throw InternalException(HERE) << "The FORM analysis has been stopped.\n";
   }
 
   // Importance sampling

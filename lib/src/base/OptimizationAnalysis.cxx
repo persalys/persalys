@@ -201,6 +201,7 @@ void OptimizationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
   result_ = OptimizationResult();
+  notify("progressValueChanged");
 }
 
 
@@ -272,6 +273,7 @@ void OptimizationAnalysis::launch()
   solver.setMaximumResidualError(getMaximumResidualError());
   solver.setMaximumConstraintError(getMaximumConstraintError());
   solver.setStopCallback(&AnalysisImplementation::Stop, this);
+  solver.setProgressCallback(&UpdateProgressValue, this);
 
   // run solver
   solver.run();

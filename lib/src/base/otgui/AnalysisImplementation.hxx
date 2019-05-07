@@ -78,6 +78,7 @@ protected:
   virtual void initialize();
   virtual void launch();
   static bool Stop(void * p);
+  static void UpdateProgressValue(double percent, void * data);
 
 protected:
   bool isReliabilityAnalysis_;

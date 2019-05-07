@@ -229,6 +229,18 @@ bool AnalysisImplementation::Stop(void * p)
 }
 
 
+void AnalysisImplementation::UpdateProgressValue(double percent, void * data)
+{
+  AnalysisImplementation * analysis = static_cast<AnalysisImplementation*>(data);
+  if (!analysis)
+    return;
+
+  // set progress value
+  analysis->progressValue_ = (int) percent;
+  analysis->notify("progressValueChanged");
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void AnalysisImplementation::save(Advocate & adv) const
 {
