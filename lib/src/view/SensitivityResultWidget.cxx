@@ -56,18 +56,21 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   // set info
   QString graphTitle;
   QString defaultFileName;
-  QStringList tableTitles;
+  QStringList tableTitles(tr("Input"));
+  QStringList legendNames;
   if (type == SensitivityResultWidget::Sobol)
   {
     graphTitle = tr("Sobol sensitivity indices:");
     defaultFileName = tr("sensitivitySobol");
-    tableTitles << tr("Input") << tr("First order\nindex");
+    legendNames << tr("First order index");
+    tableTitles << tr("First order\nindex");
     if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
     {
       tableTitles << tr("First order index\nconfidence interval");
     }
     tableTitles << tr("Total index");
-    if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
+    legendNames << tr("Total index");
+    if (totalIndicesIntervals.getDimension() == totalIndices.getSize())
     {
       tableTitles << tr("Total index\nconfidence interval");
     }
@@ -76,7 +79,16 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   {
     graphTitle = tr("SRC sensitivity indices:");
     defaultFileName = tr("sensitivitySRC");
-    tableTitles << tr("Input") << tr("Index");
+    legendNames << tr("Index") << tr("Signed index");
+    tableTitles << tr("Index");
+    if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
+      tableTitles << tr("Index\nconfidence interval");
+    if (totalIndices.getSize())
+    {
+      tableTitles << tr("Signed index");
+      if (totalIndicesIntervals.getDimension() == totalIndices.getSize())
+        tableTitles << tr("Signed index\nconfidence interval");
+    }
   }
   // plot
   QScrollArea * scrollArea = new QScrollArea;
@@ -85,7 +97,10 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   plot_ = new PlotWidget(defaultFileName, true);
-  plot_->plotSensitivityIndices(firstIndices, totalIndices, inputNames, firstIndicesIntervals, totalIndicesIntervals);
+  plot_->plotSensitivityIndices(firstIndices, totalIndices,
+      inputNames,
+      firstIndicesIntervals, totalIndicesIntervals,
+      legendNames);
   plot_->setTitle(graphTitle + " " + QString::fromUtf8(outputName.c_str()));
   plotWidgetLayout->addWidget(plot_);
 
@@ -140,7 +155,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       indicesTableModel->setNotEditableItem(j, ++col, totalIndices[j]);
       indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
       indicesTableModel->setData(indicesTableModel->index(j, col), totalIndices[j], Qt::UserRole + 1);
-      if (totalIndices[j] < firstIndices[j])
+
+      if (type != SensitivityResultWidget::SRC && totalIndices[j] < firstIndices[j])
       {
         indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is less than the first order index."), Qt::ToolTipRole);
         indicesTableModel->setData(indicesTableModel->index(j, col), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
@@ -175,7 +191,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
 
   // Interactions widgets
-  if (totalIndices.getSize())
+  if (totalIndices.getSize() && type != SensitivityResultWidget::SRC)
   {
     QWidget * interactionWidget = new QWidget;
     QHBoxLayout * hbox = new QHBoxLayout(interactionWidget);
@@ -185,12 +201,15 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     interactionsLabel = new QLabel(QString::number(interactionsValue, 'g', 4));
     hbox->addWidget(interactionsLabel);
     hbox->addStretch();
+    hbox->setContentsMargins(0, 0, 0, 0);
     subWidgetLayout->addWidget(interactionWidget);
   }
+  subWidgetLayout->setContentsMargins(0, 0, 0, 0);
 
   mainSplitter->addWidget(subWidget);
   mainSplitter->setStretchFactor(1, 1);
   mainLayout->addWidget(mainSplitter);
+  mainLayout->setContentsMargins(0, 0, 0, 0);
 }
 
 

@@ -37,8 +37,6 @@ public:
 
   /** Default constructor */
   SRCResult();
-  /** Constructor with parameters */
-  SRCResult(const OT::Sample& indices, const OT::Description & outputNames);
 
   /** Virtual constructor */
   virtual SRCResult * clone() const;
@@ -46,6 +44,11 @@ public:
   OT::Description getOutputNames() const;
   OT::Description getInputNames() const;
   OT::Sample getIndices() const;
+  OT::Sample getSignedIndices() const;
+  OT::Collection<OT::Interval> getIndicesInterval() const;
+  OT::Collection<OT::Interval> getSignedIndicesInterval() const;
+  OT::UnsignedInteger getCallsNumber() const;
+  OT::Point getR2() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -59,6 +62,11 @@ public:
 private:
   OT::Description outputNames_;
   OT::Sample indices_;
+  OT::Sample signedIndices_;
+  OT::PersistentCollection<OT::Interval> indicesInterval_;
+  OT::PersistentCollection<OT::Interval> signedIndicesInterval_;
+  OT::Point r2_;
+  OT::UnsignedInteger callsNumber_;
 };
 }
 #endif
