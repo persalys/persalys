@@ -10,7 +10,7 @@ ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
-  && git checkout 1.12 \
+  && git checkout 1.13 \
   && ${ARCH}-w64-mingw32-cmake-py${PYMAJMIN} -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
   -DUSE_SPHINX=OFF -DUSE_TBB=OFF . \
