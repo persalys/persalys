@@ -19,7 +19,7 @@ RUN git clone https://github.com/beltoforion/muparser.git && cd muparser && git 
 
 # swig
 RUN yum -y install pcre-devel
-RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz | tar xz && cd swig-3.0.12 \
+RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.0.tar.gz | tar xz && cd swig-4.0.0 \
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
