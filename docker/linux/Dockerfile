@@ -27,7 +27,7 @@ RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz | tar xz && cd 
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # nlopt
-RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz | tar xz && cd nlopt-2.5.0 \
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.1.tar.gz | tar xz && cd nlopt-2.6.1 \
  && cmake -DINSTALL_LIB_DIR=/usr/local/lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1
 
 # tbb
