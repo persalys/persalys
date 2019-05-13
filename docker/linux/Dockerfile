@@ -23,7 +23,7 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.0.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz | tar xz && cd cmake-3.14.0 \
+RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.3.tar.gz | tar xz && cd cmake-3.14.3 \
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # nlopt
