@@ -19,15 +19,15 @@ RUN git clone https://github.com/beltoforion/muparser.git && cd muparser && git 
 
 # swig
 RUN yum -y install pcre-devel
-RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz | tar xz && cd swig-3.0.12 \
+RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.0.tar.gz | tar xz && cd swig-4.0.0 \
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.0.tar.gz | tar xz && cd cmake-3.14.0 \
+RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.3.tar.gz | tar xz && cd cmake-3.14.3 \
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # nlopt
-RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz | tar xz && cd nlopt-2.5.0 \
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.1.tar.gz | tar xz && cd nlopt-2.6.1 \
  && cmake -DINSTALL_LIB_DIR=/usr/local/lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1
 
 # tbb
@@ -110,7 +110,7 @@ RUN yum -y install pandoc dvisvgm
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
-RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2 | tar xj && cd boost_1_69_0 \
+RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2 | tar xj && cd boost_1_70_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
 
 # X11
@@ -167,11 +167,11 @@ RUN git clone https://github.com/openturns/openturns.git && cd openturns && git 
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.5 && git cherry-pick 29d7aafe8eadd2fae3e497ecbd3a6f29315a5f8b \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.6 \
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi
-RUN pip install git+git://github.com/openturns/otfmi.git@v0.2 && python3 -c "import otfmi"
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.3 && python3 -c "import otfmi"
 
 # locale
 RUN localedef -i en_US -f UTF-8 C.UTF-8
