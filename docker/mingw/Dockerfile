@@ -3,7 +3,7 @@ MAINTAINER jschueller
 
 RUN aurman -Syu --noconfirm --noedit   mingw-w64-qwt
 RUN aurman -Syu --noconfirm --noedit   mingw-w64-paraview
-
+RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
 ENV ARCH=x86_64 PYMAJMIN=37
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32

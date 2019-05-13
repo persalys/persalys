@@ -20,10 +20,10 @@ Dependencies
 
 Installation
 ------------
-- Python libs found must of same version as interpreter (else adjust PYTHON_INCLUDE_DIR, PYTHON_LIBRARY)
 - The Qwt library found must be linked to the qt libs found (else adjust QWT_LIBRARY)
 - otfmi must be importable at configure time, so both openturns & otfmi should be reachable via PYTHONPATH or a default location
 - ParaView must be linked to the same qt libs, and built with PARAVIEW_BUILD_QT_GUI=ON
+- On windows OpenGL software rendering is provided for graphic widgets with mesa, if you wish to use system-provided GL libs you can remove opengl32.dll
 
 Compile Persalys::
 
@@ -50,5 +50,5 @@ Translation::
 Environment variables:
 
 - PERSALYS_HTML_DOCUMENTATION_PATH: override path to the html documentation
-- PERSALYS_NO_GL: if defined, this disables OpenGL (Paraview widgets) support for troubleshooting
+- PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets) support for troubleshooting
 
