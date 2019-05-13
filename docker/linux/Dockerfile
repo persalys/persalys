@@ -171,7 +171,7 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi
-RUN pip install git+git://github.com/openturns/otfmi.git@v0.2 && python3 -c "import otfmi"
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.3 && python3 -c "import otfmi"
 
 # locale
 RUN localedef -i en_US -f UTF-8 C.UTF-8
