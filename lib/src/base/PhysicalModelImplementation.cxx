@@ -21,7 +21,6 @@
 #include "otgui/PhysicalModelImplementation.hxx"
 
 #include "otgui/BaseTools.hxx"
-#include "otgui/ParametricPointToFieldFunction.hxx"
 
 #include <openturns/NonCenteredFiniteDifferenceGradient.hxx>
 #include <openturns/CenteredFiniteDifferenceHessian.hxx>
@@ -31,6 +30,7 @@
 #include <openturns/ParametricFunction.hxx>
 #include <openturns/IndependentCopula.hxx>
 #include <openturns/CompositeRandomVector.hxx>
+#include <openturns/ParametricPointToFieldFunction.hxx>
 
 using namespace OT;
 
@@ -52,8 +52,8 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   , isParallel_(false)
 {
   setName(name);
-  // by default a ComposedCopula contain an IndependentCopula with the description "X0"
-  composedCopula_.setDescription(Description(1, ""));
+  // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
+  composedCopula_.setDescription(Description(2, ""));
 }
 
 
@@ -147,8 +147,8 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 
   // update composedCopula_
   composedCopula_ = ComposedCopula();
-  // by default a ComposedCopula contain an IndependentCopula with the description "X0"
-  composedCopula_.setDescription(Description(1, ""));
+  // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
+  composedCopula_.setDescription(Description(2, ""));
 
   inputsChanged();
 }
@@ -364,8 +364,8 @@ void PhysicalModelImplementation::updateCopula()
   else
   {
     composedCopula_ = ComposedCopula();
-    // by default a ComposedCopula contain an IndependentCopula with the description "X0"
-    composedCopula_.setDescription(Description(1, ""));
+    // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
+    composedCopula_.setDescription(Description(2, ""));
   }
 
   notify("copulaChanged");
@@ -848,8 +848,8 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
   else
   {
     composedCopula_ = ComposedCopula();
-    // by default a ComposedCopula contain an IndependentCopula with the description "X0"
-    composedCopula_.setDescription(Description(1, ""));
+    // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
+    composedCopula_.setDescription(Description(2, ""));
   }
   updateCopula();
 

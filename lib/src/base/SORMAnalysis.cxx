@@ -62,6 +62,7 @@ void SORMAnalysis::initialize()
   // clear result
   AnalysisImplementation::initialize();
   result_ = SORMAnalysisResult();
+  notify("progressValueChanged");
 }
 
 
@@ -77,6 +78,7 @@ void SORMAnalysis::launch()
   event.setDescription(outputName);
 
   optimizationAlgorithm_.setStopCallback(&AnalysisImplementation::Stop, this);
+  optimizationAlgorithm_.setProgressCallback(&UpdateProgressValue, this);
 
   // create OT::FORM
   SORM algo(getOptimizationAlgorithm(), event, getPhysicalStartingPoint());

@@ -50,149 +50,6 @@ customConvert< Sample, _PySequence_ >(Sample inS)
   return sample;
 }
 
-// Temporary template to overwrite the convert template of OT defined in PythonWrappingFunctions.hxx
-// We replace throw; with throw InvalidArgumentException(HERE)
-// TODO: rm this template with the next OT version
-template <class _PySequence_, class Sample> static inline Sample     tempConvert(PyObject * pyObj);
-template <>
-inline
-Sample
-tempConvert< _PySequence_, Sample >(PyObject * pyObj)
-{
-  // Check whether pyObj follows the buffer protocol
-  if (PyObject_CheckBuffer(pyObj))
-  {
-    Py_buffer view;
-    if (PyObject_GetBuffer(pyObj, &view, PyBUF_FORMAT | PyBUF_ND | PyBUF_ANY_CONTIGUOUS) >= 0)
-    {
-      if (view.ndim == 2 &&
-          view.itemsize == traitsPythonType<Scalar>::buf_itemsize &&
-          view.format != NULL &&
-          strcmp(view.format, pyBuf_formats[traitsPythonType<Scalar>::buf_format_idx]) == 0)
-      {
-        const Scalar* data = static_cast<const Scalar*>(view.buf);
-        const UnsignedInteger size = view.shape[0];
-        const UnsignedInteger dimension = view.shape[1];
-        Sample sample(size, dimension);
-        if (PyBuffer_IsContiguous(&view, 'C'))
-        {
-          // 2-d contiguous array in C notation, we can directly copy memory chunk
-          std::copy(data, data + size * dimension, (Scalar *)sample.__baseaddress__());
-        }
-        else
-        {
-          for (UnsignedInteger j = 0; j < dimension; ++j)
-            for(UnsignedInteger i = 0; i < size; ++i, ++data)
-              sample(i, j) = *data;
-        }
-        PyBuffer_Release(&view);
-        return sample;
-      }
-      PyBuffer_Release(&view);
-    }
-    else
-      PyErr_Clear();
-  }
-
-  // use the same conversion function for numpy array/matrix, knowing numpy matrix is not a sequence
-  if ( PyObject_HasAttrString(pyObj, const_cast<char *>("shape")) )
-  {
-    ScopedPyObjectPointer shapeObj(PyObject_GetAttrString( pyObj, "shape" ));
-    if ( !shapeObj.get() ) throw InvalidArgumentException(HERE) << "Not a sequence object";
-
-    Indices shape( checkAndConvert< _PySequence_, Indices >( shapeObj.get() ) );
-    if ( shape.getSize() == 2 )
-    {
-      UnsignedInteger size = shape[0];
-      UnsignedInteger dimension = shape[1];
-      ScopedPyObjectPointer askObj(PyTuple_New(2));
-      ScopedPyObjectPointer methodObj(convert< String, _PyString_ >("__getitem__"));
-      Sample sample( size, dimension );
-      for ( UnsignedInteger i = 0; i < size; ++ i )
-      {
-        PyTuple_SetItem( askObj.get(), 0, convert< UnsignedInteger, _PyInt_ >(i) );
-        for ( UnsignedInteger j = 0; j < dimension; ++ j )
-        {
-          PyTuple_SetItem( askObj.get(), 1, convert< UnsignedInteger, _PyInt_ >(j) );
-          ScopedPyObjectPointer elt(PyObject_CallMethodObjArgs( pyObj, methodObj.get(), askObj.get(), NULL));
-          if (elt.get())
-          {
-            sample( i, j ) = checkAndConvert<_PyFloat_, Scalar>(elt.get());
-          }
-        }
-      }
-      return sample;
-    }
-    else
-      throw InvalidArgumentException(HERE) << "Invalid array dimension: " << shape.getSize();
-  }
-  check<_PySequence_>(pyObj);
-  ScopedPyObjectPointer newPyObj(PySequence_Fast( pyObj, "" ));
-  if (!newPyObj.get()) throw InvalidArgumentException(HERE) << "Not a sequence object";
-  const UnsignedInteger size = PySequence_Fast_GET_SIZE( newPyObj.get() );
-  if (size == 0) return Sample();
-
-  // Get dimension of first point
-  PyObject * firstPoint = PySequence_Fast_GET_ITEM( newPyObj.get(), 0 );
-  check<_PySequence_>( firstPoint );
-  ScopedPyObjectPointer newPyFirstObj(PySequence_Fast( firstPoint, "" ));
-  const UnsignedInteger dimension = PySequence_Fast_GET_SIZE( newPyFirstObj.get() );
-  // Allocate result Sample
-  Sample sample( size, dimension );
-  for(UnsignedInteger i = 0; i < size; ++i)
-  {
-    PyObject * pointObj = PySequence_Fast_GET_ITEM( newPyObj.get(), i );
-    ScopedPyObjectPointer newPyPointObj(PySequence_Fast( pointObj, "" ));
-    if (i > 0)
-    {
-      // Check that object is a sequence, and has the right size
-      check<_PySequence_>( pointObj );
-
-      if (static_cast<UnsignedInteger>(PySequence_Fast_GET_SIZE( newPyPointObj.get() )) != dimension)
-        throw InvalidArgumentException(HERE) << "The sequences must have the same size";
-    }
-    for(UnsignedInteger j = 0; j < dimension; ++j)
-    {
-      PyObject * value = PySequence_Fast_GET_ITEM( newPyPointObj.get(), j );
-      sample(i, j) = checkAndConvert<_PyFloat_, Scalar>(value);
-    }
-  }
-  return sample;
-}
-
-template <class Sample>
-static inline
-Collection<Sample> *
-tempBuildCollectionFromPySequence(PyObject * pyObj, int sz = 0)
-{
-  check<_PySequence_>(pyObj);
-  ScopedPyObjectPointer newPyObj(PySequence_Fast( pyObj, "" ));
-  if (!newPyObj.get()) throw InvalidArgumentException(HERE) << "Not a sequence object";
-  const UnsignedInteger size = PySequence_Fast_GET_SIZE( newPyObj.get() );
-  if ((sz != 0) && (sz != (int)size))
-  {
-    throw InvalidArgumentException(HERE) << "Sequence object has incorrect size " << size << ". Must be " << sz << ".";
-  }
-  Collection<Sample> * p_coll = new Collection< Sample >( size );
-
-  for(UnsignedInteger i = 0; i < size; ++i)
-  {
-    PyObject * elt = PySequence_Fast_GET_ITEM( newPyObj.get(), i );
-    try
-    {
-      check<_PySequence_>( elt );
-    }
-    catch (InvalidArgumentException &)
-    {
-      delete p_coll;
-      throw;
-    }
-    (*p_coll)[i] = tempConvert< _PySequence_, Sample >( elt );
-  }
-
-  return p_coll;
-}
-
 
 /* Default constructor */
 PythonScriptFieldFunction::PythonScriptFieldFunction()
@@ -293,7 +150,7 @@ Sample PythonScriptFieldFunction::operator() (const Point & inP) const
     Sample outS_t;
     try
     {
-      outS_t = tempConvert<_PySequence_, Sample>(outputList.get());
+      outS_t = convert<_PySequence_, Sample>(outputList.get());
       if (outS_t.getDimension() != getOutputMesh().getVerticesNumber() || outS_t.getSize() != outputModelDimension_)
         throw InvalidDimensionException(HERE);
     }
@@ -381,7 +238,7 @@ ProcessSample PythonScriptFieldFunction::operator() (const Sample & inS) const
   Pointer< Collection< Sample > > ptr;
   try
   {
-    ptr = tempBuildCollectionFromPySequence< Sample >(sampleResult.get());
+    ptr = buildCollectionFromPySequence< Sample >(sampleResult.get());
   }
   catch (std::exception& e)
   {

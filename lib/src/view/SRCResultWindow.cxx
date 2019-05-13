@@ -24,6 +24,7 @@
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/SensitivityResultWidget.hxx"
 #include "otgui/QtTools.hxx"
+#include "otgui/ParametersTableView.hxx"
 
 #include <QGroupBox>
 #include <QScrollArea>
@@ -88,20 +89,46 @@ void SRCResultWindow::buildInterface()
   QWidget * widget = new QWidget;
   QVBoxLayout * vbox = new QVBoxLayout(widget);
 
+  // - indices graph and table
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
+  Interval indicesInterval;
+  Interval signedIndicesInterval;
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
+    QWidget * indicesWidget = new QWidget;
+    QVBoxLayout * indicesLayout = new QVBoxLayout(indicesWidget);
+
+    // table
+    if (result_.getR2().getSize() == nbOutputs)
+    {
+      QStringList namesList;
+      namesList << tr("Elapsed time")
+                  << tr("Number of calls")
+                  << tr("R2");
+
+      QStringList valuesList;
+      valuesList << QString::number(result_.getElapsedTime()) + " s"
+          << QString::number(result_.getCallsNumber())
+      << QString::number(result_.getR2()[i]);
+      ParametersTableView * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
+      indicesLayout->addWidget(basisTableView);
+    }
+
+    // indices graph and table
+    Interval indicesInterval = result_.getIndicesInterval().getSize() == nbOutputs? result_.getIndicesInterval()[i] : Interval();
+    Interval signedIndicesInterval = result_.getSignedIndicesInterval().getSize() == nbOutputs? result_.getSignedIndicesInterval()[i] : Interval();
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getIndices()[i],
-        Interval(),
-        Point(),
-        Interval(),
+        indicesInterval,
+        result_.getSignedIndices().getSize() == nbOutputs ? result_.getSignedIndices()[i] : Point(),
+        signedIndicesInterval,
         result_.getInputNames(),
         result_.getOutputNames()[i],
         SensitivityResultWidget::SRC,
         this);
-    stackedWidget->addWidget(indicesResultWidget);
+    indicesLayout->addWidget(indicesResultWidget);
+    stackedWidget->addWidget(indicesWidget);
   }
   vbox->addWidget(stackedWidget);
 
@@ -111,6 +138,7 @@ void SRCResultWindow::buildInterface()
     QLabel * warningLabel = new QLabel(QString("<font color=red>%1</font>").arg(warningMessage_));
     vbox->addWidget(warningLabel);
   }
+  vbox->setContentsMargins(0, 0, 0, 0);
   scrollArea->setWidget(widget);
   tabWidget->addTab(scrollArea, tr("Indices"));
 

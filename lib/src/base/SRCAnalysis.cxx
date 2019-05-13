@@ -23,6 +23,7 @@
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/CorrelationAnalysis.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/BootstrapExperiment.hxx>
 
 using namespace OT;
 
@@ -76,6 +77,7 @@ void SRCAnalysis::initialize()
 {
   SimulationAnalysis::initialize();
   result_ = SRCResult();
+  notify("progressValueChanged");
 }
 
 
@@ -89,21 +91,29 @@ void SRCAnalysis::launch()
   // initialization
   RandomGenerator::SetSeed(getSeed());
 
+  // generate input sample
   const Sample inputSample(generateInputSample(getSimulationsNumber()));
-  const UnsignedInteger inputSampleSize = inputSample.getSize();
+
+  const UnsignedInteger nbInputs = inputSample.getDimension();
+  const UnsignedInteger nbOutputs = getInterestVariables().getSize();
 
   // number of iterations
-  const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
+  const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * getSimulationsNumber() / getBlockSize()));
   // last block size
-  const UnsignedInteger modulo = inputSampleSize % getBlockSize();
+  const UnsignedInteger modulo = getSimulationsNumber() % getBlockSize();
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
-  // evaluate model
-  Sample outputSample(0, getInterestVariables().getSize());
+  TimeCriteria timeCriteria;
+  // evaluate output sample
+  Sample outputSample(0, nbOutputs);
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
     if (stopRequested_ && i > 1)
       break;
+
+    // information message
+    informationMessage_ = OSS() << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notify("informationMessageUpdated");
 
     progressValue_ = (int) (i * 100 / nbIter);
     notify("progressValueChanged");
@@ -117,21 +127,91 @@ void SRCAnalysis::launch()
 
     // Perform a block of simulations
     outputSample.add(computeOutputSample(blockInputSample));
+
+    timeCriteria.incrementElapsedTime();
   }
 
-  // compute SRC indices
-  Sample indices(0, inputSample.getDimension());
-
+  // get input points really evaluated
   const Sample effectiveInputSample(inputSample, 0, outputSample.getSize());
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
+
+  // compute signed SRC indices
+  Sample indices(0, inputSample.getDimension());
+  Sample signedIndices(0, inputSample.getDimension());
+  Point r2(nbOutputs);
+
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    indices.add(CorrelationAnalysis::SRC(effectiveInputSample, outputSample.getMarginal(i)));
+    const Point signedSRC(CorrelationAnalysis::SignedSRC(effectiveInputSample, outputSample.getMarginal(i)));
+    signedIndices.add(signedSRC);
+    Point unscaledSRC;
+    for (UnsignedInteger j = 0; j < nbInputs; ++j)
+    {
+      unscaledSRC.add(signedSRC[j] * signedSRC[j]);
+      r2[i] += signedSRC[j] * signedSRC[j];
+    }
+    indices.add(unscaledSRC);
   }
 
-  indices.setDescription(inputSample.getDescription());
   // set results
+  indices.setDescription(inputSample.getDescription());
   result_.indices_ = indices;
+  result_.signedIndices_ = signedIndices;
+  result_.r2_ = r2;
   result_.outputNames_ = getInterestVariables();
+  result_.callsNumber_ = effectiveInputSample.getSize();
+
+  // information message
+  timeCriteria.incrementElapsedTime();
+  informationMessage_ = OSS() << "Computation of the confidence intervals\n" << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+  notify("informationMessageUpdated");
+
+  // Compute bootstrap confidence intervals
+  const UnsignedInteger bootstrapSize = ResourceMap::GetAsUnsignedInteger("SobolIndicesAlgorithm-DefaultBootstrapSize");
+  const Scalar alpha = ResourceMap::GetAsScalar("SobolIndicesAlgorithm-DefaultBootstrapConfidenceLevel");
+  Indices inIndices(nbInputs);
+  inIndices.fill();
+
+  // - get bootstrap experiment
+  Sample sample(effectiveInputSample);
+  sample.stack(outputSample);
+  BootstrapExperiment bootstrapExp(sample);
+  // - compute signed SRC
+  Collection<Sample> signedSRCBootstrap(nbOutputs, Sample(0, nbInputs));
+  Collection<Sample> unscaledSRCBootstrap(nbOutputs, Sample(0, nbInputs));
+  for (UnsignedInteger i = 0; i < bootstrapSize; ++i)
+  {
+    informationMessage_ = OSS() << "Computation of the confidence intervals\n" << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notify("informationMessageUpdated");
+    const Sample bootstrapSample(bootstrapExp.generate());
+    for (UnsignedInteger j = 0; j < nbOutputs; ++j)
+    {
+      const Point signedSRC(CorrelationAnalysis::SignedSRC(bootstrapSample.getMarginal(inIndices), bootstrapSample.getMarginal(nbInputs + j)));
+      signedSRCBootstrap[j].add(signedSRC);
+
+      Point unscaledSRC;
+      for (UnsignedInteger k = 0; k < nbInputs; ++k)
+        unscaledSRC.add(signedSRC[k] * signedSRC[k]);
+      unscaledSRCBootstrap[j].add(unscaledSRC);
+    }
+    timeCriteria.incrementElapsedTime();
+  }
+  // - compute bounds
+  PersistentCollection<Interval> signedSRCInterval(nbOutputs);
+  PersistentCollection<Interval> unscaledSRCInterval(nbOutputs);
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+  {
+    Point upperBound(signedSRCBootstrap[i].computeQuantilePerComponent(alpha));
+    Point lowerBound(signedSRCBootstrap[i].computeQuantilePerComponent(1-alpha));
+    signedSRCInterval[i] = Interval(lowerBound, upperBound);
+
+    Point upperBound2(unscaledSRCBootstrap[i].computeQuantilePerComponent(alpha));
+    Point lowerBound2(unscaledSRCBootstrap[i].computeQuantilePerComponent(1-alpha));
+    unscaledSRCInterval[i] = Interval(lowerBound2, upperBound2);
+  }
+  result_.indicesInterval_ = unscaledSRCInterval;
+  result_.signedIndicesInterval_ = signedSRCInterval;
+  timeCriteria.incrementElapsedTime();
+  result_.elapsedTime_ = timeCriteria.getElapsedTime();
 
   // add warning if the model does not have an independent copula
   if (!getPhysicalModel().getCopula().hasIndependentCopula())

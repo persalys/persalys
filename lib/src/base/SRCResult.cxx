@@ -34,15 +34,11 @@ static Factory<SRCResult> Factory_SRCResult;
 /* Default constructor */
 SRCResult::SRCResult()
   : EvaluationResult()
-{
-}
-
-
-/* Constructor with parameters */
-SRCResult::SRCResult(const Sample& indices, const Description & outputNames)
-  : EvaluationResult()
-  , outputNames_(outputNames)
-  , indices_(indices)
+  , outputNames_()
+  , indices_()
+  , signedIndices_()
+  , indicesInterval_()
+  , callsNumber_(0)
 {
 }
 
@@ -72,6 +68,36 @@ Sample SRCResult::getIndices() const
 }
 
 
+Sample SRCResult::getSignedIndices() const
+{
+  return signedIndices_;
+}
+
+
+Collection<Interval> SRCResult::getIndicesInterval() const
+{
+  return indicesInterval_;
+}
+
+
+Collection<Interval> SRCResult::getSignedIndicesInterval() const
+{
+  return signedIndicesInterval_;
+}
+
+
+UnsignedInteger SRCResult::getCallsNumber() const
+{
+  return callsNumber_;
+}
+
+
+Point SRCResult::getR2() const
+{
+  return r2_;
+}
+
+
 /* String converter */
 String SRCResult::__repr__() const
 {
@@ -79,7 +105,12 @@ String SRCResult::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " outputNames=" << getOutputNames()
-      << " indices=" << getIndices();
+      << " indices=" << getIndices()
+      << " indices intervals=" << getIndicesInterval()
+      << " signed indices=" << getSignedIndices()
+      << " signed indices intervals=" << getSignedIndicesInterval()
+      << " r2=" << getR2()
+      << " calls number=" << getCallsNumber();
   return oss;
 }
 
@@ -90,6 +121,11 @@ void SRCResult::save(Advocate & adv) const
   EvaluationResult::save(adv);
   adv.saveAttribute("outputNames_", outputNames_);
   adv.saveAttribute("indices_", indices_);
+  adv.saveAttribute("signedIndices_", signedIndices_);
+  adv.saveAttribute("indicesInterval_", indicesInterval_);
+  adv.saveAttribute("signedIndicesInterval_", signedIndicesInterval_);
+  adv.saveAttribute("r2_", r2_);
+  adv.saveAttribute("callsNumber_", callsNumber_);
 }
 
 
@@ -99,5 +135,10 @@ void SRCResult::load(Advocate & adv)
   EvaluationResult::load(adv);
   adv.loadAttribute("outputNames_", outputNames_);
   adv.loadAttribute("indices_", indices_);
+  adv.loadAttribute("signedIndices_", signedIndices_);
+  adv.loadAttribute("indicesInterval_", indicesInterval_);
+  adv.loadAttribute("signedIndicesInterval_", signedIndicesInterval_);
+  adv.loadAttribute("r2_", r2_);
+  adv.loadAttribute("callsNumber_", callsNumber_);
 }
 }

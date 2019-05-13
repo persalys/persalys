@@ -92,7 +92,8 @@ void KrigingPage::buildInterface()
 
   //  -spinbox
   generalizedModelParameterPSpinBox_ = new DoubleSpinBox;
-  generalizedModelParameterPSpinBox_->setMinimum(1e-12); // TODO setMaximum with the next OT version
+  generalizedModelParameterPSpinBox_->setMinimum(1e-12);
+  generalizedModelParameterPSpinBox_->setMaximum(2);
   parametersLayout->addWidget(generalizedModelParameterPSpinBox_, 2, 2);
   generalizedModelParameterPSpinBox_->setValue(1.0);
 

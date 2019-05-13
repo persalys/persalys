@@ -163,7 +163,7 @@ RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.0.tar.gz | tar xz &&
 
 # openturns
 RUN yum -y install libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.12.1 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 1.13 \
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris

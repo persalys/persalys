@@ -64,7 +64,6 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      CopulaInferenceAnalysis.cxx
                      OptimizationAnalysis.cxx
                      PythonEnvironment.cxx
-                     ParametricPointToFieldFunction.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx )
@@ -161,7 +160,6 @@ ot_install_header_file ( CopulaInferenceAnalysis.hxx )
 ot_install_header_file ( OptimizationAnalysis.hxx )
 ot_install_header_file ( PythonEnvironment.hxx )
 ot_install_header_file ( LaunchParametersVisitor.hxx )
-ot_install_header_file ( ParametricPointToFieldFunction.hxx )
 
 if (USE_OTFMI)
   ot_install_header_file (FMIPhysicalModel.hxx)

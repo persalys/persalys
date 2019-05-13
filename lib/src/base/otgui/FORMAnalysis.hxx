@@ -32,6 +32,8 @@ class OTGUI_API FORMAnalysis : public ReliabilityAnalysis, public ApproximationA
   CLASSNAME
 
 public:
+  friend class FORMImportanceSamplingAnalysis;
+
   /** Default constructor */
   FORMAnalysis();
   /** Constructor with parameters */

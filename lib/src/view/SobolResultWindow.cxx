@@ -90,6 +90,24 @@ void SobolResultWindow::buildInterface()
   QWidget * widget = new QWidget;
   QVBoxLayout * vbox = new QVBoxLayout(widget);
 
+  // stopping criteria
+  if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
+  {
+    // stopping criteria
+    QStringList namesList;
+    namesList << tr("Elapsed time")
+              << tr("Number of calls")
+              << tr("Confidence interval length");
+
+    QStringList valuesList;
+    valuesList << QString::number(result_.getElapsedTime()) + " s"
+               << QString::number(result_.getCallsNumber())
+               << QString::number(result_.getConfidenceIntervalLength());
+
+    ParametersWidget * parametersWidget = new ParametersWidget(tr("Stopping criteria"), namesList, valuesList, true, true);
+    vbox->addWidget(parametersWidget);
+  }
+
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
@@ -114,7 +132,7 @@ void SobolResultWindow::buildInterface()
         this);
     stackedWidget->addWidget(indicesResultWidget);
   }
-  vbox->addWidget(stackedWidget);
+  vbox->addWidget(stackedWidget, 1);
 
   // add a warning (if the model does not have an independent copula when doing a SensitivityAnalysis)
   if (!warningMessage_.isEmpty())
@@ -124,30 +142,6 @@ void SobolResultWindow::buildInterface()
   }
   scrollArea->setWidget(widget);
   tabWidget->addTab(scrollArea, tr("Indices"));
-
-  // second tab --------------------------------
-  if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
-  {
-    QWidget * paramWidget = new QWidget;
-    QGridLayout * paramWidgetLayout = new QGridLayout(paramWidget);
-
-    // stopping criteria
-    QStringList namesList;
-    namesList << tr("Elapsed time")
-              << tr("Number of calls")
-              << tr("Confidence interval length");
-
-    QStringList valuesList;
-    valuesList << QString::number(result_.getElapsedTime()) + " s"
-               << QString::number(result_.getCallsNumber())
-               << QString::number(result_.getConfidenceIntervalLength());
-
-    ParametersWidget * parametersWidget = new ParametersWidget(tr("Stopping criteria"), namesList, valuesList, true, true);
-    paramWidgetLayout->addWidget(parametersWidget);
-    paramWidgetLayout->setRowStretch(1, 1);
-
-    tabWidget->addTab(paramWidget, tr("Summary"));
-  }
 
   // third tab --------------------------------
   if (parametersWidget_)

@@ -546,8 +546,10 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
                                         const Point& totalIndices,
                                         const Description& inputNames,
                                         const Interval& firstOrderIndicesIntervals,
-                                        const Interval& totalIndicesIntervals)
+                                        const Interval& totalIndicesIntervals,
+                                        const QStringList& legendNames)
 {
+  Q_ASSERT(legendNames.size() == 2);
   setAxisTitle(QwtPlot::yLeft, tr("Index"));
   setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
 
@@ -583,7 +585,7 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
     }
   }
 
-  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), tr("First order index"));
+  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), legendNames[0]);
   delete[] xData;
   delete[] yData;
 
@@ -609,7 +611,7 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
         yMax = std::max(yMax, totalIndicesIntervals.getUpperBound()[i]);
       }
     }
-    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), tr("Total index"));
+    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), legendNames[1]);
 
     insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
     delete[] xData;
@@ -625,6 +627,12 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
   yMin = yMin - (std::abs(0.05 * yMin) < 0.01 ? 0.05 : std::abs(0.05 * yMin));
   yMax = yMax + std::abs(0.05 * yMax);
   setAxisScale(QwtPlot::yLeft, yMin, yMax);
+
+  // horizontal line y = 0
+  QwtPlotMarker * hMarker = new QwtPlotMarker;
+  hMarker->setLineStyle(QwtPlotMarker::HLine);
+  hMarker->setLinePen(QPen(Qt::darkGray, 1));
+  hMarker->attach(this);
 
   replot();
 }

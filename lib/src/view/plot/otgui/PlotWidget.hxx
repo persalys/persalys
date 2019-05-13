@@ -133,7 +133,8 @@ public:
                               const OT::Point& totalIndices,
                               const OT::Description& inputNames,
                               const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
-                              const OT::Interval& totalIndicesIntervals = OT::Interval());
+                              const OT::Interval& totalIndicesIntervals = OT::Interval(),
+                              const QStringList& legendNames = QStringList() << tr("First order index") << tr("Total index"));
   void plotContour(const OT::Distribution& distribution, const bool isPdf = true);
   void plotContour(const OT::Drawable& drawable, const bool displayContour = true);
   void setMorrisPlotType(const QPointF& initialMarkersCoord);
