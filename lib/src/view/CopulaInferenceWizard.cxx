@@ -129,6 +129,7 @@ void CopulaInferenceWizard::buildInterface()
   tableView_->horizontalHeader()->setStretchLastSection(true);
   tableView_->verticalHeader()->hide();
   tableView_->setShowGrid(false);
+  tableView_->setStyleSheet("QTableView::item:selected{background-color: " + ApplicationColor["lightColor"] + "; color: doubledarkgray;}");
   leftSideLayout->addWidget(tableView_);
 
   tableModel_ = new QStandardItemModel(tableView_);

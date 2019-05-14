@@ -28,6 +28,7 @@
 #include "otgui/CheckableHeaderView.hxx"
 #include "otgui/CopulaInferenceResultWizard.hxx"
 #include "otgui/StudyItem.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <openturns/NormalCopula.hxx>
 
@@ -106,6 +107,7 @@ void DependenciesWidget::buildInterface()
   tableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
   tableView_->horizontalHeader()->setStretchLastSection(true);
   tableView_->verticalHeader()->hide();
+  tableView_->setStyleSheet("QTableView::item:selected{background-color: " + ApplicationColor["lightColor"] + ";color: doubledarkgray;}");
 
   // - table model
   tableModel_ = new DependenciesTableModel(physicalModel_, tableView_);

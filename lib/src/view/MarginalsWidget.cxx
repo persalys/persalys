@@ -82,6 +82,7 @@ void MarginalsWidget::buildInterface()
   inputTableView_ = new QTableView;
   inputTableView_->setSelectionMode(QAbstractItemView::SingleSelection);
   inputTableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
+  inputTableView_->setStyleSheet("QTableView::item:selected{background-color: " + ApplicationColor["lightColor"] + ";color: doubledarkgray;}");
 
   // - model
   inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);

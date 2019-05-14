@@ -21,6 +21,7 @@
 #include "otgui/StudyTreeView.hxx"
 
 #include "otgui/LineEditWithQValidatorDelegate.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QMenu>
 #include <QHeaderView>
@@ -61,7 +62,7 @@ public:
     if (index.data(Qt::UserRole).toString() == "Study")
     {
       QLineF aLine(optionButton.rect.bottomLeft(), optionButton.rect.bottomRight());
-      QPen pen("#0a5205");
+      QPen pen(ApplicationColor["darkColor"]);
       pen.setWidth(1);
       painter->setPen(pen);
       painter->drawLine(aLine);
@@ -113,10 +114,13 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   setExpandsOnDoubleClick(false);
 
   // style sheet
-  const QString styleSheet = " QTreeView::item:selected { background-color: #a5d3a1;\
+  const QString dark(ApplicationColor["darkColor"]);
+  const QString light(ApplicationColor["lightColor"]);
+  const QString medium(ApplicationColor["mediumColor"]);
+  const QString styleSheet = " QTreeView::item:selected { background-color: " + light + ";\
                                                           color: doubledarkgray;\
                                }\
-                               QTreeView::branch:selected { background-color: #a5d3a1;\
+                               QTreeView::branch:selected { background-color: " + light + ";\
                                }\
                                QTreeView::branch:has-children:!has-siblings:closed,\
                                QTreeView::branch:closed:has-children:has-siblings { border-image: none;\
@@ -135,11 +139,11 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   setStyleSheet(styleSheet);
 
   // style sheet for header
-  const QString headerStyleSheet = " QHeaderView::section { border: 2px solid #0a5205;\
+  const QString headerStyleSheet = " QHeaderView::section { border: 2px solid " + dark + ";\
                                                             border-radius: 1px;\
                                                             background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
-                                                                                              stop: 0 #0a5205, stop: 0.4 #4ea248,\
-                                                                                              stop: 0.5 #4ea248, stop: 1.0 #0a5205);\
+                                                                                              stop: 0 " + dark + ", stop: 0.4 " + medium + ",\
+                                                                                              stop: 0.5 " + medium + ", stop: 1.0 " + dark + ");\
                                                             color: white;\
                                                             font: bold;\
                                                             padding: 5px 1px;\

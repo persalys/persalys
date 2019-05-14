@@ -20,6 +20,8 @@
  */
 #include "otgui/DiagramPushButton.hxx"
 
+#include "otgui/QtTools.hxx"
+
 #include <QStyleOptionButton>
 #include <QPainter>
 
@@ -33,19 +35,22 @@ DiagramPushButton::DiagramPushButton(const QString& text, QWidget* parent)
 {
   setAttribute(Qt::WA_TranslucentBackground);
 
-  setStyleSheet("QPushButton          { border: 2px solid #0a5205;\
+  const QString dark(ApplicationColor["darkColor"]);
+  const QString light(ApplicationColor["lightColor"]);
+  const QString medium(ApplicationColor["mediumColor"]);
+  setStyleSheet("QPushButton          { border: 2px solid " + dark + ";\
                                         border-radius: 10px;\
                                         background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\
-                                                                          stop: 0 #0a5205, stop: 0.4 #4ea248,\
-                                                                          stop: 0.5 #4ea248, stop: 1.0 #0a5205);\
+                                                                          stop: 0 " + dark + ", stop: 0.4 " + medium + ",\
+                                                                          stop: 0.5 " + medium + ", stop: 1.0 " + dark + ");\
                                         color: white;\
                                         font: bold;\
                                         padding: 5px 5px;\
                                         outline: none;\
                                       }\
-                 QPushButton:hover    { background-color: #0a5205 }\
-                 QPushButton:pressed  { background-color: #4ca545; }\
-                 QPushButton:disabled { background-color: #a5d3a1 }\
+                 QPushButton:hover    { background-color: " + dark + " }\
+                 QPushButton:pressed  { background-color: " + dark + " }\
+                 QPushButton:disabled { background-color: " + light + " }\
                 ");
 }
 
