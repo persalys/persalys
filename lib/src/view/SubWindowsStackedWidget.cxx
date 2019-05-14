@@ -21,6 +21,7 @@
 #include "otgui/SubWindowsStackedWidget.hxx"
 
 #include <QDebug>
+#include <QLayout>
 
 namespace OTGUI
 {
@@ -36,7 +37,12 @@ int SubWindowsStackedWidget::addSubWindow(SubWindow * win)
   // connections
   connect(win, SIGNAL(showWindowRequested(QWidget*)), this, SLOT(setCurrentWidget(QWidget*)));
   connect(win, SIGNAL(removeWindowRequested(QWidget*)), this, SLOT(removeSubWindow(QWidget*)));
-
+  if (win->layout())
+  {
+    int x1, y1, x2, y2;
+    win->layout()->getContentsMargins(&x1, &y1, &x2, &y2);
+    win->layout()->setContentsMargins(x1, 0, x2, 0);
+  }
   int ret = QStackedWidget::addWidget(win);
   setCurrentWidget(win);
 
