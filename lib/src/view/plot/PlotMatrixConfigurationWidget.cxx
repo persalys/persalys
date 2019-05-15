@@ -38,33 +38,27 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   , plotMatrix_(plotMatrix)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  mainLayout->setContentsMargins(0, 0, 0, 0);
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QFrame * frame = new QFrame;
-  QGridLayout * mainGridLayout = new QGridLayout(frame);
+  QVBoxLayout * frameLayout = new QVBoxLayout(frame);
+
+  QGridLayout * mainGridLayout = new QGridLayout;
   int rowGrid = 0;
 
   // title
   QLabel * label = new QLabel(tr("Title"));
-  mainGridLayout->addWidget(label, rowGrid, 0, 1, 1);
+  mainGridLayout->addWidget(label, rowGrid, 0);
   titleLineEdit_ = new QLineEdit;
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
-  mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
-
-  // show Outputs vs Inputs
-  if (plotMatrix_->getOutputNames().size())
-  {
-    QCheckBox * outputVsInputCheckBox = new QCheckBox(tr("Outputs vs inputs"));
-    outputVsInputCheckBox->setChecked(false);
-    connect(outputVsInputCheckBox, SIGNAL(clicked(bool)), this, SLOT(showXY(bool)));
-    mainGridLayout->addWidget(outputVsInputCheckBox, ++rowGrid, 0, 1, 2);
-  }
+  mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1);
 
   // columns label
   label = new QLabel(tr("Columns"));
-  mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+  mainGridLayout->addWidget(label, ++rowGrid, 0);
 
   // combobox to select the columns to display
   TitledComboBox * inputsComboBox = new TitledComboBox("-- " + tr("Select variables") + " --");
@@ -72,11 +66,11 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   connect(columnsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setColumnsToDisplay(QStringList)));
   inputsComboBox->setModel(columnsListWidget_->model());
   inputsComboBox->setView(columnsListWidget_);
-  mainGridLayout->addWidget(inputsComboBox, rowGrid, 1, 1, 1);
+  mainGridLayout->addWidget(inputsComboBox, rowGrid, 1);
 
   // rows label
   label = new QLabel(tr("Rows"));
-  mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+  mainGridLayout->addWidget(label, ++rowGrid, 0);
 
   // combobox to select the rows to display
   TitledComboBox * outputsComboBox = new TitledComboBox("-- " + tr("Select variables") + " --");
@@ -84,18 +78,28 @@ PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * 
   connect(rowsListWidget_, SIGNAL(checkedItemsChanged(QStringList)), plotMatrix_, SLOT(setRowsToDisplay(QStringList)));
   outputsComboBox->setModel(rowsListWidget_->model());
   outputsComboBox->setView(rowsListWidget_);
-  mainGridLayout->addWidget(outputsComboBox, rowGrid, 1, 1, 1);
+  mainGridLayout->addWidget(outputsComboBox, rowGrid, 1);
+
+  frameLayout->addLayout(mainGridLayout);
+
+  // show Outputs vs Inputs
+  if (plotMatrix_->getOutputNames().size())
+  {
+    QCheckBox * outputVsInputCheckBox = new QCheckBox(tr("Outputs vs inputs"));
+    outputVsInputCheckBox->setChecked(false);
+    connect(outputVsInputCheckBox, SIGNAL(clicked(bool)), this, SLOT(showXY(bool)));
+    frameLayout->addWidget(outputVsInputCheckBox);
+  }
 
   // pushbutton to export the plot
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
-  hboxForBottomButtons->addStretch();
   QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
+  hboxForBottomButtons->addStretch();
 
-  mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
-
-  mainGridLayout->setRowStretch(++rowGrid, 1);
+  frameLayout->addLayout(hboxForBottomButtons);
+  frameLayout->addStretch();
 
   updateLineEdits();
 
