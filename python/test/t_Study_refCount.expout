@@ -11,7 +11,10 @@ X0 = otguibase.Input('X0', 0, '')
 Y0 = otguibase.Output('Y0', '')
 inputs = [X0]
 outputs = [Y0]
-code = 'def _exec(X0):\n    Y0 = X0\n    return Y0'
+code = """
+def _exec(X0):
+    Y0 = X0
+    return Y0"""
 PhysicalModel_0 = otguibase.PythonPhysicalModel('PhysicalModel_0', inputs, outputs, code)
 Study_0.add(PhysicalModel_0)
 

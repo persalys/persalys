@@ -45,7 +45,14 @@ Y0 = otguibase.Output('Y0', '')
 fake_Y0 = otguibase.Output('fake_Y0', '')
 inputs = [X0, X1]
 outputs = [Y0, fake_Y0]
-code = 'from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return Y0, fake_Y0\n'
+code = """
+from math import sin
+
+def _exec(X0, X1):
+    Y0 = sin(X0) + 8*X1
+    fake_Y0 = X0
+    return Y0, fake_Y0
+"""
 myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myStudy.add(myPhysicalModel)
 aTaylor = otguibase.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)

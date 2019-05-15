@@ -27,7 +27,13 @@ F = otguibase.Input('F', 0, dist_F, 'Traction load')
 G = otguibase.Output('G', 'deviation')
 inputs = [R, F]
 outputs = [G]
-code = 'from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)/0.\n    return G\n'
+code = """
+from math import pi
+
+def _exec(R, F):
+    G = 2*R-F/(pi*100.0)/0.
+    return G
+"""
 myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myPhysicalModel.setParallel(True)
 myStudy.add(myPhysicalModel)
