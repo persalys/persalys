@@ -21,9 +21,12 @@
 #include "otgui/MainWidget.hxx"
 
 #include "otgui/WelcomeWindow.hxx"
+#include "otgui/QtTools.hxx"
+#include "otgui/SubWindow.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QTabBar>
 
 namespace OTGUI
 {
@@ -32,7 +35,7 @@ MainWidget::MainWidget(QWidget* parent)
   : QWidget(parent)
   , studyTree_(new StudyTreeView(this))
   , subWindowsStackedWidget_(new SubWindowsStackedWidget(this))
-  , graphSettingDockWidget_(new QDockWidget(tr("Graph settings"), this))
+  , graphSettingDockWidget_(new QDockWidget(this))
   , actions_(new Actions(this))
 {
   buildInterface();
@@ -54,6 +57,7 @@ void MainWidget::buildInterface()
 
   // - dock widget for graph setting
   graphSettingDockWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  graphSettingDockWidget_->setTitleBarWidget(new TitleLabel(tr("Graph settings")));
   leftSideSplitter->addWidget(graphSettingDockWidget_);
   graphSettingDockWidget_->close();
   leftSideSplitter->setStretchFactor(1, 2);
@@ -70,6 +74,13 @@ void MainWidget::buildInterface()
   mainSplitter->setStretchFactor(1, 3);
 
   widgetLayout->addWidget(mainSplitter);
+
+  // change style of all the QTabWidget of the application
+  QColor background = QTabBar().palette().color(QPalette::Base);
+  QString styleSheet = "\
+      QTabBar::tab {border: 1px solid #C4C4C3; padding: 8px; border-bottom: 0px; border-radius: 2px;}\
+      QTabBar::tab:selected {border-bottom: 2px solid " + ApplicationColor["darkColor"] + "; background: " + background.name() + ";}";
+  setStyleSheet(styleSheet);
 }
 
 
