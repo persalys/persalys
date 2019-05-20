@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/KrigingAnalysis.hxx"
+#include "persalys/KrigingAnalysis.hxx"
 %}
 
 %include KrigingAnalysis_doc.i
 
-%include otgui/KrigingAnalysis.hxx
-namespace OTGUI {
+%include persalys/KrigingAnalysis.hxx
+namespace PERSALYS {
 
-%extend KrigingAnalysis { KrigingAnalysis(const KrigingAnalysis & other) { return new OTGUI::KrigingAnalysis(other); } 
+%extend KrigingAnalysis { KrigingAnalysis(const KrigingAnalysis & other) { return new PERSALYS::KrigingAnalysis(other); } 
 
 } }

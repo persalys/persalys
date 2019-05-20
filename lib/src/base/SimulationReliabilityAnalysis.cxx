@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SimulationReliabilityAnalysis.hxx"
+#include "persalys/SimulationReliabilityAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/CompositeRandomVector.hxx>
@@ -26,7 +26,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 /* Default constructor */
@@ -210,7 +210,7 @@ String SimulationReliabilityAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
-  oss << getName() << " = otguibase." << getClassName() << "('" << getName() << "', " << getLimitState().getName() << ")\n";
+  oss << getName() << " = persalys." << getClassName() << "('" << getName() << "', " << getLimitState().getName() << ")\n";
 
   if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";

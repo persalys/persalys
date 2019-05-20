@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CustomScaleDraw.hxx"
+#include "persalys/CustomScaleDraw.hxx"
 
 #include <QString>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CustomScaleDraw::CustomScaleDraw()

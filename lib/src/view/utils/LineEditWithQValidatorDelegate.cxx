@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/LineEditWithQValidatorDelegate.hxx"
+#include "persalys/LineEditWithQValidatorDelegate.hxx"
 
 #include <QLineEdit>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 LineEditWithQValidatorDelegate::LineEditWithQValidatorDelegate(QObject *parent)

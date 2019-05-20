@@ -1,14 +1,14 @@
-#include "otgui/SobolAnalysis.hxx"
-#include "otgui/SRCAnalysis.hxx"
-#include "otgui/SensitivityAnalysisWizard.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
+#include "persalys/SobolAnalysis.hxx"
+#include "persalys/SRCAnalysis.hxx"
+#include "persalys/SensitivityAnalysisWizard.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
 
 #include <QtTest/QtTest>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestSensitivityAnalysisWizard : public QObject
 {
@@ -149,5 +149,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestSensitivityAnalysisWizard)
+QTEST_MAIN(PERSALYS::TestSensitivityAnalysisWizard)
 #include "t_SensitivityAnalysisWizard_std.moc"

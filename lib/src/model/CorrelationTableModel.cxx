@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CorrelationTableModel.hxx"
+#include "persalys/CorrelationTableModel.hxx"
 
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 #include <openturns/NormalCopula.hxx>
 
@@ -28,7 +28,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CorrelationTableModel::CorrelationTableModel(const PhysicalModel &model, const OT::Copula &copula, QObject *parent)

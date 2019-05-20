@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::CopulaInferenceAnalysis
+%feature("docstring") PERSALYS::CopulaInferenceAnalysis
 "Perform a dependence inference analysis.
 
 Parameters
 ----------
 name : str
     Name
-design : :class:`~otguibase.DesignOfExperiment`
+design : :class:`~persalys.DesignOfExperiment`
     Design of experiments
 
 Examples
@@ -13,16 +13,16 @@ Examples
 Create the model:
 
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 >>> filename = 'data.csv'
 >>> ot.RandomGenerator_SetSeed(0)
 >>> sample = ot.Normal(3).getSample(100)
 >>> sample.exportToCSVFile(filename)
->>> model = otguibase.DataModel('myDataModel', 'data.csv', [0, 1, 2])
+>>> model = persalys.DataModel('myDataModel', 'data.csv', [0, 1, 2])
 
 Create the dependence inference analysis:
 
->>> analysis = otguibase.CopulaInferenceAnalysis('analysis', model)
+>>> analysis = persalys.CopulaInferenceAnalysis('analysis', model)
 >>> analysis.run()
 
 Get the result:
@@ -32,7 +32,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::CopulaInferenceAnalysis::getDistributionsFactories
+%feature("docstring") PERSALYS::CopulaInferenceAnalysis::getDistributionsFactories
 "Get the sequence of distributions to test for a set of variables.
 
 Parameters
@@ -47,7 +47,7 @@ factories : sequence of :py:class:`openturns.DistributionFactory`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::CopulaInferenceAnalysis::setDistributionsFactories
+%feature("docstring") PERSALYS::CopulaInferenceAnalysis::setDistributionsFactories
 "Set the sequence of distributions to test for a set of variables.
 
 Parameters
@@ -59,11 +59,11 @@ factories : sequence of :py:class:`openturns.DistributionFactory`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::CopulaInferenceAnalysis::getResult
+%feature("docstring") PERSALYS::CopulaInferenceAnalysis::getResult
 "Result accessor.
 
 Returns
 -------
-result : :class:`~otguibase.CopulaInferenceResult`
+result : :class:`~persalys.CopulaInferenceResult`
     Result."
 

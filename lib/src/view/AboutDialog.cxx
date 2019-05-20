@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AboutDialog.hxx"
+#include "persalys/AboutDialog.hxx"
 
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/SubWindow.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/SubWindow.hxx"
 
 #include <openturns/PlatformInfo.hxx>
 
@@ -34,20 +34,20 @@
 
 #include <patchlevel.h>
 #include <qwt.h>
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
 #include <vtkPVConfig.h>
 #endif
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 AboutDialog::AboutDialog(QWidget* parent)
   : QDialog(parent)
 {
-  setWindowIcon(QIcon(":/images/otgui.ico"));
-  setWindowTitle(tr("About OTGui"));
+  setWindowIcon(QIcon(":/images/persalys.ico"));
+  setWindowTitle(tr("About Persalys"));
 
   QVBoxLayout * mainLayout = new QVBoxLayout;
 
@@ -60,7 +60,7 @@ AboutDialog::AboutDialog(QWidget* parent)
   logoLabel->setPixmap(QPixmap(":/images/OT_icon32x32.png"));
   headerLayout->addWidget(logoLabel);
 
-  QLabel * phibootLabel = new QLabel("<font size=\"6\">OTGui</font><br>" + tr("Version %1").arg(OTGUI_VERSION));
+  QLabel * phibootLabel = new QLabel("<font size=\"6\">Persalys</font><br>" + tr("Version %1").arg(PERSALYS_VERSION));
   headerLayout->addWidget(phibootLabel);
   headerLayout->addStretch();
 
@@ -75,7 +75,7 @@ AboutDialog::AboutDialog(QWidget* parent)
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  QLabel * descriptionLabel = new QLabel(tr("OTGui, an interface for OpenTURNS"));
+  QLabel * descriptionLabel = new QLabel(tr("Persalys, an interface for OpenTURNS"));
   tabLayout->addWidget(descriptionLabel);
 
   QLabel * otLinkLabel = new QLabel();
@@ -106,15 +106,15 @@ AboutDialog::AboutDialog(QWidget* parent)
          << qVersion()
          << PY_VERSION
          << QWT_VERSION_STR;
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
   names  << QString("Paraview") + (SubWindow::HaveOpenGL32() ? "" : " (" + tr("disabled") + ")");
   values << PARAVIEW_VERSION_FULL;
 #endif
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
   names << "OTMorris";
   values << OTMORRIS_VERSION_STRING;
 #endif
-#ifdef OTGUI_HAVE_OTFMI
+#ifdef PERSALYS_HAVE_OTFMI
   names << "OTFMI";
   values << OTFMI_VERSION_STRING;
 #endif

@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::DataSample
+%feature("docstring") PERSALYS::DataSample
 "Class containing an input and an output sample.
 
 The base class containing an input and an output sample"
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::getInputSample
+%feature("docstring") PERSALYS::DataSample::getInputSample
 "Input sample accessor.
 
 Returns
@@ -15,7 +15,7 @@ sample : :py:class:`openturns.Sample`
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::setInputSample
+%feature("docstring") PERSALYS::DataSample::setInputSample
 "Input sample accessor.
 
 Parameters
@@ -25,7 +25,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::getOutputSample
+%feature("docstring") PERSALYS::DataSample::getOutputSample
 "Output sample accessor.
 
 Returns
@@ -35,7 +35,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::setOutputSample
+%feature("docstring") PERSALYS::DataSample::setOutputSample
 "Output sample accessor.
 
 Parameters
@@ -45,7 +45,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::getSample
+%feature("docstring") PERSALYS::DataSample::getSample
 "Sample accessor.
 
 Returns
@@ -55,7 +55,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::getListXMax
+%feature("docstring") PERSALYS::DataSample::getListXMax
 "List of input values.
 
 Returns
@@ -65,7 +65,7 @@ list : SampleCollection
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::getListXMin
+%feature("docstring") PERSALYS::DataSample::getListXMin
 "List of input values.
 
 Returns
@@ -75,7 +75,7 @@ list : SampleCollection
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataSample::isValid
+%feature("docstring") PERSALYS::DataSample::isValid
 "Whether the model is valid.
 
 Returns

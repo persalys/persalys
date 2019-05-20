@@ -7,17 +7,17 @@ class=FittingTestResult variableName=X3 testedDistributions=[Normal(mu = 0.65185
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 inputColumns = [0,2,3]
 outputColumns = []
 inputNames = ['X0', 'X2', 'X3']
 outputNames = []
-myDataModel = otguibase.DataModel('myDataModel', 'data1.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel = persalys.DataModel('myDataModel', 'data1.csv', inputColumns, outputColumns, inputNames, outputNames)
 myStudy.add(myDataModel)
-analysis = otguibase.InferenceAnalysis('analysis', myDataModel)
+analysis = persalys.InferenceAnalysis('analysis', myDataModel)
 interestVariables = ['X0', 'X3']
 analysis.setInterestVariables(interestVariables)
 factories = [ot.NormalFactory()]

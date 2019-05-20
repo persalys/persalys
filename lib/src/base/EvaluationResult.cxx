@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/EvaluationResult.hxx"
+#include "persalys/EvaluationResult.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(EvaluationResult)

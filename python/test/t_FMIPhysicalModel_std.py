@@ -3,11 +3,11 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing as ott
-import otguibase
+import persalys
 import os
 import platform
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 key_platform = (platform.system(), platform.architecture()[0])
 # Call to either 'platform.system' or 'platform.architecture' *after*
@@ -23,15 +23,15 @@ except KeyError:
 
 path_fmu = os.path.join(path_here, 'fmu', directory_platform, 'deviation.fmu')
 
-E = otguibase.Input('E', 1.0, ot.Normal(), 'E description')
-F = otguibase.Input('F', 1.0)
-I = otguibase.Input('I', 1.0)
-L = otguibase.Input('L', 1.0)
-y = otguibase.Output('y', 'deviation')
+E = persalys.Input('E', 1.0, ot.Normal(), 'E description')
+F = persalys.Input('F', 1.0)
+I = persalys.Input('I', 1.0)
+L = persalys.Input('L', 1.0)
+y = persalys.Output('y', 'deviation')
 
 inputs = [E, F, I, L]
 outputs = [y]
-model = otguibase.FMIPhysicalModel(
+model = persalys.FMIPhysicalModel(
     'myPhysicalModel', inputs, outputs, path_fmu)
 myStudy.add(model)
 

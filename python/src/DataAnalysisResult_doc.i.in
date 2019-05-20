@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::DataAnalysisResult
+%feature("docstring") PERSALYS::DataAnalysisResult
 "Get the results of a data analysis."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getMin
+%feature("docstring") PERSALYS::DataAnalysisResult::getMin
 "Minimum accessor.
 
 Returns
@@ -13,7 +13,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getMax
+%feature("docstring") PERSALYS::DataAnalysisResult::getMax
 "Maximum accessor.
 
 Returns
@@ -23,7 +23,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getMean
+%feature("docstring") PERSALYS::DataAnalysisResult::getMean
 "Mean accessor.
 
 Returns
@@ -33,7 +33,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getMedian
+%feature("docstring") PERSALYS::DataAnalysisResult::getMedian
 "Median accessor.
 
 Returns
@@ -43,7 +43,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getStandardDeviation
+%feature("docstring") PERSALYS::DataAnalysisResult::getStandardDeviation
 "Standard deviation accessor.
 
 Returns
@@ -53,7 +53,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getVariance
+%feature("docstring") PERSALYS::DataAnalysisResult::getVariance
 "Variance accessor.
 
 Returns
@@ -63,7 +63,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getCoefficientOfVariation
+%feature("docstring") PERSALYS::DataAnalysisResult::getCoefficientOfVariation
 "Coefficient of variation accessor.
 
 Returns
@@ -73,7 +73,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getSkewness
+%feature("docstring") PERSALYS::DataAnalysisResult::getSkewness
 "Skewness accessor.
 
 Returns
@@ -82,7 +82,7 @@ result : sequence of :py:class:`openturns.Point`
     Skewness"
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getKurtosis
+%feature("docstring") PERSALYS::DataAnalysisResult::getKurtosis
 "Kurtosis accessor.
 
 Returns
@@ -92,7 +92,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getFirstQuartile
+%feature("docstring") PERSALYS::DataAnalysisResult::getFirstQuartile
 "First quartile accessor.
 
 Returns
@@ -102,7 +102,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getThirdQuartile
+%feature("docstring") PERSALYS::DataAnalysisResult::getThirdQuartile
 "Third quartile accessor.
 
 Returns
@@ -112,7 +112,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getMeanConfidenceInterval
+%feature("docstring") PERSALYS::DataAnalysisResult::getMeanConfidenceInterval
 "Confidence interval mean accessor.
 
 Parameters
@@ -127,7 +127,7 @@ result : :py:class:`openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getStdConfidenceInterval
+%feature("docstring") PERSALYS::DataAnalysisResult::getStdConfidenceInterval
 "Confidence interval standard deviation accessor.
 
 Parameters
@@ -142,7 +142,7 @@ result : :py:class:`openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getOutliers
+%feature("docstring") PERSALYS::DataAnalysisResult::getOutliers
 "Outliers accessor.
 
 Returns
@@ -152,7 +152,7 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getFittedDistribution
+%feature("docstring") PERSALYS::DataAnalysisResult::getFittedDistribution
 "Fitted distribution accessor.
 
 Returns
@@ -162,7 +162,7 @@ result : :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getCDF
+%feature("docstring") PERSALYS::DataAnalysisResult::getCDF
 "CDF accessor.
 
 Returns
@@ -172,7 +172,7 @@ result : sequence of :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getPDF
+%feature("docstring") PERSALYS::DataAnalysisResult::getPDF
 "PDF accessor.
 
 Returns
@@ -182,7 +182,7 @@ result : sequence of :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getElapsedTime
+%feature("docstring") PERSALYS::DataAnalysisResult::getElapsedTime
 "Elapsed time in seconds to perform the analysis.
 
 Returns
@@ -192,10 +192,10 @@ time : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataAnalysisResult::getDesignOfExperiment
+%feature("docstring") PERSALYS::DataAnalysisResult::getDesignOfExperiment
 "Design of experiments accessor.
 
 Returns
 -------
-design : :class:`~otguibase.DesignOfExperiment`
+design : :class:`~persalys.DesignOfExperiment`
     Design of experiments containing the points really analysed"

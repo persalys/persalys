@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OutputTableModel.hxx"
+#include "persalys/OutputTableModel.hxx"
 
-#include "otgui/SymbolicPhysicalModel.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 #include <QDebug>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 OutputTableModel::OutputTableModel(const PhysicalModel & physicalModel, QObject * parent)

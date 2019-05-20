@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MorrisAnalysis.hxx"
+#include "persalys/MorrisAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/SpecFunc.hxx>
@@ -32,7 +32,7 @@
 using namespace OT;
 using namespace OTMORRIS;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(MorrisAnalysis)
@@ -306,7 +306,7 @@ Parameters MorrisAnalysis::getParameters() const
 String MorrisAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.MorrisAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  oss << getName() << " = persalys.MorrisAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

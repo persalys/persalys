@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "persalys/PlotMatrixConfigurationWidget.hxx"
 
-#include "otgui/ListWidgetWithCheckBox.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/TitledComboBox.hxx"
+#include "persalys/ListWidgetWithCheckBox.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/TitledComboBox.hxx"
 
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -30,7 +30,7 @@
 #include <QScrollArea>
 #include <QCheckBox>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PlotMatrixConfigurationWidget::PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent)

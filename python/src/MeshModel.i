@@ -1,41 +1,41 @@
 // SWIG file
 
 %{
-#include "otgui/MeshModel.hxx"
+#include "persalys/MeshModel.hxx"
 
 namespace OT {
 template <>
-struct traitsPythonType< OTGUI::MeshModel >
+struct traitsPythonType< PERSALYS::MeshModel >
 {
   typedef _PyObject_ Type;
 };
 
 template <>
   inline
-  OTGUI::MeshModel
-  convert< _PyObject_, OTGUI::MeshModel >(PyObject * pyObj)
+  PERSALYS::MeshModel
+  convert< _PyObject_, PERSALYS::MeshModel >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::MeshModel *"), 0))) {
-      OTGUI::MeshModel * p_it = reinterpret_cast< OTGUI::MeshModel * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::MeshModel *"), 0))) {
+      PERSALYS::MeshModel * p_it = reinterpret_cast< PERSALYS::MeshModel * >( ptr );
       return *p_it;
     }
     else {
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a MeshModel";
     }
-    return OTGUI::MeshModel();
+    return PERSALYS::MeshModel();
   }
 }
 %}
 
 %include MeshModel_doc.i
 
-OTGUITypedInterfaceObjectHelper(MeshModel)
-OTGUITypedCollectionInterfaceObjectHelper(MeshModel)
+PERSALYSTypedInterfaceObjectHelper(MeshModel)
+PERSALYSTypedCollectionInterfaceObjectHelper(MeshModel)
 
-%include otgui/MeshModel.hxx
-namespace OTGUI {
+%include persalys/MeshModel.hxx
+namespace PERSALYS {
 
-%extend MeshModel { MeshModel(const MeshModel & other) { return new OTGUI::MeshModel(other); } 
+%extend MeshModel { MeshModel(const MeshModel & other) { return new PERSALYS::MeshModel(other); } 
 
 } }

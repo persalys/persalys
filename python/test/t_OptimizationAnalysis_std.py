@@ -2,25 +2,25 @@
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
-X0 = otguibase.Input('X0', ot.Normal(1, 1))
-X1 = otguibase.Input('X1', ot.Normal(1, 1))
-Y00 = otguibase.Output('fake_Y0')
+X0 = persalys.Input('X0', ot.Normal(1, 1))
+X1 = persalys.Input('X1', ot.Normal(1, 1))
+Y00 = persalys.Output('fake_Y0')
 Y00.setIsSelected(False)
-Y0 = otguibase.Output('Y0')
+Y0 = persalys.Output('Y0')
 
 formula_Y00 = 'X0'
 formula_Y0 = '3*(X0-5)^2 + 8*(X1+8)^2'
-model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [
+model = persalys.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [
                                         formula_Y00, formula_Y0])
 myStudy.add(model)
 
 # Monte Carlo ##
-analysis = otguibase.OptimizationAnalysis('optim', model, 'Cobyla')
+analysis = persalys.OptimizationAnalysis('optim', model, 'Cobyla')
 analysis.setInterestVariables(['Y0'])
 analysis.setStartingPoint([0.5, 0.5])
 interval = ot.Interval([-5, 0], [5, 0])

@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FixedDesignOfExperiment.hxx"
+#include "persalys/FixedDesignOfExperiment.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(FixedDesignOfExperiment)
@@ -89,7 +89,7 @@ String FixedDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << getName() << " = otguibase.FixedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  oss << getName() << " = persalys.FixedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
 
   oss << "inputSample = [\n";
   for (UnsignedInteger i = 0; i < getOriginalInputSample().getSize(); ++i)

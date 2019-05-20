@@ -1,5 +1,5 @@
-OTGui Module
-============
+Persalys Module
+===============
 Qt GUI module for OpenTURNS
 
 Dependencies
@@ -25,10 +25,10 @@ Installation
 - otfmi must be importable at configure time, so both openturns & otfmi should be reachable via PYTHONPATH or a default location
 - ParaView must be linked to the same qt libs, and built with PARAVIEW_BUILD_QT_GUI=ON
 
-Compile OTGui::
+Compile Persalys::
 
-    git clone http://git.phimeca.lan/ot-edf/otgui.git
-    cd otgui
+    git clone http://git.phimeca.lan/ot-edf/persalys.git
+    cd persalys
     mkdir -p build && cd build
     cmake \
       -DCMAKE_INSTALL_PREFIX=$PWD/install \
@@ -38,17 +38,17 @@ Compile OTGui::
       ..
     make install
 
-Run OTGui::
+Run Persalys::
 
-    gui_launch.sh
+    persalys.sh
 
 Translation::
 
-    lupdate -verbose lib/ -ts translations/otgui_fr.ts -no-obsolete
-    linguist translations/otgui_fr.ts
+    lupdate -verbose lib/ -ts translations/persalys_fr.ts -no-obsolete
+    linguist translations/persalys_fr.ts
 
 Environment variables:
 
-- OTGUI_HTML_DOCUMENTATION_PATH: override path to the html documentation
-- OTGUI_NO_GL: if defined, this disables OpenGL (Paraview widgets) support for troubleshooting
+- PERSALYS_HTML_DOCUMENTATION_PATH: override path to the html documentation
+- PERSALYS_NO_GL: if defined, this disables OpenGL (Paraview widgets) support for troubleshooting
 

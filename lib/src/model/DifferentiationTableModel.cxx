@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DifferentiationTableModel.hxx"
+#include "persalys/DifferentiationTableModel.hxx"
 
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DifferentiationTableModel::DifferentiationTableModel(const PhysicalModel& physicalModel, QObject* parent)

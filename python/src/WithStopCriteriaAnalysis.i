@@ -1,16 +1,16 @@
 // SWIG file
 
 %{
-#include "otgui/WithStopCriteriaAnalysis.hxx"
+#include "persalys/WithStopCriteriaAnalysis.hxx"
 %}
 
 %include WithStopCriteriaAnalysis_doc.i
 
-%ignore OTGUI::WithStopCriteriaAnalysis::TimeCriteria;
+%ignore PERSALYS::WithStopCriteriaAnalysis::TimeCriteria;
 
-%include otgui/WithStopCriteriaAnalysis.hxx
-namespace OTGUI {
+%include persalys/WithStopCriteriaAnalysis.hxx
+namespace PERSALYS {
 
-%extend WithStopCriteriaAnalysis { WithStopCriteriaAnalysis(const WithStopCriteriaAnalysis & other) { return new OTGUI::WithStopCriteriaAnalysis(other); } 
+%extend WithStopCriteriaAnalysis { WithStopCriteriaAnalysis(const WithStopCriteriaAnalysis & other) { return new PERSALYS::WithStopCriteriaAnalysis(other); } 
 
 } }

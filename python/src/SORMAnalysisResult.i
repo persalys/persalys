@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/SORMAnalysisResult.hxx"
+#include "persalys/SORMAnalysisResult.hxx"
 %}
 
 %include SORMAnalysisResult_doc.i
 
-%include otgui/SORMAnalysisResult.hxx
-namespace OTGUI {
+%include persalys/SORMAnalysisResult.hxx
+namespace PERSALYS {
 
-%extend SORMAnalysisResult { SORMAnalysisResult(const SORMAnalysisResult & other) { return new OTGUI::SORMAnalysisResult(other); } 
+%extend SORMAnalysisResult { SORMAnalysisResult(const SORMAnalysisResult & other) { return new PERSALYS::SORMAnalysisResult(other); } 
 
 } }

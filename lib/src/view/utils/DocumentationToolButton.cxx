@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DocumentationToolButton.hxx"
+#include "persalys/DocumentationToolButton.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DocumentationToolButton::DocumentationToolButton(const QString& urlLink, const FileTools::docType type, QWidget *parent)

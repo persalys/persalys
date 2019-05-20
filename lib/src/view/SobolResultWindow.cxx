@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SobolResultWindow.hxx"
+#include "persalys/SobolResultWindow.hxx"
 
-#include "otgui/SobolAnalysis.hxx"
-#include "otgui/SensitivityResultWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/SobolAnalysis.hxx"
+#include "persalys/SensitivityResultWidget.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QGroupBox>
 #include <QScrollArea>
@@ -33,7 +33,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SobolResultWindow::SobolResultWindow(AnalysisItem * item, QWidget * parent)

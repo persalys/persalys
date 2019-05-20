@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <boost/locale.hpp>
 
@@ -27,7 +27,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 Parameters::Parameters()

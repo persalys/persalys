@@ -1,14 +1,14 @@
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
-#include "otgui/DesignOfExperimentEvaluationWizard.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
-#include "otgui/Study.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/DesignOfExperimentEvaluationWizard.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/Study.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
 
 #include <QtTest/QtTest>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestDesignOfExperimentEvaluationWizard : public QObject
 {
@@ -118,5 +118,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestDesignOfExperimentEvaluationWizard)
+QTEST_MAIN(PERSALYS::TestDesignOfExperimentEvaluationWizard)
 #include "t_DesignOfExperimentEvaluationWizard_std.moc"

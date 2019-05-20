@@ -23,18 +23,18 @@ ot_install_header_file ( PlotMatrixWidget.hxx )
 ot_install_header_file ( GraphConfigurationWidget.hxx )
 ot_install_header_file ( PlotMatrixConfigurationWidget.hxx )
 
-qt5_wrap_cpp (OTGUI_PLOT_MOC_SRCS
-              otgui/PlotWidget.hxx
-              otgui/PieChartView.hxx
-              otgui/PlotMatrixWidget.hxx
-              otgui/GraphConfigurationWidget.hxx
-              otgui/PlotMatrixConfigurationWidget.hxx)
+qt5_wrap_cpp (PERSALYS_PLOT_MOC_SRCS
+              persalys/PlotWidget.hxx
+              persalys/PieChartView.hxx
+              persalys/PlotMatrixWidget.hxx
+              persalys/GraphConfigurationWidget.hxx
+              persalys/PlotMatrixConfigurationWidget.hxx)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-otgui_add_library (otguiplot ${SOURCEFILES} ${OTGUI_PLOT_MOC_SRCS})
+persalys_add_library (persalysplot ${SOURCEFILES} ${PERSALYS_PLOT_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
-  set_target_properties ( otguiplot PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
+  set_target_properties ( persalysplot PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -43,20 +43,20 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( otguiplot PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( otguiplot PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries ( otguiplot otguiutils )
+set_target_properties ( persalysplot PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties ( persalysplot PROPERTIES SOVERSION ${LIB_SOVERSION} )
+target_link_libraries ( persalysplot persalysutils )
 
 include_directories (${QWT_INCLUDE_DIRS})
-target_link_libraries (otguiplot ${QT_LIBRARIES})
-target_link_libraries (otguiplot ${QWT_LIBRARIES})
+target_link_libraries (persalysplot ${QT_LIBRARIES})
+target_link_libraries (persalysplot ${QWT_LIBRARIES})
 if (ParaView_FOUND)
-  target_link_libraries (otguiplot otguiplotparaview)
+  target_link_libraries (persalysplot persalysplotparaview)
 endif ()
 
-install ( TARGETS otguiplot
+install ( TARGETS persalysplot
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}
-  ARCHIVE DESTINATION ${OTGUI_LIBRARY_PATH}
+  LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
+  ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 

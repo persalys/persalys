@@ -27,24 +27,24 @@ Generalised reliability (Tvedt)1.19382
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
-X0 = otguibase.Input('X0', 0, dist_X0, '')
+X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
-X1 = otguibase.Input('X1', 0, dist_X1, '')
-X2 = otguibase.Input('X2', 2, '')
-Y0 = otguibase.Output('Y0', '')
+X1 = persalys.Input('X1', 0, dist_X1, '')
+X2 = persalys.Input('X2', 2, '')
+Y0 = persalys.Output('Y0', '')
 inputs = [X0, X1, X2]
 outputs = [Y0]
 formulas = ['sin(X0) + 8*X1 + X2']
-aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
-aLimitState = otguibase.LimitState('aLimitState', aModelPhys, 'Y0', ot.Greater(), 20)
+aLimitState = persalys.LimitState('aLimitState', aModelPhys, 'Y0', ot.Greater(), 20)
 myStudy.add(aLimitState)
-mySORM = otguibase.SORMAnalysis('mySORM', aLimitState)
+mySORM = persalys.SORMAnalysis('mySORM', aLimitState)
 mySORM.setPhysicalStartingPoint([1,1])
 optimizationAlgo = ot.Cobyla()
 optimizationAlgo.setMaximumEvaluationNumber(100)
@@ -54,7 +54,7 @@ optimizationAlgo.setMaximumResidualError(1e-05)
 optimizationAlgo.setMaximumConstraintError(1e-05)
 mySORM.setOptimizationAlgorithm(optimizationAlgo)
 myStudy.add(mySORM)
-mySORM2 = otguibase.SORMAnalysis('mySORM2', aLimitState)
+mySORM2 = persalys.SORMAnalysis('mySORM2', aLimitState)
 mySORM2.setPhysicalStartingPoint([1,1])
 optimizationAlgo = ot.Cobyla()
 optimizationAlgo.setMaximumEvaluationNumber(100)
@@ -64,7 +64,7 @@ optimizationAlgo.setMaximumResidualError(1e-05)
 optimizationAlgo.setMaximumConstraintError(1e-05)
 mySORM2.setOptimizationAlgorithm(optimizationAlgo)
 myStudy.add(mySORM2)
-mySORM3 = otguibase.SORMAnalysis('mySORM3', aLimitState)
+mySORM3 = persalys.SORMAnalysis('mySORM3', aLimitState)
 mySORM3.setPhysicalStartingPoint([1.08161,2.38966])
 optimizationAlgo = ot.AbdoRackwitz()
 optimizationAlgo.setMaximumEvaluationNumber(100000)

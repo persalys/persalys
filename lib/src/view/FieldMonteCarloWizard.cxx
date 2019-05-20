@@ -18,20 +18,20 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FieldMonteCarloWizard.hxx"
+#include "persalys/FieldMonteCarloWizard.hxx"
 
-#include "otgui/FieldMonteCarloAnalysis.hxx"
-#include "otgui/OutputsSelectionGroupBox.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/StopCriteriaGroupBox.hxx"
-#include "otgui/BlockSizeGroupBox.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/FieldMonteCarloAnalysis.hxx"
+#include "persalys/OutputsSelectionGroupBox.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
+#include "persalys/StopCriteriaGroupBox.hxx"
+#include "persalys/BlockSizeGroupBox.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 FieldMonteCarloWizard::FieldMonteCarloWizard(const Analysis& analysis, QWidget* parent)

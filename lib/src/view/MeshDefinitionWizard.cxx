@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MeshDefinitionWizard.hxx"
+#include "persalys/MeshDefinitionWizard.hxx"
 
-#include "otgui/GridMeshModel.hxx"
-#include "otgui/ImportedMeshModel.hxx"
-#include "otgui/FileTools.hxx"
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/HorizontalHeaderViewWithCombobox.hxx"
-#include "otgui/SpinBoxDelegate.hxx"
+#include "persalys/GridMeshModel.hxx"
+#include "persalys/ImportedMeshModel.hxx"
+#include "persalys/FileTools.hxx"
+#include "persalys/SampleTableModel.hxx"
+#include "persalys/HorizontalHeaderViewWithCombobox.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
 
 #include <QScrollBar>
 #include <QHBoxLayout>
@@ -37,7 +37,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, QWidget* parent)

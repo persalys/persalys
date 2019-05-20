@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FieldMonteCarloAnalysis.hxx"
+#include "persalys/FieldMonteCarloAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(FieldMonteCarloAnalysis)
@@ -278,7 +278,7 @@ String FieldMonteCarloAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
-  oss << getName() << " = otguibase.FieldMonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  oss << getName() << " = persalys.FieldMonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

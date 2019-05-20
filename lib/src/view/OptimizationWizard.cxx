@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OptimizationWizard.hxx"
+#include "persalys/OptimizationWizard.hxx"
 
-#include "otgui/SpinBoxDelegate.hxx"
-#include "otgui/OptimizationAnalysis.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 
 #include <QHeaderView>
 #include <QScrollBar>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 OptimizationWizard::OptimizationWizard(const Analysis& analysis, QWidget* parent)

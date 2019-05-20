@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/TranslationManager.hxx"
+#include "persalys/TranslationManager.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 boost::bimap< QString, QString > TranslationManager::DistributionsNames_;

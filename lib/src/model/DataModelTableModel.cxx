@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataModelTableModel.hxx"
+#include "persalys/DataModelTableModel.hxx"
 
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 #include <QColor>
 #include <QHeaderView>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DataModelTableModel::DataModelTableModel(DataModel* dataModel, QObject* parent)

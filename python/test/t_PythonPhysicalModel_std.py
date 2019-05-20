@@ -3,18 +3,18 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
-R = otguibase.Input('R', 0., ot.LogNormalMuSigma(
+R = persalys.Input('R', 0., ot.LogNormalMuSigma(
     300., 30.).getDistribution(), 'Yield strength')
-F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
-G = otguibase.Output('G', 'deviation')
+F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+G = persalys.Output('G', 'deviation')
 code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return G\n'
 
-model = otguibase.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)
+model = persalys.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)
 myStudy.add(model)
 
 f = model.getFunction()
@@ -38,7 +38,7 @@ print(f([[300., 75000.], [400., 74000.]]))
 model.setCode(
     'from math import pi\nimport time\ndef _exec(R, F):\n    if R == 300.:\n      time.sleep(0.5)\n    G = 2*R-F/(pi*100.0)\n    return G\n')
 
-plan_0 = otguibase.FixedDesignOfExperiment('plan_0', model, [[300., 75000.], [400., 74000.]])
+plan_0 = persalys.FixedDesignOfExperiment('plan_0', model, [[300., 75000.], [400., 74000.]])
 plan_0.setBlockSize(2)
 myStudy.add(plan_0)
 plan_0.run()

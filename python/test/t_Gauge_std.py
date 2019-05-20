@@ -3,14 +3,14 @@
 from __future__ import print_function
 import sys
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 XMLfilename = 'gauge.xml'
 if len(sys.argv) > 1:
     XMLfilename = sys.argv[1]
-myPhysicalModel = otguibase.YACSPhysicalModel('myPhysicalModel', XMLfilename)
+myPhysicalModel = persalys.YACSPhysicalModel('myPhysicalModel', XMLfilename)
 myStudy.add(myPhysicalModel)
 
 print(myPhysicalModel.getInputs())

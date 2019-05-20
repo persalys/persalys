@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/FunctionalChaosAnalysis.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
 %}
 
 %include FunctionalChaosAnalysis_doc.i
 
-%include otgui/FunctionalChaosAnalysis.hxx
-namespace OTGUI {
+%include persalys/FunctionalChaosAnalysis.hxx
+namespace PERSALYS {
 
-%extend FunctionalChaosAnalysis { FunctionalChaosAnalysis(const FunctionalChaosAnalysis & other) { return new OTGUI::FunctionalChaosAnalysis(other); } 
+%extend FunctionalChaosAnalysis { FunctionalChaosAnalysis(const FunctionalChaosAnalysis & other) { return new PERSALYS::FunctionalChaosAnalysis(other); } 
 
 } }

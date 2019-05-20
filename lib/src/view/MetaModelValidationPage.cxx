@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MetaModelValidationPage.hxx"
+#include "persalys/MetaModelValidationPage.hxx"
 
-#include "otgui/FunctionalChaosAnalysis.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
 
 #include <QGridLayout>
 #include <QGroupBox>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MetaModelValidationPage::MetaModelValidationPage(QWidget* parent)

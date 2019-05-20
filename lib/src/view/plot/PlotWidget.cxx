@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PlotWidget.hxx"
+#include "persalys/PlotWidget.hxx"
 
-#include "otgui/CustomScaleEngine.hxx"
-#include "otgui/CustomScaleDraw.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ContourData.hxx"
-#include "otgui/UIntSpinBox.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/CustomScaleEngine.hxx"
+#include "persalys/CustomScaleDraw.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/ContourData.hxx"
+#include "persalys/UIntSpinBox.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QMenu>
 #include <QFileDialog>
@@ -52,11 +52,11 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 // -- custom QwtPlotCurve with Rtti_PlotUserItem = 1001
-class OTGUI_API StaticPlotCurveItem : public QwtPlotCurve
+class PERSALYS_API StaticPlotCurveItem : public QwtPlotCurve
 {
 public:
   StaticPlotCurveItem() {};
@@ -68,7 +68,7 @@ public:
 
 
 // -- custom QwtPlotCurve with Rtti_PlotUserItem = 1000 + index_
-class OTGUI_API CustomPlotCurveItem : public QwtPlotCurve
+class PERSALYS_API CustomPlotCurveItem : public QwtPlotCurve
 {
 public:
   CustomPlotCurveItem(int index)

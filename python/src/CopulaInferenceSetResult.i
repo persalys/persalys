@@ -1,11 +1,11 @@
 // SWIG file
 
 %{
-#include "otgui/CopulaInferenceSetResult.hxx"
+#include "persalys/CopulaInferenceSetResult.hxx"
 
 namespace OT {
 template <>
-struct traitsPythonType< OTGUI::CopulaInferenceSetResult >
+struct traitsPythonType< PERSALYS::CopulaInferenceSetResult >
 {
   typedef _PyObject_ Type;
 };
@@ -14,11 +14,11 @@ struct traitsPythonType< OTGUI::CopulaInferenceSetResult >
 template <>
   inline
   bool
-  canConvert< _PyObject_, OTGUI::CopulaInferenceSetResult >(PyObject * pyObj)
+  canConvert< _PyObject_, PERSALYS::CopulaInferenceSetResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::CopulaInferenceSetResult *"), 0 ))) {
-      OTGUI::CopulaInferenceSetResult * p_it = reinterpret_cast< OTGUI::CopulaInferenceSetResult * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::CopulaInferenceSetResult *"), 0 ))) {
+      PERSALYS::CopulaInferenceSetResult * p_it = reinterpret_cast< PERSALYS::CopulaInferenceSetResult * >( ptr );
       return p_it != NULL;
     }
     return false;
@@ -27,18 +27,18 @@ template <>
 
 template <>
   inline
-  OTGUI::CopulaInferenceSetResult
-  convert< _PyObject_, OTGUI::CopulaInferenceSetResult >(PyObject * pyObj)
+  PERSALYS::CopulaInferenceSetResult
+  convert< _PyObject_, PERSALYS::CopulaInferenceSetResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::CopulaInferenceSetResult *"), 0))) {
-      OTGUI::CopulaInferenceSetResult * p_it = reinterpret_cast< OTGUI::CopulaInferenceSetResult * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::CopulaInferenceSetResult *"), 0))) {
+      PERSALYS::CopulaInferenceSetResult * p_it = reinterpret_cast< PERSALYS::CopulaInferenceSetResult * >( ptr );
       return *p_it;
     }
     else {
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a CopulaInferenceSetResult";
     }
-    return OTGUI::CopulaInferenceSetResult();
+    return PERSALYS::CopulaInferenceSetResult();
   }
 
 }
@@ -46,12 +46,12 @@ template <>
 
 %include CopulaInferenceSetResult_doc.i
 
-%include otgui/CopulaInferenceSetResult.hxx
+%include persalys/CopulaInferenceSetResult.hxx
 
-%template(CopulaInferenceSetResultCollection) OT::Collection<OTGUI::CopulaInferenceSetResult>;
+%template(CopulaInferenceSetResultCollection) OT::Collection<PERSALYS::CopulaInferenceSetResult>;
 
-namespace OTGUI {
+namespace PERSALYS {
 
-%extend CopulaInferenceSetResult { CopulaInferenceSetResult(const CopulaInferenceSetResult & other) { return new OTGUI::CopulaInferenceSetResult(other); } 
+%extend CopulaInferenceSetResult { CopulaInferenceSetResult(const CopulaInferenceSetResult & other) { return new PERSALYS::CopulaInferenceSetResult(other); } 
 
 } }

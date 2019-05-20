@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ProbabilisticModelWindow.hxx"
+#include "persalys/ProbabilisticModelWindow.hxx"
 
-#include "otgui/DependenciesWidget.hxx"
+#include "persalys/DependenciesWidget.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ProbabilisticModelWindow::ProbabilisticModelWindow(ProbabilisticModelItem * item, QWidget * parent)

@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SymbolicPhysicalModel.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SymbolicFunction.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(SymbolicPhysicalModel)
@@ -219,7 +219,7 @@ String SymbolicPhysicalModel::getPythonScript() const
   oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
   oss << "formulas = " << Parameters::GetOTDescriptionStr(getFormulas()) << "\n";
 
-  oss << getName() + " = otguibase.SymbolicPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";
+  oss << getName() + " = persalys.SymbolicPhysicalModel('" + getName() + "', inputs, outputs, formulas)\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 

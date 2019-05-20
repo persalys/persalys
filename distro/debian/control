@@ -1,4 +1,4 @@
-Source: otgui
+Source: persalys
 Section: science
 Priority: extra
 Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
@@ -9,10 +9,10 @@ Homepage: http://trac.openturns.org/
 X-Python-Version: current
 X-Python3-Version: current
 
-Package: otgui
+Package: persalys
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, python-openturns, python3-openturns, python
-Description: openturns module otgui
+Description: openturns module persalys
  GUI module for OpenTURNS
  It provides a graphical interface

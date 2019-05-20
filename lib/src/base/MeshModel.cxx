@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MeshModel.hxx"
+#include "persalys/MeshModel.hxx"
 
-#include "otgui/GridMeshModel.hxx"
+#include "persalys/GridMeshModel.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/IntervalMesher.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(MeshModel)

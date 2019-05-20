@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ReliabilityAnalysisWizard.hxx"
+#include "persalys/ReliabilityAnalysisWizard.hxx"
 
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/FORMAnalysis.hxx"
-#include "otgui/SORMAnalysis.hxx"
-#include "otgui/StudyItem.hxx"
+#include "persalys/FORMImportanceSamplingAnalysis.hxx"
+#include "persalys/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/FORMAnalysis.hxx"
+#include "persalys/SORMAnalysis.hxx"
+#include "persalys/StudyItem.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)

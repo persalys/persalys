@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ExtractDataFieldWizard.hxx"
+#include "persalys/ExtractDataFieldWizard.hxx"
 
-#include "otgui/StudyItem.hxx"
+#include "persalys/StudyItem.hxx"
 
-#include "otgui/ListWidgetWithCheckBox.hxx"
-#include "otgui/TitledComboBox.hxx"
+#include "persalys/ListWidgetWithCheckBox.hxx"
+#include "persalys/TitledComboBox.hxx"
 
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -31,7 +31,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ExtractDataFieldWizard::ExtractDataFieldWizard(const Analysis& analysis, QWidget *parent)

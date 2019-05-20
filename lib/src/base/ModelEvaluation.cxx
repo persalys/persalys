@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ModelEvaluation.hxx"
+#include "persalys/ModelEvaluation.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(ModelEvaluation)
@@ -110,7 +110,7 @@ String ModelEvaluation::getPythonScript() const
 
   OSS oss;
   oss << "values = " << values_.__str__() << "\n";
-  oss << getName() << " = otguibase.ModelEvaluation('" << getName() << "', " << getPhysicalModel().getName();
+  oss << getName() << " = persalys.ModelEvaluation('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", values)\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {

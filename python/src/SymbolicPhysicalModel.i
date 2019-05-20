@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/SymbolicPhysicalModel.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
 %}
 
 %include SymbolicPhysicalModel_doc.i
 
-%include otgui/SymbolicPhysicalModel.hxx
-namespace OTGUI {
+%include persalys/SymbolicPhysicalModel.hxx
+namespace PERSALYS {
 
-%extend SymbolicPhysicalModel { SymbolicPhysicalModel(const SymbolicPhysicalModel & other) { return new OTGUI::SymbolicPhysicalModel(other); } 
+%extend SymbolicPhysicalModel { SymbolicPhysicalModel(const SymbolicPhysicalModel & other) { return new PERSALYS::SymbolicPhysicalModel(other); } 
 
 } }

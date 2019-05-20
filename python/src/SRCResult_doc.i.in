@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::SRCResult
+%feature("docstring") PERSALYS::SRCResult
 "Get the results of a SRC sensitivity analysis."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SRCResult::getInputNames
+%feature("docstring") PERSALYS::SRCResult::getInputNames
 "Input variable names accessor.
 
 Returns
@@ -13,7 +13,7 @@ sample : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SRCResult::getOutputNames
+%feature("docstring") PERSALYS::SRCResult::getOutputNames
 "Output variable names accessor.
 
 Returns
@@ -23,7 +23,7 @@ sample : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SRCResult::getIndices
+%feature("docstring") PERSALYS::SRCResult::getIndices
 "SRC indices accessor.
 
 Returns

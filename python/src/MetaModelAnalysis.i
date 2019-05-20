@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/MetaModelAnalysis.hxx"
+#include "persalys/MetaModelAnalysis.hxx"
 %}
 
 %include MetaModelAnalysis_doc.i
 
-%include otgui/MetaModelAnalysis.hxx
-namespace OTGUI {
+%include persalys/MetaModelAnalysis.hxx
+namespace PERSALYS {
 
-%extend MetaModelAnalysis { MetaModelAnalysis(const MetaModelAnalysis & other) { return new OTGUI::MetaModelAnalysis(other); } 
+%extend MetaModelAnalysis { MetaModelAnalysis(const MetaModelAnalysis & other) { return new PERSALYS::MetaModelAnalysis(other); } 
 
 } }

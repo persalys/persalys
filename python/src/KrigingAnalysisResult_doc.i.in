@@ -1,15 +1,15 @@
-%feature("docstring") OTGUI::KrigingAnalysisResult
+%feature("docstring") PERSALYS::KrigingAnalysisResult
 "Get the results of a Kriging analysis.
 
 Notes
 -----
 Structure created by the method run() of
-:class:`~otguibase.KrigingAnalysis`, and obtained thanks to the method
+:class:`~persalys.KrigingAnalysis`, and obtained thanks to the method
 getResult()."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysisResult::getKrigingResultCollection
+%feature("docstring") PERSALYS::KrigingAnalysisResult::getKrigingResultCollection
 "Sequence of kriging results accessor.
 
 Returns
@@ -19,7 +19,7 @@ results : sequence of :class:`openturns.KrigingResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysisResult::getResultForVariable
+%feature("docstring") PERSALYS::KrigingAnalysisResult::getResultForVariable
 "Get the kriging result of a variable.
 
 Parameters

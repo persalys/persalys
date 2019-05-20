@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::FittingTestResult
+%feature("docstring") PERSALYS::FittingTestResult
 "Get the results of a fitting test."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FittingTestResult::getVariableName
+%feature("docstring") PERSALYS::FittingTestResult::getVariableName
 "Variable name accessor.
 
 Returns
@@ -13,7 +13,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FittingTestResult::getValues
+%feature("docstring") PERSALYS::FittingTestResult::getValues
 "Data accessor.
 
 Returns
@@ -23,7 +23,7 @@ values : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FittingTestResult::getTestedDistributions
+%feature("docstring") PERSALYS::FittingTestResult::getTestedDistributions
 "Get the sequence of tested distributions.
 
 Returns
@@ -33,7 +33,7 @@ distributions : sequence of :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FittingTestResult::getKolmogorovTestResults
+%feature("docstring") PERSALYS::FittingTestResult::getKolmogorovTestResults
 "Get the result of the Kolmogorov goodness-of-fit test.
 
 Returns
@@ -43,7 +43,7 @@ results : sequence of :py:class:`openturns.TestResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FittingTestResult::getErrorMessages
+%feature("docstring") PERSALYS::FittingTestResult::getErrorMessages
 "Get the sequence of error messages.
 
 Returns

@@ -3,10 +3,10 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 import os
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
 filename = 'data1.csv'
@@ -17,12 +17,12 @@ sample.setDescription(['X0', 'X1', 'X2', 'X3'])
 sample.exportToCSVFile(filename, ',')
 columns = [0, 2, 3]
 
-model = otguibase.DataModel('myDataModel', "data1.csv", columns)
+model = persalys.DataModel('myDataModel', "data1.csv", columns)
 myStudy.add(model)
 print(model)
 
 # Inference analysis ##
-analysis = otguibase.InferenceAnalysis('analysis', model)
+analysis = persalys.InferenceAnalysis('analysis', model)
 variables = ["X0", "X3"]
 analysis.setInterestVariables(variables)
 factories = [ot.NormalFactory(), ot.GumbelFactory()]

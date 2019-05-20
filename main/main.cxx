@@ -22,14 +22,14 @@
 #include <QSettings>
 #include <QTranslator>
 
-#include "otgui/MainWindow.hxx"
-#include "otgui/PythonEnvironment.hxx"
+#include "persalys/MainWindow.hxx"
+#include "persalys/PythonEnvironment.hxx"
 
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
 #include <pqPVApplicationCore.h>
 #endif
 
-using namespace OTGUI;
+using namespace PERSALYS;
 
 int main(int argc, char *argv[])
 {
@@ -41,14 +41,14 @@ int main(int argc, char *argv[])
   // Application
   QApplication app(argc, argv);
 
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
   pqPVApplicationCore appPV(argc, argv);
   QApplication::instance()->installEventFilter(&appPV);
 #endif
 
   // Settings
   QCoreApplication::setOrganizationName("EDF_Phimeca");
-  QCoreApplication::setApplicationName("otgui");
+  QCoreApplication::setApplicationName("persalys");
   QSettings::setDefaultFormat(QSettings::IniFormat);
   if (!QSettings().contains("currentDir"))
     QSettings().setValue("currentDir", QSettings().fileName());
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
   app.installTranslator(&qtbaseTranslator);
 
   QTranslator appTranslator;
-  appTranslator.load("otgui_" + QLocale::system().name(), ":/translations");
+  appTranslator.load("persalys_" + QLocale::system().name(), ":/translations");
   app.installTranslator(&appTranslator);
 
   // main window

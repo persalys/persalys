@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ImportedDesignOfExperiment.hxx"
+#include "persalys/ImportedDesignOfExperiment.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(ImportedDesignOfExperiment)
@@ -222,7 +222,7 @@ String ImportedDesignOfExperiment::getPythonScript() const
 
   oss << "inputColumns = " << inputColumns_.__str__() << "\n";
 
-  oss << getName() << " = otguibase.ImportedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
+  oss << getName() << " = persalys.ImportedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << "'" << fileName_ << "', inputColumns)\n";
 
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";

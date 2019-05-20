@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MorrisResultWindow.hxx"
+#include "persalys/MorrisResultWindow.hxx"
 
-#include "otgui/MorrisAnalysis.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/MorrisResultWidget.hxx"
+#include "persalys/MorrisAnalysis.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/MorrisResultWidget.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MorrisResultWindow::MorrisResultWindow(AnalysisItem * item, QWidget * parent)
@@ -69,7 +69,7 @@ void MorrisResultWindow::fillTabWidget()
 
   // -- graph tabs
   bool canUseParaview = false;
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::HaveOpenGL32())
   {
     addParaviewWidgetsTabs();

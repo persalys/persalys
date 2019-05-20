@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DistributionsForInferenceWidget.hxx"
+#include "persalys/DistributionsForInferenceWidget.hxx"
 
-#include "otgui/TranslationManager.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QHeaderView>
 #include <QPushButton>
@@ -28,7 +28,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList &distributions, const Description &variables, QWidget *parent)

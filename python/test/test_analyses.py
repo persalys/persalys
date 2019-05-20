@@ -3,31 +3,31 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 import numpy as np
 
 ot.RandomGenerator.SetSeed(0)
 ot.TBB_Disable()
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 
 # Models
-x1 = otguibase.Input('x1', 0.2, ot.Uniform(0., 10.))
-x2 = otguibase.Input('x2', 1.2, ot.Uniform(0., 10.))
-x3 = otguibase.Input('x3', 1.0)
-fake_var = otguibase.Output('fake_var')
+x1 = persalys.Input('x1', 0.2, ot.Uniform(0., 10.))
+x2 = persalys.Input('x2', 1.2, ot.Uniform(0., 10.))
+x3 = persalys.Input('x3', 1.0)
+fake_var = persalys.Output('fake_var')
 fake_var.setIsSelected(False)
-y0 = otguibase.Output('y0')
-fake_y0 = otguibase.Output('fake_y0')
+y0 = persalys.Output('y0')
+fake_y0 = persalys.Output('fake_y0')
 fake_y0.setIsSelected(False)
-y1 = otguibase.Output('y1')
+y1 = persalys.Output('y1')
 
 # model 1 ##
 formula_fake_var = 'x1'
 formula_y0 = 'cos(0.5*x1) + sin(x2)'
 formula_y1 = 'cos(0.5*x1) + sin(x2) + x3'
-model1 = otguibase.SymbolicPhysicalModel('model1', [x1, x2, x3], [fake_var, y0, fake_y0, y1], [
+model1 = persalys.SymbolicPhysicalModel('model1', [x1, x2, x3], [fake_var, y0, fake_y0, y1], [
                                          formula_fake_var, formula_y0, formula_y0, formula_y1])
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.25
@@ -36,7 +36,7 @@ myStudy.add(model1)
 
 # model 2 ##
 code = 'from math import cos, sin, sqrt\n\ndef _exec(x1, x2, x3):\n    y0 = cos(0.5*x1) + sin(x2) + sqrt(x3)\n    return y0\n'
-model2 = otguibase.PythonPhysicalModel('model2', [x1, x2, x3], [y0], code)
+model2 = persalys.PythonPhysicalModel('model2', [x1, x2, x3], [y0], code)
 myStudy.add(model2)
 
 # model 3 ##
@@ -46,7 +46,7 @@ cDist = ot.ComposedDistribution(
                                 ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, ' ')
-model3 = otguibase.DataModel(
+model3 = persalys.DataModel(
     'model3', 'data.csv', [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
 myStudy.add(model3)
 
@@ -54,7 +54,7 @@ myStudy.add(model3)
 
 # design 1 ##
 ot.RandomGenerator.SetSeed(0)
-design_1 = otguibase.FixedDesignOfExperiment('design_1', model1)
+design_1 = persalys.FixedDesignOfExperiment('design_1', model1)
 inputSample = ot.LHSExperiment(ot.ComposedDistribution(
     [ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
@@ -67,53 +67,53 @@ values = [0, 0, 1]
 lowerBounds = [0.5, 0.5, 0.9]
 upperBounds = [9.5, 9.5, 1.1]
 levels = [7, 7, 1]
-design_2 = otguibase.GridDesignOfExperiment(
+design_2 = persalys.GridDesignOfExperiment(
     'design_2', model1, lowerBounds, upperBounds, levels, values)
 myStudy.add(design_2)
 
 # design 3 ##
-design_3 = otguibase.ImportedDesignOfExperiment(
+design_3 = persalys.ImportedDesignOfExperiment(
     'design_3', model1, 'data.csv', [0, 2, 3])
 design_3.run()
 myStudy.add(design_3)
 
 # design 4 ##
-design_4 = otguibase.ProbabilisticDesignOfExperiment(
+design_4 = persalys.ProbabilisticDesignOfExperiment(
     'design_4', model1, 100, "MONTE_CARLO")
 design_4.run()
 myStudy.add(design_4)
 
 # design 5 ##
-design_5 = otguibase.GridDesignOfExperiment('design_5', model2)
+design_5 = persalys.GridDesignOfExperiment('design_5', model2)
 myStudy.add(design_5)
 
 # design 6 ##
 lowerBounds = [0., 0., -0.2]
 upperBounds = [0., 0., 1.]
 levels = [1, 1, 2]
-design_6 = otguibase.GridDesignOfExperiment(
+design_6 = persalys.GridDesignOfExperiment(
     'design_6', model2, lowerBounds, upperBounds, levels)
 myStudy.add(design_6)
 
 # model 4 ##
-model4 = otguibase.DataModel(
+model4 = persalys.DataModel(
     'model4', inputSample, design_1.getResult().getDesignOfExperiment().getOutputSample())
 myStudy.add(model4)
 
 # 0- models evaluations
 
 # 0-a evaluation model1 ##
-evaluation1 = otguibase.ModelEvaluation('evaluation1', model1)
+evaluation1 = persalys.ModelEvaluation('evaluation1', model1)
 myStudy.add(evaluation1)
 
 # 0-b evaluation model2 ##
-evaluation2 = otguibase.ModelEvaluation('evaluation2', model2)
+evaluation2 = persalys.ModelEvaluation('evaluation2', model2)
 myStudy.add(evaluation2)
 
 # 1- meta model1 ##
 
 # 1-a Kriging ##
-kriging = otguibase.KrigingAnalysis('kriging', design_4)
+kriging = persalys.KrigingAnalysis('kriging', design_4)
 kriging.setBasis(ot.LinearBasisFactory(2).build())
 kriging.setCovarianceModel(ot.MaternModel(2))
 kriging.setTestSampleValidation(True)
@@ -122,7 +122,7 @@ kriging.setInterestVariables(['y0', 'y1'])
 myStudy.add(kriging)
 
 # 1-b Chaos ##
-chaos1 = otguibase.FunctionalChaosAnalysis('chaos_1', design_4)
+chaos1 = persalys.FunctionalChaosAnalysis('chaos_1', design_4)
 chaos1.setChaosDegree(7)
 chaos1.setSparseChaos(True)
 chaos1.setTestSampleValidation(True)
@@ -131,7 +131,7 @@ chaos1.setInterestVariables(['y1'])
 myStudy.add(chaos1)
 
 # 1-c Chaos ##
-chaos2 = otguibase.FunctionalChaosAnalysis('chaos_2', design_2)
+chaos2 = persalys.FunctionalChaosAnalysis('chaos_2', design_2)
 chaos2.setChaosDegree(2)
 chaos2.setSparseChaos(True)
 myStudy.add(chaos2)
@@ -139,7 +139,7 @@ myStudy.add(chaos2)
 # 2- central tendancy ##
 
 # 2-a Monte Carlo ##
-monteCarlo = otguibase.MonteCarloAnalysis('MonteCarlo', model1)
+monteCarlo = persalys.MonteCarloAnalysis('MonteCarlo', model1)
 monteCarlo.setIsConfidenceIntervalRequired(False)
 monteCarlo.setMaximumCoefficientOfVariation(-1.)
 monteCarlo.setMaximumElapsedTime(1000)
@@ -150,14 +150,14 @@ monteCarlo.setInterestVariables(['y0', 'y1'])
 myStudy.add(monteCarlo)
 
 # 2-b Taylor Expansion ##
-taylor = otguibase.TaylorExpansionMomentsAnalysis('Taylor', model1)
+taylor = persalys.TaylorExpansionMomentsAnalysis('Taylor', model1)
 taylor.setInterestVariables(['y0', 'y1'])
 myStudy.add(taylor)
 
 # 3- reliability ##
 
 # limit state ##
-limitState = otguibase.LimitState(
+limitState = persalys.LimitState(
     'aLimitState', model1, 'y1', ot.Greater(), 0.5)
 myStudy.add(limitState)
 
@@ -166,7 +166,7 @@ optimAlgo.setMaximumIterationNumber(150)
 optimAlgo.setMaximumAbsoluteError(1e-3)
 
 # 3-a Monte Carlo ##
-monteCarloReliability = otguibase.MonteCarloReliabilityAnalysis(
+monteCarloReliability = persalys.MonteCarloReliabilityAnalysis(
     'MonteCarloReliability', limitState)
 monteCarloReliability.setMaximumCoefficientOfVariation(-1.)
 monteCarloReliability.setMaximumElapsedTime(1000)
@@ -176,7 +176,7 @@ monteCarloReliability.setSeed(2)
 myStudy.add(monteCarloReliability)
 
 # 3-b FORM IS ##
-form_is = otguibase.FORMImportanceSamplingAnalysis('FORM_IS', limitState)
+form_is = persalys.FORMImportanceSamplingAnalysis('FORM_IS', limitState)
 form_is.setOptimizationAlgorithm(optimAlgo)
 form_is.setMaximumCoefficientOfVariation(-1.)
 form_is.setMaximumElapsedTime(1000)
@@ -186,19 +186,19 @@ form_is.setSeed(2)
 myStudy.add(form_is)
 
 # 3-c FORM ##
-form = otguibase.FORMAnalysis('FORM', limitState)
+form = persalys.FORMAnalysis('FORM', limitState)
 form.setOptimizationAlgorithm(optimAlgo)
 myStudy.add(form)
 
 # 3-d SORM ##
-sorm = otguibase.SORMAnalysis('SORM', limitState)
+sorm = persalys.SORMAnalysis('SORM', limitState)
 sorm.setOptimizationAlgorithm(optimAlgo)
 myStudy.add(sorm)
 
 # 4- sensitivity ##
 
 # 4-a Sobol ##
-sobol = otguibase.SobolAnalysis('Sobol', model1)
+sobol = persalys.SobolAnalysis('Sobol', model1)
 sobol.setMaximumConfidenceIntervalLength(-1)
 sobol.setMaximumElapsedTime(1000)
 sobol.setMaximumCalls(1000)
@@ -209,14 +209,14 @@ sobol.setInterestVariables(['y0', 'y1'])
 myStudy.add(sobol)
 
 # 4-b SRC ##
-src = otguibase.SRCAnalysis('SRC', model1)
+src = persalys.SRCAnalysis('SRC', model1)
 src.setSimulationsNumber(200)
 src.setSeed(2)
 src.setInterestVariables(['y0', 'y1'])
 myStudy.add(src)
 
 # 5- optimization ##
-optim = otguibase.OptimizationAnalysis('optim', model1, 'TNC')
+optim = persalys.OptimizationAnalysis('optim', model1, 'TNC')
 optim.setInterestVariables(['y1'])
 optim.setVariableInputs(['x1', 'x2'])
 optim.setMaximumEvaluationNumber(150)
@@ -228,7 +228,7 @@ myStudy.add(optim)
 
 # 6- morris ##
 try:
-    morris = otguibase.MorrisAnalysis('aMorris', model1)
+    morris = persalys.MorrisAnalysis('aMorris', model1)
     morris.setInterestVariables(['y0'])
     morris.setLevel(4)
     morris.setTrajectoriesNumber(10)
@@ -238,11 +238,11 @@ except:
     print("No Morris")
 
 # 7- data analysis ##
-dataAnalysis = otguibase.DataAnalysis('DataAnalysis', model3)
+dataAnalysis = persalys.DataAnalysis('DataAnalysis', model3)
 myStudy.add(dataAnalysis)
 
 # 8- Marginals inference ##
-inference = otguibase.InferenceAnalysis('inference', model3)
+inference = persalys.InferenceAnalysis('inference', model3)
 inference.setInterestVariables(['x_0', 'x_3'])
 factories = [ot.NormalFactory(), ot.GumbelFactory()]
 inference.setDistributionsFactories('x_3', factories)
@@ -250,7 +250,7 @@ inference.setLevel(0.1)
 myStudy.add(inference)
 
 # 9- Copula inference ##
-copulaInference = otguibase.CopulaInferenceAnalysis('copulaInference', model3)
+copulaInference = persalys.CopulaInferenceAnalysis('copulaInference', model3)
 factories = [ot.NormalCopulaFactory(), ot.GumbelCopulaFactory()]
 copulaInference.setDistributionsFactories(['x_0', 'x_3'], factories)
 myStudy.add(copulaInference)

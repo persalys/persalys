@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ParametersWidget.hxx"
+#include "persalys/ParametersWidget.hxx"
 
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/TranslationManager.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QVBoxLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ParametersWidget::ParametersWidget(const QString title,           // table title

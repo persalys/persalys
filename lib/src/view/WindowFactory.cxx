@@ -18,50 +18,50 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/WindowFactory.hxx"
+#include "persalys/WindowFactory.hxx"
 
-#include "otgui/SymbolicPhysicalModelWindow.hxx"
-#include "otgui/PythonPhysicalModelWindow.hxx"
-#include "otgui/MetaModelWindow.hxx"
-#ifdef OTGUI_HAVE_YACS
-#include "otgui/YACSPhysicalModelWindow.hxx"
+#include "persalys/SymbolicPhysicalModelWindow.hxx"
+#include "persalys/PythonPhysicalModelWindow.hxx"
+#include "persalys/MetaModelWindow.hxx"
+#ifdef PERSALYS_HAVE_YACS
+#include "persalys/YACSPhysicalModelWindow.hxx"
 #endif
-#ifdef OTGUI_HAVE_OTFMI
-#include "otgui/FMIPhysicalModelWindow.hxx"
-#endif
-
-#include "otgui/DesignOfExperimentWindow.hxx"
-#include "otgui/DataAnalysisResultWindow.hxx"
-#include "otgui/ModelEvaluationResultWindow.hxx"
-#include "otgui/OptimizationResultWindow.hxx"
-#include "otgui/MonteCarloResultWindow.hxx"
-#include "otgui/TaylorExpansionMomentsResultWindow.hxx"
-#include "otgui/SobolResultWindow.hxx"
-#include "otgui/SRCResultWindow.hxx"
-#include "otgui/SimulationReliabilityResultWindow.hxx"
-#include "otgui/ApproximationResultWindow.hxx"
-#include "otgui/FunctionalChaosResultWindow.hxx"
-#include "otgui/KrigingResultWindow.hxx"
-#include "otgui/InferenceResultWindow.hxx"
-#include "otgui/CopulaInferenceResultWindow.hxx"
-#include "otgui/FieldModelEvaluationResultWindow.hxx"
-#include "otgui/FieldMonteCarloWizard.hxx"
-#ifdef OTGUI_HAVE_OTMORRIS
-#include "otgui/ScreeningAnalysisWizard.hxx"
-#include "otgui/MorrisResultWindow.hxx"
+#ifdef PERSALYS_HAVE_OTFMI
+#include "persalys/FMIPhysicalModelWindow.hxx"
 #endif
 
-#include "otgui/InferenceWizard.hxx"
-#include "otgui/DesignOfExperimentWizard.hxx"
-#include "otgui/ModelEvaluationWizard.hxx"
-#include "otgui/OptimizationWizard.hxx"
-#include "otgui/CentralTendencyWizard.hxx"
-#include "otgui/SensitivityAnalysisWizard.hxx"
-#include "otgui/ReliabilityAnalysisWizard.hxx"
-#include "otgui/MetaModelAnalysisWizard.hxx"
-#include "otgui/CopulaInferenceWizard.hxx"
+#include "persalys/DesignOfExperimentWindow.hxx"
+#include "persalys/DataAnalysisResultWindow.hxx"
+#include "persalys/ModelEvaluationResultWindow.hxx"
+#include "persalys/OptimizationResultWindow.hxx"
+#include "persalys/MonteCarloResultWindow.hxx"
+#include "persalys/TaylorExpansionMomentsResultWindow.hxx"
+#include "persalys/SobolResultWindow.hxx"
+#include "persalys/SRCResultWindow.hxx"
+#include "persalys/SimulationReliabilityResultWindow.hxx"
+#include "persalys/ApproximationResultWindow.hxx"
+#include "persalys/FunctionalChaosResultWindow.hxx"
+#include "persalys/KrigingResultWindow.hxx"
+#include "persalys/InferenceResultWindow.hxx"
+#include "persalys/CopulaInferenceResultWindow.hxx"
+#include "persalys/FieldModelEvaluationResultWindow.hxx"
+#include "persalys/FieldMonteCarloWizard.hxx"
+#ifdef PERSALYS_HAVE_OTMORRIS
+#include "persalys/ScreeningAnalysisWizard.hxx"
+#include "persalys/MorrisResultWindow.hxx"
+#endif
 
-namespace OTGUI
+#include "persalys/InferenceWizard.hxx"
+#include "persalys/DesignOfExperimentWizard.hxx"
+#include "persalys/ModelEvaluationWizard.hxx"
+#include "persalys/OptimizationWizard.hxx"
+#include "persalys/CentralTendencyWizard.hxx"
+#include "persalys/SensitivityAnalysisWizard.hxx"
+#include "persalys/ReliabilityAnalysisWizard.hxx"
+#include "persalys/MetaModelAnalysisWizard.hxx"
+#include "persalys/CopulaInferenceWizard.hxx"
+
+namespace PERSALYS
 {
 
 SubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent)
@@ -82,13 +82,13 @@ SubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* it
   {
     window = new MetaModelWindow(item, parent);
   }
-#ifdef OTGUI_HAVE_YACS
+#ifdef PERSALYS_HAVE_YACS
   else if (physicalModelType == "YACSPhysicalModel")
   {
     window = new YACSPhysicalModelWindow(item, parent);
   }
 #endif
-#ifdef OTGUI_HAVE_OTFMI
+#ifdef PERSALYS_HAVE_OTFMI
   else if (physicalModelType == "FMIPhysicalModel")
   {
     window = new FMIPhysicalModelWindow(item, parent);
@@ -113,7 +113,7 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   {
     wizard = new ModelEvaluationWizard(analysis, parent);
   }
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
   else if (analysisType == "MorrisAnalysis")
   {
     wizard = new ScreeningAnalysisWizard(analysis, parent);
@@ -187,7 +187,7 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   {
     resultWindow = new FieldModelEvaluationResultWindow(item, parent);
   }
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
   else if (analysisType == "MorrisAnalysis")
   {
     resultWindow = new MorrisResultWindow(item, parent);

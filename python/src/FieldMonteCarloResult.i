@@ -1,7 +1,7 @@
 // SWIG file
 
 %{
-#include "otgui/FieldMonteCarloResult.hxx"
+#include "persalys/FieldMonteCarloResult.hxx"
 
 namespace OT {
 template <>
@@ -48,9 +48,9 @@ template <>
 
 %template(KarhunenLoeveResultCollection) OT::Collection<OT::KarhunenLoeveResult>;
 
-%include otgui/FieldMonteCarloResult.hxx
-namespace OTGUI {
+%include persalys/FieldMonteCarloResult.hxx
+namespace PERSALYS {
 
-%extend FieldMonteCarloResult { FieldMonteCarloResult(const FieldMonteCarloResult & other) { return new OTGUI::FieldMonteCarloResult(other); } 
+%extend FieldMonteCarloResult { FieldMonteCarloResult(const FieldMonteCarloResult & other) { return new PERSALYS::FieldMonteCarloResult(other); } 
 
 } }

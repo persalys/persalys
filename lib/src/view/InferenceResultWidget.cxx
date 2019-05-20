@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/InferenceResultWidget.hxx"
+#include "persalys/InferenceResultWidget.hxx"
 
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/RadioButtonDelegate.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/DistributionDictionary.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/RadioButtonDelegate.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/DistributionDictionary.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <openturns/VisualTest.hxx>
 
@@ -37,7 +37,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidget* parent)

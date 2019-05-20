@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CheckableHeaderView.hxx"
+#include "persalys/CheckableHeaderView.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CheckableHeaderView::CheckableHeaderView(Qt::Orientation orientation, QWidget* parent)

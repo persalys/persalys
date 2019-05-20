@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::GridDesignOfExperiment
+%feature("docstring") PERSALYS::GridDesignOfExperiment
 "Create a grid design of experiments.
 
 Available constructors:
@@ -10,7 +10,7 @@ Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 lowerBound : sequence of float
     Lower bound
@@ -29,23 +29,23 @@ physical model.
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the design of experiments:
 
->>> myDOE = otguibase.GridDesignOfExperiment('myDOE', myPhysicalModel)"
+>>> myDOE = persalys.GridDesignOfExperiment('myDOE', myPhysicalModel)"
 
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::getTypeDesignOfExperiment
+%feature("docstring") PERSALYS::GridDesignOfExperiment::getTypeDesignOfExperiment
 "Design type accessor.
 
 Returns
@@ -55,7 +55,7 @@ type : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::getValues
+%feature("docstring") PERSALYS::GridDesignOfExperiment::getValues
 "Values accessor.
 
 Returns
@@ -65,7 +65,7 @@ values : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::setValues
+%feature("docstring") PERSALYS::GridDesignOfExperiment::setValues
 "Values accessor.
 
 Parameters
@@ -75,7 +75,7 @@ values : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::getLowerBounds
+%feature("docstring") PERSALYS::GridDesignOfExperiment::getLowerBounds
 "Lower bounds accessor.
 
 Returns
@@ -85,7 +85,7 @@ bounds : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::setLowerBounds
+%feature("docstring") PERSALYS::GridDesignOfExperiment::setLowerBounds
 "Lower bounds accessor.
 
 Parameters
@@ -95,7 +95,7 @@ bounds : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::getUpperBounds
+%feature("docstring") PERSALYS::GridDesignOfExperiment::getUpperBounds
 "Upper bounds accessor.
 
 Returns
@@ -105,7 +105,7 @@ bounds : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::setUpperBounds
+%feature("docstring") PERSALYS::GridDesignOfExperiment::setUpperBounds
 "Upper bounds accessor.
 
 Parameters
@@ -115,7 +115,7 @@ bounds : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::getLevels
+%feature("docstring") PERSALYS::GridDesignOfExperiment::getLevels
 "Levels accessor.
 
 Returns
@@ -125,7 +125,7 @@ levels : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::setLevels
+%feature("docstring") PERSALYS::GridDesignOfExperiment::setLevels
 "Levels accessor.
 
 Parameters
@@ -135,7 +135,7 @@ levels : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::getDeltas
+%feature("docstring") PERSALYS::GridDesignOfExperiment::getDeltas
 "Deltas accessor.
 
 Returns
@@ -145,7 +145,7 @@ deltas : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridDesignOfExperiment::setDeltas
+%feature("docstring") PERSALYS::GridDesignOfExperiment::setDeltas
 "Deltas accessor.
 
 Parameters

@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ListWidgetWithCheckBox.hxx"
+#include "persalys/ListWidgetWithCheckBox.hxx"
 
 #include <QCheckBox>
 #include <iostream>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ListWidgetWithCheckBox::ListWidgetWithCheckBox(const QString &title,

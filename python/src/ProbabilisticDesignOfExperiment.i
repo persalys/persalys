@@ -1,16 +1,16 @@
 // SWIG file
 
 %{
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
 %}
 
-%ignore OTGUI::ProbabilisticDesignOfExperiment::setDesignOfExperiment;
+%ignore PERSALYS::ProbabilisticDesignOfExperiment::setDesignOfExperiment;
 
 %include ProbabilisticDesignOfExperiment_doc.i
 
-%include otgui/ProbabilisticDesignOfExperiment.hxx
-namespace OTGUI {
+%include persalys/ProbabilisticDesignOfExperiment.hxx
+namespace PERSALYS {
 
-%extend ProbabilisticDesignOfExperiment { ProbabilisticDesignOfExperiment(const ProbabilisticDesignOfExperiment & other) { return new OTGUI::ProbabilisticDesignOfExperiment(other); } 
+%extend ProbabilisticDesignOfExperiment { ProbabilisticDesignOfExperiment(const ProbabilisticDesignOfExperiment & other) { return new PERSALYS::ProbabilisticDesignOfExperiment(other); } 
 
 } }

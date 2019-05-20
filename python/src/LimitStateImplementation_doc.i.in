@@ -1,11 +1,11 @@
-%define OTGUI_LimitState_doc
+%define PERSALYS_LimitState_doc
 "Create a limit state.
 
 Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 outputName : str
     Interest variable name
@@ -17,25 +17,25 @@ threshold : float
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> physicalModel = otguibase.SymbolicPhysicalModel('model1', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> physicalModel = persalys.SymbolicPhysicalModel('model1', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the limit state:
 
->>> limitState = otguibase.LimitState('ls1', physicalModel, 'G', ot.Less(), 0.)"
+>>> limitState = persalys.LimitState('ls1', physicalModel, 'G', ot.Less(), 0.)"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation
-OTGUI_LimitState_doc
+%feature("docstring") PERSALYS::LimitStateImplementation
+PERSALYS_LimitState_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_setOutputName_doc
+%define PERSALYS_LimitState_setOutputName_doc
 "Accessor to the name of output variable of interest in limit state.
 
 Parameters
@@ -43,12 +43,12 @@ Parameters
 outputName : str
     Interest variable name"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::setOutputName
-OTGUI_LimitState_setOutputName_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::setOutputName
+PERSALYS_LimitState_setOutputName_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_getOutputName_doc
+%define PERSALYS_LimitState_getOutputName_doc
 "Accessor to the name of output variable of interest in limit state.
 
 Returns
@@ -56,12 +56,12 @@ Returns
 outputName : str
     Interest variable name"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::getOutputName
-OTGUI_LimitState_getOutputName_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::getOutputName
+PERSALYS_LimitState_getOutputName_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_setThreshold_doc
+%define PERSALYS_LimitState_setThreshold_doc
 "Threshold value for limit state accessor.
 
 Parameters
@@ -69,12 +69,12 @@ Parameters
 threshold : float
     Threshold value"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::setThreshold
-OTGUI_LimitState_setThreshold_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::setThreshold
+PERSALYS_LimitState_setThreshold_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_getThreshold_doc
+%define PERSALYS_LimitState_getThreshold_doc
 "Threshold value for limit state accessor.
 
 Returns
@@ -82,12 +82,12 @@ Returns
 threshold : float
     Threshold value"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::getThreshold
-OTGUI_LimitState_getThreshold_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::getThreshold
+PERSALYS_LimitState_getThreshold_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_getPythonScript_doc
+%define PERSALYS_LimitState_getPythonScript_doc
 "Python script for limit state accessor.
 
 Returns
@@ -95,25 +95,25 @@ Returns
 script : str
     Python script to rebuild the limit state"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::getPythonScript
-OTGUI_LimitState_getPythonScript_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::getPythonScript
+PERSALYS_LimitState_getPythonScript_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_getPhysicalModel_doc
+%define PERSALYS_LimitState_getPhysicalModel_doc
 "Physical model for limit state accessor.
 
 Returns
 -------
-model : :class:`~otguibase.PhysicalModel`
+model : :class:`~persalys.PhysicalModel`
     Physical model"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::getPhysicalModel
-OTGUI_LimitState_getPhysicalModel_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::getPhysicalModel
+PERSALYS_LimitState_getPhysicalModel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_setOperator_doc
+%define PERSALYS_LimitState_setOperator_doc
 "Comparison operator accessor.
 
 Parameters
@@ -121,12 +121,12 @@ Parameters
 operator : :py:class:`openturns.ComparisonOperator`
     Comparison operator"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::setOperator
-OTGUI_LimitState_setOperator_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::setOperator
+PERSALYS_LimitState_setOperator_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_getOperator_doc
+%define PERSALYS_LimitState_getOperator_doc
 "Comparison operator accessor.
 
 Returns
@@ -134,12 +134,12 @@ Returns
 operator : :py:class:`openturns.ComparisonOperator`
     Comparison operator"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::getOperator
-OTGUI_LimitState_getOperator_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::getOperator
+PERSALYS_LimitState_getOperator_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_LimitState_isValid_doc
+%define PERSALYS_LimitState_isValid_doc
 "Whether limit state is valid.
 
 Returns
@@ -147,5 +147,5 @@ Returns
 isValid : bool
     Whether it is valid"
 %enddef
-%feature("docstring") OTGUI::LimitStateImplementation::isValid
-OTGUI_LimitState_isValid_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::isValid
+PERSALYS_LimitState_isValid_doc

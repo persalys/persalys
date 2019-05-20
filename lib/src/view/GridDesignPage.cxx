@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/GridDesignPage.hxx"
+#include "persalys/GridDesignPage.hxx"
 
-#include "otgui/ComboBoxDelegate.hxx"
-#include "otgui/SpinBoxDelegate.hxx"
+#include "persalys/ComboBoxDelegate.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 GridDesignPage::GridDesignPage(QWidget* parent)

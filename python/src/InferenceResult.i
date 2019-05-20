@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/InferenceResult.hxx"
+#include "persalys/InferenceResult.hxx"
 %}
 
 %include InferenceResult_doc.i
 
-%include otgui/InferenceResult.hxx
-namespace OTGUI {
+%include persalys/InferenceResult.hxx
+namespace PERSALYS {
 
-%extend InferenceResult { InferenceResult(const InferenceResult & other) { return new OTGUI::InferenceResult(other); } 
+%extend InferenceResult { InferenceResult(const InferenceResult & other) { return new PERSALYS::InferenceResult(other); } 
 
 } }

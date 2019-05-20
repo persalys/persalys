@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FileTools.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QSettings>
 #include <QDir>
@@ -30,7 +30,7 @@
 #include <QCoreApplication>
 #include <QDesktopServices>
 
-namespace OTGUI
+namespace PERSALYS
 {
 const QString FileTools::OpenTURNSUrlLink = "http://openturns.github.io/openturns/latest/";
 
@@ -148,7 +148,7 @@ void FileTools::ExportImage(const QImage& image, QWidget * parent)
 QString FileTools::GetDocumentationDirectoryPath()
 {
   // case 1: try to use an environment variable
-  QString userManualDir = std::getenv("OTGUI_HTML_DOCUMENTATION_PATH");
+  QString userManualDir = std::getenv("PERSALYS_HTML_DOCUMENTATION_PATH");
   if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
     return userManualDir;
 
@@ -200,7 +200,7 @@ void FileTools::OpenUrl(const QUrl& url)
   if (url.isLocalFile() && url.hasFragment())
   {
     // create a temporary html file which contains the right file path with fragment
-    const QString fileName(QDir::toNativeSeparators(QDir::tempPath() + "/otgui_html_temp_file.html"));
+    const QString fileName(QDir::toNativeSeparators(QDir::tempPath() + "/persalys_html_temp_file.html"));
     QFile file(fileName);
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))

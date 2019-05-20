@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataModelWindow.hxx"
+#include "persalys/DataModelWindow.hxx"
 
-#include "otgui/ComboBoxDelegate.hxx"
-#include "otgui/FileTools.hxx"
-#include "otgui/LineEditWithQValidatorDelegate.hxx"
-#include "otgui/CheckableHeaderView.hxx"
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/ComboBoxDelegate.hxx"
+#include "persalys/FileTools.hxx"
+#include "persalys/LineEditWithQValidatorDelegate.hxx"
+#include "persalys/CheckableHeaderView.hxx"
+#include "persalys/SampleTableModel.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -41,7 +41,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * parent)

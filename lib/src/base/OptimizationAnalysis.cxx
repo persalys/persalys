@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OptimizationAnalysis.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/OptimizationAlgorithm.hxx>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(OptimizationAnalysis)
@@ -479,7 +479,7 @@ String OptimizationAnalysis::getPythonScript() const
 
   OSS oss;
 
-  oss << getName() << " = otguibase.OptimizationAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ", '" << solverName_ << "')\n";
+  oss << getName() << " = persalys.OptimizationAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ", '" << solverName_ << "')\n";
   // interest output
   if (getInterestVariables().getSize() < getPhysicalModel().getOutputNames().getSize())
   {

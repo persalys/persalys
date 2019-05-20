@@ -230,131 +230,131 @@ if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningResultWizard.hxx )
 endif ()
 
-qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MainWindow.hxx
-                                  otgui/MainWidget.hxx
-                                  otgui/Actions.hxx
-                                  otgui/ToolBar.hxx
-                                  otgui/MenuBar.hxx
-                                  otgui/StatusBar.hxx
-                                  otgui/SubWindow.hxx
-                                  otgui/Wizard.hxx
-                                  otgui/SubWindowsStackedWidget.hxx
-                                  otgui/StudyManager.hxx
-                                  otgui/WelcomeWindow.hxx
-                                  otgui/StudyWindow.hxx
-                                  otgui/MeshWindow.hxx
-                                  otgui/PhysicalModelDiagramWindow.hxx
-                                  otgui/FieldModelDiagramWindow.hxx
-                                  otgui/DataModelDiagramWindow.hxx
-                                  otgui/ResultWindow.hxx
-                                  otgui/AnalysisWindow.hxx
-                                  otgui/BlockSizeGroupBox.hxx
-                                  otgui/MinMaxTableGroupBox.hxx
-                                  otgui/MomentsEstimatesTableGroupBox.hxx
-                                  otgui/OutputsSelectionGroupBox.hxx
-                                  otgui/DataModelWindow.hxx
-                                  otgui/DataAnalysisWindow.hxx
-                                  otgui/DataAnalysisResultWindow.hxx
-                                  otgui/StudyTreeView.hxx
-                                  otgui/DesignOfExperimentIntroPage.hxx
-                                  otgui/GridDesignPage.hxx
-                                  otgui/ProbabilisticDesignPage.hxx
-                                  otgui/ImportedDesignPage.hxx
-                                  otgui/DesignOfExperimentInputWindow.hxx
-                                  otgui/DesignOfExperimentEvaluationWizard.hxx
-                                  otgui/PhysicalModelWindowWidget.hxx
-                                  otgui/SymbolicPhysicalModelWindow.hxx
-                                  otgui/PythonPhysicalModelWindow.hxx
-                                  otgui/MetaModelWindow.hxx
-                                  otgui/ProbabilisticModelWindow.hxx
-                                  otgui/DesignOfExperimentWizard.hxx
-                                  otgui/DesignOfExperimentWindow.hxx
-                                  otgui/ModelEvaluationWizard.hxx
-                                  otgui/ModelEvaluationResultWindow.hxx
-                                  otgui/CentralTendencyIntroPage.hxx
-                                  otgui/MonteCarloPage.hxx
-                                  otgui/CentralTendencyWizard.hxx
-                                  otgui/MonteCarloResultWindow.hxx
-                                  otgui/TaylorExpansionMomentsResultWindow.hxx
-                                  otgui/SensitivityResultWidget.hxx
-                                  otgui/SobolResultWindow.hxx
-                                  otgui/SRCResultWindow.hxx
-                                  otgui/SensitivityIntroPage.hxx
-                                  otgui/SobolPage.hxx
-                                  otgui/SRCPage.hxx
-                                  otgui/SensitivityAnalysisWizard.hxx
-                                  otgui/LimitStateWindow.hxx
-                                  otgui/ReliabilityIntroPage.hxx
-                                  otgui/SimulationReliabilityPage.hxx
-                                  otgui/ApproximationReliabilityPage.hxx
-                                  otgui/ReliabilityAnalysisWizard.hxx
-                                  otgui/SimulationReliabilityResultWindow.hxx
-                                  otgui/ApproximationResultTabWidget.hxx
-                                  otgui/ApproximationResultWindow.hxx
-                                  otgui/StopCriteriaGroupBox.hxx
-                                  otgui/ParametersDefinitionWizard.hxx
-                                  otgui/MetaModelIntroPage.hxx
-                                  otgui/MetaModelValidationPage.hxx
-                                  otgui/KrigingPage.hxx
-                                  otgui/FunctionalChaosPage.hxx
-                                  otgui/MetaModelAnalysisWizard.hxx
-                                  otgui/MetaModelValidationWidget.hxx
-                                  otgui/FunctionalChaosResultWindow.hxx
-                                  otgui/KrigingResultWindow.hxx
-                                  otgui/InferenceResultWindow.hxx
-                                  otgui/InferenceWizard.hxx
-                                  otgui/DistributionsForInferenceWidget.hxx
-                                  otgui/InferenceResultWizard.hxx
-                                  otgui/InferenceResultWidget.hxx
-                                  otgui/Controller.hxx
-                                  otgui/ControllerWidget.hxx
-                                  otgui/CopulaInferenceResultWidget.hxx
-                                  otgui/CopulaInferenceResultWindow.hxx
-                                  otgui/CopulaParametersTabWidget.hxx
-                                  otgui/OptimizationIntroPage.hxx
-                                  otgui/OptimizationWizard.hxx
-                                  otgui/OptimizationResultWindow.hxx
-                                  otgui/WidgetBoundToDockWidget.hxx
-                                  otgui/MarginalsWidget.hxx
-                                  otgui/DependenciesWidget.hxx
-                                  otgui/CopulaWidget.hxx
-                                  otgui/CopulaInferenceWizard.hxx
-                                  otgui/CopulaInferenceResultWizard.hxx
-                                  otgui/AboutDialog.hxx
-                                  otgui/MeshDefinitionWizard.hxx
-                                  otgui/FieldModelEvaluationResultWindow.hxx
-                                  otgui/FieldMonteCarloWizard.hxx
-                                  otgui/ExtractDataFieldWizard.hxx
+qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
+                                  persalys/MainWidget.hxx
+                                  persalys/Actions.hxx
+                                  persalys/ToolBar.hxx
+                                  persalys/MenuBar.hxx
+                                  persalys/StatusBar.hxx
+                                  persalys/SubWindow.hxx
+                                  persalys/Wizard.hxx
+                                  persalys/SubWindowsStackedWidget.hxx
+                                  persalys/StudyManager.hxx
+                                  persalys/WelcomeWindow.hxx
+                                  persalys/StudyWindow.hxx
+                                  persalys/MeshWindow.hxx
+                                  persalys/PhysicalModelDiagramWindow.hxx
+                                  persalys/FieldModelDiagramWindow.hxx
+                                  persalys/DataModelDiagramWindow.hxx
+                                  persalys/ResultWindow.hxx
+                                  persalys/AnalysisWindow.hxx
+                                  persalys/BlockSizeGroupBox.hxx
+                                  persalys/MinMaxTableGroupBox.hxx
+                                  persalys/MomentsEstimatesTableGroupBox.hxx
+                                  persalys/OutputsSelectionGroupBox.hxx
+                                  persalys/DataModelWindow.hxx
+                                  persalys/DataAnalysisWindow.hxx
+                                  persalys/DataAnalysisResultWindow.hxx
+                                  persalys/StudyTreeView.hxx
+                                  persalys/DesignOfExperimentIntroPage.hxx
+                                  persalys/GridDesignPage.hxx
+                                  persalys/ProbabilisticDesignPage.hxx
+                                  persalys/ImportedDesignPage.hxx
+                                  persalys/DesignOfExperimentInputWindow.hxx
+                                  persalys/DesignOfExperimentEvaluationWizard.hxx
+                                  persalys/PhysicalModelWindowWidget.hxx
+                                  persalys/SymbolicPhysicalModelWindow.hxx
+                                  persalys/PythonPhysicalModelWindow.hxx
+                                  persalys/MetaModelWindow.hxx
+                                  persalys/ProbabilisticModelWindow.hxx
+                                  persalys/DesignOfExperimentWizard.hxx
+                                  persalys/DesignOfExperimentWindow.hxx
+                                  persalys/ModelEvaluationWizard.hxx
+                                  persalys/ModelEvaluationResultWindow.hxx
+                                  persalys/CentralTendencyIntroPage.hxx
+                                  persalys/MonteCarloPage.hxx
+                                  persalys/CentralTendencyWizard.hxx
+                                  persalys/MonteCarloResultWindow.hxx
+                                  persalys/TaylorExpansionMomentsResultWindow.hxx
+                                  persalys/SensitivityResultWidget.hxx
+                                  persalys/SobolResultWindow.hxx
+                                  persalys/SRCResultWindow.hxx
+                                  persalys/SensitivityIntroPage.hxx
+                                  persalys/SobolPage.hxx
+                                  persalys/SRCPage.hxx
+                                  persalys/SensitivityAnalysisWizard.hxx
+                                  persalys/LimitStateWindow.hxx
+                                  persalys/ReliabilityIntroPage.hxx
+                                  persalys/SimulationReliabilityPage.hxx
+                                  persalys/ApproximationReliabilityPage.hxx
+                                  persalys/ReliabilityAnalysisWizard.hxx
+                                  persalys/SimulationReliabilityResultWindow.hxx
+                                  persalys/ApproximationResultTabWidget.hxx
+                                  persalys/ApproximationResultWindow.hxx
+                                  persalys/StopCriteriaGroupBox.hxx
+                                  persalys/ParametersDefinitionWizard.hxx
+                                  persalys/MetaModelIntroPage.hxx
+                                  persalys/MetaModelValidationPage.hxx
+                                  persalys/KrigingPage.hxx
+                                  persalys/FunctionalChaosPage.hxx
+                                  persalys/MetaModelAnalysisWizard.hxx
+                                  persalys/MetaModelValidationWidget.hxx
+                                  persalys/FunctionalChaosResultWindow.hxx
+                                  persalys/KrigingResultWindow.hxx
+                                  persalys/InferenceResultWindow.hxx
+                                  persalys/InferenceWizard.hxx
+                                  persalys/DistributionsForInferenceWidget.hxx
+                                  persalys/InferenceResultWizard.hxx
+                                  persalys/InferenceResultWidget.hxx
+                                  persalys/Controller.hxx
+                                  persalys/ControllerWidget.hxx
+                                  persalys/CopulaInferenceResultWidget.hxx
+                                  persalys/CopulaInferenceResultWindow.hxx
+                                  persalys/CopulaParametersTabWidget.hxx
+                                  persalys/OptimizationIntroPage.hxx
+                                  persalys/OptimizationWizard.hxx
+                                  persalys/OptimizationResultWindow.hxx
+                                  persalys/WidgetBoundToDockWidget.hxx
+                                  persalys/MarginalsWidget.hxx
+                                  persalys/DependenciesWidget.hxx
+                                  persalys/CopulaWidget.hxx
+                                  persalys/CopulaInferenceWizard.hxx
+                                  persalys/CopulaInferenceResultWizard.hxx
+                                  persalys/AboutDialog.hxx
+                                  persalys/MeshDefinitionWizard.hxx
+                                  persalys/FieldModelEvaluationResultWindow.hxx
+                                  persalys/FieldMonteCarloWizard.hxx
+                                  persalys/ExtractDataFieldWizard.hxx
                                   )
 
 
 if (SalomeYACS_FOUND)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/YACSPhysicalModelWindow.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/YACSPhysicalModelWindow.hxx)
 endif ()
 if (USE_OTFMI)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/FMIPhysicalModelWindow.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/FMIPhysicalModelWindow.hxx)
 endif ()
 if (OTMORRIS_FOUND)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/ScreeningIntroPage.hxx)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisPage.hxx)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/ScreeningAnalysisWizard.hxx)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisResultWidget.hxx)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/MorrisResultWindow.hxx)
-  qt5_wrap_cpp (OTGUI_VIEW_MOC_SRCS otgui/ScreeningResultWizard.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningIntroPage.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MorrisPage.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningAnalysisWizard.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MorrisResultWidget.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MorrisResultWindow.hxx)
+  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningResultWizard.hxx)
 endif ()
 
-set(RESOURCES ${CMAKE_SOURCE_DIR}/gui.qrc)
+set(RESOURCES ${CMAKE_SOURCE_DIR}/persalys.qrc)
 
-qt5_add_resources (OTGUI_RESOURCES_RCC ${RESOURCES})
+qt5_add_resources (PERSALYS_RESOURCES_RCC ${RESOURCES})
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 include_directories (${PYTHON_INCLUDE_DIRS})
 
-otgui_add_library (otguiview ${SOURCEFILES} ${OTGUI_VIEW_MOC_SRCS} ${OTGUI_RESOURCES_RCC})
-target_compile_features (otguiview PRIVATE cxx_lambdas)
+persalys_add_library (persalysview ${SOURCEFILES} ${PERSALYS_VIEW_MOC_SRCS} ${PERSALYS_RESOURCES_RCC})
+target_compile_features (persalysview PRIVATE cxx_lambdas)
 
 if ( BUILD_SHARED_LIBS )
-  set_target_properties ( otguiview PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
+  set_target_properties ( persalysview PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -363,23 +363,23 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties (otguiview PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties (otguiview PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries (otguiview otguimodel)
-target_link_libraries (otguiview otguipyconsole)
-target_link_libraries (otguiview otguiplot)
+set_target_properties (persalysview PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties (persalysview PROPERTIES SOVERSION ${LIB_SOVERSION} )
+target_link_libraries (persalysview persalysmodel)
+target_link_libraries (persalysview persalyspyconsole)
+target_link_libraries (persalysview persalysplot)
 if (SalomeYACS_FOUND)
-  target_link_libraries (otguiview py2yacsguilib )
-  target_link_libraries (otguiview ydefxgui)
+  target_link_libraries (persalysview py2yacsguilib )
+  target_link_libraries (persalysview ydefxgui)
 endif ()
 
 include_directories (${QWT_INCLUDE_DIRS})
-target_link_libraries (otguiview ${QWT_LIBRARIES})
+target_link_libraries (persalysview ${QWT_LIBRARIES})
 
 
-install ( TARGETS otguiview
+install ( TARGETS persalysview
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}
-  ARCHIVE DESTINATION ${OTGUI_LIBRARY_PATH}
+  LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
+  ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 

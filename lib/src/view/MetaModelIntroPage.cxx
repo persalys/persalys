@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MetaModelIntroPage.hxx"
+#include "persalys/MetaModelIntroPage.hxx"
 
-#include "otgui/MetaModelAnalysisWizard.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/MetaModelAnalysisWizard.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QRadioButton>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)

@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MonteCarloAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 
-#include "otgui/DataAnalysis.hxx"
-#include "otgui/DataModel.hxx"
+#include "persalys/DataAnalysis.hxx"
+#include "persalys/DataModel.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(MonteCarloAnalysis)
@@ -258,7 +258,7 @@ String MonteCarloAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
-  oss << getName() << " = otguibase.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  oss << getName() << " = persalys.MonteCarloAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
+#include "persalys/TaylorExpansionMomentsAnalysis.hxx"
 
 #include <openturns/TaylorExpansionMoments.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(TaylorExpansionMomentsAnalysis)
@@ -101,7 +101,7 @@ Parameters TaylorExpansionMomentsAnalysis::getParameters() const
 String TaylorExpansionMomentsAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.TaylorExpansionMomentsAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  oss << getName() << " = persalys.TaylorExpansionMomentsAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

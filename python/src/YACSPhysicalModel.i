@@ -1,9 +1,9 @@
 // SWIG file
-namespace OTGUI {
+namespace PERSALYS {
 
 %extend YACSPhysicalModel {
 YACSPhysicalModel(const YACSPhysicalModel & other)
-{ return new OTGUI::YACSPhysicalModel(other); }
+{ return new PERSALYS::YACSPhysicalModel(other); }
 
 PyObject* jobParameters()
 { return py2cpp::toPy($self->jobParameters());}
@@ -12,9 +12,9 @@ PyObject* jobParameters()
 
 %ignore jobParameters;
 %{
-#include "otgui/YACSPhysicalModel.hxx"
+#include "persalys/YACSPhysicalModel.hxx"
 %}
 
 %include YACSPhysicalModel_doc.i
 
-%include otgui/YACSPhysicalModel.hxx
+%include persalys/YACSPhysicalModel.hxx

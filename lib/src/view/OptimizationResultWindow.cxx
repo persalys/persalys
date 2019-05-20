@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OptimizationResultWindow.hxx"
-#include "otgui/OptimizationAnalysis.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
-#include "otgui/ParametersWidget.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/PlotWidget.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+#include "persalys/OptimizationResultWindow.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
+#include "persalys/ParametersWidget.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/PlotWidget.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -40,7 +40,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 OptimizationResultWindow::OptimizationResultWindow(AnalysisItem * item, QWidget * parent)

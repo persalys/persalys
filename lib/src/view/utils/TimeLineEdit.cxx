@@ -19,9 +19,9 @@
  *
  */
 
-#include "otgui/TimeLineEdit.hxx"
+#include "persalys/TimeLineEdit.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 TimeLineEdit::TimeLineEdit(const QString text, QWidget *parent)

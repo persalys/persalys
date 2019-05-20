@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/SRCAnalysis.hxx"
+#include "persalys/SRCAnalysis.hxx"
 %}
 
 %include SRCAnalysis_doc.i
 
-%include otgui/SRCAnalysis.hxx
-namespace OTGUI {
+%include persalys/SRCAnalysis.hxx
+namespace PERSALYS {
 
-%extend SRCAnalysis { SRCAnalysis(const SRCAnalysis & other) { return new OTGUI::SRCAnalysis(other); } 
+%extend SRCAnalysis { SRCAnalysis(const SRCAnalysis & other) { return new PERSALYS::SRCAnalysis(other); } 
 
 } }

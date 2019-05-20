@@ -16,15 +16,15 @@ Error on the line 4 : True
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_R = ot.LogNormal(5.69881, 0.0997513, 0)
-R = otguibase.Input('R', 0, dist_R, 'Yield strength')
+R = persalys.Input('R', 0, dist_R, 'Yield strength')
 dist_F = ot.Normal(75000, 5000)
-F = otguibase.Input('F', 0, dist_F, 'Traction load')
-G = otguibase.Output('G', 'deviation')
+F = persalys.Input('F', 0, dist_F, 'Traction load')
+G = persalys.Output('G', 'deviation')
 inputs = [R, F]
 outputs = [G]
 code = """
@@ -34,10 +34,10 @@ def _exec(R, F):
     G = 2*R-F/(pi*100.0)/0.
     return G
 """
-myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
+myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myPhysicalModel.setParallel(True)
 myStudy.add(myPhysicalModel)
-plan_0 = otguibase.FixedDesignOfExperiment('plan_0', myPhysicalModel)
+plan_0 = persalys.FixedDesignOfExperiment('plan_0', myPhysicalModel)
 inputSample = [
 [300, 75000],
 [400, 74000]]

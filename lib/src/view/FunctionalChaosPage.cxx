@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FunctionalChaosPage.hxx"
+#include "persalys/FunctionalChaosPage.hxx"
 
-#include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <openturns/SpecFunc.hxx>
 
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 FunctionalChaosPage::FunctionalChaosPage(QWidget* parent)

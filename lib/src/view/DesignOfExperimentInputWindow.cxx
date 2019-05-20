@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentInputWindow.hxx"
+#include "persalys/DesignOfExperimentInputWindow.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent)

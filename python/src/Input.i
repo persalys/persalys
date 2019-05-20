@@ -1,11 +1,11 @@
 // SWIG file
 
 %{
-#include "otgui/Input.hxx"
+#include "persalys/Input.hxx"
 
 namespace OT {
 template <>
-struct traitsPythonType< OTGUI::Input >
+struct traitsPythonType< PERSALYS::Input >
 {
   typedef _PyObject_ Type;
 };
@@ -14,11 +14,11 @@ struct traitsPythonType< OTGUI::Input >
 template <>
   inline
   bool
-  canConvert< _PyObject_, OTGUI::Input >(PyObject * pyObj)
+  canConvert< _PyObject_, PERSALYS::Input >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::Input *"), 0 ))) {
-      OTGUI::Input * p_it = reinterpret_cast< OTGUI::Input * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Input *"), 0 ))) {
+      PERSALYS::Input * p_it = reinterpret_cast< PERSALYS::Input * >( ptr );
       return p_it != NULL;
     }
     return false;
@@ -27,18 +27,18 @@ template <>
 
 template <>
   inline
-  OTGUI::Input
-  convert< _PyObject_, OTGUI::Input >(PyObject * pyObj)
+  PERSALYS::Input
+  convert< _PyObject_, PERSALYS::Input >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::Input *"), 0))) {
-      OTGUI::Input * p_it = reinterpret_cast< OTGUI::Input * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Input *"), 0))) {
+      PERSALYS::Input * p_it = reinterpret_cast< PERSALYS::Input * >( ptr );
       return *p_it;
     }
     else {
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Input";
     }
-    return OTGUI::Input();
+    return PERSALYS::Input();
   }
 
 }
@@ -46,14 +46,14 @@ template <>
 
 %include Input_doc.i
 
-%template(InputCollection) OT::Collection<OTGUI::Input>;
+%template(InputCollection) OT::Collection<PERSALYS::Input>;
 
 %typemap(in) const InputCollection & {
   if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
     // From interface class, ok
   } else {
     try {
-      $1 = OT::buildCollectionFromPySequence< OTGUI::Input >( $input );
+      $1 = OT::buildCollectionFromPySequence< PERSALYS::Input >( $input );
     } catch (OT::InvalidArgumentException & ex) {
       SWIG_exception(SWIG_TypeError, "Object passed as argument is not convertible to a collection of Input");
     }
@@ -62,14 +62,14 @@ template <>
 
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const InputCollection & {
   $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
-    || OT::canConvertCollectionObjectFromPySequence< OTGUI::Input >( $input );
+    || OT::canConvertCollectionObjectFromPySequence< PERSALYS::Input >( $input );
 }
 
-%apply const InputCollection & { const OTGUI::InputCollection & };
+%apply const InputCollection & { const PERSALYS::InputCollection & };
 
-%include otgui/Input.hxx
-namespace OTGUI {
+%include persalys/Input.hxx
+namespace PERSALYS {
 
-%extend Input { Input(const Input & other) { return new OTGUI::Input(other); } 
+%extend Input { Input(const Input & other) { return new PERSALYS::Input(other); } 
 
 } }

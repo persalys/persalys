@@ -1,8 +1,8 @@
-#include "otgui/GridDesignOfExperiment.hxx"
-#include "otgui/ImportedDesignOfExperiment.hxx"
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
-#include "otgui/DesignOfExperimentWizard.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
+#include "persalys/GridDesignOfExperiment.hxx"
+#include "persalys/ImportedDesignOfExperiment.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/DesignOfExperimentWizard.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -10,7 +10,7 @@
 #include <QtTest/QtTest>
 #include <QAbstractButton>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestDesignOfExperimentWizard : public QObject
 {
@@ -152,5 +152,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestDesignOfExperimentWizard)
+QTEST_MAIN(PERSALYS::TestDesignOfExperimentWizard)
 #include "t_DesignOfExperimentWizard_std.moc"

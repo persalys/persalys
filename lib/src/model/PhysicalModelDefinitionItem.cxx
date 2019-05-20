@@ -18,22 +18,22 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PhysicalModelDefinitionItem.hxx"
+#include "persalys/PhysicalModelDefinitionItem.hxx"
 
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/FieldModelEvaluation.hxx"
-#include "otgui/GridDesignOfExperiment.hxx"
-#include "otgui/StudyItem.hxx"
-#ifdef OTGUI_HAVE_OTMORRIS
-#include "otgui/MorrisAnalysis.hxx"
+#include "persalys/ModelEvaluation.hxx"
+#include "persalys/FieldModelEvaluation.hxx"
+#include "persalys/GridDesignOfExperiment.hxx"
+#include "persalys/StudyItem.hxx"
+#ifdef PERSALYS_HAVE_OTMORRIS
+#include "persalys/MorrisAnalysis.hxx"
 #endif
-#include "otgui/OptimizationAnalysis.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 
 #include <QDebug>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & physicalModel)
@@ -76,7 +76,7 @@ void PhysicalModelDefinitionItem::buildActions()
 
   if (!physicalModel_.hasMesh())
   {
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
     newScreening_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
     newScreening_->setStatusTip(tr("Create a new screening"));
     connect(newScreening_, SIGNAL(triggered()), this, SLOT(createScreening()));
@@ -197,7 +197,7 @@ void PhysicalModelDefinitionItem::createModelEvaluation()
 }
 
 
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
 void PhysicalModelDefinitionItem::createScreening()
 {
   // check

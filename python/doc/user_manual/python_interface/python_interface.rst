@@ -5,7 +5,7 @@ User manual for the Python interface
 Model creation
 --------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -28,7 +28,7 @@ Model creation
 Model evaluation
 ----------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -40,7 +40,7 @@ Model evaluation
 Optimization
 ------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -53,7 +53,7 @@ Optimization
     Screening
     ---------
 
-    .. currentmodule:: otguibase
+    .. currentmodule:: persalys
 
     .. autosummary::
         :toctree: _generated/
@@ -68,7 +68,7 @@ Probabilistic studies
 Central tendency
 ~~~~~~~~~~~~~~~~
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -83,7 +83,7 @@ Central tendency
 Sensitivity analysis
 ~~~~~~~~~~~~~~~~~~~~
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -97,7 +97,7 @@ Sensitivity analysis
 Reliability model
 -----------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -108,7 +108,7 @@ Reliability model
 Reliability analysis
 --------------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -124,7 +124,7 @@ Reliability analysis
 Design of experiments
 ---------------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -139,7 +139,7 @@ Design of experiments
 Data analysis
 -------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -157,7 +157,7 @@ Data analysis
 Metamodel
 ---------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -174,7 +174,7 @@ Metamodel
 Study storage
 -------------
 
-.. currentmodule:: otguibase
+.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/

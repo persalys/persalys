@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MonteCarloResultWindow.hxx"
+#include "persalys/MonteCarloResultWindow.hxx"
 
-#include "otgui/MonteCarloAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item, QWidget * parent)

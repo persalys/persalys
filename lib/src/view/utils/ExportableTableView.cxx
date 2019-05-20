@@ -18,18 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ExportableTableView.hxx"
+#include "persalys/ExportableTableView.hxx"
 
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/SampleTableModel.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QMenu>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ExportableTableView::ExportableTableView(QWidget* parent)

@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FunctionalChaosResultWindow.hxx"
+#include "persalys/FunctionalChaosResultWindow.hxx"
 
-#include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/MetaModelValidationWidget.hxx"
-#include "otgui/SensitivityResultWidget.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/TemporaryLabel.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/MetaModelValidationWidget.hxx"
+#include "persalys/SensitivityResultWidget.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
 #include <openturns/SpecFunc.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -42,7 +42,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent)

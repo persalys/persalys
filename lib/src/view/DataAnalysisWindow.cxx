@@ -18,28 +18,28 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataAnalysisWindow.hxx"
+#include "persalys/DataAnalysisWindow.hxx"
 
-#include "otgui/QtTools.hxx"
-#include "otgui/DesignOfExperimentWindow.hxx"
-#include "otgui/MinMaxTableGroupBox.hxx"
-#include "otgui/MomentsEstimatesTableGroupBox.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/PlotMatrixConfigurationWidget.hxx"
-#include "otgui/TemporaryLabel.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/DesignOfExperimentWindow.hxx"
+#include "persalys/MinMaxTableGroupBox.hxx"
+#include "persalys/MomentsEstimatesTableGroupBox.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/ExportableTableView.hxx"
+#include "persalys/SampleTableModel.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/PlotMatrixConfigurationWidget.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
-#ifdef OTGUI_HAVE_PARAVIEW
-#include "otgui/PVServerManagerInterface.hxx"
-#include "otgui/PVServerManagerSingleton.hxx"
-#include "otgui/PVParCooViewWidget.hxx"
-#include "otgui/PVMatrixPlotViewWidget.hxx"
-#include "otgui/PVPlotSettingWidget.hxx"
-#include "otgui/PVXYChartViewWidget.hxx"
-#include "otgui/PVXYChartSettingWidget.hxx"
+#ifdef PERSALYS_HAVE_PARAVIEW
+#include "persalys/PVServerManagerInterface.hxx"
+#include "persalys/PVServerManagerSingleton.hxx"
+#include "persalys/PVParCooViewWidget.hxx"
+#include "persalys/PVMatrixPlotViewWidget.hxx"
+#include "persalys/PVPlotSettingWidget.hxx"
+#include "persalys/PVXYChartViewWidget.hxx"
+#include "persalys/PVXYChartSettingWidget.hxx"
 
 #include <pqLinksModel.h>
 #include <pqApplicationCore.h>
@@ -56,7 +56,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
@@ -189,7 +189,7 @@ void DataAnalysisWindow::fillTabWidget()
     addDependenceTab();
   }
   bool canUseParaview = false;
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::HaveOpenGL32())
   {
     addParaviewWidgetsTabs();
@@ -701,7 +701,7 @@ void DataAnalysisWindow::addTableTab()
 }
 
 
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
 void DataAnalysisWindow::addParaviewWidgetsTabs()
 {
   // get data info

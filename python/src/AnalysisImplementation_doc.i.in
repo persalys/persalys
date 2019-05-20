@@ -1,12 +1,12 @@
-%define OTGUI_Analysis_doc
+%define PERSALYS_Analysis_doc
 "Analysis base class."
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation
-OTGUI_Analysis_doc
+%feature("docstring") PERSALYS::AnalysisImplementation
+PERSALYS_Analysis_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_getErrorMessage_doc
+%define PERSALYS_Analysis_getErrorMessage_doc
 "Error message accessor.
 
 Returns
@@ -14,12 +14,12 @@ Returns
 message : str
     Error message if the analysis failed"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::getErrorMessage
-OTGUI_Analysis_getErrorMessage_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::getErrorMessage
+PERSALYS_Analysis_getErrorMessage_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_getWarningMessage_doc
+%define PERSALYS_Analysis_getWarningMessage_doc
 "Warning message accessor.
 
 Returns
@@ -27,12 +27,12 @@ Returns
 message : str
     Warning message which can appear during the analysis computation"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::getWarningMessage
-OTGUI_Analysis_getWarningMessage_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::getWarningMessage
+PERSALYS_Analysis_getWarningMessage_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_getPythonScript_doc
+%define PERSALYS_Analysis_getPythonScript_doc
 "Physical model accessor.
 
 Returns
@@ -40,12 +40,12 @@ Returns
 script : str
     Python script to replay the analysis"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::getPythonScript
-OTGUI_Analysis_getPythonScript_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::getPythonScript
+PERSALYS_Analysis_getPythonScript_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_isReliabilityAnalysis_doc
+%define PERSALYS_Analysis_isReliabilityAnalysis_doc
 "Whether the analysis involves reliability.
 
 Returns
@@ -53,12 +53,12 @@ Returns
 isReliabilityAnalysis : bool
     Whether the analysis involves a reliability analysis"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::isReliabilityAnalysis
-OTGUI_Analysis_isReliabilityAnalysis_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::isReliabilityAnalysis
+PERSALYS_Analysis_isReliabilityAnalysis_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_isRunning_doc
+%define PERSALYS_Analysis_isRunning_doc
 "Whether the analysis is running.
 
 Returns
@@ -66,20 +66,20 @@ Returns
 isRunning : bool
     Whether the analysis is running"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::isRunning
-OTGUI_Analysis_isRunning_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::isRunning
+PERSALYS_Analysis_isRunning_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_run_doc
+%define PERSALYS_Analysis_run_doc
 "Launch the analysis."
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::run
-OTGUI_Analysis_run_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::run
+PERSALYS_Analysis_run_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_hasValidResult_doc
+%define PERSALYS_Analysis_hasValidResult_doc
 "Whether the analysis has been run.
 
 Returns
@@ -87,12 +87,12 @@ Returns
 hasValidResult : bool
     Whether the analysis has already been run"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::hasValidResult
-OTGUI_Analysis_hasValidResult_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::hasValidResult
+PERSALYS_Analysis_hasValidResult_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_getInterestVariables_doc
+%define PERSALYS_Analysis_getInterestVariables_doc
 "Get the variables to analyse.
 
 Returns
@@ -100,12 +100,12 @@ Returns
 variablesNames : sequence of str
     Names of the variables to analyse"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::getInterestVariables
-OTGUI_Analysis_getInterestVariables_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::getInterestVariables
+PERSALYS_Analysis_getInterestVariables_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_Analysis_setInterestVariables_doc
+%define PERSALYS_Analysis_setInterestVariables_doc
 "Set the variables to analyse.
 
 Parameters
@@ -113,5 +113,5 @@ Parameters
 variablesNames : sequence of str
     Names of the variables to analyse"
 %enddef
-%feature("docstring") OTGUI::AnalysisImplementation::setInterestVariables
-OTGUI_Analysis_setInterestVariables_doc
+%feature("docstring") PERSALYS::AnalysisImplementation::setInterestVariables
+PERSALYS_Analysis_setInterestVariables_doc

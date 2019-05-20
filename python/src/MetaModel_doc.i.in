@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::MetaModel
+%feature("docstring") PERSALYS::MetaModel
 "Metamodel.
 
 Parameters
@@ -10,7 +10,7 @@ function : :py:class:`openturns.Function`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModel::setFunction
+%feature("docstring") PERSALYS::MetaModel::setFunction
 "Metamodel function accessor.
 
 Parameters

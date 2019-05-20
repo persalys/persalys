@@ -20,15 +20,15 @@
  */
 #include "openturns/OT.hxx"
 #include "openturns/OTtestcode.hxx"
-#include "otgui/Study.hxx"
-#include "otgui/YACSPhysicalModel.hxx"
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
-#include "otgui/ModelEvaluation.hxx"
+#include "persalys/Study.hxx"
+#include "persalys/YACSPhysicalModel.hxx"
+#include "persalys/TaylorExpansionMomentsAnalysis.hxx"
+#include "persalys/ModelEvaluation.hxx"
 
 
 using namespace OT;
 using namespace OT::Test;
-using namespace OTGUI;
+using namespace PERSALYS;
 
 int main(int argc, char *argv[])
 {

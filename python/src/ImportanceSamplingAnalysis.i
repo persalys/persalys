@@ -1,14 +1,14 @@
 // SWIG file ImportanceSamplingAnalysis.i
 
 %{
-#include "otgui/ImportanceSamplingAnalysis.hxx"
+#include "persalys/ImportanceSamplingAnalysis.hxx"
 %}
 
 %include ImportanceSamplingAnalysis_doc.i
 
-%include otgui/ImportanceSamplingAnalysis.hxx
-namespace OTGUI {
+%include persalys/ImportanceSamplingAnalysis.hxx
+namespace PERSALYS {
 
-%extend ImportanceSamplingAnalysis { ImportanceSamplingAnalysis(const ImportanceSamplingAnalysis & other) { return new OTGUI::ImportanceSamplingAnalysis(other); } 
+%extend ImportanceSamplingAnalysis { ImportanceSamplingAnalysis(const ImportanceSamplingAnalysis & other) { return new PERSALYS::ImportanceSamplingAnalysis(other); } 
 
 } }

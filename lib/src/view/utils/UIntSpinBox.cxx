@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/UIntSpinBox.hxx"
+#include "persalys/UIntSpinBox.hxx"
 
 #include <QLineEdit>
 
 #include <limits>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 UIntSpinBox::UIntSpinBox(QWidget* parent)

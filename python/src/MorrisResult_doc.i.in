@@ -1,15 +1,15 @@
-%feature("docstring") OTGUI::MorrisResult
+%feature("docstring") PERSALYS::MorrisResult
 "Get the result of a Morris analysis.
 
 Notes
 -----
 Structure created by the method run() of
-:class:`~otguibase.MorrisAnalysis`, and obtained thanks to the method
+:class:`~persalys.MorrisAnalysis`, and obtained thanks to the method
 getResult()."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MorrisResult::getInputsSelection
+%feature("docstring") PERSALYS::MorrisResult::getInputsSelection
 "Input selection accessor.
 
 Parameters
@@ -24,7 +24,7 @@ selection : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MorrisResult::setInputsSelection
+%feature("docstring") PERSALYS::MorrisResult::setInputsSelection
 "Input selection accessor.
 
 Parameters
@@ -36,7 +36,7 @@ selection : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MorrisResult::getNoEffectBoundary
+%feature("docstring") PERSALYS::MorrisResult::getNoEffectBoundary
 "No effect boundary accessor.
 
 Parameters
@@ -51,7 +51,7 @@ boundary : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MorrisResult::setNoEffectBoundary
+%feature("docstring") PERSALYS::MorrisResult::setNoEffectBoundary
 "No effect boundary accessor.
 
 Parameters

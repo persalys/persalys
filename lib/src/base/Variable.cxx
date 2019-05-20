@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Variable.hxx"
+#include "persalys/Variable.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(Variable)
@@ -126,7 +126,7 @@ String Variable::getPythonScript() const
   String pythonName(getName());
   std::replace(pythonName.begin(), pythonName.end(), '.', '_');
 
-  oss << pythonName << " = otguibase.Variable('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
+  oss << pythonName << " = persalys.Variable('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
 
   return oss;
 }

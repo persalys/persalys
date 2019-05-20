@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::FMUInfo
+%feature("docstring") PERSALYS::FMUInfo
 "Retrieve information from an FMU file."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getVariableNames
+%feature("docstring") PERSALYS::FMUInfo::getVariableNames
 "Variable names accessor.
 
 Returns
@@ -13,7 +13,7 @@ description : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getFileName
+%feature("docstring") PERSALYS::FMUInfo::getFileName
 "File name accessor.
 
 Returns
@@ -23,7 +23,7 @@ fn : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getVariability
+%feature("docstring") PERSALYS::FMUInfo::getVariability
 "Variability accessor.
 
 Returns
@@ -33,7 +33,7 @@ variability : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getCausality
+%feature("docstring") PERSALYS::FMUInfo::getCausality
 "Causality accessor.
 
 Returns
@@ -43,7 +43,7 @@ causality : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getAuthor
+%feature("docstring") PERSALYS::FMUInfo::getAuthor
 "Author accessor.
 
 Returns
@@ -53,7 +53,7 @@ author : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getCopyright
+%feature("docstring") PERSALYS::FMUInfo::getCopyright
 "Copyright accessor.
 
 Returns
@@ -64,7 +64,7 @@ copyright : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getDateTime
+%feature("docstring") PERSALYS::FMUInfo::getDateTime
 "Date/Time accessor.
 
 Returns
@@ -74,7 +74,7 @@ dateTime : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getFMIVersion
+%feature("docstring") PERSALYS::FMUInfo::getFMIVersion
 "FMI version accessor.
 
 Returns
@@ -84,7 +84,7 @@ fmiVersion : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getModelType
+%feature("docstring") PERSALYS::FMUInfo::getModelType
 "Model type accessor.
 
 Returns
@@ -94,7 +94,7 @@ model_type : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getVersion
+%feature("docstring") PERSALYS::FMUInfo::getVersion
 "Model version accessor.
 
 Returns
@@ -104,7 +104,7 @@ version : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getPlatform
+%feature("docstring") PERSALYS::FMUInfo::getPlatform
 "Platform accessor.
 
 Returns
@@ -114,7 +114,7 @@ platform : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getIdentifier
+%feature("docstring") PERSALYS::FMUInfo::getIdentifier
 "Model identifier accessor.
 
 Returns
@@ -124,7 +124,7 @@ identifier : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getGUID
+%feature("docstring") PERSALYS::FMUInfo::getGUID
 "GUID accessor.
 
 Returns
@@ -134,7 +134,7 @@ guid : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getTool
+%feature("docstring") PERSALYS::FMUInfo::getTool
 "Tool identifier accessor.
 
 Returns
@@ -144,7 +144,7 @@ tool : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getStartKeys
+%feature("docstring") PERSALYS::FMUInfo::getStartKeys
 "Variables with values: names accessor.
 
 Returns
@@ -154,7 +154,7 @@ startKeys : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMUInfo::getStartValues
+%feature("docstring") PERSALYS::FMUInfo::getStartValues
 "Variables with values: values accessor.
 
 Returns

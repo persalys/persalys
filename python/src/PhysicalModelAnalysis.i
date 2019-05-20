@@ -1,15 +1,15 @@
 // SWIG file
 
 %{
-#include "otgui/PhysicalModelAnalysis.hxx"
+#include "persalys/PhysicalModelAnalysis.hxx"
 %}
 
 %include PhysicalModelAnalysis_doc.i
 
-%include otgui/PhysicalModelAnalysis.hxx
-namespace OTGUI {
+%include persalys/PhysicalModelAnalysis.hxx
+namespace PERSALYS {
 
-%extend PhysicalModelAnalysis { PhysicalModelAnalysis(const PhysicalModelAnalysis & other) { return new OTGUI::PhysicalModelAnalysis(other); } 
+%extend PhysicalModelAnalysis { PhysicalModelAnalysis(const PhysicalModelAnalysis & other) { return new PERSALYS::PhysicalModelAnalysis(other); } 
 
 std::string __repr__() {
   return "PhysicalModelAnalysis";

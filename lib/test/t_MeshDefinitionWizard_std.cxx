@@ -1,13 +1,13 @@
-#include "otgui/MeshDefinitionWizard.hxx"
-#include "otgui/ImportedMeshModel.hxx"
-#include "otgui/GridMeshModel.hxx"
+#include "persalys/MeshDefinitionWizard.hxx"
+#include "persalys/ImportedMeshModel.hxx"
+#include "persalys/GridMeshModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 
 #include <QtTest/QtTest>
 #include <QAbstractButton>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestMeshDefinitionWizard : public QObject
 {
@@ -139,5 +139,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestMeshDefinitionWizard)
+QTEST_MAIN(PERSALYS::TestMeshDefinitionWizard)
 #include "t_MeshDefinitionWizard_std.moc"

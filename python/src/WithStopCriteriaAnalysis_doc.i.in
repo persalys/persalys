@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis
+%feature("docstring") PERSALYS::WithStopCriteriaAnalysis
 "Class to define stop criteria.
 
 The base class for analysis involving stop criteria."
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::getMaximumCalls
+%feature("docstring") PERSALYS::WithStopCriteriaAnalysis::getMaximumCalls
 "Maximum calls accessor.
 
 Returns
@@ -15,7 +15,7 @@ maxCalls : positive int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::setMaximumCalls
+%feature("docstring") PERSALYS::WithStopCriteriaAnalysis::setMaximumCalls
 "Maximum calls accessor.
 
 Parameters
@@ -25,7 +25,7 @@ maxCalls : positive int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::getMaximumCoefficientOfVariation
+%feature("docstring") PERSALYS::WithStopCriteriaAnalysis::getMaximumCoefficientOfVariation
 "Maximum coefficient of variation accessor.
 
 Returns
@@ -35,7 +35,7 @@ maxCoef : double
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::setMaximumCoefficientOfVariation
+%feature("docstring") PERSALYS::WithStopCriteriaAnalysis::setMaximumCoefficientOfVariation
 "Maximum coefficient of variation accessor.
 
 Parameters
@@ -45,7 +45,7 @@ maxCoef : double
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::getMaximumElapsedTime
+%feature("docstring") PERSALYS::WithStopCriteriaAnalysis::getMaximumElapsedTime
 "Maximum elapsed time accessor.
 
 Returns
@@ -55,7 +55,7 @@ maxTime : positive int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::WithStopCriteriaAnalysis::setMaximumElapsedTime
+%feature("docstring") PERSALYS::WithStopCriteriaAnalysis::setMaximumElapsedTime
 "Maximum elapsed time accessor.
 
 Parameters

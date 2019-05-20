@@ -2,26 +2,26 @@
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
-X0 = otguibase.Input('X0', ot.Normal(1, 1))
-X1 = otguibase.Input('X1', ot.Normal(1, 1))
-Y0 = otguibase.Output('Y0')
+X0 = persalys.Input('X0', ot.Normal(1, 1))
+X1 = persalys.Input('X1', ot.Normal(1, 1))
+Y0 = persalys.Output('Y0')
 
-model = otguibase.SymbolicPhysicalModel(
+model = persalys.SymbolicPhysicalModel(
     'aModelPhys', [X0, X1], [Y0], ['sin(X0) + 8*X1'])
 myStudy.add(model)
 
 # limit state ##
-limitState = otguibase.LimitState(
+limitState = persalys.LimitState(
     'aLimitState', model, 'Y0', ot.Greater(), 20.)
 myStudy.add(limitState)
 
 # SORM ##
-analysis = otguibase.SORMAnalysis('mySORM', limitState)
+analysis = persalys.SORMAnalysis('mySORM', limitState)
 myStudy.add(analysis)
 print(analysis)
 
@@ -30,11 +30,11 @@ analysis.run()
 print("result=", analysis.getResult().getSORMResult())
 
 # SORM ##
-X2 = otguibase.Input('X2', 2)
+X2 = persalys.Input('X2', 2)
 model.addInput(X2)
 model.setFormula('Y0', 'sin(X0) + 8*X1 + X2')
 
-analysis2 = otguibase.SORMAnalysis('mySORM2', limitState)
+analysis2 = persalys.SORMAnalysis('mySORM2', limitState)
 myStudy.add(analysis2)
 print(analysis2)
 
@@ -44,7 +44,7 @@ result2 = analysis2.getResult().getSORMResult()
 print("result=", result2)
 
 # SORM ##
-analysis3 = otguibase.SORMAnalysis('mySORM3', limitState)
+analysis3 = persalys.SORMAnalysis('mySORM3', limitState)
 analysis3.setPhysicalStartingPoint([1.08161, 2.38966])
 analysis3.setOptimizationAlgorithm(ot.AbdoRackwitz())
 myStudy.add(analysis3)

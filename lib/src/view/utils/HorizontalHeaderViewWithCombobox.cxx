@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/HorizontalHeaderViewWithCombobox.hxx"
+#include "persalys/HorizontalHeaderViewWithCombobox.hxx"
 
 #include <QLineEdit>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 HorizontalHeaderViewWithCombobox::HorizontalHeaderViewWithCombobox(QStringList comboBoxItems,

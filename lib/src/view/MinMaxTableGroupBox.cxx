@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MinMaxTableGroupBox.hxx"
+#include "persalys/MinMaxTableGroupBox.hxx"
 
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MinMaxTableGroupBox::MinMaxTableGroupBox(const DesignOfExperiment& doe, const bool onlyOutput, QWidget* parent)

@@ -1,7 +1,7 @@
 // SWIG file PhysicalModelImplementation.i
 
 %{
-#include "otgui/PhysicalModelImplementation.hxx"
+#include "persalys/PhysicalModelImplementation.hxx"
 %}
 %ignore *::acceptLaunchParameters;
 
@@ -10,9 +10,9 @@
 %ignore *::getHtmlDescription;
 %ignore *::getCopulaCollection;
 
-%include otgui/PhysicalModelImplementation.hxx
-namespace OTGUI {
+%include persalys/PhysicalModelImplementation.hxx
+namespace PERSALYS {
 
-%extend PhysicalModelImplementation { PhysicalModelImplementation(const PhysicalModelImplementation & other) { return new OTGUI::PhysicalModelImplementation(other); } 
+%extend PhysicalModelImplementation { PhysicalModelImplementation(const PhysicalModelImplementation & other) { return new PERSALYS::PhysicalModelImplementation(other); } 
 
 } }

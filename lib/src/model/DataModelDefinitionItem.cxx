@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataModelDefinitionItem.hxx"
+#include "persalys/DataModelDefinitionItem.hxx"
 
-#include "otgui/StudyItem.hxx"
-#include "otgui/InferenceAnalysis.hxx"
-#include "otgui/DataAnalysis.hxx"
-#include "otgui/CopulaInferenceAnalysis.hxx"
-#include "otgui/FunctionalChaosAnalysis.hxx"
+#include "persalys/StudyItem.hxx"
+#include "persalys/InferenceAnalysis.hxx"
+#include "persalys/DataAnalysis.hxx"
+#include "persalys/CopulaInferenceAnalysis.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
 
 #include <openturns/SpecFunc.hxx>
 
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment)

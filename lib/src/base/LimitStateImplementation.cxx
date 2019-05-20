@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/LimitStateImplementation.hxx"
+#include "persalys/LimitStateImplementation.hxx"
 
 #include <openturns/Equal.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(LimitStateImplementation)
@@ -148,7 +148,7 @@ bool LimitStateImplementation::isValid() const
 String LimitStateImplementation::getPythonScript() const
 {
   String result;
-  result += getName() + " = otguibase.LimitState('" + getName() + "', " + getPhysicalModel().getName();
+  result += getName() + " = persalys.LimitState('" + getName() + "', " + getPhysicalModel().getName();
   result += ", '" + outputName_ + "', ot." + operator_.getImplementation()->getClassName() + "(), ";
   OSS oss;
   oss.setPrecision(12);

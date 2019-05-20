@@ -1,14 +1,14 @@
 // SWIG file MonteCarloAnalysis.i
 
 %{
-#include "otgui/MonteCarloAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 %}
 
 %include MonteCarloAnalysis_doc.i
 
-%include otgui/MonteCarloAnalysis.hxx
-namespace OTGUI {
+%include persalys/MonteCarloAnalysis.hxx
+namespace PERSALYS {
 
-%extend MonteCarloAnalysis { MonteCarloAnalysis(const MonteCarloAnalysis & other) { return new OTGUI::MonteCarloAnalysis(other); } 
+%extend MonteCarloAnalysis { MonteCarloAnalysis(const MonteCarloAnalysis & other) { return new PERSALYS::MonteCarloAnalysis(other); } 
 
 } }

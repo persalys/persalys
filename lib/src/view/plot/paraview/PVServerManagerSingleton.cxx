@@ -1,6 +1,6 @@
-#include "otgui/PVServerManagerSingleton.hxx"
+#include "persalys/PVServerManagerSingleton.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 PVServerManagerInterface * PVServerManagerSingleton::singleton_ = 0;
 

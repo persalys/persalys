@@ -2,25 +2,25 @@
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
-X0 = otguibase.Input('X0', ot.Normal(1, 1))
-X1 = otguibase.Input('X1', ot.Normal(1, 1))
-Y00 = otguibase.Output('fake_Y0')
+X0 = persalys.Input('X0', ot.Normal(1, 1))
+X1 = persalys.Input('X1', ot.Normal(1, 1))
+Y00 = persalys.Output('fake_Y0')
 Y00.setIsSelected(False)
-Y0 = otguibase.Output('Y0')
+Y0 = persalys.Output('Y0')
 
 formula_Y00 = 'X0'
 formula_Y0 = 'sin(X0) + 8*X1'
-model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [
+model = persalys.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y00, Y0], [
                                         formula_Y00, formula_Y0])
 myStudy.add(model)
 
 # Monte Carlo ##
-analysis = otguibase.MonteCarloAnalysis('myMonteCarlo', model)
+analysis = persalys.MonteCarloAnalysis('myMonteCarlo', model)
 analysis.setLevelConfidenceInterval(0.93)
 analysis.setMaximumCalls(1000)
 analysis.setMaximumCoefficientOfVariation(-1)
@@ -38,7 +38,7 @@ print("CDF=", result.getCDF())
 print("outliers=", result.getOutliers())
 
 # Monte Carlo ##
-analysis2 = otguibase.MonteCarloAnalysis('myMonteCarlo2', model)
+analysis2 = persalys.MonteCarloAnalysis('myMonteCarlo2', model)
 analysis2.setIsConfidenceIntervalRequired(False)
 analysis2.setMaximumCoefficientOfVariation(0.02)
 analysis2.setMaximumElapsedTime(100000)
@@ -55,12 +55,12 @@ print("CDF=", result2.getCDF())
 print("outliers=", result2.getOutliers())
 
 # Monte Carlo ##
-X2 = otguibase.Input('X2', 2)
+X2 = persalys.Input('X2', 2)
 model.addInput(X2)
-model.addOutput(otguibase.Output('Y1'))
+model.addOutput(persalys.Output('Y1'))
 model.setFormula('Y1', 'sin(X0) + 8*X1 + X2')
 
-analysis3 = otguibase.MonteCarloAnalysis('myMonteCarlo3', model)
+analysis3 = persalys.MonteCarloAnalysis('myMonteCarlo3', model)
 analysis3.setMaximumCalls(1000)
 analysis3.setInterestVariables(['Y1'])
 myStudy.add(analysis3)

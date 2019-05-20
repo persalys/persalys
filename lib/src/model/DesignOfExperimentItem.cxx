@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentItem.hxx"
+#include "persalys/DesignOfExperimentItem.hxx"
 
-#include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/StudyItem.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/StudyItem.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType)

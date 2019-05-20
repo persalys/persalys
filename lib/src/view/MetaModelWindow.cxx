@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MetaModelWindow.hxx"
+#include "persalys/MetaModelWindow.hxx"
 
-#include "otgui/PhysicalModelWindowWidget.hxx"
+#include "persalys/PhysicalModelWindowWidget.hxx"
 
 #include <QVBoxLayout>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)

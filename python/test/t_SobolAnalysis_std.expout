@@ -15,25 +15,25 @@ result= class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_x0 = ot.Normal(0, 1)
-x0 = otguibase.Input('x0', 0, dist_x0, '')
+x0 = persalys.Input('x0', 0, dist_x0, '')
 dist_x1 = ot.Normal(0, 1)
-x1 = otguibase.Input('x1', 0, dist_x1, '')
-x2 = otguibase.Input('x2', 10, '')
-fake_y0 = otguibase.Output('fake_y0', '')
+x1 = persalys.Input('x1', 0, dist_x1, '')
+x2 = persalys.Input('x2', 10, '')
+fake_y0 = persalys.Output('fake_y0', '')
 fake_y0.setIsSelected(False)
-y0 = otguibase.Output('y0', '')
-y1 = otguibase.Output('y1', '')
+y0 = persalys.Output('y0', '')
+y1 = persalys.Output('y1', '')
 inputs = [x0, x1, x2]
 outputs = [fake_y0, y0, y1]
 formulas = ['x0', '10+3*x0+x1', '3*x0 + x1 + x2']
-aModel = otguibase.SymbolicPhysicalModel('aModel', inputs, outputs, formulas)
+aModel = persalys.SymbolicPhysicalModel('aModel', inputs, outputs, formulas)
 myStudy.add(aModel)
-aSobol = otguibase.SobolAnalysis('aSobol', aModel)
+aSobol = persalys.SobolAnalysis('aSobol', aModel)
 interestVariables = ['y0']
 aSobol.setInterestVariables(interestVariables)
 aSobol.setMaximumCalls(1000)
@@ -44,7 +44,7 @@ aSobol.setReplicationSize(250)
 aSobol.setSeed(2)
 aSobol.setConfidenceLevel(0.95)
 myStudy.add(aSobol)
-aSobol2 = otguibase.SobolAnalysis('aSobol2', aModel)
+aSobol2 = persalys.SobolAnalysis('aSobol2', aModel)
 interestVariables = ['y0']
 aSobol2.setInterestVariables(interestVariables)
 aSobol2.setMaximumConfidenceIntervalLength(0.2)
@@ -54,7 +54,7 @@ aSobol2.setReplicationSize(1000)
 aSobol2.setSeed(0)
 aSobol2.setConfidenceLevel(0.95)
 myStudy.add(aSobol2)
-aSobol3 = otguibase.SobolAnalysis('aSobol3', aModel)
+aSobol3 = persalys.SobolAnalysis('aSobol3', aModel)
 interestVariables = ['y1']
 aSobol3.setInterestVariables(interestVariables)
 aSobol3.setMaximumCalls(1000)

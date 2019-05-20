@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Item.hxx"
+#include "persalys/Item.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 Item::Item(const QString& name, const QString& type)

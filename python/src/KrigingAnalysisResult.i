@@ -1,7 +1,7 @@
 // SWIG file
 
 %{
-#include "otgui/KrigingAnalysisResult.hxx"
+#include "persalys/KrigingAnalysisResult.hxx"
 
 namespace OT {
 template <>
@@ -48,9 +48,9 @@ template <>
 
 %template(KrigingResultCollection) OT::Collection<OT::KrigingResult>;
 
-%include otgui/KrigingAnalysisResult.hxx
-namespace OTGUI {
+%include persalys/KrigingAnalysisResult.hxx
+namespace PERSALYS {
 
-%extend KrigingAnalysisResult { KrigingAnalysisResult(const KrigingAnalysisResult & other) { return new OTGUI::KrigingAnalysisResult(other); } 
+%extend KrigingAnalysisResult { KrigingAnalysisResult(const KrigingAnalysisResult & other) { return new PERSALYS::KrigingAnalysisResult(other); } 
 
 } }

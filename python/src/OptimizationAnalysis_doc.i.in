@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::OptimizationAnalysis
+%feature("docstring") PERSALYS::OptimizationAnalysis
 "Perform the optimization analysis of a model.
 
 Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 solverName : str
     Optimization algorithm name (optional). Use :func:`GetSolverNames()` to list available names.
@@ -13,18 +13,18 @@ solverName : str
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the Model evaluation:
 
->>> analysis = otguibase.OptimizationAnalysis('anAnalysis', myPhysicalModel, 'TNC')
+>>> analysis = persalys.OptimizationAnalysis('anAnalysis', myPhysicalModel, 'TNC')
 >>> analysis.setInterestVariables(['G'])
 >>> analysis.run()
 
@@ -36,7 +36,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumAbsoluteError
+%feature("docstring") PERSALYS::OptimizationAnalysis::getMaximumAbsoluteError
 "Accessor to maximum allowed absolute error.
 
 Returns
@@ -46,7 +46,7 @@ maximumAbsoluteError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumConstraintError
+%feature("docstring") PERSALYS::OptimizationAnalysis::getMaximumConstraintError
 "Accessor to maximum allowed constraint error.
 
 Returns
@@ -56,7 +56,7 @@ maximumConstraintError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumEvaluationNumber
+%feature("docstring") PERSALYS::OptimizationAnalysis::getMaximumEvaluationNumber
 "Accessor to maximum allowed number of evaluations.
 
 Returns
@@ -66,7 +66,7 @@ N : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumRelativeError
+%feature("docstring") PERSALYS::OptimizationAnalysis::getMaximumRelativeError
 "Accessor to maximum allowed relative error.
 
 Returns
@@ -76,7 +76,7 @@ maximumRelativeError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getMaximumResidualError
+%feature("docstring") PERSALYS::OptimizationAnalysis::getMaximumResidualError
 "Accessor to maximum allowed residual error.
 
 Returns
@@ -86,7 +86,7 @@ maximumResidualError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getStartingPoint
+%feature("docstring") PERSALYS::OptimizationAnalysis::getStartingPoint
 "Accessor to starting point.
 
 Returns
@@ -96,7 +96,7 @@ startingPoint : :class:`~openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumAbsoluteError
+%feature("docstring") PERSALYS::OptimizationAnalysis::setMaximumAbsoluteError
 "Accessor to maximum allowed absolute error.
 
 Parameters
@@ -106,7 +106,7 @@ maximumAbsoluteError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumConstraintError
+%feature("docstring") PERSALYS::OptimizationAnalysis::setMaximumConstraintError
 "Accessor to maximum allowed constraint error.
 
 Parameters
@@ -116,7 +116,7 @@ maximumConstraintError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumEvaluationNumber
+%feature("docstring") PERSALYS::OptimizationAnalysis::setMaximumEvaluationNumber
 "Accessor to maximum allowed number of evaluations.
 
 Parameters
@@ -126,7 +126,7 @@ N : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumRelativeError
+%feature("docstring") PERSALYS::OptimizationAnalysis::setMaximumRelativeError
 "Accessor to maximum allowed relative error.
 
 Parameters
@@ -136,7 +136,7 @@ maximumRelativeError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setMaximumResidualError
+%feature("docstring") PERSALYS::OptimizationAnalysis::setMaximumResidualError
 "Accessor to maximum allowed residual error.
 
 Parameters
@@ -146,7 +146,7 @@ maximumResidualError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setStartingPoint
+%feature("docstring") PERSALYS::OptimizationAnalysis::setStartingPoint
 "Accessor to starting point.
 
 Parameters
@@ -156,7 +156,7 @@ startingPoint : sequence of float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getResult
+%feature("docstring") PERSALYS::OptimizationAnalysis::getResult
 "Accessor to optimization result.
 
 Returns
@@ -166,7 +166,7 @@ result : :class:`~openturns.OptimizationResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getBounds
+%feature("docstring") PERSALYS::OptimizationAnalysis::getBounds
 "Accessor to bounds.
 
 Returns
@@ -176,7 +176,7 @@ bounds : :class:`~openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getMinimization
+%feature("docstring") PERSALYS::OptimizationAnalysis::getMinimization
 "Test whether this is a minimization or maximization problem.
 
 Returns
@@ -186,7 +186,7 @@ value : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setBounds
+%feature("docstring") PERSALYS::OptimizationAnalysis::setBounds
 "Accessor to bounds.
 
 Parameters
@@ -196,7 +196,7 @@ bounds : :class:`~openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setMinimization
+%feature("docstring") PERSALYS::OptimizationAnalysis::setMinimization
 "Tell whether this is a minimization or maximization problem.
 
 Parameters
@@ -206,7 +206,7 @@ minimization : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getSolverName
+%feature("docstring") PERSALYS::OptimizationAnalysis::getSolverName
 "Accessor to solver name
 
 Returns
@@ -216,7 +216,7 @@ solver : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setSolverName
+%feature("docstring") PERSALYS::OptimizationAnalysis::setSolverName
 "Accessor to solver name
 
 Parameters
@@ -226,7 +226,7 @@ solver : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getSolverName
+%feature("docstring") PERSALYS::OptimizationAnalysis::getSolverName
 "Accessor to solver name
 
 Returns
@@ -236,7 +236,7 @@ solver : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setSolverName
+%feature("docstring") PERSALYS::OptimizationAnalysis::setSolverName
 "Accessor to solver name
 
 Parameters
@@ -246,7 +246,7 @@ solver : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::GetSolverNames
+%feature("docstring") PERSALYS::OptimizationAnalysis::GetSolverNames
 "Accessor to the list of solver names.
 
 Returns
@@ -256,7 +256,7 @@ names : :class:`~openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::getVariableInputs
+%feature("docstring") PERSALYS::OptimizationAnalysis::getVariableInputs
 "Accessor to variable input names
 
 Returns
@@ -266,7 +266,7 @@ inputs : :class:`~openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::OptimizationAnalysis::setVariableInputs
+%feature("docstring") PERSALYS::OptimizationAnalysis::setVariableInputs
 "Accessor to variable input names
 
 Parameters

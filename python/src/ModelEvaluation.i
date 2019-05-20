@@ -1,16 +1,16 @@
 // SWIG file
 
 %{
-#include "otgui/ModelEvaluation.hxx"
+#include "persalys/ModelEvaluation.hxx"
 %}
 
 %include ModelEvaluation_doc.i
 
-%ignore OTGUI::ModelEvaluation::updateParameters;
+%ignore PERSALYS::ModelEvaluation::updateParameters;
 
-%include otgui/ModelEvaluation.hxx
-namespace OTGUI {
+%include persalys/ModelEvaluation.hxx
+namespace PERSALYS {
 
-%extend ModelEvaluation { ModelEvaluation(const ModelEvaluation & other) { return new OTGUI::ModelEvaluation(other); } 
+%extend ModelEvaluation { ModelEvaluation(const ModelEvaluation & other) { return new PERSALYS::ModelEvaluation(other); } 
 
 } }

@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/LimitStateWindow.hxx"
+#include "persalys/LimitStateWindow.hxx"
 
-#include "otgui/QtTools.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <openturns/Greater.hxx>
 #include <openturns/GreaterOrEqual.hxx>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)

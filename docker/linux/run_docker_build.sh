@@ -13,19 +13,19 @@ cmake -DUSE_COTIRE=ON \
 -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
 -DCMAKE_CXX_FLAGS="-Wall -Werror -D_GLIBCXX_ASSERTIONS" \
 -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
--DCMAKE_INSTALL_PREFIX=/tmp/otgui.AppDir/usr \
-../otgui
+-DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr \
+../persalys
 make install
 make tests
 xvfb-run ctest --output-on-failure --timeout 100 -j8
 
-cd /tmp/otgui.AppDir/usr/share/otgui/doc/; zip -r /tmp/otgui-doc.zip ./html/*; cd -
+cd /tmp/persalys.AppDir/usr/share/persalys/doc/; zip -r /tmp/persalys-doc.zip ./html/*; cd -
 
 cd /tmp
 
-rm -r otgui.AppDir/usr/include/otgui
+rm -r persalys.AppDir/usr/include/persalys
 
-cat > otgui.AppDir/AppRun <<\EOF
+cat > persalys.AppDir/AppRun <<\EOF
 #!/bin/sh
 HERE=$(dirname $(readlink -f "${0}"))
 export PATH=${HERE}/usr/bin/:${PATH}
@@ -40,72 +40,72 @@ export OPENTURNS_CONFIG_PATH=${HERE}/etc/openturns
 
 export OPENMODELICAHOME=${HERE}/usr
 
-${HERE}/usr/bin/otgui
+${HERE}/usr/bin/persalys
 EOF
-chmod a+x otgui.AppDir/AppRun
+chmod a+x persalys.AppDir/AppRun
 
-cat > otgui.AppDir/otgui.desktop <<\EOF
+cat > persalys.AppDir/persalys.desktop <<\EOF
 [Desktop Entry]
 Type=Application
-Name=otgui
+Name=persalys
 Comment=OpenTURNS gui
-Exec=otgui
-MimeType=application/x-otgui;
-Icon=otgui
+Exec=persalys
+MimeType=application/x-persalys;
+Icon=persalys
 Terminal=false
 EOF
-cp -v /tmp/otgui/images/OT_icon32x32.png otgui.AppDir/otgui.png
+cp -v /tmp/persalys/images/OT_icon32x32.png persalys.AppDir/persalys.png
 
 # system libs
 for libname in lapack blas xml2 png12 gfortran ffi
 do
-  cp -v /usr/lib64/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
+  cp -v /usr/lib64/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
-cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 otgui.AppDir/usr/lib
-cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so otgui.AppDir/usr/lib
+cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 persalys.AppDir/usr/lib
+cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so persalys.AppDir/usr/lib
 
 # python
-cp -v /usr/local/bin/python3* otgui.AppDir/usr/bin
-cp -r /usr/local/lib/python3* otgui.AppDir/usr/lib
-cp -v /usr/local/lib/libpython*.so.* otgui.AppDir/usr/lib
+cp -v /usr/local/bin/python3* persalys.AppDir/usr/bin
+cp -r /usr/local/lib/python3* persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libpython*.so.* persalys.AppDir/usr/lib
 
 # ot libs
 for libname in otmorris OT muparser nlopt
 do
-  cp -v /usr/local/lib/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
+  cp -v /usr/local/lib/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
-cp -v /usr/local/lib/libtbb.so otgui.AppDir/usr/lib
-cp -v /usr/local/lib/libboost* otgui.AppDir/usr/lib
-cp -rv /usr/local/etc/ otgui.AppDir/etc
+cp -v /usr/local/lib/libtbb.so persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libboost* persalys.AppDir/usr/lib
+cp -rv /usr/local/etc/ persalys.AppDir/etc
 
 # qt libs
 for libname in Qt5XcbQpa Qt5DBus Qt5Widgets Qt5Gui Qt5Test Qt5Core qwt Qt5PrintSupport Qt5OpenGL Qt5Svg Qt5Concurrent Qt5Help Qt5Network Qt5X11Extras Qt5Sql
 do
-  cp -v /usr/local/lib/lib${libname}.so.[0-9] otgui.AppDir/usr/lib
+  cp -v /usr/local/lib/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
-cp -rv /usr/local/lib/qt/plugins otgui.AppDir/usr/lib
+cp -rv /usr/local/lib/qt/plugins persalys.AppDir/usr/lib
 
 # paraview libs
-cp -v /usr/local/lib/paraview/libvtk* otgui.AppDir/usr/lib
-cp /usr/local/lib/paraview/libQtTesting.so otgui.AppDir/usr/lib
-cp /usr/local/lib/paraview/libprotobuf*.so otgui.AppDir/usr/lib
+cp -v /usr/local/lib/paraview/libvtk* persalys.AppDir/usr/lib
+cp /usr/local/lib/paraview/libQtTesting.so persalys.AppDir/usr/lib
+cp /usr/local/lib/paraview/libprotobuf*.so persalys.AppDir/usr/lib
 
 # modelica
-cp -rv /usr/local/lib/x86_64-linux-gnu otgui.AppDir/usr/lib
-cp -rv /usr/local/lib/omc otgui.AppDir/usr/lib
-cp -rv /usr/local/include/omc otgui.AppDir/usr/include
-cp -rv /usr/local/share/omc otgui.AppDir/usr/share
-cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 otgui.AppDir/usr/lib
-cp -v /usr/local/bin/omc otgui.AppDir/usr/bin
-cp -v /usr/local/lib/libsundials* otgui.AppDir/usr/lib
+cp -rv /usr/local/lib/x86_64-linux-gnu persalys.AppDir/usr/lib
+cp -rv /usr/local/lib/omc persalys.AppDir/usr/lib
+cp -rv /usr/local/include/omc persalys.AppDir/usr/include
+cp -rv /usr/local/share/omc persalys.AppDir/usr/share
+cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 persalys.AppDir/usr/lib
+cp -v /usr/local/bin/omc persalys.AppDir/usr/bin
+cp -v /usr/local/lib/libsundials* persalys.AppDir/usr/lib
 
-LD_LIBRARY_PATH=$PWD/otgui.AppDir/usr/lib ldd otgui.AppDir/usr/bin/otgui
+LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys
 
-appimagetool -v otgui.AppDir
+appimagetool -v persalys.AppDir
 
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"
 then
-  sudo cp otgui*.AppImage otgui-doc.zip /tmp/otgui
-  sudo chown ${uid}:${gid} /tmp/otgui/otgui*.AppImage /tmp/otgui/otgui-doc.zip
+  sudo cp persalys*.AppImage persalys-doc.zip /tmp/persalys
+  sudo chown ${uid}:${gid} /tmp/persalys/persalys*.AppImage /tmp/persalys/persalys-doc.zip
 fi

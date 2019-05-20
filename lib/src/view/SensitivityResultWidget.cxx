@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SensitivityResultWidget.hxx"
+#include "persalys/SensitivityResultWidget.hxx"
 
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
 
 #include <openturns/Exception.hxx>
 
@@ -34,7 +34,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,

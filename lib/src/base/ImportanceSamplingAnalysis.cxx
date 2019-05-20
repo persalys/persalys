@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ImportanceSamplingAnalysis.hxx"
+#include "persalys/ImportanceSamplingAnalysis.hxx"
 
 #include <openturns/ProbabilitySimulationAlgorithm.hxx>
 #include <openturns/Normal.hxx>
@@ -28,7 +28,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(ImportanceSamplingAnalysis)

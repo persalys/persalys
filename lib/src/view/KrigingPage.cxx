@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MetaModelAnalysisWizard.hxx"
+#include "persalys/MetaModelAnalysisWizard.hxx"
 
-#include "otgui/ParametersDefinitionWizard.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/KrigingAnalysis.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/ParametersDefinitionWizard.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
+#include "persalys/KrigingAnalysis.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <openturns/OTBase.hxx>
 
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 KrigingPage::KrigingPage(QWidget* parent)

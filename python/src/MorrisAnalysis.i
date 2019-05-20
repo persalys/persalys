@@ -1,16 +1,16 @@
 // SWIG file
 
 %{
-#include "otgui/MorrisAnalysis.hxx"
+#include "persalys/MorrisAnalysis.hxx"
 %}
 
 %include MorrisAnalysis_doc.i
 
-%ignore OTGUI::MorrisAnalysis::updateParameters;
+%ignore PERSALYS::MorrisAnalysis::updateParameters;
 
-%include otgui/MorrisAnalysis.hxx
-namespace OTGUI {
+%include persalys/MorrisAnalysis.hxx
+namespace PERSALYS {
 
-%extend MorrisAnalysis { MorrisAnalysis(const MorrisAnalysis & other) { return new OTGUI::MorrisAnalysis(other); } 
+%extend MorrisAnalysis { MorrisAnalysis(const MorrisAnalysis & other) { return new PERSALYS::MorrisAnalysis(other); } 
 
 } }

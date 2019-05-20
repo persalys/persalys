@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SobolAnalysis.hxx"
+#include "persalys/SobolAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/SobolSimulationAlgorithm.hxx>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(SobolAnalysis)
@@ -339,7 +339,7 @@ Parameters SobolAnalysis::getParameters() const
 String SobolAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  oss << getName() << " = persalys.SobolAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

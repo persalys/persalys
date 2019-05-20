@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataAnalysisResultWindow.hxx"
+#include "persalys/DataAnalysisResultWindow.hxx"
 
-#include "otgui/DataAnalysis.hxx"
+#include "persalys/DataAnalysis.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent)

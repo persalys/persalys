@@ -1,22 +1,22 @@
-%feature("docstring") OTGUI::PhysicalModelAnalysis
+%feature("docstring") PERSALYS::PhysicalModelAnalysis
 "Analysis using a physical model"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::PhysicalModelAnalysis::getPhysicalModel
+%feature("docstring") PERSALYS::PhysicalModelAnalysis::getPhysicalModel
 "Physical model accessor.
 
 Returns
 -------
-model : :class:`~otguibase.PhysicalModel`
+model : :class:`~persalys.PhysicalModel`
     Physical model"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::PhysicalModelAnalysis::setPhysicalModel
+%feature("docstring") PERSALYS::PhysicalModelAnalysis::setPhysicalModel
 "Physical model accessor.
 
 Parameters
 ----------
-model : :class:`~otguibase.PhysicalModel`
+model : :class:`~persalys.PhysicalModel`
     Physical model"

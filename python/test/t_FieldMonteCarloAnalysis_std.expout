@@ -68,29 +68,29 @@ eigen values= [110985,2982.14,1467.11,162.664,108.997,26.8557,11.3351,4.82782]
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-Study_0 = otguibase.Study('Study_0')
-otguibase.Study.Add(Study_0)
-t = otguibase.Variable('t', 0, '')
-meshModel = otguibase.GridMeshModel([t], ot.Interval([0], [12]), [20])
+Study_0 = persalys.Study('Study_0')
+persalys.Study.Add(Study_0)
+t = persalys.Variable('t', 0, '')
+meshModel = persalys.GridMeshModel([t], ot.Interval([0], [12]), [20])
 dist_z0 = ot.Uniform(100, 150)
-z0 = otguibase.Input('z0', 100, dist_z0, '')
+z0 = persalys.Input('z0', 100, dist_z0, '')
 dist_v0 = ot.Normal(55, 10)
-v0 = otguibase.Input('v0', 55, dist_v0, '')
+v0 = persalys.Input('v0', 55, dist_v0, '')
 dist_m = ot.Normal(80, 8)
-m = otguibase.Input('m', 80, dist_m, '')
+m = persalys.Input('m', 80, dist_m, '')
 dist_c = ot.Uniform(0, 30)
-c = otguibase.Input('c', 16, dist_c, '')
-z = otguibase.Output('z', '')
-z2 = otguibase.Output('z2', 'fake output')
+c = persalys.Input('c', 16, dist_c, '')
+z = persalys.Output('z', '')
+z2 = persalys.Output('z2', 'fake output')
 inputs = [z0, v0, m, c]
 outputs = [z, z2]
 code = 'from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z2 = [2*max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n\n    return z, z2'
-PhysicalModel_1 = otguibase.PythonFieldModel('PhysicalModel_1',meshModel, inputs, outputs, code)
+PhysicalModel_1 = persalys.PythonFieldModel('PhysicalModel_1',meshModel, inputs, outputs, code)
 PhysicalModel_1.setParallel(True)
 Study_0.add(PhysicalModel_1)
-mcAnalysis1 = otguibase.FieldMonteCarloAnalysis('mcAnalysis1', PhysicalModel_1)
+mcAnalysis1 = persalys.FieldMonteCarloAnalysis('mcAnalysis1', PhysicalModel_1)
 mcAnalysis1.setMaximumCalls(30)
 mcAnalysis1.setMaximumElapsedTime(60)
 mcAnalysis1.setBlockSize(1)
@@ -98,7 +98,7 @@ mcAnalysis1.setSeed(0)
 mcAnalysis1.setKarhunenLoeveThreshold(1e-05)
 mcAnalysis1.setQuantileLevel(0.05)
 Study_0.add(mcAnalysis1)
-mcAnalysis2 = otguibase.FieldMonteCarloAnalysis('mcAnalysis2', PhysicalModel_1)
+mcAnalysis2 = persalys.FieldMonteCarloAnalysis('mcAnalysis2', PhysicalModel_1)
 interestVariables = ['z2']
 mcAnalysis2.setInterestVariables(interestVariables)
 mcAnalysis2.setMaximumCalls(100)

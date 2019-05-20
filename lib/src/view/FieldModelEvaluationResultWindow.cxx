@@ -18,32 +18,32 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FieldModelEvaluationResultWindow.hxx"
+#include "persalys/FieldModelEvaluationResultWindow.hxx"
 
-#include "otgui/FieldModelEvaluation.hxx"
-#include "otgui/FieldMonteCarloAnalysis.hxx"
+#include "persalys/FieldModelEvaluation.hxx"
+#include "persalys/FieldMonteCarloAnalysis.hxx"
 
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/SampleTableModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/PlotWidget.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/PlotMatrixConfigurationWidget.hxx"
+#include "persalys/ExportableTableView.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/PlotWidget.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/PlotMatrixConfigurationWidget.hxx"
 
-#ifdef OTGUI_HAVE_PARAVIEW
-#include "otgui/PVServerManagerInterface.hxx"
-#include "otgui/PVServerManagerSingleton.hxx"
-#include "otgui/PVSpreadSheetViewWidget.hxx"
-#include "otgui/PVBagChartViewWidget.hxx"
-#include "otgui/PVXYChartViewWidget.hxx"
-#include "otgui/PVXYChartSettingWidget.hxx"
-#include "otgui/PVMatrixPlotViewWidget.hxx"
-#include "otgui/PVPlotSettingWidget.hxx"
+#ifdef PERSALYS_HAVE_PARAVIEW
+#include "persalys/PVServerManagerInterface.hxx"
+#include "persalys/PVServerManagerSingleton.hxx"
+#include "persalys/PVSpreadSheetViewWidget.hxx"
+#include "persalys/PVBagChartViewWidget.hxx"
+#include "persalys/PVXYChartViewWidget.hxx"
+#include "persalys/PVXYChartSettingWidget.hxx"
+#include "persalys/PVMatrixPlotViewWidget.hxx"
+#include "persalys/PVPlotSettingWidget.hxx"
 
 #include <pqLinksModel.h>
 #include <pqApplicationCore.h>
@@ -63,7 +63,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 FieldModelEvaluationResultWindow::FieldModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent)
@@ -159,7 +159,7 @@ void FieldCentralTendencyResultWindow::buildInterface()
 void FieldCentralTendencyResultWindow::addDecompositionTab()
 {
   bool canUseParaview = false;
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::HaveOpenGL32())
     canUseParaview = true;
 #endif
@@ -256,7 +256,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
     QVBoxLayout * modesWidgetLayout = new QVBoxLayout(modesWidget);
     modesStackedWidget->addWidget(modesWidget);
 
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
     if (canUseParaview)
     {
       PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
@@ -307,7 +307,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
     }
 
     // 3- Cumulative eigen value sum graph
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
     if (canUseParaview && nbModes > 1)
     {
       WidgetBoundToDockWidget * cumulWidget = new WidgetBoundToDockWidget(this);
@@ -391,7 +391,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
       QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
       xiMatrixStackedWidget->addWidget(matrixTabWidget);
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
       if (canUseParaview)
       {
         PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
@@ -523,7 +523,7 @@ void FieldModelEvaluationResultWidget::buildInterface()
 
   tabWidget_ = new QTabWidget;
   bool canUseParaview = false;
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::HaveOpenGL32())
   {
     addParaviewWidgetsTabs();
@@ -669,7 +669,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
 }
 
 
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
 void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
 {
   // get model info

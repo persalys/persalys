@@ -1,13 +1,13 @@
-%feature("docstring") OTGUI::FMIPhysicalModel
+%feature("docstring") PERSALYS::FMIPhysicalModel
 "Physical model defined by a FMI scheme.
 
 Parameters
 ----------
 name : str
     Model name
-inputs : sequence of :class:`~otguibase.Input`
+inputs : sequence of :class:`~persalys.Input`
     Input variables (optional)
-outputs : sequence of :class:`~otguibase.Output`
+outputs : sequence of :class:`~persalys.Output`
     Output variables (optional)
 fmuFile : str
     FMU file name
@@ -21,7 +21,7 @@ causality are set as model input variables, and only variables marked with
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMIPhysicalModel::getFMUFileName
+%feature("docstring") PERSALYS::FMIPhysicalModel::getFMUFileName
 "FMU file name accessor.
 
 Returns
@@ -31,7 +31,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMIPhysicalModel::setFMUFileName
+%feature("docstring") PERSALYS::FMIPhysicalModel::setFMUFileName
 "FMU file name accessor.
 
 Parameters
@@ -41,10 +41,10 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FMIPhysicalModel::getFMUInfo
+%feature("docstring") PERSALYS::FMIPhysicalModel::getFMUInfo
 "FMU infos accessor.
 
 Returns
 -------
-fmuInfo : :class:`~otguibase.FMUInfo`
+fmuInfo : :class:`~persalys.FMUInfo`
     FMU infos"

@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DistributionsTableModel.hxx"
+#include "persalys/DistributionsTableModel.hxx"
 
-#include "otgui/TranslationManager.hxx"
+#include "persalys/TranslationManager.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DistributionsTableModel::DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, QWidget *parent)

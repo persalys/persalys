@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::YACSPhysicalModel
+%feature("docstring") PERSALYS::YACSPhysicalModel
 "Physical model using YACS."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::YACSPhysicalModel::getContent
+%feature("docstring") PERSALYS::YACSPhysicalModel::getContent
 "Script content of the model.
 
 Returns
@@ -13,7 +13,7 @@ result : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::YACSPhysicalModel::setContent
+%feature("docstring") PERSALYS::YACSPhysicalModel::setContent
 "Modify the script content of the model.
 
 Parameters
@@ -23,7 +23,7 @@ script : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::YACSPhysicalModel::jobParameters
+%feature("docstring") PERSALYS::YACSPhysicalModel::jobParameters
 "Launching parameters accessor.
 
 Returns

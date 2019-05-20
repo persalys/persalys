@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/LimitStateItem.hxx"
+#include "persalys/LimitStateItem.hxx"
 
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/StudyItem.hxx"
+#include "persalys/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/StudyItem.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)

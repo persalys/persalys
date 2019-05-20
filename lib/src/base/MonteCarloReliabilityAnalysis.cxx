@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/MonteCarloReliabilityAnalysis.hxx"
 
 #include <openturns/ProbabilitySimulationAlgorithm.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -26,7 +26,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(MonteCarloReliabilityAnalysis)

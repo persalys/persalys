@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MorrisResultTableModel.hxx"
+#include "persalys/MorrisResultTableModel.hxx"
 
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MorrisResultTableModel::MorrisResultTableModel(MorrisResult & result, UnsignedInteger outputIndex, const Mode mode, QObject * parent)

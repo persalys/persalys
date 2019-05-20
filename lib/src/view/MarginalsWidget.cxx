@@ -18,23 +18,23 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MarginalsWidget.hxx"
+#include "persalys/MarginalsWidget.hxx"
 
-#include "otgui/ComboBoxDelegate.hxx"
-#include "otgui/DistributionDictionary.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/CheckableHeaderView.hxx"
-#include "otgui/InferenceResultWizard.hxx"
-#include "otgui/StudyItem.hxx"
-#include "otgui/DocumentationToolButton.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/ComboBoxDelegate.hxx"
+#include "persalys/DistributionDictionary.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/CheckableHeaderView.hxx"
+#include "persalys/InferenceResultWizard.hxx"
+#include "persalys/StudyItem.hxx"
+#include "persalys/DocumentationToolButton.hxx"
+#include "persalys/FileTools.hxx"
 
-#ifdef OTGUI_HAVE_OTMORRIS
-#include "otgui/ScreeningResultWizard.hxx"
+#ifdef PERSALYS_HAVE_OTMORRIS
+#include "persalys/ScreeningResultWizard.hxx"
 #endif
 
 #include <openturns/Normal.hxx>
@@ -49,7 +49,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MarginalsWidget::MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent)
@@ -107,7 +107,7 @@ void MarginalsWidget::buildInterface()
 
   leftSideLayout->addWidget(inputTableView_);
 
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
   if (!physicalModel_.hasMesh())
   {
     // import Morris result button
@@ -767,7 +767,7 @@ void MarginalsWidget::openWizardToChooseInferenceResult(const QModelIndex& input
 }
 
 
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
 void MarginalsWidget::openWizardToChooseScreeningResult()
 {
   bool studyHasScreeningResults = false;

@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/KrigingAnalysis.hxx"
+#include "persalys/KrigingAnalysis.hxx"
 
-#include "otgui/DesignOfExperimentEvaluation.hxx"
-#include "otgui/BaseTools.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/OTBase.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(KrigingAnalysis)
@@ -476,7 +476,7 @@ String KrigingAnalysis::getPythonScript() const
 {
   OSS oss;
 
-  oss << getName() << " = otguibase.KrigingAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+  oss << getName() << " = persalys.KrigingAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
 
   // interest outputs
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())

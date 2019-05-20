@@ -1,10 +1,10 @@
-%feature("docstring") OTGUI::FieldMonteCarloResult
+%feature("docstring") PERSALYS::FieldMonteCarloResult
 "Get the results of a Monte Carlo analysis with mesh."
 
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloResult::getCorrelationFunction
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getCorrelationFunction
 "Correlation function accessor.
 
 Returns
@@ -14,7 +14,7 @@ functions : sequence of :py:class:`openturns.Function`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloResult::getKarhunenLoeveResult
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getKarhunenLoeveResult
 "Karhunen Loeve result accessor.
 
 Parameters
@@ -29,7 +29,7 @@ result : :py:class:`openturns.KarhunenLoeveResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloResult::getMeanSample
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getMeanSample
 "Mean trajectory accessor.
 
 Returns
@@ -39,7 +39,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloResult::getProcessSample
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getProcessSample
 "Output values accessor.
 
 Returns
@@ -49,29 +49,29 @@ sample : :py:class:`openturns.ProcessSample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloResult::getLowerQuantileSample
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getLowerQuantileSample
 "Lower quantile accessor.
 
 Returns
 -------
 sample : :py:class:`openturns.Sample`
     Lower quantile trajectory for each output at *level* defined in
-    :meth:`otguibase.FieldMonteCarloAnalysis.getQuantileLevel`"
+    :meth:`persalys.FieldMonteCarloAnalysis.getQuantileLevel`"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloResult::getUpperQuantileSample
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getUpperQuantileSample
 "Upper quantile accessor.
 
 Returns
 -------
 sample : :py:class:`openturns.Sample`
     Upper quantile trajectory for each output at *1-level* defined in
-    :meth:`otguibase.FieldMonteCarloAnalysis.getQuantileLevel`"
+    :meth:`persalys.FieldMonteCarloAnalysis.getQuantileLevel`"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloResult::getXiSamples
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getXiSamples
 ":math:`X_i` distribution values accessor.
 
 Returns

@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/InferenceResultWizard.hxx"
+#include "persalys/InferenceResultWizard.hxx"
 
-#include "otgui/InferenceAnalysis.hxx"
+#include "persalys/InferenceAnalysis.hxx"
 
 #include <QGridLayout>
 #include <QScrollArea>
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 InferenceResultWizard::InferenceResultWizard(const Study& study, QWidget* parent)

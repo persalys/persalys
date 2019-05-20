@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AnalysisWizard.hxx"
+#include "persalys/AnalysisWizard.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 AnalysisWizard::AnalysisWizard(const Analysis & analysis, QWidget * parent)

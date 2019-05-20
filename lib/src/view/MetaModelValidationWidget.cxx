@@ -18,18 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MetaModelValidationWidget.hxx"
+#include "persalys/MetaModelValidationWidget.hxx"
 
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/TranslationManager.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QVBoxLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationResult& result,

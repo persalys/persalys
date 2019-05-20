@@ -3,29 +3,29 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 
 ot.RandomGenerator.SetSeed(0)
 ot.TBB_Disable()
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
-xi1 = otguibase.Input('xi1', ot.Uniform(0., 10.))
-xi2 = otguibase.Input('xi2', ot.Uniform(0., 10.))
-xi3 = otguibase.Input('xi3', 0.5)
-y00 = otguibase.Output('fake_y0')
+xi1 = persalys.Input('xi1', ot.Uniform(0., 10.))
+xi2 = persalys.Input('xi2', ot.Uniform(0., 10.))
+xi3 = persalys.Input('xi3', 0.5)
+y00 = persalys.Output('fake_y0')
 y00.setIsSelected(False)
-y0 = otguibase.Output('y0')
+y0 = persalys.Output('y0')
 
 formula_y00 = "xi1"
 formula_y0 = "cos(0.5*xi1) + sin(xi2)"
-model = otguibase.SymbolicPhysicalModel('model', [xi1, xi2, xi3], [y00, y0], [
+model = persalys.SymbolicPhysicalModel('model', [xi1, xi2, xi3], [y00, y0], [
                                         formula_y00, formula_y0])
 myStudy.add(model)
 
 # Design of Experiment ##
-aDesign = otguibase.FixedDesignOfExperiment('design', model)
+aDesign = persalys.FixedDesignOfExperiment('design', model)
 validationInputSample = ot.LHSExperiment(
     model.getDistribution(), 10).generate()
 inputSample = ot.Sample(validationInputSample)
@@ -36,7 +36,7 @@ myStudy.add(aDesign)
 aDesign.run()
 
 # Kriging ##
-analysis = otguibase.KrigingAnalysis('kriging_0', aDesign)
+analysis = persalys.KrigingAnalysis('kriging_0', aDesign)
 analysis.setBasis(ot.LinearBasisFactory(2).build())
 analysis.setCovarianceModel(ot.MaternModel(2))
 myStudy.add(analysis)
@@ -48,13 +48,13 @@ openturns.testing.assert_almost_equal(
     aDesign.getResult().getDesignOfExperiment().getOutputSample(), metaModel(validationInputSample), 3.0e-5, 3.0e-5)
 
 # Design of Experiment ##
-model.addOutput(otguibase.Output('y1'))
+model.addOutput(persalys.Output('y1'))
 model.setFormula('y1', formula_y0 + ' + xi3')
 aDesign.setInterestVariables(['y0', 'y1'])
 aDesign.run()
 
 # Kriging ##
-analysis2 = otguibase.KrigingAnalysis('kriging_1', aDesign)
+analysis2 = persalys.KrigingAnalysis('kriging_1', aDesign)
 analysis2.setAnalyticalValidation(True)
 analysis2.setInterestVariables(['y1', 'y0'])
 myStudy.add(analysis2)
@@ -70,7 +70,7 @@ openturns.testing.assert_almost_equal(
     result2.getAnalyticalValidation().getQ2(), [0.685791,0.685791], 1e-6, 1e-6)
 
 # Kriging ##
-analysis3 = otguibase.KrigingAnalysis('kriging_2', aDesign)
+analysis3 = persalys.KrigingAnalysis('kriging_2', aDesign)
 analysis3.setOptimizeParameters(False)
 analysis3.setInterestVariables(['y0'])
 myStudy.add(analysis3)

@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/SimulationReliabilityResult.hxx"
+#include "persalys/SimulationReliabilityResult.hxx"
 %}
 
 %include SimulationReliabilityResult_doc.i
 
-%include otgui/SimulationReliabilityResult.hxx
-namespace OTGUI {
+%include persalys/SimulationReliabilityResult.hxx
+namespace PERSALYS {
 
-%extend SimulationReliabilityResult { SimulationReliabilityResult(const SimulationReliabilityResult & other) { return new OTGUI::SimulationReliabilityResult(other); } 
+%extend SimulationReliabilityResult { SimulationReliabilityResult(const SimulationReliabilityResult & other) { return new PERSALYS::SimulationReliabilityResult(other); } 
 
 } }

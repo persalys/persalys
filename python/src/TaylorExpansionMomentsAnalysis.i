@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
+#include "persalys/TaylorExpansionMomentsAnalysis.hxx"
 %}
 
 %include TaylorExpansionMomentsAnalysis_doc.i
 
-%include otgui/TaylorExpansionMomentsAnalysis.hxx
-namespace OTGUI {
+%include persalys/TaylorExpansionMomentsAnalysis.hxx
+namespace PERSALYS {
 
-%extend TaylorExpansionMomentsAnalysis { TaylorExpansionMomentsAnalysis(const TaylorExpansionMomentsAnalysis & other) { return new OTGUI::TaylorExpansionMomentsAnalysis(other); } 
+%extend TaylorExpansionMomentsAnalysis { TaylorExpansionMomentsAnalysis(const TaylorExpansionMomentsAnalysis & other) { return new PERSALYS::TaylorExpansionMomentsAnalysis(other); } 
 
 } }

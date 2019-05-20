@@ -1,44 +1,44 @@
 // SWIG file Analysis.i
 
 %{
-#include "otgui/Analysis.hxx"
+#include "persalys/Analysis.hxx"
 
 namespace OT {
 template <>
-struct traitsPythonType< OTGUI::Analysis >
+struct traitsPythonType< PERSALYS::Analysis >
 {
   typedef _PyObject_ Type;
 };
 
 template <>
   inline
-  OTGUI::Analysis
-  convert< _PyObject_, OTGUI::Analysis >(PyObject * pyObj)
+  PERSALYS::Analysis
+  convert< _PyObject_, PERSALYS::Analysis >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::Analysis *"), 0))) {
-      OTGUI::Analysis * p_it = reinterpret_cast< OTGUI::Analysis * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Analysis *"), 0))) {
+      PERSALYS::Analysis * p_it = reinterpret_cast< PERSALYS::Analysis * >( ptr );
       return *p_it;
     }
     else {
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Analysis";
     }
-    return OTGUI::Analysis();
+    return PERSALYS::Analysis();
   }
 }
 %}
 
-%ignore OTGUI::Analysis::getParameters;
+%ignore PERSALYS::Analysis::getParameters;
 
 %include Analysis_doc.i
 
-OTGUITypedInterfaceObjectHelper(Analysis)
-OTGUITypedCollectionInterfaceObjectHelper(Analysis)
+PERSALYSTypedInterfaceObjectHelper(Analysis)
+PERSALYSTypedCollectionInterfaceObjectHelper(Analysis)
 
-%include otgui/Analysis.hxx
-namespace OTGUI {
+%include persalys/Analysis.hxx
+namespace PERSALYS {
 
-%extend Analysis { Analysis(const Analysis & other) { return new OTGUI::Analysis(other); } 
+%extend Analysis { Analysis(const Analysis & other) { return new PERSALYS::Analysis(other); } 
 
 std::string __repr__() {
   return "Analysis";

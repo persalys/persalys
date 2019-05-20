@@ -1,10 +1,10 @@
-%feature("docstring") OTGUI::FORMAnalysisResult
+%feature("docstring") PERSALYS::FORMAnalysisResult
 "Class containing results of the FORM analysis."
 
 // ---------------------------------------------------------------------
 
 
-%feature("docstring") OTGUI::FORMAnalysisResult::getFORMResult
+%feature("docstring") PERSALYS::FORMAnalysisResult::getFORMResult
 "FORM result accessor.
 
 Returns

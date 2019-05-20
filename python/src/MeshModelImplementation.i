@@ -1,16 +1,16 @@
 // SWIG file MeshModelImplementation.i
 
 %{
-#include "otgui/MeshModelImplementation.hxx"
+#include "persalys/MeshModelImplementation.hxx"
 %}
 
 %ignore *::getHtmlDescription;
 
 %include MeshModelImplementation_doc.i
 
-%include otgui/MeshModelImplementation.hxx
-namespace OTGUI {
+%include persalys/MeshModelImplementation.hxx
+namespace PERSALYS {
 
-%extend MeshModelImplementation { MeshModelImplementation(const MeshModelImplementation & other) { return new OTGUI::MeshModelImplementation(other); } 
+%extend MeshModelImplementation { MeshModelImplementation(const MeshModelImplementation & other) { return new PERSALYS::MeshModelImplementation(other); } 
 
 } }

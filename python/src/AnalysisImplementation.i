@@ -1,21 +1,21 @@
 // SWIG file AnalysisImplementation.i
 
 %{
-#include "otgui/AnalysisImplementation.hxx"
+#include "persalys/AnalysisImplementation.hxx"
 %}
 
 %ignore *::getInformationMessage;
 %ignore *::getProgressValue;
 %ignore *::stop;
 %ignore *::acceptLaunchParameters;
-%ignore OTGUI::AnalysisImplementation::getParameters;
+%ignore PERSALYS::AnalysisImplementation::getParameters;
 
 %include AnalysisImplementation_doc.i
 
-%include otgui/AnalysisImplementation.hxx
-namespace OTGUI {
+%include persalys/AnalysisImplementation.hxx
+namespace PERSALYS {
 
-%extend AnalysisImplementation { AnalysisImplementation(const AnalysisImplementation & other) { return new OTGUI::AnalysisImplementation(other); } 
+%extend AnalysisImplementation { AnalysisImplementation(const AnalysisImplementation & other) { return new PERSALYS::AnalysisImplementation(other); } 
 
 std::string __repr__() {
   return "AnalysisImplementation";

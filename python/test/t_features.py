@@ -8,7 +8,7 @@ width = 40
 # check that python can load the module
 print('1: Python module load'.ljust(width), end=' ')
 try:
-    import otguibase as otg
+    import persalys as otg
     print('OK')
 except:
     print('no')

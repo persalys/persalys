@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopulaInferenceWizard.hxx"
+#include "persalys/CopulaInferenceWizard.hxx"
 
-#include "otgui/TranslationManager.hxx"
-#include "otgui/DistributionsForInferenceWidget.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/DistributionDictionary.hxx"
-#include "otgui/CheckableHeaderView.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/DistributionsForInferenceWidget.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/DistributionDictionary.hxx"
+#include "persalys/CheckableHeaderView.hxx"
 
 #include <openturns/NormalCopulaFactory.hxx>
 
@@ -35,7 +35,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CopulaInferenceWizard::CopulaInferenceWizard(const Analysis &analysis, QWidget *parent)

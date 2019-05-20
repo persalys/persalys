@@ -3,10 +3,10 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 import os
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model 1
 filename = 'data.csv'
@@ -14,7 +14,7 @@ ot.RandomGenerator_SetSeed(0)
 ot.Normal(3).getSample(10).exportToCSVFile(filename)
 inColumns = [0, 2]
 
-model = otguibase.DataModel('myDataModel', filename, inColumns)
+model = persalys.DataModel('myDataModel', filename, inColumns)
 myStudy.add(model)
 print(model)
 
@@ -22,7 +22,7 @@ print("inputNames=", model.getInputNames())
 print("outputNames=", model.getOutputNames())
 
 # Data analysis ##
-analysis = otguibase.DataAnalysis("aDataAnalysis", model)
+analysis = persalys.DataAnalysis("aDataAnalysis", model)
 myStudy.add(analysis)
 
 analysis.run()
@@ -42,7 +42,7 @@ openturns.testing.assert_almost_equal(
 # Model 2
 outColumns = [1]
 
-model2 = otguibase.DataModel(
+model2 = persalys.DataModel(
     'myDataModel2', filename, inColumns, outColumns, ["var1", "var2"], ["var3"])
 myStudy.add(model2)
 print(model2)
@@ -54,7 +54,7 @@ print("min=", model2.getListXMin())
 print("max=", model2.getListXMax())
 
 # Model 3
-model3 = otguibase.DataModel('myDataModel3', filename, inColumns, outColumns)
+model3 = persalys.DataModel('myDataModel3', filename, inColumns, outColumns)
 myStudy.add(model3)
 print(model3)
 

@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ProbabilisticModelItem.hxx"
+#include "persalys/ProbabilisticModelItem.hxx"
 
-#include "otgui/LimitState.hxx"
-#include "otgui/SobolAnalysis.hxx"
-#include "otgui/MonteCarloAnalysis.hxx"
-#include "otgui/StudyItem.hxx"
-#include "otgui/FieldMonteCarloAnalysis.hxx"
+#include "persalys/LimitState.hxx"
+#include "persalys/SobolAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
+#include "persalys/StudyItem.hxx"
+#include "persalys/FieldMonteCarloAnalysis.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)

@@ -8,23 +8,23 @@ Y1 < 15
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
-X0 = otguibase.Input('X0', 0, dist_X0, '')
+X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
-X1 = otguibase.Input('X1', 0, dist_X1, '')
-Y0 = otguibase.Output('Y0', '')
-Y1 = otguibase.Output('Y1', '')
+X1 = persalys.Input('X1', 0, dist_X1, '')
+Y0 = persalys.Output('Y0', '')
+Y1 = persalys.Output('Y1', '')
 inputs = [X0, X1]
 outputs = [Y0, Y1]
 formulas = ['sin(X0) + 8*X1', '1 + sin(X0) + 8*X1']
-aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
-aLimitState = otguibase.LimitState('aLimitState', aModelPhys, 'Y0', ot.Less(), 10)
+aLimitState = persalys.LimitState('aLimitState', aModelPhys, 'Y0', ot.Less(), 10)
 myStudy.add(aLimitState)
-aLimitState2 = otguibase.LimitState('aLimitState2', aModelPhys, 'Y1', ot.Less(), 15)
+aLimitState2 = persalys.LimitState('aLimitState2', aModelPhys, 'Y1', ot.Less(), 15)
 myStudy.add(aLimitState2)
 

@@ -1,14 +1,14 @@
 // SWIG file FORMImportanceSamplingAnalysis.i
 
 %{
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
+#include "persalys/FORMImportanceSamplingAnalysis.hxx"
 %}
 
 %include FORMImportanceSamplingAnalysis_doc.i
 
-%include otgui/FORMImportanceSamplingAnalysis.hxx
-namespace OTGUI {
+%include persalys/FORMImportanceSamplingAnalysis.hxx
+namespace PERSALYS {
 
-%extend FORMImportanceSamplingAnalysis { FORMImportanceSamplingAnalysis(const FORMImportanceSamplingAnalysis & other) { return new OTGUI::FORMImportanceSamplingAnalysis(other); } 
+%extend FORMImportanceSamplingAnalysis { FORMImportanceSamplingAnalysis(const FORMImportanceSamplingAnalysis & other) { return new PERSALYS::FORMImportanceSamplingAnalysis(other); } 
 
 } }

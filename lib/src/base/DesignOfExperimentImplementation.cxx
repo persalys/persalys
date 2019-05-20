@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentImplementation.hxx"
+#include "persalys/DesignOfExperimentImplementation.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(DesignOfExperimentImplementation)
@@ -136,7 +136,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
 {
   OSS oss;
 
-  oss << getName() << " = otguibase.DesignOfExperimentImplementation('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  oss << getName() << " = persalys.DesignOfExperimentImplementation('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
 
   oss << "inputSample = " << Parameters::GetOTSampleStr(getInputSample());
 

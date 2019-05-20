@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ImportedMeshModel.hxx"
+#include "persalys/ImportedMeshModel.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(ImportedMeshModel)
@@ -149,7 +149,7 @@ String ImportedMeshModel::getPythonScript() const
     paramNames.add(getIndexParameters()[i].getName());
   }
 
-  oss << getName() << " = otguibase.ImportedMeshModel(" << Parameters::GetOTDescriptionStr(paramNames, false) << ", '" << fileName_ << "', " << columns_.__str__() << ")\n";
+  oss << getName() << " = persalys.ImportedMeshModel(" << Parameters::GetOTDescriptionStr(paramNames, false) << ", '" << fileName_ << "', " << columns_.__str__() << ")\n";
 
   return oss;
 }

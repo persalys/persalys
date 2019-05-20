@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/YACSEvaluation.hxx"
+#include "persalys/YACSEvaluation.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include "otgui/InterpreterUnlocker.hxx"
+#include "persalys/InterpreterUnlocker.hxx"
 #include <memory> //std::unique_ptr
 #include <cmath> //std::nan
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(YACSEvaluation)

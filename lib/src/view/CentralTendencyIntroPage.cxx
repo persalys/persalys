@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CentralTendencyIntroPage.hxx"
+#include "persalys/CentralTendencyIntroPage.hxx"
 
-#include "otgui/CentralTendencyWizard.hxx"
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
+#include "persalys/CentralTendencyWizard.hxx"
+#include "persalys/TaylorExpansionMomentsAnalysis.hxx"
 
 #include <QVBoxLayout>
 #include <QRadioButton>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CentralTendencyIntroPage::CentralTendencyIntroPage(QWidget* parent)

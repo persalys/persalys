@@ -20,28 +20,28 @@
  */
 #include <PyConsole_Interp.h>   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 
-#include "otgui/MainWindow.hxx"
+#include "persalys/MainWindow.hxx"
 
-#include "otgui/MenuBar.hxx"
-#include "otgui/ToolBar.hxx"
-#include "otgui/StatusBar.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/MenuBar.hxx"
+#include "persalys/ToolBar.hxx"
+#include "persalys/StatusBar.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QSplitter>
 #include <QSettings>
 #include <QApplication>
 
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
 #include <vtkSMProxyManager.h>
 #include <vtkSMWriterFactory.h>
 #include <pqParaViewBehaviors.h>
-#include "otgui/PVServerManagerInterface.hxx"
-#include "otgui/PVServerManagerSingleton.hxx"
+#include "persalys/PVServerManagerInterface.hxx"
+#include "persalys/PVServerManagerSingleton.hxx"
 #include "vtkPVPlugin.h"
 PV_PLUGIN_IMPORT_INIT(XYChartRepresentationColumns)
 #endif
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 
@@ -51,10 +51,10 @@ MainWindow::MainWindow()
   , manager_(0)
   , pythonConsole_(new PyConsole_Console(this))
 {
-  setWindowTitle("OTGui");
-  setWindowIcon(QIcon(":/images/otgui.ico"));
+  setWindowTitle("Persalys");
+  setWindowIcon(QIcon(":/images/persalys.ico"));
 
-#ifdef OTGUI_HAVE_PARAVIEW
+#ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::HaveOpenGL32())
   {
     // from ParaView 5.6 the toolBar is hidden if PersistentMainWindowStateBehavior is enabled

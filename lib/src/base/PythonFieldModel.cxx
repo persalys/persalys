@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PythonFieldModel.hxx"
+#include "persalys/PythonFieldModel.hxx"
 
-#include "otgui/PythonScriptFieldFunction.hxx"
-#include "otgui/BaseTools.hxx"
+#include "persalys/PythonScriptFieldFunction.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(PythonFieldModel)
@@ -100,7 +100,7 @@ String PythonFieldModel::getPythonScript() const
   oss << "code = '" << escaped_code << "'\n";
 
   // define model
-  oss << getName() << " = otguibase.PythonFieldModel('" << getName() << "'," << getMeshModel().getName() << ", inputs, outputs, code)\n";
+  oss << getName() << " = persalys.PythonFieldModel('" << getName() << "'," << getMeshModel().getName() << ", inputs, outputs, code)\n";
 
   if (isParallel())
     oss << getName() << ".setParallel(True)\n";

@@ -15,7 +15,7 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
-project (OTGui)
+project (Persalys)
 
 if (POLICY CMP0020)
   cmake_policy (SET CMP0020 NEW)
@@ -37,7 +37,7 @@ endif ()
 
 
 # add library with unity build support, inspired by https://github.com/onqtam/ucm
-macro (otgui_add_library name)
+macro (persalys_add_library name)
   if (USE_COTIRE)
     set (orig_target ${name}_orig)
     # add regular target with another name
@@ -58,7 +58,7 @@ find_package (OpenTURNS 1.13 NO_MODULE REQUIRED)
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 
 if (NOT BUILD_SHARED_LIBS)
-  list ( APPEND OTGUI_DEFINITIONS "-DOTGUI_STATIC" )
+  list ( APPEND PERSALYS_DEFINITIONS "-DPERSALYS_STATIC" )
 endif ()
 
 find_package (Boost COMPONENTS regex filesystem locale REQUIRED)
@@ -91,7 +91,7 @@ if (BUILD_GUI)
         if (DEFINED PARAVIEW_USE_FILE)
           include (${PARAVIEW_USE_FILE})
         endif ()
-        list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_PARAVIEW)
+        list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_PARAVIEW)
       else ()
         set (ParaView_FOUND FALSE CACHE BOOL "")
         message (WARNING "ParaView must be compiled with PARAVIEW_BUILD_QT_GUI enabled")
@@ -108,8 +108,8 @@ if (USE_SALOME)
   find_package (SalomeGUI NO_MODULE)
   find_package (SalomeYACS NO_MODULE)
   if (SalomeYACS_FOUND)
-    list (APPEND OTGUI_DEFINITIONS ${YACS_DEFINITIONS})
-    list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_YACS)
+    list (APPEND PERSALYS_DEFINITIONS ${YACS_DEFINITIONS})
+    list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_YACS)
     include_directories (${YACS_INCLUDE_DIRS}) 
   endif ()
   find_package (Py2cpp NO_MODULE)
@@ -120,29 +120,29 @@ if (USE_OTFMI)
   include (FindPythonModule)
   find_python_module (otfmi)
   if (OTFMI_FOUND)
-    list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_OTFMI)
-    list (APPEND OTGUI_DEFINITIONS -DOTFMI_VERSION_STRING="${OTFMI_VERSION_STRING}")
+    list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_OTFMI)
+    list (APPEND PERSALYS_DEFINITIONS -DOTFMI_VERSION_STRING="${OTFMI_VERSION_STRING}")
   endif ()
 endif ()
 
 if (USE_OTMORRIS)
   find_package (OTMORRIS NO_MODULE) # TODO: restore >=0.4 version check
   if (OTMORRIS_FOUND)
-    list (APPEND OTGUI_DEFINITIONS -DOTGUI_HAVE_OTMORRIS)
-    list (APPEND OTGUI_DEFINITIONS -DOTMORRIS_VERSION_STRING="${OTMORRIS_VERSION}")
+    list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_OTMORRIS)
+    list (APPEND PERSALYS_DEFINITIONS -DOTMORRIS_VERSION_STRING="${OTMORRIS_VERSION}")
     include_directories (${OTMORRIS_INCLUDE_DIRS})
   endif ()
 endif ()
 
-set ( OTGUI_LIBRARY_PATH lib${LIB_SUFFIX} )
-set ( OTGUI_INCLUDE_PATH include )
-set ( OTGUI_SWIG_INCLUDE_PATH ${OTGUI_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
-set ( OTGUI_DATA_PATH share )
-set ( OTGUI_EXAMPLE_PATH ${OTGUI_DATA_PATH}/${PACKAGE_NAME}/examples )
-set ( OTGUI_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/otgui )
+set ( PERSALYS_LIBRARY_PATH lib${LIB_SUFFIX} )
+set ( PERSALYS_INCLUDE_PATH include )
+set ( PERSALYS_SWIG_INCLUDE_PATH ${PERSALYS_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
+set ( PERSALYS_DATA_PATH share )
+set ( PERSALYS_EXAMPLE_PATH ${PERSALYS_DATA_PATH}/${PACKAGE_NAME}/examples )
+set ( PERSALYS_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/persalys )
 set ( DOC_INSTALL_PATH share/${PACKAGE_NAME}/doc )
 
-list (APPEND OTGUI_DEFINITIONS -DDOCUMENTATION_INSTALL_PATH="${DOC_INSTALL_PATH}")
+list (APPEND PERSALYS_DEFINITIONS -DDOCUMENTATION_INSTALL_PATH="${DOC_INSTALL_PATH}")
 
 if (BUILD_PYTHON)
   # workaround for cmake bug #0013449
@@ -175,7 +175,7 @@ if (BUILD_PYTHON)
 
   if (PYTHONINTERP_FOUND)
     if (DEFINED PYTHON_SITE_PACKAGES)
-      set (OTGUI_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
+      set (PERSALYS_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
 
     else ()
       execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
@@ -188,13 +188,13 @@ if (BUILD_PYTHON)
       endif ()
 
       get_filename_component (_ABS_PYTHON_MODULE_PATH ${_ABS_PYTHON_MODULE_PATH} ABSOLUTE)
-      file (RELATIVE_PATH OTGUI_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
+      file (RELATIVE_PATH PERSALYS_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
     endif ()
 
-    if (IS_ABSOLUTE ${OTGUI_PYTHON_MODULE_PATH})
-      set (PYTHON_MODULE_PATH ${OTGUI_PYTHON_MODULE_PATH})
+    if (IS_ABSOLUTE ${PERSALYS_PYTHON_MODULE_PATH})
+      set (PYTHON_MODULE_PATH ${PERSALYS_PYTHON_MODULE_PATH})
     else ()
-      set (PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/${OTGUI_PYTHON_MODULE_PATH})
+      set (PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/${PERSALYS_PYTHON_MODULE_PATH})
     endif ()
 
     if (CMAKE_VERSION VERSION_LESS "2.8.6")
@@ -202,17 +202,17 @@ if (BUILD_PYTHON)
                        OUTPUT_VARIABLE PYTHON_VERSION_MAJOR
                        OUTPUT_STRIP_TRAILING_WHITESPACE)
     endif ()
-    set (OTGUI_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${OTGUI_PYTHON_MODULE_PATH})
+    set (PERSALYS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${PERSALYS_PYTHON_MODULE_PATH})
   endif ( PYTHONINTERP_FOUND )
 endif ()
 
 
 # WARNING: This is where variables without OPENTURNS_ prefix are defined !
 foreach ( _var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
-  if ( NOT IS_ABSOLUTE OTGUI_${_var} )
-    set ( OTGUI_${_var} ${CMAKE_INSTALL_PREFIX}/${OTGUI_${_var}} )
+  if ( NOT IS_ABSOLUTE PERSALYS_${_var} )
+    set ( PERSALYS_${_var} ${CMAKE_INSTALL_PREFIX}/${PERSALYS_${_var}} )
   endif ()
-  set ( ${_var} ${OTGUI_${_var}} )
+  set ( ${_var} ${PERSALYS_${_var}} )
 endforeach ( _var )
 
 # RPATH settings
@@ -285,28 +285,28 @@ add_custom_target ( uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
 )
 
-set ( OTGUI_LIBRARY                 otgui )
-set ( OTGUI_LIBRARIES ${OPENTURNS_LIBRARIES} )
-list ( APPEND OTGUI_LIBRARIES ${OTGUI_LIBRARY} )
-set ( OTGUI_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS})
+set ( PERSALYS_LIBRARY                 persalys )
+set ( PERSALYS_LIBRARIES ${OPENTURNS_LIBRARIES} )
+list ( APPEND PERSALYS_LIBRARIES ${PERSALYS_LIBRARY} )
+set ( PERSALYS_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS})
 if (OTMORRIS_FOUND)
-  list ( APPEND OTGUI_LIBRARY_DIRS ${OTMORRIS_LIBRARY_DIRS} )
+  list ( APPEND PERSALYS_LIBRARY_DIRS ${OTMORRIS_LIBRARY_DIRS} )
 endif ()
-list ( APPEND OTGUI_LIBRARY_DIRS ${LIBRARY_PATH} )
-set ( OTGUI_INCLUDE_DIR ${OTGUI_INCLUDE_PATH} )
-set ( OTGUI_INCLUDE_DIRS ${OTGUI_INCLUDE_DIR} )
-set ( OTGUI_ROOT_DIR       ${CMAKE_INSTALL_PREFIX} )
-list ( APPEND OTGUI_INCLUDE_DIRS ${OPENTURNS_INCLUDE_DIRS} )
-set ( OTGUI_VERSION_STRING ${PACKAGE_VERSION} )
-set ( OTGUI_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
-set ( OTGUI_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
-set ( OTGUI_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
-set ( OTGUI_USE_FILE      ${OTGUI_CONFIG_CMAKE_PATH}/UseOTGui.cmake )
+list ( APPEND PERSALYS_LIBRARY_DIRS ${LIBRARY_PATH} )
+set ( PERSALYS_INCLUDE_DIR ${PERSALYS_INCLUDE_PATH} )
+set ( PERSALYS_INCLUDE_DIRS ${PERSALYS_INCLUDE_DIR} )
+set ( PERSALYS_ROOT_DIR       ${CMAKE_INSTALL_PREFIX} )
+list ( APPEND PERSALYS_INCLUDE_DIRS ${OPENTURNS_INCLUDE_DIRS} )
+set ( PERSALYS_VERSION_STRING ${PACKAGE_VERSION} )
+set ( PERSALYS_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
+set ( PERSALYS_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
+set ( PERSALYS_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
+set ( PERSALYS_USE_FILE      ${PERSALYS_CONFIG_CMAKE_PATH}/UsePersalys.cmake )
 
-list (APPEND OTGUI_DEFINITIONS -DOTGUI_VERSION="${OTGUI_VERSION_STRING}")
-list (APPEND OTGUI_DEFINITIONS -DINSTALL_PATH="${CMAKE_INSTALL_PREFIX}")
+list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_VERSION="${PERSALYS_VERSION_STRING}")
+list (APPEND PERSALYS_DEFINITIONS -DINSTALL_PATH="${CMAKE_INSTALL_PREFIX}")
 
-add_definitions (${OTGUI_DEFINITIONS})
+add_definitions (${PERSALYS_DEFINITIONS})
 
 # The tests can't be run if this function is absent
 enable_testing ()
@@ -339,45 +339,45 @@ macro(set_and_check _var _value)
 endmacro(set_and_check _var _value)
 "     )
   foreach (_var
-      OTGUI_USE_FILE
-      OTGUI_ROOT_DIR
-      OTGUI_INCLUDE_DIR
-      OTGUI_INCLUDE_DIRS
-      OTGUI_LIBRARY_DIRS )
+      PERSALYS_USE_FILE
+      PERSALYS_ROOT_DIR
+      PERSALYS_INCLUDE_DIR
+      PERSALYS_INCLUDE_DIRS
+      PERSALYS_LIBRARY_DIRS )
     set(PACKAGE_${_var} ${${_var}})
   endforeach ()
   
-configure_file ( ${CMAKE_SOURCE_DIR}/cmake/OTGuiConfig.cmake.in
-                 ${CMAKE_BINARY_DIR}/OTGuiConfig.cmake
+configure_file ( ${CMAKE_SOURCE_DIR}/cmake/PersalysConfig.cmake.in
+                 ${CMAKE_BINARY_DIR}/PersalysConfig.cmake
                  @ONLY ESCAPE_QUOTES
                )
 
-install ( FILES cmake/UseOTGui.cmake 
-                ${CMAKE_BINARY_DIR}/OTGuiConfig.cmake
-          DESTINATION ${OTGUI_CONFIG_CMAKE_PATH}
+install ( FILES cmake/UsePersalys.cmake
+                ${CMAKE_BINARY_DIR}/PersalysConfig.cmake
+          DESTINATION ${PERSALYS_CONFIG_CMAKE_PATH}
         )
 
 else ()
 
   include(CMakePackageConfigHelpers)
   configure_package_config_file (
-    cmake/OTGuiConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/OTGuiConfig.cmake
-    INSTALL_DESTINATION ${OTGUI_CONFIG_CMAKE_PATH}
+    cmake/PersalysConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfig.cmake
+    INSTALL_DESTINATION ${PERSALYS_CONFIG_CMAKE_PATH}
     PATH_VARS
-      OTGUI_USE_FILE
-      OTGUI_ROOT_DIR
-      OTGUI_INCLUDE_DIR
-      OTGUI_INCLUDE_DIRS
-      OTGUI_LIBRARY_DIRS
+      PERSALYS_USE_FILE
+      PERSALYS_ROOT_DIR
+      PERSALYS_INCLUDE_DIR
+      PERSALYS_INCLUDE_DIRS
+      PERSALYS_LIBRARY_DIRS
     NO_CHECK_REQUIRED_COMPONENTS_MACRO
-                                )                   
-  write_basic_package_version_file( OTGuiConfigVersion.cmake VERSION ${OTGUI_VERSION_STRING} COMPATIBILITY AnyNewerVersion )               
+                                )
+  write_basic_package_version_file( PersalysConfigVersion.cmake VERSION ${PERSALYS_VERSION_STRING} COMPATIBILITY AnyNewerVersion )
 
-  install ( FILES cmake/UseOTGui.cmake
-                  ${CMAKE_CURRENT_BINARY_DIR}/OTGuiConfig.cmake
-                  ${CMAKE_CURRENT_BINARY_DIR}/OTGuiConfigVersion.cmake
-            DESTINATION ${OTGUI_CONFIG_CMAKE_PATH}
+  install ( FILES cmake/UsePersalys.cmake
+                  ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfig.cmake
+                  ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfigVersion.cmake
+            DESTINATION ${PERSALYS_CONFIG_CMAKE_PATH}
           )
 endif ()
 

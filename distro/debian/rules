@@ -39,7 +39,7 @@ cmake-configure-%:
             -DCMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING='$(ldflags)' \
             -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
             -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-            -DINSTALL_DESTDIR:PATH=$(CURDIR)/debian/otgui \
+            -DINSTALL_DESTDIR:PATH=$(CURDIR)/debian/persalys \
             -DLINK_PYTHON_LIBRARY:BOOL=OFF \
             -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python$* \
             -DPYTHON_INCLUDE_DIR:PATH=$$(python$*-config --includes | sed -e 's/ .*//' -e 's/^-I//') \
@@ -56,20 +56,20 @@ override_dh_auto_install: $(PYALL:python%=cmake-install-%)
 cmake-install-%:
 	dh_auto_install -Bbuild-python$*
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
-	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$${LD_LIBRARY_PATH}:}$(CURDIR)/debian/otgui/usr/lib \
+	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$${LD_LIBRARY_PATH}:}$(CURDIR)/debian/persalys/usr/lib \
 	  CTEST_OUTPUT_ON_FAILURE=1 \
 	  $(MAKE) $(test_makeflags) -C build-python$* test ARGS="$(test_makeflags) -R pyinstallcheck"
-	find $(CURDIR)/debian/otgui -name "*.pyc" -o -name "__pycache__" | xargs rm -rf
+	find $(CURDIR)/debian/persalys -name "*.pyc" -o -name "__pycache__" | xargs rm -rf
 endif
 
 override_dh_makeshlibs:
 	dh_makeshlibs -Xpyshared
 
 override_dh_python2:
-	dh_python2 debian/otgui$(shell $(PYVER) -c "from distutils import sysconfig; print(sysconfig.get_python_lib())")
+	dh_python2 debian/persalys$(shell $(PYVER) -c "from distutils import sysconfig; print(sysconfig.get_python_lib())")
 
 override_dh_python3:
-	dh_python3 debian/otgui$(shell $(PY3VER) -c "from distutils import sysconfig; print(sysconfig.get_python_lib())")
+	dh_python3 debian/persalys$(shell $(PY3VER) -c "from distutils import sysconfig; print(sysconfig.get_python_lib())")
 
 override_dh_compress:
 	dh_compress -X.pdf -X.svn -X.py
@@ -80,7 +80,7 @@ cmake-test-%:
 	# 'make test' does not build binary tests
 ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 	$(MAKE) $(test_makeflags) -C build-python$* tests
-	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$${LD_LIBRARY_PATH}:}$(CURDIR)/debian/otgui/usr/lib \
+	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$${LD_LIBRARY_PATH}:}$(CURDIR)/debian/persalys/usr/lib \
 	  CTEST_OUTPUT_ON_FAILURE=1 \
 	  $(MAKE) -C build-python$* test ARGS="$(test_makeflags) -R cppcheck"
 endif

@@ -4,10 +4,10 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 import os
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # data
 filename = 'données.csv'
@@ -16,14 +16,14 @@ ot.Normal(3).getSample(10).exportToCSVFile(filename)
 inColumns = [0, 2]
 
 # Model 1
-model = otguibase.DataModel('myDataModel', filename, inColumns)
+model = persalys.DataModel('myDataModel', filename, inColumns)
 myStudy.add(model)
 print(model)
 
 # Model 2
-model2 = otguibase.SymbolicPhysicalModel('SM', [otguibase.Input('A'), otguibase.Input('B')], [otguibase.Output('S')], ['A+B+2'])
+model2 = persalys.SymbolicPhysicalModel('SM', [persalys.Input('A'), persalys.Input('B')], [persalys.Output('S')], ['A+B+2'])
 myStudy.add(model2)
-importedDOE = otguibase.ImportedDesignOfExperiment('doeI', model2, filename, inColumns)
+importedDOE = persalys.ImportedDesignOfExperiment('doeI', model2, filename, inColumns)
 myStudy.add(importedDOE)
 
 # script
@@ -35,7 +35,7 @@ xmlFileName = 'file_with_données.xml'
 myStudy.save(xmlFileName)
 
 # open
-s = otguibase.Study.Open('file_with_données.xml')
+s = persalys.Study.Open('file_with_données.xml')
 print(s.getPythonScript())
 
 os.remove(filename)

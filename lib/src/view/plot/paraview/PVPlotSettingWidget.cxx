@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PVPlotSettingWidget.hxx"
+#include "persalys/PVPlotSettingWidget.hxx"
 
-#include "otgui/ListWidgetWithCheckBox.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/TitledComboBox.hxx"
+#include "persalys/ListWidgetWithCheckBox.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/TitledComboBox.hxx"
 
 #include <vtkSMProperty.h>
 #include <pqSMAdaptor.h>
@@ -36,7 +36,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget, QWidget* parent)

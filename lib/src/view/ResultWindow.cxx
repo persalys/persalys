@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ResultWindow.hxx"
+#include "persalys/ResultWindow.hxx"
 
-#include "otgui/TranslationManager.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QVBoxLayout>
 #include <QTextEdit>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ResultWindow::ResultWindow(Item * item, QWidget * parent)

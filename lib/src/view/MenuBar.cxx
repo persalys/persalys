@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MenuBar.hxx"
+#include "persalys/MenuBar.hxx"
 
-#include "otgui/AboutDialog.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/AboutDialog.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QSettings>
 #include <QFileInfo>
@@ -30,7 +30,7 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MenuBar::MenuBar(const Actions* actions)
@@ -102,7 +102,7 @@ void MenuBar::buildActions(const Actions* actions)
 
   helpMenu->addSeparator();
 
-  action = new QAction(QIcon(":/images/otgui.ico"), tr("About OTGui"), this);
+  action = new QAction(QIcon(":/images/persalys.ico"), tr("About Persalys"), this);
   connect(action, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
   helpMenu->addAction(action);
 

@@ -1,16 +1,16 @@
 // SWIG file
 
 %{
-#include "otgui/FixedDesignOfExperiment.hxx"
+#include "persalys/FixedDesignOfExperiment.hxx"
 %}
 
-%ignore OTGUI::FixedDesignOfExperiment::setDesignOfExperiment;
+%ignore PERSALYS::FixedDesignOfExperiment::setDesignOfExperiment;
 
 %include FixedDesignOfExperiment_doc.i
 
-%include otgui/FixedDesignOfExperiment.hxx
-namespace OTGUI {
+%include persalys/FixedDesignOfExperiment.hxx
+namespace PERSALYS {
 
-%extend FixedDesignOfExperiment { FixedDesignOfExperiment(const FixedDesignOfExperiment & other) { return new OTGUI::FixedDesignOfExperiment(other); } 
+%extend FixedDesignOfExperiment { FixedDesignOfExperiment(const FixedDesignOfExperiment & other) { return new PERSALYS::FixedDesignOfExperiment(other); } 
 
 } }

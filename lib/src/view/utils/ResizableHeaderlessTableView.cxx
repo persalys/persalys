@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ResizableHeaderlessTableView.hxx"
+#include "persalys/ResizableHeaderlessTableView.hxx"
 
 #include <QScrollBar>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 // ------- HeaderlessTableView
 

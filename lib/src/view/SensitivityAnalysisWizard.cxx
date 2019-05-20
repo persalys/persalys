@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SensitivityAnalysisWizard.hxx"
+#include "persalys/SensitivityAnalysisWizard.hxx"
 
-#include "otgui/PhysicalModelAnalysis.hxx"
+#include "persalys/PhysicalModelAnalysis.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent)

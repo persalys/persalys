@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/StudyTreeView.hxx"
+#include "persalys/StudyTreeView.hxx"
 
-#include "otgui/LineEditWithQValidatorDelegate.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/LineEditWithQValidatorDelegate.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QMenu>
 #include <QHeaderView>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 // define QStyledItemDelegate

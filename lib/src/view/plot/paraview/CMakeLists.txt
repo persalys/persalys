@@ -23,19 +23,19 @@ ot_install_header_file (PVXYChartViewWidget.hxx)
 ot_install_header_file (PVPlotSettingWidget.hxx)
 ot_install_header_file (PVBagChartViewWidget.hxx)
 
-qt5_wrap_cpp (OTGUI_PLOTPARAVIEW_MOC_SRCS
-              otgui/PVMatrixPlotViewWidget.hxx
-              otgui/PVParCooViewWidget.hxx
-              otgui/PVSpreadSheetViewWidget.hxx
-              otgui/PVViewWidget.hxx
-              otgui/PVXYChartSettingWidget.hxx
-              otgui/PVXYChartViewWidget.hxx
-              otgui/PVPlotSettingWidget.hxx
-              otgui/PVBagChartViewWidget.hxx
+qt5_wrap_cpp (PERSALYS_PLOTPARAVIEW_MOC_SRCS
+              persalys/PVMatrixPlotViewWidget.hxx
+              persalys/PVParCooViewWidget.hxx
+              persalys/PVSpreadSheetViewWidget.hxx
+              persalys/PVViewWidget.hxx
+              persalys/PVXYChartSettingWidget.hxx
+              persalys/PVXYChartViewWidget.hxx
+              persalys/PVPlotSettingWidget.hxx
+              persalys/PVBagChartViewWidget.hxx
               )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-add_library (otguiplotparaview ${SOURCEFILES} ${OTGUI_PLOTPARAVIEW_MOC_SRCS})
+add_library (persalysplotparaview ${SOURCEFILES} ${PERSALYS_PLOTPARAVIEW_MOC_SRCS})
 
 ADD_PARAVIEW_PLUGIN(XYChartRepresentationColumns "1.0"
   SERVER_MANAGER_XML XYChartRepresentationColumns.xml
@@ -43,7 +43,7 @@ ADD_PARAVIEW_PLUGIN(XYChartRepresentationColumns "1.0"
   vtkXYChartRepresentationColumns.cxx)
 
 if ( BUILD_SHARED_LIBS )
-  set_target_properties ( otguiplotparaview PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
+  set_target_properties ( persalysplotparaview PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -52,23 +52,23 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( otguiplotparaview PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( otguiplotparaview PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries ( otguiplotparaview otguiutils )
+set_target_properties ( persalysplotparaview PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties ( persalysplotparaview PROPERTIES SOVERSION ${LIB_SOVERSION} )
+target_link_libraries ( persalysplotparaview persalysutils )
 
 if (TARGET ParaView::pqApplicationComponents)
-  target_link_libraries (otguiplotparaview ParaView::pqApplicationComponents ParaView::vtkPVServerManagerRenderingCS ParaView::vtkRenderingFreeTypeCS)
-  target_link_libraries (otguiplotparaview ParaView::vtkRenderingContext2DCS) # for vtkContextScene::SetDirty(bool)
+  target_link_libraries (persalysplotparaview ParaView::pqApplicationComponents ParaView::vtkPVServerManagerRenderingCS ParaView::vtkRenderingFreeTypeCS)
+  target_link_libraries (persalysplotparaview ParaView::vtkRenderingContext2DCS) # for vtkContextScene::SetDirty(bool)
 else ()
-  target_link_libraries (otguiplotparaview pqApplicationComponents vtkPVServerManagerRendering vtkRenderingFreeType)
-  target_link_libraries (otguiplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
+  target_link_libraries (persalysplotparaview pqApplicationComponents vtkPVServerManagerRendering vtkRenderingFreeType)
+  target_link_libraries (persalysplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
 endif ()
 
-target_link_libraries (otguiplotparaview XYChartRepresentationColumns)
+target_link_libraries (persalysplotparaview XYChartRepresentationColumns)
 
-install ( TARGETS otguiplotparaview XYChartRepresentationColumns
+install ( TARGETS persalysplotparaview XYChartRepresentationColumns
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}
-  ARCHIVE DESTINATION ${OTGUI_LIBRARY_PATH}
+  LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
+  ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 

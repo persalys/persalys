@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::SobolResult
+%feature("docstring") PERSALYS::SobolResult
 "Get the results of a Sobol sensitivity analysis."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getInputNames
+%feature("docstring") PERSALYS::SobolResult::getInputNames
 "Input variables names accessor.
 
 Returns
@@ -13,7 +13,7 @@ sample : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getOutputNames
+%feature("docstring") PERSALYS::SobolResult::getOutputNames
 "Output variables names accessor.
 
 Returns
@@ -23,7 +23,7 @@ sample : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getFirstOrderIndices
+%feature("docstring") PERSALYS::SobolResult::getFirstOrderIndices
 "First order indices accessor.
 
 Returns
@@ -33,7 +33,7 @@ indices : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getTotalIndices
+%feature("docstring") PERSALYS::SobolResult::getTotalIndices
 "Total indices accessor.
 
 Returns
@@ -43,7 +43,7 @@ indices : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getFirstOrderIndicesInterval
+%feature("docstring") PERSALYS::SobolResult::getFirstOrderIndicesInterval
 "First order indices interval accessor.
 
 Returns
@@ -53,7 +53,7 @@ interval : sequence of :py:class:`openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getTotalIndicesInterval
+%feature("docstring") PERSALYS::SobolResult::getTotalIndicesInterval
 "Total indices interval accessor.
 
 Returns
@@ -63,7 +63,7 @@ interval : sequence of :py:class:`openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getConfidenceIntervalLength
+%feature("docstring") PERSALYS::SobolResult::getConfidenceIntervalLength
 "Confidence interval length accessor.
 
 Returns
@@ -73,7 +73,7 @@ length : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getElapsedTime
+%feature("docstring") PERSALYS::SobolResult::getElapsedTime
 "Elapsed time in seconds to perform the analysis.
 
 Returns
@@ -83,7 +83,7 @@ time : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolResult::getCallsNumber
+%feature("docstring") PERSALYS::SobolResult::getCallsNumber
 "Number of calls accessor.
 
 Returns

@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentIntroPage.hxx"
+#include "persalys/DesignOfExperimentIntroPage.hxx"
 
-#include "otgui/DesignOfExperimentEvaluation.hxx"
-#include "otgui/DesignOfExperimentWizard.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/DesignOfExperimentWizard.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DesignOfExperimentIntroPage::DesignOfExperimentIntroPage(QWidget* parent)

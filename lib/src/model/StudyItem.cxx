@@ -18,21 +18,21 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifdef OTGUI_HAVE_YACS
-#include "otgui/YACSPhysicalModel.hxx"
+#ifdef PERSALYS_HAVE_YACS
+#include "persalys/YACSPhysicalModel.hxx"
 #endif
-#include "otgui/StudyItem.hxx"
+#include "persalys/StudyItem.hxx"
 
-#include "otgui/FileTools.hxx"
-#include "otgui/PhysicalModelAnalysis.hxx"
-#include "otgui/DesignOfExperimentAnalysis.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
-#include "otgui/SymbolicFieldModel.hxx"
-#include "otgui/PythonPhysicalModel.hxx"
-#include "otgui/PythonFieldModel.hxx"
+#include "persalys/FileTools.hxx"
+#include "persalys/PhysicalModelAnalysis.hxx"
+#include "persalys/DesignOfExperimentAnalysis.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/SymbolicFieldModel.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
+#include "persalys/PythonFieldModel.hxx"
 
-#ifdef OTGUI_HAVE_OTFMI
-#include "otgui/FMIPhysicalModel.hxx"
+#ifdef PERSALYS_HAVE_OTFMI
+#include "persalys/FMIPhysicalModel.hxx"
 #endif
 
 #include <QDebug>
@@ -41,7 +41,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 StudyItem::StudyItem(const Study& study)
@@ -66,11 +66,11 @@ void StudyItem::buildActions()
   newPythonModel_ = new QAction(tr("Python model"), this);
   connect(newPythonModel_, SIGNAL(triggered()), this, SLOT(createPythonModel()));
 
-#ifdef OTGUI_HAVE_YACS
+#ifdef PERSALYS_HAVE_YACS
   newYACSModel_ = new QAction(tr("YACS model"), this);
   connect(newYACSModel_, SIGNAL(triggered()), this, SLOT(createYACSModel()));
 #endif
-#ifdef OTGUI_HAVE_OTFMI
+#ifdef PERSALYS_HAVE_OTFMI
   newFMIModel_ = new QAction(tr("FMI model"), this);
   connect(newFMIModel_, SIGNAL(triggered()), this, SLOT(createFMIModel()));
 #endif
@@ -105,10 +105,10 @@ void StudyItem::buildActions()
   appendSeparator(tr("Model"));
   appendAction(newSymbolicModel_);
   appendAction(newPythonModel_);
-#ifdef OTGUI_HAVE_YACS
+#ifdef PERSALYS_HAVE_YACS
   appendAction(newYACSModel_);
 #endif
-#ifdef OTGUI_HAVE_OTFMI
+#ifdef PERSALYS_HAVE_OTFMI
   appendAction(newFMIModel_);
 #endif
   appendAction(newSymbolicFieldModel_);
@@ -196,7 +196,7 @@ void StudyItem::createPythonFieldModel()
 }
 
 
-#ifdef OTGUI_HAVE_YACS
+#ifdef PERSALYS_HAVE_YACS
 void StudyItem::createYACSModel()
 {
   YACSPhysicalModel * newModel = new YACSPhysicalModel(study_.getAvailablePhysicalModelName(tr("YACSModel_").toStdString()));
@@ -205,7 +205,7 @@ void StudyItem::createYACSModel()
 #endif
 
 
-#ifdef OTGUI_HAVE_OTFMI
+#ifdef PERSALYS_HAVE_OTFMI
 void StudyItem::createFMIModel()
 {
   FMIPhysicalModel newModel(study_.getAvailablePhysicalModelName(tr("FMIModel_").toStdString()));
@@ -342,10 +342,10 @@ void StudyItem::appendItem(PhysicalModel & physicalModel)
   {
     item->appendAction(newSymbolicModel_);
     item->appendAction(newPythonModel_);
-#ifdef OTGUI_HAVE_YACS
+#ifdef PERSALYS_HAVE_YACS
     item->appendAction(newYACSModel_);
 #endif
-#ifdef OTGUI_HAVE_OTFMI
+#ifdef PERSALYS_HAVE_OTFMI
     item->appendAction(newFMIModel_);
 #endif
   }
@@ -451,7 +451,7 @@ void StudyItem::setData(const QVariant & value, int role)
 {
   // do NOT use study_.setName otherwise study_ is duplicated!!
   // when copying an Observable, the list of observers is not duplicated...
-  // when an observable has no observer, otgui is lost
+  // when an observable has no observer, persalys is lost
   // for example is not possible to remove the items...
   if (role == Qt::EditRole)
     study_.getImplementation()->setName(value.toString().toUtf8().data());

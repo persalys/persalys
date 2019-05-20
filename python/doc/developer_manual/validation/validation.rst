@@ -306,7 +306,7 @@ Find here the procedure to validate the graphical interface
 Open
 ``````
 
-- open otgui
+- open persalys
 
   - there are a Menu bar, a Tool bar, a Python console, a status bar
 
@@ -318,7 +318,7 @@ Open
 Console Python
 ````````````````
 
-- open otgui
+- open persalys
 - click Menu->View->Window->Python Console
 
   - console hidden

@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::SRCAnalysis
+%feature("docstring") PERSALYS::SRCAnalysis
 "Run a SRC sensitivity analysis.
 
 Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 simulationsNumber : int
     Simulations number (optional). By default it is 10000.
@@ -13,18 +13,18 @@ simulationsNumber : int
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the SRC analysis:
 
->>> analysis = otguibase.SRCAnalysis('anAnalysis', myPhysicalModel, 1000)
+>>> analysis = persalys.SRCAnalysis('anAnalysis', myPhysicalModel, 1000)
 >>> analysis.run()
 
 Get the result:
@@ -34,17 +34,17 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SRCAnalysis::getResult
+%feature("docstring") PERSALYS::SRCAnalysis::getResult
 "Result accessor.
 
 Returns
 -------
-result : :class:`~otguibase.SRCResult`
+result : :class:`~persalys.SRCResult`
     Result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SRCAnalysis::getSimulationsNumber
+%feature("docstring") PERSALYS::SRCAnalysis::getSimulationsNumber
 "Simulations number accessor.
 
 Returns
@@ -54,7 +54,7 @@ number : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SRCAnalysis::setSimulationsNumber
+%feature("docstring") PERSALYS::SRCAnalysis::setSimulationsNumber
 "Simulations number accessor.
 
 Parameters

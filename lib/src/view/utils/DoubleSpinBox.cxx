@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DoubleSpinBox.hxx"
+#include "persalys/DoubleSpinBox.hxx"
 
 #include <QLineEdit>
 #include <QDebug>
 
 #include <limits>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DoubleSpinBox::DoubleSpinBox(QWidget * parent)

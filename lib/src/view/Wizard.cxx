@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Specific QWizard for otgui
+ *  @brief Specific QWizard for persalys
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,23 +18,23 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Wizard.hxx"
+#include "persalys/Wizard.hxx"
 
-#include "otgui/FileTools.hxx"
-#include "otgui/AnalysisWizard.hxx"
+#include "persalys/FileTools.hxx"
+#include "persalys/AnalysisWizard.hxx"
 
 #include <QIcon>
 #include <QAbstractButton>
 #include <QDesktopServices>
 
-namespace OTGUI
+namespace PERSALYS
 {
 QMap<QString, QString> Wizard::DocLinks_;
 
 Wizard::Wizard(QWidget * parent)
   : QWizard(parent)
 {
-  setWindowIcon(QIcon(":/images/otgui.ico"));
+  setWindowIcon(QIcon(":/images/persalys.ico"));
   setWizardStyle(QWizard::MacStyle);
   setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/OT_image256x256.png"));
   setButtonText(QWizard::BackButton, tr("Back"));

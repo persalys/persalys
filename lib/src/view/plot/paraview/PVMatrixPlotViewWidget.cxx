@@ -1,6 +1,6 @@
-#include "otgui/PVMatrixPlotViewWidget.hxx"
+#include "persalys/PVMatrixPlotViewWidget.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 const char PVMatrixPlotViewWidget::PV_VIEW_TYPE[] = "PlotMatrixView";
 

@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SubWindowsStackedWidget.hxx"
+#include "persalys/SubWindowsStackedWidget.hxx"
 
 #include <QDebug>
 #include <QLayout>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SubWindowsStackedWidget::SubWindowsStackedWidget(QWidget * parent)

@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/GraphConfigurationWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
 
-#include "otgui/TitledComboBox.hxx"
-#include "otgui/ListWidgetWithCheckBox.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/TitledComboBox.hxx"
+#include "persalys/ListWidgetWithCheckBox.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -37,7 +37,7 @@
 
 #include <qwt_plot_renderer.h>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,

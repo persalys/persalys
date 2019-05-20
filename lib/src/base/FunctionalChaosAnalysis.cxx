@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FunctionalChaosAnalysis.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
 
-#include "otgui/MetaModel.hxx"
+#include "persalys/MetaModel.hxx"
 
 #include <openturns/LinearEnumerateFunction.hxx>
 #include <openturns/FixedStrategy.hxx>
@@ -38,7 +38,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(FunctionalChaosAnalysis)
@@ -404,7 +404,7 @@ Parameters FunctionalChaosAnalysis::getParameters() const
 String FunctionalChaosAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.FunctionalChaosAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+  oss << getName() << " = persalys.FunctionalChaosAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

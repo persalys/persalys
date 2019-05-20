@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MainWidget.hxx"
+#include "persalys/MainWidget.hxx"
 
-#include "otgui/WelcomeWindow.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/SubWindow.hxx"
+#include "persalys/WelcomeWindow.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/SubWindow.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QTabBar>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MainWidget::MainWidget(QWidget* parent)

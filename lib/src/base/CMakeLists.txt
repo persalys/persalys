@@ -177,11 +177,11 @@ if (SalomeYACS_FOUND)
 endif ()
 
 
-otgui_add_library (otguibase ${BASE_SOURCEFILES})
-target_compile_features (otguibase PRIVATE cxx_lambdas)
+persalys_add_library (persalysbase ${BASE_SOURCEFILES})
+target_compile_features (persalysbase PRIVATE cxx_lambdas)
 
 if ( BUILD_SHARED_LIBS )
-  set_target_properties ( otguibase PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
+  set_target_properties ( persalysbase PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -190,31 +190,31 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( otguibase PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( otguibase PROPERTIES SOVERSION ${LIB_SOVERSION} )
+set_target_properties ( persalysbase PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties ( persalysbase PROPERTIES SOVERSION ${LIB_SOVERSION} )
 
-target_link_libraries ( otguibase ${OPENTURNS_LIBRARIES} )
+target_link_libraries ( persalysbase ${OPENTURNS_LIBRARIES} )
 
 if (OTMORRIS_FOUND)
-  target_link_libraries ( otguibase ${OTMORRIS_LIBRARIES} )
+  target_link_libraries ( persalysbase ${OTMORRIS_LIBRARIES} )
 endif ()
 
 if (SalomeYACS_FOUND)
-  target_link_libraries ( otguibase ydefx)
+  target_link_libraries ( persalysbase ydefx)
 endif ()
 
-target_link_libraries (otguibase ${PYTHON_LIBRARIES})
+target_link_libraries (persalysbase ${PYTHON_LIBRARIES})
 if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-  target_compile_definitions (otguibase PRIVATE -DMS_WIN64)
+  target_compile_definitions (persalysbase PRIVATE -DMS_WIN64)
 endif ()
-target_link_libraries (otguibase ${Boost_LIBRARIES})
+target_link_libraries (persalysbase ${Boost_LIBRARIES})
 if(MINGW)
   # add this link for boost::process
-  target_link_libraries(otguibase ws2_32)
+  target_link_libraries(persalysbase ws2_32)
 endif()
-install ( TARGETS otguibase
+install ( TARGETS persalysbase
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}
-  ARCHIVE DESTINATION ${OTGUI_LIBRARY_PATH}
+  LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
+  ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 
