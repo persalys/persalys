@@ -585,7 +585,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
       sample.stack(processSample_.getField(in).getValues().getMarginal(out));
       plotWidget->plotCurve(sample, QPen(colors[in].c_str()).color(), QwtPlotCurve::Lines, 0, tr("Input %1").arg(in));
     }
-    plotWidget->setTitle(tr("Trajectories"));
+    plotWidget->setTitle(nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
     plotWidget->setAxisTitle(QwtPlot::yLeft, outNames[out]);
     plotWidget->setAxisTitle(QwtPlot::xBottom, meshParamName);
     plotWidget->insertLegend(new QwtLegend, QwtPlot::RightLegend);
@@ -856,7 +856,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     sample.stack(processSample_.getMesh().getVertices());
 
     outPVGraph->PVViewWidget::setData(sample);
-    outPVGraph->setChartTitle("", "", tr("Trajectories"));
+    outPVGraph->setChartTitle("", "", nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
     outPVGraph->setXAxisTitle("", "", meshParamName[0]);
     outPVGraph->setYAxisTitle("", "", currentOutName[0]);
     outPVGraph->setXAxisData(meshParamName[0]);
