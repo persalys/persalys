@@ -29,6 +29,7 @@
 #include "persalys/FileTools.hxx"
 
 #include <openturns/VisualTest.hxx>
+#include <openturns/UserDefined.hxx>
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -478,12 +479,29 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // -- cdf
+  cdfPlot_->plotCDFCurve(distribution);
+
+  // -- empirical cdf
   const Sample sample(currentFittingTestResult_.getValues());
   const Scalar xmin = sample.getMin()[0] - 1.0;
   const Scalar xmax = sample.getMax()[0] + 1.0;
-  const Sample F_nx(VisualTest::DrawEmpiricalCDF(sample, xmin, xmax).getDrawable(0).getData());
+  UserDefined u(sample);
+  const Sample F_nxOT(u.drawCDF(xmin, xmax).getDrawable(0).getData());
+
+  Sample F_nx(0, 2);
+  for (UnsignedInteger i = 0; i < F_nxOT.getSize(); ++i)
+  {
+    F_nx.add(F_nxOT[i]);
+    if (i < F_nxOT.getSize() - 1)
+    {
+      Point interPt(2);
+      interPt[0] = F_nxOT[i][0];
+      interPt[1] = F_nxOT[i+1][1];
+      F_nx.add(interPt);
+    }
+  }
   cdfPlot_->plotCurve(F_nx, QPen(Qt::blue, 2));
-  cdfPlot_->plotCDFCurve(distribution);
+
   // compute Kolmogorov–Smirnov statistic : D_n = sup |F_n(x) - F(x)|
   const Sample Fx(distribution.computeCDF(F_nx.getMarginal(0)));
   Sample KSStatistic(2, 2);
