@@ -23,7 +23,6 @@
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/RadioButtonDelegate.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
-#include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/DistributionDictionary.hxx"
 #include "persalys/FileTools.hxx"
@@ -127,14 +126,13 @@ void InferenceResultWidget::buildInterface()
     QVector<PlotWidget*> listpdf_cdfPlot;
     listpdf_cdfPlot.append(pdfPlot_);
     listpdf_cdfPlot.append(cdfPlot_);
-    GraphConfigurationWidget * pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listpdf_cdfPlot,
+    pdf_cdfPlotSettingWidget_ = new GraphConfigurationWidget(listpdf_cdfPlot,
         QStringList(),
         QStringList(),
         GraphConfigurationWidget::PDF_Inference,
         this);
-    pdf_cdfPlotSettingWidget->hide();
-    plotWidget->setDockWidget(pdf_cdfPlotSettingWidget);
-    connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
+    plotWidget->setDockWidget(pdf_cdfPlotSettingWidget_);
+    connect(pdf_cdfPlotSettingWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
     plotWidgetLayout->addWidget(pdf_cdfStackedWidget);
     scrollArea->setWidget(plotWidget);
@@ -439,10 +437,11 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // reset
-  pdfPlot_->show();
+  pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 0 ? pdfPlot_->show() : pdfPlot_->hide();
   pdfPlot_->clear();
   if (cdfPlot_ && qqPlot_)
   {
+    pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 1 ? cdfPlot_->show() : cdfPlot_->hide();
     cdfPlot_->clear();
     qqPlot_->clear();
   }
