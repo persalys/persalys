@@ -29,6 +29,7 @@
 
 #include "persalys/ParametersWidget.hxx"
 #include "persalys/TranslationManager.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QHBoxLayout>
 #include <QScrollArea>
@@ -81,6 +82,9 @@ void AnalysisWindow::buildInterface()
 
   // progress bar
   progressBar_ = new QProgressBar;
+  QPalette p = progressBar_->palette();
+  p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
+  progressBar_->setPalette(p);
   mainLayout->addWidget(progressBar_, 1, 0);
   connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
 
