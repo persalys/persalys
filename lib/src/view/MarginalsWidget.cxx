@@ -97,9 +97,11 @@ void MarginalsWidget::buildInterface()
   ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
   delegate->setNoWheelEvent(true);
   inputTableView_->setItemDelegateForColumn(1, delegate);
+  inputTableView_->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
   // - connections
-  connect(inputTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
+  connect(inputTableView_->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), this, SLOT(updateDistributionWidgets(QModelIndex, QModelIndex)));
+
   connect(inputTableModel_, SIGNAL(distributionChanged(const QModelIndex&)), this, SLOT(updateDistributionWidgets(const QModelIndex&)));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SIGNAL(updateDependenciesRequested()));
   connect(inputTableModel_, SIGNAL(distributionsChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
@@ -303,7 +305,7 @@ void MarginalsWidget::updateProbabilisticModel()
 }
 
 
-void MarginalsWidget::updateDistributionWidgets(const QModelIndex & index)
+void MarginalsWidget::updateDistributionWidgets(const QModelIndex & index, const QModelIndex & /*prevIndex*/)
 {
   if (!index.isValid())
   {

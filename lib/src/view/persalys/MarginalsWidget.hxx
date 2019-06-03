@@ -52,7 +52,7 @@ protected:
 
 public slots:
   void openUrl();
-  void updateDistributionWidgets(const QModelIndex & index);
+  void updateDistributionWidgets(const QModelIndex & index, const QModelIndex & prevIndex = QModelIndex());
   void updateCurrentVariableDistributionWidgets();
   void updateDistributionParametersWidgets(const QModelIndex & index);
   void updateTruncationParametersWidgets(const QModelIndex & index);
