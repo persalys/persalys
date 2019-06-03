@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/WithStopCriteriaAnalysis.hxx"
+#include "persalys/WithStopCriteriaAnalysis.hxx"
 
-#include "otgui/AnalysisImplementation.hxx"
-#include "otgui/BaseTools.hxx"
+#include "persalys/AnalysisImplementation.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 /* Default constructor */

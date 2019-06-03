@@ -1,15 +1,15 @@
-#include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/KrigingAnalysis.hxx"
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
-#include "otgui/MetaModelAnalysisWizard.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/KrigingAnalysis.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/MetaModelAnalysisWizard.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
 
 #include <QtTest/QtTest>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestMetaModelAnalysisWizard : public QObject
 {
@@ -202,5 +202,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestMetaModelAnalysisWizard)
+QTEST_MAIN(PERSALYS::TestMetaModelAnalysisWizard)
 #include "t_MetaModelAnalysisWizard_std.moc"

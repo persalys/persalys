@@ -4,31 +4,31 @@
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_E = ot.Beta(0.93, 3.2, 2.8e+07, 4.8e+07)
-E = otguibase.Input('E', 30000000, dist_E, 'Young\'s modulus (Pa)')
+E = persalys.Input('E', 30000000, dist_E, 'Young\'s modulus (Pa)')
 dist_F = ot.LogNormal(9.46206, 0.554513, 15000)
-F = otguibase.Input('F', 30000, dist_F, 'Force applied (N)')
+F = persalys.Input('F', 30000, dist_F, 'Force applied (N)')
 dist_L = ot.Uniform(250, 260)
-L = otguibase.Input('L', 250, dist_L, 'Length (m4)')
+L = persalys.Input('L', 250, dist_L, 'Length (m4)')
 dist_I = ot.Beta(2.5, 4, 310, 450)
-I = otguibase.Input('I', 400, dist_I, 'Section modulus (m4)')
-y = otguibase.Output('y', 'Vertical deviation (m)')
+I = persalys.Input('I', 400, dist_I, 'Section modulus (m4)')
+y = persalys.Output('y', 'Vertical deviation (m)')
 inputs = [E, F, L, I]
 outputs = [y]
 formulas = ['F*L^3/(3*E*I)']
-myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
+myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
 R = ot.CorrelationMatrix(2)
 R[0, 1] = -0.2
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))
 myPhysicalModel.setCopula(['L', 'I'], copula)
 myStudy.add(myPhysicalModel)
-limitState1 = otguibase.LimitState('limitState1', myPhysicalModel, 'y', ot.Greater(), 30)
+limitState1 = persalys.LimitState('limitState1', myPhysicalModel, 'y', ot.Greater(), 30)
 myStudy.add(limitState1)
-mySobol = otguibase.SobolAnalysis('mySobol', myPhysicalModel)
+mySobol = persalys.SobolAnalysis('mySobol', myPhysicalModel)
 mySobol.setMaximumCalls(1000)
 mySobol.setMaximumConfidenceIntervalLength(-1)
 mySobol.setMaximumElapsedTime(60)
@@ -37,7 +37,7 @@ mySobol.setReplicationSize(166)
 mySobol.setSeed(0)
 mySobol.setConfidenceLevel(0.95)
 myStudy.add(mySobol)
-mySRC = otguibase.SRCAnalysis('mySRC', myPhysicalModel, 1000)
+mySRC = persalys.SRCAnalysis('mySRC', myPhysicalModel, 1000)
 mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
@@ -45,21 +45,21 @@ values = [3e+07,30000,250,400]
 lowerBounds = [2.8e+07,15000,250,310]
 upperBounds = [4.8e+07,47021.3,260,450]
 levels = [2,2,2,2]
-aDesign = otguibase.GridDesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
+aDesign = persalys.GridDesignOfExperiment('aDesign', myPhysicalModel, lowerBounds, upperBounds, levels, values)
 aDesign.setBlockSize(1)
 interestVariables = ['y']
 aDesign.setInterestVariables(interestVariables)
 myStudy.add(aDesign)
-myTaylorExpansionMoments = otguibase.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
+myTaylorExpansionMoments = persalys.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)
-myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
+myMonteCarlo = persalys.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
 myMonteCarlo.setMaximumCalls(1000)
 myMonteCarlo.setMaximumCoefficientOfVariation(0.01)
 myMonteCarlo.setMaximumElapsedTime(60)
 myMonteCarlo.setBlockSize(1)
 myMonteCarlo.setSeed(0)
 myStudy.add(myMonteCarlo)
-myMonteCarloSimu = otguibase.MonteCarloReliabilityAnalysis('myMonteCarloSimu', limitState1)
+myMonteCarloSimu = persalys.MonteCarloReliabilityAnalysis('myMonteCarloSimu', limitState1)
 myMonteCarloSimu.setMaximumCalls(10000)
 myMonteCarloSimu.setMaximumCoefficientOfVariation(0.01)
 myMonteCarloSimu.setMaximumElapsedTime(60)

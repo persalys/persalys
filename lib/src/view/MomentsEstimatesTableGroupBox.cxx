@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MomentsEstimatesTableGroupBox.hxx"
+#include "persalys/MomentsEstimatesTableGroupBox.hxx"
 
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisResult& result,

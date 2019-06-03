@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ProbabilisticDesignPage.hxx"
+#include "persalys/ProbabilisticDesignPage.hxx"
 
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QGridLayout>
 #include <QRadioButton>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ProbabilisticDesignPage::ProbabilisticDesignPage(QWidget* parent)

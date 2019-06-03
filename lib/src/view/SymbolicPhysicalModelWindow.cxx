@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SymbolicPhysicalModelWindow.hxx"
+#include "persalys/SymbolicPhysicalModelWindow.hxx"
 
-#include "otgui/PhysicalModelWindowWidget.hxx"
+#include "persalys/PhysicalModelWindowWidget.hxx"
 
 #include <QVBoxLayout>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)

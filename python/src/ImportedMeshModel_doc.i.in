@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::ImportedMeshModel
+%feature("docstring") PERSALYS::ImportedMeshModel
 "Create a model with imported meshes
 
 Available constructors:
@@ -6,7 +6,7 @@ Available constructors:
 
 Parameters
 ----------
-parameters : sequence of :class:`otguibase.Variable`
+parameters : sequence of :class:`persalys.Variable`
     Sequence of index parameters (optional). By default
     the index parameter is named **t**
 fileName : str
@@ -18,31 +18,31 @@ columns : sequence of int
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the mesh model:
 
 >>> mesh = ot.IntervalMesher(ot.Indices(1, 20)).build(ot.Interval(0., 12.))
 >>> mesh.getVertices().exportToCSVFile('mesh.csv')
 
->>> meshModel = otguibase.ImportedMeshModel([otguibase.Variable('x', 'aDescription')], 'mesh.csv', [0])
+>>> meshModel = persalys.ImportedMeshModel([persalys.Variable('x', 'aDescription')], 'mesh.csv', [0])
 
 Create the model:
 
->>> z0 = otguibase.Input('z0', 100)
->>> v0 = otguibase.Input('v0', 55)
->>> m = otguibase.Input('m', 80)
->>> c = otguibase.Input('c', 15)
->>> z = otguibase.Output('z')
+>>> z0 = persalys.Input('z0', 100)
+>>> v0 = persalys.Input('v0', 55)
+>>> m = persalys.Input('m', 80)
+>>> c = persalys.Input('c', 15)
+>>> z = persalys.Output('z')
 >>> formula = ['max(0, z0 + (m * 9.81 / c) * x + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-x * c / m)))']
->>> model = otguibase.SymbolicFieldModel('model',meshModel , [z0, v0, m, c], [z], formula)
+>>> model = persalys.SymbolicFieldModel('model',meshModel , [z0, v0, m, c], [z], formula)
 
 >>> y = model.getPointToFieldFunction()([100, 55, 80, 15])"
 
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedMeshModel::setParameters
+%feature("docstring") PERSALYS::ImportedMeshModel::setParameters
 "Parameters accessor.
 
 Parameters
@@ -54,7 +54,7 @@ columns : sequence of int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedMeshModel::getFileName
+%feature("docstring") PERSALYS::ImportedMeshModel::getFileName
 "File name accessor.
 
 Returns
@@ -64,7 +64,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedMeshModel::getColumns
+%feature("docstring") PERSALYS::ImportedMeshModel::getColumns
 "Columns accessor.
 
 Returns

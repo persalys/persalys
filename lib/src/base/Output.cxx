@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Output.hxx"
+#include "persalys/Output.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(Output)
@@ -87,7 +87,7 @@ String Output::getPythonScript() const
 
   String pythonName(getName());
   std::replace(pythonName.begin(), pythonName.end(), '.', '_');
-  oss << pythonName << " = otguibase.Output('" << getName() << "', '" << getEscapedDescription() << "')\n";
+  oss << pythonName << " = persalys.Output('" << getName() << "', '" << getEscapedDescription() << "')\n";
   if (hasBeenComputed_)
     oss << pythonName << ".setValue(" << getValue() << ")\n";
   if (!isSelected_)

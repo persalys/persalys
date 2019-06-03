@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SRCResultWindow.hxx"
+#include "persalys/SRCResultWindow.hxx"
 
-#include "otgui/SRCAnalysis.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/SensitivityResultWidget.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/ParametersTableView.hxx"
+#include "persalys/SRCAnalysis.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/SensitivityResultWidget.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/ParametersTableView.hxx"
 
 #include <QGroupBox>
 #include <QScrollArea>
@@ -33,7 +33,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SRCResultWindow::SRCResultWindow(AnalysisItem * item, QWidget * parent)

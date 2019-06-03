@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DependenciesWidget.hxx"
+#include "persalys/DependenciesWidget.hxx"
 
-#include "otgui/CopulaWidget.hxx"
-#include "otgui/DependenciesTableModel.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/ComboBoxDelegate.hxx"
-#include "otgui/VariablesSelectionTableModel.hxx"
-#include "otgui/CheckableHeaderView.hxx"
-#include "otgui/CopulaInferenceResultWizard.hxx"
-#include "otgui/StudyItem.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/CopulaWidget.hxx"
+#include "persalys/DependenciesTableModel.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/ComboBoxDelegate.hxx"
+#include "persalys/VariablesSelectionTableModel.hxx"
+#include "persalys/CheckableHeaderView.hxx"
+#include "persalys/CopulaInferenceResultWizard.hxx"
+#include "persalys/StudyItem.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <openturns/NormalCopula.hxx>
 
@@ -41,7 +41,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DependenciesWidget::DependenciesWidget(ProbabilisticModelItem * item, QWidget *parent)

@@ -20,12 +20,12 @@
  */
 #include <openturns/PythonWrappingFunctions.hxx>   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 
-#include "otgui/Controller.hxx"
+#include "persalys/Controller.hxx"
 
 #include <QThread>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 void Worker::process(Analysis analysis)
@@ -44,8 +44,8 @@ void Worker::process(Analysis analysis)
 Controller::Controller()
   : QObject()
 {
-  qRegisterMetaType<OTGUI::PhysicalModel>("PhysicalModel");
-  qRegisterMetaType<OTGUI::Analysis>("Analysis");
+  qRegisterMetaType<PERSALYS::PhysicalModel>("PhysicalModel");
+  qRegisterMetaType<PERSALYS::Analysis>("Analysis");
 
   // new thread
   QThread * workerThread = new QThread;

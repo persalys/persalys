@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::TaylorExpansionMomentsResult
+%feature("docstring") PERSALYS::TaylorExpansionMomentsResult
 "Get the results of Taylor expansions for moments estimation."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getOutputNames
+%feature("docstring") PERSALYS::TaylorExpansionMomentsResult::getOutputNames
 "Output variable names accessor.
 
 Returns
@@ -13,7 +13,7 @@ listXMax : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getMeanFirstOrder
+%feature("docstring") PERSALYS::TaylorExpansionMomentsResult::getMeanFirstOrder
 "First order mean accessor.
 
 Returns
@@ -23,7 +23,7 @@ mean : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getMeanSecondOrder
+%feature("docstring") PERSALYS::TaylorExpansionMomentsResult::getMeanSecondOrder
 "Second order mean accessor.
 
 Returns
@@ -33,7 +33,7 @@ mean : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getStandardDeviation
+%feature("docstring") PERSALYS::TaylorExpansionMomentsResult::getStandardDeviation
 "Standard deviation accessor.
 
 Returns
@@ -43,7 +43,7 @@ mean : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::TaylorExpansionMomentsResult::getVariance
+%feature("docstring") PERSALYS::TaylorExpansionMomentsResult::getVariance
 "Variance accessor.
 
 Returns

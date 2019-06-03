@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentEvaluationWizard.hxx"
+#include "persalys/DesignOfExperimentEvaluationWizard.hxx"
 
-#include "otgui/DesignOfExperimentEvaluation.hxx"
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/StudyItem.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/ModelEvaluation.hxx"
+#include "persalys/StudyItem.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -31,7 +31,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis, QWidget* parent)

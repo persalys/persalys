@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SpinBoxDelegate.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
 
-#include "otgui/LogDoubleSpinBox.hxx"
-#include "otgui/AppliException.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/LogDoubleSpinBox.hxx"
+#include "persalys/AppliException.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SpinBoxDelegate::SpinBoxDelegate(QObject *parent)

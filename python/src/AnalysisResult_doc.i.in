@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::AnalysisResult
+%feature("docstring") PERSALYS::AnalysisResult
 "Class containing results of the analysis."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::AnalysisResult::getElapsedTime
+%feature("docstring") PERSALYS::AnalysisResult::getElapsedTime
 "Elapsed time in seconds to perform the analysis.
 
 Returns

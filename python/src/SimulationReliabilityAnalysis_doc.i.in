@@ -1,16 +1,16 @@
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis
 "Reliability analysis using simulation method.
 
 Parameters
 ----------
 name : str
     Name
-limitState : :class:`~otguibase.LimitState`
+limitState : :class:`~persalys.LimitState`
     Limit state"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setBlockSize
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::setBlockSize
 "Block size accessor.
 
 Parameters
@@ -21,7 +21,7 @@ size : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getBlockSize
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::getBlockSize
 "Block size accessor.
 
 Returns
@@ -32,7 +32,7 @@ size : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setSeed
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::setSeed
 "Seed accessor.
 
 Parameters
@@ -42,7 +42,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getSeed
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::getSeed
 "Seed accessor.
 
 Returns
@@ -52,7 +52,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setMaximumCoefficientOfVariation
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::setMaximumCoefficientOfVariation
 "Maximum coefficient of variation accessor.
 
 Parameters
@@ -62,7 +62,7 @@ maxCovar : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getMaximumCoefficientOfVariation
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::getMaximumCoefficientOfVariation
 "Maximum coefficient of variation accessor.
 
 Returns
@@ -72,7 +72,7 @@ maxCovar : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::setMaximumCalls
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::setMaximumCalls
 "Maximum calls accessor.
 
 Parameters
@@ -82,7 +82,7 @@ max : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getMaximumCalls
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::getMaximumCalls
 "Maximum calls accessor.
 
 Returns
@@ -92,10 +92,10 @@ max : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityAnalysis::getResult
+%feature("docstring") PERSALYS::SimulationReliabilityAnalysis::getResult
 "Result accessor.
 
 Returns
 -------
-result : :class:`~otguibase.SimulationReliabilityResult`
+result : :class:`~persalys.SimulationReliabilityResult`
     Result"

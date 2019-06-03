@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OutputsSelectionGroupBox.hxx"
+#include "persalys/OutputsSelectionGroupBox.hxx"
 
 #include <QVBoxLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)

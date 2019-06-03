@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/YACSPhysicalModel.hxx"
+#include "persalys/YACSPhysicalModel.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(YACSPhysicalModel)
@@ -205,7 +205,7 @@ String YACSPhysicalModel::getPythonScript() const
 
   oss << "code = '''" << myString << "'''\n";
   oss << getName()
-      << " = otguibase.YACSPhysicalModel('" << getName() <<"', code)\n";
+      << " = persalys.YACSPhysicalModel('" << getName() <<"', code)\n";
   oss << getJobParamsPythonScript();
 
   oss << getProbaModelPythonScript();

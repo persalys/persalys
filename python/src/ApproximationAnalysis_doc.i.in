@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::ApproximationAnalysis
+%feature("docstring") PERSALYS::ApproximationAnalysis
 "Class to define reliability analysis using approximation method.
 
 "
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ApproximationAnalysis::getPhysicalStartingPoint
+%feature("docstring") PERSALYS::ApproximationAnalysis::getPhysicalStartingPoint
 "Physical starting point accessor.
 
 Returns
@@ -16,7 +16,7 @@ point : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ApproximationAnalysis::setPhysicalStartingPoint
+%feature("docstring") PERSALYS::ApproximationAnalysis::setPhysicalStartingPoint
 "Physical starting point accessor.
 
 Parameters
@@ -27,7 +27,7 @@ point : sequence of float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ApproximationAnalysis::getOptimizationAlgorithm
+%feature("docstring") PERSALYS::ApproximationAnalysis::getOptimizationAlgorithm
 "Accessor to the optimization algorithm used to find the design point.
 
 Returns
@@ -38,7 +38,7 @@ algorithm : :py:class:`openturns.OptimizationAlgorithm`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ApproximationAnalysis::setOptimizationAlgorithm
+%feature("docstring") PERSALYS::ApproximationAnalysis::setOptimizationAlgorithm
 "Accessor to the optimization algorithm used to find the design point.
 
 Parameters

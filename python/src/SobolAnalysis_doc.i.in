@@ -1,28 +1,28 @@
-%feature("docstring") OTGUI::SobolAnalysis
+%feature("docstring") PERSALYS::SobolAnalysis
 "Run a Sobol sensitivity analysis.
 
 Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the Sobol analysis:
 
->>> analysis = otguibase.SobolAnalysis('anAnalysis', myPhysicalModel)
+>>> analysis = persalys.SobolAnalysis('anAnalysis', myPhysicalModel)
 >>> analysis.setMaximumCalls(500)
 >>> analysis.setReplicationSize(125)
 >>> analysis.run()
@@ -34,17 +34,17 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::getResult
+%feature("docstring") PERSALYS::SobolAnalysis::getResult
 "Result accessor.
 
 Returns
 -------
-result : :class:`~otguibase.SobolResult`
+result : :class:`~persalys.SobolResult`
     Result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::getConfidenceLevel
+%feature("docstring") PERSALYS::SobolAnalysis::getConfidenceLevel
 "Confidence level accessor.
 
 Returns
@@ -54,7 +54,7 @@ level : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::setConfidenceLevel
+%feature("docstring") PERSALYS::SobolAnalysis::setConfidenceLevel
 "Confidence level accessor.
 
 Parameters
@@ -64,7 +64,7 @@ level : float in ]0,1[
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::getReplicationSize
+%feature("docstring") PERSALYS::SobolAnalysis::getReplicationSize
 "Replication size accessor.
 
 Returns
@@ -74,7 +74,7 @@ size : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SobolAnalysis::setReplicationSize
+%feature("docstring") PERSALYS::SobolAnalysis::setReplicationSize
 "Replication size accessor.
 
 Parameters

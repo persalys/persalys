@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class defining the otgui studies
+ *  @brief Class defining the persalys studies
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Study.hxx"
+#include "persalys/Study.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/Study.hxx>
 #include <openturns/XMLStorageManager.hxx>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(Study)
@@ -38,7 +38,7 @@ PersistentCollection<Study > Study::studies_;
 Observer * Study::studyObserver_ = 0;
 
 
-Collection<OTGUI::Study> Study::GetInstances()
+Collection<PERSALYS::Study> Study::GetInstances()
 {
   return studies_;
 }

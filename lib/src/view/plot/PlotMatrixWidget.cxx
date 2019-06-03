@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PlotMatrixWidget.hxx"
+#include "persalys/PlotMatrixWidget.hxx"
 
-#include "otgui/PlotWidget.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/PlotWidget.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample & sample2, QWidget* parent)

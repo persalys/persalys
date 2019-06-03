@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/LogSpinBox.hxx"
+#include "persalys/LogSpinBox.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 LogSpinBox::LogSpinBox(int base, QWidget * parent)

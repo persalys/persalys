@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/FORMAnalysisResult.hxx"
+#include "persalys/FORMAnalysisResult.hxx"
 %}
 
 %include FORMAnalysisResult_doc.i
 
-%include otgui/FORMAnalysisResult.hxx
-namespace OTGUI {
+%include persalys/FORMAnalysisResult.hxx
+namespace PERSALYS {
 
-%extend FORMAnalysisResult { FORMAnalysisResult(const FORMAnalysisResult & other) { return new OTGUI::FORMAnalysisResult(other); } 
+%extend FORMAnalysisResult { FORMAnalysisResult(const FORMAnalysisResult & other) { return new PERSALYS::FORMAnalysisResult(other); } 
 
 } }

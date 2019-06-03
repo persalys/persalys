@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopulaInferenceResultWidget.hxx"
+#include "persalys/CopulaInferenceResultWidget.hxx"
 
-#include "otgui/RadioButtonDelegate.hxx"
-#include "otgui/CopulaParametersTabWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/InferenceResultWidget.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
-#include "otgui/TranslationManager.hxx"
-#include "otgui/TemporaryLabel.hxx"
+#include "persalys/RadioButtonDelegate.hxx"
+#include "persalys/CopulaParametersTabWidget.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/InferenceResultWidget.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
+#include "persalys/TranslationManager.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -34,7 +34,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CopulaInferenceResultWidget::CopulaInferenceResultWidget(const CopulaInferenceSetResult& currentSetResult,

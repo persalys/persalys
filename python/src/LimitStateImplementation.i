@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/LimitStateImplementation.hxx"
+#include "persalys/LimitStateImplementation.hxx"
 %}
 
 %include LimitStateImplementation_doc.i
 
-%include otgui/LimitStateImplementation.hxx
-namespace OTGUI {
+%include persalys/LimitStateImplementation.hxx
+namespace PERSALYS {
 
-%extend LimitStateImplementation { LimitStateImplementation(const LimitStateImplementation & other) { return new OTGUI::LimitStateImplementation(other); } 
+%extend LimitStateImplementation { LimitStateImplementation(const LimitStateImplementation & other) { return new PERSALYS::LimitStateImplementation(other); } 
 
 } }

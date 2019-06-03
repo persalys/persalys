@@ -1,32 +1,32 @@
-%feature("docstring") OTGUI::MonteCarloReliabilityAnalysis
+%feature("docstring") PERSALYS::MonteCarloReliabilityAnalysis
 "Run a reliability analysis using the Monte Carlo method.
 
 Parameters
 ----------
 name : str
     Name
-limitState : :class:`~otguibase.LimitState`
+limitState : :class:`~persalys.LimitState`
     Limit state
 
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the limit state:
 
->>> limitState = otguibase.LimitState('ls1', myPhysicalModel, 'G', ot.Less(), 0.)
+>>> limitState = persalys.LimitState('ls1', myPhysicalModel, 'G', ot.Less(), 0.)
 
 Process a reliability analysis using the Monte Carlo method:
 
->>> analysis = otguibase.MonteCarloReliabilityAnalysis('myAnalysis', limitState)
+>>> analysis = persalys.MonteCarloReliabilityAnalysis('myAnalysis', limitState)
 >>> analysis.setMaximumCalls(1000)
 >>> analysis.run()
 

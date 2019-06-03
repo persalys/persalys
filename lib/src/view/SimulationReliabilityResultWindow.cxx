@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SimulationReliabilityResultWindow.hxx"
+#include "persalys/SimulationReliabilityResultWindow.hxx"
 
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/ImportanceSamplingAnalysis.hxx"
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/ApproximationResultTabWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/TranslationManager.hxx"
+#include "persalys/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/ImportanceSamplingAnalysis.hxx"
+#include "persalys/FORMImportanceSamplingAnalysis.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/ApproximationResultTabWidget.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -40,7 +40,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent)

@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MorrisPage.hxx"
+#include "persalys/MorrisPage.hxx"
 
-#include "otgui/SpinBoxDelegate.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/ScreeningAnalysisWizard.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
+#include "persalys/ScreeningAnalysisWizard.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 // First Morris page

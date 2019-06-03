@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FMIPhysicalModel.hxx"
-#include "otgui/PythonScriptEvaluation.hxx"
-#include "otgui/FMUInfo.hxx"
+#include "persalys/FMIPhysicalModel.hxx"
+#include "persalys/PythonScriptEvaluation.hxx"
+#include "persalys/FMUInfo.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/MemoizeFunction.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(FMIPhysicalModel)
@@ -307,7 +307,7 @@ String FMIPhysicalModel::getPythonScript() const
   oss << "]\n";
 
   oss << "fmuFile = '" + getFMUFileName() + "'\n";
-  oss << getName() + " = otguibase.FMIPhysicalModel('" + getName() + "', inputs, outputs, fmuFile)\n";
+  oss << getName() + " = persalys.FMIPhysicalModel('" + getName() + "', inputs, outputs, fmuFile)\n";
   if (isParallel())
     oss << getName() + ".setParallel(True)\n";
 

@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CodeModel.hxx"
+#include "persalys/CodeModel.hxx"
 
-#include "otgui/PythonPhysicalModel.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CodeModel::CodeModel(const PhysicalModel & physicalModel, QObject* parent)

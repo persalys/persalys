@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/VariablesSelectionTableModel.hxx"
+#include "persalys/VariablesSelectionTableModel.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 VariablesSelectionTableModel::VariablesSelectionTableModel(const Description& variablesNames, const Interval::BoolCollection& isVariablesChecked, QObject* parent)

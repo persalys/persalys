@@ -1,8 +1,8 @@
-#include "otgui/MainWidget.hxx"
+#include "persalys/MainWidget.hxx"
 
 #include <QtTest/QtTest>
 
-using namespace OTGUI;
+using namespace PERSALYS;
 
 class TestGui : public QObject
 {

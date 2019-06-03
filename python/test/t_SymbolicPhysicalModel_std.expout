@@ -32,19 +32,19 @@ selected outputs= [Y0]
 inputs= [class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0 finiteDifferenceStep=1e-05,class=Input name=X4 value=0 description= distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X5 value=0 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07]
 outputs= [class=Output name=Y0 description=output_1]
 script= dist_X0 = ot.Normal(0, 1)
-X0 = otguibase.Input('X0', 1, dist_X0, 'aDescription')
+X0 = persalys.Input('X0', 1, dist_X0, 'aDescription')
 dist_X1 = ot.LogNormal(0, 1, 0)
-X1 = otguibase.Input('X1', 2, dist_X1, '')
+X1 = persalys.Input('X1', 2, dist_X1, '')
 X1.setFiniteDifferenceStep(1e-05)
 dist_X4 = ot.Normal(0, 1)
-X4 = otguibase.Input('X4', 0, dist_X4, '')
+X4 = persalys.Input('X4', 0, dist_X4, '')
 dist_X5 = ot.Normal(0, 1)
-X5 = otguibase.Input('X5', 0, dist_X5, 'aDescription')
-Y0 = otguibase.Output('Y0', 'output_1')
+X5 = persalys.Input('X5', 0, dist_X5, 'aDescription')
+Y0 = persalys.Output('Y0', 'output_1')
 inputs = [X0, X1, X4, X5]
 outputs = [Y0]
 formulas = ['sin(X0)+8*X1+0.5']
-aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.239358526049
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))

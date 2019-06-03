@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataAnalysis.hxx"
+#include "persalys/DataAnalysis.hxx"
 
 #include <openturns/Normal.hxx>
 #include <openturns/ChiSquare.hxx>
@@ -28,7 +28,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(DataAnalysis)
@@ -291,7 +291,7 @@ DataAnalysisResult DataAnalysis::getResult() const
 String DataAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.DataAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+  oss << getName() << " = persalys.DataAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
 
   return oss;
 }

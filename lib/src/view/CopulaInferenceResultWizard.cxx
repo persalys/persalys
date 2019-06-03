@@ -18,19 +18,19 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopulaInferenceResultWizard.hxx"
+#include "persalys/CopulaInferenceResultWizard.hxx"
 
-#include "otgui/CopulaInferenceAnalysis.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/CopulaInferenceResultWidget.hxx"
-#include "otgui/ComboBoxDelegate.hxx"
+#include "persalys/CopulaInferenceAnalysis.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/CopulaInferenceResultWidget.hxx"
+#include "persalys/ComboBoxDelegate.hxx"
 
 #include <QGridLayout>
 #include <QHeaderView>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CopulaInferenceResultWizard::CopulaInferenceResultWizard(const Study &study, const Description &variables, QWidget *parent)

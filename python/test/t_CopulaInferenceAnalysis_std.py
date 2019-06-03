@@ -3,10 +3,10 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 import os
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
 filename = 'data2.csv'
@@ -17,12 +17,12 @@ sample.setDescription(['X0', 'X1', 'X2', 'X3'])
 sample.exportToCSVFile(filename, ',')
 columns = [0, 2, 3]
 
-model = otguibase.DataModel('myDataModel', "data2.csv", columns)
+model = persalys.DataModel('myDataModel', "data2.csv", columns)
 myStudy.add(model)
 print(model)
 
 # Dependencies inference analysis ##
-analysis = otguibase.CopulaInferenceAnalysis('analysis', model)
+analysis = persalys.CopulaInferenceAnalysis('analysis', model)
 variables = ["X0", "X3"]
 factories = [ot.NormalCopulaFactory(), ot.GumbelCopulaFactory()]
 analysis.setDistributionsFactories(variables, factories)

@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CustomStandardItemModel.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
 
-#include "otgui/AppliException.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/AppliException.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 #include <QFile>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CustomStandardItemModel::CustomStandardItemModel(int nbRows, int nbColumns, QObject * parent)

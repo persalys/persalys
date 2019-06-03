@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Welcome window of otgui
+ *  @brief Welcome window of persalys
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/WelcomeWindow.hxx"
+#include "persalys/WelcomeWindow.hxx"
 
-#include "otgui/DiagramPushButton.hxx"
+#include "persalys/DiagramPushButton.hxx"
 
 #include <QVBoxLayout>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 WelcomeWindow::WelcomeWindow(const Actions* actions, QWidget * parent)

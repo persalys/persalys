@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/KrigingResultWindow.hxx"
+#include "persalys/KrigingResultWindow.hxx"
 
-#include "otgui/KrigingAnalysis.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/MetaModelValidationWidget.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/TranslationManager.hxx"
+#include "persalys/KrigingAnalysis.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/MetaModelValidationWidget.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <openturns/OTBase.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -39,7 +39,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 KrigingResultWindow::KrigingResultWindow(AnalysisItem * item, QWidget * parent)

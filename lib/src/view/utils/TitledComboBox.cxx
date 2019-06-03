@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/TitledComboBox.hxx"
+#include "persalys/TitledComboBox.hxx"
 
 #include <QPainter>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 TitledComboBox::TitledComboBox(const QString & title, QWidget * parent)

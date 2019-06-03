@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/GridDesignOfExperiment.hxx"
+#include "persalys/GridDesignOfExperiment.hxx"
 
 #include <openturns/Box.hxx>
 #include <openturns/TruncatedDistribution.hxx>
@@ -27,7 +27,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(GridDesignOfExperiment)
@@ -459,7 +459,7 @@ String GridDesignOfExperiment::getPythonScript() const
   oss << "upperBounds = " << upperBounds_.__str__() << "\n";
   oss << "levels = " << levels_.__str__() << "\n";
 
-  oss << getName() << " = otguibase.GridDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
+  oss << getName() << " = persalys.GridDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << "lowerBounds, upperBounds, levels, values)\n";
 
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";

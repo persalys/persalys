@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ImportedDesignPage.hxx"
+#include "persalys/ImportedDesignPage.hxx"
 
-#include "otgui/HorizontalHeaderViewWithCombobox.hxx"
-#include "otgui/SampleTableModel.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/HorizontalHeaderViewWithCombobox.hxx"
+#include "persalys/SampleTableModel.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QScrollBar>
 #include <QGroupBox>
@@ -33,7 +33,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ImportedDesignPage::ImportedDesignPage(QWidget* parent)

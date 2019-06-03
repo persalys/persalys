@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/DataModel.hxx"
+#include "persalys/DataModel.hxx"
 %}
 
 %include DataModel_doc.i
 
-%include otgui/DataModel.hxx
-namespace OTGUI {
+%include persalys/DataModel.hxx
+namespace PERSALYS {
 
-%extend DataModel { DataModel(const DataModel & other) { return new OTGUI::DataModel(other); } 
+%extend DataModel { DataModel(const DataModel & other) { return new PERSALYS::DataModel(other); } 
 
 } }

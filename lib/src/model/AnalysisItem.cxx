@@ -18,18 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AnalysisItem.hxx"
+#include "persalys/AnalysisItem.hxx"
 
-#include "otgui/DesignOfExperimentEvaluation.hxx"
-#include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/KrigingAnalysis.hxx"
-#include "otgui/StudyItem.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/KrigingAnalysis.hxx"
+#include "persalys/StudyItem.hxx"
 
 #include <QDebug>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 AnalysisItem::AnalysisItem(const Analysis & analysis)

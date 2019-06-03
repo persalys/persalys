@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PVXYChartSettingWidget.hxx"
+#include "persalys/PVXYChartSettingWidget.hxx"
 
-#include "otgui/PVBagChartViewWidget.hxx"
+#include "persalys/PVBagChartViewWidget.hxx"
 
-#include "otgui/QtTools.hxx"
-#include "otgui/TitledComboBox.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/TitledComboBox.hxx"
 
 #include <vtkPlotPoints.h>
 
@@ -38,7 +38,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,

@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::SimulationReliabilityResult
+%feature("docstring") PERSALYS::SimulationReliabilityResult
 "Get simulation results from a reliability analysis using Monte Carlo or Importance Sampling method."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityResult::getSimulationResult
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getSimulationResult
 "Simulation result accessor.
 
 Returns
@@ -13,7 +13,7 @@ sample : :py:class:`openturns.SimulationResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityResult::getOutputSample
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getOutputSample
 "Output sample accessor.
 
 Returns
@@ -23,7 +23,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityResult::getConvergenceSample
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getConvergenceSample
 "Convergence sample accessor.
 
 Returns
@@ -33,7 +33,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityResult::getConvergenceSampleLowerBound
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getConvergenceSampleLowerBound
 "Convergence sample lower bound accessor.
 
 Returns
@@ -43,7 +43,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityResult::getConvergenceSampleUpperBound
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getConvergenceSampleUpperBound
 "Convergence sample upper bound accessor.
 
 Returns
@@ -53,7 +53,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationReliabilityResult::getElapsedTime
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getElapsedTime
 "Elapsed time in seconds to perform the analysis.
 
 Returns

@@ -18,22 +18,22 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MeshWindow.hxx"
+#include "persalys/MeshWindow.hxx"
 
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ExportableTableView.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/MeshDefinitionWizard.hxx"
-#include "otgui/SampleTableModel.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/ExportableTableView.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/MeshDefinitionWizard.hxx"
+#include "persalys/SampleTableModel.hxx"
 
-#ifdef OTGUI_HAVE_PARAVIEW
-#include "otgui/PVServerManagerInterface.hxx"
-#include "otgui/PVServerManagerSingleton.hxx"
-#include "otgui/PVPlotSettingWidget.hxx"
-#include "otgui/PVXYChartViewWidget.hxx"
-#include "otgui/PVXYChartSettingWidget.hxx"
-#include "otgui/PVSpreadSheetViewWidget.hxx"
+#ifdef PERSALYS_HAVE_PARAVIEW
+#include "persalys/PVServerManagerInterface.hxx"
+#include "persalys/PVServerManagerSingleton.hxx"
+#include "persalys/PVPlotSettingWidget.hxx"
+#include "persalys/PVXYChartViewWidget.hxx"
+#include "persalys/PVXYChartSettingWidget.hxx"
+#include "persalys/PVSpreadSheetViewWidget.hxx"
 
 #include <pqLinksModel.h>
 #include <pqApplicationCore.h>
@@ -49,7 +49,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MeshWindow::MeshWindow(MeshItem * item, QWidget * parent)
@@ -122,7 +122,7 @@ void MeshWindow::buildInterface()
   // mesh display
   tabWidget_ = new QTabWidget;
   bool canUseParaview = false;
-// #ifdef OTGUI_HAVE_PARAVIEW
+// #ifdef PERSALYS_HAVE_PARAVIEW
 //   if (OTguiSubWindow::HaveOpenGL32())
 //   {
 //     addParaviewWidgetsTabs();

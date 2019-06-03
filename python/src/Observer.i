@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/Observer.hxx"
+#include "persalys/Observer.hxx"
 %}
 
 
-%include otgui/Observer.hxx
-namespace OTGUI {
+%include persalys/Observer.hxx
+namespace PERSALYS {
 
-%extend Observer { Observer(const Observer & other) { return new OTGUI::Observer(other); } 
+%extend Observer { Observer(const Observer & other) { return new PERSALYS::Observer(other); } 
 
 std::string __repr__() {
   return "Observer";

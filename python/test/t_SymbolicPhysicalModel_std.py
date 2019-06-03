@@ -2,18 +2,18 @@
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
-X0 = otguibase.Input('X0', 1, ot.Normal(), 'aDescription')
-X1 = otguibase.Input('X1', 2)
-Y0 = otguibase.Output('Y0', 'output_1')
+X0 = persalys.Input('X0', 1, ot.Normal(), 'aDescription')
+X1 = persalys.Input('X1', 2)
+Y0 = persalys.Output('Y0', 'output_1')
 inputs = [X0, X1]
 outputs = [Y0]
 formulas = ['sin(X0)+8*X1']
-model = otguibase.SymbolicPhysicalModel(
+model = persalys.SymbolicPhysicalModel(
     'aModelPhys', inputs, outputs, formulas)
 myStudy.add(model)
 print(model)
@@ -51,22 +51,22 @@ print('outputs=', model.getOutputs())
 
 # add variables
 # in
-X2 = otguibase.Input('X2', 10)
+X2 = persalys.Input('X2', 10)
 model.addInput(X2)
 model.setInputName('X2', 'X_2')
 print('inputs=', model.getInputs())
 print('copula=', model.getCopula())
-X3 = otguibase.Input('X3', 10, 'aDescription')
+X3 = persalys.Input('X3', 10, 'aDescription')
 model.addInput(X3)
-X4 = otguibase.Input('X4', ot.Normal())
+X4 = persalys.Input('X4', ot.Normal())
 model.addInput(X4)
-X5 = otguibase.Input('X5', ot.Normal(), 'aDescription')
+X5 = persalys.Input('X5', ot.Normal(), 'aDescription')
 model.addInput(X5)
 print('stochastic var=', model.getStochasticInputNames())
 print('distribution=', model.getDistribution())
 print('copula=', model.getCopula())
 # out
-model.addOutput(otguibase.Output('Y1'))
+model.addOutput(persalys.Output('Y1'))
 model.setFormula('Y1', 'sin(X0)+8*X1+X2')
 model.setOutputName('Y1', 'Y_1')
 model.selectOutput('Y_1', False)

@@ -19,25 +19,25 @@ orthogonal basis=class=OrthogonalProductPolynomialFactory univariate polynomial 
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_xi1 = ot.Uniform(0, 10)
-xi1 = otguibase.Input('xi1', 0, dist_xi1, '')
+xi1 = persalys.Input('xi1', 0, dist_xi1, '')
 dist_xi2 = ot.Uniform(0, 10)
-xi2 = otguibase.Input('xi2', 0, dist_xi2, '')
-xi3 = otguibase.Input('xi3', 0.5, '')
-fake_y0 = otguibase.Output('fake_y0', '')
+xi2 = persalys.Input('xi2', 0, dist_xi2, '')
+xi3 = persalys.Input('xi3', 0.5, '')
+fake_y0 = persalys.Output('fake_y0', '')
 fake_y0.setIsSelected(False)
-y0 = otguibase.Output('y0', '')
-y1 = otguibase.Output('y1', '')
+y0 = persalys.Output('y0', '')
+y1 = persalys.Output('y1', '')
 inputs = [xi1, xi2, xi3]
 outputs = [fake_y0, y0, y1]
 formulas = ['xi1', 'cos(0.5*xi1) + sin(xi2)', 'cos(0.5*xi1) + sin(xi2) + xi3']
-model = otguibase.SymbolicPhysicalModel('model', inputs, outputs, formulas)
+model = persalys.SymbolicPhysicalModel('model', inputs, outputs, formulas)
 myStudy.add(model)
-design = otguibase.FixedDesignOfExperiment('design', model)
+design = persalys.FixedDesignOfExperiment('design', model)
 inputSample = [
 [0.981558, 9.34995, 0.5],
 [9.70026, 0.30288, 0.5],
@@ -94,14 +94,14 @@ design.setBlockSize(1)
 interestVariables = ['y0', 'y1']
 design.setInterestVariables(interestVariables)
 myStudy.add(design)
-chaos_0 = otguibase.FunctionalChaosAnalysis('chaos_0', design)
+chaos_0 = persalys.FunctionalChaosAnalysis('chaos_0', design)
 chaos_0.setChaosDegree(4)
 chaos_0.setSparseChaos(True)
 chaos_0.setAnalyticalValidation(True)
 chaos_0.setTestSampleValidation(False)
 chaos_0.setKFoldValidation(False)
 myStudy.add(chaos_0)
-chaos_1 = otguibase.FunctionalChaosAnalysis('chaos_1', design)
+chaos_1 = persalys.FunctionalChaosAnalysis('chaos_1', design)
 interestVariables = ['y1']
 chaos_1.setInterestVariables(interestVariables)
 chaos_1.setChaosDegree(4)

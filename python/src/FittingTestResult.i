@@ -1,11 +1,11 @@
 // SWIG file
 
 %{
-#include "otgui/FittingTestResult.hxx"
+#include "persalys/FittingTestResult.hxx"
 
 namespace OT {
 template <>
-struct traitsPythonType< OTGUI::FittingTestResult >
+struct traitsPythonType< PERSALYS::FittingTestResult >
 {
   typedef _PyObject_ Type;
 };
@@ -14,11 +14,11 @@ struct traitsPythonType< OTGUI::FittingTestResult >
 template <>
   inline
   bool
-  canConvert< _PyObject_, OTGUI::FittingTestResult >(PyObject * pyObj)
+  canConvert< _PyObject_, PERSALYS::FittingTestResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::FittingTestResult *"), 0 ))) {
-      OTGUI::FittingTestResult * p_it = reinterpret_cast< OTGUI::FittingTestResult * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::FittingTestResult *"), 0 ))) {
+      PERSALYS::FittingTestResult * p_it = reinterpret_cast< PERSALYS::FittingTestResult * >( ptr );
       return p_it != NULL;
     }
     return false;
@@ -27,18 +27,18 @@ template <>
 
 template <>
   inline
-  OTGUI::FittingTestResult
-  convert< _PyObject_, OTGUI::FittingTestResult >(PyObject * pyObj)
+  PERSALYS::FittingTestResult
+  convert< _PyObject_, PERSALYS::FittingTestResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::FittingTestResult *"), 0))) {
-      OTGUI::FittingTestResult * p_it = reinterpret_cast< OTGUI::FittingTestResult * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::FittingTestResult *"), 0))) {
+      PERSALYS::FittingTestResult * p_it = reinterpret_cast< PERSALYS::FittingTestResult * >( ptr );
       return *p_it;
     }
     else {
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a FittingTestResult";
     }
-    return OTGUI::FittingTestResult();
+    return PERSALYS::FittingTestResult();
   }
 
 }
@@ -46,12 +46,12 @@ template <>
 
 %include FittingTestResult_doc.i
 
-%include otgui/FittingTestResult.hxx
+%include persalys/FittingTestResult.hxx
 
-%template(FittingTestResultCollection) OT::Collection<OTGUI::FittingTestResult>;
+%template(FittingTestResultCollection) OT::Collection<PERSALYS::FittingTestResult>;
 
-namespace OTGUI {
+namespace PERSALYS {
 
-%extend FittingTestResult { FittingTestResult(const FittingTestResult & other) { return new OTGUI::FittingTestResult(other); } 
+%extend FittingTestResult { FittingTestResult(const FittingTestResult & other) { return new PERSALYS::FittingTestResult(other); } 
 
 } }

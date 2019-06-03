@@ -1,20 +1,20 @@
 // DesignOfExperiment docstrings are defined in DesignOfExperimentImplementation_doc.i.in
 
-%feature("docstring") OTGUI::DesignOfExperiment
-OTGUI_DesignOfExperiment_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getPhysicalModel
-OTGUI_DesignOfExperiment_getPhysicalModel_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getPythonScript
-OTGUI_DesignOfExperiment_getPythonScript_doc
-%feature("docstring") OTGUI::DesignOfExperiment::hasPhysicalModel
-OTGUI_DesignOfExperiment_hasPhysicalModel_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getInputSample
-OTGUI_DesignOfExperiment_getInputSample_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setInputSample
-OTGUI_DesignOfExperiment_setInputSample_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getOutputSample
-OTGUI_DesignOfExperiment_getOutputSample_doc
-%feature("docstring") OTGUI::DesignOfExperiment::setOutputSample
-OTGUI_DesignOfExperiment_setOutputSample_doc
-%feature("docstring") OTGUI::DesignOfExperiment::getSample
-OTGUI_DesignOfExperiment_getSample_doc
+%feature("docstring") PERSALYS::DesignOfExperiment
+PERSALYS_DesignOfExperiment_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::getPhysicalModel
+PERSALYS_DesignOfExperiment_getPhysicalModel_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::getPythonScript
+PERSALYS_DesignOfExperiment_getPythonScript_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::hasPhysicalModel
+PERSALYS_DesignOfExperiment_hasPhysicalModel_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::getInputSample
+PERSALYS_DesignOfExperiment_getInputSample_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::setInputSample
+PERSALYS_DesignOfExperiment_setInputSample_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::getOutputSample
+PERSALYS_DesignOfExperiment_getOutputSample_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::setOutputSample
+PERSALYS_DesignOfExperiment_setOutputSample_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::getSample
+PERSALYS_DesignOfExperiment_getSample_doc

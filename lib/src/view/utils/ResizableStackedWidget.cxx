@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ResizableStackedWidget.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ResizableStackedWidget::ResizableStackedWidget(QWidget * parent)

@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::CopulaInferenceSetResult
+%feature("docstring") PERSALYS::CopulaInferenceSetResult
 "Dependence inference result for a set of variables.
 
 "
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::CopulaInferenceSetResult::getSetOfVariablesNames
+%feature("docstring") PERSALYS::CopulaInferenceSetResult::getSetOfVariablesNames
 "Set of variables names accessor.
 
 Returns
@@ -15,7 +15,7 @@ names : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::CopulaInferenceSetResult::getTestedDistributions
+%feature("docstring") PERSALYS::CopulaInferenceSetResult::getTestedDistributions
 "Get the sequence of tested distributions.
 
 Returns
@@ -25,7 +25,7 @@ distributions : sequence of :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::CopulaInferenceSetResult::getErrorMessages
+%feature("docstring") PERSALYS::CopulaInferenceSetResult::getErrorMessages
 "Get the sequence of error messages.
 
 Returns
@@ -36,7 +36,7 @@ messages : sequence of :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::CopulaInferenceSetResult::getKendallPlotData
+%feature("docstring") PERSALYS::CopulaInferenceSetResult::getKendallPlotData
 "Data of the Kendall plot.
 
 Returns

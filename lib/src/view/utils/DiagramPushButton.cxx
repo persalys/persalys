@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DiagramPushButton.hxx"
+#include "persalys/DiagramPushButton.hxx"
 
-#include "otgui/QtTools.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QStyleOptionButton>
 #include <QPainter>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DiagramPushButton::DiagramPushButton(const QString& text, QWidget* parent)

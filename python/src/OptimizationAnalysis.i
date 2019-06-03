@@ -1,16 +1,16 @@
 // SWIG file OptimizationAnalysis.i
 
 %{
-#include "otgui/OptimizationAnalysis.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 %}
 
 %include OptimizationAnalysis_doc.i
 
-%ignore OTGUI::OptimizationAnalysis::updateParameters;
+%ignore PERSALYS::OptimizationAnalysis::updateParameters;
 
-%include otgui/OptimizationAnalysis.hxx
-namespace OTGUI {
+%include persalys/OptimizationAnalysis.hxx
+namespace PERSALYS {
 
-%extend OptimizationAnalysis { OptimizationAnalysis(const OptimizationAnalysis & other) { return new OTGUI::OptimizationAnalysis(other); } 
+%extend OptimizationAnalysis { OptimizationAnalysis(const OptimizationAnalysis & other) { return new PERSALYS::OptimizationAnalysis(other); } 
 
 } }

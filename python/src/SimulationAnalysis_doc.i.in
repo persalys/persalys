@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::SimulationAnalysis
+%feature("docstring") PERSALYS::SimulationAnalysis
 "Simulation reliability analysis."
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::setSeed
+%feature("docstring") PERSALYS::SimulationAnalysis::setSeed
 "Seed accessor.
 
 Parameters
@@ -13,7 +13,7 @@ seed : int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::getSeed
+%feature("docstring") PERSALYS::SimulationAnalysis::getSeed
 "Seed accessor.
 
 Returns
@@ -23,7 +23,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::getFailedInputSample
+%feature("docstring") PERSALYS::SimulationAnalysis::getFailedInputSample
 "Failed input sample accessor.
 
 Returns
@@ -33,7 +33,7 @@ sample : :py:class:`openturns.Sample`
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::getBlockSize
+%feature("docstring") PERSALYS::SimulationAnalysis::getBlockSize
 "Block size accessor.
 
 Returns
@@ -44,7 +44,7 @@ blockSize : positive int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::setBlockSize
+%feature("docstring") PERSALYS::SimulationAnalysis::setBlockSize
 "Block size accessor.
 
 Parameters
@@ -55,11 +55,11 @@ blockSize : positive int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::SimulationAnalysis::getDesignOfExperiment
+%feature("docstring") PERSALYS::SimulationAnalysis::getDesignOfExperiment
 "Design of experiments accessor.
 
 Returns
 -------
-design : :class:`~otguibase.DesignOfExperiment`
+design : :class:`~persalys.DesignOfExperiment`
     Design of experiments, result of the analysis"
 

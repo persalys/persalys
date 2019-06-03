@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopulaInferenceResultWindow.hxx"
+#include "persalys/CopulaInferenceResultWindow.hxx"
 
-#include "otgui/CopulaInferenceAnalysis.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/CopulaInferenceResultWidget.hxx"
+#include "persalys/CopulaInferenceAnalysis.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/CopulaInferenceResultWidget.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CopulaInferenceResultWindow::CopulaInferenceResultWindow(AnalysisItem* item, QWidget * parent)

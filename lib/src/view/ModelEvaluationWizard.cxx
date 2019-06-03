@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ModelEvaluationWizard.hxx"
+#include "persalys/ModelEvaluationWizard.hxx"
 
-#include "otgui/DoubleSpinBox.hxx"
-#include "otgui/FieldModelEvaluation.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/DoubleSpinBox.hxx"
+#include "persalys/FieldModelEvaluation.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -31,7 +31,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ModelEvaluationWizard::ModelEvaluationWizard(const Analysis& analysis, QWidget* parent)

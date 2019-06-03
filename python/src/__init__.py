@@ -1,10 +1,10 @@
 """
-    otgui --- An OpenTURNS module
+    Persalys --- An OpenTURNS module
     ==================================
 
     Contents
     --------
-      'otgui' is a module for OpenTURNS
+      'Persalys' is a module for OpenTURNS
 
 """
 
@@ -13,6 +13,6 @@ if sys.platform.startswith('win'):
     # this ensures OT dll is loaded
     import openturns
 
-from .otguibase import *
+from .persalys import *
 
 __version__ = '7.0dev'

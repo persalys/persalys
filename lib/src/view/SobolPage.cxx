@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SobolPage.hxx"
+#include "persalys/SobolPage.hxx"
 
-#include "otgui/SobolAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
+#include "persalys/SobolAnalysis.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QVBoxLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SobolPage::SobolPage(QWidget* parent)

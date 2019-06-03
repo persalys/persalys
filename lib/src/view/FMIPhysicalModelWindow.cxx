@@ -18,19 +18,19 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FMIPhysicalModelWindow.hxx"
+#include "persalys/FMIPhysicalModelWindow.hxx"
 
-#include "otgui/FMIPhysicalModel.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/FileTools.hxx"
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/FMUInfo.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/TitledComboBox.hxx"
-#include "otgui/SpinBoxDelegate.hxx"
-#include "otgui/DifferentiationTableModel.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/FMIPhysicalModel.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/FileTools.hxx"
+#include "persalys/ModelEvaluation.hxx"
+#include "persalys/FMUInfo.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/TitledComboBox.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/DifferentiationTableModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 #include <QFileDialog>
 #include <QHeaderView>
@@ -44,7 +44,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)

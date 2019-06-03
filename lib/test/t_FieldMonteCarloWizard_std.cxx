@@ -1,7 +1,7 @@
-#include "otgui/FieldMonteCarloAnalysis.hxx"
-#include "otgui/FieldMonteCarloWizard.hxx"
-#include "otgui/SymbolicFieldModel.hxx"
-#include "otgui/GridMeshModel.hxx"
+#include "persalys/FieldMonteCarloAnalysis.hxx"
+#include "persalys/FieldMonteCarloWizard.hxx"
+#include "persalys/SymbolicFieldModel.hxx"
+#include "persalys/GridMeshModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -9,7 +9,7 @@
 
 #include <QtTest/QtTest>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestFieldMonteCarloWizard : public QObject
 {
@@ -92,5 +92,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestFieldMonteCarloWizard)
+QTEST_MAIN(PERSALYS::TestFieldMonteCarloWizard)
 #include "t_FieldMonteCarloWizard_std.moc"

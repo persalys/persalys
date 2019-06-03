@@ -1,13 +1,13 @@
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/ModelEvaluationWizard.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
+#include "persalys/ModelEvaluation.hxx"
+#include "persalys/ModelEvaluationWizard.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
 
 #include <QtTest/QtTest>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestModelEvaluationWizard : public QObject
 {
@@ -87,5 +87,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestModelEvaluationWizard)
+QTEST_MAIN(PERSALYS::TestModelEvaluationWizard)
 #include "t_ModelEvaluationWizard_std.moc"

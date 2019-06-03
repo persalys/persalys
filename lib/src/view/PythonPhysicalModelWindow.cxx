@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PythonPhysicalModelWindow.hxx"
+#include "persalys/PythonPhysicalModelWindow.hxx"
 
-#include "otgui/CodeDelegate.hxx"
-#include "otgui/PhysicalModelWindowWidget.hxx"
-#include "otgui/CodeModel.hxx"
+#include "persalys/CodeDelegate.hxx"
+#include "persalys/PhysicalModelWindowWidget.hxx"
+#include "persalys/CodeModel.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QSplitter>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)

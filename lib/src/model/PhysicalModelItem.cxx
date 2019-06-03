@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PhysicalModelItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel, const String observerType)

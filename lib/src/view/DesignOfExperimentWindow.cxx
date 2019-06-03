@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentWindow.hxx"
+#include "persalys/DesignOfExperimentWindow.hxx"
 
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget * parent)

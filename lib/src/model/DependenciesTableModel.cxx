@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DependenciesTableModel.hxx"
+#include "persalys/DependenciesTableModel.hxx"
 
-#include "otgui/TranslationManager.hxx"
-#include "otgui/DistributionDictionary.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/DistributionDictionary.hxx"
 
 #include <openturns/IndependentCopula.hxx>
 
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DependenciesTableModel::DependenciesTableModel(const PhysicalModel &physicalModel, QObject *parent)

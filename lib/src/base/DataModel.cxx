@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataModel.hxx"
+#include "persalys/DataModel.hxx"
 
-#include "otgui/ImportedDesignOfExperiment.hxx"
-#include "otgui/BaseTools.hxx"
+#include "persalys/ImportedDesignOfExperiment.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(DataModel)
@@ -335,7 +335,7 @@ String DataModel::getPythonScript() const
     oss << "inputSample.setDescription(" << Parameters::GetOTDescriptionStr(inputNames_) << ")\n";
     oss << "outputSample = ot.Sample(" << Parameters::GetOTSampleStr(getOutputSample()) << ")\n";
     oss << "outputSample.setDescription(" << Parameters::GetOTDescriptionStr(outputNames_) << ")\n";
-    oss << getName() << " = otguibase.DataModel('" << getName() << "', inputSample, outputSample)\n";
+    oss << getName() << " = persalys.DataModel('" << getName() << "', inputSample, outputSample)\n";
   }
   else
   {
@@ -345,7 +345,7 @@ String DataModel::getPythonScript() const
     oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
     oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
 
-    oss << getName() << " = otguibase.DataModel('" << getName() << "', ";
+    oss << getName() << " = persalys.DataModel('" << getName() << "', ";
     oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
   }
 

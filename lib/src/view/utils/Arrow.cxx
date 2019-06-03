@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Arrow.hxx"
+#include "persalys/Arrow.hxx"
 
 #include <math.h>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 Arrow::Arrow(QPointF startP, QPointF endP, QGraphicsItem *parent)

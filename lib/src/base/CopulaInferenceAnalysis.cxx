@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopulaInferenceAnalysis.hxx"
+#include "persalys/CopulaInferenceAnalysis.hxx"
 
-#include "otgui/DistributionDictionary.hxx"
-#include "otgui/CopulaInferenceSetResult.hxx"
+#include "persalys/DistributionDictionary.hxx"
+#include "persalys/CopulaInferenceSetResult.hxx"
 
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/Combinations.hxx>
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(CopulaInferenceAnalysis)
@@ -327,7 +327,7 @@ CopulaInferenceResult CopulaInferenceAnalysis::getResult() const
 String CopulaInferenceAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.CopulaInferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+  oss << getName() << " = persalys.CopulaInferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
 
   std::map<Description, DistributionFactoryCollection>::const_iterator it;
   for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)

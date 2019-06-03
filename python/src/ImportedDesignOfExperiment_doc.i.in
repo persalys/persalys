@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::ImportedDesignOfExperiment
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment
 "Create a design of experiments, using an imported design.
 
 Available constructors:
@@ -8,7 +8,7 @@ Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 fileName : str
     Name of a data file to load
@@ -18,25 +18,25 @@ columns : sequence of int
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 >>> ot.RandomGenerator.SetSeed(0)
 
 Create the model:
 
->>> X0 = otguibase.Input('X0')
->>> X1 = otguibase.Input('X1')
->>> Y0 = otguibase.Output('Y0')
->>> model = otguibase.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0)+8*X1'])
+>>> X0 = persalys.Input('X0')
+>>> X1 = persalys.Input('X1')
+>>> Y0 = persalys.Output('Y0')
+>>> model = persalys.SymbolicPhysicalModel('aModelPhys', [X0, X1], [Y0], ['sin(X0)+8*X1'])
 
 Create the design of experiments:
 
 >>> filename = 'normal.csv'
 >>> ot.Normal(3).getSample(10).exportToCSVFile(filename)
->>> aDesign = otguibase.ImportedDesignOfExperiment('aDesign', model, filename, [0, 2])"
+>>> aDesign = persalys.ImportedDesignOfExperiment('aDesign', model, filename, [0, 2])"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedDesignOfExperiment::ImportSample
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::ImportSample
 "Import a sample from a file.
 
 Parameters
@@ -51,7 +51,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedDesignOfExperiment::getFileName
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getFileName
 "File name accessor.
 
 Returns
@@ -61,7 +61,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedDesignOfExperiment::setFileName
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setFileName
 "File name accessor.
 
 Parameters
@@ -71,7 +71,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedDesignOfExperiment::getInputColumns
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getInputColumns
 "Input columns accessor.
 
 Returns
@@ -81,7 +81,7 @@ columns : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ImportedDesignOfExperiment::setInputColumns
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setInputColumns
 "Input columns accessor.
 
 Parameters

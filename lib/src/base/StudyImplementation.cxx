@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class defining the otgui studies
+ *  @brief Class defining the persalys studies
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/StudyImplementation.hxx"
+#include "persalys/StudyImplementation.hxx"
 
-#include "otgui/ReliabilityAnalysis.hxx"
-#include "otgui/DesignOfExperimentAnalysis.hxx"
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "persalys/ReliabilityAnalysis.hxx"
+#include "persalys/DesignOfExperimentAnalysis.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/Study.hxx>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(StudyImplementation)
@@ -612,10 +612,10 @@ String StudyImplementation::getPythonScript()
 {
   String result;
 
-  result += "#!/usr/bin/env python\n# coding: utf-8\n\nfrom __future__ import print_function\nimport openturns as ot\nimport otguibase\n\n";
+  result += "#!/usr/bin/env python\n# coding: utf-8\n\nfrom __future__ import print_function\nimport openturns as ot\nimport persalys\n\n";
 
-  result += getName() + " = otguibase.Study('" + getName() + "')\n";
-  result += "otguibase.Study.Add(" + getName() + ")\n";
+  result += getName() + " = persalys.Study('" + getName() + "')\n";
+  result += "persalys.Study.Add(" + getName() + ")\n";
 
   for (Collection<DesignOfExperiment>::iterator it = dataModels_.begin(); it != dataModels_.end(); ++it)
   {

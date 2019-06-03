@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::FixedDesignOfExperiment
+%feature("docstring") PERSALYS::FixedDesignOfExperiment
 "Create a fixed design of experiments.
 
 Available constructors:
@@ -10,7 +10,7 @@ Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 sample : :py:class:`openturns.Sample`
     Input sample. The sample must have a dimension equal to the number of
@@ -19,23 +19,23 @@ sample : :py:class:`openturns.Sample`
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the design of experiments:
 
->>> myDOE = otguibase.FixedDesignOfExperiment('myDOE', myPhysicalModel)"
+>>> myDOE = persalys.FixedDesignOfExperiment('myDOE', myPhysicalModel)"
 
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FixedDesignOfExperiment::setOriginalInputSample
+%feature("docstring") PERSALYS::FixedDesignOfExperiment::setOriginalInputSample
 "Input sample accessor.
 
 Parameters

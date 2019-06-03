@@ -6,23 +6,23 @@ y= [578]
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
-X0 = otguibase.Input('X0', 0, dist_X0, '')
+X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
-X1 = otguibase.Input('X1', 0, dist_X1, '')
-fake_Y0 = otguibase.Output('fake_Y0', '')
+X1 = persalys.Input('X1', 0, dist_X1, '')
+fake_Y0 = persalys.Output('fake_Y0', '')
 fake_Y0.setIsSelected(False)
-Y0 = otguibase.Output('Y0', '')
+Y0 = persalys.Output('Y0', '')
 inputs = [X0, X1]
 outputs = [fake_Y0, Y0]
 formulas = ['X0', '3*(X0-5)^2 + 8*(X1+8)^2']
-aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
-optim = otguibase.OptimizationAnalysis('optim', aModelPhys, 'Cobyla')
+optim = persalys.OptimizationAnalysis('optim', aModelPhys, 'Cobyla')
 interestVariables = ['Y0']
 optim.setInterestVariables(interestVariables)
 optim.setMinimization(True)

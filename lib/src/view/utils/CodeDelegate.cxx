@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CodeDelegate.hxx"
+#include "persalys/CodeDelegate.hxx"
 
 #include <QPlainTextEdit>
 #include <QApplication>
@@ -29,7 +29,7 @@
 
 #include <iostream>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 // CodeEditor

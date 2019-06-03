@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataModelDiagramItem.hxx"
+#include "persalys/DataModelDiagramItem.hxx"
 
-#include "otgui/StudyItem.hxx"
+#include "persalys/StudyItem.hxx"
 
 #include <QDebug>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DataModelDiagramItem::DataModelDiagramItem(const DesignOfExperiment& designOfExperiment)

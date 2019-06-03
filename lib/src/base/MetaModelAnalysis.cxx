@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MetaModelAnalysis.hxx"
+#include "persalys/MetaModelAnalysis.hxx"
 
-#include "otgui/MetaModel.hxx"
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "persalys/MetaModel.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 #include <openturns/KPermutationsDistribution.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 /* Default constructor */

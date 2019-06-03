@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PythonPhysicalModel.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 
-#include "otgui/PythonScriptEvaluation.hxx"
-#include "otgui/BaseTools.hxx"
+#include "persalys/PythonScriptEvaluation.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
@@ -31,7 +31,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(PythonPhysicalModel)
@@ -229,7 +229,7 @@ String PythonPhysicalModel::getPythonScript() const
 
   oss << "code = \"\"\"\n" + escaped_code + "\"\"\"\n";
 
-  oss << getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
+  oss << getName() + " = persalys.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
   if (isParallel())
     oss << getName() + ".setParallel(True)\n";
 

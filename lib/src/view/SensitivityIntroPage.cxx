@@ -18,18 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SensitivityIntroPage.hxx"
+#include "persalys/SensitivityIntroPage.hxx"
 
-#include "otgui/SensitivityAnalysisWizard.hxx"
-#include "otgui/PhysicalModelAnalysis.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/SensitivityAnalysisWizard.hxx"
+#include "persalys/PhysicalModelAnalysis.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QRadioButton>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SensitivityIntroPage::SensitivityIntroPage(QWidget* parent)

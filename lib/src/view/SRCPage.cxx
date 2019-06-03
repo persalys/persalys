@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SRCPage.hxx"
+#include "persalys/SRCPage.hxx"
 
-#include "otgui/SRCAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
+#include "persalys/SRCAnalysis.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QVBoxLayout>
 #include <QLabel>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SRCPage::SRCPage(QWidget* parent)

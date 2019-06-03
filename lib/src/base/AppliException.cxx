@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define otgui Exceptions
+ *  @brief Class to define persalys Exceptions
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,24 +18,24 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AppliException.hxx"
+#include "persalys/AppliException.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
-#define DEFINE_OTGUIEXCEPTION( CName )               \
+#define DEFINE_PERSALYSEXCEPTION( CName )               \
   static const char * CName ## Name = #CName;   \
   static const CName CName ## Obj ( HERE );     \
   CName::CName(const PointInSourceFile & point) \
     : Exception(point, CName ## Name) {}        \
   CName::~CName () throw() {}
 
-DEFINE_OTGUIEXCEPTION( PhysicalModelNotValidException )
-DEFINE_OTGUIEXCEPTION( AnalysisExecutionFailedException )
-DEFINE_OTGUIEXCEPTION( InvalidValueException )
-DEFINE_OTGUIEXCEPTION( IOException )
+DEFINE_PERSALYSEXCEPTION( PhysicalModelNotValidException )
+DEFINE_PERSALYSEXCEPTION( AnalysisExecutionFailedException )
+DEFINE_PERSALYSEXCEPTION( InvalidValueException )
+DEFINE_PERSALYSEXCEPTION( IOException )
 
-#undef DEFINE_OTGUIEXCEPTION
+#undef DEFINE_PERSALYSEXCEPTION
 }

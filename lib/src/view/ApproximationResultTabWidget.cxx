@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ApproximationResultTabWidget.hxx"
+#include "persalys/ApproximationResultTabWidget.hxx"
 
-#include "otgui/FORMAnalysis.hxx"
-#include "otgui/SORMAnalysis.hxx"
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/ParametersTableView.hxx"
-#include "otgui/ParametersWidget.hxx"
-#include "otgui/PieChartView.hxx"
-#include "otgui/TranslationManager.hxx"
+#include "persalys/FORMAnalysis.hxx"
+#include "persalys/SORMAnalysis.hxx"
+#include "persalys/FORMImportanceSamplingAnalysis.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/ParametersWidget.hxx"
+#include "persalys/PieChartView.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -36,7 +36,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& result,

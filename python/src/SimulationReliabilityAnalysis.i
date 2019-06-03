@@ -1,14 +1,14 @@
 // SWIG file SimulationReliabilityAnalysis.i
 
 %{
-#include "otgui/SimulationReliabilityAnalysis.hxx"
+#include "persalys/SimulationReliabilityAnalysis.hxx"
 %}
 
 %include SimulationReliabilityAnalysis_doc.i
 
-%include otgui/SimulationReliabilityAnalysis.hxx
-namespace OTGUI {
+%include persalys/SimulationReliabilityAnalysis.hxx
+namespace PERSALYS {
 
-%extend SimulationReliabilityAnalysis { SimulationReliabilityAnalysis(const SimulationReliabilityAnalysis & other) { return new OTGUI::SimulationReliabilityAnalysis(other); } 
+%extend SimulationReliabilityAnalysis { SimulationReliabilityAnalysis(const SimulationReliabilityAnalysis & other) { return new PERSALYS::SimulationReliabilityAnalysis(other); } 
 
 } }

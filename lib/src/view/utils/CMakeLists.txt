@@ -53,36 +53,36 @@ ot_install_header_file ( ResizableHeaderlessTableView.hxx )
 ot_install_header_file ( TemporaryLabel.hxx )
 ot_install_header_file ( DocumentationToolButton.hxx )
 
-qt5_wrap_cpp (OTGUI_UTILS_MOC_SRCS
-              otgui/ListWidgetWithCheckBox.hxx
-              otgui/ValueLineEdit.hxx
-              otgui/TimeLineEdit.hxx
-              otgui/CollapsibleGroupBox.hxx
-              otgui/SpinBoxDelegate.hxx
-              otgui/CodeDelegate.hxx
-              otgui/ComboBoxDelegate.hxx
-              otgui/LineEditWithQValidatorDelegate.hxx
-              otgui/HorizontalHeaderViewWithCombobox.hxx
-              otgui/ExportableTableView.hxx
-              otgui/CopyableTableView.hxx
-              otgui/DoubleSpinBox.hxx
-              otgui/UIntSpinBox.hxx
-              otgui/LogSpinBox.hxx
-              otgui/LogDoubleSpinBox.hxx
-              otgui/CheckableHeaderView.hxx
-              otgui/ResizableStackedWidget.hxx
-              otgui/TitledComboBox.hxx
-              otgui/Arrow.hxx
-              otgui/DiagramPushButton.hxx
-              otgui/TemporaryLabel.hxx
-              otgui/DocumentationToolButton.hxx
+qt5_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
+              persalys/ListWidgetWithCheckBox.hxx
+              persalys/ValueLineEdit.hxx
+              persalys/TimeLineEdit.hxx
+              persalys/CollapsibleGroupBox.hxx
+              persalys/SpinBoxDelegate.hxx
+              persalys/CodeDelegate.hxx
+              persalys/ComboBoxDelegate.hxx
+              persalys/LineEditWithQValidatorDelegate.hxx
+              persalys/HorizontalHeaderViewWithCombobox.hxx
+              persalys/ExportableTableView.hxx
+              persalys/CopyableTableView.hxx
+              persalys/DoubleSpinBox.hxx
+              persalys/UIntSpinBox.hxx
+              persalys/LogSpinBox.hxx
+              persalys/LogDoubleSpinBox.hxx
+              persalys/CheckableHeaderView.hxx
+              persalys/ResizableStackedWidget.hxx
+              persalys/TitledComboBox.hxx
+              persalys/Arrow.hxx
+              persalys/DiagramPushButton.hxx
+              persalys/TemporaryLabel.hxx
+              persalys/DocumentationToolButton.hxx
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-otgui_add_library (otguiutils ${SOURCEFILES} ${OTGUI_UTILS_MOC_SRCS})
+persalys_add_library (persalysutils ${SOURCEFILES} ${PERSALYS_UTILS_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
-  set_target_properties ( otguiutils PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
+  set_target_properties ( persalysutils PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -91,15 +91,15 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION )
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( otguiutils PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( otguiutils PROPERTIES SOVERSION ${LIB_SOVERSION} )
+set_target_properties ( persalysutils PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties ( persalysutils PROPERTIES SOVERSION ${LIB_SOVERSION} )
 
-target_link_libraries (otguiutils otguibase otguimodel)
-target_link_libraries (otguiutils ${QT_LIBRARIES})
+target_link_libraries (persalysutils persalysbase persalysmodel)
+target_link_libraries (persalysutils ${QT_LIBRARIES})
 
-install ( TARGETS otguiutils
+install ( TARGETS persalysutils
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}
-  ARCHIVE DESTINATION ${OTGUI_LIBRARY_PATH}
+  LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
+  ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 

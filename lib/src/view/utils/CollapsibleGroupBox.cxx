@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "otgui/CollapsibleGroupBox.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QLayout>
 #include <QStyle>
@@ -27,7 +27,7 @@
 #include <QAction>
 #include <QMouseEvent>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 class CollapsibleGroupBoxPrivate

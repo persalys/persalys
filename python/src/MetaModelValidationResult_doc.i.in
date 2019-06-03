@@ -1,9 +1,9 @@
-%feature("docstring") OTGUI::MetaModelValidationResult
+%feature("docstring") PERSALYS::MetaModelValidationResult
 "Create the base class for the results of a metamodel validation."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelValidationResult::getName
+%feature("docstring") PERSALYS::MetaModelValidationResult::getName
 "Validation method name accessor.
 
 Returns
@@ -13,7 +13,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelValidationResult::getMetaModelOutputSample
+%feature("docstring") PERSALYS::MetaModelValidationResult::getMetaModelOutputSample
 "Output sample accessor.
 
 Returns
@@ -23,7 +23,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelValidationResult::getResiduals
+%feature("docstring") PERSALYS::MetaModelValidationResult::getResiduals
 "Residuals accessor.
 
 Returns
@@ -36,7 +36,7 @@ error : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelValidationResult::getQ2
+%feature("docstring") PERSALYS::MetaModelValidationResult::getQ2
 "Q2 accessor.
 
 Returns

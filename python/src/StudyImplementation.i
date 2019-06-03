@@ -1,14 +1,14 @@
 // SWIG file StudyImplementation.i
 
 %{
-#include "otgui/StudyImplementation.hxx"
+#include "persalys/StudyImplementation.hxx"
 %}
 
-%ignore OTGUI::StudyImplementation::setFileName;
+%ignore PERSALYS::StudyImplementation::setFileName;
 
-%include otgui/StudyImplementation.hxx
-namespace OTGUI {
+%include persalys/StudyImplementation.hxx
+namespace PERSALYS {
 
-%extend StudyImplementation { StudyImplementation(const StudyImplementation & other) { return new OTGUI::StudyImplementation(other); } 
+%extend StudyImplementation { StudyImplementation(const StudyImplementation & other) { return new PERSALYS::StudyImplementation(other); } 
 
 } }

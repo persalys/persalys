@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::Output
+%feature("docstring") PERSALYS::Output
 "Create an output variable.
 
 Represents an output variable.
@@ -12,13 +12,13 @@ description : str
 
 Examples
 --------
->>> import otguibase
->>> G = otguibase.Output('G', 'deviation')"
+>>> import persalys
+>>> G = persalys.Output('G', 'deviation')"
 
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Output::setHasBeenComputed
+%feature("docstring") PERSALYS::Output::setHasBeenComputed
 "Whether the variable has been evaluated.
 
 Parameters
@@ -28,7 +28,7 @@ computed : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Output::hasBeenComputed
+%feature("docstring") PERSALYS::Output::hasBeenComputed
 "Whether the variable has been evaluated.
 
 Returns
@@ -38,7 +38,7 @@ computed : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Output::isSelected
+%feature("docstring") PERSALYS::Output::isSelected
 "Whether the variable is selected.
 
 Returns
@@ -48,7 +48,7 @@ isSelected : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Output::setIsSelected
+%feature("docstring") PERSALYS::Output::setIsSelected
 "Whether the variable is selected.
 
 Parameters

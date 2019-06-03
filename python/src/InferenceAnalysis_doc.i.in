@@ -1,17 +1,17 @@
-%feature("docstring") OTGUI::InferenceAnalysis
+%feature("docstring") PERSALYS::InferenceAnalysis
 "Perform a Kolmogorov goodness-of-fit test for 1-D continuous distributions.
 
 Parameters
 ----------
 name : str
     Name
-design : :class:`~otguibase.DesignOfExperiment`
+design : :class:`~persalys.DesignOfExperiment`
     Design of experiments
 
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 >>> ot.RandomGenerator_SetSeed(0)
 
 Create the model:
@@ -19,11 +19,11 @@ Create the model:
 >>> filename = 'data.csv'
 >>> sample = ot.Normal(3).getSample(100)
 >>> sample.exportToCSVFile(filename)
->>> model = otguibase.DataModel('myDataModel', 'data.csv', [0, 1, 2])
+>>> model = persalys.DataModel('myDataModel', 'data.csv', [0, 1, 2])
 
 Create the Inference Analysis:
 
->>> analysis = otguibase.InferenceAnalysis('analysis', model)
+>>> analysis = persalys.InferenceAnalysis('analysis', model)
 >>> analysis.run()
 
 Get the result:
@@ -33,7 +33,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceAnalysis::getLevel
+%feature("docstring") PERSALYS::InferenceAnalysis::getLevel
 "Level accessor.
 
 Returns
@@ -44,7 +44,7 @@ level : float, :math:`0 < {\rm level} < 1`, optional
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceAnalysis::setLevel
+%feature("docstring") PERSALYS::InferenceAnalysis::setLevel
 "Level accessor.
 
 Parameters
@@ -55,7 +55,7 @@ level : float, :math:`0 < {\rm level} < 1`, optional
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceAnalysis::getDistributionsFactories
+%feature("docstring") PERSALYS::InferenceAnalysis::getDistributionsFactories
 "Get the sequence of distributions to test for a variable.
 
 Parameters
@@ -70,7 +70,7 @@ factories : sequence of :py:class:`openturns.DistributionFactory`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceAnalysis::setDistributionsFactories
+%feature("docstring") PERSALYS::InferenceAnalysis::setDistributionsFactories
 "Set the sequence of distributions to test for a variable.
 
 Parameters
@@ -82,10 +82,10 @@ factories : sequence of :py:class:`openturns.DistributionFactory`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::InferenceAnalysis::getResult
+%feature("docstring") PERSALYS::InferenceAnalysis::getResult
 "Result accessor.
 
 Returns
 -------
-result : :class:`~otguibase.InferenceResult`
+result : :class:`~persalys.InferenceResult`
     Result."

@@ -1,14 +1,14 @@
 // SWIG file MonteCarloReliabilityAnalysis.i
 
 %{
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/MonteCarloReliabilityAnalysis.hxx"
 %}
 
 %include MonteCarloReliabilityAnalysis_doc.i
 
-%include otgui/MonteCarloReliabilityAnalysis.hxx
-namespace OTGUI {
+%include persalys/MonteCarloReliabilityAnalysis.hxx
+namespace PERSALYS {
 
-%extend MonteCarloReliabilityAnalysis { MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other) { return new OTGUI::MonteCarloReliabilityAnalysis(other); } 
+%extend MonteCarloReliabilityAnalysis { MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other) { return new PERSALYS::MonteCarloReliabilityAnalysis(other); } 
 
 } }

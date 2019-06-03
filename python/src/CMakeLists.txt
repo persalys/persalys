@@ -59,7 +59,7 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
     set (module_target ${MODULENAME}_python)
   endif ()
 
-  swig_link_libraries (${MODULENAME}_python otguibase)
+  swig_link_libraries (${MODULENAME}_python persalysbase)
 
   target_link_libraries_with_dynamic_lookup (${module_target} ${PYTHON_LIBRARIES})
 
@@ -74,28 +74,28 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
   endif ()
 
   install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
-            DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/${MODULENAME})
+            DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
   install ( TARGETS ${module_target}
-            LIBRARY DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/${MODULENAME})
+            LIBRARY DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
 
-  list ( APPEND OTGUI_PYTHON_MODULES ${MODULENAME} )
+  list ( APPEND PERSALYS_PYTHON_MODULES ${MODULENAME} )
 endmacro ( ot_add_python_module )
 
 if (CMAKE_VERSION VERSION_LESS 3.12)
   if (SalomeYACS_FOUND)
-    list (APPEND SWIG_MODULE_otguibase_python_EXTRA_FLAGS -DOTGUI_HAVE_YACS=1)
+    list (APPEND SWIG_MODULE_persalys_python_EXTRA_FLAGS -DPERSALYS_HAVE_YACS=1)
   endif ()
 
   if (OTFMI_FOUND)
-    list (APPEND SWIG_MODULE_otguibase_python_EXTRA_FLAGS -DOTGUI_HAVE_OTFMI=1)
+    list (APPEND SWIG_MODULE_persalys_python_EXTRA_FLAGS -DPERSALYS_HAVE_OTFMI=1)
   endif ()
 
   if (OTMORRIS_FOUND)
-    list (APPEND SWIG_MODULE_otguibase_python_EXTRA_FLAGS -DOTGUI_HAVE_OTMORRIS=1)
+    list (APPEND SWIG_MODULE_persalys_python_EXTRA_FLAGS -DPERSALYS_HAVE_OTMORRIS=1)
   endif ()
 endif ()
 
-ot_add_python_module (otguibase otguibase_module.i
+ot_add_python_module (persalys persalys_module.i
                       Observer.i
                       Observable.i
                       Variable.i Variable_doc.i.in
@@ -181,45 +181,45 @@ ot_add_python_module (otguibase otguibase_module.i
 if (NOT CMAKE_VERSION VERSION_LESS 3.12)
   # UseSWIG generates now standard target names
   if (CMAKE_VERSION VERSION_LESS 3.13)
-    set (otguibase_target ${SWIG_MODULE_otguibase_python_REAL_NAME})
+    set (persalys_target ${SWIG_MODULE_persalys_python_REAL_NAME})
   else ()
-    set (otguibase_target otguibase_python)
+    set (persalys_target persalys_python)
   endif ()
 
   if (SalomeYACS_FOUND)
-    set_property (TARGET ${otguibase_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_YACS=1)
+    set_property (TARGET ${persalys_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YACS=1)
   endif ()
 
   if (OTFMI_FOUND)
-    set_property (TARGET ${otguibase_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTFMI=1)
+    set_property (TARGET ${persalys_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_OTFMI=1)
   endif ()
 
   if (OTMORRIS_FOUND)
-    set_property (TARGET ${otguibase_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS OTGUI_HAVE_OTMORRIS=1)
+    set_property (TARGET ${persalys_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_OTMORRIS=1)
   endif ()
 endif ()
 
 
 install ( FILES __init__.py
-          DESTINATION ${OTGUI_PYTHON_MODULE_PATH}/otguibase
+          DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/persalys
         )
 
 install ( FILES ${SWIGFILES}
-          DESTINATION ${OTGUI_SWIG_INCLUDE_PATH}
+          DESTINATION ${PERSALYS_SWIG_INCLUDE_PATH}
         )
 
 if (SPHINX_FOUND)
 
   # create a build site-package from which sphinx can import
-  set (OTGUI_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}/site-packages)
-  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase)
-  foreach (module ${OTGUI_PYTHON_MODULES})
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/${module}.py)
+  set (PERSALYS_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}/site-packages)
+  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys)
+  foreach (module ${PERSALYS_PYTHON_MODULES})
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${module}.py)
     # FIXME: get_target_property (suffix ${SWIG_MODULE_${module}_REAL_NAME} SUFFIX)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/_${module}.so)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/_${module}.so)
   endforeach ()
   foreach (file __init__.py)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTGUI_PYTHON_BUILD_MODULE_PATH}/otguibase/${file})
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${file})
   endforeach ()
 
   # sphinx configuration
@@ -305,7 +305,7 @@ if (SPHINX_FOUND)
                                   ${SPHINX_BINARY_DIR}/${format}
                         DEPENDS ${sphinx_clones}
                       )
-    foreach (MODULENAME ${OTGUI_PYTHON_MODULES})
+    foreach (MODULENAME ${PERSALYS_PYTHON_MODULES})
       if (CMAKE_VERSION VERSION_LESS 3.13)
         set (module_target ${SWIG_MODULE_${MODULENAME}_python_REAL_NAME})
       else ()

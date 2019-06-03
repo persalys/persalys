@@ -1,6 +1,6 @@
-#include "otgui/PVBagChartViewWidget.hxx"
+#include "persalys/PVBagChartViewWidget.hxx"
 
-#include "otgui/PVServerManagerInterface.hxx"
+#include "persalys/PVServerManagerInterface.hxx"
 
 #include <pqApplicationCore.h>
 #include <pqObjectBuilder.h>
@@ -11,7 +11,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PVBagChartViewWidget::PVBagChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type)

@@ -4,15 +4,15 @@ from __future__ import print_function
 import openturns as ot
 import openturns.testing
 import sys
-import otguibase
+import persalys
 
 XMLfilename = 'example.xml'
 if len(sys.argv) > 1:
     XMLfilename = sys.argv[1]
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
-myPhysicalModel = otguibase.YACSPhysicalModel('myPhysicalModel', XMLfilename)
+myPhysicalModel = persalys.YACSPhysicalModel('myPhysicalModel', XMLfilename)
 
 myStudy.addPhysicalModel(myPhysicalModel)
 

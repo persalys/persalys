@@ -3,18 +3,18 @@
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-Study_0 = otguibase.Study('Study_0')
-otguibase.Study.Add(Study_0)
-X0 = otguibase.Input('X0', 0, '')
-Y0 = otguibase.Output('Y0', '')
+Study_0 = persalys.Study('Study_0')
+persalys.Study.Add(Study_0)
+X0 = persalys.Input('X0', 0, '')
+Y0 = persalys.Output('Y0', '')
 inputs = [X0]
 outputs = [Y0]
 code = """
 def _exec(X0):
     Y0 = X0
     return Y0"""
-PhysicalModel_0 = otguibase.PythonPhysicalModel('PhysicalModel_0', inputs, outputs, code)
+PhysicalModel_0 = persalys.PythonPhysicalModel('PhysicalModel_0', inputs, outputs, code)
 Study_0.add(PhysicalModel_0)
 

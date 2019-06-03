@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SimulationReliabilityPage.hxx"
+#include "persalys/SimulationReliabilityPage.hxx"
 
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
+#include "persalys/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QVBoxLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 SimulationReliabilityPage::SimulationReliabilityPage(QWidget* parent)

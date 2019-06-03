@@ -19,13 +19,13 @@
  *
  */
 
-#include "otgui/MetaModel.hxx"
+#include "persalys/MetaModel.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(MetaModel)

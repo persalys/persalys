@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/InferenceAnalysis.hxx"
+#include "persalys/InferenceAnalysis.hxx"
 
-#include "otgui/DistributionDictionary.hxx"
+#include "persalys/DistributionDictionary.hxx"
 
 #include <openturns/SpecFunc.hxx>
 #include <openturns/FittingTest.hxx>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(InferenceAnalysis)
@@ -254,7 +254,7 @@ String InferenceAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
-  oss << getName() << " = otguibase.InferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+  oss << getName() << " = persalys.InferenceAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
 

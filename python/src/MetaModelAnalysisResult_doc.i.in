@@ -1,19 +1,19 @@
-%feature("docstring") OTGUI::MetaModelAnalysisResult
+%feature("docstring") PERSALYS::MetaModelAnalysisResult
 "Create the base class for a metamodel analysis result."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getMetaModel
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getMetaModel
 "Metamodel accessor.
 
 Returns
 -------
-metamodel : :class:`~otguibase.MetaModel`
+metamodel : :class:`~persalys.MetaModel`
     Metamodel"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getOutputSample
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getOutputSample
 "Output sample accessor.
 
 Returns
@@ -23,7 +23,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getMetaModelOutputSample
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getMetaModelOutputSample
 "Output sample accessor.
 
 Returns
@@ -33,51 +33,51 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getLeaveOneOutValidation
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getLeaveOneOutValidation
 "Leave-one-out validation result accessor.
 
 Returns
 -------
-validation : :class:`otguibase.MetaModelValidationResult`
+validation : :class:`persalys.MetaModelValidationResult`
     Leave-one-out validation result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getKFoldValidation
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getKFoldValidation
 "K-Fold validation result accessor.
 
 Returns
 -------
-validation : :class:`otguibase.MetaModelValidationResult`
+validation : :class:`persalys.MetaModelValidationResult`
     K-Fold validation result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getTestSampleValidation
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getTestSampleValidation
 "Test sample validation result accessor.
 
 Returns
 -------
-validation : :class:`otguibase.MetaModelValidationResult`
+validation : :class:`persalys.MetaModelValidationResult`
     Test sample validation result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getAnalyticalValidation
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getAnalyticalValidation
 "Analytical validation result accessor.
 
 Returns
 -------
-validation : :class:`otguibase.MetaModelValidationResult`
+validation : :class:`persalys.MetaModelValidationResult`
     Analytical validation result"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysisResult::getValidations
+%feature("docstring") PERSALYS::MetaModelAnalysisResult::getValidations
 "Validation results accessor.
 
 Returns
 -------
-validations : sequence of :class:`otguibase.MetaModelValidationResult`
+validations : sequence of :class:`persalys.MetaModelValidationResult`
     All the validation results"
 

@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::Variable
+%feature("docstring") PERSALYS::Variable
 "Create a variable base class.
 
 Represents a variable.
@@ -12,12 +12,12 @@ description : str
 
 Examples
 --------
->>> import otguibase
->>> G = otguibase.Variable('G', 'deviation')"
+>>> import persalys
+>>> G = persalys.Variable('G', 'deviation')"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Variable::setDescription
+%feature("docstring") PERSALYS::Variable::setDescription
 "Description accessor.
 
 Parameters
@@ -27,7 +27,7 @@ description : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Variable::getDescription
+%feature("docstring") PERSALYS::Variable::getDescription
 "Description accessor.
 
 Returns
@@ -37,7 +37,7 @@ description : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Variable::getPythonScript
+%feature("docstring") PERSALYS::Variable::getPythonScript
 "Python script accessor.
 
 Returns
@@ -47,7 +47,7 @@ script : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Variable::setValue
+%feature("docstring") PERSALYS::Variable::setValue
 "Default value accessor.
 
 Parameters
@@ -57,7 +57,7 @@ value : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Variable::getValue
+%feature("docstring") PERSALYS::Variable::getValue
 "Default value accessor.
 
 Returns

@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopulaParametersTabWidget.hxx"
+#include "persalys/CopulaParametersTabWidget.hxx"
 
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/DocumentationToolButton.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/DocumentationToolButton.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <openturns/NormalCopula.hxx>
 #include <openturns/VisualTest.hxx>
@@ -42,7 +42,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CopulaParametersTabWidget::CopulaParametersTabWidget(const Distribution& distribution,

@@ -1,14 +1,14 @@
-%feature("docstring") OTGUI::ReliabilityAnalysis
+%feature("docstring") PERSALYS::ReliabilityAnalysis
 "Reliability analysis base class.
 
-The base class for analysis involving a :class:`~otguibase.LimitState`."
+The base class for analysis involving a :class:`~persalys.LimitState`."
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ReliabilityAnalysis::getLimitState
+%feature("docstring") PERSALYS::ReliabilityAnalysis::getLimitState
 "Limit-state accessor.
 
 Returns
 -------
-limitState : :class:`~otguibase.LimitState`
+limitState : :class:`~persalys.LimitState`
     The Limit-state."

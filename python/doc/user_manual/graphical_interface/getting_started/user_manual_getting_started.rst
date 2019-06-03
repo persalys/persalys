@@ -129,7 +129,7 @@ The **Help** menu gathers the following shortcuts:
 
 - **User's manual**: Open the user's manual in a Web browser.
 
-- **About OTGui**: Display information (version, license, libraries, etc.) about the interface in a pop-up dialog window.
+- **About Persalys**: Display information (version, license, libraries, etc.) about the interface in a pop-up dialog window.
 
 2- Create a study
 =================

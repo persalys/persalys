@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopyableTableView.hxx"
+#include "persalys/CopyableTableView.hxx"
 
 #include <QApplication>
 #include <QAction>
 #include <QClipboard>
 #include <QHeaderView>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CopyableTableView::CopyableTableView(QWidget * parent)

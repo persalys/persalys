@@ -1,16 +1,16 @@
 // SWIG file
 
 %{
-#include "otgui/ImportedDesignOfExperiment.hxx"
+#include "persalys/ImportedDesignOfExperiment.hxx"
 %}
 
-%ignore OTGUI::ImportedDesignOfExperiment::setDesignOfExperiment;
+%ignore PERSALYS::ImportedDesignOfExperiment::setDesignOfExperiment;
 
 %include ImportedDesignOfExperiment_doc.i
 
-%include otgui/ImportedDesignOfExperiment.hxx
-namespace OTGUI {
+%include persalys/ImportedDesignOfExperiment.hxx
+namespace PERSALYS {
 
-%extend ImportedDesignOfExperiment { ImportedDesignOfExperiment(const ImportedDesignOfExperiment & other) { return new OTGUI::ImportedDesignOfExperiment(other); } 
+%extend ImportedDesignOfExperiment { ImportedDesignOfExperiment(const ImportedDesignOfExperiment & other) { return new PERSALYS::ImportedDesignOfExperiment(other); } 
 
 } }

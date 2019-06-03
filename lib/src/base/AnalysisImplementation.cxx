@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/AnalysisImplementation.hxx"
+#include "persalys/AnalysisImplementation.hxx"
 
-#include "otgui/PhysicalModelAnalysis.hxx"
-#include "otgui/PythonPhysicalModel.hxx"
+#include "persalys/PhysicalModelAnalysis.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 /* Default constructor */

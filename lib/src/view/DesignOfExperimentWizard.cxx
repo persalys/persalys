@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentWizard.hxx"
+#include "persalys/DesignOfExperimentWizard.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DesignOfExperimentWizard::DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent)

@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/SymbolicFieldModel.hxx"
+#include "persalys/SymbolicFieldModel.hxx"
 %}
 
 %include SymbolicFieldModel_doc.i
 
-%include otgui/SymbolicFieldModel.hxx
-namespace OTGUI {
+%include persalys/SymbolicFieldModel.hxx
+namespace PERSALYS {
 
-%extend SymbolicFieldModel { SymbolicFieldModel(const SymbolicFieldModel & other) { return new OTGUI::SymbolicFieldModel(other); } 
+%extend SymbolicFieldModel { SymbolicFieldModel(const SymbolicFieldModel & other) { return new PERSALYS::SymbolicFieldModel(other); } 
 
 } }

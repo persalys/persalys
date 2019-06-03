@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PhysicalModelImplementation.hxx"
+#include "persalys/PhysicalModelImplementation.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/NonCenteredFiniteDifferenceGradient.hxx>
 #include <openturns/CenteredFiniteDifferenceHessian.hxx>
@@ -34,7 +34,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 static Factory<PersistentCollection<Input> > Factory_PersistentCollectionInput;

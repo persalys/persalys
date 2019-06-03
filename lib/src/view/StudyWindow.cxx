@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/StudyWindow.hxx"
-#include "otgui/DiagramPushButton.hxx"
+#include "persalys/StudyWindow.hxx"
+#include "persalys/DiagramPushButton.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 StudyWindow::StudyWindow(StudyItem * item, QWidget * parent)
@@ -91,7 +91,7 @@ void StudyWindow::buildInterface()
   connect(button, SIGNAL(clicked()), studyItem_, SLOT(createPythonModel()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
 
-#ifdef OTGUI_HAVE_YACS
+#ifdef PERSALYS_HAVE_YACS
   button = new DiagramPushButton(tr("YACS model"));
   button->setStatusTip(tr("Create a physical model defined with an YACS file"));
   connect(button, SIGNAL(clicked()), studyItem_, SLOT(createYACSModel()));
@@ -99,7 +99,7 @@ void StudyWindow::buildInterface()
   ++nbModels;
 #endif
 
-#ifdef OTGUI_HAVE_OTFMI
+#ifdef PERSALYS_HAVE_OTFMI
   button = new DiagramPushButton(tr("FMI model"));
   button->setStatusTip(tr("Create a physical model defined with a FMU file"));
   connect(button, SIGNAL(clicked()), studyItem_, SLOT(createFMIModel()));
@@ -118,7 +118,7 @@ void StudyWindow::buildInterface()
                  .arg(tr("Sensitivity"))
                  .arg(tr("Reliability"))
                  .arg(tr("Metamodel"));
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
   text.append(QString("\n- %1").arg(tr("Screening")));
 #endif
   textEdit->setText(text);

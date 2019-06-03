@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MetaModelAnalysisWizard.hxx"
+#include "persalys/MetaModelAnalysisWizard.hxx"
 
-#include "otgui/StudyItem.hxx"
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/DesignOfExperimentAnalysis.hxx"
+#include "persalys/StudyItem.hxx"
+#include "persalys/ModelEvaluation.hxx"
+#include "persalys/DesignOfExperimentAnalysis.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)

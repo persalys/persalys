@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ToolBar.hxx"
+#include "persalys/ToolBar.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ToolBar::ToolBar(const Actions* actions, QWidget * parent)

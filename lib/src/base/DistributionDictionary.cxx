@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DistributionDictionary.hxx"
+#include "persalys/DistributionDictionary.hxx"
 
 #include <openturns/SpecFunc.hxx>
 #include <openturns/OTDistribution.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 /* Build a distribution factory */

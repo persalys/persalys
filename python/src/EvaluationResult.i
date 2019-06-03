@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/EvaluationResult.hxx"
+#include "persalys/EvaluationResult.hxx"
 %}
 
 %include EvaluationResult_doc.i
 
-%include otgui/EvaluationResult.hxx
-namespace OTGUI {
+%include persalys/EvaluationResult.hxx
+namespace PERSALYS {
 
-%extend EvaluationResult { EvaluationResult(const EvaluationResult & other) { return new OTGUI::EvaluationResult(other); } 
+%extend EvaluationResult { EvaluationResult(const EvaluationResult & other) { return new PERSALYS::EvaluationResult(other); } 
 
 } }

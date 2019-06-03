@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PhysicalModelWindowWidget.hxx"
+#include "persalys/PhysicalModelWindowWidget.hxx"
 
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/LineEditWithQValidatorDelegate.hxx"
-#include "otgui/CheckableHeaderView.hxx"
-#include "otgui/SpinBoxDelegate.hxx"
-#include "otgui/InputTableModel.hxx"
-#include "otgui/OutputTableModel.hxx"
-#include "otgui/DifferentiationTableModel.hxx"
-#include "otgui/FieldModelEvaluation.hxx"
-#include "otgui/FieldModelEvaluationResultWindow.hxx"
+#include "persalys/ModelEvaluation.hxx"
+#include "persalys/LineEditWithQValidatorDelegate.hxx"
+#include "persalys/CheckableHeaderView.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/InputTableModel.hxx"
+#include "persalys/OutputTableModel.hxx"
+#include "persalys/DifferentiationTableModel.hxx"
+#include "persalys/FieldModelEvaluation.hxx"
+#include "persalys/FieldModelEvaluationResultWindow.hxx"
 
 #include <QHeaderView>
 #include <QSplitter>
@@ -41,7 +41,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem * item)

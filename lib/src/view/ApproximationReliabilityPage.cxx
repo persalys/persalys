@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ApproximationReliabilityPage.hxx"
+#include "persalys/ApproximationReliabilityPage.hxx"
 
-#include "otgui/FORMAnalysis.hxx"
-#include "otgui/SORMAnalysis.hxx"
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
-#include "otgui/ParametersDefinitionWizard.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/FORMAnalysis.hxx"
+#include "persalys/SORMAnalysis.hxx"
+#include "persalys/FORMImportanceSamplingAnalysis.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
+#include "persalys/ParametersDefinitionWizard.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <openturns/Cobyla.hxx>
 #include <openturns/AbdoRackwitz.hxx>
@@ -40,7 +40,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ApproximationReliabilityPage::ApproximationReliabilityPage(QWidget* parent)

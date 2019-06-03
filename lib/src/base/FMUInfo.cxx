@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FMUInfo.hxx"
-#include "otgui/InterpreterUnlocker.hxx"
+#include "persalys/FMUInfo.hxx"
+#include "persalys/InterpreterUnlocker.hxx"
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(FMUInfo)

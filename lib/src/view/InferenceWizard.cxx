@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/InferenceWizard.hxx"
+#include "persalys/InferenceWizard.hxx"
 
-#include "otgui/CheckableHeaderView.hxx"
-#include "otgui/DistributionDictionary.hxx"
-#include "otgui/DistributionsForInferenceWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/DoubleSpinBox.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/CheckableHeaderView.hxx"
+#include "persalys/DistributionDictionary.hxx"
+#include "persalys/DistributionsForInferenceWidget.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/DoubleSpinBox.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <openturns/OTDistribution.hxx>
 #include <openturns/FittingTest.hxx>
@@ -36,7 +36,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)

@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Input.hxx"
+#include "persalys/Input.hxx"
 
-#include "otgui/DistributionDictionary.hxx"
+#include "persalys/DistributionDictionary.hxx"
 
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/Dirac.hxx>
@@ -28,7 +28,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(Input)
@@ -216,11 +216,11 @@ String Input::getPythonScript() const
   std::replace(pythonName.begin(), pythonName.end(), '.', '_');
 
   if (!isStochastic())
-    oss << pythonName << " = otguibase.Input('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
+    oss << pythonName << " = persalys.Input('" << getName() << "', " << getValue() << ", '" << getEscapedDescription() << "')\n";
   else
   {
     oss << getDistributionPythonScript();
-    oss << pythonName << " = otguibase.Input('" << getName() << "', " << getValue();
+    oss << pythonName << " = persalys.Input('" << getName() << "', " << getValue();
     oss << ", dist_" << pythonName << ", '" << getEscapedDescription() << "')\n";
   }
   if (getFiniteDifferenceStep() != ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))

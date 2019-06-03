@@ -18,22 +18,22 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifdef OTGUI_HAVE_YACS
-#include "otgui/YACSPhysicalModel.hxx" //includes python.h. Has to be done before any Qt include
+#ifdef PERSALYS_HAVE_YACS
+#include "persalys/YACSPhysicalModel.hxx" //includes python.h. Has to be done before any Qt include
 #include <ydefx/ResourceWidget.hxx>
 #endif
 
-#include "otgui/Controller.hxx"   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
+#include "persalys/Controller.hxx"   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 
-#include "otgui/AnalysisWindow.hxx"
+#include "persalys/AnalysisWindow.hxx"
 
-#include "otgui/ParametersWidget.hxx"
-#include "otgui/TranslationManager.hxx"
+#include "persalys/ParametersWidget.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QHBoxLayout>
 #include <QScrollArea>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress, QWidget * parent)
@@ -216,7 +216,7 @@ void AnalysisWindow::updateProgressBar(const int value)
 }
 
 
-#ifdef OTGUI_HAVE_YACS
+#ifdef PERSALYS_HAVE_YACS
 void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
 {
   ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());

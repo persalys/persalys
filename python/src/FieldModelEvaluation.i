@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/FieldModelEvaluation.hxx"
+#include "persalys/FieldModelEvaluation.hxx"
 %}
 
 %include FieldModelEvaluation_doc.i
 
-%include otgui/FieldModelEvaluation.hxx
-namespace OTGUI {
+%include persalys/FieldModelEvaluation.hxx
+namespace PERSALYS {
 
-%extend FieldModelEvaluation { FieldModelEvaluation(const FieldModelEvaluation & other) { return new OTGUI::FieldModelEvaluation(other); } 
+%extend FieldModelEvaluation { FieldModelEvaluation(const FieldModelEvaluation & other) { return new PERSALYS::FieldModelEvaluation(other); } 
 
 } }

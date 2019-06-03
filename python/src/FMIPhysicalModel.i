@@ -1,14 +1,14 @@
 // SWIG file FMIPhysicalModel.i
 
 %{
-#include "otgui/FMIPhysicalModel.hxx"
+#include "persalys/FMIPhysicalModel.hxx"
 %}
 
 %include FMIPhysicalModel_doc.i
 
-%include otgui/FMIPhysicalModel.hxx
-namespace OTGUI {
+%include persalys/FMIPhysicalModel.hxx
+namespace PERSALYS {
 
-%extend FMIPhysicalModel { FMIPhysicalModel(const FMIPhysicalModel & other) { return new OTGUI::FMIPhysicalModel(other); } 
+%extend FMIPhysicalModel { FMIPhysicalModel(const FMIPhysicalModel & other) { return new PERSALYS::FMIPhysicalModel(other); } 
 
 } }

@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/LogDoubleSpinBox.hxx"
+#include "persalys/LogDoubleSpinBox.hxx"
 
 #include <QMenu>
 #include <QLineEdit>
@@ -26,7 +26,7 @@
 #include <limits>
 #include <cmath>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 LogDoubleSpinBox::LogDoubleSpinBox(QWidget * parent)
@@ -55,7 +55,7 @@ void LogDoubleSpinBox::stepBy(int steps)
    QLineEdit is overridden by a "Select all" action of QSpinBox.
    The selectAll method of QSpinBox Selects all the text
    in the spinbox except the prefix and suffix.
-   In OTGui there is no spinbox with prefix or suffix
+   In Persalys there is no spinbox with prefix or suffix
    So we do not this operation here
 */
 void LogDoubleSpinBox::contextMenuEvent(QContextMenuEvent* event)

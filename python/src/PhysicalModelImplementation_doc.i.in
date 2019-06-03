@@ -1,17 +1,17 @@
-%define OTGUI_PhysicalModel_doc
+%define PERSALYS_PhysicalModel_doc
 "Physical model base class.
 
 Notes
 -----
 Can only be used through its derived classes.
-See :class:`~otguibase.SymbolicPhysicalModel`, :class:`~otguibase.PythonPhysicalModel`"
+See :class:`~persalys.SymbolicPhysicalModel`, :class:`~persalys.PythonPhysicalModel`"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation
-OTGUI_PhysicalModel_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation
+PERSALYS_PhysicalModel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getOutputNames_doc
+%define PERSALYS_PhysicalModel_getOutputNames_doc
 "Output variable names accessor.
 
 Returns
@@ -19,38 +19,38 @@ Returns
 names : :py:class:`openturns.Description`
     Ouput variable names"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputNames
-OTGUI_PhysicalModel_getOutputNames_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getOutputNames
+PERSALYS_PhysicalModel_getOutputNames_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_addInput_doc
+%define PERSALYS_PhysicalModel_addInput_doc
 "Add an input variable.
 
 Parameters
 ----------
-input : :class:`~otguibase.Input`
+input : :class:`~persalys.Input`
     New variable"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::addInput
-OTGUI_PhysicalModel_addInput_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::addInput
+PERSALYS_PhysicalModel_addInput_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_addOutput_doc
+%define PERSALYS_PhysicalModel_addOutput_doc
 "Add an output variable.
 
 Parameters
 ----------
-output : :class:`~otguibase.Output`
+output : :class:`~persalys.Output`
     New variable"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::addOutput
-OTGUI_PhysicalModel_addOutput_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::addOutput
+PERSALYS_PhysicalModel_addOutput_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_removeInput_doc
+%define PERSALYS_PhysicalModel_removeInput_doc
 "Remove an input variable.
 
 Parameters
@@ -58,12 +58,12 @@ Parameters
 name : str
     Variable name"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::removeInput
-OTGUI_PhysicalModel_removeInput_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::removeInput
+PERSALYS_PhysicalModel_removeInput_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_removeOutput_doc
+%define PERSALYS_PhysicalModel_removeOutput_doc
 "Remove an output variable.
 
 Parameters
@@ -71,12 +71,12 @@ Parameters
 name : str
     Variable name"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::removeOutput
-OTGUI_PhysicalModel_removeOutput_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::removeOutput
+PERSALYS_PhysicalModel_removeOutput_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getFunction_doc
+%define PERSALYS_PhysicalModel_getFunction_doc
 "Accessor to the underlying function.
 
 Parameters
@@ -89,12 +89,12 @@ Returns
 function : :py:class:`openturns.Function`
     Function evaluating the outputs"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getFunction
-OTGUI_PhysicalModel_getFunction_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getFunction
+PERSALYS_PhysicalModel_getFunction_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getPointToFieldFunction_doc
+%define PERSALYS_PhysicalModel_getPointToFieldFunction_doc
 "Accessor to the underlying function.
 
 Parameters
@@ -107,12 +107,12 @@ Returns
 function : :py:class:`openturns.PointToFieldFunction`
     Function evaluating the outputs along the mesh nodes"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getPointToFieldFunction
-OTGUI_PhysicalModel_getPointToFieldFunction_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getPointToFieldFunction
+PERSALYS_PhysicalModel_getPointToFieldFunction_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getPythonScript_doc
+%define PERSALYS_PhysicalModel_getPythonScript_doc
 "Python script accessor.
 
 Returns
@@ -120,12 +120,12 @@ Returns
 script : str
     Python script to replay the model"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getPythonScript
-OTGUI_PhysicalModel_getPythonScript_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getPythonScript
+PERSALYS_PhysicalModel_getPythonScript_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setCopula_doc
+%define PERSALYS_PhysicalModel_setCopula_doc
 "Copula accessor.
 
 Parameters
@@ -133,12 +133,12 @@ Parameters
 copula : :py:class:`openturns.Copula`
     The copula"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setCopula
-OTGUI_PhysicalModel_setCopula_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setCopula
+PERSALYS_PhysicalModel_setCopula_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getDistribution_doc
+%define PERSALYS_PhysicalModel_getDistribution_doc
 "Distribution accessor.
 
 Parameters
@@ -146,12 +146,12 @@ Parameters
 Distribution : :py:class:`openturns.ComposedDistribution`
     The composed distribution (marginals and dependence)"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getDistribution
-OTGUI_PhysicalModel_getDistribution_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getDistribution
+PERSALYS_PhysicalModel_getDistribution_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getCopula_doc
+%define PERSALYS_PhysicalModel_getCopula_doc
 "Copula accessor.
 
 Parameters
@@ -159,12 +159,12 @@ Parameters
 copula : :py:class:`openturns.Copula`
     The copula"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getCopula
-OTGUI_PhysicalModel_getCopula_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getCopula
+PERSALYS_PhysicalModel_getCopula_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputDescription_doc
+%define PERSALYS_PhysicalModel_setInputDescription_doc
 "Input description accessor.
 
 Parameters
@@ -174,12 +174,12 @@ name : str
 description : str
     Description text"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputDescription
-OTGUI_PhysicalModel_setInputDescription_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setInputDescription
+PERSALYS_PhysicalModel_setInputDescription_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setOutputDescription_doc
+%define PERSALYS_PhysicalModel_setOutputDescription_doc
 "Output description accessor.
 
 Parameters
@@ -189,64 +189,64 @@ name : str
 description : str
     Description text"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputDescription
-OTGUI_PhysicalModel_setOutputDescription_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setOutputDescription
+PERSALYS_PhysicalModel_setOutputDescription_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputs_doc
+%define PERSALYS_PhysicalModel_setInputs_doc
 "Input variables accessor.
 
 Parameters
 ----------
-inputs : sequence of :class:`~otguibase.Input`
+inputs : sequence of :class:`~persalys.Input`
     Input variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputs
-OTGUI_PhysicalModel_setInputs_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setInputs
+PERSALYS_PhysicalModel_setInputs_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getInputs_doc
+%define PERSALYS_PhysicalModel_getInputs_doc
 "Input variables accessor.
 
 Returns
 -------
-inputs : sequence of :class:`~otguibase.Input`
+inputs : sequence of :class:`~persalys.Input`
     Input variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getInputs
-OTGUI_PhysicalModel_getInputs_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getInputs
+PERSALYS_PhysicalModel_getInputs_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setOutputs_doc
+%define PERSALYS_PhysicalModel_setOutputs_doc
 "Output variables accessor.
 
 Parameters
 ----------
-outputs : sequence of :class:`~otguibase.Output`
+outputs : sequence of :class:`~persalys.Output`
     Output variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputs
-OTGUI_PhysicalModel_setOutputs_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setOutputs
+PERSALYS_PhysicalModel_setOutputs_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getOutputs_doc
+%define PERSALYS_PhysicalModel_getOutputs_doc
 "Output variables accessor.
 
 Returns
 -------
-outputs : sequence of :class:`~otguibase.Output`
+outputs : sequence of :class:`~persalys.Output`
     Output variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputs
-OTGUI_PhysicalModel_getOutputs_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getOutputs
+PERSALYS_PhysicalModel_getOutputs_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getInputByName_doc
+%define PERSALYS_PhysicalModel_getInputByName_doc
 "Input variable accessor.
 
 Parameters
@@ -256,15 +256,15 @@ name : str
 
 Returns
 -------
-input : :class:`~otguibase.Input`
+input : :class:`~persalys.Input`
     Input variable"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getInputByName
-OTGUI_PhysicalModel_getInputByName_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getInputByName
+PERSALYS_PhysicalModel_getInputByName_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getOutputByName_doc
+%define PERSALYS_PhysicalModel_getOutputByName_doc
 "Output variable accessor.
 
 Parameters
@@ -274,15 +274,15 @@ name : str
 
 Returns
 -------
-input : :class:`~otguibase.Output`
+input : :class:`~persalys.Output`
     Output variable"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputByName
-OTGUI_PhysicalModel_getOutputByName_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getOutputByName
+PERSALYS_PhysicalModel_getOutputByName_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getInputDimension_doc
+%define PERSALYS_PhysicalModel_getInputDimension_doc
 "Number of input variables accessor.
 
 Returns
@@ -290,12 +290,12 @@ Returns
 dimension : int
     Number of input variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getInputDimension
-OTGUI_PhysicalModel_getInputDimension_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getInputDimension
+PERSALYS_PhysicalModel_getInputDimension_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getOutputDimension_doc
+%define PERSALYS_PhysicalModel_getOutputDimension_doc
 "Number of output variables accessor.
 
 Returns
@@ -303,12 +303,12 @@ Returns
 dimension : int
     Number of output variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputDimension
-OTGUI_PhysicalModel_getOutputDimension_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getOutputDimension
+PERSALYS_PhysicalModel_getOutputDimension_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getInputNames_doc
+%define PERSALYS_PhysicalModel_getInputNames_doc
 "Input variable names accessor.
 
 Returns
@@ -316,12 +316,12 @@ Returns
 names : :py:class:`openturns.Description`
     Input variable names"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getInputNames
-OTGUI_PhysicalModel_getInputNames_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getInputNames
+PERSALYS_PhysicalModel_getInputNames_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getStochasticInputNames_doc
+%define PERSALYS_PhysicalModel_getStochasticInputNames_doc
 "Accessor to the names of the stochastic input variables.
 
 Returns
@@ -329,12 +329,12 @@ Returns
 names : :py:class:`openturns.Description`
     Names of the stochastic input variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getStochasticInputNames
-OTGUI_PhysicalModel_getStochasticInputNames_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getStochasticInputNames
+PERSALYS_PhysicalModel_getStochasticInputNames_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getInputRandomVector_doc
+%define PERSALYS_PhysicalModel_getInputRandomVector_doc
 "Input random vector accessor.
 
 Returns
@@ -342,12 +342,12 @@ Returns
 names : :py:class:`openturns.RandomVector`
     Input random vector"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getInputRandomVector
-OTGUI_PhysicalModel_getInputRandomVector_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getInputRandomVector
+PERSALYS_PhysicalModel_getInputRandomVector_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getOutputRandomVector_doc
+%define PERSALYS_PhysicalModel_getOutputRandomVector_doc
 "Output random vector accessor.
 
 Returns
@@ -355,12 +355,12 @@ Returns
 names : :py:class:`openturns.RandomVector`
     Output random vector"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getOutputRandomVector
-OTGUI_PhysicalModel_getOutputRandomVector_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getOutputRandomVector
+PERSALYS_PhysicalModel_getOutputRandomVector_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputName_doc
+%define PERSALYS_PhysicalModel_setInputName_doc
 "Input variable name accessor.
 
 Parameters
@@ -370,12 +370,12 @@ name : str
 newName : str
     New name"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputName
-OTGUI_PhysicalModel_setInputName_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setInputName
+PERSALYS_PhysicalModel_setInputName_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setOutputName_doc
+%define PERSALYS_PhysicalModel_setOutputName_doc
 "Output variable name accessor.
 
 Parameters
@@ -385,12 +385,12 @@ name : str
 newName : str
     New name"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputName
-OTGUI_PhysicalModel_setOutputName_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setOutputName
+PERSALYS_PhysicalModel_setOutputName_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputValue_doc
+%define PERSALYS_PhysicalModel_setInputValue_doc
 "Input variable value accessor.
 
 Parameters
@@ -400,12 +400,12 @@ name : str
 value : float
     New value"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputValue
-OTGUI_PhysicalModel_setInputValue_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setInputValue
+PERSALYS_PhysicalModel_setInputValue_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setOutputValue_doc
+%define PERSALYS_PhysicalModel_setOutputValue_doc
 "Output variable name accessor.
 
 Parameters
@@ -415,12 +415,12 @@ name : str
 value : float
     New value"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setOutputValue
-OTGUI_PhysicalModel_setOutputValue_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setOutputValue
+PERSALYS_PhysicalModel_setOutputValue_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_hasInputNamed_doc
+%define PERSALYS_PhysicalModel_hasInputNamed_doc
 "Check if an input has the given name.
 
 Parameters
@@ -433,12 +433,12 @@ Returns
 has : bool
     Whether an input has the given name"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::hasInputNamed
-OTGUI_PhysicalModel_hasInputNamed_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::hasInputNamed
+PERSALYS_PhysicalModel_hasInputNamed_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_hasOutputNamed_doc
+%define PERSALYS_PhysicalModel_hasOutputNamed_doc
 "Check if an output has the given name.
 
 Parameters
@@ -451,12 +451,12 @@ Returns
 has : bool
     Whether an output has the given name"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::hasOutputNamed
-OTGUI_PhysicalModel_hasOutputNamed_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::hasOutputNamed
+PERSALYS_PhysicalModel_hasOutputNamed_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_hasStochasticInputs_doc
+%define PERSALYS_PhysicalModel_hasStochasticInputs_doc
 "Whether it contains stochastic variables.
 
 Returns
@@ -464,12 +464,12 @@ Returns
 has : bool
     Whether it contains stochastic variables"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::hasStochasticInputs
-OTGUI_PhysicalModel_hasStochasticInputs_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::hasStochasticInputs
+PERSALYS_PhysicalModel_hasStochasticInputs_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_isValid_doc
+%define PERSALYS_PhysicalModel_isValid_doc
 "Whether it is valid.
 
 Returns
@@ -477,12 +477,12 @@ Returns
 isValid : bool
     Whether it is valid"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::isValid
-OTGUI_PhysicalModel_isValid_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::isValid
+PERSALYS_PhysicalModel_isValid_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setDistribution_doc
+%define PERSALYS_PhysicalModel_setDistribution_doc
 "Input distribution accessor.
 
 Parameters
@@ -492,12 +492,12 @@ name : str
 distribution : :py:class:`openturns.Distribution`
     Variable distribution"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setDistribution
-OTGUI_PhysicalModel_setDistribution_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setDistribution
+PERSALYS_PhysicalModel_setDistribution_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setInputStochastic_doc
+%define PERSALYS_PhysicalModel_setInputStochastic_doc
 "Whether the input variable is stochastic.
 
 Parameters
@@ -507,12 +507,12 @@ name : str
 isStochastic : bool
     Whether the input variable is stochastic"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setInputStochastic
-OTGUI_PhysicalModel_setInputStochastic_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setInputStochastic
+PERSALYS_PhysicalModel_setInputStochastic_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setDistributionParametersType_doc
+%define PERSALYS_PhysicalModel_setDistributionParametersType_doc
 "Input distribution parameter type accessor.
 
 Parameters
@@ -522,12 +522,12 @@ name : str
 parametersType : int
     Distribution parameter type accessor"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setDistributionParametersType
-OTGUI_PhysicalModel_setDistributionParametersType_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setDistributionParametersType
+PERSALYS_PhysicalModel_setDistributionParametersType_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
+%define PERSALYS_PhysicalModel_setFiniteDifferenceStep_doc
 "Finite difference step accessor.
 
 Parameters
@@ -537,12 +537,12 @@ name : str
 step : float
     Finite difference step used to define the gradient of the model's function"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setFiniteDifferenceStep
-OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setFiniteDifferenceStep
+PERSALYS_PhysicalModel_setFiniteDifferenceStep_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getRestrictedFunction_doc
+%define PERSALYS_PhysicalModel_getRestrictedFunction_doc
 "Accessor to the function restricted to its stochastic inputs.
 
 Parameters
@@ -555,12 +555,12 @@ Returns
 restricted : :py:class:`openturns.Function`
     Stochastic function"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedFunction
-OTGUI_PhysicalModel_getRestrictedFunction_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getRestrictedFunction
+PERSALYS_PhysicalModel_getRestrictedFunction_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
+%define PERSALYS_PhysicalModel_getRestrictedPointToFieldFunction_doc
 "Accessor to the field function restricted to its stochastic inputs.
 
 Parameters
@@ -573,12 +573,12 @@ Returns
 restricted : :py:class:`openturns.PointToFieldFunction`
     Stochastic field function (for model with mesh)"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getRestrictedPointToFieldFunction
-OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getRestrictedPointToFieldFunction
+PERSALYS_PhysicalModel_getRestrictedPointToFieldFunction_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getSelectedOutputsNames_doc
+%define PERSALYS_PhysicalModel_getSelectedOutputsNames_doc
 "Accessor to the selected outputs names.
 
 Returns
@@ -586,12 +586,12 @@ Returns
 names : :py:class:`openturns.Description`
     Selected outputs names"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getSelectedOutputsNames
-OTGUI_PhysicalModel_getSelectedOutputsNames_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getSelectedOutputsNames
+PERSALYS_PhysicalModel_getSelectedOutputsNames_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_selectOutput_doc
+%define PERSALYS_PhysicalModel_selectOutput_doc
 "Select output.
 
 Parameters
@@ -601,22 +601,22 @@ name : str
 isSelected : bool
     Whether it is selected"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::selectOutput
-OTGUI_PhysicalModel_selectOutput_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::selectOutput
+PERSALYS_PhysicalModel_selectOutput_doc
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::PhysicalModelImplementation::clearInputs
+%feature("docstring") PERSALYS::PhysicalModelImplementation::clearInputs
 "Remove all the input variables."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::PhysicalModelImplementation::clearOutputs
+%feature("docstring") PERSALYS::PhysicalModelImplementation::clearOutputs
 "Remove all the output variables."
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_isParallel_doc
+%define PERSALYS_PhysicalModel_isParallel_doc
 "Whether the evaluations of the model are parallelized.
 
 Returns
@@ -624,12 +624,12 @@ Returns
 isParallel : bool
     Whether the evaluations of the model are parallelized (available only for the Python model)"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::isParallel
-OTGUI_PhysicalModel_isParallel_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::isParallel
+PERSALYS_PhysicalModel_isParallel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setParallel_doc
+%define PERSALYS_PhysicalModel_setParallel_doc
 "Whether the evaluations of the model are parallelized.
 
 Parameters
@@ -637,12 +637,12 @@ Parameters
 isParallel : bool
     Whether the evaluations of the model are parallelized (available only for the Python model)"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setParallel
-OTGUI_PhysicalModel_setParallel_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setParallel
+PERSALYS_PhysicalModel_setParallel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_hasMesh_doc
+%define PERSALYS_PhysicalModel_hasMesh_doc
 "Whether the model has a mesh.
 
 Returns
@@ -650,31 +650,31 @@ Returns
 hasMesh : bool
     Whether the model has a mesh"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::hasMesh
-OTGUI_PhysicalModel_hasMesh_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::hasMesh
+PERSALYS_PhysicalModel_hasMesh_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_setMeshModel_doc
+%define PERSALYS_PhysicalModel_setMeshModel_doc
 "Mesh model accessor.
 
 Parameters
 ----------
-mesh : :class:`~otguibase.MeshModel`
+mesh : :class:`~persalys.MeshModel`
     Mesh model"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::setMeshModel
-OTGUI_PhysicalModel_setMeshModel_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setMeshModel
+PERSALYS_PhysicalModel_setMeshModel_doc
 
 // ---------------------------------------------------------------------
 
-%define OTGUI_PhysicalModel_getMeshModel_doc
+%define PERSALYS_PhysicalModel_getMeshModel_doc
 "Mesh model accessor.
 
 Returns
 -------
-mesh : :class:`~otguibase.MeshModel`
+mesh : :class:`~persalys.MeshModel`
     Mesh model"
 %enddef
-%feature("docstring") OTGUI::PhysicalModelImplementation::getMeshModel
-OTGUI_PhysicalModel_getMeshModel_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getMeshModel
+PERSALYS_PhysicalModel_getMeshModel_doc

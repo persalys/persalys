@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OptimizationIntroPage.hxx"
+#include "persalys/OptimizationIntroPage.hxx"
 
-#include "otgui/OptimizationAnalysis.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/DocumentationToolButton.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/DocumentationToolButton.hxx"
 
 #include <openturns/NLopt.hxx>
 
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)

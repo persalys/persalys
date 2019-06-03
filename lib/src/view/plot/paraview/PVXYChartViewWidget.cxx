@@ -1,4 +1,4 @@
-#include "otgui/PVXYChartViewWidget.hxx"
+#include "persalys/PVXYChartViewWidget.hxx"
 
 #include <vtkSMProperty.h>
 #include <vtkSMPropertyHelper.h>
@@ -14,13 +14,13 @@
 #include <vtkContextScene.h>
 #include <vtkXYChartRepresentation.h>
 
-#include "otgui/ListWidgetWithCheckBox.hxx"
+#include "persalys/ListWidgetWithCheckBox.hxx"
 
 #include <QEvent>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_VIEW_TYPE{
   {PVXYChartViewWidget::Scatter, "XYChartView"},

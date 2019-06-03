@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SORMAnalysis.hxx"
+#include "persalys/SORMAnalysis.hxx"
 
 #include <openturns/SORM.hxx>
 #include <openturns/CompositeRandomVector.hxx>
@@ -26,7 +26,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(SORMAnalysis)
@@ -122,7 +122,7 @@ String SORMAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
-  oss << getName() << " = otguibase.SORMAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
+  oss << getName() << " = persalys.SORMAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
   oss << getName() << ".setPhysicalStartingPoint(" << getPhysicalStartingPoint().__str__() << ")\n";
   // optimization algo
   oss << "optimizationAlgo = ot." << getOptimizationAlgorithm().getImplementation()->getClassName() << "()\n";

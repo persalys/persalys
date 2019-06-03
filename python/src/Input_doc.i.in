@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::Input
+%feature("docstring") PERSALYS::Input
 "Create an input variable.
 
 Represents an input variable.
@@ -17,14 +17,14 @@ description : str
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> R = otguibase.Input('R', ot.Normal(75000., 5000.))
->>> S = otguibase.Input('S', 10.5)"
+>>> import persalys
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> R = persalys.Input('R', ot.Normal(75000., 5000.))
+>>> S = persalys.Input('S', 10.5)"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::setDistribution
+%feature("docstring") PERSALYS::Input::setDistribution
 "Distribution accessor.
 
 Parameters
@@ -34,7 +34,7 @@ distribution : :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::getDistribution
+%feature("docstring") PERSALYS::Input::getDistribution
 "Distribution accessor.
 
 Returns
@@ -44,7 +44,7 @@ distribution : :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::setDistributionParametersType
+%feature("docstring") PERSALYS::Input::setDistributionParametersType
 "Distribution parameters type accessor.
 
 Parameters
@@ -54,7 +54,7 @@ parametersType : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::getDistributionParametersType
+%feature("docstring") PERSALYS::Input::getDistributionParametersType
 "Distribution parameters type accessor.
 
 Returns
@@ -64,7 +64,7 @@ parametersType : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::setFiniteDifferenceStep
+%feature("docstring") PERSALYS::Input::setFiniteDifferenceStep
 "Finite difference step accessor.
 
 Parameters
@@ -99,7 +99,7 @@ Second order centered finite difference scheme:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::getFiniteDifferenceStep
+%feature("docstring") PERSALYS::Input::getFiniteDifferenceStep
 "Finite difference step accessor.
 
 Returns
@@ -109,7 +109,7 @@ step : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::isStochastic
+%feature("docstring") PERSALYS::Input::isStochastic
 "Whether the variable is stochastic.
 
 Returns
@@ -119,7 +119,7 @@ isStochastic : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Input::setStochastic
+%feature("docstring") PERSALYS::Input::setStochastic
 "Whether the variable is stochastic.
 
 Parameters

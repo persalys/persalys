@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ModelEvaluationResultWindow.hxx"
-#include "otgui/ModelEvaluation.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/ModelEvaluationResultWindow.hxx"
+#include "persalys/ModelEvaluation.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 #include <QHBoxLayout>
 #include <QGroupBox>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ModelEvaluationResultWindow::ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent)

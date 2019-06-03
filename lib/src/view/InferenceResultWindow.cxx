@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/InferenceResultWindow.hxx"
+#include "persalys/InferenceResultWindow.hxx"
 
-#include "otgui/InferenceAnalysis.hxx"
+#include "persalys/InferenceAnalysis.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -28,7 +28,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * parent)

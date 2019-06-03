@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ParametersDefinitionWizard.hxx"
+#include "persalys/ParametersDefinitionWizard.hxx"
 
 #include <QTableView>
 #include <QVBoxLayout>
@@ -26,7 +26,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ParametersTableModel::ParametersTableModel(const Description& names, const Point& values, const QStringList& labels, QObject* parent)

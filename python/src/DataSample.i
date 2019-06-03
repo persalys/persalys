@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/DataSample.hxx"
+#include "persalys/DataSample.hxx"
 %}
 
 %include DataSample_doc.i
 
-%include otgui/DataSample.hxx
-namespace OTGUI {
+%include persalys/DataSample.hxx
+namespace PERSALYS {
 
-%extend DataSample { DataSample(const DataSample & other) { return new OTGUI::DataSample(other); } 
+%extend DataSample { DataSample(const DataSample & other) { return new PERSALYS::DataSample(other); } 
 
 } }

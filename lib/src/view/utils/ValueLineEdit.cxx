@@ -19,14 +19,14 @@
  *
  */
 
-#include "otgui/ValueLineEdit.hxx"
+#include "persalys/ValueLineEdit.hxx"
 
-#include "otgui/AppliException.hxx"
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/AppliException.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 #include <QDoubleValidator>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ValueLineEdit::ValueLineEdit(const double value, QWidget *parent)

@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
 
 #include <openturns/MonteCarloExperiment.hxx>
 #include <openturns/LHSExperiment.hxx>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(ProbabilisticDesignOfExperiment)
@@ -197,7 +197,7 @@ Parameters ProbabilisticDesignOfExperiment::getParameters() const
 String ProbabilisticDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.ProbabilisticDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
+  oss << getName() << " = persalys.ProbabilisticDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << getSize() << ", '" << getDesignName() << "')\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
 

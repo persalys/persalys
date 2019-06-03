@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import otguibase
+import persalys
 import openturns as ot
 import sys
 import os
@@ -9,7 +9,7 @@ from glob import glob
 from tempfile import mkdtemp
 import doctest
 
-mod_path = os.path.dirname(otguibase.__file__)
+mod_path = os.path.dirname(persalys.__file__)
 py_files = sorted(glob(mod_path + '/*.py'))
 
 total_failure_count = 0
@@ -21,7 +21,7 @@ os.chdir(work_dir)
 
 for py_file in py_files:
     py_basename = os.path.splitext(os.path.basename(py_file))[0]
-    module = __import__('otguibase.' + py_basename, fromlist=[py_basename])
+    module = __import__('persalys.' + py_basename, fromlist=[py_basename])
     failure_count, test_count = doctest.testmod(
         module, verbose=False, optionflags=doctest.ELLIPSIS)
 

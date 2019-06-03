@@ -1,16 +1,16 @@
 // SWIG file DesignOfExperimentEvaluation.i
 
 %{
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 %}
 
-%ignore OTGUI::DesignOfExperimentEvaluation::setDesignOfExperiment;
+%ignore PERSALYS::DesignOfExperimentEvaluation::setDesignOfExperiment;
 
 %include DesignOfExperimentEvaluation_doc.i
 
-%include otgui/DesignOfExperimentEvaluation.hxx
-namespace OTGUI {
+%include persalys/DesignOfExperimentEvaluation.hxx
+namespace PERSALYS {
 
-%extend DesignOfExperimentEvaluation { DesignOfExperimentEvaluation(const DesignOfExperimentEvaluation & other) { return new OTGUI::DesignOfExperimentEvaluation(other); } 
+%extend DesignOfExperimentEvaluation { DesignOfExperimentEvaluation(const DesignOfExperimentEvaluation & other) { return new PERSALYS::DesignOfExperimentEvaluation(other); } 
 
 } }

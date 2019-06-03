@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/Observer.hxx"
+#include "persalys/Observer.hxx"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 /* Default constructor */

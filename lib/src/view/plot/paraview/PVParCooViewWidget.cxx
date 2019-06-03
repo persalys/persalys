@@ -1,4 +1,4 @@
-#include "otgui/PVParCooViewWidget.hxx"
+#include "persalys/PVParCooViewWidget.hxx"
 
 #include <vtkChart.h>
 #include <pqContextView.h>
@@ -7,7 +7,7 @@
 #include <vtkContextScene.h>
 
 #include <vtkSMPropertyHelper.h>
-namespace OTGUI
+namespace PERSALYS
 {
 const char PVParCooViewWidget::PV_VIEW_TYPE[] = "ParallelCoordinatesChartView";
 

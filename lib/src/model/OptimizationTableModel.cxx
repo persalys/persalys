@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/OptimizationTableModel.hxx"
+#include "persalys/OptimizationTableModel.hxx"
 
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 OptimizationTableModel::OptimizationTableModel(const OptimizationAnalysis & analysis, QObject * parent)

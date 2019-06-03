@@ -1,38 +1,38 @@
-%feature("docstring") OTGUI::FunctionalChaosAnalysis
+%feature("docstring") PERSALYS::FunctionalChaosAnalysis
 "Create a Functional chaos analysis.
 
 Parameters
 ----------
 name : str
     Name
-designOfExperiment : :class:`~otguibase.DesignOfExperiment`
+designOfExperiment : :class:`~persalys.DesignOfExperiment`
     Design of experiments
 
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
 >>> from math import pi
 >>> ot.RandomGenerator.SetSeed(0)
->>> xi1 = otguibase.Input('xi1', ot.Uniform(-pi, pi))
->>> xi2 = otguibase.Input('xi2', ot.Uniform(-pi, pi))
->>> xi3 = otguibase.Input('xi3', ot.Uniform(-pi, pi))
->>> y0 = otguibase.Output('y0')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [xi1, xi2, xi3], [y0], ['sin(xi1) + 7. * (sin(xi2)) ^ 2 + 0.1 * xi3^4 * sin(xi1)'])
+>>> xi1 = persalys.Input('xi1', ot.Uniform(-pi, pi))
+>>> xi2 = persalys.Input('xi2', ot.Uniform(-pi, pi))
+>>> xi3 = persalys.Input('xi3', ot.Uniform(-pi, pi))
+>>> y0 = persalys.Output('y0')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [xi1, xi2, xi3], [y0], ['sin(xi1) + 7. * (sin(xi2)) ^ 2 + 0.1 * xi3^4 * sin(xi1)'])
 
 Create the design of experiments:
 
->>> aDesign = otguibase.FixedDesignOfExperiment('aDesign', myPhysicalModel)
+>>> aDesign = persalys.FixedDesignOfExperiment('aDesign', myPhysicalModel)
 >>> inputSample = ot.LHSExperiment(myPhysicalModel.getDistribution(), 250).generate()
 >>> aDesign.setOriginalInputSample(inputSample)
 >>> aDesign.run()
 
 Create the Functional Chaos Analysis:
 
->>> chaos = otguibase.FunctionalChaosAnalysis('chaos', aDesign)
+>>> chaos = persalys.FunctionalChaosAnalysis('chaos', aDesign)
 >>> chaos.setChaosDegree(6)
 >>> chaos.setSparseChaos(False)
 >>> chaos.setLeaveOneOutValidation(False)
@@ -45,7 +45,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::getChaosDegree
+%feature("docstring") PERSALYS::FunctionalChaosAnalysis::getChaosDegree
 "Chaos degree accessor.
 
 Returns
@@ -55,7 +55,7 @@ degree : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::setChaosDegree
+%feature("docstring") PERSALYS::FunctionalChaosAnalysis::setChaosDegree
 "Chaos degree accessor.
 
 Parameters
@@ -65,7 +65,7 @@ degree : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::getSparseChaos
+%feature("docstring") PERSALYS::FunctionalChaosAnalysis::getSparseChaos
 "Whether it is sparse.
 
 Returns
@@ -75,7 +75,7 @@ isSparse : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::setSparseChaos
+%feature("docstring") PERSALYS::FunctionalChaosAnalysis::setSparseChaos
 "Whether it is sparse.
 
 Parameters
@@ -85,10 +85,10 @@ isSparse : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysis::getResult
+%feature("docstring") PERSALYS::FunctionalChaosAnalysis::getResult
 "Results accessor.
 
 Returns
 -------
-result : :class:`~otguibase.FunctionalChaosAnalysisResult`
+result : :class:`~persalys.FunctionalChaosAnalysisResult`
     Results"

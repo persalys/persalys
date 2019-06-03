@@ -1,15 +1,15 @@
 // SWIG file
 
 %{
-#include "otgui/ReliabilityAnalysis.hxx"
+#include "persalys/ReliabilityAnalysis.hxx"
 %}
 
 %include ReliabilityAnalysis_doc.i
 
-%include otgui/ReliabilityAnalysis.hxx
-namespace OTGUI {
+%include persalys/ReliabilityAnalysis.hxx
+namespace PERSALYS {
 
-%extend ReliabilityAnalysis { ReliabilityAnalysis(const ReliabilityAnalysis & other) { return new OTGUI::ReliabilityAnalysis(other); } 
+%extend ReliabilityAnalysis { ReliabilityAnalysis(const ReliabilityAnalysis & other) { return new PERSALYS::ReliabilityAnalysis(other); } 
 
 std::string __repr__() {
   return "ReliabilityAnalysis";

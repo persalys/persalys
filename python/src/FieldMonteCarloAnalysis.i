@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/FieldMonteCarloAnalysis.hxx"
+#include "persalys/FieldMonteCarloAnalysis.hxx"
 %}
 
 %include FieldMonteCarloAnalysis_doc.i
 
-%include otgui/FieldMonteCarloAnalysis.hxx
-namespace OTGUI {
+%include persalys/FieldMonteCarloAnalysis.hxx
+namespace PERSALYS {
 
-%extend FieldMonteCarloAnalysis { FieldMonteCarloAnalysis(const FieldMonteCarloAnalysis & other) { return new OTGUI::FieldMonteCarloAnalysis(other); } 
+%extend FieldMonteCarloAnalysis { FieldMonteCarloAnalysis(const FieldMonteCarloAnalysis & other) { return new PERSALYS::FieldMonteCarloAnalysis(other); } 
 
 } }

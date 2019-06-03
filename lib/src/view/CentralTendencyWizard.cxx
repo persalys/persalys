@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CentralTendencyWizard.hxx"
+#include "persalys/CentralTendencyWizard.hxx"
 
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
+#include "persalys/TaylorExpansionMomentsAnalysis.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CentralTendencyWizard::CentralTendencyWizard(const Analysis& analysis, QWidget* parent)

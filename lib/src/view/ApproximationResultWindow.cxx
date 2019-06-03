@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ApproximationResultWindow.hxx"
+#include "persalys/ApproximationResultWindow.hxx"
 
-#include "otgui/ApproximationResultTabWidget.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/FORMAnalysis.hxx"
-#include "otgui/SORMAnalysis.hxx"
+#include "persalys/ApproximationResultTabWidget.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/FORMAnalysis.hxx"
+#include "persalys/SORMAnalysis.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget * parent)

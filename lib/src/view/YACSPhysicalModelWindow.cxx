@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/YACSPhysicalModel.hxx"
-#include "otgui/YACSPhysicalModelWindow.hxx"
-#include "otgui/PhysicalModelWindowWidget.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/YACSPhysicalModel.hxx"
+#include "persalys/YACSPhysicalModelWindow.hxx"
+#include "persalys/PhysicalModelWindowWidget.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/FileTools.hxx"
 
 #include "Py2YacsDialog.hxx"
 
@@ -36,7 +36,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)

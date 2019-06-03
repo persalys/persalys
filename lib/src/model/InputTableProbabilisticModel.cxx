@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/InputTableProbabilisticModel.hxx"
+#include "persalys/InputTableProbabilisticModel.hxx"
 
-#include "otgui/DistributionDictionary.hxx"
-#include "otgui/TranslationManager.hxx"
+#include "persalys/DistributionDictionary.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/Dirac.hxx>
@@ -30,7 +30,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent)

@@ -18,24 +18,24 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/StudyManager.hxx"
+#include "persalys/StudyManager.hxx"
 
-#include "otgui/WindowFactory.hxx"
+#include "persalys/WindowFactory.hxx"
 
-#include "otgui/StudyWindow.hxx"
-#include "otgui/MeshWindow.hxx"
-#include "otgui/DataModelDiagramWindow.hxx"
-#include "otgui/PhysicalModelDiagramWindow.hxx"
-#include "otgui/FieldModelDiagramWindow.hxx"
-#include "otgui/ProbabilisticModelWindow.hxx"
-#include "otgui/DesignOfExperimentInputWindow.hxx"
-#include "otgui/LimitStateWindow.hxx"
-#include "otgui/DataModelWindow.hxx"
-#include "otgui/AnalysisWindow.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/StudyWindow.hxx"
+#include "persalys/MeshWindow.hxx"
+#include "persalys/DataModelDiagramWindow.hxx"
+#include "persalys/PhysicalModelDiagramWindow.hxx"
+#include "persalys/FieldModelDiagramWindow.hxx"
+#include "persalys/ProbabilisticModelWindow.hxx"
+#include "persalys/DesignOfExperimentInputWindow.hxx"
+#include "persalys/LimitStateWindow.hxx"
+#include "persalys/DataModelWindow.hxx"
+#include "persalys/AnalysisWindow.hxx"
+#include "persalys/FileTools.hxx"
 
-#include "otgui/DesignOfExperimentEvaluationWizard.hxx"
-#include "otgui/ExtractDataFieldWizard.hxx"
+#include "persalys/DesignOfExperimentEvaluationWizard.hxx"
+#include "persalys/ExtractDataFieldWizard.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -43,7 +43,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 StudyManager::StudyManager(MainWidget * mainWidget, QObject * parent)

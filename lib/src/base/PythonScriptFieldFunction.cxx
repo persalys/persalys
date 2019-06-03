@@ -18,18 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PythonScriptFieldFunction.hxx"
+#include "persalys/PythonScriptFieldFunction.hxx"
 
-#include "otgui/InterpreterUnlocker.hxx"
-#include "otgui/PythonEnvironment.hxx"
-#include "otgui/BaseTools.hxx"
+#include "persalys/InterpreterUnlocker.hxx"
+#include "persalys/PythonEnvironment.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(PythonScriptFieldFunction)

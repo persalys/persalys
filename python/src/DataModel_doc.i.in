@@ -1,7 +1,7 @@
-%feature("docstring") OTGUI::DataModel
+%feature("docstring") PERSALYS::DataModel
 "Create a data model from an imported dataset.
 
-The OTGui allows the user to load data samples and analyse them. They are considered as data models.
+The interface allows the user to load data samples and analyse them. They are considered as data models.
 
     DataModel(*name, fileName, inputColumns, outputColumns, inputNames, outputNames*)
 
@@ -29,16 +29,16 @@ outputSample : :py:class:`openturns.Sample`
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 >>> ot.RandomGenerator.SetSeed(0)
 >>> fileName = 'sample.csv'
 >>> sample = ot.Normal(3).getSample(30)
 >>> sample.exportToCSVFile(fileName)
->>> model = otguibase.DataModel('dataModel', fileName, [0, 2], [1], ['var1', 'var2'], ['var3'])"
+>>> model = persalys.DataModel('dataModel', fileName, [0, 2], [1], ['var1', 'var2'], ['var3'])"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::getInputColumns
+%feature("docstring") PERSALYS::DataModel::getInputColumns
 "Columns of the input variables accessor.
 
 Returns
@@ -48,7 +48,7 @@ columns : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::getOutputColumns
+%feature("docstring") PERSALYS::DataModel::getOutputColumns
 "Columns of the ouput variables accessor.
 
 Returns
@@ -58,7 +58,7 @@ columns : :py:class:`openturns.Indices`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::setColumns
+%feature("docstring") PERSALYS::DataModel::setColumns
 "Columns and names of the variables accessor.
 
 Parameters
@@ -74,7 +74,7 @@ outputNames : sequence of str, optional
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::getInputNames
+%feature("docstring") PERSALYS::DataModel::getInputNames
 "Names of the input variables accessor.
 
 Returns
@@ -84,7 +84,7 @@ names : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::getOutputNames
+%feature("docstring") PERSALYS::DataModel::getOutputNames
 "Names of the ouput variables accessor.
 
 Returns
@@ -94,7 +94,7 @@ names : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::setNames
+%feature("docstring") PERSALYS::DataModel::setNames
 "Names of the variables accessor.
 
 Parameters
@@ -106,7 +106,7 @@ outNames : sequence of str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::getFileName
+%feature("docstring") PERSALYS::DataModel::getFileName
 "File name accessor.
 
 Returns
@@ -116,7 +116,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::setFileName
+%feature("docstring") PERSALYS::DataModel::setFileName
 "File name accessor.
 
 Parameters
@@ -126,7 +126,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::DataModel::getSampleFromFile
+%feature("docstring") PERSALYS::DataModel::getSampleFromFile
 "Sample from the file accessor.
 
 Returns

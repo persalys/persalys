@@ -1,11 +1,11 @@
-%feature("docstring") OTGUI::KrigingAnalysis
+%feature("docstring") PERSALYS::KrigingAnalysis
 "Create a Kriging analysis.
 
 Parameters
 ----------
 name : str
     Name
-designOfExperiment : :class:`~otguibase.DesignOfExperiment`
+designOfExperiment : :class:`~persalys.DesignOfExperiment`
     Design of experiments
 
 Examples
@@ -13,26 +13,26 @@ Examples
 Create the model:
 
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 >>> from math import pi
 >>> ot.RandomGenerator.SetSeed(0)
 
 Create the model:
 
->>> xi1 = otguibase.Input('xi1', ot.Uniform(-pi, pi))
->>> xi2 = otguibase.Input('xi2', ot.Uniform(-pi, pi))
->>> xi3 = otguibase.Input('xi3', ot.Uniform(-pi, pi))
->>> y0 = otguibase.Output('y0')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [xi1, xi2, xi3], [y0], ['sin(xi1) + 7. * (sin(xi2)) ^ 2 + 0.1 * xi3^4 * sin(xi1)'])
+>>> xi1 = persalys.Input('xi1', ot.Uniform(-pi, pi))
+>>> xi2 = persalys.Input('xi2', ot.Uniform(-pi, pi))
+>>> xi3 = persalys.Input('xi3', ot.Uniform(-pi, pi))
+>>> y0 = persalys.Output('y0')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [xi1, xi2, xi3], [y0], ['sin(xi1) + 7. * (sin(xi2)) ^ 2 + 0.1 * xi3^4 * sin(xi1)'])
 
 Create the design of experiments:
 
->>> aDesign = otguibase.ProbabilisticDesignOfExperiment('aDesign', myPhysicalModel, 100, 'LHS')
+>>> aDesign = persalys.ProbabilisticDesignOfExperiment('aDesign', myPhysicalModel, 100, 'LHS')
 >>> aDesign.run()
 
 Create the Kriging Analysis:
 
->>> kriging = otguibase.KrigingAnalysis('kriging', aDesign)
+>>> kriging = persalys.KrigingAnalysis('kriging', aDesign)
 >>> kriging.setBasis(ot.LinearBasisFactory(3).build())
 >>> kriging.setCovarianceModel(ot.GeneralizedExponential(3))
 >>> kriging.setLeaveOneOutValidation(False)
@@ -44,7 +44,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysis::getCovarianceModel
+%feature("docstring") PERSALYS::KrigingAnalysis::getCovarianceModel
 "Covariance model accessor.
 
 Returns
@@ -54,7 +54,7 @@ model : :py:class:`openturns.CovarianceModel`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysis::setCovarianceModel
+%feature("docstring") PERSALYS::KrigingAnalysis::setCovarianceModel
 "Covariance model accessor.
 
 Parameters
@@ -64,7 +64,7 @@ model : :py:class:`openturns.CovarianceModel`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysis::getBasis
+%feature("docstring") PERSALYS::KrigingAnalysis::getBasis
 "Trend basis accessor.
 
 Returns
@@ -74,7 +74,7 @@ basis : :py:class:`openturns.Basis`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysis::setBasis
+%feature("docstring") PERSALYS::KrigingAnalysis::setBasis
 "Trend basis accessor.
 
 Parameters
@@ -84,7 +84,7 @@ basis : :py:class:`openturns.Basis`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysis::getOptimizeParameters
+%feature("docstring") PERSALYS::KrigingAnalysis::getOptimizeParameters
 "Accessor to the covariance model parameters optimization flag.
 
 Returns
@@ -94,7 +94,7 @@ optimize : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysis::setOptimizeParameters
+%feature("docstring") PERSALYS::KrigingAnalysis::setOptimizeParameters
 "Accessor to the covariance model parameters optimization flag.
 
 Parameters
@@ -104,10 +104,10 @@ optimize : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::KrigingAnalysis::getResult
+%feature("docstring") PERSALYS::KrigingAnalysis::getResult
 "Results accessor.
 
 Returns
 -------
-result : :class:`~otguibase.KrigingAnalysisResult`
+result : :class:`~persalys.KrigingAnalysisResult`
     Results"

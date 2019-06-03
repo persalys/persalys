@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ComboBoxDelegate.hxx"
+#include "persalys/ComboBoxDelegate.hxx"
 
 #include <QStandardItemModel>
 #include <QWheelEvent>
 #include <QLineEdit>
 #include <QComboBox>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 // CustomComboBox with no wheel event if it has no focus

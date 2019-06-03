@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 from math import pi
 
 code = """
@@ -83,20 +83,20 @@ def _exec(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16,
 """
 
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 inputs = []
 for i in range(20):
-    inputs.append(otguibase.Input('x' + str(i + 1), ot.Uniform(0, 1)))
-y = otguibase.Output('y')
-y_fake = otguibase.Output('y_fake')
+    inputs.append(persalys.Input('x' + str(i + 1), ot.Uniform(0, 1)))
+y = persalys.Output('y')
+y_fake = persalys.Output('y_fake')
 print(inputs)
-model = otguibase.PythonPhysicalModel('MorrisModel', inputs, [y, y_fake], code)
+model = persalys.PythonPhysicalModel('MorrisModel', inputs, [y, y_fake], code)
 
 myStudy.add(model)
 
 # Morris ##
-analysis = otguibase.MorrisAnalysis('aMorris', model)
+analysis = persalys.MorrisAnalysis('aMorris', model)
 analysis.setInterestVariables(['y'])
 analysis.setLevel(4)
 analysis.setTrajectoriesNumber(4)
@@ -112,6 +112,6 @@ print("meanAbsEE =", analysis.getResult().getMeanAbsoluteElementaryEffects(0))
 # script
 script = myStudy.getPythonScript()
 
-otguibase.Study.Add(myStudy)
+persalys.Study.Add(myStudy)
 print(script)
 exec(script)

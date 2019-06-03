@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/DataAnalysis.hxx"
+#include "persalys/DataAnalysis.hxx"
 %}
 
 %include DataAnalysis_doc.i
 
-%include otgui/DataAnalysis.hxx
-namespace OTGUI {
+%include persalys/DataAnalysis.hxx
+namespace PERSALYS {
 
-%extend DataAnalysis { DataAnalysis(const DataAnalysis & other) { return new OTGUI::DataAnalysis(other); } 
+%extend DataAnalysis { DataAnalysis(const DataAnalysis & other) { return new PERSALYS::DataAnalysis(other); } 
 
 } }

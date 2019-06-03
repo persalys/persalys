@@ -1,16 +1,16 @@
 // SWIG file
 
 %{
-#include "otgui/PythonPhysicalModel.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 %}
 
 %include PythonPhysicalModel_doc.i
 
 %ignore *::resetCallsNumber;
 
-%include otgui/PythonPhysicalModel.hxx
-namespace OTGUI {
+%include persalys/PythonPhysicalModel.hxx
+namespace PERSALYS {
 
-%extend PythonPhysicalModel { PythonPhysicalModel(const PythonPhysicalModel & other) { return new OTGUI::PythonPhysicalModel(other); } 
+%extend PythonPhysicalModel { PythonPhysicalModel(const PythonPhysicalModel & other) { return new PERSALYS::PythonPhysicalModel(other); } 
 
 } }

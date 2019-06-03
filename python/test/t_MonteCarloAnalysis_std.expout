@@ -1551,25 +1551,25 @@ result= class=DataAnalysisResult name=Unnamed min=[[-2.24637],[-2.18965],[-15.89
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
-otguibase.Study.Add(myStudy)
+myStudy = persalys.Study('myStudy')
+persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
-X0 = otguibase.Input('X0', 0, dist_X0, '')
+X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
-X1 = otguibase.Input('X1', 0, dist_X1, '')
-X2 = otguibase.Input('X2', 2, '')
-fake_Y0 = otguibase.Output('fake_Y0', '')
+X1 = persalys.Input('X1', 0, dist_X1, '')
+X2 = persalys.Input('X2', 2, '')
+fake_Y0 = persalys.Output('fake_Y0', '')
 fake_Y0.setIsSelected(False)
-Y0 = otguibase.Output('Y0', '')
-Y1 = otguibase.Output('Y1', '')
+Y0 = persalys.Output('Y0', '')
+Y1 = persalys.Output('Y1', '')
 inputs = [X0, X1, X2]
 outputs = [fake_Y0, Y0, Y1]
 formulas = ['X0', 'sin(X0) + 8*X1', 'sin(X0) + 8*X1 + X2']
-aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 myStudy.add(aModelPhys)
-myMonteCarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', aModelPhys)
+myMonteCarlo = persalys.MonteCarloAnalysis('myMonteCarlo', aModelPhys)
 interestVariables = ['Y0']
 myMonteCarlo.setInterestVariables(interestVariables)
 myMonteCarlo.setMaximumCalls(1000)
@@ -1578,7 +1578,7 @@ myMonteCarlo.setMaximumElapsedTime(30)
 myMonteCarlo.setBlockSize(1)
 myMonteCarlo.setSeed(2)
 myStudy.add(myMonteCarlo)
-myMonteCarlo2 = otguibase.MonteCarloAnalysis('myMonteCarlo2', aModelPhys)
+myMonteCarlo2 = persalys.MonteCarloAnalysis('myMonteCarlo2', aModelPhys)
 interestVariables = ['Y0']
 myMonteCarlo2.setInterestVariables(interestVariables)
 myMonteCarlo2.setMaximumCoefficientOfVariation(0.02)
@@ -1586,7 +1586,7 @@ myMonteCarlo2.setMaximumElapsedTime(100000)
 myMonteCarlo2.setBlockSize(100)
 myMonteCarlo2.setSeed(0)
 myStudy.add(myMonteCarlo2)
-myMonteCarlo3 = otguibase.MonteCarloAnalysis('myMonteCarlo3', aModelPhys)
+myMonteCarlo3 = persalys.MonteCarloAnalysis('myMonteCarlo3', aModelPhys)
 interestVariables = ['Y1']
 myMonteCarlo3.setInterestVariables(interestVariables)
 myMonteCarlo3.setMaximumCalls(1000)

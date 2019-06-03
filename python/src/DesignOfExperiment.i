@@ -1,44 +1,44 @@
 // SWIG file
 
 %{
-#include "otgui/DesignOfExperiment.hxx"
+#include "persalys/DesignOfExperiment.hxx"
 
 namespace OT {
 template <>
-struct traitsPythonType< OTGUI::DesignOfExperiment >
+struct traitsPythonType< PERSALYS::DesignOfExperiment >
 {
   typedef _PyObject_ Type;
 };
 
 template <>
   inline
-  OTGUI::DesignOfExperiment
-  convert< _PyObject_, OTGUI::DesignOfExperiment >(PyObject * pyObj)
+  PERSALYS::DesignOfExperiment
+  convert< _PyObject_, PERSALYS::DesignOfExperiment >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OTGUI::DesignOfExperiment *"), 0))) {
-      OTGUI::DesignOfExperiment * p_it = reinterpret_cast< OTGUI::DesignOfExperiment * >( ptr );
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::DesignOfExperiment *"), 0))) {
+      PERSALYS::DesignOfExperiment * p_it = reinterpret_cast< PERSALYS::DesignOfExperiment * >( ptr );
       return *p_it;
     }
     else {
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a DesignOfExperiment";
     }
-    return OTGUI::DesignOfExperiment();
+    return PERSALYS::DesignOfExperiment();
   }
 }
 %}
 
-%ignore OTGUI::DesignOfExperiment::setImplementationAsPersistentObject;
+%ignore PERSALYS::DesignOfExperiment::setImplementationAsPersistentObject;
 
 %include DesignOfExperiment_doc.i
 
-OTGUITypedInterfaceObjectHelper(DesignOfExperiment)
-OTGUITypedCollectionInterfaceObjectHelper(DesignOfExperiment)
+PERSALYSTypedInterfaceObjectHelper(DesignOfExperiment)
+PERSALYSTypedCollectionInterfaceObjectHelper(DesignOfExperiment)
 
-%include otgui/DesignOfExperiment.hxx
-namespace OTGUI {
+%include persalys/DesignOfExperiment.hxx
+namespace PERSALYS {
 
-%extend DesignOfExperiment { DesignOfExperiment(const DesignOfExperiment & other) { return new OTGUI::DesignOfExperiment(other); } 
+%extend DesignOfExperiment { DesignOfExperiment(const DesignOfExperiment & other) { return new PERSALYS::DesignOfExperiment(other); } 
 
 std::string __repr__() {
   return "DesignOfExperiment";

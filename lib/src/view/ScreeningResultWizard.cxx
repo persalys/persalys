@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/ScreeningResultWizard.hxx"
+#include "persalys/ScreeningResultWizard.hxx"
 
-#include "otgui/MorrisAnalysis.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/MorrisAnalysis.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QGridLayout>
 #include <QHeaderView>
@@ -29,7 +29,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 ScreeningResultWizard::ScreeningResultWizard(const Study& study, const PhysicalModel& model, QWidget* parent)

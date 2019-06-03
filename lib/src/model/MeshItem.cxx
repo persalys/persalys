@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MeshItem.hxx"
+#include "persalys/MeshItem.hxx"
 
-#include "otgui/StudyItem.hxx"
+#include "persalys/StudyItem.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MeshItem::MeshItem(const PhysicalModel & physicalModel)

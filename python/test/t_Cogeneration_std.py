@@ -3,21 +3,21 @@
 from __future__ import print_function
 import openturns as ot
 import openturns.testing
-import otguibase
+import persalys
 
-myStudy = otguibase.Study('myStudy')
+myStudy = persalys.Study('myStudy')
 
 # Model
 dist_Q = ot.Normal(10200, 100)
 dist_E = ot.Normal(3000, 15)
 dist_C = ot.Normal(4000, 60)
 
-Q = otguibase.Input('Q', 10200, dist_Q, 'Primary energy (W.h)')
-E = otguibase.Input('E', 3000, dist_E, 'Produced electric energy (W.h)')
-C = otguibase.Input('C', 4000, dist_C, 'Valued thermal energy (W.h)')
-Ep = otguibase.Output('Ep', 'Primary energy savings (W.h)')
+Q = persalys.Input('Q', 10200, dist_Q, 'Primary energy (W.h)')
+E = persalys.Input('E', 3000, dist_E, 'Produced electric energy (W.h)')
+C = persalys.Input('C', 4000, dist_C, 'Valued thermal energy (W.h)')
+Ep = persalys.Output('Ep', 'Primary energy savings (W.h)')
 
-model = otguibase.SymbolicPhysicalModel(
+model = persalys.SymbolicPhysicalModel(
     'myPhysicalModel', [Q, E, C], [Ep], ['1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))'])
 myStudy.add(model)
 
@@ -32,7 +32,7 @@ outputSample = [[0.060036508072],
 
 
 # Design of Experiment - Parametric analysis ##
-aDesign = otguibase.GridDesignOfExperiment('aDesign_0', model)
+aDesign = persalys.GridDesignOfExperiment('aDesign_0', model)
 aDesign.setLevels([2, 2, 2])
 myStudy.add(aDesign)
 aDesign.run()
@@ -42,7 +42,7 @@ openturns.testing.assert_almost_equal(
     outputSample, aDesign.getResult().getDesignOfExperiment().getOutputSample(), 1e-16)
 
 # Taylor Expansions ##
-taylorExpansionsMoments = otguibase.TaylorExpansionMomentsAnalysis(
+taylorExpansionsMoments = persalys.TaylorExpansionMomentsAnalysis(
     'myTaylorExpansionMoments', model)
 myStudy.add(taylorExpansionsMoments)
 taylorExpansionsMoments.run()
@@ -53,7 +53,7 @@ openturns.testing.assert_almost_equal(
     0.059730458221, taylorExpansionsMomentsResult.getMeanFirstOrder()[0], 1e-13)
 
 # Monte Carlo ##
-montecarlo = otguibase.MonteCarloAnalysis('myMonteCarlo', model)
+montecarlo = persalys.MonteCarloAnalysis('myMonteCarlo', model)
 montecarlo.setMaximumCalls(1000)
 montecarlo.setMaximumCoefficientOfVariation(-1)
 myStudy.add(montecarlo)
@@ -78,7 +78,7 @@ openturns.testing.assert_almost_equal(
     0.0119363302339, stdCi.getUpperBound()[3], 1e-13)
 
 # Sobol ##
-sobol = otguibase.SobolAnalysis('mySobol', model)
+sobol = persalys.SobolAnalysis('mySobol', model)
 sobol.setReplicationSize(200)
 sobol.setMaximumCalls(1000)
 myStudy.add(sobol)
@@ -96,7 +96,7 @@ openturns.testing.assert_almost_equal(
     totalIndicesValues, sobolResult.getTotalIndices(), 1e-6)
 
 # SRC ##
-src = otguibase.SRCAnalysis('mySRC', model)
+src = persalys.SRCAnalysis('mySRC', model)
 myStudy.add(src)
 src.run()
 srcResult = src.getResult()
@@ -114,12 +114,12 @@ values = [10200, 3000, 4000]
 lowerBounds = [10035.5, 2975.33, 3901.31]
 upperBounds = [10364.5, 3024.67, 4098.69]
 levels = [10, 10, 10]
-design_1 = otguibase.GridDesignOfExperiment(
+design_1 = persalys.GridDesignOfExperiment(
     'aDesign_1', model, lowerBounds, upperBounds, levels, values)
 design_1.run()
 myStudy.add(design_1)
 
-chaos = otguibase.FunctionalChaosAnalysis('chaos_0', design_1)
+chaos = persalys.FunctionalChaosAnalysis('chaos_0', design_1)
 chaos.setChaosDegree(2)
 chaos.setSparseChaos(False)
 myStudy.add(chaos)

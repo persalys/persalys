@@ -1,8 +1,8 @@
-#include "otgui/PVViewWidget.hxx"
+#include "persalys/PVViewWidget.hxx"
 
-#include "otgui/AppliException.hxx"
-#include "otgui/PVServerManagerInterface.hxx"
-#include "otgui/PVSpreadSheetViewWidget.hxx"
+#include "persalys/AppliException.hxx"
+#include "persalys/PVServerManagerInterface.hxx"
+#include "persalys/PVSpreadSheetViewWidget.hxx"
 
 #include <pqApplicationCore.h>
 #include <pqObjectBuilder.h>
@@ -35,7 +35,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 const char PVViewWidget::SERIES_VISIBILITY_PROP[] = "SeriesVisibility";

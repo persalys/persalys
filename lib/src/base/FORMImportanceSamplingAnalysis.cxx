@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FORMImportanceSamplingAnalysis.hxx"
+#include "persalys/FORMImportanceSamplingAnalysis.hxx"
 
-#include "otgui/FORMAnalysis.hxx"
+#include "persalys/FORMAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(FORMImportanceSamplingAnalysis)

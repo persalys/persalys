@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MonteCarloPage.hxx"
+#include "persalys/MonteCarloPage.hxx"
 
-#include "otgui/MonteCarloAnalysis.hxx"
-#include "otgui/CollapsibleGroupBox.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QVBoxLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MonteCarloPage::MonteCarloPage(QWidget* parent)

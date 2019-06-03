@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/TaylorExpansionMomentsResultWindow.hxx"
+#include "persalys/TaylorExpansionMomentsResultWindow.hxx"
 
-#include "otgui/TaylorExpansionMomentsAnalysis.hxx"
-#include "otgui/CustomStandardItemModel.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/TaylorExpansionMomentsAnalysis.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -33,7 +33,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 TaylorExpansionMomentsResultWindow::TaylorExpansionMomentsResultWindow(AnalysisItem * item, QWidget * parent)

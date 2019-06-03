@@ -1,19 +1,19 @@
-%feature("docstring") OTGUI::Study
+%feature("docstring") PERSALYS::Study
 "Create the class to store a study."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::Add
+%feature("docstring") PERSALYS::Study::Add
 "Add a study in the tree view.
 
 Parameters
 ----------
-object : :class:`~otguibase.Study`
+object : :class:`~persalys.Study`
     The study to add"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::GetFileNames
+%feature("docstring") PERSALYS::Study::GetFileNames
 "Files name accessor.
 
 Returns
@@ -23,7 +23,7 @@ filesNames : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::Open
+%feature("docstring") PERSALYS::Study::Open
 "Open a study.
 
 Parameters
@@ -33,12 +33,12 @@ fileName : str
 
 Returns
 -------
-study : :class:`~otguibase.Study`
+study : :class:`~persalys.Study`
     The study saved in fileName"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::save
+%feature("docstring") PERSALYS::Study::save
 "Save it in an xml file.
 
 Parameters
@@ -48,27 +48,27 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::Remove
+%feature("docstring") PERSALYS::Study::Remove
 "Remove a study from the tree view.
 
 Parameters
 ----------
-object : :class:`~otguibase.Study`
+object : :class:`~persalys.Study`
     The study to remove"
  
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::GetInstances
+%feature("docstring") PERSALYS::Study::GetInstances
 "Studies accessor.
 
 Returns
 -------
-studies : sequence of :class:`~otguibase.Study`
+studies : sequence of :class:`~persalys.Study`
     Studies existing in the tree view"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::GetInstanceByName
+%feature("docstring") PERSALYS::Study::GetInstanceByName
 "Study accessor.
 
 Parameters
@@ -78,12 +78,12 @@ name : str
 
 Returns
 -------
-study : :class:`~otguibase.Study`
+study : :class:`~persalys.Study`
     Study"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::GetAvailableName
+%feature("docstring") PERSALYS::Study::GetAvailableName
 "Available name for a study accessor.
 
 Returns
@@ -93,7 +93,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::HasInstanceNamed
+%feature("docstring") PERSALYS::Study::HasInstanceNamed
 "Whether the tree view contains a study named with the given name.
 
 Parameters
@@ -108,27 +108,27 @@ contains : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::add
+%feature("docstring") PERSALYS::Study::add
 "Add an object to the study.
 
 Parameters
 ----------
-object : :class:`~otguibase.PhysicalModel`, :class:`~otguibase.LimitState`, :class:`~otguibase.Analysis` ...
+object : :class:`~persalys.PhysicalModel`, :class:`~persalys.LimitState`, :class:`~persalys.Analysis` ...
     The object to add"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::remove
+%feature("docstring") PERSALYS::Study::remove
 "Remove an object from the study.
 
 Parameters
 ----------
-object : :class:`~otguibase.PhysicalModel`, :class:`~otguibase.LimitState`, :class:`~otguibase.Analysis` ...
+object : :class:`~persalys.PhysicalModel`, :class:`~persalys.LimitState`, :class:`~persalys.Analysis` ...
     The object to remove"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getPythonScript
+%feature("docstring") PERSALYS::Study::getPythonScript
 "Python script accessor.
 
 Returns
@@ -138,7 +138,7 @@ script : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getPythonScript
+%feature("docstring") PERSALYS::Study::getPythonScript
 "Python script accessor.
 
 Returns
@@ -148,7 +148,7 @@ script : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::setFileName
+%feature("docstring") PERSALYS::Study::setFileName
 "File name accessor.
 
 Parameters
@@ -158,7 +158,7 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getFileName
+%feature("docstring") PERSALYS::Study::getFileName
 "File name accessor.
 
 Returns
@@ -168,57 +168,57 @@ fileName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getPhysicalModels
+%feature("docstring") PERSALYS::Study::getPhysicalModels
 "Physical models accessor.
 
 Returns
 -------
-models : sequence of :class:`~otguibase.PhysicalModel`
+models : sequence of :class:`~persalys.PhysicalModel`
     Physical models"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getLimitStates
+%feature("docstring") PERSALYS::Study::getLimitStates
 "Limit state accessor.
 
 Returns
 -------
-states : sequence of :class:`~otguibase.LimitState`
+states : sequence of :class:`~persalys.LimitState`
     Limit states"
  
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getAnalyses
+%feature("docstring") PERSALYS::Study::getAnalyses
 "Analysis accessor.
 
 Returns
 -------
-analyses : sequence of :class:`~otguibase.Analysis`
+analyses : sequence of :class:`~persalys.Analysis`
     Analyses"
     
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getDesignOfExperiments
+%feature("docstring") PERSALYS::Study::getDesignOfExperiments
 "Designs of experiments accessor.
 
 Returns
 -------
-designs : sequence of :class:`~otguibase.DesignOfExperiment`
+designs : sequence of :class:`~persalys.DesignOfExperiment`
     Designs of experiments"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getDataModels
+%feature("docstring") PERSALYS::Study::getDataModels
 "Data model accessor.
 
 Returns
 -------
-models : sequence of :class:`~otguibase.DataModel`
+models : sequence of :class:`~persalys.DataModel`
     Data models"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getPhysicalModelByName
+%feature("docstring") PERSALYS::Study::getPhysicalModelByName
 "Physical model accessor.
 
 Parameters
@@ -228,12 +228,12 @@ name : str
 
 Returns
 -------
-model : :class:`~otguibase.PhysicalModel`
+model : :class:`~persalys.PhysicalModel`
     Physical model"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getDesignOfExperimentByName
+%feature("docstring") PERSALYS::Study::getDesignOfExperimentByName
 "Design of experiments accessor.
 
 Parameters
@@ -243,12 +243,12 @@ name : str
 
 Returns
 -------
-design : :class:`~otguibase.DesignOfExperiment`
+design : :class:`~persalys.DesignOfExperiment`
     Design of experiments"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getAnalysisByName
+%feature("docstring") PERSALYS::Study::getAnalysisByName
 "Analysis accessor.
 
 Parameters
@@ -258,12 +258,12 @@ name : str
 
 Returns
 -------
-analysis : :class:`~otguibase.Analysis`
+analysis : :class:`~persalys.Analysis`
     Analysis"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getDataModelByName
+%feature("docstring") PERSALYS::Study::getDataModelByName
 "Data model accessor.
 
 Parameters
@@ -273,12 +273,12 @@ name : str
 
 Returns
 -------
-model : :class:`~otguibase.DataModel`
+model : :class:`~persalys.DataModel`
     Data model"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getAvailableAnalysisName
+%feature("docstring") PERSALYS::Study::getAvailableAnalysisName
 "Available name for an analysis accessor.
 
 Returns
@@ -288,7 +288,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getAvailableDataModelName
+%feature("docstring") PERSALYS::Study::getAvailableDataModelName
 "Available name for a data model accessor.
 
 Returns
@@ -298,7 +298,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getAvailableDesignOfExperimentName
+%feature("docstring") PERSALYS::Study::getAvailableDesignOfExperimentName
 "Available name for a design of experiments accessor.
 
 Returns
@@ -308,7 +308,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getAvailableLimitStateName
+%feature("docstring") PERSALYS::Study::getAvailableLimitStateName
 "Available name for a limit state accessor.
 
 Returns
@@ -318,7 +318,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::getAvailablePhysicalModelName
+%feature("docstring") PERSALYS::Study::getAvailablePhysicalModelName
 "Available name for a physical model accessor.
 
 Returns
@@ -328,7 +328,7 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::hasAnalysisNamed
+%feature("docstring") PERSALYS::Study::hasAnalysisNamed
 "Whether it contains an analysis named with the given name.
 
 Parameters
@@ -343,7 +343,7 @@ contains : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::hasDataModelNamed
+%feature("docstring") PERSALYS::Study::hasDataModelNamed
 "Whether it contains a data model named with the given name.
 
 Parameters
@@ -358,7 +358,7 @@ contains : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::hasPhysicalModelNamed
+%feature("docstring") PERSALYS::Study::hasPhysicalModelNamed
 "Whether it contains a physical model named with the given name.
 
 Parameters
@@ -373,7 +373,7 @@ contains : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::hasDesignOfExperimentNamed
+%feature("docstring") PERSALYS::Study::hasDesignOfExperimentNamed
 "Whether it contains a design of experiments named with the given name.
 
 Parameters
@@ -388,7 +388,7 @@ contains : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::Study::hasLimitStateNamed
+%feature("docstring") PERSALYS::Study::hasLimitStateNamed
 "Whether it contains a limit state named with the given name.
 
 Parameters

@@ -1,17 +1,17 @@
 // SWIG file Observable.i
 
 %{
-#include "otgui/Observable.hxx"
+#include "persalys/Observable.hxx"
 %}
 
 %ignore Observable;
 
-%include otgui/Observable.hxx
+%include persalys/Observable.hxx
 
 
-namespace OTGUI {
+namespace PERSALYS {
 
-%extend Observable { Observable(const Observable & other) { return new OTGUI::Observable(other); } 
+%extend Observable { Observable(const Observable & other) { return new PERSALYS::Observable(other); } 
 
 }
 

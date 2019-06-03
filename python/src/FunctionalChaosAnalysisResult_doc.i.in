@@ -1,15 +1,15 @@
-%feature("docstring") OTGUI::FunctionalChaosAnalysisResult
+%feature("docstring") PERSALYS::FunctionalChaosAnalysisResult
 "Get the results for a Functional chaos analysis.
 
 Notes
 -----
 Structure created by the method run() of
-:class:`~otguibase.FunctionalChaosAnalysis`, and obtained thanks to the method
+:class:`~persalys.FunctionalChaosAnalysis`, and obtained thanks to the method
 getResult()."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getFunctionalChaosResult
+%feature("docstring") PERSALYS::FunctionalChaosAnalysisResult::getFunctionalChaosResult
 "Functional chaos result accessor.
 
 Returns
@@ -19,17 +19,17 @@ result : :py:class:`openturns.FunctionalChaosResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getSobolResult
+%feature("docstring") PERSALYS::FunctionalChaosAnalysisResult::getSobolResult
 "Sobol' indices result accessor.
 
 Returns
 -------
-result : :class:`~otguibase.SobolResult`
+result : :class:`~persalys.SobolResult`
     Object containing the first order and total Sobol' indices"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getMean
+%feature("docstring") PERSALYS::FunctionalChaosAnalysisResult::getMean
 "Mean estimation accessor.
 
 Returns
@@ -39,7 +39,7 @@ result : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getVariance
+%feature("docstring") PERSALYS::FunctionalChaosAnalysisResult::getVariance
 "Variance estimation accessor.
 
 Returns
@@ -49,7 +49,7 @@ result : :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FunctionalChaosAnalysisResult::getOutputSample
+%feature("docstring") PERSALYS::FunctionalChaosAnalysisResult::getOutputSample
 "Output sample accessor.
 
 Returns

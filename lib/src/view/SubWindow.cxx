@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Base class for all the windows of otgui
+ *  @brief Base class for all the windows of persalys
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SubWindow.hxx"
+#include "persalys/SubWindow.hxx"
 
-#include "otgui/DocumentationToolButton.hxx"
-#include "otgui/QtTools.hxx"
+#include "persalys/DocumentationToolButton.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QEventLoop>
 #include <QOpenGLContext>
@@ -29,7 +29,7 @@
 #include <QOpenGLFunctions_3_2_Core>
 #include <QHBoxLayout>
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 // custom QLabel for all result windows
@@ -101,7 +101,7 @@ void SubWindow::removeRequest()
 
 bool SubWindow::HaveOpenGL32()
 {
-  char *pNO_GL = getenv("OTGUI_NO_GL");
+  char *pNO_GL = getenv("PERSALYS_NO_GL");
   if (pNO_GL)
     return false;
 

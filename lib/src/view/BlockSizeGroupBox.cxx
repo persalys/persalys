@@ -18,14 +18,14 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/BlockSizeGroupBox.hxx"
+#include "persalys/BlockSizeGroupBox.hxx"
 
 #include <QLabel>
 #include <QGridLayout>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 BlockSizeGroupBox::BlockSizeGroupBox(const QString &title, const bool withReplicationSize, QWidget* parent)

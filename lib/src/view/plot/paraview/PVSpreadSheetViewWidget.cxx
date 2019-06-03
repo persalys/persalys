@@ -1,4 +1,4 @@
-#include "otgui/PVSpreadSheetViewWidget.hxx"
+#include "persalys/PVSpreadSheetViewWidget.hxx"
 
 #include <pqSaveDataReaction.h>
 #include <pqActiveObjects.h>
@@ -13,7 +13,7 @@
 
 #include <QMenu>
 
-namespace OTGUI
+namespace PERSALYS
 {
 const char PVSpreadSheetViewWidget::PV_VIEW_TYPE[] = "SpreadSheetView";
 

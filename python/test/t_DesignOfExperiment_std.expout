@@ -41,41 +41,41 @@ outs=     [ Y0      ]
 
 from __future__ import print_function
 import openturns as ot
-import otguibase
+import persalys
 
-anOTStudy = otguibase.Study('anOTStudy')
-otguibase.Study.Add(anOTStudy)
+anOTStudy = persalys.Study('anOTStudy')
+persalys.Study.Add(anOTStudy)
 dist_X0 = ot.Normal(0, 1)
-X0 = otguibase.Input('X0', 1, dist_X0, '')
-X1 = otguibase.Input('X1', 2, '')
-Y0 = otguibase.Output('Y0', '')
+X0 = persalys.Input('X0', 1, dist_X0, '')
+X1 = persalys.Input('X1', 2, '')
+Y0 = persalys.Output('Y0', '')
 inputs = [X0, X1]
 outputs = [Y0]
 formulas = ['sin(X0)+8*X1']
-aModelPhys = otguibase.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
+aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 anOTStudy.add(aModelPhys)
 values = [1,2]
 lowerBounds = [0.9,1.8]
 upperBounds = [1.1,2.2]
 levels = [2,2]
-aDesign_1 = otguibase.GridDesignOfExperiment('aDesign_1', aModelPhys, lowerBounds, upperBounds, levels, values)
+aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', aModelPhys, lowerBounds, upperBounds, levels, values)
 aDesign_1.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_1.setInterestVariables(interestVariables)
 anOTStudy.add(aDesign_1)
 inputColumns = [0,2]
-aDesign_2 = otguibase.ImportedDesignOfExperiment('aDesign_2', aModelPhys, 'normal.csv', inputColumns)
+aDesign_2 = persalys.ImportedDesignOfExperiment('aDesign_2', aModelPhys, 'normal.csv', inputColumns)
 aDesign_2.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_2.setInterestVariables(interestVariables)
 anOTStudy.add(aDesign_2)
-aDesign_3 = otguibase.ProbabilisticDesignOfExperiment('aDesign_3', aModelPhys, 10, 'QUASI_MONTE_CARLO')
+aDesign_3 = persalys.ProbabilisticDesignOfExperiment('aDesign_3', aModelPhys, 10, 'QUASI_MONTE_CARLO')
 aDesign_3.setSeed(0)
 aDesign_3.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_3.setInterestVariables(interestVariables)
 anOTStudy.add(aDesign_3)
-aDesign_4 = otguibase.FixedDesignOfExperiment('aDesign_4', aModelPhys)
+aDesign_4 = persalys.FixedDesignOfExperiment('aDesign_4', aModelPhys)
 inputSample = [
 [-0.178219, 0.5],
 [-0.328047, 0.5],

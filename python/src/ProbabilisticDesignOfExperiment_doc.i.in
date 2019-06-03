@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment
 "Create a probabilistic design of experiments.
 
 Available constructors:
@@ -10,7 +10,7 @@ Parameters
 ----------
 name : str
     Name
-physicalModel : :class:`~otguibase.PhysicalModel`
+physicalModel : :class:`~persalys.PhysicalModel`
     Physical model with at least a stochastic input variable.
 size : positive int
     Number of points in the design.
@@ -20,22 +20,22 @@ designName : str
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> R = otguibase.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
->>> F = otguibase.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
->>> G = otguibase.Output('G', 'deviation')
->>> myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
+>>> R = persalys.Input('R', 0., ot.LogNormalMuSigma(300., 30., 0.).getDistribution(), 'Yield strength')
+>>> F = persalys.Input('F', 0., ot.Normal(75000., 5000.), 'Traction load')
+>>> G = persalys.Output('G', 'deviation')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [R, F], [G], ['R-F/(pi_*100.0)'])
 
 Create the design of experiments:
 
->>> myDOE = otguibase.ProbabilisticDesignOfExperiment('myDOE', myPhysicalModel, 10, 'MONTE_CARLO')"
+>>> myDOE = persalys.ProbabilisticDesignOfExperiment('myDOE', myPhysicalModel, 10, 'MONTE_CARLO')"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::setDesignName
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment::setDesignName
 "Accessor to the design name.
 
 Parameters
@@ -45,7 +45,7 @@ designName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::getDesignName
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment::getDesignName
 "Accessor to the design name.
 
 Returns
@@ -55,7 +55,7 @@ designName : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::GetDesignNames
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment::GetDesignNames
 "Accessor to the list of designs provided by ProbabilisticDesignOfExperiment.
 
 Returns
@@ -65,14 +65,14 @@ names : :py:class:`openturns.Description`
 
 Examples
 --------
->>> import otguibase
->>> print(otguibase.ProbabilisticDesignOfExperiment.GetDesignNames())
+>>> import persalys
+>>> print(persalys.ProbabilisticDesignOfExperiment.GetDesignNames())
 [LHS,MONTE_CARLO,QUASI_MONTE_CARLO]
 "
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::setSeed
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment::setSeed
 "Initialize the random generator seed.
 
 Parameters
@@ -82,7 +82,7 @@ seed : int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::getSeed
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment::getSeed
 "Random generator seed accessor.
 
 Returns
@@ -92,7 +92,7 @@ seed : int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::setSize
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment::setSize
 "Accessor to the size of the generated sample.
 
 Parameters
@@ -102,7 +102,7 @@ size : positive int
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") OTGUI::ProbabilisticDesignOfExperiment::getSize
+%feature("docstring") PERSALYS::ProbabilisticDesignOfExperiment::getSize
 "Accessor to the size of the generated sample.
 
 Returns

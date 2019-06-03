@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/CopulaInferenceAnalysis.hxx"
+#include "persalys/CopulaInferenceAnalysis.hxx"
 %}
 
 %include CopulaInferenceAnalysis_doc.i
 
-%include otgui/CopulaInferenceAnalysis.hxx
-namespace OTGUI {
+%include persalys/CopulaInferenceAnalysis.hxx
+namespace PERSALYS {
 
-%extend CopulaInferenceAnalysis { CopulaInferenceAnalysis(const CopulaInferenceAnalysis & other) { return new OTGUI::CopulaInferenceAnalysis(other); } 
+%extend CopulaInferenceAnalysis { CopulaInferenceAnalysis(const CopulaInferenceAnalysis & other) { return new PERSALYS::CopulaInferenceAnalysis(other); } 
 
 } }

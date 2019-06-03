@@ -18,18 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CopulaWidget.hxx"
+#include "persalys/CopulaWidget.hxx"
 
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
-#include "otgui/ResizableStackedWidget.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/TranslationManager.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/CorrelationTableModel.hxx"
-#include "otgui/SpinBoxDelegate.hxx"
-#include "otgui/DocumentationToolButton.hxx"
-#include "otgui/FileTools.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/TranslationManager.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/CorrelationTableModel.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/DocumentationToolButton.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -38,7 +38,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWidget *parent)

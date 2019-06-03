@@ -18,10 +18,10 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DataModelDiagramWindow.hxx"
+#include "persalys/DataModelDiagramWindow.hxx"
 
-#include "otgui/Arrow.hxx"
-#include "otgui/DiagramPushButton.hxx"
+#include "persalys/Arrow.hxx"
+#include "persalys/DiagramPushButton.hxx"
 
 #include <QVBoxLayout>
 #include <QGraphicsView>
@@ -32,7 +32,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem, QWidget * parent)

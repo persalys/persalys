@@ -1,13 +1,13 @@
-#include "otgui/OptimizationAnalysis.hxx"
-#include "otgui/OptimizationWizard.hxx"
-#include "otgui/SymbolicPhysicalModel.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
+#include "persalys/OptimizationWizard.hxx"
+#include "persalys/SymbolicPhysicalModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
 
 #include <QtTest/QtTest>
 
-namespace OTGUI
+namespace PERSALYS
 {
 class TestOptimizationWizard : public QObject
 {
@@ -145,5 +145,5 @@ private slots:
 };
 }
 
-QTEST_MAIN(OTGUI::TestOptimizationWizard)
+QTEST_MAIN(PERSALYS::TestOptimizationWizard)
 #include "t_OptimizationWizard_std.moc"

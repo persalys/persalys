@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SRCAnalysis.hxx"
+#include "persalys/SRCAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/CorrelationAnalysis.hxx>
@@ -27,7 +27,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(SRCAnalysis)
@@ -245,7 +245,7 @@ Parameters SRCAnalysis::getParameters() const
 String SRCAnalysis::getPythonScript() const
 {
   OSS oss;
-  oss << getName() << " = otguibase.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();
+  oss << getName() << " = persalys.SRCAnalysis('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", " << getSimulationsNumber() << ")\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {

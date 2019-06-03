@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/ApproximationAnalysis.hxx"
+#include "persalys/ApproximationAnalysis.hxx"
 %}
 
 %include ApproximationAnalysis_doc.i
 
-%include otgui/ApproximationAnalysis.hxx
-namespace OTGUI {
+%include persalys/ApproximationAnalysis.hxx
+namespace PERSALYS {
 
-%extend ApproximationAnalysis { ApproximationAnalysis(const ApproximationAnalysis & other) { return new OTGUI::ApproximationAnalysis(other); } 
+%extend ApproximationAnalysis { ApproximationAnalysis(const ApproximationAnalysis & other) { return new PERSALYS::ApproximationAnalysis(other); } 
 
 } }

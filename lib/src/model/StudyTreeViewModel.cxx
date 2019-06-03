@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/StudyTreeViewModel.hxx"
+#include "persalys/StudyTreeViewModel.hxx"
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 const int StudyTreeViewModel::DefaultSignificantDigits = 12;
@@ -43,7 +43,7 @@ QVariant StudyTreeViewModel::headerData(int section, Qt::Orientation orientation
       return tr("Studies");
 
     else if (role == Qt::DecorationRole)
-      return QIcon(":/images/otgui.ico");
+      return QIcon(":/images/persalys.ico");
   }
 
   return QStandardItemModel::headerData(section, orientation, role);

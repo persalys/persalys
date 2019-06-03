@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/FORMAnalysis.hxx"
+#include "persalys/FORMAnalysis.hxx"
 
 #include <openturns/FORM.hxx>
 #include <openturns/CompositeRandomVector.hxx>
@@ -26,7 +26,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(FORMAnalysis)
@@ -130,7 +130,7 @@ String FORMAnalysis::getPythonScript() const
 {
   OSS oss;
   oss.setPrecision(12);
-  oss << getName() << " = otguibase.FORMAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
+  oss << getName() << " = persalys.FORMAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
   oss << getName() << ".setPhysicalStartingPoint(" << getPhysicalStartingPoint().__str__() << ")\n";
   // optimization algo
   oss << "optimizationAlgo = ot." << getOptimizationAlgorithm().getImplementation()->getClassName() << "()\n";

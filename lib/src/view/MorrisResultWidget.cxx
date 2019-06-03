@@ -18,15 +18,15 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/MorrisResultWidget.hxx"
+#include "persalys/MorrisResultWidget.hxx"
 
-#include "otgui/PlotWidget.hxx"
-#include "otgui/QtTools.hxx"
-#include "otgui/CheckableHeaderView.hxx"
-#include "otgui/CopyableTableView.hxx"
-#include "otgui/MorrisResultTableModel.hxx"
-#include "otgui/WidgetBoundToDockWidget.hxx"
-#include "otgui/GraphConfigurationWidget.hxx"
+#include "persalys/PlotWidget.hxx"
+#include "persalys/QtTools.hxx"
+#include "persalys/CheckableHeaderView.hxx"
+#include "persalys/CopyableTableView.hxx"
+#include "persalys/MorrisResultTableModel.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -40,7 +40,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 MorrisResultWidget::MorrisResultWidget(MorrisResult &result, const int outIndex, QWidget *parent)

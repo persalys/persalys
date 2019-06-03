@@ -1,4 +1,4 @@
-%feature("docstring") OTGUI::GridMeshModel
+%feature("docstring") PERSALYS::GridMeshModel
 "Create a model to build regular meshes.
 
 Available constructors:
@@ -6,7 +6,7 @@ Available constructors:
 
 Parameters
 ----------
-parameters : sequence of :class:`otguibase.Variable`
+parameters : sequence of :class:`persalys.Variable`
     Sequence of index parameters (optional). By default
     the index parameter is named **t**
 bounds : :py:class:`openturns.Interval`
@@ -21,28 +21,28 @@ The sequences must have a dimension equal to the number of index parameters.
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the mesh model:
 
->>> meshModel = otguibase.GridMeshModel([otguibase.Variable('x', 'aDescription')], ot.Interval(0., 12.), [10])
+>>> meshModel = persalys.GridMeshModel([persalys.Variable('x', 'aDescription')], ot.Interval(0., 12.), [10])
 
 Create the model:
 
->>> z0 = otguibase.Input('z0', 100)
->>> v0 = otguibase.Input('v0', 55)
->>> m = otguibase.Input('m', 80)
->>> c = otguibase.Input('c', 15)
->>> z = otguibase.Output('z')
+>>> z0 = persalys.Input('z0', 100)
+>>> v0 = persalys.Input('v0', 55)
+>>> m = persalys.Input('m', 80)
+>>> c = persalys.Input('c', 15)
+>>> z = persalys.Output('z')
 >>> formula = ['max(0, z0 + (m * 9.81 / c) * x + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-x * c / m)))']
->>> model = otguibase.SymbolicFieldModel('model', meshModel, [z0, v0, m, c], [z], formula)
+>>> model = persalys.SymbolicFieldModel('model', meshModel, [z0, v0, m, c], [z], formula)
 
 >>> y = model.getPointToFieldFunction()([100, 55, 80, 15])"
 
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::GridMeshModel::setParameters
+%feature("docstring") PERSALYS::GridMeshModel::setParameters
 "Parameters accessor.
 
 Parameters

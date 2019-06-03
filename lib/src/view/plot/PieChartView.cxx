@@ -47,9 +47,9 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-#include "otgui/PieChartView.hxx"
+#include "persalys/PieChartView.hxx"
 
-#include "otgui/FileTools.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QPainter>
 #include <QDebug>
@@ -66,7 +66,7 @@
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 // not editable model

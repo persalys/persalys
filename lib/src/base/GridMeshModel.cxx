@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/GridMeshModel.hxx"
+#include "persalys/GridMeshModel.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/IntervalMesher.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(GridMeshModel)
@@ -121,7 +121,7 @@ String GridMeshModel::getPythonScript() const
     paramNames.add(getIndexParameters()[i].getName());
   }
 
-  oss << getName() << " = otguibase.GridMeshModel(" << Parameters::GetOTDescriptionStr(paramNames, false) << ", ot.Interval(" << Parameters::GetOTPointStr(getBounds().getLowerBound()) << ", " << Parameters::GetOTPointStr(getBounds().getUpperBound()) << "), " << getNumberOfNodes().__str__() << ")\n";
+  oss << getName() << " = persalys.GridMeshModel(" << Parameters::GetOTDescriptionStr(paramNames, false) << ", ot.Interval(" << Parameters::GetOTPointStr(getBounds().getLowerBound()) << ", " << Parameters::GetOTPointStr(getBounds().getUpperBound()) << "), " << getNumberOfNodes().__str__() << ")\n";
 
   return oss;
 }

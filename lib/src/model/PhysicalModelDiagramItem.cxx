@@ -18,18 +18,18 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PhysicalModelDiagramItem.hxx"
+#include "persalys/PhysicalModelDiagramItem.hxx"
 
-#include "otgui/StudyItem.hxx"
-#include "otgui/MonteCarloReliabilityAnalysis.hxx"
-#include "otgui/FunctionalChaosAnalysis.hxx"
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "persalys/StudyItem.hxx"
+#include "persalys/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 #include <QDebug>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PhysicalModelDiagramItem::PhysicalModelDiagramItem(const PhysicalModel & physicalModel)
@@ -274,7 +274,7 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
   // connections
   connect(pmItem, SIGNAL(probabilisticModelRequested(PhysicalModelItem*)), this, SLOT(appendProbabilisticModelItem()));
   connect(this, SIGNAL(evaluationModelRequested()), pmItem, SLOT(createModelEvaluation()));
-#ifdef OTGUI_HAVE_OTMORRIS
+#ifdef PERSALYS_HAVE_OTMORRIS
   connect(this, SIGNAL(screeningRequested()), pmItem, SLOT(createScreening()));
 #endif
   connect(this, SIGNAL(designOfExperimentRequested()), pmItem, SLOT(createDesignOfExperiment()));

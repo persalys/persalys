@@ -21,16 +21,16 @@
 #include <iostream>
 // OT includes
 #include "openturns/OT.hxx"
-#include "otgui/OTGui.hxx"
+#include "persalys/Persalys.hxx"
 
 using namespace OT;
-using namespace OTGUI;
+using namespace PERSALYS;
 
 int main(int argc, char **argv)
 {
   PythonEnvironment pyEnv;
 
-  OTGUI::Study study("study1");
+  PERSALYS::Study study("study1");
   Input Q("Q", 0., Normal(10200, 100), "Primary energy");
   Input E("E", 0., Normal(3000, 15), "Produced electric energy");
   Input C("C", 0., Normal(4000, 60), "Valued thermal energy");

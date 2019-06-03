@@ -1,15 +1,15 @@
-%feature("docstring") OTGUI::MetaModelAnalysis
+%feature("docstring") PERSALYS::MetaModelAnalysis
 "Create a base class for the creation of meta models.
 
 Notes
 -----
 Can only be used through its derived classes.
-See :class:`~otguibase.FunctionalChaosAnalysis`,
-:class:`~otguibase.KrigingAnalysis`"
+See :class:`~persalys.FunctionalChaosAnalysis`,
+:class:`~persalys.KrigingAnalysis`"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::leaveOneOutValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::leaveOneOutValidation
 "Whether a validation by leave-one-out is requested.
 
 Returns
@@ -19,7 +19,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setLeaveOneOutValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::setLeaveOneOutValidation
 "Whether it is sparse.
 
 Parameters
@@ -29,7 +29,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::kFoldValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::kFoldValidation
 "Whether a k-Fold cross-validation is requested.
 
 Returns
@@ -39,7 +39,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setKFoldValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::setKFoldValidation
 "Whether a k-Fold cross-validation is requested.
 
 Parameters
@@ -49,7 +49,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::analyticalValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::analyticalValidation
 "Whether an analytical validation is requested.
 
 Returns
@@ -60,7 +60,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setAnalyticalValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::setAnalyticalValidation
 "Whether an analytical validation is requested.
 
 Parameters
@@ -71,7 +71,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::testSampleValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::testSampleValidation
 "Whether a validation with a test sample is requested.
 
 Returns
@@ -86,7 +86,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setTestSampleValidation
+%feature("docstring") PERSALYS::MetaModelAnalysis::setTestSampleValidation
 "Whether a validation with a test sample is requested.
 
 Parameters
@@ -101,7 +101,7 @@ validation : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::getKFoldValidationNumberOfFolds
+%feature("docstring") PERSALYS::MetaModelAnalysis::getKFoldValidationNumberOfFolds
 "Number of folds accessor.
 
 Returns
@@ -111,7 +111,7 @@ folds : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setKFoldValidationNumberOfFolds
+%feature("docstring") PERSALYS::MetaModelAnalysis::setKFoldValidationNumberOfFolds
 "Number of folds accessor.
 
 Parameters
@@ -121,7 +121,7 @@ folds : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::getKFoldValidationSeed
+%feature("docstring") PERSALYS::MetaModelAnalysis::getKFoldValidationSeed
 "Seed accessor.
 
 Returns
@@ -131,7 +131,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setKFoldValidationSeed
+%feature("docstring") PERSALYS::MetaModelAnalysis::setKFoldValidationSeed
 "Seed accessor.
 
 Parameters
@@ -141,7 +141,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::getTestSampleValidationSeed
+%feature("docstring") PERSALYS::MetaModelAnalysis::getTestSampleValidationSeed
 "Seed accessor.
 
 Returns
@@ -151,7 +151,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setTestSampleValidationSeed
+%feature("docstring") PERSALYS::MetaModelAnalysis::setTestSampleValidationSeed
 "Seed accessor.
 
 Parameters
@@ -161,7 +161,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::getTestSampleValidationPercentageOfPoints
+%feature("docstring") PERSALYS::MetaModelAnalysis::getTestSampleValidationPercentageOfPoints
 "Percentage of points accessor.
 
 Returns
@@ -171,7 +171,7 @@ percentage : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::setTestSampleValidationPercentageOfPoints
+%feature("docstring") PERSALYS::MetaModelAnalysis::setTestSampleValidationPercentageOfPoints
 "Percentage of points accessor.
 
 Parameters
@@ -181,7 +181,7 @@ percentage : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::getEffectiveInputSample
+%feature("docstring") PERSALYS::MetaModelAnalysis::getEffectiveInputSample
 "Effective input sample accessor.
 
 Returns
@@ -192,7 +192,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::getEffectiveOutputSample
+%feature("docstring") PERSALYS::MetaModelAnalysis::getEffectiveOutputSample
 "Effective output sample accessor.
 
 Returns
@@ -202,7 +202,7 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::MetaModelAnalysis::getDistribution
+%feature("docstring") PERSALYS::MetaModelAnalysis::getDistribution
 "Input distribution accessor.
 
 Returns

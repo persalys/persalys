@@ -69,47 +69,47 @@ ot_install_header_file ( MorrisTableModel.hxx )
 ot_install_header_file ( MorrisResultTableModel.hxx )
 endif ()
 
-qt5_wrap_cpp ( OTGUI_MODEL_MOC_SRCS otgui/InputTableModel.hxx
-                                    otgui/InputTableProbabilisticModel.hxx
-                                    otgui/OutputTableModel.hxx
-                                    otgui/SampleTableModel.hxx
-                                    otgui/ExperimentTableModel.hxx
-                                    otgui/CorrelationTableModel.hxx
-                                    otgui/DifferentiationTableModel.hxx
-                                    otgui/DataModelTableModel.hxx
-                                    otgui/DistributionsTableModel.hxx
-                                    otgui/Item.hxx
-                                    otgui/MeshItem.hxx
-                                    otgui/PhysicalModelDiagramItem.hxx
-                                    otgui/PhysicalModelDefinitionItem.hxx
-                                    otgui/AnalysisItem.hxx
-                                    otgui/StudyTreeViewModel.hxx
-                                    otgui/LimitStateItem.hxx
-                                    otgui/DesignOfExperimentItem.hxx
-                                    otgui/DesignOfExperimentDefinitionItem.hxx
-                                    otgui/DataModelDiagramItem.hxx
-                                    otgui/DataModelDefinitionItem.hxx
-                                    otgui/ProbabilisticModelItem.hxx
-                                    otgui/PhysicalModelItem.hxx
-                                    otgui/StudyItem.hxx
-                                    otgui/CodeModel.hxx
-                                    otgui/VariablesSelectionTableModel.hxx
-                                    otgui/CustomStandardItemModel.hxx
-                                    otgui/DependenciesTableModel.hxx
-                                    otgui/OptimizationTableModel.hxx
-                                    otgui/TranslationManager.hxx
-                                    otgui/FileTools.hxx)
+qt5_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
+                                    persalys/InputTableProbabilisticModel.hxx
+                                    persalys/OutputTableModel.hxx
+                                    persalys/SampleTableModel.hxx
+                                    persalys/ExperimentTableModel.hxx
+                                    persalys/CorrelationTableModel.hxx
+                                    persalys/DifferentiationTableModel.hxx
+                                    persalys/DataModelTableModel.hxx
+                                    persalys/DistributionsTableModel.hxx
+                                    persalys/Item.hxx
+                                    persalys/MeshItem.hxx
+                                    persalys/PhysicalModelDiagramItem.hxx
+                                    persalys/PhysicalModelDefinitionItem.hxx
+                                    persalys/AnalysisItem.hxx
+                                    persalys/StudyTreeViewModel.hxx
+                                    persalys/LimitStateItem.hxx
+                                    persalys/DesignOfExperimentItem.hxx
+                                    persalys/DesignOfExperimentDefinitionItem.hxx
+                                    persalys/DataModelDiagramItem.hxx
+                                    persalys/DataModelDefinitionItem.hxx
+                                    persalys/ProbabilisticModelItem.hxx
+                                    persalys/PhysicalModelItem.hxx
+                                    persalys/StudyItem.hxx
+                                    persalys/CodeModel.hxx
+                                    persalys/VariablesSelectionTableModel.hxx
+                                    persalys/CustomStandardItemModel.hxx
+                                    persalys/DependenciesTableModel.hxx
+                                    persalys/OptimizationTableModel.hxx
+                                    persalys/TranslationManager.hxx
+                                    persalys/FileTools.hxx)
 
 if (OTMORRIS_FOUND)
-  qt5_wrap_cpp (OTGUI_MODEL_MOC_SRCS otgui/MorrisTableModel.hxx)
-  qt5_wrap_cpp (OTGUI_MODEL_MOC_SRCS otgui/MorrisResultTableModel.hxx)
+  qt5_wrap_cpp (PERSALYS_MODEL_MOC_SRCS persalys/MorrisTableModel.hxx)
+  qt5_wrap_cpp (PERSALYS_MODEL_MOC_SRCS persalys/MorrisResultTableModel.hxx)
 endif ()
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
-otgui_add_library ( otguimodel ${SOURCEFILES} ${OTGUI_MODEL_MOC_SRCS} )
+persalys_add_library ( persalysmodel ${SOURCEFILES} ${PERSALYS_MODEL_MOC_SRCS} )
 if ( BUILD_SHARED_LIBS )
-  set_target_properties ( otguimodel PROPERTIES COMPILE_DEFINITIONS "OTGUI_DLL_EXPORTS" )
+  set_target_properties ( persalysmodel PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -118,13 +118,13 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( otguimodel PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( otguimodel PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries ( otguimodel otguibase ${QT_LIBRARIES})
+set_target_properties ( persalysmodel PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties ( persalysmodel PROPERTIES SOVERSION ${LIB_SOVERSION} )
+target_link_libraries ( persalysmodel persalysbase ${QT_LIBRARIES})
 
-install ( TARGETS otguimodel
+install ( TARGETS persalysmodel
   RUNTIME DESTINATION bin
-  LIBRARY DESTINATION ${OTGUI_LIBRARY_PATH}
-  ARCHIVE DESTINATION ${OTGUI_LIBRARY_PATH}
+  LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
+  ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 

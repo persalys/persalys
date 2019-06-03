@@ -18,17 +18,17 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/DesignOfExperimentEvaluation.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
-#include "otgui/BaseTools.hxx"
-#include "otgui/DataAnalysis.hxx"
+#include "persalys/BaseTools.hxx"
+#include "persalys/DataAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(DesignOfExperimentEvaluation)

@@ -1,34 +1,34 @@
-%feature("docstring") OTGUI::FieldMonteCarloAnalysis
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis
 "Run a Monte Carlo analysis for models with mesh.
 
 Parameters
 ----------
 name : str
     Name
-model : :class:`~otguibase.PhysicalModel`
+model : :class:`~persalys.PhysicalModel`
     Model containing a mesh
 
 Examples
 --------
 >>> import openturns as ot
->>> import otguibase
+>>> import persalys
 
 Create the model:
 
->>> meshModel = otguibase.GridMeshModel(ot.Interval(0., 12.), [5])
+>>> meshModel = persalys.GridMeshModel(ot.Interval(0., 12.), [5])
 
->>> z0 = otguibase.Input('z0', 100, ot.Uniform(100, 150))
->>> v0 = otguibase.Input('v0', 55, ot.Normal(55, 10))
->>> m = otguibase.Input('m', 80, ot.Normal(80, 8))
->>> c = otguibase.Input('c', 15, ot.Uniform(0, 30))
->>> z = otguibase.Output('z', '')
+>>> z0 = persalys.Input('z0', 100, ot.Uniform(100, 150))
+>>> v0 = persalys.Input('v0', 55, ot.Normal(55, 10))
+>>> m = persalys.Input('m', 80, ot.Normal(80, 8))
+>>> c = persalys.Input('c', 15, ot.Uniform(0, 30))
+>>> z = persalys.Output('z', '')
 >>> formula = ['max(0, z0 + (m * 9.81 / c) * t + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-t * c / m)))']
 
->>> model = otguibase.SymbolicFieldModel('aModel', meshModel, [z0, v0, m, c], [z], formula)
+>>> model = persalys.SymbolicFieldModel('aModel', meshModel, [z0, v0, m, c], [z], formula)
 
 Create the analysis:
 
->>> analysis = otguibase.FieldMonteCarloAnalysis('analysis', model)
+>>> analysis = persalys.FieldMonteCarloAnalysis('analysis', model)
 >>> analysis.setMaximumCalls(30)
 >>> analysis.run()
 
@@ -38,7 +38,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloAnalysis::getKarhunenLoeveThreshold
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getKarhunenLoeveThreshold
 "Accessor to the limit ratio on eigenvalues.
 
 Returns
@@ -48,7 +48,7 @@ threshold : float, positive
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloAnalysis::setKarhunenLoeveThreshold
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::setKarhunenLoeveThreshold
 "Accessor to the limit ratio on eigenvalues.
 
 Parameters
@@ -58,7 +58,7 @@ threshold : float, positive
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloAnalysis::getQuantileLevel
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getQuantileLevel
 "Probability level accessor.
 
 Returns
@@ -68,7 +68,7 @@ level : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloAnalysis::setQuantileLevel
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::setQuantileLevel
 "Probability level accessor.
 
 Parameters
@@ -78,10 +78,10 @@ level : float, :math:`0 < p < 1`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTGUI::FieldMonteCarloAnalysis::getResult
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getResult
 "Result accessor.
 
 Returns
 -------
-result : :class:`otguibase.FieldMonteCarloResult`
+result : :class:`persalys.FieldMonteCarloResult`
     Result"

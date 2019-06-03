@@ -1,14 +1,14 @@
 // SWIG file
 
 %{
-#include "otgui/SobolResult.hxx"
+#include "persalys/SobolResult.hxx"
 %}
 
 %include SobolResult_doc.i
 
-%include otgui/SobolResult.hxx
-namespace OTGUI {
+%include persalys/SobolResult.hxx
+namespace PERSALYS {
 
-%extend SobolResult { SobolResult(const SobolResult & other) { return new OTGUI::SobolResult(other); } 
+%extend SobolResult { SobolResult(const SobolResult & other) { return new PERSALYS::SobolResult(other); } 
 
 } }

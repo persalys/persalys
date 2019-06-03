@@ -1,13 +1,13 @@
-%feature("docstring") OTGUI::EvaluationResult
+%feature("docstring") PERSALYS::EvaluationResult
 "Class containing results of the simulation analysis."
 
 // ---------------------------------------------------------------------
 
 
-%feature("docstring") OTGUI::EvaluationResult::getDesignOfExperiment
+%feature("docstring") PERSALYS::EvaluationResult::getDesignOfExperiment
 "Design of experiments accessor.
 
 Returns
 -------
-design : :class:`~otguibase.DesignOfExperiment`
+design : :class:`~persalys.DesignOfExperiment`
     Design of experiments containing the analysed points"

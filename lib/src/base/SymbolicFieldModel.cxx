@@ -18,16 +18,16 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/SymbolicFieldModel.hxx"
+#include "persalys/SymbolicFieldModel.hxx"
 
-#include "otgui/BaseTools.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/SymbolicFunction.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CLASSNAMEINIT(SymbolicFieldModel)
@@ -117,7 +117,7 @@ String SymbolicFieldModel::getPythonScript() const
 
   // define model
   oss << "formulas = " << Parameters::GetOTDescriptionStr(getFormulas()) << "\n";
-  oss << getName() << " = otguibase.SymbolicFieldModel('" << getName() << "', " << getMeshModel().getName() << ", inputs, outputs, formulas)\n";
+  oss << getName() << " = persalys.SymbolicFieldModel('" << getName() << "', " << getMeshModel().getName() << ", inputs, outputs, formulas)\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 

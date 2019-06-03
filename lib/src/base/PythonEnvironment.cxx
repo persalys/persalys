@@ -18,13 +18,13 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/PythonEnvironment.hxx"
+#include "persalys/PythonEnvironment.hxx"
 
 #include <openturns/PythonWrappingFunctions.hxx>
 
 using namespace OT;
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 PythonEnvironment::PythonEnvironment()

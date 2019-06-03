@@ -18,12 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "otgui/CustomScaleEngine.hxx"
+#include "persalys/CustomScaleEngine.hxx"
 
 #include <cmath>
 #include "qwt_math.h"
 
-namespace OTGUI
+namespace PERSALYS
 {
 
 CustomScaleEngine::CustomScaleEngine()

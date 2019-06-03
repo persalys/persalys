@@ -1,96 +1,96 @@
 // PhysicalModel docstrings are defined in PhysicalModelImplementation_doc.i.in
 
-%feature("docstring") OTGUI::PhysicalModel
-OTGUI_PhysicalModel_doc
-%feature("docstring") OTGUI::PhysicalModel::getOutputNames
-OTGUI_PhysicalModel_getOutputNames_doc
-%feature("docstring") OTGUI::PhysicalModel::addInput
-OTGUI_PhysicalModel_addInput_doc
-%feature("docstring") OTGUI::PhysicalModel::addOutput
-OTGUI_PhysicalModel_addOutput_doc
-%feature("docstring") OTGUI::PhysicalModel::getFunction
-OTGUI_PhysicalModel_getFunction_doc
-%feature("docstring") OTGUI::PhysicalModel::getPythonScript
-OTGUI_PhysicalModel_getPythonScript_doc
-%feature("docstring") OTGUI::PhysicalModel::setCopula
-OTGUI_PhysicalModel_setCopula_doc
-%feature("docstring") OTGUI::PhysicalModel::getCopula
-OTGUI_PhysicalModel_getCopula_doc
-%feature("docstring") OTGUI::PhysicalModel::getDistribution
-OTGUI_PhysicalModel_getDistribution_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputStochastic
-OTGUI_PhysicalModel_setInputStochastic_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputDescription
-OTGUI_PhysicalModel_setInputDescription_doc
-%feature("docstring") OTGUI::PhysicalModel::setOutputDescription
-OTGUI_PhysicalModel_setOutputDescription_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputs
-OTGUI_PhysicalModel_setInputs_doc
-%feature("docstring") OTGUI::PhysicalModel::getInputs
-OTGUI_PhysicalModel_getInputs_doc
-%feature("docstring") OTGUI::PhysicalModel::setOutputs
-OTGUI_PhysicalModel_setOutputs_doc
-%feature("docstring") OTGUI::PhysicalModel::getOutputs
-OTGUI_PhysicalModel_getOutputs_doc
-%feature("docstring") OTGUI::PhysicalModel::getInputByName
-OTGUI_PhysicalModel_getInputByName_doc
-%feature("docstring") OTGUI::PhysicalModel::getOutputByName
-OTGUI_PhysicalModel_getOutputByName_doc
-%feature("docstring") OTGUI::PhysicalModel::getInputDimension
-OTGUI_PhysicalModel_getInputDimension_doc
-%feature("docstring") OTGUI::PhysicalModel::getOutputDimension
-OTGUI_PhysicalModel_getOutputDimension_doc
-%feature("docstring") OTGUI::PhysicalModel::getStochasticInputNames
-OTGUI_PhysicalModel_getStochasticInputNames_doc
-%feature("docstring") OTGUI::PhysicalModel::getInputNames
-OTGUI_PhysicalModel_getInputNames_doc
-%feature("docstring") OTGUI::PhysicalModel::getInputRandomVector
-OTGUI_PhysicalModel_getInputRandomVector_doc
-%feature("docstring") OTGUI::PhysicalModel::getOutputRandomVector
-OTGUI_PhysicalModel_getOutputRandomVector_doc
-%feature("docstring") OTGUI::PhysicalModel::removeInput
-OTGUI_PhysicalModel_removeInput_doc
-%feature("docstring") OTGUI::PhysicalModel::removeOutput
-OTGUI_PhysicalModel_removeOutput_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputName
-OTGUI_PhysicalModel_setInputName_doc
-%feature("docstring") OTGUI::PhysicalModel::setOutputName
-OTGUI_PhysicalModel_setOutputName_doc
-%feature("docstring") OTGUI::PhysicalModel::setInputValue
-OTGUI_PhysicalModel_setInputValue_doc
-%feature("docstring") OTGUI::PhysicalModel::setOutputValue
-OTGUI_PhysicalModel_setOutputValue_doc
-%feature("docstring") OTGUI::PhysicalModel::hasInputNamed
-OTGUI_PhysicalModel_hasInputNamed_doc
-%feature("docstring") OTGUI::PhysicalModel::hasOutputNamed
-OTGUI_PhysicalModel_hasOutputNamed_doc
-%feature("docstring") OTGUI::PhysicalModel::hasStochasticInputs
-OTGUI_PhysicalModel_hasStochasticInputs_doc
-%feature("docstring") OTGUI::PhysicalModel::isValid
-OTGUI_PhysicalModel_isValid_doc
-%feature("docstring") OTGUI::PhysicalModel::setDistribution
-OTGUI_PhysicalModel_setDistribution_doc
-%feature("docstring") OTGUI::PhysicalModel::setDistributionParametersType
-OTGUI_PhysicalModel_setDistributionParametersType_doc
-%feature("docstring") OTGUI::PhysicalModel::setFiniteDifferenceStep
-OTGUI_PhysicalModel_setFiniteDifferenceStep_doc
-%feature("docstring") OTGUI::PhysicalModel::getRestrictedFunction
-OTGUI_PhysicalModel_getRestrictedFunction_doc
-%feature("docstring") OTGUI::PhysicalModel::getRestrictedPointToFieldFunction
-OTGUI_PhysicalModel_getRestrictedPointToFieldFunction_doc
-%feature("docstring") OTGUI::PhysicalModel::getPointToFieldFunction
-OTGUI_PhysicalModel_getPointToFieldFunction_doc
-%feature("docstring") OTGUI::PhysicalModel::getSelectedOutputsNames
-OTGUI_PhysicalModel_getSelectedOutputsNames_doc
-%feature("docstring") OTGUI::PhysicalModel::selectOutput
-OTGUI_PhysicalModel_selectOutput_doc
-%feature("docstring") OTGUI::PhysicalModel::isParallel
-OTGUI_PhysicalModel_isParallel_doc
-%feature("docstring") OTGUI::PhysicalModel::setParallel
-OTGUI_PhysicalModel_setParallel_doc
-%feature("docstring") OTGUI::PhysicalModel::setMeshModel
-OTGUI_PhysicalModel_setMeshModel_doc
-%feature("docstring") OTGUI::PhysicalModel::getMeshModel
-OTGUI_PhysicalModel_getMeshModel_doc
-%feature("docstring") OTGUI::PhysicalModel::hasMesh
-OTGUI_PhysicalModel_hasMesh_doc
+%feature("docstring") PERSALYS::PhysicalModel
+PERSALYS_PhysicalModel_doc
+%feature("docstring") PERSALYS::PhysicalModel::getOutputNames
+PERSALYS_PhysicalModel_getOutputNames_doc
+%feature("docstring") PERSALYS::PhysicalModel::addInput
+PERSALYS_PhysicalModel_addInput_doc
+%feature("docstring") PERSALYS::PhysicalModel::addOutput
+PERSALYS_PhysicalModel_addOutput_doc
+%feature("docstring") PERSALYS::PhysicalModel::getFunction
+PERSALYS_PhysicalModel_getFunction_doc
+%feature("docstring") PERSALYS::PhysicalModel::getPythonScript
+PERSALYS_PhysicalModel_getPythonScript_doc
+%feature("docstring") PERSALYS::PhysicalModel::setCopula
+PERSALYS_PhysicalModel_setCopula_doc
+%feature("docstring") PERSALYS::PhysicalModel::getCopula
+PERSALYS_PhysicalModel_getCopula_doc
+%feature("docstring") PERSALYS::PhysicalModel::getDistribution
+PERSALYS_PhysicalModel_getDistribution_doc
+%feature("docstring") PERSALYS::PhysicalModel::setInputStochastic
+PERSALYS_PhysicalModel_setInputStochastic_doc
+%feature("docstring") PERSALYS::PhysicalModel::setInputDescription
+PERSALYS_PhysicalModel_setInputDescription_doc
+%feature("docstring") PERSALYS::PhysicalModel::setOutputDescription
+PERSALYS_PhysicalModel_setOutputDescription_doc
+%feature("docstring") PERSALYS::PhysicalModel::setInputs
+PERSALYS_PhysicalModel_setInputs_doc
+%feature("docstring") PERSALYS::PhysicalModel::getInputs
+PERSALYS_PhysicalModel_getInputs_doc
+%feature("docstring") PERSALYS::PhysicalModel::setOutputs
+PERSALYS_PhysicalModel_setOutputs_doc
+%feature("docstring") PERSALYS::PhysicalModel::getOutputs
+PERSALYS_PhysicalModel_getOutputs_doc
+%feature("docstring") PERSALYS::PhysicalModel::getInputByName
+PERSALYS_PhysicalModel_getInputByName_doc
+%feature("docstring") PERSALYS::PhysicalModel::getOutputByName
+PERSALYS_PhysicalModel_getOutputByName_doc
+%feature("docstring") PERSALYS::PhysicalModel::getInputDimension
+PERSALYS_PhysicalModel_getInputDimension_doc
+%feature("docstring") PERSALYS::PhysicalModel::getOutputDimension
+PERSALYS_PhysicalModel_getOutputDimension_doc
+%feature("docstring") PERSALYS::PhysicalModel::getStochasticInputNames
+PERSALYS_PhysicalModel_getStochasticInputNames_doc
+%feature("docstring") PERSALYS::PhysicalModel::getInputNames
+PERSALYS_PhysicalModel_getInputNames_doc
+%feature("docstring") PERSALYS::PhysicalModel::getInputRandomVector
+PERSALYS_PhysicalModel_getInputRandomVector_doc
+%feature("docstring") PERSALYS::PhysicalModel::getOutputRandomVector
+PERSALYS_PhysicalModel_getOutputRandomVector_doc
+%feature("docstring") PERSALYS::PhysicalModel::removeInput
+PERSALYS_PhysicalModel_removeInput_doc
+%feature("docstring") PERSALYS::PhysicalModel::removeOutput
+PERSALYS_PhysicalModel_removeOutput_doc
+%feature("docstring") PERSALYS::PhysicalModel::setInputName
+PERSALYS_PhysicalModel_setInputName_doc
+%feature("docstring") PERSALYS::PhysicalModel::setOutputName
+PERSALYS_PhysicalModel_setOutputName_doc
+%feature("docstring") PERSALYS::PhysicalModel::setInputValue
+PERSALYS_PhysicalModel_setInputValue_doc
+%feature("docstring") PERSALYS::PhysicalModel::setOutputValue
+PERSALYS_PhysicalModel_setOutputValue_doc
+%feature("docstring") PERSALYS::PhysicalModel::hasInputNamed
+PERSALYS_PhysicalModel_hasInputNamed_doc
+%feature("docstring") PERSALYS::PhysicalModel::hasOutputNamed
+PERSALYS_PhysicalModel_hasOutputNamed_doc
+%feature("docstring") PERSALYS::PhysicalModel::hasStochasticInputs
+PERSALYS_PhysicalModel_hasStochasticInputs_doc
+%feature("docstring") PERSALYS::PhysicalModel::isValid
+PERSALYS_PhysicalModel_isValid_doc
+%feature("docstring") PERSALYS::PhysicalModel::setDistribution
+PERSALYS_PhysicalModel_setDistribution_doc
+%feature("docstring") PERSALYS::PhysicalModel::setDistributionParametersType
+PERSALYS_PhysicalModel_setDistributionParametersType_doc
+%feature("docstring") PERSALYS::PhysicalModel::setFiniteDifferenceStep
+PERSALYS_PhysicalModel_setFiniteDifferenceStep_doc
+%feature("docstring") PERSALYS::PhysicalModel::getRestrictedFunction
+PERSALYS_PhysicalModel_getRestrictedFunction_doc
+%feature("docstring") PERSALYS::PhysicalModel::getRestrictedPointToFieldFunction
+PERSALYS_PhysicalModel_getRestrictedPointToFieldFunction_doc
+%feature("docstring") PERSALYS::PhysicalModel::getPointToFieldFunction
+PERSALYS_PhysicalModel_getPointToFieldFunction_doc
+%feature("docstring") PERSALYS::PhysicalModel::getSelectedOutputsNames
+PERSALYS_PhysicalModel_getSelectedOutputsNames_doc
+%feature("docstring") PERSALYS::PhysicalModel::selectOutput
+PERSALYS_PhysicalModel_selectOutput_doc
+%feature("docstring") PERSALYS::PhysicalModel::isParallel
+PERSALYS_PhysicalModel_isParallel_doc
+%feature("docstring") PERSALYS::PhysicalModel::setParallel
+PERSALYS_PhysicalModel_setParallel_doc
+%feature("docstring") PERSALYS::PhysicalModel::setMeshModel
+PERSALYS_PhysicalModel_setMeshModel_doc
+%feature("docstring") PERSALYS::PhysicalModel::getMeshModel
+PERSALYS_PhysicalModel_getMeshModel_doc
+%feature("docstring") PERSALYS::PhysicalModel::hasMesh
+PERSALYS_PhysicalModel_hasMesh_doc
