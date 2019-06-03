@@ -21,6 +21,7 @@
 #include "otgui/SubWindow.hxx"
 
 #include "otgui/DocumentationToolButton.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QEventLoop>
 #include <QOpenGLContext>
@@ -41,7 +42,7 @@ TitleLabel::TitleLabel(const QString &text, const QString &docLink, QWidget * pa
   label_ = new QLabel(text, this);
   label_->setFrameStyle(QFrame::StyledPanel);
   label_->setMargin(5);
-  label_->setStyleSheet("QLabel { font: bold; background-color: white; }");
+  label_->setStyleSheet("QLabel { font: bold; background-color: white; border: 2px solid " + ApplicationColor["darkColor"] + ";}");
   layout->addWidget(label_, 1);
   if (!docLink.isEmpty())
   {

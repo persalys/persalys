@@ -31,6 +31,9 @@ WelcomeWindow::WelcomeWindow(const Actions* actions, QWidget * parent)
   : QWidget(parent)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  int x1, y1, x2, y2;
+  mainLayout->getContentsMargins(&x1, &y1, &x2, &y2);
+  mainLayout->setContentsMargins(x1, 0, x2, 0);
 
   mainLayout->addWidget(new TitleLabel(tr("Study creation"), "user_manual/graphical_interface/getting_started/user_manual_getting_started.html#create-a-study"));
 

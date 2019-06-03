@@ -48,7 +48,8 @@ int DependenciesTableModel::columnCount(const QModelIndex &parent) const
 
 int DependenciesTableModel::rowCount(const QModelIndex &parent) const
 {
-  return copula_.getDimension() < 2 ? 0 : copula_.getCopulaCollection().getSize();
+  // do not use hasIndependentCopula because we can have NormalCopula(R=0)
+  return copula_.getCopulaCollection().contains(IndependentCopula()) ? 0 : copula_.getCopulaCollection().getSize();
 }
 
 

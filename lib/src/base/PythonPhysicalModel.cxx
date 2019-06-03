@@ -223,10 +223,11 @@ String PythonPhysicalModel::getPythonScript() const
   oss << "inputs = " << Parameters::GetOTDescriptionStr(getInputNames(), false) << "\n";
   oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
 
-  // escape quotes, eols
-  String escaped_code = boost::regex_replace(getCode(), boost::regex("'"), "\\\\'");
-  escaped_code = boost::regex_replace(escaped_code, boost::regex("\n"), "\\\\n");
-  oss << "code = '" + escaped_code + "'\n";
+  // escape triple quotes, backslashes
+  String escaped_code = boost::regex_replace(getCode(), boost::regex("\\\\"), "\\\\\\\\");
+  escaped_code = boost::regex_replace(escaped_code, boost::regex("\"\"\""), "\\\\\"\\\\\"\\\\\"");
+
+  oss << "code = \"\"\"\n" + escaped_code + "\"\"\"\n";
 
   oss << getName() + " = otguibase.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
   if (isParallel())

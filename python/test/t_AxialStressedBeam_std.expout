@@ -15,7 +15,13 @@ F = otguibase.Input('F', 75000, dist_F, 'Traction force (N)')
 G = otguibase.Output('G', 'Stress difference (Pa)')
 inputs = [R, F]
 outputs = [G]
-code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return G\n'
+code = """
+from math import pi
+
+def _exec(R, F):
+    G = R-F/(pi*100.0)
+    return G
+"""
 myPhysicalModel = otguibase.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myStudy.add(myPhysicalModel)
 values = [300,75000]

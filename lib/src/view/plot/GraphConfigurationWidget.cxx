@@ -100,12 +100,15 @@ void GraphConfigurationWidget::buildInterface()
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  mainLayout->setContentsMargins(0, 0, 0, 0);
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QFrame * frame = new QFrame;
-  QGridLayout * mainGridLayout = new QGridLayout(frame);
+  QVBoxLayout * frameLayout = new QVBoxLayout(frame);
+
+  QGridLayout * topLayout = new QGridLayout;
   int rowGrid = 0;
 
   // combobox PDF - CDF - quantile function - Survival function
@@ -120,17 +123,17 @@ void GraphConfigurationWidget::buildInterface()
       distReprs << tr("Quantile function") << tr("Survival function");
     distReprComboBox_ = new QComboBox;
     distReprComboBox_->addItems(distReprs);
-    mainGridLayout->addWidget(distReprComboBox_, rowGrid, 0, 1, 2);
+    topLayout->addWidget(distReprComboBox_, rowGrid, 0, 1, 2);
     connect(distReprComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }
 
   // title
   QLabel * label = new QLabel(tr("Title"));
-  mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+  topLayout->addWidget(label, ++rowGrid, 0);
 
   titleLineEdit_ = new QLineEdit;
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
-  mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
+  topLayout->addWidget(titleLineEdit_, rowGrid, 1);
 
   // Axis comboboxes
   if (plotType_ == GraphConfigurationWidget::Scatter ||
@@ -140,7 +143,7 @@ void GraphConfigurationWidget::buildInterface()
   {
     // X-axis combobox
     label = new QLabel(tr("X-axis"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    topLayout->addWidget(label, ++rowGrid, 0);
 
     xAxisComboBox_ = new QComboBox;
 
@@ -150,17 +153,17 @@ void GraphConfigurationWidget::buildInterface()
     for (int i = 0; i < outputNames_.size(); ++i)
       xAxisComboBox_->addItem(outputNames_[i], false);
 
-    mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
+    topLayout->addWidget(xAxisComboBox_, rowGrid, 1);
     if (plotType_ != GraphConfigurationWidget::Kendall && plotType_ != GraphConfigurationWidget::KSPDF)
     {
       connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
 
       // Y-axis combobox
       label = new QLabel(tr("Y-axis"));
-      mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+      topLayout->addWidget(label, ++rowGrid, 0);
 
       yAxisComboBox_ = new QComboBox;
-      mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
+      topLayout->addWidget(yAxisComboBox_, rowGrid, 1);
       connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
     }
     else
@@ -170,7 +173,7 @@ void GraphConfigurationWidget::buildInterface()
   {
     // variables to display
     QLabel * label = new QLabel(tr("Variables"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    topLayout->addWidget(label, ++rowGrid, 0);
 
     // combobox to select the variables to display
     TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
@@ -178,26 +181,16 @@ void GraphConfigurationWidget::buildInterface()
     connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(setVariablesToShow(QStringList)));
     varComboBox->setModel(varListWidget->model());
     varComboBox->setView(varListWidget);
-    mainGridLayout->addWidget(varComboBox, rowGrid, 1, 1, 1);
+    topLayout->addWidget(varComboBox, rowGrid, 1);
   }
+  frameLayout->addLayout(topLayout);
 
   // radio button ranks
   if (plotType_ == GraphConfigurationWidget::Scatter)
   {
     rankCheckBox_ = new QCheckBox(tr("Ranks"));
-    mainGridLayout->addWidget(rankCheckBox_, ++rowGrid, 0, 1, 2);
+    frameLayout->addWidget(rankCheckBox_);
     connect(rankCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(plotChanged()));
-  }
-
-  // label direction
-  if (plotType_ == GraphConfigurationWidget::SensitivityIndices || plotType_ == GraphConfigurationWidget::Boxplot)
-  {
-    label = new QLabel(tr("X-axis labels\norientation"));
-    QComboBox * labelOrientation = new QComboBox;
-    labelOrientation->addItems(QStringList() << tr("Horizontal") << tr("Vertical"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
-    mainGridLayout->addWidget(labelOrientation, rowGrid, 1, 1, 1);
-    connect(labelOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLabelOrientation(int)));
   }
 
   //TODO: add Legend?
@@ -231,7 +224,20 @@ void GraphConfigurationWidget::buildInterface()
   connect(xmax_, SIGNAL(editingFinished()), this, SLOT(updateXrange()));
   gridLayoutTab->addWidget(xmax_, 2, 1, 1, 1);
 
-  gridLayoutTab->setRowStretch(3, 1);
+  // label direction
+  if (plotType_ == GraphConfigurationWidget::SensitivityIndices || plotType_ == GraphConfigurationWidget::Boxplot)
+  {
+    QHBoxLayout * hLayout = new QHBoxLayout;
+    label = new QLabel(tr("Labels\norientation"));
+    QComboBox * labelOrientation = new QComboBox;
+    labelOrientation->addItems(QStringList() << tr("Horizontal") << tr("Vertical"));
+    hLayout->addWidget(label);
+    hLayout->addWidget(labelOrientation, 1);
+    gridLayoutTab->addLayout(hLayout, 3, 0, 1, 2);
+    connect(labelOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLabelOrientation(int)));
+  }
+
+  gridLayoutTab->setRowStretch(4, 1);
 
   tabWidget->addTab(tabHorizontalAxis, tr("X-axis"));
 
@@ -263,18 +269,17 @@ void GraphConfigurationWidget::buildInterface()
 
   tabWidget->addTab(tabVerticalAxis, tr("Y-axis"));
 
-  mainGridLayout->addWidget(tabWidget, ++rowGrid, 0, 1, 2);
+  frameLayout->addWidget(tabWidget);
 
   // Bottom layout
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
-  hboxForBottomButtons->addStretch();
   QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
+  hboxForBottomButtons->addStretch();
 
-  mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
-
-  mainGridLayout->setRowStretch(++rowGrid, 1);
+  frameLayout->addLayout(hboxForBottomButtons);
+  frameLayout->addStretch();
 
   // update widgets
   updateLineEdits();

@@ -24,6 +24,7 @@
 #include "otgui/SubWindow.hxx"
 #include "otgui/AnalysisItem.hxx"
 #include "otgui/ParametersWidget.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <QScrollArea>
 #include <QListWidget>
@@ -56,8 +57,7 @@ public:
     : QListWidget(parent)
   {
     // style sheet
-    const QString styleSheet = "QListWidget::item:selected { background-color: #a5d3a1;\
-                                                             color: doubledarkgray; }";
+    const QString styleSheet = "QListWidget::item:selected { background-color: " + ApplicationColor["lightColor"] + "; color: doubledarkgray; }";
 
     setStyleSheet(styleSheet);
     ListWidgetItemDelegate * delegate = new ListWidgetItemDelegate(this);

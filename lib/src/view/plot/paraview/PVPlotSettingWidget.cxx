@@ -65,14 +65,14 @@ PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget* pvViewWidget,
 void PVPlotSettingWidget::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  mainLayout->setContentsMargins(0, 0, 0, 0);
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
   QFrame * frame = new QFrame;
-  QGridLayout * mainGridLayout = new QGridLayout(frame);
-  int rowGrid = 0;
+  QVBoxLayout * frameLayout = new QVBoxLayout(frame);
 
   // title ? can not :(
 
@@ -84,8 +84,9 @@ void PVPlotSettingWidget::buildInterface()
   }
 
   // variables to display
+  QHBoxLayout * hLayout = new QHBoxLayout;
   QLabel * label = new QLabel(tr("Variables"));
-  mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+  hLayout->addWidget(label);
 
   // combobox to select the variables to display
   TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
@@ -93,27 +94,28 @@ void PVPlotSettingWidget::buildInterface()
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
   varComboBox->setModel(varListWidget->model());
   varComboBox->setView(varListWidget);
-  mainGridLayout->addWidget(varComboBox, rowGrid, 1, 1, 1);
+  hLayout->addWidget(varComboBox, 1);
+
+  frameLayout->addLayout(hLayout);
 
   // rank checkbox
   if (sample_.getSize() && sampleRank_.getSize())
   {
     QCheckBox * rankCheckBox = new QCheckBox(tr("Ranks"));
     rankCheckBox->setChecked(true);
-    mainGridLayout->addWidget(rankCheckBox, ++rowGrid, 0, 1, 2);
+    frameLayout->addWidget(rankCheckBox);
     connect(rankCheckBox, SIGNAL(clicked(bool)), this, SLOT(modifyData(bool)));
   }
 
   // pushbutton to export the plot
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
-  hboxForBottomButtons->addStretch();
   QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
+  hboxForBottomButtons->addStretch();
 
-  mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
-
-  mainGridLayout->setRowStretch(++rowGrid, 1);
+  frameLayout->addLayout(hboxForBottomButtons);
+  frameLayout->addStretch();
 
   //
   scrollArea->setWidget(frame);

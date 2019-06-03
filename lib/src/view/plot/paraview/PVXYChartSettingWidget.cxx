@@ -164,21 +164,24 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidge
 void PVXYChartSettingWidget::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  mainLayout->setContentsMargins(0, 0, 0, 0);
   setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QFrame * frame = new QFrame;
-  QGridLayout * mainGridLayout = new QGridLayout(frame);
+  QVBoxLayout * frameLayout = new QVBoxLayout(frame);
+
+  QGridLayout * topLayout = new QGridLayout;
   int rowGrid = 0;
 
   // title
   QLabel * label = new QLabel(tr("Title"));
-  mainGridLayout->addWidget(label, rowGrid, 0, 1, 1);
+  topLayout->addWidget(label, rowGrid, 0, 1, 1);
 
   titleLineEdit_ = new QLineEdit;
   connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
-  mainGridLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
+  topLayout->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
   // Axis comboboxes
   xAxisComboBox_ = new QComboBox(this);
@@ -187,7 +190,7 @@ void PVXYChartSettingWidget::buildInterface()
   {
     // X-axis combobox
     label = new QLabel(tr("X-axis"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    topLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
     for (int i = 0; i < inputNames_.size(); ++i)
       xAxisComboBox_->addItem(inputNames_[i], true);
@@ -195,14 +198,14 @@ void PVXYChartSettingWidget::buildInterface()
     for (int i = 0; i < outputNames_.size(); ++i)
       xAxisComboBox_->addItem(outputNames_[i], false);
 
-    mainGridLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
+    topLayout->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
     connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
 
     // Y-axis combobox
     label = new QLabel(tr("Y-axis"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    topLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
-    mainGridLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
+    topLayout->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
     connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
   }
   else
@@ -213,19 +216,11 @@ void PVXYChartSettingWidget::buildInterface()
     yAxisComboBox_->setVisible(false);
   }
 
-  // rank checkbox
-  if (sampleRank_.getSize())
-  {
-    QCheckBox * rankCheckBox = new QCheckBox(tr("Ranks"));
-    mainGridLayout->addWidget(rankCheckBox, ++rowGrid, 0, 1, 2);
-    connect(rankCheckBox, SIGNAL(clicked(bool)), this, SLOT(modifyData(bool)));
-  }
-
   // representation
   if (pvViewWidget_->getNumberOfRepresentations() > 1)
   {
     label = new QLabel(tr("Data"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    topLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
     // combobox to select the representations to display
     TitledComboBox * reprComboBox = new TitledComboBox("-- " + tr("Select") + " --");
@@ -243,13 +238,13 @@ void PVXYChartSettingWidget::buildInterface()
     reprComboBox->setModel(reprListWidget_->model());
     reprComboBox->setView(reprListWidget_);
 
-    mainGridLayout->addWidget(reprComboBox, rowGrid, 1, 1, 1);
+    topLayout->addWidget(reprComboBox, rowGrid, 1, 1, 1);
   }
 
   if (plotType_ == PVXYChartSettingWidget::Trajectories)
   {
     label = new QLabel(tr("Data"));
-    mainGridLayout->addWidget(label, ++rowGrid, 0, 1, 1);
+    topLayout->addWidget(label, ++rowGrid, 0, 1, 1);
 
     // combobox to select the representations to display
     TitledComboBox * dataComboBox = new TitledComboBox("-- " + tr("Select") + " --");
@@ -260,19 +255,28 @@ void PVXYChartSettingWidget::buildInterface()
     dataComboBox->setView(reprListWidget_);
     reprListWidget_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-    mainGridLayout->addWidget(dataComboBox, rowGrid, 1, 1, 1);
+    topLayout->addWidget(dataComboBox, rowGrid, 1, 1, 1);
+  }
+  frameLayout->addLayout(topLayout);
+
+  // rank checkbox
+  if (sampleRank_.getSize())
+  {
+    QCheckBox * rankCheckBox = new QCheckBox(tr("Ranks"));
+    frameLayout->addWidget(rankCheckBox);
+    connect(rankCheckBox, SIGNAL(clicked(bool)), this, SLOT(modifyData(bool)));
   }
 
   // TODO: does not work for now
 //  if (plotType_ == PVXYChartSettingWidget::BagChart)
 //  {
-//    mainGridLayout->addWidget(new QLabel(tr("Quantile")), ++rowGrid, 0);
+//    topLayout->addWidget(new QLabel(tr("Quantile")), ++rowGrid, 0);
 //    quantileSpinBox_ = new UIntSpinBox;
 //    quantileSpinBox_->setMinimum(10);
 //    quantileSpinBox_->setMaximum(100);
 //    quantileSpinBox_->setValue(dynamic_cast<PVBagChartViewWidget*>(pvViewWidget_)->getUserQuantile());
 //    connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(updateQuantile()));
-//    mainGridLayout->addWidget(quantileSpinBox_, rowGrid, 1);
+//    topLayout->addWidget(quantileSpinBox_, rowGrid, 1);
 //  }
 
   // axis - style
@@ -311,7 +315,6 @@ void PVXYChartSettingWidget::buildInterface()
   connect(xlogScaleCheckBox_, SIGNAL(clicked(bool)), pvViewWidget_, SLOT(setXLogScale(bool)));
   gridLayoutTab->addWidget(xlogScaleCheckBox_, 3, 0, 1, 2);
 
-  gridLayoutTab->setRowStretch(4, 1);
   tabWidget->addTab(tabHorizontalAxis, tr("X-axis"));
 
   // --- tab Vertical Axis
@@ -347,7 +350,6 @@ void PVXYChartSettingWidget::buildInterface()
   connect(ylogScaleCheckBox_, SIGNAL(clicked(bool)), pvViewWidget_, SLOT(setYLogScale(bool)));
   gridLayoutTab->addWidget(ylogScaleCheckBox_, 3, 0, 1, 2);
 
-  gridLayoutTab->setRowStretch(4, 1);
   tabWidget->addTab(tabVerticalAxis, tr("Y-axis"));
 
   // --- tab Properties
@@ -364,19 +366,19 @@ void PVXYChartSettingWidget::buildInterface()
         (plotType_ == PVXYChartSettingWidget::Scatter || plotType_ == PVXYChartSettingWidget::Simple))
     {
       label = new QLabel(tr("Plot color"));
-      propertiesTabLayout->addWidget(label, 0, 0, 1, 1);
+      propertiesTabLayout->addWidget(label, 0, 0);
 
       colorButton_ = new QToolButton;
       QPixmap px(20, 20);
       px.fill(pvViewWidget_->getRepresentationColor());
       colorButton_->setIcon(px);
       connect(colorButton_, SIGNAL(clicked()), this, SLOT(setColor()));
-      propertiesTabLayout->addWidget(colorButton_, 0, 1, 1, 1);
+      propertiesTabLayout->addWidget(colorButton_, 0, 1, Qt::AlignLeft);
     }
 
     // marker style
     label = new QLabel(tr("Marker style"));
-    propertiesTabLayout->addWidget(label, 1, 0, 1, 1);
+    propertiesTabLayout->addWidget(label, 1, 0);
 
     markerStyles_ = new QComboBox;
     markerStyles_->addItem(tr("None"), vtkPlotPoints::NONE);
@@ -387,38 +389,36 @@ void PVXYChartSettingWidget::buildInterface()
     markerStyles_->addItem(tr("Diamond"), vtkPlotPoints::DIAMOND);
     markerStyles_->setCurrentIndex(pvViewWidget_->getMarkerStyle());
     connect(markerStyles_, SIGNAL(currentIndexChanged(int)), this, SLOT(setMarkerStyle(int)));
-    propertiesTabLayout->addWidget(markerStyles_, 1, 1, 1, 1);
-
-    tabWidget->addTab(propertiesTab, tr("Plot style"));
+    propertiesTabLayout->addWidget(markerStyles_, 1, 1);
 
     // marker size
     label = new QLabel(tr("Marker size"));
-    propertiesTabLayout->addWidget(label, 2, 0, 1, 1);
+    propertiesTabLayout->addWidget(label, 2, 0);
 
     QSpinBox * markerSize = new QSpinBox;
     markerSize->setMinimum(1);
     markerSize->setMaximum(10);
     markerSize->setValue(2);
     connect(markerSize, SIGNAL(valueChanged(int)), pvViewWidget_, SLOT(setMarkerSize(int)));
-    propertiesTabLayout->addWidget(markerSize, 2, 1, 1, 1);
+    propertiesTabLayout->addWidget(markerSize, 2, 1);
 
     propertiesTabLayout->setRowStretch(3, 1);
+    propertiesTabLayout->setColumnStretch(1, 2);
     tabWidget->addTab(propertiesTab, tr("Plot style"));
   }
 
-  mainGridLayout->addWidget(tabWidget, ++rowGrid, 0, 1, 2);
+  frameLayout->addWidget(tabWidget);
 
   // Bottom layout
   // export button
   QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
-  hboxForBottomButtons->addStretch();
   QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(button, SIGNAL(clicked()), pvViewWidget_, SLOT(exportPlot()));
   hboxForBottomButtons->addWidget(button);
+  hboxForBottomButtons->addStretch();
 
-  mainGridLayout->addLayout(hboxForBottomButtons, ++rowGrid, 1, 1, 1);
-
-  mainGridLayout->setRowStretch(++rowGrid, 1);
+  frameLayout->addLayout(hboxForBottomButtons);
+  frameLayout->addStretch();
 
   // update widgets
   if (plotType_ == PVXYChartSettingWidget::Scatter)

@@ -26,6 +26,7 @@
 #include "otgui/ResizableStackedWidget.hxx"
 #include "otgui/DoubleSpinBox.hxx"
 #include "otgui/TranslationManager.hxx"
+#include "otgui/QtTools.hxx"
 
 #include <openturns/OTDistribution.hxx>
 #include <openturns/FittingTest.hxx>
@@ -106,6 +107,7 @@ void InferenceWizard::buildInterface()
   varTableView->setSelectionMode(QAbstractItemView::SingleSelection);
   varTableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   varTableView->setShowGrid(false);
+  varTableView->setStyleSheet("QTableView::item:selected{background-color: " + ApplicationColor["lightColor"] + ";color: doubledarkgray;}");
   connect(varTableView, SIGNAL(applyToAllRequested()), this, SLOT(applyCurrentDistToAll()));
 
   // - model

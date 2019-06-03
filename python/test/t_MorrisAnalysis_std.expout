@@ -55,7 +55,83 @@ x20 = otguibase.Input('x20', 0, dist_x20, '')
 y = otguibase.Output('y', '')
 inputs = [x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20]
 outputs = [y]
-code = '\nimport openturns as ot\ndef _exec(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20):\n    ot.RandomGenerator.SetSeed(123)\n    b0 = ot.DistFunc.rNormal()\n    alpha = ot.DistFunc.rNormal(10)\n    beta =  ot.DistFunc.rNormal(6*14)\n    gamma =  ot.DistFunc.rNormal(20*14)\n\n    # b1\n    b1 = [20] * 10 + list(alpha)\n\n    # b2\n    b2 = [[0] *20] * 20\n    for i in range(6):\n        for j in range(6):\n            b2[i][j] = -15.0\n\n    # Take into account beta\n    k = 0\n    for i in range(6):\n        for j in range(14):\n            b2[i][j + 6] = beta[k]\n            k = k + 1\n\n    # Take into account gamma\n    k = 0\n    for i in range(6, 20):\n        for j in range(20):\n            b2[i][j] = gamma[k]\n\n    # b3\n    b3 = [[[0]*20]*20]*20\n    for i in range(5):\n        for j in range(5):\n            for k in range(5):\n                b3[i][j][k] = -10.0\n\n    # b4\n    b4 = [[[[0]*20]*20]*20]*20\n    for i in range(4):\n        for j in range(4):\n            for k in range(4):\n                for l in range(4):\n                    b4[i][j][k][l] = 5\n\n    # X is a list, transform it into array\n    X = ot.Point([x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20])\n    w = (X - [0.5]*20)*2\n    for k in [2,4,6]:\n        w[k] = 2.0 * (1.1 * X[k] / (X[k] + 0.1) - 0.5)\n\n    y = 0.0\n    y = ot.dot(w, b1)\n\n    # Morris function\n    for i in range(19):\n        for j in range(i + 1, 20):\n            y +=  b2[i][j] * w[i] * w[j]\n    for i in range(18):\n        for j in range(i + 1, 19):\n            for k in range(j + 1, 20):\n                y += b3[i][j][k] * w[i] * w[j] * w[k]\n\n    for i in range(17):\n        for j in range(i + 1, 18):\n            for k in range(j + 1, 20):\n                for l in range(k + 1, 20):\n                    y += b4[i][j][k][l] * w[i] * w[j] * w[k] * w[l]\n\n    y = y + b0\n    y_fake = 0.\n\n    return y\n\n'
+code = """
+
+import openturns as ot
+def _exec(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20):
+    ot.RandomGenerator.SetSeed(123)
+    b0 = ot.DistFunc.rNormal()
+    alpha = ot.DistFunc.rNormal(10)
+    beta =  ot.DistFunc.rNormal(6*14)
+    gamma =  ot.DistFunc.rNormal(20*14)
+
+    # b1
+    b1 = [20] * 10 + list(alpha)
+
+    # b2
+    b2 = [[0] *20] * 20
+    for i in range(6):
+        for j in range(6):
+            b2[i][j] = -15.0
+
+    # Take into account beta
+    k = 0
+    for i in range(6):
+        for j in range(14):
+            b2[i][j + 6] = beta[k]
+            k = k + 1
+
+    # Take into account gamma
+    k = 0
+    for i in range(6, 20):
+        for j in range(20):
+            b2[i][j] = gamma[k]
+
+    # b3
+    b3 = [[[0]*20]*20]*20
+    for i in range(5):
+        for j in range(5):
+            for k in range(5):
+                b3[i][j][k] = -10.0
+
+    # b4
+    b4 = [[[[0]*20]*20]*20]*20
+    for i in range(4):
+        for j in range(4):
+            for k in range(4):
+                for l in range(4):
+                    b4[i][j][k][l] = 5
+
+    # X is a list, transform it into array
+    X = ot.Point([x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20])
+    w = (X - [0.5]*20)*2
+    for k in [2,4,6]:
+        w[k] = 2.0 * (1.1 * X[k] / (X[k] + 0.1) - 0.5)
+
+    y = 0.0
+    y = ot.dot(w, b1)
+
+    # Morris function
+    for i in range(19):
+        for j in range(i + 1, 20):
+            y +=  b2[i][j] * w[i] * w[j]
+    for i in range(18):
+        for j in range(i + 1, 19):
+            for k in range(j + 1, 20):
+                y += b3[i][j][k] * w[i] * w[j] * w[k]
+
+    for i in range(17):
+        for j in range(i + 1, 18):
+            for k in range(j + 1, 20):
+                for l in range(k + 1, 20):
+                    y += b4[i][j][k][l] * w[i] * w[j] * w[k] * w[l]
+
+    y = y + b0
+    y_fake = 0.
+
+    return y
+
+"""
 MorrisModel = otguibase.PythonPhysicalModel('MorrisModel', inputs, outputs, code)
 myStudy.add(MorrisModel)
 aMorris = otguibase.MorrisAnalysis('aMorris', MorrisModel)
