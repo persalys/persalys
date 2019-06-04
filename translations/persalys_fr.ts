@@ -213,37 +213,37 @@
 <context>
     <name>PERSALYS::AnalysisWindow</name>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="78"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="79"/>
         <source>Analysis parameters</source>
         <translation>Paramètres de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="92"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="96"/>
         <source>Run</source>
         <translation>Lancer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="99"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="103"/>
         <source>Stop</source>
         <translation>Arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="143"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="147"/>
         <source>No results are available. An error has occurred during the execution of the analysis.</source>
         <translation>Aucun résultat n&apos;est disponible. Une erreur est survenue durant l&apos;exécution de l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="156"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="160"/>
         <source>The analysis is ready to be launched.</source>
         <translation>L&apos;analyse est prête à être lancée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="190"/>
         <source>The analysis is running</source>
         <translation>L&apos;analyse est en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="201"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="205"/>
         <source>Stop in progress</source>
         <translation>Arrêt en cours</translation>
     </message>
@@ -2975,39 +2975,39 @@ des étiquettes</translation>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="140"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="139"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="152"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="151"/>
         <source>qqPlot</source>
         <translation>diagrammeQQ</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="164"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="505"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="163"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="522"/>
         <source>Q-Q Plot</source>
         <translation>Diagramme Q-Q</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="181"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="377"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="180"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="376"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="187"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="186"/>
         <source>Distribution parameters</source>
         <translation>Paramètres de la distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="213"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="212"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="214"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="213"/>
         <source>Bayesian
 Information
 Criterion</source>
@@ -3016,63 +3016,63 @@ d&apos;information
 bayésien (BIC)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="215"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="214"/>
         <source>Lower BIC value is better</source>
         <translation>Mieux vaut une valeur de BIC faible</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="216"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="291"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="215"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="290"/>
         <source>Kolmogorov-Smirnov</source>
         <translation>Kolmogorov-Smirnov</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="217"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="216"/>
         <source>p-value</source>
         <translation>p-valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="218"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="217"/>
         <source>Acceptation</source>
         <translation>Acceptation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="261"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="260"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="265"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="264"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="272"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="271"/>
         <source>failed</source>
         <translation>échoué</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="389"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="388"/>
         <source>Moments</source>
         <translation>Moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="393"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="392"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="394"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="393"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="395"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="394"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="396"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="395"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
@@ -3082,22 +3082,22 @@ bayésien (BIC)</translation>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="501"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="518"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="501"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="518"/>
         <source>(Kolmogorov–Smirnov statistic=%1)</source>
         <translation>(Statistique de Kolmogorov–Smirnov=%1)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="506"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="523"/>
         <source>Data quantiles</source>
         <translation>Quantiles des données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="507"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="524"/>
         <source>%1 theoretical quantiles</source>
         <translation>Quantiles théoriques de %1</translation>
     </message>
@@ -3203,28 +3203,28 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::InputTableProbabilisticModel</name>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="82"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="79"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="84"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="81"/>
         <source>Distribution</source>
         <translation>Distribution</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="92"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="89"/>
         <source>Select all</source>
         <translation>Tout sélectionner</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="92"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="89"/>
         <source>Deselect all</source>
         <translation>Tout désélectionner</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="139"/>
-        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="172"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="136"/>
+        <location filename="../lib/src/model/InputTableProbabilisticModel.cxx" line="169"/>
         <source>Inference result</source>
         <translation>Résultat d&apos;inférence</translation>
     </message>
@@ -3558,74 +3558,74 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::MarginalsWidget</name>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="114"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="116"/>
         <source>Import Morris result</source>
         <translation>Importer un résultat de Morris</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="136"/>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="198"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="138"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="200"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="138"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="140"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="165"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="167"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="169"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="171"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="173"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="175"/>
         <source>distributionQuantile</source>
         <translation>distributionQuantile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="177"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="179"/>
         <source>distributionSurvivalFunction</source>
         <translation>distributionFonctionSurvie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="225"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="227"/>
         <source>Truncation parameters</source>
         <translation>Paramètres de troncature</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="228"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="230"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="230"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="232"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="202"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="204"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="752"/>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="787"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="754"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="789"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="752"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="754"/>
         <source>The current study has not inference analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat d&apos;inférence.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MarginalsWidget.cxx" line="787"/>
+        <location filename="../lib/src/view/MarginalsWidget.cxx" line="789"/>
         <source>The current study has not screening analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat de criblage.</translation>
     </message>
@@ -5566,6 +5566,11 @@ métamodèle</translation>
         <translation>Sorties</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="154"/>
+        <source>Check model</source>
+        <translation>Vérifier le modèle</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="166"/>
         <source>Add an output</source>
         <translation>Ajouter une sortie</translation>
@@ -5574,11 +5579,6 @@ métamodèle</translation>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="170"/>
         <source>Remove the selected output</source>
         <translation>Supprimer la sortie sélectionnée</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="154"/>
-        <source>Evaluate</source>
-        <translation>Evaluer</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="155"/>
