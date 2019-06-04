@@ -16,7 +16,7 @@ Dependencies
 - Numpydoc (optional, for doc)
 - otfmi (optional, for FMI support)
 - ParaView >=5.4.0 (optional, for visualisation)
-- otmorris >=0.5 (optional, for Morris support)
+- otmorris >=0.6 (optional, for Morris support)
 
 Installation
 ------------
