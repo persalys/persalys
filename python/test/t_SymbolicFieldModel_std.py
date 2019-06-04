@@ -22,7 +22,7 @@ outputs = [z]
 meshModel = persalys.GridMeshModel(ot.Interval(0., 12.), [20])
 
 # Symbolic model
-formula = ["max(0, z0 + (m * 9.81 / c) * t + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-t * c / m)))"]
+formula = ["max(0, z0 - (m * 9.81 / c) * t + (m / c) * (v0 + (m * 9.81 / c)) * (1 - exp(-t * c / m)))"]
 model1 = persalys.SymbolicFieldModel('model1', meshModel, inputs, outputs, formula)
 Study_0.add(model1)
 
@@ -33,7 +33,7 @@ print(f([[100, 55, 81, 17], [100, 55, 81, 18]]))
 
 # Symbolic model : two outputs
 outputs = [z, z2]
-formula = ["max(0, z0 + (m * 9.81 / c) * t + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-t * c / m)))"] * 2
+formula = ["max(0, z0 - (m * 9.81 / c) * t + (m / c) * (v0 + (m * 9.81 / c)) * (1 - exp(-t * c / m)))"] * 2
 model2 = persalys.SymbolicFieldModel('model2', meshModel, inputs, outputs, formula)
 Study_0.add(model2)
 
@@ -45,4 +45,4 @@ print(f([[100, 55, 81, 17], [100, 55, 81, 18]]))
 # script
 script = Study_0.getPythonScript()
 print(script)
-exec(script)
+#exec(script)
