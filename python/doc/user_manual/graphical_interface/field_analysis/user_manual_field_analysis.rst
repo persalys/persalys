@@ -143,7 +143,7 @@ When an analysis is required, a window appears, in order to set up:
   - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
     purposes (default=1; expected= integer). It must be less than the maximum sampling size.
   - **Advanced Parameters** (default: hidden):
-      - the `Karhunen-Loeve <openturns.github.io/openturns/latest/user_manual/_generated/openturns.KarhunenLoeveAlgorithm.html>`_
+      - the `Karhunen-Loeve <http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.KarhunenLoeveAlgorithm.html>`_
         threshold (default: 1e-5, expected: float)
       - the seed of the random generator (default: 0, positive integer expected)
 

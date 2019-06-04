@@ -418,16 +418,16 @@ SectionEnd
 
 
 Section -AdditionalIcons
-  !insertmacro PRINT "Create OpenTURNS ${MODULE_NAME_LOWERCASE} menu."
+  !insertmacro PRINT "Create ${MODULE_NAME} menu."
   ; install shortcuts on every accounts
   !insertmacro SET_MENU_CONTEXT
   SetOutPath "$MODULE_INSTALL_PATH"
 
-  CreateDirectory "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}"
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" ""
-  ;CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" ""
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" ""
-  CreateShortCut "$SMPROGRAMS\OpenTURNS\${MODULE_NAME}\Persalys.lnk" "$MODULE_INSTALL_PATH\persalys.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
+  CreateDirectory "$SMPROGRAMS\${MODULE_NAME}"
+  CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" ""
+  ;CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" ""
+  CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" ""
+  CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Persalys.lnk" "$MODULE_INSTALL_PATH\persalys.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
 SectionEnd
 
 

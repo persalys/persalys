@@ -1,10 +1,10 @@
 # persalys module
 
 Examples
-  Template examples can be found here: C:\Python27\Lib\site-packages\persalys\examples\persalys
+  Template examples can be found here: C:\Python37\Lib\site-packages\persalys\examples
 
 Installation
-  Silent install can be done with the switch /S (e.g. openturns-persalys-0.0-py27.exe /S).
+  Silent install can be done with the switch /S (e.g. persalys-0.0-py37-x86_64.exe /S).
   To test persalys module installation, in an OpenTURNS python console type:
     import persalys
     print persalys.__version__

@@ -151,7 +151,7 @@ void PhysicalModelWindowWidget::buildInterface()
   QHBoxLayout * outputButtonsLayout = new QHBoxLayout;
 
   // button Evaluate outputs -------------------------------------------
-  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate"));
+  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
   outputButtonsLayout->addWidget(evaluateOutputsButton);

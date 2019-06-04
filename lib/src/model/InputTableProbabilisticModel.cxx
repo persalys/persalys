@@ -60,11 +60,8 @@ Qt::ItemFlags InputTableProbabilisticModel::flags(const QModelIndex & index) con
     result &= ~Qt::ItemIsEditable;
     result |= Qt::ItemIsUserCheckable;
   }
-  else if (index.column() == 1 && data(this->index(index.row(), 1), Qt::DisplayRole).toString() != "Dirac")
-    result &= ~Qt::ItemIsSelectable;
   else if (index.column() == 1 && data(this->index(index.row(), 1), Qt::DisplayRole).toString() == "Dirac")
   {
-    result &= ~Qt::ItemIsSelectable;
     result &= ~Qt::ItemIsEnabled;
     result &= ~Qt::ItemIsEditable;
   }

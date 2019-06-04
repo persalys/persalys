@@ -46,6 +46,17 @@ public:
     if (hasFocus() && !neverWheelEvent_)
       QComboBox::wheelEvent(e);
   }
+  virtual void keyPressEvent(QKeyEvent *e)
+  {
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
+    if (keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Up ||
+        keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
+    {
+      e->ignore();
+      return;
+    }
+    QComboBox::keyPressEvent(e);
+  }
 private:
   bool neverWheelEvent_;
 };

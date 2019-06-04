@@ -27,6 +27,7 @@
 #include "persalys/PlotWidget.hxx"
 #include "persalys/DocumentationToolButton.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
 
 #include <QTabWidget>
 #include <QScrollArea>
@@ -67,6 +68,7 @@ private:
   CustomStandardItemModel * distParamTableModel_;
   DocumentationToolButton * infoButton_;
   TemporaryLabel * analysisErrorMessageLabel_;
+  GraphConfigurationWidget * pdf_cdfPlotSettingWidget_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   PlotWidget * qqPlot_;

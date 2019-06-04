@@ -23,12 +23,12 @@
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/RadioButtonDelegate.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
-#include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/DistributionDictionary.hxx"
 #include "persalys/FileTools.hxx"
 
 #include <openturns/VisualTest.hxx>
+#include <openturns/UserDefined.hxx>
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -126,14 +126,13 @@ void InferenceResultWidget::buildInterface()
     QVector<PlotWidget*> listpdf_cdfPlot;
     listpdf_cdfPlot.append(pdfPlot_);
     listpdf_cdfPlot.append(cdfPlot_);
-    GraphConfigurationWidget * pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listpdf_cdfPlot,
+    pdf_cdfPlotSettingWidget_ = new GraphConfigurationWidget(listpdf_cdfPlot,
         QStringList(),
         QStringList(),
         GraphConfigurationWidget::PDF_Inference,
         this);
-    pdf_cdfPlotSettingWidget->hide();
-    plotWidget->setDockWidget(pdf_cdfPlotSettingWidget);
-    connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
+    plotWidget->setDockWidget(pdf_cdfPlotSettingWidget_);
+    connect(pdf_cdfPlotSettingWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
     plotWidgetLayout->addWidget(pdf_cdfStackedWidget);
     scrollArea->setWidget(plotWidget);
@@ -438,10 +437,11 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // reset
-  pdfPlot_->show();
+  pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 0 ? pdfPlot_->show() : pdfPlot_->hide();
   pdfPlot_->clear();
   if (cdfPlot_ && qqPlot_)
   {
+    pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 1 ? cdfPlot_->show() : cdfPlot_->hide();
     cdfPlot_->clear();
     qqPlot_->clear();
   }
@@ -478,12 +478,29 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // -- cdf
+  cdfPlot_->plotCDFCurve(distribution);
+
+  // -- empirical cdf
   const Sample sample(currentFittingTestResult_.getValues());
   const Scalar xmin = sample.getMin()[0] - 1.0;
   const Scalar xmax = sample.getMax()[0] + 1.0;
-  const Sample F_nx(VisualTest::DrawEmpiricalCDF(sample, xmin, xmax).getDrawable(0).getData());
+  UserDefined u(sample);
+  const Sample F_nxOT(u.drawCDF(xmin, xmax).getDrawable(0).getData());
+
+  Sample F_nx(0, 2);
+  for (UnsignedInteger i = 0; i < F_nxOT.getSize(); ++i)
+  {
+    F_nx.add(F_nxOT[i]);
+    if (i < F_nxOT.getSize() - 1)
+    {
+      Point interPt(2);
+      interPt[0] = F_nxOT[i][0];
+      interPt[1] = F_nxOT[i+1][1];
+      F_nx.add(interPt);
+    }
+  }
   cdfPlot_->plotCurve(F_nx, QPen(Qt::blue, 2));
-  cdfPlot_->plotCDFCurve(distribution);
+
   // compute Kolmogorov–Smirnov statistic : D_n = sup |F_n(x) - F(x)|
   const Sample Fx(distribution.computeCDF(F_nx.getMarginal(0)));
   Sample KSStatistic(2, 2);

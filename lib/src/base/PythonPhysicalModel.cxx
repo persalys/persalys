@@ -66,7 +66,6 @@ PythonPhysicalModel* PythonPhysicalModel::clone() const
 
 void PythonPhysicalModel::setCode(const String & code)
 {
-
   std::vector<std::string> lines;
   boost::split(lines, code, boost::is_any_of("\n"));
 
@@ -74,13 +73,20 @@ void PythonPhysicalModel::setCode(const String & code)
   Description outputVariables;
 
   boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  bool inExecScope = false;
   for (unsigned int i = 0; i < lines.size(); ++ i)
   {
     String line = lines[i];
+
+    // we know that we are outside the _exec scope when the line begins with a character (different from space)
+    if (inExecScope && line[0] != ' ' && line.size() != 0)
+      inExecScope = false;
+
     boost::regex defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]+)\\)[ ]*:", boost::regex::extended);
     boost::smatch what;
     if (boost::regex_match(line, what, defFunction))
     {
+      inExecScope = true;
       String inputList = what[1];
       std::string::const_iterator start = inputList.begin(), end = inputList.end();
       while (boost::regex_search(start, end, what, variable))
@@ -91,7 +97,7 @@ void PythonPhysicalModel::setCode(const String & code)
     }
 
     boost::regex returnOutput("    return[ ]+([_a-zA-Z0-9, ]+)");
-    if (boost::regex_match(line, what, returnOutput))
+    if (inExecScope && boost::regex_match(line, what, returnOutput))
     {
       String outputList = what[1];
       std::string::const_iterator start = outputList.begin(), end = outputList.end();
