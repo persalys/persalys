@@ -35,6 +35,9 @@ class PERSALYS_API CodeEditor : public QPlainTextEdit
 public:
   CodeEditor(QWidget * parent = 0);
 
+  void lineNumberAreaPaintEvent(QPaintEvent * event);
+  int lineNumberAreaWidth();
+
 signals:
   // signal sent when the code is ready to be parsed
   void codeEdited(QWidget * QWidget);
@@ -42,13 +45,45 @@ signals:
 protected:
   virtual void keyPressEvent(QKeyEvent *e);
   virtual void focusOutEvent(QFocusEvent *event);
+  void resizeEvent(QResizeEvent *event) override;
+
 private  slots:
   void updateVerticalScrollBarValue();
   void updateHorizontalScrollBarValue();
 
+  void updateLineNumberAreaWidth(int newBlockCount);
+  void highlightCurrentLine();
+  void updateLineNumberArea(const QRect &, int);
+
 private:
   int verticalScrollBarValue_;
   int horizontalScrollBarValue_;
+  QWidget * lineNumberArea_;
+};
+
+
+class PERSALYS_API LineNumberArea : public QWidget
+{
+public:
+  LineNumberArea(CodeEditor *editor)
+  : QWidget(editor)
+  , codeEditor_(editor)
+  {
+  }
+
+  QSize sizeHint() const override
+  {
+    return QSize(codeEditor_->lineNumberAreaWidth(), 0);
+  }
+
+protected:
+  void paintEvent(QPaintEvent *event) override
+  {
+    codeEditor_->lineNumberAreaPaintEvent(event);
+  }
+
+private:
+    CodeEditor * codeEditor_;
 };
 
 
