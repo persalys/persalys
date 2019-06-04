@@ -18,10 +18,12 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
-  && git checkout v0.5 && git cherry-pick 29d7aafe8eadd2fae3e497ecbd3a6f29315a5f8b \
+  && git checkout v0.6 \
   && ${ARCH}-w64-mingw32-cmake-py${PYMAJMIN} -DPYTHON_SITE_PACKAGES=Lib/site-packages . \
   && make && sudo make install && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libotmorris.dll ${MINGW_PREFIX}/Lib/site-packages/otmorris/*.pyd
 
 # fake otfmi
 RUN echo "__version__= '0.0'" > /tmp/otfmi.py \
  && sudo mv /tmp/otfmi.py ${MINGW_PREFIX}/lib/python${PYMAJMIN}/otfmi.py
+
+RUN sudo pacman -S unzip --noconfirm
