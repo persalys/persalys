@@ -57,7 +57,7 @@ void PVSpreadSheetViewWidget::exportData()
 }
 
 
-QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWidget* pvWidget, Item* item, const OT::Sample& sample)
+QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item)
 {
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
@@ -75,7 +75,8 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
 
   // - table
   pvWidget->setData(sample);
-  connect(item, SIGNAL(dataExportRequested()), pvWidget, SLOT(exportData()));
+  if (item)
+    connect(item, SIGNAL(dataExportRequested()), pvWidget, SLOT(exportData()));
   mainLayout->addWidget(pvWidget);
 
   return mainWidget;

@@ -266,13 +266,13 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       }
       sample.setDescription(QtOT::StringListToDescription(meshParamName + labels));
       outPVGraph->PVViewWidget::setData(sample);
-      outPVGraph->setChartTitle("", "", tr("Modes"));
-      outPVGraph->setXAxisTitle("", "", meshParamName[0]);
-      outPVGraph->setYAxisTitle("", "", currentOutName[0]);
+      outPVGraph->setChartTitle(tr("Modes"));
+      outPVGraph->setAxisTitle(vtkAxis::BOTTOM, meshParamName[0]);
+      outPVGraph->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
       outPVGraph->setXAxisData(meshParamName[0]);
       outPVGraph->setAxisToShow(labels);
 
-      PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph, labels, PVXYChartSettingWidget::Trajectories, this);
+      TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph, labels, this);
 
       modesStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
     }
@@ -312,11 +312,11 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       eigenPVGraph->setMarkerStyle(2);
       eigenPVGraph->showChart(tr("Mode"), tr("Cumulative sum"));
       eigenPVGraph->setChartTitle(tr("Mode"), tr("Cumulative sum"), tr("Cumulative eigenvalue sum"));
-      eigenPVGraph->setXAxisRange(0. - 0.1, nbModes - 1 + 0.1);
+      eigenPVGraph->setAxisRange(vtkAxis::BOTTOM, 0. - 0.1, nbModes - 1 + 0.1);
       const double min = cumulEigenSample(0, 1);
-      eigenPVGraph->setYAxisRange(min - (1 - min) * 0.04, 1 + (1 - min) * 0.02);
+      eigenPVGraph->setAxisRange(vtkAxis::LEFT, min - (1 - min) * 0.04, 1 + (1 - min) * 0.02);
 
-      PVXYChartSettingWidget * cumulSettingWidget = new PVXYChartSettingWidget(eigenPVGraph, QStringList(), PVXYChartSettingWidget::Simple, this);
+      XYChartSettingWidget * cumulSettingWidget = new XYChartSettingWidget(eigenPVGraph, this);
 
       klWidget->addWidget(new WidgetBoundToDockWidget(eigenPVGraph, cumulSettingWidget, this));
       klWidget->setCollapsible(0, false);
@@ -649,26 +649,9 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   // input table tab
   QTabWidget * inTabWidget = new QTabWidget;
 
-  QWidget * inTableWidget = new QWidget;
-  QVBoxLayout * inTableWidgetLayout = new QVBoxLayout(inTableWidget);
-
-  // - sample size
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(inputSample_.getSize()));
-  hLayout->addWidget(sizeLabel);
-  hLayout->addStretch();
-  // export button
-  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
-  hLayout->addWidget(exportButton);
-  inTableWidgetLayout->addLayout(hLayout);
-
   // - with paraview the table is always shown in order to use the selection behavior
   PVSpreadSheetViewWidget * inPVTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-  inPVTable->setData(inputSample_);
-  connect(exportButton, SIGNAL(clicked()), inPVTable, SLOT(exportData()));
-  inTableWidgetLayout->addWidget(inPVTable);
-
-  inTabWidget->addTab(inTableWidget, tr("Table"));
+  inTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(inPVTable, inputSample_), tr("Table"));
 
   pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();
 
@@ -720,20 +703,20 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   {
     const QStringList currentOutName(outNames[out]);
 
-    // table tab
-    QWidget * outTableWidget = new QWidget;
-    QVBoxLayout * outTableWidgetLayout = new QVBoxLayout(outTableWidget);
-
-    // with paraview the table is always shown in order to use the selection behavior
-    PVSpreadSheetViewWidget * outPVTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-
+    // - table tab
     Sample fieldSample(nbInputPt, nbNodes);
     fieldSample.setDescription(meshNodesNames);
     for (UnsignedInteger in = 0; in < nbInputPt; ++in)
-    {
       fieldSample[in] = processSample_.getField(in).getValues().getMarginal(out).asPoint();
-    }
-    outPVTable->setData(fieldSample);
+
+    // with paraview the table is always shown in order to use the selection behavior
+    PVSpreadSheetViewWidget * outPVTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+    tableStackedWidget->addWidget(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(outPVTable, fieldSample));
+
+    // There are selection behavior errors if windows use the same links names: a link name must be unique.
+    // The pointers are unique, so we use them to create an unique name...find a better and easier way.
+    String aStr = (OSS() << inPVTable->getProxy() << outPVTable->getProxy()).str();
+    linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), outPVTable->getProxy());
 
     // get fieldSample transpose
     Sample fieldSamplet(nbNodes, nbInputPt);
@@ -745,16 +728,16 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
         fieldSamplet(i, j) = fieldSample(j, i);
     }
 
-    // functional/bag chart
+    // - functional/bag chart
     if (nbInputPt > 1)
     {
       // bag chart
       PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::BagChart);
       bagChartWidget->PVViewWidget::setData(fieldSamplet);
-      bagChartWidget->setXAxisTitle("", "", "PC1");
-      bagChartWidget->setYAxisTitle("", "", "PC2");
+      bagChartWidget->setAxisTitle(vtkAxis::BOTTOM, "PC1");
+      bagChartWidget->setAxisTitle(vtkAxis::LEFT, "PC2");
 
-      PVXYChartSettingWidget * settingWidget = new PVXYChartSettingWidget(bagChartWidget, QStringList(), PVXYChartSettingWidget::BagChart, this);
+      BagChartSettingWidget * settingWidget = new BagChartSettingWidget(bagChartWidget, this);
 
       bagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(bagChartWidget, settingWidget, this));
 
@@ -763,39 +746,17 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
 
       // functional bag chart
       PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::FunctionalBagChart, bagChartWidget->getFilterSource());
-      fBagChartWidget->setChartTitle("", "", tr("Quantiles"));
-      fBagChartWidget->setXAxisTitle("", "", "Node index");
-      fBagChartWidget->setYAxisTitle("", "", currentOutName[0]);
       fBagChartWidget->setXAxisData(meshParamName[0]);
+      fBagChartWidget->setChartTitle(tr("Quantiles"));
+      fBagChartWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Node index"));
+      fBagChartWidget->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
 
-      settingWidget = new PVXYChartSettingWidget(fBagChartWidget, QStringList(), PVXYChartSettingWidget::BagChart, this);
+      settingWidget = new BagChartSettingWidget(fBagChartWidget, this);
 
       functionalBagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(fBagChartWidget, settingWidget, this));
     }
 
-    // sample size
-    hLayout = new QHBoxLayout;
-    sizeLabel = new QLabel(tr("Size") + " : " + QString::number(nbInputPt));
-    hLayout->addWidget(sizeLabel);
-    hLayout->addStretch();
-    // export button
-    exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
-    connect(exportButton, SIGNAL(clicked()), outPVTable, SLOT(exportData()));
-    hLayout->addWidget(exportButton);
-    outTableWidgetLayout->addLayout(hLayout);
-
-    outTableWidgetLayout->addWidget(outPVTable);
-
-    // links model --------------------------------
-
-    // There are selection behavior errors if windows use the same links names: a link name must be unique.
-    // The pointers are unique, so we use them to create an unique name...find a better and easier way.
-    String aStr = (OSS() << inPVTable->getProxy() << outPVTable->getProxy()).str();
-    linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), outPVTable->getProxy());
-
-    tableStackedWidget->addWidget(outTableWidget);
-
-    // graph tab
+    // - graph tab
     PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
     listCharts.append(outPVGraph);
 
@@ -803,16 +764,15 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     sample.stack(processSample_.getMesh().getVertices());
 
     outPVGraph->PVViewWidget::setData(sample);
-    outPVGraph->setChartTitle("", "", nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
-    outPVGraph->setXAxisTitle("", "", meshParamName[0]);
-    outPVGraph->setYAxisTitle("", "", currentOutName[0]);
+    outPVGraph->setChartTitle(nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
+    outPVGraph->setAxisTitle(vtkAxis::BOTTOM, meshParamName[0]);
+    outPVGraph->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
     outPVGraph->setXAxisData(meshParamName[0]);
     outPVGraph->setAxisToShow(fieldSamplet.getDescription());
 
-    PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph,
-        QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
-                                                                               PVXYChartSettingWidget::Trajectories,
-                                                                               this);
+    TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph,
+                                                                                     QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
+                                                                                     this);
 
     trajStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
 
@@ -847,13 +807,13 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
       sample.setDescription(QtOT::StringListToDescription(meshParamName + labels));
 
       outPVGraph->PVViewWidget::setData(sample);
-      outPVGraph->setChartTitle("", "", tr("Quantiles"));
-      outPVGraph->setXAxisTitle("", "", meshParamName[0]);
-      outPVGraph->setYAxisTitle("", "", currentOutName[0]);
+      outPVGraph->setChartTitle(tr("Quantiles"));
+      outPVGraph->setAxisTitle(vtkAxis::BOTTOM, meshParamName[0]);
+      outPVGraph->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
       outPVGraph->setXAxisData(meshParamName[0]);
       outPVGraph->setAxisToShow(labels);
 
-      PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph, labels, PVXYChartSettingWidget::Trajectories, this);
+      TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph, labels, this);
 
       meanStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
     }

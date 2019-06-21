@@ -16,7 +16,7 @@ public:
   {
     return PV_REPRESENTATION_TYPE;
   }
-  static QWidget * GetSpreadSheetViewWidget(PVSpreadSheetViewWidget* pvWidget, Item* item, const OT::Sample& sample);
+  static QWidget * GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item = 0);
 
 public slots:
   void contextMenu(const QPoint & pos);

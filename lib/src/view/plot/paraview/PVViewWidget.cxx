@@ -48,7 +48,7 @@ PVViewWidget::PVViewWidget(QWidget *parent, PVServerManagerInterface *smb, const
   , producerBases_()
 {
   QMainWindow * mw(findMWInHierachy());
-  if(!mw)
+  if (!mw)
     throw InvalidArgumentException(HERE) << "Internal error : No main window found !";
   if (!smb_)
     throw InvalidArgumentException(HERE) << "PVViewWidget: No pvserver factory found !";
@@ -109,18 +109,11 @@ bool PVViewWidget::eventFilter(QObject *obj, QEvent *event)
 {
   if (obj == getView()->widget() && event->type() == QEvent::Paint)
   {
-    emit plotChanged();
-
     // set active view : ugly to do this here...
     // avoid the problem of synchronization of the selection between the bound widgets
     QWidget * wdg = qobject_cast<QWidget*>(obj);
-    if (wdg && this->isAncestorOf(wdg))
-    {
-      if (pqActiveObjects::instance().activeView() != getView())
-      {
-        pqActiveObjects::instance().setActiveView(getView());
-      }
-    }
+    if (wdg && this->isAncestorOf(wdg) && pqActiveObjects::instance().activeView() != getView())
+      pqActiveObjects::instance().setActiveView(getView());
   }
   return QObject::eventFilter(obj, event);
 }
@@ -284,9 +277,7 @@ void PVViewWidget::setAxisToShow(const QStringList& variablesNames)
 {
   std::vector<std::string> varNames(variablesNames.size());
   for (int i = 0; i < variablesNames.size(); ++i)
-  {
     varNames[i] = variablesNames[i].toStdString();
-  }
 
   setAxisToShow(varNames);
 }
@@ -311,5 +302,107 @@ void PVViewWidget::updateTable(const Sample& sample, const UnsignedInteger repr_
   // update view
   getProxy(repr_ind)->MarkModified(NULL);
   getView()->resetDisplay();
+}
+
+
+int PVViewWidget::getNumberOfRepresentations() const
+{
+  return getView()->getNumberOfRepresentations();
+}
+
+
+QStringList PVViewWidget::getRepresentationLabels(const int reprIndex) const
+{
+  const int numberOfRepr = getView()->getNumberOfRepresentations();
+
+  // check index
+  if (reprIndex >= numberOfRepr)
+  {
+    OSS oss;
+    oss << "PVViewWidget::getRepresentationLabels: the given representation index "
+        << reprIndex << " is not valid. The number of representations is " << numberOfRepr;
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
+
+  // set label property
+  vtkSMProperty * idvp(getView()->getRepresentation(reprIndex)->getProxy()->GetProperty("SeriesLabel"));
+  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+  QList<QVariant> labelsVariant = pqSMAdaptor::getMultipleElementProperty(idvp);
+
+  QStringList labels;
+  for (int cc = 0; cc < labelsVariant.size() / 2; cc++)
+  {
+    labels << labelsVariant[2 * cc + 1].toString();
+  }
+  delete smph;
+  return labels;
+}
+
+
+void PVViewWidget::setRepresentationLabels(const QStringList& newLabels, const int reprIndex)
+{
+  const int numberOfRepr = getView()->getNumberOfRepresentations();
+
+  // check index
+  if (reprIndex >= numberOfRepr)
+  {
+    OSS oss;
+    oss << "PVViewWidget::setRepresentationLabels: the given representation index "
+        << reprIndex << " is not valid. The number of representations is " << numberOfRepr;
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
+
+  // set internal parameter to be able to update automatically the plot
+  dynamic_cast<pqContextView *>(getView())->getContextViewProxy()->GetContextItem()->GetScene()->SetDirty(true);
+
+  // set label property
+  vtkSMProperty * idvp(getView()->getRepresentation(reprIndex)->getProxy()->GetProperty("SeriesLabel"));
+  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+  QList<QVariant> labels = pqSMAdaptor::getMultipleElementProperty(idvp);
+
+  // check labels
+  if (newLabels.size() != labels.size() / 2)
+  {
+    OSS oss;
+    oss << "PVViewWidget::setRepresentationLabels: the number of given labels "
+        << newLabels.size()
+        << " does not match the number of variables of the representation "
+        << labels.size() / 2;
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
+
+  for (int cc = 0; cc < labels.size() / 2; cc++)
+  {
+    smph->Set(2 * cc + 1, newLabels[cc].toStdString().c_str());
+  }
+  getView()->getRepresentation(reprIndex)->getProxy()->UpdateProperty("SeriesLabel");
+  delete smph;
+}
+
+
+bool PVViewWidget::getRepresentationVisibility(const int reprIndex)
+{
+  const int numberOfRepr = getView()->getNumberOfRepresentations();
+
+  // check index
+  if (reprIndex >= numberOfRepr)
+  {
+    OSS oss;
+    oss << "PVViewWidget::getRepresentationVisibility: the given representation index "
+        << reprIndex << " is not valid. The number of representations is " << numberOfRepr;
+    throw InvalidArgumentException(HERE) << oss.str();
+  }
+
+  return getView()->getRepresentation(reprIndex)->isVisible();
+}
+
+
+void PVViewWidget::setRepresentationVisibility(const QList<int>& indices)
+{
+  // set internal parameter to be able to update automatically the plot
+  dynamic_cast<pqContextView *>(getView())->getContextViewProxy()->GetContextItem()->GetScene()->SetDirty(true);
+
+  for (int i = 0; i < getView()->getNumberOfRepresentations(); ++i)
+    getView()->getRepresentation(i)->setVisible(indices.contains(i));
 }
 }

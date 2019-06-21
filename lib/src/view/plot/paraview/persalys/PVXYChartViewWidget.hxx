@@ -4,6 +4,7 @@
 #include "PVViewWidget.hxx"
 
 #include <vtkChartXY.h>
+#include <vtkAxis.h>
 
 #include <QSet>
 
@@ -14,7 +15,7 @@ class PERSALYS_API PVXYChartViewWidget : public PVViewWidget
   Q_OBJECT
 
 public:
-  enum Type {Scatter, Trajectories, BagChart, FunctionalBagChart};
+  enum Type {Scatter, TrajectoriesPoints, Trajectories, BagChart, FunctionalBagChart};
 
   PVXYChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type = Scatter);
   ~PVXYChartViewWidget();
@@ -25,44 +26,33 @@ public:
     return PV_REPRESENTATION_TYPE[type_];
   }
   void setXAxisData(const QString& varX);
-  double getXAxisRangeMinimum();
-  double getXAxisRangeMaximum();
-  double getYAxisRangeMinimum();
-  double getYAxisRangeMaximum();
-  void setXAxisRange(const double minValue, const double maxValue);
-  void setYAxisRange(const double minValue, const double maxValue);
+  double getAxisRangeMinimum(const vtkAxis::Location ax);
+  double getAxisRangeMaximum(const vtkAxis::Location ax);
+  void setAxisRange(const vtkAxis::Location ax, const double minValue, const double maxValue);
+  QString getAxisTitle(const vtkAxis::Location ax, const QString& varX, const QString& varY);
+  void setAxisTitle(const vtkAxis::Location ax, const QString& title, const QString& varX="", const QString& varY="");
+
   QString getChartTitle(const QString& varX, const QString& varY);
-  QString getXAxisTitle(const QString& varX, const QString& varY);
-  QString getYAxisTitle(const QString& varX, const QString& varY);
-  void setChartTitle(const QString& varX, const QString& varY, const QString& title);
-  void setXAxisTitle(const QString& varX, const QString& varY, const QString& title);
-  void setYAxisTitle(const QString& varX, const QString& varY, const QString& title);
+  void setChartTitle(const QString& title, const QString& varX="", const QString& varY="");
   void setAxisTitles(const QStringList& variablesNames, const QStringList& titles);
-  bool logScalingValidForXAxis();
-  bool logScalingValidForYAxis();
+  bool logScalingValidForAxis(const vtkAxis::Location ax);
+  void setSerieColors(const QMap<QString, QColor>& colors);
+  void setSerieLineStyles(const QMap<QString, int>& styles);
   void setRepresentationColor(const QColor& color, const int reprIndex = 0);
   QColor getRepresentationColor(const int reprIndex = 0) const;
-  void setRepresentationLabels(const QStringList& labels, const int reprIndex = 0);
-  QStringList getRepresentationLabels(const int reprIndex = 0) const;
   void setMarkerStyle(const int markerStyle);
   int getMarkerStyle() const;
   void setShowLegend(const bool show);
-  int getNumberOfRepresentations() const;
-  void setRepresentationVisibility(const bool visibility, const int reprIndex = 0);
-  bool getRepresentationVisibility(const int reprIndex = 0);
 
 protected:
   void setPlotStyle();
 
 public slots:
   virtual void showChart(const QString& varX, const QString& varY);
-  virtual void setXLogScale(const bool scale);
-  virtual void setYLogScale(const bool scale);
+  virtual void setLogScale(const vtkAxis::Location ax, const bool scale);
   void setMarkerSize(const int markerSize);
-  void setRepresentationVisibility(const QList<int>& indices);
 signals:
-  void reprVisibilityChanged(const QList<int>& visibleRepr);
-  void selectedReprChanged(const QStringList& visibleRepr);
+  void axisHasBeenModified();
 
 public:
   static const QMap<Type, const char*> PV_VIEW_TYPE;
@@ -71,11 +61,11 @@ public:
 
 protected:
   vtkChartXY * chartXY_;
-  QMap<QPair<QString, QString>, QStringList > chartsTitle_;
+  QMap<QPair<QString, QString>, QString > chartsTitle_;
+  QMap<QString, QString> axisLabels_;
 private:
   Type type_;
   QList<QColor> reprColors_;
-  QSet<int> visibleRepr_;
 };
 }
 #endif

@@ -21,10 +21,9 @@
 #ifndef PERSALYS_PVPLOTSETTINGWIDGET_HXX
 #define PERSALYS_PVPLOTSETTINGWIDGET_HXX
 
-#include "persalys/PersalysPrivate.hxx"
 #include "PVViewWidget.hxx"
 
-#include <QComboBox>
+#include <QGridLayout>
 
 namespace PERSALYS
 {
@@ -35,25 +34,29 @@ class PERSALYS_API PVPlotSettingWidget : public QWidget
 
 public:
   PVPlotSettingWidget(PVViewWidget* pvViewWidget, QWidget* parent = 0);
-  PVPlotSettingWidget(PVViewWidget* pvViewWidget,
-                      const OT::Sample& sample,
-                      const OT::Sample& sampleRank,
-                      QWidget* parent = 0);
 
   virtual QSize sizeHint() const;
   virtual QSize minimumSizeHint() const;
 
 protected:
-  void buildInterface();
+  void addSelectDataWidget(const QString &labelName);
+  void addRankWidget(const bool checkState);
+  void addExportLayout();
 
-public slots:
-  void modifyData(bool);
-  void exportPlot();
-
-private:
+protected:
   PVViewWidget * pvViewWidget_;
-  OT::Sample sample_;
-  OT::Sample sampleRank_;
+  QStringList plotNames_;
+  OT::Collection<OT::Sample> samples_;
+  OT::Collection<OT::Sample> rankSamples_;
+  QGridLayout * frameLayout_;
+};
+
+class PERSALYS_API MultiPlotSettingWidget : public PVPlotSettingWidget
+{
+  Q_OBJECT
+
+public:
+  MultiPlotSettingWidget(PVViewWidget* pvViewWidget, const OT::Sample& sample, const OT::Sample& sampleRank, QWidget* parent = 0);
 };
 }
 #endif
