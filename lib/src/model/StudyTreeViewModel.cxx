@@ -70,16 +70,17 @@ void StudyTreeViewModel::appendItem(const Study & study)
   emit studyCreated(studyItem);
 
   // add sub items
-  for (UnsignedInteger i = 0; i < study.getDataModels().getSize(); ++i)
-  {
-    studyItem->appendItem(study.getDataModels()[i]);
-    study.getDataModels()[i].addObserver(study.getImplementation().get());
-  }
 
   for (UnsignedInteger i = 0; i < study.getPhysicalModels().getSize(); ++i)
   {
     studyItem->appendItem(study.getPhysicalModels()[i]);
     study.getPhysicalModels()[i].addObserver(study.getImplementation().get());
+  }
+
+  for (UnsignedInteger i = 0; i < study.getDataModels().getSize(); ++i)
+  {
+    studyItem->appendItem(study.getDataModels()[i]);
+    study.getDataModels()[i].addObserver(study.getImplementation().get());
   }
 
   for (UnsignedInteger i = 0; i < study.getLimitStates().getSize(); ++i)
