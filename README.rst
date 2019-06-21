@@ -24,6 +24,7 @@ Installation
 - otfmi must be importable at configure time, so both openturns & otfmi should be reachable via PYTHONPATH or a default location
 - ParaView must be linked to the same qt libs, and built with PARAVIEW_BUILD_QT_GUI=ON
 - On windows OpenGL software rendering is provided for graphic widgets with mesa, if you wish to use system-provided GL libs you can remove opengl32.dll
+- To override the default language you can set LANG=en/fr environment variable, on windows see persalys.vbs
 
 Compile Persalys::
 
