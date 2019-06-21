@@ -2,6 +2,7 @@
 #define __PV_SPREADSHEETVIEW_WIDGET_HXX__
 
 #include "PVViewWidget.hxx"
+#include "persalys/Item.hxx"
 
 namespace PERSALYS
 {
@@ -15,6 +16,8 @@ public:
   {
     return PV_REPRESENTATION_TYPE;
   }
+  static QWidget * GetSpreadSheetViewWidget(PVSpreadSheetViewWidget* pvWidget, Item* item, const OT::Sample& sample);
+
 public slots:
   void contextMenu(const QPoint & pos);
   void exportData();

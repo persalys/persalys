@@ -12,6 +12,9 @@
 #include <pqSelectionManager.h>
 
 #include <QMenu>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -51,5 +54,30 @@ void PVSpreadSheetViewWidget::exportData()
 {
   pqActiveObjects::instance().setActivePort(getPort());
   pqSaveDataReaction::saveActiveData();
+}
+
+
+QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWidget* pvWidget, Item* item, const OT::Sample& sample)
+{
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+
+  QHBoxLayout * hLayout = new QHBoxLayout;
+  // - sample size
+  QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(sample.getSize()));
+  hLayout->addWidget(sizeLabel);
+  hLayout->addStretch();
+  // - export button
+  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
+  hLayout->addWidget(exportButton);
+  connect(exportButton, SIGNAL(clicked()), pvWidget, SLOT(exportData()));
+  mainLayout->addLayout(hLayout);
+
+  // - table
+  pvWidget->setData(sample);
+  connect(item, SIGNAL(dataExportRequested()), pvWidget, SLOT(exportData()));
+  mainLayout->addWidget(pvWidget);
+
+  return mainWidget;
 }
 }
