@@ -199,6 +199,7 @@ void AnalysisItem::modifyAnalysis()
     if (analysisType != "ModelEvaluation" &&
         analysisType != "MorrisAnalysis" &&
         analysisType != "OptimizationAnalysis" &&
+        analysisType != "CalibrationAnalysis" &&
         !analysisType.contains("DesignOfExperiment"))
     {
       // must have stochastic variables

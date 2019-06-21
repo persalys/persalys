@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of designs of experiments
+ *  @brief QStandardItem, observer of observations
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,34 +18,34 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/DesignOfExperimentItem.hxx"
+#ifndef PERSALYS_OBSERVATIONSITEM_HXX
+#define PERSALYS_OBSERVATIONSITEM_HXX
 
-using namespace OT;
+#include "persalys/DesignOfExperimentItem.hxx"
+#include "persalys/AnalysisItem.hxx"
 
 namespace PERSALYS
 {
-
-DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType)
-  : Item(QString::fromUtf8(designOfExperiment.getName().c_str()), observerType.c_str())
-  , Observer(observerType)
-  , designOfExperiment_(designOfExperiment)
+class PERSALYS_API ObservationsItem : public DesignOfExperimentItem
 {
-  designOfExperiment_.addObserver(this);
+  Q_OBJECT
+
+public:
+  ObservationsItem(const DesignOfExperiment& designOfExperiment);
+  virtual void update(Observable * source, const OT::String & message);
+  void appendItem(Analysis& analysis);
+public slots:
+  void createCalibration();
+  void removeObservations();
+signals:
+  void analysisItemCreated(AnalysisItem*);
+
+protected:
+  void buildActions();
+
+private:
+  QAction * newCalibration_;
+  QAction * removeAction_;
+};
 }
-
-
-DesignOfExperiment DesignOfExperimentItem::getDesignOfExperiment() const
-{
-  return designOfExperiment_;
-}
-
-
-void DesignOfExperimentItem::setData(const QVariant & value, int role)
-{
-  // rename
-  if (role == Qt::EditRole)
-    designOfExperiment_.getImplementation()->setName(value.toString().toUtf8().data());
-
-  QStandardItem::setData(value, role);
-}
-}
+#endif

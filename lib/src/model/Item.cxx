@@ -126,6 +126,8 @@ QVariant Item::data(int role) const
         return QIcon(":/images/limitstate.png");
       else if (QStandardItem::data(Qt::UserRole).toString() == "OptimizationTitle")
         return QIcon(":/images/optimize.png");
+      else if (QStandardItem::data(Qt::UserRole).toString() == "CalibrationTitle")
+        return QIcon(":/images/calibration.png");
     }
   }
   else if (QStandardItem::data(Qt::UserRole).toString().contains("Diagram"))

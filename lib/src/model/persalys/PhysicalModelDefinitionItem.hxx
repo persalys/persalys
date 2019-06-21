@@ -22,6 +22,7 @@
 #define PERSALYS_PHYSICALMODELDEFINITIONITEM_HXX
 
 #include "persalys/PhysicalModelItem.hxx"
+#include "persalys/DesignOfExperiment.hxx"
 #include "persalys/Analysis.hxx"
 
 namespace PERSALYS
@@ -43,9 +44,11 @@ public slots:
   void createScreening();
 #endif
   void createOptimization();
+  void createObservations();
   void updateProbaActionAvailability();
 signals:
   void probabilisticModelRequested(PhysicalModelItem*);
+  void observationsRequested(PhysicalModelDefinitionItem*, const DesignOfExperiment& designOfExp);
   void outputChanged();
   void codeChanged();
   void physicalModelRemoved(QStandardItem*);
@@ -61,6 +64,7 @@ private:
   QAction * newScreening_;
   QAction * newOptimization_;
   QAction * newDesignOfExperiment_;
+  QAction * newObservations_;
 };
 }
 #endif

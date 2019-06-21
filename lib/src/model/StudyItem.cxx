@@ -311,23 +311,35 @@ void StudyItem::emitClose()
 
 void StudyItem::appendItem(DesignOfExperiment & dataModel)
 {
-  Item * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
-
-  // context menu actions
-  if (!item->getActions().size())
+  if (!dataModel.hasPhysicalModel())
   {
-    item->appendAction(newDataModel_);
+    Item * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
+
+    // context menu actions
+    if (!item->getActions().size())
+    {
+      item->appendAction(newDataModel_);
+    }
+
+    // new Data model item
+    DataModelDiagramItem * newItem = new DataModelDiagramItem(dataModel);
+    item->appendRow(newItem);
+
+    // signal for StudyTreeView to create the window
+    emit dataModelItemCreated(newItem);
+
+    // Add sub items
+    newItem->fill();
   }
-
-  // new Data model item
-  DataModelDiagramItem * newItem = new DataModelDiagramItem(dataModel);
-  item->appendRow(newItem);
-
-  // signal for StudyTreeView to create the window
-  emit dataModelItemCreated(newItem);
-
-  // Add sub items
-  newItem->fill();
+  else // Observations
+  {
+    // search PhysicalModelDiagram observer
+    if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(dataModel.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram")))
+    {
+      // append item for limitState
+      pmItem->appendItem(dataModel);
+    }
+  }
 }
 
 

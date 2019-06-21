@@ -23,6 +23,7 @@
 #include "persalys/ModelEvaluation.hxx"
 #include "persalys/FieldModelEvaluation.hxx"
 #include "persalys/GridDesignOfExperiment.hxx"
+#include "persalys/Observations.hxx"
 #include "persalys/StudyItem.hxx"
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/MorrisAnalysis.hxx"
@@ -43,6 +44,7 @@ PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & p
   , newScreening_(0)
   , newOptimization_(0)
   , newDesignOfExperiment_(0)
+  , newObservations_(0)
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
@@ -61,14 +63,6 @@ void PhysicalModelDefinitionItem::buildActions()
   newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
   connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createProbabilisticModel()));
 
-  // new design of experiments action
-  if (!physicalModel_.hasMesh())
-  {
-    newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
-    newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
-    connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createDesignOfExperiment()));
-  }
-
   // new evaluation action
   newModelEvaluation_ = new QAction(QIcon(":/images/modelEvaluation.png"), tr("Evaluation"), this);
   newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
@@ -76,6 +70,14 @@ void PhysicalModelDefinitionItem::buildActions()
 
   if (!physicalModel_.hasMesh())
   {
+    // new observations action
+    newObservations_ = new QAction(tr("Observations"), this);
+    connect(newObservations_, SIGNAL(triggered()), this, SLOT(createObservations()));
+    // new design of experiments action
+    newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
+    newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
+    connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createDesignOfExperiment()));
+    // new screening action
 #ifdef PERSALYS_HAVE_OTMORRIS
     newScreening_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
     newScreening_->setStatusTip(tr("Create a new screening"));
@@ -89,6 +91,7 @@ void PhysicalModelDefinitionItem::buildActions()
 
   // add actions
   appendAction(newProbabilisticModel_);
+  appendAction(newObservations_);
   appendAction(newDesignOfExperiment_);
   appendSeparator(tr("Analysis"));
   appendAction(newModelEvaluation_);
@@ -246,6 +249,21 @@ void PhysicalModelDefinitionItem::createDesignOfExperiment()
   GridDesignOfExperiment design(doeName, physicalModel_);
   // emit signal to StudyManager to open a wizard
   emit analysisRequested(this, design);
+}
+
+
+void PhysicalModelDefinitionItem::createObservations()
+{
+  // check
+  if (!physicalModel_.isValid() || physicalModel_.getInputDimension() < 2)
+  {
+    emit showErrorMessageRequested(tr("The physical model must have at least two inputs and at least one selected output."));
+    return;
+  }
+  const String obsName(getParentStudyItem()->getStudy().getAvailableDataModelName(tr("observations_").toStdString()));
+  Observations obs(obsName, physicalModel_);
+  // emit signal to StudyManager to open a wizard
+  emit observationsRequested(this, obs);
 }
 
 

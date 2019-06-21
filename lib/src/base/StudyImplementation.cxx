@@ -23,6 +23,7 @@
 #include "persalys/ReliabilityAnalysis.hxx"
 #include "persalys/DesignOfExperimentAnalysis.hxx"
 #include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/CalibrationAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/Study.hxx>
@@ -153,7 +154,7 @@ void StudyImplementation::clear()
   // remove all the datamodels
   for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
   {
-    dataModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Observations");
+    dataModels_[i].getImplementation().get()->notifyAndRemove("observationsRemoved", "Observations");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "Study");
@@ -239,6 +240,7 @@ void StudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
   // remove analyses depending on designOfExperiment
   clear(designOfExperiment);
 
+  designOfExperiment.getImplementation().get()->notifyAndRemove("observationsRemoved", "Observations");
   designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
   designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
   designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "Study");
@@ -250,26 +252,22 @@ void StudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
 void StudyImplementation::clear(const DesignOfExperiment& designOfExperiment)
 {
   // remove all the analyses
-  PersistentCollection<Analysis>::iterator iterAnalysis = analyses_.begin();
-  while (iterAnalysis != analyses_.end())
+  PersistentCollection<Analysis>::iterator iter = analyses_.begin();
+  while (iter != analyses_.end())
   {
-    DesignOfExperimentAnalysis * analysis_ptr = dynamic_cast<DesignOfExperimentAnalysis*>((*iterAnalysis).getImplementation().get());
-    if (analysis_ptr)
+    DesignOfExperimentAnalysis * analysis_ptr1 = dynamic_cast<DesignOfExperimentAnalysis*>((*iter).getImplementation().get());
+    CalibrationAnalysis * analysis_ptr2 = dynamic_cast<CalibrationAnalysis*>((*iter).getImplementation().get());
+
+    if ((analysis_ptr1 && analysis_ptr1->getDesignOfExperiment() == designOfExperiment) ||
+        (analysis_ptr2 && analysis_ptr2->getObservations() == designOfExperiment))
     {
-      if (analysis_ptr->getDesignOfExperiment() == designOfExperiment)
-      {
-        analysis_ptr->notifyAndRemove("analysisRemoved", "Analysis");
-        analysis_ptr->notifyAndRemove("analysisRemoved", "Study");
-        iterAnalysis = analyses_.erase(iterAnalysis);
-      }
-      else
-      {
-        ++iterAnalysis;
-      }
+      (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+      (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "Study");
+      iter = analyses_.erase(iter);
     }
     else
     {
-      ++iterAnalysis;
+      ++iter;
     }
   }
 }

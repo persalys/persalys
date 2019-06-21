@@ -26,6 +26,7 @@
 #include "persalys/ProbabilisticModelItem.hxx"
 #include "persalys/LimitStateItem.hxx"
 #include "persalys/DesignOfExperimentDefinitionItem.hxx"
+#include "persalys/ObservationsItem.hxx"
 
 namespace PERSALYS
 {
@@ -43,6 +44,7 @@ public:
   void fill();
   void appendItem(Analysis& analysis);
   void appendItem(const LimitState& limitState);
+  void appendItem(const DesignOfExperiment& designOfExp);
 
 public slots:
   void appendPhysicalModelItem();
@@ -52,6 +54,8 @@ public slots:
   void requestReliabilityCreation();
   void requestLimitStateRemoval();
   void requestDesignOfExperimentRemoval(bool);
+  void requestObservationsRemoval();
+  void requestCalibrationCreation();
   void updateDesignEvaluationCounter(bool);
   void duplicatePhysicalModel();
   void removePhysicalModel();
@@ -67,6 +71,7 @@ signals:
   void limitStateNumberValidityChanged(bool);
   void doeNumberValidityChanged(bool);
   void doeEvaluationNumberValidityChanged(bool);
+  void observationsNumberValidityChanged(bool);
 
   // signals for StudyManager
   void evaluationModelRequested();
@@ -78,6 +83,7 @@ signals:
   void limitStateRequested();
   void designOfExperimentRequested();
   void designOfExperimentEvaluationRequested(const PhysicalModel&);
+  void observationsRequested();
 
   void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
   void meshWindowRequested(MeshItem*);
@@ -85,6 +91,7 @@ signals:
   void doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*);
   void analysisItemCreated(AnalysisItem*);
   void limitStateCreated(LimitStateItem*);
+  void observationsCreated(ObservationsItem*);
 
   void changeCurrentItemRequested(QModelIndex);
 
@@ -96,6 +103,7 @@ private:
   QAction * duplicateAction_;
   QAction * removeAction_;
   int limitStateCounter_;
+  int observationsCounter_;
   OT::Indices doeCounter_;
 };
 }
