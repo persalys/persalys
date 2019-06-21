@@ -12,5 +12,11 @@ wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory
 rem add documentation path in Environment variable PERSALYS_HTML_DOCUMENTATION_PATH
 wshEnv("PERSALYS_HTML_DOCUMENTATION_PATH") = currentDirectory + "\doc\html\"
 
+rem https://github.com/pal1000/mesa-dist-win/blob/master/readme.md#opengl-context-configuration-override
+wshEnv("MESA_GL_VERSION_OVERRIDE") = "3.2"
+
+rem uncomment this to override default language: en/fr
+rem wshEnv("LANG") = "en"
+
 rem need quotes if contains spaces (C:\Program Files)
 wshShell.run Chr(34) & fso.BuildPath(currentDirectory, "persalys.exe") & Chr(34)
