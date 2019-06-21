@@ -33,10 +33,12 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
 {
   MainWidget * mainWidget = findMainWidgetInHierachy();
   if (!mainWidget)
-    throw InvalidArgumentException(HERE) << "Internal error : No main window found !";
-
-  connect(this, SIGNAL(showDockWidgetRequested(QWidget*)), mainWidget, SLOT(showGraphSettingDockWidget(QWidget*)));
-  connect(this, SIGNAL(hideDockWidgetRequested(QWidget*)), mainWidget, SLOT(hideGraphSettingDockWidget(QWidget*)));
+    LOGWARN("No main window found ! no graph settings will be displayed");
+  else
+  {
+    connect(this, SIGNAL(showDockWidgetRequested(QWidget*)), mainWidget, SLOT(showGraphSettingDockWidget(QWidget*)));
+    connect(this, SIGNAL(hideDockWidgetRequested(QWidget*)), mainWidget, SLOT(hideGraphSettingDockWidget(QWidget*)));
+  }
 }
 
 
