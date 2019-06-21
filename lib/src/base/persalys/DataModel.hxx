@@ -54,9 +54,9 @@ public:
   /** Virtual constructor */
   virtual DataModel * clone() const;
 
-  OT::Description getInputNames();
-  OT::Description getOutputNames();
-  void setNames(const OT::Description & inputNames, const OT::Description & outputNames);
+  virtual OT::Description getInputNames();
+  virtual OT::Description getOutputNames();
+  virtual void setNames(const OT::Description & inputNames, const OT::Description & outputNames);
 
   virtual OT::String getPythonScript() const;
 
@@ -74,7 +74,7 @@ protected:
   virtual void update();
   virtual void setDefaultColumns();
 
-private:
+protected:
   OT::Description inputNames_;
   OT::Description outputNames_;
 };

@@ -217,7 +217,10 @@ String DataModel::getPythonScript() const
     oss << "inputSample.setDescription(" << Parameters::GetOTDescriptionStr(inputNames_) << ")\n";
     oss << "outputSample = ot.Sample(" << Parameters::GetOTSampleStr(getOutputSample()) << ")\n";
     oss << "outputSample.setDescription(" << Parameters::GetOTDescriptionStr(outputNames_) << ")\n";
-    oss << getName() << " = persalys.DataModel('" << getName() << "', inputSample, outputSample)\n";
+    if (!hasPhysicalModel())
+      oss << getName() << " = persalys."<< getClassName() <<"('" << getName() << "', inputSample, outputSample)\n";
+    else
+      oss << getName() << " = persalys."<< getClassName() <<"('" << getName() << "', " << getPhysicalModel().getName() << ", inputSample, outputSample)\n";
   }
   else
   {
@@ -227,7 +230,10 @@ String DataModel::getPythonScript() const
     oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
     oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";
 
-    oss << getName() << " = persalys.DataModel('" << getName() << "', ";
+    if (!hasPhysicalModel())
+      oss << getName() << " = persalys."<< getClassName() <<"('" << getName() << "', ";
+    else
+      oss << getName() << " = persalys."<< getClassName() <<"('" << getName() << "', " << getPhysicalModel().getName() <<", ";
     oss << "'" << getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
   }
 

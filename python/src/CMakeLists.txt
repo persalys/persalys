@@ -139,6 +139,7 @@ ot_add_python_module (persalys persalys_module.i
                       ImportedDesignOfExperiment.i ImportedDesignOfExperiment_doc.i.in
                       ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i.in
                       DataModel.i DataModel_doc.i.in
+                      Observations.i Observations_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       FieldMonteCarloResult.i FieldMonteCarloResult_doc.i.in
                       FieldMonteCarloAnalysis.i FieldMonteCarloAnalysis_doc.i.in

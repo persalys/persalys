@@ -153,6 +153,7 @@ void StudyImplementation::clear()
   // remove all the datamodels
   for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
   {
+    dataModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Observations");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
     dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "Study");
