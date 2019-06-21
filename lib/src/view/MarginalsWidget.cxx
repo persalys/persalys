@@ -54,6 +54,7 @@ namespace PERSALYS
 
 MarginalsWidget::MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent)
   : QWidget(parent)
+  , failSoftMode_(false)
   , study_(item->getParentStudyItem()->getStudy())
   , physicalModel_(item->getPhysicalModel())
 {
@@ -65,6 +66,21 @@ MarginalsWidget::MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
 
+  buildInterface();
+}
+
+
+MarginalsWidget::MarginalsWidget(const PhysicalModel& model, QWidget * parent)
+  : QWidget(parent)
+  , failSoftMode_(true)
+  , study_()
+  , physicalModel_(model)
+{
+  for (UnsignedInteger i = 0; i < 5; ++i)
+  {
+    parameterValuesLabel_[i] = 0;
+    parameterValuesEdit_[i] = 0;
+  }
   buildInterface();
 }
 
@@ -85,19 +101,22 @@ void MarginalsWidget::buildInterface()
   inputTableView_->setStyleSheet("QTableView::item:selected{background-color: " + ApplicationColor["lightColor"] + ";color: doubledarkgray;}");
 
   // - model
-  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, inputTableView_);
+  inputTableModel_ = new InputTableProbabilisticModel(physicalModel_, failSoftMode_, inputTableView_);
   inputTableView_->setModel(inputTableModel_);
 
-  // - header view
-  CheckableHeaderView * inputTableHeaderView = new CheckableHeaderView;
-  inputTableHeaderView->setStretchLastSection(true);
-  inputTableView_->setHorizontalHeader(inputTableHeaderView);
+  if (!failSoftMode_)
+  {
+    // - header view
+    CheckableHeaderView * inputTableHeaderView = new CheckableHeaderView;
+    inputTableView_->setHorizontalHeader(inputTableHeaderView);
 
-  // - delegate for distributions list
-  ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
-  delegate->setNoWheelEvent(true);
-  inputTableView_->setItemDelegateForColumn(1, delegate);
-  inputTableView_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    // - delegate for distributions list
+    ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
+    delegate->setNoWheelEvent(true);
+    inputTableView_->setItemDelegateForColumn(1, delegate);
+    inputTableView_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  }
+  inputTableView_->horizontalHeader()->setStretchLastSection(true);
 
   // - connections
   connect(inputTableView_->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), this, SLOT(updateDistributionWidgets(QModelIndex, QModelIndex)));
@@ -110,7 +129,7 @@ void MarginalsWidget::buildInterface()
   leftSideLayout->addWidget(inputTableView_);
 
 #ifdef PERSALYS_HAVE_OTMORRIS
-  if (!physicalModel_.hasMesh())
+  if (!failSoftMode_ && !physicalModel_.hasMesh())
   {
     // import Morris result button
     QPushButton * importButton = new QPushButton(tr("Import Morris result"));
@@ -182,22 +201,31 @@ void MarginalsWidget::buildInterface()
 
   rightFrameLayout->addWidget(new WidgetBoundToDockWidget(plotStackedWidget, plotsSettingWidget, this), 1);
 
-  // button to open the OT documentation
-  DocumentationToolButton * infoButton = new DocumentationToolButton("", FileTools::docOT);
-  connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
-  rightFrameLayout->addWidget(infoButton);
+  if (!failSoftMode_)
+  {
+    // button to open the OT documentation
+    DocumentationToolButton * infoButton = new DocumentationToolButton("", FileTools::docOT);
+    connect(infoButton, SIGNAL(clicked()), this, SLOT(openUrl()));
+    rightFrameLayout->addWidget(infoButton);
+  }
 
   // parameters
   QGroupBox * paramEditor = new QGroupBox(tr("Parameters"));
   QGridLayout * lay = new QGridLayout(paramEditor);
 
   // combobox to choose the type of distribution configuration
-  lay->addWidget(new QLabel(tr("Type")), 0, 0);
+  QLabel * typeLabel = new QLabel(tr("Type"));
+  lay->addWidget(typeLabel, 0, 0);
 
   selectParametersTypeCombo_ = new QComboBox;
   selectParametersTypeCombo_->setObjectName("paramTypeCombo");
   connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
   lay->addWidget(selectParametersTypeCombo_, 0, 1);
+  if (failSoftMode_)
+  {
+    typeLabel->hide();
+    selectParametersTypeCombo_->hide();
+  }
 
   // lineEdits to set the distribution parameters
   for (UnsignedInteger i = 0; i < 5; ++i)
@@ -214,28 +242,31 @@ void MarginalsWidget::buildInterface()
   rightFrameLayout->addWidget(paramEditor);
 
   // truncation parameters
-  truncationParamGroupBox_ = new CollapsibleGroupBox;
-  truncationParamGroupBox_->setTitle(tr("Truncation parameters"));
-  QGridLayout * truncationParamGroupBoxLayout = new QGridLayout(truncationParamGroupBox_);
+  if (!failSoftMode_)
+  {
+    truncationParamGroupBox_ = new CollapsibleGroupBox;
+    truncationParamGroupBox_->setTitle(tr("Truncation parameters"));
+    QGridLayout * truncationParamGroupBoxLayout = new QGridLayout(truncationParamGroupBox_);
 
-  lowerBoundCheckBox_ = new QCheckBox(tr("Lower bound"));
-  truncationParamGroupBoxLayout->addWidget(lowerBoundCheckBox_, 0, 0);
-  upperBoundCheckBox_ = new QCheckBox(tr("Upper bound"));
-  truncationParamGroupBoxLayout->addWidget(upperBoundCheckBox_, 1, 0);
+    lowerBoundCheckBox_ = new QCheckBox(tr("Lower bound"));
+    truncationParamGroupBoxLayout->addWidget(lowerBoundCheckBox_, 0, 0);
+    upperBoundCheckBox_ = new QCheckBox(tr("Upper bound"));
+    truncationParamGroupBoxLayout->addWidget(upperBoundCheckBox_, 1, 0);
 
-  lowerBoundLineEdit_ = new ValueLineEdit;
-  lowerBoundLineEdit_->setObjectName("lowerBound");
-  truncationParamGroupBoxLayout->addWidget(lowerBoundLineEdit_, 0, 1);
-  upperBoundLineEdit_ = new ValueLineEdit;
-  upperBoundLineEdit_->setObjectName("upperBound");
-  truncationParamGroupBoxLayout->addWidget(upperBoundLineEdit_, 1, 1);
+    lowerBoundLineEdit_ = new ValueLineEdit;
+    lowerBoundLineEdit_->setObjectName("lowerBound");
+    truncationParamGroupBoxLayout->addWidget(lowerBoundLineEdit_, 0, 1);
+    upperBoundLineEdit_ = new ValueLineEdit;
+    upperBoundLineEdit_->setObjectName("upperBound");
+    truncationParamGroupBoxLayout->addWidget(upperBoundLineEdit_, 1, 1);
 
-  connect(lowerBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
-  connect(upperBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
-  connect(lowerBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
-  connect(upperBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
+    connect(lowerBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
+    connect(upperBoundCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(truncationParametersStateChanged()));
+    connect(lowerBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
+    connect(upperBoundLineEdit_, SIGNAL(editingFinished()), this, SLOT(truncationParametersChanged()));
 
-  rightFrameLayout->addWidget(truncationParamGroupBox_);
+    rightFrameLayout->addWidget(truncationParamGroupBox_);
+  }
   rightFrameLayout->addStretch();
 
   rightScrollArea->setWidget(rightFrame);
@@ -282,8 +313,9 @@ void MarginalsWidget::updateProbabilisticModel()
   inputTableModel_->updateData();
 
   // - show combo box
-  for (int i = 0; i < inputTableModel_->rowCount(); ++i)
-    inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
+  if (!failSoftMode_)
+    for (int i = 0; i < inputTableModel_->rowCount(); ++i)
+      inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
 
   // update plots and truncation widgets
   if (inputTableModel_->rowCount())
@@ -405,12 +437,14 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
       parameterValuesEdit_[i]->hide();
     }
   }
+  if (failSoftMode_)
+    parameterValuesEdit_[0]->setDisabled(true);
 }
 
 
 void MarginalsWidget::updateTruncationParametersWidgets(const QModelIndex & index)
 {
-  if (!index.isValid())
+  if (failSoftMode_ || !index.isValid())
     return;
 
   SignalBlocker lowerBoundCheckBoxBlocker(lowerBoundCheckBox_);

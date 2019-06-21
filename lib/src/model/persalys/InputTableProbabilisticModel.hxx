@@ -32,7 +32,7 @@ class PERSALYS_API InputTableProbabilisticModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  InputTableProbabilisticModel(const PhysicalModel & physicalModel, const bool failSoftMode, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -49,6 +49,7 @@ signals:
   void inferenceResultRequested(const QModelIndex&);
 
 private:
+  bool failSoftMode_;
   PhysicalModel physicalModel_;
 };
 }
