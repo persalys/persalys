@@ -79,14 +79,14 @@ pqView * PVViewWidget::getView() const
 
 vtkTable * PVViewWidget::getTable(const UnsignedInteger repr_ind) const
 {
-  Q_ASSERT(repr_ind <= tables_.size());
+  Q_ASSERT((int)repr_ind <= tables_.size());
   return tables_[repr_ind];
 }
 
 
 vtkSMProxy * PVViewWidget::getProxy(const UnsignedInteger repr_ind) const
 {
-  Q_ASSERT(repr_ind <= producerBases_.size());
+  Q_ASSERT((int)repr_ind <= producerBases_.size());
   return producerBases_[repr_ind];
 }
 
@@ -295,7 +295,7 @@ void PVViewWidget::setAxisToShow(const QStringList& variablesNames)
 void PVViewWidget::updateTable(const Sample& sample, const UnsignedInteger repr_ind)
 {
   vtkIdType nbCols(getTable(repr_ind)->GetNumberOfColumns());
-  Q_ASSERT(sample.getDimension() == nbCols);
+  Q_ASSERT((int)sample.getDimension() == nbCols);
 
   for (vtkIdType i = 0; i < nbCols; i++)
   {
