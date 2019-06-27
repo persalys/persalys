@@ -110,52 +110,10 @@ void OptimizationAnalysis::setInterestVariables(const Description& variablesName
 
 void OptimizationAnalysis::initializeParameters()
 {
-  const InputCollection inputs = getPhysicalModel().getInputs();
-  UnsignedInteger nbInputs = inputs.getSize();
-
   inputNames_ = getPhysicalModel().getInputNames();
-  startingPoint_ = Point(nbInputs);
-  bounds_ = Interval(nbInputs);
   variableInputs_ = inputNames_;
 
-  Point lowerBounds(nbInputs);
-  Point upperBounds(nbInputs);
-
-  for (UnsignedInteger i = 0; i < nbInputs; ++i)
-  {
-    startingPoint_[i] = inputs[i].getValue();
-
-    if (!inputs[i].isStochastic())
-    {
-      lowerBounds[i] = -0.1;
-      upperBounds[i] = 0.1;
-      if (startingPoint_[i] != 0)
-      {
-        lowerBounds[i] = startingPoint_[i] - 0.1 * std::abs(startingPoint_[i]);
-        upperBounds[i] = startingPoint_[i] + 0.1 * std::abs(startingPoint_[i]);
-      }
-    }
-    else
-    {
-      const Distribution distribution = inputs[i].getDistribution();
-      // lower bound
-      if (distribution.getRange().getFiniteLowerBound()[0])
-        lowerBounds[i] = distribution.getRange().getLowerBound()[0];
-      else
-        lowerBounds[i] = distribution.computeQuantile(0.05)[0];
-      // upper bound
-      if (distribution.getRange().getFiniteUpperBound()[0])
-        upperBounds[i] = distribution.getRange().getUpperBound()[0];
-      else
-        upperBounds[i] = distribution.computeQuantile(0.95)[0];
-
-      // check if the interval contains the starting point
-      if (!Interval(lowerBounds[i], upperBounds[i]).contains(Point(1, startingPoint_[i])))
-        startingPoint_[i] = (upperBounds[i] + lowerBounds[i]) * 0.5;
-    }
-  }
-  bounds_.setLowerBound(lowerBounds);
-  bounds_.setUpperBound(upperBounds);
+  Tools::ComputeBounds(getPhysicalModel().getInputs(), startingPoint_, bounds_);
 }
 
 
@@ -207,6 +165,7 @@ void OptimizationAnalysis::initialize()
 
 void OptimizationAnalysis::launch()
 {
+  const Description modelInputNames(getPhysicalModel().getInputNames());
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
   // check
   if (getInterestVariables().getSize() != 1)
@@ -229,29 +188,22 @@ void OptimizationAnalysis::launch()
   Indices fixedInputsIndices;
   Point fixedInputsValues;
   Point variableInputsValues;
-  Point lowerB;
-  Point upperB;
-  Interval::BoolCollection finiteLowerB;
-  Interval::BoolCollection finiteUpperB;
+  Indices variableInputsIndices;
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
-    if (!variableInputs_.contains(getPhysicalModel().getInputNames()[i]))
+    if (!variableInputs_.contains(modelInputNames[i]))
     {
       fixedInputsIndices.add(i);
       fixedInputsValues.add(startingPoint_[i]);
     }
     else
     {
+      variableInputsIndices.add(i);
       variableInputsValues.add(startingPoint_[i]);
-      lowerB.add(getBounds().getLowerBound()[i]);
-      upperB.add(getBounds().getUpperBound()[i]);
-      finiteLowerB.add(getBounds().getFiniteLowerBound()[i]);
-      finiteUpperB.add(getBounds().getFiniteUpperBound()[i]);
     }
   }
   // check bounds
-  Interval bounds(lowerB, upperB, finiteLowerB, finiteUpperB);
-  if (bounds.isEmpty())
+  if (bounds_.getMarginal(variableInputsIndices).isEmpty())
     throw InvalidArgumentException(HERE) << "The lower bounds must be less than the upper bounds";
 
   // set objective
@@ -260,7 +212,7 @@ void OptimizationAnalysis::launch()
     objective = ParametricFunction(objective, fixedInputsIndices, fixedInputsValues);
 
   // set OptimizationProblem
-  OptimizationProblem problem(objective, Function(), Function(), bounds);
+  OptimizationProblem problem(objective, Function(), Function(), bounds_.getMarginal(variableInputsIndices));
   problem.setMinimization(isMinimization_);
 
   // build solver

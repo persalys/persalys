@@ -165,9 +165,9 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
         case 2:
           return QString::number(designOfExperiment_.getValues()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         case 3:
-          return QString::number(designOfExperiment_.getLowerBounds()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+          return QString::number(designOfExperiment_.getBounds().getLowerBound()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         case 4:
-          return QString::number(designOfExperiment_.getUpperBounds()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+          return QString::number(designOfExperiment_.getBounds().getUpperBound()[indexInput], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         case 5:
         {
           if (designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
@@ -183,6 +183,22 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
     {
       return designOfExperiment_.getLevels()[index.row() - 1] == 1 ? Qt::Unchecked : Qt::Checked;
     }
+    else if ((role == Qt::ForegroundRole || role == Qt::ToolTipRole) && index.column() == 0)
+    {
+      const int inputIndex = index.row() - 1;
+      const String currentInputName = designOfExperiment_.getPhysicalModel().getInputNames()[inputIndex];
+      // check bounds
+      if (designOfExperiment_.getVariableInputNames().contains(currentInputName))
+      {
+        if (designOfExperiment_.getBounds().getMarginal(inputIndex).isEmpty())
+        {
+          if (role == Qt::ForegroundRole)
+            return QColor(Qt::red);
+          else if (role == Qt::ToolTipRole)
+            return tr("The lower bound must be less than the upper bound");
+        }
+      }
+    }
   }
   return QVariant();
 }
@@ -190,6 +206,9 @@ QVariant ExperimentTableModel::data(const QModelIndex & index, int role) const
 
 bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+  if (role == Qt::DisplayRole)
+    return true;
+
   // header
   if (index.row() == 0)
   {
@@ -203,19 +222,13 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
     // fifth column : select levels or deltas
     else if (role == Qt::EditRole && index.column() == 5)
     {
-      try
-      {
-        if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndDeltas)
-          designOfExperiment_.setLevels(designOfExperiment_.getLevels());
-        else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
-          designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
-        else
-          return false;
-      }
-      catch (std::exception & ex)
-      {
-        emit errorMessageChanged(ex.what());
-      }
+      if (value.toString() == tr("Levels") && designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndDeltas)
+        designOfExperiment_.setLevels(designOfExperiment_.getLevels());
+      else if (value.toString() == tr("Delta") && designOfExperiment_.getTypeDesignOfExperiment() == GridDesignOfExperiment::FromBoundsAndLevels)
+        designOfExperiment_.setDeltas(designOfExperiment_.getDeltas());
+      else
+        return false;
+
       emit dataChanged(this->index(1, 5), this->index(rowCount() - 1, 5));
     }
   }
@@ -236,33 +249,19 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           levels[indexInput] = 1;
         else
           return false;
-        try
-        {
-          designOfExperiment_.setLevels(levels);
-        }
-        catch (std::exception & ex)
-        {
-          emit errorMessageChanged(ex.what());
-        }
+        designOfExperiment_.setLevels(levels);
       }
       // doe defined with deltas
       else
       {
         Point deltas = designOfExperiment_.getDeltas();
         if (value.toDouble() == Qt::Checked)
-          deltas[indexInput] = designOfExperiment_.getUpperBounds()[indexInput] - designOfExperiment_.getLowerBounds()[indexInput];
+          deltas[indexInput] = designOfExperiment_.getBounds().getMarginal(indexInput).getVolume();
         else if (value.toDouble() == Qt::Unchecked)
           deltas[indexInput] = 0;
         else
           return false;
-        try
-        {
-          designOfExperiment_.setDeltas(deltas);
-        }
-        catch (std::exception & ex)
-        {
-          emit errorMessageChanged(ex.what());
-        }
+        designOfExperiment_.setDeltas(deltas);
       }
       firstColumnChecked_ = !designOfExperiment_.getLevels().contains(1);
 
@@ -283,56 +282,34 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
           if (values[indexInput] == value.toDouble())
             return false;
           values[indexInput] = value.toDouble();
-          try
-          {
-            designOfExperiment_.setValues(values);
-          }
-          catch (std::exception & ex)
-          {
-            emit errorMessageChanged(ex.what());
-          }
+          designOfExperiment_.setValues(values);
+
           break;
         }
         case 3: // lower bounds
         {
-          if (value.toDouble() >= designOfExperiment_.getUpperBounds()[indexInput])
-          {
-            emit errorMessageChanged(tr("The lower bound must be less than the upper bound"));
-            return false;
-          }
-          Point lowerBounds = designOfExperiment_.getLowerBounds();
+          Point lowerBounds = designOfExperiment_.getBounds().getLowerBound();
           if (lowerBounds[indexInput] == value.toDouble())
             return false;
           lowerBounds[indexInput] = value.toDouble();
-          try
-          {
-            designOfExperiment_.setLowerBounds(lowerBounds);
-          }
-          catch (std::exception & ex)
-          {
-            emit errorMessageChanged(ex.what());
-          }
+          Interval newInterval(designOfExperiment_.getBounds());
+          newInterval.setLowerBound(lowerBounds);
+
+          designOfExperiment_.setBounds(newInterval);
+
           break;
         }
         case 4: // upper bounds
         {
-          if (value.toDouble() <= designOfExperiment_.getLowerBounds()[indexInput])
-          {
-            emit errorMessageChanged(tr("The upper bound must be greater than the lower bound"));
-            return false;
-          }
-          Point upperBounds = designOfExperiment_.getUpperBounds();
+          Point upperBounds = designOfExperiment_.getBounds().getUpperBound();
           if (upperBounds[indexInput] == value.toDouble())
             return false;
           upperBounds[indexInput] = value.toDouble();
-          try
-          {
-            designOfExperiment_.setUpperBounds(upperBounds);
-          }
-          catch (std::exception & ex)
-          {
-            emit errorMessageChanged(ex.what());
-          }
+          Interval newInterval(designOfExperiment_.getBounds());
+          newInterval.setUpperBound(upperBounds);
+
+          designOfExperiment_.setBounds(newInterval);
+
           break;
         }
         case 5: // levels or deltas
@@ -346,14 +323,8 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             if (nbValues[indexInput] == value.toUInt())
               return false;
             nbValues[indexInput] = value.toUInt();
-            try
-            {
-              designOfExperiment_.setLevels(nbValues);
-            }
-            catch (std::exception & ex)
-            {
-              emit errorMessageChanged(ex.what());
-            }
+            designOfExperiment_.setLevels(nbValues);
+
             break;
           }
           // deltas
@@ -363,22 +334,17 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
             if (deltas[indexInput] == value.toDouble())
               return false;
             deltas[indexInput] = value.toDouble();
-            if (deltas[indexInput] <= (designOfExperiment_.getUpperBounds()[indexInput] - designOfExperiment_.getLowerBounds()[indexInput]))
+
+            try
             {
-              try
-              {
-                designOfExperiment_.setDeltas(deltas);
-              }
-              catch (std::exception & ex)
-              {
-                emit errorMessageChanged(ex.what());
-              }
+              designOfExperiment_.setDeltas(deltas);
             }
-            else
+            catch (std::exception & ex)
             {
-              emit errorMessageChanged(tr("Delta must be less than (the upper bound - the lower bound)"));
+              emit errorMessageChanged(tr("All the deltas must be greater or equal to 0 and less than the interval length"));
               return false;
             }
+
             break;
           }
         }
@@ -387,6 +353,7 @@ bool ExperimentTableModel::setData(const QModelIndex & index, const QVariant & v
       }
     }
   }
+  emit errorMessageChanged("");
   emit doeSizeChanged(QString::number(designOfExperiment_.getOriginalInputSample().getSize()));
   return true;
 }

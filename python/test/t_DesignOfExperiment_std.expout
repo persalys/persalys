@@ -55,10 +55,9 @@ formulas = ['sin(X0)+8*X1']
 aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 anOTStudy.add(aModelPhys)
 values = [1,2]
-lowerBounds = [0.9,1.8]
-upperBounds = [1.1,2.2]
+bounds = ot.Interval([0.9,1.8], [1.1,2.2])
 levels = [2,2]
-aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', aModelPhys, lowerBounds, upperBounds, levels, values)
+aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', aModelPhys, bounds, levels, values)
 aDesign_1.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_1.setInterestVariables(interestVariables)

@@ -21,7 +21,7 @@
 #ifndef PERSALYS_BASETOOLS_HXX
 #define PERSALYS_BASETOOLS_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#include "Input.hxx"
 
 #include <openturns/OTType.hxx>
 
@@ -57,6 +57,7 @@ public:
   static OT::Sample ImportSample(const OT::String& fileName);
   static OT::String GetLocaleString(const OT::String& str);
   static int IsUTF8(const char *data, size_t size);
+  static void ComputeBounds(const InputCollection& inputs, OT::Point& startingPoint, OT::Interval& bounds);
 };
 
 

@@ -115,7 +115,7 @@ lowerBounds = [10035.5, 2975.33, 3901.31]
 upperBounds = [10364.5, 3024.67, 4098.69]
 levels = [10, 10, 10]
 design_1 = persalys.GridDesignOfExperiment(
-    'aDesign_1', model, lowerBounds, upperBounds, levels, values)
+    'aDesign_1', model, ot.Interval(lowerBounds, upperBounds), levels, values)
 design_1.run()
 myStudy.add(design_1)
 

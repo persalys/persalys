@@ -144,4 +144,25 @@ Analysis GridDesignPage::getAnalysis()
   Q_ASSERT(tableModel_);
   return tableModel_->getDesignOfExperiment();
 }
+
+
+bool GridDesignPage::validatePage()
+{
+  Interval bounds(tableModel_->getDesignOfExperiment().getBounds());
+  const Description inputNames(tableModel_->getDesignOfExperiment().getPhysicalModel().getInputNames());
+  for (UnsignedInteger i = 0; i < tableModel_->getDesignOfExperiment().getPhysicalModel().getInputDimension(); ++i)
+  {
+    if (tableModel_->getDesignOfExperiment().getVariableInputNames().contains(inputNames[i]))
+    {
+
+      if (bounds.getMarginal(i).isEmpty())
+      {
+        errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
 }

@@ -39,6 +39,7 @@ public:
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis();
+  bool validatePage();
 
 protected:
   void buildInterface();
