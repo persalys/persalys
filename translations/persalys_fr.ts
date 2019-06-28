@@ -251,78 +251,53 @@
 <context>
     <name>PERSALYS::ApproximationReliabilityPage</name>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="64"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="59"/>
         <source>Optimization parameters</source>
         <translation>Optimisation des paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="71"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="66"/>
         <source>Algorithm</source>
         <translation>Algorithme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="75"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="70"/>
         <source>Abdo-Rackwitz</source>
         <translation>Abdo-Rackwitz</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="81"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="76"/>
         <source>Cobyla</source>
         <translation>Cobyla</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="86"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="81"/>
         <source>SQP</source>
         <translation>SQP</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="93"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="88"/>
         <source>Starting point</source>
         <translation>Point de départ</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="96"/>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="220"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="91"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="171"/>
         <source>Physical starting point</source>
         <translation>Point de départ physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="112"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="107"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="116"/>
-        <source>Maximum number of evaluations</source>
-        <translation>Nombre maximum d&apos;évaluations</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="125"/>
-        <source>Absolute error</source>
-        <translation>Erreur absolue</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="133"/>
-        <source>Relative error</source>
-        <translation>Erreur relative</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="141"/>
-        <source>Residual error</source>
-        <translation>Erreur sur les résidus</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="149"/>
-        <source>Constraint error</source>
-        <translation>Erreur sur la contrainte</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="218"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="169"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="218"/>
+        <location filename="../lib/src/view/ApproximationReliabilityPage.cxx" line="169"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
@@ -808,12 +783,12 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CopyableTableView</name>
     <message>
-        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="118"/>
+        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="131"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="119"/>
+        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="132"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
@@ -871,16 +846,16 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="577"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="927"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="829"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="646"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="699"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="738"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="745"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="877"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="617"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="637"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="658"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="665"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="779"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
@@ -956,65 +931,49 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="607"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="874"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="949"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="776"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="851"/>
         <source>Scatter plot</source>
         <translation>Diagramme de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="631"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="661"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="683"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="724"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="753"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="768"/>
-        <source>Size</source>
-        <translation>Taille</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="635"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="728"/>
-        <source>Export</source>
-        <translation>Exporter</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="652"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="624"/>
         <source>Points</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="674"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="629"/>
         <source>Failed blocks</source>
         <translation>Blocs échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="696"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="775"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="840"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="634"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="677"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="742"/>
         <source>Non-evaluated points</source>
         <translation>Points non évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="827"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="729"/>
         <source>Evaluated points</source>
         <translation>Points évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="760"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="833"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="671"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="735"/>
         <source>Failed points</source>
         <translation>Points échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="802"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="704"/>
         <source>Status
 0: failed; 1: ok</source>
         <translation>Statut
 0: échoué; 1: ok</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="814"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="908"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="716"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="810"/>
         <source>Cobweb plot</source>
         <translation>Graphique Cobweb</translation>
     </message>
@@ -1223,7 +1182,7 @@ métamodèle</translation>
     <name>PERSALYS::DataModelTableModel</name>
     <message>
         <location filename="../lib/src/model/DataModelTableModel.cxx" line="98"/>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="344"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="345"/>
         <source>The sample contains invalid values</source>
         <translation>L&apos;échantillon contient des valeurs invalides</translation>
     </message>
@@ -1267,7 +1226,7 @@ métamodèle</translation>
         <translation>Le nom %2 est déjà utilisé par une autre variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelTableModel.cxx" line="341"/>
+        <location filename="../lib/src/model/DataModelTableModel.cxx" line="342"/>
         <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
@@ -1290,18 +1249,18 @@ métamodèle</translation>
         <translation>Echantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="313"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="302"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="315"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="304"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="304"/>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="326"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="293"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="315"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -1316,14 +1275,14 @@ métamodèle</translation>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="305"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="294"/>
         <source>Cannot update the table.
 %1</source>
         <translation>Impossible de mettre à jour la table.
 %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelWindow.cxx" line="327"/>
+        <location filename="../lib/src/view/DataModelWindow.cxx" line="316"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
@@ -1777,59 +1736,60 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="128"/>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="138"/>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="208"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="225"/>
         <source>Levels</source>
         <translation>Niveaux</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="130"/>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="138"/>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="210"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="227"/>
         <source>Delta</source>
         <translation>Incrément</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="300"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="198"/>
         <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="321"/>
-        <source>The upper bound must be greater than the lower bound</source>
-        <translation>La borne supérieure doit être supérieure à la borne inférieure</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="379"/>
-        <source>Delta must be less than (the upper bound - the lower bound)</source>
-        <translation>L&apos;incrément doit être inférieur à (la borne supérieure - la borne inférieure)</translation>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="344"/>
+        <source>All the deltas must be greater or equal to 0 and less than the interval length</source>
+        <translation>Tous les incréments doivent être supérieurs ou égaux à 0 et inférieurs à la longueur de l&apos;intervalle</translation>
     </message>
 </context>
 <context>
     <name>PERSALYS::ExportableTableView</name>
     <message>
-        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="41"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="44"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="145"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="42"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="45"/>
         <source>Export the data</source>
         <translation>Exporter les données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="54"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="57"/>
         <source>Export as Image</source>
         <translation>Exporter comme image</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="55"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="58"/>
         <source>Export table as image</source>
         <translation>Exporter la table comme image</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="97"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="100"/>
         <source>Internal exception: cannot get the sample</source>
         <translation>Erreur interne: impossible de récupérer l&apos;échantillon</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="140"/>
+        <source>Size</source>
+        <translation>Taille</translation>
     </message>
 </context>
 <context>
@@ -2900,59 +2860,66 @@ des étiquettes</translation>
         <source>Define a grid</source>
         <translation>Définir une grille</translation>
     </message>
+    <message>
+        <location filename="../lib/src/view/GridDesignPage.cxx" line="160"/>
+        <source>The lower bounds must be less than the upper bounds</source>
+        <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
+    </message>
 </context>
 <context>
-    <name>PERSALYS::ImportedDesignPage</name>
+    <name>PERSALYS::ImportSampleWidget</name>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="54"/>
-        <source>Import table from file</source>
-        <translation>Importer une table d&apos;un fichier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="60"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="59"/>
         <source>Data file</source>
         <translation>Fichier de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="74"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="73"/>
         <source>File Preview</source>
         <translation>Prévisualisation du fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="81"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="80"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="102"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="101"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="104"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="103"/>
         <source>Data files (*.csv *.txt)</source>
         <translation>Fichiers de données (*.csv *.txt)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="115"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="114"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="116"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="115"/>
         <source>Cannot read file %1:
 %2</source>
-        <translation>Impossible de lire le fichier %1: 
+        <translation>Impossible de lire le fichier %1 :
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="140"/>
+        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="139"/>
         <source>Impossible to load the file.%1%2</source>
         <translation>Impossible de charger le fichier.%1%2</translation>
     </message>
+</context>
+<context>
+    <name>PERSALYS::ImportedDesignPage</name>
     <message>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="212"/>
-        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="226"/>
+        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="43"/>
+        <source>Import table from file</source>
+        <translation>Importer une table d&apos;un fichier</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ImportedDesignPage.cxx" line="77"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
     </message>
@@ -3691,112 +3658,65 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::MeshDefinitionWizard</name>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="60"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="47"/>
         <source>Mesh definition</source>
         <translation>Définition du maillage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="63"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="50"/>
         <source>Define the mesh</source>
         <translation>Définir le maillage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="70"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="57"/>
         <source>Regular mesh</source>
         <translation>Maillage régulier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="74"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="62"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="75"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="63"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="76"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="64"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="77"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="65"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="78"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="66"/>
         <source>Number of nodes</source>
         <translation>Nombre de noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="114"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="103"/>
         <source>Import mesh</source>
         <translatorcomment>Importer le maillage</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="123"/>
-        <source>File</source>
-        <translation>Fichier</translation>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="176"/>
+        <source>The parameter must be associated with one column.</source>
+        <translation>Le paramètre doit être associé à une colonne.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="137"/>
-        <source>File Preview</source>
-        <translation>Prévisualisation du fichier</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="144"/>
-        <source>Size</source>
-        <translation>Taille</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="189"/>
-        <source>Data to import...</source>
-        <translation>Importer des données...</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="191"/>
-        <source>Data files (*.csv *.txt)</source>
-        <translation>Fichiers de données (*.csv *.txt)</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="202"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="203"/>
-        <source>Cannot read file %1:
-%2</source>
-        <translation>Impossible de lire le fichier %1 :
-%2</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="226"/>
-        <source>Impossible to load the file.%1%2</source>
-        <translation>Impossible de charger le fichier.%1%2</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="310"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="205"/>
         <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="312"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="207"/>
         <source>The mesh must contain at least two nodes</source>
         <translation>Le maillage doit contenir au moins deux noeuds</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="317"/>
-        <source>The file name is empty</source>
-        <translation>Le nom du fichier est vide</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="329"/>
-        <source>Choose a column</source>
-        <translation>Choisir une colonne</translation>
     </message>
 </context>
 <context>
@@ -3810,66 +3730,66 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::MeshWindow</name>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="69"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="266"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="68"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="273"/>
         <source>Mesh</source>
         <translation>Maillage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="72"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="71"/>
         <source>Index parameter</source>
         <translation>Paramètre d&apos;indexation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="80"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="79"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="81"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="80"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="82"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="81"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="83"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="82"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="84"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="83"/>
         <source>Number of nodes</source>
         <translation>Nombre de noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="117"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="162"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="169"/>
         <source>Regular mesh : %1</source>
         <translation>Maillage régulier : %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="117"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="162"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="169"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="117"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="162"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="113"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="169"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="198"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="205"/>
         <source>Number of nodes = %1</source>
         <translation>Nombre de noeuds = %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="280"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="287"/>
         <source>Nodes</source>
         <translation>Noeuds</translation>
     </message>
@@ -4571,6 +4491,29 @@ ou interaction</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::OptimizationBoundsPage</name>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="48"/>
+        <source>Inputs</source>
+        <translation>Entrées</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="118"/>
+        <source>At least one variable must vary</source>
+        <translation>Au moins une variable doit variée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="104"/>
+        <source>The lower bounds must be less than the upper bounds</source>
+        <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="109"/>
+        <source>The interval must contain the starting point</source>
+        <translation>L&apos;intervalle doit contenir le point de départ</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::OptimizationIntroPage</name>
     <message>
         <location filename="../lib/src/view/OptimizationIntroPage.cxx" line="44"/>
@@ -4705,6 +4648,34 @@ ou interaction</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::OptimizationStoppingCriteria</name>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="132"/>
+        <source>Number of evaluations</source>
+        <translation>Nombre d&apos;évaluations</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="141"/>
+        <source>Absolute error</source>
+        <translation>Erreur absolue</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="149"/>
+        <source>Relative error</source>
+        <translation>Erreur relative</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="157"/>
+        <source>Residual error</source>
+        <translation>Erreur sur les résidus</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="165"/>
+        <source>Constraint error</source>
+        <translation>Erreur sur la contrainte</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::OptimizationTableModel</name>
     <message>
         <location filename="../lib/src/model/OptimizationTableModel.cxx" line="111"/>
@@ -4745,79 +4716,39 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OptimizationWizard</name>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="45"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="185"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="57"/>
-        <source>Inputs</source>
-        <translation>Entrées</translation>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="194"/>
+        <source>Choose the input variables to optimize. Define the starting point and the bounds of the optimization algorithm.</source>
+        <translation>Choisir les entrées à optimiser. Définir le point de départ et les bornes de l&apos;algorithme d&apos;optimisation.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="104"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="203"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="107"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="206"/>
         <source>Problem type</source>
         <translation>Type d&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="110"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="209"/>
         <source>Minimization</source>
         <translation>Minimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="110"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="209"/>
         <source>Maximization</source>
         <translation>Maximisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="120"/>
-        <source>Number of function evaluations</source>
-        <translation>Nombre d&apos;évaluations</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="247"/>
-        <source>At least one variable must vary</source>
-        <translation>Au moins une variable doit variée</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="253"/>
-        <source>The lower bounds must be less than the upper bounds</source>
-        <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="258"/>
-        <source>The interval must contain the starting point</source>
-        <translation>L&apos;intervalle doit contenir le point de départ</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="129"/>
-        <source>Absolute error</source>
-        <translation>Erreur absolue</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="116"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="215"/>
         <source>Stopping criteria</source>
         <translation>Critères d&apos;arrêt</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="137"/>
-        <source>Relative error</source>
-        <translation>Erreur relative</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="145"/>
-        <source>Residual error</source>
-        <translation>Erreur sur les résidus</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="153"/>
-        <source>Constraint error</source>
-        <translation>Erreur sur la contrainte</translation>
     </message>
 </context>
 <context>
@@ -4909,9 +4840,15 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::PVSpreadSheetViewWidget</name>
     <message>
-        <location filename="../lib/src/view/plot/paraview/PVSpreadSheetViewWidget.cxx" line="40"/>
+        <location filename="../lib/src/view/plot/paraview/PVSpreadSheetViewWidget.cxx" line="43"/>
+        <location filename="../lib/src/view/plot/paraview/PVSpreadSheetViewWidget.cxx" line="71"/>
         <source>Export</source>
         <translation>Exporter</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/paraview/PVSpreadSheetViewWidget.cxx" line="67"/>
+        <source>Size</source>
+        <translation>Taille</translation>
     </message>
 </context>
 <context>
