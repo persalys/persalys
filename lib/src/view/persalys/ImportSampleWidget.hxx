@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to import sample to define designs of experiments
+ *  @brief QWidget to import sample
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,38 +18,45 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_IMPORTDESIGNOFEXPERIMENTPAGE_HXX
-#define PERSALYS_IMPORTDESIGNOFEXPERIMENTPAGE_HXX
+#ifndef PERSALYS_IMPORTSAMPLEWIDGET_HXX
+#define PERSALYS_IMPORTSAMPLEWIDGET_HXX
 
-#include "persalys/Analysis.hxx"
-#include "persalys/ImportedDesignOfExperiment.hxx"
-#include "persalys/ImportSampleWidget.hxx"
+#include "persalys/ExportableTableView.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
-#include <QWizardPage>
+#include <openturns/OTType.hxx>
+
+#include <QLineEdit>
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportedDesignPage : public QWizardPage
+class PERSALYS_API ImportSampleWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  ImportedDesignPage(QWidget *parent = 0);
+  friend class ImportedDesignPage;
+  friend class MeshDefinitionWizard;
 
-  void initialize(const Analysis& analysis);
-  Analysis getAnalysis();
-  bool validatePage();
+  ImportSampleWidget(QWidget *parent = 0);
 
 protected:
   void buildInterface();
+  void setData(const QString & fileName);
+  void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns);
 
 public slots:
-  void setTable(const QString& fileName);
-  void checkColumns();
+  void openFileRequested();
+signals:
+  void updateTableRequested(const QString & fileName);
+  void checkColumnsRequested();
 
-private:
-  ImportSampleWidget * sampleWidget_;
-  ImportedDesignOfExperiment designOfExperiment_;
+protected:
+  bool tableValidity_;
+  QLineEdit * filePathLineEdit_;
+  ExportableTableView * dataPreviewTableView_;
+  QLabel * DOESizeLabel_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

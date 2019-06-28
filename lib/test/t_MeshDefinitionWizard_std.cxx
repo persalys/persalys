@@ -31,7 +31,7 @@ private slots:
     // checks
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
     QVERIFY2(wizard.methodGroup_->checkedId() == MeshDefinitionWizard::Grid, "Checked button must be Grid");
-    QVERIFY2(!wizard.dataPreviewTableView_->isEnabled(), "Table view must be not enabled");
+    QVERIFY2(!wizard.sampleWidget_->dataPreviewTableView_->isEnabled(), "Table view must be not enabled");
     QVERIFY2(static_cast<QWidget*>(wizard.tableModel_->parent())->isEnabled(), "Table view must be enabled");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
@@ -75,34 +75,36 @@ private slots:
     wizard.show();
 
     // checks
+    ImportSampleWidget * sampleWidget = wizard.sampleWidget_;
+
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
     QVERIFY2(!static_cast<QWidget*>(wizard.tableModel_->parent())->isEnabled(), "Table view must be not enabled");
-    QVERIFY2(wizard.dataPreviewTableView_->isEnabled(), "Table view must be enabled");
+    QVERIFY2(sampleWidget->dataPreviewTableView_->isEnabled(), "Table view must be enabled");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
     OT::Sample(1, OT::Point(1, 2.5)).exportToCSVFile(file.fileName().toStdString());
-    wizard.setData(file.fileName());
+    sampleWidget->setData(file.fileName());
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!wizard.errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
     OT::Sample(2, OT::Point(2, 2.5)).exportToCSVFile(file.fileName().toStdString());
-    wizard.setData(file.fileName());
-    wizard.dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "", Qt::DisplayRole);
+    sampleWidget->setData(file.fileName());
+    sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!wizard.errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
-    wizard.dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "t", Qt::DisplayRole);
+    sampleWidget->dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "t", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    wizard.dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "t", Qt::DisplayRole);
+    sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "t", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!wizard.errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
-    wizard.dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "", Qt::DisplayRole);
+    sampleWidget->dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
     bool analysisEquality = wizard.getMesh().getPythonScript()==meshModel.getPythonScript();
     QVERIFY2(analysisEquality, "The two ImportedMeshModel must be equal");
@@ -119,19 +121,20 @@ private slots:
     wizard.show();
 
     // checks
+    ImportSampleWidget * sampleWidget = wizard.sampleWidget_;
     wizard.methodGroup_->button(MeshDefinitionWizard::Import)->click();
-    QVERIFY2(wizard.dataPreviewTableView_->isEnabled(), "Table view must be enabled");
+    QVERIFY2(sampleWidget->dataPreviewTableView_->isEnabled(), "Table view must be enabled");
 
     QTemporaryFile file;
     QVERIFY2(file.open(), "Can not open the file");
-    wizard.setData(file.fileName());
+    sampleWidget->setData(file.fileName());
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!wizard.errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
     OT::Sample(2, OT::Point(1, 2.5)).exportToCSVFile(file.fileName().toStdString());
-    wizard.setData(file.fileName());
+    sampleWidget->setData(file.fileName());
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
     bool analysisEquality = wizard.getMesh().getPythonScript()==ImportedMeshModel(file.fileName().toStdString()).getPythonScript();
     QVERIFY2(analysisEquality, "The two ImportedMeshModel must be equal");

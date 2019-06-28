@@ -22,13 +22,14 @@
 #define PERSALYS_MESHDEFINITIONWIZARD_HXX
 
 #include "persalys/Wizard.hxx"
-#include "persalys/TemporaryLabel.hxx"
-#include "persalys/MeshModel.hxx"
-#include "persalys/ExportableTableView.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/ImportSampleWidget.hxx"
+#include "persalys/GridMeshModel.hxx"
+#include "persalys/ImportedMeshModel.hxx"
+#include "persalys/CopyableTableView.hxx"
 
-#include <QLineEdit>
 #include <QButtonGroup>
+#include <QResizeEvent>
 
 namespace PERSALYS
 {
@@ -47,20 +48,20 @@ public:
 
 protected:
   void buildInterface();
-  void setTable(const QString& fileName);
-  void setData(const QString & fileName);
+  virtual void resizeEvent(QResizeEvent * event);
 
 public slots:
-  void openFileRequested();
+  void setTable(const QString& fileName);
+  void checkColumns();
 
 private:
   MeshModel mesh_;
-  OT::Indices columns_;
   QButtonGroup * methodGroup_;
+  ImportSampleWidget * sampleWidget_;
+  CopyableTableView * tableView_;
   CustomStandardItemModel * tableModel_;
-  QLineEdit * filePathLineEdit_;
-  ExportableTableView * dataPreviewTableView_;
-  QLabel * sizeLabel_;
+  GridMeshModel gridMesh_;
+  ImportedMeshModel importedMesh_;
   TemporaryLabel * errorMessageLabel_;
 };
 }

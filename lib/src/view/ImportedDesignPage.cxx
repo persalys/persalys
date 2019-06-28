@@ -20,16 +20,9 @@
  */
 #include "persalys/ImportedDesignPage.hxx"
 
-#include "persalys/HorizontalHeaderViewWithCombobox.hxx"
-#include "persalys/SampleTableModel.hxx"
-#include "persalys/FileTools.hxx"
+#include "persalys/QtTools.hxx"
 
-#include <QScrollBar>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QToolButton>
-#include <QFileDialog>
-#include <QMessageBox>
+#include <QVBoxLayout>
 
 using namespace OT;
 
@@ -38,12 +31,8 @@ namespace PERSALYS
 
 ImportedDesignPage::ImportedDesignPage(QWidget* parent)
   : QWizardPage(parent)
+  , sampleWidget_(new ImportSampleWidget(this))
   , designOfExperiment_()
-  , pageValidity_(false)
-  , filePathLineEdit_(0)
-  , dataPreviewTableView_(0)
-  , DOESizeLabel_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -53,93 +42,10 @@ void ImportedDesignPage::buildInterface()
 {
   setWindowTitle(tr("Import table from file"));
 
-  QGridLayout * mainGridLayout = new QGridLayout(this);
-
-  // file path
-  QHBoxLayout * hboxLayout = new QHBoxLayout;
-  QLabel * label = new QLabel(tr("Data file"));
-  hboxLayout->addWidget(label);
-
-  filePathLineEdit_ = new QLineEdit;
-  hboxLayout->addWidget(filePathLineEdit_);
-
-  QToolButton * openFileButton = new QToolButton;
-  openFileButton->setText("...");
-  connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
-  hboxLayout->addWidget(openFileButton);
-
-  mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
-
-  // file preview
-  QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
-  QGridLayout * gridLayout = new QGridLayout(groupBox);
-  gridLayout->setSpacing(6);
-  gridLayout->setContentsMargins(11, 11, 11, 11);
-
-  // DOE size
-  QHBoxLayout * sizeLayout = new QHBoxLayout;
-  QLabel * sizeLabel = new QLabel(tr("Size") + " : ");
-  sizeLayout->addWidget(sizeLabel);
-  DOESizeLabel_ = new QLabel(QString::number(0));
-  sizeLayout->addWidget(DOESizeLabel_);
-  sizeLayout->addStretch();
-  gridLayout->addLayout(sizeLayout, 0, 0);
-
-  dataPreviewTableView_ = new ExportableTableView(groupBox);
-  gridLayout->addWidget(dataPreviewTableView_, 1, 0, 1, 1);
-
-  mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
-
-  // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
-}
-
-
-void ImportedDesignPage::openFileRequested()
-{
-  QString fileName = QFileDialog::getOpenFileName(this,
-                     tr("Data to import..."),
-                     FileTools::GetCurrentDir(),
-                     tr("Data files (*.csv *.txt)"));
-
-  if (!fileName.isEmpty())
-  {
-    QFile file(fileName);
-    FileTools::SetCurrentDir(fileName);
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this,
-                           tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    else
-    {
-      setData(fileName);
-    }
-  }
-}
-
-
-void ImportedDesignPage::setData(const QString& fileName)
-{
-  filePathLineEdit_->setText(fileName);
-  try
-  {
-    errorMessageLabel_->reset();
-    setTable(fileName);
-    pageValidity_ = true;
-  }
-  catch (std::exception & ex)
-  {
-    dataPreviewTableView_->setModel(0);
-    // DOE size
-    DOESizeLabel_->setText("");
-    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(ex.what()));
-    pageValidity_ = false;
-  }
+  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  mainLayout->addWidget(sampleWidget_);
+  connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
+  connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
 }
 
 
@@ -148,69 +54,45 @@ void ImportedDesignPage::setTable(const QString& fileName)
   // set file name
   designOfExperiment_.setFileName(fileName.toUtf8().data());
 
-  // get sample From File
-  Sample sample(designOfExperiment_.getSampleFromFile());
-
-  // get input names
-  const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
-
-  // get inputs columns indices
-  Indices columns(designOfExperiment_.getInputColumns());
-
-  // set sample description
-  Description desc(sample.getDimension());
-  for (UnsignedInteger i = 0; i < columns.getSize(); ++i)
-    desc[columns[i]] = inputNames[i];
-  sample.setDescription(desc);
-
-  // set table model
-  dataPreviewTableView_->setModel(new SampleTableModel(sample, false, dataPreviewTableView_));
-  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SLOT(columnNameChanged()));
-
-  // set comboboxes items: each of them contains the input Names and an empty item
-  QStringList comboBoxItems;
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
-    comboBoxItems << QString::fromUtf8(inputNames[i].c_str());
-  comboBoxItems << "";
-
-  // set horizontal header view
-  QVector<int> columnsWithCombo(sample.getDimension());
-  for (int i = 0; i < columnsWithCombo.size(); ++i)
-    columnsWithCombo[i] = i;
-  HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
-  dataPreviewTableView_->setHorizontalHeader(header);
-  connect(dataPreviewTableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), header, SLOT(fixComboPositions()));
-  dataPreviewTableView_->horizontalHeader()->show();
-  dataPreviewTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-
-  // DOE size
-  DOESizeLabel_->setText(QString::number(sample.getSize()));
+  // update widgets
+  sampleWidget_->updateWidgets(designOfExperiment_.getSampleFromFile(),
+                               designOfExperiment_.getPhysicalModel().getInputNames(),
+                               designOfExperiment_.getInputColumns());
 }
 
 
-void ImportedDesignPage::columnNameChanged()
+void ImportedDesignPage::checkColumns()
 {
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
-  // test the unicity of each variable
+  QStringList inNames;
   Indices columns;
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
-    for (int j = 0; j < dataPreviewTableView_->model()->columnCount(); ++j)
-      if (inputNames[i] == dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString().toStdString())
-      {
-        columns.add(j);
-        break;
-      }
-  // test the presence of all variables
-  Indices columns2;
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
-    for (int j = 0; j < dataPreviewTableView_->model()->columnCount(); ++j)
-      if (inputNames[i] == dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString().toStdString())
-        columns2.add(j);
-
-  if (columns != columns2)
+  // test the unicity of each variable
+  for (int i = 0; i < sampleWidget_->dataPreviewTableView_->model()->columnCount(); ++i)
   {
-    errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
-    pageValidity_ = false;
+    QString headerName_i(sampleWidget_->dataPreviewTableView_->model()->headerData(i, Qt::Horizontal).toString());
+    if (!headerName_i.isEmpty())
+    {
+      if (inNames.contains(headerName_i))
+      {
+        sampleWidget_->errorMessageLabel_->setErrorMessage(tr("A variable must be associated with only one column."));
+        sampleWidget_->tableValidity_ = false;
+        return;
+      }
+      for (UnsignedInteger j = 0; j < inputNames.getSize(); ++j)
+      {
+        if (inputNames[j] == headerName_i.toStdString())
+        {
+          columns.add(i);
+          inNames << headerName_i;
+        }
+      }
+    }
+  }
+  // test the presence of all variables
+  if (inNames.size() != (int)inputNames.getSize())
+  {
+    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
+    sampleWidget_->tableValidity_ = false;
     return;
   }
 
@@ -218,13 +100,13 @@ void ImportedDesignPage::columnNameChanged()
   try
   {
     designOfExperiment_.setInputColumns(columns);
-    pageValidity_ = true;
-    errorMessageLabel_->reset();
+    sampleWidget_->tableValidity_ = true;
+    sampleWidget_->errorMessageLabel_->reset();
   }
   catch(InvalidArgumentException & ex)
   {
-    errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
-    pageValidity_ = false;
+    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
+    sampleWidget_->tableValidity_ = false;
   }
 }
 
@@ -237,7 +119,7 @@ void ImportedDesignPage::initialize(const Analysis& analysis)
   if (analysis_ptr)
   {
     designOfExperiment_ = *analysis_ptr;
-    setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
+    sampleWidget_->setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
   }
   else
   {
@@ -256,6 +138,6 @@ Analysis ImportedDesignPage::getAnalysis()
 
 bool ImportedDesignPage::validatePage()
 {
-  return pageValidity_;
+  return sampleWidget_->tableValidity_;
 }
 }
