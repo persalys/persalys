@@ -242,18 +242,7 @@ void DataModelWindow::resizeEvent(QResizeEvent* event)
 {
   SubWindow::resizeEvent(event);
   if (isVisible())
-    resizeTable();
-}
-
-
-void DataModelWindow::resizeTable()
-{
-  int h = tableView_->verticalHeader()->length() + tableView_->horizontalHeader()->height();
-  if (tableView_->horizontalScrollBar()->maximum())
-    h += tableView_->horizontalScrollBar()->sizeHint().height();
-  int x1, y1, x2, y2;
-  tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
-  tableView_->setFixedHeight(h + y1 + y2);
+    tableView_->resizeWithOptimalHeight();
 }
 
 
@@ -275,14 +264,14 @@ void DataModelWindow::sortSectionChanged(int section, Qt::SortOrder order)
 void DataModelWindow::resizeDataTableColumn(int column, int /*oldWidth*/, int newWidth)
 {
   dataTableView2_->horizontalHeader()->resizeSection(column + 1, newWidth);
-  resizeTable();
+  tableView_->resizeWithOptimalHeight();
 }
 
 
 void DataModelWindow::resizeVariablesTableColumn(int column, int /*oldWidth*/, int newWidth)
 {
   tableView_->horizontalHeader()->resizeSection(column - 1, newWidth);
-  resizeTable();
+  tableView_->resizeWithOptimalHeight();
 }
 
 
@@ -347,7 +336,7 @@ void DataModelWindow::updateTableView()
 {
   if (!dataModel_->getSample().getSize())
   {
-    resizeTable();
+    tableView_->resizeWithOptimalHeight();
     return;
   }
 
@@ -408,7 +397,7 @@ void DataModelWindow::updateTableView()
   tableView_->horizontalHeader()->show();
   tableView_->horizontalHeader()->hide();
 
-  resizeTable();
+  tableView_->resizeWithOptimalHeight();
 
   // update sample size label
   sampleSizeLabel_->setText(QString::number(dataModel_->getSample().getSize()));

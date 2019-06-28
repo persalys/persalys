@@ -21,8 +21,9 @@
 #ifndef PERSALYS_COPYABLETABLEVIEW_HXX
 #define PERSALYS_COPYABLETABLEVIEW_HXX
 
-#include <QTableView>
 #include "persalys/PersalysPrivate.hxx"
+
+#include <QTableView>
 
 namespace PERSALYS
 {
@@ -38,6 +39,7 @@ public:
   QSize sizeHint() const;
   QSize minimumSizeHint() const;
   void resizeToContents();
+  void resizeWithOptimalHeight();
 
 public slots:
   void copy();
