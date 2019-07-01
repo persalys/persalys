@@ -9,6 +9,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      Observer.cxx Observable.cxx Study.cxx StudyImplementation.cxx
                      Variable.cxx Input.cxx Output.cxx
                      DataSample.cxx
+                     DataImport.cxx
                      DataModel.cxx
                      MeshModel.cxx MeshModelImplementation.cxx
                      GridMeshModel.cxx
@@ -84,6 +85,7 @@ ot_install_header_file ( Variable.hxx )
 ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
 ot_install_header_file ( DataSample.hxx )
+ot_install_header_file ( DataImport.hxx )
 ot_install_header_file ( MeshModel.hxx )
 ot_install_header_file ( MeshModelImplementation.hxx )
 ot_install_header_file ( GridMeshModel.hxx )
