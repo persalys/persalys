@@ -36,9 +36,6 @@ static Factory<ImportedDesignOfExperiment> Factory_ImportedDesignOfExperiment;
 /* Default constructor */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment()
   : DesignOfExperimentEvaluation()
-  , fileName_("")
-  , inputColumns_()
-  , sampleFromFile_()
 {
 }
 
@@ -46,9 +43,7 @@ ImportedDesignOfExperiment::ImportedDesignOfExperiment()
 /* Constructor with parameters */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
   : DesignOfExperimentEvaluation(name, physicalModel)
-  , fileName_("")
-  , inputColumns_()
-  , sampleFromFile_()
+  , DataImport()
 {
 }
 
@@ -59,12 +54,8 @@ ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
     const String& fileName,
     const Indices& inputColumns)
   : DesignOfExperimentEvaluation(name, physicalModel)
-  , fileName_("")
-  , inputColumns_()
-  , sampleFromFile_()
+  , DataImport(fileName, inputColumns)
 {
-  setFileName(fileName);
-  setInputColumns(inputColumns);
 }
 
 
@@ -85,109 +76,28 @@ Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*n
 }
 
 
-String ImportedDesignOfExperiment::getFileName() const
+void ImportedDesignOfExperiment::setColumns(const Indices& inputColumns, const Indices& /*outputColumns*/)
 {
-  return fileName_;
-}
-
-
-void ImportedDesignOfExperiment::setFileName(const String& fileName)
-{
-  if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
-
-  // get sample from file
-  sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));
-
-  // save file path
-  const String oldFileName = fileName_;
-  fileName_ = fileName;
-
-  // set columns and names
-  bool validArg = false;
-  // if reload file
-  if (fileName_ == oldFileName)
-  {
-    try
-    {
-      // try to use the same indices
-      setInputColumns(inputColumns_);
-      validArg = true;
-    }
-    catch (std::exception &)
-    {
-      // if the number of input variables in the physical model have changed
-      // of if the file content has changed
-    }
-  }
-  // default values if needed
-  if (!validArg)
-  {
-    Indices inputColumns(getPhysicalModel().getInputDimension());
-    inputColumns.fill();
-    setInputColumns(inputColumns);
-  }
-}
-
-
-Indices ImportedDesignOfExperiment::getInputColumns() const
-{
-  return inputColumns_;
-}
-
-
-void ImportedDesignOfExperiment::setInputColumns(const Indices& inputColumns)
-{
+  // check columns
   if (inputColumns.getSize() != getPhysicalModel().getInputDimension())
-  {
-    OSS oss;
-    oss << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputDimension();
-    throw InvalidArgumentException(HERE) << oss.str();
-  }
+    throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: " << getPhysicalModel().getInputDimension();
+  DataImport::setColumns(inputColumns);
+}
 
-  if (!inputColumns.check(getSampleFromFile().getDimension()))
-    throw InvalidArgumentException(HERE) << "Values in the input columns list are not compatible with the sample dimension contained in the file.";
 
-  inputColumns_ = inputColumns;
+void ImportedDesignOfExperiment::setDefaultColumns()
+{
+  Indices inputColumns(getPhysicalModel().getInputDimension());
+  inputColumns.fill();
+  setColumns(inputColumns);
+}
 
+
+void ImportedDesignOfExperiment::update()
+{
   // reset
   originalInputSample_.clear();
   initialize();
-}
-
-
-Sample ImportedDesignOfExperiment::getSampleFromFile() const
-{
-  // TODO reload file if empty
-  // when we will be able to retrieve ImportedDesignOfExperiment object
-  // in the Python console (use boost::locale::conv::from_utf ?)
-  return sampleFromFile_;
-}
-
-
-Sample ImportedDesignOfExperiment::getSampleFromFile(const String& fileName) const
-{
-  Sample sampleFromFile(Tools::ImportSample(fileName));
-
-  // check sampleFromFile dimension
-  const Description inputNames = getPhysicalModel().getInputNames();
-  if (sampleFromFile.getDimension() < inputNames.getSize())
-    throw InvalidArgumentException(HERE) << "The file contains a sample with a dimension less than the number of inputs of the physical model: "
-                                         << inputNames.getSize();
-
-  // check the sample description
-  const Description sampleDescription(sampleFromFile.getDescription());
-  Description descriptionToCheck;
-  for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
-    if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
-      descriptionToCheck.add(sampleDescription[i]);
-
-  // if empty name or at least two same names
-  if (descriptionToCheck.getSize() != sampleDescription.getSize())
-    sampleFromFile.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
-
-  return sampleFromFile;
 }
 
 
@@ -251,8 +161,7 @@ String ImportedDesignOfExperiment::__repr__() const
 void ImportedDesignOfExperiment::save(Advocate& adv) const
 {
   DesignOfExperimentEvaluation::save(adv);
-  adv.saveAttribute("fileName_", fileName_);
-  adv.saveAttribute("inputColumns_", inputColumns_);
+  DataImport::save(adv);
 }
 
 
@@ -260,7 +169,6 @@ void ImportedDesignOfExperiment::save(Advocate& adv) const
 void ImportedDesignOfExperiment::load(Advocate& adv)
 {
   DesignOfExperimentEvaluation::load(adv);
-  adv.loadAttribute("fileName_", fileName_);
-  adv.loadAttribute("inputColumns_", inputColumns_);
+  DataImport::load(adv);
 }
 }

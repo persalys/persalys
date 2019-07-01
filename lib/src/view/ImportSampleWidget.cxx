@@ -176,4 +176,26 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
   // DOE size
   DOESizeLabel_->setText(QString::number(sample.getSize()));
 }
+
+
+Indices ImportSampleWidget::getColumns(const Description &names) const
+{
+  Indices columns;
+  // get the index of each item of names
+  for (int i = 0; i < dataPreviewTableView_->model()->columnCount(); ++i)
+  {
+    QString headerName_i(dataPreviewTableView_->model()->headerData(i, Qt::Horizontal).toString());
+    if (!headerName_i.isEmpty())
+    {
+      for (UnsignedInteger j = 0; j < names.getSize(); ++j)
+      {
+        if (names[j] == headerName_i.toStdString())
+        {
+          columns.add(i);
+        }
+      }
+    }
+  }
+  return columns;
+}
 }

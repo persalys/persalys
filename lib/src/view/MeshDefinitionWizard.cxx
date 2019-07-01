@@ -151,66 +151,29 @@ void MeshDefinitionWizard::resizeEvent(QResizeEvent* event)
 
 void MeshDefinitionWizard::setTable(const QString& fileName)
 {
-  // get sample From File
-  Sample sample(Tools::ImportSample(fileName.toStdString()));
-
-  // get input names
-  const Description paramNames(1, mesh_.getIndexParameters()[0].getName());
-
-  // get inputs columns indices
-  Indices columns(importedMesh_.getColumns());
-  if (!columns.check(sample.getDimension()))
-    columns = Indices(1, 0);
-
-  sampleWidget_->updateWidgets(sample, paramNames, columns);
+  // set file name
+  importedMesh_.setFileName(fileName.toUtf8().data());
+  // update widgets
+  sampleWidget_->updateWidgets(importedMesh_.getSampleFromFile(),
+                               Description(1, mesh_.getIndexParameters()[0].getName()),
+                               importedMesh_.getInputColumns());
 }
 
 
 void MeshDefinitionWizard::checkColumns()
 {
   const Description paramNames(1, mesh_.getIndexParameters()[0].getName());
-  QStringList pNames;
-  Indices columns;
-  // test the unicity of each variable
-  for (int i = 0; i < sampleWidget_->dataPreviewTableView_->model()->columnCount(); ++i)
-  {
-    QString headerName_i(sampleWidget_->dataPreviewTableView_->model()->headerData(i, Qt::Horizontal).toString());
-    if (!headerName_i.isEmpty())
-    {
-      if (pNames.contains(headerName_i))
-      {
-        sampleWidget_->errorMessageLabel_->setErrorMessage(tr("The parameter must be associated with only one column."));
-        sampleWidget_->tableValidity_ = false;
-        return;
-      }
-      for (UnsignedInteger j = 0; j < paramNames.getSize(); ++j)
-      {
-        if (paramNames[j] == headerName_i.toStdString())
-        {
-          columns.add(i);
-          pNames << headerName_i;
-        }
-      }
-    }
-  }
-  // test the presence of all variables
-  if (pNames.size() != (int)paramNames.getSize())
-  {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each parameter must be associated with one column."));
-    sampleWidget_->tableValidity_ = false;
-    return;
-  }
 
-  // update the model
+  // try to update the model
   try
   {
-    importedMesh_.setParameters(sampleWidget_->filePathLineEdit_->text().toStdString(), columns);
+    importedMesh_.setColumns(sampleWidget_->getColumns(paramNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }
-  catch(InvalidArgumentException & ex)
+  catch (InvalidArgumentException & ex)
   {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each parameter must be associated with one column."));
+    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("The parameter must be associated with one column."));
     sampleWidget_->tableValidity_ = false;
   }
 }
@@ -226,7 +189,7 @@ MeshModel MeshDefinitionWizard::getMesh() const
   }
   else
   {
-    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), importedMesh_.getFileName(), importedMesh_.getColumns());
+    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), importedMesh_.getFileName(), importedMesh_.getInputColumns());
   }
   return newMesh;
 }
@@ -246,7 +209,6 @@ bool MeshDefinitionWizard::validateCurrentPage()
   }
   else
   {
-    checkColumns();
     return sampleWidget_->tableValidity_;
   }
 }

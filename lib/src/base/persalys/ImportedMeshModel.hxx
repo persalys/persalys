@@ -22,10 +22,11 @@
 #define PERSALYS_IMPORTEDMESHMODEL_HXX
 
 #include "MeshModelImplementation.hxx"
+#include "DataImport.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportedMeshModel : public MeshModelImplementation
+class PERSALYS_API ImportedMeshModel : public MeshModelImplementation, public DataImport
 {
   CLASSNAME
 
@@ -39,11 +40,9 @@ public:
   /** Virtual constructor */
   virtual ImportedMeshModel * clone() const;
 
-  void setParameters(const OT::String& fileName, const OT::Indices& columns=OT::Indices(1, 0));
+  virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns = OT::Indices());
   OT::Interval getBounds() const;
   OT::Indices getNumberOfNodes() const;
-  OT::String getFileName() const;
-  OT::Indices getColumns() const;
 
   virtual OT::String getHtmlDescription() const;
   virtual OT::String getPythonScript() const;
@@ -57,9 +56,9 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-private:
-  OT::String fileName_;
-  OT::Indices columns_;
+protected:
+  virtual void update();
+  virtual void setDefaultColumns();
 };
 }
 #endif

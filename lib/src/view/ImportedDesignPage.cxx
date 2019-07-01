@@ -64,42 +64,11 @@ void ImportedDesignPage::setTable(const QString& fileName)
 void ImportedDesignPage::checkColumns()
 {
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
-  QStringList inNames;
-  Indices columns;
-  // test the unicity of each variable
-  for (int i = 0; i < sampleWidget_->dataPreviewTableView_->model()->columnCount(); ++i)
-  {
-    QString headerName_i(sampleWidget_->dataPreviewTableView_->model()->headerData(i, Qt::Horizontal).toString());
-    if (!headerName_i.isEmpty())
-    {
-      if (inNames.contains(headerName_i))
-      {
-        sampleWidget_->errorMessageLabel_->setErrorMessage(tr("A variable must be associated with only one column."));
-        sampleWidget_->tableValidity_ = false;
-        return;
-      }
-      for (UnsignedInteger j = 0; j < inputNames.getSize(); ++j)
-      {
-        if (inputNames[j] == headerName_i.toStdString())
-        {
-          columns.add(i);
-          inNames << headerName_i;
-        }
-      }
-    }
-  }
-  // test the presence of all variables
-  if (inNames.size() != (int)inputNames.getSize())
-  {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
-    sampleWidget_->tableValidity_ = false;
-    return;
-  }
 
-  // update the design of experiments
+  // try to update the design of experiments
   try
   {
-    designOfExperiment_.setInputColumns(columns);
+    designOfExperiment_.setColumns(sampleWidget_->getColumns(inputNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }

@@ -37,6 +37,7 @@ class PERSALYS_API ImportSampleWidget : public QWidget
 public:
   friend class ImportedDesignPage;
   friend class MeshDefinitionWizard;
+  friend class TestMeshDefinitionWizard;
 
   ImportSampleWidget(QWidget *parent = 0);
 
@@ -44,6 +45,7 @@ protected:
   void buildInterface();
   void setData(const QString & fileName);
   void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns);
+  OT::Indices getColumns(const OT::Description& names) const;
 
 public slots:
   void openFileRequested();

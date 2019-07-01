@@ -35,8 +35,7 @@ static Factory<ImportedMeshModel> Factory_ImportedMeshModel;
 
 ImportedMeshModel::ImportedMeshModel()
   : MeshModelImplementation()
-  , fileName_("")
-  , columns_(Indices(1, 0))
+  , DataImport()
 {
 }
 
@@ -44,21 +43,19 @@ ImportedMeshModel::ImportedMeshModel()
 /* Constructor with parameters */
 ImportedMeshModel::ImportedMeshModel(const String& fileName, const Indices& columns)
   : MeshModelImplementation()
-  , fileName_("")
-  , columns_()
+  , DataImport(fileName, columns)
 {
-  setParameters(fileName, columns);
+  update();
 }
 
 
 /* Constructor with parameters */
 ImportedMeshModel::ImportedMeshModel(const VariableCollection& parameters, const String& fileName, const Indices& columns)
   : MeshModelImplementation()
-  , fileName_("")
-  , columns_()
+  , DataImport(fileName, columns)
 {
   setIndexParameters(parameters);
-  setParameters(fileName, columns);
+  update();
 }
 
 
@@ -69,37 +66,36 @@ ImportedMeshModel* ImportedMeshModel::clone() const
 }
 
 
-void ImportedMeshModel::setParameters(const String& fileName, const Indices& columns)
+void ImportedMeshModel::setDefaultColumns()
 {
-  // check
-  if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
+  setColumns(Indices(1, 0));
+}
 
-  // import sample
-  Sample sampleFromFile(Tools::ImportSample(fileName));
 
-  // check columns
-  if (columns.getSize() != getIndexParameters().getSize())
-    throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " << getIndexParameters().getSize();
-  if (!columns.check(sampleFromFile.getDimension()))
-    throw InvalidArgumentException(HERE) << "Values in the columns list are not compatible with the sample dimension contained in the file.";
-
-  Sample sample(sampleFromFile.getMarginal(columns));
-  sample.setDescription(Description(1, getIndexParameters()[0].getName()));
-  if (sample.getSize() < 2)
-    throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
-
-  fileName_ = fileName;
-  columns_ = columns;
-
+void ImportedMeshModel::update()
+{
   // build mesh
-  Collection<Indices> simplices(sampleFromFile.getSize() - 1, Indices(2));
+  Sample sample(getSampleFromFile().getMarginal(inputColumns_));
+  sample.setDescription(Description(1, getIndexParameters()[0].getName()));
+
+  Collection<Indices> simplices(sample.getSize() - 1, Indices(2));
   for (UnsignedInteger i = 0; i < simplices.getSize(); ++i)
   {
     simplices[i][0] = i;
     simplices[i][1] = i + 1;
   }
   mesh_ = Mesh(sample, IndicesCollection(simplices));
+}
+
+
+void ImportedMeshModel::setColumns(const Indices& inputColumns, const Indices& /*outputColumns*/)
+{
+  // check columns
+  if (inputColumns.getSize() != getIndexParameters().getSize())
+    throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " << getIndexParameters().getSize();
+  if (getSampleFromFile().getSize() < 2)
+    throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
+  DataImport::setColumns(inputColumns);
 }
 
 
@@ -112,18 +108,6 @@ Interval ImportedMeshModel::getBounds() const
 Indices ImportedMeshModel::getNumberOfNodes() const
 {
   return  Indices(1, mesh_.getVertices().getSize());
-}
-
-
-String ImportedMeshModel::getFileName() const
-{
-  return fileName_;
-}
-
-
-Indices ImportedMeshModel::getColumns() const
-{
-  return columns_;
 }
 
 
@@ -149,7 +133,7 @@ String ImportedMeshModel::getPythonScript() const
     paramNames.add(getIndexParameters()[i].getName());
   }
 
-  oss << getName() << " = persalys.ImportedMeshModel(" << Parameters::GetOTDescriptionStr(paramNames, false) << ", '" << fileName_ << "', " << columns_.__str__() << ")\n";
+  oss << getName() << " = persalys.ImportedMeshModel(" << Parameters::GetOTDescriptionStr(paramNames, false) << ", '" << fileName_ << "', " << inputColumns_.__str__() << ")\n";
 
   return oss;
 }
@@ -162,7 +146,7 @@ String ImportedMeshModel::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " file name=" << getFileName()
-      << " columns=" << getColumns()
+      << " columns=" << getInputColumns()
       << " index parameters=" << getIndexParameters()
       << " mesh=" << getMesh();
   return oss;
@@ -173,8 +157,7 @@ String ImportedMeshModel::__repr__() const
 void ImportedMeshModel::save(Advocate & adv) const
 {
   MeshModelImplementation::save(adv);
-  adv.saveAttribute("fileName_", fileName_);
-  adv.saveAttribute("columns_", columns_);
+  DataImport::save(adv);
 }
 
 
@@ -182,7 +165,6 @@ void ImportedMeshModel::save(Advocate & adv) const
 void ImportedMeshModel::load(Advocate & adv)
 {
   MeshModelImplementation::load(adv);
-  adv.loadAttribute("fileName_", fileName_);
-  adv.loadAttribute("columns_", columns_);
+  DataImport::load(adv);
 }
 }
