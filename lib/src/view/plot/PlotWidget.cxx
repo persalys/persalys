@@ -690,7 +690,7 @@ void PlotWidget::plotContour(const Drawable& drawable, const bool displayContour
     levels += sortedData[rank[i] * size - 1][0];
   }
   levels += (sortedData[size - 1][0] - sortedData[0.99 * size - 1][0]) * 0.5;
-  qSort(levels);
+  std::sort(levels.begin(), levels.end());
   spectrogram->setContourLevels(levels);
 
   // color map

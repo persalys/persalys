@@ -112,20 +112,22 @@ RUN pip install sphinx numpydoc --upgrade
 RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2 | tar xj && cd boost_1_70_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
 
-# X11
+# x11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
 RUN yum -y install mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel
-RUN yum -y install freetype-devel libjpeg-turbo-devel libxcb-devel xcb-util xcb-util-devel fontconfig-devel xz-devel
-RUN xvfb-run -h
+RUN yum -y install freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel
+RUN yum -y install xorg-x11-util-macros bison
+RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz | tar xz && cd libxkbcommon-xkbcommon-0.8.4 && sed -i "/AX_GCC_BUILTIN/d" configure.ac && ./autogen.sh && ./configure --prefix=/usr --libdir=/usr/lib64 && make && make install && pkg-config --exists xkbcommon
 
 # qt
-RUN curl -fSsL https://download.qt.io/archive/qt/5.11/5.11.2/single/qt-everywhere-src-5.11.2.tar.xz | tar xJ && cd qt-everywhere-src-5.11.2 \
+RUN curl -fSsL https://download.qt.io/archive/qt/5.13/5.13.0/single/qt-everywhere-src-5.13.0.tar.xz | tar xJ && cd qt-everywhere-src-5.13.0 \
  && ./configure -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.13/5.13.0/submodules/qtx11extras-everywhere-src-5.13.0.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.13.0 && qmake src/x11extras && make && make install
 
 # qwt
-RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.3.tar.bz2 | tar xj && cd qwt-6.1.3 \
+RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj && cd qwt-6.1.4 \
  && sed -i "s|QWT_INSTALL_PREFIX    = /usr/local/qwt-\$\$QWT_VERSION|QWT_INSTALL_PREFIX = /usr/local|g" qwtconfig.pri \
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
@@ -187,5 +189,3 @@ RUN yum -y install sudo
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel
-
-
