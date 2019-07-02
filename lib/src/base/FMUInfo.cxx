@@ -55,6 +55,24 @@ FMUInfo * FMUInfo::clone() const
   return new FMUInfo(*this);
 }
 
+
+inline String StrOrBytesToString(PyObject * obj)
+{
+  // old pyfmi returns bytes instead of strings
+  // https://github.com/modelon/PyFMI/commit/801884fb20419f0ea9f174d4065ad87a708d83dc
+  try
+  {
+    // pyfmi >=2.5.1
+    return checkAndConvert<_PyString_, String>(obj);
+  }
+  catch (InvalidArgumentException &)
+  {
+    // pyfmi <2.5.1
+    return checkAndConvert<_PyBytes_, String>(obj);
+  }
+}
+
+
 void FMUInfo::initialize()
 {
   InterpreterUnlocker uil;
@@ -105,35 +123,35 @@ void FMUInfo::initialize()
   }
 
   ScopedPyObjectPointer authorStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_author"), NULL)); // new reference
-  author_ = convert<_PyBytes_, String>(authorStr.get());
+  author_ = StrOrBytesToString(authorStr.get());
 
   ScopedPyObjectPointer copyrightStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_copyright"), NULL)); // new reference
-  copyright_ = convert<_PyBytes_, String>(copyrightStr.get());
+  copyright_ = StrOrBytesToString(copyrightStr.get());
 
   ScopedPyObjectPointer toolStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_generation_tool"), NULL)); // new reference
-  tool_ = convert<_PyBytes_, String>(toolStr.get());
+  tool_ = StrOrBytesToString(toolStr.get());
 
   ScopedPyObjectPointer dateTimeStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_generation_date_and_time"), NULL)); // new reference
-  dateTime_ = convert<_PyBytes_, String>(dateTimeStr.get());
+  dateTime_ = StrOrBytesToString(dateTimeStr.get());
 
   ScopedPyObjectPointer guidStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_guid"), NULL)); // new reference
-  guid_ = convert<_PyString_, String>(guidStr.get());
+  guid_ = checkAndConvert<_PyString_, String>(guidStr.get());
 
   ScopedPyObjectPointer identifierStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_identifier"), NULL)); // new reference
-  identifier_ = convert<_PyString_, String>(identifierStr.get());
+  identifier_ = checkAndConvert<_PyString_, String>(identifierStr.get());
 
   ScopedPyObjectPointer platformStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_model_types_platform"), NULL)); // new reference
-  platform_ = convert<_PyBytes_, String>(platformStr.get());
+  platform_ = StrOrBytesToString(platformStr.get());
 
   ScopedPyObjectPointer versionStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_model_version"), NULL)); // new reference
-  version_ = convert<_PyBytes_, String>(versionStr.get());
+  version_ = StrOrBytesToString(versionStr.get());
 
   ScopedPyObjectPointer fmiVersionStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_version"), NULL)); // new reference
-  fmiVersion_ = convert<_PyBytes_, String>(fmiVersionStr.get());
+  fmiVersion_ = StrOrBytesToString(fmiVersionStr.get());
 
   ScopedPyObjectPointer fmuClass(PyObject_GetAttrString(model.get(), const_cast<char*>("__class__"))); // new reference
   ScopedPyObjectPointer fmuClassName(PyObject_GetAttrString(fmuClass.get(), const_cast<char*>("__name__"))); // new reference
-  modelType_ = convert<_PyString_, String>(fmuClassName.get());
+  modelType_ = checkAndConvert<_PyString_, String>(fmuClassName.get());
   if (modelType_.find("ModelME") != std::string::npos)
     modelType_ = "Model Exchange";
   else if (modelType_.find("ModelCS") != std::string::npos)

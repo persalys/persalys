@@ -100,8 +100,7 @@ RUN pip install lxml cython \
  && cd .. && python3 -c "import assimulo; import assimulo.solvers"
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon/PyFMI/archive/PyFMI-2.5.tar.gz | tar xz && cd PyFMI-PyFMI-2.5 \
- && curl -fSsL https://github.com/modelon/PyFMI/pull/11.patch | patch -p1 \
+RUN curl -fSsL https://github.com/modelon/PyFMI/archive/PyFMI-2.5.1.tar.gz | tar xz && cd PyFMI-PyFMI-2.5.1 \
  && curl -fSsL https://github.com/modelon/PyFMI/pull/13.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
