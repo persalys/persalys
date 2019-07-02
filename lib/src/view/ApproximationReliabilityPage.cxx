@@ -49,11 +49,6 @@ ApproximationReliabilityPage::ApproximationReliabilityPage(QWidget* parent)
   , startingPoint_()
   , pointLineEdit_(0)
   , algoChoice_(0)
-  , evaluationsSpinBox_(0)
-  , absoluteErrSpinBox_(0)
-  , relativeErrSpinBox_(0)
-  , residualErrSpinBox_(0)
-  , constraintErrSpinBox_(0)
 {
   buildInterface();
 }
@@ -107,52 +102,10 @@ void ApproximationReliabilityPage::buildInterface()
 
   pageLayout->addWidget(pointGroup);
 
-  // Advanced parameters ---------- ----------
+  // Advanced parameters ---------------------
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
-  QGridLayout * advancedGroupLayout = new QGridLayout(advancedParamGroupBox);
-
-  // max number evaluations
-  QLabel * label = new QLabel(tr("Maximum number of evaluations"));
-  advancedGroupLayout->addWidget(label, 0, 0);
-  evaluationsSpinBox_ = new UIntSpinBox;
-  label->setBuddy(evaluationsSpinBox_);
-  evaluationsSpinBox_->setRange(1, 2e9);
-  evaluationsSpinBox_->setSingleStep(5);
-  advancedGroupLayout->addWidget(evaluationsSpinBox_, 0, 1);
-
-  // Absolute error
-  label = new QLabel(tr("Absolute error"));
-  advancedGroupLayout->addWidget(label, 1, 0);
-  absoluteErrSpinBox_ = new LogDoubleSpinBox;
-  label->setBuddy(absoluteErrSpinBox_);
-  absoluteErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
-  advancedGroupLayout->addWidget(absoluteErrSpinBox_, 1, 1);
-
-  // Relative error
-  label = new QLabel(tr("Relative error"));
-  advancedGroupLayout->addWidget(label, 2, 0);
-  relativeErrSpinBox_ = new LogDoubleSpinBox;
-  label->setBuddy(relativeErrSpinBox_);
-  relativeErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
-  advancedGroupLayout->addWidget(relativeErrSpinBox_, 2, 1);
-
-  // Residual error
-  label = new QLabel(tr("Residual error"));
-  advancedGroupLayout->addWidget(label, 1, 2);
-  residualErrSpinBox_ = new LogDoubleSpinBox;
-  label->setBuddy(residualErrSpinBox_);
-  residualErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
-  advancedGroupLayout->addWidget(residualErrSpinBox_, 1, 3);
-
-  // Constraint error
-  label = new QLabel(tr("Constraint error"));
-  advancedGroupLayout->addWidget(label, 2, 2);
-  constraintErrSpinBox_ = new LogDoubleSpinBox;
-  label->setBuddy(constraintErrSpinBox_);
-  constraintErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
-  advancedGroupLayout->addWidget(constraintErrSpinBox_, 2, 3);
-
+  stoppingCriteriaLayout_ = new OptimizationStoppingCriteria(advancedParamGroupBox);
   pageLayout->addWidget(advancedParamGroupBox);
 
   // initialize widgets
@@ -186,24 +139,22 @@ void ApproximationReliabilityPage::initialize(const Analysis& analysis)
   }
 
   // initialize widgets
-  if (solver.getImplementation()->getClassName() == "AbdoRackwitz")
+  const String solverName(solver.getImplementation()->getClassName());
+  if (solverName == "AbdoRackwitz")
     algoChoice_->button(ApproximationReliabilityPage::AbdoRackwitzAlgo)->click();
-  else if (solver.getImplementation()->getClassName() ==  "Cobyla")
+  else if (solverName ==  "Cobyla")
     algoChoice_->button(ApproximationReliabilityPage::CobylaAlgo)->click();
-  else
+  else if (solverName ==  "SQP")
     algoChoice_->button(ApproximationReliabilityPage::SQPAlgo)->click();
 
-  evaluationsSpinBox_->setValue(solver.getMaximumEvaluationNumber());
-  absoluteErrSpinBox_->setValue(solver.getMaximumAbsoluteError());
-  relativeErrSpinBox_->setValue(solver.getMaximumRelativeError());
-  residualErrSpinBox_->setValue(solver.getMaximumResidualError());
-  constraintErrSpinBox_->setValue(solver.getMaximumConstraintError());
+  stoppingCriteriaLayout_->initialize(solver);
 }
 
 
 void ApproximationReliabilityPage::updatePointLineEdit()
 {
-  pointLineEdit_->setText(QtOT::PointToString(startingPoint_));
+  if (pointLineEdit_)
+    pointLineEdit_->setText(QtOT::PointToString(startingPoint_));
 }
 
 
@@ -240,11 +191,7 @@ OptimizationAlgorithm ApproximationReliabilityPage::getOptimizationAlgorithm() c
     optimAlgo = SQP();
 
   optimAlgo.setStartingPoint(startingPoint_);
-  optimAlgo.setMaximumEvaluationNumber(evaluationsSpinBox_->value());
-  optimAlgo.setMaximumAbsoluteError(absoluteErrSpinBox_->value());
-  optimAlgo.setMaximumRelativeError(relativeErrSpinBox_->value());
-  optimAlgo.setMaximumResidualError(residualErrSpinBox_->value());
-  optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
+  stoppingCriteriaLayout_->updateAlgorithm(optimAlgo);
 
   return optimAlgo;
 }

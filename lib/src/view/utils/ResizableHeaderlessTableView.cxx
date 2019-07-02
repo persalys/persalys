@@ -29,7 +29,7 @@ namespace PERSALYS
 // ------- HeaderlessTableView
 
 HeaderlessTableView::HeaderlessTableView(QWidget *parent)
-  : QTableView(parent)
+  : CopyableTableView(parent)
   , boundary_width_(10)
   , column_index_(-1)
 {
@@ -137,15 +137,6 @@ void ResizableHeaderlessTableView::resizeWithOptimalWidth()
   if (verticalScrollBar()->maximum())
     w += verticalScrollBar()->sizeHint().width();
   setFixedWidth(w + x1 + x2);
-}
-
-
-void ResizableHeaderlessTableView::resizeWithOptimalHeight()
-{
-  int x1, y1, x2, y2;
-  getContentsMargins(&x1, &y1, &x2, &y2);
-  const int h = verticalHeader()->length() + horizontalHeader()->height();
-  setFixedHeight(h + y1 + y2);
 }
 
 

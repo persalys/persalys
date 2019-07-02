@@ -49,7 +49,6 @@ protected:
   void buildInterface();
   void resizeEvent(QResizeEvent* event);
   void updateTable(const QString& fileName);
-  void resizeTable();
 
 public slots:
   void openFileRequested();

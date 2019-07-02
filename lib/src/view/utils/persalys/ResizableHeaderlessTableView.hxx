@@ -21,7 +21,7 @@
 #ifndef PERSALYS_RESIZABLEHEADERLESSTABLEVIEW_HXX
 #define PERSALYS_RESIZABLEHEADERLESSTABLEVIEW_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#include "persalys/CopyableTableView.hxx"
 
 #include <openturns/Indices.hxx>
 
@@ -35,7 +35,7 @@ namespace PERSALYS
  * Subclass of QTableView that provides notification when the mouse cursor
  *  enters/leaves a column boundary.
  */
-class PERSALYS_API HeaderlessTableView: public QTableView
+class PERSALYS_API HeaderlessTableView: public CopyableTableView
 {
 public:
   explicit HeaderlessTableView(QWidget *parent = 0);
@@ -71,7 +71,6 @@ public:
   explicit ResizableHeaderlessTableView(QWidget *parent = 0);
 
   void resizeWithOptimalWidth();
-  void resizeWithOptimalHeight();
 
 protected:
   virtual bool eventFilter(QObject *obj, QEvent *event);

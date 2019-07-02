@@ -610,90 +610,28 @@ void DataAnalysisWindow::addScatterPlotsTab()
 
 void DataAnalysisWindow::addTableTab()
 {
-  // Well evaluated points
-  ExportableTableView * tableView = new ExportableTableView;
-  connect(getItem(), SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
-  tableView->setSortingEnabled(true);
-
-  SampleTableModel * tableModel = new SampleTableModel(designOfExperiment_.getSample(), tableView);
-  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
-  proxyModel->setSourceModel(tableModel);
-  proxyModel->setSortRole(Qt::UserRole);
-
-  tableView->setModel(proxyModel);
-  tableView->sortByColumn(0, Qt::AscendingOrder);
-
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  // sample size
-  QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(designOfExperiment_.getSample().getSize()));
-  hLayout->addWidget(sizeLabel);
-  hLayout->addStretch();
-  // export button
-  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
-  hLayout->addWidget(exportButton);
-  connect(exportButton, SIGNAL(clicked()), tableView, SLOT(exportData()));
-  tabLayout->addLayout(hLayout);
-
-  // table
-  tabLayout->addWidget(tableView);
-
   // if no failed points and no not evaluated points:
   if (!failedInputSample_.getSize() && !notEvaluatedInputSample_.getSize())
   {
-    tabWidget_->addTab(tab, tr("Table"));
+    // Well evaluated points table
+    tabWidget_->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), designOfExperiment_.getSample()), tr("Table"));
   }
   else
   {
     QTabWidget * tablesTabWidget = new QTabWidget;
 
-    tablesTabWidget->addTab(tab, tr("Points"));
+    // tab with well evaluated points
+    tablesTabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), designOfExperiment_.getSample()), tr("Points"));
 
     // tab with failed points
     if (failedInputSample_.getSize())
     {
-      tab = new QWidget;
-      tabLayout = new QVBoxLayout(tab);
-
-      // sample size
-      sizeLabel = new QLabel(tr("Size") + " : " + QString::number(failedInputSample_.getSize()));
-      tabLayout->addWidget(sizeLabel);
-
-      tableView = new ExportableTableView;
-      tableView->setSortingEnabled(true);
-      tableModel = new SampleTableModel(failedInputSample_, tableView);
-      proxyModel = new QSortFilterProxyModel(tableView);
-      proxyModel->setSourceModel(tableModel);
-      proxyModel->setSortRole(Qt::UserRole);
-      tableView->setModel(proxyModel);
-      tableView->sortByColumn(0, Qt::AscendingOrder);
-      tabLayout->addWidget(tableView);
-
-      tablesTabWidget->addTab(tab, tr("Failed blocks"));
+      tablesTabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), failedInputSample_), tr("Failed blocks"));
     }
     // tab with not evaluated points
     if (notEvaluatedInputSample_.getSize())
     {
-      tab = new QWidget;
-      tabLayout = new QVBoxLayout(tab);
-
-      // sample size
-      sizeLabel = new QLabel(tr("Size") + " : " + QString::number(failedInputSample_.getSize()));
-      tabLayout->addWidget(sizeLabel);
-
-      tableView = new ExportableTableView;
-      tableView->setSortingEnabled(true);
-      tableModel = new SampleTableModel(notEvaluatedInputSample_, tableView);
-      proxyModel = new QSortFilterProxyModel(tableView);
-      proxyModel->setSourceModel(tableModel);
-      proxyModel->setSortRole(Qt::UserRole);
-      tableView->setModel(proxyModel);
-      tableView->sortByColumn(0, Qt::AscendingOrder);
-      tabLayout->addWidget(tableView);
-
-      tablesTabWidget->addTab(tab, tr("Non-evaluated points"));
+      tablesTabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), notEvaluatedInputSample_), tr("Non-evaluated points"));
     }
 
     tabWidget_->addTab(tablesTabWidget, tr("Table"));
@@ -711,68 +649,32 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   const UnsignedInteger inSampleDim = designOfExperiment_.getInputSample().getDimension();
 
   // table tab
-  QWidget * tableWidget = new QWidget;
-  QVBoxLayout * tableWidgetLayout = new QVBoxLayout(tableWidget);
-
   // with paraview the table is always shown in order to use the selection behavior
   PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-  pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
-  connect(getItem(), SIGNAL(dataExportRequested()), pvSpreadSheetWidget, SLOT(exportData()));
-
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  // sample size
-  QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(designOfExperiment_.getSample().getSize()));
-  hLayout->addWidget(sizeLabel);
-  hLayout->addStretch();
-  // export button
-  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
-  hLayout->addWidget(exportButton);
-  connect(exportButton, SIGNAL(clicked()), pvSpreadSheetWidget, SLOT(exportData()));
-  tableWidgetLayout->addLayout(hLayout);
-
-  tableWidgetLayout->addWidget(pvSpreadSheetWidget);
 
   // if no failed points and no not evaluated points:
   if (!failedInSampleSize && !notEvalInSampleSize)
   {
-    tabWidget_->addTab(tableWidget, tr("Table"));
+    tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, getItem(), designOfExperiment_.getSample()), tr("Table"));
   }
   else
   {
     // Table tab ------------------------------------------
     QTabWidget * tablesTabWidget = new QTabWidget;
 
-    tablesTabWidget->addTab(tableWidget, tr("Table"));
+    tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, getItem(), designOfExperiment_.getSample()), tr("Table"));
 
     // -- failed points tab
     if (failedInSampleSize)
     {
-      tableWidget = new QWidget;
-      tableWidgetLayout = new QVBoxLayout(tableWidget);
-
-      sizeLabel = new QLabel(tr("Size") + " : " + QString::number(failedInSampleSize));
-      tableWidgetLayout->addWidget(sizeLabel);
-
       PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      failedPointsTable->setData(failedInputSample_);
-      tableWidgetLayout->addWidget(failedPointsTable);
-
-      tablesTabWidget->addTab(tableWidget, tr("Failed points"));
+      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(failedPointsTable, getItem(), failedInputSample_), tr("Failed points"));
     }
     // -- not evaluated points tab
     if (notEvalInSampleSize)
     {
-      tableWidget = new QWidget;
-      tableWidgetLayout = new QVBoxLayout(tableWidget);
-
-      sizeLabel = new QLabel(tr("Size") + " : " + QString::number(failedInSampleSize));
-      tableWidgetLayout->addWidget(sizeLabel);
-
       PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      notEvaluatedPointsTable->setData(notEvaluatedInputSample_);
-      tableWidgetLayout->addWidget(notEvaluatedPointsTable);
-
-      tablesTabWidget->addTab(tableWidget, tr("Non-evaluated points"));
+      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(notEvaluatedPointsTable, getItem(), notEvaluatedInputSample_), tr("Non-evaluated points"));
     }
 
     // -- Cobweb plot tab
@@ -953,9 +855,7 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
 
   // There are selection behavior errors if windows use the same links names: a link name must be unique.
   // The pointers are uniques, so we use them to create an unique name...find a better and easier way.
-  String aStr = (OSS() << cobwebWidget->getProxy() << pvmatrixWidget->getProxy()).str();
-  linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvmatrixWidget->getProxy());
-  aStr = (OSS() << pvSpreadSheet->getProxy() << pvmatrixWidget->getProxy()).str();
+  String aStr = (OSS() << pvSpreadSheet->getProxy() << pvmatrixWidget->getProxy()).str();
   linksModel->addSelectionLink(aStr.c_str(), pvSpreadSheet->getProxy(), pvmatrixWidget->getProxy());
   aStr = (OSS() << cobwebWidget->getProxy() << pvSpreadSheet->getProxy()).str();
   linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvSpreadSheet->getProxy());

@@ -20,7 +20,6 @@
  */
 #include "persalys/DataModel.hxx"
 
-#include "persalys/ImportedDesignOfExperiment.hxx"
 #include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
@@ -37,6 +36,7 @@ static Factory<DataModel> Factory_DataModel;
 /* Default constructor */
 DataModel::DataModel(const String& name)
   : DesignOfExperimentImplementation()
+  , DataImport()
 {
   setName(name);
   hasPhysicalModel_ = false;
@@ -51,12 +51,13 @@ DataModel::DataModel(const String& name,
                      const Description& inputNames,
                      const Description& outputNames)
   : DesignOfExperimentImplementation()
+  , DataImport(fileName, inputColumns, outputColumns)
 {
   setName(name);
   hasPhysicalModel_ = false;
 
-  setFileName(fileName);
-  setColumns(inputColumns, outputColumns, inputNames, outputNames);
+  setNames(inputNames, outputNames);
+  update();
 }
 
 
@@ -65,6 +66,7 @@ DataModel::DataModel(const String& name,
                      const Sample& inSample,
                      const Sample& outSample)
   : DesignOfExperimentImplementation()
+  , DataImport()
   , inputNames_(inSample.getDescription())
   , outputNames_(outSample.getDescription())
 {
@@ -97,114 +99,16 @@ DataModel* DataModel::clone() const
 }
 
 
-String DataModel::getFileName() const
+void DataModel::check()
 {
-  return fileName_;
+  // try to use the same indices and names
+  setColumns(inputColumns_, outputColumns_);
+  setNames(inputNames_, outputNames_);
 }
 
 
-void DataModel::setFileName(const String& fileName)
+void DataModel::update()
 {
-  if (fileName.empty())
-    throw InvalidArgumentException(HERE) << "The file name cannot be empty";
-
-  // get sample from file
-  sampleFromFile_ = getSampleFromFile(Tools::GetLocaleString(fileName));
-
-  // save file path
-  const String oldFileName = fileName_;
-  fileName_ = fileName;
-
-  // set columns and names
-  bool validArg = false;
-  // if reload file
-  if (fileName_ == oldFileName)
-  {
-    try
-    {
-      // try to use the same indices
-      setColumns(inputColumns_, outputColumns_, inputNames_, outputNames_);
-      validArg = true;
-    }
-    catch (std::exception &)
-    {
-      // if the file content has changed
-    }
-  }
-  // default values if needed
-  if (!validArg)
-  {
-    const UnsignedInteger dim = sampleFromFile_.getDimension();
-    Indices inputColumns(dim > 1 ? dim - 1 : 1);
-    inputColumns.fill();
-    Indices outputColumns(dim > 1 ? 1 : 0, dim - 1);
-    setColumns(inputColumns, outputColumns);
-  }
-}
-
-
-Indices DataModel::getInputColumns() const
-{
-  return inputColumns_;
-}
-
-
-Indices DataModel::getOutputColumns() const
-{
-  return outputColumns_;
-}
-
-
-void DataModel::setColumns(const Indices& inputColumns,
-                           const Indices& outputColumns,
-                           const Description& inputNames,
-                           const Description& outputNames)
-{
-  // check indices
-  if (!inputColumns.check(getSampleFromFile().getDimension()))
-    throw InvalidArgumentException(HERE) << "Values in the inputs columns list are not compatible with the sample dimension contained in the file.";
-
-  if (!outputColumns.check(getSampleFromFile().getDimension()))
-    throw InvalidArgumentException(HERE) << "Values in the outputs columns list are not compatible with the sample dimension contained in the file.";
-
-  Indices indices(inputColumns);
-  indices.add(outputColumns);
-
-  if (!indices.check(getSampleFromFile().getDimension()))
-    throw InvalidArgumentException(HERE) << "A value cannot be in the two columns lists at the same time.";
-
-  // check names
-  // - check input
-  if (inputNames.getSize())
-  {
-    if (inputColumns.getSize() != inputNames.getSize())
-      throw InvalidArgumentException(HERE) << "The dimension of the inputs names list has to be equal to the dimension of the inputs columns list.";
-  }
-  // - check output
-  if (outputNames.getSize())
-  {
-    if (outputColumns.getSize() != outputNames.getSize())
-      throw InvalidArgumentException(HERE) << "The dimension of the outputs names list has to be equal to the dimension of the outputs columns list.";
-  }
-  // - check unicity of the variables names
-  if ((inputNames.getSize() + outputNames.getSize()) > 0)
-  {
-    std::set<String> variableNamesSet;
-    for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
-      variableNamesSet.insert(inputNames[i]);
-    for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
-      variableNamesSet.insert(outputNames[i]);
-
-    if (variableNamesSet.size() != (inputNames.getSize() + outputNames.getSize()))
-      throw InvalidArgumentException(HERE) << "Two variables cannot have the same name.";
-  }
-
-  // set attributs
-  inputColumns_ = inputColumns;
-  outputColumns_ = outputColumns;
-  inputNames_ = inputNames;
-  outputNames_ = outputNames;
-
   // set samples
   Sample inS;
   if (inputColumns_.getSize())
@@ -258,15 +162,7 @@ void DataModel::setNames(const Description & inputNames, const Description & out
   outputNames_ = outputNames;
 
   // set samples
-  Sample inS(getInputSample());
-  if (inS.getSize())
-    inS.setDescription(getInputNames());
-  setInputSample(inS);
-
-  Sample outS(getOutputSample());
-  if (outS.getSize())
-    outS.setDescription(getOutputNames());
-  setOutputSample(outS);
+  update();
 }
 
 
@@ -297,31 +193,6 @@ Description DataModel::getOutputNames()
       outputNames_[i] = sampleDescription[outputColumns_[i]];
   }
   return outputNames_;
-}
-
-
-Sample DataModel::getSampleFromFile() const
-{
-  return sampleFromFile_;
-}
-
-
-Sample DataModel::getSampleFromFile(const String& fileName)
-{
-  Sample sampleFromFile(Tools::ImportSample(fileName));
-
-  // check the sample description
-  const Description sampleDescription(sampleFromFile.getDescription());
-  Description descriptionToCheck;
-  for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
-    if (!descriptionToCheck.contains(sampleDescription[i]) && !sampleDescription[i].empty())
-      descriptionToCheck.add(sampleDescription[i]);
-
-  // if empty name or at least two same names
-  if (descriptionToCheck.getSize() != sampleDescription.getSize())
-    sampleFromFile.setDescription(Description::BuildDefault(sampleDescription.getSize(), "data_"));
-
-  return sampleFromFile;
 }
 
 
@@ -372,9 +243,7 @@ String DataModel::__repr__() const
 void DataModel::save(Advocate & adv) const
 {
   DesignOfExperimentImplementation::save(adv);
-  adv.saveAttribute("fileName_", fileName_);
-  adv.saveAttribute("inputColumns_", inputColumns_);
-  adv.saveAttribute("outputColumns_", outputColumns_);
+  DataImport::save(adv);
   adv.saveAttribute("inputNames_", inputNames_);
   adv.saveAttribute("outputNames_", outputNames_);
 }
@@ -384,9 +253,7 @@ void DataModel::save(Advocate & adv) const
 void DataModel::load(Advocate & adv)
 {
   DesignOfExperimentImplementation::load(adv);
-  adv.loadAttribute("fileName_", fileName_);
-  adv.loadAttribute("inputColumns_", inputColumns_);
-  adv.loadAttribute("outputColumns_", outputColumns_);
+  DataImport::load(adv);
   adv.loadAttribute("inputNames_", inputNames_);
   adv.loadAttribute("outputNames_", outputNames_);
 }

@@ -28,11 +28,66 @@
 #include "persalys/OptimizationIntroPage.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
 
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QHeaderView>
 
 namespace PERSALYS
 {
+
+class PERSALYS_API OptimizationBoundsPage : public QWizardPage
+{
+  Q_OBJECT
+
+  friend class TestOptimizationWizard;
+
+public:
+  OptimizationBoundsPage(const QString& subTitle, QWidget* parent = 0);
+
+  void initialize(const Analysis& analysis);
+  bool validatePage();
+  ResizableHeaderlessTableView * getTableView() const {return tableView_;};
+  OptimizationTableModel * getTableModel() const {return tableModel_;};
+
+private:
+  ResizableHeaderlessTableView * tableView_;
+  OptimizationTableModel * tableModel_;
+  TemporaryLabel * errorMessageLabel_;
+};
+
+
+class PERSALYS_API OptimizationStoppingCriteria : public QGridLayout
+{
+  Q_OBJECT
+
+public:
+  OptimizationStoppingCriteria(QWidget* parent = 0);
+  template <class T>
+  void initialize(const T& optimAlgo)
+  {
+    evaluationsSpinBox_->setValue(optimAlgo.getMaximumEvaluationNumber());
+    absoluteErrSpinBox_->setValue(optimAlgo.getMaximumAbsoluteError());
+    relativeErrSpinBox_->setValue(optimAlgo.getMaximumRelativeError());
+    residualErrSpinBox_->setValue(optimAlgo.getMaximumResidualError());
+    constraintErrSpinBox_->setValue(optimAlgo.getMaximumConstraintError());
+  }
+  template <class T>
+  void updateAlgorithm(T& optimAlgo)
+  {
+    optimAlgo.setMaximumEvaluationNumber(evaluationsSpinBox_->value());
+    optimAlgo.setMaximumRelativeError(relativeErrSpinBox_->value());
+    optimAlgo.setMaximumResidualError(residualErrSpinBox_->value());
+    optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
+    optimAlgo.setMaximumAbsoluteError(absoluteErrSpinBox_->value());
+  }
+private:
+  UIntSpinBox * evaluationsSpinBox_;
+  LogDoubleSpinBox * absoluteErrSpinBox_;
+  LogDoubleSpinBox * relativeErrSpinBox_;
+  LogDoubleSpinBox * residualErrSpinBox_;
+  LogDoubleSpinBox * constraintErrSpinBox_;
+};
+
+
 class PERSALYS_API OptimizationWizard : public AnalysisWizard
 {
   Q_OBJECT
@@ -44,7 +99,6 @@ public:
 
   virtual int nextId() const;
   virtual Analysis getAnalysis() const;
-  virtual bool validateCurrentPage();
 
 protected:
   void buildInterface();
@@ -53,16 +107,9 @@ protected:
 
 private:
   OptimizationIntroPage * introPage_;
-  QVBoxLayout * groupBoxLayout_;
-  ResizableHeaderlessTableView * tableView_;
-  OptimizationTableModel * tableModel_;
+  OptimizationBoundsPage * boundsPage_;
   QComboBox * pbTypeComboBox_;
-  UIntSpinBox * evaluationSpinBox_;
-  LogDoubleSpinBox * absoluteErrSpinBox_;
-  LogDoubleSpinBox * relativeErrSpinBox_;
-  LogDoubleSpinBox * residualErrSpinBox_;
-  LogDoubleSpinBox * constraintErrSpinBox_;
-  TemporaryLabel * errorMessageLabel_;
+  OptimizationStoppingCriteria * stoppingCriteriaLayout_;
 };
 }
 #endif

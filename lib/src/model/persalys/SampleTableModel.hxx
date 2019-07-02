@@ -53,7 +53,7 @@ class PERSALYS_API SampleTableModel : public QAbstractTableModel
 
 public:
   SampleTableModel(const OT::Sample & data, QObject * parent = 0);
-  SampleTableModel(const OT::Sample & data, const bool isSortable, QObject * parent = 0);
+  SampleTableModel(const OT::Sample & data, const OT::Description& initialDescription, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -70,6 +70,7 @@ public slots:
 protected:
   OT::Sample data_;
   bool sampleIsSortable_;
+  OT::Description initialDescription_;
 };
 }
 #endif

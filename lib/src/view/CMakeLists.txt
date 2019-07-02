@@ -110,6 +110,7 @@ ot_add_source_file ( MeshDefinitionWizard.cxx )
 ot_add_source_file ( FieldModelEvaluationResultWindow.cxx )
 ot_add_source_file ( FieldMonteCarloWizard.cxx )
 ot_add_source_file ( ExtractDataFieldWizard.cxx )
+ot_add_source_file ( ImportSampleWidget.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -221,6 +222,7 @@ ot_install_header_file ( MeshDefinitionWizard.hxx )
 ot_install_header_file ( FieldModelEvaluationResultWindow.hxx )
 ot_install_header_file ( FieldMonteCarloWizard.hxx )
 ot_install_header_file ( ExtractDataFieldWizard.hxx )
+ot_install_header_file ( ImportSampleWidget.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -325,6 +327,7 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/FieldModelEvaluationResultWindow.hxx
                                   persalys/FieldMonteCarloWizard.hxx
                                   persalys/ExtractDataFieldWizard.hxx
+                                  persalys/ImportSampleWidget.hxx
                                   )
 
 

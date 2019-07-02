@@ -23,11 +23,9 @@
 
 #include "persalys/Analysis.hxx"
 #include "persalys/ImportedDesignOfExperiment.hxx"
-#include "persalys/ExportableTableView.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ImportSampleWidget.hxx"
 
 #include <QWizardPage>
-#include <QLineEdit>
 
 namespace PERSALYS
 {
@@ -44,20 +42,14 @@ public:
 
 protected:
   void buildInterface();
-  virtual void setTable(const QString& fileName);
-  void setData(const QString & fileName);
 
 public slots:
-  void openFileRequested();
-  void columnNameChanged();
+  void setTable(const QString& fileName);
+  void checkColumns();
 
 private:
+  ImportSampleWidget * sampleWidget_;
   ImportedDesignOfExperiment designOfExperiment_;
-  bool pageValidity_;
-  QLineEdit * filePathLineEdit_;
-  ExportableTableView * dataPreviewTableView_;
-  QLabel * DOESizeLabel_;
-  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif

@@ -22,10 +22,11 @@
 #define PERSALYS_DATAMODEL_HXX
 
 #include "DesignOfExperiment.hxx"
+#include "DataImport.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API DataModel : public DesignOfExperimentImplementation
+class PERSALYS_API DataModel : public DesignOfExperimentImplementation, public DataImport
 {
   CLASSNAME
 
@@ -53,21 +54,9 @@ public:
   /** Virtual constructor */
   virtual DataModel * clone() const;
 
-  OT::String getFileName() const;
-  void setFileName(const OT::String& fileName);
-
-  OT::Indices getInputColumns() const;
-  OT::Indices getOutputColumns() const;
-  void setColumns(const OT::Indices & inputColumns,
-                  const OT::Indices & outputColumns = OT::Indices(),
-                  const OT::Description & inputNames = OT::Description(),
-                  const OT::Description & outputNames = OT::Description());
-
   OT::Description getInputNames();
   OT::Description getOutputNames();
   void setNames(const OT::Description & inputNames, const OT::Description & outputNames);
-
-  OT::Sample getSampleFromFile() const;
 
   virtual OT::String getPythonScript() const;
 
@@ -81,15 +70,12 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  OT::Sample getSampleFromFile(const OT::String& fileName);
+  virtual void check();
+  virtual void update();
 
 private:
-  OT::String fileName_;
   OT::Description inputNames_;
   OT::Description outputNames_;
-  OT::Indices outputColumns_;
-  OT::Indices inputColumns_;
-  OT::Sample sampleFromFile_;
 };
 }
 #endif

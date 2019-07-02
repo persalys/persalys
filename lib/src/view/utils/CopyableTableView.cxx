@@ -24,6 +24,7 @@
 #include <QAction>
 #include <QClipboard>
 #include <QHeaderView>
+#include <QScrollBar>
 
 namespace PERSALYS
 {
@@ -71,6 +72,18 @@ void CopyableTableView::resizeToContents()
   int x1, y1, x2, y2;
   getContentsMargins(&x1, &y1, &x2, &y2);
   setFixedSize(w + x1 + x2, h + y1 + y2);
+}
+
+
+void CopyableTableView::resizeWithOptimalHeight()
+{
+  int x1, y1, x2, y2;
+  getContentsMargins(&x1, &y1, &x2, &y2);
+  int h = verticalHeader()->length() + horizontalHeader()->height();
+  // if there is an horizontal scroll bar, add its height
+  if (horizontalScrollBar()->maximum())
+    h += horizontalScrollBar()->sizeHint().height();
+  setFixedHeight(h + y1 + y2);
 }
 
 

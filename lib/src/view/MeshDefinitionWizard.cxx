@@ -20,20 +20,11 @@
  */
 #include "persalys/MeshDefinitionWizard.hxx"
 
-#include "persalys/GridMeshModel.hxx"
-#include "persalys/ImportedMeshModel.hxx"
-#include "persalys/FileTools.hxx"
-#include "persalys/SampleTableModel.hxx"
-#include "persalys/HorizontalHeaderViewWithCombobox.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
 
-#include <QScrollBar>
 #include <QHBoxLayout>
 #include <QRadioButton>
-#include <QToolButton>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QGroupBox>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -43,12 +34,8 @@ namespace PERSALYS
 MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, QWidget* parent)
   : Wizard(parent)
   , mesh_(mesh)
-  , columns_()
   , methodGroup_(0)
   , tableModel_(0)
-  , filePathLineEdit_(0)
-  , dataPreviewTableView_(0)
-  , sizeLabel_(0)
   , errorMessageLabel_(0)
 {
   buildInterface();
@@ -71,18 +58,19 @@ void MeshDefinitionWizard::buildInterface()
   methodGroup_->addButton(manuallyButton, MeshDefinitionWizard::Grid);
   pageLayout->addWidget(manuallyButton);
 
+  // build table
   QStringList headerLabels = QStringList() << tr("Name")
                                            << tr("Description")
                                            << tr("Minimum")
                                            << tr("Maximum")
                                            << tr("Number of nodes");
 
-  QTableView * tableView = new QTableView;
-  tableView->setEditTriggers(QTableView::AllEditTriggers);
-  tableView->horizontalHeader()->setStretchLastSection(true);
-  tableView->verticalHeader()->hide();
+  tableView_ = new CopyableTableView;
+  tableView_->setEditTriggers(QTableView::AllEditTriggers);
+  tableView_->horizontalHeader()->setStretchLastSection(true);
+  tableView_->verticalHeader()->hide();
 
-  tableModel_ = new CustomStandardItemModel(1, headerLabels.size(), tableView);
+  tableModel_ = new CustomStandardItemModel(1, headerLabels.size(), tableView_);
   tableModel_->setHorizontalHeaderLabels(headerLabels);
   const Variable param(mesh_.getIndexParameters()[0]);
   tableModel_->setNotEditableItem(0, 0, QString::fromUtf8(param.getName().c_str()));
@@ -90,185 +78,104 @@ void MeshDefinitionWizard::buildInterface()
   tableModel_->setItem(0, 2, new QStandardItem(QString::number(mesh_.getBounds().getLowerBound()[0])));
   tableModel_->setItem(0, 3, new QStandardItem(QString::number(mesh_.getBounds().getUpperBound()[0])));
   tableModel_->setItem(0, 4, new QStandardItem(QString::number(mesh_.getNumberOfNodes()[0])));
-  tableView->setModel(tableModel_);
+  tableView_->setModel(tableModel_);
 
-  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView);
+  SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView_);
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
   for (int i = 2; i < tableModel_->columnCount() - 1; ++i)
-    tableView->setItemDelegateForColumn(i, spinBoxDelegate);
-  spinBoxDelegate = new SpinBoxDelegate(tableView);
-  tableView->setItemDelegateForColumn(4, spinBoxDelegate);
+    tableView_->setItemDelegateForColumn(i, spinBoxDelegate);
+  spinBoxDelegate = new SpinBoxDelegate(tableView_);
+  tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
 
   // resize table
-  const int h = tableView->verticalHeader()->length() + tableView->horizontalHeader()->height();
-  int x1, y1, x2, y2;
-  tableView->getContentsMargins(&x1, &y1, &x2, &y2);
-  tableView->setFixedHeight(h + y1 + y2);
+  tableView_->resizeWithOptimalHeight();
 
   QWidget * aWidget = new QWidget;
   QVBoxLayout * aLayout = new QVBoxLayout(aWidget);
-  aLayout->addWidget(tableView);
-  pageLayout->addWidget(aWidget);
+  aLayout->addWidget(tableView_);
+  pageLayout->addWidget(aWidget, 0, Qt::AlignTop);
+
+  // error message
+  errorMessageLabel_ = new TemporaryLabel;
+  pageLayout->addWidget(errorMessageLabel_);
 
   // import
   QRadioButton * importButton = new QRadioButton(tr("Import mesh"));
   methodGroup_->addButton(importButton, MeshDefinitionWizard::Import);
   pageLayout->addWidget(importButton);
 
-  // file path
-  QWidget * importWidget = new QWidget;
-  QVBoxLayout * importLayout = new QVBoxLayout(importWidget);
+  sampleWidget_ = new ImportSampleWidget;
+  pageLayout->addWidget(sampleWidget_);
+  connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
+  connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
 
-  QHBoxLayout * hboxLayout = new QHBoxLayout;
-  QLabel * label = new QLabel(tr("File"));
-  hboxLayout->addWidget(label);
+  addPage(page);
 
-  filePathLineEdit_ = new QLineEdit;
-  hboxLayout->addWidget(filePathLineEdit_);
-
-  QToolButton * openFileButton = new QToolButton;
-  openFileButton->setText("...");
-  connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
-  hboxLayout->addWidget(openFileButton);
-
-  importLayout->addLayout(hboxLayout);
-
-  // file preview
-  QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
-  QGridLayout * gridLayout = new QGridLayout(groupBox);
-  gridLayout->setSpacing(6);
-  gridLayout->setContentsMargins(11, 11, 11, 11);
-
-  // DOE size
-  QHBoxLayout * sizeLayout = new QHBoxLayout;
-  QLabel * sizeLabel = new QLabel(tr("Size") + " : ");
-  sizeLayout->addWidget(sizeLabel);
-  sizeLabel_ = new QLabel(QString::number(0));
-  sizeLayout->addWidget(sizeLabel_);
-  sizeLayout->addStretch();
-  gridLayout->addLayout(sizeLayout, 0, 0);
-
-  dataPreviewTableView_ = new ExportableTableView(groupBox);
-  gridLayout->addWidget(dataPreviewTableView_, 1, 0, 1, 1);
-
-  importLayout->addWidget(groupBox);
-
-  pageLayout->addWidget(importWidget);
-
-  // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_);
-
+  // connections
   connect(tableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
-  connect(manuallyButton, SIGNAL(toggled(bool)), errorMessageLabel_, SLOT(reset()));
+  connect(importButton, SIGNAL(toggled(bool)), sampleWidget_, SLOT(setEnabled(bool)));
+  connect(importButton, SIGNAL(toggled(bool)), tableView_, SLOT(setDisabled(bool)));
+  connect(importButton, SIGNAL(toggled(bool)), errorMessageLabel_, SLOT(setDisabled(bool)));
 
-  connect(importButton, SIGNAL(toggled(bool)), importWidget, SLOT(setEnabled(bool)));
-  connect(importButton, SIGNAL(toggled(bool)), tableView, SLOT(setDisabled(bool)));
+  // initialize widgets
+  ImportedMeshModel * importedMeshModel = dynamic_cast<ImportedMeshModel*>(mesh_.getImplementation().get());
+  GridMeshModel * gridMeshModel = dynamic_cast<GridMeshModel*>(mesh_.getImplementation().get());
 
-  const ImportedMeshModel * importedMeshModel = dynamic_cast<ImportedMeshModel*>(mesh_.getImplementation().get());
   if (importedMeshModel)
   {
     importButton->click();
-    columns_ = importedMeshModel->getColumns();
-    setData(QString::fromUtf8(importedMeshModel->getFileName().c_str()));
+    importedMesh_ = *importedMeshModel;
+    sampleWidget_->setData(QString::fromUtf8(importedMeshModel->getFileName().c_str()));
   }
-  else
+  else if (gridMeshModel)
   {
     manuallyButton->click();
-    importWidget->setEnabled(false);
-    columns_ = Indices(1, 0);
+    gridMesh_ = *gridMeshModel;
+    sampleWidget_->setEnabled(false);
   }
-
-  addPage(page);
+  else
+    throw InvalidArgumentException(HERE) << "Unknown mesh class name";
 }
 
 
-void MeshDefinitionWizard::openFileRequested()
+void MeshDefinitionWizard::resizeEvent(QResizeEvent* event)
 {
-  QString fileName = QFileDialog::getOpenFileName(this,
-                     tr("Data to import..."),
-                     FileTools::GetCurrentDir(),
-                     tr("Data files (*.csv *.txt)"));
+  QWizard::resizeEvent(event);
 
-  if (!fileName.isEmpty())
+  if (isVisible() && event->oldSize().width() > 0 && tableView_ && tableModel_)
   {
-    QFile file(fileName);
-    FileTools::SetCurrentDir(fileName);
-
-    // check
-    if (!file.open(QFile::ReadOnly))
-    {
-      QMessageBox::warning(this,
-                           tr("Warning"),
-                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
-    }
-    else
-    {
-      setData(fileName);
-    }
-  }
-}
-
-
-void MeshDefinitionWizard::setData(const QString& fileName)
-{
-  filePathLineEdit_->setText(fileName);
-  try
-  {
-    errorMessageLabel_->reset();
-    setTable(fileName);
-  }
-  catch (std::exception & ex)
-  {
-    dataPreviewTableView_->setModel(0);
-    // DOE size
-    sizeLabel_->setText("");
-    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(ex.what()));
+    tableView_->resizeWithOptimalHeight();
   }
 }
 
 
 void MeshDefinitionWizard::setTable(const QString& fileName)
 {
-  // get sample From File
-  Sample sample(Tools::ImportSample(fileName.toStdString()));
+  // set file name
+  importedMesh_.setFileName(fileName.toUtf8().data());
+  // update widgets
+  sampleWidget_->updateWidgets(importedMesh_.getSampleFromFile(),
+                               Description(1, mesh_.getIndexParameters()[0].getName()),
+                               importedMesh_.getInputColumns());
+}
 
-  // get input names
+
+void MeshDefinitionWizard::checkColumns()
+{
   const Description paramNames(1, mesh_.getIndexParameters()[0].getName());
 
-  // get inputs columns indices
-  Indices columns(columns_);
-  if (!columns.check(sample.getDimension()))
-    columns = Indices(1, 0);
-
-  // set sample description
-  Description desc(sample.getDimension());
-  for (UnsignedInteger i = 0; i < columns.getSize(); ++i)
-    desc[columns[i]] = paramNames[i];
-  sample.setDescription(desc);
-
-  // set table model
-  dataPreviewTableView_->setModel(new SampleTableModel(sample, false, dataPreviewTableView_));
-  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), errorMessageLabel_, SLOT(reset()));
-
-  // set comboboxes items: each of them contains the input Names and an empty item
-  QStringList comboBoxItems;
-  for (UnsignedInteger i = 0; i < paramNames.getSize(); ++i)
-    comboBoxItems << QString::fromUtf8(paramNames[i].c_str());
-  comboBoxItems << "";
-
-  // set horizontal header view
-  QVector<int> columnsWithCombo(sample.getDimension());
-  for (int i = 0; i < columnsWithCombo.size(); ++i)
-    columnsWithCombo[i] = i;
-  HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
-  dataPreviewTableView_->setHorizontalHeader(header);
-  connect(dataPreviewTableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), header, SLOT(fixComboPositions()));
-  dataPreviewTableView_->horizontalHeader()->show();
-  dataPreviewTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-
-  // size
-  sizeLabel_->setText(QString::number(sample.getSize()));
+  // try to update the model
+  try
+  {
+    importedMesh_.setColumns(sampleWidget_->getColumns(paramNames));
+    sampleWidget_->tableValidity_ = true;
+    sampleWidget_->errorMessageLabel_->reset();
+  }
+  catch (InvalidArgumentException & ex)
+  {
+    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("The parameter must be associated with one column."));
+    sampleWidget_->tableValidity_ = false;
+  }
 }
 
 
@@ -282,19 +189,7 @@ MeshModel MeshDefinitionWizard::getMesh() const
   }
   else
   {
-    Indices column;
-    if (dataPreviewTableView_->model())
-    {
-      for (int i = 0; i < dataPreviewTableView_->model()->columnCount(); ++i)
-      {
-        if (newMesh.getIndexParameters()[0].getName() == dataPreviewTableView_->model()->headerData(i, Qt::Horizontal).toString().toStdString())
-        {
-          column.add(i);
-          break;
-        }
-      }
-    }
-    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), filePathLineEdit_->text().toStdString(), column);
+    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), importedMesh_.getFileName(), importedMesh_.getInputColumns());
   }
   return newMesh;
 }
@@ -310,28 +205,11 @@ bool MeshDefinitionWizard::validateCurrentPage()
       errorMessageLabel_->setErrorMessage(tr("The lower bound must be less than the upper bound"));
     if (tableModel_->item(0, 4)->data(Qt::DisplayRole).toInt() < 2)
       errorMessageLabel_->setErrorMessage(tr("The mesh must contain at least two nodes"));
+    return errorMessageLabel_->text().isEmpty();
   }
   else
   {
-    if (filePathLineEdit_->text().isEmpty())
-      errorMessageLabel_->setErrorMessage(tr("The file name is empty"));
-    else if (!dataPreviewTableView_->model())
-      errorMessageLabel_->setErrorMessage("No sample");
-    else
-    {
-      Indices column;
-      for (int i = 0; i < dataPreviewTableView_->model()->columnCount(); ++i)
-      {
-        if (mesh_.getIndexParameters()[0].getName() == dataPreviewTableView_->model()->headerData(i, Qt::Horizontal).toString().toStdString())
-          column.add(i);
-      }
-      if (column.getSize() != 1)
-        errorMessageLabel_->setErrorMessage(tr("Choose a column"));
-
-      if (dataPreviewTableView_->model()->rowCount() < 2)
-        errorMessageLabel_->setErrorMessage("The mesh must contain at least two nodes");
-    }
+    return sampleWidget_->tableValidity_;
   }
-  return errorMessageLabel_->text().isEmpty();
 }
 }

@@ -22,10 +22,11 @@
 #define PERSALYS_IMPORTEDDESIGNOFEXPERIMENT_HXX
 
 #include "DesignOfExperimentEvaluation.hxx"
+#include "DataImport.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation
+class PERSALYS_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation, public DataImport
 {
   CLASSNAME
 
@@ -43,12 +44,7 @@ public:
   /** Virtual constructor */
   virtual ImportedDesignOfExperiment * clone() const;
 
-  OT::String getFileName() const;
-  void setFileName(const OT::String& fileName);
-  OT::Indices getInputColumns() const;
-  void setInputColumns(const OT::Indices& inputColumns);
-
-  OT::Sample getSampleFromFile() const;
+  virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns = OT::Indices());
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
@@ -63,13 +59,9 @@ public:
   void load(OT::Advocate& adv);
 
 protected:
-  OT::Sample getSampleFromFile(const OT::String& fileName) const;
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
-
-protected:
-  OT::String fileName_;
-  OT::Indices inputColumns_;
-  mutable OT::Sample sampleFromFile_;
+  virtual void update();
+  virtual void setDefaultColumns();
 };
 }
 #endif

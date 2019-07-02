@@ -28,6 +28,9 @@
 #include <QMenu>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -109,5 +112,45 @@ void ExportableTableView::exportImage()
   render(&image);
 
   FileTools::ExportImage(image, this);
+}
+
+
+QWidget * ExportableTableView::GetSampleTableViewWidget(Item* item, const OT::Sample& sample)
+{
+  // create the Table
+  ExportableTableView * tableView = new ExportableTableView;
+  connect(item, SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
+  tableView->setSortingEnabled(true);
+
+  SampleTableModel * tableModel = new SampleTableModel(sample, tableView);
+  QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel(tableView);
+  proxyModel->setSourceModel(tableModel);
+  proxyModel->setSortRole(Qt::UserRole);
+
+  tableView->setModel(proxyModel);
+  tableView->sortByColumn(0, Qt::AscendingOrder);
+
+  // create the Widget
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+
+  QHBoxLayout * hLayout = new QHBoxLayout;
+
+  // - sample size
+  QLabel * sizeLabel = new QLabel(tr("Size") + " : " + QString::number(sample.getSize()));
+  hLayout->addWidget(sizeLabel);
+  hLayout->addStretch();
+
+  // - export button
+  QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
+  hLayout->addWidget(exportButton);
+  connect(exportButton, SIGNAL(clicked()), tableView, SLOT(exportData()));
+
+  mainLayout->addLayout(hLayout);
+
+  // - table
+  mainLayout->addWidget(tableView);
+
+  return mainWidget;
 }
 }

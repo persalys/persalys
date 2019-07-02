@@ -48,7 +48,7 @@ void TemporaryLabel::setMessage(const QString& message)
 
 void TemporaryLabel::setErrorMessage(const QString& message)
 {
-  setStyleSheet("QLabel {color: red;}");
+  setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
   setText(message);
 }
 

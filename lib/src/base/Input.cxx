@@ -116,8 +116,9 @@ void Input::setDistribution(const Distribution & distribution)
     return;
   }
   isStochastic_ = true;
+  if (distribution_.getName() != distribution.getName())
+    distributionParametersType_ = 0;
   distribution_ = distribution;
-  distributionParametersType_ = 0;
 }
 
 

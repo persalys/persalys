@@ -23,14 +23,12 @@
 
 #include "persalys/LimitState.hxx"
 #include "persalys/Analysis.hxx"
-#include "persalys/LogDoubleSpinBox.hxx"
-#include "persalys/UIntSpinBox.hxx"
+#include "persalys/OptimizationWizard.hxx"
 
 #include <openturns/OptimizationAlgorithm.hxx>
 
 #include <QWizardPage>
 #include <QLineEdit>
-#include <QButtonGroup>
 
 namespace PERSALYS
 {
@@ -61,11 +59,7 @@ private:
   OT::Point startingPoint_;
   QLineEdit * pointLineEdit_;
   QButtonGroup * algoChoice_;
-  UIntSpinBox * evaluationsSpinBox_;
-  LogDoubleSpinBox * absoluteErrSpinBox_;
-  LogDoubleSpinBox * relativeErrSpinBox_;
-  LogDoubleSpinBox * residualErrSpinBox_;
-  LogDoubleSpinBox * constraintErrSpinBox_;
+  OptimizationStoppingCriteria * stoppingCriteriaLayout_;
 };
 }
 #endif

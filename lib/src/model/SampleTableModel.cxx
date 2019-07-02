@@ -35,14 +35,16 @@ SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
   : QAbstractTableModel(parent)
   , data_(data)
   , sampleIsSortable_(true)
+  , initialDescription_()
 {
 }
 
 
-SampleTableModel::SampleTableModel(const Sample & data, const bool isSortable, QObject * parent)
+SampleTableModel::SampleTableModel(const Sample & data, const Description& initialDescription, QObject * parent)
   : QAbstractTableModel(parent)
   , data_(data)
-  , sampleIsSortable_(isSortable)
+  , sampleIsSortable_(initialDescription.getSize() == 0)
+  , initialDescription_(initialDescription)
 {
 }
 
@@ -57,7 +59,7 @@ int SampleTableModel::columnCount(const QModelIndex& /*parent*/) const
 
 int SampleTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
-  return data_.getSize();
+  return sampleIsSortable_ ? data_.getSize() : data_.getSize() + 1;
 }
 
 
@@ -76,7 +78,12 @@ QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, 
       return Qt::AlignCenter;
   }
   else if (orientation == Qt::Vertical && role == Qt::DisplayRole)
-    return section;
+  {
+    if (!(!sampleIsSortable_ && section == 0))
+      return sampleIsSortable_ ? section : section - 1;
+    else
+      return QVariant();
+  }
 
   return QAbstractTableModel::headerData(section, orientation, role);
 }
@@ -101,29 +108,36 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
   if (!index.isValid())
     return QVariant();
 
-  const int dataIndex = sampleIsSortable_ ? index.column() - 1 : index.column();
+  const int dataColIndex = sampleIsSortable_ ? index.column() - 1 : index.column();
+  const int dataRowIndex = sampleIsSortable_ ? index.row() : index.row() - 1;
 
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
 
   else if (role == Qt::DisplayRole)
   {
-    if (!index.column() && sampleIsSortable_)
+    if (sampleIsSortable_ && index.column() == 0)
       return QString::number(index.row());
+    else if (!sampleIsSortable_ && index.row() == 0)
+      return QString::fromUtf8(initialDescription_[index.column()].c_str());
     else
-      return QString::number(data_(index.row(), dataIndex), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      return QString::number(data_(dataRowIndex, dataColIndex), 'g', StudyTreeViewModel::DefaultSignificantDigits);
   }
 
-  else if (role == Qt::UserRole)
+  else if (sampleIsSortable_ && role == Qt::UserRole)
   {
-    if (!index.column() && sampleIsSortable_)
+    if (index.column() == 0)
       return index.row();
     else
-      return data_(index.row(), dataIndex);
+      return data_(index.row(), dataColIndex);
   }
 
-  else if (role == Qt::BackgroundRole && index.column() && !SpecFunc::IsNormal(data_(index.row(), dataIndex)))
-    return QColor(Qt::red);
+  else if (role == Qt::BackgroundRole)
+  {
+    if ((sampleIsSortable_ && index.column() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))) ||
+        (!sampleIsSortable_ && index.row() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))))
+      return QColor(Qt::red);
+  }
 
   return QVariant();
 }
@@ -137,6 +151,7 @@ Sample SampleTableModel::getSample() const
 
 void SampleTableModel::updateHeaderData(const Description& header)
 {
+  Q_ASSERT(sampleIsSortable_);
   Q_ASSERT(header.getSize() == data_.getDimension());
   data_.setDescription(header);
   emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
@@ -145,6 +160,7 @@ void SampleTableModel::updateHeaderData(const Description& header)
 
 void SampleTableModel::updateData(const Sample& data)
 {
+  Q_ASSERT(sampleIsSortable_);
   beginResetModel();
   data_ = data;
   endResetModel();

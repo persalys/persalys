@@ -150,6 +150,14 @@ void StudyImplementation::clear()
     limitStates_[i].getImplementation().get()->notifyAndRemove("limitStateRemoved", "Study");
   }
 
+  // remove all the datamodels
+  for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
+  {
+    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
+    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
+    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "Study");
+  }
+
   // remove all the physical models
   for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
   {
@@ -158,14 +166,6 @@ void StudyImplementation::clear()
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Mesh");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDiagram");
     physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Study");
-  }
-
-  // remove all the datamodels
-  for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
-  {
-    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
-    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
-    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "Study");
   }
 }
 

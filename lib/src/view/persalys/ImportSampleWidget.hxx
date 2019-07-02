@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define deterministic designs of experiments
+ *  @brief QWidget to import sample
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,36 +18,45 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_DETERMINISTICDESIGNPAGE_HXX
-#define PERSALYS_DETERMINISTICDESIGNPAGE_HXX
+#ifndef PERSALYS_IMPORTSAMPLEWIDGET_HXX
+#define PERSALYS_IMPORTSAMPLEWIDGET_HXX
 
-#include "persalys/Analysis.hxx"
-#include "persalys/ResizableHeaderlessTableView.hxx"
+#include "persalys/ExportableTableView.hxx"
 #include "persalys/TemporaryLabel.hxx"
-#include "persalys/ExperimentTableModel.hxx"
 
-#include <QWizardPage>
+#include <openturns/OTType.hxx>
+
+#include <QLineEdit>
 
 namespace PERSALYS
 {
-class PERSALYS_API GridDesignPage : public QWizardPage
+class PERSALYS_API ImportSampleWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  GridDesignPage(QWidget *parent = 0);
+  friend class ImportedDesignPage;
+  friend class MeshDefinitionWizard;
+  friend class TestMeshDefinitionWizard;
 
-  void initialize(const Analysis& analysis);
-  Analysis getAnalysis();
-  bool validatePage();
+  ImportSampleWidget(QWidget *parent = 0);
 
 protected:
   void buildInterface();
-  virtual void resizeEvent(QResizeEvent * event);
+  void setData(const QString & fileName);
+  void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns);
+  OT::Indices getColumns(const OT::Description& names) const;
 
-private:
-  ResizableHeaderlessTableView * tableView_;
-  ExperimentTableModel * tableModel_;
+public slots:
+  void openFileRequested();
+signals:
+  void updateTableRequested(const QString & fileName);
+  void checkColumnsRequested();
+
+protected:
+  bool tableValidity_;
+  QLineEdit * filePathLineEdit_;
+  ExportableTableView * dataPreviewTableView_;
   QLabel * DOESizeLabel_;
   TemporaryLabel * errorMessageLabel_;
 };

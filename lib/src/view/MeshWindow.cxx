@@ -40,7 +40,6 @@
 #endif
 
 #include <QVBoxLayout>
-#include <QTableView>
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QToolButton>
@@ -72,9 +71,9 @@ void MeshWindow::buildInterface()
   QGroupBox * groupBox = new QGroupBox(tr("Index parameter"));
   QGridLayout * groupBoxLayout = new QGridLayout(groupBox);
 
-  QTableView * tableView = new QTableView;
-  tableView->horizontalHeader()->setStretchLastSection(true);
-  tableView->verticalHeader()->hide();
+  tableView_ = new CopyableTableView;
+  tableView_->horizontalHeader()->setStretchLastSection(true);
+  tableView_->verticalHeader()->hide();
 
   // fill in table
   QStringList headerLabels = QStringList() << tr("Name")
@@ -82,8 +81,8 @@ void MeshWindow::buildInterface()
                                            << tr("Minimum")
                                            << tr("Maximum")
                                            << tr("Number of nodes");
-  tableModel_ = new CustomStandardItemModel(1, headerLabels.size(), tableView);
-  tableView->setModel(tableModel_);
+  tableModel_ = new CustomStandardItemModel(1, headerLabels.size(), tableView_);
+  tableView_->setModel(tableModel_);
 
   // fill in table
   tableModel_->setHorizontalHeaderLabels(headerLabels);
@@ -100,12 +99,9 @@ void MeshWindow::buildInterface()
   connect(tableModel_, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(updateModel(QStandardItem *)));
 
   // resize table
-  const int h = tableView->verticalHeader()->length() + tableView->horizontalHeader()->height();
-  int x1, y1, x2, y2;
-  tableView->getContentsMargins(&x1, &y1, &x2, &y2);
-  tableView->setFixedHeight(h + y1 + y2);
+  tableView_->resizeWithOptimalHeight();
 
-  groupBoxLayout->addWidget(tableView, 0, 0);
+  groupBoxLayout->addWidget(tableView_, 0, 0);
 
   // edit button
   QToolButton * editButton = new QToolButton;
@@ -135,6 +131,17 @@ void MeshWindow::buildInterface()
   }
 
   mainLayout->addWidget(tabWidget_, 1);
+}
+
+
+void MeshWindow::resizeEvent(QResizeEvent* event)
+{
+  SubWindow::resizeEvent(event);
+
+  if (isVisible() && event->oldSize().width() > 0 && tableView_ && tableModel_)
+  {
+    tableView_->resizeWithOptimalHeight();
+  }
 }
 
 
@@ -225,8 +232,8 @@ void MeshWindow::updatePlot()
 //   tabWidget_->addTab(plotWidget, tr("Mesh"));
 // 
 //   // table
-//   QWidget * tableView = new QWidget;
-//   QVBoxLayout * tableViewLayout = new QVBoxLayout(tableView);
+//   QWidget * tableView_ = new QWidget;
+//   QVBoxLayout * tableViewLayout = new QVBoxLayout(tableView_);
 // 
 //   // with paraview the table is always shown in order to use the selection behavior
 //   PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
@@ -235,7 +242,7 @@ void MeshWindow::updatePlot()
 // 
 //   tableViewLayout->addWidget(pvSpreadSheetWidget);
 // 
-//   tabWidget_->addTab(tableView, tr("Table"));
+//   tabWidget_->addTab(tableView_, tr("Table"));
 // }
 
 

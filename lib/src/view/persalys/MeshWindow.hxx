@@ -31,6 +31,7 @@
 #include <QTabWidget>
 #include <QStandardItem>
 #include <QLabel>
+#include <QResizeEvent>
 
 namespace PERSALYS
 {
@@ -48,6 +49,9 @@ public:
   void addWidgetsTabs();
   void updatePlot();
 
+protected:
+  virtual void resizeEvent(QResizeEvent * event);
+
 public slots:
   void updateTable();
   void updateModel(QStandardItem *item);
@@ -56,6 +60,7 @@ public slots:
 private:
   MeshItem * meshItem_;
   QLabel * isRegularLabel_;
+  CopyableTableView * tableView_;
   CustomStandardItemModel * tableModel_;
   PlotWidget * meshPlot_;
   SampleTableModel * nodesModel_;

@@ -22,6 +22,9 @@
 #define PERSALYS_EXPORTABLETABLEVIEW_HXX
 
 #include "persalys/CopyableTableView.hxx"
+#include "persalys/Item.hxx"
+
+#include <openturns/Sample.hxx>
 
 namespace PERSALYS
 {
@@ -33,6 +36,8 @@ public:
   ExportableTableView(QWidget * parent = 0);
 
   void setExportableAsImage(const bool exportable);
+
+  static QWidget * GetSampleTableViewWidget(Item* item, const OT::Sample& sample);
 
 public slots:
   void contextMenu(const QPoint & pos);

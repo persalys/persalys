@@ -74,67 +74,30 @@ MorrisAnalysis* MorrisAnalysis::clone() const
 void MorrisAnalysis::initializeParameters()
 {
   inputNames_ = getPhysicalModel().getInputNames();
-  const UnsignedInteger nbInputs = inputNames_.getSize();
-  bounds_ = Interval(nbInputs);
 
-  Point lowerBounds(nbInputs, 0.9);
-  Point upperBounds(nbInputs, 1.1);
-
-  for (UnsignedInteger i = 0; i < nbInputs; ++i)
-  {
-    const Input input_i = getPhysicalModel().getInputs()[i];
-    if (!input_i.isStochastic())
-    {
-      const Scalar value = input_i.getValue();
-      if (value != 0)
-      {
-        lowerBounds[i] = 0.9 * value;
-        upperBounds[i] = 1.1 * value;
-      }
-    }
-    else
-    {
-      const Distribution distribution = input_i.getDistribution();
-
-      // lower bound
-      if (distribution.getRange().getFiniteLowerBound()[0])
-        lowerBounds[i] = distribution.getRange().getLowerBound()[0];
-      else
-        lowerBounds[i] = distribution.computeQuantile(0.01)[0];
-      // upper bound
-      if (distribution.getRange().getFiniteUpperBound()[0])
-        upperBounds[i] = distribution.getRange().getUpperBound()[0];
-      else
-        upperBounds[i] = distribution.computeQuantile(0.99)[0];
-    }
-  }
-  bounds_.setLowerBound(lowerBounds);
-  bounds_.setUpperBound(upperBounds);
+  Point fakePoint;
+  Tools::ComputeBounds(getPhysicalModel().getInputs(), fakePoint, bounds_);
 }
 
 
 void MorrisAnalysis::updateParameters()
 {
   const Description inputNames(inputNames_);
-  const Point lowBounds(bounds_.getLowerBound());
-  const Point upBounds(bounds_.getUpperBound());
+  const Point lowerBounds(bounds_.getLowerBound());
+  const Point upperBounds(bounds_.getUpperBound());
 
   initializeParameters();
 
-  if (!(lowBounds.getSize() == inputNames_.getSize() &&
-        upBounds.getSize() == inputNames_.getSize()))
-    return;
-
-  Point newLowerBounds(inputNames_.getSize());
-  Point newUpperBounds(inputNames_.getSize());
+  Point newLowerBounds(bounds_.getLowerBound());
+  Point newUpperBounds(bounds_.getUpperBound());
 
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
     {
-      newLowerBounds[i] = lowBounds[it - inputNames.begin()];
-      newUpperBounds[i] = upBounds[it - inputNames.begin()];
+      newLowerBounds[i] = lowerBounds[it - inputNames.begin()];
+      newUpperBounds[i] = upperBounds[it - inputNames.begin()];
     }
   }
   bounds_.setLowerBound(newLowerBounds);

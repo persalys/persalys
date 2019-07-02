@@ -39,8 +39,7 @@ public:
   /** Constructor with parameters */
   GridDesignOfExperiment(const OT::String & name,
                          const PhysicalModel & physicalModel,
-                         const OT::Point & lowerBounds,
-                         const OT::Point & upperBounds,
+                         const OT::Interval & bounds,
                          const OT::Indices & nbValues,
                          const OT::Point & values = OT::Point(0));
 
@@ -51,10 +50,8 @@ public:
 
   OT::Point getValues() const;
   void setValues(const OT::Point & values);
-  OT::Point getLowerBounds() const;
-  void setLowerBounds(const OT::Point & lowerBounds);
-  OT::Point getUpperBounds() const;
-  void setUpperBounds(const OT::Point & upperBounds);
+  OT::Interval getBounds() const;
+  void setBounds(const OT::Interval & bounds);
   OT::Indices getLevels() const;
   void setLevels(const OT::Indices & nbValues);
   OT::Point getDeltas() const;
@@ -84,8 +81,7 @@ protected:
   OT::Point values_;
 private:
   Type type_;
-  OT::Point lowerBounds_;
-  OT::Point upperBounds_;
+  OT::Interval bounds_;
   OT::Indices levels_;
   OT::Point deltas_;
 };

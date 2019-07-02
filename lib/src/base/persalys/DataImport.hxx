@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to build mesh with a file
+ *  @brief Class to import file data
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,34 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_IMPORTEDMESHMODEL_HXX
-#define PERSALYS_IMPORTEDMESHMODEL_HXX
+#ifndef PERSALYS_DATAIMPORT_HXX
+#define PERSALYS_DATAIMPORT_HXX
 
-#include "MeshModelImplementation.hxx"
-#include "DataImport.hxx"
+#include "persalys/PersalysPrivate.hxx"
+
+#include <openturns/Sample.hxx>
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportedMeshModel : public MeshModelImplementation, public DataImport
+class PERSALYS_API DataImport
 {
-  CLASSNAME
-
 public:
   /** Default constructor */
-  ImportedMeshModel();
+  DataImport();
   /** Constructor with parameters */
-  ImportedMeshModel(const OT::String& fileName, const OT::Indices& columns=OT::Indices(1, 0));
-  ImportedMeshModel(const VariableCollection& parameters, const OT::String& fileName, const OT::Indices& columns=OT::Indices(1, 0));
+  DataImport(const OT::String & fileName,
+            const OT::Indices & inputColumns,
+            const OT::Indices & outputColumns = OT::Indices());
 
-  /** Virtual constructor */
-  virtual ImportedMeshModel * clone() const;
+  virtual ~DataImport();
 
-  virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns = OT::Indices());
-  OT::Interval getBounds() const;
-  OT::Indices getNumberOfNodes() const;
+  OT::String getFileName() const;
+  void setFileName(const OT::String& fileName);
 
-  virtual OT::String getHtmlDescription() const;
-  virtual OT::String getPythonScript() const;
+  OT::Indices getInputColumns() const;
+  OT::Indices getOutputColumns() const;
+  virtual void setColumns(const OT::Indices & inputColumns,
+                          const OT::Indices & outputColumns = OT::Indices());
+
+  OT::Sample getSampleFromFile() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -57,8 +59,16 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+//   OT::Sample getSampleFromFile(const OT::String& fileName);
+  virtual void check();
   virtual void update();
   virtual void setDefaultColumns();
+
+protected:
+  OT::String fileName_;
+  OT::Indices outputColumns_;
+  OT::Indices inputColumns_;
+  OT::Sample sampleFromFile_;
 };
 }
 #endif
