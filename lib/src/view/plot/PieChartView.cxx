@@ -153,7 +153,11 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   for (UnsignedInteger i = 0; i < size; ++i)
   {
     const QString text = QString::fromUtf8(data.getDescription()[i].c_str());
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    const int textWidth = fm.horizontalAdvance(text);
+#else
     const int textWidth = fm.width(text);
+#endif
     if (textWidth > maxTextWidth)
       maxTextWidth = textWidth;
 

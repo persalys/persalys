@@ -95,7 +95,7 @@ QString CopyableTableView::getFormattedText() const
   if(list.size() < 1)
     return result;
 
-  qSort(list);
+  std::sort(list.begin(), list.end());
 
   QModelIndex previous = list.first();
 
