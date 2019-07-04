@@ -46,6 +46,7 @@ public slots:
   void openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard = false);
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis);
   void openDesignOfExperimentEvaluationWizard(const PhysicalModel& model);
+  void openObservationsWizard(PhysicalModelDefinitionItem*, const DesignOfExperiment& designOfExp);
   void openExtractDataFieldWizard(const Analysis& analysis);
 
   // create windows
@@ -60,6 +61,7 @@ public slots:
   void createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);
   void createLimitStateWindow(LimitStateItem* item);
   void createAnalysisWindow(AnalysisItem* item, const bool createConnections = true);
+  void createObservationsWindow(ObservationsItem*);
 
   // modify objects
   void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);

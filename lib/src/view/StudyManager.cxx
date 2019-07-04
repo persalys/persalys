@@ -36,6 +36,8 @@
 
 #include "persalys/DesignOfExperimentEvaluationWizard.hxx"
 #include "persalys/ExtractDataFieldWizard.hxx"
+#include "persalys/ObservationsWizard.hxx"
+#include "persalys/ObservationsWindow.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -140,6 +142,21 @@ void StudyManager::openAnalysisWizard(Item* item, const Analysis& analysis, cons
 }
 
 
+void StudyManager::openObservationsWizard(PhysicalModelDefinitionItem* item, const DesignOfExperiment& designOfExp)
+{
+  if (!item || !item->getParentStudyItem())
+    return;
+
+  ObservationsWizard * wizard = new ObservationsWizard(designOfExp);
+
+  if (wizard && wizard->exec())
+  {
+    item->getParentStudyItem()->getStudy().add(wizard->getDesignOfExperiment());
+    delete wizard;
+  }
+}
+
+
 void StudyManager::openExtractDataFieldWizard(const Analysis& analysis)
 {
   ExtractDataFieldWizard * wizard = new ExtractDataFieldWizard(analysis, mainWidget_);
@@ -225,6 +242,7 @@ void StudyManager::createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* it
   connect(item, SIGNAL(designOfExperimentEvaluationRequested(PhysicalModel)), this, SLOT(openDesignOfExperimentEvaluationWizard(PhysicalModel)));
   connect(item, SIGNAL(doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*)), this, SLOT(createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem*)));
   connect(item, SIGNAL(analysisRequested(Item*, Analysis, bool)), this, SLOT(openAnalysisWizard(Item*, Analysis, bool)));
+  connect(item, SIGNAL(observationsCreated(ObservationsItem*)), this, SLOT(createObservationsWindow(ObservationsItem*)));
 
   // window
   PhysicalModelDiagramWindow * window = new PhysicalModelDiagramWindow(item, mainWidget_);
@@ -276,6 +294,7 @@ void StudyManager::createPhysicalModelWindow(PhysicalModelDefinitionItem* item)
   // connections
   connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisRequested(Item*, const Analysis&)), this, SLOT(openAnalysisWizard(Item*, const Analysis&)));
+  connect(item, SIGNAL(observationsRequested(PhysicalModelDefinitionItem*, DesignOfExperiment)), this, SLOT(openObservationsWizard(PhysicalModelDefinitionItem*, DesignOfExperiment)));
 
   // window
   SubWindow * window = WindowFactory::GetPhysicalModelWindow(item, mainWidget_);
@@ -390,6 +409,19 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     connect(this, SIGNAL(analysisInProgressStatusChanged(bool)), analysisWindow, SLOT(updateRunButtonAvailability(bool)));
     updateView(analysisWindow);
   }
+}
+
+
+void StudyManager::createObservationsWindow(ObservationsItem* item)
+{
+  if (!item)
+    return;
+
+  connect(item, SIGNAL(analysisRequested(Item*, Analysis)), this, SLOT(openAnalysisWizard(Item*, Analysis)));
+  connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+
+  ObservationsWindow * window = new ObservationsWindow(item, mainWidget_);
+  updateView(window);
 }
 
 
