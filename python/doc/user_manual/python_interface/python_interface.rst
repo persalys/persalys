@@ -62,6 +62,20 @@ Optimization
         MorrisAnalysis
         MorrisResult
 
+Calibration
+-----------
+
+.. currentmodule:: persalys
+
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
+
+    Observations
+    CalibrationAnalysis
+    CalibrationAnalysisResult
+
+
 Probabilistic studies
 ---------------------
 

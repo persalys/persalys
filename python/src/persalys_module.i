@@ -177,6 +177,8 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include CopulaInferenceResult.i
 %include CopulaInferenceAnalysis.i
 %include OptimizationAnalysis.i
+%include CalibrationAnalysisResult.i
+%include CalibrationAnalysis.i
 %include StudyImplementation.i
 %include Study.i
 

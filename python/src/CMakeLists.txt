@@ -176,6 +176,8 @@ ot_add_python_module (persalys persalys_module.i
                       CopulaInferenceResult.i CopulaInferenceResult_doc.i.in
                       CopulaInferenceAnalysis.i CopulaInferenceAnalysis_doc.i.in
                       OptimizationAnalysis.i OptimizationAnalysis_doc.i.in
+                      CalibrationAnalysis.i CalibrationAnalysis_doc.i.in
+                      CalibrationAnalysisResult.i CalibrationAnalysisResult_doc.i.in
                       StudyImplementation.i
                       Study.i Study_doc.i.in
                     )
