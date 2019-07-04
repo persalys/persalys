@@ -66,6 +66,18 @@ ImportedMeshModel* ImportedMeshModel::clone() const
 }
 
 
+Sample ImportedMeshModel::importSample(const String& fileName)
+{
+  Sample sampleFromFile(DataImport::importSample(fileName));
+
+  // check sampleFromFile size
+  if (sampleFromFile.getSize() < 2)
+    throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
+
+  return sampleFromFile;
+}
+
+
 void ImportedMeshModel::setDefaultColumns()
 {
   setColumns(Indices(1, 0));
@@ -93,8 +105,7 @@ void ImportedMeshModel::setColumns(const Indices& inputColumns, const Indices& /
   // check columns
   if (inputColumns.getSize() != getIndexParameters().getSize())
     throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " << getIndexParameters().getSize();
-  if (getSampleFromFile().getSize() < 2)
-    throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
+
   DataImport::setColumns(inputColumns);
 }
 

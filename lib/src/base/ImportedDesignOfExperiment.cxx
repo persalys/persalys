@@ -36,6 +36,7 @@ static Factory<ImportedDesignOfExperiment> Factory_ImportedDesignOfExperiment;
 /* Default constructor */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment()
   : DesignOfExperimentEvaluation()
+  , DataImport()
 {
 }
 
@@ -81,6 +82,7 @@ void ImportedDesignOfExperiment::setColumns(const Indices& inputColumns, const I
   // check columns
   if (inputColumns.getSize() != getPhysicalModel().getInputDimension())
     throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: " << getPhysicalModel().getInputDimension();
+
   DataImport::setColumns(inputColumns);
 }
 

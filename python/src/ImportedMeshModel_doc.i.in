@@ -54,20 +54,10 @@ columns : sequence of int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::ImportedMeshModel::getFileName
-"File name accessor.
+%feature("docstring") PERSALYS::ImportedMeshModel::setColumns
+"Columns of the index parameters accessor.
 
-Returns
--------
-fileName : str
-   Name of a data file to load"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::ImportedMeshModel::getColumns
-"Columns accessor.
-
-Returns
--------
-columns : :py:class:`openturns.Indices`
+Parameters
+----------
+columns : sequence of int
    Columns of the index parameters"

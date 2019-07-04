@@ -36,55 +36,10 @@ Create the design of experiments:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::ImportedDesignOfExperiment::ImportSample
-"Import a sample from a file.
-
-Parameters
-----------
-fileName : str
-   File name (.txt, .csv)
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Sample"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getFileName
-"File name accessor.
-
-Returns
--------
-fileName : str
-   File name"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setFileName
-"File name accessor.
-
-Parameters
-----------
-fileName : str
-   File name"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getInputColumns
-"Input columns accessor.
-
-Returns
--------
-columns : :py:class:`openturns.Indices`
-   Columns of the inputs"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setInputColumns
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setColumns
 "Input columns accessor.
 
 Parameters
 ----------
 columns : sequence of int
-   Columns of the inputs"
+   Columns of the input variables"
