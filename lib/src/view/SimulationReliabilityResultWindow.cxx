@@ -215,8 +215,6 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 {
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   // get output info
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
@@ -238,15 +236,13 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
   plot->setTitle(tr("%1 output distribution").arg(outputName));
 
-  plotWidgetLayout->addWidget(plot);
-
   GraphConfigurationWidget * histogramSettingWidget = new GraphConfigurationWidget(plot,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::NoType,
       this);
-  plotWidget->setDockWidget(histogramSettingWidget);
-  scrollArea->setWidget(plotWidget);
+
+  scrollArea->setWidget(new WidgetBoundToDockWidget(plot, histogramSettingWidget, this));
 
   return scrollArea;
 }
@@ -256,8 +252,6 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
 {
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   // do not use a simple QWidget here otherwise it is not possible to resize the window
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
@@ -290,9 +284,8 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
       QStringList(),
       GraphConfigurationWidget::NoType,
       this);
-  plotWidget->setDockWidget(convergenceGraphSettingWidget);
-  plotWidgetLayout->addWidget(stackedWidget);
-  scrollArea->setWidget(plotWidget);
+
+  scrollArea->setWidget(new WidgetBoundToDockWidget(plot, convergenceGraphSettingWidget, this));
 
   return scrollArea;
 }

@@ -252,15 +252,10 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
     klWidget->addWidget(eigenWidget);
 
     // 2- modes graph
-    WidgetBoundToDockWidget * modesWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * modesWidgetLayout = new QVBoxLayout(modesWidget);
-    modesStackedWidget->addWidget(modesWidget);
-
 #ifdef PERSALYS_HAVE_PARAVIEW
     if (canUseParaview)
     {
       PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
-      modesWidgetLayout->addWidget(outPVGraph);
 
       Sample sample(scaledModes.getMesh().getVertices());
       QStringList labels;
@@ -278,13 +273,13 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       outPVGraph->setAxisToShow(labels);
 
       PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph, labels, PVXYChartSettingWidget::Trajectories, this);
-      modesWidget->setDockWidget(scatterSettingWidget);
+
+      modesStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
     }
 #endif
     if (!canUseParaview)
     {
       PlotWidget * plotWidget = new PlotWidget;
-      modesWidgetLayout->addWidget(plotWidget);
       const Description colors(Drawable().BuildDefaultPalette(nbModes));
 
       for (UnsignedInteger i = 0; i < nbModes; ++i)
@@ -303,16 +298,14 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
           QStringList(),
           GraphConfigurationWidget::NoType,
           this);
-      modesWidget->setDockWidget(graphSetting);
+
+      modesStackedWidget->addWidget(new WidgetBoundToDockWidget(plotWidget, graphSetting, this));
     }
 
     // 3- Cumulative eigen value sum graph
 #ifdef PERSALYS_HAVE_PARAVIEW
     if (canUseParaview && nbModes > 1)
     {
-      WidgetBoundToDockWidget * cumulWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * cumulWidgetLayout = new QVBoxLayout(cumulWidget);
-
       PVXYChartViewWidget * eigenPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
       cumulEigenSample.setDescription(QtOT::StringListToDescription(QStringList() << tr("Mode") << tr("Cumulative sum")));
       eigenPVGraph->setData(cumulEigenSample, Qt::blue);
@@ -322,12 +315,10 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       eigenPVGraph->setXAxisRange(0. - 0.1, nbModes - 1 + 0.1);
       const double min = cumulEigenSample(0, 1);
       eigenPVGraph->setYAxisRange(min - (1 - min) * 0.04, 1 + (1 - min) * 0.02);
-      cumulWidgetLayout->addWidget(eigenPVGraph);
 
       PVXYChartSettingWidget * cumulSettingWidget = new PVXYChartSettingWidget(eigenPVGraph, QStringList(), PVXYChartSettingWidget::Simple, this);
-      cumulWidget->setDockWidget(cumulSettingWidget);
 
-      klWidget->addWidget(cumulWidget);
+      klWidget->addWidget(new WidgetBoundToDockWidget(eigenPVGraph, cumulSettingWidget, this));
       klWidget->setCollapsible(0, false);
       klWidget->setStretchFactor(1, 5);
     }
@@ -339,9 +330,6 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       const Sample xi_sample(result_.getXiSamples()[out]);
 
       // plot matrix tab --------------------------------
-      WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
-
       ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
       QVector<PlotWidget*> listPlotWidgets;
 
@@ -382,15 +370,9 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
           this);
       connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
-      plotWidget->setDockWidget(graphSetting);
-      plotWidgetLayout->addWidget(stackedWidget);
-
-      xiPDFStackedWidget->addWidget(plotWidget);
+      xiPDFStackedWidget->addWidget(new WidgetBoundToDockWidget(stackedWidget, graphSetting, this));
 
       // Plot matrix
-      WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
-      xiMatrixStackedWidget->addWidget(matrixTabWidget);
 #ifdef PERSALYS_HAVE_PARAVIEW
       if (canUseParaview)
       {
@@ -398,20 +380,19 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
         pvmatrixWidget->setData(xi_sample);
         // the variables are automatically sorted : use setAxisToShow with the order of the sample
         pvmatrixWidget->setAxisToShow(xi_sample.getDescription());
-        matrixTabWidgetLayout->addWidget(pvmatrixWidget);
 
         // setting widget
         PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
-        matrixTabWidget->setDockWidget(matrixSettingWidget);
+
+        xiMatrixStackedWidget->addWidget(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this));
       }
 #endif
       if (!canUseParaview)
       {
         PlotMatrixWidget * matrixWidget = new PlotMatrixWidget(xi_sample, xi_sample);
-
         PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(matrixWidget, this);
-        matrixTabWidget->setDockWidget(plotMatrixSettingWidget);
-        matrixTabWidgetLayout->addWidget(matrixWidget);
+
+        xiMatrixStackedWidget->addWidget(new WidgetBoundToDockWidget(matrixWidget, plotMatrixSettingWidget, this));
       }
     }
   }
@@ -440,9 +421,6 @@ void FieldCentralTendencyResultWindow::addCorrelationTab()
   // for each output
   for (UnsignedInteger out = 0; out < nbOutput; ++out)
   {
-    WidgetBoundToDockWidget * corrWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * corrWidgetLayout = new QVBoxLayout(corrWidget);
-
     QVector<PlotWidget*> listPlot;
     PlotWidget * corrPlot = new PlotWidget(tr("correlation"));
     Graph graph(result_.getCorrelationFunction()[out].draw(Point(2, minValueVertices), Point(2,  maxValueVertices)));
@@ -450,15 +428,13 @@ void FieldCentralTendencyResultWindow::addCorrelationTab()
     corrPlot->setTitle(tr("Empirical correlation") + " " + outNames[out]);
     corrPlot->setAxisTitle(QwtPlot::xBottom, meshParamName);
     corrPlot->setAxisTitle(QwtPlot::yLeft, meshParamName + "'");
-    corrWidgetLayout->addWidget(corrPlot);
     listPlot.append(corrPlot);
     GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlot,
                                                                           QStringList(),
                                                                           QStringList(),
                                                                           GraphConfigurationWidget::NoType,
                                                                           this);
-    corrWidget->setDockWidget(graphSetting);
-    outStackedWidget->addWidget(corrWidget);
+    outStackedWidget->addWidget(new WidgetBoundToDockWidget(corrPlot, graphSetting, this));
   }
   connect(mainWidget_->getOutListWidget(), SIGNAL(currentRowChanged(int)), outStackedWidget, SLOT(setCurrentIndex(int)));
 
@@ -573,12 +549,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
   for (UnsignedInteger out = 0; out < nbOutput; ++out)
   {
     // trajectories tab --------------------------------
-    WidgetBoundToDockWidget * graphTabWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * graphTabWidgetLayout = new QVBoxLayout(graphTabWidget);
-
     PlotWidget * plotWidget = new PlotWidget;
-    graphTabWidgetLayout->addWidget(plotWidget);
-
     for (UnsignedInteger in = 0; in < nbInputPt; ++in)
     {
       Sample sample(processSample_.getMesh().getVertices());
@@ -595,9 +566,8 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
         QStringList(),
         GraphConfigurationWidget::NoType,
         this);
-    graphTabWidget->setDockWidget(graphSetting);
 
-    outTabWidget->addTab(graphTabWidget, nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
+    outTabWidget->addTab(new WidgetBoundToDockWidget(plotWidget, graphSetting, this), nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
 
     Sample fieldSample(nbInputPt, nbNodes);
     fieldSample.setDescription(meshNodesNames);
@@ -619,11 +589,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
     // quantiles tab ----------------
     if (meanSample_.getSize())
     {
-      graphTabWidget = new WidgetBoundToDockWidget(this);
-      graphTabWidgetLayout = new QVBoxLayout(graphTabWidget);
-
       plotWidget = new PlotWidget;
-      graphTabWidgetLayout->addWidget(plotWidget);
       // mean
       Sample sample(processSample_.getMesh().getVertices());
       sample.stack(meanSample_.getMarginal(out));
@@ -637,8 +603,6 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
       sample.stack(lowerQuantileSample_.getMarginal(out));
       plotWidget->plotCurve(sample, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Quantile 5%"));
 
-      outTabWidget->addTab(graphTabWidget, tr("Mean trajectory"));
-
       plotWidget->setTitle(tr("Quantiles"));
       plotWidget->setAxisTitle(QwtPlot::yLeft, outNames[out]);
       plotWidget->setAxisTitle(QwtPlot::xBottom, meshParamName);
@@ -650,7 +614,8 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
           QStringList(),
           GraphConfigurationWidget::NoType,
           this);
-      graphTabWidget->setDockWidget(graphSetting);
+
+      outTabWidget->addTab(new WidgetBoundToDockWidget(plotWidget, graphSetting, this), tr("Mean trajectory"));
     }
   }
 
@@ -711,20 +676,15 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   if (nbInputPt > 1)
   {
     // Plot matrix
-    WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
-
     pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
     pvmatrixWidget->setData(inputSample_);
     // the variables are automatically sorted : use setAxisToShow with the order of the sample
     pvmatrixWidget->setAxisToShow(inputSample_.getDescription());
-    matrixTabWidgetLayout->addWidget(pvmatrixWidget);
 
     // setting widget
     PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
-    matrixTabWidget->setDockWidget(matrixSettingWidget);
 
-    inTabWidget->addTab(matrixTabWidget, tr("Plot matrix"));
+    inTabWidget->addTab(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this), tr("Plot matrix"));
 
     String aStr = (OSS() << inPVTable->getProxy() << pvmatrixWidget->getProxy()).str();
     linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), pvmatrixWidget->getProxy());
@@ -789,36 +749,28 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     if (nbInputPt > 1)
     {
       // bag chart
-      WidgetBoundToDockWidget * graphWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * graphWidgetLayout = new QVBoxLayout(graphWidget);
-
       PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::BagChart);
       bagChartWidget->PVViewWidget::setData(fieldSamplet);
       bagChartWidget->setXAxisTitle("", "", "PC1");
       bagChartWidget->setYAxisTitle("", "", "PC2");
-      graphWidgetLayout->addWidget(bagChartWidget);
-      bagChartStackedWidget->addWidget(graphWidget);
 
       PVXYChartSettingWidget * settingWidget = new PVXYChartSettingWidget(bagChartWidget, QStringList(), PVXYChartSettingWidget::BagChart, this);
-      graphWidget->setDockWidget(settingWidget);
+
+      bagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(bagChartWidget, settingWidget, this));
 
       String aStr = (OSS() << inPVTable->getProxy() << bagChartWidget->getProxy()).str();
       linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), bagChartWidget->getProxy());
 
       // functional bag chart
-      graphWidget = new WidgetBoundToDockWidget(this);
-      graphWidgetLayout = new QVBoxLayout(graphWidget);
-
       PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::FunctionalBagChart, bagChartWidget->getFilterSource());
       fBagChartWidget->setChartTitle("", "", tr("Quantiles"));
       fBagChartWidget->setXAxisTitle("", "", "Node index");
       fBagChartWidget->setYAxisTitle("", "", currentOutName[0]);
       fBagChartWidget->setXAxisData(meshParamName[0]);
-      graphWidgetLayout->addWidget(fBagChartWidget);
-      functionalBagChartStackedWidget->addWidget(graphWidget);
 
       settingWidget = new PVXYChartSettingWidget(fBagChartWidget, QStringList(), PVXYChartSettingWidget::BagChart, this);
-      graphWidget->setDockWidget(settingWidget);
+
+      functionalBagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(fBagChartWidget, settingWidget, this));
     }
 
     // sample size
@@ -844,13 +796,8 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     tableStackedWidget->addWidget(outTableWidget);
 
     // graph tab
-    WidgetBoundToDockWidget * graphTabWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * graphTabWidgetLayout = new QVBoxLayout(graphTabWidget);
-
     PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
     listCharts.append(outPVGraph);
-
-    graphTabWidgetLayout->addWidget(outPVGraph);
 
     Sample sample(fieldSamplet);
     sample.stack(processSample_.getMesh().getVertices());
@@ -866,9 +813,8 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
         QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
                                                                                PVXYChartSettingWidget::Trajectories,
                                                                                this);
-    graphTabWidget->setDockWidget(scatterSettingWidget);
 
-    trajStackedWidget->addWidget(graphTabWidget);
+    trajStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
 
     aStr = (OSS() << outPVTable->getProxy() << outPVGraph->getProxy()).str();
     linksModel->addSelectionLink(aStr.c_str(), outPVTable->getProxy(), outPVGraph->getProxy());
@@ -889,11 +835,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     {
       const QStringList currentOutName = QStringList() << outNames[out];
 
-      WidgetBoundToDockWidget * graphTabWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * graphTabWidgetLayout = new QVBoxLayout(graphTabWidget);
-
       PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
-      graphTabWidgetLayout->addWidget(outPVGraph);
       // mean
       Sample sample(processSample_.getMesh().getVertices());
       sample.stack(meanSample_.getMarginal(out));
@@ -912,9 +854,8 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
       outPVGraph->setAxisToShow(labels);
 
       PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(outPVGraph, labels, PVXYChartSettingWidget::Trajectories, this);
-      graphTabWidget->setDockWidget(scatterSettingWidget);
 
-      meanStackedWidget->addWidget(graphTabWidget);
+      meanStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
     }
   }
 

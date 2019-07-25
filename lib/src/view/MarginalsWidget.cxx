@@ -158,9 +158,6 @@ void MarginalsWidget::buildInterface()
   rightFrameLayout = new QVBoxLayout(rightFrame);
 
   //  PDF and CDF graphs
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
-
   ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
   QVector<PlotWidget*> listPlotWidgets;
 
@@ -180,16 +177,14 @@ void MarginalsWidget::buildInterface()
   plotStackedWidget->addWidget(survivalPlot_);
   listPlotWidgets.append(survivalPlot_);
 
-  plotWidgetLayout->addWidget(plotStackedWidget);
-
   GraphConfigurationWidget * plotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::PDF,
       this);
-  plotWidget->setDockWidget(plotsSettingWidget);
   connect(plotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
-  rightFrameLayout->addWidget(plotWidget, 1);
+
+  rightFrameLayout->addWidget(new WidgetBoundToDockWidget(plotStackedWidget, plotsSettingWidget, this), 1);
 
   // button to open the OT documentation
   DocumentationToolButton * infoButton = new DocumentationToolButton("", FileTools::docOT);

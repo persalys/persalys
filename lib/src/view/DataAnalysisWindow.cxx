@@ -339,9 +339,6 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
   for (int i = 0; i < variablesNames.size(); ++i)
   {
-    WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
-
     ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
 
     // PDF
@@ -377,10 +374,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
         this);
     connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
-    plotWidget->setDockWidget(graphSetting);
-    plotWidgetLayout->addWidget(stackedWidget);
-
-    tabStackedWidget->addWidget(plotWidget);
+    tabStackedWidget->addWidget(new WidgetBoundToDockWidget(stackedWidget, graphSetting, this));
   }
 
   scrollArea->setWidget(tabStackedWidget);
@@ -412,9 +406,6 @@ void DataAnalysisWindow::addBoxPlotTab()
   // indices with good order
   ind.add(inInd);
 
-  WidgetBoundToDockWidget * boxPlotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * boxPlotWidgetLayout = new QVBoxLayout(boxPlotWidget);
-
   PlotWidget * plot = new PlotWidget(tr("boxplot"));
 
   QList< double > ticks;
@@ -433,7 +424,6 @@ void DataAnalysisWindow::addBoxPlotTab()
   plot->setTitle(tr("Box plots"));
   plot->setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(QtOT::StringListToDescription(variablesNames)));
   plot->setAxisScaleEngine(QwtPlot::xBottom, new CustomScaleEngineForBoxplot(variablesNames.size()));
-  boxPlotWidgetLayout->addWidget(plot);
 
   // Graph Setting
   GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot,
@@ -441,9 +431,8 @@ void DataAnalysisWindow::addBoxPlotTab()
       QStringList(),
       GraphConfigurationWidget::Boxplot,
       this);
-  boxPlotWidget->setDockWidget(graphSetting);
 
-  mainLayout->addWidget(boxPlotWidget);
+  mainLayout->addWidget(new WidgetBoundToDockWidget(plot, graphSetting, this));
 
   scrollArea->setWidget(mainWidget);
   tabWidget_->addTab(scrollArea, tr("Box plots"));
@@ -564,25 +553,18 @@ void DataAnalysisWindow::addDependenceTab()
 
 void DataAnalysisWindow::addPlotMatrixTab()
 {
-  WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
   PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(designOfExperiment_.getSample(), designOfExperiment_.getSample());
   plotMatrixWidget->setInputNames(inputNames_);
   plotMatrixWidget->setOutputNames(outputNames_);
-  matrixTabWidgetLayout->addWidget(plotMatrixWidget);
 
   PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(plotMatrixWidget, this);
-  matrixTabWidget->setDockWidget(plotMatrixSettingWidget);
 
-  tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
+  tabWidget_->addTab(new WidgetBoundToDockWidget(plotMatrixWidget, plotMatrixSettingWidget, this), tr("Plot matrix"));
 }
 
 
 void DataAnalysisWindow::addScatterPlotsTab()
 {
-  WidgetBoundToDockWidget * scatterWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * scatterWidgetLayout = new QVBoxLayout(scatterWidget);
-
   QVector<PlotWidget*> listScatterPlotWidgets = PlotWidget::GetListScatterPlots(designOfExperiment_.getInputSample(),
       designOfExperiment_.getOutputSample(),
       failedInputSample_,
@@ -600,11 +582,9 @@ void DataAnalysisWindow::addScatterPlotsTab()
       outputNames_,
       GraphConfigurationWidget::Scatter,
       this);
-  scatterWidget->setDockWidget(scatterSettingWidget);
   connect(scatterSettingWidget, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
-  scatterWidgetLayout->addWidget(stackedWidget);
-  tabWidget_->addTab(scatterWidget, tr("Scatter plot"));
+  tabWidget_->addTab(new WidgetBoundToDockWidget(stackedWidget, scatterSettingWidget, this), tr("Scatter plot"));
 }
 
 
@@ -680,9 +660,6 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
     // -- Cobweb plot tab
     if (failedInSampleSize)
     {
-      WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
-
       PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
 
       // input sample + failed input sample
@@ -707,13 +684,11 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
       cobwebWidget->setData(succeedAndFailedInSRank);
       cobwebWidget->setAxisToShow(desc);
-      cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
       // cobweb setting widget
       PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, succeedAndFailedInS, succeedAndFailedInSRank, this);
-      cobwebTabWidget->setDockWidget(cobwebSettingWidget);
 
-      tablesTabWidget->addTab(cobwebTabWidget, tr("Cobweb plot"));
+      tablesTabWidget->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Cobweb plot"));
     }
 
     // -- scatter plots tab
@@ -742,10 +717,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
         std::list<QString> notEvaluatedInSLabelsList(inSampleDim, tr("Non-evaluated points"));
         sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
       }
-      WidgetBoundToDockWidget * scatterTabWidget = new WidgetBoundToDockWidget(this);
-      QVBoxLayout * scatterTabWidgetLayout = new QVBoxLayout(scatterTabWidget);
       sampleScatterPlotWidget->setAxisTitles(inputNames_, inAxisTitles_);
-      scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
 
       // samples rank
       // allInputsSample : input sample + failed input sample + not evaluated input sample
@@ -771,9 +743,8 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
           notEvaluatedInputsRank,
           PVXYChartSettingWidget::Scatter,
           this);
-      scatterTabWidget->setDockWidget(inSampleSettingWidget);
 
-      tablesTabWidget->addTab(scatterTabWidget, tr("Scatter plot"));
+      tablesTabWidget->addTab(new WidgetBoundToDockWidget(sampleScatterPlotWidget, inSampleSettingWidget, this), tr("Scatter plot"));
     }
 
     tabWidget_->addTab(tablesTabWidget, tr("Table"));
@@ -790,54 +761,40 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   Q_ASSERT(pvSpreadSheet);
 
   // 1- cobweb tab --------------------------------
-  WidgetBoundToDockWidget * cobwebTabWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * cobwebTabWidgetLayout = new QVBoxLayout(cobwebTabWidget);
-
   PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
   const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
   cobwebWidget->setData(sampleRank);
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
   cobwebWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
-  cobwebTabWidgetLayout->addWidget(cobwebWidget);
 
   // setting widget
   PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
       designOfExperiment_.getSample(),
       sampleRank,
       this);
-  cobwebTabWidget->setDockWidget(cobwebSettingWidget);
 
-  tabWidget_->addTab(cobwebTabWidget, tr("Cobweb plot"));
+  tabWidget_->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Cobweb plot"));
 
   // 2- plot matrix tab --------------------------------
-  WidgetBoundToDockWidget * matrixTabWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * matrixTabWidgetLayout = new QVBoxLayout(matrixTabWidget);
-
   PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
   pvmatrixWidget->setData(sampleRank);
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
   pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
-  matrixTabWidgetLayout->addWidget(pvmatrixWidget);
 
   // setting widget
   PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget,
       designOfExperiment_.getSample(),
       sampleRank,
       this);
-  matrixTabWidget->setDockWidget(matrixSettingWidget);
 
-  tabWidget_->addTab(matrixTabWidget, tr("Plot matrix"));
+  tabWidget_->addTab(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this), tr("Plot matrix"));
 
   // 3- scatter plots tab --------------------------------
-  WidgetBoundToDockWidget * scatterTabWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * scatterTabWidgetLayout = new QVBoxLayout(scatterTabWidget);
-
   // sample
   PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
   sampleScatterPlotWidget->PVViewWidget::setData(designOfExperiment_.getSample());
   if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
     sampleScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
-  scatterTabWidgetLayout->addWidget(sampleScatterPlotWidget);
 
   PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
       designOfExperiment_.getSample(),
@@ -846,9 +803,8 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
       outputNames_,
       PVXYChartSettingWidget::Scatter,
       this);
-  scatterTabWidget->setDockWidget(scatterSettingWidget);
 
-  tabWidget_->addTab(scatterTabWidget, tr("Scatter plot"));
+  tabWidget_->addTab(new WidgetBoundToDockWidget(sampleScatterPlotWidget, scatterSettingWidget, this), tr("Scatter plot"));
 
   // 4- links model --------------------------------
   pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();

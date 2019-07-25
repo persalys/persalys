@@ -22,12 +22,14 @@
 
 #include "persalys/AppliException.hxx"
 
+#include <QVBoxLayout>
+
 using namespace OT;
 
 namespace PERSALYS
 {
 
-WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
+WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget *parent)
   : QWidget(parent)
   , dockWidget_(0)
 {
@@ -39,6 +41,15 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget* parent)
     connect(this, SIGNAL(showDockWidgetRequested(QWidget*)), mainWidget, SLOT(showGraphSettingDockWidget(QWidget*)));
     connect(this, SIGNAL(hideDockWidgetRequested(QWidget*)), mainWidget, SLOT(hideGraphSettingDockWidget(QWidget*)));
   }
+}
+
+
+WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget *mainObject, QWidget *dockWidget, QWidget *parent)
+  : WidgetBoundToDockWidget(parent)
+{
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  widgetLayout->addWidget(mainObject);
+  setDockWidget(dockWidget);
 }
 
 

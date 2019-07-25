@@ -93,8 +93,6 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   // plot
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   plot_ = new PlotWidget(defaultFileName, true);
   plot_->plotSensitivityIndices(firstIndices, totalIndices,
@@ -102,15 +100,14 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       firstIndicesIntervals, totalIndicesIntervals,
       legendNames);
   plot_->setTitle(graphTitle + " " + QString::fromUtf8(outputName.c_str()));
-  plotWidgetLayout->addWidget(plot_);
 
   GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot_,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::SensitivityIndices,
       this);
-  plotWidget->setDockWidget(graphSetting);
-  scrollArea->setWidget(plotWidget);
+
+  scrollArea->setWidget(new WidgetBoundToDockWidget(plot_, graphSetting, this));
   mainSplitter->addWidget(scrollArea);
   mainSplitter->setStretchFactor(0, 2);
 
