@@ -70,18 +70,16 @@ void PVXYChartViewWidget::setData(const std::vector< std::vector<double> >& valu
   // set data
   PVViewWidget::setData(valuesByColumn, columnNames);
 
-  if (type_ == Scatter)
+  // set default axis/title properties
+  for (std::size_t cc = 0; cc < columnNames.size(); cc++)
   {
-    // set axis/title properties
-    for (std::size_t cc = 0; cc < columnNames.size(); cc++)
+    for (std::size_t cc2 = 0; cc2 < columnNames.size(); cc2++)
     {
-      for (std::size_t cc2 = 0; cc2 < columnNames.size(); cc2++)
+      QPair<QString, QString> varPair(columnNames[cc].c_str(), columnNames[cc2].c_str());
+      if (!chartsTitle_.contains(varPair))
       {
-        QPair<QString, QString> varPair(columnNames[cc].c_str(), columnNames[cc2].c_str());
-        if (!chartsTitle_.contains(varPair))
-        {
-          chartsTitle_[varPair] = QStringList() << (tr("Scatter plot") + ": " + columnNames[cc2].c_str() + " " + tr("vs") + " " + columnNames[cc].c_str()) << columnNames[cc].c_str() << columnNames[cc2].c_str();
-        }
+        const QString title((type_ == Scatter ? tr("Scatter plot") + ": " : "") + columnNames[cc2].c_str() + " " + tr("vs") + " " + columnNames[cc].c_str());
+        chartsTitle_[varPair] = QStringList() << title << columnNames[cc].c_str() << columnNames[cc2].c_str();
       }
     }
   }
