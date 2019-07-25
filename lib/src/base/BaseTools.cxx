@@ -157,6 +157,32 @@ String Parameters::GetOTBoolCollectionStr(const Interval::BoolCollection& values
 }
 
 
+String Parameters::GetOTNormalCopulaStr(const Distribution &distribution)
+{
+  OSS oss;
+  oss.setPrecision(12);
+  if (distribution.getImplementation()->getClassName() != "NormalCopula")
+    return oss;
+
+  CorrelationMatrix correlationMatrix(distribution.getCorrelation());
+
+  oss << "R = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
+
+  for (UnsignedInteger row = 0; row < correlationMatrix.getNbRows(); ++ row)
+  {
+    for (UnsignedInteger col = row + 1; col < correlationMatrix.getNbRows(); ++ col)
+    {
+      if (correlationMatrix(row, col) != 0.0)
+      {
+        oss << "R[" << row << ", " << col << "] = " << correlationMatrix(row, col) << "\n";
+      }
+    }
+  }
+  oss << "copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))\n";
+  return oss;
+}
+
+
 Description Parameters::GetOTIntervalDescription(const Interval& interval)
 {
   Description resu(interval.getDimension());
