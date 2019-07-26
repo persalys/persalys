@@ -1092,21 +1092,7 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
 
     if (composedCopula_i.getImplementation()->getClassName() == "NormalCopula")
     {
-      CorrelationMatrix correlationMatrix(composedCopula_i.getCorrelation());
-
-      oss << "R = ot.CorrelationMatrix(" << correlationMatrix.getNbRows() << ")\n";
-
-      for (UnsignedInteger row = 0; row < correlationMatrix.getNbRows(); ++ row)
-      {
-        for (UnsignedInteger col = row + 1; col < correlationMatrix.getNbRows(); ++ col)
-        {
-          if (correlationMatrix(row, col) != 0.0)
-          {
-            oss << "R[" << row << ", " << col << "] = " << correlationMatrix(row, col) << "\n";
-          }
-        }
-      }
-      oss << "copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))\n";
+      oss << Parameters::GetOTNormalCopulaStr(composedCopula_i);
       oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(composedCopula_i.getDescription()) << ", copula)\n";
     }
     else

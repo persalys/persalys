@@ -61,9 +61,6 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   vSplitter->setStyleSheet("QSplitter::handle:vertical {height: 2px; background: lightGray;}");
 
   // -- plots creation
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
-
   ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
   const QStringList variablesNames(QtOT::DescriptionToStringList(copula_.getDescription()));
 
@@ -105,12 +102,9 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
       QStringList(),
       GraphConfigurationWidget::Copula,
       this);
-  plotWidget->setDockWidget(plotSettingWidget);
   connect(plotSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
 
-  plotWidgetLayout->addWidget(plotStackedWidget);
-
-  vSplitter->addWidget(plotWidget);
+  vSplitter->addWidget(new WidgetBoundToDockWidget(plotStackedWidget, plotSettingWidget, this));
 
   //  parameters
   QWidget * subWidget = new QWidget;

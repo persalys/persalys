@@ -251,9 +251,6 @@ void MeshWindow::addWidgetsTabs()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   // Mesh
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
-
   meshPlot_ = new PlotWidget();
 //   meshPlot->plotCurve();
 //   meshPlot_->setTitle(tr("Number of nodes = ") + " ");
@@ -265,11 +262,8 @@ void MeshWindow::addWidgetsTabs()
       QStringList(),
       GraphConfigurationWidget::NoType,
       this);
-  plotWidget->setDockWidget(graphSetting);
 
-  plotWidgetLayout->addWidget(meshPlot_);
-
-  scrollArea->setWidget(plotWidget);
+  scrollArea->setWidget(new WidgetBoundToDockWidget(meshPlot_, graphSetting, this));
   tabWidget_->addTab(scrollArea, tr("Mesh"));
 
   // nodes

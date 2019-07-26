@@ -180,8 +180,6 @@ void OptimizationResultWindow::buildInterface()
 
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   // optimal point
   QVector<PlotWidget*> listPlotWidget1;
@@ -189,7 +187,6 @@ void OptimizationResultWindow::buildInterface()
   PlotWidget * plot = new PlotWidget;
   plot->plotCurve(graph.getDrawables()[0].getData(), QPen(Qt::blue, 2));
   listPlotWidget1.append(plot);
-  plotWidgetLayout->addWidget(plot);
 
   plot->setTitle(tr("Optimal value convergence graph"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Optimal value"));
@@ -200,17 +197,15 @@ void OptimizationResultWindow::buildInterface()
       QStringList(),
       GraphConfigurationWidget::NoType,
       this);
-  plotWidget->setDockWidget(graphSettingWidget1);
 
-  scrollArea->setWidget(plotWidget);
+  scrollArea->setWidget(new WidgetBoundToDockWidget(plot, graphSettingWidget1, this));
   convTab->addTab(scrollArea, tr("Optimal value"));
 
   // error
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QVector<PlotWidget*> listPlotWidget2;
-  plotWidget = new WidgetBoundToDockWidget(this);
-  plotWidgetLayout = new QVBoxLayout(plotWidget);
+
   graph = result_.drawErrorHistory();
   plot = new PlotWidget;
   plot->plotCurve(graph.getDrawables()[0].getData(), QPen(Qt::red, 2), QwtPlotCurve::Lines, 0, tr("Absolute error"));
@@ -224,16 +219,14 @@ void OptimizationResultWindow::buildInterface()
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
 
   listPlotWidget2.append(plot);
-  plotWidgetLayout->addWidget(plot);
 
   GraphConfigurationWidget * graphSettingWidget2 = new GraphConfigurationWidget(listPlotWidget2,
       QStringList(),
       QStringList(),
       GraphConfigurationWidget::NoType,
       this);
-  plotWidget->setDockWidget(graphSettingWidget2);
 
-  scrollArea->setWidget(plotWidget);
+  scrollArea->setWidget(new WidgetBoundToDockWidget(plot, graphSettingWidget2, this));
   convTab->addTab(scrollArea, tr("Error"));
 
   tabWidget->addTab(convTab, tr("Convergence"));

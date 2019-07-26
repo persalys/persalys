@@ -617,12 +617,6 @@ String StudyImplementation::getPythonScript()
   result += getName() + " = persalys.Study('" + getName() + "')\n";
   result += "persalys.Study.Add(" + getName() + ")\n";
 
-  for (Collection<DesignOfExperiment>::iterator it = dataModels_.begin(); it != dataModels_.end(); ++it)
-  {
-    result += (*it).getPythonScript();
-    result += getName() + ".add(" + (*it).getName() + ")\n";
-  }
-
   for (Collection<PhysicalModel>::iterator it = physicalModels_.begin(); it != physicalModels_.end(); ++it)
   {
     if ((*it).getImplementation()->getClassName() != "MetaModel")
@@ -630,6 +624,11 @@ String StudyImplementation::getPythonScript()
       result += (*it).getPythonScript();
       result += getName() + ".add(" + (*it).getName() + ")\n";
     }
+  }
+  for (Collection<DesignOfExperiment>::iterator it = dataModels_.begin(); it != dataModels_.end(); ++it)
+  {
+    result += (*it).getPythonScript();
+    result += getName() + ".add(" + (*it).getName() + ")\n";
   }
   for (Collection<LimitState>::iterator it = limitStates_.begin(); it != limitStates_.end(); ++it)
   {

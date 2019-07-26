@@ -57,6 +57,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual OT::Sample importSample(const OT::String& fileName);
   virtual void update();
   virtual void setDefaultColumns();
 };

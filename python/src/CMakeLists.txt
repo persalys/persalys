@@ -102,6 +102,7 @@ ot_add_python_module (persalys persalys_module.i
                       Input.i Input_doc.i.in
                       Output.i Output_doc.i.in
                       DataSample.i DataSample_doc.i.in
+                      DataImport.i DataImport_doc.i.in
                       MeshModelImplementation.i MeshModelImplementation_doc.i.in
                       MeshModel.i MeshModel_doc.i.in
                       GridMeshModel.i GridMeshModel_doc.i.in

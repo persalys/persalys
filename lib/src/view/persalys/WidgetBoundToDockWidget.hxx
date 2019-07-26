@@ -34,6 +34,8 @@ class PERSALYS_API WidgetBoundToDockWidget : public QWidget
 public:
   WidgetBoundToDockWidget(QWidget* parent = 0);
 
+  WidgetBoundToDockWidget(QWidget *mainObject, QWidget *dockWidget, QWidget *parent);
+
   MainWidget * findMainWidgetInHierachy();
 
   void setDockWidget(QWidget*);

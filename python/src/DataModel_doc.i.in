@@ -38,42 +38,6 @@ Examples
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DataModel::getInputColumns
-"Columns of the input variables accessor.
-
-Returns
--------
-columns : :py:class:`openturns.Indices`
-   Columns of the input variables"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataModel::getOutputColumns
-"Columns of the ouput variables accessor.
-
-Returns
--------
-columns : :py:class:`openturns.Indices`
-   Columns of the output variables"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataModel::setColumns
-"Columns and names of the variables accessor.
-
-Parameters
-----------
-inputColumns : sequence of int
-    Columns of the input variables
-outputColumns : sequence of int
-    Columns of the output variables
-inputNames : sequence of str, optional
-    Names of the input variables (optional)
-outputNames : sequence of str, optional
-    Names of the output variables (optional)"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::DataModel::getInputNames
 "Names of the input variables accessor.
 
@@ -102,34 +66,6 @@ Parameters
 inNames : sequence of str
    Names of the input variables
 outNames : sequence of str
-   Names of the output variables"
+   Names of the output variables
 
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataModel::getFileName
-"File name accessor.
-
-Returns
--------
-fileName : str
-   File name"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataModel::setFileName
-"File name accessor.
-
-Parameters
-----------
-fileName : str
-   File name"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataModel::getSampleFromFile
-"Sample from the file accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-   Sample from the file"
+   Set the columns before the names."

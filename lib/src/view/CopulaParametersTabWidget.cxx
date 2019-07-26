@@ -79,9 +79,6 @@ void CopulaParametersTabWidget::buildInterface()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
-
   ResizableStackedWidget * pdf_StackedWidget = new ResizableStackedWidget;
 
   // -- plots creation
@@ -123,28 +120,27 @@ void CopulaParametersTabWidget::buildInterface()
     }
   }
 
+  GraphConfigurationWidget * pdf_cdfPlotSettingWidget = 0;
   if (displaySetting_)
   {
     // -- GraphConfigurationWidget
-    GraphConfigurationWidget * pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listPlot,
+    pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listPlot,
         variablesNames,
         QStringList(),
         GraphConfigurationWidget::Copula,
         this);
-    plotWidget->setDockWidget(pdf_cdfPlotSettingWidget);
     connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_StackedWidget, SLOT(setCurrentIndex(int)));
   }
 
-  plotWidgetLayout->addWidget(pdf_StackedWidget);
-  scrollArea->setWidget(plotWidget);
+  scrollArea->setWidget(new WidgetBoundToDockWidget(pdf_StackedWidget, pdf_cdfPlotSettingWidget, this));
   addTab(scrollArea, tr("PDF/CDF"));
 
   // tab Kendall plot
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  plotWidget = new WidgetBoundToDockWidget(this);
-  plotWidgetLayout = new QVBoxLayout(plotWidget);
+  WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
+  QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
   DocumentationToolButton * infoKendallPlotButton = new DocumentationToolButton("theory/data_analysis/graphical_fitting_test.html", FileTools::docOT);
   plotWidgetLayout->addWidget(infoKendallPlotButton);

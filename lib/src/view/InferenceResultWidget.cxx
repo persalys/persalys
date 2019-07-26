@@ -113,8 +113,6 @@ void InferenceResultWidget::buildInterface()
     scrollArea->setWidgetResizable(true);
 
     // tab PDF/CDF
-    WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
     ResizableStackedWidget * pdf_cdfStackedWidget = new ResizableStackedWidget;
 
     // --- pdf
@@ -131,18 +129,16 @@ void InferenceResultWidget::buildInterface()
         QStringList(),
         GraphConfigurationWidget::PDF_Inference,
         this);
-    plotWidget->setDockWidget(pdf_cdfPlotSettingWidget_);
     connect(pdf_cdfPlotSettingWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
-    plotWidgetLayout->addWidget(pdf_cdfStackedWidget);
-    scrollArea->setWidget(plotWidget);
+    scrollArea->setWidget(new WidgetBoundToDockWidget(pdf_cdfStackedWidget, pdf_cdfPlotSettingWidget_, this));
     tabWidget_->addTab(scrollArea, tr("PDF/CDF"));
 
     // tab QQ plot
     scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);
-    plotWidget = new WidgetBoundToDockWidget(this);
-    plotWidgetLayout = new QVBoxLayout(plotWidget);
+    WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
+    QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
     DocumentationToolButton * infoQQPlotButton = new DocumentationToolButton("theory/data_analysis/graphical_fitting_test.html", FileTools::docOT);
     plotWidgetLayout->addWidget(infoQQPlotButton);

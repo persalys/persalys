@@ -93,8 +93,6 @@ void MorrisResultWidget::buildInterface()
   // tab plot (µ*, σ)
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  WidgetBoundToDockWidget * tab = new WidgetBoundToDockWidget(this);
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
   PlotWidget * plotMuStarSigma = new PlotWidget(tr("morrisResult"));
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarSigma, SLOT(replot()));
@@ -105,17 +103,12 @@ void MorrisResultWidget::buildInterface()
       GraphConfigurationWidget::NoType,
       this);
 
-  tab->setDockWidget(graphSetting);
-
-  tabLayout->addWidget(plotMuStarSigma);
-  scrollArea->setWidget(tab);
+  scrollArea->setWidget(new WidgetBoundToDockWidget(plotMuStarSigma, graphSetting, this));
   tabWidget->addTab(scrollArea, tr("Graph (µ*, σ)"));
 
   // tab plot (µ*, µ)
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  tab = new WidgetBoundToDockWidget(this);
-  tabLayout = new QVBoxLayout(tab);
 
   PlotWidget * plotMuStarMu = new PlotWidget(tr("morrisResultMuStarMu"));
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarMu, SLOT(replot()));
@@ -125,10 +118,8 @@ void MorrisResultWidget::buildInterface()
       QStringList(),
       GraphConfigurationWidget::NoType,
       this);
-  tab->setDockWidget(graphSetting);
 
-  tabLayout->addWidget(plotMuStarMu);
-  scrollArea->setWidget(tab);
+  scrollArea->setWidget(new WidgetBoundToDockWidget(plotMuStarMu, graphSetting, this));
   tabWidget->addTab(scrollArea, tr("Graph (µ*, µ)"));
 
   // set plot (µ*, σ)

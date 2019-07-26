@@ -90,7 +90,7 @@ void Arrow::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
   }
   painter->drawLine(line());
 
-  if (color_ == Qt::red)
+  if (color_ == "#cccccc")
   {
     QImage image(":/images/user-busy.png");
     QPointF imagePoint((endP_.x() + startP_.x()) / 2 - image.width() / 2, endP_.y() - image.height() / 2);
@@ -119,6 +119,6 @@ void Arrow::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 
 void Arrow::setValidity(bool validity)
 {
-  setColor(validity ? Qt::black : Qt::red);
+  setColor(validity ? Qt::black : QColor("#cccccc"));
 }
 }
