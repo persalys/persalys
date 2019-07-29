@@ -1,5 +1,7 @@
 = 7.0 release (in-progress)
 
+ * Software OpenGL rendering on windows (mesa/llvmpipe)
+
 = 6.1 release (2019-04-17)
 
  * Various bug fixes

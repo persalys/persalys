@@ -67,8 +67,8 @@ if (TARGET Boost::regex)
 endif ()
 include_directories (${Boost_INCLUDE_DIRS})
 
-find_package (PythonInterp)
-find_package (PythonLibs 3.2 REQUIRED)
+find_package (PythonInterp 3.2)
+find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
 
 if (BUILD_GUI)
 
