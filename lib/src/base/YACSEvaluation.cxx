@@ -153,8 +153,11 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
             result(j, i) = jobSample.outputs<double>().get(name, j);
           else // the point could not have been evaluated
             throw InternalException(HERE)
-                  << "The evaluation of the point number " << j
-                  << " is in error:" << jobSample.getError(j);
+                  << "\nThe evaluation of the point number " << j
+                  << " is in error:" << jobSample.getError(j)
+                  << "\nFor further details, see "
+                  << jobParams_.work_directory() << "/logs directory on "
+                  << jobParams_.resource_name() << ".";
       }
     }
     else
