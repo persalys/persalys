@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/YACSPhysicalModel.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -41,8 +42,11 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name)
 
 
 /* Constructor with parameters */
-YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & script)
-  : PhysicalModelImplementation(name)
+YACSPhysicalModel::YACSPhysicalModel(const String & name,
+                                     const InputCollection & inputs,
+                                     const OutputCollection & outputs,
+                                     const String & script)
+  : PhysicalModelImplementation(name, inputs, outputs)
   , evaluation_(script)
 {
   updateData();
@@ -209,13 +213,23 @@ String YACSPhysicalModel::getPythonScript() const
 {
   OSS oss;
 
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
+    oss << getInputs()[i].getPythonScript();
+
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
+    oss << getOutputs()[i].getPythonScript();
+
+  oss << "inputs = " << Parameters::GetOTDescriptionStr(getInputNames(), false) << "\n";
+  oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
+
   // replace ''' by """
   std::string myString = getContent();
   replaceInString(myString, "'''", "\"\"\"");
 
   oss << "code = '''" << myString << "'''\n";
   oss << getName()
-      << " = persalys.YACSPhysicalModel('" << getName() <<"', code)\n";
+      << " = persalys.YACSPhysicalModel('" << getName() << "'"
+      << ", inputs, outputs, code)\n";
   oss << getJobParamsPythonScript();
 
   oss << getProbaModelPythonScript();

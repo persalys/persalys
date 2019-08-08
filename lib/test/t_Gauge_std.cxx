@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
   {
     Study myStudy("myStudy");
 
-    YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
+    YACSPhysicalModel myPhysicalModel("myPhysicalModel", InputCollection(), OutputCollection(), fileName);
     myPhysicalModel.setInputDistribution("Conductivity", Normal(0.5, 0.01));
     myStudy.add(myPhysicalModel);
 
