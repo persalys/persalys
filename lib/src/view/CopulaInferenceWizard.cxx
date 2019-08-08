@@ -103,19 +103,19 @@ void CopulaInferenceWizard::buildInterface()
   leftWidgetLayout->addWidget(varTableView, 0, 0, 2, 1);
   hSplitter->addWidget(leftWidget);
 
-  // - remove button
-  QToolButton * arrowButton = new QToolButton;
-  arrowButton->setArrowType(Qt::LeftArrow);
-  arrowButton->setToolTip(tr("Remove the selected group of variables"));
-  leftWidgetLayout->addWidget(arrowButton, 0, 1, Qt::AlignBottom);
-  connect(arrowButton, SIGNAL(pressed()), this, SLOT(removeGroup()));
-
   // - add button
-  arrowButton = new QToolButton;
+  QToolButton * arrowButton = new QToolButton;
   arrowButton->setArrowType(Qt::RightArrow);
   arrowButton->setToolTip(tr("Add a group of variables"));
-  leftWidgetLayout->addWidget(arrowButton, 1, 1, Qt::AlignTop);
+  leftWidgetLayout->addWidget(arrowButton, 0, 1, Qt::AlignBottom);
   connect(arrowButton, SIGNAL(pressed()), this, SLOT(defineGroup()));
+
+  // - remove button
+  arrowButton = new QToolButton;
+  arrowButton->setArrowType(Qt::LeftArrow);
+  arrowButton->setToolTip(tr("Remove the selected group of variables"));
+  leftWidgetLayout->addWidget(arrowButton, 1, 1, Qt::AlignTop);
+  connect(arrowButton, SIGNAL(pressed()), this, SLOT(removeGroup()));
 
   // left side
   QWidget * leftSideWidget = new QWidget;
