@@ -126,19 +126,29 @@ void YACSPhysicalModel::setContent(const String & script)
 
 void YACSPhysicalModel::updateData()
 {
-  PhysicalModelImplementation::clearInputs();
-  for (UnsignedInteger i = 0; i < evaluation_.getInputDimension(); ++i)
+  unsigned int size = evaluation_.getInputDimension();
+  InputCollection newInputs(size);
+  for (unsigned int i = 0; i < size; ++ i)
   {
-    Input newInput(evaluation_.getInputVariablesNames()[i], evaluation_.getInputValues()[i]);
-    PhysicalModelImplementation::addInput(newInput);
+    const String inputName(evaluation_.getInputVariablesNames()[i]);
+    if (hasInputNamed(inputName))
+      newInputs[i] = getInputByName(inputName);
+    else
+      newInputs[i] = Input(inputName, evaluation_.getInputValues()[i]);
   }
+  PhysicalModelImplementation::setInputs(newInputs);
 
-  PhysicalModelImplementation::clearOutputs();
-  for (UnsignedInteger i = 0; i < evaluation_.getOutputDimension(); ++i)
+  size = evaluation_.getOutputDimension();
+  OutputCollection newOutputs(size);
+  for (unsigned int i = 0; i < size; ++ i)
   {
-    Output newOutput(evaluation_.getOutputVariablesNames()[i]);
-    PhysicalModelImplementation::addOutput(newOutput);
+    const String outputName(evaluation_.getOutputVariablesNames()[i]);
+    if (hasOutputNamed(outputName))
+      newOutputs[i] = getOutputByName(outputName);
+    else
+      newOutputs[i] = Output(outputName);
   }
+  PhysicalModelImplementation::setOutputs(newOutputs);
 }
 
 
