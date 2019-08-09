@@ -263,6 +263,8 @@ Interval GridDesignOfExperiment::getBounds() const
 void GridDesignOfExperiment::setBounds(const Interval & bounds)
 {
   bounds_ = bounds;
+  // clear sample
+  originalInputSample_.clear();
 }
 
 
