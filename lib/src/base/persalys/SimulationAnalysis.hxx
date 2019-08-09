@@ -45,6 +45,8 @@ public:
   OT::UnsignedInteger getSeed() const;
   virtual void setSeed(const OT::UnsignedInteger seed);
 
+  virtual Parameters getParameters() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 

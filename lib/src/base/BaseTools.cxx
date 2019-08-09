@@ -68,6 +68,13 @@ void Parameters::add(const String& name, const Point& values)
 }
 
 
+void Parameters::add(const Parameters& parameters)
+{
+  for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
+    add(parameters[i].first, parameters[i].second);
+}
+
+
 UnsignedInteger Parameters::getSize() const
 {
   return pairsCollection_.getSize();

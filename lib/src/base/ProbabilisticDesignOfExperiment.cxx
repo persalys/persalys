@@ -187,8 +187,7 @@ Parameters ProbabilisticDesignOfExperiment::getParameters() const
   param.add("Design name", designName);
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Sample size", getOriginalInputSample().getSize());
-  param.add("Block size", getBlockSize());
-  param.add("Seed", getSeed());
+  param.add(SimulationAnalysis::getParameters());
 
   return param;
 }

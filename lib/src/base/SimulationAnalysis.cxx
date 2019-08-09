@@ -106,6 +106,17 @@ void SimulationAnalysis::initialize()
 }
 
 
+Parameters SimulationAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Block size", getBlockSize());
+  param.add("Seed", getSeed());
+
+  return param;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void SimulationAnalysis::save(Advocate & adv) const
 {

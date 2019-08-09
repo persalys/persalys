@@ -6,6 +6,8 @@
 
 %include SimulationReliabilityResult_doc.i
 
+%ignore PERSALYS::SimulationReliabilityResult::getParameters;
+
 %include persalys/SimulationReliabilityResult.hxx
 namespace PERSALYS {
 

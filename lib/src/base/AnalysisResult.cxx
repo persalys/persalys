@@ -46,7 +46,7 @@ AnalysisResult* AnalysisResult::clone() const
 }
 
 
-double AnalysisResult::getElapsedTime() const
+Scalar AnalysisResult::getElapsedTime() const
 {
   return elapsedTime_;
 }

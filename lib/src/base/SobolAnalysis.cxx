@@ -215,7 +215,7 @@ void SobolAnalysis::launch()
 
   // set callbacks
   timeCriteria_.setStartTime(TimeCriteria::Now());
-  timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
+  timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime() > 0 ? getMaximumElapsedTime() : std::numeric_limits<double>::max());
   algo.setStopCallback(&WithStopCriteriaAnalysis::Stop, &timeCriteria_);
   SobolAnalysisStruct analysisStruc(this, &algo);
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
@@ -319,17 +319,9 @@ Parameters SobolAnalysis::getParameters() const
   param.add("Algorithm", "Sobol");
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Maximum confidence interval length", getMaximumConfidenceIntervalLength());
-  String time = "- (s)";
-  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
-  param.add("Maximum elapsed time", time);
-  String maxCalls = "-";
-  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    maxCalls = (OSS() << getMaximumCalls()).str();
-  param.add("Maximum calls", maxCalls);
-  param.add("Block size", getBlockSize());
+  param.add(WithStopCriteriaAnalysis::getParameters(false));
   param.add("Replication size", getReplicationSize());
-  param.add("Seed", getSeed());
+  param.add(SimulationAnalysis::getParameters());
   param.add("Confidence level", getConfidenceLevel());
 
   return param;

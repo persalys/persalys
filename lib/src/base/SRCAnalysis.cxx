@@ -235,8 +235,7 @@ Parameters SRCAnalysis::getParameters() const
   param.add("Algorithm", "Standardized Regression Coefficients");
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Sample size", getSimulationsNumber());
-  param.add("Block size", getBlockSize());
-  param.add("Seed", getSeed());
+  param.add(SimulationAnalysis::getParameters());
 
   return param;
 }

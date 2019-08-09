@@ -47,6 +47,8 @@ public:
   OT::UnsignedInteger getBlockSize() const;
   virtual void setBlockSize(const OT::UnsignedInteger size);
 
+  virtual Parameters getParameters() const;
+
   SimulationReliabilityResult getResult() const;
 
   virtual OT::String getPythonScript() const;

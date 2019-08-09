@@ -157,19 +157,20 @@ void StopCriteriaGroupBox::setMaximumConfidenceIntervalLength(const Scalar lengt
 }
 
 
-UnsignedInteger StopCriteriaGroupBox::getMaximumElapsedTime() const
+Scalar StopCriteriaGroupBox::getMaximumElapsedTime() const
 {
   if (maxiTimeCheckBox_->isChecked())
     return maxTimeLineEdit_->getSeconds();
-  return (UnsignedInteger)std::numeric_limits<int>::max();
+  return -1;
 }
 
 
-void StopCriteriaGroupBox::setMaximumElapsedTime(const UnsignedInteger maxTime)
+void StopCriteriaGroupBox::setMaximumElapsedTime(const Scalar maxTime)
 {
-  maxTimeLineEdit_->setSeconds(maxTime < (UnsignedInteger)std::numeric_limits<int>::max() ? maxTime : 60);
-  maxiTimeCheckBox_->setChecked(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
-  maxTimeLineEdit_->setEnabled(maxTime < (UnsignedInteger)std::numeric_limits<int>::max());
+  bool validMaxTime = (int)maxTime < std::numeric_limits<int>::max() && maxTime > 0;
+  maxTimeLineEdit_->setSeconds(validMaxTime ? maxTime : 60);
+  maxiTimeCheckBox_->setChecked(validMaxTime);
+  maxTimeLineEdit_->setEnabled(validMaxTime);
 }
 
 

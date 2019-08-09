@@ -50,8 +50,8 @@ public:
   OT::Scalar getMaximumConfidenceIntervalLength() const;
   void setMaximumConfidenceIntervalLength(const OT::Scalar length);
 
-  OT::UnsignedInteger getMaximumElapsedTime() const;
-  void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
+  OT::Scalar getMaximumElapsedTime() const;
+  void setMaximumElapsedTime(const OT::Scalar seconds);
 
   bool isMaxElapsedTimeValid() const;
   bool isMaxCallsRequired() const;
