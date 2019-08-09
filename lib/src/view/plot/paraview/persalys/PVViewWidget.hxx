@@ -39,12 +39,15 @@ public:
   virtual const char *getRepresentationName() const = 0;
   void updateTable(const OT::Sample& sample, const OT::UnsignedInteger repr_ind = 0);
   pqOutputPort *getPort(const OT::UnsignedInteger ind = 0) const { return ports_[ind]; };
+  int getNumberOfRepresentations() const;
+  QStringList getRepresentationLabels(const int reprIndex = 0) const;
+  void setRepresentationLabels(const QStringList& labels, const int reprIndex = 0);
+  bool getRepresentationVisibility(const int reprIndex = 0);
 
 public slots:
   void setAxisToShow(const QStringList& variablesNames);
   void exportPlot();
-signals:
-  void plotChanged();
+  void setRepresentationVisibility(const QList<int>& indices);
 
 protected:
   QMainWindow *findMWInHierachy();

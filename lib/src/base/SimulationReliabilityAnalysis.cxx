@@ -170,7 +170,7 @@ void SimulationReliabilityAnalysis::launch()
   algo.setBlockSize(getBlockSize());
 
   timeCriteria_.setStartTime(TimeCriteria::Now());
-  timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime());
+  timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime() > 0 ? getMaximumElapsedTime() : std::numeric_limits<double>::max());
   algo.setStopCallback(&WithStopCriteriaAnalysis::Stop, &timeCriteria_);
   SimuReliabilityAnalysisStruct analysisStruc(this, algo);
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
@@ -203,6 +203,17 @@ void SimulationReliabilityAnalysis::stop()
 SimulationReliabilityResult SimulationReliabilityAnalysis::getResult() const
 {
   return result_;
+}
+
+
+Parameters SimulationReliabilityAnalysis::getParameters() const
+{
+  Parameters param;
+
+  param.add("Block size", getBlockSize());
+  param.add("Seed", getSeed());
+
+  return param;
 }
 
 

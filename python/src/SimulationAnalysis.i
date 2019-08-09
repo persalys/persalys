@@ -6,6 +6,8 @@
 
 %include SimulationAnalysis_doc.i
 
+%ignore PERSALYS::SimulationAnalysis::getParameters;
+
 %include persalys/SimulationAnalysis.hxx
 namespace PERSALYS {
 

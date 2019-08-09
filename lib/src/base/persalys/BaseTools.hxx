@@ -38,6 +38,7 @@ public:
   void add(const OT::String& name, const double& value);
   void add(const OT::String& name, const OT::UnsignedInteger& value);
   void add(const OT::String& name, const OT::Point& values);
+  void add(const Parameters& parameters);
   OT::UnsignedInteger getSize() const;
   std::pair<OT::String, OT::String> operator[](const OT::UnsignedInteger index) const;
   bool operator==(const Parameters& other) const;

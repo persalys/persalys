@@ -127,12 +127,13 @@ void MonteCarloAnalysis::launch()
   Scalar coefficientOfVariation = -1.0;
   UnsignedInteger outerSampling = 0;
   TimeCriteria timeCriteria;
+  const Scalar maxTime = getMaximumElapsedTime() > 0 ? getMaximumElapsedTime() : std::numeric_limits<double>::max();
 
   // We loop if there remains some outer sampling and the coefficient of variation is greater than the limit or has not been computed yet.
   while (!stopRequested_
          && (outerSampling < maximumOuterSampling)
          && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
-         && (timeCriteria.getElapsedTime() < getMaximumElapsedTime()))
+         && (timeCriteria.getElapsedTime() < maxTime))
   {
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
@@ -238,17 +239,8 @@ Parameters MonteCarloAnalysis::getParameters() const
   param.add("Outputs of interest", getInterestVariables().__str__());
   if (isConfidenceIntervalRequired())
     param.add("Confidence level", (OSS() << getLevelConfidenceInterval() * 100).str() + "%");
-  param.add("Maximum coefficient of variation", getMaximumCoefficientOfVariation());
-  String time = "- (s)";
-  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
-  param.add("Maximum elapsed time", time);
-  String maxCalls = "-";
-  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    maxCalls = (OSS() << getMaximumCalls()).str();
-  param.add("Maximum calls", maxCalls);
-  param.add("Block size", getBlockSize());
-  param.add("Seed", getSeed());
+  param.add(WithStopCriteriaAnalysis::getParameters());
+  param.add(SimulationAnalysis::getParameters());
 
   return param;
 }
@@ -267,8 +259,7 @@ String MonteCarloAnalysis::getPythonScript() const
   if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     oss << getName() << ".setMaximumCalls(" << getMaximumCalls() << ")\n";
   oss << getName() << ".setMaximumCoefficientOfVariation(" << getMaximumCoefficientOfVariation() << ")\n";
-  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
+  oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
 

@@ -67,29 +67,49 @@ void WithStopCriteriaAnalysis::setMaximumCalls(const UnsignedInteger maxi)
 }
 
 
-double WithStopCriteriaAnalysis::getMaximumCoefficientOfVariation() const
+Scalar WithStopCriteriaAnalysis::getMaximumCoefficientOfVariation() const
 {
   return maximumCoefficientOfVariation_;
 }
 
 
-void WithStopCriteriaAnalysis::setMaximumCoefficientOfVariation(const double coef)
+void WithStopCriteriaAnalysis::setMaximumCoefficientOfVariation(const Scalar coef)
 {
   maximumCoefficientOfVariation_ = coef;
 }
 
 
-UnsignedInteger WithStopCriteriaAnalysis::getMaximumElapsedTime() const
+Scalar WithStopCriteriaAnalysis::getMaximumElapsedTime() const
 {
   return maximumElapsedTime_;
 }
 
 
-void WithStopCriteriaAnalysis::setMaximumElapsedTime(const UnsignedInteger seconds)
+void WithStopCriteriaAnalysis::setMaximumElapsedTime(const Scalar seconds)
 {
-  if (seconds < 1)
-    throw InvalidValueException(HERE) << "The maximum elapsed time must be greater than 0 second";
   maximumElapsedTime_ = seconds;
+}
+
+
+Parameters WithStopCriteriaAnalysis::getParameters(const bool withCoefOfVar) const
+{
+  Parameters param;
+
+  if (withCoefOfVar)
+    param.add("Maximum coefficient of variation", getMaximumCoefficientOfVariation());
+
+  String time = "- (s)";
+  if ((int)getMaximumElapsedTime() < std::numeric_limits<int>::max() /*for old study*/ &&
+      getMaximumElapsedTime() > 0)
+    time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
+  param.add("Maximum elapsed time", time);
+
+  String maxCalls = "-";
+  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
+    maxCalls = (OSS() << getMaximumCalls()).str();
+  param.add("Maximum calls", maxCalls);
+
+  return param;
 }
 
 
@@ -104,7 +124,7 @@ String WithStopCriteriaAnalysis::__repr__() const
     oss << "inf";
   oss << " maximumCoefficientOfVariation=" << getMaximumCoefficientOfVariation()
       << " maximumElapsedTime=";
-  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
+  if (getMaximumElapsedTime() < std::numeric_limits<double>::max() && getMaximumElapsedTime() > 0)
     oss << getMaximumElapsedTime();
   else
     oss << "inf";

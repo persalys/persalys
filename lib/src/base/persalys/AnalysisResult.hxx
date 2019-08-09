@@ -38,7 +38,7 @@ public:
   /** Virtual constructor */
   virtual AnalysisResult * clone() const;
 
-  double getElapsedTime() const;
+  OT::Scalar getElapsedTime() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -50,7 +50,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  double elapsedTime_;
+  OT::Scalar elapsedTime_;
 };
 }
 #endif

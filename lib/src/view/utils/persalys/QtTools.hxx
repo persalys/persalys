@@ -21,11 +21,13 @@
 #ifndef PERSALYS_QTTOOLS_HXX
 #define PERSALYS_QTTOOLS_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#include "persalys/PhysicalModel.hxx"
+
+#include <openturns/OTType.hxx>
+
 #include <QColor>
 #include <QMap>
 #include <QObject>
-#include <openturns/OTType.hxx>
 
 namespace PERSALYS
 {
@@ -59,7 +61,9 @@ public:
   static QStringList DescriptionToStringList(const OT::Description & description);
   static OT::Description StringListToDescription(const QStringList& stringList);
   static QString PointToString(const OT::Point& point);
+  static QStringList GetVariableAxisLabels(const PhysicalModel &model, const OT::Description &variableNames);
 };
+
 
 
 static QMap<QString, QString> InitColors()

@@ -92,39 +92,14 @@ void DataAnalysisWindow::initializeVariablesNames()
   // inputs
   if (designOfExperiment_.getInputSample().getSize())
   {
-    for (UnsignedInteger i = 0; i < designOfExperiment_.getInputSample().getDimension(); ++i)
-    {
-      const String inputName = designOfExperiment_.getInputSample().getDescription()[i];
-      inputNames_ << QString::fromUtf8(inputName.c_str());
-      QString inputDescription;
-      if (model.hasInputNamed(inputName))
-      {
-        inputDescription = QString::fromUtf8(model.getInputByName(inputName).getDescription().c_str());
-      }
-      if (!inputDescription.isEmpty())
-        inAxisTitles_ << inputDescription;
-      else
-        inAxisTitles_ << inputNames_.last();
-    }
+    inputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getInputSample().getDescription());
+    inAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getInputSample().getDescription());
   }
-
   // outputs
   if (designOfExperiment_.getOutputSample().getSize())
   {
-    for (UnsignedInteger i = 0; i < designOfExperiment_.getOutputSample().getDimension(); ++i)
-    {
-      const String outputName = designOfExperiment_.getOutputSample().getDescription()[i];
-      outputNames_ << QString::fromUtf8(outputName.c_str());
-      QString outputDescription;
-      if (model.hasOutputNamed(outputName))
-      {
-        outputDescription = QString::fromUtf8(model.getOutputByName(outputName).getDescription().c_str());
-      }
-      if (!outputDescription.isEmpty())
-        outAxisTitles_ << outputDescription;
-      else
-        outAxisTitles_ << outputNames_.last();
-    }
+    outputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription());
+    outAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getOutputSample().getDescription());
   }
 }
 
@@ -635,26 +610,26 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // if no failed points and no not evaluated points:
   if (!failedInSampleSize && !notEvalInSampleSize)
   {
-    tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, getItem(), designOfExperiment_.getSample()), tr("Table"));
+    tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, designOfExperiment_.getSample(), getItem()), tr("Table"));
   }
   else
   {
     // Table tab ------------------------------------------
     QTabWidget * tablesTabWidget = new QTabWidget;
 
-    tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, getItem(), designOfExperiment_.getSample()), tr("Table"));
+    tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, designOfExperiment_.getSample(), getItem()), tr("Table"));
 
     // -- failed points tab
     if (failedInSampleSize)
     {
       PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(failedPointsTable, getItem(), failedInputSample_), tr("Failed points"));
+      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(failedPointsTable, failedInputSample_, getItem()), tr("Failed points"));
     }
     // -- not evaluated points tab
     if (notEvalInSampleSize)
     {
       PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(notEvaluatedPointsTable, getItem(), notEvaluatedInputSample_), tr("Non-evaluated points"));
+      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(notEvaluatedPointsTable, notEvaluatedInputSample_, getItem()), tr("Non-evaluated points"));
     }
 
     // -- Cobweb plot tab
@@ -686,7 +661,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       cobwebWidget->setAxisToShow(desc);
 
       // cobweb setting widget
-      PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget, succeedAndFailedInS, succeedAndFailedInSRank, this);
+      MultiPlotSettingWidget * cobwebSettingWidget = new MultiPlotSettingWidget(cobwebWidget, succeedAndFailedInS, succeedAndFailedInSRank, this);
 
       tablesTabWidget->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Cobweb plot"));
     }
@@ -695,10 +670,12 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
     const bool canBuildScatterPlot = (inSampleSize > 1 &&
                                       (failedInSampleSize == 0 || failedInSampleSize > 1) &&
                                       (notEvalInSampleSize == 0 || notEvalInSampleSize > 1));
+    Collection<Sample> samples;
     // if one representation has only one point => paraview error => segfault
     if (canBuildScatterPlot)
     {
       // input sample
+      samples.add(designOfExperiment_.getInputSample());
       PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
       sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
       std::list<QString> inSLabelsList(inSampleDim, tr("Evaluated points"));
@@ -706,6 +683,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // failed input sample
       if (failedInSampleSize)
       {
+        samples.add(failedInputSample_);
         sampleScatterPlotWidget->setData(failedInputSample_, Qt::red);
         std::list<QString> failedInSLabelsList(inSampleDim, tr("Failed points"));
         sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(failedInSLabelsList), 1);
@@ -713,6 +691,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // not evaluated points
       if (notEvalInSampleSize)
       {
+        samples.add(notEvaluatedInputSample_);
         sampleScatterPlotWidget->setData(notEvaluatedInputSample_, Qt::blue);
         std::list<QString> notEvaluatedInSLabelsList(inSampleDim, tr("Non-evaluated points"));
         sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
@@ -733,16 +712,15 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       const Sample failedInputsRank(allInputsSampleRank, inSampleSize, inSampleSize + failedInSampleSize);
       const Sample notEvaluatedInputsRank(allInputsSampleRank, inSampleSize + failedInSampleSize, allInputsSampleRank.getSize());
 
+      Collection<Sample> rankSamples;
+      rankSamples.add(Sample(allInputsSampleRank, 0, inSampleSize));
+      if (failedInSampleSize)
+        rankSamples.add(Sample(allInputsSampleRank, inSampleSize, inSampleSize + failedInSampleSize));
+      if (notEvalInSampleSize)
+        rankSamples.add(Sample(allInputsSampleRank, inSampleSize + failedInSampleSize, allInputsSampleRank.getSize()));
+
       // scatter plots setting widget
-      PVXYChartSettingWidget * inSampleSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
-          designOfExperiment_.getInputSample(),
-          inputsRank,
-          failedInputSample_,
-          failedInputsRank,
-          notEvaluatedInputSample_,
-          notEvaluatedInputsRank,
-          PVXYChartSettingWidget::Scatter,
-          this);
+      ScatterSettingWidget * inSampleSettingWidget = new ScatterSettingWidget(sampleScatterPlotWidget, samples, rankSamples, this);
 
       tablesTabWidget->addTab(new WidgetBoundToDockWidget(sampleScatterPlotWidget, inSampleSettingWidget, this), tr("Scatter plot"));
     }
@@ -768,10 +746,7 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   cobwebWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
 
   // setting widget
-  PVPlotSettingWidget * cobwebSettingWidget = new PVPlotSettingWidget(cobwebWidget,
-      designOfExperiment_.getSample(),
-      sampleRank,
-      this);
+  MultiPlotSettingWidget * cobwebSettingWidget = new MultiPlotSettingWidget(cobwebWidget, designOfExperiment_.getSample(), sampleRank, this);
 
   tabWidget_->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Cobweb plot"));
 
@@ -782,10 +757,7 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
 
   // setting widget
-  PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget,
-      designOfExperiment_.getSample(),
-      sampleRank,
-      this);
+  MultiPlotSettingWidget * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, designOfExperiment_.getSample(), sampleRank, this);
 
   tabWidget_->addTab(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this), tr("Plot matrix"));
 
@@ -796,12 +768,11 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
     sampleScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
 
-  PVXYChartSettingWidget * scatterSettingWidget = new PVXYChartSettingWidget(sampleScatterPlotWidget,
+  ScatterSettingWidget * scatterSettingWidget = new ScatterSettingWidget(sampleScatterPlotWidget,
       designOfExperiment_.getSample(),
       sampleRank,
       inputNames_,
       outputNames_,
-      PVXYChartSettingWidget::Scatter,
       this);
 
   tabWidget_->addTab(new WidgetBoundToDockWidget(sampleScatterPlotWidget, scatterSettingWidget, this), tr("Scatter plot"));

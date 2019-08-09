@@ -102,6 +102,7 @@ void FieldMonteCarloAnalysis::launch()
   const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
+  const Scalar maxTime = getMaximumElapsedTime() > 0 ? getMaximumElapsedTime() : std::numeric_limits<double>::max();
   Scalar elapsedTime = 0.0;
   const Scalar startTime = TimeCriteria::Now();
   UnsignedInteger outerSampling = 0;
@@ -110,7 +111,7 @@ void FieldMonteCarloAnalysis::launch()
   ProcessSample processSample(getPhysicalModel().getMeshModel().getMesh(), 0, getInterestVariables().getSize());
   while (!stopRequested_
          && (outerSampling < maximumOuterSampling)
-         && (elapsedTime < getMaximumElapsedTime()))
+         && (elapsedTime < maxTime))
   {
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
@@ -258,17 +259,9 @@ Parameters FieldMonteCarloAnalysis::getParameters() const
 
   param.add("Algorithm", "Monte Carlo");
   param.add("Outputs of interest", getInterestVariables().__str__());
-  String time = "- (s)";
-  if (getMaximumElapsedTime() < (UnsignedInteger)std::numeric_limits<int>::max())
-    time = (OSS() << getMaximumElapsedTime()).str() + "(s)";
-  param.add("Maximum elapsed time", time);
-  String maxCalls = "-";
-  if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
-    maxCalls = (OSS() << getMaximumCalls()).str();
-  param.add("Maximum calls", maxCalls);
-  param.add("Block size", getBlockSize());
+  param.add(WithStopCriteriaAnalysis::getParameters(false));
   param.add("Karhunen-Loeve threshold", getKarhunenLoeveThreshold());
-  param.add("Seed", getSeed());
+  param.add(SimulationAnalysis::getParameters());
 
   return param;
 }

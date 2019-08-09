@@ -94,4 +94,24 @@ QString QtOT::PointToString(const Point& point)
   }
   return resu;
 }
+
+
+QStringList QtOT::GetVariableAxisLabels(const PhysicalModel &model, const Description &variableNames)
+{
+  QStringList labels;
+  for (UnsignedInteger i = 0; i < variableNames.getSize(); ++i)
+  {
+    const String varName(variableNames[i]);
+
+    // get description
+    QString varDescription;
+    if (model.hasInputNamed(varName))
+      varDescription = QString::fromUtf8(model.getInputByName(varName).getDescription().c_str());
+    else if (model.hasOutputNamed(varName))
+      varDescription = QString::fromUtf8(model.getOutputByName(varName).getDescription().c_str());
+
+    labels << (varDescription.isEmpty() ? QString::fromUtf8(varName.c_str()) : varDescription);
+  }
+  return labels;
+}
 }

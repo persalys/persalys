@@ -21,7 +21,7 @@
 #ifndef PERSALYS_WITHSTOPCRITERIAANALYSIS_HXX
 #define PERSALYS_WITHSTOPCRITERIAANALYSIS_HXX
 
-#include "SimulationAnalysis.hxx"
+#include "BaseTools.hxx"
 
 namespace PERSALYS
 {
@@ -36,11 +36,13 @@ public:
   OT::UnsignedInteger getMaximumCalls() const;
   virtual void setMaximumCalls(const OT::UnsignedInteger maxi);
 
-  double getMaximumCoefficientOfVariation() const;
-  void setMaximumCoefficientOfVariation(const double coef);
+  OT::Scalar getMaximumCoefficientOfVariation() const;
+  void setMaximumCoefficientOfVariation(const OT::Scalar coef);
 
-  OT::UnsignedInteger getMaximumElapsedTime() const;
-  void setMaximumElapsedTime(const OT::UnsignedInteger seconds);
+  OT::Scalar getMaximumElapsedTime() const;
+  void setMaximumElapsedTime(const OT::Scalar seconds);
+
+  Parameters getParameters(const bool withCoefOfVar = true) const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -57,8 +59,8 @@ protected:
 
 private:
   OT::UnsignedInteger maximumCalls_;
-  double maximumCoefficientOfVariation_;
-  OT::UnsignedInteger maximumElapsedTime_;
+  OT::Scalar maximumCoefficientOfVariation_;
+  OT::Scalar maximumElapsedTime_;
 };
 }
 #endif
