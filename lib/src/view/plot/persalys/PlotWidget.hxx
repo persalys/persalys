@@ -83,12 +83,6 @@ public:
   void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType = 0, int barNumber = 0, QString title = "");
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");
-  void plotSensitivityIndices(const OT::Point& firstOrderIndices,
-                              const OT::Point& totalIndices,
-                              const OT::Description& inputNames,
-                              const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
-                              const OT::Interval& totalIndicesIntervals = OT::Interval(),
-                              const QStringList& legendNames = QStringList() << tr("First order index") << tr("Total index"));
 
   /// clear plot
   void clear();

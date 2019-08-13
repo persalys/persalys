@@ -22,9 +22,7 @@
 #define PERSALYS_SENSITIVITYRESULTWIDGET_HXX
 
 #include "persalys/CustomStandardItemModel.hxx"
-#include "persalys/PlotWidget.hxx"
-
-#include <openturns/Point.hxx>
+#include "persalys/SensitivityIndicesPlot.hxx"
 
 #include <QSortFilterProxyModel>
 
@@ -70,7 +68,7 @@ public slots:
   void updateIndicesPlot(int, Qt::SortOrder);
 
 private:
-  PlotWidget * plot_;
+  SensitivityIndicesPlot * plot_;
   IndicesProxyModel * proxyModel_;
 };
 }
