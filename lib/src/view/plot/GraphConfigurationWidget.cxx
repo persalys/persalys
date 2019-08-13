@@ -23,6 +23,7 @@
 #include "persalys/TitledComboBox.hxx"
 #include "persalys/ListWidgetWithCheckBox.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/BoxPlot.hxx"
 
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -537,8 +538,7 @@ void GraphConfigurationWidget::setVariablesToShow(const QStringList& varNames)
   }
   if (indices.size())
   {
-    plotWidgets_[0]->setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(QtOT::StringListToDescription(orderedVarList)));
-    plotWidgets_[0]->setAxisScaleEngine(QwtPlot::xBottom, new CustomScaleEngineForBoxplot(indices));
+    dynamic_cast<BoxPlot*>(plotWidgets_[0])->updateVariableOrder(orderedVarList, indices);
   }
   else
   {

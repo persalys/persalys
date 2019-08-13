@@ -25,6 +25,7 @@
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/UIntSpinBox.hxx"
 #include "persalys/FileTools.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QMenu>
 #include <QFileDialog>
@@ -62,23 +63,6 @@ public:
   {
     return 1001;
   };
-};
-
-
-// -- custom QwtPlotCurve with Rtti_PlotUserItem = 1000 + index_
-class PERSALYS_API CustomPlotCurveItem : public QwtPlotCurve
-{
-public:
-  CustomPlotCurveItem(int index)
-  : QwtPlotCurve()
-  , index_(index)
-  {};
-  virtual int rtti() const
-  {
-    return QwtPlotItem::Rtti_PlotUserItem + index_;
-  };
-private:
-  int index_;
 };
 
 
@@ -253,21 +237,6 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
   {
     curve->setItemAttribute(QwtPlotItem::Legend, false);
   }
-  curve->attach(this);
-
-  replot();
-}
-
-
-void PlotWidget::plotCurve(const int index, double * x, double * y, int size, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol)
-{
-  CustomPlotCurveItem * curve = new CustomPlotCurveItem(index);
-  curve->setSamples(x, y, size);
-  curve->setPen(pen);
-  curve->setStyle(style);
-  if (symbol)
-    curve->setSymbol(symbol);
-  curve->setItemAttribute(QwtPlotItem::Legend, false);
   curve->attach(this);
 
   replot();
@@ -467,78 +436,6 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
 }
 
 
-void PlotWidget::plotBoxPlot(const double mean,
-                             const double std_0,
-                             const double median_0,
-                             const double lowerQuartile_0,
-                             const double upperQuartile_0,
-                             const double lowerBound_0,
-                             const double upperBound_0,
-                             const Point& outliers_0,
-                             const int index)
-{
-  double x = index;
-  double std = std_0 > 0 ? std_0 : 1;
-
-  double median = (mean - median_0) / std;
-  double lowerQuartile = (mean - lowerQuartile_0) / std;
-  double upperQuartile = (mean - upperQuartile_0) / std;
-  double lowerBound = (mean - lowerBound_0) / std;
-  double upperBound = (mean - upperBound_0) / std;
-  Point outliers = (Point(outliers_0.getSize(), mean) - outliers_0) / std;
-
-  // draw median
-  double xMedian[2] = {x - 0.1, x + 0.1};
-  double yMedian[2] = {median, median};
-  plotCurve(index, xMedian, yMedian, 2, QPen(Qt::red));
-
-  // draw box
-  double yUpperQuartile[2] = {upperQuartile, upperQuartile};
-  plotCurve(index, xMedian, yUpperQuartile, 2, QPen(Qt::blue));
-  double yLowerQuartile[2] = {lowerQuartile, lowerQuartile};
-  plotCurve(index, xMedian, yLowerQuartile, 2, QPen(Qt::blue));
-  double xLeftSide[2] = {x - 0.1, x - 0.1};
-  double yBoxSides[2] = {lowerQuartile, upperQuartile};
-  plotCurve(index, xLeftSide, yBoxSides, 2, QPen(Qt::blue));
-  double xRightSide[2] = {x + 0.1, x + 0.1};
-  plotCurve(index, xRightSide, yBoxSides, 2, QPen(Qt::blue));
-
-  // draw whiskers
-  double xWhiskers[2] = {x, x};
-  double yLower[2] = {lowerBound, lowerQuartile};
-  plotCurve(index, xWhiskers, yLower, 2, QPen(Qt::black, 2, Qt::DashLine));
-
-  double yUpper[2] = {upperQuartile, upperBound};
-  plotCurve(index, xWhiskers, yUpper, 2, QPen(Qt::black, 2, Qt::DashLine));
-
-
-  double xWhiskersBars[2] = {x - 0.05, x + 0.05};
-  double yLowerWhiskersBar[2] = {lowerBound, lowerBound};
-  plotCurve(index, xWhiskersBars, yLowerWhiskersBar, 2);
-
-  double yUpperWhiskersBar[2] = {upperBound, upperBound};
-  plotCurve(index, xWhiskersBars, yUpperWhiskersBar, 2);
-
-  // draw outliers
-  const int dim = outliers.getDimension();
-  double * xOutliers = new double[dim];
-  double * yOutliers = new double[dim];
-
-  for (int i = 0; i < dim; ++i)
-  {
-    xOutliers[i] = x;
-    yOutliers[i] = outliers[i];
-  }
-
-  plotCurve(index, xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-  delete[] xOutliers;
-  delete[] yOutliers;
-
-  setAxisMaxMinor(QwtPlot::xBottom, 0);
-  replot();
-}
-
-
 void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
                                         const Point& totalIndices,
                                         const Description& inputNames,
@@ -618,7 +515,7 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
   // scales
   setAxisScale(QwtPlot::xBottom, -0.5, firstOrderIndices.getSize() - 0.5, 1.0);
   setAxisMaxMinor(QwtPlot::xBottom, 0);
-  setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(inputNames));
+  setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(QtOT::DescriptionToStringList(inputNames)));
 
   // rescale to avoid to cut points
   yMin = yMin - (std::abs(0.05 * yMin) < 0.01 ? 0.05 : std::abs(0.05 * yMin));

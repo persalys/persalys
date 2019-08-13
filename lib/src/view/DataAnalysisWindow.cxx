@@ -31,6 +31,7 @@
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/PlotMatrixConfigurationWidget.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/BoxPlot.hxx"
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include "persalys/PVServerManagerInterface.hxx"
@@ -381,24 +382,10 @@ void DataAnalysisWindow::addBoxPlotTab()
   // indices with good order
   ind.add(inInd);
 
-  PlotWidget * plot = new PlotWidget(tr("boxplot"));
+  BoxPlot * plot = new BoxPlot(variablesNames);
 
-  QList< double > ticks;
   for (int i = 0; i < variablesNames.size(); ++i)
-  {
-
-    const double mean = result_.getMean()[ind[i]][0];
-    const double std = result_.getStandardDeviation()[ind[i]][0];
-    const double median = result_.getMedian()[ind[i]][0];
-    const double Q1 = result_.getFirstQuartile()[ind[i]][0];
-    const double Q3 = result_.getThirdQuartile()[ind[i]][0];
-    plot->plotBoxPlot(mean, std, median, Q1, Q3, Q1 - 1.5 * (Q3 - Q1), Q3 + 1.5 * (Q3 - Q1), result_.getOutliers()[ind[i]], i);
-    ticks.append(i);
-  }
-
-  plot->setTitle(tr("Box plots"));
-  plot->setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(QtOT::StringListToDescription(variablesNames)));
-  plot->setAxisScaleEngine(QwtPlot::xBottom, new CustomScaleEngineForBoxplot(variablesNames.size()));
+    plot->addBoxPlot(result_, ind[i]);
 
   // Graph Setting
   GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot,

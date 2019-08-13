@@ -39,7 +39,7 @@ namespace PERSALYS
 class CustomHorizontalScaleDraw: public QwtScaleDraw
 {
 public:
-  CustomHorizontalScaleDraw(const OT::Description& labels)
+  CustomHorizontalScaleDraw(const QStringList& labels)
     : labels_(labels)
   {
   }
@@ -47,46 +47,13 @@ public:
   virtual QwtText label(double value) const
   {
     const int index = qRound(value);
-    if (index >= 0 && index < (int)labels_.getSize())
-      return QwtText(QString::fromUtf8(labels_[index].c_str()));
+    if (index >= 0 && index < labels_.size())
+      return QwtText(labels_[index]);
     return QwtText();
   }
 
 private:
-  const OT::Description labels_;
-};
-
-
-// Custom ScaleEngine For Boxplot
-class CustomScaleEngineForBoxplot: public QwtLinearScaleEngine
-{
-public:
-  CustomScaleEngineForBoxplot(const int nbVariables)
-  : QwtLinearScaleEngine()
-  , varIndices_()
-  {
-    for (int i = 0; i < nbVariables; ++i)
-      varIndices_ << i;
-  }
-
-  CustomScaleEngineForBoxplot(const QList<int> varIndices)
-  : QwtLinearScaleEngine()
-  , varIndices_(varIndices)
-  {
-  }
-
-  virtual QwtScaleDiv divideScale(double x1, double x2, int numMajorSteps, int numMinorSteps, double stepSize) const
-  {
-    QList<double> ticks[QwtScaleDiv::NTickTypes];
-    for (int i = 0; i < varIndices_.size(); ++i)
-      ticks[QwtScaleDiv::MajorTick] << varIndices_[i];
-
-    QwtScaleDiv scDiv(ticks[QwtScaleDiv::MajorTick].first() - 0.2, ticks[QwtScaleDiv::MajorTick].last() + 0.2, ticks);
-    return scDiv;
-  }
-
-private:
-  QList<int> varIndices_;
+  const QStringList labels_;
 };
 
 
@@ -106,8 +73,6 @@ public:
                  QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "", bool isStatic = false);
   void plotCurve(double * x, double * y, int size, const QPen pen = QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "");
-  void plotCurve(const int index, double * x, double * y, int size, const QPen pen = QPen(Qt::black, 2),
-                 QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0);
   void plotCurve(const OT::Sample & data, const QPen pen = QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "");
 
@@ -118,15 +83,6 @@ public:
   void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType = 0, int barNumber = 0, QString title = "");
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");
-  void plotBoxPlot(const double mean,
-                   const double std,
-                   const double median,
-                   const double lowerQuartile,
-                   const double upperQuartile,
-                   const double lowerBound,
-                   const double upperBound,
-                   const OT::Point& outliers,
-                   const int index);
   void plotSensitivityIndices(const OT::Point& firstOrderIndices,
                               const OT::Point& totalIndices,
                               const OT::Description& inputNames,
