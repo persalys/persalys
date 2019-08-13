@@ -183,6 +183,7 @@ void MorrisResultTableModel::updateData()
 {
   beginResetModel();
   endResetModel();
+  emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
 
 

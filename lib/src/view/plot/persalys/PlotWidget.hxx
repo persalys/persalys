@@ -26,7 +26,6 @@
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
-#include <qwt_plot_marker.h>
 #include <qwt_scale_draw.h>
 #include <qwt_scale_engine.h>
 #include <qwt_scale_div.h>
@@ -134,7 +133,6 @@ public:
                               const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
                               const OT::Interval& totalIndicesIntervals = OT::Interval(),
                               const QStringList& legendNames = QStringList() << tr("First order index") << tr("Total index"));
-  void setMorrisPlotType(const QPointF& initialMarkersCoord);
 
   /// clear plot
   void clear();
@@ -147,21 +145,13 @@ public:
       const QStringList outNames,
       const QStringList outAxisNames);
 
-protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event);
-
 public slots:
   void contextMenu(const QPoint & pos);
   virtual void replot();
   void exportPlot();
-  void selectPoints(const QRectF&);
-  void updateVerticalMarkerValue(const QPointF&);
 
 signals:
   void plotChanged();
-  void verticalMarkerPositionChanged(double);
-  void selectedPointsChanged();
-  void selectedPointsChanged(const OT::Indices& ind);
 
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
@@ -169,7 +159,6 @@ private:
 private:
 // TODO  QwtPlotGrid * grid_;
   QString plotTypeName_;
-  QwtPlotMarker *  verticalMarker_;
 };
 }
 #endif

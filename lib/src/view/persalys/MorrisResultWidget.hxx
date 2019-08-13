@@ -23,9 +23,7 @@
 
 #include "persalys/MorrisResult.hxx"
 
-#include <QWidget>
-
-#include <qwt_plot_marker.h>
+#include "persalys/MorrisPlot.hxx"
 
 namespace PERSALYS
 {
@@ -50,14 +48,14 @@ signals:
   void plotItemsChanged();
   void resetTableModel();
   void noEffectBoundaryChanged(const QPointF&);
+  void updateSelectedMarkerRequested(const QString &text);
+  void updateUnselectedMarkerRequested(const QString &text);
 
 private:
   MorrisResult& result_;
-  OT::UnsignedInteger outpuIndex_;
-  QVector<QwtPlotMarker*> markersMuSigma_;
-  QVector<QwtPlotMarker*> markersMuMu_;
-  QVector<QwtPlotMarker*> fakeSelectedMarkers_;
-  QVector<QwtPlotMarker*> fakeUnselectedMarkers_;
+  OT::UnsignedInteger outputIndex_;
+  QVector<PlotMarker*> markersMuSigma_;
+  QVector<PlotMarker*> markersMuMu_;
 };
 }
 #endif

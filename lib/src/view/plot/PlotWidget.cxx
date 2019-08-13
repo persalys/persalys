@@ -46,6 +46,7 @@
 #include <qwt_plot_renderer.h>
 #include <qwt_picker_machine.h>
 #include <qwt_scale_widget.h>
+#include <qwt_plot_marker.h>
 
 using namespace OT;
 
@@ -88,7 +89,6 @@ const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
 PlotWidget::PlotWidget(const QString &plotTypeName, const bool disableZoom, QWidget *parent)
   : QwtPlot(parent)
   , plotTypeName_(plotTypeName)
-  , verticalMarker_(0)
 {
   if (!disableZoom)
   {
@@ -632,126 +632,6 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
   hMarker->attach(this);
 
   replot();
-}
-
-
-void PlotWidget::setMorrisPlotType(const QPointF& initialMarkersCoord)
-{
-  // vertical marker: no effect boundary
-  verticalMarker_ = new QwtPlotMarker;
-  verticalMarker_->setValue(initialMarkersCoord);
-  verticalMarker_->setLineStyle(QwtPlotMarker::VLine);
-  verticalMarker_->setTitle(tr("No effect boundary"));
-  verticalMarker_->setLinePen(QPen(Qt::darkGreen, 2, Qt::DashLine));
-  verticalMarker_->setItemAttribute(QwtPlotItem::Legend, true);
-  verticalMarker_->attach(this);
-
-  // mouse right click event filter to change the vertical marker position
-  QwtScaleWidget * scaleWidget = axisWidget(QwtPlot::xBottom);
-  scaleWidget->installEventFilter(this);
-  scaleWidget->setToolTip(tr("Selecting a value at the scale will move the vertical marker."));
-
-  // picker to select points with the right button
-  QwtPlotPicker * picker = new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft, QwtPlotPicker::RectRubberBand, QwtPicker::AlwaysOn, canvas());
-  picker->setStateMachine(new QwtPickerDragRectMachine);
-  picker->setMousePattern(QwtEventPattern::MouseSelect1, Qt::RightButton);
-
-  connect(picker, SIGNAL(selected(QRectF)), this , SLOT(selectPoints(QRectF)));
-}
-
-
-bool PlotWidget::eventFilter(QObject *obj, QEvent *event)
-{
-  if (event->type() == QEvent::MouseButtonPress)
-  {
-    if (obj == axisWidget(QwtPlot::xBottom))
-    {
-      QMouseEvent * mEvent = dynamic_cast<QMouseEvent *>(event);
-      if (mEvent->button() == Qt::LeftButton)
-      {
-        const double newX = invTransform(QwtPlot::xBottom, mEvent->pos().x());
-        verticalMarker_->setValue(QPointF(newX, 0));
-        replot();
-        emit verticalMarkerPositionChanged(newX);
-      }
-    }
-  }
-  return QwtPlot::eventFilter(obj, event);
-}
-
-
-void PlotWidget::selectPoints(const QRectF& rect)
-{
-  const double left = std::min(rect.left(), rect.right());
-  const double right = std::max(rect.left(), rect.right());
-  const double top = std::max(rect.top(), rect.bottom());
-  const double bottom = std::min(rect.top(), rect.bottom());
-
-  const QwtPlotItemList& plotItemList = itemList();
-  QVector< QPointF > selectedPoints;
-  QVector< QwtPlotMarker* > selectedMarkers;
-
-  for (QwtPlotItemIterator it = plotItemList.begin(); it != plotItemList.end(); ++it)
-  {
-    if ((*it)->rtti() == QwtPlotItem::Rtti_PlotMarker)
-    {
-      QwtPlotMarker *m = static_cast<QwtPlotMarker *>(*it);
-      const double xP = m->xValue();
-      const double yP = m->yValue();
-
-      // if the point is in rect
-      if (yP <= top && yP >= bottom && xP <= right && xP >= left)
-      {
-        selectedMarkers.append(m);
-        selectedPoints.append(m->value());
-      }
-    }
-  }
-  // if there is at least one point in the rectangle
-  if (selectedMarkers.size())
-  {
-    // hightlight the selected points
-    QwtPlotCurve selectedPointCurve;
-    selectedPointCurve.setSymbol(new QwtSymbol(QwtSymbol::Ellipse, Qt::magenta, QPen(Qt::magenta), QSize(7, 7)));
-    selectedPointCurve.setStyle(QwtPlotCurve::NoCurve);
-    selectedPointCurve.setItemAttribute(QwtPlotItem::Legend, false);
-
-    selectedPointCurve.setSamples(selectedPoints);
-    selectedPointCurve.attach(this);
-
-    replot();
-
-    // context menu to choose to de/select the points
-    QMenu contextMenu(this);
-    // actions of the context menu
-    QAction * deselectPointsAction = new QAction(tr("Deselect the points"), &contextMenu);
-    QAction * selectPointsAction = new QAction(tr("Select the points"), &contextMenu);
-    contextMenu.addAction(deselectPointsAction);
-    contextMenu.addAction(selectPointsAction);
-
-    const QPoint pos(transform(QwtPlot::xBottom, left), transform(QwtPlot::yLeft, bottom));
-    QAction * action = contextMenu.exec(mapToGlobal(pos));
-
-    // emit signal to the window to update the data
-    if (action == deselectPointsAction || action == selectPointsAction)
-    {
-      const QPen markerPen = (action == deselectPointsAction ? QPen(Qt::red) : QPen(Qt::blue));
-      for (int i = 0; i < selectedMarkers.size(); ++i)
-        selectedMarkers[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
-      emit selectedPointsChanged();
-    }
-    selectedPointCurve.detach();
-
-    replot();
-  }
-}
-
-
-void PlotWidget::updateVerticalMarkerValue(const QPointF& markerValue)
-{
-  if (!verticalMarker_)
-    return;
-  verticalMarker_->setValue(markerValue);
 }
 
 

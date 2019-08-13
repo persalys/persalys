@@ -20,7 +20,7 @@
  */
 #include "persalys/MorrisResultWidget.hxx"
 
-#include "persalys/PlotWidget.hxx"
+#include "persalys/MorrisPlot.hxx"
 #include "persalys/QtTools.hxx"
 #include "persalys/CheckableHeaderView.hxx"
 #include "persalys/CopyableTableView.hxx"
@@ -46,11 +46,9 @@ namespace PERSALYS
 MorrisResultWidget::MorrisResultWidget(MorrisResult &result, const int outIndex, QWidget *parent)
   : QWidget(parent)
   , result_(result)
-  , outpuIndex_(outIndex)
+  , outputIndex_(outIndex)
   , markersMuSigma_()
   , markersMuMu_()
-  , fakeSelectedMarkers_(2)
-  , fakeUnselectedMarkers_(2)
 {
   buildInterface();
 }
@@ -59,21 +57,21 @@ MorrisResultWidget::MorrisResultWidget(MorrisResult &result, const int outIndex,
 void MorrisResultWidget::buildInterface()
 {
   // get result info
-  const UnsignedInteger nbInVar = result_.getMeanElementaryEffects(outpuIndex_).getSize();
+  const UnsignedInteger nbInVar = result_.getMeanElementaryEffects(outputIndex_).getSize();
 
-  Point a = result_.getMeanAbsoluteElementaryEffects(outpuIndex_);
+  Point a = result_.getMeanAbsoluteElementaryEffects(outputIndex_);
   std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(a.begin(), a.end());
   const Scalar maxMeanStarEffect = (*p.second);
 
-  a = result_.getMeanElementaryEffects(outpuIndex_);
+  a = result_.getMeanElementaryEffects(outputIndex_);
   p = std::minmax_element(a.begin(), a.end());
   const Scalar maxMeanEffect = (*p.second);
 
-  a = result_.getStandardDeviationElementaryEffects(outpuIndex_);
+  a = result_.getStandardDeviationElementaryEffects(outputIndex_);
   p = std::minmax_element(a.begin(), a.end());
   const Scalar maxStdEffect = (*p.second);
 
-  const Scalar noEffectBoundary = result_.getNoEffectBoundary(outpuIndex_);
+  const Scalar noEffectBoundary = result_.getNoEffectBoundary(outputIndex_);
 
   // - var names
   const QStringList names(QtOT::DescriptionToStringList(result_.getDesignOfExperiment().getInputSample().getDescription()));
@@ -94,7 +92,7 @@ void MorrisResultWidget::buildInterface()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  PlotWidget * plotMuStarSigma = new PlotWidget(tr("morrisResult"));
+  MorrisPlot * plotMuStarSigma = new MorrisPlot(tr("morrisResult"), QPointF(noEffectBoundary, 0));
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarSigma, SLOT(replot()));
 
   GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotMuStarSigma,
@@ -110,7 +108,7 @@ void MorrisResultWidget::buildInterface()
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  PlotWidget * plotMuStarMu = new PlotWidget(tr("morrisResultMuStarMu"));
+  MorrisPlot * plotMuStarMu = new MorrisPlot(tr("morrisResultMuStarMu"), QPointF(noEffectBoundary, 0));
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarMu, SLOT(replot()));
 
   graphSetting = new GraphConfigurationWidget(plotMuStarMu,
@@ -124,16 +122,13 @@ void MorrisResultWidget::buildInterface()
 
   // set plot (µ*, σ)
   plotMuStarSigma->setTitle(tr("Standard deviation (σ) and mean of the absolute value (µ*) of the elementary effects"));
-  plotMuStarSigma->setAxisTitle(QwtPlot::xBottom, tr("µ*"));
   plotMuStarSigma->setAxisTitle(QwtPlot::yLeft, tr("σ"));
-  plotMuStarSigma->setMorrisPlotType(QPointF(noEffectBoundary, 0));
-  QwtLegend * legend = new QwtLegend;
-  legend->setToolTip(tr("Coefficient of variation cv = σ / µ*"));
-  plotMuStarSigma->insertLegend(legend, QwtPlot::RightLegend);
-  plotMuStarSigma->setContextMenuPolicy(Qt::NoContextMenu);
+  plotMuStarSigma->legend()->setToolTip(tr("Coefficient of variation cv = σ / µ*"));
   connect(plotMuStarSigma, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuSigma()));
   connect(plotMuStarSigma, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
   connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarSigma, SLOT(updateVerticalMarkerValue(QPointF)));
+  connect(this, &MorrisResultWidget::updateSelectedMarkerRequested, plotMuStarSigma, &MorrisPlot::updateFakeSelectedMarkerTitle);
+  connect(this, &MorrisResultWidget::updateUnselectedMarkerRequested, plotMuStarSigma, &MorrisPlot::updateFakeUnSelectedMarkerTitle);
 
   // - curve cv = 1
   QVector<QPointF> points1(2);
@@ -145,32 +140,14 @@ void MorrisResultWidget::buildInterface()
   points1[1] = QPointF(maxPoint, 0.5 * maxPoint);
   plotMuStarSigma->plotCurve(points1, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("cv = 0.5"), true);
 
-  // - two fake markers to add items in the legend
-  // -- first fake blue marker
-  QwtPlotMarker * fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarSigma);
-  fakeMarker->setVisible(false);
-  fakeSelectedMarkers_[0] = fakeMarker;
-  // -- second fake red marker
-  fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarSigma);
-  fakeMarker->setVisible(false);
-  fakeUnselectedMarkers_[0] = fakeMarker;
-
   // set plot (µ*, µ)
   plotMuStarMu->setTitle(tr("Mean (µ) and mean of the absolute value (µ*) of the elementary effects"));
-  plotMuStarMu->setAxisTitle(QwtPlot::xBottom, tr("µ*"));
   plotMuStarMu->setAxisTitle(QwtPlot::yLeft, tr("µ"));
-  plotMuStarMu->setMorrisPlotType(QPointF(noEffectBoundary, 0));
-  plotMuStarMu->insertLegend(new QwtLegend, QwtPlot::RightLegend);
-  plotMuStarMu->setContextMenuPolicy(Qt::NoContextMenu);
   connect(plotMuStarMu, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuMu()));
   connect(plotMuStarMu, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
   connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarMu, SLOT(updateVerticalMarkerValue(QPointF)));
+  connect(this, &MorrisResultWidget::updateSelectedMarkerRequested, plotMuStarMu, &MorrisPlot::updateFakeSelectedMarkerTitle);
+  connect(this, &MorrisResultWidget::updateUnselectedMarkerRequested, plotMuStarMu, &MorrisPlot::updateFakeUnSelectedMarkerTitle);
 
   // - curve µ = µ*
   QVector<QPointF> points(2);
@@ -188,46 +165,18 @@ void MorrisResultWidget::buildInterface()
   points[1] = QPointF(maxPoint2, - maxPoint2 * 0.5);
   plotMuStarMu->plotCurve(points, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, "", true);
 
-  // - two fake markers to add items in the legend
-  // -- first fake blue marker
-  fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarMu);
-  fakeMarker->setVisible(false);
-  fakeSelectedMarkers_[1] = fakeMarker;
-  // -- second fake red marker
-  fakeMarker = new QwtPlotMarker;
-  fakeMarker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
-  fakeMarker->setItemAttribute(QwtPlotItem::Legend, true);
-  fakeMarker->attach(plotMuStarMu);
-  fakeMarker->setVisible(false);
-  fakeUnselectedMarkers_[1] = fakeMarker;
-
   // points markers for plot (µ*, σ) and (µ*, µ)
   for (UnsignedInteger i = 0; i < nbInVar; ++i)
   {
-    const QPen markerPen = (result_.getInputsSelection(outpuIndex_)[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
+    const QPen markerPen = (result_.getInputsSelection(outputIndex_)[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
 
     // markers graph (µ*, σ)
-    const QPointF pt(result_.getMeanAbsoluteElementaryEffects(outpuIndex_)[i], result_.getStandardDeviationElementaryEffects(outpuIndex_)[i]);
-    QwtPlotMarker * marker = new QwtPlotMarker;
-    markersMuSigma_.append(marker);
-    marker->setLabelAlignment(Qt::AlignRight | Qt::AlignBottom);
-    marker->setValue(pt);
-    marker->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
-    marker->setLabel(names[i]);
-    marker->attach(plotMuStarSigma);
+    const QPointF pt(result_.getMeanAbsoluteElementaryEffects(outputIndex_)[i], result_.getStandardDeviationElementaryEffects(outputIndex_)[i]);
+    markersMuSigma_.append(new PlotMarker(plotMuStarSigma, markerPen, pt, names[i]));
 
     // markers graph (µ*, µ)
-    const QPointF pt2(result_.getMeanAbsoluteElementaryEffects(outpuIndex_)[i], result_.getMeanElementaryEffects(outpuIndex_)[i]);
-    QwtPlotMarker * marker2 = new QwtPlotMarker;
-    markersMuMu_.append(marker2);
-    marker2->setLabelAlignment(Qt::AlignRight | Qt::AlignBottom);
-    marker2->setValue(pt2);
-    marker2->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
-    marker2->setLabel(names[i]);
-    marker2->attach(plotMuStarMu);
+    const QPointF pt2(result_.getMeanAbsoluteElementaryEffects(outputIndex_)[i], result_.getMeanElementaryEffects(outputIndex_)[i]);
+    markersMuMu_.append(new PlotMarker(plotMuStarMu, markerPen, pt2, names[i]));
   }
 
   // update labels with number of un/selected points
@@ -259,7 +208,7 @@ void MorrisResultWidget::buildInterface()
   tableView->setSortingEnabled(true);
 
   // table model
-  MorrisResultTableModel * model = new MorrisResultTableModel(result_, outpuIndex_, MorrisResultTableModel::Edition, tableView);
+  MorrisResultTableModel * model = new MorrisResultTableModel(result_, outputIndex_, MorrisResultTableModel::Edition, tableView);
   connect(this, SIGNAL(resetTableModel()), model, SLOT(updateData()));
   connect(model, SIGNAL(selectionChanged()), this, SLOT(updateSelectedPointsFromTable()));
 
@@ -278,11 +227,11 @@ void MorrisResultWidget::buildInterface()
 
 void MorrisResultWidget::updateSelectedPointsFromTable()
 {
-  for (UnsignedInteger i = 0; i < result_.getInputsSelection(outpuIndex_).getSize(); ++i)
+  for (UnsignedInteger i = 0; i < result_.getInputsSelection(outputIndex_).getSize(); ++i)
   {
-    const QPen markerPen = result_.getInputsSelection(outpuIndex_)[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red);
-    markersMuSigma_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
-    markersMuMu_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
+    const QPen markerPen = result_.getInputsSelection(outputIndex_)[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red);
+    markersMuSigma_[i]->updateSymbolColor(markerPen);
+    markersMuMu_[i]->updateSymbolColor(markerPen);
   }
   updateLabels();
 }
@@ -294,8 +243,7 @@ void MorrisResultWidget::updateSelectedPointsFromMuSigma()
   for (int i = 0; i < markersMuSigma_.size(); ++i)
   {
     selection[i] = markersMuSigma_[i]->symbol()->pen().color() == Qt::red ? 0 : 1;
-    const QPen markerPen = selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red);
-    markersMuMu_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
+    markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
   }
   result_.setInputsSelection(0, selection);
   emit resetTableModel();
@@ -309,8 +257,7 @@ void MorrisResultWidget::updateSelectedPointsFromMuMu()
   for (int i = 0; i < markersMuMu_.size(); ++i)
   {
     selection[i] = markersMuMu_[i]->symbol()->pen().color() == Qt::red ? 0 : 1;
-    const QPen markerPen = selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red);
-    markersMuSigma_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
+    markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
   }
   result_.setInputsSelection(0, selection);
   emit resetTableModel();
@@ -320,22 +267,14 @@ void MorrisResultWidget::updateSelectedPointsFromMuMu()
 
 void MorrisResultWidget::updateNoEffectBoundary(const double value)
 {
-  result_.setNoEffectBoundary(outpuIndex_, value);
+  result_.setNoEffectBoundary(outputIndex_, value);
 
   Indices selection(markersMuSigma_.size());
   for (int i = 0; i < markersMuSigma_.size(); ++i)
   {
-    if (markersMuSigma_[i]->xValue() <= value)
-    {
-      markersMuSigma_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
-      markersMuMu_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::red), QSize(5, 5)));
-    }
-    else
-    {
-      markersMuSigma_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-      markersMuMu_[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-    }
     selection[i] = markersMuSigma_[i]->xValue() <= value ? 0 : 1;
+    markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
+    markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
   }
   result_.setInputsSelection(0, selection);
 
@@ -356,10 +295,8 @@ void MorrisResultWidget::updateLabels()
     else
       ++unselectedCounter;
   }
-  fakeSelectedMarkers_[0]->setTitle(tr("Selected points (%1)").arg(selectedCounter));
-  fakeSelectedMarkers_[1]->setTitle(tr("Selected points (%1)").arg(selectedCounter));
-  fakeUnselectedMarkers_[0]->setTitle(tr("Unselected points (%1)").arg(unselectedCounter));
-  fakeUnselectedMarkers_[1]->setTitle(tr("Unselected points (%1)").arg(unselectedCounter));
+  emit updateSelectedMarkerRequested(tr("Selected points (%1)").arg(selectedCounter));
+  emit updateUnselectedMarkerRequested(tr("Unselected points (%1)").arg(unselectedCounter));
   emit plotItemsChanged();
 }
 }
