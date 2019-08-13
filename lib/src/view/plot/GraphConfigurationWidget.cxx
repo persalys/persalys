@@ -136,10 +136,11 @@ void GraphConfigurationWidget::buildInterface()
   topLayout->addWidget(titleLineEdit_, rowGrid, 1);
 
   // Axis comboboxes
-  if (plotType_ == GraphConfigurationWidget::Scatter ||
-      plotType_ == GraphConfigurationWidget::Copula  ||
-      plotType_ == GraphConfigurationWidget::Kendall ||
-      plotType_ == GraphConfigurationWidget::KSPDF)
+  if (inputNames_.size() &&
+      (plotType_ == GraphConfigurationWidget::Scatter ||
+       plotType_ == GraphConfigurationWidget::Copula  ||
+       plotType_ == GraphConfigurationWidget::Kendall ||
+       plotType_ == GraphConfigurationWidget::KSPDF))
   {
     // X-axis combobox
     label = new QLabel(tr("X-axis"));
@@ -370,29 +371,29 @@ int GraphConfigurationWidget::getCurrentPlotIndex() const
 
 void GraphConfigurationWidget::plotChanged()
 {
-  int outputIndex = 0;
-  if (yAxisComboBox_)
-    outputIndex = yAxisComboBox_->currentIndex();
+  const int inputIndex = xAxisComboBox_ ? xAxisComboBox_->currentIndex() : 0;
+  const int outputIndex = yAxisComboBox_ ? yAxisComboBox_->currentIndex() : 0;
+  const int outputCount = yAxisComboBox_ ? yAxisComboBox_->count() : 0;
 
   currentPlotIndex_ = outputIndex;
 
-  if (plotType_ == GraphConfigurationWidget::Scatter && xAxisComboBox_ && yAxisComboBox_ && rankCheckBox_)
+  if (plotType_ == GraphConfigurationWidget::Scatter && rankCheckBox_)
   {
     if (!rankCheckBox_->isChecked())
-      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex);
+      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex);
     else
-      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
+      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex) + 1;
   }
-  else if (plotType_ == GraphConfigurationWidget::Copula && distReprComboBox_ && xAxisComboBox_ && yAxisComboBox_)
+  else if (plotType_ == GraphConfigurationWidget::Copula && distReprComboBox_)
   {
     if (distReprComboBox_->currentIndex() == 0)
-      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex);
+      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex);
     else
-      currentPlotIndex_ = 2 * (xAxisComboBox_->currentIndex() * yAxisComboBox_->count() + outputIndex) + 1;
+      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex) + 1;
   }
   else if (xAxisComboBox_ && plotType_ == GraphConfigurationWidget::Kendall)
   {
-    currentPlotIndex_ = xAxisComboBox_->currentIndex();
+    currentPlotIndex_ = inputIndex;
   }
   else if (distReprComboBox_ && (plotType_ == GraphConfigurationWidget::PDF ||
                                  plotType_ == GraphConfigurationWidget::PDF_Inference ||
@@ -402,7 +403,7 @@ void GraphConfigurationWidget::plotChanged()
   }
   else if (xAxisComboBox_ && plotType_ == GraphConfigurationWidget::KSPDF)
   {
-    currentPlotIndex_ = 2 * xAxisComboBox_->currentIndex() + distReprComboBox_->currentIndex();
+    currentPlotIndex_ = 2 * inputIndex + distReprComboBox_->currentIndex();
   }
 
   updateLineEdits();

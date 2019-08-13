@@ -23,7 +23,6 @@
 #include "persalys/CustomScaleEngine.hxx"
 #include "persalys/CustomScaleDraw.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
-#include "persalys/ContourData.hxx"
 #include "persalys/UIntSpinBox.hxx"
 #include "persalys/FileTools.hxx"
 
@@ -45,10 +44,8 @@
 #include <qwt_legend.h>
 #include <qwt_column_symbol.h>
 #include <qwt_plot_renderer.h>
-#include <qwt_plot_spectrogram.h>
 #include <qwt_picker_machine.h>
 #include <qwt_scale_widget.h>
-#include <qwt_color_map.h>
 
 using namespace OT;
 
@@ -633,97 +630,6 @@ void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
   hMarker->setLineStyle(QwtPlotMarker::HLine);
   hMarker->setLinePen(QPen(Qt::darkGray, 1));
   hMarker->attach(this);
-
-  replot();
-}
-
-
-void PlotWidget::plotContour(const Distribution& distribution, const bool isPdf)
-{
-  if (distribution.getDimension() != 2)
-  {
-    qDebug() << "In plotContour: distribution dimension must be 2";
-    return;
-  }
-  // drawable
-  Drawable aDrawable;
-  if (isPdf)
-    aDrawable = distribution.drawPDF(Indices(2, 70)).getDrawable(1);
-  else
-    aDrawable = distribution.drawCDF(Indices(2, 70)).getDrawable(0);
-  plotContour(aDrawable);
-}
-
-
-void PlotWidget::plotContour(const Drawable& drawable, const bool displayContour)
-{
-  // contour
-  Contour * contour = dynamic_cast<Contour*>(drawable.getImplementation().get());
-  if (!contour)
-  {
-    qDebug() << "In plotContour: the drawable is not a Contour";
-    return;
-  }
-  // spectrogram
-  QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;
-
-  spectrogram->setRenderThreadCount(0); // use system specific thread count
-  spectrogram->setCachePolicy(QwtPlotRasterItem::PaintCache);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ContourMode, displayContour);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ImageMode, true);
-
-  // data
-  ContourData * contourData = new ContourData;
-  contourData->setData(*contour);
-  spectrogram->setData(contourData);
-
-  const QwtInterval zInterval = contourData->interval(Qt::ZAxis);
-
-  // build levels
-  const Sample sortedData(contour->getData().sort(0));
-  const UnsignedInteger size = sortedData.getSize();
-  QList<double> rank = QList<double>() << 0.1 << 0.2 << 0.3 << 0.4 << 0.5 << 0.6 << 0.7 << 0.8 << 0.9 << 0.95 << 0.97 << 0.99;
-
-  QList<double> levels;
-  for (int i = 0; i < rank.size(); ++i)
-  {
-    levels += sortedData[rank[i] * size - 1][0];
-  }
-  levels += (sortedData[size - 1][0] - sortedData[0.99 * size - 1][0]) * 0.5;
-  std::sort(levels.begin(), levels.end());
-  spectrogram->setContourLevels(levels);
-
-  // color map
-  const double maxV = levels[levels.size() - 1];
-  const double minV = levels[0];
-
-  QwtLinearColorMap * colorMap = new QwtLinearColorMap(Qt::darkCyan, Qt::darkRed);
-  colorMap->addColorStop((levels[1] - minV) / (maxV - minV), Qt::cyan);
-  colorMap->addColorStop((levels[2] - minV) / (maxV - minV), Qt::green);
-  colorMap->addColorStop((levels[levels.size() - 5] - minV) / (maxV - minV), Qt::yellow);
-  colorMap->addColorStop((levels[levels.size() - 2] - minV) / (maxV - minV), Qt::red);
-  spectrogram->setColorMap(colorMap);
-
-  spectrogram->attach(this);
-
-  // A color bar on the right axis
-  QwtScaleWidget * rightAxis = axisWidget(QwtPlot::yRight);
-  rightAxis->setTitle(tr("Density"));
-  rightAxis->setColorBarEnabled(true);
-  rightAxis->setScaleDraw(new CustomScaleDraw);
-
-  // - color map
-  colorMap = new QwtLinearColorMap(Qt::darkCyan, Qt::darkRed);
-  colorMap->addColorStop((levels[1] - minV) / (maxV - minV), Qt::cyan);
-  colorMap->addColorStop((levels[2] - minV) / (maxV - minV), Qt::green);
-  colorMap->addColorStop((levels[levels.size() - 5] - minV) / (maxV - minV), Qt::yellow);
-  colorMap->addColorStop((levels[levels.size() - 2] - minV) / (maxV - minV), Qt::red);
-  rightAxis->setColorMap(zInterval, colorMap);
-
-  setAxisScale(QwtPlot::yRight, zInterval.minValue(), zInterval.maxValue());
-  enableAxis(QwtPlot::yRight);
-
-  plotLayout()->setAlignCanvasToScales(true);
 
   replot();
 }

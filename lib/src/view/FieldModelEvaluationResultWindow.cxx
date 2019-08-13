@@ -29,7 +29,7 @@
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/QtTools.hxx"
-#include "persalys/PlotWidget.hxx"
+#include "persalys/ContourPlot.hxx"
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
@@ -422,9 +422,8 @@ void FieldCentralTendencyResultWindow::addCorrelationTab()
   for (UnsignedInteger out = 0; out < nbOutput; ++out)
   {
     QVector<PlotWidget*> listPlot;
-    PlotWidget * corrPlot = new PlotWidget(tr("correlation"));
     Graph graph(result_.getCorrelationFunction()[out].draw(Point(2, minValueVertices), Point(2,  maxValueVertices)));
-    corrPlot->plotContour(graph.getDrawable(0), false);
+    ContourPlot * corrPlot = new ContourPlot(graph.getDrawables());
     corrPlot->setTitle(tr("Empirical correlation") + " " + outNames[out]);
     corrPlot->setAxisTitle(QwtPlot::xBottom, meshParamName);
     corrPlot->setAxisTitle(QwtPlot::yLeft, meshParamName + "'");

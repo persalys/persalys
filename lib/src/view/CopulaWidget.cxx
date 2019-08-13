@@ -30,6 +30,7 @@
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/DocumentationToolButton.hxx"
 #include "persalys/FileTools.hxx"
+#include "persalys/ContourPlot.hxx"
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -64,8 +65,12 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
   const QStringList variablesNames(QtOT::DescriptionToStringList(copula_.getDescription()));
 
+  // if NormalCopula of dimension > 2: Display copula for each pair of variables
+  // else: display copula for one pair of variables
+  const UnsignedInteger dim = copula_.getDimension() == 2 ? 1 : copula_.getDimension();
+
   // create a PDF and a CDF for each pair of variables
-  for (UnsignedInteger i = 0; i < copula_.getDimension(); ++i)
+  for (UnsignedInteger i = 0; i < dim; ++i)
   {
     for (UnsignedInteger j = 0; j < copula_.getDimension(); ++j)
     {
@@ -76,8 +81,7 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
         marginals[1] = j;
 
         //pdf
-        PlotWidget * pdfPlot = new PlotWidget(tr("copulaPDF"), true);
-        pdfPlot->plotContour(copula_.getMarginal(marginals));
+        ContourPlot * pdfPlot = new ContourPlot(copula_.getMarginal(marginals), true);
         pdfPlot->setTitle(tr("PDF"));
         pdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         pdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
@@ -85,8 +89,7 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
         listPlot_.append(pdfPlot);
 
         // cdf
-        PlotWidget * cdfPlot = new PlotWidget(tr("copulaCDF"), true);
-        cdfPlot->plotContour(copula_.getMarginal(marginals), false);
+        ContourPlot * cdfPlot = new ContourPlot(copula_.getMarginal(marginals), false);
         cdfPlot->setTitle(tr("CDF"));
         cdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         cdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
@@ -98,7 +101,7 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
 
   // -- GraphConfigurationWidget
   GraphConfigurationWidget * plotSettingWidget = new GraphConfigurationWidget(listPlot_,
-      variablesNames,
+      dim == 1 ? QStringList() : variablesNames,
       QStringList(),
       GraphConfigurationWidget::Copula,
       this);
@@ -181,7 +184,11 @@ void CopulaWidget::updateParameters()
 
 void CopulaWidget::updatePlots()
 {
-  for (UnsignedInteger i = 0; i < copula_.getDimension(); ++i)
+  // if NormalCopula of dimension > 2: Display copula for each pair of variables
+  // else: display copula for one pair of variables
+  const UnsignedInteger dim = copula_.getDimension() == 2 ? 1 : copula_.getDimension();
+
+  for (UnsignedInteger i = 0; i < dim; ++i)
   {
     int ind = 0;
     for (UnsignedInteger j = 0; j < copula_.getDimension(); ++j)
@@ -195,12 +202,12 @@ void CopulaWidget::updatePlots()
         //pdf
         PlotWidget * pdfPlot = listPlot_[2 * (i * (copula_.getDimension() - 1) + ind)];
         pdfPlot->clear();
-        pdfPlot->plotContour(copula_.getMarginal(marginals));
+        dynamic_cast<ContourPlot*>(pdfPlot)->updateContour(copula_.getMarginal(marginals), true);
 
         // cdf
         PlotWidget * cdfPlot = listPlot_[2 * (i * (copula_.getDimension() - 1) + ind) + 1];
         cdfPlot->clear();
-        cdfPlot->plotContour(copula_.getMarginal(marginals), false);
+        dynamic_cast<ContourPlot*>(cdfPlot)->updateContour(copula_.getMarginal(marginals), false);
         ++ind;
       }
     }

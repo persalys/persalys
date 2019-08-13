@@ -21,6 +21,8 @@
 #ifndef PERSALYS_PLOTWIDGET_HXX
 #define PERSALYS_PLOTWIDGET_HXX
 
+#include "persalys/PersalysPrivate.hxx"
+
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
@@ -28,11 +30,8 @@
 #include <qwt_scale_draw.h>
 #include <qwt_scale_engine.h>
 #include <qwt_scale_div.h>
-#include "qwt_global.h"
-#include "qwt_interval.h"
 
 #include <openturns/Distribution.hxx>
-#include "persalys/PersalysPrivate.hxx"
 
 namespace PERSALYS
 {
@@ -135,8 +134,6 @@ public:
                               const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
                               const OT::Interval& totalIndicesIntervals = OT::Interval(),
                               const QStringList& legendNames = QStringList() << tr("First order index") << tr("Total index"));
-  void plotContour(const OT::Distribution& distribution, const bool isPdf = true);
-  void plotContour(const OT::Drawable& drawable, const bool displayContour = true);
   void setMorrisPlotType(const QPointF& initialMarkersCoord);
 
   /// clear plot
