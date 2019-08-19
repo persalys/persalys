@@ -251,17 +251,13 @@ void MeshWindow::addWidgetsTabs()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   // Mesh
-  meshPlot_ = new PlotWidget();
+  meshPlot_ = new PlotWidget;
 //   meshPlot->plotCurve();
 //   meshPlot_->setTitle(tr("Number of nodes = ") + " ");
 //   meshPlot_->setAxisTitle(QwtPlot::xBottom, "time");
 
   // Graph Setting
-  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(meshPlot_,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
+  SimpleGraphSetting * graphSetting = new SimpleGraphSetting(meshPlot_, this);
 
   scrollArea->setWidget(new WidgetBoundToDockWidget(meshPlot_, graphSetting, this));
   tabWidget_->addTab(scrollArea, tr("Mesh"));

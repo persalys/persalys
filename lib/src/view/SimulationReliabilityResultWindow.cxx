@@ -236,11 +236,7 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
   plot->setTitle(tr("%1 output distribution").arg(outputName));
 
-  GraphConfigurationWidget * histogramSettingWidget = new GraphConfigurationWidget(plot,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
+  SimpleGraphSetting * histogramSettingWidget = new SimpleGraphSetting(plot, this);
 
   scrollArea->setWidget(new WidgetBoundToDockWidget(plot, histogramSettingWidget, this));
 
@@ -279,13 +275,9 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
 
   stackedWidget->addWidget(plot);
 
-  GraphConfigurationWidget * convergenceGraphSettingWidget = new GraphConfigurationWidget(plot,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
+  SimpleGraphSetting * convergenceGraphSettingWidget = new SimpleGraphSetting(plot, this);
 
-  scrollArea->setWidget(new WidgetBoundToDockWidget(plot, convergenceGraphSettingWidget, this));
+  scrollArea->setWidget(new WidgetBoundToDockWidget(stackedWidget, convergenceGraphSettingWidget, this));
 
   return scrollArea;
 }

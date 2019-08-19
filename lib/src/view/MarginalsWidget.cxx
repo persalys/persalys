@@ -177,11 +177,7 @@ void MarginalsWidget::buildInterface()
   plotStackedWidget->addWidget(survivalPlot_);
   listPlotWidgets.append(survivalPlot_);
 
-  GraphConfigurationWidget * plotsSettingWidget = new GraphConfigurationWidget(listPlotWidgets,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::PDF,
-      this);
+  PDFGraphSetting * plotsSettingWidget = new PDFGraphSetting(listPlotWidgets, PDFGraphSetting::Distribution, this);
   connect(plotsSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
 
   rightFrameLayout->addWidget(new WidgetBoundToDockWidget(plotStackedWidget, plotsSettingWidget, this), 1);

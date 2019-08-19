@@ -100,12 +100,8 @@ MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationRe
     plot->setAxisTitle(QwtPlot::yLeft, tr("Prediction"));
     mainWidgetLayout->addWidget(plot);
 
-    // GraphConfigurationWidget
-    GraphConfigurationWidget * graphSettingWidget = new GraphConfigurationWidget(plot,
-        QStringList(),
-        QStringList(),
-        GraphConfigurationWidget::NoType,
-        this);
+    // SimpleGraphSetting
+    SimpleGraphSetting * graphSettingWidget = new SimpleGraphSetting(plot, this);
     mainWidget->setDockWidget(graphSettingWidget);
   }
   setWidget(mainWidget);

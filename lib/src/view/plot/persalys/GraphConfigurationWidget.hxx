@@ -21,11 +21,11 @@
 #ifndef PERSALYS_GRAPHCONFIGURATIONWIDGET_HXX
 #define PERSALYS_GRAPHCONFIGURATIONWIDGET_HXX
 
-#include "persalys/PlotWidget.hxx"
+#include "persalys/BoxPlot.hxx"
 #include "persalys/ValueLineEdit.hxx"
 
+#include <QGridLayout>
 #include <QComboBox>
-#include <QButtonGroup>
 #include <QCheckBox>
 
 namespace PERSALYS
@@ -36,19 +36,7 @@ class PERSALYS_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {NoType, Kendall, Scatter, PDF, PDF_Inference, PDFResult, SensitivityIndices, Copula, KSPDF, Boxplot};
-
-  GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
-                           QStringList inputNames = QStringList(),
-                           QStringList outputNames = QStringList(),
-                           Type plotType = NoType,
-                           QWidget * parent = 0);
-
-  GraphConfigurationWidget(PlotWidget * plotWidget,
-                           QStringList inputNames = QStringList(),
-                           QStringList outputNames = QStringList(),
-                           Type plotType = NoType,
-                           QWidget * parent = 0);
+  GraphConfigurationWidget(const QVector<PlotWidget *> &plotWidgets, QWidget *parent = 0);
 
   int getCurrentPlotIndex() const;
 
@@ -56,40 +44,87 @@ public:
   virtual QSize minimumSizeHint() const;
 
 protected:
-  void buildInterface();
+  void addXYAxisTabs(const bool xAxisWithLabels = false);
+  void addExportLayout();
 
 public slots:
-  void updateLineEdits();
-  void updateYComboBox();
-  void plotChanged();
-  void updateTitle();
-  void updateXLabel();
-  void updateYLabel();
-  void updateXrange();
-  void updateYrange();
-  void changeLabelOrientation(int);
-  void setVariablesToShow(const QStringList&);
-  void exportPlot();
+  virtual void updateLineEdits();
+  virtual void currentPlotIndexChanged(int i = 0);
+  void updateRange(QwtPlot::Axis);
 signals:
-  void currentPlotChanged(int);
+  void currentPlotChanged(int i = 0);
 
-private:
+protected:
   QVector<PlotWidget *> plotWidgets_;
-  Type plotType_;
-  int currentPlotIndex_;
-  QStringList inputNames_;
-  QStringList outputNames_;
-  QCheckBox * rankCheckBox_;
-  QComboBox * distReprComboBox_;
+  int plotIndex_;
+  QGridLayout * frameLayout_;
+  QTabWidget * propertiesTabWidget_;
+  QLineEdit * titleLineEdit_;
+  QLineEdit * axisLabelLineEdit_[2];
+  ValueLineEdit * axisMinValueLineEdit_[2];
+  ValueLineEdit * axisMaxValueLineEdit_[2];
+};
+
+
+class PERSALYS_API SimpleGraphSetting : public GraphConfigurationWidget
+{
+  Q_OBJECT
+
+public:
+  SimpleGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, QWidget *parent = 0);
+  SimpleGraphSetting(PlotWidget *plotWidget, QWidget *parent = 0);
+};
+
+
+class PERSALYS_API ScatterGraphSetting : public GraphConfigurationWidget
+{
+  Q_OBJECT
+
+public:
+  ScatterGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const QStringList &outputNames, QWidget *parent = 0);
+public slots:
+  void updateYComboBox();
+  virtual void currentPlotIndexChanged(int i = 0);
+private:
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;
-  QLineEdit * titleLineEdit_;
-  QLineEdit * xlabelLineEdit_;
-  ValueLineEdit * xmin_;
-  ValueLineEdit * xmax_;
-  QLineEdit * ylabelLineEdit_;
-  ValueLineEdit * ymin_;
-  ValueLineEdit * ymax_;
+  QCheckBox * rankCheckBox_;
+};
+
+
+class PERSALYS_API PDFGraphSetting : public GraphConfigurationWidget
+{
+  Q_OBJECT
+
+public:
+  enum PDFType {Distribution, Result, Copula, Ksi};
+  PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const PDFType type, QWidget *parent = 0);
+  PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const PDFType type, QWidget *parent = 0);
+public slots:
+  void updateYComboBox();
+  virtual void currentPlotIndexChanged(int i = 0);
+private:
+  QComboBox * xAxisComboBox_;
+  QComboBox * yAxisComboBox_;
+  QComboBox * reprComboBox_;
+};
+
+
+class PERSALYS_API BoxPlotGraphSetting : public GraphConfigurationWidget
+{
+  Q_OBJECT
+
+public:
+  BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, QWidget *parent = 0);
+};
+
+
+class PERSALYS_API SensitivityIndicesGraphSetting : public GraphConfigurationWidget
+{
+  Q_OBJECT
+
+public:
+  SensitivityIndicesGraphSetting(PlotWidget *plotWidget, QWidget *parent = 0);
 };
 }
 #endif

@@ -100,11 +100,7 @@ CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWi
   }
 
   // -- GraphConfigurationWidget
-  GraphConfigurationWidget * plotSettingWidget = new GraphConfigurationWidget(listPlot_,
-      dim == 1 ? QStringList() : variablesNames,
-      QStringList(),
-      GraphConfigurationWidget::Copula,
-      this);
+  PDFGraphSetting * plotSettingWidget = new PDFGraphSetting(listPlot_, dim == 1 ? QStringList() : variablesNames, PDFGraphSetting::Copula, this);
   connect(plotSettingWidget, SIGNAL(currentPlotChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
 
   vSplitter->addWidget(new WidgetBoundToDockWidget(plotStackedWidget, plotSettingWidget, this));

@@ -476,6 +476,15 @@ void PlotWidget::replot()
 }
 
 
+void PlotWidget::setXLabelOrientation(int orientation)
+{
+  // orientation == 0 : Horizontal
+  // orientation == 1 : Vertical
+  setAxisLabelAlignment(QwtPlot::xBottom, orientation == 0 ? Qt::AlignBottom : Qt::AlignLeft);
+  setAxisLabelRotation(QwtPlot::xBottom, orientation == 0 ? 0 : -90);
+}
+
+
 QVector<PlotWidget*> PlotWidget::GetListScatterPlots(const Sample& inS,
     const Sample& outS,
     const Sample& notValidInS,

@@ -99,6 +99,7 @@ public slots:
   void contextMenu(const QPoint & pos);
   virtual void replot();
   void exportPlot();
+  void setXLabelOrientation(int);
 
 signals:
   void plotChanged();

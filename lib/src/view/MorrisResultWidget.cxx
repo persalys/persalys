@@ -95,11 +95,7 @@ void MorrisResultWidget::buildInterface()
   MorrisPlot * plotMuStarSigma = new MorrisPlot(tr("morrisResult"), QPointF(noEffectBoundary, 0));
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarSigma, SLOT(replot()));
 
-  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotMuStarSigma,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
+  SimpleGraphSetting * graphSetting = new SimpleGraphSetting(plotMuStarSigma, this);
 
   scrollArea->setWidget(new WidgetBoundToDockWidget(plotMuStarSigma, graphSetting, this));
   tabWidget->addTab(scrollArea, tr("Graph (µ*, σ)"));
@@ -111,11 +107,7 @@ void MorrisResultWidget::buildInterface()
   MorrisPlot * plotMuStarMu = new MorrisPlot(tr("morrisResultMuStarMu"), QPointF(noEffectBoundary, 0));
   connect(this, SIGNAL(plotItemsChanged()), plotMuStarMu, SLOT(replot()));
 
-  graphSetting = new GraphConfigurationWidget(plotMuStarMu,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
+  graphSetting = new SimpleGraphSetting(plotMuStarMu, this);
 
   scrollArea->setWidget(new WidgetBoundToDockWidget(plotMuStarMu, graphSetting, this));
   tabWidget->addTab(scrollArea, tr("Graph (µ*, µ)"));

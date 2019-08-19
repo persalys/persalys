@@ -98,13 +98,9 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   plot_ = new SensitivityIndicesPlot(defaultFileName, firstIndices, totalIndices, firstIndicesIntervals, totalIndicesIntervals, inputNames, legendNames);
   plot_->setTitle(graphTitle + " " + QString::fromUtf8(outputName.c_str()));
 
-  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot_,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::SensitivityIndices,
-      this);
-
+  SensitivityIndicesGraphSetting * graphSetting = new SensitivityIndicesGraphSetting(plot_, this);
   scrollArea->setWidget(new WidgetBoundToDockWidget(plot_, graphSetting, this));
+
   mainSplitter->addWidget(scrollArea);
   mainSplitter->setStretchFactor(0, 2);
 

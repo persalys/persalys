@@ -343,11 +343,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
     QVector<PlotWidget*> listPlotWidgets;
     listPlotWidgets.append(pdfPlot);
     listPlotWidgets.append(cdfPlot);
-    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlotWidgets,
-        QStringList(),
-        QStringList(),
-        GraphConfigurationWidget::PDFResult,
-        this);
+    PDFGraphSetting * graphSetting = new PDFGraphSetting(listPlotWidgets, PDFGraphSetting::Result, this);
     connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
     tabStackedWidget->addWidget(new WidgetBoundToDockWidget(stackedWidget, graphSetting, this));
@@ -388,12 +384,7 @@ void DataAnalysisWindow::addBoxPlotTab()
     plot->addBoxPlot(result_, ind[i]);
 
   // Graph Setting
-  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot,
-      variablesNames,
-      QStringList(),
-      GraphConfigurationWidget::Boxplot,
-      this);
-
+  BoxPlotGraphSetting * graphSetting = new BoxPlotGraphSetting(plot, variablesNames, this);
   mainLayout->addWidget(new WidgetBoundToDockWidget(plot, graphSetting, this));
 
   scrollArea->setWidget(mainWidget);
@@ -539,11 +530,7 @@ void DataAnalysisWindow::addScatterPlotsTab()
   for (int i = 0; i < listScatterPlotWidgets.size(); ++i)
     stackedWidget->addWidget(listScatterPlotWidgets[i]);
 
-  GraphConfigurationWidget * scatterSettingWidget = new GraphConfigurationWidget(listScatterPlotWidgets,
-      inputNames_,
-      outputNames_,
-      GraphConfigurationWidget::Scatter,
-      this);
+  ScatterGraphSetting * scatterSettingWidget = new ScatterGraphSetting(listScatterPlotWidgets, inputNames_, outputNames_, this);
   connect(scatterSettingWidget, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   tabWidget_->addTab(new WidgetBoundToDockWidget(stackedWidget, scatterSettingWidget, this), tr("Scatter plot"));

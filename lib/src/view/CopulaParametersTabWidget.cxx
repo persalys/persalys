@@ -122,15 +122,11 @@ void CopulaParametersTabWidget::buildInterface()
     }
   }
 
-  GraphConfigurationWidget * pdf_cdfPlotSettingWidget = 0;
+  PDFGraphSetting * pdf_cdfPlotSettingWidget = 0;
   if (displaySetting_)
   {
     // -- GraphConfigurationWidget
-    pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listPlot,
-        dim == 1 ? QStringList() : variablesNames,
-        QStringList(),
-        GraphConfigurationWidget::Copula,
-        this);
+    pdf_cdfPlotSettingWidget = new PDFGraphSetting(listPlot, dim == 1 ? QStringList() : variablesNames, PDFGraphSetting::Copula, this);
     connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_StackedWidget, SLOT(setCurrentIndex(int)));
   }
 
@@ -179,11 +175,7 @@ void CopulaParametersTabWidget::buildInterface()
   if (displaySetting_ && kendallPlotData_.getSize())
   {
     // -- GraphConfigurationWidget
-    GraphConfigurationWidget * kendallPlotSettingWidget = new GraphConfigurationWidget(listKendallPlots,
-        variablesPairsNames,
-        QStringList(),
-        GraphConfigurationWidget::Kendall,
-        this);
+    SimpleGraphSetting * kendallPlotSettingWidget = new SimpleGraphSetting(listKendallPlots, variablesPairsNames, this);
     plotWidget->setDockWidget(kendallPlotSettingWidget);
     connect(kendallPlotSettingWidget, SIGNAL(currentPlotChanged(int)), kendall_StackedWidget, SLOT(setCurrentIndex(int)));
   }

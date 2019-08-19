@@ -23,79 +23,24 @@
 #include "persalys/TitledComboBox.hxx"
 #include "persalys/ListWidgetWithCheckBox.hxx"
 #include "persalys/QtTools.hxx"
-#include "persalys/BoxPlot.hxx"
 
-#include <QGridLayout>
-#include <QHBoxLayout>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QLabel>
-#include <QFileDialog>
-#include <QImageWriter>
-#include <QRadioButton>
 #include <QScrollArea>
-#include <QCheckBox>
-
-#include <qwt_plot_renderer.h>
 
 namespace PERSALYS
 {
 
-GraphConfigurationWidget::GraphConfigurationWidget(QVector<PlotWidget *> plotWidgets,
-    QStringList inputNames,
-    QStringList outputNames,
-    GraphConfigurationWidget::Type plotType,
-    QWidget * parent)
+static const QwtPlot::Axis Axes[2] = {QwtPlot::xBottom, QwtPlot::yLeft};
+
+GraphConfigurationWidget::GraphConfigurationWidget(const QVector<PlotWidget *> &plotWidgets, QWidget *parent)
   : QWidget(parent)
   , plotWidgets_(plotWidgets)
-  , plotType_(plotType)
-  , currentPlotIndex_(0)
-  , inputNames_(inputNames)
-  , outputNames_(outputNames)
-  , rankCheckBox_(0)
-  , distReprComboBox_(0)
-  , xAxisComboBox_(0)
-  , yAxisComboBox_(0)
+  , plotIndex_(0)
+  , frameLayout_(0)
+  , propertiesTabWidget_(0)
   , titleLineEdit_(0)
-  , xlabelLineEdit_(0)
-  , xmin_(0)
-  , xmax_(0)
-  , ylabelLineEdit_(0)
-  , ymin_(0)
-  , ymax_(0)
-{
-  buildInterface();
-}
-
-
-GraphConfigurationWidget::GraphConfigurationWidget(PlotWidget * plotWidget,
-    QStringList inputNames,
-    QStringList outputNames,
-    GraphConfigurationWidget::Type plotType,
-    QWidget * parent)
-  : QWidget(parent)
-  , plotWidgets_(1, plotWidget)
-  , plotType_(plotType)
-  , currentPlotIndex_(0)
-  , inputNames_(inputNames)
-  , outputNames_(outputNames)
-  , rankCheckBox_(0)
-  , distReprComboBox_(0)
-  , xAxisComboBox_(0)
-  , yAxisComboBox_(0)
-  , titleLineEdit_(0)
-  , xlabelLineEdit_(0)
-  , xmin_(0)
-  , xmax_(0)
-  , ylabelLineEdit_(0)
-  , ymin_(0)
-  , ymax_(0)
-{
-  buildInterface();
-}
-
-
-void GraphConfigurationWidget::buildInterface()
 {
   for (int i = 0; i < plotWidgets_.size(); ++i)
     connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
@@ -107,454 +52,141 @@ void GraphConfigurationWidget::buildInterface()
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
   QFrame * frame = new QFrame;
-  QVBoxLayout * frameLayout = new QVBoxLayout(frame);
-
-  QGridLayout * topLayout = new QGridLayout;
-  int rowGrid = 0;
-
-  // combobox PDF - CDF - quantile function - Survival function
-  if (plotType_ == GraphConfigurationWidget::PDF ||
-      plotType_ == GraphConfigurationWidget::PDF_Inference ||
-      plotType_ == GraphConfigurationWidget::PDFResult ||
-      plotType_ == GraphConfigurationWidget::Copula ||
-      plotType_ == GraphConfigurationWidget::KSPDF)
-  {
-    QStringList distReprs = QStringList() << tr("PDF") << tr("CDF");
-    if (plotType_ == GraphConfigurationWidget::PDF)
-      distReprs << tr("Quantile function") << tr("Survival function");
-    distReprComboBox_ = new QComboBox;
-    distReprComboBox_->addItems(distReprs);
-    topLayout->addWidget(distReprComboBox_, rowGrid, 0, 1, 2);
-    connect(distReprComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-  }
+  frameLayout_ = new QGridLayout(frame);
 
   // title
   QLabel * label = new QLabel(tr("Title"));
-  topLayout->addWidget(label, ++rowGrid, 0);
+  frameLayout_->addWidget(label, 0, 0);
 
   titleLineEdit_ = new QLineEdit;
-  connect(titleLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateTitle()));
-  topLayout->addWidget(titleLineEdit_, rowGrid, 1);
+  connect(titleLineEdit_, &QLineEdit::textChanged, [=](const QString& text) {plotWidgets_[plotIndex_]->setTitle(text);});
+  frameLayout_->addWidget(titleLineEdit_, 0, 1);
 
-  // Axis comboboxes
-  if (inputNames_.size() &&
-      (plotType_ == GraphConfigurationWidget::Scatter ||
-       plotType_ == GraphConfigurationWidget::Copula  ||
-       plotType_ == GraphConfigurationWidget::Kendall ||
-       plotType_ == GraphConfigurationWidget::KSPDF))
-  {
-    // X-axis combobox
-    label = new QLabel(tr("X-axis"));
-    topLayout->addWidget(label, ++rowGrid, 0);
+  propertiesTabWidget_ = new QTabWidget;
 
-    xAxisComboBox_ = new QComboBox;
-
-    for (int i = 0; i < inputNames_.size(); ++i)
-      xAxisComboBox_->addItem(inputNames_[i], true);
-
-    for (int i = 0; i < outputNames_.size(); ++i)
-      xAxisComboBox_->addItem(outputNames_[i], false);
-
-    topLayout->addWidget(xAxisComboBox_, rowGrid, 1);
-    if (plotType_ != GraphConfigurationWidget::Kendall && plotType_ != GraphConfigurationWidget::KSPDF)
-    {
-      connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
-
-      // Y-axis combobox
-      label = new QLabel(tr("Y-axis"));
-      topLayout->addWidget(label, ++rowGrid, 0);
-
-      yAxisComboBox_ = new QComboBox;
-      topLayout->addWidget(yAxisComboBox_, rowGrid, 1);
-      connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-    }
-    else
-      connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(plotChanged()));
-  }
-  if (plotType_ == GraphConfigurationWidget::Boxplot)
-  {
-    // variables to display
-    QLabel * label = new QLabel(tr("Variables"));
-    topLayout->addWidget(label, ++rowGrid, 0);
-
-    // combobox to select the variables to display
-    TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
-    ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames_, this);
-    connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(setVariablesToShow(QStringList)));
-    varComboBox->setModel(varListWidget->model());
-    varComboBox->setView(varListWidget);
-    topLayout->addWidget(varComboBox, rowGrid, 1);
-  }
-  frameLayout->addLayout(topLayout);
-
-  // radio button ranks
-  if (plotType_ == GraphConfigurationWidget::Scatter)
-  {
-    rankCheckBox_ = new QCheckBox(tr("Ranks"));
-    frameLayout->addWidget(rankCheckBox_);
-    connect(rankCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(plotChanged()));
-  }
-
-  //TODO: add Legend?
-//   QwtLegend *legend = new QwtLegend ;
-//   plotWidgets_[currentPlotIndex_]->insertLegend(legend, QwtPlot::BottomLegend);
-
-  QTabWidget * tabWidget = new QTabWidget;
-
-  // --- tab Horizontal Axis
-  QWidget * tabHorizontalAxis = new QWidget;
-  QGridLayout * gridLayoutTab = new QGridLayout(tabHorizontalAxis);
-
-  label = new QLabel(tr("Title"));
-  gridLayoutTab->addWidget(label, 0, 0, 1, 1);
-
-  xlabelLineEdit_ = new QLineEdit;
-  connect(xlabelLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateXLabel()));
-  gridLayoutTab->addWidget(xlabelLineEdit_, 0, 1, 1, 1);
-
-  label = new QLabel(tr("Min"));
-  gridLayoutTab->addWidget(label, 1, 0, 1, 1);
-
-  xmin_ = new ValueLineEdit;
-  connect(xmin_, SIGNAL(editingFinished()), this, SLOT(updateXrange()));
-  gridLayoutTab->addWidget(xmin_, 1, 1, 1, 1);
-
-  label = new QLabel(tr("Max"));
-  gridLayoutTab->addWidget(label, 2, 0, 1, 1);
-
-  xmax_ = new ValueLineEdit;
-  connect(xmax_, SIGNAL(editingFinished()), this, SLOT(updateXrange()));
-  gridLayoutTab->addWidget(xmax_, 2, 1, 1, 1);
-
-  // label direction
-  if (plotType_ == GraphConfigurationWidget::SensitivityIndices || plotType_ == GraphConfigurationWidget::Boxplot)
-  {
-    QHBoxLayout * hLayout = new QHBoxLayout;
-    label = new QLabel(tr("Labels\norientation"));
-    QComboBox * labelOrientation = new QComboBox;
-    labelOrientation->addItems(QStringList() << tr("Horizontal") << tr("Vertical"));
-    hLayout->addWidget(label);
-    hLayout->addWidget(labelOrientation, 1);
-    gridLayoutTab->addLayout(hLayout, 3, 0, 1, 2);
-    connect(labelOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(changeLabelOrientation(int)));
-  }
-
-  gridLayoutTab->setRowStretch(4, 1);
-
-  tabWidget->addTab(tabHorizontalAxis, tr("X-axis"));
-
-  // --- tab Vertical Axis
-  QWidget * tabVerticalAxis = new QWidget;
-  gridLayoutTab = new QGridLayout(tabVerticalAxis);
-  label = new QLabel(tr("Title"));
-  gridLayoutTab->addWidget(label, 0, 0, 1, 1);
-
-  ylabelLineEdit_ = new QLineEdit;
-  connect(ylabelLineEdit_, SIGNAL(textChanged(QString)), this, SLOT(updateYLabel()));
-  gridLayoutTab->addWidget(ylabelLineEdit_, 0, 1, 1, 1);
-
-  label = new QLabel(tr("Min"));
-  gridLayoutTab->addWidget(label, 1, 0, 1, 1);
-
-  ymin_ = new ValueLineEdit;
-  connect(ymin_, SIGNAL(editingFinished()), this, SLOT(updateYrange()));
-  gridLayoutTab->addWidget(ymin_, 1, 1, 1, 1);
-
-  label = new QLabel(tr("Max"));
-  gridLayoutTab->addWidget(label, 2, 0, 1, 1);
-
-  ymax_ = new ValueLineEdit;
-  connect(ymax_, SIGNAL(editingFinished()), this, SLOT(updateYrange()));
-  gridLayoutTab->addWidget(ymax_, 2, 1, 1, 1);
-
-  gridLayoutTab->setRowStretch(3, 1);
-
-  tabWidget->addTab(tabVerticalAxis, tr("Y-axis"));
-
-  frameLayout->addWidget(tabWidget);
-
-  // Bottom layout
-  QHBoxLayout * hboxForBottomButtons = new QHBoxLayout;
-  QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
-  connect(button, SIGNAL(clicked()), this, SLOT(exportPlot()));
-  hboxForBottomButtons->addWidget(button);
-  hboxForBottomButtons->addStretch();
-
-  frameLayout->addLayout(hboxForBottomButtons);
-  frameLayout->addStretch();
-
-  // update widgets
-  updateLineEdits();
-  updateYComboBox();
-
-  //
   scrollArea->setWidget(frame);
   mainLayout->addWidget(scrollArea);
   setVisible(false);
 }
 
 
-void GraphConfigurationWidget::updateLineEdits()
+void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
 {
-  if (!plotWidgets_.size())
-    return;
-
-  SignalBlocker xlabelLineEditBlocker(xlabelLineEdit_);
-  SignalBlocker xminBlocker(xmin_);
-  SignalBlocker xmaxBlocker(xmax_);
-  SignalBlocker yminBlocker(ymin_);
-  SignalBlocker ymaxBlocker(ymax_);
-  SignalBlocker ylabelLineEditBlocker(ylabelLineEdit_);
-  SignalBlocker titleLineEditBlocker(titleLineEdit_);
-
-  titleLineEdit_->setText(plotWidgets_[currentPlotIndex_]->title().text());
-  xlabelLineEdit_->setText(plotWidgets_[currentPlotIndex_]->axisTitle(QwtPlot::xBottom).text());
-  xmin_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::xBottom).minValue());
-  xmax_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::xBottom).maxValue());
-  ylabelLineEdit_->setText(plotWidgets_[currentPlotIndex_]->axisTitle(QwtPlot::yLeft).text());
-  ymin_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).minValue());
-  ymax_->setValue(plotWidgets_[currentPlotIndex_]->axisInterval(QwtPlot::yLeft).maxValue());
-
-  if (plotType_ == GraphConfigurationWidget::SensitivityIndices)
+  for (int i = 0; i < 2; ++i)
   {
-    xmin_->setEnabled(false);
-    xmax_->setEnabled(false);
-    ymin_->setEnabled(false);
-    ymax_->setEnabled(false);
-    xmin_->clear();
-    xmax_->clear();
-    ymin_->clear();
-    ymax_->clear();
+    // tab widget
+    QWidget * tabVerticalAxis = new QWidget;
+    QGridLayout * gridLayoutTab = new QGridLayout(tabVerticalAxis);
+
+    // axis title
+    QLabel * label = new QLabel(tr("Title"));
+    gridLayoutTab->addWidget(label, 0, 0, 1, 1);
+
+    axisLabelLineEdit_[i] = new QLineEdit;
+    connect(axisLabelLineEdit_[i], &QLineEdit::textChanged, [=](const QString& text) {plotWidgets_[plotIndex_]->setAxisTitle(Axes[i], text);});
+    gridLayoutTab->addWidget(axisLabelLineEdit_[i], 0, 1, 1, 1);
+
+    // min
+    label = new QLabel(tr("Min"));
+    gridLayoutTab->addWidget(label, 1, 0, 1, 1);
+
+    axisMinValueLineEdit_[i] = new ValueLineEdit;
+    connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {updateRange(Axes[i]);});
+    gridLayoutTab->addWidget(axisMinValueLineEdit_[i], 1, 1, 1, 1);
+
+    // max
+    label = new QLabel(tr("Max"));
+    gridLayoutTab->addWidget(label, 2, 0, 1, 1);
+
+    axisMaxValueLineEdit_[i] = new ValueLineEdit;
+    connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {updateRange(Axes[i]);});
+    gridLayoutTab->addWidget(axisMaxValueLineEdit_[i], 2, 1, 1, 1);
+
+    // label direction
+    if (xAxisWithLabels)
+    {
+      if (Axes[i] == QwtPlot::xBottom)
+      {
+        QHBoxLayout * hLayout = new QHBoxLayout;
+        label = new QLabel(tr("Labels\norientation"));
+        QComboBox * labelOrientation = new QComboBox;
+        labelOrientation->addItems(QStringList() << tr("Horizontal") << tr("Vertical"));
+        hLayout->addWidget(label);
+        hLayout->addWidget(labelOrientation, 1);
+        gridLayoutTab->addLayout(hLayout, 3, 0, 1, 2);
+        connect(labelOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {plotWidgets_[plotIndex_]->setXLabelOrientation(idx);});
+      }
+      axisMinValueLineEdit_[i]->setEnabled(false);
+      axisMaxValueLineEdit_[i]->setEnabled(false);
+      axisMinValueLineEdit_[i]->clear();
+      axisMaxValueLineEdit_[i]->clear();
+    }
+
+    gridLayoutTab->setRowStretch(gridLayoutTab->rowCount(), 1);
+    propertiesTabWidget_->addTab(tabVerticalAxis, Axes[i] == QwtPlot::xBottom ? tr("X-axis") : tr("Y-axis"));
   }
 }
 
 
-void GraphConfigurationWidget::updateYComboBox()
+void GraphConfigurationWidget::updateLineEdits()
 {
-  if (!xAxisComboBox_ || !yAxisComboBox_)
-    return;
+  SignalBlocker titleLineEditBlocker(titleLineEdit_);
+  titleLineEdit_->setText(plotWidgets_[plotIndex_]->title().text());
 
-  const QString currentYText = yAxisComboBox_->currentText();
-  SignalBlocker blocker(yAxisComboBox_);
-  yAxisComboBox_->clear();
-
-  QStringList inputNames;
-  QStringList outputNames;
-
-  for (int i = 0; i < xAxisComboBox_->count(); ++i)
+  for (int i = 0; i < 2; ++i)
   {
-    if (i != xAxisComboBox_->currentIndex()) // must have x != y
+    SignalBlocker labelLineEditBlocker(axisLabelLineEdit_[i]);
+    axisLabelLineEdit_[i]->setText(plotWidgets_[plotIndex_]->axisTitle(Axes[i]).text());
+    if (axisMinValueLineEdit_[i]->isEnabled() && axisMaxValueLineEdit_[i]->isEnabled())
     {
-      // == input
-      if (xAxisComboBox_->itemData(i).toBool())
-        inputNames << xAxisComboBox_->itemText(i);
-      // == output
-      else
-        outputNames << xAxisComboBox_->itemText(i);
+      SignalBlocker minLineEditBlocker(axisMinValueLineEdit_[i]);
+      SignalBlocker maxLineEditBlocker(axisMaxValueLineEdit_[i]);
+      axisMinValueLineEdit_[i]->setValue(plotWidgets_[plotIndex_]->axisInterval(Axes[i]).minValue());
+      axisMaxValueLineEdit_[i]->setValue(plotWidgets_[plotIndex_]->axisInterval(Axes[i]).maxValue());
     }
   }
-
-  if (plotType_ == GraphConfigurationWidget::Scatter)
-    yAxisComboBox_->addItems(outputNames + inputNames);
-  else if (plotType_ == GraphConfigurationWidget::Copula)
-    yAxisComboBox_->addItems(inputNames + outputNames);
-  yAxisComboBox_->setCurrentText(currentYText);
-
-  plotChanged();
 }
 
 
 int GraphConfigurationWidget::getCurrentPlotIndex() const
 {
-  return currentPlotIndex_;
+  return plotIndex_;
 }
 
 
-void GraphConfigurationWidget::plotChanged()
+void GraphConfigurationWidget::currentPlotIndexChanged(int index)
 {
-  const int inputIndex = xAxisComboBox_ ? xAxisComboBox_->currentIndex() : 0;
-  const int outputIndex = yAxisComboBox_ ? yAxisComboBox_->currentIndex() : 0;
-  const int outputCount = yAxisComboBox_ ? yAxisComboBox_->count() : 0;
-
-  currentPlotIndex_ = outputIndex;
-
-  if (plotType_ == GraphConfigurationWidget::Scatter && rankCheckBox_)
-  {
-    if (!rankCheckBox_->isChecked())
-      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex);
-    else
-      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex) + 1;
-  }
-  else if (plotType_ == GraphConfigurationWidget::Copula && distReprComboBox_)
-  {
-    if (distReprComboBox_->currentIndex() == 0)
-      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex);
-    else
-      currentPlotIndex_ = 2 * (inputIndex * outputCount + outputIndex) + 1;
-  }
-  else if (xAxisComboBox_ && plotType_ == GraphConfigurationWidget::Kendall)
-  {
-    currentPlotIndex_ = inputIndex;
-  }
-  else if (distReprComboBox_ && (plotType_ == GraphConfigurationWidget::PDF ||
-                                 plotType_ == GraphConfigurationWidget::PDF_Inference ||
-                                 plotType_ == GraphConfigurationWidget::PDFResult))
-  {
-    currentPlotIndex_ = 2 * outputIndex + distReprComboBox_->currentIndex();
-  }
-  else if (xAxisComboBox_ && plotType_ == GraphConfigurationWidget::KSPDF)
-  {
-    currentPlotIndex_ = 2 * inputIndex + distReprComboBox_->currentIndex();
-  }
-
+  plotIndex_ = index;
   updateLineEdits();
-  emit currentPlotChanged(currentPlotIndex_);
+  emit currentPlotChanged(plotIndex_);
 }
 
 
-void GraphConfigurationWidget::updateTitle()
+void GraphConfigurationWidget::updateRange(QwtPlot::Axis ax)
 {
-  if (!plotWidgets_.size())
-    return;
-
-  plotWidgets_[currentPlotIndex_]->setTitle(titleLineEdit_->text());
-  plotWidgets_[currentPlotIndex_]->replot();
-}
-
-
-void GraphConfigurationWidget::updateXLabel()
-{
-  if (!plotWidgets_.size())
-    return;
-
-  plotWidgets_[currentPlotIndex_]->setAxisTitle(QwtPlot::xBottom, xlabelLineEdit_->text());
-  plotWidgets_[currentPlotIndex_]->replot();
-}
-
-
-void GraphConfigurationWidget::updateYLabel()
-{
-  if (!plotWidgets_.size())
-    return;
-
-  plotWidgets_[currentPlotIndex_]->setAxisTitle(QwtPlot::yLeft, ylabelLineEdit_->text());
-  plotWidgets_[currentPlotIndex_]->replot();
-}
-
-
-void GraphConfigurationWidget::updateXrange()
-{
-  if (!plotWidgets_.size())
-    return;
-
+  const int axIndex = (ax == QwtPlot::xBottom ? 0 : 1);
   try
   {
-    plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::xBottom, xmin_->value(), xmax_->value());
-    plotWidgets_[currentPlotIndex_]->replot();
+    plotWidgets_[plotIndex_]->setAxisScale(ax, axisMinValueLineEdit_[axIndex]->value(), axisMaxValueLineEdit_[axIndex]->value());
+    plotWidgets_[plotIndex_]->replot();
   }
   catch (std::exception & ex)
   {
     updateLineEdits();
-    qDebug() << "GraphConfigurationWidget::updateXrange: value not valid\n";
+    qDebug() << "GraphConfigurationWidget::updateRange: value not valid\n";
   }
 }
 
 
-void GraphConfigurationWidget::updateYrange()
+void GraphConfigurationWidget::addExportLayout()
 {
-  if (!plotWidgets_.size())
-    return;
+  QHBoxLayout * exportLayout = new QHBoxLayout;
+  QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
+  connect(button, &QPushButton::clicked, [=]() {plotWidgets_[plotIndex_]->exportPlot();});
+  exportLayout->addWidget(button);
+  exportLayout->addStretch();
 
-  try
-  {
-    plotWidgets_[currentPlotIndex_]->setAxisScale(QwtPlot::yLeft, ymin_->value(), ymax_->value());
-    plotWidgets_[currentPlotIndex_]->replot();
-  }
-  catch (std::exception & ex)
-  {
-    updateLineEdits();
-    qDebug() << "GraphConfigurationWidget::updateYrange: value not valid\n";
-  }
-}
-
-
-void GraphConfigurationWidget::changeLabelOrientation(int index)
-{
-  if (index == 0)
-  {
-    plotWidgets_[currentPlotIndex_]->setAxisLabelAlignment(QwtPlot::xBottom, Qt::AlignBottom);
-    plotWidgets_[currentPlotIndex_]->setAxisLabelRotation(QwtPlot::xBottom, 0);
-  }
-  else
-  {
-    plotWidgets_[currentPlotIndex_]->setAxisLabelAlignment(QwtPlot::xBottom, Qt::AlignLeft);
-    plotWidgets_[currentPlotIndex_]->setAxisLabelRotation(QwtPlot::xBottom, -90);
-  }
-  plotWidgets_[currentPlotIndex_]->replot();
-}
-
-
-void GraphConfigurationWidget::setVariablesToShow(const QStringList& varNames)
-{
-  if (plotWidgets_.size() != 1)
-    return;
-
-  QStringList orderedVarList;
-  QList<int> indices;
-  int newX = -1;
-
-  for (int i = 0; i < inputNames_.size(); ++i)
-  {
-    if (varNames.contains(inputNames_[i]))
-    {
-      orderedVarList << inputNames_[i];
-      ++newX;
-      indices << newX;
-    }
-    // get current X axis coord
-    QwtPlotCurve * curve = dynamic_cast<QwtPlotCurve*>(plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i)[5]);
-    const int x = curve->data()->sample(0).x();
-
-    // update all curves of the i_th boxplot
-    for (int j = 0; j < plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i).size(); ++j)
-    {
-      // change visibility
-      plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i)[j]->setVisible(varNames.contains(inputNames_[i]));
-
-      // translate curve
-      if (varNames.contains(inputNames_[i]) && (x != newX))
-      {
-        QwtPlotCurve * curve = dynamic_cast<QwtPlotCurve*>(plotWidgets_[0]->itemList(QwtPlotItem::Rtti_PlotUserItem + i)[j]);
-        QVector< QPointF > series(curve->data()->size());
-        for (size_t k = 0; k < curve->data()->size(); ++k)
-        {
-          QPointF pt = curve->data()->sample(k);
-          pt.setX(pt.x() + abs(x - newX) * (newX > x ? 1 : -1));
-          series[k] = pt;
-        }
-        curve->setSamples(series);
-      }
-    }
-  }
-  if (indices.size())
-  {
-    dynamic_cast<BoxPlot*>(plotWidgets_[0])->updateVariableOrder(orderedVarList, indices);
-  }
-  else
-  {
-    plotWidgets_[0]->setAxisScaleDraw(QwtPlot::xBottom, 0);
-    plotWidgets_[0]->setAxisScaleEngine(QwtPlot::xBottom, 0);
-  }
-  plotWidgets_[0]->replot();
-}
-
-
-void GraphConfigurationWidget::exportPlot()
-{
-  if (!plotWidgets_.size())
-    return;
-
-  plotWidgets_[currentPlotIndex_]->exportPlot();
+  frameLayout_->addLayout(exportLayout, frameLayout_->rowCount(), 0, 1, 2);
 }
 
 
@@ -572,5 +204,232 @@ QSize GraphConfigurationWidget::minimumSizeHint() const
   QSize size = QWidget::minimumSizeHint();
   size.setHeight(10);
   return size;
+}
+
+// ----------- SimpleGraphSetting -----------
+
+SimpleGraphSetting::SimpleGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, QWidget *parent)
+  : GraphConfigurationWidget(plotWidgets, parent)
+{
+  // X-axis combobox
+  if (inputNames.size())
+  {
+    int rowGrid = frameLayout_->rowCount();
+    QLabel * label = new QLabel(tr("X-axis"));
+    frameLayout_->addWidget(label, rowGrid, 0);
+
+    QComboBox * xAxisComboBox = new QComboBox;
+    xAxisComboBox->addItems(inputNames);
+    frameLayout_->addWidget(xAxisComboBox, rowGrid, 1);
+    connect(xAxisComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(currentPlotIndexChanged(int)));
+  }
+
+  // axis, plot properties
+  addXYAxisTabs();
+  frameLayout_->addWidget(propertiesTabWidget_, frameLayout_->rowCount(), 0, 1, 2);
+  // export button
+  addExportLayout();
+}
+
+
+SimpleGraphSetting::SimpleGraphSetting(PlotWidget *plotWidget, QWidget *parent)
+  : SimpleGraphSetting(QVector<PlotWidget *>(1, plotWidget), QStringList(), parent)
+{
+}
+
+// ----------- ScatterGraphSetting -----------
+
+ScatterGraphSetting::ScatterGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const QStringList &outputNames, QWidget *parent)
+  : GraphConfigurationWidget(plotWidgets, parent)
+{
+  int rowGrid = frameLayout_->rowCount();
+  // X-axis combobox
+  QLabel * label = new QLabel(tr("X-axis"));
+  frameLayout_->addWidget(label, rowGrid, 0);
+
+  xAxisComboBox_ = new QComboBox;
+  for (int i = 0; i < inputNames.size(); ++i)
+    xAxisComboBox_->addItem(inputNames[i], true);
+  for (int i = 0; i < outputNames.size(); ++i)
+    xAxisComboBox_->addItem(outputNames[i], false);
+
+  frameLayout_->addWidget(xAxisComboBox_, rowGrid, 1);
+  connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
+
+  // Y-axis combobox
+  label = new QLabel(tr("Y-axis"));
+  frameLayout_->addWidget(label, ++rowGrid, 0);
+
+  yAxisComboBox_ = new QComboBox;
+  frameLayout_->addWidget(yAxisComboBox_, rowGrid, 1);
+  connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(currentPlotIndexChanged(int)));
+
+  // rank check box
+  rankCheckBox_ = new QCheckBox(tr("Ranks"));
+  frameLayout_->addWidget(rankCheckBox_, ++rowGrid, 0, 1, 2);
+  connect(rankCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(currentPlotIndexChanged()));
+
+  // axis, plot properties
+  addXYAxisTabs();
+  frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
+  // export button
+  addExportLayout();
+
+  updateYComboBox();
+}
+
+
+void ScatterGraphSetting::updateYComboBox()
+{
+  const QString currentYText = yAxisComboBox_->currentText();
+  SignalBlocker blocker(yAxisComboBox_);
+  yAxisComboBox_->clear();
+
+  QStringList inputNames;
+  QStringList outputNames;
+  for (int i = 0; i < xAxisComboBox_->count(); ++i)
+  {
+    if (i != xAxisComboBox_->currentIndex()) // must have x != y
+    {
+      if (xAxisComboBox_->itemData(i).toBool()) // == input
+        inputNames << xAxisComboBox_->itemText(i);
+      else // == output
+        outputNames << xAxisComboBox_->itemText(i);
+    }
+  }
+  yAxisComboBox_->addItems(outputNames + inputNames);
+  yAxisComboBox_->setCurrentText(currentYText);
+
+  currentPlotIndexChanged();
+}
+
+
+void ScatterGraphSetting::currentPlotIndexChanged(int /*i*/)
+{
+  const int inputIndex = xAxisComboBox_->currentIndex();
+  const int outputIndex = yAxisComboBox_->currentIndex();
+  const int outputCount = yAxisComboBox_->count();
+  plotIndex_ = 2 * (inputIndex * outputCount + outputIndex) + (rankCheckBox_->isChecked() ? 1 : 0);
+  GraphConfigurationWidget::currentPlotIndexChanged(plotIndex_);
+}
+
+// ----------- PDFGraphSetting -----------
+
+PDFGraphSetting::PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const PDFType type, QWidget *parent)
+  : GraphConfigurationWidget(plotWidgets, parent)
+  , xAxisComboBox_(0)
+  , yAxisComboBox_(0)
+{
+  int rowGrid = frameLayout_->rowCount();
+  // distribution representation choice
+  QStringList reprs = QStringList() << tr("PDF") << tr("CDF");
+  if (type == PDFGraphSetting::Distribution)
+    reprs << tr("Quantile function") << tr("Survival function");
+  reprComboBox_ = new QComboBox;
+  reprComboBox_->addItems(reprs);
+  frameLayout_->addWidget(reprComboBox_, rowGrid, 0, 1, 2);
+  connect(reprComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(currentPlotIndexChanged()));
+  // X-axis combobox
+  if (inputNames.size())
+  {
+    QLabel * label = new QLabel(tr("X-axis"));
+    frameLayout_->addWidget(label, ++rowGrid, 0);
+
+    xAxisComboBox_ = new QComboBox;
+    xAxisComboBox_->addItems(inputNames);
+    frameLayout_->addWidget(xAxisComboBox_, rowGrid, 1);
+    if (type == PDFGraphSetting::Ksi)
+      connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(currentPlotIndexChanged(int)));
+    else
+    {
+      // Y-axis combobox
+      label = new QLabel(tr("Y-axis"));
+      frameLayout_->addWidget(label, ++rowGrid, 0);
+
+      yAxisComboBox_ = new QComboBox;
+      frameLayout_->addWidget(yAxisComboBox_, rowGrid, 1);
+      connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
+      connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(currentPlotIndexChanged(int)));
+    }
+  }
+  // axis, plot properties
+  addXYAxisTabs();
+  frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
+  // export button
+  addExportLayout();
+
+  if (yAxisComboBox_)
+    updateYComboBox();
+}
+
+
+PDFGraphSetting::PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const PDFType type, QWidget *parent)
+  : PDFGraphSetting(plotWidgets, QStringList(), type, parent)
+{
+}
+
+
+void PDFGraphSetting::updateYComboBox()
+{
+  const QString currentYText = yAxisComboBox_->currentText();
+  SignalBlocker blocker(yAxisComboBox_);
+  yAxisComboBox_->clear();
+
+  QStringList names;
+  for (int i = 0; i < xAxisComboBox_->count(); ++i)
+    if (i != xAxisComboBox_->currentIndex()) // must have x != y
+      names << xAxisComboBox_->itemText(i);
+
+  yAxisComboBox_->addItems(names);
+  yAxisComboBox_->setCurrentText(currentYText);
+
+  currentPlotIndexChanged();
+}
+
+
+void PDFGraphSetting::currentPlotIndexChanged(int /*i*/)
+{
+  const int inputIndex = xAxisComboBox_ ? xAxisComboBox_->currentIndex() : 0;
+  const int outputIndex = yAxisComboBox_ ? yAxisComboBox_->currentIndex() : 0;
+  const int outputCount = yAxisComboBox_ ? yAxisComboBox_->count() : 1;
+  plotIndex_ = 2 * (inputIndex * outputCount + outputIndex) + reprComboBox_->currentIndex();
+  GraphConfigurationWidget::currentPlotIndexChanged(plotIndex_);
+}
+
+// ----------- BoxPlotGraphSetting -----------
+
+BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, QWidget *parent)
+  : GraphConfigurationWidget(QVector<PlotWidget *>(1, plotWidget), parent)
+{
+  int rowGrid = frameLayout_->rowCount();
+
+  // combobox to select the variables to display
+  QLabel * label = new QLabel(tr("Variables"));
+  frameLayout_->addWidget(label, rowGrid, 0);
+
+  TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
+  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames, this);
+  connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), plotWidget, SLOT(setVariablesToShow(QStringList)));
+  varComboBox->setModel(varListWidget->model());
+  varComboBox->setView(varListWidget);
+  frameLayout_->addWidget(varComboBox, rowGrid, 1);
+
+  // axis, plot properties
+  addXYAxisTabs(true);
+  frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
+  // export button
+  addExportLayout();
+}
+
+// ----------- SensitivityIndicesGraphSetting -----------
+
+SensitivityIndicesGraphSetting::SensitivityIndicesGraphSetting(PlotWidget *plotWidget, QWidget *parent)
+  : GraphConfigurationWidget(QVector<PlotWidget *>(1, plotWidget), parent)
+{
+  // axis, plot properties
+  addXYAxisTabs(true);
+  frameLayout_->addWidget(propertiesTabWidget_, frameLayout_->rowCount(), 0, 1, 2);
+  // export button
+  addExportLayout();
 }
 }
