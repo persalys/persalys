@@ -253,6 +253,78 @@ OT::String YACSPhysicalModel::getJobParamsPythonScript() const
     oss << getName() << ".jobParameters().salome_parameters.in_files = "
         << filesListName << "\n";
   }
+  std::string root_string = getName() + ".jobParameters().salome_parameters.";
+  std::string value;
+  value = jobParameters().job_name();
+  if(!value.empty())
+    oss << root_string << "job_name = '" << value << "'\n";
+
+  value = jobParameters().pre_command();
+  if(!value.empty())
+    oss << root_string << "pre_command = '" << value << "'\n";
+
+  value = jobParameters().env_file();
+  if(!value.empty())
+    oss << root_string << "env_file = '" << value << "'\n";
+
+  value = jobParameters().work_directory();
+  if(!value.empty())
+    oss << root_string << "work_directory = '" << value << "'\n";
+
+  value = jobParameters().result_directory();
+  if(!value.empty())
+    oss << root_string << "result_directory = '" << value << "'\n";
+
+  value = jobParameters().maximum_duration();
+  if(!value.empty())
+    oss << root_string << "maximum_duration = '" << value << "'\n";
+
+  value = jobParameters().resource_name();
+  if(!value.empty())
+    oss << root_string << "resource_required.name = '" << value << "'\n";
+
+  if(jobParameters().nb_proc() > 0)
+    oss << root_string << "resource_required.nb_proc = "
+        << jobParameters().nb_proc() << "\n";
+
+  if(jobParameters().mem_mb() > 0)
+    oss << root_string << "resource_required.mem_mb = "
+        << jobParameters().mem_mb() << "\n";
+
+  if(jobParameters().nb_node() > 0)
+    oss << root_string << "resource_required.nb_node = "
+        << jobParameters().nb_node() << "\n";
+
+  if(jobParameters().nb_proc_per_node() > 0)
+    oss << root_string << "resource_required.nb_proc_per_node = "
+        << jobParameters().nb_proc_per_node() << "\n";
+
+  value = jobParameters().queue();
+  if(!value.empty())
+    oss << root_string << "queue = '" << value << "'\n";
+
+  value = jobParameters().partition();
+  if(!value.empty())
+    oss << root_string << "partition = '" << value << "'\n";
+
+  if(jobParameters().exclusive())
+    oss << root_string << "exclusive = True\n";
+
+  if(jobParameters().mem_per_cpu() > 0)
+    oss << root_string << "mem_per_cpu = "
+        << jobParameters().mem_per_cpu() << "\n";
+
+  value = jobParameters().wckey();
+  if(!value.empty())
+    oss << root_string << "wckey = '" << value << "'\n";
+
+  value = jobParameters().extra_params();
+  if(!value.empty())
+    oss << root_string << "extra_params = '''" << value << "'''\n";
+
+  if(jobParameters().nb_branches() > 0)
+    oss << getName() << ".jobParameters().nb_branches = "
+        << jobParameters().nb_branches() << "\n";
   return oss;
 }
 
