@@ -405,4 +405,45 @@ void ScatterSettingWidget::updateYComboBox()
 
   pvXYViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
 }
+
+
+// ------------- ScatterSettingWidget -------------
+
+MultiPDFSettingWidget::MultiPDFSettingWidget(PVXYChartViewWidget *pvViewWidget,
+                                           const QStringList &inputNames,
+                                           const QStringList &outputNames,
+                                           QWidget *parent)
+  : PVXYChartSettingWidget(pvViewWidget, QStringList(), false, parent)
+{
+  int rowGrid = frameLayout_->rowCount();
+
+  // X-axis combobox
+  QLabel * label = new QLabel(tr("X-axis"));
+  frameLayout_->addWidget(label, rowGrid, 0, 1, 1);
+
+  for (int i = 0; i < inputNames.size(); ++i)
+    xAxisComboBox_->addItem(inputNames[i]);
+  xAxisComboBox_->setVisible(true);
+
+  for (int i = 0; i < outputNames.size(); ++i)
+    yAxisComboBox_->addItem(outputNames[i]);
+
+  frameLayout_->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
+
+  connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), yAxisComboBox_, SLOT(setCurrentIndex(int)));
+  connect(yAxisComboBox_, &QComboBox::currentTextChanged, [=]() {pvXYViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());});
+
+  if (pvXYViewWidget_->getNumberOfRepresentations() > 1)
+    addSelectDataWidget(tr("Data"));
+
+  // axis, plot properties
+  addMarkerTab(pvXYViewWidget_->getNumberOfRepresentations() == 1);
+  frameLayout_->addWidget(propertiesTabWidget_, frameLayout_->rowCount(), 0, 1, 2);
+
+  // export button
+  addExportLayout();
+  frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
+
+  pvXYViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
+}
 }
