@@ -457,13 +457,11 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
 void PlotWidget::clear()
 {
   detachItems();
-  setAxisAutoScale(QwtPlot::xBottom);
   enableAxis(QwtPlot::xBottom);
-  setAxisAutoScale(QwtPlot::yLeft);
   enableAxis(QwtPlot::yLeft);
   // TODO initialize grid
 //   grid_ = new QwtPlotGrid;
-  replot();
+  resetAxisRanges();
 }
 
 
@@ -480,6 +478,14 @@ void PlotWidget::setXLabelOrientation(int orientation)
   // orientation == 1 : Vertical
   setAxisLabelAlignment(QwtPlot::xBottom, orientation == 0 ? Qt::AlignBottom : Qt::AlignLeft);
   setAxisLabelRotation(QwtPlot::xBottom, orientation == 0 ? 0 : -90);
+}
+
+
+void PlotWidget::resetAxisRanges()
+{
+  setAxisAutoScale(QwtPlot::xBottom);
+  setAxisAutoScale(QwtPlot::yLeft);
+  replot();
 }
 
 

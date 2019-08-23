@@ -48,6 +48,7 @@ public slots:
   void setAxisToShow(const QStringList& variablesNames);
   void exportPlot();
   void setRepresentationVisibility(const QList<int>& indices);
+  void resetDisplay();
 
 protected:
   QMainWindow *findMWInHierachy();

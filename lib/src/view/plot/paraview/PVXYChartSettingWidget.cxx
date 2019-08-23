@@ -106,10 +106,20 @@ void PVXYChartSettingWidget::addXYAxisTabs()
     connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {pvXYViewWidget_->setAxisRange(Axes[i], axisMinValueLineEdit_[i]->value(), axisMaxValueLineEdit_[i]->value());});
     gridLayoutTab->addWidget(axisMaxValueLineEdit_[i], 2, 1, 1, 1);
 
+    QHBoxLayout * hLayout = new QHBoxLayout;
     // log scale
     axisLogScaleCheckBox_[i] = new QCheckBox(tr("Log scale"));
     connect(axisLogScaleCheckBox_[i], &QCheckBox::clicked, [=](bool checked) {pvXYViewWidget_->setLogScale(Axes[i], checked);});
-    gridLayoutTab->addWidget(axisLogScaleCheckBox_[i], 3, 0, 1, 2);
+    hLayout->addWidget(axisLogScaleCheckBox_[i]);
+
+    // reset axis
+    QToolButton * resetButton = new QToolButton;
+    resetButton->setIcon(QIcon(":/images/view-refresh.svg"));
+    resetButton->setToolTip(tr("Reset axis ranges"));
+    connect(resetButton, SIGNAL(clicked()), pvViewWidget_, SLOT(resetDisplay()));
+    hLayout->addStretch();
+    hLayout->addWidget(resetButton);
+    gridLayoutTab->addLayout(hLayout, 3, 0, 1, 2);
 
     propertiesTabWidget_->addTab(tabVerticalAxis, Axes[i] == vtkAxis::BOTTOM ? tr("X-axis") : tr("Y-axis"));
   }

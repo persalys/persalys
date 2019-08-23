@@ -28,6 +28,7 @@
 #include <QScrollArea>
 #include <QCheckBox>
 #include <QLabel>
+#include <QToolButton>
 
 using namespace OT;
 

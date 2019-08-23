@@ -97,6 +97,7 @@ public slots:
   virtual void replot();
   void exportPlot();
   void setXLabelOrientation(int);
+  void resetAxisRanges();
 
 signals:
   void plotChanged();

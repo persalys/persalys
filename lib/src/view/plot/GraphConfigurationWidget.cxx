@@ -24,6 +24,7 @@
 #include "persalys/ListWidgetWithCheckBox.hxx"
 #include "persalys/QtTools.hxx"
 
+#include <QToolButton>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QLabel>
@@ -80,27 +81,27 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
 
     // axis title
     QLabel * label = new QLabel(tr("Title"));
-    gridLayoutTab->addWidget(label, 0, 0, 1, 1);
+    gridLayoutTab->addWidget(label, 0, 0);
 
     axisLabelLineEdit_[i] = new QLineEdit;
     connect(axisLabelLineEdit_[i], &QLineEdit::textChanged, [=](const QString& text) {plotWidgets_[plotIndex_]->setAxisTitle(Axes[i], text);});
-    gridLayoutTab->addWidget(axisLabelLineEdit_[i], 0, 1, 1, 1);
+    gridLayoutTab->addWidget(axisLabelLineEdit_[i], 0, 1);
 
     // min
     label = new QLabel(tr("Min"));
-    gridLayoutTab->addWidget(label, 1, 0, 1, 1);
+    gridLayoutTab->addWidget(label, 1, 0);
 
     axisMinValueLineEdit_[i] = new ValueLineEdit;
     connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {updateRange(Axes[i]);});
-    gridLayoutTab->addWidget(axisMinValueLineEdit_[i], 1, 1, 1, 1);
+    gridLayoutTab->addWidget(axisMinValueLineEdit_[i], 1, 1);
 
     // max
     label = new QLabel(tr("Max"));
-    gridLayoutTab->addWidget(label, 2, 0, 1, 1);
+    gridLayoutTab->addWidget(label, 2, 0);
 
     axisMaxValueLineEdit_[i] = new ValueLineEdit;
     connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {updateRange(Axes[i]);});
-    gridLayoutTab->addWidget(axisMaxValueLineEdit_[i], 2, 1, 1, 1);
+    gridLayoutTab->addWidget(axisMaxValueLineEdit_[i], 2, 1);
 
     // label direction
     if (xAxisWithLabels)
@@ -121,8 +122,15 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
       axisMinValueLineEdit_[i]->clear();
       axisMaxValueLineEdit_[i]->clear();
     }
-
-    gridLayoutTab->setRowStretch(gridLayoutTab->rowCount(), 1);
+    else
+    {
+      // reset axis
+      QToolButton * resetButton = new QToolButton;
+      resetButton->setIcon(QIcon(":/images/view-refresh.svg"));
+      resetButton->setToolTip(tr("Reset axis ranges"));
+      connect(resetButton, &QToolButton::clicked, [=]() {plotWidgets_[plotIndex_]->resetAxisRanges();});
+      gridLayoutTab->addWidget(resetButton, 3, 1, Qt::AlignRight);
+    }
     propertiesTabWidget_->addTab(tabVerticalAxis, Axes[i] == QwtPlot::xBottom ? tr("X-axis") : tr("Y-axis"));
   }
 }
@@ -229,6 +237,7 @@ SimpleGraphSetting::SimpleGraphSetting(const QVector<PlotWidget *> &plotWidgets,
   frameLayout_->addWidget(propertiesTabWidget_, frameLayout_->rowCount(), 0, 1, 2);
   // export button
   addExportLayout();
+  frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 }
 
 
@@ -274,6 +283,7 @@ ScatterGraphSetting::ScatterGraphSetting(const QVector<PlotWidget *> &plotWidget
   frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
   // export button
   addExportLayout();
+  frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 
   updateYComboBox();
 }
@@ -357,6 +367,7 @@ PDFGraphSetting::PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const
   frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
   // export button
   addExportLayout();
+  frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 
   if (yAxisComboBox_)
     updateYComboBox();
@@ -422,6 +433,7 @@ BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList 
   frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
   // export button
   addExportLayout();
+  frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 
   if (inputNames != visibleReprNames) plotWidget->setVariablesToShow(visibleReprNames);
 }
@@ -436,5 +448,6 @@ SensitivityIndicesGraphSetting::SensitivityIndicesGraphSetting(PlotWidget *plotW
   frameLayout_->addWidget(propertiesTabWidget_, frameLayout_->rowCount(), 0, 1, 2);
   // export button
   addExportLayout();
+  frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 }
 }
