@@ -22,6 +22,7 @@
 
 #include "persalys/ListWidgetWithCheckBox.hxx"
 #include "persalys/TitledComboBox.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QPushButton>
 #include <QScrollArea>
@@ -84,13 +85,16 @@ void PVPlotSettingWidget::addSelectDataWidget(const QString &labelName)
   else
   {
     reprNames = plotNames_;
-    visibleReprNames = plotNames_;
+    for (const auto& name : qAsConst(plotNames_)) {if (visibleReprNames.size() < MaxVisibleVariableNumber) visibleReprNames << name;}
   }
   ListWidgetWithCheckBox * reprListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, visibleReprNames, this);
   if (pvViewWidget_->getNumberOfRepresentations() > 1)
     connect(reprListWidget, SIGNAL(checkedItemsChanged(QList<int>)), pvViewWidget_, SLOT(setRepresentationVisibility(QList<int>)));
   else
+  {
     connect(reprListWidget, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
+    if (plotNames_ != visibleReprNames) pvViewWidget_->setAxisToShow(visibleReprNames);
+  }
 
   comboBox->setModel(reprListWidget->model());
   comboBox->setView(reprListWidget);

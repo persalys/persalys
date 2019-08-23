@@ -62,9 +62,6 @@ class PERSALYS_API PlotWidget : public QwtPlot
   Q_OBJECT
 
 public:
-
-  static const QColor DefaultHistogramColor;
-
   /// constructor
   PlotWidget(const QString &plotTypeName = "", const bool disableZoom = false, QWidget *parent = 0);
 

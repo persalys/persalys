@@ -408,8 +408,11 @@ BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList 
   frameLayout_->addWidget(label, rowGrid, 0);
 
   TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
-  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames, this);
+  QStringList visibleReprNames;
+  for (const auto& name : qAsConst(inputNames)) {if (visibleReprNames.size() < MaxVisibleVariableNumber) visibleReprNames << name;}
+  ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames, visibleReprNames, this);
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), plotWidget, SLOT(setVariablesToShow(QStringList)));
+
   varComboBox->setModel(varListWidget->model());
   varComboBox->setView(varListWidget);
   frameLayout_->addWidget(varComboBox, rowGrid, 1);
@@ -419,6 +422,8 @@ BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList 
   frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
   // export button
   addExportLayout();
+
+  if (inputNames != visibleReprNames) plotWidget->setVariablesToShow(visibleReprNames);
 }
 
 // ----------- SensitivityIndicesGraphSetting -----------

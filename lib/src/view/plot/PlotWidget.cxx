@@ -68,8 +68,6 @@ public:
 
 // -- class PlotWidget --
 
-const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
-
 PlotWidget::PlotWidget(const QString &plotTypeName, const bool disableZoom, QWidget *parent)
   : QwtPlot(parent)
   , plotTypeName_(plotTypeName)
