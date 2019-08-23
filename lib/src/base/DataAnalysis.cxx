@@ -66,7 +66,10 @@ DataAnalysis* DataAnalysis::clone() const
 void DataAnalysis::initialize()
 {
   AnalysisImplementation::initialize();
-  result_ = DataAnalysisResult(designOfExperiment_);
+  if (getDesignOfExperiment().hasPhysicalModel())
+    result_ = DataAnalysisResult(designOfExperiment_);
+  else
+    result_ = DataAnalysisResult();
 }
 
 
