@@ -108,12 +108,14 @@ void DataModelWindow::buildInterface()
   // open file button
   QToolButton * openFileButton = new QToolButton;
   openFileButton->setText("...");
+  openFileButton->setToolTip(tr("Search file"));
   connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
   hboxLayout->addWidget(openFileButton);
 
   // reload button
   QToolButton * reloadButton = new QToolButton;
   reloadButton->setIcon(QIcon(":/images/view-refresh.png"));
+  reloadButton->setToolTip(tr("Reload file"));
   connect(reloadButton, SIGNAL(clicked()), this, SLOT(refreshTable()));
   hboxLayout->addWidget(reloadButton);
 

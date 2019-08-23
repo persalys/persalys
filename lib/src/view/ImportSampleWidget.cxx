@@ -64,6 +64,7 @@ void ImportSampleWidget::buildInterface()
 
   QToolButton * openFileButton = new QToolButton;
   openFileButton->setText("...");
+  openFileButton->setToolTip(tr("Search file"));
   connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
   hboxLayout->addWidget(openFileButton);
 
