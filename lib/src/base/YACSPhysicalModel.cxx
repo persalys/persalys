@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/YACSPhysicalModel.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -41,8 +42,11 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name)
 
 
 /* Constructor with parameters */
-YACSPhysicalModel::YACSPhysicalModel(const String & name, const String & script)
-  : PhysicalModelImplementation(name)
+YACSPhysicalModel::YACSPhysicalModel(const String & name,
+                                     const InputCollection & inputs,
+                                     const OutputCollection & outputs,
+                                     const String & script)
+  : PhysicalModelImplementation(name, inputs, outputs)
   , evaluation_(script)
 {
   updateData();
@@ -126,19 +130,29 @@ void YACSPhysicalModel::setContent(const String & script)
 
 void YACSPhysicalModel::updateData()
 {
-  PhysicalModelImplementation::clearInputs();
-  for (UnsignedInteger i = 0; i < evaluation_.getInputDimension(); ++i)
+  unsigned int size = evaluation_.getInputDimension();
+  InputCollection newInputs(size);
+  for (unsigned int i = 0; i < size; ++ i)
   {
-    Input newInput(evaluation_.getInputVariablesNames()[i], evaluation_.getInputValues()[i]);
-    PhysicalModelImplementation::addInput(newInput);
+    const String inputName(evaluation_.getInputVariablesNames()[i]);
+    if (hasInputNamed(inputName))
+      newInputs[i] = getInputByName(inputName);
+    else
+      newInputs[i] = Input(inputName, evaluation_.getInputValues()[i]);
   }
+  PhysicalModelImplementation::setInputs(newInputs);
 
-  PhysicalModelImplementation::clearOutputs();
-  for (UnsignedInteger i = 0; i < evaluation_.getOutputDimension(); ++i)
+  size = evaluation_.getOutputDimension();
+  OutputCollection newOutputs(size);
+  for (unsigned int i = 0; i < size; ++ i)
   {
-    Output newOutput(evaluation_.getOutputVariablesNames()[i]);
-    PhysicalModelImplementation::addOutput(newOutput);
+    const String outputName(evaluation_.getOutputVariablesNames()[i]);
+    if (hasOutputNamed(outputName))
+      newOutputs[i] = getOutputByName(outputName);
+    else
+      newOutputs[i] = Output(outputName);
   }
+  PhysicalModelImplementation::setOutputs(newOutputs);
 }
 
 
@@ -199,13 +213,23 @@ String YACSPhysicalModel::getPythonScript() const
 {
   OSS oss;
 
+  for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
+    oss << getInputs()[i].getPythonScript();
+
+  for (UnsignedInteger i = 0; i < getOutputDimension(); ++ i)
+    oss << getOutputs()[i].getPythonScript();
+
+  oss << "inputs = " << Parameters::GetOTDescriptionStr(getInputNames(), false) << "\n";
+  oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
+
   // replace ''' by """
   std::string myString = getContent();
   replaceInString(myString, "'''", "\"\"\"");
 
   oss << "code = '''" << myString << "'''\n";
   oss << getName()
-      << " = persalys.YACSPhysicalModel('" << getName() <<"', code)\n";
+      << " = persalys.YACSPhysicalModel('" << getName() << "'"
+      << ", inputs, outputs, code)\n";
   oss << getJobParamsPythonScript();
 
   oss << getProbaModelPythonScript();
@@ -229,6 +253,78 @@ OT::String YACSPhysicalModel::getJobParamsPythonScript() const
     oss << getName() << ".jobParameters().salome_parameters.in_files = "
         << filesListName << "\n";
   }
+  std::string root_string = getName() + ".jobParameters().salome_parameters.";
+  std::string value;
+  value = jobParameters().job_name();
+  if(!value.empty())
+    oss << root_string << "job_name = '" << value << "'\n";
+
+  value = jobParameters().pre_command();
+  if(!value.empty())
+    oss << root_string << "pre_command = '" << value << "'\n";
+
+  value = jobParameters().env_file();
+  if(!value.empty())
+    oss << root_string << "env_file = '" << value << "'\n";
+
+  value = jobParameters().work_directory();
+  if(!value.empty())
+    oss << root_string << "work_directory = '" << value << "'\n";
+
+  value = jobParameters().result_directory();
+  if(!value.empty())
+    oss << root_string << "result_directory = '" << value << "'\n";
+
+  value = jobParameters().maximum_duration();
+  if(!value.empty())
+    oss << root_string << "maximum_duration = '" << value << "'\n";
+
+  value = jobParameters().resource_name();
+  if(!value.empty())
+    oss << root_string << "resource_required.name = '" << value << "'\n";
+
+  if(jobParameters().nb_proc() > 0)
+    oss << root_string << "resource_required.nb_proc = "
+        << jobParameters().nb_proc() << "\n";
+
+  if(jobParameters().mem_mb() > 0)
+    oss << root_string << "resource_required.mem_mb = "
+        << jobParameters().mem_mb() << "\n";
+
+  if(jobParameters().nb_node() > 0)
+    oss << root_string << "resource_required.nb_node = "
+        << jobParameters().nb_node() << "\n";
+
+  if(jobParameters().nb_proc_per_node() > 0)
+    oss << root_string << "resource_required.nb_proc_per_node = "
+        << jobParameters().nb_proc_per_node() << "\n";
+
+  value = jobParameters().queue();
+  if(!value.empty())
+    oss << root_string << "queue = '" << value << "'\n";
+
+  value = jobParameters().partition();
+  if(!value.empty())
+    oss << root_string << "partition = '" << value << "'\n";
+
+  if(jobParameters().exclusive())
+    oss << root_string << "exclusive = True\n";
+
+  if(jobParameters().mem_per_cpu() > 0)
+    oss << root_string << "mem_per_cpu = "
+        << jobParameters().mem_per_cpu() << "\n";
+
+  value = jobParameters().wckey();
+  if(!value.empty())
+    oss << root_string << "wckey = '" << value << "'\n";
+
+  value = jobParameters().extra_params();
+  if(!value.empty())
+    oss << root_string << "extra_params = '''" << value << "'''\n";
+
+  if(jobParameters().nb_branches() > 0)
+    oss << getName() << ".jobParameters().nb_branches = "
+        << jobParameters().nb_branches() << "\n";
   return oss;
 }
 

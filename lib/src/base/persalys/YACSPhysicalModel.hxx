@@ -34,7 +34,10 @@ public:
   /* Default constructor */
   YACSPhysicalModel(const OT::String & name = "Unnamed");
   /* Constructor with parameters */
-  YACSPhysicalModel(const OT::String & name, const OT::String & fileName);
+  YACSPhysicalModel(const OT::String & name,
+                    const InputCollection & inputs,
+                    const OutputCollection & outputs,
+                    const OT::String & script);
 
   /** Virtual constructor */
   virtual YACSPhysicalModel * clone() const;

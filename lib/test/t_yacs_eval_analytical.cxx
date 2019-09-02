@@ -33,19 +33,14 @@ int main(int argc, char *argv[], char* env[])
   TESTPREAMBLE;
   OStream fullprint(std::cout);
 
-  char *fileName = 0;
-  if (argc > 1)
-  {
-    fileName = argv[1];
-  }
-  else
-  {
-    std::cerr << "Schema file not provided" << std::endl;
-    return -1;
-  }
+  const char *pyscript =
+"def _exec(x, y, p):\n"
+"  w,z=3*x+4*y+p,x+y+p\n"
+"  return w,z\n";
+
   try
   {
-    YACSPhysicalModel myPhysicalModel("myPhysicalModel", fileName);
+    YACSPhysicalModel myPhysicalModel("myPhysicalModel", InputCollection(), OutputCollection(), pyscript);
     Sample inputSample(3, 3);
     inputSample[0][0] = 1;
     inputSample[1][0] = 2;
