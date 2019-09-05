@@ -132,6 +132,15 @@ void DataModel::update()
 }
 
 
+void DataModel::setDefaultColumns()
+{
+  // first reset variable names
+  inputNames_.clear();
+  outputNames_.clear();
+  DataImport::setDefaultColumns();
+}
+
+
 void DataModel::setNames(const Description & inputNames, const Description & outputNames)
 {
   // check names

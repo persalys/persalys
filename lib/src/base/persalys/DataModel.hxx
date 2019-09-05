@@ -72,6 +72,7 @@ public:
 protected:
   virtual void check();
   virtual void update();
+  virtual void setDefaultColumns();
 
 private:
   OT::Description inputNames_;
