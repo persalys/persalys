@@ -21,18 +21,16 @@
 #ifndef PERSALYS_PLOTWIDGET_HXX
 #define PERSALYS_PLOTWIDGET_HXX
 
+#include "persalys/PersalysPrivate.hxx"
+
 #include <qwt_plot_curve.h>
 #include <qwt_plot.h>
 #include <qwt_symbol.h>
-#include <qwt_plot_marker.h>
 #include <qwt_scale_draw.h>
 #include <qwt_scale_engine.h>
 #include <qwt_scale_div.h>
-#include "qwt_global.h"
-#include "qwt_interval.h"
 
 #include <openturns/Distribution.hxx>
-#include "persalys/PersalysPrivate.hxx"
 
 namespace PERSALYS
 {
@@ -41,7 +39,7 @@ namespace PERSALYS
 class CustomHorizontalScaleDraw: public QwtScaleDraw
 {
 public:
-  CustomHorizontalScaleDraw(const OT::Description& labels)
+  CustomHorizontalScaleDraw(const QStringList& labels)
     : labels_(labels)
   {
   }
@@ -49,46 +47,13 @@ public:
   virtual QwtText label(double value) const
   {
     const int index = qRound(value);
-    if (index >= 0 && index < (int)labels_.getSize())
-      return QwtText(QString::fromUtf8(labels_[index].c_str()));
+    if (index >= 0 && index < labels_.size())
+      return QwtText(labels_[index]);
     return QwtText();
   }
 
 private:
-  const OT::Description labels_;
-};
-
-
-// Custom ScaleEngine For Boxplot
-class CustomScaleEngineForBoxplot: public QwtLinearScaleEngine
-{
-public:
-  CustomScaleEngineForBoxplot(const int nbVariables)
-  : QwtLinearScaleEngine()
-  , varIndices_()
-  {
-    for (int i = 0; i < nbVariables; ++i)
-      varIndices_ << i;
-  }
-
-  CustomScaleEngineForBoxplot(const QList<int> varIndices)
-  : QwtLinearScaleEngine()
-  , varIndices_(varIndices)
-  {
-  }
-
-  virtual QwtScaleDiv divideScale(double x1, double x2, int numMajorSteps, int numMinorSteps, double stepSize) const
-  {
-    QList<double> ticks[QwtScaleDiv::NTickTypes];
-    for (int i = 0; i < varIndices_.size(); ++i)
-      ticks[QwtScaleDiv::MajorTick] << varIndices_[i];
-
-    QwtScaleDiv scDiv(ticks[QwtScaleDiv::MajorTick].first() - 0.2, ticks[QwtScaleDiv::MajorTick].last() + 0.2, ticks);
-    return scDiv;
-  }
-
-private:
-  QList<int> varIndices_;
+  const QStringList labels_;
 };
 
 
@@ -97,9 +62,6 @@ class PERSALYS_API PlotWidget : public QwtPlot
   Q_OBJECT
 
 public:
-
-  static const QColor DefaultHistogramColor;
-
   /// constructor
   PlotWidget(const QString &plotTypeName = "", const bool disableZoom = false, QWidget *parent = 0);
 
@@ -108,8 +70,6 @@ public:
                  QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "", bool isStatic = false);
   void plotCurve(double * x, double * y, int size, const QPen pen = QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "");
-  void plotCurve(const int index, double * x, double * y, int size, const QPen pen = QPen(Qt::black, 2),
-                 QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0);
   void plotCurve(const OT::Sample & data, const QPen pen = QPen(Qt::black, 2),
                  QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0, QString title = "");
 
@@ -120,24 +80,6 @@ public:
   void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType = 0, int barNumber = 0, QString title = "");
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");
-  void plotBoxPlot(const double mean,
-                   const double std,
-                   const double median,
-                   const double lowerQuartile,
-                   const double upperQuartile,
-                   const double lowerBound,
-                   const double upperBound,
-                   const OT::Point& outliers,
-                   const int index);
-  void plotSensitivityIndices(const OT::Point& firstOrderIndices,
-                              const OT::Point& totalIndices,
-                              const OT::Description& inputNames,
-                              const OT::Interval& firstOrderIndicesIntervals = OT::Interval(),
-                              const OT::Interval& totalIndicesIntervals = OT::Interval(),
-                              const QStringList& legendNames = QStringList() << tr("First order index") << tr("Total index"));
-  void plotContour(const OT::Distribution& distribution, const bool isPdf = true);
-  void plotContour(const OT::Drawable& drawable, const bool displayContour = true);
-  void setMorrisPlotType(const QPointF& initialMarkersCoord);
 
   /// clear plot
   void clear();
@@ -150,21 +92,15 @@ public:
       const QStringList outNames,
       const QStringList outAxisNames);
 
-protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event);
-
 public slots:
   void contextMenu(const QPoint & pos);
   virtual void replot();
   void exportPlot();
-  void selectPoints(const QRectF&);
-  void updateVerticalMarkerValue(const QPointF&);
+  void setXLabelOrientation(int);
+  void resetAxisRanges();
 
 signals:
   void plotChanged();
-  void verticalMarkerPositionChanged(double);
-  void selectedPointsChanged();
-  void selectedPointsChanged(const OT::Indices& ind);
 
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
@@ -172,7 +108,6 @@ private:
 private:
 // TODO  QwtPlotGrid * grid_;
   QString plotTypeName_;
-  QwtPlotMarker *  verticalMarker_;
 };
 }
 #endif

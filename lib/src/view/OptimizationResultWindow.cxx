@@ -19,13 +19,12 @@
  *
  */
 #include "persalys/OptimizationResultWindow.hxx"
+
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
-#include "persalys/StudyTreeViewModel.hxx"
 #include "persalys/ParametersWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
-#include "persalys/PlotWidget.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 
@@ -182,21 +181,15 @@ void OptimizationResultWindow::buildInterface()
   scrollArea->setWidgetResizable(true);
 
   // optimal point
-  QVector<PlotWidget*> listPlotWidget1;
   Graph graph = result_.drawOptimalValueHistory();
   PlotWidget * plot = new PlotWidget;
   plot->plotCurve(graph.getDrawables()[0].getData(), QPen(Qt::blue, 2));
-  listPlotWidget1.append(plot);
 
   plot->setTitle(tr("Optimal value convergence graph"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Optimal value"));
   plot->setAxisTitle(QwtPlot::xBottom, tr("Number of evaluations"));
 
-  GraphConfigurationWidget * graphSettingWidget1 = new GraphConfigurationWidget(listPlotWidget1,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
+  SimpleGraphSetting * graphSettingWidget1 = new SimpleGraphSetting(plot, this);
 
   scrollArea->setWidget(new WidgetBoundToDockWidget(plot, graphSettingWidget1, this));
   convTab->addTab(scrollArea, tr("Optimal value"));
@@ -204,7 +197,6 @@ void OptimizationResultWindow::buildInterface()
   // error
   scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  QVector<PlotWidget*> listPlotWidget2;
 
   graph = result_.drawErrorHistory();
   plot = new PlotWidget;
@@ -218,13 +210,7 @@ void OptimizationResultWindow::buildInterface()
   plot->setAxisTitle(QwtPlot::xBottom, tr("Number of evaluations"));
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
 
-  listPlotWidget2.append(plot);
-
-  GraphConfigurationWidget * graphSettingWidget2 = new GraphConfigurationWidget(listPlotWidget2,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::NoType,
-      this);
+  SimpleGraphSetting * graphSettingWidget2 = new SimpleGraphSetting(plot, this);
 
   scrollArea->setWidget(new WidgetBoundToDockWidget(plot, graphSettingWidget2, this));
   convTab->addTab(scrollArea, tr("Error"));

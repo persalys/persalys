@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QHeaderView with a checkable first column
+ *  @brief QwtPlot for contour
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,38 +18,30 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_CHECKABLEHEADERVIEW_HXX
-#define PERSALYS_CHECKABLEHEADERVIEW_HXX
+#ifndef PERSALYS_CONTOURPLOT_HXX
+#define PERSALYS_CONTOURPLOT_HXX
 
-#include "persalys/PersalysPrivate.hxx"
-
-#include <QHeaderView>
-#include <QPainter>
-#include <QMouseEvent>
+#include "persalys/PlotWidget.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API CheckableHeaderView : public QHeaderView
+
+class PERSALYS_API ContourPlot : public PlotWidget
 {
   Q_OBJECT
 
 public:
-  CheckableHeaderView(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent = 0);
+  ContourPlot(const OT::Distribution &distribution, const bool isPDF = true, QWidget *parent = 0);
+  ContourPlot(const OT::Collection<OT::Drawable> &drawables, QWidget *parent = 0);
 
-  virtual void setModel(QAbstractItemModel* model);
-  bool isChecked() const;
-
-protected:
-  int getMinimumSectionSize() const;
-  virtual void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const;
-  virtual void mousePressEvent(QMouseEvent *event);
-
-public slots:
-  void updateCheckState(const Qt::Orientation = Qt::Horizontal);
+public:
+  void updateContour(const OT::Distribution &distribution, const bool isPDF);
 
 private:
-  bool isChecked_;
-  bool modelSignalBlocked_;
+  void plotContour(const OT::Collection<OT::Drawable>& drawables,
+                   const OT::UnsignedInteger drawableIndex,
+                   const bool displayGradient,
+                   const bool isPDF);
 };
 }
 #endif

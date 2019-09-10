@@ -58,7 +58,7 @@ void TranslationManager::InitializeCopulasNames()
   // list of all the available copulas
   CopulasNames_.insert(type("AliMikhailHaq", "Ali-Mikhail-Haq"));
   CopulasNames_.insert(type("Clayton", "Clayton"));
-  CopulasNames_.insert(type("FarlieGumbelMorgenstern", "Farlie-Gumbel-Morgenstern"));
+  CopulasNames_.insert(type("FarlieGumbelMorgenstern", "Farlie-Gumbel-\nMorgenstern"));
   CopulasNames_.insert(type("Frank", "Frank"));
   CopulasNames_.insert(type("Gumbel", "Gumbel"));
   CopulasNames_.insert(type("Normal", tr("Normal")));

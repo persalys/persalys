@@ -9,6 +9,10 @@ ot_add_current_dir_to_include_dirs ()
 ot_add_source_file (CustomScaleEngine.cxx)
 ot_add_source_file (CustomScaleDraw.cxx)
 ot_add_source_file (PlotWidget.cxx)
+ot_add_source_file (ContourPlot.cxx)
+ot_add_source_file (MorrisPlot.cxx)
+ot_add_source_file (BoxPlot.cxx)
+ot_add_source_file (SensitivityIndicesPlot.cxx)
 ot_add_source_file (PieChartView.cxx)
 ot_add_source_file (PlotMatrixWidget.cxx)
 ot_add_source_file (GraphConfigurationWidget.cxx)
@@ -16,8 +20,11 @@ ot_add_source_file (PlotMatrixConfigurationWidget.cxx)
 
 ot_install_header_file ( CustomScaleEngine.hxx )
 ot_install_header_file ( CustomScaleDraw.hxx )
-ot_install_header_file ( ContourData.hxx )
 ot_install_header_file ( PlotWidget.hxx )
+ot_install_header_file ( ContourPlot.hxx )
+ot_install_header_file ( MorrisPlot.hxx )
+ot_install_header_file ( BoxPlot.hxx )
+ot_install_header_file ( SensitivityIndicesPlot.hxx )
 ot_install_header_file ( PieChartView.hxx )
 ot_install_header_file ( PlotMatrixWidget.hxx )
 ot_install_header_file ( GraphConfigurationWidget.hxx )
@@ -25,6 +32,10 @@ ot_install_header_file ( PlotMatrixConfigurationWidget.hxx )
 
 qt5_wrap_cpp (PERSALYS_PLOT_MOC_SRCS
               persalys/PlotWidget.hxx
+              persalys/ContourPlot.hxx
+              persalys/MorrisPlot.hxx
+              persalys/BoxPlot.hxx
+              persalys/SensitivityIndicesPlot.hxx
               persalys/PieChartView.hxx
               persalys/PlotMatrixWidget.hxx
               persalys/GraphConfigurationWidget.hxx

@@ -114,7 +114,8 @@ void DataModel::update()
   if (inputColumns_.getSize())
   {
     inS = sampleFromFile_.getMarginal(inputColumns_);
-    inS.setDescription(getInputNames());
+    if (getInputNames().getSize() == inS.getDimension())
+      inS.setDescription(getInputNames());
   }
   setInputSample(inS);
 
@@ -122,11 +123,21 @@ void DataModel::update()
   if (outputColumns_.getSize())
   {
     outS = sampleFromFile_.getMarginal(outputColumns_);
-    outS.setDescription(getOutputNames());
+    if (getOutputNames().getSize() == outS.getDimension())
+      outS.setDescription(getOutputNames());
   }
   setOutputSample(outS);
 
   notify("variablesChanged");
+}
+
+
+void DataModel::setDefaultColumns()
+{
+  // first reset variable names
+  inputNames_.clear();
+  outputNames_.clear();
+  DataImport::setDefaultColumns();
 }
 
 

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QHeaderView with a checkable first column
+ *  @brief QwtPlot for box plot
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,38 +18,35 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_CHECKABLEHEADERVIEW_HXX
-#define PERSALYS_CHECKABLEHEADERVIEW_HXX
+#ifndef PERSALYS_BOXPLOT_HXX
+#define PERSALYS_BOXPLOT_HXX
 
-#include "persalys/PersalysPrivate.hxx"
-
-#include <QHeaderView>
-#include <QPainter>
-#include <QMouseEvent>
+#include "persalys/PlotWidget.hxx"
+#include "persalys/DataAnalysisResult.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API CheckableHeaderView : public QHeaderView
+
+class PERSALYS_API BoxPlot : public PlotWidget
 {
   Q_OBJECT
 
 public:
-  CheckableHeaderView(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent = 0);
+  BoxPlot(const QStringList &variableNames, QWidget *parent = 0);
 
-  virtual void setModel(QAbstractItemModel* model);
-  bool isChecked() const;
+  void addBoxPlot(const DataAnalysisResult &result, const OT::UnsignedInteger index);
 
 protected:
-  int getMinimumSectionSize() const;
-  virtual void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const;
-  virtual void mousePressEvent(QMouseEvent *event);
+  void plotCurve(const int index, double * x, double * y, int size, const QPen pen = QPen(Qt::black, 2),
+                 QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines, QwtSymbol* symbol = 0);
+  void updateVariableOrder(const QStringList &variableNames, const QList<int> &indices);
 
 public slots:
-  void updateCheckState(const Qt::Orientation = Qt::Horizontal);
+  void setVariablesToShow(const QStringList&);
 
 private:
-  bool isChecked_;
-  bool modelSignalBlocked_;
+  QStringList variableNames_;
+  int boxesCounter_;
 };
 }
 #endif

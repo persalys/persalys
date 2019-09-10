@@ -46,17 +46,17 @@ DesignOfExperimentIntroPage::DesignOfExperimentIntroPage(QWidget* parent)
   methodGroup_ = new QButtonGroup(this);
 
   // Deterministic
-  QRadioButton * deterministicButton = new QRadioButton(tr("Deterministic"));
+  QRadioButton * deterministicButton = new QRadioButton(tr("Full factorial design"));
   methodGroup_->addButton(deterministicButton, DesignOfExperimentIntroPage::Deterministic);
   methodLayout->addWidget(deterministicButton);
 
   // Probabilistic
-  QRadioButton * probaButton = new QRadioButton(tr("Probabilistic"));
+  QRadioButton * probaButton = new QRadioButton(tr("Probabilistic design"));
   methodGroup_->addButton(probaButton, DesignOfExperimentIntroPage::Probabilistic);
   methodLayout->addWidget(probaButton);
 
   // import
-  QRadioButton * importButton = new QRadioButton(tr("Import data"));
+  QRadioButton * importButton = new QRadioButton(tr("Imported design"));
   methodGroup_->addButton(importButton, DesignOfExperimentIntroPage::Import);
   methodLayout->addWidget(importButton);
 

@@ -29,7 +29,7 @@
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/QtTools.hxx"
-#include "persalys/PlotWidget.hxx"
+#include "persalys/ContourPlot.hxx"
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
@@ -293,12 +293,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
       plotWidget->setAxisTitle(QwtPlot::xBottom, meshParamName[0]);
       plotWidget->insertLegend(new QwtLegend, QwtPlot::RightLegend);
       // Graph Setting
-      GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotWidget,
-          QStringList(),
-          QStringList(),
-          GraphConfigurationWidget::NoType,
-          this);
-
+      SimpleGraphSetting * graphSetting = new SimpleGraphSetting(plotWidget, this);
       modesStackedWidget->addWidget(new WidgetBoundToDockWidget(plotWidget, graphSetting, this));
     }
 
@@ -363,11 +358,8 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
         listPlotWidgets.append(pdfPlot);
         listPlotWidgets.append(cdfPlot);
       }
-      GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlotWidgets,
-          QtOT::DescriptionToStringList(Description::BuildDefault(nbModes, "ξ")),
-          QStringList(),
-          GraphConfigurationWidget::KSPDF,
-          this);
+      PDFGraphSetting * graphSetting = new PDFGraphSetting(listPlotWidgets,
+          QtOT::DescriptionToStringList(Description::BuildDefault(nbModes, "ξ")), PDFGraphSetting::Ksi, this);
       connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
       xiPDFStackedWidget->addWidget(new WidgetBoundToDockWidget(stackedWidget, graphSetting, this));
@@ -421,19 +413,13 @@ void FieldCentralTendencyResultWindow::addCorrelationTab()
   // for each output
   for (UnsignedInteger out = 0; out < nbOutput; ++out)
   {
-    QVector<PlotWidget*> listPlot;
-    PlotWidget * corrPlot = new PlotWidget(tr("correlation"));
     Graph graph(result_.getCorrelationFunction()[out].draw(Point(2, minValueVertices), Point(2,  maxValueVertices)));
-    corrPlot->plotContour(graph.getDrawable(0), false);
+    ContourPlot * corrPlot = new ContourPlot(graph.getDrawables());
     corrPlot->setTitle(tr("Empirical correlation") + " " + outNames[out]);
     corrPlot->setAxisTitle(QwtPlot::xBottom, meshParamName);
     corrPlot->setAxisTitle(QwtPlot::yLeft, meshParamName + "'");
-    listPlot.append(corrPlot);
-    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(listPlot,
-                                                                          QStringList(),
-                                                                          QStringList(),
-                                                                          GraphConfigurationWidget::NoType,
-                                                                          this);
+
+    SimpleGraphSetting * graphSetting = new SimpleGraphSetting(corrPlot, this);
     outStackedWidget->addWidget(new WidgetBoundToDockWidget(corrPlot, graphSetting, this));
   }
   connect(mainWidget_->getOutListWidget(), SIGNAL(currentRowChanged(int)), outStackedWidget, SLOT(setCurrentIndex(int)));
@@ -561,11 +547,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
     plotWidget->setAxisTitle(QwtPlot::xBottom, meshParamName);
     plotWidget->insertLegend(new QwtLegend, QwtPlot::RightLegend);
     // Graph Setting
-    GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plotWidget,
-        QStringList(),
-        QStringList(),
-        GraphConfigurationWidget::NoType,
-        this);
+    SimpleGraphSetting * graphSetting = new SimpleGraphSetting(plotWidget, this);
 
     outTabWidget->addTab(new WidgetBoundToDockWidget(plotWidget, graphSetting, this), nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
 
@@ -609,11 +591,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
       plotWidget->insertLegend(new QwtLegend, QwtPlot::RightLegend);
 
       // Graph Setting
-      graphSetting = new GraphConfigurationWidget(plotWidget,
-          QStringList(),
-          QStringList(),
-          GraphConfigurationWidget::NoType,
-          this);
+      graphSetting = new SimpleGraphSetting(plotWidget, this);
 
       outTabWidget->addTab(new WidgetBoundToDockWidget(plotWidget, graphSetting, this), tr("Mean trajectory"));
     }

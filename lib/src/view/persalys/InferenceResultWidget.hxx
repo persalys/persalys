@@ -68,7 +68,7 @@ private:
   CustomStandardItemModel * distParamTableModel_;
   DocumentationToolButton * infoButton_;
   TemporaryLabel * analysisErrorMessageLabel_;
-  GraphConfigurationWidget * pdf_cdfPlotSettingWidget_;
+  PDFGraphSetting * pdf_cdfPlotSettingWidget_;
   PlotWidget * pdfPlot_;
   PlotWidget * cdfPlot_;
   PlotWidget * qqPlot_;

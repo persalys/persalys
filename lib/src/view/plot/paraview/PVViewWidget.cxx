@@ -126,6 +126,12 @@ void PVViewWidget::exportPlot()
 }
 
 
+void PVViewWidget::resetDisplay()
+{
+  getView()->resetDisplay();
+}
+
+
 void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames)
 {
   pqObjectBuilder * builder(pqApplicationCore::instance()->getObjectBuilder());

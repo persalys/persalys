@@ -250,6 +250,8 @@ Sample MetaModelAnalysis::getEffectiveOutputSample() const
 {
   if (!getInterestVariables().getSize())
     throw InvalidDimensionException(HERE) << "You have not defined output variable to be analysed. Set the list of interest variables.";
+  if (!designOfExperiment_.getOutputSample().getSize())
+    throw InvalidValueException(HERE) << "The output sample is empty. Evaluate the design of experiments.\n";
 
   const Description modelOutputsNames(designOfExperiment_.getOutputSample().getDescription());
   Indices outputIndices;

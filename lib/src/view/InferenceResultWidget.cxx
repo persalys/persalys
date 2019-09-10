@@ -124,11 +124,7 @@ void InferenceResultWidget::buildInterface()
     QVector<PlotWidget*> listpdf_cdfPlot;
     listpdf_cdfPlot.append(pdfPlot_);
     listpdf_cdfPlot.append(cdfPlot_);
-    pdf_cdfPlotSettingWidget_ = new GraphConfigurationWidget(listpdf_cdfPlot,
-        QStringList(),
-        QStringList(),
-        GraphConfigurationWidget::PDF_Inference,
-        this);
+    pdf_cdfPlotSettingWidget_ = new PDFGraphSetting(listpdf_cdfPlot, PDFGraphSetting::Result, this);
     connect(pdf_cdfPlotSettingWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
     scrollArea->setWidget(new WidgetBoundToDockWidget(pdf_cdfStackedWidget, pdf_cdfPlotSettingWidget_, this));
@@ -147,11 +143,7 @@ void InferenceResultWidget::buildInterface()
     qqPlot_ = new PlotWidget(tr("qqPlot"));
     plotWidgetLayout->addWidget(qqPlot_);
     // --- GraphConfigurationWidget
-    GraphConfigurationWidget * qqPlotSettingWidget = new GraphConfigurationWidget(qqPlot_,
-        QStringList(),
-        QStringList(),
-        GraphConfigurationWidget::NoType,
-        this);
+    SimpleGraphSetting * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot_, this);
     qqPlotSettingWidget->hide();
     plotWidget->setDockWidget(qqPlotSettingWidget);
 

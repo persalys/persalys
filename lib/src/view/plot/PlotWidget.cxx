@@ -23,9 +23,9 @@
 #include "persalys/CustomScaleEngine.hxx"
 #include "persalys/CustomScaleDraw.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
-#include "persalys/ContourData.hxx"
 #include "persalys/UIntSpinBox.hxx"
 #include "persalys/FileTools.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QMenu>
 #include <QFileDialog>
@@ -45,10 +45,9 @@
 #include <qwt_legend.h>
 #include <qwt_column_symbol.h>
 #include <qwt_plot_renderer.h>
-#include <qwt_plot_spectrogram.h>
 #include <qwt_picker_machine.h>
 #include <qwt_scale_widget.h>
-#include <qwt_color_map.h>
+#include <qwt_plot_marker.h>
 
 using namespace OT;
 
@@ -67,31 +66,11 @@ public:
 };
 
 
-// -- custom QwtPlotCurve with Rtti_PlotUserItem = 1000 + index_
-class PERSALYS_API CustomPlotCurveItem : public QwtPlotCurve
-{
-public:
-  CustomPlotCurveItem(int index)
-  : QwtPlotCurve()
-  , index_(index)
-  {};
-  virtual int rtti() const
-  {
-    return QwtPlotItem::Rtti_PlotUserItem + index_;
-  };
-private:
-  int index_;
-};
-
-
 // -- class PlotWidget --
-
-const QColor PlotWidget::DefaultHistogramColor = QColor(127, 172, 210);
 
 PlotWidget::PlotWidget(const QString &plotTypeName, const bool disableZoom, QWidget *parent)
   : QwtPlot(parent)
   , plotTypeName_(plotTypeName)
-  , verticalMarker_(0)
 {
   if (!disableZoom)
   {
@@ -256,21 +235,6 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
   {
     curve->setItemAttribute(QwtPlotItem::Legend, false);
   }
-  curve->attach(this);
-
-  replot();
-}
-
-
-void PlotWidget::plotCurve(const int index, double * x, double * y, int size, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol)
-{
-  CustomPlotCurveItem * curve = new CustomPlotCurveItem(index);
-  curve->setSamples(x, y, size);
-  curve->setPen(pen);
-  curve->setStyle(style);
-  if (symbol)
-    curve->setSymbol(symbol);
-  curve->setItemAttribute(QwtPlotItem::Legend, false);
   curve->attach(this);
 
   replot();
@@ -470,385 +434,6 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
 }
 
 
-void PlotWidget::plotBoxPlot(const double mean,
-                             const double std_0,
-                             const double median_0,
-                             const double lowerQuartile_0,
-                             const double upperQuartile_0,
-                             const double lowerBound_0,
-                             const double upperBound_0,
-                             const Point& outliers_0,
-                             const int index)
-{
-  double x = index;
-  double std = std_0 > 0 ? std_0 : 1;
-
-  double median = (mean - median_0) / std;
-  double lowerQuartile = (mean - lowerQuartile_0) / std;
-  double upperQuartile = (mean - upperQuartile_0) / std;
-  double lowerBound = (mean - lowerBound_0) / std;
-  double upperBound = (mean - upperBound_0) / std;
-  Point outliers = (Point(outliers_0.getSize(), mean) - outliers_0) / std;
-
-  // draw median
-  double xMedian[2] = {x - 0.1, x + 0.1};
-  double yMedian[2] = {median, median};
-  plotCurve(index, xMedian, yMedian, 2, QPen(Qt::red));
-
-  // draw box
-  double yUpperQuartile[2] = {upperQuartile, upperQuartile};
-  plotCurve(index, xMedian, yUpperQuartile, 2, QPen(Qt::blue));
-  double yLowerQuartile[2] = {lowerQuartile, lowerQuartile};
-  plotCurve(index, xMedian, yLowerQuartile, 2, QPen(Qt::blue));
-  double xLeftSide[2] = {x - 0.1, x - 0.1};
-  double yBoxSides[2] = {lowerQuartile, upperQuartile};
-  plotCurve(index, xLeftSide, yBoxSides, 2, QPen(Qt::blue));
-  double xRightSide[2] = {x + 0.1, x + 0.1};
-  plotCurve(index, xRightSide, yBoxSides, 2, QPen(Qt::blue));
-
-  // draw whiskers
-  double xWhiskers[2] = {x, x};
-  double yLower[2] = {lowerBound, lowerQuartile};
-  plotCurve(index, xWhiskers, yLower, 2, QPen(Qt::black, 2, Qt::DashLine));
-
-  double yUpper[2] = {upperQuartile, upperBound};
-  plotCurve(index, xWhiskers, yUpper, 2, QPen(Qt::black, 2, Qt::DashLine));
-
-
-  double xWhiskersBars[2] = {x - 0.05, x + 0.05};
-  double yLowerWhiskersBar[2] = {lowerBound, lowerBound};
-  plotCurve(index, xWhiskersBars, yLowerWhiskersBar, 2);
-
-  double yUpperWhiskersBar[2] = {upperBound, upperBound};
-  plotCurve(index, xWhiskersBars, yUpperWhiskersBar, 2);
-
-  // draw outliers
-  const int dim = outliers.getDimension();
-  double * xOutliers = new double[dim];
-  double * yOutliers = new double[dim];
-
-  for (int i = 0; i < dim; ++i)
-  {
-    xOutliers[i] = x;
-    yOutliers[i] = outliers[i];
-  }
-
-  plotCurve(index, xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
-  delete[] xOutliers;
-  delete[] yOutliers;
-
-  setAxisMaxMinor(QwtPlot::xBottom, 0);
-  replot();
-}
-
-
-void PlotWidget::plotSensitivityIndices(const Point& firstOrderIndices,
-                                        const Point& totalIndices,
-                                        const Description& inputNames,
-                                        const Interval& firstOrderIndicesIntervals,
-                                        const Interval& totalIndicesIntervals,
-                                        const QStringList& legendNames)
-{
-  Q_ASSERT(legendNames.size() == 2);
-  setAxisTitle(QwtPlot::yLeft, tr("Index"));
-  setAxisTitle(QwtPlot::xBottom, tr("Inputs"));
-
-  // populate bar chart
-  static const char *colors[] = {"DarkOrchid", "SteelBlue"};
-
-  const UnsignedInteger size = firstOrderIndices.getSize();
-
-  double *xData = new double[size];
-  double *yData = new double[size];
-
-  double width = 0.;
-  if (totalIndices.getSize())
-    width = 0.1;
-
-  double yMin = 0.;
-  double yMax = 0.;
-  for (UnsignedInteger i = 0 ; i < size ; ++i)
-  {
-    xData[i] = (i - width);
-    yData[i] = firstOrderIndices[i];
-    yMin = std::min(yMin, firstOrderIndices[i]);
-    yMax = std::max(yMax, firstOrderIndices[i]);
-    //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
-    if (firstOrderIndicesIntervals.getDimension() == size)
-    {
-      double xInterval[2] = {(i - width), (i - width)};
-      double yInterval[2] = {firstOrderIndicesIntervals.getLowerBound()[i], firstOrderIndicesIntervals.getUpperBound()[i]};
-      plotCurve(xInterval, yInterval, 2, QPen(colors[0]));
-
-      yMin = std::min(yMin, firstOrderIndicesIntervals.getLowerBound()[i]);
-      yMax = std::max(yMax, firstOrderIndicesIntervals.getUpperBound()[i]);
-    }
-  }
-
-  plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5)), legendNames[0]);
-  delete[] xData;
-  delete[] yData;
-
-  if (totalIndices.getSize())
-  {
-    xData = new double[size];
-    yData = new double[size];
-
-    for (UnsignedInteger i = 0 ; i < size ; ++i)
-    {
-      xData[i] = (i + width) ;
-      yData[i] = totalIndices[i];
-      yMin = std::min(yMin, totalIndices[i]);
-      yMax = std::max(yMax, totalIndices[i]);
-      //qDebug() << "x= " << xData[i] << " , y= " << yData[i];
-      if (totalIndicesIntervals.getDimension() == size)
-      {
-        double xInterval[2] = {(i + width), (i + width)};
-        double yInterval[2] = {totalIndicesIntervals.getLowerBound()[i], totalIndicesIntervals.getUpperBound()[i]};
-        plotCurve(xInterval, yInterval, 2, QPen(colors[1]));
-
-        yMin = std::min(yMin, totalIndicesIntervals.getLowerBound()[i]);
-        yMax = std::max(yMax, totalIndicesIntervals.getUpperBound()[i]);
-      }
-    }
-    plotCurve(xData, yData, size, QPen(Qt::black), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5)), legendNames[1]);
-
-    insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
-    delete[] xData;
-    delete[] yData;
-  }
-
-  // scales
-  setAxisScale(QwtPlot::xBottom, -0.5, firstOrderIndices.getSize() - 0.5, 1.0);
-  setAxisMaxMinor(QwtPlot::xBottom, 0);
-  setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(inputNames));
-
-  // rescale to avoid to cut points
-  yMin = yMin - (std::abs(0.05 * yMin) < 0.01 ? 0.05 : std::abs(0.05 * yMin));
-  yMax = yMax + std::abs(0.05 * yMax);
-  setAxisScale(QwtPlot::yLeft, yMin, yMax);
-
-  // horizontal line y = 0
-  QwtPlotMarker * hMarker = new QwtPlotMarker;
-  hMarker->setLineStyle(QwtPlotMarker::HLine);
-  hMarker->setLinePen(QPen(Qt::darkGray, 1));
-  hMarker->attach(this);
-
-  replot();
-}
-
-
-void PlotWidget::plotContour(const Distribution& distribution, const bool isPdf)
-{
-  if (distribution.getDimension() != 2)
-  {
-    qDebug() << "In plotContour: distribution dimension must be 2";
-    return;
-  }
-  // drawable
-  Drawable aDrawable;
-  if (isPdf)
-    aDrawable = distribution.drawPDF(Indices(2, 70)).getDrawable(1);
-  else
-    aDrawable = distribution.drawCDF(Indices(2, 70)).getDrawable(0);
-  plotContour(aDrawable);
-}
-
-
-void PlotWidget::plotContour(const Drawable& drawable, const bool displayContour)
-{
-  // contour
-  Contour * contour = dynamic_cast<Contour*>(drawable.getImplementation().get());
-  if (!contour)
-  {
-    qDebug() << "In plotContour: the drawable is not a Contour";
-    return;
-  }
-  // spectrogram
-  QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;
-
-  spectrogram->setRenderThreadCount(0); // use system specific thread count
-  spectrogram->setCachePolicy(QwtPlotRasterItem::PaintCache);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ContourMode, displayContour);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ImageMode, true);
-
-  // data
-  ContourData * contourData = new ContourData;
-  contourData->setData(*contour);
-  spectrogram->setData(contourData);
-
-  const QwtInterval zInterval = contourData->interval(Qt::ZAxis);
-
-  // build levels
-  const Sample sortedData(contour->getData().sort(0));
-  const UnsignedInteger size = sortedData.getSize();
-  QList<double> rank = QList<double>() << 0.1 << 0.2 << 0.3 << 0.4 << 0.5 << 0.6 << 0.7 << 0.8 << 0.9 << 0.95 << 0.97 << 0.99;
-
-  QList<double> levels;
-  for (int i = 0; i < rank.size(); ++i)
-  {
-    levels += sortedData[rank[i] * size - 1][0];
-  }
-  levels += (sortedData[size - 1][0] - sortedData[0.99 * size - 1][0]) * 0.5;
-  std::sort(levels.begin(), levels.end());
-  spectrogram->setContourLevels(levels);
-
-  // color map
-  const double maxV = levels[levels.size() - 1];
-  const double minV = levels[0];
-
-  QwtLinearColorMap * colorMap = new QwtLinearColorMap(Qt::darkCyan, Qt::darkRed);
-  colorMap->addColorStop((levels[1] - minV) / (maxV - minV), Qt::cyan);
-  colorMap->addColorStop((levels[2] - minV) / (maxV - minV), Qt::green);
-  colorMap->addColorStop((levels[levels.size() - 5] - minV) / (maxV - minV), Qt::yellow);
-  colorMap->addColorStop((levels[levels.size() - 2] - minV) / (maxV - minV), Qt::red);
-  spectrogram->setColorMap(colorMap);
-
-  spectrogram->attach(this);
-
-  // A color bar on the right axis
-  QwtScaleWidget * rightAxis = axisWidget(QwtPlot::yRight);
-  rightAxis->setTitle(tr("Density"));
-  rightAxis->setColorBarEnabled(true);
-  rightAxis->setScaleDraw(new CustomScaleDraw);
-
-  // - color map
-  colorMap = new QwtLinearColorMap(Qt::darkCyan, Qt::darkRed);
-  colorMap->addColorStop((levels[1] - minV) / (maxV - minV), Qt::cyan);
-  colorMap->addColorStop((levels[2] - minV) / (maxV - minV), Qt::green);
-  colorMap->addColorStop((levels[levels.size() - 5] - minV) / (maxV - minV), Qt::yellow);
-  colorMap->addColorStop((levels[levels.size() - 2] - minV) / (maxV - minV), Qt::red);
-  rightAxis->setColorMap(zInterval, colorMap);
-
-  setAxisScale(QwtPlot::yRight, zInterval.minValue(), zInterval.maxValue());
-  enableAxis(QwtPlot::yRight);
-
-  plotLayout()->setAlignCanvasToScales(true);
-
-  replot();
-}
-
-
-void PlotWidget::setMorrisPlotType(const QPointF& initialMarkersCoord)
-{
-  // vertical marker: no effect boundary
-  verticalMarker_ = new QwtPlotMarker;
-  verticalMarker_->setValue(initialMarkersCoord);
-  verticalMarker_->setLineStyle(QwtPlotMarker::VLine);
-  verticalMarker_->setTitle(tr("No effect boundary"));
-  verticalMarker_->setLinePen(QPen(Qt::darkGreen, 2, Qt::DashLine));
-  verticalMarker_->setItemAttribute(QwtPlotItem::Legend, true);
-  verticalMarker_->attach(this);
-
-  // mouse right click event filter to change the vertical marker position
-  QwtScaleWidget * scaleWidget = axisWidget(QwtPlot::xBottom);
-  scaleWidget->installEventFilter(this);
-  scaleWidget->setToolTip(tr("Selecting a value at the scale will move the vertical marker."));
-
-  // picker to select points with the right button
-  QwtPlotPicker * picker = new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft, QwtPlotPicker::RectRubberBand, QwtPicker::AlwaysOn, canvas());
-  picker->setStateMachine(new QwtPickerDragRectMachine);
-  picker->setMousePattern(QwtEventPattern::MouseSelect1, Qt::RightButton);
-
-  connect(picker, SIGNAL(selected(QRectF)), this , SLOT(selectPoints(QRectF)));
-}
-
-
-bool PlotWidget::eventFilter(QObject *obj, QEvent *event)
-{
-  if (event->type() == QEvent::MouseButtonPress)
-  {
-    if (obj == axisWidget(QwtPlot::xBottom))
-    {
-      QMouseEvent * mEvent = dynamic_cast<QMouseEvent *>(event);
-      if (mEvent->button() == Qt::LeftButton)
-      {
-        const double newX = invTransform(QwtPlot::xBottom, mEvent->pos().x());
-        verticalMarker_->setValue(QPointF(newX, 0));
-        replot();
-        emit verticalMarkerPositionChanged(newX);
-      }
-    }
-  }
-  return QwtPlot::eventFilter(obj, event);
-}
-
-
-void PlotWidget::selectPoints(const QRectF& rect)
-{
-  const double left = std::min(rect.left(), rect.right());
-  const double right = std::max(rect.left(), rect.right());
-  const double top = std::max(rect.top(), rect.bottom());
-  const double bottom = std::min(rect.top(), rect.bottom());
-
-  const QwtPlotItemList& plotItemList = itemList();
-  QVector< QPointF > selectedPoints;
-  QVector< QwtPlotMarker* > selectedMarkers;
-
-  for (QwtPlotItemIterator it = plotItemList.begin(); it != plotItemList.end(); ++it)
-  {
-    if ((*it)->rtti() == QwtPlotItem::Rtti_PlotMarker)
-    {
-      QwtPlotMarker *m = static_cast<QwtPlotMarker *>(*it);
-      const double xP = m->xValue();
-      const double yP = m->yValue();
-
-      // if the point is in rect
-      if (yP <= top && yP >= bottom && xP <= right && xP >= left)
-      {
-        selectedMarkers.append(m);
-        selectedPoints.append(m->value());
-      }
-    }
-  }
-  // if there is at least one point in the rectangle
-  if (selectedMarkers.size())
-  {
-    // hightlight the selected points
-    QwtPlotCurve selectedPointCurve;
-    selectedPointCurve.setSymbol(new QwtSymbol(QwtSymbol::Ellipse, Qt::magenta, QPen(Qt::magenta), QSize(7, 7)));
-    selectedPointCurve.setStyle(QwtPlotCurve::NoCurve);
-    selectedPointCurve.setItemAttribute(QwtPlotItem::Legend, false);
-
-    selectedPointCurve.setSamples(selectedPoints);
-    selectedPointCurve.attach(this);
-
-    replot();
-
-    // context menu to choose to de/select the points
-    QMenu contextMenu(this);
-    // actions of the context menu
-    QAction * deselectPointsAction = new QAction(tr("Deselect the points"), &contextMenu);
-    QAction * selectPointsAction = new QAction(tr("Select the points"), &contextMenu);
-    contextMenu.addAction(deselectPointsAction);
-    contextMenu.addAction(selectPointsAction);
-
-    const QPoint pos(transform(QwtPlot::xBottom, left), transform(QwtPlot::yLeft, bottom));
-    QAction * action = contextMenu.exec(mapToGlobal(pos));
-
-    // emit signal to the window to update the data
-    if (action == deselectPointsAction || action == selectPointsAction)
-    {
-      const QPen markerPen = (action == deselectPointsAction ? QPen(Qt::red) : QPen(Qt::blue));
-      for (int i = 0; i < selectedMarkers.size(); ++i)
-        selectedMarkers[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
-      emit selectedPointsChanged();
-    }
-    selectedPointCurve.detach();
-
-    replot();
-  }
-}
-
-
-void PlotWidget::updateVerticalMarkerValue(const QPointF& markerValue)
-{
-  if (!verticalMarker_)
-    return;
-  verticalMarker_->setValue(markerValue);
-}
-
-
 void PlotWidget::updateScaleParameters(const Distribution & distribution)
 {
   double mean = distribution.getMean()[0];
@@ -872,13 +457,11 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
 void PlotWidget::clear()
 {
   detachItems();
-  setAxisAutoScale(QwtPlot::xBottom);
   enableAxis(QwtPlot::xBottom);
-  setAxisAutoScale(QwtPlot::yLeft);
   enableAxis(QwtPlot::yLeft);
   // TODO initialize grid
 //   grid_ = new QwtPlotGrid;
-  replot();
+  resetAxisRanges();
 }
 
 
@@ -886,6 +469,23 @@ void PlotWidget::replot()
 {
   QwtPlot::replot();
   emit plotChanged();
+}
+
+
+void PlotWidget::setXLabelOrientation(int orientation)
+{
+  // orientation == 0 : Horizontal
+  // orientation == 1 : Vertical
+  setAxisLabelAlignment(QwtPlot::xBottom, orientation == 0 ? Qt::AlignBottom : Qt::AlignLeft);
+  setAxisLabelRotation(QwtPlot::xBottom, orientation == 0 ? 0 : -90);
+}
+
+
+void PlotWidget::resetAxisRanges()
+{
+  setAxisAutoScale(QwtPlot::xBottom);
+  setAxisAutoScale(QwtPlot::yLeft);
+  replot();
 }
 
 

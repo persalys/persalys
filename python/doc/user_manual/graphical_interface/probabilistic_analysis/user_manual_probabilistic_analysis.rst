@@ -449,7 +449,9 @@ When an analysis is required, a window appears, in order to set up:
 
 The **Monte Carlo parameters** window allows to define:
   - **Stopping criteria** of the algorithm (Select at least one criterion to validate the window):
-      - the maximum coefficient of variation for the mean, (default: 0.01,
+      - the maximum coefficient of variation (CV) for the mean (
+        :math:`CV = \frac{\sigma / \sqrt{n}}{\lvert \mu \rvert}` with :math:`n`: the number of simulations,
+        :math:`\mu`: the mean, :math:`\sigma`: the standard deviation), (default: 0.01,
         expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
       - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
       - the maximum sampling size (default: 10000, expected: integer)

@@ -29,6 +29,7 @@
 #include "persalys/TranslationManager.hxx"
 #include "persalys/DocumentationToolButton.hxx"
 #include "persalys/FileTools.hxx"
+#include "persalys/ContourPlot.hxx"
 
 #include <openturns/NormalCopula.hxx>
 #include <openturns/VisualTest.hxx>
@@ -37,7 +38,6 @@
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QHeaderView>
-#include <QLabel>
 #include <QDesktopServices>
 
 using namespace OT;
@@ -47,7 +47,7 @@ namespace PERSALYS
 
 CopulaParametersTabWidget::CopulaParametersTabWidget(const Distribution& distribution,
     const Sample& sample,
-    const OT::ProcessSample & kendallPlotData,
+    const ProcessSample & kendallPlotData,
     const bool displaySetting,
     QWidget* parent)
   : QTabWidget(parent)
@@ -87,7 +87,11 @@ void CopulaParametersTabWidget::buildInterface()
   const int size = sample_.getSize();
   const Sample sampleRanks(sample_.rank() / size);
 
-  for (UnsignedInteger i = 0; i < distribution_.getDimension(); ++i)
+  // if NormalCopula of dimension > 2: Display copula for each pair of variables
+  // else: display copula for one pair of variables
+  const UnsignedInteger dim = distribution_.getDimension() == 2 ? 1 : distribution_.getDimension();
+
+  for (UnsignedInteger i = 0; i < dim; ++i)
   {
     for (UnsignedInteger j = 0; j < distribution_.getDimension(); ++j)
     {
@@ -98,10 +102,9 @@ void CopulaParametersTabWidget::buildInterface()
         marginals[1] = j;
 
         //pdf
-        PlotWidget * pdfPlot = new PlotWidget(tr("copulaPDF"));
+        ContourPlot * pdfPlot = new ContourPlot(distribution_.getMarginal(marginals), true);
         //  use rank of the Sample to have the points in [0, 1]*[0, 1]
         pdfPlot->plotCurve(sampleRanks.getMarginal(marginals), pen, QwtPlotCurve::Dots);
-        pdfPlot->plotContour(distribution_.getMarginal(marginals));
         pdfPlot->setTitle(tr("PDF") + ": " + distName);
         pdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         pdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
@@ -109,8 +112,7 @@ void CopulaParametersTabWidget::buildInterface()
         listPlot.append(pdfPlot);
 
         // cdf
-        PlotWidget * cdfPlot = new PlotWidget(tr("copulaCDF"));
-        cdfPlot->plotContour(distribution_.getMarginal(marginals), false);
+        ContourPlot * cdfPlot = new ContourPlot(distribution_.getMarginal(marginals), false);
         cdfPlot->setTitle(tr("CDF") + ": " + distName);
         cdfPlot->setAxisTitle(QwtPlot::xBottom, variablesNames[i]);
         cdfPlot->setAxisTitle(QwtPlot::yLeft, variablesNames[j]);
@@ -120,15 +122,11 @@ void CopulaParametersTabWidget::buildInterface()
     }
   }
 
-  GraphConfigurationWidget * pdf_cdfPlotSettingWidget = 0;
+  PDFGraphSetting * pdf_cdfPlotSettingWidget = 0;
   if (displaySetting_)
   {
     // -- GraphConfigurationWidget
-    pdf_cdfPlotSettingWidget = new GraphConfigurationWidget(listPlot,
-        variablesNames,
-        QStringList(),
-        GraphConfigurationWidget::Copula,
-        this);
+    pdf_cdfPlotSettingWidget = new PDFGraphSetting(listPlot, dim == 1 ? QStringList() : variablesNames, PDFGraphSetting::Copula, this);
     connect(pdf_cdfPlotSettingWidget, SIGNAL(currentPlotChanged(int)), pdf_StackedWidget, SLOT(setCurrentIndex(int)));
   }
 
@@ -177,11 +175,7 @@ void CopulaParametersTabWidget::buildInterface()
   if (displaySetting_ && kendallPlotData_.getSize())
   {
     // -- GraphConfigurationWidget
-    GraphConfigurationWidget * kendallPlotSettingWidget = new GraphConfigurationWidget(listKendallPlots,
-        variablesPairsNames,
-        QStringList(),
-        GraphConfigurationWidget::Kendall,
-        this);
+    SimpleGraphSetting * kendallPlotSettingWidget = new SimpleGraphSetting(listKendallPlots, variablesPairsNames, this);
     plotWidget->setDockWidget(kendallPlotSettingWidget);
     connect(kendallPlotSettingWidget, SIGNAL(currentPlotChanged(int)), kendall_StackedWidget, SLOT(setCurrentIndex(int)));
   }

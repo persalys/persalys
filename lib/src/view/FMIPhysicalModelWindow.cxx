@@ -74,6 +74,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   QToolButton * selectFileButton = new QToolButton;
   selectFileButton->setText("...");
+  selectFileButton->setToolTip(tr("Search file"));
   connect(selectFileButton, SIGNAL(clicked()), this, SLOT(selectImportFileDialogRequested()));
   fieldsLayout->addWidget(selectFileButton);
 

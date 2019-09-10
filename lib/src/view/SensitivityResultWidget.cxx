@@ -20,6 +20,7 @@
  */
 #include "persalys/SensitivityResultWidget.hxx"
 
+#include "persalys/SensitivityIndicesPlot.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
@@ -94,20 +95,12 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  plot_ = new PlotWidget(defaultFileName, true);
-  plot_->plotSensitivityIndices(firstIndices, totalIndices,
-      inputNames,
-      firstIndicesIntervals, totalIndicesIntervals,
-      legendNames);
+  plot_ = new SensitivityIndicesPlot(defaultFileName, firstIndices, totalIndices, firstIndicesIntervals, totalIndicesIntervals, inputNames, legendNames);
   plot_->setTitle(graphTitle + " " + QString::fromUtf8(outputName.c_str()));
 
-  GraphConfigurationWidget * graphSetting = new GraphConfigurationWidget(plot_,
-      QStringList(),
-      QStringList(),
-      GraphConfigurationWidget::SensitivityIndices,
-      this);
-
+  SensitivityIndicesGraphSetting * graphSetting = new SensitivityIndicesGraphSetting(plot_, this);
   scrollArea->setWidget(new WidgetBoundToDockWidget(plot_, graphSetting, this));
+
   mainSplitter->addWidget(scrollArea);
   mainSplitter->setStretchFactor(0, 2);
 
@@ -244,9 +237,8 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
     }
   }
 
-  plot_->clear();
   const Interval foInterval(sortedFOIntervalLowerBounds, sortedFOIntervalUpperBounds);
   const Interval toInterval(sortedTOIntervalLowerBounds, sortedTOIntervalUpperBounds);
-  plot_->plotSensitivityIndices(sortedFirstOrderIndices, sortedTotalIndices, sortedInputNames, foInterval, toInterval);
+  plot_->updatePlot(sortedFirstOrderIndices, sortedTotalIndices, foInterval, toInterval, sortedInputNames);
 }
 }

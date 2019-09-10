@@ -88,5 +88,8 @@ static QMap<QString, QString> InitColors()
   return map;
 }
 static QMap<QString, QString> ApplicationColor = InitColors();
+
+static const QColor DefaultHistogramColor = QColor(127, 172, 210);
+static const int MaxVisibleVariableNumber = 12;
 }
 #endif

@@ -215,7 +215,10 @@ void AnalysisWindow::stopAnalysis()
 void AnalysisWindow::updateProgressBar(const int value)
 {
   if (progressBar_->maximum() == progressBar_->minimum())
+  {
     progressBar_->setRange(0, 100);
+    progressBar_->setValue(0.);
+  }
   progressBar_->setValue(value);
 }
 
