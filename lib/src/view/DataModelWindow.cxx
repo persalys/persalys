@@ -132,6 +132,7 @@ void DataModelWindow::buildInterface()
   gridLayout->setContentsMargins(11, 11, 11, 11);
 
   tableView_ = new ResizableHeaderlessTableView;
+  tableView_->setObjectName("variableTable");
   tableView_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   tableView_->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
   tableView_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -176,6 +177,7 @@ void DataModelWindow::buildInterface()
 
   // -- first part: row ID
   dataTableView1_ = new ExportableTableView;
+  dataTableView1_->setObjectName("rowIDTable");
   dataTableView1_->setModel(proxyModel);
   dataTableView1_->setSelectionBehavior(QAbstractItemView::SelectRows);
   dataTableView1_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -187,6 +189,7 @@ void DataModelWindow::buildInterface()
 
   // -- second part: sample
   dataTableView2_ = new ExportableTableView;
+  dataTableView2_->setObjectName("sampleTable");
   dataTableView2_->setModel(proxyModel);
   dataTableView2_->setFrameShape(QFrame::NoFrame);
   dataTableView2_->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -371,7 +374,7 @@ void DataModelWindow::updateTableView()
   // hide data table columns if not done yet
   if (!dataTableView2_->isColumnHidden(0))
   {
-    dataTableView2_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed); // fix bug on Windows (possible to resize the hidden column!)
+    dataTableView2_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed); // TODO fix bug on Windows (possible to resize the hidden column!)
     dataTableView2_->hideColumn(0);
   }
   for (int i = 1; i < dataTableView1_->model()->columnCount(); ++i)

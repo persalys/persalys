@@ -1,15 +1,19 @@
 
 set (REPLACE_EOL " | cat ")
+set ( PATH_SEP ":" )
 if (WIN32)
   # replace dos eols
   set (REPLACE_EOL " | tr -d '\\\\015' ")
+  set ( PATH_SEP "\\;" )
 
   if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 4)
     add_library (CRT_fp8 STATIC CRT_fp8.c)
   endif ()
 endif ()
 
-set (CHECK_ENVIRONMENT)
+set (CHECK_ENVIRONMENT
+     "PYTHONPATH=${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${OTMORRIS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${OTGUI_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
+    )
 
 set ( CHECK_TO_BE_RUN )
 macro ( ot_check_test TESTNAME )
@@ -82,14 +86,13 @@ macro (ot_qt_check_test TESTNAME)
   add_executable (${TESTNAME_TGT} EXCLUDE_FROM_ALL ${TESTNAME_SRCS})
   add_dependencies (tests ${TESTNAME_TGT} )
   target_link_libraries (${TESTNAME_TGT} persalysview)
-  add_test (NAME cppcheck_${TESTNAME} COMMAND ${TESTNAME_TGT})
+  add_test (NAME cppcheck_${TESTNAME} COMMAND ${TESTNAME_TGT} ${ARGV1} ${ARGV2})
   set_tests_properties (cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT};QT_QPA_PLATFORM_PLUGIN_PATH=.")
 endmacro ()
 
 
-
+include_directories (${QWT_INCLUDE_DIRS})
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
-
 
 
 # because of PhysicalModel_std where we need Python.h
@@ -100,6 +103,7 @@ ot_check_test ( Cogeneration_std )
 
 if (BUILD_GUI)
   include_directories (${CMAKE_CURRENT_BINARY_DIR}) # for mocs
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_analyses.py ${CMAKE_CURRENT_BINARY_DIR})
   ot_qt_check_test (WelcomeWindow_std)
   ot_qt_check_test (OptimizationWizard_std)
   ot_qt_check_test (CentralTendencyWizard_std)
@@ -114,6 +118,9 @@ if (BUILD_GUI)
   ot_qt_check_test (DesignOfExperimentWizard_std)
   ot_qt_check_test (FieldMonteCarloWizard_std)
   ot_qt_check_test (MeshDefinitionWizard_std)
+  ot_qt_check_test (SymbolicPhysicalModelWindow_std)
+  ot_qt_check_test (ProbabilisticModelWindow_std -platform minimal)
+  ot_qt_check_test (DataModelWindow_std)
 endif ()
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
