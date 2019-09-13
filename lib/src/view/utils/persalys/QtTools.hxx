@@ -68,23 +68,10 @@ public:
 
 static QMap<QString, QString> InitColors()
 {
-  QString color = "blue";
-#ifdef PERSALYS_HAVE_YACS
-  color = "green";
-#endif
   QMap<QString, QString> map;
-  if (color == "blue")
-  {
-    map["mediumColor"] = "#0873A8";
-    map["darkColor"] = "#333399";
-    map["lightColor"] = "#7FACD2";
-  }
-  else
-  {
-    map["mediumColor"] = "#4ea248";
-    map["darkColor"] = "#0a5205";
-    map["lightColor"] = "#a5d3a1";
-  }
+  map["mediumColor"] = "#0873A8";
+  map["darkColor"] = "#333399";
+  map["lightColor"] = "#7FACD2";
   return map;
 }
 static QMap<QString, QString> ApplicationColor = InitColors();
