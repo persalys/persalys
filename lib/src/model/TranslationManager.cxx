@@ -173,6 +173,16 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("File name", tr("File name")));
   ParametersNames_.insert(type("Number of trajectories", tr("Number of trajectories")));
   ParametersNames_.insert(type("Columns", tr("Columns")));
+  ParametersNames_.insert(type("Observed variables", tr("Observed variables")));
+  ParametersNames_.insert(type("Variables to calibrate", tr("Variables to calibrate")));
+  ParametersNames_.insert(type("θ prior distribution", tr("θ prior distribution")));
+  ParametersNames_.insert(type("θ prior\nSpearman correlation", tr("θ prior\nSpearman correlation")));
+  ParametersNames_.insert(type("Error\ncovariance", tr("Error\ncovariance")));
+  ParametersNames_.insert(type("θ prior", tr("θ prior")));
+  ParametersNames_.insert(type("Fixed inputs", tr("Fixed inputs")));
+  ParametersNames_.insert(type("Confidence interval length", tr("Confidence interval length")));
+  ParametersNames_.insert(type("Bootstrap resampling size", tr("Bootstrap resampling size")));
+  ParametersNames_.insert(type("Maximum number of function evaluations", tr("Maximum number of function evaluations")));
 }
 
 
