@@ -103,7 +103,6 @@ ot_check_test ( Cogeneration_std )
 
 if (BUILD_GUI)
   include_directories (${CMAKE_CURRENT_BINARY_DIR}) # for mocs
-  execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_analyses.py ${CMAKE_CURRENT_BINARY_DIR})
   ot_qt_check_test (WelcomeWindow_std)
   ot_qt_check_test (OptimizationWizard_std)
   ot_qt_check_test (CentralTendencyWizard_std)
