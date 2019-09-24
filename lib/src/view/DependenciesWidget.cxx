@@ -109,9 +109,6 @@ void DependenciesWidget::buildInterface()
 
   QSplitter * hSplitter = new QSplitter;
   // left side
-  QWidget * leftSideWidget = new QWidget;
-  QVBoxLayout * leftSideLayout = new QVBoxLayout(leftSideWidget);
-
   // table view for groups of variables
   tableView_ = new QTableView;
   tableView_->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -137,9 +134,7 @@ void DependenciesWidget::buildInterface()
     tableView_->setItemDelegateForColumn(1, delegate);
   }
 
-  leftSideLayout->addWidget(tableView_);
-
-  hSplitter->addWidget(leftSideWidget);
+  hSplitter->addWidget(tableView_);
 
   // right side
   rightSideOfSplitterStackedWidget_ = new ResizableStackedWidget;

@@ -143,7 +143,7 @@ void ImportSampleWidget::setData(const QString& fileName)
 }
 
 
-void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns)
+void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns, const Description &comboItems)
 {
   Sample sample(fileSample);
   const Description initialDescription(sample.getDescription());
@@ -160,8 +160,8 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
 
   // set comboboxes items: each of them contains the input Names and an empty item
   QStringList comboBoxItems;
-  for (UnsignedInteger i = 0; i < variableNames.getSize(); ++i)
-    comboBoxItems << QString::fromUtf8(variableNames[i].c_str());
+  for (UnsignedInteger i = 0; i < comboItems.getSize(); ++i)
+    comboBoxItems << QString::fromUtf8(comboItems[i].c_str());
   comboBoxItems << "";
 
   // set horizontal header view
@@ -176,6 +176,12 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
 
   // DOE size
   DOESizeLabel_->setText(QString::number(sample.getSize()));
+}
+
+
+void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns)
+{
+  updateWidgets(fileSample, variableNames, variablecolumns, variableNames);
 }
 
 

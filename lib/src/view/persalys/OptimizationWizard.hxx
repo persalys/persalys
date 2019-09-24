@@ -79,6 +79,8 @@ public:
     optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
     optimAlgo.setMaximumAbsoluteError(absoluteErrSpinBox_->value());
   }
+  UIntSpinBox * getEvaluationSpinBox() const {return evaluationsSpinBox_;}
+
 private:
   UIntSpinBox * evaluationsSpinBox_;
   LogDoubleSpinBox * absoluteErrSpinBox_;

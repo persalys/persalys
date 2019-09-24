@@ -46,6 +46,7 @@
 #include "persalys/CopulaInferenceResultWindow.hxx"
 #include "persalys/FieldModelEvaluationResultWindow.hxx"
 #include "persalys/FieldMonteCarloWizard.hxx"
+#include "persalys/CalibrationResultWindow.hxx"
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/ScreeningAnalysisWizard.hxx"
 #include "persalys/MorrisResultWindow.hxx"
@@ -60,6 +61,7 @@
 #include "persalys/ReliabilityAnalysisWizard.hxx"
 #include "persalys/MetaModelAnalysisWizard.hxx"
 #include "persalys/CopulaInferenceWizard.hxx"
+#include "persalys/CalibrationAnalysisWizard.hxx"
 
 namespace PERSALYS
 {
@@ -164,6 +166,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   {
     wizard = new DesignOfExperimentWizard(analysis, parent);
   }
+  else if (analysisType == "CalibrationAnalysis")
+  {
+    wizard = new CalibrationAnalysisWizard(analysis, isGeneralWizard, parent);
+  }
   else
   {
     qDebug() << "Error: In GetAnalysisWizard: analysisType " << analysisType << " not recognized.\n";
@@ -247,6 +253,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   else if (analysisType == "CopulaInferenceAnalysis")
   {
     resultWindow = new CopulaInferenceResultWindow(item, parent);
+  }
+  else if (analysisType == "CalibrationAnalysis")
+  {
+    resultWindow = new CalibrationResultWindow(item, parent);
   }
   else if (analysisType.contains("DesignOfExperiment"))
   {
