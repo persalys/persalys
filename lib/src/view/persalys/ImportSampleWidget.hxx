@@ -39,8 +39,6 @@ public:
   friend class MeshDefinitionWizard;
   friend class ImportObservationsPage;
   friend class TestMeshDefinitionWizard;
-  friend class TestObservationsWizard;
-  friend class TestDesignOfExperimentWizard;
 
   ImportSampleWidget(QWidget *parent = 0);
 

@@ -1,6 +1,7 @@
 #include "persalys/Observations.hxx"
 #include "persalys/ObservationsWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/SampleTableModel.hxx"
 
 #include <openturns/OTType.hxx>
 #include <openturns/Normal.hxx>
@@ -54,11 +55,12 @@ private slots:
     wizard.show();
 
     TemporaryLabel * errorMessageLabel = wizard.page_->findChild<TemporaryLabel*>();
-    QAbstractItemModel * model = wizard.page_->sampleWidget_->dataPreviewTableView_->model();
+    SampleTableModel * model = wizard.page_->findChild<SampleTableModel*>();
+    QLineEdit * fileLineEdit = wizard.page_->findChild<QLineEdit*>();
 
     // checks
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
-    QVERIFY2(wizard.page_->sampleWidget_->filePathLineEdit_->text() == filename.c_str(), "wrong filename");
+    QVERIFY2(fileLineEdit->text() == filename.c_str(), "wrong filename");
     QVERIFY2(model->headerData(0, Qt::Horizontal).toString() == "Ep2", "header not valid");
     QVERIFY2(model->headerData(2, Qt::Horizontal).toString() == "E", "header not valid");
 
