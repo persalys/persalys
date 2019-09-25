@@ -531,7 +531,6 @@ The results window gathers the following tabs:
 
     - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
     - Graph interactivity:
-       - Left-click to translate the graph
        - Mouse wheel up/down to zoom in/zoom out
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyBoxplot.png

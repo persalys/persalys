@@ -439,40 +439,47 @@ Models
   .. image:: /developer_manual/validation/model1.png
       :align: center
 
-- click on 'Evaluate' button below the outputs table
-    - only y0 and y1 are evaluated
+- click on 'Check model' button below the outputs table
+    - fake_var is not evaluated
 
-- select lines 1 and 3 of the outputs table
+- select lines 1 of the outputs table
     - first header item is checked
 
-- click on Evaluate button
-    - fake_var and fake_y0 are evaluated
+- click on 'Check model' button
+    - fake_var is evaluated
 
 - change x2 value to 1.5 + press enter
     - outputs values are reinitialized
 
 - unselect all outputs
 
-- click on 'Evaluate' button
+- click on 'Check model' button
     - nothing appends
 
 - check fake_var + change its formula to 'x1 +'
 
-- click on 'Evaluate' button
-    - error message 'Unexpected etc.'
+- click on 'Check model' button
+    - error message 'Errors found when parsing expression etc.'
 
 - unselect fake_var + select y0, fake_y0 and y1
+
+- change x2 value to 1.2 + press enter
+
+- check the doc link
 
 - click on 'Definition' child item of 'model2' item
 
   .. image:: /developer_manual/validation/model2.png
       :align: center
 
+- check the doc link
+
 - click on 'Definition' child item of 'model3' item
 
   .. image:: /developer_manual/validation/model3.png
       :align: center
 
+- check the doc link
 
 Designs of experiments
 ``````````````````````
@@ -486,7 +493,9 @@ Designs of experiments
       .. image:: /developer_manual/validation/design_1_wizard_1st_page.png
           :align: center
 
-      - type : Deterministic
+      - type : Full factorial design
+
+      - check the doc link (Help button)
 
       - continue
 
@@ -497,20 +506,21 @@ Designs of experiments
 
       - no selected line
       - first and second columns are not editable
-      - 3 last columns are disabled
+      - the bounds and levels are disabled
       - all levels are equal to 1
       - check wizard behavior :
 
-        - fifth header item : change combo box item to Delta
+        - sixth column items : change combo box item to Delta
 
-          - values changed : all deltas values are null
+          - values changed : all deltas values are '-'
 
         - first header item : check all
 
           - third column is disabled
-          - 3 last columns are enabled
+          - other columns are enabled
+          - the Deltas are [10, 10, 0.2]
 
-        - fifth header item : change combo box item to Levels
+        - sixth column items : change combo box item to Levels
 
           - values changed : all levels values are equal to 2
 
@@ -520,16 +530,19 @@ Designs of experiments
 
         - line 2 : change lower bound to 10, press enter
 
-          - error message : 'The lower bound must be lesser than the upper bound'
+          - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
 
         - line 2 : change upper bound to 0, press enter
 
-          - error message : 'The upper bound must be greater than the lower bound'
+          - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
 
-        - fifth header item : change combo box item to Delta
-        - line 2 : change delta to 15, press enter
+        - sixth column items : change combo box item to Delta
 
-          - error message : 'Delta must be lesser than (the upper bound - the lower bound)'
+          - all deltas values are '-'
+
+        - line 2 : change upper bound to 20 and Delta to 15, press enter
+
+          - error message : The delta must be greater or equal to 0 and less than the interval length
 
         - line 2 : change delta to 0.5, press enter
 
@@ -549,7 +562,7 @@ Designs of experiments
   - right click on design_2 and choose Modify :
 
     - First page :
-        - type : Deterministic
+        - type : Full factorial design
         - continue
 
     - Second page :
@@ -561,7 +574,7 @@ Designs of experiments
       - lower bounds : [0.5, 0.5]
       - upper bounds : [9.5, 9.5]
       - levels : [7, 7]
-      - fifth header item: change combo box item to Delta
+      - sixth column items : change combo box item to Delta
           - deltas : [1.5, 1.5]
       - size of the design of experiments : 49
       - cancel
@@ -569,7 +582,7 @@ Designs of experiments
   - right click on design_3 and choose Modify :
 
     - First page :
-        - type : Import data
+        - type : Imported design
         - continue
 
     - Second page :
@@ -587,7 +600,7 @@ Designs of experiments
   - right click on design_4 and choose Modify :
 
     - First page :
-        - type : Probabilistic
+        - type : Probabilistic design
         - continue
 
     - Second page :
@@ -596,8 +609,8 @@ Designs of experiments
           :align: center
 
       - Monte Carlo selected
-      - LHS and Quasi-Monte Carlo disabled: check the tooltip is 'The physical model does not have an independent copula'
-      - sample size : 10
+      - LHS disabled: check the tooltip is 'The physical model does not have an independent copula'
+      - sample size : 100
       - seed : 0
       - cancel
 
@@ -608,6 +621,7 @@ Designs of experiments
     .. image:: /developer_manual/validation/design_3_evaluation_wizard.png
         :align: center
 
+    - deselect fake_y0
     - click on the Finish button
     - an item 'Evaluation' appears in the tree view
     - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
@@ -618,16 +632,16 @@ Designs of experiments
       .. image:: /developer_manual/validation/design_3_Table.png
           :align: center
 
-      - 7 tabs : Summary - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model
-      - Summary tab :
+      - 10 tabs : Summary - PDF/CDF - Boxplots - Dependence - Table - Cobweb plot - Plot matrix - Scatter plot - Parameters - Model
+      - Summary and PDF/CDF tabs :
 
-        - when changing the variable, the Summary tab is updated
+        - when changing the variable, the tabs are updated
 
-      - Plots tabs and Table tab :
+      - Other Plots tabs and Table tab :
 
         - when clicking on the tab, the list view has been hidden
         - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-        - check the tabs are linked (do several selections in a tab and check the selection is the same in the others tabs)
+        - check the tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
 
   - right click on design_5, choose Evaluate :
 
@@ -640,7 +654,7 @@ Designs of experiments
         .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
             :align: center
 
-        - 3 tabs : Summary - Table - Parameters
+        - 4 tabs : Summary - Table - Parameters - Model
 
         - Summary tab :
 
@@ -657,14 +671,14 @@ Designs of experiments
         .. image:: /developer_manual/validation/DOE_result_model2_two_points.png
             :align: center
 
-        - 3 tabs : Summary - Table - Parameters
+        - 4 tabs : Summary - Table - Parameters - Model
         - Summary tab :
 
           - a list view with a variable appears at the left side of the window
 
         - Table tab has 3 tabs: Table - Failed points - Cobweb plot
 
-          - check the cobweb plot has 4 columns. The fourth one is named 'Status\n0: failed; 1: ok'.
+          - check the cobweb plot has 4 columns. The fourth one is named 'Status 0: failed; 1: ok'.
 
 
 Analyses
@@ -678,6 +692,8 @@ Analyses
 
     .. image:: /developer_manual/validation/evaluation_wizard.png
         :align: center
+
+    - deselect fake_y0
 
     - check the values : [0.2, 1.2, 1]
 
@@ -1127,7 +1143,6 @@ Analyses
       - Indices tab :
 
         - can not zoom the plot
-        - Total indices and Interactions are associated with a warning icon with Tooltip
         - Click on the 2 last sections headers of the table :
 
           - the table values are sorted
@@ -1168,13 +1183,13 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-      - right side, 2 tabs : Indices - Parameters
+      - right side, tabs : Indices - Parameters - Model
       - when changing the variable, the Indices tab is updated
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - Indices tab :
 
         - can not zoom the plot
-        - click on the last section header of the table:
+        - click on the 'Input'/'Index'/'Signed index' section headers of the table :
 
           - the table values are sorted
           - the plot is updated
@@ -1237,7 +1252,7 @@ Analyses
           :align: center
 
       - left side : 2 variables in the list view
-      - right side, 4 tabs : MetaModel - Results - Validation - Parameters
+      - right side, tabs : MetaModel - Results - Validation - Parameters - Model
       - when changing the variable, the tabs are updated
       - Metamodel tab : only the plot on the tab
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
@@ -1323,7 +1338,7 @@ Analyses
     - click on the 'Run' button
     - error message : 'No results are available...'
     - right click on the item design_2 and choose Evaluate
-    - a wizard appears, click one the Finish button
+    - a wizard appears, deselect fake_y0, click one the Finish button
     - a window appears, click on the 'Run' button
     - right click on the item chaos_2 and click on Modify
 
@@ -1387,7 +1402,7 @@ Analyses
 
         - check tables are well drawn
         - 2 types of extrema tables: one for the output x_1 and one for inputs x_0, x_1 and x_3
-        - Moments estimates table has 4 columns : Estimate - Value - Lower bound - Upper bound
+        - Moments estimates table has the columns : Estimate - Value - Confidence interval at 95%
         - there are bounds only for Mean and Standard deviation
         - check probability and quantile spinboxes behavior
 
@@ -1429,7 +1444,7 @@ Analyses
       - when selecting a distribution, the tab widget is updated
       - check tables are well drawn
       - select x_0
-      - select InverseNormal/LogUniform/Student :
+      - select InverseNormal/LogUniform :
 
         - PDF/CDF and Q-Q Plot tabs are disabled
         - the Parameters tab contains an error message
@@ -1501,7 +1516,7 @@ Analyses
     - check the reuse of the copula inference result by the Probabilistic model :
 
       - go on the Probabilistic model window of model1, tab 'Dependence'
-      - choose Inference result in the combo box of the [x_0,x_3] group
+      - choose Inference result in the combo box of the [x_1,x_2] group
       - a wizard appears, check its behavior (update of the tables when changing the items selection, etc.)
 
         .. image:: /developer_manual/validation/copulaInferenceResultWizard.png
@@ -1526,28 +1541,32 @@ Diagrams
       :align: center
 
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
-    - add an input and an output, set the formula of y0 to X0
-    - the 'Model evaluation', 'Optimization', 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
+    - add an input : the 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
+    - add an output, set its formula to X0 : the 'Model evaluation', 'Optimization', 'Observations' buttons of the diagram are enabled
 
 - click on the 'Model evaluation' button of the diagram
     - a wizard appears, click on Cancel
 
-- click twice on the 'Design of experiments creation' button of the diagram
+- In the model window : add a second input
+    - the 'Screening' button of the diagram is enabled
+
+- click on the 'Screening' button of the diagram
+    - a wizard appears, click on Cancel
+
+- click on the 'Optimization' button of the diagram
+    - a wizard appears, click on Cancel
+
+- click on the 'Design of experiments creation' button of the diagram
     - a wizard appears, click on Continue button on the first page
-    - on the second page : select X0, write 20 in the 'Levels' column, click on Finish
+    - on the second page : select X0, set Levels = 20, click on Finish
     - the 'Design of experiments evaluation' button of the diagram is enabled
+
+- redo the previous action with Levels = 40
 
 - click on the 'Design of experiments evaluation' button of the diagram
     - a wizard appears, there are 2 items in the combo box in Design of experiments group box, click on Finish, an item 'Evaluation' appears, click on it
     - click on the 'Run' button
     - the 'MetaModel creation' button of the diagram is enabled
-
-- click on the 'Design of experiments evaluation' button of the diagram
-    - a wizard appears, there is 1 item in the combo box in Design of experiments group box, click on Finish, an item 'Evaluation' appears, click on it
-    - click on the 'Run' button
-
-- click on the 'Design of experiments evaluation' button of the diagram
-    - an error message appears : 'All the designs of experiments have already been evaluated'
 
 - click on the 'MetaModel creation' button of the diagram
     - a wizard appears, click on Continue button then on Finish button
@@ -1562,9 +1581,11 @@ Diagrams
 - click on the 'Central tendency' button of the diagram
     - a wizard appears, click on Cancel
 
-- click twice on the 'Limit state definition' button of the diagram
-    - 2 windows appears
+- click on the 'Limit state definition' button of the diagram
+    - a window appears
     - the 'Reliability' button of the diagram is enabled
+
+- redo the previous action
 
 - click on the 'Reliability' button of the diagram
     - a wizard appears, there are 2 items in the combo box in Limit state group box, click on Cancel

@@ -40,9 +40,9 @@ Create a new design of experiment through:
 In the resulting window, the user has to choose between three types of design prior to
 click on the **Continue** button:
 
-  - Deterministic
-  - Probabilistic
-  - Import data
+  - Full factorial design
+  - Probabilistic design
+  - Imported design
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperiment.png
     :align: center
@@ -70,12 +70,12 @@ are unselected and the grid contains only one point).
   The user has to define the lower and upper bound for the variable. The values
   of the variable will be regularly spaced between the bounds. The bounds are always points of the grid.
 
-  The number of values is defined in the last column.
-  The combo box has two items **Levels** (default) and **Delta**.
+  The number of values is defined in the sixth column.
+  The combo boxes of the fifth column have two items **Levels=** (default) and **Delta=**.
 
   - **Levels**: the user gives the number of points (default: 2).
 
-  - **Delta**: the user gives the space between two points (default: (upper bound - lower bound)). 
+  - **Delta**: the user gives the space between two points (default: (upper bound - lower bound)).
 
 
 1-1-2 Probabilistic design
