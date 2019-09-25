@@ -189,18 +189,13 @@ Indices ImportSampleWidget::getColumns(const Description &names) const
 {
   Indices columns;
   // get the index of each item of names
-  for (int i = 0; i < dataPreviewTableView_->model()->columnCount(); ++i)
+  for (UnsignedInteger i = 0; i < names.getSize(); ++i)
   {
-    QString headerName_i(dataPreviewTableView_->model()->headerData(i, Qt::Horizontal).toString());
-    if (!headerName_i.isEmpty())
+    for (int j = 0; j < dataPreviewTableView_->model()->columnCount(); ++j)
     {
-      for (UnsignedInteger j = 0; j < names.getSize(); ++j)
-      {
-        if (names[j] == headerName_i.toStdString())
-        {
-          columns.add(i);
-        }
-      }
+      QString headerName_j(dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString());
+      if (names[i] == headerName_j.toStdString())
+        columns.add(j);
     }
   }
   return columns;
