@@ -17,11 +17,7 @@ model = persalys.SymbolicPhysicalModel(
 anOTStudy.add(model)
 
 # Design of Experiment ##
-lowerBounds = [0.9, 1.8]
-upperBounds = [1.1, 2.2]
-levels = [2, 2]
-aDesign = persalys.GridDesignOfExperiment(
-    'aDesign_1', model, ot.Interval(lowerBounds, upperBounds), levels)
+aDesign = persalys.GridDesignOfExperiment('aDesign_1', model, [[0.9, 1.1], [1.8, 2.2]])
 anOTStudy.add(aDesign)
 
 aDesign.run()

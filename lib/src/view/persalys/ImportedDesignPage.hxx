@@ -33,6 +33,8 @@ class PERSALYS_API ImportedDesignPage : public QWizardPage
 {
   Q_OBJECT
 
+  friend class TestDesignOfExperimentWizard;
+
 public:
   ImportedDesignPage(QWidget *parent = 0);
 

@@ -39,7 +39,7 @@ ModelEvaluation::ModelEvaluation()
 
 
 /* Constructor with parameters */
-ModelEvaluation::ModelEvaluation(const String& name, const PhysicalModel& physicalModel)
+ModelEvaluation::ModelEvaluation(const String &name, const PhysicalModel &physicalModel)
   : GridDesignOfExperiment(name, physicalModel)
 {
   initializeParameters();
@@ -48,13 +48,16 @@ ModelEvaluation::ModelEvaluation(const String& name, const PhysicalModel& physic
 
 
 /* Constructor with parameters */
-ModelEvaluation::ModelEvaluation(const String& name,
-                                 const PhysicalModel& physicalModel,
-                                 const Point& inputsValues)
+ModelEvaluation::ModelEvaluation(const String &name,
+                                 const PhysicalModel &physicalModel,
+                                 const Point &inputsValues)
   : GridDesignOfExperiment(name, physicalModel)
 {
   inputNames_ = getPhysicalModel().getInputNames();
-  setValues(inputsValues);
+  Collection<Point> values(inputsValues.getSize(), Point(1));
+  for (UnsignedInteger i = 0; i < inputsValues.getSize(); ++i)
+    values[i][0] = inputsValues[i];
+  setValues(values);
   setInterestVariables(getPhysicalModel().getSelectedOutputsNames());
 }
 
@@ -68,19 +71,17 @@ ModelEvaluation* ModelEvaluation::clone() const
 
 void ModelEvaluation::launch()
 {
-  if (getValues().getSize() != getPhysicalModel().getInputDimension())
+  if (getOriginalInputSample().getDimension() != getPhysicalModel().getInputDimension())
     throw InvalidArgumentException(HERE) << "Wrong input point dimension";
 
-  // output = f(input)
-  const Point outputP(getPhysicalModel().getFunction(getInterestVariables())(getValues()));
+  // output = f(input) - use a Point on purpose
+  const Sample outputP(1, getPhysicalModel().getFunction(getInterestVariables())(getOriginalInputSample()[0]));
 
   // set design of experiments
   // input sample
-  Sample inputSample(1, getValues());
-  inputSample.setDescription(inputNames_);
-  result_.designOfExperiment_.setInputSample(inputSample);
+  result_.designOfExperiment_.setInputSample(getOriginalInputSample());
   // output sample
-  Sample outputSample(1, outputP);
+  Sample outputSample(outputP);
   outputSample.setDescription(getInterestVariables());
   result_.designOfExperiment_.setOutputSample(outputSample);
 }
@@ -92,11 +93,14 @@ Parameters ModelEvaluation::getParameters() const
 
   param.add("Outputs of interest", getInterestVariables().__str__());
   OSS values;
-  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
+  if (inputNames_.getSize() == values_.getSize())
   {
-    values << inputNames_[i] << " : " << values_[i];
-    if (i < inputNames_.getSize() - 1)
-      values << "\n";
+    for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
+    {
+      values << inputNames_[i] << " : " << values_[i][0];
+      if (i < inputNames_.getSize() - 1)
+        values << "\n";
+    }
   }
   param.add("Point", values);
 
@@ -109,8 +113,8 @@ String ModelEvaluation::getPythonScript() const
   String result;
 
   OSS oss;
-  oss << "values = " << values_.__str__() << "\n";
-  oss << getName() << " = persalys.ModelEvaluation('" << getName() << "', " << getPhysicalModel().getName();
+  oss << "values = " << Parameters::GetOTPointStr(getOriginalInputSample()[0]) << "\n";
+  oss << getName() << " = persalys." << getClassName() << "('" << getName() << "', " << getPhysicalModel().getName();
   oss << ", values)\n";
   if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
@@ -131,19 +135,5 @@ String ModelEvaluation::__repr__() const
       << " physicalModel=" << getPhysicalModel().getName()
       << " inputValues=" << getValues();
   return oss;
-}
-
-
-/* Method save() stores the object through the StorageManager */
-void ModelEvaluation::save(Advocate & adv) const
-{
-  GridDesignOfExperiment::save(adv);
-}
-
-
-/* Method load() reloads the object from the StorageManager */
-void ModelEvaluation::load(Advocate & adv)
-{
-  GridDesignOfExperiment::load(adv);
 }
 }

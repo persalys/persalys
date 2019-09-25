@@ -84,7 +84,7 @@ void ModelEvaluationWizard::buildInterface()
     item->setFlags(item->flags() & ~Qt::ItemIsEditable);
     table_->setItem(i, 1, item);
     // input value
-    const double defaultValue = analysis.getValues()[i];
+    const double defaultValue = analysis.getOriginalInputSample()[0][i];
     const double delta(0.1 * fabs(defaultValue));
     const double step(delta > 1e-12 ? 0.5 * delta : 0.1);
 

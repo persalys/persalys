@@ -69,44 +69,23 @@ FieldModelEvaluation* FieldModelEvaluation::clone() const
 
 void FieldModelEvaluation::launch()
 {
-  if (getValues().getSize() != getPhysicalModel().getInputDimension())
+  if (getOriginalInputSample().getDimension() != getPhysicalModel().getInputDimension())
     throw InvalidArgumentException(HERE) << "Wrong input point dimension";
 
   // output = f(input)
   ProcessSample processSample(getPhysicalModel().getMeshModel().getMesh(), 1, getInterestVariables().getSize());
-  processSample[0] = getPhysicalModel().getPointToFieldFunction(getInterestVariables())(getValues());
+  processSample[0] = getPhysicalModel().getPointToFieldFunction(getInterestVariables())(getOriginalInputSample()[0]);
 
   processSample_ = processSample;
 
-  // set design of experiments
-  // input sample
-  Sample inputSample(1, getValues());
-  inputSample.setDescription(inputNames_);
-  result_.designOfExperiment_.setInputSample(inputSample);
+  // set design of experiments input sample
+  result_.designOfExperiment_.setInputSample(getOriginalInputSample());
 }
 
 
 ProcessSample FieldModelEvaluation::getProcessSample() const
 {
   return processSample_;
-}
-
-
-String FieldModelEvaluation::getPythonScript() const
-{
-  String result;
-
-  OSS oss;
-  oss << "values = " << getValues().__str__() << "\n";
-  oss << getName() << " = persalys.FieldModelEvaluation('" << getName() << "', " << getPhysicalModel().getName();
-  oss << ", values)\n";
-  if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
-  {
-    oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
-    oss << getName() << ".setInterestVariables(interestVariables)\n";
-  }
-
-  return oss;
 }
 
 

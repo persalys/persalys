@@ -25,6 +25,8 @@
 
 #include <QAbstractTableModel>
 
+Q_DECLARE_METATYPE(OT::Point)
+
 namespace PERSALYS
 {
 class PERSALYS_API ExperimentTableModel : public QAbstractTableModel
@@ -32,24 +34,29 @@ class PERSALYS_API ExperimentTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  ExperimentTableModel(const GridDesignOfExperiment & designOfExperiment, QObject * parent = 0);
+  ExperimentTableModel(const GridDesignOfExperiment &designOfExperiment, QObject *parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  bool setData(const QModelIndex & index, const QVariant & value, int role);
-  Qt::ItemFlags flags(const QModelIndex & index) const;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  bool setData(const QModelIndex &index, const QVariant &value, int role);
+  Qt::ItemFlags flags(const QModelIndex &index) const;
   GridDesignOfExperiment getDesignOfExperiment() const;
+  OT::Interval getInterval() const;
 
-public slots:
 signals:
   void errorMessageChanged(QString);
   void doeSizeChanged(QString);
 
 private:
   GridDesignOfExperiment designOfExperiment_;
-  bool firstColumnChecked_;
+  OT::Collection<OT::Point> values_;
+  OT::Point fixValues_;
+  OT::Interval interval_;
+  OT::Indices levels_;
+  OT::Point deltas_;
+  QStringList settings_;
 };
 }
 #endif

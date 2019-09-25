@@ -23,8 +23,9 @@ f = model.getFunction()
 print(f([300., 75000.]))
 
 # Design of Experiment - Parametric analysis ##
-aDesign = persalys.GridDesignOfExperiment('design', model)
-aDesign.setLevels([2, 2])
+bounds = persalys.GridDesignOfExperiment.GetDefaultBounds(model)
+values = [[bounds.getLowerBound()[i], bounds.getUpperBound()[i]] for i in range(2)]
+aDesign = persalys.GridDesignOfExperiment('design', model, values)
 myStudy.add(aDesign)
 aDesign.run()
 

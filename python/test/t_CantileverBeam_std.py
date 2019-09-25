@@ -52,8 +52,9 @@ copula = ot.NormalCopula(R)
 model.setCopula(['L', 'I'], copula)
 
 # Design of Experiment - Parametric analysis ##
-aDesign = persalys.GridDesignOfExperiment('aDesign', model)
-aDesign.setLevels([2, 2, 2, 2])
+bounds = persalys.GridDesignOfExperiment.GetDefaultBounds(model)
+values = [[bounds.getLowerBound()[i], bounds.getUpperBound()[i]] for i in range(4)]
+aDesign = persalys.GridDesignOfExperiment('aDesign', model, values)
 myStudy.add(aDesign)
 aDesign.run()
 

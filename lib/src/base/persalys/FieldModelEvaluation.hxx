@@ -44,7 +44,6 @@ public:
 
   OT::ProcessSample getProcessSample() const;
 
-  virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
 
   /** Method save() stores the object through the StorageManager */
