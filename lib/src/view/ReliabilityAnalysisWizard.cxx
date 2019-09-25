@@ -37,7 +37,6 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, c
   , introPage_(0)
   , simulationPage_(0)
   , approximationPage_(0)
-  , formPage_(0)
 {
   const LimitState limitState = dynamic_cast<ReliabilityAnalysis*>(analysis_.getImplementation().get())->getLimitState();
 
@@ -77,15 +76,10 @@ void ReliabilityAnalysisWizard::buildInterface()
   simulationPage_->initialize(analysis_);
   setPage(Page_SimuMethod, simulationPage_);
 
-  // Second Page: approximation methods
+  // Second/third Page: approximation methods
   approximationPage_ = new ApproximationReliabilityPage(this);
   approximationPage_->initialize(analysis_);
   setPage(Page_ApproxMethod, approximationPage_);
-
-  // third page: FORM page
-  formPage_ = new ApproximationReliabilityPage(this);
-  formPage_->initialize(analysis_);
-  setPage(Page_FORM, formPage_);
 
   setStartId(Page_Intro);
 }
@@ -100,7 +94,7 @@ int ReliabilityAnalysisWizard::nextId() const
     case Page_SimuMethod:
     {
       if (introPage_->getMethodId() == ReliabilityIntroPage::FORM_IS)
-        return ReliabilityAnalysisWizard::Page_FORM;
+        return ReliabilityAnalysisWizard::Page_ApproxMethod;
       return -1;
     }
     default:

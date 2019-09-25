@@ -35,7 +35,7 @@ class PERSALYS_API ReliabilityAnalysisWizard : public AnalysisWizard
   friend class TestReliabilityAnalysisWizard;
 
 public:
-  enum {Page_Intro, Page_SimuMethod, Page_ApproxMethod, Page_FORM};
+  enum {Page_Intro, Page_SimuMethod, Page_ApproxMethod};
 
   ReliabilityAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
@@ -50,7 +50,6 @@ private:
   ReliabilityIntroPage * introPage_;
   SimulationReliabilityPage * simulationPage_;
   ApproximationReliabilityPage * approximationPage_;
-  ApproximationReliabilityPage * formPage_;
 };
 }
 #endif
