@@ -74,11 +74,16 @@ Qt::ItemFlags OptimizationTableModel::flags(const QModelIndex & index) const
     }
     else if (index.column() == 3 || index.column() == 4)
     {
-      result |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+      result |= Qt::ItemIsUserCheckable;
+
       if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]))
         result |= Qt::ItemIsEnabled;
       else
         result &= ~Qt::ItemIsEnabled;
+
+      if ((index.column() == 3 && analysis_.getBounds().getFiniteLowerBound()[index.row() - 1]) ||
+          (index.column() == 4 && analysis_.getBounds().getFiniteUpperBound()[index.row() - 1]))
+        result |= Qt::ItemIsEditable;
     }
   }
   return result;
@@ -153,14 +158,14 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
         return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 3:
       {
-        if (analysis_.getBounds().getFiniteLowerBound()[inputIndex])
+        if (analysis_.getBounds().getFiniteLowerBound()[inputIndex] || role == Qt::EditRole)
           return QString::number(analysis_.getBounds().getLowerBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         else
           return "-∞";
       }
       case 4:
       {
-        if (analysis_.getBounds().getFiniteUpperBound()[inputIndex])
+        if (analysis_.getBounds().getFiniteUpperBound()[inputIndex] || role == Qt::EditRole)
           return QString::number(analysis_.getBounds().getUpperBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         else
           return "+∞";
