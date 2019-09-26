@@ -24,6 +24,7 @@
 #include "persalys/MonteCarloReliabilityAnalysis.hxx"
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/CalibrationAnalysis.hxx"
 
 #include <QDebug>
 
@@ -101,6 +102,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+    emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
   }
   else if (message == "outputNumberChanged")
   {
@@ -116,12 +118,14 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+    emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
   }
   else if (message == "inputDistributionChanged")
   {
     appendProbabilisticModelItem(); // if modification from Python console
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+    emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
   }
   else if (message == "copulaChanged")
   {
@@ -203,6 +207,26 @@ void PhysicalModelDiagramItem::requestReliabilityCreation()
 }
 
 
+void PhysicalModelDiagramItem::requestCalibrationCreation()
+{
+  DesignOfExperiment doe;
+  for (UnsignedInteger i = 0; i < getParentStudyItem()->getStudy().getDataModels().getSize(); ++i)
+  {
+    if (getParentStudyItem()->getStudy().getDataModels()[i].getPhysicalModel() == physicalModel_)
+    {
+      doe = getParentStudyItem()->getStudy().getDataModels()[i];
+      break;
+    }
+  }
+
+  // new analysis
+  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("calibration_").toStdString()));
+  CalibrationAnalysis analysis(analysisName, doe);
+  // emit signal to StudyManager to open a 'general' wizard (with a list of observations)
+  emit analysisRequested(this, analysis, true);
+}
+
+
 void PhysicalModelDiagramItem::duplicatePhysicalModel()
 {
   if (!getParentStudyItem())
@@ -280,6 +304,7 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
   connect(this, SIGNAL(designOfExperimentRequested()), pmItem, SLOT(createDesignOfExperiment()));
   connect(this, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), pmItem, SLOT(updateProbaActionAvailability()));
   connect(this, SIGNAL(optimizationRequested()), pmItem, SLOT(createOptimization()));
+  connect(this, SIGNAL(observationsRequested()), pmItem, SLOT(createObservations()));
 
   // append item
   appendRow(pmItem);
@@ -336,10 +361,24 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
     LimitStateItem * lsItem = dynamic_cast<LimitStateItem*>(limitState.getImplementation().get()->getObserver("LimitState"));
     if (!lsItem)
     {
-      qDebug() << "In PhysicalModelDiagramItem::appendAnalysisItem: No item added for the analysis named " << analysis.getName().data() << ". Limit state item not found.\n";
+      qDebug() << "In PhysicalModelDiagramItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". Limit state item not found.\n";
       return;
     }
     lsItem->appendItem(analysis);
+    return;
+  }
+  // if calibration analysis: observations item takes care of adding an item for the analysis
+  CalibrationAnalysis * analysis_ptr2 = dynamic_cast<CalibrationAnalysis*>(analysis.getImplementation().get());
+  if (analysis_ptr2)
+  {
+    DesignOfExperiment obs(analysis_ptr2->getObservations());
+    ObservationsItem * obsItem = dynamic_cast<ObservationsItem*>(obs.getImplementation().get()->getObserver("Observations"));
+    if (!obsItem)
+    {
+      qDebug() << "In PhysicalModelDiagramItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". Observations item not found.\n";
+      return;
+    }
+    obsItem->appendItem(analysis);
     return;
   }
 
@@ -527,11 +566,46 @@ void PhysicalModelDiagramItem::appendItem(const LimitState& limitState)
 }
 
 
+void PhysicalModelDiagramItem::appendItem(const DesignOfExperiment &designOfExp)
+{
+  Item * titleItem = getTitleItemNamed(tr("Calibration"), "CalibrationTitle");
+  if (!titleItem->getActions().size())
+  {
+    // context menu actions
+    QAction * newObservations = new QAction(/*QIcon(":/images/optimize.png"),*/ tr("New observations"), this);
+    newObservations->setStatusTip(tr("Add new observations"));
+    connect(newObservations, SIGNAL(triggered()), this, SIGNAL(observationsRequested()));
+    titleItem->appendAction(newObservations);
+  }
+  ObservationsItem * newItem = new ObservationsItem(designOfExp);
+
+  // connections
+  connect(newItem, SIGNAL(removeRequested(int)), this, SLOT(requestObservationsRemoval()));
+
+  titleItem->appendRow(newItem);
+
+  // emit signal to StudyManager to create a window
+  emit observationsCreated(newItem);
+
+  // signal for diagram window : update diagram
+  ++observationsCounter_;
+  emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
+}
+
+
 void PhysicalModelDiagramItem::requestLimitStateRemoval()
 {
   // signal for diagram window : update diagram
   --limitStateCounter_;
   emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+}
+
+
+void PhysicalModelDiagramItem::requestObservationsRemoval()
+{
+  // signal for diagram window : update diagram
+  --observationsCounter_;
+  emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
 }
 
 

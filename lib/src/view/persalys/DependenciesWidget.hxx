@@ -38,6 +38,7 @@ class PERSALYS_API DependenciesWidget : public QWidget
 
 public:
   DependenciesWidget(ProbabilisticModelItem *item, QWidget *parent = 0);
+  DependenciesWidget(const PhysicalModel& model, QWidget *parent = 0);
 
 public slots:
   void updateWidgets();
@@ -54,6 +55,7 @@ protected:
   void updateVariablesList();
 
 private:
+  bool failSoftMode_;
   Study study_;
   PhysicalModel physicalModel_;
   VariablesSelectionTableModel * varTableModel_;

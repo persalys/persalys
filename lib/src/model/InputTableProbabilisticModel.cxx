@@ -33,8 +33,9 @@ using namespace OT;
 namespace PERSALYS
 {
 
-InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel & physicalModel, QObject * parent)
+InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel & physicalModel, const bool failSoftMode, QObject * parent)
   : QAbstractTableModel(parent)
+  , failSoftMode_(failSoftMode)
   , physicalModel_(physicalModel)
 {
 }
@@ -55,15 +56,22 @@ int InputTableProbabilisticModel::rowCount(const QModelIndex & parent) const
 Qt::ItemFlags InputTableProbabilisticModel::flags(const QModelIndex & index) const
 {
   Qt::ItemFlags result = QAbstractTableModel::flags(index);
-  if (index.column() == 0)
+  if (failSoftMode_)
   {
     result &= ~Qt::ItemIsEditable;
-    result |= Qt::ItemIsUserCheckable;
   }
-  else if (index.column() == 1 && data(this->index(index.row(), 1), Qt::DisplayRole).toString() == "Dirac")
+  else
   {
-    result &= ~Qt::ItemIsEnabled;
-    result &= ~Qt::ItemIsEditable;
+    if (index.column() == 0)
+    {
+      result &= ~Qt::ItemIsEditable;
+      result |= Qt::ItemIsUserCheckable;
+    }
+    else if (index.column() == 1 && data(this->index(index.row(), 1), Qt::DisplayRole).toString() == "Dirac")
+    {
+      result &= ~Qt::ItemIsEnabled;
+      result &= ~Qt::ItemIsEditable;
+    }
   }
   return result;
 }
@@ -97,7 +105,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
   if (!index.isValid())
     return QVariant();
 
-  if (role == Qt::CheckStateRole && index.column() == 0)
+  if (!failSoftMode_ && role == Qt::CheckStateRole && index.column() == 0)
   {
     const Input input(physicalModel_.getInputs()[index.row()]);
     return input.isStochastic() ? Qt::Checked : Qt::Unchecked;

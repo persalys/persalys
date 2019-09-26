@@ -125,6 +125,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
 %include DataModel.i
+%include Observations.i
 %include EvaluationResult.i
 %include DataAnalysisResult.i
 %include DesignOfExperimentAnalysis.i
@@ -176,6 +177,8 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include CopulaInferenceResult.i
 %include CopulaInferenceAnalysis.i
 %include OptimizationAnalysis.i
+%include CalibrationAnalysisResult.i
+%include CalibrationAnalysis.i
 %include StudyImplementation.i
 %include Study.i
 

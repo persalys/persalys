@@ -139,6 +139,7 @@ ot_add_python_module (persalys persalys_module.i
                       ImportedDesignOfExperiment.i ImportedDesignOfExperiment_doc.i.in
                       ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i.in
                       DataModel.i DataModel_doc.i.in
+                      Observations.i Observations_doc.i.in
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       FieldMonteCarloResult.i FieldMonteCarloResult_doc.i.in
                       FieldMonteCarloAnalysis.i FieldMonteCarloAnalysis_doc.i.in
@@ -175,6 +176,8 @@ ot_add_python_module (persalys persalys_module.i
                       CopulaInferenceResult.i CopulaInferenceResult_doc.i.in
                       CopulaInferenceAnalysis.i CopulaInferenceAnalysis_doc.i.in
                       OptimizationAnalysis.i OptimizationAnalysis_doc.i.in
+                      CalibrationAnalysis.i CalibrationAnalysis_doc.i.in
+                      CalibrationAnalysisResult.i CalibrationAnalysisResult_doc.i.in
                       StudyImplementation.i
                       Study.i Study_doc.i.in
                     )

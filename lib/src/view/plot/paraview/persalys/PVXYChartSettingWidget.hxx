@@ -119,5 +119,17 @@ public:
 public slots:
   void updateYComboBox();
 };
+
+
+class PERSALYS_API MultiPDFSettingWidget : public PVXYChartSettingWidget
+{
+  Q_OBJECT
+
+public:
+  MultiPDFSettingWidget(PVXYChartViewWidget *pvViewWidget,
+                       const QStringList &inputNames,
+                       const QStringList &outputNames,
+                       QWidget *parent = 0);
+};
 }
 #endif

@@ -11,6 +11,7 @@ ot_add_source_file ( CorrelationTableModel.cxx )
 ot_add_source_file ( DifferentiationTableModel.cxx )
 ot_add_source_file ( DataModelTableModel.cxx )
 ot_add_source_file ( DistributionsTableModel.cxx )
+ot_add_source_file ( CalibrationTableModel.cxx )
 ot_add_source_file ( Item.cxx )
 ot_add_source_file ( MeshItem.cxx )
 ot_add_source_file ( PhysicalModelDiagramItem.cxx )
@@ -24,6 +25,7 @@ ot_add_source_file ( ProbabilisticModelItem.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
 ot_add_source_file ( StudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
+ot_add_source_file ( ObservationsItem.cxx )
 ot_add_source_file ( StudyTreeViewModel.cxx )
 ot_add_source_file ( CodeModel.cxx)
 ot_add_source_file ( VariablesSelectionTableModel.cxx)
@@ -44,6 +46,7 @@ ot_install_header_file ( OutputTableModel.hxx )
 ot_install_header_file ( ExperimentTableModel.hxx )
 ot_install_header_file ( CorrelationTableModel.hxx )
 ot_install_header_file ( DifferentiationTableModel.hxx )
+ot_install_header_file ( CalibrationTableModel.hxx )
 ot_install_header_file ( Item.hxx )
 ot_install_header_file ( MeshItem.hxx )
 ot_install_header_file ( PhysicalModelDiagramItem.hxx )
@@ -57,6 +60,7 @@ ot_install_header_file ( DataModelDefinitionItem.hxx )
 ot_install_header_file ( ProbabilisticModelItem.hxx )
 ot_install_header_file ( PhysicalModelItem.hxx )
 ot_install_header_file ( StudyItem.hxx )
+ot_install_header_file ( ObservationsItem.hxx )
 ot_install_header_file ( StudyTreeViewModel.hxx )
 ot_install_header_file ( VariablesSelectionTableModel.hxx )
 ot_install_header_file ( CustomStandardItemModel.hxx )
@@ -78,6 +82,7 @@ qt5_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/DifferentiationTableModel.hxx
                                     persalys/DataModelTableModel.hxx
                                     persalys/DistributionsTableModel.hxx
+                                    persalys/CalibrationTableModel.hxx
                                     persalys/Item.hxx
                                     persalys/MeshItem.hxx
                                     persalys/PhysicalModelDiagramItem.hxx
@@ -92,6 +97,7 @@ qt5_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/ProbabilisticModelItem.hxx
                                     persalys/PhysicalModelItem.hxx
                                     persalys/StudyItem.hxx
+                                    persalys/ObservationsItem.hxx
                                     persalys/CodeModel.hxx
                                     persalys/VariablesSelectionTableModel.hxx
                                     persalys/CustomStandardItemModel.hxx

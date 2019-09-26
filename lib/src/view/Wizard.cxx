@@ -74,6 +74,8 @@ void Wizard::InitializeDocLInks()
   DocLinks_["InferenceResultWizard"] = "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#inferenceresultwizard";
   DocLinks_["CopulaInferenceResultWizard"] = "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#dependenceinferenceresultwizard";
   DocLinks_["MeshDefinitionWizard"] = "user_manual/graphical_interface/field_model/user_manual_field_model.html#meshdefinitionwizard";
+  DocLinks_["CalibrationAnalysisWizard"] = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#calibrationwizard";
+  DocLinks_["ObservationsWizard"] = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#observationwizard";
 }
 
 

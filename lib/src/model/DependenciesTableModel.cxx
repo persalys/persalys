@@ -32,8 +32,9 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DependenciesTableModel::DependenciesTableModel(const PhysicalModel &physicalModel, QObject *parent)
+DependenciesTableModel::DependenciesTableModel(const PhysicalModel &physicalModel, const bool failSoftMode, QObject *parent)
   : QAbstractTableModel(parent)
+  , failSoftMode_(failSoftMode)
   , physicalModel_(physicalModel)
   , copula_(physicalModel.getCopulaCollection())
 {
@@ -56,11 +57,9 @@ int DependenciesTableModel::rowCount(const QModelIndex &parent) const
 Qt::ItemFlags DependenciesTableModel::flags(const QModelIndex & index) const
 {
   Qt::ItemFlags result = QAbstractTableModel::flags(index);
-  if (index.column() == 0)
-  {
+  if (index.column() == 0 || (failSoftMode_ && index.column() == 1))
     result &= ~Qt::ItemIsEditable;
-  }
-  else if (index.column() == 1)
+  else if (!failSoftMode_ && index.column() == 1)
     result &= ~Qt::ItemIsSelectable;
 
   return result;

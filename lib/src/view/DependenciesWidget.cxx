@@ -46,10 +46,21 @@ namespace PERSALYS
 
 DependenciesWidget::DependenciesWidget(ProbabilisticModelItem * item, QWidget *parent)
   : QWidget(parent)
+  , failSoftMode_(false)
   , study_(item->getParentStudyItem()->getStudy())
   , physicalModel_(item->getPhysicalModel())
 {
   connect(item, SIGNAL(copulaChanged()), this, SLOT(updateWidgets()));
+  buildInterface();
+}
+
+
+DependenciesWidget::DependenciesWidget(const PhysicalModel& model, QWidget *parent)
+  : QWidget(parent)
+  , failSoftMode_(true)
+  , study_()
+  , physicalModel_(model)
+{
   buildInterface();
 }
 
@@ -98,9 +109,6 @@ void DependenciesWidget::buildInterface()
 
   QSplitter * hSplitter = new QSplitter;
   // left side
-  QWidget * leftSideWidget = new QWidget;
-  QVBoxLayout * leftSideLayout = new QVBoxLayout(leftSideWidget);
-
   // table view for groups of variables
   tableView_ = new QTableView;
   tableView_->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -119,13 +127,14 @@ void DependenciesWidget::buildInterface()
   connect(tableView_->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 
   // - ComboBoxDelegate
-  ComboBoxDelegate * delegate = new ComboBoxDelegate(tableView_);
-  delegate->setNoWheelEvent(true);
-  tableView_->setItemDelegateForColumn(1, delegate);
+  if (!failSoftMode_)
+  {
+    ComboBoxDelegate * delegate = new ComboBoxDelegate(tableView_);
+    delegate->setNoWheelEvent(true);
+    tableView_->setItemDelegateForColumn(1, delegate);
+  }
 
-  leftSideLayout->addWidget(tableView_);
-
-  hSplitter->addWidget(leftSideWidget);
+  hSplitter->addWidget(tableView_);
 
   // right side
   rightSideOfSplitterStackedWidget_ = new ResizableStackedWidget;
@@ -196,9 +205,12 @@ void DependenciesWidget::updateWidgets()
 
   // update table
   tableModel_->updateData();
-  for (int i = 0; i < tableModel_->rowCount(); ++i)
+  if (!failSoftMode_)
   {
-    tableView_->openPersistentEditor(tableModel_->index(i, 1));
+    for (int i = 0; i < tableModel_->rowCount(); ++i)
+    {
+      tableView_->openPersistentEditor(tableModel_->index(i, 1));
+    }
   }
   tableView_->selectRow(0);
 
@@ -299,9 +311,12 @@ void DependenciesWidget::addCopula()
 
   const int lastRow = tableView_->model()->rowCount() - 1;
   tableView_->selectRow(lastRow);
-  for (int i = 0; i < tableView_->model()->rowCount(); ++i)
+  if (!failSoftMode_)
   {
-    tableView_->openPersistentEditor(tableView_->model()->index(i, 1));
+    for (int i = 0; i < tableView_->model()->rowCount(); ++i)
+    {
+      tableView_->openPersistentEditor(tableView_->model()->index(i, 1));
+    }
   }
   // update variables list
   updateVariablesList();

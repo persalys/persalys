@@ -35,7 +35,7 @@ class PERSALYS_API DependenciesTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DependenciesTableModel(const PhysicalModel &physicalModel, QObject *parent = 0);
+  DependenciesTableModel(const PhysicalModel &physicalModel, const bool failSoftMode, QObject *parent = 0);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -58,6 +58,7 @@ protected:
   void updateCopula();
 
 private:
+  bool failSoftMode_;
   PhysicalModel physicalModel_;
   OT::ComposedCopula copula_;
 };

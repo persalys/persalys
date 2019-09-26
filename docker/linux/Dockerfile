@@ -26,9 +26,25 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.0.tar.gz | tar x
 RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.3.tar.gz | tar xz && cd cmake-3.14.3 \
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
+# cminpack
+RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.6.tar.gz | tar xz && cd cminpack-1.3.6 \
+ && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF . && make install
+
 # nlopt
 RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.1.tar.gz | tar xz && cd nlopt-2.6.1 \
- && cmake -DINSTALL_LIB_DIR=/usr/local/lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1
+ && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1
+
+# eigen
+RUN curl -fsSL http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd eigen-eigen-323c052e1731 \
+ && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install
+
+# glog
+RUN curl -fsSL https://github.com/google/glog/archive/v0.4.0.tar.gz | tar xz && cd glog-0.4.0 \
+ && cmake . && make install
+
+# ceres
+RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/1.14.0.tar.gz | tar xz && cd ceres-solver-1.14.0 \
+&& cmake -DLIB_SUFFIX="" -DBUILD_SHARED_LIBS=ON . && make install
 
 # tbb
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1

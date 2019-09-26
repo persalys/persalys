@@ -588,7 +588,7 @@ The results window gathers several tabs:
 
   - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
-      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on column header to sort values in ascending or descending order
       - Left-click on a column header and drag it in another place to change columns order
 
 - The **Cobweb plot** tab displays the sample.
@@ -750,7 +750,7 @@ When the analysis is finished, a result window appears.
 
 The results window gathers the following tabs:
 
-- The **Result** tab includes
+- The **Result** tab includes:
     - The optimal point
     - The optimization stopping criteria value:
         - The number of function evaluations;
@@ -771,3 +771,201 @@ The results window gathers the following tabs:
 
 - The **Model** tab shows the model content used to perform the analysis.
 
+5- Observations
+===============
+
+To perform a calibration analysis, define first observations for at least one output and one input.
+
+.. _observationwizard:
+
+5-1 Definition
+''''''''''''''
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentImport.png
+    :align: center
+
+Import a data file. Then set the link between columns of the imported data
+and variables of the physical model by clicking on the column name (default : first column for the first input
+variable, second column for the first output variable).
+Define at least one output and one input.
+
+.. _observationwindow:
+
+5-2 Results
+'''''''''''
+
+When the sample is defined, a new element appears in the study tree, below **Observations**.
+This item is associated with a window showing a table of the observation values.
+
+
+6- Calibration
+===============
+
+The interface proposes to `calibrate <http://openturns.github.io/openturns/latest/theory/data_analysis/code_calibration.html>`_ the physical model.
+
+New model calibration can be created through:
+  - the **Calibration** item in the context menu of the relevant model in the study tree
+
+    .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+        :align: center
+
+  - the **Calibration** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
+        :align: center
+
+  - the **New Analysis** context menu of the **Calibration** section
+
+.. _calibrationwizard:
+
+6-1 Definition
+''''''''''''''
+
+When this analysis is required, the following window appears, in order to set up:
+  - The observations of interest
+  - The method: `Linear least squares <http://openturns.github.io/openturns/latest/theory/data_analysis/code_calibration.html#linear-least-squares>`_ (default),
+    `Non linear least squares <http://openturns.github.io/openturns/latest/theory/data_analysis/code_calibration.html#non-linear-least-squares>`_,
+    `Linear Gaussian <http://openturns.github.io/openturns/latest/theory/data_analysis/gaussian_calibration.html#linear-gaussian-calibration-bayesian-blue>`_,
+    `Non linear Gaussian <http://openturns.github.io/openturns/latest/theory/data_analysis/gaussian_calibration.html#non-linear-gaussian-calibration-3dvar>`_
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardFirstPage.png
+    :align: center
+
+In the table of the next window:
+  - *First column*: Select the inputs which will be calibrated by checking off the corresponding line
+    (default: all inputs are calibrated)
+    At least one input must be calibrated.
+  - *Second column*: description of the variables (defined in the model)
+  - *Third column*: Define the reference point of the calibration
+    (default: value in the physical model definition)
+
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardSecondPage.png
+    :align: center
+
+
+The values of the table are expected to be floating points or integer.
+
+When a rule is not respected:
+  - an error message appears when clicking on the **Continue** button
+  - it is impossible to go to the next page
+
+6-1-1 Gaussian methods
+~~~~~~~~~~~~~~~~~~~~~~
+
+In the next window set up the prior distribution covariance matrix.
+The mean values are defined in the table of the previous table.
+
+In the next window define the covariance matrix of the output observations error.
+The mean is zero.
+
+
+6-1-2 Linear methods
+~~~~~~~~~~~~~~~~~~~~
+
+In the last window set up the confidence interval length of the posterior distribution.
+
+
+6-1-3 Non linear methods
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the last window set up:
+  - the confidence interval length of the posterior distribution
+  - computation of the confidence interval by Bootstrap resampling (default: checked)
+      - the sample size (default: 100, positive integer expected)
+  - the optimization stopping criteria:
+      - the maximum number of function evaluations (default: 100, positive integer expected)
+      - the errors: absolute, relative, residual and constraint errors (default: 1e-5, positive float expected)
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardThirdPage.png
+    :align: center
+
+
+6-2 Launch
+''''''''''
+
+When the « Calibration » window is validated, a new element appears in the study tree, below
+the observations item.
+
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis
+
+This item is associated with a window showing the parameter list, a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWindow.png
+    :align: center
+
+Click on the **Start** button to launch the analysis.
+
+
+.. _calibrationresult:
+
+6-3 Results
+'''''''''''
+
+When the analysis is finished, a result window appears.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationResultWindow.png
+    :align: center
+
+It shows numerous tabs, some of which are interactively linked (Table, vs Observations, vs Inputs tabs):
+when the user selects points on one of these representations, the same points are automatically selected in the other tabs.
+
+The results window gathers the following tabs:
+
+- The **θ** tab includes:
+    - The optimal point and its confidence interval (**Optimal** tab)
+    - The prior and posterior PDF of the calibrated inputs (**PDF** tab)
+
+- The **Prediction** tab includes, for a selected output (left column):
+    - The **Table** tab contains the observations, the prior and posterior values and the prior and posterior residuals values.
+      The table can be exported (**Export** button).
+
+      - Table interactivity:
+          - Left-click (optional: + Ctrl) on lines to select them
+          - Left-click on column header to sort values in ascending or descending order
+          - Left-click on a column header and drag it in another place to change columns order
+
+    - The **vs Observations** tab displays the prior and posterior predictions vs the output observations.
+      The calibration performed well when the predictions after calibration (i.e. the green points) are close to the
+      the diagonal of the graph (i.e. the blue points).
+
+      - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+        select the data to plot
+      - Graph interactivity:
+          - Right-click to select points
+          - Left-click to translate the graph
+          - Mouse wheel up/down to zoom in/zoom out
+
+    - The **vs Inputs** tab displays the prior and posterior predictions vs the input observations.
+      The calibration performed well when the predictions after calibration (i.e. the green points) are close to the
+      observations (i.e. the blue points).
+
+      - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+        select the data to plot and the variables to plot on X-axis (default: all predictions versus first observed input)
+      - Graph interactivity:
+          - Right-click to select points
+          - Left-click to translate the graph
+          - Mouse wheel up/down to zoom in/zoom out
+
+    - The **Residuals** tab display the distribution of the residuals (blue curve) and
+      the Probability Distribution Function values of the difference
+      between the output observations and the prior (red curve) and posterior (green curve) output values.
+      The calibration performed well when the distribution of the residuals is centered on zero and symmetric.
+
+      - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
+        select the data to plot
+      - Graph interactivity:
+          - Left-click to translate the graph
+          - Mouse wheel up/down to zoom in/zoom out
+
+
+  .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationResultWindowConvergence.png
+      :align: center
+
+- The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
+
+- The **Model** tab shows the model content used to perform the analysis.

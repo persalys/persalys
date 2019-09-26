@@ -91,6 +91,30 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   boxHeight = std::max(boxHeight, screeningButton->height());
 #endif
 
+  DiagramPushButton * observationButton = new DiagramPushButton;
+  observationButton->setText(tr("Observations"));
+  observationButton->setWhatsThis(tr("Define observations of variables"));
+  observationButton->setErrorMessage(tr("Define at least one input variable and one output variable in the model"));
+  QGraphicsProxyWidget * observationProxy = new QGraphicsProxyWidget;
+  observationProxy->setWidget(observationButton);
+  scene->addItem(observationProxy);
+  connect(observationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SIGNAL(observationsRequested()));
+  connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool)), observationButton, SLOT(setEnabled(bool)));
+  boxWidth = std::max(boxWidth, observationButton->width());
+  boxHeight = std::max(boxHeight, observationButton->height());
+
+  DiagramPushButton * calibrationButton = new DiagramPushButton;
+  calibrationButton->setText(tr("Calibration"));
+  calibrationButton->setWhatsThis(tr("Calibrate the model"));
+  calibrationButton->setErrorMessage(tr("Define observations of the model"));
+  QGraphicsProxyWidget * calibrationProxy = new QGraphicsProxyWidget;
+  calibrationProxy->setWidget(calibrationButton);
+  scene->addItem(calibrationProxy);
+  connect(calibrationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestCalibrationCreation()));
+  connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool)), calibrationButton, SLOT(setEnabled(bool)));
+  boxWidth = std::max(boxWidth, calibrationButton->width());
+  boxHeight = std::max(boxHeight, calibrationButton->height());
+
   DiagramPushButton * doeCreationButton = new DiagramPushButton;
   doeCreationButton->setText(tr("Design of\nexperiments\ncreation"));
   doeCreationButton->setWhatsThis(tr("Create manually a design of experiments or import one"));
@@ -205,6 +229,8 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   modelEvaluationButton->resize(boxWidth, boxHeight);
   if (screeningButton)
     screeningButton->resize(boxWidth, boxHeight);
+  observationButton->resize(boxWidth, boxHeight);
+  calibrationButton->resize(boxWidth, boxHeight);
   optimizationCreationButton->resize(boxWidth, boxHeight);
   doeCreationButton->resize(boxWidth, boxHeight);
   probaModelButton->resize(boxWidth, boxHeight);
@@ -240,6 +266,10 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   optimizationCreationProxy->setPos(column1pos, ++lineCounter * linePos);
 
   // ++line
+  observationProxy->setPos(column1pos, ++lineCounter * linePos);
+  calibrationProxy->setPos(column2pos, lineCounter * linePos);
+
+  // ++line
   doeCreationProxy->setPos(column1pos, ++lineCounter * linePos);
   doeEvaluationProxy->setPos(column2pos, lineCounter * linePos);
   metamodelProxy->setPos(column3pos, lineCounter * linePos);
@@ -262,6 +292,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   const QPointF deltaRight(boxWidth + buttonMargin, boxHeight * 0.5);
 
   const QPointF modelDefinition_rightPoint(deltaRight);
+  const QPointF observation_rightPoint = observationProxy->pos() + deltaRight;
   const QPointF doeCreation_rightPoint = doeCreationProxy->pos() + deltaRight;
   const QPointF doeEval_rightPoint = doeEvaluationProxy->pos() + deltaRight;
   const QPointF probaModel_rightPoint = probaModelProxy->pos() + deltaRight;
@@ -271,6 +302,8 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   const QPointF deltaLeft(-buttonMargin, boxHeight * 0.5);
   const QPointF modelEval_leftPoint = modelEvaluationProxy->pos() + deltaLeft;
   const QPointF optimizationCreation_leftPoint = optimizationCreationProxy->pos() + deltaLeft;
+  const QPointF observation_leftPoint = observationProxy->pos() + deltaLeft;
+  const QPointF calibration_leftPoint = calibrationProxy->pos() + deltaLeft;
   const QPointF doeCreation_leftPoint = doeCreationProxy->pos() + deltaLeft;
   const QPointF probaModel_leftPoint = probaModelProxy->pos() + deltaLeft;
   const QPointF doeEval_leftPoint = doeEvaluationProxy->pos() + deltaLeft;
@@ -308,6 +341,16 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   Arrow * modelDef_optimizationCreation = new Arrow(modelDefinition_rightPoint, optimizationCreation_leftPoint);
   scene->addItem(modelDef_optimizationCreation);
   connect(optimizationCreationButton, SIGNAL(enabledChanged(bool)), modelDef_optimizationCreation, SLOT(setValidity(bool)));
+
+  // arrow model definition -> model observation
+  Arrow * modelDef_observation = new Arrow(modelDefinition_rightPoint, observation_leftPoint);
+  scene->addItem(modelDef_observation);
+  connect(observationButton, SIGNAL(enabledChanged(bool)), modelDef_observation, SLOT(setValidity(bool)));
+
+  // arrow observation -> model calibration
+  Arrow * observation_calibration = new Arrow(observation_rightPoint, calibration_leftPoint);
+  scene->addItem(observation_calibration);
+  connect(calibrationButton, SIGNAL(enabledChanged(bool)), observation_calibration, SLOT(setValidity(bool)));
 
   // arrow model definition -> proba model definition
   Arrow * modelDef_probaModel = new Arrow(modelDefinition_rightPoint,

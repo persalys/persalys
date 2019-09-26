@@ -45,6 +45,7 @@ class PERSALYS_API MarginalsWidget : public QWidget
 
 public :
   MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent = 0);
+  MarginalsWidget(const PhysicalModel& model, QWidget * parent = 0);
 
 protected:
   void buildInterface();
@@ -69,6 +70,7 @@ signals:
   void updateDependenciesRequested();
 
 private:
+  bool failSoftMode_;
   Study study_;
   PhysicalModel physicalModel_;
   QTableView * inputTableView_;

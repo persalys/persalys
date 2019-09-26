@@ -20,9 +20,6 @@
  */
 #include "persalys/DesignOfExperimentItem.hxx"
 
-#include "persalys/FunctionalChaosAnalysis.hxx"
-#include "persalys/StudyItem.hxx"
-
 using namespace OT;
 
 namespace PERSALYS
