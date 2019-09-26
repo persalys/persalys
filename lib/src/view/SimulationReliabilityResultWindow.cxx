@@ -163,42 +163,34 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   CopyableTableView * resultsTable = new CopyableTableView;
   resultsTable->horizontalHeader()->hide();
   resultsTable->verticalHeader()->hide();
-  CustomStandardItemModel * resultsTableModel = new CustomStandardItemModel(4, 4, resultsTable);
+  CustomStandardItemModel * resultsTableModel = new CustomStandardItemModel(3, 3, resultsTable);
   resultsTable->setModel(resultsTableModel);
 
   // horizontal header
   resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Estimate"));
-  resultsTable->setSpan(0, 0, 2, 1);
-
   resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Value"));
-  resultsTable->setSpan(0, 1, 2, 1);
+  const Scalar defaultLevel = ResourceMap::GetAsScalar("ProbabilitySimulationResult-DefaultConfidenceLevel") * 100;
+  resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Confidence interval\nat") + " " + QString::number(defaultLevel) + "%");
 
   // Failure probability
   const Scalar pfEstimate = result_.getSimulationResult().getProbabilityEstimate();
 
-  resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Failure probability"));
-  resultsTableModel->setNotEditableItem(2, 1, pfEstimate);
+  resultsTableModel->setNotEditableHeaderItem(1, 0, tr("Failure probability"));
+  resultsTableModel->setNotEditableItem(1, 1, pfEstimate);
 
-  // - lower bound
-  resultsTableModel->setNotEditableHeaderItem(1, 2, tr("Lower bound"));
-  const double pfCILowerBound = std::max(0.0, pfEstimate - 0.5 * result_.getSimulationResult().getConfidenceLength());
-  resultsTableModel->setNotEditableItem(2, 2, pfCILowerBound);
+  // - confidence interval
+  const Scalar confidenceLength = result_.getSimulationResult().getConfidenceLength();
+  const double pfCILowerBound = std::max(0.0, pfEstimate - 0.5 * confidenceLength);
+  const double pfCIUpperBound = std::min(1.0, pfEstimate + 0.5 * confidenceLength);
 
-  // - upper bound
-  resultsTableModel->setNotEditableHeaderItem(1, 3, tr("Upper bound"));
-  const double pfCIUpperBound = std::min(1.0, pfEstimate + 0.5 * result_.getSimulationResult().getConfidenceLength());
-  resultsTableModel->setNotEditableItem(2, 3, pfCIUpperBound);
+  resultsTableModel->setNotEditableItem(1, 2, Interval(pfCILowerBound, pfCIUpperBound).__str__().c_str());
 
   // Coefficient of variation
-  resultsTableModel->setNotEditableHeaderItem(3, 0, tr("Coefficient of variation"));
-  resultsTableModel->setNotEditableItem(3, 1, result_.getSimulationResult().getCoefficientOfVariation());
+  resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Coefficient of variation"));
+  resultsTableModel->setNotEditableItem(2, 1, result_.getSimulationResult().getCoefficientOfVariation());
 
   // resize to contents
   resultsTable->resizeToContents();
-
-  // Confidence interval: do it after resizeToContents
-  resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Confidence interval at 95%"));
-  resultsTable->setSpan(0, 2, 1, 2);
 
   groupBoxLayout->addWidget(resultsTable);
 
