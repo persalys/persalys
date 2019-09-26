@@ -52,4 +52,5 @@ Environment variables:
 
 - PERSALYS_HTML_DOCUMENTATION_PATH: override path to the html documentation
 - PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets) support for troubleshooting
+- PERSALYS_CALIBRATION_ENGINE: if defined to "adao" and adao support is enabled, this switches to adao for calibration computations
 
