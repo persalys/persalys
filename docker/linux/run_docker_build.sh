@@ -10,11 +10,11 @@ cd /tmp
 
 mkdir -p build && cd build
 cmake -DUSE_COTIRE=ON \
--DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
--DCMAKE_CXX_FLAGS="-Wall -Werror -D_GLIBCXX_ASSERTIONS" \
--DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
--DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr \
-../persalys
+  -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
+  -DCMAKE_CXX_FLAGS="-Wall -Werror -D_GLIBCXX_ASSERTIONS" \
+  -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
+  -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr \
+  /io
 make install
 make tests
 xvfb-run ctest --output-on-failure --timeout 100 -j8
@@ -40,7 +40,7 @@ export OPENTURNS_CONFIG_PATH=${HERE}/etc/openturns
 
 export OPENMODELICAHOME=${HERE}/usr
 
-${HERE}/usr/bin/persalys
+${HERE}/usr/bin/persalys "$@"
 EOF
 chmod a+x persalys.AppDir/AppRun
 
@@ -53,8 +53,9 @@ Exec=persalys
 MimeType=application/x-persalys;
 Icon=persalys
 Terminal=false
+Categories=Science;
 EOF
-cp -v /tmp/persalys/images/OT_icon32x32.png persalys.AppDir/persalys.png
+cp -v /io/images/OT_icon32x32.png persalys.AppDir/persalys.png
 
 # system libs
 for libname in lapack blas xml2 png12 gfortran ffi xkbcommon
@@ -101,11 +102,11 @@ cp -v /usr/local/lib/libsundials* persalys.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys
 
-appimagetool -v persalys.AppDir
+appimagetool -v persalys.AppDir persalys-`cat /io/VERSION`-`uname -p`.AppImage
 
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"
 then
-  sudo cp persalys*.AppImage persalys-doc.zip /tmp/persalys
-  sudo chown ${uid}:${gid} /tmp/persalys/persalys*.AppImage /tmp/persalys/persalys-doc.zip
+  sudo cp persalys*.AppImage persalys-doc.zip /io
+  sudo chown ${uid}:${gid} /io/persalys*.AppImage /io/persalys-doc.zip
 fi

@@ -86,7 +86,15 @@ macro (ot_qt_check_test TESTNAME)
   add_executable (${TESTNAME_TGT} EXCLUDE_FROM_ALL ${TESTNAME_SRCS})
   add_dependencies (tests ${TESTNAME_TGT} )
   target_link_libraries (${TESTNAME_TGT} persalysview)
-  add_test (NAME cppcheck_${TESTNAME} COMMAND ${TESTNAME_TGT} ${ARGV1} ${ARGV2})
+  set (TEST_ARGUMENTS "${ARGV}")
+  list (REMOVE_AT TEST_ARGUMENTS 0)
+
+  # for MinGW from Linux QTest does not print anything when stdout is redirected, see QPlainTestLogger::outputMessage
+  if (MINGW AND CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+    list (APPEND TEST_ARGUMENTS "-o;/dev/stderr,txt")
+  endif ()
+
+  add_test (NAME cppcheck_${TESTNAME} COMMAND ${TESTNAME_TGT} ${TEST_ARGUMENTS})
   set_tests_properties (cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT};QT_QPA_PLATFORM_PLUGIN_PATH=.")
 endmacro ()
 
@@ -103,7 +111,6 @@ ot_check_test ( Cogeneration_std )
 
 if (BUILD_GUI)
   include_directories (${CMAKE_CURRENT_BINARY_DIR}) # for mocs
-  execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_analyses.py ${CMAKE_CURRENT_BINARY_DIR})
   ot_qt_check_test (WelcomeWindow_std)
   ot_qt_check_test (OptimizationWizard_std)
   ot_qt_check_test (CentralTendencyWizard_std)

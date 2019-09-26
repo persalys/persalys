@@ -19,11 +19,11 @@ RUN git clone https://github.com/beltoforion/muparser.git && cd muparser && git 
 
 # swig
 RUN yum -y install pcre-devel
-RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.0.tar.gz | tar xz && cd swig-4.0.0 \
+RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz | tar xz && cd swig-4.0.1 \
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.14/cmake-3.14.3.tar.gz | tar xz && cd cmake-3.14.3 \
+RUN curl -fSsL https://cmake.org/files/v3.15/cmake-3.15.2.tar.gz | tar xz && cd cmake-3.15.2 \
  && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # cminpack
@@ -50,7 +50,7 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/1.14.0.tar.g
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1
 
 # appimagetool
-RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/11/appimagetool-x86_64.AppImage \
+RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage \
  && chmod a+rx appimagetool-x86_64.AppImage \
  && ./appimagetool-x86_64.AppImage --appimage-extract \
  && chmod -R a+rx squashfs-root \
@@ -90,9 +90,9 @@ RUN fc-cache -fsv
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
-RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2r.tar.gz | tar xz && cd openssl-1.0.2r \
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2s.tar.gz | tar xz && cd openssl-1.0.2s \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
-RUN curl -fSsL https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz | tar xz && cd Python-3.7.2 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz | tar xz && cd Python-3.7.4 \
  && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
@@ -116,7 +116,7 @@ RUN pip install lxml cython \
  && cd .. && python3 -c "import assimulo; import assimulo.solvers"
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon/PyFMI/archive/PyFMI-2.5.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.5.3 \
+RUN curl -fSsL https://github.com/modelon/PyFMI/archive/PyFMI-2.5.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.5.4 \
  && curl -fSsL https://github.com/modelon/PyFMI/pull/13.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
@@ -125,7 +125,7 @@ RUN yum -y install pandoc dvisvgm
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
-RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2 | tar xj && cd boost_1_70_0 \
+RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.bz2 | tar xj && cd boost_1_71_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
 
 # x11
@@ -136,11 +136,11 @@ RUN yum -y install xorg-x11-util-macros bison
 RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz | tar xz && cd libxkbcommon-xkbcommon-0.8.4 && sed -i "/AX_GCC_BUILTIN/d" configure.ac && ./autogen.sh && ./configure --prefix=/usr --libdir=/usr/lib64 && make && make install && pkg-config --exists xkbcommon
 
 # qt
-RUN curl -fSsL https://download.qt.io/archive/qt/5.13/5.13.0/single/qt-everywhere-src-5.13.0.tar.xz | tar xJ && cd qt-everywhere-src-5.13.0 \
+RUN curl -fSsL https://download.qt.io/archive/qt/5.13/5.13.1/single/qt-everywhere-src-5.13.1.tar.xz | tar xJ && cd qt-everywhere-src-5.13.1 \
  && ./configure -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.13/5.13.0/submodules/qtx11extras-everywhere-src-5.13.0.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.13.0 && qmake src/x11extras && make && make install
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.13/5.13.1/submodules/qtx11extras-everywhere-src-5.13.1.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.13.1 && qmake src/x11extras && make && make install
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj && cd qwt-6.1.4 \
@@ -148,7 +148,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # paraview
-RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.0.tar.gz | tar xz && cd ParaView-v5.6.0 \
+RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.2.tar.xz | tar xJ && cd ParaView-v5.6.2 \
   && mkdir build && cd build && cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
