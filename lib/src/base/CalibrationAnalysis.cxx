@@ -256,7 +256,10 @@ void CalibrationAnalysis::runCalibrationAlgorithm(const Function &paramFunction)
   const CovarianceMatrix priorCovariance(priorDistribution_.getCovariance());
 
 #ifdef PERSALYS_HAVE_ADAO_CPP_LAYER
-  String calibrationEngine(std::getenv("PERSALYS_CALIBRATION_ENGINE"));
+  char *calibrationEngineSystem(std::getenv("PERSALYS_CALIBRATION_ENGINE"));
+  String calibrationEngine;
+  if(calibrationEngineSystem)
+    calibrationEngine = calibrationEngineSystem;
   if (calibrationEngine == "adao")
   {
     AdaoCalibration algo(getMethodName(),

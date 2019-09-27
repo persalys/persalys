@@ -22,33 +22,47 @@
 #define PERSALYS_ADAOCALIBRATION_HXX
 
 #include <openturns/CalibrationAlgorithmImplementation.hxx>
+#include <openturns/Normal.hxx>
+
+class AdaoExchangeLayer;
+
+namespace AdaoModel
+{
+  class MainModel;
+}
 
 namespace PERSALYS
 {
+  
+  class AdaoCalibration : public OT::CalibrationAlgorithmImplementation
+  {
+    CLASSNAME
+    public:
+    /** Constructor with parameters */
+    AdaoCalibration(const OT::String & methodName,
+                    const OT::Function & model,
+                    const OT::Sample & inputObservations,
+                    const OT::Sample & outputObservations,
+                    const OT::Point & candidate,
+                    const OT::CovarianceMatrix & parameterCovariance,
+                    const OT::CovarianceMatrix & errorCovariance);
 
-class AdaoCalibration : public OT::CalibrationAlgorithmImplementation
-{
-  CLASSNAME
-public:
-  /** Constructor with parameters */
-  AdaoCalibration(const OT::String & methodName,
-                  const OT::Function & model,
-                  const OT::Sample & inputObservations,
-                  const OT::Sample & outputObservations,
-                  const OT::Point & candidate,
-                  const OT::CovarianceMatrix & parameterCovariance,
-                  const OT::CovarianceMatrix & errorCovariance);
-
-  /** Run algorithm */
-  virtual void run();
-
-private:
-  OT::String methodName_;
-  OT::Function model_;
-
-  OT::Sample inputObservations_;
-
-  OT::CovarianceMatrix errorCovariance_;
-};
+    /** Run algorithm */
+    void run() override;
+  private:
+    OT::Point postProcessResult(const OT::Point &resu);
+    void feedADAOModel(const OT::Function &paramFunction, AdaoExchangeLayer& adao, AdaoModel::MainModel& mm);
+    OT::Normal getObservationsError();
+    double getObservationErrorScalar();
+  private:
+    OT::String methodName_;
+    OT::Point candidate_;
+    OT::Function model_;
+    OT::Sample inputObservations_;
+    OT::Sample outputObservations_;
+    OT::CovarianceMatrix errorCovariance_;
+  };
+  
 }
+
 #endif

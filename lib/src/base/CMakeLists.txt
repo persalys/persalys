@@ -214,6 +214,10 @@ if (SalomeYACS_FOUND)
   target_link_libraries (persalysbase ydefx)
 endif ()
 
+if (AdaoCppLayer_FOUND)
+  target_link_libraries ( persalysbase ${AdaoCppLayer_LIBRARIES} )
+endif ()
+
 target_link_libraries (persalysbase ${PYTHON_LIBRARIES})
 if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
   target_compile_definitions (persalysbase PRIVATE -DMS_WIN64)

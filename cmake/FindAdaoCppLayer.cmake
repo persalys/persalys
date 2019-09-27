@@ -41,12 +41,7 @@
 find_path (AdaoCppLayer_INCLUDE_DIR
   NAMES AdaoExchangeLayer.hxx
 )
-
 set (AdaoCppLayer_INCLUDE_DIRS ${AdaoCppLayer_INCLUDE_DIR})
-
-# find_library (AdaoCppLayer_LIBRARY
-#   NAMES AdaoCppLayer
-# )
 
 # set (AdaoCppLayer_LIBRARIES ${AdaoCppLayer_LIBRARY})
 
@@ -59,6 +54,11 @@ elseif (AdaoCppLayer_LIBRARY)
   string (REGEX REPLACE "(.*)/lib[/|32|64].*" "\\1" AdaoCppLayer_ROOT_DIR ${AdaoCppLayer_LIBRARY})
 endif ()
 
+if(AdaoCppLayer_ROOT_DIR)
+  list(APPEND CMAKE_PREFIX_PATH "${AdaoCppLayer_ROOT_DIR}")
+endif(AdaoCppLayer_ROOT_DIR)
+
+find_library (AdaoCppLayer_LIBRARIES NAMES adaoexchange )
 
 # handle the QUIETLY and REQUIRED arguments
 include (FindPackageHandleStandardArgs)
