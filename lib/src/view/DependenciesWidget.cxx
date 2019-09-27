@@ -109,8 +109,11 @@ void DependenciesWidget::buildInterface()
 
   QSplitter * hSplitter = new QSplitter;
   // left side
+  QWidget * fakeWidget = new QWidget;
+  QHBoxLayout * fakeLayout = new QHBoxLayout(fakeWidget);
   // table view for groups of variables
   tableView_ = new QTableView;
+  fakeLayout->addWidget(tableView_);
   tableView_->setSelectionMode(QAbstractItemView::SingleSelection);
   tableView_->setSelectionBehavior(QAbstractItemView::SelectRows);
   tableView_->horizontalHeader()->setStretchLastSection(true);
@@ -134,11 +137,11 @@ void DependenciesWidget::buildInterface()
     tableView_->setItemDelegateForColumn(1, delegate);
   }
 
-  hSplitter->addWidget(tableView_);
+  hSplitter->addWidget(fakeWidget);
 
   // right side
   rightSideOfSplitterStackedWidget_ = new ResizableStackedWidget;
-
+rightSideOfSplitterStackedWidget_->setContentsMargins(0, 0, 0, 0);
   // 1- If physical model has not dependent variables: use a dummy widget
   QWidget * dummyWidget = new QWidget;
   QVBoxLayout * dummyWidgetLayout = new QVBoxLayout(dummyWidget);
