@@ -39,6 +39,7 @@ PhysicalModelDiagramItem::PhysicalModelDiagramItem(const PhysicalModel & physica
   , duplicateAction_(0)
   , removeAction_(0)
   , limitStateCounter_(0)
+  , observationsCounter_(0)
   , doeCounter_(Indices(2))
 {
   setData(QString::fromUtf8(physicalModel.getName().c_str()), Qt::DisplayRole);
@@ -102,7 +103,7 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-    emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
+    emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
   }
   else if (message == "outputNumberChanged")
   {
@@ -118,14 +119,14 @@ void PhysicalModelDiagramItem::update(Observable* source, const String & message
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-    emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
+    emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
   }
   else if (message == "inputDistributionChanged")
   {
     appendProbabilisticModelItem(); // if modification from Python console
     emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
     emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-    emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
+    emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
   }
   else if (message == "copulaChanged")
   {
@@ -278,6 +279,7 @@ void PhysicalModelDiagramItem::fill()
   emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
   emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+  emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
 }
 
 

@@ -94,12 +94,12 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   DiagramPushButton * observationButton = new DiagramPushButton;
   observationButton->setText(tr("Observations"));
   observationButton->setWhatsThis(tr("Define observations of variables"));
-  observationButton->setErrorMessage(tr("Define at least one input variable and one output variable in the model"));
+  observationButton->setErrorMessage(tr("Define at least two input variables and an output variable in the model"));
   QGraphicsProxyWidget * observationProxy = new QGraphicsProxyWidget;
   observationProxy->setWidget(observationButton);
   scene->addItem(observationProxy);
   connect(observationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SIGNAL(observationsRequested()));
-  connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool)), observationButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(twoInputsValidityChanged(bool)), observationButton, SLOT(setEnabled(bool)));
   boxWidth = std::max(boxWidth, observationButton->width());
   boxHeight = std::max(boxHeight, observationButton->height());
 
@@ -111,7 +111,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   calibrationProxy->setWidget(calibrationButton);
   scene->addItem(calibrationProxy);
   connect(calibrationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestCalibrationCreation()));
-  connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool)), calibrationButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(observationsNumberValidityChanged(bool)), calibrationButton, SLOT(setEnabled(bool)));
   boxWidth = std::max(boxWidth, calibrationButton->width());
   boxHeight = std::max(boxHeight, calibrationButton->height());
 
@@ -408,6 +408,8 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   if (screeningButton)
     connect(screeningButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(optimizationCreationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
+  connect(observationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
+  connect(calibrationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeCreationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(probaModelButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
   connect(doeEvaluationButton, SIGNAL(messageChanged(QString)), textArea, SLOT(setHtml(QString)));
