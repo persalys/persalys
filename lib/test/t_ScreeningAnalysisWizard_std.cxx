@@ -7,6 +7,8 @@
 
 #include <QtTest/QtTest>
 
+using namespace OT;
+
 namespace PERSALYS
 {
 class TestScreeningAnalysisWizard : public QObject
@@ -17,9 +19,9 @@ public:
   TestScreeningAnalysisWizard()
   {
     // create the model
-    Input Q("Q", 10200, OT::Normal(10200, 100), "Primary energy");
-    Input E("E", 3000, OT::Normal(3000, 15), "Produced electric energy");
-    Input C("C", 4000, OT::Normal(4000, 60), "Valued thermal energy");
+    Input Q("Q", 10200, Normal(10200, 100), "Primary energy");
+    Input E("E", 3000, Normal(3000, 15), "Produced electric energy");
+    Input C("C", 4000, Normal(4000, 60), "Valued thermal energy");
     Output Ep("Ep", "Primary energy savings");
     InputCollection inputCollection(3);
     inputCollection[0] = Q;
@@ -27,7 +29,7 @@ public:
     inputCollection[2] = C;
     OutputCollection outputCollection(1, Ep);
 
-    OT::Description formula(1, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
+    Description formula(1, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
     model = SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);
   }
 
@@ -39,7 +41,6 @@ private slots:
   {
     // create the analysis
     MorrisAnalysis analysis("analysis", model);
-    OT::Interval initialBounds(analysis.getBounds());
 
     // create the wizard
     ScreeningAnalysisWizard wizard(analysis);
@@ -74,7 +75,7 @@ private slots:
   {
     // create the analysis
     MorrisAnalysis analysis("analysis", model);
-    OT::Interval initialBounds(analysis.getBounds());
+    Interval initBounds(analysis.getBounds());
 
     // create the wizard
     ScreeningAnalysisWizard wizard(analysis);
@@ -85,19 +86,27 @@ private slots:
     // - second page
     wizard.next();
     TemporaryLabel * errorMessageLabel = wizard.morrisPage_->findChild<TemporaryLabel*>();
-    QTableView * tableView = wizard.morrisPage_->findChild<QTableView*>();
+    MorrisTableModel * tableModel = wizard.morrisPage_->findChild<MorrisTableModel*>();
 
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
 
-    tableView->model()->setData(tableView->model()->index(0, 2), 10500, Qt::EditRole);
+    QVERIFY2(tableModel->data(tableModel->index(0, 0)).toString() == "Q", "wrong name");
+    QVERIFY2(tableModel->data(tableModel->index(0, 1)).toString() == "Primary energy", "wrong description");
+    QVERIFY2(tableModel->data(tableModel->index(0, 2)).toString() == QString::number(initBounds.getLowerBound()[0], 'g', 12), "wrong lower bound value");
+    QVERIFY2(tableModel->data(tableModel->index(0, 3)).toString() == QString::number(initBounds.getUpperBound()[0], 'g', 12), "wrong upper bound value");
+
+    tableModel->setData(tableModel->index(0, 2), 10500, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
 
-    tableView->model()->setData(tableView->model()->index(0, 2), initialBounds.getLowerBound()[0], Qt::EditRole);
+    tableModel->setData(tableModel->index(0, 2), initBounds.getLowerBound()[0], Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+
+    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    QVERIFY2(analysisEquality, "The two MorrisAnalysis must be equal");
   }
 
 
@@ -105,7 +114,6 @@ private slots:
   {
     // create the analysis
     MorrisAnalysis analysis("analysis", model);
-    OT::Interval initialBounds(analysis.getBounds());
 
     // create the wizard
     ScreeningAnalysisWizard wizard(analysis);

@@ -51,6 +51,7 @@ InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidg
   , distParamTableModel_(0)
   , infoButton_(0)
   , analysisErrorMessageLabel_(0)
+  , pdf_cdfPlotSettingWidget_(0)
   , pdfPlot_(0)
   , cdfPlot_(0)
   , qqPlot_(0)
@@ -425,9 +426,10 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     return;
 
   // reset
-  pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 0 ? pdfPlot_->show() : pdfPlot_->hide();
+  if (pdf_cdfPlotSettingWidget_)
+    pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 0 ? pdfPlot_->show() : pdfPlot_->hide();
   pdfPlot_->clear();
-  if (cdfPlot_ && qqPlot_)
+  if (cdfPlot_ && qqPlot_ && pdf_cdfPlotSettingWidget_)
   {
     pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 1 ? cdfPlot_->show() : cdfPlot_->hide();
     cdfPlot_->clear();

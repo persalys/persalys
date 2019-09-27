@@ -19,10 +19,10 @@ outputs = [Ep]
 formulas = ['1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))']
 myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
 myStudy.add(myPhysicalModel)
-values = [10200,3000,4000]
-bounds = ot.Interval([10035.5,2975.33,3901.31], [10364.5,3024.67,4098.69])
-levels = [2,2,2]
-aDesign_0 = persalys.GridDesignOfExperiment('aDesign_0', myPhysicalModel, bounds, levels, values)
+values = [[10035.5, 10364.5],
+[2975.33, 3024.67],
+[3901.31, 4098.69]]
+aDesign_0 = persalys.GridDesignOfExperiment('aDesign_0', myPhysicalModel, values)
 aDesign_0.setBlockSize(1)
 interestVariables = ['Ep']
 aDesign_0.setInterestVariables(interestVariables)
@@ -49,10 +49,10 @@ mySRC = persalys.SRCAnalysis('mySRC', myPhysicalModel, 10000)
 mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
-values = [10200,3000,4000]
-bounds = ot.Interval([10035.5,2975.33,3901.31], [10364.5,3024.67,4098.69])
-levels = [10,10,10]
-aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', myPhysicalModel, bounds, levels, values)
+values = [[10035.5, 10072.1, 10108.6, 10145.2, 10181.7, 10218.3, 10254.8, 10291.4, 10327.9, 10364.5],
+[2975.33, 2980.81, 2986.29, 2991.78, 2997.26, 3002.74, 3008.22, 3013.71, 3019.19, 3024.67],
+[3901.31, 3923.24, 3945.17, 3967.1, 3989.03, 4010.97, 4032.9, 4054.83, 4076.76, 4098.69]]
+aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', myPhysicalModel, values)
 aDesign_1.setBlockSize(1)
 interestVariables = ['Ep']
 aDesign_1.setInterestVariables(interestVariables)

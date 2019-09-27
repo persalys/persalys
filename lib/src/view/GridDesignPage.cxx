@@ -20,12 +20,13 @@
  */
 #include "persalys/GridDesignPage.hxx"
 
-#include "persalys/ComboBoxDelegate.hxx"
+#include "persalys/EditButtonDelegate.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QScrollBar>
+#include <persalys/ComboBoxDelegate.hxx>
 
 using namespace OT;
 
@@ -45,7 +46,7 @@ GridDesignPage::GridDesignPage(QWidget* parent)
 
 void GridDesignPage::buildInterface()
 {
-  setTitle(tr("Deterministic design of experiments"));
+  setTitle(tr("Full factorial design"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
@@ -55,6 +56,7 @@ void GridDesignPage::buildInterface()
   QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
   sizeLayout->addWidget(sizeLabel, 0, 0);
   DOESizeLabel_ = new QLabel;
+  DOESizeLabel_->setObjectName("DOESizeLabel");
   sizeLayout->addWidget(DOESizeLabel_, 0, 1);
   sizeLayout->setColumnStretch(1, 1);
   sizeLayout->setSizeConstraint(QLayout::SetFixedSize);
@@ -98,18 +100,31 @@ void GridDesignPage::initialize(const Analysis& analysis)
   // fill table
   tableModel_ = new ExperimentTableModel(doe, this);
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
   tableView_->setModel(tableModel_);
 
-  const QPair<int, int> cellWithComboBox(0, 5);
-  ComboBoxDelegate * delegate = new ComboBoxDelegate(cellWithComboBox, tableView_);
-  tableView_->setItemDelegateForColumn(5, delegate);
-  tableView_->setItemDelegateForRow(0, delegate);
-  tableView_->openPersistentEditor(tableModel_->index(0, 5));
+  // column 5 : level/delta
+  ComboBoxDelegate * comboDelegate = new ComboBoxDelegate(tableView_);
+  tableView_->setItemDelegateForColumn(5, comboDelegate);
+  tableView_->setSpan(0, 5, 1, 3);
 
+  // column 7: edit button
+  EditButtonDelegate * delegate = new EditButtonDelegate(tableView_);
+  tableView_->setItemDelegateForColumn(7, delegate);
+
+  // column 2-3-4-6: double spinbox
   SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView_);
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  tableView_->setItemDelegateForColumn(2, spinBoxDelegate);
+  tableView_->setItemDelegateForColumn(3, spinBoxDelegate);
+  tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
+  tableView_->setItemDelegateForColumn(6, spinBoxDelegate);
+
   for (int i = 1; i < tableModel_->rowCount(); ++i)
-    tableView_->setItemDelegateForRow(i, spinBoxDelegate);
+  {
+    tableView_->openPersistentEditor(tableModel_->index(i, 5));
+    tableView_->openPersistentEditor(tableModel_->index(i, 7));
+  }
 
   // resize table
   tableView_->resizeWithOptimalWidth();
@@ -118,10 +133,8 @@ void GridDesignPage::initialize(const Analysis& analysis)
   {
     tableView_->resizeWithOptimalHeight();
   }
-
   // set DOE size label
-  DOESizeLabel_->setText(QString::number(doe.getOriginalInputSample().getSize()));
-  connect(tableModel_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
+  DOESizeLabel_->setText(QString::number(tableModel_->getDesignOfExperiment().getOriginalInputSample().getSize()));
 }
 
 
@@ -148,19 +161,10 @@ Analysis GridDesignPage::getAnalysis()
 
 bool GridDesignPage::validatePage()
 {
-  Interval bounds(tableModel_->getDesignOfExperiment().getBounds());
-  const Description inputNames(tableModel_->getDesignOfExperiment().getPhysicalModel().getInputNames());
-  for (UnsignedInteger i = 0; i < tableModel_->getDesignOfExperiment().getPhysicalModel().getInputDimension(); ++i)
+  if (tableModel_->getInterval().isNumericallyEmpty())
   {
-    if (tableModel_->getDesignOfExperiment().getVariableInputNames().contains(inputNames[i]))
-    {
-
-      if (bounds.getMarginal(i).isEmpty())
-      {
-        errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
-        return false;
-      }
-    }
+    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
+    return false;
   }
 
   return true;

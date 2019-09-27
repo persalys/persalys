@@ -35,28 +35,18 @@ public:
   /** Default constructor */
   GridDesignOfExperiment();
   /** Constructor with parameters */
-  GridDesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  GridDesignOfExperiment(const OT::String &name, const PhysicalModel &physicalModel);
   /** Constructor with parameters */
-  GridDesignOfExperiment(const OT::String & name,
-                         const PhysicalModel & physicalModel,
-                         const OT::Interval & bounds,
-                         const OT::Indices & nbValues,
-                         const OT::Point & values = OT::Point(0));
+  GridDesignOfExperiment(const OT::String &name,
+                         const PhysicalModel &physicalModel,
+                         const OT::Collection<OT::Point> &values);
 
   /** Virtual constructor */
   virtual GridDesignOfExperiment * clone() const;
 
-  Type getTypeDesignOfExperiment() const;
-
-  OT::Point getValues() const;
-  void setValues(const OT::Point & values);
-  OT::Interval getBounds() const;
-  void setBounds(const OT::Interval & bounds);
-  OT::Indices getLevels() const;
-  void setLevels(const OT::Indices & nbValues);
-  OT::Point getDeltas() const;
-  void setDeltas(const OT::Point & deltas);
-  OT::Description getVariableInputNames() const;
+  OT::Collection<OT::Point> getValues() const;
+  void setValues(const OT::Collection<OT::Point> &values);
+  static OT::Interval GetDefaultBounds(const PhysicalModel &model);
 
   void updateParameters();
 
@@ -78,12 +68,7 @@ protected:
 
 protected:
   OT::Description inputNames_;
-  OT::Point values_;
-private:
-  Type type_;
-  OT::Interval bounds_;
-  OT::Indices levels_;
-  OT::Point deltas_;
+  OT::PersistentCollection<OT::Point> values_;
 };
 }
 #endif

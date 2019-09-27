@@ -52,9 +52,14 @@ int main(int argc, char *argv[])
     myStudy.add(myPhysicalModel);
 
     // First parametric analysis
-    GridDesignOfExperiment aDesign("aDesign", myPhysicalModel);
-    Indices levels(3, 2);
-    aDesign.setLevels(levels);
+    Collection<Point> values(3, Point(2));
+    const Interval bounds(GridDesignOfExperiment::GetDefaultBounds(myPhysicalModel));
+    for (UnsignedInteger i = 0; i < 3; ++i)
+    {
+      values[i][0] = bounds.getLowerBound()[i];
+      values[i][1] = bounds.getUpperBound()[i];
+    }
+    GridDesignOfExperiment aDesign("aDesign", myPhysicalModel, values);
     myStudy.add(aDesign);
     aDesign.run();
     Sample resultSample1(aDesign.getResult().getDesignOfExperiment().getOutputSample());

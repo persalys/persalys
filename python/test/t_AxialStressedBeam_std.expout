@@ -24,10 +24,9 @@ def _exec(R, F):
 """
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myStudy.add(myPhysicalModel)
-values = [300,75000]
-bounds = ot.Interval([0,66775.7], [351.737,83224.3])
-levels = [2,2]
-design = persalys.GridDesignOfExperiment('design', myPhysicalModel, bounds, levels, values)
+values = [[0, 351.737],
+[66775.7, 83224.3]]
+design = persalys.GridDesignOfExperiment('design', myPhysicalModel, values)
 design.setBlockSize(1)
 interestVariables = ['G']
 design.setInterestVariables(interestVariables)

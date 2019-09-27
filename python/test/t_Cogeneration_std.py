@@ -22,18 +22,19 @@ model = persalys.SymbolicPhysicalModel(
 myStudy.add(model)
 
 outputSample = [[0.060036508072],
-                [0.0292238907867],
-                [0.0684295269203],
-                [0.0378920382755],
                 [0.0812679132055],
-                [0.0511512752497],
+                [0.0684295269203],
                 [0.0892876773294],
+                [0.0292238907867],
+                [0.0511512752497],
+                [0.0378920382755],
                 [0.0594339324804]]
 
 
 # Design of Experiment - Parametric analysis ##
-aDesign = persalys.GridDesignOfExperiment('aDesign_0', model)
-aDesign.setLevels([2, 2, 2])
+bounds = persalys.GridDesignOfExperiment.GetDefaultBounds(model)
+values = [[bounds.getLowerBound()[i], bounds.getUpperBound()[i]] for i in range(3)]
+aDesign = persalys.GridDesignOfExperiment('aDesign_0', model, values)
 myStudy.add(aDesign)
 aDesign.run()
 
@@ -110,12 +111,11 @@ openturns.testing.assert_almost_equal(
     0.318226, srcResult.getIndices()[0][2], 1e-5)
 
 # Chaos ##
-values = [10200, 3000, 4000]
-lowerBounds = [10035.5, 2975.33, 3901.31]
-upperBounds = [10364.5, 3024.67, 4098.69]
-levels = [10, 10, 10]
-design_1 = persalys.GridDesignOfExperiment(
-    'aDesign_1', model, ot.Interval(lowerBounds, upperBounds), levels, values)
+values = [[10035.5,10072.1,10108.6,10145.2,10181.7,10218.3,10254.8,10291.4,10327.9,10364.5],
+[2975.33,2980.81,2986.29,2991.78,2997.26,3002.74,3008.22,3013.71,3019.19,3024.67],
+[3901.31,3923.24,3945.17,3967.1,3989.03,4010.97,4032.9,4054.83,4076.76,4098.69]]
+
+design_1 = persalys.GridDesignOfExperiment('aDesign_1', model, values)
 design_1.run()
 myStudy.add(design_1)
 

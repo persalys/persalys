@@ -59,7 +59,7 @@ private slots:
     // - second page
     wizard.next();
     TemporaryLabel * errorMessageLabel = wizard.simulationPage_->findChild<TemporaryLabel*>();
-    QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
+    QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_SimuMethod, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
 
@@ -88,12 +88,12 @@ private slots:
     // - second page
     wizard.next();
     TemporaryLabel * errorMessageLabel = wizard.simulationPage_->findChild<TemporaryLabel*>();
-    QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
+    QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_SimuMethod, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
     // - third page
     wizard.next();
-    QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
+    QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_ApproxMethod, "Current page ID must be 2");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
@@ -120,7 +120,7 @@ private slots:
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
     // - second page
     wizard.next();
-    QVERIFY2(wizard.currentId() == 2, "Current page ID must be 2");
+    QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_ApproxMethod, "Current page ID must be 2");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
@@ -147,7 +147,7 @@ private slots:
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
     // - second page
     wizard.next();
-    QVERIFY2(wizard.currentId() == 2, "Current page ID must be 2");
+    QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_ApproxMethod, "Current page ID must be 2");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");

@@ -360,7 +360,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
     {
       eval.run();
 
-      Sample inputSample(1, eval.getValues());
+      Sample inputSample(eval.getOriginalInputSample());
       inputSample.setDescription(physicalModel_.getInputNames());
       FieldModelEvaluationResultWidget * widget = new FieldModelEvaluationResultWidget(inputSample, eval.getProcessSample(), this);
       addTab(widget, tr("Evaluation"));

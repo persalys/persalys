@@ -20,7 +20,6 @@ fake_var = persalys.Output('fake_var')
 fake_var.setIsSelected(False)
 y0 = persalys.Output('y0')
 fake_y0 = persalys.Output('fake_y0')
-fake_y0.setIsSelected(False)
 y1 = persalys.Output('y1')
 
 # model 1 ##
@@ -63,12 +62,8 @@ design_1.run()
 myStudy.add(design_1)
 
 # design 2 ##
-values = [0, 0, 1]
-lowerBounds = [0.5, 0.5, 0.9]
-upperBounds = [9.5, 9.5, 1.1]
-levels = [7, 7, 1]
-design_2 = persalys.GridDesignOfExperiment(
-    'design_2', model1, lowerBounds, upperBounds, levels, values)
+values = [[0.5+i*1.5 for i in range(7)], [0.5+i*1.5 for i in range(7)], [1]]
+design_2 = persalys.GridDesignOfExperiment('design_2', model1, values)
 myStudy.add(design_2)
 
 # design 3 ##
@@ -88,11 +83,7 @@ design_5 = persalys.GridDesignOfExperiment('design_5', model2)
 myStudy.add(design_5)
 
 # design 6 ##
-lowerBounds = [0., 0., -0.2]
-upperBounds = [0., 0., 1.]
-levels = [1, 1, 2]
-design_6 = persalys.GridDesignOfExperiment(
-    'design_6', model2, lowerBounds, upperBounds, levels)
+design_6 = persalys.GridDesignOfExperiment('design_6', model2, [[0.2], [1.2], [-0.2, 1.]])
 myStudy.add(design_6)
 
 # model 4 ##

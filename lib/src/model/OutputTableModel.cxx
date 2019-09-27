@@ -128,6 +128,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
     emit headerDataChanged(Qt::Horizontal, 0, 0);
+    emit errorMessageChanged("");
 
     return true;
   }

@@ -658,106 +658,6 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   outTabWidget->addTab(trajStackedWidget, nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
   connect(outListWidget_, SIGNAL(currentRowChanged(int)), trajStackedWidget, SLOT(setCurrentIndex(int)));
 
-  ResizableStackedWidget * tableStackedWidget = new ResizableStackedWidget;
-  outTabWidget->addTab(tableStackedWidget, tr("Table"));
-  connect(outListWidget_, SIGNAL(currentRowChanged(int)), tableStackedWidget, SLOT(setCurrentIndex(int)));
-
-  ResizableStackedWidget * bagChartStackedWidget = 0;
-  ResizableStackedWidget * functionalBagChartStackedWidget = 0;
-  if (nbInputPt > 1)
-  {
-    bagChartStackedWidget = new ResizableStackedWidget;
-    outTabWidget->addTab(bagChartStackedWidget, tr("Bag chart"));
-    connect(outListWidget_, SIGNAL(currentRowChanged(int)), bagChartStackedWidget, SLOT(setCurrentIndex(int)));
-
-    functionalBagChartStackedWidget = new ResizableStackedWidget;
-    outTabWidget->addTab(functionalBagChartStackedWidget, tr("Functional bag chart"));
-    connect(outListWidget_, SIGNAL(currentRowChanged(int)), functionalBagChartStackedWidget, SLOT(setCurrentIndex(int)));
-  }
-
-  // for each output
-  QList<PVXYChartViewWidget*> listCharts;
-  for (UnsignedInteger out = 0; out < nbOutput; ++out)
-  {
-    const QStringList currentOutName(outNames[out]);
-
-    // - table tab
-    Sample fieldSample(nbInputPt, nbNodes);
-    fieldSample.setDescription(meshNodesNames);
-    for (UnsignedInteger in = 0; in < nbInputPt; ++in)
-      fieldSample[in] = processSample_.getField(in).getValues().getMarginal(out).asPoint();
-
-    // with paraview the table is always shown in order to use the selection behavior
-    PVSpreadSheetViewWidget * outPVTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-    tableStackedWidget->addWidget(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(outPVTable, fieldSample));
-
-    // There are selection behavior errors if windows use the same links names: a link name must be unique.
-    // The pointers are unique, so we use them to create an unique name...find a better and easier way.
-    String aStr = (OSS() << inPVTable->getProxy() << outPVTable->getProxy()).str();
-    linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), outPVTable->getProxy());
-
-    // get fieldSample transpose
-    Sample fieldSamplet(nbNodes, nbInputPt);
-    fieldSamplet.setDescription(Description::BuildDefault(nbInputPt, "Input"));
-
-    for (UnsignedInteger i = 0; i < nbNodes; ++i)
-    {
-      for (UnsignedInteger j = 0; j < nbInputPt; ++j)
-        fieldSamplet(i, j) = fieldSample(j, i);
-    }
-
-    // - functional/bag chart
-    if (nbInputPt > 1)
-    {
-      // bag chart
-      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::BagChart);
-      bagChartWidget->PVViewWidget::setData(fieldSamplet);
-      bagChartWidget->setAxisTitle(vtkAxis::BOTTOM, "PC1");
-      bagChartWidget->setAxisTitle(vtkAxis::LEFT, "PC2");
-
-      BagChartSettingWidget * settingWidget = new BagChartSettingWidget(bagChartWidget, this);
-
-      bagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(bagChartWidget, settingWidget, this));
-
-      String aStr = (OSS() << inPVTable->getProxy() << bagChartWidget->getProxy()).str();
-      linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), bagChartWidget->getProxy());
-
-      // functional bag chart
-      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::FunctionalBagChart, bagChartWidget->getFilterSource());
-      fBagChartWidget->setXAxisData(meshParamName[0]);
-      fBagChartWidget->setChartTitle(tr("Quantiles"));
-      fBagChartWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Node index"));
-      fBagChartWidget->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
-
-      settingWidget = new BagChartSettingWidget(fBagChartWidget, this);
-
-      functionalBagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(fBagChartWidget, settingWidget, this));
-    }
-
-    // - graph tab
-    PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
-    listCharts.append(outPVGraph);
-
-    Sample sample(fieldSamplet);
-    sample.stack(processSample_.getMesh().getVertices());
-
-    outPVGraph->PVViewWidget::setData(sample);
-    outPVGraph->setChartTitle(nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
-    outPVGraph->setAxisTitle(vtkAxis::BOTTOM, meshParamName[0]);
-    outPVGraph->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
-    outPVGraph->setXAxisData(meshParamName[0]);
-    outPVGraph->setAxisToShow(fieldSamplet.getDescription());
-
-    TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph,
-                                                                                     QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
-                                                                                     this);
-
-    trajStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
-
-    aStr = (OSS() << outPVTable->getProxy() << outPVGraph->getProxy()).str();
-    linksModel->addSelectionLink(aStr.c_str(), outPVTable->getProxy(), outPVGraph->getProxy());
-  }
-
   // mean graph tab
   if (meanSample_.getSize())
   {
@@ -794,6 +694,106 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
       TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph, labels, this);
 
       meanStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
+    }
+  }
+
+  ResizableStackedWidget * bagChartStackedWidget = 0;
+  ResizableStackedWidget * functionalBagChartStackedWidget = 0;
+  if (nbInputPt > 1)
+  {
+    bagChartStackedWidget = new ResizableStackedWidget;
+    outTabWidget->addTab(bagChartStackedWidget, tr("Bag chart"));
+    connect(outListWidget_, SIGNAL(currentRowChanged(int)), bagChartStackedWidget, SLOT(setCurrentIndex(int)));
+
+    functionalBagChartStackedWidget = new ResizableStackedWidget;
+    outTabWidget->addTab(functionalBagChartStackedWidget, tr("Functional bag chart"));
+    connect(outListWidget_, SIGNAL(currentRowChanged(int)), functionalBagChartStackedWidget, SLOT(setCurrentIndex(int)));
+  }
+
+  ResizableStackedWidget * tableStackedWidget = new ResizableStackedWidget;
+  outTabWidget->addTab(tableStackedWidget, tr("Table"));
+  connect(outListWidget_, SIGNAL(currentRowChanged(int)), tableStackedWidget, SLOT(setCurrentIndex(int)));
+
+  // for each output
+  QList<PVXYChartViewWidget*> listCharts;
+  for (UnsignedInteger out = 0; out < nbOutput; ++out)
+  {
+    const QStringList currentOutName(outNames[out]);
+
+    // - table tab
+    Sample fieldSample(nbInputPt, nbNodes);
+    fieldSample.setDescription(meshNodesNames);
+    for (UnsignedInteger in = 0; in < nbInputPt; ++in)
+      fieldSample[in] = processSample_.getField(in).getValues().getMarginal(out).asPoint();
+
+    // with paraview the table is always shown in order to use the selection behavior
+    PVSpreadSheetViewWidget * outPVTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+    tableStackedWidget->addWidget(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(outPVTable, fieldSample));
+
+    // There are selection behavior errors if windows use the same links names: a link name must be unique.
+    // The pointers are unique, so we use them to create an unique name...find a better and easier way.
+    String aStr = (OSS() << inPVTable->getProxy() << outPVTable->getProxy()).str();
+    linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), outPVTable->getProxy());
+
+    // get fieldSample transpose
+    Sample fieldSamplet(nbNodes, nbInputPt);
+    fieldSamplet.setDescription(Description::BuildDefault(nbInputPt, "Input"));
+
+    for (UnsignedInteger i = 0; i < nbNodes; ++i)
+    {
+      for (UnsignedInteger j = 0; j < nbInputPt; ++j)
+        fieldSamplet(i, j) = fieldSample(j, i);
+    }
+
+    // - graph tab
+    PVXYChartViewWidget * outPVGraph = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
+    listCharts.append(outPVGraph);
+
+    Sample sample(fieldSamplet);
+    sample.stack(processSample_.getMesh().getVertices());
+
+    outPVGraph->PVViewWidget::setData(sample);
+    outPVGraph->setChartTitle(nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
+    outPVGraph->setAxisTitle(vtkAxis::BOTTOM, meshParamName[0]);
+    outPVGraph->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
+    outPVGraph->setXAxisData(meshParamName[0]);
+    outPVGraph->setAxisToShow(fieldSamplet.getDescription());
+
+    TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph,
+                                                                                     QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
+                                                                                     this);
+
+    trajStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
+
+    aStr = (OSS() << outPVTable->getProxy() << outPVGraph->getProxy()).str();
+    linksModel->addSelectionLink(aStr.c_str(), outPVTable->getProxy(), outPVGraph->getProxy());
+
+    // - functional/bag chart
+    if (nbInputPt > 1)
+    {
+      // bag chart
+      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::BagChart);
+      bagChartWidget->PVViewWidget::setData(fieldSamplet);
+      bagChartWidget->setAxisTitle(vtkAxis::BOTTOM, "PC1");
+      bagChartWidget->setAxisTitle(vtkAxis::LEFT, "PC2");
+
+      BagChartSettingWidget * settingWidget = new BagChartSettingWidget(bagChartWidget, this);
+
+      bagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(bagChartWidget, settingWidget, this));
+
+      String aStr = (OSS() << inPVTable->getProxy() << bagChartWidget->getProxy()).str();
+      linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), bagChartWidget->getProxy());
+
+      // functional bag chart
+      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::FunctionalBagChart, bagChartWidget->getFilterSource());
+      fBagChartWidget->setXAxisData(meshParamName[0]);
+      fBagChartWidget->setChartTitle(tr("Quantiles"));
+      fBagChartWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Node index"));
+      fBagChartWidget->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
+
+      settingWidget = new BagChartSettingWidget(fBagChartWidget, this);
+
+      functionalBagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(fBagChartWidget, settingWidget, this));
     }
   }
 

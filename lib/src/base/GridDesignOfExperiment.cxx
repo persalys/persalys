@@ -21,8 +21,6 @@
 #include "persalys/GridDesignOfExperiment.hxx"
 
 #include <openturns/Box.hxx>
-#include <openturns/TruncatedDistribution.hxx>
-#include <openturns/TruncatedNormal.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -39,55 +37,37 @@ GridDesignOfExperiment::GridDesignOfExperiment()
   : DesignOfExperimentEvaluation()
   , inputNames_()
   , values_()
-  , type_(GridDesignOfExperiment::FromBoundsAndLevels)
-  , bounds_()
-  , levels_()
-  , deltas_()
 {
 }
 
 
 /* Constructor with parameters */
-GridDesignOfExperiment::GridDesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
+GridDesignOfExperiment::GridDesignOfExperiment(const String &name, const PhysicalModel &physicalModel)
   : DesignOfExperimentEvaluation(name, physicalModel)
   , inputNames_()
   , values_()
-  , type_(GridDesignOfExperiment::FromBoundsAndLevels)
-  , bounds_()
-  , levels_()
-  , deltas_()
-{
-  initializeParameters();
-}
-
-
-/* Constructor with parameters */
-GridDesignOfExperiment::GridDesignOfExperiment(const String& name,
-    const PhysicalModel& physicalModel,
-    const Interval& bounds,
-    const Indices& levels,
-    const Point& values)
-  : DesignOfExperimentEvaluation(name, physicalModel)
-  , inputNames_(physicalModel.getInputNames())
-  , values_(values)
-  , type_(GridDesignOfExperiment::FromBoundsAndLevels)
-  , bounds_()
-  , levels_()
-  , deltas_()
 {
   const UnsignedInteger nbInputs = physicalModel.getInputDimension();
   if (!nbInputs)
     throw InvalidArgumentException(HERE) << "The physical model does not have input variables";
 
-  setBounds(bounds);
-  setLevels(levels);
+  initializeParameters();
+}
 
-  if (!values_.getSize())
-  {
-    values_ = Point(nbInputs);
-    for (UnsignedInteger i = 0; i < nbInputs; ++i)
-      values_[i] = physicalModel.getInputs()[i].getValue();
-  }
+
+/* Constructor with parameters */
+GridDesignOfExperiment::GridDesignOfExperiment(const String &name,
+    const PhysicalModel &physicalModel,
+    const Collection<Point> &values)
+  : DesignOfExperimentEvaluation(name, physicalModel)
+  , inputNames_(physicalModel.getInputNames())
+  , values_()
+{
+  const UnsignedInteger nbInputs = physicalModel.getInputDimension();
+  if (!nbInputs)
+    throw InvalidArgumentException(HERE) << "The physical model does not have input variables";
+
+  setValues(values);
 }
 
 
@@ -95,12 +75,6 @@ GridDesignOfExperiment::GridDesignOfExperiment(const String& name,
 GridDesignOfExperiment* GridDesignOfExperiment::clone() const
 {
   return new GridDesignOfExperiment(*this);
-}
-
-
-GridDesignOfExperiment::Type GridDesignOfExperiment::getTypeDesignOfExperiment() const
-{
-  return type_;
 }
 
 
@@ -112,10 +86,10 @@ void GridDesignOfExperiment::initializeParameters()
   inputNames_ = getPhysicalModel().getInputNames();
 
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
-  levels_ = Indices(nbInputs, 1);
-  deltas_ = Point(nbInputs);
 
-  Tools::ComputeBounds(getPhysicalModel().getInputs(), values_, bounds_);
+  values_ = Collection<Point>(nbInputs);
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+    values_[i] = Point(1, getPhysicalModel().getInputs()[i].getValue());
 }
 
 
@@ -123,75 +97,23 @@ Sample GridDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSim
 {
   const UnsignedInteger nbInputs = inputNames_.getSize();
 
-  // check arguments size
-  if (levels_.getSize() != nbInputs ||
-      bounds_.getDimension() != nbInputs ||
-      values_.getSize() != nbInputs)
-  {
-    throw InvalidArgumentException(HERE) << "All the arguments must have the same size";
-  }
+  UnsignedInteger nbPts = 1;
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+    nbPts *= values_[i].getSize();
 
-  if (!nbInputs)
-    return Sample();
+  // build input sample
+  Sample inputSample(nbPts, nbInputs);
 
-  Point scale;
-  Point transvec;
-  Point otLevels;
-  Indices variableInputsIndices;
-
+  UnsignedInteger prec = nbPts;
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
-    if (levels_[i] > 1)
+    const UnsignedInteger nb_i = values_[i].getSize();
+    for (UnsignedInteger j = 0; j < nbPts; j++)
     {
-      if (bounds_.getMarginal(i).isEmpty())
-        throw InvalidArgumentException(HERE) << "The interval must be not empty";
-      scale.add(bounds_.getMarginal(i).getVolume());
-      transvec.add(bounds_.getMarginal(i).getLowerBound()[0]);
-      variableInputsIndices.add(i);
-      otLevels.add(levels_[i] - 2);
+      const UnsignedInteger indice = (j % prec) / (prec / nb_i);
+      inputSample(j, i) = values_[i][indice];
     }
-  }
-
-  Sample inputSample;
-
-  // if there is at least an input which varies
-  if (otLevels.getSize())
-  {
-    Sample sample;
-    try
-    {
-      sample = Box(otLevels).generate();
-    }
-    catch (std::exception & ex)
-    {
-      throw InvalidValueException(HERE) << "Impossible to generate the design of experiments\n " << ex.what();
-    }
-
-    sample *= scale;
-    sample += transvec;
-
-    // if all the inputs vary
-    if (sample.getDimension() == nbInputs)
-    {
-      inputSample = sample;
-    }
-    // if there is at least an input which is constant
-    else
-    {
-      inputSample = Sample(sample.getSize(), values_);
-      for (UnsignedInteger j = 0; j < sample.getSize(); ++j)
-      {
-        for (UnsignedInteger i = 0; i < variableInputsIndices.getSize(); ++i)
-        {
-          inputSample(j, variableInputsIndices[i]) = sample(j, i);
-        }
-      }
-    }
-  }
-  // if all the inputs are constant
-  else
-  {
-    inputSample = Sample(1, values_);
+    prec = prec / nb_i;
   }
 
   inputSample.setDescription(inputNames_);
@@ -203,41 +125,27 @@ Sample GridDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSim
 void GridDesignOfExperiment::updateParameters()
 {
   const Description inputNames(inputNames_);
-  const Point values(values_);
-  const Point lowerBounds(bounds_.getLowerBound());
-  const Point upperBounds(bounds_.getUpperBound());
-  const Indices levels(levels_);
-  const Point deltas(deltas_);
+
+  const Collection<Point> values(values_);
 
   initializeParameters();
-
-  Point newLowerBounds(bounds_.getLowerBound());
-  Point newUpperBounds(bounds_.getUpperBound());
 
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
     const Description::const_iterator it = std::find(inputNames.begin(), inputNames.end(), inputNames_[i]);
     if (it != inputNames.end())
-    {
       values_[i] = values[it - inputNames.begin()];
-      newLowerBounds[i] = lowerBounds[it - inputNames.begin()];
-      newUpperBounds[i] = upperBounds[it - inputNames.begin()];
-      levels_[i] = levels[it - inputNames.begin()];
-      deltas_[i] = deltas[it - inputNames.begin()];
-    }
   }
-  bounds_.setLowerBound(newLowerBounds);
-  bounds_.setUpperBound(newUpperBounds);
 }
 
 
-Point GridDesignOfExperiment::getValues() const
+Collection<Point> GridDesignOfExperiment::getValues() const
 {
   return values_;
 }
 
 
-void GridDesignOfExperiment::setValues(const Point & values)
+void GridDesignOfExperiment::setValues(const Collection<Point> &values)
 {
   if (values.getSize() != getPhysicalModel().getInputDimension())
   {
@@ -246,118 +154,19 @@ void GridDesignOfExperiment::setValues(const Point & values)
     oss << getPhysicalModel().getInputDimension();
     throw InvalidArgumentException(HERE) << oss.str();
   }
-
   values_ = values;
-
   // clear sample
   originalInputSample_.clear();
 }
 
 
-Interval GridDesignOfExperiment::getBounds() const
+Interval GridDesignOfExperiment::GetDefaultBounds(const PhysicalModel &model)
 {
-  return bounds_;
-}
-
-
-void GridDesignOfExperiment::setBounds(const Interval & bounds)
-{
-  bounds_ = bounds;
-  // clear sample
-  originalInputSample_.clear();
-}
-
-
-Indices GridDesignOfExperiment::getLevels() const
-{
-  return levels_;
-}
-
-
-void GridDesignOfExperiment::setLevels(const Indices & levels)
-{
-  if (levels.getSize() != getPhysicalModel().getInputDimension())
-  {
-    OSS oss;
-    oss << "GridDesignOfExperiment::setLevels : The dimension of the list of the levels has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputDimension();
-    throw InvalidArgumentException(HERE) << oss.str();
-  }
-
-  Point deltas(getPhysicalModel().getInputDimension());
-  for (UnsignedInteger i = 0; i < levels.getSize(); ++i)
-  {
-    if (levels[i] == 1)
-      deltas[i] = 0;
-    else
-    {
-      if (bounds_.getDimension() != getPhysicalModel().getInputDimension())
-        throw InvalidValueException(HERE) << "Define the bounds for each input variable";
-      deltas[i] = (bounds_.getMarginal(i).getVolume()) / (levels[i] - 1);
-    }
-  }
-
-  type_ = GridDesignOfExperiment::FromBoundsAndLevels;
-  levels_ = levels;
-  deltas_ = deltas;
-
-  // clear sample
-  originalInputSample_.clear();
-}
-
-
-Point GridDesignOfExperiment::getDeltas() const
-{
-  return deltas_;
-}
-
-
-void GridDesignOfExperiment::setDeltas(const Point & deltas)
-{
-  if (deltas.getSize() != getPhysicalModel().getInputDimension())
-  {
-    OSS oss;
-    oss << "GridDesignOfExperiment::setDeltas : The dimension of the list of the deltas has to be equal to the number of inputs of the physical model: ";
-    oss << getPhysicalModel().getInputDimension();
-    throw InvalidArgumentException(HERE) << oss.str();
-  }
-
-  for (UnsignedInteger i = 0; i < deltas.getSize(); ++i)
-    if (deltas[i] < 0. || deltas[i] > bounds_.getMarginal(i).getVolume())
-      throw InvalidArgumentException(HERE) << "GridDesignOfExperiment::setDeltas : All the deltas must be greater or equal to 0 and less than the interval length.";
-
-  Indices levels(getPhysicalModel().getInputDimension());
-  for (UnsignedInteger i = 0; i < deltas.getSize(); ++i)
-  {
-    if (deltas[i] > 0.)
-    {
-      if (bounds_.getDimension() != getPhysicalModel().getInputDimension())
-        throw InvalidValueException(HERE) << "Define the bounds for each input variable";
-      levels[i] = (bounds_.getMarginal(i).getVolume()) / deltas[i] + 1;
-    }
-    else
-      levels[i] = 1;
-  }
-
-  type_ = GridDesignOfExperiment::FromBoundsAndDeltas;
-  deltas_ = deltas;
-  levels_ = levels;
-
-  // clear sample
-  originalInputSample_.clear();
-}
-
-
-Description GridDesignOfExperiment::getVariableInputNames() const
-{
-  if (!levels_.contains(1))
-    return inputNames_;
-
-  Description variableInputsNames;
-  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
-    if (levels_[i] > 1)
-      variableInputsNames.add(inputNames_[i]);
-  return variableInputsNames;
+  const UnsignedInteger nbInputs = model.getInputDimension();
+  Point fixValues(nbInputs);
+  Interval interval(nbInputs);
+  Tools::ComputeBounds(model.getInputs(), fixValues, interval);
+  return interval;
 }
 
 
@@ -369,18 +178,17 @@ Parameters GridDesignOfExperiment::getParameters() const
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Sample size", getOriginalInputSample().getSize());
 
-  Description allInputsBoundsStr = Parameters::GetOTIntervalDescription(getBounds());
-  OSS bounds;
-  for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
+  OSS values;
+  if (inputNames_.getSize() == values_.getSize())
   {
-    if (levels_[i] > 1)
-      bounds << inputNames_[i] << " : " << allInputsBoundsStr[i] << "levels" << " = " << levels_[i];
-    else
-      bounds << inputNames_[i] << " : " << values_[i];
-    if (i < inputNames_.getSize() - 1)
-      bounds << "\n";
+    for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
+    {
+      values << inputNames_[i] << " : " << Parameters::GetOTPointStr(values_[i]);
+      if (i < inputNames_.getSize() - 1)
+        values << "\n";
+    }
   }
-  param.add("Bounds", bounds);
+  param.add("Values", values);
 
   param.add("Block size", getBlockSize());
 
@@ -391,14 +199,10 @@ Parameters GridDesignOfExperiment::getParameters() const
 String GridDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
-
-  oss << "values = " << values_.__str__() << "\n";
-  oss << "bounds = ot.Interval(" << getBounds().getLowerBound().__str__() << ", " << getBounds().getUpperBound().__str__() << ")\n";
-  oss << "levels = " << levels_.__str__() << "\n";
-
-  oss << getName() << " = persalys.GridDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
-  oss << "bounds, levels, values)\n";
-
+  oss << "values = [";
+  for (UnsignedInteger i = 0; i < values_.getSize(); ++i)
+    oss << Parameters::GetOTPointStr(values_[i]) << (i < values_.getSize()-1 ? ",\n" : "]\n");
+  oss << getName() << " = persalys.GridDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", values)\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
@@ -414,9 +218,6 @@ String GridDesignOfExperiment::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
-      << " deltas=" << getDeltas()
-      << " levels=" << getLevels()
-      << " bounds=" << getBounds()
       << " values=" << getValues()
       << " blockSize=" << getBlockSize();
   return oss;
@@ -427,9 +228,6 @@ String GridDesignOfExperiment::__repr__() const
 void GridDesignOfExperiment::save(Advocate & adv) const
 {
   DesignOfExperimentEvaluation::save(adv);
-  adv.saveAttribute("deltas_", deltas_);
-  adv.saveAttribute("levels_", levels_);
-  adv.saveAttribute("bounds_", bounds_);
   adv.saveAttribute("values_", values_);
   adv.saveAttribute("inputNames_", inputNames_);
 }
@@ -439,18 +237,41 @@ void GridDesignOfExperiment::save(Advocate & adv) const
 void GridDesignOfExperiment::load(Advocate & adv)
 {
   DesignOfExperimentEvaluation::load(adv);
-  adv.loadAttribute("deltas_", deltas_);
-  adv.loadAttribute("levels_", levels_);
-  adv.loadAttribute("bounds_", bounds_);
-  if (!bounds_.getDimension())
+  // can load old file
+  Indices levels;
+  adv.loadAttribute("levels_", levels);
+  if (levels.getSize())
   {
-    Point lowerBounds;
-    Point upperBounds;
-    adv.loadAttribute("lowerBounds_", lowerBounds);
-    adv.loadAttribute("upperBounds_", upperBounds);
-    bounds_ = Interval(lowerBounds, upperBounds);
+    Interval bounds;
+    adv.loadAttribute("bounds_", bounds);
+    if (bounds.getDimension() != levels.getSize())
+    {
+      Point lowerBounds;
+      Point upperBounds;
+      adv.loadAttribute("lowerBounds_", lowerBounds);
+      adv.loadAttribute("upperBounds_", upperBounds);
+      bounds = Interval(lowerBounds, upperBounds);
+    }
+    Point values;
+    adv.loadAttribute("values_", values);
+    values_ = Collection<Point>(levels.getSize());
+    for (UnsignedInteger i = 0; i < levels.getSize(); ++i)
+    {
+      if (levels[i] < 2)
+        values_[i] = Point(1, values[i]);
+      else
+        values_[i] = Box(Indices(1, levels[i] - 2), bounds.getMarginal(i)).generate().asPoint();
+    }
   }
-  adv.loadAttribute("values_", values_);
+  else
+  {
+    adv.loadAttribute("values_", values_);
+  }
+  if (!values_.getSize() && getOriginalInputSample().getSize())
+  {
+    for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
+      values_.add(getOriginalInputSample().getMarginal(i).sortUnique().asPoint());
+  }
   adv.loadAttribute("inputNames_", inputNames_);
 }
 }

@@ -153,28 +153,24 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     // - PDF
     PVXYChartViewWidget * pvWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
     Sample pdfSamplePrior; // can not initialize size to DefaultPointNumber because of possible discrete distribution
-    Sample pdfSamplePosterior(ResourceMap::GetAsUnsignedInteger("Distribution-DefaultPointNumber"), 0);
+    Sample pdfSamplePosterior; // can not initialize size to DefaultPointNumber because of possible discrete distribution
     Description sampleDescription;
     QStringList pdfNames;
     for (UnsignedInteger i = 0; i < nbInputs; ++i)
     {
       if (i == 0)
+      {
         pdfSamplePrior = thetaPrior.getMarginal(i).drawPDF().getDrawables()[0].getData();
+        pdfSamplePosterior = thetaPosterior.getMarginal(i).drawPDF().getDrawables()[0].getData();
+      }
       else
+      {
         pdfSamplePrior.stack(thetaPrior.getMarginal(i).drawPDF().getDrawables()[0].getData());
-      pdfSamplePosterior.stack(thetaPosterior.getMarginal(i).drawPDF().getDrawables()[0].getData());
+        pdfSamplePosterior.stack(thetaPosterior.getMarginal(i).drawPDF().getDrawables()[0].getData());
+      }
       sampleDescription.add(calibratedInputNames[i]);
       sampleDescription.add(calibratedInputNames[i] + "pdf");
       pdfNames << (calibratedInputNames[i] + "pdf").c_str();
-    }
-    if (thetaPrior.isDiscrete())
-    {
-      // if prior distribution = Dirac: set max pdf to max of posterior distribution PDF
-      const Point maxiValues(pdfSamplePosterior.getMax());
-      for (UnsignedInteger i = 0; i < nbInputs; ++i)
-        for (UnsignedInteger j = 0; j < pdfSamplePrior.getSize(); ++j)
-          if (pdfSamplePrior(j, i * 2 + 1) > maxiValues[i * 2 + 1])
-            pdfSamplePrior(j, i * 2 + 1) = maxiValues[i * 2 + 1];
     }
     pdfSamplePrior.setDescription(sampleDescription);
     pdfSamplePosterior.setDescription(sampleDescription);

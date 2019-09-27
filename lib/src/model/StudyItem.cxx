@@ -345,12 +345,13 @@ void StudyItem::appendItem(DesignOfExperiment & dataModel)
 
 void StudyItem::appendItem(PhysicalModel & physicalModel)
 {
-  const QString title = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? tr("Metamodels") : tr("Physical models");
-  const QString titleType = (physicalModel.getImplementation()->getClassName() == "MetaModel") ? "MetaModelsTitle" : "PhysicalModelsTitle";
+  const bool isMetaModelTitle = physicalModel.getImplementation()->getClassName() == "MetaModel";
+  const QString title = isMetaModelTitle ? tr("Metamodels") : tr("Physical models");
+  const QString titleType = isMetaModelTitle ? "MetaModelsTitle" : "PhysicalModelsTitle";
   Item * item = getTitleItemNamed(title, titleType);
 
   // context menu actions
-  if (!item->getActions().size())
+  if (!item->getActions().size() && !isMetaModelTitle)
   {
     item->appendAction(newSymbolicModel_);
     item->appendAction(newPythonModel_);
