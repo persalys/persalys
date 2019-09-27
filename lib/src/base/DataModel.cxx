@@ -102,8 +102,7 @@ DataModel* DataModel::clone() const
 void DataModel::check()
 {
   // try to use the same indices and names
-  setColumns(inputColumns_, outputColumns_);
-  setNames(inputNames_, outputNames_);
+  setColumns(inputColumns_, inputNames_, outputColumns_, outputNames_);
 }
 
 
@@ -138,10 +137,24 @@ void DataModel::setDefaultColumns()
   inputNames_.clear();
   outputNames_.clear();
   DataImport::setDefaultColumns();
+
+  notify("variablesChanged");
 }
 
 
-void DataModel::setNames(const Description & inputNames, const Description & outputNames)
+void DataModel::setColumns(const Indices &inputColumns,
+                           const Description &inputNames,
+                           const Indices &outputColumns,
+                           const Description &outputNames)
+{
+  DataImport::setColumns(inputColumns, outputColumns);
+  setNames(inputNames, outputNames);
+  // set samples
+  update();
+}
+
+
+void DataModel::setNames(const Description &inputNames, const Description &outputNames)
 {
   // check names
   // - check input
@@ -171,9 +184,6 @@ void DataModel::setNames(const Description & inputNames, const Description & out
   // set attributs
   inputNames_ = inputNames;
   outputNames_ = outputNames;
-
-  // set samples
-  update();
 }
 
 

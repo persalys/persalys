@@ -68,7 +68,7 @@ void ImportedDesignPage::checkColumns()
   // try to update the design of experiments
   try
   {
-    designOfExperiment_.setColumns(sampleWidget_->getColumns(inputNames));
+    designOfExperiment_.setInputColumns(sampleWidget_->getColumns(inputNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }

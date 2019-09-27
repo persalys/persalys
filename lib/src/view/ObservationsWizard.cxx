@@ -83,8 +83,7 @@ void ImportObservationsPage::checkColumns()
   // try to update the observations
   try
   {
-    observations_.setColumns(inColumns, outColumns);
-    observations_.setNames(QtOT::StringListToDescription(inNames), QtOT::StringListToDescription(outNames));
+    observations_.setColumns(inColumns, QtOT::StringListToDescription(inNames), outColumns, QtOT::StringListToDescription(outNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }

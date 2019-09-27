@@ -41,21 +41,21 @@ ImportedMeshModel::ImportedMeshModel()
 
 
 /* Constructor with parameters */
-ImportedMeshModel::ImportedMeshModel(const String& fileName, const Indices& columns)
+ImportedMeshModel::ImportedMeshModel(const String &fileName, const Indices &columns)
   : MeshModelImplementation()
   , DataImport(fileName, columns)
 {
-  update();
+  setParameterColumns(columns);
 }
 
 
 /* Constructor with parameters */
-ImportedMeshModel::ImportedMeshModel(const VariableCollection& parameters, const String& fileName, const Indices& columns)
+ImportedMeshModel::ImportedMeshModel(const VariableCollection &parameters, const String &fileName, const Indices &columns)
   : MeshModelImplementation()
   , DataImport(fileName, columns)
 {
   setIndexParameters(parameters);
-  update();
+  setParameterColumns(columns);
 }
 
 
@@ -80,12 +80,18 @@ Sample ImportedMeshModel::importSample(const String& fileName)
 
 void ImportedMeshModel::setDefaultColumns()
 {
-  setColumns(Indices(1, 0));
+  setColumns(Indices(1, 0), Indices());
 }
 
 
-void ImportedMeshModel::update()
+void ImportedMeshModel::setParameterColumns(const Indices& inputColumns)
 {
+  // check columns
+  if (inputColumns.getSize() != getIndexParameters().getSize())
+    throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " << getIndexParameters().getSize();
+
+  DataImport::setColumns(inputColumns, Indices());
+
   // build mesh
   Sample sample(getSampleFromFile().getMarginal(inputColumns_));
   sample.setDescription(Description(1, getIndexParameters()[0].getName()));
@@ -97,16 +103,6 @@ void ImportedMeshModel::update()
     simplices[i][1] = i + 1;
   }
   mesh_ = Mesh(sample, IndicesCollection(simplices));
-}
-
-
-void ImportedMeshModel::setColumns(const Indices& inputColumns, const Indices& /*outputColumns*/)
-{
-  // check columns
-  if (inputColumns.getSize() != getIndexParameters().getSize())
-    throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " << getIndexParameters().getSize();
-
-  DataImport::setColumns(inputColumns);
 }
 
 

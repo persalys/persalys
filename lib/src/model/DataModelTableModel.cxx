@@ -252,7 +252,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
         outNames.add(names_[outputColumns_[i]]);
 
       dataModel_->blockNotification("DataModelDefinition");
-      dataModel_->setNames(inNames, outNames);
+      dataModel_->setColumns(inputColumns_, inNames, outputColumns_, outNames);
       dataModel_->blockNotification();
 
       emit sampleDescriptionChanged(names_);
@@ -333,8 +333,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
     outNames.add(names_[outputColumns_[i]]);
 
   dataModel_->blockNotification("DataModelDefinition");
-  dataModel_->setColumns(inputColumns_, outputColumns_);
-  dataModel_->setNames(inNames, outNames);
+  dataModel_->setColumns(inputColumns_, inNames, outputColumns_, outNames);
 
   // emit error if all variables are disabled
   emit errorMessageChanged("");

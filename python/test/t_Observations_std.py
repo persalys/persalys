@@ -40,24 +40,24 @@ obs.setFileName('normal.csv')
 openturns.testing.assert_almost_equal(obs.getSample(), sample2.getMarginal([3, 7, 2, 6]), 1e-16)
 
 # - change columns
-obs.setColumns([4, 5], [3, 0])
+obs.setColumns([4, 5], ["X3", "X1"], [3, 0], ["Y2", "Y1"])
 openturns.testing.assert_almost_equal(obs.getSample(), sample2.getMarginal([5, 4, 0, 3]), 1e-16)
 
 try:
-  obs.setColumns([4, 5, 0], [3, 0])
+  obs.setColumns([4, 5, 0], ["X3", "X1"], [3, 0], ["Y2", "Y1"])
 except Exception as e:
   print("InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e)))
 
 try:
-  obs.setColumns([4, 5, 0], [])
+  obs.setColumns([4, 5, 0], ["X0", "X1", "X2"], [], [])
 except Exception as e:
   print("InvalidArgumentException occured: %s" % ("InvalidArgumentException : Define observations for at least an output" in str(e)))
 
-obs.setColumns([4, 5, 1], [3, 0])
+obs.setColumns([4, 5, 1], ["X0", "X1", "X2"], [3, 0], ["Y1", "Y2"])
 assert(obs.getSample().getDescription() == ["X0", "X1", "X2", "Y1", "Y2"])
 
 # - change observed variables
-obs.setNames(["X3", "X2", "X1"], ["Y1", "Y0"])
+obs.setColumns([4, 5, 1], ["X3", "X2", "X1"], [3, 0], ["Y1", "Y0"])
 assert(obs.getSample().getDescription() == ["X1", "X2", "X3", "Y0", "Y1"])
 
 # Observations ##

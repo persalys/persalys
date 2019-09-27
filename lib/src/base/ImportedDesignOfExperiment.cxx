@@ -77,13 +77,16 @@ Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*n
 }
 
 
-void ImportedDesignOfExperiment::setColumns(const Indices& inputColumns, const Indices& /*outputColumns*/)
+void ImportedDesignOfExperiment::setInputColumns(const Indices &inputColumns)
 {
   // check columns
   if (inputColumns.getSize() != getPhysicalModel().getInputDimension())
     throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: " << getPhysicalModel().getInputDimension();
 
-  DataImport::setColumns(inputColumns);
+  DataImport::setColumns(inputColumns, Indices());
+  // reset
+  originalInputSample_.clear();
+  initialize();
 }
 
 
@@ -91,15 +94,7 @@ void ImportedDesignOfExperiment::setDefaultColumns()
 {
   Indices inputColumns(getPhysicalModel().getInputDimension());
   inputColumns.fill();
-  setColumns(inputColumns);
-}
-
-
-void ImportedDesignOfExperiment::update()
-{
-  // reset
-  originalInputSample_.clear();
-  initialize();
+  setInputColumns(inputColumns);
 }
 
 

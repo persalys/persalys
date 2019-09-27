@@ -103,8 +103,8 @@ Indices DataImport::getOutputColumns() const
 }
 
 
-void DataImport::setColumns(const Indices& inputColumns,
-                           const Indices& outputColumns)
+void DataImport::setColumns(const Indices &inputColumns,
+                            const Indices &outputColumns)
 {
   // check indices
   if (!inputColumns.check(getSampleFromFile().getDimension()))
@@ -122,8 +122,6 @@ void DataImport::setColumns(const Indices& inputColumns,
   // set attributs
   inputColumns_ = inputColumns;
   outputColumns_ = outputColumns;
-
-  update();
 }
 
 
@@ -148,12 +146,6 @@ void DataImport::check()
 {
   // try to use the same indices
   setColumns(inputColumns_, outputColumns_);
-}
-
-
-void DataImport::update()
-{
-  // by default do nothing
 }
 
 

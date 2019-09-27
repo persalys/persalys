@@ -62,8 +62,7 @@ Observations::Observations(const String &name,
   hasPhysicalModel_ = true;
 
   setFileName(fileName);
-  setColumns(inputColumns, outputColumns);
-  setNames(inputNames, outputNames);
+  setColumns(inputColumns, inputNames, outputColumns, outputNames);
 }
 
 
@@ -103,13 +102,18 @@ Observations* Observations::clone() const
 
 void Observations::setDefaultColumns()
 {
-  setColumns(Indices(1, 0), Indices(1, 1));
-  setNames(Description(1, getPhysicalModel().getInputNames()[0]), Description(1, getPhysicalModel().getOutputNames()[0]));
+  setColumns(Indices(1, 0),
+             Description(1, getPhysicalModel().getInputNames()[0]),
+             Indices(1, 1),
+             Description(1, getPhysicalModel().getOutputNames()[0]));
 }
 
 
+
 void Observations::setColumns(const Indices &inputColumns,
-                              const Indices &outputColumns)
+                              const Description &inputNames,
+                              const Indices &outputColumns,
+                              const Description &outputNames)
 {
   // check at least there at least one output and one input
   if (!outputColumns.getSize())
@@ -117,38 +121,22 @@ void Observations::setColumns(const Indices &inputColumns,
   // TODO : remove this check with new version of OT (possible to have no input observations in the future)
   if (!inputColumns.getSize())
     throw InvalidArgumentException(HERE) << "Define observations for at least an input.";
+  // check if names of physical model
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
+    if (!getPhysicalModel().getInputNames().contains(inputNames[i]))
+      throw InvalidArgumentException(HERE) << "The physical model does not contain an input named " << inputNames[i];
+  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
+    if (!getPhysicalModel().getOutputNames().contains(outputNames[i]))
+      throw InvalidArgumentException(HERE) << "The physical model does not contain an output named " << outputNames[i];
 
-  DataModel::setColumns(inputColumns, outputColumns);
+  DataModel::setColumns(inputColumns, inputNames, outputColumns, outputNames);
 }
 
 
 void Observations::update()
 {
-  const Description modelInputNames(getPhysicalModel().getInputNames());
-  const Description modelOutputNames(getPhysicalModel().getOutputNames());
-  Indices orderedInd;
-  // set input sample
-  Sample inS;
-  if (inputColumns_.getSize())
-  {
-    inS = sampleFromFile_.getMarginal(inputColumns_);
-    if (getInputNames().getSize() != inS.getDimension())
-      inputNames_.clear();
-    inS.setDescription(getInputNames());
-  }
-  setInputSample(inS);
-
-  // set output sample
-  Sample outS;
-  if (outputColumns_.getSize())
-  {
-    outS = sampleFromFile_.getMarginal(outputColumns_);
-    if (getOutputNames().getSize() != outS.getDimension())
-      outputNames_.clear();
-    outS.setDescription(getOutputNames());
-  }
-  setOutputSample(outS);
-
+  DataModel::update();
+  // order sample according to the order of the model variable lists
   orderSamples();
 }
 
@@ -194,46 +182,6 @@ void Observations::orderSamples()
     }
     setOutputSample(outS.getMarginal(orderedInd));
   }
-}
-
-
-void Observations::setNames(const Description &inputNames, const Description &outputNames)
-{
-  // check if names of physical model
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
-    if (!getPhysicalModel().getInputNames().contains(inputNames[i]))
-      throw InvalidArgumentException(HERE) << "The physical model does not contain an input named " << inputNames[i];
-  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
-    if (!getPhysicalModel().getOutputNames().contains(outputNames[i]))
-      throw InvalidArgumentException(HERE) << "The physical model does not contain an output named " << outputNames[i];
-
-  DataModel::setNames(inputNames, outputNames);
-}
-
-
-Description Observations::getInputNames()
-{
-  if (!inputNames_.getSize())
-  {
-    // set input names
-    inputNames_ = Description(inputColumns_.getSize());
-    for (UnsignedInteger i = 0; i < inputColumns_.getSize(); ++i)
-      inputNames_[i] = getPhysicalModel().getInputs()[i].getName();
-  }
-  return inputNames_;
-}
-
-
-Description Observations::getOutputNames()
-{
-  if (!outputNames_.getSize())
-  {
-    // set output names
-    outputNames_ = Description(outputColumns_.getSize());
-    for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
-      outputNames_[i] = getPhysicalModel().getOutputs()[i].getName();
-  }
-  return outputNames_;
 }
 
 

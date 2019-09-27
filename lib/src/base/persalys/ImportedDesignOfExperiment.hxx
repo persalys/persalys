@@ -44,7 +44,7 @@ public:
   /** Virtual constructor */
   virtual ImportedDesignOfExperiment * clone() const;
 
-  virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns = OT::Indices());
+  void setInputColumns(const OT::Indices &inputColumns);
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
@@ -60,7 +60,6 @@ public:
 
 protected:
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
-  virtual void update();
   virtual void setDefaultColumns();
 };
 }
