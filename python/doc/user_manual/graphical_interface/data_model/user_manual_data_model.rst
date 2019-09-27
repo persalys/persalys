@@ -60,7 +60,7 @@ A new data model can be defined through:
 
   - the **Model definition** box of the model diagram
 
-    .. image:: /user_manual/graphical_interface/physical_model/modeldefBox.png
+    .. image:: /user_manual/graphical_interface/data_model/modelDefBox.png
         :align: center
 
 

@@ -148,7 +148,7 @@ Define variables in the **Definition** tab:
       - Define the mathematical relationships between the **index parameter** and the input and output variables (**Formula** column).
         Note that the language used here differs from Python (see corresponding syntax for operators,
         mathematical functions and constants in the previous :ref:`section <AvailableSymbolsModel>`).
-      - Launch the computation of the selected output values based on inputs, index parameter and formula (**Evaluate** button).
+      - Launch the computation of the selected output values based on inputs, index parameter and formula (**Check model** button).
         It shall be used to test the physical model: this will
         add a new tab, described :ref:`below <fieldmodelevalresult>`.
         To save the output values, the user
@@ -188,7 +188,7 @@ The model definition window contains:
     - Describe variables (default: empty string, expected: string (no restriction on
       the label format: floating point, integer, string, etc...))(**Description** column)
     - Require the parallelization of the computations (**Enable multiprocessing** button)
-    - Launch the computation of the selected output values based on inputs, and the Python function (**Evaluate** button).
+    - Launch the computation of the selected output values based on inputs, and the Python function (**Check model** button).
       It shall be used to test the physical model: this will
       add a new tab, described :ref:`below <fieldmodelevalresult>`.
       To save the output values, the user

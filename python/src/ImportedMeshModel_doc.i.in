@@ -35,29 +35,16 @@ Create the model:
 >>> c = persalys.Input('c', 15)
 >>> z = persalys.Output('z')
 >>> formula = ['max(0, z0 + (m * 9.81 / c) * x + (m / c) * (v0 - (m * 9.81 / c)) * (1 - exp(-x * c / m)))']
->>> model = persalys.SymbolicFieldModel('model',meshModel , [z0, v0, m, c], [z], formula)
+>>> model = persalys.SymbolicFieldModel('model', meshModel , [z0, v0, m, c], [z], formula)
 
 >>> y = model.getPointToFieldFunction()([100, 55, 80, 15])"
 
-
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::ImportedMeshModel::setParameters
-"Parameters accessor.
-
-Parameters
-----------
-fileName : str
-    Name of a data file to load
-columns : sequence of int
-    Indices of columns in files to consider"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::ImportedMeshModel::setColumns
+%feature("docstring") PERSALYS::ImportedMeshModel::setParameterColumns
 "Columns of the index parameters accessor.
 
 Parameters
 ----------
 columns : sequence of int
-   Columns of the index parameters"
+   Indices of columns in file of the index parameters"

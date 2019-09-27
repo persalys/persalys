@@ -29,6 +29,7 @@ The creation of a physical model adds a new element in the study tree, below the
 Different actions are available through the context menu of the model (by right click):
   - **Rename**: Rename the model
   - **Define the model**: Open a new window to define the model
+  - **Duplicate the model**: Create a copy of the model in the study tree
   - **Remove**: Remove the model and all the analyses depending on it
 
 .. image:: /user_manual/graphical_interface/physical_model/physicalModelNameContextMenu.png
@@ -71,6 +72,7 @@ When the definition is required, a new item named **Definition** appears in the 
 
 Its context menu proposes these actions:
   - **Probabilistic model**: Create stochastic input variables and dependence
+  - **Observations**: Import observations of variables of the model
   - **Design of experiments**: Create a new design of experiments
   - **Evaluation**: Evaluate the model at a point
   - **Screening**: Perform a screening analysis
@@ -108,7 +110,7 @@ Define variables in the **Definition** tab:
       - Define the mathematical relationships between the input and output variables (**Formula** column).
         Note that the language used here differs from Python (see corresponding syntax for operators,
         mathematical functions and constants below).
-      - Launch the computation of the selected output values based on inputs and formula (**Evaluate** button).
+      - Launch the computation of the selected output values based on inputs and formula (**Check model** button).
         It shall be used to test the physical model. To save the output values, the user
         should use a :ref:`Model evaluation <modelEvaluation>`.
 
@@ -206,7 +208,7 @@ The model definition window contains:
     - Describe variables (default: empty string, expected: string (no restriction on
       the label format: floating point, integer, string, etc...)) (**Description** column)
     - Require the parallelization of the computations (**Enable multiprocessing** button)
-    - Launch the computation of the selected output values based on inputs, and the Python function (**Evaluate** button).
+    - Launch the computation of the selected output values based on inputs, and the Python function (**Check model** button).
       It shall be used to test the physical model. To save the output values, the user
       should use a :ref:`Model evaluation <modelEvaluation>`.
 
@@ -234,10 +236,7 @@ which contains:
 
 - Actions to be performed to evaluate the model (for instance, a call to Code_Aster solver)
 
-.. image:: /user_manual/graphical_interface/physical_model/YACSPhysicalModel.png
-    :align: center
-
-The **Evaluate** button computes the output values based on inputs and the YACS scheme. It shall be
+The **Check model** button computes the output values based on inputs and the YACS scheme. It shall be
 used to test the physical model. To save the output values, the user should use the :ref:`Model evaluation <modelEvaluation>`.
 
 .. _vectfmimodel:
@@ -269,7 +268,7 @@ model: disabled, input or output in the *I/O* column under the following constra
 By default, all the variables appear in the array and some filters allow
 to modify the currently listed variables.
 
-The **Evaluate** button runs the model once.
+The **Check model** button runs the model once.
 The output values are displayed in the **Value** column.
 
 .. _DifferentiationTab:

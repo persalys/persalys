@@ -332,7 +332,7 @@ The results window gathers several tabs:
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySummary.png
         :align: center
-    
+
 - The **Histogram** tab presents the histogram of the output sample. The red vertical line
   represents the threshold of the failure event.
 
@@ -715,6 +715,7 @@ The window presents the following tabs:
 
 - The **Indices** tab includes, for a selected output (left column):
 
+  - The values of the stopping criteria
   - The graphic representation of the first and total order indices and their confidence intervals,
     for each variable.
     Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
@@ -735,15 +736,13 @@ The window presents the following tabs:
   If input variables are correlated in the physical model of the analysis, a message will appear at the
   bottom of the window to warn the user the result can be false.
 
-- The **Summary** tab includes the values of the stopping criteria.
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobol_tab_summary.png
-    :align: center
 
 - The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
 
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSobol_tab_parameters1.png
       :align: center
+
+- The **Model** tab shows the model content used to perform the analysis.
 
 .. _srcresult:
 
@@ -774,3 +773,4 @@ The results window gathers these tabs:
   .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRC_tab_parameters.png
       :align: center
 
+- The **Model** tab shows the model content used to perform the analysis.
