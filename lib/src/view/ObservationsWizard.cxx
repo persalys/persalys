@@ -54,7 +54,7 @@ void ImportObservationsPage::setTable(const QString& fileName)
   observations_.setFileName(fileName.toUtf8().data());
   // get variable names
   Description allVarNames(observations_.getPhysicalModel().getInputNames());
-  allVarNames.add(observations_.getPhysicalModel().getSelectedOutputsNames());
+  allVarNames.add(observations_.getPhysicalModel().getOutputNames());
   Description initVarNames(observations_.getInputNames());
   initVarNames.add(observations_.getOutputNames());
   // get variable columns indices
