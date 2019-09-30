@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -x -e
+
+export MAKEFLAGS="-j8"
+cd /tmp
+
+mkdir -p build && cd build
+cmake \
+  -DUSE_COTIRE=OFF -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
+  -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" \
+  -DCMAKE_INSTALL_PREFIX=$PWD/install \
+  -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files \
+  -DSalomeGUI_DIR=/home/devel/local/adm_local/cmake_files/ \
+  -DSalomeYACS_DIR=/home/devel/local/adm/cmake/ \
+  -Dydefx_DIR=/home/devel/local/salome_adm/cmake_files/ \
+  -DPy2cpp_DIR=/home/devel/local/lib/cmake/py2cpp \
+  /io
+make install
+make tests
+
+echo "#!/bin/sh" > ctest.sh
+echo "ctest --output-on-failure --timeout 100 -R YACS" >> ctest.sh
+chmod a+rx ctest.sh
+/home/devel/salome -t
+xvfb-run /home/devel/salome shell ctest.sh

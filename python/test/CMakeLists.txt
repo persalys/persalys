@@ -112,8 +112,7 @@ ot_pyinstallcheck_test (Encoding_std)
 ot_pyinstallcheck_test (docstring)
 
 if (SalomeYACS_FOUND)
-# ot_pyinstallcheck_test (yacs_eval_analytical PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
-# ot_pyinstallcheck_test (Gauge_std PARAMS ${CMAKE_CURRENT_SOURCE_DIR}/analytical.xml)
+  ot_pyinstallcheck_test (YACSPhysicalModel_std IGNOREOUT)
 endif ()
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
