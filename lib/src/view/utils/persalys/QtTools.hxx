@@ -64,18 +64,10 @@ public:
   static QStringList GetVariableAxisLabels(const PhysicalModel &model, const OT::Description &variableNames);
 };
 
-
-
-static QMap<QString, QString> InitColors()
-{
-  QMap<QString, QString> map;
-  map["mediumColor"] = "#0873A8";
-  map["darkColor"] = "#333399";
-  map["lightColor"] = "#7FACD2";
-  return map;
-}
-static QMap<QString, QString> ApplicationColor = InitColors();
-
+static const QMap<QString, QString> ApplicationColor{
+  {"darkColor", "#003366"},
+  {"mediumColor", "#336699"},
+  {"lightColor", "#6699cc"}};
 static const QColor DefaultHistogramColor = QColor(127, 172, 210);
 static const int MaxVisibleVariableNumber = 12;
 }
