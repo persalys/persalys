@@ -40,7 +40,8 @@ ImportedDesignPage::ImportedDesignPage(QWidget* parent)
 
 void ImportedDesignPage::buildInterface()
 {
-  setWindowTitle(tr("Import table from file"));
+  setTitle(tr("Imported design"));
+  setSubTitle(tr("Import data from a file"));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   mainLayout->addWidget(sampleWidget_);

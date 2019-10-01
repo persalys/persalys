@@ -39,7 +39,8 @@ ImportObservationsPage::ImportObservationsPage(QWidget* parent)
 
 void ImportObservationsPage::buildInterface()
 {
-  setWindowTitle(tr("Import observations from file"));
+  setTitle(tr("Define observations"));
+  setSubTitle(tr("Import data from a file"));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   mainLayout->addWidget(sampleWidget_);
