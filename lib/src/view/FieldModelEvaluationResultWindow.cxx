@@ -773,7 +773,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     if (nbInputPt > 1)
     {
       // bag chart
-      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::BagChart);
+      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get());
       bagChartWidget->PVViewWidget::setData(fieldSamplet);
       bagChartWidget->setAxisTitle(vtkAxis::BOTTOM, "PC1");
       bagChartWidget->setAxisTitle(vtkAxis::LEFT, "PC2");
@@ -786,7 +786,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
       linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), bagChartWidget->getProxy());
 
       // functional bag chart
-      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::FunctionalBagChart, bagChartWidget->getFilterSource());
+      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), bagChartWidget->getFilterSource());
       fBagChartWidget->setXAxisData(meshParamName[0]);
       fBagChartWidget->setChartTitle(tr("Quantiles"));
       fBagChartWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Node index"));

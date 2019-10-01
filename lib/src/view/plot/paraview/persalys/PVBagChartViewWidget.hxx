@@ -12,8 +12,7 @@ class PERSALYS_API PVBagChartViewWidget : public PVXYChartViewWidget
   Q_OBJECT
 
 public:
-  PVBagChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type);
-  PVBagChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type, pqPipelineSource* filtersource);
+  PVBagChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, pqPipelineSource* filtersource = 0);
 
   ~PVBagChartViewWidget();
 
