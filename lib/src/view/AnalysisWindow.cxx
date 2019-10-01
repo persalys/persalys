@@ -77,7 +77,7 @@ void AnalysisWindow::buildInterface()
   if (analysisParameters.getSize())
   {
     ParametersWidget * parametersWidget_ = new ParametersWidget(tr("Analysis parameters"), analysisParameters);
-    mainLayout->addWidget(parametersWidget_, 0, 0);
+    mainLayout->addWidget(parametersWidget_, 0, 0, 1, 3);
   }
 
   // progress bar
@@ -85,33 +85,29 @@ void AnalysisWindow::buildInterface()
   QPalette p = progressBar_->palette();
   p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
   progressBar_->setPalette(p);
-  mainLayout->addWidget(progressBar_, 1, 0);
+  mainLayout->addWidget(progressBar_, 1, 2);
   connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
 
   // buttons
-  QHBoxLayout * hLayout = new QHBoxLayout;
-  hLayout->addStretch();
-
   // - run button
   runButton_ = new QPushButton(tr("Run"));
   runButton_->setIcon(QIcon(":/images/system-run.png"));
   runButton_->setDisabled(analysisInProgress_);
   connect(runButton_, SIGNAL(clicked(bool)), this, SLOT(launchAnalysis()));
-  hLayout->addWidget(runButton_);
+  mainLayout->addWidget(runButton_, 1, 0);
 
   // - stop button
   stopButton_ = new QPushButton(tr("Stop"));
   stopButton_->setIcon(QIcon(":/images/process-stop.png"));
   stopButton_->setEnabled(false);
   connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(stopAnalysis()));
-  hLayout->addWidget(stopButton_);
-
-  mainLayout->addLayout(hLayout, 2, 0);
+  mainLayout->addWidget(stopButton_, 1, 1);
+  mainLayout->setColumnStretch(2, 1);
 
   // information message
   messageLabel_ = new TemporaryLabel;
   messageLabel_->setTextFormat(Qt::PlainText);
-  mainLayout->addWidget(messageLabel_, 3, 0);
+  mainLayout->addWidget(messageLabel_, 2, 0, 1, 3);
   connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
 
   mainLayout->setRowStretch(4, 1);
@@ -120,7 +116,7 @@ void AnalysisWindow::buildInterface()
   analysisItem_->getAnalysis().acceptLaunchParameters(this);
   if (launchParameters_)
   {
-    mainLayout->addWidget(launchParameters_, 4, 0);
+    mainLayout->addWidget(launchParameters_, 4, 0, 1, 3);
   }
 
   scrollArea->setWidget(mainWidget);
