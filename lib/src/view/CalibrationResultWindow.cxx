@@ -147,7 +147,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   tabWidget->addTab(tabThetaWidget, "θ");
 
 #ifdef PERSALYS_HAVE_PARAVIEW
-  if (SubWindow::HaveOpenGL32())
+  if (SubWindow::SupportsOpenGL_3_2())
   {
     // - PDF
     PVXYChartViewWidget * pvWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);

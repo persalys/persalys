@@ -99,7 +99,7 @@ void SubWindow::removeRequest()
 }
 
 
-bool SubWindow::HaveOpenGL32()
+bool SubWindow::SupportsOpenGL_3_2()
 {
   char *pNO_GL = getenv("PERSALYS_NO_GL");
   if (pNO_GL)

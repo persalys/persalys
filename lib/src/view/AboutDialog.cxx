@@ -107,7 +107,7 @@ AboutDialog::AboutDialog(QWidget* parent)
          << PY_VERSION
          << QWT_VERSION_STR;
 #ifdef PERSALYS_HAVE_PARAVIEW
-  names  << QString("Paraview") + (SubWindow::HaveOpenGL32() ? "" : " (" + tr("disabled") + ")");
+  names  << QString("ParaView") + (SubWindow::SupportsOpenGL_3_2() ? "" : " (" + tr("disabled") + ")");
   values << PARAVIEW_VERSION_FULL;
 #endif
 #ifdef PERSALYS_HAVE_OTMORRIS

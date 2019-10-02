@@ -53,7 +53,7 @@ public:
 
   Item * getItem() const;
 
-  static bool HaveOpenGL32();
+  static bool SupportsOpenGL_3_2();
 
 public slots:
   void showRequest();

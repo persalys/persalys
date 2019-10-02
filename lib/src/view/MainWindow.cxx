@@ -55,7 +55,7 @@ MainWindow::MainWindow()
   setWindowIcon(QIcon(":/images/persalys.ico"));
 
 #ifdef PERSALYS_HAVE_PARAVIEW
-  if (SubWindow::HaveOpenGL32())
+  if (SubWindow::SupportsOpenGL_3_2())
   {
     // from ParaView 5.6 the toolBar is hidden if PersistentMainWindowStateBehavior is enabled
     pqParaViewBehaviors::setEnablePersistentMainWindowStateBehavior(false);

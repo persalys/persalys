@@ -119,7 +119,7 @@ void MeshWindow::buildInterface()
   tabWidget_ = new QTabWidget;
   bool canUseParaview = false;
 // #ifdef PERSALYS_HAVE_PARAVIEW
-//   if (OTguiSubWindow::HaveOpenGL32())
+//   if (OTguiSubWindow::SupportsOpenGL_3_2())
 //   {
 //     addParaviewWidgetsTabs();
 //     canUseParaview = true;
