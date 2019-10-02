@@ -55,7 +55,7 @@ Icon=persalys
 Terminal=false
 Categories=Science;
 EOF
-cp -v /io/images/OT_icon32x32.png persalys.AppDir/persalys.png
+cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
 for libname in lapack blas xml2 png12 gfortran ffi xkbcommon

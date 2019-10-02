@@ -23,6 +23,7 @@
 #include "persalys/DiagramPushButton.hxx"
 
 #include <QVBoxLayout>
+#include <QScrollArea>
 
 namespace PERSALYS
 {
@@ -30,15 +31,20 @@ namespace PERSALYS
 WelcomeWindow::WelcomeWindow(const Actions* actions, QWidget * parent)
   : QWidget(parent)
 {
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
   int x1, y1, x2, y2;
-  mainLayout->getContentsMargins(&x1, &y1, &x2, &y2);
-  mainLayout->setContentsMargins(x1, 0, x2, 0);
+  widgetLayout->getContentsMargins(&x1, &y1, &x2, &y2);
+  widgetLayout->setContentsMargins(x1, 0, x2, 0);
 
-  mainLayout->addWidget(new TitleLabel(tr("Study creation"), "user_manual/graphical_interface/getting_started/user_manual_getting_started.html#create-a-study"));
+  widgetLayout->addWidget(new TitleLabel(tr("Study creation"), "user_manual/graphical_interface/getting_started/user_manual_getting_started.html#create-a-study"));
 
-  // spacer
-  mainLayout->addSpacing(10);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  widgetLayout->addWidget(scrollArea);
+
+  QWidget * mainWidget = new QWidget;
+  QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
+  scrollArea->setWidget(mainWidget);
 
   // buttons
   QHBoxLayout * hlayout = new QHBoxLayout;
@@ -68,5 +74,12 @@ WelcomeWindow::WelcomeWindow(const Actions* actions, QWidget * parent)
   hlayout->addStretch();
 
   mainLayout->addLayout(hlayout);
+
+  // Persalys logo
+  QLabel * imageLabel = new QLabel;
+  QPixmap pixmap(":/images/persalys-logo.png");
+  imageLabel->setPixmap(pixmap);
+
+  mainLayout->addWidget(imageLabel, 0, Qt::AlignCenter);
 }
 }

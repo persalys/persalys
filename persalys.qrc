@@ -4,9 +4,11 @@
         <file>translations/persalys_fr.qm</file>
         <file>translations/qt_fr.qm</file>
         <file>translations/qtbase_fr.qm</file>
-        <file>images/OT_icon16x16.png</file>
-        <file>images/OT_icon32x32.png</file>
-        <file>images/OT_image256x256.png</file>
+        <file>images/persalys.ico</file>
+        <file>images/persalys-logo.png</file>
+        <file>images/Ps-icon-16.png</file>
+        <file>images/Ps-icon-64.png</file>
+        <file>images/Ps-icon-144.png</file>
         <file>images/list-add.png</file>
         <file>images/list-remove.png</file>
         <file>images/document-new.png</file>
@@ -46,7 +48,6 @@
         <file>images/edit-delete.png</file>
         <file>images/dialog-ok-apply.png</file>
         <file>images/optimize.png</file>
-        <file>images/persalys.ico</file>
         <file>images/help-contents.png</file>
         <file>images/view-refresh.svg</file>
     </qresource>
