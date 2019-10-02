@@ -222,6 +222,21 @@ Parameters DesignOfExperimentEvaluation::getParameters() const
 
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Sample size", getOriginalInputSample().getSize());
+
+  OSS values;
+  const Point minValues(getOriginalInputSample().getMin());
+  const Point maxValues(getOriginalInputSample().getMax());
+  for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
+  {
+    if (minValues[i] != maxValues[i])
+      values << getOriginalInputSample().getDescription()[i] << " : [" << minValues[i] << ", " << maxValues[i] << "]";
+    else
+      values << getOriginalInputSample().getDescription()[i] << " : " << minValues[i];
+    if (i < getOriginalInputSample().getDimension() - 1)
+      values << "\n";
+  }
+  param.add("Values", values);
+
   param.add("Block size", getBlockSize());
 
   return param;
