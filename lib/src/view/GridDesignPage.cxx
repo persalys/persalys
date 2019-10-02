@@ -22,11 +22,12 @@
 
 #include "persalys/EditButtonDelegate.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/QtTools.hxx"
+#include <persalys/ComboBoxDelegate.hxx>
 
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QScrollBar>
-#include <persalys/ComboBoxDelegate.hxx>
 
 using namespace OT;
 
@@ -129,9 +130,11 @@ void GridDesignPage::initialize(const Analysis& analysis)
   // resize table
   tableView_->resizeWithOptimalWidth();
   // if too many variables: no fixed height + use scrollbar
-  if (tableView_->model()->rowCount() < 15)
+  if (tableView_->model()->rowCount() < RowNumberToScrollTable)
   {
-    tableView_->resizeWithOptimalHeight();
+    int x1, y1, x2, y2;
+    tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
+    tableView_->setFixedHeight(tableView_->verticalHeader()->length() + y1 + y2);
   }
   // set DOE size label
   DOESizeLabel_->setText(QString::number(tableModel_->getDesignOfExperiment().getOriginalInputSample().getSize()));

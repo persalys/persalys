@@ -70,5 +70,6 @@ static const QMap<QString, QString> ApplicationColor{
   {"lightColor", "#6699cc"}};
 static const QColor DefaultHistogramColor = QColor(127, 172, 210);
 static const int MaxVisibleVariableNumber = 12;
+static const int RowNumberToScrollTable = 11;
 }
 #endif

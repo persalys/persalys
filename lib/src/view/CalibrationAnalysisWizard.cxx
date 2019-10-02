@@ -26,6 +26,7 @@
 #include "persalys/SymbolicPhysicalModel.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/CheckableHeaderView.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <openturns/Normal.hxx>
 #include <openturns/Dirac.hxx>
@@ -212,7 +213,7 @@ void CalibrationReferencePointPage::updateData(const PhysicalModel &model)
 
   // resize table
   // if too many variables: no fixed height + use scrollbar
-  if (tableView_->model()->rowCount() < 15)
+  if (tableView_->model()->rowCount() < RowNumberToScrollTable)
   {
     tableView_->resizeWithOptimalHeight();
   }

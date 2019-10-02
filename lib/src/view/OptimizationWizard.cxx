@@ -22,6 +22,7 @@
 
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/OptimizationAnalysis.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QHeaderView>
 #include <QScrollBar>
@@ -83,7 +84,7 @@ void OptimizationBoundsPage::initialize(const Analysis& analysis)
 
   // resize table
   tableView_->resizeWithOptimalWidth();
-  if (tableView_->model()->rowCount() < 15) // if too many variables: no fixed height + use scrollbar
+  if (tableView_->model()->rowCount() < RowNumberToScrollTable) // if too many variables: no fixed height + use scrollbar
   {
     tableView_->resizeWithOptimalHeight();
   }
