@@ -82,7 +82,6 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
   QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
@@ -196,6 +195,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     // tab : Prediction
     ResizableStackedWidget * predictionStackedWidget = new ResizableStackedWidget;
     // for each output
+    const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
     for (UnsignedInteger out = 0; out < nbOutput; ++out)
     {
       predictionStackedWidget->addWidget(getPredictionTabWidget(out));
