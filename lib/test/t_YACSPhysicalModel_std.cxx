@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/YACSPhysicalModel.hxx"
+#include "persalys/PythonEnvironment.hxx"
 
 #include "openturns/OT.hxx"
 #include "openturns/OTtestcode.hxx"
@@ -28,37 +29,38 @@ using namespace OT;
 using namespace OT::Test;
 using namespace PERSALYS;
 
-int main(int argc, char *argv[], char* env[])
+int main(int argc, char *argv[])
 {
   TESTPREAMBLE;
   OStream fullprint(std::cout);
 
-  const char *pyscript =
+  String pyscript =
 "def _exec(x, y, p):\n"
-"  w,z=3*x+4*y+p,x+y+p\n"
+"  w, z=3*x+4*y+p,x+y+p\n"
 "  return w,z\n";
 
   try
   {
+    PythonEnvironment env;
     YACSPhysicalModel myPhysicalModel("myPhysicalModel", InputCollection(), OutputCollection(), pyscript);
     Sample inputSample(3, 3);
-    inputSample[0][0] = 1;
-    inputSample[1][0] = 2;
-    inputSample[2][0] = 6;
-    inputSample[0][1] = 2;
-    inputSample[1][1] = 3;
-    inputSample[2][1] = 1;
-    inputSample[0][2] = 4;
-    inputSample[1][2] = 5;
-    inputSample[2][2] = 3;
+    inputSample(0, 0) = 1;
+    inputSample(1, 0) = 2;
+    inputSample(2, 0) = 6;
+    inputSample(0, 1) = 2;
+    inputSample(1, 1) = 3;
+    inputSample(2, 1) = 1;
+    inputSample(0, 2) = 4;
+    inputSample(1, 2) = 5;
+    inputSample(2, 2) = 3;
 
     Sample evalSample(3, 2);
-    evalSample[0][0] = 15.;
-    evalSample[0][1] = 7.;
-    evalSample[1][0] = 23.;
-    evalSample[1][1] = 10.;
-    evalSample[2][0] = 25.;
-    evalSample[2][1] = 10.;
+    evalSample(0, 0) = 15.;
+    evalSample(0, 1) = 7.;
+    evalSample(1, 0) = 23.;
+    evalSample(1, 1) = 10.;
+    evalSample(2, 0) = 25.;
+    evalSample(2, 1) = 10.;
 
     Sample resultSample(myPhysicalModel.getFunction()(inputSample));
     std::cout << resultSample << std::endl;

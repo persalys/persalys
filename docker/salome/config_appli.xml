@@ -1,0 +1,8 @@
+<application>
+<context path='/tmp/salome_context.cfg'/>
+<modules>
+   <module name="KERNEL"       path="/home/devel/local"/>
+   <module name="GUI"          path="/home/devel/local"/>
+   <module name='YDEFX'        path='/home/devel/local'/>
+</modules>
+</application>
