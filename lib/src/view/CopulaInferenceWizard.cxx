@@ -225,7 +225,7 @@ void CopulaInferenceWizard::defineGroup()
   QString errorMessage;
   if (selectedVars.getSize() < 2)
   {
-    errorMessage = tr("Define at least one group of two variables");
+    errorMessage = tr("Define groups of at least two variables");
   }
   selectedVars.sort();
   // check if group already exists
@@ -241,7 +241,7 @@ void CopulaInferenceWizard::defineGroup()
   }
   if (!errorMessage.isEmpty())
   {
-    errorMessageLabel_->setErrorMessage(errorMessage);
+    errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
     return;
   }
 
