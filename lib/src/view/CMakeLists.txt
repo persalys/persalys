@@ -343,11 +343,14 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
 
 
 if (SalomeYACS_FOUND)
+  set_source_files_properties (AnalysisWindow.cxx YACSPhysicalModelWindow.cxx PROPERTIES COTIRE_EXCLUDED ON) # FIXME: Python/Qt conflict due to YACS
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/YACSPhysicalModelWindow.hxx)
 endif ()
+
 if (USE_OTFMI)
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/FMIPhysicalModelWindow.hxx)
 endif ()
+
 if (OTMORRIS_FOUND)
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningIntroPage.hxx)
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MorrisPage.hxx)

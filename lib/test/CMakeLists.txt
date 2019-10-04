@@ -138,8 +138,5 @@ add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
 
 if (SalomeYACS_FOUND)
   ot_check_test (YACSPhysicalModel_std IGNOREOUT)
+  set_tests_properties (cppcheck_YACSPhysicalModel_std PROPERTIES RUN_SERIAL ON)
 endif ()
-
-
-
-

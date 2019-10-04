@@ -93,3 +93,8 @@ RUN sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
 ENV KERNEL_ROOT_DIR=/home/devel/local GUI_ROOT_DIR=/home/devel/local YDEFX_ROOT_DIR=/home/devel/local 
 RUN cd /home/devel/bin/salome/test/ && ctest -R YDEFX_SampleTest -j8 --output-on-failure
 
+# Set the locale
+RUN sudo apt-get -y install locales && sudo sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && sudo locale-gen
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
