@@ -14,21 +14,12 @@ using namespace OT;
 namespace PERSALYS
 {
 
-PVBagChartViewWidget::PVBagChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type)
-  : PVXYChartViewWidget(parent, smb, type)
-  , filtersource_(0)
-{
-}
-
-
-PVBagChartViewWidget::PVBagChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type, pqPipelineSource *filtersource)
-  : PVXYChartViewWidget(parent, smb, type)
+PVBagChartViewWidget::PVBagChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, pqPipelineSource *filtersource)
+  : PVXYChartViewWidget(parent, smb, filtersource == 0 ? BagChart : FunctionalBagChart)
   , filtersource_(filtersource)
 {
-  if (!filtersource)
-    throw InvalidArgumentException(HERE) << "Internal error in PVBagChartViewWidget constructor: filter source null pointer !";
-
-  createRepresentation();
+  if (filtersource)
+    createRepresentation();
 }
 
 

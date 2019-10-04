@@ -40,7 +40,7 @@ public:
   /** Virtual constructor */
   virtual ImportedMeshModel * clone() const;
 
-  virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns = OT::Indices());
+  void setParameterColumns(const OT::Indices &inputColumns);
   OT::Interval getBounds() const;
   OT::Indices getNumberOfNodes() const;
 
@@ -58,7 +58,6 @@ public:
 
 protected:
   virtual OT::Sample importSample(const OT::String& fileName);
-  virtual void update();
   virtual void setDefaultColumns();
 };
 }

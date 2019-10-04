@@ -36,7 +36,7 @@ Wizard::Wizard(QWidget * parent)
 {
   setWindowIcon(QIcon(":/images/persalys.ico"));
   setWizardStyle(QWizard::MacStyle);
-  setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/OT_image256x256.png"));
+  setPixmap(QWizard::BackgroundPixmap, QPixmap(":/images/Ps-icon-144.png"));
   setButtonText(QWizard::BackButton, tr("Back"));
   setButtonText(QWizard::FinishButton, tr("Finish"));
   setButtonText(QWizard::CancelButton, tr("Cancel"));
@@ -45,7 +45,7 @@ Wizard::Wizard(QWidget * parent)
   setOption(QWizard::HaveHelpButton, true);
   button(QWizard::HelpButton)->setIcon(QIcon(":/images/documentinfo.png"));
   connect(this, SIGNAL(helpRequested()), this, SLOT(showHelp()));
-  resize(800, 600);
+  resize(800, 500);
 }
 
 

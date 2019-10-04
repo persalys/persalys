@@ -58,14 +58,17 @@ names : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DataModel::setNames
-"Names of the variables accessor.
+%feature("docstring") PERSALYS::DataImport::setColumns
+"Columns and names of variables accessor.
 
 Parameters
 ----------
+inputColumns : sequence of int
+    Columns of input variables
 inNames : sequence of str
-   Names of the input variables
+   Names of input variables
+outputColumns : sequence of int, optional
+    Columns of output variables
 outNames : sequence of str
-   Names of the output variables
+   Names of output variables"
 
-   Set the columns before the names."

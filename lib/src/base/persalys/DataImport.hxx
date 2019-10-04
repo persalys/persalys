@@ -44,8 +44,6 @@ public:
 
   OT::Indices getInputColumns() const;
   OT::Indices getOutputColumns() const;
-  virtual void setColumns(const OT::Indices & inputColumns,
-                          const OT::Indices & outputColumns = OT::Indices());
 
   OT::Sample getSampleFromFile() const;
 
@@ -59,9 +57,9 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns);
   virtual OT::Sample importSample(const OT::String& fileName);
   virtual void check();
-  virtual void update();
   virtual void setDefaultColumns();
 
 protected:

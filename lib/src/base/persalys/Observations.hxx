@@ -55,11 +55,9 @@ public:
   virtual Observations * clone() const;
 
   virtual void setColumns(const OT::Indices &inputColumns,
-                          const OT::Indices &outputColumns);
-
-  virtual OT::Description getInputNames();
-  virtual OT::Description getOutputNames();
-  virtual void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
+                          const OT::Description &inputNames,
+                          const OT::Indices &outputColumns,
+                          const OT::Description &outputNames);
 
   /** String converter */
   virtual OT::String __repr__() const;

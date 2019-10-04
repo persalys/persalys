@@ -40,7 +40,8 @@ ImportedDesignPage::ImportedDesignPage(QWidget* parent)
 
 void ImportedDesignPage::buildInterface()
 {
-  setWindowTitle(tr("Import table from file"));
+  setTitle(tr("Imported design"));
+  setSubTitle(tr("Import data from a file"));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   mainLayout->addWidget(sampleWidget_);
@@ -68,7 +69,7 @@ void ImportedDesignPage::checkColumns()
   // try to update the design of experiments
   try
   {
-    designOfExperiment_.setColumns(sampleWidget_->getColumns(inputNames));
+    designOfExperiment_.setInputColumns(sampleWidget_->getColumns(inputNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }

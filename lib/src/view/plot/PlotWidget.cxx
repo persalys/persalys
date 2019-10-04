@@ -119,7 +119,7 @@ void PlotWidget::exportPlot()
 {
   // wizard to choose image size
   QWizard sizeSelectionWizard(this);
-  sizeSelectionWizard.setWindowIcon(QIcon(":/images/OT_icon16x16.png"));
+  sizeSelectionWizard.setWindowIcon(QIcon(":/images/Ps-icon-16.png"));
   sizeSelectionWizard.setButtonText(QWizard::CancelButton, tr("Cancel"));
   sizeSelectionWizard.setButtonText(QWizard::FinishButton, tr("OK"));
   sizeSelectionWizard.setOption(QWizard::NoDefaultButton, true);

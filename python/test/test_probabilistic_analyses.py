@@ -4,7 +4,6 @@ from __future__ import print_function
 import openturns as ot
 import openturns.testing
 import persalys
-import numpy as np
 
 ot.RandomGenerator.SetSeed(0)
 ot.TBB_Disable()
@@ -33,11 +32,6 @@ R[0, 1] = 0.25
 model1.setCopula(['x1', 'x2'], ot.NormalCopula(R))
 myStudy.add(model1)
 
-# model 2 ##
-code = 'from math import cos, sin, sqrt\n\ndef _exec(x1, x2, x3):\n    y0 = cos(0.5*x1) + sin(x2) + sqrt(x3)\n    return y0\n'
-model2 = persalys.PythonPhysicalModel('model2', [x1, x2, x3], [y0], code)
-myStudy.add(model2)
-
 # model 3 ##
 filename = 'data.csv'
 cDist = ot.ComposedDistribution(
@@ -51,60 +45,25 @@ myStudy.add(model3)
 
 # Designs of Experiment ##
 
-# design 1 ##
-ot.RandomGenerator.SetSeed(0)
-design_1 = persalys.FixedDesignOfExperiment('design_1', model1)
-inputSample = ot.LHSExperiment(ot.ComposedDistribution(
-    [ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
-inputSample.stack(ot.Sample(10, [0.5]))
-design_1.setOriginalInputSample(inputSample)
-design_1.run()
-myStudy.add(design_1)
-
 # design 2 ##
 values = [[0.5+i*1.5 for i in range(7)], [0.5+i*1.5 for i in range(7)], [1]]
 design_2 = persalys.GridDesignOfExperiment('design_2', model1, values)
 myStudy.add(design_2)
 
-# design 3 ##
-design_3 = persalys.ImportedDesignOfExperiment(
-    'design_3', model1, 'data.csv', [0, 2, 3])
+# design 4 ##
+probaDesign = persalys.ProbabilisticDesignOfExperiment('probaDesign', model1, 100, "MONTE_CARLO")
+probaDesign.run()
+myStudy.add(probaDesign)
+
+design_3 = persalys.ImportedDesignOfExperiment('design_3', model1, 'data.csv', [0, 2, 3])
 design_3.run()
 myStudy.add(design_3)
 
-# design 4 ##
-design_4 = persalys.ProbabilisticDesignOfExperiment(
-    'design_4', model1, 100, "MONTE_CARLO")
-design_4.run()
-myStudy.add(design_4)
-
-# design 5 ##
-design_5 = persalys.GridDesignOfExperiment('design_5', model2)
-myStudy.add(design_5)
-
-# design 6 ##
-design_6 = persalys.GridDesignOfExperiment('design_6', model2, [[0.2], [1.2], [-0.2, 1.]])
-myStudy.add(design_6)
-
-# model 4 ##
-model4 = persalys.DataModel(
-    'model4', inputSample, design_1.getResult().getDesignOfExperiment().getOutputSample())
-myStudy.add(model4)
-
-# 0- models evaluations
-
-# 0-a evaluation model1 ##
-evaluation1 = persalys.ModelEvaluation('evaluation1', model1)
-myStudy.add(evaluation1)
-
-# 0-b evaluation model2 ##
-evaluation2 = persalys.ModelEvaluation('evaluation2', model2)
-myStudy.add(evaluation2)
 
 # 1- meta model1 ##
 
 # 1-a Kriging ##
-kriging = persalys.KrigingAnalysis('kriging', design_4)
+kriging = persalys.KrigingAnalysis('kriging', probaDesign)
 kriging.setBasis(ot.LinearBasisFactory(2).build())
 kriging.setCovarianceModel(ot.MaternModel(2))
 kriging.setTestSampleValidation(True)
@@ -113,7 +72,7 @@ kriging.setInterestVariables(['y0', 'y1'])
 myStudy.add(kriging)
 
 # 1-b Chaos ##
-chaos1 = persalys.FunctionalChaosAnalysis('chaos_1', design_4)
+chaos1 = persalys.FunctionalChaosAnalysis('chaos_1', probaDesign)
 chaos1.setChaosDegree(7)
 chaos1.setSparseChaos(True)
 chaos1.setTestSampleValidation(True)
@@ -205,28 +164,6 @@ src.setSimulationsNumber(200)
 src.setSeed(2)
 src.setInterestVariables(['y0', 'y1'])
 myStudy.add(src)
-
-# 5- optimization ##
-optim = persalys.OptimizationAnalysis('optim', model1, 'TNC')
-optim.setInterestVariables(['y1'])
-optim.setVariableInputs(['x1', 'x2'])
-optim.setMaximumEvaluationNumber(150)
-optim.setMaximumAbsoluteError(1e-6)
-optim.setMaximumRelativeError(1e-6)
-optim.setMaximumResidualError(1e-6)
-optim.setMaximumConstraintError(1e-6)
-myStudy.add(optim)
-
-# 6- morris ##
-try:
-    morris = persalys.MorrisAnalysis('aMorris', model1)
-    morris.setInterestVariables(['y0'])
-    morris.setLevel(4)
-    morris.setTrajectoriesNumber(10)
-    morris.setSeed(2)
-    myStudy.add(morris)
-except:
-    print("No Morris")
 
 # 7- data analysis ##
 dataAnalysis = persalys.DataAnalysis('DataAnalysis', model3)

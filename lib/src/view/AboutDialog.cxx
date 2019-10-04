@@ -57,7 +57,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
   QHBoxLayout * headerLayout = new QHBoxLayout;
   QLabel * logoLabel = new QLabel;
-  logoLabel->setPixmap(QPixmap(":/images/OT_icon32x32.png"));
+  logoLabel->setPixmap(QPixmap(":/images/Ps-icon-64.png"));
   headerLayout->addWidget(logoLabel);
 
   QLabel * phibootLabel = new QLabel("<font size=\"6\">Persalys</font><br>" + tr("Version %1").arg(PERSALYS_VERSION));

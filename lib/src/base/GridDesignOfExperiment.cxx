@@ -183,7 +183,15 @@ Parameters GridDesignOfExperiment::getParameters() const
   {
     for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++i)
     {
-      values << inputNames_[i] << " : " << Parameters::GetOTPointStr(values_[i]);
+      Point values_i(values_[i]);
+      if (values_[i].getSize() > 1)
+      {
+        std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(values_i.begin(), values_i.end());
+        values << inputNames_[i] << " : [" << (*p.first) << ", " << (*p.second) << "]";
+        values << " levels" << " = " << values_i.getSize();
+      }
+      else
+        values << inputNames_[i] << " : " << values_i[0];
       if (i < inputNames_.getSize() - 1)
         values << "\n";
     }

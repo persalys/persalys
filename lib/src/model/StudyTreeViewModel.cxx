@@ -41,9 +41,6 @@ QVariant StudyTreeViewModel::headerData(int section, Qt::Orientation orientation
   {
     if (role == Qt::DisplayRole)
       return tr("Studies");
-
-    else if (role == Qt::DecorationRole)
-      return QIcon(":/images/persalys.ico");
   }
 
   return QStandardItemModel::headerData(section, orientation, role);

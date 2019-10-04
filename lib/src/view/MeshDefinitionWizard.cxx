@@ -167,7 +167,7 @@ void MeshDefinitionWizard::checkColumns()
   // try to update the model
   try
   {
-    importedMesh_.setColumns(sampleWidget_->getColumns(paramNames));
+    importedMesh_.setParameterColumns(sampleWidget_->getColumns(paramNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }

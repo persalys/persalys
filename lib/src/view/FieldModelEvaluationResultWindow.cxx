@@ -636,14 +636,15 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   PVMatrixPlotViewWidget * pvmatrixWidget = 0;
   if (nbInputPt > 1)
   {
+    const Sample sampleRank(inputSample_.rank() / inputSample_.getSize());
     // Plot matrix
     pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
-    pvmatrixWidget->setData(inputSample_);
+    pvmatrixWidget->setData(sampleRank);
     // the variables are automatically sorted : use setAxisToShow with the order of the sample
     pvmatrixWidget->setAxisToShow(inputSample_.getDescription());
 
     // setting widget
-    PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
+    MultiPlotSettingWidget * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, inputSample_, sampleRank, this);
 
     inTabWidget->addTab(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this), tr("Plot matrix"));
 
@@ -701,13 +702,13 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   ResizableStackedWidget * functionalBagChartStackedWidget = 0;
   if (nbInputPt > 1)
   {
-    bagChartStackedWidget = new ResizableStackedWidget;
-    outTabWidget->addTab(bagChartStackedWidget, tr("Bag chart"));
-    connect(outListWidget_, SIGNAL(currentRowChanged(int)), bagChartStackedWidget, SLOT(setCurrentIndex(int)));
-
     functionalBagChartStackedWidget = new ResizableStackedWidget;
     outTabWidget->addTab(functionalBagChartStackedWidget, tr("Functional bag chart"));
     connect(outListWidget_, SIGNAL(currentRowChanged(int)), functionalBagChartStackedWidget, SLOT(setCurrentIndex(int)));
+
+    bagChartStackedWidget = new ResizableStackedWidget;
+    outTabWidget->addTab(bagChartStackedWidget, tr("Bag chart"));
+    connect(outListWidget_, SIGNAL(currentRowChanged(int)), bagChartStackedWidget, SLOT(setCurrentIndex(int)));
   }
 
   ResizableStackedWidget * tableStackedWidget = new ResizableStackedWidget;
@@ -772,7 +773,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     if (nbInputPt > 1)
     {
       // bag chart
-      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::BagChart);
+      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get());
       bagChartWidget->PVViewWidget::setData(fieldSamplet);
       bagChartWidget->setAxisTitle(vtkAxis::BOTTOM, "PC1");
       bagChartWidget->setAxisTitle(vtkAxis::LEFT, "PC2");
@@ -785,7 +786,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
       linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), bagChartWidget->getProxy());
 
       // functional bag chart
-      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::FunctionalBagChart, bagChartWidget->getFilterSource());
+      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), bagChartWidget->getFilterSource());
       fBagChartWidget->setXAxisData(meshParamName[0]);
       fBagChartWidget->setChartTitle(tr("Quantiles"));
       fBagChartWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Node index"));

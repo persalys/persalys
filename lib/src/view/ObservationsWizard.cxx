@@ -39,7 +39,8 @@ ImportObservationsPage::ImportObservationsPage(QWidget* parent)
 
 void ImportObservationsPage::buildInterface()
 {
-  setWindowTitle(tr("Import observations from file"));
+  setTitle(tr("Define observations"));
+  setSubTitle(tr("Import data from a file"));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   mainLayout->addWidget(sampleWidget_);
@@ -54,7 +55,7 @@ void ImportObservationsPage::setTable(const QString& fileName)
   observations_.setFileName(fileName.toUtf8().data());
   // get variable names
   Description allVarNames(observations_.getPhysicalModel().getInputNames());
-  allVarNames.add(observations_.getPhysicalModel().getSelectedOutputsNames());
+  allVarNames.add(observations_.getPhysicalModel().getOutputNames());
   Description initVarNames(observations_.getInputNames());
   initVarNames.add(observations_.getOutputNames());
   // get variable columns indices
@@ -83,8 +84,7 @@ void ImportObservationsPage::checkColumns()
   // try to update the observations
   try
   {
-    observations_.setColumns(inColumns, outColumns);
-    observations_.setNames(QtOT::StringListToDescription(inNames), QtOT::StringListToDescription(outNames));
+    observations_.setColumns(inColumns, QtOT::StringListToDescription(inNames), outColumns, QtOT::StringListToDescription(outNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }

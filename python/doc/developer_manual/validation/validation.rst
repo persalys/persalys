@@ -432,9 +432,9 @@ Models
 
 - open the interface
 
-- Import the file python/test/test_analyses.py
+- Import the file python/test/test_deterministic_analyses.py
 
-- click on 'Definition' child item of 'model1' item
+- click on 'Definition' child item of 'symbolicModel' item
 
   .. image:: /developer_manual/validation/model1.png
       :align: center
@@ -467,222 +467,31 @@ Models
 
 - check the doc link
 
-- click on 'Definition' child item of 'model2' item
+- click on 'Definition' child item of 'pythonModel' item
 
   .. image:: /developer_manual/validation/model2.png
       :align: center
 
 - check the doc link
 
-- click on 'Definition' child item of 'model3' item
+- click on 'Definition' child item of 'fixedDataModel' item
+
+  .. image:: /developer_manual/validation/model4.png
+      :align: center
+
+  - click on reload button : nothing appends
+
+- click on 'Definition' child item of 'importDataModel' item
 
   .. image:: /developer_manual/validation/model3.png
       :align: center
 
+  - click on reload button : nothing appends
+
 - check the doc link
 
-Designs of experiments
+Deterministic analyses
 ``````````````````````
-
-- check the wizards:
-
-  - right click on design_1 and choose Modify :
-
-    - First page :
-
-      .. image:: /developer_manual/validation/design_1_wizard_1st_page.png
-          :align: center
-
-      - type : Full factorial design
-
-      - check the doc link (Help button)
-
-      - continue
-
-    - Second page :
-
-      .. image:: /developer_manual/validation/design_1_wizard_2nd_page.png
-          :align: center
-
-      - no selected line
-      - first and second columns are not editable
-      - the bounds and levels are disabled
-      - all levels are equal to 1
-      - check wizard behavior :
-
-        - sixth column items : change combo box item to Delta
-
-          - values changed : all deltas values are '-'
-
-        - first header item : check all
-
-          - third column is disabled
-          - other columns are enabled
-          - the Deltas are [10, 10, 0.2]
-
-        - sixth column items : change combo box item to Levels
-
-          - values changed : all levels values are equal to 2
-
-        - first header item : uncheck all
-
-        - check second line
-
-        - line 2 : change lower bound to 10, press enter
-
-          - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
-
-        - line 2 : change upper bound to 0, press enter
-
-          - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
-
-        - sixth column items : change combo box item to Delta
-
-          - all deltas values are '-'
-
-        - line 2 : change upper bound to 20 and Delta to 15, press enter
-
-          - error message : The delta must be greater or equal to 0 and less than the interval length
-
-        - line 2 : change delta to 0.5, press enter
-
-          - size of the design of experiments : 21
-
-        - check all lines one by one :
-
-          - first header item is checked
-          - size of the design of experiments : 84
-
-        - click on the 'Back' button then on the 'Continue' button
-
-          - check nothing has changed (values in the table, checked items, size label)
-
-      - cancel
-
-  - right click on design_2 and choose Modify :
-
-    - First page :
-        - type : Full factorial design
-        - continue
-
-    - Second page :
-
-      .. image:: /developer_manual/validation/design_2_wizard_2nd_page.png
-          :align: center
-
-      - x1 and x2 checked
-      - lower bounds : [0.5, 0.5]
-      - upper bounds : [9.5, 9.5]
-      - levels : [7, 7]
-      - sixth column items : change combo box item to Delta
-          - deltas : [1.5, 1.5]
-      - size of the design of experiments : 49
-      - cancel
-
-  - right click on design_3 and choose Modify :
-
-    - First page :
-        - type : Imported design
-        - continue
-
-    - Second page :
-
-      .. image:: /developer_manual/validation/design_3_wizard_2nd_page.png
-          :align: center
-
-      - Data file : data.csv
-      - header items : ['x1', '', 'x2', 'x3']
-      - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
-      - set the second header item to 'x2' and the third one to ''
-      - finish
-      - check the design of experiments window is updated : check the values of x2 have changed
-
-  - right click on design_4 and choose Modify :
-
-    - First page :
-        - type : Probabilistic design
-        - continue
-
-    - Second page :
-
-      .. image:: /developer_manual/validation/design_4_wizard_2nd_page.png
-          :align: center
-
-      - Monte Carlo selected
-      - LHS disabled: check the tooltip is 'The physical model does not have an independent copula'
-      - sample size : 100
-      - seed : 0
-      - cancel
-
-- check the evaluation result window :
-
-  - right click on design_3, choose Evaluate :
-
-    .. image:: /developer_manual/validation/design_3_evaluation_wizard.png
-        :align: center
-
-    - deselect fake_y0
-    - click on the Finish button
-    - an item 'Evaluation' appears in the tree view
-    - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
-    - click on the run button
-    - the evaluation is launched
-    - check result window :
-
-      .. image:: /developer_manual/validation/design_3_Table.png
-          :align: center
-
-      - 10 tabs : Summary - PDF/CDF - Boxplots - Dependence - Table - Cobweb plot - Plot matrix - Scatter plot - Parameters - Model
-      - Summary and PDF/CDF tabs :
-
-        - when changing the variable, the tabs are updated
-
-      - Other Plots tabs and Table tab :
-
-        - when clicking on the tab, the list view has been hidden
-        - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-        - check the tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
-
-  - right click on design_5, choose Evaluate :
-
-      - a wizard appears, click on the Finish button
-      - an item 'Evaluation' appears in the tree view
-      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
-      - click on 'Run' button
-      - check result window :
-
-        .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
-            :align: center
-
-        - 4 tabs : Summary - Table - Parameters - Model
-
-        - Summary tab :
-
-          - a list view with a variable appears at the left side of the window
-
-  - right click on design_6, choose Evaluate :
-
-      - a wizard appears, click on the Finish button
-      - an item 'Evaluation' appears in the tree view
-      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
-      - click on 'Run' button
-      - check result window :
-
-        .. image:: /developer_manual/validation/DOE_result_model2_two_points.png
-            :align: center
-
-        - 4 tabs : Summary - Table - Parameters - Model
-        - Summary tab :
-
-          - a list view with a variable appears at the left side of the window
-
-        - Table tab has 3 tabs: Table - Failed points - Cobweb plot
-
-          - check the cobweb plot has 4 columns. The fourth one is named 'Status 0: failed; 1: ok'.
-
-
-Analyses
-`````````````
 
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
@@ -725,13 +534,8 @@ Analyses
 
     - Second page check the values :
 
-      .. image:: /developer_manual/validation/optimization_wizard_2nd_page.png
-          :align: center
-
       - x1 and x2 checked
       - starting point : [0.2, 1.2, 1.]
-      - lower bounds : [0, 0, 0.9]
-      - upper bounds : [10, 10, 1.1]
       - check table behavior:
 
         - unselect line : lower and upper bounds columns are disabled
@@ -740,6 +544,11 @@ Analyses
         - if lower > upper bound : variable name in red, tooltip on the name and can not validate the page
         - if upper < lower bound : variable name in red, tooltip on the name and can not validate the page
         - if starting point not in the interval [lower bound, upper bound] : variable name in red, tooltip on the name and can not validate the page
+      - set lower bounds : [0, 0, 0.9]
+      - set upper bounds : [10, 10, 1.1]
+
+      .. image:: /developer_manual/validation/optimization_wizard_2nd_page.png
+          :align: center
 
     - Third page check the values :
 
@@ -778,16 +587,16 @@ Analyses
 
     - Second page check the values :
 
-      .. image:: /developer_manual/validation/morris_wizard_2nd_page.png
-          :align: center
-
       - 3 lines
-      - lower bounds : [0, 0, 0.9]
-      - upper bounds : [10, 10, 1.1]
       - check table behavior:
 
         - if lower > upper bound : variable name in red, tooltip on the name and can not validate the page
         - if upper < lower bound : variable name in red, tooltip on the name and can not validate the page
+      - set lower bounds : [0, 0, 0.9]
+      - set upper bounds : [10, 10, 1.1]
+
+      .. image:: /developer_manual/validation/morris_wizard_2nd_page.png
+          :align: center
 
     - Third page check the values :
 
@@ -829,9 +638,13 @@ Analyses
 
     - check the reuse of the Morris result by the Probabilistic model :
 
-      - go on the Probabilistic model window of model1, tab 'Marginals'
-      - select the x3 variable
-      - Click on the button Import Morris result below the table
+      - create a Probabilistic model for symbolicModel (right click on Definition item below symbolicModel)
+      - On the window which appears, select all variables of the table
+
+        .. image:: /developer_manual/validation/probaModelAll.png
+            :align: center
+
+      - Click on the 'Import Morris result' button below the table
       - a wizard appears
 
         .. image:: /developer_manual/validation/morrisResultWizard.png
@@ -839,7 +652,317 @@ Analyses
 
       - check the table is read-only
       - click on Finish
-      - check that x_3 is unselected
+      - check that x_2 and x_3 are unselected
+      - uncheck x_1
+
+  - Calibration : item calibration
+
+    - First page check the values :
+
+      .. image:: /developer_manual/validation/calibrationWizard_1stPage.png
+          :align: center
+
+      - Observations : observations
+      - Observed variables : [x1, y0]
+      - Number of observations : 100
+      - method : Non linear Gaussian
+      - continue
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/calibrationWizard_2ndPage.png
+          :align: center
+
+      - x2 checked, x3 unchecked
+      - values : [1.2, 1.1]
+      - continue
+
+    - Third page check the values :
+
+      .. image:: /developer_manual/validation/calibrationWizard_3rdPage.png
+          :align: center
+
+      - only x2 in the table.
+      - the mean is disabled
+      - the mean is 1.2 and sigma is 0.12
+      - continue
+
+    - Fourth page :
+
+      .. image:: /developer_manual/validation/calibrationWizard_4thPage.png
+          :align: center
+
+      - only y0 in the table
+      - the mean is disabled
+      - continue
+
+    - Fifth page :
+
+      .. image:: /developer_manual/validation/calibrationWizard_5thPage.png
+          :align: center
+
+      - confidence interval length : 0.99
+      - estimation by Bootstrap resampling : checked
+      - sample size : 25
+      - Number of evaluations : 50
+      - Errors : 1e-6
+      - Maximum number of evaluations : 1250
+
+    - click on the Back button 3 times to go on the second page :
+
+      - select x3
+      - change the value of x2 to 1.3
+      - click on Continue button
+      - the table of the third page has 2 rows : x2 and x3
+      - the mean of x2 is 1.3 and sigma is 0.13
+
+    - click on the Back button 2 times to go on the first page :
+
+      - select Linear Gaussian method
+      - continue
+      - the table of the second page has not been changed
+      - continue
+      - the third and fourth pages are the same
+      - continue
+      - the next page is :
+
+      .. image:: /developer_manual/validation/calibrationWizard_lastPage_linear.png
+          :align: center
+
+    - click on the Back button 2 times to go on the first page :
+
+      - select Linear least squares method
+      - continue
+      - the table of the second page has not been changed
+      - the next page is the last one :
+
+      .. image:: /developer_manual/validation/calibrationWizard_lastPage_linear.png
+          :align: center
+
+      - confidence interval length : 0.99
+
+    - click on the Back button 2 times to go on the first page :
+
+      - select Nonlinear least squares method
+      - continue
+      - the table of the second page has not been changed
+      - the next page is the last one :
+
+      .. image:: /developer_manual/validation/calibrationWizard_5thPage.png
+          :align: center
+
+
+    - click on the Cancel button
+
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on the 'Run' button
+
+    - check result window :
+
+      .. image:: /developer_manual/validation/calibration_result_optimal.png
+          :align: center
+
+      - left side : 1 variable in the list view
+      - right side, tabs : θ - Prediction - Parameters - Model
+      - θ tab : 2 tabs : Optimal - PDF
+      - Prediction tab : 4 tabs : Table - vs Observations - vs Inputs - Residuals
+          - check the 3 first tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+
+
+Designs of experiments
+''''''''''''''''''''''
+
+- check the wizards:
+
+  - right click on fixedDesign and choose Modify :
+
+    - First page :
+
+      .. image:: /developer_manual/validation/design_1_wizard_1st_page.png
+          :align: center
+
+      - type : Full factorial design
+
+      - check the doc link (Help button)
+
+      - continue
+
+    - Second page :
+
+      .. image:: /developer_manual/validation/design_1_wizard_2nd_page.png
+          :align: center
+
+      - no selected line
+      - first and second columns are not editable
+      - the bounds and levels are disabled
+      - all levels are equal to 1
+      - check wizard behavior :
+
+        - sixth column items : change combo box item to Delta
+
+          - values changed : all deltas values are '-'
+
+        - first header item : check all
+
+          - third column is disabled
+          - other columns are enabled
+          - the Deltas are [0.04, 0.24, 0.2]
+
+        - sixth column items : change combo box item to Levels
+
+          - values changed : all levels values are equal to 2
+
+        - first header item : uncheck all
+
+        - check second line
+
+        - line 2 : change lower bound to 10, press enter
+
+          - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
+
+        - line 2 : change upper bound to 0, press enter
+
+          - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
+
+        - sixth column items : change combo box item to Delta
+
+          - all deltas values are '-'
+
+        - line 2 : change upper bound to 20 and Delta to 15, press enter
+
+          - error message : The delta must be greater or equal to 0 and less than the interval length
+
+        - line 2 : change delta to 0.5, press enter
+
+          - size of the design of experiments : 21
+
+        - check all lines one by one :
+
+          - first header item is checked
+          - size of the design of experiments : 84
+
+      - click on Finish button:
+
+          - the window is updated : check the sample size is 84
+          - the Evaluation item is removed
+
+  - right click on grid and choose Modify :
+
+    - First page :
+        - type : Full factorial design
+        - continue
+
+    - Second page :
+
+      .. image:: /developer_manual/validation/design_2_wizard_2nd_page.png
+          :align: center
+
+      - x1 and x2 checked
+      - lower bounds : [0.5, 0.5]
+      - upper bounds : [9.5, 9.5]
+      - levels : [7, 7]
+      - sixth column items : change combo box item to Delta
+          - deltas : [1.5, 1.5]
+      - size of the design of experiments : 49
+      - cancel
+
+  - right click on importDesign and choose Modify :
+
+    - First page :
+        - type : Imported design
+        - continue
+
+    - Second page :
+
+      .. image:: /developer_manual/validation/design_3_wizard_2nd_page.png
+          :align: center
+
+      - Data file : data.csv
+      - header items : ['x1', '', 'x2', 'x3']
+      - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
+      - set the second header item to 'x2' and the third one to ''
+      - finish
+      - check the design of experiments window is updated : check the values of x2 have changed
+
+
+- check the evaluation result window :
+
+  - right click on importDesign, choose Evaluate :
+
+    .. image:: /developer_manual/validation/design_3_evaluation_wizard.png
+        :align: center
+
+    - deselect fake_y0
+    - click on the Finish button
+    - an item 'Evaluation' appears in the tree view
+    - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+    - click on the run button
+    - the evaluation is launched
+    - check result window :
+
+      .. image:: /developer_manual/validation/design_3_Table.png
+          :align: center
+
+      - 10 tabs : Summary - PDF/CDF - Boxplots - Dependence - Table - Cobweb plot - Plot matrix - Scatter plot - Parameters - Model
+      - Summary and PDF/CDF tabs :
+
+        - when changing the variable, the tabs are updated
+
+      - Other Plots tabs and Table tab :
+
+        - when clicking on the tab, the list view has been hidden
+        - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+        - check the tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
+
+  - right click on onePointDesign, choose Evaluate :
+
+      - a wizard appears, click on the Finish button
+      - an item 'Evaluation' appears in the tree view
+      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on 'Run' button
+      - check result window :
+
+        .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
+            :align: center
+
+        - 4 tabs : Summary - Table - Parameters - Model
+
+        - Summary tab :
+
+          - a list view with a variable appears at the left side of the window
+
+  - right click on twoPointsDesign, choose Evaluate :
+
+      - a wizard appears, click on the Finish button
+      - an item 'Evaluation' appears in the tree view
+      - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on 'Run' button
+      - check result window :
+
+        .. image:: /developer_manual/validation/DOE_result_model2_two_points.png
+            :align: center
+
+        - 4 tabs : Summary - Table - Parameters - Model
+        - Summary tab :
+
+          - a list view with a variable appears at the left side of the window
+
+        - Table tab has 3 tabs: Table - Failed points - Cobweb plot
+
+          - check the cobweb plot has 4 columns. The fourth one is named 'Status 0: failed; 1: ok'.
+
+
+- save the study, close it, reopen it, check all windows are correctly build, close the study.
+
+Probabilistic analyses
+``````````````````````
+
+- Import the file python/test/test_probabilistic_analyses.py
+
+- Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
+
+- Check all the analyses wizards -> Right click on each item and choose Modify :
 
   - Monte Carlo : MonteCarlo item
 
@@ -1117,12 +1240,12 @@ Analyses
       .. image:: /developer_manual/validation/sobol_wizard_2nd_page.png
           :align: center
 
-      - Accuracy disabled : 0.01
+      - max confidence interval length : 0.01
       - max time : 16m40s
       - max calls : 1000
+      - replication size : 100
       - block size : 100
       - number of calls by iteration : 400
-      - bootstrap sampling size : 100
       - confidence level : 0.95
       - seed : 2
 
@@ -1268,7 +1391,7 @@ Analyses
       - a new item MetaModel_0 appears in the tree view
       - click on its sub-item named 'Definition'
       - change the value of x2 to 1.6
-      - click on the Evaluate button
+      - click on the Check model button
 
       .. image:: /developer_manual/validation/kriging_new_model.png
           :align: center
@@ -1294,7 +1417,7 @@ Analyses
       .. image:: /developer_manual/validation/chaos_1_wizard_1st_page.png
           :align: center
 
-      - design of experiments : design_1
+      - design of experiments : probaDesign
       - selected outputs : y1
       - method : Functional chaos
       - continue
@@ -1326,7 +1449,7 @@ Analyses
           :align: center
 
       - left side : 1 variable in the list view
-      - right side, tabs : MetaModel - Summary - Sobol indices - Validation - Parameters
+      - right side, tabs : MetaModel - Summary - Sobol indices - Validation - Parameters - Model
       - Metamodel tab : plot + Relative error table
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
@@ -1525,15 +1648,114 @@ Analyses
       - choose copulaInference/[x_2, x_3]/Gumbel, click on Finish
       - check that the copula is Gumbel now
 
-- save the study, close it, reopen it
+Designs of experiments
+''''''''''''''''''''''
+
+- check the wizard:
+
+  - right click on probaDesign and choose Modify :
+
+    - First page :
+        - type : Probabilistic design
+        - continue
+
+    - Second page :
+
+      .. image:: /developer_manual/validation/design_4_wizard_2nd_page.png
+          :align: center
+
+      - Monte Carlo selected
+      - LHS disabled: check the tooltip is 'The physical model does not have an independent copula'
+      - sample size : 100
+      - seed : 0
+      - cancel
+
+
+
+- save the study, close it, reopen it, check all windows are correctly built, close the study.
+
+
+
+Field analyses
+``````````````````````
+
+- Import the file python/test/test_field_analyses.py
+
+- Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
+
+- Check all the analyses wizards -> Right click on each item and choose Modify :
+
+  - Monte Carlo : mcAnalysis item
+
+    - First page check the values :
+
+      .. image:: /developer_manual/validation/fieldMonteCarlo_Wizard.png
+          :align: center
+
+      - selected output : z
+      - max time : 16m40s
+      - max calls : 10
+      - block size : 5
+      - Karhunen-Loeve threshold : 2e-5
+      - seed : 2
+
+    - click on the Finish button
+
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on the 'Run' button
+
+    - check result window :
+
+      .. image:: /developer_manual/validation/fieldMonteCarlo_result.png
+          :align: center
+
+      - left side : 1 variable in the list view
+      - right side, tabs : Result - Input - Decomposition - Correlation - Parameters - Model
+      - Result tab, tabs : Trajectories - Mean trajectory - Functional bag chart - Bag chart - Table
+      - Input tab, tabs : Table - Plot matrix
+      - Decomposition tab, tabs : Modes - Eigenvalues - ξi
+      - ξi tab, tabs : PDF - Plot matrix
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - check the tabs (Trajectories - Functional bag chart - Bag chart - Table) are linked :
+        do several selections in a tab and check the selection is the same in the others tabs
+
+  - Evaluation : item evaluation
+
+    .. image:: /developer_manual/validation/fieldEvaluation_Wizard.png
+        :align: center
+
+    - selected outputs : z, z2
+    - check the values : [100, 55, 80, 16]
+
+    - click on the Finish button
+
+      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
+      - click on the 'Run' button
+
+    - check result window
+
+      .. image:: /developer_manual/validation/fieldEvaluation_result.png
+          :align: center
+
+      - left side : 2 variables in the list view
+      - right side, tabs : Result - Input - Parameters - Model
+      - Result tab, tabs : Trajectory - Table
+      - Input tab, tabs : Table
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+
+- save the study, close it, reopen it, check all windows are correctly built, close the study.
+
 
 Diagrams
 `````````
 
+Physical model
+''''''''''''''''
+
 - open the interface
 - create a new Study
 - click on 'Symbolic model' button of the window of myOTStudy
-    - the item PhysicalModel_0 appears in the tree view
+    - the item SymbolicModel_0 appears in the tree view
     - a new Physical model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled
 
@@ -1542,19 +1764,28 @@ Diagrams
 
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
     - add an input : the 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
-    - add an output, set its formula to X0 : the 'Model evaluation', 'Optimization', 'Observations' buttons of the diagram are enabled
+    - add an output, set its formula to X0 : the 'Model evaluation', 'Optimization' buttons of the diagram are enabled
 
 - click on the 'Model evaluation' button of the diagram
     - a wizard appears, click on Cancel
 
 - In the model window : add a second input
-    - the 'Screening' button of the diagram is enabled
+    - the 'Screening' and 'Observations' buttons of the diagram is enabled
 
 - click on the 'Screening' button of the diagram
     - a wizard appears, click on Cancel
 
 - click on the 'Optimization' button of the diagram
     - a wizard appears, click on Cancel
+
+- click on the 'Observations' button of the diagram
+    - a wizard appears, import a sample with at least 2 columns, click on Finish
+    - the 'Calibration' button of the diagram is enabled
+
+- redo the previous action
+
+- click on the 'Calibration' button of the diagram
+    - a wizard appears, there are 2 items in the combo box in Observations group box, click on Cancel
 
 - click on the 'Design of experiments creation' button of the diagram
     - a wizard appears, click on Continue button on the first page
@@ -1590,6 +1821,9 @@ Diagrams
 - click on the 'Reliability' button of the diagram
     - a wizard appears, there are 2 items in the combo box in Limit state group box, click on Cancel
 
+Data model
+''''''''''''''''
+
 - click on 'Data model' button of the window of myOTStudy
     - the item dataModel_0 appears in the tree view
     - a new Data model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
@@ -1608,3 +1842,29 @@ Diagrams
 
 - save the current study, reopen
     - in the window of the 'Definition' item of the data model : click on the reload button
+
+
+Field model
+''''''''''''''''
+
+- click on 'Symbolic Field model' button of the window of myOTStudy
+    - the item SymbolicModel_1 appears in the tree view
+    - a new model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+    - only the 'Model definition' button is enabled
+
+  .. image:: /developer_manual/validation/fieldModel_diagramWindow.png
+      :align: center
+
+- click on 'Model definition' button of the diagram: an item 'Definition' appears
+    - add an input : the 'Probabilistic model definition' button of the diagram is enabled
+    - add an output : the 'Model evaluation' button of the diagram is enabled
+
+- click on the 'Model evaluation' button of the diagram
+    - a wizard appears, click on Cancel
+
+- click on the 'Probabilistic model definition' button of the diagram
+    - a window appears, select X0
+    - the  'Central tendency' button of the diagram is enabled
+
+- click on the 'Central tendency' button of the diagram
+    - a wizard appears, click on Cancel

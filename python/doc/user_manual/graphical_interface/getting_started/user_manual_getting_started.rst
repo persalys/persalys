@@ -58,10 +58,11 @@ windows (model definition or result window) open, surrounded by:
            - Select data to plot
            - Modify the space where the values are plotted with the **Ranks** check button
              (default: physical space). Check off the button to display the rank of the values
-           - Specify X-axis label orientation
            - Specify other axis parameters in the **X-axis** and **Y-axis** tabs:
                - minimum/maximum bounds (expected: floating point)
                - log scale (check button only available if axis values are positive)
+               - X-axis label orientation
+           - Reset the axis ranges
            - Specify the **plot style**: color, marker size and style (cross, circle, diamond, square, plus)
 
       .. image:: /user_manual/graphical_interface/getting_started/graphicConfiguration.png
@@ -81,6 +82,10 @@ The interface startup window shows 3 items:
   - **Import Python script**: Load a Python Script from a dialog box.
     It is impossible to load a study when another one is already opened.
 
+
+.. |infoButton| image:: /user_manual/graphical_interface/probabilistic_analysis/documentinfo.png
+
+- Click on the icon |infoButton| to open the documentation
 
 1-3 Menus
 '''''''''
@@ -135,6 +140,7 @@ The **Help** menu gathers the following shortcuts:
 =================
 
 .. |newButton| image:: /user_manual/graphical_interface/getting_started/document-new22x22.png
+
 
 There are several ways to create a new study:
 

@@ -23,6 +23,7 @@
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
 #include "persalys/ScreeningAnalysisWizard.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -89,7 +90,7 @@ void MorrisPage::initialize(const Analysis& analysis)
   tableView_->resizeColumnsToContents();
 
   // if too many variables: no fixed height + use scrollbar
-  if (tableModel_->rowCount() < 15)
+  if (tableModel_->rowCount() < RowNumberToScrollTable)
   {
     // resize table
     const int h = tableView_->verticalHeader()->length() + tableView_->horizontalHeader()->height();

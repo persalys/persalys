@@ -56,7 +56,10 @@ public:
 
   virtual OT::Description getInputNames();
   virtual OT::Description getOutputNames();
-  virtual void setNames(const OT::Description & inputNames, const OT::Description & outputNames);
+  virtual void setColumns(const OT::Indices &inputColumns,
+                          const OT::Description &inputNames,
+                          const OT::Indices &outputColumns,
+                          const OT::Description &outputNames);
 
   virtual OT::String getPythonScript() const;
 
@@ -70,6 +73,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
   virtual void check();
   virtual void update();
   virtual void setDefaultColumns();

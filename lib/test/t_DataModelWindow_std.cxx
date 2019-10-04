@@ -61,46 +61,47 @@ private slots:
 
     // get widgets
     QTableView * variableTable = window.findChild<QTableView*>("variableTable");
+    DataModelTableModel * variableModel = static_cast<DataModelTableModel*>(variableTable->model());
     CheckableHeaderView * headerView = dynamic_cast<CheckableHeaderView*>(variableTable->verticalHeader());
     QTableView * rowIDTable = window.findChild<QTableView*>("rowIDTable");
     QTableView * sampleTable = window.findChild<QTableView*>("sampleTable");
 
     // check
-    QVERIFY2(variableTable->model()->rowCount() == 2, "one line in the variable table");
-    QVERIFY2(variableTable->model()->columnCount() == 5, "5 columns in the variable table");
+    QVERIFY2(variableModel->rowCount() == 2, "one line in the variable table");
+    QVERIFY2(variableModel->columnCount() == 5, "5 columns in the variable table");
     QVERIFY2(rowIDTable->model()->columnCount() == 6, "6 columns in the rowIDTable table");
     QVERIFY2(sampleTable->model()->columnCount() == 6, "6 columns in the sample table");
     QVERIFY2(sampleTable->model()->rowCount() == (int)model->getSample().getSize(), "wrong line number in the sample table");
     QVERIFY2(headerView->isChecked() == false, "wrong header check state");
-    for (int i = 0; i < variableTable->model()->columnCount(); ++i)
+    for (int i = 0; i < variableModel->columnCount(); ++i)
     {
       if (model->getInputColumns().contains(i) || model->getOutputColumns().contains(i))
       {
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, i), Qt::CheckStateRole).toInt() == Qt::Checked, "wrong check state in Table");
+        QVERIFY2(variableModel->data(variableModel->index(0, i), Qt::CheckStateRole) == Qt::Checked, "wrong check state in Table");
         if (model->getInputColumns().contains(i))
-          QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString() == "Input", "wrong variable type in Table");
+          QVERIFY2(variableModel->data(variableModel->index(1, i)) == "Input", "wrong variable type in Table");
         if (model->getOutputColumns().contains(i))
-          QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString() == "Output", "wrong variable type in Table");
+          QVERIFY2(variableModel->data(variableModel->index(1, i)) == "Output", "wrong variable type in Table");
       }
       else
       {
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, i), Qt::CheckStateRole).toInt() == Qt::Unchecked, "wrong check state in Table");
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString().isEmpty() == true, "wrong variable type in Table");
+        QVERIFY2(variableModel->data(variableModel->index(0, i), Qt::CheckStateRole) == Qt::Unchecked, "wrong check state in Table");
+        QVERIFY2(variableModel->data(variableModel->index(1, i)).toString().isEmpty() == true, "wrong variable type in Table");
       }
     }
     Indices col(model->getInputColumns());
     for (UnsignedInteger i = 0; i < col.getSize(); ++i)
     {
       QString name_i(model->getInputNames()[i].c_str());
-      QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, col[i])).toString() == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal).toString() == name_i, "wrong name in sample Table");
+      QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
     col = model->getOutputColumns();
     for (UnsignedInteger i = 0; i < col.getSize(); ++i)
     {
       QString name_i(model->getOutputNames()[i].c_str());
-      QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, col[i])).toString() == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal).toString() == name_i, "wrong name in sample Table");
+      QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
 
     // resize column
@@ -120,6 +121,7 @@ private slots:
 
     // get widgets
     QTableView * variableTable = window.findChild<QTableView*>("variableTable");
+    DataModelTableModel * variableModel = static_cast<DataModelTableModel*>(variableTable->model());
     CheckableHeaderView * headerView = dynamic_cast<CheckableHeaderView*>(variableTable->verticalHeader());
 
     // check
@@ -128,25 +130,25 @@ private slots:
     QTest::mousePress(headerView->viewport(), Qt::LeftButton, 0, headerView->viewport()->rect().topLeft()+QPoint(5,2));
     QVERIFY2(model->getInputColumns().contains(4) == true, "wrong input columns");
 
-    variableTable->model()->setData(variableTable->model()->index(0, 4), Qt::Unchecked, Qt::CheckStateRole);
+    variableModel->setData(variableModel->index(0, 4), Qt::Unchecked, Qt::CheckStateRole);
     QVERIFY2(headerView->isChecked() == false, "wrong header check state");
     QVERIFY2(model->getInputColumns().contains(4) == false, "wrong input columns");
 
-    variableTable->model()->setData(variableTable->model()->index(0, 2), Qt::Unchecked, Qt::CheckStateRole);
+    variableModel->setData(variableModel->index(0, 2), Qt::Unchecked, Qt::CheckStateRole);
     QVERIFY2(model->getOutputColumns().contains(2) == false, "wrong output columns");
 
-    variableTable->model()->setData(variableTable->model()->index(0, 2), Qt::Checked, Qt::CheckStateRole);
+    variableModel->setData(variableModel->index(0, 2), Qt::Checked, Qt::CheckStateRole);
     QVERIFY2(model->getInputColumns().contains(2) == true, "wrong input columns");
 
     // change variable type
-    variableTable->model()->setData(variableTable->model()->index(1, 2), "Output");
+    variableModel->setData(variableModel->index(1, 2), "Output");
     QVERIFY2(model->getOutputColumns().contains(2) == true, "wrong output columns");
     QVERIFY2(model->getInputColumns().contains(2) == false, "wrong input columns");
 
     // change variable name
-    variableTable->model()->setData(variableTable->model()->index(0, 1), "myVariable");
+    variableModel->setData(variableModel->index(0, 1), "myVariable");
     QVERIFY2(QtOT::DescriptionToStringList(model->getInputNames()).contains("myVariable") == true, "wrong input names");
-    variableTable->model()->setData(variableTable->model()->index(0, 2), "myVariable2");
+    variableModel->setData(variableModel->index(0, 2), "myVariable2");
     QVERIFY2(QtOT::DescriptionToStringList(model->getOutputNames()).contains("myVariable2") == true, "wrong output names");
   }
 
@@ -159,6 +161,7 @@ private slots:
 
     // get widgets
     QTableView * variableTable = window.findChild<QTableView*>("variableTable");
+    DataModelTableModel * variableModel = static_cast<DataModelTableModel*>(variableTable->model());
     QTableView * sampleTable = window.findChild<QTableView*>("sampleTable");
 
     // checks
@@ -176,70 +179,70 @@ private slots:
     Description outDesc(2);
     outDesc[0] = "outp1";
     outDesc[1] = "outp2";
-    model->setColumns(inCol, outCol);
-    model->setNames(inDesc, outDesc);
-    for (int i = 0; i < variableTable->model()->columnCount(); ++i)
+    model->setColumns(inCol, inDesc, outCol, outDesc);
+    for (int i = 0; i < variableModel->columnCount(); ++i)
     {
       if (inCol.contains(i) || outCol.contains(i))
       {
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, i), Qt::CheckStateRole).toInt() == Qt::Checked, "wrong check state in Table");
+        QVERIFY2(variableModel->data(variableModel->index(0, i), Qt::CheckStateRole) == Qt::Checked, "wrong check state in Table");
         if (inCol.contains(i))
-          QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString() == "Input", "wrong variable type in Table");
+          QVERIFY2(variableModel->data(variableModel->index(1, i)) == "Input", "wrong variable type in Table");
         if (outCol.contains(i))
-          QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString() == "Output", "wrong variable type in Table");
+          QVERIFY2(variableModel->data(variableModel->index(1, i)) == "Output", "wrong variable type in Table");
       }
       else
       {
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, i), Qt::CheckStateRole).toInt() == Qt::Unchecked, "wrong check state in Table");
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString().isEmpty() == true, "wrong variable type in Table");
+        QVERIFY2(variableModel->data(variableModel->index(0, i), Qt::CheckStateRole) == Qt::Unchecked, "wrong check state in Table");
+        QVERIFY2(variableModel->data(variableModel->index(1, i)).toString().isEmpty() == true, "wrong variable type in Table");
       }
     }
     for (UnsignedInteger i = 0; i < inCol.getSize(); ++i)
     {
       QString name_i(inDesc[i].c_str());
-      QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, inCol[i])).toString() == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(inCol[i]+1, Qt::Horizontal).toString() == name_i, "wrong name in sample Table");
+      QVERIFY2(variableModel->data(variableModel->index(0, inCol[i])) == name_i, "wrong name in variable Table");
+      QVERIFY2(sampleTable->model()->headerData(inCol[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
     for (UnsignedInteger i = 0; i < outCol.getSize(); ++i)
     {
       QString name_i(outDesc[i].c_str());
-      QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, outCol[i])).toString() == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(outCol[i]+1, Qt::Horizontal).toString() == name_i, "wrong name in sample Table");
+      QVERIFY2(variableModel->data(variableModel->index(0, outCol[i])) == name_i, "wrong name in variable Table");
+      QVERIFY2(sampleTable->model()->headerData(outCol[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
 
     // change file name
     Sample sample(Normal(2).getSample(10));
     sample.exportToCSVFile("sample.csv");
     model->setFileName("sample.csv");
-    for (int i = 0; i < variableTable->model()->columnCount(); ++i)
+    std::cout<<"dans test --------- "<<model->getInputNames()<<" "<<model->getOutputNames()<<" "<<model->getInputColumns()<<" "<<model->getOutputColumns()<<" "<<variableModel->columnCount()<<std::endl;
+    for (int i = 0; i < variableModel->columnCount(); ++i)
     {
       if (model->getInputColumns().contains(i) || model->getOutputColumns().contains(i))
       {
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, i), Qt::CheckStateRole).toInt() == Qt::Checked, "wrong check state in Table");
+        QVERIFY2(variableModel->data(variableModel->index(0, i), Qt::CheckStateRole) == Qt::Checked, "wrong check state in Table");
         if (model->getInputColumns().contains(i))
-          QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString() == "Input", "wrong variable type in Table");
+          QVERIFY2(variableModel->data(variableModel->index(1, i)) == "Input", "wrong variable type in Table");
         if (model->getOutputColumns().contains(i))
-          QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString() == "Output", "wrong variable type in Table");
+          QVERIFY2(variableModel->data(variableModel->index(1, i)) == "Output", "wrong variable type in Table");
       }
       else
       {
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, i), Qt::CheckStateRole).toInt() == Qt::Unchecked, "wrong check state in Table");
-        QVERIFY2(variableTable->model()->data(variableTable->model()->index(1, i)).toString().isEmpty() == true, "wrong variable type in Table");
+        QVERIFY2(variableModel->data(variableModel->index(0, i), Qt::CheckStateRole) == Qt::Unchecked, "wrong check state in Table");
+        QVERIFY2(variableModel->data(variableModel->index(1, i)).toString().isEmpty() == true, "wrong variable type in Table");
       }
     }
     Indices col(model->getInputColumns());
     for (UnsignedInteger i = 0; i < col.getSize(); ++i)
     {
       QString name_i(model->getInputNames()[i].c_str());
-      QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, col[i])).toString() == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal).toString() == name_i, "wrong name in sample Table");
+      QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
     col = model->getOutputColumns();
     for (UnsignedInteger i = 0; i < col.getSize(); ++i)
     {
       QString name_i(model->getOutputNames()[i].c_str());
-      QVERIFY2(variableTable->model()->data(variableTable->model()->index(0, col[i])).toString() == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal).toString() == name_i, "wrong name in sample Table");
+      QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
   }
 };

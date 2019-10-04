@@ -110,8 +110,9 @@ void StudyWindow::buildInterface()
 
   // functionalities list
   textEdit = new QLabel;
-  QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6\n- %7")
+  QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6\n- %7\n- %8")
                  .arg(tr("Evaluation"))
+                 .arg(tr("Calibration"))
                  .arg(tr("Optimization"))
                  .arg(tr("Design of experiments"))
                  .arg(tr("Central tendency"))
@@ -190,5 +191,12 @@ void StudyWindow::buildInterface()
   layout->addWidget(textEdit, row, 1, Qt::AlignLeft | Qt::AlignTop);
 
   layout->setRowStretch(++row, 4);
+
+  // Persalys logo
+  QLabel * imageLabel = new QLabel;
+  QPixmap pixmap(":/images/persalys-logo.png");
+  imageLabel->setPixmap(pixmap);
+
+  layout->addWidget(imageLabel, ++row, 0, 1, 2, Qt::AlignCenter);
 }
 }
