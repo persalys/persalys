@@ -15,6 +15,7 @@ cmake \
   -DSalomeYACS_DIR=/home/devel/local/adm/cmake/ \
   -Dydefx_DIR=/home/devel/local/salome_adm/cmake_files/ \
   -DPy2cpp_DIR=/home/devel/local/lib/cmake/py2cpp \
+  -DAdaoCppLayer_ROOT_DIR=/home/devel/local/ \
   /io
 make install
 make tests

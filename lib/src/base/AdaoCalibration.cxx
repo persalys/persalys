@@ -68,7 +68,6 @@ class MyDefaultVisitor : public AdaoModel::PythonLeafVisitor
 public:
   MyDefaultVisitor(PyObject *context, Point thetaPrior, Sample modelObservations):_context(context)
   {
-    UnsignedInteger sz(thetaPrior.getSize());
     std::vector< double > Xb(thetaPrior.begin(),thetaPrior.end());
     py2cpp::PyPtr XbPy(py2cpp::toPyPtr(Xb));
     _Xb = XbPy.get();
@@ -238,7 +237,7 @@ PyObject *EvaluateSamples(const std::vector<double>& inputObservation, PyObject 
     if(numpyModule.isNull())
       throw AdaoExchangeLayerException("Failed to load numpy");
     PyObjectRAII ravelFunc(PyObjectRAII::FromNew(PyObject_GetAttrString(numpyModule,"ravel")));
-    while( item = PyIter_Next(iterator) )
+    while ((item = PyIter_Next(iterator)))
       {
         PyObjectRAII item2(PyObjectRAII::FromNew(item));
         {

@@ -4,8 +4,8 @@
 #  AdaoCppLayer_FOUND - the system has Adao Cpp
 #  AdaoCppLayer_INCLUDE_DIR - where to find AdaoExchangeLayer.hxx
 #  AdaoCppLayer_INCLUDE_DIRS - Adao Cpp includes
-#  AdaoCppLayer_LIBRARY - where to find the Adao Cpp library
-#  AdaoCppLayer_LIBRARIES - aditional libraries
+#  AdaoCppLayer_LIBRARY - where to find the adaoexchange lib
+#  AdaoCppLayer_LIBRARIES - additional libraries
 #  AdaoCppLayer_ROOT_DIR - root dir (ex. /usr/local)
 
 #=============================================================================
@@ -40,10 +40,15 @@
 
 find_path (AdaoCppLayer_INCLUDE_DIR
   NAMES AdaoExchangeLayer.hxx
+  HINTS ${AdaoCppLayer_ROOT_DIR}/include
 )
 set (AdaoCppLayer_INCLUDE_DIRS ${AdaoCppLayer_INCLUDE_DIR})
 
-# set (AdaoCppLayer_LIBRARIES ${AdaoCppLayer_LIBRARY})
+
+find_library (AdaoCppLayer_LIBRARY
+  NAMES adaoexchange
+  HINTS ${AdaoCppLayer_ROOT_DIR}/lib)
+set (AdaoCppLayer_LIBRARIES ${AdaoCppLayer_LIBRARY})
 
 
 # try to guess root dir from include dir
@@ -54,17 +59,13 @@ elseif (AdaoCppLayer_LIBRARY)
   string (REGEX REPLACE "(.*)/lib[/|32|64].*" "\\1" AdaoCppLayer_ROOT_DIR ${AdaoCppLayer_LIBRARY})
 endif ()
 
-if(AdaoCppLayer_ROOT_DIR)
-  list(APPEND CMAKE_PREFIX_PATH "${AdaoCppLayer_ROOT_DIR}")
-endif(AdaoCppLayer_ROOT_DIR)
-
-find_library (AdaoCppLayer_LIBRARIES NAMES adaoexchange )
-
 # handle the QUIETLY and REQUIRED arguments
 include (FindPackageHandleStandardArgs)
-find_package_handle_standard_args (AdaoCppLayer REQUIRED_VARS AdaoCppLayer_INCLUDE_DIR)
+find_package_handle_standard_args (AdaoCppLayer REQUIRED_VARS AdaoCppLayer_LIBRARIES AdaoCppLayer_INCLUDE_DIRS)
 
 mark_as_advanced (
+  AdaoCppLayer_LIBRARY
+  AdaoCppLayer_LIBRARIES
   AdaoCppLayer_INCLUDE_DIR
   AdaoCppLayer_INCLUDE_DIRS
   AdaoCppLayer_ROOT_DIR
