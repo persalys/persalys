@@ -17,7 +17,7 @@ cmake -DUSE_COTIRE=ON \
   /io
 make install
 make tests
-xvfb-run ctest --output-on-failure --timeout 100 -j8
+xvfb-run ctest --output-on-failure --timeout 30 -j8
 
 cd /tmp/persalys.AppDir/usr/share/persalys/doc/; zip -r /tmp/persalys-doc.zip ./html/*; cd -
 
