@@ -91,6 +91,16 @@ void PhysicalModelImplementation::setName(const String & name)
 }
 
 
+void PhysicalModelImplementation::removeAllObservers()
+{
+  notifyAndRemove("ProbabilisticModelItem");
+  notifyAndRemove("PhysicalModelDefinitionItem");
+  notifyAndRemove("MeshItem");
+  notifyAndRemove("PhysicalModelDiagramItem");
+  notifyAndRemove("Study");
+}
+
+
 Bool PhysicalModelImplementation::operator==(const PhysicalModelImplementation& other) const
 {
   if (this == &other)

@@ -54,6 +54,8 @@ public:
   /** Virtual constructor */
   virtual Observations * clone() const;
 
+  virtual void removeAllObservers();
+
   virtual void setColumns(const OT::Indices &inputColumns,
                           const OT::Description &inputNames,
                           const OT::Indices &outputColumns,

@@ -25,6 +25,7 @@
 #include "BaseTools.hxx"
 #include "LaunchParametersVisitor.hxx"
 
+class Study;
 namespace PERSALYS
 {
 class PERSALYS_API AnalysisImplementation : public OT::PersistentObject, public Observable
@@ -42,6 +43,9 @@ public:
   /** Object name accessor */
   virtual void setName(const OT::String& name);
 
+  virtual void removeAllObservers();
+  virtual Observer * getParentObserver() const;
+
   /** Comparison operators */
   OT::Bool operator ==(const AnalysisImplementation & other) const;
   OT::Bool operator !=(const AnalysisImplementation & other) const;
@@ -50,6 +54,7 @@ public:
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
 
   bool isReliabilityAnalysis() const;
 

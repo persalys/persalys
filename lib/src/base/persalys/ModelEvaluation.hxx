@@ -23,6 +23,7 @@
 
 #include "GridDesignOfExperiment.hxx"
 
+class Study;
 namespace PERSALYS
 {
 class PERSALYS_API ModelEvaluation : public GridDesignOfExperiment
@@ -42,6 +43,7 @@ public:
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
 
   /** String converter */
   virtual OT::String __repr__() const;

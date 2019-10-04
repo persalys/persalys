@@ -39,8 +39,11 @@ public:
   /** Virtual constructor */
   virtual DesignOfExperimentAnalysis * clone() const;
 
+  virtual Observer * getParentObserver() const;
+
   DesignOfExperiment getDesignOfExperiment() const;
 
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
   virtual void run();
 
   /** String converter */

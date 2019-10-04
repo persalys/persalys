@@ -357,6 +357,17 @@ bool CopulaInferenceAnalysis::hasValidResult() const
 }
 
 
+bool CopulaInferenceAnalysis::canBeLaunched(String &errorMessage) const
+{
+  const bool canBeLaunched = DesignOfExperimentAnalysis::canBeLaunched(errorMessage);
+  if (!canBeLaunched)
+    return false;
+  if (designOfExperiment_.getSample().getDimension() < 2)
+    errorMessage = "The model must contain at least two variables.";
+  return errorMessage.empty();
+}
+
+
 String CopulaInferenceAnalysis::__repr__() const
 {
   OSS oss;

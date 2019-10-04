@@ -264,6 +264,18 @@ bool SRCAnalysis::hasValidResult() const
 }
 
 
+bool SRCAnalysis::canBeLaunched(String &errorMessage) const
+{
+  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
+  if (!canBeLaunched)
+    return false;
+  // pm must have independent copula
+  if (!getPhysicalModel().getCopula().hasIndependentCopula())
+    errorMessage = "The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.";
+  return errorMessage.empty();
+}
+
+
 /* String converter */
 String SRCAnalysis::__repr__() const
 {

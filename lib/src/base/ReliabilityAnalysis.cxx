@@ -44,6 +44,12 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
 }
 
 
+Observer * ReliabilityAnalysis::getParentObserver() const
+{
+  return limitState_.getImplementation()->getObserver("LimitStateItem");
+}
+
+
 LimitState ReliabilityAnalysis::getLimitState() const
 {
   return limitState_;

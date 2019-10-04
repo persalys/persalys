@@ -45,6 +45,8 @@ public:
 
   virtual void setName(const OT::String & name);
 
+  virtual void removeAllObservers();
+
   // Observer method override
   virtual void update(Observable * source, const OT::String & message);
 

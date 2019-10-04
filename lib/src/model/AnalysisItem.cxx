@@ -178,78 +178,14 @@ void AnalysisItem::modifyAnalysis()
 
   const QString analysisType = data(Qt::UserRole).toString();
 
-  // -- IF PhysicalModelAnalysis
-
-  // check physical model
-  PhysicalModelAnalysis * pmAnalysis_ptr = dynamic_cast<PhysicalModelAnalysis*>(analysis_.getImplementation().get());
-  if (pmAnalysis_ptr)
+  String errorMessage = "";
+  if (!analysis_.canBeLaunched(errorMessage))
   {
-    // must have in/outputs
-    if (!pmAnalysis_ptr->getPhysicalModel().isValid())
-    {
-      emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
-      return;
-    }
-    if (analysisType == "MorrisAnalysis" && pmAnalysis_ptr->getPhysicalModel().getInputDimension() < 2)
-    {
-      emit showErrorMessageRequested(tr("The physical model must have at least two inputs"));
-      return;
-    }
-    // if proba analysis
-    if (analysisType != "ModelEvaluation" &&
-        analysisType != "MorrisAnalysis" &&
-        analysisType != "OptimizationAnalysis" &&
-        analysisType != "CalibrationAnalysis" &&
-        !analysisType.contains("DesignOfExperiment"))
-    {
-      // must have stochastic variables
-      if (!pmAnalysis_ptr->getPhysicalModel().hasStochasticInputs())
-      {
-        emit showErrorMessageRequested(tr("The physical model must have stochastic inputs."));
-        return;
-      }
-      // if sensitivity analysis
-      if (analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis")
-      {
-        // must have an independent copula
-        if (!pmAnalysis_ptr->getPhysicalModel().getCopula().hasIndependentCopula())
-        {
-          emit showErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent."));
-          return;
-        }
-      }
-    }
-    // TODO check limitstate?
+    emit showErrorMessageRequested(errorMessage.c_str()); // todo translation
+    return;
   }
+  // TODO check limitstate?
 
-  // -- IF DesignOfExperimentAnalysis
-
-  // check data model
-  DesignOfExperimentAnalysis * dmAnalysis_ptr = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get());
-  if (dmAnalysis_ptr)
-  {
-    // if meta model analysis
-    if (analysisType == "FunctionalChaosAnalysis" || analysisType == "KrigingAnalysis")
-    {
-      // must have output data
-      if (!dmAnalysis_ptr->getDesignOfExperiment().getOutputSample().getSize())
-      {
-        emit showErrorMessageRequested(tr("The sample must not be empty and must contain output values."));
-        return;
-      }
-    }
-    // must have at least a point
-    if (!dmAnalysis_ptr->getDesignOfExperiment().getSample().getSize())
-    {
-      emit showErrorMessageRequested(tr("The sample is empty."));
-      return;
-    }
-    if (!dmAnalysis_ptr->getDesignOfExperiment().isValid())
-    {
-      emit showErrorMessageRequested(tr("The sample contains invalid values."));
-      return;
-    }
-  }
 
   if (analysisType.contains("DesignOfExperiment"))
   {

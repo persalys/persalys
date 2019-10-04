@@ -72,6 +72,14 @@ LimitStateImplementation* LimitStateImplementation::clone() const
 }
 
 
+void LimitStateImplementation::removeAllObservers()
+{
+  getPhysicalModel().getImplementation()->removeObserver(getObserver("LimitStateItem"));
+  notifyAndRemove("LimitStateItem");
+  notifyAndRemove("Study");
+}
+
+
 Bool LimitStateImplementation::operator==(const LimitStateImplementation& other) const
 {
   if (this == &other)

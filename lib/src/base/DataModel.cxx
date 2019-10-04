@@ -99,6 +99,14 @@ DataModel* DataModel::clone() const
 }
 
 
+void DataModel::removeAllObservers()
+{
+  notifyAndRemove("DataModelDefinitionItem");
+  notifyAndRemove("DataModelDiagramItem");
+  notifyAndRemove("Study");
+}
+
+
 void DataModel::check()
 {
   // try to use the same indices and names

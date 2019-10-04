@@ -100,6 +100,13 @@ Observations* Observations::clone() const
 }
 
 
+void Observations::removeAllObservers()
+{
+  notifyAndRemove("ObservationsItem");
+  notifyAndRemove("Study");
+}
+
+
 void Observations::setDefaultColumns()
 {
   setColumns(Indices(1, 0),

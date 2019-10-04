@@ -20,6 +20,8 @@
  */
 #include "persalys/ModelEvaluation.hxx"
 
+#include "persalys/Study.hxx"
+
 #include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
@@ -123,6 +125,12 @@ String ModelEvaluation::getPythonScript() const
   }
 
   return oss;
+}
+
+
+bool ModelEvaluation::canBeLaunched(String &errorMessage) const
+{
+  return PhysicalModelAnalysis::canBeLaunched(errorMessage);
 }
 
 

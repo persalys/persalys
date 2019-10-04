@@ -80,6 +80,19 @@ void AnalysisImplementation::setName(const String& name)
 }
 
 
+void AnalysisImplementation::removeAllObservers()
+{
+  notifyAndRemove("AnalysisItem");
+  notifyAndRemove("Study");
+}
+
+
+Observer * AnalysisImplementation::getParentObserver() const
+{
+  return 0;
+}
+
+
 Bool AnalysisImplementation::operator==(const AnalysisImplementation& other) const
 {
   if (this == &other)
@@ -155,6 +168,7 @@ void AnalysisImplementation::launch()
 void AnalysisImplementation::run()
 {
   isRunning_ = true;
+  notify("analysisLaunched");
   try
   {
     initialize();
@@ -201,6 +215,12 @@ int AnalysisImplementation::getProgressValue() const
 bool AnalysisImplementation::hasValidResult() const
 {
   return false;
+}
+
+
+bool AnalysisImplementation::canBeLaunched(String &errorMessage) const
+{
+  return true;
 }
 
 

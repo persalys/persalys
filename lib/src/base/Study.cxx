@@ -94,7 +94,7 @@ void Study::Remove(const Study& study)
 
   if (studyObserver_)
   {
-    study.getImplementation().get()->notifyAndRemove("studyRemoved", "Study");
+    study.getImplementation().get()->removeAllObservers();
 
     for (UnsignedInteger i = 0; i < studies_.getSize(); ++ i)
     {
