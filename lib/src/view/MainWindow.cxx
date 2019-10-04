@@ -37,6 +37,7 @@
 #include <pqParaViewBehaviors.h>
 #include "persalys/PVServerManagerInterface.hxx"
 #include "persalys/PVServerManagerSingleton.hxx"
+#define PARAVIEW_BUILDING_PLUGIN
 #include "vtkPVPlugin.h"
 PV_PLUGIN_IMPORT_INIT(XYChartRepresentationColumns)
 #endif

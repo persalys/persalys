@@ -56,8 +56,12 @@ PVViewWidget::PVViewWidget(QWidget *parent, PVServerManagerInterface *smb, const
   // create view
   pqObjectBuilder * builder(pqApplicationCore::instance()->getObjectBuilder());
   pqServer * serv(smb_->fetchServer());
+#ifdef PERSALYS_HAVE_PARAVIEW_LESS_5_7
+  // detachedFromLayout argument is not longer applicable. All views are now created detached by default.
   view_ = builder->createView(QString(viewType), serv, true);
-
+#else
+  view_ = builder->createView(QString(viewType), serv);
+#endif
   this->installEventFilter(this);
   QWidget * pvWid(getView()->widget());
   pvWid->installEventFilter(this);

@@ -1,0 +1,6 @@
+NAME
+  XYChartRepresentationColumns
+DESCRIPTION
+  Custom XY chart
+REQUIRES_MODULES
+  VTK::CommonCore

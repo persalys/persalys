@@ -35,6 +35,7 @@ if (USE_COTIRE)
   include (cotire)
 endif ()
 
+include (GNUInstallDirs)
 
 # add library with unity build support, inspired by https://github.com/onqtam/ucm
 macro (persalys_add_library name)
@@ -92,6 +93,9 @@ if (BUILD_GUI)
           include (${PARAVIEW_USE_FILE})
         endif ()
         list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_PARAVIEW)
+        if (ParaView_VERSION VERSION_LESS 5.7)
+          list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_PARAVIEW_LESS_5_7)
+        endif ()
       else ()
         set (ParaView_FOUND FALSE CACHE BOOL "")
         message (WARNING "ParaView must be compiled with PARAVIEW_BUILD_QT_GUI enabled")
