@@ -264,7 +264,7 @@ bool ExperimentTableModel::setData(const QModelIndex &index, const QVariant &val
         values_[indexInput] = Point(1, fixValues_[indexInput]);
       }
 
-      emit dataChanged(index, this->index(index.row(), 6));
+      emit dataChanged(index, this->index(index.row(), 7));
       designOfExperiment_.setValues(values_);
     }
     // when user edit a value
