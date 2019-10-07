@@ -31,15 +31,18 @@
 #include "persalys/TranslationManager.hxx"
 #include "persalys/QtTools.hxx"
 
+#include "persalys/StudyManager.hxx"
+
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QMessageBox>
 
 namespace PERSALYS
 {
 
-AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress, QWidget * parent)
+AnalysisWindow::AnalysisWindow(AnalysisItem* item, StudyManager *manager, QWidget * parent)
   : SubWindow(item, parent)
-  , analysisInProgress_(analysisInProgress)
+  , studyManager_(manager)
   , analysisItem_(item)
   , progressBar_(0)
   , runButton_(0)
@@ -53,6 +56,7 @@ AnalysisWindow::AnalysisWindow(AnalysisItem* item, const bool analysisInProgress
 AnalysisWindow::~AnalysisWindow()
 {
   analysisItem_ = 0;
+  studyManager_ = 0;
 }
 
 
@@ -92,7 +96,6 @@ void AnalysisWindow::buildInterface()
   // - run button
   runButton_ = new QPushButton(tr("Run"));
   runButton_->setIcon(QIcon(":/images/system-run.png"));
-  runButton_->setDisabled(analysisInProgress_);
   connect(runButton_, SIGNAL(clicked(bool)), this, SLOT(launchAnalysis()));
   mainLayout->addWidget(runButton_, 1, 0);
 
@@ -159,18 +162,14 @@ void AnalysisWindow::initializeWidgets()
 }
 
 
-void AnalysisWindow::updateRunButtonAvailability(bool analysisInProgress)
-{
-  // impossible to launch an analysis when another one is already running
-  runButton_->setDisabled(analysisInProgress);
-}
-
-
 void AnalysisWindow::launchAnalysis()
 {
-  // re re re check
-  if (analysisItem_->getAnalysis().isRunning())
+  // check if an analysis is running
+  if (studyManager_->analysisInProgress())
+  {
+    QMessageBox::critical(parentWidget(), tr("Error"), tr("An analysis is already running"));
     return;
+  }
 
   // enable stop button
   stopButton_->setEnabled(true);
@@ -187,8 +186,8 @@ void AnalysisWindow::launchAnalysis()
 
   // create controller
   Controller * controller = new Controller;
-  connect(controller, SIGNAL(launchAnalysisRequested(Analysis)), analysisItem_, SLOT(processLaunched()));
-  connect(controller, SIGNAL(processFinished()), analysisItem_, SLOT(processFinished()));
+  connect(controller, SIGNAL(launchAnalysisRequested(Analysis)), analysisItem_, SLOT(processStatusChanged()));
+  connect(controller, SIGNAL(processFinished()), analysisItem_, SLOT(processStatusChanged()));
 
   // launch the analysis in a separate thread
   controller->launchAnalysis(analysisItem_->getAnalysis());

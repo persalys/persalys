@@ -3,6 +3,7 @@
 #include "persalys/PhysicalModelWindowWidget.hxx"
 #include "persalys/CheckableHeaderView.hxx"
 #include "persalys/DifferentiationTableModel.hxx"
+#include "persalys/PhysicalModelDefinitionItem.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>

@@ -21,12 +21,12 @@
 #ifndef PERSALYS_PHYSICALMODELDIAGRAMWINDOW_HXX
 #define PERSALYS_PHYSICALMODELDIAGRAMWINDOW_HXX
 
-#include "persalys/SubWindow.hxx"
+#include "persalys/DiagramWindow.hxx"
 #include "persalys/PhysicalModelDiagramItem.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API PhysicalModelDiagramWindow : public SubWindow
+class PERSALYS_API PhysicalModelDiagramWindow : public DiagramWindow
 {
   Q_OBJECT
 

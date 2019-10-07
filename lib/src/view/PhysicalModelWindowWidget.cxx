@@ -44,7 +44,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelDefinitionItem * item)
+PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
   : QTabWidget()
   , physicalModel_(item->getPhysicalModel())
   , isFirstPaint_(true)

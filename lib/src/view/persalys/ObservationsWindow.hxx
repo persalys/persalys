@@ -22,7 +22,7 @@
 #define PERSALYS_OBSERVATIONSWINDOW_HXX
 
 #include "persalys/SubWindow.hxx"
-#include "persalys/ObservationsItem.hxx"
+#include "persalys/DesignOfExperimentItem.hxx"
 #include "persalys/ExportableTableView.hxx"
 
 #include <QVBoxLayout>
@@ -34,7 +34,7 @@ class PERSALYS_API ObservationsWindow : public SubWindow
   Q_OBJECT
 
 public:
-  ObservationsWindow(ObservationsItem *item, QWidget *parent)
+  ObservationsWindow(DesignOfExperimentItem *item, QWidget *parent)
   : SubWindow(item, parent)
   {
     QVBoxLayout * mainLayout = new QVBoxLayout(this);

@@ -21,7 +21,7 @@
 #ifndef PERSALYS_MARGINALSWIDGET_HXX
 #define PERSALYS_MARGINALSWIDGET_HXX
 
-#include "persalys/ProbabilisticModelItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 #include "persalys/PlotWidget.hxx"
 #include "persalys/InputTableProbabilisticModel.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
@@ -44,7 +44,7 @@ class PERSALYS_API MarginalsWidget : public QWidget
   Q_OBJECT
 
 public :
-  MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent = 0);
+  MarginalsWidget(PhysicalModelItem * item, QWidget * parent = 0);
   MarginalsWidget(const PhysicalModel& model, QWidget * parent = 0);
 
 protected:

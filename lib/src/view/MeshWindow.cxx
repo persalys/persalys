@@ -51,7 +51,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-MeshWindow::MeshWindow(MeshItem * item, QWidget * parent)
+MeshWindow::MeshWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , meshItem_(item)
 {

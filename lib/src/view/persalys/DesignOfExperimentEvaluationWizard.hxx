@@ -21,7 +21,6 @@
 #ifndef PERSALYS_DESIGNOFEXPERIMENTEVALUATIONWIZARD_HXX
 #define PERSALYS_DESIGNOFEXPERIMENTEVALUATIONWIZARD_HXX
 
-#include "persalys/DesignOfExperimentDefinitionItem.hxx"
 #include "persalys/Wizard.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
 #include "persalys/BlockSizeGroupBox.hxx"
@@ -43,8 +42,7 @@ class PERSALYS_API DesignOfExperimentEvaluationWizard : public Wizard
   friend class TestDesignOfExperimentEvaluationWizard;
 
 public:
-  DesignOfExperimentEvaluationWizard(const Analysis& analysis, QWidget* parent = 0);
-  DesignOfExperimentEvaluationWizard(const PhysicalModel& model, QWidget* parent = 0);
+  DesignOfExperimentEvaluationWizard(const Analysis& analysis, bool isGeneralWizard = false, QWidget* parent = 0);
 
   Analysis getAnalysis() const;
   virtual bool validateCurrentPage();

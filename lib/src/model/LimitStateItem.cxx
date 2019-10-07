@@ -20,7 +20,6 @@
  */
 #include "persalys/LimitStateItem.hxx"
 
-#include "persalys/MonteCarloReliabilityAnalysis.hxx"
 #include "persalys/StudyItem.hxx"
 
 using namespace OT;
@@ -30,7 +29,7 @@ namespace PERSALYS
 
 LimitStateItem::LimitStateItem(const LimitState & limitState)
   : Item(QString::fromUtf8(limitState.getName().c_str()), "LimitState")
-  , Observer("LimitState")
+  , Observer("LimitStateItem")
   , limitState_(limitState)
 {
   limitState_.addObserver(this);
@@ -43,9 +42,7 @@ LimitStateItem::LimitStateItem(const LimitState & limitState)
 void LimitStateItem::buildActions()
 {
   // new threshold exceedance action
-  newThresholdExceedanceAction_ = new QAction(tr("Threshold exceedance"), this);
-  newThresholdExceedanceAction_->setStatusTip(tr("Create a new threshold exceedance"));
-  connect(newThresholdExceedanceAction_, SIGNAL(triggered()), this, SLOT(createThresholdExceedance()));
+  newThresholdExceedanceAction_ = createAction("ThresholdExceedance", getLimitState());
 
   // remove limit state action
   removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -95,57 +92,25 @@ void LimitStateItem::update(Observable* source, const String & message)
   {
     emit thresholdChanged();
   }
-  else if (message == "limitStateRemoved")
+  else if (message == "analysisLaunched")
+  {
+    analysisInProgress_ = true;
+  }
+  else if (message == "analysisFinished" || message == "analysisBadlyFinished")
+  {
+    analysisInProgress_ = false;
+  }
+  else if (message == "objectRemoved")
   {
     emit removeRequested(row());
   }
 }
 
 
-void LimitStateItem::appendItem(Analysis& analysis)
+void LimitStateItem::appendItem(const Analysis &analysis)
 {
-  // new item
-  AnalysisItem * newItem = new AnalysisItem(analysis);
-
-  // connections
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-  // - signal for the PhysicalModelDiagramItem
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentStudyItem())
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
-
-  // append item
-  appendRow(newItem);
-
-  // emit signal to StudyTreeView to create a window
-  emit analysisItemCreated(newItem);
-}
-
-
-void LimitStateItem::createThresholdExceedance()
-{
-  // check
-  if (!limitState_.getPhysicalModel().isValid())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
-    return;
-  }
-  if (!limitState_.getPhysicalModel().hasStochasticInputs())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have stochastic inputs."));
-    return;
-  }
-  if (!limitState_.isValid())
-  {
-    emit showErrorMessageRequested(tr("The limit state is not valid."));
-    return;
-  }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
-  MonteCarloReliabilityAnalysis analysis(analysisName, limitState_);
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, analysis);
+  appendAnalysisItem(analysis);
+  analysis.getImplementation().get()->addObserver(this);
 }
 
 

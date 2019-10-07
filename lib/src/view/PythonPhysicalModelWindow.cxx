@@ -31,7 +31,7 @@
 namespace PERSALYS
 {
 
-PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
 {
 //  setFocusPolicy(Qt::ClickFocus);

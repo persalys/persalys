@@ -42,7 +42,6 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
   const DesignOfExperiment doe = doeAnalysis->getDesignOfExperiment();
 
   // set list of design of experiments items
-  QList < DesignOfExperimentDefinitionItem* > doeList;
   if (isGeneralWizard && doe.hasPhysicalModel())
   {
     PhysicalModel model(doe.getPhysicalModel());
@@ -56,12 +55,9 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
       {
         DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study->getAnalyses()[i].getImplementation().get());
         ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study->getAnalyses()[i].getImplementation().get());
-        if (doeEval && !modelEval)
+        if (doeEval && !modelEval && doeEval->getPhysicalModel() == model && doeEval->hasValidResult())
         {
-          if (doeEval->getPhysicalModel() == model && doeEval->hasValidResult())
-          {
-            doeList_.append(doeEval->getResult().getDesignOfExperiment());
-          }
+          doeList_.append(doeEval->getResult().getDesignOfExperiment());
         }
       }
     }

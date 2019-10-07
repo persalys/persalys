@@ -21,12 +21,6 @@
 #include "persalys/DataModelDefinitionItem.hxx"
 
 #include "persalys/StudyItem.hxx"
-#include "persalys/InferenceAnalysis.hxx"
-#include "persalys/DataAnalysis.hxx"
-#include "persalys/CopulaInferenceAnalysis.hxx"
-#include "persalys/FunctionalChaosAnalysis.hxx"
-
-#include <openturns/SpecFunc.hxx>
 
 #include <QDebug>
 
@@ -35,8 +29,8 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment)
-  : DesignOfExperimentItem(designOfExperiment, "DataModelDefinition")
+DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment &doe, const DataModelDiagramItem *diagramItem)
+  : DesignOfExperimentItem(doe, "DataModelDefinitionItem")
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
@@ -44,35 +38,15 @@ DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment & desi
   setData(font, Qt::FontRole);
   setEditable(false);
 
-  buildActions();
-}
-
-
-void DataModelDefinitionItem::buildActions()
-{
-  // new data analyses
-  newDataAnalysis_ = new QAction(tr("Data analysis"), this);
-  newDataAnalysis_->setStatusTip(tr("Analyse the data sample"));
-  connect(newDataAnalysis_, SIGNAL(triggered()), this, SLOT(createDataAnalysis()));
-
-  newInferenceAnalysis_ = new QAction(tr("Marginals inference"), this);
-  newInferenceAnalysis_->setStatusTip(tr("Marginals inference"));
-  connect(newInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createInferenceAnalysis()));
-
-  newCopulaInferenceAnalysis_ = new QAction(tr("Dependence inference"), this);
-  newCopulaInferenceAnalysis_->setStatusTip(tr("Dependence inference"));
-  connect(newCopulaInferenceAnalysis_, SIGNAL(triggered()), this, SLOT(createCopulaInferenceAnalysis()));
-
-  newMetaModel_ = new QAction(tr("Metamodel"), this);
-  newMetaModel_->setStatusTip(tr("Create a new metamodel"));
-  connect(newMetaModel_, SIGNAL(triggered()), this, SLOT(createMetaModel()));
-
-  // add actions
-  appendSeparator(tr("Analysis"));
-  appendAction(newDataAnalysis_);
-  appendAction(newInferenceAnalysis_);
-  appendAction(newCopulaInferenceAnalysis_);
-  appendAction(newMetaModel_);
+  if (diagramItem)
+  {
+    // add actions
+    appendSeparator(tr("Analysis"));
+    appendAction(diagramItem->newDataAnalysis_);
+    appendAction(diagramItem->newInferenceAnalysis_);
+    appendAction(diagramItem->newCopulaInferenceAnalysis_);
+    appendAction(diagramItem->newMetaModel_);
+  }
 }
 
 
@@ -83,93 +57,11 @@ void DataModelDefinitionItem::update(Observable* source, const String& message)
     // emit signal to DataModelWindow
     emit variablesChanged();
   }
-  else if (message == "designOfExperimentRemoved")
+  else if (message == "objectRemoved")
   {
     if (hasChildren())
-      qDebug() << "DataModelDefinitionItem::update(designOfExperimentRemoved) has not to contain child\n";
+      qDebug() << "DataModelDefinitionItem::update(objectRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
-}
-
-
-bool DataModelDefinitionItem::designOfExperimentValid()
-{
-  if (!designOfExperiment_.getSample().getSize())
-  {
-    emit showErrorMessageRequested(tr("The sample is empty."));
-    return false;
-  }
-  if (!designOfExperiment_.isValid())
-  {
-    emit showErrorMessageRequested(tr("The sample contains invalid values."));
-    return false;
-  }
-  return true;
-}
-
-
-void DataModelDefinitionItem::createDataAnalysis()
-{
-  // check
-  if (!designOfExperimentValid())
-    return;
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("dataAnalysis_").toStdString()));
-  DataAnalysis analysis(analysisName, designOfExperiment_);
-  getParentStudyItem()->getStudy().add(analysis);
-}
-
-
-void DataModelDefinitionItem::createInferenceAnalysis()
-{
-  // check
-  if (!designOfExperimentValid())
-    return;
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("marginalsInference_").toStdString()));
-  InferenceAnalysis analysis(analysisName, designOfExperiment_);
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, analysis);
-}
-
-
-void DataModelDefinitionItem::createCopulaInferenceAnalysis()
-{
-  // check
-  if (!designOfExperimentValid())
-    return;
-
-  if (designOfExperiment_.getSample().getDimension() < 2)
-  {
-    emit showErrorMessageRequested(tr("The model must contain at least two variables."));
-    return;
-  }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("dependenceInference_").toStdString()));
-  CopulaInferenceAnalysis analysis(analysisName, designOfExperiment_);
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, analysis);
-}
-
-
-void DataModelDefinitionItem::createMetaModel()
-{
-  // check
-  if (!designOfExperimentValid())
-    return;
-  if (!designOfExperiment_.getOutputSample().getSize() || !designOfExperiment_.getInputSample().getSize())
-  {
-    emit showErrorMessageRequested(tr("The model must have at least one output and one input."));
-    return;
-  }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
-  FunctionalChaosAnalysis analysis(analysisName, designOfExperiment_);
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, analysis);
 }
 }

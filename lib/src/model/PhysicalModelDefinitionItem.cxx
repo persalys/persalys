@@ -20,15 +20,7 @@
  */
 #include "persalys/PhysicalModelDefinitionItem.hxx"
 
-#include "persalys/ModelEvaluation.hxx"
-#include "persalys/FieldModelEvaluation.hxx"
-#include "persalys/GridDesignOfExperiment.hxx"
-#include "persalys/Observations.hxx"
 #include "persalys/StudyItem.hxx"
-#ifdef PERSALYS_HAVE_OTMORRIS
-#include "persalys/MorrisAnalysis.hxx"
-#endif
-#include "persalys/OptimizationAnalysis.hxx"
 
 #include <QDebug>
 
@@ -37,14 +29,8 @@ using namespace OT;
 namespace PERSALYS
 {
 
-PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & physicalModel)
-  : PhysicalModelItem(physicalModel, "PhysicalModelDefinition")
-  , newProbabilisticModel_(0)
-  , newModelEvaluation_(0)
-  , newScreening_(0)
-  , newOptimization_(0)
-  , newDesignOfExperiment_(0)
-  , newObservations_(0)
+PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel &model, const PhysicalModelDiagramItem *diagramItem)
+  : PhysicalModelItem(model, "PhysicalModelDefinitionItem")
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
@@ -52,51 +38,17 @@ PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel & p
   setData(font, Qt::FontRole);
   setEditable(false);
 
-  buildActions();
-}
-
-
-void PhysicalModelDefinitionItem::buildActions()
-{
-  // new probabilistic model action
-  newProbabilisticModel_ = new QAction(tr("Probabilistic model"), this);
-  newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
-  connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(createProbabilisticModel()));
-
-  // new evaluation action
-  newModelEvaluation_ = new QAction(QIcon(":/images/modelEvaluation.png"), tr("Evaluation"), this);
-  newModelEvaluation_->setStatusTip(tr("Create a new model evaluation"));
-  connect(newModelEvaluation_, SIGNAL(triggered()), this, SLOT(createModelEvaluation()));
-
-  if (!physicalModel_.hasMesh())
-  {
-    // new observations action
-    newObservations_ = new QAction(tr("Observations"), this);
-    connect(newObservations_, SIGNAL(triggered()), this, SLOT(createObservations()));
-    // new design of experiments action
-    newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
-    newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
-    connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SLOT(createDesignOfExperiment()));
-    // new screening action
-#ifdef PERSALYS_HAVE_OTMORRIS
-    newScreening_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
-    newScreening_->setStatusTip(tr("Create a new screening"));
-    connect(newScreening_, SIGNAL(triggered()), this, SLOT(createScreening()));
-#endif
-    // new optimization action
-    newOptimization_ = new QAction(QIcon(":/images/optimize.png"), tr("Optimization"), this);
-    newOptimization_->setStatusTip(tr("Create a new model optimization"));
-    connect(newOptimization_, SIGNAL(triggered()), this, SLOT(createOptimization()));
-  }
-
   // add actions
-  appendAction(newProbabilisticModel_);
-  appendAction(newObservations_);
-  appendAction(newDesignOfExperiment_);
-  appendSeparator(tr("Analysis"));
-  appendAction(newModelEvaluation_);
-  appendAction(newScreening_);
-  appendAction(newOptimization_);
+  if (diagramItem)
+  {
+    appendAction(diagramItem->newProbabilisticModel_);
+    appendAction(diagramItem->newDesignOfExperiment_);
+    appendAction(diagramItem->newObservations_);
+    appendSeparator(tr("Analysis"));
+    appendAction(diagramItem->newModelEvaluation_);
+    appendAction(diagramItem->newScreening_);
+    appendAction(diagramItem->newOptimization_);
+  }
 }
 
 
@@ -152,124 +104,11 @@ void PhysicalModelDefinitionItem::update(Observable* source, const String & mess
   {
     emit meshChanged();
   }
-  else if (message == "physicalModelRemoved")
+  else if (message == "objectRemoved")
   {
     if (hasChildren())
-      qDebug() << "PhysicalModelDefinitionItem::update(physicalModelRemoved) has not to contain child\n";
+      qDebug() << "PhysicalModelDefinitionItem::update(objectRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
-}
-
-
-void PhysicalModelDefinitionItem::createProbabilisticModel()
-{
-  // check
-  if (!physicalModel_.getInputDimension())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have inputs."));
-    return;
-  }
-  // emit signal to StudyManager to create a window
-  emit probabilisticModelRequested(this);
-}
-
-
-void PhysicalModelDefinitionItem::createModelEvaluation()
-{
-  // check
-  if (!physicalModel_.isValid())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
-    return;
-  }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("evaluation_").toStdString()));
-  if (!physicalModel_.hasMesh())
-  {
-    ModelEvaluation evaluation(analysisName, physicalModel_);
-    // emit signal to StudyManager to open a wizard
-    emit analysisRequested(this, evaluation);
-  }
-  else
-  {
-    FieldModelEvaluation evaluation(analysisName, physicalModel_);
-    // emit signal to StudyManager to open a wizard
-    emit analysisRequested(this, evaluation);
-  }
-}
-
-
-#ifdef PERSALYS_HAVE_OTMORRIS
-void PhysicalModelDefinitionItem::createScreening()
-{
-  // check
-  if (!physicalModel_.isValid() || physicalModel_.getInputDimension() < 2)
-  {
-    emit showErrorMessageRequested(tr("The physical model must have at least two inputs and at least one selected output."));
-    return;
-  }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("screening_").toStdString()));
-  MorrisAnalysis analysis(analysisName, physicalModel_);
-  // emit signal to StudyManager to open a wizard
-  emit analysisRequested(this, analysis);
-}
-#endif
-
-
-void PhysicalModelDefinitionItem::createOptimization()
-{
-  // check
-  if (!physicalModel_.isValid())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
-    return;
-  }
-
-  // new analysis
-  OptimizationAnalysis optimization(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("optimization_").toStdString()), physicalModel_);
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, optimization);
-}
-
-
-void PhysicalModelDefinitionItem::createDesignOfExperiment()
-{
-  // check
-  if (!physicalModel_.getInputDimension())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have inputs."));
-    return;
-  }
-
-  // new design
-  const String doeName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("design_").toStdString()));
-  GridDesignOfExperiment design(doeName, physicalModel_);
-  // emit signal to StudyManager to open a wizard
-  emit analysisRequested(this, design);
-}
-
-
-void PhysicalModelDefinitionItem::createObservations()
-{
-  // check
-  if (!physicalModel_.isValid() || physicalModel_.getInputDimension() < 2)
-  {
-    emit showErrorMessageRequested(tr("The physical model must have at least two inputs and at least one selected output."));
-    return;
-  }
-  const String obsName(getParentStudyItem()->getStudy().getAvailableDataModelName(tr("observations_").toStdString()));
-  Observations obs(obsName, physicalModel_);
-  // emit signal to StudyManager to open a wizard
-  emit observationsRequested(this, obs);
-}
-
-
-void PhysicalModelDefinitionItem::updateProbaActionAvailability()
-{
-  // disable the new proba model action
-  newProbabilisticModel_->setDisabled(true);
 }
 }

@@ -185,7 +185,7 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
   Copula copula = DistributionDictionary::BuildCopulaFactory(newCopula).build();
 
   // update the copula
-  physicalModel_.blockNotification("ProbabilisticModel");
+  physicalModel_.blockNotification("ProbabilisticModelItem");
   const Description vars(copula_.getCopulaCollection()[index.row()].getDescription());
   physicalModel_.setCopula(vars, copula);
   physicalModel_.blockNotification();
@@ -201,7 +201,7 @@ void DependenciesTableModel::removeLine(const QModelIndex &index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification("ProbabilisticModel");
+  physicalModel_.blockNotification("ProbabilisticModelItem");
   const Description copulaVar(copula_.getCopulaCollection()[index.row()].getDescription());
   physicalModel_.setCopula(copulaVar, IndependentCopula(copulaVar.getSize()));
   physicalModel_.blockNotification();

@@ -20,7 +20,6 @@
  */
 #include "persalys/ObservationsItem.hxx"
 
-#include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/StudyItem.hxx"
 
 #include <QDebug>
@@ -31,7 +30,7 @@ namespace PERSALYS
 {
 
 ObservationsItem::ObservationsItem(const DesignOfExperiment& designOfExperiment)
-  : DesignOfExperimentItem(designOfExperiment, "Observations")
+  : DesignOfExperimentItem(designOfExperiment, "ObservationsItem")
   , newCalibration_(0)
 {
   buildActions();
@@ -41,9 +40,7 @@ ObservationsItem::ObservationsItem(const DesignOfExperiment& designOfExperiment)
 void ObservationsItem::buildActions()
 {
   // new calibration action
-  newCalibration_ = new QAction(QIcon(":/images/calibration.png"), tr("Calibration"), this);
-  newCalibration_->setStatusTip(tr("Create a new calibration"));
-  connect(newCalibration_, SIGNAL(triggered()), this, SLOT(createCalibration()));
+  newCalibration_ = createAction("Calibration", getDesignOfExperiment());
 
   // remove observations action
   removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -59,7 +56,15 @@ void ObservationsItem::buildActions()
 
 void ObservationsItem::update(Observable * source, const String & message)
 {
-  if (message == "observationsRemoved")
+  if (message == "analysisLaunched")
+  {
+    analysisInProgress_ = true;
+  }
+  else if (message == "analysisFinished" || message == "analysisBadlyFinished")
+  {
+    analysisInProgress_ = false;
+  }
+  else if (message == "objectRemoved")
   {
     if (hasChildren())
       qDebug() << "ObservationsItem::update(observationsRemoved) has not to contain child\n";
@@ -68,44 +73,11 @@ void ObservationsItem::update(Observable * source, const String & message)
 }
 
 
-void ObservationsItem::appendItem(Analysis& analysis)
+void ObservationsItem::appendItem(const Analysis &analysis)
 {
-  // new item
-  AnalysisItem * newItem = new AnalysisItem(analysis);
-
-  // connections
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-  // - signal for the PhysicalModelDiagramItem
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentStudyItem())
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
-
-  // append item
-  appendRow(newItem);
-
-  // emit signal to StudyTreeView to create a window
-  emit analysisItemCreated(newItem);
-}
-
-
-void ObservationsItem::createCalibration()
-{
-  // check
-  if (!getDesignOfExperiment().getInputSample().getDimension() || !getDesignOfExperiment().getOutputSample().getDimension())
-  {
-    emit showErrorMessageRequested(tr("Observations must be defined for at least an input and an output."));
-    return;
-  }
-  if (getDesignOfExperiment().getInputSample().getDimension() >= getDesignOfExperiment().getPhysicalModel().getInputDimension())
-  {
-    emit showErrorMessageRequested(tr("All the input variables can not be observed. At least an input variable must be calibrated."));
-    return;
-  }
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("calibration_").toStdString()));
-  CalibrationAnalysis analysis(analysisName, getDesignOfExperiment());
-  // emit signal to StudyManager to open a wizard
-  emit analysisRequested(this, analysis);
+  appendAnalysisItem(analysis);
+  analysis.getImplementation().get()->addObserver(this);
+  analysis.getImplementation().get()->addObserver(getParentStudyItem());
 }
 
 

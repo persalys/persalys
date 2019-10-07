@@ -20,23 +20,15 @@
  */
 #include "persalys/ProbabilisticModelItem.hxx"
 
-#include "persalys/LimitState.hxx"
-#include "persalys/SobolAnalysis.hxx"
-#include "persalys/MonteCarloAnalysis.hxx"
-#include "persalys/StudyItem.hxx"
-#include "persalys/FieldMonteCarloAnalysis.hxx"
+#include "persalys/PhysicalModelDiagramItem.hxx"
 
 using namespace OT;
 
 namespace PERSALYS
 {
 
-ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalModel)
-  : PhysicalModelItem(physicalModel, "ProbabilisticModel")
-  , newDesignOfExperiment_(0)
-  , newLimitState_(0)
-  , newCentralTendency_(0)
-  , newSensitivityAnalysis_(0)
+ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel &physicalModel, const PhysicalModelDiagramItem *diagramItem)
+  : PhysicalModelItem(physicalModel, "ProbabilisticModelItem")
 {
   setData(tr("Probabilistic model"), Qt::DisplayRole);
   QFont font;
@@ -44,41 +36,14 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel & physicalMod
   setData(font, Qt::FontRole);
   setEditable(false);
 
-  buildActions();
-}
-
-
-void ProbabilisticModelItem::buildActions()
-{
-  if (!physicalModel_.hasMesh())
+  if (diagramItem)
   {
-    // new design of experiments action
-    newDesignOfExperiment_ = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
-    newDesignOfExperiment_->setStatusTip(tr("Create a new design of experiments"));
-    connect(newDesignOfExperiment_, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
-
-    // new limit state action
-    newLimitState_ = new QAction(QIcon(":/images/limitstate.png"), tr("Limit state"), this);
-    newLimitState_->setStatusTip(tr("Create a new limit state"));
-    connect(newLimitState_, SIGNAL(triggered()), this, SLOT(createLimitState()));
-
-    // new analysis action
-    newSensitivityAnalysis_ = new QAction(QIcon(":/images/sensitivity.png"), tr("Sensitivity"), this);
-    newSensitivityAnalysis_->setStatusTip(tr("Create a new sensitivity analysis"));
-    connect(newSensitivityAnalysis_, SIGNAL(triggered()), this, SLOT(createSensitivityAnalysis()));
+    appendAction(diagramItem->newDesignOfExperiment_);
+    appendAction(diagramItem->newLimitState_);
+    appendSeparator(tr("Analysis"));
+    appendAction(diagramItem->newCentralTendency_);
+    appendAction(diagramItem->newSensitivityAnalysis_);
   }
-
-  // new analysis action
-  newCentralTendency_ = new QAction(QIcon(":/images/centralTendency.png"), tr("Central tendency"), this);
-  newCentralTendency_->setStatusTip(tr("Create a new central tendency"));
-  connect(newCentralTendency_, SIGNAL(triggered()), this, SLOT(createCentralTendency()));
-
-  // add actions
-  appendAction(newDesignOfExperiment_);
-  appendAction(newLimitState_);
-  appendSeparator(tr("Analysis"));
-  appendAction(newCentralTendency_);
-  appendAction(newSensitivityAnalysis_);
 }
 
 
@@ -101,81 +66,9 @@ void ProbabilisticModelItem::update(Observable* source, const String & message)
   {
     emit inputListDefinitionChanged();
   }
-  else if (message == "probabilisticModelRemoved")
+  else if (message == "objectRemoved")
   {
     emit removeRequested(row());
   }
-}
-
-
-bool ProbabilisticModelItem::physicalModelValid()
-{
-  if (!physicalModel_.isValid())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have inputs AND at least one selected output."));
-    return false;
-  }
-  if (!physicalModel_.hasStochasticInputs())
-  {
-    emit showErrorMessageRequested(tr("The physical model must have stochastic inputs."));
-    return false;
-  }
-  return true;
-}
-
-
-void ProbabilisticModelItem::createLimitState()
-{
-  // check
-  if (!physicalModelValid())
-    return;
-
-  // new limit state
-  LimitState newLimitState(getParentStudyItem()->getStudy().getAvailableLimitStateName(tr("limitState_").toStdString()), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
-  getParentStudyItem()->getStudy().add(newLimitState);
-}
-
-
-void ProbabilisticModelItem::createCentralTendency()
-{
-  // check
-  if (!physicalModelValid())
-    return;
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("centralTendency_").toStdString()));
-  if (!physicalModel_.hasMesh())
-  {
-    MonteCarloAnalysis analysis(analysisName, physicalModel_);
-    // emit signal to StudyTreeView to open a wizard
-    emit analysisRequested(this, analysis);
-  }
-  else
-  {
-    FieldMonteCarloAnalysis analysis(analysisName, physicalModel_);
-    // emit signal to StudyTreeView to open a wizard
-    emit analysisRequested(this, analysis);
-  }
-}
-
-
-void ProbabilisticModelItem::createSensitivityAnalysis()
-{
-  // check
-  if (!physicalModelValid())
-    return;
-
-  // check if the model has an independent copula
-  if (!physicalModel_.getCopula().hasIndependentCopula())
-  {
-    emit showErrorMessageRequested(tr("The model must have an independent copula to compute a sensitivity analysis but inputs are dependent."));
-    return;
-  }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("sensitivity_").toStdString()));
-  SobolAnalysis analysis(analysisName, physicalModel_);
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, analysis);
 }
 }

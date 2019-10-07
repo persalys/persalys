@@ -22,10 +22,6 @@
 #define PERSALYS_STUDYTREEVIEW_HXX
 
 #include "persalys/StudyTreeViewModel.hxx"
-#include "persalys/SubWindow.hxx"
-#include "persalys/AnalysisWizard.hxx"
-#include "persalys/DataModelDefinitionItem.hxx"
-#include "persalys/DesignOfExperimentDefinitionItem.hxx"
 
 #include <QTreeView>
 #include <QMouseEvent>
@@ -40,6 +36,7 @@ public:
   StudyTreeView(QWidget * parent = 0);
 
   Item * getCurrentItem() const;
+  StudyItem * getItem(const int row) const;
 
   virtual void mousePressEvent(QMouseEvent*);
 
@@ -50,7 +47,7 @@ public slots:
   void modifyStudySubItemsExpansion(StudyItem* item);
 
 signals:
-  void studyCreated(StudyItem*);
+  void windowRequested(Item*);
   void itemSelectionChanged(QStandardItem*);
 
 private:

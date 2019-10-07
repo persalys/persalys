@@ -30,13 +30,16 @@ class PERSALYS_API DataModelDiagramItem : public DesignOfExperimentItem
 {
   Q_OBJECT
 
+  friend class DataModelDefinitionItem;
+  friend class DataModelDiagramWindow;
+
 public:
   DataModelDiagramItem(const DesignOfExperiment& designOfExperiment);
 
   virtual void update(Observable* source, const OT::String& message);
 
   void fill();
-  void appendItem(Analysis& analysis);
+  virtual void appendItem(const Analysis& analysis);
 
 protected:
   void buildActions();
@@ -45,24 +48,18 @@ public slots:
   void appendDataModelItem();
   void removeDesignOfExperiment();
 signals:
-  // signals for StudyTreeview
-  void modelDefinitionWindowRequested(DataModelDefinitionItem*);
-  void analysisItemCreated(AnalysisItem*);
-  void dataAnalysisRequested();
-  void inferenceRequested();
-  void copulaInferenceRequested();
-  void metaModelRequested();
-
-  void changeCurrentItemRequested(QModelIndex);
-
   // signal for diagram
   void dataModelValidityChanged(bool);
   void dependenciesValidityChanged(bool);
   void metaModelValidityChanged(bool);
 
 private:
-  QAction * defineAction_;
-  QAction * removeAction_;
+  QAction * defineAction_ = 0;
+  QAction * newDataAnalysis_ = 0;
+  QAction * newInferenceAnalysis_ = 0;
+  QAction * newCopulaInferenceAnalysis_ = 0;
+  QAction * newMetaModel_ = 0;
+  QAction * removeAction_ = 0;
 };
 }
 #endif

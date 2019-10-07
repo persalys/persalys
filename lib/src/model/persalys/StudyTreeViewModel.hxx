@@ -41,7 +41,7 @@ public:
   virtual void update(Observable * source, const OT::String & message);
 
 signals:
-  void studyCreated(StudyItem*);
+  void windowRequested(Item*);
   void studySubItemsAdded(StudyItem*);
 
 public:

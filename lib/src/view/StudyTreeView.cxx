@@ -97,7 +97,7 @@ StudyTreeView::StudyTreeView(QWidget * parent)
   // set model
   Study::SetInstanceObserver(treeViewModel_);
   setModel(treeViewModel_);
-  connect(treeViewModel_, SIGNAL(studyCreated(StudyItem*)), this, SIGNAL(studyCreated(StudyItem*)));
+  connect(treeViewModel_, SIGNAL(windowRequested(Item*)), this, SIGNAL(windowRequested(Item*)));
   connect(treeViewModel_, SIGNAL(studySubItemsAdded(StudyItem*)), this, SLOT(modifyStudySubItemsExpansion(StudyItem*)));
 
   // forbid the user to define not valid item's name
@@ -157,6 +157,13 @@ StudyTreeView::StudyTreeView(QWidget * parent)
 Item * StudyTreeView::getCurrentItem() const
 {
   return dynamic_cast<Item*>(treeViewModel_->itemFromIndex(selectionModel()->currentIndex()));
+}
+
+
+StudyItem * StudyTreeView::getItem(const int row) const
+{
+  Q_ASSERT(row < treeViewModel_->rowCount());
+  return dynamic_cast<StudyItem *>(treeViewModel_->itemFromIndex(treeViewModel_->index(row, 0)));
 }
 
 

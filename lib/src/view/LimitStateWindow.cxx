@@ -160,7 +160,7 @@ void LimitStateWindow::updateThresholdWidget()
 void LimitStateWindow::updateOutput(int index)
 {
   errorMessageLabel_->reset();
-  limitState_.blockNotification("LimitState");
+  limitState_.blockNotification("LimitStateItem");
   limitState_.setOutputName(outputsComboBox_->itemText(index).toStdString());
   limitState_.blockNotification();
 }
@@ -184,7 +184,7 @@ void LimitStateWindow::updateOperator(int index)
       comparisonOperator = GreaterOrEqual();
       break;
   }
-  limitState_.blockNotification("LimitState");
+  limitState_.blockNotification("LimitStateItem");
   limitState_.setOperator(comparisonOperator);
   limitState_.blockNotification();
 }
@@ -194,7 +194,7 @@ void LimitStateWindow::updateThreshold()
 {
   try
   {
-    limitState_.blockNotification("LimitState");
+    limitState_.blockNotification("LimitStateItem");
     limitState_.setThreshold(thresholdLineEdit_->value());
     limitState_.blockNotification();
     errorMessageLabel_->reset();

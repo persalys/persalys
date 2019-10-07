@@ -94,24 +94,23 @@ private slots:
     aStudy.add(aModel);
 
     // create analyses
-    ProbabilisticDesignOfExperiment analysis1("analysis1", aModel);
+    Analysis analysis1(ProbabilisticDesignOfExperiment("analysis1", aModel, 100));
     aStudy.add(analysis1);
-    ProbabilisticDesignOfExperiment analysis2("analysis2", aModel);
-    analysis2.setSize(analysis1.getSize() * 2);
+    Analysis analysis2(ProbabilisticDesignOfExperiment("analysis2", aModel, 200));
     aStudy.add(analysis2);
 
     // create the wizard
-    DesignOfExperimentEvaluationWizard wizard(aModel);
+    DesignOfExperimentEvaluationWizard wizard(analysis1, true);
     wizard.show();
 
     // checks
     QVERIFY2(wizard.doesComboBox_->count() == 2, "The combobox must have two items");
     QVERIFY2(wizard.getAnalysis().getName() == "analysis1", "The analysis must be named : analysis1");
-    QVERIFY2(wizard.doeLabel_->text().contains(QString::number(analysis1.getSize())), "Wrong label");
+    QVERIFY2(wizard.doeLabel_->text().contains(QString::number(100)), "Wrong label");
 
     wizard.doesComboBox_->setCurrentIndex(1);
     QVERIFY2(wizard.getAnalysis().getName() == "analysis2", "The analysis must be named : analysis2");
-    QVERIFY2(wizard.doeLabel_->text().contains(QString::number(analysis1.getSize()*2)), "Wrong label");
+    QVERIFY2(wizard.doeLabel_->text().contains(QString::number(200)), "Wrong label");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
   }

@@ -23,8 +23,7 @@
 
 #include "persalys/SubWindow.hxx"
 #include "persalys/AnalysisWizard.hxx"
-#include "persalys/StudyItem.hxx"
-#include "persalys/DataModelDefinitionItem.hxx"
+#include "persalys/DesignOfExperimentItem.hxx"
 #include "persalys/DesignOfExperimentDefinitionItem.hxx"
 #include "persalys/MainWidget.hxx"
 
@@ -37,35 +36,23 @@ class PERSALYS_API StudyManager : public QObject
 public:
   StudyManager(MainWidget * mainWidget, QObject * parent = 0);
 
-public slots:
-  void setAnalysisInProgress(bool);
-  void showErrorMessage(QString);
+  bool analysisInProgress() const;
 
-  // create objects
+public slots:
+  void showErrorMessage(const QString&);
+
   void createStudy();
-  void openAnalysisWizard(Item* item, const Analysis& analysis, const bool isGeneralWizard = false);
-  void openDesignOfExperimentEvaluationWizard(const Analysis& analysis);
-  void openDesignOfExperimentEvaluationWizard(const PhysicalModel& model);
-  void openObservationsWizard(PhysicalModelDefinitionItem*, const DesignOfExperiment& designOfExp);
-  void openExtractDataFieldWizard(const Analysis& analysis);
+
+  // open wizards
+  void openAnalysisWizard(StudyItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
+  void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
+  void openObservationsWizard(StudyItem*, const DesignOfExperiment& designOfExp);
+  void openExtractDataFieldWizard(StudyItem *item, const Analysis& analysis);
+  void modifyAnalysis(AnalysisItem* item);
 
   // create windows
-  void createStudyWindow(StudyItem* item);
-  void createDataModelDiagramWindow(DataModelDiagramItem*);
-  void createDataModelWindow(DataModelDefinitionItem* item);
-  void createPhysicalModelDiagramWindow(PhysicalModelDiagramItem* item);
-  void createMeshWindow(MeshItem* item);
-  void createFieldModelDiagramWindow(PhysicalModelDiagramItem* item);
-  void createPhysicalModelWindow(PhysicalModelDefinitionItem* item);
-  void createProbabilisticModelWindow(ProbabilisticModelItem* item);
-  void createDesignOfExperimentWindow(DesignOfExperimentDefinitionItem* item, const bool createConnections = true);
-  void createLimitStateWindow(LimitStateItem* item);
+  void createWindow(Item *item);
   void createAnalysisWindow(AnalysisItem* item, const bool createConnections = true);
-  void createObservationsWindow(ObservationsItem*);
-
-  // modify objects
-  void modifyDesignOfExperiment(DesignOfExperimentDefinitionItem* item);
-  void modifyAnalysis(AnalysisItem* item);
 
   // import/export/save/open/close study
   void importPythonScript();
@@ -80,7 +67,6 @@ public slots:
   bool closeAll();
 signals:
   void recentFilesListChanged(const QString& recentFileName);
-  void analysisInProgressStatusChanged(bool analysisInProgress);
   void commandExecutionRequested(const QString& command);
 
 protected:
@@ -88,7 +74,6 @@ protected:
 
 private:
   MainWidget * mainWidget_;
-  bool analysisInProgress_;
 };
 }
 #endif

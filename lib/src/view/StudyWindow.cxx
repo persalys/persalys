@@ -83,18 +83,18 @@ void StudyWindow::buildInterface()
   int nbModels = 2;
   QPushButton * button = new DiagramPushButton(tr("Symbolic model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
-  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createSymbolicModel()));
+  connect(button, SIGNAL(clicked()), studyItem_->newSymbolicModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
 
   button = new DiagramPushButton(tr("Python model"));
   button->setStatusTip(tr("Create a physical model defined with a Python script"));
-  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createPythonModel()));
+  connect(button, SIGNAL(clicked()), studyItem_->newPythonModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
 
 #ifdef PERSALYS_HAVE_YACS
   button = new DiagramPushButton(tr("YACS model"));
   button->setStatusTip(tr("Create a physical model defined with an YACS file"));
-  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createYACSModel()));
+  connect(button, SIGNAL(clicked()), studyItem_->newYACSModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
   ++nbModels;
 #endif
@@ -102,7 +102,7 @@ void StudyWindow::buildInterface()
 #ifdef PERSALYS_HAVE_OTFMI
   button = new DiagramPushButton(tr("FMI model"));
   button->setStatusTip(tr("Create a physical model defined with a FMU file"));
-  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createFMIModel()));
+  connect(button, SIGNAL(clicked()), studyItem_->newFMIModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
   ++nbModels;
 #endif
@@ -143,7 +143,7 @@ void StudyWindow::buildInterface()
   // row - buttons
   button = new DiagramPushButton(tr("Symbolic Field model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
-  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createSymbolicFieldModel()));
+  connect(button, SIGNAL(clicked()), studyItem_->newSymbolicFieldModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0);
 
   textEdit = new QLabel;
@@ -155,7 +155,7 @@ void StudyWindow::buildInterface()
 
   button = new DiagramPushButton(tr("Python Field model"));
   button->setStatusTip(tr("Create a physical model defined with a Python script"));
-  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createPythonFieldModel()));
+  connect(button, SIGNAL(clicked()), studyItem_->newPythonFieldModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0);
 
   // row - HLine
@@ -175,7 +175,7 @@ void StudyWindow::buildInterface()
 
   button = new DiagramPushButton(tr("Data model"));
   button->setStatusTip(tr("Import a sample to create a model"));
-  connect(button, SIGNAL(clicked()), studyItem_, SLOT(createDataModel()));
+  connect(button, SIGNAL(clicked()), studyItem_->newDataModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
 
   layout->setRowStretch(row, 1);

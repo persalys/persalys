@@ -165,6 +165,7 @@ int MetaModelIntroPage::getMethodId() const
 
 void MetaModelIntroPage::updateDesignOfExperiment(int index)
 {
+  Q_ASSERT(doesComboBoxModel_->rowCount());
   if (index < 0)
     return;
 

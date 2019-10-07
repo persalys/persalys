@@ -27,6 +27,7 @@ boost::bimap< QString, QString > TranslationManager::DistributionsNames_;
 boost::bimap< QString, QString > TranslationManager::CopulasNames_;
 boost::bimap< QString, QString > TranslationManager::DistributionsParametersNames_;
 boost::bimap< QString, QString > TranslationManager::ParametersNames_;
+boost::bimap< QString, QString > TranslationManager::ErrorMessages_;
 
 
 void TranslationManager::InitializeDistributionsNames()
@@ -186,6 +187,20 @@ void TranslationManager::InitializeParametersNames()
 }
 
 
+void TranslationManager::InitializeErrorMessages()
+{
+  ErrorMessages_.insert(type("The model must contain at least two variables.", tr("The model must contain at least two variables.")));
+  ErrorMessages_.insert(type("The sample must be not empty.", tr("The sample must be not empty.")));
+  ErrorMessages_.insert(type("The sample contains invalid values.", tr("The sample contains invalid values.")));
+  ErrorMessages_.insert(type("The physical model must have inputs.", tr("The physical model must have inputs.")));
+  ErrorMessages_.insert(type("The design of experiments must contain data for input and output variables.", tr("The design of experiments must contain data for input and output variables.")));
+  ErrorMessages_.insert(type("The physical model must have at least two inputs.", tr("The physical model must have at least two inputs.")));
+  ErrorMessages_.insert(type("The physical model must have inputs and at least a selected output.", tr("The physical model must have inputs and at least a selected output.")));
+  ErrorMessages_.insert(type("The physical model must have stochastic inputs.", tr("The physical model must have stochastic inputs.")));
+  ErrorMessages_.insert(type("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.", tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.")));
+}
+
+
 QString TranslationManager::GetTranslatedDistributionName(const std::string& name)
 {
   if (DistributionsNames_.empty())
@@ -299,5 +314,19 @@ QStringList TranslationManager::GetAvailableCopulas()
   for (bimap_type::left_const_iterator left_iter = CopulasNames_.left.begin(), iend = CopulasNames_.left.end(); left_iter != iend; ++left_iter)
     copulas << left_iter->second;
   return copulas;
+}
+
+
+QString TranslationManager::GetTranslatedErrorMessage(const std::string& message)
+{
+  if (ErrorMessages_.empty())
+    InitializeErrorMessages();
+
+  bimap_type::left_const_iterator left_iter = ErrorMessages_.left.find(message.c_str());
+
+  if (left_iter != ErrorMessages_.left.end())
+    return left_iter->second;
+
+  return message.c_str();
 }
 }

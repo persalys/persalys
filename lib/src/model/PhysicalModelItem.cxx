@@ -26,11 +26,10 @@ namespace PERSALYS
 {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel, const String observerType)
-  : Item("Unnamed", "NoUserRole")
+  : Item("Unnamed", observerType.c_str())
   , Observer(observerType)
   , physicalModel_(physicalModel)
 {
-  setData(observerType.c_str(), Qt::UserRole);
   physicalModel_.addObserver(this);
 }
 

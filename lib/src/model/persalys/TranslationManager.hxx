@@ -48,17 +48,20 @@ public:
   static QStringList GetAvailableDistributions();
   static QStringList GetAvailableCopulas();
   static QString GetTranslatedParameterName(const std::string& name);
+  static QString GetTranslatedErrorMessage(const std::string& message);
 
 private:
   static void InitializeDistributionsNames();
   static void InitializeCopulasNames();
   static void InitializeDistributionsParametersNames();
   static void InitializeParametersNames();
+  static void InitializeErrorMessages();
 #ifndef Q_MOC_RUN
   static bimap_type DistributionsNames_;
   static bimap_type CopulasNames_;
   static bimap_type DistributionsParametersNames_;
   static bimap_type ParametersNames_;
+  static bimap_type ErrorMessages_;
 #endif
 };
 }

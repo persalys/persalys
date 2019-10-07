@@ -24,6 +24,7 @@
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/KrigingAnalysis.hxx"
 #include "persalys/StudyItem.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QDebug>
 
@@ -32,14 +33,10 @@ using namespace OT;
 namespace PERSALYS
 {
 
-AnalysisItem::AnalysisItem(const Analysis & analysis)
+AnalysisItem::AnalysisItem(const Analysis &analysis)
   : Item(QString::fromUtf8(analysis.getName().c_str()), analysis.getImplementation()->getClassName().c_str())
-  , Observer("Analysis")
+  , Observer("AnalysisItem")
   , analysis_(analysis)
-  , convertAction_(0)
-  , extractDataAction_(0)
-  , modifyAction_(0)
-  , removeAction_(0)
 {
   analysis_.addObserver(this);
 
@@ -47,9 +44,18 @@ AnalysisItem::AnalysisItem(const Analysis & analysis)
 }
 
 
+AnalysisItem::AnalysisItem(const Analysis & analysis, const String &typeName)
+  : Item(QString::fromUtf8(analysis.getName().c_str()), typeName.c_str())
+  , Observer(typeName)
+  , analysis_(analysis)
+{
+  analysis_.addObserver(this);
+}
+
+
 void AnalysisItem::buildActions()
 {
-  const QString analysisType = data(Qt::UserRole).toString();
+  const QString analysisType(analysis_.getImplementation()->getClassName().c_str());
 
   // modify analysis action
   if (analysisType != "DataAnalysis" &&
@@ -71,7 +77,7 @@ void AnalysisItem::buildActions()
 
     appendAction(convertAction_);
   }
-  if (analysisType == "FieldMonteCarloAnalysis")
+  else if (analysisType == "FieldMonteCarloAnalysis")
   {
     extractDataAction_ = new QAction(tr("Extract data at nodes"), this);
     connect(extractDataAction_, SIGNAL(triggered()), this, SLOT(extractData()));
@@ -79,16 +85,14 @@ void AnalysisItem::buildActions()
     if (!analysis_.hasValidResult())
       extractDataAction_->setEnabled(false);
   }
-
-  // no remove action for these analyses
-  if (analysisType.contains("DesignOfExperiment"))
+  else if (analysisType.contains("DesignOfExperiment"))
   {
     convertAction_ = new QAction(tr("Convert into data model"), this);
     convertAction_->setStatusTip(tr("Add a data model in the study tree"));
     connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendDataModelItem()));
     convertAction_->setEnabled(analysis_.hasValidResult());
     appendAction(convertAction_);
-    return;
+    return; // no remove action for these analyses
   }
 
   appendSeparator();
@@ -158,6 +162,8 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
     convertAction_->setEnabled(analysis_.hasValidResult());
   if (extractDataAction_)
     extractDataAction_->setEnabled(analysis_.hasValidResult());
+
+  emit windowRequested(this, false);
 }
 
 
@@ -175,21 +181,19 @@ void AnalysisItem::modifyAnalysis()
     emit showErrorMessageRequested(tr("Can not modify a running analysis."));
     return;
   }
-
-  const QString analysisType = data(Qt::UserRole).toString();
-
   String errorMessage = "";
   if (!analysis_.canBeLaunched(errorMessage))
   {
-    emit showErrorMessageRequested(errorMessage.c_str()); // todo translation
+    emit showErrorMessageRequested(TranslationManager::GetTranslatedErrorMessage(errorMessage));
     return;
   }
+
   // TODO check limitstate?
 
-
-  if (analysisType.contains("DesignOfExperiment"))
+  const QString analysisType(data(Qt::UserRole).toString());
+  if (analysisType.contains("DesignOfExperiment") && analysisType != "DesignOfExperimentDefinitionItem")
   {
-    emit modifyDesignOfExperimentEvaluation(getAnalysis());
+    emit doeEvaluationWizardRequested(getAnalysis());
   }
   else
   {
@@ -241,25 +245,10 @@ void AnalysisItem::removeAnalysis()
 }
 
 
-void AnalysisItem::processLaunched()
+void AnalysisItem::processStatusChanged()
 {
   // change icon
   emitDataChanged();
-
-  // emit signal to disable run analysis/close study/import script...
-  // warn the other objects that an analysis is running
-  emit analysisInProgressStatusChanged(true);
-}
-
-
-void AnalysisItem::processFinished()
-{
-  // change icon
-  emitDataChanged();
-
-  // emit signal to enable run analysis/close study/import script...
-  // warn the other objects that an analysis is finished
-  emit analysisInProgressStatusChanged(false);
 }
 
 
@@ -267,19 +256,16 @@ void AnalysisItem::update(Observable* source, const String& message)
 {
   if (message == "analysisFinished")
   {
-    // emit signal to the StudyTreeView to create a window
-    emit analysisFinished(this, false);
-
     // if MetaModelAnalysis : enable convertAction_ action
     if (convertAction_)
       convertAction_->setEnabled(true);
     if (extractDataAction_)
       extractDataAction_->setEnabled(true);
   }
-  else if (message == "analysisBadlyFinished")
+  if (message == "analysisFinished" || message == "analysisBadlyFinished")
   {
     // emit signal to the StudyTreeView to create a window
-    emit analysisFinished(this, false);
+    emit windowRequested(this, false);
   }
   else if (message == "informationMessageUpdated")
   {
@@ -295,10 +281,10 @@ void AnalysisItem::update(Observable* source, const String& message)
   {
     convertAction_->setEnabled(analysis_.hasValidResult());
   }
-  else if (message == "analysisRemoved")
+  else if (message == "objectRemoved")
   {
     if (hasChildren())
-      qDebug() << "AnalysisItem::update(analysisRemoved) has not to contain child\n";
+      qDebug() << "AnalysisItem::update(objectRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
 }
@@ -306,6 +292,6 @@ void AnalysisItem::update(Observable* source, const String& message)
 
 void AnalysisItem::extractData()
 {
-  emit dataExtractionRequested(analysis_);
+  emit dataExtractionWizardRequested(getParentStudyItem(), analysis_);
 }
 }

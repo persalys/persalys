@@ -41,9 +41,6 @@ public:
   QAction * closeAction() const;
   QAction * exitAction() const;
 
-public slots:
-  void updateActionsAvailability(bool analysisInProgress);
-
 private:
   QAction * new_;
   QAction * open_;

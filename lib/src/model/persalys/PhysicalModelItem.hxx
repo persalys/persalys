@@ -40,6 +40,14 @@ signals:
   void numberOutputsChanged();
   void inputListDefinitionChanged();
   void inputListDifferentiationChanged();
+  void outputChanged();
+  void codeChanged();
+  void physicalModelRemoved(QStandardItem*);
+  void parallelizationStatusChanged();
+  void meshChanged();
+  void stochasticInputListChanged();
+  void inputListCorrelationChanged();
+  void copulaChanged();
 
 protected:
   PhysicalModel physicalModel_;

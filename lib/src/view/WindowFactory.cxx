@@ -20,6 +20,16 @@
  */
 #include "persalys/WindowFactory.hxx"
 
+#include "persalys/StudyItem.hxx"
+#include "persalys/LimitStateItem.hxx"
+#include "persalys/PhysicalModelDiagramItem.hxx"
+#include "persalys/DataModelDiagramItem.hxx"
+
+#include "persalys/StudyWindow.hxx"
+#include "persalys/LimitStateWindow.hxx"
+#include "persalys/DataModelDiagramWindow.hxx"
+#include "persalys/PhysicalModelDiagramWindow.hxx"
+#include "persalys/FieldModelDiagramWindow.hxx"
 #include "persalys/SymbolicPhysicalModelWindow.hxx"
 #include "persalys/PythonPhysicalModelWindow.hxx"
 #include "persalys/MetaModelWindow.hxx"
@@ -29,6 +39,11 @@
 #ifdef PERSALYS_HAVE_OTFMI
 #include "persalys/FMIPhysicalModelWindow.hxx"
 #endif
+#include "persalys/ProbabilisticModelWindow.hxx"
+#include "persalys/MeshWindow.hxx"
+
+#include "persalys/ObservationsWindow.hxx"
+#include "persalys/DataModelWindow.hxx"
 
 #include "persalys/DesignOfExperimentWindow.hxx"
 #include "persalys/DataAnalysisResultWindow.hxx"
@@ -47,6 +62,7 @@
 #include "persalys/FieldModelEvaluationResultWindow.hxx"
 #include "persalys/FieldMonteCarloWizard.hxx"
 #include "persalys/CalibrationResultWindow.hxx"
+#include "persalys/DesignOfExperimentInputWindow.hxx"
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/ScreeningAnalysisWizard.hxx"
 #include "persalys/MorrisResultWindow.hxx"
@@ -66,34 +82,86 @@
 namespace PERSALYS
 {
 
-SubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent)
+SubWindow * WindowFactory::GetWindow(Item *item, QWidget *parent)
 {
   SubWindow * window = 0;
 
+  // if study item
+  if (StudyItem * studyItem = dynamic_cast<StudyItem *>(item))
+  {
+    window = new StudyWindow(studyItem, parent);
+  }
+  // if limit state item
+  else if (LimitStateItem * lsItem = dynamic_cast<LimitStateItem *>(item))
+  {
+    window = new LimitStateWindow(lsItem, parent);
+  }
+  // if physical model item
+  else if (PhysicalModelItem * pmItem = dynamic_cast<PhysicalModelItem *>(item))
+  {
+    window = GetPhysicalModelWindow(pmItem, parent);
+  }
+  // if data model item
+  else if (DesignOfExperimentItem * dmItem = dynamic_cast<DesignOfExperimentItem *>(item))
+  {
+    window = GetDesignOfExperimentWindow(dmItem, parent);
+  }
+  return window;
+}
+
+
+SubWindow * WindowFactory::GetPhysicalModelWindow(PhysicalModelItem *item, QWidget *parent)
+{
+  // if diagram item
+  if (PhysicalModelDiagramItem * pmDiagramItem = dynamic_cast<PhysicalModelDiagramItem *>(item))
+  {
+    if (!pmDiagramItem->getPhysicalModel().hasMesh())
+    {
+      return new PhysicalModelDiagramWindow(pmDiagramItem, parent);
+    }
+    else
+    {
+      return new FieldModelDiagramWindow(pmDiagramItem, parent);
+    }
+  }
+
+  // if proba / mesh item
+  const QString itemType = item->data(Qt::UserRole).toString();
+
+  if (itemType == "ProbabilisticModelItem")
+  {
+    return new ProbabilisticModelWindow(item, parent);
+  }
+  else if (itemType == "MeshItem")
+  {
+    return new MeshWindow(item, parent);
+  }
+
+  // model definition item
   const QString physicalModelType = item->getPhysicalModel().getImplementation()->getClassName().c_str();
 
-  if (physicalModelType == "SymbolicPhysicalModel" || physicalModelType == "SymbolicFieldModel")
+  if (physicalModelType.contains("Symbolic"))
   {
-    window = new SymbolicPhysicalModelWindow(item, parent);
+    return new SymbolicPhysicalModelWindow(item, parent);
   }
-  else if (physicalModelType == "PythonPhysicalModel" || physicalModelType == "PythonFieldModel")
+  else if (physicalModelType.contains("Python"))
   {
-    window = new PythonPhysicalModelWindow(item, parent);
+    return new PythonPhysicalModelWindow(item, parent);
   }
   else if (physicalModelType == "MetaModel")
   {
-    window = new MetaModelWindow(item, parent);
+    return new MetaModelWindow(item, parent);
   }
 #ifdef PERSALYS_HAVE_YACS
   else if (physicalModelType == "YACSPhysicalModel")
   {
-    window = new YACSPhysicalModelWindow(item, parent);
+    return new YACSPhysicalModelWindow(item, parent);
   }
 #endif
 #ifdef PERSALYS_HAVE_OTFMI
   else if (physicalModelType == "FMIPhysicalModel")
   {
-    window = new FMIPhysicalModelWindow(item, parent);
+    return new FMIPhysicalModelWindow(item, parent);
   }
 #endif
   else
@@ -101,7 +169,30 @@ SubWindow* WindowFactory::GetPhysicalModelWindow(PhysicalModelDefinitionItem* it
     qDebug() << "Error: In createNewPhysicalModelWindow: impossible to create PhysicalModelWindow\n";
   }
 
-  return window;
+  return 0;
+}
+
+
+SubWindow * WindowFactory::GetDesignOfExperimentWindow(DesignOfExperimentItem *item, QWidget *parent)
+{
+  // if diagram item
+  if (DataModelDiagramItem * dmDiagramItem = dynamic_cast<DataModelDiagramItem *>(item))
+  {
+    return new DataModelDiagramWindow(dmDiagramItem, parent);
+  }
+
+  // if model definition / observations item
+  const QString itemType = item->data(Qt::UserRole).toString();
+
+  if (itemType == "DataModelDefinitionItem")
+  {
+    return new DataModelWindow(item, parent);
+  }
+  else if (itemType == "ObservationsItem")
+  {
+    return new ObservationsWindow(item, parent);
+  }
+  return 0;
 }
 
 
@@ -181,9 +272,16 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
 
 SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent)
 {
-  SubWindow * resultWindow = 0;
-
   const QString analysisType = item->data(Qt::UserRole).toString();
+
+  if (analysisType == "DesignOfExperimentDefinitionItem")
+    return new DesignOfExperimentInputWindow(item, parent);
+
+  // if no result: can not build a ResultWindow
+  if (!item->getAnalysis().hasValidResult())
+    return 0;
+
+  SubWindow * resultWindow = 0;
 
   if (analysisType == "ModelEvaluation")
   {

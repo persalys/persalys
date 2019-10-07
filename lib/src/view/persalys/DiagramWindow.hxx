@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QStandardItem, observer of design of experiments
+ *  @brief SubWindow base class to define the diagram of a model
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,38 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_DESIGNOFEXPERIMENTDEFINITIONITEM_HXX
-#define PERSALYS_DESIGNOFEXPERIMENTDEFINITIONITEM_HXX
+#ifndef PERSALYS_DIAGRAMWINDOW_HXX
+#define PERSALYS_DIAGRAMWINDOW_HXX
 
-#include "persalys/AnalysisItem.hxx"
+#include "persalys/SubWindow.hxx"
+#include "persalys/Item.hxx"
+#include "persalys/DiagramPushButton.hxx"
+
+#include <QGraphicsProxyWidget>
+#include <QGraphicsScene>
+#include <QTextEdit>
 
 namespace PERSALYS
 {
-class PERSALYS_API DesignOfExperimentDefinitionItem : public AnalysisItem
+class PERSALYS_API DiagramWindow : public SubWindow
 {
   Q_OBJECT
 
-public:
-  DesignOfExperimentDefinitionItem(const Analysis& analysis);
-
-  virtual QVariant data(int role) const;
-  OT::Sample getOriginalInputSample() const;
-
-  virtual void appendItem(const Analysis& analysis);
-
-  virtual void update(Observable * source, const OT::String & message);
-  void fill();
+public :
+  DiagramWindow(Item * item, QWidget * parent = 0);
 
 protected:
-  virtual void buildActions();
+  void appendButton(DiagramPushButton *button, const unsigned int row, DiagramPushButton *parentButton = 0);
+  void updateDiagram();
 
-public slots:
-  virtual void updateAnalysis(const Analysis & analysis);
-  void appendEvaluationItem();
-  void createEvaluation();
-
-private:
-  QAction * evaluateAction_ = 0;
+  int columnNumber_ = 0;
+  QGraphicsScene * scene_;
+  TitleLabel * titleLabel_;
+  QMap<DiagramPushButton*, DiagramPushButton*> buttons_;
+  QMap<DiagramPushButton*, QGraphicsProxyWidget*> proxies_;
+  QTextEdit * textArea_;
 };
 }
 #endif

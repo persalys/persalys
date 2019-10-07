@@ -44,7 +44,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DependenciesWidget::DependenciesWidget(ProbabilisticModelItem * item, QWidget *parent)
+DependenciesWidget::DependenciesWidget(PhysicalModelItem * item, QWidget *parent)
   : QWidget(parent)
   , failSoftMode_(false)
   , study_(item->getParentStudyItem()->getStudy())
@@ -301,7 +301,7 @@ void DependenciesWidget::addCopula()
   newCopula.setDescription(selectedVars);
 
   // set copula
-  physicalModel_.blockNotification("ProbabilisticModel");
+  physicalModel_.blockNotification("ProbabilisticModelItem");
   physicalModel_.setCopula(selectedVars, newCopula);
   physicalModel_.blockNotification();
 
@@ -376,7 +376,7 @@ void DependenciesWidget::openWizardToChooseInferenceResult(const QModelIndex& in
     copula.setDescription(currentGroup);
 
     // update the copula
-    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.blockNotification("ProbabilisticModelItem");
     physicalModel_.setCopula(currentGroup, copula);
     physicalModel_.blockNotification();
 

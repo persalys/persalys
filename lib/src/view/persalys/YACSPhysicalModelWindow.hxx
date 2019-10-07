@@ -22,7 +22,7 @@
 #define PERSALYS_YACSPHYSICALMODELWINDOW_HXX
 
 #include "persalys/SubWindow.hxx"
-#include "persalys/PhysicalModelDefinitionItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 #include "persalys/TemporaryLabel.hxx"
 
 #include <QLineEdit>
@@ -35,7 +35,7 @@ class PERSALYS_API YACSPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
+  YACSPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
 
 public slots:
   void buildSchemaDialogRequested();

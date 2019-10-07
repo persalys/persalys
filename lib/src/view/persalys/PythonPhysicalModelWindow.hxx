@@ -22,7 +22,7 @@
 #define PERSALYS_PYTHONPHYSICALMODELWINDOW_HXX
 
 #include "persalys/SubWindow.hxx"
-#include "persalys/PhysicalModelDefinitionItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 
 namespace PERSALYS
 {
@@ -31,7 +31,7 @@ class PERSALYS_API PythonPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  PythonPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
+  PythonPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
 };
 }
 #endif

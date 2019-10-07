@@ -21,12 +21,12 @@
 #ifndef PERSALYS_DATAMODELDIAGRAMWINDOW_HXX
 #define PERSALYS_DATAMODELDIAGRAMWINDOW_HXX
 
-#include "persalys/SubWindow.hxx"
+#include "persalys/DiagramWindow.hxx"
 #include "persalys/DataModelDiagramItem.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API DataModelDiagramWindow : public SubWindow
+class PERSALYS_API DataModelDiagramWindow : public DiagramWindow
 {
   Q_OBJECT
 

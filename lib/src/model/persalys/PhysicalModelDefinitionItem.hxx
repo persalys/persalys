@@ -27,44 +27,15 @@
 
 namespace PERSALYS
 {
+class PhysicalModelDiagramItem;
 class PERSALYS_API PhysicalModelDefinitionItem : public PhysicalModelItem
 {
   Q_OBJECT
 
 public:
-  PhysicalModelDefinitionItem(const PhysicalModel & physicalModel);
+  PhysicalModelDefinitionItem(const PhysicalModel &physicalModel, const PhysicalModelDiagramItem *diagramItem = 0);
 
   virtual void update(Observable * source, const OT::String & message);
-
-public slots:
-  void createProbabilisticModel();
-  void createDesignOfExperiment();
-  void createModelEvaluation();
-#ifdef PERSALYS_HAVE_OTMORRIS
-  void createScreening();
-#endif
-  void createOptimization();
-  void createObservations();
-  void updateProbaActionAvailability();
-signals:
-  void probabilisticModelRequested(PhysicalModelItem*);
-  void observationsRequested(PhysicalModelDefinitionItem*, const DesignOfExperiment& designOfExp);
-  void outputChanged();
-  void codeChanged();
-  void physicalModelRemoved(QStandardItem*);
-  void parallelizationStatusChanged();
-  void meshChanged();
-
-protected:
-  void buildActions();
-
-private:
-  QAction * newProbabilisticModel_;
-  QAction * newModelEvaluation_;
-  QAction * newScreening_;
-  QAction * newOptimization_;
-  QAction * newDesignOfExperiment_;
-  QAction * newObservations_;
 };
 }
 #endif

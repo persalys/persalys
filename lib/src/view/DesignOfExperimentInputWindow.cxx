@@ -20,13 +20,15 @@
  */
 #include "persalys/DesignOfExperimentInputWindow.hxx"
 
+#include "persalys/DesignOfExperimentEvaluation.hxx"
+
 namespace PERSALYS
 {
 
-DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent)
+DesignOfExperimentInputWindow::DesignOfExperimentInputWindow(AnalysisItem * item, QWidget * parent)
   : DataAnalysisWindow(item, parent)
 {
-  designOfExperiment_.setInputSample(item->getOriginalInputSample());
+  designOfExperiment_.setInputSample(dynamic_cast<DesignOfExperimentEvaluation*>(item->getAnalysis().getImplementation().get())->getOriginalInputSample());
 
   titleLabel_->setText(tr("Design of experiments input sample"));
   titleLabel_->setDocLink("user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#doeinputwindow");

@@ -25,32 +25,15 @@
 
 namespace PERSALYS
 {
+class DataModelDiagramItem;
 class PERSALYS_API DataModelDefinitionItem : public DesignOfExperimentItem
 {
   Q_OBJECT
 
 public:
-  DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment);
+  DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment, const DataModelDiagramItem * diagramItem = 0);
 
   virtual void update(Observable * source, const OT::String & message);
-
-protected:
-  void buildActions();
-  bool designOfExperimentValid();
-
-public slots:
-  void createDataAnalysis();
-  void createInferenceAnalysis();
-  void createCopulaInferenceAnalysis();
-  void createMetaModel();
-signals:
-  void variablesChanged();
-
-private:
-  QAction * newDataAnalysis_;
-  QAction * newInferenceAnalysis_;
-  QAction * newCopulaInferenceAnalysis_;
-  QAction * newMetaModel_;
 };
 }
 #endif

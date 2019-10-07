@@ -103,11 +103,4 @@ QAction * Actions::exitAction() const
 {
   return exit_;
 }
-
-
-void Actions::updateActionsAvailability(bool analysisInProgress)
-{
-  // can not import a Python script when an analysis is running
-  importPy_->setDisabled(analysisInProgress);
-}
 }

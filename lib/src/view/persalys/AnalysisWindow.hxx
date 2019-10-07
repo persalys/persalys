@@ -31,12 +31,13 @@
 
 namespace PERSALYS
 {
+class StudyManager;
 class PERSALYS_API AnalysisWindow : public SubWindow, LaunchParametersVisitor
 {
   Q_OBJECT
 
 public:
-  AnalysisWindow(AnalysisItem* item, const bool analysisInProgress = false, QWidget * parent = 0);
+  AnalysisWindow(AnalysisItem *item, StudyManager *manager, QWidget * parent = 0);
 
   virtual ~AnalysisWindow();
 
@@ -49,16 +50,13 @@ protected:
   virtual void visitYACS(YACSPhysicalModel* model);
 #endif
 
-public slots:
-  void updateRunButtonAvailability(bool);
-
 protected slots:
   void launchAnalysis();
   void stopAnalysis();
   void updateProgressBar(const int value);
 
 private:
-  bool analysisInProgress_;
+  StudyManager * studyManager_;
   AnalysisItem * analysisItem_;
   QProgressBar * progressBar_;
   QPushButton * runButton_;
