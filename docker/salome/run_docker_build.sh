@@ -19,9 +19,5 @@ cmake \
   /io
 make install
 make tests
-
-echo "#!/bin/sh" > ctest.sh
-echo "ctest --output-on-failure --timeout 30 -j8" >> ctest.sh
-chmod a+rx ctest.sh
 /home/devel/salome -t
-xvfb-run --server-args="-screen 0 1024x768x24 -ac +render" /home/devel/salome shell ctest.sh
+xvfb-run --server-args="+render" /home/devel/salome shell -- ctest --output-on-failure --timeout 30 -j8
