@@ -37,6 +37,7 @@ CentralTendencyWizard::CentralTendencyWizard(const Analysis& analysis, QWidget* 
 void CentralTendencyWizard::buildInterface()
 {
   setWindowTitle(tr("Central tendency"));
+  docLink_ = "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#centraltendencywizard";
 
   // First Page: choose the method
   introPage_ = new CentralTendencyIntroPage(this);

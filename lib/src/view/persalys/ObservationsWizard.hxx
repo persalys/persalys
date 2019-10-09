@@ -65,6 +65,8 @@ public:
   ObservationsWizard(const DesignOfExperiment &designOfExp, QWidget *parent = 0)
   : Wizard(parent)
   {
+    docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#observationwizard";
+
     page_ = new ImportObservationsPage(this);
     page_->initialize(designOfExp);
     setPage(0, page_);

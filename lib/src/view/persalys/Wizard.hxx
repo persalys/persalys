@@ -45,10 +45,8 @@ public slots:
 signals:
   void analysisChanged(const Analysis & analysis);
 
-private:
-  static QMap<QString, QString> DocLinks_;
-  static void InitializeDocLInks();
-  QString getDocLink();
+protected:
+  QString docLink_ = "";
 };
 }
 #endif

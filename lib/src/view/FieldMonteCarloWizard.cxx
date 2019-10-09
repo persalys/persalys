@@ -44,6 +44,8 @@ FieldMonteCarloWizard::FieldMonteCarloWizard(const Analysis& analysis, QWidget* 
 void FieldMonteCarloWizard::buildInterface()
 {
   setWindowTitle(tr("Central tendency"));
+  docLink_ = "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldcentraltendencywizard";
+
   // get data
   const FieldMonteCarloAnalysis * analysis_ptr = dynamic_cast<const FieldMonteCarloAnalysis*>(analysis_.getImplementation().get());
 

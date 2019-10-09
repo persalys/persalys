@@ -51,6 +51,7 @@ InferenceResultWizard::InferenceResultWizard(const Study& study, QWidget* parent
 void InferenceResultWizard::buildInterface()
 {
   setWindowTitle(tr("Inference analyses results"));
+  docLink_ = "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#inferenceresultwizard";
 
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * mainLayout = new QVBoxLayout(page);

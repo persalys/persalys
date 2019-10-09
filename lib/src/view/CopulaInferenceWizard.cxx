@@ -70,6 +70,7 @@ CopulaInferenceWizard::CopulaInferenceWizard(const Analysis &analysis, QWidget *
 void CopulaInferenceWizard::buildInterface()
 {
   setWindowTitle(tr("Copula inference"));
+  docLink_ = "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#dependenceinferencewizard";
 
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);

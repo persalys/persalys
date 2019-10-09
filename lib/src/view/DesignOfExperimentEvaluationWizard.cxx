@@ -106,6 +106,7 @@ void DesignOfExperimentEvaluationWizard::buildInterface()
 {
   // set window title
   setWindowTitle(tr("Design of experiments evaluation"));
+  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#doeevalwizard";
 
   // create a page
   QWizardPage * page = new QWizardPage(this); // create a class QWidget with the doesComboBox_ to reuse it in metamodel wizard

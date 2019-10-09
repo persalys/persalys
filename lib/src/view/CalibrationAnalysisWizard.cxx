@@ -459,6 +459,7 @@ CalibrationAnalysisWizard::CalibrationAnalysisWizard(const Analysis &analysis, c
 void CalibrationAnalysisWizard::buildInterface()
 {
   setWindowTitle(tr("Calibration"));
+  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#calibrationwizard";
 
   // First Page: choose the observations and the method of calibration analysis
   introPage_ = new CalibrationIntroPage(this);
