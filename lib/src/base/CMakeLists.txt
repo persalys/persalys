@@ -76,7 +76,7 @@ if (AdaoCppLayer_FOUND)
   list (APPEND BASE_SOURCEFILES AdaoCalibration.cxx)
 endif ()
 
-if (USE_OTFMI)
+if (OTFMI_FOUND)
   list (APPEND BASE_SOURCEFILES FMIPhysicalModel.cxx FMUInfo.cxx)
 endif ()
 
@@ -172,7 +172,7 @@ ot_install_header_file ( Observations.hxx )
 ot_install_header_file ( CalibrationAnalysis.hxx )
 ot_install_header_file ( CalibrationAnalysisResult.hxx )
 
-if (USE_OTFMI)
+if (OTFMI_FOUND)
   ot_install_header_file (FMIPhysicalModel.hxx)
   ot_install_header_file (FMUInfo.hxx)
 endif ()

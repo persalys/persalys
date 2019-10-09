@@ -22,7 +22,7 @@ make tests
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
 cp -r ${MINGW_PREFIX}/lib/qt/plugins/platforms ${MOD_PREFIX}/lib
 cp -r ${MINGW_PREFIX}/lib/qt/plugins/imageformats ${MOD_PREFIX}/lib
-WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin" xvfb-run ctest --output-on-failure --timeout 30 -j8 -E FMI
+WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin" xvfb-run ctest --output-on-failure --timeout 30 -j8
 VERSION=`cat /io/VERSION`
 cp /io/distro/windows/* .
 unzip persalys-doc.zip -d .
