@@ -81,6 +81,12 @@ void ImportObservationsPage::checkColumns()
   for (UnsignedInteger i = 0; i < outColumns.getSize(); ++i)
     outNames << sampleWidget_->dataPreviewTableView_->model()->headerData(outColumns[i], Qt::Horizontal).toString();
 
+  if (inNames.size() == (int)inputNames.getSize())
+  {
+    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("All the input variables can not be observed. At least an input variable must be calibrated."));
+    sampleWidget_->tableValidity_ = false;
+    return;
+  }
   // try to update the observations
   try
   {
@@ -90,7 +96,7 @@ void ImportObservationsPage::checkColumns()
   }
   catch (InvalidArgumentException & ex)
   {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Define observations for at least an output and at least an input."));
+    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Define observations for at least an output variable and an input variable. A variable must be associated with only one column."));
     sampleWidget_->tableValidity_ = false;
   }
 }

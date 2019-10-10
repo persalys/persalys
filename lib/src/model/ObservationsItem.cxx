@@ -96,6 +96,11 @@ void ObservationsItem::createCalibration()
     emit showErrorMessageRequested(tr("Observations must be defined for at least an input and an output."));
     return;
   }
+  if (getDesignOfExperiment().getInputSample().getDimension() >= getDesignOfExperiment().getPhysicalModel().getInputDimension())
+  {
+    emit showErrorMessageRequested(tr("All the input variables can not be observed. At least an input variable must be calibrated."));
+    return;
+  }
   // new analysis
   const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("calibration_").toStdString()));
   CalibrationAnalysis analysis(analysisName, getDesignOfExperiment());

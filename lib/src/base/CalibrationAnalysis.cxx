@@ -102,6 +102,8 @@ void CalibrationAnalysis::initializeParameters()
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
   const Description observedInputs(getObservations().getInputSample().getDescription());
   const UnsignedInteger nbOutputs = getObservations().getOutputSample().getDimension();
+  if (observedInputs.getSize() == nbInputs)
+    throw InvalidValueException(HERE) << "At least an input variable must be calibrated. Here, all the input variables are observed.";
 
   // set prior distribution
   Point candidate;
@@ -306,9 +308,11 @@ void CalibrationAnalysis::runNonLinearAlgorithm(T& algo)
 
 
 void CalibrationAnalysis::check(const Description &calibratedInputs, const Distribution &priorDistribution,
-                                 const Description &fixedInputs, const Point &fixedValues)
+                                const Description &fixedInputs, const Point &fixedValues)
 {
   // dimensions
+  if (!calibratedInputs.getSize())
+    throw InvalidArgumentException(HERE) << "At least an input variable must be calibrated.";
   if (calibratedInputs.getSize() != priorDistribution.getDimension())
     throw InvalidArgumentException(HERE) << "The dimension of the prior distribution must equal to the number of inputs to calibrate";
   if (fixedInputs.getSize() != fixedValues.getSize())
