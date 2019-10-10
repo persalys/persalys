@@ -75,19 +75,22 @@ AboutDialog::AboutDialog(QWidget* parent)
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  QLabel * descriptionLabel = new QLabel(tr("Persalys, an interface for OpenTURNS"));
+  QLabel * descriptionLabel = new QLabel(tr("Persalys, an user interface for uncertainty analysis"));
   tabLayout->addWidget(descriptionLabel);
 
-  QLabel * otLinkLabel = new QLabel();
-  otLinkLabel->setText("<a href=\"http://www.openturns.org\">www.openturns.org</a>");
-  otLinkLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-  otLinkLabel->setOpenExternalLinks(true);
-  tabLayout->addWidget(otLinkLabel);
+// TODO: own website ?
+//   QLabel * linkLabel = new QLabel();
+//   linkLabel->setText("<a href=\"http://www.openturns.org\">www.openturns.org</a>");
+//   linkLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+//   linkLabel->setOpenExternalLinks(true);
+//   tabLayout->addWidget(linkLabel);
 
   QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2019 EDF-Phimeca"));
   tabLayout->addWidget(copyrightLabel);
 
-  QLabel * licenseLabel = new QLabel(tr("License: GNU Lesser General Public License Version 3"));
+  QLabel * licenseLabel = new QLabel("<a>"+tr("License:")+"&nbsp;<a href=\"https://www.gnu.org/licenses/lgpl-3.0.en.html\">GNU Lesser General Public License Version 3</a>");
+  licenseLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+  licenseLabel->setOpenExternalLinks(true);
   tabLayout->addWidget(licenseLabel);
 
   tabWidget->addTab(tab, tr("&About"));
