@@ -578,12 +578,12 @@
     <message>
         <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="79"/>
         <source>Linear least squares</source>
-        <translation>Moindres carrés linaire</translation>
+        <translation>Moindres carrés linéaires</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="86"/>
         <source>Nonlinear least squares</source>
-        <translation>Moindres carrés non linaire</translation>
+        <translation>Moindres carrés non linéaires</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="92"/>
@@ -2267,7 +2267,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="84"/>
         <source>Identifier</source>
-        <translation>Identitiant</translation>
+        <translation>Identifiant</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="85"/>
@@ -2503,7 +2503,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="425"/>
         <source>Selected variables: input:%1, output:%2</source>
-        <translation>Variables séléctionnées : entrée : %1, sortie : %2</translation>
+        <translation>Variables sélectionnées : entrée : %1, sortie : %2</translation>
     </message>
 </context>
 <context>
