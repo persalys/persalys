@@ -417,6 +417,7 @@ void StudyManager::createObservationsWindow(ObservationsItem* item)
   if (!item)
     return;
 
+  connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(analysisRequested(Item*, Analysis)), this, SLOT(openAnalysisWizard(Item*, Analysis)));
   connect(item, SIGNAL(analysisItemCreated(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
 

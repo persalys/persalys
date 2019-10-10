@@ -3252,9 +3252,14 @@ des étiquettes</translation>
         <translation>Importer des données d&apos;un fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ObservationsWizard.cxx" line="93"/>
-        <source>Define observations for at least an output and at least an input.</source>
-        <translation>Définir des observations pour au moins une sortie et une entrée.</translation>
+        <location filename="../lib/src/view/ObservationsWizard.cxx" line="86"/>
+        <source>All the input variables can not be observed. At least an input variable must be calibrated.</source>
+        <translation>Toutes les variables d&apos;entrée ne peuvent être observées. Au moins une variable d&apos;entrée doit être calibrée.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ObservationsWizard.cxx" line="99"/>
+        <source>Define observations for at least an output variable and an input variable. A variable must be associated with only one column.</source>
+        <translation>Définir des observations pour au moins une variable de sortie et une variable d&apos;entrée. Une variable doit être associée à une seule colonne.</translation>
     </message>
 </context>
 <context>
@@ -4960,12 +4965,17 @@ ou interaction</translation>
         <translation>Des observations doivent être définies pour au moins une entrée et une sortie.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ObservationsItem.cxx" line="100"/>
+        <location filename="../lib/src/model/ObservationsItem.cxx" line="101"/>
+        <source>All the input variables can not be observed. At least an input variable must be calibrated.</source>
+        <translation>Toutes les variables d&apos;entrée ne peuvent être observées. Au moins une variable d&apos;entrée doit être calibrée.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ObservationsItem.cxx" line="105"/>
         <source>calibration_</source>
         <translation>calage_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ObservationsItem.cxx" line="112"/>
+        <location filename="../lib/src/model/ObservationsItem.cxx" line="117"/>
         <source>Can not remove observations when an analysis is running.</source>
         <translation>Impossible de supprimer des observations lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
@@ -7340,90 +7350,90 @@ at</source>
         <translation>Impossible de créer une fenêtre de résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="465"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="492"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="664"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="466"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="493"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="665"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="466"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="467"/>
         <source>Cannot import a Python script when other studies are opened.
 Do you want to continue and close the other studies?</source>
         <translation>Impossible d&apos;importer un script Python lorsque d&apos;autres études sont ouvertes.
 Voulez-vous continuer et fermer les autres études ?</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="479"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="480"/>
         <source>Import Python...</source>
         <translation>Import Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="481"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="518"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="482"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="519"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="493"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="494"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="511"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="512"/>
         <source>Can not export the current study</source>
         <translation>Impossible d&apos;exporter l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="516"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="517"/>
         <source>Export Python...</source>
         <translation>Export Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="556"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="557"/>
         <source>Can not save the current study</source>
         <translation>Impossible de sauvegarder l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="579"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="580"/>
         <source>Can not save the current study as</source>
         <translation>Impossible de sauvegarder sous l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="584"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="585"/>
         <source>Save study...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="603"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="604"/>
         <source>Open an existing study</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="665"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="666"/>
         <source>Do you want to save the study &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="586"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="605"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="587"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="606"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="615"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="616"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="620"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="621"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="636"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="637"/>
         <source>An error has occurred when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
@@ -7432,12 +7442,12 @@ Des objets ne sont peut être pas ouverts.
 </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="649"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="650"/>
         <source>Can not close the current study</source>
         <translation>Impossible de fermer l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="656"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="657"/>
         <source>Can not remove a study when one of its analyses is running.</source>
         <translation>Impossible de supprimer une étude lorsqu&apos;une de ses analyses est en cours d&apos;exécution.</translation>
     </message>
