@@ -72,6 +72,9 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx )
 endif ()
+if (AdaoCppLayer_FOUND)
+  list (APPEND BASE_SOURCEFILES AdaoCalibration.cxx)
+endif ()
 
 if (USE_OTFMI)
   list (APPEND BASE_SOURCEFILES FMIPhysicalModel.cxx FMUInfo.cxx)
@@ -208,7 +211,11 @@ if (OTMORRIS_FOUND)
 endif ()
 
 if (SalomeYACS_FOUND)
-  target_link_libraries ( persalysbase ydefx)
+  target_link_libraries (persalysbase ydefx)
+endif ()
+
+if (AdaoCppLayer_FOUND)
+  target_link_libraries ( persalysbase ${AdaoCppLayer_LIBRARIES} )
 endif ()
 
 target_link_libraries (persalysbase ${PYTHON_LIBRARIES})
