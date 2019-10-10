@@ -160,7 +160,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
 {
   bool canUseParaview = false;
 #ifdef PERSALYS_HAVE_PARAVIEW
-  if (SubWindow::HaveOpenGL32())
+  if (SubWindow::SupportsOpenGL_3_2())
     canUseParaview = true;
 #endif
 
@@ -486,7 +486,7 @@ void FieldModelEvaluationResultWidget::buildInterface()
   tabWidget_ = new QTabWidget;
   bool canUseParaview = false;
 #ifdef PERSALYS_HAVE_PARAVIEW
-  if (SubWindow::HaveOpenGL32())
+  if (SubWindow::SupportsOpenGL_3_2())
   {
     addParaviewWidgetsTabs();
     canUseParaview = true;

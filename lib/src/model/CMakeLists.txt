@@ -111,9 +111,14 @@ if (OTMORRIS_FOUND)
   qt5_wrap_cpp (PERSALYS_MODEL_MOC_SRCS persalys/MorrisResultTableModel.hxx)
 endif ()
 
+if (SalomeYACS_FOUND)
+  set_source_files_properties (StudyItem.cxx PROPERTIES COTIRE_EXCLUDED ON) # FIXME: Python/Qt conflict due to YACS
+endif ()
+
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
 persalys_add_library ( persalysmodel ${SOURCEFILES} ${PERSALYS_MODEL_MOC_SRCS} )
+
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( persalysmodel PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()

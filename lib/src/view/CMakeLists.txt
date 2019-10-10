@@ -49,7 +49,7 @@ ot_add_source_file ( MetaModelWindow.cxx )
 if (SalomeYACS_FOUND)
   ot_add_source_file ( YACSPhysicalModelWindow.cxx)
 endif ()
-if (USE_OTFMI)
+if (OTFMI_FOUND)
   ot_add_source_file ( FMIPhysicalModelWindow.cxx)
 endif ()
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
@@ -171,7 +171,7 @@ ot_install_header_file ( MetaModelWindow.hxx )
 if (SalomeYACS_FOUND)
   ot_install_header_file (YACSPhysicalModelWindow.hxx)
 endif ()
-if (USE_OTFMI)
+if (OTFMI_FOUND)
   ot_install_header_file (FMIPhysicalModelWindow.hxx)
 endif ()
 ot_install_header_file ( ProbabilisticModelWindow.hxx )
@@ -343,11 +343,14 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
 
 
 if (SalomeYACS_FOUND)
+  set_source_files_properties (AnalysisWindow.cxx YACSPhysicalModelWindow.cxx PROPERTIES COTIRE_EXCLUDED ON) # FIXME: Python/Qt conflict due to YACS
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/YACSPhysicalModelWindow.hxx)
 endif ()
-if (USE_OTFMI)
+
+if (OTFMI_FOUND)
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/FMIPhysicalModelWindow.hxx)
 endif ()
+
 if (OTMORRIS_FOUND)
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningIntroPage.hxx)
   qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MorrisPage.hxx)

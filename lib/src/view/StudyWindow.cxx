@@ -191,12 +191,5 @@ void StudyWindow::buildInterface()
   layout->addWidget(textEdit, row, 1, Qt::AlignLeft | Qt::AlignTop);
 
   layout->setRowStretch(++row, 4);
-
-  // Persalys logo
-  QLabel * imageLabel = new QLabel;
-  QPixmap pixmap(":/images/persalys-logo.png");
-  imageLabel->setPixmap(pixmap);
-
-  layout->addWidget(imageLabel, ++row, 0, 1, 2, Qt::AlignCenter);
 }
 }

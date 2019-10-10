@@ -37,11 +37,6 @@ qt5_wrap_cpp (PERSALYS_PLOTPARAVIEW_MOC_SRCS
 include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library (persalysplotparaview ${SOURCEFILES} ${PERSALYS_PLOTPARAVIEW_MOC_SRCS})
 
-ADD_PARAVIEW_PLUGIN(XYChartRepresentationColumns "1.0"
-  SERVER_MANAGER_XML XYChartRepresentationColumns.xml
-  SERVER_MANAGER_SOURCES
-  vtkXYChartRepresentationColumns.cxx)
-
 if ( BUILD_SHARED_LIBS )
   set_target_properties ( persalysplotparaview PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
 endif ()
@@ -64,11 +59,31 @@ else ()
   target_link_libraries (persalysplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
 endif ()
 
-target_link_libraries (persalysplotparaview XYChartRepresentationColumns)
-
-install ( TARGETS persalysplotparaview XYChartRepresentationColumns
+install ( TARGETS persalysplotparaview
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 
+if (ParaView_VERSION VERSION_LESS 5.7)
+  include_directories (plugins/XYChartRepresentationColumns)
+  add_paraview_plugin(XYChartRepresentationColumns "1.0"
+    SERVER_MANAGER_XML plugins/XYChartRepresentationColumns/XYChartRepresentationColumns.xml
+    SERVER_MANAGER_SOURCES plugins/XYChartRepresentationColumns/vtkXYChartRepresentationColumns.cxx)
+  install (TARGETS XYChartRepresentationColumns
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
+    ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH})
+else ()
+  # https://gitlab.kitware.com/paraview/paraview/issues/19358
+  if (CMAKE_LIBRARY_OUTPUT_DIRECTORY STREQUAL "")
+    set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ".")
+  endif ()
+  # https://kitware.github.io/paraview-docs/latest/cxx/PluginHowto.html
+  paraview_plugin_scan (PLUGIN_FILES "${CMAKE_CURRENT_SOURCE_DIR}/plugins/XYChartRepresentationColumns/paraview.plugin"
+    PROVIDES_PLUGINS plugins
+    ENABLE_BY_DEFAULT ON)
+  paraview_plugin_build (PLUGINS ${plugins})
+endif ()
+
+target_link_libraries (persalysplotparaview XYChartRepresentationColumns)

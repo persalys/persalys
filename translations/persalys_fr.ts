@@ -14,37 +14,37 @@
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="78"/>
-        <source>Persalys, an interface for OpenTURNS</source>
-        <translation>Persalys, une interface pour OpenTURNS</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="87"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="88"/>
         <source>Copyright 2015-2019 EDF-Phimeca</source>
         <translation>Copyright 2015-2019 EDF-Phimeca</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="90"/>
-        <source>License: GNU Lesser General Public License Version 3</source>
-        <translation>Licence : Version 3 de la Licence Générale Publique Limitée GNU</translation>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="78"/>
+        <source>Persalys, an user interface for uncertainty analysis</source>
+        <translation>Persalys, une interface utilisateur pour l&apos;analyse d&apos;incertitudes</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="93"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="91"/>
+        <source>License:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="96"/>
         <source>&amp;About</source>
         <translation>À &amp;propos</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="110"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="113"/>
         <source>disabled</source>
         <translation>désactivé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="127"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="130"/>
         <source>&amp;Librairies</source>
         <translation>&amp;Bibliothèques</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="134"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="137"/>
         <source>&amp;Close</source>
         <translation>&amp;Fermer</translation>
     </message>
@@ -578,12 +578,12 @@
     <message>
         <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="79"/>
         <source>Linear least squares</source>
-        <translation>Moindres carrés linaire</translation>
+        <translation>Moindres carrés linéaires</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="86"/>
         <source>Nonlinear least squares</source>
-        <translation>Moindres carrés non linaire</translation>
+        <translation>Moindres carrés non linéaires</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="92"/>
@@ -675,42 +675,42 @@
         <translation>Paramètres de calage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="86"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="85"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="109"/>
         <source>Optimal θ</source>
         <translation>θ optimal</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="123"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="122"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="123"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="122"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="123"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="122"/>
         <source>Confidence interval at</source>
         <translation>Intervalle de confiance à</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="133"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="132"/>
         <source>Not available</source>
         <translation>Non disponible</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="147"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="146"/>
         <source>Optimal</source>
         <translation>Optimum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="179"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="178"/>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="236"/>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="326"/>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="327"/>
@@ -718,7 +718,7 @@
         <translation>A priori</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="180"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="179"/>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="246"/>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="331"/>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="332"/>
@@ -726,18 +726,18 @@
         <translation>A posteriori</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="185"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="184"/>
         <source>PDF:</source>
         <translation>PDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="187"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="186"/>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="338"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="194"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="193"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
@@ -2267,7 +2267,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="84"/>
         <source>Identifier</source>
-        <translation>Identitiant</translation>
+        <translation>Identifiant</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="85"/>
@@ -2503,7 +2503,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="425"/>
         <source>Selected variables: input:%1, output:%2</source>
-        <translation>Variables séléctionnées : entrée : %1, sortie : %2</translation>
+        <translation>Variables sélectionnées : entrée : %1, sortie : %2</translation>
     </message>
 </context>
 <context>
@@ -3923,7 +3923,7 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="97"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="98"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>

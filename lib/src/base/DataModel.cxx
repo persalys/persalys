@@ -138,7 +138,7 @@ void DataModel::setDefaultColumns()
   outputNames_.clear();
   DataImport::setDefaultColumns();
 
-  notify("variablesChanged");
+  update();
 }
 
 

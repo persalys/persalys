@@ -37,6 +37,7 @@
 #include <pqParaViewBehaviors.h>
 #include "persalys/PVServerManagerInterface.hxx"
 #include "persalys/PVServerManagerSingleton.hxx"
+#define PARAVIEW_BUILDING_PLUGIN
 #include "vtkPVPlugin.h"
 PV_PLUGIN_IMPORT_INIT(XYChartRepresentationColumns)
 #endif
@@ -55,7 +56,7 @@ MainWindow::MainWindow()
   setWindowIcon(QIcon(":/images/persalys.ico"));
 
 #ifdef PERSALYS_HAVE_PARAVIEW
-  if (SubWindow::HaveOpenGL32())
+  if (SubWindow::SupportsOpenGL_3_2())
   {
     // from ParaView 5.6 the toolBar is hidden if PersistentMainWindowStateBehavior is enabled
     pqParaViewBehaviors::setEnablePersistentMainWindowStateBehavior(false);
