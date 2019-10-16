@@ -46,9 +46,9 @@ public:
   {
     setResampleMode(QwtMatrixRasterData::BilinearInterpolation);
 
-    QVector<double> zValues;
-    for (UnsignedInteger i = 0; i < contour->getData().getSize(); i++)
-      zValues += contour->getData()(i, 0);
+    QVector<double> zValues(contour->getData().getSize());
+    Sample sample(contour->getData());
+    std::copy(&sample(0, 0), &sample(contour->getData().getSize()-1, 0)+1, zValues.begin());
     setValueMatrix(zValues, contour->getX().getSize());
   };
 
@@ -79,12 +79,12 @@ public:
     const double minLevel = levels[0];
     const double intervalWidth = maxLevel - minLevel;
 
-    addColorStop((levels[1] - minLevel) / intervalWidth, Qt::blue);
-    addColorStop((levels[2] - minLevel) / intervalWidth, Qt::cyan);
-    addColorStop((levels[3] - minLevel) / intervalWidth, Qt::green);
-    addColorStop((levels[levels.size() - 5] - minLevel) / intervalWidth, Qt::yellow);
-    addColorStop((levels[levels.size() - 3] - minLevel) / intervalWidth, "#ffb000"); // orange
-    addColorStop((levels[levels.size() - 2] - minLevel) / intervalWidth, Qt::red);
+    if (levels.size() > 2) addColorStop((levels[1] - minLevel) / intervalWidth, Qt::blue);
+    if (levels.size() > 3) addColorStop((levels[2] - minLevel) / intervalWidth, Qt::cyan);
+    if (levels.size() > 4) addColorStop((levels[3] - minLevel) / intervalWidth, Qt::green);
+    if (levels.size() > 9) addColorStop((levels[levels.size() - 5] - minLevel) / intervalWidth, Qt::yellow);
+    if (levels.size() > 7) addColorStop((levels[levels.size() - 3] - minLevel) / intervalWidth, "#ffb000"); // orange
+    if (levels.size() > 6) addColorStop((levels[levels.size() - 2] - minLevel) / intervalWidth, Qt::red);
   }
 };
 
@@ -112,6 +112,7 @@ void ContourPlot::updateContour(const Distribution &distribution, const bool isP
     qDebug() << "In plotContour: distribution dimension must be 2";
     return;
   }
+
   // plot
   if (isPDF)
     plotContour(distribution.drawPDF().getDrawables(), 1, false, true);
@@ -144,13 +145,13 @@ void ContourPlot::plotContour(const Collection<Drawable>& drawables,
   if (!displayGradient)
     spectrogram->setDefaultContourPen(QPen(Qt::NoPen));
 
-  // data
-  RasterData * rasterData = new RasterData(contour);
   // intervals
   const QwtInterval xInterval(contour->getX().getMin()[0], contour->getX().getMax()[0]);
   const QwtInterval yInterval(contour->getY().getMin()[0], contour->getY().getMax()[0]);
   const double maxZ = isPDF ? contour->getData().computeQuantile(0.97)[0] : contour->getData().getMax()[0];
   const QwtInterval zInterval(contour->getData().getMin()[0], maxZ);
+  // data
+  RasterData * rasterData = new RasterData(contour);
   rasterData->setInterval(Qt::XAxis, xInterval);
   rasterData->setInterval(Qt::YAxis, yInterval);
   rasterData->setInterval(Qt::ZAxis, zInterval);
