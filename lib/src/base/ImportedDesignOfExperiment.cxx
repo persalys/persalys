@@ -67,6 +67,13 @@ ImportedDesignOfExperiment* ImportedDesignOfExperiment::clone() const
 }
 
 
+void ImportedDesignOfExperiment::check()
+{
+  // try to use the same indices
+  setInputColumns(inputColumns_);
+}
+
+
 Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSimu*/) const
 {
   if (!getSampleFromFile().getSize())
