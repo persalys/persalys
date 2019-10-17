@@ -32,9 +32,3 @@ mingw-tag:
   only:
     - tags
 
-salome-tag:
-  script:
-    - docker build docker/salome -t salome
-    - docker run --rm --volume `pwd`:/io salome sh -c "/io/docker/salome/run_docker_build.sh"
-  only:
-    - tags
