@@ -477,7 +477,7 @@ void DataAnalysisWindow::addDependenceTab()
   colorTable->setSelectionMode(QAbstractItemView::NoSelection);
   colorTable->setShowGrid(false);
 
-  QStandardItemModel * colorTableModel = new QStandardItemModel(labels.size(), 1);
+  QStandardItemModel * colorTableModel = new QStandardItemModel(labels.size(), 1, colorTable);
   for (int i = 0; i < labels.size(); ++i)
   {
     QPixmap px(20, 20);

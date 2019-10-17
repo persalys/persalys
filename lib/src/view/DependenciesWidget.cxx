@@ -121,7 +121,7 @@ void DependenciesWidget::buildInterface()
   tableView_->setStyleSheet("QTableView::item:selected{background-color: " + ApplicationColor["lightColor"] + ";color: doubledarkgray;}");
 
   // - table model
-  tableModel_ = new DependenciesTableModel(physicalModel_, tableView_);
+  tableModel_ = new DependenciesTableModel(physicalModel_, failSoftMode_, tableView_);
   tableView_->setModel(tableModel_);
 
   connect(this, SIGNAL(removeTableLine(QModelIndex)), tableModel_, SLOT(removeLine(QModelIndex)));
@@ -141,7 +141,8 @@ void DependenciesWidget::buildInterface()
 
   // right side
   rightSideOfSplitterStackedWidget_ = new ResizableStackedWidget;
-rightSideOfSplitterStackedWidget_->setContentsMargins(0, 0, 0, 0);
+  rightSideOfSplitterStackedWidget_->setContentsMargins(0, 0, 0, 0);
+
   // 1- If physical model has not dependent variables: use a dummy widget
   QWidget * dummyWidget = new QWidget;
   QVBoxLayout * dummyWidgetLayout = new QVBoxLayout(dummyWidget);

@@ -549,6 +549,23 @@ String CalibrationAnalysis::getPythonScript() const
                                               << ")\n";
   oss << getName() << ".setConfidenceIntervalLength(" << getConfidenceIntervalLength() << ")\n";
 
+  if (getMethodName().compare(0, 8, "Gaussian") == 0)
+  {
+    oss << "covMatrix = ot.CovarianceMatrix(" << errorCovariance_.getNbRows() << ")\n";
+
+    for (UnsignedInteger row = 0; row < errorCovariance_.getNbRows(); ++ row)
+    {
+      for (UnsignedInteger col = 0; col < errorCovariance_.getNbRows(); ++ col)
+      {
+        if (errorCovariance_(row, col) != 0.0)
+        {
+          oss << "covMatrix[" << row << ", " << col << "] = " << errorCovariance_(row, col) << "\n";
+        }
+      }
+    }
+    oss << getName() << ".setErrorCovariance(covMatrix)\n";
+  }
+
   if (getMethodName().compare(getMethodName().size() - 9, 9, "Nonlinear") == 0)
   {
     oss << getName() << ".setBootStrapSize(" << getBootStrapSize() << ")\n";

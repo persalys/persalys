@@ -59,6 +59,7 @@ public:
   void load(OT::Advocate& adv);
 
 protected:
+  virtual void check();
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
   virtual void setDefaultColumns();
 };
