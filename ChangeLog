@@ -1,5 +1,7 @@
-= 7.0 release (in-progress)
+= 7.0 release (2019-10-17)
 
+ * New name, artwork
+ * Calibration
  * Software OpenGL rendering on windows (mesa/llvmpipe)
 
 = 6.1 release (2019-04-17)
