@@ -49,7 +49,7 @@ void ModelEvaluationWizard::buildInterface()
   setWindowTitle(tr("Model evaluation"));
 
   // get data
-  ModelEvaluation analysis = *dynamic_cast<ModelEvaluation*>(analysis_.getImplementation()->clone());
+  ModelEvaluation analysis(*dynamic_cast<ModelEvaluation*>(analysis_.getImplementation().get()));
   analysis.updateParameters();
 
   const PhysicalModel model(analysis.getPhysicalModel());
