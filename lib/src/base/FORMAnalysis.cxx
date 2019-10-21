@@ -23,6 +23,7 @@
 #include <openturns/FORM.hxx>
 #include <openturns/CompositeRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/ThresholdEvent.hxx>
 
 using namespace OT;
 
@@ -76,7 +77,7 @@ void FORMAnalysis::launch()
   Function function(getPhysicalModel().getRestrictedFunction(outputName));
 
   // create OT::Event
-  Event event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
   // create OT::FORM

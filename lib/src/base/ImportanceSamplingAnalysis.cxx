@@ -59,7 +59,7 @@ ImportanceSamplingAnalysis* ImportanceSamplingAnalysis::clone() const
 }
 
 
-SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Event& event)
+SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const RandomVector & event)
 {
   const UnsignedInteger inDimension = standardSpaceDesignPoint_.getSize();
   const Normal conditionalDistribution(standardSpaceDesignPoint_, Point(inDimension, 1.), CorrelationMatrix(inDimension));

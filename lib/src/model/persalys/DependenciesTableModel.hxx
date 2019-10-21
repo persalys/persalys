@@ -26,8 +26,6 @@
 #include <QAbstractTableModel>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
-Q_DECLARE_METATYPE(OT::Copula)
-
 namespace PERSALYS
 {
 class PERSALYS_API DependenciesTableModel : public QAbstractTableModel
@@ -51,7 +49,7 @@ public slots:
   void updateData();
   void removeLine(const QModelIndex &index);
 signals:
-  void dataUpdated(const int index, const OT::Copula &copula);
+  void dataUpdated(const int index, const OT::Distribution &copula);
   void inferenceResultRequested(const QModelIndex&);
 
 protected:

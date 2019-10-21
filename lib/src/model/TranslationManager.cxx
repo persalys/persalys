@@ -44,12 +44,14 @@ void TranslationManager::InitializeDistributionsNames()
   DistributionsNames_.insert(type("LogNormal", tr("LogNormal")));
   DistributionsNames_.insert(type("LogUniform", tr("LogUniform")));
   DistributionsNames_.insert(type("Normal", tr("Normal")));
+  DistributionsNames_.insert(type("Pareto", tr("Pareto")));
   DistributionsNames_.insert(type("Rayleigh", "Rayleigh"));
   DistributionsNames_.insert(type("Student", "Student"));
   DistributionsNames_.insert(type("Trapezoidal", tr("Trapezoidal")));
   DistributionsNames_.insert(type("Triangular", tr("Triangular")));
   DistributionsNames_.insert(type("Uniform", tr("Uniform")));
-  DistributionsNames_.insert(type("Weibull", "Weibull"));
+  DistributionsNames_.insert(type("WeibullMax", "WeibullMax"));
+  DistributionsNames_.insert(type("WeibullMin", "WeibullMin"));
 }
 
 

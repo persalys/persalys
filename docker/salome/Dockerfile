@@ -17,7 +17,7 @@ RUN curl -L http://downloads.sourceforge.net/omniorb/omniORB-4.2.3.tar.bz2|tar x
 RUN curl -L http://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.3/omniORBpy-4.2.3.tar.bz2|tar xj && cd omniORBpy-4.2.3 && ./configure && make && make install
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.13 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 1.14 \
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # libbatch

@@ -37,10 +37,10 @@ myStudy.add(model)
 
 # print(model.getCode())
 
-E_d = ot.Beta(0.93, 3.2, 28000000.0, 48000000.0)
+E_d = ot.Beta(0.93, 3.2-0.93, 28000000.0, 48000000.0)
 F_d = ot.LogNormalMuSigma(30000.0, 9000.0, 15000.0).getDistribution()
 L_d = ot.Uniform(250.0, 260.0)
-I_d = ot.Beta(2.5, 4.0, 310.0, 450.0)
+I_d = ot.Beta(2.5, 4.0-2.5, 310.0, 450.0)
 distribution = ot.ComposedDistribution([E_d, F_d, I_d, L_d])
 x = distribution.getMean()
 

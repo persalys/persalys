@@ -206,7 +206,7 @@ void CopulaInferenceResultWidget::updateParametersTable(const QModelIndex& curre
 }
 
 
-Copula CopulaInferenceResultWidget::getCopula() const
+Distribution CopulaInferenceResultWidget::getCopula() const
 {
   // check
   Q_ASSERT(distTableModel_ && distTableView_);
@@ -224,7 +224,7 @@ Copula CopulaInferenceResultWidget::getCopula() const
   if (variant.canConvert<Distribution>())
     return variant.value<Distribution>();
 
-  return Copula();
+  return Distribution();
 }
 
 

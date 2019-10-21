@@ -125,7 +125,7 @@ void DependenciesWidget::buildInterface()
   tableView_->setModel(tableModel_);
 
   connect(this, SIGNAL(removeTableLine(QModelIndex)), tableModel_, SLOT(removeLine(QModelIndex)));
-  connect(tableModel_, SIGNAL(dataUpdated(int, OT::Copula)), this, SLOT(updateCopulaWidget(int, OT::Copula)));
+  connect(tableModel_, SIGNAL(dataUpdated(int, OT::Distribution)), this, SLOT(updateCopulaWidget(int, OT::Distribution)));
   connect(tableModel_, SIGNAL(inferenceResultRequested(const QModelIndex&)), this, SLOT(openWizardToChooseInferenceResult(const QModelIndex&)));
   connect(tableView_->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), this, SLOT(selectedItemChanged(QModelIndex, QModelIndex)));
 
@@ -186,8 +186,8 @@ void DependenciesWidget::updateWidgets()
     widget->deleteLater();
   }
   // - get copulas list
-  Collection<Copula> coll(physicalModel_.getCopulaCollection());
-  Collection<Copula>::iterator iter = coll.begin();
+  Collection<Distribution> coll(physicalModel_.getCopulaCollection());
+  Collection<Distribution>::iterator iter = coll.begin();
   while (iter != coll.end())
   {
     if ((*iter).getImplementation()->getClassName() == "IndependentCopula")
@@ -226,7 +226,7 @@ void DependenciesWidget::updateWidgets()
 }
 
 
-void DependenciesWidget::updateCopulaWidget(const int index, const Copula &copula)
+void DependenciesWidget::updateCopulaWidget(const int index, const Distribution &copula)
 {
   CopulaWidget * copulaWidget = static_cast<CopulaWidget*>(copulaStackedWidget_->widget(index));
   Q_ASSERT(copulaWidget);
@@ -279,7 +279,7 @@ void DependenciesWidget::addCopula()
     return;
   }
   // check the variables are not used elsewhere
-  Collection<Copula> coll(physicalModel_.getCopulaCollection());
+  Collection<Distribution> coll(physicalModel_.getCopulaCollection());
   Description varsInCopula;
   for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
   {
@@ -330,7 +330,7 @@ void DependenciesWidget::addCopula()
 void DependenciesWidget::updateVariablesList()
 {
   // - get copulas list
-  Collection<Copula> coll(physicalModel_.getCopulaCollection());
+  Collection<Distribution> coll(physicalModel_.getCopulaCollection());
   Description independentVars;
   for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
   {
@@ -372,7 +372,7 @@ void DependenciesWidget::openWizardToChooseInferenceResult(const QModelIndex& in
   if (wizard.exec())
   {
     // get new copula
-    Copula copula(wizard.getCopula());
+    Distribution copula(wizard.getCopula());
     copula.setDescription(currentGroup);
 
     // update the copula

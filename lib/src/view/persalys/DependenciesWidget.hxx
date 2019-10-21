@@ -42,7 +42,7 @@ public:
 
 public slots:
   void updateWidgets();
-  void updateCopulaWidget(const int index, const OT::Copula &copula);
+  void updateCopulaWidget(const int index, const OT::Distribution &copula);
   void selectedItemChanged(const QModelIndex &current, const QModelIndex &previous);
   void removeCopula();
   void addCopula();

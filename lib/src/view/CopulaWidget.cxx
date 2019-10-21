@@ -42,7 +42,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-CopulaWidget::CopulaWidget(const PhysicalModel &model, const Copula &copula, QWidget *parent)
+CopulaWidget::CopulaWidget(const PhysicalModel &model, const Distribution &copula, QWidget *parent)
   : QWidget(parent)
   , physicalModel_(model)
   , copula_(copula)
@@ -157,7 +157,7 @@ void CopulaWidget::updateParameters()
     CorrelationTableModel * corrTableModel = new CorrelationTableModel(physicalModel_, copula_, corrTableView);
     corrTableView->setModel(corrTableModel);
     groupBoxLayout->addWidget(corrTableView, 0, 0);
-    connect(corrTableModel, SIGNAL(dataUpdated(OT::Copula)), this, SLOT(updateCopulaFromCorrTable(OT::Copula)));
+    connect(corrTableModel, SIGNAL(dataUpdated(OT::Distribution)), this, SLOT(updateCopulaFromCorrTable(OT::Distribution)));
     connect(corrTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(emitErrorMessage(QString)));
 
     corrTableView->resizeColumnsToContents();
@@ -211,7 +211,7 @@ void CopulaWidget::updatePlots()
 }
 
 
-void CopulaWidget::setCopula(const Copula &copula)
+void CopulaWidget::setCopula(const Distribution &copula)
 {
   Q_ASSERT(copula.getDimension() == copula.getDimension());
   copula_ = copula;
@@ -246,7 +246,7 @@ void CopulaWidget::updateCopulaFromLineEdit()
 }
 
 
-void CopulaWidget::updateCopulaFromCorrTable(const Copula &copula)
+void CopulaWidget::updateCopulaFromCorrTable(const Distribution &copula)
 {
   copula_ = copula;
   updatePlots();

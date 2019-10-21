@@ -23,6 +23,7 @@
 #include <openturns/SORM.hxx>
 #include <openturns/CompositeRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/ThresholdEvent.hxx>
 
 using namespace OT;
 
@@ -74,7 +75,7 @@ void SORMAnalysis::launch()
   Function function(getPhysicalModel().getRestrictedFunction(outputName));
 
   // create OT::Event
-  Event event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
   optimizationAlgorithm_.setStopCallback(&AnalysisImplementation::Stop, this);

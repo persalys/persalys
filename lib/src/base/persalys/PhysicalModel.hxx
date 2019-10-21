@@ -98,9 +98,9 @@ public:
   OT::PointToFieldFunction getPointToFieldFunction(const OT::Description & outputNames) const;
   OT::PointToFieldFunction getRestrictedPointToFieldFunction(const OT::Description & outputNames) const;
 
-  OT::Copula getCopula() const;
-  OT::Collection<OT::Copula> getCopulaCollection() const;
-  void setCopula(const OT::Description& inputNames, const OT::Copula & copula);
+  OT::Distribution getCopula() const;
+  OT::Collection<OT::Distribution> getCopulaCollection() const;
+  void setCopula(const OT::Description& inputNames, const OT::Distribution & copula);
 
   bool hasMesh() const;
   MeshModel getMeshModel() const;

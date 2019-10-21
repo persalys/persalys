@@ -132,8 +132,8 @@ void DependenciesTableModel::updateData()
 
 void DependenciesTableModel::updateCopula()
 {
-  Collection<Copula> coll(physicalModel_.getCopulaCollection());
-  Collection<Copula>::iterator iter = coll.begin();
+  Collection<Distribution> coll(physicalModel_.getCopulaCollection());
+  Collection<Distribution>::iterator iter = coll.begin();
   while (iter != coll.end())
   {
     if ((*iter).getImplementation()->getClassName() == "IndependentCopula")
@@ -182,7 +182,7 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
   // the built copula has a dimension equal to 2
   // if dimension > 2 : do not enter here because there is for now only the Normal copula
   // improve this part if another copula is added in OpenTURNS
-  Copula copula = DistributionDictionary::BuildCopulaFactory(newCopula).build();
+  Distribution copula(DistributionDictionary::BuildCopulaFactory(newCopula).build());
 
   // update the copula
   physicalModel_.blockNotification("ProbabilisticModel");

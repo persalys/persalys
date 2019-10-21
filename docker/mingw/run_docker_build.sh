@@ -26,7 +26,7 @@ WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin" xvfb-run ctest --output-on-fail
 VERSION=`cat /io/VERSION`
 cp /io/distro/windows/* .
 unzip persalys-doc.zip -d .
-makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.13 -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DPYBASEVER_NODOT=${PYMAJMIN} -DARCH=${ARCH} installer.nsi
+makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.14 -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DPYBASEVER_NODOT=${PYMAJMIN} -DARCH=${ARCH} installer.nsi
 
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"

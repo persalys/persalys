@@ -32,7 +32,7 @@ class PERSALYS_API CorrelationTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  CorrelationTableModel(const PhysicalModel &model, const OT::Copula &copula, QObject *parent = 0);
+  CorrelationTableModel(const PhysicalModel &model, const OT::Distribution &copula, QObject *parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -45,11 +45,11 @@ public slots:
   void updateData();
 signals:
   void errorMessageChanged(const QString & errorMessage);
-  void dataUpdated(const OT::Copula &copula);
+  void dataUpdated(const OT::Distribution &copula);
 
 private:
   PhysicalModel physicalModel_;
-  OT::Copula copula_;
+  OT::Distribution copula_;
 };
 }
 #endif

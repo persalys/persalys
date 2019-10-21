@@ -31,7 +31,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-CorrelationTableModel::CorrelationTableModel(const PhysicalModel &model, const OT::Copula &copula, QObject *parent)
+CorrelationTableModel::CorrelationTableModel(const PhysicalModel &model, const OT::Distribution &copula, QObject *parent)
   : QAbstractTableModel(parent)
   , physicalModel_(model)
   , copula_(copula)

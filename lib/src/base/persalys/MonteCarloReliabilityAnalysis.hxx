@@ -41,7 +41,7 @@ public:
   virtual Parameters getParameters() const;
 
 protected:
-  virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
+  virtual SimulationInterface getSimulationAlgorithm(const OT::RandomVector & event);
 };
 }
 #endif

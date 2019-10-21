@@ -55,7 +55,7 @@ MonteCarloReliabilityAnalysis* MonteCarloReliabilityAnalysis::clone() const
 }
 
 
-SimulationInterface MonteCarloReliabilityAnalysis::getSimulationAlgorithm(const Event& event)
+SimulationInterface MonteCarloReliabilityAnalysis::getSimulationAlgorithm(const RandomVector & event)
 {
   const MonteCarloExperiment experiment;
   return ProbabilitySimulationAlgorithm(event, experiment);
