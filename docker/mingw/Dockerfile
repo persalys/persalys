@@ -1,9 +1,9 @@
 FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
-RUN aurman -Syu --noconfirm --noedit   mingw-w64-qwt
-RUN aurman -Syu --noconfirm --noedit   mingw-w64-paraview
-RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
+RUN aurman -S --noconfirm --noedit mingw-w64-qwt
+RUN aurman -S --noconfirm --noedit --pgp_fetch mingw-w64-paraview56
+RUN aurman -S --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
 ENV ARCH=x86_64 PYMAJMIN=37
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
@@ -14,7 +14,7 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
   && ${ARCH}-w64-mingw32-cmake-py${PYMAJMIN} -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
   -DUSE_SPHINX=OFF -DUSE_TBB=OFF . \
-  && make && sudo make install && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libOT.dll ${MINGW_PREFIX}/Lib/site-packages/openturns/*.pyd
+  && make > /dev/null 2>&1 && sudo make install && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libOT.dll ${MINGW_PREFIX}/Lib/site-packages/openturns/*.pyd
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \

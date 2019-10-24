@@ -148,7 +148,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # paraview
-RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.2.tar.xz | tar xJ && cd ParaView-v5.6.2 \
+RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.3.tar.xz | tar xJ && cd ParaView-v5.6.3 \
   && mkdir build && cd build && cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
