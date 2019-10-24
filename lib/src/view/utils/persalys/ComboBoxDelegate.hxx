@@ -24,6 +24,7 @@
 #include "persalys/PersalysPrivate.hxx"
 
 #include <QItemDelegate>
+#include <QStandardItemModel>
 
 namespace PERSALYS
 {
@@ -36,6 +37,7 @@ public:
   ComboBoxDelegate(QPair<int, int> cell, QObject * parent = 0);
 
   void setNoWheelEvent(const bool noWheelEvent);
+  void addSeparatorIndex(const int index, const QString &text = "");
 
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
@@ -48,6 +50,25 @@ public slots:
 private:
   QPair<int, int> cell_;
   bool noWheelEvent_;
+  QList<int> separatorIndex_;
+  QStringList separatorText_;
+};
+
+
+class PERSALYS_API ComboBoxWithSeparatorDelegate : public QItemDelegate
+{
+public:
+  ComboBoxWithSeparatorDelegate(QObject *parent);
+
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+};
+
+
+class PERSALYS_API ModelForComboBoxWithSeparator : public QStandardItemModel
+{
+public:
+  ModelForComboBoxWithSeparator(const QStringList &allItems, const QList<int> separatorIndex, const QStringList &separatorText, QWidget *parent);
 };
 }
 #endif

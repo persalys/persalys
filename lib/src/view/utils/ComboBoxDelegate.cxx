@@ -20,10 +20,11 @@
  */
 #include "persalys/ComboBoxDelegate.hxx"
 
-#include <QStandardItemModel>
 #include <QWheelEvent>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QFontMetrics>
+#include <QPainter>
 
 namespace PERSALYS
 {
@@ -62,6 +63,84 @@ private:
 };
 
 
+// -- ComboBoxWithSeparatorDelegate
+
+ComboBoxWithSeparatorDelegate::ComboBoxWithSeparatorDelegate(QObject *parent)
+  : QItemDelegate(parent)
+{
+}
+
+
+void ComboBoxWithSeparatorDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+  if (index.data(Qt::AccessibleDescriptionRole).toString() == QLatin1String("separator"))
+  {
+    painter->setPen(Qt::gray);
+    painter->drawLine(option.rect.left(), option.rect.center().y(), option.rect.right(), option.rect.center().y());
+  }
+  else if (index.data(Qt::AccessibleDescriptionRole).toString() == QLatin1String("parent"))
+  {
+    QStyleOptionViewItem parentOption = option;
+    parentOption.state |= QStyle::State_Enabled;
+    QItemDelegate::paint(painter, parentOption, index);
+  }
+  else if (index.data(Qt::AccessibleDescriptionRole).toString() == QLatin1String("child"))
+  {
+    QStyleOptionViewItem childOption = option;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int indent = option.fontMetrics.horizontalAdvance(QString(4, QChar(' ')));
+#else
+    int indent = painter->fontMetrics().width(QString(4, QChar(' ')));
+#endif
+    childOption.rect.adjust(indent, 0, 0, 0);
+    childOption.textElideMode = Qt::ElideNone;
+    QItemDelegate::paint(painter, childOption, index);
+  }
+  else
+  {
+    QItemDelegate::paint(painter, option, index);
+  }
+}
+
+
+QSize ComboBoxWithSeparatorDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+  QString type = index.data(Qt::AccessibleDescriptionRole).toString();
+  if(type == QLatin1String("separator"))
+      return QSize(0, 10);
+  return QItemDelegate::sizeHint(option, index);
+}
+
+
+// -- ModelForComboBoxWithSeparator
+
+ModelForComboBoxWithSeparator::ModelForComboBoxWithSeparator(const QStringList &allItems,
+                                                             const QList<int> separatorIndex,
+                                                             const QStringList &separatorText,
+                                                             QWidget *parent)
+  : QStandardItemModel(parent)
+{
+  for (int i = 0; i < allItems.size(); ++i)
+  {
+    QStandardItem * item = new QStandardItem(allItems[i]);
+    item->setData("child", Qt::AccessibleDescriptionRole);
+    appendRow(item);
+  }
+  for (int i = 0; i < separatorIndex.size(); ++i)
+  {
+    QStandardItem * item = new QStandardItem(separatorText[i]);
+    item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
+    item->setData(separatorText[i].isEmpty() ? "separator" : "parent", Qt::AccessibleDescriptionRole);
+    QFont font = item->font();
+    font.setBold(true);
+    font.setItalic(true);
+    item->setFont(font);
+    insertRow(separatorIndex[i], item);
+  }
+}
+
+// ---------- ComboBoxDelegate ----------
+
 ComboBoxDelegate::ComboBoxDelegate(QObject * parent)
   : QItemDelegate(parent)
   , cell_()
@@ -84,6 +163,13 @@ void ComboBoxDelegate::setNoWheelEvent(const bool noWheelEvent)
 }
 
 
+void ComboBoxDelegate::addSeparatorIndex(const int index, const QString &text)
+{
+  separatorIndex_ << index;
+  separatorText_ << text;
+}
+
+
 QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
   if (cell_ != QPair<int, int>())
@@ -91,6 +177,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
       return QItemDelegate::createEditor(parent, option, index);
 
   QComboBox * editor = new CustomComboBox(noWheelEvent_, parent);
+  editor->setItemDelegate(new ComboBoxWithSeparatorDelegate(editor));
   const QStringList items(index.model()->data(index, Qt::UserRole + 1).toStringList());
   editor->addItems(items);
   editor->setEnabled(items.size() > 0);
@@ -116,7 +203,14 @@ void ComboBoxDelegate::setEditorData(QWidget * editor, const QModelIndex & index
   QComboBox * comboBox = static_cast<QComboBox*>(editor);
   const QStringList items(index.model()->data(index, Qt::UserRole + 1).toStringList());
   comboBox->clear();
-  comboBox->addItems(items);
+
+  // if has separator : use QStandardItemModel
+  if (separatorIndex_.size())
+    comboBox->setModel(new ModelForComboBoxWithSeparator(items, separatorIndex_, separatorText_, comboBox));
+  // else : use QStringList
+  else
+    comboBox->addItems(items);
+
   comboBox->setEnabled(items.size() > 0);
   comboBox->setCurrentIndex(comboBox->findText(index.model()->data(index, Qt::DisplayRole).toString()));
   comboBox->setEnabled(comboBox->currentIndex() != -1);
