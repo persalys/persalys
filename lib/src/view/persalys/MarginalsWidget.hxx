@@ -36,6 +36,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QStackedWidget>
+#include <QToolButton>
 
 namespace PERSALYS
 {
@@ -66,6 +67,7 @@ public slots:
 #ifdef PERSALYS_HAVE_OTMORRIS
   void openWizardToChooseScreeningResult();
 #endif
+  void openValuesDefinitionWizard();
 signals:
   void updateDependenciesRequested();
 
@@ -73,23 +75,24 @@ private:
   bool failSoftMode_;
   Study study_;
   PhysicalModel physicalModel_;
-  QTableView * inputTableView_;
-  InputTableProbabilisticModel * inputTableModel_;
-  ResizableStackedWidget * rightSideOfSplitterStackedWidget_;
-  ValueLineEdit * valueForDeterministicVariable_;
-  PlotWidget * pdfPlot_;
-  PlotWidget * cdfPlot_;
-  PlotWidget * quantilePlot_;
-  PlotWidget * survivalPlot_;
-  QComboBox * selectParametersTypeCombo_;
+  QTableView * inputTableView_ = 0;
+  InputTableProbabilisticModel * inputTableModel_ = 0;
+  ResizableStackedWidget * rightSideOfSplitterStackedWidget_ = 0;
+  ValueLineEdit * valueForDeterministicVariable_ = 0;
+  PlotWidget * pdfPlot_ = 0;
+  PlotWidget * cdfPlot_ = 0;
+  PlotWidget * quantilePlot_ = 0;
+  PlotWidget * survivalPlot_ = 0;
+  QComboBox * selectParametersTypeCombo_ = 0;
   QLabel * parameterValuesLabel_[5];
   ValueLineEdit * parameterValuesEdit_[5];
-  CollapsibleGroupBox * truncationParamGroupBox_;
-  QCheckBox * lowerBoundCheckBox_;
-  QCheckBox * upperBoundCheckBox_;
-  ValueLineEdit * lowerBoundLineEdit_;
-  ValueLineEdit * upperBoundLineEdit_;
-  TemporaryLabel * errorMessageLabel_;
+  QToolButton * editButton_ = 0;
+  CollapsibleGroupBox * truncationParamGroupBox_ = 0;
+  QCheckBox * lowerBoundCheckBox_ = 0;
+  QCheckBox * upperBoundCheckBox_ = 0;
+  ValueLineEdit * lowerBoundLineEdit_ = 0;
+  ValueLineEdit * upperBoundLineEdit_ = 0;
+  TemporaryLabel * errorMessageLabel_ = 0;
 };
 }
 #endif

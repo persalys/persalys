@@ -28,89 +28,40 @@ using namespace OT;
 namespace PERSALYS
 {
 
+std::vector<String> DistributionDictionary::ContinuousDistributions_ = {
+  "Arcsine", "Beta", "ChiSquare", "Exponential", "Gamma", "Gumbel", "InverseNormal",
+  "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", "Student",
+  "Trapezoidal", "Triangular", "Uniform", "Weibull"
+  };
+std::vector<String> DistributionDictionary::DiscreteDistributions_ = {
+  "Bernoulli", "Geometric", "Binomial", "Geometric", "Hypergeometric", "NegativeBinomial",
+  "Poisson", "Skellam", "UserDefined", "ZipfMandelbrot"
+  };
+
+
 /* Build a distribution factory */
 DistributionFactory DistributionDictionary::BuildDistributionFactory(const String & distributionName)
 {
-  if (distributionName == "Arcsine")
-  {
-    return ArcsineFactory();
-  }
-  else if (distributionName == "Beta")
-  {
-    return BetaFactory();
-  }
-  else if (distributionName == "ChiSquare")
-  {
-    return ChiSquareFactory();
-  }
-  else if (distributionName == "Exponential")
-  {
-    return ExponentialFactory();
-  }
-  else if (distributionName == "Gamma")
-  {
-    return GammaFactory();
-  }
-  else if (distributionName == "Gumbel")
-  {
-    return GumbelFactory();
-  }
-  else if (distributionName == "InverseNormal")
-  {
-    return InverseNormalFactory();
-  }
-  else if (distributionName == "Laplace")
-  {
-    return LaplaceFactory();
-  }
-  else if (distributionName == "Logistic")
-  {
-    return LogisticFactory();
-  }
-  else if (distributionName == "LogNormal")
-  {
-    return LogNormalFactory();
-  }
-  else if (distributionName == "LogUniform")
-  {
-    return LogUniformFactory();
-  }
-  else if (distributionName == "Normal")
-  {
-    return NormalFactory();
-  }
-  else if (distributionName == "Pareto")
-  {
-    return ParetoFactory();
-  }
-  else if (distributionName == "Rayleigh")
-  {
-    return RayleighFactory();
-  }
-  else if (distributionName == "Student")
-  {
-    return StudentFactory();
-  }
-  else if (distributionName == "Trapezoidal")
-  {
-    return TrapezoidalFactory();
-  }
-  else if (distributionName == "Triangular")
-  {
-    return TriangularFactory();
-  }
-  else if (distributionName == "Uniform")
-  {
-    return UniformFactory();
-  }
-  else if (distributionName == "WeibullMax")
-  {
-    return WeibullMaxFactory();
-  }
-  else if (distributionName == "WeibullMin")
-  {
-    return WeibullMinFactory();
-  }
+  if (distributionName == "Arcsine") return ArcsineFactory();
+  else if (distributionName == "Beta") return BetaFactory();
+  else if (distributionName == "ChiSquare") return ChiSquareFactory();
+  else if (distributionName == "Exponential") return ExponentialFactory();
+  else if (distributionName == "Gamma") return GammaFactory();
+  else if (distributionName == "Gumbel") return GumbelFactory();
+  else if (distributionName == "InverseNormal") return InverseNormalFactory();
+  else if (distributionName == "Laplace") return LaplaceFactory();
+  else if (distributionName == "Logistic") return LogisticFactory();
+  else if (distributionName == "LogNormal") return LogNormalFactory();
+  else if (distributionName == "LogUniform") return LogUniformFactory();
+  else if (distributionName == "Normal") return NormalFactory();
+  else if (distributionName == "Pareto") return ParetoFactory();
+  else if (distributionName == "Rayleigh") return RayleighFactory();
+  else if (distributionName == "Student") return StudentFactory();
+  else if (distributionName == "Trapezoidal") return TrapezoidalFactory();
+  else if (distributionName == "Triangular") return TriangularFactory();
+  else if (distributionName == "Uniform") return UniformFactory();
+  else if (distributionName == "WeibullMax") return WeibullMaxFactory();
+  else if (distributionName == "WeibullMin") return WeibullMinFactory();
   else
   {
     throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildDistributionFactory unknow distribution : " << distributionName;
@@ -121,38 +72,15 @@ DistributionFactory DistributionDictionary::BuildDistributionFactory(const Strin
 /* Build a copula factory */
 DistributionFactory DistributionDictionary::BuildCopulaFactory(const String& distributionName)
 {
-  if (distributionName == "AliMikhailHaq")
-  {
-    return AliMikhailHaqCopulaFactory();
-  }
-  else if (distributionName == "Bernstein")
-  {
-    return BernsteinCopulaFactory();
-  }
-  else if (distributionName == "Clayton")
-  {
-    return ClaytonCopulaFactory();
-  }
-  else if (distributionName == "FarlieGumbelMorgenstern")
-  {
-    return FarlieGumbelMorgensternCopulaFactory();
-  }
-  else if (distributionName == "Frank")
-  {
-    return FrankCopulaFactory();
-  }
-  else if (distributionName == "Gumbel")
-  {
-    return GumbelCopulaFactory();
-  }
-  else if (distributionName == "Normal")
-  {
-    return NormalCopulaFactory();
-  }
+  if (distributionName == "AliMikhailHaq") return AliMikhailHaqCopulaFactory();
+  else if (distributionName == "Bernstein") return BernsteinCopulaFactory();
+  else if (distributionName == "Clayton") return ClaytonCopulaFactory();
+  else if (distributionName == "FarlieGumbelMorgenstern") return FarlieGumbelMorgensternCopulaFactory();
+  else if (distributionName == "Frank") return FrankCopulaFactory();
+  else if (distributionName == "Gumbel") return GumbelCopulaFactory();
+  else if (distributionName == "Normal") return NormalCopulaFactory();
   else
-  {
     throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildCopulaFactory unknow copula : " << distributionName;
-  }
 }
 
 
@@ -166,25 +94,41 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     {
       return ArcsineMuSigma(mu, sigma).getDistribution();
     }
+    else if (distributionName == "Bernoulli")
+    {
+      return Bernoulli();
+    }
     else if (distributionName == "Beta")
     {
       return BetaMuSigma(mu, sigma, mu - 3 * sigma, mu + 3 * sigma).getDistribution();
+    }
+    else if (distributionName == "Binomial")
+    {
+      return Binomial();
     }
     else if (distributionName == "ChiSquare")
     {
       return ChiSquare(1.); // arbitrary value for nu
     }
+    else if (distributionName == "Exponential")
+    {
+      return Exponential(1.0 / sigma, mu - sigma);
+    }
     else if (distributionName == "Gamma")
     {
       return GammaMuSigma(mu, sigma, mu - 10.0 * sigma).getDistribution(); // arbitrary gamma
+    }
+    else if (distributionName == "Geometric")
+    {
+      return Geometric();
     }
     else if (distributionName == "Gumbel")
     {
       return GumbelMuSigma(mu, sigma).getDistribution();
     }
-    else if (distributionName == "Exponential")
+    else if (distributionName == "Hypergeometric")
     {
-      return Exponential(1.0 / sigma, mu - sigma);
+      return Hypergeometric();
     }
     else if (distributionName == "InverseNormal")
     {
@@ -219,6 +163,10 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
 
       return LogUniform(muLog - sqrt(3.0) * sigmaLog, muLog + sqrt(3.0) * sigmaLog);
     }
+    else if (distributionName == "NegativeBinomial")
+    {
+      return NegativeBinomial();
+    }
     else if (distributionName == "Normal")
     {
       return Normal(mu, sigma);
@@ -227,9 +175,17 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     {
       return Pareto(sigma, 3.0, mu);
     }
+    else if (distributionName == "Poisson")
+    {
+      return Poisson();
+    }
     else if (distributionName == "Rayleigh")
     {
       return Rayleigh(sigma / 0.6551363775620335530939357, mu - sigma * 1.253314137315500251207882 / 0.6551363775620335530939357);
+    }
+    else if (distributionName == "Skellam")
+    {
+      return Skellam();
     }
     else if (distributionName == "Student")
     {
@@ -247,6 +203,12 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     {
       return Uniform(mu - sigma * sqrt(3.0), mu + sigma * sqrt(3.0));
     }
+    else if (distributionName == "UserDefined")
+    {
+      Sample values(2, 1);
+      values(1, 0) = 1.;
+      return UserDefined(values, Point(2, 0.5));
+    }
     else if (distributionName == "WeibullMax")
     {
       return WeibullMaxMuSigma(mu, sigma, mu + 10.0 * sigma).getDistribution(); // arbitrary gamma
@@ -254,6 +216,10 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     else if (distributionName == "WeibullMin")
     {
       return WeibullMinMuSigma(mu, sigma, mu - 10.0 * sigma).getDistribution(); // arbitrary gamma
+    }
+    else if (distributionName == "ZipfMandelbrot")
+    {
+      return ZipfMandelbrot();
     }
     else
     {
@@ -342,6 +308,18 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
     nPWithDesc.setDescription(description);
 
     nPWithDescColl[0] = nPWithDesc;
+  }
+  else if (distributionName == "UserDefined")
+  {
+    nPWithDesc = PointWithDescription(2);
+
+    Description description(2);
+    description[0] = "Values";
+    description[1] = "Probabilities";
+    nPWithDesc.setDescription(description);
+
+    nPWithDescColl.clear();
+    nPWithDescColl.add(nPWithDesc);
   }
   else if (distributionName == "WeibullMax")
   {

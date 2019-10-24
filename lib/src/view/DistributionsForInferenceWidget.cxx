@@ -39,6 +39,13 @@ DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringLi
   , tableModel_(0)
   , addComboBox_(0)
 {
+  if (variables_.getSize() == 1)
+    allDistributions_ = TranslationManager::GetTranslatedContinuousDistributions();
+  else if (variables_.getSize() > 2)
+    allDistributions_ << TranslationManager::GetTranslatedCopulaName("Normal");
+  else
+    allDistributions_ = TranslationManager::GetAvailableCopulas();
+
   Q_ASSERT(variables_.getSize() > 0);
   buildInterface();
 }
@@ -50,18 +57,11 @@ void DistributionsForInferenceWidget::buildInterface()
 
   // list distributions
   QStringList notUsedDistributions;
-  QStringList allDistributions;
-  if (variables_.getSize() == 1)
-    allDistributions = TranslationManager::GetAvailableDistributions();
-  else if (variables_.getSize() > 2)
-    allDistributions << TranslationManager::GetTranslatedCopulaName("Normal");
-  else
-    allDistributions = TranslationManager::GetAvailableCopulas();
 
-  for (int i = 0; i < allDistributions.size(); ++i)
+  for (int i = 0; i < allDistributions_.size(); ++i)
   {
-    if (!distributions_.contains(allDistributions[i]))
-      notUsedDistributions << allDistributions[i];
+    if (!distributions_.contains(allDistributions_[i]))
+      notUsedDistributions << allDistributions_[i];
   }
   notUsedDistributions << tr("All");
 
@@ -75,7 +75,7 @@ void DistributionsForInferenceWidget::buildInterface()
   mainLayout->addWidget(tableView_);
 
   // - table model
-  tableModel_ = new DistributionsTableModel(distributions_, allDistributions, tableView_);
+  tableModel_ = new DistributionsTableModel(distributions_, allDistributions_, variables_.getSize() > 1, tableView_);
   connect(tableModel_, SIGNAL(distributionsListChanged(QStringList)), this, SIGNAL(distributionsListChanged(QStringList)));
 
   tableView_->setModel(tableModel_);
@@ -105,17 +105,11 @@ void DistributionsForInferenceWidget::buildInterface()
 
 void DistributionsForInferenceWidget::updateDistributions(const QStringList& distributions)
 {
-  QStringList allDistributions;
-  if (variables_.getSize() == 1)
-    allDistributions = TranslationManager::GetAvailableDistributions();
-  else
-    allDistributions = TranslationManager::GetAvailableCopulas();
-
   QStringList notUsedDistributions;
-  for (int i = 0; i < allDistributions.size(); ++i)
+  for (int i = 0; i < allDistributions_.size(); ++i)
   {
-    if (!distributions.contains(allDistributions[i]))
-      notUsedDistributions << allDistributions[i];
+    if (!distributions.contains(allDistributions_[i]))
+      notUsedDistributions << allDistributions_[i];
   }
   notUsedDistributions << tr("All");
 

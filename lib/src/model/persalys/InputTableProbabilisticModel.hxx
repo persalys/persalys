@@ -51,6 +51,7 @@ signals:
 private:
   bool failSoftMode_;
   PhysicalModel physicalModel_;
+  QStringList allDistributions_;
 };
 }
 #endif

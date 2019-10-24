@@ -20,6 +20,8 @@
  */
 #include "persalys/TranslationManager.hxx"
 
+#include "persalys/DistributionDictionary.hxx"
+
 namespace PERSALYS
 {
 
@@ -34,25 +36,33 @@ void TranslationManager::InitializeDistributionsNames()
 {
   // list of all the available distributions
   DistributionsNames_.insert(type("Arcsine", tr("Arcsine")));
+  DistributionsNames_.insert(type("Bernoulli", "Bernoulli"));
   DistributionsNames_.insert(type("Beta", tr("Beta")));
+  DistributionsNames_.insert(type("Binomial", "Binomial"));
   DistributionsNames_.insert(type("ChiSquare", tr("ChiSquare")));
   DistributionsNames_.insert(type("Exponential", tr("Exponential")));
   DistributionsNames_.insert(type("Gamma", tr("Gamma")));
+  DistributionsNames_.insert(type("Geometric", tr("Geometric")));
   DistributionsNames_.insert(type("Gumbel", "Gumbel"));
+  DistributionsNames_.insert(type("Hypergeometric", tr("Hypergeometric")));
   DistributionsNames_.insert(type("InverseNormal", tr("InverseNormal")));
-  DistributionsNames_.insert(type("Laplace", tr("Laplace")));
+  DistributionsNames_.insert(type("Laplace", "Laplace"));
   DistributionsNames_.insert(type("Logistic", tr("Logistic")));
   DistributionsNames_.insert(type("LogNormal", tr("LogNormal")));
   DistributionsNames_.insert(type("LogUniform", tr("LogUniform")));
+  DistributionsNames_.insert(type("NegativeBinomial", tr("NegativeBinomial")));
   DistributionsNames_.insert(type("Normal", tr("Normal")));
-  DistributionsNames_.insert(type("Pareto", tr("Pareto")));
+  DistributionsNames_.insert(type("Pareto", "Pareto"));
+  DistributionsNames_.insert(type("Poisson", "Poisson"));
   DistributionsNames_.insert(type("Rayleigh", "Rayleigh"));
+  DistributionsNames_.insert(type("Skellam", "Skellam"));
   DistributionsNames_.insert(type("Student", "Student"));
   DistributionsNames_.insert(type("Trapezoidal", tr("Trapezoidal")));
   DistributionsNames_.insert(type("Triangular", tr("Triangular")));
   DistributionsNames_.insert(type("Uniform", tr("Uniform")));
   DistributionsNames_.insert(type("WeibullMax", "WeibullMax"));
   DistributionsNames_.insert(type("WeibullMin", "WeibullMin"));
+  DistributionsNames_.insert(type("ZipfMandelbrot", "Zipf-Mandelbrot"));
 }
 
 
@@ -294,14 +304,29 @@ std::string TranslationManager::GetCopulaName(const QString& name)
 
 
 /* Get the list of the available distributions */
-QStringList TranslationManager::GetAvailableDistributions()
+QStringList TranslationManager::GetTranslatedContinuousDistributions()
 {
   if (DistributionsNames_.empty())
     InitializeDistributionsNames();
 
+  std::vector<std::string> continuousDist(DistributionDictionary::ContinuousDistributions_);
   QStringList distributions;
-  for (bimap_type::left_const_iterator left_iter = DistributionsNames_.left.begin(), iend = DistributionsNames_.left.end(); left_iter != iend; ++left_iter)
-    distributions << left_iter->second;
+  for (int i = 0; i < (int)continuousDist.size(); ++i)
+    distributions << GetTranslatedDistributionName(continuousDist[i]);
+  return distributions;
+}
+
+
+/* Get the list of the available distributions */
+QStringList TranslationManager::GetTranslatedDiscreteDistributions()
+{
+  if (DistributionsNames_.empty())
+    InitializeDistributionsNames();
+
+  std::vector<std::string> discreteDist(DistributionDictionary::DiscreteDistributions_);
+  QStringList distributions;
+  for (int i = 0; i < (int)discreteDist.size(); ++i)
+    distributions << GetTranslatedDistributionName(discreteDist[i]);
   return distributions;
 }
 
