@@ -31,20 +31,25 @@ using namespace OT;
 namespace PERSALYS
 {
 
-SampleTableModel::SampleTableModel(const Sample & data, QObject * parent)
+SampleTableModel::SampleTableModel(const Sample &data, const bool isEditable,
+                                   const bool hasRowIDcolumn, const Description &initialDescription, QObject *parent)
   : QAbstractTableModel(parent)
   , data_(data)
-  , sampleIsSortable_(true)
-  , initialDescription_()
+  , isEditable_(isEditable)
+  , hasRowIDcolumn_(hasRowIDcolumn)
+  , initialDescription_(initialDescription)
 {
 }
 
 
-SampleTableModel::SampleTableModel(const Sample & data, const Description& initialDescription, QObject * parent)
-  : QAbstractTableModel(parent)
-  , data_(data)
-  , sampleIsSortable_(initialDescription.getSize() == 0)
-  , initialDescription_(initialDescription)
+SampleTableModel::SampleTableModel(const Sample &data, QObject *parent)
+  : SampleTableModel(data, false, true, Description(), parent)
+{
+}
+
+
+SampleTableModel::SampleTableModel(const Sample &data, const Description &initialDescription, QObject *parent)
+  : SampleTableModel(data, false, initialDescription.getSize() == 0, initialDescription, parent)
 {
 }
 
@@ -52,14 +57,21 @@ SampleTableModel::SampleTableModel(const Sample & data, const Description& initi
 int SampleTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
   if (data_.getSize())
-    return sampleIsSortable_ ? data_.getDimension() + 1 : data_.getDimension();
+    return hasRowIDcolumn_ ? data_.getDimension() + 1 : data_.getDimension();
   return 0;
 }
 
 
 int SampleTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
-  return sampleIsSortable_ ? data_.getSize() : data_.getSize() + 1;
+  return initialDescription_.getSize() ? data_.getSize() + 1 : data_.getSize();
+}
+
+
+Qt::ItemFlags SampleTableModel::flags(const QModelIndex & index) const
+{
+  Qt::ItemFlags result = QAbstractTableModel::flags(index);
+  return isEditable_ ? result |= Qt::ItemIsEditable : result;
 }
 
 
@@ -69,18 +81,22 @@ QVariant SampleTableModel::headerData(int section, Qt::Orientation orientation, 
   {
     if (role == Qt::DisplayRole)
     {
-      if (!section && sampleIsSortable_)
+      if (!section && hasRowIDcolumn_)
         return "Row ID";
       else
-        return QString::fromUtf8(data_.getDescription()[sampleIsSortable_ ? section - 1 : section].c_str());
+      {
+        const UnsignedInteger index = hasRowIDcolumn_ ? section - 1 : section;
+        if (index < data_.getDescription().getSize())
+          return QString::fromUtf8(data_.getDescription()[index].c_str());
+      }
     }
     else if (role == Qt::TextAlignmentRole)
       return Qt::AlignCenter;
   }
   else if (orientation == Qt::Vertical && role == Qt::DisplayRole)
   {
-    if (!(!sampleIsSortable_ && section == 0))
-      return sampleIsSortable_ ? section : section - 1;
+    if (!(!hasRowIDcolumn_ && section == 0))
+      return hasRowIDcolumn_ ? section : section - 1;
     else
       return QVariant();
   }
@@ -108,38 +124,54 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
   if (!index.isValid())
     return QVariant();
 
-  const int dataColIndex = sampleIsSortable_ ? index.column() - 1 : index.column();
-  const int dataRowIndex = sampleIsSortable_ ? index.row() : index.row() - 1;
+  const int dataColIndex = hasRowIDcolumn_ ? index.column() - 1 : index.column();
+  const int dataRowIndex = initialDescription_.getSize() ? index.row() - 1 : index.row();
 
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
 
-  else if (role == Qt::DisplayRole)
+  else if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    if (sampleIsSortable_ && index.column() == 0)
+    if (hasRowIDcolumn_ && index.column() == 0)
       return QString::number(index.row());
-    else if (!sampleIsSortable_ && index.row() == 0)
+    else if (initialDescription_.getSize() && index.row() == 0)
       return QString::fromUtf8(initialDescription_[index.column()].c_str());
     else
       return QString::number(data_(dataRowIndex, dataColIndex), 'g', StudyTreeViewModel::DefaultSignificantDigits);
   }
 
-  else if (sampleIsSortable_ && role == Qt::UserRole)
+  else if (role == Qt::UserRole)
   {
-    if (index.column() == 0)
+    if (hasRowIDcolumn_ && index.column() == 0)
       return index.row();
     else
-      return data_(index.row(), dataColIndex);
+      return data_(dataRowIndex, dataColIndex);
   }
 
   else if (role == Qt::BackgroundRole)
   {
-    if ((sampleIsSortable_ && index.column() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))) ||
-        (!sampleIsSortable_ && index.row() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))))
+    if ((hasRowIDcolumn_ && index.column() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))) ||
+        (!hasRowIDcolumn_ && index.row() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))))
       return QColor(Qt::red);
   }
 
   return QVariant();
+}
+
+
+bool SampleTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+  if (!index.isValid() || (hasRowIDcolumn_ && index.column() > 0))
+    return false;
+
+  if (role == Qt::EditRole)
+  {
+    const int dataColIndex = hasRowIDcolumn_ ? index.column() - 1 : index.column();
+    const int dataRowIndex = initialDescription_.getSize() ? index.row() - 1 : index.row();
+    data_(dataRowIndex, dataColIndex) = value.toDouble();
+    emit dataChanged(index, index);
+  }
+  return true;
 }
 
 
@@ -151,7 +183,7 @@ Sample SampleTableModel::getSample() const
 
 void SampleTableModel::updateHeaderData(const Description& header)
 {
-  Q_ASSERT(sampleIsSortable_);
+  Q_ASSERT(hasRowIDcolumn_);
   Q_ASSERT(header.getSize() == data_.getDimension());
   data_.setDescription(header);
   emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
@@ -160,7 +192,6 @@ void SampleTableModel::updateHeaderData(const Description& header)
 
 void SampleTableModel::updateData(const Sample& data)
 {
-  Q_ASSERT(sampleIsSortable_);
   beginResetModel();
   data_ = data;
   endResetModel();

@@ -52,24 +52,30 @@ class PERSALYS_API SampleTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
+  SampleTableModel(const OT::Sample & data, const bool isEditable, const bool hasRowIDcolumn, const OT::Description& initialDescription, QObject * parent = 0);
   SampleTableModel(const OT::Sample & data, QObject * parent = 0);
   SampleTableModel(const OT::Sample & data, const OT::Description& initialDescription, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  Qt::ItemFlags flags(const QModelIndex & index) const;
   QVariant data(const QModelIndex & index, int role) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
+  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
 
   OT::Sample getSample() const;
 
 public slots:
   void updateHeaderData(const OT::Description & header);
   void updateData(const OT::Sample & data);
+signals:
+  void errorMessageChanged(const QString &message);
 
 protected:
   OT::Sample data_;
-  bool sampleIsSortable_;
+  bool isEditable_;
+  bool hasRowIDcolumn_;
   OT::Description initialDescription_;
 };
 }
