@@ -168,7 +168,7 @@ void PhysicalModelImplementation::setInputName(const String & inputName, const S
   // update composedCopula_ description
   if (input.isStochastic())
   {
-    Collection<Copula> coll(composedCopula_.getCopulaCollection());
+    Collection<Distribution> coll(composedCopula_.getCopulaCollection());
     for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
     {
       Description copulaDescription(coll[i].getDescription());
@@ -177,7 +177,7 @@ void PhysicalModelImplementation::setInputName(const String & inputName, const S
         if (copulaDescription[j] == inputName)
         {
           copulaDescription[j] = newName;
-          Copula copula(coll[i]);
+          Distribution copula(coll[i]);
           copula.setDescription(copulaDescription);
           coll[i] = copula;
         }
@@ -301,7 +301,7 @@ void PhysicalModelImplementation::updateCopula()
 {
   const Description stochasticInput(getStochasticInputNames());
 
-  Collection<Copula> coll(composedCopula_.getCopulaCollection());
+  Collection<Distribution> coll(composedCopula_.getCopulaCollection());
   std::set<UnsignedInteger> indicesToRemove;
 
   // remove IndependentCopula
@@ -331,7 +331,7 @@ void PhysicalModelImplementation::updateCopula()
   }
 
   // new collection of copulas
-  Collection<Copula> newColl;
+  Collection<Distribution> newColl;
   for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
   {
     if (indicesToRemove.find(i) == indicesToRemove.end())
@@ -749,7 +749,7 @@ PointToFieldFunction PhysicalModelImplementation::getRestrictedPointToFieldFunct
 }
 
 
-Copula PhysicalModelImplementation::getCopula() const
+Distribution PhysicalModelImplementation::getCopula() const
 {
   Description copulaDescription(composedCopula_.getDescription());
   Indices copulaMarginals;
@@ -762,17 +762,17 @@ Copula PhysicalModelImplementation::getCopula() const
       copulaMarginals.add(it - copulaDescription.begin());
     }
   }
-  return copulaMarginals.getSize() > 0 ? composedCopula_.getMarginal(copulaMarginals) : Copula(composedCopula_);
+  return copulaMarginals.getSize() > 0 ? composedCopula_.getMarginal(copulaMarginals) : composedCopula_;
 }
 
 
-Collection<Copula> PhysicalModelImplementation::getCopulaCollection() const
+Collection<Distribution> PhysicalModelImplementation::getCopulaCollection() const
 {
   return composedCopula_.getCopulaCollection();
 }
 
 
-void PhysicalModelImplementation::setCopula(const Description &inputNames, const Copula &copula)
+void PhysicalModelImplementation::setCopula(const Description &inputNames, const Distribution &copula)
 {
   // - check
   // inputNames and copula must have the same dimension
@@ -786,7 +786,10 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
       throw InvalidArgumentException(HERE) << "The input " << inputNames[i] << " is not stochastic";
   }
 
-  Collection<Copula> coll(composedCopula_.getCopulaCollection());
+  if (!copula.isCopula())
+    throw InvalidArgumentException(HERE) << "The provided distribution is not a copula";
+ 
+  Collection<Distribution> coll(composedCopula_.getCopulaCollection());
   std::set<UnsignedInteger> indicesToRemove;
 
   // remove copula if its description contains an input name of the list
@@ -806,7 +809,7 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
   }
 
   // new collection of copulas
-  Collection<Copula> newColl;
+  Collection<Distribution> newColl;
   if ((indicesToRemove.size() == 1 && copula.getImplementation()->getClassName() != "IndependentCopula") ||
       indicesToRemove.size() == 0)
   {
@@ -824,7 +827,7 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
   // update copulas collection
   if (copula.getImplementation()->getClassName() != "IndependentCopula")
   {
-    Copula newCopula(copula);
+    Distribution newCopula(copula);
     newCopula.setDescription(inputNames);
     if (indicesToRemove.size() != 1)
     {
@@ -1088,7 +1091,7 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
 
   for (UnsignedInteger i = 0; i < composedCopula_.getCopulaCollection().getSize(); ++i)
   {
-    Copula composedCopula_i = composedCopula_.getCopulaCollection()[i];
+    Distribution composedCopula_i = composedCopula_.getCopulaCollection()[i];
 
     if (composedCopula_i.getImplementation()->getClassName() == "NormalCopula")
     {

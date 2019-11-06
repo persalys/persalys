@@ -15,4 +15,4 @@ if sys.platform.startswith('win'):
 
 from .persalys import *
 
-__version__ = '7.0'
+__version__ = '8.0dev'

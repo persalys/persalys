@@ -319,7 +319,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   // copula
   if (designOfExperiment_.getPhysicalModel().hasStochasticInputs())
   {
-    Collection<Copula> coll(designOfExperiment_.getPhysicalModel().getCopulaCollection());
+    Collection<Distribution> coll(designOfExperiment_.getPhysicalModel().getCopulaCollection());
     for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
     {
       metaModel.setCopula(coll[i].getDescription(), coll[i]);

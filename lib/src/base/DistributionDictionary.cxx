@@ -79,6 +79,10 @@ DistributionFactory DistributionDictionary::BuildDistributionFactory(const Strin
   {
     return NormalFactory();
   }
+  else if (distributionName == "Pareto")
+  {
+    return ParetoFactory();
+  }
   else if (distributionName == "Rayleigh")
   {
     return RayleighFactory();
@@ -99,9 +103,13 @@ DistributionFactory DistributionDictionary::BuildDistributionFactory(const Strin
   {
     return UniformFactory();
   }
-  else if (distributionName == "Weibull")
+  else if (distributionName == "WeibullMax")
   {
-    return WeibullFactory();
+    return WeibullMaxFactory();
+  }
+  else if (distributionName == "WeibullMin")
+  {
+    return WeibullMinFactory();
   }
   else
   {
@@ -181,12 +189,12 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     else if (distributionName == "InverseNormal")
     {
       if (mu <= 0)
-        return InverseNormal(0.01, 0.1);
-      return InverseNormal(mu * mu * mu / (sigma * sigma), mu);
+        return InverseNormal(0.1, 0.01);
+      return InverseNormal(mu, mu * mu * mu / (sigma * sigma));
     }
     else if (distributionName == "Laplace")
     {
-      return Laplace(sqrt(2.0) / sigma, mu);
+      return Laplace(mu, sqrt(2.0) / sigma);
     }
     else if (distributionName == "Logistic")
     {
@@ -215,6 +223,10 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     {
       return Normal(mu, sigma);
     }
+    else if (distributionName == "Pareto")
+    {
+      return Pareto(sigma, 3.0, mu);
+    }
     else if (distributionName == "Rayleigh")
     {
       return Rayleigh(sigma / 0.6551363775620335530939357, mu - sigma * 1.253314137315500251207882 / 0.6551363775620335530939357);
@@ -235,9 +247,13 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     {
       return Uniform(mu - sigma * sqrt(3.0), mu + sigma * sqrt(3.0));
     }
-    else if (distributionName == "Weibull")
+    else if (distributionName == "WeibullMax")
     {
-      return WeibullMuSigma(mu, sigma, mu - 10.0 * sigma).getDistribution(); // arbitrary gamma
+      return WeibullMaxMuSigma(mu, sigma, mu + 10.0 * sigma).getDistribution(); // arbitrary gamma
+    }
+    else if (distributionName == "WeibullMin")
+    {
+      return WeibullMinMuSigma(mu, sigma, mu - 10.0 * sigma).getDistribution(); // arbitrary gamma
     }
     else
     {
@@ -282,7 +298,7 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
   }
   else if (distributionName == "Gumbel")
   {
-    GumbelAB d1;
+    GumbelLambdaGamma d1;
     nPWithDesc = d1.inverse(distribution.getParameter());
     nPWithDesc.setDescription(d1.getDescription());
     nPWithDescColl.add(nPWithDesc);
@@ -327,9 +343,16 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
 
     nPWithDescColl[0] = nPWithDesc;
   }
-  else if (distributionName == "Weibull")
+  else if (distributionName == "WeibullMax")
   {
-    WeibullMuSigma d1;
+    WeibullMaxMuSigma d1;
+    nPWithDesc = d1.inverse(distribution.getParameter());
+    nPWithDesc.setDescription(d1.getDescription());
+    nPWithDescColl.add(nPWithDesc);
+  }
+  else if (distributionName == "WeibullMin")
+  {
+    WeibullMinMuSigma d1;
     nPWithDesc = d1.inverse(distribution.getParameter());
     nPWithDesc.setDescription(d1.getDescription());
     nPWithDescColl.add(nPWithDesc);
@@ -372,7 +395,7 @@ void DistributionDictionary::UpdateDistribution(Distribution & distribution,
     else if (distributionName == "Gumbel")
     {
       if (parametersType == 1)
-        distribution.setParameter(GumbelAB(description[0], description[1]).evaluate());
+        distribution.setParameter(GumbelLambdaGamma(description[0], description[1]).evaluate());
       else if (parametersType == 2)
         distribution.setParameter(GumbelMuSigma(description[0], description[1]).evaluate());
     }
@@ -383,10 +406,15 @@ void DistributionDictionary::UpdateDistribution(Distribution & distribution,
       else if (parametersType == 2)
         distribution.setParameter(LogNormalMuSigmaOverMu(description[0], description[1], description[2]).evaluate());
     }
-    else if (distributionName == "Weibull")
+    else if (distributionName == "WeibullMax")
     {
       if (parametersType == 1)
-        distribution.setParameter(WeibullMuSigma(description[0], description[1], description[2]).evaluate());
+        distribution.setParameter(WeibullMaxMuSigma(description[0], description[1], description[2]).evaluate());
+    }
+    else if (distributionName == "WeibullMin")
+    {
+      if (parametersType == 1)
+        distribution.setParameter(WeibullMinMuSigma(description[0], description[1], description[2]).evaluate());
     }
   }
 }

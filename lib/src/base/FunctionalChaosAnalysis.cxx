@@ -233,7 +233,7 @@ Function FunctionalChaosAnalysis::runAlgo(const Sample& inputSample, const Sampl
 FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(const Sample& inputSample, const Sample& outputSample)
 {
   const UnsignedInteger inputDimension = inputSample.getDimension();
-  const EnumerateFunction phi(inputDimension);
+  const LinearEnumerateFunction phi(inputDimension);
 
   // adaptiveStrategy
   const OrthogonalProductPolynomialFactory multivariateBasis(getPolynomialFamilyCollection(), phi);

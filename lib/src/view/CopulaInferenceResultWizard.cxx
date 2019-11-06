@@ -219,10 +219,10 @@ void CopulaInferenceResultWizard::updateVariablesTable(const QString &text)
 }
 
 
-Copula CopulaInferenceResultWizard::getCopula() const
+Distribution CopulaInferenceResultWizard::getCopula() const
 {
   CopulaInferenceResultWidget * widget = static_cast<CopulaInferenceResultWidget*>(inferenceResultStackWidget_->currentWidget());
-  Copula copula(widget->getCopula());
+  Distribution copula(widget->getCopula());
 
   // if Normal copula
   if (tableView_)

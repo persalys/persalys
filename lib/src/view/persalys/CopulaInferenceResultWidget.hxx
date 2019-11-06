@@ -25,8 +25,6 @@
 #include "persalys/CustomStandardItemModel.hxx"
 #include "persalys/ExportableTableView.hxx"
 
-#include <openturns/Copula.hxx>
-
 #include <QScrollArea>
 
 namespace PERSALYS
@@ -41,7 +39,7 @@ public:
                               const bool displaySetting = true,
                               QWidget* parent = 0);
 
-  OT::Copula getCopula() const;
+  OT::Distribution getCopula() const;
   bool isSelectedCopulaValid() const;
 
 protected:

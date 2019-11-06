@@ -92,7 +92,7 @@ RUN fc-cache -fsv
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
 RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2s.tar.gz | tar xz && cd openssl-1.0.2s \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
-RUN curl -fSsL https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz | tar xz && cd Python-3.7.4 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.7.5/Python-3.7.5.tgz | tar xz && cd Python-3.7.5 \
  && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
@@ -148,7 +148,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # paraview
-RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.2.tar.xz | tar xJ && cd ParaView-v5.6.2 \
+RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.3.tar.xz | tar xJ && cd ParaView-v5.6.3 \
   && mkdir build && cd build && cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
@@ -180,11 +180,11 @@ RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.2.tar.xz | tar xJ &&
 
 # openturns
 RUN yum -y install libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.13 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 1.14 \
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.6 \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.7 \
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi

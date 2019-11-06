@@ -23,6 +23,7 @@
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/CompositeRandomVector.hxx>
 #include <openturns/MemoizeFunction.hxx>
+#include <openturns/ThresholdEvent.hxx>
 
 using namespace OT;
 
@@ -96,7 +97,7 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
 }
 
 
-SimulationInterface SimulationReliabilityAnalysis::getSimulationAlgorithm(const OT::Event& event)
+SimulationInterface SimulationReliabilityAnalysis::getSimulationAlgorithm(const OT::RandomVector & event)
 {
   throw NotYetImplementedException(HERE) << "In SimulationReliabilityAnalysis::getSimulationAlgorithm()";
 }
@@ -152,7 +153,7 @@ void SimulationReliabilityAnalysis::launch()
   function.clearHistory();
 
   // create OT::Event
-  Event event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
   // create OT::Simulation

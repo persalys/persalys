@@ -68,7 +68,7 @@ public:
 protected:
   virtual void initialize();
   virtual void launch();
-  virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
+  virtual SimulationInterface getSimulationAlgorithm(const OT::RandomVector& event);
   static void UpdateProgressValue(double percent, void* data);
 
 private:

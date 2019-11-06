@@ -40,7 +40,7 @@
 #include <openturns/KernelSmoothing.hxx>
 #include <openturns/MarginalDistribution.hxx>
 #include <openturns/NormalCopula.hxx>
-
+#include <openturns/LeastSquaresProblem.hxx>
 
 using namespace OT;
 
@@ -131,13 +131,7 @@ void CalibrationAnalysis::initializeParameters()
     errorCovariance_(i, i) = 0.01;
 
   // automatic selection of the optimization algorithm
-  const Description leastSquaresNames(OptimizationAlgorithm::GetLeastSquaresAlgorithmNames());
-  if (leastSquaresNames.getSize() > 0)
-    optimizationAlgorithm_ = OptimizationAlgorithm::Build(leastSquaresNames[0]);
-  else
-    optimizationAlgorithm_ = MultiStart(TNC(),
-                                        LowDiscrepancyExperiment(SobolSequence(),
-                                                                 Normal(candidate, CovarianceMatrix(candidate.getDimension())), ResourceMap::GetAsUnsignedInteger("NonLinearLeastSquaresCalibration-MultiStartSize")).generate());
+  optimizationAlgorithm_ = OptimizationAlgorithm::Build(LeastSquaresProblem());
 }
 
 
@@ -371,7 +365,7 @@ void CalibrationAnalysis::check(const Description &calibratedInputs, const Distr
     // if distribution has dependence : check the copula is Gaussian
     if (!priorDistribution.hasIndependentCopula())
     {
-      Copula copula(priorDistribution.getCopula());
+      Distribution copula(priorDistribution.getCopula());
       // can have copula = NormalCopula / ComposedCopula / MarginalDistribution
       MarginalDistribution * margDist = dynamic_cast<MarginalDistribution *>(copula.getImplementation().get());
       if (margDist)
@@ -478,8 +472,6 @@ void CalibrationAnalysis::setConfidenceIntervalLength(const Scalar length)
 
 void CalibrationAnalysis::setBootStrapSize(const UnsignedInteger size)
 {
-  if (size == 1)
-    throw InvalidArgumentException(HERE) << "The BootStrap size can not be equal to 1";
   bootStrapSize_ = size;
 }
 

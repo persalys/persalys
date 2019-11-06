@@ -350,19 +350,19 @@ PointToFieldFunction PhysicalModel::getRestrictedPointToFieldFunction(const Desc
 }
 
 
-Copula PhysicalModel::getCopula() const
+Distribution PhysicalModel::getCopula() const
 {
   return getImplementation()->getCopula();
 }
 
 
-Collection<Copula> PhysicalModel::getCopulaCollection() const
+Collection<Distribution> PhysicalModel::getCopulaCollection() const
 {
   return getImplementation()->getCopulaCollection();
 }
 
 
-void PhysicalModel::setCopula(const Description &inputNames, const Copula &copula)
+void PhysicalModel::setCopula(const Description &inputNames, const Distribution &copula)
 {
   getImplementation()->setCopula(inputNames, copula);
 }

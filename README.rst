@@ -4,19 +4,17 @@ Qt GUI module for OpenTURNS
 
 Dependencies
 ------------
-- OpenTURNS >=1.13
+- OpenTURNS >=1.14
 - Qt >=5
 - Qwt >=6
 - Python >=3.2
-- Boost.locale
-- Boost.filesystem
-- Boost.regex
+- Boost.locale/filesystem/regex
 - SalomeYACS (optional, for YACS support)
 - Sphinx >=1.1 (optional, for doc)
 - Numpydoc (optional, for doc)
 - otfmi (optional, for FMI support)
 - ParaView >=5.4.0 (optional, for visualisation)
-- otmorris >=0.6 (optional, for Morris support)
+- otmorris >=0.7 (optional, for Morris support)
 
 Installation
 ------------

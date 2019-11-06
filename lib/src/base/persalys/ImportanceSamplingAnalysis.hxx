@@ -54,7 +54,7 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
-  virtual SimulationInterface getSimulationAlgorithm(const OT::Event& event);
+  virtual SimulationInterface getSimulationAlgorithm(const OT::RandomVector & event);
 
 private:
   OT::Point standardSpaceDesignPoint_;

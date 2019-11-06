@@ -338,7 +338,7 @@ void CalibrationParametersPage::buildInterface()
   QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
   sampleSizeLayout->addWidget(sampleSizeLabel);
   bootStrapSizeSpinBox_ = new UIntSpinBox;
-  bootStrapSizeSpinBox_->setMinimum(2);
+  bootStrapSizeSpinBox_->setMinimum(1);
   bootStrapSizeSpinBox_->setSingleStep(5);;
   connect(bootstrapCheckBox_, SIGNAL(clicked(bool)), bootStrapSizeSpinBox_, SLOT(setEnabled(bool)));
   sampleSizeLayout->addWidget(bootStrapSizeSpinBox_);

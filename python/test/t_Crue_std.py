@@ -40,8 +40,7 @@ montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(
-    0.0006, montecarloResult.getSimulationResult().getProbabilityEstimate(), 1e-16)
+openturns.testing.assert_almost_equal(montecarloResult.getSimulationResult().getProbabilityEstimate(), 0.0, 1e-6)
 
 # FORM-IS ##
 formIS = persalys.FORMImportanceSamplingAnalysis('myformIS', limitState)
@@ -54,8 +53,7 @@ formIS.run()
 formISResult = formIS.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(0.000635,
-                                      formISResult.getSimulationResult().getProbabilityEstimate(), 1e-5, 1e-5)
+openturns.testing.assert_almost_equal(formISResult.getSimulationResult().getProbabilityEstimate(), 0.000142088, 1e-5, 1e-5)
 
 # script
 script = myStudy.getPythonScript()
