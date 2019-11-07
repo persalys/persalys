@@ -20,13 +20,31 @@ make install
 ${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/bin/*.dll ${MOD_PREFIX}/Lib/site-packages/persalys/*.pyd
 make tests
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
-cp -r ${MINGW_PREFIX}/lib/qt/plugins/platforms ${MOD_PREFIX}/lib
-cp -r ${MINGW_PREFIX}/lib/qt/plugins/imageformats ${MOD_PREFIX}/lib
 WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin" xvfb-run ctest --output-on-failure --timeout 30 -j8
+
+# module installer
+cp -r ${MINGW_PREFIX}/lib/qt/plugins/{platforms,imageformats} ${MOD_PREFIX}/lib
+cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf ${MOD_PREFIX}/Lib/site-packages/persalys/
 VERSION=`cat /io/VERSION`
 cp /io/distro/windows/* .
 unzip persalys-doc.zip -d .
 makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.14 -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DPYBASEVER_NODOT=${PYMAJMIN} -DARCH=${ARCH} installer.nsi
+
+# bundle installer
+cd /tmp
+PYVER=`${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -V|sed "s|.*Python \([0-9\.]*\).*|\1|g"`
+curl -fSsLO https://www.python.org/ftp/python/${PYVER}/python-${PYVER}-embed-amd64.zip
+mkdir -p python_root/Lib/site-packages && cd python_root
+unzip /tmp/python-${PYVER}-embed-amd64.zip
+echo 'Lib\\site-packages' >> python${PYMAJMIN}._pth
+curl -fSsL https://anaconda.org/conda-forge/vs2015_runtime/14.0.25420/download/win-64/vs2015_runtime-14.0.25420-0.tar.bz2 | tar xj
+cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns Lib/site-packages
+cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
+cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
+rm Lib/site-packages/openturns/{libvtk,libboost,LLVM,Qt,python}*.dll
+cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
+cd /tmp/build
+makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DPYTHON_PREFIX=/tmp/python_root -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DARCH=${ARCH} installer_bundle.nsi
 
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"

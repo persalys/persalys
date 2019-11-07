@@ -9,6 +9,9 @@ wshEnv("MPLBACKEND") = "TkAgg"
 rem add Python directory in Environment variable PATH
 wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory + "\..\..\..")
 
+rem set PYTHONPATH
+wshEnv("PYTHONPATH") = fso.GetAbsolutePathName(currentDirectory + "\..\") & ";" & wshEnv("PYTHONPATH")
+
 rem add documentation path in Environment variable PERSALYS_HTML_DOCUMENTATION_PATH
 wshEnv("PERSALYS_HTML_DOCUMENTATION_PATH") = currentDirectory + "\doc\html\"
 
