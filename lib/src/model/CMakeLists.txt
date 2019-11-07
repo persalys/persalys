@@ -115,7 +115,7 @@ if (OTMORRIS_FOUND)
 endif ()
 
 if (SalomeYACS_FOUND)
-  set_source_files_properties (StudyItem.cxx PROPERTIES COTIRE_EXCLUDED ON) # FIXME: Python/Qt conflict due to YACS
+  set_source_files_properties (StudyItem.cxx PROPERTIES COTIRE_EXCLUDED ON SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
 endif ()
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
