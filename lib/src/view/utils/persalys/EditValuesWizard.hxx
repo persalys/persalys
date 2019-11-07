@@ -21,51 +21,91 @@
 #ifndef PERSALYS_EDITVALUESWIZARD_HXX
 #define PERSALYS_EDITVALUESWIZARD_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#include "persalys/SampleTableModel.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
-#include <openturns/Point.hxx>
+#include <openturns/Distribution.hxx>
 
 #include <QWizard>
 #include <QTableView>
 #include <QSortFilterProxyModel>
 #include <QLabel>
-#include <QDoubleSpinBox>
 #include <QPushButton>
-#include <QStandardItemModel>
 
 namespace PERSALYS
 {
 
-class EditValuesWizard : public QWizard
+class PERSALYS_API EditValuesWizard : public QWizard
 {
   Q_OBJECT
 
 public:
+  EditValuesWizard(QWidget *parent = 0);
+  EditValuesWizard(const OT::Sample &values, QWidget *parent = 0);
   EditValuesWizard(const QString &variableName, const OT::Point &values, QWidget *parent = 0);
 
-  OT::Point getValues() const;
+  OT::Point getValues(const OT::UnsignedInteger index = 0) const;
   virtual bool validateCurrentPage();
 
 private slots:
   void removeSelectedValues();
   void checkButtons();
-  void addValue();
+  virtual void addValue();
 
-private:
-  void addAValue(double v);
-  void insertAValue(double value);
+protected:
+  void buildInterface();
   void check();
 
-  QStandardItemModel * model_;
+  SampleTableModel * model_;
   QSortFilterProxyModel * proxy_;
+  TemporaryLabel * errorMessageLabel_;
+
+private:
+  OT::Description sampleDescription_;
   QTableView * valueTable_;
   QLabel * valueNumber_;
-  QDoubleSpinBox * addedValueBox_;
   QPushButton * removeButton_;
-  QDoubleSpinBox * deltaBox_;
-  QSpinBox * nbPointsBox_;
+};
 
-  OT::Point values_;
+
+class PERSALYS_API UserDefinedWizard : public EditValuesWizard
+{
+  Q_OBJECT
+
+public:
+  UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = 0);
+
+  OT::Distribution getDistribution() const;
+  virtual bool validateCurrentPage();
+
+private slots:
+  virtual void addValue();
+};
+
+
+class PERSALYS_API ProbabilityTableModel : public SampleTableModel
+{
+  Q_OBJECT
+
+public:
+  ProbabilityTableModel(const OT::Sample & data, QObject * parent)
+  : SampleTableModel(data, true, false, OT::Description(), parent)
+  {
+    Q_ASSERT(data.getDimension() == 2);
+  }
+
+  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole)
+  {
+    if (!index.isValid())
+      return false;
+    if (role == Qt::EditRole && index.column() == 1 && (value.toDouble() > 1 || value.toDouble() < 0))
+    {
+      emit errorMessageChanged(tr("Probability must be in ]0, 1["));
+      return false;
+    }
+
+    return SampleTableModel::setData(index, value, role);
+  }
 };
 }
 #endif
