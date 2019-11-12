@@ -20,13 +20,14 @@
  */
 #include "persalys/Item.hxx"
 
+#include "persalys/StudyItem.hxx"
+#include "persalys/AnalysisItem.hxx"
+
 namespace PERSALYS
 {
 
 Item::Item(const QString& name, const QString& type)
-  : QObject()
-  , QStandardItem(name)
-  , parentStudyItem_(0)
+  : QStandardItem(name)
   , analysisInProgress_(false)
   , menuActions_()
 {
@@ -42,7 +43,6 @@ Item::Item(const QString& name, const QString& type)
 
 Item::~Item()
 {
-  parentStudyItem_ = 0;
 }
 
 
@@ -55,12 +55,6 @@ void Item::emitShowWindowRequested()
 void Item::emitRemoveWindowRequested()
 {
   emit removeWindowRequested();
-}
-
-
-StudyItem* Item::getParentStudyItem()
-{
-  return parentStudyItem_;
 }
 
 
@@ -96,48 +90,19 @@ void Item::insertAction(int i, QAction* action)
 
 QVariant Item::data(int role) const
 {
-  if (QStandardItem::data(Qt::UserRole).toString().contains("Title"))
+  const QString dataType(QStandardItem::data(Qt::UserRole).toString());
+
+  if (role == Qt::FontRole && dataType.contains("Title"))
   {
-    if (role == Qt::FontRole)
-    {
-      QFont font;
-      font.setBold(true);
-      return font;
-    }
-    else if (role == Qt::DecorationRole)
-    {
-      if (QStandardItem::data(Qt::UserRole).toString() == "PhysicalModelsTitle")
-        return QIcon(":/images/physicalModel.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "DataModelsTitle")
-        return QIcon(":/images/dataModel.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "MetaModelsTitle")
-        return QIcon(":/images/metaModel.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "ModelEvaluationTitle")
-        return QIcon(":/images/modelEvaluation.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "DesignsOfExperimentTitle")
-        return QIcon(":/images/designOfExperiment.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "CentralTendencyTitle")
-        return QIcon(":/images/centralTendency.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "SensitivityTitle")
-        return QIcon(":/images/sensitivity.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "ScreeningTitle")
-        return QIcon(":/images/sensitivity.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "ReliabilityTitle")
-        return QIcon(":/images/limitstate.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "OptimizationTitle")
-        return QIcon(":/images/optimize.png");
-      else if (QStandardItem::data(Qt::UserRole).toString() == "CalibrationTitle")
-        return QIcon(":/images/calibration.png");
-    }
+    QFont font;
+    font.setBold(true);
+    return font;
   }
-  else if (QStandardItem::data(Qt::UserRole).toString().contains("Diagram"))
+  else if (role == Qt::FontRole && dataType.contains("Diagram"))
   {
-    if (role == Qt::FontRole)
-    {
-      QFont font;
-      font.setUnderline(true);
-      return font;
-    }
+    QFont font;
+    font.setUnderline(true);
+    return font;
   }
   return QStandardItem::data(role);
 }
@@ -179,21 +144,15 @@ void Item::requestRemoveChild(int row)
 }
 
 
-void Item::setAnalysisInProgress(bool inProgress)
-{
-  analysisInProgress_ = inProgress;
-}
-
-
 bool Item::analysisInProgress() const
 {
   return analysisInProgress_;
 }
 
 
-Item* Item::getTitleItemNamed(const QString& name, const QString& typeName)
+Item * Item::getTitleItemNamed(const QString &analysisName)
 {
-  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, typeName, 1, Qt::MatchRecursive);
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, getParentTitleType(analysisName), 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1)
   {
     QStandardItem * item = model()->itemFromIndex(listIndexes[0]);
@@ -201,8 +160,27 @@ Item* Item::getTitleItemNamed(const QString& name, const QString& typeName)
       return static_cast<Item*>(item);
   }
 
-  Item * item = new Item(name, typeName);
-  appendRow(item);
+  Item * item = getTitleItem(analysisName);
+  if (item)
+    appendRow(item);
   return item;
+}
+
+
+void Item::appendAnalysisItem(const Analysis &analysis)
+{
+  // new item
+  AnalysisItem * newItem = new AnalysisItem(analysis);
+
+  // append item
+  const QString analysisName = analysis.getImplementation()->getClassName().c_str();
+  // search title, parent item of the new item
+  if (Item * titleItem = getTitleItemNamed(analysisName))
+    titleItem->appendRow(newItem);
+  else
+    appendRow(newItem);
+
+  // emit signal to StudyTreeView to create a window
+  emit windowRequested(newItem);
 }
 }

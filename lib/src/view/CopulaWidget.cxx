@@ -232,9 +232,9 @@ void CopulaWidget::updateCopulaFromLineEdit()
     if (value == oldValue)
       return;
     copula_.setParameter(Point(1, value));
-    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.blockNotification("ProbabilisticModelItem");
     physicalModel_.setCopula(copulaDescription, copula_);
-    physicalModel_.blockNotification("");
+    physicalModel_.blockNotification();
     updatePlots();
   }
   catch (std::exception &ex)

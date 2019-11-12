@@ -32,14 +32,8 @@ namespace PERSALYS
 {
 
 DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysis& analysis)
-  : Item(QString::fromUtf8(analysis.getName().c_str()), "DesignOfExperimentDefinitionItem")
-  , Observer("DesignOfExperimentDefinition")
-  , analysis_(analysis)
-  , newMetaModelAction_(0)
-  , modifyAction_(0)
-  , removeAction_(0)
+  : AnalysisItem(analysis, "DesignOfExperimentDefinitionItem")
 {
-  analysis_.addObserver(this);
   // this item must be an observer of the design of experiments:
   // it is used in StudyItem to know where adding a DesignOfExperimentAnalysis based
   // on this design of experiments
@@ -52,16 +46,6 @@ DesignOfExperimentDefinitionItem::DesignOfExperimentDefinitionItem(const Analysi
 }
 
 
-void DesignOfExperimentDefinitionItem::setData(const QVariant & value, int role)
-{
-  // rename
-  if (role == Qt::EditRole)
-    analysis_.getImplementation()->setName(value.toString().toUtf8().data());
-
-  QStandardItem::setData(value, role);
-}
-
-
 void DesignOfExperimentDefinitionItem::buildActions()
 {
   modifyAction_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
@@ -70,10 +54,10 @@ void DesignOfExperimentDefinitionItem::buildActions()
 
   appendAction(modifyAction_);
 
-  exportAction_ = new QAction(QIcon(":/images/document-export-table.png"), tr("Export data"), this);
-  exportAction_->setStatusTip(tr("Export the data in a file"));
-  connect(exportAction_, SIGNAL(triggered()), this, SIGNAL(dataExportRequested()));
-  appendAction(exportAction_);
+  convertAction_ = new QAction(tr("Convert into data model"), this);
+  convertAction_->setStatusTip(tr("Add a data model in the study tree"));
+  connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendDataModelItem()));
+  appendAction(convertAction_);
 
   appendSeparator(tr("Analysis"));
 
@@ -83,11 +67,6 @@ void DesignOfExperimentDefinitionItem::buildActions()
   connect(evaluateAction_, SIGNAL(triggered()), this, SLOT(createEvaluation()));
 
   appendAction(evaluateAction_);
-
-  // new metamodel action
-  newMetaModelAction_ = new QAction(QIcon(":/images/metaModel.png"), tr("Metamodel"), this);
-  newMetaModelAction_->setStatusTip(tr("Create a new metamodel"));
-  connect(newMetaModelAction_, SIGNAL(triggered()), this, SLOT(createMetaModel()));
 
   appendSeparator();
 
@@ -100,9 +79,9 @@ void DesignOfExperimentDefinitionItem::buildActions()
 }
 
 
-Analysis DesignOfExperimentDefinitionItem::getAnalysis() const
+QVariant DesignOfExperimentDefinitionItem::data(int role) const
 {
-  return analysis_;
+  return Item::data(role);
 }
 
 
@@ -116,23 +95,32 @@ Sample DesignOfExperimentDefinitionItem::getOriginalInputSample() const
 
 void DesignOfExperimentDefinitionItem::update(Observable* source, const String& message)
 {
-  if (message == "analysisFinished")
+  if (message == "EvaluationItemRequested")
+  {
+    appendEvaluationItem();
+  }
+  else if (message == "analysisLaunched")
+  {
+    analysisInProgress_ = true;
+  }
+  else if (message == "analysisFinished")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
     emit designEvaluationUpdated(true);
+    analysisInProgress_ = false;
   }
-  else if (message == "analysisRemoved")
+  else if (message == "analysisBadlyFinished")
+  {
+    analysisInProgress_ = false;
+  }
+  else if (message == "objectRemoved")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
     emit numberDesignEvaluationChanged(getAnalysis().hasValidResult());
     if (hasChildren())
-      qDebug() << "DesignOfExperimentDefinitionItem::update(analysisRemoved) has not to contain child\n";
+      qDebug() << "DesignOfExperimentDefinitionItem::update(objectRemoved) has not to contain child\n";
 
     emit removeRequested(row());
-  }
-  else if (message == "EvaluationItemRequested")
-  {
-    appendEvaluationItem();
   }
 }
 
@@ -148,11 +136,12 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   // check if there is already an Evaluation item
   for (int i = 0; i < rowCount(); ++i)
   {
-    if (child(i)->data(Qt::UserRole).toString().contains("DesignOfExperiment"))
+    QString dataType(child(i)->data(Qt::UserRole).toString());
+    if (dataType.contains("DesignOfExperiment") && dataType != "DesignOfExperimentDefinitionItem")
     {
       AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(child(i));
       // emit signal to StudyTreeView to update the window bound to analysisItem
-      emit updateEvaluationWindowRequested(analysisItem, false);
+      emit windowRequested(analysisItem, false);
       return;
     }
   }
@@ -166,66 +155,35 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
   evaluationItem->appendSeparator(tr("Analysis"));
-  evaluationItem->appendAction(newMetaModelAction_);
-
-  // connections
-  // - signal for the PhysicalModelDiagramItem
-  connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentStudyItem())
-  {
-    connect(evaluationItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
-  }
+  evaluationItem->appendAction(createAction("Metamodel", getAnalysis()));
 
   // insert item
   insertRow(0, evaluationItem);
 
   // emit signal to StudyTreeView to create a window
-  emit analysisItemCreated(evaluationItem);
+  emit windowRequested(evaluationItem);
 }
 
 
-void DesignOfExperimentDefinitionItem::appendItem(Analysis& analysis)
+void DesignOfExperimentDefinitionItem::appendItem(const Analysis& analysis)
 {
-  // new item
-  AnalysisItem * newItem = new AnalysisItem(analysis);
-  Q_ASSERT(newItem);
-
-  // connections
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-  // - signal for the PhysicalModelDiagramItem
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentStudyItem())
-  {
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
-  }
-
-  // append item
-  appendRow(newItem);
-
-  // emit signal to StudyTreeView to create a window
-  emit analysisItemCreated(newItem);
-}
-
-
-void DesignOfExperimentDefinitionItem::modifyAnalysis()
-{
-  // emit signal to StudyTreeView to open the wizard
-  emit modifyAnalysisRequested(this);
+  appendAnalysisItem(analysis);
+  analysis.getImplementation().get()->addObserver(this);
+  analysis.getImplementation().get()->addObserver(getParentStudyItem());
 }
 
 
 void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
 {
   DesignOfExperimentEvaluation * oldDoeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
-  DesignOfExperimentEvaluation * newDoeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
   const bool wasValid = oldDoeEval->hasValidResult();
+
+  DesignOfExperimentEvaluation * newDoeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
   newDoeEval->setDesignOfExperiment(oldDoeEval->getResult().getDesignOfExperiment());
 
   // remove Evaluation item
-  analysis_.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
+  analysis_.getImplementation().get()->notifyAndRemove("AnalysisItem");
   analysis_.getImplementation().get()->removeObserver("Study");
-
-  // remove last observer
   analysis_.getImplementation().get()->removeObserver(this);
 
   // update analysis_
@@ -233,11 +191,12 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   analysis_.addObserver(this);
   analysis_.addObserver(getParentStudyItem()->getStudy().getImplementation().get());
 
+  // update the implementation of the analysis stored in Study
+  getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+
   if (wasValid)
     emit designEvaluationUpdated(false);
-
-  // update the implementation of the design of experiments stored in Study
-  getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
+  emit windowRequested(this, false);
 }
 
 
@@ -251,52 +210,7 @@ void DesignOfExperimentDefinitionItem::createEvaluation()
   }
 
   // emit signal to StudyTreeView to open a wizard
-  emit DOEEvaluationRequested(analysis_);
-}
-
-
-void DesignOfExperimentDefinitionItem::removeAnalysis()
-{
-  // check if the analysis is running
-  if (analysis_.isRunning())
-  {
-    emit showErrorMessageRequested(tr("Can not remove a running analysis."));
-    return;
-  }
-  // check
-  if (analysisInProgress_)
-  {
-    emit showErrorMessageRequested(tr("Can not remove a design of experiments when an analysis is running."));
-    return;
-  }
-
-  // remove
-  if (getParentStudyItem())
-    getParentStudyItem()->getStudy().remove(Analysis(analysis_));
-}
-
-
-void DesignOfExperimentDefinitionItem::createMetaModel()
-{
-  // check
-  if (!getAnalysis().hasValidResult())
-  {
-    emit showErrorMessageRequested(tr("The model must have at least one output. Evaluate the design of experiments"));
-    return;
-  }
-  const DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analysis_.getImplementation().get());
-  Q_ASSERT(doeEval);
-  if (doeEval->getResult().getDesignOfExperiment().getSample().getSize() < 2)
-  {
-    emit showErrorMessageRequested(tr("The design of experiments must contain at least two points."));
-    return;
-  }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("metaModel_").toStdString()));
-  FunctionalChaosAnalysis analysis(analysisName, getAnalysis());
-  // emit signal to StudyTreeView to open a wizard
-  emit analysisRequested(this, analysis);
+  emit doeEvaluationWizardRequested(analysis_);
 }
 
 

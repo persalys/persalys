@@ -22,7 +22,7 @@
 #define PERSALYS_DESIGNOFEXPERIMENTINPUTWINDOW_HXX
 
 #include "persalys/DataAnalysisWindow.hxx"
-#include "persalys/DesignOfExperimentDefinitionItem.hxx"
+#include "persalys/AnalysisItem.hxx"
 
 namespace PERSALYS
 {
@@ -31,7 +31,7 @@ class PERSALYS_API DesignOfExperimentInputWindow : public DataAnalysisWindow
   Q_OBJECT
 
 public:
-  DesignOfExperimentInputWindow(DesignOfExperimentDefinitionItem * item, QWidget * parent = 0);
+  DesignOfExperimentInputWindow(AnalysisItem * item, QWidget * parent = 0);
 
 public slots:
   virtual void updateVariablesListVisibility(int indexTab);

@@ -39,19 +39,17 @@ public:
 
   virtual void update(Observable * source, const OT::String & message);
 
-  void appendItem(Analysis& analysis);
+  virtual void appendItem(const Analysis& analysis);
 
 protected:
   void buildActions();
 
 public slots:
-  void createThresholdExceedance();
   void removeLimitState();
 signals:
   void outputListChanged();
   void operatorChanged();
   void thresholdChanged();
-  void analysisItemCreated(AnalysisItem*);
 
 private:
   LimitState limitState_;

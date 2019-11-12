@@ -30,9 +30,7 @@ namespace PERSALYS
 {
 
 DataModelDiagramItem::DataModelDiagramItem(const DesignOfExperiment& designOfExperiment)
-  : DesignOfExperimentItem(designOfExperiment, "DataModelDiagram")
-  , defineAction_(0)
-  , removeAction_(0)
+  : DesignOfExperimentItem(designOfExperiment, "DataModelDiagramItem")
 {
   buildActions();
 }
@@ -44,6 +42,12 @@ void DataModelDiagramItem::buildActions()
   defineAction_ = new QAction(tr("Define the model"), this);
   defineAction_->setStatusTip(tr("Define the data model"));
   connect(defineAction_, SIGNAL(triggered(bool)), this, SLOT(appendDataModelItem()));
+
+  // new analyses
+  newDataAnalysis_ = createAction("DataAnalysis", getDesignOfExperiment());
+  newInferenceAnalysis_ = createAction("Inference", getDesignOfExperiment());
+  newCopulaInferenceAnalysis_ = createAction("CopulaInference", getDesignOfExperiment());
+  newMetaModel_ = createAction("Metamodel", getDesignOfExperiment());
 
   // remove data model
   removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -73,10 +77,18 @@ void DataModelDiagramItem::update(Observable* source, const String& message)
     emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1 && validDOE);
     emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize() && validDOE);
   }
-  else if (message == "designOfExperimentRemoved")
+  else if (message == "analysisLaunched")
+  {
+    analysisInProgress_ = true;
+  }
+  else if (message == "analysisFinished" || message == "analysisBadlyFinished")
+  {
+    analysisInProgress_ = false;
+  }
+  else if (message == "objectRemoved")
   {
     if (hasChildren())
-      qDebug() << "DataModelDiagramItem::update(designOfExperimentRemoved) has not to contain child\n";
+      qDebug() << "DataModelDiagramItem::update(objectRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
 }
@@ -105,44 +117,22 @@ void DataModelDiagramItem::appendDataModelItem()
   }
 
   // new item
-  DataModelDefinitionItem * dmItem = new DataModelDefinitionItem(getDesignOfExperiment());
-
-  // connections
-  connect(this, SIGNAL(dataAnalysisRequested()), dmItem, SLOT(createDataAnalysis()));
-  connect(this, SIGNAL(inferenceRequested()), dmItem, SLOT(createInferenceAnalysis()));
-  connect(this, SIGNAL(copulaInferenceRequested()), dmItem, SLOT(createCopulaInferenceAnalysis()));
-  connect(this, SIGNAL(metaModelRequested()), dmItem, SLOT(createMetaModel()));
-
-  // append item
+  DataModelDefinitionItem * dmItem = new DataModelDefinitionItem(getDesignOfExperiment(), this);
   appendRow(dmItem);
 
   // emit signal to the StudyTreeView to create a window
-  emit modelDefinitionWindowRequested(dmItem);
+  emit windowRequested(dmItem);
 
   // disable the definition action
   defineAction_->setDisabled(true);
 }
 
 
-void DataModelDiagramItem::appendItem(Analysis& analysis)
+void DataModelDiagramItem::appendItem(const Analysis& analysis)
 {
-  // new item
-  AnalysisItem * newItem = new AnalysisItem(analysis);
-
-  // connections
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-  // - signal for the PhysicalModelDiagramItem
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SIGNAL(analysisInProgressStatusChanged(bool)));
-  if (getParentStudyItem())
-  {
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
-  }
-
-  // append item
-  appendRow(newItem);
-
-  // emit signal to StudyTreeView to create a window
-  emit analysisItemCreated(newItem);
+  appendAnalysisItem(analysis);
+  analysis.getImplementation().get()->addObserver(this);
+  analysis.getImplementation().get()->addObserver(getParentStudyItem());
 }
 
 

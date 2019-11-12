@@ -77,6 +77,12 @@ void Analysis::addObserver(Observer * observer)
 }
 
 
+Observer * Analysis::getParentObserver() const
+{
+  return getImplementation()->getParentObserver();
+}
+
+
 bool Analysis::isReliabilityAnalysis() const
 {
   return getImplementation()->isReliabilityAnalysis();
@@ -128,6 +134,12 @@ void Analysis::run()
 bool Analysis::hasValidResult() const
 {
   return getImplementation()->hasValidResult();
+}
+
+
+bool Analysis::canBeLaunched(String &errorMessage) const
+{
+  return getImplementation()->canBeLaunched(errorMessage);
 }
 
 

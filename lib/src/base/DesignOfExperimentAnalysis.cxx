@@ -56,9 +56,30 @@ DesignOfExperimentAnalysis* DesignOfExperimentAnalysis::clone() const
 }
 
 
+Observer * DesignOfExperimentAnalysis::getParentObserver() const
+{
+  if (Observer * obs = designOfExperiment_.getImplementation()->getObserver("DataModelDiagramItem"))
+    return obs;
+  return designOfExperiment_.getImplementation()->getObserver("DesignOfExperimentDefinitionItem");
+}
+
+
 DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 {
   return designOfExperiment_;
+}
+
+
+bool DesignOfExperimentAnalysis::canBeLaunched(String &errorMessage) const
+{
+  // doe must be not empty
+  if (!getDesignOfExperiment().getSample().getSize())
+    errorMessage = "The sample must be not empty.";
+  // values must be valid
+  if (!getDesignOfExperiment().isValid())
+    errorMessage = "The sample contains invalid values.";
+
+  return errorMessage.empty();
 }
 
 

@@ -37,8 +37,11 @@ public:
   /** Virtual constructor */
   virtual PhysicalModelAnalysis * clone() const;
 
+  virtual Observer * getParentObserver() const;
+
   PhysicalModel getPhysicalModel() const;
 
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
   virtual void run();
 
   /** String converter */

@@ -184,6 +184,7 @@ OptimizationWizard::OptimizationWizard(const Analysis& analysis, QWidget* parent
 void OptimizationWizard::buildInterface()
 {
   setWindowTitle(tr("Optimization"));
+  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#optimizationwizard";
 
   // -- intro page
   introPage_ = new OptimizationIntroPage(this);

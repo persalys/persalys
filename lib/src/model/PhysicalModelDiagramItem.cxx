@@ -20,11 +20,14 @@
  */
 #include "persalys/PhysicalModelDiagramItem.hxx"
 
+#include "persalys/ModelEvaluation.hxx"
 #include "persalys/StudyItem.hxx"
-#include "persalys/MonteCarloReliabilityAnalysis.hxx"
-#include "persalys/FunctionalChaosAnalysis.hxx"
-#include "persalys/DesignOfExperimentEvaluation.hxx"
-#include "persalys/CalibrationAnalysis.hxx"
+#include "persalys/Observations.hxx"
+#include "persalys/MeshItem.hxx"
+#include "persalys/ProbabilisticModelItem.hxx"
+#include "persalys/LimitStateItem.hxx"
+#include "persalys/DesignOfExperimentDefinitionItem.hxx"
+#include "persalys/ObservationsItem.hxx"
 
 #include <QDebug>
 
@@ -34,10 +37,7 @@ namespace PERSALYS
 {
 
 PhysicalModelDiagramItem::PhysicalModelDiagramItem(const PhysicalModel & physicalModel)
-  : PhysicalModelItem(physicalModel, "PhysicalModelDiagram")
-  , defineAction_(0)
-  , duplicateAction_(0)
-  , removeAction_(0)
+  : PhysicalModelItem(physicalModel, "PhysicalModelDiagramItem")
   , limitStateCounter_(0)
   , observationsCounter_(0)
   , doeCounter_(Indices(2))
@@ -59,6 +59,33 @@ void PhysicalModelDiagramItem::buildActions()
   duplicateAction_ = new QAction(tr("Duplicate the model"), this);
   duplicateAction_->setStatusTip(tr("Duplicate the physical model"));
   connect(duplicateAction_, SIGNAL(triggered()), this, SLOT(duplicatePhysicalModel()));
+
+  // new probabilistic model action
+  newProbabilisticModel_ = new QAction(tr("Probabilistic model"), this);
+  newProbabilisticModel_->setStatusTip(tr("Create a new probabilistic model"));
+  connect(newProbabilisticModel_, SIGNAL(triggered()), this, SLOT(appendProbabilisticModelItem()));
+
+  // new analysis actions
+  newModelEvaluation_ = createAction("ModelEvaluation", getPhysicalModel());
+  newCentralTendency_ = createAction("CentralTendency", getPhysicalModel());
+
+  if (!physicalModel_.hasMesh())
+  {
+    newDesignOfExperiment_ = createAction("DesignOfExperiment", getPhysicalModel());
+    newScreening_ = createAction("Screening", getPhysicalModel());
+    newOptimization_ = createAction("Optimization", getPhysicalModel());
+    newSensitivityAnalysis_ = createAction("Sensitivity", getPhysicalModel());
+
+    // new limit state action
+    newLimitState_ = new QAction(QIcon(":/images/limitstate.png"), tr("Limit state"), this);
+    newLimitState_->setStatusTip(tr("Create a new limit state"));
+    connect(newLimitState_, SIGNAL(triggered()), this, SLOT(newLimitState()));
+
+    // new observations action
+    newObservations_ = new QAction(tr("Observations"), this);
+    newObservations_->setStatusTip(tr("Define observations of the model"));
+    connect(newObservations_, SIGNAL(triggered()), this, SLOT(newObservations()));
+  }
 
   // remove physical model action
   removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -85,104 +112,120 @@ void PhysicalModelDiagramItem::setData(const QVariant & value, int role)
 
 void PhysicalModelDiagramItem::update(Observable* source, const String & message)
 {
-  // emit signals to PhysicalModelDiagramWindow
-  // to update the diagram (arrow color and button availability)
-
-  if (message == "inputNumberChanged")
+  if (message == "outputNumberChanged" || message == "inputNumberChanged")
   {
     if (!hasChildren()) // if modification from Python console
     {
       fill();
       return;
     }
-    emit inputNumberValidityChanged(physicalModel_.getInputDimension());
-    emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
-    emit physicalModelValidityChanged(physicalModel_.isValid());
-    emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-    emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
-    emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
-    emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
-    emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-    emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
-  }
-  else if (message == "outputNumberChanged")
-  {
-    if (!hasChildren()) // if modification from Python console
-    {
-      fill();
-      return;
-    }
-    emit physicalModelValidityChanged(physicalModel_.isValid());
-    emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
-    emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-    emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
-    emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
-    emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
-    emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-    emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
+    updateDiagramBoxesValidity();
   }
   else if (message == "inputDistributionChanged")
   {
     appendProbabilisticModelItem(); // if modification from Python console
-    emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-    emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-    emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
+    updateDiagramBoxesValidity();
   }
   else if (message == "copulaChanged")
   {
-    emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
+    updateDiagramBoxesValidity();
   }
-  else if (message == "physicalModelRemoved")
+  else if (message == "analysisLaunched")
+  {
+    analysisInProgress_ = true;
+  }
+  else if (message == "analysisFinished" || message == "analysisBadlyFinished")
+  {
+    analysisInProgress_ = false;
+  }
+  else if (message == "objectRemoved")
   {
     if (hasChildren())
-      qDebug() << "PhysicalModelDiagramItem::update(physicalModelRemoved) has not to contain child\n";
+      qDebug() << "PhysicalModelDiagramItem::update(objectRemoved) has not to contain child\n";
     emit removeRequested(row());
   }
 }
 
 
-void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
+void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
 {
-  // check if there is at least a design of experiments
-  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
-  if (listIndexes.size() < 1)
+  // emit signals to PhysicalModelDiagramWindow
+  // to update diagram (arrow color and button availability)
+  emit inputNumberValidityChanged(physicalModel_.getInputDimension());
+  emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
+  emit physicalModelValidityChanged(physicalModel_.isValid());
+  emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
+  emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
+  emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
+  emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
+  emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+  emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
+}
+
+
+void PhysicalModelDiagramItem::newLimitState()
+{
+  // check
+  if (!physicalModel_.isValid() || !physicalModel_.hasStochasticInputs())
   {
-    emit showErrorMessageRequested(tr("There is no design of experiments."));
+    emit showErrorMessageRequested(tr("The physical model must have at least a stochastic input and at least one selected output."));
     return;
   }
+  // new limit state
+  LimitState newLimitState(getParentStudyItem()->getStudy().getAvailableLimitStateName(tr("limitState_").toStdString()), physicalModel_, physicalModel_.getSelectedOutputsNames()[0], OT::Less(), 0.);
+  getParentStudyItem()->getStudy().add(newLimitState);
+}
+
+
+void PhysicalModelDiagramItem::newObservations()
+{
+  // check
+  if (!physicalModel_.isValid() || physicalModel_.getInputDimension() < 2)
+  {
+    emit showErrorMessageRequested(tr("The physical model must have at least two inputs and at least one selected output."));
+    return;
+  }
+  // new observations
+  const String obsName(getParentStudyItem()->getStudy().getAvailableDataModelName(tr("observations_").toStdString()));
+  Observations obs(obsName, physicalModel_);
   // emit signal to StudyManager to open a wizard
-  emit designOfExperimentEvaluationRequested(physicalModel_);
+  emit wizardRequested(getParentStudyItem(), obs);
+}
+
+
+void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
+{
+  // find a DesignOfExperimentEvaluation
+  Study study(getParentStudyItem()->getStudy());
+  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
+  {
+    DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study.getAnalyses()[i].getImplementation().get());
+    ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study.getAnalyses()[i].getImplementation().get());
+    if (doeEval && !modelEval && doeEval->getPhysicalModel() == getPhysicalModel())
+    {
+      emit doeEvaluationWizardRequested(Analysis(doeEval), true);
+      return;
+    }
+  }
+  // emit error message
+  emit showErrorMessageRequested(tr("We have not found a design of experiments.\n"));
 }
 
 
 void PhysicalModelDiagramItem::requestMetaModelCreation()
 {
-  // check if there is at least a design of experiments
-  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "DesignsOfExperimentTitle", 1, Qt::MatchRecursive);
-  if (listIndexes.size() < 1)
+  // find a DesignOfExperimentEvaluation with results
+  Study study(getParentStudyItem()->getStudy());
+  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
   {
-    emit showErrorMessageRequested(tr("There is no design of experiments."));
-    return;
-  }
-  // find designs of experiments
-  QStandardItem * doeTitleItem = this->model()->itemFromIndex(listIndexes[0]);
-  for (int i = 0; i < doeTitleItem->rowCount(); ++i)
-  {
-    if (doeTitleItem->child(i)->data(Qt::UserRole).toString() == "DesignOfExperimentDefinitionItem")
+    DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study.getAnalyses()[i].getImplementation().get());
+    ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study.getAnalyses()[i].getImplementation().get());
+    if (doeEval && !modelEval && doeEval->getPhysicalModel() == getPhysicalModel() && doeEval->hasValidResult())
     {
-      DesignOfExperimentDefinitionItem * analysisItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(doeTitleItem->child(i));
-      if (analysisItem->getAnalysis().hasValidResult())
-      {
-        // new analysis
-        const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("metamodel_").toStdString()));
-        FunctionalChaosAnalysis analysis(analysisName, analysisItem->getAnalysis());
-        // emit signal to StudyManager to open a 'general' wizard (with a list of designs of experiments)
-        emit analysisRequested(this, analysis, true);
-        return;
-      }
+      newAnalysis("Metamodel", Analysis(doeEval), true);
+      return;
     }
   }
-
   // emit error message
   emit showErrorMessageRequested(tr("We have not found a design of experiments with an output sample.\n"));
 }
@@ -190,41 +233,27 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
 
 void PhysicalModelDiagramItem::requestReliabilityCreation()
 {
-  LimitState limitState;
   for (UnsignedInteger i = 0; i < getParentStudyItem()->getStudy().getLimitStates().getSize(); ++i)
   {
     if (getParentStudyItem()->getStudy().getLimitStates()[i].getPhysicalModel() == physicalModel_)
     {
-      limitState = getParentStudyItem()->getStudy().getLimitStates()[i];
-      break;
+      newAnalysis("ThresholdExceedance", getParentStudyItem()->getStudy().getLimitStates()[i], true);
+      return;
     }
   }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("reliability_").toStdString()));
-  MonteCarloReliabilityAnalysis analysis(analysisName, limitState);
-  // emit signal to StudyManager to open a 'general' wizard (with a list of limit states)
-  emit analysisRequested(this, analysis, true);
 }
 
 
 void PhysicalModelDiagramItem::requestCalibrationCreation()
 {
-  DesignOfExperiment doe;
   for (UnsignedInteger i = 0; i < getParentStudyItem()->getStudy().getDataModels().getSize(); ++i)
   {
     if (getParentStudyItem()->getStudy().getDataModels()[i].getPhysicalModel() == physicalModel_)
     {
-      doe = getParentStudyItem()->getStudy().getDataModels()[i];
-      break;
+      newAnalysis("Calibration", getParentStudyItem()->getStudy().getDataModels()[i], true);
+      return;
     }
   }
-
-  // new analysis
-  const String analysisName(getParentStudyItem()->getStudy().getAvailableAnalysisName(tr("calibration_").toStdString()));
-  CalibrationAnalysis analysis(analysisName, doe);
-  // emit signal to StudyManager to open a 'general' wizard (with a list of observations)
-  emit analysisRequested(this, analysis, true);
 }
 
 
@@ -261,7 +290,7 @@ void PhysicalModelDiagramItem::fill()
   {
     MeshItem * meshItem = new MeshItem(getPhysicalModel());
     appendRow(meshItem);
-    emit meshWindowRequested(meshItem);
+    emit windowRequested(meshItem);
   }
   // model definition item
   if (physicalModel_.getInputDimension() || physicalModel_.getOutputDimension())
@@ -269,24 +298,14 @@ void PhysicalModelDiagramItem::fill()
   // probabilistic model item
   if (physicalModel_.hasStochasticInputs())
     appendProbabilisticModelItem();
-
-  // update diagram (arrow color and button availability)
-  emit inputNumberValidityChanged(physicalModel_.getInputDimension());
-  emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
-  emit physicalModelValidityChanged(physicalModel_.isValid());
-  emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-  emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
-  emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
-  emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
-  emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-  emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
+  updateDiagramBoxesValidity();
 }
 
 
 void PhysicalModelDiagramItem::appendPhysicalModelItem()
 {
   // do nothing if the item already exists
-  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "PhysicalModelDefinition", 1, Qt::MatchRecursive);
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "PhysicalModelDefinitionItem", 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1 && listIndexes[0].parent() == this->index())
   {
     // emit signal to the study tree to display the window
@@ -295,24 +314,11 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
   }
 
   // new item
-  PhysicalModelDefinitionItem * pmItem = new PhysicalModelDefinitionItem(getPhysicalModel());
-
-  // connections
-  connect(pmItem, SIGNAL(probabilisticModelRequested(PhysicalModelItem*)), this, SLOT(appendProbabilisticModelItem()));
-  connect(this, SIGNAL(evaluationModelRequested()), pmItem, SLOT(createModelEvaluation()));
-#ifdef PERSALYS_HAVE_OTMORRIS
-  connect(this, SIGNAL(screeningRequested()), pmItem, SLOT(createScreening()));
-#endif
-  connect(this, SIGNAL(designOfExperimentRequested()), pmItem, SLOT(createDesignOfExperiment()));
-  connect(this, SIGNAL(probabilisticModelItemCreated(ProbabilisticModelItem*)), pmItem, SLOT(updateProbaActionAvailability()));
-  connect(this, SIGNAL(optimizationRequested()), pmItem, SLOT(createOptimization()));
-  connect(this, SIGNAL(observationsRequested()), pmItem, SLOT(createObservations()));
-
-  // append item
+  PhysicalModelDefinitionItem * pmItem = new PhysicalModelDefinitionItem(getPhysicalModel(), this);
   appendRow(pmItem);
 
   // emit signal to the StudyManager to create a window
-  emit modelDefinitionWindowRequested(pmItem);
+  emit windowRequested(pmItem);
 
   // disable the definition action
   defineAction_->setDisabled(true);
@@ -321,8 +327,14 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
 
 void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 {
+  // check
+  if (!physicalModel_.getInputDimension())
+  {
+    emit showErrorMessageRequested(tr("The physical model must have inputs."));
+    return;
+  }
   // do nothing if the item already exists
-  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModel", 1, Qt::MatchRecursive);
+  QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModelItem", 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1 && listIndexes[0].parent() == this->index())
   {
     // emit signal to the study tree to display the window
@@ -331,98 +343,50 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
   }
 
   // new item
-  ProbabilisticModelItem * probaItem = new ProbabilisticModelItem(getPhysicalModel());
+  ProbabilisticModelItem * probaItem = new ProbabilisticModelItem(getPhysicalModel(), this);
 
   // insert the item after the model definition item
-  listIndexes = model()->match(this->index(), Qt::UserRole, "PhysicalModelDefinition", 1, Qt::MatchRecursive);
+  listIndexes = model()->match(this->index(), Qt::UserRole, "PhysicalModelDefinitionItem", 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1 && listIndexes[0].parent() == this->index())
   {
     insertRow(listIndexes[0].row() + 1, probaItem);
 
-    // connections
-    connect(probaItem, SIGNAL(designOfExperimentRequested()), this, SIGNAL(designOfExperimentRequested()));
-    connect(this, SIGNAL(limitStateRequested()), probaItem, SLOT(createLimitState()));
-    connect(this, SIGNAL(centralTendencyRequested()), probaItem, SLOT(createCentralTendency()));
-    connect(this, SIGNAL(sensitivityRequested()), probaItem, SLOT(createSensitivityAnalysis()));
-
     // emit signal to the StudyManager to create a window
-    emit probabilisticModelItemCreated(probaItem);
+    emit windowRequested(probaItem);
+    // disable the new proba model action
+    newProbabilisticModel_->setDisabled(true);
     return;
   }
   qDebug() << "In PhysicalModelDiagramItem::appendProbabilisticModelItem: No item added for the proba model\n";
 }
 
 
-void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
+void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
 {
-  // if reliability analysis: limit state item takes care of adding an item for the analysis
-  ReliabilityAnalysis * analysis_ptr = dynamic_cast<ReliabilityAnalysis*>(analysis.getImplementation().get());
-  if (analysis_ptr)
-  {
-    LimitState limitState(analysis_ptr->getLimitState());
-    LimitStateItem * lsItem = dynamic_cast<LimitStateItem*>(limitState.getImplementation().get()->getObserver("LimitState"));
-    if (!lsItem)
-    {
-      qDebug() << "In PhysicalModelDiagramItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". Limit state item not found.\n";
-      return;
-    }
-    lsItem->appendItem(analysis);
-    return;
-  }
-  // if calibration analysis: observations item takes care of adding an item for the analysis
-  CalibrationAnalysis * analysis_ptr2 = dynamic_cast<CalibrationAnalysis*>(analysis.getImplementation().get());
-  if (analysis_ptr2)
-  {
-    DesignOfExperiment obs(analysis_ptr2->getObservations());
-    ObservationsItem * obsItem = dynamic_cast<ObservationsItem*>(obs.getImplementation().get()->getObserver("Observations"));
-    if (!obsItem)
-    {
-      qDebug() << "In PhysicalModelDiagramItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". Observations item not found.\n";
-      return;
-    }
-    obsItem->appendItem(analysis);
-    return;
-  }
-
-  /// append a sub-item (title) if it does not exist yet
-
-  // parent item of the new analysis item
-  Item * titleItem = 0;
-
   const QString analysisName = analysis.getImplementation()->getClassName().c_str();
 
-  // If a DesignOfExperimentEvaluation
+  // create new analysis item
 
   // if DesignOfExperimentEvaluation GridDesignOfExperiment ImportedDesignOfExperiment ProbabilisticDesignOfExperiment
   if (analysisName.contains("DesignOfExperiment"))
   {
-    // search DesignsOfExperiment title
-    // parent item of the new doe item
-    titleItem = getTitleItemNamed(tr("Designs of experiments"), "DesignsOfExperimentTitle");
-
-    // context menu actions
-    if (!titleItem->getActions().size())
-    {
-      QAction * newDesignOfExperiment = new QAction(QIcon(":/images/designOfExperiment.png"), tr("New design of experiments"), this);
-      newDesignOfExperiment->setStatusTip(tr("Create a new design of experiments"));
-      connect(newDesignOfExperiment, SIGNAL(triggered()), this, SIGNAL(designOfExperimentRequested()));
-      titleItem->appendAction(newDesignOfExperiment);
-    }
-    Q_ASSERT(titleItem);
-
-    // new analysis item
     DesignOfExperimentDefinitionItem * newItem = new DesignOfExperimentDefinitionItem(analysis);
 
     // connections
     connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)), this, SLOT(requestDesignOfExperimentRemoval(bool)));
     connect(newItem, SIGNAL(designEvaluationUpdated(bool)), this , SLOT(updateDesignEvaluationCounter(bool)));
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
 
     // append item
+    // search title, parent item of the new item
+    Item * titleItem = getTitleItemNamed(analysisName);
+    Q_ASSERT(titleItem != 0);
     titleItem->appendRow(newItem);
 
     // emit signal to StudyManager to create a window
-    emit doeAnalysisItemCreated(newItem);
+    emit windowRequested(newItem);
+
+    // add Evaluation item if needed : do it AFTER emit windowRequested
+    newItem->fill();
 
     // signal for diagram window : update diagram
     ++doeCounter_[0];
@@ -431,136 +395,28 @@ void PhysicalModelDiagramItem::appendItem(Analysis& analysis)
 
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
-
-    // add Evaluation item if needed
-    newItem->fill();
-
-    return;
   }
-
-  // If not a DesignOfExperimentEvaluation
-
-  // Evaluation title
-  if (analysisName.contains("ModelEvaluation"))
-  {
-    titleItem = getTitleItemNamed(tr("Evaluation"), "ModelEvaluationTitle");
-
-    if (!titleItem->getActions().size())
-    {
-      // context menu actions
-      QAction * newEvaluation = new QAction(QIcon(":/images/modelEvaluation.png"), tr("New evaluation"), this);
-      newEvaluation->setStatusTip(tr("Create a new model evaluation"));
-      connect(newEvaluation, SIGNAL(triggered()), this, SIGNAL(evaluationModelRequested()));
-      titleItem->appendAction(newEvaluation);
-    }
-  }
-  // Central tendency title
-  else if (analysisName.contains("MonteCarloAnalysis") ||
-           analysisName == "TaylorExpansionMomentsAnalysis")
-  {
-    titleItem = getTitleItemNamed(tr("Central tendency"), "CentralTendencyTitle");
-
-    if (!titleItem->getActions().size())
-    {
-      // context menu actions
-      QAction * newCentralTendency = new QAction(QIcon(":/images/centralTendency.png"), tr("New analysis"), this);
-      newCentralTendency->setStatusTip(tr("Create a new central tendency"));
-      connect(newCentralTendency, SIGNAL(triggered()), this, SIGNAL(centralTendencyRequested()));
-      titleItem->appendAction(newCentralTendency);
-    }
-  }
-  // Sensitivity title
-  else if (analysisName == "SobolAnalysis" ||
-           analysisName == "SRCAnalysis")
-  {
-    titleItem = getTitleItemNamed(tr("Sensitivity"), "SensitivityTitle");
-
-    if (!titleItem->getActions().size())
-    {
-      // context menu actions
-      QAction * newSensitivityAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New analysis"), this);
-      newSensitivityAnalysis->setStatusTip(tr("Create a new sensitivity analysis"));
-      connect(newSensitivityAnalysis, SIGNAL(triggered()), this, SIGNAL(sensitivityRequested()));
-      titleItem->appendAction(newSensitivityAnalysis);
-    }
-  }
-  // Screening title
-  else if (analysisName == "MorrisAnalysis")
-  {
-    titleItem = getTitleItemNamed(tr("Screening"), "ScreeningTitle");
-
-    if (!titleItem->getActions().size())
-    {
-      // context menu actions
-      QAction * newScreeningAnalysis = new QAction(QIcon(":/images/sensitivity.png"), tr("New analysis"), this);
-      newScreeningAnalysis->setStatusTip(tr("Create a new screening analysis"));
-      connect(newScreeningAnalysis, SIGNAL(triggered()), this, SIGNAL(screeningRequested()));
-      titleItem->appendAction(newScreeningAnalysis);
-    }
-  }
-  // Optimization title
-  else if (analysisName == "OptimizationAnalysis")
-  {
-    titleItem = getTitleItemNamed(tr("Optimization"), "OptimizationTitle");
-
-    if (!titleItem->getActions().size())
-    {
-      // context menu actions
-      QAction * newOptimizationAnalysis = new QAction(QIcon(":/images/optimize.png"), tr("New analysis"), this);
-      newOptimizationAnalysis->setStatusTip(tr("Create a new optimization analysis"));
-      connect(newOptimizationAnalysis, SIGNAL(triggered()), this, SIGNAL(optimizationRequested()));
-      titleItem->appendAction(newOptimizationAnalysis);
-    }
-  }
-  ///
-  if (!titleItem)
-  {
-    qDebug() << "In PhysicalModelDiagramItem::appendAnalysisItem: No item added for the analysis named " << analysis.getName().data() << ".\n";
-    return;
-  }
-
-  // new analysis item
-  AnalysisItem * newItem = new AnalysisItem(analysis);
-
-  // connections
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
-  if (getParentStudyItem())
-    connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), getParentStudyItem(), SLOT(setAnalysisInProgress(bool)));
-
-  // append item
-  titleItem->appendRow(newItem);
-
-  // emit signal to StudyManager to create a window
-  emit analysisItemCreated(newItem);
+  else
+    appendAnalysisItem(analysis);
+  analysis.getImplementation().get()->addObserver(this);
+  analysis.getImplementation().get()->addObserver(getParentStudyItem());
 }
 
 
 void PhysicalModelDiagramItem::appendItem(const LimitState& limitState)
 {
-  // parent item of the new limit state item
-  Item * titleItem = getTitleItemNamed(tr("Reliability"), "ReliabilityTitle");
-
-  if (!titleItem->getActions().size())
-  {
-    // context menu actions
-    QAction * newLimitState = new QAction(QIcon(":/images/limitstate.png"), tr("New limit state"), this);
-    newLimitState->setStatusTip(tr("Create a new limit state"));
-    connect(newLimitState, SIGNAL(triggered()), this, SIGNAL(limitStateRequested()));
-    titleItem->appendAction(newLimitState);
-  }
-
   // new limit state item
   LimitStateItem * newItem = new LimitStateItem(limitState);
 
   // connections
   connect(newItem, SIGNAL(removeRequested(int)), this, SLOT(requestLimitStateRemoval()));
-  connect(newItem, SIGNAL(analysisInProgressStatusChanged(bool)), this, SLOT(setAnalysisInProgress(bool)));
 
   // append item
+  Item * titleItem = getTitleItemNamed("Reliability");
   titleItem->appendRow(newItem);
 
   // emit signal to StudyManager to create a window
-  emit limitStateCreated(newItem);
+  emit windowRequested(newItem);
 
   // signal for diagram window : update diagram
   ++limitStateCounter_;
@@ -570,24 +426,16 @@ void PhysicalModelDiagramItem::appendItem(const LimitState& limitState)
 
 void PhysicalModelDiagramItem::appendItem(const DesignOfExperiment &designOfExp)
 {
-  Item * titleItem = getTitleItemNamed(tr("Calibration"), "CalibrationTitle");
-  if (!titleItem->getActions().size())
-  {
-    // context menu actions
-    QAction * newObservations = new QAction(/*QIcon(":/images/optimize.png"),*/ tr("New observations"), this);
-    newObservations->setStatusTip(tr("Add new observations"));
-    connect(newObservations, SIGNAL(triggered()), this, SIGNAL(observationsRequested()));
-    titleItem->appendAction(newObservations);
-  }
   ObservationsItem * newItem = new ObservationsItem(designOfExp);
 
   // connections
   connect(newItem, SIGNAL(removeRequested(int)), this, SLOT(requestObservationsRemoval()));
 
+  Item * titleItem = getTitleItemNamed("Calibration");
   titleItem->appendRow(newItem);
 
   // emit signal to StudyManager to create a window
-  emit observationsCreated(newItem);
+  emit windowRequested(newItem);
 
   // signal for diagram window : update diagram
   ++observationsCounter_;

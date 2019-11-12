@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-MetaModelWindow::MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+MetaModelWindow::MetaModelWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
 {

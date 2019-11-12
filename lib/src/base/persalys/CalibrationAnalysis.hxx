@@ -43,6 +43,8 @@ public:
   /** Virtual constructor */
   virtual CalibrationAnalysis * clone() const;
 
+  virtual Observer * getParentObserver() const;
+
   DesignOfExperiment getObservations() const {return observations_;};
 
   CalibrationAnalysisResult getResult() const {return result_;};
@@ -77,6 +79,7 @@ public:
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
 
   /** String converter */
   virtual OT::String __repr__() const;

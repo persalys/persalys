@@ -88,6 +88,7 @@ void InferenceWizard::initialize()
 void InferenceWizard::buildInterface()
 {
   setWindowTitle(tr("Inference"));
+  docLink_ = "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#marginalsinferencewizard";
 
   QWizardPage * page = new QWizardPage(this);
   QVBoxLayout * pageLayout = new QVBoxLayout(page);

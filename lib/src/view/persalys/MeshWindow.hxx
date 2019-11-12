@@ -22,7 +22,7 @@
 #define PERSALYS_MESHWINDOW_HXX
 
 #include "persalys/SubWindow.hxx"
-#include "persalys/MeshItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 #include "persalys/PlotWidget.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
 #include "persalys/ExportableTableView.hxx"
@@ -40,7 +40,7 @@ class PERSALYS_API MeshWindow : public SubWindow
   Q_OBJECT
 
 public:
-  MeshWindow(MeshItem * item, QWidget * parent = 0);
+  MeshWindow(PhysicalModelItem * item, QWidget * parent = 0);
 
   void buildInterface();
 #ifdef PERSALYS_HAVE_PARAVIEW
@@ -58,7 +58,7 @@ public slots:
   void editMesh();
 
 private:
-  MeshItem * meshItem_;
+  PhysicalModelItem * meshItem_;
   QLabel * isRegularLabel_;
   CopyableTableView * tableView_;
   CustomStandardItemModel * tableModel_;

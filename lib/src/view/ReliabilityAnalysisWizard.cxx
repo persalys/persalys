@@ -65,6 +65,7 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, c
 void ReliabilityAnalysisWizard::buildInterface()
 {
   setWindowTitle(tr("Threshold exceedance"));
+  docLink_ = "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#thresholdexceedancewizard";
 
   // First Page: choose the limit state and the method of reliability analysis
   introPage_ = new ReliabilityIntroPage(this);

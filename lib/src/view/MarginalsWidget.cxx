@@ -52,7 +52,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-MarginalsWidget::MarginalsWidget(ProbabilisticModelItem * item, QWidget * parent)
+MarginalsWidget::MarginalsWidget(PhysicalModelItem * item, QWidget * parent)
   : QWidget(parent)
   , failSoftMode_(false)
   , study_(item->getParentStudyItem()->getStudy())
@@ -541,7 +541,7 @@ void MarginalsWidget::distributionParametersChanged()
       TruncatedDistribution newTruncatedDistribution(distribution, distInterval);
 
       // update input distribution
-      physicalModel_.blockNotification("ProbabilisticModel");
+      physicalModel_.blockNotification("ProbabilisticModelItem");
       physicalModel_.setDistribution(input.getName(), newTruncatedDistribution);
       physicalModel_.blockNotification();
       updatePlots();
@@ -571,7 +571,7 @@ void MarginalsWidget::distributionParametersChanged()
         return;
 
       DistributionDictionary::UpdateDistribution(inputDist, parameters, parametersType);
-      physicalModel_.blockNotification("ProbabilisticModel");
+      physicalModel_.blockNotification("ProbabilisticModelItem");
       physicalModel_.setDistribution(input.getName(), inputDist);
       physicalModel_.blockNotification();
       updatePlots();
@@ -606,7 +606,7 @@ void MarginalsWidget::truncationParametersChanged()
 
   try
   {
-    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.blockNotification("ProbabilisticModelItem");
     // TruncatedNormal
     if (inputDist.getImplementation()->getClassName() == "TruncatedNormal")
     {
@@ -744,7 +744,7 @@ void MarginalsWidget::truncationParametersStateChanged()
       inputDist = TruncatedDistribution(newDist, truncatureInterval);
     }
 
-    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.blockNotification("ProbabilisticModelItem");
     physicalModel_.setDistribution(input.getName(), inputDist);
 
     // update plots
@@ -785,7 +785,7 @@ void MarginalsWidget::openWizardToChooseInferenceResult(const QModelIndex& input
   {
     // update the input
     const Input input(physicalModel_.getInputs()[inputIndex.row()]);
-    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.blockNotification("ProbabilisticModelItem");
     physicalModel_.setDistribution(input.getName(), wizard.getDistribution());
     physicalModel_.setDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification();
@@ -821,7 +821,7 @@ void MarginalsWidget::openWizardToChooseScreeningResult()
     // update the inputs
     const Indices selectedInputs(wizard.getInputsSelection());
     Q_ASSERT(selectedInputs.getSize() == physicalModel_.getInputDimension());
-    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.blockNotification("ProbabilisticModelItem");
     for (UnsignedInteger i = 0; i < physicalModel_.getInputDimension(); ++i)
     {
       const Input input(physicalModel_.getInputs()[i]);

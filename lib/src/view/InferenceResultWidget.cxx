@@ -484,8 +484,8 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     if (i < F_nxOT.getSize() - 1)
     {
       Point interPt(2);
-      interPt[0] = F_nxOT[i][0];
-      interPt[1] = F_nxOT[i+1][1];
+      interPt[0] = F_nxOT(i+1, 0);
+      interPt[1] = F_nxOT(i, 1);
       F_nx.add(interPt);
     }
   }
@@ -496,16 +496,16 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   Sample KSStatistic(2, 2);
   for (UnsignedInteger i = 0; i < F_nx.getSize(); ++i)
   {
-    if (std::abs(F_nx[i][1] - Fx[i][0]) > std::abs(KSStatistic[0][1] - KSStatistic[1][1]))
+    if (std::abs(F_nx(i, 1) - Fx(i, 0)) > std::abs(KSStatistic(0, 1) - KSStatistic(1, 1)))
     {
-      KSStatistic[0][1] = F_nx[i][1];
-      KSStatistic[1][1] = Fx[i][0];
-      KSStatistic[0][0] = F_nx[i][0];
-      KSStatistic[1][0] = F_nx[i][0];
+      KSStatistic(0, 1) = F_nx(i, 1);
+      KSStatistic(1, 1) = Fx(i, 0);
+      KSStatistic(0, 0) = F_nx(i, 0);
+      KSStatistic(1, 0) = F_nx(i, 0);
     }
   }
   cdfPlot_->plotCurve(KSStatistic, QPen(Qt::red, 2));
-  cdfPlot_->setTitle(tr("CDF") + ": " + distName + " " + tr("(Kolmogorov–Smirnov statistic=%1)").arg(std::abs(KSStatistic[0][1] - KSStatistic[1][1])));
+  cdfPlot_->setTitle(tr("CDF") + ": " + distName + " " + tr("(Kolmogorov–Smirnov statistic=%1)").arg(std::abs(KSStatistic(0, 1) - KSStatistic(1, 1))));
 
   // -- qq plot
   Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));

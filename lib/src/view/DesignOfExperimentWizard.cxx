@@ -37,6 +37,7 @@ DesignOfExperimentWizard::DesignOfExperimentWizard(const Analysis & designOfExpe
 void DesignOfExperimentWizard::buildInterface()
 {
   setWindowTitle(tr("Design of experiments"));
+  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#doeinputwizard";
 
   introPage_ = new DesignOfExperimentIntroPage(this);
   introPage_->initialize(analysis_);

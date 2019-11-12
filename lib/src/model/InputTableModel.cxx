@@ -102,7 +102,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
           return true;
         if (value.toString().isEmpty())
           return false;
-        physicalModel_.blockNotification("PhysicalModelDefinition");
+        physicalModel_.blockNotification("PhysicalModelDefinitionItem");
         emit errorMessageChanged("");
         try
         {
@@ -119,7 +119,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
       {
         if (input.getDescription() == value.toString().toUtf8().constData())
           return true;
-        physicalModel_.blockNotification("PhysicalModelDefinition");
+        physicalModel_.blockNotification("PhysicalModelDefinitionItem");
         emit errorMessageChanged("");
         physicalModel_.setInputDescription(input.getName(), value.toString().toUtf8().constData());
         break;
@@ -161,7 +161,7 @@ void InputTableModel::addLine()
   int i = 0;
   while (physicalModel_.hasInputNamed('X' + (OSS() << i).str()))
     ++i;
-  physicalModel_.blockNotification("PhysicalModelDefinition");
+  physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.addInput(Input('X' + (OSS() << i).str()));
   emit inputNumberChanged();
   physicalModel_.blockNotification();
@@ -175,7 +175,7 @@ void InputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification("PhysicalModelDefinition");
+  physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.removeInput(physicalModel_.getInputs()[index.row()].getName());
   emit inputNumberChanged();
   physicalModel_.blockNotification();

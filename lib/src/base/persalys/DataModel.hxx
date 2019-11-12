@@ -54,6 +54,8 @@ public:
   /** Virtual constructor */
   virtual DataModel * clone() const;
 
+  virtual void removeAllObservers();
+
   virtual OT::Description getInputNames();
   virtual OT::Description getOutputNames();
   virtual void setColumns(const OT::Indices &inputColumns,

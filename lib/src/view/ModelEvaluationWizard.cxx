@@ -49,10 +49,11 @@ void ModelEvaluationWizard::buildInterface()
   setWindowTitle(tr("Model evaluation"));
 
   // get data
-  ModelEvaluation analysis = *dynamic_cast<ModelEvaluation*>(analysis_.getImplementation()->clone());
+  ModelEvaluation analysis(*dynamic_cast<ModelEvaluation*>(analysis_.getImplementation().get()));
   analysis.updateParameters();
 
   const PhysicalModel model(analysis.getPhysicalModel());
+  docLink_ = model.hasMesh() ? "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmodelevalwizard" : "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#vectmodelevalwizard";
 
   // build page
   QWizardPage * page = new QWizardPage(this);

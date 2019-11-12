@@ -47,10 +47,6 @@ GridDesignOfExperiment::GridDesignOfExperiment(const String &name, const Physica
   , inputNames_()
   , values_()
 {
-  const UnsignedInteger nbInputs = physicalModel.getInputDimension();
-  if (!nbInputs)
-    throw InvalidArgumentException(HERE) << "The physical model does not have input variables";
-
   initializeParameters();
 }
 

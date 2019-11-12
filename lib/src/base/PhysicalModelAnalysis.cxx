@@ -49,9 +49,27 @@ PhysicalModelAnalysis* PhysicalModelAnalysis::clone() const
 }
 
 
+Observer * PhysicalModelAnalysis::getParentObserver() const
+{
+  return physicalModel_.getImplementation()->getObserver("PhysicalModelDiagramItem");
+}
+
+
 PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 {
   return physicalModel_;
+}
+
+
+bool PhysicalModelAnalysis::canBeLaunched(String &errorMessage) const
+{
+  // pm must have in/outputs
+  if (!getPhysicalModel().isValid())
+    errorMessage = "The physical model must have inputs and at least a selected output.";
+  // if probabilistic analysis : must have stochastic inputs
+  if (!isDeterministicAnalysis_ && !getPhysicalModel().hasStochasticInputs())
+    errorMessage = "The physical model must have stochastic inputs.";
+  return errorMessage.empty();
 }
 
 

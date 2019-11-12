@@ -30,6 +30,8 @@
 #include "persalys/SymbolicFieldModel.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
 #include "persalys/PythonFieldModel.hxx"
+#include "persalys/ReliabilityAnalysis.hxx"
+#include "persalys/CalibrationAnalysis.hxx"
 
 #ifdef PERSALYS_HAVE_OTFMI
 #include "persalys/FMIPhysicalModel.hxx"
@@ -46,7 +48,7 @@ namespace PERSALYS
 
 StudyItem::StudyItem(const Study& study)
   : Item(QString::fromUtf8(study.getName().c_str()), "Study")
-  , Observer("Study")
+  , Observer("StudyItem")
   , study_(study)
 {
   parentStudyItem_ = this;
@@ -61,29 +63,28 @@ void StudyItem::buildActions()
 {
   // new model actions
   newSymbolicModel_ = new QAction(tr("Symbolic model"), this);
-  connect(newSymbolicModel_, SIGNAL(triggered()), this, SLOT(createSymbolicModel()));
+  connect(newSymbolicModel_, &QAction::triggered, [=](){ study_.add(new SymbolicPhysicalModel(getModelName(tr("SymbolicModel_")))); });
 
   newPythonModel_ = new QAction(tr("Python model"), this);
-  connect(newPythonModel_, SIGNAL(triggered()), this, SLOT(createPythonModel()));
+  connect(newPythonModel_, &QAction::triggered, [=](){ study_.add(new PythonPhysicalModel(getModelName(tr("PythonModel_")))); });
 
 #ifdef PERSALYS_HAVE_YACS
   newYACSModel_ = new QAction(tr("YACS model"), this);
-  connect(newYACSModel_, SIGNAL(triggered()), this, SLOT(createYACSModel()));
+  connect(newYACSModel_, &QAction::triggered, [=](){ study_.add(new YACSPhysicalModel(getModelName(tr("YACSModel_")))); });
 #endif
 #ifdef PERSALYS_HAVE_OTFMI
   newFMIModel_ = new QAction(tr("FMI model"), this);
-  connect(newFMIModel_, SIGNAL(triggered()), this, SLOT(createFMIModel()));
+  connect(newFMIModel_, &QAction::triggered, [=](){ study_.add(new FMIPhysicalModel(getModelName(tr("FMIModel_")))); });
 #endif
   // new model actions
   newSymbolicFieldModel_ = new QAction(tr("Symbolic Field model"), this);
-  connect(newSymbolicFieldModel_, SIGNAL(triggered()), this, SLOT(createSymbolicFieldModel()));
+  connect(newSymbolicFieldModel_, &QAction::triggered, [=](){ study_.add(new SymbolicFieldModel(getModelName(tr("SymbolicModel_")))); });
 
   newPythonFieldModel_ = new QAction(tr("Python Field model"), this);
-  connect(newPythonFieldModel_, SIGNAL(triggered()), this, SLOT(createPythonFieldModel()));
-
+  connect(newPythonFieldModel_, &QAction::triggered, [=](){ study_.add(new PythonFieldModel(getModelName(tr("PythonModel_")))); });
 
   newDataModel_ = new QAction(tr("Data model"), this);
-  connect(newDataModel_, SIGNAL(triggered()), this, SLOT(createDataModel()));
+  connect(newDataModel_, &QAction::triggered, [=](){ study_.add(new DataModel(study_.getAvailableDataModelName(tr("DataModel_").toStdString()))); });
 
   // export action
   exportAction_ = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
@@ -122,31 +123,21 @@ void StudyItem::buildActions()
 }
 
 
+String StudyItem::getModelName(const QString &baseName) const
+{
+  return study_.getAvailablePhysicalModelName(baseName.toStdString());
+}
+
+
 void StudyItem::update(Observable * source, const String & message)
 {
-  if (message == "addDataModel")
+  if (message == "analysisLaunched")
   {
-    DesignOfExperiment addedDataModel = study_.getDataModels()[study_.getDataModels().getSize() - 1];
-    appendItem(addedDataModel);
+    analysisInProgress_ = true;
   }
-  else if (message == "addPhysicalModel")
+  else if (message == "analysisFinished" || message == "analysisBadlyFinished")
   {
-    PhysicalModel addedPhysicalModel = study_.getPhysicalModels()[study_.getPhysicalModels().getSize() - 1];
-    appendItem(addedPhysicalModel);
-  }
-  else if (message == "addLimitState")
-  {
-    LimitState addedLimitState = study_.getLimitStates()[study_.getLimitStates().getSize() - 1];
-    appendItem(addedLimitState);
-  }
-  else if (message == "addAnalysis")
-  {
-    Analysis addedAnalysis = study_.getAnalyses()[study_.getAnalyses().getSize() - 1];
-    appendItem(addedAnalysis);
-  }
-  else if (message == "studyRemoved")
-  {
-    requestRemove();
+    analysisInProgress_ = false;
   }
   else if (message == "statusChanged")
   {
@@ -155,9 +146,9 @@ void StudyItem::update(Observable * source, const String & message)
     // (some notifications are emitted when the analyses are running)
     emit statusChanged();
   }
-  else
+  else if (message == "objectRemoved")
   {
-    qDebug() << "In StudyItem::update: not recognized message: " << message.data() << "\n";
+    requestRemove();
   }
 }
 
@@ -165,59 +156,6 @@ void StudyItem::update(Observable * source, const String & message)
 void StudyItem::updateIcon()
 {
   emitDataChanged();
-}
-
-
-void StudyItem::createSymbolicModel()
-{
-  SymbolicPhysicalModel * newModel = new SymbolicPhysicalModel(study_.getAvailablePhysicalModelName(tr("SymbolicModel_").toStdString()));
-  study_.add(newModel);
-}
-
-
-void StudyItem::createSymbolicFieldModel()
-{
-  SymbolicFieldModel * newModel = new SymbolicFieldModel(study_.getAvailablePhysicalModelName(tr("SymbolicModel_").toStdString()));
-  study_.add(newModel);
-}
-
-
-void StudyItem::createPythonModel()
-{
-  PythonPhysicalModel * newModel = new PythonPhysicalModel(study_.getAvailablePhysicalModelName(tr("PythonModel_").toStdString()));
-  study_.add(newModel);
-}
-
-
-void StudyItem::createPythonFieldModel()
-{
-  PythonFieldModel * newModel = new PythonFieldModel(study_.getAvailablePhysicalModelName(tr("PythonModel_").toStdString()));
-  study_.add(newModel);
-}
-
-
-#ifdef PERSALYS_HAVE_YACS
-void StudyItem::createYACSModel()
-{
-  YACSPhysicalModel * newModel = new YACSPhysicalModel(study_.getAvailablePhysicalModelName(tr("YACSModel_").toStdString()));
-  study_.add(newModel);
-}
-#endif
-
-
-#ifdef PERSALYS_HAVE_OTFMI
-void StudyItem::createFMIModel()
-{
-  FMIPhysicalModel newModel(study_.getAvailablePhysicalModelName(tr("FMIModel_").toStdString()));
-  study_.add(newModel);
-}
-#endif
-
-
-void StudyItem::createDataModel()
-{
-  DesignOfExperiment newDataModel(DataModel(study_.getAvailableDataModelName(tr("DataModel_").toStdString())));
-  study_.add(newDataModel);
 }
 
 
@@ -309,82 +247,53 @@ void StudyItem::emitClose()
 }
 
 
-void StudyItem::appendItem(DesignOfExperiment & dataModel)
+void StudyItem::appendItem(const DesignOfExperiment &dataModel)
 {
   if (!dataModel.hasPhysicalModel())
   {
-    Item * item = getTitleItemNamed(tr("Data models"), "DataModelsTitle");
-
-    // context menu actions
-    if (!item->getActions().size())
-    {
-      item->appendAction(newDataModel_);
-    }
-
     // new Data model item
     DataModelDiagramItem * newItem = new DataModelDiagramItem(dataModel);
-    item->appendRow(newItem);
+    Item * titleItem = getTitleItemNamed("DataModel");
+    titleItem->appendRow(newItem);
 
     // signal for StudyTreeView to create the window
-    emit dataModelItemCreated(newItem);
+    emit windowRequested(newItem);
 
     // Add sub items
     newItem->fill();
   }
-  else // Observations
+  else if (Observer * observer = dataModel.getPhysicalModel().getImplementation()->getObserver("PhysicalModelDiagramItem"))
   {
-    // search PhysicalModelDiagram observer
-    if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(dataModel.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram")))
-    {
-      // append item for limitState
-      pmItem->appendItem(dataModel);
-    }
+    observer->appendItem(dataModel);
+  }
+  else
+  {
+    qDebug() << "In StudyItem::appendItem: No item added for the design of experiment\n";
   }
 }
 
 
-void StudyItem::appendItem(PhysicalModel & physicalModel)
+void StudyItem::appendItem(const PhysicalModel &physicalModel)
 {
-  const bool isMetaModelTitle = physicalModel.getImplementation()->getClassName() == "MetaModel";
-  const QString title = isMetaModelTitle ? tr("Metamodels") : tr("Physical models");
-  const QString titleType = isMetaModelTitle ? "MetaModelsTitle" : "PhysicalModelsTitle";
-  Item * item = getTitleItemNamed(title, titleType);
-
-  // context menu actions
-  if (!item->getActions().size() && !isMetaModelTitle)
-  {
-    item->appendAction(newSymbolicModel_);
-    item->appendAction(newPythonModel_);
-#ifdef PERSALYS_HAVE_YACS
-    item->appendAction(newYACSModel_);
-#endif
-#ifdef PERSALYS_HAVE_OTFMI
-    item->appendAction(newFMIModel_);
-#endif
-  }
-
   // new Physical model item
   PhysicalModelDiagramItem * newModelItem = new PhysicalModelDiagramItem(physicalModel);
-  item->appendRow(newModelItem);
+  Item * titleItem = getTitleItemNamed(physicalModel.getImplementation()->getClassName().c_str());
+  titleItem->appendRow(newModelItem);
 
   // signal for StudyTreeView to create the window
-  if (!physicalModel.hasMesh())
-    emit physicalModelItemCreated(newModelItem);
-  else
-    emit fieldModelItemCreated(newModelItem);
+  emit windowRequested(newModelItem);
 
   // Add sub items
   newModelItem->fill();
 }
 
 
-void StudyItem::appendItem(LimitState & limitState)
+void StudyItem::appendItem(const LimitState &limitState)
 {
   // search PhysicalModelDiagram observer
-  if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(limitState.getPhysicalModel().getImplementation().get()->getObserver("PhysicalModelDiagram")))
+  if (Observer * observer = limitState.getPhysicalModel().getImplementation()->getObserver("PhysicalModelDiagramItem"))
   {
-    // append item for limitState
-    pmItem->appendItem(limitState);
+    observer->appendItem(limitState);
   }
   else
   {
@@ -394,43 +303,12 @@ void StudyItem::appendItem(LimitState & limitState)
 }
 
 
-void StudyItem::appendItem(Analysis & analysis)
+void StudyItem::appendItem(const Analysis &analysis)
 {
-  if (PhysicalModelAnalysis * pmAnalysis = dynamic_cast<PhysicalModelAnalysis*>(analysis.getImplementation().get()))
-  {
-    PhysicalModel model(pmAnalysis->getPhysicalModel());
-    // search PhysicalModelDiagram observer
-    if (PhysicalModelDiagramItem * pmItem = dynamic_cast<PhysicalModelDiagramItem*>(model.getImplementation().get()->getObserver("PhysicalModelDiagram")))
-    {
-      // append item for analysis
-      pmItem->appendItem(analysis);
-    }
-    else
-    {
-      qDebug() << "In StudyItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". Physical model item not found.\n";
-    }
-  }
-  else if (DesignOfExperimentAnalysis * dmAnalysis = dynamic_cast<DesignOfExperimentAnalysis*>(analysis.getImplementation().get()))
-  {
-    DesignOfExperiment design(dmAnalysis->getDesignOfExperiment());
-    // search DesignOfExperiment observer
-    if (design.hasPhysicalModel())
-    {
-      DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(design.getImplementation().get()->getObserver("DesignOfExperimentDefinition"));
-      Q_ASSERT(doeItem);
-      // append item for analysis
-      doeItem->appendItem(analysis);
-    }
-    else
-    {
-      DataModelDiagramItem * doeItem = dynamic_cast<DataModelDiagramItem*>(design.getImplementation().get()->getObserver("DataModelDiagram"));
-      Q_ASSERT(doeItem);
-      // append item for analysis
-      doeItem->appendItem(analysis);
-    }
-  }
+  if (Observer * observer = analysis.getParentObserver())
+    observer->appendItem(analysis);
   else
-    qDebug() << "In StudyItem::appendItem: No item added for the analysis named " << analysis.getName().data() << "\n";
+    qDebug() << "In StudyItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". No found observer\n";
 }
 
 

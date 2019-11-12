@@ -82,6 +82,12 @@ CalibrationAnalysis* CalibrationAnalysis::clone() const
 }
 
 
+Observer * CalibrationAnalysis::getParentObserver() const
+{
+  return observations_.getImplementation()->getObserver("ObservationsItem");
+}
+
+
 Description CalibrationAnalysis::MethodNames_;
 
 Description CalibrationAnalysis::GetMethodNames()
@@ -578,6 +584,22 @@ String CalibrationAnalysis::getPythonScript() const
 bool CalibrationAnalysis::hasValidResult() const
 {
   return result_.outputAtPrior_.getSize() != 0;
+}
+
+
+bool CalibrationAnalysis::canBeLaunched(String &errorMessage) const
+{
+  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
+  if (!canBeLaunched)
+    return false;
+
+  if (!getObservations().getInputSample().getDimension() || !getObservations().getOutputSample().getDimension())
+    errorMessage = "Observations must be defined for at least an input and an output.";
+
+  if (getObservations().getInputSample().getDimension() >= getObservations().getPhysicalModel().getInputDimension())
+    errorMessage = "All the input variables can not be observed. At least an input variable must be calibrated.";
+
+  return errorMessage.empty();
 }
 
 

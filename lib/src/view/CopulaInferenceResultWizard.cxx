@@ -51,6 +51,7 @@ CopulaInferenceResultWizard::CopulaInferenceResultWizard(const Study &study, con
 void CopulaInferenceResultWizard::buildInterface()
 {
   setWindowTitle(tr("Inference analyses results"));
+  docLink_ = "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#dependenceinferenceresultwizard";
 
   QWizardPage * page = new QWizardPage(this);
   page->setTitle(tr("Define dependence between %1").arg(QtOT::DescriptionToStringList(variables_).join(", ")));

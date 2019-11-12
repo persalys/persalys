@@ -42,10 +42,11 @@ public:
   void removeObserver(Observer * observer);
   void removeObserver(const OT::String & observerType);
   void notify(const OT::String & message);
-  void notifyAndRemove(const OT::String & message, const OT::String & type);
+  void notifyAndRemove(const OT::String & type);
   void blockNotification(const OT::String & blockedObserverType = "");
   std::vector<Observer *> getObservers() const;
-  Observer * getObserver(const OT::String & type);
+  Observer * getObserver(const OT::String & type) const;
+  virtual void removeAllObservers() {};
 
 private:
   std::vector<Observer *> observers_;

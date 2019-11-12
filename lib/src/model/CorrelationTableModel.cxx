@@ -103,7 +103,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     emit errorMessageChanged("");
     try
     {
-      physicalModel_.blockNotification("ProbabilisticModel");
+      physicalModel_.blockNotification("ProbabilisticModelItem");
       const Description oldDescription = copula_.getDescription();
       copula_ = NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation));
       copula_.setDescription(oldDescription);
@@ -118,7 +118,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
       QString input2 = QString::fromUtf8(copula_.getDescription()[index.column()].c_str());
       emit errorMessageChanged(tr("The correlation between %1 and %2 cannot be equal to '%3'.\n %4").arg(input1).arg(input2).arg(value.toString()).arg(ex.what()));
     }
-    physicalModel_.blockNotification("");
+    physicalModel_.blockNotification();
   }
   return false;
 }

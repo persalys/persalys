@@ -21,15 +21,14 @@
 #ifndef PERSALYS_ITEM_HXX
 #define PERSALYS_ITEM_HXX
 
-#include "persalys/Analysis.hxx"
+#include "persalys/ItemFactory.hxx"
 
 #include <QStandardItem>
-#include <QAction>
 
 namespace PERSALYS
 {
-class StudyItem;
-class PERSALYS_API Item : public QObject, public QStandardItem
+class AnalysisItem;
+class PERSALYS_API Item : public ItemFactory, public QStandardItem
 {
   Q_OBJECT
 
@@ -42,7 +41,7 @@ public:
   void emitRemoveWindowRequested();
 
   QList< QAction* > getActions();
-  void appendAction(QAction* action);
+  void appendAction(QAction *action);
   void appendSeparator(const QString& text = "");
   void insertAction(int i, QAction* action);
 
@@ -51,26 +50,34 @@ public:
   virtual void insertRow(int row, Item * item);
   virtual void removeRow(int row);
 
-  StudyItem * getParentStudyItem();
   bool analysisInProgress() const;
 
 protected slots:
   void requestRemoveChild(int);
-  void setAnalysisInProgress(bool);
 signals:
   void showWindowRequested();
   void dataExportRequested();
-  void showErrorMessageRequested(QString);
-  void analysisRequested(Item*, const Analysis&, const bool isGeneralWizard = false);
+
   void removeRequested(int);
   void removeWindowRequested();
-  void analysisInProgressStatusChanged(bool);
+
+  // signals for StudyManager
+  void showErrorMessageRequested(QString);
+  void changeCurrentItemRequested(QModelIndex);
+  void windowRequested(AnalysisItem*, bool createConnections = true);
+  void windowRequested(Item*);
+
+  void exportRequested();
+  void saveRequested(StudyItem* item);
+  void saveAsRequested(StudyItem* item);
+  void closeRequested(StudyItem* item);
+
 
 protected:
-  Item * getTitleItemNamed(const QString& name, const QString& typeName);
+  Item * getTitleItemNamed(const QString &analysisName);
+  void appendAnalysisItem(const Analysis &analysis);
 
 protected:
-  StudyItem * parentStudyItem_;
   bool analysisInProgress_;
 
 private:

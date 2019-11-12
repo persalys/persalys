@@ -37,6 +37,8 @@ public:
   /** Virtual constructor */
   virtual ReliabilityAnalysis * clone() const = 0;
 
+  virtual Observer * getParentObserver() const;
+
   LimitState getLimitState() const;
 
   virtual void setInterestVariables(const OT::Description& outputsNames);

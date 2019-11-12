@@ -21,7 +21,7 @@
 #ifndef PERSALYS_DATAMODELWINDOW_HXX
 #define PERSALYS_DATAMODELWINDOW_HXX
 
-#include "persalys/DataModelDefinitionItem.hxx"
+#include "persalys/DesignOfExperimentItem.hxx"
 #include "persalys/DataModelTableModel.hxx"
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/SubWindow.hxx"
@@ -39,7 +39,7 @@ class PERSALYS_API DataModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DataModelDefinitionItem * item, QWidget * parent = 0);
+  DataModelWindow(DesignOfExperimentItem * item, QWidget * parent = 0);
 
   virtual ~DataModelWindow();
 

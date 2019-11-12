@@ -22,7 +22,7 @@
 #define PERSALYS_SYMBOLICPHYSICALMODELWINDOW_HXX
 
 #include "persalys/SubWindow.hxx"
-#include "persalys/PhysicalModelDefinitionItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 
 namespace PERSALYS
 {
@@ -32,7 +32,7 @@ class PERSALYS_API SymbolicPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
+  SymbolicPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
 };
 }
 #endif

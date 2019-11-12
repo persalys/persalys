@@ -55,6 +55,7 @@ public:
 
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
 
   /** String converter */
   virtual OT::String __repr__() const;

@@ -22,7 +22,7 @@
 #define PERSALYS_METAMODELWINDOW_HXX
 
 #include "persalys/SubWindow.hxx"
-#include "persalys/PhysicalModelDefinitionItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 
 namespace PERSALYS
 {
@@ -31,7 +31,7 @@ class PERSALYS_API MetaModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  MetaModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent = 0);
+  MetaModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
 
 private:
   PhysicalModel physicalModel_;

@@ -51,6 +51,8 @@ public:
 
   virtual void setName(const OT::String & name);
 
+  virtual void removeAllObservers();
+
   /** Comparison operators */
   OT::Bool operator ==(const PhysicalModelImplementation & other) const;
   OT::Bool operator !=(const PhysicalModelImplementation & other) const;

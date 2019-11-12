@@ -32,13 +32,12 @@ class PERSALYS_API ObservationsItem : public DesignOfExperimentItem
 
 public:
   ObservationsItem(const DesignOfExperiment& designOfExperiment);
+
   virtual void update(Observable * source, const OT::String & message);
-  void appendItem(Analysis& analysis);
+  virtual void appendItem(const Analysis &analysis);
+
 public slots:
-  void createCalibration();
   void removeObservations();
-signals:
-  void analysisItemCreated(AnalysisItem*);
 
 protected:
   void buildActions();

@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
 {
   // Widgets

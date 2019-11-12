@@ -65,8 +65,7 @@ void Observable::notify(const String & message)
 {
   // do not use for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
   // avoid problem if an observer is added in the list observers_ in the update function
-  const int nbObservers = observers_.size();
-  for (int i = 0; i < nbObservers; ++i)
+  for (int i = 0; i < (int)observers_.size(); ++i)
   {
     if (observers_[i]->getType() != blockedObserverType_)
     {
@@ -76,13 +75,13 @@ void Observable::notify(const String & message)
 }
 
 
-void Observable::notifyAndRemove(const String & message, const String & type)
+void Observable::notifyAndRemove(const String & type)
 {
   for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
   {
     if ((*it)->getType() == type)
     {
-      (*it)->update(this, message);
+      (*it)->update(this, "objectRemoved");
       observers_.erase(it);
       return;
     }
@@ -92,6 +91,21 @@ void Observable::notifyAndRemove(const String & message, const String & type)
 
 void Observable::blockNotification(const String& blockedObserverType)
 {
+  // check observer type
+  if (!blockedObserverType.empty())
+  {
+    bool found = false;
+    for (int i = 0; i < (int)observers_.size(); ++i)
+    {
+      if (observers_[i]->getType() == blockedObserverType)
+      {
+        found = true;
+        break;
+      }
+    }
+    if (!found)
+      throw InvalidArgumentException(HERE) << "In Observable::blockNotification : observer type unknown " << blockedObserverType;
+  }
   blockedObserverType_ = blockedObserverType;
 }
 
@@ -102,9 +116,9 @@ std::vector< Observer* > Observable::getObservers() const
 }
 
 
-Observer* Observable::getObserver(const String & type)
+Observer* Observable::getObserver(const String & type) const
 {
-  for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
+  for (std::vector<Observer*>::const_iterator it = observers_.begin(); it != observers_.end(); ++it)
   {
     if ((*it)->getType() == type)
       return (*it);

@@ -251,7 +251,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
       for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
         outNames.add(names_[outputColumns_[i]]);
 
-      dataModel_->blockNotification("DataModelDefinition");
+      dataModel_->blockNotification("DataModelDefinitionItem");
       dataModel_->setColumns(inputColumns_, inNames, outputColumns_, outNames);
       dataModel_->blockNotification();
 
@@ -332,7 +332,7 @@ bool DataModelTableModel::setData(const QModelIndex & index, const QVariant & va
   for (UnsignedInteger i = 0; i < outputColumns_.getSize(); ++i)
     outNames.add(names_[outputColumns_[i]]);
 
-  dataModel_->blockNotification("DataModelDefinition");
+  dataModel_->blockNotification("DataModelDefinitionItem");
   dataModel_->setColumns(inputColumns_, inNames, outputColumns_, outNames);
 
   // emit error if all variables are disabled

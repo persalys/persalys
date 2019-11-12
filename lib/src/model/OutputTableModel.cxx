@@ -123,7 +123,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
     Output output(physicalModel_.getOutputs()[index.row()]);
 
     // update the output
-    physicalModel_.blockNotification("PhysicalModelDefinition");
+    physicalModel_.blockNotification("PhysicalModelDefinitionItem");
     physicalModel_.selectOutput(output.getName(), value.toBool());
     physicalModel_.blockNotification();
     emit dataChanged(index, this->index(index.row(), 1));
@@ -144,7 +144,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
           return true;
         if (value.toString().isEmpty())
           return false;
-        physicalModel_.blockNotification("PhysicalModelDefinition");
+        physicalModel_.blockNotification("PhysicalModelDefinitionItem");
         emit errorMessageChanged("");
         try
         {
@@ -160,7 +160,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
       {
         if (output.getDescription() == value.toString().toUtf8().constData())
           return true;
-        physicalModel_.blockNotification("PhysicalModelDefinition");
+        physicalModel_.blockNotification("PhysicalModelDefinitionItem");
         emit errorMessageChanged("");
         physicalModel_.setOutputDescription(output.getName(), value.toString().toUtf8().constData());
         break;
@@ -176,7 +176,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
         else
           return false;
         // TODO test if value.toString() ok
-        physicalModel_.blockNotification("PhysicalModelDefinition");
+        physicalModel_.blockNotification("PhysicalModelDefinitionItem");
         emit errorMessageChanged("");
         model->setFormula(output.getName(), value.toString().toUtf8().constData());
         break;
@@ -219,7 +219,7 @@ void OutputTableModel::addLine()
   int i = 0;
   while (physicalModel_.hasOutputNamed('Y' + (OSS() << i).str()))
     ++i;
-  physicalModel_.blockNotification("PhysicalModelDefinition");
+  physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.addOutput(Output('Y' + (OSS() << i).str()));
   physicalModel_.blockNotification();
   //
@@ -236,7 +236,7 @@ void OutputTableModel::removeLine(const QModelIndex & index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification("PhysicalModelDefinition");
+  physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
   physicalModel_.blockNotification();
   endRemoveRows();

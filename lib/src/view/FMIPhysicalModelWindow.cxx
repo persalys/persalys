@@ -672,7 +672,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       if (description == descriptions_[index.row()]) return false;
       descriptions_[index.row()] = description;
       String varName(variableNames_[index.row()]);
-      physicalModel_.blockNotification("PhysicalModelDefinition");
+      physicalModel_.blockNotification("PhysicalModelDefinitionItem");
       if (physicalModel_.hasInputNamed(varName))
       {
         physicalModel_.setInputDescription(varName, description);
@@ -702,7 +702,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
 
       String varName(variableNames_[index.row()]);
 
-      physicalModel_.blockNotification("PhysicalModelDefinition");
+      physicalModel_.blockNotification("PhysicalModelDefinitionItem");
       dynamic_cast<FMIPhysicalModel*>(physicalModel_.getImplementation().get())->reassignVariables(getInputVariableNames(), getOutputVariableNames());
       if (physicalModel_.hasInputNamed(varName) && startKeys_.contains(varName))
       {
@@ -745,7 +745,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
     {
       const double dvalue = value.toDouble();
       String varName(variableNames_[index.row()]);
-      physicalModel_.blockNotification("PhysicalModelDefinition");
+      physicalModel_.blockNotification("PhysicalModelDefinitionItem");
       if (physicalModel_.hasInputNamed(varName))
         physicalModel_.getInputByName(varName).setValue(dvalue);
       else if (physicalModel_.hasOutputNamed(varName))

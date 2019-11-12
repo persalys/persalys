@@ -37,7 +37,7 @@ class PERSALYS_API DependenciesWidget : public QWidget
   Q_OBJECT
 
 public:
-  DependenciesWidget(ProbabilisticModelItem *item, QWidget *parent = 0);
+  DependenciesWidget(PhysicalModelItem *item, QWidget *parent = 0);
   DependenciesWidget(const PhysicalModel& model, QWidget *parent = 0);
 
 public slots:

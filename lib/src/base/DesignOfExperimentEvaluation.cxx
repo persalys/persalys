@@ -70,6 +70,14 @@ void DesignOfExperimentEvaluation::setName(const String& name)
 }
 
 
+void DesignOfExperimentEvaluation::removeAllObservers()
+{
+  notifyAndRemove("AnalysisItem");
+  notifyAndRemove("DesignOfExperimentDefinitionItem");
+  notifyAndRemove("Study");
+}
+
+
 void DesignOfExperimentEvaluation::setDesignOfExperiment(const DesignOfExperiment& designOfExperiment)
 {
   result_ = DataAnalysisResult(designOfExperiment);
@@ -213,6 +221,15 @@ Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 DataAnalysisResult DesignOfExperimentEvaluation::getResult() const
 {
   return result_;
+}
+
+
+bool DesignOfExperimentEvaluation::canBeLaunched(String &errorMessage) const
+{
+  // pm must have inputs
+  if (!getPhysicalModel().getInputDimension())
+    errorMessage = "The physical model must have inputs.";
+  return errorMessage.empty();
 }
 
 

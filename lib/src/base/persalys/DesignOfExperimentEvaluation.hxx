@@ -43,6 +43,8 @@ public:
   /** Object name accessor */
   virtual void setName(const OT::String& name);
 
+  virtual void removeAllObservers();
+
   virtual OT::Sample getOriginalInputSample() const;
 
   OT::Sample getNotEvaluatedInputSample() const;
@@ -52,6 +54,7 @@ public:
 
   virtual Parameters getParameters() const;
   virtual bool hasValidResult() const;
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

@@ -22,17 +22,17 @@
 #define PERSALYS_PHYSICALMODELDIAGRAMITEM_HXX
 
 #include "persalys/PhysicalModelDefinitionItem.hxx"
-#include "persalys/MeshItem.hxx"
-#include "persalys/ProbabilisticModelItem.hxx"
-#include "persalys/LimitStateItem.hxx"
-#include "persalys/DesignOfExperimentDefinitionItem.hxx"
-#include "persalys/ObservationsItem.hxx"
 
 namespace PERSALYS
 {
 class PERSALYS_API PhysicalModelDiagramItem : public PhysicalModelItem
 {
   Q_OBJECT
+
+  friend class PhysicalModelDefinitionItem;
+  friend class ProbabilisticModelItem;
+  friend class FieldModelDiagramWindow;
+  friend class PhysicalModelDiagramWindow;
 
 public:
   PhysicalModelDiagramItem(const PhysicalModel & physicalModel);
@@ -42,9 +42,10 @@ public:
   virtual void update(Observable * source, const OT::String & message);
 
   void fill();
-  void appendItem(Analysis& analysis);
-  void appendItem(const LimitState& limitState);
-  void appendItem(const DesignOfExperiment& designOfExp);
+  virtual void appendItem(const Analysis& analysis);
+  virtual void appendItem(const LimitState& limitState);
+  virtual void appendItem(const DesignOfExperiment& designOfExp);
+  void updateDiagramBoxesValidity();
 
 public slots:
   void appendPhysicalModelItem();
@@ -59,6 +60,8 @@ public slots:
   void updateDesignEvaluationCounter(bool);
   void duplicatePhysicalModel();
   void removePhysicalModel();
+  void newLimitState();
+  void newObservations();
 
 signals:
   // signal for diagram
@@ -73,35 +76,13 @@ signals:
   void doeEvaluationNumberValidityChanged(bool);
   void observationsNumberValidityChanged(bool);
 
-  // signals for StudyManager
-  void evaluationModelRequested();
-  void screeningRequested();
-  void optimizationRequested();
-  void probabilisticModelRequested();
-  void centralTendencyRequested();
-  void sensitivityRequested();
-  void limitStateRequested();
-  void designOfExperimentRequested();
-  void designOfExperimentEvaluationRequested(const PhysicalModel&);
-  void observationsRequested();
-
-  void modelDefinitionWindowRequested(PhysicalModelDefinitionItem*);
-  void meshWindowRequested(MeshItem*);
-  void probabilisticModelItemCreated(ProbabilisticModelItem*);
-  void doeAnalysisItemCreated(DesignOfExperimentDefinitionItem*);
-  void analysisItemCreated(AnalysisItem*);
-  void limitStateCreated(LimitStateItem*);
-  void observationsCreated(ObservationsItem*);
-
-  void changeCurrentItemRequested(QModelIndex);
-
 protected:
   void buildActions();
 
 private:
-  QAction * defineAction_;
-  QAction * duplicateAction_;
-  QAction * removeAction_;
+  QAction * defineAction_ = 0;
+  QAction * duplicateAction_ = 0;
+  QAction * removeAction_ = 0;
   int limitStateCounter_;
   int observationsCounter_;
   OT::Indices doeCounter_;

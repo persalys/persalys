@@ -40,6 +40,7 @@ SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis& analysis, Q
 void SensitivityAnalysisWizard::buildInterface()
 {
   setWindowTitle(tr("Sensitivity analysis"));
+  docLink_ = "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#sensitivitywizard";
 
   // First Page: choose the method
   introPage_ = new SensitivityIntroPage(this);

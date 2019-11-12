@@ -28,7 +28,7 @@ namespace PERSALYS
 {
 
 MeshItem::MeshItem(const PhysicalModel & physicalModel)
-  : PhysicalModelItem(physicalModel, "Mesh")
+  : PhysicalModelItem(physicalModel, "MeshItem")
 {
   setData(tr("Mesh"), Qt::DisplayRole);
   QFont font;
@@ -54,7 +54,7 @@ void MeshItem::update(Observable* source, const String & message)
   {
     emit meshChanged();
   }
-  else if (message == "physicalModelRemoved")
+  else if (message == "objectRemoved")
   {
     emit removeRequested(row());
   }

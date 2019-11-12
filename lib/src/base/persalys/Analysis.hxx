@@ -48,6 +48,7 @@ public:
   OT::Bool operator !=(const Analysis & other) const;
 
   void addObserver(Observer * observer);
+  Observer * getParentObserver() const;
 
   bool isReliabilityAnalysis() const;
 
@@ -63,6 +64,7 @@ public:
   Parameters getParameters() const;
   OT::String getPythonScript() const;
   bool hasValidResult() const;
+  bool canBeLaunched(OT::String &errorMessage) const;
 
   void stop();
 

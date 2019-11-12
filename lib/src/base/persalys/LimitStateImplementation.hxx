@@ -42,6 +42,8 @@ public:
   /** Virtual constructor */
   virtual LimitStateImplementation * clone() const;
 
+  virtual void removeAllObservers();
+
   /** Comparison operators */
   OT::Bool operator ==(const LimitStateImplementation & other) const;
   OT::Bool operator !=(const LimitStateImplementation & other) const;

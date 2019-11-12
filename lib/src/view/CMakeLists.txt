@@ -14,6 +14,7 @@ ot_add_source_file ( Actions.cxx )
 ot_add_source_file ( MenuBar.cxx )
 ot_add_source_file ( StatusBar.cxx )
 ot_add_source_file ( SubWindow.cxx )
+ot_add_source_file ( DiagramWindow.cxx )
 ot_add_source_file ( Wizard.cxx )
 ot_add_source_file ( SubWindowsStackedWidget.cxx )
 ot_add_source_file ( StudyManager.cxx )
@@ -128,6 +129,7 @@ ot_install_header_file ( MainWidget.hxx )
 ot_install_header_file ( Actions.hxx )
 ot_install_header_file ( ToolBar.hxx )
 ot_install_header_file ( MenuBar.hxx )
+ot_install_header_file ( DiagramWindow.hxx )
 ot_install_header_file ( StatusBar.hxx )
 ot_install_header_file ( Wizard.hxx )
 ot_install_header_file ( SubWindowsStackedWidget.hxx )
@@ -246,6 +248,7 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/MenuBar.hxx
                                   persalys/StatusBar.hxx
                                   persalys/SubWindow.hxx
+                                  persalys/DiagramWindow.hxx
                                   persalys/Wizard.hxx
                                   persalys/SubWindowsStackedWidget.hxx
                                   persalys/StudyManager.hxx

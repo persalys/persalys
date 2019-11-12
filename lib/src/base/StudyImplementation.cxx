@@ -79,6 +79,12 @@ void StudyImplementation::setName(const String & name)
 }
 
 
+void StudyImplementation::removeAllObservers()
+{
+  notifyAndRemove("StudyItem");
+}
+
+
 void StudyImplementation::update(Observable* source, const String& message)
 {
   if (message == "informationMessageUpdated" ||
@@ -125,50 +131,27 @@ void StudyImplementation::clear()
     // we do not want to remove the design of experiments for now
     // some analyses can be dependant of the design of experiments: we need to remove them before the design of experiments
     if (!doeEval)
-    {
-      analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-      analyses_[i].getImplementation().get()->notifyAndRemove("analysisRemoved", "Study");
-    }
+      analyses_[i].getImplementation()->removeAllObservers();
   }
-  // remove all the analyses
+  // remove all the DesignOfExperimentEvaluation
   for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
   {
     DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analyses_[i].getImplementation().get());
-    // remove the design of experiments for now
     if (doeEval)
-    {
-      doeEval->notifyAndRemove("analysisRemoved", "Analysis");
-      doeEval->notifyAndRemove("analysisRemoved", "DesignOfExperimentDefinition");
-      doeEval->notifyAndRemove("analysisRemoved", "Study");
-    }
+      doeEval->removeAllObservers();
   }
 
   // remove all the limit states
   for (UnsignedInteger i = 0; i < limitStates_.getSize(); ++i)
-  {
-    limitStates_[i].getPhysicalModel().getImplementation().get()->removeObserver(limitStates_[i].getImplementation().get()->getObserver("LimitState"));
-    limitStates_[i].getImplementation().get()->notifyAndRemove("limitStateRemoved", "LimitState");
-    limitStates_[i].getImplementation().get()->notifyAndRemove("limitStateRemoved", "Study");
-  }
+    limitStates_[i].getImplementation()->removeAllObservers();
 
   // remove all the datamodels
   for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
-  {
-    dataModels_[i].getImplementation().get()->notifyAndRemove("observationsRemoved", "Observations");
-    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
-    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
-    dataModels_[i].getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "Study");
-  }
+    dataModels_[i].getImplementation()->removeAllObservers();
 
   // remove all the physical models
   for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
-  {
-    physicalModels_[i].getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
-    physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDefinition");
-    physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Mesh");
-    physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDiagram");
-    physicalModels_[i].getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Study");
-  }
+    physicalModels_[i].getImplementation()->removeAllObservers();
 }
 
 
@@ -224,9 +207,10 @@ void StudyImplementation::add(const DesignOfExperiment& designOfExperiment)
     throw InvalidArgumentException(HERE) << "The study already contains a data model named " << designOfExperiment.getName();
 
   dataModels_.add(designOfExperiment);
-  notify("addDataModel");
 
   designOfExperiment.getImplementation().get()->addObserver(this);
+  if (Observer * obs = getObserver("StudyItem"))
+    obs->appendItem(designOfExperiment);
   modified_ = true;
   notify("statusChanged");
 }
@@ -237,13 +221,9 @@ void StudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
   if (!dataModels_.contains(designOfExperiment))
     return;
 
-  // remove analyses depending on designOfExperiment
+  // remove analyses/observers depending on designOfExperiment
   clear(designOfExperiment);
-
-  designOfExperiment.getImplementation().get()->notifyAndRemove("observationsRemoved", "Observations");
-  designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDefinition");
-  designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "DataModelDiagram");
-  designOfExperiment.getImplementation().get()->notifyAndRemove("designOfExperimentRemoved", "Study");
+  designOfExperiment.getImplementation().get()->removeAllObservers();
 
   dataModels_.erase(std::remove(dataModels_.begin(), dataModels_.end(), designOfExperiment), dataModels_.end());
 }
@@ -261,8 +241,7 @@ void StudyImplementation::clear(const DesignOfExperiment& designOfExperiment)
     if ((analysis_ptr1 && analysis_ptr1->getDesignOfExperiment() == designOfExperiment) ||
         (analysis_ptr2 && analysis_ptr2->getObservations() == designOfExperiment))
     {
-      (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-      (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "Study");
+      (*iter).getImplementation()->removeAllObservers();
       iter = analyses_.erase(iter);
     }
     else
@@ -309,13 +288,14 @@ String StudyImplementation::getAvailablePhysicalModelName(const String& physical
 
 void StudyImplementation::add(const PhysicalModel& physicalModel)
 {
-  if (hasPhysicalModelNamed(physicalModel.getName()))
-    throw InvalidArgumentException(HERE) << "The study already contains a physical model named " << physicalModel.getName();
+  if (physicalModels_.contains(physicalModel))
+    throw InvalidArgumentException(HERE) << "The study already contains this physical model";
 
   physicalModels_.add(physicalModel);
-  notify("addPhysicalModel");
 
   physicalModel.getImplementation().get()->addObserver(this);
+  if (Observer * obs = getObserver("StudyItem"))
+    obs->appendItem(physicalModel);
   modified_ = true;
   notify("statusChanged");
 }
@@ -330,9 +310,7 @@ void StudyImplementation::clear(const PhysicalModel& physicalModel)
     if ((*iter).getPhysicalModel() == physicalModel)
     {
       clear(*iter);
-      physicalModel.getImplementation().get()->removeObserver((*iter).getImplementation().get()->getObserver("LimitState"));
-      (*iter).getImplementation().get()->notifyAndRemove("limitStateRemoved", "LimitState");
-      (*iter).getImplementation().get()->notifyAndRemove("limitStateRemoved", "Study");
+      (*iter).getImplementation()->removeAllObservers();;
       iter = limitStates_.erase(iter);
     }
     else
@@ -351,9 +329,7 @@ void StudyImplementation::clear(const PhysicalModel& physicalModel)
       if (analysis_ptr->getPhysicalModel() == physicalModel)
       {
         clear(*analysis_ptr);
-        analysis_ptr->notifyAndRemove("analysisRemoved", "Analysis");
-        analysis_ptr->notifyAndRemove("analysisRemoved", "DesignOfExperimentDefinition");
-        analysis_ptr->notifyAndRemove("analysisRemoved", "Study");
+        analysis_ptr->removeAllObservers();
         iterAnalysis = analyses_.erase(iterAnalysis);
       }
       else
@@ -374,15 +350,9 @@ void StudyImplementation::remove(const PhysicalModel& physicalModel)
   if (!physicalModels_.contains(physicalModel))
     return;
 
-  // remove all does/analyses depending on physicalModel
+  // remove all does/analyses/observers depending on physicalModel
   clear(physicalModel);
-
-  // remove physicalModel
-  physicalModel.getImplementation().get()->notifyAndRemove("probabilisticModelRemoved", "ProbabilisticModel");
-  physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDefinition");
-  physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Mesh");
-  physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "PhysicalModelDiagram");
-  physicalModel.getImplementation().get()->notifyAndRemove("physicalModelRemoved", "Study");
+  physicalModel.getImplementation().get()->removeAllObservers();
 
   physicalModels_.erase(std::remove(physicalModels_.begin(), physicalModels_.end(), physicalModel), physicalModels_.end());
 }
@@ -425,14 +395,17 @@ String StudyImplementation::getAvailableAnalysisName(const String& rootName) con
 void StudyImplementation::add(const Analysis& analysis)
 {
   // check
-  if (hasAnalysisNamed(analysis.getName()))
-    throw InvalidArgumentException(HERE) << "The study already contains an analysis named " << analysis.getName();
+  if (analyses_.contains(analysis))
+    throw InvalidArgumentException(HERE) << "The study already contains this analysis ";
 
   const PhysicalModelAnalysis * pm_analysis_ptr = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get());
   if (pm_analysis_ptr)
   {
     if (!physicalModels_.contains(pm_analysis_ptr->getPhysicalModel()))
       throw InvalidArgumentException(HERE) << "The analysis has been created with a physical model not belonging to the study.";
+    if (analysis.isReliabilityAnalysis() &&
+        !limitStates_.contains(dynamic_cast<const ReliabilityAnalysis*>(pm_analysis_ptr)->getLimitState()))
+      throw InvalidArgumentException(HERE) << "The analysis has been created with a limit state not belonging to the study.";
   }
 
   const DesignOfExperimentAnalysis * dm_analysis_ptr = dynamic_cast<const DesignOfExperimentAnalysis*>(analysis.getImplementation().get());
@@ -463,15 +436,12 @@ void StudyImplementation::add(const Analysis& analysis)
     }
   }
 
-  if (analysis.isReliabilityAnalysis())
-    if (!hasLimitStateNamed(dynamic_cast<const ReliabilityAnalysis*>(analysis.getImplementation().get())->getLimitState().getName()))
-      throw InvalidArgumentException(HERE) << "The analysis has been created with a limit state not belonging to the study.";
-
   // add analysis
   analyses_.add(analysis);
-  notify("addAnalysis");
 
   analysis.getImplementation().get()->addObserver(this);
+  if (Observer * obs = getObserver("StudyItem"))
+    obs->appendItem(analysis);
   modified_ = true;
   notify("statusChanged");
 }
@@ -483,9 +453,7 @@ void StudyImplementation::remove(const Analysis& analysis)
     return;
 
   clear(analysis);
-  analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-  analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "DesignOfExperimentDefinition");
-  analysis.getImplementation().get()->notifyAndRemove("analysisRemoved", "Study");
+  analysis.getImplementation().get()->removeAllObservers();
 
   analyses_.erase(std::remove(analyses_.begin(), analyses_.end(), analysis), analyses_.end());
 }
@@ -506,8 +474,7 @@ void StudyImplementation::clear(const Analysis& analysis)
     {
       if (analysis_ptr->getDesignOfExperiment() == doeEval->getResult().getDesignOfExperiment())
       {
-        analysis_ptr->notifyAndRemove("analysisRemoved", "Analysis");
-        analysis_ptr->notifyAndRemove("analysisRemoved", "Study");
+        analysis_ptr->removeAllObservers();
         iterAnalysis = analyses_.erase(iterAnalysis);
       }
       else
@@ -550,16 +517,17 @@ String StudyImplementation::getAvailableLimitStateName(const String & rootName) 
 
 void StudyImplementation::add(const LimitState& limitState)
 {
-  if (hasLimitStateNamed(limitState.getName()))
-    throw InvalidArgumentException(HERE) << "The study already contains a limit state named " << limitState.getName();
+  if (limitStates_.contains(limitState))
+    throw InvalidArgumentException(HERE) << "The study already contains this limit state";;
 
-  if (!hasPhysicalModelNamed(limitState.getPhysicalModel().getName()))
+  if (!physicalModels_.contains(limitState.getPhysicalModel()))
     throw InvalidArgumentException(HERE) << "The limit state has been created with a physical model not belonging to the study.";
 
   limitStates_.add(limitState);
-  notify("addLimitState");
 
   limitState.getImplementation().get()->addObserver(this);
+  if (Observer * obs = getObserver("StudyItem"))
+    obs->appendItem(limitState);
   modified_ = true;
   notify("statusChanged");
 }
@@ -575,8 +543,7 @@ void StudyImplementation::clear(const LimitState& limitState)
     {
       if (dynamic_cast<ReliabilityAnalysis*>((*iter).getImplementation().get())->getLimitState() == limitState)
       {
-        (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "Analysis");
-        (*iter).getImplementation().get()->notifyAndRemove("analysisRemoved", "Study");
+        (*iter).getImplementation()->removeAllObservers();
         iter = analyses_.erase(iter);
       }
       else
@@ -595,13 +562,9 @@ void StudyImplementation::remove(const LimitState& limitState)
   if (!limitStates_.contains(limitState))
     return;
 
-  // remove the analyses depending on the limitState
+  // remove the analyses/observers depending on the limitState
   clear(limitState);
-
-  // remove the limitState
-  limitState.getPhysicalModel().getImplementation().get()->removeObserver(limitState.getImplementation().get()->getObserver("LimitState"));
-  limitState.getImplementation().get()->notifyAndRemove("limitStateRemoved", "LimitState");
-  limitState.getImplementation().get()->notifyAndRemove("limitStateRemoved", "Study");
+  limitState.getImplementation().get()->removeAllObservers();
 
   limitStates_.erase(std::remove(limitStates_.begin(), limitStates_.end(), limitState), limitStates_.end());
 }

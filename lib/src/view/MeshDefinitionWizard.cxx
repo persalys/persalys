@@ -45,6 +45,7 @@ MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, QWidget* paren
 void MeshDefinitionWizard::buildInterface()
 {
   setWindowTitle(tr("Mesh definition"));
+  docLink_ = "user_manual/graphical_interface/field_model/user_manual_field_model.html#meshdefinitionwizard";
 
   QWizardPage * page = new QWizardPage;
   page->setTitle(tr("Define the mesh"));

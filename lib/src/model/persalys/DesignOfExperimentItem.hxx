@@ -37,6 +37,9 @@ public:
 
   void setData(const QVariant & value, int role);
 
+signals:
+  void variablesChanged();
+
 protected:
   DesignOfExperiment designOfExperiment_;
 };

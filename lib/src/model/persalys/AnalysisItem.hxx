@@ -34,6 +34,7 @@ class PERSALYS_API AnalysisItem : public Item, public Observer
 
 public:
   AnalysisItem(const Analysis & analysis);
+  AnalysisItem(const Analysis & analysis, const OT::String &typeName);
 
   virtual QVariant data(int role) const;
   void setData(const QVariant & value, int role);
@@ -43,12 +44,11 @@ public:
   virtual void update(Observable * source, const OT::String & message);
 
 protected:
-  void buildActions();
+  virtual void buildActions();
 
 public slots:
-  void processLaunched();
-  void processFinished();
-  void updateAnalysis(const Analysis & analysis);
+  void processStatusChanged();
+  virtual void updateAnalysis(const Analysis & analysis);
   void stopAnalysis();
   void modifyAnalysis();
   void appendMetaModelItem();
@@ -56,20 +56,22 @@ public slots:
   void removeAnalysis();
   void extractData();
 signals:
-  void analysisFinished(AnalysisItem*, bool);
   void analysisRemoved(QStandardItem*);
   void messageChanged(QString);
   void progressValueChanged(int);
   void modifyAnalysisRequested(AnalysisItem*);
-  void modifyDesignOfExperimentEvaluation(Analysis);
-  void dataExtractionRequested(Analysis);
+  void dataExtractionWizardRequested(StudyItem*, Analysis);
 
-private:
+  void numberDesignEvaluationChanged(bool);
+  void designEvaluationUpdated(bool);
+
+protected:
   Analysis analysis_;
-  QAction * convertAction_;
-  QAction * extractDataAction_;
-  QAction * modifyAction_;
-  QAction * removeAction_;
+  QAction * modifyAction_ = 0;
+  QAction * convertAction_ = 0;
+  QAction * removeAction_ = 0;
+private:
+  QAction * extractDataAction_ = 0;
 };
 }
 #endif

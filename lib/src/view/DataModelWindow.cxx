@@ -44,7 +44,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DataModelWindow::DataModelWindow(DataModelDefinitionItem * item, QWidget * parent)
+DataModelWindow::DataModelWindow(DesignOfExperimentItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , dataModel_(0)
   , tableView_(0)

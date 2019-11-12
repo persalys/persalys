@@ -21,7 +21,7 @@
 #ifndef PERSALYS_PHYSICALMODELWINDOWWIDGET_HXX
 #define PERSALYS_PHYSICALMODELWINDOWWIDGET_HXX
 
-#include "persalys/PhysicalModelDefinitionItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/TemporaryLabel.hxx"
 
@@ -32,7 +32,7 @@ class PERSALYS_API PhysicalModelWindowWidget : public QTabWidget
   Q_OBJECT
 
 public :
-  PhysicalModelWindowWidget(PhysicalModelDefinitionItem * item);
+  PhysicalModelWindowWidget(PhysicalModelItem * item);
 
 protected:
   void buildInterface();

@@ -213,7 +213,6 @@ private slots:
     Sample sample(Normal(2).getSample(10));
     sample.exportToCSVFile("sample.csv");
     model->setFileName("sample.csv");
-    std::cout<<"dans test --------- "<<model->getInputNames()<<" "<<model->getOutputNames()<<" "<<model->getInputColumns()<<" "<<model->getOutputColumns()<<" "<<variableModel->columnCount()<<std::endl;
     for (int i = 0; i < variableModel->columnCount(); ++i)
     {
       if (model->getInputColumns().contains(i) || model->getOutputColumns().contains(i))

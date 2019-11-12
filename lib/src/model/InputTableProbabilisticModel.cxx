@@ -161,7 +161,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     const Input input(physicalModel_.getInputs()[index.row()]);
 
     // update the input
-    physicalModel_.blockNotification("ProbabilisticModel");
+    physicalModel_.blockNotification("ProbabilisticModelItem");
     physicalModel_.setInputStochastic(input.getName(), value.toInt() == Qt::Checked);
     physicalModel_.setDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification();
@@ -195,7 +195,7 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
         const String newDist = TranslationManager::GetDistributionName(newName);
         Distribution distribution(DistributionDictionary::BuildDistribution(newDist, input.getValue()));
         // update the input
-        physicalModel_.blockNotification("ProbabilisticModel");
+        physicalModel_.blockNotification("ProbabilisticModelItem");
         physicalModel_.setDistribution(input.getName(), distribution);
         physicalModel_.setDistributionParametersType(input.getName(), 0);
         physicalModel_.blockNotification();

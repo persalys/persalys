@@ -31,15 +31,17 @@ class PERSALYS_API StudyItem : public Item, public Observer
 {
   Q_OBJECT
 
+  friend class StudyWindow;
+
 public:
   StudyItem(const Study & study);
 
   void update(Observable * source, const OT::String & message);
 
-  void appendItem(DesignOfExperiment & dataModel);
-  void appendItem(PhysicalModel & physicalModel);
-  void appendItem(LimitState & limitState);
-  void appendItem(Analysis & analysis);
+  virtual void appendItem(const DesignOfExperiment & dataModel);
+  void appendItem(const PhysicalModel & physicalModel);
+  virtual void appendItem(const LimitState & limitState);
+  virtual void appendItem(const Analysis & analysis);
 
   virtual QVariant data(int role) const;
   void setData(const QVariant & value, int role);
@@ -52,17 +54,6 @@ protected slots:
 
 public slots:
   void updateIcon();
-  void createSymbolicModel();
-  void createSymbolicFieldModel();
-  void createPythonModel();
-  void createPythonFieldModel();
-#ifdef PERSALYS_HAVE_YACS
-  void createYACSModel();
-#endif
-#ifdef PERSALYS_HAVE_OTFMI
-  void createFMIModel();
-#endif
-  void createDataModel();
   void emitSave();
   void emitSaveAs();
   bool save(const QString&);
@@ -70,36 +61,17 @@ public slots:
   void appendMetaModelItem(PhysicalModel metaModel);
 signals:
   void statusChanged();
-  void exportRequested();
-  void saveRequested();
-  void saveAsRequested();
-  void saveRequested(StudyItem* item);
-  void saveAsRequested(StudyItem* item);
-  void closeRequested(StudyItem* item);
-  void dataModelItemCreated(DataModelDiagramItem*);
-  void physicalModelItemCreated(PhysicalModelDiagramItem*);
-  void fieldModelItemCreated(PhysicalModelDiagramItem*);
 
 protected:
   void buildActions();
 
 private:
+  OT::String getModelName(const QString &baseName) const;
   Study study_;
-  QAction * newSymbolicModel_;
-  QAction * newPythonModel_;
-#ifdef PERSALYS_HAVE_YACS
-  QAction * newYACSModel_;
-#endif
-#ifdef PERSALYS_HAVE_OTFMI
-  QAction * newFMIModel_;
-#endif
-  QAction * newSymbolicFieldModel_;
-  QAction * newPythonFieldModel_;
-  QAction * newDataModel_;
-  QAction * exportAction_;
-  QAction * saveAction_;
-  QAction * saveAsAction_;
-  QAction * closeAction_;
+  QAction * exportAction_ = 0;
+  QAction * saveAction_ = 0;
+  QAction * saveAsAction_ = 0;
+  QAction * closeAction_ = 0;
 };
 }
 #endif

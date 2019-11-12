@@ -34,7 +34,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis, QWidget* parent)
+DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis, bool isGeneralWizard, QWidget* parent)
   : Wizard(parent)
   , doesComboBox_(0)
   , doesComboBoxModel_(0)
@@ -51,42 +51,18 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   buildInterface();
 
   // - fill combo box
-  QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(analysis.getName().c_str()));
-  comboItem->setData(qVariantFromValue(analysis));
-  doesComboBoxModel_->appendRow(comboItem);
-
-  connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWidgets()));
-
-  // update widgets
-  updateWidgets();
-}
-
-
-DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const PhysicalModel& model, QWidget* parent)
-  : Wizard(parent)
-  , doesComboBox_(0)
-  , doesComboBoxModel_(0)
-  , doeLabel_(0)
-  , outputsSelectionGroupBox_(0)
-  , blockSizeGroupBox_(0)
-  , errorMessageLabel_(0)
-{
-  // build interface
-  buildInterface();
-
-  // - fill combo box
-  // get list of DesignOfExperimentDefinitionItem of the current physical model
-  if (Observer * obs = model.getImplementation().get()->getObserver("Study"))
+  if (isGeneralWizard)
   {
-    StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
-    Q_ASSERT(study);
-    for (UnsignedInteger i = 0; i < study->getAnalyses().getSize(); ++i)
+    // get list of DesignOfExperimentDefinitionItem of the current physical model
+    if (Observer * obs = analysis.getImplementation().get()->getObserver("Study"))
     {
-      DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study->getAnalyses()[i].getImplementation().get());
-      ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study->getAnalyses()[i].getImplementation().get());
-      if (doeEval && !modelEval)
+      StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
+      Q_ASSERT(study);
+      for (UnsignedInteger i = 0; i < study->getAnalyses().getSize(); ++i)
       {
-        if (doeEval->getPhysicalModel() == model)
+        DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+        ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+        if (doeEval && !modelEval && doeEval->getPhysicalModel() == currentDoe->getPhysicalModel())
         {
           QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(doeEval->getName().c_str()));
           comboItem->setData(qVariantFromValue(study->getAnalyses()[i]));
@@ -94,8 +70,14 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Phy
         }
       }
     }
+    connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWidgets()));
   }
-  connect(doesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateWidgets()));
+  else
+  {
+    QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(analysis.getName().c_str()));
+    comboItem->setData(qVariantFromValue(analysis));
+    doesComboBoxModel_->appendRow(comboItem);
+  }
 
   // update widgets
   updateWidgets();
@@ -106,6 +88,7 @@ void DesignOfExperimentEvaluationWizard::buildInterface()
 {
   // set window title
   setWindowTitle(tr("Design of experiments evaluation"));
+  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#doeevalwizard";
 
   // create a page
   QWizardPage * page = new QWizardPage(this); // create a class QWidget with the doesComboBox_ to reuse it in metamodel wizard

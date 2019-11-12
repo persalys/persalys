@@ -25,34 +25,15 @@
 
 namespace PERSALYS
 {
+class PhysicalModelDiagramItem;
 class PERSALYS_API ProbabilisticModelItem : public PhysicalModelItem
 {
   Q_OBJECT
 
 public:
-  ProbabilisticModelItem(const PhysicalModel & physicalModel);
+  ProbabilisticModelItem(const PhysicalModel &physicalModel, const PhysicalModelDiagramItem *diagramItem = 0);
 
   virtual void update(Observable * source, const OT::String & message);
-
-protected:
-  void buildActions();
-  bool physicalModelValid();
-
-public slots:
-  void createLimitState();
-  void createCentralTendency();
-  void createSensitivityAnalysis();
-signals:
-  void designOfExperimentRequested();
-  void stochasticInputListChanged();
-  void inputListCorrelationChanged();
-  void copulaChanged();
-
-private:
-  QAction * newDesignOfExperiment_;
-  QAction * newLimitState_;
-  QAction * newCentralTendency_;
-  QAction * newSensitivityAnalysis_;
 };
 }
 #endif

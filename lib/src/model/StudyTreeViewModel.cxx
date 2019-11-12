@@ -64,10 +64,9 @@ void StudyTreeViewModel::appendItem(const Study & study)
   invisibleRootItem()->appendRow(studyItem);
 
   // signal for StudyTreeView to create the window
-  emit studyCreated(studyItem);
+  emit windowRequested(studyItem);
 
   // add sub items
-
   for (UnsignedInteger i = 0; i < study.getPhysicalModels().getSize(); ++i)
   {
     studyItem->appendItem(study.getPhysicalModels()[i]);
@@ -91,6 +90,7 @@ void StudyTreeViewModel::appendItem(const Study & study)
     studyItem->appendItem(study.getAnalyses()[i]);
     study.getAnalyses()[i].addObserver(study.getImplementation().get());
   }
+
   // signal for StudyTreeView to collapse models items
   emit studySubItemsAdded(studyItem);
 }

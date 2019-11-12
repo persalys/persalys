@@ -39,7 +39,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelDefinitionItem * item, QWidget * parent)
+YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , errorMessageLabel_(0)

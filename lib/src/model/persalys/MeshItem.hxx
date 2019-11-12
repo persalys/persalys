@@ -36,13 +36,6 @@ public:
 
 protected:
   void buildActions();
-
-public slots:
-signals:
-  void meshChanged();
-
-private:
-
 };
 }
 #endif

@@ -613,6 +613,18 @@ void MetaModelAnalysis::computeLOOValidation(MetaModelAnalysisResult& result, co
 }
 
 
+bool MetaModelAnalysis::canBeLaunched(String &errorMessage) const
+{
+  const bool canBeLaunched = DesignOfExperimentAnalysis::canBeLaunched(errorMessage);
+  if (!canBeLaunched)
+    return false;
+  // doe must have in/output data
+  if (!getDesignOfExperiment().getOutputSample().getSize() || !getDesignOfExperiment().getInputSample().getSize())
+    errorMessage = "The design of experiments must contain data for input and output variables.";
+  return errorMessage.empty();
+}
+
+
 /* String converter */
 String MetaModelAnalysis::__repr__() const
 {

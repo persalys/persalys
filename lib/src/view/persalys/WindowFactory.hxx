@@ -23,8 +23,9 @@
 
 #include "persalys/SubWindow.hxx"
 #include "persalys/AnalysisWizard.hxx"
-#include "persalys/PhysicalModelDefinitionItem.hxx"
+#include "persalys/PhysicalModelItem.hxx"
 #include "persalys/AnalysisItem.hxx"
+#include "persalys/DesignOfExperimentItem.hxx"
 
 #include <QWidget>
 
@@ -33,7 +34,9 @@ namespace PERSALYS
 class PERSALYS_API WindowFactory
 {
 public:
-  static SubWindow * GetPhysicalModelWindow(PhysicalModelDefinitionItem* item, QWidget * parent = 0);
+  static SubWindow * GetWindow(Item* item, QWidget * parent = 0);
+  static SubWindow * GetPhysicalModelWindow(PhysicalModelItem* item, QWidget * parent = 0);
+  static SubWindow * GetDesignOfExperimentWindow(DesignOfExperimentItem* item, QWidget * parent = 0);
   static AnalysisWizard * GetAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget * parent = 0);
   static SubWindow * GetAnalysisWindow(AnalysisItem* item, QWidget * parent = 0);
 };

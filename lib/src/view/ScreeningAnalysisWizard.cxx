@@ -38,6 +38,7 @@ ScreeningAnalysisWizard::ScreeningAnalysisWizard(const Analysis& analysis, QWidg
 void ScreeningAnalysisWizard::buildInterface()
 {
   setWindowTitle(tr("Screening analysis"));
+  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#screeningwizard";
 
   // First Page: choose the method
   introPage_ = new ScreeningIntroPage(this);
