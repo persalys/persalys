@@ -26,7 +26,7 @@ using namespace OT;
 using namespace OT::Test;
 using namespace PERSALYS;
 
-int main(int argc, char *argv[])
+int main(int /*argc*/, char ** /*argv*/)
 {
   TESTPREAMBLE;
   OStream fullprint(std::cout);

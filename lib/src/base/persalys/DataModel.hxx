@@ -58,6 +58,7 @@ public:
 
   virtual OT::Description getInputNames();
   virtual OT::Description getOutputNames();
+  using DataImport::setColumns;
   virtual void setColumns(const OT::Indices &inputColumns,
                           const OT::Description &inputNames,
                           const OT::Indices &outputColumns,

@@ -493,7 +493,7 @@ void PieChartView::draw(QPainter& painter)
 }
 
 
-void PieChartView::paintEvent(QPaintEvent *event)
+void PieChartView::paintEvent(QPaintEvent * /*event*/)
 {
   QPainter painter(viewport());
   draw(painter);
@@ -512,7 +512,7 @@ int PieChartView::rows(const QModelIndex &index) const
 }
 
 
-void PieChartView::scrollTo(const QModelIndex &index, ScrollHint)
+void PieChartView::scrollTo(const QModelIndex & /*index*/, ScrollHint)
 {
   // no scroll bar
 }

@@ -36,13 +36,13 @@ MorrisResultTableModel::MorrisResultTableModel(MorrisResult & result, UnsignedIn
 }
 
 
-int MorrisResultTableModel::columnCount(const QModelIndex & parent) const
+int MorrisResultTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 7;
 }
 
 
-int MorrisResultTableModel::rowCount(const QModelIndex & parent) const
+int MorrisResultTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return result_.getDesignOfExperiment().getInputSample().getDimension();
 }

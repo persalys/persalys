@@ -436,7 +436,7 @@ void FMIPhysicalModelWindow::clearFilters()
 }
 
 
-void FMIPhysicalModelWindow::treeSelect(const QModelIndex & current, const QModelIndex & previous)
+void FMIPhysicalModelWindow::treeSelect(const QModelIndex & current, const QModelIndex & /*previous*/)
 {
   QModelIndex index(current);
   if (!index.isValid())
@@ -496,13 +496,13 @@ DataTableModel::DataTableModel(const PhysicalModel & physicalModel, QObject * pa
 }
 
 
-int DataTableModel::columnCount(const QModelIndex & parent) const
+int DataTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 6;
 }
 
 
-int DataTableModel::rowCount(const QModelIndex & parent) const
+int DataTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return variableNames_.getSize();
 }
@@ -968,7 +968,7 @@ int TreeItem::row() const
   return 0;
 }
 
-TreeModel::TreeModel(const QString &file, QObject *parent)
+TreeModel::TreeModel(const QString & /*file*/, QObject *parent)
   : QAbstractItemModel(parent)
 {
   QList<QVariant> rootData;

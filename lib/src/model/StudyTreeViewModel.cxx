@@ -47,7 +47,7 @@ QVariant StudyTreeViewModel::headerData(int section, Qt::Orientation orientation
 }
 
 
-void StudyTreeViewModel::update(Observable * source, const String & message)
+void StudyTreeViewModel::update(Observable * /*source*/, const String & message)
 {
   if (message == "addStudy")
   {

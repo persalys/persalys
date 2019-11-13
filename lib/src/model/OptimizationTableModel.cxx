@@ -36,13 +36,13 @@ OptimizationTableModel::OptimizationTableModel(const OptimizationAnalysis & anal
 }
 
 
-int OptimizationTableModel::columnCount(const QModelIndex & parent) const
+int OptimizationTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 5;
 }
 
 
-int OptimizationTableModel::rowCount(const QModelIndex & parent) const
+int OptimizationTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   // +1 for the header
   return analysis_.getPhysicalModel().getInputs().getSize() + 1;

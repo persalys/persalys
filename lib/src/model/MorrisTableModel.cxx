@@ -35,13 +35,13 @@ MorrisTableModel::MorrisTableModel(const MorrisAnalysis & analysis, QObject * pa
 }
 
 
-int MorrisTableModel::columnCount(const QModelIndex & parent) const
+int MorrisTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 4;
 }
 
 
-int MorrisTableModel::rowCount(const QModelIndex & parent) const
+int MorrisTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return analysis_.getPhysicalModel().getInputDimension();
 }

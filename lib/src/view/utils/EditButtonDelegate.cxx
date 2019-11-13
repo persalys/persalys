@@ -33,7 +33,7 @@ EditButtonDelegate::EditButtonDelegate(QObject *parent)
 }
 
 
-QWidget* EditButtonDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &index) const
+QWidget* EditButtonDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex & /*index*/) const
 {
   EditValuesButton * editor = new EditValuesButton("...", parent);
   connect(editor, &QPushButton::clicked, this, &EditButtonDelegate::editRequest);

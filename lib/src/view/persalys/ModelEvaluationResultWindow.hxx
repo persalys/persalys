@@ -35,7 +35,7 @@ public:
   ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
 protected:
-  virtual void setParameters(const Analysis& analysis, const QString& title)
+  virtual void setParameters(const Analysis& /*analysis*/, const QString& /*title*/)
   {
     /*has not parameters*/
   };

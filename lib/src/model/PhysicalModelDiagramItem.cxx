@@ -110,7 +110,7 @@ void PhysicalModelDiagramItem::setData(const QVariant & value, int role)
 }
 
 
-void PhysicalModelDiagramItem::update(Observable* source, const String & message)
+void PhysicalModelDiagramItem::update(Observable* /*source*/, const String & message)
 {
   if (message == "outputNumberChanged" || message == "inputNumberChanged")
   {

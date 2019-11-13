@@ -97,7 +97,7 @@ bool HeaderlessTableView::eventFilter(QObject *obj, QEvent *event)
   * `entered' is true then the index of the column can be obtained using
   * `column_index()'.
   */
-void HeaderlessTableView::entered_column_boundary(bool entered)
+void HeaderlessTableView::entered_column_boundary(bool /*entered*/)
 {
 }
 

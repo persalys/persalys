@@ -223,7 +223,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
 QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteger i)
 {
   QTabWidget * predTabWidget = new QTabWidget;
-
+  (void)i;
 #ifdef PERSALYS_HAVE_PARAVIEW
 
   QMap<QString, QColor> Colors_ = {{QObject::tr("Data"), Qt::blue}, {QObject::tr("Prior"), Qt::red}, {QObject::tr("Posterior"), Qt::green}};

@@ -328,11 +328,11 @@ bool ExperimentTableModel::setData(const QModelIndex &index, const QVariant &val
             deltas_[indexInput] = value.toDouble();
             Point values;
             values.add(interval_.getMarginal(indexInput).getLowerBound()[0]);
-            Scalar value = values[0] + deltas_[indexInput];
-            while (value < interval_.getMarginal(indexInput).getUpperBound()[0])
+            Scalar dvalue = values[0] + deltas_[indexInput];
+            while (dvalue < interval_.getMarginal(indexInput).getUpperBound()[0])
             {
-              values.add(value);
-              value += deltas_[indexInput];
+              values.add(dvalue);
+              dvalue += deltas_[indexInput];
             }
             values.add(interval_.getMarginal(indexInput).getUpperBound()[0]);
             values_[indexInput] = values;

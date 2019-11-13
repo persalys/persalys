@@ -53,7 +53,7 @@ MetaModel* MetaModel::clone() const
 }
 
 
-Function MetaModel::generateFunction(const Description & outputNames) const
+Function MetaModel::generateFunction(const Description & /*outputNames*/) const
 {
   return function_;
 }

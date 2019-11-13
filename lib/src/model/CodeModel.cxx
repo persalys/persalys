@@ -34,13 +34,13 @@ CodeModel::CodeModel(const PhysicalModel & physicalModel, QObject* parent)
 }
 
 
-int CodeModel::columnCount(const QModelIndex & parent) const
+int CodeModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 1;
 }
 
 
-int CodeModel::rowCount(const QModelIndex & parent) const
+int CodeModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return 1;
 }

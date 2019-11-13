@@ -218,7 +218,7 @@ bool AnalysisImplementation::hasValidResult() const
 }
 
 
-bool AnalysisImplementation::canBeLaunched(String &errorMessage) const
+bool AnalysisImplementation::canBeLaunched(String & /*errorMessage*/) const
 {
   return true;
 }
@@ -288,7 +288,7 @@ void AnalysisImplementation::load(Advocate & adv)
 
 
 /* To be implemented in child classes. */
-void AnalysisImplementation::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+void AnalysisImplementation::acceptLaunchParameters(LaunchParametersVisitor* /*visitor*/)
 {
 }
 }

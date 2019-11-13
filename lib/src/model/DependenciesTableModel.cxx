@@ -41,13 +41,13 @@ DependenciesTableModel::DependenciesTableModel(const PhysicalModel &physicalMode
 }
 
 
-int DependenciesTableModel::columnCount(const QModelIndex &parent) const
+int DependenciesTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 2;
 }
 
 
-int DependenciesTableModel::rowCount(const QModelIndex &parent) const
+int DependenciesTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   // do not use hasIndependentCopula because we can have NormalCopula(R=0)
   return copula_.getCopulaCollection().contains(IndependentCopula()) ? 0 : copula_.getCopulaCollection().getSize();

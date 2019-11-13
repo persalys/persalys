@@ -73,7 +73,7 @@ LimitState LimitStateItem::getLimitState() const
 }
 
 
-void LimitStateItem::update(Observable* source, const String & message)
+void LimitStateItem::update(Observable* /*source*/, const String & message)
 {
   // emit signals to LimitStateWindow
 

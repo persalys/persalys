@@ -228,7 +228,7 @@ CodeDelegate::CodeDelegate(QObject * parent)
 }
 
 
-QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
+QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
 {
   CodeEditor * textEdit = new CodeEditor(parent);
   connect(textEdit, SIGNAL(codeEdited(QWidget *)), this, SIGNAL(commitData(QWidget *)));

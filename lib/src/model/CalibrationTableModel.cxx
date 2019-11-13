@@ -62,13 +62,13 @@ void CalibrationTableModel::updateData(const PhysicalModel &model)
 }
 
 
-int CalibrationTableModel::columnCount(const QModelIndex &parent) const
+int CalibrationTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 3;
 }
 
 
-int CalibrationTableModel::rowCount(const QModelIndex &parent) const
+int CalibrationTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return fakeModel_.getInputDimension();
 }

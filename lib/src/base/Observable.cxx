@@ -36,7 +36,7 @@ Observable::Observable()
 
 
 /* Copy constructor */
-Observable::Observable(const Observable & other)
+Observable::Observable(const Observable & /*other*/)
   : observers_()
   , blockedObserverType_("")
 {

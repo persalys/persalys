@@ -75,7 +75,7 @@ void DiagramPushButton::paintEvent(QPaintEvent*)
 }
 
 
-void DiagramPushButton::enterEvent(QEvent* event)
+void DiagramPushButton::enterEvent(QEvent* /*event*/)
 {
   // emit message to update the QTextEdit of the diagram window
   const QString errorMessage = "<p>" + whatsThis() + QString("<p><font color=red>%1</font>").arg(errorMessage_);
@@ -89,7 +89,7 @@ void DiagramPushButton::enterEvent(QEvent* event)
 }
 
 
-void DiagramPushButton::leaveEvent(QEvent* event)
+void DiagramPushButton::leaveEvent(QEvent* /*event*/)
 {
   emit messageChanged("");
 }

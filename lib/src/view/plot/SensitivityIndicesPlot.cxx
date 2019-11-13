@@ -95,8 +95,8 @@ void SensitivityIndicesPlot::updatePlot(const Point &firstOrderIndices,
   // total order indices
   if (totalIndices.getSize())
   {
-    QwtSymbol * symbol = new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5));
-    plotIndices(totalIndices, totalIndicesIntervals, xOffset, symbol, legendNames_[1]);
+    QwtSymbol * symbol2 = new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5));
+    plotIndices(totalIndices, totalIndicesIntervals, xOffset, symbol2, legendNames_[1]);
   }
   // update x axis
   setAxisScaleDraw(QwtPlot::xBottom, new CustomHorizontalScaleDraw(QtOT::DescriptionToStringList(inputNames)));

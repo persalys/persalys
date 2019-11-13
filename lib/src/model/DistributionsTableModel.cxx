@@ -34,13 +34,13 @@ DistributionsTableModel::DistributionsTableModel(const QStringList &distribution
 }
 
 
-int DistributionsTableModel::rowCount(const QModelIndex& parent) const
+int DistributionsTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
   return distributions_.size();
 }
 
 
-int DistributionsTableModel::columnCount(const QModelIndex& parent) const
+int DistributionsTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
   return 1;
 }

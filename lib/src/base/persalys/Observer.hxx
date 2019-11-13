@@ -43,10 +43,10 @@ public:
 
   OT::String getType() const;
   virtual void update(Observable * source, const OT::String & message) = 0;
-  virtual void appendItem(const PhysicalModel &model) {};
-  virtual void appendItem(const Analysis &analysis) {};
-  virtual void appendItem(const LimitState &limitState) {};
-  virtual void appendItem(const DesignOfExperiment &doe) {};
+  virtual void appendItem(const PhysicalModel &/*model*/) {};
+  virtual void appendItem(const Analysis &/*analysis*/) {};
+  virtual void appendItem(const LimitState &/*limitState*/) {};
+  virtual void appendItem(const DesignOfExperiment &/*doe*/) {};
 
 private:
   OT::String type_;

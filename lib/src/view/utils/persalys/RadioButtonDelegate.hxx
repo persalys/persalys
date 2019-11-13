@@ -69,7 +69,7 @@ public:
   }
 
 
-  virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+  virtual QSize sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
   {
     const QSize buttonSize = QRadioButton(index.data(Qt::DisplayRole).toString()).sizeHint();
     const int buttonMargin = 3;

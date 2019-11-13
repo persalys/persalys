@@ -429,7 +429,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
 }
 
 
-void MetaModelAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
+void MetaModelAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& /*result*/, const Sample& /*inputSample*/)
 {
   throw NotYetImplementedException(HERE) << "Analytical validation not available";
 }

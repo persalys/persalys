@@ -36,13 +36,13 @@ VariablesSelectionTableModel::VariablesSelectionTableModel(const Description& va
 }
 
 
-int VariablesSelectionTableModel::columnCount(const QModelIndex& parent) const
+int VariablesSelectionTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
   return 1;
 }
 
 
-int VariablesSelectionTableModel::rowCount(const QModelIndex& parent) const
+int VariablesSelectionTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
   return variablesNames_.getSize();
 }

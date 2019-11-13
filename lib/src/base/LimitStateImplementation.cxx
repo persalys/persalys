@@ -182,7 +182,7 @@ String LimitStateImplementation::__repr__() const
 String LimitStateImplementation::__str__(const String & offset) const
 {
   OSS oss(false);
-  oss << getOutputName();
+  oss << offset << getOutputName();
 
   const String operatorName = getOperator().getImplementation()->getClassName();
   if (operatorName == "Less")

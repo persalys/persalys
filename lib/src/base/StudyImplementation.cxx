@@ -85,7 +85,7 @@ void StudyImplementation::removeAllObservers()
 }
 
 
-void StudyImplementation::update(Observable* source, const String& message)
+void StudyImplementation::update(Observable* /*source*/, const String& message)
 {
   if (message == "informationMessageUpdated" ||
       message == "progressValueChanged")

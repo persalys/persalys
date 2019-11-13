@@ -178,7 +178,7 @@ void CopulaInferenceWizard::buildInterface()
 }
 
 
-void CopulaInferenceWizard::selectedItemChanged(const QModelIndex &current, const QModelIndex &old)
+void CopulaInferenceWizard::selectedItemChanged(const QModelIndex &current, const QModelIndex & /*old*/)
 {
   if (current.isValid())
     stackedWidget_->setCurrentIndex(current.row());

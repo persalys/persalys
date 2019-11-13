@@ -73,6 +73,11 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
     set_target_properties (${module_target} PROPERTIES NO_SONAME ON)
   endif ()
 
+  # allows to pass compile flags like -O1 to reduce memory usage
+  if (DEFINED SWIG_COMPILE_FLAGS)
+    set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS ${SWIG_COMPILE_FLAGS})
+  endif ()
+
   install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
             DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
   install ( TARGETS ${module_target}

@@ -93,7 +93,7 @@ Sample DesignOfExperimentDefinitionItem::getOriginalInputSample() const
 }
 
 
-void DesignOfExperimentDefinitionItem::update(Observable* source, const String& message)
+void DesignOfExperimentDefinitionItem::update(Observable* /*source*/, const String& message)
 {
   if (message == "EvaluationItemRequested")
   {

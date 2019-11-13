@@ -252,7 +252,7 @@ void AnalysisItem::processStatusChanged()
 }
 
 
-void AnalysisItem::update(Observable* source, const String& message)
+void AnalysisItem::update(Observable* /*source*/, const String& message)
 {
   if (message == "analysisFinished")
   {

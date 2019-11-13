@@ -39,13 +39,13 @@ CorrelationTableModel::CorrelationTableModel(const PhysicalModel &model, const O
 }
 
 
-int CorrelationTableModel::columnCount(const QModelIndex & parent) const
+int CorrelationTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return copula_.getDimension();
 }
 
 
-int CorrelationTableModel::rowCount(const QModelIndex & parent) const
+int CorrelationTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return copula_.getDimension();
 }
@@ -60,7 +60,7 @@ Qt::ItemFlags CorrelationTableModel::flags(const QModelIndex & index) const
 }
 
 
-QVariant CorrelationTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant CorrelationTableModel::headerData(int section, Qt::Orientation /*orientation*/, int role) const
 {
   if (role == Qt::DisplayRole)
     return QString::fromUtf8(copula_.getDescription()[section].c_str());

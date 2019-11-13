@@ -34,13 +34,13 @@ DifferentiationTableModel::DifferentiationTableModel(const PhysicalModel& physic
 }
 
 
-int DifferentiationTableModel::columnCount(const QModelIndex& parent) const
+int DifferentiationTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
   return 2;
 }
 
 
-int DifferentiationTableModel::rowCount(const QModelIndex& parent) const
+int DifferentiationTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
   return physicalModel_.getInputDimension();
 }

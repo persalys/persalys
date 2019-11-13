@@ -231,7 +231,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 }
 
 
-void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& previousIndex)
+void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& /*previousIndex*/)
 {
   QStandardItem * selectedItem = treeViewModel_->itemFromIndex(currentIndex);
   if (!selectedItem)
