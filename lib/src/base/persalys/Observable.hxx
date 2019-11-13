@@ -38,6 +38,8 @@ public:
 
   virtual ~Observable() {};
 
+  Observable & operator=(const Observable & rhs);
+
   void addObserver(Observer * observer);
   void removeObserver(Observer * observer);
   void removeObserver(const OT::String & observerType);

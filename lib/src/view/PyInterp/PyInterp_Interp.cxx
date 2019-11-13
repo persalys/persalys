@@ -71,7 +71,7 @@ PyStdOut_write(PyStdOut *self, PyObject *args)
 }
 
 static PyObject*
-PyStdOut_flush(PyStdOut * /*self*/)
+PyStdOut_flush(PyStdOut * /*self*/, PyObject * /*args*/)
 {
   Py_INCREF(Py_None);
   return Py_None;

@@ -42,6 +42,17 @@ Observable::Observable(const Observable & /*other*/)
 {
 }
 
+/* Assingment operator */
+Observable & Observable::operator=(const Observable & rhs)
+{
+  if (this != &rhs)
+  {
+    observers_ = rhs.observers_;
+    blockedObserverType_ = rhs.blockedObserverType_;
+  }
+  return *this;
+}
+
 
 void Observable::addObserver(Observer * observer)
 {
