@@ -52,7 +52,7 @@ DoubleSpinBox::DoubleSpinBox(QWidget * parent)
 }
 
 
-void DoubleSpinBox::initLocalValues(QWidget *parent)
+void DoubleSpinBox::initLocalValues(QWidget * /*parent*/)
 {
   setLocale(QLocale::C);
   locale().setNumberOptions(QLocale::OmitGroupSeparator | QLocale::RejectGroupSeparator);

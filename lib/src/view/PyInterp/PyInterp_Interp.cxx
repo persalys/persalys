@@ -71,7 +71,7 @@ PyStdOut_write(PyStdOut *self, PyObject *args)
 }
 
 static PyObject*
-PyStdOut_flush(PyStdOut *self)
+PyStdOut_flush(PyStdOut * /*self*/)
 {
   Py_INCREF(Py_None);
   return Py_None;
@@ -80,13 +80,13 @@ PyStdOut_flush(PyStdOut *self)
 static PyMethodDef PyStdOut_methods[] = {
   {"write",  (PyCFunction)PyStdOut_write,  METH_VARARGS, PyDoc_STR("write(string) -> None")},
   {"flush",  (PyCFunction)PyStdOut_flush,  METH_NOARGS,  PyDoc_STR("flush() -> None")},
-  {NULL,    NULL}   /* sentinel */
+  {NULL, (PyCFunction)NULL, 0, NULL}   /* sentinel */
 };
 
 static PyMemberDef PyStdOut_memberlist[] = {
   {(char*)"softspace", T_INT,  offsetof(PyStdOut, softspace), 0,
    (char*)"flag indicating that a space needs to be printed; used by print"},
-  {NULL} /* Sentinel */
+  {NULL, 0, 0, 0, NULL} /* Sentinel */
 };
 
 static PyTypeObject PyStdOut_Type = {

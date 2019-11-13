@@ -58,7 +58,7 @@ class PYINTERP_EXPORT PyInterp_RefCounterObj
 {
  protected:
   PyInterp_RefCounterObj():_cnt(1) { }
-  PyInterp_RefCounterObj(const PyInterp_RefCounterObj& other):_cnt(1) { }
+  PyInterp_RefCounterObj(const PyInterp_RefCounterObj& /*other*/):_cnt(1) { }
  public:
   bool decrRef() const
   {
@@ -70,7 +70,7 @@ class PYINTERP_EXPORT PyInterp_RefCounterObj
   void incrRef() const { _cnt++; }
   int getRCValue() const { return _cnt; }
   // copies using operator= should not copy the ref counter of \a other 
-  PyInterp_RefCounterObj& operator=(const PyInterp_RefCounterObj& other) { return *this; }
+  PyInterp_RefCounterObj& operator=(const PyInterp_RefCounterObj& /*other*/) { return *this; }
  protected:
   virtual ~PyInterp_RefCounterObj() { }
  private:

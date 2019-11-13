@@ -34,17 +34,17 @@ public:
     OutputCollection outputCollection(1, Ep);
 
     Description formula(1, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
-    model = SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);
+    model_ = SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);
   }
 
 private:
-  SymbolicPhysicalModel model;
+  SymbolicPhysicalModel model_;
 
 private slots:
   void TestDefaultDeterministic()
   {
     // create the analysis
-    GridDesignOfExperiment doe("analysis", model);
+    GridDesignOfExperiment doe("analysis", model_);
 
     // create the wizard
     DesignOfExperimentWizard wizard(doe);
@@ -77,7 +77,7 @@ private slots:
   void TestGridDefinitionTable()
   {
     // create the analysis
-    const Interval bounds(GridDesignOfExperiment::GetDefaultBounds(model));
+    const Interval bounds(GridDesignOfExperiment::GetDefaultBounds(model_));
     Collection<Point> values;
     Point val1(2);
     val1[0] = bounds.getLowerBound()[0] + 100;
@@ -89,7 +89,7 @@ private slots:
     val2[1] = (val2[2] + val2[0])*0.5;
     values.add(val2);
     values.add(Point(1, 4500));
-    GridDesignOfExperiment doe("analysis", model, values);
+    GridDesignOfExperiment doe("analysis", model_, values);
 
     // create the wizard
     DesignOfExperimentWizard wizard(doe);
@@ -205,7 +205,7 @@ private slots:
   void TestProbabilistic()
   {
     // create the analysis
-    ProbabilisticDesignOfExperiment doe("analysis", model);
+    ProbabilisticDesignOfExperiment doe("analysis", model_);
 
     // create the wizard
     DesignOfExperimentWizard wizard(doe);
@@ -233,7 +233,7 @@ private slots:
   void TestImportEmpty()
   {
     // create the analysis
-    ImportedDesignOfExperiment doe("analysis", model);
+    ImportedDesignOfExperiment doe("analysis", model_);
 
     // create the wizard
     DesignOfExperimentWizard wizard(doe);
@@ -268,7 +268,7 @@ private slots:
     ind[0] = 4;
     ind[1] = 1;
     ind[2] = 3;
-    ImportedDesignOfExperiment doe("analysis", model, filename, ind);
+    ImportedDesignOfExperiment doe("analysis", model_, filename, ind);
 
     // create the wizard
     DesignOfExperimentWizard wizard(doe);
@@ -328,7 +328,7 @@ private slots:
   void TestAnalysisModification()
   {
     // create the analysis
-    GridDesignOfExperiment doe("analysis", model);
+    GridDesignOfExperiment doe("analysis", model_);
 
     // create the wizard
     DesignOfExperimentWizard wizard(doe);
@@ -340,12 +340,12 @@ private slots:
     QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     buttonGroup->button(DesignOfExperimentIntroPage::Probabilistic)->click();
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
-    bool analysisEquality = wizard.getAnalysis().getParameters()==ProbabilisticDesignOfExperiment("analysis", model).getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters()==ProbabilisticDesignOfExperiment("analysis", model_).getParameters();
     QVERIFY2(analysisEquality, "The two ProbabilisticDesignOfExperiment must be equal");
 
     buttonGroup->button(DesignOfExperimentIntroPage::Import)->click();
     QVERIFY2(wizard.nextId() == 3, "Next page ID must be 3");
-    analysisEquality = wizard.getAnalysis().getParameters()==ImportedDesignOfExperiment("analysis", model).getParameters();
+    analysisEquality = wizard.getAnalysis().getParameters()==ImportedDesignOfExperiment("analysis", model_).getParameters();
     QVERIFY2(analysisEquality, "The two ImportedDesignOfExperiment must be equal");
   }
 };

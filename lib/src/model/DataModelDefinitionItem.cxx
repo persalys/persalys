@@ -50,7 +50,7 @@ DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment &doe, 
 }
 
 
-void DataModelDefinitionItem::update(Observable* source, const String& message)
+void DataModelDefinitionItem::update(Observable* /*source*/, const String& message)
 {
   if (message == "variablesChanged")
   {

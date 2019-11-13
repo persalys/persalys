@@ -613,7 +613,7 @@ RandomVector PhysicalModelImplementation::getOutputRandomVector(const Descriptio
 }
 
 
-Function PhysicalModelImplementation::generateFunction(const Description & outputNames) const
+Function PhysicalModelImplementation::generateFunction(const Description & /*outputNames*/) const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::generateFunction(outputNames)";
 }
@@ -1165,7 +1165,7 @@ void PhysicalModelImplementation::load(Advocate & adv)
 
 
 /* Nothing to do at this level. Overloaded in child classes if needed.*/
-void PhysicalModelImplementation::acceptLaunchParameters(LaunchParametersVisitor* visitor)
+void PhysicalModelImplementation::acceptLaunchParameters(LaunchParametersVisitor* /*visitor*/)
 {
 }
 

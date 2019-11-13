@@ -34,13 +34,13 @@ InputTableModel::InputTableModel(const PhysicalModel & physicalModel, QObject * 
 }
 
 
-int InputTableModel::columnCount(const QModelIndex & parent) const
+int InputTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 3;
 }
 
 
-int InputTableModel::rowCount(const QModelIndex & parent) const
+int InputTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return physicalModel_.getInputDimension();
 }

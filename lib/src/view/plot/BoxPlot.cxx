@@ -214,15 +214,15 @@ void BoxPlot::setVariablesToShow(const QStringList &varNames)
       // translate curve
       if (varNames.contains(variableNames_[i]) && (x != newX))
       {
-        QwtPlotCurve * curve = dynamic_cast<QwtPlotCurve*>(itemList(QwtPlotItem::Rtti_PlotUserItem + i)[j]);
-        QVector< QPointF > series(curve->data()->size());
-        for (size_t k = 0; k < curve->data()->size(); ++k)
+        QwtPlotCurve * curve2 = dynamic_cast<QwtPlotCurve*>(itemList(QwtPlotItem::Rtti_PlotUserItem + i)[j]);
+        QVector< QPointF > series(curve2->data()->size());
+        for (size_t k = 0; k < curve2->data()->size(); ++k)
         {
-          QPointF pt = curve->data()->sample(k);
+          QPointF pt = curve2->data()->sample(k);
           pt.setX(pt.x() + abs(x - newX) * (newX > x ? 1 : -1));
           series[k] = pt;
         }
-        curve->setSamples(series);
+        curve2->setSamples(series);
       }
     }
   }

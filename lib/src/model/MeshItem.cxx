@@ -47,7 +47,7 @@ void MeshItem::buildActions()
 }
 
 
-void MeshItem::update(Observable* source, const String & message)
+void MeshItem::update(Observable* /*source*/, const String & message)
 {
   // emit signals to MeshWindow
   if (message == "meshChanged")

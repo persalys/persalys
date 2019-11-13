@@ -11,7 +11,8 @@ cd /tmp
 mkdir -p build && cd build
 cmake -DUSE_COTIRE=ON \
   -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
-  -DCMAKE_CXX_FLAGS="-Wall -Werror -D_GLIBCXX_ASSERTIONS" \
+  -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -D_GLIBCXX_ASSERTIONS" \
+  -DSWIG_COMPILE_FLAGS="-Wno-error=unused-parameter" \
   -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr \
   /io

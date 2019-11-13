@@ -102,13 +102,13 @@ void DataModelTableModel::updateData()
 }
 
 
-int DataModelTableModel::rowCount(const QModelIndex& parent) const
+int DataModelTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
   return 2;
 }
 
 
-int DataModelTableModel::columnCount(const QModelIndex& parent) const
+int DataModelTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
   return names_.getSize();
 }

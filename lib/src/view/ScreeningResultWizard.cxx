@@ -116,7 +116,7 @@ void ScreeningResultWizard::updateVariablesComboBox(const int currentAnalysis)
 }
 
 
-void ScreeningResultWizard::updateTableModel(const QString& variableName)
+void ScreeningResultWizard::updateTableModel(const QString& /*variableName*/)
 {
   if (!screeningResultsComboBox_ || !variablesComboBox_ || !tableModel_)
     return;

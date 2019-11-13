@@ -36,11 +36,11 @@ public:
     outputCollection.add(Ep2);
 
     Description formula(2, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
-    model = SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);
+    model_ = SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);
   }
 
 private:
-  SymbolicPhysicalModel model;
+  SymbolicPhysicalModel model_;
 
 private slots:
   void TestImport()
@@ -48,7 +48,7 @@ private slots:
     // create the observations
     String filename = "normal.csv";
     Normal(5).getSample(10).exportToCSVFile(filename);
-    Observations obs("obs", model, filename, Indices(1, 2), Indices(1, 0), Description(1, "E"), Description(1, "Ep2"));
+    Observations obs("obs", model_, filename, Indices(1, 2), Indices(1, 0), Description(1, "E"), Description(1, "Ep2"));
 
     // create the wizard
     ObservationsWizard wizard(obs);

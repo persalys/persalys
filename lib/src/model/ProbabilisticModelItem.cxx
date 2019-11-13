@@ -47,7 +47,7 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel &physicalMode
 }
 
 
-void ProbabilisticModelItem::update(Observable* source, const String & message)
+void ProbabilisticModelItem::update(Observable* /*source*/, const String & message)
 {
   // emit signals to ProbabilisticModelWindow
 

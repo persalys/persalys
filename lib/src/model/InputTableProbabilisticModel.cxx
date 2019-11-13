@@ -41,13 +41,13 @@ InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel &
 }
 
 
-int InputTableProbabilisticModel::columnCount(const QModelIndex & parent) const
+int InputTableProbabilisticModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 2;
 }
 
 
-int InputTableProbabilisticModel::rowCount(const QModelIndex & parent) const
+int InputTableProbabilisticModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return physicalModel_.getInputDimension();
 }

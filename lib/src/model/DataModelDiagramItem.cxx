@@ -61,7 +61,7 @@ void DataModelDiagramItem::buildActions()
 }
 
 
-void DataModelDiagramItem::update(Observable* source, const String& message)
+void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
 {
   if (message == "variablesChanged")
   {

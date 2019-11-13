@@ -54,7 +54,7 @@ void ObservationsItem::buildActions()
 }
 
 
-void ObservationsItem::update(Observable * source, const String & message)
+void ObservationsItem::update(Observable * /*source*/, const String & message)
 {
   if (message == "analysisLaunched")
   {

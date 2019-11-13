@@ -52,7 +52,7 @@ PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel &mo
 }
 
 
-void PhysicalModelDefinitionItem::update(Observable* source, const String & message)
+void PhysicalModelDefinitionItem::update(Observable* /*source*/, const String & message)
 {
   // emit signals to PhysicalModelWindowWidget
 

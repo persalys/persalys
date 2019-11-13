@@ -234,7 +234,7 @@ void DependenciesWidget::updateCopulaWidget(const int index, const Distribution 
 }
 
 
-void DependenciesWidget::selectedItemChanged(const QModelIndex &current, const QModelIndex &previous)
+void DependenciesWidget::selectedItemChanged(const QModelIndex &current, const QModelIndex & /*previous*/)
 {
   if (!current.isValid())
   {

@@ -100,7 +100,7 @@ public:
   {
   }
 
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
   {
     QComboBox * editor = new QComboBox(parent);
     editor->addItems(enumLabels_);
@@ -137,7 +137,7 @@ public:
   {
   }
 
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
   {
     DoubleSpinBox * editor = new DoubleSpinBox(parent);
     return editor;

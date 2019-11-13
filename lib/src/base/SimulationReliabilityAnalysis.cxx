@@ -97,7 +97,7 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
 }
 
 
-SimulationInterface SimulationReliabilityAnalysis::getSimulationAlgorithm(const OT::RandomVector & event)
+SimulationInterface SimulationReliabilityAnalysis::getSimulationAlgorithm(const OT::RandomVector & /*event*/)
 {
   throw NotYetImplementedException(HERE) << "In SimulationReliabilityAnalysis::getSimulationAlgorithm()";
 }

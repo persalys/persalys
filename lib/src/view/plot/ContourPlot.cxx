@@ -161,8 +161,8 @@ void ContourPlot::plotContour(const Collection<Drawable>& drawables,
   QList<double> levels;
   for (UnsignedInteger i = 0; i < drawables.getSize(); ++i)
   {
-    Contour * contour = dynamic_cast<Contour*>(drawables[i].getImplementation().get());
-    if (contour)
+    Contour * contour2 = dynamic_cast<Contour*>(drawables[i].getImplementation().get());
+    if (contour2)
       levels.append(drawables[i].getLevels()[0]);
   }
   std::sort(levels.begin(), levels.end());

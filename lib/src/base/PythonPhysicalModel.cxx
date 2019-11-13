@@ -270,36 +270,36 @@ void PythonPhysicalModel::load(Advocate & adv)
   adv.loadAttribute("code_", code_);
 }
 
-void PythonPhysicalModel::setInputs(const InputCollection & inputs)
+void PythonPhysicalModel::setInputs(const InputCollection & /*inputs*/)
 {
   throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
 }
 
 
-void PythonPhysicalModel::addInput(const Input & input)
+void PythonPhysicalModel::addInput(const Input & /*input*/)
 {
   throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
 }
 
 
-void PythonPhysicalModel::removeInput(const String & inputName)
+void PythonPhysicalModel::removeInput(const String & /*inputName*/)
 {
   throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
 }
 
-void PythonPhysicalModel::setOutputs(const OutputCollection & outputs)
-{
-  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
-}
-
-
-void PythonPhysicalModel::addOutput(const Output & output)
+void PythonPhysicalModel::setOutputs(const OutputCollection & /*outputs*/)
 {
   throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
 }
 
 
-void PythonPhysicalModel::removeOutput(const String & outputName)
+void PythonPhysicalModel::addOutput(const Output & /*output*/)
+{
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
+}
+
+
+void PythonPhysicalModel::removeOutput(const String & /*outputName*/)
 {
   throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
 }

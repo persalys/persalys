@@ -129,7 +129,7 @@ String StudyItem::getModelName(const QString &baseName) const
 }
 
 
-void StudyItem::update(Observable * source, const String & message)
+void StudyItem::update(Observable * /*source*/, const String & message)
 {
   if (message == "analysisLaunched")
   {
