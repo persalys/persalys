@@ -59,7 +59,7 @@ EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
-for libname in lapack blas xml2 png12 gfortran ffi xkbcommon
+for libname in lapack blas xml2 png12 gfortran ffi
 do
   cp -v /usr/lib64/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
