@@ -45,7 +45,8 @@ public:
   static QString GetTranslatedDistributionParameterName(const std::string& name);
   static std::string GetDistributionName(const QString& name);
   static std::string GetCopulaName(const QString& name);
-  static QStringList GetAvailableDistributions();
+  static QStringList GetTranslatedContinuousDistributions();
+  static QStringList GetTranslatedDiscreteDistributions();
   static QStringList GetAvailableCopulas();
   static QString GetTranslatedParameterName(const std::string& name);
   static QString GetTranslatedErrorMessage(const std::string& message);

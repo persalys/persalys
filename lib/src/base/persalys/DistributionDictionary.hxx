@@ -47,6 +47,9 @@ public:
 
   /** Compute standard deviation from mean */
   static double ComputeSigmaFromMu(const double mu);
+
+  static std::vector<OT::String> ContinuousDistributions_;
+  static std::vector<OT::String> DiscreteDistributions_;
 };
 }
 #endif

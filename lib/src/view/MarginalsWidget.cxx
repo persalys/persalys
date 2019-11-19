@@ -32,6 +32,7 @@
 #include "persalys/StudyItem.hxx"
 #include "persalys/DocumentationToolButton.hxx"
 #include "persalys/FileTools.hxx"
+#include "persalys/EditValuesWizard.hxx"
 
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/ScreeningResultWizard.hxx"
@@ -46,6 +47,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include <openturns/UserDefined.hxx>
 
 using namespace OT;
 
@@ -113,6 +115,10 @@ void MarginalsWidget::buildInterface()
     // - delegate for distributions list
     ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
     delegate->setNoWheelEvent(true);
+    const int continuousDistNb = DistributionDictionary::ContinuousDistributions_.size();
+    delegate->addSeparatorIndex(0, tr("Continuous"));
+    delegate->addSeparatorIndex(continuousDistNb + 1, tr("Discrete"));
+    delegate->addSeparatorIndex(continuousDistNb + DistributionDictionary::DiscreteDistributions_.size() + 2, tr("Use result"));
     inputTableView_->setItemDelegateForColumn(1, delegate);
     inputTableView_->setEditTriggers(QAbstractItemView::NoEditTriggers);
   }
@@ -220,7 +226,7 @@ void MarginalsWidget::buildInterface()
   selectParametersTypeCombo_ = new QComboBox;
   selectParametersTypeCombo_->setObjectName("paramTypeCombo");
   connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
-  lay->addWidget(selectParametersTypeCombo_, 0, 1);
+  lay->addWidget(selectParametersTypeCombo_, 0, 1, 1, 2);
   if (failSoftMode_)
   {
     typeLabel->hide();
@@ -238,6 +244,10 @@ void MarginalsWidget::buildInterface()
     lay->addWidget(parameterValuesLabel_[i], i + 1, 0);
     lay->addWidget(parameterValuesEdit_[i], i + 1, 1);
   }
+  editButton_ = new QToolButton;
+  editButton_->setText("...");
+  lay->addWidget(editButton_, 1, 2);
+  connect(editButton_, SIGNAL(pressed()), this, SLOT(openValuesDefinitionWizard()));
 
   rightFrameLayout->addWidget(paramEditor);
 
@@ -428,7 +438,26 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
     {
       parameterValuesLabel_[i]->setText(TranslationManager::GetTranslatedDistributionParameterName(parametersName[i]));
       parameterValuesLabel_[i]->show();
-      parameterValuesEdit_[i]->setValue(parameters[parametersType][i]);
+      editButton_->hide();
+      if (distName != "UserDefined")
+      {
+        parameterValuesEdit_[i]->setValue(parameters[parametersType][i]);
+        parameterValuesEdit_[i]->setReadOnly(false);
+      }
+      else
+      {
+        QString text;
+        const int nbValues = inputDist.getParametersCollection()[0].getSize();
+        for (int j = 0; j < nbValues; ++j)
+        {
+          text += QString::number(inputDist.getParametersCollection()[i][j], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+          if (j < nbValues-1)
+            text += ", ";
+        }
+        parameterValuesEdit_[i]->setText(text);
+        editButton_->show();
+        parameterValuesEdit_[i]->setReadOnly(true);
+      }
       parameterValuesEdit_[i]->show();
     }
     else
@@ -460,6 +489,8 @@ void MarginalsWidget::updateTruncationParametersWidgets(const QModelIndex & inde
   truncationParamGroupBox_->setExpanded(false);
 
   const Input input(physicalModel_.getInputs()[index.row()]);
+  truncationParamGroupBox_->setVisible(!input.getDistribution().isDiscrete());
+
   const String distName = input.getDistribution().getImplementation()->getClassName();
   if (distName != "TruncatedDistribution" && distName != "TruncatedNormal")
     return;
@@ -505,6 +536,10 @@ void MarginalsWidget::distributionParametersChanged()
   Distribution inputDist = input.getDistribution();
   const String distName = inputDist.getImplementation()->getClassName();
   const UnsignedInteger parametersType = input.getDistributionParametersType();
+
+  // do nothing if UserDefined : parameters are read only
+  if (distName == "UserDefined")
+    return;
 
   if (distName == "TruncatedDistribution")
   {
@@ -835,4 +870,24 @@ void MarginalsWidget::openWizardToChooseScreeningResult()
   }
 }
 #endif
+
+
+void MarginalsWidget::openValuesDefinitionWizard()
+{
+  const QModelIndex index = inputTableView_->currentIndex();
+  const Input input(physicalModel_.getInputs()[index.row()]);
+  Distribution inputDist = input.getDistribution();
+  String distName = inputDist.getImplementation()->getClassName();
+
+  UserDefinedWizard wizard(inputDist.getParametersCollection(), this);
+  if (wizard.exec())
+  {
+    // update the input
+    physicalModel_.blockNotification("ProbabilisticModelItem");
+    physicalModel_.setDistribution(input.getName(), wizard.getDistribution());
+    physicalModel_.setDistributionParametersType(input.getName(), 0);
+    physicalModel_.blockNotification();
+    updateDistributionWidgets(index);
+  }
+}
 }

@@ -25,8 +25,9 @@
 namespace PERSALYS
 {
 
-DistributionsTableModel::DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, QWidget *parent)
+DistributionsTableModel::DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, const bool isCopulaList, QWidget *parent)
   : QAbstractTableModel(parent)
+  , isCopulaList_(isCopulaList)
   , distributions_(distributions)
   , availableDistributions_(availableDistributions)
 {
@@ -49,12 +50,7 @@ int DistributionsTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant DistributionsTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section == 0)
-  {
-    if (availableDistributions_.size() == TranslationManager::GetAvailableDistributions().size())
-      return tr("Distributions");
-    else
-      return tr("Copulas");
-  }
+    return isCopulaList_ ? tr("Copulas") : tr("Distributions");
   return QAbstractItemModel::headerData(section, orientation, role);
 }
 

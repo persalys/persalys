@@ -311,7 +311,22 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   setAxisTitle(QwtPlot::xBottom, tr("X"));
 
   updateScaleParameters(distribution);
-  const Sample dataCDF(distribution.drawCDF().getDrawable(0).getData());
+  Drawable drawable(distribution.drawCDF().getDrawable(0));
+  Sample dataCDF(drawable.getData());
+  if (drawable.getImplementation()->getClassName() == "Staircase")
+  {
+    Sample newDataCDF(0, 2);
+    for (UnsignedInteger i = 0; i < dataCDF.getSize()-1; ++i)
+    {
+      newDataCDF.add(dataCDF[i]);
+      Point interPt(2);
+      interPt[0] = dataCDF(i+1, 0);
+      interPt[1] = dataCDF(i, 1);
+      newDataCDF.add(interPt);
+    }
+    newDataCDF.add(dataCDF[dataCDF.getSize()-1]);
+    dataCDF = newDataCDF;
+  }
   plotCurve(dataCDF, pen);
   // Add margin at the top to avoid to cut the curve
   const double yMax = dataCDF.getMax()[1];
@@ -345,19 +360,30 @@ void PlotWidget::plotSurvivalCurve(const Distribution & distribution, const QPen
   setTitle(tr("Survival function"));
   setAxisTitle(QwtPlot::yLeft, tr("Survival function"));
   setAxisTitle(QwtPlot::xBottom, tr("X"));
-
   updateScaleParameters(distribution);
-  const Scalar xMin = distribution.computeQuantile(ResourceMap::GetAsScalar("Distribution-QMin"))[0];
-  const Scalar xMax = distribution.computeQuantile(ResourceMap::GetAsScalar("Distribution-QMax"))[0];
-  const UnsignedInteger pointNumber = ResourceMap::GetAsUnsignedInteger("Distribution-DefaultPointNumber");
-  const Scalar delta = 2.0 * (xMax - xMin) * (1.0 - 0.5 * (ResourceMap::GetAsScalar("Distribution-QMax" ) - ResourceMap::GetAsScalar("Distribution-QMin")));
-  const Sample data(distribution.computeComplementaryCDF(xMin - delta, xMax + delta, pointNumber));
-  plotCurve(data, pen);
+  Drawable drawable(distribution.drawSurvivalFunction().getDrawable(0));
+  Sample dataSurv(drawable.getData());
+  if (drawable.getImplementation()->getClassName() == "Staircase")
+  {
+    Sample newDataSurv(0, 2);
+    for (UnsignedInteger i = 0; i < dataSurv.getSize()-1; ++i)
+    {
+      newDataSurv.add(dataSurv[i]);
+      Point interPt(2);
+      interPt[0] = dataSurv(i, 0);
+      interPt[1] = dataSurv(i+1, 1);
+      newDataSurv.add(interPt);
+    }
+    newDataSurv.add(dataSurv[dataSurv.getSize()-1]);
+    dataSurv = newDataSurv;
+  }
+
+  plotCurve(dataSurv, pen);
   // Add margin at the top to avoid to cut the curve
-  double yMax = data.getMax()[1];
+  double yMax = dataSurv.getMax()[1];
   if (axisInterval(QwtPlot::yLeft).maxValue() < (yMax * (1 + 0.02)))
     yMax = yMax * (1 + 0.02);
-  setAxisScale(QwtPlot::yLeft, data.getMin()[1], yMax * (1 + 0.02));
+  setAxisScale(QwtPlot::yLeft, dataSurv.getMin()[1], yMax * (1 + 0.02));
   replot();
 }
 

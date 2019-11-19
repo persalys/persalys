@@ -54,6 +54,7 @@ signals:
 
 private:
   OT::Description variables_;
+  QStringList allDistributions_;
   QStringList distributions_;
   QTableView * tableView_;
   DistributionsTableModel * tableModel_;

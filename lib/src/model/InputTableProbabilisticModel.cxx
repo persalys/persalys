@@ -38,6 +38,9 @@ InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel &
   , failSoftMode_(failSoftMode)
   , physicalModel_(physicalModel)
 {
+  allDistributions_ = TranslationManager::GetTranslatedContinuousDistributions() <<
+                      TranslationManager::GetTranslatedDiscreteDistributions() <<
+                      tr("Inference result");
 }
 
 
@@ -141,7 +144,7 @@ QVariant InputTableProbabilisticModel::data(const QModelIndex & index, int role)
   else if (role == Qt::UserRole + 1)
   {
     const Input input(physicalModel_.getInputs()[index.row()]);
-    return input.isStochastic() ? TranslationManager::GetAvailableDistributions() << tr("Inference result") : QStringList();
+    return input.isStochastic() ? allDistributions_ : QStringList();
   }
   else if (role == Qt::BackgroundRole)
   {

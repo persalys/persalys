@@ -30,20 +30,66 @@
 #include <QFileDialog>
 #include <QDialogButtonBox>
 #include <cfloat>
+#include <openturns/UserDefined.hxx>
 
 using namespace OT;
 
 namespace PERSALYS
 {
-EditValuesWizard::EditValuesWizard(const QString &variableName, const Point& values, QWidget *parent)
+
+EditValuesWizard::EditValuesWizard(QWidget *parent)
   : QWizard(parent)
-  , model_(new QStandardItemModel(0, 1, this))
+  , model_(0)
   , proxy_(new QSortFilterProxyModel(this))
+  , errorMessageLabel_(new TemporaryLabel)
+  , sampleDescription_()
   , valueTable_(new QTableView(this))
   , valueNumber_(new QLabel("0"))
-  , addedValueBox_(new DoubleSpinBox)
   , removeButton_(0)
-  , values_(values)
+{
+}
+
+
+EditValuesWizard::EditValuesWizard(const Sample &values, QWidget *parent)
+  : QWizard(parent)
+  , model_(new SampleTableModel(values, true, false, Description(), this))
+  , proxy_(new QSortFilterProxyModel(this))
+  , errorMessageLabel_(new TemporaryLabel)
+  , sampleDescription_(values.getDescription())
+  , valueTable_(new QTableView(this))
+  , valueNumber_(new QLabel("0"))
+  , removeButton_(0)
+{
+  buildInterface();
+}
+
+
+EditValuesWizard::EditValuesWizard(const QString &variableName, const Point &values, QWidget *parent)
+  : QWizard(parent)
+  , model_(0)
+  , proxy_(new QSortFilterProxyModel(this))
+  , errorMessageLabel_(new TemporaryLabel)
+  , sampleDescription_()
+  , valueTable_(new QTableView(this))
+  , valueNumber_(new QLabel("0"))
+  , removeButton_(0)
+{
+  Point points(values);
+  // remove duplicates
+  auto last = std::unique(points.begin(), points.end());
+  points.erase(last, points.end());
+  Sample sample(points.getSize(), 1);
+  std::copy(points.begin(), points.end(), &sample(0, 0));
+  sampleDescription_ = Description(1, variableName.toStdString());
+  sample.setDescription(sampleDescription_);
+
+  model_ = new SampleTableModel(sample, true, false, Description(), this);
+
+  buildInterface();
+}
+
+
+void EditValuesWizard::buildInterface()
 {
   setWindowTitle(tr("Define values"));
   setButtonText(QWizard::FinishButton, tr("Finish"));
@@ -51,11 +97,10 @@ EditValuesWizard::EditValuesWizard(const QString &variableName, const Point& val
   setOption(QWizard::NoDefaultButton, true);
   setOption(QWizard::NoBackButtonOnStartPage, true);
 
-
-  model_->setHorizontalHeaderLabels(QStringList() << variableName);
   proxy_->setSourceModel(model_);
   proxy_->setSortRole(Qt::UserRole);
   valueTable_->setModel(proxy_);
+  proxy_->sort(0);
   valueTable_->horizontalHeader()->setStretchLastSection(true);
   valueTable_->verticalHeader()->hide();
   connect(valueTable_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(checkButtons()));
@@ -72,11 +117,8 @@ EditValuesWizard::EditValuesWizard(const QString &variableName, const Point& val
   // add button
   QPushButton * addButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"), this);
   addButton->setToolTip(tr("Add a value"));
-  QHBoxLayout * addLayout = new QHBoxLayout;
-  addLayout->addWidget(addedValueBox_);
-  addLayout->addWidget(addButton);
   connect(addButton, SIGNAL(clicked()), this, SLOT(addValue()));
-  optionLayout->addLayout(addLayout);
+  optionLayout->addWidget(addButton);
 
   // remove button
   removeButton_ = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
@@ -87,26 +129,12 @@ EditValuesWizard::EditValuesWizard(const QString &variableName, const Point& val
   optionLayout->addStretch();
 
   QWizardPage * page = new QWizardPage;
-  QHBoxLayout * pageLayout = new QHBoxLayout(page);
-  pageLayout->addWidget(valueTable_);
-  pageLayout->addLayout(optionLayout);
+  QGridLayout * pageLayout = new QGridLayout(page);
+  pageLayout->addWidget(valueTable_, 0, 0);
+  pageLayout->addLayout(optionLayout, 0, 1);
+  pageLayout->addWidget(errorMessageLabel_, 1, 0, 1, 2);
+
   addPage(page);
-
-  // sort and remove duplicates
-  std::sort(values_.begin(), values_.end());
-  auto last = std::unique(values_.begin(), values_.end());
-  values_.erase(last, values_.end());
-
-  // fill table
-  foreach(double value, values_)
-    insertAValue(value);
-
-  // set default value of addedValueBox_
-  if (values_.getSize())
-  {
-    std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(values_.begin(), values_.end());
-    addedValueBox_->setValue((*p.second) + 1);
-  }
 
   checkButtons();
 }
@@ -114,42 +142,33 @@ EditValuesWizard::EditValuesWizard(const QString &variableName, const Point& val
 
 void EditValuesWizard::addValue()
 {
-  if (!values_.contains(addedValueBox_->value()))
+  Sample sample(model_->getSample());
+  if (sample.getSize())
   {
-    addAValue(addedValueBox_->value());
-    addedValueBox_->setValue(addedValueBox_->value()+1);
+    Point newpoint(model_->columnCount());
+    for (int i = 0; i < model_->columnCount(); ++i)
+    {
+      const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount()-1, i)));
+      newpoint[i] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
+    }
+    sample.add(newpoint);
   }
+  else
+    sample = Sample(1, 1);
+
+  if (sampleDescription_.getSize() == sample.getDimension())
+    sample.setDescription(sampleDescription_);
+
+  // update table
+  model_->updateData(sample);
+
+  check();
 }
 
 
 void EditValuesWizard::checkButtons()
 {
-  const QItemSelectionModel * selectionModel = valueTable_->selectionModel();
-  const QItemSelection & selection = selectionModel->selection();
-  removeButton_->setEnabled(!selection.empty());
-}
-
-
-void EditValuesWizard::addAValue(double v)
-{
-  if (!values_.contains(v))
-  {
-    values_.add(v);
-    insertAValue(v);
-  }
-}
-
-
-void EditValuesWizard::insertAValue(double v)
-{
-  Q_ASSERT(values_.contains(v));
-
-  QStandardItem * currentItem = new QStandardItem(QString::number(v, 'g', StudyTreeViewModel::DefaultSignificantDigits));
-  currentItem->setData(v, Qt::UserRole);
-  currentItem->setEditable(false);
-  model_->appendRow(currentItem);
-
-  check();
+  removeButton_->setEnabled(!valueTable_->selectionModel()->selection().empty());
 }
 
 
@@ -157,46 +176,118 @@ void EditValuesWizard::removeSelectedValues()
 {
   QList<int> selectedRow;
   // retrieve rows
-  foreach(QModelIndex index, valueTable_->selectionModel()->selectedIndexes())
-  {
+  foreach (QModelIndex index, valueTable_->selectionModel()->selectedIndexes())
     selectedRow << proxy_->mapToSource(index).row();
-  }
+
   // sort
   std::sort(selectedRow.begin(), selectedRow.end(), std::greater<int>());
 
   // remove
-  foreach(int row, selectedRow)
+  Sample sample(model_->getSample());
+  foreach (int row, selectedRow)
   {
-    QList<QStandardItem*> rowItems = model_->takeRow(row);
-    Q_ASSERT(rowItems.count() == 1);
-    bool ok;
-    const double value = rowItems.first()->data(Qt::UserRole).toDouble(&ok);
-    Q_ASSERT(ok);
-    values_.erase(std::remove(values_.begin(), values_.end(), value), values_.end());
+    Point point(sample[row]);
+    sample.erase(row);
   }
+  model_->updateData(sample);
 
   check();
 }
 
 
-Point EditValuesWizard::getValues() const
+Point EditValuesWizard::getValues(const UnsignedInteger index) const
 {
-  Point orderedValues(values_);
-  std::sort(orderedValues.begin(), orderedValues.end());
-  return orderedValues;
+  return model_->getSample().getMarginal(index).asPoint();
 }
 
 
 void EditValuesWizard::check()
 {
   proxy_->sort(0);
-  valueNumber_->setText(QString::number(values_.getSize()));
+  valueNumber_->setText(QString::number(model_->getSample().getSize()));
   checkButtons();
 }
 
 
 bool EditValuesWizard::validateCurrentPage()
 {
-  return values_.getSize() > 1;
+  if (model_->getSample().getSize() < 2)
+  {
+    errorMessageLabel_->setErrorMessage(tr("Define at least two values"));
+    return false;
+  }
+  return true;
+}
+
+
+UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCollection &parameters, QWidget *parent)
+  : EditValuesWizard(parent)
+{
+  Q_ASSERT(parameters.getSize() == 2);
+
+  const UnsignedInteger nbPoints = parameters[0].getSize();
+  Q_ASSERT(nbPoints);
+
+  Sample sample(nbPoints, 2);
+  for (UnsignedInteger i = 0; i < 2; ++i)
+  {
+    Q_ASSERT(parameters[i].getSize() == nbPoints);
+    for (UnsignedInteger j = 0; j < nbPoints; ++j)
+      sample(j, i) = parameters[i][j];
+  }
+  Description description(2);
+  description[0] = tr("Value").toStdString();
+  description[1] = tr("Probability").toStdString();
+  sample.setDescription(description);
+  model_ = new ProbabilityTableModel(sample, this);
+  connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
+  connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+
+  buildInterface();
+}
+
+
+void UserDefinedWizard::addValue()
+{
+  Point newpoint(model_->columnCount());
+  const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount()-1, 0)));
+  newpoint[0] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
+
+  Sample sample(model_->getSample());
+  Point proba(sample.getMarginal(1).asPoint());
+  // if sum < 1 : p = 1 - sum
+  // if sum >= 1 : p = 0
+  newpoint[1] = 1.0 - std::min(std::accumulate(proba.begin(), proba.end(), 0.0), 1.0);
+
+  sample.add(newpoint);
+  model_->updateData(sample);
+
+  check();
+}
+
+
+Distribution UserDefinedWizard::getDistribution() const
+{
+  return UserDefined(model_->getSample().getMarginal(0), getValues(1));
+}
+
+
+bool UserDefinedWizard::validateCurrentPage()
+{
+  errorMessageLabel_->reset();
+  Sample sample(model_->getSample());
+  if (sample.getSize() < 2)
+  {
+    errorMessageLabel_->setErrorMessage(tr("Define at least two values"));
+    return false;
+  }
+  Point proba(sample.getMarginal(1).asPoint());
+  const double sum = std::accumulate(proba.begin(), proba.end(), 0.0);
+  if (sum > 1 || sum <= 0)
+  {
+    errorMessageLabel_->setErrorMessage(tr("The sum of probabilities must be in ]0, 1]"));
+    return false;
+  }
+  return true;
 }
 }

@@ -64,6 +64,9 @@ void TaylorExpansionMomentsAnalysis::initialize()
 
 void TaylorExpansionMomentsAnalysis::launch()
 {
+  if (!getPhysicalModel().getDistribution().isContinuous())
+    throw InvalidArgumentException(HERE) << "The model distribution must have continuous marginals.";
+
   // set analysis
   TaylorExpansionMoments algoTaylorExpansionMoments(getPhysicalModel().getOutputRandomVector(getInterestVariables()));
 
