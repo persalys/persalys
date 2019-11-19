@@ -211,6 +211,7 @@ void TranslationManager::InitializeErrorMessages()
   ErrorMessages_.insert(type("The physical model must have inputs and at least a selected output.", tr("The physical model must have inputs and at least a selected output.")));
   ErrorMessages_.insert(type("The physical model must have stochastic inputs.", tr("The physical model must have stochastic inputs.")));
   ErrorMessages_.insert(type("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.", tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.")));
+  ErrorMessages_.insert(type("The limit state is not valid.", tr("The limit state is not valid.")));
 }
 
 

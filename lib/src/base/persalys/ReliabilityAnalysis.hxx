@@ -44,6 +44,7 @@ public:
   virtual void setInterestVariables(const OT::Description& outputsNames);
 
   virtual void run();
+  virtual bool canBeLaunched(OT::String &errorMessage) const;
 
   /** String converter */
   virtual OT::String __repr__() const;

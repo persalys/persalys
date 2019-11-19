@@ -88,6 +88,17 @@ void ReliabilityAnalysis::run()
 }
 
 
+bool ReliabilityAnalysis::canBeLaunched(String &errorMessage) const
+{
+  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
+  if (!canBeLaunched)
+    return false;
+  if (!getLimitState().isValid())
+    errorMessage = "The limit state is not valid.";
+  return errorMessage.empty();
+}
+
+
 /* String converter */
 String ReliabilityAnalysis::__repr__() const
 {

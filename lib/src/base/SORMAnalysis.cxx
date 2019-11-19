@@ -69,6 +69,9 @@ void SORMAnalysis::initialize()
 
 void SORMAnalysis::launch()
 {
+  if (!getPhysicalModel().getDistribution().isContinuous())
+    throw InvalidArgumentException(HERE) << "The model distribution must have continuous marginals.";
+
   const Description outputName(1, getLimitState().getOutputName());
 
   // get function
