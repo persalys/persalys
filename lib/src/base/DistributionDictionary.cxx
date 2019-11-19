@@ -31,7 +31,7 @@ namespace PERSALYS
 std::vector<String> DistributionDictionary::ContinuousDistributions_ = {
   "Arcsine", "Beta", "ChiSquare", "Exponential", "Gamma", "Gumbel", "InverseNormal",
   "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", "Student",
-  "Trapezoidal", "Triangular", "Uniform", "Weibull"
+  "Trapezoidal", "Triangular", "Uniform", "WeibullMax", "WeibullMin"
   };
 std::vector<String> DistributionDictionary::DiscreteDistributions_ = {
   "Bernoulli", "Geometric", "Binomial", "Geometric", "Hypergeometric", "NegativeBinomial",
@@ -62,6 +62,7 @@ DistributionFactory DistributionDictionary::BuildDistributionFactory(const Strin
   else if (distributionName == "Uniform") return UniformFactory();
   else if (distributionName == "WeibullMax") return WeibullMaxFactory();
   else if (distributionName == "WeibullMin") return WeibullMinFactory();
+  else if (distributionName == "Weibull") return WeibullMinFactory();
   else
   {
     throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildDistributionFactory unknow distribution : " << distributionName;

@@ -24,10 +24,51 @@
 
 #include <openturns/Study.hxx>
 #include <openturns/XMLStorageManager.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/WeibullMin.hxx>
+#include <openturns/ThresholdEventImplementation.hxx>
 
 #include <boost/filesystem.hpp>
 
 using namespace OT;
+
+// define old OT classes to be able to open old xml filesystem
+
+namespace OT
+{
+
+// -- removed Copula class
+
+class Copula : public Distribution
+{
+  CLASSNAME
+};
+CLASSNAMEINIT(Copula)
+TEMPLATE_CLASSNAMEINIT(PersistentCollection<Copula>)
+static const Factory<PersistentCollection<Copula> > Factory_PersistentCollection_Copula;
+
+
+// -- renamed Weibull class
+
+class Weibull : public WeibullMin
+{
+  CLASSNAME
+};
+CLASSNAMEINIT(Weibull)
+static Factory<Weibull> Factory_Weibull;
+
+
+// -- renamed EventRandomVector class
+
+class EventRandomVector : public ThresholdEventImplementation
+{
+  CLASSNAME
+};
+CLASSNAMEINIT(EventRandomVector)
+static Factory<EventRandomVector> Factory_EventRandomVector;
+
+} // namespace OT
+
 
 namespace PERSALYS
 {
