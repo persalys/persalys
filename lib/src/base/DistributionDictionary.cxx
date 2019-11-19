@@ -34,9 +34,9 @@ std::vector<String> DistributionDictionary::ContinuousDistributions_ = {
   "Trapezoidal", "Triangular", "Uniform", "WeibullMax", "WeibullMin"
   };
 std::vector<String> DistributionDictionary::DiscreteDistributions_ = {
-  "Bernoulli", "Geometric", "Binomial", "Geometric", "Hypergeometric", "NegativeBinomial",
+  "Bernoulli", "Geometric", "Binomial", "Geometric", /*"Hypergeometric",*/ "NegativeBinomial",
   "Poisson", "Skellam", "UserDefined", "ZipfMandelbrot"
-  };
+  }; // TODO OT 1.15: add Hypergeometric
 
 
 /* Build a distribution factory */
