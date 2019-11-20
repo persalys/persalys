@@ -66,24 +66,29 @@ install ( TARGETS persalysplotparaview
 )
 
 if (ParaView_VERSION VERSION_LESS 5.7)
-  include_directories (plugins/XYChartRepresentationColumns)
+  include_directories (plugins/XYChartRepresentationColumns/XYChartRepresentationColumn)
   add_paraview_plugin(XYChartRepresentationColumns "1.0"
-    SERVER_MANAGER_XML plugins/XYChartRepresentationColumns/XYChartRepresentationColumns.xml
-    SERVER_MANAGER_SOURCES plugins/XYChartRepresentationColumns/vtkXYChartRepresentationColumns.cxx)
+    SERVER_MANAGER_XML plugins/XYChartRepresentationColumns/XYChartRepresentationColumn/XYChartRepresentationColumns.xml
+    SERVER_MANAGER_SOURCES plugins/XYChartRepresentationColumns/XYChartRepresentationColumn/vtkXYChartRepresentationColumns.cxx)
   install (TARGETS XYChartRepresentationColumns
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
     ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH})
+  target_link_libraries (persalysplotparaview XYChartRepresentationColumns)
 else ()
   # https://gitlab.kitware.com/paraview/paraview/issues/19358
   if (CMAKE_LIBRARY_OUTPUT_DIRECTORY STREQUAL "")
     set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ".")
   endif ()
   # https://kitware.github.io/paraview-docs/latest/cxx/PluginHowto.html
-  paraview_plugin_scan (PLUGIN_FILES "${CMAKE_CURRENT_SOURCE_DIR}/plugins/XYChartRepresentationColumns/paraview.plugin"
+  paraview_plugin_scan (PLUGIN_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/plugins/XYChartRepresentationColumns/paraview.plugin"
+    "${CMAKE_CURRENT_SOURCE_DIR}/plugins/BagPlotViewsAndFilters/paraview.plugin"
     PROVIDES_PLUGINS plugins
     ENABLE_BY_DEFAULT ON)
   paraview_plugin_build (PLUGINS ${plugins})
+  include_directories(plugins/BagPlotViewsAndFilters/BagPlot ${CMAKE_CURRENT_BINARY_DIR}/plugins/BagPlotViewsAndFilters/BagPlot)
+  target_link_libraries (persalysplotparaview XYChartRepresentationColumns BagPlotViewsAndFilters)
 endif ()
 
-target_link_libraries (persalysplotparaview XYChartRepresentationColumns)
+

@@ -1,0 +1,10 @@
+NAME
+  XYChartRepresentationColumn
+DEPENDS
+  VTK::FiltersCore
+  ParaView::ServerManagerRendering
+  ParaView::ClientServerCoreRendering
+  VTK::CommonExecutionModel
+PRIVATE_DEPENDS
+  VTK::CommonCore
+  ParaView::VTKExtensionsDefault
