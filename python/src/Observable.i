@@ -4,15 +4,8 @@
 #include "persalys/Observable.hxx"
 %}
 
-%ignore Observable;
+%ignore PERSALYS::Observable::operator=;
 
 %include persalys/Observable.hxx
 
 
-namespace PERSALYS {
-
-%extend Observable { Observable(const Observable & other) { return new PERSALYS::Observable(other); } 
-
-}
-
-}
