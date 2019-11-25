@@ -93,8 +93,6 @@ void SRCResultWindow::buildInterface()
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
-  Interval indicesInterval;
-  Interval signedIndicesInterval;
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     QWidget * indicesWidget = new QWidget;
