@@ -14,6 +14,7 @@ cmake -DUSE_COTIRE=ON \
   -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -D_GLIBCXX_ASSERTIONS" \
   -DSWIG_COMPILE_FLAGS="-Wno-error=unused-parameter" \
   -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
+  -DSPHINX_FLAGS="-W -T -j8" \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr \
   /io
 make install
