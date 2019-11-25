@@ -1,0 +1,79 @@
+%feature("docstring") PERSALYS::CouplingInputFile
+"Input file metadata for coupling.
+
+Parameters
+----------
+path : str
+    Path to the input file, must be relative."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::setPath
+"Path accessor.
+
+Parameters
+----------
+path : str
+    Path to the input file, must be relative."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::getPath
+"Path accessor.
+
+Returns
+-------
+path : :py:class:`openturns.Description`
+    Path"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::setTemplatePath
+"Template path accessor.
+
+Parameters
+----------
+template_path : str
+    Template file path."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::getTemplatePath
+"Template path accessor.
+
+Returns
+-------
+template_path : str
+    Template file path."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::setVariables
+"Variables accessor.
+
+Parameters
+----------
+names : sequence of str
+    Variable names
+tokens : sequence of str
+    Tokens used for replacement in the template file."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::getTokens
+"Tokens accessor.
+
+Returns
+-------
+tokens : :py:class:`openturns.Description`
+    Tokens for each variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::getVariableNames
+"Variable names accessor.
+
+Returns
+-------
+variable_names : :py:class:`openturns.Description`
+    Output variable names"

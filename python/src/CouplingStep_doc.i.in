@@ -1,0 +1,74 @@
+%feature("docstring") PERSALYS::CouplingStep
+"Coupling step.
+
+Represents one step of the coupling with one command to execute and the
+input or output files associated.
+
+Parameters
+----------
+command : str
+    Command to execute
+input_files : sequence of :class:`~persalys.CouplingInputFile`
+    Input file metadatas
+output_files : sequence of :class:`~persalys.CouplingOutputFile`
+    Output file metadatas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::setCommand
+"Path accessor.
+
+Parameters
+----------
+path : str
+    Path"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getCommand
+"Path accessor.
+
+Returns
+-------
+path : :py:class:`openturns.Description`
+    Path"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getInputFiles
+"Template path accessor.
+
+Returns
+-------
+input_files : sequence of :class:`~persalys.CouplingInputFile`
+    Input file metadatas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::setInputFiles
+"Tokens accessor.
+
+Parameters
+----------
+input_files : sequence of :class:`~persalys.CouplingInputFile`
+    Input file metadatas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::setOutputFiles
+"Variable names accessor.
+
+Parameters
+----------
+output_files : sequence of :class:`~persalys.CouplingOutputFile`
+    Output file metadatas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getOutputFiles
+"Variable names accessor.
+
+Returns
+-------
+output_files : sequence of :class:`~persalys.CouplingOutputFile`
+    Output file metadatas"

@@ -181,4 +181,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include CalibrationAnalysis.i
 %include StudyImplementation.i
 %include Study.i
-
+%include CouplingInputFile.i
+%include CouplingOutputFile.i
+%include CouplingStep.i
+%include CouplingPhysicalModel.i

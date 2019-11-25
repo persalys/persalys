@@ -1,0 +1,50 @@
+%feature("docstring") PERSALYS::CouplingPhysicalModel
+"File-exchange based coupling model.
+
+Parameters
+----------
+name : str
+    Model name
+steps : sequence of :class:`~persalys.CouplingStep`
+    List of steps to execute
+
+Examples
+--------
+>>> import persalys
+>>> import sys
+
+input.txt is generated from the existing input_template.txt by replacing the @XN tokens:
+>>> input_file1 = persalys.CouplingInputFile('input.txt')
+>>> input_file1.setTemplatePath('input_template.txt')
+>>> input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+
+external_program.py reads input.txt and writes output.txt:
+
+>>> input_file2 = persalys.CouplingInputFile('external_program.py')
+
+output variables YM are read from output.txt:
+
+>>> output_file = persalys.CouplingOutputFile('output.txt')
+>>> output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+>>> step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file1, input_file2], [output_file])
+>>> model = persalys.CouplingPhysicalModel('A', [step])"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::getSteps
+"Coupling steps accessor.
+
+Returns
+-------
+steps : sequence of :class:`~persalys.CouplingStep`
+    List of steps to execute"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::setSteps
+"Coupling steps accessor.
+
+Parameters
+----------
+steps : sequence of :class:`~persalys.CouplingStep`
+    List of steps to execute"

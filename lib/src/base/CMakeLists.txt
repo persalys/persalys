@@ -1,7 +1,7 @@
-include_directories (${INTERNAL_INCLUDE_DIRS})
 include_directories (${PYTHON_INCLUDE_DIRS})
 
 ot_add_current_dir_to_include_dirs ()
+include_directories (${INTERNAL_INCLUDE_DIRS})
 
 set(BASE_SOURCEFILES DistributionDictionary.cxx
                      BaseTools.cxx
@@ -68,6 +68,10 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      Observations.cxx
                      CalibrationAnalysis.cxx
                      CalibrationAnalysisResult.cxx
+                     CouplingInputFile.cxx
+                     CouplingOutputFile.cxx
+                     CouplingStep.cxx
+                     CouplingPhysicalModel.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx )
@@ -171,6 +175,9 @@ ot_install_header_file ( LaunchParametersVisitor.hxx )
 ot_install_header_file ( Observations.hxx )
 ot_install_header_file ( CalibrationAnalysis.hxx )
 ot_install_header_file ( CalibrationAnalysisResult.hxx )
+ot_install_header_file ( CouplingInputFile.hxx )
+ot_install_header_file ( CouplingOutputFile.hxx )
+ot_install_header_file ( CouplingStep.hxx )
 
 if (OTFMI_FOUND)
   ot_install_header_file (FMIPhysicalModel.hxx)
