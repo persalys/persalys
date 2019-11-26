@@ -95,6 +95,7 @@ void AnalysisWindow::buildInterface()
   // buttons
   // - run button
   runButton_ = new QPushButton(tr("Run"));
+  runButton_->setObjectName("runbutton");
   runButton_->setIcon(QIcon(":/images/system-run.png"));
   connect(runButton_, SIGNAL(clicked(bool)), this, SLOT(launchAnalysis()));
   mainLayout->addWidget(runButton_, 1, 0);
