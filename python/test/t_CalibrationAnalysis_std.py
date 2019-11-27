@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 import openturns as ot
+import openturns.testing as ott
 import persalys
 
 ot.RandomGenerator.SetSeed(0)
@@ -132,12 +133,18 @@ except Exception as e:
 
 print("\nthetaMAP=", analysis.getResult().getCalibrationResult().getParameterMAP())
 print("thetaMAP CI=\n", analysis.getResult().getConfidenceInterval())
-print("\nthetaMAP=", analysis2.getResult().getCalibrationResult().getParameterMAP())
-print("thetaMAP CI=\n", analysis2.getResult().getConfidenceInterval())
+
+#print("\nthetaMAP=", analysis2.getResult().getCalibrationResult().getParameterMAP())
+#print("thetaMAP CI=\n", analysis2.getResult().getConfidenceInterval())
+ott.assert_almost_equal(analysis2.getResult().getCalibrationResult().getParameterMAP(), [7.73108e+08,3.55285e+09], 1e-2, 1)
+
 print("\nthetaMAP=", analysis3.getResult().getCalibrationResult().getParameterMAP())
 print("thetaMAP CI=\n", analysis3.getResult().getConfidenceInterval())
-print("\nthetaMAP=", analysis4.getResult().getCalibrationResult().getParameterMAP())
-print("thetaMAP CI=\n", analysis4.getResult().getConfidenceInterval())
+
+#print("\nthetaMAP=", analysis4.getResult().getCalibrationResult().getParameterMAP())
+#print("thetaMAP CI=\n", analysis4.getResult().getConfidenceInterval())
+ott.assert_almost_equal(analysis4.getResult().getCalibrationResult().getParameterMAP(), [7.47517e+08,2.83374e+09,9.58942], 1e-2, 1)
+
 print("\nthetaMAP=", analysis5.getResult().getCalibrationResult().getParameterMAP())
 print("thetaMAP CI=\n", analysis5.getResult().getConfidenceInterval())
 print("\nthetaMAP=", analysis6.getResult().getCalibrationResult().getParameterMAP())
