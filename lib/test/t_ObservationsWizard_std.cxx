@@ -46,7 +46,7 @@ private slots:
   void TestImport()
   {
     // create the observations
-    String filename = "normal.csv";
+    String filename = "normal2.csv";
     Normal(5).getSample(10).exportToCSVFile(filename);
     Observations obs("obs", model_, filename, Indices(1, 2), Indices(1, 0), Description(1, "E"), Description(1, "Ep2"));
 
@@ -82,7 +82,7 @@ private slots:
 
     QVERIFY2(wizard.getDesignOfExperiment().__repr__()==obs.__repr__(), "The two Observations must be equal");
 
-    remove("normal.csv");
+    remove(filename.c_str());
   }
 };
 }

@@ -23,7 +23,7 @@ model = persalys.SymbolicPhysicalModel('aModelPhys', [X0, X1, X2, X3], [Y0, Y1, 
 anOTStudy.add(model)
 
 # Observations ##
-filename = 'normal.csv'
+filename = 'normal2.csv'
 sample = ot.Normal(8).getSample(10)
 sample.exportToCSVFile(filename)
 
@@ -36,7 +36,7 @@ openturns.testing.assert_almost_equal(obs.getSample(), sample.getMarginal([3, 7,
 # - reload file
 sample2 = sample*3
 sample2.exportToCSVFile(filename)
-obs.setFileName('normal.csv')
+obs.setFileName(filename)
 openturns.testing.assert_almost_equal(obs.getSample(), sample2.getMarginal([3, 7, 2, 6]), 1e-16)
 
 # - change columns
