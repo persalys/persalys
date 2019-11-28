@@ -12,7 +12,7 @@ if (WIN32)
 endif ()
 
 set (CHECK_ENVIRONMENT
-     "PYTHONPATH=${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${OTMORRIS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${OTGUI_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
+     "PYTHONPATH=${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${OTMORRIS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${PERSALYS_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
     )
 
 set ( CHECK_TO_BE_RUN )
@@ -112,7 +112,11 @@ ot_check_test ( Cogeneration_std )
 
 if (BUILD_GUI)
   include_directories (${CMAKE_CURRENT_BINARY_DIR}) # for mocs
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_deterministic_analyses.xml ${CMAKE_CURRENT_BINARY_DIR})
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_probabilistic_analyses.xml ${CMAKE_CURRENT_BINARY_DIR})
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/test_field_analyses.xml ${CMAKE_CURRENT_BINARY_DIR})
   ot_qt_check_test (WelcomeWindow_std)
+  ot_qt_check_test (MainWindow_std -platform minimal)
   ot_qt_check_test (OptimizationWizard_std)
   ot_qt_check_test (CentralTendencyWizard_std)
   ot_qt_check_test (SensitivityAnalysisWizard_std)
@@ -131,6 +135,9 @@ if (BUILD_GUI)
   ot_qt_check_test (SymbolicPhysicalModelWindow_std)
   ot_qt_check_test (ProbabilisticModelWindow_std -platform minimal)
   ot_qt_check_test (DataModelWindow_std)
+  if (NOT MINGW)
+    ot_qt_check_test (MonteCarloResultWindow_std -platform offscreen)
+  endif ()
 endif ()
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"

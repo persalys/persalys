@@ -54,7 +54,7 @@ PythonFieldModel::PythonFieldModel(const String& name,
   : PythonPhysicalModel(name, inputs, outputs, code)
 {
   hasMesh_ = true;
-  setMeshModel(meshModel);
+  setMeshModel(meshModel.getImplementation()->clone());
 }
 
 

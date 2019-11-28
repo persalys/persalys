@@ -29,6 +29,8 @@ class PERSALYS_API MonteCarloResultWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 
+  friend class TestMonteCarloResultWindow;
+
 public:
   MonteCarloResultWindow(AnalysisItem * item, QWidget * parent = 0);
 
