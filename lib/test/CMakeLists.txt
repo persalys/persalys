@@ -96,7 +96,7 @@ macro (ot_qt_check_test TESTNAME)
   endif ()
 
   add_test (NAME cppcheck_${TESTNAME} COMMAND ${TESTNAME_TGT} ${TEST_ARGUMENTS})
-  set_tests_properties (cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT};QT_QPA_PLATFORM_PLUGIN_PATH=.")
+  set_tests_properties (cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT}")
 endmacro ()
 
 
@@ -135,9 +135,10 @@ if (BUILD_GUI)
   ot_qt_check_test (SymbolicPhysicalModelWindow_std)
   ot_qt_check_test (ProbabilisticModelWindow_std -platform minimal)
   ot_qt_check_test (DataModelWindow_std)
-  if (NOT MINGW)
-    ot_qt_check_test (MonteCarloResultWindow_std -platform offscreen)
+  if (UNIX)
+    set (PLATFORM_OFFSCREEN -platform offscreen)
   endif ()
+  ot_qt_check_test (MonteCarloResultWindow_std ${PLATFORM_OFFSCREEN})
 endif ()
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
