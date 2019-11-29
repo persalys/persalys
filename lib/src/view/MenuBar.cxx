@@ -45,7 +45,7 @@ MenuBar::MenuBar(const Actions* actions)
 void MenuBar::buildActions(const Actions* actions)
 {
   // File menu
-  QMenu * fileMenu = new QMenu(tr("&File"));
+  QMenu * fileMenu = new QMenu(tr("&File"), this);
   QAction * action;
 
   fileMenu->addAction(actions->newAction());
@@ -84,8 +84,8 @@ void MenuBar::buildActions(const Actions* actions)
   addMenu(fileMenu);
 
   // View menu
-  QMenu * viewMenu = new QMenu(tr("&View"));
-  QMenu * windowMenu = new QMenu(tr("W&indow"));
+  QMenu * viewMenu = new QMenu(tr("&View"), this);
+  QMenu * windowMenu = new QMenu(tr("W&indow"), this);
   pythonConsoleDisplayAction_ = new QAction(tr("Python Console"), this);
   pythonConsoleDisplayAction_->setCheckable(true);
   windowMenu->addAction(pythonConsoleDisplayAction_);
@@ -94,7 +94,7 @@ void MenuBar::buildActions(const Actions* actions)
   addMenu(viewMenu);
 
   // Help menu
-  QMenu * helpMenu = new QMenu(tr("&Help"));
+  QMenu * helpMenu = new QMenu(tr("&Help"), this);
 
   action = new QAction(QIcon(":/images/help-contents.png"), tr("User's manual"), this);
   connect(action, SIGNAL(triggered()), this, SLOT(openUserManual()));
