@@ -21,8 +21,6 @@ persalys_add_library (persalyspyinterp ${SOURCEFILES} ${PERSALYS_CONSOLE_MOC_SRC
 
 if ( BUILD_SHARED_LIBS )
   target_compile_definitions (persalyspyinterp PRIVATE PERSALYS_DLL_EXPORTS PyInterp_EXPORTS)
-else ()
-  target_compile_definitions (persalyspyinterp PRIVATE PYINTERP_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
