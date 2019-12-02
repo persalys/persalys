@@ -27,7 +27,7 @@
 
 // ========================================================
 // set dllexport type for Win platform 
-#ifdef WIN32
+#if !defined(PYINTERP_STATIC) && defined(_WIN32)
 # if defined PYINTERP_EXPORTS || defined PyInterp_EXPORTS
 #  define PYINTERP_EXPORT __declspec(dllexport)
 # else
