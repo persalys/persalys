@@ -23,8 +23,6 @@ persalys_add_library (persalyspyconsole ${SOURCEFILES} ${PERSALYS_CONSOLE_MOC_SR
 
 if ( BUILD_SHARED_LIBS )
   target_compile_definitions (persalyspyconsole PRIVATE PERSALYS_DLL_EXPORTS PyConsole_EXPORTS)
-else ()
-  target_compile_definitions (persalyspyconsole PRIVATE PYCONSOLE_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
