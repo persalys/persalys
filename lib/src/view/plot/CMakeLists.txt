@@ -44,8 +44,8 @@ qt5_wrap_cpp (PERSALYS_PLOT_MOC_SRCS
 include_directories (${INTERNAL_INCLUDE_DIRS})
 persalys_add_library (persalysplot ${SOURCEFILES} ${PERSALYS_PLOT_MOC_SRCS})
 
-if ( BUILD_SHARED_LIBS )
-  set_target_properties ( persalysplot PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
+if (BUILD_SHARED_LIBS)
+  target_compile_definitions (persalysplot PRIVATE PERSALYS_DLL_EXPORTS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

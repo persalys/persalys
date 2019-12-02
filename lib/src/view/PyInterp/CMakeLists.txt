@@ -20,7 +20,9 @@ include_directories (${INTERNAL_INCLUDE_DIRS})
 persalys_add_library (persalyspyinterp ${SOURCEFILES} ${PERSALYS_CONSOLE_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
-  set_target_properties (persalyspyinterp PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS;PyInterp_EXPORTS")
+  target_compile_definitions (persalyspyinterp PRIVATE PERSALYS_DLL_EXPORTS PyInterp_EXPORTS)
+else ()
+  target_compile_definitions (persalyspyinterp PRIVATE PYINTERP_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -36,7 +38,7 @@ include_directories (${PYTHON_INCLUDE_DIRS})
 target_link_libraries (persalyspyinterp ${QT_LIBRARIES})
 target_link_libraries (persalyspyinterp ${PYTHON_LIBRARIES})
 if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-  target_compile_definitions (persalyspyinterp PRIVATE -DMS_WIN64)
+  target_compile_definitions (persalyspyinterp PRIVATE MS_WIN64)
 endif ()
 
 install ( TARGETS persalyspyinterp

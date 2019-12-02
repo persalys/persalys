@@ -368,8 +368,8 @@ include_directories (${PYTHON_INCLUDE_DIRS})
 persalys_add_library (persalysview ${SOURCEFILES} ${PERSALYS_VIEW_MOC_SRCS} ${PERSALYS_RESOURCES_RCC})
 target_compile_features (persalysview PRIVATE cxx_lambdas)
 
-if ( BUILD_SHARED_LIBS )
-  set_target_properties ( persalysview PROPERTIES COMPILE_DEFINITIONS "PERSALYS_DLL_EXPORTS" )
+if (BUILD_SHARED_LIBS)
+  target_compile_definitions (persalysview PRIVATE PERSALYS_DLL_EXPORTS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

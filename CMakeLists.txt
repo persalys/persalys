@@ -323,7 +323,7 @@ if (BUILD_GUI)
   add_subdirectory (main)
 endif ()
 
-if ( PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND AND BUILD_SHARED_LIBS )
+if (PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND)
   add_subdirectory ( python )
   add_dependencies ( installcheck pyinstallcheck )
 endif ()

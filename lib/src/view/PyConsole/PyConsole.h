@@ -27,7 +27,7 @@
 
 // ========================================================
 // set dllexport type for Win platform 
-#ifdef WIN32
+#if !defined(PYCONSOLE_STATIC) && defined(_WIN32)
 #  if defined PYCONSOLE_EXPORTS || defined PyConsole_EXPORTS
 #    define PYCONSOLE_EXPORT __declspec(dllexport)
 #  else
