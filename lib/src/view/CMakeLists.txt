@@ -115,6 +115,7 @@ ot_add_source_file ( ImportSampleWidget.cxx )
 ot_add_source_file ( ObservationsWizard.cxx )
 ot_add_source_file ( CalibrationAnalysisWizard.cxx )
 ot_add_source_file ( CalibrationResultWindow.cxx )
+ot_add_source_file ( CouplingModelWindow.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -232,6 +233,7 @@ ot_install_header_file ( ObservationsWizard.hxx )
 ot_install_header_file ( ObservationsWindow.hxx )
 ot_install_header_file ( CalibrationAnalysisWizard.hxx )
 ot_install_header_file ( CalibrationResultWindow.hxx )
+ot_install_header_file ( CouplingModelWindow.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -342,6 +344,7 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/ObservationsWindow.hxx
                                   persalys/CalibrationAnalysisWizard.hxx
                                   persalys/CalibrationResultWindow.hxx
+                                  persalys/CouplingModelWindow.hxx
                                   )
 
 

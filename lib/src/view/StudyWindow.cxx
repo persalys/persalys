@@ -80,7 +80,7 @@ void StudyWindow::buildInterface()
   layout->addLayout(hLayout, ++row, 0, 1, 2);
 
   // row - buttons
-  int nbModels = 2;
+  int nbModels = 3;
   QPushButton * button = new DiagramPushButton(tr("Symbolic model"));
   button->setStatusTip(tr("Create a physical model with outputs defined by analytical formulae"));
   connect(button, SIGNAL(clicked()), studyItem_->newSymbolicModel_, SIGNAL(triggered()));
@@ -106,6 +106,12 @@ void StudyWindow::buildInterface()
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
   ++nbModels;
 #endif
+
+  button = new DiagramPushButton(tr("Coupling model"));
+  button->setStatusTip(tr("Create a coupling model"));
+  connect(button, SIGNAL(clicked()), studyItem_->newCouplingModel_, SIGNAL(triggered()));
+  layout->addWidget(button, ++row, 0, Qt::AlignTop);
+
   layout->setRowStretch(row, 1);
 
   // functionalities list

@@ -32,6 +32,7 @@
 #include "persalys/PythonFieldModel.hxx"
 #include "persalys/ReliabilityAnalysis.hxx"
 #include "persalys/CalibrationAnalysis.hxx"
+#include "persalys/CouplingPhysicalModel.hxx"
 
 #ifdef PERSALYS_HAVE_OTFMI
 #include "persalys/FMIPhysicalModel.hxx"
@@ -68,14 +69,20 @@ void StudyItem::buildActions()
   newPythonModel_ = new QAction(tr("Python model"), this);
   connect(newPythonModel_, &QAction::triggered, [=](){ study_.add(new PythonPhysicalModel(getModelName(tr("PythonModel_")))); });
 
+  newCouplingModel_ = new QAction(tr("Coupling model"), this);
 #ifdef PERSALYS_HAVE_YACS
   newYACSModel_ = new QAction(tr("YACS model"), this);
   connect(newYACSModel_, &QAction::triggered, [=](){ study_.add(new YACSPhysicalModel(getModelName(tr("YACSModel_")))); });
+
+  connect(newYACSModel_, &QAction::triggered, [=](){ study_.add(new YACSCouplingPhysicalModel(getModelName(tr("YACSModel_")))); });
+#else
+  connect(newCouplingModel_, &QAction::triggered, [=](){ study_.add(new CouplingPhysicalModel(getModelName(tr("CouplingModel_")))); });
 #endif
 #ifdef PERSALYS_HAVE_OTFMI
   newFMIModel_ = new QAction(tr("FMI model"), this);
   connect(newFMIModel_, &QAction::triggered, [=](){ study_.add(new FMIPhysicalModel(getModelName(tr("FMIModel_")))); });
 #endif
+
   // new model actions
   newSymbolicFieldModel_ = new QAction(tr("Symbolic Field model"), this);
   connect(newSymbolicFieldModel_, &QAction::triggered, [=](){ study_.add(new SymbolicFieldModel(getModelName(tr("SymbolicModel_")))); });
@@ -114,6 +121,7 @@ void StudyItem::buildActions()
 #endif
   appendAction(newSymbolicFieldModel_);
   appendAction(newPythonFieldModel_);
+  appendAction(newCouplingModel_);
   appendAction(newDataModel_);
   appendSeparator();
   appendAction(exportAction_);
