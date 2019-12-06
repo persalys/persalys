@@ -93,7 +93,7 @@ Sample DesignOfExperimentDefinitionItem::getOriginalInputSample() const
 }
 
 
-void DesignOfExperimentDefinitionItem::update(Observable* /*source*/, const String& message)
+void DesignOfExperimentDefinitionItem::update(Observable* source, const String& message)
 {
   if (message == "EvaluationItemRequested")
   {
@@ -106,7 +106,8 @@ void DesignOfExperimentDefinitionItem::update(Observable* /*source*/, const Stri
   else if (message == "analysisFinished")
   {
     // emit signal to PhysicalModelDiagramItem to update the diagram
-    emit designEvaluationUpdated(true);
+    if (dynamic_cast<DesignOfExperimentEvaluation *>(source))
+      emit designEvaluationUpdated(true);
     analysisInProgress_ = false;
   }
   else if (message == "analysisBadlyFinished")
@@ -169,6 +170,7 @@ void DesignOfExperimentDefinitionItem::appendItem(const Analysis& analysis)
 {
   appendAnalysisItem(analysis);
   analysis.getImplementation().get()->addObserver(this);
+  analysis.getImplementation().get()->addObserver(analysis_.getImplementation().get()->getObserver("PhysicalModelDiagramItem"));
   analysis.getImplementation().get()->addObserver(getParentStudyItem());
 }
 
@@ -181,15 +183,14 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   DesignOfExperimentEvaluation * newDoeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
   newDoeEval->setDesignOfExperiment(oldDoeEval->getResult().getDesignOfExperiment());
 
-  // remove Evaluation item
+  // remove the item named Evaluation which is an AnalysisItem
   analysis_.getImplementation().get()->notifyAndRemove("AnalysisItem");
-  analysis_.getImplementation().get()->removeObserver("Study");
-  analysis_.getImplementation().get()->removeObserver(this);
-
+  std::vector<Observer*> copyObservers(analysis_.getImplementation()->getObservers());
   // update analysis_
   analysis_ = analysis;
-  analysis_.addObserver(this);
-  analysis_.addObserver(getParentStudyItem()->getStudy().getImplementation().get());
+  // set the observers
+  for (auto obs : copyObservers)
+    analysis_.addObserver(obs);
 
   // update the implementation of the analysis stored in Study
   getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
@@ -197,6 +198,26 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   if (wasValid)
     emit designEvaluationUpdated(false);
   emit windowRequested(this, false);
+}
+
+
+void DesignOfExperimentDefinitionItem::removeAnalysis()
+{
+  // check if the analysis is running
+  if (analysis_.isRunning())
+  {
+    emit showErrorMessageRequested(tr("Can not remove a running analysis."));
+    return;
+  }
+  // check if a metamodel is running
+  if (analysisInProgress_)
+  {
+    emit showErrorMessageRequested(tr("Can not remove a design of experiment when an analysis is running."));
+    return;
+  }
+  // remove
+  if (getParentStudyItem())
+    getParentStudyItem()->getStudy().remove(Analysis(analysis_));
 }
 
 
@@ -217,7 +238,7 @@ void DesignOfExperimentDefinitionItem::createEvaluation()
 void DesignOfExperimentDefinitionItem::fill()
 {
   // append Evaluation item
-  if (getAnalysis().hasValidResult())
+  if (getAnalysis().hasValidResult() || !getAnalysis().getErrorMessage().empty())
     appendEvaluationItem();
 }
 }
