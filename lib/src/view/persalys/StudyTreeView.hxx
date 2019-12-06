@@ -52,7 +52,6 @@ signals:
 
 private:
   StudyTreeViewModel * treeViewModel_;
-  bool analysisInProgress_;
 };
 }
 #endif

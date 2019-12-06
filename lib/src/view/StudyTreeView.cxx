@@ -92,7 +92,6 @@ public:
 StudyTreeView::StudyTreeView(QWidget * parent)
   : QTreeView(parent)
   , treeViewModel_(new StudyTreeViewModel(this))
-  , analysisInProgress_(false)
 {
   // set model
   Study::SetInstanceObserver(treeViewModel_);
