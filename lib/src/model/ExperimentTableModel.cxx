@@ -314,8 +314,16 @@ bool ExperimentTableModel::setData(const QModelIndex &index, const QVariant &val
           if (settings_[indexInput] == tr("Levels ="))
           {
             levels_[indexInput] = value.toUInt();
-            values_[indexInput] = Box(Indices(1, levels_[indexInput] - 2), interval_.getMarginal(indexInput)).generate().asPoint();
-            deltas_[indexInput] = levels_[indexInput] < 2 ? 0 : values_[indexInput][1] - values_[indexInput][0];
+            if (value.toUInt() > 1)
+            {
+              values_[indexInput] = Box(Indices(1, levels_[indexInput] - 2), interval_.getMarginal(indexInput)).generate().asPoint();
+              deltas_[indexInput] = levels_[indexInput] < 2 ? 0 : values_[indexInput][1] - values_[indexInput][0];
+            }
+            else
+            {
+              values_[indexInput] = Point(1, fixValues_[indexInput]);
+              deltas_[indexInput] = 0.;
+            }
           }
           // deltas
           else
