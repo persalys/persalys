@@ -22,12 +22,8 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz | tar xz
 
 # pip
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
- && pip install -U pip wheel setuptools && pip install sip --upgrade
+ && pip install -U pip wheel setuptools && pip install numpy --upgrade
 ENV LD_LIBRARY_PATH /usr/local/lib/
-
-# numpy
-RUN curl -fSsL https://github.com/numpy/numpy/releases/download/v1.16.5/numpy-1.16.5.tar.gz | tar xz && cd numpy-1.16.5 && python3 setup.py install && cd .. && python3 -c "import numpy; print(numpy.__version__)"
-# TODO: by pip
 
 # omniorb
 RUN curl -L http://downloads.sourceforge.net/omniorb/omniORB-4.2.3.tar.bz2|tar xj && cd omniORB-4.2.3 && ./configure --with-openssl=/usr && make && make install
@@ -53,8 +49,6 @@ RUN git clone https://git.salome-platform.org/gitpub/tools/libbatch.git && cd li
 
 # sip
 RUN curl -L https://www.riverbankcomputing.com/static/Downloads/sip/4.19.3/sip-4.19.3.tar.gz | tar xz && cd sip-4.19.3 && mkdir build && cd build && python3 ../configure.py  && make && make install && cp /usr/local/include/python3.6m/sip.h /usr/local/include
-# TODO: not by pip
-RUN rm /usr/local/bin/sip5
 
 # pyqt
 RUN curl -fSsL http://downloads.sourceforge.net/pyqt/PyQt5/PyQt5_gpl-5.7.1.tar.gz |tar xz && cd PyQt5_gpl-5.7.1 && python3 configure.py --verbose --confirm-license && make && make install
@@ -91,8 +85,7 @@ RUN git clone https://git.salome-platform.org/gitpub/modules/kernel.git && cd ke
 RUN git clone https://git.salome-platform.org/gitpub/modules/gui.git && cd gui && git checkout V9_4_0rc3 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DSALOME_USE_VTKVIEWER=OFF -DSALOME_BUILD_DOC=OFF -DSALOME_USE_PVVIEWER=OFF -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PLOT2DVIEWER=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local -DSALOME_CMAKE_DEBUG=ON . && make install
 
 # salome-yacs
-RUN git clone https://git.salome-platform.org/gitpub/modules/yacs.git && cd yacs && git checkout V9_4_0rc3 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install && cp -v src/py2yacsgui/*.hxx /home/devel/local/include
-# TODO: check we still need the copy
+RUN git clone https://git.salome-platform.org/gitpub/modules/yacs.git && cd yacs && git checkout V9_4_0rc3 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install
 
 # py2cpp
 RUN git clone https://github.com/jschueller/py2cpp.git && cd py2cpp && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install

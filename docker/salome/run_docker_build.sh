@@ -25,7 +25,7 @@ cmake \
 make install
 make tests
 /home/devel/salome -t
-xvfb-run -s "-screen 0 1024x768x24" /home/devel/salome shell -- ctest --output-on-failure --timeout 30 -j8 -E "MainWindow|MonteCarloResultWindow"
+xvfb-run -s "-screen 0 1024x768x24" /home/devel/salome shell -- ctest --output-on-failure --timeout 30 -j8 -E "Window|Wizard"
 
 
 cd /tmp
@@ -40,16 +40,15 @@ export LD_LIBRARY_PATH=${HERE}/usr/lib/:${LD_LIBRARY_PATH}
 export PYTHONHOME=${HERE}/usr/
 export PYTHONPATH=${HERE}/usr/lib/python3.6/site-packages/salome:${HERE}/usr/bin/salome
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
-# export QT_DEBUG_PLUGINS=1
 
 # assumes fonts are provided on host machine
 export QT_QPA_FONTDIR=/usr/share/fonts/truetype
 
 export OPENTURNS_CONFIG_PATH=${HERE}/etc/openturns
 
-export KERNEL_ROOT_DIR=${HERE}/local
-export GUI_ROOT_DIR=${HERE}/local
-export YDEFX_ROOT_DIR=${HERE}/local
+#export KERNEL_ROOT_DIR=${HERE}/local
+#export GUI_ROOT_DIR=${HERE}/local
+#export YDEFX_ROOT_DIR=${HERE}/local
 
 ${HERE}/usr/bin/persalys "$@"
 EOF
