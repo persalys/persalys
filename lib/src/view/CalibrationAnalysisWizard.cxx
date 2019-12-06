@@ -201,7 +201,7 @@ CalibrationReferencePointPage::CalibrationReferencePointPage(/*const PhysicalMod
   pageLayout->addWidget(tableView_, 0, Qt::AlignTop);
 
   errorMessageLabel_ = new TemporaryLabel;
-  connect(tableModel_, &CalibrationTableModel::modelChanged, [=]() {errorMessageLabel_->reset();});
+  connect(tableModel_, SIGNAL(modelChanged(PhysicalModel)), errorMessageLabel_, SLOT(reset()));
   pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
 }
 
@@ -210,6 +210,7 @@ void CalibrationReferencePointPage::updateData(const PhysicalModel &model)
 {
   tableModel_->updateData(model);
   tableView_->resizeColumnsToContents();
+  calibratedLabel_->setText(QString::number(model.getStochasticInputNames().getSize()));
 
   // resize table
   // if too many variables: no fixed height + use scrollbar

@@ -203,7 +203,7 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
     ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study.getAnalyses()[i].getImplementation().get());
     if (doeEval && !modelEval && doeEval->getPhysicalModel() == getPhysicalModel())
     {
-      emit doeEvaluationWizardRequested(Analysis(doeEval), true);
+      emit doeEvaluationWizardRequested(study.getAnalyses()[i], true);
       return;
     }
   }
@@ -222,7 +222,7 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
     ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study.getAnalyses()[i].getImplementation().get());
     if (doeEval && !modelEval && doeEval->getPhysicalModel() == getPhysicalModel() && doeEval->hasValidResult())
     {
-      newAnalysis("Metamodel", Analysis(doeEval), true);
+      newAnalysis("Metamodel", study.getAnalyses()[i], true);
       return;
     }
   }

@@ -53,7 +53,7 @@ public slots:
   void modifyAnalysis();
   void appendMetaModelItem();
   void appendDataModelItem();
-  void removeAnalysis();
+  virtual void removeAnalysis();
   void extractData();
 signals:
   void analysisRemoved(QStandardItem*);

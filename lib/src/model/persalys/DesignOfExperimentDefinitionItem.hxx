@@ -45,6 +45,7 @@ protected:
 
 public slots:
   virtual void updateAnalysis(const Analysis & analysis);
+  virtual void removeAnalysis();
   void appendEvaluationItem();
   void createEvaluation();
 

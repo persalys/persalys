@@ -181,7 +181,7 @@ void MeshWindow::updateModel(QStandardItem *item)
   VariableCollection coll;
   coll.add(param);
   meshModel.setIndexParameters(coll);
-  meshItem_->getPhysicalModel().blockNotification("Mesh");
+  meshItem_->getPhysicalModel().blockNotification("MeshItem");
   meshItem_->getPhysicalModel().setMeshModel(meshModel);
   meshItem_->getPhysicalModel().blockNotification();
   updatePlot();

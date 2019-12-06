@@ -42,6 +42,12 @@ Observable::Observable(const Observable & /*other*/)
 {
 }
 
+
+Observable::~Observable()
+{
+}
+
+
 /* Assingment operator */
 Observable & Observable::operator=(const Observable & rhs)
 {
@@ -62,7 +68,8 @@ void Observable::addObserver(Observer * observer)
 
 void Observable::removeObserver(Observer * observer)
 {
-  observers_.erase(std::remove(observers_.begin(), observers_.end(), observer), observers_.end());
+  if (observer)
+    observers_.erase(std::remove(observers_.begin(), observers_.end(), observer), observers_.end());
 }
 
 
