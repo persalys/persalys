@@ -92,10 +92,17 @@ void GridDesignOfExperiment::initializeParameters()
 Sample GridDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSimu*/) const
 {
   const UnsignedInteger nbInputs = inputNames_.getSize();
+  if (nbInputs != getPhysicalModel().getInputDimension())
+    throw InvalidArgumentException(HERE) << "Wrong dimension of the input name list";
+  if (values_.getSize() != nbInputs)
+    throw InvalidArgumentException(HERE) << "Wrong values list dimension";
 
   UnsignedInteger nbPts = 1;
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
     nbPts *= values_[i].getSize();
+
+  if (!nbPts)
+    throw InvalidArgumentException(HERE) << "Input sample size null";
 
   // build input sample
   Sample inputSample(nbPts, nbInputs);
