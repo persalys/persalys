@@ -36,7 +36,7 @@ public:
   /** Copy constructor */
   Observable(const Observable & other);
 
-  virtual ~Observable() {};
+  virtual ~Observable();
 
   Observable & operator=(const Observable & rhs);
 

@@ -47,7 +47,7 @@ void DesignOfExperimentWizard::buildInterface()
   gridPage_->initialize(analysis_);
   setPage(Page_Deterministic, gridPage_);
 
-  probaPage_ = new ProbabilisticDesignPage;
+  probaPage_ = new ProbabilisticDesignPage(this);
   probaPage_->initialize(analysis_);
   setPage(Page_Probabilistic, probaPage_);
 

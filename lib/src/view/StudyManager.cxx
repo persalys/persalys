@@ -98,9 +98,10 @@ void StudyManager::openAnalysisWizard(StudyItem *item, const Analysis &analysis,
 
   AnalysisWizard * wizard = WindowFactory::GetAnalysisWizard(analysis, isGeneralWizard, mainWidget_);
 
-  if (wizard && wizard->exec())
+  if (wizard)
   {
-    item->getStudy().add(wizard->getAnalysis());
+    if (wizard->exec())
+      item->getStudy().add(wizard->getAnalysis());
     delete wizard;
   }
 }
@@ -111,9 +112,10 @@ void StudyManager::modifyAnalysis(AnalysisItem* item)
   Q_ASSERT(item);
   AnalysisWizard * wizard = WindowFactory::GetAnalysisWizard(item->getAnalysis(), false, mainWidget_);
 
-  if (wizard && wizard->exec())
+  if (wizard)
   {
-    item->updateAnalysis(wizard->getAnalysis());
+    if (wizard->exec())
+      item->updateAnalysis(wizard->getAnalysis());
     delete wizard;
   }
 }
@@ -123,9 +125,10 @@ void StudyManager::openDesignOfExperimentEvaluationWizard(const Analysis& analys
 {
   DesignOfExperimentEvaluationWizard * wizard = new DesignOfExperimentEvaluationWizard(analysis, isGeneralWizard, mainWidget_);
 
-  if (wizard && wizard->exec())
+  if (wizard)
   {
-    wizard->getAnalysis().getImplementation().get()->notify("EvaluationItemRequested");
+    if (wizard->exec())
+      wizard->getAnalysis().getImplementation().get()->notify("EvaluationItemRequested");
     delete wizard;
   }
 }
@@ -136,9 +139,10 @@ void StudyManager::openObservationsWizard(StudyItem *item, const DesignOfExperim
   Q_ASSERT(item);
   ObservationsWizard * wizard = new ObservationsWizard(designOfExp, mainWidget_);
 
-  if (wizard && wizard->exec())
+  if (wizard)
   {
-    item->getStudy().add(wizard->getDesignOfExperiment());
+    if (wizard->exec())
+      item->getStudy().add(wizard->getDesignOfExperiment());
     delete wizard;
   }
 }
@@ -149,9 +153,10 @@ void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &a
   Q_ASSERT(item);
   ExtractDataFieldWizard * wizard = new ExtractDataFieldWizard(analysis, mainWidget_);
 
-  if (wizard && wizard->exec())
+  if (wizard)
   {
-    item->getStudy().add(wizard->getDataModel());
+    if (wizard->exec())
+      item->getStudy().add(wizard->getDataModel());
     delete wizard;
   }
 }
