@@ -240,7 +240,7 @@ void PVViewWidget::setAxisToShow(const std::vector<std::string>& axis)
     }
 
     // re order/ keep some columns
-    vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+    vtkSMPropertyHelper smph(idvp);
     std::size_t ii(0);
     for (std::vector<std::string>::const_iterator it = axis.begin(); it != axis.end(); it++, ii++)
     {
@@ -250,25 +250,23 @@ void PVViewWidget::setAxisToShow(const std::vector<std::string>& axis)
         std::cerr << "Oooops " << *it << " not in ";
         std::copy(sts.begin(), sts.end(), std::ostream_iterator<std::string>(std::cerr, " "));
         std::cerr << std::endl;
-        delete smph;
         return ;
       }
-      smph->Set(2 * ii, (*it).c_str());
-      smph->Set(2 * ii + 1, 1);
+      smph.Set(2 * ii, (*it).c_str());
+      smph.Set(2 * ii + 1, 1);
     }
     for (std::vector<std::string>::const_iterator it = sts.begin(); it != sts.end() && ii < sts.size(); it++)
     {
       std::vector<std::string>::const_iterator it2(std::find(axis.begin(), axis.end(), *it));
       if (it2 != axis.end())
         continue;
-      smph->Set(2 * ii, (*it).c_str());
-      smph->Set(2 * ii + 1, 0);
+      smph.Set(2 * ii, (*it).c_str());
+      smph.Set(2 * ii + 1, 0);
       ii++;
     }
 
     // update property
     getView()->getRepresentation(repr_ind)->getProxy()->UpdateProperty("SeriesVisibility");
-    delete smph;
   }
   getView()->resetDisplay();
 }
@@ -336,7 +334,6 @@ QStringList PVViewWidget::getRepresentationLabels(const int reprIndex) const
 
   // set label property
   vtkSMProperty * idvp(getView()->getRepresentation(reprIndex)->getProxy()->GetProperty("SeriesLabel"));
-  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
   QList<QVariant> labelsVariant = pqSMAdaptor::getMultipleElementProperty(idvp);
 
   QStringList labels;
@@ -344,7 +341,6 @@ QStringList PVViewWidget::getRepresentationLabels(const int reprIndex) const
   {
     labels << labelsVariant[2 * cc + 1].toString();
   }
-  delete smph;
   return labels;
 }
 
@@ -367,7 +363,7 @@ void PVViewWidget::setRepresentationLabels(const QStringList& newLabels, const i
 
   // set label property
   vtkSMProperty * idvp(getView()->getRepresentation(reprIndex)->getProxy()->GetProperty("SeriesLabel"));
-  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+  vtkSMPropertyHelper smph(idvp);
   QList<QVariant> labels = pqSMAdaptor::getMultipleElementProperty(idvp);
 
   // check labels
@@ -383,10 +379,9 @@ void PVViewWidget::setRepresentationLabels(const QStringList& newLabels, const i
 
   for (int cc = 0; cc < labels.size() / 2; cc++)
   {
-    smph->Set(2 * cc + 1, newLabels[cc].toStdString().c_str());
+    smph.Set(2 * cc + 1, newLabels[cc].toStdString().c_str());
   }
   getView()->getRepresentation(reprIndex)->getProxy()->UpdateProperty("SeriesLabel");
-  delete smph;
 }
 
 

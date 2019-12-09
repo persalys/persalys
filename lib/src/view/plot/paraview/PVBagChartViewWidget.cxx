@@ -78,20 +78,14 @@ void PVBagChartViewWidget::createRepresentation()
 
   // ChartTitleBold : yes
   vtkSMProperty * idvpTitleBold(getView()->getProxy()->GetProperty("ChartTitleBold"));
-  vtkSMPropertyHelper * smphTitleBold(new vtkSMPropertyHelper(idvpTitleBold));
-  smphTitleBold->Set(true);
+  vtkSMPropertyHelper(idvpTitleBold).Set(true);
   getView()->getProxy()->UpdateProperty("ChartTitleBold");
-  delete smphTitleBold;
 }
 
 
 int PVBagChartViewWidget::getUserQuantile() const
 {
-  vtkSMProperty * idvp(getProxy()->GetProperty("UserQuantile"));
-  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
-  int quantile = smph->GetAsInt();
-  delete smph;
-  return quantile;
+  return vtkSMPropertyHelper(getProxy()->GetProperty("UserQuantile")).GetAsInt();
 }
 
 
@@ -100,10 +94,7 @@ void PVBagChartViewWidget::setUserQuantile(const int quantile)
   // set internal parameter to be able to update automatically the plot
   chartXY_->GetScene()->SetDirty(true);
 
-  vtkSMProperty * idvp(getProxy()->GetProperty("UserQuantile"));
-  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
-  smph->Set(quantile);
-  filtersource_->getProxy()->UpdateProperty("UserQuantile");
-  delete smph;
+  vtkSMPropertyHelper(getProxy()->GetProperty("UserQuantile")).Set(quantile);
+  getProxy()->UpdateProperty("UserQuantile");
 }
 }
