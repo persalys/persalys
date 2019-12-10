@@ -53,6 +53,7 @@ export YDEFX_ROOT_DIR=${HERE}/usr/salome
 # salome virtual app
 cp ${HERE}/salome_context.cfg ${HERE}/config_appli.xml /tmp
 sed -i "s|/home/devel/local|${HERE}/usr/salome|g" /tmp/salome_context.cfg /tmp/config_appli.xml
+rm -rf /tmp/appli
 python3 ${HERE}/usr/salome/bin/salome/appli_gen.py --prefix=/tmp/appli --config=/tmp/config_appli.xml
 /tmp/appli/salome -t
 
