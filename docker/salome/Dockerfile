@@ -103,10 +103,10 @@ ENV PYTHONPATH /usr/local/lib/python3.6/site-packages:/usr/local/lib/python3.6/s
 # salome virtual app
 ADD config_appli.xml /tmp/config_appli.xml
 ADD salome_context.cfg /tmp/salome_context.cfg
-RUN python3 /home/devel/local/bin/salome/appli_gen.py  --prefix=/home/devel --config=/tmp/config_appli.xml
-RUN /home/devel/salome info
+RUN python3 /home/devel/local/bin/salome/appli_gen.py  --prefix=/home/devel/appli --config=/tmp/config_appli.xml
+RUN /home/devel/appli/salome info
 
 # try test
 RUN sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
 ENV KERNEL_ROOT_DIR=/home/devel/local GUI_ROOT_DIR=/home/devel/local YDEFX_ROOT_DIR=/home/devel/local 
-RUN /home/devel/salome test --output-on-failure -E NoSession
+RUN /home/devel/appli/salome test --output-on-failure -E NoSession

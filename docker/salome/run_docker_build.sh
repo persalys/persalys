@@ -24,8 +24,8 @@ cmake \
   /io
 make install
 make tests
-/home/devel/salome -t
-xvfb-run -s "-screen 0 1024x768x24" /home/devel/salome shell -- ctest --output-on-failure --timeout 30 -j8 -E "Window|Wizard"
+/home/devel/appli/salome -t
+xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 30 -j8 -E "Window|Wizard"
 
 
 cd /tmp
@@ -35,10 +35,10 @@ rm -r persalys.AppDir/usr/include/persalys
 cat > persalys.AppDir/AppRun <<\EOF
 #!/bin/sh
 HERE=$(dirname $(readlink -f "${0}"))
-export PATH=${HERE}/usr/bin/:${PATH}
+export PATH=${HERE}/usr/bin/:${HERE}/usr/salome/bin:${HERE}/usr/salome/bin/salome:${PATH}
 export LD_LIBRARY_PATH=${HERE}/usr/lib/:${LD_LIBRARY_PATH}
 export PYTHONHOME=${HERE}/usr/
-export PYTHONPATH=${HERE}/usr/lib/python3.6/site-packages/salome:${HERE}/usr/bin/salome
+export PYTHONPATH=${HERE}/usr/lib/python3.6/site-packages/salome:${HERE}/usr/bin/salome:${HERE}/usr/salome/lib/python3.6/site-packages
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 
 # assumes fonts are provided on host machine
@@ -46,11 +46,17 @@ export QT_QPA_FONTDIR=/usr/share/fonts/truetype
 
 export OPENTURNS_CONFIG_PATH=${HERE}/etc/openturns
 
-#export KERNEL_ROOT_DIR=${HERE}/local
-#export GUI_ROOT_DIR=${HERE}/local
-#export YDEFX_ROOT_DIR=${HERE}/local
+export KERNEL_ROOT_DIR=${HERE}/usr/salome
+export GUI_ROOT_DIR=${HERE}/usr/salome
+export YDEFX_ROOT_DIR=${HERE}/usr/salome
 
-${HERE}/usr/bin/persalys "$@"
+# salome virtual app
+cp ${HERE}/salome_context.cfg ${HERE}/config_appli.xml /tmp
+sed -i "s|/home/devel/local|${HERE}/usr/salome|g" /tmp/salome_context.cfg /tmp/config_appli.xml
+python3 ${HERE}/usr/salome/bin/salome/appli_gen.py --prefix=/tmp/appli --config=/tmp/config_appli.xml
+/tmp/appli/salome -t
+
+/tmp/appli/salome shell -- ${HERE}/usr/bin/persalys "$@"
 EOF
 chmod a+x persalys.AppDir/AppRun
 
@@ -93,7 +99,9 @@ cp -r /usr/local/lib/python3* persalys.AppDir/usr/lib
 cp -r /home/devel/local/lib/python3.6/site-packages/* persalys.AppDir/usr/lib/python3.6/site-packages
 
 # salome
-cp -rv /home/devel/local/bin/salome persalys.AppDir/usr/bin
+cp -v /usr/local/bin/omni* persalys.AppDir/usr/bin
+cp -rv /home/devel/local persalys.AppDir/usr/salome
+cp -v /tmp/salome_context.cfg /tmp/config_appli.xml persalys.AppDir/
 
 cp -rv /usr/local/etc/ persalys.AppDir/etc
 
