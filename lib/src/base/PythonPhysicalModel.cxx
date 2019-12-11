@@ -82,13 +82,14 @@ void PythonPhysicalModel::setCode(const String & code)
     if (inExecScope && line[0] != ' ' && line.size() != 0)
       inExecScope = false;
 
-    boost::regex defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]+)\\)[ ]*:", boost::regex::extended);
+    boost::regex defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", boost::regex::extended);
     boost::smatch what;
     if (boost::regex_match(line, what, defFunction))
     {
       inExecScope = true;
       String inputList = what[1];
       std::string::const_iterator start = inputList.begin(), end = inputList.end();
+      inputVariables.clear();
       while (boost::regex_search(start, end, what, variable))
       {
         start = what[0].second;
@@ -101,6 +102,7 @@ void PythonPhysicalModel::setCode(const String & code)
     {
       String outputList = what[1];
       std::string::const_iterator start = outputList.begin(), end = outputList.end();
+      outputVariables.clear();
       while (boost::regex_search(start, end, what, variable))
       {
         start = what[0].second;
