@@ -113,12 +113,8 @@ void PVXYChartViewWidget::setXAxisData(const QString& varX)
     vtkSMProperty * idvpXName(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("XArrayName"));
     if (!idvpXName)
       return;
-    vtkSMPropertyHelper * smphXName(new vtkSMPropertyHelper(idvpXName));
-    if (!smphXName)
-      return;
-    smphXName->Set(varX.toStdString().c_str());
+    vtkSMPropertyHelper(idvpXName).Set(varX.toStdString().c_str());
     getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("XArrayName");
-    delete smphXName;
   }
   chartXY_->GetAxis(vtkAxis::BOTTOM)->SetTitle(axisLabels_[varX].toStdString());
 }
@@ -182,15 +178,14 @@ void PVXYChartViewWidget::setPlotStyle()
       vtkSMProperty * idvpLineStyle(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesLineStyle"));
       QList<QVariant> lineStyles = pqSMAdaptor::getMultipleElementProperty(idvpLineStyle);
 
-      vtkSMPropertyHelper * smphLineStyle(new vtkSMPropertyHelper(idvpLineStyle));
+      vtkSMPropertyHelper smphLineStyle(idvpLineStyle);
 
       for (int cc = 0; cc < lineStyles.size() / 2; cc++)
       {
-        smphLineStyle->Set(2 * cc + 1, 0);
+        smphLineStyle.Set(2 * cc + 1, 0);
       }
 
       getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("SeriesLineStyle");
-      delete smphLineStyle;
 
       // marker style : circle
       setMarkerStyle(vtkPlotPoints::CIRCLE);
@@ -198,18 +193,14 @@ void PVXYChartViewWidget::setPlotStyle()
 
     // UseIndexForXAxis : no
     vtkSMProperty * idvpUseIndex(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("UseIndexForXAxis"));
-    vtkSMPropertyHelper * smphUseIndex(new vtkSMPropertyHelper(idvpUseIndex));
-    smphUseIndex->Set(false);
+    vtkSMPropertyHelper(idvpUseIndex).Set(false);
     getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("UseIndexForXAxis");
-    delete smphUseIndex;
   }
 
   // ChartTitleBold : yes
   vtkSMProperty * idvpTitleBold(getView()->getProxy()->GetProperty("ChartTitleBold"));
-  vtkSMPropertyHelper * smphTitleBold(new vtkSMPropertyHelper(idvpTitleBold));
-  smphTitleBold->Set(true);
+  vtkSMPropertyHelper(idvpTitleBold).Set(true);
   getView()->getProxy()->UpdateProperty("ChartTitleBold");
-  delete smphTitleBold;
 
   // ShowLegend : no if only one representation
   setShowLegend(getView()->getNumberOfRepresentations() > 1 || type_ == Trajectories || type_ == TrajectoriesPoints);
@@ -298,7 +289,7 @@ void PVXYChartViewWidget::setSerieColors(const QMap<QString, QColor>& colors)
     // get property
     vtkSMProperty* idvp(getView()->getRepresentation(repr_ind)->getProxy()->GetProperty("SeriesColor"));
     QList<QVariant> value = pqSMAdaptor::getMultipleElementProperty(idvp);
-    vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+    vtkSMPropertyHelper smph(idvp);
 
     for (int cc = 0; cc < value.size()/4; cc++)
     {
@@ -306,15 +297,14 @@ void PVXYChartViewWidget::setSerieColors(const QMap<QString, QColor>& colors)
       if (colors.contains(name))
       {
         QColor color = colors[name];
-        smph->Set(4 * cc + 1, (OSS() << color.redF()).str().c_str());
-        smph->Set(4 * cc + 2, (OSS() << color.greenF()).str().c_str());
-        smph->Set(4 * cc + 3, (OSS() << color.blueF()).str().c_str());
+        smph.Set(4 * cc + 1, (OSS() << color.redF()).str().c_str());
+        smph.Set(4 * cc + 2, (OSS() << color.greenF()).str().c_str());
+        smph.Set(4 * cc + 3, (OSS() << color.blueF()).str().c_str());
       }
     }
 
     // update property
     getView()->getRepresentation(repr_ind)->getProxy()->UpdateProperty("SeriesColor");
-    delete smph;
   }
   getView()->resetDisplay();
 }
@@ -327,20 +317,19 @@ void PVXYChartViewWidget::setSerieLineStyles(const QMap<QString, int>& styles)
     // get property
     vtkSMProperty* idvp(getView()->getRepresentation(repr_ind)->getProxy()->GetProperty("SeriesLineStyle"));
     QList<QVariant> value = pqSMAdaptor::getMultipleElementProperty(idvp);
-    vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+    vtkSMPropertyHelper smph(idvp);
 
     for (int cc = 0; cc < value.size()/2; cc++)
     {
       QString name = value[2 * cc].toString();
       if (styles.contains(name))
       {
-        smph->Set(2 * cc + 1, styles[name]);
+        smph.Set(2 * cc + 1, styles[name]);
       }
     }
 
     // update property
     getView()->getRepresentation(repr_ind)->getProxy()->UpdateProperty("SeriesLineStyle");
-    delete smph;
   }
   getView()->resetDisplay();
 }
@@ -366,17 +355,16 @@ void PVXYChartViewWidget::setRepresentationColor(const QColor& color, const int 
 
   // set color property
   vtkSMProperty * idvp(getView()->getRepresentation(reprIndex)->getProxy()->GetProperty("SeriesColor"));
-  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+  vtkSMPropertyHelper smph(idvp);
   QList<QVariant> colors = pqSMAdaptor::getMultipleElementProperty(idvp);
 
   for (int cc = 0; cc < colors.size() / 4; cc++)
   {
-    smph->Set(4 * cc + 1, (OSS() << color.redF()).str().c_str());
-    smph->Set(4 * cc + 2, (OSS() << color.greenF()).str().c_str());
-    smph->Set(4 * cc + 3, (OSS() << color.blueF()).str().c_str());
+    smph.Set(4 * cc + 1, (OSS() << color.redF()).str().c_str());
+    smph.Set(4 * cc + 2, (OSS() << color.greenF()).str().c_str());
+    smph.Set(4 * cc + 3, (OSS() << color.blueF()).str().c_str());
   }
   getView()->getRepresentation(reprIndex)->getProxy()->UpdateProperty("SeriesColor");
-  delete smph;
 
   if (reprColors_.size() == numberOfRepr)
     reprColors_[reprIndex] = color;
@@ -411,15 +399,14 @@ void PVXYChartViewWidget::setMarkerStyle(const int markerStyle)
     vtkSMProperty * idvp(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesMarkerStyle"));
     QList<QVariant> markerStyles = pqSMAdaptor::getMultipleElementProperty(idvp);
 
-    vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+    vtkSMPropertyHelper smph(idvp);
 
     for (int cc = 0; cc < markerStyles.size() / 2; cc++)
     {
-      smph->Set(2 * cc + 1, markerStyle);
+      smph.Set(2 * cc + 1, markerStyle);
     }
 
     getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("SeriesMarkerStyle");
-    delete smph;
   }
 }
 
@@ -431,13 +418,7 @@ int PVXYChartViewWidget::getMarkerStyle() const
 
   // get marker style property
   vtkSMProperty * idvp(getView()->getRepresentation(0)->getProxy()->GetProperty("SeriesMarkerStyle"));
-  QList<QVariant> markerStyles = pqSMAdaptor::getMultipleElementProperty(idvp);
-
-  vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
-
-  int style = smph->GetAsInt(1);
-  delete smph;
-  return style;
+  return vtkSMPropertyHelper(idvp).GetAsInt(1);
 }
 
 
@@ -452,15 +433,14 @@ void PVXYChartViewWidget::setMarkerSize(const int markerSize)
     vtkSMProperty * idvp(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesLineThickness"));
     QList<QVariant> markerSizes = pqSMAdaptor::getMultipleElementProperty(idvp);
 
-    vtkSMPropertyHelper * smph(new vtkSMPropertyHelper(idvp));
+    vtkSMPropertyHelper smph(idvp);
 
     for (int cc = 0; cc < markerSizes.size() / 2; cc++)
     {
-      smph->Set(2 * cc + 1, markerSize);
+      smph.Set(2 * cc + 1, markerSize);
     }
 
     getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("SeriesLineThickness");
-    delete smph;
   }
 }
 
