@@ -86,19 +86,6 @@ Sample SimulationAnalysis::generateInputSample(const UnsignedInteger nbSimu) con
 }
 
 
-Sample SimulationAnalysis::computeOutputSample(const Sample& inputSample) const
-{
-  Sample outputSample(getPhysicalModel().getRestrictedFunction(getInterestVariables())(inputSample));
-  return outputSample;
-}
-
-
-Sample SimulationAnalysis::computeOutputSample(const Point& inputValues) const
-{
-  return computeOutputSample(Sample(1, inputValues));
-}
-
-
 void SimulationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();

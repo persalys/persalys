@@ -56,8 +56,6 @@ public:
 protected:
   virtual void initialize();
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
-  OT::Sample computeOutputSample(const OT::Sample& inputSample) const;
-  OT::Sample computeOutputSample(const OT::Point& inputValues) const;
 
 protected:
   OT::Sample failedInputSample_;
