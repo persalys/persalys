@@ -37,6 +37,9 @@
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include <vtkPVConfig.h>
 #endif
+#ifdef PERSALYS_HAVE_YACS
+#include <YACS_version.h>
+#endif
 
 using namespace OT;
 
@@ -120,6 +123,10 @@ AboutDialog::AboutDialog(QWidget* parent)
 #ifdef PERSALYS_HAVE_OTFMI
   names << "OTFMI";
   values << OTFMI_VERSION_STRING;
+#endif
+#ifdef PERSALYS_HAVE_YACS
+  names << "YACS";
+  values << YACS_VERSION_STR;
 #endif
   ParametersTableView * table = new ParametersTableView(names, values, false, false);
   table->setSelectionMode(QAbstractItemView::NoSelection);
