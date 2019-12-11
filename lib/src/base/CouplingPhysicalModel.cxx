@@ -274,7 +274,7 @@ String CouplingPhysicalModel::getPythonScript() const
   oss << "]\n";
 
   oss << getStepsMacro();
-  oss << getName() + " = persalys."+getClassName()+"('" << getName() << "', steps)\n";
+  oss << getName() + " = persalys." << getClassName() << "('" << getName() << "', steps)\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;
