@@ -42,7 +42,7 @@ public:
   /** Virtual constructor */
   virtual PythonPhysicalModel * clone() const;
 
-  void setCode(const OT::String & code);
+  virtual void setCode(const OT::String & code);
   OT::String getCode() const;
 
   virtual OT::String getHtmlDescription(const bool deterministic) const;

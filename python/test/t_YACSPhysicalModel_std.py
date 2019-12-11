@@ -19,3 +19,11 @@ print(resultSample)
 
 # Comparison
 ott.assert_almost_equal(evalSample, resultSample, 1e-16)
+
+
+# script
+myStudy = persalys.Study('myStudy')
+myStudy.add(model)
+script = myStudy.getPythonScript()
+#print('script=', script)
+exec(script)

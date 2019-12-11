@@ -137,7 +137,10 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   steps_ = steps;
 
   OSS code;
-
+  code << "import tempfile\n";
+  code << "import openturns.coupling_tools as otct\n";
+  code << "import shutil\n";
+  code << "import os\n";
   code << "def _exec(";
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
@@ -271,7 +274,7 @@ String CouplingPhysicalModel::getPythonScript() const
   oss << "]\n";
 
   oss << getStepsMacro();
-  oss << getName() + " = persalys.CouplingPhysicalModel('" << getName() << "', steps)\n";
+  oss << getName() + " = persalys."+getClassName()+"('" << getName() << "', steps)\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;

@@ -1,0 +1,34 @@
+%feature("docstring") PERSALYS::YACSCouplingPhysicalModel
+"Physical model using YACS."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::YACSCouplingPhysicalModel::getContent
+"Script content of the model.
+
+Returns
+-------
+result : str
+    function script as a string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::YACSCouplingPhysicalModel::setContent
+"Modify the script content of the model.
+
+Parameters
+----------
+script : str
+    function script as a string"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::YACSCouplingPhysicalModel::jobParameters
+"Launching parameters accessor.
+
+Returns
+----------
+result : :py:class:'pydefx.parameters.Parameters'
+    job parameters structure"
+
+// ---------------------------------------------------------------------

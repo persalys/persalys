@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief YACSPhysicalModel implements models defined by an xml file
+ *  @brief Coupling model through YACS
  *
  *  Copyright 2015-2019 EDF-Phimeca
  *
@@ -18,49 +18,33 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_YACSPHYSICALMODEL_HXX
-#define PERSALYS_YACSPHYSICALMODEL_HXX
+#ifndef PERSALYS_YACSCOUPLINGPHYSICALMODEL_HXX
+#define PERSALYS_YACSCOUPLINGPHYSICALMODEL_HXX
 
-#include "persalys/PhysicalModelImplementation.hxx"
+#include "persalys/CouplingPhysicalModel.hxx"
 #include "persalys/YACSEvaluation.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_API YACSPhysicalModel : public PhysicalModelImplementation
+class PERSALYS_API YACSCouplingPhysicalModel : public CouplingPhysicalModel
 {
   CLASSNAME
 
 public:
   /* Default constructor */
-  YACSPhysicalModel(const OT::String & name = "Unnamed");
-
-  /* Constructor with parameters */
-  YACSPhysicalModel(const OT::String & name,
-                    const InputCollection & inputs,
-                    const OutputCollection & outputs,
-                    const OT::String & script);
+  YACSCouplingPhysicalModel(const OT::String & name = "Unnamed",
+                            const CouplingStepCollection & steps = CouplingStepCollection());
 
   /** Virtual constructor */
-  virtual YACSPhysicalModel * clone() const;
+  virtual YACSCouplingPhysicalModel * clone() const;
 
-  void setInputs(const InputCollection & inputs);
-  void addInput(const Input & input);
-  void removeInput(const OT::String & inputName);
-
-  void setOutputs(const OutputCollection & outputs);
-  void addOutput(const Output & output);
-  void removeOutput(const OT::String & outputName);
-
-  /** Accessor to the text script of the model (python, xml, whatever). */
-  OT::String getContent() const;
-  void setContent(const OT::String & script);
+  virtual void setCode(const OT::String & code);
 
   /** Accesor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
 
-  virtual OT::String getHtmlDescription(const bool deterministic) const;
-  OT::String getPythonScript() const;
+  virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -73,10 +57,7 @@ public:
 
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
-  static void ReplaceInString(OT::String & workString, const OT::String & strToReplace, const OT::String & newValue);
-
 protected:
-  void updateData();
 
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;
   virtual OT::String getJobParamsPythonScript() const;

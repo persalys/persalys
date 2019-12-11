@@ -26,6 +26,7 @@ namespace PERSALYS
 {
 #ifdef PERSALYS_HAVE_YACS
 class YACSPhysicalModel;
+class YACSCouplingPhysicalModel;
 #endif
 
 class LaunchParametersVisitor
@@ -35,6 +36,7 @@ public:
   ~LaunchParametersVisitor() {}
 #ifdef PERSALYS_HAVE_YACS
   virtual void visitYACS(YACSPhysicalModel* model) = 0;
+  virtual void visitYACS(YACSCouplingPhysicalModel* model) = 0;
 #endif
 
 };

@@ -120,6 +120,7 @@ ot_add_python_module (persalys persalys_module.i
                       MetaModel.i MetaModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i YACSPhysicalModel_doc.i.in
+                      YACSCouplingPhysicalModel.i YACSCouplingPhysicalModel_doc.i.in
                       FMIPhysicalModel.i FMIPhysicalModel_doc.i.in
                       FMUInfo.i FMUInfo_doc.i.in
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in

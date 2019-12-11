@@ -20,6 +20,7 @@
  */
 #ifdef PERSALYS_HAVE_YACS
 #include "persalys/YACSPhysicalModel.hxx" //includes python.h. Has to be done before any Qt include
+#include "persalys/YACSCouplingPhysicalModel.hxx"
 #include <ydefx/ResourceWidget.hxx>
 #endif
 
@@ -225,5 +226,13 @@ void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
   ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
   launchParameters_ = rw;
 }
+
+void AnalysisWindow::visitYACS(YACSCouplingPhysicalModel* model)
+{
+  ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
+  launchParameters_ = rw;
+}
+
+
 #endif
 }

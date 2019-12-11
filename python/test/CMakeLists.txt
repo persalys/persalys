@@ -114,6 +114,7 @@ ot_pyinstallcheck_test (docstring)
 
 if (SalomeYACS_FOUND)
   ot_pyinstallcheck_test (YACSPhysicalModel_std IGNOREOUT)
+  ot_pyinstallcheck_test (YACSCouplingPhysicalModel_std IGNOREOUT)
 endif ()
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"

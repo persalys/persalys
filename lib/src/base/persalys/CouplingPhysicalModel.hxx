@@ -58,9 +58,9 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-private:
+protected:
   OT::String getStepsMacro(const OT::String & offset = "") const;
-
+private:
   // list of steps
   OT::PersistentCollection<CouplingStep> steps_;
 
