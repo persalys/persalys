@@ -147,7 +147,9 @@ private slots:
     QVERIFY(stackedWidget_->count() == 1);
 
     QStringList files;
+#ifdef PERSALYS_HAVE_OTMORRIS
     files << "test_deterministic_analyses.xml";
+#endif
     files << "test_probabilistic_analyses.xml";
     files << "test_field_analyses.xml";
 
@@ -159,9 +161,9 @@ private slots:
       QVERIFY(treeViewModel_->rowCount() == 1);
 
       // check the result windows type
-      for (int i = 0; i < stackedWidget_->count(); ++i)
+      for (int j = 0; j < stackedWidget_->count(); ++ j)
       {
-        SubWindow * subWindow = dynamic_cast<SubWindow*>(stackedWidget_->widget(i));
+        SubWindow * subWindow = dynamic_cast<SubWindow*>(stackedWidget_->widget(j));
         if (subWindow)
         {
           AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(subWindow->getItem());

@@ -96,8 +96,9 @@ private slots:
     ResizableStackedWidget * minMaxStackWidget = minMaxGroupBox->findChild<ResizableStackedWidget*>();
 
     // checks
-
+#ifdef PERSALYS_HAVE_PARAVIEW
     QVERIFY2(window.tabWidget_->count() == 10, "wrong number of tabs");
+#endif
     QVERIFY2(window.analysisStopCriteriaMessage_ == "Maximum elapsed time reached", "Wrong stop message");
 
     Description varNames(analysis.getPhysicalModel().getOutputNames());

@@ -96,6 +96,7 @@ void SRCAnalysis::launch()
 
   const UnsignedInteger nbInputs = inputSample.getDimension();
   const UnsignedInteger nbOutputs = getInterestVariables().getSize();
+  Function function(getPhysicalModel().getRestrictedFunction(getInterestVariables()));
 
   // number of iterations
   const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * getSimulationsNumber() / getBlockSize()));
@@ -126,7 +127,7 @@ void SRCAnalysis::launch()
     const Sample blockInputSample(inputSample, blockFirstIndex, blockFirstIndex + effectiveBlockSize);
 
     // Perform a block of simulations
-    outputSample.add(computeOutputSample(blockInputSample));
+    outputSample.add(function(blockInputSample));
 
     timeCriteria.incrementElapsedTime();
   }

@@ -142,6 +142,7 @@ void DesignOfExperimentEvaluation::launch()
   TimeCriteria timeCriteria;
 
   // iterations
+  Function function(getPhysicalModel().getFunction(getInterestVariables()));
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
     if (stopRequested_)
@@ -167,7 +168,7 @@ void DesignOfExperimentEvaluation::launch()
     Sample failedSample;
     try
     {
-      blockOutputSample = getPhysicalModel().getFunction(getInterestVariables())(blockInputSample);
+      blockOutputSample = function(blockInputSample);
     }
     catch (InternalException & ex)
     {

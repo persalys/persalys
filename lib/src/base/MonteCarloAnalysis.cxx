@@ -118,6 +118,7 @@ void MonteCarloAnalysis::launch()
   effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
   Sample outputSample(0, getInterestVariables().getSize());
   outputSample.setDescription(getInterestVariables());
+  Function function(getPhysicalModel().getRestrictedFunction(getInterestVariables()));
 
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
@@ -159,7 +160,7 @@ void MonteCarloAnalysis::launch()
     Sample blockOutputSample;
     try
     {
-      blockOutputSample = computeOutputSample(blockInputSample);
+      blockOutputSample = function(blockInputSample);
     }
     catch (std::exception & ex)
     {
