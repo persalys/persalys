@@ -111,6 +111,7 @@ ot_pyinstallcheck_test (CalibrationAnalysis_std)
 ot_pyinstallcheck_test (Study_refCount)
 ot_pyinstallcheck_test (Encoding_std)
 ot_pyinstallcheck_test (docstring)
+ot_pyinstallcheck_test (FileMemoizeFunction_std)
 
 if (SalomeYACS_FOUND)
   ot_pyinstallcheck_test (YACSPhysicalModel_std IGNOREOUT)

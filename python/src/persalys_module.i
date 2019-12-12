@@ -186,3 +186,6 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include YACSPhysicalModel.i
 %include YACSCouplingPhysicalModel.i
 #endif
+%include FileMemoizeEvaluation.i
+%include FileMemoizeFunction.i
+

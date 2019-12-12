@@ -72,6 +72,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      CouplingOutputFile.cxx
                      CouplingStep.cxx
                      CouplingPhysicalModel.cxx
+                     FileMemoizeEvaluation.cxx
+                     FileMemoizeFunction.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx)

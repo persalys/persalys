@@ -190,6 +190,8 @@ ot_add_python_module (persalys persalys_module.i
                       CouplingOutputFile.i CouplingOutputFile_doc.i.in
                       CouplingStep.i CouplingStep_doc.i.in
                       CouplingPhysicalModel.i CouplingPhysicalModel_doc.i.in
+                      FileMemoizeEvaluation.i
+                      FileMemoizeFunction.i FileMemoizeFunction_doc.i.in
                     )
 
 if (NOT CMAKE_VERSION VERSION_LESS 3.12)
