@@ -14,6 +14,7 @@ import sys
 import hashlib
 import struct
 
+
 class CouplingInputFile(object):
     def __init__(self, path, template_path=''):
         if os.path.isabs(path):
@@ -56,7 +57,7 @@ class CouplingOutputFile(object):
         self.varnames_ = varnames
         # empty str => None token
         for k in range(len(tokens)):
-            if tokens[k] == '':
+            if not tokens[k]:
                 self.tokens_[k] = None
         if skip_lines is None:
             self.skip_lines_ = [0] * len(tokens)
@@ -161,7 +162,9 @@ class CouplingPhysicalModel(object):
 
             # 1. write input files
             for input_file in step.getInputFiles():
-                if input_file.getTemplatePath() == '':
+                if not input_file.getPath():
+                    continue
+                if not input_file.getTemplatePath():
                     # just a file/dir that needs to be copied
                     if os.path.isfile(input_file.getPath()):
                         shutil.copy(input_file.getPath(), os.path.join(workdir, input_file.getPath()))
@@ -180,6 +183,8 @@ class CouplingPhysicalModel(object):
 
             # 3. read values
             for output_file in step.getOutputFiles():
+                if not output_file.getPath():
+                    continue
                 outfile = os.path.join(workdir, output_file.getPath())
                 for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):
                     all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)

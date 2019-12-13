@@ -75,6 +75,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
     for (UnsignedInteger j = 0; j < inputFiles.getSize(); ++ j)
     {
       const CouplingInputFile inputFile(inputFiles[j]);
+      if (inputFile.getPath().empty())
+        continue;
       oss << offset << "input_file" << j << " = persalys.CouplingInputFile('"<<EscapePath(inputFile.getPath())<<"')\n";
       if (!inputFile.getTemplatePath().empty())
         oss << offset << "input_file" << j <<".setTemplatePath('" << EscapePath(inputFile.getTemplatePath())<<"')\n";
@@ -86,6 +88,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
     for (UnsignedInteger j = 0; j < outputFiles.getSize(); ++ j)
     {
       const CouplingOutputFile outputFile(outputFiles[j]);
+      if (outputFile.getPath().empty())
+        continue;
       oss << offset << "output_file" << j << " = persalys.CouplingOutputFile('"<<EscapePath(outputFile.getPath())<<"')\n";
       oss << offset << "output_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())<<", "<<outputFile.getSkipLines().__str__()<<", "<<outputFile.getSkipColumns().__str__()<<")\n";
       oss << offset << "output_files.append(output_file"<<j<<")\n";
@@ -111,6 +115,8 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
     for (UnsignedInteger j = 0; j < outputFiles.getSize(); ++ j)
     {
       const CouplingOutputFile outputFile(outputFiles[j]);
+      if (outputFile.getPath().empty())
+        continue;
       const Description variableNames(outputFile.getVariableNames());
       for (UnsignedInteger k = 0; k < variableNames.getSize(); ++ k)
       {
@@ -128,6 +134,8 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
     for (UnsignedInteger j = 0; j < inputFiles.getSize(); ++ j)
     {
       const CouplingInputFile inputFile(inputFiles[j]);
+      if (inputFile.getPath().empty())
+        continue;
       const Description variableNames(inputFile.getVariableNames());
       for (UnsignedInteger k = 0; k < variableNames.getSize(); ++ k)
       {
@@ -174,7 +182,9 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 
   code << "    for step in steps:\n";
   code << "        for input_file in step.getInputFiles():\n";
-  code << "            if input_file.getTemplatePath() == '':\n";
+  code << "            if not input_file.getPath():\n";
+  code << "                continue\n";
+  code << "            if not input_file.getTemplatePath():\n";
   code << "                if os.path.isfile(input_file.getPath()):\n";
   code << "                    shutil.copy(input_file.getPath(), os.path.join(workdir, input_file.getPath()))\n";
   code << "                elif os.path.isdir(input_file.getPath()):\n";
@@ -187,9 +197,11 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "        if len(step.getCommand()) > 0:\n";
   code << "            otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell())\n";
   code << "        for output_file in step.getOutputFiles():\n";
-  code << "             outfile = os.path.join(workdir, output_file.getPath())\n";
-  code << "             for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
-  code << "                 all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)\n";
+  code << "            if not output_file.getPath():\n";
+  code << "                continue\n";
+  code << "            outfile = os.path.join(workdir, output_file.getPath())\n";
+  code << "            for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
+  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)\n";
 
   if (cleanupWorkDirectory_)
     code << "    shutil.rmtree(workdir)\n";
