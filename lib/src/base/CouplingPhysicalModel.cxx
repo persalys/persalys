@@ -21,9 +21,9 @@
 #include "persalys/CouplingPhysicalModel.hxx"
 #include "persalys/PythonScriptEvaluation.hxx"
 #include "persalys/BaseTools.hxx"
+#include "persalys/FileMemoizeFunction.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/MemoizeFunction.hxx>
 
 #include <boost/regex.hpp>
 
@@ -211,15 +211,9 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 }
 
 
-Function CouplingPhysicalModel::getFunction() const
+Function CouplingPhysicalModel::generateFunction(const Description & outputNames) const
 {
-  if (!getInputDimension())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no inputs.";
-  if (!getOutputDimension())
-    throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
-
-  Function function(MemoizeFunction(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel())));
-  return function;
+  return FileMemoizeFunction(PythonPhysicalModel::generateFunction(outputNames), cacheInputFile_, cacheOutputFile_);
 }
 
 
@@ -289,6 +283,7 @@ String CouplingPhysicalModel::getPythonScript() const
   oss << getStepsMacro();
   oss << getName() + " = persalys." << getClassName() << "('" << getName() << "', steps)\n";
   oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True": "False") << ")\n";
+  oss << getName() + ".setCacheFiles('" << EscapePath(getCacheInputFile()) << "', '"<<EscapePath(getCacheOutputFile()) <<"')\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;
@@ -320,6 +315,21 @@ Bool CouplingPhysicalModel::getCleanupWorkDirectory() const
   return cleanupWorkDirectory_;
 }
 
+void CouplingPhysicalModel::setCacheFiles(const OT::FileName & inputFile, const OT::FileName & outputFile)
+{
+  cacheInputFile_ = inputFile;
+  cacheOutputFile_ = outputFile;
+}
+
+OT::FileName CouplingPhysicalModel::getCacheInputFile() const
+{
+  return cacheInputFile_;
+}
+
+OT::FileName CouplingPhysicalModel::getCacheOutputFile() const
+{
+  return cacheOutputFile_;
+}
 
 /* Method save() stores the object through the StorageManager */
 void CouplingPhysicalModel::save(Advocate & adv) const
@@ -327,6 +337,8 @@ void CouplingPhysicalModel::save(Advocate & adv) const
   PythonPhysicalModel::save(adv);
   adv.saveAttribute("steps_", steps_);
   adv.saveAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
+  adv.saveAttribute("cacheInputFile_", cacheInputFile_);
+  adv.saveAttribute("cacheOutputFile_", cacheOutputFile_);
 }
 
 
@@ -336,6 +348,8 @@ void CouplingPhysicalModel::load(Advocate & adv)
   PythonPhysicalModel::load(adv);
   adv.loadAttribute("steps_", steps_);
   adv.loadAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
+  adv.loadAttribute("cacheInputFile_", cacheInputFile_);
+  adv.loadAttribute("cacheOutputFile_", cacheOutputFile_);
 }
 
 

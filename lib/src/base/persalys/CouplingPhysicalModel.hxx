@@ -45,14 +45,17 @@ public:
   void setSteps(const CouplingStepCollection & steps);
   CouplingStepCollection getSteps() const;
 
-  OT::Function getFunction() const;
-
   virtual OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
 
   /** Whether the work dir is discarded */
   void setCleanupWorkDirectory(const OT::Bool cleanupWorkDirectory);
   OT::Bool getCleanupWorkDirectory() const;
+
+  /** Cache files accessors */
+  void setCacheFiles(const OT::FileName & inputFile, const OT::FileName & outputFile);
+  OT::FileName getCacheInputFile() const;
+  OT::FileName getCacheOutputFile() const;
 
   OT::String __repr__() const;
 
@@ -63,11 +66,15 @@ public:
   void load(OT::Advocate & adv);
 
 protected:
+  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+
   OT::String getStepsMacro(const OT::String & offset = "") const;
 private:
   // list of steps
   OT::PersistentCollection<CouplingStep> steps_;
   OT::Bool cleanupWorkDirectory_;
+  OT::FileName cacheInputFile_;
+  OT::FileName cacheOutputFile_;
 };
 }
 #endif

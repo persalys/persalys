@@ -46,7 +46,7 @@ FileMemoizeEvaluation::FileMemoizeEvaluation(const Evaluation & evaluation, cons
   : EvaluationProxy(evaluation)
   , inputFile_(inputFile)
   , outputFile_(outputFile)
-  , isCacheEnabled_(true)
+  , isCacheEnabled_(!inputFile_.empty() && !outputFile_.empty())
   , hits_(0)
 {
   setEvaluation(evaluation);
@@ -61,49 +61,61 @@ FileMemoizeEvaluation * FileMemoizeEvaluation::clone() const
 /** Function implementation accessors */
 void FileMemoizeEvaluation::setEvaluation(const Evaluation & evaluation)
 {
-  try
+  if (!inputFile_.empty() && !outputFile_.empty())
   {
-    Sample inSample(Sample::ImportFromCSVFile(inputFile_));
-    if (inSample.getDimension() != evaluation.getInputDimension())
-      throw InvalidDimensionException(HERE) << "Invalid input dimension";
-    Sample outSample(Sample::ImportFromCSVFile(outputFile_));
-    if (outSample.getDimension() != evaluation.getOutputDimension())
-      throw InvalidDimensionException(HERE) << "Invalid output dimension";
-  }
-  catch (FileNotFoundException &)
-  {
-    // one of the files do not exist: write empty files
-    clearCache();
+    try
+    {
+      Sample inSample(Sample::ImportFromCSVFile(inputFile_));
+      if (inSample.getDimension() != evaluation.getInputDimension())
+        throw InvalidDimensionException(HERE) << "Invalid input dimension";
+      Sample outSample(Sample::ImportFromCSVFile(outputFile_));
+      if (outSample.getDimension() != evaluation.getOutputDimension())
+        throw InvalidDimensionException(HERE) << "Invalid output dimension";
+    }
+    catch (FileNotFoundException &)
+    {
+      // one of the files do not exist: write empty files
+      clearCache();
+    }
   }
   evaluation_ = evaluation;
 
   // disable when the inner evaluation is a FileMemoizeEvaluation too
   FileMemoizeEvaluation * p_FileMemoizeEvaluation = dynamic_cast<FileMemoizeEvaluation*>(evaluation.getImplementation().get());
-  if (p_FileMemoizeEvaluation)
+  if (p_FileMemoizeEvaluation && p_FileMemoizeEvaluation->isCacheEnabled_)
   {
-    isCacheEnabled_ = !p_FileMemoizeEvaluation->isCacheEnabled_;
+    isCacheEnabled_ = false;
   }
 }
 
 
 void FileMemoizeEvaluation::setCacheFiles(const OT::FileName & inputFile, const OT::FileName & outputFile)
 {
-  try
+  if (inputFile.empty() || outputFile.empty())
   {
-    Sample inSample(Sample::ImportFromCSVFile(inputFile_));
-    if (inSample.getDimension() != evaluation_.getInputDimension())
-      throw InvalidDimensionException(HERE) << "Invalid input dimension";
-    Sample outSample(Sample::ImportFromCSVFile(outputFile_));
-    if (outSample.getDimension() != evaluation_.getOutputDimension())
-      throw InvalidDimensionException(HERE) << "Invalid output dimension";
+    isCacheEnabled_ = false;
+    inputFile_ = "";
+    outputFile_ = "";
   }
-  catch (FileNotFoundException &)
+  else
   {
-    // one of the files do not exist: write empty files
-    clearCache();
+    try
+    {
+      Sample inSample(Sample::ImportFromCSVFile(inputFile_));
+      if (inSample.getDimension() != evaluation_.getInputDimension())
+        throw InvalidDimensionException(HERE) << "Invalid input dimension";
+      Sample outSample(Sample::ImportFromCSVFile(outputFile_));
+      if (outSample.getDimension() != evaluation_.getOutputDimension())
+        throw InvalidDimensionException(HERE) << "Invalid output dimension";
+    }
+    catch (FileNotFoundException &)
+    {
+      // one of the files do not exist: write empty files
+      clearCache();
+    }
+    inputFile_ = inputFile;
+    outputFile_ = outputFile;
   }
-  inputFile_ = inputFile;
-  outputFile_ = outputFile;
 }
 
 /* Operator () */
@@ -262,14 +274,16 @@ Sample FileMemoizeEvaluation::getCacheOutput() const
 
 void FileMemoizeEvaluation::clearCache() const
 {
-  Sample input(0, evaluation_.getInputDimension());
-  input.setDescription(getInputDescription());
-  input.exportToCSVFile(inputFile_);
+  if (isCacheEnabled_)
+  {
+    Sample input(0, evaluation_.getInputDimension());
+    input.setDescription(getInputDescription());
+    input.exportToCSVFile(inputFile_);
 
-  Sample output(0, evaluation_.getOutputDimension());
-  output.setDescription(getOutputDescription());
-  output.exportToCSVFile(outputFile_);
-
+    Sample output(0, evaluation_.getOutputDimension());
+    output.setDescription(getOutputDescription());
+    output.exportToCSVFile(outputFile_);
+  }
   hits_ = 0;
 }
 

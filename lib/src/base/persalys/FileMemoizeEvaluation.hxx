@@ -94,6 +94,7 @@ public:
    */
   void clearCache() const;
 
+  /** Cache files accessors */
   void setCacheFiles(const OT::FileName & inputFile, const OT::FileName & outputFile);
   OT::FileName getCacheInputFile() const;
   OT::FileName getCacheOutputFile() const;
