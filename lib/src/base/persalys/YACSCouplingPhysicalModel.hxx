@@ -57,6 +57,7 @@ public:
 
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
+  OT::Function getFunction() const;
 protected:
 
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;

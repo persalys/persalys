@@ -23,6 +23,7 @@
 #include "persalys/YACSPhysicalModel.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <boost/filesystem.hpp>
 
 using namespace OT;
 
@@ -38,6 +39,7 @@ YACSCouplingPhysicalModel::YACSCouplingPhysicalModel(const String & name, const 
   : CouplingPhysicalModel(name, steps)
   , evaluation_()
 {
+  setCode(getCode());
 }
 
 
@@ -61,23 +63,50 @@ const ydefx::JobParametersProxy& YACSCouplingPhysicalModel::jobParameters() cons
 
 void YACSCouplingPhysicalModel::setCode(const String & script)
 {
+  CouplingPhysicalModel::setCode(script);
   try
   {
     evaluation_.setContent(script);
   }
   catch (std::exception & ex)
   {
-    throw InvalidArgumentException(HERE) << "Error in the script.\n" << ex.what();
+    throw InvalidArgumentException(HERE) << "Error in the script:\n" << ex.what();
   }
-  CouplingPhysicalModel::setCode(script);
+
+  // add data files to job parameters
+  const Collection<CouplingStep> steps(getSteps());
+  std::list<std::string> inFiles;
+  for (UnsignedInteger i = 0; i < steps.getSize(); ++ i)
+  {
+    const CouplingStep step(steps[i]);
+    const CouplingInputFileCollection inputFiles(step.getInputFiles());
+    for (UnsignedInteger j = 0; j < inputFiles.getSize(); ++ j)
+    {
+      const CouplingInputFile inputFile(inputFiles[j]);
+      // yacs wants absolute paths
+      if (!inputFile.getTemplatePath().empty())
+      {
+        inFiles.push_back(boost::filesystem::weakly_canonical(inputFile.getTemplatePath()).string());
+      }
+      else
+      {
+        inFiles.push_back(boost::filesystem::weakly_canonical(inputFile.getPath()).string());
+      }
+    }
+  }
+  jobParameters().in_files(inFiles);
+}
+
+Function YACSCouplingPhysicalModel::getFunction() const
+{
+  return generateFunction(getOutputNames());
 }
 
 Function YACSCouplingPhysicalModel::generateFunction(const Description & outputNames) const
 {
-  YACSEvaluation anEvaluation(evaluation_);
-  anEvaluation.setOutputVariablesNames(outputNames);
-
-  return Function(anEvaluation);
+  YACSEvaluation evaluation(evaluation_);
+  evaluation.setOutputVariablesNames(outputNames);
+  return FileMemoizeFunction(evaluation, getCacheInputFile(), getCacheOutputFile());
 }
 
 

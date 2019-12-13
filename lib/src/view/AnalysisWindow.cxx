@@ -231,20 +231,6 @@ void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
 
 void AnalysisWindow::visitYACS(YACSCouplingPhysicalModel* model)
 {
-  // add data files
-  const Collection<CouplingStep> steps(model->getSteps());
-  std::list<std::string> inFiles;
-  for (UnsignedInteger i = 0; i < steps.getSize(); ++ i)
-  {
-    const CouplingStep step(steps[i]);
-    const CouplingInputFileCollection inputFiles(step.getInputFiles());
-    for (UnsignedInteger j = 0; j < inputFiles.getSize(); ++ j)
-    {
-      const CouplingInputFile inputFile(inputFiles[j]);
-      inFiles.push_back(inputFile.getPath());
-    }
-  }
-  model->jobParameters().add_in_files(inFiles);
   ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
   launchParameters_ = rw;
 }

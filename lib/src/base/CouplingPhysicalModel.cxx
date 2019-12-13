@@ -141,6 +141,7 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   OSS code;
   code << "import tempfile\n";
   code << "import openturns.coupling_tools as otct\n";
+  code << "import persalys\n";
   code << "import shutil\n";
   code << "import os\n";
   code << "import hashlib\n";
@@ -213,7 +214,7 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 
 Function CouplingPhysicalModel::generateFunction(const Description & outputNames) const
 {
-  return FileMemoizeFunction(PythonPhysicalModel::generateFunction(outputNames), cacheInputFile_, cacheOutputFile_);
+  return FileMemoizeFunction(PythonPhysicalModel::generateFunction(outputNames), getCacheInputFile(), getCacheOutputFile());
 }
 
 

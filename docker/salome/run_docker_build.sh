@@ -23,9 +23,10 @@ cmake \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr \
   /io
 make install
+sudo cp -r /tmp/persalys.AppDir/usr/lib/* /usr/local/lib # needed for yacs container
 make tests
 /home/devel/appli/salome -t
-xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 30 -j8 -E "Window|Wizard"
+xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 60 -j8 -E "Window|Wizard"
 
 
 cd /tmp
