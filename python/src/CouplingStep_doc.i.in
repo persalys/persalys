@@ -35,6 +35,26 @@ path : :py:class:`openturns.Description`
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::CouplingStep::setIsShell
+"Shell command property accessor.
+
+Parameters
+----------
+is_shell : bool
+    Whether the command should be interpreted by the shell"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getIsShell
+"Shell command property accessor.
+
+Returns
+-------
+is_shell : bool
+    Whether the command should be interpreted by the shell"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::CouplingStep::getInputFiles
 "Template path accessor.
 

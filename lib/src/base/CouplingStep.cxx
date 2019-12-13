@@ -35,6 +35,7 @@ static Factory<CouplingStep> Factory_CouplingStep;
 CouplingStep::CouplingStep(const String & command)
   : PersistentObject()
   , command_(command)
+  , isShell_(false)
 {
 }
 
@@ -44,6 +45,7 @@ CouplingStep::CouplingStep(const String & command,
                           const CouplingOutputFileCollection & outputFiles)
   : PersistentObject()
   , command_(command)
+  , isShell_(false)
   , inputFiles_(inputFiles)
   , outputFiles_(outputFiles)
 {
@@ -88,13 +90,25 @@ CouplingOutputFileCollection CouplingStep::getOutputFiles() const
   return outputFiles_;
 }
 
+/* Whether the command is to be interpreted by the shell */
+void CouplingStep::setIsShell(const Bool isShell)
+{
+  isShell_ = isShell;
+}
+
+Bool CouplingStep::getIsShell() const
+{
+  return isShell_;
+}
+
 
 /* String converter */
 String CouplingStep::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
-      << " path=" << getCommand()
+      << " command=" << getCommand()
+      << " isShell=" << getIsShell()
       << " inputFiles=" << getInputFiles()
       << " outputFiles=" << getOutputFiles();
   return oss;

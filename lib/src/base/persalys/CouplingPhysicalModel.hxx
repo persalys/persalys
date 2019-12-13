@@ -50,6 +50,10 @@ public:
   virtual OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
 
+  /** Whether the work dir is discarded */
+  void setCleanupWorkDirectory(const OT::Bool cleanupWorkDirectory);
+  OT::Bool getCleanupWorkDirectory() const;
+
   OT::String __repr__() const;
 
   /** Method save() stores the object through the StorageManager */
@@ -63,7 +67,7 @@ protected:
 private:
   // list of steps
   OT::PersistentCollection<CouplingStep> steps_;
-
+  OT::Bool cleanupWorkDirectory_;
 };
 }
 #endif

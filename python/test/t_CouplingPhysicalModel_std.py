@@ -11,6 +11,8 @@ import tempfile
 import shutil
 import math
 import sys
+import hashlib
+import struct
 
 class CouplingInputFile(object):
     def __init__(self, path, template_path=''):
@@ -27,7 +29,16 @@ class CouplingInputFile(object):
         if len(varnames) != len(tokens):
             raise ValueError('tokens must have the same size as varnames')
         self.varnames_ = varnames
-
+    def getVariableNames(self):
+        return self.varnames_
+    def setTemplatePath(self, template_path):
+        self.template_path_ = template_path
+    def getTemplatePath(self):
+        return self.template_path_
+    def getPath(self):
+        return self.path_
+    def getTokens(self):
+        return self.tokens_
 class CouplingOutputFile(object):
     def __init__(self, path):
         if os.path.isabs(path):
@@ -59,20 +70,39 @@ class CouplingOutputFile(object):
             if len(skip_cols) != len(self.tokens_):
                 raise ValueError('skip_cols must have the same size as tokens')
             self.skip_cols_ = skip_cols
-
+    def getVariableNames(self):
+        return self.varnames_
+    def getPath(self):
+        return self.path_
+    def getTokens(self):
+        return self.tokens_
+    def getSkipLines(self):
+        return self.skip_lines_
+    def getSkipColumns(self):
+        return self.skip_cols_
 class CouplingStep(object):
     def __init__(self, command, input_files, output_files):
         self.command_ = command
+        self.is_shell_ = False
         self.input_files_ = input_files
         self.output_files_ = output_files
-
+    def getIsShell(self):
+        return self.is_shell_
+    def getInputFiles(self):
+        return self.input_files_
+    def getOutputFiles(self):
+        return self.output_files_
+    def getCommand(self):
+        return self.command_
 class CouplingPhysicalModel(object):
-    def __init__(self, steps):
+    def __init__(self, name, steps):
         if len(steps) == 0:
             raise ValueError('at least one step is required')
         self.steps_ = steps
         # cache input variables
         self.input_variables_ = self.getInputVariables()
+        self.cleanup_work_dir_ = True
+        self.name_ = name
 
     def getInputVariables(self):
         # variables of all input files (no duplicates), exclude outputs
@@ -101,15 +131,30 @@ class CouplingPhysicalModel(object):
     def getOutputDimension(self):
         return len(self.getOutputVariables())
 
+    def getCleanupWorkDirectory(self):
+        return self.cleanup_work_dir_
+
+    def getFunction(self):
+        return ot.PythonFunction(self.getInputDimension(), self.getOutputDimension(), self)
+
+    def getInputNames(self):
+        return ot.Description(self.getInputVariables())
+    def getOutputNames(self):
+        return ot.Description(self.getOutputVariables())
     def __call__(self, X):
         if len(X) != len(self.input_variables_):
             raise ValueError('wrong input dimension')
 
         # initialize known current values
-        all_values = dict(zip(self.input_variables_, X))
+        all_vars = dict(zip(self.input_variables_, X))
 
-        # everything happens in a temporary dir
-        workdir = tempfile.mkdtemp()
+        # everything happens in a temporary work dir
+        #workdir = tempfile.mkdtemp()
+        checksum = hashlib.sha1()
+        [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in X]
+        workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())
+        if not os.path.exists(workdir):
+            os.makedirs(workdir)
 
         # for each command
         for step in self.steps_:
@@ -126,23 +171,25 @@ class CouplingPhysicalModel(object):
                         raise ValueError('cannot handle file:', input_file.getPath())
                 else:
                     # generate input file from template
-                    input_values = [all_values[varname] for varname in input_file.getVariableNames()]
+                    input_values = [all_vars[varname] for varname in input_file.getVariableNames()]
                     otct.replace(input_file.getTemplatePath(), os.path.join(workdir, input_file.getPath()), input_file.getTokens(), input_values)
 
             # 2. run command
-            otct.execute(step.getCommand(), workdir=workdir)
+            if len(step.getCommand()) > 0:
+                otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell())
 
             # 3. read values
             for output_file in step.getOutputFiles():
                 outfile = os.path.join(workdir, output_file.getPath())
                 for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):
-                    all_values[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)
+                    all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)
 
         # cleanup work dir
-        shutil.rmtree(workdir)
+        if self.getCleanupWorkDirectory():
+            shutil.rmtree(workdir)
 
         # return the output values
-        output_values = [all_values[varname] for varname in self.getOutputVariables()]
+        output_values = [all_vars[varname] for varname in self.getOutputVariables()]
         return output_values
 
 ### testcase A: parse output with tokens
@@ -226,9 +273,49 @@ ott.assert_almost_equal(y, [6.0, 7.0])
 os.remove('input_template.txt')
 os.remove('external_program.py')
 
+### testcase reusing temp dir
+with open('input.txt.in', 'w') as f:
+    f.write('X0=@X0\n')
+    f.write('X1=@X1\n')
+    f.write('X2=@X2\n')
+with open('program.py', 'w') as f:
+    f.write('import sys\n')
+    f.write('exec(open(sys.argv[1]).read())\n')
+    f.write('Y0=X0+X1+X2\n')
+    f.write('Y1=X0+X1*X2\n')
+    f.write('with open("output.txt", "w") as f:\n')
+    f.write('    f.write("Y0=%.17e\\n" % Y0)\n')
+    f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
+input_file1 = persalys.CouplingInputFile('input.txt')
+input_file1.setTemplatePath('input.txt.in')
+input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+input_file2 = persalys.CouplingInputFile('program.py')
+output_file = persalys.CouplingOutputFile('output.txt')
+output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+step = persalys.CouplingStep(sys.executable + ' program.py input.txt', [input_file1, input_file2], [output_file])
+model = persalys.CouplingPhysicalModel('reuse1', [step])
+# leave work dir
+model.setCleanupWorkDirectory(False)
 
+# single evaluation
+x = [1.0, 2.0, 3.0]
+f = model.getFunction()
+y = f(x)
+print(y)
+ott.assert_almost_equal(y, [6.0, 7.0])
+
+# reuse previous work dir, with an empty command
+step = persalys.CouplingStep('', [input_file1, input_file2], [output_file])
+model = persalys.CouplingPhysicalModel('reuse2', [step])
+f = model.getFunction()
+y = f(x)
+ott.assert_almost_equal(y, [6.0, 7.0])
+
+# cleanup
+os.remove('input.txt.in')
+os.remove('program.py')
 
 
 ### testcase with several steps
@@ -289,7 +376,8 @@ output_file.setVariables(['Z0'], ['Z0='], [0], [0])
 step3 = persalys.CouplingStep(sys.executable + ' program3.py', [input_file1, input_file2], [output_file])
 
 # step4: no inputs, no outputs
-step4 = persalys.CouplingStep(sys.executable + ' -c "print(42)"', [], [])
+step4 = persalys.CouplingStep('echo 42', [], [])
+step4.setIsShell(True)
 
 model = persalys.CouplingPhysicalModel('multi', [step1, step2, step3, step4])
 print('input variables=', model.getInputNames())
@@ -316,3 +404,4 @@ myStudy.add(model)
 script = myStudy.getPythonScript()
 #print('script=', script)
 exec(script)
+

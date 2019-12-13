@@ -48,3 +48,23 @@ Parameters
 ----------
 steps : sequence of :class:`~persalys.CouplingStep`
     List of steps to execute"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::getCleanupWorkDirectory
+"Cleanup work directory accessor.
+
+Returns
+-------
+cleanup_work_dir : bool
+    Whether the work directory is discarded"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::setCleanupWorkDirectory
+"Cleanup work directory accessor.
+
+Parameters
+----------
+cleanup_work_dir : bool
+    Whether the work directory is discarded"

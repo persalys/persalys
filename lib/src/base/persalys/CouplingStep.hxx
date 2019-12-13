@@ -48,6 +48,10 @@ public:
   void setCommand(const OT::String & command);
   OT::String getCommand() const;
 
+  /* Whether the command is to be interpreted by the shell */
+  void setIsShell(const OT::Bool isShell);
+  OT::Bool getIsShell() const;
+
   /** Files accessor */
   void setInputFiles(const CouplingInputFileCollection & inputFiles);
   CouplingInputFileCollection getInputFiles() const;
@@ -66,6 +70,7 @@ public:
 
 private:
   OT::String command_;
+  OT::Bool isShell_;
   OT::PersistentCollection<CouplingInputFile> inputFiles_;
   OT::PersistentCollection<CouplingOutputFile> outputFiles_;
 };

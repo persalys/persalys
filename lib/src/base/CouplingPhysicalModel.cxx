@@ -40,6 +40,7 @@ static Factory<CouplingPhysicalModel> Factory_CouplingPhysicalModel;
 CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
                                              const CouplingStepCollection & steps)
   : PythonPhysicalModel(name)
+  , cleanupWorkDirectory_(true)
 {
   setSteps(steps);
 }
@@ -91,6 +92,7 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
     }
     // escape backslashes
     oss << offset << "step" << i << " = persalys.CouplingStep('"<<EscapePath(step.getCommand())<<"', input_files, output_files)\n";
+    oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True": "False") << ")\n";
     oss << offset << "steps.append(step"<<i<<")\n";
   }
   return oss;
@@ -141,6 +143,8 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "import openturns.coupling_tools as otct\n";
   code << "import shutil\n";
   code << "import os\n";
+  code << "import hashlib\n";
+  code << "import struct\n\n";
   code << "def _exec(";
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
@@ -151,7 +155,7 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "):\n";
 
   code << getStepsMacro("    ");
-  code << "    all_values = dict(zip(" << Parameters::GetOTDescriptionStr(inputNames) << ", [";
+  code << "    all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(inputNames) << ", [";
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
     code << inputNames[i];
@@ -159,7 +163,14 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
       code << ", ";
   }
   code << "]))\n";
-  code << "    workdir = tempfile.mkdtemp()\n";
+
+//   code << "    workdir = tempfile.mkdtemp()\n";
+  code << "    checksum = hashlib.sha1()\n";
+  code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
+  code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
+  code << "    if not os.path.exists(workdir):\n";
+  code << "        os.makedirs(workdir)\n";
+
   code << "    for step in steps:\n";
   code << "        for input_file in step.getInputFiles():\n";
   code << "            if input_file.getTemplatePath() == '':\n";
@@ -170,19 +181,21 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "                else:\n";
   code << "                    raise ValueError('cannot handle file:', input_file.getPath())\n";
   code << "            else:\n";
-  code << "                input_values = [all_values[varname] for varname in input_file.getVariableNames()]\n";
+  code << "                input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
   code << "                otct.replace(input_file.getTemplatePath(), os.path.join(workdir, input_file.getPath()), input_file.getTokens(), input_values)\n";
-  code << "        otct.execute(step.getCommand(), workdir=workdir)\n";
+  code << "        if len(step.getCommand()) > 0:\n";
+  code << "            otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell())\n";
   code << "        for output_file in step.getOutputFiles():\n";
   code << "             outfile = os.path.join(workdir, output_file.getPath())\n";
   code << "             for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
-  code << "                 all_values[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)\n";
+  code << "                 all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)\n";
 
-  code << "    shutil.rmtree(workdir)\n";
+  if (cleanupWorkDirectory_)
+    code << "    shutil.rmtree(workdir)\n";
 
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
-    code << "    " << outputNames[i] <<" = all_values['"<<outputNames[i]<<"']\n";
+    code << "    " << outputNames[i] <<" = all_vars['" << outputNames[i] << "']\n";
   }
   code << "    return ";
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
@@ -275,6 +288,7 @@ String CouplingPhysicalModel::getPythonScript() const
 
   oss << getStepsMacro();
   oss << getName() + " = persalys." << getClassName() << "('" << getName() << "', steps)\n";
+  oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True": "False") << ")\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;
@@ -291,11 +305,28 @@ String CouplingPhysicalModel::__repr__() const
 }
 
 
+/** Whether the work dir is discarded */
+void CouplingPhysicalModel::setCleanupWorkDirectory(const Bool cleanupWorkDirectory)
+{
+  if (cleanupWorkDirectory != cleanupWorkDirectory_)
+  {
+    cleanupWorkDirectory_ = cleanupWorkDirectory;
+    setSteps(getSteps());
+  }
+}
+
+Bool CouplingPhysicalModel::getCleanupWorkDirectory() const
+{
+  return cleanupWorkDirectory_;
+}
+
+
 /* Method save() stores the object through the StorageManager */
 void CouplingPhysicalModel::save(Advocate & adv) const
 {
   PythonPhysicalModel::save(adv);
   adv.saveAttribute("steps_", steps_);
+  adv.saveAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
 }
 
 
@@ -304,6 +335,7 @@ void CouplingPhysicalModel::load(Advocate & adv)
 {
   PythonPhysicalModel::load(adv);
   adv.loadAttribute("steps_", steps_);
+  adv.loadAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
 }
 
 
