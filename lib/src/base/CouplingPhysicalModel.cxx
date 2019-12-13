@@ -80,7 +80,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       oss << offset << "input_file" << j << " = persalys.CouplingInputFile('"<<EscapePath(inputFile.getPath())<<"')\n";
       if (!inputFile.getTemplatePath().empty())
         oss << offset << "input_file" << j <<".setTemplatePath('" << EscapePath(inputFile.getTemplatePath())<<"')\n";
-      oss << offset << "input_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(inputFile.getTokens())<<")\n";
+      if (inputFile.getVariableNames().getSize() > 0)
+        oss << offset << "input_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(inputFile.getTokens())<<")\n";
       oss << offset << "input_files.append(input_file"<<j<<")\n";
     }
     const CouplingOutputFileCollection outputFiles(step.getOutputFiles());
@@ -91,7 +92,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       if (outputFile.getPath().empty())
         continue;
       oss << offset << "output_file" << j << " = persalys.CouplingOutputFile('"<<EscapePath(outputFile.getPath())<<"')\n";
-      oss << offset << "output_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())<<", "<<outputFile.getSkipLines().__str__()<<", "<<outputFile.getSkipColumns().__str__()<<")\n";
+      if (outputFile.getVariableNames().getSize() > 0)
+        oss << offset << "output_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())<<", "<<outputFile.getSkipLines().__str__()<<", "<<outputFile.getSkipColumns().__str__()<<")\n";
       oss << offset << "output_files.append(output_file"<<j<<")\n";
     }
     // escape backslashes
