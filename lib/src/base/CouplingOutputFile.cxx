@@ -116,7 +116,7 @@ void CouplingOutputFile::save(Advocate & adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("path_", path_);
   adv.saveAttribute("variableNames_", variableNames_);
-  adv.saveAttribute("indicesInterval_", tokens_);
+  adv.saveAttribute("tokens_", tokens_);
   adv.saveAttribute("skipLines_", skipLines_);
   adv.saveAttribute("skipColumns_", skipColumns_);
 

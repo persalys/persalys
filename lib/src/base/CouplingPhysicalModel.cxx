@@ -35,6 +35,7 @@ namespace PERSALYS
 CLASSNAMEINIT(CouplingPhysicalModel)
 
 static Factory<CouplingPhysicalModel> Factory_CouplingPhysicalModel;
+static Factory<PersistentCollection<CouplingStep> > Factory_PersistentCollectionCouplingStep;
 
 /* Default constructor */
 CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,

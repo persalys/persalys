@@ -30,6 +30,8 @@ namespace PERSALYS
 CLASSNAMEINIT(CouplingStep)
 
 static Factory<CouplingStep> Factory_CouplingStep;
+static Factory<PersistentCollection<CouplingInputFile> > Factory_PersistentCollectionCouplingInputFile;
+static Factory<PersistentCollection<CouplingOutputFile> > Factory_PersistentCollectionCouplingOutputFile;
 
 /* Default constructor */
 CouplingStep::CouplingStep(const String & command)
@@ -121,6 +123,7 @@ void CouplingStep::save(Advocate & adv) const
   adv.saveAttribute("command_", command_);
   adv.saveAttribute("inputFiles_", inputFiles_);
   adv.saveAttribute("outputFiles_", outputFiles_);
+  adv.saveAttribute("isShell_", isShell_);
 }
 
 
@@ -131,6 +134,7 @@ void CouplingStep::load(Advocate & adv)
   adv.loadAttribute("command_", command_);
   adv.loadAttribute("inputFiles_", inputFiles_);
   adv.loadAttribute("outputFiles_", outputFiles_);
+  adv.loadAttribute("isShell_", isShell_);
 }
 
 }
