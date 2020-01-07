@@ -112,7 +112,7 @@ void ReliabilityIntroPage::initialize(const Analysis& analysis, QList<LimitState
   for (int i = 0; i < limitStatesList.count(); ++i)
   {
     QStandardItem * item = new QStandardItem(limitStatesList[i].getName().c_str());
-    item->setData(qVariantFromValue(limitStatesList[i]));
+    item->setData(QVariant::fromValue(limitStatesList[i]));
     limitStatesComboBoxModel_->appendRow(item);
   }
 

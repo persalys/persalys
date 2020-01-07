@@ -94,9 +94,8 @@ void MorrisPage::initialize(const Analysis& analysis)
   {
     // resize table
     const int h = tableView_->verticalHeader()->length() + tableView_->horizontalHeader()->height();
-    int x1, y1, x2, y2;
-    tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
-    tableView_->setFixedHeight(h + y1 + y2);
+    const QMargins margins(tableView_->contentsMargins());
+    tableView_->setFixedHeight(h + margins.top() + margins.bottom());
   }
 }
 

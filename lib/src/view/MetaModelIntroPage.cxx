@@ -100,7 +100,7 @@ void MetaModelIntroPage::initialize(const Analysis& analysis, QList< DesignOfExp
   for (int i = 0; i < doesList.count(); ++i)
   {
     QStandardItem * item = new QStandardItem(doesList[i].getName().c_str());
-    item->setData(qVariantFromValue(doesList[i]));
+    item->setData(QVariant::fromValue(doesList[i]));
     doesComboBoxModel_->appendRow(item);
   }
   // interest variables

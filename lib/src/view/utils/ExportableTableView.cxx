@@ -103,12 +103,11 @@ void ExportableTableView::exportData()
 
 void ExportableTableView::exportImage()
 {
-  int x1, y1, x2, y2;
-  getContentsMargins(&x1, &y1, &x2, &y2);
+  const QMargins margins(contentsMargins());
   const int w = horizontalHeader()->length() + verticalHeader()->width();
   const int h = verticalHeader()->length() + horizontalHeader()->height();
 
-  QImage image(QSize(w + x1 + x2, h + y1 + y2), QImage::Format_ARGB32_Premultiplied);
+  QImage image(QSize(w + margins.left() + margins.right(), h + margins.top() + margins.bottom()), QImage::Format_ARGB32_Premultiplied);
   render(&image);
 
   FileTools::ExportImage(image, this);

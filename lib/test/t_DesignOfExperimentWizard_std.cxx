@@ -182,7 +182,7 @@ private slots:
     editValue[0] = 4502;
     editValue[1] = 4660;
     editValue[2] = 5020;
-    doeModel->setData(doeModel->index(3, 7), qVariantFromValue(editValue), Qt::UserRole);
+    doeModel->setData(doeModel->index(3, 7), QVariant::fromValue(editValue), Qt::UserRole);
     QVERIFY2(doeModel->data(doeModel->index(3, 3)) == QString::number(4502, 'g', 12), "wrong lower bound value");
     QVERIFY2(doeModel->data(doeModel->index(3, 4)) == QString::number(5020, 'g', 12), "wrong upper bound value");
     doeModel->setData(doeModel->index(3, 5), "Deltas =", Qt::EditRole);

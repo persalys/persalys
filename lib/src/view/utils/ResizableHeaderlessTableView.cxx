@@ -131,12 +131,11 @@ void ResizableHeaderlessTableView::resizeWithOptimalWidth()
     }
   }
   // set width
-  int x1, y1, x2, y2;
-  getContentsMargins(&x1, &y1, &x2, &y2);
   int w = horizontalHeader()->length() + verticalHeader()->width();
   if (verticalScrollBar()->maximum())
     w += verticalScrollBar()->sizeHint().width();
-  setFixedWidth(w + x1 + x2);
+  const QMargins margins(contentsMargins());
+  setFixedWidth(w + margins.left() + margins.right());
 }
 
 

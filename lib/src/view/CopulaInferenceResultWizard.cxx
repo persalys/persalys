@@ -98,9 +98,8 @@ void CopulaInferenceResultWizard::buildInterface()
     }
     // - resize
     const int h = tableView_->verticalHeader()->length() + tableView_->horizontalHeader()->height();
-    int x1, y1, x2, y2;
-    tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
-    tableView_->setFixedHeight(h + y1 + y2);
+    const QMargins margins(tableView_->contentsMargins());
+    tableView_->setFixedHeight(h + margins.top() + margins.bottom());
     topWidgetLayout->addWidget(tableView_, 2, 0, 1, 2);
 
     // signal to update the table

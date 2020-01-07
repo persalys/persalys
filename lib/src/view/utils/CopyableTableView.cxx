@@ -69,21 +69,19 @@ void CopyableTableView::resizeToContents()
   // resize table
   const int w = horizontalHeader()->length() + (verticalHeader()->isHidden() ? 0 : verticalHeader()->sizeHint().width());
   const int h = verticalHeader()->length() + horizontalHeader()->height();
-  int x1, y1, x2, y2;
-  getContentsMargins(&x1, &y1, &x2, &y2);
-  setFixedSize(w + x1 + x2, h + y1 + y2);
+  const QMargins margins(contentsMargins());
+  setFixedSize(w + margins.left() + margins.right(), h + margins.top() + margins.bottom());
 }
 
 
 void CopyableTableView::resizeWithOptimalHeight()
 {
-  int x1, y1, x2, y2;
-  getContentsMargins(&x1, &y1, &x2, &y2);
   int h = verticalHeader()->length() + horizontalHeader()->height();
   // if there is an horizontal scroll bar, add its height
   if (horizontalScrollBar()->maximum())
     h += horizontalScrollBar()->sizeHint().height();
-  setFixedHeight(h + y1 + y2);
+  const QMargins margins(contentsMargins());
+  setFixedHeight(h + margins.top() + margins.bottom());
 }
 
 

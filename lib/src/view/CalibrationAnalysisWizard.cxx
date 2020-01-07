@@ -112,7 +112,7 @@ void CalibrationIntroPage::initialize(const Analysis& analysis, QList<DesignOfEx
   for (int i = 0; i < observationsList.count(); ++i)
   {
     QStandardItem * item = new QStandardItem(observationsList[i].getName().c_str());
-    item->setData(qVariantFromValue(observationsList[i]));
+    item->setData(QVariant::fromValue(observationsList[i]));
     observationsComboBoxModel_->appendRow(item);
   }
   const CalibrationAnalysis * analysis_ptr = dynamic_cast<const CalibrationAnalysis*>(analysis.getImplementation().get());
