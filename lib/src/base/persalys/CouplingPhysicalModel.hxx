@@ -38,6 +38,11 @@ public:
   explicit CouplingPhysicalModel(const OT::String & name = "Unnamed",
                                  const CouplingStepCollection & steps = CouplingStepCollection());
 
+  CouplingPhysicalModel(const OT::String & name,
+                        const InputCollection & inputs,
+                        const OutputCollection & outputs,
+                        const CouplingStepCollection & steps);
+
   /** Virtual constructor */
   virtual CouplingPhysicalModel * clone() const;
 

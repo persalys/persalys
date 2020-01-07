@@ -1,5 +1,22 @@
 %feature("docstring") PERSALYS::YACSCouplingPhysicalModel
-"Physical model using YACS."
+"File-exchange based coupling model using YACS.
+
+YACS engine variant of :class:`~persalys.CouplingPhysicalModel`.
+
+Parameters
+----------
+name : str
+    Model name
+inputs : sequence of :class:`~persalys.Input`
+    Input variables (optional)
+outputs : sequence of :class:`~persalys.Output`
+    Output variables (optional)
+steps : sequence of :class:`~persalys.CouplingStep`
+    List of steps to execute (optional)
+
+See Also
+--------
+CouplingPhysicalModel"
 
 // ---------------------------------------------------------------------
 

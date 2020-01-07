@@ -165,7 +165,7 @@ SubWindow * WindowFactory::GetPhysicalModelWindow(PhysicalModelItem *item, QWidg
     return new FMIPhysicalModelWindow(item, parent);
   }
 #endif
-  else if (physicalModelType == "CouplingPhysicalModel")
+  else if ((physicalModelType == "CouplingPhysicalModel") || (physicalModelType == "YACSCouplingPhysicalModel"))
   {
     return new CouplingModelWindow(item, parent);
   }

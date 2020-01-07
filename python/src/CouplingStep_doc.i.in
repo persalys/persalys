@@ -2,16 +2,21 @@
 "Coupling step.
 
 Represents one step of the coupling with one command to execute and the
-input or output files associated.
+associated input or output files.
 
 Parameters
 ----------
 command : str
     Command to execute
+    By default it is run by the system else see :meth:`setIsShell`.
 input_files : sequence of :class:`~persalys.CouplingInputFile`
     Input file metadatas
 output_files : sequence of :class:`~persalys.CouplingOutputFile`
-    Output file metadatas"
+    Output file metadatas
+
+See Also
+--------
+CouplingPhysicalModel, CouplingInputFile, CouplingOutputFile"
 
 // ---------------------------------------------------------------------
 

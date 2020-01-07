@@ -20,6 +20,7 @@
  */
 #ifdef PERSALYS_HAVE_YACS
 #include "persalys/YACSPhysicalModel.hxx"
+#include "persalys/YACSCouplingPhysicalModel.hxx"
 #endif
 #include "persalys/StudyItem.hxx"
 
@@ -74,7 +75,7 @@ void StudyItem::buildActions()
   newYACSModel_ = new QAction(tr("YACS model"), this);
   connect(newYACSModel_, &QAction::triggered, [=](){ study_.add(new YACSPhysicalModel(getModelName(tr("YACSModel_")))); });
 
-  connect(newYACSModel_, &QAction::triggered, [=](){ study_.add(new YACSCouplingPhysicalModel(getModelName(tr("YACSModel_")))); });
+  connect(newCouplingModel_, &QAction::triggered, [=](){ study_.add(new YACSCouplingPhysicalModel(getModelName(tr("CouplingModel_")))); });
 #else
   connect(newCouplingModel_, &QAction::triggered, [=](){ study_.add(new CouplingPhysicalModel(getModelName(tr("CouplingModel_")))); });
 #endif

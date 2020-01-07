@@ -35,13 +35,24 @@ CLASSNAMEINIT(YACSCouplingPhysicalModel)
 static Factory<YACSCouplingPhysicalModel> Factory_YACSCouplingPhysicalModel;
 
 /* Default constructor */
-YACSCouplingPhysicalModel::YACSCouplingPhysicalModel(const String & name, const CouplingStepCollection & steps)
+YACSCouplingPhysicalModel::YACSCouplingPhysicalModel(const String & name,
+                                                     const CouplingStepCollection & steps)
   : CouplingPhysicalModel(name, steps)
   , evaluation_()
 {
   setCode(getCode());
 }
 
+/* Default constructor */
+YACSCouplingPhysicalModel::YACSCouplingPhysicalModel(const String & name,
+                                                     const InputCollection & inputs,
+                                                     const OutputCollection & outputs,
+                                                     const CouplingStepCollection & steps)
+  : CouplingPhysicalModel(name, inputs, outputs, steps)
+  , evaluation_()
+{
+  setCode(getCode());
+}
 
 /* Virtual constructor */
 YACSCouplingPhysicalModel* YACSCouplingPhysicalModel::clone() const

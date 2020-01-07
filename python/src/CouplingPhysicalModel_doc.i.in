@@ -1,12 +1,31 @@
 %feature("docstring") PERSALYS::CouplingPhysicalModel
 "File-exchange based coupling model.
 
+This model allows to wrap computer codes that read input values
+and write output values in text files.
+It is defined from a sequence steps, each step being defined from:
+
+- a list of input files to copy, or input files in which some variables are written
+- a command to launch the code
+- a list of output files and the associated output variables to read.
+
+Each step is run sequentially in a temporary working directory for each input point.
+The name of the temporary working directory is computed from a hash of the input point.
+
 Parameters
 ----------
 name : str
     Model name
+inputs : sequence of :class:`~persalys.Input`
+    Input variables (optional)
+outputs : sequence of :class:`~persalys.Output`
+    Output variables (optional)
 steps : sequence of :class:`~persalys.CouplingStep`
-    List of steps to execute
+    List of steps to execute (optional)
+
+See Also
+--------
+CouplingStep, CouplingInputFile, CouplingOutputFile
 
 Examples
 --------
@@ -22,7 +41,7 @@ external_program.py reads input.txt and writes output.txt:
 
 >>> input_file2 = persalys.CouplingInputFile('external_program.py')
 
-output variables YM are read from output.txt:
+output variables Yj are read from output.txt and delimited by tokens, no line/column skipped:
 
 >>> output_file = persalys.CouplingOutputFile('output.txt')
 >>> output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])

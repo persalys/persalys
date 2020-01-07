@@ -46,6 +46,19 @@ CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
   setSteps(steps);
 }
 
+/* Default constructor */
+CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
+                                             const InputCollection & inputs,
+                                             const OutputCollection & outputs,
+                                             const CouplingStepCollection & steps)
+  : PythonPhysicalModel(name)
+  , cleanupWorkDirectory_(true)
+{
+  PhysicalModelImplementation::setInputs(inputs);
+  PhysicalModelImplementation::setOutputs(outputs);
+  setSteps(steps);
+}
+
 /* Virtual constructor */
 CouplingPhysicalModel* CouplingPhysicalModel::clone() const
 {
@@ -189,9 +202,9 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "                continue\n";
   code << "            if not input_file.getTemplatePath():\n";
   code << "                if os.path.isfile(input_file.getPath()):\n";
-  code << "                    shutil.copy(input_file.getPath(), os.path.join(workdir, input_file.getPath()))\n";
+  code << "                    shutil.copy(input_file.getPath(), os.path.join(workdir, os.path.basename(input_file.getPath())))\n";
   code << "                elif os.path.isdir(input_file.getPath()):\n";
-  code << "                    shutil.copytree(input_file.getPath(), os.path.join(workdir, input_file.getPath()))\n";
+  code << "                    shutil.copytree(input_file.getPath(), os.path.join(workdir, os.path.basename(input_file.getPath())))\n";
   code << "                else:\n";
   code << "                    raise ValueError('cannot handle file:', input_file.getPath())\n";
   code << "            else:\n";
@@ -297,7 +310,7 @@ String CouplingPhysicalModel::getPythonScript() const
   oss << "]\n";
 
   oss << getStepsMacro();
-  oss << getName() + " = persalys." << getClassName() << "('" << getName() << "', steps)\n";
+  oss << getName() + " = persalys." << getClassName() << "('" << getName() << "', inputs, outputs, steps)\n";
   oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True": "False") << ")\n";
   oss << getName() + ".setCacheFiles('" << EscapePath(getCacheInputFile()) << "', '"<<EscapePath(getCacheOutputFile()) <<"')\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();

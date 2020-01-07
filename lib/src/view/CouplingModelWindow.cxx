@@ -184,6 +184,7 @@ void CouplingModelWindow::evaluateOutputs()
   Sample outputSample(eval.getResult().getDesignOfExperiment().getOutputSample());
 
   // check
+  errorMessageLabel_->reset();
   if (!eval.getErrorMessage().empty())
   {
     errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
@@ -299,7 +300,7 @@ bool InTableModel::setData(const QModelIndex & index, const QVariant & value, in
     return false;
 
   CouplingInputFile inFile(getInputFile());
-  const String inName(getInputFile().getVariableNames()[index.row()]);
+  const String inName(inFile.getVariableNames()[index.row()]);
 
   switch (index.column())
   {
@@ -443,15 +444,19 @@ void InTableModel::removeLine()
 OutTableModel::OutTableModel(CouplingPhysicalModel *model, const int indStep, const int indFile, QWidget *parent)
   : QAbstractTableModel(parent)
   , model_(model)
-  , outFile_(model->getSteps()[indStep].getOutputFiles()[indFile])
   , indStep_(indStep)
   , indFile_(indFile)
 {
 }
 
+CouplingOutputFile OutTableModel::getOutputFile() const
+{
+  return model_->getSteps()[indStep_].getOutputFiles()[indFile_];
+}
+
 int OutTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
-  return outFile_.getVariableNames().getSize();
+  return getOutputFile().getVariableNames().getSize();
 }
 
 int OutTableModel::columnCount(const QModelIndex & /*parent*/) const
@@ -495,7 +500,7 @@ QVariant OutTableModel::data(const QModelIndex & index, int role) const
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    const String outName(outFile_.getVariableNames()[index.row()]);
+    const String outName(getOutputFile().getVariableNames()[index.row()]);
     switch (index.column())
     {
       case 0:
@@ -503,11 +508,11 @@ QVariant OutTableModel::data(const QModelIndex & index, int role) const
       case 1:
         return QString::fromUtf8(model_->getOutputByName(outName).getDescription().c_str());
       case 2:
-        return QString::fromUtf8(outFile_.getTokens()[index.row()].c_str());
+        return QString::fromUtf8(getOutputFile().getTokens()[index.row()].c_str());
       case 3:
-        return QString::number(outFile_.getSkipLines()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        return QString::number(getOutputFile().getSkipLines()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 4:
-        return QString::number(outFile_.getSkipColumns()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        return QString::number(getOutputFile().getSkipColumns()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 5:
       {
         Output output(model_->getOutputByName(outName));
@@ -525,7 +530,8 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
   if (!index.isValid() || role != Qt::EditRole)
     return false;
 
-  const String outName(outFile_.getVariableNames()[index.row()]);
+  CouplingOutputFile outFile(getOutputFile());
+  const String outName(outFile.getVariableNames()[index.row()]);
   Output output(model_->getOutputByName(outName));
   switch (index.column())
   {
@@ -540,10 +546,10 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
       const String description(output.getDescription());
       const double varValue = output.getValue();
 
-      Description names(outFile_.getVariableNames());
+      Description names(outFile.getVariableNames());
       names[index.row()] = newname;
-      outFile_.setVariables(names, outFile_.getTokens(), outFile_.getSkipLines(), outFile_.getSkipColumns());
-      updateModel();
+      outFile.setVariables(names, outFile.getTokens(), outFile.getSkipLines(), outFile.getSkipColumns());
+      updateModel(outFile);
 
       model_->blockNotification("PhysicalModelDefinitionItem");
       model_->setOutputDescription(newname, description);
@@ -566,37 +572,37 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
     case 2:
     {
       String newtoken = value.toString().toUtf8().constData();
-      if (outFile_.getTokens()[index.row()] == newtoken)
+      if (outFile.getTokens()[index.row()] == newtoken)
         return true;
       if (value.toString().isEmpty())
         return false;
 
-      Description tokens(outFile_.getTokens());
+      Description tokens(outFile.getTokens());
       tokens[index.row()] = newtoken;
-      outFile_.setVariables(outFile_.getVariableNames(), tokens, outFile_.getSkipLines(), outFile_.getSkipColumns());
-      updateModel();
+      outFile.setVariables(outFile.getVariableNames(), tokens, outFile.getSkipLines(), outFile.getSkipColumns());
+      updateModel(outFile);
       break;
     }
     case 3:
     {
-      if (outFile_.getSkipLines()[index.row()] == value.toDouble())
+      if (outFile.getSkipLines()[index.row()] == value.toDouble())
         return true;
 
-      Point skipLines(outFile_.getSkipLines());
+      Point skipLines(outFile.getSkipLines());
       skipLines[index.row()] = value.toDouble();
-      outFile_.setVariables(outFile_.getVariableNames(), outFile_.getTokens(), skipLines, outFile_.getSkipColumns());
-      updateModel();
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), skipLines, outFile.getSkipColumns());
+      updateModel(outFile);
       break;
     }
     case 4:
     {
-      if (outFile_.getSkipColumns()[index.row()] == value.toDouble())
+      if (outFile.getSkipColumns()[index.row()] == value.toDouble())
         return true;
 
-      Point skipColumns(outFile_.getSkipColumns());
+      Point skipColumns(outFile.getSkipColumns());
       skipColumns[index.row()] = value.toDouble();
-      outFile_.setVariables(outFile_.getVariableNames(), outFile_.getTokens(), outFile_.getSkipLines(), skipColumns);
-      updateModel();
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), outFile.getSkipLines(), skipColumns);
+      updateModel(outFile);
       break;
     }
   }
@@ -611,11 +617,11 @@ void OutTableModel::updateData()
   emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-void OutTableModel::updateModel()
+void OutTableModel::updateModel(const CouplingOutputFile &file)
 {
   CouplingStepCollection csColl(model_->getSteps());
   CouplingOutputFileCollection coutColl(csColl[indStep_].getOutputFiles());
-  coutColl[indFile_] = outFile_;
+  coutColl[indFile_] = file;
   csColl[indStep_].setOutputFiles(coutColl);
   model_->blockNotification("PhysicalModelDefinitionItem");
   model_->setSteps(csColl);
@@ -628,17 +634,18 @@ void OutTableModel::addLine()
   while (model_->hasOutputNamed('Y' + (OSS() << i).str()))
     ++i;
 
-  Description names(outFile_.getVariableNames());
-  Description tokens(outFile_.getTokens());
-  Point skipLine(outFile_.getSkipLines());
-  Point skipCol(outFile_.getSkipColumns());
+  CouplingOutputFile outFile(getOutputFile());
+  Description names(outFile.getVariableNames());
+  Description tokens(outFile.getTokens());
+  Point skipLine(outFile.getSkipLines());
+  Point skipCol(outFile.getSkipColumns());
   names.add('Y' + (OSS() << i).str());
   tokens.add('Y' + (OSS() << i).str() + '=');
   skipLine.add(0.);
   skipCol.add(0.);
 
-  outFile_.setVariables(names, tokens, skipLine, skipCol);
-  updateModel();
+  outFile.setVariables(names, tokens, skipLine, skipCol);
+  updateModel(outFile);
 
   updateData();
 }
@@ -651,17 +658,18 @@ void OutTableModel::removeLine()
 
   QModelIndex index = tableView->selectionModel()->currentIndex();
 
-  Description names(outFile_.getVariableNames());
-  Description tokens(outFile_.getTokens());
-  Point skipLine(outFile_.getSkipLines());
-  Point skipCol(outFile_.getSkipColumns());
+  CouplingOutputFile outFile(getOutputFile());
+  Description names(outFile.getVariableNames());
+  Description tokens(outFile.getTokens());
+  Point skipLine(outFile.getSkipLines());
+  Point skipCol(outFile.getSkipColumns());
   names.__delitem__(index.row());
   tokens.__delitem__(index.row());
   skipLine.__delitem__(index.row());
   skipCol.__delitem__(index.row());
 
-  outFile_.setVariables(names, tokens, skipLine, skipCol);
-  updateModel();
+  outFile.setVariables(names, tokens, skipLine, skipCol);
+  updateModel(outFile);
 
   updateData();
 }
@@ -937,6 +945,17 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
 
   QLineEdit * commandLineEdit = new QLineEdit(QString::fromUtf8(model->getSteps()[indStep].getCommand().c_str()));
   widgetLayout->addWidget(commandLineEdit, 0, 1);
+  connect(commandLineEdit, &QLineEdit::editingFinished,
+        [=](){
+              CouplingStepCollection csColl(model->getSteps());
+              CouplingStep cs(csColl[indStep]);
+
+              cs.setCommand(commandLineEdit->text().toUtf8().constData());
+              csColl[indStep] = cs;
+              model->blockNotification("PhysicalModelDefinitionItem");
+              model->setSteps(csColl);
+              model->blockNotification();
+             });
 
   QCheckBox * checkBox = new QCheckBox(tr("Shell command"));
   widgetLayout->addWidget(checkBox, 1, 0, 1, 2);

@@ -116,6 +116,7 @@ ot_pyinstallcheck_test (FileMemoizeFunction_std)
 if (SalomeYACS_FOUND)
   ot_pyinstallcheck_test (YACSPhysicalModel_std IGNOREOUT)
   ot_pyinstallcheck_test (YACSCouplingPhysicalModel_std IGNOREOUT)
+  set_tests_properties (pyinstallcheck_YACSPhysicalModel_std pyinstallcheck_YACSCouplingPhysicalModel_std PROPERTIES RUN_SERIAL ON)
 endif ()
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"

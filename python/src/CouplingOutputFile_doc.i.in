@@ -4,7 +4,12 @@
 Parameters
 ----------
 path : str
-    Path to the output file, must be relative."
+    Path to the output file.
+    It must be must be relative, and is joined to the temporary working directory.
+
+See Also
+--------
+CouplingStep, CouplingInputFile"
 
 // ---------------------------------------------------------------------
 

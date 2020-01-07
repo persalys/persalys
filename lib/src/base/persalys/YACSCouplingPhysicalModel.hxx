@@ -32,8 +32,12 @@ class PERSALYS_API YACSCouplingPhysicalModel : public CouplingPhysicalModel
 
 public:
   /* Default constructor */
-  YACSCouplingPhysicalModel(const OT::String & name = "Unnamed",
-                            const CouplingStepCollection & steps = CouplingStepCollection());
+  explicit YACSCouplingPhysicalModel(const OT::String & name = "Unnamed",
+                                     const CouplingStepCollection & steps = CouplingStepCollection());
+  YACSCouplingPhysicalModel(const OT::String & name,
+                            const InputCollection & inputs,
+                            const OutputCollection & outputs,
+                            const CouplingStepCollection & steps);
 
   /** Virtual constructor */
   virtual YACSCouplingPhysicalModel * clone() const;

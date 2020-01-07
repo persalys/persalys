@@ -49,7 +49,7 @@ public:
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
 
-  Qt::ItemFlags flags(const QModelIndex & index) const;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
   QVariant data(const QModelIndex & index, int role) const override;
   bool setData(const QModelIndex & index, const QVariant & value, int role) override;
@@ -65,7 +65,6 @@ public slots:
 
 private:
   CouplingPhysicalModel * model_ = 0;
-//   CouplingInputFile inFile_;
   int indStep_;
   int indFile_;
 };
@@ -80,13 +79,14 @@ public:
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
 
-  Qt::ItemFlags flags(const QModelIndex & index) const;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
   QVariant data(const QModelIndex & index, int role) const override;
   bool setData(const QModelIndex & index, const QVariant & value, int role) override;
 
 private:
-  void updateModel();
+  CouplingOutputFile getOutputFile() const;
+  void updateModel(const CouplingOutputFile &file);
 
 public slots:
   void updateData();
@@ -95,7 +95,6 @@ public slots:
 
 private:
   CouplingPhysicalModel * model_ = 0;
-  CouplingOutputFile outFile_;
   int indStep_;
   int indFile_;
 };
