@@ -15,6 +15,7 @@ else ()
 endif ()
 
 target_link_libraries (persalys persalysview)
+set_target_properties (persalys PROPERTIES UNITY_BUILD OFF)
 
 if (UNIX AND NOT APPLE)
   set (launch_file ${CMAKE_BINARY_DIR}/persalys.sh)

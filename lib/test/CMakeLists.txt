@@ -87,6 +87,7 @@ macro (ot_qt_check_test TESTNAME)
   add_executable (${TESTNAME_TGT} EXCLUDE_FROM_ALL ${TESTNAME_SRCS})
   add_dependencies (tests ${TESTNAME_TGT} )
   target_link_libraries (${TESTNAME_TGT} persalysview)
+  set_target_properties (${TESTNAME_TGT} PROPERTIES UNITY_BUILD OFF)
   set (TEST_ARGUMENTS "${ARGV}")
   list (REMOVE_AT TEST_ARGUMENTS 0)
 
