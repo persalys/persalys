@@ -386,9 +386,8 @@ void DataModelWindow::updateTableView()
   // - get dataTableView1_ width
   dataTableView1_->resizeColumnToContents(0);
   int w = dataTableView1_->horizontalHeader()->length() + dataTableView1_->verticalHeader()->sizeHint().width();
-  int x1, y1, x2, y2;
-  dataTableView1_->getContentsMargins(&x1, &y1, &x2, &y2);
-  w += x1 + x2;
+  const QMargins margins(dataTableView1_->contentsMargins());
+  w += margins.left() + margins.right();
 
   // - get optimal tableView_ vertical header width
   const int optiHeaderWidth = std::max(w, tableView_->verticalHeader()->minimumWidth());

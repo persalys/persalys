@@ -23,8 +23,8 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.15/cmake-3.15.2.tar.gz | tar xz && cd cmake-3.15.2 \
- && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
+RUN curl -fSsL https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz | tar xz && cd cmake-3.16.2 \
+ && ./bootstrap --parallel=8 -- -DCMAKE_USE_OPENSSL=OFF && make install > /dev/null 2>&1
 
 # cminpack
 RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.6.tar.gz | tar xz && cd cminpack-1.3.6 \
@@ -92,7 +92,7 @@ RUN fc-cache -fsv
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
 RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2s.tar.gz | tar xz && cd openssl-1.0.2s \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
-RUN curl -fSsL https://www.python.org/ftp/python/3.7.5/Python-3.7.5.tgz | tar xz && cd Python-3.7.5 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz | tar xz && cd Python-3.7.6 \
  && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
@@ -102,7 +102,7 @@ RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
 
 # sundials
 RUN yum -y install blas-devel lapack-devel
-RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-3.2.1.tar.gz | tar xz && cd sundials-3.2.1 \
+RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t -DCMAKE_INSTALL_LIBDIR=lib .. && make install > /dev/null 2>&1
 
@@ -112,7 +112,7 @@ RUN curl -fSsLO https://jmodelica.org/FMILibrary/FMILibrary-2.0.3-src.zip && unz
 
 # assimulo
 RUN pip install lxml cython \
- && curl -fSsL https://github.com/modelon/Assimulo/archive/Assimulo-3.0.tar.gz | tar xz && cd Assimulo-Assimulo-3.0 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
+ && curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.1 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd .. && python3 -c "import assimulo; import assimulo.solvers"
 
 # pyfmi
@@ -125,7 +125,7 @@ RUN yum -y install pandoc dvisvgm
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
-RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.bz2 | tar xj && cd boost_1_71_0 \
+RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2 | tar xj && cd boost_1_72_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
 
 # x11
@@ -136,11 +136,11 @@ RUN yum -y install xorg-x11-util-macros bison
 RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz | tar xz && cd libxkbcommon-xkbcommon-0.8.4 && sed -i "/AX_GCC_BUILTIN/d" configure.ac && ./autogen.sh && ./configure --prefix=/usr --libdir=/usr/lib64 && make && make install && pkg-config --exists xkbcommon
 
 # qt
-RUN curl -fSsL https://download.qt.io/archive/qt/5.13/5.13.1/single/qt-everywhere-src-5.13.1.tar.xz | tar xJ && cd qt-everywhere-src-5.13.1 \
+RUN curl -fSsL https://download.qt.io/archive/qt/5.13/5.13.2/single/qt-everywhere-src-5.13.2.tar.xz | tar xJ && cd qt-everywhere-src-5.13.2 \
  && ./configure -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.13/5.13.1/submodules/qtx11extras-everywhere-src-5.13.1.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.13.1 && qmake src/x11extras && make && make install
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.13/5.13.2/submodules/qtx11extras-everywhere-src-5.13.2.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.13.2 && qmake src/x11extras && make && make install
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj && cd qwt-6.1.4 \

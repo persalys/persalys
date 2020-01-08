@@ -9,8 +9,8 @@ export MAKEFLAGS="-j8"
 cd /tmp
 
 mkdir -p build && cd build
-cmake -DUSE_COTIRE=ON \
-  -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
+cmake \
+  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -D_GLIBCXX_ASSERTIONS" \
   -DSWIG_COMPILE_FLAGS="-Wno-error=unused-parameter" \
   -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \

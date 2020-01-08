@@ -147,7 +147,7 @@ void CopulaInferenceWizard::buildInterface()
   {
     Description vars(it->first);
     QStandardItem * newItem = new QStandardItem(vars.__str__().c_str());
-    newItem->setData(qVariantFromValue(vars), Qt::UserRole + 1);
+    newItem->setData(QVariant::fromValue(vars), Qt::UserRole + 1);
     tableModel_->appendRow(newItem);
 
     CopulaInferenceAnalysis::DistributionFactoryCollection factories(it->second);
@@ -252,7 +252,7 @@ void CopulaInferenceWizard::defineGroup()
   distForVars_[selectedVars] = collectionCopula;
 
   QStandardItem * newItem = new QStandardItem(selectedVars.__str__().c_str());
-  newItem->setData(qVariantFromValue(selectedVars), Qt::UserRole + 1);
+  newItem->setData(QVariant::fromValue(selectedVars), Qt::UserRole + 1);
   tableModel_->appendRow(newItem);
 
   QStringList dist(TranslationManager::GetTranslatedCopulaName("Normal"));

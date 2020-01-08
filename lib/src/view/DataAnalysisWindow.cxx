@@ -491,9 +491,8 @@ void DataAnalysisWindow::addDependenceTab()
   colorTable->verticalHeader()->resizeSections(QHeaderView::ResizeToContents);
   const int w = colorTable->horizontalHeader()->length();
   const int h = colorTable->verticalHeader()->length() + colorTable->horizontalHeader()->height();
-  int x1, y1, x2, y2;
-  colorTable->getContentsMargins(&x1, &y1, &x2, &y2);
-  colorTable->setFixedSize(w + x1 + x2, h + y1 + y2);
+  const QMargins margins(colorTable->contentsMargins());
+  colorTable->setFixedSize(w + margins.left() + margins.right(), h + margins.top() + margins.bottom());
   colorTable->verticalHeader()->hide();
 
   gpBoxLayout->addWidget(colorTable, 0, Qt::AlignTop);
@@ -652,23 +651,20 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       samples.add(designOfExperiment_.getInputSample());
       PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
       sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
-      std::list<QString> inSLabelsList(inSampleDim, tr("Evaluated points"));
-      sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(inSLabelsList), 0);
+      sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Evaluated points")).toList(), 0);
       // failed input sample
       if (failedInSampleSize)
       {
         samples.add(failedInputSample_);
         sampleScatterPlotWidget->setData(failedInputSample_, Qt::red);
-        std::list<QString> failedInSLabelsList(inSampleDim, tr("Failed points"));
-        sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(failedInSLabelsList), 1);
+        sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Failed points")).toList(), 1);
       }
       // not evaluated points
       if (notEvalInSampleSize)
       {
         samples.add(notEvaluatedInputSample_);
         sampleScatterPlotWidget->setData(notEvaluatedInputSample_, Qt::blue);
-        std::list<QString> notEvaluatedInSLabelsList(inSampleDim, tr("Non-evaluated points"));
-        sampleScatterPlotWidget->setRepresentationLabels(QList<QString>::fromStdList(notEvaluatedInSLabelsList), failedInSampleSize > 0 ? 2 : 1);
+        sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Non-evaluated points")).toList(), failedInSampleSize > 0 ? 2 : 1);
       }
       sampleScatterPlotWidget->setAxisTitles(inputNames_, inAxisTitles_);
 

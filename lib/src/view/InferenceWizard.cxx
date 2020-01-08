@@ -134,10 +134,9 @@ void InferenceWizard::buildInterface()
   varTableView->resizeColumnToContents(0);
   if (varTableView->horizontalHeader()->length() > w)
     w = varTableView->horizontalHeader()->length();
-  int x1, y1, x2, y2;
-  varTableView->getContentsMargins(&x1, &y1, &x2, &y2);
-  varTableView->setFixedWidth(w + x1 + x2);
-  varTableView->horizontalHeader()->resizeSection(0, w + x1 + x2);
+  const QMargins margins(varTableView->contentsMargins());
+  varTableView->setFixedWidth(w + margins.left() + margins.right());
+  varTableView->horizontalHeader()->resizeSection(0, w + margins.left() + margins.right());
 
   leftWidgetLayout->addWidget(varTableView);
   splitter->addWidget(leftWidget);

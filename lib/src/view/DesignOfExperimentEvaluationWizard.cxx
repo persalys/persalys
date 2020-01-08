@@ -65,7 +65,7 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
         if (doeEval && !modelEval && doeEval->getPhysicalModel() == currentDoe->getPhysicalModel())
         {
           QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(doeEval->getName().c_str()));
-          comboItem->setData(qVariantFromValue(study->getAnalyses()[i]));
+          comboItem->setData(QVariant::fromValue(study->getAnalyses()[i]));
           doesComboBoxModel_->appendRow(comboItem);
         }
       }
@@ -75,7 +75,7 @@ DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Ana
   else
   {
     QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(analysis.getName().c_str()));
-    comboItem->setData(qVariantFromValue(analysis));
+    comboItem->setData(QVariant::fromValue(analysis));
     doesComboBoxModel_->appendRow(comboItem);
   }
 

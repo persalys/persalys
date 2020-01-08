@@ -39,9 +39,10 @@ int SubWindowsStackedWidget::addSubWindow(SubWindow * win)
   connect(win, SIGNAL(removeWindowRequested(QWidget*)), this, SLOT(removeSubWindow(QWidget*)));
   if (win->layout())
   {
-    int x1, y1, x2, y2;
-    win->layout()->getContentsMargins(&x1, &y1, &x2, &y2);
-    win->layout()->setContentsMargins(x1, 0, x2, 0);
+    QMargins margins(win->layout()->contentsMargins());
+    margins.setTop(0);
+    margins.setBottom(0);
+    win->layout()->setContentsMargins(margins);
   }
   int ret = QStackedWidget::addWidget(win);
   setCurrentWidget(win);

@@ -132,9 +132,8 @@ void GridDesignPage::initialize(const Analysis& analysis)
   // if too many variables: no fixed height + use scrollbar
   if (tableView_->model()->rowCount() < RowNumberToScrollTable)
   {
-    int x1, y1, x2, y2;
-    tableView_->getContentsMargins(&x1, &y1, &x2, &y2);
-    tableView_->setFixedHeight(tableView_->verticalHeader()->length() + y1 + y2);
+    const QMargins margins(tableView_->contentsMargins());
+    tableView_->setFixedHeight(tableView_->verticalHeader()->length() + margins.top() + margins.bottom());
   }
   // set DOE size label
   DOESizeLabel_->setText(QString::number(tableModel_->getDesignOfExperiment().getOriginalInputSample().getSize()));

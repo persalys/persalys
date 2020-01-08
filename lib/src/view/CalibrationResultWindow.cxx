@@ -175,8 +175,8 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     pdfSamplePosterior.setDescription(sampleDescription);
     pvWidget->setData(pdfSamplePrior, Qt::red);
     pvWidget->setData(pdfSamplePosterior, Qt::green);
-    pvWidget->setRepresentationLabels(QList<QString>::fromStdList(std::list<QString>(nbInputs * 2, tr("Prior"))), 0);
-    pvWidget->setRepresentationLabels(QList<QString>::fromStdList(std::list<QString>(nbInputs * 2, tr("Posterior"))), 1);
+    pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Prior")).toList(), 0);
+    pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Posterior")).toList(), 1);
     for (UnsignedInteger i = 0; i < nbInputs; ++i)
     {
       const QString varX(calibratedInputNames[i].c_str());

@@ -101,10 +101,9 @@ void ModelEvaluationWizard::buildInterface()
   // if too many variables: no fixed height + use scrollbar
   if (table_->model()->rowCount() < 12)
   {
-    int x1, y1, x2, y2;
-    table_->getContentsMargins(&x1, &y1, &x2, &y2);
     const int h = table_->verticalHeader()->length() + table_->horizontalHeader()->height();
-    table_->setFixedHeight(h + y1 + y2);
+    const QMargins margins(table_->contentsMargins());
+    table_->setFixedHeight(h + margins.top() + margins.bottom());
   }
 
   inputsLayout->addWidget(table_);
