@@ -196,9 +196,9 @@ ENV LANG "C.UTF-8"
 
 # openmodelica
 RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel libtool gettext zip
-RUN git clone --recursive https://github.com/OpenModelica/OMCompiler.git && cd OMCompiler && git checkout v1.13.2 \
+RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.14.1 \
  && git submodule sync && git submodule update --init --recursive \
- && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+ && cd OMCompiler && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # devel user
 RUN yum -y install sudo
