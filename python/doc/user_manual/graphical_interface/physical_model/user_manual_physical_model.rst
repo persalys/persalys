@@ -7,6 +7,7 @@ This section introduces the models defined with a vectorial function.
 Several types of physical models are available:
   - **Symbolic model**: Physical model defined with analytical formulas
   - **Python model**: Physical model defined with a Python script
+  - **Coupling model**: Physical model to wrap an external code using file-exchange
   - **YACS model**: Physical model defined with a YACS scheme (optional)
   - **FMI model**: Physical model defined with a FMU file (optional)
 
@@ -222,9 +223,25 @@ Here is an example of an error message transmission, when we tried to compute sq
 .. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel_error.png
     :align: center
 
+.. _vectcouplingmodel:
+
+2-3 *Coupling model*: define a physical model to wrap an external code using file-exchange
+--------------------------------------------------------------------------------------------
+
+A physical model can be defined to wrap an external code based on:
+
+- Locations of the resource/template files, input variables;
+
+- A command to launch the external code;
+
+- Location of the output files, output variables
+
+The **Check model** button run the model on the defined input values. It shall be
+used to test the physical model. To save the output values, the user should use the :ref:`Model evaluation <modelEvaluation>`.
+
 .. _vectyacsmodel:
 
-2-3 *YACS model*: define a physical model with an XML file
+2-4 *YACS model*: define a physical model with an XML file
 -------------------------------------------------------------------
 
 A physical model can be defined by loading an XML file, previously generated for example with Salome,
@@ -241,7 +258,7 @@ used to test the physical model. To save the output values, the user should use 
 
 .. _vectfmimodel:
 
-2-4 *FMI model*: define a physical model from an FMU file
+2-5 *FMI model*: define a physical model from an FMU file
 ------------------------------------------------------------------
 
 A physical model can be defined by loading a FMU file, previously generated 
@@ -273,7 +290,7 @@ The output values are displayed in the **Value** column.
 
 .. _DifferentiationTab:
 
-2-5 Differentiation tab
+2-6 Differentiation tab
 -----------------------
 
 .. image:: /user_manual/graphical_interface/physical_model/differentiation_tab.png
