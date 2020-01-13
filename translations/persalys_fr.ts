@@ -4,47 +4,47 @@
 <context>
     <name>PERSALYS::AboutDialog</name>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="50"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="53"/>
         <source>About Persalys</source>
         <translation>À propos de Persalys</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="63"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="66"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="88"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="91"/>
         <source>Copyright 2015-2019 EDF-Phimeca</source>
         <translation>Copyright 2015-2019 EDF-Phimeca</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="78"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="81"/>
         <source>Persalys, an user interface for uncertainty analysis</source>
         <translation>Persalys, une interface utilisateur pour l&apos;analyse d&apos;incertitudes</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="91"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="94"/>
         <source>License:</source>
         <translation>Licence:</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="96"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="99"/>
         <source>&amp;About</source>
         <translation>À &amp;propos</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="113"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="116"/>
         <source>disabled</source>
         <translation>désactivé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="130"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="137"/>
         <source>&amp;Librairies</source>
         <translation>&amp;Bibliothèques</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="137"/>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="144"/>
         <source>&amp;Close</source>
         <translation>&amp;Fermer</translation>
     </message>
@@ -118,6 +118,19 @@
     </message>
 </context>
 <context>
+    <name>PERSALYS::AddRemoveWidget</name>
+    <message>
+        <location filename="../lib/src/view/persalys/CouplingModelWindow.hxx" line="207"/>
+        <source>Add</source>
+        <translation>Ajouter</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/persalys/CouplingModelWindow.hxx" line="212"/>
+        <source>Remove</source>
+        <translation>Supprimer</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::AnalysisItem</name>
     <message>
         <location filename="../lib/src/model/AnalysisItem.cxx" line="64"/>
@@ -165,12 +178,12 @@
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="181"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="180"/>
         <source>Can not modify a running analysis.</source>
         <translation>Impossible de modifier une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="238"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="237"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
@@ -178,47 +191,47 @@
 <context>
     <name>PERSALYS::AnalysisWindow</name>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="83"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="86"/>
         <source>Analysis parameters</source>
         <translation>Paramètres de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="97"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="100"/>
         <source>Run</source>
         <translation>Lancer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="103"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="107"/>
         <source>Stop</source>
         <translation>Arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="146"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="150"/>
         <source>No results are available. An error has occurred during the execution of the analysis.</source>
         <translation>Aucun résultat n&apos;est disponible. Une erreur est survenue durant l&apos;exécution de l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="159"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="163"/>
         <source>The analysis is ready to be launched.</source>
         <translation>L&apos;analyse est prête à être lancée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="170"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="174"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="170"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="174"/>
         <source>An analysis is already running</source>
         <translation>Une analyse est déjà en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="185"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="189"/>
         <source>The analysis is running</source>
         <translation>L&apos;analyse est en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="200"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="204"/>
         <source>Stop in progress</source>
         <translation>Arrêt en cours</translation>
     </message>
@@ -495,27 +508,27 @@
 <context>
     <name>PERSALYS::CalibrationAnalysisWizard</name>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="461"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="462"/>
         <source>Calibration</source>
         <translation>Calage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="475"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="476"/>
         <source>Gaussian prior distribution</source>
         <translation>Distribution Gaussienne a priori</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="476"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="477"/>
         <source>Define the covariance matrix of the parameters θ to calibrate.</source>
         <translation>Définir la matrice de covariance des paramètres θ à caler.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="484"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="485"/>
         <source>Gaussian distribution of the output observations error</source>
         <translation>Distribution Gaussienne de l&apos;erreur des observations des sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="485"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="486"/>
         <source>Define the covariance matrix of the output observations error.</source>
         <translation>Définir la matrice de covariance de l&apos;erreur des observations des sorties.</translation>
     </message>
@@ -523,12 +536,12 @@
 <context>
     <name>PERSALYS::CalibrationDistributionPage</name>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="262"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="263"/>
         <source>Marginals</source>
         <translation>Marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="265"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="266"/>
         <source>Dependence</source>
         <translation>Dépendance</translation>
     </message>
@@ -584,42 +597,42 @@
 <context>
     <name>PERSALYS::CalibrationParametersPage</name>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="313"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="314"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="318"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="319"/>
         <source>Confidence interval of the posterior distribution</source>
         <translation>Intervallle de confiance de la distribution a posteriori</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="322"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="323"/>
         <source>Confidence interval length</source>
         <translation>Taille de l&apos;intervalle de confiance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="335"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="336"/>
         <source>Estimation by Bootstrap resampling</source>
         <translation>Estimation par rééchantillonage Bootstrap</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="338"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="339"/>
         <source>Sample size</source>
         <translation>Taille d&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="354"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="355"/>
         <source>Optimization stopping criteria</source>
         <translation>Critères d&apos;arrêt de l&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="361"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="362"/>
         <source>Maximum number of evaluations</source>
         <translation>Nombre maximum d&apos;évaluations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="362"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="363"/>
         <source>Bootstrap_size * optimization_maximum_number_of_evaluations</source>
         <translation>taille_Bootstrap * nombre_maximum_evaluations_optimisation</translation>
     </message>
@@ -637,7 +650,7 @@
         <translation>Nombre d&apos;entrées à caler</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="240"/>
+        <location filename="../lib/src/view/CalibrationAnalysisWizard.cxx" line="241"/>
         <source>Define at least a variable to calibrate</source>
         <translation>Définir au moins une variable à caler</translation>
     </message>
@@ -978,22 +991,22 @@ bayésien (BIC)</translation>
         <translation>Groupe de variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="184"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="183"/>
         <source>The result does not contain infered copula of dimension equal to %1</source>
         <translation>Le résultat ne contient pas de copule inférée de dimension %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="254"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="253"/>
         <source>No copula with a dimension of %1 in this result</source>
         <translation>Aucune copule de dimension %1 dans le résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="259"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="258"/>
         <source>The selected copula is not valid.</source>
         <translation>La copule sélectionnée n&apos;est pas valide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="279"/>
+        <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="278"/>
         <source>Invalid list %1. The elements must be single-use.</source>
         <translation>Liste %1 invalide. Les éléments doivent être unique.</translation>
     </message>
@@ -1121,12 +1134,12 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CopyableTableView</name>
     <message>
-        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="131"/>
+        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="129"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="132"/>
+        <location filename="../lib/src/view/utils/CopyableTableView.cxx" line="130"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
@@ -1139,6 +1152,135 @@ bayésien (BIC)</translation>
  %4</source>
         <translation>La corrélation entre %1 et %2 ne peut pas être égale à &apos;%3&apos;.
  %4</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::CouplingInputFileWidget</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="689"/>
+        <source>Template file</source>
+        <translation>Fichier modèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="696"/>
+        <source>Input model file</source>
+        <translation>Fichier d&apos;entrée de modèle</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::CouplingModelWindow</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="51"/>
+        <source>Coupling model</source>
+        <translation>Modèle de couplage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="58"/>
+        <source>Definition</source>
+        <translation>Définition</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="70"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="161"/>
+        <source>Command</source>
+        <translation>Commande</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="84"/>
+        <source>Cache</source>
+        <translation>Cache</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="88"/>
+        <source>Cache input file</source>
+        <translation>Fichier d&apos;entrée de cache</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="89"/>
+        <source>Cache output file</source>
+        <translation>FIchier de sortie de cache</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="99"/>
+        <source>Clear cache</source>
+        <translation>Vider le cache</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="117"/>
+        <source>Check model</source>
+        <translation>Vérifier le modèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="118"/>
+        <source>Evaluate the outputs</source>
+        <translation>Evaluer les sorties</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="130"/>
+        <source>Finite difference step definition</source>
+        <translation>Définition du pas de différence finie</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="151"/>
+        <source>Differentiation</source>
+        <translation>Différentiation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="195"/>
+        <source>Not possible to evaluate the outputs</source>
+        <translation>Impossible d&apos;évaluer les sorties</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::CouplingOutputFileWidget</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="891"/>
+        <source>Output file</source>
+        <translation>Fichier de sortie</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::CouplingRessourceFileWidget</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="814"/>
+        <source>Search file</source>
+        <translation>Chercher un fichier</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::CouplingStepWidget</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="943"/>
+        <source>Command</source>
+        <translation>Commande</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="960"/>
+        <source>Shell command</source>
+        <translation>Commande shell</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="985"/>
+        <source>Input</source>
+        <translation>Entrée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1004"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1053"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1077"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1102"/>
+        <source>File</source>
+        <translation>Fichier</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1023"/>
+        <source>Ressource</source>
+        <translation>Ressource</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1034"/>
+        <source>Output</source>
+        <translation>Sortie</translation>
     </message>
 </context>
 <context>
@@ -1182,17 +1324,17 @@ bayésien (BIC)</translation>
         <translation>Boîtes à moustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="515"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="736"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="514"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="732"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="546"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="566"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="587"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="594"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="702"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="545"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="565"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="586"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="593"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="698"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
@@ -1257,55 +1399,55 @@ bayésien (BIC)</translation>
         <translation>Coefficient de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="503"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="502"/>
         <source>Dependence</source>
         <translation>Dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="536"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="699"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="752"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="535"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="695"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="748"/>
         <source>Scatter plot</source>
         <translation>Diagramme de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="553"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="552"/>
         <source>Points</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="558"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="557"/>
         <source>Failed blocks</source>
         <translation>Blocs échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="563"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="606"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="670"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="562"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="605"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="667"/>
         <source>Non-evaluated points</source>
         <translation>Points non évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="655"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="654"/>
         <source>Evaluated points</source>
         <translation>Points évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="600"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="662"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="599"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="660"/>
         <source>Failed points</source>
         <translation>Points échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="630"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="629"/>
         <source>Status
 0: failed; 1: ok</source>
         <translation>Statut
 0: échoué; 1: ok</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="640"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="725"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="639"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="721"/>
         <source>Cobweb plot</source>
         <translation>Graphique Cobweb</translation>
     </message>
@@ -1735,7 +1877,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="62"/>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="157"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="158"/>
         <source>Analysis</source>
         <translation>Analyse</translation>
     </message>
@@ -1760,15 +1902,25 @@ métamodèle</translation>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="133"/>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="208"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="134"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="229"/>
         <source>The input sample is empty.</source>
         <translation>L&apos;échantillon d&apos;entrée  est vide.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="152"/>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="153"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="209"/>
+        <source>Can not remove a running analysis.</source>
+        <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DesignOfExperimentDefinitionItem.cxx" line="215"/>
+        <source>Can not remove a design of experiment when an analysis is running.</source>
+        <translation>Impossible de supprimer un plan d&apos;epérience si une analyse est en cours d&apos;exécution.</translation>
     </message>
 </context>
 <context>
@@ -1945,6 +2097,19 @@ métamodèle</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::DynamicTabWidget</name>
+    <message>
+        <location filename="../lib/src/view/persalys/CouplingModelWindow.hxx" line="182"/>
+        <source>Remove</source>
+        <translation>Supprimer</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/persalys/CouplingModelWindow.hxx" line="182"/>
+        <source>Do you really want to remove the variables?</source>
+        <translation>Voulez-vous vraiment supprimer les variables ?</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::EditValuesWizard</name>
     <message>
         <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="94"/>
@@ -1993,111 +2158,13 @@ métamodèle</translation>
     </message>
 </context>
 <context>
-    <name>PERSALYS::EvaluationParametersWidget</name>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="623"/>
-        <source>Method</source>
-        <translation>Méthode</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="630"/>
-        <source>FORM IS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="634"/>
-        <source>Subset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="638"/>
-        <source>FORM</source>
-        <translation>FORM</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="642"/>
-        <source>Monte Carlo</source>
-        <translation>Monte-Carlo</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="652"/>
-        <source>Simulation method parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="657"/>
-        <source>Maximum simulation number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="662"/>
-        <source>Coefficient of variation</source>
-        <translation>Coefficient de variation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="671"/>
-        <source>FORM parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="676"/>
-        <source>Iteration number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="681"/>
-        <source>Find the best FORM algorithm and function</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="686"/>
-        <source>Optimization algorithm</source>
-        <translation type="unfinished">Algorithme d&apos;optimisation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="698"/>
-        <source>Multi-constraint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="711"/>
-        <source>Absolute error</source>
-        <translation type="unfinished">Erreur absolue</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="720"/>
-        <source>Residual error</source>
-        <translation type="unfinished">Erreur sur les résidus</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="729"/>
-        <source>Relative error</source>
-        <translation type="unfinished">Erreur relative</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="738"/>
-        <source>Constraint error</source>
-        <translation type="unfinished">Erreur sur la contrainte</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="749"/>
-        <source>Subset parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="751"/>
-        <source>Simulation number per step</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PERSALYS::ExperimentTableModel</name>
     <message>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="68"/>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="198"/>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="219"/>
         <location filename="../lib/src/model/ExperimentTableModel.cxx" line="314"/>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="367"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="375"/>
         <source>Levels =</source>
         <translation>Niveaux =</translation>
     </message>
@@ -2138,7 +2205,7 @@ métamodèle</translation>
         <translation>Discrétisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="325"/>
+        <location filename="../lib/src/model/ExperimentTableModel.cxx" line="333"/>
         <source>The delta must be greater or equal to 0 and less than the interval length.</source>
         <translation>L&apos;incrément doit être supérieur ou égal à 0 et inférieur à la longueur de l&apos;interval.</translation>
     </message>
@@ -2152,7 +2219,7 @@ métamodèle</translation>
     <name>PERSALYS::ExportableTableView</name>
     <message>
         <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="44"/>
-        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="145"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="144"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
@@ -2177,7 +2244,7 @@ métamodèle</translation>
         <translation>Erreur interne: impossible de récupérer l&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="140"/>
+        <location filename="../lib/src/view/utils/ExportableTableView.cxx" line="139"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
@@ -2872,6 +2939,14 @@ centrale</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::FilePathWidget</name>
+    <message>
+        <location filename="../lib/src/view/persalys/CouplingModelWindow.hxx" line="124"/>
+        <source>Search file</source>
+        <translation>Chercher un fichier</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::FileTools</name>
     <message>
         <location filename="../lib/src/model/FileTools.cxx" line="64"/>
@@ -2929,205 +3004,6 @@ centrale</translation>
         <location filename="../lib/src/model/FileTools.cxx" line="142"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
-    </message>
-</context>
-<context>
-    <name>PERSALYS::FractureMechanicsWidget</name>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="388"/>
-        <source>Use fracture mechanics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="402"/>
-        <source>Defect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="404"/>
-        <source>Surface breaking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="404"/>
-        <source>Internal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="411"/>
-        <source>CND type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="415"/>
-        <source>S1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="415"/>
-        <source>S2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="415"/>
-        <source>S3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="415"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="416"/>
-        <source>Without</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="416"/>
-        <source>V1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="416"/>
-        <source>V2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="416"/>
-        <source>V3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="440"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="541"/>
-        <source>Add user type:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="443"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="444"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="447"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="448"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="544"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="546"/>
-        <source>User type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="451"/>
-        <source>a_max</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="456"/>
-        <source>c2_max</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="467"/>
-        <source>Types</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="483"/>
-        <source>Brut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="484"/>
-        <source>Adouci
-par meulage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="485"/>
-        <source>Arasé
-et meulé</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="487"/>
-        <source>Magnetic particle testing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="488"/>
-        <source>Liquid penetrant</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="489"/>
-        <source>ACFM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="504"/>
-        <source>Cordon de soudure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="516"/>
-        <source>Ultrasonic testing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="517"/>
-        <source>Ultrasonic
-phased-array
-testing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="518"/>
-        <source>AUT TOFD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="519"/>
-        <source>Radiography</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="530"/>
-        <source>Penstock type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="534"/>
-        <source>fr : Coef = 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="534"/>
-        <source>dt : Coef = 0.2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="534"/>
-        <source>dmpe : Coef = 0.4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="534"/>
-        <source>ndne : Coef = 0.8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="548"/>
-        <source>Coef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="553"/>
-        <source>(σ_res = Coef * Re)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="557"/>
-        <source>K_IC distribution</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="558"/>
-        <source>Normal</source>
-        <translation type="unfinished">Normale</translation>
     </message>
 </context>
 <context>
@@ -3402,7 +3278,7 @@ des étiquettes</translation>
         <translation>Définir une grille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/GridDesignPage.cxx" line="169"/>
+        <location filename="../lib/src/view/GridDesignPage.cxx" line="168"/>
         <source>The lower bounds must be less than the upper bounds</source>
         <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
     </message>
@@ -3496,6 +3372,29 @@ des étiquettes</translation>
         <location filename="../lib/src/view/ImportedDesignPage.cxx" line="78"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::InTableModel</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="245"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="247"/>
+        <source>Description</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="249"/>
+        <source>Token</source>
+        <translation>Marqueur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="251"/>
+        <source>Value</source>
+        <translation>Valeur</translation>
     </message>
 </context>
 <context>
@@ -3702,23 +3601,23 @@ bayésien (BIC)</translation>
         <translation>D&apos;abord sélectionner des variables. Ensuite pour chaque variable, lister des distributions à inférer à partir de l&apos;échantillon.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="172"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="171"/>
         <source>Kolmogorov-Smirnov</source>
         <translation>Kolmogorov-Smirnov</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="174"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="173"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="265"/>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="302"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="264"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="301"/>
         <source>Select at least one variable</source>
         <translation>Sélectionner au moins une variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="313"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="312"/>
         <source>At least one distribution must be tested for the selected variable &apos;%1&apos;</source>
         <translation>Au moins une distribution doit être testée pour la variable sélectionnée &apos;%1&apos;</translation>
     </message>
@@ -4272,7 +4171,7 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="98"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="105"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>
@@ -4365,61 +4264,6 @@ bayésien (BIC)</translation>
         <location filename="../lib/src/view/MarginalsWidget.cxx" line="849"/>
         <source>The current study has not screening analyses results.</source>
         <translation>L&apos;étude courante n&apos;a aucun résultat de criblage.</translation>
-    </message>
-</context>
-<context>
-    <name>PERSALYS::MaterialTabWidget</name>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="199"/>
-        <source>Limit stress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="209"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="259"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="285"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="315"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="335"/>
-        <source>Normal</source>
-        <translation type="unfinished">Normale</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="209"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="285"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="315"/>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="335"/>
-        <source>LogNormal</source>
-        <translation type="unfinished">LogNormale</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="231"/>
-        <source>Correlated with Rm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="283"/>
-        <source>Distribution</source>
-        <translation type="unfinished">Distribution</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="309"/>
-        <source>Thickness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="368"/>
-        <source>Reference stress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="371"/>
-        <source>Coef σ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="375"/>
-        <source>k PMIS</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4906,7 +4750,7 @@ extremum</translation>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ModelEvaluationWizard.cxx" line="127"/>
+        <location filename="../lib/src/view/ModelEvaluationWizard.cxx" line="126"/>
         <source>At least one output must be selected</source>
         <translation>Au moins une sortie doit être sélectionnée</translation>
     </message>
@@ -5080,12 +4924,12 @@ at</source>
         <translation>Définir une grille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="121"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="120"/>
         <source>The lower bounds must be less than the upper bounds</source>
         <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="135"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="134"/>
         <source>At least two variables must vary.</source>
         <translation>Au moins deux variables doivent varier.</translation>
     </message>
@@ -5272,37 +5116,37 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::MorrisSecondPage</name>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="157"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="156"/>
         <source>Morris parameters</source>
         <translation>Paramètres de Morris</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="162"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="161"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="166"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="165"/>
         <source>Number of trajectories</source>
         <translation>Nombre de trajectoires</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="173"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="172"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="182"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="181"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="186"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="185"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MorrisPage.cxx" line="200"/>
+        <location filename="../lib/src/view/MorrisPage.cxx" line="199"/>
         <source>Number of simulations:</source>
         <translation>Nombre de simulations:</translation>
     </message>
@@ -5644,6 +5488,39 @@ ou interaction</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::OutTableModel</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="480"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="482"/>
+        <source>Description</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="484"/>
+        <source>Token</source>
+        <translation>Marqueur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="486"/>
+        <source>Skip Line</source>
+        <translation>Saut de ligne</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="488"/>
+        <source>Skip Column</source>
+        <translation>Saut de colonne</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="490"/>
+        <source>Value</source>
+        <translation>Valeur</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::OutputTableModel</name>
     <message>
         <location filename="../lib/src/model/OutputTableModel.cxx" line="62"/>
@@ -5899,109 +5776,6 @@ ou interaction</translation>
         <location filename="../lib/src/view/ParametersDefinitionWizard.cxx" line="96"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
-    </message>
-</context>
-<context>
-    <name>PERSALYS::PenstockModelDiagramWindow</name>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="34"/>
-        <source>Model
-definition</source>
-        <translation type="unfinished">Définition
-du
-modèle</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="35"/>
-        <source>Define the input and output variables</source>
-        <translation type="unfinished">Définir les variables d&apos;entrée et de sortie</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="41"/>
-        <source>Model
-evaluation</source>
-        <translation type="unfinished">Évaluation
-du
-modèle</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="42"/>
-        <source>Evaluate the model at a given point</source>
-        <translation type="unfinished">Evaluer le modèle à un point donné</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="43"/>
-        <source>Define input and output variables in the model</source>
-        <translation type="unfinished">Définir des variables d&apos;entrée et de sortie dans le modèle</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="50"/>
-        <source>Design of
-experiments
-creation</source>
-        <translation type="unfinished">Création
-d&apos;un plan
-d&apos;expériences</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="51"/>
-        <source>Create manually a design of experiments or import one</source>
-        <translation type="unfinished">Créer manuellement un plan d&apos;expériences ou en importer un</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="52"/>
-        <source>Define at least one input variable</source>
-        <translation type="unfinished">Définir au moins une variable d&apos;entrée</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="59"/>
-        <source>Design of
-experiments
-evaluation</source>
-        <translation type="unfinished">Évaluation
-d&apos;un plan
-d&apos;expériences</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="60"/>
-        <source>Evaluate the model at the points of the design of experiments</source>
-        <translation type="unfinished">Evaluer le modèle aux points du plan d&apos;expériences</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelDiagramWindow.cxx" line="61"/>
-        <source>Create at least one design of experiments and define output variables in the model</source>
-        <translation type="unfinished">Créer au moins un plan d&apos;expériences et définir des variables de sortie dans le modèle</translation>
-    </message>
-</context>
-<context>
-    <name>PERSALYS::PenstockModelWidget</name>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="89"/>
-        <source>Probability</source>
-        <translation type="unfinished">Probabilité</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="92"/>
-        <source>Material properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="99"/>
-        <source>Fracture mechanics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="106"/>
-        <source>Reliability</source>
-        <translation type="unfinished">Fiabilité</translation>
-    </message>
-</context>
-<context>
-    <name>PERSALYS::PenstockModelWindow</name>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="55"/>
-        <source>Penstock model</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6740,59 +6514,6 @@ métamodèle</translation>
     </message>
 </context>
 <context>
-    <name>PERSALYS::ProbabilityChoiceWidget</name>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="120"/>
-        <source>Output</source>
-        <translation type="unfinished">Sortie</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="124"/>
-        <source>Probability</source>
-        <translation type="unfinished">Probabilité</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="126"/>
-        <source>Annual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="126"/>
-        <source>Annual given trial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="126"/>
-        <source>Exceptional cumulated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="132"/>
-        <source>Performance function type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="134"/>
-        <source>Intersection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="134"/>
-        <source>Product</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="148"/>
-        <source>k epreuve</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PenstockModelWindow.cxx" line="157"/>
-        <source>Margin factor (FM)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PERSALYS::ProbabilityTableModel</name>
     <message>
         <location filename="../lib/src/view/utils/persalys/EditValuesWizard.hxx" line="103"/>
@@ -6920,27 +6641,27 @@ métamodèle</translation>
         <translation>Standardized Regression Coefficients</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="107"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="105"/>
         <source>Elapsed time</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="108"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="106"/>
         <source>Number of calls</source>
         <translation>Nombre d&apos;appels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="109"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="107"/>
         <source>R2</source>
         <translation>R2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="143"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="141"/>
         <source>Indices</source>
         <translation>Indices</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="151"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="149"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
@@ -6950,7 +6671,7 @@ métamodèle</translation>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SRCResultWindow.cxx" line="147"/>
+        <location filename="../lib/src/view/SRCResultWindow.cxx" line="145"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -7534,101 +7255,112 @@ at</source>
 <context>
     <name>PERSALYS::StudyItem</name>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="65"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="67"/>
         <source>Symbolic model</source>
         <translation>Modèle symbolique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="68"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="70"/>
         <source>Python model</source>
         <translation>Modèle Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="72"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="73"/>
+        <source>Coupling model</source>
+        <translation>Modèle de couplage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/StudyItem.cxx" line="75"/>
         <source>YACS model</source>
         <translation>Modèle YACS</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="76"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="78"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="80"/>
+        <source>CouplingModel_</source>
+        <translation>ModèleCouplage_</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/StudyItem.cxx" line="83"/>
         <source>FMI model</source>
         <translation>Modèle FMI</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="80"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="88"/>
         <source>Symbolic Field model</source>
         <translation>Modèle de champ symbolique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="83"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="91"/>
         <source>Python Field model</source>
         <translation>Modèle de champ Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="86"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="94"/>
         <source>Data model</source>
         <translation>Modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="90"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="98"/>
         <source>Export Python</source>
         <translation>Export Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="94"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="102"/>
         <source>Save</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="98"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="106"/>
         <source>Save As...</source>
         <translation>Sauvegarder sous...</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="102"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="110"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="106"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="114"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="66"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="81"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="68"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="89"/>
         <source>SymbolicModel_</source>
         <translation>ModèleSymbolique_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="69"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="84"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="71"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="92"/>
         <source>PythonModel_</source>
         <translation>ModèlePython_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="73"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="76"/>
         <source>YACSModel_</source>
         <translation>ModèleYACS_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="77"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="84"/>
         <source>FMIModel_</source>
         <translation>ModèleFMI_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="87"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="95"/>
         <source>DataModel_</source>
         <translation>ModèleDonnées_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="181"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="190"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="228"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="237"/>
         <source>Cannot save file %1:
 %2</source>
         <translation>Impossible de sauvegarder le fichier %1:
@@ -7648,95 +7380,95 @@ at</source>
         <translation>Étude_</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="221"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="226"/>
         <source>Impossible to create a result window</source>
         <translation>Impossible de créer une fenêtre de résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="260"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="289"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="468"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="265"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="294"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="473"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="261"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="266"/>
         <source>Cannot import a Python script when other studies are opened.
 Do you want to continue and close the other studies?</source>
         <translation>Impossible d&apos;importer un script Python lorsque d&apos;autres études sont ouvertes.
 Voulez-vous continuer et fermer les autres études ?</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="276"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="281"/>
         <source>Import Python...</source>
         <translation>Import Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="278"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="315"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="283"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="320"/>
         <source>Python source files (*.py)</source>
         <translation>Fichiers Python (*.py)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="290"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="295"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="308"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="313"/>
         <source>Can not export the current study</source>
         <translation>Impossible d&apos;exporter l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="313"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="318"/>
         <source>Export Python...</source>
         <translation>Export Python...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="355"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="360"/>
         <source>Can not save the current study</source>
         <translation>Impossible de sauvegarder l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="379"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="384"/>
         <source>Can not save the current study as</source>
         <translation>Impossible de sauvegarder sous l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="384"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="389"/>
         <source>Save study...</source>
         <translation>Sauvegarder l&apos;étude...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="405"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="410"/>
         <source>Open an existing study</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="469"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="474"/>
         <source>Do you want to save the study &apos;%1&apos; [%2]?</source>
         <translation>Voulez-vous sauvegarder l&apos;étude &apos;%1&apos; [%2] ?</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="386"/>
-        <location filename="../lib/src/view/StudyManager.cxx" line="407"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="391"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="412"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="417"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="422"/>
         <source>The file &apos;%1&apos; does not exist.</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="422"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="427"/>
         <source>The file &apos;%1&apos; is already opened.</source>
         <translation>Le fichier &apos;%1&apos; est déjà ouvert.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="438"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="443"/>
         <source>An error has occurred when reading the file &apos;%1&apos;. 
 Maybe objects are not opened.
 </source>
@@ -7745,12 +7477,12 @@ Des objets ne sont peut être pas ouverts.
 </translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="453"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="458"/>
         <source>Can not close the current study</source>
         <translation>Impossible de fermer l&apos;étude courante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyManager.cxx" line="460"/>
+        <location filename="../lib/src/view/StudyManager.cxx" line="465"/>
         <source>Can not remove a study when one of its analyses is running.</source>
         <translation>Impossible de supprimer une étude lorsqu&apos;une de ses analyses est en cours d&apos;exécution.</translation>
     </message>
@@ -7758,7 +7490,7 @@ Des objets ne sont peut être pas ouverts.
 <context>
     <name>PERSALYS::StudyTreeView</name>
     <message>
-        <location filename="../lib/src/view/StudyTreeView.cxx" line="215"/>
+        <location filename="../lib/src/view/StudyTreeView.cxx" line="214"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
@@ -7780,7 +7512,7 @@ Des objets ne sont peut être pas ouverts.
     </message>
     <message>
         <location filename="../lib/src/view/StudyWindow.cxx" line="85"/>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="145"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="151"/>
         <source>Create a physical model with outputs defined by analytical formulae</source>
         <translation>Créer un modèle physique dont les sorties sont définies par une formule analytique</translation>
     </message>
@@ -7791,7 +7523,7 @@ Des objets ne sont peut être pas ouverts.
     </message>
     <message>
         <location filename="../lib/src/view/StudyWindow.cxx" line="90"/>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="163"/>
         <source>Create a physical model defined with a Python script</source>
         <translation>Créer un modèle physique défini par un script Python</translation>
     </message>
@@ -7836,95 +7568,105 @@ Des objets ne sont peut être pas ouverts.
         <translation>Créer un modèle physique défini avec un fichier FMU</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="114"/>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="151"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="110"/>
+        <source>Coupling model</source>
+        <translation>Modèle de couplage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="111"/>
+        <source>Create a coupling model</source>
+        <translation>Créer un modèle physique de couplage</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="120"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="157"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="115"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="121"/>
         <source>Calibration</source>
         <translation>Calage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="116"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="122"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="117"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="123"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="118"/>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="152"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="124"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="158"/>
         <source>Central tendency</source>
         <translation>Tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="119"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="125"/>
         <source>Sensitivity</source>
         <translation>Sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="120"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="126"/>
         <source>Reliability</source>
         <translation>Fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="121"/>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="189"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="127"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="195"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="123"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="129"/>
         <source>Screening</source>
         <translation>Criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="134"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="140"/>
         <source>Field function</source>
         <translation>Fonction de champ</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="144"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="150"/>
         <source>Symbolic Field model</source>
         <translation>Modèle de champ symbolique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="156"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="162"/>
         <source>Python Field model</source>
         <translation>Modèle de champ Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="167"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="173"/>
         <source>Data sample</source>
         <translation>Échantillon de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="176"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="182"/>
         <source>Data model</source>
         <translation>Modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="177"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="183"/>
         <source>Import a sample to create a model</source>
         <translation>Importer un échantillon de données pour créer un modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="186"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="192"/>
         <source>Data analysis</source>
         <translation>Analyse de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="187"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="193"/>
         <source>Marginals inference</source>
         <translation>Inférence des lois marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="188"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="194"/>
         <source>Dependence inference</source>
         <translation>Inférence de la dépendance</translation>
     </message>
@@ -8714,37 +8456,37 @@ de la fonction</translation>
 <context>
     <name>PERSALYS::WelcomeWindow</name>
     <message>
-        <location filename="../lib/src/view/WelcomeWindow.cxx" line="54"/>
+        <location filename="../lib/src/view/WelcomeWindow.cxx" line="55"/>
         <source>New study</source>
         <translation>Nouvelle étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/WelcomeWindow.cxx" line="56"/>
+        <location filename="../lib/src/view/WelcomeWindow.cxx" line="57"/>
         <source>Create a new study</source>
         <translation>Créer une nouvelle étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/WelcomeWindow.cxx" line="62"/>
+        <location filename="../lib/src/view/WelcomeWindow.cxx" line="63"/>
         <source>Open an existing study</source>
         <translation>Ouvrir une étude existante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/WelcomeWindow.cxx" line="60"/>
+        <location filename="../lib/src/view/WelcomeWindow.cxx" line="61"/>
         <source>Open study</source>
         <translation>Ouvrir une étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/WelcomeWindow.cxx" line="39"/>
+        <location filename="../lib/src/view/WelcomeWindow.cxx" line="40"/>
         <source>Study creation</source>
         <translation>Création d&apos;une étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/WelcomeWindow.cxx" line="66"/>
+        <location filename="../lib/src/view/WelcomeWindow.cxx" line="67"/>
         <source>Import Python script</source>
         <translation>Importer un script Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/WelcomeWindow.cxx" line="68"/>
+        <location filename="../lib/src/view/WelcomeWindow.cxx" line="69"/>
         <source>Import a Python Script</source>
         <translation>Importer un script Python</translation>
     </message>
