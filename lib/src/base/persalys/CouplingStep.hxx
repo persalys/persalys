@@ -22,11 +22,13 @@
 #define PERSALYS_COUPLINGSTEP_HXX
 
 #include "persalys/CouplingInputFile.hxx"
+#include "persalys/CouplingResourceFile.hxx"
 #include "persalys/CouplingOutputFile.hxx"
 
 namespace PERSALYS
 {
   typedef OT::Collection<CouplingInputFile> CouplingInputFileCollection;
+  typedef OT::Collection<CouplingResourceFile> CouplingResourceFileCollection;
   typedef OT::Collection<CouplingOutputFile> CouplingOutputFileCollection;
 
 class PERSALYS_API CouplingStep : public OT::PersistentObject
@@ -39,6 +41,7 @@ public:
 
   CouplingStep(const OT::String & command,
                const CouplingInputFileCollection & inputFiles,
+               const CouplingResourceFileCollection & resourceFiles,
                const CouplingOutputFileCollection & outputFiles);
 
   /** Virtual constructor */
@@ -56,6 +59,9 @@ public:
   void setInputFiles(const CouplingInputFileCollection & inputFiles);
   CouplingInputFileCollection getInputFiles() const;
 
+  void setResourceFiles(const CouplingResourceFileCollection & inputFiles);
+  CouplingResourceFileCollection getResourceFiles() const;
+
   void setOutputFiles(const CouplingOutputFileCollection & outputFiles);
   CouplingOutputFileCollection getOutputFiles() const;
 
@@ -72,6 +78,7 @@ private:
   OT::String command_;
   OT::Bool isShell_;
   OT::PersistentCollection<CouplingInputFile> inputFiles_;
+  OT::PersistentCollection<CouplingResourceFile> resourceFiles_;
   OT::PersistentCollection<CouplingOutputFile> outputFiles_;
 };
 

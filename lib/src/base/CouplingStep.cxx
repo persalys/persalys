@@ -31,6 +31,7 @@ CLASSNAMEINIT(CouplingStep)
 
 static Factory<CouplingStep> Factory_CouplingStep;
 static Factory<PersistentCollection<CouplingInputFile> > Factory_PersistentCollectionCouplingInputFile;
+static Factory<PersistentCollection<CouplingResourceFile> > Factory_PersistentCollectionCouplingResourceFile;
 static Factory<PersistentCollection<CouplingOutputFile> > Factory_PersistentCollectionCouplingOutputFile;
 
 /* Default constructor */
@@ -43,12 +44,14 @@ CouplingStep::CouplingStep(const String & command)
 
 /* Default constructor */
 CouplingStep::CouplingStep(const String & command,
-                          const CouplingInputFileCollection & inputFiles,
-                          const CouplingOutputFileCollection & outputFiles)
+                           const CouplingInputFileCollection & inputFiles,
+                           const CouplingResourceFileCollection & resourceFiles,
+                           const CouplingOutputFileCollection & outputFiles)
   : PersistentObject()
   , command_(command)
   , isShell_(false)
   , inputFiles_(inputFiles)
+  , resourceFiles_(resourceFiles)
   , outputFiles_(outputFiles)
 {
 }
@@ -71,7 +74,7 @@ String CouplingStep::getCommand() const
   return command_;
 }
 
-/* Variables accessor */
+/* Files accessor */
 void CouplingStep::setInputFiles(const CouplingInputFileCollection & inputFiles)
 {
   inputFiles_ = inputFiles;
@@ -80,6 +83,16 @@ void CouplingStep::setInputFiles(const CouplingInputFileCollection & inputFiles)
 CouplingInputFileCollection CouplingStep::getInputFiles() const
 {
   return inputFiles_;
+}
+
+void CouplingStep::setResourceFiles(const CouplingResourceFileCollection & resourceFiles)
+{
+  resourceFiles_ = resourceFiles;
+}
+
+CouplingResourceFileCollection CouplingStep::getResourceFiles() const
+{
+  return resourceFiles_;
 }
 
 void CouplingStep::setOutputFiles(const CouplingOutputFileCollection & outputFiles)
@@ -112,6 +125,7 @@ String CouplingStep::__repr__() const
       << " command=" << getCommand()
       << " isShell=" << getIsShell()
       << " inputFiles=" << getInputFiles()
+      << " resourceFiles=" << getResourceFiles()
       << " outputFiles=" << getOutputFiles();
   return oss;
 }
@@ -122,6 +136,7 @@ void CouplingStep::save(Advocate & adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("command_", command_);
   adv.saveAttribute("inputFiles_", inputFiles_);
+  adv.saveAttribute("resourceFiles_", resourceFiles_);
   adv.saveAttribute("outputFiles_", outputFiles_);
   adv.saveAttribute("isShell_", isShell_);
 }
@@ -133,6 +148,7 @@ void CouplingStep::load(Advocate & adv)
   PersistentObject::load(adv);
   adv.loadAttribute("command_", command_);
   adv.loadAttribute("inputFiles_", inputFiles_);
+  adv.loadAttribute("resourceFiles_", resourceFiles_);
   adv.loadAttribute("outputFiles_", outputFiles_);
   adv.loadAttribute("isShell_", isShell_);
 }

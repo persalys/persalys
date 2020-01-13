@@ -239,16 +239,16 @@ private:
 };
 
 
-class PERSALYS_API CouplingRessourceFileWidget : public QWidget
+class PERSALYS_API CouplingResourceFileWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  CouplingRessourceFileWidget(CouplingPhysicalModel * model, const int indStep, QWidget *parent = 0);
+  CouplingResourceFileWidget(CouplingPhysicalModel * model, const int indStep, QWidget *parent = 0);
   void updateTable();
 
 signals:
-  void couplingInputCollectionModified();
+  void couplingResourceCollectionModified();
 private:
   CouplingPhysicalModel * model_ = 0;
   int indStep_;
@@ -282,7 +282,7 @@ private:
   CouplingPhysicalModel * model_ = 0;
   int indStep_ = 0;
   DynamicTabWidget * inTabWidget_ = 0;
-  CouplingRessourceFileWidget * ressourceFileWidget_ = 0;
+  CouplingResourceFileWidget * ressourceFileWidget_ = 0;
 };
 
 

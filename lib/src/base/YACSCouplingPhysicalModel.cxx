@@ -95,14 +95,14 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
     {
       const CouplingInputFile inputFile(inputFiles[j]);
       // yacs wants absolute paths
-      if (!inputFile.getTemplatePath().empty())
-      {
-        inFiles.push_back(boost::filesystem::weakly_canonical(inputFile.getTemplatePath()).string());
-      }
-      else
-      {
-        inFiles.push_back(boost::filesystem::weakly_canonical(inputFile.getPath()).string());
-      }
+      inFiles.push_back(boost::filesystem::weakly_canonical(inputFile.getTemplatePath()).string());
+    }
+    const CouplingResourceFileCollection resourceFiles(step.getResourceFiles());
+    for (UnsignedInteger j = 0; j < resourceFiles.getSize(); ++ j)
+    {
+      const CouplingResourceFile resourceFile(resourceFiles[j]);
+      // yacs wants absolute paths
+      inFiles.push_back(boost::filesystem::weakly_canonical(resourceFile.getPath()).string());
     }
   }
   jobParameters().in_files(inFiles);

@@ -187,6 +187,7 @@ ot_add_python_module (persalys persalys_module.i
                       StudyImplementation.i
                       Study.i Study_doc.i.in
                       CouplingInputFile.i CouplingInputFile_doc.i.in
+                      CouplingResourceFile.i CouplingResourceFile_doc.i.in
                       CouplingOutputFile.i CouplingOutputFile_doc.i.in
                       CouplingStep.i CouplingStep_doc.i.in
                       CouplingPhysicalModel.i CouplingPhysicalModel_doc.i.in

@@ -14,7 +14,13 @@ import sys
 import hashlib
 import struct
 
-
+class CouplingResourceFile(object):
+    def __init__(self, path):
+        if not os.path.isabs(path):
+            raise ValueError('path to input file must be absolute')
+        self.path_ = path
+    def getPath(self):
+        return self.path_
 class CouplingInputFile(object):
     def __init__(self, path, template_path=''):
         if os.path.isabs(path):
@@ -82,15 +88,18 @@ class CouplingOutputFile(object):
     def getSkipColumns(self):
         return self.skip_cols_
 class CouplingStep(object):
-    def __init__(self, command, input_files, output_files):
+    def __init__(self, command, input_files, resource_files, output_files):
         self.command_ = command
         self.is_shell_ = False
         self.input_files_ = input_files
+        self.resource_files_ = resource_files
         self.output_files_ = output_files
     def getIsShell(self):
         return self.is_shell_
     def getInputFiles(self):
         return self.input_files_
+    def getResourceFiles(self):
+        return self.resource_files_
     def getOutputFiles(self):
         return self.output_files_
     def getCommand(self):
@@ -161,21 +170,20 @@ class CouplingPhysicalModel(object):
         for step in self.steps_:
 
             # 1. write input files
-            for input_file in step.getInputFiles():
+            for resource_file in step.getResourceFiles():
                 if not input_file.getPath():
                     continue
-                if not input_file.getTemplatePath():
-                    # just a file/dir that needs to be copied
-                    if os.path.isfile(input_file.getPath()):
-                        shutil.copy(input_file.getPath(), os.path.join(workdir, input_file.getPath()))
-                    elif os.path.isdir(input_file.getPath()):
-                        shutil.copytree(input_file.getPath(), os.path.join(workdir, input_file.getPath()))
-                    else:
-                        raise ValueError('cannot handle file:', input_file.getPath())
+                # just a file/dir that needs to be copied
+                if os.path.isfile(input_file.getPath()):
+                    shutil.copy(input_file.getPath(), os.path.join(workdir, input_file.getPath()))
+                elif os.path.isdir(input_file.getPath()):
+                    shutil.copytree(input_file.getPath(), os.path.join(workdir, input_file.getPath()))
                 else:
-                    # generate input file from template
-                    input_values = [all_vars[varname] for varname in input_file.getVariableNames()]
-                    otct.replace(input_file.getTemplatePath(), os.path.join(workdir, input_file.getPath()), input_file.getTokens(), input_values)
+                    raise ValueError('cannot handle file:', input_file.getPath())
+            for resource_file in step.getResourceFiles():
+                # generate input file from template
+                input_values = [all_vars[varname] for varname in input_file.getVariableNames()]
+                otct.replace(input_file.getTemplatePath(), os.path.join(workdir, input_file.getPath()), input_file.getTokens(), input_values)
 
             # 2. run command
             if len(step.getCommand()) > 0:
@@ -212,13 +220,13 @@ with open('external_program.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
-input_file1 = persalys.CouplingInputFile('input.txt')
-input_file1.setTemplatePath('input_template.txt')
-input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
-input_file2 = persalys.CouplingInputFile('external_program.py')
+input_file = persalys.CouplingInputFile('input.txt')
+input_file.setTemplatePath('input_template.txt')
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
-step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file1, input_file2], [output_file])
+step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('A', [step])
 
 # single evaluation
@@ -258,13 +266,13 @@ with open('external_program.py', 'w') as f:
     f.write('    f.write("%.17e\\n" % Y1)\n')
 
 
-input_file1 = persalys.CouplingInputFile('input.txt')
-input_file1.setTemplatePath('input_template.txt')
-input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
-input_file2 = persalys.CouplingInputFile('external_program.py')
+input_file = persalys.CouplingInputFile('input.txt')
+input_file.setTemplatePath('input_template.txt')
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['']*2, [0, -1], [0, 0])
-step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file1, input_file2], [output_file])
+step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('D', [step])
 
 # single evaluation
@@ -293,13 +301,13 @@ with open('program.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
-input_file1 = persalys.CouplingInputFile('input.txt')
-input_file1.setTemplatePath('input.txt.in')
-input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
-input_file2 = persalys.CouplingInputFile('program.py')
+input_file = persalys.CouplingInputFile('input.txt')
+input_file.setTemplatePath('input.txt.in')
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
-step = persalys.CouplingStep(sys.executable + ' program.py input.txt', [input_file1, input_file2], [output_file])
+step = persalys.CouplingStep(sys.executable + ' program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('reuse1', [step])
 # leave work dir
 model.setCleanupWorkDirectory(False)
@@ -312,7 +320,7 @@ print(y)
 ott.assert_almost_equal(y, [6.0, 7.0])
 
 # reuse previous work dir, with an empty command
-step = persalys.CouplingStep('', [input_file1, input_file2], [output_file])
+step = persalys.CouplingStep('', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('reuse2', [step])
 f = model.getFunction()
 y = f(x)
@@ -337,13 +345,13 @@ with open('program.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
-input_file1 = persalys.CouplingInputFile('input.txt')
-input_file1.setTemplatePath('input.txt.in')
-input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
-input_file2 = persalys.CouplingInputFile('program.py')
+input_file = persalys.CouplingInputFile('input.txt')
+input_file.setTemplatePath('input.txt.in')
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
-step = persalys.CouplingStep(sys.executable + ' program.py input.txt', [input_file1, input_file2], [output_file])
+step = persalys.CouplingStep(sys.executable + ' program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('csvcache', [step])
 model.setCacheFiles('in.csv', 'out.csv')
 
@@ -377,13 +385,13 @@ with open('program1.py', 'w') as f:
     f.write('with open("output1.txt", "w") as f:\n')
     f.write('    f.write("Y0=%.17e\\n" % Y0)\n')
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
-input_file1 = persalys.CouplingInputFile('input1.txt')
-input_file1.setTemplatePath('input1.txt.in')
-input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
-input_file2 = persalys.CouplingInputFile('program1.py')
+input_file = persalys.CouplingInputFile('input1.txt')
+input_file.setTemplatePath('input1.txt.in')
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+resource_file = persalys.CouplingResourceFile('program1.py')
 output_file = persalys.CouplingOutputFile('output1.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
-step1 = persalys.CouplingStep(sys.executable + ' program1.py', [input_file1, input_file2], [output_file])
+step1 = persalys.CouplingStep(sys.executable + ' program1.py', [input_file], [resource_file], [output_file])
 
 # step2: Y2=f2(X2, X3, X4)
 with open('input2.txt.in', 'w') as f:
@@ -395,13 +403,13 @@ with open('program2.py', 'w') as f:
     f.write('Y2=27+X2+X3+X4\n')
     f.write('with open("output2.txt", "w") as f:\n')
     f.write('    f.write("Y2=%.17e\\n" % Y2)\n')
-input_file1 = persalys.CouplingInputFile('input2.txt')
-input_file1.setTemplatePath('input2.txt.in')
-input_file1.setVariables(['X2', 'X3', 'X4'], ['@X2', '@X3', '@X4'])
-input_file2 = persalys.CouplingInputFile('program2.py')
+input_file = persalys.CouplingInputFile('input2.txt')
+input_file.setTemplatePath('input2.txt.in')
+input_file.setVariables(['X2', 'X3', 'X4'], ['@X2', '@X3', '@X4'])
+resource_file = persalys.CouplingResourceFile('program2.py')
 output_file = persalys.CouplingOutputFile('output2.txt')
 output_file.setVariables(['Y2'], ['Y2='], [0], [0])
-step2 = persalys.CouplingStep(sys.executable + ' program2.py', [input_file1, input_file2], [output_file])
+step2 = persalys.CouplingStep(sys.executable + ' program2.py', [input_file], [resource_file], [output_file])
 
 # step3: Z0=f3(Y1, Y2)
 with open('input3.txt.in', 'w') as f:
@@ -412,16 +420,16 @@ with open('program3.py', 'w') as f:
     f.write('Z0=100+Y1+Y2\n')
     f.write('with open("output3.txt", "w") as f:\n')
     f.write('    f.write("Z0=%.17e\\n" % Z0)\n')
-input_file1 = persalys.CouplingInputFile('input3.txt')
-input_file1.setTemplatePath('input3.txt.in')
-input_file1.setVariables(['Y1', 'Y2'], ['@Y1', '@Y2'])
-input_file2 = persalys.CouplingInputFile('program3.py')
+input_file = persalys.CouplingInputFile('input3.txt')
+input_file.setTemplatePath('input3.txt.in')
+input_file.setVariables(['Y1', 'Y2'], ['@Y1', '@Y2'])
+resource_file = persalys.CouplingResourceFile('program3.py')
 output_file = persalys.CouplingOutputFile('output3.txt')
 output_file.setVariables(['Z0'], ['Z0='], [0], [0])
-step3 = persalys.CouplingStep(sys.executable + ' program3.py', [input_file1, input_file2], [output_file])
+step3 = persalys.CouplingStep(sys.executable + ' program3.py', [input_file], [resource_file], [output_file])
 
 # step4: no inputs, no outputs
-step4 = persalys.CouplingStep('echo 42', [], [])
+step4 = persalys.CouplingStep('echo 42', [], [], [])
 step4.setIsShell(True)
 
 model = persalys.CouplingPhysicalModel('multi', [step1, step2, step3, step4])

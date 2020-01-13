@@ -51,6 +51,8 @@ CouplingInputFile* CouplingInputFile::clone() const
 /* Path accessor */
 void CouplingInputFile::setPath(const String & path)
 {
+  if (boost::filesystem::path(path).is_absolute())
+    throw InvalidArgumentException(HERE) << "Path must be relative";
   path_ = path;
 }
 

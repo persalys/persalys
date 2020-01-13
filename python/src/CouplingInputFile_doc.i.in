@@ -4,14 +4,8 @@
 Parameters
 ----------
 path : str
-    Path to the input file.
-    When no template path is defined (see :meth:`setTemplatePath`), the file
-    is understood as a resource (file or directory) to copy to the temporary
-    working directory in which the command of the corresponding step is run.
-    In that case the path to the resource can be absolute or relative, and the destination
-    is the basename of the path joined to the temporary working directory.
-    Else when a template path is defined (see :meth:`setTemplatePath`) it should be relative,
-    and it is interpreted as the path to the file with the actual input values
+    Path to the input file, must be relative,
+    It is interpreted as the path to the file with the actual input values
     relatively to the temporary working directory.
 
 See Also
@@ -26,7 +20,7 @@ CouplingStep, CouplingOutputFile"
 Parameters
 ----------
 path : str
-    Path to the input file, must be relative."
+    Path to the input file."
 
 // ---------------------------------------------------------------------
 
@@ -35,7 +29,7 @@ path : str
 
 Returns
 -------
-path : :py:class:`openturns.Description`
+path : str
     Path"
 
 // ---------------------------------------------------------------------
@@ -46,7 +40,7 @@ path : :py:class:`openturns.Description`
 Parameters
 ----------
 template_path : str
-    Template file path."
+    Template file path, must be absolute."
 
 // ---------------------------------------------------------------------
 

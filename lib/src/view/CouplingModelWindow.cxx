@@ -753,7 +753,7 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
 
 // Widget for Coupling Ressource file ( <=> Coupling input file without template path )
 
-CouplingRessourceFileWidget::CouplingRessourceFileWidget(CouplingPhysicalModel *model, const int indStep, QWidget *parent)
+CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *model, const int indStep, QWidget *parent)
   : QWidget(parent)
   , model_(model)
   , indStep_(indStep)
@@ -776,10 +776,10 @@ CouplingRessourceFileWidget::CouplingRessourceFileWidget(CouplingPhysicalModel *
           [=](QTableWidgetItem * item) {
                  CouplingStepCollection csColl(model->getSteps());
                  CouplingStep cs(csColl[indStep]);
-                 CouplingInputFileCollection inColl(cs.getInputFiles());
+                 CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
                  inColl[item->data(Qt::UserRole).toInt()].setPath(item->data(Qt::DisplayRole).toString().toUtf8().constData());
-                 cs.setInputFiles(inColl);
+                 cs.setResourceFiles(inColl);
                  csColl[indStep] = cs;
                  model->blockNotification("PhysicalModelDefinitionItem");
                  model->setSteps(csColl);
@@ -790,10 +790,10 @@ CouplingRessourceFileWidget::CouplingRessourceFileWidget(CouplingPhysicalModel *
           [=]() {
                  CouplingStepCollection csColl(model->getSteps());
                  CouplingStep cs(csColl[indStep]);
-                 CouplingInputFileCollection inColl(cs.getInputFiles());
+                 CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
-                 inColl.add(CouplingInputFile());
-                 cs.setInputFiles(inColl);
+                 inColl.add(CouplingResourceFile());
+                 cs.setResourceFiles(inColl);
                  csColl[indStep] = cs;
                  model->blockNotification("PhysicalModelDefinitionItem");
                  model->setSteps(csColl);
@@ -821,10 +821,10 @@ CouplingRessourceFileWidget::CouplingRessourceFileWidget(CouplingPhysicalModel *
 
                                 CouplingStepCollection csColl(model->getSteps());
                                 CouplingStep cs(csColl[indStep]);
-                                CouplingInputFileCollection inColl(cs.getInputFiles());
+                                CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
                                 inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
-                                cs.setInputFiles(inColl);
+                                cs.setResourceFiles(inColl);
                                 csColl[indStep] = cs;
                                 model->blockNotification("PhysicalModelDefinitionItem");
                                 model->setSteps(csColl);
@@ -835,22 +835,22 @@ CouplingRessourceFileWidget::CouplingRessourceFileWidget(CouplingPhysicalModel *
     [=]() {
            CouplingStepCollection csColl(model->getSteps());
            CouplingStep cs(csColl[indStep]);
-           CouplingInputFileCollection inColl(cs.getInputFiles());
+           CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
            inColl.__delitem__(tableWidget_->selectionModel()->currentIndex().data(Qt::UserRole).toInt());
-           cs.setInputFiles(inColl);
+           cs.setResourceFiles(inColl);
            csColl[indStep] = cs;
            model->blockNotification("PhysicalModelDefinitionItem");
            model->setSteps(csColl);
            model->blockNotification();
            // emit signal to the parent widget in order to rebuild widgets
            // (because we want to update the input file index in all widgets)
-           emit couplingInputCollectionModified();
+           emit couplingResourceCollectionModified();
           });
 }
 
 
-void CouplingRessourceFileWidget::updateTable()
+void CouplingResourceFileWidget::updateTable()
 {
   // remove all rows
   tableWidget_->clear();
@@ -858,17 +858,17 @@ void CouplingRessourceFileWidget::updateTable()
 
   // fill in the table
   CouplingStep cs(model_->getSteps()[indStep_]);
-  if (cs.getInputFiles().getSize())
+  if (cs.getResourceFiles().getSize())
   {
     int row = -1;
-    for (UnsignedInteger i = 0; i < cs.getInputFiles().getSize(); ++i)
+    for (UnsignedInteger i = 0; i < cs.getResourceFiles().getSize(); ++i)
     {
-      if (cs.getInputFiles()[i].getTemplatePath().empty() && !cs.getInputFiles()[i].getPath().empty())
+      if (!cs.getResourceFiles()[i].getPath().empty())
       {
         ++row;
         tableWidget_->setRowCount(row+1);
 
-        QTableWidgetItem * newItem = new QTableWidgetItem(cs.getInputFiles()[i].getPath().c_str());
+        QTableWidgetItem * newItem = new QTableWidgetItem(cs.getResourceFiles()[i].getPath().c_str());
         newItem->setData(Qt::UserRole, int(i));
         tableWidget_->setItem(row, 0, newItem);
 
@@ -1025,9 +1025,9 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
   QGridLayout * resGroupBoxLayout = new QGridLayout(resGroupBox);
   mainLayout->addWidget(resGroupBox);
 
-  ressourceFileWidget_ = new CouplingRessourceFileWidget(model, indStep, resGroupBox);
+  ressourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, resGroupBox);
   resGroupBoxLayout->addWidget(ressourceFileWidget_);
-  connect(ressourceFileWidget_, &CouplingRessourceFileWidget::couplingInputCollectionModified, [=]() { updateInputFileWidgets(item); });
+  connect(ressourceFileWidget_, &CouplingResourceFileWidget::couplingResourceCollectionModified, [=]() { updateInputFileWidgets(item); });
 
   updateInputFileWidgets(item);
 

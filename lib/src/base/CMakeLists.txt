@@ -69,6 +69,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      CalibrationAnalysis.cxx
                      CalibrationAnalysisResult.cxx
                      CouplingInputFile.cxx
+                     CouplingResourceFile.cxx
                      CouplingOutputFile.cxx
                      CouplingStep.cxx
                      CouplingPhysicalModel.cxx
@@ -180,6 +181,7 @@ ot_install_header_file ( Observations.hxx )
 ot_install_header_file ( CalibrationAnalysis.hxx )
 ot_install_header_file ( CalibrationAnalysisResult.hxx )
 ot_install_header_file ( CouplingInputFile.hxx )
+ot_install_header_file ( CouplingResourceFile.hxx )
 ot_install_header_file ( CouplingOutputFile.hxx )
 ot_install_header_file ( CouplingStep.hxx )
 

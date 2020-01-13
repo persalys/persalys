@@ -92,11 +92,20 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       if (inputFile.getPath().empty())
         continue;
       oss << offset << "input_file" << j << " = persalys.CouplingInputFile('"<<EscapePath(inputFile.getPath())<<"')\n";
-      if (!inputFile.getTemplatePath().empty())
-        oss << offset << "input_file" << j <<".setTemplatePath('" << EscapePath(inputFile.getTemplatePath())<<"')\n";
+      oss << offset << "input_file" << j <<".setTemplatePath('" << EscapePath(inputFile.getTemplatePath())<<"')\n";
       if (inputFile.getVariableNames().getSize() > 0)
         oss << offset << "input_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(inputFile.getTokens())<<")\n";
       oss << offset << "input_files.append(input_file"<<j<<")\n";
+    }
+    const CouplingResourceFileCollection resourceFiles(step.getResourceFiles());
+    oss << offset << "resource_files = []\n";
+    for (UnsignedInteger j = 0; j < resourceFiles.getSize(); ++ j)
+    {
+      const CouplingResourceFile resourceFile(resourceFiles[j]);
+      if (resourceFile.getPath().empty())
+        continue;
+      oss << offset << "resource_file" << j << " = persalys.CouplingResourceFile('"<<EscapePath(resourceFile.getPath())<<"')\n";
+      oss << offset << "resource_files.append(resource_file"<<j<<")\n";
     }
     const CouplingOutputFileCollection outputFiles(step.getOutputFiles());
     oss << offset << "output_files = []\n";
@@ -111,7 +120,7 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       oss << offset << "output_files.append(output_file"<<j<<")\n";
     }
     // escape backslashes
-    oss << offset << "step" << i << " = persalys.CouplingStep('"<<EscapePath(step.getCommand())<<"', input_files, output_files)\n";
+    oss << offset << "step" << i << " = persalys.CouplingStep('"<<EscapePath(step.getCommand())<<"', input_files, resource_files, output_files)\n";
     oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True": "False") << ")\n";
     oss << offset << "steps.append(step"<<i<<")\n";
   }
@@ -195,21 +204,21 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
   code << "    if not os.path.exists(workdir):\n";
   code << "        os.makedirs(workdir)\n";
-
   code << "    for step in steps:\n";
   code << "        for input_file in step.getInputFiles():\n";
   code << "            if not input_file.getPath():\n";
   code << "                continue\n";
-  code << "            if not input_file.getTemplatePath():\n";
-  code << "                if os.path.isfile(input_file.getPath()):\n";
-  code << "                    shutil.copy(input_file.getPath(), os.path.join(workdir, os.path.basename(input_file.getPath())))\n";
-  code << "                elif os.path.isdir(input_file.getPath()):\n";
-  code << "                    shutil.copytree(input_file.getPath(), os.path.join(workdir, os.path.basename(input_file.getPath())))\n";
-  code << "                else:\n";
-  code << "                    raise ValueError('cannot handle file:', input_file.getPath())\n";
+  code << "            input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
+  code << "            otct.replace(input_file.getTemplatePath(), os.path.join(workdir, input_file.getPath()), input_file.getTokens(), input_values)\n";
+  code << "        for resource_file in step.getResourceFiles():\n";
+  code << "            if not resource_file.getPath():\n";
+  code << "                continue\n";
+  code << "            if os.path.isfile(resource_file.getPath()):\n";
+  code << "                shutil.copy(resource_file.getPath(), os.path.join(workdir, os.path.basename(resource_file.getPath())))\n";
+  code << "            elif os.path.isdir(resource_file.getPath()):\n";
+  code << "                shutil.copytree(resource_file.getPath(), os.path.join(workdir, os.path.basename(resource_file.getPath())))\n";
   code << "            else:\n";
-  code << "                input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
-  code << "                otct.replace(input_file.getTemplatePath(), os.path.join(workdir, input_file.getPath()), input_file.getTokens(), input_values)\n";
+  code << "                raise ValueError('cannot handle file:', resource_file.getPath())\n";
   code << "        if len(step.getCommand()) > 0:\n";
   code << "            otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell())\n";
   code << "        for output_file in step.getOutputFiles():\n";
