@@ -4,53 +4,58 @@
 Parameters
 ----------
 path : str
-    Path to the input file, must be relative,
-    It is interpreted as the path to the file with the actual input values
-    relatively to the temporary working directory.
+    Path to the template file.
+
+Notes
+-----
+By default the configured path is the basename of the template path,
+minus the `.in` extension.
 
 See Also
 --------
-CouplingStep, CouplingOutputFile"
+CouplingStep, CouplingResourceFile, CouplingOutputFile"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::CouplingInputFile::setPath
-"Path accessor.
+"Template file path accessor.
 
 Parameters
 ----------
 path : str
-    Path to the input file."
+    Path to the template file."
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::CouplingInputFile::getPath
-"Path accessor.
+"Template file path accessor.
 
 Returns
 -------
 path : str
-    Path"
+    Path to the template file."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CouplingInputFile::setTemplatePath
-"Template path accessor.
+%feature("docstring") PERSALYS::CouplingInputFile::setConfiguredPath
+"Configured path accessor.
 
 Parameters
 ----------
-template_path : str
-    Template file path, must be absolute."
+configured_path : str
+    Configured file path, must be relative.
+    It is interpreted as the path to the file with the actual input values
+    relatively to the temporary working directory."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CouplingInputFile::getTemplatePath
+%feature("docstring") PERSALYS::CouplingInputFile::getConfiguredPath
 "Template path accessor.
 
 Returns
 -------
-template_path : str
-    Template file path."
+configured_path : str
+    Configured file path."
 
 // ---------------------------------------------------------------------
 

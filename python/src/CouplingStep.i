@@ -1,4 +1,4 @@
-// SWIG file
+// SWIG file CouplingStep.i
 
 %{
 #include "persalys/CouplingStep.hxx"

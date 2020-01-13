@@ -1163,8 +1163,8 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="696"/>
-        <source>Input model file</source>
-        <translation>Fichier d&apos;entrée de modèle</translation>
+        <source>Configured file</source>
+        <translation>Fichier configuré</translation>
     </message>
 </context>
 <context>
@@ -1234,15 +1234,15 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CouplingOutputFileWidget</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="891"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="898"/>
         <source>Output file</source>
         <translation>Fichier de sortie</translation>
     </message>
 </context>
 <context>
-    <name>PERSALYS::CouplingRessourceFileWidget</name>
+    <name>PERSALYS::CouplingResourceFileWidget</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="814"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="821"/>
         <source>Search file</source>
         <translation>Chercher un fichier</translation>
     </message>
@@ -1250,35 +1250,35 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CouplingStepWidget</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="943"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="953"/>
         <source>Command</source>
         <translation>Commande</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="960"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="970"/>
         <source>Shell command</source>
         <translation>Commande shell</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="985"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="995"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1004"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1053"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1077"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1102"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1014"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1063"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1087"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1110"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1023"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1033"/>
         <source>Ressource</source>
         <translation>Ressource</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1034"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1044"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
@@ -3687,195 +3687,195 @@ bayésien (BIC)</translation>
         <translation>Modèles physiques</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="134"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="224"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="135"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="225"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="141"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="246"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="142"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="247"/>
         <source>Screening</source>
         <translation>Criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="148"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="255"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="149"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="256"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="154"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="155"/>
         <source>Designs of experiments</source>
         <translation>Plans d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="162"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="271"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="163"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="272"/>
         <source>Central tendency</source>
         <translation>Tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="169"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="263"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="170"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="264"/>
         <source>Sensitivity</source>
         <translation>Sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="175"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="176"/>
         <source>Reliability</source>
         <translation>Fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="181"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="321"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="182"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="322"/>
         <source>Calibration</source>
         <translation>Calage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="193"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="204"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="194"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="205"/>
         <source>metaModel_</source>
         <translation>métamodèle_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="195"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="196"/>
         <source>calibration_</source>
         <translation>calage_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="213"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="214"/>
         <source>reliability_</source>
         <translation>fiabilité_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="225"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="226"/>
         <source>Create a new model evaluation</source>
         <translation>Créer une nouvelle évaluation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="229"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="233"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="230"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="234"/>
         <source>evaluation_</source>
         <translation>évaluation_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="237"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="238"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="238"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="239"/>
         <source>Create a new design of experiments</source>
         <translation>Créer un nouveau plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="241"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="242"/>
         <source>design_</source>
         <translation>plan_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="247"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="248"/>
         <source>Create a new screening</source>
         <translation>Créer un nouveau criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="250"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="251"/>
         <source>screening_</source>
         <translation>criblage_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="256"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="257"/>
         <source>Create a new model optimization</source>
         <translation>Créer une nouvelle optimisation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="259"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="260"/>
         <source>optimization_</source>
         <translation>optimisation_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="264"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="265"/>
         <source>Create a new sensitivity analysis</source>
         <translation>Créer une nouvelle analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="267"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="268"/>
         <source>sensitivity_</source>
         <translation>sensibilité_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="272"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="273"/>
         <source>Create a new central tendency</source>
         <translation>Créer une nouvelle analyse en tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="276"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="280"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="277"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="281"/>
         <source>centralTendency_</source>
         <translation>tendanceCentrale_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="292"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="293"/>
         <source>Data analysis</source>
         <translation>Analyse de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="293"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="294"/>
         <source>Analyse the data sample</source>
         <translation>Analyser l&apos;échantillon de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="295"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="296"/>
         <source>dataAnalysis_</source>
         <translation>analyseDonnées_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="299"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="351"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="300"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="352"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="300"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="352"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="301"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="353"/>
         <source>Create a new metamodel</source>
         <translation>Créer un nouveau métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="305"/>
         <location filename="../lib/src/model/ItemFactory.cxx" line="306"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="307"/>
         <source>Marginals inference</source>
         <translation>Inférence des lois marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="309"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="310"/>
         <source>marginalsInference_</source>
         <translation>inferenceMarginales_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="313"/>
         <location filename="../lib/src/model/ItemFactory.cxx" line="314"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="315"/>
         <source>Dependence inference</source>
         <translation>Inférence de la dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="317"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="318"/>
         <source>dependenceInference_</source>
         <translation>inférenceDépendance_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="322"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="323"/>
         <source>Create a new calibration</source>
         <translation>Créer un nouveau calage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="337"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="338"/>
         <source>Threshold exceedance</source>
         <translation>Dépassement de seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="338"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="339"/>
         <source>Create a new threshold exceedance</source>
         <translation>Créer un nouveau calcul de probabilité de dépassement de seuil</translation>
     </message>

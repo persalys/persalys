@@ -120,6 +120,7 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
       item->setData(QIcon(":/images/physicalModel.png"), Qt::DecorationRole);
       item->appendAction(newSymbolicModel_);
       item->appendAction(newPythonModel_);
+      item->appendAction(newCouplingModel_);
 #ifdef PERSALYS_HAVE_YACS
       item->appendAction(newYACSModel_);
 #endif

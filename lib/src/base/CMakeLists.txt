@@ -91,8 +91,6 @@ if (OTMORRIS_FOUND)
   list (APPEND BASE_SOURCEFILES MorrisAnalysis.cxx MorrisResult.cxx)
 endif ()
 
-set_source_files_properties (PythonEnvironment.cxx FMUInfo.cxx PythonScriptEvaluation.cxx PythonScriptFieldFunction.cxx PROPERTIES COTIRE_EXCLUDED ON SKIP_UNITY_BUILD_INCLUSION ON)
-
 ot_install_header_file ( DistributionDictionary.hxx )
 ot_install_header_file ( BaseTools.hxx )
 ot_install_header_file ( AppliException.hxx )

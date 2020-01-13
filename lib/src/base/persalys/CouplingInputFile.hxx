@@ -32,18 +32,18 @@ class PERSALYS_API CouplingInputFile : public OT::PersistentObject
 
 public:
   /** Default constructor */
-  explicit CouplingInputFile(const OT::String & path = "");
+  explicit CouplingInputFile(const OT::String & templatePath = "");
 
   /** Virtual constructor */
   virtual CouplingInputFile * clone() const;
 
   /** Path accessor */
-  void setPath(const OT::String & path);
+  void setPath(const OT::String & templatePath);
   OT::String getPath() const;
 
   /** Template path accessor */
-  void setTemplatePath(const OT::String & templatePath);
-  OT::String getTemplatePath() const;
+  void setConfiguredPath(const OT::String & configuredPath);
+  OT::String getConfiguredPath() const;
 
   /** Variables accessor */
   void setVariables(const OT::Description & variableNames, const OT::Description & tokens);
@@ -61,7 +61,7 @@ public:
 
 private:
   OT::String path_;
-  OT::String templatePath_;
+  OT::String configuredPath_;
   OT::Description variableNames_;
   OT::Description tokens_;
 };

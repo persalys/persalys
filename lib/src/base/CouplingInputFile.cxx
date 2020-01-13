@@ -34,10 +34,10 @@ CLASSNAMEINIT(CouplingInputFile)
 static Factory<CouplingInputFile> Factory_CouplingInputFile;
 
 /* Default constructor */
-CouplingInputFile::CouplingInputFile(const String & path)
+CouplingInputFile::CouplingInputFile(const String & templatePath)
   : PersistentObject()
 {
-  setPath(path);
+  setPath(templatePath);
 }
 
 
@@ -51,9 +51,17 @@ CouplingInputFile* CouplingInputFile::clone() const
 /* Path accessor */
 void CouplingInputFile::setPath(const String & path)
 {
-  if (boost::filesystem::path(path).is_absolute())
-    throw InvalidArgumentException(HERE) << "Path must be relative";
   path_ = path;
+
+  if (getConfiguredPath().empty())
+  {
+    // by default the configured path is the basename of the template path, minus the ".in" extension
+    String configuredPath(boost::filesystem::path(path).filename().string());
+    std::size_t pos = configuredPath.find(".in");
+    if (pos != std::string::npos)
+      configuredPath = configuredPath.substr(0, pos);
+    setConfiguredPath(configuredPath);
+  }
 }
 
 String CouplingInputFile::getPath() const
@@ -62,14 +70,16 @@ String CouplingInputFile::getPath() const
 }
 
 /* Template path accessor */
-void CouplingInputFile::setTemplatePath(const String & templatePath)
+void CouplingInputFile::setConfiguredPath(const String & configuredPath)
 {
-  templatePath_ = templatePath;
+  if (boost::filesystem::path(configuredPath).is_absolute())
+    throw InvalidArgumentException(HERE) << "Configured path must be relative";
+  configuredPath_ = configuredPath;
 }
 
-String CouplingInputFile::getTemplatePath() const
+String CouplingInputFile::getConfiguredPath() const
 {
-  return templatePath_;
+  return configuredPath_;
 }
 
 /* Variables accessor */
@@ -98,7 +108,7 @@ String CouplingInputFile::__repr__() const
   OSS oss;
   oss << "class=" << GetClassName()
       << " path=" << getPath()
-      << " templatePath=" << getTemplatePath()
+      << " configuredPath=" << getConfiguredPath()
       << " variableNames=" << getVariableNames()
       << " tokens=" << getTokens();
   return oss;
@@ -109,7 +119,7 @@ void CouplingInputFile::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("path_", path_);
-  adv.saveAttribute("templatePath_", templatePath_);
+  adv.saveAttribute("configuredPath_", configuredPath_);
   adv.saveAttribute("variableNames_", variableNames_);
   adv.saveAttribute("tokens_", tokens_);
 }
@@ -120,7 +130,7 @@ void CouplingInputFile::load(Advocate & adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("path_", path_);
-  adv.loadAttribute("templatePath_", templatePath_);
+  adv.loadAttribute("configuredPath_", configuredPath_);
   adv.loadAttribute("variableNames_", variableNames_);
   adv.loadAttribute("tokens_", tokens_);
 }

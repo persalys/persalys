@@ -15,7 +15,7 @@ with open('input_template0y.txt', 'w') as f:
     f.write('X2=@X2\n')
 with open('external_program0y.py', 'w') as f:
     f.write('import sys\n')
-    f.write('exec(open(sys.argv[1]).read())\n')
+    f.write('exec(open("input.txt").read())\n')
     f.write('Y0=X0+X1+X2\n')
     f.write('Y1=X0+X1*X2\n')
     f.write('with open("output.txt", "w") as f:\n')
@@ -23,13 +23,13 @@ with open('external_program0y.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
-input_file1 = persalys.CouplingInputFile('input.txt')
-input_file1.setTemplatePath('input_template0y.txt')
-input_file1.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
-input_file2 = persalys.CouplingInputFile('external_program0y.py')
+input_file = persalys.CouplingInputFile('input_template0y.txt')
+input_file.setConfiguredPath('input.txt')
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+resource_file = persalys.CouplingResourceFile('external_program0y.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
-step = persalys.CouplingStep(sys.executable + ' external_program0y.py input.txt', [input_file1, input_file2], [output_file])
+step = persalys.CouplingStep(sys.executable + ' external_program0y.py', [input_file], [resource_file], [output_file])
 model = persalys.YACSCouplingPhysicalModel('A', [step])
 
 # single evaluation

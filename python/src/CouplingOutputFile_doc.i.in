@@ -9,7 +9,7 @@ path : str
 
 See Also
 --------
-CouplingStep, CouplingInputFile"
+CouplingStep, CouplingInputFile, CouplingResourceFile"
 
 // ---------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ path : str
 
 Returns
 -------
-path : :py:class:`openturns.Description`
+path : str
     Path"
 
 // ---------------------------------------------------------------------

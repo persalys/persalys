@@ -22,12 +22,10 @@ class CouplingResourceFile(object):
     def getPath(self):
         return self.path_
 class CouplingInputFile(object):
-    def __init__(self, path, template_path=''):
+    def __init__(self, path):
         if os.path.isabs(path):
             raise ValueError('path to input file cannot be absolute')
-        # When template_path==None this file is not configured, just a copied data file
-        # the template_path can be absolute
-        self.template_path_ = template_path
+        self.configured_path_ = os.path.basename(configured_path)
         self.path_ = path
         self.tokens_ = []
         self.varnames_ = []
@@ -38,10 +36,10 @@ class CouplingInputFile(object):
         self.varnames_ = varnames
     def getVariableNames(self):
         return self.varnames_
-    def setTemplatePath(self, template_path):
-        self.template_path_ = template_path
+    def setConfiguredPath(self, configured_path):
+        self.configured_path_ = configured_path
     def getTemplatePath(self):
-        return self.template_path_
+        return self.configured_path_
     def getPath(self):
         return self.path_
     def getTokens(self):
@@ -220,8 +218,8 @@ with open('external_program.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
-input_file = persalys.CouplingInputFile('input.txt')
-input_file.setTemplatePath('input_template.txt')
+input_file = persalys.CouplingInputFile('input_template.txt')
+input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
@@ -266,8 +264,8 @@ with open('external_program.py', 'w') as f:
     f.write('    f.write("%.17e\\n" % Y1)\n')
 
 
-input_file = persalys.CouplingInputFile('input.txt')
-input_file.setTemplatePath('input_template.txt')
+input_file = persalys.CouplingInputFile('input_template.txt')
+input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
@@ -301,8 +299,8 @@ with open('program.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
-input_file = persalys.CouplingInputFile('input.txt')
-input_file.setTemplatePath('input.txt.in')
+input_file = persalys.CouplingInputFile('input.txt.in')
+input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
@@ -345,8 +343,8 @@ with open('program.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 
 
-input_file = persalys.CouplingInputFile('input.txt')
-input_file.setTemplatePath('input.txt.in')
+input_file = persalys.CouplingInputFile('input.txt.in')
+input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
@@ -385,8 +383,8 @@ with open('program1.py', 'w') as f:
     f.write('with open("output1.txt", "w") as f:\n')
     f.write('    f.write("Y0=%.17e\\n" % Y0)\n')
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
-input_file = persalys.CouplingInputFile('input1.txt')
-input_file.setTemplatePath('input1.txt.in')
+input_file = persalys.CouplingInputFile('input1.txt.in')
+input_file.setConfiguredPath('input1.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('program1.py')
 output_file = persalys.CouplingOutputFile('output1.txt')
@@ -403,8 +401,8 @@ with open('program2.py', 'w') as f:
     f.write('Y2=27+X2+X3+X4\n')
     f.write('with open("output2.txt", "w") as f:\n')
     f.write('    f.write("Y2=%.17e\\n" % Y2)\n')
-input_file = persalys.CouplingInputFile('input2.txt')
-input_file.setTemplatePath('input2.txt.in')
+input_file = persalys.CouplingInputFile('input2.txt.in')
+input_file.setConfiguredPath('input2.txt')
 input_file.setVariables(['X2', 'X3', 'X4'], ['@X2', '@X3', '@X4'])
 resource_file = persalys.CouplingResourceFile('program2.py')
 output_file = persalys.CouplingOutputFile('output2.txt')
@@ -420,8 +418,8 @@ with open('program3.py', 'w') as f:
     f.write('Z0=100+Y1+Y2\n')
     f.write('with open("output3.txt", "w") as f:\n')
     f.write('    f.write("Z0=%.17e\\n" % Z0)\n')
-input_file = persalys.CouplingInputFile('input3.txt')
-input_file.setTemplatePath('input3.txt.in')
+input_file = persalys.CouplingInputFile('input3.txt.in')
+input_file.setConfiguredPath('input3.txt')
 input_file.setVariables(['Y1', 'Y2'], ['@Y1', '@Y2'])
 resource_file = persalys.CouplingResourceFile('program3.py')
 output_file = persalys.CouplingOutputFile('output3.txt')

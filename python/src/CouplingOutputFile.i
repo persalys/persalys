@@ -1,4 +1,4 @@
-// SWIG file
+// SWIG file CouplingOutputFile.i
 
 %{
 #include "persalys/CouplingOutputFile.hxx"
