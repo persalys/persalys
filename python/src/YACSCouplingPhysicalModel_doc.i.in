@@ -14,6 +14,10 @@ outputs : sequence of :class:`~persalys.Output`
 steps : sequence of :class:`~persalys.CouplingStep`
     List of steps to execute (optional)
 
+Notes
+-----
+The YACS engine does not allow relative input files.
+
 See Also
 --------
 CouplingPhysicalModel"

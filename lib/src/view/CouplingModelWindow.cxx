@@ -696,7 +696,8 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   QLabel * fileLabel = new QLabel(tr("Input model file"));
   layout->addWidget(fileLabel, ++row, 0);
 
-  FilePathWidget * fileLineEdit = new FilePathWidget(model->getSteps()[indStep].getInputFiles()[indFile].getPath().c_str());
+  QLineEdit * fileLineEdit = new QLineEdit;
+  fileLineEdit->setText(model->getSteps()[indStep].getInputFiles()[indFile].getPath().c_str());
   layout->addWidget(fileLineEdit, row, 1);
 
   // input variable table
@@ -732,16 +733,16 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
                 model->setSteps(csColl);
                 model->blockNotification();
                });
-  connect(fileLineEdit, &FilePathWidget::pathChanged,
-          [=](const QString& text){
-                inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || text.isEmpty());
-                addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || text.isEmpty());
+  connect(fileLineEdit, &QLineEdit::editingFinished,
+          [=](){
+                inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
+                addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
                 // update model
                 CouplingStepCollection csColl(model->getSteps());
                 CouplingStep cs(csColl[indStep]);
                 CouplingInputFileCollection inColl(cs.getInputFiles());
 
-                inColl[indFile].setPath(text.toUtf8().constData());
+                inColl[indFile].setPath(fileLineEdit->text().toUtf8().constData());
                 cs.setInputFiles(inColl);
                 csColl[indStep] = cs;
                 model->blockNotification("PhysicalModelDefinitionItem");
