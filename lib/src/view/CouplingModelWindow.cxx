@@ -72,7 +72,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(stepTabWidget_, &DynamicTabWidget::removeTabRequested,
           [=](int index){
                           CouplingStepCollection csColl(model_->getSteps());
-                          csColl.__delitem__(index);
+                          csColl.erase(csColl.begin() + index);
                           model_->blockNotification("PhysicalModelDefinitionItem");
                           model_->setSteps(csColl);
                           model_->blockNotification();
@@ -430,8 +430,8 @@ void InTableModel::removeLine()
   CouplingInputFile inFile(getInputFile());
   Description names(inFile.getVariableNames());
   Description tokens(inFile.getTokens());
-  names.__delitem__(index.row());
-  tokens.__delitem__(index.row());
+  names.erase(names.begin() + index.row());
+  tokens.erase(tokens.begin() + index.row());
 
   inFile.setVariables(names, tokens);
   updateModel(inFile);
@@ -663,10 +663,10 @@ void OutTableModel::removeLine()
   Description tokens(outFile.getTokens());
   Point skipLine(outFile.getSkipLines());
   Point skipCol(outFile.getSkipColumns());
-  names.__delitem__(index.row());
-  tokens.__delitem__(index.row());
-  skipLine.__delitem__(index.row());
-  skipCol.__delitem__(index.row());
+  names.erase(names.begin() + index.row());
+  tokens.erase(tokens.begin() + index.row());
+  skipLine.erase(skipLine.begin() + index.row());
+  skipCol.erase(skipCol.begin() + index.row());
 
   outFile.setVariables(names, tokens, skipLine, skipCol);
   updateModel(outFile);
@@ -843,7 +843,7 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
            CouplingStep cs(csColl[indStep]);
            CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
-           inColl.__delitem__(tableWidget_->selectionModel()->currentIndex().data(Qt::UserRole).toInt());
+           inColl.erase(inColl.begin() + tableWidget_->selectionModel()->currentIndex().data(Qt::UserRole).toInt());
            cs.setResourceFiles(inColl);
            csColl[indStep] = cs;
            model->blockNotification("PhysicalModelDefinitionItem");
@@ -1018,9 +1018,8 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
                           CouplingStepCollection csColl(model->getSteps());
                           CouplingStep cs(csColl[indStep]);
                           CouplingInputFileCollection inColl(cs.getInputFiles());
-                          CouplingInputFileWidget * cinWidget = dynamic_cast<CouplingInputFileWidget *>(inTabWidget_->widget(index));
 
-                          inColl.__delitem__(cinWidget->getIndFile());
+                          inColl.erase(inColl.begin() + index);
                           cs.setInputFiles(inColl);
                           csColl[indStep] = cs;
                           model->blockNotification("PhysicalModelDefinitionItem");
@@ -1068,7 +1067,7 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
                           CouplingStep cs(csColl[indStep]);
                           CouplingOutputFileCollection outColl(cs.getOutputFiles());
 
-                          outColl.__delitem__(index);
+                          outColl.erase(outColl.begin() + index);
                           cs.setOutputFiles(outColl);
                           csColl[indStep] = cs;
                           model->blockNotification("PhysicalModelDefinitionItem");
