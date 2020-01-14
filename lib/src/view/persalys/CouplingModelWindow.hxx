@@ -182,9 +182,9 @@ public:
     int ret = QMessageBox::question(this, tr("Remove"), tr("Do you really want to remove the variables?"));
     if (ret == QMessageBox::Yes)
     {
+      removeTab(index);
+      setCurrentIndex(index-1);
       emit removeTabRequested(index);
-//       removeTab(index);
-//       setCurrentIndex(index-1);
       if (count() < 2)
         emit newTabRequested();
     }
