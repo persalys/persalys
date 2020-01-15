@@ -35,6 +35,7 @@ Coupling model
     :template: class.rst_t
 
     CouplingInputFile
+    CouplingResourceFile
     CouplingOutputFile
     CouplingStep
     CouplingPhysicalModel
@@ -209,3 +210,14 @@ Study storage
     :template: class.rst_t
 
     Study
+
+Function caching
+----------------
+
+.. currentmodule:: persalys
+
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
+
+    FileMemoizeFunction

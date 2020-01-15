@@ -11,12 +11,14 @@ command : str
     By default it is run by the system else see :meth:`setIsShell`.
 input_files : sequence of :class:`~persalys.CouplingInputFile`
     Input file metadatas
+resource_files : sequence of :class:`~persalys.CouplingResourceFile`
+    Resource file metadatas
 output_files : sequence of :class:`~persalys.CouplingOutputFile`
     Output file metadatas
 
 See Also
 --------
-CouplingPhysicalModel, CouplingInputFile, CouplingOutputFile"
+CouplingPhysicalModel, CouplingInputFile, CouplingResourceFile, CouplingOutputFile"
 
 // ---------------------------------------------------------------------
 
@@ -77,6 +79,26 @@ Parameters
 ----------
 input_files : sequence of :class:`~persalys.CouplingInputFile`
     Input file metadatas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getResourceFiles
+"Template path accessor.
+
+Returns
+-------
+resource_files : sequence of :class:`~persalys.CouplingResourceFile`
+    Resource file metadatas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::setResourceFiles
+"Tokens accessor.
+
+Parameters
+----------
+resource_files : sequence of :class:`~persalys.CouplingResourceFile`
+    Resource file metadatas"
 
 // ---------------------------------------------------------------------
 

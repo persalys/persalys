@@ -25,7 +25,7 @@ steps : sequence of :class:`~persalys.CouplingStep`
 
 See Also
 --------
-CouplingStep, CouplingInputFile, CouplingOutputFile
+CouplingStep, CouplingInputFile, CouplingResourceFile, CouplingOutputFile
 
 Examples
 --------
@@ -33,6 +33,7 @@ Examples
 >>> import sys
 
 input.txt is generated from the existing input_template.txt by replacing the @XN tokens:
+
 >>> input_file = persalys.CouplingInputFile('/tmp/input_template.txt')
 >>> input_file.setConfiguredPath('input.txt')
 >>> input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
@@ -87,3 +88,35 @@ Parameters
 ----------
 cleanup_work_dir : bool
     Whether the work directory is discarded"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::getCacheInputFile
+"Cache input file accessor.
+
+Returns
+-------
+input_file : str
+    Cache input file name."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::getCacheOutputFile
+"Cache output file accessor.
+
+Returns
+-------
+output_file : str
+    Cache output file name."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::setCacheFiles
+"Cache files accessor.
+
+Parameters
+----------
+input_file : str
+    Cache input file name.
+output_file : str
+    Cache output file name."

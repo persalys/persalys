@@ -45,7 +45,6 @@ namespace OT {
 
 %include CouplingPhysicalModel_doc.i
 
-
 %template(CouplingStepCollection) OT::Collection<PERSALYS::CouplingStep>;
 
 %typemap(in) const PERSALYS::CouplingStepCollection & {
