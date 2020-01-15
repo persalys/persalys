@@ -1,4 +1,12 @@
-// SWIG file
+// SWIG file YACSPhysicalModel.i
+
+%{
+#include "persalys/YACSPhysicalModel.hxx"
+%}
+
+%include YACSPhysicalModel_doc.i
+
+
 namespace PERSALYS {
 
 %extend YACSPhysicalModel {
@@ -10,11 +18,6 @@ PyObject* jobParameters()
 
 } }
 
-%ignore jobParameters;
-%{
-#include "persalys/YACSPhysicalModel.hxx"
-%}
-
-%include YACSPhysicalModel_doc.i
+%ignore PERSALYS::YACSPhysicalModel::jobParameters;
 
 %include persalys/YACSPhysicalModel.hxx

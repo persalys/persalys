@@ -48,6 +48,7 @@ protected:
   void initializeWidgets();
 #ifdef PERSALYS_HAVE_YACS
   virtual void visitYACS(YACSPhysicalModel* model);
+  virtual void visitYACS(YACSCouplingPhysicalModel* model);
 #endif
 
 protected slots:

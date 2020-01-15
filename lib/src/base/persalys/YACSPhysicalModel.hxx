@@ -21,8 +21,8 @@
 #ifndef PERSALYS_YACSPHYSICALMODEL_HXX
 #define PERSALYS_YACSPHYSICALMODEL_HXX
 
-#include "PhysicalModelImplementation.hxx"
-#include "YACSEvaluation.hxx"
+#include "persalys/PhysicalModelImplementation.hxx"
+#include "persalys/YACSEvaluation.hxx"
 
 namespace PERSALYS
 {
@@ -33,6 +33,7 @@ class PERSALYS_API YACSPhysicalModel : public PhysicalModelImplementation
 public:
   /* Default constructor */
   YACSPhysicalModel(const OT::String & name = "Unnamed");
+
   /* Constructor with parameters */
   YACSPhysicalModel(const OT::String & name,
                     const InputCollection & inputs,
@@ -56,7 +57,7 @@ public:
 
   /** Accesor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();
-  const ydefx::JobParametersProxy& jobParameters()const;
+  const ydefx::JobParametersProxy& jobParameters() const;
 
   virtual OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
@@ -71,6 +72,8 @@ public:
   virtual OT::String __repr__() const;
 
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
+
+  static void ReplaceInString(OT::String & workString, const OT::String & strToReplace, const OT::String & newValue);
 
 protected:
   void updateData();

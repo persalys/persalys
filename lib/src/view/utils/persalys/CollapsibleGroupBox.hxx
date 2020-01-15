@@ -47,6 +47,7 @@ class PERSALYS_API CollapsibleGroupBox : public QWidget
 
 public:
   explicit CollapsibleGroupBox(QWidget *parent = 0);
+  CollapsibleGroupBox(const QString &title, QWidget *parent = 0);
   virtual ~CollapsibleGroupBox();
 
   /**

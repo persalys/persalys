@@ -67,6 +67,17 @@ CollapsibleGroupBox::CollapsibleGroupBox(QWidget* parent)
 }
 
 
+CollapsibleGroupBox::CollapsibleGroupBox(const QString &title, QWidget* parent)
+  : QWidget(parent)
+  , d(new CollapsibleGroupBoxPrivate(this))
+{
+  setTitle(title);
+  setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+  setFocusPolicy(Qt::TabFocus);
+  setMouseTracking(true);
+}
+
+
 CollapsibleGroupBox::~CollapsibleGroupBox()
 {
   delete d;

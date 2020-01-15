@@ -25,6 +25,20 @@ Model creation
     DataModel
     MetaModel
 
+Coupling model
+--------------
+
+.. currentmodule:: persalys
+
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
+
+    CouplingInputFile
+    CouplingOutputFile
+    CouplingStep
+    CouplingPhysicalModel
+
 Model evaluation
 ----------------
 

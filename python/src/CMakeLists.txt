@@ -120,6 +120,7 @@ ot_add_python_module (persalys persalys_module.i
                       MetaModel.i MetaModel_doc.i.in
                       PhysicalModel.i PhysicalModel_doc.i.in
                       YACSPhysicalModel.i YACSPhysicalModel_doc.i.in
+                      YACSCouplingPhysicalModel.i YACSCouplingPhysicalModel_doc.i.in
                       FMIPhysicalModel.i FMIPhysicalModel_doc.i.in
                       FMUInfo.i FMUInfo_doc.i.in
                       LimitStateImplementation.i LimitStateImplementation_doc.i.in
@@ -185,6 +186,13 @@ ot_add_python_module (persalys persalys_module.i
                       CalibrationAnalysisResult.i CalibrationAnalysisResult_doc.i.in
                       StudyImplementation.i
                       Study.i Study_doc.i.in
+                      CouplingInputFile.i CouplingInputFile_doc.i.in
+                      CouplingResourceFile.i CouplingResourceFile_doc.i.in
+                      CouplingOutputFile.i CouplingOutputFile_doc.i.in
+                      CouplingStep.i CouplingStep_doc.i.in
+                      CouplingPhysicalModel.i CouplingPhysicalModel_doc.i.in
+                      FileMemoizeEvaluation.i
+                      FileMemoizeFunction.i FileMemoizeFunction_doc.i.in
                     )
 
 if (NOT CMAKE_VERSION VERSION_LESS 3.12)

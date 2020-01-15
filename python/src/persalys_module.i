@@ -106,9 +106,6 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include PythonPhysicalModel.i
 %include MetaModel.i
 %include PhysicalModel.i
-#ifdef PERSALYS_HAVE_YACS
-%include YACSPhysicalModel.i
-#endif
 #ifdef PERSALYS_HAVE_OTFMI
 %include FMUInfo.i
 %include FMIPhysicalModel.i
@@ -181,4 +178,15 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include CalibrationAnalysis.i
 %include StudyImplementation.i
 %include Study.i
+%include CouplingInputFile.i
+%include CouplingResourceFile.i
+%include CouplingOutputFile.i
+%include CouplingStep.i
+%include CouplingPhysicalModel.i
+#ifdef PERSALYS_HAVE_YACS
+%include YACSPhysicalModel.i
+%include YACSCouplingPhysicalModel.i
+#endif
+%include FileMemoizeEvaluation.i
+%include FileMemoizeFunction.i
 

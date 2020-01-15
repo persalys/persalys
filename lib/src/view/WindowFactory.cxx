@@ -41,6 +41,7 @@
 #endif
 #include "persalys/ProbabilisticModelWindow.hxx"
 #include "persalys/MeshWindow.hxx"
+#include "persalys/CouplingModelWindow.hxx"
 
 #include "persalys/ObservationsWindow.hxx"
 #include "persalys/DataModelWindow.hxx"
@@ -164,6 +165,10 @@ SubWindow * WindowFactory::GetPhysicalModelWindow(PhysicalModelItem *item, QWidg
     return new FMIPhysicalModelWindow(item, parent);
   }
 #endif
+  else if ((physicalModelType == "CouplingPhysicalModel") || (physicalModelType == "YACSCouplingPhysicalModel"))
+  {
+    return new CouplingModelWindow(item, parent);
+  }
   else
   {
     qDebug() << "Error: In createNewPhysicalModelWindow: impossible to create PhysicalModelWindow\n";

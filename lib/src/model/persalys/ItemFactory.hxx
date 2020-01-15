@@ -75,6 +75,7 @@ protected:
 #ifdef PERSALYS_HAVE_OTFMI
   QAction * newFMIModel_ = 0;
 #endif
+  QAction * newCouplingModel_ = 0;
   QAction * newSymbolicFieldModel_ = 0;
   QAction * newPythonFieldModel_ = 0;
   QAction * newDataModel_ = 0;

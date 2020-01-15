@@ -25,6 +25,7 @@
 
 using namespace OT;
 
+
 namespace PERSALYS
 {
 
@@ -165,7 +166,7 @@ Function YACSPhysicalModel::generateFunction(const Description & outputNames) co
 }
 
 
-static void replaceInString(String& workString,
+void YACSPhysicalModel::ReplaceInString(String& workString,
                             const String& strToReplace,
                             const String& newValue)
 {
@@ -201,7 +202,7 @@ String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "<pre>";
   String code = getContent();
   // replace all "<" by "&lt;"
-  replaceInString(code, "<", "&lt;");
+  ReplaceInString(code, "<", "&lt;");
   oss << code;
   oss << "</pre>";
 
@@ -224,7 +225,7 @@ String YACSPhysicalModel::getPythonScript() const
 
   // replace ''' by """
   std::string myString = getContent();
-  replaceInString(myString, "'''", "\"\"\"");
+  ReplaceInString(myString, "'''", "\"\"\"");
 
   oss << "code = '''" << myString << "'''\n";
   oss << getName()
