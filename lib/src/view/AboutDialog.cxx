@@ -91,10 +91,10 @@ AboutDialog::AboutDialog(QWidget* parent)
   QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2020 EDF-Phimeca"));
   tabLayout->addWidget(copyrightLabel);
 
-  QLabel * licenseLabel = new QLabel("<a>"+tr("License:")+"&nbsp;<a href=\"https://www.gnu.org/licenses/lgpl-3.0.en.html\">GNU Lesser General Public License Version 3</a>");
-  licenseLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-  licenseLabel->setOpenExternalLinks(true);
-  tabLayout->addWidget(licenseLabel);
+  //QLabel * licenseLabel = new QLabel("<a>"+tr("License:")+"&nbsp;<a href=\"https://www.gnu.org/licenses/lgpl-3.0.en.html\">GNU Lesser General Public License Version 3</a>");
+  //licenseLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+  //licenseLabel->setOpenExternalLinks(true);
+  //tabLayout->addWidget(licenseLabel);
 
   tabWidget->addTab(tab, tr("&About"));
 
