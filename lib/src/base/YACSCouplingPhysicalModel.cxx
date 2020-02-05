@@ -21,6 +21,7 @@
 #include "persalys/YACSCouplingPhysicalModel.hxx"
 #include "persalys/BaseTools.hxx"
 #include "persalys/YACSPhysicalModel.hxx"
+#include "persalys/FileMemoizeFunction.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <boost/filesystem.hpp>
