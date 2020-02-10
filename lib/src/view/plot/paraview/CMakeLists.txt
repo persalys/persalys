@@ -51,13 +51,7 @@ set_target_properties ( persalysplotparaview PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( persalysplotparaview PROPERTIES SOVERSION ${LIB_SOVERSION} )
 target_link_libraries ( persalysplotparaview persalysutils )
 
-if (TARGET ParaView::pqApplicationComponents)
-  target_link_libraries (persalysplotparaview ParaView::pqApplicationComponents ParaView::vtkPVServerManagerRenderingCS ParaView::vtkRenderingFreeTypeCS)
-  target_link_libraries (persalysplotparaview ParaView::vtkRenderingContext2DCS) # for vtkContextScene::SetDirty(bool)
-else ()
-  target_link_libraries (persalysplotparaview pqApplicationComponents vtkPVServerManagerRendering vtkRenderingFreeType)
-  target_link_libraries (persalysplotparaview vtkRenderingContext2D) # for vtkContextScene::SetDirty(bool)
-endif ()
+target_link_libraries (persalysplotparaview ParaView::pqApplicationComponents ParaView::RemotingViews)
 
 install ( TARGETS persalysplotparaview
   RUNTIME DESTINATION bin
@@ -65,30 +59,30 @@ install ( TARGETS persalysplotparaview
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 
-if (ParaView_VERSION VERSION_LESS 5.7)
-  include_directories (plugins/XYChartRepresentationColumns/XYChartRepresentationColumn)
-  add_paraview_plugin(XYChartRepresentationColumns "1.0"
-    SERVER_MANAGER_XML plugins/XYChartRepresentationColumns/XYChartRepresentationColumn/XYChartRepresentationColumns.xml
-    SERVER_MANAGER_SOURCES plugins/XYChartRepresentationColumns/XYChartRepresentationColumn/vtkXYChartRepresentationColumns.cxx)
-  install (TARGETS XYChartRepresentationColumns
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
-    ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH})
-  target_link_libraries (persalysplotparaview XYChartRepresentationColumns)
-else ()
-  # https://gitlab.kitware.com/paraview/paraview/issues/19358
-  if (CMAKE_LIBRARY_OUTPUT_DIRECTORY STREQUAL "")
-    set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ".")
-  endif ()
-  # https://kitware.github.io/paraview-docs/latest/cxx/PluginHowto.html
-  paraview_plugin_scan (PLUGIN_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/plugins/XYChartRepresentationColumns/paraview.plugin"
-    "${CMAKE_CURRENT_SOURCE_DIR}/plugins/BagPlotViewsAndFilters/paraview.plugin"
-    PROVIDES_PLUGINS plugins
-    ENABLE_BY_DEFAULT ON)
-  paraview_plugin_build (PLUGINS ${plugins})
-  include_directories(plugins/BagPlotViewsAndFilters/BagPlot ${CMAKE_CURRENT_BINARY_DIR}/plugins/BagPlotViewsAndFilters/BagPlot)
-  target_link_libraries (persalysplotparaview XYChartRepresentationColumns BagPlotViewsAndFilters)
+# https://gitlab.kitware.com/paraview/paraview/issues/19358
+if (CMAKE_LIBRARY_OUTPUT_DIRECTORY STREQUAL "")
+  set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ".")
 endif ()
+# https://kitware.github.io/paraview-docs/latest/cxx/PluginHowto.html
+paraview_plugin_scan (
+  PLUGIN_FILES "${CMAKE_CURRENT_SOURCE_DIR}/plugin/paraview.plugin"
+  PROVIDES_PLUGINS plugins
+  REQUIRES_MODULES required_modules
+  ENABLE_BY_DEFAULT ON)
+
+foreach(module IN LISTS required_modules)
+  if(NOT TARGET "${module}")
+    message("Missing required module: ${module}")
+    return()
+  endif()
+endforeach()
+
+paraview_plugin_build (
+  RUNTIME_DESTINATION "${CMAKE_INSTALL_BINDIR}"
+  LIBRARY_DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  LIBRARY_SUBDIRECTORY "${PARAVIEW_PLUGIN_SUBDIR}"
+  PLUGINS ${plugins}
+  AUTOLOAD ${plugins})
+target_link_libraries (persalysplotparaview XYChartRepresentationColumns)
 
 

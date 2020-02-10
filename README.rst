@@ -4,6 +4,7 @@ Qt GUI module for OpenTURNS
 
 Dependencies
 ------------
+- CMake >=3.8
 - OpenTURNS >=1.14
 - Qt >=5
 - Qwt >=6
@@ -13,14 +14,14 @@ Dependencies
 - Sphinx >=1.1 (optional, for doc)
 - Numpydoc (optional, for doc)
 - otfmi (optional, for FMI support)
-- ParaView >=5.4.0 (optional, for visualisation)
+- ParaView >=5.8 (optional, for visualization)
 - otmorris >=0.7 (optional, for Morris support)
 
 Installation
 ------------
 - The Qwt library found must be linked to the qt libs found (else adjust QWT_LIBRARY)
 - otfmi must be importable at configure time, so both openturns & otfmi should be reachable via PYTHONPATH or a default location
-- ParaView must be linked to the same qt libs, and built with PARAVIEW_BUILD_QT_GUI=ON
+- ParaView must be linked to the same qt libs, built with PARAVIEW_BUILD_QT_GUI=ON and PARAVIEW_PLUGIN_ENABLE_BagPlotViewsAndFilters=ON (default)
 - On windows OpenGL software rendering is provided for graphic widgets with mesa, if you wish to use system-provided GL libs you can remove opengl32.dll
 - To override the default language you can set LANG=en/fr environment variable, on windows see persalys.vbs
 

@@ -26,7 +26,9 @@
 #include "persalys/PythonEnvironment.hxx"
 
 #ifdef PERSALYS_HAVE_PARAVIEW
+#include <QSurfaceFormat>
 #include <pqPVApplicationCore.h>
+#include <QVTKRenderWindowAdapter.h>
 #endif
 
 using namespace PERSALYS;
@@ -42,6 +44,7 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
 
 #ifdef PERSALYS_HAVE_PARAVIEW
+  QSurfaceFormat::setDefaultFormat(QVTKRenderWindowAdapter::defaultFormat(false));
   pqPVApplicationCore appPV(argc, argv);
   QApplication::instance()->installEventFilter(&appPV);
 #endif

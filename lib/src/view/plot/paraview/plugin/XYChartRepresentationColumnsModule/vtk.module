@@ -1,0 +1,12 @@
+NAME
+  XYChartRepresentationColumnsModule
+DEPENDS
+  VTK::CommonCore
+  VTK::CommonDataModel
+  VTK::CommonExecutionModel
+  VTK::FiltersCore
+  ParaView::RemotingViews
+PRIVATE_DEPENDS
+  VTK::CommonMisc
+  VTK::CommonSystem
+  VTK::FiltersGeneral

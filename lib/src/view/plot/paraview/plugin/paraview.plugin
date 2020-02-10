@@ -1,6 +1,6 @@
 NAME
   XYChartRepresentationColumns
 DESCRIPTION
-  Custom XY chart
+  Provides a new representation
 REQUIRES_MODULES
-  VTK::CommonCore
+  ParaView::RemotingViews
