@@ -14,19 +14,14 @@
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="91"/>
-        <source>Copyright 2015-2019 EDF-Phimeca</source>
-        <translation>Copyright 2015-2019 EDF-Phimeca</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="81"/>
         <source>Persalys, an user interface for uncertainty analysis</source>
         <translation>Persalys, une interface utilisateur pour l&apos;analyse d&apos;incertitudes</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AboutDialog.cxx" line="94"/>
-        <source>License:</source>
-        <translation>Licence:</translation>
+        <location filename="../lib/src/view/AboutDialog.cxx" line="91"/>
+        <source>Copyright 2015-2020 EDF-Phimeca</source>
+        <translation>Copyright 2015-2020 EDF-Phimeca</translation>
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="99"/>
@@ -1266,19 +1261,19 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1014"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1063"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1087"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1110"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1062"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1086"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1109"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1033"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1032"/>
         <source>Ressource</source>
         <translation>Ressource</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1044"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1043"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
@@ -4171,7 +4166,7 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::MainWindow</name>
     <message>
-        <location filename="../lib/src/view/MainWindow.cxx" line="105"/>
+        <location filename="../lib/src/view/MainWindow.cxx" line="99"/>
         <source>Python Console</source>
         <translation>Console Python</translation>
     </message>
