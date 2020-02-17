@@ -428,6 +428,9 @@ Section -AdditionalIcons
   ;CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" ""
   CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" ""
   CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Persalys.lnk" "$MODULE_INSTALL_PATH\persalys.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
+
+  !insertmacro PRINT "Create desktop shortcut."
+  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$MODULE_INSTALL_PATH\persalys.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
 SectionEnd
 
 
@@ -458,6 +461,9 @@ Section Uninstall
 
   !insertmacro SET_MENU_CONTEXT
   RMDir /r "$SMPROGRAMS\${MODULE_NAME}"
+  !insertmacro PRINT "Delete desktop shortcut."
+  Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey ${PRODUCT_INST_ROOT_KEY} "${PRODUCT_DIR_REGKEY}"
 
