@@ -3,6 +3,7 @@ dim currentDirectory: currentDirectory = fso.GetParentFolderName(WScript.ScriptF
 Set wshShell = CreateObject("WScript.Shell")
 Set wshEnv = wshShell.Environment("Process")
 
+wshEnv("PYTHONHOME") = fso.GetAbsolutePathName(currentDirectory + "\..\..\..\")
 wshEnv("PYTHONPATH") = fso.GetAbsolutePathName(currentDirectory + "\..\..\..\python37.zip")
 
 wshShell.Run "persalys.vbs"
