@@ -67,7 +67,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
                 model_->setSteps(csColl);
                 model_->blockNotification();
                 CouplingStepWidget * csWidget = new CouplingStepWidget(item, model_, csColl.getSize()-1);
-                stepTabWidget_->addTab(csWidget, tr("Command"));
+                stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(stepTabWidget_->count()));
                });
   connect(stepTabWidget_, &DynamicTabWidget::removeTabRequested,
           [=](int index){
@@ -158,7 +158,7 @@ void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)
   for (UnsignedInteger i = 0; i < model_->getSteps().getSize(); ++i)
   {
     CouplingStepWidget * csWidget = new CouplingStepWidget(item, model_, i);
-    stepTabWidget_->addTab(csWidget, tr("Command"));
+    stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(i + 1));
   }
 
   if (stepTabWidget_->count() < 2)
