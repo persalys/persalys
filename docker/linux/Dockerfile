@@ -7,12 +7,11 @@ WORKDIR /usr/local/src
 # utils
 RUN yum install -y epel-release wget git patch unzip perl subversion xz
 
-# devtoolset2
-RUN wget -O /etc/yum.repos.d/devtools-2.repo http://people.centos.org/tru/devtools-2/devtools-2.repo
-RUN yum -y update
-RUN yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran devtoolset-2-binutils
-ENV PATH /opt/rh/devtoolset-2/root/usr/bin:$PATH
-ENV LD_LIBRARY_PATH /opt/rh/devtoolset-2/root/usr/lib64:/opt/rh/devtoolset-2/root/usr/lib
+# devtoolset-6
+RUN yum install -y centos-release-scl
+RUN yum install -y devtoolset-6-gcc devtoolset-6-gcc-c++ devtoolset-6-gcc-gfortran devtoolset-6-binutils
+ENV PATH /opt/rh/devtoolset-6/root/usr/bin:$PATH
+ENV LD_LIBRARY_PATH /opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib
 
 # muparser
 RUN git clone https://github.com/beltoforion/muparser.git && cd muparser && git checkout v2.2.5 && ./configure --disable-samples && make && make install > /dev/null 2>&1
@@ -48,6 +47,8 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/1.14.0.tar.g
 
 # tbb
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1
+# https://bugreports.qt.io/browse/QTBUG-80990
+RUN sed -i 's|#ifndef __TBB_profiling_H|#if !defined(__TBB_profiling_H) \&\& !defined(Q_MOC_RUN)|g' /usr/local/include/tbb/tbb_profiling.h
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage \
@@ -58,7 +59,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimag
  && appimagetool -h
 
 # glibc 2.14
-RUN curl -fSsL http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz | tar xz && cd glibc-2.14 \
+RUN curl -fSsL http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz | tar xz && cd glibc-2.14 && sed -i 's/3.4\* | 4.\[0-9\]\*/3.4* | 4.\[0-9\]\* | 6.\[0-9\]\*/g' configure \
  && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # texlive: see https://github.com/leodido/dockerfiles/blob/master/texlive:latest/Dockerfile
@@ -97,27 +98,28 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz | tar xz
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
- && pip install -U pip wheel setuptools && pip install scipy pandas matplotlib ipython --upgrade
+RUN yum -y install blas-devel lapack-devel
+RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython
+RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.17.5.tar.gz | tar xz && cd numpy-1.17.5 && python3 setup.py install && cd - && python3 -c "import numpy"
+RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.1.0.tar.gz | tar xz && cd scipy-1.1.0 && python3 setup.py install && cd - && python3 -c "import scipy.linalg"
+RUN pip install lxml pandas matplotlib ipython --upgrade
 
 # sundials
-RUN yum -y install blas-devel lapack-devel
 RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t -DCMAKE_INSTALL_LIBDIR=lib .. && make install > /dev/null 2>&1
 
 # fmilib
-RUN curl -fSsLO https://jmodelica.org/FMILibrary/FMILibrary-2.0.3-src.zip && unzip -q FMILibrary-2.0.3-src.zip && cd FMILibrary-2.0.3 \
- && mkdir build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.1.tar.gz | tar xz && cd fmi-library-2.1 \
+ && mkdir -p build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1
 
 # assimulo
-RUN pip install lxml cython \
- && curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.1 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.1 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd .. && python3 -c "import assimulo; import assimulo.solvers"
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon/PyFMI/archive/PyFMI-2.5.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.5.4 \
- && curl -fSsL https://github.com/modelon/PyFMI/pull/13.patch | patch -p1 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.5.7.tar.gz | tar xz && cd PyFMI-PyFMI-2.5.7 \
+ && curl -fSsL https://github.com/modelon-community/PyFMI/pull/13.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
 # sphinx
@@ -136,11 +138,11 @@ RUN yum -y install xorg-x11-util-macros bison
 RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz | tar xz && cd libxkbcommon-xkbcommon-0.8.4 && sed -i "/AX_GCC_BUILTIN/d" configure.ac && ./autogen.sh && ./configure --prefix=/usr --libdir=/usr/lib64 && make && make install && pkg-config --exists xkbcommon
 
 # qt
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.13/5.13.2/single/qt-everywhere-src-5.13.2.tar.xz | tar xJ && cd qt-everywhere-src-5.13.2 \
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.14/5.14.0/single/qt-everywhere-src-5.14.0.tar.xz | tar xJ && cd qt-everywhere-src-5.14.0 \
  && ./configure -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.13/5.13.2/submodules/qtx11extras-everywhere-src-5.13.2.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.13.2 && qmake src/x11extras && make && make install
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.14/5.14.0/submodules/qtx11extras-everywhere-src-5.14.0.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.14.0 && qmake src/x11extras && make && make install
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj && cd qwt-6.1.4 \
@@ -185,7 +187,7 @@ ENV LANG "C.UTF-8"
 RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel libtool gettext zip
 RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.14.1 \
  && git submodule sync && git submodule update --init --recursive \
- && cd OMCompiler && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+ && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # devel user
 RUN yum -y install sudo
