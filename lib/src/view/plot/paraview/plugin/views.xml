@@ -8,7 +8,7 @@
                       processes="client|renderserver|dataserver"
                       representation_name="XYChartRepresentationColumns"
                       post_creation="SetChartTypeToLine" >
-      <Documentation>This is the proxy for the XY line chart 
+      <Documentation>This is the proxy for the XY line chart
       view that support column selection.</Documentation>
     </ContextViewProxy>
   </ProxyGroup>
@@ -212,7 +212,8 @@
                            min="0 0 0"
                            name="range" />
         <Hints>
-          <GlobalPropertyLink type="ColorPalette" property="SelectionColor" />
+          <PropertyLink group="settings" proxy="ColorPalette" property="SelectionColor"
+            unlink_if_modified="1" />
         </Hints>
       </DoubleVectorProperty>
       <SubProxy command="SetSelectionRepresentation">

@@ -40,9 +40,6 @@
 #define PARAVIEW_BUILDING_PLUGIN
 #include "vtkPVPlugin.h"
 PV_PLUGIN_IMPORT_INIT(XYChartRepresentationColumns)
-#ifndef PERSALYS_HAVE_PARAVIEW_LESS_5_7
-PV_PLUGIN_IMPORT_INIT(BagPlotViewsAndFilters)
-#endif
 #endif
 
 namespace PERSALYS
@@ -71,9 +68,6 @@ MainWindow::MainWindow()
     // import XYChartRepresentationColumns plugin
     // It is used to plot trajectories which can be selected
     PV_PLUGIN_IMPORT(XYChartRepresentationColumns);
-  #ifndef PERSALYS_HAVE_PARAVIEW_LESS_5_7
-    PV_PLUGIN_IMPORT(BagPlotViewsAndFilters)
-  #endif
   }
 #endif
 

@@ -34,12 +34,12 @@ export PATH=${HERE}/usr/bin/:${PATH}
 export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/lib/x86_64-linux-gnu/omc/:${LD_LIBRARY_PATH}
 export PYTHONHOME=${HERE}/usr/
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
+export PV_PLUGIN_PATH=${HERE}/usr/lib/paraview/plugins/BagPlotViewsAndFilters
 
 # assumes fonts are provided on host machine
 export QT_QPA_FONTDIR=/usr/share/fonts/truetype
 
 export OPENTURNS_CONFIG_PATH=${HERE}/etc/openturns
-
 export OPENMODELICAHOME=${HERE}/usr
 
 ${HERE}/usr/bin/persalys "$@"
@@ -89,9 +89,10 @@ done
 cp -rv /usr/local/lib/qt/plugins persalys.AppDir/usr/lib
 
 # paraview libs
-cp -v /usr/local/lib/paraview/libvtk* persalys.AppDir/usr/lib
-cp /usr/local/lib/paraview/libQtTesting.so persalys.AppDir/usr/lib
-cp /usr/local/lib/paraview/libprotobuf*.so persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libvtk* persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libpq* persalys.AppDir/usr/lib
+mkdir -p persalys.AppDir/usr/lib/paraview/plugins
+cp -rv /usr/local/lib/paraview*/plugins/BagPlotViewsAndFilters persalys.AppDir/usr/lib/paraview/plugins
 
 # modelica
 cp -rv /usr/local/lib/x86_64-linux-gnu persalys.AppDir/usr/lib

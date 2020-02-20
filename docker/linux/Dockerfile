@@ -148,33 +148,20 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # paraview
-RUN curl -fSsL http://paraview.org/files/v5.6/ParaView-v5.6.3.tar.xz | tar xJ && cd ParaView-v5.6.3 \
+RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.0.tar.xz | tar xJ && cd ParaView-v5.8.0 \
   && mkdir build && cd build && cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_LIBDIR=lib \
   -DVTK_USE_64BIT_IDS=OFF \
   -DVTK_NO_PYTHON_THREADS=OFF \
   -DVTK_PYTHON_FULL_THREADSAFE=ON \
-  -DPARAVIEW_ENABLE_PYTHON=ON \
-  -DBUILD_DOCUMENTATION=OFF \
+  -DPARAVIEW_USE_PYTHON=ON \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF \
-  -DVTK_USE_OGGTHEORA_ENCODER=ON \
-  -DPARAVIEW_ENABLE_CATALYST:BOOL=ON \
   -DPARAVIEW_BUILD_QT_GUI:BOOL=ON \
-  -DPARAVIEW_QT_VERSION=5 \
-  -DVTK_BUILD_QT_DESIGNER_PLUGIN:BOOL=OFF \
-  -DPARAVIEW_ENABLE_MATPLOTLIB:BOOL=ON \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF\
   -DCMAKE_SKIP_RPATH=OFF \
-  -DVTK_CUSTOM_LIBRARY_SUFFIX="" \
-  -DVTK_INSTALL_LIBRARY_DIR="lib/paraview" \
-  -DVTK_INSTALL_ARCHIVE_DIR="lib/paraview" \
-  -DVTK_INSTALL_INCLUDE_DIR="include/paraview" \
-  -DVTK_INSTALL_DATA_DIR="share/paraview" \
-  -DVTK_INSTALL_DOC_DIR="share/doc/paraview" \
-  -DVTK_INSTALL_PACKAGE_DIR="lib/cmake/paraview" \
   -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON \
-  -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
   -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   .. && make install > /dev/null 2>&1
 

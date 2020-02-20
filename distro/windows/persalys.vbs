@@ -12,6 +12,9 @@ wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory
 rem set PYTHONPATH
 wshEnv("PYTHONPATH") = fso.GetAbsolutePathName(currentDirectory + "\..\") & ";" & wshEnv("PYTHONPATH")
 
+rem ParaView plugins
+wshEnv("PV_PLUGIN_PATH") = fso.GetAbsolutePathName(currentDirectory + "\BagPlotViewsAndFilters")
+
 rem add documentation path in Environment variable PERSALYS_HTML_DOCUMENTATION_PATH
 wshEnv("PERSALYS_HTML_DOCUMENTATION_PATH") = currentDirectory + "\doc\html\"
 
