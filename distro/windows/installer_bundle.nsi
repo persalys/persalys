@@ -37,17 +37,18 @@ RequestExecutionLevel user
 !endif
 !define PRODUCT_VERSION ${MODULE_VERSION}
 
-; !ifndef OPENTURNS_VERSION
-;   !error "OPENTURNS_VERSION must be defined"
-; !endif
 !define PRODUCT_NAME "${MODULE_NAME}"
+!define PRODUCT_NAME_LOWERCASE "${MODULE_NAME_LOWERCASE}"
+; used for submodule FULL_NAME = "${MODULE_NAME}-${PRODUCT_NAME}"
+!define FULL_NAME "${MODULE_NAME}"
+!define FULL_NAME_LOWERCASE "${MODULE_NAME_LOWERCASE}"
 !define PRODUCT_WEB_SITE "http://www.openturns.org"
-!define OT_PRODUCT_DIR_REGKEY "Software\Persalys"
-!define PRODUCT_DIR_REGKEY "Software\Persalys\${MODULE_NAME}"
-!define PRODUCT_INST_ROOT_KEY "HKLM"
+!define OT_PRODUCT_DIR_REGKEY "Software\${MODULE_NAME}"
+!define PRODUCT_DIR_REGKEY "Software\${MODULE_NAME}\${PRODUCT_NAME}"
+; If root_key is SHCTX or SHELL_CONTEXT, it will be replaced with HKLM if SetShellVarContext is set to all and with HKCU if SetShellVarContext is set to current.
+!define PRODUCT_ROOT_KEY SHCTX
 
-!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\Persalys\${MODULE_NAME}"
-!define PRODUCT_UNINST_ROOT_KEY "HKLM"
+!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${MODULE_NAME}\${PRODUCT_NAME}"
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -57,25 +58,25 @@ RequestExecutionLevel user
 !define MUI_ICON "persalys.ico"
 
 ; Language Selection Dialog Settings
-!define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
+!define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_ROOT_KEY}"
 !define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
 !define MUI_LANGDLL_REGISTRY_VALUENAME "NSIS:Language"
 
 ; Welcome page
-!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of ${PRODUCT_NAME} ${PRODUCT_VERSION}.\r\rThis installer has been tested on Windows 2007, 2000, XP and Vista. Although Persalys may work on it, other operating systems are not supported."
+!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of ${FULL_NAME} ${PRODUCT_VERSION}.\r\rThis installer has been tested on Windows 7 and 10. Although ${FULL_NAME} may work on it, other operating systems are not supported."
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 ;!insertmacro MUI_PAGE_LICENSE "COPYING.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
-; !define MUI_PAGE_CUSTOMFUNCTION_LEAVE "DirectoryLeave"
-!define MUI_DIRECTORYPAGE_TEXT_TOP "Setup will install ${PRODUCT_NAME} ${PRODUCT_VERSION} in the following folder. To install in a different folder, click Browse and select another folder."
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "DirectoryEmptyLeave"
+!define MUI_DIRECTORYPAGE_TEXT_TOP "Setup will install ${FULL_NAME} ${PRODUCT_VERSION} in the following folder. To install in a different folder, click Browse and select another folder."
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!define MUI_FINISHPAGE_TEXT "${PRODUCT_NAME} ${PRODUCT_VERSION} has been installed on your computer.\r\rSee README-${MODULE_NAME}.txt for further explanation."
+!define MUI_FINISHPAGE_TEXT "${FULL_NAME} ${PRODUCT_VERSION} has been installed on your computer.\r\rSee README.txt for further explanation."
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -86,52 +87,20 @@ RequestExecutionLevel user
 
 ; MUI end ------
 
-; Function DirectoryLeave
-;   ; check if python.exe exists
-;   IfFileExists "$INSTDIR\python.exe" End
-;     MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. It must contain a python.exe file."
-;     Abort
-;   End:
-; 
-;   ; check the Python version
-;   nsExec::ExectoStack 'cmd.exe /c if 1==1 "$INSTDIR\python.exe" -c "from distutils import sysconfig; assert(sysconfig.get_python_version() == \"${PYBASEVER}\")"'
-;   pop $0
-; 
-;   ${If} $0 != 0
-;     MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. The expected Python version is ${PYBASEVER}" /SD IDOK
-;     Abort
-;   ${EndIf}
-; 
-;   ; check if the OpenTURNS module exists
-;   nsExec::ExectoStack 'cmd.exe /c if 1==1 "$INSTDIR\python.exe" -c "import openturns"'
-;   pop $0
-; 
-;   ${If} $0 != 0
-;     MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. Python directory must contain an OpenTURNS module" /SD IDOK
-;     Abort
-;   ${EndIf}
-; 
-;   ; check the OpenTURNS version
-; ;   nsExec::ExectoStack 'cmd.exe /c if 1==1 "$INSTDIR\python.exe" -c "import openturns; from distutils.version import LooseVersion; assert(LooseVersion(openturns.__version__) >= \"${OPENTURNS_VERSION}\")"'
-; ;   pop $0
-; ; 
-; ;   ${If} $0 != 0
-; ;     MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not valid. The expected OpenTURNS module version is ${OPENTURNS_VERSION}" /SD IDOK
-; ;     Abort
-; ;   ${EndIf}
-; 
-; FunctionEnd
+Function DirectoryEmptyLeave
+  ; Check if the installation folder is empty
+  IfFileExists "$INSTDIR\*.*" 0 skip_abort
+    MessageBox MB_YESNO|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not empty. $\rDo you want to change the installation directory ?" /SD IDYES IDNO skip_abort
+    Abort
+  skip_abort:
+FunctionEnd
 
-Name "${MODULE_NAME} ${PRODUCT_VERSION}"
-OutFile "${MODULE_NAME_LOWERCASE}-bundle-${PRODUCT_VERSION}-py${PYBASEVER}-${ARCH}.exe"
-!define UNINST_EXE "uninst-${MODULE_NAME_LOWERCASE}.exe"
+Name "${FULL_NAME} ${PRODUCT_VERSION}"
+OutFile "${FULL_NAME_LOWERCASE}-bundle-${PRODUCT_VERSION}-py${PYBASEVER}-${ARCH}.exe"
+!define UNINST_EXE "uninst-${FULL_NAME_LOWERCASE}.exe"
 Var MODULE_INSTALL_PATH
-!define Python_default_INSTALL_PATH "C:\Persalys"
-InstallDir "${Python_default_INSTALL_PATH}\"
 ShowInstDetails show
 ShowUnInstDetails show
-
-Var Python_INSTALL_PATH 
 
 !macro CHECK_REG_VIEW
   ${If} "${ARCH}" == "x86_64"
@@ -161,13 +130,13 @@ Var UserInstall
   IfErrors 0 set_level
 
   ClearErrors
-  WriteRegStr ${PRODUCT_INST_ROOT_KEY} ${PRODUCT_DIR_REGKEY} "Test" "${PRODUCT_VERSION}"
+  WriteRegStr HKLM ${PRODUCT_DIR_REGKEY} "Test" "${PRODUCT_VERSION}"
   IfErrors user_install admin_install
   user_install:
   StrCpy $UserInstall "1"
-  MessageBox MB_OK|MB_ICONINFORMATION "You are not running Windows from an administrator account.$\r$\rTo enable admin rights on Windows Vista and above: right click on the installer, choose 'Run as administrator'.$\r$\r${WARN_MSG}" /SD IDOK
+  MessageBox MB_OK|MB_ICONINFORMATION "You are not running Windows from an administrator account.$\r$\rTo enable admin rights on Windows 7 and above: right click on the installer, choose 'Run as administrator'.$\r$\r${WARN_MSG}" /SD IDOK
   admin_install:
-  DeleteRegValue ${PRODUCT_INST_ROOT_KEY} ${PRODUCT_DIR_REGKEY} "Test"
+  DeleteRegValue HKLM ${PRODUCT_DIR_REGKEY} "Test"
   Goto end_set_level
 
   set_level:
@@ -200,8 +169,7 @@ Var UserInstall
   userfile_fail:
 !macroend
 
-
-; Set whether OpenTURNS shortcuts will be in every user menu or only in current user menu.
+; Set whether Persalys shortcuts will be in every user menu or only in current user menu.
 ; CHECK_USER_INSTALL must have been called first
 !macro SET_MENU_CONTEXT
   ${If} "$UserInstall" == "0"
@@ -211,139 +179,39 @@ Var UserInstall
   ${EndIf}
 !macroend
 
-
-; set $Python_INSTALL_PATH to python dir found
-; Function CheckPython
-;   ClearErrors
-; 
-;   ; user set the python path
-;   ${If} $INSTDIR != "${Python_default_INSTALL_PATH}"
-;     StrCpy $Python_INSTALL_PATH "$INSTDIR"
-;   ${Else}
-;     ; search the prog in the Windows registry
-;     ReadRegStr $Python_INSTALL_PATH HKLM "Software\Python\PythonCore\${PYBASEVER}\InstallPath" ""
-;     ${If} $Python_INSTALL_PATH == ""
-;       !insertmacro PRINT "! Python not found in machine registry, try user registry."
-;       ReadRegStr $Python_INSTALL_PATH HKCU "Software\Python\PythonCore\${PYBASEVER}\InstallPath" ""
-;     ${EndIf}
-; 
-;     ${If} $Python_INSTALL_PATH == ""
-;       !insertmacro PRINT "! Python not found in registry, try default directory (${Python_default_INSTALL_PATH}) ."
-;       StrCpy $Python_INSTALL_PATH "${Python_default_INSTALL_PATH}"
-;     ${EndIf}
-;   ${EndIf}
-; 
-;   ; Check that the python exe is there
-;   IfFileExists "$Python_INSTALL_PATH\python.exe" 0 python_not_found_error
-;     !insertmacro PRINT "=> Python found here: $Python_INSTALL_PATH."
-;   Goto python_not_found_error_end
-;   python_not_found_error:
-;     StrCpy $Python_INSTALL_PATH ""
-;     !insertmacro PRINT "! Python not found !"
-;   python_not_found_error_end:
-; 
-; FunctionEnd
-
-
-; set $Python_INSTALL_PATH to python dir found
-; Function CheckOpenturns
-;   ClearErrors
-; 
-;   ; user set the python path
-;   ${If} $INSTDIR != "${Python_default_INSTALL_PATH}"
-;     StrCpy $Python_INSTALL_PATH "$INSTDIR"
-;   ${Else}
-; 
-;     ; Find where OT is installed
-;     ReadRegStr $0 ${PRODUCT_INST_ROOT_KEY} "${OT_PRODUCT_DIR_REGKEY}" "InstallPath"
-;     ${If} $0 != ""
-;       ReadRegStr $1 ${PRODUCT_INST_ROOT_KEY} "${OT_PRODUCT_DIR_REGKEY}" "Current Version"
-;       !insertmacro PRINT "Found OpenTURNS $1 in directory $0."
-; 
-;       ${If} $1 == "${OPENTURNS_VERSION}"
-;         !insertmacro PRINT "OpenTURNS version is ok."
-;       ${Else}
-;         !insertmacro PRINT "OpenTURNS version is not the recommended one!"
-;       ${EndIf}
-; 
-;       ; Find python prefix
-;       ${GetParent} $0 $0
-;       ${GetParent} $0 $0
-;       ${GetParent} $0 $Python_INSTALL_PATH
-; 
-;     ${Else}
-;       !insertmacro PRINT "! OpenTURNS not found in registry, try to find python directory"
-;       Call CheckPython
-;     ${EndIf}
-;   ${EndIf}
-; 
-;   ; Check that the python exe is there
-;   IfFileExists "$Python_INSTALL_PATH\python.exe" 0 python_not_found_error
-;     !insertmacro PRINT "=> Python found here: $Python_INSTALL_PATH."
-;   Goto python_not_found_error_end
-;   python_not_found_error:
-;     StrCpy $Python_INSTALL_PATH ""
-;     !insertmacro PRINT "! Python not found !"
-;   python_not_found_error_end:
-; 
-; FunctionEnd
-
-
-
-
-
-
-
 ; Launched before the section are displayed
 Function .onInit
   !insertmacro CHECK_REG_VIEW
 
   !insertmacro MUI_LANGDLL_DISPLAY
 
-  !insertmacro CHECK_USER_INSTALL "Installation from a non-administrator account is not supported although it may works."
+  !insertmacro CHECK_USER_INSTALL "Installation switched to user install."
+
+  !insertmacro SET_MENU_CONTEXT
+
+  ${If} "$UserInstall" == "1"
+    StrCpy $INSTDIR "$LOCALAPPDATA\${PRODUCT_NAME}"
+  ${Else}
+    StrCpy $INSTDIR "$PROGRAMFILES64\${PRODUCT_NAME}"
+  ${EndIf}
 
   SetDetailsPrint both
 
-
-;   Call CheckOpenturns
-
-;   ${If} $Python_INSTALL_PATH == ""
-;     MessageBox MB_OK|MB_ICONEXCLAMATION "Python ${PYBASEVER} installation directory not found!$\rEnter manually the Python installation directory." /SD IDOK
-;     ; abort if silent install and not FORCE flag
-;     IfSilent 0 end_abort
-;     ${GetParameters} $R1
-;     ClearErrors
-;     ${GetOptions} $R1 '/FORCE' $R0
-;     IfErrors 0 +2
-;     Abort
-;     end_abort:
-;   ${Else} 
-;     ; if there is a \ at the end of Python_INSTALL_PATH: remove it
-;     StrCpy $0 "$Python_INSTALL_PATH" "" -1
-;     ${if} $0 == "\" 
-;       StrCpy $0 "$Python_INSTALL_PATH" -1
-;       StrCpy $Python_INSTALL_PATH "$0"
-;     ${EndIf}
-; 
-;     StrCpy $INSTDIR "$Python_INSTALL_PATH"
-;     StrCpy $MODULE_INSTALL_PATH "$Python_INSTALL_PATH\Lib\site-packages\${MODULE_NAME_LOWERCASE}"
-;     ; MessageBox MB_OK|MB_ICONEXCLAMATION "Python found in $Python_INSTALL_PATH." /SD IDOK
-;     ; !insertmacro PRINT "Python $PYBASEVER found in directory $Python_INSTALL_PATH."
-;   ${EndIf}
+  StrCpy $MODULE_INSTALL_PATH "$INSTDIR\Lib\site-packages\${MODULE_NAME_LOWERCASE}"
 
   ; if already installed, uninstall previous.
-  ReadRegStr $0 ${PRODUCT_INST_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" "${MODULE_NAME}"
+  ReadRegStr $0 ${PRODUCT_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" "${PRODUCT_NAME}"
   ${If} $0 != ""
-    MessageBox MB_YESNO|MB_ICONEXCLAMATION "${MODULE_NAME} $0 is already installed in directory $MODULE_INSTALL_PATH.$\rDo you want to uninstall this installed version (recommended)?" /SD IDYES IDNO skip_uninstall
+    MessageBox MB_YESNO|MB_ICONEXCLAMATION "${PRODUCT_NAME} $0 is already installed in directory $INSTDIR. $\rDo you want to uninstall this installed version (recommended)?" /SD IDYES IDNO skip_uninstall
 
     ; copy uninstaller to temp dir in order to erase the whole ot dir
     ; _? option permit to avoid uninstaller to copy itself to tempdir. it permit too to make ExecWait work
-    CopyFiles "$MODULE_INSTALL_PATH\${UNINST_EXE}" $TEMP
+    CopyFiles "$INSTDIR\${UNINST_EXE}" $TEMP
     IfSilent 0 +3
     ; silent uninstall
-    ExecWait '"$TEMP\${UNINST_EXE}" /S _?=$MODULE_INSTALL_PATH'
+    ExecWait '"$TEMP\${UNINST_EXE}" /S _?=$INSTDIR'
     Goto +2
-    ExecWait '"$TEMP\${UNINST_EXE}" _?=$MODULE_INSTALL_PATH'
+    ExecWait '"$TEMP\${UNINST_EXE}" _?=$INSTDIR'
 
     skip_uninstall:
   ${EndIf}
@@ -353,12 +221,10 @@ Function .onInit
 FunctionEnd
 
 
-Section "!${MODULE_NAME} DLL & doc" SEC01
+Section "!${PRODUCT_NAME} DLL & doc" SEC01
   SetOverwrite on
 
-  ; reread $INSTDIR in case user change it.
-  StrCpy $Python_INSTALL_PATH "$INSTDIR"
-  StrCpy $MODULE_INSTALL_PATH "$Python_INSTALL_PATH\Lib\site-packages\${MODULE_NAME_LOWERCASE}"
+  StrCpy $MODULE_INSTALL_PATH "$INSTDIR\Lib\site-packages\${MODULE_NAME_LOWERCASE}"
 
   SetDetailsPrint both
   ClearErrors
@@ -371,8 +237,8 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   permission_ok:
   SetDetailsPrint none
 
-  !insertmacro PRINT "Install binary files in $Python_INSTALL_PATH."
-  SetOutPath "$Python_INSTALL_PATH"
+  !insertmacro PRINT "Install binary files in $INSTDIR."
+  SetOutPath "$INSTDIR"
   File /r "${PYTHON_PREFIX}\*.*"
 
   !insertmacro PRINT "Install binary files in $MODULE_INSTALL_PATH."
@@ -395,28 +261,25 @@ Section "!${MODULE_NAME} DLL & doc" SEC01
   SetOutPath "$MODULE_INSTALL_PATH\doc\"
   File /r "html"
 
-;   ; create a version file
-;   ClearErrors
-;   FileOpen $0 $MODULE_INSTALL_PATH\share\openturns\VERSION-${MODULE_NAME}.txt w
-;   IfErrors versionfile_fail
-;   FileWrite $0 "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-;   FileWrite $0 "Compiled for OpenTURNS ${OPENTURNS_VERSION}"
-;   FileClose $0
-;   versionfile_fail:
-; 
-;   !insertmacro PRINT "Put OpenTURNS ${MODULE_NAME} in windows registry."
-;   WriteRegStr ${PRODUCT_INST_ROOT_KEY} ${PRODUCT_DIR_REGKEY} "${MODULE_NAME}" "${PRODUCT_VERSION}"
-; 
-  !insertmacro PRINT "Install uninstaller in $MODULE_INSTALL_PATH\${UNINST_EXE}."
-  WriteUninstaller "$MODULE_INSTALL_PATH\${UNINST_EXE}"
-;   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
-;   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$MODULE_INSTALL_PATH\${UNINST_EXE}"
-;   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
-;   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+  ${If} "$UserInstall" == "1"
+    !insertmacro PRINT "Install UserInstall file in $MODULE_INSTALL_PATH\UserInstall"
+    !insertmacro CREATE_USER_INSTALL_FILE "$MODULE_INSTALL_PATH\UserInstall"
+  ${EndIf}
+
+  !insertmacro PRINT "Put ${PRODUCT_NAME} in windows registry."
+  WriteRegStr ${PRODUCT_ROOT_KEY} ${PRODUCT_DIR_REGKEY} "${PRODUCT_NAME}" "${PRODUCT_VERSION}"
+  WriteRegStr ${PRODUCT_ROOT_KEY} ${PRODUCT_DIR_REGKEY} "InstallPath" "$INSTDIR"
+ 
+  !insertmacro PRINT "Install uninstaller in $INSTDIR\${UNINST_EXE}."
+  WriteUninstaller "$INSTDIR\${UNINST_EXE}"
+  WriteRegStr ${PRODUCT_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+  WriteRegStr ${PRODUCT_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\${UNINST_EXE}"
+  WriteRegStr ${PRODUCT_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr ${PRODUCT_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
 SectionEnd
 
 
-Section "${MODULE_NAME} python examples" SEC02
+Section "${PRODUCT_NAME} python examples" SEC02
   SetOverwrite on
 
   !insertmacro PRINT "Install Python examples in $MODULE_INSTALL_PATH\examples."
@@ -427,16 +290,16 @@ SectionEnd
 
 
 Section -AdditionalIcons
-  !insertmacro PRINT "Create ${MODULE_NAME} menu."
-  ; install shortcuts on every accounts
+  !insertmacro PRINT "Create ${PRODUCT_NAME} menu."
+  ; install shortcuts on every accounts or user only depending on the context
   !insertmacro SET_MENU_CONTEXT
   SetOutPath "$MODULE_INSTALL_PATH"
 
-  CreateDirectory "$SMPROGRAMS\${MODULE_NAME}"
-  CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" ""
-  ;CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\pdf\${MODULE_NAME}_Documentation.pdf" "" ""
-  CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Uninstall.lnk" "$MODULE_INSTALL_PATH\${UNINST_EXE}" "" ""
-  CreateShortCut "$SMPROGRAMS\${MODULE_NAME}\Persalys.lnk" "$MODULE_INSTALL_PATH\persalys-bundle.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
+  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" ""
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\html\index.html" "" ""
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall-${PRODUCT_NAME}.lnk" "$INSTDIR\${UNINST_EXE}" "" ""
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$MODULE_INSTALL_PATH\persalys-bundle.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
 
   !insertmacro PRINT "Create desktop shortcut."
   CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$MODULE_INSTALL_PATH\persalys-bundle.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
@@ -446,7 +309,7 @@ SectionEnd
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Python stack."
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "${MODULE_NAME} module."
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "${FULL_NAME} module."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -454,7 +317,10 @@ Function un.onInit
   !insertmacro MUI_UNGETLANGUAGE
 
   ; Get previous installation mode
+  StrCpy $MODULE_INSTALL_PATH "$INSTDIR\Lib\site-packages\${MODULE_NAME_LOWERCASE}"
   !insertmacro CHECK_USER_INSTALL_FILE "$MODULE_INSTALL_PATH\UserInstall"
+
+  !insertmacro SET_MENU_CONTEXT
 
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you want to remove the module $(^Name) from directory $INSTDIR?" /SD IDYES IDYES +2
   Abort
@@ -465,15 +331,21 @@ Section Uninstall
   ; nsis can't delete current directory
   SetOutPath $TEMP
 
-  ;SetDetailsPrint both
-  RMDir /R $INSTDIR
+  !insertmacro CHECK_REG_VIEW
 
   !insertmacro SET_MENU_CONTEXT
-  RMDir /r "$SMPROGRAMS\${MODULE_NAME}"
-  DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
-  DeleteRegKey ${PRODUCT_INST_ROOT_KEY} "${PRODUCT_DIR_REGKEY}"
+
+  SetDetailsPrint both
+  RMDir /R $INSTDIR
+
+  RMDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
+
   !insertmacro PRINT "Delete desktop shortcut."
   Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+
+  !insertmacro PRINT "Remove ${PRODUCT_NAME} in windows registry."
+  DeleteRegKey ${PRODUCT_ROOT_KEY} ${PRODUCT_UNINST_KEY}
+  DeleteRegKey ${PRODUCT_ROOT_KEY} ${PRODUCT_DIR_REGKEY}
 
   SetAutoClose false
 
