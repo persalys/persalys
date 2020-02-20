@@ -4983,16 +4983,21 @@ ou interaction</translation>
     </message>
     <message>
         <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="85"/>
+        <source>Non-monotonic effect</source>
+        <translation>Effet non-monotone</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="87"/>
         <source>µ*</source>
         <translation>µ*</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="87"/>
+        <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="89"/>
         <source>µ</source>
         <translation>µ</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="89"/>
+        <location filename="../lib/src/model/MorrisResultTableModel.cxx" line="91"/>
         <source>σ</source>
         <translation>σ</translation>
     </message>

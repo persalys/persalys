@@ -38,7 +38,7 @@ MorrisResultTableModel::MorrisResultTableModel(MorrisResult & result, UnsignedIn
 
 int MorrisResultTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-  return 7;
+  return 8;
 }
 
 
@@ -82,10 +82,12 @@ QVariant MorrisResultTableModel::headerData(int section, Qt::Orientation orienta
       case 3:
         return tr("Non-linear effect\nor interaction");
       case 4:
-        return tr("µ*");
+	return tr("Non-monotonic effect");
       case 5:
-        return tr("µ");
+        return tr("µ*");
       case 6:
+        return tr("µ");
+      case 7:
         return tr("σ");
       default:
         return QVariant();
@@ -128,10 +130,16 @@ QVariant MorrisResultTableModel::data(const QModelIndex & index, int role) const
         return QVariant();
       }
       case 4:
-        return QString::number(meanAbsEE, 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      {
+	if (std::abs(result_.getMeanElementaryEffects(outputIndex_)[inIndex]) != meanAbsEE)
+          return "X";
+	return QVariant();
+      }
       case 5:
-        return QString::number(result_.getMeanElementaryEffects(outputIndex_)[inIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        return QString::number(meanAbsEE, 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 6:
+        return QString::number(result_.getMeanElementaryEffects(outputIndex_)[inIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      case 7:
         return QString::number(result_.getStandardDeviationElementaryEffects(outputIndex_)[inIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       default:
         return QVariant();
@@ -141,11 +149,11 @@ QVariant MorrisResultTableModel::data(const QModelIndex & index, int role) const
   {
     switch (index.column())
     {
-      case 4:
-        return result_.getMeanAbsoluteElementaryEffects(outputIndex_)[inIndex];
       case 5:
-        return result_.getMeanElementaryEffects(outputIndex_)[inIndex];
+        return result_.getMeanAbsoluteElementaryEffects(outputIndex_)[inIndex];
       case 6:
+        return result_.getMeanElementaryEffects(outputIndex_)[inIndex];
+      case 7:
         return result_.getStandardDeviationElementaryEffects(outputIndex_)[inIndex];
       default:
         return data(index, Qt::DisplayRole);
@@ -155,7 +163,7 @@ QVariant MorrisResultTableModel::data(const QModelIndex & index, int role) const
   {
     return result_.getInputsSelection(outputIndex_)[inIndex] > 0 ? Qt::Checked : Qt::Unchecked;
   }
-  else if (role == Qt::TextAlignmentRole && index.column() > 0 && index.column() < 4)
+  else if (role == Qt::TextAlignmentRole && index.column() > 0 && index.column() < 5)
   {
     return Qt::AlignCenter;
   }
