@@ -36,6 +36,7 @@ makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_V
 cd /tmp
 PYVER=`${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -V|sed "s|.*Python \([0-9\.]*\).*|\1|g"`
 curl -fSsLO https://www.python.org/ftp/python/${PYVER}/python-${PYVER}-embed-amd64.zip
+curl -fsSLO https://bootstrap.pypa.io/get-pip.py && sudo ${ARCH}-w64-mingw32-python${PYMAJMIN}-bin get-pip.py
 mkdir -p python_root/Lib/site-packages && cd python_root
 unzip /tmp/python-${PYVER}-embed-amd64.zip
 echo 'Lib\\site-packages' >> python${PYMAJMIN}._pth
@@ -44,7 +45,9 @@ cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns Lib/site-packages
 cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
 rm Lib/site-packages/openturns/{libvtk,libboost,LLVM,Qt,python}*.dll
-cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
+cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
+cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/{pip*,setuptools*,wheel*,pkg_resources,easy_install.py} Lib/site-packages/
+mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
 makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DPYTHON_PREFIX=/tmp/python_root -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DARCH=${ARCH} installer_bundle.nsi
 
