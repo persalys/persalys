@@ -324,7 +324,7 @@ void CalibrationAnalysis::runNonLinearAlgorithm(T& algo)
 {
   OptimizationAlgorithm optimAlgo(getOptimizationAlgorithm());
   optimAlgo.setStopCallback(&AnalysisImplementation::Stop, this);
-  algo.setAlgorithm(optimAlgo);
+  algo.setOptimizationAlgorithm(optimAlgo);
   algo.setBootstrapSize(bootStrapSize_);
   algo.run();
   result_.calibrationResult_ = algo.getResult();
