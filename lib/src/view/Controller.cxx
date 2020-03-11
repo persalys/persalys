@@ -18,7 +18,6 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <openturns/PythonWrappingFunctions.hxx>   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 
 #include "persalys/Controller.hxx"
 
