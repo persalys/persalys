@@ -1,7 +1,7 @@
 FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
-RUN aurman -S --noconfirm --noedit mingw-w64-qwt
+RUN aurman -Syu --noconfirm --noedit mingw-w64-qwt
 RUN aurman -S --noconfirm --noedit --pgp_fetch mingw-w64-paraview58
 RUN aurman -S --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
