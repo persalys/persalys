@@ -138,11 +138,11 @@ RUN yum -y install xorg-x11-util-macros bison
 RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz | tar xz && cd libxkbcommon-xkbcommon-0.8.4 && sed -i "/AX_GCC_BUILTIN/d" configure.ac && ./autogen.sh && ./configure --prefix=/usr --libdir=/usr/lib64 && make && make install && pkg-config --exists xkbcommon
 
 # qt
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.14/5.14.0/single/qt-everywhere-src-5.14.0.tar.xz | tar xJ && cd qt-everywhere-src-5.14.0 \
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.14/5.14.1/single/qt-everywhere-src-5.14.1.tar.xz | tar xJ && cd qt-everywhere-src-5.14.1 \
  && ./configure -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.14/5.14.0/submodules/qtx11extras-everywhere-src-5.14.0.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.14.0 && qmake src/x11extras && make && make install
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.14/5.14.1/submodules/qtx11extras-everywhere-src-5.14.1.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.14.1 && qmake src/x11extras && make && make install
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj && cd qwt-6.1.4 \
