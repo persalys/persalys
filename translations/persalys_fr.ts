@@ -1182,8 +1182,8 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="84"/>
-        <source>Cache</source>
-        <translation>Cache</translation>
+        <source>Advanced parameters</source>
+        <translation>Paramètres avancés</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="88"/>
@@ -1193,7 +1193,7 @@ bayésien (BIC)</translation>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="89"/>
         <source>Cache output file</source>
-        <translation>FIchier de sortie de cache</translation>
+        <translation>Fichier de sortie de cache</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="99"/>

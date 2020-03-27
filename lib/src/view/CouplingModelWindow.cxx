@@ -81,23 +81,23 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   updateStepTabWidget(item);
 
-  CollapsibleGroupBox * cacheGroupBox = new CollapsibleGroupBox(tr("Cache"));
-  QGridLayout * cacheGroupBoxLayout = new QGridLayout(cacheGroupBox);
-  tabLayout->addWidget(cacheGroupBox, 1, 0);
+  CollapsibleGroupBox * advancedGroupBox = new CollapsibleGroupBox(tr("Advanced parameters"));
+  QGridLayout * advancedGroupBoxLayout = new QGridLayout(advancedGroupBox);
+  tabLayout->addWidget(advancedGroupBox, 1, 0);
 
-  cacheGroupBoxLayout->addWidget(new QLabel(tr("Cache input file")), 0, 0);
-  cacheGroupBoxLayout->addWidget(new QLabel(tr("Cache output file")), 1, 0);
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Cache input file")), 0, 0);
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Cache output file")), 1, 0);
 
   FilePathWidget * filePath = new FilePathWidget(QString::fromUtf8(model_->getCacheInputFile().c_str()));
-  cacheGroupBoxLayout->addWidget(filePath, 0, 1);
+  advancedGroupBoxLayout->addWidget(filePath, 0, 1);
   connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) { model_->setCacheFiles(text.toUtf8().constData(), model_->getCacheOutputFile()); });
 
   filePath = new FilePathWidget(QString::fromUtf8(model_->getCacheOutputFile().c_str()));
-  cacheGroupBoxLayout->addWidget(filePath, 1, 1);
+  advancedGroupBoxLayout->addWidget(filePath, 1, 1);
   connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) { model_->setCacheFiles(model_->getCacheInputFile(), text.toUtf8().constData()); });
 
   QPushButton * clearButton = new QPushButton(tr("Clear cache"));
-  cacheGroupBoxLayout->addWidget(clearButton, 2, 1, Qt::AlignRight);
+  advancedGroupBoxLayout->addWidget(clearButton, 2, 1, Qt::AlignRight);
   connect(clearButton, &QPushButton::clicked,
     [=] () {
             if (!model_->getCacheInputFile().empty())
