@@ -57,6 +57,10 @@ public:
   void setCleanupWorkDirectory(const OT::Bool cleanupWorkDirectory);
   OT::Bool getCleanupWorkDirectory() const;
 
+  /** Working directory accessors **/
+  void setWorkDir(const OT::FileName & workDir);
+  OT::FileName getWorkDir() const;
+
   /** Cache files accessors */
   void setCacheFiles(const OT::FileName & inputFile, const OT::FileName & outputFile);
   OT::FileName getCacheInputFile() const;
@@ -80,6 +84,7 @@ private:
   OT::Bool cleanupWorkDirectory_;
   OT::FileName cacheInputFile_;
   OT::FileName cacheOutputFile_;
+  OT::FileName workDir_;
 };
 }
 #endif

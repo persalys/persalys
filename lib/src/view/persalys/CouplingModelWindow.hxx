@@ -105,7 +105,7 @@ class PERSALYS_API FilePathWidget : public QWidget
   Q_OBJECT
 
 public:
-  FilePathWidget(const QString &path="", QWidget *parent=0)
+  FilePathWidget(const QString &path="", QFileDialog::FileMode mode=QFileDialog::AnyFile, QWidget *parent=0)
     : QWidget(parent)
   {
     QHBoxLayout * hLayout = new QHBoxLayout(this);
@@ -121,15 +121,19 @@ public:
 
     connect(button, &QToolButton::clicked,
             [=]() {
-                    QString fileName = QFileDialog::getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
-
-                    if (fileName.isEmpty())
-                      return;
-
-                    FileTools::SetCurrentDir(fileName);
-                    edit_->setText(fileName);
-                    emit pathChanged(fileName);
-                  });
+	      QFileDialog dialog;
+	      dialog.setFileMode(mode);
+	      QString fileName;
+	      if(mode == QFileDialog::Directory)
+		fileName = dialog.getExistingDirectory(this, tr("Choose directory"), FileTools::GetCurrentDir());
+	      else
+		fileName = dialog.getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
+	      if (fileName.isEmpty())
+		return;
+	      FileTools::SetCurrentDir(fileName);
+	      edit_->setText(fileName);
+	      emit pathChanged(fileName);
+	    });
   }
   QString text()
   {

@@ -201,7 +201,10 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 //   code << "    workdir = tempfile.mkdtemp()\n";
   code << "    checksum = hashlib.sha1()\n";
   code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
-  code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
+  if(!workDir_.empty())
+    code << "    workdir = os.path.join('"+workDir_+"', 'persalys_' + checksum.hexdigest())\n";
+  else
+    code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
   code << "    if not os.path.exists(workdir):\n";
   code << "        os.makedirs(workdir)\n";
   code << "    for step in steps:\n";
@@ -359,6 +362,17 @@ void CouplingPhysicalModel::setCacheFiles(const OT::FileName & inputFile, const 
   cacheOutputFile_ = outputFile;
 }
 
+void CouplingPhysicalModel::setWorkDir(const OT::FileName & workDir)
+{
+  workDir_ = workDir;
+}
+
+
+OT::FileName CouplingPhysicalModel::getWorkDir() const
+{
+  return workDir_;
+}
+
 OT::FileName CouplingPhysicalModel::getCacheInputFile() const
 {
   return cacheInputFile_;
@@ -377,6 +391,7 @@ void CouplingPhysicalModel::save(Advocate & adv) const
   adv.saveAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
   adv.saveAttribute("cacheInputFile_", cacheInputFile_);
   adv.saveAttribute("cacheOutputFile_", cacheOutputFile_);
+  adv.saveAttribute("workDir_", workDir_);
 }
 
 
@@ -388,6 +403,7 @@ void CouplingPhysicalModel::load(Advocate & adv)
   adv.loadAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
   adv.loadAttribute("cacheInputFile_", cacheInputFile_);
   adv.loadAttribute("cacheOutputFile_", cacheOutputFile_);
+  adv.loadAttribute("workDir_", workDir_);
 }
 
 

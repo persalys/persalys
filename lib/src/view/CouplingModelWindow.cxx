@@ -114,6 +114,19 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
             }
            });
 
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Working directory")), 3, 0);
+  filePath = new FilePathWidget(QString::fromUtf8(model_->getWorkDir().c_str()), QFileDialog::Directory);
+  advancedGroupBoxLayout->addWidget(filePath, 3, 1);
+  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) {
+    model_->setWorkDir(text.toUtf8().constData()); });
+
+  QCheckBox * keepCheckBox = new QCheckBox(tr("Keep working directory"));
+  keepCheckBox->setChecked(!model_->getCleanupWorkDirectory());
+  advancedGroupBoxLayout->addWidget(keepCheckBox, 4, 0);
+  connect(keepCheckBox, &QCheckBox::toggled,
+	  [=](bool toggled){model_->setCleanupWorkDirectory(!toggled);
+	  });
+
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
