@@ -110,16 +110,15 @@ RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-
     -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t -DCMAKE_INSTALL_LIBDIR=lib .. && make install > /dev/null 2>&1
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.1.tar.gz | tar xz && cd fmi-library-2.1 \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.tar.gz | tar xz && cd fmi-library-2.2 \
  && mkdir -p build && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.1 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.tar.gz | tar xz && cd Assimulo-Assimulo-3.2 && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd .. && python3 -c "import assimulo; import assimulo.solvers"
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.5.7.tar.gz | tar xz && cd PyFMI-PyFMI-2.5.7 \
- && curl -fSsL https://github.com/modelon-community/PyFMI/pull/13.patch | patch -p1 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.6.tar.gz | tar xz && cd PyFMI-PyFMI-2.6 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
 # sphinx
@@ -177,7 +176,7 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi
-RUN pip install git+git://github.com/openturns/otfmi.git@v0.3 && python3 -c "import otfmi"
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.4 && python3 -c "import otfmi"
 
 # locale
 RUN localedef -i en_US -f UTF-8 C.UTF-8
