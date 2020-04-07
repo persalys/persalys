@@ -91,11 +91,19 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   FilePathWidget * filePath = new FilePathWidget(QString::fromUtf8(model_->getCacheInputFile().c_str()));
   advancedGroupBoxLayout->addWidget(filePath, 0, 1);
-  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) { model_->setCacheFiles(text.toUtf8().constData(), model_->getCacheOutputFile()); });
+  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) {
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setCacheFiles(text.toUtf8().constData(), model_->getCacheOutputFile());
+      model_->blockNotification();
+    });
 
   filePath = new FilePathWidget(QString::fromUtf8(model_->getCacheOutputFile().c_str()));
   advancedGroupBoxLayout->addWidget(filePath, 1, 1);
-  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) { model_->setCacheFiles(model_->getCacheInputFile(), text.toUtf8().constData()); });
+  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) {
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setCacheFiles(model_->getCacheInputFile(), text.toUtf8().constData());
+      model_->blockNotification();
+    });
 
   QPushButton * clearButton = new QPushButton(tr("Clear cache"));
   advancedGroupBoxLayout->addWidget(clearButton, 2, 1, Qt::AlignRight);
@@ -119,14 +127,19 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   filePath = new FilePathWidget(QString::fromUtf8(model_->getWorkDir().c_str()), QFileDialog::Directory);
   advancedGroupBoxLayout->addWidget(filePath, 3, 1);
   connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) {
-    model_->setWorkDir(text.toUtf8().constData()); });
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setWorkDir(text.toUtf8().constData());
+      model_->blockNotification();
+    });
 
   QCheckBox * keepCheckBox = new QCheckBox(tr("Keep working directory"));
   keepCheckBox->setChecked(!model_->getCleanupWorkDirectory());
   advancedGroupBoxLayout->addWidget(keepCheckBox, 4, 0);
-  connect(keepCheckBox, &QCheckBox::toggled,
-	  [=](bool toggled){model_->setCleanupWorkDirectory(!toggled);
-	  });
+  connect(keepCheckBox, &QCheckBox::toggled, [=](bool toggled){
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setCleanupWorkDirectory(!toggled);
+      model_->blockNotification();
+    });
 
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
