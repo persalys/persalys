@@ -222,7 +222,7 @@ void CouplingPhysicalModel::updateCode()
   code << "            if not input_file.getPath():\n";
   code << "                continue\n";
   code << "            input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
-  code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values)\n";
+  code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values, encoding=step.getEncoding())\n";
   code << "        for resource_file in step.getResourceFiles():\n";
   code << "            if not resource_file.getPath():\n";
   code << "                continue\n";
@@ -242,7 +242,7 @@ void CouplingPhysicalModel::updateCode()
   code << "                continue\n";
   code << "            outfile = os.path.join(workdir, output_file.getPath())\n";
   code << "            for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
-  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=skip_tok, skip_line=skip_line, skip_col=skip_col)\n";
+  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=skip_tok, skip_line=skip_line, skip_col=skip_col, encoding=step.getEncoding())\n";
 
   if (cleanupWorkDirectory_)
     code << "    shutil.rmtree(workdir)\n";

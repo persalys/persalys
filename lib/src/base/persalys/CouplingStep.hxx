@@ -69,6 +69,10 @@ public:
   void setTimeOut(const double & timeOut);
   double getTimeOut() const;
 
+  /** Encoding accessors **/
+  void setEncoding(const OT::String & encoding);
+  OT::String getEncoding() const;
+
   /** String converter */
   virtual OT::String __repr__() const;
 

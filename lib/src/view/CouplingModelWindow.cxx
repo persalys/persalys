@@ -36,6 +36,8 @@
 #include <QHeaderView>
 #include <QScrollArea>
 #include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QComboBox>
 
 using namespace OT;
 
@@ -1139,6 +1141,23 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
             model->setSteps(csColl);
             model->blockNotification();
           });
+
+  advGroupBoxLayout->addWidget(new QLabel(tr("I/O Encoding")), 0, 0);
+  QComboBox * encodingBox = new QComboBox();
+  encodingBox->insertItem(0, QString::fromStdString("utf-8"));
+  encodingBox->insertItem(1, QString::fromStdString("latin-1"));
+  int index = encodingBox->findText(QString::fromStdString(model->getSteps()[indStep].getEncoding()));
+  if ( index != -1 )
+    encodingBox->setCurrentIndex(index);
+  advGroupBoxLayout->addWidget(encodingBox, 0, 1);
+  connect(encodingBox, &QComboBox::currentTextChanged,
+	  [=](const QString& enc) {
+            CouplingStepCollection csColl(model->getSteps());
+            csColl[indStep].setEncoding(enc.toUtf8().constData());
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+	  });
 
   // - fill in the QTabWidget
   CouplingStep cs(model->getSteps()[indStep]);
