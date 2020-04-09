@@ -28,7 +28,7 @@ input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('external_program0y.py')
 output_file = persalys.CouplingOutputFile('output.txt')
-output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
 step = persalys.CouplingStep(sys.executable + ' external_program0y.py', [input_file], [resource_file], [output_file])
 model = persalys.YACSCouplingPhysicalModel('A', [step])
 

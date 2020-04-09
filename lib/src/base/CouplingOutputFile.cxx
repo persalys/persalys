@@ -62,8 +62,11 @@ String CouplingOutputFile::getPath() const
 }
 
 /* Variables accessor */
-void CouplingOutputFile::setVariables(const Description & variableNames, const Description & tokens,
-                                      const OT::Point & skipLines, const OT::Point & skipColumns)
+void CouplingOutputFile::setVariables(const Description & variableNames,
+				      const Description & tokens,
+				      const OT::Point & skipTokens,
+				      const OT::Point & skipLines,
+				      const OT::Point & skipColumns)
 {
   if (variableNames.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Variable names size must match tokens size";
@@ -71,8 +74,11 @@ void CouplingOutputFile::setVariables(const Description & variableNames, const D
     throw InvalidArgumentException(HERE) << "Skip lines size must match tokens size";
   if (skipColumns.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Skip columns size must match tokens size";
+  if (skipTokens.getSize() != tokens.getSize())
+    throw InvalidArgumentException(HERE) << "Skip tokens size must match tokens size";
   variableNames_= variableNames;
   tokens_ = tokens;
+  skipTokens_ = skipTokens;
   skipLines_ = skipLines;
   skipColumns_ = skipColumns;
 }
@@ -85,6 +91,11 @@ Description CouplingOutputFile::getVariableNames() const
 Description CouplingOutputFile::getTokens() const
 {
   return tokens_;
+}
+
+Point CouplingOutputFile::getSkipTokens() const
+{
+  return skipTokens_;
 }
 
 Point CouplingOutputFile::getSkipLines() const
@@ -105,6 +116,7 @@ String CouplingOutputFile::__repr__() const
       << " path=" << getPath()
       << " variableNames=" << getVariableNames()
       << " tokens=" << getTokens()
+      << " skipTokens=" << getSkipTokens()
       << " skipLines=" << getSkipLines()
       << " skipColumns=" << getSkipColumns();
   return oss;
@@ -117,9 +129,9 @@ void CouplingOutputFile::save(Advocate & adv) const
   adv.saveAttribute("path_", path_);
   adv.saveAttribute("variableNames_", variableNames_);
   adv.saveAttribute("tokens_", tokens_);
+  adv.saveAttribute("skipTokens_", skipTokens_);
   adv.saveAttribute("skipLines_", skipLines_);
   adv.saveAttribute("skipColumns_", skipColumns_);
-
 }
 
 
@@ -130,6 +142,7 @@ void CouplingOutputFile::load(Advocate & adv)
   adv.loadAttribute("path_", path_);
   adv.loadAttribute("variableNames_", variableNames_);
   adv.loadAttribute("tokens_", tokens_);
+  adv.loadAttribute("skipTokens_", skipTokens_);
   adv.loadAttribute("skipLines_", skipLines_);
   adv.loadAttribute("skipColumns_", skipColumns_);
 }

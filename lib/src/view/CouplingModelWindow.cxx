@@ -475,7 +475,7 @@ int OutTableModel::rowCount(const QModelIndex & /*parent*/) const
 
 int OutTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-  return 6;
+  return 7;
 }
 
 Qt::ItemFlags OutTableModel::flags(const QModelIndex & index) const
@@ -497,10 +497,12 @@ QVariant OutTableModel::headerData(int section, Qt::Orientation orientation, int
       case 2:
         return tr("Token");
       case 3:
-        return tr("Skip Line");
+        return tr("Skip Token");
       case 4:
-        return tr("Skip Column");
+        return tr("Skip Line");
       case 5:
+        return tr("Skip Column");
+      case 6:
         return tr("Value");
     }
   }
@@ -524,10 +526,12 @@ QVariant OutTableModel::data(const QModelIndex & index, int role) const
       case 2:
         return QString::fromUtf8(getOutputFile().getTokens()[index.row()].c_str());
       case 3:
-        return QString::number(getOutputFile().getSkipLines()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+	return QString::number(getOutputFile().getSkipTokens()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 4:
-        return QString::number(getOutputFile().getSkipColumns()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        return QString::number(getOutputFile().getSkipLines()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 5:
+        return QString::number(getOutputFile().getSkipColumns()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      case 6:
       {
         Output output(model_->getOutputByName(outName));
         if (!output.hasBeenComputed())
@@ -562,7 +566,7 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
 
       Description names(outFile.getVariableNames());
       names[index.row()] = newname;
-      outFile.setVariables(names, outFile.getTokens(), outFile.getSkipLines(), outFile.getSkipColumns());
+      outFile.setVariables(names, outFile.getTokens(), outFile.getSkipTokens(), outFile.getSkipLines(), outFile.getSkipColumns());
       updateModel(outFile);
 
       model_->blockNotification("PhysicalModelDefinitionItem");
@@ -593,29 +597,40 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
 
       Description tokens(outFile.getTokens());
       tokens[index.row()] = newtoken;
-      outFile.setVariables(outFile.getVariableNames(), tokens, outFile.getSkipLines(), outFile.getSkipColumns());
+      outFile.setVariables(outFile.getVariableNames(), tokens, outFile.getSkipTokens(), outFile.getSkipLines(), outFile.getSkipColumns());
       updateModel(outFile);
       break;
     }
     case 3:
+    {
+      if (outFile.getSkipTokens()[index.row()] == value.toDouble())
+        return true;
+
+      Point skipTokens(outFile.getSkipTokens());
+      skipTokens[index.row()] = value.toDouble();
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), skipTokens, outFile.getSkipLines(), outFile.getSkipColumns());
+      updateModel(outFile);
+      break;
+    }
+    case 4:
     {
       if (outFile.getSkipLines()[index.row()] == value.toDouble())
         return true;
 
       Point skipLines(outFile.getSkipLines());
       skipLines[index.row()] = value.toDouble();
-      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), skipLines, outFile.getSkipColumns());
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), outFile.getSkipTokens(), skipLines, outFile.getSkipColumns());
       updateModel(outFile);
       break;
     }
-    case 4:
+    case 5:
     {
       if (outFile.getSkipColumns()[index.row()] == value.toDouble())
         return true;
 
       Point skipColumns(outFile.getSkipColumns());
       skipColumns[index.row()] = value.toDouble();
-      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), outFile.getSkipLines(), skipColumns);
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), outFile.getSkipTokens(), outFile.getSkipLines(), skipColumns);
       updateModel(outFile);
       break;
     }
@@ -653,12 +668,14 @@ void OutTableModel::addLine()
   Description tokens(outFile.getTokens());
   Point skipLine(outFile.getSkipLines());
   Point skipCol(outFile.getSkipColumns());
+  Point skipTokens(outFile.getSkipTokens());
   names.add('Y' + (OSS() << i).str());
   tokens.add('Y' + (OSS() << i).str() + '=');
   skipLine.add(0.);
   skipCol.add(0.);
+  skipTokens.add(0.);
 
-  outFile.setVariables(names, tokens, skipLine, skipCol);
+  outFile.setVariables(names, tokens, skipTokens, skipLine, skipCol);
   updateModel(outFile);
 
   updateData();
@@ -675,14 +692,16 @@ void OutTableModel::removeLine()
   CouplingOutputFile outFile(getOutputFile());
   Description names(outFile.getVariableNames());
   Description tokens(outFile.getTokens());
+  Point skipTokens(outFile.getSkipTokens());
   Point skipLine(outFile.getSkipLines());
   Point skipCol(outFile.getSkipColumns());
   names.erase(names.begin() + index.row());
   tokens.erase(tokens.begin() + index.row());
+  skipTokens.erase(skipTokens.begin() + index.row());
   skipLine.erase(skipLine.begin() + index.row());
   skipCol.erase(skipCol.begin() + index.row());
 
-  outFile.setVariables(names, tokens, skipLine, skipCol);
+  outFile.setVariables(names, tokens, skipTokens, skipLine, skipCol);
   updateModel(outFile);
 
   updateData();

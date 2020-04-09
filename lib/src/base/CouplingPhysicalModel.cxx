@@ -116,7 +116,13 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
         continue;
       oss << offset << "output_file" << j << " = persalys.CouplingOutputFile('"<<EscapePath(outputFile.getPath())<<"')\n";
       if (outputFile.getVariableNames().getSize() > 0)
-        oss << offset << "output_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())<<", "<<outputFile.getSkipLines().__str__()<<", "<<outputFile.getSkipColumns().__str__()<<")\n";
+        oss << offset << "output_file" << j
+	    <<".setVariables("
+	    << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())
+	    <<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())
+	    <<", "<<outputFile.getSkipTokens().__str__()
+	    <<", "<<outputFile.getSkipLines().__str__()
+	    <<", "<<outputFile.getSkipColumns().__str__()<<")\n";
       oss << offset << "output_files.append(output_file"<<j<<")\n";
     }
     // escape backslashes
@@ -235,8 +241,8 @@ void CouplingPhysicalModel::updateCode()
   code << "            if not output_file.getPath():\n";
   code << "                continue\n";
   code << "            outfile = os.path.join(workdir, output_file.getPath())\n";
-  code << "            for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
-  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)\n";
+  code << "            for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
+  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=skip_tok, skip_line=skip_line, skip_col=skip_col)\n";
 
   if (cleanupWorkDirectory_)
     code << "    shutil.rmtree(workdir)\n";

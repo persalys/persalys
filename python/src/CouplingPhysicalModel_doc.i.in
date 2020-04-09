@@ -42,10 +42,10 @@ external_program.py reads input.txt and writes output.txt:
 
 >>> resource_file = persalys.CouplingResourceFile('external_program.py')
 
-output variables Yj are read from output.txt and delimited by tokens, no line/column skipped:
+output variables Yj are read from output.txt and delimited by tokens, no token/line/column skipped:
 
 >>> output_file = persalys.CouplingOutputFile('output.txt')
->>> output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+>>> output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
 >>> step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file], [resource_file], [output_file])
 >>> model = persalys.CouplingPhysicalModel('A', [step])"
 

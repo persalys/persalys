@@ -52,9 +52,10 @@ class CouplingOutputFile(object):
         self.tokens_ = []
         self.skip_lines_ = []
         self.skip_cols_ = []
+        self.skip_tokens_ = []
         self.varnames_ = []
 
-    def setVariables(self, varnames, tokens, skip_lines=None, skip_cols=None):
+    def setVariables(self, varnames, tokens, skip_lines=None, skip_cols=None, skip_tokens=None):
         self.tokens_ = tokens
         if len(varnames) != len(tokens):
             raise ValueError('tokens must have the same size as varnames')
@@ -75,6 +76,12 @@ class CouplingOutputFile(object):
             if len(skip_cols) != len(self.tokens_):
                 raise ValueError('skip_cols must have the same size as tokens')
             self.skip_cols_ = skip_cols
+        if skip_tokens is None:
+            self.skip_tokens_ = [0] * len(tokens)
+        else:
+            if len(skip_tokens) != len(self.tokens_):
+                raise ValueError('skip_tokens must have the same size as tokens')
+            self.skip_tokens_ = skip_tokens
     def getVariableNames(self):
         return self.varnames_
     def getPath(self):
@@ -85,6 +92,8 @@ class CouplingOutputFile(object):
         return self.skip_lines_
     def getSkipColumns(self):
         return self.skip_cols_
+    def getSkipTokens(self):
+        return self.skip_tokens_
 class CouplingStep(object):
     def __init__(self, command, input_files, resource_files, output_files):
         self.command_ = command
@@ -192,8 +201,8 @@ class CouplingPhysicalModel(object):
                 if not output_file.getPath():
                     continue
                 outfile = os.path.join(workdir, output_file.getPath())
-                for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):
-                    all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)
+                for varname, token, skip_line, skip_col, skip_tok in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns(), output_file.getSkipTokens()):
+                    all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col, skip_tok=skip_tok)
 
         # cleanup work dir
         if self.getCleanupWorkDirectory():
@@ -223,7 +232,7 @@ input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
-output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
 step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('A', [step])
 
@@ -269,7 +278,7 @@ input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
-output_file.setVariables(['Y0', 'Y1'], ['']*2, [0, -1], [0, 0])
+output_file.setVariables(['Y0', 'Y1'], ['']*2, [0, 0], [0, -1], [0, 0])
 step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('D', [step])
 
@@ -283,6 +292,44 @@ ott.assert_almost_equal(y, [6.0, 7.0])
 # cleanup
 os.remove('input_template.txt')
 os.remove('external_program.py')
+
+### testcase E: parse output and skip token
+with open('input_template.txt', 'w') as f:
+    f.write('X0=@X0\n')
+    f.write('X1=@X1\n')
+    f.write('X2=@X2\n')
+with open('external_program.py', 'w') as f:
+    f.write('import sys\n')
+    f.write('exec(open(sys.argv[1]).read())\n')
+    f.write('Y0=X0+X1+X2\n')
+    f.write('Y1=X0+X1*X2\n')
+    f.write('with open("output.txt", "w") as f:\n')
+    #Voluntarily adding an empty line w. token so we can skip it
+    f.write('    f.write("Y0=")\n')
+    f.write('    f.write("Y0=%.3e\\n" % Y0)\n')
+    f.write('    f.write("Y1=%.3e\\n" % Y1)\n')
+
+input_file = persalys.CouplingInputFile('input_template.txt')
+input_file.setConfiguredPath('input.txt')
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+resource_file = persalys.CouplingResourceFile('external_program.py')
+output_file = persalys.CouplingOutputFile('output.txt')
+output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [1, 0], [0, 0], [0, 0])
+step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt', [input_file], [resource_file], [output_file])
+model = persalys.CouplingPhysicalModel('E', [step])
+
+# single evaluation
+x = [1.0, 2.0, 3.0]
+model.setCleanupWorkDirectory(False)
+f = model.getFunction()
+y = f(x)
+print(y)
+ott.assert_almost_equal(y, [6.0, 7.0])
+
+# cleanup
+os.remove('input_template.txt')
+os.remove('external_program.py')
+
 
 ### testcase reusing temp dir
 with open('input.txt.in', 'w') as f:
@@ -304,7 +351,7 @@ input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
-output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
 step = persalys.CouplingStep(sys.executable + ' program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('reuse1', [step])
 # leave work dir
@@ -348,7 +395,7 @@ input_file.setConfiguredPath('input.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
-output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
 step = persalys.CouplingStep(sys.executable + ' program.py input.txt', [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('csvcache', [step])
 model.setCacheFiles('in.csv', 'out.csv')
@@ -388,7 +435,7 @@ input_file.setConfiguredPath('input1.txt')
 input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
 resource_file = persalys.CouplingResourceFile('program1.py')
 output_file = persalys.CouplingOutputFile('output1.txt')
-output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0])
+output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
 step1 = persalys.CouplingStep(sys.executable + ' program1.py', [input_file], [resource_file], [output_file])
 
 # step2: Y2=f2(X2, X3, X4)
@@ -406,7 +453,7 @@ input_file.setConfiguredPath('input2.txt')
 input_file.setVariables(['X2', 'X3', 'X4'], ['@X2', '@X3', '@X4'])
 resource_file = persalys.CouplingResourceFile('program2.py')
 output_file = persalys.CouplingOutputFile('output2.txt')
-output_file.setVariables(['Y2'], ['Y2='], [0], [0])
+output_file.setVariables(['Y2'], ['Y2='], [0], [0], [0])
 step2 = persalys.CouplingStep(sys.executable + ' program2.py', [input_file], [resource_file], [output_file])
 
 # step3: Z0=f3(Y1, Y2)
@@ -423,7 +470,7 @@ input_file.setConfiguredPath('input3.txt')
 input_file.setVariables(['Y1', 'Y2'], ['@Y1', '@Y2'])
 resource_file = persalys.CouplingResourceFile('program3.py')
 output_file = persalys.CouplingOutputFile('output3.txt')
-output_file.setVariables(['Z0'], ['Z0='], [0], [0])
+output_file.setVariables(['Z0'], ['Z0='], [0], [0], [0])
 step3 = persalys.CouplingStep(sys.executable + ' program3.py', [input_file], [resource_file], [output_file])
 
 # step4: no inputs, no outputs
@@ -455,4 +502,3 @@ myStudy.add(model)
 script = myStudy.getPythonScript()
 #print('script=', script)
 exec(script)
-
