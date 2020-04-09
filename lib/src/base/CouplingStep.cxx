@@ -116,6 +116,15 @@ Bool CouplingStep::getIsShell() const
   return isShell_;
 }
 
+void CouplingStep::setTimeOut(const double & timeOut)
+{
+  timeOut_ = timeOut;
+}
+
+double CouplingStep::getTimeOut() const
+{
+  return timeOut_;
+}
 
 /* String converter */
 String CouplingStep::__repr__() const
@@ -139,6 +148,7 @@ void CouplingStep::save(Advocate & adv) const
   adv.saveAttribute("resourceFiles_", resourceFiles_);
   adv.saveAttribute("outputFiles_", outputFiles_);
   adv.saveAttribute("isShell_", isShell_);
+  adv.saveAttribute("timeOut_", timeOut_);
 }
 
 
@@ -151,6 +161,7 @@ void CouplingStep::load(Advocate & adv)
   adv.loadAttribute("resourceFiles_", resourceFiles_);
   adv.loadAttribute("outputFiles_", outputFiles_);
   adv.loadAttribute("isShell_", isShell_);
+  adv.loadAttribute("timeOut_", timeOut_);
 }
 
 }

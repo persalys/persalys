@@ -23,6 +23,7 @@
 #include "persalys/DifferentiationTableModel.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/DoubleSpinBox.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
 #include "persalys/StudyTreeViewModel.hxx"
 #include "persalys/EditButtonDelegate.hxx"
@@ -1088,6 +1089,24 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
                           model->blockNotification();
                           item->update(0, "inputStepChanged");
                         });
+
+  CollapsibleGroupBox * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
+  QGridLayout * advGroupBoxLayout = new QGridLayout(advGroupBox);
+  mainLayout->addWidget(advGroupBox);
+
+  advGroupBoxLayout->addWidget(new QLabel(tr("Timeout (s)")), 5, 0);
+  DoubleSpinBox * timeOutVal = new DoubleSpinBox();
+  timeOutVal->setMinimum(-1);
+  timeOutVal->setValue(model_->getSteps()[indStep].getTimeOut());
+  advGroupBoxLayout->addWidget(timeOutVal, 5, 1);
+  connect(timeOutVal, QOverload<double>::of(&DoubleSpinBox::valueChanged),
+          [=](const double& val) {
+            CouplingStepCollection csColl(model->getSteps());
+            csColl[indStep].setTimeOut(val);
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+          });
 
   // - fill in the QTabWidget
   CouplingStep cs(model->getSteps()[indStep]);

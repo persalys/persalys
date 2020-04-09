@@ -227,7 +227,10 @@ void CouplingPhysicalModel::updateCode()
   code << "            else:\n";
   code << "                raise ValueError('cannot handle file:', resource_file.getPath())\n";
   code << "        if len(step.getCommand()) > 0:\n";
-  code << "            otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell(), get_stderr=True)\n";
+  code << "            timeout=step.getTimeOut()\n";
+  code << "            if timeout <= 0:\n";
+  code << "                timeout=None\n";
+  code << "            otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell(), get_stderr=True,timeout=timeout)\n";
   code << "        for output_file in step.getOutputFiles():\n";
   code << "            if not output_file.getPath():\n";
   code << "                continue\n";
