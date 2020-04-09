@@ -129,6 +129,13 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
 
 void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 {
+  steps_ = steps;
+  updateCode();
+}
+
+void CouplingPhysicalModel::updateCode()
+{
+  CouplingStepCollection steps = getSteps();
   Description inputNames;
   Description outputNames;
 
@@ -169,8 +176,6 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
       }
     }
   }
-  steps_ = steps;
-
   OSS code;
   code << "import tempfile\n";
   code << "import openturns.coupling_tools as otct\n";
@@ -198,7 +203,6 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   }
   code << "]))\n";
 
-//   code << "    workdir = tempfile.mkdtemp()\n";
   code << "    checksum = hashlib.sha1()\n";
   code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
   if(!workDir_.empty())
@@ -250,7 +254,6 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 
   notify("stepsChanged");
 }
-
 
 Function CouplingPhysicalModel::generateFunction(const Description & outputNames) const
 {
@@ -340,15 +343,11 @@ String CouplingPhysicalModel::__repr__() const
   return oss;
 }
 
-
 /** Whether the work dir is discarded */
 void CouplingPhysicalModel::setCleanupWorkDirectory(const Bool cleanupWorkDirectory)
 {
-  if (cleanupWorkDirectory != cleanupWorkDirectory_)
-  {
-    cleanupWorkDirectory_ = cleanupWorkDirectory;
-    setSteps(getSteps());
-  }
+  cleanupWorkDirectory_ = cleanupWorkDirectory;
+  updateCode();
 }
 
 Bool CouplingPhysicalModel::getCleanupWorkDirectory() const
@@ -365,6 +364,7 @@ void CouplingPhysicalModel::setCacheFiles(const OT::FileName & inputFile, const 
 void CouplingPhysicalModel::setWorkDir(const OT::FileName & workDir)
 {
   workDir_ = workDir;
+  updateCode();
 }
 
 

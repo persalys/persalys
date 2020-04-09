@@ -53,6 +53,9 @@ public:
   virtual OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
 
+  /** Update python code if advanced config has changed **/
+  void updateCode();
+
   /** Whether the work dir is discarded */
   void setCleanupWorkDirectory(const OT::Bool cleanupWorkDirectory);
   OT::Bool getCleanupWorkDirectory() const;
