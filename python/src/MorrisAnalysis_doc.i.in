@@ -24,7 +24,7 @@ Create the Morris analysis:
 
 >>> analysis = persalys.MorrisAnalysis('anAnalysis', myPhysicalModel)
 >>> analysis.setBounds(ot.Interval([100, 60000], [350, 80000]))
->>> analysis.setLevel(4)
+>>> analysis.setLevel(5)
 >>> analysis.run()
 
 Get the result:

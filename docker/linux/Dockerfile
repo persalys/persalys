@@ -168,11 +168,11 @@ RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.0.tar.xz | tar xJ &&
 
 # openturns
 RUN yum -y install libxml2-devel
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout 1.14 \
- && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.15rc1 \
+ && cmake  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.7 \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.8 \
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otfmi
