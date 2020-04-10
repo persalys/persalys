@@ -255,7 +255,7 @@ int InTableModel::rowCount(const QModelIndex & /*parent*/) const
 
 int InTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-  return 4;
+  return 5;
 }
 
 Qt::ItemFlags InTableModel::flags(const QModelIndex & index) const
@@ -278,6 +278,8 @@ QVariant InTableModel::headerData(int section, Qt::Orientation orientation, int 
         return tr("Token");
       case 3:
         return tr("Value");
+      case 4:
+        return tr("Format");
     }
   }
   return QAbstractTableModel::headerData(section, orientation, role);
@@ -318,6 +320,10 @@ QVariant InTableModel::data(const QModelIndex & index, int role) const
           return QString::number(output.getValue(), 'g', StudyTreeViewModel::DefaultSignificantDigits);
         }
       }
+      case 4:
+      {
+        return QString::fromUtf8(getInputFile().getFormats()[index.row()].c_str());
+      }
     }
   }
   return QVariant();
@@ -348,7 +354,7 @@ bool InTableModel::setData(const QModelIndex & index, const QVariant & value, in
 
       Description names(inFile.getVariableNames());
       names[index.row()] = newname;
-      inFile.setVariables(names, inFile.getTokens());
+      inFile.setVariables(names, inFile.getTokens(), inFile.getFormats());
       updateModel(inFile);
 
       if (model_->hasInputNamed(newname))
@@ -386,7 +392,7 @@ bool InTableModel::setData(const QModelIndex & index, const QVariant & value, in
 
       Description tokens(inFile.getTokens());
       tokens[index.row()] = newtoken;
-      inFile.setVariables(inFile.getVariableNames(), tokens);
+      inFile.setVariables(inFile.getVariableNames(), tokens, inFile.getFormats());
       updateModel(inFile);
       break;
     }
@@ -404,6 +410,20 @@ bool InTableModel::setData(const QModelIndex & index, const QVariant & value, in
       else
         model_->setOutputValue(name, value.toDouble());
       model_->blockNotification();
+      break;
+    }
+    case 4:
+    {
+      String newformat = value.toString().toUtf8().constData();
+      if(newformat.empty())
+        newformat = "{}";
+      if (inFile.getFormats()[index.row()] == newformat)
+        return true;
+
+      Description formats(inFile.getFormats());
+      formats[index.row()] = newformat;
+      inFile.setVariables(inFile.getVariableNames(), inFile.getTokens(), formats);
+      updateModel(inFile);
       break;
     }
   }
@@ -438,10 +458,12 @@ void InTableModel::addLine()
   CouplingInputFile inFile(getInputFile());
   Description names(inFile.getVariableNames());
   Description tokens(inFile.getTokens());
+  Description formats(inFile.getFormats());
   names.add('X' + (OSS() << i).str());
   tokens.add("@X" + (OSS() << i).str());
+  formats.add("{}");
 
-  inFile.setVariables(names, tokens);
+  inFile.setVariables(names, tokens, formats);
   updateModel(inFile);
 
   updateData();
@@ -459,10 +481,12 @@ void InTableModel::removeLine()
   CouplingInputFile inFile(getInputFile());
   Description names(inFile.getVariableNames());
   Description tokens(inFile.getTokens());
+  Description formats(inFile.getFormats());
   names.erase(names.begin() + index.row());
   tokens.erase(tokens.begin() + index.row());
+  formats.erase(formats.begin() + index.row());
 
-  inFile.setVariables(names, tokens);
+  inFile.setVariables(names, tokens, formats);
   updateModel(inFile);
 
   updateData();

@@ -94,7 +94,10 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       oss << offset << "input_file" << j << " = persalys.CouplingInputFile('"<<EscapePath(inputFile.getPath())<<"')\n";
       oss << offset << "input_file" << j <<".setConfiguredPath('" << EscapePath(inputFile.getConfiguredPath())<<"')\n";
       if (inputFile.getVariableNames().getSize() > 0)
-        oss << offset << "input_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(inputFile.getTokens())<<")\n";
+        oss << offset << "input_file" << j <<".setVariables("
+            << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "
+            << Parameters::GetOTDescriptionStr(inputFile.getTokens())<<", "
+            << Parameters::GetOTDescriptionStr(inputFile.getFormats())<<")\n";
       oss << offset << "input_files.append(input_file"<<j<<")\n";
     }
     const CouplingResourceFileCollection resourceFiles(step.getResourceFiles());
@@ -222,7 +225,10 @@ void CouplingPhysicalModel::updateCode()
   code << "            if not input_file.getPath():\n";
   code << "                continue\n";
   code << "            input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
-  code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values, encoding=step.getEncoding())\n";
+  code << "            formats = input_file.getFormats()\n";
+  code << "            if formats.isBlank():\n";
+  code << "                formats=None\n";
+  code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
   code << "        for resource_file in step.getResourceFiles():\n";
   code << "            if not resource_file.getPath():\n";
   code << "                continue\n";

@@ -83,12 +83,15 @@ String CouplingInputFile::getConfiguredPath() const
 }
 
 /* Variables accessor */
-void CouplingInputFile::setVariables(const Description & variableNames, const Description & tokens)
+void CouplingInputFile::setVariables(const Description & variableNames,
+                                     const Description & tokens,
+                                     const Description & formats)
 {
   if (variableNames.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Variable names size must match tokens size";
   variableNames_= variableNames;
   tokens_ = tokens;
+  formats_ = formats;
 }
 
 Description CouplingInputFile::getVariableNames() const
@@ -101,6 +104,11 @@ Description CouplingInputFile::getTokens() const
   return tokens_;
 }
 
+Description CouplingInputFile::getFormats() const
+{
+  return formats_;
+}
+
 
 /* String converter */
 String CouplingInputFile::__repr__() const
@@ -110,7 +118,8 @@ String CouplingInputFile::__repr__() const
       << " path=" << getPath()
       << " configuredPath=" << getConfiguredPath()
       << " variableNames=" << getVariableNames()
-      << " tokens=" << getTokens();
+      << " tokens=" << getTokens()
+      << " formats=" << getFormats();
   return oss;
 }
 
@@ -122,6 +131,7 @@ void CouplingInputFile::save(Advocate & adv) const
   adv.saveAttribute("configuredPath_", configuredPath_);
   adv.saveAttribute("variableNames_", variableNames_);
   adv.saveAttribute("tokens_", tokens_);
+  adv.saveAttribute("formats_", formats_);
 }
 
 
@@ -133,6 +143,7 @@ void CouplingInputFile::load(Advocate & adv)
   adv.loadAttribute("configuredPath_", configuredPath_);
   adv.loadAttribute("variableNames_", variableNames_);
   adv.loadAttribute("tokens_", tokens_);
+  adv.loadAttribute("formats_", formats_);
 }
 
 }

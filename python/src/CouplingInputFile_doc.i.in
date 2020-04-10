@@ -67,7 +67,9 @@ Parameters
 names : sequence of str
     Variable names
 tokens : sequence of str
-    Tokens used for replacement in the template file."
+    Tokens used for replacement in the template file.
+formats : sequence of str
+    Variable numerical formats"
 
 // ---------------------------------------------------------------------
 
@@ -87,4 +89,14 @@ tokens : :py:class:`openturns.Description`
 Returns
 -------
 variable_names : :py:class:`openturns.Description`
-    Output variable names"
+    Input variable names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingInputFile::getFormats
+"Variables format accessor.
+
+Returns
+-------
+formats : :py:class:`openturns.Description`
+    Input variables format"

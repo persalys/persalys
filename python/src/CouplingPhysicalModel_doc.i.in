@@ -36,7 +36,7 @@ input.txt is generated from the existing input_template.txt by replacing the @XN
 
 >>> input_file = persalys.CouplingInputFile('/tmp/input_template.txt')
 >>> input_file.setConfiguredPath('input.txt')
->>> input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+>>> input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'], ['', '', ''])
 
 external_program.py reads input.txt and writes output.txt:
 

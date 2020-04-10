@@ -46,9 +46,12 @@ public:
   OT::String getConfiguredPath() const;
 
   /** Variables accessor */
-  void setVariables(const OT::Description & variableNames, const OT::Description & tokens);
+  void setVariables(const OT::Description & variableNames,
+                    const OT::Description & tokens,
+                    const OT::Description & formats);
   OT::Description getVariableNames() const;
   OT::Description getTokens() const;
+  OT::Description getFormats() const;
 
   /** String converter */
   virtual OT::String __repr__() const;
@@ -64,6 +67,7 @@ private:
   OT::String configuredPath_;
   OT::Description variableNames_;
   OT::Description tokens_;
+  OT::Description formats_;
 };
 
 }

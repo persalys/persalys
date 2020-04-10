@@ -25,7 +25,8 @@ with open('external_program.py', 'w') as f:
 
 input_file = persalys.CouplingInputFile('input_template.txt')
 input_file.setConfiguredPath('input.txt')
-input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'],
+                        ['{:10.6f}', '{:10.6f}', '{:10.6f}'])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
@@ -72,7 +73,7 @@ with open('external_program.py', 'w') as f:
 
 input_file = persalys.CouplingInputFile('input_template.txt')
 input_file.setConfiguredPath('input.txt')
-input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'], ['', '', ''])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['']*2, [0, 0], [0, -1], [0, 0])
@@ -109,7 +110,7 @@ with open('external_program.py', 'w') as f:
 
 input_file = persalys.CouplingInputFile('input_template.txt')
 input_file.setConfiguredPath('input.txt')
-input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'], ['', '', ''])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [1, 0], [0, 0], [0, 0])
@@ -147,7 +148,7 @@ with open('program.py', 'w') as f:
 
 input_file = persalys.CouplingInputFile('input.txt.in')
 input_file.setConfiguredPath('input.txt')
-input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'], ['', '', ''])
 resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
@@ -192,7 +193,7 @@ with open('program.py', 'w') as f:
 
 input_file = persalys.CouplingInputFile('input.txt.in')
 input_file.setConfiguredPath('input.txt')
-input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'], ['', '', ''])
 resource_file = persalys.CouplingResourceFile('program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
@@ -233,7 +234,7 @@ with open('program1.py', 'w') as f:
     f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
 input_file = persalys.CouplingInputFile('input1.txt.in')
 input_file.setConfiguredPath('input1.txt')
-input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'])
+input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'], ['', '', ''])
 resource_file = persalys.CouplingResourceFile('program1.py')
 output_file = persalys.CouplingOutputFile('output1.txt')
 output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
@@ -252,7 +253,7 @@ with open('program2.py', 'w') as f:
     f.write('    f.write("Y2=%.17e\\n" % Y2)\n')
 input_file = persalys.CouplingInputFile('input2.txt.in')
 input_file.setConfiguredPath('input2.txt')
-input_file.setVariables(['X2', 'X3', 'X4'], ['@X2', '@X3', '@X4'])
+input_file.setVariables(['X2', 'X3', 'X4'], ['@X2', '@X3', '@X4'], ['', '', ''])
 resource_file = persalys.CouplingResourceFile('program2.py')
 output_file = persalys.CouplingOutputFile('output2.txt')
 output_file.setVariables(['Y2'], ['Y2='], [0], [0], [0])
@@ -270,7 +271,7 @@ with open('program3.py', 'w') as f:
     f.write('    f.write("Z0=%.17e\\n" % Z0)\n')
 input_file = persalys.CouplingInputFile('input3.txt.in')
 input_file.setConfiguredPath('input3.txt')
-input_file.setVariables(['Y1', 'Y2'], ['@Y1', '@Y2'])
+input_file.setVariables(['Y1', 'Y2'], ['@Y1', '@Y2'], ['', ''])
 resource_file = persalys.CouplingResourceFile('program3.py')
 output_file = persalys.CouplingOutputFile('output3.txt')
 output_file.setVariables(['Z0'], ['Z0='], [0], [0], [0])
