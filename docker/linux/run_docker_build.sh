@@ -68,6 +68,8 @@ cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so persalys.AppDir/usr/lib
 
 # python
+sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
+cp -v /usr/local/bin/python persalys.AppDir/usr/bin
 cp -v /usr/local/bin/python3* persalys.AppDir/usr/bin
 cp -r /usr/local/lib/python3* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpython*.so.* persalys.AppDir/usr/lib
