@@ -24,3 +24,7 @@ RUN echo "__version__= '0.0'" > /tmp/otfmi.py \
  && sudo mv /tmp/otfmi.py ${MINGW_PREFIX}/lib/python${PYMAJMIN}/otfmi.py
 
 RUN sudo pacman -S unzip --noconfirm
+
+# https://bugreports.qt.io/browse/QTBUG-80990
+RUN sudo sed -i 's|#ifndef __TBB_profiling_H|#if !defined(__TBB_profiling_H) \&\& !defined(Q_MOC_RUN)|g' ${MINGW_PREFIX}/include/tbb/tbb_profiling.h || :
+
