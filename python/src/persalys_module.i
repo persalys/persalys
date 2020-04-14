@@ -145,7 +145,6 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include SRCResult.i
 %include SRCAnalysis.i
 #ifdef PERSALYS_HAVE_OTMORRIS
-%include otmorris_module.i
 %include MorrisResult.i
 %include MorrisAnalysis.i
 #endif
