@@ -30,14 +30,14 @@ namespace PERSALYS
 
 DoubleSpinBox::DoubleSpinBox(QWidget * parent)
   : QDoubleSpinBox(parent)
-  , dispDecimals(15)
+  , dispDecimals(0)
   , delimiter(' ')
   , thousand(' ')
   , v(0)
 {
   initLocalValues(parent);
 
-  QDoubleSpinBox::setDecimals(15);
+  QDoubleSpinBox::setDecimals(323);
   setDecimals(15);
 
   // set Range to maximum possible values
