@@ -19,8 +19,12 @@
  *
  */
 #include "persalys/CouplingInputFile.hxx"
+#include "persalys/BaseTools.hxx"
+#include "persalys/PythonEnvironment.hxx"
+#include "persalys/InterpreterUnlocker.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/PythonWrappingFunctions.hxx>
 
 #include <boost/filesystem.hpp>
 
@@ -109,6 +113,41 @@ Description CouplingInputFile::getFormats() const
   return formats_;
 }
 
+/* Simulating input file creation */
+void CouplingInputFile::simulateInput(InputCollection inColl) const
+{
+  const Description variableNames(getVariableNames());
+  OSS code;
+  code << "import tempfile\n";
+  code << "import os\n";
+  code << "import openturns.coupling_tools as otct\n";
+  code << "import persalys\n";
+  code << "input_file = persalys.CouplingInputFile('"<<EscapePath(getPath())<<"')\n";
+  code << "input_file.setConfiguredPath('" << EscapePath(getConfiguredPath())<<"')\n";
+  code << "input_file.setVariables("
+       << Parameters::GetOTDescriptionStr(getVariableNames())<<", "
+       << Parameters::GetOTDescriptionStr(getTokens())<<", "
+       << Parameters::GetOTDescriptionStr(getFormats())<<")\n";
+  code << "all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(variableNames) << ", [";
+  for (UnsignedInteger i = 0; i < inColl.getSize(); ++ i)
+  {
+    code << inColl[i].getValue();
+    if (i < inColl.getSize() - 1)
+      code << ", ";
+  }
+  code << "]))\n";
+  code << "input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
+  code << "formats = input_file.getFormats()\n";
+  code << "if formats.isBlank():\n";
+  code << "    formats=None\n";
+  code << "otct.replace(input_file.getPath(), os.path.join(tempfile.gettempdir(), input_file.getConfiguredPath()), tokens=input_file.getTokens(), values=input_values, formats=formats)\n";
+
+  InterpreterUnlocker iul;
+  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
+  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
+  ScopedPyObjectPointer retValue(PyRun_String(code.str().c_str(), Py_file_input, dict, dict));
+  handleExceptionTraceback();
+}
 
 /* String converter */
 String CouplingInputFile::__repr__() const

@@ -38,6 +38,7 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QComboBox>
+#include <QTextStream>
 
 using namespace OT;
 
@@ -827,6 +828,84 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
                 model->setSteps(csColl);
                 model->blockNotification();
                });
+
+  QPushButton * checkTemplateButton = new QPushButton(tr("Check template file"));
+  checkTemplateButton->minimumSizeHint();
+  layout->addWidget(checkTemplateButton, row, 0);
+  CollapsibleGroupBox * inputLayoutBox = new CollapsibleGroupBox(tr("Template/input comparison"));
+  layout->addWidget(inputLayoutBox, ++row, 0, 1, 3);
+  QHBoxLayout * inputLayout = new QHBoxLayout(inputLayoutBox);
+  QLabel * temTextLabel = new QLabel("");
+  QLabel * simTextLabel = new QLabel("");
+  temTextLabel->setTextFormat(Qt::AutoText);
+  simTextLabel->setTextFormat(Qt::AutoText);
+  inputLayout->addWidget(temTextLabel, 0, Qt::AlignTop);
+  inputLayout->addWidget(simTextLabel, 1, Qt::AlignTop);
+  inputLayout->setStretch(0, 0.5);
+  inputLayout->setStretch(1, 0.5);
+
+  connect(checkTemplateButton, &QPushButton::clicked,
+          [=](){
+            temTextLabel->clear();
+            temTextLabel->setStyleSheet("");
+            simTextLabel->clear();
+            CouplingStepCollection csColl(model->getSteps());
+            CouplingStep cs(csColl[indStep]);
+            CouplingInputFileCollection inColl(cs.getInputFiles());
+
+            QFileInfo temFile(inColl[indFile].getPath().c_str());
+            QFileInfo simFile(QDir::temp().absolutePath()+"/"+inColl[indFile].getConfiguredPath().c_str());
+
+            if(!temFile.exists())
+              temTextLabel->setText(tr("Template file not found")+"\n");
+            else if(!temFile.isReadable())
+              temTextLabel->setText(tr("Template file not readable")+"\n");
+            else {
+              try {
+                inColl[indFile].simulateInput(model->getInputs());}
+              catch (std::exception & ex) {
+                temTextLabel->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
+                temTextLabel->setText(ex.what());
+                return;}
+              QString temText(readFile(temFile));
+              QString simText(readFile(simFile));
+              compareFiles(temText, simText);
+
+              temTextLabel->setText(temText);
+              simTextLabel->setText(simText);
+            }
+          });
+}
+
+void CouplingInputFileWidget::compareFiles(QString & s1, QString & s2) const
+{
+  QList<QString> l1 = s1.split("\n");
+  QList<QString> l2 = s2.split("\n");
+  assert(l1.size() == l2.size());
+  s2.clear();
+  for(int i=0; i<l1.size(); ++i) {
+    if(l1[i]!=l2[i]) {
+      l2[i].replace(l2[i], QString("<font color=\"red\">" + l2[i].toHtmlEscaped() + "</font>"));
+      s2.append(l2[i]+"<br>");
+    } else {
+      s2.append(l2[i].toHtmlEscaped()+"<br>");
+    }
+  }
+}
+
+QString CouplingInputFileWidget::readFile(QFileInfo & fname) const
+{
+  QFile file(fname.filePath());
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    return "Reading error for "+fname.filePath()+"\n";
+
+  QTextStream in(&file);
+  QString lines;
+  while(!in.atEnd()) {
+    lines += in.readLine()+"\n";
+  }
+  file.close();
+  return lines;
 }
 
 // Widget for Coupling Ressource file ( <=> Coupling input file without template path )

@@ -27,6 +27,7 @@
 #include "persalys/FileTools.hxx"
 #include "persalys/TemporaryLabel.hxx"
 
+#include <QPushButton>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QTabWidget>
@@ -206,14 +207,10 @@ class PERSALYS_API AddRemoveWidget : public QWidget
 public:
   AddRemoveWidget()
   {
-    QToolButton * addButton = new QToolButton;
-    addButton->setIcon(QIcon(":/images/list-add.png"));
-    addButton->setToolTip(tr("Add"));
+    QPushButton * addButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     connect(addButton, SIGNAL(clicked(bool)), this, SIGNAL(addRequested()));
 
-    QToolButton * removeButton = new QToolButton;
-    removeButton->setIcon(QIcon(":/images/list-remove.png"));
-    removeButton->setToolTip(tr("Remove"));
+    QPushButton * removeButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
     connect(removeButton, SIGNAL(clicked(bool)), this, SIGNAL(removeRequested()));
 
     QHBoxLayout * buttonsLayout = new QHBoxLayout(this);
@@ -235,6 +232,8 @@ class PERSALYS_API CouplingInputFileWidget : public QWidget
 public:
   CouplingInputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = 0);
   int getIndFile() const { return indFile_; };
+  QString readFile(QFileInfo & fname) const;
+  void compareFiles(QString & s1, QString & s2) const;
 signals:
   void variableListChanged();
 private:

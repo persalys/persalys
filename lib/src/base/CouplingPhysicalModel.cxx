@@ -25,8 +25,6 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 
-#include <boost/regex.hpp>
-
 using namespace OT;
 
 namespace PERSALYS
@@ -69,12 +67,6 @@ CouplingPhysicalModel* CouplingPhysicalModel::clone() const
 CouplingStepCollection CouplingPhysicalModel::getSteps() const
 {
   return steps_;
-}
-
-inline String EscapePath(const FileName & filename)
-{
-  FileName escapedPath = boost::regex_replace(filename, boost::regex("\\\\"), "\\\\\\\\");
-  return escapedPath;
 }
 
 String CouplingPhysicalModel::getStepsMacro(const String & offset) const

@@ -22,6 +22,8 @@
 #define PERSALYS_COUPLINGINPUTFILE_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include "Input.hxx"
+
 #include <openturns/Description.hxx>
 
 namespace PERSALYS
@@ -52,6 +54,9 @@ public:
   OT::Description getVariableNames() const;
   OT::Description getTokens() const;
   OT::Description getFormats() const;
+
+  /** Simulating input file creation */
+  void simulateInput(InputCollection inColl) const;
 
   /** String converter */
   virtual OT::String __repr__() const;
