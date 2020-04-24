@@ -26,6 +26,7 @@
 #include "persalys/CouplingPhysicalModel.hxx"
 #include "persalys/FileTools.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/CopyableTableView.hxx"
 
 #include <QPushButton>
 #include <QToolButton>
@@ -304,6 +305,22 @@ private:
   CouplingPhysicalModel * model_ = 0;
   DynamicTabWidget * stepTabWidget_ = 0;
   TemporaryLabel * errorMessageLabel_ = 0;
+};
+
+class PERSALYS_API CouplingSummaryWidget : public QTabWidget
+{
+ Q_OBJECT
+
+public :
+  CouplingSummaryWidget(PhysicalModelItem * item);
+
+protected slots:
+  void showEvent(QShowEvent *event);
+
+private:
+  PhysicalModel model_;
+  CopyableTableView * inputTableView_;
+  CopyableTableView * outputTableView_;
 };
 }
 #endif

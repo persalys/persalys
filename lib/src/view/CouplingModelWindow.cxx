@@ -28,6 +28,8 @@
 #include "persalys/StudyTreeViewModel.hxx"
 #include "persalys/EditButtonDelegate.hxx"
 #include "persalys/ModelEvaluation.hxx"
+#include "persalys/InputTableModel.hxx"
+#include "persalys/OutputTableModel.hxx"
 
 #include <QGroupBox>
 #include <QGridLayout>
@@ -39,6 +41,7 @@
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include <QTextStream>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -177,8 +180,14 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
 
   tabLayout->addWidget(differentiationTableView);
-
   mainTabWidget->addTab(tab, tr("Differentiation"));
+
+  //Summary tab
+  tab = new QWidget;
+  tabLayout = new QGridLayout(tab);
+  CouplingSummaryWidget * summaryTab = new CouplingSummaryWidget(item);
+  tabLayout->addWidget(summaryTab);
+  mainTabWidget->addTab(tab, tr("Summary"));
 }
 
 void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)
@@ -1303,5 +1312,56 @@ void CouplingStepWidget::updateInputFileWidgets(PhysicalModelItem *item)
   ressourceFileWidget_->updateTable();
 
   item->update(0, "inputStepChanged");
+}
+
+CouplingSummaryWidget::CouplingSummaryWidget(PhysicalModelItem * item)
+  : QTabWidget()
+  , model_(item->getPhysicalModel())
+  , inputTableView_(0)
+  , outputTableView_(0)
+{
+  QVBoxLayout * vbox = new QVBoxLayout;
+  QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
+
+  // Table Inputs -------------------------------------------
+  QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
+  QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
+
+  // table view
+  inputTableView_ = new CopyableTableView;
+  inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
+
+  InputTableModel * inputTableModel = new InputTableModel(model_, inputTableView_);
+  inputTableView_->setModel(inputTableModel);
+
+  inputsLayout->addWidget(inputTableView_);
+  verticalSplitter->addWidget(inputsBox);
+  verticalSplitter->setStretchFactor(0, 5);
+
+  // Table Outputs -------------------------------------------
+  QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
+  QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
+
+  // table view
+  outputTableView_ = new CopyableTableView;
+  outputTableView_->setEditTriggers(QTableView::NoEditTriggers);
+
+  OutputTableModel * outputTableModel = new OutputTableModel(model_, outputTableView_);
+  outputTableView_->setModel(outputTableModel);
+
+  // connections
+  outputsLayout->addWidget(outputTableView_);
+  verticalSplitter->addWidget(outputsBox);
+  verticalSplitter->setStretchFactor(1, 3);
+
+  vbox->addWidget(verticalSplitter);
+  setLayout(vbox);
+}
+
+void CouplingSummaryWidget::showEvent(QShowEvent *event)
+{
+  QTabWidget::showEvent(event);
+  qobject_cast<InputTableModel*>(inputTableView_->model())->updateData();
+  qobject_cast<OutputTableModel*>(outputTableView_->model())->updateData();
 }
 }
