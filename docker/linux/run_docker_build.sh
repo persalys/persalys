@@ -73,7 +73,7 @@ cp -r /usr/local/lib/python3* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpython*.so.* persalys.AppDir/usr/lib
 
 # ot libs
-for libname in otmorris OT muparser nlopt ceres cminpack
+for libname in otmorris OT nlopt ceres cminpack
 do
   cp -v /usr/local/lib/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
