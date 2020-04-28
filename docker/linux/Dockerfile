@@ -5,19 +5,18 @@ ENV MAKEFLAGS -j8
 WORKDIR /usr/local/src
 
 # utils
-RUN yum install -y epel-release wget git patch unzip perl subversion xz
+RUN yum -y install wget git patch zip unzip perl subversion xz gettext autoconf automake libtool pcre-devel perl fontconfig blas-devel lapack-devel atlas-devel libxml2-devel sudo
+RUN yum -y install epel-release && yum -y install patchelf pandoc dvisvgm
 
 # devtoolset-6
-RUN yum install -y centos-release-scl
-RUN yum install -y devtoolset-6-gcc devtoolset-6-gcc-c++ devtoolset-6-gcc-gfortran devtoolset-6-binutils
-ENV PATH /opt/rh/devtoolset-6/root/usr/bin:$PATH
-ENV LD_LIBRARY_PATH /opt/rh/devtoolset-6/root/usr/lib64:/opt/rh/devtoolset-6/root/usr/lib
+RUN yum -y install centos-release-scl && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
+ENV PATH /opt/rh/devtoolset-8/root/usr/bin:$PATH
+ENV LD_LIBRARY_PATH /opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
 
 # muparser
 RUN git clone https://github.com/beltoforion/muparser.git && cd muparser && git checkout v2.2.5 && ./configure --disable-samples && make && make install > /dev/null 2>&1
 
 # swig
-RUN yum -y install pcre-devel
 RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz | tar xz && cd swig-4.0.1 \
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
@@ -59,11 +58,10 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimag
  && appimagetool -h
 
 # glibc 2.14
-RUN curl -fSsL http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz | tar xz && cd glibc-2.14 && sed -i 's/3.4\* | 4.\[0-9\]\*/3.4* | 4.\[0-9\]\* | 6.\[0-9\]\*/g' configure \
+RUN curl -fSsL http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz | tar xz && cd glibc-2.14 && curl -L https://raw.githubusercontent.com/wheybags/glibc_version_header/master/patches/fix_obstack_compat.diff | patch -p1 && sed -i 's/3.4\* | 4.\[0-9\]\*/3.4* | 4.\[0-9\]\* | 8.\[0-9\]\*/g' configure \
  && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # texlive: see https://github.com/leodido/dockerfiles/blob/master/texlive:latest/Dockerfile
-RUN yum install -y perl fontconfig
 # environment
 ENV TL install-tl
 RUN mkdir -p $TL
@@ -76,7 +74,6 @@ RUN ln -s /usr/local/texlive/2014/bin/x86_64-linux /opt/texbin
 ENV PATH $PATH:/usr/local/texlive/2014/bin/x86_64-linux
 
 # relink texlive executables
-RUN yum install -y patchelf
 RUN patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/pdftex \
  && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/bibtex \
  && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/kpsewhich \
@@ -98,7 +95,6 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz | tar xz
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
 # pip
-RUN yum -y install blas-devel lapack-devel
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython
 RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.17.5.tar.gz | tar xz && cd numpy-1.17.5 && python3 setup.py install && cd - && python3 -c "import numpy"
 RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.1.0.tar.gz | tar xz && cd scipy-1.1.0 && python3 setup.py install && cd - && python3 -c "import scipy.linalg"
@@ -122,7 +118,6 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.6.tar.
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
 # sphinx
-RUN yum -y install pandoc dvisvgm
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
@@ -167,7 +162,6 @@ RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.0.tar.xz | tar xJ &&
   .. && make install > /dev/null 2>&1
 
 # openturns
-RUN yum -y install libxml2-devel
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.15rc1 \
  && cmake  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
@@ -183,13 +177,12 @@ RUN localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG "C.UTF-8"
 
 # openmodelica
-RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel libtool gettext zip
+RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel
 RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.14.1 \
  && git submodule sync && git submodule update --init --recursive \
  && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # devel user
-RUN yum -y install sudo
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel
