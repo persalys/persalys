@@ -26,7 +26,7 @@ RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.6.tar.gz | tar 
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF . && make install
 
 # nlopt
-RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.1.tar.gz | tar xz && cd nlopt-2.6.1 \
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.2.tar.gz | tar xz && cd nlopt-2.6.2 \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1
 
 # eigen
