@@ -13,9 +13,6 @@ RUN yum -y install centos-release-scl && yum -y install devtoolset-8-gcc devtool
 ENV PATH /opt/rh/devtoolset-8/root/usr/bin:$PATH
 ENV LD_LIBRARY_PATH /opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
 
-# muparser
-RUN git clone https://github.com/beltoforion/muparser.git && cd muparser && git checkout v2.2.5 && ./configure --disable-samples && make && make install > /dev/null 2>&1
-
 # swig
 RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz | tar xz && cd swig-4.0.1 \
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
