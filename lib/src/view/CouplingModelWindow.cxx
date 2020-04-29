@@ -978,25 +978,48 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
                  tableWidget_->horizontalHeader()->resizeSection(1, tb->width());
                  connect(tb, &QToolButton::clicked,
                          [=](){
-                                QString fileName = QFileDialog::getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
-                                if (fileName.isEmpty())
-                                  return;
+                           QFileDialog* dlg = new QFileDialog(this);
+                           QStringList filters;
+                           filters <<"Any file (*)"
+                                   <<"Choose directory";
 
-                                FileTools::SetCurrentDir(fileName);
-                                newItem->setData(Qt::DisplayRole, fileName);
+                           dlg->setFileMode(QFileDialog::AnyFile);
+                           dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+                           dlg->setNameFilters(filters);
+                           connect(dlg, &QFileDialog::filterSelected,
+                                   [=]() {
+                                     if(dlg->selectedNameFilter().contains("directory")) {
+                                       dlg->setFileMode(QFileDialog::Directory);
+                                       // Filters are reset when setting QFileDialog::Directory
+                                       QStringList r_filters;
+                                       r_filters << filters[1] << filters[0];
+                                       dlg->setNameFilters(r_filters);
+                                     } else {
+                                       dlg->setFileMode(QFileDialog::AnyFile);
+                                       dlg->setNameFilters(filters);
+                                     }
+                                   });
+                           dlg->exec();
+                           QString fileName = dlg->selectedFiles()[0];
 
-                                CouplingStepCollection csColl(model->getSteps());
-                                CouplingStep cs(csColl[indStep]);
-                                CouplingResourceFileCollection inColl(cs.getResourceFiles());
+                           if (fileName.isEmpty())
+                             return;
 
-                                inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
-                                cs.setResourceFiles(inColl);
-                                csColl[indStep] = cs;
-                                model->blockNotification("PhysicalModelDefinitionItem");
-                                model->setSteps(csColl);
-                                model->blockNotification();
-                              });
-                });
+                           FileTools::SetCurrentDir(fileName);
+                           newItem->setData(Qt::DisplayRole, fileName);
+
+                           CouplingStepCollection csColl(model->getSteps());
+                           CouplingStep cs(csColl[indStep]);
+                           CouplingResourceFileCollection inColl(cs.getResourceFiles());
+
+                           inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
+                           cs.setResourceFiles(inColl);
+                           csColl[indStep] = cs;
+                           model->blockNotification("PhysicalModelDefinitionItem");
+                           model->setSteps(csColl);
+                           model->blockNotification();
+                         });
+          });
   connect(addRemoveWidget, &AddRemoveWidget::removeRequested,
     [=]() {
            CouplingStepCollection csColl(model->getSteps());
