@@ -142,7 +142,10 @@ void CouplingOutputFile::load(Advocate & adv)
   adv.loadAttribute("path_", path_);
   adv.loadAttribute("variableNames_", variableNames_);
   adv.loadAttribute("tokens_", tokens_);
-  adv.loadAttribute("skipTokens_", skipTokens_);
+  if(adv.hasAttribute("skipTokens_"))
+    adv.loadAttribute("skipTokens_", skipTokens_);
+  else
+    skipTokens_ = OT::Point(variableNames_.getSize(), 0.);
   adv.loadAttribute("skipLines_", skipLines_);
   adv.loadAttribute("skipColumns_", skipColumns_);
 }

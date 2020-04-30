@@ -182,7 +182,10 @@ void CouplingInputFile::load(Advocate & adv)
   adv.loadAttribute("configuredPath_", configuredPath_);
   adv.loadAttribute("variableNames_", variableNames_);
   adv.loadAttribute("tokens_", tokens_);
-  adv.loadAttribute("formats_", formats_);
+  if(adv.hasAttribute("formats_"))
+    adv.loadAttribute("formats_", formats_);
+  else
+    formats_ = Description(variableNames_.getSize(), "{}");
 }
 
 }
