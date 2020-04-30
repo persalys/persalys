@@ -641,8 +641,6 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
       String newtoken = value.toString().toUtf8().constData();
       if (outFile.getTokens()[index.row()] == newtoken)
         return true;
-      if (value.toString().isEmpty())
-        return false;
 
       Description tokens(outFile.getTokens());
       tokens[index.row()] = newtoken;
