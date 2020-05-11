@@ -22,6 +22,8 @@
 #define PERSALYS_COUPLINGOUTPUTFILE_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include "Output.hxx"
+
 #include <openturns/Description.hxx>
 #include <openturns/Point.hxx>
 
@@ -52,6 +54,7 @@ public:
   OT::Point getSkipColumns() const;
   OT::Point getSkipTokens() const;
 
+  OT::String checkOutputFile(OT::String fname) const;
   /** String converter */
   virtual OT::String __repr__() const;
 

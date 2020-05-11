@@ -1119,6 +1119,21 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
               model->setSteps(csColl);
               model->blockNotification();
              });
+
+  QPushButton * checkButton = new QPushButton(tr("Check output"));
+  layout->addWidget(checkButton, row, 0, Qt::AlignLeft);
+  QLabel * textLabel = new QLabel("");
+  connect(checkButton, &QToolButton::clicked,
+          [=](){
+            layout->addWidget(textLabel, row+1, 0, Qt::AlignLeft);
+            QFileDialog * dlg = new QFileDialog(this);
+            dlg->setFileMode(QFileDialog::AnyFile);
+            dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+            dlg->exec();
+            QString fileName = dlg->selectedFiles()[0];
+            CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
+            textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString())));
+          });
 }
 
 // Widget for Coupling Step
