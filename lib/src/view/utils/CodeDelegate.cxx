@@ -164,7 +164,7 @@ void CodeEditor::highlightCurrentLine()
   {
     QTextEdit::ExtraSelection selection;
 
-    QColor lineColor(ApplicationColor["lightColor"]);
+    QColor lineColor(ApplicationColor["lighterColor"]);
 
     selection.format.setBackground(lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -239,6 +239,8 @@ QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem
 void CodeDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
 {
   CodeEditor * textEdit = dynamic_cast<CodeEditor*>(editor);
+  CodeHighlighter * highlighter = new CodeHighlighter(textEdit->document());
+  (void) highlighter;
   QString currentText(textEdit->toPlainText());
   QString newText(index.model()->data(index, Qt::DisplayRole).toString());
   if (currentText != newText)
@@ -274,4 +276,108 @@ void CodeDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option,
     painter->translate(-option.rect.topLeft());
   }
 }
+
+// ---------------- CodeHighlighter ---------------------------
+
+typedef QMap<QString, QTextCharFormat> FormatMap;
+static const FormatMap STYLES = {
+    { "keyword", CodeHighlighter::format("blue") },
+    { "operator", CodeHighlighter::format("red") },
+    { "brace", CodeHighlighter::format("darkGray") },
+    { "defclass", CodeHighlighter::format("black", "bold") },
+    { "string", CodeHighlighter::format("magenta") },
+    { "string2", CodeHighlighter::format("darkMagenta") },
+    { "comment", CodeHighlighter::format("darkGreen", "italic") },
+    { "self", CodeHighlighter::format("black", "italic") },
+    { "numbers", CodeHighlighter::format("brown") }
+};
+
+static const QStringList keywords = {
+    "and", "assert", "break", "class", "continue", "def",
+    "del", "elif", "else", "except", "exec", "finally",
+    "for", "from", "global", "if", "import", "in",
+    "is", "lambda", "not", "or", "pass", "print",
+    "raise", "return", "try", "while", "yield",
+    "None", "True", "False"
+};
+
+static const QStringList operators = {
+    "=",
+    "==", "!=", "<", "<=", ">", ">=",
+    "\\+", "-", "\\*", "/", "//", "\\%", "\\*\\*",
+    "\\+=", "-=", "\\*=", "/=", "\\%=",
+    "\\^", "\\|", "\\&", "\\~", ">>", "<<"
+};
+
+static const QStringList braces = {
+    "\\{", "\\}", "\\(", "\\)", "\\[", "\\]"
+};
+
+CodeHighlighter::CodeHighlighter(QTextDocument *parent)
+    : QSyntaxHighlighter(parent)
+{
+  // Keyword, operator, and brace rules
+  for(const QString &keyword : keywords)
+    {
+      QString pattern = QString("\\b%1\\b").arg(keyword);
+      highlightingRules += HighlightingRule(pattern, 0, STYLES["keyword"]);
+    }
+
+  for(const QString &pattern: operators)
+    highlightingRules += HighlightingRule(pattern, 0, STYLES["operator"]);
+
+  for(const QString &pattern: braces)
+    highlightingRules += HighlightingRule(pattern, 0, STYLES["brace"]);
+
+  // All other rules
+
+  // 'self'
+  highlightingRules += HighlightingRule("\\bself\\b", 0, STYLES["self"]);
+
+  // Quoted string
+  highlightingRules += HighlightingRule("\".*\"", 0, STYLES["string"]);
+  highlightingRules += HighlightingRule("\'.*\'", 0, STYLES["string"]);
+
+  // 'def' followed by an identifier
+  highlightingRules += HighlightingRule("\\bdef\\b\\s*(\\w+)", 1, STYLES["defclass"]);
+  // 'class' followed by an identifier
+  highlightingRules += HighlightingRule("\\bclass\\b\\s*(\\w+)", 1, STYLES["defclass"]);
+
+  // From '#' until a newline
+  highlightingRules += HighlightingRule("#[^\\n]*", 0, STYLES["comment"]);
+}
+
+void CodeHighlighter::highlightBlock(const QString &text)
+{
+  if(text.isEmpty())
+    return;
+  QRegularExpressionMatchIterator index;
+  // Do other syntax formatting
+  for (const HighlightingRule &rule : qAsConst(highlightingRules)) {
+    QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
+    while (matchIterator.hasNext()) {
+      QRegularExpressionMatch match = matchIterator.next();
+      setFormat(match.capturedStart(), match.capturedLength(), rule.format);
+    }
+  }
+  setCurrentBlockState(0);
+}
+
+// Return a QTextCharFormat with the given attributes.
+QTextCharFormat CodeHighlighter::format(const QString &colorName, const QString &style)
+{
+  QColor color;
+  color.setNamedColor(colorName);
+
+  QTextCharFormat format;
+  format.setForeground(color);
+
+  if(style.contains("bold"))
+    format.setFontWeight(QFont::Bold);
+  if(style.contains("italic"))
+    format.setFontItalic(true);
+
+  return format;
+}
+
 }
