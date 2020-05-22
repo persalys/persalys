@@ -164,9 +164,13 @@ void AnalysisImplementation::launch()
 {
 }
 
-
+Scalar AnalysisImplementation::getElapsedTime() const
+{
+  return elapsedTime_;
+}
 void AnalysisImplementation::run()
 {
+  TimeCriteria tc;
   isRunning_ = true;
   notify("analysisLaunched");
   try
@@ -176,12 +180,16 @@ void AnalysisImplementation::run()
     launch();
 
     isRunning_ = false;
+    tc.incrementElapsedTime();
+    elapsedTime_ = tc.getElapsedTime();
     notify("analysisFinished");
   }
   catch (std::exception & ex)
   {
     errorMessage_ +=  ex.what();
     isRunning_ = false;
+    tc.incrementElapsedTime();
+    elapsedTime_ = tc.getElapsedTime();
     notify("analysisBadlyFinished");
     throw;
   }

@@ -68,7 +68,7 @@ public:
   OT::String getWarningMessage() const;
   int getProgressValue() const;
   OT::String getHtmlDescription() const;
-
+  OT::Scalar getElapsedTime() const;
   virtual void stop();
 
   /** Method save() stores the object through the StorageManager */
@@ -95,6 +95,7 @@ protected:
   OT::String modelHtmlDescription_;
 
 private:
+  OT::Scalar elapsedTime_;
   bool isRunning_;
   OT::String errorMessage_;
   OT::Description interestVariables_;
