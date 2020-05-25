@@ -145,6 +145,15 @@ void PhysicalModel::setInputStochastic(const String & inputName, const bool & st
   getImplementation()->setInputStochastic(inputName, stoch);
 }
 
+void PhysicalModel::setEvalTime(const Scalar & evalTime)
+{
+  getImplementation()->setEvalTime(evalTime);
+}
+
+Scalar PhysicalModel::getEvalTime() const
+{
+  return getImplementation()->getEvalTime();
+}
 
 void PhysicalModel::setDistribution(const String & inputName, const Distribution & distribution)
 {

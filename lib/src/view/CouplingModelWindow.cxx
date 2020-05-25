@@ -147,7 +147,16 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-  connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
+  QLabel * timeInfo = new QLabel();
+  tabLayout->addWidget(timeInfo, 3, 0);
+  connect(evaluateOutputsButton, &QPushButton::clicked,
+          [=] () {
+            timeInfo->clear();
+            evaluateOutputs();
+            if(model_->getEvalTime()>0)
+              timeInfo->setText(tr("Elapsed time: ")
+                                + QString{ "%1" }.arg(model_->getEvalTime(), 0, 'g', 3) + "s");
+          });
   tabLayout->addWidget(evaluateOutputsButton, 2, 0, Qt::AlignLeft);
 
   // - error message label
@@ -225,17 +234,20 @@ void CouplingModelWindow::evaluateOutputs()
   if (!eval.getErrorMessage().empty())
   {
     errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
+    model_->setEvalTime(0);
     return;
   }
   if (!outputSample.getSize())
   {
     errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
+    model_->setEvalTime(0);
     return;
   }
 
   // set output value
   for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
     model_->setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
+  model_->setEvalTime(eval.getElapsedTime());
 
   // TODO: clear errorMessageLabel_ if model modification after an error message
 }

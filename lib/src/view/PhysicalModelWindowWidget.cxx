@@ -153,9 +153,17 @@ void PhysicalModelWindowWidget::buildInterface()
   // button Evaluate outputs -------------------------------------------
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-  connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
+  QLabel * timeInfo = new QLabel();
+  connect(evaluateOutputsButton, &QPushButton::clicked,
+          [=] () {
+            timeInfo->clear();
+            evaluateOutputs();
+            if(evalTime_>0)
+              timeInfo->setText(tr("Elapsed time: ")
+                                + QString{ "%1" }.arg( evalTime_, 0, 'g', 3) + "s");
+          });
   outputButtonsLayout->addWidget(evaluateOutputsButton);
-
+  outputButtonsLayout->addWidget(timeInfo);
   outputsLayout->addLayout(outputButtonsLayout);
   outputButtonsLayout->addStretch();
 
@@ -341,17 +349,20 @@ void PhysicalModelWindowWidget::evaluateOutputs()
     if (!eval.getErrorMessage().empty())
     {
       errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
+      physicalModel_.setEvalTime(0);
       return;
     }
     if (!outputSample.getSize())
     {
       errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
+      physicalModel_.setEvalTime(0);
       return;
     }
 
     // set output value
     for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++ i)
       physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
+    physicalModel_.setEvalTime(eval.getElapsedTime());
   }
   else
   {
@@ -369,8 +380,10 @@ void PhysicalModelWindowWidget::evaluateOutputs()
     catch (std::exception& ex)
     {
       errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs %1").arg(ex.what()));
+      physicalModel_.setEvalTime(0);
       return;
     }
+    physicalModel_.setEvalTime(eval.getElapsedTime());
   }
   errorMessageLabel_->reset();
 }

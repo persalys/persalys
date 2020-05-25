@@ -306,4 +306,14 @@ void PythonPhysicalModel::removeOutput(const String & /*outputName*/)
   throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
 }
 
+void PythonPhysicalModel::setEvalTime(const Scalar& evalTime)
+{
+  PhysicalModelImplementation::setEvalTime(evalTime);
+}
+
+Scalar PythonPhysicalModel::getEvalTime() const
+{
+  return PhysicalModelImplementation::getEvalTime();
+}
+
 }

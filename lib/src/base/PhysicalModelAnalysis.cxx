@@ -76,6 +76,7 @@ bool PhysicalModelAnalysis::canBeLaunched(String &errorMessage) const
 void PhysicalModelAnalysis::run()
 {
   AnalysisImplementation::run();
+  physicalModel_.setEvalTime(getElapsedTime());
   modelHtmlDescription_ = physicalModel_.getHtmlDescription(isDeterministicAnalysis_);
 }
 
