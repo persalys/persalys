@@ -209,7 +209,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(wizard.refPointPage_->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, 0, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!wizard.refPointPage_->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
     QVERIFY2(QtOT::DescriptionToStringList(wizard.refPointPage_->getFixedValues().getDescription()).join(",").toStdString() == "R,C,gam", "wrong fixed input names");
@@ -221,7 +221,7 @@ private slots:
     QVERIFY2(QtOT::DescriptionToStringList(wizard.refPointPage_->getFixedValues().getDescription()).join(",").toStdString() == "C,gam", "wrong fixed input names");
     QVERIFY2(wizard.priorDistPage_->getDistribution().getDescription() == Description(1, "R"), "wrong calibrated input names");
 
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, 0, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
     bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
     QVERIFY2(analysisEquality, "The two CalibrationAnalysis must be equal");
   }

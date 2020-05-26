@@ -114,9 +114,9 @@ private slots:
     QVERIFY2(model->getInputs()[3].isStochastic() == true, "wrong input status");
     QVERIFY2(model->getInputs()[3].getDistribution() == OT::Normal(2, 0.2), "wrong input distribution");
 
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, 0, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
     QVERIFY2(model->hasStochasticInputs() == false, "no stochastic inputs");
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, 0, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
     QVERIFY2(model->hasStochasticInputs() == true, "must have stochastic inputs");
 
     // change input distribution
@@ -125,7 +125,7 @@ private slots:
 
     // change distribution configuration type
     QRect rect = inTable->visualRect(inTable->model()->index(3, 0));
-    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, 0, rect.center()); // select line 3
+    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // select line 3
     selectParamTypeCombo->setCurrentIndex(1);
     ValueLineEdit * paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_0");
     QVERIFY2(paramValueEdit->value() == 2, "wrong mu value");
@@ -160,7 +160,7 @@ private slots:
     QVERIFY2(model->getInputs()[3].getDistribution() == OT::Gamma(100, 50), "wrong input distribution");
 
     // change distribution param values
-    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, 0, rect.center()); // select line 3
+    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // select line 3
     selectParamTypeCombo->setCurrentIndex(0);
     // - wrong value
     paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_1");
@@ -208,13 +208,13 @@ private slots:
     // set Value
     model->setInputValue("aNewInput", 15000.);
     QRect rect = inTable->visualRect(inTable->model()->index(3, 0));
-    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, 0, rect.center()); // select line 3
+    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // select line 3
     QVERIFY2(valueEdit->text() == "15000", "wrong value");
 
     // set distribution
     model->setDistribution("aNewInput", OT::Beta(4, 8, -3, 3));
     QVERIFY2(inTable->model()->data(inTable->model()->index(3, 1)).toString() == "Beta", "wrong distribution name");
-    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, 0, rect.center()); // select line 3
+    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // select line 3
     ValueLineEdit * paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_0");
     QVERIFY2(paramValueEdit->value() == 4, "wrong r param value");
     paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_1");
@@ -227,7 +227,7 @@ private slots:
     // set truncated distribution
     model->setDistribution("aNewInput", OT::TruncatedDistribution(OT::LogNormal(3, 1, 2), 4, 78));
     QVERIFY2(inTable->model()->data(inTable->model()->index(3, 1)).toString() == "LogNormal", "wrong distribution name");
-    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, 0, rect.center()); // select line 3
+    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // select line 3
     paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_0");
     QVERIFY2(paramValueEdit->value() == 3, "wrong mulog param value");
     paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_1");
@@ -249,7 +249,7 @@ private slots:
     model->addInput(Input("A", 100.5, "a description"));
     QVERIFY2(inTable->model()->rowCount() == 4, "Table must have 4 lines");
     QVERIFY2(inTable->model()->data(inTable->model()->index(3, 0)).toString() == "A", "wrong name");
-    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, 0, rect.center()); // select line 3
+    QTest::mouseClick(inTable->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // select line 3
     QVERIFY2(valueEdit->text() == "100.5", "wrong value");
   }
 };

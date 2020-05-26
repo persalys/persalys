@@ -127,7 +127,7 @@ private slots:
     // check
 
     // change number of variables
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, 0, headerView->viewport()->rect().topLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().topLeft()+QPoint(5,2));
     QVERIFY2(model->getInputColumns().contains(4) == true, "wrong input columns");
 
     variableModel->setData(variableModel->index(0, 4), Qt::Unchecked, Qt::CheckStateRole);

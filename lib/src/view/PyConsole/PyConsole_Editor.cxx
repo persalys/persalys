@@ -1392,7 +1392,7 @@ bool PyConsole_Editor::dump( const QString& fileName )
     if ( file.open( QFile::WriteOnly ) ) {
       QTextStream out( &file );
       for ( int i = 0; i < myHistory.count(); i++ ) {
-        out << myHistory[i] << endl;
+        out << myHistory[i] << Qt::endl;
       }
       file.close();
       ok = true;
@@ -1561,7 +1561,7 @@ void PyConsole_Editor::multilinePaste( const QString& s )
   // Split string data to lines
   QString s2 = s;
   s2.replace( "\r", "" ); // Windows string format converted to Unix style
-  QStringList lst = s2.split( QChar('\n'), QString::KeepEmptyParts );
+  QStringList lst = s2.split( QChar('\n'), Qt::KeepEmptyParts );
 
   // Perform the proper paste operation for the first line to handle the case where
   // something was already there
