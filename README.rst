@@ -5,7 +5,7 @@ Qt GUI module for OpenTURNS
 Dependencies
 ------------
 - CMake >=3.8
-- OpenTURNS >=1.14
+- OpenTURNS >=1.15
 - Qt >=5
 - Qwt >=6
 - Python >=3.2
