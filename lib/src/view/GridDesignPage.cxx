@@ -55,13 +55,23 @@ void GridDesignPage::buildInterface()
   QWidget * aWidget = new QWidget;
   QGridLayout * sizeLayout = new QGridLayout(aWidget);
   QLabel * sizeLabel = new QLabel(tr("Size of the design of experiments:") + " ");
+  QLabel * timeLabel = new QLabel(tr("Estimated duration (s):") + " ");
   sizeLayout->addWidget(sizeLabel, 0, 0);
+  sizeLayout->addWidget(timeLabel, 1, 0);
   DOESizeLabel_ = new QLabel;
   DOESizeLabel_->setObjectName("DOESizeLabel");
   sizeLayout->addWidget(DOESizeLabel_, 0, 1);
+  DOETimeLabel_ = new QLabel;
+  DOETimeLabel_->setObjectName("DOETimeLabel");
+  sizeLayout->addWidget(DOETimeLabel_, 1, 1);
   sizeLayout->setColumnStretch(1, 1);
   sizeLayout->setSizeConstraint(QLayout::SetFixedSize);
   pageLayout->addWidget(aWidget);
+
+  DOETimeLabel_->setVisible(DOETimeLabel_->text().toFloat()>1e-6);
+  timeLabel->setVisible(DOETimeLabel_->text().toFloat()>1e-6);
+
+  connect(this, SIGNAL(showTime()), timeLabel, SLOT(show()));
 
   // table
   QGroupBox * groupBox = new QGroupBox(tr("Define a grid"));
@@ -103,6 +113,16 @@ void GridDesignPage::initialize(const Analysis& analysis)
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
   connect(tableModel_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
   tableView_->setModel(tableModel_);
+  connect(tableModel_, &ExperimentTableModel::doeSizeChanged,
+          [=](const QString& text) {
+            DOETimeLabel_->setText(QString::number(text.toDouble()*tableModel_->getDesignOfExperiment().getPhysicalModel().getEvalTime()));
+            if(DOETimeLabel_->text().toFloat()>1e-6) {
+              DOETimeLabel_->setVisible(true);
+              emit showTime();
+            }
+          });
+
+  tableView_->setModel(tableModel_);
 
   // column 5 : level/delta
   ComboBoxDelegate * comboDelegate = new ComboBoxDelegate(tableView_);
@@ -137,6 +157,7 @@ void GridDesignPage::initialize(const Analysis& analysis)
   }
   // set DOE size label
   DOESizeLabel_->setText(QString::number(tableModel_->getDesignOfExperiment().getOriginalInputSample().getSize()));
+  DOETimeLabel_->setText(QString::number(tableModel_->getDesignOfExperiment().getPhysicalModel().getEvalTime()*tableModel_->getDesignOfExperiment().getOriginalInputSample().getSize()));
 }
 
 

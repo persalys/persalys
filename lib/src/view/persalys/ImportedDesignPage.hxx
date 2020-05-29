@@ -42,6 +42,9 @@ public:
   Analysis getAnalysis();
   bool validatePage();
 
+signals:
+  void showTime();
+
 protected:
   void buildInterface();
 
@@ -52,6 +55,8 @@ public slots:
 private:
   ImportSampleWidget * sampleWidget_;
   ImportedDesignOfExperiment designOfExperiment_;
+  QLabel * estimatedTimeValueLabel_;
+
 };
 }
 #endif

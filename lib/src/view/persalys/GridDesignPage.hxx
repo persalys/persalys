@@ -41,6 +41,9 @@ public:
   Analysis getAnalysis();
   bool validatePage();
 
+signals:
+  void showTime();
+
 protected:
   void buildInterface();
   virtual void resizeEvent(QResizeEvent * event);
@@ -49,6 +52,7 @@ private:
   ResizableHeaderlessTableView * tableView_;
   ExperimentTableModel * tableModel_;
   QLabel * DOESizeLabel_;
+  QLabel * DOETimeLabel_;
   TemporaryLabel * errorMessageLabel_;
 };
 }
