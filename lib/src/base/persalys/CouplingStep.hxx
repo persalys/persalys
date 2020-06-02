@@ -65,6 +65,14 @@ public:
   void setOutputFiles(const CouplingOutputFileCollection & outputFiles);
   CouplingOutputFileCollection getOutputFiles() const;
 
+  /** TimeOut accessors **/
+  void setTimeOut(const double & timeOut);
+  double getTimeOut() const;
+
+  /** Encoding accessors **/
+  void setEncoding(const OT::String & encoding);
+  OT::String getEncoding() const;
+
   /** String converter */
   virtual OT::String __repr__() const;
 
@@ -80,6 +88,8 @@ private:
   OT::PersistentCollection<CouplingInputFile> inputFiles_;
   OT::PersistentCollection<CouplingResourceFile> resourceFiles_;
   OT::PersistentCollection<CouplingOutputFile> outputFiles_;
+  double timeOut_=-1;
+  OT::String encoding_="utf-8";
 };
 
 }

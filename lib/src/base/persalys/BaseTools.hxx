@@ -24,6 +24,8 @@
 #include "Input.hxx"
 
 #include <openturns/OTType.hxx>
+#include <boost/regex.hpp>
+
 
 namespace PERSALYS
 {
@@ -87,5 +89,11 @@ private:
   OT::Scalar maximumElapsedTime_;
   bool stopRequested_;
 };
+
+inline OT::String EscapePath(const OT::FileName & filename)
+{
+  OT::FileName escapedPath = boost::regex_replace(filename, boost::regex("\\\\"), "\\\\\\\\");
+  return escapedPath;
+}
 }
 #endif

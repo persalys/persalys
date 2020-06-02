@@ -116,6 +116,25 @@ Bool CouplingStep::getIsShell() const
   return isShell_;
 }
 
+void CouplingStep::setTimeOut(const double & timeOut)
+{
+  timeOut_ = timeOut;
+}
+
+double CouplingStep::getTimeOut() const
+{
+  return timeOut_;
+}
+
+void CouplingStep::setEncoding(const OT::String & encoding)
+{
+  encoding_ = encoding;
+}
+
+OT::String CouplingStep::getEncoding() const
+{
+  return encoding_;
+}
 
 /* String converter */
 String CouplingStep::__repr__() const
@@ -126,7 +145,8 @@ String CouplingStep::__repr__() const
       << " isShell=" << getIsShell()
       << " inputFiles=" << getInputFiles()
       << " resourceFiles=" << getResourceFiles()
-      << " outputFiles=" << getOutputFiles();
+      << " outputFiles=" << getOutputFiles()
+      << " encoding=" << getEncoding();
   return oss;
 }
 
@@ -139,6 +159,8 @@ void CouplingStep::save(Advocate & adv) const
   adv.saveAttribute("resourceFiles_", resourceFiles_);
   adv.saveAttribute("outputFiles_", outputFiles_);
   adv.saveAttribute("isShell_", isShell_);
+  adv.saveAttribute("timeOut_", timeOut_);
+  adv.saveAttribute("encoding_", encoding_);
 }
 
 
@@ -151,6 +173,8 @@ void CouplingStep::load(Advocate & adv)
   adv.loadAttribute("resourceFiles_", resourceFiles_);
   adv.loadAttribute("outputFiles_", outputFiles_);
   adv.loadAttribute("isShell_", isShell_);
+  adv.loadAttribute("timeOut_", timeOut_);
+  adv.loadAttribute("encoding_", encoding_);
 }
 
 }

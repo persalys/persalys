@@ -22,6 +22,8 @@
 #define PERSALYS_COUPLINGOUTPUTFILE_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include "Output.hxx"
+
 #include <openturns/Description.hxx>
 #include <openturns/Point.hxx>
 
@@ -44,12 +46,15 @@ public:
 
   /** Variables accessor */
   void setVariables(const OT::Description & variableNames, const OT::Description & tokens,
-                    const OT::Point & skipLines, const OT::Point & skipColumns);
+                    const OT::Point & skipTokens,
+		    const OT::Point & skipLines, const OT::Point & skipColumns);
   OT::Description getVariableNames() const;
   OT::Description getTokens() const;
   OT::Point getSkipLines() const;
   OT::Point getSkipColumns() const;
+  OT::Point getSkipTokens() const;
 
+  OT::String checkOutputFile(OT::String fname) const;
   /** String converter */
   virtual OT::String __repr__() const;
 
@@ -65,6 +70,7 @@ private:
   OT::Description tokens_;
   OT::Point skipLines_;
   OT::Point skipColumns_;
+  OT::Point skipTokens_;
 };
 
 }

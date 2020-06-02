@@ -26,7 +26,9 @@
 #include "persalys/CouplingPhysicalModel.hxx"
 #include "persalys/FileTools.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/CopyableTableView.hxx"
 
+#include <QPushButton>
 #include <QToolButton>
 #include <QHBoxLayout>
 #include <QTabWidget>
@@ -105,7 +107,7 @@ class PERSALYS_API FilePathWidget : public QWidget
   Q_OBJECT
 
 public:
-  FilePathWidget(const QString &path="", QWidget *parent=0)
+  FilePathWidget(const QString &path="", QFileDialog::FileMode mode=QFileDialog::AnyFile, QWidget *parent=0)
     : QWidget(parent)
   {
     QHBoxLayout * hLayout = new QHBoxLayout(this);
@@ -121,15 +123,19 @@ public:
 
     connect(button, &QToolButton::clicked,
             [=]() {
-                    QString fileName = QFileDialog::getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
-
-                    if (fileName.isEmpty())
-                      return;
-
-                    FileTools::SetCurrentDir(fileName);
-                    edit_->setText(fileName);
-                    emit pathChanged(fileName);
-                  });
+	      QFileDialog dialog;
+	      dialog.setFileMode(mode);
+	      QString fileName;
+	      if(mode == QFileDialog::Directory)
+		fileName = dialog.getExistingDirectory(this, tr("Choose directory"), FileTools::GetCurrentDir());
+	      else
+		fileName = dialog.getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
+	      if (fileName.isEmpty())
+		return;
+	      FileTools::SetCurrentDir(fileName);
+	      edit_->setText(fileName);
+	      emit pathChanged(fileName);
+	    });
   }
   QString text()
   {
@@ -202,14 +208,10 @@ class PERSALYS_API AddRemoveWidget : public QWidget
 public:
   AddRemoveWidget()
   {
-    QToolButton * addButton = new QToolButton;
-    addButton->setIcon(QIcon(":/images/list-add.png"));
-    addButton->setToolTip(tr("Add"));
+    QPushButton * addButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     connect(addButton, SIGNAL(clicked(bool)), this, SIGNAL(addRequested()));
 
-    QToolButton * removeButton = new QToolButton;
-    removeButton->setIcon(QIcon(":/images/list-remove.png"));
-    removeButton->setToolTip(tr("Remove"));
+    QPushButton * removeButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
     connect(removeButton, SIGNAL(clicked(bool)), this, SIGNAL(removeRequested()));
 
     QHBoxLayout * buttonsLayout = new QHBoxLayout(this);
@@ -231,6 +233,8 @@ class PERSALYS_API CouplingInputFileWidget : public QWidget
 public:
   CouplingInputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = 0);
   int getIndFile() const { return indFile_; };
+  QString readFile(QFileInfo & fname) const;
+  void compareFiles(QString & s1, QString & s2) const;
 signals:
   void variableListChanged();
 private:
@@ -301,6 +305,22 @@ private:
   CouplingPhysicalModel * model_ = 0;
   DynamicTabWidget * stepTabWidget_ = 0;
   TemporaryLabel * errorMessageLabel_ = 0;
+};
+
+class PERSALYS_API CouplingSummaryWidget : public QTabWidget
+{
+ Q_OBJECT
+
+public :
+  CouplingSummaryWidget(PhysicalModelItem * item);
+
+protected slots:
+  void showEvent(QShowEvent *event);
+
+private:
+  PhysicalModel model_;
+  CopyableTableView * inputTableView_;
+  CopyableTableView * outputTableView_;
 };
 }
 #endif

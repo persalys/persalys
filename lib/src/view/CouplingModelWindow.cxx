@@ -23,10 +23,13 @@
 #include "persalys/DifferentiationTableModel.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/DoubleSpinBox.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
 #include "persalys/StudyTreeViewModel.hxx"
 #include "persalys/EditButtonDelegate.hxx"
 #include "persalys/ModelEvaluation.hxx"
+#include "persalys/InputTableModel.hxx"
+#include "persalys/OutputTableModel.hxx"
 
 #include <QGroupBox>
 #include <QGridLayout>
@@ -35,6 +38,10 @@
 #include <QHeaderView>
 #include <QScrollArea>
 #include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QComboBox>
+#include <QTextStream>
+#include <QSplitter>
 
 using namespace OT;
 
@@ -81,23 +88,31 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   updateStepTabWidget(item);
 
-  CollapsibleGroupBox * cacheGroupBox = new CollapsibleGroupBox(tr("Cache"));
-  QGridLayout * cacheGroupBoxLayout = new QGridLayout(cacheGroupBox);
-  tabLayout->addWidget(cacheGroupBox, 1, 0);
+  CollapsibleGroupBox * advancedGroupBox = new CollapsibleGroupBox(tr("Advanced parameters"));
+  QGridLayout * advancedGroupBoxLayout = new QGridLayout(advancedGroupBox);
+  tabLayout->addWidget(advancedGroupBox, 1, 0);
 
-  cacheGroupBoxLayout->addWidget(new QLabel(tr("Cache input file")), 0, 0);
-  cacheGroupBoxLayout->addWidget(new QLabel(tr("Cache output file")), 1, 0);
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Cache input file")), 0, 0);
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Cache output file")), 1, 0);
 
   FilePathWidget * filePath = new FilePathWidget(QString::fromUtf8(model_->getCacheInputFile().c_str()));
-  cacheGroupBoxLayout->addWidget(filePath, 0, 1);
-  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) { model_->setCacheFiles(text.toUtf8().constData(), model_->getCacheOutputFile()); });
+  advancedGroupBoxLayout->addWidget(filePath, 0, 1);
+  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) {
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setCacheFiles(text.toUtf8().constData(), model_->getCacheOutputFile());
+      model_->blockNotification();
+    });
 
   filePath = new FilePathWidget(QString::fromUtf8(model_->getCacheOutputFile().c_str()));
-  cacheGroupBoxLayout->addWidget(filePath, 1, 1);
-  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) { model_->setCacheFiles(model_->getCacheInputFile(), text.toUtf8().constData()); });
+  advancedGroupBoxLayout->addWidget(filePath, 1, 1);
+  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) {
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setCacheFiles(model_->getCacheInputFile(), text.toUtf8().constData());
+      model_->blockNotification();
+    });
 
   QPushButton * clearButton = new QPushButton(tr("Clear cache"));
-  cacheGroupBoxLayout->addWidget(clearButton, 2, 1, Qt::AlignRight);
+  advancedGroupBoxLayout->addWidget(clearButton, 2, 1, Qt::AlignRight);
   connect(clearButton, &QPushButton::clicked,
     [=] () {
             if (!model_->getCacheInputFile().empty())
@@ -113,6 +128,24 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
               output.exportToCSVFile(model_->getCacheOutputFile());
             }
            });
+
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Working directory")), 3, 0);
+  filePath = new FilePathWidget(QString::fromUtf8(model_->getWorkDir().c_str()), QFileDialog::Directory);
+  advancedGroupBoxLayout->addWidget(filePath, 3, 1);
+  connect(filePath, &FilePathWidget::pathChanged, [=](const QString& text) {
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setWorkDir(text.toUtf8().constData());
+      model_->blockNotification();
+    });
+
+  QCheckBox * keepCheckBox = new QCheckBox(tr("Keep working directory"));
+  keepCheckBox->setChecked(!model_->getCleanupWorkDirectory());
+  advancedGroupBoxLayout->addWidget(keepCheckBox, 4, 0);
+  connect(keepCheckBox, &QCheckBox::toggled, [=](bool toggled){
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setCleanupWorkDirectory(!toggled);
+      model_->blockNotification();
+    });
 
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
@@ -147,8 +180,14 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
 
   tabLayout->addWidget(differentiationTableView);
-
   mainTabWidget->addTab(tab, tr("Differentiation"));
+
+  //Summary tab
+  tab = new QWidget;
+  tabLayout = new QGridLayout(tab);
+  CouplingSummaryWidget * summaryTab = new CouplingSummaryWidget(item);
+  tabLayout->addWidget(summaryTab);
+  mainTabWidget->addTab(tab, tr("Summary"));
 }
 
 void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)
@@ -226,7 +265,7 @@ int InTableModel::rowCount(const QModelIndex & /*parent*/) const
 
 int InTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-  return 4;
+  return 5;
 }
 
 Qt::ItemFlags InTableModel::flags(const QModelIndex & index) const
@@ -249,6 +288,8 @@ QVariant InTableModel::headerData(int section, Qt::Orientation orientation, int 
         return tr("Token");
       case 3:
         return tr("Value");
+      case 4:
+        return tr("Format");
     }
   }
   return QAbstractTableModel::headerData(section, orientation, role);
@@ -289,6 +330,10 @@ QVariant InTableModel::data(const QModelIndex & index, int role) const
           return QString::number(output.getValue(), 'g', StudyTreeViewModel::DefaultSignificantDigits);
         }
       }
+      case 4:
+      {
+        return QString::fromUtf8(getInputFile().getFormats()[index.row()].c_str());
+      }
     }
   }
   return QVariant();
@@ -319,7 +364,7 @@ bool InTableModel::setData(const QModelIndex & index, const QVariant & value, in
 
       Description names(inFile.getVariableNames());
       names[index.row()] = newname;
-      inFile.setVariables(names, inFile.getTokens());
+      inFile.setVariables(names, inFile.getTokens(), inFile.getFormats());
       updateModel(inFile);
 
       if (model_->hasInputNamed(newname))
@@ -357,7 +402,7 @@ bool InTableModel::setData(const QModelIndex & index, const QVariant & value, in
 
       Description tokens(inFile.getTokens());
       tokens[index.row()] = newtoken;
-      inFile.setVariables(inFile.getVariableNames(), tokens);
+      inFile.setVariables(inFile.getVariableNames(), tokens, inFile.getFormats());
       updateModel(inFile);
       break;
     }
@@ -375,6 +420,20 @@ bool InTableModel::setData(const QModelIndex & index, const QVariant & value, in
       else
         model_->setOutputValue(name, value.toDouble());
       model_->blockNotification();
+      break;
+    }
+    case 4:
+    {
+      String newformat = value.toString().toUtf8().constData();
+      if(newformat.empty())
+        newformat = "{}";
+      if (inFile.getFormats()[index.row()] == newformat)
+        return true;
+
+      Description formats(inFile.getFormats());
+      formats[index.row()] = newformat;
+      inFile.setVariables(inFile.getVariableNames(), inFile.getTokens(), formats);
+      updateModel(inFile);
       break;
     }
   }
@@ -409,10 +468,12 @@ void InTableModel::addLine()
   CouplingInputFile inFile(getInputFile());
   Description names(inFile.getVariableNames());
   Description tokens(inFile.getTokens());
+  Description formats(inFile.getFormats());
   names.add('X' + (OSS() << i).str());
   tokens.add("@X" + (OSS() << i).str());
+  formats.add("{}");
 
-  inFile.setVariables(names, tokens);
+  inFile.setVariables(names, tokens, formats);
   updateModel(inFile);
 
   updateData();
@@ -430,10 +491,12 @@ void InTableModel::removeLine()
   CouplingInputFile inFile(getInputFile());
   Description names(inFile.getVariableNames());
   Description tokens(inFile.getTokens());
+  Description formats(inFile.getFormats());
   names.erase(names.begin() + index.row());
   tokens.erase(tokens.begin() + index.row());
+  formats.erase(formats.begin() + index.row());
 
-  inFile.setVariables(names, tokens);
+  inFile.setVariables(names, tokens, formats);
   updateModel(inFile);
 
   updateData();
@@ -461,7 +524,7 @@ int OutTableModel::rowCount(const QModelIndex & /*parent*/) const
 
 int OutTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-  return 6;
+  return 7;
 }
 
 Qt::ItemFlags OutTableModel::flags(const QModelIndex & index) const
@@ -483,10 +546,12 @@ QVariant OutTableModel::headerData(int section, Qt::Orientation orientation, int
       case 2:
         return tr("Token");
       case 3:
-        return tr("Skip Line");
+        return tr("Skip Token");
       case 4:
-        return tr("Skip Column");
+        return tr("Skip Line");
       case 5:
+        return tr("Skip Column");
+      case 6:
         return tr("Value");
     }
   }
@@ -510,10 +575,12 @@ QVariant OutTableModel::data(const QModelIndex & index, int role) const
       case 2:
         return QString::fromUtf8(getOutputFile().getTokens()[index.row()].c_str());
       case 3:
-        return QString::number(getOutputFile().getSkipLines()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+	return QString::number(getOutputFile().getSkipTokens()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 4:
-        return QString::number(getOutputFile().getSkipColumns()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        return QString::number(getOutputFile().getSkipLines()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 5:
+        return QString::number(getOutputFile().getSkipColumns()[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      case 6:
       {
         Output output(model_->getOutputByName(outName));
         if (!output.hasBeenComputed())
@@ -548,7 +615,7 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
 
       Description names(outFile.getVariableNames());
       names[index.row()] = newname;
-      outFile.setVariables(names, outFile.getTokens(), outFile.getSkipLines(), outFile.getSkipColumns());
+      outFile.setVariables(names, outFile.getTokens(), outFile.getSkipTokens(), outFile.getSkipLines(), outFile.getSkipColumns());
       updateModel(outFile);
 
       model_->blockNotification("PhysicalModelDefinitionItem");
@@ -574,34 +641,43 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
       String newtoken = value.toString().toUtf8().constData();
       if (outFile.getTokens()[index.row()] == newtoken)
         return true;
-      if (value.toString().isEmpty())
-        return false;
 
       Description tokens(outFile.getTokens());
       tokens[index.row()] = newtoken;
-      outFile.setVariables(outFile.getVariableNames(), tokens, outFile.getSkipLines(), outFile.getSkipColumns());
+      outFile.setVariables(outFile.getVariableNames(), tokens, outFile.getSkipTokens(), outFile.getSkipLines(), outFile.getSkipColumns());
       updateModel(outFile);
       break;
     }
     case 3:
+    {
+      if (outFile.getSkipTokens()[index.row()] == value.toDouble())
+        return true;
+
+      Point skipTokens(outFile.getSkipTokens());
+      skipTokens[index.row()] = value.toDouble();
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), skipTokens, outFile.getSkipLines(), outFile.getSkipColumns());
+      updateModel(outFile);
+      break;
+    }
+    case 4:
     {
       if (outFile.getSkipLines()[index.row()] == value.toDouble())
         return true;
 
       Point skipLines(outFile.getSkipLines());
       skipLines[index.row()] = value.toDouble();
-      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), skipLines, outFile.getSkipColumns());
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), outFile.getSkipTokens(), skipLines, outFile.getSkipColumns());
       updateModel(outFile);
       break;
     }
-    case 4:
+    case 5:
     {
       if (outFile.getSkipColumns()[index.row()] == value.toDouble())
         return true;
 
       Point skipColumns(outFile.getSkipColumns());
       skipColumns[index.row()] = value.toDouble();
-      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), outFile.getSkipLines(), skipColumns);
+      outFile.setVariables(outFile.getVariableNames(), outFile.getTokens(), outFile.getSkipTokens(), outFile.getSkipLines(), skipColumns);
       updateModel(outFile);
       break;
     }
@@ -639,12 +715,14 @@ void OutTableModel::addLine()
   Description tokens(outFile.getTokens());
   Point skipLine(outFile.getSkipLines());
   Point skipCol(outFile.getSkipColumns());
+  Point skipTokens(outFile.getSkipTokens());
   names.add('Y' + (OSS() << i).str());
   tokens.add('Y' + (OSS() << i).str() + '=');
   skipLine.add(0.);
   skipCol.add(0.);
+  skipTokens.add(0.);
 
-  outFile.setVariables(names, tokens, skipLine, skipCol);
+  outFile.setVariables(names, tokens, skipTokens, skipLine, skipCol);
   updateModel(outFile);
 
   updateData();
@@ -661,14 +739,16 @@ void OutTableModel::removeLine()
   CouplingOutputFile outFile(getOutputFile());
   Description names(outFile.getVariableNames());
   Description tokens(outFile.getTokens());
+  Point skipTokens(outFile.getSkipTokens());
   Point skipLine(outFile.getSkipLines());
   Point skipCol(outFile.getSkipColumns());
   names.erase(names.begin() + index.row());
   tokens.erase(tokens.begin() + index.row());
+  skipTokens.erase(skipTokens.begin() + index.row());
   skipLine.erase(skipLine.begin() + index.row());
   skipCol.erase(skipCol.begin() + index.row());
 
-  outFile.setVariables(names, tokens, skipLine, skipCol);
+  outFile.setVariables(names, tokens, skipTokens, skipLine, skipCol);
   updateModel(outFile);
 
   updateData();
@@ -755,6 +835,84 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
                 model->setSteps(csColl);
                 model->blockNotification();
                });
+
+  QPushButton * checkTemplateButton = new QPushButton(tr("Check template file"));
+  checkTemplateButton->minimumSizeHint();
+  layout->addWidget(checkTemplateButton, row, 0);
+  CollapsibleGroupBox * inputLayoutBox = new CollapsibleGroupBox(tr("Template/input comparison"));
+  layout->addWidget(inputLayoutBox, ++row, 0, 1, 3);
+  QHBoxLayout * inputLayout = new QHBoxLayout(inputLayoutBox);
+  QLabel * temTextLabel = new QLabel("");
+  QLabel * simTextLabel = new QLabel("");
+  temTextLabel->setTextFormat(Qt::AutoText);
+  simTextLabel->setTextFormat(Qt::AutoText);
+  inputLayout->addWidget(temTextLabel, 0, Qt::AlignTop);
+  inputLayout->addWidget(simTextLabel, 1, Qt::AlignTop);
+  inputLayout->setStretch(0, 0.5);
+  inputLayout->setStretch(1, 0.5);
+
+  connect(checkTemplateButton, &QPushButton::clicked,
+          [=](){
+            temTextLabel->clear();
+            temTextLabel->setStyleSheet("");
+            simTextLabel->clear();
+            CouplingStepCollection csColl(model->getSteps());
+            CouplingStep cs(csColl[indStep]);
+            CouplingInputFileCollection inColl(cs.getInputFiles());
+
+            QFileInfo temFile(inColl[indFile].getPath().c_str());
+            QFileInfo simFile(QDir::temp().absolutePath()+"/"+inColl[indFile].getConfiguredPath().c_str());
+
+            if(!temFile.exists())
+              temTextLabel->setText(tr("Template file not found")+"\n");
+            else if(!temFile.isReadable())
+              temTextLabel->setText(tr("Template file not readable")+"\n");
+            else {
+              try {
+                inColl[indFile].simulateInput(model->getInputs());}
+              catch (std::exception & ex) {
+                temTextLabel->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
+                temTextLabel->setText(ex.what());
+                return;}
+              QString temText(readFile(temFile));
+              QString simText(readFile(simFile));
+              compareFiles(temText, simText);
+
+              temTextLabel->setText(temText);
+              simTextLabel->setText(simText);
+            }
+          });
+}
+
+void CouplingInputFileWidget::compareFiles(QString & s1, QString & s2) const
+{
+  QList<QString> l1 = s1.split("\n");
+  QList<QString> l2 = s2.split("\n");
+  assert(l1.size() == l2.size());
+  s2.clear();
+  for(int i=0; i<l1.size(); ++i) {
+    if(l1[i]!=l2[i]) {
+      l2[i].replace(l2[i], QString("<font color=\"red\">" + l2[i].toHtmlEscaped() + "</font>"));
+      s2.append(l2[i]+"<br>");
+    } else {
+      s2.append(l2[i].toHtmlEscaped()+"<br>");
+    }
+  }
+}
+
+QString CouplingInputFileWidget::readFile(QFileInfo & fname) const
+{
+  QFile file(fname.filePath());
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    return "Reading error for "+fname.filePath()+"\n";
+
+  QTextStream in(&file);
+  QString lines;
+  while(!in.atEnd()) {
+    lines += in.readLine()+"\n";
+  }
+  file.close();
+  return lines;
 }
 
 // Widget for Coupling Ressource file ( <=> Coupling input file without template path )
@@ -818,25 +976,48 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
                  tableWidget_->horizontalHeader()->resizeSection(1, tb->width());
                  connect(tb, &QToolButton::clicked,
                          [=](){
-                                QString fileName = QFileDialog::getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
-                                if (fileName.isEmpty())
-                                  return;
+                           QFileDialog* dlg = new QFileDialog(this);
+                           QStringList filters;
+                           filters <<"Any file (*)"
+                                   <<"Choose directory";
 
-                                FileTools::SetCurrentDir(fileName);
-                                newItem->setData(Qt::DisplayRole, fileName);
+                           dlg->setFileMode(QFileDialog::AnyFile);
+                           dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+                           dlg->setNameFilters(filters);
+                           connect(dlg, &QFileDialog::filterSelected,
+                                   [=]() {
+                                     if(dlg->selectedNameFilter().contains("directory")) {
+                                       dlg->setFileMode(QFileDialog::Directory);
+                                       // Filters are reset when setting QFileDialog::Directory
+                                       QStringList r_filters;
+                                       r_filters << filters[1] << filters[0];
+                                       dlg->setNameFilters(r_filters);
+                                     } else {
+                                       dlg->setFileMode(QFileDialog::AnyFile);
+                                       dlg->setNameFilters(filters);
+                                     }
+                                   });
+                           dlg->exec();
+                           QString fileName = dlg->selectedFiles()[0];
 
-                                CouplingStepCollection csColl(model->getSteps());
-                                CouplingStep cs(csColl[indStep]);
-                                CouplingResourceFileCollection inColl(cs.getResourceFiles());
+                           if (fileName.isEmpty())
+                             return;
 
-                                inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
-                                cs.setResourceFiles(inColl);
-                                csColl[indStep] = cs;
-                                model->blockNotification("PhysicalModelDefinitionItem");
-                                model->setSteps(csColl);
-                                model->blockNotification();
-                              });
-                });
+                           FileTools::SetCurrentDir(fileName);
+                           newItem->setData(Qt::DisplayRole, fileName);
+
+                           CouplingStepCollection csColl(model->getSteps());
+                           CouplingStep cs(csColl[indStep]);
+                           CouplingResourceFileCollection inColl(cs.getResourceFiles());
+
+                           inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
+                           cs.setResourceFiles(inColl);
+                           csColl[indStep] = cs;
+                           model->blockNotification("PhysicalModelDefinitionItem");
+                           model->setSteps(csColl);
+                           model->blockNotification();
+                         });
+          });
   connect(addRemoveWidget, &AddRemoveWidget::removeRequested,
     [=]() {
            CouplingStepCollection csColl(model->getSteps());
@@ -938,6 +1119,21 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
               model->setSteps(csColl);
               model->blockNotification();
              });
+
+  QPushButton * checkButton = new QPushButton(tr("Check output"));
+  layout->addWidget(checkButton, row, 0, Qt::AlignLeft);
+  QLabel * textLabel = new QLabel("");
+  connect(checkButton, &QToolButton::clicked,
+          [=](){
+            layout->addWidget(textLabel, row+1, 0, Qt::AlignLeft);
+            QFileDialog * dlg = new QFileDialog(this);
+            dlg->setFileMode(QFileDialog::AnyFile);
+            dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+            dlg->exec();
+            QString fileName = dlg->selectedFiles()[0];
+            CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
+            textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString())));
+          });
 }
 
 // Widget for Coupling Step
@@ -1076,6 +1272,41 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
                           item->update(0, "inputStepChanged");
                         });
 
+  CollapsibleGroupBox * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
+  QGridLayout * advGroupBoxLayout = new QGridLayout(advGroupBox);
+  mainLayout->addWidget(advGroupBox);
+
+  advGroupBoxLayout->addWidget(new QLabel(tr("Timeout (s)")), 5, 0);
+  DoubleSpinBox * timeOutVal = new DoubleSpinBox();
+  timeOutVal->setMinimum(-1);
+  timeOutVal->setValue(model_->getSteps()[indStep].getTimeOut());
+  advGroupBoxLayout->addWidget(timeOutVal, 5, 1);
+  connect(timeOutVal, QOverload<double>::of(&DoubleSpinBox::valueChanged),
+          [=](const double& val) {
+            CouplingStepCollection csColl(model->getSteps());
+            csColl[indStep].setTimeOut(val);
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+          });
+
+  advGroupBoxLayout->addWidget(new QLabel(tr("I/O Encoding")), 0, 0);
+  QComboBox * encodingBox = new QComboBox();
+  encodingBox->insertItem(0, QString::fromStdString("utf-8"));
+  encodingBox->insertItem(1, QString::fromStdString("latin-1"));
+  int index = encodingBox->findText(QString::fromStdString(model->getSteps()[indStep].getEncoding()));
+  if ( index != -1 )
+    encodingBox->setCurrentIndex(index);
+  advGroupBoxLayout->addWidget(encodingBox, 0, 1);
+  connect(encodingBox, &QComboBox::currentTextChanged,
+	  [=](const QString& enc) {
+            CouplingStepCollection csColl(model->getSteps());
+            csColl[indStep].setEncoding(enc.toUtf8().constData());
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+	  });
+
   // - fill in the QTabWidget
   CouplingStep cs(model->getSteps()[indStep]);
   if (cs.getOutputFiles().getSize())
@@ -1117,5 +1348,56 @@ void CouplingStepWidget::updateInputFileWidgets(PhysicalModelItem *item)
   ressourceFileWidget_->updateTable();
 
   item->update(0, "inputStepChanged");
+}
+
+CouplingSummaryWidget::CouplingSummaryWidget(PhysicalModelItem * item)
+  : QTabWidget()
+  , model_(item->getPhysicalModel())
+  , inputTableView_(0)
+  , outputTableView_(0)
+{
+  QVBoxLayout * vbox = new QVBoxLayout;
+  QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
+
+  // Table Inputs -------------------------------------------
+  QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
+  QVBoxLayout * inputsLayout = new QVBoxLayout(inputsBox);
+
+  // table view
+  inputTableView_ = new CopyableTableView;
+  inputTableView_->setEditTriggers(QTableView::AllEditTriggers);
+
+  InputTableModel * inputTableModel = new InputTableModel(model_, inputTableView_);
+  inputTableView_->setModel(inputTableModel);
+
+  inputsLayout->addWidget(inputTableView_);
+  verticalSplitter->addWidget(inputsBox);
+  verticalSplitter->setStretchFactor(0, 5);
+
+  // Table Outputs -------------------------------------------
+  QGroupBox * outputsBox = new QGroupBox(tr("Outputs"));
+  QVBoxLayout * outputsLayout = new QVBoxLayout(outputsBox);
+
+  // table view
+  outputTableView_ = new CopyableTableView;
+  outputTableView_->setEditTriggers(QTableView::NoEditTriggers);
+
+  OutputTableModel * outputTableModel = new OutputTableModel(model_, outputTableView_);
+  outputTableView_->setModel(outputTableModel);
+
+  // connections
+  outputsLayout->addWidget(outputTableView_);
+  verticalSplitter->addWidget(outputsBox);
+  verticalSplitter->setStretchFactor(1, 3);
+
+  vbox->addWidget(verticalSplitter);
+  setLayout(vbox);
+}
+
+void CouplingSummaryWidget::showEvent(QShowEvent *event)
+{
+  QTabWidget::showEvent(event);
+  qobject_cast<InputTableModel*>(inputTableView_->model())->updateData();
+  qobject_cast<OutputTableModel*>(outputTableView_->model())->updateData();
 }
 }

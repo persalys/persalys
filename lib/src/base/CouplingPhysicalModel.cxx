@@ -25,8 +25,6 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 
-#include <boost/regex.hpp>
-
 using namespace OT;
 
 namespace PERSALYS
@@ -71,12 +69,6 @@ CouplingStepCollection CouplingPhysicalModel::getSteps() const
   return steps_;
 }
 
-inline String EscapePath(const FileName & filename)
-{
-  FileName escapedPath = boost::regex_replace(filename, boost::regex("\\\\"), "\\\\\\\\");
-  return escapedPath;
-}
-
 String CouplingPhysicalModel::getStepsMacro(const String & offset) const
 {
   OSS oss;
@@ -94,7 +86,10 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       oss << offset << "input_file" << j << " = persalys.CouplingInputFile('"<<EscapePath(inputFile.getPath())<<"')\n";
       oss << offset << "input_file" << j <<".setConfiguredPath('" << EscapePath(inputFile.getConfiguredPath())<<"')\n";
       if (inputFile.getVariableNames().getSize() > 0)
-        oss << offset << "input_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(inputFile.getTokens())<<")\n";
+        oss << offset << "input_file" << j <<".setVariables("
+            << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "
+            << Parameters::GetOTDescriptionStr(inputFile.getTokens())<<", "
+            << Parameters::GetOTDescriptionStr(inputFile.getFormats())<<")\n";
       oss << offset << "input_files.append(input_file"<<j<<")\n";
     }
     const CouplingResourceFileCollection resourceFiles(step.getResourceFiles());
@@ -116,7 +111,13 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
         continue;
       oss << offset << "output_file" << j << " = persalys.CouplingOutputFile('"<<EscapePath(outputFile.getPath())<<"')\n";
       if (outputFile.getVariableNames().getSize() > 0)
-        oss << offset << "output_file" << j <<".setVariables(" << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())<<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())<<", "<<outputFile.getSkipLines().__str__()<<", "<<outputFile.getSkipColumns().__str__()<<")\n";
+        oss << offset << "output_file" << j
+	    <<".setVariables("
+	    << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())
+	    <<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())
+	    <<", "<<outputFile.getSkipTokens().__str__()
+	    <<", "<<outputFile.getSkipLines().__str__()
+	    <<", "<<outputFile.getSkipColumns().__str__()<<")\n";
       oss << offset << "output_files.append(output_file"<<j<<")\n";
     }
     // escape backslashes
@@ -129,6 +130,13 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
 
 void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 {
+  steps_ = steps;
+  updateCode();
+}
+
+void CouplingPhysicalModel::updateCode()
+{
+  CouplingStepCollection steps = getSteps();
   Description inputNames;
   Description outputNames;
 
@@ -169,8 +177,6 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
       }
     }
   }
-  steps_ = steps;
-
   OSS code;
   code << "import tempfile\n";
   code << "import openturns.coupling_tools as otct\n";
@@ -198,10 +204,12 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   }
   code << "]))\n";
 
-//   code << "    workdir = tempfile.mkdtemp()\n";
   code << "    checksum = hashlib.sha1()\n";
   code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
-  code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
+  if(!workDir_.empty())
+    code << "    workdir = os.path.join('"+workDir_+"', 'persalys_' + checksum.hexdigest())\n";
+  else
+    code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
   code << "    if not os.path.exists(workdir):\n";
   code << "        os.makedirs(workdir)\n";
   code << "    for step in steps:\n";
@@ -209,7 +217,10 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "            if not input_file.getPath():\n";
   code << "                continue\n";
   code << "            input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
-  code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values)\n";
+  code << "            formats = input_file.getFormats()\n";
+  code << "            if formats.isBlank():\n";
+  code << "                formats=None\n";
+  code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
   code << "        for resource_file in step.getResourceFiles():\n";
   code << "            if not resource_file.getPath():\n";
   code << "                continue\n";
@@ -220,13 +231,16 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   code << "            else:\n";
   code << "                raise ValueError('cannot handle file:', resource_file.getPath())\n";
   code << "        if len(step.getCommand()) > 0:\n";
-  code << "            otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell(), get_stderr=True)\n";
+  code << "            timeout=step.getTimeOut()\n";
+  code << "            if timeout <= 0:\n";
+  code << "                timeout=None\n";
+  code << "            otct.execute(step.getCommand(), workdir=workdir, is_shell=step.getIsShell(), get_stderr=True,timeout=timeout)\n";
   code << "        for output_file in step.getOutputFiles():\n";
   code << "            if not output_file.getPath():\n";
   code << "                continue\n";
   code << "            outfile = os.path.join(workdir, output_file.getPath())\n";
-  code << "            for varname, token, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
-  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_line=skip_line, skip_col=skip_col)\n";
+  code << "            for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
+  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=skip_tok, skip_line=skip_line, skip_col=skip_col, encoding=step.getEncoding())\n";
 
   if (cleanupWorkDirectory_)
     code << "    shutil.rmtree(workdir)\n";
@@ -247,7 +261,6 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
 
   notify("stepsChanged");
 }
-
 
 Function CouplingPhysicalModel::generateFunction(const Description & outputNames) const
 {
@@ -337,15 +350,11 @@ String CouplingPhysicalModel::__repr__() const
   return oss;
 }
 
-
 /** Whether the work dir is discarded */
 void CouplingPhysicalModel::setCleanupWorkDirectory(const Bool cleanupWorkDirectory)
 {
-  if (cleanupWorkDirectory != cleanupWorkDirectory_)
-  {
-    cleanupWorkDirectory_ = cleanupWorkDirectory;
-    setSteps(getSteps());
-  }
+  cleanupWorkDirectory_ = cleanupWorkDirectory;
+  updateCode();
 }
 
 Bool CouplingPhysicalModel::getCleanupWorkDirectory() const
@@ -357,6 +366,18 @@ void CouplingPhysicalModel::setCacheFiles(const OT::FileName & inputFile, const 
 {
   cacheInputFile_ = inputFile;
   cacheOutputFile_ = outputFile;
+}
+
+void CouplingPhysicalModel::setWorkDir(const OT::FileName & workDir)
+{
+  workDir_ = workDir;
+  updateCode();
+}
+
+
+OT::FileName CouplingPhysicalModel::getWorkDir() const
+{
+  return workDir_;
 }
 
 OT::FileName CouplingPhysicalModel::getCacheInputFile() const
@@ -377,6 +398,7 @@ void CouplingPhysicalModel::save(Advocate & adv) const
   adv.saveAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
   adv.saveAttribute("cacheInputFile_", cacheInputFile_);
   adv.saveAttribute("cacheOutputFile_", cacheOutputFile_);
+  adv.saveAttribute("workDir_", workDir_);
 }
 
 
@@ -388,6 +410,7 @@ void CouplingPhysicalModel::load(Advocate & adv)
   adv.loadAttribute("cleanupWorkDirectory_", cleanupWorkDirectory_);
   adv.loadAttribute("cacheInputFile_", cacheInputFile_);
   adv.loadAttribute("cacheOutputFile_", cacheOutputFile_);
+  adv.loadAttribute("workDir_", workDir_);
 }
 
 
