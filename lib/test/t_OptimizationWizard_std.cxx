@@ -68,12 +68,12 @@ private slots:
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0"); // can not go to next page
 
     QRect rect = listWidget->visualItemRect(listWidget->item(0));
-    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, 0, rect.center()); // deselect all
+    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // deselect all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
 
     rect = listWidget->visualItemRect(listWidget->item(1));
-    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, 0, rect.center()); // check row 1
+    QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // check row 1
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
   }

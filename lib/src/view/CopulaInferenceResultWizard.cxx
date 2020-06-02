@@ -206,7 +206,7 @@ void CopulaInferenceResultWizard::updateVariablesTable(const QString &text)
   if (!tableView_ || text.isEmpty())
     return;
 
-  const QStringList variablesNames(text.split(QRegExp("\\W+"), QString::SkipEmptyParts));
+  const QStringList variablesNames(text.split(QRegExp("\\W+"), Qt::SkipEmptyParts));
   QStringList variablesNamesCopy(variablesNames);
   variablesNamesCopy.sort();
   QStringList variablesList(QtOT::DescriptionToStringList(variables_));
