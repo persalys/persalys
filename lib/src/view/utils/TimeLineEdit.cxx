@@ -20,6 +20,7 @@
  */
 
 #include "persalys/TimeLineEdit.hxx"
+#include <QtGlobal>
 
 namespace PERSALYS
 {
@@ -46,7 +47,11 @@ int TimeLineEdit::getSeconds() const
   QStringList list = s.split(QRegExp("d|h|m|s"));
 
   int seconds = 0;
+#if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
   seconds += list[0].split("", Qt::SkipEmptyParts).join("").trimmed().toInt() * 24 * 3600;
+#else
+  seconds += list[0].split("", QString::SkipEmptyParts).join("").trimmed().toInt() * 24 * 3600;
+#endif
   seconds += list[1].trimmed().toInt() * 3600;
   seconds += list[2].trimmed().toInt() * 60;
   seconds += list[3].trimmed().toInt();

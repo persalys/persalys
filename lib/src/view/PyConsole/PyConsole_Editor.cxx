@@ -108,6 +108,7 @@
 #include <QChar>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QtGlobal>
 
 //VSR: uncomment below macro to support unicode text properly in SALOME
 //     current commented out due to regressions
@@ -1392,7 +1393,11 @@ bool PyConsole_Editor::dump( const QString& fileName )
     if ( file.open( QFile::WriteOnly ) ) {
       QTextStream out( &file );
       for ( int i = 0; i < myHistory.count(); i++ ) {
-        out << myHistory[i] << Qt::endl;
+#if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
+       	out << myHistory[i] << Qt::endl;
+#else
+        out << myHistory[i] << endl;
+#endif
       }
       file.close();
       ok = true;
@@ -1561,7 +1566,11 @@ void PyConsole_Editor::multilinePaste( const QString& s )
   // Split string data to lines
   QString s2 = s;
   s2.replace( "\r", "" ); // Windows string format converted to Unix style
+#if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
   QStringList lst = s2.split( QChar('\n'), Qt::KeepEmptyParts );
+#else
+  QStringList lst = s2.split( QChar('\n'), QString::KeepEmptyParts );
+#endif
 
   // Perform the proper paste operation for the first line to handle the case where
   // something was already there
