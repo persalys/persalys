@@ -18,7 +18,7 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz | tar xz && cd cmake-3.16.2 \
+RUN curl -fSsL https://cmake.org/files/v3.17/cmake-3.17.3.tar.gz | tar xz && cd cmake-3.17.3 \
  && ./bootstrap --parallel=8 -- -DCMAKE_USE_OPENSSL=OFF && make install > /dev/null 2>&1
 
 # cminpack
@@ -34,7 +34,7 @@ RUN curl -fsSL http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd
  && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install
 
 # spectra
-RUN curl -fsSL https://github.com/yixuan/spectra/archive/v0.8.1.tar.gz | tar xz && cd spectra-0.8.1 && cp -rv include/Spectra /usr/include
+RUN curl -fsSL https://github.com/yixuan/spectra/archive/v0.9.0.tar.gz | tar xz && cd spectra-0.9.0 && cmake . && make install
 
 # glog
 RUN curl -fsSL https://github.com/google/glog/archive/v0.4.0.tar.gz | tar xz && cd glog-0.4.0 \
@@ -90,7 +90,7 @@ RUN fc-cache -fsv
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
 RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2s.tar.gz | tar xz && cd openssl-1.0.2s \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
-RUN curl -fSsL https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz | tar xz && cd Python-3.7.6 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tgz | tar xz && cd Python-3.7.7 \
  && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
@@ -114,7 +114,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd .. && python3 -c "import assimulo; import assimulo.solvers"
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.7.tar.gz | tar xz && cd PyFMI-PyFMI-2.7 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.7.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.7.3 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
 # sphinx
