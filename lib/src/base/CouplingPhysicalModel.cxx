@@ -123,6 +123,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
     // escape backslashes
     oss << offset << "step" << i << " = persalys.CouplingStep('"<<EscapePath(step.getCommand())<<"', input_files, resource_files, output_files)\n";
     oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True": "False") << ")\n";
+    if(!step.getCode().empty())
+      oss << offset << "step" << i << ".setCode('" << step.getEscapedCode() << "')\n";
     oss << offset << "steps.append(step"<<i<<")\n";
   }
   return oss;
@@ -157,6 +159,10 @@ void CouplingPhysicalModel::updateCode()
           outputNames.add(variableNames[k]);
       }
     }
+    if(!step.getCode().empty())
+      for(UnsignedInteger i=0; i<step.getPPOutputs().getSize(); ++i)
+        if(!outputNames.contains(step.getPPOutputs()[i]))
+          outputNames.add(step.getPPOutputs()[i]);
   }
 
   // retrieve input variables
@@ -176,6 +182,11 @@ void CouplingPhysicalModel::updateCode()
           inputNames.add(variableNames[k]);
       }
     }
+    if(!step.getCode().empty())
+      for(UnsignedInteger i=0; i<step.getPPInputs().getSize(); ++i)
+        if(!inputNames.contains(step.getPPInputs()[i]) &&
+           !outputNames.contains(step.getPPInputs()[i]))
+          inputNames.add(step.getPPInputs()[i]);
   }
   OSS code;
   code << "import tempfile\n";
@@ -183,6 +194,7 @@ void CouplingPhysicalModel::updateCode()
   code << "import persalys\n";
   code << "import shutil\n";
   code << "import os\n";
+  code << "import re\n";
   code << "import hashlib\n";
   code << "import struct\n\n";
   code << "def _exec(";
@@ -241,6 +253,19 @@ void CouplingPhysicalModel::updateCode()
   code << "            outfile = os.path.join(workdir, output_file.getPath())\n";
   code << "            for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=skip_tok, skip_line=skip_line, skip_col=skip_col, encoding=step.getEncoding())\n";
+  code << "        if step.getCode():\n";
+  code << "            script=step.getCode()\n";
+  code << "            script_funcname = re.search('def (\\w+)\\([\\w, ]+\\):', script).group(1)\n";
+  code << "            script_invars = re.search('def \\w+\\(([\\w, ]+)\\):', script).group(1).replace(' ', '').split(',')\n";
+  code << "            script_outvars = re.search('return ([\\w, ]+)', script).group(1).replace(' ', '').split(',')\n";
+  code << "            exec_script = script+'\\nscript_output__ = '+script_funcname+'('+ ', '.join([str(all_vars[var]) for var in script_invars]) + ')\\n'\n";
+  code << "            local_dict = locals()\n";
+  code << "            exec(exec_script, globals(), local_dict)\n";
+  code << "            script_output__ = local_dict['script_output__']\n";
+  code << "            if len(script_outvars) == 1:\n";
+  code << "                script_output__ = [script_output__]\n";
+  code << "            for var, value in zip(script_outvars, script_output__):\n";
+  code << "                all_vars[var] = value\n";
 
   if (cleanupWorkDirectory_)
     code << "    shutil.rmtree(workdir)\n";

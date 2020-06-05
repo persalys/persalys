@@ -73,6 +73,13 @@ public:
   void setEncoding(const OT::String & encoding);
   OT::String getEncoding() const;
 
+  /** Post Process **/
+  void setCode(const OT::String & code);
+  OT::String getCode() const;
+  OT::String getEscapedCode() const;
+  OT::Description getPPOutputs() const;
+  OT::Description getPPInputs() const;
+
   /** String converter */
   virtual OT::String __repr__() const;
 
@@ -90,6 +97,7 @@ private:
   OT::PersistentCollection<CouplingOutputFile> outputFiles_;
   double timeOut_=-1;
   OT::String encoding_="utf-8";
+  OT::String ppCode_="";
 };
 
 }

@@ -50,6 +50,14 @@ print(mean, stddev)
 ott.assert_almost_equal(mean, [0, 0], 0.3, 0.3)
 ott.assert_almost_equal(stddev, [math.sqrt(3.0), 1.415], 0.3, 0.3)
 
+# post-processing
+step.setCode("def _exec2(Y0, Y1): \n    Y2 = Y0+3*Y1 \n    Y3 = Y2+3*Y1 \n    return Y2, Y3 \n")
+model = persalys.CouplingPhysicalModel('A', [step])
+f = model.getFunction()
+y = f(x)
+print(y)
+ott.assert_almost_equal(y, [6.0, 7.0, 27.0, 48.0])
+
 # cleanup
 os.remove('input_template.txt')
 os.remove('external_program.py')
