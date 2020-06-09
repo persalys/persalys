@@ -309,7 +309,7 @@ private:
 
 class PERSALYS_API CouplingSummaryWidget : public QTabWidget
 {
- Q_OBJECT
+  Q_OBJECT
 
 public :
   CouplingSummaryWidget(PhysicalModelItem * item);

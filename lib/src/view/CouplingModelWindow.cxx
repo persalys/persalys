@@ -1145,55 +1145,102 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
 {
   QGridLayout * widgetLayout = new QGridLayout(this);
 
-  // command definition
-  QLabel * commandLabel = new QLabel(tr("Command"));
-  widgetLayout->addWidget(commandLabel, 0, 0);
-
-  QLineEdit * commandLineEdit = new QLineEdit(QString::fromUtf8(model->getSteps()[indStep].getCommand().c_str()));
-  widgetLayout->addWidget(commandLineEdit, 0, 1);
-  connect(commandLineEdit, &QLineEdit::editingFinished,
-        [=](){
-              CouplingStepCollection csColl(model->getSteps());
-              CouplingStep cs(csColl[indStep]);
-
-              cs.setCommand(commandLineEdit->text().toUtf8().constData());
-              csColl[indStep] = cs;
-              model->blockNotification("PhysicalModelDefinitionItem");
-              model->setSteps(csColl);
-              model->blockNotification();
-             });
-
-  QCheckBox * checkBox = new QCheckBox(tr("Shell command"));
-  widgetLayout->addWidget(checkBox, 1, 0, 1, 2);
-  checkBox->setChecked(model->getSteps()[indStep].getIsShell());
-  connect(checkBox, &QCheckBox::toggled,
-          [=](bool toggled){
-                            CouplingStepCollection csColl(model->getSteps());
-                            CouplingStep cs(csColl[indStep]);
-
-                            cs.setIsShell(toggled);
-                            csColl[indStep] = cs;
-                            model->blockNotification("PhysicalModelDefinitionItem");
-                            model->setSteps(csColl);
-                            model->blockNotification();
-                           });
-
   // step definition
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  widgetLayout->addWidget(scrollArea, 2, 0, 1, 2);
+  widgetLayout->addWidget(scrollArea);
 
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
   scrollArea->setWidget(mainWidget);
 
-  // input definition
-  CollapsibleGroupBox * inGroupBox = new CollapsibleGroupBox(tr("Input"));
-  QVBoxLayout * inGroupBoxLayout = new QVBoxLayout(inGroupBox);
-  mainLayout->addWidget(inGroupBox);
+  QTabWidget * stepTabWidget = new QTabWidget;
+  mainLayout->addWidget(stepTabWidget);
 
+  // command definition
+  QWidget * tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Command"));
+
+  QGridLayout * comTabLayout = new QGridLayout(tab);
+  QLabel * commandLabel = new QLabel(tr("Command"));
+  comTabLayout->addWidget(commandLabel, 0, 0);
+
+  QLineEdit * commandLineEdit = new QLineEdit(QString::fromUtf8(model->getSteps()[indStep].getCommand().c_str()));
+  comTabLayout->addWidget(commandLineEdit, 0, 1);
+  connect(commandLineEdit, &QLineEdit::editingFinished,
+          [=](){
+            CouplingStepCollection csColl(model->getSteps());
+            CouplingStep cs(csColl[indStep]);
+
+            cs.setCommand(commandLineEdit->text().toUtf8().constData());
+            csColl[indStep] = cs;
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+          });
+
+  QCheckBox * checkBox = new QCheckBox(tr("Shell command"));
+  comTabLayout->addWidget(checkBox, 1, 0, 1, 2);
+  checkBox->setChecked(model->getSteps()[indStep].getIsShell());
+  connect(checkBox, &QCheckBox::toggled,
+          [=](bool toggled){
+            CouplingStepCollection csColl(model->getSteps());
+            CouplingStep cs(csColl[indStep]);
+
+            cs.setIsShell(toggled);
+            csColl[indStep] = cs;
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+          });
+
+  CollapsibleGroupBox * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
+  QGridLayout * advGroupBoxLayout = new QGridLayout(advGroupBox);
+  comTabLayout->addWidget(advGroupBox, 2, 0, 1, 2);
+
+  advGroupBoxLayout->addWidget(new QLabel(tr("Timeout (s)")), 0, 0);
+  DoubleSpinBox * timeOutVal = new DoubleSpinBox();
+  timeOutVal->setMinimum(-1);
+  timeOutVal->setValue(model_->getSteps()[indStep].getTimeOut());
+  advGroupBoxLayout->addWidget(timeOutVal, 0, 1);
+  connect(timeOutVal, QOverload<double>::of(&DoubleSpinBox::valueChanged),
+          [=](const double& val) {
+            CouplingStepCollection csColl(model->getSteps());
+            csColl[indStep].setTimeOut(val);
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+          });
+
+  advGroupBoxLayout->addWidget(new QLabel(tr("I/O Encoding")), 1, 0);
+  QComboBox * encodingBox = new QComboBox();
+  encodingBox->insertItem(0, QString::fromStdString("utf-8"));
+  encodingBox->insertItem(1, QString::fromStdString("latin-1"));
+  int index = encodingBox->findText(QString::fromStdString(model->getSteps()[indStep].getEncoding()));
+  if ( index != -1 )
+    encodingBox->setCurrentIndex(index);
+  advGroupBoxLayout->addWidget(encodingBox, 1, 1);
+  connect(encodingBox, &QComboBox::currentTextChanged,
+	  [=](const QString& enc) {
+            CouplingStepCollection csColl(model->getSteps());
+            csColl[indStep].setEncoding(enc.toUtf8().constData());
+            model->blockNotification("PhysicalModelDefinitionItem");
+            model->setSteps(csColl);
+            model->blockNotification();
+	  });
+  advGroupBoxLayout->setColumnStretch(1,1);
+  advGroupBoxLayout->setRowStretch(1,1);
+  comTabLayout->setColumnStretch(1,1);
+  comTabLayout->setRowStretch(3,1);
+
+
+  // input definition
+  tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Input"));
+
+  QVBoxLayout * inTabLayout = new QVBoxLayout(tab);
   inTabWidget_ = new DynamicTabWidget;
-  inGroupBoxLayout->addWidget(inTabWidget_);
+  inTabLayout->addWidget(inTabWidget_);
   connect(inTabWidget_, &DynamicTabWidget::newTabRequested,
           [=](){
                 CouplingStepCollection csColl(model->getSteps());
@@ -1225,23 +1272,23 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
                         });
 
   // ressource definition
-  CollapsibleGroupBox * resGroupBox = new CollapsibleGroupBox(tr("Ressource"));
-  QGridLayout * resGroupBoxLayout = new QGridLayout(resGroupBox);
-  mainLayout->addWidget(resGroupBox);
+  tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Ressource"));
 
-  ressourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, resGroupBox);
-  resGroupBoxLayout->addWidget(ressourceFileWidget_);
+  QGridLayout * resTabLayout = new QGridLayout(tab);
+  ressourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, tab);
+  resTabLayout->addWidget(ressourceFileWidget_);
   connect(ressourceFileWidget_, &CouplingResourceFileWidget::couplingResourceCollectionModified, [=]() { updateInputFileWidgets(item); });
 
   updateInputFileWidgets(item);
 
   // output definition
-  CollapsibleGroupBox * outGroupBox = new CollapsibleGroupBox(tr("Output"));
-  QGridLayout * outGroupBoxLayout = new QGridLayout(outGroupBox);
-  mainLayout->addWidget(outGroupBox);
+  tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Output"));
+  QGridLayout * outTabLayout = new QGridLayout(tab);
 
   DynamicTabWidget * outTabWidget = new DynamicTabWidget;
-  outGroupBoxLayout->addWidget(outTabWidget);
+  outTabLayout->addWidget(outTabWidget);
   connect(outTabWidget, &DynamicTabWidget::newTabRequested,
           [=](){
                 CouplingStepCollection csColl(model->getSteps());
@@ -1272,40 +1319,7 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
                           item->update(0, "inputStepChanged");
                         });
 
-  CollapsibleGroupBox * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
-  QGridLayout * advGroupBoxLayout = new QGridLayout(advGroupBox);
-  mainLayout->addWidget(advGroupBox);
-
-  advGroupBoxLayout->addWidget(new QLabel(tr("Timeout (s)")), 5, 0);
-  DoubleSpinBox * timeOutVal = new DoubleSpinBox();
-  timeOutVal->setMinimum(-1);
-  timeOutVal->setValue(model_->getSteps()[indStep].getTimeOut());
-  advGroupBoxLayout->addWidget(timeOutVal, 5, 1);
-  connect(timeOutVal, QOverload<double>::of(&DoubleSpinBox::valueChanged),
-          [=](const double& val) {
-            CouplingStepCollection csColl(model->getSteps());
-            csColl[indStep].setTimeOut(val);
-            model->blockNotification("PhysicalModelDefinitionItem");
-            model->setSteps(csColl);
-            model->blockNotification();
           });
-
-  advGroupBoxLayout->addWidget(new QLabel(tr("I/O Encoding")), 0, 0);
-  QComboBox * encodingBox = new QComboBox();
-  encodingBox->insertItem(0, QString::fromStdString("utf-8"));
-  encodingBox->insertItem(1, QString::fromStdString("latin-1"));
-  int index = encodingBox->findText(QString::fromStdString(model->getSteps()[indStep].getEncoding()));
-  if ( index != -1 )
-    encodingBox->setCurrentIndex(index);
-  advGroupBoxLayout->addWidget(encodingBox, 0, 1);
-  connect(encodingBox, &QComboBox::currentTextChanged,
-	  [=](const QString& enc) {
-            CouplingStepCollection csColl(model->getSteps());
-            csColl[indStep].setEncoding(enc.toUtf8().constData());
-            model->blockNotification("PhysicalModelDefinitionItem");
-            model->setSteps(csColl);
-            model->blockNotification();
-	  });
 
   // - fill in the QTabWidget
   CouplingStep cs(model->getSteps()[indStep]);
