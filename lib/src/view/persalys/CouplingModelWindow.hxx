@@ -322,5 +322,38 @@ private:
   CopyableTableView * inputTableView_;
   CopyableTableView * outputTableView_;
 };
+
+class PERSALYS_API PythonCodeModel : public QAbstractTableModel
+{
+  Q_OBJECT
+
+public :
+  PythonCodeModel(PhysicalModelItem * item, int indStep, QWidget * parent = 0);
+
+  int columnCount(const QModelIndex & parent = QModelIndex()) const;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  QVariant data(const QModelIndex & index, int role) const;
+  bool setData(const QModelIndex & index, const QVariant & value, int role);
+  Qt::ItemFlags flags(const QModelIndex & index) const;
+
+public slots:
+  void updateData();
+
+signals:
+  void dataChanged();
+private :
+  PhysicalModel model_;
+  int indStep_;
+};
+
+class PERSALYS_API PythonCodeWidget : public QWidget
+{
+  Q_OBJECT
+
+public :
+  PythonCodeWidget(PhysicalModelItem * item, const int indStep, QWidget *parent);
+signals :
+  void codeChanged();
+};
 }
 #endif

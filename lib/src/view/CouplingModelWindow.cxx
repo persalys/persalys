@@ -30,6 +30,7 @@
 #include "persalys/ModelEvaluation.hxx"
 #include "persalys/InputTableModel.hxx"
 #include "persalys/OutputTableModel.hxx"
+#include "persalys/CodeDelegate.hxx"
 
 #include <QGroupBox>
 #include <QGridLayout>
@@ -1320,6 +1321,11 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
                         });
 
           });
+  tab = new QWidget(stepTabWidget);
+  stepTabWidget->addTab(tab, tr("Additional processing"));
+  QVBoxLayout * pyCodeLayout = new QVBoxLayout(tab);
+  PythonCodeWidget * pyCodeWidget = new PythonCodeWidget(item, indStep, tab);
+  pyCodeLayout->addWidget(pyCodeWidget);
 
   // - fill in the QTabWidget
   CouplingStep cs(model->getSteps()[indStep]);
@@ -1413,5 +1419,88 @@ void CouplingSummaryWidget::showEvent(QShowEvent *event)
   QTabWidget::showEvent(event);
   qobject_cast<InputTableModel*>(inputTableView_->model())->updateData();
   qobject_cast<OutputTableModel*>(outputTableView_->model())->updateData();
+}
+
+PythonCodeModel::PythonCodeModel(PhysicalModelItem * item, int indStep, QWidget * parent)
+  : QAbstractTableModel(parent)
+  , model_(item->getPhysicalModel())
+  , indStep_(indStep)
+{
+
+}
+
+int PythonCodeModel::columnCount(const QModelIndex & /*parent*/) const
+{
+  return 1;
+}
+
+
+int PythonCodeModel::rowCount(const QModelIndex & /*parent*/) const
+{
+  return 1;
+}
+
+
+QVariant PythonCodeModel::data(const QModelIndex & index, int role) const
+{
+  if (!index.isValid())
+    return QVariant();
+
+  if (role == Qt::DisplayRole || role == Qt::EditRole) {
+    CouplingPhysicalModel * model = dynamic_cast<CouplingPhysicalModel*>(model_.getImplementation().get());
+    CouplingStep cs = model->getSteps()[indStep_];
+    return QString::fromUtf8(cs.getCode().c_str());}
+  return QVariant();
+}
+
+
+bool PythonCodeModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+  if (!index.isValid())
+    return false;
+
+  if (role == Qt::EditRole) {
+    model_.blockNotification("PhysicalModelDefinitionItem");
+    CouplingPhysicalModel * model = dynamic_cast<CouplingPhysicalModel*>(model_.getImplementation().get());
+    CouplingStepCollection csColl = model->getSteps();
+    csColl[indStep_].setCode(value.toString().toUtf8().data());
+    dynamic_cast<CouplingPhysicalModel*>(model_.getImplementation().get())->setSteps(csColl);
+    model_.blockNotification();
+    emit dataChanged();
+    return true;}
+  return false;
+}
+
+
+Qt::ItemFlags PythonCodeModel::flags(const QModelIndex & index) const
+{
+  return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
+}
+
+
+void PythonCodeModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+}
+
+PythonCodeWidget::PythonCodeWidget(PhysicalModelItem * item, const int indStep, QWidget *parent)
+  : QWidget(parent)
+{
+  QVBoxLayout * widgetLayout = new QVBoxLayout;
+  QTableView * codeView = new QTableView;
+  codeView->setEditTriggers(QTableView::AllEditTriggers);
+  codeView->horizontalHeader()->setStretchLastSection(true);
+  codeView->verticalHeader()->setStretchLastSection(true);
+  codeView->horizontalHeader()->hide();
+  codeView->verticalHeader()->hide();
+  codeView->setItemDelegate(new CodeDelegate(codeView));
+
+  PythonCodeModel * codeModel = new PythonCodeModel(item, indStep, parent);
+  codeView->setModel(codeModel);
+  codeView->openPersistentEditor(codeModel->index(0, 0));
+  connect(item, SIGNAL(codeChanged()), codeModel, SLOT(updateData()));
+  widgetLayout->addWidget(codeView);
+  setLayout(widgetLayout);
 }
 }
