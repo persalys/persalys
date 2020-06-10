@@ -14,7 +14,7 @@ ENV PATH /opt/rh/devtoolset-8/root/usr/bin:$PATH
 ENV LD_LIBRARY_PATH /opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
 
 # swig
-RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz | tar xz && cd swig-4.0.1 \
+RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz | tar xz && cd swig-4.0.2 \
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
 
 # cmake
