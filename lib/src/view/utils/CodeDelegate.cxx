@@ -155,6 +155,17 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
   lineNumberArea_->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
+void CodeEditor::zoomIn(int scale)
+{
+  QPlainTextEdit::zoomIn(scale);
+  lineNumberArea_->setFont(font());
+}
+
+void CodeEditor::zoomOut(int scale)
+{
+  QPlainTextEdit::zoomOut(scale);
+  lineNumberArea_->setFont(font());
+}
 
 void CodeEditor::highlightCurrentLine()
 {
@@ -210,6 +221,16 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
 {
+  if(obj == qobject_cast<CodeEditor*>(obj) && event->type() == QEvent::Wheel ) {
+    CodeEditor *editor = qobject_cast<CodeEditor*>(obj);
+    QWheelEvent *wheel = static_cast<QWheelEvent*>(event);
+    if(wheel->modifiers() == Qt::ControlModifier) {
+      if(wheel->angleDelta().y() > 0)
+        editor->zoomIn(1);
+      else
+        editor->zoomOut(1);
+    }
+  }
   if (event->type() == QEvent::KeyPress)
   {
     QKeyEvent * keyEvent = dynamic_cast<QKeyEvent*>(event);

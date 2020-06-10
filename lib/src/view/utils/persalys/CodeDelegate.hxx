@@ -38,6 +38,8 @@ public:
 
   void lineNumberAreaPaintEvent(QPaintEvent * event);
   int lineNumberAreaWidth();
+  void zoomIn(int scale);
+  void zoomOut(int scale);
 
 signals:
   // signal sent when the code is ready to be parsed
