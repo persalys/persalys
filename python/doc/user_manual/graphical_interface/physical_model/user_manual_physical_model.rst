@@ -228,16 +228,64 @@ Here is an example of an error message transmission, when we tried to compute sq
 2-3 *Coupling model*: define a physical model to wrap an external code using file-exchange
 --------------------------------------------------------------------------------------------
 
-A physical model can be defined to wrap an external code based on:
+A physical model can be defined to wrap an external code. I/O can be
+cached in dedicated files. Remember to clear it when significant
+changes are made on the model. Working directory (local temp area by
+default) can be explicitely set. The checkbox allows the user to keep
+the working directory once the model has run. The **Check model**
+button runs the model on the defined input values. It shall be used to
+test the physical model. To save the output values, the user should
+use the :ref:`Model evaluation <modelEvaluation>`.
 
-- Locations of the resource/template files, input variables;
+A coupling model is divided into steps (one per tab), each with
+its own parameters.
 
-- A command to launch the external code;
+Step definition is divided into several categories:
 
-- Location of the output files, output variables
+- Command: used to define the command calling the external code. This
+  can be empty if one decides to set a pre-processing. In addition I/O
+  encoding (utf-8/latin-1) and command timeout (-1 for no time out)
+  can be set.
 
-The **Check model** button run the model on the defined input values. It shall be
-used to test the physical model. To save the output values, the user should use the :ref:`Model evaluation <modelEvaluation>`.
+.. image:: /user_manual/graphical_interface/physical_model/CPM_Command.png
+    :align: center
+
+- Inputs: used to locate the template file that will be used to
+  generate inputs files for the command. Each input variable is
+  associated to a token that will tell the coupling model code where
+  to find it in the input file. Template file correctness can be
+  evaluated using the "check input button". Template and generated
+  input files will be displayed side-by-side for visual inspection and
+  validation.
+
+.. image:: /user_manual/graphical_interface/physical_model/CPM_Input.png
+    :align: center
+
+- Resources: used to locate the files required by the command
+  (executable, configuration files, etc..)
+
+.. image:: /user_manual/graphical_interface/physical_model/CPM_Resource.png
+    :align: center
+
+- Outputs: used to specify the output file name and specify where to
+  find the output variables in it. Similarly to the Inputs section,
+  output varaibles are associated to a token. In addition, numerical
+  format can be specified as in https://pyformat.info/ set of "new
+  rules". Generated output files can be inspected using the "check
+  output button". When clicked it will ask the user to choose a
+  generated output file and will try to retrieve the output variables
+  values.
+
+.. image:: /user_manual/graphical_interface/physical_model/CPM_Output.png
+    :align: center
+
+- Additional processing (Optional): A python editor (similar to the
+  one in the PythonModel) can be used to set a pre/post processing
+  function. Variables form preceding steps and/or intermediate/output
+  variables can be defined and manipulated here.
+
+.. image:: /user_manual/graphical_interface/physical_model/CPM_ExtraProcessing.png
+    :align: center
 
 .. _vectyacsmodel:
 
@@ -261,7 +309,7 @@ used to test the physical model. To save the output values, the user should use 
 2-5 *FMI model*: define a physical model from an FMU file
 ------------------------------------------------------------------
 
-A physical model can be defined by loading a FMU file, previously generated 
+A physical model can be defined by loading a FMU file, previously generated
 by OpenModelica for example.
 
 .. image:: /user_manual/graphical_interface/physical_model/FMIPhysicalModel1.png
@@ -319,4 +367,3 @@ Second order centered finite difference scheme:
                                         f_k(x - \epsilon_i - \epsilon_j) -
                                         f_k(x - \epsilon_i + \epsilon_j)}
                                      {4 \epsilon_i \epsilon_j}
-
