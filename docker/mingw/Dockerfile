@@ -28,6 +28,3 @@ RUN sudo pacman -Sy unzip --noconfirm
 # https://bugreports.qt.io/browse/QTBUG-80578
 RUN sudo sed -i 's|#ifndef __TBB_profiling_H|#if !defined(__TBB_profiling_H) \&\& !defined(Q_MOC_RUN)|g' ${MINGW_PREFIX}/include/tbb/tbb_profiling.h || :
 
-# https://sourceforge.net/p/qwt/patches/73/
-RUN cd ${MINGW_PREFIX}/include/qwt/ && curl -L https://sourceforge.net/p/qwt/patches/73/attachment/qwt61_qflags.patch | sudo patch -p2
-
