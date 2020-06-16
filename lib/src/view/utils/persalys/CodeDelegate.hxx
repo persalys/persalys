@@ -23,11 +23,12 @@
 
 #include <QItemDelegate>
 #include <QPlainTextEdit>
+#include <QTextDocument>
+#include <QSyntaxHighlighter>
 #include "persalys/PersalysPrivate.hxx"
 
 namespace PERSALYS
 {
-
 class PERSALYS_API CodeEditor : public QPlainTextEdit
 {
   Q_OBJECT
@@ -37,6 +38,8 @@ public:
 
   void lineNumberAreaPaintEvent(QPaintEvent * event);
   int lineNumberAreaWidth();
+  void zoomIn(int scale);
+  void zoomOut(int scale);
 
 signals:
   // signal sent when the code is ready to be parsed
@@ -86,7 +89,6 @@ private:
     CodeEditor * codeEditor_;
 };
 
-
 class PERSALYS_API CodeDelegate : public QItemDelegate
 {
   Q_OBJECT
@@ -101,6 +103,34 @@ public:
 
 protected:
   bool eventFilter(QObject *obj, QEvent *ev);
+};
+
+class PERSALYS_API CodeHighlighter : public QSyntaxHighlighter
+{
+  Q_OBJECT
+
+public:
+  explicit CodeHighlighter(QTextDocument * parent = 0);
+  static QTextCharFormat format(const QString &colorName, const QString &style = QString());
+
+protected:
+  void highlightBlock(const QString &text) override;
+
+private:
+  struct HighlightingRule
+  {
+    QRegularExpression pattern;
+    QTextCharFormat format;
+    int matchIndex = 0;
+    HighlightingRule() { }
+    HighlightingRule(const QRegularExpression &r, int i, const QTextCharFormat &f)
+      : pattern(r), format(f), matchIndex(i) { }
+    HighlightingRule(const QString &p, int i, const QTextCharFormat &f)
+      : pattern(QRegularExpression(p)), format(f), matchIndex(i) { }
+  };
+  bool matchMultiLine(const QString &text, const HighlightingRule &rule);
+
+  QVector<HighlightingRule> highlightingRules;
 };
 }
 #endif
