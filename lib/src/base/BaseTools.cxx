@@ -225,15 +225,21 @@ Description Parameters::GetOTIntervalDescription(const Interval& interval)
 Sample Tools::ImportSample(const String& fileName)
 {
   std::vector< String > separatorsList(3);
-  separatorsList[0] = " ";
-  separatorsList[1] = ",";
-  separatorsList[2] = ";";
+  separatorsList = {" ", ",", ";"};
   Sample sampleFromFile;
 
-  for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
-  {
-    // import sample from the file
-    sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i]);
+  std::vector<String> numSep(2);
+  numSep = {".", ","};
+
+  for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i) {
+    for (UnsignedInteger j = 0; j < numSep.size(); ++ j) {
+      if (separatorsList[i] == numSep[j])
+        continue;
+      // import sample from the file
+      sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i], 0, numSep[j]);
+      if (sampleFromFile.getSize())
+        break;
+    }
     if (sampleFromFile.getSize())
       break;
   }
