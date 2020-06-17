@@ -188,17 +188,33 @@ void MorrisAnalysis::launch()
   inSample.setDescription(getPhysicalModel().getInputNames());
 
   // compute output sample
-  Sample outSample = getPhysicalModel().getFunction(getInterestVariables())(inSample);
+  Sample outSample(0, getInterestVariables().getSize());
   outSample.setDescription(getInterestVariables());
+  Function function(getPhysicalModel().getFunction(getInterestVariables()));
+
+  const UnsignedInteger nbIter = inSample.getSize();
+  Sample effectiveInSample(0, nbInputs);
+  effectiveInSample.setDescription(getPhysicalModel().getInputNames());
+
+  for (UnsignedInteger i = 0; i < nbIter; ++i) {
+    progressValue_ = (int) (i * 100 / nbIter);
+    const Sample blockInputSample(inSample, i, i+1);
+
+    effectiveInSample.add(blockInputSample);
+    outSample.add(function(blockInputSample));
+    notify("progressValueChanged");
+    if(stopRequested_)
+      break;
+  }
 
   // Compute effects
-  Morris morris(inSample, outSample, bounds_);
+  Morris morris(effectiveInSample, outSample, bounds_);
 
   // set result
   const UnsignedInteger nbOutputs = outSample.getDimension();
 
   result_.designOfExperiment_ = DesignOfExperiment("name", getPhysicalModel());
-  result_.designOfExperiment_.setInputSample(inSample);
+  result_.designOfExperiment_.setInputSample(effectiveInSample);
   result_.designOfExperiment_.setOutputSample(outSample);
   result_.inputsSelection_ = PersistentCollection<Indices >(nbOutputs, Indices(nbInputs, 1));
   result_.noEffectBoundary_ = Point(nbOutputs);
