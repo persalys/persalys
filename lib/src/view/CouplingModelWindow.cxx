@@ -844,8 +844,8 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   simTextLabel->setTextFormat(Qt::AutoText);
   inputLayout->addWidget(temTextLabel, 0, Qt::AlignTop);
   inputLayout->addWidget(simTextLabel, 1, Qt::AlignTop);
-  inputLayout->setStretch(0, 0.5);
-  inputLayout->setStretch(1, 0.5);
+  inputLayout->setStretch(0, 1);
+  inputLayout->setStretch(1, 1);
 
   connect(checkTemplateButton, &QPushButton::clicked, [=](){
       temTextLabel->clear();
