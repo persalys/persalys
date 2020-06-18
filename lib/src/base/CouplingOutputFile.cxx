@@ -151,8 +151,13 @@ String CouplingOutputFile::checkOutputFile(String fname) const
 
   Point outSample(convert<_PySequence_, Point>(sampleResult.get()));
   OSS output;
-  if(outSample.getSize()!=getVariableNames().getSize())
-    return "Could not read all the variables\n";
+  if(outSample.getSize()!=getVariableNames().getSize()) {
+    OSS outMessage;
+    outMessage << "Python Function returned a sequence object with incorrect size (got ";
+    outMessage << outSample.getSize() << ", expected ";
+    outMessage << getVariableNames().getSize() << ")";
+    return outMessage.str();
+  }
   for(unsigned int i=0; i<outSample.getSize(); ++i)
     output<<getVariableNames()[i].c_str()<<"="<<std::to_string(outSample.at(i)).c_str()<<"\n";
   return output.str().c_str();
