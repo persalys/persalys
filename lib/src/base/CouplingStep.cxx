@@ -21,6 +21,8 @@
 #include "persalys/CouplingStep.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace OT;
 
@@ -131,9 +133,62 @@ void CouplingStep::setEncoding(const OT::String & encoding)
   encoding_ = encoding;
 }
 
-OT::String CouplingStep::getEncoding() const
+String CouplingStep::getEncoding() const
 {
   return encoding_;
+}
+
+void CouplingStep::setCode(const OT::String & code)
+{
+  ppCode_ = code;
+}
+
+String CouplingStep::getCode() const
+{
+  return ppCode_;
+}
+
+String CouplingStep::getEscapedCode() const
+{
+  String code = getCode();
+  boost::replace_all(code, "\n", "\\n");
+  return code;
+}
+
+Description CouplingStep::getPPOutputs() const
+{
+  String PPCode = getCode();
+  Description vars;
+  boost::regex variable("([a-zA-Z][a-zA-Z0-9]*)");
+  boost::regex returnOutput("return ([a-zA-Z0-9, ]+)", boost::regex::extended);
+  boost::smatch what;
+  if (boost::regex_search(PPCode, what, returnOutput)) {
+    String outputList = what[1];
+    std::string::const_iterator start = outputList.begin(), end = outputList.end();
+    while (boost::regex_search(start, end, what, variable)) {
+      start = what[0].second;
+      vars.add(what[1]);
+    }
+  }
+  return vars;
+}
+
+Description CouplingStep::getPPInputs() const
+{
+  String PPCode = getCode();
+  Description vars;
+  boost::regex variable("([a-zA-Z][a-zA-Z0-9]*)");
+  boost::regex defFunc("def \\w+\\(([\\w, ]+)\\)", boost::regex::extended);
+  boost::smatch what;
+  if (boost::regex_search(PPCode, what, defFunc)) {
+    String outputList = what[1];
+    std::string::const_iterator start = outputList.begin(), end = outputList.end();
+    while (boost::regex_search(start, end, what, variable)) {
+      start = what[0].second;
+      vars.add(what[1]);
+    }
+  }
+  return vars;
 }
 
 /* String converter */
@@ -146,7 +201,8 @@ String CouplingStep::__repr__() const
       << " inputFiles=" << getInputFiles()
       << " resourceFiles=" << getResourceFiles()
       << " outputFiles=" << getOutputFiles()
-      << " encoding=" << getEncoding();
+      << " encoding=" << getEncoding()
+      << " ppCode=" << getCode();
   return oss;
 }
 
@@ -161,6 +217,7 @@ void CouplingStep::save(Advocate & adv) const
   adv.saveAttribute("isShell_", isShell_);
   adv.saveAttribute("timeOut_", timeOut_);
   adv.saveAttribute("encoding_", encoding_);
+  adv.saveAttribute("ppCode_", ppCode_);
 }
 
 
@@ -175,6 +232,10 @@ void CouplingStep::load(Advocate & adv)
   adv.loadAttribute("isShell_", isShell_);
   adv.loadAttribute("timeOut_", timeOut_);
   adv.loadAttribute("encoding_", encoding_);
+  if(adv.hasAttribute("ppCode_"))
+    adv.loadAttribute("ppCode_", ppCode_);
+  else
+    ppCode_ = "";
 }
 
 }

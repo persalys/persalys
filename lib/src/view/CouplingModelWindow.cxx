@@ -30,6 +30,7 @@
 #include "persalys/ModelEvaluation.hxx"
 #include "persalys/InputTableModel.hxx"
 #include "persalys/OutputTableModel.hxx"
+#include "persalys/CodeDelegate.hxx"
 
 #include <QGroupBox>
 #include <QGridLayout>
@@ -66,25 +67,23 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   stepTabWidget_ = new DynamicTabWidget;
   tabLayout->addWidget(stepTabWidget_, 0, 0);
-  connect(stepTabWidget_, &DynamicTabWidget::newTabRequested,
-          [=](){
-                CouplingStepCollection csColl(model_->getSteps());
-                csColl.add(CouplingStep());
-                model_->blockNotification("PhysicalModelDefinitionItem");
-                model_->setSteps(csColl);
-                model_->blockNotification();
-                CouplingStepWidget * csWidget = new CouplingStepWidget(item, model_, csColl.getSize()-1);
-                stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(stepTabWidget_->count()));
-               });
-  connect(stepTabWidget_, &DynamicTabWidget::removeTabRequested,
-          [=](int index){
-                          CouplingStepCollection csColl(model_->getSteps());
-                          csColl.erase(csColl.begin() + index);
-                          model_->blockNotification("PhysicalModelDefinitionItem");
-                          model_->setSteps(csColl);
-                          model_->blockNotification();
-                          updateStepTabWidget(item);
-                        });
+  connect(stepTabWidget_, &DynamicTabWidget::newTabRequested, [=](){
+      CouplingStepCollection csColl(model_->getSteps());
+      csColl.add(CouplingStep());
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setSteps(csColl);
+      model_->blockNotification();
+      CouplingStepWidget * csWidget = new CouplingStepWidget(item, model_, csColl.getSize()-1);
+      stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(stepTabWidget_->count()));
+    });
+  connect(stepTabWidget_, &DynamicTabWidget::removeTabRequested, [=](int index) {
+      CouplingStepCollection csColl(model_->getSteps());
+      csColl.erase(csColl.begin() + index);
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setSteps(csColl);
+      model_->blockNotification();
+      updateStepTabWidget(item);
+    });
 
   updateStepTabWidget(item);
 
@@ -113,21 +112,20 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   QPushButton * clearButton = new QPushButton(tr("Clear cache"));
   advancedGroupBoxLayout->addWidget(clearButton, 2, 1, Qt::AlignRight);
-  connect(clearButton, &QPushButton::clicked,
-    [=] () {
-            if (!model_->getCacheInputFile().empty())
-            {
-              Sample input(0, model_->getInputDimension());
-              input.setDescription(model_->getInputNames());
-              input.exportToCSVFile(model_->getCacheInputFile());
-            }
-            if (!model_->getCacheOutputFile().empty())
-            {
-              Sample output(0, model_->getOutputDimension());
-              output.setDescription(model_->getOutputNames());
-              output.exportToCSVFile(model_->getCacheOutputFile());
-            }
-           });
+  connect(clearButton, &QPushButton::clicked, [=]() {
+      if (!model_->getCacheInputFile().empty())
+        {
+          Sample input(0, model_->getInputDimension());
+          input.setDescription(model_->getInputNames());
+          input.exportToCSVFile(model_->getCacheInputFile());
+        }
+      if (!model_->getCacheOutputFile().empty())
+        {
+          Sample output(0, model_->getOutputDimension());
+          output.setDescription(model_->getOutputNames());
+          output.exportToCSVFile(model_->getCacheOutputFile());
+        }
+    });
 
   advancedGroupBoxLayout->addWidget(new QLabel(tr("Working directory")), 3, 0);
   filePath = new FilePathWidget(QString::fromUtf8(model_->getWorkDir().c_str()), QFileDialog::Directory);
@@ -797,44 +795,42 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
   addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
 
-  connect(templateFileLineEdit, &FilePathWidget::pathChanged,
-          [=](const QString& text){
-                inTableView->setDisabled(text.isEmpty() || fileLineEdit->text().isEmpty());
-                addRemoveWidget->setDisabled(text.isEmpty() || fileLineEdit->text().isEmpty());
-                // update model
-                CouplingStepCollection csColl(model->getSteps());
-                CouplingStep cs(csColl[indStep]);
-                CouplingInputFileCollection inColl(cs.getInputFiles());
+  connect(templateFileLineEdit, &FilePathWidget::pathChanged, [=](const QString& text){
+      inTableView->setDisabled(text.isEmpty() || fileLineEdit->text().isEmpty());
+      addRemoveWidget->setDisabled(text.isEmpty() || fileLineEdit->text().isEmpty());
+      // update model
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingInputFileCollection inColl(cs.getInputFiles());
 
-                inColl[indFile].setPath(text.toUtf8().constData());
-                cs.setInputFiles(inColl);
-                csColl[indStep] = cs;
-                model->blockNotification("PhysicalModelDefinitionItem");
-                model->setSteps(csColl);
-                model->blockNotification();
+      inColl[indFile].setPath(text.toUtf8().constData());
+      cs.setInputFiles(inColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
 
-                // refresh configured path in case it was unitialized
-                fileLineEdit->setText(inColl[indFile].getConfiguredPath().c_str());
-               });
-  connect(fileLineEdit, &QLineEdit::editingFinished,
-          [=](){
-                if (QFileInfo(fileLineEdit->text()).isAbsolute())
-                  fileLineEdit->setText(QFileInfo(fileLineEdit->text()).fileName());
+      // refresh configured path in case it was unitialized
+      fileLineEdit->setText(inColl[indFile].getConfiguredPath().c_str());
+    });
+  connect(fileLineEdit, &QLineEdit::editingFinished, [=](){
+      if (QFileInfo(fileLineEdit->text()).isAbsolute())
+        fileLineEdit->setText(QFileInfo(fileLineEdit->text()).fileName());
 
-                inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
-                addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
-                // update model
-                CouplingStepCollection csColl(model->getSteps());
-                CouplingStep cs(csColl[indStep]);
-                CouplingInputFileCollection inColl(cs.getInputFiles());
+      inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
+      addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
+      // update model
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingInputFileCollection inColl(cs.getInputFiles());
 
-                inColl[indFile].setConfiguredPath(fileLineEdit->text().toUtf8().constData());
-                cs.setInputFiles(inColl);
-                csColl[indStep] = cs;
-                model->blockNotification("PhysicalModelDefinitionItem");
-                model->setSteps(csColl);
-                model->blockNotification();
-               });
+      inColl[indFile].setConfiguredPath(fileLineEdit->text().toUtf8().constData());
+      cs.setInputFiles(inColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+    });
 
   QPushButton * checkTemplateButton = new QPushButton(tr("Check template file"));
   checkTemplateButton->minimumSizeHint();
@@ -851,37 +847,36 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   inputLayout->setStretch(0, 0.5);
   inputLayout->setStretch(1, 0.5);
 
-  connect(checkTemplateButton, &QPushButton::clicked,
-          [=](){
-            temTextLabel->clear();
-            temTextLabel->setStyleSheet("");
-            simTextLabel->clear();
-            CouplingStepCollection csColl(model->getSteps());
-            CouplingStep cs(csColl[indStep]);
-            CouplingInputFileCollection inColl(cs.getInputFiles());
+  connect(checkTemplateButton, &QPushButton::clicked, [=](){
+      temTextLabel->clear();
+      temTextLabel->setStyleSheet("");
+      simTextLabel->clear();
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingInputFileCollection inColl(cs.getInputFiles());
 
-            QFileInfo temFile(inColl[indFile].getPath().c_str());
-            QFileInfo simFile(QDir::temp().absolutePath()+"/"+inColl[indFile].getConfiguredPath().c_str());
+      QFileInfo temFile(inColl[indFile].getPath().c_str());
+      QFileInfo simFile(QDir::temp().absolutePath()+"/"+inColl[indFile].getConfiguredPath().c_str());
 
-            if(!temFile.exists())
-              temTextLabel->setText(tr("Template file not found")+"\n");
-            else if(!temFile.isReadable())
-              temTextLabel->setText(tr("Template file not readable")+"\n");
-            else {
-              try {
-                inColl[indFile].simulateInput(model->getInputs());}
-              catch (std::exception & ex) {
-                temTextLabel->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
-                temTextLabel->setText(ex.what());
-                return;}
-              QString temText(readFile(temFile));
-              QString simText(readFile(simFile));
-              compareFiles(temText, simText);
+      if(!temFile.exists())
+        temTextLabel->setText(tr("Template file not found")+"\n");
+      else if(!temFile.isReadable())
+        temTextLabel->setText(tr("Template file not readable")+"\n");
+      else {
+        try {
+          inColl[indFile].simulateInput(model->getInputs());}
+        catch (std::exception & ex) {
+          temTextLabel->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
+          temTextLabel->setText(ex.what());
+          return;}
+        QString temText(readFile(temFile));
+        QString simText(readFile(simFile));
+        compareFiles(temText, simText);
 
-              temTextLabel->setText(temText);
-              simTextLabel->setText(simText);
-            }
-          });
+        temTextLabel->setText(temText);
+        simTextLabel->setText(simText);
+      }
+    });
 }
 
 void CouplingInputFileWidget::compareFiles(QString & s1, QString & s2) const
@@ -936,104 +931,99 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
   resGroupBoxLayout->addWidget(addRemoveWidget, 1, 0, Qt::AlignRight);
 
   updateTable();
-  connect(tableWidget_, &QTableWidget::itemChanged,
-          [=](QTableWidgetItem * item) {
-                 CouplingStepCollection csColl(model->getSteps());
-                 CouplingStep cs(csColl[indStep]);
-                 CouplingResourceFileCollection inColl(cs.getResourceFiles());
+  connect(tableWidget_, &QTableWidget::itemChanged, [=](QTableWidgetItem * item) {
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
-                 inColl[item->data(Qt::UserRole).toInt()].setPath(item->data(Qt::DisplayRole).toString().toUtf8().constData());
-                 cs.setResourceFiles(inColl);
-                 csColl[indStep] = cs;
-                 model->blockNotification("PhysicalModelDefinitionItem");
-                 model->setSteps(csColl);
-                 model->blockNotification();
-                });
+      inColl[item->data(Qt::UserRole).toInt()].setPath(item->data(Qt::DisplayRole).toString().toUtf8().constData());
+      cs.setResourceFiles(inColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+    });
 
-  connect(addRemoveWidget, &AddRemoveWidget::addRequested,
-          [=]() {
-                 CouplingStepCollection csColl(model->getSteps());
-                 CouplingStep cs(csColl[indStep]);
-                 CouplingResourceFileCollection inColl(cs.getResourceFiles());
+  connect(addRemoveWidget, &AddRemoveWidget::addRequested, [=]() {
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
-                 inColl.add(CouplingResourceFile());
-                 cs.setResourceFiles(inColl);
-                 csColl[indStep] = cs;
-                 model->blockNotification("PhysicalModelDefinitionItem");
-                 model->setSteps(csColl);
-                 model->blockNotification();
+      inColl.add(CouplingResourceFile());
+      cs.setResourceFiles(inColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
 
-                 const int row = tableWidget_->rowCount();
-                 tableWidget_->setRowCount(row+1);
+      const int row = tableWidget_->rowCount();
+      tableWidget_->setRowCount(row+1);
 
-                 QTableWidgetItem * newItem = new QTableWidgetItem;
-                 newItem->setData(Qt::UserRole, (int)inColl.getSize()-1);
-                 tableWidget_->setItem(row, 0, newItem);
+      QTableWidgetItem * newItem = new QTableWidgetItem;
+      newItem->setData(Qt::UserRole, (int)inColl.getSize()-1);
+      tableWidget_->setItem(row, 0, newItem);
 
-                 QToolButton * tb = new QToolButton;
-                 tb->setText("...");
-                 tableWidget_->setCellWidget(row, 1, tb);
-                 tableWidget_->horizontalHeader()->resizeSection(1, tb->width());
-                 connect(tb, &QToolButton::clicked,
-                         [=](){
-                           QFileDialog* dlg = new QFileDialog(this);
-                           QStringList filters;
-                           filters <<"Any file (*)"
-                                   <<"Choose directory";
+      QToolButton * tb = new QToolButton;
+      tb->setText("...");
+      tableWidget_->setCellWidget(row, 1, tb);
+      tableWidget_->horizontalHeader()->resizeSection(1, tb->width());
+      connect(tb, &QToolButton::clicked, [=](){
+          QFileDialog* dlg = new QFileDialog(this);
+          QStringList filters;
+          filters <<"Any file (*)"
+                  <<"Choose directory";
 
-                           dlg->setFileMode(QFileDialog::AnyFile);
-                           dlg->setOption(QFileDialog::DontUseNativeDialog, true);
-                           dlg->setNameFilters(filters);
-                           connect(dlg, &QFileDialog::filterSelected,
-                                   [=]() {
-                                     if(dlg->selectedNameFilter().contains("directory")) {
-                                       dlg->setFileMode(QFileDialog::Directory);
-                                       // Filters are reset when setting QFileDialog::Directory
-                                       QStringList r_filters;
-                                       r_filters << filters[1] << filters[0];
-                                       dlg->setNameFilters(r_filters);
-                                     } else {
-                                       dlg->setFileMode(QFileDialog::AnyFile);
-                                       dlg->setNameFilters(filters);
-                                     }
-                                   });
-                           dlg->exec();
-                           QString fileName = dlg->selectedFiles()[0];
+          dlg->setFileMode(QFileDialog::AnyFile);
+          dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+          dlg->setNameFilters(filters);
+          connect(dlg, &QFileDialog::filterSelected, [=]() {
+              if(dlg->selectedNameFilter().contains("directory")) {
+                dlg->setFileMode(QFileDialog::Directory);
+                // Filters are reset when setting QFileDialog::Directory
+                QStringList r_filters;
+                r_filters << filters[1] << filters[0];
+                dlg->setNameFilters(r_filters);
+              } else {
+                dlg->setFileMode(QFileDialog::AnyFile);
+                dlg->setNameFilters(filters);
+              }
+            });
+          dlg->exec();
+          QString fileName = dlg->selectedFiles()[0];
 
-                           if (fileName.isEmpty())
-                             return;
+          if (fileName.isEmpty())
+            return;
 
-                           FileTools::SetCurrentDir(fileName);
-                           newItem->setData(Qt::DisplayRole, fileName);
+          FileTools::SetCurrentDir(fileName);
+          newItem->setData(Qt::DisplayRole, fileName);
 
-                           CouplingStepCollection csColl(model->getSteps());
-                           CouplingStep cs(csColl[indStep]);
-                           CouplingResourceFileCollection inColl(cs.getResourceFiles());
+          CouplingStepCollection csColl(model->getSteps());
+          CouplingStep cs(csColl[indStep]);
+          CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
-                           inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
-                           cs.setResourceFiles(inColl);
-                           csColl[indStep] = cs;
-                           model->blockNotification("PhysicalModelDefinitionItem");
-                           model->setSteps(csColl);
-                           model->blockNotification();
-                         });
-          });
-  connect(addRemoveWidget, &AddRemoveWidget::removeRequested,
-    [=]() {
-           CouplingStepCollection csColl(model->getSteps());
-           CouplingStep cs(csColl[indStep]);
-           CouplingResourceFileCollection inColl(cs.getResourceFiles());
+          inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
+          cs.setResourceFiles(inColl);
+          csColl[indStep] = cs;
+          model->blockNotification("PhysicalModelDefinitionItem");
+          model->setSteps(csColl);
+          model->blockNotification();
+        });
+    });
+  connect(addRemoveWidget, &AddRemoveWidget::removeRequested, [=]() {
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
-           inColl.erase(inColl.begin() + tableWidget_->selectionModel()->currentIndex().data(Qt::UserRole).toInt());
-           cs.setResourceFiles(inColl);
-           csColl[indStep] = cs;
-           model->blockNotification("PhysicalModelDefinitionItem");
-           model->setSteps(csColl);
-           model->blockNotification();
-           // emit signal to the parent widget in order to rebuild widgets
-           // (because we want to update the input file index in all widgets)
-           emit couplingResourceCollectionModified();
-          });
+      inColl.erase(inColl.begin() + tableWidget_->selectionModel()->currentIndex().data(Qt::UserRole).toInt());
+      cs.setResourceFiles(inColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+      // emit signal to the parent widget in order to rebuild widgets
+      // (because we want to update the input file index in all widgets)
+      emit couplingResourceCollectionModified();
+    });
 }
 
 
@@ -1100,40 +1090,38 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
   outTableView->setDisabled(outFileLineEdit->text().isEmpty());
   addRemoveWidget->setDisabled(outFileLineEdit->text().isEmpty());
 
-  connect(outFileLineEdit, &QLineEdit::editingFinished,
-        [=](){
-              if (QFileInfo(outFileLineEdit->text()).isAbsolute())
-                outFileLineEdit->setText(QFileInfo(outFileLineEdit->text()).fileName());
+  connect(outFileLineEdit, &QLineEdit::editingFinished, [=](){
+      if (QFileInfo(outFileLineEdit->text()).isAbsolute())
+        outFileLineEdit->setText(QFileInfo(outFileLineEdit->text()).fileName());
 
-              outTableView->setDisabled(outFileLineEdit->text().isEmpty());
-              addRemoveWidget->setDisabled(outFileLineEdit->text().isEmpty());
+      outTableView->setDisabled(outFileLineEdit->text().isEmpty());
+      addRemoveWidget->setDisabled(outFileLineEdit->text().isEmpty());
 
-              CouplingStepCollection csColl(model->getSteps());
-              CouplingStep cs(csColl[indStep]);
-              CouplingOutputFileCollection outColl(cs.getOutputFiles());
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingOutputFileCollection outColl(cs.getOutputFiles());
 
-              outColl[indFile].setPath(outFileLineEdit->text().toUtf8().constData());
-              cs.setOutputFiles(outColl);
-              csColl[indStep] = cs;
-              model->blockNotification("PhysicalModelDefinitionItem");
-              model->setSteps(csColl);
-              model->blockNotification();
-             });
+      outColl[indFile].setPath(outFileLineEdit->text().toUtf8().constData());
+      cs.setOutputFiles(outColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+    });
 
   QPushButton * checkButton = new QPushButton(tr("Check output"));
   layout->addWidget(checkButton, row, 0, Qt::AlignLeft);
   QLabel * textLabel = new QLabel("");
-  connect(checkButton, &QToolButton::clicked,
-          [=](){
-            layout->addWidget(textLabel, row+1, 0, Qt::AlignLeft);
-            QFileDialog * dlg = new QFileDialog(this);
-            dlg->setFileMode(QFileDialog::AnyFile);
-            dlg->setOption(QFileDialog::DontUseNativeDialog, true);
-            dlg->exec();
-            QString fileName = dlg->selectedFiles()[0];
-            CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
-            textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString())));
-          });
+  connect(checkButton, &QToolButton::clicked, [=](){
+      layout->addWidget(textLabel, row+1, 0, Qt::AlignLeft);
+      QFileDialog * dlg = new QFileDialog(this);
+      dlg->setFileMode(QFileDialog::AnyFile);
+      dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+      dlg->exec();
+      QString fileName = dlg->selectedFiles()[0];
+      CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
+      textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString())));
+    });
 }
 
 // Widget for Coupling Step
@@ -1145,167 +1133,177 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
 {
   QGridLayout * widgetLayout = new QGridLayout(this);
 
-  // command definition
-  QLabel * commandLabel = new QLabel(tr("Command"));
-  widgetLayout->addWidget(commandLabel, 0, 0);
-
-  QLineEdit * commandLineEdit = new QLineEdit(QString::fromUtf8(model->getSteps()[indStep].getCommand().c_str()));
-  widgetLayout->addWidget(commandLineEdit, 0, 1);
-  connect(commandLineEdit, &QLineEdit::editingFinished,
-        [=](){
-              CouplingStepCollection csColl(model->getSteps());
-              CouplingStep cs(csColl[indStep]);
-
-              cs.setCommand(commandLineEdit->text().toUtf8().constData());
-              csColl[indStep] = cs;
-              model->blockNotification("PhysicalModelDefinitionItem");
-              model->setSteps(csColl);
-              model->blockNotification();
-             });
-
-  QCheckBox * checkBox = new QCheckBox(tr("Shell command"));
-  widgetLayout->addWidget(checkBox, 1, 0, 1, 2);
-  checkBox->setChecked(model->getSteps()[indStep].getIsShell());
-  connect(checkBox, &QCheckBox::toggled,
-          [=](bool toggled){
-                            CouplingStepCollection csColl(model->getSteps());
-                            CouplingStep cs(csColl[indStep]);
-
-                            cs.setIsShell(toggled);
-                            csColl[indStep] = cs;
-                            model->blockNotification("PhysicalModelDefinitionItem");
-                            model->setSteps(csColl);
-                            model->blockNotification();
-                           });
-
   // step definition
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
-  widgetLayout->addWidget(scrollArea, 2, 0, 1, 2);
+  widgetLayout->addWidget(scrollArea);
 
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
   scrollArea->setWidget(mainWidget);
 
-  // input definition
-  CollapsibleGroupBox * inGroupBox = new CollapsibleGroupBox(tr("Input"));
-  QVBoxLayout * inGroupBoxLayout = new QVBoxLayout(inGroupBox);
-  mainLayout->addWidget(inGroupBox);
+  QTabWidget * stepTabWidget = new QTabWidget;
+  mainLayout->addWidget(stepTabWidget);
 
-  inTabWidget_ = new DynamicTabWidget;
-  inGroupBoxLayout->addWidget(inTabWidget_);
-  connect(inTabWidget_, &DynamicTabWidget::newTabRequested,
-          [=](){
-                CouplingStepCollection csColl(model->getSteps());
-                CouplingStep cs(csColl[indStep]);
-                CouplingInputFileCollection inColl(cs.getInputFiles());
+  // command definition
+  QWidget * tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Command"));
 
-                inColl.add(CouplingInputFile());
-                cs.setInputFiles(inColl);
-                csColl[indStep] = cs;
-                model->blockNotification("PhysicalModelDefinitionItem");
-                model->setSteps(csColl);
-                model->blockNotification();
-                CouplingInputFileWidget * ciFileWidget = new CouplingInputFileWidget(item, model, indStep, inColl.getSize()-1);
-                inTabWidget_->addTab(ciFileWidget, tr("File"));
-               });
-  connect(inTabWidget_, &DynamicTabWidget::removeTabRequested,
-          [=](int index){
-                          CouplingStepCollection csColl(model->getSteps());
-                          CouplingStep cs(csColl[indStep]);
-                          CouplingInputFileCollection inColl(cs.getInputFiles());
+  QGridLayout * comTabLayout = new QGridLayout(tab);
+  QLabel * commandLabel = new QLabel(tr("Command"));
+  comTabLayout->addWidget(commandLabel, 0, 0);
 
-                          inColl.erase(inColl.begin() + index);
-                          cs.setInputFiles(inColl);
-                          csColl[indStep] = cs;
-                          model->blockNotification("PhysicalModelDefinitionItem");
-                          model->setSteps(csColl);
-                          model->blockNotification();
-                          updateInputFileWidgets(item);
-                        });
+  QLineEdit * commandLineEdit = new QLineEdit(QString::fromUtf8(model->getSteps()[indStep].getCommand().c_str()));
+  comTabLayout->addWidget(commandLineEdit, 0, 1);
+  connect(commandLineEdit, &QLineEdit::editingFinished, [=](){
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
 
-  // ressource definition
-  CollapsibleGroupBox * resGroupBox = new CollapsibleGroupBox(tr("Ressource"));
-  QGridLayout * resGroupBoxLayout = new QGridLayout(resGroupBox);
-  mainLayout->addWidget(resGroupBox);
+      cs.setCommand(commandLineEdit->text().toUtf8().constData());
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+    });
 
-  ressourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, resGroupBox);
-  resGroupBoxLayout->addWidget(ressourceFileWidget_);
-  connect(ressourceFileWidget_, &CouplingResourceFileWidget::couplingResourceCollectionModified, [=]() { updateInputFileWidgets(item); });
+  QCheckBox * checkBox = new QCheckBox(tr("Shell command"));
+  comTabLayout->addWidget(checkBox, 1, 0, 1, 2);
+  checkBox->setChecked(model->getSteps()[indStep].getIsShell());
+  connect(checkBox, &QCheckBox::toggled, [=](bool toggled){
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
 
-  updateInputFileWidgets(item);
-
-  // output definition
-  CollapsibleGroupBox * outGroupBox = new CollapsibleGroupBox(tr("Output"));
-  QGridLayout * outGroupBoxLayout = new QGridLayout(outGroupBox);
-  mainLayout->addWidget(outGroupBox);
-
-  DynamicTabWidget * outTabWidget = new DynamicTabWidget;
-  outGroupBoxLayout->addWidget(outTabWidget);
-  connect(outTabWidget, &DynamicTabWidget::newTabRequested,
-          [=](){
-                CouplingStepCollection csColl(model->getSteps());
-                CouplingStep cs(csColl[indStep]);
-                CouplingOutputFileCollection outColl(cs.getOutputFiles());
-
-                outColl.add(CouplingOutputFile());
-                cs.setOutputFiles(outColl);
-                csColl[indStep] = cs;
-                model->blockNotification("PhysicalModelDefinitionItem");
-                model->setSteps(csColl);
-                model->blockNotification();
-                CouplingOutputFileWidget * outFileWidget = new CouplingOutputFileWidget(item, model, indStep, outColl.getSize()-1);
-                outTabWidget->addTab(outFileWidget, tr("File"));
-               });
-  connect(outTabWidget, &DynamicTabWidget::removeTabRequested,
-          [=](int index){
-                          CouplingStepCollection csColl(model->getSteps());
-                          CouplingStep cs(csColl[indStep]);
-                          CouplingOutputFileCollection outColl(cs.getOutputFiles());
-
-                          outColl.erase(outColl.begin() + index);
-                          cs.setOutputFiles(outColl);
-                          csColl[indStep] = cs;
-                          model->blockNotification("PhysicalModelDefinitionItem");
-                          model->setSteps(csColl);
-                          model->blockNotification();
-                          item->update(0, "inputStepChanged");
-                        });
+      cs.setIsShell(toggled);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+    });
 
   CollapsibleGroupBox * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
   QGridLayout * advGroupBoxLayout = new QGridLayout(advGroupBox);
-  mainLayout->addWidget(advGroupBox);
+  comTabLayout->addWidget(advGroupBox, 2, 0, 1, 2);
 
-  advGroupBoxLayout->addWidget(new QLabel(tr("Timeout (s)")), 5, 0);
+  advGroupBoxLayout->addWidget(new QLabel(tr("Timeout (s)")), 0, 0);
   DoubleSpinBox * timeOutVal = new DoubleSpinBox();
   timeOutVal->setMinimum(-1);
   timeOutVal->setValue(model_->getSteps()[indStep].getTimeOut());
-  advGroupBoxLayout->addWidget(timeOutVal, 5, 1);
-  connect(timeOutVal, QOverload<double>::of(&DoubleSpinBox::valueChanged),
-          [=](const double& val) {
-            CouplingStepCollection csColl(model->getSteps());
-            csColl[indStep].setTimeOut(val);
-            model->blockNotification("PhysicalModelDefinitionItem");
-            model->setSteps(csColl);
-            model->blockNotification();
-          });
+  advGroupBoxLayout->addWidget(timeOutVal, 0, 1);
+  connect(timeOutVal, QOverload<double>::of(&DoubleSpinBox::valueChanged), [=](const double& val) {
+      CouplingStepCollection csColl(model->getSteps());
+      csColl[indStep].setTimeOut(val);
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+    });
 
-  advGroupBoxLayout->addWidget(new QLabel(tr("I/O Encoding")), 0, 0);
+  advGroupBoxLayout->addWidget(new QLabel(tr("I/O Encoding")), 1, 0);
   QComboBox * encodingBox = new QComboBox();
   encodingBox->insertItem(0, QString::fromStdString("utf-8"));
   encodingBox->insertItem(1, QString::fromStdString("latin-1"));
   int index = encodingBox->findText(QString::fromStdString(model->getSteps()[indStep].getEncoding()));
   if ( index != -1 )
     encodingBox->setCurrentIndex(index);
-  advGroupBoxLayout->addWidget(encodingBox, 0, 1);
-  connect(encodingBox, &QComboBox::currentTextChanged,
-	  [=](const QString& enc) {
-            CouplingStepCollection csColl(model->getSteps());
-            csColl[indStep].setEncoding(enc.toUtf8().constData());
-            model->blockNotification("PhysicalModelDefinitionItem");
-            model->setSteps(csColl);
-            model->blockNotification();
-	  });
+  advGroupBoxLayout->addWidget(encodingBox, 1, 1);
+  connect(encodingBox, &QComboBox::currentTextChanged, [=](const QString& enc) {
+      CouplingStepCollection csColl(model->getSteps());
+      csColl[indStep].setEncoding(enc.toUtf8().constData());
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+    });
+  advGroupBoxLayout->setColumnStretch(1,1);
+  advGroupBoxLayout->setRowStretch(1,1);
+  comTabLayout->setColumnStretch(1,1);
+  comTabLayout->setRowStretch(3,1);
+
+
+  // input definition
+  tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Input"));
+
+  QVBoxLayout * inTabLayout = new QVBoxLayout(tab);
+  inTabWidget_ = new DynamicTabWidget;
+  inTabLayout->addWidget(inTabWidget_);
+  connect(inTabWidget_, &DynamicTabWidget::newTabRequested, [=](){
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingInputFileCollection inColl(cs.getInputFiles());
+
+      inColl.add(CouplingInputFile());
+      cs.setInputFiles(inColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+      CouplingInputFileWidget * ciFileWidget = new CouplingInputFileWidget(item, model, indStep, inColl.getSize()-1);
+      inTabWidget_->addTab(ciFileWidget, tr("File"));
+    });
+  connect(inTabWidget_, &DynamicTabWidget::removeTabRequested, [=](int index){
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingInputFileCollection inColl(cs.getInputFiles());
+
+      inColl.erase(inColl.begin() + index);
+      cs.setInputFiles(inColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+      updateInputFileWidgets(item);
+    });
+
+  // ressource definition
+  tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Ressource"));
+
+  QGridLayout * resTabLayout = new QGridLayout(tab);
+  ressourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, tab);
+  resTabLayout->addWidget(ressourceFileWidget_);
+  connect(ressourceFileWidget_, &CouplingResourceFileWidget::couplingResourceCollectionModified, [=]() { updateInputFileWidgets(item); });
+
+  updateInputFileWidgets(item);
+
+  // output definition
+  tab = new QWidget;
+  stepTabWidget->addTab(tab, tr("Output"));
+  QGridLayout * outTabLayout = new QGridLayout(tab);
+
+  DynamicTabWidget * outTabWidget = new DynamicTabWidget;
+  outTabLayout->addWidget(outTabWidget);
+  connect(outTabWidget, &DynamicTabWidget::newTabRequested, [=](){
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingOutputFileCollection outColl(cs.getOutputFiles());
+
+      outColl.add(CouplingOutputFile());
+      cs.setOutputFiles(outColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+      CouplingOutputFileWidget * outFileWidget = new CouplingOutputFileWidget(item, model, indStep, outColl.getSize()-1);
+      outTabWidget->addTab(outFileWidget, tr("File"));
+    });
+  connect(outTabWidget, &DynamicTabWidget::removeTabRequested, [=](int index){
+      CouplingStepCollection csColl(model->getSteps());
+      CouplingStep cs(csColl[indStep]);
+      CouplingOutputFileCollection outColl(cs.getOutputFiles());
+
+      outColl.erase(outColl.begin() + index);
+      cs.setOutputFiles(outColl);
+      csColl[indStep] = cs;
+      model->blockNotification("PhysicalModelDefinitionItem");
+      model->setSteps(csColl);
+      model->blockNotification();
+      item->update(0, "inputStepChanged");
+    });
+
+  tab = new QWidget(stepTabWidget);
+  stepTabWidget->addTab(tab, tr("Additional processing"));
+  QVBoxLayout * pyCodeLayout = new QVBoxLayout(tab);
+  PythonCodeWidget * pyCodeWidget = new PythonCodeWidget(item, indStep, tab);
+  pyCodeLayout->addWidget(pyCodeWidget);
 
   // - fill in the QTabWidget
   CouplingStep cs(model->getSteps()[indStep]);
@@ -1399,5 +1397,88 @@ void CouplingSummaryWidget::showEvent(QShowEvent *event)
   QTabWidget::showEvent(event);
   qobject_cast<InputTableModel*>(inputTableView_->model())->updateData();
   qobject_cast<OutputTableModel*>(outputTableView_->model())->updateData();
+}
+
+PythonCodeModel::PythonCodeModel(PhysicalModelItem * item, int indStep, QWidget * parent)
+  : QAbstractTableModel(parent)
+  , model_(item->getPhysicalModel())
+  , indStep_(indStep)
+{
+
+}
+
+int PythonCodeModel::columnCount(const QModelIndex & /*parent*/) const
+{
+  return 1;
+}
+
+
+int PythonCodeModel::rowCount(const QModelIndex & /*parent*/) const
+{
+  return 1;
+}
+
+
+QVariant PythonCodeModel::data(const QModelIndex & index, int role) const
+{
+  if (!index.isValid())
+    return QVariant();
+
+  if (role == Qt::DisplayRole || role == Qt::EditRole) {
+    CouplingPhysicalModel * model = dynamic_cast<CouplingPhysicalModel*>(model_.getImplementation().get());
+    CouplingStep cs = model->getSteps()[indStep_];
+    return QString::fromUtf8(cs.getCode().c_str());}
+  return QVariant();
+}
+
+
+bool PythonCodeModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+  if (!index.isValid())
+    return false;
+
+  if (role == Qt::EditRole) {
+    model_.blockNotification("PhysicalModelDefinitionItem");
+    CouplingPhysicalModel * model = dynamic_cast<CouplingPhysicalModel*>(model_.getImplementation().get());
+    CouplingStepCollection csColl = model->getSteps();
+    csColl[indStep_].setCode(value.toString().toUtf8().data());
+    dynamic_cast<CouplingPhysicalModel*>(model_.getImplementation().get())->setSteps(csColl);
+    model_.blockNotification();
+    emit dataChanged();
+    return true;}
+  return false;
+}
+
+
+Qt::ItemFlags PythonCodeModel::flags(const QModelIndex & index) const
+{
+  return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
+}
+
+
+void PythonCodeModel::updateData()
+{
+  beginResetModel();
+  endResetModel();
+}
+
+PythonCodeWidget::PythonCodeWidget(PhysicalModelItem * item, const int indStep, QWidget *parent)
+  : QWidget(parent)
+{
+  QVBoxLayout * widgetLayout = new QVBoxLayout;
+  QTableView * codeView = new QTableView;
+  codeView->setEditTriggers(QTableView::AllEditTriggers);
+  codeView->horizontalHeader()->setStretchLastSection(true);
+  codeView->verticalHeader()->setStretchLastSection(true);
+  codeView->horizontalHeader()->hide();
+  codeView->verticalHeader()->hide();
+  codeView->setItemDelegate(new CodeDelegate(codeView));
+
+  PythonCodeModel * codeModel = new PythonCodeModel(item, indStep, parent);
+  codeView->setModel(codeModel);
+  codeView->openPersistentEditor(codeModel->index(0, 0));
+  connect(item, SIGNAL(codeChanged()), codeModel, SLOT(updateData()));
+  widgetLayout->addWidget(codeView);
+  setLayout(widgetLayout);
 }
 }
