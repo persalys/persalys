@@ -131,9 +131,11 @@ void CouplingInputFile::simulateInput(InputCollection inColl) const
   code << "all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(variableNames) << ", [";
   for (UnsignedInteger i = 0; i < inColl.getSize(); ++ i)
   {
-    code << inColl[i].getValue();
-    if (i < inColl.getSize() - 1)
-      code << ", ";
+    if(variableNames.contains(inColl[i].getName())) {
+      code << inColl[i].getValue();
+      if (i < inColl.getSize() - 1)
+        code << ", ";
+    }
   }
   code << "]))\n";
   code << "input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
