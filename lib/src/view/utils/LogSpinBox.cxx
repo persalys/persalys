@@ -48,6 +48,6 @@ void LogSpinBox::stepBy(int steps)
   if (steps > 0)
     setValue(base_ * value());
   else
-    setValue(value() / base_);
+    setValue((int)(value() / base_));
 }
 }

@@ -77,7 +77,6 @@ protected:
 private:
   OT::String code_;
   mutable OT::Function functionCache_;
-  OT::Scalar evalTime_ = 0;
 };
 
 }
