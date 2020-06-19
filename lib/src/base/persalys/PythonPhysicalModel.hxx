@@ -68,12 +68,16 @@ public:
   virtual void setParallel(const OT::Bool flag);
   void resetCallsNumber();
 
+  void setEvalTime(const OT::Scalar& evalTime);
+  OT::Scalar getEvalTime() const;
+
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;
 
 private:
   OT::String code_;
   mutable OT::Function functionCache_;
+  OT::Scalar evalTime_ = 0;
 };
 
 }

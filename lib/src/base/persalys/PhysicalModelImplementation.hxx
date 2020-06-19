@@ -114,6 +114,9 @@ public:
   MeshModel getMeshModel() const;
   void setMeshModel(const MeshModel& meshModel);
 
+  OT::Scalar getEvalTime() const;
+  void setEvalTime(const OT::Scalar& evalTime);
+
   OT::Bool isParallel() const;
   virtual void setParallel(const OT::Bool flag);
 
@@ -155,6 +158,7 @@ private:
   MeshModel meshModel_;
   mutable OT::Point finiteDifferenceSteps_;
   OT::Bool isParallel_;
+  OT::Scalar evalTime_;
 };
 }
 #endif

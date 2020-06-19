@@ -63,6 +63,7 @@ private:
   CopyableTableView * outputTableView_;
   TemporaryLabel * errorMessageLabel_;
   QLabel * indexParamLabel_;
+  OT::Scalar evalTime_ = 0;
 };
 }
 #endif

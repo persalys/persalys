@@ -43,6 +43,7 @@ protected:
 
 private:
   DesignOfExperiment designOfExperiment_;
+  OT::Scalar elapsedTime_;
 };
 }
 #endif

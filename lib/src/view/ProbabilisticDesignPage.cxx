@@ -72,14 +72,29 @@ void ProbabilisticDesignPage::buildInterface()
 
   QLabel * sampleSizeLabel = new QLabel(tr("Sample size"));
   sampleSizeLayout->addWidget(sampleSizeLabel, 0, 0);
+  QLabel * sampleTimeLabel = new QLabel(tr("Estimated duration (s):"));
+  sampleSizeLayout->addWidget(sampleTimeLabel, 1, 0);
 
   sampleSizeSpinbox_ = new LogSpinBox;
   sampleSizeSpinbox_->setMinimum(1);
   sampleSizeSpinbox_->setMaximum(std::numeric_limits<int>::max());
   sampleSizeLabel->setBuddy(sampleSizeSpinbox_);
   sampleSizeLayout->addWidget(sampleSizeSpinbox_, 0, 1);
-
+  QLabel * sampleTimeValueLabel = new QLabel(QString::number(sampleSizeSpinbox_->value()*modelEvalTime_));
+  sampleSizeLayout->addWidget(sampleTimeValueLabel, 1, 1);
   pageLayout->addWidget(sampleSizeGroupBox);
+
+  sampleTimeValueLabel->setVisible(sampleTimeValueLabel->text().toFloat()>1e-6);
+  sampleTimeLabel->setVisible(sampleTimeValueLabel->text().toFloat()>1e-6);
+
+  connect(sampleSizeSpinbox_, QOverload<double>::of(&LogSpinBox::valueChanged), [=](const double& value) {
+      sampleTimeValueLabel->setText(QString::number(value*modelEvalTime_));
+      if(sampleTimeValueLabel->text().toFloat()>1e-6) {
+        sampleTimeValueLabel->setVisible(true);
+        emit showTime();}
+    });
+
+  connect(this, SIGNAL(showTime()), sampleTimeLabel, SLOT(show()));
 
   // advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
@@ -107,6 +122,7 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
 {
   const DesignOfExperimentEvaluation * doe_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
 
+  modelEvalTime_ = doe_ptr->getPhysicalModel().getEvalTime();
   if (!doe_ptr)
     return;
 
@@ -134,7 +150,6 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
   sampleSizeSpinbox_->setValue(probaDoe_ptr->getSize());
   seedSpinbox_->setValue(probaDoe_ptr->getSeed());
 }
-
 
 Analysis ProbabilisticDesignPage::getAnalysis(const String& name, const PhysicalModel& model) const
 {

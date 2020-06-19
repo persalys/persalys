@@ -50,6 +50,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   , composedCopula_()
   , finiteDifferenceSteps_()
   , isParallel_(false)
+  , evalTime_(0)
 {
   setName(name);
   // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
@@ -69,6 +70,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
   , composedCopula_()
   , finiteDifferenceSteps_()
   , isParallel_(false)
+  , evalTime_(0)
 {
   setName(name);
 
@@ -798,7 +800,7 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
 
   if (!copula.isCopula())
     throw InvalidArgumentException(HERE) << "The provided distribution is not a copula";
- 
+
   Collection<Distribution> coll(composedCopula_.getCopulaCollection());
   std::set<UnsignedInteger> indicesToRemove;
 
@@ -1121,7 +1123,15 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   return oss;
 }
 
+void PhysicalModelImplementation::setEvalTime(const OT::Scalar & evalTime)
+{
+  evalTime_ = evalTime;
+}
 
+Scalar PhysicalModelImplementation::getEvalTime() const
+{
+  return evalTime_;
+}
 /* String converter */
 String PhysicalModelImplementation::__repr__() const
 {
@@ -1147,6 +1157,7 @@ void PhysicalModelImplementation::save(Advocate & adv) const
   adv.saveAttribute("composedCopula_", composedCopula_);
   adv.saveAttribute("meshModel_", meshModel_);
   adv.saveAttribute("isParallel_", isParallel_);
+  adv.saveAttribute("evalTime_", evalTime_);
 }
 
 
@@ -1160,6 +1171,7 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("composedCopula_", composedCopula_);
   adv.loadAttribute("meshModel_", meshModel_);
   adv.loadAttribute("isParallel_", isParallel_);
+  adv.loadAttribute("evalTime_", evalTime_);
   updateCopula();
 }
 

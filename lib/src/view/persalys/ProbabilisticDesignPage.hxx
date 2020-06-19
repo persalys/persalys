@@ -47,11 +47,13 @@ protected:
 public slots:
 signals:
   void designOfExperimentChanged(const Analysis & designOfExperiment);
+  void showTime();
 
 private:
   QButtonGroup * designsGroup_;
   LogSpinBox * sampleSizeSpinbox_;
   QSpinBox * seedSpinbox_;
+  OT::Scalar modelEvalTime_;
 };
 }
 #endif

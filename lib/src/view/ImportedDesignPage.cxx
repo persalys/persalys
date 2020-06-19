@@ -44,9 +44,20 @@ void ImportedDesignPage::buildInterface()
   setSubTitle(tr("Import data from a file"));
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  QLabel * estimatedTimeLabel = new QLabel(tr("Estimated duration (s): "));
+  estimatedTimeValueLabel_ = new QLabel;
+  QWidget * timeWidget = new QWidget;
+  QHBoxLayout * timeLayout = new QHBoxLayout(timeWidget);
+  timeLayout->addWidget(estimatedTimeLabel, 0);
+  timeLayout->addWidget(estimatedTimeValueLabel_, 1);
+  mainLayout->addWidget(timeWidget);
   mainLayout->addWidget(sampleWidget_);
   connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
   connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
+
+  estimatedTimeValueLabel_->setVisible(estimatedTimeValueLabel_->text().toFloat()>1e-6);
+  estimatedTimeLabel->setVisible(estimatedTimeValueLabel_->text().toFloat()>1e-6);
+  connect(this, SIGNAL(showTime()), estimatedTimeLabel, SLOT(show()));
 }
 
 
@@ -56,6 +67,11 @@ void ImportedDesignPage::setTable(const QString& fileName)
   designOfExperiment_.setFileName(fileName.toUtf8().data());
 
   // update widgets
+  estimatedTimeValueLabel_->setText(QString::number(designOfExperiment_.getSampleFromFile().getSize()*designOfExperiment_.getPhysicalModel().getEvalTime()));
+  if(estimatedTimeValueLabel_->text().toFloat()>1e-6) {
+    estimatedTimeValueLabel_->setVisible(true);
+    emit showTime();
+  }
   sampleWidget_->updateWidgets(designOfExperiment_.getSampleFromFile(),
                                designOfExperiment_.getPhysicalModel().getInputNames(),
                                designOfExperiment_.getInputColumns());

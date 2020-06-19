@@ -102,6 +102,9 @@ public:
   OT::Collection<OT::Distribution> getCopulaCollection() const;
   void setCopula(const OT::Description& inputNames, const OT::Distribution & copula);
 
+  void setEvalTime(const OT::Scalar& evalTime);
+  OT::Scalar getEvalTime() const;
+
   bool hasMesh() const;
   MeshModel getMeshModel() const;
   void setMeshModel(const MeshModel& meshModel);
