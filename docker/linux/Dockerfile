@@ -23,7 +23,7 @@ RUN curl -fSsL https://cmake.org/files/v3.17/cmake-3.17.3.tar.gz | tar xz && cd 
 
 # cminpack
 RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.6.tar.gz | tar xz && cd cminpack-1.3.6 \
- && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF . && make install
+ && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DBLAS_LIBRARIES="/usr/lib64/atlas/libcblas.so.3.0;blas;m" . && make install
 
 # nlopt
 RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.2.tar.gz | tar xz && cd nlopt-2.6.2 \
