@@ -1166,8 +1166,12 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
   comTabLayout->addWidget(commandLabel, 0, 0);
 
   QLineEdit * commandLineEdit = new QLineEdit(QString::fromUtf8(model->getSteps()[indStep].getCommand().c_str()));
+  commandLineEdit->setValidator(new QRegExpValidator(QRegExp("([^\r\n]*)")));
   comTabLayout->addWidget(commandLineEdit, 0, 1);
+  if(!commandLineEdit->hasAcceptableInput())
+    commandLineEdit->setStyleSheet("color: red");
   connect(commandLineEdit, &QLineEdit::editingFinished, [=](){
+      commandLineEdit->setStyleSheet("");
       CouplingStepCollection csColl(model->getSteps());
       CouplingStep cs(csColl[indStep]);
 

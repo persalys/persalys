@@ -25,7 +25,7 @@
 
 #include <openturns/OTType.hxx>
 #include <boost/regex.hpp>
-
+#include <boost/algorithm/string/replace.hpp>
 
 namespace PERSALYS
 {
@@ -95,5 +95,12 @@ inline OT::String EscapePath(const OT::FileName & filename)
   OT::FileName escapedPath = boost::regex_replace(filename, boost::regex("\\\\"), "\\\\\\\\");
   return escapedPath;
 }
+
+inline OT::String EscapeQuotes(OT::String str)
+{
+  boost::replace_all(str, "\'", "\\\'");
+  return str;
+}
+
 }
 #endif
