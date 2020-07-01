@@ -60,12 +60,13 @@ EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
-for libname in lapack blas xml2 png12 gfortran ffi
+for libname in lapack blas xml2 png12 gfortran ffi lzma
 do
   cp -v /usr/lib64/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
 cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so persalys.AppDir/usr/lib
+cp -v /usr/lib64/atlas/lib*.so.3 persalys.AppDir/usr/lib
 
 # python
 sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
