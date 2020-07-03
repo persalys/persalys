@@ -120,8 +120,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
 	    <<", "<<outputFile.getSkipColumns().__str__()<<")\n";
       oss << offset << "output_files.append(output_file"<<j<<")\n";
     }
-    // escape backslashes
-    oss << offset << "step" << i << " = persalys.CouplingStep('"<<EscapePath(step.getCommand())<<"', input_files, resource_files, output_files)\n";
+    // escape backslashes and single quotes
+    oss << offset << "step" << i << " = persalys.CouplingStep('"<<EscapeQuotes(EscapePath(step.getCommand()))<<"', input_files, resource_files, output_files)\n";
     oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True": "False") << ")\n";
     if(!step.getCode().empty())
       oss << offset << "step" << i << ".setCode('" << step.getEscapedCode() << "')\n";
@@ -219,7 +219,7 @@ void CouplingPhysicalModel::updateCode()
   code << "    checksum = hashlib.sha1()\n";
   code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
   if(!workDir_.empty())
-    code << "    workdir = os.path.join('"+workDir_+"', 'persalys_' + checksum.hexdigest())\n";
+    code << "    workdir = os.path.join('"+EscapeQuotes(EscapePath(workDir_))+"', 'persalys_' + checksum.hexdigest())\n";
   else
     code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
   code << "    if not os.path.exists(workdir):\n";
