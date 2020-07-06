@@ -23,12 +23,14 @@
 #include "persalys/BaseTools.hxx"
 
 #include <openturns/Study.hxx>
-#include <openturns/XMLStorageManager.hxx>
+#include <openturns/XMLH5StorageManager.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/WeibullMin.hxx>
 #include <openturns/ThresholdEventImplementation.hxx>
 
 #include <boost/filesystem.hpp>
+#include <locale>
+#include <codecvt>
 
 using namespace OT;
 
@@ -153,7 +155,14 @@ Study Study::Open(const String & xmlFileName)
 {
   // open study
   OT::Study study;
-  study.setStorageManager(XMLStorageManager(xmlFileName));
+  boost::filesystem::path::imbue(std::locale(std::locale(), new std::codecvt_utf8_utf16<wchar_t>()));
+  boost::filesystem::path h5FileName(xmlFileName);
+  h5FileName.replace_extension(".h5");
+  if(boost::filesystem::exists(h5FileName))
+    study.setStorageManager(XMLH5StorageManager(xmlFileName));
+  else
+    study.setStorageManager(XMLStorageManager(xmlFileName));
+
   study.load();
   Study openedStudy;
   study.fillObject("aStudy", openedStudy);

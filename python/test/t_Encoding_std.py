@@ -40,3 +40,4 @@ print(s.getPythonScript())
 
 os.remove(filename)
 os.remove(xmlFileName)
+os.remove(xmlFileName.split('.')[0]+'.h5')

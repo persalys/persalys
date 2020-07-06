@@ -27,7 +27,7 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/Study.hxx>
-#include <openturns/XMLStorageManager.hxx>
+#include <openturns/XMLH5StorageManager.hxx>
 
 using namespace OT;
 
@@ -609,7 +609,7 @@ String StudyImplementation::getPythonScript()
 void StudyImplementation::save(const String& xmlFileName)
 {
   OT::Study study;
-  study.setStorageManager(XMLStorageManager(xmlFileName));
+  study.setStorageManager(XMLH5StorageManager(xmlFileName));
   study.add("aStudy", this->clone());
   study.save();
 
