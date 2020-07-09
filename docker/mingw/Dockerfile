@@ -1,8 +1,7 @@
 FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
-RUN aurman -Syu --noconfirm --noedit mingw-w64-qwt
-RUN git clone https://aur.archlinux.org/mingw-w64-protobuf.git /tmp/pb && cd /tmp/pb && makepkg -sfi --skippgpcheck --noconfirm
+RUN aurman -Syu  --noconfirm --noedit mingw-w64-qwt
 RUN aurman -S --noconfirm --noedit --pgp_fetch mingw-w64-paraview58
 RUN aurman -S --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
