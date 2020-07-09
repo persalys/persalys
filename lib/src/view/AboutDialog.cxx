@@ -104,17 +104,13 @@ AboutDialog::AboutDialog(QWidget* parent)
   QStringList names;
   QStringList values;
   names << "OpenTURNS"
-        << "Qt"
         << "Python"
+        << "Qt"
         << "Qwt";
   values << PlatformInfo::GetVersion().c_str()
-         << qVersion()
          << PY_VERSION
+         << qVersion()
          << QWT_VERSION_STR;
-#ifdef PERSALYS_HAVE_PARAVIEW
-  names  << QString("ParaView") + (SubWindow::SupportsOpenGL_3_2() ? "" : " (" + tr("disabled") + ")");
-  values << PARAVIEW_VERSION_FULL;
-#endif
 #ifdef PERSALYS_HAVE_OTMORRIS
   names << "OTMorris";
   values << OTMORRIS_VERSION_STRING;
@@ -127,6 +123,17 @@ AboutDialog::AboutDialog(QWidget* parent)
   names << "YACS";
   values << YACS_VERSION_STR;
 #endif
+#ifdef PERSALYS_HAVE_PARAVIEW
+  names  << "ParaView";
+  values << PARAVIEW_VERSION_FULL;
+  QStringList glInfos;
+  (void) SubWindow::SupportsOpenGL_3_2(glInfos);
+  names << "OpenGL Vendor";
+  names << "OpenGL Version";
+  names << "OpenGL Renderer";
+  values << glInfos;
+#endif
+
   ParametersTableView * table = new ParametersTableView(names, values, false, false);
   table->setSelectionMode(QAbstractItemView::NoSelection);
   table->setSelectionBehavior(QAbstractItemView::SelectRows);

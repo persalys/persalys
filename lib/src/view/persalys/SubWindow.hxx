@@ -53,7 +53,11 @@ public:
 
   Item * getItem() const;
 
+  // do we support opengl 3.2 context ?
   static bool SupportsOpenGL_3_2();
+
+  // same + returns vendor/version/renderer strings
+  static bool SupportsOpenGL_3_2(QStringList & glInfos);
 
 public slots:
   void showRequest();

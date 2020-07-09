@@ -28,6 +28,7 @@
 #include <QSurfaceFormat>
 #include <QOpenGLFunctions_3_2_Core>
 #include <QHBoxLayout>
+#include <QOffscreenSurface>
 
 namespace PERSALYS
 {
@@ -101,6 +102,13 @@ void SubWindow::removeRequest()
 
 bool SubWindow::SupportsOpenGL_3_2()
 {
+  QStringList glInfos;
+  return SupportsOpenGL_3_2(glInfos);
+}
+
+bool SubWindow::SupportsOpenGL_3_2(QStringList & glInfos)
+{
+  glInfos = QStringList() << "n/a" << "n/a" << "n/a";
   char *pNO_GL = getenv("PERSALYS_NO_GL");
   if (pNO_GL)
     return false;
@@ -112,7 +120,22 @@ bool SubWindow::SupportsOpenGL_3_2()
   if (!context.create())
     return false;
 
-  return context.versionFunctions<QOpenGLFunctions_3_2_Core>();
+  QOpenGLFunctions_3_2_Core *funcs = context.versionFunctions<QOpenGLFunctions_3_2_Core>();
+  if (funcs)
+  {
+    QOffscreenSurface surface;
+    surface.setFormat(requestedFormat);
+    surface.create();
+    if (context.makeCurrent(&surface))
+    {
+      funcs->initializeOpenGLFunctions();
+      glInfos.clear();
+      glInfos << reinterpret_cast<const char*>(funcs->glGetString(GL_VENDOR));
+      glInfos << reinterpret_cast<const char*>(funcs->glGetString(GL_VERSION));
+      glInfos << reinterpret_cast<const char*>(funcs->glGetString(GL_RENDERER));
+    }
+  }
+  return funcs;
 }
 
 
