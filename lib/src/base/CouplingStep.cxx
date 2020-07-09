@@ -159,8 +159,8 @@ Description CouplingStep::getPPOutputs() const
 {
   String PPCode = getCode();
   Description vars;
-  boost::regex variable("([a-zA-Z][a-zA-Z0-9]*)");
-  boost::regex returnOutput("return ([a-zA-Z0-9, ]+)", boost::regex::extended);
+  boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  boost::regex returnOutput("return[ ]+([_a-zA-Z0-9, ]+)", boost::regex::extended);
   boost::smatch what;
   if (boost::regex_search(PPCode, what, returnOutput)) {
     String outputList = what[1];
@@ -177,8 +177,8 @@ Description CouplingStep::getPPInputs() const
 {
   String PPCode = getCode();
   Description vars;
-  boost::regex variable("([a-zA-Z][a-zA-Z0-9]*)");
-  boost::regex defFunc("def \\w+\\(([\\w, ]+)\\)", boost::regex::extended);
+  boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  boost::regex defFunc("def[ ]+[_a-zA-Z][_a-zA-Z0-9]*[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", boost::regex::extended);
   boost::smatch what;
   if (boost::regex_search(PPCode, what, defFunc)) {
     String outputList = what[1];
