@@ -255,9 +255,23 @@ void CouplingPhysicalModel::updateCode()
   code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=skip_tok, skip_line=skip_line, skip_col=skip_col, encoding=step.getEncoding())\n";
   code << "        if step.getCode():\n";
   code << "            script=step.getCode()\n";
-  code << "            script_funcname = re.search('def (\\w+)\\([\\w, ]+\\):', script).group(1)\n";
-  code << "            script_invars = re.search('def \\w+\\(([\\w, ]+)\\):', script).group(1).replace(' ', '').split(',')\n";
-  code << "            script_outvars = re.search('return ([\\w, ]+)', script).group(1).replace(' ', '').split(',')\n";
+
+  code << "            regexsearch = re.search('def (\\w+)\\(.*\\):', script)\n";
+  code << "            if(regexsearch is not None):\n";
+  code << "                script_funcname = regexsearch.group(1)\n";
+  code << "            else:\n";
+  code << "                raise RuntimeError('Could not find extra processing function name')\n";
+
+  code << "            regexsearch = re.search('def \\w+\\(([\\w, ]+)\\):', script)\n";
+  code << "            if(regexsearch is not None):\n";
+  code << "                script_invars = regexsearch.group(1).replace(' ', '').split(',')\n";
+  code << "            else:\n";
+  code << "                raise RuntimeError('Could not find extra processing input variables')\n";
+  code << "            regexsearch = re.search('return ([\\w, ]+)', script)\n";
+  code << "            if(regexsearch is not None):\n";
+  code << "                script_outvars = regexsearch.group(1).replace(' ', '').split(',')\n";
+  code << "            else:\n";
+  code << "                raise RuntimeError('Could not find extra processing output variables')\n";
   code << "            exec_script = script+'\\nscript_output__ = '+script_funcname+'('+ ', '.join([str(all_vars[var]) for var in script_invars]) + ')\\n'\n";
   code << "            local_dict = locals()\n";
   code << "            exec(exec_script, globals(), local_dict)\n";
