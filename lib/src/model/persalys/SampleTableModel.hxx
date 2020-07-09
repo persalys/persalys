@@ -30,8 +30,9 @@
 namespace PERSALYS
 {
 
-class SampleTableProxyModel : public QSortFilterProxyModel
+class PERSALYS_MODEL_API SampleTableProxyModel : public QSortFilterProxyModel
 {
+  Q_OBJECT
 public:
   SampleTableProxyModel(QObject *parent = 0)
   : QSortFilterProxyModel(parent)
@@ -54,16 +55,18 @@ class PERSALYS_MODEL_API SampleTableModel : public QAbstractTableModel
 public:
   SampleTableModel(const OT::Sample & data, const bool isEditable, const bool hasRowIDcolumn, const OT::Description& initialDescription, QObject * parent = 0);
   SampleTableModel(const OT::Sample & data, QObject * parent = 0);
+  SampleTableModel(const OT::Sample &data, const bool isEditable, QObject *parent = 0);
   SampleTableModel(const OT::Sample & data, const OT::Description& initialDescription, QObject * parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  Qt::ItemFlags flags(const QModelIndex & index) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole);
-  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
-
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
+  QVariant data(const QModelIndex & index, int role) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole) override;
+  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
+  bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
+  bool removeRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
   OT::Sample getSample() const;
 
 public slots:
@@ -71,6 +74,7 @@ public slots:
   void updateData(const OT::Sample & data);
 signals:
   void errorMessageChanged(const QString &message);
+  void sampleChanged();
 
 protected:
   OT::Sample data_;

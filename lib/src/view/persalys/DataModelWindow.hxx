@@ -34,6 +34,9 @@
 namespace PERSALYS
 {
 
+//Fwd declaration
+class EditableExportableTableView;
+
 class PERSALYS_VIEW_API DataModelWindow : public SubWindow
 {
   Q_OBJECT
@@ -62,12 +65,30 @@ private:
   DataModel * dataModel_;
   ResizableHeaderlessTableView * tableView_;
   DataModelTableModel * tableModel_;
-  ExportableTableView * dataTableView1_;
-  ExportableTableView * dataTableView2_;
+  EditableExportableTableView * dataTableView1_;
+  EditableExportableTableView * dataTableView2_;
   QLineEdit * filePathLineEdit_;
   QPalette defaultLineEditPalette_;
   QLabel * sampleSizeLabel_;
   TemporaryLabel * errorMessageLabel_;
+};
+
+class PERSALYS_VIEW_API EditableExportableTableView : public ExportableTableView
+{
+  Q_OBJECT
+
+public:
+  EditableExportableTableView(QWidget* parent = 0);
+  //virtual ~EditableExportableTableView();
+
+public slots:
+  void contextMenu(const QPoint & pos);
+  void addRow();
+  void removeRows();
+
+private:
+  QAction * addRowAction_;
+  QAction * removeRowAction_;
 };
 }
 #endif

@@ -47,6 +47,10 @@ SampleTableModel::SampleTableModel(const Sample &data, QObject *parent)
 {
 }
 
+SampleTableModel::SampleTableModel(const Sample &data, const bool isEditable, QObject *parent)
+  : SampleTableModel(data, isEditable, true, Description(), parent)
+{
+}
 
 SampleTableModel::SampleTableModel(const Sample &data, const Description &initialDescription, QObject *parent)
   : SampleTableModel(data, false, initialDescription.getSize() == 0, initialDescription, parent)
@@ -130,7 +134,7 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
   if (role == Qt::TextAlignmentRole)
     return int(Qt::AlignRight | Qt::AlignVCenter);
 
-  else if (role == Qt::DisplayRole || role == Qt::EditRole)
+  else if (role == Qt::EditRole || role == Qt::DisplayRole)
   {
     if (hasRowIDcolumn_ && index.column() == 0)
       return QString::number(index.row());
@@ -161,7 +165,7 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
 
 bool SampleTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-  if (!index.isValid() || (hasRowIDcolumn_ && index.column() > 0))
+  if (!index.isValid() || (hasRowIDcolumn_ && index.column() > 0 && !isEditable_))
     return false;
 
   if (role == Qt::EditRole)
@@ -170,6 +174,7 @@ bool SampleTableModel::setData(const QModelIndex & index, const QVariant & value
     const int dataRowIndex = initialDescription_.getSize() ? index.row() - 1 : index.row();
     data_(dataRowIndex, dataColIndex) = value.toDouble();
     emit dataChanged(index, index);
+    emit sampleChanged();
   }
   return true;
 }
@@ -195,5 +200,25 @@ void SampleTableModel::updateData(const Sample& data)
   beginResetModel();
   data_ = data;
   endResetModel();
+}
+
+bool SampleTableModel::removeRows(int row, int count, const QModelIndex &)
+{
+  beginRemoveRows(QModelIndex(), row, row + count - 1);
+  data_.erase(row, row+count);
+  endRemoveRows();
+  updateData(data_);
+  emit sampleChanged();
+  return true;
+}
+
+bool SampleTableModel::insertRows(int row, int count, const QModelIndex &)
+{
+  beginInsertRows(QModelIndex(), row, row+count);
+  data_.add(Point(data_.getDimension(), 0.));
+  updateData(data_);
+  endInsertRows();
+  emit sampleChanged();
+  return true;
 }
 }
