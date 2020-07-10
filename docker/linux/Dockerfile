@@ -96,8 +96,8 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tgz | tar xz
 
 # pip
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython
-RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.17.5.tar.gz | tar xz && cd numpy-1.17.5 && python3 setup.py install && cd - && python3 -c "import numpy"
-RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.1.0.tar.gz | tar xz && cd scipy-1.1.0 && python3 setup.py install && cd - && python3 -c "import scipy.linalg"
+RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.17.5.tar.gz | tar xz && cd numpy-1.17.5 && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import numpy"
+RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.1.0.tar.gz | tar xz && cd scipy-1.1.0 && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import scipy.linalg"
 RUN pip install lxml pandas matplotlib ipython --upgrade
 
 # sundials
@@ -122,7 +122,7 @@ RUN pip install sphinx numpydoc --upgrade
 
 # boost
 RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.73.0/source/boost_1_73_0.tar.bz2 | tar xj && cd boost_1_73_0 \
- && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system -j8 install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
+ && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem --with-regex > /dev/null 2>&1
 
 # x11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
