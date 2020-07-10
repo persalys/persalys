@@ -93,6 +93,7 @@ void CouplingInputFile::setVariables(const Description & variableNames,
 {
   if (variableNames.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Variable names size must match tokens size";
+  ValidateVariables(variableNames);
   variableNames_= variableNames;
   tokens_ = tokens;
   formats_ = formats;

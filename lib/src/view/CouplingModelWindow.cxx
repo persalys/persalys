@@ -31,6 +31,7 @@
 #include "persalys/InputTableModel.hxx"
 #include "persalys/OutputTableModel.hxx"
 #include "persalys/CodeDelegate.hxx"
+#include "persalys/LineEditWithQValidatorDelegate.hxx"
 
 #include <QGroupBox>
 #include <QGridLayout>
@@ -619,7 +620,6 @@ bool OutTableModel::setData(const QModelIndex & index, const QVariant & value, i
         return true;
       if (value.toString().isEmpty())
         return false;
-
       const String description(output.getDescription());
       const double varValue = output.getValue();
 
@@ -799,6 +799,8 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
 
   InTableModel * inTableModel = new InTableModel(model, indStep, indFile, inTableView);
   inTableView->setModel(inTableModel);
+  inTableView->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(inTableView));
+
   connect(addRemoveWidget, &AddRemoveWidget::addRequested, inTableModel, &InTableModel::addLine);
   connect(addRemoveWidget, &AddRemoveWidget::removeRequested, inTableModel, &InTableModel::removeLine);
   connect(inTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), item, SIGNAL(inputListDifferentiationChanged()));
@@ -1094,6 +1096,8 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
 
   OutTableModel * outTableModel = new OutTableModel(model, indStep, indFile, outTableView);
   outTableView->setModel(outTableModel);
+  outTableView->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(outTableView));
+
   connect(addRemoveWidget, &AddRemoveWidget::addRequested, outTableModel, &OutTableModel::addLine);
   connect(addRemoveWidget, &AddRemoveWidget::removeRequested, outTableModel, &OutTableModel::removeLine);
   connect(outTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), item, SIGNAL(inputListDifferentiationChanged()));
