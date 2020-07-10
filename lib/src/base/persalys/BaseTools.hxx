@@ -102,5 +102,14 @@ inline OT::String EscapeQuotes(OT::String str)
   return str;
 }
 
+inline void ValidateVariables(const OT::Description & desc) {
+  boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  boost::smatch what;
+  for(OT::UnsignedInteger i=0; i<desc.getSize(); ++i) {
+    if(!boost::regex_match(desc[i], what, variable))
+      throw OT::InvalidArgumentException(HERE) << "Invalid variable name";
+  }
+}
+
 }
 #endif

@@ -58,6 +58,33 @@ y = f(x)
 print(y)
 ott.assert_almost_equal(y, [6.0, 7.0, 27.0, 48.0])
 
+# mis-spelled function name
+step.setCode("def _exe-c2(Y0, Y1): \n    Y2 = Y0+3*Y1 \n    Y3 = Y2+3*Y1 \n    return Y2, Y3 \n")
+model = persalys.CouplingPhysicalModel('A', [step])
+f = model.getFunction()
+try:
+    f(x)
+    print("FAIL")
+except Exception:
+    print("OK")
+
+# mis-spelled variable names
+step.setCode("def _exec2(Y-0, Y1): \n    Y2 = Y0+3*Y1 \n    Y3 = Y2+3*Y1 \n    return Y2, Y3 \n")
+model = persalys.CouplingPhysicalModel('A', [step])
+f = model.getFunction()
+try:
+    f(x)
+    print("FAIL")
+except Exception:
+    print("OK")
+
+try:
+    output_file.setVariables(['Y-0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
+    print("FAIL")
+except TypeError:
+    print("OK")
+
+
 # cleanup
 os.remove('input_template.txt')
 os.remove('external_program.py')

@@ -80,6 +80,7 @@ void CouplingOutputFile::setVariables(const Description & variableNames,
     throw InvalidArgumentException(HERE) << "Skip columns size must match tokens size";
   if (skipTokens.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Skip tokens size must match tokens size";
+  ValidateVariables(variableNames);
   variableNames_= variableNames;
   tokens_ = tokens;
   skipTokens_ = skipTokens;
