@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportedDesignPage : public QWizardPage
+class PERSALYS_VIEW_API ImportedDesignPage : public QWizardPage
 {
   Q_OBJECT
 

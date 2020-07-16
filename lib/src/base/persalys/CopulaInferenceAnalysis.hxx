@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CopulaInferenceAnalysis : public DesignOfExperimentAnalysis
+class PERSALYS_BASE_API CopulaInferenceAnalysis : public DesignOfExperimentAnalysis
 {
   CLASSNAME
 

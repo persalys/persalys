@@ -31,7 +31,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API GraphConfigurationWidget : public QWidget
+class PERSALYS_PLOT_API GraphConfigurationWidget : public QWidget
 {
   Q_OBJECT
 
@@ -66,7 +66,7 @@ protected:
 };
 
 
-class PERSALYS_API SimpleGraphSetting : public GraphConfigurationWidget
+class PERSALYS_PLOT_API SimpleGraphSetting : public GraphConfigurationWidget
 {
   Q_OBJECT
 
@@ -76,7 +76,7 @@ public:
 };
 
 
-class PERSALYS_API ScatterGraphSetting : public GraphConfigurationWidget
+class PERSALYS_PLOT_API ScatterGraphSetting : public GraphConfigurationWidget
 {
   Q_OBJECT
 
@@ -92,7 +92,7 @@ private:
 };
 
 
-class PERSALYS_API PDFGraphSetting : public GraphConfigurationWidget
+class PERSALYS_PLOT_API PDFGraphSetting : public GraphConfigurationWidget
 {
   Q_OBJECT
 
@@ -110,7 +110,7 @@ private:
 };
 
 
-class PERSALYS_API BoxPlotGraphSetting : public GraphConfigurationWidget
+class PERSALYS_PLOT_API BoxPlotGraphSetting : public GraphConfigurationWidget
 {
   Q_OBJECT
 
@@ -119,7 +119,7 @@ public:
 };
 
 
-class PERSALYS_API SensitivityIndicesGraphSetting : public GraphConfigurationWidget
+class PERSALYS_PLOT_API SensitivityIndicesGraphSetting : public GraphConfigurationWidget
 {
   Q_OBJECT
 

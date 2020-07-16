@@ -32,7 +32,7 @@
 namespace PERSALYS
 {
 class StudyManager;
-class PERSALYS_API AnalysisWindow : public SubWindow, LaunchParametersVisitor
+class PERSALYS_VIEW_API AnalysisWindow : public SubWindow, LaunchParametersVisitor
 {
   Q_OBJECT
 

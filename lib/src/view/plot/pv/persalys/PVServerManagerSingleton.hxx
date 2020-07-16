@@ -7,7 +7,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PVServerManagerSingleton
+class PERSALYS_PLOTPV_API PVServerManagerSingleton
 {
 public:
   static PVServerManagerInterface * Get();

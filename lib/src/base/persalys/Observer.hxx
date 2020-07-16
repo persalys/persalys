@@ -33,7 +33,7 @@ class Analysis;
 class LimitState;
 class DesignOfExperiment;
 
-class PERSALYS_API Observer
+class PERSALYS_BASE_API Observer
 {
 public:
   /** Default constructor */

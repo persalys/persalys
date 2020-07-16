@@ -32,7 +32,7 @@ namespace PERSALYS
  *
  * The class that implement the evaluation of an analytical function.
  */
-class PERSALYS_API PythonScriptEvaluation : public OT::EvaluationImplementation
+class PERSALYS_BASE_API PythonScriptEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME
 

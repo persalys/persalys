@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API LimitStateImplementation : public OT::PersistentObject, public Observable
+class PERSALYS_BASE_API LimitStateImplementation : public OT::PersistentObject, public Observable
 {
   CLASSNAME
 

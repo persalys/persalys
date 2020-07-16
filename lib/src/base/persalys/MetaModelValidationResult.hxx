@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MetaModelValidationResult : public OT::PersistentObject
+class PERSALYS_BASE_API MetaModelValidationResult : public OT::PersistentObject
 {
   CLASSNAME
 

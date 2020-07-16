@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MeshModelImplementation : public OT::PersistentObject
+class PERSALYS_BASE_API MeshModelImplementation : public OT::PersistentObject
 {
   CLASSNAME
 

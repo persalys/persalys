@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SobolAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
+class PERSALYS_BASE_API SobolAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME
 

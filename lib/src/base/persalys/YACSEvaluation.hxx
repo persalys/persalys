@@ -35,7 +35,7 @@ namespace PERSALYS
  *
  * The class that implement the evaluation of an analytical function.
  */
-class PERSALYS_API YACSEvaluation : public OT::EvaluationImplementation
+class PERSALYS_BASE_API YACSEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME
 

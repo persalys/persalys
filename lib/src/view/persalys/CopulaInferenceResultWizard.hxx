@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CopulaInferenceResultWizard : public Wizard
+class PERSALYS_VIEW_API CopulaInferenceResultWizard : public Wizard
 {
   Q_OBJECT
 

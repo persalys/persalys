@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API PythonFieldModel : public PythonPhysicalModel
+class PERSALYS_BASE_API PythonFieldModel : public PythonPhysicalModel
 {
   CLASSNAME
 

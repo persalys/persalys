@@ -31,7 +31,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API CalibrationAnalysis : public PhysicalModelAnalysis
+class PERSALYS_BASE_API CalibrationAnalysis : public PhysicalModelAnalysis
 {
   CLASSNAME
 

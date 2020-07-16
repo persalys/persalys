@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SimulationInterface : public OT::TypedInterfaceObject<OT::ProbabilitySimulationAlgorithm>
+class PERSALYS_BASE_API SimulationInterface : public OT::TypedInterfaceObject<OT::ProbabilitySimulationAlgorithm>
 {
 public:
   typedef OT::Pointer<OT::ProbabilitySimulationAlgorithm> Implementation;

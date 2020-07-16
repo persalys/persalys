@@ -30,7 +30,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API FMUInfo : public OT::PersistentObject
+class PERSALYS_BASE_API FMUInfo : public OT::PersistentObject
 {
   CLASSNAME
 

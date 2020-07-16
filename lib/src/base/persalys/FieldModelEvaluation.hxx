@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API FieldModelEvaluation : public ModelEvaluation
+class PERSALYS_BASE_API FieldModelEvaluation : public ModelEvaluation
 {
   CLASSNAME
 

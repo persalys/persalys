@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CopulaInferenceResultWindow : public ResultWindow
+class PERSALYS_VIEW_API CopulaInferenceResultWindow : public ResultWindow
 {
   Q_OBJECT
 

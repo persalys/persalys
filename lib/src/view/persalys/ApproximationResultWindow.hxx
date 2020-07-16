@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ApproximationResultWindow : public ResultWindow
+class PERSALYS_VIEW_API ApproximationResultWindow : public ResultWindow
 {
   Q_OBJECT
 

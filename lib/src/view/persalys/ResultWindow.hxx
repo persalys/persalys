@@ -34,7 +34,7 @@ namespace PERSALYS
 {
 
 // custom QStyledItemDelegate for VariablesListWidget
-class PERSALYS_API ListWidgetItemDelegate : public QStyledItemDelegate
+class PERSALYS_VIEW_API ListWidgetItemDelegate : public QStyledItemDelegate
 {
   public:
     ListWidgetItemDelegate(QObject* parent = 0)
@@ -50,7 +50,7 @@ class PERSALYS_API ListWidgetItemDelegate : public QStyledItemDelegate
 };
 
 // custom QListWidget for all result windows
-class PERSALYS_API VariablesListWidget : public QListWidget
+class PERSALYS_VIEW_API VariablesListWidget : public QListWidget
 {
 public:
   VariablesListWidget(QWidget * parent = 0)
@@ -67,7 +67,7 @@ public:
 
 
 // base class for all result windows
-class PERSALYS_API ResultWindow : public SubWindow
+class PERSALYS_VIEW_API ResultWindow : public SubWindow
 {
   Q_OBJECT
 

@@ -33,7 +33,7 @@ Q_DECLARE_METATYPE(PERSALYS::DesignOfExperimentDefinitionItem*)
 
 namespace PERSALYS
 {
-class PERSALYS_API Wizard : public QWizard
+class PERSALYS_VIEW_API Wizard : public QWizard
 {
   Q_OBJECT
 

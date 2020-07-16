@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SRCResultWindow : public ResultWindow
+class PERSALYS_VIEW_API SRCResultWindow : public ResultWindow
 {
   Q_OBJECT
 

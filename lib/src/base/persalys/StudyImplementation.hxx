@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API StudyImplementation : public OT::PersistentObject, public Observable, public Observer
+class PERSALYS_BASE_API StudyImplementation : public OT::PersistentObject, public Observable, public Observer
 {
   CLASSNAME
 

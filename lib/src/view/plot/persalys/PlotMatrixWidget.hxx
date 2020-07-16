@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PlotMatrixWidget : public QWidget
+class PERSALYS_PLOT_API PlotMatrixWidget : public QWidget
 {
   Q_OBJECT
 

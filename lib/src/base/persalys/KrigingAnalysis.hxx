@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API KrigingAnalysis : public MetaModelAnalysis
+class PERSALYS_BASE_API KrigingAnalysis : public MetaModelAnalysis
 {
   CLASSNAME
 

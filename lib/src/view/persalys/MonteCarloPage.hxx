@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MonteCarloPage : public QWizardPage
+class PERSALYS_VIEW_API MonteCarloPage : public QWizardPage
 {
   Q_OBJECT
 

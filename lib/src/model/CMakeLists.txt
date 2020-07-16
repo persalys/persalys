@@ -123,7 +123,7 @@ include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 persalys_add_library ( persalysmodel ${SOURCEFILES} ${PERSALYS_MODEL_MOC_SRCS} )
 
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions (persalysmodel PRIVATE PERSALYS_DLL_EXPORTS)
+  target_compile_definitions (persalysmodel PRIVATE PERSALYS_MODEL_DLL_EXPORTS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

@@ -41,7 +41,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API InTableModel : public QAbstractTableModel
+class PERSALYS_VIEW_API InTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
@@ -71,7 +71,7 @@ private:
   int indFile_;
 };
 
-class PERSALYS_API OutTableModel : public QAbstractTableModel
+class PERSALYS_VIEW_API OutTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
@@ -102,7 +102,7 @@ private:
 };
 
 
-class PERSALYS_API FilePathWidget : public QWidget
+class PERSALYS_VIEW_API FilePathWidget : public QWidget
 {
   Q_OBJECT
 
@@ -148,7 +148,7 @@ private:
     QLineEdit * edit_ = 0;
 };
 
-class PERSALYS_API DynamicTabWidget : public QTabWidget
+class PERSALYS_VIEW_API DynamicTabWidget : public QTabWidget
 {
   Q_OBJECT
 
@@ -202,7 +202,7 @@ signals:
 };
 
 
-class PERSALYS_API AddRemoveWidget : public QWidget
+class PERSALYS_VIEW_API AddRemoveWidget : public QWidget
 {
   Q_OBJECT
 
@@ -227,7 +227,7 @@ signals:
 };
 
 
-class PERSALYS_API CouplingInputFileWidget : public QWidget
+class PERSALYS_VIEW_API CouplingInputFileWidget : public QWidget
 {
   Q_OBJECT
 
@@ -244,7 +244,7 @@ private:
 };
 
 
-class PERSALYS_API CouplingResourceFileWidget : public QWidget
+class PERSALYS_VIEW_API CouplingResourceFileWidget : public QWidget
 {
   Q_OBJECT
 
@@ -261,7 +261,7 @@ private:
 };
 
 
-class PERSALYS_API CouplingOutputFileWidget : public QWidget
+class PERSALYS_VIEW_API CouplingOutputFileWidget : public QWidget
 {
   Q_OBJECT
 
@@ -272,7 +272,7 @@ signals:
 };
 
 
-class PERSALYS_API CouplingStepWidget : public QWidget
+class PERSALYS_VIEW_API CouplingStepWidget : public QWidget
 {
   Q_OBJECT
 
@@ -291,7 +291,7 @@ private:
 };
 
 
-class PERSALYS_API CouplingModelWindow : public SubWindow
+class PERSALYS_VIEW_API CouplingModelWindow : public SubWindow
 {
   Q_OBJECT
 
@@ -308,7 +308,7 @@ private:
   TemporaryLabel * errorMessageLabel_ = 0;
 };
 
-class PERSALYS_API CouplingSummaryWidget : public QTabWidget
+class PERSALYS_VIEW_API CouplingSummaryWidget : public QTabWidget
 {
   Q_OBJECT
 
@@ -324,7 +324,7 @@ private:
   CopyableTableView * outputTableView_;
 };
 
-class PERSALYS_API PythonCodeModel : public QAbstractTableModel
+class PERSALYS_VIEW_API PythonCodeModel : public QAbstractTableModel
 {
   Q_OBJECT
 
@@ -347,7 +347,7 @@ private :
   int indStep_;
 };
 
-class PERSALYS_API PythonCodeWidget : public QWidget
+class PERSALYS_VIEW_API PythonCodeWidget : public QWidget
 {
   Q_OBJECT
 

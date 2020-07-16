@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API Observable
+class PERSALYS_BASE_API Observable
 {
 public:
   /** Default constructor */

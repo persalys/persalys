@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MomentsEstimatesTableGroupBox : public QGroupBox
+class PERSALYS_VIEW_API MomentsEstimatesTableGroupBox : public QGroupBox
 {
   Q_OBJECT
 

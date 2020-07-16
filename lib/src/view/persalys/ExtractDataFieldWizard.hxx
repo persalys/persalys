@@ -31,7 +31,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API ExtractDataFieldWizard : public QDialog
+class PERSALYS_VIEW_API ExtractDataFieldWizard : public QDialog
 {
   Q_OBJECT
 

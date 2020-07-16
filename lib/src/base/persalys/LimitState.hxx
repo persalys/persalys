@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
+class PERSALYS_BASE_API LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
 {
   CLASSNAME
 

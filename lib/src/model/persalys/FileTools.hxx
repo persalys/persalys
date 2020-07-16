@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API FileTools : public QObject
+class PERSALYS_MODEL_API FileTools : public QObject
 {
   Q_OBJECT
 

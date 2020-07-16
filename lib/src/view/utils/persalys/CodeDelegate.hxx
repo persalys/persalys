@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CodeEditor : public QPlainTextEdit
+class PERSALYS_UTILS_API CodeEditor : public QPlainTextEdit
 {
   Q_OBJECT
 
@@ -65,7 +65,7 @@ private:
 };
 
 
-class PERSALYS_API LineNumberArea : public QWidget
+class PERSALYS_UTILS_API LineNumberArea : public QWidget
 {
 public:
   LineNumberArea(CodeEditor *editor)
@@ -89,7 +89,7 @@ private:
     CodeEditor * codeEditor_;
 };
 
-class PERSALYS_API CodeDelegate : public QItemDelegate
+class PERSALYS_UTILS_API CodeDelegate : public QItemDelegate
 {
   Q_OBJECT
 
@@ -105,7 +105,7 @@ protected:
   bool eventFilter(QObject *obj, QEvent *ev);
 };
 
-class PERSALYS_API CodeHighlighter : public QSyntaxHighlighter
+class PERSALYS_UTILS_API CodeHighlighter : public QSyntaxHighlighter
 {
   Q_OBJECT
 

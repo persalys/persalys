@@ -31,7 +31,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API CentralTendencyIntroPage : public QWizardPage
+class PERSALYS_VIEW_API CentralTendencyIntroPage : public QWizardPage
 {
   Q_OBJECT
 

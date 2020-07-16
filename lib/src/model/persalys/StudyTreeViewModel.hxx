@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API StudyTreeViewModel : public QStandardItemModel, public Observer
+class PERSALYS_MODEL_API StudyTreeViewModel : public QStandardItemModel, public Observer
 {
   Q_OBJECT
 

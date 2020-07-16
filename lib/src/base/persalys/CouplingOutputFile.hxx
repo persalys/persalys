@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CouplingOutputFile : public OT::PersistentObject
+class PERSALYS_BASE_API CouplingOutputFile : public OT::PersistentObject
 {
   CLASSNAME
 

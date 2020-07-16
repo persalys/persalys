@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API StudyTreeView : public QTreeView
+class PERSALYS_VIEW_API StudyTreeView : public QTreeView
 {
   Q_OBJECT
 

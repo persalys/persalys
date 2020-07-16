@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CopulaInferenceSetResult : public OT::PersistentObject
+class PERSALYS_BASE_API CopulaInferenceSetResult : public OT::PersistentObject
 {
   CLASSNAME
 

@@ -35,7 +35,7 @@ namespace PERSALYS
  *
  */
 
-#define NEW_PERSALYSEXCEPTION( CName ) class PERSALYS_API CName : public OT::Exception   \
+#define NEW_PERSALYSEXCEPTION( CName ) class PERSALYS_BASE_API CName : public OT::Exception   \
   {                                                             \
   public:                                                       \
     CName (const OT::PointInSourceFile & point);                    \

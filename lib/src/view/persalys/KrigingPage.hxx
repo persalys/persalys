@@ -34,7 +34,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API KrigingPage : public QWizardPage
+class PERSALYS_VIEW_API KrigingPage : public QWizardPage
 {
   Q_OBJECT
 

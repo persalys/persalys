@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation, public DataImport
+class PERSALYS_BASE_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation, public DataImport
 {
   CLASSNAME
 

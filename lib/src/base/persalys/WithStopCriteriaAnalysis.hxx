@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API WithStopCriteriaAnalysis
+class PERSALYS_BASE_API WithStopCriteriaAnalysis
 {
 public:
   /** Default constructor */

@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MetaModelWindow : public SubWindow
+class PERSALYS_VIEW_API MetaModelWindow : public SubWindow
 {
   Q_OBJECT
 

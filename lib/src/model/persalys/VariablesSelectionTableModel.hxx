@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API VariablesSelectionTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API VariablesSelectionTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

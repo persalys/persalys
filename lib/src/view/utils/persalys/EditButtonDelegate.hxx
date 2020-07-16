@@ -29,7 +29,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API EditButtonDelegate : public QStyledItemDelegate
+class PERSALYS_UTILS_API EditButtonDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 
@@ -46,7 +46,7 @@ public slots:
 };
 
 
-class PERSALYS_API EditValuesButton : public QPushButton
+class PERSALYS_UTILS_API EditValuesButton : public QPushButton
 {
   Q_OBJECT
 

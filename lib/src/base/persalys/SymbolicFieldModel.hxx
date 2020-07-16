@@ -77,7 +77,7 @@ private:
 };
 
 
-class PERSALYS_API SymbolicFieldModel : public SymbolicPhysicalModel
+class PERSALYS_BASE_API SymbolicFieldModel : public SymbolicPhysicalModel
 {
   CLASSNAME
 

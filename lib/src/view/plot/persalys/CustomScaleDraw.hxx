@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CustomScaleDraw : public QwtScaleDraw
+class PERSALYS_PLOT_API CustomScaleDraw : public QwtScaleDraw
 {
 public:
   CustomScaleDraw();

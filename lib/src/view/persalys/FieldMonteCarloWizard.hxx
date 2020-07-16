@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API FieldMonteCarloWizard : public AnalysisWizard
+class PERSALYS_VIEW_API FieldMonteCarloWizard : public AnalysisWizard
 {
   Q_OBJECT
 

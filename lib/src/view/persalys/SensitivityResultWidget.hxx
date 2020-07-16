@@ -30,7 +30,7 @@ namespace PERSALYS
 {
 
 // custom QSortFilterProxyModel
-class PERSALYS_API IndicesProxyModel : public QSortFilterProxyModel
+class PERSALYS_VIEW_API IndicesProxyModel : public QSortFilterProxyModel
 {
 public:
   IndicesProxyModel(QObject * parent = 0)
@@ -48,7 +48,7 @@ public:
 };
 
 
-class PERSALYS_API SensitivityResultWidget : public QWidget
+class PERSALYS_VIEW_API SensitivityResultWidget : public QWidget
 {
   Q_OBJECT
 

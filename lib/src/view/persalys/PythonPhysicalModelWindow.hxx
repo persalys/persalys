@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PythonPhysicalModelWindow : public SubWindow
+class PERSALYS_VIEW_API PythonPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

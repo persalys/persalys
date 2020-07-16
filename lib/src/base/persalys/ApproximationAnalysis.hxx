@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ApproximationAnalysis
+class PERSALYS_BASE_API ApproximationAnalysis
 {
 public:
   /** Default constructor */

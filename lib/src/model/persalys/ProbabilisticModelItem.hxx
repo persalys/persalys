@@ -26,7 +26,7 @@
 namespace PERSALYS
 {
 class PhysicalModelDiagramItem;
-class PERSALYS_API ProbabilisticModelItem : public PhysicalModelItem
+class PERSALYS_MODEL_API ProbabilisticModelItem : public PhysicalModelItem
 {
   Q_OBJECT
 

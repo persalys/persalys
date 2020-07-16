@@ -73,6 +73,22 @@ private slots:
     QVERIFY2(analysisEquality, "The two GridDesignOfExperiment must be equal");
   }
 
+  void TestDOETime()
+  {
+    // create the analysis
+    model_.setEvalTime(1.0);// 1s per eval
+    GridDesignOfExperiment doe("analysis", model_);
+    // - second page
+    GridDesignPage * designPage = new GridDesignPage;
+    designPage->initialize(doe);
+
+    ExperimentTableModel * doeModel = designPage->findChild<ExperimentTableModel*>();
+    QLabel * label = designPage->findChild<QLabel*>("DOETimeLabel");
+    QVERIFY2(label->text() == "1", "wrong DOE time label");
+    // change doe size
+    doeModel->setData(doeModel->index(0, 0), 1, Qt::CheckStateRole);//check first var
+    QVERIFY2(label->text() == "8", "wrong DOE time label");
+  }
 
   void TestGridDefinitionTable()
   {

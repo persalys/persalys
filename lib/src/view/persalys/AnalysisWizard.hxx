@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API AnalysisWizard : public Wizard
+class PERSALYS_VIEW_API AnalysisWizard : public Wizard
 {
 public:
   AnalysisWizard(const Analysis & analysis, QWidget * parent = 0);

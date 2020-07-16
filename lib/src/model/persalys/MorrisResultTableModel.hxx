@@ -30,7 +30,7 @@ Q_DECLARE_METATYPE(OT::Indices)
 
 namespace PERSALYS
 {
-class PERSALYS_API MorrisResultTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API MorrisResultTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

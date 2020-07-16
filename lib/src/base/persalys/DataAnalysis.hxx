@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DataAnalysis : public DesignOfExperimentAnalysis
+class PERSALYS_BASE_API DataAnalysis : public DesignOfExperimentAnalysis
 {
   CLASSNAME
 

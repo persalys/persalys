@@ -29,7 +29,7 @@ namespace PERSALYS
 {
 
 // custom QLabel for all result windows
-class PERSALYS_API TitleLabel : public QWidget
+class PERSALYS_VIEW_API TitleLabel : public QWidget
 {
 public:
   TitleLabel(const QString &text = "", const QString &docLink = "", QWidget * parent = 0);
@@ -42,7 +42,7 @@ private:
 };
 
 
-class PERSALYS_API SubWindow : public QWidget
+class PERSALYS_VIEW_API SubWindow : public QWidget
 {
   Q_OBJECT
 

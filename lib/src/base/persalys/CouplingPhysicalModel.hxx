@@ -28,7 +28,7 @@ namespace PERSALYS
 {
 typedef OT::Collection<CouplingStep> CouplingStepCollection;
 
-class PERSALYS_API CouplingPhysicalModel : public PythonPhysicalModel
+class PERSALYS_BASE_API CouplingPhysicalModel : public PythonPhysicalModel
 {
   CLASSNAME
 

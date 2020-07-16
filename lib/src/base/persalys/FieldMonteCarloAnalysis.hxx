@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API CovFunctionEvaluation : public OT::EvaluationImplementation
+class PERSALYS_BASE_API CovFunctionEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME
 
@@ -95,7 +95,7 @@ private:
 };
 
 
-class PERSALYS_API FieldMonteCarloAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
+class PERSALYS_BASE_API FieldMonteCarloAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
   CLASSNAME
 

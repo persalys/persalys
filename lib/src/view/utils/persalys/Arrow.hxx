@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API Arrow : public QObject, public QGraphicsLineItem
+class PERSALYS_UTILS_API Arrow : public QObject, public QGraphicsLineItem
 {
   Q_OBJECT
 

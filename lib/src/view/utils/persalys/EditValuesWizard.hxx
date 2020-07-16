@@ -35,7 +35,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API EditValuesWizard : public QWizard
+class PERSALYS_UTILS_API EditValuesWizard : public QWizard
 {
   Q_OBJECT
 
@@ -68,7 +68,7 @@ private:
 };
 
 
-class PERSALYS_API UserDefinedWizard : public EditValuesWizard
+class PERSALYS_UTILS_API UserDefinedWizard : public EditValuesWizard
 {
   Q_OBJECT
 
@@ -83,7 +83,7 @@ private slots:
 };
 
 
-class PERSALYS_API ProbabilityTableModel : public SampleTableModel
+class PERSALYS_UTILS_API ProbabilityTableModel : public SampleTableModel
 {
   Q_OBJECT
 

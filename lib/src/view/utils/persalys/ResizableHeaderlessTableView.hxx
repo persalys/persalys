@@ -35,7 +35,7 @@ namespace PERSALYS
  * Subclass of QTableView that provides notification when the mouse cursor
  *  enters/leaves a column boundary.
  */
-class PERSALYS_API HeaderlessTableView: public CopyableTableView
+class PERSALYS_UTILS_API HeaderlessTableView: public CopyableTableView
 {
 public:
   explicit HeaderlessTableView(QWidget *parent = 0);
@@ -65,7 +65,7 @@ private:
 /*
  * Subclass of HeaderlessTableView that allows resizing of columns.
  */
-class PERSALYS_API ResizableHeaderlessTableView: public HeaderlessTableView
+class PERSALYS_UTILS_API ResizableHeaderlessTableView: public HeaderlessTableView
 {
 public:
   explicit ResizableHeaderlessTableView(QWidget *parent = 0);

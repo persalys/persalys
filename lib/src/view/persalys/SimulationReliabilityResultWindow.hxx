@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SimulationReliabilityResultWindow : public ResultWindow
+class PERSALYS_VIEW_API SimulationReliabilityResultWindow : public ResultWindow
 {
   Q_OBJECT
 

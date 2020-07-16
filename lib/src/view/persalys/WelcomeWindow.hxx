@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API WelcomeWindow : public QWidget
+class PERSALYS_VIEW_API WelcomeWindow : public QWidget
 {
   Q_OBJECT
 

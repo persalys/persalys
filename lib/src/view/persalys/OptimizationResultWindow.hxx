@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API OptimizationResultWindow : public ResultWindow
+class PERSALYS_VIEW_API OptimizationResultWindow : public ResultWindow
 {
   Q_OBJECT
 

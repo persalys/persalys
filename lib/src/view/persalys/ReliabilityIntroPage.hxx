@@ -36,7 +36,7 @@ Q_DECLARE_METATYPE(PERSALYS::LimitState)
 namespace PERSALYS
 {
 
-class PERSALYS_API ReliabilityIntroPage : public QWizardPage
+class PERSALYS_VIEW_API ReliabilityIntroPage : public QWizardPage
 {
   Q_OBJECT
 

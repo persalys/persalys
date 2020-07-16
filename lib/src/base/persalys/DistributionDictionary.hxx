@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DistributionDictionary
+class PERSALYS_BASE_API DistributionDictionary
 {
 public:
   /** Build a distribution factory */

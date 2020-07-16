@@ -35,7 +35,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PhysicalModelImplementation : public OT::PersistentObject, public Observable
+class PERSALYS_BASE_API PhysicalModelImplementation : public OT::PersistentObject, public Observable
 {
 public:
   /** Constructor with parameters */

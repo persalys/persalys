@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CalibrationResultWindow : public ResultWindow
+class PERSALYS_VIEW_API CalibrationResultWindow : public ResultWindow
 {
   Q_OBJECT
 

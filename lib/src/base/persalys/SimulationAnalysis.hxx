@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SimulationAnalysis : public PhysicalModelAnalysis
+class PERSALYS_BASE_API SimulationAnalysis : public PhysicalModelAnalysis
 {
 protected:
   /** Default constructor */

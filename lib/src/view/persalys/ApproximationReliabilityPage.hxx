@@ -32,7 +32,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ApproximationReliabilityPage : public QWizardPage
+class PERSALYS_VIEW_API ApproximationReliabilityPage : public QWizardPage
 {
   Q_OBJECT
 

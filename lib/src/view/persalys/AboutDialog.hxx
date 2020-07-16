@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API AboutDialog : public QDialog
+class PERSALYS_VIEW_API AboutDialog : public QDialog
 {
   Q_OBJECT
 

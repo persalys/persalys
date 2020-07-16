@@ -33,7 +33,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MeshDefinitionWizard : public Wizard
+class PERSALYS_VIEW_API MeshDefinitionWizard : public Wizard
 {
   Q_OBJECT
 

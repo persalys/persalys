@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API LimitStateWindow : public SubWindow
+class PERSALYS_VIEW_API LimitStateWindow : public SubWindow
 {
   Q_OBJECT
 

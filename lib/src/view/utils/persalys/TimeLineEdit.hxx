@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API TimeLineEdit : public QLineEdit
+class PERSALYS_UTILS_API TimeLineEdit : public QLineEdit
 {
   Q_OBJECT
 

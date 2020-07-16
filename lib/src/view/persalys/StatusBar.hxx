@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API StatusBar : public QStatusBar
+class PERSALYS_VIEW_API StatusBar : public QStatusBar
 {
   Q_OBJECT
 

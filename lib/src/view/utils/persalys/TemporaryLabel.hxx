@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API TemporaryLabel : public QLabel
+class PERSALYS_UTILS_API TemporaryLabel : public QLabel
 {
   Q_OBJECT
 

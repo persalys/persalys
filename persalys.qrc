@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>lib/src/view/plot/paraview/ParaViewSources.xml</file>
+        <file>lib/src/view/plot/pv/ParaViewSources.xml</file>
         <file>translations/persalys_fr.qm</file>
         <file>translations/qt_fr.qm</file>
         <file>translations/qtbase_fr.qm</file>

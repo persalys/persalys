@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API KrigingResultWindow : public ResultWindow
+class PERSALYS_VIEW_API KrigingResultWindow : public ResultWindow
 {
   Q_OBJECT
 

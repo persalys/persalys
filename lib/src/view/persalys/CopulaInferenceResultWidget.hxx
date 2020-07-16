@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CopulaInferenceResultWidget : public QScrollArea
+class PERSALYS_VIEW_API CopulaInferenceResultWidget : public QScrollArea
 {
   Q_OBJECT
 

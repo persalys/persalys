@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PhysicalModelWindowWidget : public QTabWidget
+class PERSALYS_VIEW_API PhysicalModelWindowWidget : public QTabWidget
 {
   Q_OBJECT
 

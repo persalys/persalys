@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API TaylorExpansionMomentsResult : public AnalysisResult
+class PERSALYS_BASE_API TaylorExpansionMomentsResult : public AnalysisResult
 {
   CLASSNAME
 

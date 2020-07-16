@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API BoxPlot : public PlotWidget
+class PERSALYS_PLOT_API BoxPlot : public PlotWidget
 {
   Q_OBJECT
 

@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MinMaxTableGroupBox : public QGroupBox
+class PERSALYS_VIEW_API MinMaxTableGroupBox : public QGroupBox
 {
   Q_OBJECT
 

@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CentralTendencyWizard : public AnalysisWizard
+class PERSALYS_VIEW_API CentralTendencyWizard : public AnalysisWizard
 {
   Q_OBJECT
 

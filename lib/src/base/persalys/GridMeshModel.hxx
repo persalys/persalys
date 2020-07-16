@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API GridMeshModel : public MeshModelImplementation
+class PERSALYS_BASE_API GridMeshModel : public MeshModelImplementation
 {
   CLASSNAME
 

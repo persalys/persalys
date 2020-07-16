@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API GridDesignPage : public QWizardPage
+class PERSALYS_VIEW_API GridDesignPage : public QWizardPage
 {
   Q_OBJECT
 

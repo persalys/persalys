@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API AnalysisResult : public OT::PersistentObject
+class PERSALYS_BASE_API AnalysisResult : public OT::PersistentObject
 {
   CLASSNAME
 

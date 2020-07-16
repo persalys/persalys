@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportSampleWidget : public QWidget
+class PERSALYS_VIEW_API ImportSampleWidget : public QWidget
 {
   Q_OBJECT
 

@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SimulationReliabilityPage : public QWizardPage
+class PERSALYS_VIEW_API SimulationReliabilityPage : public QWizardPage
 {
   Q_OBJECT
 

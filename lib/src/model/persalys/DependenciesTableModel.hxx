@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DependenciesTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API DependenciesTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

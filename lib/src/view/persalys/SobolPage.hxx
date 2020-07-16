@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SobolPage : public QWizardPage
+class PERSALYS_VIEW_API SobolPage : public QWizardPage
 {
   Q_OBJECT
 

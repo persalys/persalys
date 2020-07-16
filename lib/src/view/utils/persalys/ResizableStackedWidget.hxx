@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ResizableStackedWidget : public QStackedWidget
+class PERSALYS_UTILS_API ResizableStackedWidget : public QStackedWidget
 {
   Q_OBJECT
 

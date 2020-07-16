@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ToolBar : public QToolBar
+class PERSALYS_VIEW_API ToolBar : public QToolBar
 {
   Q_OBJECT
 

@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API FieldModelEvaluationResultWidget : public QWidget
+class PERSALYS_VIEW_API FieldModelEvaluationResultWidget : public QWidget
 {
   Q_OBJECT
 
@@ -58,7 +58,7 @@ private:
 };
 
 
-class PERSALYS_API FieldModelEvaluationResultWindow : public ResultWindow
+class PERSALYS_VIEW_API FieldModelEvaluationResultWindow : public ResultWindow
 {
   Q_OBJECT
 
@@ -75,7 +75,7 @@ private:
 };
 
 
-class PERSALYS_API FieldCentralTendencyResultWindow : public ResultWindow
+class PERSALYS_VIEW_API FieldCentralTendencyResultWindow : public ResultWindow
 {
   Q_OBJECT
 

@@ -26,7 +26,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API SensitivityIndicesPlot : public PlotWidget
+class PERSALYS_PLOT_API SensitivityIndicesPlot : public PlotWidget
 {
   Q_OBJECT
 

@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ProbabilisticDesignOfExperiment : public DesignOfExperimentEvaluation
+class PERSALYS_BASE_API ProbabilisticDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME
 

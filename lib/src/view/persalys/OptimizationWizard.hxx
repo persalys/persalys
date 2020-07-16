@@ -34,7 +34,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API OptimizationBoundsPage : public QWizardPage
+class PERSALYS_VIEW_API OptimizationBoundsPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -55,7 +55,7 @@ private:
 };
 
 
-class PERSALYS_API OptimizationStoppingCriteria : public QGridLayout
+class PERSALYS_VIEW_API OptimizationStoppingCriteria : public QGridLayout
 {
   Q_OBJECT
 
@@ -90,7 +90,7 @@ private:
 };
 
 
-class PERSALYS_API OptimizationWizard : public AnalysisWizard
+class PERSALYS_VIEW_API OptimizationWizard : public AnalysisWizard
 {
   Q_OBJECT
 

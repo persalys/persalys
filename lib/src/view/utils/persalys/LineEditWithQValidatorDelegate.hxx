@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API LineEditWithQValidatorDelegate : public QStyledItemDelegate
+class PERSALYS_UTILS_API LineEditWithQValidatorDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 

@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DataModelDiagramItem : public DesignOfExperimentItem
+class PERSALYS_MODEL_API DataModelDiagramItem : public DesignOfExperimentItem
 {
   Q_OBJECT
 

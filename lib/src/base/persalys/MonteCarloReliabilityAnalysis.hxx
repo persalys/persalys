@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MonteCarloReliabilityAnalysis : public SimulationReliabilityAnalysis
+class PERSALYS_BASE_API MonteCarloReliabilityAnalysis : public SimulationReliabilityAnalysis
 {
   CLASSNAME
 

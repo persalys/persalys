@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API FieldMonteCarloResult : public EvaluationResult
+class PERSALYS_BASE_API FieldMonteCarloResult : public EvaluationResult
 {
   CLASSNAME
 

@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API InferenceResultWindow : public ResultWindow
+class PERSALYS_VIEW_API InferenceResultWindow : public ResultWindow
 {
   Q_OBJECT
 

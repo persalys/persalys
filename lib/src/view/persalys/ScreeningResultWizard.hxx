@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ScreeningResultWizard : public Wizard
+class PERSALYS_VIEW_API ScreeningResultWizard : public Wizard
 {
   Q_OBJECT
 

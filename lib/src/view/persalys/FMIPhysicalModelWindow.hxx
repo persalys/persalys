@@ -44,7 +44,7 @@ namespace PERSALYS
 {
 
 
-class PERSALYS_API DataTableModel : public QAbstractTableModel
+class PERSALYS_VIEW_API DataTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
@@ -90,7 +90,7 @@ private:
 
 
 
-class PERSALYS_API EnumDelegate : public QItemDelegate
+class PERSALYS_VIEW_API EnumDelegate : public QItemDelegate
 {
   Q_OBJECT
 public:
@@ -128,7 +128,7 @@ private:
 };
 
 
-class PERSALYS_API FloatDelegate : public QItemDelegate
+class PERSALYS_VIEW_API FloatDelegate : public QItemDelegate
 {
   Q_OBJECT
 public:
@@ -277,7 +277,7 @@ private:
 
 
 
-class PERSALYS_API FMIPhysicalModelWindow : public SubWindow
+class PERSALYS_VIEW_API FMIPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

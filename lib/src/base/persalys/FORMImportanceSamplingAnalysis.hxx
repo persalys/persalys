@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API FORMImportanceSamplingAnalysis : public ImportanceSamplingAnalysis, public ApproximationAnalysis
+class PERSALYS_BASE_API FORMImportanceSamplingAnalysis : public ImportanceSamplingAnalysis, public ApproximationAnalysis
 {
   CLASSNAME
 

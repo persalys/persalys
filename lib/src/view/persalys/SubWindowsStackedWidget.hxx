@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SubWindowsStackedWidget : public QStackedWidget
+class PERSALYS_VIEW_API SubWindowsStackedWidget : public QStackedWidget
 {
   Q_OBJECT
 

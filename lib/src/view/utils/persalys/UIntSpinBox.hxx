@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API UIntSpinBox : public DoubleSpinBox
+class PERSALYS_UTILS_API UIntSpinBox : public DoubleSpinBox
 {
   Q_OBJECT
 

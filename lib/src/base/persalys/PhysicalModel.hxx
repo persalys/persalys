@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
+class PERSALYS_BASE_API PhysicalModel : public OT::TypedInterfaceObject<PhysicalModelImplementation>
 {
   CLASSNAME
 

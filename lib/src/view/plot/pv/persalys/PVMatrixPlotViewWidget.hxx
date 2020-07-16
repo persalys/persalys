@@ -6,7 +6,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PVMatrixPlotViewWidget : public PVViewWidget
+class PERSALYS_PLOTPV_API PVMatrixPlotViewWidget : public PVViewWidget
 {
   Q_OBJECT
 public:

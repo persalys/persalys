@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DiagramPushButton : public QPushButton
+class PERSALYS_UTILS_API DiagramPushButton : public QPushButton
 {
   Q_OBJECT
 

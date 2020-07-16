@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ObservationsWindow : public SubWindow
+class PERSALYS_VIEW_API ObservationsWindow : public SubWindow
 {
   Q_OBJECT
 

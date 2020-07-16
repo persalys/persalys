@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportanceSamplingAnalysis : public SimulationReliabilityAnalysis
+class PERSALYS_BASE_API ImportanceSamplingAnalysis : public SimulationReliabilityAnalysis
 {
   CLASSNAME
 

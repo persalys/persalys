@@ -35,7 +35,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API InferenceWizard : public AnalysisWizard
+class PERSALYS_VIEW_API InferenceWizard : public AnalysisWizard
 {
   Q_OBJECT
 

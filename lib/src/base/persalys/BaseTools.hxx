@@ -30,7 +30,7 @@
 namespace PERSALYS
 {
 // class to build a collection of parameters
-class PERSALYS_API Parameters
+class PERSALYS_BASE_API Parameters
 {
 public:
   Parameters();
@@ -56,7 +56,7 @@ private:
   OT::Collection<std::pair<OT::String, OT::String> > pairsCollection_;
 };
 
-class PERSALYS_API Tools
+class PERSALYS_BASE_API Tools
 {
 public:
   static OT::Sample ImportSample(const OT::String& fileName);
@@ -66,7 +66,7 @@ public:
 };
 
 
-class PERSALYS_API TimeCriteria
+class PERSALYS_BASE_API TimeCriteria
 {
   friend class WithStopCriteriaAnalysis;
 

@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SRCResult : public EvaluationResult
+class PERSALYS_BASE_API SRCResult : public EvaluationResult
 {
   CLASSNAME
 

@@ -62,7 +62,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PieChartView: public QAbstractItemView
+class PERSALYS_PLOT_API PieChartView: public QAbstractItemView
 {
   Q_OBJECT
 

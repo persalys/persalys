@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API LimitStateItem : public Item, public Observer
+class PERSALYS_MODEL_API LimitStateItem : public Item, public Observer
 {
   Q_OBJECT
 

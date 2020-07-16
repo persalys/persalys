@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API Input : public Variable
+class PERSALYS_BASE_API Input : public Variable
 {
   CLASSNAME
 

@@ -27,7 +27,7 @@ namespace PERSALYS
 {
 class LaunchParametersVisitor;
 
-class PERSALYS_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
+class PERSALYS_BASE_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 {
   CLASSNAME
 

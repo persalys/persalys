@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MorrisAnalysis : public SimulationAnalysis
+class PERSALYS_BASE_API MorrisAnalysis : public SimulationAnalysis
 {
   CLASSNAME
 

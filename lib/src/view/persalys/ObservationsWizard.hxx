@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportObservationsPage : public QWizardPage
+class PERSALYS_VIEW_API ImportObservationsPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -55,7 +55,7 @@ private:
 };
 
 
-class PERSALYS_API ObservationsWizard : public Wizard
+class PERSALYS_VIEW_API ObservationsWizard : public Wizard
 {
   Q_OBJECT
 

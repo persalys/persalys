@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API StopCriteriaGroupBox : public QGroupBox
+class PERSALYS_VIEW_API StopCriteriaGroupBox : public QGroupBox
 {
   Q_OBJECT
 

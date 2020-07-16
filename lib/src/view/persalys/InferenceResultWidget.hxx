@@ -36,7 +36,7 @@ Q_DECLARE_METATYPE(OT::Distribution)
 
 namespace PERSALYS
 {
-class PERSALYS_API InferenceResultWidget : public QScrollArea
+class PERSALYS_VIEW_API InferenceResultWidget : public QScrollArea
 {
   Q_OBJECT
 

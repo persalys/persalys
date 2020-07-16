@@ -26,7 +26,7 @@
 class Study;
 namespace PERSALYS
 {
-class PERSALYS_API ModelEvaluation : public GridDesignOfExperiment
+class PERSALYS_BASE_API ModelEvaluation : public GridDesignOfExperiment
 {
   CLASSNAME
 

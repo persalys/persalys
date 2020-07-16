@@ -35,10 +35,10 @@ qt5_wrap_cpp (PERSALYS_PLOTPARAVIEW_MOC_SRCS
               )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-add_library (persalysplotparaview ${SOURCEFILES} ${PERSALYS_PLOTPARAVIEW_MOC_SRCS})
+add_library (persalysplotpv ${SOURCEFILES} ${PERSALYS_PLOTPARAVIEW_MOC_SRCS})
 
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions (persalysplotparaview PRIVATE PERSALYS_DLL_EXPORTS)
+  target_compile_definitions (persalysplotpv PRIVATE PERSALYS_PLOTPV_DLL_EXPORTS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -47,13 +47,13 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION ) 
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( persalysplotparaview PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( persalysplotparaview PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries ( persalysplotparaview persalysutils )
+set_target_properties ( persalysplotpv PROPERTIES VERSION ${LIB_VERSION} )
+set_target_properties ( persalysplotpv PROPERTIES SOVERSION ${LIB_SOVERSION} )
+target_link_libraries ( persalysplotpv persalysutils )
 
-target_link_libraries (persalysplotparaview ParaView::pqApplicationComponents ParaView::RemotingViews)
+target_link_libraries (persalysplotpv ParaView::pqApplicationComponents ParaView::RemotingViews)
 
-install ( TARGETS persalysplotparaview
+install ( TARGETS persalysplotpv
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
@@ -83,6 +83,6 @@ paraview_plugin_build (
   LIBRARY_SUBDIRECTORY "${PARAVIEW_PLUGIN_SUBDIR}"
   PLUGINS ${plugins}
   AUTOLOAD ${plugins})
-target_link_libraries (persalysplotparaview XYChartRepresentationColumns)
+target_link_libraries (persalysplotpv XYChartRepresentationColumns)
 
 

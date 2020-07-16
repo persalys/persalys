@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ScreeningAnalysisWizard : public AnalysisWizard
+class PERSALYS_VIEW_API ScreeningAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 

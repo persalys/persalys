@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 class AnalysisItem;
-class PERSALYS_API Item : public ItemFactory, public QStandardItem
+class PERSALYS_MODEL_API Item : public ItemFactory, public QStandardItem
 {
   Q_OBJECT
 

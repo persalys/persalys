@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DocumentationToolButton : public QToolButton
+class PERSALYS_UTILS_API DocumentationToolButton : public QToolButton
 {
   Q_OBJECT
 

@@ -23,7 +23,7 @@ class vtkAbstractContextItem;
 namespace PERSALYS
 {
 class PVServerManagerInterface;
-class PERSALYS_API PVViewWidget : public QWidget
+class PERSALYS_PLOTPV_API PVViewWidget : public QWidget
 {
   Q_OBJECT
 public:

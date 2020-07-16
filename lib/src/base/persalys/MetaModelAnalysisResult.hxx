@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MetaModelAnalysisResult : public AnalysisResult
+class PERSALYS_BASE_API MetaModelAnalysisResult : public AnalysisResult
 {
   CLASSNAME
 

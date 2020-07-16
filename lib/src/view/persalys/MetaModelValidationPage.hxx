@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MetaModelValidationPage : public QWizardPage
+class PERSALYS_VIEW_API MetaModelValidationPage : public QWizardPage
 {
   Q_OBJECT
 

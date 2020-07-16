@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API TaylorExpansionMomentsResultWindow : public ResultWindow
+class PERSALYS_VIEW_API TaylorExpansionMomentsResultWindow : public ResultWindow
 {
   Q_OBJECT
 

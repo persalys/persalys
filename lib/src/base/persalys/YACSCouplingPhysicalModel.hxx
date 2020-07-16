@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API YACSCouplingPhysicalModel : public CouplingPhysicalModel
+class PERSALYS_BASE_API YACSCouplingPhysicalModel : public CouplingPhysicalModel
 {
   CLASSNAME
 

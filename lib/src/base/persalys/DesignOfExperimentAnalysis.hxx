@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DesignOfExperimentAnalysis : public AnalysisImplementation
+class PERSALYS_BASE_API DesignOfExperimentAnalysis : public AnalysisImplementation
 {
 public:
   /** Default constructor */

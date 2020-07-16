@@ -40,7 +40,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CalibrationIntroPage : public QWizardPage
+class PERSALYS_VIEW_API CalibrationIntroPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -68,7 +68,7 @@ private:
 };
 
 
-class PERSALYS_API CalibrationReferencePointPage : public QWizardPage
+class PERSALYS_VIEW_API CalibrationReferencePointPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -96,7 +96,7 @@ private:
 };
 
 
-class PERSALYS_API CalibrationDistributionPage : public QWizardPage
+class PERSALYS_VIEW_API CalibrationDistributionPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -115,7 +115,7 @@ private:
 };
 
 
-class PERSALYS_API CalibrationParametersPage : public QWizardPage
+class PERSALYS_VIEW_API CalibrationParametersPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -141,7 +141,7 @@ private:
 };
 
 
-class PERSALYS_API CalibrationAnalysisWizard : public AnalysisWizard
+class PERSALYS_VIEW_API CalibrationAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 

@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API Observations : public DataModel
+class PERSALYS_BASE_API Observations : public DataModel
 {
   CLASSNAME
 

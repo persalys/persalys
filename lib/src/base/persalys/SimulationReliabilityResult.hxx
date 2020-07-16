@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SimulationReliabilityResult : public EvaluationResult
+class PERSALYS_BASE_API SimulationReliabilityResult : public EvaluationResult
 {
   CLASSNAME
 

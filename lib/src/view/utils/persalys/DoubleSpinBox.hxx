@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DoubleSpinBox : public QDoubleSpinBox
+class PERSALYS_UTILS_API DoubleSpinBox : public QDoubleSpinBox
 {
   Q_OBJECT
 

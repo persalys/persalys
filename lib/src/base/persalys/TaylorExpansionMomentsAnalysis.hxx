@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API TaylorExpansionMomentsAnalysis : public PhysicalModelAnalysis
+class PERSALYS_BASE_API TaylorExpansionMomentsAnalysis : public PhysicalModelAnalysis
 {
   CLASSNAME
 

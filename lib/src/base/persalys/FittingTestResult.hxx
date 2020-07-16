@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API FittingTestResult : public OT::PersistentObject
+class PERSALYS_BASE_API FittingTestResult : public OT::PersistentObject
 {
   CLASSNAME
 

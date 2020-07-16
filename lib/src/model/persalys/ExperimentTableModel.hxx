@@ -29,7 +29,7 @@ Q_DECLARE_METATYPE(OT::Point)
 
 namespace PERSALYS
 {
-class PERSALYS_API ExperimentTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API ExperimentTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

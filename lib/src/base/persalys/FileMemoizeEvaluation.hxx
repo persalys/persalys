@@ -31,7 +31,7 @@ namespace PERSALYS {
 /**
  * @class FileMemoizeEvaluation
  */
-class PERSALYS_API FileMemoizeEvaluation
+class PERSALYS_BASE_API FileMemoizeEvaluation
   : public OT::EvaluationProxy
 {
   CLASSNAME

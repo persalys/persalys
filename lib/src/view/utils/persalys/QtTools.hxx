@@ -36,7 +36,7 @@ namespace PERSALYS
  *
  * Class to block signals of widgets.
  */
-class PERSALYS_API SignalBlocker
+class PERSALYS_UTILS_API SignalBlocker
 {
   QObject* blockedObject_;
   bool previousBlockingStatus_;
@@ -45,7 +45,7 @@ public :
   ~SignalBlocker();
 };
 
-class PERSALYS_API SimpleException : public std::exception
+class PERSALYS_UTILS_API SimpleException : public std::exception
 {
   const QString text_;
 public :
@@ -55,7 +55,7 @@ public :
   virtual const char* what() const throw();
 };
 
-class PERSALYS_API QtOT
+class PERSALYS_UTILS_API QtOT
 {
 public:
   static QStringList DescriptionToStringList(const OT::Description & description);

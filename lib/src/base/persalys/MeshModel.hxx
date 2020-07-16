@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MeshModel : public OT::TypedInterfaceObject<MeshModelImplementation>
+class PERSALYS_BASE_API MeshModel : public OT::TypedInterfaceObject<MeshModelImplementation>
 {
   CLASSNAME
 

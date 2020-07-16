@@ -60,7 +60,7 @@ public:
 };
 
 
-class PERSALYS_API MorrisPlot : public PlotWidget
+class PERSALYS_PLOT_API MorrisPlot : public PlotWidget
 {
   Q_OBJECT
 

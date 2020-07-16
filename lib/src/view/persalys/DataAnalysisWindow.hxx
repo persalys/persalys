@@ -32,7 +32,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DataAnalysisWindow : public ResultWindow
+class PERSALYS_VIEW_API DataAnalysisWindow : public ResultWindow
 {
   Q_OBJECT
 

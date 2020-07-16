@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
+class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
 {
   CLASSNAME
 

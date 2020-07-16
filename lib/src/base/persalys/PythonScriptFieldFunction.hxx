@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API PythonScriptFieldFunction : public OT::PointToFieldFunctionImplementation
+class PERSALYS_BASE_API PythonScriptFieldFunction : public OT::PointToFieldFunctionImplementation
 {
   CLASSNAME
 

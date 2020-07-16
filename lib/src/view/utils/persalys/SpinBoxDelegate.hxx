@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SpinBoxDelegate : public QStyledItemDelegate
+class PERSALYS_UTILS_API SpinBoxDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 

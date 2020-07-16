@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SRCAnalysis : public SimulationAnalysis
+class PERSALYS_BASE_API SRCAnalysis : public SimulationAnalysis
 {
   CLASSNAME
 

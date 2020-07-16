@@ -26,7 +26,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API ContourPlot : public PlotWidget
+class PERSALYS_PLOT_API ContourPlot : public PlotWidget
 {
   Q_OBJECT
 

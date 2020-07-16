@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CheckableHeaderView : public QHeaderView
+class PERSALYS_UTILS_API CheckableHeaderView : public QHeaderView
 {
   Q_OBJECT
 

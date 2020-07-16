@@ -50,7 +50,7 @@ signals:
 };
 
 
-class PERSALYS_API MainWindow : public QMainWindow
+class PERSALYS_VIEW_API MainWindow : public QMainWindow
 {
   Q_OBJECT
 

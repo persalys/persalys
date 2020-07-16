@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API TitledComboBox : public QComboBox
+class PERSALYS_UTILS_API TitledComboBox : public QComboBox
 {
   Q_OBJECT
 

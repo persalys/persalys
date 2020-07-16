@@ -33,7 +33,7 @@ namespace PERSALYS {
  *
  * This class is a Function with history of input and output.
  */
-class PERSALYS_API FileMemoizeFunction
+class PERSALYS_BASE_API FileMemoizeFunction
   : public OT::FunctionImplementation
 {
   CLASSNAME

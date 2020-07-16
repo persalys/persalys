@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MetaModel : public PhysicalModelImplementation
+class PERSALYS_BASE_API MetaModel : public PhysicalModelImplementation
 {
   CLASSNAME
 

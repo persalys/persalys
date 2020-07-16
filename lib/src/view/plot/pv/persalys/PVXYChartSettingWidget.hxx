@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PVXYChartSettingWidget : public PVPlotSettingWidget
+class PERSALYS_PLOTPV_API PVXYChartSettingWidget : public PVPlotSettingWidget
 {
   Q_OBJECT
 
@@ -64,7 +64,7 @@ private:
 };
 
 
-class PERSALYS_API XYChartSettingWidget : public PVXYChartSettingWidget
+class PERSALYS_PLOTPV_API XYChartSettingWidget : public PVXYChartSettingWidget
 {
   Q_OBJECT
 
@@ -73,7 +73,7 @@ public:
 };
 
 
-class PERSALYS_API BagChartSettingWidget : public PVXYChartSettingWidget
+class PERSALYS_PLOTPV_API BagChartSettingWidget : public PVXYChartSettingWidget
 {
   Q_OBJECT
 
@@ -82,7 +82,7 @@ public:
 };
 
 
-class PERSALYS_API TrajectoriesSettingWidget : public PVXYChartSettingWidget
+class PERSALYS_PLOTPV_API TrajectoriesSettingWidget : public PVXYChartSettingWidget
 {
   Q_OBJECT
 
@@ -92,7 +92,7 @@ public:
 };
 
 
-class PERSALYS_API ScatterSettingWidget : public PVXYChartSettingWidget
+class PERSALYS_PLOTPV_API ScatterSettingWidget : public PVXYChartSettingWidget
 {
   Q_OBJECT
 
@@ -121,7 +121,7 @@ public slots:
 };
 
 
-class PERSALYS_API MultiPDFSettingWidget : public PVXYChartSettingWidget
+class PERSALYS_PLOTPV_API MultiPDFSettingWidget : public PVXYChartSettingWidget
 {
   Q_OBJECT
 

@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MorrisPage : public QWizardPage
+class PERSALYS_VIEW_API MorrisPage : public QWizardPage
 {
   Q_OBJECT
 
@@ -52,7 +52,7 @@ private:
   MorrisTableModel * tableModel_;
   TemporaryLabel * errorMessageLabel_;
 };
-class PERSALYS_API MorrisSecondPage : public QWizardPage
+class PERSALYS_VIEW_API MorrisSecondPage : public QWizardPage
 {
   Q_OBJECT
 

@@ -11,7 +11,7 @@ class pqServer;
 
 namespace PERSALYS
 {
-class PERSALYS_API PVServerManagerInterface
+class PERSALYS_PLOTPV_API PVServerManagerInterface
 {
 public:
   virtual ~PVServerManagerInterface() {}

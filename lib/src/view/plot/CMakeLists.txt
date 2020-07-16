@@ -1,5 +1,5 @@
 if (ParaView_FOUND)
-  add_subdirectory (paraview)
+  add_subdirectory (pv)
 endif ()
 
 set (SOURCEFILES "" CACHE STRING "" FORCE)
@@ -45,7 +45,7 @@ include_directories (${INTERNAL_INCLUDE_DIRS})
 persalys_add_library (persalysplot ${SOURCEFILES} ${PERSALYS_PLOT_MOC_SRCS})
 
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions (persalysplot PRIVATE PERSALYS_DLL_EXPORTS)
+  target_compile_definitions (persalysplot PRIVATE PERSALYS_PLOT_DLL_EXPORTS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 
@@ -62,7 +62,7 @@ include_directories (${QWT_INCLUDE_DIRS})
 target_link_libraries (persalysplot ${QT_LIBRARIES})
 target_link_libraries (persalysplot ${QWT_LIBRARIES})
 if (ParaView_FOUND)
-  target_link_libraries (persalysplot persalysplotparaview)
+  target_link_libraries (persalysplot persalysplotpv)
 endif ()
 
 install ( TARGETS persalysplot

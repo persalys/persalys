@@ -57,7 +57,7 @@ private:
 };
 
 
-class PERSALYS_API PlotWidget : public QwtPlot
+class PERSALYS_PLOT_API PlotWidget : public QwtPlot
 {
   Q_OBJECT
 

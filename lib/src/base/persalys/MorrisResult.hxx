@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MorrisResult : public EvaluationResult
+class PERSALYS_BASE_API MorrisResult : public EvaluationResult
 {
   CLASSNAME
 

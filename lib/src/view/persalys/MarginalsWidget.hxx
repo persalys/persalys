@@ -40,7 +40,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MarginalsWidget : public QWidget
+class PERSALYS_VIEW_API MarginalsWidget : public QWidget
 {
   Q_OBJECT
 

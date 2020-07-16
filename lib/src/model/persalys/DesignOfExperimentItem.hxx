@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DesignOfExperimentItem : public Item, public Observer
+class PERSALYS_MODEL_API DesignOfExperimentItem : public Item, public Observer
 {
   Q_OBJECT
 

@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API TranslationManager : public QObject
+class PERSALYS_MODEL_API TranslationManager : public QObject
 {
   Q_OBJECT
 

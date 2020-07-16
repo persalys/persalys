@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MenuBar : public QMenuBar
+class PERSALYS_VIEW_API MenuBar : public QMenuBar
 {
   Q_OBJECT
 

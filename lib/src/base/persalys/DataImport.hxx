@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DataImport
+class PERSALYS_BASE_API DataImport
 {
 public:
   /** Default constructor */

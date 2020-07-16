@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API GridDesignOfExperiment : public DesignOfExperimentEvaluation
+class PERSALYS_BASE_API GridDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME
 

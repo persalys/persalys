@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API WindowFactory
+class PERSALYS_VIEW_API WindowFactory
 {
 public:
   static SubWindow * GetWindow(Item* item, QWidget * parent = 0);

@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MetaModelValidationWidget : public QScrollArea
+class PERSALYS_VIEW_API MetaModelValidationWidget : public QScrollArea
 {
   Q_OBJECT
 

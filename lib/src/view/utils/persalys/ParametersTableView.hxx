@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ParametersTableView : public CopyableTableView
+class PERSALYS_UTILS_API ParametersTableView : public CopyableTableView
 {
 public:
   ParametersTableView(const QStringList names,             // parameters names
@@ -38,36 +38,7 @@ public:
                       const bool showGrid = false,         // show the grid of the table
                       const bool namesHasHeaderType = false, // parameters names display has table header
                       QWidget * parent = 0
-                     )
-    : CopyableTableView(parent)
-  {
-    if (!names.size() * values.size() > 0)
-      throw OT::InvalidArgumentException(HERE) << "To build the ParametersTableView, the data vectors must have the same (not null) dimension\n";
-
-    // headers
-    horizontalHeader()->hide();
-    verticalHeader()->hide();
-
-    // table model
-    CustomStandardItemModel * tableModel = new CustomStandardItemModel(names.size(), 2, this);
-    setModel(tableModel);
-
-    // vertical header
-    for (int i = 0; i < names.size(); ++i)
-    {
-      if (namesHasHeaderType)
-        tableModel->setNotEditableHeaderItem(i, 0, names[i]);
-      else
-        tableModel->setNotEditableItem(i, 0, names[i]);
-      tableModel->setNotEditableItem(i, 1, values[i]);
-    }
-
-    // show grid
-    setShowGrid(showGrid);
-
-    // resize to contents
-    resizeToContents();
-  }
+                     );
 };
 }
 #endif

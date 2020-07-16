@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API CustomScaleEngine : public QwtLinearScaleEngine
+class PERSALYS_PLOT_API CustomScaleEngine : public QwtLinearScaleEngine
 {
 public:
   CustomScaleEngine();

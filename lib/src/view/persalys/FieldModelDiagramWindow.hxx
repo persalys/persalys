@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API FieldModelDiagramWindow : public DiagramWindow
+class PERSALYS_VIEW_API FieldModelDiagramWindow : public DiagramWindow
 {
   Q_OBJECT
 

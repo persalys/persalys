@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API StudyWindow : public SubWindow
+class PERSALYS_VIEW_API StudyWindow : public SubWindow
 {
   Q_OBJECT
 

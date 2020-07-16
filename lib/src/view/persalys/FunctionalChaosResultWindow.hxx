@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API FunctionalChaosResultWindow : public ResultWindow
+class PERSALYS_VIEW_API FunctionalChaosResultWindow : public ResultWindow
 {
   Q_OBJECT
 

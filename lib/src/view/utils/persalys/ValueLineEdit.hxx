@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ValueLineEdit : public QLineEdit
+class PERSALYS_UTILS_API ValueLineEdit : public QLineEdit
 {
   Q_OBJECT
 

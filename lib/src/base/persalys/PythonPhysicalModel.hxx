@@ -25,7 +25,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PythonPhysicalModel : public PhysicalModelImplementation
+class PERSALYS_BASE_API PythonPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME
 

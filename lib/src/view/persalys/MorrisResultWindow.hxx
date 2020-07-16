@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API MorrisResultWindow : public DataAnalysisWindow
+class PERSALYS_VIEW_API MorrisResultWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 

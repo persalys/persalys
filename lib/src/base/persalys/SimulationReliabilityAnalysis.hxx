@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SimulationReliabilityAnalysis : public ReliabilityAnalysis, public WithStopCriteriaAnalysis
+class PERSALYS_BASE_API SimulationReliabilityAnalysis : public ReliabilityAnalysis, public WithStopCriteriaAnalysis
 {
 public:
   /** Default constructor */

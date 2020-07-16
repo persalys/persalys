@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DesignOfExperimentInputWindow : public DataAnalysisWindow
+class PERSALYS_VIEW_API DesignOfExperimentInputWindow : public DataAnalysisWindow
 {
   Q_OBJECT
 

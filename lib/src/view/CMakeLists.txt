@@ -372,7 +372,7 @@ persalys_add_library (persalysview ${SOURCEFILES} ${PERSALYS_VIEW_MOC_SRCS} ${PE
 target_compile_features (persalysview PRIVATE cxx_lambdas)
 
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions (persalysview PRIVATE PERSALYS_DLL_EXPORTS)
+  target_compile_definitions (persalysview PRIVATE PERSALYS_VIEW_DLL_EXPORTS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

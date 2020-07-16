@@ -10,7 +10,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API PVXYChartViewWidget : public PVViewWidget
+class PERSALYS_PLOTPV_API PVXYChartViewWidget : public PVViewWidget
 {
   Q_OBJECT
 

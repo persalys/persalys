@@ -35,7 +35,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API MeshWindow : public SubWindow
+class PERSALYS_VIEW_API MeshWindow : public SubWindow
 {
   Q_OBJECT
 

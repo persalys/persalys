@@ -33,7 +33,7 @@ Q_DECLARE_METATYPE(OT::Description)
 
 namespace PERSALYS
 {
-class PERSALYS_API DistributionsForInferenceWidget : public QWidget
+class PERSALYS_VIEW_API DistributionsForInferenceWidget : public QWidget
 {
   Q_OBJECT
 

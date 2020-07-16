@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ParametersWidget : public QGroupBox
+class PERSALYS_VIEW_API ParametersWidget : public QGroupBox
 {
 public:
   ParametersWidget(const QString title,                 // table title

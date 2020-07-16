@@ -31,7 +31,7 @@ namespace PERSALYS
 {
 class StudyItem;
 class Item;
-class PERSALYS_API ItemFactory : public QObject
+class PERSALYS_MODEL_API ItemFactory : public QObject
 {
   Q_OBJECT
 

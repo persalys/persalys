@@ -7,7 +7,7 @@ class pqPipelineSource;
 
 namespace PERSALYS
 {
-class PERSALYS_API PVBagChartViewWidget : public PVXYChartViewWidget
+class PERSALYS_PLOTPV_API PVBagChartViewWidget : public PVXYChartViewWidget
 {
   Q_OBJECT
 

@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API Actions : public QObject
+class PERSALYS_VIEW_API Actions : public QObject
 {
   Q_OBJECT
 

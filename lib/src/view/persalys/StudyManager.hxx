@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API StudyManager : public QObject
+class PERSALYS_VIEW_API StudyManager : public QObject
 {
   Q_OBJECT
 

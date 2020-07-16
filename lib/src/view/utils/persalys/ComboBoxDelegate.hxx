@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ComboBoxDelegate : public QItemDelegate
+class PERSALYS_UTILS_API ComboBoxDelegate : public QItemDelegate
 {
   Q_OBJECT
 
@@ -55,7 +55,7 @@ private:
 };
 
 
-class PERSALYS_API ComboBoxWithSeparatorDelegate : public QItemDelegate
+class PERSALYS_UTILS_API ComboBoxWithSeparatorDelegate : public QItemDelegate
 {
 public:
   ComboBoxWithSeparatorDelegate(QObject *parent);
@@ -65,7 +65,7 @@ public:
 };
 
 
-class PERSALYS_API ModelForComboBoxWithSeparator : public QStandardItemModel
+class PERSALYS_UTILS_API ModelForComboBoxWithSeparator : public QStandardItemModel
 {
 public:
   ModelForComboBoxWithSeparator(const QStringList &allItems, const QList<int> separatorIndex, const QStringList &separatorText, QWidget *parent);

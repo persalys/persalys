@@ -31,7 +31,7 @@ namespace PERSALYS
   typedef OT::Collection<CouplingResourceFile> CouplingResourceFileCollection;
   typedef OT::Collection<CouplingOutputFile> CouplingOutputFileCollection;
 
-class PERSALYS_API CouplingStep : public OT::PersistentObject
+class PERSALYS_BASE_API CouplingStep : public OT::PersistentObject
 {
   CLASSNAME
 

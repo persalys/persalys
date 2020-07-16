@@ -18,42 +18,39 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_RADIOBUTTONDELEGATE_HXX
-#define PERSALYS_RADIOBUTTONDELEGATE_HXX
 
-#include "persalys/PersalysPrivate.hxx"
-
-#include <QStyledItemDelegate>
-#include <QApplication>
-#include <QPainter>
-#include <QRadioButton>
+#include "persalys/RadioButtonDelegate.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_UTILS_API RadioButtonDelegate : public QStyledItemDelegate
-{
-public:
-  RadioButtonDelegate(const int firstRowWithButton, QObject *parent)
-    : QStyledItemDelegate(parent)
-    , firstRowWithButton_(firstRowWithButton)
-  {
-  }
 
-
-  void paint(QPainter* painter,
+  void RadioButtonDelegate::paint(QPainter* painter,
              const QStyleOptionViewItem& option,
-             const QModelIndex& index) const;
-
-  virtual QSize sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
+             const QModelIndex& index) const
   {
-    const QSize buttonSize = QRadioButton(index.data(Qt::DisplayRole).toString()).sizeHint();
+    if (index.row() < firstRowWithButton_)
+    {
+      QStyledItemDelegate::paint(painter, option, index);
+      return;
+    }
+
+    // draw a radio button
+    QStyleOptionButton optionButton;
+    optionButton.rect = option.rect;
+    // add margin before the radio button
     const int buttonMargin = 3;
-    const int epsilon = 15; // correction for Windows
-    return buttonSize + QSize(buttonMargin + epsilon, 0);
+    optionButton.rect.translate(buttonMargin, 0);
+    optionButton.text  = index.data(Qt::DisplayRole).toString();
+
+    if (index.data(Qt::CheckStateRole).toBool())
+      optionButton.state |= QStyle::State_On;
+    else
+      optionButton.state |= QStyle::State_Off;
+
+    optionButton.state |= QStyle::State_Enabled;
+
+    QApplication::style()->drawControl(QStyle::CE_RadioButton, &optionButton, painter);
   }
 
-private:
-  int firstRowWithButton_;
-};
+
 }
-#endif

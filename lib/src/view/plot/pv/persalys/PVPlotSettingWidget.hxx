@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API PVPlotSettingWidget : public QWidget
+class PERSALYS_PLOTPV_API PVPlotSettingWidget : public QWidget
 {
   Q_OBJECT
 
@@ -51,7 +51,7 @@ protected:
   QGridLayout * frameLayout_;
 };
 
-class PERSALYS_API MultiPlotSettingWidget : public PVPlotSettingWidget
+class PERSALYS_PLOTPV_API MultiPlotSettingWidget : public PVPlotSettingWidget
 {
   Q_OBJECT
 

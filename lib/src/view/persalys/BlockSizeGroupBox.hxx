@@ -29,7 +29,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API BlockSizeGroupBox : public QGroupBox
+class PERSALYS_VIEW_API BlockSizeGroupBox : public QGroupBox
 {
   Q_OBJECT
 

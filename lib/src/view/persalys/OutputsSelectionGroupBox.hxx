@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API OutputsSelectionGroupBox : public QGroupBox
+class PERSALYS_VIEW_API OutputsSelectionGroupBox : public QGroupBox
 {
   Q_OBJECT
 

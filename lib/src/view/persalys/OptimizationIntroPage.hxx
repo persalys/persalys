@@ -31,7 +31,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API OptimizationIntroPage : public QWizardPage
+class PERSALYS_VIEW_API OptimizationIntroPage : public QWizardPage
 {
   Q_OBJECT
 

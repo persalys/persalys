@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DataSample : public OT::PersistentObject
+class PERSALYS_BASE_API DataSample : public OT::PersistentObject
 {
 public:
   typedef OT::Collection<OT::Sample> SampleCollection;

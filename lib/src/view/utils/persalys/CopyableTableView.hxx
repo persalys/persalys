@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API CopyableTableView : public QTableView
+class PERSALYS_UTILS_API CopyableTableView : public QTableView
 {
   Q_OBJECT
 

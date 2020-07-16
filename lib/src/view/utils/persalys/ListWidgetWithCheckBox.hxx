@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ListWidgetWithCheckBox : public QListWidget
+class PERSALYS_UTILS_API ListWidgetWithCheckBox : public QListWidget
 {
   Q_OBJECT
 

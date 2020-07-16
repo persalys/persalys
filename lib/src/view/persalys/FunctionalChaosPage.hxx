@@ -33,7 +33,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API FunctionalChaosPage : public QWizardPage
+class PERSALYS_VIEW_API FunctionalChaosPage : public QWizardPage
 {
   Q_OBJECT
 

@@ -47,7 +47,7 @@ public:
 };
 
 
-class PERSALYS_API SampleTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API SampleTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

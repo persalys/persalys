@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CopulaWidget : public QWidget
+class PERSALYS_VIEW_API CopulaWidget : public QWidget
 {
   Q_OBJECT
 

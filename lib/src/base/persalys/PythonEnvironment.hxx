@@ -26,7 +26,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API PythonEnvironment
+class PERSALYS_BASE_API PythonEnvironment
 {
 public:
   /** Default constructor */

@@ -27,7 +27,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API SymbolicPhysicalModelWindow : public SubWindow
+class PERSALYS_VIEW_API SymbolicPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

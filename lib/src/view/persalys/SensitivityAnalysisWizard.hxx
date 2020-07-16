@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SensitivityAnalysisWizard : public AnalysisWizard
+class PERSALYS_VIEW_API SensitivityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 

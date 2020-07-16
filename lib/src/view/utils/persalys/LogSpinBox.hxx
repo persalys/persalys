@@ -31,7 +31,7 @@ namespace PERSALYS
 /// when clicking on the up arrow
 /// by default base=10
 /// also the default range is (1, max int)
-class PERSALYS_API LogSpinBox : public UIntSpinBox
+class PERSALYS_UTILS_API LogSpinBox : public UIntSpinBox
 {
   Q_OBJECT
 

@@ -30,7 +30,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API YACSPhysicalModelWindow : public SubWindow
+class PERSALYS_VIEW_API YACSPhysicalModelWindow : public SubWindow
 {
   Q_OBJECT
 

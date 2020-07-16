@@ -203,7 +203,7 @@ persalys_add_library (persalysbase ${BASE_SOURCEFILES})
 target_compile_features (persalysbase PRIVATE cxx_lambdas)
 
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions (persalysbase PRIVATE PERSALYS_DLL_EXPORTS)
+  target_compile_definitions (persalysbase PRIVATE PERSALYS_BASE_DLL_EXPORTS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

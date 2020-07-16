@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DesignOfExperimentWizard : public AnalysisWizard
+class PERSALYS_VIEW_API DesignOfExperimentWizard : public AnalysisWizard
 {
   Q_OBJECT
 

@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ModelEvaluationWizard : public AnalysisWizard
+class PERSALYS_VIEW_API ModelEvaluationWizard : public AnalysisWizard
 {
   Q_OBJECT
 

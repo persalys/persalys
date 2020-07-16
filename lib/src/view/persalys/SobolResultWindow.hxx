@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API SobolResultWindow : public ResultWindow
+class PERSALYS_VIEW_API SobolResultWindow : public ResultWindow
 {
   Q_OBJECT
 

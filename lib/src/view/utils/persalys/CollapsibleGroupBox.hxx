@@ -41,7 +41,7 @@ class CollapsibleGroupBoxPrivate;
  * @since 5.16
  */
 
-class PERSALYS_API CollapsibleGroupBox : public QWidget
+class PERSALYS_UTILS_API CollapsibleGroupBox : public QWidget
 {
   Q_OBJECT
 

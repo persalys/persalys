@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DesignOfExperimentImplementation : public DataSample, public Observable
+class PERSALYS_BASE_API DesignOfExperimentImplementation : public DataSample, public Observable
 {
   CLASSNAME
 

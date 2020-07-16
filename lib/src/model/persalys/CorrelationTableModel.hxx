@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CorrelationTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API CorrelationTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

@@ -28,7 +28,7 @@
 class Study;
 namespace PERSALYS
 {
-class PERSALYS_API AnalysisImplementation : public OT::PersistentObject, public Observable
+class PERSALYS_BASE_API AnalysisImplementation : public OT::PersistentObject, public Observable
 {
 public:
   /** Default constructor */

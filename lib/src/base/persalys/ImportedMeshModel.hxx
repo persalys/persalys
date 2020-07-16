@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ImportedMeshModel : public MeshModelImplementation, public DataImport
+class PERSALYS_BASE_API ImportedMeshModel : public MeshModelImplementation, public DataImport
 {
   CLASSNAME
 

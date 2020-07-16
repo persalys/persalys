@@ -55,7 +55,7 @@ namespace PERSALYS
 {
 
 // -- custom QwtPlotCurve with Rtti_PlotUserItem = 1001
-class PERSALYS_API StaticPlotCurveItem : public QwtPlotCurve
+class PERSALYS_PLOT_API StaticPlotCurveItem : public QwtPlotCurve
 {
 public:
   StaticPlotCurveItem() {};

@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API YACSPhysicalModel : public PhysicalModelImplementation
+class PERSALYS_BASE_API YACSPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME
 

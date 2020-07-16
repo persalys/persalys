@@ -30,7 +30,7 @@ Q_DECLARE_METATYPE(PERSALYS::PhysicalModel)
 
 namespace PERSALYS
 {
-class PERSALYS_API CalibrationTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API CalibrationTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

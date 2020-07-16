@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API HorizontalHeaderViewWithCombobox : public QHeaderView
+class PERSALYS_UTILS_API HorizontalHeaderViewWithCombobox : public QHeaderView
 {
   Q_OBJECT
 

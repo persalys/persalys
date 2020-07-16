@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ReliabilityAnalysisWizard : public AnalysisWizard
+class PERSALYS_VIEW_API ReliabilityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
 

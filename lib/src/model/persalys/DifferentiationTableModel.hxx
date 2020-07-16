@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API DifferentiationTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API DifferentiationTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 

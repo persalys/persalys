@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API OptimizationAnalysis : public PhysicalModelAnalysis
+class PERSALYS_BASE_API OptimizationAnalysis : public PhysicalModelAnalysis
 {
   CLASSNAME
 

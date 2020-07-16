@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API InputTableProbabilisticModel : public QAbstractTableModel
+class PERSALYS_MODEL_API InputTableProbabilisticModel : public QAbstractTableModel
 {
   Q_OBJECT
 

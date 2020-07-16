@@ -28,7 +28,7 @@
 namespace PERSALYS
 {
 
-class PERSALYS_API MorrisResultWidget : public QWidget
+class PERSALYS_VIEW_API MorrisResultWidget : public QWidget
 {
   Q_OBJECT
 

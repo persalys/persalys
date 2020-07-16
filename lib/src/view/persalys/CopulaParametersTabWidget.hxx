@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API CopulaParametersTabWidget : public QTabWidget
+class PERSALYS_VIEW_API CopulaParametersTabWidget : public QTabWidget
 {
   Q_OBJECT
 

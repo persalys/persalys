@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ApproximationResultTabWidget : public QTabWidget
+class PERSALYS_VIEW_API ApproximationResultTabWidget : public QTabWidget
 {
   Q_OBJECT
 

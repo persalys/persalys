@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API WidgetBoundToDockWidget : public QWidget
+class PERSALYS_VIEW_API WidgetBoundToDockWidget : public QWidget
 {
   Q_OBJECT
 

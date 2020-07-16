@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_API ProbabilisticModelWindow : public SubWindow
+class PERSALYS_VIEW_API ProbabilisticModelWindow : public SubWindow
 {
   Q_OBJECT
 
