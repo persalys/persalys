@@ -14,8 +14,6 @@
 #include <vtkContextScene.h>
 #include <vtkXYChartRepresentation.h>
 
-#include "persalys/ListWidgetWithCheckBox.hxx"
-
 #include <QEvent>
 #include <pqCoreUtilities.h>
 

@@ -379,12 +379,16 @@ void DataAnalysisWindow::addBoxPlotTab()
   ind.add(inInd);
 
   BoxPlot * plot = new BoxPlot(variablesNames);
+  QList<bool> checked;
+  Point max = designOfExperiment_.getSample().getMax();
+  Point min = designOfExperiment_.getSample().getMin();
 
-  for (int i = 0; i < variablesNames.size(); ++i)
+  for (int i = 0; i < variablesNames.size(); ++i) {
+    checked << !(max[ind[i]] == min[ind[i]]);
     plot->addBoxPlot(result_, ind[i]);
-
+  }
   // Graph Setting
-  BoxPlotGraphSetting * graphSetting = new BoxPlotGraphSetting(plot, variablesNames, this);
+  BoxPlotGraphSetting * graphSetting = new BoxPlotGraphSetting(plot, variablesNames, checked, this);
   mainLayout->addWidget(new WidgetBoundToDockWidget(plot, graphSetting, this));
 
   scrollArea->setWidget(mainWidget);

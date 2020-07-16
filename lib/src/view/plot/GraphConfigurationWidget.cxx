@@ -409,7 +409,7 @@ void PDFGraphSetting::currentPlotIndexChanged(int /*i*/)
 
 // ----------- BoxPlotGraphSetting -----------
 
-BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, QWidget *parent)
+BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, const QList<bool> & checked, QWidget *parent)
   : GraphConfigurationWidget(QVector<PlotWidget *>(1, plotWidget), parent)
 {
   int rowGrid = frameLayout_->rowCount();
@@ -420,7 +420,10 @@ BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList 
 
   TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
   QStringList visibleReprNames;
-  for (const auto& name : qAsConst(inputNames)) {if (visibleReprNames.size() < MaxVisibleVariableNumber) visibleReprNames << name;}
+  for (int i=0; i<inputNames.size(); ++i) {
+    if (visibleReprNames.size() < MaxVisibleVariableNumber && checked[i])
+      visibleReprNames << qAsConst(inputNames[i]);}
+
   ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames, visibleReprNames, this);
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), plotWidget, SLOT(setVariablesToShow(QStringList)));
 

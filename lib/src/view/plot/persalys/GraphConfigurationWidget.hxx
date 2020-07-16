@@ -115,7 +115,7 @@ class PERSALYS_PLOT_API BoxPlotGraphSetting : public GraphConfigurationWidget
   Q_OBJECT
 
 public:
-  BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, QWidget *parent = 0);
+  BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, const QList<bool> & checked, QWidget *parent = 0);
 };
 
 

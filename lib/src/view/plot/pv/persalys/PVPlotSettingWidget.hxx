@@ -39,7 +39,7 @@ public:
   virtual QSize minimumSizeHint() const;
 
 protected:
-  void addSelectDataWidget(const QString &labelName);
+  void addSelectDataWidget(const QString &labelName, const QList<bool> &checked = QList<bool>());
   void addRankWidget(const bool checkState);
   void addExportLayout();
 
