@@ -58,7 +58,7 @@ PVPlotSettingWidget::PVPlotSettingWidget(PVViewWidget *pvViewWidget, QWidget *pa
 }
 
 
-void PVPlotSettingWidget::addSelectDataWidget(const QString &labelName)
+void PVPlotSettingWidget::addSelectDataWidget(const QString &labelName, const QList<bool> &checked)
 {
   Q_ASSERT(frameLayout_);
 
@@ -79,14 +79,16 @@ void PVPlotSettingWidget::addSelectDataWidget(const QString &labelName)
     for (int i = 0; i < pvViewWidget_->getNumberOfRepresentations(); ++i)
     {
       reprNames << pvViewWidget_->getRepresentationLabels(i)[0];
-      if (pvViewWidget_->getRepresentationVisibility(i))
+      if (pvViewWidget_->getRepresentationVisibility(i) && (!checked.size() || checked[i]))
         visibleReprNames << pvViewWidget_->getRepresentationLabels(i)[0];
     }
   }
   else
   {
     reprNames = plotNames_;
-    for (const auto& name : qAsConst(plotNames_)) {if (visibleReprNames.size() < MaxVisibleVariableNumber) visibleReprNames << name;}
+    for (int i=0; i<plotNames_.size(); ++i) {
+      if (visibleReprNames.size() < MaxVisibleVariableNumber && (!checked.size() || checked[i]))
+        visibleReprNames << plotNames_[i];}
   }
   ListWidgetWithCheckBox * reprListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, visibleReprNames, this);
   if (pvViewWidget_->getNumberOfRepresentations() > 1)
@@ -157,7 +159,16 @@ MultiPlotSettingWidget::MultiPlotSettingWidget(PVViewWidget *pvViewWidget, const
     plotNames_ << pvViewWidget_->getTable()->GetColumnName(cc);
 
   // add widgets
-  addSelectDataWidget(tr("Variables"));
+
+  QList<bool> checked;
+  Description variablesNames = sample.getDescription();
+  Point max = sample.getMax();
+  Point min = sample.getMin();
+  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i) {
+    checked << !(max[i] == min[i]);
+  }
+
+  addSelectDataWidget(tr("Variables"), checked);
   addRankWidget(true);
   addExportLayout();
   frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
