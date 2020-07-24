@@ -336,6 +336,11 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
 void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
 {
   variablesTableModel_->loadData(info);
+
+  // leave the comboboxes apparent to suggest the column is editable
+  for(int iRow =0; iRow < proxyModel_->rowCount(proxyModel_->index(0, 4)); ++ iRow)
+    variablesTableView_->openPersistentEditor(proxyModel_->index(iRow, 4));
+
   Description properties(variablesTableModel_->getProperties());
   for(int i = 0; i < propertiesTable_->model()->rowCount(); ++ i)
   {
