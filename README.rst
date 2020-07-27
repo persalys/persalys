@@ -1,6 +1,6 @@
-Persalys Module
-===============
-Qt GUI module for OpenTURNS
+Persalys
+========
+OpenTURNS-based GUI for uncertainty treatment
 
 Dependencies
 ------------
