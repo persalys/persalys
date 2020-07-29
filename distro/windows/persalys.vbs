@@ -26,4 +26,4 @@ rem uncomment this to override default language: en/fr
 rem wshEnv("LANG") = "en"
 
 rem need quotes if contains spaces (C:\Program Files)
-wshShell.run Chr(34) & fso.BuildPath(currentDirectory, "persalys.exe") & Chr(34)
+wshShell.run "%comspec% /k " & Chr(34) & fso.BuildPath(currentDirectory, "persalys.exe") & Chr(34)
