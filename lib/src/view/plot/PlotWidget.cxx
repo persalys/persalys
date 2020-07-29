@@ -149,8 +149,8 @@ void PlotWidget::exportPlot()
 
   // save image
   QString fileName = QFileDialog::getSaveFileName(this, tr("Export plot"),
-                     FileTools::GetCurrentDir() + QDir::separator() + plotTypeName_,
-                     tr("PNG (*.png);; JPEG (*.jpg *.jpeg);; BMP (*.bmp);; PPM (*.ppm);; XBM (*.xbm);; XPM (*.xpm);; TIFF (*.tiff);; SVG (*.svg);; PDF (*.pdf);; PS (*.ps)"));
+                     FileTools::GetCurrentDir() + QDir::separator() + plotTypeName_ + ".png",
+                     tr("Images (*.bmp *.jpg *.jpeg *.png *.pdf *.svg *.ppm *.xbm *.xpm)"));
 
   if (!fileName.isEmpty())
   {
@@ -162,7 +162,7 @@ void PlotWidget::exportPlot()
       fileName += ".png";
       format = QString("png");
     }
-    if (format == "ps" || format == "pdf" || format == "svg")
+    if (format == "pdf" || format == "svg")
     {
       QwtPlotRenderer * renderer = new QwtPlotRenderer();
       renderer->renderDocument(this, fileName, QSizeF(imageWidth, imageHeight));
