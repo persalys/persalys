@@ -88,15 +88,15 @@ RUN fc-cache -fsv
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
-RUN curl -fSsL https://www.openssl.org/source/openssl-1.0.2s.tar.gz | tar xz && cd openssl-1.0.2s \
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1g.tar.gz | tar xz && cd openssl-1.1.1g \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
-RUN curl -fSsL https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tgz | tar xz && cd Python-3.7.7 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz | tar xz && cd Python-3.8.5 \
  && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
 
 # pip
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython
-RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.17.5.tar.gz | tar xz && cd numpy-1.17.5 && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import numpy"
+RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.18.5.tar.gz | tar xz && cd numpy-1.18.5 && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import numpy"
 RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.1.0.tar.gz | tar xz && cd scipy-1.1.0 && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import scipy.linalg"
 RUN pip install lxml pandas matplotlib ipython --upgrade
 
@@ -114,7 +114,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd .. && python3 -c "import assimulo; import assimulo.solvers"
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.7.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.7.3 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.7.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.7.4 \
  && python3 setup.py install --fmil-home=/usr/local && cd .. && python3 -c "import pyfmi"
 
 # sphinx

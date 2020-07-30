@@ -20,6 +20,7 @@ CXXFLAGS="-Wall -Wextra -Werror -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake
 make install
 ${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/bin/*.dll ${MOD_PREFIX}/Lib/site-packages/persalys/*.pyd
 make tests
+cp ${MOD_PREFIX}/bin/*.dll ${MOD_PREFIX}/Lib/site-packages/persalys/
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
 WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin" xvfb-run -s "-screen 0 1024x768x24" ctest --output-on-failure --timeout 100 -j8
 
@@ -30,23 +31,25 @@ cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf ${MOD_PREFIX}/Lib/site-
 VERSION=`cat /io/VERSION`
 cp /io/distro/windows/* .
 unzip persalys-doc.zip -d .
-makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.14 -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DPYBASEVER_NODOT=${PYMAJMIN} -DARCH=${ARCH} installer.nsi
+makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DOPENTURNS_VERSION=1.15 -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DPYBASEVER_NODOT=${PYMAJMIN} -DARCH=${ARCH} installer.nsi
 
 # bundle installer
 cd /tmp
 PYVER=`${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -V|sed "s|.*Python \([0-9\.]*\).*|\1|g"`
-curl -fSsLO https://www.python.org/ftp/python/${PYVER}/python-${PYVER}-embed-amd64.zip
-curl -fsSLO https://bootstrap.pypa.io/get-pip.py && sudo ${ARCH}-w64-mingw32-python${PYMAJMIN}-bin get-pip.py
 mkdir -p python_root/Lib/site-packages && cd python_root
-unzip /tmp/python-${PYVER}-embed-amd64.zip
+curl -fSsL https://www.python.org/ftp/python/${PYVER}/python-${PYVER}-embed-amd64.zip | bsdtar -xf-
 echo 'Lib\\site-packages' >> python${PYMAJMIN}._pth
-curl -fSsL https://anaconda.org/conda-forge/vs2015_runtime/14.0.25420/download/win-64/vs2015_runtime-14.0.25420-0.tar.bz2 | tar xj
+curl -fSsL https://anaconda.org/conda-forge/vs2015_runtime/14.16.27012/download/win-64/vs2015_runtime-14.16.27012-h30e32a0_2.tar.bz2 | tar xj
 cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns Lib/site-packages
 cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
 rm Lib/site-packages/openturns/{libvtk,libboost,LLVM,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
-cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/{pip*,setuptools*,wheel*,pkg_resources,easy_install.py} Lib/site-packages/
+cd Lib/site-packages
+curl -fsSL https://pypi.io/packages/py2.py3/p/pip/pip-20.2-py2.py3-none-any.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
+cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
 makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DPYTHON_PREFIX=/tmp/python_root -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1:1} -DARCH=${ARCH} installer_bundle.nsi
