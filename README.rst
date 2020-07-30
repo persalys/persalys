@@ -2,8 +2,22 @@ Persalys
 ========
 OpenTURNS-based GUI for uncertainty treatment
 
-Dependencies
+Installation
 ------------
+- Linux: no install
+- Windows: KB2533623 and KB2999226 updates are needed
+
+Environment variables:
+
+- LANG: to override the default language you can set LANG=en/fr, on windows you can edit persalys.vbs
+- PERSALYS_HTML_DOCUMENTATION_PATH: override path to the html documentation
+- PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets), on windows you can remove the mesa opengl32.dll to prefer system GL libs
+- PERSALYS_CALIBRATION_ENGINE: if defined to "adao" and adao support is enabled, this switches to adao for calibration computations
+
+Development
+-----------
+Dependencies:
+
 - CMake >=3.8
 - OpenTURNS >=1.15
 - Qt >=5
@@ -17,15 +31,7 @@ Dependencies
 - ParaView >=5.8 (optional, for visualization)
 - otmorris >=0.7 (optional, for Morris support)
 
-Installation
-------------
-- The Qwt library found must be linked to the qt libs found (else adjust QWT_LIBRARY)
-- otfmi must be importable at configure time, so both openturns & otfmi should be reachable via PYTHONPATH or a default location
-- ParaView must be linked to the same qt libs, built with PARAVIEW_BUILD_QT_GUI=ON and PARAVIEW_PLUGIN_ENABLE_BagPlotViewsAndFilters=ON (default)
-- On windows OpenGL software rendering is provided for graphic widgets with mesa, if you wish to use system-provided GL libs you can remove opengl32.dll
-- To override the default language you can set LANG=en/fr environment variable, on windows see persalys.vbs
-
-Compile Persalys::
+Compilation::
 
     git clone http://git.phimeca.lan/ot-edf/persalys.git
     cd persalys
@@ -38,7 +44,7 @@ Compile Persalys::
       ..
     make install
 
-Run Persalys::
+Launch::
 
     persalys.sh
 
@@ -46,10 +52,4 @@ Translation::
 
     lupdate -verbose lib/ -ts translations/persalys_fr.ts -no-obsolete
     linguist translations/persalys_fr.ts
-
-Environment variables:
-
-- PERSALYS_HTML_DOCUMENTATION_PATH: override path to the html documentation
-- PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets) support for troubleshooting
-- PERSALYS_CALIBRATION_ENGINE: if defined to "adao" and adao support is enabled, this switches to adao for calibration computations
 
