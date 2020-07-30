@@ -4,14 +4,21 @@ OpenTURNS-based GUI for uncertainty treatment
 
 Installation
 ------------
-- Linux: no install
-- Windows: KB2533623 and KB2999226 updates are needed
+- Linux:
+
+  * requirements: glibc>=2.5, X11
+  * no install required, just run the .AppImage
+
+- Windows:
+
+  * requirements: Windows>=7, KB2533623 and KB2999226 updates
+  * to use system GL libs remove the provided opengl32.dll
 
 Environment variables:
 
 - LANG: to override the default language you can set LANG=en/fr, on windows you can edit persalys.vbs
 - PERSALYS_HTML_DOCUMENTATION_PATH: override path to the html documentation
-- PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets), on windows you can remove the mesa opengl32.dll to prefer system GL libs
+- PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets)
 - PERSALYS_CALIBRATION_ENGINE: if defined to "adao" and adao support is enabled, this switches to adao for calibration computations
 
 Development
