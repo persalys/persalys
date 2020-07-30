@@ -4,15 +4,15 @@ OpenTURNS-based GUI for uncertainty treatment
 
 Installation
 ------------
-- Linux:
-
-  * requirements: glibc>=2.5, X11
-  * no install required, just run the .AppImage
-
 - Windows:
 
   * requirements: Windows>=7, KB2533623 and KB2999226 updates
   * to use system GL libs remove the provided opengl32.dll
+
+- Linux:
+
+  * requirements: glibc>=2.12, X11
+  * no install required, just run the .AppImage
 
 Environment variables:
 
