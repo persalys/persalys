@@ -7,7 +7,6 @@ set -x -e
 uid=$1
 gid=$2
 
-export MAKEFLAGS="-j8"
 cd /tmp
 
 mkdir -p build && cd build

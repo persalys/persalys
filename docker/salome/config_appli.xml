@@ -1,5 +1,6 @@
 <application>
 <context path='/tmp/salome_context.cfg'/>
+<python version='3.6'/>
 <modules>
    <module name="KERNEL"       path="/home/devel/local"/>
    <module name="GUI"          path="/home/devel/local"/>
