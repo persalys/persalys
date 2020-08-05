@@ -29,7 +29,7 @@ RUN curl -L http://downloads.sourceforge.net/omniorb/omniORB-4.2.3.tar.bz2|tar x
 RUN curl -L http://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.3/omniORBpy-4.2.3.tar.bz2|tar xj && cd omniORBpy-4.2.3 && ./configure && make && make install
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.16/cmake-3.16.2.tar.gz | tar xz && cd cmake-3.16.2 && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
+RUN curl -fSsL https://cmake.org/files/v3.12/cmake-3.12.1.tar.gz | tar xz && cd cmake-3.12.1 && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
 
 # opencascade
 RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/V7_4_0p1;sf=tgz" | tar xz && cd occt-V7_4_0p1 && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1
@@ -74,7 +74,6 @@ WORKDIR /home/devel/src
 RUN git config --global user.email devel@a.b && git config --global user.name devel
 
 # salome-configuration
-# https://www.salome-platform.org/forum/forum_9/980773415
 RUN git clone https://git.salome-platform.org/gitpub/tools/configuration.git && cd configuration && git checkout V9_5_0 && sed -i "s|NO_SYSTEM_ENVIRONMENT_PATH||g" cmake/SalomeMacros.cmake
 
 # salome-kernel

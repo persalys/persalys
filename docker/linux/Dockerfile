@@ -135,7 +135,6 @@ RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz | tar xJ && cd qt-everywhere-src-5.15.0 && ./configure -xcb -no-mimetype-database -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.0/submodules/qtx11extras-everywhere-src-5.15.0.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.0 && qmake src/x11extras && make > /dev/null 2>&1 && make install
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj && cd qwt-6.1.5 \
@@ -143,26 +142,15 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
 # paraview
-RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.0.tar.xz | tar xJ && cd ParaView-v5.8.0 \
-  && mkdir build && cd build && cmake \
-  -DBUILD_SHARED_LIBS=ON \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_LIBDIR=lib \
-  -DVTK_USE_64BIT_IDS=OFF \
-  -DVTK_NO_PYTHON_THREADS=OFF \
-  -DVTK_PYTHON_FULL_THREADSAFE=ON \
-  -DPARAVIEW_USE_PYTHON=ON \
-  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF \
-  -DPARAVIEW_USE_QT=ON \
-  -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF\
-  -DCMAKE_SKIP_RPATH=OFF \
-  -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON \
-  -DCMAKE_INSTALL_PREFIX=/usr/local/ \
-  .. && make install > /dev/null 2>&1
+RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
+  && mkdir build && cd build \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON .. \
+  && make install > /dev/null 2>&1
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.15 \
- && cmake  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
+ && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.8 \
@@ -177,7 +165,7 @@ ENV LANG "C.UTF-8"
 
 # openmodelica
 RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel
-RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.14.1 \
+RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.14.2 \
  && git submodule sync && git submodule update --init --recursive \
  && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
