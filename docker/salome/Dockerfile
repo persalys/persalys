@@ -14,44 +14,43 @@ ENV LD_LIBRARY_PATH /usr/local/lib/
 
 # swig
 RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz | tar xz && cd swig-3.0.12 \
- && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version
+ && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # python
 RUN curl -fSsL https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz | tar xz && cd Python-3.6.5 \
- && ./configure --enable-shared && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl"
+ && ./configure --enable-shared && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools numpy==1.15.1 scipy==0.19.1
 ENV LD_LIBRARY_PATH /usr/local/lib/
 
 # omniorb
-RUN curl -L http://downloads.sourceforge.net/omniorb/omniORB-4.2.3.tar.bz2|tar xj && cd omniORB-4.2.3 && ./configure --with-openssl=/usr && make && make install
-RUN curl -L http://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.3/omniORBpy-4.2.3.tar.bz2|tar xj && cd omniORBpy-4.2.3 && ./configure && make && make install
+RUN curl -L http://downloads.sourceforge.net/omniorb/omniORB-4.2.3.tar.bz2|tar xj && cd omniORB-4.2.3 && ./configure --with-openssl=/usr && make && make install && cd - && rm -r omniORB*
+RUN curl -L http://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.3/omniORBpy-4.2.3.tar.bz2|tar xj && cd omniORBpy-4.2.3 && ./configure && make && make install && cd - && rm -r omniORBpy*
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.12/cmake-3.12.1.tar.gz | tar xz && cd cmake-3.12.1 && ./bootstrap --parallel=8 && make install > /dev/null 2>&1
+RUN curl -fSsL https://cmake.org/files/v3.12/cmake-3.12.1.tar.gz | tar xz && cd cmake-3.12.1 && ./bootstrap --parallel=8 && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # opencascade
-RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/V7_4_0p1;sf=tgz" | tar xz && cd occt-V7_4_0p1 && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1
+RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/V7_4_0p1;sf=tgz" | tar xz && cd occt-V7_4_0p1 && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1 && cd - && rm -r occt*
 
 # qwt
-RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.4.tar.bz2 | tar xj && cd qwt-6.1.4 \
+RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.2.tar.bz2 | tar xj && cd qwt-6.1.2 \
  && sed -i "s|QWT_INSTALL_PREFIX    = /usr/local/qwt-\$\$QWT_VERSION|QWT_INSTALL_PREFIX = /usr/local|g" qwtconfig.pri \
- && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+ && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.15 \
- && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1
+ && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # libbatch
-RUN git clone https://git.salome-platform.org/gitpub/tools/libbatch.git && cd libbatch && git checkout V2_4_3 && cmake . && make install
+RUN git clone https://git.salome-platform.org/gitpub/tools/libbatch.git && cd libbatch && git checkout V2_4_3 && cmake . && make install && cd - && rm -r libbatch
 
 # sip
-RUN curl -L https://www.riverbankcomputing.com/static/Downloads/sip/4.19.3/sip-4.19.3.tar.gz | tar xz && cd sip-4.19.3 && mkdir build && cd build && python3 ../configure.py  && make && make install && cp /usr/local/include/python3.6m/sip.h /usr/local/include
+RUN curl -L https://www.riverbankcomputing.com/static/Downloads/sip/4.19.3/sip-4.19.3.tar.gz | tar xz && cd sip-4.19.3 && mkdir build && cd build && python3 ../configure.py  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cp /usr/local/include/python3.6m/sip.h /usr/local/include && cd - && rm -r sip*
 
 # pyqt
-RUN curl -fSsL http://downloads.sourceforge.net/pyqt/PyQt5/PyQt5_gpl-5.7.1.tar.gz |tar xz && cd PyQt5_gpl-5.7.1 && python3 configure.py --verbose --confirm-license && make && make install
-RUN python3 -c "from PyQt5 import Qt; print(Qt.PYQT_VERSION_STR)"
+RUN curl -fSsL http://downloads.sourceforge.net/pyqt/PyQt5/PyQt5_gpl-5.7.1.tar.gz |tar xz && cd PyQt5_gpl-5.7.1 && python3 configure.py --verbose --confirm-license && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -c "from PyQt5 import Qt; print(Qt.PYQT_VERSION_STR)" && cd - && rm -r PyQt*
 
 # uname -p => unknown
 RUN cd /tmp && sudo mv /bin/uname /bin/uname.orig && echo -n "#!/bin/sh\nuname.orig \"\$@\"|sed 's|unknown|x86_64|g'\n" > uname && chmod a+rx ./uname && sudo mv ./uname /bin/uname && uname  -p
@@ -77,22 +76,22 @@ RUN git config --global user.email devel@a.b && git config --global user.name de
 RUN git clone https://git.salome-platform.org/gitpub/tools/configuration.git && cd configuration && git checkout V9_5_0 && sed -i "s|NO_SYSTEM_ENVIRONMENT_PATH||g" cmake/SalomeMacros.cmake
 
 # salome-kernel
-RUN git clone https://git.salome-platform.org/gitpub/modules/kernel.git && cd kernel && git checkout V9_5_0 && cmake -DSALOME_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOME_USE_LIBBATCH=ON -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install
+RUN git clone https://git.salome-platform.org/gitpub/modules/kernel.git && cd kernel && git checkout V9_5_0 && cmake -DSALOME_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOME_USE_LIBBATCH=ON -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install && cd - && rm -r kernel*
 
 # salome-gui
-RUN git clone https://git.salome-platform.org/gitpub/modules/gui.git && cd gui && git checkout V9_5_0 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DSALOME_USE_VTKVIEWER=OFF -DSALOME_BUILD_DOC=OFF -DSALOME_USE_PVVIEWER=OFF -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PLOT2DVIEWER=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local -DSALOME_CMAKE_DEBUG=ON . && make install
+RUN git clone https://git.salome-platform.org/gitpub/modules/gui.git && cd gui && git checkout V9_5_0 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DSALOME_USE_VTKVIEWER=OFF -DSALOME_BUILD_DOC=OFF -DSALOME_USE_PVVIEWER=OFF -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PLOT2DVIEWER=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local -DSALOME_CMAKE_DEBUG=ON . && make install && cd - && rm -rf gui*
 
 # salome-yacs
-RUN git clone https://git.salome-platform.org/gitpub/modules/yacs.git && cd yacs && git checkout V9_5_0 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install
+RUN git clone https://git.salome-platform.org/gitpub/modules/yacs.git && cd yacs && git checkout V9_5_0 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install && cd - && rm -r yacs*
 
 # py2cpp
-RUN git clone https://github.com/jschueller/py2cpp.git && cd py2cpp && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install
+RUN git clone https://github.com/jschueller/py2cpp.git && cd py2cpp && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install && cd - && rm -r py2cpp*
 
 # ydefx
-RUN git clone https://github.com/jschueller/ydefx.git && cd ydefx && git checkout V9_5_BR && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local . &&  make install
+RUN git clone https://github.com/jschueller/ydefx.git && cd ydefx && git checkout V9_5_BR && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local . &&  make install && cd - && rm -r ydefx*
 
 # adao_interface
-RUN git clone https://github.com/jschueller/adao_interface.git && cd adao_interface && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DPY2CPP_ROOT_DIR=/home/devel/local -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install
+RUN git clone https://github.com/jschueller/adao_interface.git && cd adao_interface && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DPY2CPP_ROOT_DIR=/home/devel/local -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install && cd - && rm -r adao*
 
 # finalize install
 ENV LD_LIBRARY_PATH /usr/local/lib/:/home/devel/local/lib/:/home/devel/local/lib/salome
