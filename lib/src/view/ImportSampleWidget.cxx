@@ -101,7 +101,7 @@ void ImportSampleWidget::openFileRequested()
   QString fileName = QFileDialog::getOpenFileName(this,
                      tr("Data to import..."),
                      FileTools::GetCurrentDir(),
-                     tr("Data files (*.csv *.txt);; All files (*.*)"));
+                     tr("Data files (*.csv *.txt *.dat)"));
 
   if (!fileName.isEmpty())
   {
