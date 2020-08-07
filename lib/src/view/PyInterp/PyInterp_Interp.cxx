@@ -1,4 +1,4 @@
-// Copyright (C) 2007-2016  CEA/DEN, EDF R&D, OPEN CASCADE
+// Copyright (C) 2007-2020  CEA/DEN, EDF R&D, OPEN CASCADE
 //
 // Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
 // CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
@@ -36,6 +36,7 @@
 #include <algorithm>
 
 #include <QRegExp>
+#include <QStringList>
 
 #define TOP_HISTORY_PY   "--- top of history ---"
 #define BEGIN_HISTORY_PY "--- begin of history ---"
@@ -455,7 +456,8 @@ __getArgsList(std::string argsString)
          python dictionary context if possible. Command might correspond to
          the execution of a script with optional arguments.
          In this case, command is:
-         execfile(r"/absolute/path/to/script.py [args:arg1,...,argn]")
+           exec(open(r"/absolute/path/to/script.py", "rb").read(), args=(arg1,...,argn))
+	 and args parameter is optional one. This parameter is specified as a tuple of strings.
   \internal
   \param command Python command string
   \param context Python context (dictionary)
@@ -465,36 +467,26 @@ __getArgsList(std::string argsString)
 static int compile_command(const char *command, PyObject * global_ctxt, PyObject * local_ctxt)
 {
   // First guess if command is execution of a script with args, or a simple Python command
-  std::string singleCommand = command;
-  std::string commandArgs = "";
+  QString singleCommand = command;
+  QString commandArgs = "";
 
-  QRegExp rx("execfile\\s*\\(.*(args:.*)\"\\s*\\)");
+  QRegExp rx("exec\\s*\\(.*open\\s*\\(\\s*(.*)\\s*\\)\\s*\\.\\s*read\\s*\\(\\)(\\s*,\\s*args\\s*=\\s*\\(.*\\))\\s*\\)");
   if (rx.indexIn(command) != -1) {
-    commandArgs = rx.cap(1).remove(0,5).toStdString(); // arguments of command
-    singleCommand = rx.cap().remove(rx.cap(1)).remove(" ").toStdString(); // command for execution without arguments
+    commandArgs = rx.cap(2).remove(0, rx.cap(2).indexOf("(")); // arguments of command
+    commandArgs.insert(commandArgs.indexOf('(')+1, rx.cap(1).split(",")[0].trimmed() + ","); // prepend arguments list by the script file itself
+    singleCommand = singleCommand.remove(rx.pos(2), rx.cap(2).size()); // command for execution without arguments
   }
 
-  if (commandArgs.empty()) {
-    // process command: expression
-    // process command: execfile(r"/absolute/path/to/script.py") (no args)
-    return run_command(singleCommand.c_str(), global_ctxt, local_ctxt);
+  if (commandArgs.isEmpty()) {
+    return run_command(singleCommand.toStdString().c_str(), global_ctxt, local_ctxt);
   }
   else {
-    // process command: execfile(r"/absolute/path/to/script.py [args:arg1,...,argn]")
-    std::string script = singleCommand.substr(11); // remove leading execfile(r"
-    script = script.substr(0, script.length()-2); // remove trailing ")
-    std::vector<std::string> argList = __getArgsList(commandArgs);
-
-    std::string preCommandBegin = "import sys; save_argv = sys.argv; sys.argv=[";
-    std::string preCommandEnd = "];";
-    std::string completeCommand = preCommandBegin+"\""+script+"\",";
-    for (std::vector<std::string>::iterator itr = argList.begin(); itr != argList.end(); ++itr) {
-      if (itr != argList.begin())
-        completeCommand += ",";
-      completeCommand = completeCommand + "\"" + *itr + "\"";
-    }
-    completeCommand = completeCommand+preCommandEnd+singleCommand+";sys.argv=save_argv";
-    return run_command(completeCommand.c_str(), global_ctxt, local_ctxt);
+    ///////////////std::vector<std::string> argList = __getArgsList(commandArgs);
+    QString preCommandBegin = "import sys; save_argv = sys.argv; sys.argv=list(";
+    QString preCommandEnd = ");";
+    QString postCommand = ";sys.argv=save_argv";
+    QString completeCommand = preCommandBegin+commandArgs+preCommandEnd+singleCommand.trimmed()+postCommand;
+    return run_command(completeCommand.toStdString().c_str(), global_ctxt, local_ctxt);
   }
 }
 
