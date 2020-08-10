@@ -182,6 +182,12 @@ void SimulationReliabilityAnalysis::launch()
   // set results
   // get convergence graph at level 0.95
   const Graph graph = algo.drawProbabilityConvergence();
+  for(UnsignedInteger i=0; i<graph.getDrawables().getSize(); ++i) {
+    for(UnsignedInteger j=0; j<graph.getDrawables()[i].getData().getSize(); ++j) {
+      graph.getDrawables()[i].getData().getImplementation()->operator()(j,0) *= getBlockSize();
+    }
+  }
+
   result_ = SimulationReliabilityResult(algo.getResult(),
                                         function.getOutputHistory(),
                                         graph.getDrawables()[0].getData(),

@@ -256,7 +256,7 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
 
   plot->setTitle(tr("Probability estimate convergence graph at level 0.95"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Estimate"));
-  plot->setAxisTitle(QwtPlot::xBottom, tr("Outer iteration"));
+  plot->setAxisTitle(QwtPlot::xBottom, tr("Number of calls"));
   plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
 #if (QWT_VERSION >= 0x060100)
   QwtLogScaleEngine * scaleEngin = new QwtLogScaleEngine();
