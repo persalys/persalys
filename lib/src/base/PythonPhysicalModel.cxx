@@ -42,7 +42,7 @@ static Factory<PythonPhysicalModel> Factory_PythonPhysicalModel;
 PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
-  setCode("def _exec(X0):\n    Y0 = X0\n    return Y0");
+  setCode("def _exec(X0):\n    \"\"\"Main function: *must* be present\"\"\"\n    Y0 = X0\n    return Y0");
 }
 
 
