@@ -93,6 +93,7 @@ void DataModelTableModel::updateData()
 
   emit sampleChanged(sample);
 
+  emit errorMessageChanged("");
   if (!dataModel_->isValid())
   {
     emit errorMessageChanged(tr("The sample contains invalid values"));

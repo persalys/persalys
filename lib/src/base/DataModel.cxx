@@ -161,6 +161,12 @@ void DataModel::setColumns(const Indices &inputColumns,
   update();
 }
 
+void DataModel::setSample(const Sample & sample)
+{
+  sampleFromFile_ = sample;
+  fileName_.clear();
+  update();
+}
 
 void DataModel::setNames(const Description &inputNames, const Description &outputNames)
 {

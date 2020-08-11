@@ -75,6 +75,8 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
+  void setSample(const OT::Sample & sample);
+
 protected:
   void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
   virtual void check();

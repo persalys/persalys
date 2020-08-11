@@ -40,11 +40,11 @@ public:
   static QWidget * GetSampleTableViewWidget(Item* item, const OT::Sample& sample);
 
 public slots:
-  void contextMenu(const QPoint & pos);
+  virtual void contextMenu(const QPoint & pos);
   void exportData();
   void exportImage();
 
-private:
+protected:
   QAction * exportAction_;
   QAction * exportableAsImageAction_;
 };

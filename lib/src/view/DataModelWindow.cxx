@@ -38,6 +38,7 @@
 #include <QScrollBar>
 #include <QApplication>
 #include <QScrollArea>
+#include <QMenu>
 
 using namespace OT;
 
@@ -163,7 +164,7 @@ void DataModelWindow::buildInterface()
   gridLayout->addLayout(sizeLayout, 0, 0);
 
   // - data table model
-  SampleTableModel * dataTableModel = new SampleTableModel(Sample(), this);
+  SampleTableModel * dataTableModel = new SampleTableModel(Sample(), true, this);
 
   // - data QSortFilterProxyModel
   SampleTableProxyModel * proxyModel = new SampleTableProxyModel(this);
@@ -176,7 +177,7 @@ void DataModelWindow::buildInterface()
   tableLayout->setMargin(0);
 
   // -- first part: row ID
-  dataTableView1_ = new ExportableTableView;
+  dataTableView1_ = new EditableExportableTableView;
   dataTableView1_->setObjectName("rowIDTable");
   dataTableView1_->setModel(proxyModel);
   dataTableView1_->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -188,7 +189,7 @@ void DataModelWindow::buildInterface()
   tableLayout->addWidget(dataTableView1_);
 
   // -- second part: sample
-  dataTableView2_ = new ExportableTableView;
+  dataTableView2_ = new EditableExportableTableView;
   dataTableView2_->setObjectName("sampleTable");
   dataTableView2_->setModel(proxyModel);
   dataTableView2_->setFrameShape(QFrame::NoFrame);
@@ -223,6 +224,12 @@ void DataModelWindow::buildInterface()
 
   // connections
   connect(tableModel_, SIGNAL(sampleChanged(OT::Sample)), dataTableModel, SLOT(updateData(OT::Sample)));
+  connect(dataTableModel, &SampleTableModel::sampleChanged, [=]() {
+      dataModel_->setSample(dataTableModel->getSample());
+      tableModel_->updateData();
+      sampleSizeLabel_->setText(QString::number(dataModel_->getSample().getSize()));
+      updateTableView();
+    });
   connect(tableModel_, SIGNAL(sampleDescriptionChanged(OT::Description)), dataTableModel, SLOT(updateHeaderData(OT::Description)));
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
   connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
@@ -306,7 +313,7 @@ void DataModelWindow::openFileRequested()
   const QString fileName = QFileDialog::getOpenFileName(this,
                            tr("Data to import..."),
                            FileTools::GetCurrentDir(),
-                           tr("Data files (*.csv *.txt);; All files (*.*)"));
+                           tr("Data files (*.csv *.txt *.dat)"));
 
   if (!fileName.isEmpty())
   {
@@ -330,9 +337,9 @@ void DataModelWindow::openFileRequested()
 
 void DataModelWindow::refreshTable()
 {
-  if (!dataModel_->getFileName().empty())
+  if (!filePathLineEdit_->text().isEmpty())
   {
-    updateTable(QString::fromUtf8(dataModel_->getFileName().c_str()));
+    updateTable(filePathLineEdit_->text());
   }
 }
 
@@ -350,15 +357,13 @@ void DataModelWindow::updateTableView()
 
   dataTableView1_->sortByColumn(0, Qt::AscendingOrder);
 
-  if (dataModel_->getSampleFromFile().getSize())
-  {
+  if(dataModel_->getSampleFromFile().getSize()) {
     // use comboboxes to define the variable type
     for (int i = 0; i < tableModel_->columnCount(); ++i)
       tableView_->openPersistentEditor(tableModel_->index(1, i));
 
     // if first time here
-    if (!dynamic_cast<CheckableHeaderView*>(tableView_->verticalHeader()))
-    {
+    if (!dynamic_cast<CheckableHeaderView*>(tableView_->verticalHeader())) {
       // make tableView_ checkable if not done yet
       // table header view
       CheckableHeaderView * tableHeaderView = new CheckableHeaderView(Qt::Vertical);
@@ -405,5 +410,58 @@ void DataModelWindow::updateTableView()
 
   // update sample size label
   sampleSizeLabel_->setText(QString::number(dataModel_->getSample().getSize()));
+}
+
+EditableExportableTableView::EditableExportableTableView(QWidget* parent)
+  : ExportableTableView(parent)
+  , addRowAction_(0)
+  , removeRowAction_(0)
+{
+  addRowAction_ = new QAction(QIcon(":/images/list-add.png"), tr("Add row"), this);
+  removeRowAction_ = new QAction(QIcon(":/images/list-remove.png"), tr("Remove row"), this);
+
+  connect(addRowAction_, SIGNAL(triggered()), this, SLOT(addRow()));
+  connect(removeRowAction_, SIGNAL(triggered()), this, SLOT(removeRows()));
+  setContextMenuPolicy(Qt::CustomContextMenu);
+}
+
+// show the context menu when right clicking
+void EditableExportableTableView::contextMenu(const QPoint & pos)
+{
+  QMenu * contextMenu(new QMenu(this));
+  contextMenu->addAction(exportAction_);
+  contextMenu->addAction(addRowAction_);
+  contextMenu->addAction(removeRowAction_);
+  if (exportableAsImageAction_)
+    contextMenu->addAction(exportableAsImageAction_);
+  contextMenu->popup(this->mapToGlobal(pos));
+}
+
+void EditableExportableTableView::addRow()
+{
+  QAbstractItemModel * sourceModel = dynamic_cast<QSortFilterProxyModel*>(model())->sourceModel();
+  sourceModel->insertRows(sourceModel->rowCount()-1, 1);
+
+}
+
+void EditableExportableTableView::removeRows()
+{
+  QSortFilterProxyModel* myProxy = dynamic_cast<QSortFilterProxyModel*>(model());
+  QAbstractItemModel * sourceModel = myProxy->sourceModel();
+  QItemSelection selection(selectionModel()->selection());
+  QList<int> rows;
+  foreach( const QModelIndex & index, myProxy->mapSelectionToSource(selection).indexes() ) {
+  rows.append( index.row() );
+  }
+  std::sort( rows.begin(), rows.end() );
+  int prev = -1;
+  for( int i = rows.count() - 1; i >= 0; i -= 1 ) {
+    int current = rows[i];
+    if( current != prev ) {
+      sourceModel->removeRows( current, 1 );
+      prev = current;
+    }
+  }
+
 }
 }
