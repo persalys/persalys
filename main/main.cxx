@@ -57,11 +57,17 @@ int main(int argc, char *argv[])
     QSettings().setValue("currentDir", QSettings().fileName());
 
   // translations
-  QTranslator translator;
-  translator.load("qt_" + QLocale::system().name(), ":/translations");
-  translator.load("qtbase_" + QLocale::system().name(), ":/translations");
-  translator.load("persalys_" + QLocale::system().name(), ":/translations");
-  app.installTranslator(&translator);
+  QTranslator qtTranslator;
+  qtTranslator.load("qt_" + QLocale::system().name(), ":/translations");
+  app.installTranslator(&qtTranslator);
+
+  QTranslator qtbaseTranslator;
+  qtbaseTranslator.load("qtbase_" + QLocale::system().name(), ":/translations");
+  app.installTranslator(&qtbaseTranslator);
+
+  QTranslator appTranslator;
+  appTranslator.load("persalys_" + QLocale::system().name(), ":/translations");
+  app.installTranslator(&appTranslator);
 
   // main window
   MainWindow window;
