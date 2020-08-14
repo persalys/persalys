@@ -29,6 +29,7 @@
 #include <QImageWriter>
 #include <QCoreApplication>
 #include <QDesktopServices>
+#include <QProcess>
 
 namespace PERSALYS
 {
@@ -192,11 +193,9 @@ QUrl FileTools::GetDocumentationUrl(const QString &urlLink, const docType type)
 
 void FileTools::OpenUrl(const QUrl& url)
 {
-  bool useWorkAround = false;
-
+#ifdef _WIN32
   // workaround for Windows if the url has a fragment
   // https://bugreports.qt.io/browse/QTBUG-14460
-#ifdef _WIN32
   if (url.isLocalFile() && url.hasFragment())
   {
     // create a temporary html file which contains the right file path with fragment
@@ -205,17 +204,26 @@ void FileTools::OpenUrl(const QUrl& url)
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-      useWorkAround = true;
       QTextStream stream(&file);
       QString htmlText("<html><meta http-equiv=Refresh content=\"0; url=" + url.toString() + "\"><body></body></html>;");
       stream << htmlText;
       file.close();
       // open the file
       QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
+      return;
     }
   }
+#elif defined(PERSALYS_APPIMAGE)
+  // the browser process fails in the inherited AppImage env
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  env.remove("LD_LIBRARY_PATH");
+  QProcess process;
+  process.setProcessEnvironment(env);
+  process.setProgram("xdg-open");
+  process.setArguments(QStringList() << url.toString());
+  if (process.startDetached())
+    return;
 #endif
-  if (!useWorkAround)
-    QDesktopServices::openUrl(url);
+  QDesktopServices::openUrl(url);
 }
 }

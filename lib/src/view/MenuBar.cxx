@@ -175,7 +175,7 @@ void MenuBar::openUserManual()
   // if file exists
   if (QFileInfo(userManualFile).exists())
   {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(userManualFile));
+    FileTools::OpenUrl(QUrl::fromLocalFile(userManualFile));
   }
   else
   {
