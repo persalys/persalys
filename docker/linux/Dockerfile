@@ -124,7 +124,7 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.7.4.ta
 RUN pip install sphinx numpydoc --upgrade
 
 # boost
-RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.73.0/source/boost_1_73_0.tar.bz2 | tar xj && cd boost_1_73_0 \
+RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.bz2 | tar xj && cd boost_1_74_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem --with-regex > /dev/null 2>&1 && cd - && rm -r boost*
 
@@ -152,6 +152,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj &
 RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
   && mkdir build && cd build \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+  -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON .. \
   && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
 
