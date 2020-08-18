@@ -18,10 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include "persalys/PythonScriptEvaluation.hxx"
 
 #include "persalys/InterpreterUnlocker.hxx"
 #include "persalys/PythonEnvironment.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
@@ -186,14 +188,24 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
   PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
 
+  // code has to be separate
+  String tempFile = Path::BuildTemporaryFileName("persalys_code");
+  std::ofstream code_file;
+  code_file.open(tempFile);
+  code_file << code_ << "\n";
+  code_file.close();
+
   OSS oss;
-  oss << code_ << "\n";
-  oss << "from concurrent.futures import ThreadPoolExecutor, as_completed\n";
-  oss << "import openturns as ot\n";
+  oss << "import multiprocessing as mp\n";
+  oss << "from concurrent.futures import ProcessPoolExecutor, as_completed\n";
+  oss << "import os\n";
   oss << "import sys\n";
-  oss << "def _exec_sample():\n";
+  oss << "exec(open('" << EscapePath(tempFile) << "').read())\n";
+  oss << "if __name__== '__main__':\n";
+  oss << "    if sys.platform == 'win32':\n";
+  oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'python.exe'))\n";
   oss << "    X = " << sampleOss.str() << "\n";
-  oss << "    with ThreadPoolExecutor() as executor:\n";
+  oss << "    with ProcessPoolExecutor() as executor:\n";
   oss << "        resu = {executor.submit(_exec, *x): x for x in X}\n";
   oss << "        for future in as_completed(resu):\n";
   oss << "            try:\n";
@@ -204,21 +216,18 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
     oss << "        Y = [[task.result()] for task in resu]\n";
   else
     oss << "        Y = [task.result() for task in resu]\n";
-  oss << "    return Y\n";
 
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
   handleExceptionTraceback();
 
-  PyObject * script = PyDict_GetItemString(dict, "_exec_sample");
-  if (script == NULL)
-    throw InternalException(HERE) << "no _exec_sample function";
+  remove(tempFile.c_str());
 
-  // run _exec_sample
-  ScopedPyObjectPointer sampleResult(PyObject_CallObject(script, NULL));
-  handleExceptionTraceback();
+  PyObject * sampleResult = PyDict_GetItemString(dict, "Y");
+  if (sampleResult == NULL)
+    throw InternalException(HERE) << "no Y";
 
   // build output sample
-  Sample outputSample(convert<_PySequence_, Sample>(sampleResult.get()));
+  Sample outputSample(convert<_PySequence_, Sample>(sampleResult));
 
   // check
   if (outputSample.getSize() != size)
