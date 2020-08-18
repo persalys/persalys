@@ -29,6 +29,7 @@ print(f([300., 75000.]))
 # test operator() (sample)
 model.setCode(
     'from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)\n    return G\n')
+model.setParallel(True)
 f = model.getFunction()
 print(f([[300., 75000.]]))
 print(f([[300., 75000.], [400., 74000.]]))
@@ -46,6 +47,7 @@ print("Sample :\n %s" % plan_0.getResult().getDesignOfExperiment().getSample())
 # model with an error
 model.setCode(
     'from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)/0.\n    return G\n')
+model.setParallel(True)
 f = model.getFunction()
 try:
     print(f([[300., 75000.]]))

@@ -35,6 +35,7 @@ def _exec(R, F):
     return G
 """
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
+myPhysicalModel.setParallel(True)
 myStudy.add(myPhysicalModel)
 plan_0 = persalys.FixedDesignOfExperiment('plan_0', myPhysicalModel)
 inputSample = [
