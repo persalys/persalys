@@ -171,22 +171,16 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   if (inDim != getInputDimension())
     throw InvalidDimensionException(HERE) << "Sample has incorrect dimension. Got " << inDim << ". Expected " << getInputDimension();
 
-  // get input sample string
-  OSS sampleOss;
-  sampleOss << "[";
-  for (UnsignedInteger i = 0; i < size; ++i)
-  {
-    Point pt(inS[i]);
-    sampleOss << "[";
-    std::copy(pt.begin(), pt.end(), OSS_iterator<Scalar>(sampleOss, ","));
-    sampleOss << "],";
-  }
-  sampleOss << "]";
-
   // build script
   InterpreterUnlocker iul;
   PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
   PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
+
+  // add input sample variable
+  ScopedPyObjectPointer inputSample(PyTuple_New(size));
+  for (UnsignedInteger i = 0; i < size; ++ i)
+    PyTuple_SetItem(inputSample.get(), i, convert< Point, _PySequence_ >(inS[i]));
+  PyDict_SetItemString(dict, "X", inputSample.get());
 
   // code has to be separate
   String tempFile = Path::BuildTemporaryFileName("persalys_code");
@@ -204,7 +198,6 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "if __name__== '__main__':\n";
   oss << "    if sys.platform == 'win32':\n";
   oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'python.exe'))\n";
-  oss << "    X = " << sampleOss.str() << "\n";
   oss << "    with ProcessPoolExecutor() as executor:\n";
   oss << "        resu = {executor.submit(_exec, *x): x for x in X}\n";
   oss << "        for future in as_completed(resu):\n";
