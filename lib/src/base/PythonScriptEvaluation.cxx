@@ -183,9 +183,9 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   PyDict_SetItemString(dict, "X", inputSample.get());
 
   // code has to be separate
-  String tempFile = Path::BuildTemporaryFileName("persalys_code");
+  String tempDir = Path::CreateTemporaryDirectory("persalys");
   std::ofstream code_file;
-  code_file.open(tempFile);
+  code_file.open(tempDir + Os::GetDirectorySeparator() + "persalys_code.py");
   code_file << code_ << "\n";
   code_file.close();
 
@@ -194,12 +194,15 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "from concurrent.futures import ProcessPoolExecutor, as_completed\n";
   oss << "import os\n";
   oss << "import sys\n";
-  oss << "exec(open('" << EscapePath(tempFile) << "').read())\n";
+  oss << "from importlib import reload\n";
+  oss << "sys.path.append('" << EscapePath(tempDir) << "')\n";
+  oss << "import persalys_code\n";
+  oss << "reload(persalys_code)\n";
   oss << "if __name__== '__main__':\n";
   oss << "    if sys.platform == 'win32':\n";
   oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'python.exe'))\n";
   oss << "    with ProcessPoolExecutor() as executor:\n";
-  oss << "        resu = {executor.submit(_exec, *x): x for x in X}\n";
+  oss << "        resu = {executor.submit(persalys_code._exec, *x): x for x in X}\n";
   oss << "        for future in as_completed(resu):\n";
   oss << "            try:\n";
   oss << "                y = future.result()\n";
@@ -213,7 +216,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
   handleExceptionTraceback();
 
-  remove(tempFile.c_str());
+  Path::DeleteTemporaryDirectory(tempDir.c_str());
 
   PyObject * sampleResult = PyDict_GetItemString(dict, "Y");
   if (sampleResult == NULL)
