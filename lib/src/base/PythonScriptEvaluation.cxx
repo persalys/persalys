@@ -207,16 +207,17 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "            try:\n";
   oss << "                y = future.result()\n";
   oss << "            except Exception as exc:\n";
-  oss << "                raise Exception('Error when evaluating %r. ' % resu[future])\n";
+  oss << "                if hasattr(exc, 'message'):\n";
+  oss << "                    exc.message = exc.message + ' x = {}'.format(resu[future])\n";
+  oss << "                raise\n";
   if (outDim < 2)
     oss << "        Y = [[task.result()] for task in resu]\n";
   else
     oss << "        Y = [task.result() for task in resu]\n";
 
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
-  handleExceptionTraceback();
-
   Os::DeleteDirectory(tempDir.c_str());
+  handleExceptionTraceback();
 
   PyObject * sampleResult = PyDict_GetItemString(dict, "Y");
   if (sampleResult == NULL)
