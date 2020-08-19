@@ -642,6 +642,32 @@ PERSALYS_PhysicalModel_setParallel_doc
 
 // ---------------------------------------------------------------------
 
+%define PERSALYS_PhysicalModel_getProcessNumber_doc
+"Number of concurrent processes.
+
+Returns
+-------
+process_number : int
+    Maximum number of processes"
+%enddef
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getProcessNumber
+PERSALYS_PhysicalModel_getProcessNumber_doc
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_PhysicalModel_setProcessNumber_doc
+"Number of concurrent processes.
+
+Parameters
+----------
+process_number : int
+    Maximum number of processes"
+%enddef
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setProcessNumber
+PERSALYS_PhysicalModel_setProcessNumber_doc
+
+// ---------------------------------------------------------------------
+
 %define PERSALYS_PhysicalModel_hasMesh_doc
 "Whether the model has a mesh.
 

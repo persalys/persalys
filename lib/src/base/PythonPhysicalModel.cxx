@@ -159,7 +159,10 @@ Function PythonPhysicalModel::generateFunction(const Description &) const
 {
   if (!functionCache_.getEvaluation().getImplementation()->isActualImplementation())
   {
-    functionCache_ = MemoizeFunction(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel()));
+    PythonScriptEvaluation evaluation(getInputNames(), getOutputNames(), getCode());
+    evaluation.setParallel(isParallel());
+    evaluation.setProcessNumber(getProcessNumber());
+    functionCache_ = MemoizeFunction(evaluation);
   }
   return functionCache_;
 }
@@ -240,6 +243,8 @@ String PythonPhysicalModel::getPythonScript() const
   oss << getName() + " = persalys.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
   if (isParallel())
     oss << getName() + ".setParallel(True)\n";
+  if (getProcessNumber())
+    oss << getName() + ".setProcessNumber(" << getProcessNumber() << ")\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 

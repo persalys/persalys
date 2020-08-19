@@ -407,6 +407,18 @@ void PhysicalModel::setParallel(const Bool flag)
 }
 
 
+UnsignedInteger PhysicalModel::getProcessNumber() const
+{
+  return getImplementation()->getProcessNumber();
+}
+
+
+void PhysicalModel::setProcessNumber(const UnsignedInteger processNumber)
+{
+  getImplementation()->setProcessNumber(processNumber);
+}
+
+
 bool PhysicalModel::isValid() const
 {
   return getImplementation()->isValid();

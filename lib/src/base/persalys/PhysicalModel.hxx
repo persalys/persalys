@@ -112,6 +112,9 @@ public:
   OT::Bool isParallel() const;
   void setParallel(const OT::Bool flag);
 
+  OT::UnsignedInteger getProcessNumber() const;
+  void setProcessNumber(const OT::UnsignedInteger processNumber);
+
   bool isValid() const;
 
   OT::String getHtmlDescription(const bool deterministic) const;

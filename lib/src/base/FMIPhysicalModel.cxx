@@ -241,7 +241,9 @@ Function FMIPhysicalModel::getFunction() const
   if (!getOutputDimension())
     throw PhysicalModelNotValidException(HERE) << "The physical model has no outputs.";
 
-  Function function(MemoizeFunction(PythonScriptEvaluation(getInputNames(), getOutputNames(), getCode(), isParallel())));
+  PythonScriptEvaluation evaluation(getInputNames(), getOutputNames(), getCode());
+  evaluation.setParallel(isParallel());
+  Function function = MemoizeFunction(evaluation);
   return function;
 }
 

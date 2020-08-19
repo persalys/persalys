@@ -120,6 +120,9 @@ public:
   OT::Bool isParallel() const;
   virtual void setParallel(const OT::Bool flag);
 
+  OT::UnsignedInteger getProcessNumber() const;
+  void setProcessNumber(const OT::UnsignedInteger processNumber);
+
   bool isValid() const;
 
   virtual OT::String getHtmlDescription(const bool deterministic) const;
@@ -150,15 +153,16 @@ private:
   void inputsChanged();
 
 protected:
-  bool hasMesh_;
+  bool hasMesh_ = false;
 private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
   mutable OT::ComposedCopula composedCopula_;
   MeshModel meshModel_;
   mutable OT::Point finiteDifferenceSteps_;
-  OT::Bool isParallel_;
-  OT::Scalar evalTime_;
+  OT::Bool isParallel_ = false;
+  OT::UnsignedInteger processNumber_ = 0;
+  OT::Scalar evalTime_ = 0.0;
 };
 }
 #endif

@@ -44,13 +44,10 @@ static Factory<PersistentCollection<Output> > Factory_PersistentCollectionOutput
 PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   : PersistentObject()
   , Observable()
-  , hasMesh_(false)
   , inputs_()
   , outputs_()
   , composedCopula_()
   , finiteDifferenceSteps_()
-  , isParallel_(false)
-  , evalTime_(0)
 {
   setName(name);
   // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
@@ -64,13 +61,10 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
     const OutputCollection & outputs)
   : PersistentObject()
   , Observable()
-  , hasMesh_(false)
   , inputs_()
   , outputs_()
   , composedCopula_()
   , finiteDifferenceSteps_()
-  , isParallel_(false)
-  , evalTime_(0)
 {
   setName(name);
 
@@ -907,6 +901,16 @@ void PhysicalModelImplementation::setParallel(const Bool flag)
   notify("parallelizationStatusChanged");
 }
 
+UnsignedInteger PhysicalModelImplementation::getProcessNumber() const
+{
+  return processNumber_;
+}
+
+void PhysicalModelImplementation::setProcessNumber(const UnsignedInteger processNumber)
+{
+  processNumber_ = processNumber;
+  notify("parallelizationStatusChanged");
+}
 
 bool PhysicalModelImplementation::isValid() const
 {

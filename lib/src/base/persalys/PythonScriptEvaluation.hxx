@@ -42,8 +42,7 @@ public:
   /** Constructor with parameters */
   PythonScriptEvaluation(const OT::Description & inputVariablesNames,
                          const OT::Description & outputVariablesNames,
-                         const OT::String & code,
-                         const OT::Bool isParallel);
+                         const OT::String & code);
 
   /** Virtual constructor */
   virtual PythonScriptEvaluation * clone() const;
@@ -65,6 +64,9 @@ public:
   OT::UnsignedInteger getInputDimension() const;
   OT::UnsignedInteger getOutputDimension() const;
 
+  void setParallel(bool flag);
+  void setProcessNumber(OT::UnsignedInteger processNumber);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -72,11 +74,12 @@ public:
   void load(OT::Advocate & adv);
 
 private:
-  mutable bool scriptHasBeenEvaluated_;
-  OT::UnsignedInteger inputDimension_;
-  OT::UnsignedInteger outputDimension_;
-  OT::String code_;
-  bool isParallel_;
+  mutable bool scriptHasBeenEvaluated_ = false;
+  OT::UnsignedInteger inputDimension_ = 0;
+  OT::UnsignedInteger outputDimension_ = 0;
+  OT::String code_ = "";
+  bool isParallel_ = false;
+  OT::UnsignedInteger processNumber_ = 0;
 };
 }
 #endif

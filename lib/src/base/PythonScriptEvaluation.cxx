@@ -40,11 +40,6 @@ static Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
 /* Default constructor */
 PythonScriptEvaluation::PythonScriptEvaluation()
   : EvaluationImplementation()
-  , scriptHasBeenEvaluated_(false)
-  , inputDimension_(0)
-  , outputDimension_(0)
-  , code_("")
-  , isParallel_(false)
 {
 }
 
@@ -52,14 +47,11 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 /* Constructor with parameters */
 PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
                                                const Description & outputVariablesNames,
-                                               const String & code,
-                                               const Bool isParallel)
+                                               const String & code)
   : EvaluationImplementation()
-  , scriptHasBeenEvaluated_(false)
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
-  , isParallel_(isParallel)
 {
   setInputDescription(inputVariablesNames);
   setOutputDescription(outputVariablesNames);
@@ -110,6 +102,18 @@ UnsignedInteger PythonScriptEvaluation::getInputDimension() const
 UnsignedInteger PythonScriptEvaluation::getOutputDimension() const
 {
   return outputDimension_;
+}
+
+
+void PythonScriptEvaluation::setParallel(bool flag)
+{
+  isParallel_ = flag;
+}
+
+
+void PythonScriptEvaluation::setProcessNumber(UnsignedInteger processNumber)
+{
+  processNumber_ = processNumber;
 }
 
 
@@ -201,7 +205,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "if __name__== '__main__':\n";
   oss << "    if sys.platform == 'win32':\n";
   oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'python.exe'))\n";
-  oss << "    with ProcessPoolExecutor() as executor:\n";
+  oss << "    with ProcessPoolExecutor(max_workers=" << (processNumber_ > 0 ? std::to_string(processNumber_) : "None") << ") as executor:\n";
   oss << "        resu = {executor.submit(persalys_code._exec, *x): x for x in X}\n";
   oss << "        for future in as_completed(resu):\n";
   oss << "            try:\n";

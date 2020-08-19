@@ -88,6 +88,10 @@ PERSALYS_PhysicalModel_selectOutput_doc
 PERSALYS_PhysicalModel_isParallel_doc
 %feature("docstring") PERSALYS::PhysicalModel::setParallel
 PERSALYS_PhysicalModel_setParallel_doc
+%feature("docstring") PERSALYS::PhysicalModel::getProcessNumber
+PERSALYS_PhysicalModel_getProcessNumber_doc
+%feature("docstring") PERSALYS::PhysicalModel::setProcessNumber
+PERSALYS_PhysicalModel_setProcessNumber_doc
 %feature("docstring") PERSALYS::PhysicalModel::setMeshModel
 PERSALYS_PhysicalModel_setMeshModel_doc
 %feature("docstring") PERSALYS::PhysicalModel::getMeshModel
