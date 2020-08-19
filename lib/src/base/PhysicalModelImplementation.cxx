@@ -1162,6 +1162,7 @@ void PhysicalModelImplementation::save(Advocate & adv) const
   adv.saveAttribute("meshModel_", meshModel_);
   adv.saveAttribute("isParallel_", isParallel_);
   adv.saveAttribute("evalTime_", evalTime_);
+  adv.saveAttribute("processNumber_", processNumber_);
 }
 
 
@@ -1176,6 +1177,8 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("meshModel_", meshModel_);
   adv.loadAttribute("isParallel_", isParallel_);
   adv.loadAttribute("evalTime_", evalTime_);
+  if(adv.hasAttribute("processNumber_"))
+    adv.loadAttribute("processNumber_", processNumber_);
   updateCopula();
 }
 

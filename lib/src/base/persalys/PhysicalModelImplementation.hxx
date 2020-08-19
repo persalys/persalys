@@ -161,7 +161,7 @@ private:
   MeshModel meshModel_;
   mutable OT::Point finiteDifferenceSteps_;
   OT::Bool isParallel_ = false;
-  OT::UnsignedInteger processNumber_ = 0;
+  OT::UnsignedInteger processNumber_ = 1;
   OT::Scalar evalTime_ = 0.0;
 };
 }

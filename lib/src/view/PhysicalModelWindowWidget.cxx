@@ -38,6 +38,7 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QScrollArea>
+#include <QSpinBox>
 
 using namespace OT;
 
@@ -191,11 +192,19 @@ void PhysicalModelWindowWidget::buildInterface()
   // - multiprocessing
   if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos)
   {
-    QCheckBox * checkBox = new QCheckBox(tr("Enable multiprocessing"));
-    checkBox->setChecked(physicalModel_.isParallel());
-    checkBox->setToolTip(tr("Warning: the parallelization operation must be significantly faster than the code execution"));
-    connect(checkBox, SIGNAL(stateChanged(int)), this, SLOT(updateMultiprocessingStatus(int)));
-    vbox->addWidget(checkBox);
+    QLabel * nThreadsLabel = new QLabel(tr("Number of processes:"));
+    nThreadsLabel->setToolTip("0: "+tr("all cores"));
+    QSpinBox * nThreadsSpinBox = new QSpinBox;
+    nThreadsSpinBox->setToolTip("0: "+tr("all cores"));
+    QHBoxLayout * hbox = new QHBoxLayout;
+    nThreadsSpinBox->setMinimum(0);
+    nThreadsSpinBox->setMaximum(std::numeric_limits<int>::max());
+    nThreadsSpinBox->setValue(physicalModel_.getProcessNumber());
+    connect(nThreadsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateMultiprocessingStatus(int)));
+    vbox->addLayout(hbox);
+    hbox->addWidget(nThreadsLabel);
+    hbox->addWidget(nThreadsSpinBox);
+
   }
 
   // - error message label
@@ -389,9 +398,10 @@ void PhysicalModelWindowWidget::evaluateOutputs()
 }
 
 
-void PhysicalModelWindowWidget::updateMultiprocessingStatus(int state)
+void PhysicalModelWindowWidget::updateMultiprocessingStatus(const int nThreads)
 {
-  physicalModel_.setParallel(state == Qt::Checked);
+  physicalModel_.setProcessNumber((UnsignedInteger)nThreads);
+  physicalModel_.setParallel(nThreads != 1);
 }
 
 
