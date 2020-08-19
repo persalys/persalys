@@ -216,7 +216,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
   handleExceptionTraceback();
 
-  Path::DeleteTemporaryDirectory(tempDir.c_str());
+  Os::DeleteDirectory(tempDir.c_str());
 
   PyObject * sampleResult = PyDict_GetItemString(dict, "Y");
   if (sampleResult == NULL)
