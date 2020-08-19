@@ -418,7 +418,7 @@ EditableExportableTableView::EditableExportableTableView(QWidget* parent)
   , removeRowAction_(0)
 {
   addRowAction_ = new QAction(QIcon(":/images/list-add.png"), tr("Add row"), this);
-  removeRowAction_ = new QAction(QIcon(":/images/list-remove.png"), tr("Remove row"), this);
+  removeRowAction_ = new QAction(QIcon(":/images/list-remove.png"), tr("Remove row(s)"), this);
 
   connect(addRowAction_, SIGNAL(triggered()), this, SLOT(addRow()));
   connect(removeRowAction_, SIGNAL(triggered()), this, SLOT(removeRows()));
