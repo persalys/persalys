@@ -148,9 +148,9 @@ automatically selected in the other tabs.
 
   - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
-      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on column header to sort values in ascending or descending order
       - Left-click on a column header and drag it in another place to change columns order
- 
+
     .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableX.png
         :align: center
 
@@ -269,7 +269,7 @@ automatically selected in the other tabs.
         :align: center
 
 - The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
-  of the variables.
+  of the variables. They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
 
   - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:
@@ -293,7 +293,7 @@ automatically selected in the other tabs.
 
   - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
-      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on column header to sort values in ascending or descending order
       - Left-click on a column header and drag it in another place to change columns order
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
@@ -350,7 +350,7 @@ Particular situations:
 
       - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
-          - Left-click on column header to sort values in ascending or descending order 
+          - Left-click on column header to sort values in ascending or descending order
           - Left-click on a column header and drag it in another place to change columns order
 
     - The **Failed points** tab shows all the failed input points
@@ -411,7 +411,7 @@ Create a new model evaluation through:
 
     .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
         :align: center
- 
+
   - The **New evaluation** item in the context menu of the **Evaluation** section
 
     .. image:: /user_manual/graphical_interface/deterministic_analysis/evaluation_contextMenu.png

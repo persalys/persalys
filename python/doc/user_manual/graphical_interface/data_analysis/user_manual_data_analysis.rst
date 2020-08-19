@@ -69,7 +69,7 @@ automatically selected in the other tabs.
       :align: center
 
 - The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
-  of the variables.
+  of the variables. They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
 
   - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:
@@ -95,7 +95,7 @@ automatically selected in the other tabs.
 
   - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
-      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on column header to sort values in ascending or descending order
       - Left-click on a column header and drag it in another place to change columns order
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
@@ -223,7 +223,7 @@ When the analysis is finished or stopped, a window appears.
 The results window gathers:
 
 - The **Summary** tab includes, for a selected variable (left column):
-   - a table of all the tested distributions, the associated Bayesian Information Criterion value and the p-value. 
+   - a table of all the tested distributions, the associated Bayesian Information Criterion value and the p-value.
        - The last column indicates whether the distribution is accepted or not according to the given level.
        - The distributions are sorted in increasing order of BIC values.
    - for the selected distribution:
@@ -491,7 +491,7 @@ In the following window, the generated metamodel can be validated, with three di
   - *Using the* `K-Fold <http://openturns.github.io/openturns/latest/theory/meta_modeling/cross_validation.html>`_ *method*:
     Define the number of folds (default: 5, expected: integer greater than 1) and specify how the
     folds are generated (default seed:1).
-    
+
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_validation_page.png
     :align: center
 
@@ -632,4 +632,3 @@ The results window gathers:
          :align: center
 
 - The **Parameters** tab summarizes the parameters of the metamodel creation.
-

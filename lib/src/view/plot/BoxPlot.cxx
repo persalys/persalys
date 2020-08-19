@@ -104,12 +104,12 @@ void BoxPlot::addBoxPlot(const DataAnalysisResult &result, const UnsignedInteger
   const double x = boxesCounter_;
   const double std = indexStd > 0 ? indexStd : 1;
 
-  const double median = (mean - indexMedian) / std;
-  const double lowerQuartile = (mean - Q1) / std;
-  const double upperQuartile = (mean - Q3) / std;
-  const double lowerBound = (mean - (Q1 - 1.5 * (Q3 - Q1))) / std;
-  const double upperBound = (mean - (Q3 + 1.5 * (Q3 - Q1))) / std;
-  const Point outliers((Point(indexOutlier.getSize(), mean) - indexOutlier) / std);
+  const double median = (indexMedian - mean) / std;
+  const double lowerQuartile = (Q1 - mean) / std;
+  const double upperQuartile = (Q3 - mean) / std;
+  const double lowerBound = ((Q1 - 1.5 * (Q3 - Q1)) - mean) / std;
+  const double upperBound = ((Q3 + 1.5 * (Q3 - Q1)) - mean) / std;
+  const Point outliers((indexOutlier - Point(indexOutlier.getSize(), mean)) / std);
 
   // draw median
   double xMedian[2] = {x - 0.1, x + 0.1};

@@ -367,7 +367,7 @@ The results window gathers several tabs:
 
 - The **Summary** tab shows:
     - the failure probability and the Hasofer reliability index
-    - the optimization stopping criteria value: 
+    - the optimization stopping criteria value:
         - the number of iterations
         - the errors: absolute, relative, residual and constraint errors
     - the number of calls of the model
@@ -527,7 +527,7 @@ The results window gathers the following tabs:
       :align: center
 
 - The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
-  of the variables.
+  of the variables. They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
 
     - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
     - Graph interactivity:
@@ -550,7 +550,7 @@ The results window gathers the following tabs:
 
   - Table interactivity:
       - Left-click (optional: + Ctrl) on lines to select them
-      - Left-click on column header to sort values in ascending or descending order 
+      - Left-click on column header to sort values in ascending or descending order
       - Left-click on a column header and drag it in another place to change columns order
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
