@@ -243,7 +243,7 @@ String PythonPhysicalModel::getPythonScript() const
   oss << getName() + " = persalys.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
   if (isParallel())
     oss << getName() + ".setParallel(True)\n";
-  if (getProcessNumber())
+  if (getProcessNumber() != 1)
     oss << getName() + ".setProcessNumber(" << getProcessNumber() << ")\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
