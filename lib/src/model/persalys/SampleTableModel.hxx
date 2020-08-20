@@ -55,7 +55,7 @@ class PERSALYS_MODEL_API SampleTableModel : public QAbstractTableModel
 public:
   SampleTableModel(const OT::Sample & data, const bool isEditable, const bool hasRowIDcolumn, const OT::Description& initialDescription, QObject * parent = 0);
   SampleTableModel(const OT::Sample & data, QObject * parent = 0);
-  SampleTableModel(const OT::Sample &data, const bool isEditable, QObject *parent = 0);
+  SampleTableModel(const OT::Sample & data, const bool isEditable, QObject *parent = 0);
   SampleTableModel(const OT::Sample & data, const OT::Description& initialDescription, QObject * parent = 0);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
