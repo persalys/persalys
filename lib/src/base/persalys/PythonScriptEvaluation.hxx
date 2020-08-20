@@ -66,6 +66,7 @@ public:
 
   void setParallel(bool flag);
   void setProcessNumber(OT::UnsignedInteger processNumber);
+  void setIgnoreFailure(bool ignoreFailure);
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -80,6 +81,7 @@ private:
   OT::String code_ = "";
   bool isParallel_ = false;
   OT::UnsignedInteger processNumber_ = 0;
+  bool ignoreFailure_ = false;
 };
 }
 #endif

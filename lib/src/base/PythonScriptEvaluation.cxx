@@ -116,6 +116,10 @@ void PythonScriptEvaluation::setProcessNumber(UnsignedInteger processNumber)
   processNumber_ = processNumber;
 }
 
+void PythonScriptEvaluation::setIgnoreFailure(bool ignoreFailure)
+{
+  ignoreFailure_ = ignoreFailure;
+}
 
 void PythonScriptEvaluation::resetCallsNumber()
 {
@@ -128,37 +132,46 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 {
   Point outP;
 
-  InterpreterUnlocker iul;
-  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
-  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
-
-  // define the script on the first run only to allow to save a state
-  if (!scriptHasBeenEvaluated_)
+  try
   {
-    ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
+    InterpreterUnlocker iul;
+    PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
+    PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
+
+    // define the script on the first run only to allow to save a state
+    if (!scriptHasBeenEvaluated_)
+    {
+      ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
+      handleExceptionTraceback();
+      scriptHasBeenEvaluated_ = true;
+    }
+
+    callsNumber_.increment();
+    PyObject * script = PyDict_GetItemString(dict, "_exec");
+    if (script == NULL)
+      throw InternalException(HERE) << "no _exec function";
+
+    ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
+    ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
     handleExceptionTraceback();
-    scriptHasBeenEvaluated_ = true;
+
+    if (getOutputDimension() > 1)
+    {
+      outP = convert<_PySequence_, Point>(outputList.get());
+    }
+    else
+    {
+      Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
+      outP = Point(1, value);
+    }
   }
-
-  callsNumber_.increment();
-  PyObject * script = PyDict_GetItemString(dict, "_exec");
-  if (script == NULL)
-    throw InternalException(HERE) << "no _exec function";
-
-  ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
-  ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
-  handleExceptionTraceback();
-
-  if (getOutputDimension() > 1)
+  catch (Exception &)
   {
-    outP = convert<_PySequence_, Point>(outputList.get());
+    if (ignoreFailure_)
+      outP = Point(getOutputDimension(), std::numeric_limits<Scalar>::quiet_NaN());
+    else
+      throw;
   }
-  else
-  {
-    Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
-    outP = Point(1, value);
-  }
-
   return outP;
 }
 
@@ -199,7 +212,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "import os\n";
   oss << "import sys\n";
   oss << "from importlib import reload\n";
-  oss << "sys.path.append('" << EscapePath(tempDir) << "')\n";
+  oss << "sys.path.insert(0, '" << EscapePath(tempDir) << "')\n";
   oss << "import persalys_code\n";
   oss << "reload(persalys_code)\n";
   oss << "if __name__== '__main__':\n";
@@ -213,7 +226,13 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "            except Exception as exc:\n";
   oss << "                if hasattr(exc, 'message'):\n";
   oss << "                    exc.message = exc.message + ' x = {}'.format(resu[future])\n";
-  oss << "                raise\n";
+  if (ignoreFailure_)
+    if (outDim < 2)
+      oss << "                future.result = lambda: float('nan')\n";
+    else
+      oss << "                future.result = lambda: [float('nan')] * " << std::to_string(outDim) << "\n";
+  else
+    oss << "                raise\n";
   if (outDim < 2)
     oss << "        Y = [[task.result()] for task in resu]\n";
   else
