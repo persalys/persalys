@@ -27,6 +27,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 #include <openturns/MemoizeEvaluation.hxx>
+#include <openturns/MarginalEvaluation.hxx>
 
 using namespace OT;
 
@@ -149,7 +150,18 @@ void DesignOfExperimentEvaluation::launch()
   MemoizeEvaluation* memoize = dynamic_cast<MemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
   PythonScriptEvaluation * eval = 0;
   if (memoize)
-    eval = dynamic_cast<PythonScriptEvaluation*>(memoize->getEvaluation().getImplementation().get());
+  {
+    MarginalEvaluation *marginal = dynamic_cast<MarginalEvaluation*>(memoize->getEvaluation().getImplementation().get());
+    if (marginal)
+    {
+      // TODO: needs MarginalEvaluation::getEvaluation (https://github.com/openturns/openturns/pull/1565)
+      // eval = dynamic_cast<PythonScriptEvaluation*>(marginal->getEvaluation().getImplementation().get());
+    }
+    else
+    {
+      eval = dynamic_cast<PythonScriptEvaluation*>(memoize->getEvaluation().getImplementation().get());
+    }
+  }
   if (eval)
     eval->setIgnoreFailure(true);
 
