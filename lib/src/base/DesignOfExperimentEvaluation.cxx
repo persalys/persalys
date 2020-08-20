@@ -22,9 +22,11 @@
 
 #include "persalys/BaseTools.hxx"
 #include "persalys/DataAnalysis.hxx"
+#include "persalys/PythonScriptEvaluation.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
+#include <openturns/MemoizeEvaluation.hxx>
 
 using namespace OT;
 
@@ -141,8 +143,17 @@ void DesignOfExperimentEvaluation::launch()
   // time
   TimeCriteria timeCriteria;
 
-  // iterations
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
+
+  // to avoid failing whole blocks we make failed points succeed but mark them with nan
+  MemoizeEvaluation* memoize = dynamic_cast<MemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
+  PythonScriptEvaluation * eval = 0;
+  if (memoize)
+    eval = dynamic_cast<PythonScriptEvaluation*>(memoize->getEvaluation().getImplementation().get());
+  if (eval)
+    eval->setIgnoreFailure(true);
+
+  // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
     if (stopRequested_)
@@ -186,6 +197,28 @@ void DesignOfExperimentEvaluation::launch()
       failedInputSample_.add(failedSample);
     }
     timeCriteria.incrementElapsedTime();
+  }
+
+  // mark points evaluating to nan as failed
+  if (eval)
+  {
+    // restore
+    eval->setIgnoreFailure(false);
+
+    Indices failedIndices;
+    for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)
+    {
+      if (!SpecFunc::IsNormal(outputSample(i, 0)))
+      {
+        failedIndices.add(i);
+        failedInputSample_.add(getOriginalInputSample()[i]);
+      }
+    }
+    for (UnsignedInteger i = 0; i < failedIndices.getSize(); ++ i)
+    {
+      inputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
+      outputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
+    }
   }
 
   if (!outputSample.getSize())
