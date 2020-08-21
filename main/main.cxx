@@ -31,6 +31,8 @@
 #include <QVTKRenderWindowAdapter.h>
 #endif
 
+#include <openturns/ResourceMap.hxx>
+
 using namespace PERSALYS;
 
 int main(int argc, char *argv[])
@@ -68,6 +70,9 @@ int main(int argc, char *argv[])
   QTranslator appTranslator;
   appTranslator.load("persalys_" + QLocale::system().name(), ":/translations");
   app.installTranslator(&appTranslator);
+
+  // increase function cache
+  OT::ResourceMap::SetAsUnsignedInteger("cache-max-size", 16384);
 
   // main window
   MainWindow window;
