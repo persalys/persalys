@@ -201,8 +201,9 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 
   // code has to be separate
   String tempDir = Path::CreateTemporaryDirectory("persalys");
+  std::string code_mod = "code" + std::to_string(std::hash<std::string>{}(code_));
   std::ofstream code_file;
-  code_file.open(tempDir + Os::GetDirectorySeparator() + "persalys_code.py");
+  code_file.open(tempDir + Os::GetDirectorySeparator() + code_mod + ".py");
   code_file << code_ << "\n";
   code_file.close();
 
@@ -211,15 +212,13 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "from concurrent.futures import ProcessPoolExecutor, as_completed\n";
   oss << "import os\n";
   oss << "import sys\n";
-  oss << "from importlib import reload\n";
   oss << "sys.path.insert(0, '" << EscapePath(tempDir) << "')\n";
-  oss << "import persalys_code\n";
-  oss << "reload(persalys_code)\n";
+  oss << "import " << code_mod <<"\n";
   oss << "if __name__== '__main__':\n";
   oss << "    if sys.platform == 'win32':\n";
   oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'python.exe'))\n";
   oss << "    with ProcessPoolExecutor(max_workers=" << (processNumber_ > 0 ? std::to_string(processNumber_) : "None") << ") as executor:\n";
-  oss << "        resu = {executor.submit(persalys_code._exec, *x): x for x in X}\n";
+  oss << "        resu = {executor.submit(" << code_mod << "._exec, *x): x for x in X}\n";
   oss << "        for future in as_completed(resu):\n";
   oss << "            try:\n";
   oss << "                y = future.result()\n";
