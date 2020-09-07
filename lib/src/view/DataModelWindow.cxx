@@ -451,7 +451,7 @@ void EditableExportableTableView::removeRows()
   QItemSelection selection(selectionModel()->selection());
   QList<int> rows;
   foreach( const QModelIndex & index, myProxy->mapSelectionToSource(selection).indexes() ) {
-  rows.append( index.row() );
+    rows.append( index.row() );
   }
   std::sort( rows.begin(), rows.end() );
   int prev = -1;

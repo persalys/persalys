@@ -38,6 +38,7 @@ public:
   void setExportableAsImage(const bool exportable);
 
   static QWidget * GetSampleTableViewWidget(Item* item, const OT::Sample& sample);
+  void mousePressEvent(QMouseEvent *e);
 
 public slots:
   virtual void contextMenu(const QPoint & pos);

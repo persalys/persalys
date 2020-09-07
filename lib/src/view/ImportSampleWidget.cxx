@@ -172,7 +172,7 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
   dataPreviewTableView_->setHorizontalHeader(header);
   connect(dataPreviewTableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), header, SLOT(fixComboPositions()));
   dataPreviewTableView_->horizontalHeader()->show();
-  dataPreviewTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  dataPreviewTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
   // DOE size
   DOESizeLabel_->setText(QString::number(sample.getSize()));
