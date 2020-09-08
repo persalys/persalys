@@ -25,7 +25,6 @@
 
 #include <openturns/OTType.hxx>
 #include <regex>
-#include <boost/algorithm/string/replace.hpp>
 
 namespace PERSALYS
 {
@@ -96,17 +95,16 @@ inline OT::String EscapePath(const OT::FileName & filename)
   return escapedPath;
 }
 
-inline OT::String EscapeQuotes(OT::String str)
+inline OT::String EscapeQuotes(OT::String code)
 {
-  boost::replace_all(str, "\'", "\\\'");
-  return str;
+  return std::regex_replace(code, std::regex("\'"), "\\\'");
 }
 
 inline void ValidateVariables(const OT::Description & desc) {
   std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   std::smatch what;
-  for(OT::UnsignedInteger i=0; i<desc.getSize(); ++i) {
-    if(!std::regex_match(desc[i], what, variable))
+  for (OT::UnsignedInteger i=0; i < desc.getSize(); ++ i) {
+    if (!std::regex_match(desc[i], what, variable))
       throw OT::InvalidArgumentException(HERE) << "Invalid variable name";
   }
 }

@@ -24,7 +24,6 @@
 #include "persalys/BaseTools.hxx"
 
 #include <regex>
-#include <boost/algorithm/string.hpp>
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/MemoizeFunction.hxx>
@@ -66,8 +65,9 @@ PythonPhysicalModel* PythonPhysicalModel::clone() const
 
 void PythonPhysicalModel::setCode(const String & code)
 {
-  std::vector<std::string> lines;
-  boost::split(lines, code, boost::is_any_of("\n"));
+  std::regex eol_regex("\n");
+  std::sregex_token_iterator it{code.begin(), code.end(), eol_regex, -1};
+  std::vector<std::string> lines {it, {}};
 
   Description inputVariables;
   Description outputVariables;

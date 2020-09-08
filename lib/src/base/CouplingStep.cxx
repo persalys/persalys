@@ -22,7 +22,6 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <regex>
-#include <boost/algorithm/string.hpp>
 
 using namespace OT;
 
@@ -150,8 +149,7 @@ String CouplingStep::getCode() const
 
 String CouplingStep::getEscapedCode() const
 {
-  String code = getCode();
-  boost::replace_all(code, "\n", "\\n");
+  String code = std::regex_replace(getCode(), std::regex("\n", std::regex::extended), "\\n");
   return code;
 }
 
