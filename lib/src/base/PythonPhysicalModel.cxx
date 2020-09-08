@@ -23,8 +23,7 @@
 #include "persalys/PythonScriptEvaluation.hxx"
 #include "persalys/BaseTools.hxx"
 
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
+#include <regex>
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/MemoizeFunction.hxx>
@@ -66,13 +65,14 @@ PythonPhysicalModel* PythonPhysicalModel::clone() const
 
 void PythonPhysicalModel::setCode(const String & code)
 {
-  std::vector<std::string> lines;
-  boost::split(lines, code, boost::is_any_of("\n"));
+  std::regex eol_regex("\n");
+  std::sregex_token_iterator it{code.begin(), code.end(), eol_regex, -1};
+  std::vector<std::string> lines {it, {}};
 
   Description inputVariables;
   Description outputVariables;
 
-  boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   bool inExecScope = false;
   for (unsigned int i = 0; i < lines.size(); ++ i)
   {
@@ -82,28 +82,28 @@ void PythonPhysicalModel::setCode(const String & code)
     if (inExecScope && line[0] != ' ' && line.size() != 0)
       inExecScope = false;
 
-    boost::regex defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", boost::regex::extended);
-    boost::smatch what;
-    if (boost::regex_match(line, what, defFunction))
+    std::regex defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", std::regex::extended);
+    std::smatch what;
+    if (std::regex_match(line, what, defFunction))
     {
       inExecScope = true;
       String inputList = what[1];
       std::string::const_iterator start = inputList.begin(), end = inputList.end();
       inputVariables.clear();
-      while (boost::regex_search(start, end, what, variable))
+      while (std::regex_search(start, end, what, variable))
       {
         start = what[0].second;
         inputVariables.add(what[1]);
       }
     }
 
-    boost::regex returnOutput("    return[ ]+([_a-zA-Z0-9, ]+)");
-    if (inExecScope && boost::regex_match(line, what, returnOutput))
+    std::regex returnOutput("    return[ ]+([_a-zA-Z0-9, ]+)");
+    if (inExecScope && std::regex_match(line, what, returnOutput))
     {
       String outputList = what[1];
       std::string::const_iterator start = outputList.begin(), end = outputList.end();
       outputVariables.clear();
-      while (boost::regex_search(start, end, what, variable))
+      while (std::regex_search(start, end, what, variable))
       {
         start = what[0].second;
         outputVariables.add(what[1]);
@@ -235,8 +235,8 @@ String PythonPhysicalModel::getPythonScript() const
   oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
 
   // escape triple quotes, backslashes
-  String escaped_code = boost::regex_replace(getCode(), boost::regex("\\\\"), "\\\\\\\\");
-  escaped_code = boost::regex_replace(escaped_code, boost::regex("\"\"\""), "\\\\\"\\\\\"\\\\\"");
+  String escaped_code = std::regex_replace(getCode(), std::regex("\\\\"), "\\\\\\\\");
+  escaped_code = std::regex_replace(escaped_code, std::regex("\"\"\""), "\\\\\"\\\\\"\\\\\"");
 
   oss << "code = \"\"\"\n" + escaped_code + "\"\"\"\n";
 

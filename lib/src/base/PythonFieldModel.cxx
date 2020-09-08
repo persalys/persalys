@@ -25,7 +25,7 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 
-#include <boost/regex.hpp>
+#include <regex>
 
 using namespace OT;
 
@@ -95,8 +95,8 @@ String PythonFieldModel::getPythonScript() const
   oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
 
   // code - escape quotes, eols
-  String escaped_code = boost::regex_replace(getCode(), boost::regex("'"), "\\\\'");
-  escaped_code = boost::regex_replace(escaped_code, boost::regex("\n"), "\\\\n");
+  String escaped_code = std::regex_replace(getCode(), std::regex("'"), "\\\\'");
+  escaped_code = std::regex_replace(escaped_code, std::regex("\n", std::regex::extended), "\\n");
   oss << "code = '" << escaped_code << "'\n";
 
   // define model

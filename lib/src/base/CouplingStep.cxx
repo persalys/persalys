@@ -21,8 +21,7 @@
 #include "persalys/CouplingStep.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
+#include <regex>
 
 using namespace OT;
 
@@ -150,8 +149,7 @@ String CouplingStep::getCode() const
 
 String CouplingStep::getEscapedCode() const
 {
-  String code = getCode();
-  boost::replace_all(code, "\n", "\\n");
+  String code = std::regex_replace(getCode(), std::regex("\n", std::regex::extended), "\\n");
   return code;
 }
 
@@ -159,13 +157,13 @@ Description CouplingStep::getPPOutputs() const
 {
   String PPCode = getCode();
   Description vars;
-  boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
-  boost::regex returnOutput("return[ ]+([_a-zA-Z0-9, ]+)", boost::regex::extended);
-  boost::smatch what;
-  if (boost::regex_search(PPCode, what, returnOutput)) {
+  std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  std::regex returnOutput("return[ ]+([_a-zA-Z0-9, ]+)", std::regex::extended);
+  std::smatch what;
+  if (std::regex_search(PPCode, what, returnOutput)) {
     String outputList = what[1];
     std::string::const_iterator start = outputList.begin(), end = outputList.end();
-    while (boost::regex_search(start, end, what, variable)) {
+    while (std::regex_search(start, end, what, variable)) {
       start = what[0].second;
       vars.add(what[1]);
     }
@@ -177,13 +175,13 @@ Description CouplingStep::getPPInputs() const
 {
   String PPCode = getCode();
   Description vars;
-  boost::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
-  boost::regex defFunc("def[ ]+[_a-zA-Z][_a-zA-Z0-9]*[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", boost::regex::extended);
-  boost::smatch what;
-  if (boost::regex_search(PPCode, what, defFunc)) {
+  std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  std::regex defFunc("def[ ]+[_a-zA-Z][_a-zA-Z0-9]*[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", std::regex::extended);
+  std::smatch what;
+  if (std::regex_search(PPCode, what, defFunc)) {
     String outputList = what[1];
     std::string::const_iterator start = outputList.begin(), end = outputList.end();
-    while (boost::regex_search(start, end, what, variable)) {
+    while (std::regex_search(start, end, what, variable)) {
       start = what[0].second;
       vars.add(what[1]);
     }

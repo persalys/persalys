@@ -62,9 +62,9 @@ if (NOT BUILD_SHARED_LIBS)
   list (APPEND PERSALYS_DEFINITIONS "-DPERSALYS_STATIC -DPYINTERP_STATIC -DPYCONSOLE_STATIC")
 endif ()
 
-find_package (Boost COMPONENTS regex filesystem locale REQUIRED)
-if (TARGET Boost::regex)
-  set (Boost_LIBRARIES Boost::regex Boost::filesystem Boost::locale)
+find_package (Boost COMPONENTS filesystem locale REQUIRED)
+if (TARGET Boost::filesystem)
+  set (Boost_LIBRARIES Boost::filesystem Boost::locale)
 endif ()
 include_directories (${Boost_INCLUDE_DIRS})
 
