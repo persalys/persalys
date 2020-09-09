@@ -18,7 +18,7 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.17/cmake-3.17.3.tar.gz | tar xz && cd cmake-3.17.3 \
+RUN curl -fSsL https://cmake.org/files/v3.18/cmake-3.18.2.tar.gz | tar xz && cd cmake-3.18.2 \
  && ./bootstrap --parallel=8 -- -DCMAKE_USE_OPENSSL=OFF && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # cminpack
@@ -45,8 +45,6 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/1.14.0.tar.g
 
 # tbb
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r tbb*
-# https://bugreports.qt.io/browse/QTBUG-80990
-RUN sed -i 's|#ifndef __TBB_profiling_H|#if !defined(__TBB_profiling_H) \&\& !defined(Q_MOC_RUN)|g' /usr/local/include/tbb/tbb_profiling.h
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage \
@@ -112,7 +110,7 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.tar.
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.tar.gz | tar xz && cd Assimulo-Assimulo-3.2 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.1 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
@@ -126,7 +124,7 @@ RUN pip install sphinx numpydoc --upgrade
 # boost
 RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.bz2 | tar xj && cd boost_1_74_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
- && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem --with-regex > /dev/null 2>&1 && cd - && rm -r boost*
+ && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
 # x11
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
@@ -138,7 +136,7 @@ RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4
  && pkg-config --exists xkbcommon && cd - && rm -r libxkbcommon*
 
 # qt
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.0/single/qt-everywhere-src-5.15.0.tar.xz | tar xJ && cd qt-everywhere-src-5.15.0 && ./configure -xcb -no-mimetype-database -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz | tar xJ && cd qt-everywhere-src-5.15.1 && ./configure -xcb -no-mimetype-database -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
  -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
  -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd - && rm -r qt*
