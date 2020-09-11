@@ -60,6 +60,7 @@ public slots:
   void resizeDataTableColumn(int column, int oldWidth, int newWidth);
   void resizeVariablesTableColumn(int column, int oldWidth, int newWidth);
   void sortSectionChanged(int, Qt::SortOrder);
+  void launchCleaningWizard();
 
 private:
   DataModel * dataModel_;

@@ -26,6 +26,7 @@
 #include "persalys/CheckableHeaderView.hxx"
 #include "persalys/SampleTableModel.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/DataCleaningWizard.hxx"
 
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -240,11 +241,25 @@ void DataModelWindow::buildInterface()
   connect(dataTableView2_->verticalScrollBar(), SIGNAL(valueChanged(int)), dataTableView1_->verticalScrollBar(), SLOT(setValue(int)));
   connect(dataTableView2_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeVariablesTableColumn(int, int, int)));
   connect(dataTableView2_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sortSectionChanged(int, Qt::SortOrder)));
+  connect(dataTableView2_, SIGNAL(cleanRequested()), this, SLOT(launchCleaningWizard()));
+
 
   // fill tables
   updateTableView();
 }
 
+void DataModelWindow::launchCleaningWizard() {
+  std::cout << "Clenaing data\n";
+  errorMessageLabel_->reset();
+  if(!dataModel_->getSample().getSize()) {
+    errorMessageLabel_->setText(tr("Sample must not be empty"));
+    return;
+  }
+  DataCleaningTools* cleaner = new DataCleaningTools(dataModel_->getSample());
+  DataCleaningWizard wizard(cleaner, this);
+  dataModel_->setSample(cleaner->getSample());
+  updateTableView();
+}
 
 void DataModelWindow::resizeEvent(QResizeEvent* event)
 {
@@ -333,6 +348,7 @@ void DataModelWindow::openFileRequested()
 
 void DataModelWindow::refreshTable()
 {
+  errorMessageLabel_->reset();
   if (!filePathLineEdit_->text().isEmpty())
   {
     updateTable(filePathLineEdit_->text());
