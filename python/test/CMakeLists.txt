@@ -5,7 +5,7 @@ set (PATH_SEP ":")
 if (WIN32)
   # replace dos eols
   set (REPLACE_EOL " | tr -d '\\\\015' ")
-  
+
   set (PATH_SEP "\\;")
 endif ()
 
@@ -45,12 +45,12 @@ macro ( ot_pyinstallcheck_test TESTNAME )
       set ( _CMD )
     endif ( ${ARG} MATCHES PRE )
   endforeach ( _ARG )
-  
+
   if (_IGNOREOUT)
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
   else (_IGNOREOUT)
     set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
-    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} ) 
+    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} )
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
   endif (_IGNOREOUT)
 
@@ -63,7 +63,7 @@ macro ( ot_pyinstallcheck_test TESTNAME )
   set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
   list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
   install ( FILES ${TESTNAME_SRC}
-            DESTINATION ${PERSALYS_EXAMPLE_PATH} 
+            DESTINATION ${PERSALYS_EXAMPLE_PATH}
             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE
           )
 endmacro ( ot_pyinstallcheck_test )
@@ -114,6 +114,7 @@ ot_pyinstallcheck_test (Study_refCount)
 ot_pyinstallcheck_test (Encoding_std)
 ot_pyinstallcheck_test (docstring)
 ot_pyinstallcheck_test (FileMemoizeFunction_std)
+ot_pyinstallcheck_test (DataCleaning_std)
 
 if (SalomeYACS_FOUND)
   ot_pyinstallcheck_test (YACSPhysicalModel_std IGNOREOUT)
@@ -124,5 +125,3 @@ endif ()
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
                     DEPENDS ${PYINSTALLCHECK_TO_BE_RUN}
                     COMMENT "Run Python post-installation tests" )
-
-
