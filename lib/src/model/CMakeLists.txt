@@ -10,6 +10,7 @@ ot_add_source_file ( ExperimentTableModel.cxx )
 ot_add_source_file ( CorrelationTableModel.cxx )
 ot_add_source_file ( DifferentiationTableModel.cxx )
 ot_add_source_file ( DataModelTableModel.cxx )
+ot_add_source_file ( DataCleaningTableModel.cxx )
 ot_add_source_file ( DistributionsTableModel.cxx )
 ot_add_source_file ( CalibrationTableModel.cxx )
 ot_add_source_file ( ItemFactory.cxx )
@@ -83,6 +84,7 @@ qt5_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/CorrelationTableModel.hxx
                                     persalys/DifferentiationTableModel.hxx
                                     persalys/DataModelTableModel.hxx
+                                    persalys/DataCleaningTableModel.hxx
                                     persalys/DistributionsTableModel.hxx
                                     persalys/CalibrationTableModel.hxx
                                     persalys/ItemFactory.hxx
@@ -126,10 +128,10 @@ if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysmodel PRIVATE PERSALYS_MODEL_DLL_EXPORTS)
 endif ()
 
-if ( NOT DEFINED LIB_VERSION ) 
+if ( NOT DEFINED LIB_VERSION )
   set ( LIB_VERSION 0.0.0 )
 endif ()
-if ( NOT DEFINED LIB_SOVERSION ) 
+if ( NOT DEFINED LIB_SOVERSION )
   set ( LIB_SOVERSION 0 )
 endif ()
 set_target_properties ( persalysmodel PROPERTIES VERSION ${LIB_VERSION} )
@@ -141,4 +143,3 @@ install ( TARGETS persalysmodel
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
-

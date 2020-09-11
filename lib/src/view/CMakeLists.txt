@@ -116,6 +116,7 @@ ot_add_source_file ( ObservationsWizard.cxx )
 ot_add_source_file ( CalibrationAnalysisWizard.cxx )
 ot_add_source_file ( CalibrationResultWindow.cxx )
 ot_add_source_file ( CouplingModelWindow.cxx )
+ot_add_source_file ( DataCleaningWizard.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -234,6 +235,7 @@ ot_install_header_file ( ObservationsWindow.hxx )
 ot_install_header_file ( CalibrationAnalysisWizard.hxx )
 ot_install_header_file ( CalibrationResultWindow.hxx )
 ot_install_header_file ( CouplingModelWindow.hxx )
+ot_install_header_file ( DataCleaningWizard.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -345,6 +347,7 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CalibrationAnalysisWizard.hxx
                                   persalys/CalibrationResultWindow.hxx
                                   persalys/CouplingModelWindow.hxx
+                                  persalys/DataCleaningWizard.hxx
                                   )
 
 
@@ -375,10 +378,10 @@ if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysview PRIVATE PERSALYS_VIEW_DLL_EXPORTS)
 endif ()
 
-if ( NOT DEFINED LIB_VERSION ) 
+if ( NOT DEFINED LIB_VERSION )
   set ( LIB_VERSION 0.0.0 )
 endif ()
-if ( NOT DEFINED LIB_SOVERSION ) 
+if ( NOT DEFINED LIB_SOVERSION )
   set ( LIB_SOVERSION 0 )
 endif ()
 set_target_properties (persalysview PROPERTIES VERSION ${LIB_VERSION} )
@@ -400,4 +403,3 @@ install ( TARGETS persalysview
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
-

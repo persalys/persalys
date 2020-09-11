@@ -50,5 +50,6 @@
         <file>images/optimize.png</file>
         <file>images/help-contents.png</file>
         <file>images/view-refresh.svg</file>
+        <file>images/clean.png</file>
     </qresource>
 </RCC>
