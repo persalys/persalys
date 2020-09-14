@@ -73,8 +73,7 @@ find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
 
 if (BUILD_GUI)
 
-  find_package (Qt5Widgets CONFIG)
-  find_package (Qt5Test CONFIG)
+  find_package (Qt5 COMPONENTS Test Widgets CONFIG)
   set (QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Test_LIBRARIES})
   set (CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
   include_directories (${Qt5Widgets_INCLUDE_DIRS} ${Qt5Test_INCLUDE_DIRS})

@@ -21,6 +21,7 @@
 
 #include "persalys/TimeLineEdit.hxx"
 #include <QtGlobal>
+#include <QRegularExpression>
 
 namespace PERSALYS
 {
@@ -44,7 +45,7 @@ TimeLineEdit::TimeLineEdit(const unsigned int seconds, QWidget *parent)
 int TimeLineEdit::getSeconds() const
 {
   QString s = text();
-  QStringList list = s.split(QRegExp("d|h|m|s"));
+  QStringList list = s.split(QRegularExpression("d|h|m|s"));
 
   int seconds = 0;
 #if QT_VERSION >= QT_VERSION_CHECK(5,15,0)

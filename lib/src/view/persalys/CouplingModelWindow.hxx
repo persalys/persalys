@@ -115,7 +115,7 @@ public:
 
     edit_ = new QLineEdit(path);
     hLayout->addWidget(edit_);
-    edit_->setValidator(new QRegExpValidator(QRegExp("([^\r\n]*)")));
+    edit_->setValidator(new QRegularExpressionValidator(QRegularExpression("([^\r\n]*)")));
     connect(edit_, &QLineEdit::editingFinished, [=]() { emit pathChanged(edit_->text()); });
 
     QToolButton * button = new QToolButton;

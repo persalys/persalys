@@ -152,7 +152,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
 
   evaluationItem->setData(tr("Evaluation"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight() + 10);
+  font.setWeight(QFont::Medium);
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
   evaluationItem->appendSeparator(tr("Analysis"));

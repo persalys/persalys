@@ -32,7 +32,7 @@ ProbabilisticModelItem::ProbabilisticModelItem(const PhysicalModel &physicalMode
 {
   setData(tr("Probabilistic model"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight() + 10);
+  font.setWeight(QFont::Medium);
   setData(font, Qt::FontRole);
   setEditable(false);
 

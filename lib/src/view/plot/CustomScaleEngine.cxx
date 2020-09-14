@@ -79,7 +79,7 @@ static double ceil125(double x)
   const double lx = log10( fabs( x ) );
   const double p10 = floor( lx );
 
-  double fr = qPow( 10.0, lx - p10 );
+  double fr = std::pow(10.0, lx - p10);
   if ( fr <= 1.0 )
     fr = 1.0;
   else if ( fr <= 2.0 )
@@ -89,7 +89,7 @@ static double ceil125(double x)
   else
     fr = 10.0;
 
-  return sign * fr * qPow( 10.0, p10 );
+  return sign * fr * std::pow(10.0, p10);
 }
 
 

@@ -116,8 +116,9 @@ void CheckableHeaderView::mousePressEvent(QMouseEvent* event)
     const int sectionPosX = sectionViewportPosition(0);
     const int buttonMargin = 3;
 
-    if (event->x() <= (sectionPosX + buttonMargin + checkBoxRect.width()) &&
-        event->x() >= (sectionPosX + buttonMargin))
+    QPoint pos = event->pos();
+    if (pos.x() <= (sectionPosX + buttonMargin + checkBoxRect.width()) &&
+        pos.x() >= (sectionPosX + buttonMargin))
     {
       isChecked_ = !isChecked_;
       updateSection(0);
