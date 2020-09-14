@@ -174,7 +174,7 @@ void DataModelWindow::buildInterface()
   // - data table view
   QFrame * frame = new QFrame;
   QHBoxLayout * tableLayout = new QHBoxLayout(frame);
-  tableLayout->setMargin(0);
+  tableLayout->setContentsMargins(0, 0, 0, 0);
 
   // -- first part: row ID
   dataTableView1_ = new EditableExportableTableView;

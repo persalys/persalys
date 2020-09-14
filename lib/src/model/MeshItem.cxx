@@ -32,7 +32,7 @@ MeshItem::MeshItem(const PhysicalModel & physicalModel)
 {
   setData(tr("Mesh"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight() + 10);
+  font.setWeight(QFont::Medium);
   setData(font, Qt::FontRole);
   setEditable(false);
 

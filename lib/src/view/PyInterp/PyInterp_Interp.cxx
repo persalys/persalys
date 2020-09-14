@@ -35,7 +35,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 
 #define TOP_HISTORY_PY   "--- top of history ---"
@@ -470,11 +470,12 @@ static int compile_command(const char *command, PyObject * global_ctxt, PyObject
   QString singleCommand = command;
   QString commandArgs = "";
 
-  QRegExp rx("exec\\s*\\(.*open\\s*\\(\\s*(.*)\\s*\\)\\s*\\.\\s*read\\s*\\(\\)(\\s*,\\s*args\\s*=\\s*\\(.*\\))\\s*\\)");
-  if (rx.indexIn(command) != -1) {
-    commandArgs = rx.cap(2).remove(0, rx.cap(2).indexOf("(")); // arguments of command
-    commandArgs.insert(commandArgs.indexOf('(')+1, rx.cap(1).split(",")[0].trimmed() + ","); // prepend arguments list by the script file itself
-    singleCommand = singleCommand.remove(rx.pos(2), rx.cap(2).size()); // command for execution without arguments
+  QRegularExpression rx("exec\\s*\\(.*open\\s*\\(\\s*(.*)\\s*\\)\\s*\\.\\s*read\\s*\\(\\)(\\s*,\\s*args\\s*=\\s*\\(.*\\))\\s*\\)");
+  QRegularExpressionMatch match = rx.match(command);
+  if (match.hasMatch()) {
+    commandArgs = match.captured(2).remove(0, match.captured(2).indexOf("(")); // arguments of command
+    commandArgs.insert(commandArgs.indexOf('(')+1, match.captured(1).split(",")[0].trimmed() + ","); // prepend arguments list by the script file itself
+    singleCommand = singleCommand.remove(match.capturedStart(2), match.captured(2).size()); // command for execution without arguments
   }
 
   if (commandArgs.isEmpty()) {

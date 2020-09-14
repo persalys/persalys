@@ -208,9 +208,9 @@ void CopulaInferenceResultWizard::updateVariablesTable(const QString &text)
     return;
 
 #if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
-  const QStringList variablesNames(text.split(QRegExp("\\W+"), Qt::SkipEmptyParts));
+  const QStringList variablesNames(text.split(QRegularExpression("\\W+"), Qt::SkipEmptyParts));
 #else
-  const QStringList variablesNames(text.split(QRegExp("\\W+"), QString::SkipEmptyParts));
+  const QStringList variablesNames(text.split(QRegularExpression("\\W+"), QString::SkipEmptyParts));
 #endif
   QStringList variablesNamesCopy(variablesNames);
   variablesNamesCopy.sort();

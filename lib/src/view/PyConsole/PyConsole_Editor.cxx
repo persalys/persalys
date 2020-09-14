@@ -684,7 +684,7 @@ void PyConsole_Editor::mouseReleaseEvent( QMouseEvent* event )
   if ( event->button() == Qt::LeftButton ) {
     QTextEdit::mouseReleaseEvent( event );
   }
-  else if ( event->button() == Qt::MidButton ) {
+  else if ( event->button() == Qt::MiddleButton ) {
     QTextCursor aCursor = cursorForPosition( event->pos() );
     // if the position is not in the last line move it to the end of the command line
     if ( aCursor.position() < document()->end().previous().position() + promptSize() ) {

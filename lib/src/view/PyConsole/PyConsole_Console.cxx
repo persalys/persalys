@@ -87,7 +87,7 @@ void PyConsole_Console::init( PyConsole_Editor* editor )
   
   // create editor console
   QVBoxLayout* lay = new QVBoxLayout( this );
-  lay->setMargin( 0 );
+  lay->setContentsMargins( 0, 0, 0 ,0 );
   myEditor = editor ? editor : new PyConsole_Editor( this, interp );
   myEditor->setContextMenuPolicy( Qt::NoContextMenu );
   lay->addWidget( myEditor );

@@ -34,7 +34,7 @@ DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment &doe, 
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight() + 10);
+  font.setWeight(QFont::Medium);
   setData(font, Qt::FontRole);
   setEditable(false);
 

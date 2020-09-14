@@ -60,15 +60,18 @@ int main(int argc, char *argv[])
 
   // translations
   QTranslator qtTranslator;
-  qtTranslator.load("qt_" + QLocale::system().name(), ":/translations");
+  if (!qtTranslator.load("qt_" + QLocale::system().name(), ":/translations"))
+    std::cerr << "could not load qt translation" << std::endl;
   app.installTranslator(&qtTranslator);
 
   QTranslator qtbaseTranslator;
-  qtbaseTranslator.load("qtbase_" + QLocale::system().name(), ":/translations");
+  if(!qtbaseTranslator.load("qtbase_" + QLocale::system().name(), ":/translations"))
+    std::cerr << "could not load qtbase translation" << std::endl;
   app.installTranslator(&qtbaseTranslator);
 
   QTranslator appTranslator;
-  appTranslator.load("persalys_" + QLocale::system().name(), ":/translations");
+  if (!appTranslator.load("persalys_" + QLocale::system().name(), ":/translations"))
+    std::cerr << "could not load persalys translation" << std::endl;
   app.installTranslator(&appTranslator);
 
   // increase function cache

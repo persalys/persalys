@@ -34,7 +34,7 @@ PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel &mo
 {
   setData(tr("Definition"), Qt::DisplayRole);
   QFont font;
-  font.setWeight(font.weight() + 10);
+  font.setWeight(QFont::Medium);
   setData(font, Qt::FontRole);
   setEditable(false);
 
