@@ -67,7 +67,7 @@ Examples
 --------
 >>> import persalys
 >>> print(persalys.ProbabilisticDesignOfExperiment.GetDesignNames())
-[LHS,MONTE_CARLO,QUASI_MONTE_CARLO]
+[LHS,SALHS,MCLHS,MONTE_CARLO,QUASI_MONTE_CARLO]
 "
 
 // ----------------------------------------------------------------------

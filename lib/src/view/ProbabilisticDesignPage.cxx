@@ -27,6 +27,8 @@
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QLabel>
+#include <QListView>
+#include <QStandardItemModel>
 
 using namespace OT;
 
@@ -53,16 +55,68 @@ void ProbabilisticDesignPage::buildInterface()
   QRadioButton * buttonToChooseDesign = new QRadioButton(tr("LHS"));
   buttonToChooseDesign->setToolTip(tr("Latin Hypercube Sampling"));
   buttonToChooseDesign->setChecked(true);
-  designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::LHS);
-  designGroupBoxLayout->addWidget(buttonToChooseDesign);
 
+  QLabel * cbLabel = new QLabel(tr("Optimisation algorithm"));
+  optimComboBox_ = new QComboBox;
+  optimComboBox_->addItem(tr("None"), ProbabilisticDesignPage::LHS);
+  optimComboBox_->addItem(tr("Simulated Annealing LHS"), ProbabilisticDesignPage::SALHS);
+  optimComboBox_->addItem(tr("Monte Carlo LHS"), ProbabilisticDesignPage::MCLHS);
+
+  designsGroup_->addButton(buttonToChooseDesign, optimComboBox_->currentIndex());
+  if(designsGroup_->checkedId()<3)
+    optimComboBox_->setCurrentIndex(designsGroup_->checkedId());
+  designGroupBoxLayout->addWidget(buttonToChooseDesign, 0, 0);
+
+  CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
+  advancedParamGroupBox->setTitle(tr("Optimisation"));
+  QGridLayout * advancedParamGroupBoxLayout = new QGridLayout(advancedParamGroupBox);
+
+  advancedParamGroupBoxLayout->addWidget(cbLabel, 0, 0);
+  advancedParamGroupBoxLayout->addWidget(optimComboBox_, 0, 1);
+
+  spaceFillingComboBox_ = new QComboBox;
+  spaceFillingComboBox_->addItem(tr("PhiP"), 0);
+  spaceFillingComboBox_->addItem(tr("minDist"), 1);
+  spaceFillingComboBox_->addItem(tr("C2"), 2);
+  spaceFillingComboBox_->setCurrentIndex(0);
+  cbLabel = new QLabel(tr("Space filling"));
+  advancedParamGroupBoxLayout->addWidget(cbLabel, 1, 0);
+  advancedParamGroupBoxLayout->addWidget(spaceFillingComboBox_, 1, 1);
+
+  mcLhsSizeSB_ = new LogSpinBox;
+  mcLhsSizeSB_->setValue(1000);
+  cbLabel = new QLabel(tr("Number of simulations"));
+  advancedParamGroupBoxLayout->addWidget(cbLabel, 2, 0);
+  advancedParamGroupBoxLayout->addWidget(mcLhsSizeSB_, 2, 1);
+
+  connect(buttonToChooseDesign, &QRadioButton::toggled, [=](Bool enabled) {
+      optimComboBox_->setEnabled(enabled);
+      spaceFillingComboBox_->setEnabled(enabled && optimComboBox_->currentIndex()>0);
+      mcLhsSizeSB_->setEnabled(enabled && optimComboBox_->currentIndex() == 2);});
+
+  connect(optimComboBox_, QOverload<int>::of(&QComboBox::activated), [=](int index) {
+      qobject_cast<QListView *>(spaceFillingComboBox_->view())->setRowHidden(1, index==ProbabilisticDesignPage::SALHS);
+      QStandardItemModel* model = qobject_cast<QStandardItemModel*>(spaceFillingComboBox_->model());
+      Q_ASSERT(model != nullptr);
+      QStandardItem* item = model->item(1);
+      if(index==1)
+        item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+      else
+        item->setFlags(item->flags() | Qt::ItemIsEnabled);
+      designsGroup_->setId(buttonToChooseDesign,index);
+      mcLhsSizeSB_->setEnabled(index == 2);
+      if(index==ProbabilisticDesignPage::SALHS && spaceFillingComboBox_->currentIndex() == 1)
+        spaceFillingComboBox_->setCurrentIndex(0);
+      spaceFillingComboBox_->setEnabled(index > 0 && index < 3);});
+
+  designGroupBoxLayout->addWidget(advancedParamGroupBox, 0, 1);
   buttonToChooseDesign = new QRadioButton(tr("Monte Carlo"));
   designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::MonteCarlo);
-  designGroupBoxLayout->addWidget(buttonToChooseDesign);
+  designGroupBoxLayout->addWidget(buttonToChooseDesign, 1, 0);
 
   buttonToChooseDesign = new QRadioButton(tr("Quasi-Monte Carlo"));
   designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::QuasiMonteCarlo);
-  designGroupBoxLayout->addWidget(buttonToChooseDesign);
+  designGroupBoxLayout->addWidget(buttonToChooseDesign, 2, 0);
 
   pageLayout->addWidget(designGroupBox);
 
@@ -97,9 +151,9 @@ void ProbabilisticDesignPage::buildInterface()
   connect(this, SIGNAL(showTime()), sampleTimeLabel, SLOT(show()));
 
   // advanced parameters
-  CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
+  advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
-  QGridLayout * advancedParamGroupBoxLayout = new QGridLayout(advancedParamGroupBox);
+  advancedParamGroupBoxLayout = new QGridLayout(advancedParamGroupBox);
 
   // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
@@ -140,25 +194,57 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
   if (!probaDoe_ptr)
     return;
 
-  if (probaDoe_ptr->getDesignName() == "LHS" && independentCopula)
+  if (probaDoe_ptr->getDesignName() == "LHS" && independentCopula) {
     designsGroup_->button(ProbabilisticDesignPage::LHS)->click();
+    optimComboBox_->setCurrentIndex(0);
+  }
+  else if (probaDoe_ptr->getDesignName() == "SALHS" && independentCopula) {
+    designsGroup_->button(ProbabilisticDesignPage::LHS)->click();
+    optimComboBox_->setCurrentIndex(1);
+  }
+  else if (probaDoe_ptr->getDesignName() == "MCLHS" && independentCopula) {
+    designsGroup_->button(ProbabilisticDesignPage::LHS)->click();
+    optimComboBox_->setCurrentIndex(2);
+    mcLhsSizeSB_->setValue(probaDoe_ptr->getMCLHSSize());
+  }
   else if (probaDoe_ptr->getDesignName() == "QUASI_MONTE_CARLO")
     designsGroup_->button(ProbabilisticDesignPage::QuasiMonteCarlo)->click();
   else
     designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click();
 
+  if (probaDoe_ptr->getSpaceFilling() == "PhiP" && independentCopula)
+    spaceFillingComboBox_->setCurrentIndex(0);
+  else if (probaDoe_ptr->getSpaceFilling() == "minDist" && independentCopula)
+    spaceFillingComboBox_->setCurrentIndex(1);
+  else if (probaDoe_ptr->getSpaceFilling() == "C2" && independentCopula)
+    spaceFillingComboBox_->setCurrentIndex(2);
+
+
   sampleSizeSpinbox_->setValue(probaDoe_ptr->getSize());
   seedSpinbox_->setValue(probaDoe_ptr->getSeed());
+  mcLhsSizeSB_->setEnabled(optimComboBox_->currentIndex()==2);
+  spaceFillingComboBox_->setEnabled(optimComboBox_->currentIndex()>0 &&
+                                    optimComboBox_->currentIndex()<3);
 }
 
 Analysis ProbabilisticDesignPage::getAnalysis(const String& name, const PhysicalModel& model) const
 {
   String designType = "LHS";
-  if (designsGroup_->checkedId() == ProbabilisticDesignPage::MonteCarlo)
+  String spaceFilling = "PhiP";
+  if (designsGroup_->checkedId() == ProbabilisticDesignPage::SALHS)
+    designType = "SALHS";
+  else if (designsGroup_->checkedId() == ProbabilisticDesignPage::MCLHS)
+    designType = "MCLHS";
+  else if (designsGroup_->checkedId() == ProbabilisticDesignPage::MonteCarlo)
     designType = "MONTE_CARLO";
   else if (designsGroup_->checkedId() == ProbabilisticDesignPage::QuasiMonteCarlo)
     designType = "QUASI_MONTE_CARLO";
-  ProbabilisticDesignOfExperiment design(name, model, sampleSizeSpinbox_->value(), designType);
+
+  if(spaceFillingComboBox_->currentIndex() == 1)
+    spaceFilling = "minDist";
+  else if(spaceFillingComboBox_->currentIndex() == 2)
+    spaceFilling = "C2";
+  ProbabilisticDesignOfExperiment design(name, model, sampleSizeSpinbox_->value(), designType, spaceFilling, mcLhsSizeSB_->isEnabled() ? mcLhsSizeSB_->value() : 0);
   design.setSeed(seedSpinbox_->value());
 
   return design;

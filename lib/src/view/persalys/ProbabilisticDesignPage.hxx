@@ -26,6 +26,7 @@
 
 #include <QWizardPage>
 #include <QButtonGroup>
+#include <QComboBox>
 
 namespace PERSALYS
 {
@@ -34,7 +35,7 @@ class PERSALYS_VIEW_API ProbabilisticDesignPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum design {LHS, MonteCarlo, QuasiMonteCarlo};
+  enum design {LHS, SALHS, MCLHS, MonteCarlo, QuasiMonteCarlo};
 
   ProbabilisticDesignPage(QWidget* parent = 0);
 
@@ -51,7 +52,10 @@ signals:
 
 private:
   QButtonGroup * designsGroup_;
+  QComboBox * optimComboBox_;
+  QComboBox * spaceFillingComboBox_;
   LogSpinBox * sampleSizeSpinbox_;
+  LogSpinBox * mcLhsSizeSB_;
   QSpinBox * seedSpinbox_;
   OT::Scalar modelEvalTime_;
 };
