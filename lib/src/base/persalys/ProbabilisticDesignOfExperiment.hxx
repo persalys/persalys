@@ -36,7 +36,9 @@ public:
   ProbabilisticDesignOfExperiment(const OT::String& name,
                                   const PhysicalModel& physicalModel,
                                   const OT::UnsignedInteger size = OT::ResourceMap::GetAsUnsignedInteger("WeightedExperiment-DefaultSize"),
-                                  const OT::String& designName = "LHS");
+                                  const OT::String& designName = "LHS",
+                                  const OT::String& spaceFilling = "PhiP",
+                                  const OT::UnsignedInteger mcLhsSize = 1000);
 
 
   /** Virtual constructor */
@@ -47,10 +49,17 @@ public:
   OT::String getDesignName() const;
   void setDesignName(const OT::String& name);
 
+  OT::String getSpaceFilling() const;
+  void setSpaceFilling(const OT::String& name);
+
   static OT::Description GetDesignNames();
+  static OT::Description GetSpaceFillings();
 
   OT::UnsignedInteger getSize() const;
   void setSize(const OT::UnsignedInteger size);
+
+  OT::UnsignedInteger getMCLHSSize() const;
+
 
   virtual Parameters getParameters() const;
   virtual OT::String getPythonScript() const;
@@ -68,10 +77,13 @@ protected:
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
 
   static OT::Description DesignNames_;
+  static OT::Description SpaceFillings_;
 
 private:
   OT::String designName_;
+  OT::String spaceFilling_;
   OT::UnsignedInteger size_;
+  OT::UnsignedInteger mcLhsSize_;
 };
 }
 #endif
