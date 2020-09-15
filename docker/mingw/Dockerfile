@@ -9,7 +9,7 @@ ENV ARCH=x86_64 PYMAJMIN=38
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.15 \
+RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.16rc1 \
   && ${ARCH}-w64-mingw32-cmake-py${PYMAJMIN} -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DUSE_SPHINX=OFF . \
   && make > /dev/null 2>&1 && sudo make install \
