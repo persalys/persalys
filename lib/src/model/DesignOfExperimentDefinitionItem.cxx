@@ -57,6 +57,7 @@ void DesignOfExperimentDefinitionItem::buildActions()
   convertAction_ = new QAction(tr("Convert into data model"), this);
   convertAction_->setStatusTip(tr("Add a data model in the study tree"));
   connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendDataModelItem()));
+  convertAction_->setEnabled(getAnalysis().getImplementation()->hasValidResult());
   appendAction(convertAction_);
 
   appendSeparator(tr("Analysis"));
@@ -65,6 +66,8 @@ void DesignOfExperimentDefinitionItem::buildActions()
   evaluateAction_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateAction_->setStatusTip(tr("Evaluate the design of experiments"));
   connect(evaluateAction_, SIGNAL(triggered()), this, SLOT(createEvaluation()));
+  connect(this, &DesignOfExperimentDefinitionItem::designEvaluationUpdated, [=]() {
+      convertAction_->setEnabled(getAnalysis().getImplementation()->hasValidResult());});
 
   appendAction(evaluateAction_);
 

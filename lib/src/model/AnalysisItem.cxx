@@ -25,6 +25,8 @@
 #include "persalys/KrigingAnalysis.hxx"
 #include "persalys/StudyItem.hxx"
 #include "persalys/TranslationManager.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
+
 
 #include <QDebug>
 
@@ -56,7 +58,6 @@ AnalysisItem::AnalysisItem(const Analysis & analysis, const String &typeName)
 void AnalysisItem::buildActions()
 {
   const QString analysisType(analysis_.getImplementation()->getClassName().c_str());
-
   // modify analysis action
   if (analysisType != "DataAnalysis" &&
       analysisType != "ImportanceSamplingAnalysis") // there is no wizard associated with these analyses <=> impossible to modify them
@@ -85,12 +86,13 @@ void AnalysisItem::buildActions()
     if (!analysis_.hasValidResult())
       extractDataAction_->setEnabled(false);
   }
-  else if (analysisType.contains("DesignOfExperiment"))
+  else if (analysisType.contains("DesignOfExperiment") ||
+           analysisType == "MonteCarloAnalysis")
   {
     convertAction_ = new QAction(tr("Convert into data model"), this);
     convertAction_->setStatusTip(tr("Add a data model in the study tree"));
     connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendDataModelItem()));
-    convertAction_->setEnabled(analysis_.hasValidResult());
+    convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(convertAction_);
     return; // no remove action for these analyses
   }
@@ -219,12 +221,24 @@ void AnalysisItem::appendMetaModelItem()
 
 void AnalysisItem::appendDataModelItem()
 {
-  DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
-  if (!getParentStudyItem() || !doeEval)
+  if (!getParentStudyItem())
     return;
+
+  DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
+  DataAnalysisResult result;
+  if(doeEval) {
+    result = doeEval->getResult();
+  } else {
+    MonteCarloAnalysis * analysis  = dynamic_cast<MonteCarloAnalysis*>(analysis_.getImplementation().get());
+    if(analysis) {
+      result = analysis->getResult();
+    } else
+      return;
+  }
+
   // create the data model
-  const String newName = getParentStudyItem()->getStudy().getAvailableDataModelName((QString(doeEval->getName().c_str()) + "_").toStdString());
-  DataModel * newModel = new DataModel(newName, doeEval->getResult().getDesignOfExperiment());
+  const String newName = getParentStudyItem()->getStudy().getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString());
+  DataModel * newModel = new DataModel(newName, result.getDesignOfExperiment());
   getParentStudyItem()->getStudy().add(newModel);
 }
 
