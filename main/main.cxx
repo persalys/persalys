@@ -60,19 +60,16 @@ int main(int argc, char *argv[])
 
   // translations
   QTranslator qtTranslator;
-  if (!qtTranslator.load("qt_" + QLocale::system().name(), ":/translations"))
-    std::cerr << "could not load qt translation" << std::endl;
-  app.installTranslator(&qtTranslator);
+  if (qtTranslator.load("qt_" + QLocale::system().name(), ":/translations"))
+    app.installTranslator(&qtTranslator);
 
   QTranslator qtbaseTranslator;
-  if(!qtbaseTranslator.load("qtbase_" + QLocale::system().name(), ":/translations"))
-    std::cerr << "could not load qtbase translation" << std::endl;
-  app.installTranslator(&qtbaseTranslator);
+  if (qtbaseTranslator.load("qtbase_" + QLocale::system().name(), ":/translations"))
+    app.installTranslator(&qtbaseTranslator);
 
   QTranslator appTranslator;
-  if (!appTranslator.load("persalys_" + QLocale::system().name(), ":/translations"))
-    std::cerr << "could not load persalys translation" << std::endl;
-  app.installTranslator(&appTranslator);
+  if (appTranslator.load("persalys_" + QLocale::system().name(), ":/translations"))
+    app.installTranslator(&appTranslator);
 
   // increase function cache
   OT::ResourceMap::SetAsUnsignedInteger("cache-max-size", 16384);
