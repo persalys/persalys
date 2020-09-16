@@ -47,7 +47,7 @@ RUN git clone https://github.com/openturns/openturns.git && cd openturns && git 
 RUN git clone https://git.salome-platform.org/gitpub/tools/libbatch.git && cd libbatch && git checkout V2_4_3 && cmake . && make install && cd - && rm -r libbatch
 
 # sip
-RUN curl -L https://www.riverbankcomputing.com/static/Downloads/sip/4.19.3/sip-4.19.3.tar.gz | tar xz && cd sip-4.19.3 && mkdir build && cd build && python3 ../configure.py  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cp /usr/local/include/python3.6m/sip.h /usr/local/include && cd - && rm -r sip*
+RUN curl -fSsL https://downloads.sourceforge.net/pyqt/sip/sip-4.19.3/sip-4.19.3.tar.gz | tar xz && cd sip-4.19.3 && mkdir build && cd build && python3 ../configure.py  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cp /usr/local/include/python3.6m/sip.h /usr/local/include && cd - && rm -r sip*
 
 # pyqt
 RUN curl -fSsL http://downloads.sourceforge.net/pyqt/PyQt5/PyQt5_gpl-5.7.1.tar.gz |tar xz && cd PyQt5_gpl-5.7.1 && python3 configure.py --verbose --confirm-license && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -c "from PyQt5 import Qt; print(Qt.PYQT_VERSION_STR)" && cd - && rm -r PyQt*
