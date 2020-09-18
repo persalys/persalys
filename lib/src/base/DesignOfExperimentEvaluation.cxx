@@ -24,6 +24,10 @@
 #include "persalys/DataAnalysis.hxx"
 #include "persalys/PythonScriptEvaluation.hxx"
 
+#ifdef PERSALYS_HAVE_YACS
+#include "persalys/YACSEvaluation.hxx"
+#endif
+
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 #include <openturns/MemoizeEvaluation.hxx>
@@ -148,7 +152,8 @@ void DesignOfExperimentEvaluation::launch()
 
   // to avoid failing whole blocks we make failed points succeed but mark them with nan
   MemoizeEvaluation* memoize = dynamic_cast<MemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
-  PythonScriptEvaluation * eval = 0;
+
+  Bool ok = false;
   if (memoize)
   {
     MarginalEvaluation *marginal = dynamic_cast<MarginalEvaluation*>(memoize->getEvaluation().getImplementation().get());
@@ -157,14 +162,16 @@ void DesignOfExperimentEvaluation::launch()
       // TODO: needs MarginalEvaluation::getEvaluation (https://github.com/openturns/openturns/pull/1565)
       // eval = dynamic_cast<PythonScriptEvaluation*>(marginal->getEvaluation().getImplementation().get());
     }
-    else
-    {
-      eval = dynamic_cast<PythonScriptEvaluation*>(memoize->getEvaluation().getImplementation().get());
-    }
-  }
-  if (eval)
-    eval->setIgnoreFailure(true);
+    else if(PythonScriptEvaluation * eval = dynamic_cast<PythonScriptEvaluation*>(memoize->getEvaluation().getImplementation().get())) {
+      eval->setIgnoreFailure(true);
+      ok = true;}
+#ifdef PERSALYS_HAVE_YACS
+    else if(YACSEvaluation * eval = dynamic_cast<YACSEvaluation*>(memoize->getEvaluation().getImplementation().get())) {
+      eval->setIgnoreFailure(true);
+    ok = true;}
+#endif
 
+  }
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
@@ -212,10 +219,14 @@ void DesignOfExperimentEvaluation::launch()
   }
 
   // mark points evaluating to nan as failed
-  if (eval)
-  {
+  if (ok) {
     // restore
-    eval->setIgnoreFailure(false);
+    if(PythonScriptEvaluation * eval = dynamic_cast<PythonScriptEvaluation*>(memoize->getEvaluation().getImplementation().get())) {
+      eval->setIgnoreFailure(false);}
+#ifdef PERSALYS_HAVE_YACS
+    else if(YACSEvaluation * eval = dynamic_cast<YACSEvaluation*>(memoize->getEvaluation().getImplementation().get())) {
+      eval->setIgnoreFailure(false);}
+#endif
 
     Indices failedIndices;
     for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)

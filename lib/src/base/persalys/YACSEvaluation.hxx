@@ -80,6 +80,9 @@ public:
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters()const;
 
+  OT::Bool getIgnoreFailure() const;
+  void setIgnoreFailure(const OT::Bool & ignore);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -92,6 +95,7 @@ private:
   OT::Description outDescription_;
   ydefx::JobParametersProxy jobParams_;
   ydefx::PyStudyFunction studyFunction_;
+  OT::Bool ignoreFailure_;
 };
 }
 #endif

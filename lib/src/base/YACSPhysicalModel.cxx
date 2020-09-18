@@ -22,6 +22,7 @@
 #include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/MemoizeFunction.hxx>
 
 using namespace OT;
 
@@ -162,7 +163,7 @@ Function YACSPhysicalModel::generateFunction(const Description & outputNames) co
   YACSEvaluation anEvaluation(evaluation_);
   anEvaluation.setOutputVariablesNames(outputNames);
 
-  return Function(anEvaluation);
+  return MemoizeFunction(Function(anEvaluation));
 }
 
 
