@@ -14,10 +14,11 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      MeshModel.cxx MeshModelImplementation.cxx
                      GridMeshModel.cxx
                      ImportedMeshModel.cxx
-                     PhysicalModel.cxx PhysicalModelImplementation.cxx SymbolicPhysicalModel.cxx 
+                     PhysicalModel.cxx PhysicalModelImplementation.cxx SymbolicPhysicalModel.cxx
                      PythonPhysicalModel.cxx
                      MetaModel.cxx
                      SymbolicFieldModel.cxx
+                     IgnoreFailureEvaluation.cxx
                      PythonScriptEvaluation.cxx
                      PythonScriptFieldFunction.cxx
                      PythonFieldModel.cxx
@@ -108,6 +109,7 @@ ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( SymbolicPhysicalModel.hxx )
 ot_install_header_file ( PythonPhysicalModel.hxx )
 ot_install_header_file ( SymbolicFieldModel.hxx )
+ot_install_header_file ( IgnoreFailureEvaluation.hxx )
 ot_install_header_file ( PythonScriptEvaluation.hxx )
 ot_install_header_file ( PythonScriptFieldFunction.hxx )
 ot_install_header_file ( PythonFieldModel.hxx )
@@ -206,10 +208,10 @@ if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysbase PRIVATE PERSALYS_BASE_DLL_EXPORTS)
 endif ()
 
-if ( NOT DEFINED LIB_VERSION ) 
+if ( NOT DEFINED LIB_VERSION )
   set ( LIB_VERSION 0.0.0 )
 endif ()
-if ( NOT DEFINED LIB_SOVERSION ) 
+if ( NOT DEFINED LIB_SOVERSION )
   set ( LIB_SOVERSION 0 )
 endif ()
 set_target_properties ( persalysbase PROPERTIES VERSION ${LIB_VERSION} )
@@ -243,4 +245,3 @@ install ( TARGETS persalysbase
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
-

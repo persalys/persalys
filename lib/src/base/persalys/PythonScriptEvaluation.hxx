@@ -23,7 +23,7 @@
 
 #include "persalys/PersalysPrivate.hxx"
 
-#include <openturns/EvaluationImplementation.hxx>
+#include <persalys/IgnoreFailureEvaluation.hxx>
 
 namespace PERSALYS
 {
@@ -32,7 +32,7 @@ namespace PERSALYS
  *
  * The class that implement the evaluation of an analytical function.
  */
-class PERSALYS_BASE_API PythonScriptEvaluation : public OT::EvaluationImplementation
+class PERSALYS_BASE_API PythonScriptEvaluation : public IgnoreFailureEvaluation
 {
   CLASSNAME
 
@@ -66,7 +66,6 @@ public:
 
   void setParallel(bool flag);
   void setProcessNumber(OT::UnsignedInteger processNumber);
-  void setIgnoreFailure(bool ignoreFailure);
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -81,7 +80,6 @@ private:
   OT::String code_ = "";
   bool isParallel_ = false;
   OT::UnsignedInteger processNumber_ = 0;
-  bool ignoreFailure_ = false;
 };
 }
 #endif

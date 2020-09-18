@@ -39,7 +39,7 @@ static Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
 
 /* Default constructor */
 PythonScriptEvaluation::PythonScriptEvaluation()
-  : EvaluationImplementation()
+  : IgnoreFailureEvaluation()
 {
 }
 
@@ -48,7 +48,7 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
                                                const Description & outputVariablesNames,
                                                const String & code)
-  : EvaluationImplementation()
+  : IgnoreFailureEvaluation()
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
@@ -114,11 +114,6 @@ void PythonScriptEvaluation::setParallel(bool flag)
 void PythonScriptEvaluation::setProcessNumber(UnsignedInteger processNumber)
 {
   processNumber_ = processNumber;
-}
-
-void PythonScriptEvaluation::setIgnoreFailure(bool ignoreFailure)
-{
-  ignoreFailure_ = ignoreFailure;
 }
 
 void PythonScriptEvaluation::resetCallsNumber()

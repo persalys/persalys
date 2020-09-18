@@ -36,13 +36,12 @@ static Factory<YACSEvaluation> Factory_YACSEvaluation;
 
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & script)
-  : EvaluationImplementation()
+  : IgnoreFailureEvaluation()
   , inputValues_()
   , inDescription_()
   , outDescription_()
   , jobParams_()
   , studyFunction_()
-  , ignoreFailure_(false)
 {
   if (!script.empty())
     setContent(script);
@@ -190,14 +189,6 @@ Point YACSEvaluation::getInputValues() const
 void YACSEvaluation::setInputValues(const Point & inP)
 {
   inputValues_ = inP;
-}
-
-OT::Bool YACSEvaluation::getIgnoreFailure() const {
-  return ignoreFailure_;
-}
-
-void YACSEvaluation::setIgnoreFailure(const OT::Bool & ignore) {
-  ignoreFailure_ = ignore;
 }
 
 Description YACSEvaluation::getInputVariablesNames() const

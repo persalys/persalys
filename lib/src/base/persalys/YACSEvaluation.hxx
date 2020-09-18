@@ -22,8 +22,7 @@
 #define PERSALYS_YACSEVALUATION_HXX
 
 #include "persalys/PersalysPrivate.hxx"
-
-#include <openturns/EvaluationImplementation.hxx>
+#include "persalys/IgnoreFailureEvaluation.hxx"
 
 #include <ydefx/Launcher.hxx>
 
@@ -35,14 +34,13 @@ namespace PERSALYS
  *
  * The class that implement the evaluation of an analytical function.
  */
-class PERSALYS_BASE_API YACSEvaluation : public OT::EvaluationImplementation
+class PERSALYS_BASE_API YACSEvaluation : public IgnoreFailureEvaluation
 {
   CLASSNAME
 
 public:
   /** Default constructor */
   YACSEvaluation(const OT::String & script = "");
-
 
   /** Virtual constructor */
   virtual YACSEvaluation * clone() const;
@@ -80,9 +78,6 @@ public:
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters()const;
 
-  OT::Bool getIgnoreFailure() const;
-  void setIgnoreFailure(const OT::Bool & ignore);
-
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -95,7 +90,6 @@ private:
   OT::Description outDescription_;
   ydefx::JobParametersProxy jobParams_;
   ydefx::PyStudyFunction studyFunction_;
-  OT::Bool ignoreFailure_;
 };
 }
 #endif

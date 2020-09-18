@@ -24,6 +24,7 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SymbolicFunction.hxx>
+#include <openturns/MemoizeFunction.hxx>
 
 using namespace OT;
 
@@ -172,9 +173,13 @@ Function SymbolicPhysicalModel::generateFunction(const Description & outputNames
   {
     formulas.add(getFormula(outputNames[i]));
   }
+  OT::ResourceMap::SetAsBool("SymbolicParser-CheckResult", false);
   SymbolicFunction f(getInputNames(), formulas);
+  OT::ResourceMap::SetAsBool("SymbolicParser-CheckResult", true);
   f.getEvaluation().getImplementation()->setOutputDescription(outputNames);
-  return f;
+  MemoizeFunction function(f);
+  function.disableCache();
+  return function;
 }
 
 
