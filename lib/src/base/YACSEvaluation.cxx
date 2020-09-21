@@ -36,7 +36,7 @@ static Factory<YACSEvaluation> Factory_YACSEvaluation;
 
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & script)
-  : EvaluationImplementation()
+  : IgnoreFailureEvaluation()
   , inputValues_()
   , inDescription_()
   , outDescription_()
@@ -97,7 +97,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   InterpreterUnlocker iul;
   if(!studyFunction_.isValid())
   {
-    Log::Error(OSS() << "Invalid study function: " << studyFunction_.errors() 
+    Log::Error(OSS() << "Invalid study function: " << studyFunction_.errors()
                      << "\n");
     throw InvalidArgumentException(HERE) << "The study function is incorrect: "
                                          << studyFunction_.errors() ;
@@ -107,14 +107,14 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   std::list<std::string> outputNames = studyFunction_.outputNames();
   if (inputNames.size() != inS.getDimension())
   {
-    Log::Error(OSS() << 
+    Log::Error(OSS() <<
     "In YACSEvaluation::operator(): inputNames.size() != inS.getDimension()\n");
     throw InvalidArgumentException(HERE) << "The dimension of the input sample "
                                        << inS.getDimension() << " is not valid";
   }
   ydefx::Sample<double> jobSample;
   // set default value for not computed and failed points
-  jobSample.outputs<double>().setDefault(std::nan("1"));
+  jobSample.outputs<double>().setDefault(std::nan(""));
   UnsignedInteger nameIdx = 0;
   // ydefx identifies variables by their name, but ot does by index.
   for(const std::string& name : inputNames)
@@ -149,15 +149,18 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
       {
         std::string name = getOutputVariablesNames()[i];
         for(UnsignedInteger j = 0; j < sampleSize; ++j)
-          if(ydefx::ExecutionState::DONE == jobSample.pointState(j))
+          if(!ignoreFailure_) {
+            if(ydefx::ExecutionState::DONE == jobSample.pointState(j))
+              result(j, i) = jobSample.outputs<double>().get(name, j);
+            else// the point could not have been evaluated
+              throw InternalException(HERE)
+                << "\nThe evaluation of the point number " << j
+                << " is in error:" << jobSample.getError(j)
+                << "\nFor further details, see "
+                << jobParams_.work_directory() << "/logs directory on "
+                << jobParams_.resource_name() << ".";
+          }else
             result(j, i) = jobSample.outputs<double>().get(name, j);
-          else // the point could not have been evaluated
-            throw InternalException(HERE)
-                  << "\nThe evaluation of the point number " << j
-                  << " is in error:" << jobSample.getError(j)
-                  << "\nFor further details, see "
-                  << jobParams_.work_directory() << "/logs directory on "
-                  << jobParams_.resource_name() << ".";
       }
     }
     else
@@ -187,7 +190,6 @@ void YACSEvaluation::setInputValues(const Point & inP)
 {
   inputValues_ = inP;
 }
-
 
 Description YACSEvaluation::getInputVariablesNames() const
 {
