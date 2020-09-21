@@ -23,9 +23,6 @@ public:
 
   pqPipelineSource * getFilterSource();
 
-protected:
-  void createRepresentation();
-
 private:
   pqPipelineSource* filtersource_;
 };

@@ -772,29 +772,31 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     // - functional/bag chart
     if (nbInputPt > 1)
     {
+
+      // functional bag chart
+      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get());
+      fBagChartWidget->PVViewWidget::setData(sample);
+      fBagChartWidget->setXAxisData(meshParamName[0]);
+      fBagChartWidget->setChartTitle(tr("Quantiles"));
+      fBagChartWidget->setAxisTitle(vtkAxis::BOTTOM, meshParamName[0]);
+      fBagChartWidget->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
+
+      BagChartSettingWidget * settingWidget = new BagChartSettingWidget(fBagChartWidget, this);
+
+      functionalBagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(fBagChartWidget, settingWidget, this));
+
       // bag chart
-      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get());
-      bagChartWidget->PVViewWidget::setData(fieldSamplet);
+      PVBagChartViewWidget * bagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), fBagChartWidget->getFilterSource());
+      //bagChartWidget->PVViewWidget::setData(fieldSamplet);
       bagChartWidget->setAxisTitle(vtkAxis::BOTTOM, "PC1");
       bagChartWidget->setAxisTitle(vtkAxis::LEFT, "PC2");
 
-      BagChartSettingWidget * settingWidget = new BagChartSettingWidget(bagChartWidget, this);
+      settingWidget = new BagChartSettingWidget(bagChartWidget, this);
 
       bagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(bagChartWidget, settingWidget, this));
 
       String aStr = (OSS() << inPVTable->getProxy() << bagChartWidget->getProxy()).str();
-      linksModel->addSelectionLink(aStr.c_str(), inPVTable->getProxy(), bagChartWidget->getProxy());
-
-      // functional bag chart
-      PVBagChartViewWidget * fBagChartWidget = new PVBagChartViewWidget(this, PVServerManagerSingleton::Get(), bagChartWidget->getFilterSource());
-      fBagChartWidget->setXAxisData(meshParamName[0]);
-      fBagChartWidget->setChartTitle(tr("Quantiles"));
-      fBagChartWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Node index"));
-      fBagChartWidget->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
-
-      settingWidget = new BagChartSettingWidget(fBagChartWidget, this);
-
-      functionalBagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(fBagChartWidget, settingWidget, this));
+      linksModel->addSelectionLink(aStr.c_str(), fBagChartWidget->getProxy(), outPVGraph->getProxy());
     }
   }
 
