@@ -250,12 +250,14 @@ Parameters ProbabilisticDesignOfExperiment::getParameters() const
     designName = "Quasi-Monte Carlo";
   param.add("Design name", designName);
 
-  String spaceFilling = "PhiP";
-  if(getSpaceFilling() == "minDist")
-    spaceFilling = "minDist";
-  else if(getSpaceFilling() == "C2")
-    spaceFilling = "C2";
-  param.add("Space filling", spaceFilling);
+  if (getDesignName() == "SALHS" || getDesignName() == "MCLHS") {
+    String spaceFilling = "PhiP";
+    if(getSpaceFilling() == "minDist")
+      spaceFilling = "minDist";
+    else if(getSpaceFilling() == "C2")
+      spaceFilling = "C2";
+    param.add("Space filling", spaceFilling);
+  }
 
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Sample size", getOriginalInputSample().getSize());
