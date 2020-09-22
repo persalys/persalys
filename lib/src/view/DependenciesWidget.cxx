@@ -300,11 +300,12 @@ void DependenciesWidget::addCopula()
   NormalCopula newCopula(selectedVars.getSize());
   newCopula.setDescription(selectedVars);
 
-  // set copula
-  physicalModel_.blockNotification("ProbabilisticModelItem");
+  // set copula, item might not be available (e.g. calibration wizard copula)
+  try {
+    physicalModel_.blockNotification("ProbabilisticModelItem");
+  } catch (std::exception &ex) { }
   physicalModel_.setCopula(selectedVars, newCopula);
   physicalModel_.blockNotification();
-
   // add a copula widget
   CopulaWidget * newWidget = new CopulaWidget(physicalModel_, newCopula, this);
   connect(newWidget, SIGNAL(emitErrorMessage(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
