@@ -23,7 +23,7 @@
 #define PERSALYS_DATACLEANINGWIZARD_HXX
 
 #include "persalys/Wizard.hxx"
-#include "persalys/DataCleaningTools.hxx"
+#include "persalys/DataCleaning.hxx"
 #include "persalys/ValueLineEdit.hxx"
 #include "persalys/DataCleaningTableModel.hxx"
 
@@ -33,7 +33,7 @@ namespace PERSALYS
   {
     Q_OBJECT
   public:
-    DataCleaningWizard(DataCleaningTools* cleaner, QWidget * parent = 0);
+    DataCleaningWizard(DataCleaning* cleaner, QWidget * parent = 0);
     void keyPressEvent(QKeyEvent * event);
     void launch();
 
@@ -45,7 +45,7 @@ namespace PERSALYS
     void updateUserValues();
 
   private:
-    DataCleaningTools * cleaner_;
+    DataCleaning * cleaner_;
     ValueLineEdit * lineEdit_;
     DataCleaningTableModel * tableModel_;
   };

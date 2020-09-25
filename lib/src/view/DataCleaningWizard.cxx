@@ -37,7 +37,7 @@ using namespace OT;
 
 namespace PERSALYS
 {
-  DataCleaningWizard::DataCleaningWizard(DataCleaningTools* cleaner, QWidget * parent)
+  DataCleaningWizard::DataCleaningWizard(DataCleaning* cleaner, QWidget * parent)
     : Wizard(parent)
     , cleaner_(cleaner)
   {

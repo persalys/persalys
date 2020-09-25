@@ -18,20 +18,20 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_DATACLEANINGTOOLS_HXX
-#define PERSALYS_DATACLEANINGTOOLS_HXX
+#ifndef PERSALYS_DATACLEANING_HXX
+#define PERSALYS_DATACLEANING_HXX
 
 #include "persalys/PersalysPrivate.hxx"
 #include <openturns/Sample.hxx>
 
 namespace PERSALYS
 {
-  class PERSALYS_BASE_API DataCleaningTools : public OT::Object
+  class PERSALYS_BASE_API DataCleaning : public OT::Object
   {
   CLASSNAME
   public:
-    DataCleaningTools() {};
-    DataCleaningTools(const OT::Sample& sample);
+    DataCleaning() {};
+    DataCleaning(const OT::Sample& sample);
 
     void removeAllNans();
     void replaceAllNans(const OT::Point& point);

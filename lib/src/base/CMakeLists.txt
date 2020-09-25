@@ -76,7 +76,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      CouplingPhysicalModel.cxx
                      FileMemoizeEvaluation.cxx
                      FileMemoizeFunction.cxx
-                     DataCleaningTools.cxx
+                     DataCleaning.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx)
@@ -185,7 +185,7 @@ ot_install_header_file ( CouplingInputFile.hxx )
 ot_install_header_file ( CouplingResourceFile.hxx )
 ot_install_header_file ( CouplingOutputFile.hxx )
 ot_install_header_file ( CouplingStep.hxx )
-ot_install_header_file ( DataCleaningTools.hxx )
+ot_install_header_file ( DataCleaning.hxx )
 
 if (OTFMI_FOUND)
   ot_install_header_file (FMIPhysicalModel.hxx)

@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/DataCleaningTools.hxx"
+#include "persalys/DataCleaning.hxx"
 
 #include <openturns/SpecFunc.hxx>
 
@@ -26,9 +26,9 @@ using namespace OT;
 
 namespace PERSALYS
 {
-  CLASSNAMEINIT(DataCleaningTools)
+  CLASSNAMEINIT(DataCleaning)
 
-  DataCleaningTools::DataCleaningTools(const Sample& sample)
+  DataCleaning::DataCleaning(const Sample& sample)
     : Object()
     , sample_(sample)
     , median_(Point(sample.getDimension()))
@@ -40,7 +40,7 @@ namespace PERSALYS
     analyseSample();
   }
 
-  void DataCleaningTools::removeAllNans() {
+  void DataCleaning::removeAllNans() {
     if(!sample_.getSize())
       return;
     Sample sample(0, sample_.getDimension());
@@ -58,7 +58,7 @@ namespace PERSALYS
     sample_ = sample;
   }
 
-  void DataCleaningTools::replaceAllNans(const Point& point) {
+  void DataCleaning::replaceAllNans(const Point& point) {
     if(!sample_.getSize())
       return;
     for(UnsignedInteger i=0; i<sample_.getSize(); ++i) {
@@ -70,7 +70,7 @@ namespace PERSALYS
     }
   }
 
-  void DataCleaningTools::removeNansByColumn(const UnsignedInteger col) {
+  void DataCleaning::removeNansByColumn(const UnsignedInteger col) {
     if(!sample_.getSize())
       return;
     Sample sample(0, sample_.getDimension());
@@ -82,7 +82,7 @@ namespace PERSALYS
     sample_ = sample;
   }
 
-  void DataCleaningTools::replaceNansByColumn(const UnsignedInteger col, const OT::Scalar& val) {
+  void DataCleaning::replaceNansByColumn(const UnsignedInteger col, const OT::Scalar& val) {
     if(!sample_.getSize())
       return;
     for(UnsignedInteger i=0; i<sample_.getSize(); ++i) {
@@ -92,7 +92,7 @@ namespace PERSALYS
     }
   }
 
-  void DataCleaningTools::computeMAD() {
+  void DataCleaning::computeMAD() {
     Sample tmp(sample_.getSize(), sample_.getDimension());
     for(UnsignedInteger i=0; i<sample_.getSize(); ++i)
       for(UnsignedInteger j=0; j<sample_.getDimension(); ++j)
@@ -100,12 +100,12 @@ namespace PERSALYS
     mad_ = tmp.computeMedian();
   }
 
-  void DataCleaningTools::computeGeometricMAD() {
+  void DataCleaning::computeGeometricMAD() {
     computeMAD();
     geomMad_ = mad_.norm();
   }
 
-  void DataCleaningTools::analyseSample() {
+  void DataCleaning::analyseSample() {
     if(!sample_.getSize())
       return;
     nanFounds_ = Point(sample_.getDimension());
@@ -124,27 +124,27 @@ namespace PERSALYS
     }
   }
 
-  Sample DataCleaningTools::getSample() const {
+  Sample DataCleaning::getSample() const {
     return sample_;
   }
 
-  Point DataCleaningTools::getMedian() const {
+  Point DataCleaning::getMedian() const {
     return median_;
   }
 
-  Point DataCleaningTools::getMean() const {
+  Point DataCleaning::getMean() const {
     return mean_;
   }
 
-  Point DataCleaningTools::getMAD() const {
+  Point DataCleaning::getMAD() const {
     return mad_;
   }
 
-  Scalar DataCleaningTools::getGeometricMAD() const {
+  Scalar DataCleaning::getGeometricMAD() const {
     return geomMad_;
   }
 
-  Point DataCleaningTools::getNanNumbers() const {
+  Point DataCleaning::getNanNumbers() const {
     return nanFounds_;
   }
 }

@@ -29,7 +29,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-  DataCleaningTableModel::DataCleaningTableModel(DataCleaningTools * cleaner, QObject* parent)
+  DataCleaningTableModel::DataCleaningTableModel(DataCleaning * cleaner, QObject* parent)
     : QAbstractTableModel(parent)
     , cleaner_(cleaner)
     , names_(cleaner_->getSample().getDescription())

@@ -22,7 +22,7 @@
 #define PERSALYS_DATACLEANINGTABLEMODEL_HXX
 
 
-#include "persalys/DataCleaningTools.hxx"
+#include "persalys/DataCleaning.hxx"
 
 #include <QAbstractTableModel>
 
@@ -33,7 +33,7 @@ namespace PERSALYS
     Q_OBJECT
 
   public:
-    DataCleaningTableModel(DataCleaningTools * cleaner, QObject* parent = 0);
+    DataCleaningTableModel(DataCleaning * cleaner, QObject* parent = 0);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & parent = QModelIndex()) const override;
@@ -54,7 +54,7 @@ namespace PERSALYS
     //temporaryErrorMessageChanged(const QString & message);
 
   private:
-    DataCleaningTools * cleaner_;
+    DataCleaning * cleaner_;
     OT::Description names_;
     OT::Point values_;
     OT::Indices selected_;

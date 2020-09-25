@@ -255,7 +255,7 @@ void DataModelWindow::launchCleaningWizard() {
     errorMessageLabel_->setText(tr("Sample must not be empty"));
     return;
   }
-  DataCleaningTools* cleaner = new DataCleaningTools(dataModel_->getSample());
+  DataCleaning* cleaner = new DataCleaning(dataModel_->getSample());
   DataCleaningWizard wizard(cleaner, this);
   dataModel_->setSample(cleaner->getSample());
   updateTableView();
