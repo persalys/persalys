@@ -12,6 +12,7 @@ ot_add_source_file (ComboBoxDelegate.cxx)
 ot_add_source_file (LineEditWithQValidatorDelegate.cxx)
 ot_add_source_file (HorizontalHeaderViewWithCombobox.cxx)
 ot_add_source_file (ExportableTableView.cxx)
+ot_add_source_file (EditableExportableTableView.cxx)
 ot_add_source_file (CopyableTableView.cxx)
 ot_add_source_file (QtTools.cxx)
 ot_add_source_file (DoubleSpinBox.cxx)
@@ -41,6 +42,7 @@ ot_install_header_file ( ComboBoxDelegate.hxx )
 ot_install_header_file ( LineEditWithQValidatorDelegate.hxx )
 ot_install_header_file ( HorizontalHeaderViewWithCombobox.hxx )
 ot_install_header_file ( ExportableTableView.hxx )
+ot_install_header_file ( EditableExportableTableView.hxx )
 ot_install_header_file ( CopyableTableView.hxx )
 ot_install_header_file ( QtTools.hxx )
 ot_install_header_file ( DoubleSpinBox.hxx )
@@ -70,6 +72,7 @@ qt5_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/LineEditWithQValidatorDelegate.hxx
               persalys/HorizontalHeaderViewWithCombobox.hxx
               persalys/ExportableTableView.hxx
+              persalys/EditableExportableTableView.hxx
               persalys/CopyableTableView.hxx
               persalys/DoubleSpinBox.hxx
               persalys/UIntSpinBox.hxx
@@ -93,7 +96,7 @@ if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysutils PRIVATE PERSALYS_UTILS_DLL_EXPORTS)
 endif ()
 
-if ( NOT DEFINED LIB_VERSION ) 
+if ( NOT DEFINED LIB_VERSION )
   set ( LIB_VERSION 0.0.0 )
 endif ()
 if ( NOT DEFINED LIB_SOVERSION )
@@ -110,4 +113,3 @@ install ( TARGETS persalysutils
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
-

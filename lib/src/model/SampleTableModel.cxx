@@ -172,7 +172,11 @@ bool SampleTableModel::setData(const QModelIndex & index, const QVariant & value
   {
     const int dataColIndex = hasRowIDcolumn_ ? index.column() - 1 : index.column();
     const int dataRowIndex = initialDescription_.getSize() ? index.row() - 1 : index.row();
-    data_(dataRowIndex, dataColIndex) = value.toDouble();
+    bool ok;
+    Scalar val = value.toDouble(&ok);
+    if(!ok)
+      return false;
+    data_(dataRowIndex, dataColIndex) = val;
     emit dataChanged(index, index);
     emit sampleChanged();
   }

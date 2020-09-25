@@ -23,7 +23,7 @@
 
 #include "persalys/DesignOfExperimentItem.hxx"
 #include "persalys/DataModelTableModel.hxx"
-#include "persalys/ExportableTableView.hxx"
+#include "persalys/EditableExportableTableView.hxx"
 #include "persalys/SubWindow.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
 #include "persalys/TemporaryLabel.hxx"
@@ -60,6 +60,7 @@ public slots:
   void resizeDataTableColumn(int column, int oldWidth, int newWidth);
   void resizeVariablesTableColumn(int column, int oldWidth, int newWidth);
   void sortSectionChanged(int, Qt::SortOrder);
+  void launchCleaningWizard();
 
 private:
   DataModel * dataModel_;
@@ -71,24 +72,6 @@ private:
   QPalette defaultLineEditPalette_;
   QLabel * sampleSizeLabel_;
   TemporaryLabel * errorMessageLabel_;
-};
-
-class PERSALYS_VIEW_API EditableExportableTableView : public ExportableTableView
-{
-  Q_OBJECT
-
-public:
-  EditableExportableTableView(QWidget* parent = 0);
-  //virtual ~EditableExportableTableView();
-
-public slots:
-  void contextMenu(const QPoint & pos);
-  void addRow();
-  void removeRows();
-
-private:
-  QAction * addRowAction_;
-  QAction * removeRowAction_;
 };
 }
 #endif
