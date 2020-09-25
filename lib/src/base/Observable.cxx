@@ -122,7 +122,7 @@ void Observable::blockNotification(const String& blockedObserverType)
       }
     }
     if (!found)
-      throw InvalidArgumentException(HERE) << "In Observable::blockNotification : observer type unknown " << blockedObserverType;
+      throw InvalidArgumentException(HERE) << "In Observable::blockNotification : observer type not found " << blockedObserverType;
   }
   blockedObserverType_ = blockedObserverType;
 }
