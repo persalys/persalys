@@ -130,7 +130,7 @@ RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_
 RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
 RUN yum -y install mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel
 RUN yum -y install freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel
-RUN yum -y install xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xorg-x11-util-macros bison
+RUN yum -y install xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xorg-x11-util-macros bison
 RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz | tar xz && cd libxkbcommon-xkbcommon-0.8.4 \
  && sed -i "/AX_GCC_BUILTIN/d" configure.ac && ./autogen.sh && ./configure --prefix=/usr --libdir=/usr/lib64 && make && make install \
  && pkg-config --exists xkbcommon && cd - && rm -r libxkbcommon*
