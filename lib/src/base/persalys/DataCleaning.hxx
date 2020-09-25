@@ -31,7 +31,7 @@ namespace PERSALYS
   CLASSNAME
   public:
     DataCleaning() {};
-    DataCleaning(const OT::Sample& sample);
+    explicit DataCleaning(const OT::Sample& sample);
 
     void removeAllNans();
     void replaceAllNans(const OT::Point& point);

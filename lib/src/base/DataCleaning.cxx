@@ -31,11 +31,11 @@ namespace PERSALYS
   DataCleaning::DataCleaning(const Sample& sample)
     : Object()
     , sample_(sample)
-    , median_(Point(sample.getDimension()))
-    , mean_(Point(sample.getDimension()))
-    , mad_(Point(sample.getDimension()))
+    , median_(sample.getDimension())
+    , mean_(sample.getDimension())
+    , mad_(sample.getDimension())
     , geomMad_(0)
-    , nanFounds_(Point(sample.getDimension()))
+    , nanFounds_(sample.getDimension())
   {
     analyseSample();
   }
@@ -108,7 +108,6 @@ namespace PERSALYS
   void DataCleaning::analyseSample() {
     if(!sample_.getSize())
       return;
-    nanFounds_ = Point(sample_.getDimension());
     for(UnsignedInteger j=0; j<sample_.getDimension(); ++j) {
       Sample sample = sample_.getMarginal(j);
       Sample cleanedSample(0,1);

@@ -249,7 +249,6 @@ void DataModelWindow::buildInterface()
 }
 
 void DataModelWindow::launchCleaningWizard() {
-  std::cout << "Clenaing data\n";
   errorMessageLabel_->reset();
   if(!dataModel_->getSample().getSize()) {
     errorMessageLabel_->setText(tr("Sample must not be empty"));
