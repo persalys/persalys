@@ -20,7 +20,7 @@
  */
 #include "persalys/ApproximationAnalysis.hxx"
 
-#include <openturns/Cobyla.hxx>
+#include <openturns/AbdoRackwitz.hxx>
 
 using namespace OT;
 
@@ -29,9 +29,10 @@ namespace PERSALYS
 
 /* Default constructor */
 ApproximationAnalysis::ApproximationAnalysis()
-  : optimizationAlgorithm_(Cobyla())
+  : optimizationAlgorithm_(AbdoRackwitz())
   , physicalStartingPoint_()
 {
+  optimizationAlgorithm_.setMaximumEvaluationNumber(1000);
 }
 
 
