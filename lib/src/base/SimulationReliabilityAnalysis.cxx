@@ -35,9 +35,10 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
   : ReliabilityAnalysis()
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , blockSize_(ResourceMap::GetAsUnsignedInteger("SimulationAlgorithm-DefaultBlockSize"))
+  , blockSize_(10)
   , timeCriteria_()
 {
+  setMaximumCoefficientOfVariation(0.1);
 }
 
 
@@ -47,9 +48,10 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis(const String& name,
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , blockSize_(ResourceMap::GetAsUnsignedInteger("SimulationAlgorithm-DefaultBlockSize"))
+  , blockSize_(10)
   , timeCriteria_()
 {
+  setMaximumCoefficientOfVariation(0.1);
 }
 
 
