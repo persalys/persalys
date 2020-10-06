@@ -75,9 +75,7 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
 
   # allows to pass compile flags like -O1 to reduce memory usage
   set (SWIG_COMPILE_FLAGS "" CACHE STRING "Additional flags used when compiling swig generated code")
-  if (DEFINED SWIG_COMPILE_FLAGS)
-    set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS ${SWIG_COMPILE_FLAGS})
-  endif ()
+  set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
 
   install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
             DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
