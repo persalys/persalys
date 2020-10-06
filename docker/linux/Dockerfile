@@ -84,9 +84,9 @@ RUN tlmgr install ucs anyfontsize preview && rm $TL.tar.gz && rm -r $TL && fc-ca
 
 # python
 RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
-RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1g.tar.gz | tar xz && cd openssl-1.1.1g \
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1h.tar.gz | tar xz && cd openssl-1.1.1h \
  && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1 && cd - && rm -r openssl*
-RUN curl -fSsL https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz | tar xz && cd Python-3.8.5 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.8.6/Python-3.8.6.tgz | tar xz && cd Python-3.8.6 \
  && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
  && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
@@ -106,11 +106,11 @@ RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-
  && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.tar.gz | tar xz && cd fmi-library-2.2 \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.1.tar.gz | tar xz && cd fmi-library-2.2.1 \
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.1 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.2.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.2 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
