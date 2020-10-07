@@ -110,12 +110,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.1.ta
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.2.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.2 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.3.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.3 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.7.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.7.4 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.tar.gz | tar xz && cd PyFMI-PyFMI-2.8 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # sphinx
@@ -136,10 +136,11 @@ RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4
  && pkg-config --exists xkbcommon && cd - && rm -r libxkbcommon*
 
 # qt
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/single/qt-everywhere-src-5.15.1.tar.xz | tar xJ && cd qt-everywhere-src-5.15.1 && ./configure -xcb -no-mimetype-database -skip qt3d -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtdeclarative -skip qtgamepad -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras -skip qtmultimedia -skip qtnetworkauth -skip qtpurchasing -skip qtquickcontrols -skip qtquickcontrols2 -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview \
- -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent \
- -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
- && cd - && rm -r qt*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtbase-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.1 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtsvg-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtx11extras-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qttools-everywhere-src-5.15.1.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtxmlpatterns-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj && cd qwt-6.1.5 \
