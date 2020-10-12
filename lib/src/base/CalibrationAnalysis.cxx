@@ -55,8 +55,6 @@ static Factory<CalibrationAnalysis> Factory_CalibrationAnalysis;
 CalibrationAnalysis::CalibrationAnalysis()
   : PhysicalModelAnalysis()
   , methodName_("LeastSquaresLinear")
-  , confidenceIntervalLength_(0.95)
-  , bootStrapSize_(0)
 {
 }
 
@@ -65,8 +63,6 @@ CalibrationAnalysis::CalibrationAnalysis()
 CalibrationAnalysis::CalibrationAnalysis(const String &name, const DesignOfExperiment &observations)
   : PhysicalModelAnalysis(name, observations.getPhysicalModel())
   , methodName_("LeastSquaresLinear")
-  , confidenceIntervalLength_(0.95)
-  , bootStrapSize_(0)
   , observations_(observations)
 {
   if (!observations.hasPhysicalModel())
@@ -221,12 +217,8 @@ void CalibrationAnalysis::launch()
 
   // Prior
 
-  // - compute output at theta Prior
-  const Point meanPrior(result_.calibrationResult_.getParameterPrior().getMean());
-  paramFunction.setParameter(meanPrior);
-  result_.outputAtPrior_ = paramFunction(getObservations().getInputSample());
   // - residuals kernel smoothing
-  const Sample priorResiduals(getObservations().getOutputSample() - result_.getOutputAtPrior());
+  const Sample priorResiduals(getObservations().getOutputSample() - result_.calibrationResult_.getOutputAtPriorMean());
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
     try { result_.priorResidualsPDF_[i] = kernel.build(priorResiduals.getMarginal(i)).drawPDF().getDrawables()[0].getData(); }
@@ -235,12 +227,8 @@ void CalibrationAnalysis::launch()
 
   // Posterior
 
-  // - compute output at theta star
-  const Point meanPosterior(result_.calibrationResult_.getParameterPosterior().getMean());
-  paramFunction.setParameter(meanPosterior);
-  result_.outputAtPosterior_ = paramFunction(getObservations().getInputSample());
   // - residuals kernel smoothing
-  const Sample posteriorResiduals(getObservations().getOutputSample() - result_.getOutputAtPosterior());
+  const Sample posteriorResiduals(getObservations().getOutputSample() - result_.calibrationResult_.getOutputAtPosteriorMean());
   Collection<Sample> posteriorResidualPDF(outputsOfInterest.getSize());
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
@@ -583,7 +571,7 @@ String CalibrationAnalysis::getPythonScript() const
 
 bool CalibrationAnalysis::hasValidResult() const
 {
-  return result_.outputAtPrior_.getSize() != 0;
+  return result_.calibrationResult_.getParameterMAP().getSize() != 0;
 }
 
 

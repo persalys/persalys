@@ -105,8 +105,8 @@ protected:
 private:
   static OT::Description MethodNames_;
   OT::String methodName_;
-  OT::Scalar confidenceIntervalLength_;
-  OT::UnsignedInteger bootStrapSize_;
+  OT::Scalar confidenceIntervalLength_ = 0.95;
+  OT::UnsignedInteger bootStrapSize_ = 0;
   OT::OptimizationAlgorithm optimizationAlgorithm_;
   DesignOfExperiment observations_;
   OT::Distribution priorDistribution_;

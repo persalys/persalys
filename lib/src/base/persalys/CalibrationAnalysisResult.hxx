@@ -43,8 +43,6 @@ public:
 
   OT::CalibrationResult getCalibrationResult() const {return calibrationResult_;};
   OT::Interval getConfidenceInterval() const {return confidenceInterval_;};
-  OT::Sample getOutputAtPrior() const {return outputAtPrior_;};
-  OT::Sample getOutputAtPosterior() const {return outputAtPosterior_;};
   DataSample::SampleCollection getPriorResidualsPDF() const {return priorResidualsPDF_;};
   DataSample::SampleCollection getPosteriorResidualsPDF() const {return posteriorResidualsPDF_;};
 
@@ -60,8 +58,6 @@ public:
 private:
   OT::CalibrationResult calibrationResult_;
   OT::Interval confidenceInterval_;
-  OT::Sample outputAtPrior_;
-  OT::Sample outputAtPosterior_;
   OT::PersistentCollection<OT::Sample> priorResidualsPDF_;
   OT::PersistentCollection<OT::Sample> posteriorResidualsPDF_;
 };
