@@ -53,7 +53,7 @@ public:
   void setInputSample(const OT::Sample & sample) override;
   void setOutputSample(const OT::Sample & sample);
 
-  OT::String getPythonScript() const;
+  virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;

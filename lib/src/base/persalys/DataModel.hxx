@@ -64,7 +64,7 @@ public:
                           const OT::Indices &outputColumns,
                           const OT::Description &outputNames);
 
-  OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** String converter */
   OT::String __repr__() const override;

@@ -173,9 +173,7 @@ Function SymbolicPhysicalModel::generateFunction(const Description & outputNames
   {
     formulas.add(getFormula(outputNames[i]));
   }
-  OT::ResourceMap::SetAsBool("SymbolicParser-CheckResult", false);
   SymbolicFunction f(getInputNames(), formulas);
-  OT::ResourceMap::SetAsBool("SymbolicParser-CheckResult", true);
   f.getEvaluation().getImplementation()->setOutputDescription(outputNames);
   MemoizeFunction function(f);
   function.disableCache();

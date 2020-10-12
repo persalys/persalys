@@ -23,7 +23,7 @@
 
 #include "persalys/PersalysPrivate.hxx"
 
-#include <persalys/IgnoreFailureEvaluation.hxx>
+#include <openturns/EvaluationImplementation.hxx>
 
 namespace PERSALYS
 {
@@ -32,7 +32,7 @@ namespace PERSALYS
  *
  * The class that implement the evaluation of an analytical function.
  */
-class PERSALYS_BASE_API PythonScriptEvaluation : public IgnoreFailureEvaluation
+class PERSALYS_BASE_API PythonScriptEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME
 

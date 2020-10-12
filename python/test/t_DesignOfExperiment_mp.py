@@ -28,8 +28,5 @@ design6 = persalys.FixedDesignOfExperiment('design6', model3)
 design6.setInterestVariables(['Y0'])
 design6.setOriginalInputSample([[0.9, 1.1], [1.8, 2.2], [0, 2.2]])
 design6.setBlockSize(3)
-from distutils.version import LooseVersion
-# TODO: wire new MarginalEvaluation::getEvaluation in DesignOfExperimentEvaluation
-if LooseVersion(ot.__version__) >= '1.16':
-    design6.run()
-    assert design6.getResult().getDesignOfExperiment().getOutputSample().getSize() == 2, "whole block must no fail"
+design6.run()
+assert design6.getResult().getDesignOfExperiment().getOutputSample().getSize() == 2, "whole block must no fail"

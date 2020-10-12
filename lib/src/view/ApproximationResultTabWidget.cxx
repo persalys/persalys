@@ -202,11 +202,11 @@ void ApproximationResultTabWidget::buildInterface()
       errorMessage.clear();
     }
 
-    // -- HohenBichler
+    // -- Hohenbichler
     try
     {
-      valuesList[0] = QString::number(sormResult_.getEventProbabilityHohenBichler());
-      valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexHohenBichler());
+      valuesList[0] = QString::number(sormResult_.getEventProbabilityHohenbichler());
+      valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexHohenbichler());
     }
     catch (std::exception &ex)
     {

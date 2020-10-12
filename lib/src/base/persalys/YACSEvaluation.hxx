@@ -22,7 +22,7 @@
 #define PERSALYS_YACSEVALUATION_HXX
 
 #include "persalys/PersalysPrivate.hxx"
-#include "persalys/IgnoreFailureEvaluation.hxx"
+#include <openturns/EvaluationImplementation.hxx>
 
 #include <ydefx/Launcher.hxx>
 
@@ -34,7 +34,7 @@ namespace PERSALYS
  *
  * The class that implement the evaluation of an analytical function.
  */
-class PERSALYS_BASE_API YACSEvaluation : public IgnoreFailureEvaluation
+class PERSALYS_BASE_API YACSEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME
 
