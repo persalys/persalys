@@ -239,10 +239,10 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   const Sample outputObs(observations_.getOutputSample().getMarginal(i));
 
   Sample outputSamples(outputObs);
-  outputSamples.stack(result_.getOutputAtPrior().getMarginal(i));
-  if (result_.getOutputAtPosterior().getSize())
+  outputSamples.stack(result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(i));
+  if (result_.getCalibrationResult().getOutputAtPosteriorMean().getSize())
   {
-    outputSamples.stack(result_.getOutputAtPosterior().getMarginal(i));
+    outputSamples.stack(result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(i));
     labels << tr("Posterior");
   }
   const Description outDescription(QtOT::StringListToDescription(labels));
@@ -256,11 +256,11 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   Description sampleDescription(sample.getDescription());
 
   // + residual samples
-  sample.stack(outputObs - result_.getOutputAtPrior().getMarginal(i));
+  sample.stack(outputObs - result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(i));
   sampleDescription.add(tr("Prior residuals").toStdString());
-  if (result_.getOutputAtPosterior().getSize())
+  if (result_.getCalibrationResult().getOutputAtPosteriorMean().getSize())
   {
-    sample.stack(outputObs - result_.getOutputAtPosterior().getMarginal(i));
+    sample.stack(outputObs - result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(i));
     sampleDescription.add(tr("Posterior residuals").toStdString());
   }
   sample.setDescription(sampleDescription);
