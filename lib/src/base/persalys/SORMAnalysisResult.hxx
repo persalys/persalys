@@ -41,18 +41,18 @@ public:
   SORMAnalysisResult(const OT::SORMResult& sormResult);
 
   /** Virtual constructor */
-  virtual SORMAnalysisResult * clone() const;
+  SORMAnalysisResult * clone() const override;
 
   OT::SORMResult getSORMResult() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   OT::SORMResult sormResult_;

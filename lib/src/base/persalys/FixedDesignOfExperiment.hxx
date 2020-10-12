@@ -40,17 +40,17 @@ public:
                           const OT::Sample& inputSample);
 
   /** Virtual constructor */
-  virtual FixedDesignOfExperiment * clone() const;
+  FixedDesignOfExperiment * clone() const override;
 
   void setOriginalInputSample(const OT::Sample & sample);
 
-  virtual OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
 protected:
-  virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
+  OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
 };
 }
 #endif

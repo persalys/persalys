@@ -69,7 +69,7 @@ public:
   void stop();
 
   /** override this method in order to emit a notification */
-  virtual void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj);
+  void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj) override;
 
   void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 };

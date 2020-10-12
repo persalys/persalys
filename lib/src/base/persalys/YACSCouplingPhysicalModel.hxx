@@ -54,10 +54,10 @@ public:
   void save(OT::Advocate & adv) const;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 

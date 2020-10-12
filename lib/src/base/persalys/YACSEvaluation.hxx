@@ -40,21 +40,21 @@ class PERSALYS_BASE_API YACSEvaluation : public IgnoreFailureEvaluation
 
 public:
   /** Default constructor */
-  YACSEvaluation(const OT::String & script = "");
+  explicit YACSEvaluation(const OT::String & script = "");
 
   /** Virtual constructor */
-  virtual YACSEvaluation * clone() const;
+  YACSEvaluation * clone() const override;
 
   /** Comparison operator */
   OT::Bool operator ==(const YACSEvaluation & other) const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
-  virtual OT::String __str__(const OT::String & offset = "") const;
+  OT::String __repr__() const override;
+  OT::String __str__(const OT::String & offset = "") const override;
 
   /** Operator () */
-  virtual OT::Point operator() (const OT::Point & inP) const;
-  virtual OT::Sample operator() (const OT::Sample & inS) const;
+  OT::Point operator() (const OT::Point & inP) const override;
+  OT::Sample operator() (const OT::Sample & inS) const override;
 
   /** Accessor for input values */
   OT::Point getInputValues() const;
@@ -62,13 +62,13 @@ public:
   /** Accessor to the input variables names */
   OT::Description getInputVariablesNames() const;
   /** Accessor for input point dimension */
-  OT::UnsignedInteger getInputDimension() const;
+  OT::UnsignedInteger getInputDimension() const override;
 
   /** Accessor to the output variables names */
   OT::Description getOutputVariablesNames() const;
   void setOutputVariablesNames(const OT::Description & outDescription);
   /** Accessor for output point dimension */
-  OT::UnsignedInteger getOutputDimension() const;
+  OT::UnsignedInteger getOutputDimension() const override;
 
   /** Accessor to the formulas */
   OT::String getContent() const;
@@ -76,13 +76,13 @@ public:
 
   /** Accessor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();
-  const ydefx::JobParametersProxy& jobParameters()const;
+  const ydefx::JobParametersProxy& jobParameters() const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::Point inputValues_;

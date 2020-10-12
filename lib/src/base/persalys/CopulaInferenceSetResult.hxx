@@ -39,7 +39,7 @@ public:
   CopulaInferenceSetResult();
 
   /** Virtual constructor */
-  virtual CopulaInferenceSetResult * clone() const;
+  CopulaInferenceSetResult * clone() const override;
 
   OT::Description getSetOfVariablesNames() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
@@ -48,13 +48,13 @@ public:
   OT::Description getErrorMessages() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   OT::Description setOfVariablesNames_;

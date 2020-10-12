@@ -41,9 +41,9 @@ public:
   /** Constructor with parameters */
   CalibrationAnalysis(const OT::String& name, const DesignOfExperiment& observations);
   /** Virtual constructor */
-  virtual CalibrationAnalysis * clone() const;
+  CalibrationAnalysis * clone() const override;
 
-  virtual Observer * getParentObserver() const;
+  Observer * getParentObserver() const override;
 
   DesignOfExperiment getObservations() const {return observations_;};
 
@@ -76,26 +76,26 @@ public:
   OT::UnsignedInteger getBootStrapSize() const {return bootStrapSize_;};
   void setBootStrapSize(const OT::UnsignedInteger);
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   void initializeParameters();
-  virtual void initialize();
+  void initialize() override;
   void check(const OT::Description &calibratedInputs, const OT::Distribution &priorDistribution,
              const OT::Description &fixedInputs, const OT::Point &fixedValues);
-  virtual void launch();
+  void launch() override;
 
   template <class T>
   void runNonLinearAlgorithm(T& algo);

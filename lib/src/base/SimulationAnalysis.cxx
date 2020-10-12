@@ -44,6 +44,11 @@ SimulationAnalysis::SimulationAnalysis(const String & name, const PhysicalModel 
 {
 }
 
+SimulationAnalysis * SimulationAnalysis::clone() const
+{
+  return new SimulationAnalysis(*this);
+}
+
 
 Sample SimulationAnalysis::getFailedInputSample() const
 {

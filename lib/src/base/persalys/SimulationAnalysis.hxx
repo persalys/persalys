@@ -35,7 +35,7 @@ protected:
 
 public:
   /** Virtual constructor */
-  virtual SimulationAnalysis * clone() const = 0;
+  SimulationAnalysis * clone() const override;
 
   OT::Sample getFailedInputSample() const;
 
@@ -45,16 +45,16 @@ public:
   OT::UnsignedInteger getSeed() const;
   virtual void setSeed(const OT::UnsignedInteger seed);
 
-  virtual Parameters getParameters() const;
+  Parameters getParameters() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
+  void initialize() override;
   virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
 
 protected:

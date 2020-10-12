@@ -52,22 +52,22 @@ public:
                const OT::Sample &outSample);
 
   /** Virtual constructor */
-  virtual Observations * clone() const;
+  Observations * clone() const override;
 
-  virtual void removeAllObservers();
+  void removeAllObservers() override;
 
-  virtual void setColumns(const OT::Indices &inputColumns,
-                          const OT::Description &inputNames,
-                          const OT::Indices &outputColumns,
-                          const OT::Description &outputNames);
+  void setColumns(const OT::Indices &inputColumns,
+                  const OT::Description &inputNames,
+                  const OT::Indices &outputColumns,
+                  const OT::Description &outputNames) override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
 protected:
-  virtual OT::Sample importSample(const OT::String& fileName);
-  virtual void setDefaultColumns();
-  virtual void update();
+  OT::Sample importSample(const OT::String& fileName) override;
+  void setDefaultColumns() override;
+  void update() override;
   virtual void orderSamples();
 };
 }

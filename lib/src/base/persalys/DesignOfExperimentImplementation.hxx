@@ -37,7 +37,7 @@ public:
   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
-  virtual DesignOfExperimentImplementation * clone() const;
+  DesignOfExperimentImplementation * clone() const override;
 
   virtual void setName(const OT::String & name);
 
@@ -50,16 +50,16 @@ public:
   PhysicalModel getPhysicalModel() const;
 
   void initialize();
-  virtual void setInputSample(const OT::Sample & sample);
-  virtual void setOutputSample(const OT::Sample & sample);
+  void setInputSample(const OT::Sample & sample) override;
+  void setOutputSample(const OT::Sample & sample);
 
-  virtual OT::String getPythonScript() const;
+  OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   bool hasPhysicalModel_;

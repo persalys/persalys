@@ -37,22 +37,22 @@ public:
   GridMeshModel(const VariableCollection& parameters, const OT::Interval& bounds, const OT::Indices& nbNodes);
 
   /** Virtual constructor */
-  virtual GridMeshModel * clone() const;
+  GridMeshModel * clone() const override;
 
   void setParameters(const OT::Interval& bounds, const OT::Indices& nbNodes);
-  OT::Interval getBounds() const;
-  OT::Indices getNumberOfNodes() const;
+  OT::Interval getBounds() const override;
+  OT::Indices getNumberOfNodes() const override;
 
-  virtual OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::Interval bounds_;

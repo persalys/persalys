@@ -45,33 +45,33 @@ public:
                          const OT::String & code);
 
   /** Virtual constructor */
-  virtual PythonScriptEvaluation * clone() const;
+  PythonScriptEvaluation * clone() const override;
 
   /** Comparison operator */
   OT::Bool operator ==(const PythonScriptEvaluation & other) const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
-  virtual OT::String __str__(const OT::String & offset = "") const;
+  OT::String __repr__() const override;
+  OT::String __str__(const OT::String & offset = "") const override;
 
   void resetCallsNumber();
 
   /** Operator () */
-  virtual OT::Point operator() (const OT::Point & inP) const;
-  virtual OT::Sample operator() (const OT::Sample & inS) const;
+  OT::Point operator() (const OT::Point & inP) const override;
+  OT::Sample operator() (const OT::Sample & inS) const override;
 
   /** Accessor for input point dimension */
-  OT::UnsignedInteger getInputDimension() const;
-  OT::UnsignedInteger getOutputDimension() const;
+  OT::UnsignedInteger getInputDimension() const override;
+  OT::UnsignedInteger getOutputDimension() const override;
 
   void setParallel(bool flag);
   void setProcessNumber(OT::UnsignedInteger processNumber);
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   mutable bool scriptHasBeenEvaluated_ = false;

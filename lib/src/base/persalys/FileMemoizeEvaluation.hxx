@@ -44,7 +44,7 @@ public:
   FileMemoizeEvaluation(const OT::Evaluation & evaluation, const OT::FileName & inputFile, const OT::FileName & outputFile);
 
   /** Virtual constructor */
-  virtual FileMemoizeEvaluation * clone() const;
+  FileMemoizeEvaluation * clone() const override;
 
   /** Function implementation accessors */
   void setEvaluation(const OT::Evaluation & evaluation);
@@ -54,16 +54,16 @@ public:
   OT::Bool operator ==(const FileMemoizeEvaluation & other) const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
-  virtual OT::String __str__(const OT::String & offset = "") const;
+  OT::String __repr__() const override;
+  OT::String __str__(const OT::String & offset = "") const override;
 
   /* Here is the interface that all derived class must implement */
 
   /** Operator () */
-  virtual OT::Point operator() (const OT::Point & inPoint) const;
+  OT::Point operator() (const OT::Point & inPoint) const override;
 
   /** Operator () */
-  virtual OT::Sample operator() (const OT::Sample & inSample) const;
+  OT::Sample operator() (const OT::Sample & inSample) const override;
 
   /** Enable or disable the internal cache */
   void enableCache();
@@ -100,10 +100,10 @@ public:
   OT::FileName getCacheOutputFile() const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
 

@@ -38,7 +38,7 @@ public:
   SobolAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
-  virtual SobolAnalysis * clone() const;
+  SobolAnalysis * clone() const override;
 
   OT::Scalar getMaximumConfidenceIntervalLength() const;
   void setMaximumConfidenceIntervalLength(const OT::Scalar length);
@@ -51,26 +51,26 @@ public:
 
   SobolResult getResult() const;
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
-  virtual void stop();
+  void stop() override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   static void UpdateProgressValue(double percent, void* data);
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
 
 private:
   TimeCriteria timeCriteria_;

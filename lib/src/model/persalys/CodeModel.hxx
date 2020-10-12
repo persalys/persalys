@@ -34,11 +34,11 @@ class PERSALYS_MODEL_API CodeModel : public QAbstractTableModel
 public:
   CodeModel(const PhysicalModel & physicalModel, QObject* parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  bool setData(const QModelIndex & index, const QVariant & value, int role);
-  Qt::ItemFlags flags(const QModelIndex & index) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex & index, int role) const override;
+  bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
 
 public slots:
   void updateData();

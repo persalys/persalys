@@ -38,12 +38,12 @@ public:
   DesignOfExperimentEvaluation(const OT::String& name, const PhysicalModel& physicalModel);
 
   /** Virtual constructor */
-  virtual DesignOfExperimentEvaluation * clone() const;
+  DesignOfExperimentEvaluation * clone() const override;
 
   /** Object name accessor */
-  virtual void setName(const OT::String& name);
+  void setName(const OT::String& name) override;
 
-  virtual void removeAllObservers();
+  void removeAllObservers() override;
 
   virtual OT::Sample getOriginalInputSample() const;
 
@@ -52,19 +52,19 @@ public:
   void setDesignOfExperiment(const DesignOfExperiment& designOfExperiment);
   DataAnalysisResult getResult() const;
 
-  virtual Parameters getParameters() const;
-  virtual bool hasValidResult() const;
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  Parameters getParameters() const override;
+  bool hasValidResult() const override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
 
 protected:
   mutable OT::Sample originalInputSample_;

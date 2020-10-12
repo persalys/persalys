@@ -39,19 +39,19 @@ public:
   CopulaInferenceResult();
 
   /** Virtual constructor */
-  virtual CopulaInferenceResult * clone() const;
+  CopulaInferenceResult * clone() const override;
 
   CopulaInferenceSetResultCollection getCopulaInferenceSetResultCollection() const;
   CopulaInferenceSetResult getCopulaInferenceSetResult(const OT::Description& variablesNames) const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::PersistentCollection< CopulaInferenceSetResult > copulaInferenceSetResultCollection_;

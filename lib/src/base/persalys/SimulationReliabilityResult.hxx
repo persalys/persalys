@@ -44,7 +44,7 @@ public:
                               const OT::Sample& convergenceSampleUpperBound);
 
   /** Virtual constructor */
-  virtual SimulationReliabilityResult * clone() const;
+  SimulationReliabilityResult * clone() const override;
 
   OT::ProbabilitySimulationResult getSimulationResult() const;
   OT::Sample getConvergenceSample() const;
@@ -52,13 +52,13 @@ public:
   OT::Sample getConvergenceSampleUpperBound() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::ProbabilitySimulationResult simulationResult_;

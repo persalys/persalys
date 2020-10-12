@@ -39,7 +39,7 @@ public:
   FieldMonteCarloResult();
 
   /** Virtual constructor */
-  virtual FieldMonteCarloResult * clone() const;
+  FieldMonteCarloResult * clone() const override;
 
   OT::ProcessSample getProcessSample() const;
   OT::Sample getMeanSample() const;
@@ -50,13 +50,13 @@ public:
   OT::Collection<OT::KarhunenLoeveResult> getKarhunenLoeveResults() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::ProcessSample processSample_;

@@ -35,20 +35,20 @@ public:
   explicit CouplingResourceFile(const OT::String & path = "");
 
   /** Virtual constructor */
-  virtual CouplingResourceFile * clone() const;
+  CouplingResourceFile * clone() const override;
 
   /** Path accessor */
   void setPath(const OT::String & path);
   OT::String getPath() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::String path_;

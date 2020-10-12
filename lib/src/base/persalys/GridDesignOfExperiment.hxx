@@ -42,7 +42,7 @@ public:
                          const OT::Collection<OT::Point> &values);
 
   /** Virtual constructor */
-  virtual GridDesignOfExperiment * clone() const;
+  GridDesignOfExperiment * clone() const override;
 
   OT::Collection<OT::Point> getValues() const;
   void setValues(const OT::Collection<OT::Point> &values);
@@ -50,21 +50,21 @@ public:
 
   void updateParameters();
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   void initializeParameters();
-  virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
+  OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
 
 protected:
   OT::Description inputNames_;

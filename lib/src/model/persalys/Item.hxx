@@ -45,7 +45,7 @@ public:
   void appendSeparator(const QString& text = "");
   void insertAction(int i, QAction* action);
 
-  virtual QVariant data(int role) const;
+  QVariant data(int role) const override;
   virtual void appendRow(Item * item);
   virtual void insertRow(int row, Item * item);
   virtual void removeRow(int row);

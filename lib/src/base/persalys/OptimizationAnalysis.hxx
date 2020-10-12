@@ -41,9 +41,9 @@ public:
                        const OT::String & solverName = "Cobyla");
 
   /** Virtual constructor */
-  virtual OptimizationAnalysis * clone() const;
+  OptimizationAnalysis * clone() const override;
 
-  virtual void setInterestVariables(const OT::Description& variablesNames);
+  void setInterestVariables(const OT::Description& variablesNames) override;
 
   void updateParameters();
 
@@ -84,25 +84,25 @@ public:
   OT::Description getVariableInputs() const;
   void setVariableInputs(const OT::Description& inputs);
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
 
   OT::OptimizationResult getResult() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   void initializeParameters();
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
   static OT::Description SolverNames_;
 
 private:

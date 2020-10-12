@@ -45,7 +45,7 @@ public:
                          const OT::Bool isParallel);
 
   /** Virtual constructor */
-  virtual PythonScriptFieldFunction * clone() const;
+  PythonScriptFieldFunction * clone() const override;
 
   /** Comparison operator */
   OT::Bool operator ==(const PythonScriptFieldFunction & other) const;
@@ -54,8 +54,8 @@ public:
   void resetCallsNumber();
 
   /** Operator () */
-  virtual OT::Sample operator() (const OT::Point & inP) const;
-  virtual OT::ProcessSample operator() (const OT::Sample & inS) const;
+  OT::Sample operator() (const OT::Point & inP) const override;
+  OT::ProcessSample operator() (const OT::Sample & inS) const override;
 
 private:
   mutable bool scriptHasBeenEvaluated_;

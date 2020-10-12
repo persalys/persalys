@@ -36,12 +36,12 @@ public:
   MonteCarloReliabilityAnalysis(const OT::String& name, const LimitState& limitState);
 
   /** Virtual constructor */
-  virtual MonteCarloReliabilityAnalysis * clone() const;
+  MonteCarloReliabilityAnalysis * clone() const override;
 
-  virtual Parameters getParameters() const;
+  Parameters getParameters() const override;
 
 protected:
-  virtual SimulationInterface getSimulationAlgorithm(const OT::RandomVector & event);
+  SimulationInterface getSimulationAlgorithm(const OT::RandomVector & event) override;
 };
 }
 #endif

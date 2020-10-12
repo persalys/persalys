@@ -43,12 +43,12 @@ public:
                       const OT::String & code);
 
   /** Virtual constructor */
-  virtual PythonFieldModel * clone() const;
+  PythonFieldModel * clone() const override;
 
-  OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
 protected:
-  virtual OT::PointToFieldFunction generatePointToFieldFunction(const OT::Description & outputNames) const;
+  OT::PointToFieldFunction generatePointToFieldFunction(const OT::Description & outputNames) const override;
 };
 }
 #endif

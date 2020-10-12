@@ -37,12 +37,12 @@ class PERSALYS_MODEL_API CalibrationTableModel : public QAbstractTableModel
 public:
   CalibrationTableModel(QObject *parent = 0);
 
-  int columnCount(const QModelIndex &parent = QModelIndex()) const;
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  QVariant data(const QModelIndex &index, int role) const;
-  bool setData(const QModelIndex &index, const QVariant &value, int role);
-  Qt::ItemFlags flags(const QModelIndex &index) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  QVariant data(const QModelIndex &index, int role) const override;
+  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
   OT::PointWithDescription getFixedValues() const;
   OT::PointWithDescription getCalibratedInputs() const;
 

@@ -39,10 +39,10 @@ public:
   Variable(const OT::String & name, const OT::String & description = "");
 
   /** Virtual constructor */
-  virtual Variable * clone() const;
+  Variable * clone() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   virtual void setName(const OT::String &name);
 
@@ -55,10 +55,10 @@ public:
   virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
-  virtual void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  virtual void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   OT::String getEscapedDescription() const;

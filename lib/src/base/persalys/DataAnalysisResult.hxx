@@ -45,7 +45,7 @@ public:
   DataAnalysisResult(const DesignOfExperiment& design);
 
   /** Virtual constructor */
-  virtual DataAnalysisResult * clone() const;
+  DataAnalysisResult * clone() const override;
 
   PointCollection getMin() const;
   PointCollection getMax() const;
@@ -67,13 +67,13 @@ public:
   DataSample::SampleCollection getCDF() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::PersistentCollection<OT::Point> min_;

@@ -44,6 +44,11 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
 }
 
 
+ReliabilityAnalysis * ReliabilityAnalysis::clone() const
+{
+  return new ReliabilityAnalysis(*this);
+}
+
 Observer * ReliabilityAnalysis::getParentObserver() const
 {
   return limitState_.getImplementation()->getObserver("LimitStateItem");
