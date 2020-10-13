@@ -38,8 +38,12 @@ SobolResult::SobolResult()
   , outputNames_()
   , firstOrderIndices_()
   , totalIndices_()
+  , aggregatedFirstOrderIndices_()
+  , aggregatedTotalIndices_()
   , firstOrderIndicesInterval_()
   , totalIndicesInterval_()
+  , aggregatedFirstOrderIndicesInterval_()
+  , aggregatedTotalIndicesInterval_()
   , callsNumber_(0)
   , confidenceIntervalLength_(-1.)
 {
@@ -54,8 +58,12 @@ SobolResult::SobolResult(const Sample& firstOrderIndices,
   , outputNames_(outputNames)
   , firstOrderIndices_(firstOrderIndices)
   , totalIndices_(totalIndices)
+  , aggregatedFirstOrderIndices_()
+  , aggregatedTotalIndices_()
   , firstOrderIndicesInterval_()
   , totalIndicesInterval_()
+  , aggregatedFirstOrderIndicesInterval_()
+  , aggregatedTotalIndicesInterval_()
   , callsNumber_(0)
   , confidenceIntervalLength_(-1.)
 {
@@ -101,6 +109,18 @@ Sample SobolResult::getTotalIndices() const
 }
 
 
+Point SobolResult::getAggregatedFirstOrderIndices() const
+{
+  return aggregatedFirstOrderIndices_;
+}
+
+
+Point SobolResult::getAggregatedTotalIndices() const
+{
+  return aggregatedTotalIndices_;
+}
+
+
 Collection<Interval> SobolResult::getFirstOrderIndicesInterval() const
 {
   return firstOrderIndicesInterval_;
@@ -110,6 +130,18 @@ Collection<Interval> SobolResult::getFirstOrderIndicesInterval() const
 Collection<Interval> SobolResult::getTotalIndicesInterval() const
 {
   return totalIndicesInterval_;
+}
+
+
+Interval SobolResult::getAggregatedFirstOrderIndicesInterval() const
+{
+  return aggregatedFirstOrderIndicesInterval_;
+}
+
+
+Interval SobolResult::getAggregatedTotalIndicesInterval() const
+{
+  return aggregatedTotalIndicesInterval_;
 }
 
 
@@ -151,6 +183,10 @@ void SobolResult::save(Advocate & adv) const
   adv.saveAttribute("totalIndices_", totalIndices_);
   adv.saveAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
   adv.saveAttribute("totalIndicesInterval_", totalIndicesInterval_);
+  adv.saveAttribute("aggregatedFirstOrderIndices_", aggregatedFirstOrderIndices_);
+  adv.saveAttribute("aggregatedTotalIndices_", aggregatedTotalIndices_);
+  adv.saveAttribute("aggregatedFirstOrderIndicesInterval_", aggregatedFirstOrderIndicesInterval_);
+  adv.saveAttribute("aggregatedTotalIndicesInterval_", aggregatedTotalIndicesInterval_);
   adv.saveAttribute("callsNumber_", callsNumber_);
   adv.saveAttribute("confidenceIntervalLength_", confidenceIntervalLength_);
 }
@@ -165,6 +201,14 @@ void SobolResult::load(Advocate & adv)
   adv.loadAttribute("totalIndices_", totalIndices_);
   adv.loadAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
   adv.loadAttribute("totalIndicesInterval_", totalIndicesInterval_);
+  if(adv.hasAttribute("aggregatedFirstOrderIndices_"))
+    adv.loadAttribute("aggregatedFirstOrderIndices_", aggregatedFirstOrderIndices_);
+  if(adv.hasAttribute("aggregatedTotalIndices_"))
+    adv.loadAttribute("aggregatedTotalIndices_", aggregatedTotalIndices_);
+  if(adv.hasAttribute("aggregatedFirstOrderIndicesInterval_"))
+    adv.loadAttribute("aggregatedFirstOrderIndicesInterval_", aggregatedFirstOrderIndicesInterval_);
+  if(adv.hasAttribute("aggregatedTotalIndicesInterval_"))
+    adv.loadAttribute("aggregatedTotalIndicesInterval_", aggregatedTotalIndicesInterval_);
   adv.loadAttribute("callsNumber_", callsNumber_);
   adv.loadAttribute("confidenceIntervalLength_", confidenceIntervalLength_);
 }
