@@ -51,6 +51,10 @@ public:
   OT::Sample getTotalIndices() const;
   OT::Collection<OT::Interval> getFirstOrderIndicesInterval() const;
   OT::Collection<OT::Interval> getTotalIndicesInterval() const;
+  OT::Point getAggregatedFirstOrderIndices() const;
+  OT::Point getAggregatedTotalIndices() const;
+  OT::Interval getAggregatedFirstOrderIndicesInterval() const;
+  OT::Interval getAggregatedTotalIndicesInterval() const;
 
   OT::UnsignedInteger getCallsNumber() const;
 
@@ -69,8 +73,12 @@ private:
   OT::Description outputNames_;
   OT::Sample firstOrderIndices_;
   OT::Sample totalIndices_;
+  OT::Point aggregatedFirstOrderIndices_;
+  OT::Point aggregatedTotalIndices_;
   OT::PersistentCollection<OT::Interval> firstOrderIndicesInterval_;
   OT::PersistentCollection<OT::Interval> totalIndicesInterval_;
+  OT::Interval aggregatedFirstOrderIndicesInterval_;
+  OT::Interval aggregatedTotalIndicesInterval_;
   OT::UnsignedInteger callsNumber_;
   OT::Scalar confidenceIntervalLength_;
 };

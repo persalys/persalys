@@ -294,6 +294,10 @@ void SobolAnalysis::launch()
       result_.firstOrderIndicesInterval_.add(sobolResult_i.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
       result_.totalIndicesInterval_.add(sobolResult_i.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
     }
+    result_.aggregatedFirstOrderIndices_ = sobolResult.getFirstOrderIndicesEstimate();
+    result_.aggregatedTotalIndices_ = sobolResult.getTotalOrderIndicesEstimate();
+    result_.aggregatedFirstOrderIndicesInterval_ = sobolResult.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel());
+    result_.aggregatedTotalIndicesInterval_ = sobolResult.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel());
   }
   function.disableHistory();
 }

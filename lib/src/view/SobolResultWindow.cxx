@@ -26,6 +26,7 @@
 #include "persalys/QtTools.hxx"
 
 #include <QGroupBox>
+#include <QComboBox>
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QSplitter>
@@ -71,15 +72,8 @@ void SobolResultWindow::buildInterface()
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
-  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  VariablesListWidget * outputsListWidget = new VariablesListWidget;
-  outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
-  outputsLayoutGroupBox->addWidget(outputsListWidget);
 
-  mainWidget->addWidget(outputsGroupBox);
-  mainWidget->setStretchFactor(0, 1);
 
   // - tab widget
   QTabWidget * tabWidget = new QTabWidget;
@@ -90,26 +84,12 @@ void SobolResultWindow::buildInterface()
   QWidget * widget = new QWidget;
   QVBoxLayout * vbox = new QVBoxLayout(widget);
 
-  // stopping criteria
-  if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
-  {
-    // stopping criteria
-    QStringList namesList;
-    namesList << tr("Elapsed time")
-              << tr("Number of calls")
-              << tr("Confidence interval length");
-
-    QStringList valuesList;
-    valuesList << QString::number(result_.getElapsedTime()) + " s"
-               << QString::number(result_.getCallsNumber())
-               << QString::number(result_.getConfidenceIntervalLength());
-
-    ParametersWidget * parametersWidget = new ParametersWidget(tr("Stopping criteria"), namesList, valuesList, true, true);
-    vbox->addWidget(parametersWidget);
-  }
+  QComboBox * outputsListWidget = new QComboBox;
+  outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
+  vbox->addWidget(outputsListWidget);
 
   ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+  connect(outputsListWidget, SIGNAL(currentIndexChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
@@ -143,7 +123,42 @@ void SobolResultWindow::buildInterface()
   scrollArea->setWidget(widget);
   tabWidget->addTab(scrollArea, tr("Indices"));
 
-  // third tab --------------------------------
+  // aggregated tab -----------------------------------------
+  if(nbOutputs > 1 && result_.getAggregatedFirstOrderIndices().getSize()) {
+    SensitivityResultWidget * aggregatedIndicesResultWidget = new SensitivityResultWidget(
+        result_.getAggregatedFirstOrderIndices(),
+        result_.getAggregatedFirstOrderIndicesInterval(),
+        result_.getAggregatedTotalIndices(),
+        result_.getAggregatedTotalIndicesInterval(),
+        result_.getInputNames(),
+        result_.getOutputNames().__str__(),
+        SensitivityResultWidget::Sobol,
+        this);
+    tabWidget->addTab(aggregatedIndicesResultWidget, tr("Aggregated Indices"));
+  }
+
+  // stopping criteria
+  if (result_.getElapsedTime() > 0. && result_.getCallsNumber()) {
+    widget = new QWidget;
+    QGridLayout * gbox = new QGridLayout(widget);
+    QStringList namesList;
+    namesList << tr("Elapsed time")
+              << tr("Number of calls")
+              << tr("Confidence interval length");
+
+    QStringList valuesList;
+    valuesList << QString::number(result_.getElapsedTime()) + " s"
+               << QString::number(result_.getCallsNumber())
+               << QString::number(result_.getConfidenceIntervalLength());
+
+    ParametersWidget * parametersWidget = new ParametersWidget(tr("Stopping criteria"), namesList, valuesList, true, true);
+    gbox->addWidget(parametersWidget, 0, 0);
+    gbox->setColumnStretch(1,1);
+    gbox->setRowStretch(1,1);
+    tabWidget->addTab(widget, tr("Stopping criteria"));
+  }
+
+  // third tab ----------------------------------------------
   if (parametersWidget_)
     tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
@@ -154,7 +169,7 @@ void SobolResultWindow::buildInterface()
   // set widgets
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
-  outputsListWidget->setCurrentRow(0);
+  outputsListWidget->setCurrentIndex(0);
 
   widgetLayout->addWidget(mainWidget, 1);
 }
