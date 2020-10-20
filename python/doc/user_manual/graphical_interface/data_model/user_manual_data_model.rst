@@ -84,5 +84,21 @@ The user can enable/disable one or several variables, by checking off the corres
 table. By default, all the columns are checked off. The model must contain at least one variable to
 validate the model.
 
+The table containing sample data can be edited using the right click
+popup menu:
 
+  - New lines can be added using **Add row** then can be edited.
 
+  - Lines can also be removed by selecting them and choosing **Remove
+    row(s)**.
+
+  - Data cleaning wizard can also be launched. It will look for
+    invalid values in the sample (NaNs/Infs) and will let the choice
+    to the user to remove/replace them. Undefined values can be
+    replaced by variable statistical moments (mean/mdeian) or
+    user-defined values. Each sample variable can be processed
+    independently by toggling the corresponding checkbox in the
+    variable column header.
+
+.. image:: /user_manual/graphical_interface/data_model/datacleaning.png
+    :align: center
