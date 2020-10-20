@@ -35,6 +35,35 @@ code = 'from math import cos, sin, sqrt\n\ndef _exec(x1, x2, x3):\n    y0 = cos(
 pythonModel = persalys.PythonPhysicalModel('pythonModel', [x1, x2, x3], [y0], code)
 myStudy.add(pythonModel)
 
+# coupling model ##
+E = persalys.Input('E', 0, '')
+F = persalys.Input('F', 0, '')
+I = persalys.Input('I', 0, '')
+L = persalys.Input('L', 0, '')
+deviation = persalys.Output('deviation', '')
+deviation.setValue(1.26262626263)
+inputs = [E, F, I, L]
+outputs = [deviation]
+steps = []
+input_files = []
+input_file0 = persalys.CouplingInputFile('../python/test/coupling_model/beam_input_template.xml')
+input_file0.setConfiguredPath('beam_input.xml')
+input_file0.setVariables(['E', 'F', 'I', 'L'], ['@E', '@F', '@I', '@L'], ['{}', '{}', '{}', '{}'])
+input_files.append(input_file0)
+resource_files = []
+resource_file0 = persalys.CouplingResourceFile('../python/test/coupling_model/beam.py')
+resource_files.append(resource_file0)
+output_files = []
+output_file0 = persalys.CouplingOutputFile('beam_output.txt')
+output_file0.setVariables(['deviation'], ['deviation='], [0], [0], [0])
+output_files.append(output_file0)
+step0 = persalys.CouplingStep('python3 beam.py', input_files, resource_files, output_files)
+step0.setIsShell(False)
+steps.append(step0)
+couplingModel = persalys.CouplingPhysicalModel('couplingModel', inputs, outputs, steps)
+couplingModel.setCleanupWorkDirectory(True)
+couplingModel.setCacheFiles('', '')
+myStudy.add(couplingModel)
 filename = 'data.csv'
 cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
                                 ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))

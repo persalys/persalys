@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<beam>
+<description name="beam" title="UseCase beam with XML input file" version="1.0" date="2014-04-07">
+    <tool name="beam exe" version="1.0"/>
+</description>
+<inputs F= "@F" E="@E" L="@L" I="@I"/>
+<computation>
+    <derivate activate="on"/>
+    <hessian activate="off"/>
+</computation>
+</beam>
