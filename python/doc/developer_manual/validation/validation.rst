@@ -479,22 +479,6 @@ Models
 
 - check the doc link
 
-- click on 'Definition' child item of 'fixedDataModel' item
-
-  .. image:: /developer_manual/validation/model4.png
-      :align: center
-
-  - click on reload button : nothing appends
-
-- click on 'Definition' child item of 'importDataModel' item
-
-  .. image:: /developer_manual/validation/model3.png
-      :align: center
-
-  - click on reload button : nothing appends
-
-- check the doc link
-
 - click on 'Definition' child item of 'couplingModel' item
 
   - click on 'Input' tab
@@ -524,6 +508,34 @@ Models
 
 - check the doc link
 
+- click on 'Definition' child item of 'fixedDataModel' item
+
+  .. image:: /developer_manual/validation/model4.png
+      :align: center
+
+  - click on reload button : nothing appends
+
+- click on 'Definition' child item of 'importDataModel' item
+
+  .. image:: /developer_manual/validation/model3.png
+      :align: center
+
+  - a message stating the sample contains invalid values should be displayed
+
+  - find the troublesome line at the end of the sample, right-click on
+    it and delete it using the popup menu
+
+  - the message should disapprear
+
+  - click on reload button : the troublesome line is back, along with the message
+
+  - run the data cleaning wizard using the popop right click menu
+
+  - choose one of the replacement/removing feature
+
+  - the troublesome line and message are gone
+
+- check the doc link
 
 
 Deterministic analyses

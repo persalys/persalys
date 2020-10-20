@@ -68,6 +68,7 @@ filename = 'data.csv'
 cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
                                 ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
+sample.add([float('nan'), float('inf'), 0., 0.])
 sample.exportToCSVFile(filename, ' ')
 
 # Designs of Experiment ##
@@ -168,5 +169,3 @@ optimAlgo.setMaximumConstraintError(1e-6)
 calibration.setOptimizationAlgorithm(optimAlgo)
 
 myStudy.add(calibration)
-
-
