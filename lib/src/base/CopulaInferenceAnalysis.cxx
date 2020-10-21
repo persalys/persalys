@@ -252,7 +252,7 @@ void CopulaInferenceAnalysis::launch()
     }
 
     Sample sample(designOfExperiment_.getSample().getMarginal(indices));
-    sample = sample.rank() / sample.getSize();
+    sample = (sample.rank() + 0.5) / sample.getSize();
 
     Sample splitSample(sample);
     if (sample.getSize() > sizeKendall)

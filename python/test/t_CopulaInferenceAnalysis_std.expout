@@ -1,9 +1,9 @@
 class=DataModel name=myDataModel fileName=data2.csv inputColumns=[0,2,3] outputColumns=[] inputNames=[X0,X2,X3] outputNames=[]
 class=CopulaInferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[] setOfVariables [X0,X3] distributionFactories=[NormalCopulaFactory,GumbelCopulaFactory]
 result= class=CopulaInferenceResult copulaInferenceSetResultCollection=[class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[9.46314,9.46533] error messages=[,]]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[0.0177483,0.0207956] error messages=[,]]
 class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[9.46314,9.46533] error messages=[,]
+ [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[0.0177483,0.0207956] error messages=[,]
 #!/usr/bin/env python
 # coding: utf-8
 
