@@ -121,7 +121,7 @@ if (USE_OTFMI)
 endif ()
 
 if (USE_OTMORRIS)
-  find_package (OTMORRIS 0.6 CONFIG)
+  find_package (OTMORRIS 0.9 CONFIG)
   if (OTMORRIS_FOUND)
      message (STATUS "Found OTMORRIS: ${OTMORRIS_DIR} (found version \"${OTMORRIS_VERSION}\")")
     list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_OTMORRIS)

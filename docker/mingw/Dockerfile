@@ -17,7 +17,7 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
   && rm -r /tmp/openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.8 \
+RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.9 \
   && ${ARCH}-w64-mingw32-cmake-py${PYMAJMIN} -DPYTHON_SITE_PACKAGES=Lib/site-packages . \
   && make && sudo make install \
   && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libotmorris.dll ${MINGW_PREFIX}/Lib/site-packages/otmorris/*.pyd \

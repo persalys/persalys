@@ -28,7 +28,7 @@ Development
 Dependencies:
 
 - CMake >=3.8
-- OpenTURNS >=1.15
+- OpenTURNS >=1.16
 - Qt >=5
 - Qwt >=6
 - Python >=3.2
@@ -38,7 +38,7 @@ Dependencies:
 - Numpydoc (optional, for doc)
 - otfmi (optional, for FMI support)
 - ParaView >=5.8 (optional, for visualization)
-- otmorris >=0.7 (optional, for Morris support)
+- otmorris >=0.9 (optional, for Morris support)
 
 Compilation::
 
