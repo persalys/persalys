@@ -47,12 +47,14 @@ signals:
 
 protected:
   virtual void keyPressEvent(QKeyEvent *e) override;
+  virtual void mousePressEvent(QMouseEvent *e) override;
   virtual void focusOutEvent(QFocusEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
 
 private  slots:
   void updateVerticalScrollBarValue();
   void updateHorizontalScrollBarValue();
+  void updateIndent();
 
   void updateLineNumberAreaWidth(int newBlockCount);
   void highlightCurrentLine();
@@ -61,6 +63,7 @@ private  slots:
 private:
   int verticalScrollBarValue_;
   int horizontalScrollBarValue_;
+  uint nIndent_;
   QWidget * lineNumberArea_;
 };
 

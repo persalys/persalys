@@ -41,6 +41,7 @@ CodeEditor::CodeEditor(QWidget * parent)
   : QPlainTextEdit(parent)
   , verticalScrollBarValue_(0)
   , horizontalScrollBarValue_(0)
+  , nIndent_(0)
   , lineNumberArea_(new LineNumberArea(this))
 {
 #ifndef _WIN32
@@ -71,6 +72,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
   {
     QTextCursor cursor(textCursor());
     cursor.insertText("    ");
+    updateIndent();
     return;
   }
 
@@ -79,15 +81,56 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
   if (e->key() == Qt::Key_Return)
   {
     int position = textCursor().position();
+    if(position>1)
+      //Look for char before new line added by QPlainTextEdit::keyPressEvent
+      if(toPlainText().at(position-2) == ':')
+        nIndent_++;
     emit codeEdited(this);
     QTextCursor cursor(textCursor());
     cursor.setPosition(position);
     setTextCursor(cursor);
+    for(uint i=0; i<nIndent_; i++)
+      cursor.insertText("    ");
   }
+
+  if(e->key() == Qt::Key_Backspace) {
+    QTextCursor cursor(textCursor());
+    cursor.select(QTextCursor::LineUnderCursor);
+    //if empty line
+    if(!cursor.selectedText().contains(QRegExp("\\S+"))) {
+      //clear it
+      cursor.removeSelectedText();
+      if(nIndent_>0) nIndent_--;
+      // add spaces corresponding to new indent
+      for(uint i=0; i<nIndent_; i++)
+        cursor.insertText("    ");
+    }
+    cursor.clearSelection();
+  }
+
+  updateIndent();
+
   // update scrollBar Values
   updateVerticalScrollBarValue();
   updateHorizontalScrollBarValue();
 }
+
+
+void CodeEditor::mousePressEvent(QMouseEvent *e) {
+  QPlainTextEdit::mousePressEvent(e);
+  if(e->button() == Qt::LeftButton)
+    updateIndent();
+}
+
+
+void CodeEditor::updateIndent() {
+  QTextCursor cursor(textCursor());
+  QString currentLine = cursor.block().text();
+  QRegExp rex("(\\ {4})+");
+  rex.indexIn(currentLine);
+  nIndent_ = rex.capturedTexts()[0].size()/4;
+}
+
 
 
 void CodeEditor::focusOutEvent(QFocusEvent *event)
@@ -304,7 +347,7 @@ typedef QMap<QString, QTextCharFormat> FormatMap;
 static const FormatMap STYLES = {
     { "keyword", CodeHighlighter::format("blue") },
     { "operator", CodeHighlighter::format("red") },
-    { "brace", CodeHighlighter::format("darkGray") },
+    { "brace", CodeHighlighter::format("steelblue", "bold") },
     { "defclass", CodeHighlighter::format("black", "bold") },
     { "string", CodeHighlighter::format("magenta") },
     { "string2", CodeHighlighter::format("darkMagenta") },
