@@ -21,6 +21,7 @@
 #include "persalys/OutputsSelectionGroupBox.hxx"
 
 #include <QVBoxLayout>
+#include <QScrollArea>
 
 using namespace OT;
 
@@ -39,8 +40,10 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   // custom combobox to choose output of interest
   outputsComboBox_ = new TitledComboBox("-- " + tr("Select outputs") + " --");
   outputLayout->addWidget(outputsComboBox_);
-
-  outputLayout->addWidget(namesLabel_);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidget(namesLabel_);
+  scrollArea->setFixedHeight(namesLabel_->height()+20);
+  outputLayout->addWidget(scrollArea);
 }
 
 
@@ -56,8 +59,10 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* par
   // custom combobox to choose output of interest
   outputsComboBox_ = new TitledComboBox("-- " + (pluralText_ ? tr("Select outputs") : tr("Select output")) + " --");
   outputLayout->addWidget(outputsComboBox_);
-
-  outputLayout->addWidget(namesLabel_);
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidget(namesLabel_);
+  scrollArea->setFixedHeight(namesLabel_->height()+20);
+  outputLayout->addWidget(scrollArea);
 }
 
 
@@ -74,9 +79,11 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
   outputsComboBox_ = new TitledComboBox("-- " + tr("Select outputs") + " --");
   outputLayout->addWidget(outputsComboBox_);
 
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidget(namesLabel_);
+  scrollArea->setFixedHeight(namesLabel_->height()+20);
+  outputLayout->addWidget(scrollArea);
   updateComboBoxModel(outputsNames, interestVariables);
-
-  outputLayout->addWidget(namesLabel_);
 }
 
 
@@ -115,11 +122,13 @@ void OutputsSelectionGroupBox::updateComboBoxModel(const Description& outputsNam
   outputsComboBox_->setView(outputsListWidget_);
 
   namesLabel_->setText(variablesStringList.join(", "));
+  namesLabel_->adjustSize();
 }
 
 
 void OutputsSelectionGroupBox::updateLabel(const QStringList& variables)
 {
   namesLabel_->setText(variables.join(", "));
+  namesLabel_->adjustSize();
 }
 }
