@@ -93,7 +93,7 @@ C        3901.31 4098.69        2
 ************
 
 ======= ======= ======= =========
-Q       E       C       Ep 
+Q       E       C       Ep
 ======= ======= ======= =========
 10035.5 2975.33 3901.31 0.0600365
 10364.5 2975.33 3901.31 0.0292239
@@ -432,7 +432,12 @@ Models
 
 - open the interface
 
-- Import the file python/test/test_deterministic_analyses.py
+  .. code-block:: console
+
+      cd persalys_dir/build_dir
+      ./persalys.sh
+
+- Import the file ../python/test/test_deterministic_analyses.py
 
 - click on 'Definition' child item of 'symbolicModel' item
 
@@ -474,6 +479,35 @@ Models
 
 - check the doc link
 
+- click on 'Definition' child item of 'couplingModel' item
+
+  - click on 'Input' tab
+
+    - Edit any input value and associated format
+
+    - click on 'Check template' button
+
+    - expand 'Template/Input comparison' group box and visually
+      confirm the template has been correctly read and values have
+      been correctly replaced
+
+  .. image:: /developer_manual/validation/model5.png
+      :align: center
+
+  - click on 'Output' tab
+
+    - click on check output button
+
+      - select ../python/test/coupling_model/beam_output.txt
+
+      - check that the value is correctly displayed below the button
+
+    - click on 'Evaluate model' button
+
+      - check that the ouput value for deviation has been updated in the table
+
+- check the doc link
+
 - click on 'Definition' child item of 'fixedDataModel' item
 
   .. image:: /developer_manual/validation/model4.png
@@ -486,9 +520,23 @@ Models
   .. image:: /developer_manual/validation/model3.png
       :align: center
 
-  - click on reload button : nothing appends
+  - a message stating the sample contains invalid values should be displayed
+
+  - find the troublesome line at the end of the sample, right-click on
+    it and delete it using the popup menu
+
+  - the message should disapprear
+
+  - click on reload button : the troublesome line is back, along with the message
+
+  - run the data cleaning wizard using the popop right click menu
+
+  - choose one of the replacement/removing feature
+
+  - the troublesome line and message are gone
 
 - check the doc link
+
 
 Deterministic analyses
 ``````````````````````

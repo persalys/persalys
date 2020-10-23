@@ -57,7 +57,9 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(item, &PhysicalModelItem::codeChanged, [=](){ updateStepTabWidget(item); });
 
   QGridLayout * mainLayout = new QGridLayout(this);
-  mainLayout->addWidget(new TitleLabel(tr("Coupling model")));
+  QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#coupling-model-define-a-physical-model-to-wrap-an-external-code-using-file-exchange");
+
+  mainLayout->addWidget(new TitleLabel(tr("Coupling model"), docLink));
 
   QTabWidget * mainTabWidget = new QTabWidget;
   mainLayout->addWidget(mainTabWidget, 1, 0);
