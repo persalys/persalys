@@ -94,7 +94,8 @@ void AnalysisItem::buildActions()
     connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendDataModelItem()));
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(convertAction_);
-    return; // no remove action for these analyses
+    if(analysisType != "MonteCarloAnalysis")
+      return; // no remove action for these analyses
   }
 
   appendSeparator();
