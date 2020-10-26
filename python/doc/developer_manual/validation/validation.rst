@@ -166,10 +166,10 @@ Difference between the dike height and the water level :math:`S`
 
 .. math::
 
-    S = \left(\frac{Q}{Ks\times300\times\sqrt{(Zm-Zv)/5000}}\right)^{(3/5) +Zv-55.5-3}
+    S = \left(\frac{Q}{Ks\times300\times\sqrt{(Zm-Zv)/5000}}\right)^{(3/5)} +Zv-55.5-3
 
-2- Reliability analysis
-```````````````````````
+2- Reliability analysis (MonteCarlo)
+````````````````````````````````````
 
 2-1 Inputs
 ''''''''''
@@ -177,7 +177,7 @@ Difference between the dike height and the water level :math:`S`
 The limit state is defined by
 
 .. math::
-    S > 0
+    S > -1
 
 The analysis is performed with the Monte Carlo method with the following parameters:
 
@@ -190,19 +190,19 @@ Seed                             0
 Block size                       1
 ================================ ========
 
-3-1 Results
+2-2 Results
 '''''''''''
 
-3-1-1 Values
+2-2-1 Values
 ************
 
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.0006              0.408126                 :math:`\left[0.000120053; 0.00107995\right]`
+0.0001              0.99995                  :math:`\left[0; 0.000295987\right]`
 =================== ======================== =============================================
 
-3-1-1 Figures
+2-2-2 Figures
 *************
 
 .. image:: result_crue_MC_histo_S.png
@@ -211,6 +211,58 @@ Failure probability Coefficient of variation Confidence interval at 95%
     :height: 340px
 
 .. image:: result_crue_MC_convergence.png
+    :width: 443px
+    :align: center
+    :height: 340px
+
+3- Reliability analysis (Importance Sampling)
+`````````````````````````````````````````````
+
+3-1 Inputs
+''''''''''
+
+The limit state is defined by
+
+.. math::
+    S > -1
+
+The analysis is performed with the Monte Carlo method with the following parameters:
+
+================================ ====================
+Name                             Value
+================================ ====================
+Maximum calls                    10000
+Maximum coefficient of variation 0.01
+Seed                             0
+Block size                       1000
+-------------------------------- --------------------
+Algorithm                        Abdo-Rackwitz
+Physical starting point          1013; 30.001; 50; 55
+Number of evaluations            1000
+Errors (abs., rel., res., con.)  1e-05
+================================ ====================
+
+3-2 Results
+'''''''''''
+
+3-2-1 Values
+************
+
+=================== ======================== =============================================
+Failure probability Coefficient of variation Confidence interval at 95%
+=================== ======================== =============================================
+0.000221975         0.0206289                :math:`\left[0.000213; 0.000230945\right]`
+=================== ======================== =============================================
+
+3-2-2 Figures
+*************
+
+.. image:: result_crue_IS_histo_S.png
+    :width: 443px
+    :align: center
+    :height: 340px
+
+.. image:: result_crue_IS_convergence.png
     :width: 443px
     :align: center
     :height: 340px
@@ -228,6 +280,7 @@ The purpose of this example is to check:
     :width: 443px
     :align: center
     :height: 340px
+
 
 1- Problem statement
 ````````````````````
