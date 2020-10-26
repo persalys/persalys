@@ -290,6 +290,9 @@ Console Python
 - open persalys
 - click Menu->View->Window->Python Console
 
+  - console shown
+- click Menu->View->Window->Python Console
+
   - console hidden
 - click Menu->View->Window->Python Console
 
@@ -297,9 +300,6 @@ Console Python
 - close the console
 
   - console hidden
-- click Menu->View->Window->Python Console
-
-  - console shown
 
 Open documentation
 ``````````````````
@@ -316,11 +316,14 @@ New Study
 
   - item Study_0 appears in the tree view
 
-  - a 'study' window with 3(+2) buttons appears:
+  - a 'study' window with 6(+2) buttons appears:
     - Symbolic model
     - Python model
+    - Coupling
     - YACS model (optional)
     - FMI model (optional)
+    - Symoblic Field Model
+    - Python Field Model
     - Data model
 
 - click Menu->File->New
@@ -344,13 +347,15 @@ New Study
 Rename Study
 ``````````````
 
-- double click on Study_2 item, rename Study_2 by myOTStudy, press enter
+- double click on Study_1 item, rename Study_1 as myOTStudy, press enter
 
   - the item is renamed
 
-- right click on Study_3 item, on the context menu which appears click on Rename, rename Study_2 by myOTStudy2, press enter
+- right click on Study_2 item, on the context menu which appears click on Rename, rename Study_2 as myOTStudy2, press enter
 
   - the item is renamed
+
+- left-click select Study_3, press F2, rename Study_3 as myOTStudy3, press enter
 
 Save/open Study
 ````````````````````
@@ -746,7 +751,7 @@ Deterministic analyses
       .. image:: /developer_manual/validation/calibrationWizard_lastPage_linear.png
           :align: center
 
-    - click on the Back button 2 times to go on the first page :
+    - click on the Back button 4 times to go on the first page :
 
       - select Linear least squares method
       - continue
@@ -967,7 +972,9 @@ Designs of experiments
 
         - Table tab has 3 tabs: Table - Failed points - Cobweb plot
 
-          - check the cobweb plot has 4 columns. The fourth one is named 'Status 0: failed; 1: ok'.
+          - check the cobweb plot has 2 columns. The last one is named 'Status 0: failed; 1: ok'.
+
+          - additional columns can be displayed by checking them in the graph setting widget in the window bottom left corner
 
 
 - save the study, close it, reopen it, check all windows are correctly build, close the study.
@@ -1205,7 +1212,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/SORM_wizard_1st_page.png
           :align: center
 
-      - method : FORM
+      - method : SORM
       - continue
 
     - Second page check the values :
@@ -1240,7 +1247,7 @@ Probabilistic analyses
     - click on the 'Probabilistic model' item
 
       - click on the 'Dependence' tab of the window which appears
-      - in the cell x1-x2 : write 0, press enter
+      - remove x1-x2 copula from the list on the right
       - click on the Sobol item, right click on it and choose Modify
 
     - First page check the values :
@@ -1277,7 +1284,7 @@ Probabilistic analyses
           :align: center
 
       - left side : 2 variables in the list view
-      - right side, tabs : Indices - Summary - Parameters - Model
+      - right side, tabs : Indices - Aggregated Indices - Stopping criteria - Parameters - Model
       - when changing the variable, the Indices tab is updated
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - Indices tab :
@@ -1415,10 +1422,14 @@ Probabilistic analyses
 
     - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 
-      - choose the Kriging method, select all the validation methods:
+      - choose the Kriging method, select all the output variables, continue:
 
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
+
+      - default kriging parameters : Squared exponential covariance model, Constant trend basis type, optimize covariance omdel parameters checked, Scale 1;1, Amplitude 1, continue
+
+      - metamodel validation: for the computation of the predictivity factor Q2, only analytically is checked, finish
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button and click immediately on the Stop button
