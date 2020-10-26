@@ -279,16 +279,6 @@ Section "!${PRODUCT_NAME} DLL & doc" SEC01
 SectionEnd
 
 
-Section "${PRODUCT_NAME} python examples" SEC02
-  SetOverwrite on
-
-  !insertmacro PRINT "Install Python examples in $MODULE_INSTALL_PATH\examples."
-  SetOutPath "$MODULE_INSTALL_PATH\examples"
-  File "${MODULE_PREFIX}\share\${MODULE_NAME_LOWERCASE}\examples\*.py"
-  File "${MODULE_PREFIX}\share\${MODULE_NAME_LOWERCASE}\examples\*.cxx"
-SectionEnd
-
-
 Section -AdditionalIcons
   !insertmacro PRINT "Create ${PRODUCT_NAME} menu."
   ; install shortcuts on every accounts or user only depending on the context
@@ -309,7 +299,6 @@ SectionEnd
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Python stack."
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "${FULL_NAME} module."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
