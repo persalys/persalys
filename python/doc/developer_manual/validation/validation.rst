@@ -1705,7 +1705,7 @@ Designs of experiments
 
 
 Field analyses
-``````````````````````
+``````````````
 
 - Import the file python/test/test_field_analyses.py
 
@@ -1746,6 +1746,8 @@ Field analyses
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check the tabs (Trajectories - Functional bag chart - Bag chart - Table) are linked :
         do several selections in a tab and check the selection is the same in the others tabs
+
+    - right-click on analysis item, "Extract data at nodes", select only t0, it must create a new data model with the selected data
 
   - Evaluation : item evaluation
 

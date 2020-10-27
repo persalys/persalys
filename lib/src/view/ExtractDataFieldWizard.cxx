@@ -115,7 +115,7 @@ DataModel ExtractDataFieldWizard::getDataModel()
 
   // define new data model
   const String modelName(tr("Extraction_%1_").arg(analysis_->getName().c_str()).toStdString());
-  AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(analysis_->getObserver("Analysis"));
+  AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(analysis_->getObserver("AnalysisItem"));
   const String availableName(analysisItem->getParentStudyItem()->getStudy().getAvailableDataModelName(modelName));
   DataModel model(availableName, analysis_->getResult().getDesignOfExperiment().getInputSample(), sample);
 
