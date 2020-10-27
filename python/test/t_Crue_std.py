@@ -9,8 +9,7 @@ import persalys
 myStudy = persalys.Study('myStudy')
 
 # Model
-dist_Q = ot.TruncatedDistribution(
-    ot.Gumbel(1. / 558., 1013.), 0, ot.TruncatedDistribution.LOWER)
+dist_Q = ot.Gumbel(1. / 558., 1013.)
 dist_Ks = ot.TruncatedDistribution(
     ot.Normal(30.0, 7.5), 0, ot.TruncatedDistribution.LOWER)
 dist_Zv = ot.Uniform(49.0, 51.0)
@@ -27,20 +26,22 @@ model = persalys.SymbolicPhysicalModel('myPhysicalModel', [Q, Ks, Zv, Zm], [
 myStudy.add(model)
 
 # limit state ##
-limitState = persalys.LimitState('limitState1', model, 'S', ot.Greater(), 0.)
+limitState = persalys.LimitState('limitState1', model, 'S', ot.Greater(), -1.)
 myStudy.add(limitState)
 
 # Monte Carlo ##
 montecarlo = persalys.MonteCarloReliabilityAnalysis(
     'myMonteCarlo', limitState)
 montecarlo.setMaximumCalls(10000)
+montecarlo.setMaximumCoefficientOfVariation(0.01)
+montecarlo.setBlockSize(1)
 myStudy.add(montecarlo)
 
 montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(montecarloResult.getSimulationResult().getProbabilityEstimate(), 0.0, 1e-6)
+openturns.testing.assert_almost_equal(montecarloResult.getSimulationResult().getProbabilityEstimate(), 9.999999999999946e-05, 1e-6)
 
 # FORM-IS ##
 formIS = persalys.FORMImportanceSamplingAnalysis('myformIS', limitState)
@@ -53,7 +54,7 @@ formIS.run()
 formISResult = formIS.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(formISResult.getSimulationResult().getProbabilityEstimate(), 0.000142088, 1e-5, 1e-5)
+openturns.testing.assert_almost_equal(formISResult.getSimulationResult().getProbabilityEstimate(), 0.00022, 1e-5, 1e-5)
 
 # script
 script = myStudy.getPythonScript()

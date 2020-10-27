@@ -95,22 +95,22 @@ C        3901.31 4098.69        2
 ======= ======= ======= =========
 Q       E       C       Ep
 ======= ======= ======= =========
-10035.5 2975.33 3901.31 0.0600365
-10364.5 2975.33 3901.31 0.0292239
-10035.5 3024.67 3901.31 0.0684295
-10364.5 3024.67 3901.31 0.037892
-10035.5 2975.33 4098.69 0.0812679
-10364.5 2975.33 4098.69 0.0511513
-10035.5 3024.67 4098.69 0.0892877
-10364.5 3024.67 4098.69 0.0594339
+10035.5 2975.33 3901.31 0.0600385
+10364.5 2975.33 3901.31 0.0292232
+10035.5 3024.67 3901.31 0.0684305
+10364.5 3024.67 3901.31 0.0378903
+10035.5 2975.33 4098.69 0.0812696
+10364.5 2975.33 4098.69 0.0511503
+10035.5 3024.67 4098.69 0.0892884
+10364.5 3024.67 4098.69 0.059432
 ======= ======= ======= =========
 
 The points are generated according to the structure of a box design of experiments.
 This deterministic design of experiments has 8 points obtained by regularly discretizing
 the pavement :math:`[10035.5, 10364.5] \times [2975.33, 3024.67] \times [3901.31, 4098.69]`.
 
-The minimum value of :math:`Ep` is 0.0292239 with X=[10364.5 2975.33 3901.31].
-The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
+The minimum value of :math:`Ep` is 0.0292232 with X=[10364.5 2975.33 3901.31].
+The maximum value of :math:`Ep` is 0.0892884 with X=[10035.5 3024.67 4098.69].
 
 
 3-2-1 Figures
@@ -166,10 +166,10 @@ Difference between the dike height and the water level :math:`S`
 
 .. math::
 
-    S = \left(\frac{Q}{Ks\times300\times\sqrt{(Zm-Zv)/5000}}\right)^{(3/5) +Zv-55.5-3}
+    S = \left(\frac{Q}{Ks\times300\times\sqrt{(Zm-Zv)/5000}}\right)^{(3/5)} +Zv-55.5-3
 
-2- Reliability analysis
-```````````````````````
+2- Reliability analysis (MonteCarlo)
+````````````````````````````````````
 
 2-1 Inputs
 ''''''''''
@@ -177,7 +177,7 @@ Difference between the dike height and the water level :math:`S`
 The limit state is defined by
 
 .. math::
-    S > 0
+    S > -1
 
 The analysis is performed with the Monte Carlo method with the following parameters:
 
@@ -190,19 +190,19 @@ Seed                             0
 Block size                       1
 ================================ ========
 
-3-1 Results
+2-2 Results
 '''''''''''
 
-3-1-1 Values
+2-2-1 Values
 ************
 
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.0006              0.408126                 :math:`\left[0.000120053; 0.00107995\right]`
+0.0001              0.99995                  :math:`\left[0; 0.000295987\right]`
 =================== ======================== =============================================
 
-3-1-1 Figures
+2-2-2 Figures
 *************
 
 .. image:: result_crue_MC_histo_S.png
@@ -215,75 +215,32 @@ Failure probability Coefficient of variation Confidence interval at 95%
     :align: center
     :height: 340px
 
-Test case 3: Gauge
-------------------
-
-This test-case originates from [Jauge2014]_ and can be found in python/test/t_Gauge_std.py.
-
-The purpose of this example is to check:
-  - Test the xml file loading;
-  - The Central tendency analysis using the Taylor Expansions.
-
-.. image:: case_gauge.png
-    :width: 443px
-    :align: center
-    :height: 340px
-
-1- Problem statement
-````````````````````
-
-1-1 Inputs
-''''''''''
-
-- Deterministic variable:
-
-============ =========================== =====
-Name         Description                 Value
-============ =========================== =====
-Hauteur      Height of the cube          1.
-============ =========================== =====
-
-- Stochastic variable:
-
-============ =========================== =================
-Name         Description                 Distribution
-============ =========================== =================
-Conductivity Heat conduction coefficient Normal(0.5, 0.01)
-============ =========================== =================
-
-1-2 Output
-''''''''''
-
-An average temperature on the superior surface 'temptop'.
-
-2- XML file loading
-````````````````````
-
-When loading the XML file the window illustrated below is completed. When clicking
-on the **Evaluate** button, the computed output value must be :math:`1906.79`.
-
-2-1 Figure
-''''''''''
-
-.. image:: case_Gauge_loading.png
-    :width: 443px
-    :align: center
-    :height: 340px
-
-3- Central tendency analysis
-````````````````````````````
+3- Reliability analysis (Importance Sampling)
+`````````````````````````````````````````````
 
 3-1 Inputs
 ''''''''''
 
-Because of a temporary problem with the module of Code_Aster, it is necessary to
-uncheck **Parallelize status** before launching analyses using Code_Aster solver.
-In the same window, choose the machine which will launch the analysis.
+The limit state is defined by
 
-.. image:: YACS_scheme_parameters.png
-    :align: center
+.. math::
+    S > -1
 
-The central tendency analysis is performed with the Taylor Expansions method.
+The analysis is performed with the Monte Carlo method with the following parameters:
+
+================================ ====================
+Name                             Value
+================================ ====================
+Maximum calls                    10000
+Maximum coefficient of variation 0.01
+Seed                             0
+Block size                       1000
+-------------------------------- --------------------
+Algorithm                        Abdo-Rackwitz
+Physical starting point          1013; 30.001; 50; 55
+Number of evaluations            1000
+Errors (abs., rel., res., con.)  1e-05
+================================ ====================
 
 3-2 Results
 '''''''''''
@@ -291,12 +248,24 @@ The central tendency analysis is performed with the Taylor Expansions method.
 3-2-1 Values
 ************
 
-================ ================= ================== ===========
-First order mean Second order mean Standard deviation Variance
-================ ================= ================== ===========
-2020             2020.8            40                 1600
-================ ================= ================== ===========
+=================== ======================== =============================================
+Failure probability Coefficient of variation Confidence interval at 95%
+=================== ======================== =============================================
+0.000221975         0.0206289                :math:`\left[0.000213; 0.000230945\right]`
+=================== ======================== =============================================
 
+3-2-2 Figures
+*************
+
+.. image:: result_crue_IS_histo_S.png
+    :width: 443px
+    :align: center
+    :height: 340px
+
+.. image:: result_crue_IS_convergence.png
+    :width: 443px
+    :align: center
+    :height: 340px
 
 Graphical validation
 --------------------
@@ -321,6 +290,9 @@ Console Python
 - open persalys
 - click Menu->View->Window->Python Console
 
+  - console shown
+- click Menu->View->Window->Python Console
+
   - console hidden
 - click Menu->View->Window->Python Console
 
@@ -328,9 +300,6 @@ Console Python
 - close the console
 
   - console hidden
-- click Menu->View->Window->Python Console
-
-  - console shown
 
 Open documentation
 ``````````````````
@@ -347,11 +316,14 @@ New Study
 
   - item Study_0 appears in the tree view
 
-  - a 'study' window with 3(+2) buttons appears:
+  - a 'study' window with 6(+2) buttons appears:
     - Symbolic model
     - Python model
+    - Coupling
     - YACS model (optional)
     - FMI model (optional)
+    - Symoblic Field Model
+    - Python Field Model
     - Data model
 
 - click Menu->File->New
@@ -375,13 +347,15 @@ New Study
 Rename Study
 ``````````````
 
-- double click on Study_2 item, rename Study_2 by myOTStudy, press enter
+- double click on Study_1 item, rename Study_1 as myOTStudy, press enter
 
   - the item is renamed
 
-- right click on Study_3 item, on the context menu which appears click on Rename, rename Study_2 by myOTStudy2, press enter
+- right click on Study_2 item, on the context menu which appears click on Rename, rename Study_2 as myOTStudy2, press enter
 
   - the item is renamed
+
+- left-click select Study_3, press F2, rename Study_3 as myOTStudy3, press enter
 
 Save/open Study
 ````````````````````
@@ -777,7 +751,7 @@ Deterministic analyses
       .. image:: /developer_manual/validation/calibrationWizard_lastPage_linear.png
           :align: center
 
-    - click on the Back button 2 times to go on the first page :
+    - click on the Back button 4 times to go on the first page :
 
       - select Linear least squares method
       - continue
@@ -998,7 +972,9 @@ Designs of experiments
 
         - Table tab has 3 tabs: Table - Failed points - Cobweb plot
 
-          - check the cobweb plot has 4 columns. The fourth one is named 'Status 0: failed; 1: ok'.
+          - check the cobweb plot has 2 columns. The last one is named 'Status 0: failed; 1: ok'.
+
+          - additional columns can be displayed by checking them in the graph setting widget in the window bottom left corner
 
 
 - save the study, close it, reopen it, check all windows are correctly build, close the study.
@@ -1236,7 +1212,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/SORM_wizard_1st_page.png
           :align: center
 
-      - method : FORM
+      - method : SORM
       - continue
 
     - Second page check the values :
@@ -1271,7 +1247,7 @@ Probabilistic analyses
     - click on the 'Probabilistic model' item
 
       - click on the 'Dependence' tab of the window which appears
-      - in the cell x1-x2 : write 0, press enter
+      - remove x1-x2 copula from the list on the right
       - click on the Sobol item, right click on it and choose Modify
 
     - First page check the values :
@@ -1308,7 +1284,7 @@ Probabilistic analyses
           :align: center
 
       - left side : 2 variables in the list view
-      - right side, tabs : Indices - Summary - Parameters - Model
+      - right side, tabs : Indices - Aggregated Indices - Stopping criteria - Parameters - Model
       - when changing the variable, the Indices tab is updated
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - Indices tab :
@@ -1446,10 +1422,14 @@ Probabilistic analyses
 
     - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 
-      - choose the Kriging method, select all the validation methods:
+      - choose the Kriging method, select all the output variables, continue:
 
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
+
+      - default kriging parameters : Squared exponential covariance model, Constant trend basis type, optimize covariance omdel parameters checked, Scale 1;1, Amplitude 1, continue
+
+      - metamodel validation: for the computation of the predictivity factor Q2, only analytically is checked, finish
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button and click immediately on the Stop button
