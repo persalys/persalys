@@ -97,7 +97,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
     QTextCursor cursor(textCursor());
     cursor.select(QTextCursor::LineUnderCursor);
     //if empty line
-    if(!cursor.selectedText().contains(QRegExp("\\S+"))) {
+    if(!cursor.selectedText().contains(QRegularExpression("\\S+"))) {
       //clear it
       cursor.removeSelectedText();
       if(nIndent_>0) nIndent_--;
@@ -126,9 +126,12 @@ void CodeEditor::mousePressEvent(QMouseEvent *e) {
 void CodeEditor::updateIndent() {
   QTextCursor cursor(textCursor());
   QString currentLine = cursor.block().text();
-  QRegExp rex("(\\ {4})+");
-  rex.indexIn(currentLine);
-  nIndent_ = rex.capturedTexts()[0].size()/4;
+  QRegularExpression rex("^((\\ {4})+)");
+  QRegularExpressionMatch match = rex.match(currentLine);
+  if (match.hasMatch())
+    nIndent_ = match.capturedTexts().at(0).size()/4;
+  else
+    nIndent_ = 0;
 }
 
 
