@@ -1,7 +1,14 @@
-= 9.0 release (in-progress) 
+= 9.0 release (2020-10-27)
 
  * Coupling model input/output previews, more options
  * Optimized LHS designs
+ * Sample cleaning wizard, on the fly sample editing
+ * Exportable MC analyses
+ * Aggregated Sobol indices
+ * Python model editor overhaul
+ * DoE evaluation time estimation
+ * Failed points sub-sample
+ * Various crashes and bug fixes
 
 = 8.0 release (2020-02-24)
 
