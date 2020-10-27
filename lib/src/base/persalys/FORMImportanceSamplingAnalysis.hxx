@@ -39,25 +39,25 @@ public:
   FORMImportanceSamplingAnalysis(const OT::String& name, const LimitState& limitState);
 
   /** Virtual constructor */
-  virtual FORMImportanceSamplingAnalysis * clone() const;
+  FORMImportanceSamplingAnalysis * clone() const override;
 
   OT::FORMResult getFORMResult() const;
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
 
 private:
   OT::FORMResult FORMResult_;

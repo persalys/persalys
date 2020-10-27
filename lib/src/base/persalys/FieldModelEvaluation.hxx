@@ -40,20 +40,20 @@ public:
                        const OT::Point & inputsValues);
 
   /** Virtual constructor */
-  virtual FieldModelEvaluation * clone() const;
+  FieldModelEvaluation * clone() const override;
 
   OT::ProcessSample getProcessSample() const;
 
-  virtual bool hasValidResult() const;
+  bool hasValidResult() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void launch();
+  void launch() override;
 
 private:
   OT::ProcessSample processSample_;

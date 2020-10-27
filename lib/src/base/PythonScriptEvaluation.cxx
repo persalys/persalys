@@ -39,7 +39,7 @@ static Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
 
 /* Default constructor */
 PythonScriptEvaluation::PythonScriptEvaluation()
-  : IgnoreFailureEvaluation()
+  : EvaluationImplementation()
 {
 }
 
@@ -48,7 +48,7 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
                                                const Description & outputVariablesNames,
                                                const String & code)
-  : IgnoreFailureEvaluation()
+  : EvaluationImplementation()
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
@@ -162,10 +162,10 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
   }
   catch (Exception &)
   {
-    if (ignoreFailure_)
-      outP = Point(getOutputDimension(), std::numeric_limits<Scalar>::quiet_NaN());
-    else
+    if (checkOutput_)
       throw;
+    else
+      outP = Point(getOutputDimension(), std::numeric_limits<Scalar>::quiet_NaN());
   }
   return outP;
 }
@@ -220,13 +220,13 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "            except Exception as exc:\n";
   oss << "                if hasattr(exc, 'message'):\n";
   oss << "                    exc.message = exc.message + ' x = {}'.format(resu[future])\n";
-  if (ignoreFailure_)
+  if (checkOutput_)
+    oss << "                raise\n";
+  else
     if (outDim < 2)
       oss << "                future.result = lambda: float('nan')\n";
     else
       oss << "                future.result = lambda: [float('nan')] * " << std::to_string(outDim) << "\n";
-  else
-    oss << "                raise\n";
   if (outDim < 2)
     oss << "        Y = [[task.result()] for task in resu]\n";
   else

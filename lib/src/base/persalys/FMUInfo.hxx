@@ -41,10 +41,10 @@ public:
   /** Constructor with parameters */
   explicit FMUInfo(const OT::String & fileName);
 
-  virtual FMUInfo * clone() const;
+  FMUInfo * clone() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   OT::String getFileName() const;
 
@@ -68,10 +68,10 @@ public:
   OT::Point getStartValues() const;
 
   /** Method save() stores the object through the StorageManager */
-  virtual void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  virtual void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   void initialize();

@@ -40,39 +40,39 @@ public:
                       const OT::String & code);
 
   /** Virtual constructor */
-  virtual PythonPhysicalModel * clone() const;
+  PythonPhysicalModel * clone() const override;
 
   virtual void setCode(const OT::String & code);
   OT::String getCode() const;
 
-  virtual OT::String getHtmlDescription(const bool deterministic) const;
-  OT::String getPythonScript() const;
+  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
-  void setInputs(const InputCollection & inputs);
-  void addInput(const Input & input);
-  void removeInput(const OT::String & inputName);
+  void setInputs(const InputCollection & inputs) override;
+  void addInput(const Input & input) override;
+  void removeInput(const OT::String & inputName) override;
 
-  void setOutputs(const OutputCollection & outputs);
-  void addOutput(const Output & output);
-  void removeOutput(const OT::String & outputName);
+  void setOutputs(const OutputCollection & outputs) override;
+  void addOutput(const Output & output) override;
+  void removeOutput(const OT::String & outputName) override;
 
-  virtual void setParallel(const OT::Bool flag);
+  void setParallel(const OT::Bool flag) override;
   void resetCallsNumber();
 
   void setEvalTime(const OT::Scalar& evalTime);
   OT::Scalar getEvalTime() const;
 
 protected:
-  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  OT::Function generateFunction(const OT::Description & outputNames) const override;
 
 private:
   OT::String code_;

@@ -35,25 +35,25 @@ public:
   ReliabilityAnalysis(const OT::String & name, const LimitState & limitState);
 
   /** Virtual constructor */
-  virtual ReliabilityAnalysis * clone() const = 0;
+  ReliabilityAnalysis * clone() const override;
 
-  virtual Observer * getParentObserver() const;
+  Observer * getParentObserver() const override;
 
   LimitState getLimitState() const;
 
-  virtual void setInterestVariables(const OT::Description& outputsNames);
+  void setInterestVariables(const OT::Description& outputsNames) override;
 
-  virtual void run();
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  void run() override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   LimitState limitState_;

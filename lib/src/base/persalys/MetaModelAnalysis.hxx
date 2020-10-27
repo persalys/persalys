@@ -61,16 +61,16 @@ public:
   OT::Sample getEffectiveInputSample() const;
   OT::Sample getEffectiveOutputSample() const;
 
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate& adv) const;
+  void save(OT::Advocate& adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate& adv);
+  void load(OT::Advocate& adv) override;
 
 protected:
   virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) = 0;

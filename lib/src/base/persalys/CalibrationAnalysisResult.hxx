@@ -39,29 +39,25 @@ public:
   CalibrationAnalysisResult();
 
   /** Virtual constructor */
-  virtual CalibrationAnalysisResult * clone() const;
+  CalibrationAnalysisResult * clone() const override;
 
   OT::CalibrationResult getCalibrationResult() const {return calibrationResult_;};
   OT::Interval getConfidenceInterval() const {return confidenceInterval_;};
-  OT::Sample getOutputAtPrior() const {return outputAtPrior_;};
-  OT::Sample getOutputAtPosterior() const {return outputAtPosterior_;};
   DataSample::SampleCollection getPriorResidualsPDF() const {return priorResidualsPDF_;};
   DataSample::SampleCollection getPosteriorResidualsPDF() const {return posteriorResidualsPDF_;};
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::CalibrationResult calibrationResult_;
   OT::Interval confidenceInterval_;
-  OT::Sample outputAtPrior_;
-  OT::Sample outputAtPosterior_;
   OT::PersistentCollection<OT::Sample> priorResidualsPDF_;
   OT::PersistentCollection<OT::Sample> posteriorResidualsPDF_;
 };

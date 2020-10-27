@@ -42,7 +42,7 @@ public:
   InferenceAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
 
   /** Virtual constructor */
-  virtual InferenceAnalysis * clone() const;
+  InferenceAnalysis * clone() const override;
 
   DistributionFactoryCollection getDistributionsFactories(const OT::String& variableName) const;
   void setDistributionsFactories(const OT::String& variableName, const DistributionFactoryCollection& distributionsFactories);
@@ -50,26 +50,26 @@ public:
   double getLevel() const;
   void setLevel(const double level);
 
-  virtual void setInterestVariables(const OT::Description& variablesNames);
+  void setInterestVariables(const OT::Description& variablesNames) override;
 
   InferenceResult getResult() const;
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
 
 private:
   std::map<OT::String, DistributionFactoryCollection> distFactoriesForEachInterestVar_;

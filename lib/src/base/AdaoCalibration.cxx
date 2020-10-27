@@ -189,8 +189,8 @@ class LinearEvaluation2 : public EvaluationImplementation
     }
   return ret;
   }
-  virtual UnsignedInteger getInputDimension() const override { return this->inputDimension_; }
-  virtual UnsignedInteger getOutputDimension() const override { return this->outputObservations_.getDimension(); }
+  UnsignedInteger getInputDimension() const override { return this->inputDimension_; }
+  UnsignedInteger getOutputDimension() const override { return this->outputObservations_.getDimension(); }
  private:
   LinearEvaluation2(const LinearEvaluation2& other) = default;
  private:

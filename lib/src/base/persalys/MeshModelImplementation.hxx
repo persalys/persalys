@@ -36,7 +36,7 @@ public:
   MeshModelImplementation();
 
   /** Virtual constructor */
-  virtual MeshModelImplementation * clone() const;
+  MeshModelImplementation * clone() const override;
 
   OT::Mesh getMesh() const;
 
@@ -50,13 +50,13 @@ public:
   virtual OT::String getPythonScript() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   OT::Mesh mesh_;

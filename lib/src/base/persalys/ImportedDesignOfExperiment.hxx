@@ -42,26 +42,26 @@ public:
                              const OT::Indices& inputColumns);
 
   /** Virtual constructor */
-  virtual ImportedDesignOfExperiment * clone() const;
+  ImportedDesignOfExperiment * clone() const override;
 
   void setInputColumns(const OT::Indices &inputColumns);
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate& adv) const;
+  void save(OT::Advocate& adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate& adv);
+  void load(OT::Advocate& adv) override;
 
 protected:
-  virtual void check();
-  virtual OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const;
-  virtual void setDefaultColumns();
+  void check() override;
+  OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
+  void setDefaultColumns() override;
 };
 }
 #endif

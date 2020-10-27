@@ -40,7 +40,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.2.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.15 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.16rc1 \
  && cmake -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # libbatch

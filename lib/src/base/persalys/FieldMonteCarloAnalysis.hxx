@@ -49,21 +49,21 @@ public:
   {};
 
   /** Virtual constructor */
-  virtual CovFunctionEvaluation * clone() const
+  CovFunctionEvaluation * clone() const override
   {
     return new CovFunctionEvaluation(*this);
   };
 
   /** Accessor for input point dimension */
-  OT::UnsignedInteger getInputDimension() const
+  OT::UnsignedInteger getInputDimension() const override
   {
     return inputDimension_;
   };
-  OT::UnsignedInteger getOutputDimension() const
+  OT::UnsignedInteger getOutputDimension() const override
   {
     return outputDimension_;
   };
-  virtual OT::Point operator() (const OT::Point & inP) const
+  OT::Point operator() (const OT::Point & inP) const override
   {
     OT::Scalar den = std::sqrt(covModel_(inP[0], inP[0])(0, 0) * covModel_(inP[1],  inP[1])(0, 0));
     if (den == 0.0)
@@ -72,7 +72,7 @@ public:
   }
 
   /* Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const
+  void save(OT::Advocate & adv) const override
   {
     EvaluationImplementation::save(adv);
     adv.saveAttribute("covModel_", covModel_);
@@ -80,7 +80,7 @@ public:
     adv.saveAttribute("outputDimension_", outputDimension_);
   }
   /* Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv)
+  void load(OT::Advocate & adv) override
   {
     EvaluationImplementation::load(adv);
     adv.loadAttribute("covModel_", covModel_);
@@ -106,7 +106,7 @@ public:
   FieldMonteCarloAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
-  virtual FieldMonteCarloAnalysis * clone() const;
+  FieldMonteCarloAnalysis * clone() const override;
 
   /* Threshold accessors */
   OT::Scalar getKarhunenLoeveThreshold() const;
@@ -118,22 +118,22 @@ public:
 
   FieldMonteCarloResult getResult() const;
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
 
 private:
   OT::Scalar karhunenLoeveThreshold_;

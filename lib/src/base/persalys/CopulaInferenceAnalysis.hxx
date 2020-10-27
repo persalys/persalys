@@ -44,7 +44,7 @@ public:
   CopulaInferenceAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment, const OT::Collection<OT::Description> &groups);
 
   /** Virtual constructor */
-  virtual CopulaInferenceAnalysis * clone() const;
+  CopulaInferenceAnalysis * clone() const override;
 
   DistributionFactoryCollection getDistributionsFactories(const OT::Description& variablesNames) const;
   void setDistributionsFactories(const OT::Description& variablesNames, const DistributionFactoryCollection& distributionsFactories);
@@ -53,22 +53,22 @@ public:
 
   CopulaInferenceResult getResult() const;
 
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
 
 private:
   OT::Description getSortedVariablesNames(const OT::Description& variablesNames) const;

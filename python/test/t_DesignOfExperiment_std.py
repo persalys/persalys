@@ -74,10 +74,7 @@ print('outs=', aDesign5.getResult().getDesignOfExperiment().getOutputSample())
 # Design of Experiment SALHS-minDist#
 aDesign6 = persalys.ProbabilisticDesignOfExperiment(
     'aDesign_6', model, 10, 'SALHS', 'minDist')
-try :
-    aDesign6.run()
-except Exception as e:
-    print("expected error for SALHS+minDist")
+aDesign6.run()
 
 print('outs=', aDesign6.getResult().getDesignOfExperiment().getOutputSample())
 

@@ -39,7 +39,7 @@ public:
   SimulationReliabilityAnalysis(const OT::String& name, const LimitState& limitState);
 
   /** Virtual constructor */
-  virtual SimulationReliabilityAnalysis * clone() const;
+  SimulationReliabilityAnalysis * clone() const override;
 
   OT::UnsignedInteger getSeed() const;
   void setSeed(const OT::UnsignedInteger seed);
@@ -47,27 +47,27 @@ public:
   OT::UnsignedInteger getBlockSize() const;
   virtual void setBlockSize(const OT::UnsignedInteger size);
 
-  virtual Parameters getParameters() const;
+  Parameters getParameters() const override;
 
   SimulationReliabilityResult getResult() const;
 
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
 
-  virtual void stop();
+  void stop() override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
   virtual SimulationInterface getSimulationAlgorithm(const OT::RandomVector& event);
   static void UpdateProgressValue(double percent, void* data);
 

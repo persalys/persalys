@@ -44,14 +44,14 @@ public:
                         const CouplingStepCollection & steps);
 
   /** Virtual constructor */
-  virtual CouplingPhysicalModel * clone() const;
+  CouplingPhysicalModel * clone() const override;
 
   /** Accessor to the steps */
   void setSteps(const CouplingStepCollection & steps);
   CouplingStepCollection getSteps() const;
 
-  virtual OT::String getHtmlDescription(const bool deterministic) const;
-  OT::String getPythonScript() const;
+  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getPythonScript() const override;
 
   /** Update python code if advanced config has changed **/
   void updateCode();
@@ -69,16 +69,16 @@ public:
   OT::FileName getCacheInputFile() const;
   OT::FileName getCacheOutputFile() const;
 
-  OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  OT::Function generateFunction(const OT::Description & outputNames) const override;
 
   OT::String getStepsMacro(const OT::String & offset = "") const;
 private:

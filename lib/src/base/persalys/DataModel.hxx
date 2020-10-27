@@ -52,9 +52,9 @@ public:
             const DesignOfExperiment & doe);
 
   /** Virtual constructor */
-  virtual DataModel * clone() const;
+  DataModel * clone() const override;
 
-  virtual void removeAllObservers();
+  void removeAllObservers() override;
 
   virtual OT::Description getInputNames();
   virtual OT::Description getOutputNames();
@@ -64,24 +64,24 @@ public:
                           const OT::Indices &outputColumns,
                           const OT::Description &outputNames);
 
-  virtual OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
   void setSample(const OT::Sample & sample);
 
 protected:
   void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
-  virtual void check();
+  void check() override;
   virtual void update();
-  virtual void setDefaultColumns();
+  void setDefaultColumns() override;
 
 protected:
   OT::Description inputNames_;

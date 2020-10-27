@@ -38,7 +38,7 @@ public:
   Output(const OT::String& name, const OT::String& description = "");
 
   /** Virtual constructor */
-  virtual Output * clone() const;
+  Output * clone() const override;
 
   bool isSelected() const;
   void setIsSelected(const bool isSelected);
@@ -46,16 +46,16 @@ public:
   bool hasBeenComputed() const;
   void setHasBeenComputed(const bool hasBeenComputed);
 
-  OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   bool isSelected_;

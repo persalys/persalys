@@ -46,7 +46,7 @@ public:
                    const OT::String & fileName);
 
   /** Virtual constructor */
-  virtual FMIPhysicalModel * clone() const;
+  FMIPhysicalModel * clone() const override;
 
   /** Accessor to the xml file name */
   OT::String getFMUFileName() const;
@@ -57,16 +57,16 @@ public:
 
   OT::Function getFunction() const;
 
-  virtual OT::String getHtmlDescription(const bool deterministic) const;
-  OT::String getPythonScript() const;
+  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getPythonScript() const override;
 
-  OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
   void reassignVariables(const OT::Description & inputNames,
                          const OT::Description & outputNames);

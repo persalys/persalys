@@ -41,7 +41,7 @@ public:
   FunctionalChaosAnalysis(const OT::String& name, const Analysis& analysis);
 
   /** Virtual constructor */
-  virtual FunctionalChaosAnalysis * clone() const;
+  FunctionalChaosAnalysis * clone() const override;
 
   OT::UnsignedInteger getChaosDegree() const;
   void setChaosDegree(const OT::UnsignedInteger degree);
@@ -53,27 +53,27 @@ public:
 
   FunctionalChaosAnalysisResult getResult() const;
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual void initialize();
-  virtual void launch();
-  virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
+  void initialize() override;
+  void launch() override;
+  OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
   OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::Sample & inputSample, const OT::Sample & outputSample);
   void postProcessFunctionalChaosResult(const OT::Sample& inputSample);
   OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection getPolynomialFamilyCollection();
-  virtual void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
+  void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample) override;
 
 private:
   OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection polynomialFamilyCollection_;

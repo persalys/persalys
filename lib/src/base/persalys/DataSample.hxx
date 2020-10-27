@@ -38,7 +38,7 @@ public:
   DataSample(const OT::Sample & inSample, const OT::Sample & outSample);
 
   /** Virtual constructor */
-  virtual DataSample * clone() const;
+  DataSample * clone() const override;
 
   virtual OT::Sample getInputSample() const;
   virtual void setInputSample(const OT::Sample & sample);
@@ -53,10 +53,10 @@ public:
   bool isValid() const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   void searchMinMax() const;

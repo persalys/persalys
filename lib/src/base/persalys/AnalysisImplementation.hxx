@@ -38,12 +38,12 @@ public:
   AnalysisImplementation(const OT::String & name);
 
   /** Virtual constructor */
-  virtual AnalysisImplementation * clone() const;
+  AnalysisImplementation * clone() const override;
 
   /** Object name accessor */
   virtual void setName(const OT::String& name);
 
-  virtual void removeAllObservers();
+  void removeAllObservers() override;
   virtual Observer * getParentObserver() const;
 
   /** Comparison operators */
@@ -72,10 +72,10 @@ public:
   virtual void stop();
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 

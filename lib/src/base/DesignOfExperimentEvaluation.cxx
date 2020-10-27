@@ -22,7 +22,6 @@
 
 #include "persalys/BaseTools.hxx"
 #include "persalys/DataAnalysis.hxx"
-#include "persalys/IgnoreFailureEvaluation.hxx"
 
 #ifdef PERSALYS_HAVE_YACS
 #include "persalys/YACSEvaluation.hxx"
@@ -153,20 +152,10 @@ void DesignOfExperimentEvaluation::launch()
 
   // to avoid failing whole blocks we make failed points succeed but mark them with nan
   MemoizeEvaluation* memoize = dynamic_cast<MemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
-
-  IgnoreFailureEvaluation * eval = 0;
-  if (memoize)
-  {
-    MarginalEvaluation *marginal = dynamic_cast<MarginalEvaluation*>(memoize->getEvaluation().getImplementation().get());
-    if (marginal)
-    {
-      // TODO: needs MarginalEvaluation::getEvaluation (https://github.com/openturns/openturns/pull/1565)
-      // eval = dynamic_cast<PythonScriptEvaluation*>(marginal->getEvaluation().getImplementation().get());
-    }
-    else if((eval = dynamic_cast<IgnoreFailureEvaluation*>(memoize->getEvaluation().getImplementation().get())))
-      eval->setIgnoreFailure(true);
-
-  }
+  MarginalEvaluation *marginal = memoize ? dynamic_cast<MarginalEvaluation*>(memoize->getEvaluation().getImplementation().get()) : nullptr;
+  EvaluationImplementation * eval = marginal ? marginal->getEvaluation().getImplementation().get() : memoize;
+  eval->setCheckOutput(false);
+  
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
@@ -213,26 +202,23 @@ void DesignOfExperimentEvaluation::launch()
     timeCriteria.incrementElapsedTime();
   }
 
+  // restore default
+  eval->setCheckOutput(true);
+  
   // mark points evaluating to nan as failed
-  if (eval || (dynamic_cast<OT::SymbolicEvaluation*>(memoize->getEvaluation().getImplementation().get()))) {
-
-    if(eval)// restore
-      eval->setIgnoreFailure(false);
-
-    Indices failedIndices;
-    for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)
+  Indices failedIndices;
+  for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)
+  {
+    if (!SpecFunc::IsNormal(outputSample(i, 0)))
     {
-      if (!SpecFunc::IsNormal(outputSample(i, 0)))
-      {
-        failedIndices.add(i);
-        failedInputSample_.add(getOriginalInputSample()[i]);
-      }
+      failedIndices.add(i);
+      failedInputSample_.add(getOriginalInputSample()[i]);
     }
-    for (UnsignedInteger i = 0; i < failedIndices.getSize(); ++ i)
-    {
-      inputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
-      outputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
-    }
+  }
+  for (UnsignedInteger i = 0; i < failedIndices.getSize(); ++ i)
+  {
+    inputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
+    outputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
   }
 
   if (!outputSample.getSize())

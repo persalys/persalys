@@ -44,7 +44,7 @@ public:
   Input(const OT::String& name, const double& value, const OT::String& description = "");
 
   /** Virtual constructor */
-  virtual Input * clone() const;
+  Input * clone() const override;
 
   OT::Distribution getDistribution() const;
   void setDistribution(const OT::Distribution & distribution);
@@ -58,16 +58,16 @@ public:
   bool isStochastic() const;
   void setStochastic(const bool stoch);
 
-  OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   OT::String getDistributionPythonScript() const;

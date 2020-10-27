@@ -39,7 +39,7 @@ public:
   SRCResult();
 
   /** Virtual constructor */
-  virtual SRCResult * clone() const;
+  SRCResult * clone() const override;
 
   OT::Description getOutputNames() const;
   OT::Description getInputNames() const;
@@ -51,13 +51,13 @@ public:
   OT::Point getR2() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::Description outputNames_;

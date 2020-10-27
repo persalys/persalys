@@ -37,23 +37,23 @@ public:
             const OT::Function & function);
 
   /** Virtual constructor */
-  virtual MetaModel * clone() const;
+  MetaModel * clone() const override;
 
   void setFunction(const OT::Function & function);
 
-  virtual OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  OT::Function generateFunction(const OT::Description & outputNames) const override;
 
 private:
   OT::Function function_;

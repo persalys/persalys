@@ -45,7 +45,7 @@ public:
                const CouplingOutputFileCollection & outputFiles);
 
   /** Virtual constructor */
-  virtual CouplingStep * clone() const;
+  CouplingStep * clone() const override;
 
   /** Command accessor */
   void setCommand(const OT::String & command);
@@ -81,13 +81,13 @@ public:
   OT::Description getPPInputs() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   OT::String command_;

@@ -40,9 +40,9 @@ public:
                            const OT::ComparisonOperator & failure, const double & threshold);
 
   /** Virtual constructor */
-  virtual LimitStateImplementation * clone() const;
+  LimitStateImplementation * clone() const override;
 
-  virtual void removeAllObservers();
+  void removeAllObservers() override;
 
   /** Comparison operators */
   OT::Bool operator ==(const LimitStateImplementation & other) const;
@@ -64,14 +64,14 @@ public:
   OT::String getPythonScript() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
-  virtual OT::String __str__(const OT::String & offset) const;
+  OT::String __repr__() const override;
+  OT::String __str__(const OT::String & offset) const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   PhysicalModel physicalModel_;

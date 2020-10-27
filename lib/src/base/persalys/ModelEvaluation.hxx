@@ -39,17 +39,17 @@ public:
                   const OT::Point & inputsValues);
 
   /** Virtual constructor */
-  virtual ModelEvaluation * clone() const;
+  ModelEvaluation * clone() const override;
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
 protected:
-  virtual void launch();
+  void launch() override;
 };
 }
 #endif

@@ -367,14 +367,8 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   // retrieve kriging result
   KrigingResult krigingResult = dynamic_cast<KrigingAnalysisResult*>(&result)->getKrigingResultCollection()[0];
 
-  // normalized inputSample
-  const Function t(krigingResult.getTransformation());
-  Sample normalized_inputSample;
-  if (t.getInputDimension() == inputSample.getDimension())
-    normalized_inputSample = t(inputSample);
-  else
-    normalized_inputSample = inputSample;
-
+  // TODO: normalize input sample
+  Sample normalized_inputSample(inputSample);
   const UnsignedInteger size = normalized_inputSample.getSize();
 
   // correlation matrix

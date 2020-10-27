@@ -38,27 +38,27 @@ public:
   ImportedMeshModel(const VariableCollection& parameters, const OT::String& fileName, const OT::Indices& columns=OT::Indices(1, 0));
 
   /** Virtual constructor */
-  virtual ImportedMeshModel * clone() const;
+  ImportedMeshModel * clone() const override;
 
   void setParameterColumns(const OT::Indices &inputColumns);
-  OT::Interval getBounds() const;
-  OT::Indices getNumberOfNodes() const;
+  OT::Interval getBounds() const override;
+  OT::Indices getNumberOfNodes() const override;
 
-  virtual OT::String getHtmlDescription() const;
-  virtual OT::String getPythonScript() const;
+  OT::String getHtmlDescription() const override;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual OT::Sample importSample(const OT::String& fileName);
-  virtual void setDefaultColumns();
+  OT::Sample importSample(const OT::String& fileName) override;
+  void setDefaultColumns() override;
 };
 }
 #endif

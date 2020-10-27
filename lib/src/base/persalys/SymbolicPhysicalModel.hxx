@@ -39,12 +39,12 @@ public:
                         const OT::Description& formulas);
 
   /** Virtual constructor */
-  virtual SymbolicPhysicalModel * clone() const;
+  SymbolicPhysicalModel * clone() const override;
 
-  virtual void addOutput(const Output& output);
-  virtual void removeOutput(const OT::String& outputName);
-  virtual void setOutputs(const OutputCollection& outputs);
-  virtual void setOutputName(const OT::String& outputName, const OT::String& newName);
+  void addOutput(const Output& output) override;
+  void removeOutput(const OT::String& outputName) override;
+  void setOutputs(const OutputCollection& outputs) override;
+  void setOutputName(const OT::String& outputName, const OT::String& newName) override;
 
   OT::Description getFormulas() const;
   void setFormulas(const OT::Description& formulas);
@@ -52,20 +52,20 @@ public:
   OT::String getFormula(const OT::String& outputName) const;
   void setFormula(const OT::String& outputName, const OT::String& formula);
 
-  virtual OT::String getHtmlDescription(const bool deterministic) const;
-  OT::String getPythonScript() const;
+  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getPythonScript() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  virtual void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  virtual void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
-  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  OT::Function generateFunction(const OT::Description & outputNames) const override;
 
 private:
   std::map<OT::String, OT::String> formulaForEachOutput_;

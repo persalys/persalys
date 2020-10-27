@@ -180,11 +180,8 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
   if (designName_ == "SALHS" || designName_ == "MCLHS") {
     if (spaceFilling_ == "PhiP")
       spaceFilling = SpaceFillingPhiP();
-    else if (spaceFilling_ == "minDist") {
-      if(designName_ == "MCLHS")
-        spaceFilling = SpaceFillingMinDist();
-      else
-        throw InvalidArgumentException(HERE) << "Error: MinDist filling space algorithm unavailable for Simulated Annealing LHS";}
+    else if (spaceFilling_ == "minDist")
+      spaceFilling = SpaceFillingMinDist();
     else if (spaceFilling_ == "C2")
       spaceFilling = SpaceFillingC2();
     else

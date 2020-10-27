@@ -18,7 +18,6 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      PythonPhysicalModel.cxx
                      MetaModel.cxx
                      SymbolicFieldModel.cxx
-                     IgnoreFailureEvaluation.cxx
                      PythonScriptEvaluation.cxx
                      PythonScriptFieldFunction.cxx
                      PythonFieldModel.cxx
@@ -110,7 +109,6 @@ ot_install_header_file ( PhysicalModelImplementation.hxx )
 ot_install_header_file ( SymbolicPhysicalModel.hxx )
 ot_install_header_file ( PythonPhysicalModel.hxx )
 ot_install_header_file ( SymbolicFieldModel.hxx )
-ot_install_header_file ( IgnoreFailureEvaluation.hxx )
 ot_install_header_file ( PythonScriptEvaluation.hxx )
 ot_install_header_file ( PythonScriptFieldFunction.hxx )
 ot_install_header_file ( PythonFieldModel.hxx )

@@ -46,7 +46,7 @@ public:
                             const OT::Point& residuals);
 
   /** Virtual constructor */
-  virtual MetaModelValidationResult * clone() const;
+  MetaModelValidationResult * clone() const override;
 
   // attributs accessors
   OT::String getName() const;
@@ -56,13 +56,13 @@ public:
   OT::Point getQ2() const;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
   void add(const MetaModelValidationResult& other);

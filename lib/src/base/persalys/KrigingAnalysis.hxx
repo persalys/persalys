@@ -41,7 +41,7 @@ public:
   KrigingAnalysis(const OT::String& name, const Analysis& designOfExperimentAnalysis);
 
   /** Virtual constructor */
-  virtual KrigingAnalysis * clone() const;
+  KrigingAnalysis * clone() const override;
 
   OT::Basis getBasis() const;
   void setBasis(const OT::Basis& basis);
@@ -54,30 +54,30 @@ public:
 
   KrigingAnalysisResult getResult() const;
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
-  virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
+  OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
   OT::KrigingAlgorithm buildKrigingAlgorithm(const OT::Sample& inputSample,
       const OT::Sample& outputSample,
       const bool useOptimalCovModel = false);
 
 protected:
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
   void validateMetaModelResult(OT::Collection<KrigingAnalysisResult> results, const OT::Sample& inputSample);
-  virtual void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
+  void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample) override;
 
 private:
   OT::Basis basis_;

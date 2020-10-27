@@ -92,15 +92,15 @@ public:
                         const OT::Description& formulas);
 
   /** Virtual constructor */
-  virtual SymbolicFieldModel * clone() const;
+  SymbolicFieldModel * clone() const override;
 
-  virtual void addInput(const Input& input);
-  virtual void setInputName(const OT::String & inputName, const OT::String & newName);
+  void addInput(const Input& input) override;
+  void setInputName(const OT::String & inputName, const OT::String & newName) override;
 
-  OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
 protected:
-  virtual OT::PointToFieldFunction generatePointToFieldFunction(const OT::Description & outputNames) const;
+  OT::PointToFieldFunction generatePointToFieldFunction(const OT::Description & outputNames) const override;
 };
 }
 #endif

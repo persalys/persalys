@@ -41,14 +41,14 @@ public:
   virtual ~StudyImplementation();
 
   /** Virtual constructor */
-  virtual StudyImplementation * clone() const;
+  StudyImplementation * clone() const override;
 
   virtual void setName(const OT::String & name);
 
-  virtual void removeAllObservers();
+  void removeAllObservers() override;
 
   // Observer method override
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 
   bool hasBeenModified() const;
 
@@ -93,10 +93,10 @@ public:
   void save(const OT::String & xmlFileName);
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 private:
   void clear(const DesignOfExperiment & designOfExperiment);

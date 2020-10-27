@@ -60,8 +60,6 @@ void CalibrationAnalysisResult::save(Advocate & adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("calibrationResult_", calibrationResult_);
   adv.saveAttribute("confidenceInterval_", confidenceInterval_);
-  adv.saveAttribute("outputAtPrior_", outputAtPrior_);
-  adv.saveAttribute("outputAtPosterior_", outputAtPosterior_);
   adv.saveAttribute("priorResidualsPDF_", priorResidualsPDF_);
   adv.saveAttribute("posteriorResidualsPDF_", posteriorResidualsPDF_);
 }
@@ -73,8 +71,6 @@ void CalibrationAnalysisResult::load(Advocate & adv)
   PersistentObject::load(adv);
   adv.loadAttribute("calibrationResult_", calibrationResult_);
   adv.loadAttribute("confidenceInterval_", confidenceInterval_);
-  adv.loadAttribute("outputAtPrior_", outputAtPrior_);
-  adv.loadAttribute("outputAtPosterior_", outputAtPosterior_);
   adv.loadAttribute("priorResidualsPDF_", priorResidualsPDF_);
   adv.loadAttribute("posteriorResidualsPDF_", posteriorResidualsPDF_);
 }

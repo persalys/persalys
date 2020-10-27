@@ -35,25 +35,25 @@ public:
   PhysicalModelAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
-  virtual PhysicalModelAnalysis * clone() const;
+  PhysicalModelAnalysis * clone() const override;
 
-  virtual Observer * getParentObserver() const;
+  Observer * getParentObserver() const override;
 
   PhysicalModel getPhysicalModel() const;
 
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
-  virtual void run();
+  bool canBeLaunched(OT::String &errorMessage) const override;
+  void run() override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
-  virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
+  void acceptLaunchParameters(LaunchParametersVisitor* visitor) override;
 
 private:
   PhysicalModel physicalModel_;

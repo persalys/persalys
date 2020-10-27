@@ -46,22 +46,22 @@ public:
   FileMemoizeFunction(const OT::Function & function, const OT::FileName & inputFile, const OT::FileName & outputFile);
 
   /** Virtual copy constructor */
-  virtual FileMemoizeFunction * clone() const;
+  FileMemoizeFunction * clone() const override;
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Function implementation accessors */
-  void setEvaluation(const OT::Evaluation & evaluation);
+  void setEvaluation(const OT::Evaluation & evaluation) override;
 
   /** Comparison operator */
   OT::Bool operator ==(const FileMemoizeFunction & other) const;
 
   /** Operator () */
-  virtual OT::Point operator() (const OT::Point & inPoint) const;
+  OT::Point operator() (const OT::Point & inPoint) const override;
 
   /** Operator () */
-  virtual OT::Sample operator() (const OT::Sample & inSample) const;
+  OT::Sample operator() (const OT::Sample & inSample) const override;
 
   /** @brief Enable the internal cache
    *

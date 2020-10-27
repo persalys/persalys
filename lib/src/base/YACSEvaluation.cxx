@@ -36,7 +36,7 @@ static Factory<YACSEvaluation> Factory_YACSEvaluation;
 
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & script)
-  : IgnoreFailureEvaluation()
+  : EvaluationImplementation()
   , inputValues_()
   , inDescription_()
   , outDescription_()
@@ -149,7 +149,8 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
       {
         std::string name = getOutputVariablesNames()[i];
         for(UnsignedInteger j = 0; j < sampleSize; ++j)
-          if(!ignoreFailure_) {
+          if (checkOutput_)
+          {
             if(ydefx::ExecutionState::DONE == jobSample.pointState(j))
               result(j, i) = jobSample.outputs<double>().get(name, j);
             else// the point could not have been evaluated
@@ -159,7 +160,8 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
                 << "\nFor further details, see "
                 << jobParams_.work_directory() << "/logs directory on "
                 << jobParams_.resource_name() << ".";
-          }else
+          }
+	  else
             result(j, i) = jobSample.outputs<double>().get(name, j);
       }
     }
