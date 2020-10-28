@@ -18,7 +18,7 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.18/cmake-3.18.2.tar.gz | tar xz && cd cmake-3.18.2 \
+RUN curl -fSsL https://cmake.org/files/v3.18/cmake-3.18.4.tar.gz | tar xz && cd cmake-3.18.4 \
  && ./bootstrap --parallel=8 -- -DCMAKE_USE_OPENSSL=OFF && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # cminpack
@@ -30,7 +30,7 @@ RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.2.tar.gz | tar xz 
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # eigen
-RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.bz2 | tar xj && cd eigen-3.3.7 \
+RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.3.8/eigen-3.3.8.tar.bz2 | tar xj && cd eigen-3.3.8 && curl -L https://gitlab.com/libeigen/eigen/-/commit/ef3cc72c.patch | patch -p1 \
  && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install && cd - && rm -r eigen*
 
 # spectra
@@ -40,7 +40,7 @@ RUN curl -fsSL https://github.com/yixuan/spectra/archive/v0.9.0.tar.gz | tar xz 
 RUN curl -fsSL https://github.com/google/glog/archive/v0.4.0.tar.gz | tar xz && cd glog-0.4.0 && cmake . && make install && cd - && rm -rf glog*
 
 # ceres
-RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/1.14.0.tar.gz | tar xz && cd ceres-solver-1.14.0 \
+RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.0.0.tar.gz | tar xz && cd ceres-solver-2.0.0 \
  && cmake -DLIB_SUFFIX="" -DBUILD_SHARED_LIBS=ON . && make install && cd - && rm -r ceres*
 
 # tbb
@@ -106,16 +106,16 @@ RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-
  && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.1.tar.gz | tar xz && cd fmi-library-2.2.1 \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.3.tar.gz | tar xz && cd fmi-library-2.2.3 \
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.3.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.3 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.4.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.4 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.tar.gz | tar xz && cd PyFMI-PyFMI-2.8 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.2.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.2 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # sphinx
