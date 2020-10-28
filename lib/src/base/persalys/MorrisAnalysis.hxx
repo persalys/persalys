@@ -37,7 +37,7 @@ public:
   MorrisAnalysis(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Virtual constructor */
-  virtual MorrisAnalysis * clone() const;
+  MorrisAnalysis * clone() const override;
 
   OT::UnsignedInteger getTrajectoriesNumber() const;
   void setTrajectoriesNumber(const OT::UnsignedInteger number);
@@ -54,24 +54,24 @@ public:
   MorrisResult& getResult();
 #endif
 
-  virtual Parameters getParameters() const;
-  virtual OT::String getPythonScript() const;
-  virtual bool hasValidResult() const;
-  virtual bool canBeLaunched(OT::String &errorMessage) const;
+  Parameters getParameters() const override;
+  OT::String getPythonScript() const override;
+  bool hasValidResult() const override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
 
   /** String converter */
   OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
 protected:
   void initializeParameters();
-  virtual void initialize();
-  virtual void launch();
+  void initialize() override;
+  void launch() override;
 
 private:
   OT::UnsignedInteger trajectoriesNumber_;

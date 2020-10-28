@@ -37,7 +37,7 @@ public:
   MorrisResult();
 
   /** Virtual constructor */
-  virtual MorrisResult * clone() const;
+  MorrisResult * clone() const override;
 
   OT::Indices getInputsSelection(const OT::UnsignedInteger marginal) const;
   void setInputsSelection(const OT::UnsignedInteger marginal, const OT::Indices& values);
@@ -54,7 +54,7 @@ public:
   OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
