@@ -26,7 +26,7 @@ private slots:
   void initTestCase()
   {
     Sample sample(Normal(5).getSample(20));
-    sample.exportToCSVFile("sample.csv");
+    sample.exportToCSVFile("DataModelSample.csv");
     Indices inCol(2);
     inCol[0] = 1;
     inCol[1] = 3;
@@ -39,7 +39,7 @@ private slots:
     Description outDesc(2);
     outDesc[0] = "out1";
     outDesc[1] = "out2";
-    model = new DataModel("model", "sample.csv", inCol, outCol, inDesc, outDesc);
+    model = new DataModel("model", "DataModelSample.csv", inCol, outCol, inDesc, outDesc);
 
     Study aStudy;
     aStudy.add(model);
@@ -211,8 +211,8 @@ private slots:
 
     // change file name
     Sample sample(Normal(2).getSample(10));
-    sample.exportToCSVFile("sample.csv");
-    model->setFileName("sample.csv");
+    sample.exportToCSVFile("DataModelSample2.csv");
+    model->setFileName("DataModelSample2.csv");
     for (int i = 0; i < variableModel->columnCount(); ++i)
     {
       if (model->getInputColumns().contains(i) || model->getOutputColumns().contains(i))
