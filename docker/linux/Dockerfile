@@ -136,7 +136,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.6.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
+RUN curl -fSsL https://paraview.org/files/v5.9/ParaView-v5.9.0.tar.xz | tar xJ && cd ParaView-v5.9.0 \
  && mkdir build && cd build \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
