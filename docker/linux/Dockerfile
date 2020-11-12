@@ -175,8 +175,8 @@ RUN localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG "C.UTF-8"
 
 # openmodelica
-RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel
-RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.14.2 \
+RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel curl-devel
+RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.16.0 \
  && git submodule sync && git submodule update --init --recursive \
  && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd ../.. && rm -r OpenModelica*
