@@ -1,3 +1,7 @@
+= 9.0.1 release (2020-11-26)
+
+ * Coupling output preview fix
+
 = 9.0 release (2020-10-27)
 
  * Coupling model input/output previews, more options
