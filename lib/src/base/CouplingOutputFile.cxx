@@ -131,7 +131,7 @@ String CouplingOutputFile::checkOutputFile(String fname) const
   code << "    all_vars = []\n";
   code << "    for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "        try:\n";
-  code << "            all_vars.append(otct.get_value('"<<fname<<"', token=token, skip_token=skip_tok, skip_line=skip_line, skip_col=skip_col))\n";
+  code << "            all_vars.append(otct.get_value('"<<fname<<"', token=token, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col)))\n";
   code << "        except:\n";
   code << "            continue\n";
   code << "    return all_vars\n";
