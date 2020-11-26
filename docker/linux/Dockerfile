@@ -26,7 +26,7 @@ RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.6.tar.gz | tar 
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DBLAS_LIBRARIES="/usr/lib64/atlas/libcblas.so.3.0;blas;m" . && make install && cd - && rm -r cminpack*
 
 # nlopt
-RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.6.2.tar.gz | tar xz && cd nlopt-2.6.2 \
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.0.tar.gz | tar xz && cd nlopt-2.7.0 \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
@@ -118,7 +118,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.2.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.2 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.3 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # sphinx
@@ -139,11 +139,11 @@ RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4
  && pkg-config --exists xkbcommon && cd - && rm -r libxkbcommon*
 
 # qt
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtbase-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.1 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtsvg-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtx11extras-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qttools-everywhere-src-5.15.1.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.1/submodules/qtxmlpatterns-everywhere-src-5.15.1.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.1 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtbase-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.2 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtsvg-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtx11extras-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qttools-everywhere-src-5.15.2.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtxmlpatterns-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj && cd qwt-6.1.5 \
