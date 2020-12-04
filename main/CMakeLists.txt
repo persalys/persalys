@@ -7,12 +7,7 @@ include_directories (${CMAKE_SOURCE_DIR}/lib/src/model)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view)
 include_directories (${CMAKE_SOURCE_DIR}/lib/src/view/PyConsole)
 
-if (OTFMI_FOUND)
-  # fmi make gui application crash, so use a console application
-  add_executable (persalys main.cxx gui.rc)
-else ()
-  add_executable (persalys WIN32 main.cxx gui.rc)
-endif ()
+add_executable (persalys WIN32 main.cxx gui.rc)
 
 target_link_libraries (persalys persalysview)
 set_target_properties (persalys PROPERTIES UNITY_BUILD OFF)
