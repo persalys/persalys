@@ -45,10 +45,16 @@ cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
 rm Lib/site-packages/openturns/{libvtk,libboost,LLVM,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
-cd Lib/site-packages
+curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.8.3/download/win-64/pyfmi-2.8.3-py38h347fdf6_0.tar.bz2 | tar xj
+curl -fSsL https://anaconda.org/conda-forge/assimulo/3.2.3/download/win-64/assimulo-3.2.3-py38hfe77a75_3.tar.bz2 | tar xj
+cd Lib
+curl -fSsL https://anaconda.org/conda-forge/otfmi/0.7/download/noarch/otfmi-0.7-pyhd3deb0d_0.tar.bz2 | tar xj
+cd site-packages
 curl -fsSL https://pypi.io/packages/py2.py3/p/pip/pip-20.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp38/n/numpy/numpy-1.19.4-cp38-cp38-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp38/s/scipy/scipy-1.5.4-cp38-cp38-win_amd64.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build

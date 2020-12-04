@@ -5,11 +5,12 @@ ENV MAKEFLAGS -j8
 WORKDIR /usr/local/src
 
 # utils
+RUN sed -i -e 's/^mirrorlist/#mirrorlist/g' -e 's/^#baseurl=http:\/\/mirror.centos.org\/centos\/$releasever\//baseurl=http:\/\/vault.centos.org\/6.10\//g' /etc/yum.repos.d/CentOS-Base.repo
 RUN yum -y install wget git patch zip unzip perl subversion xz gettext autoconf automake libtool pcre-devel perl fontconfig blas-devel lapack-devel atlas-devel libxml2-devel sudo
 RUN yum -y install epel-release && yum -y install patchelf pandoc dvisvgm
 
 # devtoolset
-RUN yum -y install centos-release-scl && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
+RUN yum -y install centos-release-scl && sed -i -e 's/^mirrorlist/#mirrorlist/g' -e "s|mirror.centos.org|vault.centos.org|g" -e "s|# baseurl|#baseurl|g" /etc/yum.repos.d/CentOS-SCLo-scl*.repo && sed -i "s|#baseurl=http:\/\/vault.centos.org\/centos\/6\/sclo|baseurl=https:\/\/vault.centos.org\/centos\/6\/sclo|g" /etc/yum.repos.d/CentOS-SCLo-scl*.repo && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
 ENV PATH /opt/rh/devtoolset-8/root/usr/bin:$PATH
 ENV LD_LIBRARY_PATH /opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
 
@@ -151,7 +152,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
+RUN curl -fSsL https://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
   && mkdir build && cd build \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
