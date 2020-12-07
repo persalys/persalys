@@ -1,18 +1,30 @@
-FROM centos:6
+FROM centos:7
 MAINTAINER jschueller
 
-ENV MAKEFLAGS -j8
-WORKDIR /usr/local/src
-
 # utils
-RUN sed -i -e 's/^mirrorlist/#mirrorlist/g' -e 's/^#baseurl=http:\/\/mirror.centos.org\/centos\/$releasever\//baseurl=http:\/\/vault.centos.org\/6.10\//g' /etc/yum.repos.d/CentOS-Base.repo
-RUN yum -y install wget git patch zip unzip perl subversion xz gettext autoconf automake libtool pcre-devel perl fontconfig blas-devel lapack-devel atlas-devel libxml2-devel sudo
-RUN yum -y install epel-release && yum -y install patchelf pandoc dvisvgm
+RUN yum -y install wget git patch zip unzip bzip2 bsdtar perl subversion xz gettext autoconf automake libtool sudo bison make which file \
+  pcre-devel perl fontconfig blas-devel lapack-devel atlas-devel libxml2-devel \
+  zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel openssl-devel \
+  libX11-devel libXt-devel libXext-devel libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel \
+  xorg-x11-server-Xvfb mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers libxkbcommon-x11-devel \
+  freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel \
+  xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xorg-x11-util-macros \
+  java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel curl-devel \
+  texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin tex-preview \
+ && mkdir -p /usr/share/texlive/texmf-local/tex/latex/ && cd /usr/share/texlive/texmf-local/tex/latex \
+ && curl -fsSL http://mirrors.ctan.org/macros/latex/contrib/anyfontsize.zip | bsdtar -xf- && mktexlsr \
+ && yum -y install epel-release && yum -y install pandoc dvisvgm
+
 
 # devtoolset
-RUN yum -y install centos-release-scl && sed -i -e 's/^mirrorlist/#mirrorlist/g' -e "s|mirror.centos.org|vault.centos.org|g" -e "s|# baseurl|#baseurl|g" /etc/yum.repos.d/CentOS-SCLo-scl*.repo && sed -i "s|#baseurl=http:\/\/vault.centos.org\/centos\/6\/sclo|baseurl=https:\/\/vault.centos.org\/centos\/6\/sclo|g" /etc/yum.repos.d/CentOS-SCLo-scl*.repo && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
+RUN yum -y install centos-release-scl && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
 ENV PATH /opt/rh/devtoolset-8/root/usr/bin:$PATH
 ENV LD_LIBRARY_PATH /opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
+
+# locale
+RUN sed -i "s|override_install_langs|#override_install_langs|g" /etc/yum.conf && yum -y reinstall glibc-common && localedef -i en_US -f UTF-8 C.UTF-8
+ENV LANG="en_US.UTF-8" MAKEFLAGS="-j8"
+WORKDIR /usr/local/src
 
 # swig
 RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz | tar xz && cd swig-4.0.2 \
@@ -20,11 +32,12 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz | tar x
 
 # cmake
 RUN curl -fSsL https://cmake.org/files/v3.18/cmake-3.18.4.tar.gz | tar xz && cd cmake-3.18.4 \
- && ./bootstrap --parallel=8 -- -DCMAKE_USE_OPENSSL=OFF && make install > /dev/null 2>&1 && cd - && rm -r cmake*
+ && ./bootstrap --parallel=8 -- && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # cminpack
 RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.6.tar.gz | tar xz && cd cminpack-1.3.6 \
- && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DBLAS_LIBRARIES="/usr/lib64/atlas/libcblas.so.3.0;blas;m" . && make install && cd - && rm -r cminpack*
+ && curl -L https://github.com/devernay/cminpack/pull/21.patch | patch -p1 \
+ && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF . && make install && cd - && rm -r cminpack*
 
 # nlopt
 RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.0.tar.gz | tar xz && cd nlopt-2.7.0 \
@@ -34,7 +47,7 @@ RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.0.tar.gz | tar xz 
 RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.0/src/hdf5-1.12.0.tar.bz2 | tar xj && cd hdf5-1.12.0 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make && make install && cd - && rm -r hdf5*
 
 # eigen
-RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.3.8/eigen-3.3.8.tar.bz2 | tar xj && cd eigen-3.3.8 && curl -L https://gitlab.com/libeigen/eigen/-/commit/ef3cc72c.patch | patch -p1 \
+RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.tar.bz2 | tar xj && cd eigen-3.3.9 \
  && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install && cd - && rm -r eigen*
 
 # spectra
@@ -56,51 +69,20 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimag
  && ./appimagetool-x86_64.AppImage --appimage-extract \
  && chmod -R a+rx squashfs-root \
  && ln -s /usr/local/src/squashfs-root/AppRun /usr/bin/appimagetool \
- && appimagetool -h
-
-# glibc 2.14
-RUN curl -fSsL http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz | tar xz && cd glibc-2.14 \
- && curl -L https://raw.githubusercontent.com/wheybags/glibc_version_header/master/patches/fix_obstack_compat.diff | patch -p1 \
- && sed -i 's/3.4\* | 4.\[0-9\]\*/3.4* | 4.\[0-9\]\* | 8.\[0-9\]\*/g' configure \
- && mkdir build && cd build && ../configure --prefix=/opt/glibc-2.14 && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
- && cd ../.. && rm -r glibc*
-
-# texlive: see https://github.com/leodido/dockerfiles/blob/master/texlive:latest/Dockerfile
-# environment
-ENV TL install-tl
-RUN mkdir -p $TL
-# texlive net batch installation
-RUN wget -nv -O $TL.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-RUN tar -xzf $TL.tar.gz -C $TL --strip-components=1
-ADD full.profile $TL/
-RUN cd $TL/ && LD_LIBRARY_PATH=/opt/glibc-2.14/lib ./install-tl --persistent-downloads  --profile full.profile
-RUN ln -s /usr/local/texlive/2014/bin/x86_64-linux /opt/texbin
-ENV PATH $PATH:/usr/local/texlive/2014/bin/x86_64-linux
-
-# relink texlive executables
-RUN patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/pdftex \
- && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/bibtex \
- && patchelf --set-rpath /opt/glibc-2.14/lib /opt/texbin/kpsewhich \
- && latex --version
-
-# cleanup
-RUN tlmgr install ucs anyfontsize preview && rm $TL.tar.gz && rm -r $TL && fc-cache -fsv
+ && appimagetool --version
 
 # python
-RUN yum -y install zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel
-RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1h.tar.gz | tar xz && cd openssl-1.1.1h \
- && ./config no-ssl2 no-shared -fPIC --prefix=/usr/local/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1 && cd - && rm -r openssl*
 RUN curl -fSsL https://www.python.org/ftp/python/3.8.6/Python-3.8.6.tgz | tar xz && cd Python-3.8.6 \
- && ./configure --enable-shared CFLAGS="-I/usr/local/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/usr/local/ssl/lib" \
- && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
+ && ./configure --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
+ && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython
-RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.18.5.tar.gz | tar xz && cd numpy-1.18.5 \
+RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.19.4.tar.gz | tar xz && cd numpy-1.19.4 \
  && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
-RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.1.0.tar.gz | tar xz && cd scipy-1.1.0 \
+RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.5.4.tar.gz | tar xz && cd scipy-1.5.4 \
  && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
-RUN pip install lxml pandas matplotlib ipython --upgrade
+RUN pip install lxml pandas matplotlib ipython sphinx numpydoc --upgrade
 
 # sundials
 RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
@@ -122,22 +104,10 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.3 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
-# sphinx
-RUN pip install sphinx numpydoc --upgrade
-
 # boost
 RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.bz2 | tar xj && cd boost_1_74_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
-
-# x11
-RUN yum -y install libX11-devel libXt-devel libXext-devel chrpath libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel xorg-x11-server-Xvfb
-RUN yum -y install mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel
-RUN yum -y install freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel
-RUN yum -y install xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xorg-x11-util-macros bison
-RUN curl -fSsL https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz | tar xz && cd libxkbcommon-xkbcommon-0.8.4 \
- && sed -i "/AX_GCC_BUILTIN/d" configure.ac && ./autogen.sh && ./configure --prefix=/usr --libdir=/usr/lib64 && make && make install \
- && pkg-config --exists xkbcommon && cd - && rm -r libxkbcommon*
 
 # qt
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtbase-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.2 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
@@ -152,7 +122,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
+RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
   && mkdir build && cd build \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
@@ -169,14 +139,9 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip install git+git://github.com/openturns/otfmi.git@v0.4 && python3 -c "import otfmi"
-
-# locale
-RUN localedef -i en_US -f UTF-8 C.UTF-8
-ENV LANG "C.UTF-8"
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.7 && python3 -c "import otfmi"
 
 # openmodelica
-RUN yum -y install java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel curl-devel
 RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.16.0 \
  && git submodule sync && git submodule update --init --recursive \
  && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
