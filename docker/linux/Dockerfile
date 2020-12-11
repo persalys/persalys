@@ -13,13 +13,11 @@ RUN yum -y install wget git patch zip unzip bzip2 bsdtar perl subversion xz gett
   texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin tex-preview \
  && mkdir -p /usr/share/texlive/texmf-local/tex/latex/ && cd /usr/share/texlive/texmf-local/tex/latex \
  && curl -fsSL http://mirrors.ctan.org/macros/latex/contrib/anyfontsize.zip | bsdtar -xf- && mktexlsr \
- && yum -y install epel-release && yum -y install pandoc dvisvgm
-
+ && yum -y install epel-release && yum -y install pandoc dvisvgm \
+ && yum -y install centos-release-scl && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
 
 # devtoolset
-RUN yum -y install centos-release-scl && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
-ENV PATH /opt/rh/devtoolset-8/root/usr/bin:$PATH
-ENV LD_LIBRARY_PATH /opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
+ENV PATH=/opt/rh/devtoolset-8/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
 
 # locale
 RUN sed -i "s|override_install_langs|#override_install_langs|g" /etc/yum.conf && yum -y reinstall glibc-common && localedef -i en_US -f UTF-8 C.UTF-8
@@ -105,7 +103,7 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.3.ta
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.74.0/source/boost_1_74_0.tar.bz2 | tar xj && cd boost_1_74_0 \
+RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2 | tar xj && cd boost_1_75_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
@@ -123,11 +121,12 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj &
 
 # paraview
 RUN curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.1.tar.xz | tar xJ && cd ParaView-v5.8.1 \
-  && mkdir build && cd build \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+ && mkdir build && cd build \
+ && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
-  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON .. \
-  && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
+  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON \
+  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so .. \
+ && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.16 \
