@@ -184,7 +184,7 @@ Analysis GridDesignPage::getAnalysis()
 
 bool GridDesignPage::validatePage()
 {
-  if (tableModel_->getInterval().isNumericallyEmpty())
+  if (!(tableModel_->getInterval().getVolume() > 0.0))
   {
     errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
     return false;

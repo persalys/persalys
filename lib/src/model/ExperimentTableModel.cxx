@@ -209,10 +209,10 @@ QVariant ExperimentTableModel::data(const QModelIndex &index, int role) const
     else if (role == Qt::CheckStateRole && index.column() == 0)
       return levels_[indexInput] != 1 ? Qt::Checked : Qt::Unchecked;
 
-    else if (role == Qt::ToolTipRole && index.column() == 0 && levels_[indexInput] != 1 && interval_.getMarginal(indexInput).isNumericallyEmpty())
+    else if (role == Qt::ToolTipRole && index.column() == 0 && levels_[indexInput] != 1 && !(interval_.getMarginal(indexInput).getVolume() > 0.0))
       return tr("The lower bound must be less than the upper bound");
 
-    else if (role == Qt::ForegroundRole && index.column() == 0 && levels_[indexInput] != 1 && interval_.getMarginal(indexInput).isNumericallyEmpty())
+    else if (role == Qt::ForegroundRole && index.column() == 0 && levels_[indexInput] != 1 && !(interval_.getMarginal(indexInput).getVolume() > 0.0))
       return QColor(Qt::red);
 
     else if (role == Qt::UserRole + 1)
