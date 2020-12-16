@@ -11,6 +11,7 @@ ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 # openturns
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.16 \
   && ${ARCH}-w64-mingw32-cmake \
+  -DCMINPACK_LIBRARIES="cminpack::cminpack" \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DUSE_SPHINX=OFF . \
