@@ -107,12 +107,16 @@ RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
+# wayland
+RUN curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.18.0.tar.xz | tar xJ && cd wayland-1.18.0 && ./configure --disable-documentation && make > /dev/null 2>&1 && make install && cd - && rm -r wayland*
+
 # qt
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtbase-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.2 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtsvg-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtx11extras-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qttools-everywhere-src-5.15.2.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtxmlpatterns-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
+RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtwayland-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj && cd qwt-6.1.5 \

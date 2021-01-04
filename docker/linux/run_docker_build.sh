@@ -91,7 +91,7 @@ cp -rv /usr/local/etc/ persalys.AppDir/etc
 cp -r /usr/local/lib/libhdf5* persalys.AppDir/usr/lib
 
 # qt libs
-for libname in Qt5XcbQpa Qt5DBus Qt5Widgets Qt5Gui Qt5Test Qt5Core qwt Qt5PrintSupport Qt5OpenGL Qt5Svg Qt5Concurrent Qt5Help Qt5Network Qt5X11Extras Qt5Sql
+for libname in Qt5XcbQpa Qt5DBus Qt5Widgets Qt5Gui Qt5Test Qt5Core qwt Qt5PrintSupport Qt5OpenGL Qt5Svg Qt5Concurrent Qt5Help Qt5Network Qt5X11Extras Qt5Sql Qt5WaylandClient
 do
   cp -v /usr/local/lib/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
