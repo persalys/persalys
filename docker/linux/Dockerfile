@@ -29,7 +29,7 @@ RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz | tar x
  && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.18/cmake-3.18.4.tar.gz | tar xz && cd cmake-3.18.4 \
+RUN curl -fSsL https://cmake.org/files/v3.19/cmake-3.19.2.tar.gz | tar xz && cd cmake-3.19.2 \
  && ./bootstrap --parallel=8 -- && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # cminpack
@@ -70,7 +70,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimag
  && appimagetool --version
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.8.6/Python-3.8.6.tgz | tar xz && cd Python-3.8.6 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.8.7/Python-3.8.7.tgz | tar xz && cd Python-3.8.7 \
  && ./configure --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
@@ -99,7 +99,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.3 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.4 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -115,7 +115,7 @@ RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submod
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtxmlpatterns-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
 
 # qwt
-RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.5.tar.bz2 | tar xj && cd qwt-6.1.5 \
+RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.6.tar.bz2 | tar xj && cd qwt-6.1.6 \
  && sed -i "s|QWT_INSTALL_PREFIX    = /usr/local/qwt-\$\$QWT_VERSION|QWT_INSTALL_PREFIX = /usr/local|g" qwtconfig.pri \
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
