@@ -312,7 +312,7 @@ PERSALYS::AdaoCalibration::AdaoCalibration(const String & methodName,
                                            const Point & candidate,
                                            const CovarianceMatrix & parameterCovariance,
                                            const CovarianceMatrix & errorCovariance)
-  : CalibrationAlgorithmImplementation(outputObservations, Normal(candidate, parameterCovariance))
+  : CalibrationAlgorithmImplementation(model, inputObservations, outputObservations, Normal(candidate, parameterCovariance))
   , methodName_(methodName)
   , candidate_(candidate)
   , model_(model)
@@ -373,9 +373,8 @@ void PERSALYS::AdaoCalibration::run()
   Dirac parameterPosteriorDistribution( Point( Collection<double>(vect.begin(),vect.end() ) ) );
   parameterPosteriorDistribution.setDescription( model_.getParameterDescription() );
   Normal observationsError = this->getObservationsError();
-  Sample outputObservations( outputObservations_ );
-  LinearFunction2 residualFunction( model_, parameterMap.getDimension(), outputObservations );
-  result_ = CalibrationResult(parameterPriorDistribution, parameterPosteriorDistribution, parameterMap, observationsError, outputObservations, residualFunction);
+  LinearFunction2 residualFunction(model_, parameterMap.getDimension(), outputObservations_);
+  result_ = CalibrationResult(parameterPriorDistribution, parameterPosteriorDistribution, parameterMap, observationsError, inputObservations_, outputObservations_, residualFunction);
 }
 
 OT::Point PERSALYS::AdaoCalibration::postProcessResult(const OT::Point &resu)
