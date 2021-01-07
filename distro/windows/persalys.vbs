@@ -3,26 +3,26 @@ dim currentDirectory: currentDirectory = fso.GetParentFolderName(WScript.ScriptF
 Set wshShell = CreateObject("WScript.Shell")
 Set wshEnv = wshShell.Environment("Process")
 
-rem override default Qt5Agg backend (on conda) to avoid conflicts with newer MinGW Qt5 libs
+' override default Qt5Agg backend (on conda) to avoid conflicts with newer MinGW Qt5 libs
 wshEnv("MPLBACKEND") = "TkAgg"
 
-rem add Python directory in Environment variable PATH
+' add Python directory in Environment variable PATH
 wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory + "\..\..\..")
 wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory + "\..\..\..\Scripts")
 
-rem set PYTHONPATH
+' set PYTHONPATH
 wshEnv("PYTHONPATH") = fso.GetAbsolutePathName(currentDirectory + "\..\") & ";" & wshEnv("PYTHONPATH")
 
-rem ParaView plugins
+' ParaView plugins
 wshEnv("PV_PLUGIN_PATH") = fso.GetAbsolutePathName(currentDirectory + "\BagPlotViewsAndFilters")
 
-rem add documentation path in Environment variable PERSALYS_HTML_DOCUMENTATION_PATH
+' add documentation path in Environment variable PERSALYS_HTML_DOCUMENTATION_PATH
 wshEnv("PERSALYS_HTML_DOCUMENTATION_PATH") = currentDirectory + "\doc\html\"
 
-rem https://github.com/pal1000/mesa-dist-win/blob/master/readme.md#opengl-context-configuration-override
+' https://github.com/pal1000/mesa-dist-win/blob/master/readme.md#opengl-context-configuration-override
 wshEnv("MESA_GL_VERSION_OVERRIDE") = "3.2"
 
-rem uncomment this to override default language: en/fr
-rem wshEnv("LANG") = "en"
+' uncomment this to override default language: en/fr
+' wshEnv("LANG") = "en"
 
 wshShell.run fso.BuildPath(currentDirectory, "persalys.exe")
