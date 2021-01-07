@@ -46,6 +46,8 @@ persalys_add_library (persalysplot ${SOURCEFILES} ${PERSALYS_PLOT_MOC_SRCS})
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysplot PRIVATE PERSALYS_PLOT_DLL_EXPORTS)
+else ()
+  target_compile_definitions (persalysplot PUBLIC PERSALYS_PLOT_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

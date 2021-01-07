@@ -94,6 +94,8 @@ persalys_add_library (persalysutils ${SOURCEFILES} ${PERSALYS_UTILS_MOC_SRCS})
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysutils PRIVATE PERSALYS_UTILS_DLL_EXPORTS)
+else ()
+  target_compile_definitions (persalysutils PUBLIC PERSALYS_UTILS_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION )

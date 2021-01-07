@@ -39,6 +39,8 @@ add_library (persalysplotpv ${SOURCEFILES} ${PERSALYS_PLOTPARAVIEW_MOC_SRCS})
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysplotpv PRIVATE PERSALYS_PLOTPV_DLL_EXPORTS)
+else ()
+  target_compile_definitions (persalysplotpv PUBLIC PERSALYS_PLOTPV_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION ) 

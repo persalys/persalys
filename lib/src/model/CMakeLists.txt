@@ -126,6 +126,8 @@ persalys_add_library ( persalysmodel ${SOURCEFILES} ${PERSALYS_MODEL_MOC_SRCS} )
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysmodel PRIVATE PERSALYS_MODEL_DLL_EXPORTS)
+else ()
+  target_compile_definitions (persalysmodel PUBLIC PERSALYS_MODEL_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION )

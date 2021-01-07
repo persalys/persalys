@@ -376,6 +376,8 @@ target_compile_features (persalysview PRIVATE cxx_lambdas)
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysview PRIVATE PERSALYS_VIEW_DLL_EXPORTS)
+else ()
+  target_compile_definitions (persalysview PUBLIC PERSALYS_VIEW_STATIC)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION )
