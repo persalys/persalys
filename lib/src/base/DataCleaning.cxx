@@ -96,7 +96,7 @@ namespace PERSALYS
     Sample tmp(sample_.getSize(), sample_.getDimension());
     for(UnsignedInteger i=0; i<sample_.getSize(); ++i)
       for(UnsignedInteger j=0; j<sample_.getDimension(); ++j)
-        tmp(i,j) = abs(sample_(i,j) - median_[j]);
+        tmp(i,j) = std::abs(sample_(i,j) - median_[j]);
     mad_ = tmp.computeMedian();
   }
 
