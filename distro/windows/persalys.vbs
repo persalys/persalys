@@ -20,7 +20,7 @@ wshEnv("PV_PLUGIN_PATH") = fso.GetAbsolutePathName(currentDirectory + "\BagPlotV
 wshEnv("PERSALYS_HTML_DOCUMENTATION_PATH") = currentDirectory + "\doc\html\"
 
 ' https://github.com/pal1000/mesa-dist-win/blob/master/readme.md#opengl-context-configuration-override
-wshEnv("MESA_GL_VERSION_OVERRIDE") = "3.2"
+wshEnv("MESA_GL_VERSION_OVERRIDE") = "4.5"
 
 ' uncomment this to override default language: en/fr
 ' wshEnv("LANG") = "en"
