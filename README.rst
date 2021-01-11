@@ -11,7 +11,7 @@ Installation
 
 - Linux:
 
-  * requirements: glibc>=2.17, X11, OpenGL>=3.2
+  * requirements: glibc>=2.17, X11/Wayland, OpenGL>=3.2
   * no install required, just run the .AppImage
 
 Environment variables:
