@@ -132,11 +132,22 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   Sample result(inS.getSize(), getOutputDimension());
   result.setDescription(getOutputVariablesNames());
 
+  py2cpp::PyPtr modelToUse;
+  if(nullptr == jobModel_.get() )
+  {
+    py2cpp::PyFunction objConstructor;
+    objConstructor.loadExp("pydefx", "PyStudy");
+    modelToUse = objConstructor();
+  }
+  else
+  {
+    modelToUse = jobModel_;
+  }
   ydefx::Launcher l;
   std::unique_ptr<ydefx::Job> myJob;
   try
   {
-    myJob.reset(l.submitMonoPyJob(studyFunction_, jobSample, jobParams_));
+    myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction_, jobSample, jobParams_));
     if(myJob)
     {
       myJob->wait();
@@ -234,6 +245,13 @@ ydefx::JobParametersProxy& YACSEvaluation::jobParameters()
 const ydefx::JobParametersProxy& YACSEvaluation::jobParameters()const
 {
   return jobParams_;
+}
+
+
+/** The job model is a python object which drives the execution of the job.*/
+void YACSEvaluation::setJobModel(const py2cpp::PyPtr& model)
+{
+  jobModel_ = model;
 }
 
 
