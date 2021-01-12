@@ -68,6 +68,7 @@ cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so persalys.AppDir/usr/lib
 cp -v /usr/lib64/atlas/lib*.so.3 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libpng15.so.15 persalys.AppDir/usr/lib
+cp -v /usr/lib64/libjpeg.so.62 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libicu*.so.50 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libxcb-xinerama.so.0 /usr/lib64/libxcb-xinput.so.0 persalys.AppDir/usr/lib
 
