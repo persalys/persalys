@@ -4,7 +4,7 @@
 #
 #  Use Persalys in CMake files
 #
-#  Copyright 2015-2020 EDF-Phimeca
+#  Copyright 2015-2021 EDF-Phimeca
 #
 #  This library is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU Lesser General Public License as published by
