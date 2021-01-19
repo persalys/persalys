@@ -39,6 +39,7 @@
 #include <QCheckBox>
 #include <QScrollArea>
 #include <QSpinBox>
+#include <QSettings>
 
 using namespace OT;
 
@@ -190,21 +191,9 @@ void PhysicalModelWindowWidget::buildInterface()
   vbox->addWidget(verticalSplitter);
 
   // - multiprocessing
-  if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos)
-  {
-    QLabel * nThreadsLabel = new QLabel(tr("Number of processes:"));
-    nThreadsLabel->setToolTip("0: "+tr("all cores"));
-    QSpinBox * nThreadsSpinBox = new QSpinBox;
-    nThreadsSpinBox->setToolTip("0: "+tr("all cores"));
-    QHBoxLayout * hbox = new QHBoxLayout;
-    nThreadsSpinBox->setMinimum(0);
-    nThreadsSpinBox->setMaximum(std::numeric_limits<int>::max());
-    nThreadsSpinBox->setValue(physicalModel_.getProcessNumber());
-    connect(nThreadsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateMultiprocessingStatus(int)));
-    vbox->addLayout(hbox);
-    hbox->addWidget(nThreadsLabel);
-    hbox->addWidget(nThreadsSpinBox);
-
+  if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos) {
+    QSettings settings;
+    updateMultiprocessingStatus(settings.value("nThreads").toUInt());
   }
 
   // - error message label

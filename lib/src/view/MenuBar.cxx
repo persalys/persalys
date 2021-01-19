@@ -21,6 +21,7 @@
 #include "persalys/MenuBar.hxx"
 
 #include "persalys/AboutDialog.hxx"
+#include "persalys/SettingsDialog.hxx"
 #include "persalys/FileTools.hxx"
 
 #include <QSettings>
@@ -92,6 +93,14 @@ void MenuBar::buildActions(const Actions* actions)
   viewMenu->addMenu(windowMenu);
 
   addMenu(viewMenu);
+
+  // View menu
+  QMenu * toolsMenu = new QMenu(tr("&Tools"), this);
+  action = new QAction(QIcon(":/images/run-build.png"), tr("Settings"), this);
+  connect(action, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
+  toolsMenu->addAction(action);
+
+  addMenu(toolsMenu);
 
   // Help menu
   QMenu * helpMenu = new QMenu(tr("&Help"), this);
@@ -198,4 +207,14 @@ void MenuBar::updateConsoleStatus(const bool visibility)
   QSettings settings;
   settings.setValue("pythonConsoleVisibility", visibility);
 }
+
+void MenuBar::openSettingsWindow() {
+  SettingsDialog * settingsDialog = new SettingsDialog(this);
+  connect(settingsDialog, &QDialog::accepted, [=]() {
+      QSettings settings;
+      settings.setValue("nThreads", QVariant((uint)settingsDialog->getnThreads()));
+    });
+  settingsDialog->exec();
+}
+
 }
