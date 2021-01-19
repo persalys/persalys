@@ -65,17 +65,17 @@ namespace PERSALYS
 
     QGridLayout * tabLayout = new QGridLayout(tab);
 
-    QLabel * nThreadsLabel = new QLabel(tr("Number of processes"));
-    nThreadsLabel->setToolTip("0: "+tr("all cores"));
-    tabLayout->addWidget(nThreadsLabel, 0, 0);
+    QLabel * nProcessesLabel = new QLabel(tr("Number of processes"));
+    nProcessesLabel->setToolTip("0: "+tr("all cores"));
+    tabLayout->addWidget(nProcessesLabel, 0, 0);
 
-    QSpinBox * nThreadsSpinBox = new QSpinBox;
-    nThreadsSpinBox->setToolTip("0: "+tr("all cores"));
-    nThreadsSpinBox->setMinimum(0);
-    nThreadsSpinBox->setMaximum(std::thread::hardware_concurrency());
+    QSpinBox * nProcessesSpinBox = new QSpinBox;
+    nProcessesSpinBox->setToolTip("0: "+tr("all cores"));
+    nProcessesSpinBox->setMinimum(0);
+    nProcessesSpinBox->setMaximum(std::thread::hardware_concurrency());
     QSettings settings;
-    nThreadsSpinBox->setValue(settings.value("nThreads").toUInt());
-    tabLayout->addWidget(nThreadsSpinBox, 0, 1);
+    nProcessesSpinBox->setValue(settings.value("nProcesses").toUInt());
+    tabLayout->addWidget(nProcessesSpinBox, 0, 1);
 
     tabWidget->addTab(tab, tr("&General"));
     mainLayout->addWidget(tabWidget);
@@ -83,7 +83,7 @@ namespace PERSALYS
 
     connect(settingsButtons, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(settingsButtons, &QDialogButtonBox::accepted, [=] {
-        setnThreads(nThreadsSpinBox->value());
+        setnProcesses(nProcessesSpinBox->value());
         emit QDialog::accepted();
       });
     connect(settingsButtons, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -92,12 +92,12 @@ namespace PERSALYS
     setLayout(mainLayout);
   }
 
-  void SettingsDialog::setnThreads(const UnsignedInteger n) {
-    nTrheads_ = n;
+  void SettingsDialog::setnProcesses(const UnsignedInteger n) {
+    processNumber_ = n;
   }
 
-  UnsignedInteger SettingsDialog::getnThreads() const {
-    return nTrheads_;
+  UnsignedInteger SettingsDialog::getnProcesses() const {
+    return processNumber_;
   }
 
 

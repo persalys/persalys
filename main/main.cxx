@@ -75,8 +75,8 @@ int main(int argc, char *argv[])
   OT::ResourceMap::SetAsUnsignedInteger("cache-max-size", 16384);
 
   // set number of parallel processes
-  if (!QSettings().contains("nThreads"))
-    QSettings().setValue("nThreads", QVariant((uint)OT::ResourceMap::GetAsUnsignedInteger("parallel-threads")));
+  if (!QSettings().contains("nProcesses"))
+    QSettings().setValue("nProcesses", QVariant((uint)OT::ResourceMap::GetAsUnsignedInteger("parallel-threads")));
 
   // main window
   MainWindow window;

@@ -212,7 +212,7 @@ void MenuBar::openSettingsWindow() {
   SettingsDialog * settingsDialog = new SettingsDialog(this);
   connect(settingsDialog, &QDialog::accepted, [=]() {
       QSettings settings;
-      settings.setValue("nThreads", QVariant((uint)settingsDialog->getnThreads()));
+      settings.setValue("nProcesses", QVariant((uint)settingsDialog->getnProcesses()));
     });
   settingsDialog->exec();
 }

@@ -36,11 +36,11 @@ class PERSALYS_VIEW_API SettingsDialog : public QDialog
 public:
   SettingsDialog(QWidget* parent = 0);
 
-  void setnThreads(const OT::UnsignedInteger n);
-  OT::UnsignedInteger getnThreads() const;
+  void setnProcesses(const OT::UnsignedInteger n);
+  OT::UnsignedInteger getnProcesses() const;
 
 private:
-  OT::UnsignedInteger nTrheads_ = 0;
+  OT::UnsignedInteger processNumber_ = 0;
 };
 }
 #endif

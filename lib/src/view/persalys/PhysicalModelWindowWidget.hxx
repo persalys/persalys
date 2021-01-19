@@ -45,7 +45,7 @@ public slots:
   void evaluateOutputs();
   void resizeInputTable();
   void resizeOutputTable();
-  void updateMultiprocessingStatus(const int nThreads);
+  void updateMultiprocessingStatus(const int nProcesses);
   void updateIndexParamLabel();
 
 signals:
