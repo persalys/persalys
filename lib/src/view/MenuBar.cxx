@@ -84,18 +84,12 @@ void MenuBar::buildActions(const Actions* actions)
 
   addMenu(fileMenu);
 
-  // View menu
-  QMenu * viewMenu = new QMenu(tr("&View"), this);
-  QMenu * windowMenu = new QMenu(tr("W&indow"), this);
+  // Tools menu
+  QMenu * toolsMenu = new QMenu(tr("&Tools"), this);
   pythonConsoleDisplayAction_ = new QAction(tr("Python Console"), this);
   pythonConsoleDisplayAction_->setCheckable(true);
-  windowMenu->addAction(pythonConsoleDisplayAction_);
-  viewMenu->addMenu(windowMenu);
+  toolsMenu->addAction(pythonConsoleDisplayAction_);
 
-  addMenu(viewMenu);
-
-  // View menu
-  QMenu * toolsMenu = new QMenu(tr("&Tools"), this);
   action = new QAction(QIcon(":/images/run-build.png"), tr("Settings"), this);
   connect(action, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
   toolsMenu->addAction(action);
