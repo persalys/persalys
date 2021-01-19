@@ -20,8 +20,8 @@
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="90"/>
-        <source>Copyright 2015-2020 EDF-Phimeca</source>
-        <translation>Copyright 2015-2020 EDF-Phimeca</translation>
+        <source>Copyright 2015-2021 EDF-Phimeca</source>
+        <translation>Copyright 2015-2021 EDF-Phimeca</translation>
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="98"/>
@@ -4424,29 +4424,24 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::MenuBar</name>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="48"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="49"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="60"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="61"/>
         <source>Open Recent</source>
         <translation>Fichiers récents</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="66"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="67"/>
         <source>Clear list</source>
         <translation>Vider la liste</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="87"/>
-        <source>&amp;View</source>
-        <translation>&amp;Vue</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/MenuBar.cxx" line="88"/>
-        <source>W&amp;indow</source>
-        <translation>&amp;Fenêtre</translation>
+        <source>&amp;Tools</source>
+        <translation>&amp;Outils</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MenuBar.cxx" line="89"/>
@@ -4454,27 +4449,32 @@ bayésien (BIC)</translation>
         <translation>Console Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="97"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="93"/>
+        <source>Settings</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MenuBar.cxx" line="100"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="99"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="102"/>
         <source>User&apos;s manual</source>
         <translation>Manuel utilisateur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="105"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="108"/>
         <source>About Persalys</source>
         <translation>À propos de Persalys</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="183"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="186"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MenuBar.cxx" line="184"/>
+        <location filename="../lib/src/view/MenuBar.cxx" line="187"/>
         <source>Impossible to open the documentation. The requested file &apos;%1&apos; is not available.</source>
         <translation>Impossible d&apos;ouvrir la documentation. Le fichier demandé &apos;%1&apos; n&apos;existe pas.</translation>
     </message>
@@ -6295,105 +6295,94 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::PhysicalModelWindowWidget</name>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="83"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="84"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="102"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="174"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="103"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="175"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="103"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="104"/>
         <source>Add an input</source>
         <translation>Ajouter une entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="106"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="178"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="107"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="179"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="107"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="108"/>
         <source>Remove the selected input</source>
         <translation>Supprimer l&apos;entrée sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="130"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="131"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="155"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="156"/>
         <source>Check model</source>
         <translation>Vérifier le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="175"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="176"/>
         <source>Add an output</source>
         <translation>Ajouter une sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="179"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="180"/>
         <source>Remove the selected output</source>
         <translation>Supprimer la sortie sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="156"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="157"/>
         <source>Evaluate the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="163"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="164"/>
         <source>Elapsed time: </source>
         <translation>Temps écoulé:</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="195"/>
-        <source>Number of processes:</source>
-        <translation>Nombre de processus</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="196"/>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="198"/>
-        <source>all cores</source>
-        <translation>tous les coeurs</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="217"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="206"/>
         <source>Definition</source>
         <translation>Définition</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="225"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="214"/>
         <source>Finite difference step definition</source>
         <translation>Définition du pas de différence finie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="249"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="238"/>
         <source>Differentiation</source>
         <translation>Différentiation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="366"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="355"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="386"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="375"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="391"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="380"/>
         <source>Not possible to evaluate the outputs %1</source>
         <translation>Impossible d&apos;évaluer les sorties %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="410"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="399"/>
         <source>Index parameter : %1</source>
         <translation>Paramètre d&apos;indexation : %1</translation>
     </message>
@@ -7145,6 +7134,35 @@ de l&apos;indice signé</translation>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="188"/>
         <source>Interactions</source>
         <translation>Interactions</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::SettingsDialog</name>
+    <message>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="42"/>
+        <source>Persalys settings</source>
+        <translation>Paramètres de persalys</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="55"/>
+        <source>Version %1</source>
+        <translation>Version %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="68"/>
+        <source>Number of processes</source>
+        <translation>Nombre de processus</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="69"/>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="73"/>
+        <source>all cores</source>
+        <translation>tous les coeurs</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="80"/>
+        <source>&amp;General</source>
+        <translation>&amp;Général</translation>
     </message>
 </context>
 <context>
@@ -7963,6 +7981,21 @@ Les objets ne sont peut être pas ouverts.
         <location filename="../lib/src/view/TaylorExpansionMomentsResultWindow.cxx" line="125"/>
         <source>Model</source>
         <translation>Modèle</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::TestCalibrationAnalysisWizard</name>
+    <message>
+        <location filename="../lib/test/t_CalibrationAnalysisWizard_std.cxx" line="152"/>
+        <location filename="../lib/test/t_CalibrationAnalysisWizard_std.cxx" line="164"/>
+        <source>Observed variables</source>
+        <translation>Variables observées</translation>
+    </message>
+    <message>
+        <location filename="../lib/test/t_CalibrationAnalysisWizard_std.cxx" line="154"/>
+        <location filename="../lib/test/t_CalibrationAnalysisWizard_std.cxx" line="166"/>
+        <source>Number of observations</source>
+        <translation>Nombre d&apos;observations</translation>
     </message>
 </context>
 <context>
