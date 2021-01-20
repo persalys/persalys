@@ -254,6 +254,8 @@ public:
 
 signals:
   void couplingResourceCollectionModified();
+public slots:
+  void editResource(QTableWidgetItem * newItem);
 private:
   CouplingPhysicalModel * model_ = 0;
   int indStep_;

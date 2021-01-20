@@ -949,29 +949,29 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
 
   updateTable();
   connect(tableWidget_, &QTableWidget::itemChanged, [=](QTableWidgetItem * item) {
-      CouplingStepCollection csColl(model->getSteps());
-      CouplingStep cs(csColl[indStep]);
+      CouplingStepCollection csColl(model_->getSteps());
+      CouplingStep cs(csColl[indStep_]);
       CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
       inColl[item->data(Qt::UserRole).toInt()].setPath(item->data(Qt::DisplayRole).toString().toUtf8().constData());
       cs.setResourceFiles(inColl);
-      csColl[indStep] = cs;
-      model->blockNotification("PhysicalModelDefinitionItem");
-      model->setSteps(csColl);
-      model->blockNotification();
+      csColl[indStep_] = cs;
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setSteps(csColl);
+      model_->blockNotification();
     });
 
   connect(addRemoveWidget, &AddRemoveWidget::addRequested, [=]() {
       CouplingStepCollection csColl(model->getSteps());
-      CouplingStep cs(csColl[indStep]);
+      CouplingStep cs(csColl[indStep_]);
       CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
       inColl.add(CouplingResourceFile());
       cs.setResourceFiles(inColl);
-      csColl[indStep] = cs;
-      model->blockNotification("PhysicalModelDefinitionItem");
-      model->setSteps(csColl);
-      model->blockNotification();
+      csColl[indStep_] = cs;
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setSteps(csColl);
+      model_->blockNotification();
 
       const int row = tableWidget_->rowCount();
       tableWidget_->setRowCount(row+1);
@@ -984,59 +984,21 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
       tb->setText("...");
       tableWidget_->setCellWidget(row, 1, tb);
       tableWidget_->horizontalHeader()->resizeSection(1, tb->width());
-      connect(tb, &QToolButton::clicked, [=](){
-          QFileDialog* dlg = new QFileDialog(this);
-          QStringList filters;
-          filters <<"Any file (*)"
-                  <<"Choose directory";
-
-          dlg->setFileMode(QFileDialog::AnyFile);
-          dlg->setOption(QFileDialog::DontUseNativeDialog, true);
-          dlg->setNameFilters(filters);
-          connect(dlg, &QFileDialog::filterSelected, [=]() {
-              if(dlg->selectedNameFilter().contains("directory")) {
-                dlg->setFileMode(QFileDialog::Directory);
-                // Filters are reset when setting QFileDialog::Directory
-                QStringList r_filters;
-                r_filters << filters[1] << filters[0];
-                dlg->setNameFilters(r_filters);
-              } else {
-                dlg->setFileMode(QFileDialog::AnyFile);
-                dlg->setNameFilters(filters);
-              }
-            });
-          dlg->exec();
-          QString fileName = dlg->selectedFiles()[0];
-
-          if (fileName.isEmpty())
-            return;
-
-          FileTools::SetCurrentDir(fileName);
-          newItem->setData(Qt::DisplayRole, fileName);
-
-          CouplingStepCollection csColl(model->getSteps());
-          CouplingStep cs(csColl[indStep]);
-          CouplingResourceFileCollection inColl(cs.getResourceFiles());
-
-          inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
-          cs.setResourceFiles(inColl);
-          csColl[indStep] = cs;
-          model->blockNotification("PhysicalModelDefinitionItem");
-          model->setSteps(csColl);
-          model->blockNotification();
+      connect(tb, &QToolButton::clicked, [=]() {
+          editResource(newItem);
         });
     });
   connect(addRemoveWidget, &AddRemoveWidget::removeRequested, [=]() {
-      CouplingStepCollection csColl(model->getSteps());
-      CouplingStep cs(csColl[indStep]);
+      CouplingStepCollection csColl(model_->getSteps());
+      CouplingStep cs(csColl[indStep_]);
       CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
       inColl.erase(inColl.begin() + tableWidget_->selectionModel()->currentIndex().data(Qt::UserRole).toInt());
       cs.setResourceFiles(inColl);
-      csColl[indStep] = cs;
-      model->blockNotification("PhysicalModelDefinitionItem");
-      model->setSteps(csColl);
-      model->blockNotification();
+      csColl[indStep_] = cs;
+      model_->blockNotification("PhysicalModelDefinitionItem");
+      model_->setSteps(csColl);
+      model_->blockNotification();
       // emit signal to the parent widget in order to rebuild widgets
       // (because we want to update the input file index in all widgets)
       emit couplingResourceCollectionModified();
@@ -1069,9 +1031,56 @@ void CouplingResourceFileWidget::updateTable()
         QToolButton * tb = new QToolButton;
         tb->setText("...");
         tableWidget_->setCellWidget(row, 1, tb);
+        connect(tb, &QToolButton::clicked, [=]() {
+            editResource(newItem);
+          });
       }
     }
   }
+}
+
+void CouplingResourceFileWidget::editResource(QTableWidgetItem * newItem) {
+  QFileDialog* dlg = new QFileDialog(this);
+  QStringList filters;
+  filters <<"Any file (*)"
+          <<"Choose directory";
+
+  dlg->setFileMode(QFileDialog::AnyFile);
+  dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+  dlg->setNameFilters(filters);
+  connect(dlg, &QFileDialog::filterSelected, [=]() {
+      if(dlg->selectedNameFilter().contains("directory")) {
+        dlg->setFileMode(QFileDialog::Directory);
+        // Filters are reset when setting QFileDialog::Directory
+        QStringList r_filters;
+        r_filters << filters[1] << filters[0];
+        dlg->setNameFilters(r_filters);
+      } else {
+        dlg->setFileMode(QFileDialog::AnyFile);
+        dlg->setNameFilters(filters);
+      }
+    });
+  QString fileName;
+  if(dlg->exec())
+    fileName = dlg->selectedFiles()[0];
+
+  if (fileName.isEmpty())
+    return;
+
+  FileTools::SetCurrentDir(fileName);
+  newItem->setData(Qt::DisplayRole, fileName);
+
+  CouplingStepCollection csColl(model_->getSteps());
+  CouplingStep cs(csColl[indStep_]);
+  CouplingResourceFileCollection inColl(cs.getResourceFiles());
+
+  inColl[newItem->data(Qt::UserRole).toInt()].setPath(newItem->data(Qt::DisplayRole).toString().toUtf8().constData());
+  cs.setResourceFiles(inColl);
+  csColl[indStep_] = cs;
+  model_->blockNotification("PhysicalModelDefinitionItem");
+  model_->setSteps(csColl);
+  model_->blockNotification();
+  emit couplingResourceCollectionModified();
 }
 
 // Widget for Coupling Output file
