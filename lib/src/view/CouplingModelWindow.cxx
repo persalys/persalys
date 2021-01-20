@@ -197,6 +197,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   tabLayout = new QGridLayout(tab);
   CouplingSummaryWidget * summaryTab = new CouplingSummaryWidget(item);
   tabLayout->addWidget(summaryTab);
+  connect(summaryTab, SIGNAL(evaluationRequested()), this, SLOT(evaluateOutputs()));
   mainTabWidget->addTab(tab, tr("Summary"));
 }
 
@@ -1411,6 +1412,15 @@ CouplingSummaryWidget::CouplingSummaryWidget(PhysicalModelItem * item)
   verticalSplitter->setStretchFactor(1, 3);
 
   vbox->addWidget(verticalSplitter);
+
+  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
+  evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
+  connect(evaluateOutputsButton, &QPushButton::clicked, [=](){
+      emit evaluationRequested();
+      qobject_cast<OutputTableModel*>(outputTableView_->model())->updateData();
+    });
+  vbox->addWidget(evaluateOutputsButton);
+
   setLayout(vbox);
 }
 
