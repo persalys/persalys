@@ -317,7 +317,8 @@ public :
 
 protected slots:
   void showEvent(QShowEvent *event);
-
+signals:
+  void evaluationRequested();
 private:
   PhysicalModel model_;
   CopyableTableView * inputTableView_;
