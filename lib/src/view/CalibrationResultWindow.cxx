@@ -140,8 +140,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   tabLayout->addStretch();
   scrollArea->setWidget(tab);
 
-  const Distribution thetaPrior(result_.getCalibrationResult().getParameterPrior());
-  const Distribution thetaPosterior(result_.getCalibrationResult().getParameterPosterior());
+  const GridLayout parameterDistributionsGraph(result_.getCalibrationResult().drawParameterDistributions());
 
   tabThetaWidget->addTab(scrollArea, tr("Optimal"));
   tabWidget->addTab(tabThetaWidget, "θ");
@@ -159,13 +158,13 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     {
       if (i == 0)
       {
-        pdfSamplePrior = thetaPrior.getMarginal(i).drawPDF().getDrawables()[0].getData();
-        pdfSamplePosterior = thetaPosterior.getMarginal(i).drawPDF().getDrawables()[0].getData();
+        pdfSamplePrior = parameterDistributionsGraph.getGraph(0, 0).getDrawables()[0].getData();
+        pdfSamplePosterior = parameterDistributionsGraph.getGraph(0, 0).getDrawables()[1].getData();
       }
       else
       {
-        pdfSamplePrior.stack(thetaPrior.getMarginal(i).drawPDF().getDrawables()[0].getData());
-        pdfSamplePosterior.stack(thetaPosterior.getMarginal(i).drawPDF().getDrawables()[0].getData());
+        pdfSamplePrior.stack(parameterDistributionsGraph.getGraph(0, i).getDrawables()[0].getData());
+        pdfSamplePosterior.stack(parameterDistributionsGraph.getGraph(0, i).getDrawables()[1].getData());
       }
       sampleDescription.add(calibratedInputNames[i]);
       sampleDescription.add(calibratedInputNames[i] + "pdf");
