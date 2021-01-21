@@ -923,6 +923,9 @@ When the analysis is finished, a result window appears.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/calibration_ResultWindow.png
     :align: center
 
+.. image:: /user_manual/graphical_interface/deterministic_analysis/calibration_ResultWindow_param_dist.png
+    :align: center
+
 It shows numerous tabs, some of which are interactively linked (Table, vs Observations, vs Inputs tabs):
 when the user selects points on one of these representations, the same points are automatically selected in the other tabs.
 
