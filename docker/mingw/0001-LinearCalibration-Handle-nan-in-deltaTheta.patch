@@ -1,0 +1,49 @@
+From 87ba9499e1066e01814893e73e25f6d51906204d Mon Sep 17 00:00:00 2001
+From: Julien Schueller <schueller@phimeca.com>
+Date: Wed, 20 Jan 2021 15:29:34 +0100
+Subject: [PATCH] LinearCalibration: Handle nan in deltaTheta
+
+---
+ lib/src/Uncertainty/Bayesian/GaussianLinearCalibration.cxx    | 4 ++++
+ .../Uncertainty/Bayesian/LinearLeastSquaresCalibration.cxx    | 3 +++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/lib/src/Uncertainty/Bayesian/GaussianLinearCalibration.cxx b/lib/src/Uncertainty/Bayesian/GaussianLinearCalibration.cxx
+index 77db5d87d..1c8e29c1f 100644
+--- a/lib/src/Uncertainty/Bayesian/GaussianLinearCalibration.cxx
++++ b/lib/src/Uncertainty/Bayesian/GaussianLinearCalibration.cxx
+@@ -22,6 +22,7 @@
+ #include "openturns/PersistentObjectFactory.hxx"
+ #include "openturns/Normal.hxx"
+ #include "openturns/LinearFunction.hxx"
++#include "openturns/SpecFunc.hxx"
+ 
+ BEGIN_NAMESPACE_OPENTURNS
+ 
+@@ -158,6 +159,9 @@ void GaussianLinearCalibration::run()
+   // Solve the linear least squares problem
+   LeastSquaresMethod method(LeastSquaresMethod::Build(methodName_, Abar));
+   const Point deltaTheta(method.solve(ybar));
++  for (UnsignedInteger i = 0; i < deltaTheta.getDimension(); ++ i)
++    if (!SpecFunc::IsNormal(deltaTheta[i])) throw InvalidArgumentException(HERE) << "The calibration problem is not identifiable";
++
+   const Point thetaStar(getCandidate() + deltaTheta);
+   const CovarianceMatrix covarianceThetaStar(method.getGramInverse().getImplementation());
+   // Create the result object
+diff --git a/lib/src/Uncertainty/Bayesian/LinearLeastSquaresCalibration.cxx b/lib/src/Uncertainty/Bayesian/LinearLeastSquaresCalibration.cxx
+index 6d8538118..e302ec942 100644
+--- a/lib/src/Uncertainty/Bayesian/LinearLeastSquaresCalibration.cxx
++++ b/lib/src/Uncertainty/Bayesian/LinearLeastSquaresCalibration.cxx
+@@ -103,6 +103,9 @@ void LinearLeastSquaresCalibration::run()
+   const Point deltaY(modelObservations_.getImplementation()->getData() - outputObservations_.getImplementation()->getData());
+   LeastSquaresMethod method(LeastSquaresMethod::Build(methodName_, gradientObservations_));
+   const Point deltaTheta(method.solve(deltaY));
++  for (UnsignedInteger i = 0; i < deltaTheta.getDimension(); ++ i)
++    if (!SpecFunc::IsNormal(deltaTheta[i])) throw InvalidArgumentException(HERE) << "The calibration problem is not identifiable";
++
+   const Point thetaStar(getCandidate() - deltaTheta);
+   const Point r(deltaY - gradientObservations_ * deltaTheta);
+   const Scalar varianceError = r.normSquare() / (deltaY.getDimension() - deltaTheta.getDimension());
+-- 
+2.17.1
+

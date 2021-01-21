@@ -23,9 +23,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/OptimizationAlgorithm.hxx>
 #include <openturns/ParametricFunction.hxx>
-#include <openturns/TNC.hxx>
-#include <openturns/Cobyla.hxx>
-#include <openturns/NLopt.hxx>
+#include <openturns/SymbolicFunction.hxx>
 
 using namespace OT;
 
@@ -40,16 +38,9 @@ Description OptimizationAnalysis::SolverNames_;
 
 Description OptimizationAnalysis::GetSolverNames()
 {
-  if (SolverNames_.isEmpty())
-  {
-    SolverNames_ = Description();
-    SolverNames_.add("Cobyla");
-    SolverNames_.add("TNC");
-    if (NLopt::IsAvailable())
-      SolverNames_.add(NLopt::GetAlgorithmNames());
-  }
-
-  return SolverNames_;
+  // exclude least-squares or nearest-point
+  OptimizationProblem problem(SymbolicFunction(Description(1, "x"), Description(1, "x^2")));
+  return OptimizationAlgorithm::GetAlgorithmNames(problem);
 }
 
 /* Default constructor */
@@ -232,6 +223,9 @@ void OptimizationAnalysis::launch()
 
   // set result
   result_ = solver.getResult();
+
+  // FIXME: some algos forget to set the problem, fixed in 1.17
+  result_.setProblem(problem);
 }
 
 

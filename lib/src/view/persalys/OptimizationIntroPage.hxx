@@ -38,8 +38,6 @@ class PERSALYS_VIEW_API OptimizationIntroPage : public QWizardPage
   friend class TestOptimizationWizard;
 
 public:
-  enum OptimAlgo {AbdoRackwitzAlgo, CobylaAlgo, SQPAlgo, NLoptAlgo};
-
   OptimizationIntroPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
