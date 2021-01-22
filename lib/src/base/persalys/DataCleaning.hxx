@@ -30,21 +30,50 @@ namespace PERSALYS
   {
   CLASSNAME
   public:
+    /* Default ctor */
     DataCleaning() {};
+    /* Sample-based constructor */
     explicit DataCleaning(const OT::Sample& sample);
 
+    /* Removes Nans/Infs in sample */
     void removeAllNans();
+
+    /* Replaces Nans/Infs in sample point by point values*/
     void replaceAllNans(const OT::Point& point);
+
+    /* Removes Nans/Infs in sample column */
     void removeNansByColumn(const OT::UnsignedInteger col);
+
+    /* Replaces Nans/Infs in sample column by value */
     void replaceNansByColumn(const OT::UnsignedInteger col, const OT::Scalar& val);
+
+    /* Computes sample median absolute deviation */
     void computeMAD();
+
+    /* Computes sample geometric median absolute deviation */
     void computeGeometricMAD();
+
+    /* Column by column sample analysis.
+     Allows marginals mean/median computation by ignoring Nans/Infs
+     Evaluates number of Nans/Infs for each marginal*/
     void analyseSample();
+
+    /* Sample accessor */
     OT::Sample getSample() const;
+
+    /* Median accessor */
     OT::Point getMedian() const;
+
+    /* Mean accessor */
     OT::Point getMean() const;
+
+    /* MAD accessor */
     OT::Point getMAD() const;
+
+    /* Geom. MAD accessor */
     OT::Scalar getGeometricMAD() const;
+
+    /* Returns number of Nans/Infs in each sample column */
     OT::Point getNanNumbers() const;
 
   private:

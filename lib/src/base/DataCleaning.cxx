@@ -28,6 +28,7 @@ namespace PERSALYS
 {
   CLASSNAMEINIT(DataCleaning)
 
+  /* Sample-based constructor */
   DataCleaning::DataCleaning(const Sample& sample)
     : Object()
     , sample_(sample)
@@ -40,6 +41,7 @@ namespace PERSALYS
     analyseSample();
   }
 
+  /* Removes Nans/Infs in sample */
   void DataCleaning::removeAllNans() {
     if(!sample_.getSize())
       return;
@@ -58,6 +60,7 @@ namespace PERSALYS
     sample_ = sample;
   }
 
+  /* Replaces Nans/Infs in sample point by point values*/
   void DataCleaning::replaceAllNans(const Point& point) {
     if(!sample_.getSize())
       return;
@@ -70,6 +73,7 @@ namespace PERSALYS
     }
   }
 
+  /* Removes Nans/Infs in sample column */
   void DataCleaning::removeNansByColumn(const UnsignedInteger col) {
     if(!sample_.getSize())
       return;
@@ -82,6 +86,7 @@ namespace PERSALYS
     sample_ = sample;
   }
 
+  /* Replaces Nans/Infs in sample column by value */
   void DataCleaning::replaceNansByColumn(const UnsignedInteger col, const OT::Scalar& val) {
     if(!sample_.getSize())
       return;
@@ -92,6 +97,7 @@ namespace PERSALYS
     }
   }
 
+  /* Computes sample median absolute deviation */
   void DataCleaning::computeMAD() {
     Sample tmp(sample_.getSize(), sample_.getDimension());
     for(UnsignedInteger i=0; i<sample_.getSize(); ++i)
@@ -100,11 +106,15 @@ namespace PERSALYS
     mad_ = tmp.computeMedian();
   }
 
+  /* Computes sample geometric median absolute deviation */
   void DataCleaning::computeGeometricMAD() {
     computeMAD();
     geomMad_ = mad_.norm();
   }
 
+  /* Column by column sample analysis.
+     Allows marginals mean/median computation by ignoring Nans/Infs
+     Evaluates number of Nans/Infs for each marginal*/
   void DataCleaning::analyseSample() {
     if(!sample_.getSize())
       return;
@@ -123,26 +133,32 @@ namespace PERSALYS
     }
   }
 
+  /* Sample accessor */
   Sample DataCleaning::getSample() const {
     return sample_;
   }
 
+  /* Median accessor */
   Point DataCleaning::getMedian() const {
     return median_;
   }
 
+  /* Mean accessor */
   Point DataCleaning::getMean() const {
     return mean_;
   }
 
+  /* MAD accessor */
   Point DataCleaning::getMAD() const {
     return mad_;
   }
 
+  /* Geom. MAD accessor */
   Scalar DataCleaning::getGeometricMAD() const {
     return geomMad_;
   }
 
+  /* Returns number of Nans/Infs in each sample column */
   Point DataCleaning::getNanNumbers() const {
     return nanFounds_;
   }
