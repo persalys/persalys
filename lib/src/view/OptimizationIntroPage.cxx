@@ -58,17 +58,18 @@ OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
 
   QVBoxLayout * optimAlgoGroupLayout = new QVBoxLayout;
 
-  for (UnsignedInteger i = 0; i < OptimizationAnalysis::GetSolverNames().getSize(); ++i)
+  const Description solverNames(OptimizationAnalysis::GetSolverNames());
+  for (UnsignedInteger i = 0; i < solverNames.getSize(); ++i)
   {
     QRadioButton * methodRadioButton = new QRadioButton;
-    methodRadioButton->setText(OptimizationAnalysis::GetSolverNames()[i].c_str());
+    methodRadioButton->setText(solverNames[i].c_str());
     optimAlgoGroupLayout->addWidget(methodRadioButton);
     methodGroup_->addButton(methodRadioButton, i);
   }
 
   QGroupBox * optimAlgoGroup = new QGroupBox(tr("Method"));
   // if nlopt: use a scrollarea
-  if (OptimizationAnalysis::GetSolverNames().getSize() > 2)
+  if (solverNames.getSize() > 2)
   {
     QWidget * aWidget = new QWidget;
     aWidget->setLayout(optimAlgoGroupLayout);

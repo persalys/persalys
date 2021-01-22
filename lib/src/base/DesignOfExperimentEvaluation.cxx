@@ -151,11 +151,8 @@ void DesignOfExperimentEvaluation::launch()
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
 
   // to avoid failing whole blocks we make failed points succeed but mark them with nan
-  MemoizeEvaluation* memoize = dynamic_cast<MemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
-  MarginalEvaluation *marginal = memoize ? dynamic_cast<MarginalEvaluation*>(memoize->getEvaluation().getImplementation().get()) : nullptr;
-  EvaluationImplementation * eval = marginal ? marginal->getEvaluation().getImplementation().get() : memoize;
-  eval->setCheckOutput(false);
-  
+  function.getEvaluation().getImplementation()->setCheckOutput(false);
+
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
@@ -203,8 +200,8 @@ void DesignOfExperimentEvaluation::launch()
   }
 
   // restore default
-  eval->setCheckOutput(true);
-  
+  function.getEvaluation().getImplementation()->setCheckOutput(true);
+
   // mark points evaluating to nan as failed
   Indices failedIndices;
   for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)
