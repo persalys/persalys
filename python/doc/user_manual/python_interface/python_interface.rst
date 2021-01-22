@@ -23,6 +23,7 @@ Model creation
     PythonPhysicalModel
     PythonFieldModel
     DataModel
+    DataCleaning
     MetaModel
 
 Coupling model
