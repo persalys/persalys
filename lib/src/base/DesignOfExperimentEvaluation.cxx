@@ -23,6 +23,7 @@
 #include "persalys/BaseTools.hxx"
 #include "persalys/DataAnalysis.hxx"
 #include "persalys/IgnoreFailureEvaluation.hxx"
+#include "persalys/FileMemoizeEvaluation.hxx"
 
 #ifdef PERSALYS_HAVE_YACS
 #include "persalys/YACSEvaluation.hxx"
@@ -30,6 +31,7 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
+
 #include <openturns/MemoizeEvaluation.hxx>
 #include <openturns/MarginalEvaluation.hxx>
 #include <openturns/SymbolicEvaluation.hxx>
@@ -167,6 +169,13 @@ void DesignOfExperimentEvaluation::launch()
       eval->setIgnoreFailure(true);
 
   }
+
+  FileMemoizeEvaluation* fileMemoize = dynamic_cast<FileMemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
+  if (fileMemoize)
+    eval = dynamic_cast<IgnoreFailureEvaluation*>(fileMemoize->getEvaluation().getImplementation().get());
+  if (eval)
+      eval->setIgnoreFailure(true);
+
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
@@ -214,7 +223,7 @@ void DesignOfExperimentEvaluation::launch()
   }
 
   // mark points evaluating to nan as failed
-  if (eval || (dynamic_cast<OT::SymbolicEvaluation*>(memoize->getEvaluation().getImplementation().get()))) {
+  if (eval || (getPhysicalModel().getImplementation()->getClassName() == "SymbolicPhysicalModel")) {
 
     if(eval)// restore
       eval->setIgnoreFailure(false);
