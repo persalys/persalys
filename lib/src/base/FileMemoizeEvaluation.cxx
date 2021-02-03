@@ -67,10 +67,10 @@ void FileMemoizeEvaluation::setEvaluation(const Evaluation & evaluation)
     {
       Sample inSample(Sample::ImportFromCSVFile(inputFile_));
       if (inSample.getDimension() != evaluation.getInputDimension())
-        throw InvalidDimensionException(HERE) << "Invalid input dimension";
+        throw InvalidDimensionException(HERE) << "Input dimension has changed. Try clearing cache.";
       Sample outSample(Sample::ImportFromCSVFile(outputFile_));
       if (outSample.getDimension() != evaluation.getOutputDimension())
-        throw InvalidDimensionException(HERE) << "Invalid output dimension";
+        throw InvalidDimensionException(HERE) << "Output dimension has changed. Try clearing cache.";
     }
     catch (FileNotFoundException &)
     {
@@ -103,10 +103,10 @@ void FileMemoizeEvaluation::setCacheFiles(const OT::FileName & inputFile, const 
     {
       Sample inSample(Sample::ImportFromCSVFile(inputFile_));
       if (inSample.getDimension() != evaluation_.getInputDimension())
-        throw InvalidDimensionException(HERE) << "Invalid input dimension";
+        throw InvalidDimensionException(HERE) << "Input dimension has changed. Try clearing cache.";
       Sample outSample(Sample::ImportFromCSVFile(outputFile_));
       if (outSample.getDimension() != evaluation_.getOutputDimension())
-        throw InvalidDimensionException(HERE) << "Invalid output dimension";
+        throw InvalidDimensionException(HERE) << "Output dimension has changed. Try clearing cache.";
     }
     catch (FileNotFoundException &)
     {
