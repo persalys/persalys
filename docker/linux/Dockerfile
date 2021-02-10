@@ -25,11 +25,11 @@ ENV LANG="en_US.UTF-8" MAKEFLAGS="-j8"
 WORKDIR /usr/local/src
 
 # swig
-RUN curl -fSsL http://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz | tar xz && cd swig-4.0.2 \
- && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
+RUN curl -fSsL https://github.com/swig/swig/archive/v4.0.2.tar.gz | tar xz && cd swig-4.0.2 \
+ && ./autogen.sh && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.19/cmake-3.19.2.tar.gz | tar xz && cd cmake-3.19.2 \
+RUN curl -fSsL https://cmake.org/files/v3.19/cmake-3.19.4.tar.gz | tar xz && cd cmake-3.19.4 \
  && ./bootstrap --parallel=8 -- && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # ipopt
@@ -45,9 +45,8 @@ RUN curl -L https://github.com/davisking/dlib/archive/v19.21.tar.gz | tar xz && 
  && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install && cd - && rm -r dlib*
 
 # cminpack
-RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.6.tar.gz | tar xz && cd cminpack-1.3.6 \
- && curl -L https://github.com/devernay/cminpack/pull/21.patch | patch -p1 \
- && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF . && make install && cd - && rm -r cminpack*
+RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.8.tar.gz | tar xz && cd cminpack-1.3.8 \
+ && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d . && make install && cd - && rm -r cminpack*
 
 # nlopt
 RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.0.tar.gz | tar xz && cd nlopt-2.7.0 \
@@ -111,7 +110,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.4 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.5.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.5 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -120,7 +119,7 @@ RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
 # wayland
-RUN curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.18.0.tar.xz | tar xJ && cd wayland-1.18.0 && ./configure --disable-documentation && make > /dev/null 2>&1 && make install && cd - && rm -r wayland*
+RUN curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.19.0.tar.xz | tar xJ && cd wayland-1.19.0 && ./configure --disable-documentation && make > /dev/null 2>&1 && make install && cd - && rm -r wayland*
 
 # qt
 RUN curl -fSsL http://mirrors.dotsrc.org/qtproject/archive/qt/5.15/5.15.2/submodules/qtbase-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.2 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
@@ -146,7 +145,8 @@ RUN curl -fSsL https://paraview.org/files/v5.9/ParaView-v5.9.0.tar.xz | tar xJ &
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.16 \
- && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+ && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
+      -DUSE_SPHINX=OFF -DCMINPACK_LIBRARIES=cminpack::cminpack . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.9 \
