@@ -28,6 +28,8 @@
 #include "persalys/LimitStateItem.hxx"
 #include "persalys/DesignOfExperimentDefinitionItem.hxx"
 #include "persalys/ObservationsItem.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/KrigingAnalysis.hxx"
 
 #include <QDebug>
 
@@ -40,6 +42,7 @@ PhysicalModelDiagramItem::PhysicalModelDiagramItem(const PhysicalModel & physica
   : PhysicalModelItem(physicalModel, "PhysicalModelDiagramItem")
   , limitStateCounter_(0)
   , observationsCounter_(0)
+  , metamodelCounter_(0)
   , doeCounter_(Indices(2))
 {
   setData(QString::fromUtf8(physicalModel.getName().c_str()), Qt::DisplayRole);
@@ -160,6 +163,7 @@ void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
   emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
   emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
+  emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
 }
 
 
@@ -230,6 +234,18 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
   emit showErrorMessageRequested(tr("We have not found a design of experiments with an output sample.\n"));
 }
 
+void PhysicalModelDiagramItem::requestMetaModelExport()
+{
+  Study study(getParentStudyItem()->getStudy());
+  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i) {
+    FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(study.getAnalyses()[i].getImplementation().get());
+    KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(study.getAnalyses()[i].getImplementation().get());
+    if (chaos) {
+      getParentStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());}
+    if (kriging) {
+      getParentStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());}
+  }
+}
 
 void PhysicalModelDiagramItem::requestReliabilityCreation()
 {
@@ -364,7 +380,6 @@ void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
 {
   const QString analysisName = analysis.getImplementation()->getClassName().c_str();
-
   // create new analysis item
 
   // if DesignOfExperimentEvaluation GridDesignOfExperiment ImportedDesignOfExperiment ProbabilisticDesignOfExperiment
@@ -395,9 +410,21 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
 
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
-  }
-  else
+
+  } else if (analysisName == "FunctionalChaosAnalysis" ||
+             analysisName == "KrigingAnalysis") {
+    AnalysisItem * newItem = dynamic_cast<AnalysisItem*>(analysis.getImplementation().get()->getObserver("AnalysisItem"));
+    // connections
+    connect(newItem, SIGNAL(numberMetamodelChanged(bool)), this, SLOT(updateMetamodelCounter(bool)));
+
+    if(newItem->getAnalysis().hasValidResult())
+      ++metamodelCounter_;
+    emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
+
+  } else {
     appendAnalysisItem(analysis);
+  }
+
   analysis.getImplementation().get()->addObserver(this);
   analysis.getImplementation().get()->addObserver(getParentStudyItem());
 }
@@ -469,6 +496,13 @@ void PhysicalModelDiagramItem::updateDesignEvaluationCounter(bool increment)
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
 }
 
+void PhysicalModelDiagramItem::updateMetamodelCounter(bool increment) {
+  if (increment)
+    ++metamodelCounter_;
+  else
+    --metamodelCounter_;
+  emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
+}
 
 void PhysicalModelDiagramItem::requestDesignOfExperimentRemoval(bool isValid)
 {

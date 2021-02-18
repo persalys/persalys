@@ -175,6 +175,11 @@ void DesignOfExperimentDefinitionItem::appendItem(const Analysis& analysis)
   analysis.getImplementation().get()->addObserver(this);
   analysis.getImplementation().get()->addObserver(analysis_.getImplementation().get()->getObserver("PhysicalModelDiagramItem"));
   analysis.getImplementation().get()->addObserver(getParentStudyItem());
+  const MetaModelAnalysis * mmAnalysis = dynamic_cast<const MetaModelAnalysis*>(analysis.getImplementation().get());
+  if(mmAnalysis) {
+    Observer * observer = analysis.getImplementation().get()->getObserver("PhysicalModelDiagramItem");
+    observer->appendItem(analysis);
+  }
 }
 
 

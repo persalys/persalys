@@ -103,6 +103,7 @@ void AnalysisItem::buildActions()
   // remove analysis action
   removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
   removeAction_->setStatusTip(tr("Remove the analysis"));
+
   connect(removeAction_, SIGNAL(triggered()), this, SLOT(removeAnalysis()));
 
   appendAction(removeAction_);
@@ -160,8 +161,10 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable convertAction_ action and extractDataAction_
-  if (convertAction_)
+  if (convertAction_) {
     convertAction_->setEnabled(analysis_.hasValidResult());
+    emit numberMetamodelChanged(analysis_.hasValidResult());
+  }
   if (extractDataAction_)
     extractDataAction_->setEnabled(analysis_.hasValidResult());
 
@@ -271,8 +274,9 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
   if (message == "analysisFinished")
   {
     // if MetaModelAnalysis : enable convertAction_ action
-    if (convertAction_)
+    if (convertAction_) {
       convertAction_->setEnabled(true);
+      emit numberMetamodelChanged(true);}
     if (extractDataAction_)
       extractDataAction_->setEnabled(true);
   }
@@ -299,6 +303,9 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
   {
     if (hasChildren())
       qDebug() << "AnalysisItem::update(objectRemoved) has not to contain child\n";
+    if (convertAction_) {
+      emit numberMetamodelChanged(false);
+    }
     emit removeRequested(row());
   }
 }

@@ -52,12 +52,14 @@ public slots:
   void appendProbabilisticModelItem();
   void requestDesignOfExperimentEvaluation();
   void requestMetaModelCreation();
+  void requestMetaModelExport();
   void requestReliabilityCreation();
   void requestLimitStateRemoval();
   void requestDesignOfExperimentRemoval(bool);
   void requestObservationsRemoval();
   void requestCalibrationCreation();
   void updateDesignEvaluationCounter(bool);
+  void updateMetamodelCounter(bool);
   void duplicatePhysicalModel();
   void removePhysicalModel();
   void newLimitState();
@@ -74,6 +76,7 @@ signals:
   void limitStateNumberValidityChanged(bool);
   void doeNumberValidityChanged(bool);
   void doeEvaluationNumberValidityChanged(bool);
+  void metamodelNumberValidityChanged(bool);
   void observationsNumberValidityChanged(bool);
 
 protected:
@@ -85,6 +88,7 @@ private:
   QAction * removeAction_ = 0;
   int limitStateCounter_;
   int observationsCounter_;
+  int metamodelCounter_;
   OT::Indices doeCounter_;
 };
 }
