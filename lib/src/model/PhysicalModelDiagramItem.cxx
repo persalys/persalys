@@ -238,12 +238,11 @@ void PhysicalModelDiagramItem::requestMetaModelExport()
 {
   Study study(getParentStudyItem()->getStudy());
   for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i) {
-    FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(study.getAnalyses()[i].getImplementation().get());
-    KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(study.getAnalyses()[i].getImplementation().get());
-    if (chaos) {
-      getParentStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());}
-    if (kriging) {
-      getParentStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());}
+    const MetaModelAnalysis * analysis = dynamic_cast<const MetaModelAnalysis*>(study.getAnalyses()[i].getImplementation().get());
+    if (analysis && analysis->hasValidResult()) {
+      emit mmExportWizardRequested(getParentStudyItem(), study.getAnalyses()[i], true);
+      return;
+    }
   }
 }
 

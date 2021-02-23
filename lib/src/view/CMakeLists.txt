@@ -85,6 +85,7 @@ ot_add_source_file ( MetaModelIntroPage.cxx )
 ot_add_source_file ( KrigingPage.cxx )
 ot_add_source_file ( FunctionalChaosPage.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
+ot_add_source_file ( MetaModelExportWizard.cxx )
 ot_add_source_file ( MetaModelValidationPage.cxx )
 ot_add_source_file ( MetaModelValidationWidget.cxx )
 ot_add_source_file ( FunctionalChaosResultWindow.cxx )
@@ -204,6 +205,7 @@ ot_install_header_file ( MetaModelIntroPage.hxx )
 ot_install_header_file ( KrigingPage.hxx )
 ot_install_header_file ( FunctionalChaosPage.hxx )
 ot_install_header_file ( MetaModelAnalysisWizard.hxx )
+ot_install_header_file ( MetaModelExportWizard.hxx )
 ot_install_header_file ( MetaModelValidationPage.hxx )
 ot_install_header_file ( MetaModelValidationWidget.hxx )
 ot_install_header_file ( FunctionalChaosResultWindow.hxx )
@@ -316,6 +318,7 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/KrigingPage.hxx
                                   persalys/FunctionalChaosPage.hxx
                                   persalys/MetaModelAnalysisWizard.hxx
+                                  persalys/MetaModelExportWizard.hxx
                                   persalys/MetaModelValidationWidget.hxx
                                   persalys/FunctionalChaosResultWindow.hxx
                                   persalys/KrigingResultWindow.hxx
