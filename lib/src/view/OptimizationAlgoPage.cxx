@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/OptimizationIntroPage.hxx"
+#include "persalys/OptimizationAlgoPage.hxx"
 
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/QtTools.hxx"
@@ -35,7 +35,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
+OptimizationAlgoPage::OptimizationAlgoPage(QWidget* parent)
   : QWizardPage(parent)
   , outputsSelectionGroupBox_(0)
   , methodGroup_(0)
@@ -94,7 +94,7 @@ OptimizationIntroPage::OptimizationIntroPage(QWidget* parent)
 }
 
 
-void OptimizationIntroPage::initialize(const Analysis& analysis)
+void OptimizationAlgoPage::initialize(const Analysis& analysis)
 {
   const OptimizationAnalysis * analysis_ptr = dynamic_cast<const OptimizationAnalysis*>(analysis.getImplementation().get());
 
@@ -114,20 +114,20 @@ void OptimizationIntroPage::initialize(const Analysis& analysis)
 }
 
 
-Description OptimizationIntroPage::getInterestVariables() const
+Description OptimizationAlgoPage::getInterestVariables() const
 {
   return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
 }
 
 
-String OptimizationIntroPage::getSolverName() const
+String OptimizationAlgoPage::getSolverName() const
 {
   const int id = methodGroup_->checkedId();
   return OptimizationAnalysis::GetSolverNames()[id];
 }
 
 
-bool OptimizationIntroPage::validatePage()
+bool OptimizationAlgoPage::validatePage()
 {
   if (outputsSelectionGroupBox_->getSelectedOutputsNames().size() != 1)
   {

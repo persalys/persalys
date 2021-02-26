@@ -25,7 +25,7 @@
 #include "persalys/OptimizationTableModel.hxx"
 #include "persalys/LogDoubleSpinBox.hxx"
 #include "persalys/UIntSpinBox.hxx"
-#include "persalys/OptimizationIntroPage.hxx"
+#include "persalys/OptimizationAlgoPage.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
 
 #include <QGridLayout>
@@ -108,7 +108,7 @@ protected:
   virtual void resizeEvent(QResizeEvent * event);
 
 private:
-  OptimizationIntroPage * introPage_;
+  OptimizationAlgoPage * algoPage_;
   OptimizationBoundsPage * boundsPage_;
   QComboBox * pbTypeComboBox_;
   OptimizationStoppingCriteria * stoppingCriteriaLayout_;

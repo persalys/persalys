@@ -98,7 +98,7 @@ ot_add_source_file ( InferenceResultWidget.cxx )
 ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
-ot_add_source_file ( OptimizationIntroPage.cxx )
+ot_add_source_file ( OptimizationAlgoPage.cxx )
 ot_add_source_file ( OptimizationWizard.cxx )
 ot_add_source_file ( OptimizationResultWindow.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
@@ -218,7 +218,7 @@ ot_install_header_file ( ControllerWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
-ot_install_header_file ( OptimizationIntroPage.hxx )
+ot_install_header_file ( OptimizationAlgoPage.hxx )
 ot_install_header_file ( OptimizationWizard.hxx )
 ot_install_header_file ( OptimizationResultWindow.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
@@ -332,7 +332,7 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CopulaInferenceResultWidget.hxx
                                   persalys/CopulaInferenceResultWindow.hxx
                                   persalys/CopulaParametersTabWidget.hxx
-                                  persalys/OptimizationIntroPage.hxx
+                                  persalys/OptimizationAlgoPage.hxx
                                   persalys/OptimizationWizard.hxx
                                   persalys/OptimizationResultWindow.hxx
                                   persalys/WidgetBoundToDockWidget.hxx

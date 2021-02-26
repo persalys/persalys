@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_INTROOPTIMIZATIONPAGE_HXX
-#define PERSALYS_INTROOPTIMIZATIONPAGE_HXX
+#ifndef PERSALYS_ALGOOPTIMIZATIONPAGE_HXX
+#define PERSALYS_ALGOOPTIMIZATIONPAGE_HXX
 
 #include "persalys/Analysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
@@ -31,14 +31,14 @@
 namespace PERSALYS
 {
 
-class PERSALYS_VIEW_API OptimizationIntroPage : public QWizardPage
+class PERSALYS_VIEW_API OptimizationAlgoPage : public QWizardPage
 {
   Q_OBJECT
 
   friend class TestOptimizationWizard;
 
 public:
-  OptimizationIntroPage(QWidget* parent = 0);
+  OptimizationAlgoPage(QWidget* parent = 0);
 
   void initialize(const Analysis& analysis);
 
