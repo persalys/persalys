@@ -1420,6 +1420,18 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/kriging_new_model.png
           :align: center
 
+    - right click on the physical model 'Metamodel0' that got created
+
+      - click on 'Remove'
+      - click on model1 item, the diagram is displayed
+      - click on 'export as model'
+      - select 'kriging', analysis parameters are displayed
+      - click on 'Finish'
+      - a new item MetaModel_0 appears in the tree view
+
+      .. image:: /developer_manual/validation/metamodel_export_wizard.png
+          :align: center
+
     - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 
       - choose the Kriging method, select all the output variables, continue:
