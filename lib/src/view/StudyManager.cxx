@@ -29,6 +29,7 @@
 #include "persalys/DesignOfExperimentEvaluationWizard.hxx"
 #include "persalys/ExtractDataFieldWizard.hxx"
 #include "persalys/ObservationsWizard.hxx"
+#include "persalys/MetaModelExportWizard.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -161,6 +162,23 @@ void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &a
   }
 }
 
+void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& analysis, const bool isGeneralWizard)
+{
+  MetaModelExportWizard * wizard = new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_);
+
+  if (wizard) {
+    if (wizard->exec()) {
+      FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(wizard->getAnalysis().getImplementation().get());
+      if (chaos)
+        item->appendMetaModelItem(chaos->getResult().getMetaModel());
+      KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(wizard->getAnalysis().getImplementation().get());
+      if(kriging)
+        item->appendMetaModelItem(kriging->getResult().getMetaModel());
+    }
+    delete wizard;
+  }
+}
+
 
 // --------------- WINDOW CREATION ---------------
 
@@ -176,6 +194,7 @@ void StudyManager::createWindow(Item *item)
 
   connect(item, SIGNAL(wizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(StudyItem*, Analysis, bool)));
   connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
+  connect(item, SIGNAL(mmExportWizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openMetamodelExportWizard(StudyItem*, Analysis, bool)));
   connect(item, SIGNAL(wizardRequested(StudyItem*, DesignOfExperiment)), this, SLOT(openObservationsWizard(StudyItem*, DesignOfExperiment)));
 
   connect(item, SIGNAL(windowRequested(Item*)), this, SLOT(createWindow(Item*)));

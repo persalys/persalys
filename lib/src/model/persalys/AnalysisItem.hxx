@@ -64,6 +64,7 @@ signals:
 
   void numberDesignEvaluationChanged(bool);
   void designEvaluationUpdated(bool);
+  void numberMetamodelChanged(bool);
 
 protected:
   Analysis analysis_;

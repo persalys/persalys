@@ -77,6 +77,7 @@
 #include "persalys/SensitivityAnalysisWizard.hxx"
 #include "persalys/ReliabilityAnalysisWizard.hxx"
 #include "persalys/MetaModelAnalysisWizard.hxx"
+#include "persalys/MetaModelExportWizard.hxx"
 #include "persalys/CopulaInferenceWizard.hxx"
 #include "persalys/CalibrationAnalysisWizard.hxx"
 

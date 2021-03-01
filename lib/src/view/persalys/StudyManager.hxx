@@ -48,6 +48,7 @@ public slots:
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
   void openObservationsWizard(StudyItem*, const DesignOfExperiment& designOfExp);
   void openExtractDataFieldWizard(StudyItem *item, const Analysis& analysis);
+  void openMetamodelExportWizard(StudyItem *item, const Analysis& model, const bool isGeneralWizard = false);
   void modifyAnalysis(AnalysisItem* item);
 
   // create windows

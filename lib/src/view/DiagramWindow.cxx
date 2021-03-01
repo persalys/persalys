@@ -94,7 +94,7 @@ void DiagramWindow::updateDiagram()
     boxHeight = std::max(boxHeight, buttons[i]->height());
   }
 
-  const int horizontalSpace = 100;
+  const int horizontalSpace = 60;
   const int verticalSpace = 20;
   const int rowPos = boxHeight + verticalSpace;
   const int columnPos = boxWidth + horizontalSpace;

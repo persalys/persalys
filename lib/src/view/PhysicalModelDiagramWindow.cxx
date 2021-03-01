@@ -111,6 +111,15 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   appendButton(metamodelButton, row, doeEvaluationButton);
 
+  DiagramPushButton * metamodelExportButton = new DiagramPushButton;
+  metamodelExportButton->setText(tr("Export\nas model"));
+  metamodelExportButton->setWhatsThis(tr("Export metamodel as model"));
+  metamodelExportButton->setErrorMessage(tr("Metamodel must first be created"));
+  connect(physicalModelDiagramItem, SIGNAL(metamodelNumberValidityChanged(bool)), metamodelExportButton, SLOT(setEnabled(bool)));
+  connect(metamodelExportButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestMetaModelExport()));
+
+  appendButton(metamodelExportButton, row, metamodelButton);
+
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
   probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependence"));
