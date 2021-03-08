@@ -1,3 +1,15 @@
+= 9.0.4 release (2021-03-08)
+
+ * Coupling model script fix with more than 10 variables
+
+= 9.0.3 release (2020-11-26)
+
+ * Fix DOE evaluation
+
+= 9.0.2 release (2020-11-26)
+
+ * OTFMI package in installer
+
 = 9.0.1 release (2020-11-26)
 
  * Coupling output preview fix
