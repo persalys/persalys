@@ -46,6 +46,7 @@ public:
   static OT::String GetOTSampleStr(const OT::Sample& values);
   static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ",");
   static OT::String GetOTDescriptionStr(const OT::Description& values, const bool quote = true);
+  static OT::String GetOTIndicesStr(const OT::Indices& values);
   static OT::String GetOTBoolCollectionStr(const OT::Interval::BoolCollection& values);
   static OT::String GetOTCorrelationMatrixStr(const OT::CorrelationMatrix &correlationMatrix);
   static OT::String GetOTNormalCopulaStr(const OT::Distribution &distribution);

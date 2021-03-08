@@ -134,7 +134,7 @@ String ImportedDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = " << inputColumns_.__str__() << "\n";
+  oss << "inputColumns = " << Parameters::GetOTIndicesStr(inputColumns_) << "\n";
 
   oss << getName() << " = persalys.ImportedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
   oss << "'" << fileName_ << "', inputColumns)\n";

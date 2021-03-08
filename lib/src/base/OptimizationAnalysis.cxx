@@ -433,14 +433,14 @@ String OptimizationAnalysis::getPythonScript() const
     oss << getName() << ".setInterestVariables(interestVariables)\n";
   }
   oss << getName() << ".setMinimization(" << (isMinimization_ ? "True" : "False") << ")\n";
-  oss << "bounds = ot.Interval(" << getBounds().getLowerBound().__str__()
-      << ", " << getBounds().getUpperBound().__str__()
+  oss << "bounds = ot.Interval(" << Parameters::GetOTPointStr(getBounds().getLowerBound())
+      << ", " << Parameters::GetOTPointStr(getBounds().getUpperBound())
       << ", " << Parameters::GetOTBoolCollectionStr(getBounds().getFiniteLowerBound())
       << ", " << Parameters::GetOTBoolCollectionStr(getBounds().getFiniteUpperBound());
   oss << ")\n";
 
   oss << getName() << ".setBounds(bounds)\n";
-  oss << getName() << ".setStartingPoint(" << getStartingPoint().__str__() << ")\n";
+  oss << getName() << ".setStartingPoint(" << Parameters::GetOTPointStr(getStartingPoint()) << ")\n";
   oss << getName() << ".setVariableInputs(" << Parameters::GetOTDescriptionStr(getVariableInputs()) << ")\n";
 
   oss << getName() << ".setMaximumEvaluationNumber(" << getMaximumEvaluationNumber() << ")\n";

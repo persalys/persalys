@@ -136,6 +136,20 @@ String Parameters::GetOTPointStr(const Point& values, const String& separator)
 }
 
 
+String Parameters::GetOTIndicesStr(const Indices& values)
+{
+  String valuesStr = "[";
+  for (UnsignedInteger i = 0; i < values.getSize(); ++i)
+  {
+    valuesStr += OSS() << values[i];
+    if (i < values.getSize() - 1)
+      valuesStr += ", ";
+  }
+  valuesStr += "]";
+  return valuesStr;
+}
+
+
 String Parameters::GetOTDescriptionStr(const Description& values, const bool quote)
 {
   String valuesStr = "[";

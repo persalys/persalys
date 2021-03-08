@@ -558,19 +558,19 @@ import persalys
 
 myStudy = persalys.Study('myStudy')
 persalys.Study.Add(myStudy)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 outputColumns = []
 inputNames = ['X0', 'X2']
 outputNames = []
 myDataModel = persalys.DataModel('myDataModel', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
 myStudy.add(myDataModel)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 outputColumns = [1]
 inputNames = ['var1', 'var2']
 outputNames = ['var3']
 myDataModel2 = persalys.DataModel('myDataModel2', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
 myStudy.add(myDataModel2)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 outputColumns = [1]
 inputNames = ['X0', 'X2']
 outputNames = ['X1']

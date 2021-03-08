@@ -128,7 +128,7 @@ aDesign_1.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_1.setInterestVariables(interestVariables)
 anOTStudy.add(aDesign_1)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 aDesign_2 = persalys.ImportedDesignOfExperiment('aDesign_2', aModelPhys, 'normal.csv', inputColumns)
 aDesign_2.setBlockSize(1)
 interestVariables = ['Y0']
