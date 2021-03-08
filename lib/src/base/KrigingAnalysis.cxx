@@ -499,8 +499,8 @@ String KrigingAnalysis::getPythonScript() const
 
   // covariance model
   oss << getName() << ".setCovarianceModel(ot." << getCovarianceModel().getImplementation()->getClassName()
-      << "(" << getCovarianceModel().getScale().__str__() << ", "
-      << getCovarianceModel().getAmplitude().__str__();
+      << "(" << Parameters::GetOTPointStr(getCovarianceModel().getScale()) << ", "
+      << Parameters::GetOTPointStr(getCovarianceModel().getAmplitude());
 
   if (getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
     oss << ", " << dynamic_cast<MaternModel*>(getCovarianceModel().getImplementation().get())->getNu();

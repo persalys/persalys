@@ -248,8 +248,8 @@ String DataModel::getPythonScript() const
   }
   else
   {
-    oss << "inputColumns = " << inputColumns_.__str__() << "\n";
-    oss << "outputColumns = " << outputColumns_.__str__() << "\n";
+    oss << "inputColumns = " << Parameters::GetOTIndicesStr(inputColumns_) << "\n";
+    oss << "outputColumns = " << Parameters::GetOTIndicesStr(outputColumns_) << "\n";
 
     oss << "inputNames = " << Parameters::GetOTDescriptionStr(inputNames_) << "\n";
     oss << "outputNames = " << Parameters::GetOTDescriptionStr(outputNames_) << "\n";

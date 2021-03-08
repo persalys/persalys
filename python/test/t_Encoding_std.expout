@@ -16,13 +16,13 @@ outputs = [S]
 formulas = ['A+B+2']
 SM = persalys.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
 myStudy.add(SM)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 outputColumns = []
 inputNames = ['X0', 'X2']
 outputNames = []
 myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
 myStudy.add(myDataModel)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)
 doeI.setBlockSize(1)
 interestVariables = ['S']
@@ -46,13 +46,13 @@ outputs = [S]
 formulas = ['A+B+2']
 SM = persalys.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
 myStudy.add(SM)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 outputColumns = []
 inputNames = ['X0', 'X2']
 outputNames = []
 myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
 myStudy.add(myDataModel)
-inputColumns = [0,2]
+inputColumns = [0, 2]
 doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)
 doeI.setBlockSize(1)
 interestVariables = ['S']

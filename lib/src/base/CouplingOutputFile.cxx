@@ -125,9 +125,9 @@ String CouplingOutputFile::checkOutputFile(String fname) const
   code << "    output_file.setVariables("
        << Parameters::GetOTDescriptionStr(getVariableNames())
        <<", "<<Parameters::GetOTDescriptionStr(getTokens())
-       <<", "<<getSkipTokens().__str__()
-       <<", "<<getSkipLines().__str__()
-       <<", "<<getSkipColumns().__str__()<<")\n";
+       <<", "<< Parameters::GetOTPointStr(getSkipTokens())
+       <<", "<< Parameters::GetOTPointStr(getSkipLines())
+       <<", "<< Parameters::GetOTPointStr(getSkipColumns())<<")\n";
   code << "    all_vars = []\n";
   code << "    for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "        try:\n";

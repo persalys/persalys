@@ -24,8 +24,8 @@ outputs = [Y0, Y1, Y2]
 formulas = ['sin(X0)+8*X1', 'sin(X0)+8*X1', 'sin(X0)+8*X1']
 aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 anOTStudy.add(aModelPhys)
-inputColumns = [4,5,1]
-outputColumns = [3,0]
+inputColumns = [4, 5, 1]
+outputColumns = [3, 0]
 inputNames = ['X3', 'X2', 'X1']
 outputNames = ['Y1', 'Y0']
 obs = persalys.Observations('obs', aModelPhys, 'normal2.csv', inputColumns, outputColumns, inputNames, outputNames)

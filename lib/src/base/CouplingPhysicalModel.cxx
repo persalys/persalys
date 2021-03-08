@@ -115,9 +115,9 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
 	    <<".setVariables("
 	    << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())
 	    <<", "<<Parameters::GetOTDescriptionStr(outputFile.getTokens())
-	    <<", "<<outputFile.getSkipTokens().__str__()
-	    <<", "<<outputFile.getSkipLines().__str__()
-	    <<", "<<outputFile.getSkipColumns().__str__()<<")\n";
+	    <<", "<< Parameters::GetOTPointStr(outputFile.getSkipTokens())
+	    <<", "<< Parameters::GetOTPointStr(outputFile.getSkipLines())
+	    <<", "<< Parameters::GetOTPointStr(outputFile.getSkipColumns())<<")\n";
       oss << offset << "output_files.append(output_file"<<j<<")\n";
     }
     // escape backslashes and single quotes

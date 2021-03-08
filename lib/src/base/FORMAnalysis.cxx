@@ -135,7 +135,7 @@ String FORMAnalysis::getPythonScript() const
   OSS oss;
   oss.setPrecision(12);
   oss << getName() << " = persalys.FORMAnalysis('" << getName() << "', " << getLimitState().getName() << ")\n";
-  oss << getName() << ".setPhysicalStartingPoint(" << getPhysicalStartingPoint().__str__() << ")\n";
+  oss << getName() << ".setPhysicalStartingPoint(" << Parameters::GetOTPointStr(getPhysicalStartingPoint()) << ")\n";
   // optimization algo
   oss << "optimizationAlgo = ot." << getOptimizationAlgorithm().getImplementation()->getClassName() << "()\n";
   oss << "optimizationAlgo.setMaximumEvaluationNumber(" << getOptimizationAlgorithm().getMaximumEvaluationNumber() << ")\n";
