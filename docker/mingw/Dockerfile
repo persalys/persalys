@@ -12,6 +12,7 @@ ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.16 \
   # PR1691: LinearCalibration: Handle nan in deltaTheta
   && git cherry-pick ad2aa99217ba1cde1b0cadb00ebb0766b4e5f4d6 \
+  && sed -i "s|#ifdef OPENTURNS_HAVE_DLADDR|#if 0|g" lib/src/Base/Common/Path.cxx \
   && ${ARCH}-w64-mingw32-cmake \
   -DCMINPACK_LIBRARIES="cminpack::cminpack" \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
