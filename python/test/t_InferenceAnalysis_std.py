@@ -10,7 +10,7 @@ myStudy = persalys.Study('myStudy')
 
 # Model
 filename = 'data1.csv'
-ot.RandomGenerator_SetSeed(0)
+ot.RandomGenerator.SetSeed(0)
 sample = ot.Normal(3).getSample(300)
 sample.stack(ot.Gumbel().getSample(300))
 sample.setDescription(['X0', 'X1', 'X2', 'X3'])

@@ -12,7 +12,7 @@ Examples
 --------
 >>> import openturns as ot
 >>> import persalys
->>> ot.RandomGenerator_SetSeed(0)
+>>> ot.RandomGenerator.SetSeed(0)
 
 Create the model:
 

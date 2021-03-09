@@ -11,7 +11,7 @@ myStudy = persalys.Study('myStudy')
 
 # data
 filename = 'données.csv'
-ot.RandomGenerator_SetSeed(0)
+ot.RandomGenerator.SetSeed(0)
 ot.Normal(3).getSample(10).exportToCSVFile(filename)
 inColumns = [0, 2]
 

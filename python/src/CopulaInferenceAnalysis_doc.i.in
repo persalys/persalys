@@ -15,7 +15,7 @@ Create the model:
 >>> import openturns as ot
 >>> import persalys
 >>> filename = 'data.csv'
->>> ot.RandomGenerator_SetSeed(0)
+>>> ot.RandomGenerator.SetSeed(0)
 >>> sample = ot.Normal(3).getSample(100)
 >>> sample.exportToCSVFile(filename)
 >>> model = persalys.DataModel('myDataModel', 'data.csv', [0, 1, 2])
