@@ -30,13 +30,13 @@ namespace PERSALYS
 
 std::vector<String> DistributionDictionary::ContinuousDistributions_ = {
   "Arcsine", "Beta", "ChiSquare", "Exponential", "Gamma", "Gumbel", "InverseNormal",
-  "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", "Student",
+  "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", /*"SmoothedUniform", */ "Student",
   "Trapezoidal", "Triangular", "Uniform", "WeibullMax", "WeibullMin"
   };
 std::vector<String> DistributionDictionary::DiscreteDistributions_ = {
-  "Bernoulli", "Geometric", "Binomial", "Geometric", /*"Hypergeometric",*/ "NegativeBinomial",
+  "Bernoulli", "Geometric", "Binomial", "Geometric", "Hypergeometric", "NegativeBinomial",
   "Poisson", "Skellam", "UserDefined", "ZipfMandelbrot"
-  }; // TODO OT 1.15: add Hypergeometric
+  };
 
 
 /* Build a distribution factory */
@@ -129,7 +129,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else if (distributionName == "Hypergeometric")
     {
-      return Hypergeometric();
+      return Hypergeometric(4, 1, 1);
     }
     else if (distributionName == "InverseNormal")
     {
@@ -187,6 +187,10 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     else if (distributionName == "Skellam")
     {
       return Skellam();
+    }
+    else if (distributionName == "SmoothedUniform")
+    {
+      return SmoothedUniform(mu - sigma * sqrt(3.0), mu + sigma * sqrt(3.0), sigma);
     }
     else if (distributionName == "Student")
     {
