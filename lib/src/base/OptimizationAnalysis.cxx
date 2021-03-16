@@ -43,6 +43,13 @@ Description OptimizationAnalysis::GetSolverNames()
   return OptimizationAlgorithm::GetAlgorithmNames(problem);
 }
 
+Description OptimizationAnalysis::GetSolverNames(const Interval& bounds)
+{
+  // Dummy non-linear function respecting bounds dimension
+  OptimizationProblem problem(SymbolicFunction(Description(bounds.getDimension(), "x"), Description(1, "x^2")), Function(), Function(), bounds);
+  return OptimizationAlgorithm::GetAlgorithmNames(problem);
+}
+
 /* Default constructor */
 OptimizationAnalysis::OptimizationAnalysis()
   : PhysicalModelAnalysis()
@@ -237,9 +244,9 @@ String OptimizationAnalysis::getSolverName() const
 
 void OptimizationAnalysis::setSolverName(const String& name)
 {
-  if (!GetSolverNames().contains(name))
-    throw InvalidArgumentException(HERE) << "Error: the given solver name=" << name << " is unknown. " << GetSolverNames();
-
+  if((getBounds().getDimension()>0 && !GetSolverNames(getBounds()).contains(name)) ||
+     (getBounds().getDimension()==0 && !GetSolverNames().contains(name)))
+      throw InvalidArgumentException(HERE) << "Error: the given solver name=" << name << " is unknown. " << GetSolverNames();
   solverName_ = name;
 }
 

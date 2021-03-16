@@ -48,6 +48,7 @@ public:
   void updateParameters();
 
   static OT::Description GetSolverNames();
+  static OT::Description GetSolverNames(const OT::Interval& bounds);
 
   OT::String getSolverName() const;
   void setSolverName(const OT::String& name);
