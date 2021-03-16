@@ -120,6 +120,13 @@ bool OptimizationBoundsPage::validatePage()
     return false;
   }
 
+
+  OptimizationAnalysis dummyAnalysis = tableModel_->getAnalysis();
+  dummyAnalysis.setBounds(getTableModel()->getAnalysis().getBounds());
+  dummyAnalysis.setVariableInputs(getTableModel()->getAnalysis().getVariableInputs());
+  dummyAnalysis.setStartingPoint(getTableModel()->getAnalysis().getStartingPoint());
+  //analysis_.updateParameters();
+  emit currentAnalysisChanged(dummyAnalysis);
   return QWizardPage::validatePage();
 }
 
@@ -225,6 +232,7 @@ void OptimizationWizard::buildInterface()
   initialize(analysis_);
   //
   setStartId(0);
+  connect(boundsPage_, SIGNAL(currentAnalysisChanged(OptimizationAnalysis&)), algoPage_, SLOT(initialize(OptimizationAnalysis&)));
 }
 
 
@@ -236,7 +244,7 @@ void OptimizationWizard::initialize(const Analysis& analysis)
     return;
 
   boundsPage_->initialize(analysis_);
-  algoPage_->initialize(analysis_);
+  //algoPage_->initialize(analysis_);
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
   stoppingCriteriaLayout_->initialize(*analysis_ptr);
 }
@@ -262,7 +270,6 @@ Analysis OptimizationWizard::getAnalysis() const
   optim.setBounds(boundsPage_->getTableModel()->getAnalysis().getBounds());
   optim.setVariableInputs(boundsPage_->getTableModel()->getAnalysis().getVariableInputs());
   optim.setStartingPoint(boundsPage_->getTableModel()->getAnalysis().getStartingPoint());
-
   optim.setSolverName(algoPage_->getSolverName());
   optim.setMinimization(pbTypeComboBox_->currentIndex() == 0 ? true : false);
   stoppingCriteriaLayout_->updateAlgorithm(optim);

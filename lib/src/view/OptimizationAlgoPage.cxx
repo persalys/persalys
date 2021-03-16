@@ -40,25 +40,35 @@ OptimizationAlgoPage::OptimizationAlgoPage(QWidget* parent)
   , outputsSelectionGroupBox_(0)
   , methodGroup_(0)
   , errorMessageLabel_(0)
+  , pageLayout_(0)
 {
   setTitle(tr("Optimization methods"));
+  pageLayout_ = new QVBoxLayout(this);
+}
 
-  QVBoxLayout * pageLayout = new QVBoxLayout(this);
+
+void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
+{
+  QLayoutItem *child;
+  while ((child = pageLayout_->takeAt(0)) != 0) {
+    delete child->widget();
+    delete child;
+  }
 
   // output selection
   outputsSelectionGroupBox_ = new OutputsSelectionGroupBox(false, this);
-  pageLayout->addWidget(outputsSelectionGroupBox_);
+  pageLayout_->addWidget(outputsSelectionGroupBox_);
 
   // button to open OT documentation
   DocumentationToolButton * infoButton = new DocumentationToolButton("user_manual/optimization.html", FileTools::docOT);
-  pageLayout->addWidget(infoButton);
+  pageLayout_->addWidget(infoButton);
 
   // optimization algorithm
   methodGroup_ = new QButtonGroup(this);
 
   QVBoxLayout * optimAlgoGroupLayout = new QVBoxLayout;
+  Description solverNames = OptimizationAnalysis::GetSolverNames(analysis_ptr->getBounds());
 
-  const Description solverNames(OptimizationAnalysis::GetSolverNames());
   for (UnsignedInteger i = 0; i < solverNames.getSize(); ++i)
   {
     QRadioButton * methodRadioButton = new QRadioButton;
@@ -83,34 +93,35 @@ OptimizationAlgoPage::OptimizationAlgoPage(QWidget* parent)
   {
     optimAlgoGroup->setLayout(optimAlgoGroupLayout);
   }
-  pageLayout->addWidget(optimAlgoGroup);
+  pageLayout_->addWidget(optimAlgoGroup);
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
   connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
 
-  pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
-}
+  pageLayout_->addStretch();
+  pageLayout_->addWidget(errorMessageLabel_);
 
-
-void OptimizationAlgoPage::initialize(const Analysis& analysis)
-{
-  const OptimizationAnalysis * analysis_ptr = dynamic_cast<const OptimizationAnalysis*>(analysis.getImplementation().get());
-
-  if (!analysis_ptr)
-    return;
 
   // method
   const String methodName = analysis_ptr->getSolverName();
-  Description names = OptimizationAnalysis::GetSolverNames();
-  const Description::const_iterator it = std::find(names.begin(), names.end(), methodName);
-  const UnsignedInteger index = it - names.begin();
+  const Description::const_iterator it = std::find(solverNames.begin(), solverNames.end(), methodName);
+  UnsignedInteger index = 0;
+  //if algo is no longer compatible default to Cobyla
+  if(it!=solverNames.end())
+    index = it - solverNames.begin();
+  else {
+    LOGWARN(OSS() << "Optimization problem has changed and " << methodName << " algorithm is no longer available... Using Cobyla as default.");
+    index = std::find(solverNames.begin(), solverNames.end(), "Cobyla") - solverNames.begin();
+  }
+
   methodGroup_->button(index)->click();
 
   // update outputs list
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
   outputsSelectionGroupBox_->updateComboBoxModel(model.getSelectedOutputsNames(), analysis.getImplementation()->getInterestVariables());
+}
+
 }
 
 
@@ -122,8 +133,7 @@ Description OptimizationAlgoPage::getInterestVariables() const
 
 String OptimizationAlgoPage::getSolverName() const
 {
-  const int id = methodGroup_->checkedId();
-  return OptimizationAnalysis::GetSolverNames()[id];
+  return methodGroup_->checkedButton()->text().toStdString();
 }
 
 

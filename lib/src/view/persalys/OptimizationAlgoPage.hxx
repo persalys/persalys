@@ -22,10 +22,12 @@
 #define PERSALYS_ALGOOPTIMIZATIONPAGE_HXX
 
 #include "persalys/Analysis.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
 #include "persalys/TemporaryLabel.hxx"
 
 #include <QWizardPage>
+#include <QVBoxLayout>
 #include <QButtonGroup>
 
 namespace PERSALYS
@@ -40,18 +42,20 @@ class PERSALYS_VIEW_API OptimizationAlgoPage : public QWizardPage
 public:
   OptimizationAlgoPage(QWidget* parent = 0);
 
-  void initialize(const Analysis& analysis);
-
   OT::Description getInterestVariables() const;
 
   OT::String getSolverName() const;
 
   virtual bool validatePage();
 
+protected slots:
+  void initialize(OptimizationAnalysis&);
+
 private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   QButtonGroup * methodGroup_;
   TemporaryLabel * errorMessageLabel_;
+  QVBoxLayout * pageLayout_;
 };
 }
 #endif

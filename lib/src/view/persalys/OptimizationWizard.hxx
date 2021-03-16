@@ -23,6 +23,7 @@
 
 #include "persalys/AnalysisWizard.hxx"
 #include "persalys/OptimizationTableModel.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/LogDoubleSpinBox.hxx"
 #include "persalys/UIntSpinBox.hxx"
 #include "persalys/OptimizationAlgoPage.hxx"
@@ -47,11 +48,13 @@ public:
   bool validatePage();
   ResizableHeaderlessTableView * getTableView() const {return tableView_;};
   OptimizationTableModel * getTableModel() const {return tableModel_;};
-
+signals:
+  void currentAnalysisChanged(OptimizationAnalysis&);
 private:
   ResizableHeaderlessTableView * tableView_;
   OptimizationTableModel * tableModel_;
   TemporaryLabel * errorMessageLabel_;
+
 };
 
 
