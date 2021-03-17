@@ -94,7 +94,7 @@ RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.5.4.tar.gz | tar xz && 
 RUN pip install lxml pandas matplotlib ipython sphinx numpydoc --upgrade
 
 # sundials
-RUN curl -fSsL https://computation.llnl.gov/projects/sundials/download/sundials-4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t -DCMAKE_INSTALL_LIBDIR=lib .. \
  && make install > /dev/null 2>&1 \
