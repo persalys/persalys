@@ -61,6 +61,7 @@
 #include <QImageWriter>
 #include <QMenu>
 #include <QAction>
+#include <QPainterPath>
 
 #include <cmath>
 
