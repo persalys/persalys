@@ -96,7 +96,7 @@ Function DirectoryEmptyLeave
 FunctionEnd
 
 Name "${FULL_NAME} ${PRODUCT_VERSION}"
-OutFile "${FULL_NAME_LOWERCASE}-${PRODUCT_VERSION}-bundle-${ARCH}.exe"
+OutFile "${FULL_NAME_LOWERCASE}-${PRODUCT_VERSION}-${ARCH}.exe"
 !define UNINST_EXE "uninst-${FULL_NAME_LOWERCASE}.exe"
 Var MODULE_INSTALL_PATH
 ShowInstDetails show
