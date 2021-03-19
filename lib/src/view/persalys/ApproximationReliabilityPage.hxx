@@ -29,6 +29,7 @@
 
 #include <QWizardPage>
 #include <QLineEdit>
+#include <QButtonGroup>
 
 namespace PERSALYS
 {

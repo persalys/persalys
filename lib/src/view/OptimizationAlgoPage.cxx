@@ -21,6 +21,7 @@
 #include "persalys/OptimizationAlgoPage.hxx"
 
 #include "persalys/OptimizationAnalysis.hxx"
+#include "persalys/RadioButtonDelegate.hxx"
 #include "persalys/QtTools.hxx"
 #include "persalys/DocumentationToolButton.hxx"
 
@@ -29,6 +30,7 @@
 #include <QVBoxLayout>
 #include <QRadioButton>
 #include <QScrollArea>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -37,8 +39,10 @@ namespace PERSALYS
 
 OptimizationAlgoPage::OptimizationAlgoPage(QWidget* parent)
   : QWizardPage(parent)
+  , solverNames_()
+  , algoTableView_(0)
+  , algoTableModel_(0)
   , outputsSelectionGroupBox_(0)
-  , methodGroup_(0)
   , errorMessageLabel_(0)
   , pageLayout_(0)
 {
@@ -63,37 +67,23 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   DocumentationToolButton * infoButton = new DocumentationToolButton("user_manual/optimization.html", FileTools::docOT);
   pageLayout_->addWidget(infoButton);
 
-  // optimization algorithm
-  methodGroup_ = new QButtonGroup(this);
+  solverNames_ = OptimizationAnalysis::GetSolverNames(analysis.getBounds());
+  algoTableView_ = new ResizableHeaderlessTableView;
+  RadioButtonDelegate * delegate = new RadioButtonDelegate(1, algoTableView_);
+  algoTableView_->setItemDelegateForColumn(0, delegate);
+  algoTableView_->setSelectionMode(QAbstractItemView::NoSelection);
+  algoTableView_->verticalHeader()->hide();
+  algoTableView_->horizontalHeader()->hide();
 
-  QVBoxLayout * optimAlgoGroupLayout = new QVBoxLayout;
-  Description solverNames = OptimizationAnalysis::GetSolverNames(analysis_ptr->getBounds());
-
-  for (UnsignedInteger i = 0; i < solverNames.getSize(); ++i)
-  {
-    QRadioButton * methodRadioButton = new QRadioButton;
-    methodRadioButton->setText(solverNames[i].c_str());
-    optimAlgoGroupLayout->addWidget(methodRadioButton);
-    methodGroup_->addButton(methodRadioButton, i);
+  algoTableModel_ = new CustomStandardItemModel(solverNames_.getSize()+1, 1, algoTableView_);
+  algoTableView_->setModel(algoTableModel_);
+  algoTableModel_->setNotEditableHeaderItem(0, 0, tr("Available algorithms"));
+  for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i) {
+    algoTableModel_->setNotEditableItem(i + 1, 0, solverNames_[i].c_str());
+    algoTableModel_->setData(algoTableModel_->index(i+1, 0), (int)i, Qt::UserRole);
   }
 
-  QGroupBox * optimAlgoGroup = new QGroupBox(tr("Method"));
-  // if nlopt: use a scrollarea
-  if (solverNames.getSize() > 2)
-  {
-    QWidget * aWidget = new QWidget;
-    aWidget->setLayout(optimAlgoGroupLayout);
-    QScrollArea * scrollArea = new QScrollArea;
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(aWidget);
-    QVBoxLayout * aLayout = new QVBoxLayout(optimAlgoGroup);
-    aLayout->addWidget(scrollArea);
-  }
-  else
-  {
-    optimAlgoGroup->setLayout(optimAlgoGroupLayout);
-  }
-  pageLayout_->addWidget(optimAlgoGroup);
+  pageLayout_->addWidget(algoTableView_);
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
@@ -102,26 +92,25 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   pageLayout_->addStretch();
   pageLayout_->addWidget(errorMessageLabel_);
 
-
   // method
-  const String methodName = analysis_ptr->getSolverName();
-  const Description::const_iterator it = std::find(solverNames.begin(), solverNames.end(), methodName);
+  const String methodName = analysis.getSolverName();
+  const Description::const_iterator it = std::find(solverNames_.begin(), solverNames_.end(), methodName);
   UnsignedInteger index = 0;
   //if algo is no longer compatible default to Cobyla
-  if(it!=solverNames.end())
-    index = it - solverNames.begin();
+  if(it!=solverNames_.end())
+    index = it - solverNames_.begin();
   else {
     LOGWARN(OSS() << "Optimization problem has changed and " << methodName << " algorithm is no longer available... Using Cobyla as default.");
-    index = std::find(solverNames.begin(), solverNames.end(), "Cobyla") - solverNames.begin();
+    index = std::find(solverNames_.begin(), solverNames_.end(), "Cobyla") - solverNames_.begin();
   }
-
-  methodGroup_->button(index)->click();
+  algoTableView_->selectRow(index+1);
+  algoTableModel_->setData(algoTableModel_->index(index+1, 0), true, Qt::CheckStateRole);
 
   // update outputs list
-  PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
-  outputsSelectionGroupBox_->updateComboBoxModel(model.getSelectedOutputsNames(), analysis.getImplementation()->getInterestVariables());
-}
+  PhysicalModel model = analysis.getPhysicalModel();
+  outputsSelectionGroupBox_->updateComboBoxModel(model.getSelectedOutputsNames(), analysis.getInterestVariables());
 
+  connect(algoTableView_, SIGNAL(clicked(QModelIndex)), this, SLOT(updateRadioButtonsAlgoTable(QModelIndex)));
 }
 
 
@@ -133,7 +122,19 @@ Description OptimizationAlgoPage::getInterestVariables() const
 
 String OptimizationAlgoPage::getSolverName() const
 {
-  return methodGroup_->checkedButton()->text().toStdString();
+  // check
+  if (!(algoTableModel_ && algoTableView_))
+    throw InternalException(HERE) << "Error in OptimizationAlgoPage::getSolverName";
+
+  QModelIndex selectedAlgoIndex;
+  for (int i = 1; i < algoTableModel_->rowCount(); ++i)
+    if (algoTableModel_->data(algoTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
+      selectedAlgoIndex = algoTableModel_->index(i, 0);
+
+  if(selectedAlgoIndex.isValid())
+    return solverNames_[algoTableModel_->data(selectedAlgoIndex, Qt::UserRole).toInt()];
+  else
+    return solverNames_[0];
 }
 
 
@@ -146,4 +147,21 @@ bool OptimizationAlgoPage::validatePage()
   }
   return QWizardPage::validatePage();
 }
+
+void OptimizationAlgoPage::updateRadioButtonsAlgoTable(QModelIndex current)
+{
+  // check
+  if (!algoTableModel_ || current.row() < 1)
+    return;
+
+  // set CheckStateRole of algoTableModel_
+  for (int i = 1; i < algoTableModel_->rowCount(); ++i)
+  {
+    if (algoTableModel_->index(i, 0).row() == current.row())
+      algoTableModel_->setData(algoTableModel_->index(i, 0), true, Qt::CheckStateRole);
+    else
+      algoTableModel_->setData(algoTableModel_->index(i, 0), false, Qt::CheckStateRole);
+  }
+}
+
 }

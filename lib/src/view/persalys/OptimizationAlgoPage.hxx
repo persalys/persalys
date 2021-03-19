@@ -25,10 +25,11 @@
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
+#include "persalys/ResizableHeaderlessTableView.hxx"
 
 #include <QWizardPage>
 #include <QVBoxLayout>
-#include <QButtonGroup>
 
 namespace PERSALYS
 {
@@ -50,10 +51,13 @@ public:
 
 protected slots:
   void initialize(OptimizationAnalysis&);
+  void updateRadioButtonsAlgoTable(QModelIndex);
 
 private:
+  OT::Description solverNames_;
+  ResizableHeaderlessTableView * algoTableView_;
+  CustomStandardItemModel * algoTableModel_;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  QButtonGroup * methodGroup_;
   TemporaryLabel * errorMessageLabel_;
   QVBoxLayout * pageLayout_;
 };
