@@ -27,6 +27,32 @@
 
 namespace PERSALYS
 {
+class PERSALYS_BASE_API AlgorithmProperty
+{
+ public:
+  enum Locality{Local, Global, AnyL};
+  enum Derivative{None, First, AnyD};
+  enum Priority{Low, Medium, High};
+  AlgorithmProperty() {};
+  AlgorithmProperty(Locality locality, Derivative derivative, OT::String doc, Priority priority = Low)
+    : locality_(locality)
+    , derivative_(derivative)
+    , doc_(doc)
+    , priority_(priority) {};
+  Locality getLocality() const {return locality_;};
+  Derivative getDerivative() const {return derivative_;}
+  OT::String getDoc() const {return doc_;}
+  Priority getPriority() const {return priority_;};
+
+ private:
+  Locality locality_;
+  Derivative derivative_;
+  OT::String doc_;
+  Priority priority_;
+
+};
+
+
 class PERSALYS_BASE_API OptimizationAnalysis : public PhysicalModelAnalysis
 {
   CLASSNAME
@@ -49,6 +75,8 @@ public:
 
   static OT::Description GetSolverNames();
   static OT::Description GetSolverNames(const OT::Interval& bounds);
+
+  static std::map<OT::String, AlgorithmProperty> AlgorithmDictionary;
 
   OT::String getSolverName() const;
   void setSolverName(const OT::String& name);
