@@ -400,7 +400,7 @@ The results window gathers several tabs:
 
 The SORM result window presents a similar tab organization to the FORM window, with additional
 three other methods to compute failure probability and reliability index:
-Breitung, Hohen-Bichler and Tvedt (**Summary** tab).
+Breitung, Hohenbichler and Tvedt (**Summary** tab).
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/sormResultWindow.png
     :align: center

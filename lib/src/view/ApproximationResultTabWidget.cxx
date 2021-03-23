@@ -215,7 +215,7 @@ void ApproximationResultTabWidget::buildInterface()
       errorMessage = ex.what();
     }
 
-    parametersTable = new ParametersWidget(tr("Hohen Bichler's formula"), namesList, valuesList, true, true);
+    parametersTable = new ParametersWidget(tr("Hohenbichler's formula"), namesList, valuesList, true, true);
     groupBoxLayout->addWidget(parametersTable);
     if (!errorMessage.isEmpty())
     {
