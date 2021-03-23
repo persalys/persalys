@@ -31,8 +31,9 @@ cat > persalys.AppDir/AppRun <<\EOF
 #!/bin/sh
 HERE=$(dirname $(readlink -f "${0}"))
 export PATH=${HERE}/usr/bin/:${PATH}
-export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/lib/x86_64-linux-gnu/omc/:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/lib/x86_64-linux-gnu/omc/
 export PYTHONHOME=${HERE}/usr/
+export PYTHONPATH=
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 export PV_PLUGIN_PATH=${HERE}/usr/lib/paraview/plugins/BagPlotViewsAndFilters
 
