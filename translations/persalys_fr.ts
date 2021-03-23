@@ -318,11 +318,6 @@
         <translation>Formule de Breitung</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="218"/>
-        <source>Hohen Bichler&apos;s formula</source>
-        <translation>Formule d&apos;Hohen Bichler</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="239"/>
         <source>Tvedt&apos;s formula</source>
         <translation>Formule de Tvedt</translation>
@@ -421,6 +416,11 @@
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="381"/>
         <source>Reliability index</source>
         <translation>Indice de fiabilité</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="218"/>
+        <source>Hohenbichler&apos;s formula</source>
+        <translation>Formule d&apos;Hohenbichler</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ApproximationResultTabWidget.cxx" line="255"/>
@@ -6436,29 +6436,29 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::PieChartView</name>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="648"/>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="659"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="649"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="660"/>
         <source>Export plot</source>
         <translation>Exporter le graphique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="661"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="662"/>
         <source>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</source>
         <translation>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="685"/>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="689"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="686"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="690"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="685"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="686"/>
         <source>Impossible to export the plot.</source>
         <translation>Impossible d&apos;exporter le graphique.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="689"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="690"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
     </message>
