@@ -677,31 +677,48 @@ New model optimization can be created through:
 4-1 Definition
 ''''''''''''''
 
-When this analysis is required, the following window appears, in order to set up:
-  - The output of interest (**Select output** - default: the first output is analyzed)
-  - The method of optimization (default: Cobyla).
-    The two first methods **Cobyla** and **TNC** are proposed by OpenTURNS.
-    The other methods are solvers from the non-linear optimization library
-    `NLopt <https://nlopt.readthedocs.io/en/latest/>`_ (if it is installed).
-
-.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardFirstPage.png
-    :align: center
-
-In the table of the next window:
+When this analysis is requested, the following window appears:
   - *First column*: Select the inputs which will vary by checking off the corresponding line
     (default: all inputs vary)
     At least one input must vary.
   - *Second column*: description of the variables (defined in the model)
   - *Third column*: Define the starting point of the optimization
     (default: value in the physical model definition)
-  - *Fourth and Fifth columns*: Define the bounds of the variable inputs.
-    The lower bound must be less than the upper bound.
-    Check off/uncheck a cell to make the bound finite/infinite.
-    The interval must contain the initial value (third column).
+  - *Fourth and Fifth columns*: Define the bounds of the variable
+    inputs.  The lower bound must be less than the upper bound.  Check
+    off/uncheck a cell to make the bound finite/infinite. This will
+    condition the list of proposed algorithms on the next page The
+    interval must contain the initial value (third column).
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardSecondPage.png
     :align: center
 
+In next window, one can set up:
+  - The output of interest (**Select output** - default: the first
+    output is analyzed). Only one output must be selected.
+  - The method of optimizations are listed in the table
+    below. Proposed algorithms are given by OpenTURNS depending on
+    which optional libraries are installed. The user can filter the
+    list according to the desired algorithm property (Locality and use
+    of derivative information). The default algorithm will change
+    based on this selection according to this:
+
+========================================= ===================
+  Case	                                  Default algorithm
+========================================= ===================
+No bounds, no derivative, local           Cobyla
+No bounds, no derivative, global          Impossible
+No bounds, with derivative, local         LD_LBFGS
+No bounds, with derivative, global        Impossible
+With bounds, no derivative, local         Cobyla
+With bounds, no derivative, global        GN_MLSL
+With bounds, with derivative, local       LD_LBFGS
+With bounds, with derivative, global      GD_MLSL
+========================================= ===================
+
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/optimizationWizardFirstPage.png
+    :align: center
 
 The values of the table are expected to be floating points or integer.
 

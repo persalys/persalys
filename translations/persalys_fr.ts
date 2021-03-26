@@ -5421,6 +5421,81 @@ ou interaction</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::OptimizationAlgoPage</name>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="50"/>
+        <source>Optimization methods</source>
+        <translation>Méthodes d&apos;optimisation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="57"/>
+        <source>Available algorithms</source>
+        <translation>Algorithmes disponibles</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="61"/>
+        <source>Local</source>
+        <translation>Local</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="61"/>
+        <source>Global</source>
+        <translation>Global</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="61"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="70"/>
+        <source>Any</source>
+        <translation>Tous</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="116"/>
+        <source>Local/Global</source>
+        <translation>Local/Global</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="70"/>
+        <source>None</source>
+        <translation>Aucun</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="62"/>
+        <source>Locality</source>
+        <translation>Localité</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="70"/>
+        <source>First</source>
+        <translation>Première</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="71"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="117"/>
+        <source>Derivative</source>
+        <translation>Dérivée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="115"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="118"/>
+        <source>Doc</source>
+        <translation>Doc</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="212"/>
+        <source>Only one output must be selected</source>
+        <translation>Seulement une sortie doit être sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="292"/>
+        <source>Cannot find a compatible algorithm</source>
+        <translation>Aucun algorithme compatible n&apos;a été trouvé</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::OptimizationBoundsPage</name>
     <message>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="49"/>
@@ -5441,24 +5516,6 @@ ou interaction</translation>
         <location filename="../lib/src/view/OptimizationWizard.cxx" line="110"/>
         <source>The interval must contain the starting point</source>
         <translation>L&apos;intervalle doit contenir le point de départ</translation>
-    </message>
-</context>
-<context>
-    <name>PERSALYS::OptimizationIntroPage</name>
-    <message>
-        <location filename="../lib/src/view/OptimizationIntroPage.cxx" line="44"/>
-        <source>Optimization methods</source>
-        <translation>Méthodes d&apos;optimisation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationIntroPage.cxx" line="70"/>
-        <source>Method</source>
-        <translation>Méthode</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/OptimizationIntroPage.cxx" line="134"/>
-        <source>Only one output must be selected</source>
-        <translation>Seulement une sortie doit être sélectionnée</translation>
     </message>
 </context>
 <context>
@@ -5580,27 +5637,27 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OptimizationStoppingCriteria</name>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="133"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="140"/>
         <source>Number of evaluations</source>
         <translation>Nombre d&apos;évaluations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="142"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="149"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="150"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="157"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="158"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="165"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="166"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="173"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
@@ -5646,37 +5703,37 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OptimizationWizard</name>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="186"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="193"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="196"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="199"/>
         <source>Choose the input variables to optimize. Define the starting point and the bounds of the optimization algorithm.</source>
         <translation>Choisir les entrées à optimiser. Définir le point de départ et les bornes de l&apos;algorithme d&apos;optimisation.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="205"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="213"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="208"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="216"/>
         <source>Problem type</source>
         <translation>Type d&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="211"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="219"/>
         <source>Minimization</source>
         <translation>Minimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="211"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="219"/>
         <source>Maximization</source>
         <translation>Maximisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="217"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="225"/>
         <source>Stopping criteria</source>
         <translation>Critères d&apos;arrêt</translation>
     </message>
