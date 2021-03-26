@@ -639,7 +639,9 @@ placed below the table.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/probaModelBefore.png
     :align: center
 
-The followed window appears (only if a result exists):
+The following window appears (only if a result exists). Variables must
+be checked in the Morris ananlysis result window so they can be used
+in the probabilistic model definition:
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisResultWizard.png
     :align: center
