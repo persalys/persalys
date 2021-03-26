@@ -26,13 +26,33 @@
 #include "persalys/OutputsSelectionGroupBox.hxx"
 #include "persalys/TemporaryLabel.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
-#include "persalys/ResizableHeaderlessTableView.hxx"
 
 #include <QWizardPage>
-#include <QVBoxLayout>
+#include <QComboBox>
+#include <QSortFilterProxyModel>
+#include <QTableView>
 
 namespace PERSALYS
 {
+
+class AlgoFilterProxyModel : public QSortFilterProxyModel
+{
+  Q_OBJECT
+
+public:
+  AlgoFilterProxyModel(QObject *parent = 0);
+
+  void setDerivativeFilter(const QList<int> & derivativeFilter);
+  void setLocalityFilter(const QList<int> & localityFilter);
+
+protected:
+  virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
+private:
+  QList<int> derivativeFilter_;
+  QList<int> localityFilter_;
+};
+
 
 class PERSALYS_VIEW_API OptimizationAlgoPage : public QWizardPage
 {
@@ -52,14 +72,20 @@ public:
 protected slots:
   void initialize(OptimizationAnalysis&);
   void updateRadioButtonsAlgoTable(QModelIndex);
+  void updateFilters();
+  void openDoc(QModelIndex);
 
 private:
   OT::Description solverNames_;
-  ResizableHeaderlessTableView * algoTableView_;
+  QTableView * algoTableView_;
   CustomStandardItemModel * algoTableModel_;
+  AlgoFilterProxyModel * proxyModel_;
+  QComboBox * derivativeCombobox_;
+  QComboBox * localityCombobox_;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
   TemporaryLabel * errorMessageLabel_;
-  QVBoxLayout * pageLayout_;
 };
+
+
 }
 #endif
