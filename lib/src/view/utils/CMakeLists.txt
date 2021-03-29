@@ -29,6 +29,7 @@ ot_add_source_file (ResizableHeaderlessTableView.cxx)
 ot_add_source_file (TemporaryLabel.cxx)
 ot_add_source_file (DocumentationToolButton.cxx)
 ot_add_source_file (EditButtonDelegate.cxx)
+ot_add_source_file (LinkableItemDelegate.cxx)
 ot_add_source_file (EditValuesWizard.cxx)
 ot_add_source_file (ParametersTableView.cxx)
 
@@ -59,6 +60,7 @@ ot_install_header_file ( ResizableHeaderlessTableView.hxx )
 ot_install_header_file ( TemporaryLabel.hxx )
 ot_install_header_file ( DocumentationToolButton.hxx )
 ot_install_header_file ( EditButtonDelegate.hxx )
+ot_install_header_file ( LinkableItemDelegate.hxx)
 ot_install_header_file ( EditValuesWizard.hxx )
 
 qt5_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
@@ -86,6 +88,7 @@ qt5_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/TemporaryLabel.hxx
               persalys/DocumentationToolButton.hxx
               persalys/EditButtonDelegate.hxx
+              persalys/LinkableItemDelegate.hxx
               persalys/EditValuesWizard.hxx
              )
 

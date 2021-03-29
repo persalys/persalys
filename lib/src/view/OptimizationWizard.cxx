@@ -120,6 +120,13 @@ bool OptimizationBoundsPage::validatePage()
     return false;
   }
 
+
+  OptimizationAnalysis dummyAnalysis = tableModel_->getAnalysis();
+  dummyAnalysis.setBounds(getTableModel()->getAnalysis().getBounds());
+  dummyAnalysis.setVariableInputs(getTableModel()->getAnalysis().getVariableInputs());
+  dummyAnalysis.setStartingPoint(getTableModel()->getAnalysis().getStartingPoint());
+  //analysis_.updateParameters();
+  emit currentAnalysisChanged(dummyAnalysis);
   return QWizardPage::validatePage();
 }
 
@@ -186,15 +193,16 @@ void OptimizationWizard::buildInterface()
   setWindowTitle(tr("Optimization"));
   docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#optimizationwizard";
 
-  // -- intro page
-  introPage_ = new OptimizationIntroPage(this);
-  setPage(0, introPage_);
-
-  // -- second page
+  // -- 1st page: bounds page
 
   // starting point - inputs bounds
   boundsPage_ = new OptimizationBoundsPage(tr("Choose the input variables to optimize. Define the starting point and the bounds of the optimization algorithm."), this);
-  setPage(1, boundsPage_);
+  setPage(0, boundsPage_);
+
+  // -- 2nd page: algo page
+  algoPage_ = new OptimizationAlgoPage(this);
+  setPage(1, algoPage_);
+
 
   // -- third page
 
@@ -224,6 +232,7 @@ void OptimizationWizard::buildInterface()
   initialize(analysis_);
   //
   setStartId(0);
+  connect(boundsPage_, SIGNAL(currentAnalysisChanged(OptimizationAnalysis&)), algoPage_, SLOT(initialize(OptimizationAnalysis&)));
 }
 
 
@@ -234,8 +243,8 @@ void OptimizationWizard::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
-  introPage_->initialize(analysis_);
   boundsPage_->initialize(analysis_);
+  //algoPage_->initialize(analysis_);
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
   stoppingCriteriaLayout_->initialize(*analysis_ptr);
 }
@@ -245,9 +254,9 @@ int OptimizationWizard::nextId() const
 {
   switch (currentId())
   {
-    case 0: // method
+    case 0: // starting point - bounds
       return 1;
-    case 1: // starting point - bounds
+    case 1: // method
       return 2;
     default: // optim parameters
       return -1;
@@ -261,12 +270,11 @@ Analysis OptimizationWizard::getAnalysis() const
   optim.setBounds(boundsPage_->getTableModel()->getAnalysis().getBounds());
   optim.setVariableInputs(boundsPage_->getTableModel()->getAnalysis().getVariableInputs());
   optim.setStartingPoint(boundsPage_->getTableModel()->getAnalysis().getStartingPoint());
-
-  optim.setSolverName(introPage_->getSolverName());
+  optim.setSolverName(algoPage_->getSolverName());
   optim.setMinimization(pbTypeComboBox_->currentIndex() == 0 ? true : false);
   stoppingCriteriaLayout_->updateAlgorithm(optim);
 
-  optim.setInterestVariables(introPage_->getInterestVariables());
+  optim.setInterestVariables(algoPage_->getInterestVariables());
 
   return optim;
 }

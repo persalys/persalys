@@ -23,9 +23,10 @@
 
 #include "persalys/AnalysisWizard.hxx"
 #include "persalys/OptimizationTableModel.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/LogDoubleSpinBox.hxx"
 #include "persalys/UIntSpinBox.hxx"
-#include "persalys/OptimizationIntroPage.hxx"
+#include "persalys/OptimizationAlgoPage.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
 
 #include <QGridLayout>
@@ -47,11 +48,13 @@ public:
   bool validatePage();
   ResizableHeaderlessTableView * getTableView() const {return tableView_;};
   OptimizationTableModel * getTableModel() const {return tableModel_;};
-
+signals:
+  void currentAnalysisChanged(OptimizationAnalysis&);
 private:
   ResizableHeaderlessTableView * tableView_;
   OptimizationTableModel * tableModel_;
   TemporaryLabel * errorMessageLabel_;
+
 };
 
 
@@ -108,7 +111,7 @@ protected:
   virtual void resizeEvent(QResizeEvent * event);
 
 private:
-  OptimizationIntroPage * introPage_;
+  OptimizationAlgoPage * algoPage_;
   OptimizationBoundsPage * boundsPage_;
   QComboBox * pbTypeComboBox_;
   OptimizationStoppingCriteria * stoppingCriteriaLayout_;

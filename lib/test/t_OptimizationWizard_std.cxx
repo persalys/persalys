@@ -49,10 +49,14 @@ private slots:
     wizard.show();
 
     // checks
+    OptimizationBoundsPage * boundsPage = wizard.boundsPage_;
+    wizard.next();
+    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
+    QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    // - first page
-    OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.introPage_->findChild<OutputsSelectionGroupBox*>();
-    TemporaryLabel * errorMessageLabel = wizard.introPage_->findChild<TemporaryLabel*>();
+    // - second page
+    OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.algoPage_->findChild<OutputsSelectionGroupBox*>();
+    TemporaryLabel * errorMessageLabel = wizard.algoPage_->findChild<TemporaryLabel*>();
     TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
     ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
 
@@ -65,7 +69,7 @@ private slots:
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
 
     wizard.next();
-    QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0"); // can not go to next page
+    QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1"); // can not go to next page
 
     QRect rect = listWidget->visualItemRect(listWidget->item(0));
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // deselect all
@@ -77,7 +81,6 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
   }
-
 
   void TestOptimTable()
   {
@@ -95,12 +98,9 @@ private slots:
 
     // checks
     OptimizationBoundsPage * boundsPage = wizard.boundsPage_;
-    wizard.next();
-    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
     OptimizationTableModel * tableModel = boundsPage->tableModel_;
-    // - second page
+    // - first page
     QVERIFY2(tableModel->data(tableModel->index(0, 0), Qt::CheckStateRole).toInt() == Qt::Unchecked, "Header must be unchecked");
     for (int i = 1; i < 3; ++i)
       QVERIFY2(tableModel->data(tableModel->index(i, 0), Qt::CheckStateRole).toInt() == Qt::Checked, "Rows must be checked");
@@ -152,7 +152,6 @@ private slots:
     bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
     QVERIFY2(analysisEquality, "The two OptimizationAnalysis must be equal");
   }
-
 
   void TestOptimisation()
   {

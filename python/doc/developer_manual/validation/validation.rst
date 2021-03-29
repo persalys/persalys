@@ -547,15 +547,6 @@ Deterministic analyses
 
     - First page check the values :
 
-      .. image:: /developer_manual/validation/optimization_wizard_1st_page.png
-          :align: center
-
-      - selected output : y1
-      - method : TNC
-      - continue
-
-    - Second page check the values :
-
       - x1 and x2 checked
       - starting point : [0.2, 1.2, 1.]
       - check table behavior:
@@ -571,6 +562,20 @@ Deterministic analyses
 
       .. image:: /developer_manual/validation/optimization_wizard_2nd_page.png
           :align: center
+
+    - Second page check the values :
+
+      .. image:: /developer_manual/validation/optimization_wizard_1st_page.png
+          :align: center
+
+      - selected output : y1
+      - method : TNC
+      - change "Locality = Global"
+      - TNC no longer available algorithm changed to "GD_MLSL"
+      - revert "Locality" to "Any" and reselect "TNC"
+      - click on "doc" in the line containing "TNC"
+      - web browser opens a link to "TNC" documentation
+      - continue
 
     - Third page check the values :
 

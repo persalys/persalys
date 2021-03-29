@@ -18,29 +18,50 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_INTROOPTIMIZATIONPAGE_HXX
-#define PERSALYS_INTROOPTIMIZATIONPAGE_HXX
+#ifndef PERSALYS_ALGOOPTIMIZATIONPAGE_HXX
+#define PERSALYS_ALGOOPTIMIZATIONPAGE_HXX
 
 #include "persalys/Analysis.hxx"
+#include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/CustomStandardItemModel.hxx"
 
 #include <QWizardPage>
-#include <QButtonGroup>
+#include <QComboBox>
+#include <QSortFilterProxyModel>
+#include <QTableView>
 
 namespace PERSALYS
 {
 
-class PERSALYS_VIEW_API OptimizationIntroPage : public QWizardPage
+class AlgoFilterProxyModel : public QSortFilterProxyModel
+{
+  Q_OBJECT
+
+public:
+  AlgoFilterProxyModel(QObject *parent = 0);
+
+  void setDerivativeFilter(const QList<int> & derivativeFilter);
+  void setLocalityFilter(const QList<int> & localityFilter);
+
+protected:
+  virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+
+private:
+  QList<int> derivativeFilter_;
+  QList<int> localityFilter_;
+};
+
+
+class PERSALYS_VIEW_API OptimizationAlgoPage : public QWizardPage
 {
   Q_OBJECT
 
   friend class TestOptimizationWizard;
 
 public:
-  OptimizationIntroPage(QWidget* parent = 0);
-
-  void initialize(const Analysis& analysis);
+  OptimizationAlgoPage(QWidget* parent = 0);
 
   OT::Description getInterestVariables() const;
 
@@ -48,10 +69,23 @@ public:
 
   virtual bool validatePage();
 
+protected slots:
+  void initialize(OptimizationAnalysis&);
+  void updateRadioButtonsAlgoTable(QModelIndex);
+  void updateFilters();
+  void openDoc(QModelIndex);
+
 private:
+  OT::Description solverNames_;
+  QTableView * algoTableView_;
+  CustomStandardItemModel * algoTableModel_;
+  AlgoFilterProxyModel * proxyModel_;
+  QComboBox * derivativeCombobox_;
+  QComboBox * localityCombobox_;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  QButtonGroup * methodGroup_;
   TemporaryLabel * errorMessageLabel_;
 };
+
+
 }
 #endif
