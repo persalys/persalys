@@ -140,6 +140,7 @@ void PhysicalModelDiagramItem::update(Observable* /*source*/, const String & mes
   else if (message == "analysisFinished" || message == "analysisBadlyFinished")
   {
     analysisInProgress_ = false;
+    updateDiagramBoxesValidity();
   }
   else if (message == "objectRemoved")
   {

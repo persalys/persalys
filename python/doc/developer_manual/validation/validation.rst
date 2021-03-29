@@ -288,18 +288,26 @@ Console Python
 ````````````````
 
 - open persalys
-- click Menu->View->Window->Python Console
+- click Menu->Tools->Python Console
 
   - console shown
-- click Menu->View->Window->Python Console
+- click Menu->Tools->Python Console
 
   - console hidden
-- click Menu->View->Window->Python Console
+- click Menu->Tools->Python Console
 
   - console shown
 - close the console
 
   - console hidden
+
+Settings Menu
+`````````````
+
+- click Menu->Tools->Settings
+  - Spinbox to set the number of parallel processes
+
+- close the menu
 
 Open documentation
 ``````````````````
@@ -496,10 +504,10 @@ Models
 
   - a message stating the sample contains invalid values should be displayed
 
-  - find the troublesome line at the end of the sample, right-click on
-    it and delete it using the popup menu
+  - find the troublesome line at the end of the sample, select it then
+    right-click on it and delete it using the popup menu
 
-  - the message should disapprear
+  - the message should disappear
 
   - click on reload button : the troublesome line is back, along with the message
 
@@ -1149,7 +1157,7 @@ Probabilistic analyses
         .. image:: /developer_manual/validation/FORM_IS_reliability_starting_point_wizard.png
             :align: center
 
-      - Maximum number of evaluations : 100000
+      - Maximum number of evaluations : 1000
       - Absolute error : 0.001
       - Relative/Residual/Constraint error : 1e-5
 
@@ -1192,7 +1200,7 @@ Probabilistic analyses
 
       - Algorithm : Abdo-Rackwitz
       - Physical starting point : 5; 5
-      - Maximum number of evaluations : 100000
+      - Maximum number of evaluations : 1000
       - Absolute error : 0.001
       - Relative/Residual/Constraint error : 1e-5
 
@@ -1227,7 +1235,7 @@ Probabilistic analyses
 
       - Algorithm : Abdo-Rackwitz
       - Physical starting point : 5; 5
-      - Maximum number of evaluations : 100000
+      - Maximum number of evaluations : 1000
       - Absolute error : 0.001
       - Relative/Residual/Constraint error : 1e-5
 
