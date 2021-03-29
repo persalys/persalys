@@ -82,7 +82,7 @@ void PythonPhysicalModel::setCode(const String & code)
     if (inExecScope && line[0] != ' ' && line.size() != 0)
       inExecScope = false;
 
-    std::regex defFunction("def[ ]+\\_exec[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", std::regex::extended);
+    std::regex defFunction("def[ ]+_exec[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", std::regex::extended);
     std::smatch what;
     if (std::regex_match(line, what, defFunction))
     {
