@@ -2,6 +2,9 @@
 
  * HDF5 serialization format
  * Optimization analysis overhaul (algorithms filter also taking into account bounds)
+ * Option menu to set the number of processes locally
+ * Allowing csv import with number contaning commas as numerical separator
+ * Various crash and bug fixes
 
 = 9.0 release (2020-10-27)
 
