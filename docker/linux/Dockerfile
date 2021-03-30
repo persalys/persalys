@@ -156,6 +156,12 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
 # otfmi
 RUN pip install git+git://github.com/openturns/otfmi.git@v0.9 && python3 -c "import otfmi"
 
+# openmodelica
+RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.16.5 \
+ && git submodule sync && git submodule update --init --recursive \
+ && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
+ && cd ../.. && rm -r OpenModelica*
+
 # devel user
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
