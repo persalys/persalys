@@ -161,16 +161,12 @@ namespace PERSALYS
   }
 
   Sample DataCleaningTableModel::clean() {
-    std::cout << "Cleaning sample " << cleaner_->getSample().getSize() << std::endl;
-
     if(removalRequired_) {
       for(UnsignedInteger i=0; i<selected_.getSize(); ++i) {
-        std::cout << "Cleaning column (remove) " << selected_[i] << std::endl;
         cleaner_->removeNansByColumn(selected_[i]);}
     }
     else {
       for(UnsignedInteger i=0; i<selected_.getSize(); ++i) {
-        std::cout << "Cleaning column (replace) " << selected_[i] << std::endl;
         cleaner_->replaceNansByColumn(selected_[i], values_[selected_[i]]);}
     }
     return cleaner_->getSample();
