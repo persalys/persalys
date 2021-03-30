@@ -31,7 +31,7 @@ cat > persalys.AppDir/AppRun <<\EOF
 #!/bin/sh
 HERE=$(dirname $(readlink -f "${0}"))
 export PATH=${HERE}/usr/bin/:${PATH}
-export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/lib/x86_64-linux-gnu/omc/
+export LD_LIBRARY_PATH=${HERE}/usr/lib/
 export PYTHONHOME=${HERE}/usr/
 export PYTHONPATH=
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
@@ -105,15 +105,6 @@ cp -v /usr/local/lib/libvtk* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpq* persalys.AppDir/usr/lib
 mkdir -p persalys.AppDir/usr/lib/paraview/plugins
 cp -rv /usr/local/lib/paraview*/plugins/BagPlotViewsAndFilters persalys.AppDir/usr/lib/paraview/plugins
-
-# modelica
-cp -rv /usr/local/lib/x86_64-linux-gnu persalys.AppDir/usr/lib
-cp -rv /usr/local/lib/omc persalys.AppDir/usr/lib
-cp -rv /usr/local/include/omc persalys.AppDir/usr/include
-cp -rv /usr/local/share/omc persalys.AppDir/usr/share
-cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 persalys.AppDir/usr/lib
-cp -v /usr/local/bin/omc persalys.AppDir/usr/bin
-cp -v /usr/local/lib/libsundials* persalys.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys
 
