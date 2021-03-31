@@ -1,4 +1,4 @@
-= 10.0 release (in-progress)
+= 10.0 release (2021-03-31)
 
  * HDF5 serialization format
  * Optimization analysis overhaul (algorithms filter also taking into account bounds)
