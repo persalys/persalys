@@ -184,7 +184,7 @@ void MonteCarloAnalysis::launch()
     if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling))
     {
       const Point empiricalMean(outputSample.computeMean());
-      const Point empiricalStd(outputSample.computeStandardDeviationPerComponent());
+      const Point empiricalStd(outputSample.computeStandardDeviation());
 
       Scalar coefOfVar(0.);
       for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++i)

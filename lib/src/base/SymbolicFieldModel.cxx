@@ -24,6 +24,7 @@
 
 #include <openturns/SymbolicFunction.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/VertexValuePointToFieldFunction.hxx>
 
 using namespace OT;
 
@@ -89,12 +90,12 @@ PointToFieldFunction SymbolicFieldModel::generatePointToFieldFunction(const Desc
   {
     formulas.add(getFormula(outputNames[i]));
   }
-  Description inputNames(getInputNames());
-  inputNames.add(getMeshModel().getIndexParameters()[0].getName());
+  Description inputNames(1, getMeshModel().getIndexParameters()[0].getName());
+  inputNames.add(getInputNames());
   SymbolicFunction f(inputNames, formulas);
   f.getEvaluation().getImplementation()->setOutputDescription(outputNames);
 
-  return VertexValuePointToFieldFunction(getMeshModel().getMesh(), f);
+  return VertexValuePointToFieldFunction(f, getMeshModel().getMesh());
 }
 
 

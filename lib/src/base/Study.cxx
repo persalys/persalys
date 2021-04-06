@@ -153,21 +153,24 @@ void Study::Remove(const Study& study)
 
 Study Study::Open(const String & xmlFileName)
 {
-  // open study
+//   boost::filesystem::path::imbue(std::locale(std::locale(), new std::codecvt_utf8_utf16<wchar_t>()));
+//   boost::filesystem::path h5FileName(xmlFileName);
+//   h5FileName.replace_extension(".h5");
+//   if(boost::filesystem::exists(h5FileName))
   OT::Study study;
-  boost::filesystem::path::imbue(std::locale(std::locale(), new std::codecvt_utf8_utf16<wchar_t>()));
-  boost::filesystem::path h5FileName(xmlFileName);
-  h5FileName.replace_extension(".h5");
-  if(boost::filesystem::exists(h5FileName))
-    study.setStorageManager(XMLH5StorageManager(xmlFileName));
-  else
-    study.setStorageManager(XMLStorageManager(xmlFileName));
-
-  study.load();
   Study openedStudy;
-  study.fillObject("aStudy", openedStudy);
+  try {
+    study.setStorageManager(XMLH5StorageManager(xmlFileName));
+    study.load();
+    study.fillObject("aStudy", openedStudy);
+  }
+  catch (Exception &) {
+    LOGWARN("Fallback to XML-only format");
+    study.setStorageManager(XMLStorageManager(xmlFileName));
+    study.load();
+    study.fillObject("aStudy", openedStudy);
+  }
   openedStudy.getImplementation()->setFileName(xmlFileName);
-
   return openedStudy;
 }
 

@@ -25,58 +25,6 @@
 
 namespace PERSALYS
 {
-// customized PointToFieldFunctionImplementation
-class VertexValuePointToFieldFunction : public OT::PointToFieldFunctionImplementation
-{
-
-public:
-  /** Constructor with parameters */
-  VertexValuePointToFieldFunction(const OT::Mesh& mesh, const OT::Function& f)
-  : OT::PointToFieldFunctionImplementation(f.getInputDimension() - mesh.getDimension(), mesh, f.getOutputDimension())
-  , f_(f)
-  {
-    setOutputDescription(f_.getOutputDescription());
-  }
-
-  /** Virtual constructor */
-  virtual VertexValuePointToFieldFunction * clone() const
-  {
-    return new VertexValuePointToFieldFunction(*this);
-  }
-
-  /** Operator () */
-  virtual OT::Sample operator() (const OT::Point & inP) const
-  {
-    OT::Sample inputValues(getOutputMesh().getVertices().getSize(), inP);
-    inputValues.stack(getOutputMesh().getVertices());
-    return f_(inputValues);
-  }
-
-  /** Operator () */
-  OT::ProcessSample operator() (const OT::Sample & inS) const
-  {
-    // check
-    const OT::UnsignedInteger inDim = getInputDimension();
-    if (inS.getDimension() != inDim)
-      throw OT::InvalidArgumentException(HERE) << "Error: the given sample has an invalid dimension. Expect a dimension " << inDim << ", got " << inS.getDimension();
-    const OT::UnsignedInteger size = inS.getSize();
-    if (size == 0)
-      throw OT::InvalidArgumentException(HERE) << "Error: the given sample has a size of 0.";
-
-    // Simple loop over the evaluation operator based on time series
-    // The calls number is updated by these calls
-    OT::ProcessSample outSample(getOutputMesh(), size, getOutputDimension());
-    for (OT::UnsignedInteger i = 0; i < size; ++i)
-      outSample[i] = operator()(inS[i]);
-
-    return outSample;
-  }
-
-private:
-  OT::Function f_;
-};
-
-
 class PERSALYS_BASE_API SymbolicFieldModel : public SymbolicPhysicalModel
 {
   CLASSNAME

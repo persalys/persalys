@@ -64,7 +64,7 @@ int main(int /*argc*/, char ** /*argv*/)
     aDesign.run();
     Sample resultSample1(aDesign.getResult().getDesignOfExperiment().getOutputSample());
     assert_almost_equal(resultSample1.computeMean()[0], 0.0595903);
-    assert_almost_equal(resultSample1.computeStandardDeviationPerComponent()[0], 0.0203342);
+    assert_almost_equal(resultSample1.computeStandardDeviation()[0], 0.0203342);
 
     // Second parametric analysis
     aDesign.getResult().getDesignOfExperiment().getInputSample().exportToCSVFile("tCogenSample.csv");

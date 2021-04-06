@@ -176,7 +176,7 @@ void KrigingAnalysis::launch()
 
     // normalization was removed in 1.16
     const Point mean(effectiveInputSample.computeMean());
-    const Point stddev(effectiveInputSample.computeStandardDeviationPerComponent());
+    const Point stddev(effectiveInputSample.computeStandardDeviation());
     SquareMatrix linear(inputDimension);
     for (UnsignedInteger j = 0; j < inputDimension; ++ j)
         linear(j, j) = (std::abs(stddev[j]) > 1e-12) ? 1.0 / stddev[j] : 1.0;

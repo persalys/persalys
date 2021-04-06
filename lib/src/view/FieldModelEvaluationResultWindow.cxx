@@ -204,7 +204,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
   {
     // get data
     const QStringList currentOutName = QStringList() << outNames[out];
-    const UnsignedInteger nbModes = result_.getKarhunenLoeveResults()[out].getEigenValues().getSize();
+    const UnsignedInteger nbModes = result_.getKarhunenLoeveResults()[out].getEigenvalues().getSize();
     ProcessSample scaledModes = result_.getKarhunenLoeveResults()[out].getScaledModesAsProcessSample();
 
     // compute Cumulative eigen value sum
@@ -214,7 +214,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
     for (UnsignedInteger i = 0; i < nbModes; ++i)
     {
       cumulEigenSample(i, 0) = i;
-      sumEigenValues[1] += result_.getKarhunenLoeveResults()[out].getEigenValues()[i];
+      sumEigenValues[1] += result_.getKarhunenLoeveResults()[out].getEigenvalues()[i];
       cumulEigenSample(i, 1) = sumEigenValues[1];
     }
     cumulEigenSample /= sumEigenValues;
@@ -242,7 +242,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
     for (UnsignedInteger i = 0; i < nbModes; ++i)
     {
       tableModel->setNotEditableItem(i, 0, i);
-      tableModel->setNotEditableItem(i, 1, result_.getKarhunenLoeveResults()[out].getEigenValues()[i]);
+      tableModel->setNotEditableItem(i, 1, result_.getKarhunenLoeveResults()[out].getEigenvalues()[i]);
       tableModel->setNotEditableItem(i, 2, cumulEigenSample(i, 1));
     }
     tableView->resizeToContents();

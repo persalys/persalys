@@ -200,7 +200,7 @@ void FieldMonteCarloAnalysis::launch()
       result_.correlationFunction_.add(f);
 
       Sample xi_sample(algoKL.getResult().project(sample_centered));
-      xi_sample.setDescription(Description::BuildDefault(algoKL.getResult().getEigenValues().getSize(), "Xi_"));
+      xi_sample.setDescription(Description::BuildDefault(algoKL.getResult().getEigenvalues().getSize(), "Xi_"));
       result_.xiSamples_.add(xi_sample);
     }
   }
