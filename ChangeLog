@@ -1,3 +1,7 @@
+= 10.0.1 (2021-04-07)
+
+ * FMI selection fixes
+
 = 10.0 release (2021-03-31)
 
  * HDF5 serialization format
