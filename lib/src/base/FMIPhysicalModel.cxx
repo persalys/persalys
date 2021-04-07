@@ -140,16 +140,14 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
   Description inputNamesUnderscore;
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
-    String inputName(inputNames[i]);
-    std::replace(inputName.begin(), inputName.end(), '.', '_');
+    String inputName(std::regex_replace(inputNames[i], std::regex("[^0-9a-zA-Z_]"), "_"));
     inputNamesUnderscore.add(inputName);
   }
 
   Description outputNamesUnderscore;
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
-    String outputName(outputNames[i]);
-    std::replace(outputName.begin(), outputName.end(), '.', '_');
+    String outputName(std::regex_replace(outputNames[i], std::regex("[^0-9a-zA-Z_]"), "_"));
     outputNamesUnderscore.add(outputName);
   }
 
