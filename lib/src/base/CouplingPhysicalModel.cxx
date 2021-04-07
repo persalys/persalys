@@ -352,7 +352,7 @@ String CouplingPhysicalModel::getPythonScript() const
   for (UnsignedInteger i = 0; i < getInputDimension(); ++ i)
   {
     String inputName(getInputs()[i].getName());
-    std::replace(inputName.begin(), inputName.end(), '.', '_');
+    inputName = std::regex_replace(inputName, std::regex("[^0-9a-zA-Z_]"), "_");
     oss << inputName;
     if (i < getInputDimension() - 1)
       oss << ", ";

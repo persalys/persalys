@@ -1046,7 +1046,7 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       String distributionName = distribution.getImplementation()->getClassName();
       String inputName = getInputs()[i].getName();
       String inputPythonName(inputName);
-      std::replace(inputPythonName.begin(), inputPythonName.end(), '.', '_');
+      inputPythonName = std::regex_replace(inputPythonName, std::regex("[^0-9a-zA-Z_]"), "_");
 
       OSS oss;
       oss.setPrecision(12);

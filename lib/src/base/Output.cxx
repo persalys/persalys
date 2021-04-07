@@ -86,7 +86,7 @@ String Output::getPythonScript() const
   oss.setPrecision(12);
 
   String pythonName(getName());
-  std::replace(pythonName.begin(), pythonName.end(), '.', '_');
+  pythonName = std::regex_replace(pythonName, std::regex("[^0-9a-zA-Z_]"), "_");
   oss << pythonName << " = persalys.Output('" << getName() << "', '" << getEscapedDescription() << "')\n";
   if (hasBeenComputed_)
     oss << pythonName << ".setValue(" << getValue() << ")\n";
