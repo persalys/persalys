@@ -353,9 +353,9 @@ void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
 
 void FMIPhysicalModelWindow::updateFilters()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5,12,0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
   QRegularExpression::PatternOptions options = matchCaseCheckBox_->isChecked() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption;
-  QRegularExpression regExp(filterTextEdit_->text(), options);
+  QRegularExpression regExp(QRegularExpression::escape(filterTextEdit_->text()), options);
   proxyModel_->setFilterRegularExpression(regExp);
 #else
   QRegExp::PatternSyntax syntax = QRegExp::FixedString;
