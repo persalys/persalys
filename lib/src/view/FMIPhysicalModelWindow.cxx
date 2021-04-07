@@ -1107,9 +1107,12 @@ void TreeModel::setupModelData(const Description & variableNames)
     rootItem_ = new TreeItem(rootData);
   }
 
-  for (UnsignedInteger i = 0; i < variableNames.getSize(); ++ i)
+  Description sortedVariables(variableNames);
+  std::sort(sortedVariables.begin(), sortedVariables.end());
+
+  for (UnsignedInteger i = 0; i < sortedVariables.getSize(); ++ i)
   {
-    QString varName(QString::fromStdString(variableNames[i]));
+    QString varName(QString::fromStdString(sortedVariables[i]));
 
     QStringList chunks(varName.split('.'));
     TreeItem * currentParent = rootItem_;
