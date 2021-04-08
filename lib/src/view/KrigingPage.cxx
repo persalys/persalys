@@ -156,14 +156,7 @@ void KrigingPage::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
-  Description inputNames = analysis_ptr->getDesignOfExperiment().getInputSample().getDescription();
-  if (analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
-  {
-    if (analysis_ptr->getDesignOfExperiment().getPhysicalModel().hasStochasticInputs())
-      inputNames = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getStochasticInputNames();
-    else
-      inputNames = analysis_ptr->getDesignOfExperiment().getPhysicalModel().getInputNames();
-  }
+  const Description inputNames = analysis_ptr->getDesignOfExperiment().getInputSample().getMarginal(analysis_ptr->getDesignOfExperiment().getEffectiveInputIndices()).getDescription();
   inputsNames_ = inputNames;
 
   // covariance model

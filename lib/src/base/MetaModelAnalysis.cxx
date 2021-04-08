@@ -222,27 +222,7 @@ UnsignedInteger MetaModelAnalysis::getKFoldValidationSeed() const
 
 Sample MetaModelAnalysis::getEffectiveInputSample() const
 {
-  // if data model
-  if (!designOfExperiment_.hasPhysicalModel())
-    return designOfExperiment_.getInputSample();
-
-  // if only deterministic inputs
-  if (!designOfExperiment_.getPhysicalModel().hasStochasticInputs() || !designOfExperiment_.getInputSample().getSize())
-    return designOfExperiment_.getInputSample();
-
-  // if the physical model has stochastic variables: we do not take into account the deterministic variables
-  Indices inputIndices;
-  for (UnsignedInteger i = 0; i < designOfExperiment_.getPhysicalModel().getInputDimension(); ++i)
-    if (designOfExperiment_.getPhysicalModel().getInputs()[i].isStochastic())
-      inputIndices.add(i);
-
-  if (!inputIndices.check(designOfExperiment_.getInputSample().getDimension()))
-    throw InvalidArgumentException(HERE) << "The design of experiments input sample dimension ("
-                                         << designOfExperiment_.getInputSample().getDimension()
-                                         << ") does not match the number of stochastic inputs in the physical model ("
-                                         << inputIndices.getSize() << ")";
-
-  return designOfExperiment_.getInputSample().getMarginal(inputIndices);
+  return designOfExperiment_.getInputSample().getMarginal(designOfExperiment_.getEffectiveInputIndices());
 }
 
 
@@ -319,10 +299,21 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   // copula
   if (designOfExperiment_.getPhysicalModel().hasStochasticInputs())
   {
-    Collection<Distribution> coll(designOfExperiment_.getPhysicalModel().getCopulaCollection());
+    const Collection<Distribution> coll(designOfExperiment_.getPhysicalModel().getCopulaCollection());
     for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
     {
-      metaModel.setCopula(coll[i].getDescription(), coll[i]);
+      const Description variableBlock(coll[i].getDescription());
+      Bool common = true;
+      for (UnsignedInteger j = 0; j < inputsNames.getSize(); ++ j)
+      {
+        if (!variableBlock.contains(inputsNames[j]))
+        {
+          common = false;
+          break;
+        }
+      }
+      if (common)
+        metaModel.setCopula(variableBlock, coll[i]);
     }
   }
 

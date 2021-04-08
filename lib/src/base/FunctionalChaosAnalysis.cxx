@@ -115,9 +115,23 @@ Distribution FunctionalChaosAnalysis::getDistribution()
   {
     // use the composed distribution of the physical model:
     // if the physical model has stochastic variables
+    const Sample effectiveInputSample(getEffectiveInputSample());
+    const Description inputVariablesNames(effectiveInputSample.getDescription());
     if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
     {
-      distribution_ = designOfExperiment_.getPhysicalModel().getDistribution();
+      const Description stochasticInputNames(designOfExperiment_.getPhysicalModel().getStochasticInputNames());
+      if (stochasticInputNames == inputVariablesNames)
+        distribution_ = designOfExperiment_.getPhysicalModel().getDistribution();
+      else
+      {
+        Collection<Distribution> coll(inputVariablesNames.getSize());
+        for (UnsignedInteger i = 0; i < inputVariablesNames.getSize(); ++ i)
+          if (stochasticInputNames.contains(inputVariablesNames[i]))
+            coll[i] = designOfExperiment_.getPhysicalModel().getInputByName(inputVariablesNames[i]).getDistribution();
+          else
+            coll[i] = FunctionalChaosAlgorithm::BuildDistribution(effectiveInputSample.getMarginal(i));
+        distribution_ = ComposedDistribution(coll);
+      }
     }
     // build distribution from sample:
     // if the physical model has no distribution

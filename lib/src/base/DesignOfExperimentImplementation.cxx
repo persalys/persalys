@@ -132,6 +132,19 @@ void DesignOfExperimentImplementation::setOutputSample(const Sample& sample)
 }
 
 
+Indices DesignOfExperimentImplementation::getEffectiveInputIndices() const
+{
+  Indices inputIndices;
+  if (getInputSample().getSize())
+  {
+    const Point standardDeviation(getInputSample().computeStandardDeviationPerComponent());
+    for (UnsignedInteger i = 0; i < standardDeviation.getDimension(); ++i)
+      if (standardDeviation[i] > 0.0)
+        inputIndices.add(i);
+  }
+  return inputIndices;
+}
+
 String DesignOfExperimentImplementation::getPythonScript() const
 {
   OSS oss;

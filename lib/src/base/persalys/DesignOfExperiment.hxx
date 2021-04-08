@@ -63,6 +63,8 @@ public:
 
   OT::String getPythonScript() const;
 
+  OT::Indices getEffectiveInputIndices() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
