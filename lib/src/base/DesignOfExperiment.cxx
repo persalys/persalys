@@ -158,4 +158,12 @@ void DesignOfExperiment::setImplementationAsPersistentObject(const Implementatio
   TypedInterfaceObject< DesignOfExperimentImplementation >::setImplementationAsPersistentObject(obj);
   getImplementation()->notify("implementationModified");
 }
+
+
+Indices DesignOfExperiment::getEffectiveInputIndices() const
+{
+  return getImplementation()->getEffectiveInputIndices();
+}
+
+
 }

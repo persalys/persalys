@@ -53,6 +53,8 @@ public:
   void setInputSample(const OT::Sample & sample) override;
   void setOutputSample(const OT::Sample & sample);
 
+  OT::Indices getEffectiveInputIndices() const;
+
   virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */

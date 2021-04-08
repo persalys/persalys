@@ -18,3 +18,5 @@ PERSALYS_DesignOfExperiment_getOutputSample_doc
 PERSALYS_DesignOfExperiment_setOutputSample_doc
 %feature("docstring") PERSALYS::DesignOfExperiment::getSample
 PERSALYS_DesignOfExperiment_getSample_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::getEffectiveInputIndices
+PERSALYS_DesignOfExperiment_getEffectiveInputIndices_doc
