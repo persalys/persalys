@@ -262,7 +262,7 @@ Sample MetaModelAnalysis::getEffectiveOutputSample() const
 
 void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Function& function)
 {
-  MetaModel metaModel("MetaModel_", function);
+  MetaModel metaModel(getName(), function);
 
   const Description inputsNames(function.getInputDescription());
   const Description outputsNames(function.getOutputDescription());

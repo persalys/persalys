@@ -323,7 +323,7 @@ void StudyItem::appendItem(const Analysis &analysis)
 
 void StudyItem::appendMetaModelItem(PhysicalModel metaModel)
 {
-  const String availableName = study_.getAvailablePhysicalModelName(metaModel.getName());
+  const String availableName = metaModel.getName();
   metaModel.setName(availableName);
   study_.add(metaModel);
 }
