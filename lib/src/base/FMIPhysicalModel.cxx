@@ -25,6 +25,8 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/MemoizeFunction.hxx>
 
+#include <regex>
+
 using namespace OT;
 
 namespace PERSALYS
