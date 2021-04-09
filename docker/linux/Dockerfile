@@ -111,6 +111,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
 
 # pyfmi
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.5.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.5 \
+ && curl -L https://github.com/modelon-community/PyFMI/pull/78.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
