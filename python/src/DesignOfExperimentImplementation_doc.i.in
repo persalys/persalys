@@ -127,3 +127,18 @@ PERSALYS_DesignOfExperiment_getSample_doc
 
 %feature("docstring") PERSALYS::DesignOfExperimentImplementation::initialize
 "Empty the input and output samples."
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_DesignOfExperiment_getEffectiveInputIndices_doc
+"Effective indices accessor.
+
+Indices of non-const variables in the design.
+
+Returns
+-------
+indices : :py:class:`openturns.Indices`
+    Input sample and output sample"
+%enddef
+%feature("docstring") PERSALYS::DesignOfExperimentImplementation::getEffectiveInputIndices
+PERSALYS_DesignOfExperiment_getEffectiveInputIndices_doc

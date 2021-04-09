@@ -54,14 +54,7 @@ KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& d
   , result_()
   , optimizeParameters_(true)
 {
-  UnsignedInteger inputDimension = designOfExperiment.getInputSample().getDimension();
-  if (designOfExperiment.hasPhysicalModel())
-  {
-    if (designOfExperiment.getPhysicalModel().hasStochasticInputs())
-      inputDimension = designOfExperiment.getPhysicalModel().getStochasticInputNames().getSize();
-    else
-      inputDimension = designOfExperiment.getPhysicalModel().getInputDimension();
-  }
+  const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
 
   // basis
   setBasis(ConstantBasisFactory(inputDimension).build());
@@ -78,17 +71,7 @@ KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
   , result_()
   , optimizeParameters_(true)
 {
-  DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
-
-  DesignOfExperiment experiment(analysis_ptr->getResult().getDesignOfExperiment());
-  UnsignedInteger inputDimension = experiment.getInputSample().getDimension();
-  if (experiment.hasPhysicalModel())
-  {
-    if (experiment.getPhysicalModel().hasStochasticInputs())
-      inputDimension = experiment.getPhysicalModel().getStochasticInputNames().getSize();
-    else
-      inputDimension = experiment.getPhysicalModel().getInputDimension();
-  }
+  const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
 
   // basis
   setBasis(ConstantBasisFactory(inputDimension).build());
