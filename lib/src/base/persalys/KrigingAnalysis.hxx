@@ -82,6 +82,7 @@ protected:
 private:
   OT::Basis basis_;
   OT::CovarianceModel covarianceModel_;
+  OT::Function normalization_;
   KrigingAnalysisResult result_;
   OT::CovarianceModel optimalCovarianceModel_;
   bool optimizeParameters_;
