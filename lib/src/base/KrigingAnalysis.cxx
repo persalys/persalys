@@ -174,6 +174,15 @@ void KrigingAnalysis::launch()
     informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
     notify("informationMessageUpdated");
 
+    // normalization was removed in 1.16
+    const Point mean(effectiveInputSample.computeMean());
+    const Point stddev(effectiveInputSample.computeStandardDeviationPerComponent());
+    SquareMatrix linear(inputDimension);
+    for (UnsignedInteger j = 0; j < inputDimension; ++ j)
+        linear(j, j) = (abs(stddev[j]) > 1e-12) ? 1.0 / stddev[j] : 1.0;
+    const Point zero(inputDimension, 0.0);
+    normalization_ = LinearFunction(mean, zero, linear);
+
     // build algo
     KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
 
@@ -183,9 +192,13 @@ void KrigingAnalysis::launch()
     // get results
     KrigingAnalysisResult result_i;
     result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
-    result_i.krigingResultCollection_.add(kriging.getResult());
+    KrigingResult result(kriging.getResult());
 
-    optimalCovarianceModel_ = kriging.getResult().getCovarianceModel();
+    // take normalization into account
+    result.setMetaModel(ComposedFunction(result.getMetaModel(), normalization_));
+    result_i.krigingResultCollection_.add(result);
+
+    optimalCovarianceModel_ = result.getCovarianceModel();
 
     allResults.add(result_i);
   }
@@ -226,7 +239,7 @@ Function KrigingAnalysis::runAlgo(const Sample& inputSample, const Sample& outpu
   kriging.setOptimizeParameters(false);
   kriging.run();
 
-  return kriging.getResult().getMetaModel();
+  return ComposedFunction(kriging.getResult().getMetaModel(), normalization_);
 }
 
 
@@ -239,7 +252,7 @@ KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const Sample& inputSampl
   if (useOptimalCovModel && (optimalCovarianceModel_.getOutputDimension() > 1))
     throw InternalException(HERE) << "KrigingAnalysis::buildKrigingAlgorithm: the optimal covariance model must have a dimension of 1";
 
-  KrigingAlgorithm algo(inputSample,
+  KrigingAlgorithm algo(normalization_(inputSample),
                         outputSample,
                         useOptimalCovModel ? optimalCovarianceModel_ : covarianceModel_,
                         getBasis());
@@ -349,10 +362,10 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
 
   // retrieve kriging result
   KrigingResult krigingResult = dynamic_cast<KrigingAnalysisResult*>(&result)->getKrigingResultCollection()[0];
+  const UnsignedInteger size = inputSample.getSize();
 
-  // TODO: normalize input sample
-  Sample normalized_inputSample(inputSample);
-  const UnsignedInteger size = normalized_inputSample.getSize();
+  // normalize input sample
+  Sample normalized_inputSample(normalization_(inputSample));
 
   // correlation matrix
   CovarianceMatrix R(krigingResult.getCovarianceModel().discretize(normalized_inputSample));
