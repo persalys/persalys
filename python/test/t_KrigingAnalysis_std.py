@@ -67,7 +67,7 @@ metaModel2 = result2.getResultForVariable('y1').getMetaModel()
 openturns.testing.assert_almost_equal(
     aDesign.getResult().getDesignOfExperiment().getOutputSample().getMarginal(1), metaModel2(validationInputSample), 3.0e-5, 3.0e-5)
 openturns.testing.assert_almost_equal(
-    result2.getAnalyticalValidation().getQ2(), [0.685791,0.685791], 1e-3, 1e-3)
+    result2.getAnalyticalValidation().getQ2(), [0.685791]*2, 1e-3, 1e-3)
 
 # Kriging ##
 analysis3 = persalys.KrigingAnalysis('kriging_2', aDesign)
