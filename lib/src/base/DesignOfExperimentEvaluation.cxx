@@ -206,10 +206,14 @@ void DesignOfExperimentEvaluation::launch()
   Indices failedIndices;
   for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)
   {
-    if (!SpecFunc::IsNormal(outputSample(i, 0)))
+    for (UnsignedInteger j = 0; j < outputSample.getDimension(); ++j)
     {
-      failedIndices.add(i);
-      failedInputSample_.add(getOriginalInputSample()[i]);
+      if (!SpecFunc::IsNormal(outputSample(i, j)))
+      {
+        failedIndices.add(i);
+        failedInputSample_.add(getOriginalInputSample()[i]);
+        break;
+      }
     }
   }
   for (UnsignedInteger i = 0; i < failedIndices.getSize(); ++ i)
