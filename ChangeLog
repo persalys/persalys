@@ -1,3 +1,7 @@
+= 10.0.3 (2021-04-14)
+
+ * Kriging normalization
+
 = 10.0.2 (2021-04-09)
 
  * MetaModel/DOE fix
