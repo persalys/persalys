@@ -179,7 +179,7 @@ void KrigingAnalysis::launch()
     const Point stddev(effectiveInputSample.computeStandardDeviationPerComponent());
     SquareMatrix linear(inputDimension);
     for (UnsignedInteger j = 0; j < inputDimension; ++ j)
-        linear(j, j) = (abs(stddev[j]) > 1e-12) ? 1.0 / stddev[j] : 1.0;
+        linear(j, j) = (std::abs(stddev[j]) > 1e-12) ? 1.0 / stddev[j] : 1.0;
     const Point zero(inputDimension, 0.0);
     normalization_ = LinearFunction(mean, zero, linear);
 
