@@ -375,6 +375,7 @@ void PERSALYS::AdaoCalibration::run()
   Normal observationsError = this->getObservationsError();
   LinearFunction2 residualFunction(model_, parameterMap.getDimension(), outputObservations_);
   result_ = CalibrationResult(parameterPriorDistribution, parameterPosteriorDistribution, parameterMap, observationsError, inputObservations_, outputObservations_, residualFunction);
+  computeOutputAtPriorAndPosterior();
 }
 
 OT::Point PERSALYS::AdaoCalibration::postProcessResult(const OT::Point &resu)
