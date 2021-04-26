@@ -245,8 +245,8 @@ Sample Tools::ImportSample(const String& fileName)
   std::vector<String> numSep(2);
   numSep = {".", ","};
 
-  for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i) {
-    for (UnsignedInteger j = 0; j < numSep.size(); ++ j) {
+  for (UnsignedInteger j = 0; j < numSep.size(); ++ j) {
+    for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i) {
       if (separatorsList[i] == numSep[j])
         continue;
       // import sample from the file

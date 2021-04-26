@@ -72,4 +72,23 @@ script = myStudy.getPythonScript()
 print(script)
 exec(script)
 
+# check ambiguous import
+sample = ot.Normal(2).getSample(10)
+sample[0] = [1, 2]
+inColumns = [0, 1]
+for col_sep in [';', ',', ' ']:
+    for num_sep in ['.', ',']:
+        if col_sep == num_sep:
+            continue
+        with open(filename, "w") as csv:
+            csv.write('"x"' + col_sep + ' "y"\n')
+            for p in sample:
+                for j in range(len(p)):
+                    csv.write(str(p[j]).replace('.', num_sep))
+                    if j < len(p) - 1:
+                        csv.write(col_sep)
+                csv.write('\n')
+        model = persalys.DataModel('myDataModel2', filename, inColumns)
+        assert model.getSampleFromFile().getDimension() == 2, "wrong dimension sep="+sep
+        assert model.getSampleFromFile().getSize() == 10, "wrong size"
 os.remove(filename)
