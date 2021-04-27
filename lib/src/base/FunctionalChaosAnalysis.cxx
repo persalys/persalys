@@ -138,7 +138,7 @@ Distribution FunctionalChaosAnalysis::getDistribution()
     // or if data model
     else
     {
-      distribution_ = FunctionalChaosAlgorithm::BuildDistribution(designOfExperiment_.getInputSample());
+      distribution_ = FunctionalChaosAlgorithm::BuildDistribution(effectiveInputSample);
     }
     isDistributionComputed_ = true;
   }

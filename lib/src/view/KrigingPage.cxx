@@ -271,15 +271,7 @@ Analysis KrigingPage::getAnalysis(const String& name, const DesignOfExperiment& 
   }
 
   // basis
-  UnsignedInteger inputDimension = doe.getInputSample().getDimension();
-  if (doe.hasPhysicalModel())
-  {
-    if (doe.getPhysicalModel().hasStochasticInputs())
-      inputDimension = doe.getPhysicalModel().getStochasticInputNames().getSize();
-    else
-      inputDimension = doe.getPhysicalModel().getInputDimension();
-  }
-
+  const UnsignedInteger inputDimension = doe.getEffectiveInputIndices().getSize();
   switch (basisTypeComboBox_->currentIndex())
   {
     case 0: // Constant
