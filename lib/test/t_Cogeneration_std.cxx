@@ -40,15 +40,15 @@ int main(int /*argc*/, char ** /*argv*/)
     Input C("C", 4000., Normal(4000, 60), "Valued thermal energy");
 
     Output Ep("Ep", "Primary energy savings");
-    SymbolicPhysicalModel myPhysicalModel("myPhysicalModel");
+    SymbolicPhysicalModel symbolic("myPhysicalModel");
 
-    myPhysicalModel.addInput(Q);
-    myPhysicalModel.addInput(E);
-    myPhysicalModel.addInput(C);
+    symbolic.addInput(Q);
+    symbolic.addInput(E);
+    symbolic.addInput(C);
 
-    myPhysicalModel.addOutput(Ep);
-    myPhysicalModel.setFormula("Ep", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
-
+    symbolic.addOutput(Ep);
+    symbolic.setFormula("Ep", "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
+    PhysicalModel myPhysicalModel(symbolic);
     myStudy.add(myPhysicalModel);
 
     // First parametric analysis
@@ -63,6 +63,8 @@ int main(int /*argc*/, char ** /*argv*/)
     myStudy.add(aDesign);
     aDesign.run();
     Sample resultSample1(aDesign.getResult().getDesignOfExperiment().getOutputSample());
+    assert_almost_equal(resultSample1.computeMean()[0], 0.0595903);
+    assert_almost_equal(resultSample1.computeStandardDeviationPerComponent()[0], 0.0203342);
 
     // Second parametric analysis
     aDesign.getResult().getDesignOfExperiment().getInputSample().exportToCSVFile("tCogenSample.csv");
@@ -73,43 +75,7 @@ int main(int /*argc*/, char ** /*argv*/)
     Sample resultSample2(anotherdesign.getResult().getDesignOfExperiment().getOutputSample());
 
     // Reference
-
-    Description inputVariables(3);
-    inputVariables[0] = "Q";
-    inputVariables[1] = "E";
-    inputVariables[2] = "C";
-    Description formula(1);
-    formula[0] = (OSS() << "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
-    SymbolicFunction f(inputVariables, formula);
-
-
-    ComposedDistribution::DistributionCollection distributions;
-    distributions.add(Normal(10200, 100));
-    distributions.add(Normal(3000, 15));
-    distributions.add(Normal(4000, 60));
-
-    Point scale(3);
-    Point transvec(3);
-    Point otLevels(3, 0.);
-
-    for (int i = 0; i < 3; ++i)
-    {
-      double a = distributions[i].computeQuantile(0.05)[0];
-      double b = distributions[i].computeQuantile(0.95)[0];
-      scale[i] = b - a;
-      transvec[i] = a;
-    }
-
-    Box box(otLevels);
-    Sample inputSample(box.generate());
-    inputSample *= scale;
-    inputSample += transvec;
-
-    Sample outputSample = f(inputSample);
-
-    // Comparaison
-    assert_almost_equal(outputSample, resultSample1, 1e-16);
-    assert_almost_equal(outputSample, resultSample2, 1e-16);
+    assert_almost_equal(resultSample1, resultSample2, 1e-16);
   }
   catch (TestFailed & ex)
   {

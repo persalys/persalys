@@ -65,4 +65,4 @@ openturns.testing.assert_almost_equal(
     clean.getSample(), [[4,2,4],[2,math.nan,4],[2,3,7],[8,7,3]])
 clean.replaceNansByColumn(1, -2)
 openturns.testing.assert_almost_equal(
-    clean.getSample(), [[4,2,4],[2,-2,4][2,3,7],[8,7,3]])
+    clean.getSample(), [[4,2,4],[2,-2,4],[2,3,7],[8,7,3]])
