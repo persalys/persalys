@@ -28,7 +28,7 @@ Development
 Dependencies:
 
 - CMake >=3.8
-- OpenTURNS >=1.16
+- OpenTURNS >=1.17
 - Qt >=5
 - Qwt >=6
 - Python >=3.2

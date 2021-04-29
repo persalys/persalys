@@ -104,7 +104,7 @@ void DataAnalysis::launch()
     result_.kurtosis_.add(Point());
     try
     {
-      result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviationPerComponent();
+      result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviation();
       if (std::abs(result_.mean_[i][0]) > SpecFunc::Precision)
         result_.coefficientOfVariation_[i] = result_.standardDeviation_[i] / std::abs(result_.mean_[i][0]);
       result_.variance_[i] = sample.getMarginal(i).computeVariance();

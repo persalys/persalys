@@ -137,7 +137,7 @@ Indices DesignOfExperimentImplementation::getEffectiveInputIndices() const
   Indices inputIndices;
   if (getInputSample().getSize())
   {
-    const Point standardDeviation(getInputSample().computeStandardDeviationPerComponent());
+    const Point standardDeviation(getInputSample().computeStandardDeviation());
     for (UnsignedInteger i = 0; i < standardDeviation.getDimension(); ++i)
       if (standardDeviation[i] > 0.0)
         inputIndices.add(i);

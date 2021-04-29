@@ -9,13 +9,8 @@ ENV ARCH=x86_64 PYMAJMIN=38
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.16 \
-  # PR1691: LinearCalibration: Handle nan in deltaTheta
-  && git cherry-pick ad2aa99217ba1cde1b0cadb00ebb0766b4e5f4d6 \
-  # PR1766: Path: Dont use dladdr on win32
-  && git cherry-pick 657359b318d6ddf57a20d7b556d9441c6f2b48fd \
+RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.17rc1 \
   && ${ARCH}-w64-mingw32-cmake \
-  -DCMINPACK_LIBRARIES="cminpack::cminpack" \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -DPYTHON_SITE_PACKAGES=Lib/site-packages \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DUSE_SPHINX=OFF . \
@@ -24,7 +19,7 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
   && rm -r /tmp/openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.9 \
+RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.10 \
   && ${ARCH}-w64-mingw32-cmake \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -DPYTHON_SITE_PACKAGES=Lib/site-packages . \

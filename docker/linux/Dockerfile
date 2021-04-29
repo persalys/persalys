@@ -2,9 +2,9 @@ FROM centos:7
 MAINTAINER jschueller
 
 # utils
-RUN yum -y install wget git patch zip unzip bzip2 bsdtar perl subversion xz gettext autoconf automake libtool sudo bison make which file \
-  pcre-devel perl fontconfig blas-devel lapack-devel atlas-devel libxml2-devel \
-  zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel gpg libffi-devel openssl-devel \
+RUN yum -y install wget git patch zip unzip bzip2 bsdtar perl subversion gettext autoconf automake libtool sudo bison flex make which file \
+  pcre-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel \
+  zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel gpg libffi-devel openssl-devel \
   libX11-devel libXt-devel libXext-devel libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel \
   xorg-x11-server-Xvfb mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers libxkbcommon-x11-devel \
   freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel \
@@ -35,7 +35,7 @@ RUN curl -fSsL https://cmake.org/files/v3.19/cmake-3.19.4.tar.gz | tar xz && cd 
 # ipopt
 RUN curl -fsSL https://bitbucket.org/petsc/pkg-metis/get/v5.1.0-p10.tar.bz2 | tar xj && cd petsc-pkg-metis-* && make config shared=1 && make install && cd - && rm -r petsc*
 RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/1.6.2.tar.gz | tar xz && cd ThirdParty-Mumps-releases-1.6.2 && ./get.Mumps && ./configure --prefix=/usr/local && make && make install && cd - && rm -r ThirdParty*
-RUN curl -fsSL http://www.coin-or.org/download/source/Ipopt/Ipopt-3.13.3.tgz | tar xz && cd Ipopt-releases-3.13.3 && ./configure --prefix=/usr/local --without-hsl --disable-java && make && make install && cd - && rm -r Ipopt*
+RUN curl -fsSL http://www.coin-or.org/download/source/Ipopt/Ipopt-3.13.4.tar.gz | tar xz && cd Ipopt-releases-3.13.4 && ./configure --prefix=/usr/local --without-hsl --disable-java && make && make install && cd - && rm -r Ipopt*
 
 # bonmin
 RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make && make install && cd - && rm -r Bonmin*
@@ -105,12 +105,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.3.ta
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.4.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.4 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.5.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.5 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.5.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.5 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.7.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.7 \
  && curl -L https://github.com/modelon-community/PyFMI/pull/78.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
@@ -145,17 +145,17 @@ RUN curl -fSsL https://paraview.org/files/v5.9/ParaView-v5.9.0.tar.xz | tar xJ &
  && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.16 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.17rc1 \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
-      -DUSE_SPHINX=OFF -DCMINPACK_LIBRARIES=cminpack::cminpack . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+      -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && ctest -R pyinstall ${MAKEFLAGS} --output-on-failure && cd - && rm -r openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.9 \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.10 \
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . \
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip install git+git://github.com/openturns/otfmi.git@v0.9 && python3 -c "import otfmi"
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.10 && python3 -c "import otfmi"
 
 # openmodelica
 RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.16.5 \

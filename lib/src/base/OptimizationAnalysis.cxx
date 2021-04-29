@@ -298,9 +298,6 @@ void OptimizationAnalysis::launch()
 
   // set result
   result_ = solver.getResult();
-
-  // FIXME: some algos forget to set the problem, fixed in 1.17
-  result_.setProblem(problem);
 }
 
 

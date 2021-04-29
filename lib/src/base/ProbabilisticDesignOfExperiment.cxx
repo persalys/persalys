@@ -191,9 +191,9 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
   if (designName_ == "LHS")
     sample = LHSExperiment(getPhysicalModel().getDistribution(), size_).generate();
   else if (designName_ == "SALHS")
-    sample = SimulatedAnnealingLHS(LHSExperiment(getPhysicalModel().getDistribution(), size_),  GeometricProfile(), spaceFilling.getImplementation()).generate();
+    sample = SimulatedAnnealingLHS(LHSExperiment(getPhysicalModel().getDistribution(), size_), spaceFilling, GeometricProfile()).generate();
   else if (designName_ == "MCLHS")
-    sample = MonteCarloLHS(LHSExperiment(getPhysicalModel().getDistribution(), size_), mcLhsSize_, spaceFilling.getImplementation()).generate();
+    sample = MonteCarloLHS(LHSExperiment(getPhysicalModel().getDistribution(), size_), mcLhsSize_, spaceFilling).generate();
   else if (designName_ == "MONTE_CARLO")
     sample = MonteCarloExperiment(getPhysicalModel().getDistribution(), size_).generate();
   else if (designName_ == "QUASI_MONTE_CARLO")
