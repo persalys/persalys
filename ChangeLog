@@ -1,3 +1,9 @@
+= 10.0.4 (2021-04-29)
+
+ * MetaModel/DOE deterministic fix
+ * csv import separator fix
+ * ADAO fix
+
 = 10.0.3 (2021-04-14)
 
  * Kriging normalization
