@@ -1,6 +1,5 @@
 
 
-set (REPLACE_EOL " | cat ")
 set (PATH_SEP ":")
 if (WIN32)
   # replace dos eols

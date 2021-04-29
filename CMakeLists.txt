@@ -130,11 +130,11 @@ if (USE_OTMORRIS)
   endif ()
 endif ()
 
-set ( PERSALYS_LIBRARY_PATH lib${LIB_SUFFIX} )
+set ( PERSALYS_LIBRARY_PATH ${CMAKE_INSTALL_LIBDIR} )
 set ( PERSALYS_INCLUDE_PATH include )
 set ( PERSALYS_SWIG_INCLUDE_PATH ${PERSALYS_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
 set ( PERSALYS_DATA_PATH share )
-set ( PERSALYS_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/persalys )
+set ( PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys )
 set ( DOC_INSTALL_PATH share/${PACKAGE_NAME}/doc )
 
 # beware swig<3.0 does not like c++11: https://github.com/swig/swig/issues/73
@@ -164,26 +164,13 @@ if (BUILD_PYTHON)
 
   if (PYTHONINTERP_FOUND)
     if (DEFINED PYTHON_SITE_PACKAGES)
-      set (PERSALYS_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
-
+      set (PERSALYS_PYTHON_MODULE_PATH "${PYTHON_SITE_PACKAGES}")
     else ()
-      execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
-                        OUTPUT_VARIABLE _ABS_PYTHON_MODULE_PATH
-                        RESULT_VARIABLE _PYTHON_pythonlib_result
-                        OUTPUT_STRIP_TRAILING_WHITESPACE )
-
-      if (_PYTHON_pythonlib_result)
-        message (SEND_ERROR "Could not run ${PYTHON_EXECUTABLE}")
+     if (WIN32)
+       set (PERSALYS_PYTHON_MODULE_PATH Lib/site-packages)
+     else ()
+       set (PERSALYS_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
       endif ()
-
-      get_filename_component (_ABS_PYTHON_MODULE_PATH ${_ABS_PYTHON_MODULE_PATH} ABSOLUTE)
-      file (RELATIVE_PATH PERSALYS_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
-    endif ()
-
-    if (IS_ABSOLUTE ${PERSALYS_PYTHON_MODULE_PATH})
-      set (PYTHON_MODULE_PATH ${PERSALYS_PYTHON_MODULE_PATH})
-    else ()
-      set (PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/${PERSALYS_PYTHON_MODULE_PATH})
     endif ()
 
     set (PERSALYS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${PERSALYS_PYTHON_MODULE_PATH})
