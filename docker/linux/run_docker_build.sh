@@ -61,7 +61,7 @@ EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
-for libname in lapack blas quadmath xml2 gfortran ffi lzma harfbuzz
+for libname in lapack blas quadmath xml2 gfortran ffi lzma harfbuzz mpfr
 do
   cp -v /usr/lib64/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
