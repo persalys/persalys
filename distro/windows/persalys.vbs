@@ -25,4 +25,4 @@ wshEnv("MESA_GL_VERSION_OVERRIDE") = "4.5"
 ' uncomment this to override default language: en/fr
 ' wshEnv("LANG") = "en"
 
-wshShell.run fso.BuildPath(currentDirectory, "persalys.exe")
+wshShell.run chr(34) & fso.BuildPath(currentDirectory, "persalys.exe") & chr(34)
