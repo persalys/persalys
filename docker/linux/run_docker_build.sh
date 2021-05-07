@@ -5,6 +5,8 @@ set -x -e
 uid=$1
 gid=$2
 
+sudo pip install git+git://github.com/openturns/otfmi.git@v0.11
+
 export MAKEFLAGS="-j8"
 cd /tmp
 
