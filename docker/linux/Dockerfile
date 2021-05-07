@@ -81,7 +81,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimag
  && appimagetool --version
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.8.7/Python-3.8.7.tgz | tar xz && cd Python-3.8.7 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.8.9/Python-3.8.9.tgz | tar xz && cd Python-3.8.9 \
  && ./configure --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
@@ -91,7 +91,7 @@ RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.19.4.tar.gz | tar xz &&
  && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
 RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.5.4.tar.gz | tar xz && cd scipy-1.5.4 \
  && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
-RUN pip install lxml pandas matplotlib ipython sphinx numpydoc --upgrade
+RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
@@ -101,7 +101,7 @@ RUN curl -fSsL https://github.com/LLNL/sundials/archive/v4.1.0.tar.gz | tar xz &
  && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.2.3.tar.gz | tar xz && cd fmi-library-2.2.3 \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.3.tar.gz | tar xz && cd fmi-library-2.3 \
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
@@ -111,11 +111,11 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
 
 # pyfmi
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.8.7.tar.gz | tar xz && cd PyFMI-PyFMI-2.8.7 \
- && curl -L https://github.com/modelon-community/PyFMI/pull/78.patch | patch -p1 \
+ && curl -L https://github.com/modelon-community/PyFMI/pull/97.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2 | tar xj && cd boost_1_75_0 \
+RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.75.0/source/boost_1_75_0.tar.bz2 | tar xj && cd boost_1_75_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
@@ -147,7 +147,7 @@ RUN curl -fSsL https://paraview.org/files/v5.9/ParaView-v5.9.0.tar.xz | tar xJ &
 # openturns
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.17rc1 \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
-      -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && ctest -R pyinstall ${MAKEFLAGS} --output-on-failure && cd - && rm -r openturns*
+      -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.10 \
@@ -155,11 +155,12 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip install git+git://github.com/openturns/otfmi.git@v0.10 && python3 -c "import otfmi"
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.11 && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.16.5 \
+RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.17.0 \
  && git submodule sync && git submodule update --init --recursive \
+ && curl -L https://github.com/OpenModelica/OpenModelica/pull/7327.patch | patch -p1 \
  && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd ../.. && rm -r OpenModelica*
 
