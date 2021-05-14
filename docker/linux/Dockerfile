@@ -41,7 +41,7 @@ RUN curl -fsSL http://www.coin-or.org/download/source/Ipopt/Ipopt-3.13.4.tar.gz 
 RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make && make install && cd - && rm -r Bonmin*
 
 # dlib
-RUN curl -L https://github.com/davisking/dlib/archive/v19.21.tar.gz | tar xz && cd dlib-19.21 \
+RUN curl -L https://github.com/davisking/dlib/archive/v19.22.tar.gz | tar xz && cd dlib-19.22 \
  && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install && cd - && rm -r dlib*
 
 # cminpack
@@ -63,7 +63,7 @@ RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.tar
 RUN curl -fsSL https://github.com/yixuan/spectra/archive/v0.9.0.tar.gz | tar xz && cd spectra-0.9.0 && cmake . && make install && cd - && rm -r spectra*
 
 # glog
-RUN curl -fsSL https://github.com/google/glog/archive/v0.4.0.tar.gz | tar xz && cd glog-0.4.0 && cmake . && make install && cd - && rm -rf glog*
+RUN curl -fsSL https://github.com/google/glog/archive/v0.5.0.tar.gz | tar xz && cd glog-0.5.0 && cmake . && make install && cd - && rm -rf glog*
 
 # ceres
 RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.0.0.tar.gz | tar xz && cd ceres-solver-2.0.0 \
@@ -81,7 +81,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimag
  && appimagetool --version
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.8.9/Python-3.8.9.tgz | tar xz && cd Python-3.8.9 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.8.10/Python-3.8.10.tgz | tar xz && cd Python-3.8.10 \
  && ./configure --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
@@ -136,7 +136,8 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.6.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.9/ParaView-v5.9.0.tar.xz | tar xJ && cd ParaView-v5.9.0 \
+RUN curl -fSsL https://paraview.org/files/v5.9/ParaView-v5.9.1.tar.xz | tar xJ && cd ParaView-v5.9.1 \
+ && cd VTK && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/7978.patch | patch -p1 && cd - \
  && mkdir build && cd build \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
