@@ -10,17 +10,14 @@ set -e
 export QT_SELECT=qt5
 
 
-# git clone https://gitlab.kitware.com/paraview/paraview.git && cd paraview && git checkout v5.8.0 && git submodule init && git submodule update
-curl -fSsL http://paraview.org/files/v5.8/ParaView-v5.8.0.tar.gz | tar xz && cd ParaView-v5.8.0
+# git clone https://gitlab.kitware.com/paraview/paraview.git && cd paraview && git checkout v5.9.1 && git submodule init && git submodule update
+curl -fSsL http://paraview.org/files/v5.9/ParaView-v5.9.1.tar.gz | tar xz && cd ParaView-v5.9.1
 
 mkdir -p build && cd build
 
 cmake \
   -DPARAVIEW_BUILD_SHARED_LIBS=ON \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DVTK_USE_64BIT_IDS=OFF \
-  -DVTK_NO_PYTHON_THREADS=OFF \
-  -DVTK_PYTHON_FULL_THREADSAFE=ON \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
   -DPARAVIEW_USE_PYTHON=ON \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF \
   -DVTK_MODULE_USE_EXTERNAL_VTK_freetype=ON \
@@ -38,12 +35,6 @@ cmake \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF  \
   -DCMAKE_SKIP_RPATH=OFF \
   -DCMAKE_INSTALL_PREFIX=$PWD/install \
-  -DVTK_INSTALL_LIBRARY_DIR="lib/paraview" \
-  -DVTK_INSTALL_ARCHIVE_DIR="lib/paraview" \
-  -DVTK_INSTALL_INCLUDE_DIR="include/paraview" \
-  -DVTK_INSTALL_DATA_DIR="share/paraview" \
-  -DVTK_INSTALL_DOC_DIR="share/doc/paraview" \
-  -DVTK_INSTALL_PACKAGE_DIR="lib/cmake/paraview" \
   -DPARAVIEW_USE_VTKM=OFF \
   -DPARAVIEW_INSTALL_DEVELOPMENT_FILES:BOOL=ON \
   ..
