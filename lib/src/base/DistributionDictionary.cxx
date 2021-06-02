@@ -30,7 +30,7 @@ namespace PERSALYS
 
 std::vector<String> DistributionDictionary::ContinuousDistributions_ = {
   "Arcsine", "Beta", "ChiSquare", "Exponential", "Gamma", "Gumbel", "InverseNormal",
-  "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", "SmoothedUniform",  "Student",
+  "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", /*"SmoothedUniform", */ "Student",
   "Trapezoidal", "Triangular", "Uniform", "WeibullMax", "WeibullMin"
   };
 std::vector<String> DistributionDictionary::DiscreteDistributions_ = {

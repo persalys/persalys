@@ -198,6 +198,8 @@ void InferenceAnalysis::launch()
       try
       {
         Distribution distribution(distFactory.build(sample.getMarginal(i)));
+        distribution.getMean(); // ensures mean is defined
+        distribution.getStandardDeviation(); // ensures sttdev is defined
 
         // Kolmogorov test
         TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_));
