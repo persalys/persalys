@@ -27,7 +27,6 @@ make tests
 /home/devel/appli/salome -t
 xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 60 -j8 -E "Window|Wizard"
 
-
 cd /tmp
 
 rm -r persalys.AppDir/usr/include/persalys
@@ -74,25 +73,27 @@ Categories=Science;
 EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
-libs=`ldd persalys.AppDir/usr/bin/persalys | cut -d " " -f 3`
-for lib in ${libs}
+# system libs
+for libname in tbb fontconfig freetype sz gfortran quadmath pcre16 graphite2 swresample va va-drm va-x11 vdpau zvbi xvidcore webpmux wavpack vpx vorbisenc vorbis twolame ffi tasn1 nettle hogweed lz4 krb5 k5crypto krb5support xml2 cminpack event-2.0 harfbuzz re2 asound opus webp webpdemux xslt snappy minizip proxy aec double-conversion theoraenc theoradec speex shine openjp2 mp3lame gsm crystalhd ssh-gcrypt openmpt gme bluray chromaprint soxr numa ogg cairo
 do
-  fn=`basename ${lib}`
-  if ! test -f persalys.AppDir/usr/lib/${fn}
-  then
-    cp -v ${lib} persalys.AppDir/usr/lib
-  fi
+  cp -v /usr/lib/x86_64-linux-gnu/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
-libs=`ldd /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/libqxcb.so | cut -d " " -f 3`
-for lib in ${libs}
-do
-  fn=`basename ${lib}`
-  if ! test -f persalys.AppDir/usr/lib/${fn}
-  then
-    cp -v ${lib} persalys.AppDir/usr/lib
-  fi
-done
+cp -v /usr/lib/x86_64-linux-gnu/libQt5*.so.[0-9] persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libboost* persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libhdf5_*.so.100 /usr/lib/x86_64-linux-gnu/libgmp.so.10 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libav*.so.57 /usr/lib/x86_64-linux-gnu/libavutil.so.55 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libicu*.so.57 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libgnutls.so.30 /usr/lib/x86_64-linux-gnu/libpng16.so.16 /usr/lib/x86_64-linux-gnu/libjpeg.so.62 /usr/lib/x86_64-linux-gnu/libprotobuf.so.10 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libx265.so.95 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libx264.so.148 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libplc4.so /usr/lib/x86_64-linux-gnu/libnss3.so /usr/lib/x86_64-linux-gnu/libsmime3.so /usr/lib/x86_64-linux-gnu/libnspr4.so /usr/lib/x86_64-linux-gnu/libplds4.so persalys.AppDir/usr/lib
 
+cp -v /usr/lib/liblapack.so.3 /usr/lib/libblas.so.3 /usr/lib/libsrtp.so.0 persalys.AppDir/usr/lib
+cp -v /lib/x86_64-linux-gnu/libbz2.so.1.0 /lib/x86_64-linux-gnu/libdbus-1.so.3 /lib/x86_64-linux-gnu/liblzma.so.5 /lib/x86_64-linux-gnu/libgpg-error.so.0 /lib/x86_64-linux-gnu/libexpat.so.1 /lib/x86_64-linux-gnu/libglib-2.0.so.0 persalys.AppDir/usr/lib
+cp -v /usr/local/lib/lib*.so persalys.AppDir/usr/lib
+cp -v /usr/local/lib/lib*.so.[0-9] persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libpython3.6m.so.1.0 persalys.AppDir/usr/lib
+cp -v /home/devel/local/lib/lib*.so persalys.AppDir/usr/lib
 
 # python
 cp -v /usr/local/bin/python3* persalys.AppDir/usr/bin
@@ -108,12 +109,6 @@ cp -rv /usr/local/etc/ persalys.AppDir/etc
 
 cp -rv /usr/lib/x86_64-linux-gnu/qt5/plugins persalys.AppDir/usr/lib
 cp /usr/lib/x86_64-linux-gnu/libQt5XcbQpa.so.5 persalys.AppDir/usr/lib
-
-for libname in libpanelw.so.5 libncursesw.so.5 libgcc_s.so.1 libstdc++.so.6 libm.so.6 libdl.so.2 librt.so.1 libc.so.6 libnsl.so.1 libutil.so.1 libpthread.so.0 libresolv.so.2 libX11.so.6  libXext.so.6 libXrender.so.1 libICE.so.6 libSM.so.6 libGL.so.1 libgobject-2.0.so.0 libgthread-2.0.so.0 libglib-2.0.so.0
-do
-  rm -f persalys.AppDir/usr/lib/${libname}
-done
-rm persalys.AppDir/usr/lib/libdrm.so.2
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys
 
