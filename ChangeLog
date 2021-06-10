@@ -1,3 +1,8 @@
+= 10.0.7 (2021-06-09)
+
+ * Kriging validity fix
+ * Metamodel copula extraction fix
+
 = 10.0.6 (2021-06-02)
 
  * VTK shader fix
