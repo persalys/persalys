@@ -304,16 +304,26 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
     {
       const Description variableBlock(coll[i].getDescription());
       Bool common = true;
+      Indices subBlockIndices;
+      Description subBlockDescription;
       for (UnsignedInteger j = 0; j < inputsNames.getSize(); ++ j)
       {
-        if (!variableBlock.contains(inputsNames[j]))
+        UnsignedInteger index = variableBlock.find(inputsNames[j]);
+        if (index == variableBlock.getSize())
         {
           common = false;
           break;
         }
+        else
+        {
+          subBlockDescription.add(inputsNames[j]);
+          subBlockIndices.add(index);
+        }
       }
       if (common)
-        metaModel.setCopula(variableBlock, coll[i]);
+      {
+        metaModel.setCopula(subBlockDescription, coll[i].getMarginal(subBlockIndices));
+      }
     }
   }
 
