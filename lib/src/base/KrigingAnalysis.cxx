@@ -522,7 +522,7 @@ String KrigingAnalysis::getPythonScript() const
 
 bool KrigingAnalysis::hasValidResult() const
 {
-  return result_.outputSample_.getSize();
+  return getResult().getMetaModelOutputSample().getSize();
 }
 
 
