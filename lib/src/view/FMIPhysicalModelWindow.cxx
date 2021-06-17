@@ -605,17 +605,26 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
         {
           switch(causality_[index.row()])
           {
-            case 2:
-              return tr("Input");
-              break;
             case 0:
               return tr("Parameter");
+              break;
+            case 1:
+              return tr("Calculated parameter");
+              break;
+            case 2:
+              return tr("Input");
               break;
             case 3:
               return tr("Output");
               break;
             case 4:
               return tr("Local");
+              break;
+            case 5:
+              return tr("Independent");
+              break;
+            case 6:
+              return tr("Unknown");
               break;
             default:
               break;
