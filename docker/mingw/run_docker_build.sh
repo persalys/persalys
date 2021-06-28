@@ -41,7 +41,7 @@ curl -fSsL https://anaconda.org/conda-forge/vs2015_runtime/14.16.27012/download/
 cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns Lib/site-packages
 cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
-rm Lib/site-packages/openturns/{libvtk,libboost,LLVM,Qt,python}*.dll
+rm Lib/site-packages/openturns/{libvtk,libboost,libLLVM,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
 curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.8.5/download/win-64/pyfmi-2.8.5-py38h347fdf6_0.tar.bz2 | tar xj
 curl -fSsL https://anaconda.org/conda-forge/assimulo/3.2.5/download/win-64/assimulo-3.2.5-py38h63ee3e3_0.tar.bz2 | tar xj
