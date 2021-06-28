@@ -28,6 +28,8 @@
 #include <openturns/MemoizeFunction.hxx>
 #include <openturns/DatabaseFunction.hxx>
 
+#include <limits>
+
 using namespace OT;
 
 namespace PERSALYS

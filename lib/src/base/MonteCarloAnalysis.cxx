@@ -19,13 +19,14 @@
  *
  */
 #include "persalys/MonteCarloAnalysis.hxx"
-
 #include "persalys/DataAnalysis.hxx"
 #include "persalys/DataModel.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
+
+#include <limits>
 
 using namespace OT;
 
