@@ -27,6 +27,8 @@
 #include <openturns/InverseTrendTransform.hxx>
 #include <openturns/NonStationaryCovarianceModelFactory.hxx>
 
+#include <limits>
+
 using namespace OT;
 
 namespace PERSALYS

@@ -19,11 +19,12 @@
  *
  */
 #include "persalys/WithStopCriteriaAnalysis.hxx"
-
 #include "persalys/AnalysisImplementation.hxx"
 #include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+
+#include <limits>
 
 using namespace OT;
 

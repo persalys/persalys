@@ -25,6 +25,8 @@
 #include <openturns/MemoizeFunction.hxx>
 #include <openturns/ThresholdEvent.hxx>
 
+#include <limits>
+
 using namespace OT;
 
 namespace PERSALYS
