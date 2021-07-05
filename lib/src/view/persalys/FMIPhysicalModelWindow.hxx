@@ -51,12 +51,12 @@ class PERSALYS_VIEW_API DataTableModel : public QAbstractTableModel
 public:
   DataTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  bool setData(const QModelIndex & index, const QVariant & value, int role);
-  Qt::ItemFlags flags(const QModelIndex & index) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex & index, int role) const override;
+  bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
   bool isValid();
   void loadData(const FMUInfo & info);
@@ -100,7 +100,7 @@ public:
   {
   }
 
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override
   {
     QComboBox * editor = new QComboBox(parent);
     editor->addItems(enumLabels_);
@@ -108,7 +108,7 @@ public:
   }
 
 
-  void setEditorData(QWidget * editor, const QModelIndex & index) const
+  void setEditorData(QWidget * editor, const QModelIndex & index) const override
   {
     QComboBox * comboBox = static_cast<QComboBox*>(editor);
     int value = index.model()->data(index, Qt::EditRole).toInt();
@@ -117,7 +117,7 @@ public:
   }
 
 
-  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
+  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override
   {
     QComboBox * comboBox = static_cast<QComboBox*>(editor);
     model->setData(index, QString::number(comboBox->currentIndex()), Qt::EditRole);
@@ -137,14 +137,14 @@ public:
   {
   }
 
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override
   {
     DoubleSpinBox * editor = new DoubleSpinBox(parent);
     return editor;
   }
 
 
-  void setEditorData(QWidget * editor, const QModelIndex & index) const
+  void setEditorData(QWidget * editor, const QModelIndex & index) const override
   {
     DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
     double value = index.model()->data(index, Qt::EditRole).toDouble();
@@ -152,7 +152,7 @@ public:
   }
 
 
-  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
+  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override
   {
     DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
     model->setData(index, QString::number(comboBox->value()), Qt::EditRole);
@@ -171,7 +171,7 @@ public:
   void setCausalityFilter(const QList<int> & causalityFilter);
   void setIOFilter(const QList<int> & ioFilter);
 protected:
-  virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
   QList<int> variabilityFilter_;
@@ -211,15 +211,15 @@ public:
   explicit TreeModel(const QString &data, QObject *parent = 0);
   ~TreeModel();
 
-  QVariant data(const QModelIndex &index, int role) const;
-  Qt::ItemFlags flags(const QModelIndex &index) const;
+  QVariant data(const QModelIndex &index, int role) const override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
   QVariant headerData(int section, Qt::Orientation orientation,
-                      int role = Qt::DisplayRole) const;
+                      int role = Qt::DisplayRole) const override;
   QModelIndex index(int row, int column,
-                    const QModelIndex &parent = QModelIndex()) const;
-  QModelIndex parent(const QModelIndex &index) const;
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  int columnCount(const QModelIndex &parent = QModelIndex()) const;
+                    const QModelIndex &parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex &index) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
   void setVariableNames(const OT::Description & variableNames);
 private:
@@ -260,7 +260,7 @@ public:
   }
 
 private:
-  virtual void mousePressEvent(QMouseEvent *event)
+  void mousePressEvent(QMouseEvent *event) override
   {
     QModelIndex item = indexAt(event->pos());
     bool selected = selectionModel()->isSelected(indexAt(event->pos()));
