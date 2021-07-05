@@ -210,6 +210,22 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
       code << ", ";
   }
   code << "\n";
+
+  // save values because setCode drops renamed variables
+  std::map<String, Scalar> valueMap;
+  for(UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
+  {
+    const String varName(inputNames[i]);
+    if (hasInputNamed(varName))
+      valueMap[varName] = getInputByName(varName).getValue();
+  }
+  for(UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
+  {
+    const String varName(outputNames[i]);
+    if (hasOutputNamed(varName))
+      valueMap[varName] = getOutputByName(varName).getValue();
+  }
+
   setCode(code);
 
   // Variable names with dots have changed: restore original names
@@ -220,6 +236,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     if (newName != oldName)
     {
       getInputByName(newName).setName(oldName);
+      getInputByName(oldName).setValue(valueMap[oldName]);// restore lost value
     }
   }
   for(UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
@@ -229,6 +246,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     if (newName != oldName)
     {
       getOutputByName(newName).setName(oldName);
+      getOutputByName(oldName).setValue(valueMap[oldName]);// restore lost value
     }
   }
 }
