@@ -717,6 +717,7 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       // FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
       if ((inputOutput == 0) && (causality == 2)) return false;// cannot disable an input
       if ((inputOutput == 1) && (causality == 3)) return false;// cannot turn an output to input
+      if ((inputOutput == 1) && (causality == 1)) return false;// cannot turn a calculated input to input
       if ((inputOutput == 1) && (causality == 4)) return false;// cannot turn a local to input
       if ((inputOutput == 2) && (causality == 2)) return false;// cannot turn an input to output
       if ((inputOutput == 2) && (causality == 0)) return false;// cannot turn a parameter to output
