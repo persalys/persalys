@@ -150,7 +150,7 @@ RUN git clone https://github.com/openturns/openturns.git && cd openturns && git 
       -DUSE_SPHINX=OFF -DCMINPACK_LIBRARIES=cminpack::cminpack . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.9 \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.11 \
  && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . \
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
