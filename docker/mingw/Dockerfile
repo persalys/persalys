@@ -14,6 +14,8 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
   && git cherry-pick ad2aa99217ba1cde1b0cadb00ebb0766b4e5f4d6 \
   # PR1766: Path: Dont use dladdr on win32
   && git cherry-pick 657359b318d6ddf57a20d7b556d9441c6f2b48fd \
+  # PR1802: Dlib: Fix build with clang
+  && git cherry-pick ce334848c4a8eb4cd47b2186627b15d379a143ee --strategy-option ours \
   && ${ARCH}-w64-mingw32-cmake \
   -DCMINPACK_LIBRARIES="cminpack::cminpack" \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
