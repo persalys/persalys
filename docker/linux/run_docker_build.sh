@@ -16,6 +16,7 @@ cmake \
   -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
   -DSPHINX_FLAGS="-W -T -j8" \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr -DCMAKE_INSTALL_LIBDIR=lib \
+  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so \
   /io
 make install
 make tests
@@ -72,7 +73,7 @@ cp -v /usr/lib64/atlas/lib*.so.3 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libpng15.so.15 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libjpeg.so.62 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libicu*.so.50 persalys.AppDir/usr/lib
-cp -v /usr/lib64/libxcb-xinerama.so.0 /usr/lib64/libxcb-xinput.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib64/libxcb-*.so.[0-9] persalys.AppDir/usr/lib && rm persalys.AppDir/usr/lib/libxcb-dri3.so.0
 
 # python
 sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
@@ -88,6 +89,7 @@ do
 done
 cp -v /usr/local/lib/libtbb.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libdlib*.0 persalys.AppDir/usr/lib
+cp -v /usr/local/lib64/libglog.so.0 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libboost* persalys.AppDir/usr/lib
 cp -rv /usr/local/etc/ persalys.AppDir/etc
 
@@ -116,6 +118,7 @@ cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 persal
 cp -v /usr/local/bin/omc persalys.AppDir/usr/bin
 cp -v /usr/local/lib/libsundials* persalys.AppDir/usr/lib
 
+LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/lib/plugins/platforms/libqxcb.so
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys
 
 appimagetool -v persalys.AppDir persalys-`cat /io/VERSION`-`uname -p`.AppImage
