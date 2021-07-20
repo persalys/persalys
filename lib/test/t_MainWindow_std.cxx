@@ -226,7 +226,7 @@ private slots:
     QDockWidget * consoleDockWidget = mainWindow_->findChild<QDockWidget*>();
     QTextEdit * console = consoleDockWidget->findChild<QTextEdit*>();
     std::cout<<"Python console Message = "<<console->toPlainText().toStdString()<<std::endl;
-    QVERIFY2(console->toPlainText().toStdString() == ">>> exec(open(u\"test_field_analyses_exported.py\", encoding=\"utf-8\").read())\n>>> ", "wrong message");
+    QVERIFY2(console->toPlainText().toStdString() == ">>> __file__ = \"test_field_analyses_exported.py\"; exec(open(u\"test_field_analyses_exported.py\", encoding=\"utf-8\").read())\n>>> ", "wrong message");
     QVERIFY(treeViewModel_->rowCount() == 1);
 
     studyItem = static_cast<StudyItem*>(treeViewModel_->item(0));

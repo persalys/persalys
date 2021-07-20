@@ -315,7 +315,7 @@ void StudyManager::importPythonScript(const QString &fileToImport)
     }
     else
     {
-      const QString command("exec(open(u\"" + fileName.toUtf8() + "\", encoding=\"utf-8\").read())");
+      const QString command("__file__ = \"" + fileName.toUtf8() + "\"; exec(open(u\"" + fileName.toUtf8() + "\", encoding=\"utf-8\").read())");
       emit commandExecutionRequested(command);
     }
   }
