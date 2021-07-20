@@ -21,6 +21,7 @@
 #include "persalys/CustomScaleDraw.hxx"
 
 #include <QString>
+#include <qwt_text.h>
 
 namespace PERSALYS
 {

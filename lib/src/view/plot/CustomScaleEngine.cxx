@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include "qwt_math.h"
+#include "qwt_interval.h"
 
 namespace PERSALYS
 {
