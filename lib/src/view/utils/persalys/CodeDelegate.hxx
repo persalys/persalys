@@ -46,9 +46,9 @@ signals:
   void codeEdited(QWidget * QWidget);
 
 protected:
-  virtual void keyPressEvent(QKeyEvent *e) override;
-  virtual void mousePressEvent(QMouseEvent *e) override;
-  virtual void focusOutEvent(QFocusEvent *event) override;
+  void keyPressEvent(QKeyEvent *e) override;
+  void mousePressEvent(QMouseEvent *e) override;
+  void focusOutEvent(QFocusEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
 
 private  slots:
