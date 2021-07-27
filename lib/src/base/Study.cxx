@@ -153,10 +153,6 @@ void Study::Remove(const Study& study)
 
 Study Study::Open(const String & xmlFileName)
 {
-//   boost::filesystem::path::imbue(std::locale(std::locale(), new std::codecvt_utf8_utf16<wchar_t>()));
-//   boost::filesystem::path h5FileName(xmlFileName);
-//   h5FileName.replace_extension(".h5");
-//   if(boost::filesystem::exists(h5FileName))
   OT::Study study;
   Study openedStudy;
   try {
@@ -165,6 +161,21 @@ Study Study::Open(const String & xmlFileName)
     study.fillObject("aStudy", openedStudy);
   }
   catch (Exception &) {
+    // if setting XMLH5SM fails, it may be due to missing H5 file or pure XML study
+    // therefore, XML file is scrutinised to find any H5 dataset
+    Pointer<XMLDoc> doc = new XMLDoc(xmlFileName);
+    XML::Node root = XML::GetRootNode(*doc);
+    XML::Node node = XML::GetFirstChild(root);
+    // loop over all xml nodes
+    while( node ) {
+      std::regex h5dataset(".+\\.h5\\:\\/[0-9]+");
+      OT::String nodeVal = XML::GetNodeValue(XML::FindElementByName(node, XML_STMGR::string_tag::Get() ));
+      // if H5 DS is found, throw exception
+      if (std::regex_match(nodeVal, h5dataset))
+        throw OT::StudyFileParsingException(HERE) << "Found a HDF5 dataset in study but HDF5 file could not be found";
+      node = XML::GetNextNode(node);
+    }
+    // all nodes have been swept, no H5 DS found, assuming pure XML study
     LOGWARN("Fallback to XML-only format");
     study.setStorageManager(XMLStorageManager(xmlFileName));
     study.load();
