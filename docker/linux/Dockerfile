@@ -131,7 +131,7 @@ RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.2/submodule
 RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.2/submodules/qtwayland-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.2 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
-RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.6.tar.bz2 | tar xj && cd qwt-6.1.6 \
+RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj && cd qwt-6.2.0 \
  && sed -i "s|QWT_INSTALL_PREFIX    = /usr/local/qwt-\$\$QWT_VERSION|QWT_INSTALL_PREFIX = /usr/local|g" qwtconfig.pri \
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
