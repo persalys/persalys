@@ -108,10 +108,7 @@ ContourPlot::ContourPlot(const Collection<Drawable> &drawables, QWidget *parent)
 void ContourPlot::updateContour(const Distribution &distribution, const bool isPDF)
 {
   if (distribution.getDimension() != 2)
-  {
-    qDebug() << "In plotContour: distribution dimension must be 2";
-    return;
-  }
+    throw InvalidArgumentException(HERE)<< "In plotContour: distribution dimension must be 2";
 
   // plot
   if (isPDF)
@@ -129,10 +126,7 @@ void ContourPlot::plotContour(const Collection<Drawable>& drawables,
   // contour
   Contour * contour = dynamic_cast<Contour*>(drawables[drawableIndex].getImplementation().get());
   if (!contour)
-  {
-    qDebug() << "In plotContour: the drawable is not a Contour";
-    return;
-  }
+    throw InvalidArgumentException(HERE)<< "In plotContour: the drawable is not a Contour";
 
   // spectrogram
   QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;
