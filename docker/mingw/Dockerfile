@@ -30,5 +30,5 @@ RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp
 # fake otfmi
 RUN echo "__version__= '0.0'" > /tmp/otfmi.py && sudo mv /tmp/otfmi.py ${MINGW_PREFIX}/lib/python${PYMAJMIN}/otfmi.py
 
-# https://bugreports.qt.io/browse/QTBUG-80578
+# https://bugreports.qt.io/browse/QTBUG-94790
 RUN sudo sed -i 's|#ifndef __TBB_profiling_H|#if !defined(__TBB_profiling_H) \&\& !defined(Q_MOC_RUN)|g' ${MINGW_PREFIX}/include/tbb/tbb_profiling.h || :
