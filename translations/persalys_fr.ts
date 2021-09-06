@@ -882,7 +882,7 @@
         <translation>corrélation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/ContourPlot.cxx" line="178"/>
+        <location filename="../lib/src/view/plot/ContourPlot.cxx" line="172"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
@@ -1887,38 +1887,49 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="594"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="627"/>
         <source>Unknown</source>
         <translation>Inconnue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="609"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="636"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="612"/>
+        <source>Calculated parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="615"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="645"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="612"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="609"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="615"/>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="639"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="618"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="648"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="618"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="621"/>
         <source>Local</source>
         <translation>Locale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="633"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="624"/>
+        <source>Independent</source>
+        <translation type="unfinished">Indépendante</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="642"/>
         <source>Disabled</source>
         <translation>Desactivé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="837"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="847"/>
         <source>parameter:%1, input:%2, output:%3, local:%4</source>
         <translation>paramètre :%1, entrée : %2, sortie : %3, locale : %4</translation>
     </message>
@@ -3184,7 +3195,7 @@ centrale</translation>
         <translation>Creux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="138"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="131"/>
         <source>Design of experiments size too small : %1. It must be greater or equal to C(degree+nbInputs, degree) = %2</source>
         <translation>La taille du plan d&apos;expériences est trop petite : %1. Elle doit être supérieure ou égale à C(degree+nbInputs, degree) = %2</translation>
     </message>
@@ -3398,6 +3409,11 @@ centrale</translation>
 orientation</source>
         <translation>Orientation
 des étiquettes</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="114"/>
+        <source>Slanting</source>
+        <translation>Oblique</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/GraphConfigurationWidget.cxx" line="130"/>
@@ -4124,8 +4140,8 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/KrigingPage.cxx" line="126"/>
-        <location filename="../lib/src/view/KrigingPage.cxx" line="244"/>
-        <location filename="../lib/src/view/KrigingPage.cxx" line="246"/>
+        <location filename="../lib/src/view/KrigingPage.cxx" line="237"/>
+        <location filename="../lib/src/view/KrigingPage.cxx" line="239"/>
         <source>Scale</source>
         <translation>Échelle</translation>
     </message>
@@ -4135,7 +4151,7 @@ bayésien (BIC)</translation>
         <translation>Amplitude</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/KrigingPage.cxx" line="244"/>
+        <location filename="../lib/src/view/KrigingPage.cxx" line="237"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
@@ -5449,17 +5465,13 @@ ou interaction</translation>
         <translation>Tous</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="116"/>
-        <source>Local/Global</source>
-        <translation>Local/Global</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="70"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="62"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="116"/>
         <source>Locality</source>
         <translation>Localité</translation>
     </message>
@@ -6100,51 +6112,51 @@ ou interaction</translation>
         <translation>Supprimer le modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="175"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="176"/>
         <source>The physical model must have at least a stochastic input and at least one selected output.</source>
         <translation>Le modèle physique doit avoir au moins une variable d&apos;entrée stochastique et au moins une variable de sortie sélectionnée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="179"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="180"/>
         <source>limitState_</source>
         <translation>étatLimite_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="189"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="190"/>
         <source>The physical model must have at least two inputs and at least one selected output.</source>
         <translation>Le modèle physique doit avoir au moins deux entrées et au moins une sortie sélectionnée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="193"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="194"/>
         <source>observations_</source>
         <translation>observations_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="215"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="216"/>
         <source>We have not found a design of experiments.
 </source>
         <translation>Nous n&apos;avons pas trouvé de plan d&apos;expériences.
 </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="348"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="349"/>
         <source>The physical model must have inputs.</source>
         <translation>Le modèle physique doit avoir des entrées.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="234"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="235"/>
         <source>We have not found a design of experiments with an output sample.
 </source>
         <translation>Nous n&apos;avons pas trouvé de plan d&apos;expériences avec un échantillon de sortie.
 </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="281"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="282"/>
         <source>copy</source>
         <translation>copie</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="292"/>
+        <location filename="../lib/src/model/PhysicalModelDiagramItem.cxx" line="293"/>
         <source>Can not remove a physical model when an analysis is running.</source>
         <translation>Impossible de supprimer un modèle physique lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
@@ -6656,38 +6668,38 @@ métamodèle</translation>
         <translation>Fonction de survie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="550"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="556"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="565"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="573"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="588"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="594"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="602"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="608"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="553"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="559"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="568"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="576"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="591"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="597"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="605"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="611"/>
         <source>scatterplot</source>
         <translation>diagrammeDispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="552"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="558"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="569"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="577"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="590"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="596"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="604"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="610"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="555"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="561"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="572"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="580"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="593"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="599"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="607"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="613"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="552"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="558"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="569"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="577"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="590"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="596"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="604"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="610"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="555"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="561"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="572"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="580"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="593"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="599"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="607"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="613"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
@@ -8743,7 +8755,7 @@ de la fonction</translation>
 <context>
     <name>PERSALYS::TreeModel</name>
     <message>
-        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="994"/>
+        <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="1004"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>

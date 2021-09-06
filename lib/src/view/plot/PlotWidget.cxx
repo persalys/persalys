@@ -501,9 +501,12 @@ void PlotWidget::replot()
 void PlotWidget::setXLabelOrientation(int orientation)
 {
   // orientation == 0 : Horizontal
-  // orientation == 1 : Vertical
+  // orientation == 1 : Slanting
+  // orientation == 2 : Vertical
+
   setAxisLabelAlignment(QwtPlot::xBottom, orientation == 0 ? Qt::AlignBottom : Qt::AlignLeft);
-  setAxisLabelRotation(QwtPlot::xBottom, orientation == 0 ? 0 : -90);
+  const Scalar angle = orientation * -45.;
+  setAxisLabelRotation(QwtPlot::xBottom, angle);
 }
 
 

@@ -111,7 +111,7 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
         QHBoxLayout * hLayout = new QHBoxLayout;
         label = new QLabel(tr("Labels\norientation"));
         QComboBox * labelOrientation = new QComboBox;
-        labelOrientation->addItems(QStringList() << tr("Horizontal") << tr("Vertical"));
+        labelOrientation->addItems(QStringList() << tr("Horizontal") << tr("Slanting") << tr("Vertical"));
         hLayout->addWidget(label);
         hLayout->addWidget(labelOrientation, 1);
         gridLayoutTab->addLayout(hLayout, 3, 0, 1, 2);
