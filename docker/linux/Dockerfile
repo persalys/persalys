@@ -159,8 +159,8 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
 RUN pip install git+git://github.com/openturns/otfmi.git@v0.11 && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone --recursive https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.17.0 \
- && git submodule sync && git submodule update --init --recursive \
+RUN git clone https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.17.0 \
+ && git submodule init && git submodule sync --recursive && git submodule -q update --init --recursive \
  && curl -L https://github.com/OpenModelica/OpenModelica/pull/7327.patch | patch -p1 \
  && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd ../.. && rm -r OpenModelica*
