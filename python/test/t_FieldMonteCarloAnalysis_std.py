@@ -39,7 +39,7 @@ print(mcAnalysis1)
 mcAnalysis1.run()
 result1 = mcAnalysis1.getResult()
 print("result=", result1)
-print("eigen values=", result1.getKarhunenLoeveResults()[0].getEigenValues(), result1.getKarhunenLoeveResults()[1].getEigenValues())
+print("eigen values=", result1.getKarhunenLoeveResults()[0].getEigenvalues(), result1.getKarhunenLoeveResults()[1].getEigenvalues())
 
 PhysicalModel_1.setParallel(True)
 c.setStochastic(False)
@@ -53,7 +53,7 @@ print(mcAnalysis2)
 
 mcAnalysis2.run()
 result2 = mcAnalysis2.getResult()
-print("eigen values=", result2.getKarhunenLoeveResults()[0].getEigenValues())
+print("eigen values=", result2.getKarhunenLoeveResults()[0].getEigenvalues())
 
 # script
 script = Study_0.getPythonScript()
