@@ -235,7 +235,11 @@ QModelIndex PieChartView::indexAt(const QPoint &point) const
   }
   else
   {
+#if QT_VERSION >= 0x060000
+    double itemHeight = QFontMetrics(font()).height();
+#else
     double itemHeight = QFontMetrics(viewOptions().font).height();
+#endif
     int listItem = int((wy - margin_) / itemHeight);
     int validRow = 0;
 
@@ -290,7 +294,11 @@ QRect PieChartView::itemRect(const QModelIndex &index) const
   switch (index.column())
   {
     case 0:
+#if QT_VERSION >= 0x060000
+      itemHeight = QFontMetrics(font()).height();
+#else
       itemHeight = QFontMetrics(viewOptions().font).height();
+#endif
 
       return QRect(totalSize_,
                    int(margin_ + listItem * itemHeight),
@@ -421,11 +429,14 @@ QModelIndex PieChartView::moveCursor(QAbstractItemView::CursorAction cursorActio
 void PieChartView::draw(QPainter& painter)
 {
   QItemSelectionModel *selections = selectionModel();
-  QStyleOptionViewItem option = viewOptions();
-
-  QBrush background = option.palette.base();
-  QPen foreground(option.palette.color(QPalette::WindowText));
-
+#if QT_VERSION >= 0x060000
+  QBrush background = palette().base();
+  QPen foreground(palette().color(QPalette::WindowText));
+#else
+  QBrush background = viewOptions().palette.base();
+  QPen foreground(viewOptions().palette.color(QPalette::WindowText));
+#endif  
+ 
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(foreground);
 
@@ -480,7 +491,7 @@ void PieChartView::draw(QPainter& painter)
     if (value > 0.0)
     {
       QModelIndex labelIndex = model()->index(row, 0, rootIndex());
-
+      QStyleOptionViewItem option;
       option.rect = visualRect(labelIndex);
       if (selections->isSelected(labelIndex))
         option.state |= QStyle::State_Selected;

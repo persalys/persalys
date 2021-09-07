@@ -13,7 +13,7 @@ ot_add_source_file (PyInterp_Request.cxx)
 # ot_install_header_file (PyInterp_Request.h)
 # ot_install_header_file (PyInterp_Utils.h)
 
-qt5_wrap_cpp (PERSALYS_CONSOLE_MOC_SRCS
+qt_wrap_cpp (PERSALYS_CONSOLE_MOC_SRCS
               PyInterp_Dispatcher.h)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})

@@ -30,7 +30,7 @@ ot_install_header_file ( PlotMatrixWidget.hxx )
 ot_install_header_file ( GraphConfigurationWidget.hxx )
 ot_install_header_file ( PlotMatrixConfigurationWidget.hxx )
 
-qt5_wrap_cpp (PERSALYS_PLOT_MOC_SRCS
+qt_wrap_cpp (PERSALYS_PLOT_MOC_SRCS
               persalys/PlotWidget.hxx
               persalys/ContourPlot.hxx
               persalys/MorrisPlot.hxx

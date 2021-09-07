@@ -29,6 +29,9 @@
 #include <QOpenGLFunctions_3_2_Core>
 #include <QHBoxLayout>
 #include <QOffscreenSurface>
+#if QT_VERSION >= 0x060000
+#include <QOpenGLVersionFunctionsFactory>
+#endif
 
 namespace PERSALYS
 {
@@ -120,7 +123,11 @@ bool SubWindow::SupportsOpenGL_3_2(QStringList & glInfos)
   if (!context.create())
     return false;
 
+#if QT_VERSION >= 0x060000
+  QOpenGLFunctions_3_2_Core *funcs = QOpenGLVersionFunctionsFactory::get<QOpenGLFunctions_3_2_Core>(&context);
+#else
   QOpenGLFunctions_3_2_Core *funcs = context.versionFunctions<QOpenGLFunctions_3_2_Core>();
+#endif
   if (funcs)
   {
     QOffscreenSurface surface;

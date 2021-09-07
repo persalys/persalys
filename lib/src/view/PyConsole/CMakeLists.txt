@@ -14,7 +14,7 @@ ot_add_source_file (PyConsole_Editor.cxx)
 # ot_install_header_file (PyConsole_Interp.h)
 # ot_install_header_file (PyConsole_Request.h)
 
-qt5_wrap_cpp (PERSALYS_CONSOLE_MOC_SRCS
+qt_wrap_cpp (PERSALYS_CONSOLE_MOC_SRCS
               PyConsole_Console.h
               PyConsole_Editor.h)
 

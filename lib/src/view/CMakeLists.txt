@@ -249,7 +249,7 @@ if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningResultWizard.hxx )
 endif ()
 
-qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
+qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/MainWidget.hxx
                                   persalys/Actions.hxx
                                   persalys/ToolBar.hxx
@@ -359,20 +359,20 @@ qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
 
 if (SalomeYACS_FOUND)
   set_source_files_properties (AnalysisWindow.cxx YACSPhysicalModelWindow.cxx PROPERTIES COTIRE_EXCLUDED ON SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
-  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/YACSPhysicalModelWindow.hxx)
+  qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/YACSPhysicalModelWindow.hxx)
 endif ()
 
 if (OTFMI_FOUND)
-  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/FMIPhysicalModelWindow.hxx)
+  qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/FMIPhysicalModelWindow.hxx)
 endif ()
 
 if (OTMORRIS_FOUND)
-  qt5_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningIntroPage.hxx persalys/MorrisPage.hxx persalys/ScreeningAnalysisWizard.hxx persalys/MorrisResultWidget.hxx persalys/MorrisResultWindow.hxx persalys/ScreeningResultWizard.hxx)
+  qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningIntroPage.hxx persalys/MorrisPage.hxx persalys/ScreeningAnalysisWizard.hxx persalys/MorrisResultWidget.hxx persalys/MorrisResultWindow.hxx persalys/ScreeningResultWizard.hxx)
 endif ()
 
 set(RESOURCES ${CMAKE_SOURCE_DIR}/persalys.qrc)
 
-qt5_add_resources (PERSALYS_RESOURCES_RCC ${RESOURCES})
+qt_add_resources (PERSALYS_RESOURCES_RCC ${RESOURCES})
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 include_directories (${PYTHON_INCLUDE_DIRS})

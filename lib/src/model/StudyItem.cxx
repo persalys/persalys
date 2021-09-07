@@ -192,9 +192,7 @@ void StudyItem::exportPythonScript(const QString& filename)
   }
 
   // write file
-  QTextStream out(&file);
-  out.setCodec("UTF-8");
-  out << QString::fromUtf8(study_.getPythonScript().c_str());
+  file.write(study_.getPythonScript().c_str());
   file.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser | QFile::ReadGroup | QFile::ExeGroup | QFile::ReadOther | QFile::ExeOther);
   file.close();
 

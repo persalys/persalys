@@ -76,7 +76,7 @@ ot_install_header_file ( MorrisTableModel.hxx )
 ot_install_header_file ( MorrisResultTableModel.hxx )
 endif ()
 
-qt5_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
+qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/InputTableProbabilisticModel.hxx
                                     persalys/OutputTableModel.hxx
                                     persalys/SampleTableModel.hxx
@@ -112,8 +112,8 @@ qt5_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/FileTools.hxx)
 
 if (OTMORRIS_FOUND)
-  qt5_wrap_cpp (PERSALYS_MODEL_MOC_SRCS persalys/MorrisTableModel.hxx)
-  qt5_wrap_cpp (PERSALYS_MODEL_MOC_SRCS persalys/MorrisResultTableModel.hxx)
+  qt_wrap_cpp (PERSALYS_MODEL_MOC_SRCS persalys/MorrisTableModel.hxx)
+  qt_wrap_cpp (PERSALYS_MODEL_MOC_SRCS persalys/MorrisResultTableModel.hxx)
 endif ()
 
 if (SalomeYACS_FOUND)

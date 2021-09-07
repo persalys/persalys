@@ -51,7 +51,7 @@ CentralTendencyIntroPage::CentralTendencyIntroPage(QWidget* parent)
   QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
 
   methodGroup_ = new QButtonGroup(this);
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SLOT(updateFinalPage()));
+  connect(methodGroup_, SIGNAL(buttonClicked(QAbstractButton *)), this, SLOT(updateFinalPage()));
 
   // Chaos
   QRadioButton * buttonToChooseMethodMC = new QRadioButton(tr("Monte Carlo"));

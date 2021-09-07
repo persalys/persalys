@@ -31,7 +31,10 @@
 #include <QStandardItemModel>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
+
+#if QT_VERSION < 0x060000
 Q_DECLARE_METATYPE(PERSALYS::LimitState)
+#endif
 
 namespace PERSALYS
 {

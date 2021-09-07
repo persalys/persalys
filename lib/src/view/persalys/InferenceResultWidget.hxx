@@ -32,7 +32,9 @@
 #include <QTabWidget>
 #include <QScrollArea>
 
+#if QT_VERSION < 0x060000
 Q_DECLARE_METATYPE(OT::Distribution)
+#endif
 
 namespace PERSALYS
 {

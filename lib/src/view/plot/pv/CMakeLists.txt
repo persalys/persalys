@@ -23,7 +23,7 @@ ot_install_header_file (PVXYChartViewWidget.hxx)
 ot_install_header_file (PVPlotSettingWidget.hxx)
 ot_install_header_file (PVBagChartViewWidget.hxx)
 
-qt5_wrap_cpp (PERSALYS_PLOTPARAVIEW_MOC_SRCS
+qt_wrap_cpp (PERSALYS_PLOTPARAVIEW_MOC_SRCS
               persalys/PVMatrixPlotViewWidget.hxx
               persalys/PVParCooViewWidget.hxx
               persalys/PVSpreadSheetViewWidget.hxx

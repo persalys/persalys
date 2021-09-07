@@ -29,7 +29,9 @@
 #include <QTableView>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
+#if QT_VERSION < 0x060000
 Q_DECLARE_METATYPE(OT::Description)
+#endif
 
 namespace PERSALYS
 {

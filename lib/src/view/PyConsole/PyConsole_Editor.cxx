@@ -633,8 +633,12 @@ void PyConsole_Editor::handleBackTab()
 void PyConsole_Editor::dropEvent( QDropEvent* event )
 {
   // get the initial drop position
+#if QT_VERSION >= 0x060000
+  QPoint pos = event->position().toPoint();
+#else
   QPoint pos = event->pos();
-  QTextCursor aCursor = cursorForPosition( event->pos() );
+#endif
+  QTextCursor aCursor = cursorForPosition( pos );
 
   // if the position is not in the last line move it to the end of the command line
   if ( aCursor.position() < document()->end().previous().position() + promptSize() ) {
@@ -646,8 +650,13 @@ void PyConsole_Editor::dropEvent( QDropEvent* event )
   QDropEvent de( pos,
                  event->possibleActions(),
                  event->mimeData(),
+#if QT_VERSION >= 0x060000
+                 event->buttons(),
+                 event->modifiers(),
+#else
                  event->mouseButtons(),
                  event->keyboardModifiers(),
+#endif
                  event->type() );
   QTextEdit::dropEvent( &de );
 
@@ -1393,7 +1402,7 @@ bool PyConsole_Editor::dump( const QString& fileName )
     if ( file.open( QFile::WriteOnly ) ) {
       QTextStream out( &file );
       for ( int i = 0; i < myHistory.count(); i++ ) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
        	out << myHistory[i] << Qt::endl;
 #else
         out << myHistory[i] << endl;

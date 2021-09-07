@@ -9,6 +9,7 @@ option (USE_OTMORRIS "use otmorris" ON)
 option (USE_SPHINX "use sphinx" ON)
 option (USE_COTIRE "Use cotire for unity builds" OFF)
 option (USE_PARAVIEW "use ParaView" ON)
+set (PERSALYS_QT_VERSION 5 CACHE STRING "Qt version")
 
 # By default, build in Release mode. Must appear before project() command
 if ( NOT DEFINED CMAKE_BUILD_TYPE )
@@ -73,10 +74,22 @@ find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
 
 if (BUILD_GUI)
 
-  find_package (Qt5 COMPONENTS Test Widgets CONFIG)
-  set (QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Test_LIBRARIES})
-  set (CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
-  include_directories (${Qt5Widgets_INCLUDE_DIRS} ${Qt5Test_INCLUDE_DIRS})
+  find_package (Qt${PERSALYS_QT_VERSION} COMPONENTS Widgets Test OpenGL CONFIG)
+  set (QT_LIBRARIES ${Qt${PERSALYS_QT_VERSION}Widgets_LIBRARIES} ${Qt${PERSALYS_QT_VERSION}OpenGL_LIBRARIES} ${Qt${PERSALYS_QT_VERSION}Test_LIBRARIES})
+
+  if (Qt${PERSALYS_QT_VERSION}Widgets_VERSION VERSION_LESS 5.15)
+    macro (qt_wrap_cpp)
+      qt5_wrap_cpp (${ARGN})
+    endmacro ()
+
+    macro (qt_add_resources)
+      qt5_add_resources (${ARGN})
+    endmacro ()
+
+    macro (qt_generate_moc)
+      qt5_generate_moc (${ARGN})
+    endmacro ()
+  endif ()
 
   find_package (Qwt 6 REQUIRED)
 

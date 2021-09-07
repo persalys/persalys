@@ -63,7 +63,7 @@ ot_install_header_file ( EditButtonDelegate.hxx )
 ot_install_header_file ( LinkableItemDelegate.hxx)
 ot_install_header_file ( EditValuesWizard.hxx )
 
-qt5_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
+qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/ListWidgetWithCheckBox.hxx
               persalys/ValueLineEdit.hxx
               persalys/TimeLineEdit.hxx

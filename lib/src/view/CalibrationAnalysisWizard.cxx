@@ -100,7 +100,7 @@ CalibrationIntroPage::CalibrationIntroPage(QWidget * parent)
   methodGroup_->addButton(nonLinearGaussianButton, CalibrationIntroPage::NonlinearGaussian);
   methodLayout->addWidget(nonLinearGaussianButton);
 
-  connect(methodGroup_, SIGNAL(buttonClicked(int)), this, SIGNAL(methodChanged(int)));
+  connect(methodGroup_, static_cast<void(QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked), [=](QAbstractButton * button){emit methodChanged(methodGroup_->id(button));});
 
   pageLayout->addWidget(methodBox);
 }
