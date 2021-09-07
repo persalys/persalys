@@ -43,7 +43,7 @@ cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
 rm Lib/site-packages/openturns/{libvtk,libboost,libLLVM,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
-curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.8.10/download/win-64/pyfmi-2.8.10-py38hcb5f9af_0.tar.bz2 | tar xj
+curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.9/download/win-64/pyfmi-2.9-py38h6f4d8f0_0.tar.bz2 | tar xj
 curl -fSsL https://anaconda.org/conda-forge/assimulo/3.2.5/download/win-64/assimulo-3.2.5-py38h63ee3e3_0.tar.bz2 | tar xj
 cd Lib
 curl -fSsL https://anaconda.org/conda-forge/otfmi/0.11/download/noarch/otfmi-0.11-pyh6c4a22f_0.tar.bz2 | tar xj
