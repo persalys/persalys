@@ -49,6 +49,7 @@ cd Lib
 curl -fSsL https://anaconda.org/conda-forge/otfmi/0.11/download/noarch/otfmi-0.11-pyh6c4a22f_0.tar.bz2 | tar xj
 curl -fSsL https://anaconda.org/conda-forge/dill/0.3.3/download/noarch/dill-0.3.3-pyhd8ed1ab_0.tar.bz2 | tar xj
 cd site-packages
+curl -L https://github.com/openturns/otfmi/commit/dc144b9b86ed9464c55edae039e877dd354ca022.patch | patch -p1
 curl -fsSL https://pypi.io/packages/py2.py3/p/pip/pip-20.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
