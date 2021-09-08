@@ -93,33 +93,39 @@ void FMUInfo::initialize()
 
   PyObject * get_name_variableMethod = PyDict_GetItemString(otfmi_fmiDict, "get_name_variable");
   ScopedPyObjectPointer varList(PyObject_CallFunctionObjArgs(get_name_variableMethod, model.get(), NULL)); // new reference
+  handleException();
   variableNames_ = convert<_PySequence_, Description>(varList.get());
 
   PyObject * get_causalityMethod = PyDict_GetItemString(otfmi_fmiDict, "get_causality");
   ScopedPyObjectPointer causalityList(PyObject_CallFunctionObjArgs(get_causalityMethod, model.get(), NULL)); // new reference
+  handleException();
   causality_ = convert<_PySequence_, Indices>(causalityList.get());
   if (variableNames_.getSize() != causality_.getSize())
-  {
     throw InternalException(HERE) << "variableNames_.getSize() != causality_.getSize()";
-  }
 
   PyObject * get_variabilityMethod = PyDict_GetItemString(otfmi_fmiDict, "get_variability");
   ScopedPyObjectPointer variabilityList(PyObject_CallFunctionObjArgs(get_variabilityMethod, model.get(), NULL)); // new reference
+  handleException();
   variability_ = convert<_PySequence_, Indices>(variabilityList.get());
   if (variableNames_.getSize() != variability_.getSize())
-  {
     throw InternalException(HERE) << "variableNames_.getSize() != variability_.getSize()";
-  }
 
   PyObject * get_start_valueMethod = PyDict_GetItemString(otfmi_fmiDict, "get_start_value");
   ScopedPyObjectPointer startDict(PyObject_CallFunctionObjArgs(get_start_valueMethod, model.get(), NULL)); // new reference
+  handleException();
   ScopedPyObjectPointer startKeys(PyDict_Keys(startDict.get())); // new reference
   ScopedPyObjectPointer startValues(PyDict_Values(startDict.get())); // new reference
   startKeys_ = convert<_PySequence_, Description>(startKeys.get());
-  startValues_ = convert<_PySequence_, Point>(startValues.get());
-  if (startKeys_.getSize() != startValues_.getSize())
+  startValues_.resize(startKeys_.getSize());
+  for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++ i)
   {
-    throw InternalException(HERE) << "startKeys_.getSize() != startValues_.getSize()";
+    PyObject * elt = PySequence_Fast_GET_ITEM(startValues.get(), i);
+    if (PyFloat_Check(elt))
+      startValues_[i] = PyFloat_AsDouble(elt);
+    else if (PyLong_Check(elt))
+      startValues_[i] = PyLong_AsLongLong(elt);
+    else
+      throw InternalException(HERE) << "Invalid start value type (must be float/int)";
   }
 
   ScopedPyObjectPointer authorStr(PyObject_CallMethod(model.get(), const_cast<char*>("get_author"), NULL)); // new reference
