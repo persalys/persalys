@@ -49,7 +49,20 @@ ParametersTableView::ParametersTableView(const QStringList names,             //
         tableModel->setNotEditableHeaderItem(i, 0, names[i]);
       else
         tableModel->setNotEditableItem(i, 0, names[i]);
-      tableModel->setNotEditableItem(i, 1, values[i]);
+      const int length = 100;
+      int pos = 0;
+      QString value = values[i];
+      // Check if string is long and single lined
+      if(values[i].size() > length && !value.contains('\n')) {
+        while(pos < values[i].size()) {
+          pos += length;
+          // add new line
+          if(pos < values[i].size())
+            value.insert(value.indexOf(QString(','), pos)+1, '\n');
+        }
+        value.replace(QString(","), QString(", "));
+      }
+      tableModel->setNotEditableItem(i, 1, value);
     }
 
     // show grid
