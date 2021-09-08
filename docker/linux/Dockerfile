@@ -29,7 +29,7 @@ RUN curl -fSsL https://github.com/swig/swig/archive/v4.0.2.tar.gz | tar xz && cd
  && ./autogen.sh && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # cmake
-RUN curl -fSsL https://cmake.org/files/v3.19/cmake-3.19.4.tar.gz | tar xz && cd cmake-3.19.4 \
+RUN curl -fSsL https://cmake.org/files/v3.21/cmake-3.21.2.tar.gz | tar xz && cd cmake-3.21.2 \
  && ./bootstrap --parallel=8 -- && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # ipopt
@@ -56,7 +56,7 @@ RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.0.tar.gz | tar xz 
 RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.0/src/hdf5-1.12.0.tar.bz2 | tar xj && cd hdf5-1.12.0 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make && make install && cd - && rm -r hdf5*
 
 # eigen
-RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.tar.bz2 | tar xj && cd eigen-3.3.9 \
+RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen-3.4.0 \
  && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install && cd - && rm -r eigen*
 
 # spectra
@@ -73,7 +73,7 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.0.0.tar.gz
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r tbb*
 
 # appimagetool
-RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/12/appimagetool-x86_64.AppImage \
+RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
  && chmod a+rx appimagetool-x86_64.AppImage \
  && ./appimagetool-x86_64.AppImage --appimage-extract \
  && chmod -R a+rx squashfs-root \
@@ -86,10 +86,10 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.8.10/Python-3.8.10.tgz | tar 
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython
-RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.19.4.tar.gz | tar xz && cd numpy-1.19.4 \
+RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11
+RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.20.3.tar.gz | tar xz && cd numpy-1.20.3 \
  && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
-RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.5.4.tar.gz | tar xz && cd scipy-1.5.4 \
+RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.6.3.tar.gz | tar xz && cd scipy-1.6.3 \
  && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
 RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
@@ -97,8 +97,7 @@ RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t -DCMAKE_INSTALL_LIBDIR=lib .. \
- && make install > /dev/null 2>&1 \
- && cd ../.. && rm -r sundials*
+ && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
 RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.3.tar.gz | tar xz && cd fmi-library-2.3 \
@@ -161,6 +160,7 @@ RUN pip install git+git://github.com/openturns/otfmi.git@v0.11 && python3 -c "im
 RUN git clone https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.17.0 \
  && git submodule init && git submodule sync --recursive && git submodule -q update --init --recursive \
  && curl -L https://github.com/OpenModelica/OpenModelica/pull/7327.patch | patch -p1 \
+ && curl -L https://github.com/OpenModelica/OpenModelica/pull/7445.patch | patch -p1 \
  && cd OMCompiler && autoconf && CFLAGS="-fno-tree-vrp" ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd ../.. && rm -r OpenModelica*
 
