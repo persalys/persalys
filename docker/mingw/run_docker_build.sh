@@ -6,6 +6,7 @@ uid=$1
 gid=$2
 
 cd /tmp
+sudo pacman -Sy mingw-w64-mesa --noconfirm
 
 mkdir -p build && cd build
 MOD_PREFIX=$PWD/install
