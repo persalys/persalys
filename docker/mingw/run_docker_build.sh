@@ -46,7 +46,7 @@ cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
 curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.9/download/win-64/pyfmi-2.9-py38h6f4d8f0_0.tar.bz2 | tar xj
 curl -fSsL https://anaconda.org/conda-forge/assimulo/3.2.5/download/win-64/assimulo-3.2.5-py38h63ee3e3_0.tar.bz2 | tar xj
 cd Lib
-curl -fSsL https://anaconda.org/conda-forge/otfmi/0.13/download/noarch/otfmi-0.13-pyh6c4a22f_0.tar.bz2 | tar xj
+curl -fSsL https://anaconda.org/conda-forge/otfmi/0.14/download/noarch/otfmi-0.14-pyh6c4a22f_0.tar.bz2 | tar xj
 curl -fSsL https://anaconda.org/conda-forge/dill/0.3.3/download/noarch/dill-0.3.3-pyhd8ed1ab_0.tar.bz2 | tar xj
 cd site-packages
 curl -fsSL https://pypi.io/packages/py2.py3/p/pip/pip-20.2-py2.py3-none-any.whl | bsdtar -xf-

@@ -154,7 +154,7 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip install git+git://github.com/openturns/otfmi.git@v0.13 && python3 -c "import otfmi"
+RUN pip install git+git://github.com/openturns/otfmi.git@v0.14 && python3 -c "import otfmi"
 
 # openmodelica
 RUN git clone https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica && git checkout v1.17.0 \
