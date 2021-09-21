@@ -5,7 +5,7 @@ set -x -e
 uid=$1
 gid=$2
 
-cd /usr/local/lib/python3.8/site-packages && curl -L https://github.com/openturns/otfmi/commit/dc144b9b86ed9464c55edae039e877dd354ca022.patch | sudo patch -p1
+sudo pip install git+git://github.com/openturns/otfmi.git@v0.14
 
 export MAKEFLAGS="-j8"
 cd /tmp
