@@ -2,7 +2,8 @@ FROM centos:7
 MAINTAINER jschueller
 
 # utils
-RUN yum -y install wget git patch zip unzip bzip2 bsdtar perl subversion gettext autoconf automake libtool sudo bison flex make which file \
+RUN yum -y install epel-release centos-release-scl \
+ && yum -y install wget git patch zip unzip bzip2 bsdtar perl subversion gettext autoconf automake libtool sudo bison flex make which file \
   pcre-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel \
   zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel gpg libffi-devel openssl-devel \
   libX11-devel libXt-devel libXext-devel libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel \
@@ -10,27 +11,20 @@ RUN yum -y install wget git patch zip unzip bzip2 bsdtar perl subversion gettext
   freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel \
   xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xorg-x11-util-macros \
   java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel curl-devel \
-  texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin tex-preview \
+  texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin tex-preview pandoc dvisvgm \
+  devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils cmake3 \
+ && ln -s /usr/bin/cmake3 /usr/bin/cmake && ln -s /usr/bin/ctest3 /usr/bin/ctest \
+ && sed -i "s|override_install_langs|#override_install_langs|g" /etc/yum.conf && yum -y reinstall glibc-common && localedef -i en_US -f UTF-8 C.UTF-8 \
  && mkdir -p /usr/share/texlive/texmf-local/tex/latex/ && cd /usr/share/texlive/texmf-local/tex/latex \
- && curl -fsSL http://mirrors.ctan.org/macros/latex/contrib/anyfontsize.zip | bsdtar -xf- && mktexlsr \
- && yum -y install epel-release && yum -y install pandoc dvisvgm \
- && yum -y install centos-release-scl && yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-gcc-gfortran devtoolset-8-binutils
+ && curl -fsSL http://mirrors.ctan.org/macros/latex/contrib/anyfontsize.zip | bsdtar -xf- && mktexlsr
 
-# devtoolset
-ENV PATH=/opt/rh/devtoolset-8/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
-
-# locale
-RUN sed -i "s|override_install_langs|#override_install_langs|g" /etc/yum.conf && yum -y reinstall glibc-common && localedef -i en_US -f UTF-8 C.UTF-8
 ENV LANG="en_US.UTF-8" MAKEFLAGS="-j8"
+ENV PATH=/opt/rh/devtoolset-8/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib
 WORKDIR /usr/local/src
 
 # swig
 RUN curl -fSsL https://github.com/swig/swig/archive/v4.0.2.tar.gz | tar xz && cd swig-4.0.2 \
  && ./autogen.sh && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
-
-# cmake
-RUN curl -fSsL https://cmake.org/files/v3.21/cmake-3.21.2.tar.gz | tar xz && cd cmake-3.21.2 \
- && ./bootstrap --parallel=8 -- && make install > /dev/null 2>&1 && cd - && rm -r cmake*
 
 # ipopt
 RUN curl -fsSL https://bitbucket.org/petsc/pkg-metis/get/v5.1.0-p10.tar.bz2 | tar xj && cd petsc-pkg-metis-* && make config shared=1 && make install && cd - && rm -r petsc*
