@@ -27,41 +27,41 @@ RUN curl -fSsL https://github.com/swig/swig/archive/v4.0.2.tar.gz | tar xz && cd
  && ./autogen.sh && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
-RUN curl -fsSL https://bitbucket.org/petsc/pkg-metis/get/v5.1.0-p10.tar.bz2 | tar xj && cd petsc-pkg-metis-* && make config shared=1 && make install && cd - && rm -r petsc*
-RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/1.6.2.tar.gz | tar xz && cd ThirdParty-Mumps-releases-1.6.2 && ./get.Mumps && ./configure --prefix=/usr/local && make && make install && cd - && rm -r ThirdParty*
-RUN curl -fsSL http://www.coin-or.org/download/source/Ipopt/Ipopt-3.13.4.tar.gz | tar xz && cd Ipopt-releases-3.13.4 && ./configure --prefix=/usr/local --without-hsl --disable-java && make && make install && cd - && rm -r Ipopt*
+RUN curl -fsSL https://bitbucket.org/petsc/pkg-metis/get/v5.1.0-p10.tar.bz2 | tar xj && cd petsc-pkg-metis-* && make config shared=1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r petsc*
+RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/1.6.2.tar.gz | tar xz && cd ThirdParty-Mumps-releases-1.6.2 && ./get.Mumps && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
+RUN curl -fsSL http://www.coin-or.org/download/source/Ipopt/Ipopt-3.13.4.tar.gz | tar xz && cd Ipopt-releases-3.13.4 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
-RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make && make install && cd - && rm -r Bonmin*
+RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
 
 # dlib
 RUN curl -L https://github.com/davisking/dlib/archive/v19.22.tar.gz | tar xz && cd dlib-19.22 \
- && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install && cd - && rm -r dlib*
+ && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install > /dev/null 2>&1 && cd - && rm -r dlib*
 
 # cminpack
 RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.8.tar.gz | tar xz && cd cminpack-1.3.8 \
- && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d . && make install && cd - && rm -r cminpack*
+ && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
 RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.0.tar.gz | tar xz && cd nlopt-2.7.0 \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
-RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.0/src/hdf5-1.12.0.tar.bz2 | tar xj && cd hdf5-1.12.0 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make && make install && cd - && rm -r hdf5*
+RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.0/src/hdf5-1.12.0.tar.bz2 | tar xj && cd hdf5-1.12.0 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen-3.4.0 \
- && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install && cd - && rm -r eigen*
+ && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install > /dev/null 2>&1 && cd - && rm -r eigen*
 
 # spectra
-RUN curl -fsSL https://github.com/yixuan/spectra/archive/v0.9.0.tar.gz | tar xz && cd spectra-0.9.0 && cmake . && make install && cd - && rm -r spectra*
+RUN curl -fsSL https://github.com/yixuan/spectra/archive/v0.9.0.tar.gz | tar xz && cd spectra-0.9.0 && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
 
 # glog
-RUN curl -fsSL https://github.com/google/glog/archive/v0.5.0.tar.gz | tar xz && cd glog-0.5.0 && cmake . && make install && cd - && rm -rf glog*
+RUN curl -fsSL https://github.com/google/glog/archive/v0.5.0.tar.gz | tar xz && cd glog-0.5.0 && cmake . && make install > /dev/null 2>&1 && cd - && rm -rf glog*
 
 # ceres
 RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.0.0.tar.gz | tar xz && cd ceres-solver-2.0.0 \
- && cmake -DLIB_SUFFIX="" -DBUILD_SHARED_LIBS=ON . && make install && cd - && rm -r ceres*
+ && cmake -DLIB_SUFFIX="" -DBUILD_SHARED_LIBS=ON . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r tbb*
@@ -82,9 +82,9 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.8.10/Python-3.8.10.tgz | tar 
 # pip
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11
 RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.20.3.tar.gz | tar xz && cd numpy-1.20.3 \
- && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
+ && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
 RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.6.3.tar.gz | tar xz && cd scipy-1.6.3 \
- && python3 setup.py build ${MAKEFLAGS} && python3 setup.py install && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
+ && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
 RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
 # sundials
@@ -99,12 +99,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.3.tar.
 
 # assimulo
 RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.5.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.5 \
- && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 \
+ && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.tar.gz | tar xz && cd PyFMI-PyFMI-2.9 \
- && python3 setup.py install --fmil-home=/usr/local && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
+ && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
 RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.bz2 | tar xj && cd boost_1_76_0 \
