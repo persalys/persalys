@@ -1,5 +1,8 @@
 #include "persalys/PVSpreadSheetViewWidget.hxx"
 
+#include "persalys/ExportableTableView.hxx"
+#include "persalys/SampleTableModel.hxx"
+
 #include <pqSaveDataReaction.h>
 #include <pqActiveObjects.h>
 #include <pqApplicationCore.h>
@@ -70,7 +73,14 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   // - export button
   QPushButton * exportButton = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
   hLayout->addWidget(exportButton);
-  connect(exportButton, SIGNAL(clicked()), pvWidget, SLOT(exportData()));
+
+  ExportableTableView * tableView = new ExportableTableView;
+  connect(item, SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
+  SampleTableModel * tableModel = new SampleTableModel(sample, tableView);
+  tableView->setModel(tableModel);
+  connect(exportButton, SIGNAL(clicked()), tableView, SLOT(exportData()));
+
+  //connect(exportButton, SIGNAL(clicked()), pvWidget, SLOT(exportData()));
   mainLayout->addLayout(hLayout);
 
   // - table

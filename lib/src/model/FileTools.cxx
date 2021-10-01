@@ -23,6 +23,9 @@
 #include <QSettings>
 #include <QDir>
 #include <QFileDialog>
+#include <QGridLayout>
+#include <QComboBox>
+#include <QLabel>
 #include <QMessageBox>
 #include <QApplication>
 #include <QTextStream>
@@ -61,10 +64,29 @@ void FileTools::SetCurrentDir(const QString &fileName)
 
 void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
 {
-  QString fileName = QFileDialog::getSaveFileName(parent,
-                     tr("Export data..."),
-                     GetCurrentDir() + QDir::separator() + tr("data"),
-                     tr("CSV source files (*.csv)"));
+  QFileDialog * dlg = new QFileDialog(parent);
+  dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+  dlg->setFileMode(QFileDialog::AnyFile);
+  dlg->setNameFilters(QStringList() << tr("CSV source files (*.csv)"));
+
+  const QStringList sepLabels = QStringList() << tr("Comma") << tr("Semi-colon") << tr("Space");
+
+  QLabel * lbl = new QLabel(tr("Column separator:"));
+  QComboBox * box = new QComboBox;
+  box->addItems(sepLabels);
+  box->setItemData(0,",");
+  box->setItemData(1,";");
+  box->setItemData(2," ");
+  box->setCurrentIndex(0);
+
+  QGridLayout * layout = static_cast<QGridLayout*>(dlg->layout());
+  const int row = layout->rowCount();
+  layout->addWidget(lbl, row, 0);
+  layout->addWidget(box, row, 1);
+
+  QString fileName;
+  if(dlg->exec())
+    fileName = dlg->selectedFiles()[0];
 
   if (!fileName.isEmpty())
   {
@@ -75,7 +97,8 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
 
     try
     {
-      sample.exportToCSVFile(fileName.toLocal8Bit().data(), ",");
+      sample.exportToCSVFile(fileName.toLocal8Bit().data(),
+                             box->itemData(box->currentIndex()).toString().toStdString());
     }
     catch (std::exception & ex)
     {

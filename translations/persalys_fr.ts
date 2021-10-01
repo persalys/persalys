@@ -1894,7 +1894,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="612"/>
         <source>Calculated parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètre calculé</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="615"/>
@@ -1921,7 +1921,7 @@ métamodèle</translation>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="624"/>
         <source>Independent</source>
-        <translation type="unfinished">Indépendante</translation>
+        <translation>Indépendante</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FMIPhysicalModelWindow.cxx" line="642"/>
@@ -3110,59 +3110,77 @@ centrale</translation>
 <context>
     <name>PERSALYS::FileTools</name>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="65"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="91"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
+        <source>Comma</source>
+        <translation>Virgule</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
+        <source>Semi-colon</source>
+        <translation>Point-virgule</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
+        <source>Space</source>
+        <translation>Espace</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/FileTools.cxx" line="129"/>
         <source>Export data...</source>
         <translation>Exporter les données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="66"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="92"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="130"/>
         <source>data</source>
         <translation>données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="67"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="93"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="71"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="131"/>
         <source>CSV source files (*.csv)</source>
         <translation>Fichiers CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="82"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="111"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="139"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="143"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="75"/>
+        <source>Column separator:</source>
+        <translation>Séparateur de colonne</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/FileTools.cxx" line="120"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="149"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="177"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="181"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="82"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="111"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="120"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="149"/>
         <source>Impossible to export the data. </source>
         <translation>Impossible d&apos;exporter les données. </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="121"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="159"/>
         <source>Export image</source>
         <translation>Exporter l&apos;image</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="122"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="160"/>
         <source>image</source>
         <translation>image</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="123"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="161"/>
         <source>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</source>
         <translation>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="139"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="177"/>
         <source>Impossible to export the image.</source>
         <translation>Impossible d&apos;exporter l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="143"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="181"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
     </message>
@@ -5905,13 +5923,13 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::PVSpreadSheetViewWidget</name>
     <message>
-        <location filename="../lib/src/view/plot/pv/PVSpreadSheetViewWidget.cxx" line="43"/>
-        <location filename="../lib/src/view/plot/pv/PVSpreadSheetViewWidget.cxx" line="71"/>
+        <location filename="../lib/src/view/plot/pv/PVSpreadSheetViewWidget.cxx" line="46"/>
+        <location filename="../lib/src/view/plot/pv/PVSpreadSheetViewWidget.cxx" line="74"/>
         <source>Export</source>
         <translation>Exporter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/pv/PVSpreadSheetViewWidget.cxx" line="67"/>
+        <location filename="../lib/src/view/plot/pv/PVSpreadSheetViewWidget.cxx" line="70"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
@@ -6505,29 +6523,29 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::PieChartView</name>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="649"/>
         <location filename="../lib/src/view/plot/PieChartView.cxx" line="660"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="671"/>
         <source>Export plot</source>
         <translation>Exporter le graphique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="662"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="673"/>
         <source>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</source>
         <translation>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="686"/>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="690"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="697"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="701"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="686"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="697"/>
         <source>Impossible to export the plot.</source>
         <translation>Impossible d&apos;exporter le graphique.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PieChartView.cxx" line="690"/>
+        <location filename="../lib/src/view/plot/PieChartView.cxx" line="701"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
     </message>
@@ -7721,7 +7739,7 @@ at</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="237"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="235"/>
         <source>Cannot save file %1:
 %2</source>
         <translation>Impossible de sauvegarder le fichier %1:
@@ -8931,48 +8949,48 @@ de la fonction</translation>
 <context>
     <name>PyConsole_Editor</name>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1210"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1219"/>
         <source>NO_DOC_AVAILABLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1425"/>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1503"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1434"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1512"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1426"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1435"/>
         <source>ERR_FILE_NOT_WRITEABLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1441"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1450"/>
         <source>GET_DUMP_COMMANDS_FILENAME</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1443"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1452"/>
         <source>PYTHON_SCRIPTS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1457"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1466"/>
         <source>GET_PYTHON_TRACE_FILENAME</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1459"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1468"/>
         <source>LOG_FILES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1504"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1513"/>
         <source>File is not writable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1650"/>
+        <location filename="../lib/src/view/PyConsole/PyConsole_Editor.cxx" line="1659"/>
         <source>TOO_MANY_MATCHES</source>
         <translation type="unfinished"></translation>
     </message>
