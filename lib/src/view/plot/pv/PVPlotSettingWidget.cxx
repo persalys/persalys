@@ -146,7 +146,7 @@ QSize PVPlotSettingWidget::minimumSizeHint() const
 }
 
 
-// ------------- MultiPlotSettingWidget ------------- for Cobweb plot and plot matrix
+// ------------- MultiPlotSettingWidget ------------- for parallel coordinates plot and plot matrix
 
 MultiPlotSettingWidget::MultiPlotSettingWidget(PVViewWidget *pvViewWidget, const Sample &sample, const Sample &sampleRank, QWidget *parent)
   : PVPlotSettingWidget(pvViewWidget, parent)

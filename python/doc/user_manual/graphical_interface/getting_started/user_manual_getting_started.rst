@@ -38,7 +38,7 @@ windows (model definition or result window) open, surrounded by:
 
 .. _firstgraphsettings:
 
-    - for the **Cobweb plots** and the **Plot matrix**, the window allows to:
+    - for the **Parallel coordinates plots** and the **Plot matrix**, the window allows to:
        - Select the variables to display and the axis order
        - Modify the space where the values are plotted with the **Ranks** check button
          (default: physical space). Check off the button to display the rank of the values

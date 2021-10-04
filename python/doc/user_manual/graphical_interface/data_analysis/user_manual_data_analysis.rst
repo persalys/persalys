@@ -48,7 +48,7 @@ When the analysis is finished or stopped, the following window appears.
     :align: center
 
 The window shows numerous tabs, some of which are interactively linked (**Table**,
-**Cobweb plot**, **Plot matrix** and **Scatter plot** tabs):
+**Parallel coordinates plot**, **Plot matrix** and **Scatter plot** tabs):
 when the user selects points on one of these representations, the same points are
 automatically selected in the other tabs.
 
@@ -102,7 +102,7 @@ automatically selected in the other tabs.
       :align: center
 
 
-- The **Cobweb plot** tab displays the sample points.
+- The **Parallel coordinates plot** tab displays the sample points.
 
   - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:

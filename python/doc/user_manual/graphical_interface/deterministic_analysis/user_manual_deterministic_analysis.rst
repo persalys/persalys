@@ -128,7 +128,7 @@ A new window also appears:
     :align: center
 
 The window shows numerous tabs, some of which are interactively linked (**Table**,
-**Cobweb plot**, **Plot matrix** and **Scatter plot** tabs):
+**Parallel coordinates plot**, **Plot matrix** and **Scatter plot** tabs):
 when the user selects points on one of these representations, the same points are
 automatically selected in the other tabs.
 
@@ -154,7 +154,7 @@ automatically selected in the other tabs.
     .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTableX.png
         :align: center
 
-- The **Cobweb plot** tab displays all the points of the input sample.
+- The **Parallel coordinates plot** tab displays all the points of the input sample.
 
   - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:
@@ -248,7 +248,7 @@ When the analysis is finished or stopped, the following window appears.
     :align: center
 
 The window shows numerous tabs, some of which are interactively linked (**Table**,
-**Cobweb plot**, **Plot matrix** and **Scatter plot** tabs):
+**Parallel coordinates plot**, **Plot matrix** and **Scatter plot** tabs):
 when the user selects points on one of these representations, the same points are
 automatically selected in the other tabs.
 
@@ -299,7 +299,7 @@ automatically selected in the other tabs.
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
       :align: center
 
-- The **Cobweb plot** tab displays all the points of the design of experiments.
+- The **Parallel coordinates plot** tab displays all the points of the design of experiments.
 
   - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:
@@ -354,7 +354,7 @@ Particular situations:
           - Left-click on a column header and drag it in another place to change columns order
 
     - The **Failed points** tab shows all the failed input points
-    - The **Cobweb plot** tab displays all the input points. The status
+    - The **Parallel coordinates plot** tab displays all the input points. The status
       of each point is shown in the last column **Status** (failed points=0; evaluated points=1).
 
       - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
@@ -591,7 +591,7 @@ The results window gathers several tabs:
       - Left-click on column header to sort values in ascending or descending order
       - Left-click on a column header and drag it in another place to change columns order
 
-- The **Cobweb plot** tab displays the sample.
+- The **Parallel coordinates plot** tab displays the sample.
 
   - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:

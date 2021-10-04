@@ -609,7 +609,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(notEvaluatedPointsTable, notEvaluatedInputSample_, getItem()), tr("Non-evaluated points"));
     }
 
-    // -- Cobweb plot tab
+    // -- Parallel coordinates plot tab
     if (failedInSampleSize)
     {
       PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
@@ -640,7 +640,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // cobweb setting widget
       MultiPlotSettingWidget * cobwebSettingWidget = new MultiPlotSettingWidget(cobwebWidget, succeedAndFailedInS, succeedAndFailedInSRank, this);
 
-      tablesTabWidget->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Cobweb plot"));
+      tablesTabWidget->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Parallel coordinates plot"));
     }
 
     // -- scatter plots tab
@@ -722,7 +722,7 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   // setting widget
   MultiPlotSettingWidget * cobwebSettingWidget = new MultiPlotSettingWidget(cobwebWidget, designOfExperiment_.getSample(), sampleRank, this);
 
-  tabWidget_->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Cobweb plot"));
+  tabWidget_->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Parallel coordinates plot"));
 
   // 2- plot matrix tab --------------------------------
   PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());

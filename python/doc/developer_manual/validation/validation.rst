@@ -657,10 +657,10 @@ Deterministic analyses
           :align: center
 
       - left side : 1 variable in the list view
-      - right side, tabs : Elementary effects - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model
+      - right side, tabs : Elementary effects - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
       - Elementary effects tab : 2 tabs : Graph (mu*, sigma) - Graph (mu*, mu)
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
+      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked :
         do several selections in a tab and check the selection is the same in the others tabs
 
       - check Elementary effects tab behavior:
@@ -939,7 +939,7 @@ Designs of experiments
       .. image:: /developer_manual/validation/design_3_Table.png
           :align: center
 
-      - 10 tabs : Summary - PDF/CDF - Boxplots - Dependence - Table - Cobweb plot - Plot matrix - Scatter plot - Parameters - Model
+      - 10 tabs : Summary - PDF/CDF - Boxplots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plot - Parameters - Model
       - Summary and PDF/CDF tabs :
 
         - when changing the variable, the tabs are updated
@@ -983,9 +983,9 @@ Designs of experiments
 
           - a list view with a variable appears at the left side of the window
 
-        - Table tab has 3 tabs: Table - Failed points - Cobweb plot
+        - Table tab has 3 tabs: Table - Failed points - Parallel coordinates plot
 
-          - check the cobweb plot has 2 columns. The last one is named 'Status 0: failed; 1: ok'.
+          - check the parallel coordinates plot has 2 columns. The last one is named 'Status 0: failed; 1: ok'.
 
           - additional columns can be displayed by checking them in the graph setting widget in the window bottom left corner
 
@@ -1035,10 +1035,10 @@ Probabilistic analyses
           :align: center
 
       - left side : 4 variables in the list view
-      - right side, tabs : Summary - PDF/CDF - Box plots - Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model
+      - right side, tabs : Summary - PDF/CDF - Box plots - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
       - when changing the variable, the tabs are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
+      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked :
         do several selections in a tab and check the selection is the same in the others tabs
       - Summary tab :
 
@@ -1049,7 +1049,7 @@ Probabilistic analyses
 
         - Moments estimates table has only 2 columns : Estimate and Value
 
-      - check on the tabs (Table - Cobweb plot - Plot matrix - Scatter plots - Parameters - Model) : the list view is hidden
+      - check on the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model) : the list view is hidden
       - check tables are well drawn
 
   - Taylor : Taylor item
@@ -1568,12 +1568,12 @@ Probabilistic analyses
 
         - x_1 the output is the first item of the list
 
-      - right side, tabs : Summary - PDF/CDF - Box plots - Dependence - Table - Cobweb plot - Plot matrix - Scatter plots
+      - right side, tabs : Summary - PDF/CDF - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
       - when changing the variable, the tabs (Summary - PDF/CDF - Box plots) are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - check the tabs (Table - Cobweb plot - Plot matrix - Scatter plots) are linked :
+      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked :
         do several selections in a tab and check the selection is the same in the others tabs
-      - check on the tabs (Table - Cobweb plot - Plot matrix - Scatter plots - Parameters) : the list view is hidden
+      - check on the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters) : the list view is hidden
       - Summary tab:
 
         - check tables are well drawn
