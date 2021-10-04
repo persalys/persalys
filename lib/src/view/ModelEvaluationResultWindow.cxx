@@ -47,8 +47,8 @@ void ModelEvaluationResultWindow::buildInterface()
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   widgetLayout->addWidget(new TitleLabel(tr("Model evaluation"), "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#modelevalresult"));
-  QLabel * timeInfo = new QLabel(tr("Elapsed time: ")
-                                 + QString{ "%1" }.arg( elapsedTime_, 0, 'g', 3) + "s");
+  QLabel * timeInfo = new QLabel(tr("Elapsed time")
+                                 + QString{ ": %1" }.arg( elapsedTime_, 0, 'g', 3) + "s");
   widgetLayout->addWidget(timeInfo);
 
   QTabWidget * tabWidget = new QTabWidget;

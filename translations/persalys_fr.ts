@@ -1237,8 +1237,8 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="160"/>
-        <source>Elapsed time: </source>
-        <translation>Temps écoulé:</translation>
+        <source>Elapsed time</source>
+        <translation>Durée</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="173"/>
@@ -1499,6 +1499,12 @@ bayésien (BIC)</translation>
         <translation>Points non évalués</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="643"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="725"/>
+        <source>Parallel coordinates plot</source>
+        <translation>Coordonnées parallèles</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="658"/>
         <source>Evaluated points</source>
         <translation>Points évalués</translation>
@@ -1515,12 +1521,6 @@ bayésien (BIC)</translation>
 0: failed; 1: ok</source>
         <translation>Statut
 0: échoué; 1: ok</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="643"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="725"/>
-        <source>Cobweb plot</source>
-        <translation>Graphique Cobweb</translation>
     </message>
 </context>
 <context>
@@ -3110,77 +3110,77 @@ centrale</translation>
 <context>
     <name>PERSALYS::FileTools</name>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="72"/>
         <source>Comma</source>
         <translation>Virgule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="72"/>
         <source>Semi-colon</source>
         <translation>Point-virgule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="72"/>
         <source>Space</source>
         <translation>Espace</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="129"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="114"/>
         <source>Export data...</source>
         <translation>Exporter les données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="130"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="115"/>
         <source>data</source>
         <translation>données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="71"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="131"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="70"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="116"/>
         <source>CSV source files (*.csv)</source>
         <translation>Fichiers CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="75"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="74"/>
         <source>Column separator:</source>
         <translation>Séparateur de colonne</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="120"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="149"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="177"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="181"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="105"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="134"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="162"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="166"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="120"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="149"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="105"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="134"/>
         <source>Impossible to export the data. </source>
         <translation>Impossible d&apos;exporter les données. </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="159"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="144"/>
         <source>Export image</source>
         <translation>Exporter l&apos;image</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="160"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="145"/>
         <source>image</source>
         <translation>image</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="161"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="146"/>
         <source>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</source>
         <translation>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="177"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="162"/>
         <source>Impossible to export the image.</source>
         <translation>Impossible d&apos;exporter l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="181"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="166"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
     </message>
@@ -4909,8 +4909,8 @@ extremum</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="50"/>
-        <source>Elapsed time: </source>
-        <translation>Temps écoulé: </translation>
+        <source>Elapsed time</source>
+        <translation>Durée</translation>
     </message>
     <message>
         <location filename="../lib/src/view/ModelEvaluationResultWindow.cxx" line="62"/>
@@ -6465,6 +6465,11 @@ métamodèle</translation>
         <translation>Vérifier le modèle</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="164"/>
+        <source>Elapsed time</source>
+        <translation>Durée</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="176"/>
         <source>Add an output</source>
         <translation>Ajouter une sortie</translation>
@@ -6478,11 +6483,6 @@ métamodèle</translation>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="157"/>
         <source>Evaluate the outputs</source>
         <translation>Evaluer les sorties</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="164"/>
-        <source>Elapsed time: </source>
-        <translation>Temps écoulé:</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="206"/>

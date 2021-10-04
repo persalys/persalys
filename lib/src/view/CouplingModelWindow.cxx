@@ -157,8 +157,8 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
             timeInfo->clear();
             evaluateOutputs();
             if(model_->getEvalTime()>0)
-              timeInfo->setText(tr("Elapsed time: ")
-                                + QString{ "%1" }.arg(model_->getEvalTime(), 0, 'g', 3) + "s");
+              timeInfo->setText(tr("Elapsed time")
+                                + QString{ ": %1" }.arg(model_->getEvalTime(), 0, 'g', 3) + "s");
           });
   tabLayout->addWidget(evaluateOutputsButton, 2, 0, Qt::AlignLeft);
 
