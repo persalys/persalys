@@ -7293,7 +7293,12 @@ de l&apos;indice signé</translation>
         <translation>tous les coeurs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/SettingsDialog.cxx" line="80"/>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="77"/>
+        <source>Requires study reloading</source>
+        <translation>Nécessite un rechargement de l&apos;étude</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/SettingsDialog.cxx" line="88"/>
         <source>&amp;General</source>
         <translation>&amp;Général</translation>
     </message>

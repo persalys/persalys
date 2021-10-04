@@ -73,6 +73,14 @@ namespace PERSALYS
     nProcessesSpinBox->setToolTip("0: "+tr("all cores"));
     nProcessesSpinBox->setMinimum(0);
     nProcessesSpinBox->setMaximum(std::thread::hardware_concurrency());
+
+    QLabel * reloadLabel = new QLabel(tr("Requires study reloading"));
+    tabLayout->addWidget(reloadLabel, 1, 0, 1, 2);
+    connect(nProcessesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), [=] (int i) {
+        QSettings settings;
+        reloadLabel->setVisible(i != settings.value("nProcesses"));
+      });
+
     QSettings settings;
     nProcessesSpinBox->setValue(settings.value("nProcesses").toUInt());
     tabLayout->addWidget(nProcessesSpinBox, 0, 1);
