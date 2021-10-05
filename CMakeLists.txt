@@ -56,7 +56,7 @@ macro (persalys_add_library name)
   endif ()
 endmacro ()
 
-find_package (OpenTURNS 1.17 CONFIG REQUIRED)
+find_package (OpenTURNS 1.18 CONFIG REQUIRED)
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 
 if (NOT BUILD_SHARED_LIBS)
