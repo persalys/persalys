@@ -112,38 +112,54 @@ void DataSample::searchMinMax() const
   if (getInputSample().getSize() != getOutputSample().getSize())
     throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
 
-  // get the minimum and the maximum output values
-  const Point outputMin = getOutputSample().getMin();
-  const Point outputMax = getOutputSample().getMax();
-
-  // find for each output, the input points where the output is max and min
-  // (we can have several input points for each extremum)
-  for (UnsignedInteger out = 0; out < getOutputSample().getDimension(); ++out)
+  for (UnsignedInteger j = 0; j < getOutputSample().getDimension(); ++j)
   {
     Sample inMinSample(0, getInputSample().getDimension());
     Sample inMaxSample(0, getInputSample().getDimension());
 
-    // if output min = output max : take all the input points
-    if (outputMin[out] == outputMax[out])
+    Pointer<SampleImplementation> sampleOut = getOutputSample().getMarginal(j).getImplementation();
+    std::pair<OT::NSI_iterator, OT::NSI_iterator> minmax = std::minmax_element(sampleOut->begin(),
+                                                                               sampleOut->end());
+
+    // first occurence of min idx
+    const UnsignedInteger minIdx = minmax.first - sampleOut->begin();
+    // last occurence of max idx
+    const UnsignedInteger maxIdx = minmax.second - sampleOut->begin();
+
+    inMinSample.add(getInputSample()[minIdx]);
+    inMaxSample.add(getInputSample()[maxIdx]);
+
+    // look for antoher occurence of min
+    if (minmax.first != sampleOut->end())
     {
-      inMinSample = getInputSample();
-      inMaxSample = getInputSample();
-    }
-    // else : find the input values for the output min and max
-    else
-    {
-      for (UnsignedInteger i = 0; i < getInputSample().getSize(); ++i)
+      for (OT::NSI_iterator it = std::next(minmax.first); it != sampleOut->end(); ++it)
       {
-        if (getOutputSample()(i, out) == outputMin[out])
-          inMinSample.add(getInputSample()[i]);
-        if (getOutputSample()(i, out) == outputMax[out])
-          inMaxSample.add(getInputSample()[i]);
+        if (*it == *(minmax.first)) {
+          inMinSample.add(getInputSample()[it - sampleOut->begin()]);
+          break;
+        }
       }
     }
+
+    // look for antoher occurence of max
+    if (minmax.second != sampleOut->begin())
+    {
+      for (OT::NSI_iterator it = std::prev(minmax.second); it != sampleOut->begin(); --it)
+      {
+        if (*it == *(minmax.second))
+        {
+          inMaxSample.add(getInputSample()[it - sampleOut->begin()]);
+          break;
+        }
+      }
+    }
+
     listXMin_.add(inMinSample);
     listXMax_.add(inMaxSample);
   }
 }
+
+
 
 
 Sample DataSample::getSample() const
