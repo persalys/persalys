@@ -306,6 +306,7 @@ Settings Menu
 
 - click Menu->Tools->Settings
   - Spinbox to set the number of parallel processes
+  - A warning stating that the study requires reloading is displayed
 
 - close the menu
 
@@ -519,6 +520,20 @@ Models
 
 - check the doc link
 
+- save the study as a new study of your choice
+
+  - a .xml file along a .h5 file are created
+
+  - rename one of the file and try reloading the study
+
+  - the following message appears:
+
+  .. image:: /developer_manual/validation/error.png
+      :align: center
+
+  - revert the renaming of the file
+
+  - the study loads successfully
 
 Deterministic analyses
 ``````````````````````
@@ -1923,3 +1938,16 @@ Field model
 
 - click on the 'Central tendency' button of the diagram
     - a wizard appears, click on Cancel
+
+
+FMU model
+'''''''''
+
+- create a new study and add to it a FMI model
+
+- load the FUM file at python/test/fmu/linux64/deviation.fmu
+
+- change the value of F and click on 'check model' button then check the values
+
+  .. image:: /developer_manual/validation/fmuModel.png
+      :align: center
