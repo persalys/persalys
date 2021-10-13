@@ -47,13 +47,17 @@ curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.9.3/download/win-64/pyfmi-2.
 curl -fSsL https://anaconda.org/conda-forge/assimulo/3.2.5/download/win-64/assimulo-3.2.5-py38h63ee3e3_0.tar.bz2 | tar xj
 cd Lib
 curl -fSsL https://anaconda.org/conda-forge/otfmi/0.14/download/noarch/otfmi-0.14-pyh6c4a22f_0.tar.bz2 | tar xj
-curl -fSsL https://anaconda.org/conda-forge/dill/0.3.4/download/noarch/dill-0.3.4-pyhd8ed1ab_0.tar.bz2 | tar xj
 cd site-packages
 curl -fsSL https://pypi.io/packages/py2.py3/p/pip/pip-20.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/py2.py3/s/six/six-1.16.0-py2.py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py2.py3/p/pytz/pytz-2021.3-py2.py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py2.py3/p/python_dateutil/python_dateutil-2.8.2-py2.py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py2.py3/d/dill/dill-0.3.4-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp38/n/numpy/numpy-1.19.4-cp38-cp38-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp38/s/scipy/scipy-1.5.4-cp38-cp38-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp38/n/numpy/numpy-1.20.3-cp38-cp38-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp38/s/scipy/scipy-1.6.3-cp38-cp38-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp38/p/pandas/pandas-1.3.3-cp38-cp38-win_amd64.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
