@@ -1,4 +1,9 @@
-= 11.0 release (WIP)
+= 11.0rc1 release (2021-10-13)
+
+ * CSV export column separator choice
+ * Enhanced FMI support: memory management, string variables, final_time
+ * Metamodel/DOE fixes
+ * Enhanced AppImage binary compatibility
 
 = 10.0 release (2021-03-31)
 
