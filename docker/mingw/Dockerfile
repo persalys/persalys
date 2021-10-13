@@ -5,6 +5,9 @@ RUN aurman -Syu --pgp_fetch --noconfirm --noedit mingw-w64-qwt
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview > /dev/null 2>&1
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
+# rebuild hdf5 with cxx lib
+RUN git clone https://aur.archlinux.org/mingw-w64-hdf5.git /tmp/hdf && cd /tmp/hdf && makepkg -sfi --skippgpcheck --noconfirm
+
 ENV ARCH=x86_64 PYMAJMIN=38
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
