@@ -42,7 +42,7 @@ Dependencies:
 
 Compilation::
 
-    git clone http://git.phimeca.lan/ot-edf/persalys.git
+    git clone https://git.phimeca.com/ot-edf/otgui.git persalys
     cd persalys
     mkdir -p build && cd build
     cmake \
