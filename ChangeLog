@@ -1,4 +1,4 @@
-= 11.0rc1 release (2021-10-13)
+= 11.0 release (2021-10-28)
 
  * CSV export column separator choice
  * Enhanced FMI support: memory management, string variables, final_time
