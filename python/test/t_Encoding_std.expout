@@ -1,8 +1,6 @@
 class=DataModel name=myDataModel fileName=données.csv inputColumns=[0,2] outputColumns=[] inputNames=[X0,X2] outputNames=[]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 
@@ -30,9 +28,7 @@ doeI.setInterestVariables(interestVariables)
 myStudy.add(doeI)
 
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

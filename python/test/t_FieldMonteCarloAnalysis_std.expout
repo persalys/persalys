@@ -64,9 +64,7 @@ eigen values= [35286.2,551.26,270.795,22.3289,13.0978,1.82423] [141145,2205.04,1
 class=FieldMonteCarloAnalysis name=mcAnalysis2 physicalModel=PhysicalModel_1 interestVariables=[z2] maximumCalls=100 maximumCoefficientOfVariation=0.01 maximumElapsedTime=50 seed=0 blockSize=10 Karhunen-Loeve threshold=1e-05 quantile level=0.05
 eigen values= [110985,2982.14,1467.11,162.664,108.997,26.8557,11.3351,4.82782]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

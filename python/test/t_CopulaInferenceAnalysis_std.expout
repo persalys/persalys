@@ -5,9 +5,7 @@ result= class=CopulaInferenceResult copulaInferenceSetResultCollection=[class=Co
 class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
  [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[0.0177483,0.0207956] error messages=[,]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

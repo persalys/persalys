@@ -11,9 +11,7 @@ result= class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=
 [-0.00958092, 0.241092]] totalIndicesInterval=[[0.78735, 1.05879]
 [0.0753105, 0.119328]] callsNumber=1600 confidenceIntervalLength=0.199635
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

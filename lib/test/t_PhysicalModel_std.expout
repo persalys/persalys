@@ -1,9 +1,7 @@
 [0.0597305]
 [0.0597305]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

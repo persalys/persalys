@@ -574,7 +574,7 @@ String StudyImplementation::getPythonScript()
 {
   String result;
 
-  result += "#!/usr/bin/env python\n# coding: utf-8\n\nfrom __future__ import print_function\nimport openturns as ot\nimport persalys\n\n";
+  result += "#!/usr/bin/env python\n\nimport openturns as ot\nimport persalys\n\n";
 
   result += getName() + " = persalys.Study('" + getName() + "')\n";
   result += "persalys.Study.Add(" + getName() + ")\n";

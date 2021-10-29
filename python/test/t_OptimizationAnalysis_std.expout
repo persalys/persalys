@@ -2,9 +2,7 @@ class=OptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=Cob
 x= [5]
 y= [578]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

@@ -15,9 +15,7 @@ functionalChaosResult meta model=(0.479245 - 0.38203 * (1.73205 * x0) - 0.056230
 ))
 orthogonal basis=class=OrthogonalProductPolynomialFactory univariate polynomial collection=[class=OrthogonalUniVariatePolynomialFamily implementation=class=StandardDistributionPolynomialFactory hasSpecificFamily=true specificFamily=class=OrthogonalUniVariatePolynomialFamily implementation=class=LegendreFactory measure=class=Uniform name=Uniform dimension=1 a=-1 b=1,class=OrthogonalUniVariatePolynomialFamily implementation=class=StandardDistributionPolynomialFactory hasSpecificFamily=true specificFamily=class=OrthogonalUniVariatePolynomialFamily implementation=class=LegendreFactory measure=class=Uniform name=Uniform dimension=1 a=-1 b=1] measure=class=ComposedDistribution name=ComposedDistribution dimension=2 copula=class=IndependentCopula name=IndependentCopula dimension=2 marginal[0]=class=Uniform name=Uniform dimension=1 a=-1 b=1 marginal[1]=class=Uniform name=Uniform dimension=1 a=-1 b=1
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

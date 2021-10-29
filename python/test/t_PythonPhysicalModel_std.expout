@@ -12,9 +12,7 @@ Sample :
 ZeroDivisionError occured: True
 Error on the line 4 : True
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 
