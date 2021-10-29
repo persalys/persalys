@@ -550,9 +550,7 @@ outputSample=     [ X1         ]
 min= [0 : [ 1.20548  0.350042 ]]
 max= [0 : [ -0.355007  0.810668 ]]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

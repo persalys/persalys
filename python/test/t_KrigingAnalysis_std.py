@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
 import openturns as ot
 import openturns.testing
 import persalys
 
 ot.RandomGenerator.SetSeed(0)
-ot.TBB_Disable()
-
 myStudy = persalys.Study('myStudy')
 
 # Model

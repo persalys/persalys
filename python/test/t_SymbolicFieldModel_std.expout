@@ -129,9 +129,7 @@ field 1:
 18 : [  11.3684     8.6223     8.6223   ]
 19 : [  12          0          0        ]]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

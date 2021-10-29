@@ -3,9 +3,7 @@ InvalidArgumentException occured: True
 InvalidArgumentException occured: True
 obs2= class=Observations name=obs2 physicalModel=aModelPhys observedInputs=[X3,X1] observedOutputs=[Y2,Y1]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

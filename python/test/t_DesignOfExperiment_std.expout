@@ -103,9 +103,7 @@ outs=     [ Y0         ]
 8 : [  -1.71118  ]
 9 : [   0.992658 ]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 
@@ -159,9 +157,7 @@ aDesign_4.setInterestVariables(interestVariables)
 anOTStudy.add(aDesign_4)
 
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

@@ -4,9 +4,7 @@ error message=
 result= class=MorrisResult name=Unnamed inputs selections =[[1,1,0,1,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0]] no effect boundaries =class=Point name=Unnamed dimension=1 values=[33.1443] ee mean= class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=20 data=[[15.2911,-20.2674,9.58904,51.9031,16.493,38.612,55.7186,35.5755,41.3717,40.5778,3.46456,3.02507,-1.21817,0.228778,1.50345,1.98003,0.878264,-3.83339,-6.20619,1.72736]] absolute ee mean= class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=20 data=[[64.661,48.6508,21.9031,51.9031,16.493,38.612,55.7186,35.5755,41.3717,40.5778,3.46456,3.02507,3.40685,3.80306,2.41175,2.04517,1.62762,4.21211,6.20619,3.62001]] ee std= class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=20 data=[[75.6693,59.2558,26.4239,8.67149,7.36253,4.57369,7.5879,2.63215,3.53769,4.09501,1.05127,1.57059,4.59981,4.86444,2.80863,2.86666,1.88527,3.183,4.02771,5.04727]]
 meanAbsEE = [64.661,48.6508,21.9031,51.9031,16.493,38.612,55.7186,35.5755,41.3717,40.5778,3.46456,3.02507,3.40685,3.80306,2.41175,2.04517,1.62762,4.21211,6.20619,3.62001]#20
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

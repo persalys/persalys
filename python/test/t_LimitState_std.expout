@@ -4,9 +4,7 @@ Y0 < 0
 Y0 < 15
 Y1 < 15
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

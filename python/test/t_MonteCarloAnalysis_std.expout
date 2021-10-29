@@ -1547,9 +1547,7 @@ outliers= [[4.02799,4.15958,4.0788,-2.24637,-2.09834,-2.02125,-2.18965,-2.07535,
 class=MonteCarloAnalysis name=myMonteCarlo3 physicalModel=aModelPhys interestVariables=[Y1] isConfidenceIntervalRequired=true levelConfidenceInterval=0.95 maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 seed=0 blockSize=1
 result= class=DataAnalysisResult name=Unnamed min=[[-2.24637],[-2.18965],[-15.8957]] max=[[4.30075],[4.15958],[36.2692]] mean=[[0.973141],[1.00247],[10.5312]] median=[[0.973558],[0.978013],[10.3315]] standardDeviation=[[0.985838],[1.00015],[8.01243]] coefficientOfVariation=[[1.01305],[0.997691],[0.760825]] variance=[[0.971877],[1.0003],[64.199]] skewness=[[0.0412383],[0.0687836],[0.0684659]] kurtosis=[[3.22378],[3.03745],[3.0559]] firstQuartile=[[0.357155],[0.323571],[5.03126]] thirdQuartile=[[1.58213],[1.67508],[15.8728]] meanConfidenceInterval=class=Interval name=Unnamed dimension=3 lower bound=class=Point name=Unnamed dimension=3 values=[0.912039,0.940478,10.0346] upper bound=class=Point name=Unnamed dimension=3 values=[1.03424,1.06446,11.0278] finite lower bound=[1,1,1] finite upper bound=[1,1,1] stdConfidenceInterval=class=Interval name=Unnamed dimension=3 lower bound=class=Point name=Unnamed dimension=3 values=[0.944445,0.958158,7.676] upper bound=class=Point name=Unnamed dimension=3 values=[1.03105,1.04602,8.37992] finite lower bound=[1,1,1] finite upper bound=[1,1,1]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

@@ -39,9 +39,7 @@ thetaMAP CI=
  [7.57798e+08, 7.88225e+08]
 [3.49272e+09, 3.6139e+09]
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 

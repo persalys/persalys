@@ -7,9 +7,7 @@ result= class=SRCResult name=Unnamed outputNames=[y1] indices=class=Sample name=
 [0.0849848, 0.105183]] signed indices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.951714,0.306555]] signed indices intervals=[[0.938732, 0.968245]
 [0.291522, 0.32432]] r2=class=Point name=Unnamed dimension=1 values=[0.999735] calls number=1000
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 
