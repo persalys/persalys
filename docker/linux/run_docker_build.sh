@@ -83,14 +83,16 @@ cp -r /usr/local/lib/python3* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpython*.so.* persalys.AppDir/usr/lib
 
 # ot libs
-for libname in otmorris OT nlopt ceres cminpack bonmin ipopt coinmumps CoinUtils Cbc CbcSolver Cgl Osi OsiClp Clp ClpSolver
+for libname in otmorris nlopt ceres cminpack bonmin ipopt coinmumps CoinUtils Cbc CbcSolver Cgl Osi OsiClp Clp ClpSolver
 do
   cp -v /usr/local/lib/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
 cp -v /usr/local/lib/libtbb.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libdlib*.0 persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libglog.so.0 persalys.AppDir/usr/lib
+cp -v /usr/local/lib64/libprimesieve.so.9 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libboost* persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
 cp -rv /usr/local/etc/ persalys.AppDir/etc
 
 #hdf5
@@ -101,7 +103,7 @@ for libname in Qt5XcbQpa Qt5DBus Qt5Widgets Qt5Gui Qt5Test Qt5Core Qt5PrintSuppo
 do
   cp -v /usr/local/lib/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
-cp -v /usr/local/lib/libqwt.so.6.2 persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libqwt.so.6.* persalys.AppDir/usr/lib
 cp -rv /usr/local/lib/qt/plugins persalys.AppDir/usr/lib
 
 # paraview libs

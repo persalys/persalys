@@ -72,11 +72,11 @@ int main(int argc, char *argv[])
     app.installTranslator(&appTranslator);
 
   // increase function cache
-  OT::ResourceMap::SetAsUnsignedInteger("cache-max-size", 16384);
+  OT::ResourceMap::SetAsUnsignedInteger("Cache-MaxSize", 16384);
 
   // set number of parallel processes
   if (!QSettings().contains("nProcesses"))
-    QSettings().setValue("nProcesses", QVariant((uint)OT::ResourceMap::GetAsUnsignedInteger("parallel-threads")));
+    QSettings().setValue("nProcesses", QVariant((uint)OT::ResourceMap::GetAsUnsignedInteger("TBB-ThreadsNumber")));
 
   // main window
   MainWindow window;
