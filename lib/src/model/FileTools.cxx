@@ -25,6 +25,7 @@
 #include <QFileDialog>
 #include <QGridLayout>
 #include <QComboBox>
+#include <QStandardItem>
 #include <QLabel>
 #include <QMessageBox>
 #include <QApplication>
@@ -69,20 +70,45 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
   dlg->setFileMode(QFileDialog::AnyFile);
   dlg->setNameFilters(QStringList() << tr("CSV source files (*.csv)"));
 
-  const QStringList sepLabels = QStringList() << tr("Comma") << tr("Semi-colon") << tr("Space");
+  const QStringList colSepLabels = QStringList() << tr("Comma") << tr("Semi-colon") << tr("Space");
 
-  QLabel * lbl = new QLabel(tr("Column separator:"));
-  QComboBox * box = new QComboBox;
-  box->addItems(sepLabels);
-  box->setItemData(0,",");
-  box->setItemData(1,";");
-  box->setItemData(2," ");
-  box->setCurrentIndex(0);
+  QLabel * lblColSep = new QLabel(tr("Column separator:"));
+  QComboBox * boxColSep = new QComboBox;
+  boxColSep->addItems(colSepLabels);
+  boxColSep->setItemData(0,",");
+  boxColSep->setItemData(1,";");
+  boxColSep->setItemData(2," ");
+  boxColSep->setCurrentIndex(0);
 
   QGridLayout * layout = static_cast<QGridLayout*>(dlg->layout());
-  const int row = layout->rowCount();
-  layout->addWidget(lbl, row, 0);
-  layout->addWidget(box, row, 1);
+  int row = layout->rowCount();
+  layout->addWidget(lblColSep, row, 0);
+  layout->addWidget(boxColSep, row, 1);
+
+  const QStringList numSepLabels = QStringList() << tr("Point") << tr("Comma");
+
+  QLabel * lblNumSep = new QLabel(tr("Numerical separator:"));
+  QComboBox * boxNumSep = new QComboBox;
+  boxNumSep->addItems(numSepLabels);
+  boxNumSep->setItemData(0,".");
+  boxNumSep->setItemData(1,",");
+  boxNumSep->setCurrentIndex(0);
+
+  layout->addWidget(lblNumSep, ++row, 0);
+  layout->addWidget(boxNumSep, row, 1);
+
+  // Disable comma as numSep if already set as colSep
+  QStandardItemModel *model = qobject_cast<QStandardItemModel *>(boxNumSep->model());
+  Q_ASSERT(model != nullptr);
+
+  QStandardItem *commaItem = model->item(1);
+  commaItem->setFlags(boxColSep->currentIndex() == 0 ? commaItem->flags() & ~Qt::ItemIsEnabled
+                 : commaItem->flags() | Qt::ItemIsEnabled);
+
+  connect(boxColSep, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+      commaItem->setFlags(index == 0 ? commaItem->flags() & ~Qt::ItemIsEnabled
+                     : commaItem->flags() | Qt::ItemIsEnabled);
+    });
 
   QString fileName;
   if(dlg->exec())
@@ -98,7 +124,8 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
     try
     {
       sample.exportToCSVFile(fileName.toLocal8Bit().data(),
-                             box->itemData(box->currentIndex()).toString().toStdString());
+                             boxColSep->itemData(boxColSep->currentIndex()).toString().toStdString(),
+                             boxNumSep->itemData(boxNumSep->currentIndex()).toString().toStdString());
     }
     catch (std::exception & ex)
     {
