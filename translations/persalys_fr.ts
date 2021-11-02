@@ -3110,77 +3110,88 @@ centrale</translation>
 <context>
     <name>PERSALYS::FileTools</name>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="72"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="88"/>
         <source>Comma</source>
         <translation>Virgule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="72"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
         <source>Semi-colon</source>
         <translation>Point-virgule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="72"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="73"/>
         <source>Space</source>
         <translation>Espace</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="114"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="141"/>
         <source>Export data...</source>
         <translation>Exporter les données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="115"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="142"/>
         <source>data</source>
         <translation>données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="70"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="116"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="71"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="143"/>
         <source>CSV source files (*.csv)</source>
         <translation>Fichiers CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="74"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="75"/>
         <source>Column separator:</source>
         <translation>Séparateur de colonne</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="105"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="134"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="162"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="166"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="88"/>
+        <source>Point</source>
+        <translation type="unfinished">Point</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/FileTools.cxx" line="90"/>
+        <source>Numerical separator:</source>
+        <translation>Séparateur numérique</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/FileTools.cxx" line="132"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="161"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="189"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="193"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="105"/>
-        <location filename="../lib/src/model/FileTools.cxx" line="134"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="132"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="161"/>
         <source>Impossible to export the data. </source>
         <translation>Impossible d&apos;exporter les données. </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="144"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="171"/>
         <source>Export image</source>
         <translation>Exporter l&apos;image</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="145"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="172"/>
         <source>image</source>
         <translation>image</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="146"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="173"/>
         <source>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</source>
         <translation>Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="162"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="189"/>
         <source>Impossible to export the image.</source>
         <translation>Impossible d&apos;exporter l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/FileTools.cxx" line="166"/>
+        <location filename="../lib/src/model/FileTools.cxx" line="193"/>
         <source>Format not supported.</source>
         <translation>Format non supporté.</translation>
     </message>
