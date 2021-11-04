@@ -1,5 +1,7 @@
 = 12.0 release (wip)
 
+ * CSV export numerical separator choice
+
 = 11.0 release (2021-10-28)
 
  * CSV export column separator choice
