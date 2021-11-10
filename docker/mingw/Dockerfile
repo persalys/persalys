@@ -9,7 +9,7 @@ ENV ARCH=x86_64 PYMAJMIN=38
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.18rc1 \
+RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.18 \
   && ${ARCH}-w64-mingw32-cmake \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -DPYTHON_SITE_PACKAGES=Lib/site-packages \
@@ -19,7 +19,7 @@ RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /t
   && rm -r /tmp/openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.11 \
+RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.12 \
   && ${ARCH}-w64-mingw32-cmake \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -DPYTHON_SITE_PACKAGES=Lib/site-packages . \
