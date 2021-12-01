@@ -2,10 +2,10 @@
 User manual for the Python interface
 ====================================
 
+.. currentmodule:: persalys
+
 Model creation
 --------------
-
-.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -37,8 +37,6 @@ Model creation
 Coupling model
 --------------
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -52,8 +50,6 @@ Coupling model
 Model evaluation
 ----------------
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -63,8 +59,6 @@ Model evaluation
 
 Optimization
 ------------
-
-.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -77,8 +71,6 @@ Optimization
     Screening
     ---------
 
-    .. currentmodule:: persalys
-
     .. autosummary::
         :toctree: _generated/
         :template: class.rst_t
@@ -88,8 +80,6 @@ Optimization
 
 Calibration
 -----------
-
-.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -106,8 +96,6 @@ Probabilistic studies
 Central tendency
 ~~~~~~~~~~~~~~~~
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -121,8 +109,6 @@ Central tendency
 Sensitivity analysis
 ~~~~~~~~~~~~~~~~~~~~
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -135,8 +121,6 @@ Sensitivity analysis
 Reliability model
 -----------------
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -145,8 +129,6 @@ Reliability model
 
 Reliability analysis
 --------------------
-
-.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -162,8 +144,6 @@ Reliability analysis
 Design of experiments
 ---------------------
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -176,8 +156,6 @@ Design of experiments
 
 Data analysis
 -------------
-
-.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
@@ -195,8 +173,6 @@ Data analysis
 Metamodel
 ---------
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -212,8 +188,6 @@ Metamodel
 Study storage
 -------------
 
-.. currentmodule:: persalys
-
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
@@ -222,8 +196,6 @@ Study storage
 
 Function caching
 ----------------
-
-.. currentmodule:: persalys
 
 .. autosummary::
     :toctree: _generated/
