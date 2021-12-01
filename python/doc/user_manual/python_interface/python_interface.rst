@@ -26,6 +26,14 @@ Model creation
     DataCleaning
     MetaModel
 
+.. only:: otfmi
+
+    .. autosummary::
+        :toctree: _generated/
+        :template: class.rst_t
+
+        FMIPhysicalModel
+
 Coupling model
 --------------
 

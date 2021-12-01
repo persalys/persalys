@@ -17,7 +17,8 @@ Notes
 When only the file name is provided, only variables marked with *Input* FMI
 causality are set as model input variables, and only variables marked with
 *Output* FMI causality are set as model output variables.
-"
+
+The implementation is based on `OTFMI <https://github.com/openturns/otfmi>`_."
 
 // ---------------------------------------------------------------------
 
