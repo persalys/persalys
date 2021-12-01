@@ -29,6 +29,8 @@ Dependencies:
 
 - CMake >=3.8
 - OpenTURNS >=1.18
+- otfmi >=0.14 (optional, for FMI support)
+- otmorris >=0.9 (optional, for Morris support)
 - Qt >=5
 - Qwt >=6
 - Python >=3.2
@@ -36,9 +38,7 @@ Dependencies:
 - SalomeYACS (optional, for YACS support)
 - Sphinx >=1.1 (optional, for doc)
 - Numpydoc (optional, for doc)
-- otfmi (optional, for FMI support)
 - ParaView >=5.8 (optional, for visualization)
-- otmorris >=0.9 (optional, for Morris support)
 
 Compilation::
 

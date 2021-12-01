@@ -6,14 +6,19 @@ Dependencies
 
 Several dependencies are needed in order to build the GUI:
 
-- OpenTURNS >= 1.9
-- Qt >= 4
-- Qwt >= 6
-- Python >= 2.7, < 3
-- Boost.regex
-- Boost.filesystem
-- SalomeYACS (optional, for YACS support
-- Sphinx-doc (optional for this doc)
+- CMake >=3.8
+- OpenTURNS >=1.18
+- `otfmi <https://github.com/openturns/otfmi>`_ >=0.14 (optional, for FMI support)
+- `otmorris <https://github.com/openturns/otmorris>`_ >=0.9 (optional, for Morris support)
+- Qt >=5
+- Qwt >=6
+- Python >=3.2
+- Boost.locale/filesystem
+- SalomeYACS (optional, for YACS support)
+- Sphinx >=1.1 (optional, for doc)
+- Numpydoc (optional, for doc)
+- ParaView >=5.8 (optional, for visualization)
+
 
 Compilation
 -----------
