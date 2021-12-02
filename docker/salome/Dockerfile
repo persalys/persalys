@@ -108,4 +108,4 @@ RUN /home/devel/appli/salome info
 # try test
 RUN sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
 ENV KERNEL_ROOT_DIR=/home/devel/local GUI_ROOT_DIR=/home/devel/local YDEFX_ROOT_DIR=/home/devel/local 
-RUN /home/devel/appli/salome test --output-on-failure -E YDEFX_StudyRestartTest
+RUN /home/devel/appli/salome test --output-on-failure
