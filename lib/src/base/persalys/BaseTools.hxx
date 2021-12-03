@@ -101,6 +101,14 @@ inline OT::String EscapeQuotes(OT::String code)
   return std::regex_replace(code, std::regex("\'"), "\\\'");
 }
 
+inline OT::Description EscapeSpecialCharacters(const OT::Description & desc)
+{
+  OT::Description escapedDesc;
+  for(OT::UnsignedInteger i = 0; i < desc.getSize(); ++i)
+    escapedDesc.add(std::regex_replace(desc[i], std::regex("[^0-9a-zA-Z]"), "\\$&"));
+  return escapedDesc;
+}
+
 inline void ValidateVariables(const OT::Description & desc) {
   std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   std::smatch what;

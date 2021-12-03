@@ -98,3 +98,7 @@ PERSALYS_PhysicalModel_setMeshModel_doc
 PERSALYS_PhysicalModel_getMeshModel_doc
 %feature("docstring") PERSALYS::PhysicalModel::hasMesh
 PERSALYS_PhysicalModel_hasMesh_doc
+%feature("docstring") PERSALYS::PhysicalModel::setEvalTime
+PERSALYS_PhysicalModel_setEvalTime_doc
+%feature("docstring") PERSALYS::PhysicalModel::getEvalTime
+PERSALYS_PhysicalModel_getEvalTime_doc

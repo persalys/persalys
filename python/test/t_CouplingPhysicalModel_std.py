@@ -18,8 +18,8 @@ with open('external_program.py', 'w') as f:
     f.write('Y0=X0+X1+X2\n')
     f.write('Y1=X0+X1*X2\n')
     f.write('with open("output.txt", "w") as f:\n')
-    f.write('    f.write("Y0=%.17e\\n" % Y0)\n')
-    f.write('    f.write("Y1=%.17e\\n" % Y1)\n')
+    f.write('    f.write("Y0 [unit] = %.17e\\n" % Y0)\n')
+    f.write('    f.write("$Y1=%.17e\\n" % Y1)\n')
 
 
 input_file = persalys.CouplingInputFile('input_template.txt')
@@ -28,7 +28,7 @@ input_file.setVariables(['X0', 'X1', 'X2'], ['@X0', '@X1', '@X2'],
                         ['{:10.6f}', '{:10.6f}', '{:10.6f}'])
 resource_file = persalys.CouplingResourceFile('external_program.py')
 output_file = persalys.CouplingOutputFile('output.txt')
-output_file.setVariables(['Y0', 'Y1'], ['Y0=', 'Y1='], [0, 0], [0, 0], [0, 0])
+output_file.setVariables(['Y0', 'Y1'], ['Y0 [unit] = ', '$Y1='], [0, 0], [0, 0], [0, 0])
 step = persalys.CouplingStep(sys.executable + ' external_program.py input.txt',
                              [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel('A', [step])
