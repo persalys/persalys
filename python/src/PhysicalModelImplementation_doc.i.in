@@ -704,3 +704,29 @@ mesh : :class:`~persalys.MeshModel`
 %enddef
 %feature("docstring") PERSALYS::PhysicalModelImplementation::getMeshModel
 PERSALYS_PhysicalModel_getMeshModel_doc
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_PhysicalModel_setEvalTime_doc
+"Evaluation time accessor.
+
+Parameters
+----------
+evalTime : float
+    Evaluation time"
+%enddef
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setEvalTime
+PERSALYS_PhysicalModel_setEvalTime_doc
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_PhysicalModel_getEvalTime_doc
+"Evaluation time accessor.
+
+Returns
+-------
+evalTime : float
+    Evaluation time"
+%enddef
+%feature("docstring") PERSALYS::PhysicalModelImplementation::getEvalTime
+PERSALYS_PhysicalModel_getEvalTime_doc
