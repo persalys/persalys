@@ -89,14 +89,6 @@ if (CMAKE_VERSION VERSION_LESS 3.12)
   if (SalomeYACS_FOUND)
     list (APPEND SWIG_MODULE_persalys_python_EXTRA_FLAGS -DPERSALYS_HAVE_YACS=1)
   endif ()
-
-  if (OTFMI_FOUND)
-    list (APPEND SWIG_MODULE_persalys_python_EXTRA_FLAGS -DPERSALYS_HAVE_OTFMI=1)
-  endif ()
-
-  if (OTMORRIS_FOUND)
-    list (APPEND SWIG_MODULE_persalys_python_EXTRA_FLAGS -DPERSALYS_HAVE_OTMORRIS=1)
-  endif ()
 endif ()
 
 ot_add_python_module (persalys persalys_module.i
@@ -207,13 +199,6 @@ if (NOT CMAKE_VERSION VERSION_LESS 3.12)
     set_property (TARGET ${persalys_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YACS=1)
   endif ()
 
-  if (OTFMI_FOUND)
-    set_property (TARGET ${persalys_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_OTFMI=1)
-  endif ()
-
-  if (OTMORRIS_FOUND)
-    set_property (TARGET ${persalys_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_OTMORRIS=1)
-  endif ()
 endif ()
 
 

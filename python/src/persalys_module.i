@@ -106,10 +106,8 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include PythonPhysicalModel.i
 %include MetaModel.i
 %include PhysicalModel.i
-#ifdef PERSALYS_HAVE_OTFMI
 %include FMUInfo.i
 %include FMIPhysicalModel.i
-#endif
 %include SymbolicFieldModel.i
 %include PythonFieldModel.i
 %include LimitStateImplementation.i
@@ -144,10 +142,8 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include SobolAnalysis.i
 %include SRCResult.i
 %include SRCAnalysis.i
-#ifdef PERSALYS_HAVE_OTMORRIS
 %include MorrisResult.i
 %include MorrisAnalysis.i
-#endif
 %include ReliabilityAnalysis.i
 %include SimulationReliabilityResult.i
 %include SimulationReliabilityAnalysis.i

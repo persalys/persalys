@@ -22,17 +22,10 @@ Model creation
     SymbolicFieldModel
     PythonPhysicalModel
     PythonFieldModel
+    FMIPhysicalModel
     DataModel
     DataCleaning
     MetaModel
-
-.. only:: otfmi
-
-    .. autosummary::
-        :toctree: _generated/
-        :template: class.rst_t
-
-        FMIPhysicalModel
 
 Coupling model
 --------------
@@ -66,17 +59,16 @@ Optimization
 
     OptimizationAnalysis
 
-.. only:: otmorris
 
-    Screening
-    ---------
+Screening
+---------
 
-    .. autosummary::
-        :toctree: _generated/
-        :template: class.rst_t
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
 
-        MorrisAnalysis
-        MorrisResult
+    MorrisAnalysis
+    MorrisResult
 
 Calibration
 -----------

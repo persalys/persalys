@@ -24,13 +24,16 @@
 #include <openturns/SpecFunc.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
-#include <otmorris/Morris.hxx>
-#include <otmorris/MorrisExperimentGrid.hxx>
-
 #include <algorithm>
 
-using namespace OT;
+#ifdef PERSALYS_HAVE_OTMORRIS
+#include <otmorris/Morris.hxx>
+#include <otmorris/MorrisExperimentGrid.hxx>
 using namespace OTMORRIS;
+#endif
+
+using namespace OT;
+
 
 namespace PERSALYS
 {
@@ -153,6 +156,7 @@ void MorrisAnalysis::initialize()
 
 void MorrisAnalysis::launch()
 {
+#ifdef PERSALYS_HAVE_OTMORRIS
   // check
   if (getPhysicalModel().getInputDimension() < 2)
     throw InvalidDimensionException(HERE) << "The model must contain at least two input variables";
@@ -241,6 +245,9 @@ void MorrisAnalysis::launch()
         result_.inputsSelection_[i][j] = 0;
     }
   }
+#else
+  throw NotYetImplementedException(HERE) << "No otmorris support";
+#endif
 }
 
 
