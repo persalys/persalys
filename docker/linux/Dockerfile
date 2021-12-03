@@ -91,9 +91,9 @@ RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.6.3.tar.gz | tar xz && 
 RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
 # sundials
-RUN curl -fSsL https://github.com/LLNL/sundials/archive/v4.1.0.tar.gz | tar xz && cd sundials-4.1.0 \
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v5.8.0.tar.gz | tar xz && cd sundials-5.8.0 \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
-    -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_TYPE=int32_t -DCMAKE_INSTALL_LIBDIR=lib .. \
+    -DLAPACK_ENABLE=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib .. \
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
@@ -101,12 +101,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.3.tar.
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.7.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.7 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.8.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.8 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.9.3 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.5.tar.gz | tar xz && cd PyFMI-PyFMI-2.9.5 \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
