@@ -76,20 +76,16 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      FileMemoizeEvaluation.cxx
                      FileMemoizeFunction.cxx
                      DataCleaning.cxx
+                     MorrisAnalysis.cxx
+                     MorrisResult.cxx
+                     FMIPhysicalModel.cxx
+                     FMUInfo.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx)
 endif ()
 if (AdaoCppLayer_FOUND)
   list (APPEND BASE_SOURCEFILES AdaoCalibration.cxx)
-endif ()
-
-if (OTFMI_FOUND)
-  list (APPEND BASE_SOURCEFILES FMIPhysicalModel.cxx FMUInfo.cxx)
-endif ()
-
-if (OTMORRIS_FOUND)
-  list (APPEND BASE_SOURCEFILES MorrisAnalysis.cxx MorrisResult.cxx)
 endif ()
 
 ot_install_header_file ( DistributionDictionary.hxx )
@@ -184,21 +180,12 @@ ot_install_header_file ( CouplingResourceFile.hxx )
 ot_install_header_file ( CouplingOutputFile.hxx )
 ot_install_header_file ( CouplingStep.hxx )
 ot_install_header_file ( DataCleaning.hxx )
-
-if (OTFMI_FOUND)
-  ot_install_header_file (FMIPhysicalModel.hxx)
-  ot_install_header_file (FMUInfo.hxx)
-endif ()
-
-if (OTMORRIS_FOUND)
-  ot_install_header_file ( MorrisAnalysis.hxx )
-  ot_install_header_file ( MorrisResult.hxx )
-endif ()
-
-if (SalomeYACS_FOUND)
-  ot_install_header_file (YACSPhysicalModel.hxx)
-  ot_install_header_file (YACSEvaluation.hxx)
-endif ()
+ot_install_header_file (FMIPhysicalModel.hxx)
+ot_install_header_file (FMUInfo.hxx)
+ot_install_header_file ( MorrisAnalysis.hxx )
+ot_install_header_file ( MorrisResult.hxx )
+ot_install_header_file (YACSPhysicalModel.hxx)
+ot_install_header_file (YACSEvaluation.hxx)
 
 
 persalys_add_library (persalysbase ${BASE_SOURCEFILES})

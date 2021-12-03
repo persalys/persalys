@@ -69,12 +69,6 @@ except ImportError:
 if '@SalomeYACS_FOUND@' == '1':
     tags.add('yacs')
 
-if '@OTFMI_FOUND@' == 'TRUE':
-    tags.add('otfmi')
-
-if '@OTMORRIS_FOUND@' == '1':
-    tags.add('otmorris')
-
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
