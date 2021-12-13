@@ -43,7 +43,7 @@ RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.8.tar.gz | tar 
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
-RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.0.tar.gz | tar xz && cd nlopt-2.7.0 \
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.1.tar.gz | tar xz && cd nlopt-2.7.1 \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
@@ -51,7 +51,7 @@ RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.1
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen-3.4.0 \
- && mkdir build && cd build && cmake -DBUILD_EXAMPLES=OFF .. && make install > /dev/null 2>&1 && cd - && rm -r eigen*
+ && mkdir build && cd build && cmake .. && make install > /dev/null 2>&1 && cd - && rm -r eigen*
 
 # spectra
 RUN curl -fsSL https://github.com/yixuan/spectra/archive/v1.0.0.tar.gz | tar xz && cd spectra-1.0.0 && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
@@ -61,7 +61,7 @@ RUN curl -fsSL https://github.com/google/glog/archive/v0.5.0.tar.gz | tar xz && 
 
 # ceres
 RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.0.0.tar.gz | tar xz && cd ceres-solver-2.0.0 \
- && cmake -DLIB_SUFFIX="" -DBUILD_SHARED_LIBS=ON . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
+ && cmake -DLIB_SUFFIX="" -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
 RUN git clone https://github.com/wjakob/tbb.git && cd tbb && cmake -DTBB_BUILD_TESTS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r tbb*
@@ -101,7 +101,7 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.3.tar.
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.8.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.8 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.9.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.9 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
@@ -110,12 +110,15 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.5.ta
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.bz2 | tar xj && cd boost_1_76_0 \
+RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.bz2 | tar xj && cd boost_1_78_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
+# ninja
+RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.10.2.tar.gz | tar xz && cd ninja-1.10.2 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
+
 # wayland
-RUN curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.19.0.tar.xz | tar xJ && cd wayland-1.19.0 && ./configure --disable-documentation && make > /dev/null 2>&1 && make install && cd - && rm -r wayland*
+RUN pip install meson && curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.20.0.tar.xz | tar xJ && cd wayland-1.20.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
 RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.2/submodules/qtbase-everywhere-src-5.15.2.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.2 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
