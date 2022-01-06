@@ -4,7 +4,8 @@ MAINTAINER jschueller
 # win7 compat
 RUN git clone https://aur.archlinux.org/mingw-w64-boost.git /tmp/boost && cd /tmp/boost && git checkout 697ae198 && sed -i "s|32:i686-w64-mingw32 ||g" PKGBUILD && git diff && makepkg -sfi --noconfirm > /dev/null 2>&1 && rm -r /tmp/boost && sudo sed -i "s|#IgnorePkg   =|IgnorePkg = mingw-w64-boost|g" /etc/pacman.conf && grep IgnorePkg /etc/pacman.conf
 
-RUN aurman -Syu --pgp_fetch --noconfirm --noedit mingw-w64-qwt
+RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-qwt
+RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-exprtk-git mingw-w64-cli11
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview > /dev/null 2>&1
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
