@@ -25,12 +25,12 @@ Create the Morris analysis:
 >>> analysis = persalys.MorrisAnalysis('anAnalysis', myPhysicalModel)
 >>> analysis.setBounds(ot.Interval([100, 60000], [350, 80000]))
 >>> analysis.setLevel(5)
->>> analysis.run()
+>>> analysis.run() # doctest: +SKIP
 
 Get the result:
 
->>> result = analysis.getResult()
->>> meanAbsEE = result.getMeanAbsoluteElementaryEffects(0)"
+>>> result = analysis.getResult() # doctest: +SKIP
+>>> meanAbsEE = result.getMeanAbsoluteElementaryEffects(0) # doctest: +SKIP"
 
 // ---------------------------------------------------------------------
 
