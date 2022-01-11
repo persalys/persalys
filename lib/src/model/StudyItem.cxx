@@ -42,6 +42,7 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QApplication>
+#include <QDir>
 
 using namespace OT;
 
@@ -238,7 +239,7 @@ bool StudyItem::save(const QString& filename)
 
   // write file
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  study_.save(fileName.toUtf8().constData());
+  study_.save(QDir::toNativeSeparators(fileName).toUtf8().constData());
   QApplication::restoreOverrideCursor();
 
   // update QSettings

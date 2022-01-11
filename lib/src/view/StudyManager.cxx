@@ -383,7 +383,7 @@ bool StudyManager::save(StudyItem* studyItem)
   if (file.exists())
   {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    studyItem->getStudy().save(file.absoluteFilePath().toUtf8().data());
+    studyItem->getStudy().save(QDir::toNativeSeparators(file.absoluteFilePath()).toUtf8().data());
     QApplication::restoreOverrideCursor();
     emit recentFilesListChanged(file.absoluteFilePath().toUtf8().data());
     return true;
