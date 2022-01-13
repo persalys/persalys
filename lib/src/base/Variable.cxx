@@ -44,10 +44,11 @@ Variable::Variable()
 
 
 /* Constructor with parameters */
-Variable::Variable(const String & name, const double & value, const String & description)
+Variable::Variable(const String & name, const double & value, const String & description, const String & unit)
   : PersistentObject()
   , value_(value)
   , description_(description)
+  , unit_(unit)
 {
   setName(name);
 }
@@ -61,7 +62,6 @@ Variable::Variable(const String & name, const String & description)
 {
   setName(name);
 }
-
 
 /* Virtual constructor */
 Variable* Variable::clone() const
@@ -119,6 +119,15 @@ void Variable::setDescription(const String & description)
   description_ = description;
 }
 
+String Variable::getUnit() const
+{
+  return unit_;
+}
+
+void Variable::setUnit(const String & unit)
+{
+  unit_ = unit;
+}
 
 String Variable::getPythonScript() const
 {

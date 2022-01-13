@@ -185,3 +185,4 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 #endif
 %include FileMemoizeEvaluation.i
 %include FileMemoizeFunction.i
+%include AnsysParser.i

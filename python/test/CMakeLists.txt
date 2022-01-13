@@ -12,6 +12,7 @@ set ( PYINSTALLCHECK_ENVIRONMENT "OPENTURNS_CONFIG_PATH=${INSTALL_DESTDIR}${SYSC
 	                         "PYTHONPATH=${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${OTMORRIS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${PERSALYS_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
     )
 
+add_executable(dummyAnsys ansysConnector/dummyAnsys.cxx)
 
 set ( PYINSTALLCHECK_TO_BE_RUN )
 macro ( ot_pyinstallcheck_test TESTNAME )
@@ -73,6 +74,7 @@ if (NOT CMAKE_CROSSCOMPILING)
   ot_pyinstallcheck_test (DesignOfExperiment_mp IGNOREOUT)
 endif ()
 ot_pyinstallcheck_test (CouplingPhysicalModel_std)
+ot_pyinstallcheck_test (AnsysParser_std)
 ot_pyinstallcheck_test (CouplingPhysicalModel_logistic)
 ot_pyinstallcheck_test (features IGNOREOUT)
 ot_pyinstallcheck_test (Cogeneration_std)

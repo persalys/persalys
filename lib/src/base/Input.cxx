@@ -58,8 +58,9 @@ Input::Input(const String& name)
 
 
 /* Constructor with parameters */
-Input::Input(const String& name, const double& value, const Distribution& distribution, const String& description)
-  : Variable(name, value, description)
+Input::Input(const String& name, const double& value, const Distribution& distribution,
+             const String& description, const String& unit)
+  : Variable(name, value, description, unit)
   , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
@@ -70,8 +71,9 @@ Input::Input(const String& name, const double& value, const Distribution& distri
 
 
 /* Constructor with parameters */
-Input::Input(const String& name, const Distribution& distribution, const String& description)
-  : Variable(name, 0., description)
+Input::Input(const String& name, const Distribution& distribution,
+             const String& description, const String& unit)
+  : Variable(name, 0., description, unit)
   , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
@@ -82,15 +84,15 @@ Input::Input(const String& name, const Distribution& distribution, const String&
 
 
 /* Constructor with parameters */
-Input::Input(const String& name, const double& value, const String& description)
-  : Variable(name, value, description)
+Input::Input(const String& name, const double& value,
+             const String& description, const String& unit)
+  : Variable(name, value, description, unit)
   , isStochastic_(false)
   , distribution_(Dirac())
   , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
-
 
 /* Virtual constructor */
 Input* Input::clone() const
