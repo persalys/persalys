@@ -32,6 +32,7 @@
 #include "persalys/OutputTableModel.hxx"
 #include "persalys/CodeDelegate.hxx"
 #include "persalys/LineEditWithQValidatorDelegate.hxx"
+#include "persalys/AnsysWizard.hxx"
 
 #include <QGroupBox>
 #include <QGridLayout>
@@ -78,6 +79,8 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
       model_->blockNotification();
       CouplingStepWidget * csWidget = new CouplingStepWidget(item, model_, csColl.getSize()-1);
       stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(stepTabWidget_->count()));
+      connect(csWidget, &CouplingStepWidget::updateStepRequested, [=](){
+          updateStepTabWidget(item); });
     });
   connect(stepTabWidget_, &DynamicTabWidget::removeTabRequested, [=](int index) {
       CouplingStepCollection csColl(model_->getSteps());
@@ -1212,9 +1215,14 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       model->blockNotification();
     });
 
+  AnsysWizard * wizard = new AnsysWizard(this);
+  QPushButton * ansysTb = new QPushButton(QIcon(":/images/workbench32X32.png"),
+                                          tr("Run ansys wizard"));
+  comTabLayout->addWidget(ansysTb, 2, 0);
+
   CollapsibleGroupBox * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
   QGridLayout * advGroupBoxLayout = new QGridLayout(advGroupBox);
-  comTabLayout->addWidget(advGroupBox, 2, 0, 1, 2);
+  comTabLayout->addWidget(advGroupBox, 3, 0, 1, 2);
 
   advGroupBoxLayout->addWidget(new QLabel(tr("Timeout (s)")), 0, 0);
   DoubleSpinBox * timeOutVal = new DoubleSpinBox();
@@ -1247,7 +1255,7 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
   advGroupBoxLayout->setColumnStretch(1,1);
   advGroupBoxLayout->setRowStretch(1,1);
   comTabLayout->setColumnStretch(1,1);
-  comTabLayout->setRowStretch(3,1);
+  comTabLayout->setRowStretch(4,1);
 
 
   // input definition
@@ -1350,6 +1358,22 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
   // - if no coupling output file : add an empty widget
   if (outTabWidget->count() < 2)
     outTabWidget->newTabRequested();
+
+  // Update step if Ansys wizard has been ran
+  connect(ansysTb, &QToolButton::clicked, [=]() {
+      if(wizard->exec())
+      {
+        wizard->validateVariables();
+        wizard->validateSystems();
+
+        model->blockNotification("PhysicalModelDefinitionItem");
+        wizard->getParser()->populateCouplingStep(model, indStep);
+        model->blockNotification();
+
+        item->update(0, "inputValueChanged");
+        emit updateStepRequested();
+      }
+    });
 
   mainLayout->addStretch();
 }
