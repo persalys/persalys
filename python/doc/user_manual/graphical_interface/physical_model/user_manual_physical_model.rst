@@ -228,6 +228,9 @@ Here is an example of an error message transmission, when we tried to compute sq
 2-3 *Coupling model*: define a physical model to wrap an external code using file-exchange
 --------------------------------------------------------------------------------------------
 
+2-3-1 *Definition*
+~~~~~~~~~~~~~~~~~~
+
 A physical model can be defined to wrap an external code. I/O can be
 cached in dedicated files. Remember to clear it when significant
 changes are made on the model. Working directory (local temp area by
@@ -286,6 +289,34 @@ Step definition is divided into several categories:
 
 .. image:: /user_manual/graphical_interface/physical_model/CPM_ExtraProcessing.png
     :align: center
+
+2-3-1 *Ansys wizard*
+~~~~~~~~~~~~~~~~~~~~
+
+A wizard is available to pre-populate coupling step information based
+on data contained in an Ansys workbench project. It consists in two steps:
+
+- First, you need to specify a workbench project file (.wbpj). You can
+  also point to a specific ansys solver if the default one does not
+  suit your needs. Once the project file is read, variables from the
+  project are displayed in the table. You can select which variable
+  come into play in the coupling step.
+
+.. image:: /user_manual/graphical_interface/physical_model/CPM_Ansys1.png
+    :align: center
+
+- Likewise, in the second step, you can select which system present in
+  your project needs updating. Be careful to select all the systems
+  that are concerned by the variables you selected in the previous
+  step.
+
+.. image:: /user_manual/graphical_interface/physical_model/CPM_Ansys2.png
+    :align: center
+
+- Once completed, the wizard will generate a template file. Outputs
+  returned by the ansys solver (in the form of a csv file) are
+  processed in the extra processing tab where some python code is
+  automatically generated to parse coupling step output values.
 
 .. _vectyacsmodel:
 

@@ -39,6 +39,7 @@ Coupling model
     CouplingOutputFile
     CouplingStep
     CouplingPhysicalModel
+    AnsysParser
 
 Model evaluation
 ----------------
