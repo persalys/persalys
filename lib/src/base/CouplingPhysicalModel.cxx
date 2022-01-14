@@ -218,6 +218,7 @@ void CouplingPhysicalModel::updateCode()
 
   code << "    checksum = hashlib.sha1()\n";
   code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
+  code << "    global workdir\n";
   if(!workDir_.empty())
     code << "    workdir = os.path.join('"+EscapeQuotes(EscapePath(workDir_))+"', 'persalys_' + checksum.hexdigest())\n";
   else
@@ -239,7 +240,10 @@ void CouplingPhysicalModel::updateCode()
   code << "            if os.path.isfile(resource_file.getPath()):\n";
   code << "                shutil.copy(resource_file.getPath(), os.path.join(workdir, os.path.basename(resource_file.getPath())))\n";
   code << "            elif os.path.isdir(resource_file.getPath()):\n";
-  code << "                shutil.copytree(resource_file.getPath(), os.path.join(workdir, os.path.basename(resource_file.getPath())))\n";
+  code << "                dest = os.path.join(workdir, os.path.basename(resource_file.getPath()))\n";
+  code << "                if os.path.exists(dest):\n";
+  code << "                    shutil.rmtree(dest)\n";
+  code << "                shutil.copytree(resource_file.getPath(), dest)\n";
   code << "            else:\n";
   code << "                raise ValueError('cannot handle file:', resource_file.getPath())\n";
   code << "        if len(step.getCommand()) > 0:\n";

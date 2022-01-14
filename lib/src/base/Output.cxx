@@ -43,13 +43,21 @@ Output::Output()
 
 
 /* Constructor with parameters */
-Output::Output(const String& name, const String& description)
-  : Variable(name, 0., description)
+Output::Output(const String& name, const String& description, const String& unit)
+  : Variable(name, 0., description, unit)
   , isSelected_(true)
   , hasBeenComputed_(false)
 {
 }
 
+/* Constructor with parameters */
+Output::Output(const String& name, const double& value,
+               const String& description, const String& unit)
+  : Variable(name, value, description, unit)
+  , isSelected_(true)
+  , hasBeenComputed_(false)
+{
+}
 
 /* Virtual constructor */
 Output* Output::clone() const

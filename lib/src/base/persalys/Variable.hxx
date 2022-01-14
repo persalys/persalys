@@ -35,7 +35,7 @@ public:
   /** Default constructor */
   Variable();
   /** Constructor with parameters */
-  Variable(const OT::String & name, const double & value, const OT::String & description);
+  Variable(const OT::String & name, const double & value, const OT::String & description, const OT::String & unit ="");
   Variable(const OT::String & name, const OT::String & description = "");
 
   /** Virtual constructor */
@@ -52,6 +52,9 @@ public:
   OT::String getDescription() const;
   void setDescription(const OT::String & description);
 
+  OT::String getUnit() const;
+  void setUnit(const OT::String & unit);
+
   virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */
@@ -66,6 +69,7 @@ protected:
 private:
   double value_;
   OT::String description_;
+  OT::String unit_ = "";
 };
 typedef OT::Collection<Variable> VariableCollection;
 }

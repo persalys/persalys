@@ -80,6 +80,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      MorrisResult.cxx
                      FMIPhysicalModel.cxx
                      FMUInfo.cxx
+                     AnsysParser.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx)
@@ -182,6 +183,7 @@ ot_install_header_file ( CouplingStep.hxx )
 ot_install_header_file ( DataCleaning.hxx )
 ot_install_header_file (FMIPhysicalModel.hxx)
 ot_install_header_file (FMUInfo.hxx)
+ot_install_header_file (AnsysParser.hxx)
 ot_install_header_file ( MorrisAnalysis.hxx )
 ot_install_header_file ( MorrisResult.hxx )
 ot_install_header_file (YACSPhysicalModel.hxx)

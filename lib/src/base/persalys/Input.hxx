@@ -37,11 +37,14 @@ public:
   /** Constructor with parameters */
   Input(const OT::String& name);
   /** Constructor with parameters */
-  Input(const OT::String& name, const double& value, const OT::Distribution& distribution, const OT::String& description = "");
+  Input(const OT::String& name, const double& value, const OT::Distribution& distribution,
+        const OT::String& description = "", const OT::String& unit = "");
   /** Constructor with parameters */
-  Input(const OT::String& name, const OT::Distribution& distribution, const OT::String& description = "");
+  Input(const OT::String& name, const OT::Distribution& distribution,
+        const OT::String& description = "", const OT::String& unit = "");
   /** Constructor with parameters */
-  Input(const OT::String& name, const double& value, const OT::String& description = "");
+  Input(const OT::String& name, const double& value,
+        const OT::String& description = "", const OT::String& unit = "");
 
   /** Virtual constructor */
   Input * clone() const override;

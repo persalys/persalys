@@ -284,6 +284,7 @@ public slots:
   void updateInputFileWidgets(PhysicalModelItem *item);
 signals:
   void variableListChanged();
+  void updateStepRequested();
 
 private:
   CouplingPhysicalModel * model_ = 0;

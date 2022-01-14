@@ -35,7 +35,9 @@ public:
   /** Default constructor */
   Output();
   /** Constructor with parameters */
-  Output(const OT::String& name, const OT::String& description = "");
+  Output(const OT::String& name, const OT::String& description = "", const OT::String& unit = "");
+  Output(const OT::String& name, const double& value,
+         const OT::String& description = "", const OT::String& unit = "");
 
   /** Virtual constructor */
   Output * clone() const override;

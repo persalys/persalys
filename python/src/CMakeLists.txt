@@ -185,6 +185,7 @@ ot_add_python_module (persalys persalys_module.i
                       FileMemoizeEvaluation.i
                       FileMemoizeFunction.i FileMemoizeFunction_doc.i.in
                       DataCleaning.i DataCleaning_doc.i.in
+                      AnsysParser.i AnsysParser_doc.i.in
                     )
 
 if (NOT CMAKE_VERSION VERSION_LESS 3.12)
