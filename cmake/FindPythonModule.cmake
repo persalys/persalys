@@ -10,7 +10,7 @@
 #  MODULE_VERSION_STRING - module version, if available through __version__
 #
 #=============================================================================
-# Copyright 2015-2021 EDF-Phimeca
+# Copyright 2015-2022 EDF-Phimeca
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.

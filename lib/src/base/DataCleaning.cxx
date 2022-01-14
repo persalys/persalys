@@ -2,7 +2,7 @@
 /**
  *  @brief Sample cleaning classes
  *
- *  Copyright 2015-2021 EDF-Phimeca
+ *  Copyright 2015-2022 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
