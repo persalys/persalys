@@ -365,26 +365,26 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
   cs.setCommand(cmd);
 
   OSS code;
-  code << "def read_output(";
-  for(UnsignedInteger i = 0; i < getInputVariables().getSize()-1; ++i)
-    code << getInputVariables()[i].getName() << ",";
-  code << getInputVariables()[getInputVariables().getSize()-1].getName() << "):\n";
-  code << "    import os\n";
-  code << "    with open(os.path.join(workdir, '" << getOutputFileName() <<"'), 'r') as f:\n";
-  code << "        for line in f.read().splitlines():\n";
-  code << "            if line.startswith('N'):# 'Name|Nom' en|fr|de, !jp\n";
-  code << "                names = line.split(',')[1:]\n";
-  code << "            if line.startswith('DP'):\n";
-  code << "                values = line.split(',')[1:]\n";
-  code << "    results = dict(zip(names, values))\n";
+  if(getOutputVariables().getSize())
+  {
+    code << "def read_output():\n";
+    code << "    import os\n";
+    code << "    with open(os.path.join(workdir, '" << getOutputFileName() <<"'), 'r') as f:\n";
+    code << "        for line in f.read().splitlines():\n";
+    code << "            if line.startswith('N'):# 'Name|Nom' en|fr|de, !jp\n";
+    code << "                names = line.split(',')[1:]\n";
+    code << "            if line.startswith('DP'):\n";
+    code << "                values = line.split(',')[1:]\n";
+    code << "    results = dict(zip(names, values))\n";
 
-  for(UnsignedInteger i = 0; i < getOutputVariables().getSize(); ++i)
-    code << "    " << getOutputVariables()[i].getName() << " = float(results['"
-       << getOutputVariables()[i].getName() << "'])\n";
-  code << "    return ";
-  for(UnsignedInteger i = 0; i < getOutputVariables().getSize()-1; ++i)
-    code << getOutputVariables()[i].getName() << ",";
-  code << getOutputVariables()[getOutputVariables().getSize()-1].getName();
+    for(UnsignedInteger i = 0; i < getOutputVariables().getSize(); ++i)
+      code << "    " << getOutputVariables()[i].getName() << " = float(results['"
+           << getOutputVariables()[i].getName() << "'])\n";
+    code << "    return ";
+    for(UnsignedInteger i = 0; i < getOutputVariables().getSize()-1; ++i)
+      code << getOutputVariables()[i].getName() << ",";
+    code << getOutputVariables()[getOutputVariables().getSize()-1].getName();
+  }
   cs.setCode(EscapeQuotes(code));
 
   csColl[indStep] = cs;
