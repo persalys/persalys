@@ -260,7 +260,7 @@ void CouplingPhysicalModel::updateCode()
   code << "        if step.getCode():\n";
   code << "            script=step.getCode()\n";
 
-  code << "            regexsearch = re.search('def (\\w+)\\(.*\\):', script)\n";
+  code << "            regexsearch = re.search('def (\\w*)\\(.*\\):', script)\n";
   code << "            if(regexsearch is not None):\n";
   code << "                script_funcname = regexsearch.group(1)\n";
   code << "            else:\n";
@@ -270,12 +270,12 @@ void CouplingPhysicalModel::updateCode()
   code << "            if(regexsearch is not None):\n";
   code << "                script_invars = regexsearch.group(1).replace(' ', '').split(',')\n";
   code << "            else:\n";
-  code << "                raise RuntimeError('Could not find extra processing input variables')\n";
+  code << "                script_invars = []\n";
   code << "            regexsearch = re.search('return ([\\w, ]+)', script)\n";
   code << "            if(regexsearch is not None):\n";
   code << "                script_outvars = regexsearch.group(1).replace(' ', '').split(',')\n";
   code << "            else:\n";
-  code << "                raise RuntimeError('Could not find extra processing output variables')\n";
+  code << "                script_outvars = []\n";
   code << "            exec_script = script+'\\nscript_output__ = '+script_funcname+'('+ ', '.join([str(all_vars[var]) for var in script_invars]) + ')\\n'\n";
   code << "            local_dict = locals()\n";
   code << "            exec(exec_script, globals(), local_dict)\n";
