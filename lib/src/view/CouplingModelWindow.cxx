@@ -1215,7 +1215,6 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       model->blockNotification();
     });
 
-  AnsysWizard * wizard = new AnsysWizard(this);
   QPushButton * ansysTb = new QPushButton(QIcon(":/images/workbench32X32.png"),
                                           tr("Run ansys wizard"));
   comTabLayout->addWidget(ansysTb, 2, 0);
@@ -1361,6 +1360,7 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
 
   // Update step if Ansys wizard has been ran
   connect(ansysTb, &QToolButton::clicked, [=]() {
+      AnsysWizard * wizard = new AnsysWizard(this);
       if(wizard->exec())
       {
         wizard->validateVariables();
@@ -1371,6 +1371,7 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
         model->blockNotification();
 
         item->update(0, "inputValueChanged");
+        item->update(0, "codeChanged");
         emit updateStepRequested();
       }
     });
