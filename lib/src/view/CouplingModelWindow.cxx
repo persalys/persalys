@@ -1216,7 +1216,7 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
     });
 
   QPushButton * ansysTb = new QPushButton(QIcon(":/images/workbench32X32.png"),
-                                          tr("Run ansys wizard"));
+                                          tr("Run ansys wizard"), this);
   comTabLayout->addWidget(ansysTb, 2, 0);
 
   CollapsibleGroupBox * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
