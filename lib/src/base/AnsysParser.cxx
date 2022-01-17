@@ -342,12 +342,17 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
     inNames.add(inputs[i].getName());
     inTokens.add("@"+inputs[i].getName()+"@");
     inFormats.add("{}");
+    if(!model->hasInputNamed(inputs[i].getName()))
+      model->PhysicalModelImplementation::addInput(inputs[i]);
   }
-  model->PhysicalModelImplementation::setInputs(inputs);
+
   inFile.setVariables(inNames, inTokens, inFormats);
   inColl.add(inFile);
 
-  model->PhysicalModelImplementation::setOutputs(getOutputVariables());
+  for (UnsignedInteger i = 0; i < getOutputVariables().getSize(); ++i)
+    if(!model->hasOutputNamed(getOutputVariables()[i].getName()))
+      model->PhysicalModelImplementation::addOutput(getOutputVariables()[i]);
+
 
   resColl.add(CouplingResourceFile(getProjectDirectory()));
   resColl.add(CouplingResourceFile(getModelFileName()));
