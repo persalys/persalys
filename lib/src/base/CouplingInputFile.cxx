@@ -115,7 +115,7 @@ Description CouplingInputFile::getFormats() const
 }
 
 /* Simulating input file creation */
-void CouplingInputFile::simulateInput(InputCollection inColl) const
+void CouplingInputFile::simulateInput(VariableCollection varColl) const
 {
   const Description variableNames(getVariableNames());
   OSS code;
@@ -130,11 +130,11 @@ void CouplingInputFile::simulateInput(InputCollection inColl) const
        << Parameters::GetOTDescriptionStr(getTokens())<<", "
        << Parameters::GetOTDescriptionStr(getFormats())<<")\n";
   code << "all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(variableNames) << ", [";
-  for (UnsignedInteger i = 0; i < inColl.getSize(); ++ i)
+  for (UnsignedInteger i = 0; i < varColl.getSize(); ++ i)
   {
-    if(variableNames.contains(inColl[i].getName())) {
-      code << inColl[i].getValue();
-      if (i < inColl.getSize() - 1)
+    if(variableNames.contains(varColl[i].getName())) {
+      code << varColl[i].getValue();
+      if (i < varColl.getSize() - 1)
         code << ", ";
     }
   }

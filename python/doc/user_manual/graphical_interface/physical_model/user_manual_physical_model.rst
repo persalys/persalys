@@ -240,8 +240,9 @@ button runs the model on the defined input values. It shall be used to
 test the physical model. To save the output values, the user should
 use the :ref:`Model evaluation <modelEvaluation>`.
 
-A coupling model is divided into steps (one per tab), each with
-its own parameters.
+A coupling model is divided into steps (one per tab), each with its
+own parameters. Output from a given step can be used as input in the
+next.
 
 Step definition is divided into several categories:
 
@@ -259,7 +260,10 @@ Step definition is divided into several categories:
   to find it in the input file. Template file correctness can be
   evaluated using the "check input button". Template and generated
   input files will be displayed side-by-side for visual inspection and
-  validation.
+  validation. If an input is defined as output in one of the previous
+  step, a question mark will be displayed as its default value. When
+  checking the template, it will default to zero in the generated
+  input file.
 
 .. image:: /user_manual/graphical_interface/physical_model/CPM_Input.png
     :align: center
