@@ -878,13 +878,22 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
       QFileInfo temFile(inColl[indFile].getPath().c_str());
       QFileInfo simFile(QDir::temp().absolutePath()+"/"+inColl[indFile].getConfiguredPath().c_str());
 
+      VariableCollection varColl;
+      const InputCollection inVar = model->getInputs();
+      const OutputCollection outVar = model->getOutputs();
+
+      for(UnsignedInteger i=0; i<inVar.getSize(); ++i)
+        varColl.add(Variable(inVar[i].getName(), inVar[i].getValue(), inVar[i].getDescription()));
+      for(UnsignedInteger i=0; i<outVar.getSize(); ++i)
+        varColl.add(Variable(outVar[i].getName(), outVar[i].getValue(), outVar[i].getDescription()));
+
       if(!temFile.exists())
         temTextLabel->setText(tr("Template file not found")+"\n");
       else if(!temFile.isReadable())
         temTextLabel->setText(tr("Template file not readable")+"\n");
       else {
         try {
-          inColl[indFile].simulateInput(model->getInputs());}
+          inColl[indFile].simulateInput(varColl);}
         catch (std::exception & ex) {
           temTextLabel->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
           temTextLabel->setText(ex.what());
