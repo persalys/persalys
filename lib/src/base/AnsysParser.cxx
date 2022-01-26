@@ -294,7 +294,8 @@ void AnsysParser::generateTemplate(const String & templateFileName,
 
   templateFile << "# encoding: utf-8\n";
   templateFile << "# SetScriptVersion(Version=\"" << getFullAnsysVersion() << "\")\n";
-  templateFile << "designPoint1 = Parameters.GetDesignPoint(Name=\"0\")\n";
+  templateFile << "designPoint0 = Parameters.GetDesignPoint(Name=\"0\")\n";
+  templateFile << "designPoint1 = Parameters.CreateDesignPoint()\n";
   for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
   {
     templateFile << "parameter" << i << " = Parameters.GetParameter(Name=\""
@@ -303,6 +304,9 @@ void AnsysParser::generateTemplate(const String & templateFileName,
                  << i << ", Expression=\"@" << inputs_[i].getName()
                  << "@ [" << inputs_[i].getUnit() << "]\")\n";
   }
+  templateFile << "designPoint1.Retained = True\n";
+  templateFile << "Parameters.SetBaseDesignPoint(DesignPoint=designPoint1)\n";
+  templateFile << "Save(Overwrite=True)\n";
   int i = 1;
   for (auto const& sys : systems_)
   {
@@ -313,6 +317,9 @@ void AnsysParser::generateTemplate(const String & templateFileName,
 
   templateFile << "Parameters.ExportAllDesignPointsData(FilePath=\""
                << outputFileName << "\")\n";
+  templateFile << "Parameters.SetBaseDesignPoint(DesignPoint=designPoint0)\n";
+  templateFile << "designPoint1.Retained = False\n";
+  templateFile << "Save(Overwrite=True)\n";
 
 }
 
@@ -330,7 +337,6 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
 
   CouplingInputFileCollection inColl;
   CouplingOutputFileCollection outColl;
-  CouplingResourceFileCollection resColl;
 
   CouplingInputFile inFile(getTemplateFileName());
   const InputCollection inputs = getInputVariables();
@@ -353,19 +359,11 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
     if(!model->hasOutputNamed(getOutputVariables()[i].getName()))
       model->PhysicalModelImplementation::addOutput(getOutputVariables()[i]);
 
-
-  resColl.add(CouplingResourceFile(getProjectDirectory()));
-  resColl.add(CouplingResourceFile(getModelFileName()));
-
   cs.setInputFiles(inColl);
-  cs.setResourceFiles(resColl);
-
-  boost::filesystem::path p(modelFileName_);
-  const String modelBaseName = p.filename().string();
 
   OSS cmd;
   cmd << getExecutableFileName()
-      << " -B -F " << modelBaseName
+      << " -B -F " << modelFileName_
       << " -R input" << std::to_string(indStep) << ".wbjn";
   cs.setCommand(cmd);
 
