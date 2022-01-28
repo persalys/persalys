@@ -266,7 +266,9 @@ void PyInterp_Interp::initPython()
     Py_Initialize(); // Initialize the interpreter
     PySys_SetArgv(_argc, changed_argv);
 
+#if PY_VERSION_HEX < 0x03070000
     PyEval_InitThreads(); // Create (and acquire) the Python global interpreter lock (GIL)
+#endif
     PyEval_SaveThread(); // release safely GIL
   }
 }
