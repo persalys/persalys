@@ -77,18 +77,17 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimag
  && ln -s /usr/local/src/squashfs-root/AppRun /usr/bin/appimagetool \
  && appimagetool --version
 
+# openssl
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1m.tar.gz | tar xz && cd openssl-1.1.1m \
+ && ./config no-ssl2 no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
+
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.8.10/Python-3.8.10.tgz | tar xz && cd Python-3.8.10 \
- && ./configure --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.10.2/Python-3.10.2.tgz | tar xz && cd Python-3.10.2 \
+ && ./configure --enable-shared CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11
-RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.20.3.tar.gz | tar xz && cd numpy-1.20.3 \
- && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
-RUN curl -fSsL https://github.com/scipy/scipy/archive/v1.6.3.tar.gz | tar xz && cd scipy-1.6.3 \
- && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
-RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
+RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython "numpy<1.22" scipy lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v5.8.0.tar.gz | tar xz && cd sundials-5.8.0 \
@@ -97,13 +96,12 @@ RUN curl -fSsL https://github.com/LLNL/sundials/archive/v5.8.0.tar.gz | tar xz &
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.3.tar.gz | tar xz && cd fmi-library-2.3 \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.tar.gz | tar xz && cd fmi-library-2.4 \
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
 RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.9.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.9 \
- && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
- && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
+ && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.5.tar.gz | tar xz && cd PyFMI-PyFMI-2.9.5 \
@@ -145,8 +143,8 @@ RUN curl -fSsL https://paraview.org/files/v5.9/ParaView-v5.9.1.tar.xz | tar xJ &
 
 # openturns
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.18 \
- && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
-      -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+ && cmake -DUSE_SPHINX=OFF -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" \
+    -DPYTHON_EXECUTABLE=/usr/local/bin/python3 . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.12 \
