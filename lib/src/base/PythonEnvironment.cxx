@@ -31,7 +31,9 @@ PythonEnvironment::PythonEnvironment()
 {
   // Py_Initialize should be done by PyInterp_Interp
   Py_Initialize();
+#if PY_VERSION_HEX < 0x03070000
   PyEval_InitThreads(); // Create (and acquire) the Python global interpreter lock (GIL)
+#endif
   // avoid error: "Exception ignored in: <module 'threading' from '/usr/lib/python3.6/threading.py'>" when closing the interface if the user used parallelisation
   Py_DECREF(PyImport_ImportModule("threading"));
   PyEval_SaveThread(); /* Release the thread state */
