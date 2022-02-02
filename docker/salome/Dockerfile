@@ -21,7 +21,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz | tar xz
  && ./configure --enable-shared && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools numpy==1.15.1 scipy==0.19.1 psutil
+RUN curl -fsSLO https://bootstrap.pypa.io/pip/3.6/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools numpy==1.15.1 scipy==0.19.1 psutil
 
 # omniorb
 RUN curl -L http://downloads.sourceforge.net/omniorb/omniORB-4.2.3.tar.bz2|tar xj && cd omniORB-4.2.3 && ./configure --with-openssl=/usr && make > /dev/null 2>&1 && make install && cd - && rm -r omniORB*
@@ -72,25 +72,25 @@ WORKDIR /home/devel/src
 RUN git config --global user.email devel@a.b && git config --global user.name devel
 
 # salome-configuration
-RUN git clone https://git.salome-platform.org/gitpub/tools/configuration.git && cd configuration && git checkout V9_8_0b1 && sed -i "s|NO_SYSTEM_ENVIRONMENT_PATH||g" cmake/SalomeMacros.cmake
+RUN git clone https://git.salome-platform.org/gitpub/tools/configuration.git && cd configuration && git checkout V9_8_0 && sed -i "s|NO_SYSTEM_ENVIRONMENT_PATH||g" cmake/SalomeMacros.cmake
 
 # salome-kernel
-RUN git clone https://git.salome-platform.org/gitpub/modules/kernel.git && cd kernel && git checkout V9_8_0b1 && cmake -DSALOME_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOME_USE_LIBBATCH=ON -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r kernel*
+RUN git clone https://git.salome-platform.org/gitpub/modules/kernel.git && cd kernel && git checkout V9_8_0 && cmake -DSALOME_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOME_USE_LIBBATCH=ON -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r kernel*
 
 # salome-gui
-RUN git clone https://git.salome-platform.org/gitpub/modules/gui.git && cd gui && git checkout V9_8_0b1 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DSALOME_USE_VTKVIEWER=OFF -DSALOME_BUILD_DOC=OFF -DSALOME_USE_PVVIEWER=OFF -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PLOT2DVIEWER=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local -DSALOME_CMAKE_DEBUG=ON . && make install > /dev/null 2>&1 && cd - && rm -rf gui*
+RUN git clone https://git.salome-platform.org/gitpub/modules/gui.git && cd gui && git checkout V9_8_0 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DSALOME_USE_VTKVIEWER=OFF -DSALOME_BUILD_DOC=OFF -DSALOME_USE_PVVIEWER=OFF -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PLOT2DVIEWER=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local -DSALOME_CMAKE_DEBUG=ON . && make install > /dev/null 2>&1 && cd - && rm -rf gui*
 
 # salome-yacs
-RUN git clone https://git.salome-platform.org/gitpub/modules/yacs.git && cd yacs && git checkout V9_8_0b1 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r yacs*
+RUN git clone https://git.salome-platform.org/gitpub/modules/yacs.git && cd yacs && git checkout V9_8_0 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r yacs*
 
 # py2cpp
-RUN git clone https://git.salome-platform.org/gitpub/tools/py2cpp.git && cd py2cpp && git checkout V9_8_0b1 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r py2cpp*
+RUN git clone https://git.salome-platform.org/gitpub/tools/py2cpp.git && cd py2cpp && git checkout V9_8_0rc1 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r py2cpp*
 
 # ydefx
-RUN git clone https://git.salome-platform.org/gitpub/tools/ydefx.git && cd ydefx && git checkout V9_8_0b1 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r ydefx*
+RUN git clone https://git.salome-platform.org/gitpub/tools/ydefx.git && cd ydefx && git checkout V9_8_0rc1 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r ydefx*
 
 # adao
-RUN git clone https://git.salome-platform.org/gitpub/modules/adao.git && cd adao && git checkout V9_8_0b1 && CURRENT_SOFTWARE_INSTALL_DIR=/usr/local cmake -DADAO_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration . && make && sudo make install  && cd - && rm -r adao*
+RUN git clone https://git.salome-platform.org/gitpub/modules/adao.git && cd adao && git checkout V9_8_0 && CURRENT_SOFTWARE_INSTALL_DIR=/usr/local cmake -DADAO_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration . && make && sudo make install  && cd - && rm -r adao*
 
 # adao_interface
 RUN git clone https://git.salome-platform.org/gitpub/tools/adao_interface.git && cd adao_interface && git checkout V9_7_0 && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DPY2CPP_ROOT_DIR=/home/devel/local -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r adao*
