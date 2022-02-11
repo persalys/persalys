@@ -232,7 +232,7 @@ void CouplingPhysicalModel::updateCode()
   code << "            input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
   code << "            formats = input_file.getFormats()\n";
   code << "            if formats.isBlank():\n";
-  code << "                formats=None\n";
+  code << "                formats = None\n";
   code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
   code << "        for resource_file in step.getResourceFiles():\n";
   code << "            if not resource_file.getPath():\n";
@@ -247,9 +247,9 @@ void CouplingPhysicalModel::updateCode()
   code << "            else:\n";
   code << "                raise ValueError('cannot handle file:', resource_file.getPath())\n";
   code << "        if len(step.getCommand()) > 0:\n";
-  code << "            timeout=step.getTimeOut()\n";
+  code << "            timeout = step.getTimeOut()\n";
   code << "            if timeout <= 0:\n";
-  code << "                timeout=None\n";
+  code << "                timeout = None\n";
   code << "            otct.execute(step.getCommand(), cwd=workdir, shell=step.getIsShell(), get_stderr=True, get_stdout=True, timeout=timeout)\n";
   code << "        for output_file in step.getOutputFiles():\n";
   code << "            if not output_file.getPath():\n";
@@ -258,26 +258,26 @@ void CouplingPhysicalModel::updateCode()
   code << "            for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding=step.getEncoding())\n";
   code << "        if step.getCode():\n";
-  code << "            script=step.getCode()\n";
+  code << "            script = step.getCode()\n";
 
   code << "            regexsearch = re.search('def (\\w*)\\(.*\\):', script)\n";
-  code << "            if(regexsearch is not None):\n";
+  code << "            if regexsearch is not None:\n";
   code << "                script_funcname = regexsearch.group(1)\n";
   code << "            else:\n";
   code << "                raise RuntimeError('Could not find extra processing function name')\n";
 
   code << "            regexsearch = re.search('def \\w+\\(([\\w, ]+)\\):', script)\n";
-  code << "            if(regexsearch is not None):\n";
+  code << "            if regexsearch is not None:\n";
   code << "                script_invars = regexsearch.group(1).replace(' ', '').split(',')\n";
   code << "            else:\n";
   code << "                script_invars = []\n";
   code << "            regexsearch = re.search('return ([\\w, ]+)', script)\n";
-  code << "            if(regexsearch is not None):\n";
+  code << "            if regexsearch is not None:\n";
   code << "                script_outvars = regexsearch.group(1).replace(' ', '').split(',')\n";
   code << "            else:\n";
   code << "                script_outvars = []\n";
   code << "            exec_script = script+'\\nscript_output__ = '+script_funcname+'('+ ', '.join([str(all_vars[var]) for var in script_invars]) + ')\\n'\n";
-  code << "            local_dict = locals()\n";
+  code << "            local_dict = globals()\n";
   code << "            exec(exec_script, globals(), local_dict)\n";
   code << "            script_output__ = local_dict['script_output__']\n";
   code << "            if len(script_outvars) == 1:\n";
