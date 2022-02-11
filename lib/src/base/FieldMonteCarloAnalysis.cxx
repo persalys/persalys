@@ -85,9 +85,6 @@ void FieldMonteCarloAnalysis::initialize()
 void FieldMonteCarloAnalysis::launch()
 {
   // check
-  if (getMaximumCalls() < getBlockSize())
-    throw InvalidValueException(HERE) << "The maximum calls number (" << getMaximumCalls()
-                                      << ") cannot be less than the block size (" << getBlockSize() << ")";
   if (!getPhysicalModel().getRestrictedFunction(getInterestVariables()).getOutputDescription().getSize())
     throw InvalidDimensionException(HERE) << "The outputs of interest "
                                           << getInterestVariables() << " are not outputs of the model "

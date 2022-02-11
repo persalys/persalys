@@ -125,12 +125,6 @@ bool SimulationReliabilityPage::validatePage()
   {
     if (!stopCriteriaGroupBox_->isMaxElapsedTimeValid())
       errorMessage = tr("The maximum time must not be null");
-
-    if (stopCriteriaGroupBox_->isMaxCallsRequired())
-    {
-      if (stopCriteriaGroupBox_->getMaximumCalls() < blockSizeGroupBox_->getBlockSizeValue())
-        errorMessage = tr("The maximum calls cannot be less than the block size");
-    }
   }
 
   errorMessageLabel_->setErrorMessage(errorMessage);
