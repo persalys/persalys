@@ -6,7 +6,7 @@ Installation
 ------------
 - Windows:
 
-  * requirements: Windows>=10
+  * requirements: Windows>=7, KB2533623 and KB2999226 updates
   * to use system OpenGL libs remove the provided opengl32.dll
 
 - Linux:
