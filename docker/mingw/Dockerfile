@@ -35,6 +35,3 @@ RUN echo "__version__= '0.0'" > /tmp/otfmi.py && sudo mv /tmp/otfmi.py ${MINGW_P
 
 # https://bugreports.qt.io/browse/QTBUG-94790
 RUN sudo sed -i 's|#ifndef __TBB_profiling_H|#if !defined(__TBB_profiling_H) \&\& !defined(Q_MOC_RUN)|g' ${MINGW_PREFIX}/include/tbb/tbb_profiling.h || :
-
-# https://gitlab.freedesktop.org/mesa/mesa/-/issues/5865
-ENV MESA_EXTENSION_OVERRIDE="-GL_EXT_memory_object"
