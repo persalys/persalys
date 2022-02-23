@@ -150,6 +150,10 @@ String CouplingStep::getCode() const
 String CouplingStep::getEscapedCode() const
 {
   String code = std::regex_replace(getCode(), std::regex("\n", std::regex::extended), "\\n");
+  code = std::regex_replace(code, std::regex("\\\\u", std::regex::extended), "\\\\u");
+  code = std::regex_replace(code, std::regex("\\\\U", std::regex::extended), "\\\\U");
+  code = std::regex_replace(code, std::regex("\\\\N", std::regex::extended), "\\\\N");
+  code = std::regex_replace(code, std::regex("\\\\x", std::regex::extended), "\\\\x");
   return code;
 }
 
