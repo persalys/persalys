@@ -50,7 +50,7 @@ ott.assert_almost_equal(mean, [0, 0], 0.3, 0.3)
 ott.assert_almost_equal(stddev, [math.sqrt(3.0), 1.415], 0.3, 0.3)
 
 # post-processing
-step.setCode("import random\ndef _exec2(Y0, Y1):\n    z = random.random()\n    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n")
+step.setCode("import random\ndef _exec2(Y0, Y1):\n    A=r\"U\\U-N\\N-u\\u-x\\x\"\n    z = random.random()\n    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n")
 model = persalys.CouplingPhysicalModel('A', [step])
 f = model.getFunction()
 y = f(x)
