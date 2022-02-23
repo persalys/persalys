@@ -6,4 +6,4 @@ Set wshEnv = wshShell.Environment("Process")
 wshEnv("PYTHONHOME") = fso.GetAbsolutePathName(currentDirectory + "\..\..\..\")
 wshEnv("PYTHONPATH") = fso.GetAbsolutePathName(currentDirectory + "\..\..\..\python38.zip")
 
-wshShell.Run "persalys.vbs"
+wshShell.Run fso.GetAbsolutePathName(currentDirectory + "\persalys.vbs")
