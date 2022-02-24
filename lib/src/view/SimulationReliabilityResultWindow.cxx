@@ -149,7 +149,7 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
   QStringList valuesList;
   if (result_.getElapsedTime() > 0.)
-    valuesList << QString::number(result_.getElapsedTime()) + " s";
+    valuesList << QtOT::FormatDuration(result_.getElapsedTime());
   valuesList << QString::number(result_.getSimulationResult().getOuterSampling() * result_.getSimulationResult().getBlockSize());
 
   ParametersTableView * parametersTable = new ParametersTableView(namesList, valuesList, true, true);

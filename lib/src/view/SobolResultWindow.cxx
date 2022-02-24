@@ -147,7 +147,7 @@ void SobolResultWindow::buildInterface()
               << tr("Confidence interval length");
 
     QStringList valuesList;
-    valuesList << QString::number(result_.getElapsedTime()) + " s"
+    valuesList << QtOT::FormatDuration(result_.getElapsedTime())
                << QString::number(result_.getCallsNumber())
                << QString::number(result_.getConfidenceIntervalLength());
 
