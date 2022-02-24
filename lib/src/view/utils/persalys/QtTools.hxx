@@ -62,6 +62,7 @@ public:
   static OT::Description StringListToDescription(const QStringList& stringList);
   static QString PointToString(const OT::Point& point);
   static QStringList GetVariableAxisLabels(const PhysicalModel &model, const OT::Description &variableNames);
+  static QString FormatDuration(double seconds);
 };
 
 static const QMap<QString, QString> ApplicationColor{

@@ -107,9 +107,9 @@ void SRCResultWindow::buildInterface()
                   << tr("R2");
 
       QStringList valuesList;
-      valuesList << QString::number(result_.getElapsedTime()) + " s"
-          << QString::number(result_.getCallsNumber())
-      << QString::number(result_.getR2()[i]);
+      valuesList << QtOT::FormatDuration(result_.getElapsedTime())
+                 << QString::number(result_.getCallsNumber())
+                 << QString::number(result_.getR2()[i]);
       ParametersTableView * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
       indicesLayout->addWidget(basisTableView);
     }

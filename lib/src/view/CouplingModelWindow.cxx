@@ -33,6 +33,7 @@
 #include "persalys/CodeDelegate.hxx"
 #include "persalys/LineEditWithQValidatorDelegate.hxx"
 #include "persalys/AnsysWizard.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QGroupBox>
 #include <QGridLayout>
@@ -161,7 +162,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
             evaluateOutputs();
             if(model_->getEvalTime()>0)
               timeInfo->setText(tr("Elapsed time")
-                                + QString{ ": %1" }.arg(model_->getEvalTime(), 0, 'g', 3) + "s");
+                                + QtOT::FormatDuration(model_->getEvalTime()));
           });
   tabLayout->addWidget(evaluateOutputsButton, 2, 0, Qt::AlignLeft);
 

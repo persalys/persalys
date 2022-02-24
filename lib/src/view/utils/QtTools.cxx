@@ -20,6 +20,8 @@
  */
 #include "persalys/QtTools.hxx"
 
+#include <QTranslator>
+
 using namespace OT;
 
 namespace PERSALYS
@@ -114,4 +116,59 @@ QStringList QtOT::GetVariableAxisLabels(const PhysicalModel &model, const Descri
   }
   return labels;
 }
+
+QString QtOT::FormatDuration(double seconds)
+{
+  // convert seconds
+  double sec = std::fmod(seconds,60.);
+  int minutes = seconds / 60;
+  int hours = minutes / 60;
+  minutes %= 60;
+  int days = hours / 24;
+  hours %= 24;
+
+  // set text: XXX d XX h XX m XX s || XXX ms
+  QString duration;
+  if (days)
+  {
+    duration += QString::number(days);
+    duration += QT_TR_NOOP("d");
+  }
+  if (hours)
+  {
+    if (days)
+      duration += " ";
+    duration += QString::number(hours);
+    duration += "h";
+  }
+  if (minutes)
+  {
+    if (hours || days)
+      duration += " ";
+    duration += QString::number(minutes);
+    duration += "m";
+  }
+  if (sec && !days) // Conditional seconds display
+  {
+    if (sec < 1.) // Display ms
+    {
+      duration += QString::number((int)(sec*1000));
+      duration += "ms";
+    }
+    else
+    {
+      int precision = 3;
+      if (seconds > 60.) // Round seconds if > 1 mn and add space after minutes
+      {
+        precision = 2;
+        if (days || hours || minutes)
+          duration += " ";
+      }
+      duration += QString::number(sec, 'g', precision);
+      duration += "s";
+    }
+  }
+  return duration;
+}
+
 }

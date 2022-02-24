@@ -238,7 +238,7 @@ void DataAnalysisWindow::addSummaryTab()
   if (result_.getElapsedTime() > 0.)
   {
     namesList << tr("Elapsed time");
-    valuesList << QString::number(result_.getElapsedTime()) + " s";
+    valuesList << QtOT::FormatDuration(result_.getElapsedTime());
   }
   // - coef of variation
   if (hasMaximumCV_)
