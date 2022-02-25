@@ -330,7 +330,7 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
   if(templateFileName == "")
     generateTemplate(indStep);
   else
-    generateTemplate(templateFileName, "output.csv");
+    generateTemplate(templateFileName, "output0.csv");
 
   CouplingStepCollection csColl(model->getSteps());
   CouplingStep cs(csColl[indStep]);
