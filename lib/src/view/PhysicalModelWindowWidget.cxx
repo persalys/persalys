@@ -161,8 +161,7 @@ void PhysicalModelWindowWidget::buildInterface()
             timeInfo->clear();
             evaluateOutputs();
             if(physicalModel_.getEvalTime()>0)
-              timeInfo->setText(tr("Elapsed time")
-                                + QtOT::FormatDuration(physicalModel_.getEvalTime()));
+              timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
           });
   outputButtonsLayout->addWidget(evaluateOutputsButton);
   outputButtonsLayout->addWidget(timeInfo);
