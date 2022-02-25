@@ -606,7 +606,10 @@ void MarginalsWidget::distributionParametersChanged()
         return;
 
       DistributionDictionary::UpdateDistribution(inputDist, parameters, parametersType);
-      physicalModel_.blockNotification("ProbabilisticModelItem");
+
+      // outside proba model like in calibration, avoid blockNotification to throw if the gui item is not found
+      if (physicalModel_.getImplementation()->getObserver("ProbabilisticModelItem"))
+        physicalModel_.blockNotification("ProbabilisticModelItem");
       physicalModel_.setDistribution(input.getName(), inputDist);
       physicalModel_.blockNotification();
       updatePlots();
