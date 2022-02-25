@@ -7,8 +7,8 @@ Set wshEnv = wshShell.Environment("Process")
 wshEnv("MPLBACKEND") = "TkAgg"
 
 ' add Python directory in Environment variable PATH
-wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory + "\..\..\..")
-wshEnv("PATH") = wshEnv("PATH") & ";" & fso.GetAbsolutePathName(currentDirectory + "\..\..\..\Scripts")
+wshEnv("PATH") = fso.GetAbsolutePathName(currentDirectory + "\..\..\..") & ";" & wshEnv("PATH")
+wshEnv("PATH") = fso.GetAbsolutePathName(currentDirectory + "\..\..\..\Scripts") & ";" & wshEnv("PATH")
 
 ' set PYTHONPATH
 wshEnv("PYTHONPATH") = fso.GetAbsolutePathName(currentDirectory + "\..\") & ";" & wshEnv("PYTHONPATH")
