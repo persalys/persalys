@@ -635,7 +635,15 @@ PERSALYS_PhysicalModel_isParallel_doc
 Parameters
 ----------
 isParallel : bool
-    Whether the evaluations of the model are parallelized (available only for the Python model)"
+    Whether the evaluations of the model are parallelized
+
+Notes
+-----
+This is only implemented for the Python model.
+Also, on Windows platforms, ProcessPoolExecutor startup time being much higher,
+you may want to evaluate enough points in batch rather than many small blocks.
+Refeter to the *setBlockSize* of the various algorithms.
+"
 %enddef
 %feature("docstring") PERSALYS::PhysicalModelImplementation::setParallel
 PERSALYS_PhysicalModel_setParallel_doc

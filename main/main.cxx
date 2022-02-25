@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <QTranslator>
+#include <QThread>
 
 #include "persalys/MainWindow.hxx"
 #include "persalys/PythonEnvironment.hxx"
@@ -52,7 +53,7 @@ int main(int argc, char *argv[])
 #endif
 
   // Settings
-  QCoreApplication::setOrganizationName("EDF_Phimeca");
+  QCoreApplication::setOrganizationName("Persalys");
   QCoreApplication::setApplicationName("persalys");
   QSettings::setDefaultFormat(QSettings::IniFormat);
   if (!QSettings().contains("currentDir"))
@@ -76,7 +77,14 @@ int main(int argc, char *argv[])
 
   // set number of parallel processes
   if (!QSettings().contains("nProcesses"))
-    QSettings().setValue("nProcesses", QVariant((uint)OT::ResourceMap::GetAsUnsignedInteger("TBB-ThreadsNumber")));
+  {
+#ifdef _WIN32
+    // ProcessPoolExecutor startup penalty is much higher
+    QSettings().setValue("nProcesses", 1);
+#else
+    QSettings().setValue("nProcesses", QThread::idealThreadCount());
+#endif
+  }
 
   // main window
   MainWindow window;
