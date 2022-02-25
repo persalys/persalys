@@ -642,7 +642,7 @@ Notes
 This is only implemented for the Python model.
 Also, on Windows platforms, ProcessPoolExecutor startup time being much higher,
 you may want to evaluate enough points in batch rather than many small blocks.
-Refeter to the *setBlockSize* of the various algorithms.
+Refer to the *setBlockSize* method of the various algorithms.
 "
 %enddef
 %feature("docstring") PERSALYS::PhysicalModelImplementation::setParallel
