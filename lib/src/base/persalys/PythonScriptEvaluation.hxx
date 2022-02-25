@@ -80,6 +80,7 @@ private:
   OT::String code_ = "";
   bool isParallel_ = false;
   OT::UnsignedInteger processNumber_ = 0;
+  OT::UnsignedInteger smallSize_ = 1;
 };
 }
 #endif

@@ -173,12 +173,12 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 
 Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 {
-  if (!isParallel_)
+  const UnsignedInteger size = inS.getSize();
+  if (!isParallel_ || (size <= smallSize_))
     return EvaluationImplementation::operator() (inS);
 
   const UnsignedInteger outDim = getOutputDimension();
   const UnsignedInteger inDim = inS.getDimension();
-  const UnsignedInteger size = inS.getSize();
 
   if (inDim != getInputDimension())
     throw InvalidDimensionException(HERE) << "Sample has incorrect dimension. Got " << inDim << ". Expected " << getInputDimension();
