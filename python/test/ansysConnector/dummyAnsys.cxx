@@ -6,7 +6,7 @@ using namespace std;
 
 int main () {
   ofstream myfile;
-  myfile.open ("output.csv", std::ios::trunc);
+  myfile.open ("output0.csv", std::ios::trunc);
   myfile << "# \n";
   myfile << "# 12/16/2021 15:18:38\n";
   myfile << "# The parameters defined in the project are:\n";

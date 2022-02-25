@@ -487,7 +487,77 @@ Models
 
     - click on 'Evaluate model' button
 
-      - check that the ouput value for deviation has been updated in the table
+      - check that the output value for deviation has been updated in the table
+
+    - remove the coupling step by clicking 'X' on the step tab
+
+    - confirm variables removal
+
+    - click on 'Run Ansys wizard'
+
+      - a wizard appears
+
+        - click on '...' in the model file field
+
+          - select the ansys project python/test/ansysConnector/BEAM.wbpj
+
+          - select the ansys solver build_dir/python/test/dummyAnsys
+
+          - check the wizard displays:
+
+            .. image:: /developer_manual/validation/ansysWizardFilled.png
+                :align: center
+
+          - click the checkbox in the table header: all variables are unchecked
+
+          - click 'Continue': the message 'Please select at least one variable' appears in red
+
+          - modify the ansys solver dummyAnsys -> dummyAnsys2
+
+          - click 'Continue': the message 'Cannot find the ansys solver' appears in red
+
+          - Revert the changes made to the ansys solver
+
+          - Select one by one inputs and outputs, the header is checked
+
+          - Click on 'Continue'
+
+        - The following page appears:
+
+          .. image:: /developer_manual/validation/ansysWizardPage2.png
+              :align: center
+
+          - Deselect the system, click on 'Finish': the message 'Please select at least one system' appears in red
+
+          - select the system
+
+          - click on 'Finish'
+
+        - Check the correctness of the different tabs
+
+          - Command:
+
+          .. image:: /developer_manual/validation/ansysWizardCommand.png
+              :align: center
+
+          - Input: after clicking on 'Check template file' and expanding Input/template comparison
+
+          .. image:: /developer_manual/validation/ansysWizardInputs.png
+              :align: center
+
+          - Resource: empty
+
+          - Output: empty
+
+          - Additional processing
+
+          .. image:: /developer_manual/validation/ansysWizardPP.png
+              :align: center
+
+        - Evaluate the model and check the summary tab:
+
+          .. image:: /developer_manual/validation/ansysWizardSummary.png
+              :align: center
 
 - check the doc link
 
