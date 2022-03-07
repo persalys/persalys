@@ -237,7 +237,7 @@ void MorrisAnalysis::launch()
     std::pair<Collection<Scalar>::iterator, Collection<Scalar>::iterator> p = std::minmax_element(meanAee.begin(), meanAee.end());
     const Scalar minMeanAbsoluteEffect = (*p.first);
     const Scalar maxMeanAbsoluteEffect = (*p.second);
-    result_.noEffectBoundary_[i] = (minMeanAbsoluteEffect + maxMeanAbsoluteEffect) * 0.5;
+    result_.noEffectBoundary_[i] = (minMeanAbsoluteEffect + maxMeanAbsoluteEffect) * 0.05;
     // selected inputs
     for (UnsignedInteger j = 0; j < meanAee.getDimension(); ++j)
     {
