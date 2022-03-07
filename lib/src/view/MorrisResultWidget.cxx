@@ -237,7 +237,7 @@ void MorrisResultWidget::updateSelectedPointsFromMuSigma()
     selection[i] = markersMuSigma_[i]->symbol()->pen().color() == Qt::red ? 0 : 1;
     markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
   }
-  result_.setInputsSelection(0, selection);
+  result_.setInputsSelection(outputIndex_, selection);
   emit resetTableModel();
   updateLabels();
 }
@@ -251,7 +251,7 @@ void MorrisResultWidget::updateSelectedPointsFromMuMu()
     selection[i] = markersMuMu_[i]->symbol()->pen().color() == Qt::red ? 0 : 1;
     markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
   }
-  result_.setInputsSelection(0, selection);
+  result_.setInputsSelection(outputIndex_, selection);
   emit resetTableModel();
   updateLabels();
 }
@@ -268,7 +268,7 @@ void MorrisResultWidget::updateNoEffectBoundary(const double value)
     markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
     markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
   }
-  result_.setInputsSelection(0, selection);
+  result_.setInputsSelection(outputIndex_, selection);
 
   emit resetTableModel();
   emit noEffectBoundaryChanged(QPointF(value, 0));
