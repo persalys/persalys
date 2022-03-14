@@ -17,8 +17,10 @@ linux-tag:
     - docker build docker/linux -t persalys/linux
     - docker run --rm --volume `pwd`:/io persalys/linux sh -c "/io/docker/linux/run_docker_build.sh `id -u` `id -g`"
   artifacts:
+    name: persalys-appimage
     paths:
       - persalys*.AppImage
+    expire_in: 5 yrs
   only:
     - tags
 
@@ -27,8 +29,10 @@ mingw-tag:
     - docker build docker/mingw -t persalys/mingw
     - docker run --rm --volume `pwd`:/io persalys/mingw sh -c "/io/docker/mingw/run_docker_build.sh `id -u` `id -g`"
   artifacts:
+    name: persalys-exe
     paths:
       - persalys*.exe
+    expire_in: 5 yrs
   only:
     - tags
 
