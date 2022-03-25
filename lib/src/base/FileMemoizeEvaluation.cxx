@@ -65,10 +65,10 @@ void FileMemoizeEvaluation::setEvaluation(const Evaluation & evaluation)
   {
     try
     {
-      Sample inSample(Sample::ImportFromCSVFile(inputFile_));
+      Sample inSample(Sample::ImportFromTextFile(inputFile_, ";"));
       if (inSample.getDimension() != evaluation.getInputDimension())
         throw InvalidDimensionException(HERE) << "Input dimension has changed. Try clearing cache.";
-      Sample outSample(Sample::ImportFromCSVFile(outputFile_));
+      Sample outSample(Sample::ImportFromTextFile(outputFile_, ";"));
       if (outSample.getDimension() != evaluation.getOutputDimension())
         throw InvalidDimensionException(HERE) << "Output dimension has changed. Try clearing cache.";
     }
@@ -101,10 +101,10 @@ void FileMemoizeEvaluation::setCacheFiles(const OT::FileName & inputFile, const 
   {
     try
     {
-      Sample inSample(Sample::ImportFromCSVFile(inputFile_));
+      Sample inSample(Sample::ImportFromTextFile(inputFile_, ";"));
       if (inSample.getDimension() != evaluation_.getInputDimension())
         throw InvalidDimensionException(HERE) << "Input dimension has changed. Try clearing cache.";
-      Sample outSample(Sample::ImportFromCSVFile(outputFile_));
+      Sample outSample(Sample::ImportFromTextFile(outputFile_, ";"));
       if (outSample.getDimension() != evaluation_.getOutputDimension())
         throw InvalidDimensionException(HERE) << "Output dimension has changed. Try clearing cache.";
     }
@@ -136,8 +136,8 @@ Sample FileMemoizeEvaluation::operator() (const Sample & inSample) const
   if (isCacheEnabled_)
   {
     // read content of cache
-    Sample inputCache(Sample::ImportFromCSVFile(inputFile_));
-    Sample outputCache(Sample::ImportFromCSVFile(outputFile_));
+    Sample inputCache(Sample::ImportFromTextFile(inputFile_, ";"));
+    Sample outputCache(Sample::ImportFromTextFile(outputFile_, ";"));
     typedef PersistentCollection<Scalar>               CacheKeyType;
     typedef PersistentCollection<Scalar>               CacheValueType;
     typedef Cache<CacheKeyType, CacheValueType>        CacheType;
@@ -264,12 +264,12 @@ void FileMemoizeEvaluation::addCacheContent(const Sample& inSample, const Sample
 
 Sample FileMemoizeEvaluation::getCacheInput() const
 {
-  return Sample::ImportFromCSVFile(inputFile_);
+  return Sample::ImportFromTextFile(inputFile_, ";");
 }
 
 Sample FileMemoizeEvaluation::getCacheOutput() const
 {
-  return Sample::ImportFromCSVFile(outputFile_);
+  return Sample::ImportFromTextFile(outputFile_, ";");
 }
 
 void FileMemoizeEvaluation::clearCache() const
