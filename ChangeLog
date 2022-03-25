@@ -1,3 +1,8 @@
+= 12.0.1 release (wip)
+
+ * Fixed Morris output selection
+ * Fixed cache consistency for nan values
+
 = 12.0 release (2022-02-25)
 
  * Ansys wrapping
