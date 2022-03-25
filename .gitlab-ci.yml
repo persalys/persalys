@@ -20,7 +20,7 @@ linux-tag:
     name: persalys-appimage
     paths:
       - persalys*.AppImage
-    expire_in: 5 yrs
+    expire_in: 2 yrs
   only:
     - tags
 
@@ -32,7 +32,7 @@ mingw-tag:
     name: persalys-exe
     paths:
       - persalys*.exe
-    expire_in: 5 yrs
+    expire_in: 2 yrs
   only:
     - tags
 
