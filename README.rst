@@ -6,7 +6,7 @@ Installation
 ------------
 - Windows:
 
-  * requirements: Windows>=7, KB2533623 and KB2999226 updates
+  * requirements: Windows>=10
   * to use system OpenGL libs remove the provided opengl32.dll
 
 - Linux:
@@ -28,7 +28,7 @@ Development
 Dependencies:
 
 - CMake >=3.8
-- OpenTURNS >=1.18
+- OpenTURNS >=1.19
 - otfmi >=0.14 (optional, for FMI support)
 - otmorris >=0.9 (optional, for Morris support)
 - Qt >=5

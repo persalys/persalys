@@ -1,32 +1,30 @@
 FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
-# win7 compat
-RUN git clone https://aur.archlinux.org/mingw-w64-boost.git /tmp/boost && cd /tmp/boost && git checkout 697ae198 && sed -i "s|32:i686-w64-mingw32 ||g" PKGBUILD && git diff && makepkg -sfi --noconfirm > /dev/null 2>&1 && rm -r /tmp/boost && sudo sed -i "s|#IgnorePkg   =|IgnorePkg = mingw-w64-boost|g" /etc/pacman.conf && grep IgnorePkg /etc/pacman.conf
-
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-qwt
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview > /dev/null 2>&1
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
-ENV ARCH=x86_64 PYMAJMIN=38
+ENV ARCH=x86_64 PYMAJMIN=310
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.18 \
+RUN git clone https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns && git checkout v1.19rc1 \
+  && curl -L https://github.com/openturns/openturns/pull/2034.patch | patch -p1   \
   && ${ARCH}-w64-mingw32-cmake \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DUSE_SPHINX=OFF . \
-  && make > /dev/null 2>&1 && sudo make install \
+  && make > /dev/null 2>&1 && sudo make install > /dev/null \
   && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libOT.dll ${MINGW_PREFIX}/Lib/site-packages/openturns/*.pyd \
   && rm -r /tmp/openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.12 \
+RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris && git checkout v0.13 \
   && ${ARCH}-w64-mingw32-cmake \
   -DPYTHON_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPYTHON_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPYTHON_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin . \
-  && make && sudo make install \
+  && make > /dev/null 2>&1 && sudo make install > /dev/null \
   && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libotmorris.dll ${MINGW_PREFIX}/Lib/site-packages/otmorris/*.pyd \
   && rm -r /tmp/otmorris
 

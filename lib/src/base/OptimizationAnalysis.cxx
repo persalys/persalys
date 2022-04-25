@@ -24,6 +24,7 @@
 #include <openturns/OptimizationAlgorithm.hxx>
 #include <openturns/ParametricFunction.hxx>
 #include <openturns/SymbolicFunction.hxx>
+#include <openturns/Pagmo.hxx>
 
 using namespace OT;
 
@@ -115,7 +116,17 @@ Description OptimizationAnalysis::GetSolverNames(const Interval& bounds)
 {
   // Dummy non-linear function respecting bounds dimension
   OptimizationProblem problem(SymbolicFunction(Description(bounds.getDimension(), "x"), Description(1, "x^2")), Function(), Function(), bounds);
-  return OptimizationAlgorithm::GetAlgorithmNames(problem);
+  Description names(OptimizationAlgorithm::GetAlgorithmNames(problem));
+
+  // drop pagmo algos as they are parametrized by a sample instead of a single point
+  const Description pagmoNames(Pagmo::GetAlgorithmNames());
+  for (UnsignedInteger i = 0; i < pagmoNames.getSize(); ++ i)
+  {
+    const UnsignedInteger index = names.find(pagmoNames[i]);
+    if (index < names.getSize())
+      names.erase(names.begin() + index);
+  }
+  return names;
 }
 
 /* Default constructor */
@@ -309,7 +320,7 @@ String OptimizationAnalysis::getSolverName() const
 
 void OptimizationAnalysis::setSolverName(const String& name)
 {
-  if(!GetSolverNames(getBounds()).contains(name))
+  if (!GetSolverNames(getBounds()).contains(name))
     throw InvalidArgumentException(HERE) << "Error: the given solver name=" << name << " is unknown. " << GetSolverNames(getBounds());
   solverName_ = name;
 }
