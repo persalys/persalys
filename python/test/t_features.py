@@ -1,37 +1,29 @@
 #! /usr/bin/env python
 
-import os
+import persalys
 
 width = 40
 
-# check that python can load the module
-print('1: Python module load'.ljust(width), end=' ')
-try:
-    import persalys as otg
-    print('OK')
-except:
-    print('no')
-
 # check for Morris method
-print('2: Morris method (otmorris)'.ljust(width), end=' ')
+print('1: Morris method (otmorris)'.ljust(width), end=' ')
 try:
-    res = otg.MorrisResult()
-    print('OK')
+    persalys.MorrisResult()
+    print('ok')
 except:
-    print('no')
+    print('n/a')
 
 # check for FMI support
-print('3: FMI (otfmi)'.ljust(width), end=' ')
+print('2: FMI (otfmi)'.ljust(width), end=' ')
 try:
-    fmu = otg.FMUInfo()
-    print('OK')
+    persalys.FMUInfo()
+    print('ok')
 except:
-    print('no')
+    print('n/a')
 
 # check for YACS support
-print('4: YACS (salome)'.ljust(width), end=' ')
+print('3: YACS (salome)'.ljust(width), end=' ')
 try:
-    fmu = otg.YACSPhysicalMode()
-    print('OK')
+    persalys.YACSPhysicalModel()
+    print('ok')
 except:
-    print('no')
+    print('n/a')
