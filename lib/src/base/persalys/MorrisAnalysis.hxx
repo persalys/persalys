@@ -68,17 +68,21 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
+  void setBlockSize(const OT::UnsignedInteger blockSize);
+  OT::UnsignedInteger getBlockSize() const;
+
 protected:
   void initializeParameters();
   void initialize() override;
   void launch() override;
 
 private:
-  OT::UnsignedInteger trajectoriesNumber_;
+  OT::UnsignedInteger trajectoriesNumber_ = 10;
   OT::Description inputNames_;
   OT::Interval bounds_;
-  OT::UnsignedInteger level_;
+  OT::UnsignedInteger level_ = 4;
   MorrisResult result_;
+  OT::UnsignedInteger blockSize_ = 1;
 };
 }
 #endif

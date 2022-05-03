@@ -45,11 +45,6 @@ static Factory<MorrisAnalysis> Factory_MorrisAnalysis;
 /* Default constructor */
 MorrisAnalysis::MorrisAnalysis()
   : SimulationAnalysis()
-  , trajectoriesNumber_(10)
-  , inputNames_()
-  , bounds_()
-  , level_(4)
-  , result_()
 {
 }
 
@@ -57,11 +52,6 @@ MorrisAnalysis::MorrisAnalysis()
 /* Constructor with parameters */
 MorrisAnalysis::MorrisAnalysis(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
-  , trajectoriesNumber_(10)
-  , inputNames_()
-  , bounds_()
-  , level_(4)
-  , result_()
 {
   initializeParameters();
 }
@@ -196,19 +186,32 @@ void MorrisAnalysis::launch()
   outSample.setDescription(getInterestVariables());
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
 
-  const UnsignedInteger nbIter = inSample.getSize();
+  const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inSample.getSize() / getBlockSize()));
+
   Sample effectiveInSample(0, nbInputs);
   effectiveInSample.setDescription(getPhysicalModel().getInputNames());
 
-  for (UnsignedInteger i = 0; i < nbIter; ++i) {
+  // time
+  TimeCriteria timeCriteria;
+
+  for (UnsignedInteger i = 0; i < nbIter; ++ i)
+  {
+    if (stopRequested_)
+      break;
+
     progressValue_ = (int) (i * 100 / nbIter);
-    const Sample blockInputSample(inSample, i, i+1);
+    notify("progressValueChanged");
+
+    // information message
+    informationMessage_ = OSS() << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notify("informationMessageUpdated");
+
+    const Sample blockInputSample(inSample, i * getBlockSize(), std::min((i + 1) * getBlockSize(), inSample.getSize()));
 
     effectiveInSample.add(blockInputSample);
     outSample.add(function(blockInputSample));
-    notify("progressValueChanged");
-    if(stopRequested_)
-      break;
+
+    timeCriteria.incrementElapsedTime();
   }
 
   // Compute effects
@@ -256,6 +259,15 @@ MorrisResult MorrisAnalysis::getResult() const
   return result_;
 }
 
+void MorrisAnalysis::setBlockSize(const UnsignedInteger blockSize)
+{
+  blockSize_ = blockSize;
+}
+
+UnsignedInteger MorrisAnalysis::getBlockSize() const
+{
+  return blockSize_;
+}
 
 MorrisResult& MorrisAnalysis::getResult()
 {

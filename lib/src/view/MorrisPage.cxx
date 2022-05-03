@@ -37,9 +37,6 @@ namespace PERSALYS
 // First Morris page
 MorrisPage::MorrisPage(QWidget* parent)
   : QWizardPage(parent)
-  , tableView_(0)
-  , tableModel_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -142,10 +139,6 @@ bool MorrisPage::validatePage()
 // Second Morris page
 MorrisSecondPage::MorrisSecondPage(QWidget* parent)
   : QWizardPage(parent)
-  , nbInputs_(0)
-  , trajNbSpinbox_(0)
-  , levelSpinbox_(0)
-  , seedSpinbox_(0)
 {
   buildInterface();
 }
@@ -184,11 +177,19 @@ void MorrisSecondPage::buildInterface()
   // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
   advancedParamGroupBoxLayout->addWidget(seedLabel, 0, 0);
-
   seedSpinbox_ = new QSpinBox;
   seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
   advancedParamGroupBoxLayout->addWidget(seedSpinbox_, 0, 1);
+
+  // block size
+  QLabel * blockLabel = new QLabel(tr("Block size"));
+  advancedParamGroupBoxLayout->addWidget(blockLabel, 1, 0);
+  blockSpinbox_ = new QSpinBox;
+  blockSpinbox_->setMinimum(1);
+  blockSpinbox_->setMaximum(std::numeric_limits<int>::max());
+  blockLabel->setBuddy(blockSpinbox_);
+  advancedParamGroupBoxLayout->addWidget(blockSpinbox_, 1, 1);
 
   advancedParamGroupBox->setExpanded(false);
   pageLayout->addWidget(advancedParamGroupBox);
@@ -217,6 +218,7 @@ void MorrisSecondPage::initialize(const Analysis& analysis)
   trajNbSpinbox_->setValue(analysis_ptr->getTrajectoriesNumber());
   levelSpinbox_->setValue(analysis_ptr->getLevel());
   seedSpinbox_->setValue(analysis_ptr->getSeed());
+  blockSpinbox_->setValue(analysis_ptr->getBlockSize());
 }
 
 
@@ -237,6 +239,10 @@ int MorrisSecondPage::getSeed() const
   return seedSpinbox_->value();
 }
 
+int MorrisSecondPage::getBlockSize() const
+{
+  return blockSpinbox_->value();
+}
 
 void MorrisSecondPage::updateNbSimuLabel()
 {

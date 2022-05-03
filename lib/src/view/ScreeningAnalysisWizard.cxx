@@ -80,6 +80,7 @@ Analysis ScreeningAnalysisWizard::getAnalysis() const
   analysis.setTrajectoriesNumber(morrisSecondPage_->getTrajectoriesNumber());
   analysis.setLevel(morrisSecondPage_->getLevel());
   analysis.setSeed(morrisSecondPage_->getSeed());
+  analysis.setBlockSize(morrisSecondPage_->getBlockSize());
   analysis.setInterestVariables(introPage_->getInterestVariables());
   return analysis;
 }

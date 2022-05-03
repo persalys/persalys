@@ -48,10 +48,11 @@ protected:
   void buildInterface();
 
 private:
-  QTableView * tableView_;
-  MorrisTableModel * tableModel_;
-  TemporaryLabel * errorMessageLabel_;
+  QTableView * tableView_ = 0;
+  MorrisTableModel * tableModel_ = 0;
+  TemporaryLabel * errorMessageLabel_ = 0;
 };
+
 class PERSALYS_VIEW_API MorrisSecondPage : public QWizardPage
 {
   Q_OBJECT
@@ -63,6 +64,7 @@ public:
   int getTrajectoriesNumber() const;
   int getLevel() const;
   int getSeed() const;
+  int getBlockSize() const;
 
 protected:
   void buildInterface();
@@ -71,11 +73,12 @@ protected slots:
   void updateNbSimuLabel();
 
 private:
-  OT::UnsignedInteger nbInputs_;
-  UIntSpinBox * trajNbSpinbox_;
-  UIntSpinBox * levelSpinbox_;
-  QSpinBox * seedSpinbox_;
-  QLabel * nbSimuLabel_;
+  OT::UnsignedInteger nbInputs_ = 0;
+  UIntSpinBox * trajNbSpinbox_ = 0;
+  UIntSpinBox * levelSpinbox_ = 0;
+  QSpinBox * seedSpinbox_ = 0;
+  QSpinBox * blockSpinbox_ = 0;
+  QLabel * nbSimuLabel_ = 0;
 };
 }
 #endif
