@@ -192,7 +192,9 @@ void PhysicalModelWindowWidget::buildInterface()
   // - multiprocessing
   if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos) {
     QSettings settings;
-    updateMultiprocessingStatus(settings.value("nProcesses").toUInt());
+    const int nProcesses = settings.value("nProcesses").toUInt();
+    physicalModel_.setProcessNumber((UnsignedInteger)nProcesses);
+    physicalModel_.setParallel(nProcesses != 1);
   }
 
   // - error message label
@@ -384,14 +386,6 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   }
   errorMessageLabel_->reset();
 }
-
-
-void PhysicalModelWindowWidget::updateMultiprocessingStatus(const int nProcesses)
-{
-  physicalModel_.setProcessNumber((UnsignedInteger)nProcesses);
-  physicalModel_.setParallel(nProcesses != 1);
-}
-
 
 void PhysicalModelWindowWidget::updateIndexParamLabel()
 {

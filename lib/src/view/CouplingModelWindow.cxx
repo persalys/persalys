@@ -46,6 +46,7 @@
 #include <QComboBox>
 #include <QTextStream>
 #include <QSplitter>
+#include <QSettings>
 
 using namespace OT;
 
@@ -164,6 +165,12 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
               timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(model_->getEvalTime()));
           });
   tabLayout->addWidget(evaluateOutputsButton, 2, 0, Qt::AlignLeft);
+
+  // - multiprocessing
+  QSettings settings;
+  const int nProcesses = settings.value("nProcesses").toUInt();
+  item->getPhysicalModel().setProcessNumber((UnsignedInteger)nProcesses);
+  item->getPhysicalModel().setParallel(nProcesses != 1);
 
   // - error message label
   errorMessageLabel_ = new TemporaryLabel;
