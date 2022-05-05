@@ -24,6 +24,7 @@
 #include "persalys/Analysis.hxx"
 #include "persalys/DesignOfExperiment.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/ValueLineEdit.hxx"
 
 #include <QWizardPage>
 #include <QLabel>
@@ -50,10 +51,14 @@ protected:
 
 public slots:
   void updateInputSampleSize(DesignOfExperiment);
+  void updateBasisLabel();
+  void updateBasisSizeLabel();
 
 private:
   OT::UnsignedInteger inputSampleSize_;
   OT::UnsignedInteger inputSampleDimension_;
+  QLabel * basisLabel_;
+  QLabel * basisSizeLabel_;
   QSpinBox * chaosDegreeSpinbox_;
   QCheckBox * sparseCheckBox_;
   TemporaryLabel * errorMessageLabel_;

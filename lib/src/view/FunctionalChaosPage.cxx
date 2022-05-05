@@ -53,13 +53,18 @@ void FunctionalChaosPage::buildInterface()
 
   // Chaos parameters group
   QGroupBox * parametersBox = new QGroupBox(tr("Parameters"));
-  QHBoxLayout * chaosParametersLayout = new QHBoxLayout(parametersBox);
+  QGridLayout * chaosParametersLayout = new QGridLayout(parametersBox);
 
   // -- Polynomial degree
-  chaosParametersLayout->addWidget(new QLabel(tr("Polynomial degree")));
+  chaosParametersLayout->addWidget(new QLabel(tr("Polynomial degree")), 0, 0);
   chaosDegreeSpinbox_ = new QSpinBox;
   chaosDegreeSpinbox_->setRange(1, 30);
-  chaosParametersLayout->addWidget(chaosDegreeSpinbox_);
+  chaosParametersLayout->addWidget(chaosDegreeSpinbox_, 0, 1);
+
+  basisLabel_ = new QLabel;
+  chaosParametersLayout->addWidget(basisLabel_, 1, 0);
+  basisSizeLabel_ = new QLabel;
+  chaosParametersLayout->addWidget(basisSizeLabel_, 1, 1);
 
   pageLayout->addWidget(parametersBox);
 
@@ -92,14 +97,29 @@ void FunctionalChaosPage::initialize(const Analysis& analysis)
     return;
 
   inputSampleSize_ = analysis_ptr->getDesignOfExperiment().getSample().getSize();
-  UnsignedInteger inputDimension = analysis_ptr->getDesignOfExperiment().getEffectiveInputIndices().getSize();
+  const UnsignedInteger inputDimension = analysis_ptr->getDesignOfExperiment().getEffectiveInputIndices().getSize();
   inputSampleDimension_ = inputDimension;
 
   chaosDegreeSpinbox_->setValue(analysis_ptr->getChaosDegree());
   sparseCheckBox_->setChecked(analysis_ptr->getSparseChaos());
+  updateBasisLabel();
+  updateBasisSizeLabel();
+
+  connect(chaosDegreeSpinbox_, SIGNAL(valueChanged(int)), this, SLOT(updateBasisSizeLabel()));
+  connect(sparseCheckBox_, SIGNAL(stateChanged(int)), this, SLOT(updateBasisLabel()));
 }
 
+void FunctionalChaosPage::updateBasisLabel()
+{
+  const QString label = sparseCheckBox_->isChecked() ? tr("Full basis size") : tr("Basis size");
+  basisLabel_->setText(label);
+}
 
+void FunctionalChaosPage::updateBasisSizeLabel()
+{
+  const int basisSize = SpecFunc::BinomialCoefficient(inputSampleDimension_+chaosDegreeSpinbox_->value(), chaosDegreeSpinbox_->value());
+  basisSizeLabel_->setText(QString::number(basisSize));
+}
 Analysis FunctionalChaosPage::getAnalysis(const String& name, const DesignOfExperiment& doe) const
 {
   FunctionalChaosAnalysis analysis(name, doe);
