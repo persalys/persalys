@@ -150,8 +150,7 @@ RUN curl -fSsL https://paraview.org/files/v5.10/ParaView-v5.10.1.tar.xz | tar xJ
  && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.19rc1 \
- && curl -L https://github.com/openturns/openturns/pull/2034.patch | patch -p1   \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.19 \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" \
     -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
