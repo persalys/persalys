@@ -9,6 +9,16 @@ include_directories ( ${OTMORRIS_INCLUDE_DIR}/otmorris/swig )
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 include_directories ( ${PYTHON_INCLUDE_DIRS} )
 
+set (CMAKE_SWIG_FLAGS "" CACHE STRING "SWIG flags for generating wrapper code")
+
+# allows to pass compile flags like -O1 to reduce memory usage
+set (SWIG_COMPILE_FLAGS "" CACHE STRING "Additional flags used when compiling swig generated code")
+
+if (NOT DEFINED PYTHON_EXTENSION_MODULE_SUFFIX AND NOT CMAKE_CROSSCOMPILING)
+  execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "import importlib.machinery; print(importlib.machinery.EXTENSION_SUFFIXES[0])"
+                   OUTPUT_VARIABLE PYTHON_EXTENSION_MODULE_SUFFIX OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif ()
+
 add_custom_target( generate_docstrings )
 
 macro ( ot_add_python_module MODULENAME SOURCEFILE )
@@ -73,9 +83,11 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
     set_target_properties (${module_target} PROPERTIES NO_SONAME ON)
   endif ()
 
-  # allows to pass compile flags like -O1 to reduce memory usage
-  set (SWIG_COMPILE_FLAGS "" CACHE STRING "Additional flags used when compiling swig generated code")
   set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
+
+  if (DEFINED PYTHON_EXTENSION_MODULE_SUFFIX)
+    set_target_properties (${module_target} PROPERTIES SUFFIX "${PYTHON_EXTENSION_MODULE_SUFFIX}")
+  endif ()
 
   install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
             DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
@@ -218,8 +230,13 @@ if (SPHINX_FOUND)
   execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys)
   foreach (module ${PERSALYS_PYTHON_MODULES})
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${module}.py)
-    # FIXME: get_target_property (suffix ${SWIG_MODULE_${module}_REAL_NAME} SUFFIX)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/_${module}.so)
+    if (CMAKE_VERSION VERSION_LESS 3.13)
+      set (module_target ${SWIG_MODULE_${module}_python_REAL_NAME})
+    else ()
+      set (module_target ${module}_python)
+    endif ()
+    get_target_property (module_suffix ${module_target} SUFFIX)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}${module_suffix} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/_${module}${module_suffix})
   endforeach ()
   foreach (file __init__.py)
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${file})
