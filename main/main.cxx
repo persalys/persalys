@@ -72,6 +72,10 @@ int main(int argc, char *argv[])
   if (appTranslator.load("persalys_" + QLocale::system().name(), ":/translations"))
     app.installTranslator(&appTranslator);
 
+  QTranslator pyConsoleTranslator;
+  if (pyConsoleTranslator.load("PyConsole_msg_" + QLocale::system().name(), ":/translations"))
+    app.installTranslator(&pyConsoleTranslator);
+
   // increase function cache
   OT::ResourceMap::SetAsUnsignedInteger("Cache-MaxSize", 16384);
 
