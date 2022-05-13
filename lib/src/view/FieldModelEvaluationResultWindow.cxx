@@ -738,7 +738,18 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
 
     // get fieldSample transpose
     Sample fieldSamplet(nbNodes, nbInputPt);
-    fieldSamplet.setDescription(Description::BuildDefault(nbInputPt, "Input"));
+
+    // add leading 0 to transposed sample desc to counteract PV auto alphabetical sorting
+    const int digit = std::to_string(nbInputPt).size();
+    Description desc;
+    for (UnsignedInteger j = 0; j < nbInputPt; ++j)
+    {
+      OSS oss;
+      oss << "Input";
+      oss << std::setw(digit) << std::setfill('0') << std::to_string(j);
+      desc.add(oss.str());
+    }
+    fieldSamplet.setDescription(desc);
 
     for (UnsignedInteger i = 0; i < nbNodes; ++i)
     {
