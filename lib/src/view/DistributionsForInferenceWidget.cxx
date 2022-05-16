@@ -57,13 +57,13 @@ void DistributionsForInferenceWidget::buildInterface()
 
   // list distributions
   QStringList notUsedDistributions;
+  notUsedDistributions << tr("All");
 
   for (int i = 0; i < allDistributions_.size(); ++i)
   {
     if (!distributions_.contains(allDistributions_[i]))
       notUsedDistributions << allDistributions_[i];
   }
-  notUsedDistributions << tr("All");
 
   // distributions table
   // - table view
@@ -106,12 +106,12 @@ void DistributionsForInferenceWidget::buildInterface()
 void DistributionsForInferenceWidget::updateDistributions(const QStringList& distributions)
 {
   QStringList notUsedDistributions;
+  notUsedDistributions << tr("All");
   for (int i = 0; i < allDistributions_.size(); ++i)
   {
     if (!distributions.contains(allDistributions_[i]))
       notUsedDistributions << allDistributions_[i];
   }
-  notUsedDistributions << tr("All");
 
   // update Add button items
   addComboBox_->clear();
@@ -145,7 +145,7 @@ void DistributionsForInferenceWidget::removeSelectedDistribution()
 void DistributionsForInferenceWidget::addSelectedDistribution(int index)
 {
   // "Distribution name" item
-  if (index < addComboBox_->count() - 1)
+  if (index != 0)
   {
     addComboBox_->removeItem(index);
   }
