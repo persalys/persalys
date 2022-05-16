@@ -62,3 +62,9 @@ Translation::
     lupdate -verbose lib/ -ts translations/persalys_fr.ts -no-obsolete
     linguist translations/persalys_fr.ts
 
+- Python console menu translation::
+
+    lupdate -verbose lib/src/view/PyConsole/ -ts lib/src/view/PyConsole/resources/PyConsole_msg_fr.ts  -no-obsolete
+    linguist lib/src/view/PyConsole/resources/PyConsole_msg_fr.ts
+
+  publish ``PyConsole_msg_fr.qm`` in ``translations/``
