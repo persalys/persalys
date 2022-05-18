@@ -35,7 +35,7 @@ RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.6.tar.gz |
 RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
 
 # dlib
-RUN curl -L https://github.com/davisking/dlib/archive/v19.23.tar.gz | tar xz && cd dlib-19.23 \
+RUN curl -L https://github.com/davisking/dlib/archive/v19.24.tar.gz | tar xz && cd dlib-19.24 \
  && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install > /dev/null 2>&1 && cd - && rm -r dlib*
 
 # cminpack
@@ -47,7 +47,7 @@ RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.1.tar.gz | tar xz 
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
-RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.1/src/hdf5-1.12.1.tar.bz2 | tar xj && cd hdf5-1.12.1 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
+RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.2/src/hdf5-1.12.2.tar.bz2 | tar xj && cd hdf5-1.12.2 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen-3.4.0 \
@@ -64,10 +64,10 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.1.0.tar.gz
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.5.0.tar.gz | tar xz && cd oneTBB-2021.5.0 && cmake -DTBB_TEST=OFF . && make install && cd - && rm -r oneTBB*
+RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.5.0.tar.gz | tar xz && cd oneTBB-2021.5.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v7.9.tar.gz | tar xz && cd primesieve-7.9 && cmake -DBUILD_STATIC_LIBS=OFF . && make install && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v7.9.tar.gz | tar xz && cd primesieve-7.9 && cmake -DBUILD_STATIC_LIBS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -110,7 +110,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.6.tar.gz | tar xz && cd PyFMI-PyFMI-2.9.6 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.7.tar.gz | tar xz && cd PyFMI-PyFMI-2.9.7 \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -128,12 +128,12 @@ RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.10.2.ta
 RUN pip install meson && curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.20.0.tar.xz | tar xJ && cd wayland-1.20.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.3/submodules/qtbase-everywhere-opensource-src-5.15.3.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.3 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.3/submodules/qtsvg-everywhere-opensource-src-5.15.3.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.3 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.3/submodules/qtx11extras-everywhere-opensource-src-5.15.3.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.3 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.3/submodules/qttools-everywhere-opensource-src-5.15.3.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.3 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.3/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.3.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.3 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.3/submodules/qtwayland-everywhere-opensource-src-5.15.3.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.3 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtbase-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.4 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtsvg-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtx11extras-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qttools-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtwayland-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj && cd qwt-6.2.0 \
