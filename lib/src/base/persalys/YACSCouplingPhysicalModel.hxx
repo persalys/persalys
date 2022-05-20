@@ -40,15 +40,15 @@ public:
                             const CouplingStepCollection & steps);
 
   /** Virtual constructor */
-  virtual YACSCouplingPhysicalModel * clone() const;
+  YACSCouplingPhysicalModel * clone() const override;
 
-  virtual void setCode(const OT::String & code);
+  void setCode(const OT::String & code) override;
 
   /** Accesor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
 
-  virtual OT::String getPythonScript() const;
+  OT::String getPythonScript() const override;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -64,7 +64,7 @@ public:
   OT::Function getFunction() const;
 protected:
 
-  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  OT::Function generateFunction(const OT::Description & outputNames) const override;
   virtual OT::String getJobParamsPythonScript() const;
 
 private:

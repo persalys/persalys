@@ -41,7 +41,7 @@ public:
                     const OT::String & script);
 
   /** Virtual constructor */
-  virtual YACSPhysicalModel * clone() const;
+  YACSPhysicalModel * clone() const override;
 
   void setInputs(const InputCollection & inputs);
   void addInput(const Input & input);
@@ -62,11 +62,11 @@ public:
   /** The job model is a python object which drives the execution of the job.*/
   void setJobModel(const py2cpp::PyPtr& model);
 
-  virtual OT::String getHtmlDescription(const bool deterministic) const;
-  OT::String getPythonScript() const;
+  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getPythonScript() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
@@ -81,7 +81,7 @@ public:
 protected:
   void updateData();
 
-  virtual OT::Function generateFunction(const OT::Description & outputNames) const;
+  OT::Function generateFunction(const OT::Description & outputNames) const override;
   virtual OT::String getJobParamsPythonScript() const;
 
 private:
