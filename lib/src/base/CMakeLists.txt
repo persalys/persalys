@@ -184,8 +184,8 @@ ot_install_header_file ( DataCleaning.hxx )
 ot_install_header_file (FMIPhysicalModel.hxx)
 ot_install_header_file (FMUInfo.hxx)
 ot_install_header_file (AnsysParser.hxx)
-ot_install_header_file ( MorrisAnalysis.hxx )
-ot_install_header_file ( MorrisResult.hxx )
+ot_install_header_file (MorrisAnalysis.hxx)
+ot_install_header_file (MorrisResult.hxx)
 ot_install_header_file (YACSPhysicalModel.hxx)
 ot_install_header_file (YACSEvaluation.hxx)
 
@@ -199,39 +199,19 @@ else ()
   target_compile_definitions (persalysbase PUBLIC PERSALYS_BASE_STATIC)
 endif ()
 
-if ( NOT DEFINED LIB_VERSION )
-  set ( LIB_VERSION 0.0.0 )
+if (NOT DEFINED LIB_VERSION)
+  set (LIB_VERSION 0.0.0)
 endif ()
-if ( NOT DEFINED LIB_SOVERSION )
-  set ( LIB_SOVERSION 0 )
+if (NOT DEFINED LIB_SOVERSION)
+  set (LIB_SOVERSION 0)
 endif ()
-set_target_properties ( persalysbase PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( persalysbase PROPERTIES SOVERSION ${LIB_SOVERSION} )
+set_target_properties (persalysbase PROPERTIES VERSION ${LIB_VERSION})
+set_target_properties (persalysbase PROPERTIES SOVERSION ${LIB_SOVERSION})
 
-target_link_libraries ( persalysbase ${OPENTURNS_LIBRARIES} )
+target_link_libraries (persalysbase PUBLIC ${PERSALYS_PUBLIC_LIBRARIES})
+target_link_libraries (persalysbase PRIVATE ${PERSALYS_PRIVATE_LIBRARIES})
 
-if (OTMORRIS_FOUND)
-  target_link_libraries ( persalysbase ${OTMORRIS_LIBRARIES} )
-endif ()
-
-if (SalomeYACS_FOUND)
-  target_link_libraries (persalysbase ydefx)
-endif ()
-
-if (AdaoCppLayer_FOUND)
-  target_link_libraries ( persalysbase ${AdaoCppLayer_LIBRARIES} )
-endif ()
-
-target_link_libraries (persalysbase ${PYTHON_LIBRARIES})
-if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-  target_compile_definitions (persalysbase PRIVATE MS_WIN64)
-endif ()
-target_link_libraries (persalysbase ${Boost_LIBRARIES})
-if(MINGW)
-  # add this link for boost::process
-  target_link_libraries(persalysbase ws2_32)
-endif()
-install ( TARGETS persalysbase
+install (TARGETS persalysbase
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}

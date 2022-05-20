@@ -242,7 +242,7 @@ ydefx::JobParametersProxy& YACSEvaluation::jobParameters()
 }
 
 
-const ydefx::JobParametersProxy& YACSEvaluation::jobParameters()const
+const ydefx::JobParametersProxy& YACSEvaluation::jobParameters() const
 {
   return jobParams_;
 }

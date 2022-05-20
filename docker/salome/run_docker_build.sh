@@ -12,7 +12,7 @@ cd /tmp
 mkdir -p build && cd build
 cmake \
   -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
-  -DCMAKE_CXX_FLAGS="-Wall -Werror -D_GLIBCXX_ASSERTIONS" \
+  -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" \
   -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files \
   -DSalomeGUI_DIR=/home/devel/local/adm_local/cmake_files/ \
   -DSalomeYACS_DIR=/home/devel/local/adm/cmake/ \
