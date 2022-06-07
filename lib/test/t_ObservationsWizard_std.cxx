@@ -32,8 +32,9 @@ public:
     inputCollection[0] = Q;
     inputCollection[1] = E;
     inputCollection[2] = C;
-    OutputCollection outputCollection(1, Ep);
-    outputCollection.add(Ep2);
+    OutputCollection outputCollection(2);
+    outputCollection[0] = Ep;
+    outputCollection[1] = Ep2;
 
     Description formula(2, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
     model_ = SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);

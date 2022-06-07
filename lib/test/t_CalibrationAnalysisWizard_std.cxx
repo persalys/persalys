@@ -38,8 +38,9 @@ public:
     inputCollection[1] = C;
     inputCollection[2] = gamma;
     inputCollection[3] = eps;
-    OutputCollection outputCollection(1, sigma);
-    outputCollection.add(sigma2);
+    OutputCollection outputCollection(2);
+    outputCollection[0] = sigma;
+    outputCollection[1] = sigma2;
 
     Description formula(2, "R + C * (1 - exp(-gam * epsilon))");
     SymbolicPhysicalModel model("modelChaboche", inputCollection, outputCollection, formula);
