@@ -78,11 +78,11 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimag
  && appimagetool --version
 
 # openssl
-RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1n.tar.gz | tar xz && cd openssl-1.1.1n \
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1o.tar.gz | tar xz && cd openssl-1.1.1o \
  && ./config no-ssl2 no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tgz | tar xz && cd Python-3.10.4 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz | tar xz && cd Python-3.10.5 \
  && ./configure --enable-shared CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
@@ -122,18 +122,18 @@ RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/
 RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.18.0.tar.gz | tar xz && cd pagmo2-2.18.0 && cmake -DPAGMO_WITH_EIGEN3=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
 
 # ninja
-RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.10.2.tar.gz | tar xz && cd ninja-1.10.2 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
+RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.0.tar.gz | tar xz && cd ninja-1.11.0 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
 
 # wayland
 RUN pip install meson && curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.20.0.tar.xz | tar xJ && cd wayland-1.20.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtbase-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.4 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtsvg-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtx11extras-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qttools-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.4/submodules/qtwayland-everywhere-opensource-src-5.15.4.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.4 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtbase-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.5 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtsvg-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtx11extras-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qttools-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtwayland-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj && cd qwt-6.2.0 \
