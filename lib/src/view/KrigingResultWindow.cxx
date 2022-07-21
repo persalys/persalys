@@ -88,31 +88,7 @@ void KrigingResultWindow::buildInterface()
   // tab widget
   QTabWidget * tabWidget = new QTabWidget;
 
-  // first tab : METAMODEL GRAPH --------------------------------
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-
-  ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
-
-  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
-  {
-    MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
-                                       Point(1, -1.),
-                                       Point(1, -1.));
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
-        result_.getOutputSample(),
-        i,
-        "",
-        this);
-
-    plotsStackedWidget->addWidget(validationWidget);
-  }
-  tabLayout->addWidget(plotsStackedWidget);
-
-  tabWidget->addTab(tab, tr("Metamodel"));
-
-  // second tab : METAMODEL RESULT --------------------------------
+  // first tab : METAMODEL RESULT --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
@@ -153,6 +129,25 @@ void KrigingResultWindow::buildInterface()
   scrollArea->setWidget(resultStackedWidget);
   tabWidget->addTab(scrollArea, tr("Results"));
 
+  // second tab : METAMODEL GRAPH --------------------------------
+  QWidget * tab = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+  ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
+
+  for (UnsignedInteger i = 0; i < nbOutputs; ++ i)
+  {
+    MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
+                                       Point(1, -1.),
+                                       Point(1, -1.));
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu, result_.getOutputSample(), i, "", this);
+    plotsStackedWidget->addWidget(validationWidget);
+  }
+  tabLayout->addWidget(plotsStackedWidget);
+
+  tabWidget->addTab(tab, tr("Adequation"));
+  
   // third tab : VALIDATION --------------------------------
   if (result_.getValidations().size())
   {

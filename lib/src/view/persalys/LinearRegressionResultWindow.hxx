@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizard to export a metamodel as physical model
+ *  @brief QMdiSubWindow for the results of linear regression
  *
  *  Copyright 2015-2022 EDF-Phimeca
  *
@@ -18,35 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#ifndef PERSALYS_LINEARREGRESSIONRESULTWINDOW_HXX
+#define PERSALYS_LINEARREGRESSIONRESULTWINDOW_HXX
 
-#ifndef PERSALYS_METAMODELEXPORTWIZARD_HXX
-#define PERSALYS_METAMODELEXPORTWIZARD_HXX
-
-#include "persalys/Wizard.hxx"
-
-#include <QStandardItemModel>
-#include <QComboBox>
-#include <QVBoxLayout>
+#include "persalys/ResultWindow.hxx"
+#include "persalys/LinearRegressionAnalysisResult.hxx"
 
 namespace PERSALYS
 {
-  class PERSALYS_VIEW_API MetaModelExportWizard : public Wizard {
-    Q_OBJECT
+class PERSALYS_VIEW_API LinearRegressionResultWindow : public ResultWindow
+{
+  Q_OBJECT
 
-  public:
-    MetaModelExportWizard(const Analysis& model, bool isGeneralWizard = false, QWidget* parent = 0);
-    Analysis getAnalysis() const;
+public:
+  LinearRegressionResultWindow(AnalysisItem* item, QWidget * parent = 0);
 
-  protected:
-    void buildInterface();
-  protected slots:
-    void updateWidgets();
+protected:
+  void buildInterface();
 
-  private:
-    QComboBox * mmsComboBox_;
-    QStandardItemModel * mmsComboBoxModel_;
-    QVBoxLayout * parametersLayout_;
-  };
+private:
+  LinearRegressionAnalysisResult result_;
+  QString errorMessage_;
+};
 }
-
 #endif

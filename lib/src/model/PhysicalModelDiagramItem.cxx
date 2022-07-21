@@ -412,7 +412,8 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
 
   } else if (analysisName == "FunctionalChaosAnalysis" ||
-             analysisName == "KrigingAnalysis") {
+             analysisName == "KrigingAnalysis" ||
+	     analysisName == "LinearRegressionAnalysis") {
     AnalysisItem * newItem = dynamic_cast<AnalysisItem*>(analysis.getImplementation().get()->getObserver("AnalysisItem"));
     // connections
     connect(newItem, SIGNAL(numberMetamodelChanged(bool)), this, SLOT(updateMetamodelCounter(bool)));

@@ -25,6 +25,7 @@
 #include "persalys/MetaModelIntroPage.hxx"
 #include "persalys/KrigingPage.hxx"
 #include "persalys/FunctionalChaosPage.hxx"
+#include "persalys/LinearRegressionPage.hxx"
 #include "persalys/MetaModelValidationPage.hxx"
 
 namespace PERSALYS
@@ -36,7 +37,7 @@ class PERSALYS_VIEW_API MetaModelAnalysisWizard : public AnalysisWizard
   friend class TestMetaModelAnalysisWizard;
 
 public:
-  enum {Page_Intro, Page_ChaosMethod, Page_KrigingMethod, Page_Validation};
+  enum {Page_Intro, Page_ChaosMethod, Page_KrigingMethod, Page_Validation, Page_LinearRegressionMethod};
 
   MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
@@ -48,10 +49,11 @@ protected:
 
 private:
   QList<DesignOfExperiment> doeList_;
-  MetaModelIntroPage * introPage_;
-  KrigingPage * krigingPage_;
-  FunctionalChaosPage * functionalChaosPage_;
-  MetaModelValidationPage * validationPage_;
+  MetaModelIntroPage * introPage_ = 0;
+  KrigingPage * krigingPage_ = 0;
+  FunctionalChaosPage * functionalChaosPage_ = 0;
+  MetaModelValidationPage * validationPage_ = 0;
+  LinearRegressionPage * linearModelPage_ = 0;
 };
 }
 #endif

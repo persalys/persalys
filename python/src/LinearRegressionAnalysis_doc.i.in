@@ -1,0 +1,92 @@
+%feature("docstring") PERSALYS::LinearRegressionAnalysis
+"Linear regression analysis.
+
+Parameters
+----------
+name : str
+    Name
+designOfExperiment : :class:`~persalys.DesignOfExperiment`
+    Design of experiments
+
+Examples
+--------
+Create the model:
+
+>>> import openturns as ot
+>>> import persalys
+>>> from math import pi
+>>> ot.RandomGenerator.SetSeed(0)
+
+Create the model:
+
+>>> xi1 = persalys.Input('xi1', ot.Uniform(-pi, pi))
+>>> xi2 = persalys.Input('xi2', ot.Uniform(-pi, pi))
+>>> xi3 = persalys.Input('xi3', ot.Uniform(-pi, pi))
+>>> y0 = persalys.Output('y0')
+>>> myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', [xi1, xi2, xi3], [y0], ['sin(xi1) + 7. * (sin(xi2)) ^ 2 + 0.1 * xi3^4 * sin(xi1)'])
+
+Create the design of experiments:
+
+>>> aDesign = persalys.ProbabilisticDesignOfExperiment('aDesign', myPhysicalModel, 100, 'LHS')
+>>> aDesign.run()
+
+Create the linear regression analysis:
+
+>>> lm = persalys.LinearRegressionAnalysis('lm', aDesign)
+>>> lm.setDegree(1)
+>>> lm.setInteraction(False)
+>>> lm.run()
+
+Get the result:
+
+>>> result = lm.getResult()"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::LinearRegressionAnalysis::getDegree
+"Accessor to the basis degree.
+
+Returns
+-------
+degres : int
+    Basis degree"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::LinearRegressionAnalysis::setDegree
+"Accessor to the basis degree.
+
+Parameters
+----------
+degres : int
+    Basis degree"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::LinearRegressionAnalysis::getInteraction
+"Accessor to the interaction flag.
+
+Returns
+-------
+interaction : bool
+    Whether to include interaction terms in the basis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::LinearRegressionAnalysis::setInteraction
+"Accessor to the interaction flag.
+
+Parameters
+----------
+interaction : bool
+    Whether to include interaction terms in the basis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::LinearRegressionAnalysis::getResult
+"Results accessor.
+
+Returns
+-------
+result : :class:`~persalys.LinearRegressionAnalysisResult`
+    Results"

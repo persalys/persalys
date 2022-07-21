@@ -31,11 +31,6 @@ namespace PERSALYS
 
 MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
-  , doeList_()
-  , introPage_(0)
-  , krigingPage_(0)
-  , functionalChaosPage_(0)
-  , validationPage_(0)
 {
   DesignOfExperimentAnalysis * doeAnalysis = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get());
   Q_ASSERT(doeAnalysis);
@@ -81,9 +76,12 @@ void MetaModelAnalysisWizard::buildInterface()
   introPage_ = new MetaModelIntroPage(this);
   setPage(Page_Intro, introPage_);
 
+  // linear model page
+  linearModelPage_ = new LinearRegressionPage(this);
+  setPage(Page_LinearRegressionMethod, linearModelPage_);
+
   // chaos page
   functionalChaosPage_ = new FunctionalChaosPage(this);
-  functionalChaosPage_->initialize(analysis_);
   setPage(Page_ChaosMethod, functionalChaosPage_);
   connect(introPage_, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), functionalChaosPage_, SLOT(updateInputSampleSize(DesignOfExperiment)));
 
@@ -100,8 +98,9 @@ void MetaModelAnalysisWizard::buildInterface()
 
   // initialization
   introPage_->initialize(analysis_, doeList_);
+  linearModelPage_->initialize(analysis_);
+  functionalChaosPage_->initialize(analysis_);
   krigingPage_->initialize(analysis_);
-
   setStartId(Page_Intro);
 }
 
@@ -114,6 +113,7 @@ int MetaModelAnalysisWizard::nextId() const
       return introPage_->nextId();
     case Page_ChaosMethod:
     case Page_KrigingMethod:
+    case Page_LinearRegressionMethod:
       return Page_Validation;
     default:
       return -1;
@@ -134,6 +134,9 @@ Analysis MetaModelAnalysisWizard::getAnalysis() const
       break;
     case MetaModelIntroPage::Kriging:
       analysis = krigingPage_->getAnalysis(analysisName, design);
+      break;
+    case MetaModelIntroPage::LinearRegression:
+      analysis = linearModelPage_->getAnalysis(analysisName, design);
       break;
     default:
       throw InvalidValueException(HERE) << "MetaModelAnalysisWizard::getAnalysis no analysis";

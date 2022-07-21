@@ -171,12 +171,14 @@ Metamodel
     :template: class.rst_t
 
     MetaModelAnalysis
-    FunctionalChaosAnalysis
-    KrigingAnalysis
     MetaModelAnalysisResult
-    FunctionalChaosAnalysisResult
-    KrigingAnalysisResult
     MetaModelValidationResult
+    LinearRegressionAnalysis
+    LinearRegressionAnalysisResult
+    FunctionalChaosAnalysis
+    FunctionalChaosAnalysisResult
+    KrigingAnalysis
+    KrigingAnalysisResult
 
 Study storage
 -------------

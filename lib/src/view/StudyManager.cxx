@@ -30,6 +30,9 @@
 #include "persalys/ExtractDataFieldWizard.hxx"
 #include "persalys/ObservationsWizard.hxx"
 #include "persalys/MetaModelExportWizard.hxx"
+#include "persalys/LinearRegressionAnalysis.hxx"
+#include "persalys/KrigingAnalysis.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -174,6 +177,9 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
       KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(wizard->getAnalysis().getImplementation().get());
       if(kriging)
         item->appendMetaModelItem(kriging->getResult().getMetaModel());
+      LinearRegressionAnalysis * linear = dynamic_cast<LinearRegressionAnalysis*>(wizard->getAnalysis().getImplementation().get());
+      if (linear)
+	item->appendMetaModelItem(linear->getResult().getMetaModel());
     }
     delete wizard;
   }

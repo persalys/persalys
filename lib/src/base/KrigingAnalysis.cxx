@@ -142,6 +142,8 @@ void KrigingAnalysis::launch()
   const UnsignedInteger inputSize = effectiveInputSample.getSize();
   const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
   const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
+  const Description inputVariables(effectiveInputSample.getDescription());
+  const Description outputVariables(effectiveOutputSample.getDescription());
 
   // check
   if (inputSize * designOfExperiment_.getOutputSample().getSize() == 0)
@@ -158,6 +160,10 @@ void KrigingAnalysis::launch()
     throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (inputSize * getTestSampleValidationPercentageOfPoints() / 100);
   if (kFoldValidation() && inputSize / getKFoldValidationNumberOfFolds() < 3)
     throw InvalidArgumentException(HERE) << "K-Fold validation: each fold must contain at least three points. Here size / k = " << (inputSize / getKFoldValidationNumberOfFolds());
+  const Point stddev(effectiveOutputSample.computeStandardDeviation());
+  for (UnsignedInteger i = 0; i < outputDimension; ++ i)
+    if (!(stddev[i] > 0.0))
+      throw InvalidArgumentException(HERE) << "No variance for output variable "<< outputVariables[i];
 
   // Kriging
 
@@ -171,7 +177,7 @@ void KrigingAnalysis::launch()
     if (stopRequested_)
       break;
 
-    informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
+    informationMessage_ = "Creation of a meta model for the variable " + outputVariables[i] + " in progress.\n";
     notify("informationMessageUpdated");
 
     // normalization was removed in 1.16
@@ -218,7 +224,7 @@ void KrigingAnalysis::launch()
 
   // build metamodel
   AggregatedFunction metamodelFunction(metaModelCollection);
-  Description variablesNames(effectiveInputSample.getDescription());
+  Description variablesNames(inputVariables);
   variablesNames.add(result_.outputSample_.getDescription());
   metamodelFunction.setDescription(variablesNames);
 
@@ -424,12 +430,12 @@ Parameters KrigingAnalysis::getParameters() const
   param.add("Covariance model", getCovarianceModel().getImplementation()->getClassName());
   if (getCovarianceModel().getImplementation()->getClassName() == "MaternModel")
   {
-    const double nu = dynamic_cast<MaternModel*>(getCovarianceModel().getImplementation().get())->getNu();
+    const Scalar nu = dynamic_cast<MaternModel*>(getCovarianceModel().getImplementation().get())->getNu();
     param.add("nu", nu);
   }
   else if (getCovarianceModel().getImplementation()->getClassName() == "GeneralizedExponential")
   {
-    const double p = dynamic_cast<GeneralizedExponential*>(getCovarianceModel().getImplementation().get())->getP();
+    const Scalar p = dynamic_cast<GeneralizedExponential*>(getCovarianceModel().getImplementation().get())->getP();
     param.add("p", p);
   }
   param.add("Parameters optimization", getOptimizeParameters() ? "yes" : "no");

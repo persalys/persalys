@@ -175,6 +175,12 @@ void FunctionalChaosAnalysis::initialize()
 
 void FunctionalChaosAnalysis::launch()
 {
+  // get effective samples
+  const Sample effectiveInputSample(getEffectiveInputSample());
+  const Sample effectiveOutputSample(getEffectiveOutputSample());
+  const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
+  const Description outputVariables(effectiveOutputSample.getDescription());
+
   // check
   if (designOfExperiment_.getInputSample().getSize() * designOfExperiment_.getOutputSample().getSize() == 0)
     throw InvalidArgumentException(HERE) << "The design of experiments must contains not empty input AND output samples";
@@ -184,11 +190,12 @@ void FunctionalChaosAnalysis::launch()
     throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (designOfExperiment_.getInputSample().getSize() * getTestSampleValidationPercentageOfPoints() / 100);
   if (kFoldValidation() && (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds() < 3))
     throw InvalidArgumentException(HERE) << "K-Fold validation: each fold must contain at least three points. Here size / k = " << (designOfExperiment_.getInputSample().getSize() / getKFoldValidationNumberOfFolds());
+  const Point stddev(effectiveOutputSample.computeStandardDeviation());
+  for (UnsignedInteger i = 0; i < outputDimension; ++ i)
+    if (!(stddev[i] > 0.0))
+      throw InvalidArgumentException(HERE) << "No variance for output variable "<< outputVariables[i];
 
 
-  // get effective samples
-  const Sample effectiveInputSample(getEffectiveInputSample());
-  const Sample effectiveOutputSample(getEffectiveOutputSample());
 
   // check chaos degree
   if (!getSparseChaos())
@@ -328,30 +335,27 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
   // retrieve chaos result
   FunctionalChaosAnalysisResult chaosResult(*dynamic_cast<FunctionalChaosAnalysisResult*>(&result));
 
-  // get metamodel result
-  Function metamodel(chaosResult.getFunctionalChaosResult().getMetaModel());
   // get polynom basis
   Basis reducedBasis(chaosResult.getFunctionalChaosResult().getReducedBasis());
   // get marginals transformation
   const Function transformation(chaosResult.getFunctionalChaosResult().getTransformation());
 
   // compute basis matrix at the points of inputSample
-  const UnsignedInteger basisDim = reducedBasis.getSize();
-  Matrix A(inputSample.getSize(), basisDim);
-  for (UnsignedInteger i = 0; i < basisDim; ++i)
+  const UnsignedInteger basisSize = reducedBasis.getSize();
+  const UnsignedInteger sampleSize = result.outputSample_.getSize();
+  Matrix A(inputSample.getSize(), basisSize);
+  for (UnsignedInteger i = 0; i < basisSize; ++i)
   {
     Sample outSample_i(reducedBasis[i](transformation(inputSample)));
     for (UnsignedInteger j = 0; j < inputSample.getSize(); ++j)
-    {
       A(j, i) = outSample_i(j, 0);
-    }
   }
 
   // (A^t.A)
   CovarianceMatrix AtA(A.computeGram(true));
 
   // (A^t.A)^{-1}
-  const Matrix AtA_inv(AtA.solveLinearSystem(IdentityMatrix(basisDim)).getImplementation());
+  const Matrix AtA_inv(AtA.solveLinearSystem(IdentityMatrix(basisSize)).getImplementation());
 
   // A.(A^t.A)^{-1}.A^t
   const Matrix H(A * AtA_inv * A.transpose());
@@ -364,18 +368,22 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
   Point q2(result.outputSample_.getDimension());
   const Point variance(result.outputSample_.computeVariance());
 
+  const Scalar traceInverse = AtA_inv.getImplementation()->computeTrace();
+  const Scalar correctingFactor = (1.0 * sampleSize) / (sampleSize - basisSize) * (1.0 + traceInverse);
+
   for (UnsignedInteger i = 0; i < result.outputSample_.getDimension(); ++i)
   {
     // sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ]
-    double quadraticResidual = 0.;
-    for (UnsignedInteger j = 0; j < result.outputSample_.getSize(); ++j)
+    Scalar quadraticResidual = 0.;
+    for (UnsignedInteger j = 0; j < sampleSize; ++j)
     {
-      const double diff = (result.metaModelOutputSample_(j, i) - result.outputSample_(j, i)) / (1 - Hdiag[j]);
+      const Scalar diff = (result.metaModelOutputSample_(j, i) - result.outputSample_(j, i)) / (1 - Hdiag[j]);
       quadraticResidual += diff * diff;
     }
     // 1 - sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ] / (n-1) / Var Y
-    q2[i] = 1.0 - (quadraticResidual / (result.outputSample_.getSize() - 1)) / variance[i];
+    q2[i] = 1.0 - correctingFactor * (quadraticResidual / (sampleSize - 1.0)) / variance[i];
   }
+
   result.analyticalValidation_.q2_ = q2;
 }
 

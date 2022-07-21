@@ -33,13 +33,6 @@ namespace PERSALYS
 
 MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
   : QWizardPage(parent)
-  , doesComboBox_(0)
-  , doesComboBoxModel_(0)
-  , doeLabel_(0)
-  , outputsSelectionGroupBox_(0)
-  , methodGroup_(0)
-  , errorMessageLabel_(0)
-  , interestVariables_()
 {
   setTitle(tr("Methods to create metamodels"));
 
@@ -72,8 +65,13 @@ MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
 
   methodGroup_ = new QButtonGroup(this);
 
+  // Linear regression
+  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Linear regression"));
+  methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::LinearRegression);
+  methodLayout->addWidget(buttonToChooseMethod);
+
   // Chaos
-  QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Functional Chaos"));
+  buttonToChooseMethod = new QRadioButton(tr("Functional Chaos"));
   methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::Chaos);
   methodLayout->addWidget(buttonToChooseMethod);
 
@@ -116,6 +114,8 @@ void MetaModelIntroPage::initialize(const Analysis& analysis, QList< DesignOfExp
     methodGroup_->button(MetaModelIntroPage::Chaos)->click();
   else if (analysisName == "KrigingAnalysis")
     methodGroup_->button(MetaModelIntroPage::Kriging)->click();
+  else if (analysisName == "LinearRegressionAnalysis")
+    methodGroup_->button(MetaModelIntroPage::LinearRegression)->click();
 }
 
 
@@ -127,6 +127,8 @@ int MetaModelIntroPage::nextId() const
       return MetaModelAnalysisWizard::Page_ChaosMethod;
     case MetaModelIntroPage::Kriging:
       return MetaModelAnalysisWizard::Page_KrigingMethod;
+    case MetaModelIntroPage::LinearRegression:
+      return MetaModelAnalysisWizard::Page_LinearRegressionMethod;
     default:
       return -1;
   }
