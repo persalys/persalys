@@ -21,7 +21,7 @@
 #include "persalys/ItemFactory.hxx"
 
 #include "persalys/DesignOfExperimentEvaluation.hxx"
-#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/LinearRegressionAnalysis.hxx"
 #include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/InferenceAnalysis.hxx"
 #include "persalys/CopulaInferenceAnalysis.hxx"
@@ -191,7 +191,7 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
 Analysis ItemFactory::createAnalysis(const QString &analysisName, const DesignOfExperiment &doe)
 {
   if (analysisName == "Metamodel")
-    return new FunctionalChaosAnalysis(availableAnalysisName(tr("metaModel_")), doe);
+    return new LinearRegressionAnalysis(availableAnalysisName(tr("metaModel_")), doe);
   else if (analysisName == "Calibration")
     return new CalibrationAnalysis(availableAnalysisName(tr("calibration_")), doe);
   qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
@@ -202,7 +202,7 @@ Analysis ItemFactory::createAnalysis(const QString &analysisName, const DesignOf
 Analysis ItemFactory::createAnalysis(const QString &analysisName, const Analysis &inAnalysis)
 {
   if (analysisName == "Metamodel")
-    return new FunctionalChaosAnalysis(availableAnalysisName(tr("metaModel_")), inAnalysis);
+    return new LinearRegressionAnalysis(availableAnalysisName(tr("metaModel_")), inAnalysis);
   qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
   return 0;
 }

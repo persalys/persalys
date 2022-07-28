@@ -23,6 +23,9 @@
 #include "persalys/StudyImplementation.hxx"
 #include "persalys/ParametersWidget.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/LinearRegressionAnalysis.hxx"
+#include "persalys/KrigingAnalysis.hxx"
+#include "persalys/FunctionalChaosAnalysis.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>

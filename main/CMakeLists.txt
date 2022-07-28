@@ -27,7 +27,7 @@ if (UNIX)
     file (APPEND ${launch_file} "PV_PLUGIN_PATH=$PV_PLUGIN_PATH:${ParaView_PREFIX_PATH}/lib/${PARAVIEW_PLUGIN_SUBDIR}/BagPlotViewsAndFilters\n")
     file (APPEND ${launch_file} "export PV_PLUGIN_PATH\n")
   endif ()
-  file (APPEND ${launch_file} "${CMAKE_CURRENT_BINARY_DIR}/persalys\n")
+  file (APPEND ${launch_file} "${CMAKE_CURRENT_BINARY_DIR}/persalys &\n")
   execute_process (COMMAND chmod a+rx ${launch_file})
 endif ()
 

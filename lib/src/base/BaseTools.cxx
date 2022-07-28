@@ -74,6 +74,15 @@ void Parameters::add(const Parameters& parameters)
     add(parameters[i].first, parameters[i].second);
 }
 
+String Parameters::get(const String& name) const
+{
+  for (UnsignedInteger i = 0; i < getSize(); ++i)
+  {
+    if (pairsCollection_[i].first == name)
+      return pairsCollection_[i].second;
+  }
+  throw InvalidArgumentException(HERE) << "Key " << name << " not found in parameters";
+}
 
 UnsignedInteger Parameters::getSize() const
 {

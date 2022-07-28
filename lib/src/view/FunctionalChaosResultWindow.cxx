@@ -101,30 +101,7 @@ void FunctionalChaosResultWindow::buildInterface()
   // - tab widget
   QTabWidget * tabWidget = new QTabWidget;
 
-  // first tab : METAMODEL GRAPH --------------------------------
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
-
-  ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
-  MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
-                                     result_.getFunctionalChaosResult().getRelativeErrors(),
-                                     result_.getFunctionalChaosResult().getResiduals());
-  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
-  {
-    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu,
-        result_.getOutputSample(),
-        i,
-        tr("Relative error") + " (1 - R2)",
-        this);
-
-    plotsStackedWidget->addWidget(validationWidget);
-  }
-  tabLayout->addWidget(plotsStackedWidget);
-
-  tabWidget->addTab(tab, tr("Metamodel"));
-
-  // second tab : MOMENTS --------------------------------
+  // first tab : MOMENTS --------------------------------
   if (result_.getMean().getSize() == nbOutputs && result_.getVariance().getSize() == nbOutputs)
   {
     QScrollArea * scrollArea = new QScrollArea;
@@ -133,6 +110,19 @@ void FunctionalChaosResultWindow::buildInterface()
     QGridLayout * summaryWidgetLayout = new QGridLayout(summaryWidget);
 
     // chaos result
+    ResizableStackedWidget * generalStackedWidget = new ResizableStackedWidget;
+    for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
+    {
+      QStringList namesList;
+      namesList << tr("Residual") << "R2";
+      QStringList valuesList;
+      valuesList << QString::number(result_.getFunctionalChaosResult().getResiduals()[outputIndex]);
+      valuesList << QString::number(result_.getFunctionalChaosResult().getRelativeErrors()[outputIndex]);
+      ParametersTableView * generalTableView = new ParametersTableView(namesList, valuesList, true, true);
+      generalStackedWidget->addWidget(generalTableView);
+    }
+    summaryWidgetLayout->addWidget(generalStackedWidget);
+    
     QGroupBox * basisGroupBox = new QGroupBox(tr("Polynomial basis"));
     QVBoxLayout * basisGroupBoxLayout = new QVBoxLayout(basisGroupBox);
     ResizableStackedWidget * basisStackedWidget = new ResizableStackedWidget;
@@ -315,6 +305,24 @@ void FunctionalChaosResultWindow::buildInterface()
     }
   }
 
+  // second tab : adequation graph --------------------------------
+  QWidget * tab = new QWidget;
+  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+  ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
+  MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
+                                     result_.getFunctionalChaosResult().getRelativeErrors(),
+                                     result_.getFunctionalChaosResult().getResiduals());
+  for (UnsignedInteger i = 0; i < nbOutputs; ++ i)
+  {
+    MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu, result_.getOutputSample(), i, "", this);
+    plotsStackedWidget->addWidget(validationWidget);
+  }
+  tabLayout->addWidget(plotsStackedWidget);
+
+  tabWidget->addTab(plotsStackedWidget, tr("Adequation"));
+  
   // third tab : SOBOL INDICES --------------------------------
   if (result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
   {

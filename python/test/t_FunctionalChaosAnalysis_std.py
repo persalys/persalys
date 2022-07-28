@@ -83,7 +83,7 @@ print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
 ott.assert_almost_equal(
-    [0.9223441081335272], chaosResult2.getAnalyticalValidation().getQ2(), 1e-16)
+    [0.840009], chaosResult2.getAnalyticalValidation().getQ2())
 ott.assert_almost_equal(
     [0.9457431125210048], chaosResult2.getTestSampleValidation().getQ2(), 1e-16)
 ott.assert_almost_equal(

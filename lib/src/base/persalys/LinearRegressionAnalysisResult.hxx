@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define metamodel result
+ *  @brief Class to define linear metamodel result
  *
  *  Copyright 2015-2022 EDF-Phimeca
  *
@@ -18,46 +18,35 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_METAMODELANALYSISRESULT_HXX
-#define PERSALYS_METAMODELANALYSISRESULT_HXX
+#ifndef PERSALYS_LINEARREGRESSIONANALYSISRESULT_HXX
+#define PERSALYS_LINEARREGRESSIONANALYSISRESULT_HXX
 
-#include "PhysicalModel.hxx"
+#include "MetaModelAnalysisResult.hxx"
 
-#include "AnalysisResult.hxx"
-#include "MetaModelValidationResult.hxx"
+#include <openturns/LinearModelResult.hxx>
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API MetaModelAnalysisResult : public AnalysisResult
+class PERSALYS_BASE_API LinearRegressionAnalysisResult : public MetaModelAnalysisResult
 {
   CLASSNAME
 
 public:
 
-  friend class FunctionalChaosAnalysis;
-  friend class KrigingAnalysis;
   friend class LinearRegressionAnalysis;
-  friend class MetaModelAnalysis;
+  typedef OT::Collection< OT::LinearModelResult > LinearModelResultCollection;
 
   /** Default constructor */
-  MetaModelAnalysisResult();
+  LinearRegressionAnalysisResult();
 
   /** Virtual constructor */
-  MetaModelAnalysisResult * clone() const override;
+  LinearRegressionAnalysisResult * clone() const override;
 
-  PhysicalModel getMetaModel() const;
+  LinearModelResultCollection getLinearModelResultCollection() const;
+  OT::LinearModelResult getResultForVariable(const OT::String& variableName) const;
 
-  OT::Sample getOutputSample() const;
-
-  OT::Sample getMetaModelOutputSample() const;
-
-  MetaModelValidationResult getAnalyticalValidation() const;
-  MetaModelValidationResult getTestSampleValidation() const;
-  MetaModelValidationResult getKFoldValidation() const;
-  MetaModelValidationResult getLeaveOneOutValidation() const;
-
-  std::vector<MetaModelValidationResult> getValidations() const;
-
+  OT::Description getFormulas() const;
+  
   /** String converter */
   OT::String __repr__() const override;
 
@@ -68,13 +57,8 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  PhysicalModel metaModel_;
-  MetaModelValidationResult analyticalValidation_;
-  MetaModelValidationResult testSampleValidation_;
-  MetaModelValidationResult kFoldValidation_;
-  MetaModelValidationResult looValidation_;
-  OT::Sample outputSample_;
-  OT::Sample metaModelOutputSample_;
+  OT::PersistentCollection< OT::LinearModelResult > linearModelResultCollection_;
+  OT::Description formulas_;
 };
 }
 #endif

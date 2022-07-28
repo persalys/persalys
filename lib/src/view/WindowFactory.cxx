@@ -58,6 +58,7 @@
 #include "persalys/ApproximationResultWindow.hxx"
 #include "persalys/FunctionalChaosResultWindow.hxx"
 #include "persalys/KrigingResultWindow.hxx"
+#include "persalys/LinearRegressionResultWindow.hxx"
 #include "persalys/InferenceResultWindow.hxx"
 #include "persalys/CopulaInferenceResultWindow.hxx"
 #include "persalys/FieldModelEvaluationResultWindow.hxx"
@@ -223,7 +224,8 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
     wizard = new OptimizationWizard(analysis, parent);
   }
   else if (analysisType == "FunctionalChaosAnalysis" ||
-           analysisType == "KrigingAnalysis")
+           analysisType == "KrigingAnalysis" ||
+	   analysisType == "LinearRegressionAnalysis")
   {
     wizard = new MetaModelAnalysisWizard(analysis, isGeneralWizard, parent);
   }
@@ -349,6 +351,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   else if (analysisType == "KrigingAnalysis")
   {
     resultWindow = new KrigingResultWindow(item, parent);
+  }
+  else if (analysisType == "LinearRegressionAnalysis")
+  {
+    resultWindow = new LinearRegressionResultWindow(item, parent);
   }
   else if (analysisType == "InferenceAnalysis")
   {

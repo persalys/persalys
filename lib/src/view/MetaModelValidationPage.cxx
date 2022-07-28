@@ -20,7 +20,7 @@
  */
 #include "persalys/MetaModelValidationPage.hxx"
 
-#include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/LinearRegressionAnalysis.hxx"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -116,7 +116,7 @@ void MetaModelValidationPage::buildInterface()
   pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
 
-  initialize(FunctionalChaosAnalysis());
+  initialize(LinearRegressionAnalysis());
 }
 
 
