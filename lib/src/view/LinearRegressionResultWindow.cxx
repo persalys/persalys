@@ -27,6 +27,8 @@
 #include "persalys/TranslationManager.hxx"
 #include "persalys/PlotWidget.hxx"
 #include "persalys/CopyableTableView.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
 
 #include <openturns/OTBase.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -329,7 +331,8 @@ void LinearRegressionResultWindow::buildInterface()
       pdfPlot->setTitle(tr("Residual PDF"));
       pdfPlot->setAxisTitle(QwtPlot::xBottom, tr("Residual"));
       pdfPlot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
-      resDistLayout->addWidget(pdfPlot, 1, 0);
+      SimpleGraphSetting * graphSetting = new SimpleGraphSetting(pdfPlot, this);
+      resDistLayout->addWidget(new WidgetBoundToDockWidget(pdfPlot, graphSetting, this), 1, 0);
       QWidget * resDistWidget = new QWidget;
       resDistWidget->setLayout(resDistLayout);
       residualTabWidget->addTab(resDistWidget, tr("PDF"));
@@ -346,7 +349,8 @@ void LinearRegressionResultWindow::buildInterface()
     resVsFitPlot->setTitle(tr("Residual vs fitted"));
     resVsFitPlot->setAxisTitle(QwtPlot::xBottom, tr("Fitted values"));
     resVsFitPlot->setAxisTitle(QwtPlot::yLeft, tr("Residual"));
-    residualTabWidget->addTab(resVsFitPlot, tr("Residual vs fitted"));
+    SimpleGraphSetting * resVsFitGraphSetting = new SimpleGraphSetting(resVsFitPlot, this);
+    residualTabWidget->addTab(new WidgetBoundToDockWidget(resVsFitPlot, resVsFitGraphSetting, this), tr("Residual vs fitted"));
 
     // cook distances
     PlotWidget * cookPlot = new PlotWidget(tr("Cook distance"));
@@ -357,7 +361,8 @@ void LinearRegressionResultWindow::buildInterface()
     cookPlot->setTitle(tr("Cook distance"));
     cookPlot->setAxisTitle(QwtPlot::xBottom, tr("Observation"));
     cookPlot->setAxisTitle(QwtPlot::yLeft, tr("Cook distance"));
-    residualTabWidget->addTab(cookPlot, tr("Cook distance"));
+    SimpleGraphSetting * cookGraphSetting = new SimpleGraphSetting(cookPlot, this);
+    residualTabWidget->addTab(new WidgetBoundToDockWidget(cookPlot, cookGraphSetting, this), tr("Cook distance"));
 
     residualStackedWidget->addWidget(residualTabWidget);
   }
