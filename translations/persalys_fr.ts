@@ -4630,6 +4630,8 @@ at</source>
     </message>
     <message>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="284"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="322"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="324"/>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="337"/>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="357"/>
         <source>Residual</source>
@@ -4647,19 +4649,13 @@ at</source>
     </message>
     <message>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="318"/>
-        <source>Noise distribution</source>
-        <translation>Distribution du bruit</translation>
+        <source>Residual distribution</source>
+        <translation>Distribution du résidu</translation>
     </message>
     <message>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="321"/>
-        <source>Noise PDF</source>
-        <translation>PDF du bruit</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="322"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="324"/>
-        <source>Noise</source>
-        <translation>Bruit</translation>
+        <source>Residual PDF</source>
+        <translation>PDF du résidu</translation>
     </message>
     <message>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="323"/>
@@ -4671,7 +4667,7 @@ at</source>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="335"/>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="338"/>
         <source>Residual vs fitted</source>
-        <translation>Résidu vs prédit</translation>
+        <translation>Résidu vs prédiction</translation>
     </message>
     <message>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="336"/>

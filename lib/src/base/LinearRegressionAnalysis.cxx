@@ -194,7 +194,7 @@ void LinearRegressionAnalysis::launch()
 }
 
 
-Function LinearRegressionAnalysis::runAlgo(const Sample& inputSample, const Sample& outputSample)
+Function LinearRegressionAnalysis::runAlgoMarginal(const Sample& inputSample, const Sample& outputSample)
 {
   LinearModelStepwiseAlgorithm algo(buildAlgo(inputSample, outputSample));
   algo.run();
@@ -226,9 +226,6 @@ Basis LinearRegressionAnalysis::getBasis() const
 
 LinearModelStepwiseAlgorithm LinearRegressionAnalysis::buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample)
 {
-  if (outputSample.getDimension() > 1)
-    throw InternalException(HERE) << "LinearRegressionAnalysis::runAlgo: the output sample must have a dimension of 1";
-
   const Indices minimalIndices(1, 0);
   const Indices startIndices(1, 0);
 

@@ -25,7 +25,7 @@
 
 #include <openturns/KPermutationsDistribution.hxx>
 #include <openturns/RandomGenerator.hxx>
-#include <openturns/Uniform.hxx>
+#include <openturns/AggregatedFunction.hxx>
 
 using namespace OT;
 
@@ -330,6 +330,22 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   result.metaModel_ = metaModel;
 }
 
+
+Function MetaModelAnalysis::runAlgo(const OT::Sample& inputSample, const OT::Sample & outputSample)
+{
+  const UnsignedInteger outputDimension = outputSample.getDimension();
+  Collection<Function> coll(outputDimension);
+  for (UnsignedInteger i = 0; i < outputDimension; ++ i)
+  {
+    coll[i] = runAlgoMarginal(inputSample, outputSample.getMarginal(i));
+  }
+  return AggregatedFunction(coll);
+}
+
+Function MetaModelAnalysis::runAlgoMarginal(const OT::Sample& /*inputSample*/, const OT::Sample & /*outputSample*/)
+{
+  throw NotYetImplementedException(HERE) << "MetaModelAnalysis::runAlgoMarginal";
+}
 
 void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& outSample, Point& residuals, Point& q2)
 {

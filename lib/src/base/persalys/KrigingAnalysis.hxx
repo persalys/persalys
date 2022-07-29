@@ -68,7 +68,7 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
-  OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
+  OT::Function runAlgoMarginal(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
   OT::KrigingAlgorithm buildKrigingAlgorithm(const OT::Sample& inputSample,
       const OT::Sample& outputSample,
       const bool useOptimalCovModel = false);

@@ -73,7 +73,10 @@ public:
   void load(OT::Advocate& adv) override;
 
 protected:
-  virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) = 0;
+  // n-d algos (chaos) should reimplement runAlgo, 1-d algos (lm) to reimplement runAlgoMarginal
+  virtual OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample);
+  virtual OT::Function runAlgoMarginal(const OT::Sample& inputSample, const OT::Sample& outputSample);
+
   void buildMetaModel(MetaModelAnalysisResult& result, const OT::Function& function);
   void computeError(const OT::Sample& metaOutSample, const OT::Sample& outSample, OT::Point& error, OT::Point& q2);
   void validateMetaModelResult(MetaModelAnalysisResult& result, const OT::Sample& inputSample);

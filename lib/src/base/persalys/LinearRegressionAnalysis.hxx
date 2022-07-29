@@ -71,7 +71,7 @@ protected:
   void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample) override;
 
 private:
-  OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
+  OT::Function runAlgoMarginal(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
   OT::LinearModelStepwiseAlgorithm buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample);
   OT::Basis getBasis() const;
 

@@ -90,7 +90,7 @@ void LinearRegressionResultWindow::buildInterface()
   // tab widget
   QTabWidget * tabWidget = new QTabWidget;
 
-  // second tab : METAMODEL RESULT --------------------------------
+  // first tab : general results --------------------------------
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
@@ -173,6 +173,7 @@ void LinearRegressionResultWindow::buildInterface()
     coeffTableView->resizeToContents();
     resultWidgetLayout->addWidget(coeffTableView, 1, 0);
     resultWidgetLayout->setRowStretch(2, 1);
+    resultWidgetLayout->setColumnStretch(1, 1);
     resultStackedWidget->addWidget(resultWidget);
   }
 
@@ -306,22 +307,32 @@ void LinearRegressionResultWindow::buildInterface()
     residualTableView->resizeToContents();
     residualWidgetLayout->addWidget(residualTableView, 0, 0);
     residualWidgetLayout->setRowStretch(1, 1);
+    residualWidgetLayout->setColumnStretch(1, 1);
 
     QScrollArea * residualTableScrollArea = new QScrollArea;
     residualTableScrollArea->setWidgetResizable(true);
     residualTableScrollArea->setWidget(resultWidget);
 
     residualTabWidget->addTab(residualTableScrollArea, tr("Table"));
-    
-    // Noise
+
+    // residual distribution
     try {
-      PlotWidget * pdfPlot = new PlotWidget(tr("Noise distribution"));
+      QGridLayout * resDistLayout = new QGridLayout;
       const Normal noiseDistribution(result_.getLinearModelResultCollection()[i].getNoiseDistribution());
+      QStringList namesList(tr("Standard deviation"));
+      QStringList valuesList(QString::number(noiseDistribution.getStandardDeviation()[0]));
+      ParametersTableView * basisTableView = new ParametersTableView(namesList, valuesList, true, true);  
+      resDistLayout->addWidget(basisTableView, 0, 0);
+
+      PlotWidget * pdfPlot = new PlotWidget(tr("Residual distribution"));
       pdfPlot->plotCurve(noiseDistribution.drawPDF().getDrawable(0).getData());
-      pdfPlot->setTitle(tr("Noise PDF"));
-      pdfPlot->setAxisTitle(QwtPlot::xBottom, tr("Noise"));
+      pdfPlot->setTitle(tr("Residual PDF"));
+      pdfPlot->setAxisTitle(QwtPlot::xBottom, tr("Residual"));
       pdfPlot->setAxisTitle(QwtPlot::yLeft, tr("Density"));
-      residualTabWidget->addTab(pdfPlot, tr("Noise"));
+      resDistLayout->addWidget(pdfPlot, 1, 0);
+      QWidget * resDistWidget = new QWidget;
+      resDistWidget->setLayout(resDistLayout);
+      residualTabWidget->addTab(resDistWidget, tr("PDF"));
     }
     catch (const InvalidArgumentException &)
     {

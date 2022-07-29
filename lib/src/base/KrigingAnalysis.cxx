@@ -236,11 +236,8 @@ void KrigingAnalysis::launch()
 }
 
 
-Function KrigingAnalysis::runAlgo(const Sample& inputSample, const Sample& outputSample)
+Function KrigingAnalysis::runAlgoMarginal(const Sample& inputSample, const Sample& outputSample)
 {
-  if (outputSample.getDimension() > 1)
-    throw InternalException(HERE) << "KrigingAnalysis::runAlgo: the output sample must have a dimension of 1";
-
   KrigingAlgorithm kriging(buildKrigingAlgorithm(inputSample, outputSample, true));
   kriging.setOptimizeParameters(false);
   kriging.run();
