@@ -31,14 +31,14 @@ model1.setCopula(['x1', 'x2'], ot.NormalCopula(R))
 myStudy.add(model1)
 
 # model 3 ##
-filename = 'data.csv'
+filename = 'data_pa.csv'
 cDist = ot.ComposedDistribution(
     [ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
                                 ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, ' ')
 model3 = persalys.DataModel(
-    'model3', 'data.csv', [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
+    'model3', filename, [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
 myStudy.add(model3)
 
 # Designs of Experiment ##
@@ -53,7 +53,7 @@ probaDesign = persalys.ProbabilisticDesignOfExperiment('probaDesign', model1, 10
 probaDesign.run()
 myStudy.add(probaDesign)
 
-design_3 = persalys.ImportedDesignOfExperiment('design_3', model1, 'data.csv', [0, 2, 3])
+design_3 = persalys.ImportedDesignOfExperiment('design_3', model1, filename, [0, 2, 3])
 design_3.run()
 myStudy.add(design_3)
 
@@ -83,6 +83,15 @@ chaos2 = persalys.FunctionalChaosAnalysis('chaos_2', design_2)
 chaos2.setChaosDegree(2)
 chaos2.setSparseChaos(True)
 myStudy.add(chaos2)
+
+# 1-d linear regression #
+linreg = persalys.LinearRegressionAnalysis('linreg', probaDesign)
+linreg.setInterestVariables(['y0', 'y1'])
+linreg.setDegree(2)
+linreg.setInteraction(False)
+linreg.setTestSampleValidation(True)
+linreg.setKFoldValidation(True)
+myStudy.add(linreg)
 
 # 2- central tendancy ##
 

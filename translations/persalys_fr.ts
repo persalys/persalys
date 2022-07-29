@@ -4580,7 +4580,7 @@ bayésien (BIC)</translation>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="137"/>
         <source>Confidence Interval
 at</source>
-        <translation type="unfinished">Intervalle de confiance</translation>
+        <translation>Intervalle de confiance</translation>
     </message>
     <message>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="155"/>
@@ -4593,107 +4593,116 @@ at</source>
         <translation>indéfini</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="182"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="183"/>
         <source>Results</source>
         <translation>Résultats</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="201"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="202"/>
         <source>Adequation</source>
         <translation>Adéquation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="251"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="252"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="259"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="260"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="281"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="282"/>
         <source>Row ID</source>
         <translation>Ligne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="282"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="347"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="283"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="358"/>
         <source>Observation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="283"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="284"/>
         <source>Predicted</source>
         <translation>Prédiction</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="284"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="322"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="324"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="337"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="357"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="285"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="330"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="348"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="368"/>
         <source>Residual</source>
         <translation>Résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="285"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="286"/>
         <source>Cook distances</source>
         <translation>Distance de Cook</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="314"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="316"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="318"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="322"/>
+        <source>Standard deviation</source>
+        <translation>Écart type</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="327"/>
         <source>Residual distribution</source>
         <translation>Distribution du résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="321"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="329"/>
         <source>Residual PDF</source>
         <translation>PDF du résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="323"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="331"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="332"/>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="335"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="338"/>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="343"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="346"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="349"/>
         <source>Residual vs fitted</source>
         <translation>Résidu vs prédiction</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="336"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="347"/>
         <source>Fitted values</source>
         <translation>Valeurs prédites</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="341"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="346"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="348"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="349"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="352"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="357"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="359"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="360"/>
         <source>Cook distance</source>
         <translation>Distance de Cook</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="367"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="378"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="372"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="383"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="376"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="387"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>

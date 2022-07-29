@@ -120,6 +120,10 @@ ot_pyinstallcheck_test (docstring)
 ot_pyinstallcheck_test (FileMemoizeFunction_std)
 ot_pyinstallcheck_test (DataCleaning_std)
 
+ot_pyinstallcheck_test (probabilistic_analyses IGNOREOUT)
+ot_pyinstallcheck_test (field_analyses IGNOREOUT)
+ot_pyinstallcheck_test (deterministic_analyses IGNOREOUT)
+
 if (SalomeYACS_FOUND)
   ot_pyinstallcheck_test (YACSPhysicalModel_std IGNOREOUT)
   ot_pyinstallcheck_test (YACSCouplingPhysicalModel_std IGNOREOUT)

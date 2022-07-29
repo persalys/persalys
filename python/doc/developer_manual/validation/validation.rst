@@ -420,7 +420,7 @@ Models
       cd persalys_dir/build_dir
       ./persalys.sh
 
-- Import the file ../python/test/test_deterministic_analyses.py
+- Import the file ../python/test/t_deterministic_analyses.py
 
 - click on 'Definition' child item of 'symbolicModel' item
 
@@ -1080,7 +1080,7 @@ Designs of experiments
 Probabilistic analyses
 ``````````````````````
 
-- Import the file python/test/test_probabilistic_analyses.py
+- Import the file python/test/t_probabilistic_analyses.py
 
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
@@ -1439,7 +1439,23 @@ Probabilistic analyses
           - the table values are sorted
           - the plot is updated
 
-  - Kriging : kriging item
+  - Linear regression: linreg item
+
+    - First page check selected outputs : y0, y1
+
+    - Second page check degree=2, interaction=False
+
+    - Third page check all methods are checked
+
+    - Run, check the result window:
+
+      - check 6 tabs: Results - Adequation - Validation - Residual - Parameters - Model
+      - on results tab formula: y0 = 1.64684 -0.668623 * x1 +0.0519163 * x1^2
+      - on residual/PDF tab sigma= 0.67442
+      - tabs are updated on output variable selection
+
+
+  - Kriging: kriging item
 
     - First page check the values:
 
@@ -1497,7 +1513,7 @@ Probabilistic analyses
           :align: center
 
       - left side : 2 variables in the list view
-      - right side, tabs : MetaModel - Results - Validation - Parameters - Model
+      - right side, tabs : Results - Adequation - Validation - Parameters - Model
       - when changing the variable, the tabs are updated
       - Metamodel tab : only the plot on the tab
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
@@ -1548,7 +1564,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/design_3_result.png
           :align: center
 
-  - Functional chaos : chaos_1 item
+  - Functional chaos: chaos_1 item
 
     - First page check the values :
 
@@ -1587,7 +1603,7 @@ Probabilistic analyses
           :align: center
 
       - left side : 1 variable in the list view
-      - right side, tabs : MetaModel - Summary - Sobol indices - Validation - Parameters - Model
+      - right side, tabs : Results - Adequation - Sobol indices - Validation - Parameters - Model
       - Metamodel tab : plot + Relative error table
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
@@ -1817,7 +1833,7 @@ Designs of experiments
 Field analyses
 ``````````````
 
-- Import the file python/test/test_field_analyses.py
+- Import the file python/test/t_field_analyses.py
 
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
@@ -1887,10 +1903,10 @@ Field analyses
 
 
 Diagrams
-`````````
+````````
 
 Physical model
-''''''''''''''''
+''''''''''''''
 
 - open the interface
 - create a new Study
@@ -1962,7 +1978,7 @@ Physical model
     - a wizard appears, there are 2 items in the combo box in Limit state group box, click on Cancel
 
 Data model
-''''''''''''''''
+''''''''''
 
 - click on 'Data model' button of the window of myOTStudy
     - the item dataModel_0 appears in the tree view
@@ -1985,7 +2001,7 @@ Data model
 
 
 Field model
-''''''''''''''''
+'''''''''''
 
 - click on 'Symbolic Field model' button of the window of myOTStudy
     - the item SymbolicModel_1 appears in the tree view

@@ -62,7 +62,7 @@ couplingModel = persalys.CouplingPhysicalModel('couplingModel', inputs, outputs,
 couplingModel.setCleanupWorkDirectory(True)
 couplingModel.setCacheFiles('', '')
 myStudy.add(couplingModel)
-filename = 'data.csv'
+filename = 'data_da.csv'
 cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
                                 ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
@@ -86,7 +86,7 @@ grid = persalys.GridDesignOfExperiment('grid', symbolicModel, values)
 myStudy.add(grid)
 
 # importDesign ##
-importDesign = persalys.ImportedDesignOfExperiment('importDesign', symbolicModel, 'data.csv', [0, 2, 3])
+importDesign = persalys.ImportedDesignOfExperiment('importDesign', symbolicModel, filename, [0, 2, 3])
 importDesign.run()
 myStudy.add(importDesign)
 
@@ -103,7 +103,7 @@ fixedDataModel = persalys.DataModel('fixedDataModel', fixedDesign.getOriginalInp
 myStudy.add(fixedDataModel)
 
 # imported DataModel ##
-importDataModel = persalys.DataModel('importDataModel', 'data.csv', [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
+importDataModel = persalys.DataModel('importDataModel', filename, [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
 myStudy.add(importDataModel)
 
 # model evaluation
