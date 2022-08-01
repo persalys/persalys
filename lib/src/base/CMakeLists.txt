@@ -66,6 +66,7 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      CopulaInferenceResult.cxx
                      CopulaInferenceAnalysis.cxx
                      OptimizationAnalysis.cxx
+                     MultiObjectiveOptimizationAnalysis.cxx
                      PythonEnvironment.cxx
                      Observations.cxx
                      CalibrationAnalysis.cxx
@@ -175,6 +176,7 @@ ot_install_header_file ( CopulaInferenceSetResult.hxx )
 ot_install_header_file ( CopulaInferenceResult.hxx )
 ot_install_header_file ( CopulaInferenceAnalysis.hxx )
 ot_install_header_file ( OptimizationAnalysis.hxx )
+ot_install_header_file ( MultiObjectiveOptimizationAnalysis.hxx )
 ot_install_header_file ( PythonEnvironment.hxx )
 ot_install_header_file ( LaunchParametersVisitor.hxx )
 ot_install_header_file ( Observations.hxx )

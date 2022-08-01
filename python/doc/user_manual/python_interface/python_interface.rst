@@ -59,6 +59,7 @@ Optimization
     :template: class.rst_t
 
     OptimizationAnalysis
+    MultiObjectiveOptimizationAnalysis
 
 
 Screening

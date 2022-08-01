@@ -23,6 +23,7 @@
 
 #include "persalys/BoxPlot.hxx"
 #include "persalys/ValueLineEdit.hxx"
+#include "persalys/ListWidgetWithCheckBox.hxx"
 
 #include <QGridLayout>
 #include <QComboBox>
@@ -125,6 +126,21 @@ class PERSALYS_PLOT_API SensitivityIndicesGraphSetting : public GraphConfigurati
 
 public:
   SensitivityIndicesGraphSetting(PlotWidget *plotWidget, QWidget *parent = 0);
+};
+
+class PERSALYS_PLOT_API FrontsGraphSetting : public GraphConfigurationWidget
+{
+  Q_OBJECT
+
+public:
+  FrontsGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &outputNames, QWidget *parent = 0);
+public slots:
+  void updateYComboBox();
+  virtual void currentPlotIndexChanged(int i = 0);
+private:
+  QComboBox * xAxisComboBox_;
+  QComboBox * yAxisComboBox_;
+
 };
 }
 #endif

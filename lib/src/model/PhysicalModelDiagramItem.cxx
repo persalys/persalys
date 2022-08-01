@@ -31,6 +31,8 @@
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/KrigingAnalysis.hxx"
 
+#include <openturns/PlatformInfo.hxx>
+
 #include <QDebug>
 
 using namespace OT;
@@ -77,6 +79,8 @@ void PhysicalModelDiagramItem::buildActions()
     newDesignOfExperiment_ = createAction("DesignOfExperiment", getPhysicalModel());
     newScreening_ = createAction("Screening", getPhysicalModel());
     newOptimization_ = createAction("Optimization", getPhysicalModel());
+    if (PlatformInfo::HasFeature("pagmo"))
+      newMoOptimization_ = createAction("MultiObjectiveOptimization", getPhysicalModel());
     newSensitivityAnalysis_ = createAction("Sensitivity", getPhysicalModel());
 
     // new limit state action
@@ -156,6 +160,7 @@ void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
   // to update diagram (arrow color and button availability)
   emit inputNumberValidityChanged(physicalModel_.getInputDimension());
   emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
+  emit outputNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getOutputDimension() > 1 );
   emit physicalModelValidityChanged(physicalModel_.isValid());
   emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
   emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());

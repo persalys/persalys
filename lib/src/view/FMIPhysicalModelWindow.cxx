@@ -31,6 +31,8 @@
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/DifferentiationTableModel.hxx"
 #include "persalys/StudyTreeViewModel.hxx"
+#include "persalys/FloatDelegate.hxx"
+
 
 #include <QFileDialog>
 #include <QHeaderView>

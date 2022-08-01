@@ -27,7 +27,6 @@
 #include "persalys/ListWidgetWithCheckBox.hxx"
 #include "persalys/FMUInfo.hxx"
 #include "persalys/FMIPhysicalModel.hxx"
-#include "persalys/DoubleSpinBox.hxx"
 #include "persalys/TemporaryLabel.hxx"
 
 #include <QLineEdit>
@@ -127,38 +126,6 @@ private:
   QStringList enumLabels_;
 };
 
-
-class PERSALYS_VIEW_API FloatDelegate : public QItemDelegate
-{
-  Q_OBJECT
-public:
-  FloatDelegate(QObject *parent = 0)
-    : QItemDelegate(parent)
-  {
-  }
-
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override
-  {
-    DoubleSpinBox * editor = new DoubleSpinBox(parent);
-    return editor;
-  }
-
-
-  void setEditorData(QWidget * editor, const QModelIndex & index) const override
-  {
-    DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
-    double value = index.model()->data(index, Qt::EditRole).toDouble();
-    comboBox->setValue(value);
-  }
-
-
-  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override
-  {
-    DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
-    model->setData(index, QString::number(comboBox->value()), Qt::EditRole);
-  }
-
-};
 
 class DataFilterProxyModel : public QSortFilterProxyModel
 {

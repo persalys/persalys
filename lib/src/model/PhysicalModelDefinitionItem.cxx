@@ -22,6 +22,8 @@
 
 #include "persalys/StudyItem.hxx"
 
+#include <openturns/PlatformInfo.hxx>
+
 #include <QDebug>
 
 using namespace OT;
@@ -48,6 +50,8 @@ PhysicalModelDefinitionItem::PhysicalModelDefinitionItem(const PhysicalModel &mo
     appendAction(diagramItem->newModelEvaluation_);
     appendAction(diagramItem->newScreening_);
     appendAction(diagramItem->newOptimization_);
+    if (PlatformInfo::HasFeature("pagmo"))
+      appendAction(diagramItem->newMoOptimization_);
   }
 }
 

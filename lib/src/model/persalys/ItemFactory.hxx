@@ -84,6 +84,7 @@ protected:
   QAction * newModelEvaluation_ = 0;
   QAction * newScreening_ = 0;
   QAction * newOptimization_ = 0;
+  QAction * newMoOptimization_ = 0;
   QAction * newDesignOfExperiment_ = 0;
   QAction * newProbabilisticModel_ = 0;
   QAction * newCentralTendency_ = 0;

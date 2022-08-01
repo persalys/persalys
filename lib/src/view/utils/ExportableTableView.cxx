@@ -157,6 +157,7 @@ QWidget * ExportableTableView::GetSampleTableViewWidget(Item* item, const OT::Sa
 
   tableView->setModel(proxyModel);
   tableView->sortByColumn(0, Qt::AscendingOrder);
+  tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   // create the Widget
   QWidget * mainWidget = new QWidget;

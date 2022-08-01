@@ -273,3 +273,30 @@ Parameters
 ----------
 inputs : sequence of str
     Variable input names. It is set by default to the list of inputs of the model."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::OptimizationAnalysis::getRawEquations
+"Accessor to constraints equations
+
+Returns
+-------
+equations : sequence of str
+    Constraints equations"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::OptimizationAnalysis::addConstraint
+"Adds a constraint to the analysis
+
+Parameters
+----------
+constraint : str
+    Constraint equation"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::OptimizationAnalysis::resetConstraints
+"Clears the current analysis constraints"
+
+// ---------------------------------------------------------------------

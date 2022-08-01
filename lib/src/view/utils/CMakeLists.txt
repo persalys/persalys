@@ -40,6 +40,7 @@ ot_install_header_file ( CollapsibleGroupBox.hxx )
 ot_install_header_file ( SpinBoxDelegate.hxx )
 ot_install_header_file ( CodeDelegate.hxx )
 ot_install_header_file ( ComboBoxDelegate.hxx )
+ot_install_header_file ( FloatDelegate.hxx )
 ot_install_header_file ( LineEditWithQValidatorDelegate.hxx )
 ot_install_header_file ( HorizontalHeaderViewWithCombobox.hxx )
 ot_install_header_file ( ExportableTableView.hxx )
@@ -71,6 +72,7 @@ qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/SpinBoxDelegate.hxx
               persalys/CodeDelegate.hxx
               persalys/ComboBoxDelegate.hxx
+              persalys/FloatDelegate.hxx
               persalys/LineEditWithQValidatorDelegate.hxx
               persalys/HorizontalHeaderViewWithCombobox.hxx
               persalys/ExportableTableView.hxx

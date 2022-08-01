@@ -47,6 +47,10 @@ OptimizationAlgoPage::OptimizationAlgoPage(QWidget* parent)
   , outputsSelectionGroupBox_(0)
   , errorMessageLabel_(0)
 {
+}
+
+void OptimizationAlgoPage::buildInterface()
+{
   setTitle(tr("Optimization methods"));
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 
@@ -105,7 +109,6 @@ OptimizationAlgoPage::OptimizationAlgoPage(QWidget* parent)
 
   //pageLayout->addStretch();
   pageLayout->addWidget(errorMessageLabel_);
-
 }
 
 
@@ -160,7 +163,7 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   const Description::const_iterator it = std::find(solverNames_.begin(), solverNames_.end(), methodName);
   UnsignedInteger index = 0;
   //if algo is no longer compatible default to Cobyla
-  if(it!=solverNames_.end())
+  if (it!=solverNames_.end())
     index = it - solverNames_.begin();
   else {
     LOGWARN(OSS() << "Optimization problem has changed and " << methodName << " algorithm is no longer available... Using Cobyla as default.");
@@ -198,7 +201,7 @@ String OptimizationAlgoPage::getSolverName() const
     if (algoTableModel_->data(algoTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
       selectedAlgoIndex = algoTableModel_->index(i, 0);
 
-  if(selectedAlgoIndex.isValid())
+  if (selectedAlgoIndex.isValid())
     return solverNames_[algoTableModel_->data(selectedAlgoIndex, Qt::UserRole).toInt()];
   else
     return solverNames_[0];
@@ -212,8 +215,9 @@ bool OptimizationAlgoPage::validatePage()
     errorMessageLabel_->setErrorMessage(tr("Only one output must be selected"));
     return false;
   }
-  if(!errorMessageLabel_->text().isEmpty())
+  if (!errorMessageLabel_->text().isEmpty())
     return false;
+  emit outputSelected();
   return QWizardPage::validatePage();
 }
 
@@ -269,13 +273,13 @@ void OptimizationAlgoPage::updateFilters() {
   for (int i = 0; i < algoTableModel_->rowCount(); ++i) {
     if (algoTableModel_->data(algoTableModel_->index(i, 0), Qt::CheckStateRole).toBool()) {
       const int selectedIndex = algoTableModel_->index(i, 0).row();
-      if(!proxyModel_->mapFromSource(proxyModel_->sourceModel()->index(selectedIndex,0)).isValid()) {
+      if (!proxyModel_->mapFromSource(proxyModel_->sourceModel()->index(selectedIndex,0)).isValid()) {
         algoTableModel_->setData(algoTableModel_->index(i, 0), false, Qt::CheckStateRole);
         int prioIndex = proxyModel_->mapToSource(proxyModel_->index(0, 0)).row();
         for(int j = 1; j<proxyModel_->rowCount(); ++j) {
           const int modelIndex = proxyModel_->mapToSource(proxyModel_->index(j, 0)).row();
-          if(algoTableModel_->data(algoTableModel_->index(modelIndex, 4), Qt::UserRole).toInt() >
-             algoTableModel_->data(algoTableModel_->index(prioIndex, 4), Qt::UserRole).toInt()) {
+          if (algoTableModel_->data(algoTableModel_->index(modelIndex, 4), Qt::UserRole).toInt() >
+              algoTableModel_->data(algoTableModel_->index(prioIndex, 4), Qt::UserRole).toInt()) {
             prioIndex = proxyModel_->mapToSource(proxyModel_->index(j, 0)).row();
           }
         }
@@ -287,7 +291,7 @@ void OptimizationAlgoPage::updateFilters() {
 
   // If all algos get filtered, default to first so that the previous for loop can correctly
   // take place during next update
-  if(!selectedLocality.size() || !selectedDerivative.size()) {
+  if (!selectedLocality.size() || !selectedDerivative.size()) {
     algoTableModel_->setData(algoTableModel_->index(0, 0), true, Qt::CheckStateRole);
     errorMessageLabel_->setErrorMessage(tr("Cannot find a compatible algorithm"));
   }

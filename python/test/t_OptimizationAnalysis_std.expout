@@ -1,4 +1,4 @@
-class=OptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=Cobyla isMinimization=true starting point=class=Point name=Unnamed dimension=2 values=[0.5,0.5] maximumEvaluationNumber=150 maximumAbsoluteError=1e-06 maximumRelativeError=1e-06 maximumResidualError=1e-06 maximumConstraintError=1e-06 bounds=[[-5, 5],[0, 0]] variable inputs=[X0]
+class=OptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=Cobyla isMinimization=true starting point=class=Point name=Unnamed dimension=2 values=[0.5,0.5] constraints=[Y0<600.0] maximumEvaluationNumber=150 maximumAbsoluteError=1e-06 maximumRelativeError=1e-06 maximumResidualError=1e-06 maximumConstraintError=1e-06 bounds=[[-5, 5],[0, 0]] variable inputs=[X0]
 x= [5]
 y= [578]
 #!/usr/bin/env python
@@ -25,6 +25,7 @@ interestVariables = ['Y0']
 optim.setInterestVariables(interestVariables)
 optim.setMinimization(True)
 bounds = ot.Interval([-5, 0], [5, 0], [True, True], [True, True])
+optim.addConstraint("Y0<600.0")
 optim.setBounds(bounds)
 optim.setStartingPoint([0.5, 0.5])
 optim.setVariableInputs(['X0'])

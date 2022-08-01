@@ -201,10 +201,14 @@ void OptimizationWizard::buildInterface()
 
   // -- 2nd page: algo page
   algoPage_ = new OptimizationAlgoPage(this);
+  algoPage_->buildInterface();
   setPage(1, algoPage_);
 
 
-  // -- third page
+  // -- third page: Constraints
+  cstrPage_ = new ConstraintsPage(this);
+  setPage(2, cstrPage_);
+
 
   // algo parameter
   QWizardPage * page = new QWizardPage(this);
@@ -227,7 +231,7 @@ void OptimizationWizard::buildInterface()
 
   pageLayout->addWidget(stopCriteriaGroupBox);
 
-  setPage(2, page);
+  setPage(3, page);
 
   initialize(analysis_);
   //
@@ -238,7 +242,7 @@ void OptimizationWizard::buildInterface()
 
 void OptimizationWizard::initialize(const Analysis& analysis)
 {
-  const OptimizationAnalysis * analysis_ptr = dynamic_cast<const OptimizationAnalysis*>(analysis.getImplementation().get());
+  OptimizationAnalysis * analysis_ptr = dynamic_cast<OptimizationAnalysis*>(analysis.getImplementation().get());
 
   if (!analysis_ptr)
     return;
@@ -247,6 +251,9 @@ void OptimizationWizard::initialize(const Analysis& analysis)
   //algoPage_->initialize(analysis_);
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
   stoppingCriteriaLayout_->initialize(*analysis_ptr);
+  connect(algoPage_, &OptimizationAlgoPage::outputSelected, [=](){
+      cstrPage_->initialize(*analysis_ptr);});
+
 }
 
 
@@ -258,6 +265,8 @@ int OptimizationWizard::nextId() const
       return 1;
     case 1: // method
       return 2;
+    case 2: //constraints
+      return 3;
     default: // optim parameters
       return -1;
   }
@@ -273,6 +282,13 @@ Analysis OptimizationWizard::getAnalysis() const
   optim.setSolverName(algoPage_->getSolverName());
   optim.setMinimization(pbTypeComboBox_->currentIndex() == 0 ? true : false);
   stoppingCriteriaLayout_->updateAlgorithm(optim);
+
+  // Constraints
+  optim.resetConstraints();
+  foreach( QString str, cstrPage_->getTableModel()->getConstraints() ) {
+    optim.addConstraint(str.toStdString());
+  }
+
 
   optim.setInterestVariables(algoPage_->getInterestVariables());
 

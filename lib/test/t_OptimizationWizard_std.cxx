@@ -149,8 +149,24 @@ private slots:
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 3), Qt::Checked, Qt::CheckStateRole);
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 4), Qt::Checked, Qt::CheckStateRole);
 
+    QVERIFY2(wizard.boundsPage_->validatePage(), "Page must be valid");
+    QVERIFY2(wizard.algoPage_->validatePage(), "Page must be valid");
+
+    ConstraintsPage * cstrPage = wizard.cstrPage_;
+    ConstraintsTableModel * cstrTableModel = cstrPage->getTableModel();
+
+    QVERIFY2(cstrTableModel->rowCount() == 0, "Table must be empty");
+    cstrTableModel->addLine();
+    QVERIFY2(cstrTableModel->data(tableModel->index(0, 0)).toString() == "Ep", "wrong left part");
+    QVERIFY2(cstrTableModel->data(tableModel->index(0, 1)).toString() == ">", "wrong operator");
+    QVERIFY2(cstrTableModel->data(tableModel->index(0, 2)).toString() == "0", "wrong right part");
+    cstrTableModel->removeLine(tableModel->index(0, 0));
+    QVERIFY2(wizard.cstrPage_->validatePage(), "Page must be valid");
+
     bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
     QVERIFY2(analysisEquality, "The two OptimizationAnalysis must be equal");
+
+
   }
 
   void TestOptimisation()
@@ -172,6 +188,10 @@ private slots:
     // - third page
     wizard.next();
     QVERIFY2(wizard.currentId() == 2, "Current page ID must be 2");
+
+    // - fourth page
+    wizard.next();
+    QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 

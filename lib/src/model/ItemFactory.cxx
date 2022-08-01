@@ -32,11 +32,14 @@
 #include "persalys/SobolAnalysis.hxx"
 #include "persalys/MonteCarloReliabilityAnalysis.hxx"
 #include "persalys/OptimizationAnalysis.hxx"
+#include "persalys/MultiObjectiveOptimizationAnalysis.hxx"
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/MorrisAnalysis.hxx"
 #endif
 
 #include "persalys/StudyItem.hxx"
+
+#include <openturns/PlatformInfo.hxx>
 
 #include <QDebug>
 
@@ -79,6 +82,8 @@ QString ItemFactory::getParentTitleType(const QString &objectName) const
 #endif
   else if (objectName == "OptimizationAnalysis")
     return "OptimizationTitle";
+  else if (objectName == "MultiObjectiveOptimizationAnalysis")
+    return "MultiObjectiveOptimizationTitle";
   else if (objectName.contains("DesignOfExperiment"))
     return "DesignsOfExperimentTitle";
   else if (objectName == "MonteCarloAnalysis" ||
@@ -149,6 +154,15 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
     item = new Item(tr("Optimization"), "OptimizationTitle");
     item->setData(QIcon(":/images/optimize.png"), Qt::DecorationRole);
     item->appendAction(newOptimization_);
+  }
+  else if (objectName == "MultiObjectiveOptimizationAnalysis")
+  {
+    if (PlatformInfo::HasFeature("pagmo"))
+    {
+      item = new Item(tr("Multi-objective optimization"), "MultiObjectiveOptimizationTitle");
+      item->setData(QIcon(":/images/optimize.png"), Qt::DecorationRole);
+      item->appendAction(newMoOptimization_);
+    }
   }
   else if (objectName.contains("DesignOfExperiment"))
   {
@@ -258,6 +272,14 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     connect(action, &QAction::triggered, [=]() {
       emit wizardRequested(getParentStudyItem(),
                            OptimizationAnalysis(availableAnalysisName(tr("optimization_")), model));});
+  }
+  else if (analysisName == "MultiObjectiveOptimization")
+  {
+    action = new QAction(QIcon(":/images/optimize.png"), tr("Multi-objective optimization"), this);
+    action->setStatusTip(tr("Create a new model multi-objective optimization"));
+    connect(action, &QAction::triggered, [=]() {
+      emit wizardRequested(getParentStudyItem(),
+                           MultiObjectiveOptimizationAnalysis(availableAnalysisName(tr("mo-optimization_")), model));});
   }
   else if (analysisName == "Sensitivity")
   {

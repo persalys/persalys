@@ -579,7 +579,7 @@ Models
   .. image:: /developer_manual/validation/model4.png
       :align: center
 
-  - click on reload button : nothing appends
+  - click on reload button: nothing appends
 
 - click on 'Definition' child item of 'importDataModel' item
 
@@ -593,7 +593,7 @@ Models
 
   - the message should disappear
 
-  - click on reload button : the troublesome line is back, along with the message
+  - click on reload button: the troublesome line is back, along with the message
 
   - run the data cleaning wizard using the popup right click menu
 
@@ -623,16 +623,16 @@ Deterministic analyses
 
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
-- Check all the analyses wizards -> Right click on each item and choose Modify :
+- Check all the analyses wizards -> Right click on each item and choose Modify:
 
-  - Evaluation : item evaluation1
+  - Evaluation: item evaluation1
 
     .. image:: /developer_manual/validation/evaluation_wizard.png
         :align: center
 
     - deselect fake_y0
 
-    - check the values : [0.2, 1.2, 1]
+    - check the values: [0.2, 1.2, 1]
 
     - click on the Finish button
 
@@ -649,33 +649,33 @@ Deterministic analyses
 
       - results only for y0 and y1
 
-  - Optimization : item optim
+  - Optimization: item optim
 
-    - First page check the values :
+    - First page check the values:
 
       - x1 and x2 checked
-      - starting point : [0.2, 1.2, 1.]
+      - starting point: [0.2, 1.2, 1.]
       - check table behavior:
 
-        - unselect line : lower and upper bounds columns are disabled
-        - unselect a lower bound : -inf symbol
-        - unselect an upper bound : +inf symbol
-        - if lower > upper bound : variable name in red, tooltip on the name and can not validate the page
-        - if upper < lower bound : variable name in red, tooltip on the name and can not validate the page
-        - if starting point not in the interval [lower bound, upper bound] : variable name in red, tooltip on the name and can not validate the page
-      - set lower bounds : [0, 0, 0.9]
-      - set upper bounds : [10, 10, 1.1]
+        - unselect line: lower and upper bounds columns are disabled
+        - unselect a lower bound: -inf symbol
+        - unselect an upper bound: +inf symbol
+        - if lower > upper bound: variable name in red, tooltip on the name and can not validate the page
+        - if upper < lower bound: variable name in red, tooltip on the name and can not validate the page
+        - if starting point not in the interval [lower bound, upper bound]: variable name in red, tooltip on the name and can not validate the page
+      - set lower bounds: [0, 0, 0.9]
+      - set upper bounds: [10, 10, 1.1]
 
       .. image:: /developer_manual/validation/optimization_wizard_2nd_page.png
           :align: center
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/optimization_wizard_1st_page.png
           :align: center
 
-      - selected output : y1
-      - method : TNC
+      - selected output: y1
+      - method: TNC
       - change "Locality = Global"
       - TNC no longer available algorithm changed to "GD_MLSL"
       - revert "Locality" to "Any" and reselect "TNC"
@@ -683,93 +683,96 @@ Deterministic analyses
       - web browser opens a link to "TNC" documentation
       - continue
 
-    - Third page check the values :
+    - Third page table is empty:
+      - Continue
+
+    - Fourth page check the values:
 
       .. image:: /developer_manual/validation/optimization_wizard_3rd_page.png
           :align: center
 
-      - Problem type : Minimization
-      - Number of function evaluations : 150
-      - Absolute/Relative/Residual/Constraint error : 1e-6
+      - Problem type: Minimization
+      - Number of function evaluations: 150
+      - Absolute/Relative/Residual/Constraint error: 1e-6
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/optimization_result.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : Result - Convergence - Parameters - Model
-      - Convergence tab : 2 tabs : Optimal value - Error
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - left side: 1 variable in the list view
+      - right side, tabs: Result - Convergence - Parameters - Model
+      - Convergence tab: 2 tabs: Optimal value - Error
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
-  - Morris : aMorris item
+  - Morris: aMorris item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/morris_wizard_1st_page.png
           :align: center
 
-      - selected output : y0
-      - method : Morris
+      - selected output: y0
+      - method: Morris
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       - 3 lines
       - check table behavior:
 
-        - if lower > upper bound : variable name in red, tooltip on the name and can not validate the page
-        - if upper < lower bound : variable name in red, tooltip on the name and can not validate the page
-      - set lower bounds : [0, 0, 0.9]
-      - set upper bounds : [10, 10, 1.1]
+        - if lower > upper bound: variable name in red, tooltip on the name and can not validate the page
+        - if upper < lower bound: variable name in red, tooltip on the name and can not validate the page
+      - set lower bounds: [0, 0, 0.9]
+      - set upper bounds: [10, 10, 1.1]
 
       .. image:: /developer_manual/validation/morris_wizard_2nd_page.png
           :align: center
 
-    - Third page check the values :
+    - Third page check the values:
 
       .. image:: /developer_manual/validation/morris_wizard_3rd_page.png
           :align: center
 
-      - Number of trajectories : 10
-      - Level : 4
-      - Seed : 2
-      - Number of simulations : 40
+      - Number of trajectories: 10
+      - Level: 4
+      - Seed: 2
+      - Number of simulations: 40
       - check page behavior:
 
-        - if Number of trajectories : 11 -> Number of simulations : 44
+        - if Number of trajectories: 11 -> Number of simulations: 44
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/morris_result.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : Elementary effects - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
-      - Elementary effects tab : 2 tabs : Graph (mu*, sigma) - Graph (mu*, mu)
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked :
+      - left side: 1 variable in the list view
+      - right side, tabs: Elementary effects - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
+      - Elementary effects tab: 2 tabs: Graph (mu*, sigma) - Graph (mu*, mu)
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
 
       - check Elementary effects tab behavior:
 
-        - selection of points in the graphs (right click + draw rectangle) : a context menu appears with items : De/select the points
-        - slider below the plot : moves the green vertical line. Check the line's position is synchronized on the two graphs
+        - selection of points in the graphs (right click + draw rectangle): a context menu appears with items: De/select the points
+        - slider below the plot: moves the green vertical line. Check the line's position is synchronized on the two graphs
         - all points at the left of the green line on the graphs correspond to the lines of the table with a cross in the No effect column
         - the blue points on the graphs correspond to the selected lines of the table
         - the red points on the graphs correspond to the unselected lines of the table
 
-    - check the reuse of the Morris result by the Probabilistic model :
+    - check the reuse of the Morris result by the Probabilistic model:
 
       - create a Probabilistic model for symbolicModel (right click on Definition item below symbolicModel)
       - On the window which appears, select all variables of the table
@@ -788,29 +791,93 @@ Deterministic analyses
       - check that x_3 is unselected
       - uncheck x_2
 
-  - Calibration : item calibration
+  - Multi-objective optimization: item mo-optim
 
-    - First page check the values :
+    - Check analysis parameters values:
+
+      .. image:: /developer_manual/validation/mooptim_param_page.png
+
+    - Modify the analysis item:
+
+      - 1st page:
+
+        - y0 and y1 as selected outputs.
+        - nsga2 as selected algorithm
+        - un-select y0, click on "Continue": Error message appears: "At least 2 outputs must be selected"
+        - select back y0, then continue
+
+      - 2nd page:
+
+        - y0: minimization, y1: minimization
+        - continue
+
+      - 3rd page:
+
+        - table has one line: "y0 > 2"
+        - click "Add": a new line "fake_var > 0" appears
+        - edit first line "y0 < 2"
+        - click on first line: selection should appear
+        - click on remove: first line is removed, 2nd line remains
+        - click again on remove: table is empty
+        - continue
+
+      - 4th page:
+
+        - check values and checked/enabled states:
+
+          .. image:: /developer_manual/validation/mooptim-inputtable.png
+              :align: center
+
+        - uncheck all rows: header unchecked, 4th and 5th columns disabled, 3rd column enabled
+        - check header: all rows checked, 4th and 5th columns enabled, 3rd column disabled
+        - set value -0.22 in first row, 5th column
+        - click continue: row text color changes to red, message appears "The lower bounds must be less than the upper bounds"
+        - set value -0.22 back to 0.22
+        - click continue
+
+      - 5th page:
+
+        - check values: Number of generations = 12, Initial population size = 60, Seed = 0, Constraint error = 1e-05
+        - Check that the two top spinbox only support non-signed integers
+        - Finish
+
+    - Run the analysis and check the result:
+
+      .. image:: /developer_manual/validation/mooptim_result1.png
+          :align: center
+
+      .. image:: /developer_manual/validation/mooptim_result2.png
+          :align: center
+
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+
+      - check the export feature on the table tab
+
+      - check that the parameters are unchanged
+
+  - Calibration: item calibration
+
+    - First page check the values:
 
       .. image:: /developer_manual/validation/calibrationWizard_1stPage.png
           :align: center
 
-      - Observations : observations
-      - Observed variables : [x1, y0]
-      - Number of observations : 100
-      - method : Non linear Gaussian
+      - Observations: observations
+      - Observed variables: [x1, y0]
+      - Number of observations: 100
+      - method: Non linear Gaussian
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/calibrationWizard_2ndPage.png
           :align: center
 
       - x2 checked, x3 unchecked
-      - values : [1.2, 1.1]
+      - values: [1.2, 1.1]
       - continue
 
-    - Third page check the values :
+    - Third page check the values:
 
       .. image:: /developer_manual/validation/calibrationWizard_3rdPage.png
           :align: center
@@ -820,7 +887,7 @@ Deterministic analyses
       - the mean is 1.2 and sigma is 0.12
       - continue
 
-    - Fourth page :
+    - Fourth page:
 
       .. image:: /developer_manual/validation/calibrationWizard_4thPage.png
           :align: center
@@ -829,27 +896,27 @@ Deterministic analyses
       - the mean is disabled
       - continue
 
-    - Fifth page :
+    - Fifth page:
 
       .. image:: /developer_manual/validation/calibrationWizard_5thPage.png
           :align: center
 
-      - confidence interval length : 0.99
-      - estimation by Bootstrap resampling : checked
-      - sample size : 25
-      - Number of evaluations : 50
-      - Errors : 1e-6
-      - Maximum number of evaluations : 1250
+      - confidence interval length: 0.99
+      - estimation by Bootstrap resampling: checked
+      - sample size: 25
+      - Number of evaluations: 50
+      - Errors: 1e-6
+      - Maximum number of evaluations: 1250
 
-    - click on the Back button 3 times to go on the second page :
+    - click on the Back button 3 times to go on the second page:
 
       - select x3
       - change the value of x2 to 1.3
       - click on Continue button
-      - the table of the third page has 2 rows : x2 and x3
+      - the table of the third page has 2 rows: x2 and x3
       - the mean of x2 is 1.3 and sigma is 0.13
 
-    - click on the Back button 2 times to go on the first page :
+    - click on the Back button 2 times to go on the first page:
 
       - select Linear Gaussian method
       - continue
@@ -857,29 +924,29 @@ Deterministic analyses
       - continue
       - the third and fourth pages are the same
       - continue
-      - the next page is :
+      - the next page is:
 
       .. image:: /developer_manual/validation/calibrationWizard_lastPage_linear.png
           :align: center
 
-    - click on the Back button 4 times to go on the first page :
+    - click on the Back button 4 times to go on the first page:
 
       - select Linear least squares method
       - continue
       - the table of the second page has not been changed
-      - the next page is the last one :
+      - the next page is the last one:
 
       .. image:: /developer_manual/validation/calibrationWizard_lastPage_linear.png
           :align: center
 
-      - confidence interval length : 0.99
+      - confidence interval length: 0.99
 
-    - click on the Back button 2 times to go on the first page :
+    - click on the Back button 2 times to go on the first page:
 
       - select Nonlinear least squares method
       - continue
       - the table of the second page has not been changed
-      - the next page is the last one :
+      - the next page is the last one:
 
       .. image:: /developer_manual/validation/calibrationWizard_5thPage.png
           :align: center
@@ -890,17 +957,17 @@ Deterministic analyses
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/calibration_result_optimal.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : θ - Prediction - Parameters - Model
-      - θ tab : 2 tabs : Optimal - PDF
-      - Prediction tab : 4 tabs : Table - vs Observations - vs Inputs - Residuals
+      - left side: 1 variable in the list view
+      - right side, tabs: θ - Prediction - Parameters - Model
+      - θ tab: 2 tabs: Optimal - PDF
+      - Prediction tab: 4 tabs: Table - vs Observations - vs Inputs - Residuals
           - check the 3 first tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
 
 Designs of experiments
@@ -908,21 +975,21 @@ Designs of experiments
 
 - check the wizards:
 
-  - right click on fixedDesign and choose Modify :
+  - right click on fixedDesign and choose Modify:
 
-    - First page :
+    - First page:
 
       .. image:: /developer_manual/validation/design_1_wizard_1st_page.png
           :align: center
 
-      - type : Full factorial design
+      - type: Full factorial design
         Probabilistic design is disabled
 
       - check the doc link (Help button)
 
       - continue
 
-    - Second page :
+    - Second page:
 
       .. image:: /developer_manual/validation/design_1_wizard_2nd_page.png
           :align: center
@@ -931,98 +998,98 @@ Designs of experiments
       - first and second columns are not editable
       - the bounds and levels are disabled
       - all levels are equal to 1
-      - check wizard behavior :
+      - check wizard behavior:
 
-        - sixth column items : change combo box item to Delta
+        - sixth column items: change combo box item to Delta
 
-          - values changed : all deltas values are '-'
+          - values changed: all deltas values are '-'
 
-        - first header item : check all
+        - first header item: check all
 
           - third column is disabled
           - other columns are enabled
           - the Deltas are [0.04, 0.24, 0.2]
 
-        - sixth column items : change combo box item to Levels
+        - sixth column items: change combo box item to Levels
 
-          - values changed : all levels values are equal to 2
+          - values changed: all levels values are equal to 2
 
-        - first header item : uncheck all
+        - first header item: uncheck all
 
         - check second line
 
-        - line 2 : change lower bound to 10, press enter
+        - line 2: change lower bound to 10, press enter
 
           - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
 
-        - line 2 : change upper bound to 0, press enter
+        - line 2: change upper bound to 0, press enter
 
           - 'x2' is red and its tooltip is: 'The lower bound must be less than the upper bound'
 
-        - sixth column items : change combo box item to Delta
+        - sixth column items: change combo box item to Delta
 
           - all deltas values are '-'
 
-        - line 2 : change upper bound to 20 and Delta to 15, press enter
+        - line 2: change upper bound to 20 and Delta to 15, press enter
 
-          - error message : The delta must be greater or equal to 0 and less than the interval length
+          - error message: The delta must be greater or equal to 0 and less than the interval length
 
-        - line 2 : change delta to 0.5, press enter
+        - line 2: change delta to 0.5, press enter
 
-          - size of the design of experiments : 21
+          - size of the design of experiments: 21
 
-        - check all lines one by one :
+        - check all lines one by one:
 
           - first header item is checked
-          - size of the design of experiments : 84
+          - size of the design of experiments: 84
 
       - click on Finish button:
 
-          - the window is updated : check the sample size is 84
+          - the window is updated: check the sample size is 84
           - the Evaluation item is removed
 
-  - right click on grid and choose Modify :
+  - right click on grid and choose Modify:
 
-    - First page :
-        - type : Full factorial design
+    - First page:
+        - type: Full factorial design
         - continue
 
-    - Second page :
+    - Second page:
 
       .. image:: /developer_manual/validation/design_2_wizard_2nd_page.png
           :align: center
 
       - x1 and x2 checked
-      - lower bounds : [0.5, 0.5]
-      - upper bounds : [9.5, 9.5]
-      - levels : [7, 7]
-      - sixth column items : change combo box item to Delta
-          - deltas : [1.5, 1.5]
-      - size of the design of experiments : 49
+      - lower bounds: [0.5, 0.5]
+      - upper bounds: [9.5, 9.5]
+      - levels: [7, 7]
+      - sixth column items: change combo box item to Delta
+          - deltas: [1.5, 1.5]
+      - size of the design of experiments: 49
       - cancel
 
-  - right click on importDesign and choose Modify :
+  - right click on importDesign and choose Modify:
 
-    - First page :
-        - type : Imported design
+    - First page:
+        - type: Imported design
         - continue
 
-    - Second page :
+    - Second page:
 
       .. image:: /developer_manual/validation/design_3_wizard_2nd_page.png
           :align: center
 
-      - Data file : data_da.csv
-      - header items : ['x1', '', 'x2', 'x3']
-      - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
+      - Data file: data_da.csv
+      - header items: ['x1', '', 'x2', 'x3']
+      - when changing a combo box item: the error message 'Each variable must be associated with one column' appears
       - set the second header item to 'x2' and the third one to ''
       - finish
-      - check the design of experiments window is updated : check the values of x2 have changed
+      - check the design of experiments window is updated: check the values of x2 have changed
 
 
-- check the evaluation result window :
+- check the evaluation result window:
 
-  - right click on importDesign, choose Evaluate :
+  - right click on importDesign, choose Evaluate:
 
     .. image:: /developer_manual/validation/design_3_evaluation_wizard.png
         :align: center
@@ -1033,52 +1100,52 @@ Designs of experiments
     - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
     - click on the run button
     - the evaluation is launched
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/design_3_Table.png
           :align: center
 
-      - 10 tabs : Summary - PDF/CDF - Boxplots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plot - Parameters - Model
-      - Summary and PDF/CDF tabs :
+      - 10 tabs: Summary - PDF/CDF - Boxplots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plot - Parameters - Model
+      - Summary and PDF/CDF tabs:
 
         - when changing the variable, the tabs are updated
 
-      - Other Plots tabs and Table tab :
+      - Other Plots tabs and Table tab:
 
         - when clicking on the tab, the list view has been hidden
-        - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+        - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
         - check the tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
 
-  - right click on onePointDesign, choose Evaluate :
+  - right click on onePointDesign, choose Evaluate:
 
       - a wizard appears, click on the Finish button
       - an item 'Evaluation' appears in the tree view
       - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
       - click on 'Run' button
-      - check result window :
+      - check result window:
 
         .. image:: /developer_manual/validation/DOE_result_model2_one_point.png
             :align: center
 
-        - 4 tabs : Summary - Table - Parameters - Model
+        - 4 tabs: Summary - Table - Parameters - Model
 
-        - Summary tab :
+        - Summary tab:
 
           - a list view with a variable appears at the left side of the window
 
-  - right click on twoPointsDesign, choose Evaluate :
+  - right click on twoPointsDesign, choose Evaluate:
 
       - a wizard appears, click on the Finish button
       - an item 'Evaluation' appears in the tree view
       - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
       - click on 'Run' button
-      - check result window :
+      - check result window:
 
         .. image:: /developer_manual/validation/DOE_result_model2_two_points.png
             :align: center
 
-        - 4 tabs : Summary - Table - Parameters - Model
-        - Summary tab :
+        - 4 tabs: Summary - Table - Parameters - Model
+        - Summary tab:
 
           - a list view with a variable appears at the left side of the window
 
@@ -1098,145 +1165,145 @@ Probabilistic analyses
 
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
-- Check all the analyses wizards -> Right click on each item and choose Modify :
+- Check all the analyses wizards -> Right click on each item and choose Modify:
 
-  - Monte Carlo : MonteCarlo item
+  - Monte Carlo: MonteCarlo item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard_1st_page.png
           :align: center
 
-      - method : Monte-Carlo
-      - selected outputs : y0 and y1
+      - method: Monte-Carlo
+      - selected outputs: y0 and y1
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard_2nd_page.png
           :align: center
 
-      - Accuracy disabled : 0.01
-      - max time : 16m40s
-      - max calls : 1000
-      - block size : 100
-      - confidence interval disabled : 0.95
-      - seed : 2
+      - Accuracy disabled: 0.01
+      - max time: 16m40s
+      - max calls: 1000
+      - block size: 100
+      - confidence interval disabled: 0.95
+      - seed: 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/monteCarlo_central_tendency_result.png
           :align: center
 
-      - left side : 4 variables in the list view
-      - right side, tabs : Summary - PDF/CDF - Box plots - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
+      - left side: 4 variables in the list view
+      - right side, tabs: Summary - PDF/CDF - Box plots - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
       - when changing the variable, the tabs are updated
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked :
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
-      - Summary tab :
+      - Summary tab:
 
         - 2 types of extrema tables: one for the outputs y0 and y1 and one for the inputs x1 and x2
 
         .. image:: /developer_manual/validation/monteCarlo_central_tendency_result_input_table.png
             :align: center
 
-        - Moments estimates table has only 2 columns : Estimate and Value
+        - Moments estimates table has only 2 columns: Estimate and Value
 
-      - check on the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model) : the list view is hidden
+      - check on the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model): the list view is hidden
       - check tables are well drawn
 
-  - Taylor : Taylor item
+  - Taylor: Taylor item
 
     .. image:: /developer_manual/validation/taylor_central_tendency_wizard.png
         :align: center
 
     - check the values:
 
-      - selected outputs : y1 and y0
-      - method : Taylor expansion
+      - selected outputs: y1 and y0
+      - method: Taylor expansion
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/taylor_central_tendency_result.png
           :align: center
 
-      - left side : 2 variables in the list view
-      - right side : 1 Summary tab
+      - left side: 2 variables in the list view
+      - right side: 1 Summary tab
       - check table is well drawn
       - when changing the variable, the tabs are updated
 
-  - Monte Carlo reliability : MonteCarloReliability item
+  - Monte Carlo reliability: MonteCarloReliability item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/monteCarlo_reliability_wizard_1st_page.png
           :align: center
 
-      - limit state : aLimitState
-      - method : Monte-Carlo
+      - limit state: aLimitState
+      - method: Monte-Carlo
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/monteCarlo_reliability_wizard_2nd_page.png
           :align: center
 
-      - Accuracy is disabled : 0.01
-      - max time : 16m40s
-      - max calls : 1000
-      - block size : 100
-      - seed : 2
+      - Accuracy is disabled: 0.01
+      - max time: 16m40s
+      - max calls: 1000
+      - block size: 100
+      - seed: 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/monteCarlo_reliability_result.png
           :align: center
 
-      - left side : 1 variable in the list view
+      - left side: 1 variable in the list view
 
-      - right side, tabs : Summary - Histogram - Convergence graph - Parameters - Model
+      - right side, tabs: Summary - Histogram - Convergence graph - Parameters - Model
 
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
       - check tables are well drawn
 
-  - FORM IS reliability : FORM_IS item
+  - FORM IS reliability: FORM_IS item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/FORM_IS_reliability_1st_page.png
           :align: center
 
-      - method : FORM - Importance sampling
+      - method: FORM - Importance sampling
 
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/FORM_IS_reliability_2nd_page.png
           :align: center
 
-      - Accuracy is disabled : 0.01
-      - max time : 16m40s
-      - max calls : 1000
-      - block size : 100
-      - seed : 2
+      - Accuracy is disabled: 0.01
+      - max time: 16m40s
+      - max calls: 1000
+      - block size: 100
+      - seed: 2
       - continue
 
     - Third page check the values:
@@ -1244,117 +1311,117 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/FORM_IS_reliability_3rd_page.png
           :align: center
 
-      - Algorithm : Abdo-Rackwitz
+      - Algorithm: Abdo-Rackwitz
 
-      - Physical starting point : 5; 5
+      - Physical starting point: 5; 5
 
         - click on button '...'
         - set the value of x2 to 5.5
         - press Finish button
-        - Physical starting point : 5; 5.5
+        - Physical starting point: 5; 5.5
 
         .. image:: /developer_manual/validation/FORM_IS_reliability_starting_point_wizard.png
             :align: center
 
-      - Maximum number of evaluations : 1000
-      - Absolute error : 0.001
-      - Relative/Residual/Constraint error : 1e-5
+      - Maximum number of evaluations: 1000
+      - Absolute error: 0.001
+      - Relative/Residual/Constraint error: 1e-5
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/FORM_IS_reliability_result.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : Summary - Histogram - Convergence graph - FORM results - Parameters- Model
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - left side: 1 variable in the list view
+      - right side, tabs: Summary - Histogram - Convergence graph - FORM results - Parameters- Model
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - FORM results tab :
 
         .. image:: /developer_manual/validation/FORM_IS_reliability_FORM_results_tab.png
             :align: center
 
-        - 4 sub-tabs : Summary - Design point - Sensitivities - Parameters
+        - 4 sub-tabs: Summary - Design point - Sensitivities - Parameters
 
       - check tables are well drawn
 
-  - FORM : FORM item
+  - FORM: FORM item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/FORM_wizard_1st_page.png
           :align: center
 
-      - method : FORM
+      - method: FORM
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/FORM_wizard_2nd_page.png
           :align: center
 
-      - Algorithm : Abdo-Rackwitz
-      - Physical starting point : 5; 5
-      - Maximum number of evaluations : 1000
-      - Absolute error : 0.001
-      - Relative/Residual/Constraint error : 1e-5
+      - Algorithm: Abdo-Rackwitz
+      - Physical starting point: 5; 5
+      - Maximum number of evaluations: 1000
+      - Absolute error: 0.001
+      - Relative/Residual/Constraint error: 1e-5
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/FORM_result.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : Summary - Design point - Sensitivities - Parameters - Model
+      - left side: 1 variable in the list view
+      - right side, tabs: Summary - Design point - Sensitivities - Parameters - Model
       - check tables are well drawn
 
-  - SORM : SORM item
+  - SORM: SORM item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/SORM_wizard_1st_page.png
           :align: center
 
-      - method : SORM
+      - method: SORM
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/FORM_wizard_2nd_page.png
           :align: center
 
-      - Algorithm : Abdo-Rackwitz
-      - Physical starting point : 5; 5
-      - Maximum number of evaluations : 1000
-      - Absolute error : 0.001
-      - Relative/Residual/Constraint error : 1e-5
+      - Algorithm: Abdo-Rackwitz
+      - Physical starting point: 5; 5
+      - Maximum number of evaluations: 1000
+      - Absolute error: 0.001
+      - Relative/Residual/Constraint error: 1e-5
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/SORM_result.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : Summary - Design point - Sensitivities - Parameters - Model
+      - left side: 1 variable in the list view
+      - right side, tabs: Summary - Design point - Sensitivities - Parameters - Model
       - check tables are well drawn
 
-  - Sobol : Sobol item
+  - Sobol: Sobol item
 
-    - Pop-up with an error message appears : 'The model must have an independent copula etc'
+    - Pop-up with an error message appears: 'The model must have an independent copula etc'
 
     - click on the 'Probabilistic model' item
 
@@ -1362,47 +1429,47 @@ Probabilistic analyses
       - remove x1-x2 copula from the list on the right
       - click on the Sobol item, right click on it and choose Modify
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/sobol_wizard_1st_page.png
           :align: center
 
-      - selected outputs : y0 and y1
-      - method : Sobol
+      - selected outputs: y0 and y1
+      - method: Sobol
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/sobol_wizard_2nd_page.png
           :align: center
 
-      - max confidence interval length : 0.01
-      - max time : 16m40s
-      - max calls : 1000
-      - replication size : 100
-      - block size : 100
-      - number of calls by iteration : 400
-      - confidence level : 0.95
-      - seed : 2
+      - max confidence interval length: 0.01
+      - max time: 16m40s
+      - max calls: 1000
+      - replication size: 100
+      - block size: 100
+      - number of calls by iteration: 400
+      - confidence level: 0.95
+      - seed: 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/sobol_result.png
           :align: center
 
-      - left side : 2 variables in the list view
-      - right side, tabs : Indices - Aggregated Indices - Stopping criteria - Parameters - Model
+      - left side: 2 variables in the list view
+      - right side, tabs: Indices - Aggregated Indices - Stopping criteria - Parameters - Model
       - when changing the variable, the Indices tab is updated
-      - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - Indices tab :
+      - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+      - Indices tab:
 
         - can not zoom the plot
-        - Click on the 2 last sections headers of the table :
+        - Click on the 2 last sections headers of the table:
 
           - the table values are sorted
 
@@ -1411,51 +1478,51 @@ Probabilistic analyses
       - check tables are well drawn
 
 
-  - SRC : SRC item
+  - SRC: SRC item
 
     - First page check the values:
 
       .. image:: /developer_manual/validation/src_wizard_1st_page.png
           :align: center
 
-      - selected outputs : y0 and y1
-      - method : SRC
+      - selected outputs: y0 and y1
+      - method: SRC
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/src_wizard_2nd_page.png
           :align: center
 
-      - sample size : 1000
-      - block size : 1
-      - seed : 2
+      - sample size: 1000
+      - block size: 1
+      - seed: 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/src_result.png
           :align: center
 
-      - left side : 2 variables in the list view
-      - right side, tabs : Indices - Parameters - Model
+      - left side: 2 variables in the list view
+      - right side, tabs: Indices - Parameters - Model
       - when changing the variable, the Indices tab is updated
-      - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - Indices tab :
+      - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+      - Indices tab:
 
         - can not zoom the plot
-        - click on the 'Input'/'Squared SRC'/'SRC' section headers of the table :
+        - click on the 'Input'/'Squared SRC'/'SRC' section headers of the table:
 
           - the table values are sorted
           - the plot is updated
 
   - Linear regression: linreg item
 
-    - First page check selected outputs : y0, y1
+    - First page check selected outputs: y0, y1
 
     - Second page check degree=2, interaction=False
 
@@ -1476,26 +1543,26 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/kriging_wizard_1st_page.png
           :align: center
 
-      - design of experiments : probaDesign
-      - selected outputs : y0, y1
-      - method : Kriging
+      - design of experiments: probaDesign
+      - selected outputs: y0, y1
+      - method: Kriging
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/kriging_wizard_2nd_page.png
           :align: center
 
-      - covariance model : Matérn
-      - nu : 1.5
-      - trend : Linear
-      - optimize covariance model parameters : checked
-      - scale : 1; 1
-      - amplitude : 1
+      - covariance model: Matérn
+      - nu: 1.5
+      - trend: Linear
+      - optimize covariance model parameters: checked
+      - scale: 1; 1
+      - amplitude: 1
 
     - on the line Scale click on the button '...'
 
-      - a wizard appears : stochastic inputs x1 and x2 are listed
+      - a wizard appears: stochastic inputs x1 and x2 are listed
 
     - change the scale value of x1 to 2, then finish
 
@@ -1509,7 +1576,7 @@ Probabilistic analyses
 
     - continue
 
-    - Third page check the values :
+    - Third page check the values:
 
       .. image:: /developer_manual/validation/kriging_wizard_3rd_page.png
           :align: center
@@ -1521,23 +1588,23 @@ Probabilistic analyses
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check the Kriging result window :
+    - check the Kriging result window:
 
       .. image:: /developer_manual/validation/kriging_result.png
           :align: center
 
-      - left side : 2 variables in the list view
-      - right side, tabs : Results - Adequation - Validation - Parameters - Model
+      - left side: 2 variables in the list view
+      - right side, tabs: Results - Adequation - Validation - Parameters - Model
       - when changing the variable, the tabs are updated
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn
-      - Validation tab has 3 tabs : Analytical, Test sample, K-Fold
+      - Validation tab has 3 tabs: Analytical, Test sample, K-Fold
 
         .. image:: /developer_manual/validation/kriging_validation_result.png
             :align: center
 
 
-    - right click on the kriging item : choose 'Convert metamodel into physical model'
+    - right click on the kriging item: choose 'Convert metamodel into physical model'
 
       - a new item kriging appears in the tree view
       - click on its sub-item named 'Definition'
@@ -1566,7 +1633,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
 
-      - default kriging parameters : Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1, Amplitude 1, continue
+      - default kriging parameters: Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1, Amplitude 1, continue
 
       - metamodel validation: for the computation of the predictivity factor Q2, only analytically is checked, finish
 
@@ -1576,26 +1643,26 @@ Probabilistic analyses
 
   - Functional chaos: chaos_1 item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/chaos_1_wizard_1st_page.png
           :align: center
 
-      - design of experiments : probaDesign
-      - selected outputs : y1
-      - method : Functional chaos
+      - design of experiments: probaDesign
+      - selected outputs: y1
+      - method: Functional chaos
       - continue
 
-    - Second page check the values :
+    - Second page check the values:
 
       .. image:: /developer_manual/validation/chaos_1_wizard_2nd_page.png
           :align: center
 
-      - degree : 7
-      - sparse : checked
+      - degree: 7
+      - sparse: checked
       - continue
 
-    - Third page check the values :
+    - Third page check the values:
 
       .. image:: /developer_manual/validation/kriging_wizard_3rd_page.png
           :align: center
@@ -1607,22 +1674,22 @@ Probabilistic analyses
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/chaos_result.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : Results - Adequation - Sobol indices - Validation - Parameters - Model
-      - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - left side: 1 variable in the list view
+      - right side, tabs: Results - Adequation - Sobol indices - Validation - Parameters - Model
+      - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn
-      - Validation tab has 3 tabs : Analytical, Test sample, K-Fold
+      - Validation tab has 3 tabs: Analytical, Test sample, K-Fold
 
 
   - chaos_2
 
     - click on the 'Run' button
-    - error message : 'No results are available...'
+    - error message: 'No results are available...'
     - right click on the item design_2 and choose Evaluate
     - a wizard appears, deselect fake_y0, click one the Finish button
     - a window appears, click on the 'Run' button
@@ -1631,20 +1698,20 @@ Probabilistic analyses
     .. image:: /developer_manual/validation/chaos_2_wizard.png
         :align: center
 
-    - First page check the values :
+    - First page check the values:
 
-      - design of experiments : design_2
-      - selected outputs : y0, y1
-      - method : Functional chaos
+      - design of experiments: design_2
+      - selected outputs: y0, y1
+      - method: Functional chaos
 
-    - Second page check the values :
+    - Second page check the values:
 
-      - degree : 2
-      - full basis size : 6
-      - sparse : checked
+      - degree: 2
+      - full basis size: 6
+      - sparse: checked
       - continue
 
-    - Third page check the values :
+    - Third page check the values:
 
       - only Analytically is checked
 
@@ -1653,7 +1720,7 @@ Probabilistic analyses
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/chaos_2_result.png
           :align: center
@@ -1661,15 +1728,15 @@ Probabilistic analyses
       - left side: 2 variables in the list view
       - right side: tabs Results - Adequation - Sobol indices - Validation - Parameters - Model
       - when changing the variable, the tabs are updated
-      - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn
 
-  - Data analysis : DataAnalysis item
+  - Data analysis: DataAnalysis item
 
     - the item is associated with a window with a progress bar and 2 buttons 'Run' and 'Stop'
     - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/data_analysis_result.png
           :align: center
@@ -1678,32 +1745,32 @@ Probabilistic analyses
 
         - x_1 the output is the first item of the list
 
-      - right side, tabs : Summary - PDF/CDF - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
+      - right side, tabs: Summary - PDF/CDF - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
       - when changing the variable, the tabs (Summary - PDF/CDF - Box plots) are updated
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked :
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+      - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
-      - check on the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters) : the list view is hidden
+      - check on the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters): the list view is hidden
       - Summary tab:
 
         - check tables are well drawn
         - 2 types of extrema tables: one for the output x_1 and one for inputs x_0, x_1 and x_3
-        - Moments estimates table has the columns : Estimate - Value - Confidence interval at 95%
+        - Moments estimates table has the columns: Estimate - Value - Confidence interval at 95%
         - there are bounds only for Mean and Standard deviation
         - check probability and quantile spinboxes behavior
 
-  - Inference analysis : inference item
+  - Inference analysis: inference item
 
     .. image:: /developer_manual/validation/inference_wizard.png
         :align: center
 
-    - right click on the item 'inference' and choose 'Modify'. Check the wizard behavior :
+    - right click on the item 'inference' and choose 'Modify'. Check the wizard behavior:
 
       - check all / uncheck all
       - no wheel event on Add button
       - an uncheck line == right side of the wizard disabled
       - choose item 'All' in the list of Add button => add all distributions in the list
-      - remove items in the distributions table : use ctrl key (to select items one by one), use shift key (to select adjacent items)
+      - remove items in the distributions table: use ctrl key (to select items one by one), use shift key (to select adjacent items)
       - select a variable + empty the distributions list + click on Finish
 
         - error message 'At least one distribution etc.'
@@ -1717,20 +1784,20 @@ Probabilistic analyses
       - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/inference_result.png
           :align: center
 
-      - left side : 2 variables in the list view
-      - right side, tab : Summary
+      - left side: 2 variables in the list view
+      - right side, tab: Summary
       - when changing the variable, the tabs are updated
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - the right side of the window contains 2 parts : a distributions list and 3 tabs PDF/CDF - Q-Q Plot - Parameters
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+      - the right side of the window contains 2 parts: a distributions list and 3 tabs PDF/CDF - Q-Q Plot - Parameters
       - when selecting a distribution, the tab widget is updated
       - check tables are well drawn
       - select x_0
-      - select InverseNormal/LogUniform :
+      - select InverseNormal/LogUniform:
 
         - PDF/CDF and Q-Q Plot tabs are disabled
         - the Parameters tab contains an error message
@@ -1738,7 +1805,7 @@ Probabilistic analyses
         .. image:: /developer_manual/validation/inference_result_error.png
             :align: center
 
-    - check the reuse of the inference result by the Probabilistic model :
+    - check the reuse of the inference result by the Probabilistic model:
 
       - go on the Probabilistic model window of model1, tab 'Marginals'
       - select the x3 variable
@@ -1752,19 +1819,19 @@ Probabilistic analyses
       - check that the distribution of x_3 is Weibull now
       - unselect x_3
 
-  - Copula inference : copulaInference item
+  - Copula inference: copulaInference item
 
     .. image:: /developer_manual/validation/copula_inference_wizard.png
         :align: center
 
-    - right click on the item 'copulaInference' and choose 'Modify'. Check the wizard behavior :
+    - right click on the item 'copulaInference' and choose 'Modify'. Check the wizard behavior:
 
       - check all / uncheck all + left/right arrow buttons
       - no wheel event on Add button
       - choose item 'All' in the list of Add button => add all copulas in the list
-      - remove items in the copulas table : use ctrl key (to select items one by one), use shift key (to select adjacent items)
+      - remove items in the copulas table: use ctrl key (to select items one by one), use shift key (to select adjacent items)
       - add/remove groups with the arrows
-      - if there are at least 3 variables in a group : only the Normal copula is proposed
+      - if there are at least 3 variables in a group: only the Normal copula is proposed
       - select a variable + empty the copulas list + click on Finish
 
         - error message 'At least one copula etc.'
@@ -1779,19 +1846,19 @@ Probabilistic analyses
       - click on the 'Run' button
 
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/copula_inference_result.png
           :align: center
 
       - left side: 1 set of variables in the list view
-      - right side, 1 tab : Summary
-      - the right side of the window contains 2 parts : a copulas list and 3 tabs : PDF/CDF - Kendall Plot - Parameters
+      - right side, 1 tab: Summary
+      - the right side of the window contains 2 parts: a copulas list and 3 tabs: PDF/CDF - Kendall Plot - Parameters
       - when selecting a copula, the tab widget is updated
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn
       - select [x_2,x_3]
-      - select Ali-Mikhail-Haq / Farlie-Gumbel-Morgenstern :
+      - select Ali-Mikhail-Haq / Farlie-Gumbel-Morgenstern:
 
         - PDF/CDF and Kendall Plot tabs are disabled
         - the Parameters tab contains an error message
@@ -1799,7 +1866,7 @@ Probabilistic analyses
         .. image:: /developer_manual/validation/copula_inference_resultError.png
             :align: center
 
-    - check the reuse of the copula inference result by the Probabilistic model :
+    - check the reuse of the copula inference result by the Probabilistic model:
 
       - go on the Probabilistic model window of model1, tab 'Dependence'
       - choose Inference result in the combo box of the [x_1,x_2] group
@@ -1816,21 +1883,21 @@ Designs of experiments
 
 - check the wizard:
 
-  - right click on probaDesign and choose Modify :
+  - right click on probaDesign and choose Modify:
 
-    - First page :
-        - type : Probabilistic design
+    - First page:
+        - type: Probabilistic design
         - continue
 
-    - Second page :
+    - Second page:
 
       .. image:: /developer_manual/validation/design_4_wizard_2nd_page.png
           :align: center
 
       - Monte Carlo selected
       - LHS disabled: check the tooltip is 'The physical model does not have an independent copula'
-      - sample size : 100
-      - seed : 0
+      - sample size: 100
+      - seed: 0
       - cancel
 
 
@@ -1846,51 +1913,51 @@ Field analyses
 
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
-- Check all the analyses wizards -> Right click on each item and choose Modify :
+- Check all the analyses wizards -> Right click on each item and choose Modify:
 
-  - Monte Carlo : mcAnalysis item
+  - Monte Carlo: mcAnalysis item
 
-    - First page check the values :
+    - First page check the values:
 
       .. image:: /developer_manual/validation/fieldMonteCarlo_Wizard.png
           :align: center
 
-      - selected output : z
-      - max time : 16m40s
-      - max calls : 10
-      - block size : 5
-      - Karhunen-Loeve threshold : 2e-5
-      - seed : 2
+      - selected output: z
+      - max time: 16m40s
+      - max calls: 10
+      - block size: 5
+      - Karhunen-Loeve threshold: 2e-5
+      - seed: 2
 
     - click on the Finish button
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check result window :
+    - check result window:
 
       .. image:: /developer_manual/validation/fieldMonteCarlo_result.png
           :align: center
 
-      - left side : 1 variable in the list view
-      - right side, tabs : Result - Input - Decomposition - Correlation - Parameters - Model
-      - Result tab, tabs : Trajectories - Mean trajectory - Functional bag chart - Bag chart - Table
-      - Input tab, tabs : Table - Plot matrix
-      - Decomposition tab, tabs : Modes - Eigenvalues - ξi
-      - ξi tab, tabs : PDF - Plot matrix
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
-      - check the tabs (Trajectories - Functional bag chart - Bag chart - Table) are linked :
+      - left side: 1 variable in the list view
+      - right side, tabs: Result - Input - Decomposition - Correlation - Parameters - Model
+      - Result tab, tabs: Trajectories - Mean trajectory - Functional bag chart - Bag chart - Table
+      - Input tab, tabs: Table - Plot matrix
+      - Decomposition tab, tabs: Modes - Eigenvalues - ξi
+      - ξi tab, tabs: PDF - Plot matrix
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
+      - check the tabs (Trajectories - Functional bag chart - Bag chart - Table) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
 
     - right-click on analysis item, "Extract data at nodes", select only t0, it must create a new data model with the selected data
 
-  - Evaluation : item evaluation
+  - Evaluation: item evaluation
 
     .. image:: /developer_manual/validation/fieldEvaluation_Wizard.png
         :align: center
 
-    - selected outputs : z, z2
-    - check the values : [100, 55, 80, 16]
+    - selected outputs: z, z2
+    - check the values: [100, 55, 80, 16]
 
     - click on the Finish button
 
@@ -1902,11 +1969,11 @@ Field analyses
       .. image:: /developer_manual/validation/fieldEvaluation_result.png
           :align: center
 
-      - left side : 2 variables in the list view
-      - right side, tabs : Result - Input - Parameters - Model
-      - Result tab, tabs : Trajectory - Table
-      - Input tab, tabs : Table
-      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
+      - left side: 2 variables in the list view
+      - right side, tabs: Result - Input - Parameters - Model
+      - Result tab, tabs: Trajectory - Table
+      - Input tab, tabs: Table
+      - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
 - save the study, close it, reopen it, check all windows are correctly built, close the study.
 
@@ -1928,13 +1995,13 @@ Physical model
       :align: center
 
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
-    - add an input : the 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
-    - add an output, set its formula to X0 : the 'Model evaluation', 'Optimization' buttons of the diagram are enabled
+    - add an input: the 'Design of experiments creation' and 'Probabilistic model definition' buttons of the diagram are enabled
+    - add an output, set its formula to X0: the 'Model evaluation', 'Optimization' buttons of the diagram are enabled
 
 - click on the 'Model evaluation' button of the diagram
     - a wizard appears, click on Cancel
 
-- In the model window : add a second input
+- In the model window: add a second input
     - the 'Screening' and 'Observations' buttons of the diagram is enabled
 
 - click on the 'Screening' button of the diagram
@@ -1954,7 +2021,7 @@ Physical model
 
 - click on the 'Design of experiments creation' button of the diagram
     - a wizard appears, click on Continue button on the first page
-    - on the second page : select X0, set Levels = 20, click on Finish
+    - on the second page: select X0, set Levels = 20, click on Finish
     - the 'Design of experiments evaluation' button of the diagram is enabled
 
 - redo the previous action with Levels = 40
@@ -2007,7 +2074,7 @@ Data model
     - if all the columns are disabled, all the buttons of the diagram are disabled
 
 - save the current study, reopen
-    - in the window of the 'Definition' item of the data model : click on the reload button
+    - in the window of the 'Definition' item of the data model: click on the reload button
 
 
 Field model
@@ -2022,8 +2089,8 @@ Field model
       :align: center
 
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
-    - add an input : the 'Probabilistic model definition' button of the diagram is enabled
-    - add an output : the 'Model evaluation' button of the diagram is enabled
+    - add an input: the 'Probabilistic model definition' button of the diagram is enabled
+    - add an output: the 'Model evaluation' button of the diagram is enabled
 
 - click on the 'Model evaluation' button of the diagram
     - a wizard appears, click on Cancel

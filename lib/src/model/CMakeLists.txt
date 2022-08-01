@@ -34,6 +34,9 @@ ot_add_source_file ( VariablesSelectionTableModel.cxx)
 ot_add_source_file ( CustomStandardItemModel.cxx )
 ot_add_source_file ( DependenciesTableModel.cxx )
 ot_add_source_file ( OptimizationTableModel.cxx )
+ot_add_source_file ( MultiObjectiveOptimizationTableModel.cxx )
+ot_add_source_file ( ConstraintsTableModel.cxx )
+ot_add_source_file ( ObjectivesTableModel.cxx )
 ot_add_source_file ( TranslationManager.cxx )
 ot_add_source_file ( FileTools.cxx )
 if (OTMORRIS_FOUND)
@@ -69,6 +72,9 @@ ot_install_header_file ( VariablesSelectionTableModel.hxx )
 ot_install_header_file ( CustomStandardItemModel.hxx )
 ot_install_header_file ( DependenciesTableModel.hxx )
 ot_install_header_file ( OptimizationTableModel.hxx )
+ot_install_header_file ( MultiObjectiveOptimizationTableModel.hxx )
+ot_install_header_file ( ConstraintsTableModel.hxx )
+ot_install_header_file ( ObjectivesTableModel.hxx )
 ot_install_header_file ( TranslationManager.hxx )
 ot_install_header_file ( FileTools.hxx )
 if (OTMORRIS_FOUND)
@@ -108,6 +114,9 @@ qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/CustomStandardItemModel.hxx
                                     persalys/DependenciesTableModel.hxx
                                     persalys/OptimizationTableModel.hxx
+                                    persalys/MultiObjectiveOptimizationTableModel.hxx
+                                    persalys/ConstraintsTableModel.hxx
+                                    persalys/ObjectivesTableModel.hxx
                                     persalys/TranslationManager.hxx
                                     persalys/FileTools.hxx)
 
