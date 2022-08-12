@@ -1294,32 +1294,32 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CouplingInputFileWidget</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="792"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="793"/>
         <source>Template file</source>
         <translation>Fichier modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="799"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="800"/>
         <source>Configured file</source>
         <translation>Fichier configuré</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="862"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="863"/>
         <source>Check template file</source>
         <translation>Vérifier fichier modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="865"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="866"/>
         <source>Template/input comparison</source>
         <translation>Comparaison modèle/entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="898"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="899"/>
         <source>Template file not found</source>
         <translation>Fichier modèle introuvable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="900"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="901"/>
         <source>Template file not readable</source>
         <translation>Fichier modèle illisible</translation>
     </message>
@@ -1327,83 +1327,83 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CouplingModelWindow</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="65"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="66"/>
         <source>Coupling model</source>
         <translation>Modèle de couplage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="72"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="73"/>
         <source>Definition</source>
         <translation>Définition</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="83"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="221"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="84"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="222"/>
         <source>Command</source>
         <translation>Commande</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="98"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="99"/>
         <source>Advanced parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="102"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="103"/>
         <source>Cache input file</source>
         <translation>Fichier d&apos;entrée de cache</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="103"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="104"/>
         <source>Cache output file</source>
         <translation>Fichier de sortie de cache</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="121"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="122"/>
         <source>Clear cache</source>
         <translation>Vider le cache</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="138"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="139"/>
         <source>Working directory</source>
         <translation>Répertoire de travail</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="147"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="148"/>
         <source>Keep working directory</source>
         <translation>Garder répertoire de travail</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="156"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="157"/>
         <source>Check model</source>
         <translation>Vérifier le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="157"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="158"/>
         <source>Evaluate the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="165"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="166"/>
         <source>Elapsed time</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="183"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="184"/>
         <source>Finite difference step definition</source>
         <translation>Définition du pas de différence finie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="203"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="204"/>
         <source>Differentiation</source>
         <translation>Différentiation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="211"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="212"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="256"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="257"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
@@ -1411,74 +1411,99 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CouplingOutputFileWidget</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1114"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1129"/>
         <source>Output file</source>
         <translation>Fichier de sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1159"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1174"/>
         <source>Check output</source>
         <translation>Vérifier sortie</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::CouplingResourceFileWidget</name>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1006"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1064"/>
+        <source>Add a file</source>
+        <translation>Ajouter un fichier</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1014"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1071"/>
+        <source>Add a directory</source>
+        <translation>Ajouter un dossier</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1087"/>
+        <source>Any file (*)</source>
+        <translation>Tous les fichiers (*)</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1092"/>
+        <source>Choose directory</source>
+        <translation>Sélectionner répertoire</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::CouplingStepWidget</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1197"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1200"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1212"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1215"/>
         <source>Command</source>
         <translation>Commande</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1220"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1235"/>
         <source>Shell command</source>
         <translation>Commande shell</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1278"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1293"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1295"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1341"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1370"/>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1411"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1310"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1356"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1385"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1426"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1313"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1328"/>
         <source>Ressource</source>
         <translation>Ressource</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1324"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1339"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1358"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1373"/>
         <source>Additional processing</source>
         <translation>Traitement supplémentaire</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1238"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1253"/>
         <source>Advanced</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1235"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1250"/>
         <source>Run ansys wizard</source>
         <translation>Lancer l&apos;assistant ansys</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1242"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1257"/>
         <source>Timeout (s)</source>
         <translation>Timeout (s)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1255"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1270"/>
         <source>I/O Encoding</source>
         <translation>Encodage des E/S</translation>
     </message>
@@ -1486,22 +1511,22 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CouplingSummaryWidget</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1434"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1449"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1449"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1464"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1466"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1481"/>
         <source>Check model</source>
         <translation>Vérifier le modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1467"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1482"/>
         <source>Evaluate the outputs</source>
         <translation>Evaluer les sorties</translation>
     </message>
@@ -3739,27 +3764,27 @@ des étiquettes</translation>
 <context>
     <name>PERSALYS::InTableModel</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="308"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="309"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="310"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="311"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="312"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="313"/>
         <source>Token</source>
         <translation>Marqueur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="314"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="315"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="316"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="317"/>
         <source>Format</source>
         <translation>Format</translation>
     </message>
@@ -4522,187 +4547,187 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::LinearRegressionResultWindow</name>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="61"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="63"/>
         <source>Metamodel creation parameters</source>
         <translation>Paramètres de création du métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="71"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="73"/>
         <source>Linear regression</source>
         <translation>Régression linéaire</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="80"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="82"/>
         <source>Outputs</source>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
         <source>Dimension</source>
         <translation>Dimension</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
         <source>Degree</source>
         <translation>Degré</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
         <source>Interaction</source>
         <translation>Intéraction</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
         <source>Formula</source>
         <translation>Formule</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
         <source>R2</source>
         <translation>R2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="110"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
         <source>Adjusted R2</source>
         <translation>R2 ajusté</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="135"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="137"/>
         <source>Term</source>
         <translation>Terme</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="136"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="138"/>
         <source>Coefficient</source>
         <translation>Coefficient</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="137"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="139"/>
         <source>Confidence Interval
 at</source>
         <translation>Intervalle de confiance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="155"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="157"/>
         <source>intercept</source>
         <translation>constante</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="168"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="170"/>
         <source>undefined</source>
         <translation>indéfini</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="183"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="185"/>
         <source>Results</source>
         <translation>Résultats</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="202"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="204"/>
         <source>Adequation</source>
         <translation>Adéquation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="252"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="254"/>
         <source>Q2</source>
         <translation>Q2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="260"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="262"/>
         <source>Validation</source>
         <translation>Validation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="282"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="284"/>
         <source>Row ID</source>
         <translation>Ligne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="283"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="358"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="285"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="362"/>
         <source>Observation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="284"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="286"/>
         <source>Predicted</source>
         <translation>Prédiction</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="285"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="330"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="348"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="368"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="287"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="332"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="351"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="373"/>
         <source>Residual</source>
         <translation>Résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="286"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="288"/>
         <source>Cook distances</source>
         <translation>Distance de Cook</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="316"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="318"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="322"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="324"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="327"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="329"/>
         <source>Residual distribution</source>
         <translation>Distribution du résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="329"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="331"/>
         <source>Residual PDF</source>
         <translation>PDF du résidu</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="331"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="333"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="335"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="338"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="343"/>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="346"/>
         <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="349"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="353"/>
         <source>Residual vs fitted</source>
         <translation>Résidu vs prédiction</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="347"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="350"/>
         <source>Fitted values</source>
         <translation>Valeurs prédites</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="352"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="357"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="359"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="360"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="356"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="361"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="363"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="365"/>
         <source>Cook distance</source>
         <translation>Distance de Cook</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="378"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="383"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="383"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="388"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="387"/>
+        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="392"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
@@ -6155,37 +6180,37 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OutTableModel</name>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="567"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="568"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="569"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="570"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="571"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="572"/>
         <source>Token</source>
         <translation>Marqueur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="573"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="574"/>
         <source>Skip Token</source>
         <translation>Saut de marqueur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="575"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="576"/>
         <source>Skip Line</source>
         <translation>Saut de ligne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="577"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="578"/>
         <source>Skip Column</source>
         <translation>Saut de colonne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="579"/>
+        <location filename="../lib/src/view/CouplingModelWindow.cxx" line="580"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
