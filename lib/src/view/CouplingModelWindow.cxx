@@ -35,6 +35,7 @@
 #include "persalys/AnsysWizard.hxx"
 #include "persalys/QtTools.hxx"
 
+#include <QApplication>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QLineEdit>
@@ -956,11 +957,12 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
   QGridLayout * resGroupBoxLayout = new QGridLayout(this);
   resGroupBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-  tableWidget_ = new QTableWidget(0, 2);
+  tableWidget_ = new QTableWidget(0, 3);
   QHeaderView * headerView = new QHeaderView(Qt::Horizontal, tableWidget_);
   tableWidget_->setHorizontalHeader(headerView);
   headerView->setSectionResizeMode(0, QHeaderView::Stretch);
   headerView->setSectionResizeMode(1, QHeaderView::Fixed);
+  headerView->setSectionResizeMode(2, QHeaderView::Fixed);
   headerView->hide();
   resGroupBoxLayout->addWidget(tableWidget_, 0, 0);
   AddRemoveWidget * addRemoveWidget = new AddRemoveWidget;
@@ -1000,13 +1002,23 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
       tableWidget_->setItem(row, 0, newItem);
 
       QToolButton * tb = new QToolButton;
-      tb->setText("...");
+      tb->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileIcon));
+      tb->setToolTip(tr("Add a file"));
       tableWidget_->setCellWidget(row, 1, tb);
       tableWidget_->horizontalHeader()->resizeSection(1, tb->width());
       connect(tb, &QToolButton::clicked, [=]() {
-          editResource(newItem);
+          editResource(newItem, true);
         });
-    });
+      tb = new QToolButton;
+      tb->setIcon(QApplication::style()->standardIcon(QStyle::SP_DirIcon));
+      tb->setToolTip(tr("Add a directory"));
+      tableWidget_->setCellWidget(row, 2, tb);
+      tableWidget_->horizontalHeader()->resizeSection(2, tb->width());
+      connect(tb, &QToolButton::clicked, [=]() {
+          editResource(newItem, false);
+        });
+
+      });
   connect(addRemoveWidget, &AddRemoveWidget::removeRequested, [=]() {
       CouplingStepCollection csColl(model_->getSteps());
       CouplingStep cs(csColl[indStep_]);
@@ -1048,37 +1060,40 @@ void CouplingResourceFileWidget::updateTable()
         tableWidget_->setItem(row, 0, newItem);
 
         QToolButton * tb = new QToolButton;
-        tb->setText("...");
+        tb->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileIcon));
+        tb->setToolTip(tr("Add a file"));
         tableWidget_->setCellWidget(row, 1, tb);
         connect(tb, &QToolButton::clicked, [=]() {
-            editResource(newItem);
-          });
+            editResource(newItem, true);
+        });
+        tb = new QToolButton;
+        tb->setIcon(QApplication::style()->standardIcon(QStyle::SP_DirIcon));
+        tb->setToolTip(tr("Add a directory"));
+        tableWidget_->setCellWidget(row, 2, tb);
+        //tableWidget_->horizontalHeader()->resizeSection(2, tb->width());
+        connect(tb, &QToolButton::clicked, [=]() {
+            editResource(newItem, false);
+        });
       }
     }
   }
 }
 
-void CouplingResourceFileWidget::editResource(QTableWidgetItem * newItem) {
+void CouplingResourceFileWidget::editResource(QTableWidgetItem * newItem, bool isFile) {
   QFileDialog* dlg = new QFileDialog(this);
-  QStringList filters;
-  filters <<"Any file (*)"
-          <<"Choose directory";
-
-  dlg->setFileMode(QFileDialog::AnyFile);
+  QString filter;
+  if (isFile)
+  {
+    filter = tr("Any file (*)");
+    dlg->setFileMode(QFileDialog::AnyFile);
+  }
+  else
+  {
+    filter = tr("Choose directory");
+    dlg->setFileMode(QFileDialog::Directory);
+  }
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
-  dlg->setNameFilters(filters);
-  connect(dlg, &QFileDialog::filterSelected, [=]() {
-      if(dlg->selectedNameFilter().contains("directory")) {
-        dlg->setFileMode(QFileDialog::Directory);
-        // Filters are reset when setting QFileDialog::Directory
-        QStringList r_filters;
-        r_filters << filters[1] << filters[0];
-        dlg->setNameFilters(r_filters);
-      } else {
-        dlg->setFileMode(QFileDialog::AnyFile);
-        dlg->setNameFilters(filters);
-      }
-    });
+  dlg->setNameFilter(filter);
   QString fileName;
   if(dlg->exec())
     fileName = dlg->selectedFiles()[0];
