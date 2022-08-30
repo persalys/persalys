@@ -258,8 +258,16 @@ Sample Tools::ImportSample(const String& fileName)
     for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i) {
       if (separatorsList[i] == numSep[j])
         continue;
-      // import sample from the file
-      sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i], 0, numSep[j]);
+      try
+      {
+        // import sample from the file
+        sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i], 0, numSep[j]);
+      }
+      catch (const InternalException &)
+      {
+        // Locale not available
+        sampleFromFile.clear();
+      }
       if (sampleFromFile.getSize())
         break;
     }
