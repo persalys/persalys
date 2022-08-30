@@ -65,7 +65,7 @@ DistributionFactory DistributionDictionary::BuildDistributionFactory(const Strin
   else if (distributionName == "Weibull") return WeibullMinFactory();
   else
   {
-    throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildDistributionFactory unknow distribution : " << distributionName;
+    throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildDistributionFactory unknown distribution : " << distributionName;
   }
 }
 
@@ -81,7 +81,7 @@ DistributionFactory DistributionDictionary::BuildCopulaFactory(const String& dis
   else if (distributionName == "Gumbel") return GumbelCopulaFactory();
   else if (distributionName == "Normal") return NormalCopulaFactory();
   else
-    throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildCopulaFactory unknow copula : " << distributionName;
+    throw InvalidArgumentException(HERE) << "Error in DistributionDictionary::BuildCopulaFactory unknown copula : " << distributionName;
 }
 
 

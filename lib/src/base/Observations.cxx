@@ -78,8 +78,8 @@ Observations::Observations(const String &name,
 
   // check dimension
   if (!outSample.getSize())
-    throw InvalidArgumentException(HERE) << "Set at least an ouput to calibrate";
-  if (!inSample.getSize()) // TODO next OT : can have only observed ouput
+    throw InvalidArgumentException(HERE) << "Set at least an output to calibrate";
+  if (!inSample.getSize()) // TODO next OT : can have only observed output
     throw InvalidArgumentException(HERE) << "Set at least an input to calibrate";
   // check if names of physical model
   for (UnsignedInteger i = 0; i < inSample.getDescription().getSize(); ++i)

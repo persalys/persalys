@@ -17,7 +17,7 @@ PERSALYS_PhysicalModel_doc
 Returns
 -------
 names : :py:class:`openturns.Description`
-    Ouput variable names"
+    Output variable names"
 %enddef
 %feature("docstring") PERSALYS::PhysicalModelImplementation::getOutputNames
 PERSALYS_PhysicalModel_getOutputNames_doc

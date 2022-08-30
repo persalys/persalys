@@ -14,7 +14,7 @@ columns : :py:class:`openturns.Indices`
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataImport::getOutputColumns
-"Columns of the ouput variables accessor.
+"Columns of the output variables accessor.
 
 Returns
 -------

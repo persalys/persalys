@@ -1325,7 +1325,7 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
 
   // ressource definition
   tab = new QWidget;
-  stepTabWidget->addTab(tab, tr("Ressource"));
+  stepTabWidget->addTab(tab, tr("Resource"));
 
   QGridLayout * resTabLayout = new QGridLayout(tab);
   ressourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, tab);

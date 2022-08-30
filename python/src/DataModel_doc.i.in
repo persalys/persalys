@@ -49,7 +49,7 @@ names : :py:class:`openturns.Description`
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataModel::getOutputNames
-"Names of the ouput variables accessor.
+"Names of the output variables accessor.
 
 Returns
 -------

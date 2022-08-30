@@ -181,7 +181,7 @@ void CopulaInferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
     variablesNames << " ";
     QWidget * aWidget = new QWidget;
     QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
-    QLabel * label = new QLabel(tr("The result does not contain infered copula of dimension equal to %1").arg(variables_.getSize()));
+    QLabel * label = new QLabel(tr("The result does not contain inferred copula of dimension equal to %1").arg(variables_.getSize()));
     label->setWordWrap(true);
     aWidgetLayout->addWidget(label, 0, Qt::AlignTop);
     inferenceResultStackWidget_->addWidget(aWidget);

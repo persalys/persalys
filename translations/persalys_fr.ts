@@ -1129,7 +1129,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CopulaInferenceResultWizard.cxx" line="184"/>
-        <source>The result does not contain infered copula of dimension equal to %1</source>
+        <source>The result does not contain inferred copula of dimension equal to %1</source>
         <translation>Le résultat ne contient pas de copule inférée de dimension %1</translation>
     </message>
     <message>
@@ -1474,7 +1474,7 @@ bayésien (BIC)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="1328"/>
-        <source>Ressource</source>
+        <source>Resource</source>
         <translation>Ressource</translation>
     </message>
     <message>
