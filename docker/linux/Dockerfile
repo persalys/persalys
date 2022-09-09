@@ -29,7 +29,7 @@ RUN curl -fSsL https://github.com/swig/swig/archive/v4.0.2.tar.gz | tar xz && cd
 # ipopt
 RUN curl -fsSL https://bitbucket.org/petsc/pkg-metis/get/v5.1.0-p10.tar.bz2 | tar xj && cd petsc-pkg-metis-* && make config shared=1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r petsc*
 RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/1.6.2.tar.gz | tar xz && cd ThirdParty-Mumps-releases-1.6.2 && ./get.Mumps && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
-RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.6.tar.gz | tar xz && cd Ipopt-releases-3.14.6 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
+RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.9.tar.gz | tar xz && cd Ipopt-releases-3.14.9 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
 RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
@@ -67,7 +67,7 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.1.0.tar.gz
 RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.5.0.tar.gz | tar xz && cd oneTBB-2021.5.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v7.9.tar.gz | tar xz && cd primesieve-7.9 && cmake -DBUILD_STATIC_LIBS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v8.0.tar.gz | tar xz && cd primesieve-8.0 && cmake -DBUILD_STATIC_LIBS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -78,11 +78,11 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimag
  && appimagetool --version
 
 # openssl
-RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1o.tar.gz | tar xz && cd openssl-1.1.1o \
+RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1q.tar.gz | tar xz && cd openssl-1.1.1q \
  && ./config no-ssl2 no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz | tar xz && cd Python-3.10.5 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz | tar xz && cd Python-3.10.6 \
  && ./configure --enable-shared CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
@@ -122,18 +122,18 @@ RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/
 RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.18.0.tar.gz | tar xz && cd pagmo2-2.18.0 && cmake -DPAGMO_WITH_EIGEN3=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
 
 # ninja
-RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.0.tar.gz | tar xz && cd ninja-1.11.0 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
+RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja-1.11.1 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
 
 # wayland
-RUN pip install meson && curl -fSsL https://wayland.freedesktop.org/releases/wayland-1.20.0.tar.xz | tar xJ && cd wayland-1.20.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
+RUN pip install meson && curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.21.0/downloads/wayland-1.21.0.tar.xz | tar xJ && cd wayland-1.21.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtbase-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.5 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtsvg-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtx11extras-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qttools-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.5/submodules/qtwayland-everywhere-opensource-src-5.15.5.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.5 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.6/submodules/qtbase-everywhere-opensource-src-5.15.6.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.6 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.6/submodules/qtsvg-everywhere-opensource-src-5.15.6.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.6 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.6/submodules/qtx11extras-everywhere-opensource-src-5.15.6.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.6 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.6/submodules/qttools-everywhere-opensource-src-5.15.6.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.6 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.6/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.6.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.6 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.6/submodules/qtwayland-everywhere-opensource-src-5.15.6.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.6 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj && cd qwt-6.2.0 \
@@ -163,7 +163,7 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
 RUN pip install git+https://github.com/openturns/otfmi@v0.15 && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.19.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.19.2 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cd OMCompiler && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd ../.. && rm -r OpenModelica*

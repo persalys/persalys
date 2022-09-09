@@ -91,7 +91,7 @@ cp -v /usr/local/lib64/libpagmo.so.8 persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libtbb.so.12 persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libdlib*.0 persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libglog.so.1 persalys.AppDir/usr/lib
-cp -v /usr/local/lib64/libprimesieve.so.9 persalys.AppDir/usr/lib
+cp -v /usr/local/lib64/libprimesieve.so.10 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libboost* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
 cp -rv /usr/local/etc/ persalys.AppDir/etc
