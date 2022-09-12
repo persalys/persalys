@@ -82,7 +82,7 @@ RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1q.tar.gz | tar xz && 
  && ./config no-ssl2 no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz | tar xz && cd Python-3.10.6 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tgz | tar xz && cd Python-3.10.7 \
  && ./configure --enable-shared CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
