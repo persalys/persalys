@@ -51,7 +51,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
 {
   setName(name);
   // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-  composedCopula_.setDescription(Description(2, ""));
+  composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
 }
 
 
@@ -154,7 +154,7 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
   // update composedCopula_
   composedCopula_ = ComposedCopula();
   // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-  composedCopula_.setDescription(Description(2, ""));
+  composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
 
   inputsChanged();
 }
@@ -371,7 +371,7 @@ void PhysicalModelImplementation::updateCopula()
   {
     composedCopula_ = ComposedCopula();
     // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-    composedCopula_.setDescription(Description(2, ""));
+    composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
 
   notify("copulaChanged");
@@ -858,7 +858,7 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
   {
     composedCopula_ = ComposedCopula();
     // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-    composedCopula_.setDescription(Description(2, ""));
+    composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
   updateCopula();
 

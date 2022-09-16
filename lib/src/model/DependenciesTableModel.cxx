@@ -152,7 +152,7 @@ void DependenciesTableModel::updateCopula()
   else
   {
     copula_ = ComposedCopula();
-    copula_.setDescription(Description(2, ""));
+    copula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
 }
 
