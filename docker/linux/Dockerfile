@@ -101,7 +101,7 @@ RUN curl -fSsL https://github.com/LLNL/sundials/archive/v5.8.0.tar.gz | tar xz &
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.tar.gz | tar xz && cd fmi-library-2.4 \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.tar.gz | tar xz && cd fmi-library-2.4.1 \
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
