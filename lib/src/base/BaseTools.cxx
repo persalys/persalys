@@ -295,8 +295,8 @@ Sample Tools::ImportSample(const String& fileName)
       ++ occurences[description[i]];
       description[i] = (OSS() << description[i] << "_" << occurences[description[i]]);
     }
-    sampleFromFile.setDescription(description);
   }
+  sampleFromFile.setDescription(description);
   return sampleFromFile;
 }
 
