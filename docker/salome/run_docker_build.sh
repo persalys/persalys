@@ -94,6 +94,7 @@ cp -v /usr/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so.[0-9] persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpython3.6m.so.1.0 persalys.AppDir/usr/lib
 cp -v /home/devel/local/lib/lib*.so persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
 
 # python
 cp -v /usr/local/bin/python3* persalys.AppDir/usr/bin
