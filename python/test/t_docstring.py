@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import persalys
-import openturns as ot
-import sys
+# import openturns as ot
 import os
 import shutil
 from glob import glob
@@ -10,7 +9,7 @@ from tempfile import mkdtemp
 import doctest
 
 mod_path = os.path.dirname(persalys.__file__)
-py_files = sorted(glob(mod_path + '/*.py'))
+py_files = sorted(glob(mod_path + "/*.py"))
 
 total_failure_count = 0
 total_test_count = 0
@@ -21,20 +20,19 @@ os.chdir(work_dir)
 
 for py_file in py_files:
     py_basename = os.path.splitext(os.path.basename(py_file))[0]
-    module = __import__('persalys.' + py_basename, fromlist=[py_basename])
+    module = __import__("persalys." + py_basename, fromlist=[py_basename])
     failure_count, test_count = doctest.testmod(
-        module, verbose=False, optionflags=doctest.ELLIPSIS)
+        module, verbose=False, optionflags=doctest.ELLIPSIS
+    )
 
     total_failure_count += failure_count
     total_test_count += test_count
 
-    print(('%s %5d tests failed'
-           % ((py_basename + ' ').ljust(60, '.'), failure_count)))
+    print(("%s %5d tests failed" % ((py_basename + " ").ljust(60, "."), failure_count)))
 
-print(('-' * 79))
-print(('%s %5d tests failed'
-       % ('TOTAL '.ljust(60, '.'), total_failure_count)))
+print(("-" * 79))
+print(("%s %5d tests failed" % ("TOTAL ".ljust(60, "."), total_failure_count)))
 
 # Delete temporary working directory for IO tests
-os.chdir('..')
+os.chdir("..")
 shutil.rmtree(work_dir)

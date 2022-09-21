@@ -8,6 +8,8 @@ gid=$2
 export MAKEFLAGS="-j8"
 cd /tmp
 
+flake8 --ignore=E501 /io/python/test/t_*.py
+
 mkdir -p build && cd build
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \

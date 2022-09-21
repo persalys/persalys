@@ -1,22 +1,24 @@
 import os
 import platform
 import persalys
-import openturns as ot
+# import openturns as ot
 import openturns.testing as ott
 
-### testcase using ansys connector
+# testcase using ansys connector
 key_platform = platform.system()
-dict_exe = {'Linux': ['dummyAnsys', './dummyAnsys'],
-            'Windows': ['dummyAnsys.exe', 'dummyAnsys.exe']}
+dict_exe = {
+    "Linux": ["dummyAnsys", "./dummyAnsys"],
+    "Windows": ["dummyAnsys.exe", "dummyAnsys.exe"],
+}
 
 pathHere = os.path.dirname(os.path.abspath(__file__))
-pathResources = os.path.join(pathHere, 'ansysConnector')
-modelFile = os.path.join(pathResources, 'BEAM.wbpj')
+pathResources = os.path.join(pathHere, "ansysConnector")
+modelFile = os.path.join(pathResources, "BEAM.wbpj")
 ansysExec = dict_exe[key_platform][0]
-templateFile = 'input.txt.in'
+templateFile = "input.txt.in"
 
 step = persalys.CouplingStep()
-model = persalys.CouplingPhysicalModel('A', [step])
+model = persalys.CouplingPhysicalModel("A", [step])
 
 parser = persalys.AnsysParser(modelFile)
 parser.populateCouplingStep(model, 0, templateFile)
@@ -27,7 +29,7 @@ resourceFiles = step.getResourceFiles()
 resourceFiles.add(persalys.CouplingResourceFile(ansysExec))
 step.setResourceFiles(resourceFiles)
 command = step.getCommand()
-step.setCommand(dict_exe[key_platform][1]+command)
+step.setCommand(dict_exe[key_platform][1] + command)
 
 model.setSteps([step])
 x = [1.0, 2.0, 3.0, 4.0, 5.0]

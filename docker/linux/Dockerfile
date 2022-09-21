@@ -87,7 +87,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tgz | tar 
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11
+RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11 flake8
 RUN curl -fSsL https://github.com/numpy/numpy/archive/v1.21.6.tar.gz | tar xz && cd numpy-1.21.6 \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
 RUN pip install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.7.3.tar.gz | tar xz && cd scipy-1.7.3 \

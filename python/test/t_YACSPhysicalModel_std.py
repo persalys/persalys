@@ -1,13 +1,15 @@
 #! /usr/bin/env python
 
-import openturns as ot
+# import openturns as ot
 import openturns.testing as ott
 import persalys
 
 
-pyscript = 'def _exec(x, y, p):\n    w, z = 3*x+4*y+p,x+y+p\n    return w, z\n'
+pyscript = "def _exec(x, y, p):\n    w, z = 3*x+4*y+p,x+y+p\n    return w, z\n"
 
-model = persalys.YACSPhysicalModel('myPhysicalModel', persalys.InputCollection(), persalys.OutputCollection(), pyscript)
+model = persalys.YACSPhysicalModel(
+    "myPhysicalModel", persalys.InputCollection(), persalys.OutputCollection(), pyscript
+)
 
 inputSample = [[1, 2, 4], [2, 3, 5], [6, 1, 3]]
 
@@ -21,8 +23,8 @@ ott.assert_almost_equal(evalSample, resultSample, 1e-16)
 
 
 # script
-myStudy = persalys.Study('myStudy')
+myStudy = persalys.Study("myStudy")
 myStudy.add(model)
 script = myStudy.getPythonScript()
-#print('script=', script)
+# print('script=', script)
 exec(script)
