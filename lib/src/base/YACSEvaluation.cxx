@@ -226,6 +226,7 @@ Description YACSEvaluation::getOutputVariablesNames() const
 void YACSEvaluation::setOutputVariablesNames(const Description & outDescription)
 {
   outDescription_ = outDescription;
+  setOutputDescription(outDescription);
 }
 
 
