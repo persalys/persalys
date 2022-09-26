@@ -105,12 +105,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.ta
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.2.9.tar.gz | tar xz && cd Assimulo-Assimulo-3.2.9 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.3.tar.gz | tar xz && cd Assimulo-Assimulo-3.3 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.7.tar.gz | tar xz && cd PyFMI-PyFMI-2.9.7 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.8.tar.gz | tar xz && cd PyFMI-PyFMI-2.9.8 \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
