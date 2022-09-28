@@ -30,5 +30,3 @@ RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp
 # fake otfmi
 RUN echo "__version__= '0.0'" > /tmp/otfmi.py && sudo mv /tmp/otfmi.py ${MINGW_PREFIX}/lib/python${PYMAJMIN}/otfmi.py
 
-# ogg fix
-RUN sudo cp ${MINGW_PREFIX}/bin/libogg.dll ${MINGW_PREFIX}/bin/ogg.dll
