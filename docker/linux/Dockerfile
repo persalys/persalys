@@ -67,7 +67,7 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.1.0.tar.gz
 RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.5.0.tar.gz | tar xz && cd oneTBB-2021.5.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v8.0.tar.gz | tar xz && cd primesieve-8.0 && cmake -DBUILD_STATIC_LIBS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v8.0.tar.gz | tar xz && cd primesieve-8.0 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
