@@ -116,7 +116,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   indicesTableModel->setHorizontalHeaderLabels(tableTitles);
 
   // fill table
-  Scalar interactionsValue = 0.;
+  Scalar sumFirstIndices = 0.;
   for (UnsignedInteger j = 0; j < inputNames.getSize(); ++j)
   {
     int col = 0;
@@ -162,8 +162,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
         indicesTableModel->setData(indicesTableModel->index(j, col), toInterval.getUpperBound()[0], Qt::UserRole + 3);
       }
 
-      // compute interactions for the ith output
-      interactionsValue += (totalIndices[j] - firstIndices[j]);
+      // compute sum of first indices to be able to compute interaction
+      sumFirstIndices += firstIndices[j];
     }
   }
   proxyModel_ = new IndicesProxyModel(tableView);
@@ -188,7 +188,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     QLabel * interactionsLabel = new QLabel(tr("Interactions"));
     interactionsLabel->setStyleSheet("QLabel {font: bold;}");
     hbox->addWidget(interactionsLabel);
-    interactionsLabel = new QLabel(QString::number(interactionsValue, 'g', 4));
+    interactionsLabel = new QLabel(QString::number(1. - sumFirstIndices, 'g', 4));
     hbox->addWidget(interactionsLabel);
     hbox->addStretch();
     hbox->setContentsMargins(0, 0, 0, 0);
