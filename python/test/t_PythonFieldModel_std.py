@@ -19,7 +19,11 @@ outputs = [z]
 meshModel = persalys.GridMeshModel(ot.Interval(0.0, 12.0), [20])
 
 # Python model
-code = "from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    return z"
+code = "from math import exp\n\n"
+code += "def _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n"
+code += "    # mesh nodes\n    t = getMesh().getVertices()\n\n"
+code += "    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n"
+code += "    return z"
 model = persalys.PythonFieldModel("model", meshModel, inputs, outputs, code)
 Study_0.add(model)
 
@@ -28,9 +32,12 @@ print(f([100, 55, 81, 17]))
 print(f([[100, 55, 81, 17], [100, 55, 81, 18]]))
 
 # model with an error : ZeroDivisionError
-model.setCode(
-    "from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81 / 0.\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = mesh.getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    return z"
-)
+code = "from math import exp\n\n"
+code += "def _exec(z0,v0,m,c):\n    g = 9.81 / 0.\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n"
+code += "    # mesh nodes\n    t = mesh.getVertices()\n\n"
+code += "    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n"
+code += "    return z"
+model.setCode(code)
 model.setParallel(True)
 f = model.getPointToFieldFunction()
 try:
@@ -90,7 +97,10 @@ except Exception as e:
 z1 = persalys.Output("z1", "")
 outputs = [z, z1]
 
-code = "from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z1 = z[:]\n    return z, z1"
+code = "from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n"
+code += "    # mesh nodes\n    t = getMesh().getVertices()\n\n"
+code += "    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z1 = z[:]\n"
+code += "    return z, z1"
 model2 = persalys.PythonFieldModel("model2", meshModel, inputs, outputs, code)
 model2.setParallel(True)
 Study_0.add(model2)
@@ -102,7 +112,11 @@ print(f([[100, 55, 81, 17], [100, 55, 81, 18]]))
 
 
 # model2 with an error : wrong output sequence size
-code = "from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z1 = [2.]\n    return z, z1"
+code = "from math import exp\n\n"
+code += "def _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n"
+code += "    # mesh nodes\n    t = getMesh().getVertices()\n\n"
+code += "    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z1 = [2.]\n"
+code += "    return z, z1"
 model.setCode(code)
 
 f = model2.getPointToFieldFunction()

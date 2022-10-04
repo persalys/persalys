@@ -8,7 +8,7 @@ gid=$2
 export MAKEFLAGS="-j8"
 cd /tmp
 
-flake8 --ignore=E501 /io/python/test/t_*.py
+flake8 --max-line-length=130 /io/python
 
 mkdir -p build && cd build
 cmake \

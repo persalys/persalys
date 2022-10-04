@@ -20,7 +20,11 @@ outputs = [z1, z2]
 meshModel = persalys.GridMeshModel(ot.Interval(0.0, 12.0), [20])
 
 # Python model
-code = "from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z2 = [2*max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n\n    return z, z2"
+code = "from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n"
+code += "    # mesh nodes\n    t = getMesh().getVertices()\n\n"
+code += "    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n"
+code += "    z2 = [2*max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n\n"
+code += "    return z, z2"
 PhysicalModel_1 = persalys.PythonFieldModel(
     "PhysicalModel_1", meshModel, inputs, outputs, code
 )

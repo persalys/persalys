@@ -8,6 +8,8 @@
 
 """
 
+# flake8: noqa
+
 # ensures swig type tables order & dll load
 import openturns as _ot
 
