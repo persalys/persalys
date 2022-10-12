@@ -214,7 +214,7 @@ void CopulaParametersTabWidget::buildInterface()
         distParamTableModel->setNotEditableItem(i, j, copula.getSpearmanCorrelation()(i, j));
   }
   // ---- if NOT Normal copula : show the copula parameter value
-  else
+  else if (distribution_.getImplementation()->getClassName() != "IndependentCopula")
   {
     distParamTableView->horizontalHeader()->hide();
     distParamTableView->verticalHeader()->hide();
