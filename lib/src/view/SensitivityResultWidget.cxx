@@ -80,15 +80,15 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   {
     graphTitle = tr("SRC sensitivity indices:");
     defaultFileName = tr("sensitivitySRC");
-    legendNames << tr("Index") << tr("Signed index");
-    tableTitles << tr("Index");
+    legendNames << tr("Squared SRC") << tr("SRC");
+    tableTitles << tr("Squared SRC");
     if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
-      tableTitles << tr("Index\nconfidence interval");
+      tableTitles << tr("Squared SRC\nconfidence interval");
     if (totalIndices.getSize())
     {
-      tableTitles << tr("Signed index");
+      tableTitles << tr("SRC");
       if (totalIndicesIntervals.getDimension() == totalIndices.getSize())
-        tableTitles << tr("Signed index\nconfidence interval");
+        tableTitles << tr("SRC\nconfidence interval");
     }
   }
   // plot

@@ -7652,28 +7652,28 @@ de l&apos;indice total</translation>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="83"/>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="84"/>
-        <source>Index</source>
-        <translation>Indice</translation>
+        <source>Squared SRC</source>
+        <translation>SRC carré</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="83"/>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="89"/>
-        <source>Signed index</source>
-        <translation>Indice signé</translation>
+        <source>SRC</source>
+        <translation>SRC</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="86"/>
-        <source>Index
+        <source>Squared SRC
 confidence interval</source>
         <translation>Intervalle de confiance
-de l&apos;indice</translation>
+du SRC</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="91"/>
-        <source>Signed index
+        <source>SRC
 confidence interval</source>
         <translation>Intervalle de confiance
-de l&apos;indice signé</translation>
+du SRC carré</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="151"/>

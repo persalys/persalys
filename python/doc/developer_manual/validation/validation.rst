@@ -1434,7 +1434,7 @@ Probabilistic analyses
       - Indices tab :
 
         - can not zoom the plot
-        - click on the 'Input'/'Index'/'Signed index' section headers of the table :
+        - click on the 'Input'/'Squared SRC'/'SRC' section headers of the table :
 
           - the table values are sorted
           - the plot is updated
