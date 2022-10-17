@@ -35,6 +35,7 @@
 #include <QScrollArea>
 
 #include <qwt_legend.h>
+#include <qwt_slider.h>
 
 #include <algorithm>
 
@@ -117,7 +118,6 @@ void MorrisResultWidget::buildInterface()
   plotMuStarSigma->setAxisTitle(QwtPlot::yLeft, tr("σ"));
   plotMuStarSigma->legend()->setToolTip(tr("Coefficient of variation cv = σ / µ*"));
   connect(plotMuStarSigma, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuSigma()));
-  connect(plotMuStarSigma, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
   connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarSigma, SLOT(updateVerticalMarkerValue(QPointF)));
   connect(this, &MorrisResultWidget::updateSelectedMarkerRequested, plotMuStarSigma, &MorrisPlot::updateFakeSelectedMarkerTitle);
   connect(this, &MorrisResultWidget::updateUnselectedMarkerRequested, plotMuStarSigma, &MorrisPlot::updateFakeUnSelectedMarkerTitle);
@@ -136,7 +136,6 @@ void MorrisResultWidget::buildInterface()
   plotMuStarMu->setTitle(tr("Mean (µ) and mean of the absolute value (µ*) of the elementary effects"));
   plotMuStarMu->setAxisTitle(QwtPlot::yLeft, tr("µ"));
   connect(plotMuStarMu, SIGNAL(selectedPointsChanged()), this, SLOT(updateSelectedPointsFromMuMu()));
-  connect(plotMuStarMu, SIGNAL(verticalMarkerPositionChanged(double)), this, SLOT(updateNoEffectBoundary(double)));
   connect(this, SIGNAL(noEffectBoundaryChanged(QPointF)), plotMuStarMu, SLOT(updateVerticalMarkerValue(QPointF)));
   connect(this, &MorrisResultWidget::updateSelectedMarkerRequested, plotMuStarMu, &MorrisPlot::updateFakeSelectedMarkerTitle);
   connect(this, &MorrisResultWidget::updateUnselectedMarkerRequested, plotMuStarMu, &MorrisPlot::updateFakeUnSelectedMarkerTitle);
@@ -189,7 +188,21 @@ void MorrisResultWidget::buildInterface()
   const Scalar maxY = std::max(maxMeanEffect, maxMeanStarEffect);
   plotMuStarMu->setAxisScale(QwtPlot::yLeft, -maxY - 1 * step, maxY + 1 * step);
 
-  // second widget of the splitter : tableView
+
+  // second widget of the splitter : Slider
+
+  QwtSlider* muStarSlider = new QwtSlider(Qt::Horizontal, this);
+  muStarSlider->setScalePosition(QwtSlider::LeadingScale);
+  muStarSlider->setScale(0, noEffectBoundary/0.05);
+  muStarSlider->setTotalSteps(100);
+  muStarSlider->setValue(noEffectBoundary);
+  mainSplitter->addWidget(muStarSlider);
+
+  connect(muStarSlider, SIGNAL(valueChanged(double)),
+          this, SLOT(updateNoEffectBoundary(double)));
+
+
+  // third widget of the splitter : tableView
 
   // table view
   CopyableTableView * tableView = new CopyableTableView;

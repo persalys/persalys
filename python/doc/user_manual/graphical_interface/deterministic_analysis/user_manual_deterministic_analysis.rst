@@ -556,7 +556,7 @@ The results window gathers several tabs:
       - the variables which have no effect (:math:`\mu_i < \mu_b*`)
       - the variables which have an effect (:math:`\mu_i < \mu_b*`)
 
-    This boundary :math:`\mu_b*` can be changed by the user by clicking (left-click) on the X-axis.
+    This boundary :math:`\mu_b*` can be changed by the user by moving the slider below the plot.
 
   - the blue dotted line, called 'cv = 0.5' is defined by: :math:`cv = \frac{\sigma_i}{\mu_i*} = 0.5`.
 

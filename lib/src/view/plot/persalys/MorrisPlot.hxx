@@ -67,9 +67,6 @@ class PERSALYS_PLOT_API MorrisPlot : public PlotWidget
 public:
   MorrisPlot(const QString &plotTypeName, const QPointF& initialMarkersCoord, QWidget *parent = 0);
 
-protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event);
-
 public slots:
   void selectPoints(const QRectF&);
   void updateVerticalMarkerValue(const QPointF&);
@@ -77,7 +74,6 @@ public slots:
   void updateFakeUnSelectedMarkerTitle(const QString &title);
 
 signals:
-  void verticalMarkerPositionChanged(double);
   void selectedPointsChanged();
   void selectedPointsChanged(const OT::Indices& ind);
 
