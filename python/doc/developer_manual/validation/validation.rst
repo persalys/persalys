@@ -751,7 +751,7 @@ Deterministic analyses
       - check Elementary effects tab behavior:
 
         - selection of points in the graphs (right click + draw rectangle) : a context menu appears with items : De/select the points
-        - click on the x-axis : move the green vertical line. Check the line's position is synchronized on the two graphs
+        - slider below the plot : moves the green vertical line. Check the line's position is synchronized on the two graphs
         - all points at the left of the green line on the graphs correspond to the lines of the table with a cross in the No effect column
         - the blue points on the graphs correspond to the selected lines of the table
         - the red points on the graphs correspond to the unselected lines of the table

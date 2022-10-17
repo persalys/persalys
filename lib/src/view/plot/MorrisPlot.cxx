@@ -67,26 +67,6 @@ MorrisPlot::MorrisPlot(const QString &plotTypeName, const QPointF& initialMarker
 }
 
 
-bool MorrisPlot::eventFilter(QObject *obj, QEvent *event)
-{
-  if (event->type() == QEvent::MouseButtonPress)
-  {
-    if (obj == axisWidget(QwtPlot::xBottom))
-    {
-      QMouseEvent * mEvent = dynamic_cast<QMouseEvent *>(event);
-      if (mEvent->button() == Qt::LeftButton)
-      {
-        const double newX = invTransform(QwtPlot::xBottom, mEvent->pos().x());
-        verticalMarker_->setValue(QPointF(newX, 0));
-        replot();
-        emit verticalMarkerPositionChanged(newX);
-      }
-    }
-  }
-  return PlotWidget::eventFilter(obj, event);
-}
-
-
 void MorrisPlot::selectPoints(const QRectF& rect)
 {
   const double left = std::min(rect.left(), rect.right());
