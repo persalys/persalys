@@ -47,5 +47,5 @@ Study_0.add(mcAnalysis1)
 
 # evaluation
 evaluation1 = persalys.FieldModelEvaluation("evaluation", PhysicalModel_1)
-evaluation1.setInterestVariables(["z"])
+evaluation1.setInterestVariables(["z", "z2"])
 Study_0.add(evaluation1)
