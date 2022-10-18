@@ -297,6 +297,8 @@ Console Python
 - click Menu->Tools->Python Console
 
   - console shown
+  - check console right-click menu commands description and behavior
+
 - close the console
 
   - console hidden
@@ -321,33 +323,44 @@ Open documentation
 New Study
 ```````````
 
-- click on button New study in the mdiArea
+- click on button New study in the mid Area
 
   - item Study_0 appears in the tree view
 
   - a 'study' window with 6(+2) buttons appears:
+
     - Symbolic model
+
     - Python model
+
     - Coupling
+
     - YACS model (optional)
+
     - FMI model (optional)
-    - Symoblic Field Model
+
+    - Symbolic Field Model
+
     - Python Field Model
+
     - Data model
 
 - click Menu->File->New
 
   - item Study_1 appears in the tree view
+
     - the item is associated with a 'study' window
 
 - click icon New Study in the Tool bar
 
   - item Study_2 appears in the tree view
+
     - the item is associated with a 'study' window
 
 - press keys CTRL + N
 
   - item Study_3 appears in the tree view
+
     - the item is associated with a 'study' window
 
   .. image:: /developer_manual/validation/otstudyWindow.png
@@ -582,7 +595,7 @@ Models
 
   - click on reload button : the troublesome line is back, along with the message
 
-  - run the data cleaning wizard using the popop right click menu
+  - run the data cleaning wizard using the popup right click menu
 
   - choose one of the replacement/removing feature
 
@@ -772,8 +785,8 @@ Deterministic analyses
 
       - check the table is read-only
       - click on Finish
-      - check that x_2 and x_3 are unselected
-      - uncheck x_1
+      - check that x_3 is unselected
+      - uncheck x_2
 
   - Calibration : item calibration
 
@@ -903,6 +916,7 @@ Designs of experiments
           :align: center
 
       - type : Full factorial design
+        Probabilistic design is disabled
 
       - check the doc link (Help button)
 
@@ -998,7 +1012,7 @@ Designs of experiments
       .. image:: /developer_manual/validation/design_3_wizard_2nd_page.png
           :align: center
 
-      - Data file : data.csv
+      - Data file : data_da.csv
       - header items : ['x1', '', 'x2', 'x3']
       - when changing a combo box item : the error message 'Each variable must be associated with one column' appears
       - set the second header item to 'x2' and the third one to ''
@@ -1462,7 +1476,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/kriging_wizard_1st_page.png
           :align: center
 
-      - design of experiments : design_1
+      - design of experiments : probaDesign
       - selected outputs : y0, y1
       - method : Kriging
       - continue
@@ -1515,7 +1529,6 @@ Probabilistic analyses
       - left side : 2 variables in the list view
       - right side, tabs : Results - Adequation - Validation - Parameters - Model
       - when changing the variable, the tabs are updated
-      - Metamodel tab : only the plot on the tab
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
       - Validation tab has 3 tabs : Analytical, Test sample, K-Fold
@@ -1526,7 +1539,7 @@ Probabilistic analyses
 
     - right click on the kriging item : choose 'Convert metamodel into physical model'
 
-      - a new item MetaModel_0 appears in the tree view
+      - a new item kriging appears in the tree view
       - click on its sub-item named 'Definition'
       - change the value of x2 to 1.6
       - click on the Check model button
@@ -1534,7 +1547,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/kriging_new_model.png
           :align: center
 
-    - right click on the physical model 'Metamodel0' that got created
+    - right click on the physical model 'kriging' that got created
 
       - click on 'Remove'
       - click on model1 item, the diagram is displayed
@@ -1553,16 +1566,13 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
 
-      - default kriging parameters : Squared exponential covariance model, Constant trend basis type, optimize covariance omdel parameters checked, Scale 1;1, Amplitude 1, continue
+      - default kriging parameters : Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1, Amplitude 1, continue
 
       - metamodel validation: for the computation of the predictivity factor Q2, only analytically is checked, finish
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button and click immediately on the Stop button
       - The result window does not contain the Validation tab
-
-      .. image:: /developer_manual/validation/design_3_result.png
-          :align: center
 
   - Functional chaos: chaos_1 item
 
@@ -1587,7 +1597,7 @@ Probabilistic analyses
 
     - Third page check the values :
 
-      .. image:: /developer_manual/validation/chaos_1_wizard_3rd_page.png
+      .. image:: /developer_manual/validation/kriging_wizard_3rd_page.png
           :align: center
 
       - all validation methods are checked
@@ -1604,7 +1614,6 @@ Probabilistic analyses
 
       - left side : 1 variable in the list view
       - right side, tabs : Results - Adequation - Sobol indices - Validation - Parameters - Model
-      - Metamodel tab : plot + Relative error table
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
       - Validation tab has 3 tabs : Analytical, Test sample, K-Fold
@@ -1631,6 +1640,7 @@ Probabilistic analyses
     - Second page check the values :
 
       - degree : 2
+      - full basis size : 6
       - sparse : checked
       - continue
 
@@ -1649,8 +1659,7 @@ Probabilistic analyses
           :align: center
 
       - left side: 2 variables in the list view
-      - right side: tabs MetaModel - Summary - Sobol indices - Validation - Parameters
-      - Metamodel tab : plot + Relative error table
+      - right side: tabs Results - Adequation - Sobol indices - Validation - Parameters - Model
       - when changing the variable, the tabs are updated
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view : check its behavior
       - check tables are well drawn
@@ -1912,7 +1921,7 @@ Physical model
 - create a new Study
 - click on 'Symbolic model' button of the window of myOTStudy
     - the item SymbolicModel_0 appears in the tree view
-    - a new Physical model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+    - a new Physical model diagram window appears in the mid Area, check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled
 
   .. image:: /developer_manual/validation/physicalModelDiagramWindow.png
@@ -1957,6 +1966,7 @@ Physical model
 
 - click on the 'MetaModel creation' button of the diagram
     - a wizard appears, click on Continue button then on Finish button
+    - the 'Export as model' buttons is enabled
 
 - click on the 'Probabilistic model definition' button of the diagram
     - a window appears, select X0
