@@ -107,6 +107,7 @@ void DiagramPushButton::mousePressEvent(QMouseEvent* event)
 void DiagramPushButton::setEnabled(bool enabled)
 {
   valid_ = enabled;
+  QPushButton::setEnabled(enabled);
   emit enabledChanged(enabled);
 }
 }
