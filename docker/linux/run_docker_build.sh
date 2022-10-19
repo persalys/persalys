@@ -6,9 +6,8 @@ uid=$1
 gid=$2
 
 export MAKEFLAGS="-j8"
+cd /io && ./utils/lint.sh
 cd /tmp
-
-flake8 --max-line-length=130 /io/python
 
 mkdir -p build && cd build
 cmake \
