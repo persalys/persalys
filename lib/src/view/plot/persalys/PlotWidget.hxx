@@ -84,6 +84,12 @@ public:
 
   void plotFronts(const OT::Collection<OT::Sample> & fronts,
                   const OT::UnsignedInteger idx1, const OT::UnsignedInteger idx2);
+  
+  void plotContour(const OT::Collection<OT::Drawable>& drawables,
+                   const OT::UnsignedInteger drawableIndex,
+                   const bool displayGradient,
+                   const bool isPDF);
+  
   /// clear plot
   void clear();
 

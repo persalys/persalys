@@ -20,73 +20,10 @@
  */
 #include "persalys/ContourPlot.hxx"
 
-#include "persalys/CustomScaleDraw.hxx"
-
-#include <openturns/Contour.hxx>
-
-#include <qwt_scale_widget.h>
-#include <qwt_color_map.h>
-#include <qwt_matrix_raster_data.h>
-#include <qwt_plot_spectrogram.h>
-#include <qwt_plot_layout.h>
-
 using namespace OT;
 
 namespace PERSALYS
 {
-
-// Custom QwtMatrixRasterData
-class RasterData : public QwtMatrixRasterData
-{
-public:
-  RasterData(Contour *contour)
-  : QwtMatrixRasterData()
-  , dx_(contour->getX()(1, 0) - contour->getX()(0, 0))
-  , dy_(contour->getY()(1, 0) - contour->getY()(0, 0))
-  {
-    setResampleMode(QwtMatrixRasterData::BilinearInterpolation);
-
-    QVector<double> zValues(contour->getData().getSize());
-    Sample sample(contour->getData());
-    std::copy(&sample(0, 0), &sample(contour->getData().getSize()-1, 0)+1, zValues.begin());
-    setValueMatrix(zValues, contour->getX().getSize());
-  };
-
-
-  QRectF pixelHint(const QRectF & /*area*/) const
-  {
-    const QwtInterval intervalX(interval(Qt::XAxis));
-    const QwtInterval intervalY(interval(Qt::YAxis));
-    if (intervalX.isValid() && intervalY.isValid())
-      return QRectF(intervalX.minValue(), intervalY.minValue(), dx_, dy_);
-    return QRectF();
-  }
-
-private:
-  double dx_;
-  double dy_;
-};
-
-
-// Custom QwtLinearColorMap
-class ColorMap : public QwtLinearColorMap
-{
-public:
-  ColorMap(const QList<double> &levels)
-  : QwtLinearColorMap(Qt::darkBlue, Qt::darkRed)
-  {
-    const double maxLevel = levels[levels.size() - 1];
-    const double minLevel = levels[0];
-    const double intervalWidth = maxLevel - minLevel;
-
-    if (levels.size() > 2) addColorStop((levels[1] - minLevel) / intervalWidth, Qt::blue);
-    if (levels.size() > 3) addColorStop((levels[2] - minLevel) / intervalWidth, Qt::cyan);
-    if (levels.size() > 4) addColorStop((levels[3] - minLevel) / intervalWidth, Qt::green);
-    if (levels.size() > 9) addColorStop((levels[levels.size() - 5] - minLevel) / intervalWidth, Qt::yellow);
-    if (levels.size() > 7) addColorStop((levels[levels.size() - 3] - minLevel) / intervalWidth, "#ffb000"); // orange
-    if (levels.size() > 6) addColorStop((levels[levels.size() - 2] - minLevel) / intervalWidth, Qt::red);
-  }
-};
 
 
 // ContourPlot
@@ -118,69 +55,4 @@ void ContourPlot::updateContour(const Distribution &distribution, const bool isP
 }
 
 
-void ContourPlot::plotContour(const Collection<Drawable>& drawables,
-                              const UnsignedInteger drawableIndex,
-                              const bool displayGradient,
-                              const bool isPDF)
-{
-  // contour
-  Contour * contour = dynamic_cast<Contour*>(drawables[drawableIndex].getImplementation().get());
-  if (!contour)
-    throw InvalidArgumentException(HERE)<< "In plotContour: the drawable is not a Contour";
-
-  // spectrogram
-  QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;
-
-  spectrogram->setRenderThreadCount(0); // use system specific thread count
-  spectrogram->setCachePolicy(QwtPlotRasterItem::PaintCache);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ContourMode, true);
-  spectrogram->setRenderHint(QwtPlotItem::RenderAntialiased, true);
-  spectrogram->setDisplayMode(QwtPlotSpectrogram::ImageMode, displayGradient); // color gradient
-  if (!displayGradient)
-    spectrogram->setDefaultContourPen(QPen(Qt::NoPen));
-
-  // intervals
-  const QwtInterval xInterval(contour->getX().getMin()[0], contour->getX().getMax()[0]);
-  const QwtInterval yInterval(contour->getY().getMin()[0], contour->getY().getMax()[0]);
-  const double maxZ = isPDF ? contour->getData().computeQuantile(0.97)[0] : contour->getData().getMax()[0];
-  const QwtInterval zInterval(contour->getData().getMin()[0], maxZ);
-  // data
-  RasterData * rasterData = new RasterData(contour);
-  rasterData->setInterval(Qt::XAxis, xInterval);
-  rasterData->setInterval(Qt::YAxis, yInterval);
-  rasterData->setInterval(Qt::ZAxis, zInterval);
-  spectrogram->setData(rasterData);
-
-  // levels
-  QList<double> levels;
-  for (UnsignedInteger i = 0; i < drawables.getSize(); ++i)
-  {
-    Contour * contour2 = dynamic_cast<Contour*>(drawables[i].getImplementation().get());
-    if (contour2)
-      levels.append(drawables[i].getLevels()[0]);
-  }
-  std::sort(levels.begin(), levels.end());
-  spectrogram->setContourLevels(levels);
-
-  // color map
-  spectrogram->setColorMap(new ColorMap(levels));
-
-  spectrogram->attach(this);
-
-  // A color bar on the right axis
-  QwtScaleWidget * rightAxis = axisWidget(QwtPlot::yRight);
-  rightAxis->setTitle(tr("Density"));
-  rightAxis->setColorBarEnabled(true);
-  rightAxis->setScaleDraw(new CustomScaleDraw);
-  // - color map
-  rightAxis->setColorMap(zInterval, new ColorMap(levels));
-
-  setAxisScale(QwtPlot::yRight, zInterval.minValue(), zInterval.maxValue());
-  enableAxis(QwtPlot::yRight);
-
-  setAxisScale(QwtPlot::xBottom, xInterval.minValue(), xInterval.maxValue());
-  setAxisScale(QwtPlot::yLeft, yInterval.minValue(), yInterval.maxValue());
-
-  plotLayout()->setAlignCanvasToScales(true);
-}
 }

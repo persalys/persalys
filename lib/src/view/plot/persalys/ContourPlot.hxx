@@ -38,10 +38,7 @@ public:
   void updateContour(const OT::Distribution &distribution, const bool isPDF);
 
 private:
-  void plotContour(const OT::Collection<OT::Drawable>& drawables,
-                   const OT::UnsignedInteger drawableIndex,
-                   const bool displayGradient,
-                   const bool isPDF);
+
 };
 }
 #endif
