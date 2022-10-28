@@ -101,6 +101,8 @@ public:
       const QStringList outNames,
       const QStringList outAxisNames);
 
+  void setEnableContourColorBar(const bool enable);
+
 public slots:
   void contextMenu(const QPoint & pos);
   virtual void replot();
@@ -119,6 +121,7 @@ private:
 private:
 // TODO  QwtPlotGrid * grid_;
   QString plotTypeName_;
+  bool enableContourColorBar_ = true;
 };
 }
 #endif

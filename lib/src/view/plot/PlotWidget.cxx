@@ -789,21 +789,29 @@ void PlotWidget::plotContour(const Collection<Drawable>& drawables,
 
   spectrogram->attach(this);
 
-  // A color bar on the right axis
-  QwtScaleWidget * rightAxis = axisWidget(QwtPlot::yRight);
-  rightAxis->setTitle(tr("Density"));
-  rightAxis->setColorBarEnabled(true);
-  rightAxis->setScaleDraw(new CustomScaleDraw);
-  // - color map
-  rightAxis->setColorMap(zInterval, new ColorMap(levels));
-
-  setAxisScale(QwtPlot::yRight, zInterval.minValue(), zInterval.maxValue());
-  enableAxis(QwtPlot::yRight);
 
   setAxisScale(QwtPlot::xBottom, xInterval.minValue(), xInterval.maxValue());
   setAxisScale(QwtPlot::yLeft, yInterval.minValue(), yInterval.maxValue());
 
+  if (enableContourColorBar_)
+  { 
+    // A color bar on the right axis
+    QwtScaleWidget * rightAxis = axisWidget(QwtPlot::yRight);
+    rightAxis->setTitle(tr("Density"));
+    rightAxis->setColorBarEnabled(true);
+    rightAxis->setScaleDraw(new CustomScaleDraw);
+    // - color map
+    rightAxis->setColorMap(zInterval, new ColorMap(levels));
+    setAxisScale(QwtPlot::yRight, zInterval.minValue(), zInterval.maxValue());
+    enableAxis(QwtPlot::yRight);
+  }
+
   plotLayout()->setAlignCanvasToScales(true);
+}
+
+void PlotWidget::setEnableContourColorBar(const bool enable)
+{
+  enableContourColorBar_ = enable;
 }
 
 }
