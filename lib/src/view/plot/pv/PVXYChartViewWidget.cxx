@@ -427,18 +427,25 @@ void PVXYChartViewWidget::setMarkerSize(const int markerSize)
 
   for (int reprInd = 0; reprInd < getView()->getNumberOfRepresentations(); reprInd++)
   {
-    // set marker style property
-    vtkSMProperty * idvp(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesLineThickness"));
-    QList<QVariant> markerSizes = pqSMAdaptor::getMultipleElementProperty(idvp);
-
-    vtkSMPropertyHelper smph(idvp);
-
+    // set line size property
+    vtkSMProperty * idvpls(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesLineThickness"));
+    QList<QVariant> markerSizes = pqSMAdaptor::getMultipleElementProperty(idvpls);
+    vtkSMPropertyHelper smphls(idvpls);
     for (int cc = 0; cc < markerSizes.size() / 2; cc++)
     {
-      smph.Set(2 * cc + 1, markerSize);
+      smphls.Set(2 * cc + 1, markerSize);
     }
-
     getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("SeriesLineThickness");
+
+    // set marker size property
+    vtkSMProperty * idvpms(getView()->getRepresentation(reprInd)->getProxy()->GetProperty("SeriesMarkerSize"));
+    markerSizes = pqSMAdaptor::getMultipleElementProperty(idvpms);
+    vtkSMPropertyHelper smphms(idvpms);
+    for (int cc = 0; cc < markerSizes.size() / 2; cc++)
+    {
+      smphms.Set(2 * cc + 1, markerSize);
+    }
+    getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("SeriesMarkerSize");
   }
 }
 
