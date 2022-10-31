@@ -132,7 +132,7 @@ private slots:
     paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_1");
     QVERIFY2(paramValueEdit->value() == 0.2, "wrong sigma value");
     paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_2");
-    QVERIFY2(paramValueEdit->value() == 0, "wrong gamma value");
+    QVERIFY2(std::abs(paramValueEdit->value()) < 1e-8, "wrong gamma value");
 
     selectParamTypeCombo->setCurrentIndex(0);
 
