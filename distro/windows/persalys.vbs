@@ -19,6 +19,9 @@ wshEnv("PV_PLUGIN_PATH") = fso.GetAbsolutePathName(currentDirectory + "\BagPlotV
 ' add documentation path in Environment variable PERSALYS_HTML_DOCUMENTATION_PATH
 wshEnv("PERSALYS_HTML_DOCUMENTATION_PATH") = currentDirectory + "\doc\html\"
 
+' https://github.com/pal1000/mesa-dist-win/blob/master/readme.md#opengl-context-configuration-override
+wshEnv("MESA_GL_VERSION_OVERRIDE") = "4.5"
+
 ' allows to find the GL driver in the current directory: https://github.com/qt/qtbase/commit/a14f2d59
 wshEnv("QT_OPENGL_DLL") = "opengl32"
 
