@@ -1,3 +1,8 @@
+= 13.0.1 release (2022-10-31)
+
+ * win32 OpenGL context creation fix
+ * PVXYChart marker selection fix
+
 = 13.0 release (2022-10-18)
 
  * Linear regression
