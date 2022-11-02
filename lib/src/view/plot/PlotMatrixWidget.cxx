@@ -97,8 +97,8 @@ PlotMatrixWidget::PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample 
         plot->plotScatter(sample1.getMarginal(j), sample2.getMarginal(i), scatterPen);
       plot->enableAxis(QwtPlot::xBottom, false);
       plot->enableAxis(QwtPlot::yLeft, false);
-      // hide borders: #f6f7fa is white
-      plot->canvas()->setStyleSheet("QwtPlotCanvas {background-color: #f6f7fa;}");
+      // hide borders
+      plot->canvas()->setStyleSheet("QwtPlotCanvas {background-color: #ffffff;}");
       cellMatrixLayout->addWidget(plot);
       tableWidget_->setCellWidget(i, j, cellMatrixWidget);
 
