@@ -82,6 +82,8 @@
 #include "persalys/CopulaInferenceWizard.hxx"
 #include "persalys/CalibrationAnalysisWizard.hxx"
 
+#include <QDebug>
+
 namespace PERSALYS
 {
 

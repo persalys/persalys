@@ -58,7 +58,12 @@ QString SimpleException::text() const
 
 const char *SimpleException::what() const throw()
 {
-  return text_.toStdString().c_str();
+  const std::string message(text_.toStdString());
+  const std::string::size_type size = message.size();
+  const char *src = message.c_str();
+  char *buffer = new char[size + 1];
+  std::copy(src, src + size + 1, buffer);
+  return buffer;
 }
 
 

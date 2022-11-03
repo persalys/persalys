@@ -68,7 +68,7 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-  void setBlockSize(const OT::UnsignedInteger blockSize);
+  void setBlockSize(const OT::UnsignedInteger blockSize) override;
   OT::UnsignedInteger getBlockSize() const;
 
 protected:

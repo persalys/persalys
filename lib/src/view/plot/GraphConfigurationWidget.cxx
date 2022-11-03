@@ -29,6 +29,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QScrollArea>
+#include <QDebug>
 
 namespace PERSALYS
 {

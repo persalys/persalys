@@ -41,13 +41,14 @@
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/TruncatedNormal.hxx>
+#include <openturns/UserDefined.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDesktopServices>
-#include <openturns/UserDefined.hxx>
+#include <QDebug>
 
 using namespace OT;
 

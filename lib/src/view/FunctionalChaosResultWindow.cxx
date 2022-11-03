@@ -39,6 +39,7 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
+#include <QDebug>
 
 using namespace OT;
 
