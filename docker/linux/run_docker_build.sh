@@ -75,6 +75,7 @@ cp -v /usr/lib64/libpng15.so.15 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libjpeg.so.62 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libicu*.so.50 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libxcb-*.so.[0-9] persalys.AppDir/usr/lib && rm persalys.AppDir/usr/lib/libxcb-dri3.so.0
+cp -v /usr/lib64/libfreebl3.so persalys.AppDir/usr/lib
 
 # python
 sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python
