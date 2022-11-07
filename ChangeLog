@@ -1,3 +1,7 @@
+= 13.0.2 release (2022-11-07)
+
+ * Missing nss lib in AppImage
+
 = 13.0.1 release (2022-10-31)
 
  * win32 OpenGL context creation fix

@@ -15,7 +15,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           persalys
-Version:        13.0.1
+Version:        13.0.2
 Release:        0%{?dist}
 Summary:        GUI for OpenTURNS
 Group:          System Environment/Libraries
