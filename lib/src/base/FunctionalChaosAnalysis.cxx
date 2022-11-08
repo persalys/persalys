@@ -25,6 +25,7 @@
 #include <openturns/LinearEnumerateFunction.hxx>
 #include <openturns/FixedStrategy.hxx>
 #include <openturns/LeastSquaresStrategy.hxx>
+#include <openturns/KFold.hxx>
 #include <openturns/BasisSequenceFactory.hxx>
 #include <openturns/LeastSquaresMetaModelSelectionFactory.hxx>
 #include <openturns/LegendreFactory.hxx>
@@ -268,7 +269,7 @@ FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(
     BasisSequenceFactory basisSequenceFactory = LARS();
     basisSequenceFactory.setMaximumRelativeConvergence(-1.0);
     projectionStrategy = LeastSquaresStrategy(LeastSquaresMetaModelSelectionFactory(basisSequenceFactory,
-                         CorrectedLeaveOneOut()));
+                         KFold()));
   }
 
   // FunctionalChaosAlgorithm
