@@ -287,11 +287,8 @@ void LinearRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysisResu
       quadraticResidual += diff * diff;
     }
 
-    const Scalar traceInverse = AtA_inv.getImplementation()->computeTrace();
-    const Scalar correctingFactor = (1.0 * sampleSize) / (sampleSize - basisSize) * (1.0 + traceInverse);
-
     // 1 - sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ] / (n-1) / Var Y
-    q2[i] = 1.0 - correctingFactor * (quadraticResidual / (sampleSize - 1.0)) / variance[i];
+    q2[i] = 1.0 - (quadraticResidual / (sampleSize - 1.0)) / variance[i];
   }
   result.analyticalValidation_.q2_ = q2;
 }
