@@ -229,11 +229,7 @@ LinearModelStepwiseAlgorithm LinearRegressionAnalysis::buildAlgo(const OT::Sampl
   const Indices minimalIndices(1, 0);
   const Indices startIndices(1, 0);
 
-#if OPENTURNS_VERSION >= 102000
   LinearModelStepwiseAlgorithm algo(inputSample, outputSample, getBasis(), minimalIndices, LinearModelStepwiseAlgorithm::BOTH, startIndices);
-#else
-  LinearModelStepwiseAlgorithm algo(inputSample, getBasis(), outputSample, minimalIndices, LinearModelStepwiseAlgorithm::BOTH, startIndices);
-#endif
   algo.setPenalty(std::log(inputSample.getSize()));
   return algo;
 }

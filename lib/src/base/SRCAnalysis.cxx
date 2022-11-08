@@ -142,11 +142,7 @@ void SRCAnalysis::launch()
 
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-#if OPENTURNS_VERSION >= 102000
     const Point signedSRC(CorrelationAnalysis(effectiveInputSample, outputSample.getMarginal(i)).computeSRC());
-#else
-    const Point signedSRC(CorrelationAnalysis::SignedSRC(effectiveInputSample, outputSample.getMarginal(i)));
-#endif
     signedIndices.add(signedSRC);
     Point unscaledSRC;
     for (UnsignedInteger j = 0; j < nbInputs; ++j)
@@ -190,11 +186,7 @@ void SRCAnalysis::launch()
     const Sample bootstrapSample(bootstrapExp.generate());
     for (UnsignedInteger j = 0; j < nbOutputs; ++j)
     {
-#if OPENTURNS_VERSION >= 102000
       const Point signedSRC(CorrelationAnalysis(bootstrapSample.getMarginal(inIndices), bootstrapSample.getMarginal(nbInputs + j)).computeSRC());
-#else
-      const Point signedSRC(CorrelationAnalysis::SignedSRC(bootstrapSample.getMarginal(inIndices), bootstrapSample.getMarginal(nbInputs + j)));
-#endif
       signedSRCBootstrap[j].add(signedSRC);
 
       Point unscaledSRC;

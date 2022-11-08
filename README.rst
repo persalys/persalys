@@ -28,7 +28,7 @@ Development
 Dependencies:
 
 - CMake >=3.8
-- OpenTURNS >=1.19
+- OpenTURNS >=1.20
 - otfmi >=0.14 (optional, for FMI support)
 - otmorris >=0.9 (optional, for Morris support)
 - Qt >=5
