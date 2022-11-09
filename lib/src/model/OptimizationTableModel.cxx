@@ -27,6 +27,12 @@ using namespace OT;
 namespace PERSALYS
 {
 
+OptimizationTableModel::OptimizationTableModel(QObject * parent)
+  : QAbstractTableModel(parent)
+  , firstColumnChecked_(false)
+{
+}
+
 OptimizationTableModel::OptimizationTableModel(const OptimizationAnalysis & analysis, QObject * parent)
   : QAbstractTableModel(parent)
   , analysis_(analysis)

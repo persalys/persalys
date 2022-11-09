@@ -20,6 +20,8 @@
  */
 #include "persalys/PhysicalModelDiagramWindow.hxx"
 
+#include <openturns/PlatformInfo.hxx>
+
 namespace PERSALYS
 {
 
@@ -65,6 +67,17 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool)), optimizationCreationButton, SLOT(setEnabled(bool)));
 
   appendButton(optimizationCreationButton, ++row, modelDefinitionButton);
+
+  if (OT::PlatformInfo::HasFeature("pagmo")) {
+    DiagramPushButton * moOptimizationCreationButton = new DiagramPushButton;
+    moOptimizationCreationButton->setText(tr("Multi-objective\noptimization"));
+    moOptimizationCreationButton->setWhatsThis(tr("Multi-objective optimization of the model function"));
+    moOptimizationCreationButton->setErrorMessage(tr("Define least two output variables in the model"));
+    connect(moOptimizationCreationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newMoOptimization_, SIGNAL(triggered()));
+    connect(physicalModelDiagramItem, SIGNAL(outputNumberValidityChanged(bool)), moOptimizationCreationButton, SLOT(setEnabled(bool)));
+
+    appendButton(moOptimizationCreationButton, ++row, modelDefinitionButton);
+  }
 
   DiagramPushButton * observationButton = new DiagramPushButton;
   observationButton->setText(tr("Observations"));

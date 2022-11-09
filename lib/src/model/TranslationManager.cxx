@@ -194,10 +194,14 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("θ prior\nSpearman correlation", tr("θ prior\nSpearman correlation")));
   ParametersNames_.insert(type("Error\ncovariance", tr("Error\ncovariance")));
   ParametersNames_.insert(type("θ prior", tr("θ prior")));
-  ParametersNames_.insert(type("Fixed inputs", tr("Fixed inputs")));
   ParametersNames_.insert(type("Confidence interval length", tr("Confidence interval length")));
   ParametersNames_.insert(type("Bootstrap resampling size", tr("Bootstrap resampling size")));
   ParametersNames_.insert(type("Maximum number of function evaluations", tr("Maximum number of function evaluations")));
+  ParametersNames_.insert(type("Number of generations", tr("Number of generations")));
+  ParametersNames_.insert(type("Initial population size", tr("Initial population size")));
+  ParametersNames_.insert(type("Initial population size", tr("Initial population size")));
+  ParametersNames_.insert(type("Objectives", tr("Objectives")));
+  ParametersNames_.insert(type("Constraints", tr("Constraints")));
 }
 
 
@@ -209,6 +213,7 @@ void TranslationManager::InitializeErrorMessages()
   ErrorMessages_.insert(type("The physical model must have inputs.", tr("The physical model must have inputs.")));
   ErrorMessages_.insert(type("The design of experiments must contain data for input and output variables.", tr("The design of experiments must contain data for input and output variables.")));
   ErrorMessages_.insert(type("The physical model must have at least two inputs.", tr("The physical model must have at least two inputs.")));
+  ErrorMessages_.insert(type("The physical model must have at least two outputs.", tr("The physical model must have at least two outputs.")));
   ErrorMessages_.insert(type("The physical model must have inputs and at least a selected output.", tr("The physical model must have inputs and at least a selected output.")));
   ErrorMessages_.insert(type("The physical model must have stochastic inputs.", tr("The physical model must have stochastic inputs.")));
   ErrorMessages_.insert(type("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.", tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.")));

@@ -48,6 +48,7 @@
 #include <qwt_picker_machine.h>
 #include <qwt_scale_widget.h>
 #include <qwt_plot_marker.h>
+#include <qwt_legend_label.h>
 
 using namespace OT;
 
@@ -479,6 +480,68 @@ void PlotWidget::updateScaleParameters(const Distribution & distribution)
   setAxisScale(QwtPlot::xBottom, x1, x2, stepSize);
 }
 
+void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
+                            const UnsignedInteger idx1, const UnsignedInteger idx2)
+{
+
+  const Description colors(Drawable().BuildRainbowPalette(allFronts.getSize()));
+  Sample data;
+  Indices indices;
+  indices.add(idx1);
+  indices.add(idx2);
+  // Loop over all fronts
+  for (UnsignedInteger j=0; j<allFronts.getSize(); ++j) {
+    if (allFronts[j].getDimension()==2) {
+      Sample front = allFronts[j].getMarginal(indices).sortAccordingToAComponent(0);
+      data = Sample(2*front.getSize()-1, 2);
+      // Build front points and link them
+      for (UnsignedInteger i=0; i<front.getSize(); ++i) {
+        data[2*i] = front[i];
+        if (i != front.getSize()-1) {
+          data(2*i+1, 0) = front(i+1, 0);
+          data(2*i+1, 1) = front(i, 1);
+        }
+      }
+    } else {
+      // Get side view marginals sub samples and plot only front points
+      data = allFronts[j].getMarginal(indices).sortAccordingToAComponent(0);
+    }
+    // Draw
+    if (j<MaxVisibleVariableNumber) {
+      QwtSymbol * symbol = new QwtSymbol(QwtSymbol::Ellipse,
+                                         QBrush(colors[j].c_str()).color(),
+                                         QPen(colors[j].c_str()).color(),
+                                         QSize(7, 7));
+      plotCurve(data, QPen(colors[j].c_str()).color(),
+                allFronts[j].getDimension()==2 ? QwtPlotCurve::Lines : QwtPlotCurve::Dots,
+                symbol, QString("front"+QString::number(j)));
+    }
+  }
+
+  QwtLegend *legend = new QwtLegend();
+  legend->setDefaultItemMode(QwtLegendData::Checkable);
+  insertLegend(legend, QwtPlot::RightLegend);
+
+  // Loop over legend items ans set them checked
+  QwtPlotItemList items = itemList();
+  for (int i=0; i<items.size(); i++)
+  {
+    const QVariant itemInfo = itemToInfo(items[i]);
+    QwtLegendLabel* legendLabel =
+      qobject_cast< QwtLegendLabel* >(legend->legendWidget(itemInfo));
+    if (legendLabel)
+      legendLabel->setChecked(true );
+  }
+
+  connect(legend, SIGNAL(checked(const QVariant &, bool, int)),
+          this, SLOT(showCurve(const QVariant &, bool, int)));
+}
+
+void PlotWidget::showCurve(const QVariant &itemInfo, bool on, int /*index*/)
+{
+  infoToItem(itemInfo)->setVisible(on);
+  replot();
+}
 
 void PlotWidget::clear()
 {

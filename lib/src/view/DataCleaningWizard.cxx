@@ -20,7 +20,6 @@
  */
 
 #include "persalys/DataCleaningWizard.hxx"
-#include "persalys/ComboBoxDelegate.hxx"
 #include "persalys/SampleTableModel.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/LineEditWithQValidatorDelegate.hxx"

@@ -101,8 +101,11 @@ ot_add_source_file ( CopulaParametersTabWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWidget.cxx )
 ot_add_source_file ( CopulaInferenceResultWindow.cxx )
 ot_add_source_file ( OptimizationAlgoPage.cxx )
+ot_add_source_file ( ConstraintsPage.cxx )
 ot_add_source_file ( OptimizationWizard.cxx )
 ot_add_source_file ( OptimizationResultWindow.cxx )
+ot_add_source_file ( MultiObjectiveOptimizationResultWindow.cxx )
+ot_add_source_file ( MultiObjectiveOptimizationWizard.cxx )
 ot_add_source_file ( WidgetBoundToDockWidget.cxx )
 ot_add_source_file ( MarginalsWidget.cxx )
 ot_add_source_file ( DependenciesWidget.cxx )
@@ -224,8 +227,11 @@ ot_install_header_file ( CopulaInferenceResultWidget.hxx )
 ot_install_header_file ( CopulaInferenceResultWindow.hxx )
 ot_install_header_file ( CopulaParametersTabWidget.hxx )
 ot_install_header_file ( OptimizationAlgoPage.hxx )
+ot_install_header_file ( ConstraintsPage.hxx )
 ot_install_header_file ( OptimizationWizard.hxx )
 ot_install_header_file ( OptimizationResultWindow.hxx )
+ot_install_header_file ( MultiObjectiveOptimizationResultWindow.hxx )
+ot_install_header_file ( MultiObjectiveOptimizationWizard.hxx )
 ot_install_header_file ( WidgetBoundToDockWidget.hxx )
 ot_install_header_file ( MarginalsWidget.hxx )
 ot_install_header_file ( DependenciesWidget.hxx )
@@ -341,8 +347,11 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CopulaInferenceResultWindow.hxx
                                   persalys/CopulaParametersTabWidget.hxx
                                   persalys/OptimizationAlgoPage.hxx
+                                  persalys/ConstraintsPage.hxx
                                   persalys/OptimizationWizard.hxx
                                   persalys/OptimizationResultWindow.hxx
+                                  persalys/MultiObjectiveOptimizationResultWindow.hxx
+                                  persalys/MultiObjectiveOptimizationWizard.hxx
                                   persalys/WidgetBoundToDockWidget.hxx
                                   persalys/MarginalsWidget.hxx
                                   persalys/DependenciesWidget.hxx

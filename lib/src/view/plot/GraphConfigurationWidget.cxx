@@ -454,4 +454,68 @@ SensitivityIndicesGraphSetting::SensitivityIndicesGraphSetting(PlotWidget *plotW
   addExportLayout();
   frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 }
+
+// ----------- FrontsGraphSetting -----------
+
+FrontsGraphSetting::FrontsGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &outputNames, QWidget *parent)
+  : GraphConfigurationWidget(plotWidgets, parent)
+{
+  int rowGrid = frameLayout_->rowCount();
+  // X-axis combobox
+  QLabel * label = new QLabel(tr("X-axis"));
+  frameLayout_->addWidget(label, rowGrid, 0);
+
+  xAxisComboBox_ = new QComboBox;
+  for (int i = 0; i < outputNames.size(); ++i)
+    xAxisComboBox_->addItem(outputNames[i]);
+
+  frameLayout_->addWidget(xAxisComboBox_, rowGrid, 1);
+  connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
+
+  // Y-axis combobox
+  label = new QLabel(tr("Y-axis"));
+  frameLayout_->addWidget(label, ++rowGrid, 0);
+
+  yAxisComboBox_ = new QComboBox;
+  frameLayout_->addWidget(yAxisComboBox_, rowGrid, 1);
+  connect(yAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(currentPlotIndexChanged(int)));
+
+  // axis, plot properties
+  addXYAxisTabs();
+  frameLayout_->addWidget(propertiesTabWidget_, ++rowGrid, 0, 1, 2);
+  // export button
+  addExportLayout();
+  frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
+
+  updateYComboBox();
+}
+
+
+void FrontsGraphSetting::updateYComboBox()
+{
+  const QString currentYText = yAxisComboBox_->currentText();
+  SignalBlocker blocker(yAxisComboBox_);
+  yAxisComboBox_->clear();
+
+  QStringList outputNames;
+  for (int i = 0; i < xAxisComboBox_->count(); ++i)
+    if (i != xAxisComboBox_->currentIndex()) // must have x != y
+      outputNames << xAxisComboBox_->itemText(i);
+
+  yAxisComboBox_->addItems(outputNames);
+  yAxisComboBox_->setCurrentText(currentYText);
+
+  currentPlotIndexChanged();
+}
+
+
+void FrontsGraphSetting::currentPlotIndexChanged(int /*i*/)
+{
+  const int output1Index = xAxisComboBox_->currentIndex();
+  const int output2Index = yAxisComboBox_->currentIndex();
+  const int output2Count = yAxisComboBox_->count();
+  plotIndex_ = output1Index * output2Count + output2Index;
+  GraphConfigurationWidget::currentPlotIndexChanged(plotIndex_);
+}
+
 }

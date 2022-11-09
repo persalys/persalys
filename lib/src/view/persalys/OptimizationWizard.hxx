@@ -27,6 +27,7 @@
 #include "persalys/LogDoubleSpinBox.hxx"
 #include "persalys/UIntSpinBox.hxx"
 #include "persalys/OptimizationAlgoPage.hxx"
+#include "persalys/ConstraintsPage.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
 
 #include <QGridLayout>
@@ -113,6 +114,7 @@ protected:
 private:
   OptimizationAlgoPage * algoPage_;
   OptimizationBoundsPage * boundsPage_;
+  ConstraintsPage * cstrPage_;
   QComboBox * pbTypeComboBox_;
   OptimizationStoppingCriteria * stoppingCriteriaLayout_;
 };

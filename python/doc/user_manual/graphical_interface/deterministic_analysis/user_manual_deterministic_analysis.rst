@@ -790,14 +790,171 @@ The results window gathers the following tabs:
 
 - The **Model** tab shows the model content used to perform the analysis.
 
-5- Observations
+5- Multi-objective Optimization
+===============================
+
+The user may optimize simultaneously several physical model outputs.
+
+New model multi-objective optimization can be created through:
+  - the **Multi-objective optimization** item in the context menu of the relevant model in the study tree
+
+    .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
+        :align: center
+
+  - the **Multi-objective optimization** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
+        :align: center
+
+  - the **New Analysis** context menu of the **Multi-objective optimization** section
+
+.. _mooptimizationwizard:
+
+5-1 Definition
+''''''''''''''
+
+When this analysis is requested, the following window appears:
+  - The outputs of interest (**Select outputs** - defaults to selected
+    outputs from the physical model window). At least
+    two outputs must be selected.
+  - The method of optimizations are listed in the table
+    below. Proposed algorithms are from pagmo library and given by
+    OpenTURNS
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/mooptimizationWizardFirstPage.png
+    :align: center
+
+In next window, one can set up the type of the optimization:
+Minimization or Maximization (default: Minimization) for each of the
+output of interest.
+
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/mooptimizationWizardSecondPage.png
+    :align: center
+
+In next window, one can optionally set up the constraints associated
+to the optimization problem outputs.
+
+- First column: the output of interest that needs to be constrained.
+
+- Second column: the operator type (<,>,=)
+
+- Third column: the threshold the constraint must respect (must be a floating point value)
+
+
+Constraints can be added/removed using the **Add/Remove**
+buttons. Removing a specific constraint can be done by first selecting
+the corresponding line then clicking the remove button.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/mooptimizationWizardThirdPage.png
+    :align: center
+
+In next window, the user can specify the bounds and/or fixed values
+for input variables. The bounds will define the algorithm initial
+population and evolution domain. If a variable must not evolve and
+remain constant, deselect it and specify its value.
+
+- *First column*: input variables, uncheck the box if the input must
+  remain constant.
+
+- *Second column*: variable description, as specified during the model
+  definition stage
+
+- *Third column*: fixed value for constant variables. The cell is
+  disabled if the variable is checked
+
+- *Fourth and Fifth columns*: define the bounds of the variable
+  inputs. The lower bound must be less than the upper bound. The cells
+  are disabled if the variable are unchecked.
+
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/mooptimizationWizardFourthPage.png
+    :align: center
+
+In the fifth and last window, the user can specify the evolutive algorithm parameters.
+
+  - Number of generations (or number of evolution steps)
+
+  - Initial population size (number of points in each evolution step)
+
+  - Random generator seed.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/mooptimizationWizardFifthPage.png
+    :align: center
+
+
+5-2 Launch
+''''''''''
+
+When the « Multi-objective optimization » window is validated, a new element appears in the study tree, below
+**Multi-objective optimization**.
+
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis
+  - **Modify**: Reopen the setting window to change the analysis parameters
+  - **Remove**: Remove the analysis
+
+This item is associated with a window showing the parameter list, a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/mooptimizationWindow.png
+    :align: center
+
+Click on the **Start** button to launch the analysis.
+
+
+.. _mooptimresult:
+
+5-3 Results
+'''''''''''
+
+When the analysis is finished, a result window appears.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/mooptimizationResultWindow.png
+    :align: center
+
+The results window gathers the following tabs:
+
+- The **Result** tab includes:
+
+  - The pareto fronts plot.
+
+    - Up to twelve fronts are represented in a different color in a 2D
+      plane. The first front (front0) contains the best candidates
+      according to the objectives.
+
+    - Use the :ref:`Graph settings <secondgraphsettings>` window to
+      set up graphical parameters and select the variables to plot on
+      X-axis and Y-axis (default: first versus second input)
+
+    - Graph interactivity:
+
+      - click on a legend item to show/hide the corresponding front
+
+      - Left-click to translate the graph
+
+      - Mouse wheel up/down to zoom in/zoom out
+
+    - The final population table
+
+      - Data points obtained once the evolution is completed. An
+        additional column specifies the pareto front index the point
+        belongs to.
+
+
+- The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
+
+- The **Model** tab shows the model content used to perform the analysis.
+
+
+6- Observations
 ===============
 
 To perform a calibration analysis, define first observations for at least one output and one input.
 
 .. _observationwizard:
 
-5-1 Definition
+6-1 Definition
 ''''''''''''''
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentImport.png
@@ -810,7 +967,7 @@ Define observations for at least one output and one input.
 
 .. _observationwindow:
 
-5-2 Results
+6-2 Results
 '''''''''''
 
 When the sample is defined, a new element appears in the study tree, below **Calibration**.
@@ -820,7 +977,7 @@ This item is associated with a window showing a table of the observation values.
     :align: center
 
 
-6- Calibration
+7- Calibration
 ===============
 
 The interface proposes to `calibrate <http://openturns.github.io/openturns/latest/theory/data_analysis/code_calibration.html>`_ the physical model.
@@ -840,7 +997,7 @@ New model calibration can be created through:
 
 .. _calibrationwizard:
 
-6-1 Definition
+7-1 Definition
 ''''''''''''''
 
 When this analysis is required, the following window appears, in order to set up:
@@ -872,7 +1029,7 @@ When a rule is not respected:
   - an error message appears when clicking on the **Continue** button
   - it is impossible to go to the next page
 
-6-1-1 Gaussian methods
+7-1-1 Gaussian methods
 ~~~~~~~~~~~~~~~~~~~~~~
 
 In the next window set up the prior distribution covariance matrix.
@@ -889,7 +1046,7 @@ The mean is zero. Default standard deviation is 0.1.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/calibrationWizard_gaussianError.png
     :align: center
 
-6-1-2 Linear methods
+7-1-2 Linear methods
 ~~~~~~~~~~~~~~~~~~~~
 
 In the last window set up the confidence interval length of the posterior distribution.
@@ -897,7 +1054,7 @@ In the last window set up the confidence interval length of the posterior distri
 .. image:: /user_manual/graphical_interface/deterministic_analysis/calibrationWizard_lastPage_linear.png
     :align: center
 
-6-1-3 Non linear methods
+7-1-3 Non linear methods
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the last window set up:
@@ -912,7 +1069,7 @@ In the last window set up:
     :align: center
 
 
-6-2 Launch
+7-2 Launch
 ''''''''''
 
 When the « Calibration » window is validated, a new element appears in the study tree, below
@@ -934,7 +1091,7 @@ Click on the **Start** button to launch the analysis.
 
 .. _calibrationresult:
 
-6-3 Results
+7-3 Results
 '''''''''''
 
 When the analysis is finished, a result window appears.

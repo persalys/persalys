@@ -62,12 +62,15 @@ class PERSALYS_VIEW_API OptimizationAlgoPage : public QWizardPage
 
 public:
   OptimizationAlgoPage(QWidget* parent = 0);
-
   OT::Description getInterestVariables() const;
 
   OT::String getSolverName() const;
 
   virtual bool validatePage();
+  void buildInterface();
+
+signals:
+  void outputSelected();
 
 protected slots:
   void initialize(OptimizationAnalysis&);
@@ -75,15 +78,17 @@ protected slots:
   void updateFilters();
   void openDoc(QModelIndex);
 
-private:
+protected:
   OT::Description solverNames_;
   QTableView * algoTableView_;
   CustomStandardItemModel * algoTableModel_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
+  TemporaryLabel * errorMessageLabel_;
+
+private:
   AlgoFilterProxyModel * proxyModel_;
   QComboBox * derivativeCombobox_;
   QComboBox * localityCombobox_;
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  TemporaryLabel * errorMessageLabel_;
 };
 
 

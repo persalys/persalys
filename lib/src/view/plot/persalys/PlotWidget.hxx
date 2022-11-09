@@ -82,6 +82,8 @@ public:
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");
 
+  void plotFronts(const OT::Collection<OT::Sample> & fronts,
+                  const OT::UnsignedInteger idx1, const OT::UnsignedInteger idx2);
   /// clear plot
   void clear();
 
@@ -99,6 +101,8 @@ public slots:
   void exportPlot();
   void setXLabelOrientation(int);
   void resetAxisRanges();
+  void showCurve(const QVariant &itemInfo, bool on, int /*index*/);
+
 
 signals:
   void plotChanged();

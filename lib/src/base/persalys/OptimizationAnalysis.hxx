@@ -71,7 +71,7 @@ public:
 
   void setInterestVariables(const OT::Description& variablesNames) override;
 
-  void updateParameters();
+  virtual void updateParameters();
 
   static OT::Description GetSolverNames();
   static OT::Description GetSolverNames(const OT::Interval& bounds);
@@ -79,10 +79,19 @@ public:
   static std::map<OT::String, AlgorithmProperty> AlgorithmDictionary;
 
   OT::String getSolverName() const;
-  void setSolverName(const OT::String& name);
+  virtual void setSolverName(const OT::String& name);
 
   OT::Point getStartingPoint() const;
   void setStartingPoint(const OT::Point & startingPoint);
+
+  OT::OptimizationProblem defineProblem();
+
+  /** Constraints **/
+  void addConstraint(const OT::String& leftPart, const OT::String& op,
+                     const OT::String& rightPart);
+  void addConstraint(const OT::String& equation);
+  void resetConstraints();
+  OT::Description getRawEquations() const {return rawEqs_;};
 
   /** Maximum evaluations number accessor */
   void setMaximumEvaluationNumber(const OT::UnsignedInteger maximumEvaluationNumber);
@@ -132,22 +141,32 @@ protected:
   void initializeParameters();
   void initialize() override;
   void launch() override;
-  static OT::Description SolverNames_;
-
-private:
+  OT::Function getEqualityConstraints();
+  OT::Function getInequalityConstraints();
+  OT::Function transformEquations(OT::Description& eqs);
   OT::Description inputNames_;
   OT::String solverName_;
-  OT::Bool isMinimization_;
   OT::Point startingPoint_;
+  OT::Interval bounds_;
+  OT::Description variableInputs_;
+  OT::OptimizationResult result_;
+  OT::Description eqFunc_;
+  OT::Description ineqFunc_;
+  OT::Description rawEqs_;
+  OT::Indices variableInputsIndices_;
+
+
+private:
+  OT::Bool isMinimization_ = true;
   /** Number of outermost iterations (in case of nested iterations) */
   OT::UnsignedInteger maximumEvaluationNumber_;
   OT::Scalar maximumAbsoluteError_;    /**< Value of ||x_n - x_{n-1}|| */
   OT::Scalar maximumRelativeError_;    /**< Value of ||x_n - x_{n-1}|| / ||x_n|| */
   OT::Scalar maximumResidualError_;    /**< Value of ||objectiveFunction(x_n) - objectiveFunction(x_{n-1})|| */
   OT::Scalar maximumConstraintError_;  /**< Value of ||constraints(x_n)|| for the active constraints */
-  OT::Interval bounds_;
-  OT::Description variableInputs_;
-  OT::OptimizationResult result_;
+  OT::Point variableInputsValues_;
+
+
 };
 }
 #endif

@@ -50,6 +50,7 @@
 #include "persalys/DataAnalysisResultWindow.hxx"
 #include "persalys/ModelEvaluationResultWindow.hxx"
 #include "persalys/OptimizationResultWindow.hxx"
+#include "persalys/MultiObjectiveOptimizationResultWindow.hxx"
 #include "persalys/MonteCarloResultWindow.hxx"
 #include "persalys/TaylorExpansionMomentsResultWindow.hxx"
 #include "persalys/SobolResultWindow.hxx"
@@ -74,6 +75,7 @@
 #include "persalys/DesignOfExperimentWizard.hxx"
 #include "persalys/ModelEvaluationWizard.hxx"
 #include "persalys/OptimizationWizard.hxx"
+#include "persalys/MultiObjectiveOptimizationWizard.hxx"
 #include "persalys/CentralTendencyWizard.hxx"
 #include "persalys/SensitivityAnalysisWizard.hxx"
 #include "persalys/ReliabilityAnalysisWizard.hxx"
@@ -225,6 +227,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   {
     wizard = new OptimizationWizard(analysis, parent);
   }
+  else if (analysisType == "MultiObjectiveOptimizationAnalysis")
+  {
+    wizard = new MultiObjectiveOptimizationWizard(analysis, parent);
+  }
   else if (analysisType == "FunctionalChaosAnalysis" ||
            analysisType == "KrigingAnalysis" ||
 	   analysisType == "LinearRegressionAnalysis")
@@ -310,6 +316,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   else if (analysisType == "OptimizationAnalysis")
   {
     resultWindow = new OptimizationResultWindow(item, parent);
+  }
+  else if (analysisType == "MultiObjectiveOptimizationAnalysis")
+  {
+    resultWindow = new MultiObjectiveOptimizationResultWindow(item, parent);
   }
   else if (analysisType == "MonteCarloAnalysis")
   {
