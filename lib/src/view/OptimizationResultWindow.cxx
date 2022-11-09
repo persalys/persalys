@@ -27,6 +27,8 @@
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/TranslationManager.hxx"
+
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -54,7 +56,7 @@ OptimizationResultWindow::OptimizationResultWindow(AnalysisItem * item, QWidget 
   result_ = analysis->getResult();
 
   // title
-  const QString type = item->getAnalysis().getImplementation()->getParameters()[3].second.c_str();
+  const QString type = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[3].second.c_str());
   const QString methodName = item->getAnalysis().getImplementation()->getParameters()[2].second.c_str();
   titleLabel_ = new TitleLabel(type + " - " + methodName, "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#optimresult");
 

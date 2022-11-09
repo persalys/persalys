@@ -30,6 +30,8 @@
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/TranslationManager.hxx"
+
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include "persalys/PVServerManagerInterface.hxx"
@@ -78,7 +80,7 @@ namespace PERSALYS
     result_ = analysis->getResult();
 
     // title
-    const QString type = analysis->getParameters()[0].second.c_str();
+    const QString type = TranslationManager::GetTranslatedParameterName(analysis->getParameters()[0].second.c_str());
     const QString methodName = analysis->getParameters()[2].second.c_str();
     titleLabel_ = new TitleLabel(type + " - " + methodName, "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#optimresult");
 

@@ -202,6 +202,10 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Initial population size", tr("Initial population size")));
   ParametersNames_.insert(type("Objectives", tr("Objectives")));
   ParametersNames_.insert(type("Constraints", tr("Constraints")));
+  ParametersNames_.insert(type("Minimization", tr("Minimization")));
+  ParametersNames_.insert(type("Maximization", tr("Maximization")));
+  ParametersNames_.insert(type("Optimization", tr("Optimization")));
+  ParametersNames_.insert(type("Multi-objective optimization", tr("Multi-objective optimization")));
 }
 
 
