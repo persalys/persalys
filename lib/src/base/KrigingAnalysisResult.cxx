@@ -57,8 +57,8 @@ KrigingResult KrigingAnalysisResult::getResultForVariable(const String& variable
   if (!krigingResultCollection_.getSize())
     throw InvalidArgumentException(HERE) << "There is no kriging result";
 
-  for (UnsignedInteger i = 0; i < krigingResultCollection_.getSize(); ++i)
-    if (krigingResultCollection_[i].getModel().getOutputDescription()[0] == variableName)
+  for (UnsignedInteger i = 0; i < krigingResultCollection_.getSize(); ++ i)
+    if (krigingResultCollection_[i].getOutputSample().getDescription()[0] == variableName)
       return krigingResultCollection_[i];
 
   throw InvalidArgumentException(HERE) << "No result for a variable named " << variableName;

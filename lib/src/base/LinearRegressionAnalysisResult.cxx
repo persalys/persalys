@@ -58,8 +58,8 @@ LinearModelResult LinearRegressionAnalysisResult::getResultForVariable(const Str
   if (!linearModelResultCollection_.getSize())
     throw InvalidArgumentException(HERE) << "There is no result";
 
-  for (UnsignedInteger i = 0; i < linearModelResultCollection_.getSize(); ++i)
-    if (linearModelResultCollection_[i].getModel().getOutputDescription()[0] == variableName)
+  for (UnsignedInteger i = 0; i < linearModelResultCollection_.getSize(); ++ i)
+    if (linearModelResultCollection_[i].getOutputSample().getDescription()[0] == variableName)
       return linearModelResultCollection_[i];
 
   throw InvalidArgumentException(HERE) << "No result for a variable named " << variableName;
