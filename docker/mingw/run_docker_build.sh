@@ -42,8 +42,8 @@ cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
 rm Lib/site-packages/openturns/{libvtk,libboost,libLLVM,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
-curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.9.7/download/win-64/pyfmi-2.9.7-py310h2873277_0.tar.bz2 | tar xj
-curl -fSsL https://anaconda.org/conda-forge/assimulo/3.2.9/download/win-64/assimulo-3.2.9-py310h0643bf8_0.tar.bz2 | tar xj
+curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.9.8/download/win-64/pyfmi-2.9.8-py310h9b08ddd_1.tar.bz2 | tar xj
+curl -fSsL https://anaconda.org/conda-forge/assimulo/3.3/download/win-64/assimulo-3.3-py310h9e5cad0_1.tar.bz2 | tar xj
 cd Lib
 curl -fSsL https://anaconda.org/conda-forge/otfmi/0.15/download/noarch/otfmi-0.15-pyh6c4a22f_0.tar.bz2 | tar xj
 cd site-packages
@@ -52,11 +52,11 @@ curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-an
 curl -fsSL https://pypi.io/packages/py2.py3/s/six/six-1.16.0-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py2.py3/p/pytz/pytz-2021.3-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py2.py3/p/python_dateutil/python_dateutil-2.8.2-py2.py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py2.py3/d/dill/dill-0.3.4-py2.py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py3/d/dill/dill-0.3.6-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp310/n/numpy/numpy-1.21.6-cp310-cp310-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp310/s/scipy/scipy-1.7.3-cp310-cp310-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp310/p/pandas/pandas-1.4.2-cp310-cp310-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp310/n/numpy/numpy-1.22.4-cp310-cp310-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp310/s/scipy/scipy-1.8.1-cp310-cp310-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp310/p/pandas/pandas-1.5.1-cp310-cp310-win_amd64.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
