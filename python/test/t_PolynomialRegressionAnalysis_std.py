@@ -32,7 +32,7 @@ myStudy.add(aDesign)
 aDesign.run()
 
 # LM
-analysis = persalys.LinearRegressionAnalysis("lm_0", aDesign)
+analysis = persalys.PolynomialRegressionAnalysis("lm_0", aDesign)
 analysis.setDegree(2)
 analysis.setInteraction(True)
 myStudy.add(analysis)
@@ -55,7 +55,7 @@ datamodel = persalys.DataModel(
     "datamodel", "Housing-prices-Boston.csv", range(13), [13]
 )
 myStudy.add(datamodel)
-analysis2 = persalys.LinearRegressionAnalysis("lm_1", datamodel)
+analysis2 = persalys.PolynomialRegressionAnalysis("lm_1", datamodel)
 analysis2.setDegree(2)
 analysis2.setInteraction(True)
 myStudy.add(analysis2)

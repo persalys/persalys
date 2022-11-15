@@ -1,7 +1,7 @@
 // SWIG file
 
 %{
-#include "persalys/LinearRegressionAnalysisResult.hxx"
+#include "persalys/PolynomialRegressionAnalysisResult.hxx"
 
 namespace OT {
 template <>
@@ -44,11 +44,11 @@ template <>
 }
 %}
 
-%include LinearRegressionAnalysisResult_doc.i
+%include PolynomialRegressionAnalysisResult_doc.i
 
-%include persalys/LinearRegressionAnalysisResult.hxx
+%include persalys/PolynomialRegressionAnalysisResult.hxx
 namespace PERSALYS {
 
-%extend LinearRegressionAnalysisResult { LinearRegressionAnalysisResult(const LinearRegressionAnalysisResult & other) { return new PERSALYS::LinearRegressionAnalysisResult(other); } 
+%extend PolynomialRegressionAnalysisResult { PolynomialRegressionAnalysisResult(const PolynomialRegressionAnalysisResult & other) { return new PERSALYS::PolynomialRegressionAnalysisResult(other); } 
 
 } }

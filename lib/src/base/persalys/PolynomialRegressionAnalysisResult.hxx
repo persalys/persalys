@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_LINEARREGRESSIONANALYSISRESULT_HXX
-#define PERSALYS_LINEARREGRESSIONANALYSISRESULT_HXX
+#ifndef PERSALYS_POLYNOMIALREGRESSIONANALYSISRESULT_HXX
+#define PERSALYS_POLYNOMIALREGRESSIONANALYSISRESULT_HXX
 
 #include "MetaModelAnalysisResult.hxx"
 
@@ -27,20 +27,20 @@
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API LinearRegressionAnalysisResult : public MetaModelAnalysisResult
+class PERSALYS_BASE_API PolynomialRegressionAnalysisResult : public MetaModelAnalysisResult
 {
   CLASSNAME
 
 public:
 
-  friend class LinearRegressionAnalysis;
+  friend class PolynomialRegressionAnalysis;
   typedef OT::Collection< OT::LinearModelResult > LinearModelResultCollection;
 
   /** Default constructor */
-  LinearRegressionAnalysisResult();
+  PolynomialRegressionAnalysisResult();
 
   /** Virtual constructor */
-  LinearRegressionAnalysisResult * clone() const override;
+  PolynomialRegressionAnalysisResult * clone() const override;
 
   LinearModelResultCollection getLinearModelResultCollection() const;
   OT::LinearModelResult getResultForVariable(const OT::String& variableName) const;

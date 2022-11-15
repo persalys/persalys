@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define a linear model analysis
+ *  @brief QMdiSubWindow for the results of linear regression
  *
  *  Copyright 2015-2022 EDF-Phimeca
  *
@@ -18,41 +18,27 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_LINEARREGRESSIONPAGE_HXX
-#define PERSALYS_LINEARREGRESSIONPAGE_HXX
+#ifndef PERSALYS_POLYNOMIALREGRESSIONRESULTWINDOW_HXX
+#define PERSALYS_POLYNOMIALREGRESSIONRESULTWINDOW_HXX
 
-#include "persalys/Analysis.hxx"
-#include "persalys/DesignOfExperiment.hxx"
-#include "persalys/DoubleSpinBox.hxx"
-
-#include <QWizardPage>
-#include <QLabel>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QSpinBox>
+#include "persalys/ResultWindow.hxx"
+#include "persalys/PolynomialRegressionAnalysisResult.hxx"
 
 namespace PERSALYS
 {
-
-class PERSALYS_VIEW_API LinearRegressionPage : public QWizardPage
+class PERSALYS_VIEW_API PolynomialRegressionResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  LinearRegressionPage(QWidget* parent = 0);
-
-  void initialize(const Analysis& analysis);
-  Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;
+  PolynomialRegressionResultWindow(AnalysisItem* item, QWidget * parent = 0);
 
 protected:
   void buildInterface();
 
-public slots:
-
 private:
-  QSpinBox * degreeSpinBox_ = 0;
-  QCheckBox * interactionCheckBox_ = 0;
-  OT::Description inputsNames_;
+  PolynomialRegressionAnalysisResult result_;
+  QString errorMessage_;
 };
 }
 #endif

@@ -162,8 +162,8 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include FunctionalChaosAnalysis.i
 %include KrigingAnalysisResult.i
 %include KrigingAnalysis.i
-%include LinearRegressionAnalysisResult.i
-%include LinearRegressionAnalysis.i
+%include PolynomialRegressionAnalysisResult.i
+%include PolynomialRegressionAnalysis.i
 %include FittingTestResult.i
 %include InferenceResult.i
 %include InferenceAnalysis.i

@@ -1,6 +1,8 @@
 %feature("docstring") PERSALYS::KrigingAnalysis
 "Create a Kriging analysis.
 
+See `Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_.
+
 Parameters
 ----------
 name : str

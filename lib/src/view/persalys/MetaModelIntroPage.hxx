@@ -39,7 +39,7 @@ class PERSALYS_VIEW_API MetaModelIntroPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {Chaos, Kriging, LinearRegression};
+  enum Method {Chaos, Kriging, PolynomialRegression};
 
   MetaModelIntroPage(QWidget* parent = 0);
 

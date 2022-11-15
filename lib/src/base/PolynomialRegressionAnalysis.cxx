@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/LinearRegressionAnalysis.hxx"
+#include "persalys/PolynomialRegressionAnalysis.hxx"
 
 #include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/BaseTools.hxx"
@@ -33,12 +33,12 @@ using namespace OT;
 namespace PERSALYS
 {
 
-CLASSNAMEINIT(LinearRegressionAnalysis)
+CLASSNAMEINIT(PolynomialRegressionAnalysis)
 
-static Factory<LinearRegressionAnalysis> Factory_LinearRegressionAnalysis;
+static Factory<PolynomialRegressionAnalysis> Factory_PolynomialRegressionAnalysis;
 
 /* Default constructor */
-LinearRegressionAnalysis::LinearRegressionAnalysis()
+PolynomialRegressionAnalysis::PolynomialRegressionAnalysis()
   : MetaModelAnalysis()
 {
 
@@ -46,57 +46,57 @@ LinearRegressionAnalysis::LinearRegressionAnalysis()
 
 
 /* Constructor with parameters */
-LinearRegressionAnalysis::LinearRegressionAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
+PolynomialRegressionAnalysis::PolynomialRegressionAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
 {
 }
 
 
 /* Constructor with parameters */
-LinearRegressionAnalysis::LinearRegressionAnalysis(const String& name, const Analysis& analysis)
+PolynomialRegressionAnalysis::PolynomialRegressionAnalysis(const String& name, const Analysis& analysis)
   : MetaModelAnalysis(name, analysis)
 {
 }
 
 
 /* Virtual constructor */
-LinearRegressionAnalysis* LinearRegressionAnalysis::clone() const
+PolynomialRegressionAnalysis* PolynomialRegressionAnalysis::clone() const
 {
-  return new LinearRegressionAnalysis(*this);
+  return new PolynomialRegressionAnalysis(*this);
 }
 
-UnsignedInteger LinearRegressionAnalysis::getDegree() const
+UnsignedInteger PolynomialRegressionAnalysis::getDegree() const
 {
   return degree_;
 }
 
 
-void LinearRegressionAnalysis::setDegree(const UnsignedInteger degree)
+void PolynomialRegressionAnalysis::setDegree(const UnsignedInteger degree)
 {
   degree_ = degree;
 }
 
 
-Bool LinearRegressionAnalysis::getInteraction() const
+Bool PolynomialRegressionAnalysis::getInteraction() const
 {
   return interaction_;
 }
 
 
-void LinearRegressionAnalysis::setInteraction(const Bool interaction)
+void PolynomialRegressionAnalysis::setInteraction(const Bool interaction)
 {
   interaction_ = interaction;
 }
 
 
-void LinearRegressionAnalysis::initialize()
+void PolynomialRegressionAnalysis::initialize()
 {
   AnalysisImplementation::initialize();
-  result_ = LinearRegressionAnalysisResult();
+  result_ = PolynomialRegressionAnalysisResult();
 }
 
 
-void LinearRegressionAnalysis::launch()
+void PolynomialRegressionAnalysis::launch()
 {
   // get effective samples
   const Sample effectiveInputSample(getEffectiveInputSample());
@@ -194,14 +194,14 @@ void LinearRegressionAnalysis::launch()
 }
 
 
-Function LinearRegressionAnalysis::runAlgoMarginal(const Sample& inputSample, const Sample& outputSample)
+Function PolynomialRegressionAnalysis::runAlgoMarginal(const Sample& inputSample, const Sample& outputSample)
 {
   LinearModelStepwiseAlgorithm algo(buildAlgo(inputSample, outputSample));
   algo.run();
   return algo.getResult().getMetaModel();
 }
 
-Basis LinearRegressionAnalysis::getBasis() const
+Basis PolynomialRegressionAnalysis::getBasis() const
 {
   // basis
   Collection<Function> functions;
@@ -224,7 +224,7 @@ Basis LinearRegressionAnalysis::getBasis() const
   return basis;
 }
 
-LinearModelStepwiseAlgorithm LinearRegressionAnalysis::buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample)
+LinearModelStepwiseAlgorithm PolynomialRegressionAnalysis::buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample)
 {
   const Indices minimalIndices(1, 0);
   const Indices startIndices(1, 0);
@@ -234,7 +234,7 @@ LinearModelStepwiseAlgorithm LinearRegressionAnalysis::buildAlgo(const OT::Sampl
   return algo;
 }
 
-void LinearRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
+void PolynomialRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
   if (stopRequested_)
   {
@@ -245,7 +245,7 @@ void LinearRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysisResu
   notify("informationMessageUpdated");
 
   // retrieve chaos result
-  LinearRegressionAnalysisResult lmResult(*dynamic_cast<LinearRegressionAnalysisResult*>(&result));
+  PolynomialRegressionAnalysisResult lmResult(*dynamic_cast<PolynomialRegressionAnalysisResult*>(&result));
 
   // compute Q2
   Point q2(result.outputSample_.getDimension());
@@ -293,13 +293,13 @@ void LinearRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysisResu
   result.analyticalValidation_.q2_ = q2;
 }
 
-LinearRegressionAnalysisResult LinearRegressionAnalysis::getResult() const
+PolynomialRegressionAnalysisResult PolynomialRegressionAnalysis::getResult() const
 {
   return result_;
 }
 
 
-Parameters LinearRegressionAnalysis::getParameters() const
+Parameters PolynomialRegressionAnalysis::getParameters() const
 {
   Parameters param;
 
@@ -311,11 +311,11 @@ Parameters LinearRegressionAnalysis::getParameters() const
 }
 
 
-String LinearRegressionAnalysis::getPythonScript() const
+String PolynomialRegressionAnalysis::getPythonScript() const
 {
   OSS oss;
 
-  oss << getName() << " = persalys.LinearRegressionAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
+  oss << getName() << " = persalys.PolynomialRegressionAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
 
   // interest outputs
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
@@ -329,14 +329,14 @@ String LinearRegressionAnalysis::getPythonScript() const
 }
 
 
-bool LinearRegressionAnalysis::hasValidResult() const
+bool PolynomialRegressionAnalysis::hasValidResult() const
 {
   return getResult().getMetaModelOutputSample().getSize();
 }
 
 
 /* String converter */
-String LinearRegressionAnalysis::__repr__() const
+String PolynomialRegressionAnalysis::__repr__() const
 {
   OSS oss;
   oss << MetaModelAnalysis::__repr__()
@@ -347,7 +347,7 @@ String LinearRegressionAnalysis::__repr__() const
 
 
 /* Method save() stores the object through the StorageManager */
-void LinearRegressionAnalysis::save(Advocate& adv) const
+void PolynomialRegressionAnalysis::save(Advocate& adv) const
 {
   MetaModelAnalysis::save(adv);
   adv.saveAttribute("degree_", degree_);
@@ -357,7 +357,7 @@ void LinearRegressionAnalysis::save(Advocate& adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void LinearRegressionAnalysis::load(Advocate& adv)
+void PolynomialRegressionAnalysis::load(Advocate& adv)
 {
   MetaModelAnalysis::load(adv);
   adv.loadAttribute("degree_", degree_);

@@ -57,8 +57,8 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      FunctionalChaosAnalysis.cxx
                      KrigingAnalysisResult.cxx
                      KrigingAnalysis.cxx
-                     LinearRegressionAnalysisResult.cxx
-                     LinearRegressionAnalysis.cxx
+                     PolynomialRegressionAnalysisResult.cxx
+                     PolynomialRegressionAnalysis.cxx
                      FittingTestResult.cxx
                      InferenceResult.cxx
                      InferenceAnalysis.cxx
@@ -167,8 +167,8 @@ ot_install_header_file ( FunctionalChaosAnalysisResult.hxx )
 ot_install_header_file ( FunctionalChaosAnalysis.hxx )
 ot_install_header_file ( KrigingAnalysisResult.hxx )
 ot_install_header_file ( KrigingAnalysis.hxx )
-ot_install_header_file ( LinearRegressionAnalysisResult.hxx )
-ot_install_header_file ( LinearRegressionAnalysis.hxx )
+ot_install_header_file ( PolynomialRegressionAnalysisResult.hxx )
+ot_install_header_file ( PolynomialRegressionAnalysis.hxx )
 ot_install_header_file ( FittingTestResult.hxx )
 ot_install_header_file ( InferenceResult.hxx )
 ot_install_header_file ( InferenceAnalysis.hxx )

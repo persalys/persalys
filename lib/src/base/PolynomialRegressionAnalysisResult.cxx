@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/LinearRegressionAnalysisResult.hxx"
+#include "persalys/PolynomialRegressionAnalysisResult.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -27,33 +27,33 @@ using namespace OT;
 namespace PERSALYS
 {
 
-CLASSNAMEINIT(LinearRegressionAnalysisResult)
+CLASSNAMEINIT(PolynomialRegressionAnalysisResult)
 
-static Factory<LinearRegressionAnalysisResult> Factory_LinearRegressionAnalysisResult;
+static Factory<PolynomialRegressionAnalysisResult> Factory_PolynomialRegressionAnalysisResult;
 static Factory<PersistentCollection<LinearModelResult> > Factory_PersistentCollection_LinearModelResult;
 
 
 /* Default constructor */
-LinearRegressionAnalysisResult::LinearRegressionAnalysisResult()
+PolynomialRegressionAnalysisResult::PolynomialRegressionAnalysisResult()
   : MetaModelAnalysisResult()
 {
 }
 
 
 /* Virtual constructor */
-LinearRegressionAnalysisResult* LinearRegressionAnalysisResult::clone() const
+PolynomialRegressionAnalysisResult* PolynomialRegressionAnalysisResult::clone() const
 {
-  return new LinearRegressionAnalysisResult(*this);
+  return new PolynomialRegressionAnalysisResult(*this);
 }
 
 
-LinearRegressionAnalysisResult::LinearModelResultCollection LinearRegressionAnalysisResult::getLinearModelResultCollection() const
+PolynomialRegressionAnalysisResult::LinearModelResultCollection PolynomialRegressionAnalysisResult::getLinearModelResultCollection() const
 {
   return linearModelResultCollection_;
 }
 
 
-LinearModelResult LinearRegressionAnalysisResult::getResultForVariable(const String& variableName) const
+LinearModelResult PolynomialRegressionAnalysisResult::getResultForVariable(const String& variableName) const
 {
   if (!linearModelResultCollection_.getSize())
     throw InvalidArgumentException(HERE) << "There is no result";
@@ -65,13 +65,13 @@ LinearModelResult LinearRegressionAnalysisResult::getResultForVariable(const Str
   throw InvalidArgumentException(HERE) << "No result for a variable named " << variableName;
 }
 
-Description LinearRegressionAnalysisResult::getFormulas() const
+Description PolynomialRegressionAnalysisResult::getFormulas() const
 {
   return formulas_;
 }
 
 /* String converter */
-String LinearRegressionAnalysisResult::__repr__() const
+String PolynomialRegressionAnalysisResult::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
@@ -81,7 +81,7 @@ String LinearRegressionAnalysisResult::__repr__() const
 
 
 /* Method save() stores the object through the StorageManager */
-void LinearRegressionAnalysisResult::save(Advocate& adv) const
+void PolynomialRegressionAnalysisResult::save(Advocate& adv) const
 {
   MetaModelAnalysisResult::save(adv);
   adv.saveAttribute("linearModelResultCollection_", linearModelResultCollection_);
@@ -90,7 +90,7 @@ void LinearRegressionAnalysisResult::save(Advocate& adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void LinearRegressionAnalysisResult::load(Advocate& adv)
+void PolynomialRegressionAnalysisResult::load(Advocate& adv)
 {
   MetaModelAnalysisResult::load(adv);
   adv.loadAttribute("linearModelResultCollection_", linearModelResultCollection_);

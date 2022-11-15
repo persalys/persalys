@@ -174,8 +174,8 @@ Metamodel
     MetaModelAnalysis
     MetaModelAnalysisResult
     MetaModelValidationResult
-    LinearRegressionAnalysis
-    LinearRegressionAnalysisResult
+    PolynomialRegressionAnalysis
+    PolynomialRegressionAnalysisResult
     FunctionalChaosAnalysis
     FunctionalChaosAnalysisResult
     KrigingAnalysis

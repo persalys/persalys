@@ -77,8 +77,8 @@ void MetaModelAnalysisWizard::buildInterface()
   setPage(Page_Intro, introPage_);
 
   // linear model page
-  linearModelPage_ = new LinearRegressionPage(this);
-  setPage(Page_LinearRegressionMethod, linearModelPage_);
+  linearModelPage_ = new PolynomialRegressionPage(this);
+  setPage(Page_PolynomialRegressionMethod, linearModelPage_);
 
   // chaos page
   functionalChaosPage_ = new FunctionalChaosPage(this);
@@ -113,7 +113,7 @@ int MetaModelAnalysisWizard::nextId() const
       return introPage_->nextId();
     case Page_ChaosMethod:
     case Page_KrigingMethod:
-    case Page_LinearRegressionMethod:
+    case Page_PolynomialRegressionMethod:
       return Page_Validation;
     default:
       return -1;
@@ -135,7 +135,7 @@ Analysis MetaModelAnalysisWizard::getAnalysis() const
     case MetaModelIntroPage::Kriging:
       analysis = krigingPage_->getAnalysis(analysisName, design);
       break;
-    case MetaModelIntroPage::LinearRegression:
+    case MetaModelIntroPage::PolynomialRegression:
       analysis = linearModelPage_->getAnalysis(analysisName, design);
       break;
     default:

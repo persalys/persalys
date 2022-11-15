@@ -22,7 +22,7 @@
 
 #include "persalys/ParametersDefinitionWizard.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
-#include "persalys/LinearRegressionAnalysis.hxx"
+#include "persalys/PolynomialRegressionAnalysis.hxx"
 #include "persalys/QtTools.hxx"
 
 #include <openturns/OTBase.hxx>
@@ -35,14 +35,14 @@ using namespace OT;
 namespace PERSALYS
 {
 
-LinearRegressionPage::LinearRegressionPage(QWidget* parent)
+PolynomialRegressionPage::PolynomialRegressionPage(QWidget* parent)
   : QWizardPage(parent)
 {
   buildInterface();
 }
 
 
-void LinearRegressionPage::buildInterface()
+void PolynomialRegressionPage::buildInterface()
 {
   setTitle(tr("Linear regression parameters"));
 
@@ -67,13 +67,13 @@ void LinearRegressionPage::buildInterface()
 
   pageLayout->addWidget(parametersBox);
 
-  initialize(LinearRegressionAnalysis());
+  initialize(PolynomialRegressionAnalysis());
 }
 
 
-void LinearRegressionPage::initialize(const Analysis& analysis)
+void PolynomialRegressionPage::initialize(const Analysis& analysis)
 {
-  const LinearRegressionAnalysis * analysis_ptr = dynamic_cast<const LinearRegressionAnalysis*>(analysis.getImplementation().get());
+  const PolynomialRegressionAnalysis * analysis_ptr = dynamic_cast<const PolynomialRegressionAnalysis*>(analysis.getImplementation().get());
 
   if (!analysis_ptr)
     return;
@@ -86,9 +86,9 @@ void LinearRegressionPage::initialize(const Analysis& analysis)
 }
 
 
-Analysis LinearRegressionPage::getAnalysis(const String& name, const DesignOfExperiment& doe) const
+Analysis PolynomialRegressionPage::getAnalysis(const String& name, const DesignOfExperiment& doe) const
 {
-  LinearRegressionAnalysis analysis(name, doe);
+  PolynomialRegressionAnalysis analysis(name, doe);
   analysis.setDegree(degreeSpinBox_->value());
   analysis.setInteraction(interactionCheckBox_->isChecked());
   return analysis;

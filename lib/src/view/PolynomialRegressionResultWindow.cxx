@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/LinearRegressionResultWindow.hxx"
-#include "persalys/LinearRegressionAnalysis.hxx"
+#include "persalys/PolynomialRegressionResultWindow.hxx"
+#include "persalys/PolynomialRegressionAnalysis.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/MetaModelValidationWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
@@ -48,14 +48,14 @@ using namespace OT;
 namespace PERSALYS
 {
 
-LinearRegressionResultWindow::LinearRegressionResultWindow(AnalysisItem * item, QWidget * parent)
+PolynomialRegressionResultWindow::PolynomialRegressionResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
   , errorMessage_(item->getAnalysis().getWarningMessage().c_str())
 {
-  const LinearRegressionAnalysis * analysis = dynamic_cast<const LinearRegressionAnalysis*>(item->getAnalysis().getImplementation().get());
+  const PolynomialRegressionAnalysis * analysis = dynamic_cast<const PolynomialRegressionAnalysis*>(item->getAnalysis().getImplementation().get());
   if (!analysis)
-    throw InvalidArgumentException(HERE) << "LinearRegressionResultWindow: the analysis is not a LinearRegressionAnalysis";
+    throw InvalidArgumentException(HERE) << "PolynomialRegressionResultWindow: the analysis is not a PolynomialRegressionAnalysis";
 
   result_ = analysis->getResult();
 
@@ -66,7 +66,7 @@ LinearRegressionResultWindow::LinearRegressionResultWindow(AnalysisItem * item, 
 }
 
 
-void LinearRegressionResultWindow::buildInterface()
+void PolynomialRegressionResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
@@ -97,7 +97,7 @@ void LinearRegressionResultWindow::buildInterface()
   scrollArea->setWidgetResizable(true);
 
   ResizableStackedWidget * resultStackedWidget = new ResizableStackedWidget;
-  const LinearRegressionAnalysis * analysis(dynamic_cast<LinearRegressionAnalysis*>(dynamic_cast<AnalysisItem*>(getItem())->getAnalysis().getImplementation().get()));
+  const PolynomialRegressionAnalysis * analysis(dynamic_cast<PolynomialRegressionAnalysis*>(dynamic_cast<AnalysisItem*>(getItem())->getAnalysis().getImplementation().get()));
 
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {

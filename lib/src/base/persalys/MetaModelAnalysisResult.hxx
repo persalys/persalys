@@ -36,7 +36,7 @@ public:
 
   friend class FunctionalChaosAnalysis;
   friend class KrigingAnalysis;
-  friend class LinearRegressionAnalysis;
+  friend class PolynomialRegressionAnalysis;
   friend class MetaModelAnalysis;
 
   /** Default constructor */

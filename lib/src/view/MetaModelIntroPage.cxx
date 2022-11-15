@@ -67,7 +67,7 @@ MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
 
   // Linear regression
   QRadioButton * buttonToChooseMethod = new QRadioButton(tr("Linear regression"));
-  methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::LinearRegression);
+  methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::PolynomialRegression);
   methodLayout->addWidget(buttonToChooseMethod);
 
   // Chaos
@@ -114,8 +114,8 @@ void MetaModelIntroPage::initialize(const Analysis& analysis, QList< DesignOfExp
     methodGroup_->button(MetaModelIntroPage::Chaos)->click();
   else if (analysisName == "KrigingAnalysis")
     methodGroup_->button(MetaModelIntroPage::Kriging)->click();
-  else if (analysisName == "LinearRegressionAnalysis")
-    methodGroup_->button(MetaModelIntroPage::LinearRegression)->click();
+  else if (analysisName == "PolynomialRegressionAnalysis")
+    methodGroup_->button(MetaModelIntroPage::PolynomialRegression)->click();
 }
 
 
@@ -127,8 +127,8 @@ int MetaModelIntroPage::nextId() const
       return MetaModelAnalysisWizard::Page_ChaosMethod;
     case MetaModelIntroPage::Kriging:
       return MetaModelAnalysisWizard::Page_KrigingMethod;
-    case MetaModelIntroPage::LinearRegression:
-      return MetaModelAnalysisWizard::Page_LinearRegressionMethod;
+    case MetaModelIntroPage::PolynomialRegression:
+      return MetaModelAnalysisWizard::Page_PolynomialRegressionMethod;
     default:
       return -1;
   }

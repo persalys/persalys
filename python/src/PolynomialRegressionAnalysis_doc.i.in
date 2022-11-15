@@ -1,5 +1,10 @@
-%feature("docstring") PERSALYS::LinearRegressionAnalysis
-"Linear regression analysis.
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis
+"Polynomial stepwise regression.
+
+Allows to select of the most suitable polynomial (canonical) basis for a linear
+regression model with the help of the stepwise algorithm.
+
+See also `LinearModelStepwiseAlgorithm <https://openturns.github.io/openturns/latest/user_manual/response_surface/_generated/openturns.LinearModelStepwiseAlgorithm.html>`_.
 
 Parameters
 ----------
@@ -32,7 +37,7 @@ Create the design of experiments:
 
 Create the linear regression analysis:
 
->>> lm = persalys.LinearRegressionAnalysis('lm', aDesign)
+>>> lm = persalys.PolynomialRegressionAnalysis('lm', aDesign)
 >>> lm.setDegree(1)
 >>> lm.setInteraction(False)
 >>> lm.run()
@@ -43,7 +48,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysis::getDegree
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::getDegree
 "Accessor to the basis degree.
 
 Returns
@@ -53,7 +58,7 @@ degres : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysis::setDegree
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::setDegree
 "Accessor to the basis degree.
 
 Parameters
@@ -63,7 +68,7 @@ degres : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysis::getInteraction
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::getInteraction
 "Accessor to the interaction flag.
 
 Returns
@@ -73,7 +78,7 @@ interaction : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysis::setInteraction
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::setInteraction
 "Accessor to the interaction flag.
 
 Parameters
@@ -83,10 +88,10 @@ interaction : bool
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysis::getResult
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::getResult
 "Results accessor.
 
 Returns
 -------
-result : :class:`~persalys.LinearRegressionAnalysisResult`
+result : :class:`~persalys.PolynomialRegressionAnalysisResult`
     Results"

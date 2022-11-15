@@ -178,8 +178,8 @@ ot_add_python_module (persalys persalys_module.i
                       FunctionalChaosAnalysis.i FunctionalChaosAnalysis_doc.i.in
                       KrigingAnalysisResult.i KrigingAnalysisResult_doc.i.in
                       KrigingAnalysis.i KrigingAnalysis_doc.i.in
-                      LinearRegressionAnalysisResult.i LinearRegressionAnalysisResult_doc.i.in
-                      LinearRegressionAnalysis.i LinearRegressionAnalysis_doc.i.in
+                      PolynomialRegressionAnalysisResult.i PolynomialRegressionAnalysisResult_doc.i.in
+                      PolynomialRegressionAnalysis.i PolynomialRegressionAnalysis_doc.i.in
                       FittingTestResult.i FittingTestResult_doc.i.in
                       InferenceResult.i InferenceResult_doc.i.in
                       InferenceAnalysis.i InferenceAnalysis_doc.i.in

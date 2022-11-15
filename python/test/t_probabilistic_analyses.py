@@ -93,7 +93,7 @@ chaos2.setSparseChaos(True)
 myStudy.add(chaos2)
 
 # 1-d linear regression #
-linreg = persalys.LinearRegressionAnalysis("linreg", probaDesign)
+linreg = persalys.PolynomialRegressionAnalysis("linreg", probaDesign)
 linreg.setInterestVariables(["y0", "y1"])
 linreg.setDegree(2)
 linreg.setInteraction(False)

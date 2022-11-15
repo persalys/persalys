@@ -1,6 +1,8 @@
 %feature("docstring") PERSALYS::FunctionalChaosAnalysis
 "Create a Functional chaos analysis.
 
+See `Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_
+
 Parameters
 ----------
 name : str

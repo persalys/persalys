@@ -23,7 +23,7 @@
 #include "persalys/StudyImplementation.hxx"
 #include "persalys/ParametersWidget.hxx"
 #include "persalys/QtTools.hxx"
-#include "persalys/LinearRegressionAnalysis.hxx"
+#include "persalys/PolynomialRegressionAnalysis.hxx"
 #include "persalys/KrigingAnalysis.hxx"
 #include "persalys/FunctionalChaosAnalysis.hxx"
 

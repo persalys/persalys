@@ -1,15 +1,15 @@
-%feature("docstring") PERSALYS::LinearRegressionAnalysisResult
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysisResult
 "Get the results of a Linear model analysis.
 
 Notes
 -----
 Structure created by the method run() of
-:class:`~persalys.LinearRegressionAnalysis`, and obtained thanks to the method
+:class:`~persalys.PolynomialRegressionAnalysis`, and obtained thanks to the method
 getResult()."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysisResult::getLinearModelResultCollection
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysisResult::getLinearModelResultCollection
 "Sequence of linear model results accessor.
 
 Returns
@@ -19,7 +19,7 @@ results : Collection of :class:`openturns.LinearModelResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysisResult::getResultForVariable
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysisResult::getResultForVariable
 "Get the linear model result of a variable.
 
 Parameters
@@ -34,7 +34,7 @@ result : py:class:`openturns.LinearModelResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::LinearRegressionAnalysisResult::getFormulas
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysisResult::getFormulas
 "Accessor to the regression formulas.
 
 Returns

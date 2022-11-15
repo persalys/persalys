@@ -18,31 +18,31 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_LINEARREGRESSIONANALYSIS_HXX
-#define PERSALYS_LINEARREGRESSIONANALYSIS_HXX
+#ifndef PERSALYS_POLYNOMIALREGRESSIONANALYSIS_HXX
+#define PERSALYS_POLYNOMIALREGRESSIONANALYSIS_HXX
 
 #include "MetaModelAnalysis.hxx"
 #include "Analysis.hxx"
-#include "LinearRegressionAnalysisResult.hxx"
+#include "PolynomialRegressionAnalysisResult.hxx"
 
 #include <openturns/LinearModelStepwiseAlgorithm.hxx>
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API LinearRegressionAnalysis : public MetaModelAnalysis
+class PERSALYS_BASE_API PolynomialRegressionAnalysis : public MetaModelAnalysis
 {
   CLASSNAME
 
 public:
   /** Default constructor */
-  LinearRegressionAnalysis();
+  PolynomialRegressionAnalysis();
 
   /** Constructor with parameters */
-  LinearRegressionAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
-  LinearRegressionAnalysis(const OT::String& name, const Analysis& designOfExperimentAnalysis);
+  PolynomialRegressionAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
+  PolynomialRegressionAnalysis(const OT::String& name, const Analysis& designOfExperimentAnalysis);
 
   /** Virtual constructor */
-  LinearRegressionAnalysis * clone() const override;
+  PolynomialRegressionAnalysis * clone() const override;
 
   OT::UnsignedInteger getDegree() const;
   void setDegree(const OT::UnsignedInteger degree);
@@ -50,7 +50,7 @@ public:
   OT::Bool getInteraction() const;
   void setInteraction(const OT::Bool interaction);
 
-  LinearRegressionAnalysisResult getResult() const;
+  PolynomialRegressionAnalysisResult getResult() const;
 
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
@@ -75,7 +75,7 @@ private:
   OT::LinearModelStepwiseAlgorithm buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample);
   OT::Basis getBasis() const;
 
-  LinearRegressionAnalysisResult result_;
+  PolynomialRegressionAnalysisResult result_;
   OT::Bool interaction_ = false;
   OT::UnsignedInteger degree_ = 1;
 };

@@ -84,14 +84,14 @@ ot_add_source_file ( ParametersDefinitionWizard.cxx )
 ot_add_source_file ( MetaModelIntroPage.cxx )
 ot_add_source_file ( KrigingPage.cxx )
 ot_add_source_file ( FunctionalChaosPage.cxx )
-ot_add_source_file ( LinearRegressionPage.cxx )
+ot_add_source_file ( PolynomialRegressionPage.cxx )
 ot_add_source_file ( MetaModelAnalysisWizard.cxx )
 ot_add_source_file ( MetaModelExportWizard.cxx )
 ot_add_source_file ( MetaModelValidationPage.cxx )
 ot_add_source_file ( MetaModelValidationWidget.cxx )
 ot_add_source_file ( FunctionalChaosResultWindow.cxx )
 ot_add_source_file ( KrigingResultWindow.cxx )
-ot_add_source_file ( LinearRegressionResultWindow.cxx )
+ot_add_source_file ( PolynomialRegressionResultWindow.cxx )
 ot_add_source_file ( InferenceWizard.cxx )
 ot_add_source_file ( InferenceResultWindow.cxx )
 ot_add_source_file ( DistributionsForInferenceWidget.cxx )
@@ -210,14 +210,14 @@ ot_install_header_file ( ParametersDefinitionWizard.hxx )
 ot_install_header_file ( MetaModelIntroPage.hxx )
 ot_install_header_file ( KrigingPage.hxx )
 ot_install_header_file ( FunctionalChaosPage.hxx )
-ot_install_header_file ( LinearRegressionPage.hxx )
+ot_install_header_file ( PolynomialRegressionPage.hxx )
 ot_install_header_file ( MetaModelAnalysisWizard.hxx )
 ot_install_header_file ( MetaModelExportWizard.hxx )
 ot_install_header_file ( MetaModelValidationPage.hxx )
 ot_install_header_file ( MetaModelValidationWidget.hxx )
 ot_install_header_file ( FunctionalChaosResultWindow.hxx )
 ot_install_header_file ( KrigingResultWindow.hxx )
-ot_install_header_file ( LinearRegressionResultWindow.hxx )
+ot_install_header_file ( PolynomialRegressionResultWindow.hxx )
 ot_install_header_file ( InferenceResultWindow.hxx )
 ot_install_header_file ( InferenceResultWizard.hxx )
 ot_install_header_file ( InferenceResultWidget.hxx )
@@ -329,13 +329,13 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/MetaModelValidationPage.hxx
                                   persalys/KrigingPage.hxx
                                   persalys/FunctionalChaosPage.hxx
-                                  persalys/LinearRegressionPage.hxx
+                                  persalys/PolynomialRegressionPage.hxx
                                   persalys/MetaModelAnalysisWizard.hxx
                                   persalys/MetaModelExportWizard.hxx
                                   persalys/MetaModelValidationWidget.hxx
                                   persalys/FunctionalChaosResultWindow.hxx
                                   persalys/KrigingResultWindow.hxx
-                                  persalys/LinearRegressionResultWindow.hxx
+                                  persalys/PolynomialRegressionResultWindow.hxx
                                   persalys/InferenceResultWindow.hxx
                                   persalys/InferenceWizard.hxx
                                   persalys/DistributionsForInferenceWidget.hxx

@@ -425,12 +425,19 @@ A new metamodel can be created in 4 different ways:
 
 When an analysis is required, a window appears, in order to set up:
   - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
-  - the method: `Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_ (default) or `Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_
+  - the method: polynomial regression (default), functional chaos or kriging
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_wizard.png
     :align: center
 
-4-1-1 Functional chaos
+4-1-1 Polynomial regression
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Refer to :class:`~persalsys/PolynomialRegressionAnalysis` for more details.
+The **Polynomial regression** window allows to define:
+  - **Parameters**: polynomial degree (default: 1, expected: integer in [1, 2]), interaction terms (if degree>1 only)
+
+4-1-2 Functional chaos
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_functional_chaos_wizard.png
@@ -440,7 +447,7 @@ The **Functional chaos parameters** window allows to define:
   - **Parameters**: chaos degree (default: 2, expected: integer greater or equal to 1)
   - **Advanced Parameters** (default: hidden): sparse chaos (default: not sparse)
 
-4-1-2 Kriging
+4-1-3 Kriging
 ~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_kriging_wizard.png
