@@ -388,10 +388,6 @@ if (OTMORRIS_FOUND)
   qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/ScreeningIntroPage.hxx persalys/MorrisPage.hxx persalys/ScreeningAnalysisWizard.hxx persalys/MorrisResultWidget.hxx persalys/MorrisResultWindow.hxx persalys/ScreeningResultWizard.hxx)
 endif ()
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-  set_source_files_properties (AboutDialog.cxx PROPERTIES COMPILE_FLAGS "-Wno-error=cpp")
-endif ()
-
 set(RESOURCES ${CMAKE_SOURCE_DIR}/persalys.qrc)
 
 qt_add_resources (PERSALYS_RESOURCES_RCC ${RESOURCES})

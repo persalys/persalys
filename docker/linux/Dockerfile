@@ -141,11 +141,16 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.11/ParaView-v5.11.0.tar.xz | tar xJ && cd ParaView-v5.11.0 \
+RUN curl -fSsL https://paraview.org/files/v5.10/ParaView-v5.10.1.tar.xz | tar xJ && cd ParaView-v5.10.1 \
+ && curl -L https://gitlab.kitware.com/paraview/paraview/-/merge_requests/5616.patch | patch -p1 \
+ && curl -L https://gitlab.kitware.com/paraview/paraview/-/commit/21389980b7183439a1b193a03fc0fed6915bcb44.patch | patch -p1 \
+ && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/9227.patch | patch -p1 -d VTK \
+ && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/9228.patch | patch -p1 -d VTK \
+ && sed -i '28i#include "vtkDataSetAttributes.h"' VTK/Charts/Core/vtkScatterPlotMatrix.cxx \
  && mkdir build && cd build \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
-  -DPARAVIEW_USE_VTKM=OFF \
+  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_USE_VTKM=OFF \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so .. \
  && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
 
