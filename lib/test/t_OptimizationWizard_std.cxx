@@ -108,23 +108,24 @@ private slots:
 
     QVERIFY2(tableModel->data(tableModel->index(1, 0)).toString() == "Q", "wrong name");
     QVERIFY2(tableModel->data(tableModel->index(1, 1)).toString() == "Primary energy", "wrong description");
-    QVERIFY2(tableModel->data(tableModel->index(1, 2)).toString() == "10200", "wrong value");
-    QVERIFY2(tableModel->data(tableModel->index(1, 3)).toString() == QString::number(initBounds.getLowerBound()[0], 'g', 12), "wrong lower bound value");
-    QVERIFY2(tableModel->data(tableModel->index(1, 4)).toString() == QString::number(initBounds.getUpperBound()[0], 'g', 12), "wrong upper bound value");
+    QVERIFY2(tableModel->data(tableModel->index(1, 2)).toString() == "Continuous", "wrong value");
+    QVERIFY2(tableModel->data(tableModel->index(1, 3)).toString() == "10200", "wrong value");
+    QVERIFY2(tableModel->data(tableModel->index(1, 4)).toString() == QString::number(initBounds.getLowerBound()[0], 'g', 12), "wrong lower bound value");
+    QVERIFY2(tableModel->data(tableModel->index(1, 5)).toString() == QString::number(initBounds.getUpperBound()[0], 'g', 12), "wrong upper bound value");
 
     // change value
-    tableModel->setData(tableModel->index(1, 2), 10400, Qt::EditRole);
+    tableModel->setData(tableModel->index(1, 3), 10400, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
-    tableModel->setData(tableModel->index(1, 2), 10200, Qt::EditRole);
+    tableModel->setData(tableModel->index(1, 3), 10200, Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
     // change lower bound
-    tableModel->setData(tableModel->index(1, 3), 10400, Qt::EditRole);
+    tableModel->setData(tableModel->index(1, 4), 10400, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
-    tableModel->setData(tableModel->index(1, 3), initBounds.getLowerBound()[0], Qt::EditRole);
+    tableModel->setData(tableModel->index(1, 4), initBounds.getLowerBound()[0], Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
@@ -141,13 +142,13 @@ private slots:
     QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
     // change bounds check state
-    wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 3), Qt::Unchecked, Qt::CheckStateRole);
-    QVERIFY2(tableModel->data(tableModel->index(1, 3)).toString() == "-∞", "wrong lower bound value");
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 4), Qt::Unchecked, Qt::CheckStateRole);
-    QVERIFY2(tableModel->data(tableModel->index(1, 4)).toString() == "+∞", "wrong upper bound value");
+    QVERIFY2(tableModel->data(tableModel->index(1, 4)).toString() == "-∞", "wrong lower bound value");
+    wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 5), Qt::Unchecked, Qt::CheckStateRole);
+    QVERIFY2(tableModel->data(tableModel->index(1, 5)).toString() == "+∞", "wrong upper bound value");
 
-    wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 3), Qt::Checked, Qt::CheckStateRole);
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 4), Qt::Checked, Qt::CheckStateRole);
+    wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 5), Qt::Checked, Qt::CheckStateRole);
 
     QVERIFY2(wizard.boundsPage_->validatePage(), "Page must be valid");
     QVERIFY2(wizard.algoPage_->validatePage(), "Page must be valid");

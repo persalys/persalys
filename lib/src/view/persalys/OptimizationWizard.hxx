@@ -51,6 +51,9 @@ public:
   OptimizationTableModel * getTableModel() const {return tableModel_;};
 signals:
   void currentAnalysisChanged(OptimizationAnalysis&);
+protected slots:
+  void updateTable();
+
 private:
   ResizableHeaderlessTableView * tableView_;
   OptimizationTableModel * tableModel_;

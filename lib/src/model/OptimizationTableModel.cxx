@@ -21,6 +21,7 @@
 #include "persalys/OptimizationTableModel.hxx"
 
 #include "persalys/StudyTreeViewModel.hxx"
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -39,12 +40,28 @@ OptimizationTableModel::OptimizationTableModel(const OptimizationAnalysis & anal
   , firstColumnChecked_(false)
 {
   analysis_.updateParameters();
+  types_.clear();
+  const UnsignedInteger nbInputs = analysis_.getPhysicalModel().getInputs().getSize();
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+    switch (analysis_.getVariablesType()[i])
+    {
+    case OptimizationProblemImplementation::CONTINUOUS:
+      types_ << tr("Continuous");
+      break;
+    case OptimizationProblemImplementation::INTEGER:
+      types_ << tr("Integer");
+      break;
+    case OptimizationProblemImplementation::BINARY:
+      types_ << tr("Binary");
+      break;
+    default:
+      throw InvalidArgumentException(HERE) << "Unknown variable type";
+    }
 }
-
 
 int OptimizationTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-  return 5;
+  return 6;
 }
 
 
@@ -74,11 +91,17 @@ Qt::ItemFlags OptimizationTableModel::flags(const QModelIndex & index) const
   // not header
   else
   {
-    if (index.column() == 2)
+    if (index.column() == 2) {
+      if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]))
+        result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
+      else
+        result &= ~Qt::ItemIsEnabled;
+    }
+    else if (index.column() == 3)
     {
       result |= Qt::ItemIsEditable;
     }
-    else if (index.column() == 3 || index.column() == 4)
+    else if (index.column() == 4 || index.column() == 5)
     {
       result |= Qt::ItemIsUserCheckable;
 
@@ -87,8 +110,8 @@ Qt::ItemFlags OptimizationTableModel::flags(const QModelIndex & index) const
       else
         result &= ~Qt::ItemIsEnabled;
 
-      if ((index.column() == 3 && analysis_.getBounds().getFiniteLowerBound()[index.row() - 1]) ||
-          (index.column() == 4 && analysis_.getBounds().getFiniteUpperBound()[index.row() - 1]))
+      if ((index.column() == 4 && analysis_.getBounds().getFiniteLowerBound()[index.row() - 1]) ||
+          (index.column() == 5 && analysis_.getBounds().getFiniteUpperBound()[index.row() - 1]))
         result |= Qt::ItemIsEditable;
     }
   }
@@ -123,11 +146,13 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
         case 1:
           return tr("Description");
         case 2:
-          return tr("Starting point");
+          return tr("Type");
         case 3:
-          return tr("Lower bound");
+          return tr("Starting\npoint");
         case 4:
-          return tr("Upper bound");
+          return tr("Lower\nbound");
+        case 5:
+          return tr("Upper\nbound");
         default:
           return QVariant();
       }
@@ -161,15 +186,27 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
       case 1:
         return QString::fromUtf8(analysis_.getPhysicalModel().getInputs()[inputIndex].getDescription().c_str());
       case 2:
-        return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        switch(analysis_.getVariablesType()[inputIndex])
+        {
+          case OptimizationProblemImplementation::CONTINUOUS:
+            return tr("Continuous");
+          case OptimizationProblemImplementation::INTEGER:
+            return tr("Integer");
+          case OptimizationProblemImplementation::BINARY:
+            return tr("Binary");
+          default:
+            throw InvalidArgumentException(HERE) << "Unknown variable type";
+        }
       case 3:
+        return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      case 4:
       {
         if (analysis_.getBounds().getFiniteLowerBound()[inputIndex] || role == Qt::EditRole)
           return QString::number(analysis_.getBounds().getLowerBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
         else
           return "-∞";
       }
-      case 4:
+      case 5:
       {
         if (analysis_.getBounds().getFiniteUpperBound()[inputIndex] || role == Qt::EditRole)
           return QString::number(analysis_.getBounds().getUpperBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
@@ -191,9 +228,9 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
         const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
         return analysis_.getVariableInputs().contains(currentInputName) ? Qt::Checked : Qt::Unchecked;
       }
-      case 3:
-        return analysis_.getBounds().getFiniteLowerBound()[inputIndex] ? Qt::Checked : Qt::Unchecked;
       case 4:
+        return analysis_.getBounds().getFiniteLowerBound()[inputIndex] ? Qt::Checked : Qt::Unchecked;
+      case 5:
         return analysis_.getBounds().getFiniteUpperBound()[inputIndex] ? Qt::Checked : Qt::Unchecked;
     }
   }
@@ -214,6 +251,10 @@ QVariant OptimizationTableModel::data(const QModelIndex & ind, int role) const
         return tr("The interval must contain the starting point");
     }
   }
+  else if (role == Qt::UserRole + 1 && ind.column() == 2)
+    return QStringList() << tr("Continuous") << tr("Integer") << tr("Binary");
+  else if (role == Qt::BackgroundRole && ind.column() == 2)
+    return QHeaderView(Qt::Horizontal).palette().color(QPalette::Window);
 
   return QVariant();
 }
@@ -232,7 +273,6 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       for (int i = 1; i < rowCount(); ++i)
         if (data(this->index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
           setData(this->index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
-
       return true;
     }
     return false;
@@ -247,7 +287,19 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
 
     switch (index.column())
     {
-      case 2: // starting point
+      case 2: // type
+      {
+        Indices values = analysis_.getVariablesType();
+        if (value.toString() == tr("Continuous"))
+          values[inputIndex] = OptimizationProblemImplementation::CONTINUOUS;
+        else if (value.toString() == tr("Integer"))
+          values[inputIndex] = OptimizationProblemImplementation::INTEGER;
+        else if (value.toString() == tr("Binary"))
+          values[inputIndex] = OptimizationProblemImplementation::BINARY;
+        analysis_.setVariablesType(values);
+        break;
+      }
+      case 3: // starting point
       {
         Point values = analysis_.getStartingPoint();
         if (values[inputIndex] == value.toDouble())
@@ -258,7 +310,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
 
         break;
       }
-      case 3: // lower bounds
+      case 4: // lower bounds
       {
         Point lowerBounds = analysis_.getBounds().getLowerBound();
         if (lowerBounds[inputIndex] == value.toDouble())
@@ -271,7 +323,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
 
         break;
       }
-      case 4: // upper bounds
+      case 5: // upper bounds
       {
         Point upperBounds = analysis_.getBounds().getUpperBound();
         if (upperBounds[inputIndex] == value.toDouble())
@@ -298,18 +350,21 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       case 0: // input of interest
       {
         Description variableInputs = analysis_.getVariableInputs();
+        Indices variablesType = analysis_.getVariablesType();
         if (value.toBool() && !variableInputs.contains(currentInputName))
           variableInputs.add(currentInputName);
-        else if (!value.toBool() && variableInputs.contains(currentInputName))
+        // if variable is deselected, its type defaults to continuous
+        else if (!value.toBool() && variableInputs.contains(currentInputName)) {
           variableInputs.erase(std::remove(variableInputs.begin(), variableInputs.end(), currentInputName), variableInputs.end());
+          setData(this->index(index.row(), 2), QVariant(tr("Continuous")), Qt::EditRole);
+        }
         else
           return false;
-
         analysis_.setVariableInputs(variableInputs);
-
+        emit variablesChanged();
         break;
       }
-      case 3: // lower bounds
+      case 4: // lower bounds
       {
         Interval::BoolCollection finiteLowerBounds = analysis_.getBounds().getFiniteLowerBound();
         if (finiteLowerBounds[inputIndex] == value.toBool())
@@ -322,7 +377,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
 
         break;
       }
-      case 4: // upper bounds
+      case 5: // upper bounds
       {
         Interval::BoolCollection finiteUpperBounds = analysis_.getBounds().getFiniteUpperBound();
         if (finiteUpperBounds[inputIndex] == value.toBool())
@@ -338,7 +393,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       default:
         return false;
     }
-    emit dataChanged(this->index(index.row(), 0), this->index(index.row(), 4));
+    emit dataChanged(this->index(index.row(), 0), this->index(index.row(), 5));
   }
 
   return true;

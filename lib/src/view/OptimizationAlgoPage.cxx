@@ -121,7 +121,8 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   algoTableModel_->setHorizontalHeaderItem(3, new QStandardItem(tr("Doc")));
 
   errorMessageLabel_->reset();
-  solverNames_ = OptimizationAnalysis::GetSolverNames(analysis.getBounds());
+  solverNames_ = OptimizationAnalysis::GetSolverNames(analysis.getBounds(), analysis.getVariablesType());
+
   for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i) {
     algoTableModel_->setNotEditableItem(i, 0, solverNames_[i].c_str());
     algoTableModel_->setData(algoTableModel_->index(i, 0), (int)i, Qt::UserRole);
@@ -163,15 +164,18 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   const Description::const_iterator it = std::find(solverNames_.begin(), solverNames_.end(), methodName);
   UnsignedInteger index = 0;
   //if algo is no longer compatible default to Cobyla
-  if (it!=solverNames_.end())
-    index = it - solverNames_.begin();
-  else {
-    LOGWARN(OSS() << "Optimization problem has changed and " << methodName << " algorithm is no longer available... Using Cobyla as default.");
-    index = std::find(solverNames_.begin(), solverNames_.end(), "Cobyla") - solverNames_.begin();
+  if (solverNames_.getSize()) {
+    if (it!=solverNames_.end())
+      index = it - solverNames_.begin();
+    else {
+      index = std::find(solverNames_.begin(), solverNames_.end(), "Cobyla") - solverNames_.begin();
+      if (index == solverNames_.getSize())
+        index = 0;
+      LOGWARN(OSS() << "Optimization problem has changed and " << methodName << " algorithm is no longer available... Using " << solverNames_[index] <<" as default.");
+    }
+    algoTableView_->selectRow(index);
+    algoTableModel_->setData(algoTableModel_->index(index, 0), true, Qt::CheckStateRole);
   }
-  algoTableView_->selectRow(index);
-  algoTableModel_->setData(algoTableModel_->index(index, 0), true, Qt::CheckStateRole);
-
   updateFilters();
 
   // update outputs list
@@ -213,6 +217,10 @@ bool OptimizationAlgoPage::validatePage()
   if (outputsSelectionGroupBox_->getSelectedOutputsNames().size() != 1)
   {
     errorMessageLabel_->setErrorMessage(tr("Only one output must be selected"));
+    return false;
+  }
+  if (!solverNames_.getSize()) {
+    errorMessageLabel_->setErrorMessage(tr("Cannot find a compatible algorithm"));
     return false;
   }
   if (!errorMessageLabel_->text().isEmpty())

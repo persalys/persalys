@@ -20,6 +20,7 @@
  */
 #include "persalys/OptimizationWizard.hxx"
 
+#include "persalys/ComboBoxDelegate.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/QtTools.hxx"
@@ -48,7 +49,6 @@ OptimizationBoundsPage::OptimizationBoundsPage(const QString& subTitle, QWidget*
 
   QGroupBox * inputsBox = new QGroupBox(tr("Inputs"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(inputsBox);
-
   tableView_ = new ResizableHeaderlessTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
   groupBoxLayout->addWidget(tableView_);
@@ -72,24 +72,41 @@ void OptimizationBoundsPage::initialize(const Analysis& analysis)
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
-  // spinbox delegate column 2
+  // combobox delegate column 2
+  ComboBoxDelegate * delegate = new ComboBoxDelegate(tableView_);
+  tableView_->setItemDelegateForColumn(2, delegate);
+  // spinbox delegate column 3
   SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView_);
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
-  tableView_->setItemDelegateForColumn(2, spinBoxDelegate);
-  // spinbox delegate column 3 - 4
+  tableView_->setItemDelegateForColumn(3, spinBoxDelegate);
+  // spinbox delegate column 4 - 5
   spinBoxDelegate = new SpinBoxDelegate(true, tableView_);
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
-  tableView_->setItemDelegateForColumn(3, spinBoxDelegate);
   tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
+  tableView_->setItemDelegateForColumn(5, spinBoxDelegate);
+
+  updateTable();
 
   // resize table
+  tableView_->resizeRowToContents(0);
   tableView_->resizeWithOptimalWidth();
   if (tableView_->model()->rowCount() < RowNumberToScrollTable) // if too many variables: no fixed height + use scrollbar
   {
     tableView_->resizeWithOptimalHeight();
   }
+
+  connect(tableModel_, SIGNAL(variablesChanged()), this, SLOT(updateTable()));
 }
 
+void OptimizationBoundsPage::updateTable()
+{
+  for (int row=1; row<tableModel_->rowCount(); ++row) {
+    if(tableModel_->getAnalysis().getVariableInputs().contains(tableModel_->getAnalysis().getPhysicalModel().getInputNames()[row - 1]))
+      tableView_->openPersistentEditor(tableModel_->index(row, 2));
+    else
+      tableView_->closePersistentEditor(tableModel_->index(row, 2));
+  }
+}
 
 bool OptimizationBoundsPage::validatePage()
 {
@@ -125,6 +142,7 @@ bool OptimizationBoundsPage::validatePage()
   dummyAnalysis.setBounds(getTableModel()->getAnalysis().getBounds());
   dummyAnalysis.setVariableInputs(getTableModel()->getAnalysis().getVariableInputs());
   dummyAnalysis.setStartingPoint(getTableModel()->getAnalysis().getStartingPoint());
+  dummyAnalysis.setVariablesType(getTableModel()->getAnalysis().getVariablesType());
   //analysis_.updateParameters();
   emit currentAnalysisChanged(dummyAnalysis);
   return QWizardPage::validatePage();
@@ -261,7 +279,7 @@ int OptimizationWizard::nextId() const
 {
   switch (currentId())
   {
-    case 0: // starting point - bounds
+    case 0: // starting point - type - bounds
       return 1;
     case 1: // method
       return 2;
@@ -279,6 +297,7 @@ Analysis OptimizationWizard::getAnalysis() const
   optim.setBounds(boundsPage_->getTableModel()->getAnalysis().getBounds());
   optim.setVariableInputs(boundsPage_->getTableModel()->getAnalysis().getVariableInputs());
   optim.setStartingPoint(boundsPage_->getTableModel()->getAnalysis().getStartingPoint());
+  optim.setVariablesType(boundsPage_->getTableModel()->getAnalysis().getVariablesType());
   optim.setSolverName(algoPage_->getSolverName());
   optim.setMinimization(pbTypeComboBox_->currentIndex() == 0 ? true : false);
   stoppingCriteriaLayout_->updateAlgorithm(optim);

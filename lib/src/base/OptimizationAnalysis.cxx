@@ -97,12 +97,14 @@ std::map<OT::String, AlgorithmProperty> OptimizationAnalysis::AlgorithmDictionar
    {"LBFGS",                        AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"), Priority::Medium)},
    {"BFGS",                         AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
    {"Cobyla",                       AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Cobyla.html"), Priority::High)},
-   {"Global",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"CG",                           AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"Newton",                       AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"LSQ",                          AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"LSQLM",                        AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"TrustRegion",                  AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+   {"lbfgs",                        AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"), Priority::Medium)},
+   {"bfgs",                         AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+   {"global",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+   {"cg",                           AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+   {"newton",                       AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+   {"least_squares",                AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+   {"least_squares_lm",             AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+   {"trust_region",                 AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
    {"TNC",                          AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.TNC.html"))}};
 
 Description OptimizationAnalysis::GetSolverNames()
@@ -112,11 +114,18 @@ Description OptimizationAnalysis::GetSolverNames()
   return OptimizationAlgorithm::GetAlgorithmNames(problem);
 }
 
-Description OptimizationAnalysis::GetSolverNames(const Interval& bounds)
+Description OptimizationAnalysis::GetSolverNames(const Interval& bounds, const Indices& types)
 {
   // Dummy non-linear function respecting bounds dimension
   OptimizationProblem problem(SymbolicFunction(Description(bounds.getDimension(), "x"), Description(1, "x^2")), Function(), Function(), bounds);
+  if (types.getSize())
+    problem.setVariablesType(types);
   Description names(OptimizationAlgorithm::GetAlgorithmNames(problem));
+
+  // drop B-iFP
+  const UnsignedInteger index = names.find("B-iFP");
+  if (index < names.getSize())
+    names.erase(names.begin() + index);
 
   // drop pagmo algos as they are parametrized by a sample instead of a single point
   const Description pagmoNames(Pagmo::GetAlgorithmNames());
@@ -156,6 +165,7 @@ OptimizationAnalysis::OptimizationAnalysis(const String& name,
   , maximumConstraintError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumConstraintError"))
 {
   initializeParameters();
+  variablesType_ = Indices(inputNames_.getSize(), OptimizationProblemImplementation::CONTINUOUS);
   if (getPhysicalModel().getSelectedOutputsNames().getSize() > 0)
     setInterestVariables(Description(1, getPhysicalModel().getSelectedOutputsNames()[0]));
 }
@@ -281,6 +291,7 @@ OptimizationProblem OptimizationAnalysis::defineProblem()
       throw InvalidArgumentException(HERE) << "The interval's dimension must be equal to the number of model's inputs";
     Indices fixedInputsIndices;
     Point fixedInputsValues;
+    Indices variablesType;
     variableInputsIndices_ = Indices();
     variableInputsValues_ = Point();
     for (UnsignedInteger i = 0; i < nbInputs; ++i)
@@ -293,6 +304,7 @@ OptimizationProblem OptimizationAnalysis::defineProblem()
       else
       {
         variableInputsIndices_.add(i);
+        variablesType.add(variablesType_[i]);
         variableInputsValues_.add(startingPoint_[i]);
       }
     }
@@ -314,7 +326,9 @@ OptimizationProblem OptimizationAnalysis::defineProblem()
     }
 
     // set OptimizationProblem
-    return OptimizationProblem(objective, equalityConstraints, inequalityConstraints, bounds_.getMarginal(variableInputsIndices_));
+    OptimizationProblem problem(objective, equalityConstraints, inequalityConstraints, bounds_.getMarginal(variableInputsIndices_));
+    problem.setVariablesType(variablesType);
+    return problem;
 
 }
 
@@ -619,6 +633,7 @@ String OptimizationAnalysis::getPythonScript() const
   oss << getName() << ".setBounds(bounds)\n";
   oss << getName() << ".setStartingPoint(" << Parameters::GetOTPointStr(getStartingPoint()) << ")\n";
   oss << getName() << ".setVariableInputs(" << Parameters::GetOTDescriptionStr(getVariableInputs()) << ")\n";
+  oss << getName() << ".setVariablesType(" << Parameters::GetOTIndicesStr(getVariablesType()) << ")\n";
 
   oss << getName() << ".setMaximumEvaluationNumber(" << getMaximumEvaluationNumber() << ")\n";
   oss << getName() << ".setMaximumAbsoluteError(" << getMaximumAbsoluteError() << ")\n";
@@ -653,7 +668,8 @@ String OptimizationAnalysis::__repr__() const
       << " maximumResidualError=" << getMaximumResidualError()
       << " maximumConstraintError=" << getMaximumConstraintError()
       << " bounds=" << Parameters::GetOTIntervalDescription(getBounds())
-      << " variable inputs=" << getVariableInputs();
+      << " variable inputs=" << getVariableInputs()
+      << " variable types=" << getVariablesType();
   return oss;
 }
 
@@ -665,6 +681,7 @@ void OptimizationAnalysis::save(Advocate & adv) const
   adv.saveAttribute("inputNames_", inputNames_);
   adv.saveAttribute("solverName_", solverName_);
   adv.saveAttribute("isMinimization_", isMinimization_);
+  adv.saveAttribute("variablesType_", variablesType_);
   adv.saveAttribute("startingPoint_", startingPoint_);
   adv.saveAttribute("maximumEvaluationNumber_", maximumEvaluationNumber_);
   adv.saveAttribute("maximumAbsoluteError_", maximumAbsoluteError_);
@@ -700,6 +717,9 @@ void OptimizationAnalysis::load(Advocate & adv)
   adv.loadAttribute("eqFunc_", eqFunc_);
   adv.loadAttribute("ineqFunc_", ineqFunc_);
   adv.loadAttribute("rawEqs_", rawEqs_);
-
+  if(adv.hasAttribute("variablesType_"))
+    adv.loadAttribute("variablesType_", variablesType_);
+  else
+    variablesType_ = Indices(inputNames_.getSize(), OptimizationProblemImplementation::CONTINUOUS);
 }
 }

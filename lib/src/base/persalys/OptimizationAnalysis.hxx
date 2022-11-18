@@ -74,7 +74,7 @@ public:
   virtual void updateParameters();
 
   static OT::Description GetSolverNames();
-  static OT::Description GetSolverNames(const OT::Interval& bounds);
+  static OT::Description GetSolverNames(const OT::Interval& bounds, const OT::Indices& types = OT::Indices());
 
   static std::map<OT::String, AlgorithmProperty> AlgorithmDictionary;
 
@@ -116,6 +116,9 @@ public:
   OT::Bool getMinimization() const;
   void setMinimization(const OT::Bool minimization);
 
+  OT::Indices getVariablesType() const {return variablesType_;};
+  void setVariablesType(const OT::Indices& variablesType) {variablesType_ = variablesType;};
+
   OT::Interval getBounds() const;
   void setBounds(const OT::Interval & bounds);
 
@@ -154,6 +157,7 @@ protected:
   OT::Description ineqFunc_;
   OT::Description rawEqs_;
   OT::Indices variableInputsIndices_;
+  OT::Indices variablesType_;
 
 
 private:

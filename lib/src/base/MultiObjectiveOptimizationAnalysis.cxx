@@ -26,6 +26,7 @@
 #include <openturns/Pagmo.hxx>
 #include <openturns/SimulatedAnnealingLHS.hxx>
 #include <openturns/RandomGenerator.hxx>
+#include <openturns/UserDefined.hxx>
 
 using namespace OT;
 
@@ -72,10 +73,12 @@ namespace PERSALYS
     return oss;
   }
 
-  Description MultiObjectiveOptimizationAnalysis::GetSolverNames(const Interval& bounds)
+  Description MultiObjectiveOptimizationAnalysis::GetSolverNames(const Interval& bounds, const Indices& types)
   {
     // Dummy function to match a multi objective problem
     OptimizationProblem problem(SymbolicFunction(Description(bounds.getDimension(), "x"), Description(bounds.getDimension(), "x^2")), Function(), Function(), bounds);
+    if (types.getSize())
+      problem.setVariablesType(types);
     return OptimizationAlgorithm::GetAlgorithmNames(problem);
   }
 
@@ -184,9 +187,20 @@ namespace PERSALYS
     // Generate initial population
     Collection<Distribution> distColl;
 
-    for (UnsignedInteger i=0; i<getVariableInputs().getSize(); ++i)
-      distColl.add(OT::Uniform(bounds_.getLowerBound()[variableInputsIndices_[i]],
-                               bounds_.getUpperBound()[variableInputsIndices_[i]]));
+    for (UnsignedInteger i=0; i<getVariableInputs().getSize(); ++i) {
+      if (getVariablesType()[variableInputsIndices_[i]] == OptimizationProblemImplementation::CONTINUOUS)
+        distColl.add(OT::Uniform(bounds_.getLowerBound()[variableInputsIndices_[i]], bounds_.getUpperBound()[variableInputsIndices_[i]]));
+      else {
+        Sample values;
+        for (int val=ceil(bounds_.getLowerBound()[variableInputsIndices_[i]]);
+             val<=floor(bounds_.getUpperBound()[variableInputsIndices_[i]]);
+             ++val) {
+          const Point point(1, val);
+          values.add(point);
+        }
+        distColl.add(OT::UserDefined(values));
+      }
+    }
 
     ComposedDistribution distribution(distColl);
     SimulatedAnnealingLHS doe(LHSExperiment(distribution, startingPopSize_),
@@ -331,6 +345,7 @@ namespace PERSALYS
     oss << getName() << ".setGenerationNumber(" << getGenerationNumber() << ")\n";
 
     oss << getName() << ".setVariableInputs(" << Parameters::GetOTDescriptionStr(getVariableInputs()) << ")\n";
+    oss << getName() << ".setVariablesType(" << Parameters::GetOTIndicesStr(getVariablesType()) << ")\n";
     return oss;
 }
 
@@ -346,6 +361,7 @@ namespace PERSALYS
         << " starting population size=" << getPopulationSize()
         << " bounds=" << Parameters::GetOTIntervalDescription(getBounds())
         << " variable inputs=" << getVariableInputs()
+        << " variable types=" << getVariablesType()
         << " variables of interest=" << getInterestVariables()
         << " minimization=" << getMinimization()
         << " constraints=" << getRawEquations()
