@@ -87,7 +87,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz | tar 
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11 flake8
+RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel "setuptools<65.6" cython pybind11 flake8
 RUN git clone -b v1.22.4 --depth 1 --recursive https://github.com/numpy/numpy.git && cd numpy \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
 RUN pip install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.8.1.tar.gz | tar xz && cd scipy-1.8.1 \
