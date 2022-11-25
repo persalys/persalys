@@ -46,8 +46,10 @@ public:
 public slots:
 signals:
   void errorMessageChanged(QString);
-  void doeSizeChanged(QString);
+  void variablesChanged();
 
+protected:
+  QStringList types_;
 private:
   OptimizationAnalysis analysis_;
   bool firstColumnChecked_;

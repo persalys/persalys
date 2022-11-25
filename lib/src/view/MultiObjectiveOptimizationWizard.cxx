@@ -76,7 +76,7 @@ namespace PERSALYS
     algoTableModel_->setHorizontalHeaderItem(0, new QStandardItem(tr("Name")));
 
     errorMessageLabel_->reset();
-    solverNames_ = MultiObjectiveOptimizationAnalysis::GetSolverNames(analysis.getBounds());
+    solverNames_ = MultiObjectiveOptimizationAnalysis::GetSolverNames(analysis.getBounds(),analysis.getVariablesType());
 
     for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i) {
       algoTableModel_->setNotEditableItem(i, 0, solverNames_[i].c_str());
@@ -220,11 +220,29 @@ namespace PERSALYS
     connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
     tableView_->setModel(tableModel_);
 
+    // combobox delegate column 2
+    ComboBoxDelegate * delegate = new ComboBoxDelegate(tableView_);
+    tableView_->setItemDelegateForColumn(2, delegate);
+
+    updateTable();
+
     // resize table
+    tableView_->resizeRowToContents(0);
     tableView_->resizeWithOptimalWidth();
     if (tableView_->model()->rowCount() < RowNumberToScrollTable) // if too many variables: no fixed height + use scrollbar
     {
       tableView_->resizeWithOptimalHeight();
+    }
+    connect(tableModel_, SIGNAL(variablesChanged()), this, SLOT(updateTable()));
+  }
+
+  void MultiObjectiveOptimizationBoundsPage::updateTable()
+  {
+    for (int row=1; row<tableModel_->rowCount(); ++row) {
+      if(tableModel_->getAnalysis().getVariableInputs().contains(tableModel_->getAnalysis().getPhysicalModel().getInputNames()[row - 1]))
+        tableView_->openPersistentEditor(tableModel_->index(row, 2));
+      else
+        tableView_->closePersistentEditor(tableModel_->index(row, 2));
     }
   }
 
@@ -251,6 +269,13 @@ namespace PERSALYS
       errorMessageLabel_->setErrorMessage(tr("At least one variable must vary"));
       return false;
     }
+
+    MultiObjectiveOptimizationAnalysis dummyAnalysis = tableModel_->getAnalysis();
+    dummyAnalysis.setBounds(getTableModel()->getAnalysis().getBounds());
+    dummyAnalysis.setVariableInputs(getTableModel()->getAnalysis().getVariableInputs());
+    dummyAnalysis.setVariablesType(getTableModel()->getAnalysis().getVariablesType());
+    //analysis_.updateParameters();
+    emit currentAnalysisChanged();
 
     return QWizardPage::validatePage();
   }
@@ -300,22 +325,22 @@ namespace PERSALYS
     setWindowTitle(tr("Multi-objective optimization"));
     docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#optimizationwizard";
 
-    // -- 1st page: Outputs and algo selection
+    // -- 1st page: Inputs
+    boundsPage_ = new MultiObjectiveOptimizationBoundsPage(this);
+    setPage(0, boundsPage_);
+
+    // -- 2nd page: Outputs and algo selection
     algoPage_ = new MultiObjectiveOptimizationAlgoPage(this);
     algoPage_->buildInterface();
-    setPage(0, algoPage_);
+    setPage(1, algoPage_);
 
-    // -- 2nd page: Objectives
+    // -- 3rd page: Objectives
     objPage_ = new MultiObjectiveDefinitionPage(this);
-    setPage(1, objPage_);
+    setPage(2, objPage_);
 
-    // -- 3rd page: Constraints
+    // -- 4th page: Constraints
     cstrPage_ = new ConstraintsPage(this);
-    setPage(2, cstrPage_);
-
-    // -- 4th page: Inputs
-    boundsPage_ = new MultiObjectiveOptimizationBoundsPage(this);
-    setPage(3, boundsPage_);
+    setPage(3, cstrPage_);
 
     // -- 5th page: Parameters
     QWizardPage * page = new QWizardPage(this);
@@ -342,7 +367,12 @@ namespace PERSALYS
     if (analysis_ptr->getInterestVariables().getSize() == 1)
       analysis_ptr->setInterestVariables(analysis_ptr->getPhysicalModel().getSelectedOutputsNames());
 
-    algoPage_->initialize(*analysis_ptr);
+    boundsPage_->initialize(*analysis_ptr);
+
+    connect(boundsPage_, &MultiObjectiveOptimizationBoundsPage::currentAnalysisChanged, [=](){
+        analysis_ptr->setVariablesType(boundsPage_->getTableModel()->getAnalysis().getVariablesType());
+        algoPage_->initialize(*analysis_ptr);});
+
     parametersLayout_->initialize(*analysis_ptr);
     connect(algoPage_, &MultiObjectiveOptimizationAlgoPage::outputSelected, [=](){
         analysis_ptr->setInterestVariables(algoPage_->getInterestVariables());
@@ -352,22 +382,19 @@ namespace PERSALYS
         analysis_ptr->setMinimization(objPage_->getTableModel()->getMinimization());
         cstrPage_->initialize(*analysis_ptr);});
 
-    connect(cstrPage_, &ConstraintsPage::constraintsDefined, [=]() {
-        boundsPage_->initialize(*analysis_ptr);});
-
   }
 
   int MultiObjectiveOptimizationWizard::nextId() const
   {
     switch (currentId())
     {
-    case 0: // Algo
+    case 0: // Bounds
       return 1;
-    case 1: // Objectives
+    case 1: // Algo
       return 2;
-    case 2: // Constraints
+    case 2: // Objectives
       return 3;
-    case 3: //Bounds
+    case 3: // Constraints
       return 4;
     default:  // Params
       return -1;
@@ -400,6 +427,7 @@ namespace PERSALYS
     optim.setVariableInputs(boundsPage_->getTableModel()->getAnalysis().getVariableInputs());
     optim.setStartingPoint(boundsPage_->getTableModel()->getAnalysis().getStartingPoint());
     optim.setBounds(boundsPage_->getTableModel()->getAnalysis().getBounds());
+    optim.setVariablesType(boundsPage_->getTableModel()->getAnalysis().getVariablesType());
 
     // Parameters
     parametersLayout_->updateAlgorithm(optim);

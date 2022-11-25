@@ -21,6 +21,7 @@
 #include "persalys/MultiObjectiveOptimizationTableModel.hxx"
 
 #include "persalys/StudyTreeViewModel.hxx"
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -32,6 +33,23 @@ namespace PERSALYS
     , analysis_(analysis)
   {
     analysis_.updateParameters();
+    types_.clear();
+    const UnsignedInteger nbInputs = analysis_.getPhysicalModel().getInputs().getSize();
+    for (UnsignedInteger i = 0; i < nbInputs; ++i)
+      switch (analysis_.getVariablesType()[i])
+      {
+      case OptimizationProblemImplementation::CONTINUOUS:
+        types_ << tr("Continuous");
+        break;
+      case OptimizationProblemImplementation::INTEGER:
+        types_ << tr("Integer");
+        break;
+      case OptimizationProblemImplementation::BINARY:
+        types_ << tr("Binary");
+        break;
+      default:
+        throw InvalidArgumentException(HERE) << "Unknown variable type";
+      }
   }
 
 
@@ -62,14 +80,20 @@ namespace PERSALYS
     {
       const int inputIndex = index.row() - 1;
       const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
-      if (index.column() == 2)
+      if (index.column() == 2) {
+        if (analysis_.getVariableInputs().contains(currentInputName))
+          result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
+        else
+          result &= ~Qt::ItemIsEnabled;
+      }
+      else if (index.column() == 3)
       {
         if (analysis_.getVariableInputs().contains(currentInputName))
           result &= ~Qt::ItemIsEnabled;
         else
           result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
       }
-      else if (index.column() == 3 || index.column() == 4)
+      else if (index.column() == 4 || index.column() == 5)
       {
         if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]))
           result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
@@ -95,11 +119,13 @@ namespace PERSALYS
         case 1:
           return tr("Description");
         case 2:
-          return tr("Fixed value");
+          return tr("Type");
         case 3:
-          return tr("Lower bound");
+          return tr("Fixed\nvalue");
         case 4:
-          return tr("Upper bound");
+          return tr("Lower\nbound");
+        case 5:
+          return tr("Upper\nbound");
         default:
           return QVariant();
         }
@@ -134,10 +160,22 @@ namespace PERSALYS
       case 1:
         return QString::fromUtf8(analysis_.getPhysicalModel().getInputs()[inputIndex].getDescription().c_str());
       case 2:
-        return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        switch(analysis_.getVariablesType()[inputIndex])
+        {
+        case OptimizationProblemImplementation::CONTINUOUS:
+          return tr("Continuous");
+        case OptimizationProblemImplementation::INTEGER:
+          return tr("Integer");
+        case OptimizationProblemImplementation::BINARY:
+          return tr("Binary");
+        default:
+          throw InvalidArgumentException(HERE) << "Unknown variable type";
+        }
       case 3:
-        return QString::number(analysis_.getBounds().getLowerBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 4:
+        return QString::number(analysis_.getBounds().getLowerBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      case 5:
         return QString::number(analysis_.getBounds().getUpperBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       default:
         return QVariant();
@@ -150,10 +188,8 @@ namespace PERSALYS
       switch (ind.column())
       {
       case 0:
-      {
         const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
         return analysis_.getVariableInputs().contains(currentInputName) ? Qt::Checked : Qt::Unchecked;
-      }
       }
     }
     else if ((role == Qt::ForegroundRole || role == Qt::ToolTipRole) && ind.column() == 0)
@@ -170,7 +206,10 @@ namespace PERSALYS
           return tr("The lower bound must be less than the upper bound");
       }
     }
-
+    else if (role == Qt::UserRole + 1 && ind.column() == 2)
+      return QStringList() << tr("Continuous") << tr("Integer") << tr("Binary");
+    else if (role == Qt::BackgroundRole && ind.column() == 2)
+      return QHeaderView(Qt::Horizontal).palette().color(QPalette::Window);
     return QVariant();
   }
 
@@ -203,7 +242,20 @@ namespace PERSALYS
 
       switch (index.column())
       {
-      case 2: // starting point
+      case 2: // type
+      {
+        Indices values = analysis_.getVariablesType();
+        if (value.toString() == tr("Continuous"))
+          values[inputIndex] = OptimizationProblemImplementation::CONTINUOUS;
+        else if (value.toString() == tr("Integer"))
+          values[inputIndex] = OptimizationProblemImplementation::INTEGER;
+        else if (value.toString() == tr("Binary"))
+          values[inputIndex] = OptimizationProblemImplementation::BINARY;
+        analysis_.setVariablesType(values);
+        break;
+      }
+
+      case 3: // starting point
       {
         Point values = analysis_.getStartingPoint();
         if (values[inputIndex] == value.toDouble())
@@ -214,7 +266,7 @@ namespace PERSALYS
 
         break;
       }
-      case 3: // lower bounds
+      case 4: // lower bounds
       {
         Point lowerBounds = analysis_.getBounds().getLowerBound();
         if (lowerBounds[inputIndex] == value.toDouble())
@@ -227,7 +279,7 @@ namespace PERSALYS
 
         break;
       }
-      case 4: // upper bounds
+      case 5: // upper bounds
       {
         Point upperBounds = analysis_.getBounds().getUpperBound();
         if (upperBounds[inputIndex] == value.toDouble())
@@ -262,7 +314,7 @@ namespace PERSALYS
           return false;
 
         analysis_.setVariableInputs(variableInputs);
-
+        emit variablesChanged();
         break;
       }
       default:

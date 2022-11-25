@@ -4602,217 +4602,6 @@ bayésien (BIC)</translation>
     </message>
 </context>
 <context>
-    <name>PERSALYS::LinearRegressionPage</name>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionPage.cxx" line="47"/>
-        <source>Linear regression parameters</source>
-        <translation>Paramètres de la régression linéaire</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionPage.cxx" line="52"/>
-        <source>Parameters</source>
-        <translation>Paramètres</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionPage.cxx" line="56"/>
-        <source>Degree</source>
-        <translation>Degré</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionPage.cxx" line="64"/>
-        <source>Interaction</source>
-        <translation>Intéraction</translation>
-    </message>
-</context>
-<context>
-    <name>PERSALYS::LinearRegressionResultWindow</name>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="63"/>
-        <source>Metamodel creation parameters</source>
-        <translation>Paramètres de création du métamodèle</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="73"/>
-        <source>Linear regression</source>
-        <translation>Régression linéaire</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="82"/>
-        <source>Outputs</source>
-        <translation>Sorties</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
-        <source>Dimension</source>
-        <translation>Dimension</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
-        <source>Degree</source>
-        <translation>Degré</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
-        <source>Interaction</source>
-        <translation>Intéraction</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
-        <source>Formula</source>
-        <translation>Formule</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
-        <source>R2</source>
-        <translation>R2</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="112"/>
-        <source>Adjusted R2</source>
-        <translation>R2 ajusté</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="137"/>
-        <source>Term</source>
-        <translation>Terme</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="138"/>
-        <source>Coefficient</source>
-        <translation>Coefficient</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="139"/>
-        <source>Confidence Interval
-at</source>
-        <translation>Intervalle de confiance</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="157"/>
-        <source>intercept</source>
-        <translation>constante</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="170"/>
-        <source>undefined</source>
-        <translation>indéfini</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="185"/>
-        <source>Results</source>
-        <translation>Résultats</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="204"/>
-        <source>Adequation</source>
-        <translation>Adéquation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="254"/>
-        <source>Q2</source>
-        <translation>Q2</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="262"/>
-        <source>Validation</source>
-        <translation>Validation</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="284"/>
-        <source>Row ID</source>
-        <translation>Ligne</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="285"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="362"/>
-        <source>Observation</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="286"/>
-        <source>Predicted</source>
-        <translation>Prédiction</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="287"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="332"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="351"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="373"/>
-        <source>Residual</source>
-        <translation>Résidu</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="288"/>
-        <source>Cook distances</source>
-        <translation>Distance de Cook</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="318"/>
-        <source>Table</source>
-        <translation>Table</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="324"/>
-        <source>Standard deviation</source>
-        <translation>Écart type</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="329"/>
-        <source>Residual distribution</source>
-        <translation>Distribution du résidu</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="331"/>
-        <source>Residual PDF</source>
-        <translation>PDF du résidu</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="333"/>
-        <source>Density</source>
-        <translation>Densité</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="338"/>
-        <source>PDF</source>
-        <translation>PDF</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="346"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="349"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="353"/>
-        <source>Residual vs fitted</source>
-        <translation>Résidu vs prédiction</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="350"/>
-        <source>Fitted values</source>
-        <translation>Valeurs prédites</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="356"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="361"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="363"/>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="365"/>
-        <source>Cook distance</source>
-        <translation>Distance de Cook</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="383"/>
-        <source>Error</source>
-        <translation>Erreur</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="388"/>
-        <source>Parameters</source>
-        <translation>Paramètres</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/LinearRegressionResultWindow.cxx" line="392"/>
-        <source>Model</source>
-        <translation>Modèle</translation>
-    </message>
-</context>
-<context>
     <name>PERSALYS::ListWidgetWithCheckBox</name>
     <message>
         <location filename="../lib/src/view/utils/ListWidgetWithCheckBox.cxx" line="108"/>
@@ -5950,12 +5739,12 @@ ou interaction</translation>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="242"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="260"/>
         <source>The lower bounds must be less than the upper bounds</source>
         <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="251"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="269"/>
         <source>At least one variable must vary</source>
         <translation>Au moins une variable doit varier</translation>
     </message>
@@ -5963,22 +5752,22 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::MultiObjectiveOptimizationParameters</name>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="262"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="287"/>
         <source>Number of generations</source>
         <translation>Nombre de générations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="271"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="296"/>
         <source>Initial population size</source>
         <translation>Taille de population initiale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="280"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="305"/>
         <source>Seed</source>
         <translation>Graine</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="287"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="312"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
@@ -6030,32 +5819,69 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::MultiObjectiveOptimizationTableModel</name>
     <message>
-        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="94"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="42"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="51"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="166"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="172"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="210"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="248"/>
+        <source>Continuous</source>
+        <translation>Continu</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="45"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="168"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="210"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="250"/>
+        <source>Integer</source>
+        <translation>Entier</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="48"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="170"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="210"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="252"/>
+        <source>Binary</source>
+        <translation>Binaire</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="118"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="96"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="120"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="98"/>
-        <source>Fixed value</source>
-        <translation>Valeur fixe</translation>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="122"/>
+        <source>Type</source>
+        <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="100"/>
-        <source>Lower bound</source>
-        <translation>Borne inférieure</translation>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="124"/>
+        <source>Fixed
+value</source>
+        <translation>Valeur
+fixe</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="102"/>
-        <source>Upper bound</source>
-        <translation>Borne supérieure</translation>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="126"/>
+        <source>Lower
+bound</source>
+        <translation>Borne
+inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="170"/>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="128"/>
+        <source>Upper
+bound</source>
+        <translation>Borne
+supérieure</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/MultiObjectiveOptimizationTableModel.cxx" line="206"/>
         <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
@@ -6063,12 +5889,12 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::MultiObjectiveOptimizationWizard</name>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="300"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="325"/>
         <source>Multi-objective optimization</source>
         <translation>Optimisation multi-objectifs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="324"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationWizard.cxx" line="349"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -6207,12 +6033,13 @@ ou interaction</translation>
         <translation>Doc</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="215"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="219"/>
         <source>Only one output must be selected</source>
         <translation>Seulement une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="296"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="223"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="304"/>
         <source>Cannot find a compatible algorithm</source>
         <translation>Aucun algorithme compatible n&apos;a été trouvé</translation>
     </message>
@@ -6220,22 +6047,22 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OptimizationBoundsPage</name>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="49"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="50"/>
         <source>Inputs</source>
         <translation>Entrées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="119"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="136"/>
         <source>At least one variable must vary</source>
         <translation>Au moins une variable doit variée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="105"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="122"/>
         <source>The lower bounds must be less than the upper bounds</source>
         <translation>Les bornes inférieures doivent être inférieures aux bornes supérieures</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="110"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="127"/>
         <source>The interval must contain the starting point</source>
         <translation>L&apos;intervalle doit contenir le point de départ</translation>
     </message>
@@ -6359,27 +6186,27 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OptimizationStoppingCriteria</name>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="140"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="158"/>
         <source>Number of evaluations</source>
         <translation>Nombre d&apos;évaluations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="149"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="167"/>
         <source>Absolute error</source>
         <translation>Erreur absolue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="157"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="175"/>
         <source>Relative error</source>
         <translation>Erreur relative</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="165"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="183"/>
         <source>Residual error</source>
         <translation>Erreur sur les résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="173"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="191"/>
         <source>Constraint error</source>
         <translation>Erreur sur la contrainte</translation>
     </message>
@@ -6387,37 +6214,72 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OptimizationTableModel</name>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="122"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="49"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="58"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="192"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="198"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="255"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="293"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="359"/>
+        <source>Continuous</source>
+        <translation type="unfinished">Continue</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="52"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="194"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="255"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="295"/>
+        <source>Integer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="55"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="196"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="255"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="297"/>
+        <source>Binary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="145"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="124"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="147"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="126"/>
-        <source>Starting point</source>
-        <translation>Point de départ</translation>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="149"/>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="128"/>
-        <source>Lower bound</source>
-        <translation>Borne inférieure</translation>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="151"/>
+        <source>Starting
+point</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="130"/>
-        <source>Upper bound</source>
-        <translation>Borne supérieure</translation>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="153"/>
+        <source>Lower
+bound</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="212"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="155"/>
+        <source>Upper
+bound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="249"/>
         <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="214"/>
+        <location filename="../lib/src/model/OptimizationTableModel.cxx" line="251"/>
         <source>The interval must contain the starting point</source>
         <translation>L&apos;intervalle doit contenir le point de départ</translation>
     </message>
@@ -6425,37 +6287,37 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::OptimizationWizard</name>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="193"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="211"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="199"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="217"/>
         <source>Choose the input variables to optimize. Define the starting point and the bounds of the optimization algorithm.</source>
         <translation>Choisir les entrées à optimiser. Définir le point de départ et les bornes de l&apos;algorithme d&apos;optimisation.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="217"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="235"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="220"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="238"/>
         <source>Problem type</source>
         <translation>Type d&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="223"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="241"/>
         <source>Minimization</source>
         <translation>Minimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="223"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="241"/>
         <source>Maximization</source>
         <translation>Maximisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="229"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="247"/>
         <source>Stopping criteria</source>
         <translation>Critères d&apos;arrêt</translation>
     </message>
@@ -7429,6 +7291,218 @@ métamodèle</translation>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="676"/>
         <source>vs</source>
         <translation>vs</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::PolynomialRegressionPage</name>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionPage.cxx" line="47"/>
+        <source>Linear regression parameters</source>
+        <translation>Paramètres de la régression linéaire</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionPage.cxx" line="52"/>
+        <source>Parameters</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionPage.cxx" line="56"/>
+        <source>Degree</source>
+        <translation>Degré</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionPage.cxx" line="64"/>
+        <source>Interaction</source>
+        <translation>Intéraction</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::PolynomialRegressionResultWindow</name>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="63"/>
+        <source>Metamodel creation parameters</source>
+        <translation>Paramètres de création du métamodèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="73"/>
+        <source>Linear regression</source>
+        <translation>Régression linéaire</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="82"/>
+        <source>Outputs</source>
+        <translation>Sorties</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="112"/>
+        <source>Dimension</source>
+        <translation>Dimension</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="112"/>
+        <source>Degree</source>
+        <translation>Degré</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="112"/>
+        <source>Interaction</source>
+        <translation>Intéraction</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="112"/>
+        <source>Formula</source>
+        <translation>Formule</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="112"/>
+        <source>R2</source>
+        <translation>R2</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="112"/>
+        <source>Adjusted R2</source>
+        <translation>R2 ajusté</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="137"/>
+        <source>Term</source>
+        <translation>Terme</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="138"/>
+        <source>Coefficient</source>
+        <translation>Coefficient</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="139"/>
+        <source>Confidence Interval
+at</source>
+        <translation>Intervalle de confiance
+à</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="157"/>
+        <source>intercept</source>
+        <translation>constante</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="170"/>
+        <source>undefined</source>
+        <translation>indéfini</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="185"/>
+        <source>Results</source>
+        <translation>Résultats</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="204"/>
+        <source>Adequation</source>
+        <translation>Adéquation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="254"/>
+        <source>Q2</source>
+        <translation>Q2</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="262"/>
+        <source>Validation</source>
+        <translation>Validation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="284"/>
+        <source>Row ID</source>
+        <translation>Ligne</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="285"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="362"/>
+        <source>Observation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="286"/>
+        <source>Predicted</source>
+        <translation>Prédiction</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="287"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="332"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="351"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="373"/>
+        <source>Residual</source>
+        <translation>Résidu</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="288"/>
+        <source>Cook distances</source>
+        <translation>Distance de Cook</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="318"/>
+        <source>Table</source>
+        <translation>Table</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="324"/>
+        <source>Standard deviation</source>
+        <translation>Écart type</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="329"/>
+        <source>Residual distribution</source>
+        <translation>Distribution du résidu</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="331"/>
+        <source>Residual PDF</source>
+        <translation>PDF du résidu</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="333"/>
+        <source>Density</source>
+        <translation>Densité</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="338"/>
+        <source>PDF</source>
+        <translation>PDF</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="346"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="349"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="353"/>
+        <source>Residual vs fitted</source>
+        <translation>Résidu vs prédiction</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="350"/>
+        <source>Fitted values</source>
+        <translation>Valeurs prédites</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="356"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="361"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="363"/>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="365"/>
+        <source>Cook distance</source>
+        <translation>Distance de Cook</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="383"/>
+        <source>Error</source>
+        <translation>Erreur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="388"/>
+        <source>Parameters</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="392"/>
+        <source>Model</source>
+        <translation>Modèle</translation>
     </message>
 </context>
 <context>

@@ -28,6 +28,9 @@ analysis.setBounds(bounds)
 analysis.setPopulationSize(50)
 analysis.setGenerationNumber(ngen)
 analysis.setVariableInputs(["X0", "X1"])
+types = [ot.OptimizationProblemImplementation.CONTINUOUS,
+         ot.OptimizationProblemImplementation.INTEGER]
+analysis.setVariablesType(types)
 myStudy.add(analysis)
 analysis.run()
 print("analysis=", analysis)

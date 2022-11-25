@@ -82,7 +82,9 @@ namespace PERSALYS
     ResizableHeaderlessTableView * getTableView() const {return tableView_;};
     MultiObjectiveOptimizationTableModel * getTableModel() const {return tableModel_;};
   signals:
-    void currentAnalysisChanged(MultiObjectiveOptimizationAnalysis&);
+    void currentAnalysisChanged();
+  protected slots:
+    void updateTable();
   private:
     ResizableHeaderlessTableView * tableView_;
     MultiObjectiveOptimizationTableModel * tableModel_;
