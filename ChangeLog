@@ -1,8 +1,9 @@
-= 13.1 release (in-progress)
+= 13.1 release (2022-11-25)
 
  * Allow to score independent copula in inference
- * Added Multi-objective optimization analysis
+ * Added multi-objective optimization analysis
  * Added constraints support for optimization analysis
+ * Added mixed optimization
 
 = 13.0 release (2022-10-18)
 
