@@ -204,7 +204,12 @@ else ()
   target_compile_definitions (persalysbase PUBLIC PERSALYS_BASE_STATIC)
 endif ()
 
+target_include_directories (persalysbase PRIVATE ${Boost_INCLUDE_DIRS})
 target_include_directories (persalysbase PRIVATE ${Python_INCLUDE_DIRS})
+
+if (OTMORRIS_FOUND)
+  target_include_directories (persalysbase PRIVATE ${OTMORRIS_INCLUDE_DIRS})
+endif ()
 
 if (NOT DEFINED LIB_VERSION)
   set (LIB_VERSION 0.0.0)

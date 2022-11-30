@@ -226,9 +226,6 @@ if (SPHINX_FOUND)
 
   file (MAKE_DIRECTORY ${SPHINX_BINARY_DIR}/_static) # currently empty
 
-  if (NOT DEFINED OPENTURNS_PYTHON_MODULE_PATH)
-    set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON3_MODULE_PATH})
-  endif ()
   configure_file (${SPHINX_SOURCE_DIR}/conf.py.in ${SPHINX_BINARY_DIR}/conf.py @ONLY)
 
   # get sphinx sources
