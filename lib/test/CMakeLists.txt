@@ -11,7 +11,7 @@ if (WIN32)
 endif ()
 
 set (CHECK_ENVIRONMENT
-     "PYTHONPATH=${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${OTMORRIS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${PERSALYS_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
+     "PYTHONPATH=${OPENTURNS_PYTHON_MODULE_PATH}${PATH_SEP}${OTMORRIS_PYTHON_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${PERSALYS_PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
     )
 
 set ( CHECK_TO_BE_RUN )
@@ -97,12 +97,8 @@ macro (ot_qt_check_test TESTNAME)
 endmacro ()
 
 
-include_directories (${QWT_INCLUDE_DIRS})
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
-
-# because of PhysicalModel_std where we need Python.h
-include_directories (${PYTHON_INCLUDE_DIRS})
 
 ot_check_test ( PhysicalModel_std )
 ot_check_test ( Cogeneration_std )

@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.13)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option ( BUILD_GUI                    "Build the GUI"                                                         ON )
@@ -68,9 +68,9 @@ find_package (Boost COMPONENTS filesystem locale REQUIRED)
 list (APPEND PERSALYS_PRIVATE_LIBRARIES ${Boost_LIBRARIES})
 include_directories (${Boost_INCLUDE_DIRS})
 
-find_package (PythonInterp 3.5)
-find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
-list (APPEND PERSALYS_PUBLIC_LIBRARIES ${PYTHON_LIBRARIES})
+find_package (Python 3.5 COMPONENTS Interpreter Development REQUIRED)
+list (APPEND PERSALYS_PUBLIC_LIBRARIES ${Python_LIBRARIES})
+
 
 if (BUILD_GUI)
 
@@ -153,13 +153,12 @@ set ( PERSALYS_DATA_PATH share )
 set ( PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys )
 set ( DOC_INSTALL_PATH share/${PACKAGE_NAME}/doc )
 
-# beware swig<3.0 does not like c++11: https://github.com/swig/swig/issues/73
 set (CMAKE_CXX_STANDARD 11)
 
 list (APPEND PERSALYS_DEFINITIONS -DDOCUMENTATION_INSTALL_PATH="${DOC_INSTALL_PATH}")
 
 if (BUILD_PYTHON)
-  find_package (SWIG)
+  find_package (SWIG 3)
   if (SWIG_FOUND)
     include (${SWIG_USE_FILE})
   endif ()
@@ -179,24 +178,22 @@ if (BUILD_PYTHON)
   endif ()
 
   if (NOT DEFINED PYTHON_SITE_PACKAGES AND NOT CMAKE_CROSSCOMPILING)
-    execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig, os; print(sysconfig.get_path('platlib').replace(sysconfig.get_path('data'), '').lstrip(os.path.sep))"
+    execute_process (COMMAND ${Python_EXECUTABLE} -c "import sysconfig, os; print(sysconfig.get_path('platlib').replace(sysconfig.get_path('data'), '').lstrip(os.path.sep))"
                     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
     file (TO_CMAKE_PATH "${PYTHON_SITE_PACKAGES}" PYTHON_SITE_PACKAGES)
   endif ()
 
-  if (PYTHONINTERP_FOUND)
+  if (Python_FOUND)
     if (DEFINED PYTHON_SITE_PACKAGES)
       set (PERSALYS_PYTHON_MODULE_PATH "${PYTHON_SITE_PACKAGES}")
     else ()
      if (WIN32)
        set (PERSALYS_PYTHON_MODULE_PATH Lib/site-packages)
      else ()
-       set (PERSALYS_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+       set (PERSALYS_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
       endif ()
     endif ()
-
-    set (PERSALYS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${PERSALYS_PYTHON_MODULE_PATH})
-  endif ( PYTHONINTERP_FOUND )
+  endif ()
 endif ()
 
 

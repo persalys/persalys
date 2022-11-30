@@ -1,4 +1,3 @@
-include_directories (${PYTHON_INCLUDE_DIRS})
 
 ot_add_current_dir_to_include_dirs ()
 include_directories (${INTERNAL_INCLUDE_DIRS})
@@ -204,6 +203,8 @@ if (BUILD_SHARED_LIBS)
 else ()
   target_compile_definitions (persalysbase PUBLIC PERSALYS_BASE_STATIC)
 endif ()
+
+target_include_directories (persalysbase PRIVATE ${Python_INCLUDE_DIRS})
 
 if (NOT DEFINED LIB_VERSION)
   set (LIB_VERSION 0.0.0)

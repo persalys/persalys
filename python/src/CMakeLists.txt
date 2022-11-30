@@ -1,6 +1,5 @@
 
 include (${SWIG_USE_FILE})
-include (TargetLinkLibrariesWithDynamicLookup)
 
 include_directories (${OPENTURNS_INCLUDE_DIRS})
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
@@ -15,7 +14,7 @@ set (CMAKE_SWIG_FLAGS "" CACHE STRING "SWIG flags for generating wrapper code")
 set (SWIG_COMPILE_FLAGS "" CACHE STRING "Additional flags used when compiling swig generated code")
 
 if (NOT DEFINED PYTHON_EXTENSION_MODULE_SUFFIX AND NOT CMAKE_CROSSCOMPILING)
-  execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "import importlib.machinery; print(importlib.machinery.EXTENSION_SUFFIXES[0])"
+  execute_process (COMMAND ${Python_EXECUTABLE} -c "import importlib.machinery; print(importlib.machinery.EXTENSION_SUFFIXES[0])"
                    OUTPUT_VARIABLE PYTHON_EXTENSION_MODULE_SUFFIX OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif ()
 
@@ -56,32 +55,21 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
   endforeach ()
 
   # swig_add_module is deprecated
-  if (CMAKE_VERSION VERSION_LESS 3.8)
-    swig_add_module (${MODULENAME}_python python ${SOURCEFILE} ${swig_other_sources} )
-  else ()
-    swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
-  endif ()
+  swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
 
   # UseSWIG generates now standard target names
-  if (CMAKE_VERSION VERSION_LESS 3.13)
-    set (module_target ${SWIG_MODULE_${MODULENAME}_python_REAL_NAME})
-  else ()
-    set (module_target ${MODULENAME}_python)
-  endif ()
+  set (module_target ${MODULENAME}_python)
 
   swig_link_libraries (${MODULENAME}_python persalysbase)
 
-  target_link_libraries_with_dynamic_lookup (${module_target} ${PYTHON_LIBRARIES})
+  if (TARGET Python::MODULE)
+    target_link_libraries(${module_target} Python::MODULE)
+  else ()
+    include (TargetLinkLibrariesWithDynamicLookup)
+    target_link_libraries_with_dynamic_lookup (${module_target} ${Python_LIBRARIES})
+  endif ()
 
   set_target_properties (${module_target} PROPERTIES OUTPUT_NAME ${MODULENAME})
-
-  if (CMAKE_VERSION VERSION_LESS 3.13)
-    set_target_properties (${module_target} PROPERTIES PREFIX "_")
-  endif ()
-
-  if (CMAKE_VERSION VERSION_LESS 3.1)
-    set_target_properties (${module_target} PROPERTIES NO_SONAME ON)
-  endif ()
 
   set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
 
@@ -96,12 +84,6 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
 
   list ( APPEND PERSALYS_PYTHON_MODULES ${MODULENAME} )
 endmacro ( ot_add_python_module )
-
-if (CMAKE_VERSION VERSION_LESS 3.12)
-  if (SalomeYACS_FOUND)
-    list (APPEND SWIG_MODULE_persalys_python_EXTRA_FLAGS -DPERSALYS_HAVE_YACS=1)
-  endif ()
-endif ()
 
 ot_add_python_module (persalys persalys_module.i
                       Observer.i
@@ -203,20 +185,9 @@ ot_add_python_module (persalys persalys_module.i
                       AnsysParser.i AnsysParser_doc.i.in
                     )
 
-if (NOT CMAKE_VERSION VERSION_LESS 3.12)
-  # UseSWIG generates now standard target names
-  if (CMAKE_VERSION VERSION_LESS 3.13)
-    set (persalys_target ${SWIG_MODULE_persalys_python_REAL_NAME})
-  else ()
-    set (persalys_target persalys_python)
-  endif ()
-
-  if (SalomeYACS_FOUND)
-    set_property (TARGET ${persalys_target} APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YACS=1)
-  endif ()
-
+if (SalomeYACS_FOUND)
+  set_property (TARGET persalys_python APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YACS=1)
 endif ()
-
 
 install ( FILES __init__.py
           DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/persalys
@@ -233,11 +204,7 @@ if (SPHINX_FOUND)
   execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys)
   foreach (module ${PERSALYS_PYTHON_MODULES})
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${module}.py)
-    if (CMAKE_VERSION VERSION_LESS 3.13)
-      set (module_target ${SWIG_MODULE_${module}_python_REAL_NAME})
-    else ()
-      set (module_target ${module}_python)
-    endif ()
+    set (module_target ${module}_python)
     get_target_property (module_suffix ${module_target} SUFFIX)
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}${module_suffix} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/_${module}${module_suffix})
   endforeach ()
@@ -260,7 +227,7 @@ if (SPHINX_FOUND)
   file (MAKE_DIRECTORY ${SPHINX_BINARY_DIR}/_static) # currently empty
 
   if (NOT DEFINED OPENTURNS_PYTHON_MODULE_PATH)
-    set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH})
+    set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON3_MODULE_PATH})
   endif ()
   configure_file (${SPHINX_SOURCE_DIR}/conf.py.in ${SPHINX_BINARY_DIR}/conf.py @ONLY)
 
@@ -329,12 +296,7 @@ if (SPHINX_FOUND)
                         DEPENDS ${sphinx_clones}
                       )
     foreach (MODULENAME ${PERSALYS_PYTHON_MODULES})
-      if (CMAKE_VERSION VERSION_LESS 3.13)
-        set (module_target ${SWIG_MODULE_${MODULENAME}_python_REAL_NAME})
-      else ()
-        set (module_target ${MODULENAME}_python)
-      endif ()
-      add_dependencies (sphinx_${format} ${module_target})
+      add_dependencies (sphinx_${format} ${MODULENAME}_python)
     endforeach ()
   endforeach ()
 
