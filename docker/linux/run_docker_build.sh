@@ -14,7 +14,7 @@ cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -D_GLIBCXX_ASSERTIONS -DPERSALYS_APPIMAGE" \
   -DSWIG_COMPILE_FLAGS="-Wno-error=unused-parameter" \
-  -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
+  -DPython_EXECUTABLE=/usr/local/bin/python3 \
   -DSPHINX_FLAGS="-W -T -j8" \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr -DCMAKE_INSTALL_LIBDIR=lib \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so \

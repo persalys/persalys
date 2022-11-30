@@ -393,10 +393,11 @@ set(RESOURCES ${CMAKE_SOURCE_DIR}/persalys.qrc)
 qt_add_resources (PERSALYS_RESOURCES_RCC ${RESOURCES})
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-include_directories (${PYTHON_INCLUDE_DIRS})
 
 persalys_add_library (persalysview ${SOURCEFILES} ${PERSALYS_VIEW_MOC_SRCS} ${PERSALYS_RESOURCES_RCC})
 target_compile_features (persalysview PRIVATE cxx_lambdas)
+
+target_include_directories (persalysview PUBLIC ${QWT_INCLUDE_DIRS}) # see PlotWidget
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysview PRIVATE PERSALYS_VIEW_DLL_EXPORTS)

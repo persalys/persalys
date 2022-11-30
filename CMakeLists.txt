@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.13)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option ( BUILD_GUI                    "Build the GUI"                                                         ON )
@@ -59,6 +59,9 @@ endmacro ()
 find_package (OpenTURNS 1.20 CONFIG REQUIRED)
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 list (APPEND PERSALYS_PUBLIC_LIBRARIES ${OPENTURNS_LIBRARIES})
+if (NOT DEFINED OPENTURNS_PYTHON_MODULE_PATH)
+  set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON3_MODULE_PATH})
+endif ()
 
 if (NOT BUILD_SHARED_LIBS)
   list (APPEND PERSALYS_DEFINITIONS "-DPERSALYS_STATIC -DPYINTERP_STATIC -DPYCONSOLE_STATIC")
@@ -66,11 +69,9 @@ endif ()
 
 find_package (Boost COMPONENTS filesystem locale REQUIRED)
 list (APPEND PERSALYS_PRIVATE_LIBRARIES ${Boost_LIBRARIES})
-include_directories (${Boost_INCLUDE_DIRS})
 
-find_package (PythonInterp 3.5)
-find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT REQUIRED)
-list (APPEND PERSALYS_PUBLIC_LIBRARIES ${PYTHON_LIBRARIES})
+find_package (Python 3.5 COMPONENTS Interpreter Development REQUIRED)
+list (APPEND PERSALYS_PUBLIC_LIBRARIES ${Python_LIBRARIES})
 
 if (BUILD_GUI)
 
@@ -142,7 +143,9 @@ if (USE_OTMORRIS)
     list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_OTMORRIS)
     list (APPEND PERSALYS_DEFINITIONS -DOTMORRIS_VERSION_STRING="${OTMORRIS_VERSION}")
     list (APPEND PERSALYS_PRIVATE_LIBRARIES ${OTMORRIS_LIBRARIES})
-    include_directories (${OTMORRIS_INCLUDE_DIRS})
+    if (NOT DEFINED OTMORRIS_PYTHON_MODULE_PATH)
+      set(OTMORRIS_PYTHON_MODULE_PATH ${OTMORRIS_PYTHON3_MODULE_PATH})
+    endif ()
   endif ()
 endif ()
 
@@ -153,13 +156,12 @@ set ( PERSALYS_DATA_PATH share )
 set ( PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys )
 set ( DOC_INSTALL_PATH share/${PACKAGE_NAME}/doc )
 
-# beware swig<3.0 does not like c++11: https://github.com/swig/swig/issues/73
 set (CMAKE_CXX_STANDARD 11)
 
 list (APPEND PERSALYS_DEFINITIONS -DDOCUMENTATION_INSTALL_PATH="${DOC_INSTALL_PATH}")
 
 if (BUILD_PYTHON)
-  find_package (SWIG)
+  find_package (SWIG 3)
   if (SWIG_FOUND)
     include (${SWIG_USE_FILE})
   endif ()
@@ -179,34 +181,32 @@ if (BUILD_PYTHON)
   endif ()
 
   if (NOT DEFINED PYTHON_SITE_PACKAGES AND NOT CMAKE_CROSSCOMPILING)
-    execute_process (COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig, os; print(sysconfig.get_path('platlib').replace(sysconfig.get_path('data'), '').lstrip(os.path.sep))"
+    execute_process (COMMAND ${Python_EXECUTABLE} -c "import sysconfig, os; print(sysconfig.get_path('platlib').replace(sysconfig.get_path('data'), '').lstrip(os.path.sep))"
                     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
     file (TO_CMAKE_PATH "${PYTHON_SITE_PACKAGES}" PYTHON_SITE_PACKAGES)
   endif ()
 
-  if (PYTHONINTERP_FOUND)
+  if (Python_FOUND)
     if (DEFINED PYTHON_SITE_PACKAGES)
       set (PERSALYS_PYTHON_MODULE_PATH "${PYTHON_SITE_PACKAGES}")
     else ()
      if (WIN32)
        set (PERSALYS_PYTHON_MODULE_PATH Lib/site-packages)
      else ()
-       set (PERSALYS_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
+       set (PERSALYS_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
       endif ()
     endif ()
-
-    set (PERSALYS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${PERSALYS_PYTHON_MODULE_PATH})
-  endif ( PYTHONINTERP_FOUND )
+  endif ()
 endif ()
 
-
-# WARNING: This is where variables without OPENTURNS_ prefix are defined !
-foreach ( _var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
-  if ( NOT IS_ABSOLUTE PERSALYS_${_var} )
-    set ( PERSALYS_${_var} ${CMAKE_INSTALL_PREFIX}/${PERSALYS_${_var}} )
+# WARNING: This is where variables without PERSALYS_ prefix are defined !
+foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
+  if (IS_ABSOLUTE PERSALYS_${_var})
+    set (${_var} ${PERSALYS_${_var}})
+  else ()
+    set (${_var} ${CMAKE_INSTALL_PREFIX}/${PERSALYS_${_var}})
   endif ()
-  set ( ${_var} ${PERSALYS_${_var}} )
-endforeach ( _var )
+endforeach ()
 
 # RPATH settings
 set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH} ${OTMORRIS_LIBRARY_DIRS})
@@ -294,7 +294,6 @@ set ( PERSALYS_VERSION_STRING ${PACKAGE_VERSION} )
 set ( PERSALYS_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
 set ( PERSALYS_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
 set ( PERSALYS_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
-set ( PERSALYS_USE_FILE      ${PERSALYS_CONFIG_CMAKE_PATH}/UsePersalys.cmake )
 
 list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_VERSION="${PERSALYS_VERSION_STRING}")
 list (APPEND PERSALYS_DEFINITIONS -DINSTALL_PATH="${CMAKE_INSTALL_PREFIX}")
@@ -317,7 +316,7 @@ if (BUILD_GUI)
   add_subdirectory (main)
 endif ()
 
-if (PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND)
+if (Python_FOUND AND SWIG_FOUND)
   add_subdirectory ( python )
   add_dependencies ( installcheck pyinstallcheck )
 endif ()
@@ -329,20 +328,18 @@ configure_package_config_file (
     ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfig.cmake
     INSTALL_DESTINATION ${PERSALYS_CONFIG_CMAKE_PATH}
     PATH_VARS
-      PERSALYS_USE_FILE
       PERSALYS_ROOT_DIR
       PERSALYS_INCLUDE_DIR
       PERSALYS_INCLUDE_DIRS
       PERSALYS_LIBRARY_DIRS
+      PYTHON_MODULE_PATH
     NO_CHECK_REQUIRED_COMPONENTS_MACRO
                                 )
 write_basic_package_version_file( PersalysConfigVersion.cmake VERSION ${PERSALYS_VERSION_STRING} COMPATIBILITY AnyNewerVersion )
 
-install ( FILES cmake/UsePersalys.cmake
-                  ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfig.cmake
-                  ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfigVersion.cmake
-            DESTINATION ${PERSALYS_CONFIG_CMAKE_PATH}
-          )
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfig.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/PersalysConfigVersion.cmake
+         DESTINATION ${PERSALYS_CONFIG_CMAKE_PATH})
 
 include (CPack)
 
