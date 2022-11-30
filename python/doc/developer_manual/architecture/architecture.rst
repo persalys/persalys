@@ -26,14 +26,39 @@ Compilation
 
 .. code::
 
+    git clone https://git.phimeca.com/ot-edf/otgui.git persalys
     cd persalys
     mkdir -p build && cd build
     cmake \
       -DCMAKE_INSTALL_PREFIX=$PWD/install \
       -DOpenTURNS_DIR=$PWD/../../openturns/build/install/lib/cmake/openturns \
-      -DSalomeKERNEL_DIR=$ROOT_SALOME_MECA/V2015_1/modules/KERNEL_V7_5_1/salome_adm/cmake_files/ \
-      -DSalomeGUI_DIR=$ROOT_SALOME_MECA/V2015_1/modules/GUI_V7_5_1/adm_local/cmake_files \
-      -DSalomeYACS_DIR=$ROOT_SALOME_MECA/V2015_1/modules/YACS_V7_5_1/adm/cmake/ ..
+      -DParaView_DIR=$PWD/../../paraview/build/install/lib/cmake/paraview \
+      -DOTMORRIS_DIR=$PWD/../../otmorris/build/install/lib/cmake/otmorris \
+      ..
+    make install
+
+
+To run it::
+
+    persalys.sh
+
+
+Translation
+-----------
+
+.. code::
+
+    lupdate -verbose lib/ -ts translations/persalys_fr.ts -no-obsolete
+    linguist translations/persalys_fr.ts
+
+
+Python console menu translation::
+
+    lupdate -verbose lib/src/view/PyConsole/ -ts lib/src/view/PyConsole/resources/PyConsole_msg_fr.ts  -no-obsolete
+    linguist lib/src/view/PyConsole/resources/PyConsole_msg_fr.ts
+
+
+publish ``PyConsole_msg_fr.qm`` in ``translations/``
 
 Source code structure
 ---------------------

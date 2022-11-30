@@ -6,7 +6,7 @@ include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
 add_definitions ( ${OPENTURNS_SWIG_DEFINITIONS} )
 include_directories ( ${OTMORRIS_INCLUDE_DIR}/otmorris/swig )
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
-include_directories ( ${PYTHON_INCLUDE_DIRS} )
+include_directories ( ${Python_INCLUDE_DIRS} )
 
 set (CMAKE_SWIG_FLAGS "" CACHE STRING "SWIG flags for generating wrapper code")
 

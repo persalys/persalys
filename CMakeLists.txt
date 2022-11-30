@@ -196,14 +196,14 @@ if (BUILD_PYTHON)
   endif ()
 endif ()
 
-
-# WARNING: This is where variables without OPENTURNS_ prefix are defined !
-foreach ( _var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
-  if ( NOT IS_ABSOLUTE PERSALYS_${_var} )
-    set ( PERSALYS_${_var} ${CMAKE_INSTALL_PREFIX}/${PERSALYS_${_var}} )
+# WARNING: This is where variables without PERSALYS_ prefix are defined !
+foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
+  if (IS_ABSOLUTE PERSALYS_${_var})
+    set (${_var} ${PERSALYS_${_var}})
+  else ()
+    set (${_var} ${CMAKE_INSTALL_PREFIX}/${PERSALYS_${_var}})
   endif ()
-  set ( ${_var} ${PERSALYS_${_var}} )
-endforeach ( _var )
+endforeach ()
 
 # RPATH settings
 set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH} ${OTMORRIS_LIBRARY_DIRS})
@@ -314,7 +314,7 @@ if (BUILD_GUI)
   add_subdirectory (main)
 endif ()
 
-if (PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND)
+if (Python_FOUND AND SWIG_FOUND)
   add_subdirectory ( python )
   add_dependencies ( installcheck pyinstallcheck )
 endif ()
