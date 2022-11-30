@@ -9,7 +9,6 @@
 
 # Use the following variables to compile and link against Persalys:
 #  PERSALYS_FOUND          - True if Persalys was found on your system
-#  PERSALYS_USE_FILE       - The file making Persalys usable
 #  PERSALYS_DEFINITIONS    - Definitions needed to build with Persalys
 #  PERSALYS_INCLUDE_DIRS   - List of directories where Persalys' header file are
 #  PERSALYS_LIBRARY        - Library name
@@ -25,7 +24,6 @@
 @PACKAGE_INIT@
 
 set ( PERSALYS_FOUND 1 )
-set ( PERSALYS_USE_FILE     "@PACKAGE_PERSALYS_USE_FILE@" )
 
 set ( PERSALYS_DEFINITIONS  "@PERSALYS_DEFINITIONS@" )
 set ( PERSALYS_INCLUDE_DIR  "@PACKAGE_PERSALYS_INCLUDE_DIR@" )
