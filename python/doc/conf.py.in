@@ -53,6 +53,8 @@ imgmath_latex_preamble = r'\usepackage{{{0}math_notations}}'.format(
 imgmath_use_preview = True
 if subprocess.run(["dvisvgm", "-V"], shell=True, capture_output=True).returncode == 0:
     imgmath_image_format = 'svg'
+# embed image files inside html
+imgmath_embed = True
 
 if '@SalomeYACS_FOUND@' == '1':
     tags.add('yacs')
