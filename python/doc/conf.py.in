@@ -12,8 +12,6 @@
 # serve to show the default.
 
 import sys, os
-from distutils.version import LooseVersion
-import sphinx
 import subprocess
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -37,10 +35,7 @@ toc_object_entries = False
 extensions = ['sphinx.ext.autodoc']
 
 extensions.append('sphinx.ext.autodoc')
-if LooseVersion(sphinx.__version__) >= '1.8':
-    autodoc_default_options = {'members': None, 'inherited-members': None}
-else:
-    autodoc_default_flags =  ['members', 'inherited-members']
+autodoc_default_options = {'members': None, 'inherited-members': None}
 
 extensions.append('sphinx.ext.intersphinx')
 intersphinx_mapping = {'python': ('http://openturns.github.io/openturns/master', 'openturns-objects.txt')}
@@ -52,22 +47,12 @@ extensions.append('numpydoc')
 numpydoc_show_class_members = True
 numpydoc_class_members_toctree = False
 
-try:
-    import sphinx.ext.imgmath
-    extensions.append('sphinx.ext.imgmath')
-    imgmath_latex_preamble = r'\usepackage{{{0}math_notations}}'.format(
-        os.path.dirname(__file__) + os.sep)
-    imgmath_use_preview = True
-    if subprocess.call('dvisvgm -V', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0:
-        imgmath_image_format = 'svg'
-except ImportError:
-    extensions.append('sphinx.ext.pngmath')
-    pngmath_latex_preamble = r'\usepackage{{{0}math_notations}}'.format(
-        os.path.dirname(__file__) + os.sep)
-    # The next option is used for smart-alignment of math images on the text.
-    # It only works when the preview-latex package is installed.
-    # See http://sphinx-doc.org/latest/ext/math.html#confval-pngmath_use_preview
-    pngmath_use_preview = True
+extensions.append('sphinx.ext.imgmath')
+imgmath_latex_preamble = r'\usepackage{{{0}math_notations}}'.format(
+    os.path.dirname(__file__) + os.sep)
+imgmath_use_preview = True
+if subprocess.run(["dvisvgm", "-V"], shell=True, capture_output=True).returncode == 0:
+    imgmath_image_format = 'svg'
 
 if '@SalomeYACS_FOUND@' == '1':
     tags.add('yacs')
@@ -137,8 +122,6 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme = 'classic'
-if LooseVersion(sphinx.__version__) < LooseVersion('1.3'):
-    html_theme = 'default'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

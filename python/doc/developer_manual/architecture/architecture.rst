@@ -16,8 +16,8 @@ Several dependencies are needed in order to build the GUI:
 - SWIG >=3
 - Boost.locale/filesystem
 - SalomeYACS (optional, for YACS support)
-- Sphinx >=1.1 (optional, for doc)
-- Numpydoc (optional, for doc)
+- Sphinx >=1.8 (optional, for doc)
+- Numpydoc >=0.9 (optional, for doc)
 - ParaView >=5.8 (optional, for visualization)
 
 
