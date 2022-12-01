@@ -48,7 +48,8 @@ namespace PERSALYS
         types_ << tr("Binary");
         break;
       default:
-        throw InvalidArgumentException(HERE) << "Unknown variable type";
+        throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                             << analysis_.getPhysicalModel().getInputNames()[i];
       }
   }
 
@@ -95,7 +96,7 @@ namespace PERSALYS
       }
       else if (index.column() == 4 || index.column() == 5)
       {
-        if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]))
+        if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]) && analysis_.getVariablesType()[index.row() - 1] != OptimizationProblemImplementation::BINARY)
           result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
         else
           result &= ~Qt::ItemIsEnabled;
@@ -169,7 +170,8 @@ namespace PERSALYS
         case OptimizationProblemImplementation::BINARY:
           return tr("Binary");
         default:
-          throw InvalidArgumentException(HERE) << "Unknown variable type";
+          throw InvalidArgumentException(HERE) << "Unknown variable type for variable"
+                                               << currentInputName;
         }
       case 3:
         return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
@@ -238,7 +240,7 @@ namespace PERSALYS
     if (role == Qt::EditRole)
     {
       const int inputIndex = index.row() - 1;
-      const QString currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex].c_str();
+      const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex].c_str();
 
       switch (index.column())
       {
@@ -252,9 +254,10 @@ namespace PERSALYS
         else if (value.toString() == tr("Binary"))
           values[inputIndex] = OptimizationProblemImplementation::BINARY;
         analysis_.setVariablesType(values);
+        setData(this->index(index.row(), 4), data(this->index(index.row(), 4), role), role);
+        setData(this->index(index.row(), 5), data(this->index(index.row(), 5), role), role);
         break;
       }
-
       case 3: // starting point
       {
         Point values = analysis_.getStartingPoint();
@@ -269,27 +272,73 @@ namespace PERSALYS
       case 4: // lower bounds
       {
         Point lowerBounds = analysis_.getBounds().getLowerBound();
-        if (lowerBounds[inputIndex] == value.toDouble())
-          return false;
-        lowerBounds[inputIndex] = value.toDouble();
+        switch (analysis_.getVariablesType()[inputIndex]) {
+        case OptimizationProblemImplementation::CONTINUOUS:
+        {
+          if (lowerBounds[inputIndex] == value.toDouble())
+            return false;
+          lowerBounds[inputIndex] = value.toDouble();
+          break;
+        }
+        case OptimizationProblemImplementation::INTEGER:
+        {
+          if (lowerBounds[inputIndex] == floor(value.toDouble()))
+            return false;
+          lowerBounds[inputIndex] = floor(value.toDouble());
+          break;
+        }
+        case OptimizationProblemImplementation::BINARY:
+        {
+          if (lowerBounds[inputIndex] == 0)
+            return false;
+          lowerBounds[inputIndex] = 0;
+          break;
+        }
+        default:
+          throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                               << currentInputName;
+        }
         Interval newInterval(analysis_.getBounds());
         newInterval.setLowerBound(lowerBounds);
 
         analysis_.setBounds(newInterval);
-
+        emit dataChanged(index, index);
         break;
       }
       case 5: // upper bounds
       {
         Point upperBounds = analysis_.getBounds().getUpperBound();
-        if (upperBounds[inputIndex] == value.toDouble())
-          return false;
-        upperBounds[inputIndex] = value.toDouble();
+        switch (analysis_.getVariablesType()[inputIndex]) {
+        case OptimizationProblemImplementation::CONTINUOUS:
+        {
+          if (upperBounds[inputIndex] == value.toDouble())
+            return false;
+          upperBounds[inputIndex] = value.toDouble();
+          break;
+        }
+        case OptimizationProblemImplementation::INTEGER:
+        {
+          if (upperBounds[inputIndex] == floor(value.toDouble()))
+            return false;
+          upperBounds[inputIndex] = floor(value.toDouble());
+          break;
+        }
+        case OptimizationProblemImplementation::BINARY:
+        {
+          if (upperBounds[inputIndex] == 1)
+            return false;
+          upperBounds[inputIndex] = 1;
+          break;
+        }
+        default:
+          throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                               << currentInputName;
+        }
         Interval newInterval(analysis_.getBounds());
         newInterval.setUpperBound(upperBounds);
 
         analysis_.setBounds(newInterval);
-
+        emit dataChanged(index, index);
         break;
       }
       default:

@@ -188,13 +188,19 @@ namespace PERSALYS
     Collection<Distribution> distColl;
 
     for (UnsignedInteger i=0; i<getVariableInputs().getSize(); ++i) {
+      const Scalar lb = bounds_.getLowerBound()[variableInputsIndices_[i]];
+      const Scalar ub = bounds_.getUpperBound()[variableInputsIndices_[i]];
+      if (!(lb < ub))
+        throw InvalidArgumentException(HERE) << "Interval is empty for variable " << getVariableInputs()[i];
       if (getVariablesType()[variableInputsIndices_[i]] == OptimizationProblemImplementation::CONTINUOUS)
-        distColl.add(OT::Uniform(bounds_.getLowerBound()[variableInputsIndices_[i]], bounds_.getUpperBound()[variableInputsIndices_[i]]));
-      else {
+        distColl.add(OT::Uniform(lb, ub));
+      else if (getVariablesType()[variableInputsIndices_[i]] == OptimizationProblemImplementation::BINARY) {
+        Sample values(2, 1);
+        values(1, 0) = 1.;
+        distColl.add(OT::UserDefined(values, Point(2, 0.5)));
+      } else {
         Sample values;
-        for (int val=ceil(bounds_.getLowerBound()[variableInputsIndices_[i]]);
-             val<=floor(bounds_.getUpperBound()[variableInputsIndices_[i]]);
-             ++val) {
+        for (int val=lb; val<=ub; ++val) {
           const Point point(1, val);
           values.add(point);
         }

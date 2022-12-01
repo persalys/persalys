@@ -116,8 +116,8 @@ public:
   OT::Bool getMinimization() const;
   void setMinimization(const OT::Bool minimization);
 
-  OT::Indices getVariablesType() const {return variablesType_;};
-  void setVariablesType(const OT::Indices& variablesType) {variablesType_ = variablesType;};
+  OT::Indices getVariablesType() const;
+  void setVariablesType(const OT::Indices& variablesType);
 
   OT::Interval getBounds() const;
   void setBounds(const OT::Interval & bounds);
