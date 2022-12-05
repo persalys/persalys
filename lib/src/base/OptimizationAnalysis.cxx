@@ -358,6 +358,20 @@ Bool OptimizationAnalysis::getMinimization() const
 }
 
 
+void OptimizationAnalysis::setVariablesType(const Indices& variablesType)
+{
+  if (variablesType.getSize() != getPhysicalModel().getInputDimension())
+    throw InvalidArgumentException(HERE) << "The size of variables type to the number of model's inputs";
+  variablesType_ = variablesType;
+}
+
+
+Indices OptimizationAnalysis::getVariablesType() const
+{
+  return variablesType_;
+}
+
+
 void OptimizationAnalysis::setBounds(const Interval & bounds)
 {
   if (bounds.getDimension() != getPhysicalModel().getInputDimension())
