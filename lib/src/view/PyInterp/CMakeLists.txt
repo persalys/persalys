@@ -17,7 +17,7 @@ qt_wrap_cpp (PERSALYS_CONSOLE_MOC_SRCS
               PyInterp_Dispatcher.h)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-persalys_add_library (persalyspyinterp ${SOURCEFILES} ${PERSALYS_CONSOLE_MOC_SRCS})
+add_library (persalyspyinterp ${SOURCEFILES} ${PERSALYS_CONSOLE_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
   target_compile_definitions (persalyspyinterp PRIVATE PERSALYS_DLL_EXPORTS PyInterp_EXPORTS)

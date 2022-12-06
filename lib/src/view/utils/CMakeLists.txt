@@ -95,7 +95,7 @@ qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-persalys_add_library (persalysutils ${SOURCEFILES} ${PERSALYS_UTILS_MOC_SRCS})
+add_library (persalysutils ${SOURCEFILES} ${PERSALYS_UTILS_MOC_SRCS})
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysutils PRIVATE PERSALYS_UTILS_DLL_EXPORTS)

@@ -7,7 +7,6 @@ option (USE_SALOME "use salome" ON)
 option (USE_OTFMI "use otfmi" ON)
 option (USE_OTMORRIS "use otmorris" ON)
 option (USE_SPHINX "use sphinx" ON)
-option (USE_COTIRE "Use cotire for unity builds" OFF)
 option (USE_PARAVIEW "use ParaView" ON)
 set (PERSALYS_QT_VERSION 5 CACHE STRING "Qt version")
 
@@ -22,39 +21,16 @@ if (POLICY CMP0020)
   cmake_policy (SET CMP0020 NEW)
 endif ()
 
+if (POLICY CMP0058)
+  cmake_policy (SET CMP0058 NEW)
+endif()
+
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 
 # set module dir to find custom scripts
 list ( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
-
-if (USE_COTIRE)
-  if (POLICY CMP0058)
-    # Ninja requires custom command byproducts to be explicit
-    cmake_policy (SET CMP0058 NEW)
-  endif()
-  include (cotire)
-endif ()
-
 include (GNUInstallDirs)
-
-# add library with unity build support, inspired by https://github.com/onqtam/ucm
-macro (persalys_add_library name)
-  if (USE_COTIRE)
-    set (orig_target ${name}_orig)
-    # add regular target with another name
-    add_library (${orig_target} ${ARGN})
-    set_target_properties (${orig_target} PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
-    # set unity target name with the original name
-    set_target_properties (${orig_target} PROPERTIES COTIRE_UNITY_TARGET_NAME ${name})
-    # add unity build target
-    cotire (${orig_target})
-    set_target_properties (${name} PROPERTIES EXCLUDE_FROM_ALL 0 EXCLUDE_FROM_DEFAULT_BUILD 0)
-    set_target_properties (${name} PROPERTIES OUTPUT_NAME ${name})
-  else ()
-    add_library (${name} ${ARGN})
-  endif ()
-endmacro ()
 
 find_package (OpenTURNS 1.20 CONFIG REQUIRED)
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")

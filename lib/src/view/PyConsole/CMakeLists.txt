@@ -19,7 +19,7 @@ qt_wrap_cpp (PERSALYS_CONSOLE_MOC_SRCS
               PyConsole_Editor.h)
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
-persalys_add_library (persalyspyconsole ${SOURCEFILES} ${PERSALYS_CONSOLE_MOC_SRCS})
+add_library (persalyspyconsole ${SOURCEFILES} ${PERSALYS_CONSOLE_MOC_SRCS})
 
 if ( BUILD_SHARED_LIBS )
   target_compile_definitions (persalyspyconsole PRIVATE PERSALYS_DLL_EXPORTS PyConsole_EXPORTS)

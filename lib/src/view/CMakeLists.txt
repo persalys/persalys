@@ -376,7 +376,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
 
 
 if (SalomeYACS_FOUND)
-  set_source_files_properties (AnalysisWindow.cxx YACSPhysicalModelWindow.cxx PROPERTIES COTIRE_EXCLUDED ON SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
+  set_source_files_properties (AnalysisWindow.cxx YACSPhysicalModelWindow.cxx PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
   qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/YACSPhysicalModelWindow.hxx)
 endif ()
 
@@ -394,7 +394,7 @@ qt_add_resources (PERSALYS_RESOURCES_RCC ${RESOURCES})
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
-persalys_add_library (persalysview ${SOURCEFILES} ${PERSALYS_VIEW_MOC_SRCS} ${PERSALYS_RESOURCES_RCC})
+add_library (persalysview ${SOURCEFILES} ${PERSALYS_VIEW_MOC_SRCS} ${PERSALYS_RESOURCES_RCC})
 target_compile_features (persalysview PRIVATE cxx_lambdas)
 
 target_include_directories (persalysview PUBLIC ${QWT_INCLUDE_DIRS}) # see PlotWidget

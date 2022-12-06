@@ -195,7 +195,7 @@ ot_install_header_file (YACSPhysicalModel.hxx)
 ot_install_header_file (YACSEvaluation.hxx)
 
 
-persalys_add_library (persalysbase ${BASE_SOURCEFILES})
+add_library (persalysbase ${BASE_SOURCEFILES})
 target_compile_features (persalysbase PRIVATE cxx_lambdas)
 
 if (BUILD_SHARED_LIBS)
