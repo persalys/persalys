@@ -147,6 +147,7 @@ RUN curl -fSsL https://paraview.org/files/v5.10/ParaView-v5.10.1.tar.xz | tar xJ
  && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/9227.patch | patch -p1 -d VTK \
  && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/9228.patch | patch -p1 -d VTK \
  && sed -i '28i#include "vtkDataSetAttributes.h"' VTK/Charts/Core/vtkScatterPlotMatrix.cxx \
+ && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/9711.patch | patch -p1 -d VTK \
  && mkdir build && cd build \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
