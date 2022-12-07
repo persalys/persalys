@@ -1,21 +1,21 @@
 linux:
   script:
-    - docker pull persalys/linux:13.1
-    - docker run --rm --volume `pwd`:/io persalys/linux:13.1 sh -c "/io/docker/linux/run_docker_build.sh"
+    - docker pull persalys/linux:13.1.1
+    - docker run --rm --volume `pwd`:/io persalys/linux:13.1.1 sh -c "/io/docker/linux/run_docker_build.sh"
   except:
     - tags
 
 mingw:
   script:
-    - docker pull persalys/mingw:13.1
-    - docker run --rm --volume `pwd`:/io persalys/mingw:13.1 sh -c "/io/docker/mingw/run_docker_build.sh"
+    - docker pull persalys/mingw:13.1.1
+    - docker run --rm --volume `pwd`:/io persalys/mingw:13.1.1 sh -c "/io/docker/mingw/run_docker_build.sh"
   except:
     - tags
 
 linux-tag:
   script:
-    - docker pull persalys/linux:13.1
-    - docker run --rm --volume `pwd`:/io persalys/linux:13.1 sh -c "/io/docker/linux/run_docker_build.sh `id -u` `id -g`"
+    - docker pull persalys/linux:13.1.1
+    - docker run --rm --volume `pwd`:/io persalys/linux:13.1.1 sh -c "/io/docker/linux/run_docker_build.sh `id -u` `id -g`"
   artifacts:
     name: persalys-appimage
     paths:
@@ -26,8 +26,8 @@ linux-tag:
 
 mingw-tag:
   script:
-    - docker pull persalys/mingw:13.1
-    - docker run --rm --volume `pwd`:/io persalys/mingw:13.1 sh -c "/io/docker/mingw/run_docker_build.sh `id -u` `id -g`"
+    - docker pull persalys/mingw:13.1.1
+    - docker run --rm --volume `pwd`:/io persalys/mingw:13.1.1 sh -c "/io/docker/mingw/run_docker_build.sh `id -u` `id -g`"
   artifacts:
     name: persalys-exe
     paths:
