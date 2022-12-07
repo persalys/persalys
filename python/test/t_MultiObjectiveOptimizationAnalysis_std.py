@@ -35,8 +35,10 @@ myStudy.add(analysis)
 analysis.run()
 print("analysis=", analysis)
 results = analysis.getResult()
-print("results=", results)
-print("final population=", results.getFinalPop())
+
+# FIXME: disabled values output as we backported an openturns patch for Pagmo into 1.20
+# print("results=", results)
+# print("final population=", results.getFinalPop())
 
 # script
 script = myStudy.getPythonScript()
