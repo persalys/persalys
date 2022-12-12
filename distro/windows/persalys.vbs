@@ -20,8 +20,7 @@ wshEnv("PV_PLUGIN_PATH") = fso.GetAbsolutePathName(currentDirectory + "\BagPlotV
 wshEnv("PERSALYS_HTML_DOCUMENTATION_PATH") = currentDirectory + "\doc\html\"
 
 ' https://github.com/pal1000/mesa-dist-win/blob/master/readme.md#opengl-context-configuration-override
-wshEnv("MESA_GL_VERSION_OVERRIDE") = "4.5"
-wshEnv("LIBGL_ALWAYS_SOFTWARE") = "1"
+wshEnv("GALLIUM_DRIVER") = "llvmpipe"
 
 ' allows to find the GL driver in the current directory: https://github.com/qt/qtbase/commit/a14f2d59
 wshEnv("QT_OPENGL_DLL") = "opengl32"
