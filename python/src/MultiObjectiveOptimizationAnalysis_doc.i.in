@@ -49,7 +49,7 @@ Get the result:
 Returns
 -------
 generationNumber : int
-    number of generations for the evolving algoritm."
+    number of generations for the evolving algorithm."
 
 // ---------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ generationNumber : int
 Parameters
 ----------
 generationNumber : int
-    number of generations for the evolving algoritm."
+    number of generations for the evolving algorithm."
 
 // ---------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ generationNumber : int
 Returns
 -------
 seed : int
-    random generator seed for the evolving algoritm."
+    random generator seed for the evolving algorithm."
 
 // ---------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ seed : int
 Parameters
 ----------
 seed : int
-    random generator seed for the evolving algoritm."
+    random generator seed for the evolving algorithm."
 
 // ---------------------------------------------------------------------
 
