@@ -1,7 +1,7 @@
 %feature("docstring") PERSALYS::PolynomialRegressionAnalysis
 "Polynomial stepwise regression.
 
-Allows to select of the most suitable polynomial (canonical) basis for a linear
+Allows one to select of the most suitable polynomial (canonical) basis for a linear
 regression model with the help of the stepwise algorithm.
 
 See also `LinearModelStepwiseAlgorithm <https://openturns.github.io/openturns/latest/user_manual/response_surface/_generated/openturns.LinearModelStepwiseAlgorithm.html>`_.

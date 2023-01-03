@@ -100,7 +100,7 @@ void MorrisPlot::selectPoints(const QRectF& rect)
   // if there is at least one point in the rectangle
   if (selectedMarkers.size())
   {
-    // hightlight the selected points
+    // highlight the selected points
     QwtPlotCurve selectedPointCurve;
     selectedPointCurve.setSymbol(new QwtSymbol(QwtSymbol::Ellipse, Qt::magenta, QPen(Qt::magenta), QSize(7, 7)));
     selectedPointCurve.setStyle(QwtPlotCurve::NoCurve);

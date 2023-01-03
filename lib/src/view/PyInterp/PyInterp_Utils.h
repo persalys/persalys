@@ -51,7 +51,7 @@ Py_DecodeLocale(const char *arg, size_t *size)
  * Utility class wrapping the Python GIL acquisition. This makes use of the high level
  * API (PyGILState_Ensure and PyGILState_Release), and is hence compatible with only
  * one running Python interpreter (no call to Py_NewInterpreter()).
- * When the class is instanciated the lock is acquired. It is released at destruction time.
+ * When the class is instantiated the lock is acquired. It is released at destruction time.
  * Copy construction (and hence assignation) is forbidden.
  */
 class PYINTERP_EXPORT PyLockWrapper

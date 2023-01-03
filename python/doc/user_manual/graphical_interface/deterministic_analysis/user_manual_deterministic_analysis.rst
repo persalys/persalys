@@ -86,7 +86,7 @@ Define a probabilistic model to make this option available.
     :align: center
 
 If stochastic input variables are present in the model, the **Probabilistic** item can be
-selected in the **Input Sample definition** window. Then the next window allows to specify:
+selected in the **Input Sample definition** window. Then the next window allows one to specify:
 
   - the type of the design: LHS (Latin Hyper Cube), Monte Carlo, Quasi-Monte Carlo.
     If input variables are correlated, LHS design is not available
@@ -138,7 +138,7 @@ automatically selected in the other tabs.
 - The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
 
     - The cells are colored according to the value of the Spearman's coefficient.
-    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Its context menu allows one to export the table in a CSV file or as a PNG image.
     - Select cells and Press Ctrl+C to copy values in the clipboard
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/inDOE_dependence.png
@@ -282,7 +282,7 @@ automatically selected in the other tabs.
 - The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
 
     - The cells are colored according to the value of the Spearman's coefficient.
-    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Its context menu allows one to export the table in a CSV file or as a PNG image.
     - Select cells and Press Ctrl+C to copy values in the clipboard
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_dependence.png

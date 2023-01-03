@@ -167,7 +167,7 @@ PyConsole_Editor::PyConsole_Editor( QWidget* parent )
   
   Creates python editor window.
   \param parent parent widget
-  \param interp python interper
+  \param interp python interpreter
 */
 PyConsole_Editor::PyConsole_Editor( QWidget*          parent,
                                     PyConsole_Interp* interp )
@@ -198,7 +198,7 @@ void PyConsole_Editor::init()
   setWordWrapMode( QTextOption::WrapAnywhere );
   setAcceptRichText( false );
 
-  // set callbacks to interpeter
+  // set callbacks to interpreter
   myInterp->setvoutcb( PyConsole_CallbackStdout, this );
   myInterp->setverrcb( PyConsole_CallbackStderr, this );
   // print banner
@@ -387,7 +387,7 @@ void PyConsole_Editor::exec( const QString& command )
 {
   if ( isReadOnly() ) {
     // some interactive command is being executed in this editor...
-    // shedule the command to the queue
+    // schedule the command to the queue
     myQueue.push_back( command );
     return;
   }
@@ -1315,7 +1315,7 @@ void PyConsole_Editor::customEvent( QEvent* event )
 
   if ( (int)event->type() == (int)PyInterp_Event::ES_OK && myQueue.count() > 0 )
   {
-    // process the next sheduled command from the queue (if there is any)
+    // process the next scheduled command from the queue (if there is any)
     QString nextcmd = myQueue[0];
     myQueue.pop_front();
     exec( nextcmd );

@@ -9,7 +9,7 @@ Sample :
      [ R         F         G         ]
 0 : [   300     75000       361.268 ]
 1 : [   400     74000       564.451 ]
-ZeroDivisionError occured: True
+ZeroDivisionError occurred: True
 Error on the line 4 : True
 #!/usr/bin/env python
 

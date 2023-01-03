@@ -10,7 +10,7 @@ include_directories ( ${Python_INCLUDE_DIRS} )
 
 set (CMAKE_SWIG_FLAGS "" CACHE STRING "SWIG flags for generating wrapper code")
 
-# allows to pass compile flags like -O1 to reduce memory usage
+# allows one to pass compile flags like -O1 to reduce memory usage
 set (SWIG_COMPILE_FLAGS "" CACHE STRING "Additional flags used when compiling swig generated code")
 
 if (NOT DEFINED PYTHON_EXTENSION_MODULE_SUFFIX AND NOT CMAKE_CROSSCOMPILING)

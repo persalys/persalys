@@ -133,7 +133,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
     PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
     PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
 
-    // define the script on the first run only to allow to save a state
+    // define the script on the first run only to allow one to save a state
     if (!scriptHasBeenEvaluated_)
     {
       ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget with a progressBar which allows to stop analysis
+ *  @brief QWidget with a progressBar which allows one to stop analysis
  *
  *  Copyright 2015-2023 EDF-Phimeca
  *

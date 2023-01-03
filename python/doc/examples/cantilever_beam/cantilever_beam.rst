@@ -607,7 +607,7 @@ choose **Threshold exceedance** in the context menu of the limit state item in t
     :align: center
 
 Select the **FORM-Importance sampling** method and click on **Continue** button.
-The following page allows to change the parameters of the Importance sampling analysis.
+The following page allows one to change the parameters of the Importance sampling analysis.
 It’s the same page as the one for the Monte Carlo method.
 
 Click on **Continue** button.
@@ -675,7 +675,7 @@ For more details on the computation of a metamodel by the method of
 `Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_,
 you can consult the OpenTURNS documentation.
 
-The functional chaos allows to compute the Sobol indices. Beware that these indices
+The functional chaos allows one to compute the Sobol indices. Beware that these indices
 cannot be used for correlated stochastic variables. In order to use these indices,
 replace the value -0.2 by 0 in the **Dependence** :ref:`tab <dependenceTab>` of the probabilistic model window.
 

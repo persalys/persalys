@@ -129,7 +129,7 @@ void StudyImplementation::clear()
   {
     DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(analyses_[i].getImplementation().get());
     // we do not want to remove the design of experiments for now
-    // some analyses can be dependant of the design of experiments: we need to remove them before the design of experiments
+    // some analyses can be dependent of the design of experiments: we need to remove them before the design of experiments
     if (!doeEval)
       analyses_[i].getImplementation()->removeAllObservers();
   }

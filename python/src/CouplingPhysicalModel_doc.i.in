@@ -1,7 +1,7 @@
 %feature("docstring") PERSALYS::CouplingPhysicalModel
 "File-exchange based coupling model.
 
-This model allows to wrap computer codes that read input values
+This model allows one to wrap computer codes that read input values
 and write output values in text files.
 It is defined from a sequence steps, each step being defined from:
 

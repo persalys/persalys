@@ -128,7 +128,7 @@ try:
     )
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 try:
     analysis6.setCalibratedInputs(
@@ -136,7 +136,7 @@ try:
     )
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 try:
     analysis6.setCalibratedInputs(
@@ -144,13 +144,13 @@ try:
     )
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 try:
     analysis6.setCalibratedInputs(["R", "C"], ot.Normal(3), ["gam"], [7.0])
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 
 

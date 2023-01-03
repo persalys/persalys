@@ -44,7 +44,7 @@ try:
     print(f([[100, 55, 81, 17]]))
 except Exception as e:
     print(
-        "ZeroDivisionError occured: %s"
+        "ZeroDivisionError occurred: %s"
         % ("ZeroDivisionError: float division by zero" in str(e))
     )
     print("Error on the line 4 : %s" % ("line 4" in str(e)))
@@ -52,7 +52,7 @@ try:
     print(f([100, 55, 81, 17]))
 except Exception as e:
     print(
-        "ZeroDivisionError occured: %s"
+        "ZeroDivisionError occurred: %s"
         % ("ZeroDivisionError: float division by zero" in str(e))
     )
     print("Error on the line 4 : %s" % ("line 4" in str(e)))
@@ -66,13 +66,13 @@ try:
     print(f([100, 55, 81, 17]))
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 try:
     print(f([[100, 55, 81, 17]]))
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 
 # model with an error : wrong output sequence size
@@ -84,13 +84,13 @@ try:
     print(f([100, 55, 81, 17]))
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 try:
     print(f([[100, 55, 81, 17]]))
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 
 # Python model with two outputs
@@ -125,13 +125,13 @@ try:
     print(f([100, 55, 81, 17]))
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 try:
     print(f([[100, 55, 81, 17]]))
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 
 

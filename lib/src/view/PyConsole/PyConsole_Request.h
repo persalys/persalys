@@ -55,7 +55,7 @@ protected:
 
 private:
   QString     myDirArg;       //!< String to be passed to the dir() comman
-  QString     myStartMatch;   //!< Begining of the command (as typed by the user)
+  QString     myStartMatch;   //!< Beginning of the command (as typed by the user)
   bool        myStatus;       //!< Status of completion command execution
   QStringList myMatches;      //!< Matches
   QString     myDoc;          //!< Docstring of single match

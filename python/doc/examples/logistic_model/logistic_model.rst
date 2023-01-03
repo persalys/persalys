@@ -91,7 +91,7 @@ Then create a Python script named *program.py* that will act as the external cod
 This script reads the actual input file *input.txt*, computes the Y time series
 according to y0, a, b and writes it into the *Y.txt* file.
 
-Now create a Python script named *post.py* that will allow to post-process the time series values::
+Now create a Python script named *post.py* that will allow one to post-process the time series values::
 
     import math as m
     with open("Y.txt") as f:

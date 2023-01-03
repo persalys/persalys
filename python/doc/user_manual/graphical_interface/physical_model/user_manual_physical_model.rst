@@ -95,13 +95,13 @@ and the finite difference step of each variable (**Differentiation** tab).
     :align: center
 
 Define variables in the **Definition** tab:
-  - the **Inputs** section allows to:
+  - the **Inputs** section allows one to:
       - Add/remove inputs (**Add**/**Remove** button)
       - Rename variables (default: (X0, X1, ...), expected: string (alphanumeric characters only)) (**Name** column)
       - Describe variables (default: empty string, expected: string (no restriction on
         the label format: floating point, integer, string, etc...)) (**Description** column)
       - Assign a value to the inputs (default: 0, expected: floating points or integers) (**Value** column)
-  - the **Outputs** section allows to:
+  - the **Outputs** section allows one to:
       - Add/remove outputs (**Add**/**Remove** button)
       - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
         To perform the analyses, at least one output must be selected.
@@ -191,18 +191,18 @@ Available constants
     :align: center
 
 The model definition window contains:
- - the **Python editor** allows to define the model with the function **_exec** which:
+ - the **Python editor** allows one to define the model with the function **_exec** which:
     - takes floating point arguments (detected as the inputs of the model) (default: X0)
     - returns a float or a sequence of floats (detected as the outputs of the model) (default: Y0 = X0)
     - can use other statements defined in the Python editor
 
- - the **Inputs** section allows to:
+ - the **Inputs** section allows one to:
     - List the inputs detected from the function **_exec**
     - Describe variables (default: empty string, expected: string (no restriction on
       the label format: floating point, integer, string, etc...)) (**Description** column)
     - Assign a value to the inputs (default: 0, expected: floating points or integers) (**Value** column)
 
- - the **Outputs** section allows to:
+ - the **Outputs** section allows one to:
     - List the outputs detected from the function **_exec**
     - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
       To perform the analyses, at least one output must be selected.
@@ -234,7 +234,7 @@ Here is an example of an error message transmission, when we tried to compute sq
 A physical model can be defined to wrap an external code. I/O can be
 cached in dedicated files. Remember to clear it when significant
 changes are made on the model. Working directory (local temp area by
-default) can be explicitely set. The checkbox allows the user to keep
+default) can be explicitly set. The checkbox allows the user to keep
 the working directory once the model has run. The **Check model**
 button runs the model on the defined input values. It shall be used to
 test the physical model. To save the output values, the user should
@@ -276,7 +276,7 @@ Step definition is divided into several categories:
 
 - Outputs: used to specify the output file name and specify where to
   find the output variables in it. Similarly to the Inputs section,
-  output varaibles are associated to a token. In addition, numerical
+  output variables are associated to a token. In addition, numerical
   format can be specified as in https://pyformat.info/ set of "new
   rules". Generated output files can be inspected using the "check
   output button". When clicked it will ask the user to choose a
@@ -350,7 +350,7 @@ by OpenModelica for example.
 .. image:: /user_manual/graphical_interface/physical_model/FMIPhysicalModel1.png
     :align: center
 
-The **Properties** tab allows to select the FMU file and to display its properties.
+The **Properties** tab allows one to select the FMU file and to display its properties.
 
 The **Variables** tab describes the model variables.
 The main array shows the list of the variables.
@@ -365,7 +365,7 @@ model: disabled, input or output in the *I/O* column under the following constra
 .. image:: /user_manual/graphical_interface/physical_model/FMIPhysicalModel2.png
     :align: center
 
-By default, all the variables appear in the array and some filters allow
+By default, all the variables appear in the array and some filters allow one
 to modify the currently listed variables.
 
 The **Check model** button runs the model once.

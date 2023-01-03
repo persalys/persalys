@@ -91,7 +91,7 @@ int PyConsole_Interp::afterRun()
   \internal
   \param dirArgument Python expression to pass to the dir command. The parsing of what the
   user actually started typing is dedicated to the caller
-  \param startMatch string representing the begining of the patter to be completed. For example, when
+  \param startMatch string representing the beginning of the pattern to be completed. For example, when
   the user types "a_string_variable.rsp <TAB>", this is "rsp".
   \param[out] matches resulting list of matches
   \param[out] docString resulting docstring of single match

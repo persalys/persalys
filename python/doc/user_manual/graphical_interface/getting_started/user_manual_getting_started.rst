@@ -38,7 +38,7 @@ windows (model definition or result window) open, surrounded by:
 
 .. _firstgraphsettings:
 
-    - for the **Parallel coordinates plots** and the **Plot matrix**, the window allows to:
+    - for the **Parallel coordinates plots** and the **Plot matrix**, the window allows one to:
        - Select the variables to display and the axis order
        - Modify the space where the values are plotted with the **Ranks** check button
          (default: physical space). Check off the button to display the rank of the values
@@ -50,7 +50,7 @@ windows (model definition or result window) open, surrounded by:
 
 .. _secondgraphsettings:
 
-    - for the charts, the window allows to:
+    - for the charts, the window allows one to:
        - Export the figure
        - Specify the graph title (expected: string)
        - Specify axis title (expected: string) in the **X-axis** and **Y-axis** tabs

@@ -30,7 +30,7 @@
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="143"/>
-        <source>&amp;Librairies</source>
+        <source>&amp;Libraries</source>
         <translation>&amp;Bibliothèques</translation>
     </message>
     <message>

@@ -65,7 +65,7 @@ The model item is associated with a **Mesh** window.
 .. image:: /user_manual/graphical_interface/field_model/defaultMeshWindow.png
     :align: center
 
-This window allows to define a 1D mesh. The default mesh contains *10 nodes* in the range *[0, 1]*.
+This window allows one to define a 1D mesh. The default mesh contains *10 nodes* in the range *[0, 1]*.
 
 .. _meshdefinition:
 
@@ -131,14 +131,14 @@ and the finite difference step of each variable (:ref:`Differentiation <Differen
     :align: center
 
 Define variables in the **Definition** tab:
-  - the **Inputs** section allows to:
+  - the **Inputs** section allows one to:
       - Add/remove inputs (**Add**/**Remove** button)
       - Rename variables (default: (X0, X1, ...), expected: string (alphanumeric characters only)) (**Name** column)
       - Describe variables (default: empty string, expected: string (no restriction on
         the label format: floating point, integer, string, etc...))(**Description** column)
       - Assign a value to the inputs (default: 0, expected: floating points or integers)(**Value** column)
       - For convenience, the **Index parameter** name (previously defined in the :ref:`Mesh window <meshdefinition>`) is recalled here.
-  - the **Outputs** section allows to:
+  - the **Outputs** section allows one to:
       - Add/remove outputs (**Add**/**Remove** button)
       - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
         To perform the analyses, at least one output must be selected.
@@ -166,7 +166,7 @@ Define variables in the **Definition** tab:
       :align: center
 
 The model definition window contains:
- - the **Python editor** allows to define the model with the function **_exec** which:
+ - the **Python editor** allows one to define the model with the function **_exec** which:
     - takes floating point arguments (detected as the inputs of the model) (default: X0)
     - returns sequences of floats (detected as the outputs of the model) (default: Y0 = X0 + t)
       These sequences dimension must be equal to the number of nodes of the mesh.
@@ -174,14 +174,14 @@ The model definition window contains:
     - can use the mesh as an OpenTURNS object `Mesh <http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Mesh.html>`_
       using **getMesh()** method.
 
- - the **Inputs** section allows to:
+ - the **Inputs** section allows one to:
     - List the inputs detected from the function **_exec**
     - Describe variables (default: empty string, expected: string (no restriction on
       the label format: floating point, integer, string, etc...))(**Description** column)
     - Assign a value to the inputs (default: 0, expected: floating points or integers) (**Value** column)
     - For convenience, the windows reminds **Index parameter** name defined previously in the :ref:`Mesh window <meshdefinition>`.
 
- - the **Outputs** section allows to:
+ - the **Outputs** section allows one to:
     - List the outputs detected from the function **_exec**
     - Enable/disable one or several variables, by checking off the corresponding line (default: all output lines are checked off).
       To perform the analyses, at least one output must be selected.

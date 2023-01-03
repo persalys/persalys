@@ -287,7 +287,7 @@ void CollapsibleGroupBox::leaveEvent(QEvent *event)
 
 void CollapsibleGroupBox::keyPressEvent(QKeyEvent *event)
 {
-  //event might have just propogated up from a child, if so we don't want to react to it
+  //event might have just propagated up from a child, if so we don't want to react to it
   if (!hasFocus())
     return;
 

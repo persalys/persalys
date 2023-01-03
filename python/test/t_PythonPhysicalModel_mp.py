@@ -58,7 +58,7 @@ try:
     print(f([[300.0, 75000.0]]))
 except Exception as e:
     print(
-        "ZeroDivisionError occured: %s"
+        "ZeroDivisionError occurred: %s"
         % ("ZeroDivisionError: float division by zero" in str(e))
     )
     print("Error on the line 4 : %s" % ("line 4" in str(e)))

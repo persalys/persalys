@@ -63,14 +63,14 @@ field 1:
 17 : [  10.7368    31.1285   ]
 18 : [  11.3684     8.6223   ]
 19 : [  12          0        ]]
-ZeroDivisionError occured: True
+ZeroDivisionError occurred: True
 Error on the line 4 : True
-ZeroDivisionError occured: True
+ZeroDivisionError occurred: True
 Error on the line 4 : True
-InvalidArgumentException occured: True
-InvalidArgumentException occured: True
-InvalidArgumentException occured: True
-InvalidArgumentException occured: True
+InvalidArgumentException occurred: True
+InvalidArgumentException occurred: True
+InvalidArgumentException occurred: True
+InvalidArgumentException occurred: True
      [ z         z1        ]
  0 : [ 100       100       ]
  1 : [ 130.66    130.66    ]

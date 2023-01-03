@@ -2,7 +2,7 @@
 User manual - Data analyses
 ===========================
 
-The interface allows to perform the following types of data analysis:
+The interface allows one to perform the following types of data analysis:
   - Data analyses to get moments, minimum, maximum, PDF, etc.
   - Marginals inferences
   - Dependence inferences
@@ -85,7 +85,7 @@ automatically selected in the other tabs.
 - The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
 
     - The cells are colored according to the value of the Spearman's coefficient.
-    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Its context menu allows one to export the table in a CSV file or as a PNG image.
     - Select cells and Press Ctrl+C to copy values in the clipboard
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_dependence.png
@@ -141,7 +141,7 @@ automatically selected in the other tabs.
 2- Marginals inference
 ======================
 
-The inference analysis allows to perform a Bayesian Information Criterion
+The inference analysis allows one to perform a Bayesian Information Criterion
 (`BIC <http://openturns.github.io/openturns/latest/theory/data_analysis/bic.html>`_) and
 a `Kolmogorov-Smirnov <http://openturns.github.io/openturns/latest/theory/data_analysis/kolmogorov_test.html>`_
 goodness-of-fit tests for 1-d continuous distributions.
@@ -255,7 +255,7 @@ The results window gathers:
         .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters.png
            :align: center
 
-        *failed* in the **Acceptation** column means that an error occured when building a distribution
+        *failed* in the **Acceptation** column means that an error occurred when building a distribution
         with the given sample. Then, the **Parameters** tab shows the error message.
 
         .. image:: /user_manual/graphical_interface/data_analysis/inference_resultWindow_tab_summary_parameters_error_message.png
@@ -269,7 +269,7 @@ The result can be used in the :ref:`Probabilistic model window <inferenceresultw
 3- Dependence inference
 =======================
 
-The dependence inference allows to infer copulas on the sample of the data model.
+The dependence inference allows one to infer copulas on the sample of the data model.
 
 This analysis can be created thanks to:
   - the context menu of the **Definition** item of the relevant data model
@@ -292,7 +292,7 @@ When an analysis is required, a window appears:
 .. image:: /user_manual/graphical_interface/data_analysis/dependenceInference_wizard.png
     :align: center
 
-The windows allows to set up:
+The windows allows one to set up:
   - the groups of variables to test:
       - Select at least two variables of the model (left table):
           - Refer to the estimate of the :ref:`Spearman's matrix <dependenceTab>` in
@@ -384,7 +384,7 @@ The window gathers:
             - *For the Gaussian copula*: the tab displays the `Spearman's coefficients <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_.
 
 
-            - *'-'* in the **BIC** column means that an error occured when building a copula
+            - *'-'* in the **BIC** column means that an error occurred when building a copula
               with the given sample. Then, the **Parameters** tab shows the error message.
 
             .. image:: /user_manual/graphical_interface/data_analysis/copulaInference_resultWindow_tab_summary_parameters_ErrorMessage.png
@@ -433,7 +433,7 @@ When an analysis is required, a window appears, in order to set up:
 4-1-1 Linear regression
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The **Linear regression** window allows to define:
+The **Linear regression** window allows one to define:
   - **Parameters**: polynomial degree (default: 1, expected: integer in [1, 2]), interaction terms (if degree>1 only)
 
 Refer to :class:`~persalsys.PolynomialRegressionAnalysis` for implementation details.
@@ -444,7 +444,7 @@ Refer to :class:`~persalsys.PolynomialRegressionAnalysis` for implementation det
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_functional_chaos_wizard.png
     :align: center
 
-The **Functional chaos parameters** window allows to define:
+The **Functional chaos parameters** window allows one to define:
   - **Parameters**: chaos degree (default: 2, expected: integer greater or equal to 1)
   - **Advanced Parameters** (default: hidden): sparse chaos (default: not sparse)
 
@@ -456,11 +456,11 @@ Refer to :class:`~persalsys.FunctionalChaosAnalysis` for implementation details.
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_kriging_wizard.png
     :align: center
 
-The **Kriging parameters** window allows to define:
+The **Kriging parameters** window allows one to define:
   - **Parameters**:
      - *The type of covariance model*: Squared exponential (default), Absolute exponential,
        Generalized exponential, Matérn model
-     - *Parameters of the covariance model* (default: hidden, visible if a model is choosen):
+     - *Parameters of the covariance model* (default: hidden, visible if a model is chosen):
          - **Generalized exponential**: parameter **p**,
            exponent of the euclidean norm (default: 1., positive float expected)
 

@@ -1,6 +1,6 @@
 obs= class=Observations name=obs physicalModel=aModelPhys observedInputs=[X3,X1] observedOutputs=[Y2,Y1] fileName=normal2.csv inputColumns=[7,3] outputColumns=[6,2]
-InvalidArgumentException occured: True
-InvalidArgumentException occured: True
+InvalidArgumentException occurred: True
+InvalidArgumentException occurred: True
 obs2= class=Observations name=obs2 physicalModel=aModelPhys observedInputs=[X3,X1] observedOutputs=[Y2,Y1]
 #!/usr/bin/env python
 

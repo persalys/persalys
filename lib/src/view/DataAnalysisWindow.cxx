@@ -307,7 +307,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
   // input indices
   Indices inInd(inputNames_.size());
   inInd.fill();
-  // ouput indices
+  // output indices
   Indices ind(outputNames_.size());
   ind.fill(inputNames_.size());
   // indices with good order
@@ -372,7 +372,7 @@ void DataAnalysisWindow::addBoxPlotTab()
   // input indices
   Indices inInd(inputNames_.size());
   inInd.fill();
-  // ouput indices
+  // output indices
   Indices ind(outputNames_.size());
   ind.fill(inputNames_.size());
   // indices with good order

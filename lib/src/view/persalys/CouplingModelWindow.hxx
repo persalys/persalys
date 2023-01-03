@@ -290,7 +290,7 @@ private:
   CouplingPhysicalModel * model_ = 0;
   int indStep_ = 0;
   DynamicTabWidget * inTabWidget_ = 0;
-  CouplingResourceFileWidget * ressourceFileWidget_ = 0;
+  CouplingResourceFileWidget * resourceFileWidget_ = 0;
 };
 
 

@@ -292,7 +292,7 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
   }
   else if (message == "progressValueChanged")
   {
-    // emit signal to AnalysisWindow to upate the progress bar
+    // emit signal to AnalysisWindow to update the progress bar
     emit progressValueChanged(analysis_.getProgressValue());
   }
   else if (message == "doeChanged" && convertAction_)

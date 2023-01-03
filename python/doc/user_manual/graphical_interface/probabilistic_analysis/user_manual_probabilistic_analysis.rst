@@ -42,7 +42,7 @@ This item is associated with a window which has the **Marginals** and **Dependen
 1-2 Specify the distribution parameters
 '''''''''''''''''''''''''''''''''''''''
 
-The **Marginals** tab allows to set up the input distributions.
+The **Marginals** tab allows one to set up the input distributions.
 
 On the left, the user can choose stochastic input variables and their distribution.
       - Variables are deterministic by default: To make a variable stochastic, check the
@@ -110,7 +110,7 @@ it is not possible to select them and validate the window.
 1-3 Specify dependence between variables
 ''''''''''''''''''''''''''''''''''''''''
 
-The **Dependence** tab allows to set up dependence between variables. It is represented
+The **Dependence** tab allows one to set up dependence between variables. It is represented
 by `copulas <http://openturns.github.io/openturns/latest/theory/probabilistic_modeling/copulas.html>`_.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelDependence.png
@@ -211,7 +211,7 @@ Its context menu contains the following actions:
   - **Threshold exceedance**: Create a new threshold exceedance analysis
   - **Remove**: Remove the limit state and all the analyses depending on it
 
-This item is associated with a window which allows to:
+This item is associated with a window which allows one to:
   - Select the output of interest
   - Define the failure event by:
       - selecting an operator:
@@ -264,7 +264,7 @@ Then, set up the algorithm parameters of the corresponding method:
 3-1-1 Simulation methods
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-The **Simulation methods** window allows to define:
+The **Simulation methods** window allows one to define:
   - **Stopping criteria** of the algorithm (Select at least one criterion to validate the window):
       - the maximum coefficient of variation for the probability, (default: 0.01,
         expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
@@ -281,7 +281,7 @@ The **Simulation methods** window allows to define:
 3-1-2 Approximation methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The window allows to define **Optimization parameters**:
+The window allows one to define **Optimization parameters**:
     - the algorithm method: Abdo-Rackwitz, Cobyla (default), SQP
     - the starting point (default: means of the distributions of the stochastic inputs)
     - **Advanced Parameters** (default: hidden): the stopping criteria
@@ -447,7 +447,7 @@ When an analysis is required, a window appears, in order to set up:
 4-1-1 Monte Carlo
 ~~~~~~~~~~~~~~~~~
 
-The **Monte Carlo parameters** window allows to define:
+The **Monte Carlo parameters** window allows one to define:
   - **Stopping criteria** of the algorithm (Select at least one criterion to validate the window):
       - the maximum coefficient of variation (CV) for the mean (
         :math:`CV = \frac{\sigma / \sqrt{n}}{\lvert \mu \rvert}` with :math:`n`: the number of simulations,
@@ -539,7 +539,7 @@ The results window gathers the following tabs:
 - The **Dependence** tab displays the `Spearman's matrix <http://openturns.github.io/openturns/latest/theory/data_analysis/spearman_coefficient.html>`_ estimate.
 
     - The cells are colored according to the value of the Spearman's coefficient.
-    - Its context menu allows to export the table in a CSV file or as a PNG image.
+    - Its context menu allows one to export the table in a CSV file or as a PNG image.
     - Select cells and Press Ctrl+C to copy values in the clipboard
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/doe_dependence.png
@@ -642,7 +642,7 @@ When an analysis is required, a window appears, in order to set up:
 5-1-1 Sobol indices
 ~~~~~~~~~~~~~~~~~~~
 
-The **Sobol parameters** window allows to define:
+The **Sobol parameters** window allows one to define:
   - **Stopping criteria** of the algorithm (Select at least one criterion to validate the window):
       - the maximum confidence interval length of the first order indices (default: 0.01,
         expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
@@ -670,7 +670,7 @@ See the :ref:`Sensitivity <SobolExample>` section in the example guide.
 5-1-2 SRC indices
 ~~~~~~~~~~~~~~~~~
 
-The **SRC parameters** window allows to define:
+The **SRC parameters** window allows one to define:
   - **Evaluation parameters**:
      - the sample size (default: 10000, integer expected)
      - the block size – the number of runs launched simultaneously – for parallelization

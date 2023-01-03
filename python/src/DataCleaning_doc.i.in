@@ -1,5 +1,5 @@
 %feature("docstring") PERSALYS::DataCleaning
-"DataModel sample manipulation. Allows to remove/replace irrelevant/erroneous values on-the-fly.
+"DataModel sample manipulation. Allows one to remove/replace irrelevant/erroneous values on-the-fly.
 
 Parameters
 ----------

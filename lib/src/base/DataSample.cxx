@@ -121,15 +121,15 @@ void DataSample::searchMinMax() const
     std::pair<OT::NSI_iterator, OT::NSI_iterator> minmax = std::minmax_element(sampleOut->begin(),
                                                                                sampleOut->end());
 
-    // first occurence of min idx
+    // first occurrence of min idx
     const UnsignedInteger minIdx = minmax.first - sampleOut->begin();
-    // last occurence of max idx
+    // last occurrence of max idx
     const UnsignedInteger maxIdx = minmax.second - sampleOut->begin();
 
     inMinSample.add(getInputSample()[minIdx]);
     inMaxSample.add(getInputSample()[maxIdx]);
 
-    // look for antoher occurence of min
+    // look for antoher occurrence of min
     if (minmax.first != sampleOut->end())
     {
       for (OT::NSI_iterator it = std::next(minmax.first); it != sampleOut->end(); ++it)
@@ -141,7 +141,7 @@ void DataSample::searchMinMax() const
       }
     }
 
-    // look for antoher occurence of max
+    // look for antoher occurrence of max
     if (minmax.second != sampleOut->begin())
     {
       for (OT::NSI_iterator it = std::prev(minmax.second); it != sampleOut->begin(); --it)

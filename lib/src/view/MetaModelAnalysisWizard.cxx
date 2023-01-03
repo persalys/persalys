@@ -72,7 +72,7 @@ void MetaModelAnalysisWizard::buildInterface()
   setWindowTitle(tr("Metamodel"));
   docLink_ = "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#metamodelwizard";
 
-  // intro page : doe/ouputs/method
+  // intro page : doe/outputs/method
   introPage_ = new MetaModelIntroPage(this);
   setPage(Page_Intro, introPage_);
 

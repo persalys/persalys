@@ -56,14 +56,14 @@ try:
     obs.setColumns([4, 5, 0], ["X3", "X1"], [3, 0], ["Y2", "Y1"])
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s" % ("InvalidArgumentException" in str(e))
+        "InvalidArgumentException occurred: %s" % ("InvalidArgumentException" in str(e))
     )
 
 try:
     obs.setColumns([4, 5, 0], ["X0", "X1", "X2"], [], [])
 except Exception as e:
     print(
-        "InvalidArgumentException occured: %s"
+        "InvalidArgumentException occurred: %s"
         % (
             "InvalidArgumentException : Define observations for at least an output"
             in str(e)

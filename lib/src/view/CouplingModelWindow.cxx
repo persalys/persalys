@@ -838,7 +838,7 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
       model->setSteps(csColl);
       model->blockNotification();
 
-      // refresh configured path in case it was unitialized
+      // refresh configured path in case it was uninitialized
       fileLineEdit->setText(inColl[indFile].getConfiguredPath().c_str());
     });
   connect(fileLineEdit, &QLineEdit::editingFinished, [=](){
@@ -947,7 +947,7 @@ QString CouplingInputFileWidget::readFile(QFileInfo & fname) const
   return lines;
 }
 
-// Widget for Coupling Ressource file ( <=> Coupling input file without template path )
+// Widget for Coupling Resource file ( <=> Coupling input file without template path )
 
 CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *model, const int indStep, QWidget *parent)
   : QWidget(parent)
@@ -1323,14 +1323,14 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       updateInputFileWidgets(item);
     });
 
-  // ressource definition
+  // resource definition
   tab = new QWidget;
   stepTabWidget->addTab(tab, tr("Resource"));
 
   QGridLayout * resTabLayout = new QGridLayout(tab);
-  ressourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, tab);
-  resTabLayout->addWidget(ressourceFileWidget_);
-  connect(ressourceFileWidget_, &CouplingResourceFileWidget::couplingResourceCollectionModified, [=]() { updateInputFileWidgets(item); });
+  resourceFileWidget_ = new CouplingResourceFileWidget(model, indStep, tab);
+  resTabLayout->addWidget(resourceFileWidget_);
+  connect(resourceFileWidget_, &CouplingResourceFileWidget::couplingResourceCollectionModified, [=]() { updateInputFileWidgets(item); });
 
   updateInputFileWidgets(item);
 
@@ -1430,8 +1430,8 @@ void CouplingStepWidget::updateInputFileWidgets(PhysicalModelItem *item)
   if (inTabWidget_->count() < 2)
     inTabWidget_->newTabRequested();
 
-  // update the ressource widget
-  ressourceFileWidget_->updateTable();
+  // update the resource widget
+  resourceFileWidget_->updateTable();
 
   item->update(0, "inputStepChanged");
 }

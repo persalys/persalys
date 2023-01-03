@@ -97,7 +97,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
   tabWidget->addTab(tab, tr("&About"));
 
-  // Librairies tab
+  // Libraries tab
   tab = new QWidget;
   tabLayout = new QVBoxLayout(tab);
 
@@ -140,7 +140,7 @@ AboutDialog::AboutDialog(QWidget* parent)
 
   tabLayout->addWidget(table);
 
-  tabWidget->addTab(tab, tr("&Librairies"));
+  tabWidget->addTab(tab, tr("&Libraries"));
 
   mainLayout->addWidget(tabWidget);
 

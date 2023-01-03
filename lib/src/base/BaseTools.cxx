@@ -283,17 +283,17 @@ Sample Tools::ImportSample(const String& fileName)
     throw InvalidArgumentException(HERE) << "The file must contain utf-8 characters";
 
   // deduplicate identifiers
-  std::map<String, int> occurences;
+  std::map<String, int> occurrences;
   Description description(sampleFromFile.getDescription());
   for (UnsignedInteger i = 0; i < description.getSize(); ++ i)
   {
-    std::map<String, int>::iterator it = occurences.find(description[i]);
-    if (it == occurences.end())
-      occurences[description[i]] = 1;
+    std::map<String, int>::iterator it = occurrences.find(description[i]);
+    if (it == occurrences.end())
+      occurrences[description[i]] = 1;
     else
     {
-      ++ occurences[description[i]];
-      description[i] = (OSS() << description[i] << "_" << occurences[description[i]]);
+      ++ occurrences[description[i]];
+      description[i] = (OSS() << description[i] << "_" << occurrences[description[i]]);
     }
   }
   sampleFromFile.setDescription(description);
