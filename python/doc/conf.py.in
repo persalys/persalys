@@ -73,7 +73,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Persalys'
-copyright = u'2015-2022 EDF-Phimeca'
+copyright = u'2015-2023 EDF-Phimeca'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

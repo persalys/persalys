@@ -2,7 +2,7 @@
 /**
  *  @brief QWidget with a list of copulas and their PDF-CDF/parameters
  *
- *  Copyright 2015-2022 EDF-Phimeca
+ *  Copyright 2015-2023 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
