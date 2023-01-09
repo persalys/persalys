@@ -23,6 +23,7 @@
 #include "persalys/CodeDelegate.hxx"
 #include "persalys/PhysicalModelWindowWidget.hxx"
 #include "persalys/CodeModel.hxx"
+#include "persalys/CheckModelButtonGroup.hxx"
 
 #include <QVBoxLayout>
 #include <QHeaderView>
@@ -73,5 +74,12 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, Q
 
   ////////////////
   widgetLayout->addWidget(horizontalSplitter, 1);
+
+  // buttons
+  CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+  connect(buttons, SIGNAL(evaluateOutputsRequested()), tablesWidget, SIGNAL(evaluateOutputsRequested()));
+  connect(buttons, SIGNAL(evaluateGradientRequested()), tablesWidget, SIGNAL(evaluateGradientRequested()));
+  widgetLayout->addWidget(buttons);
+
 }
 }

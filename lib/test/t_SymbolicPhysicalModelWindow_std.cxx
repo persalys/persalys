@@ -3,6 +3,7 @@
 #include "persalys/PhysicalModelWindowWidget.hxx"
 #include "persalys/CheckableHeaderView.hxx"
 #include "persalys/DifferentiationTableModel.hxx"
+#include "persalys/GradientTableModel.hxx"
 #include "persalys/PhysicalModelDefinitionItem.hxx"
 
 #include <openturns/OTtypes.hxx>
@@ -31,14 +32,17 @@ private slots:
     PhysicalModelWindowWidget * mainWidget = window.findChild<PhysicalModelWindowWidget*>();
     QList<CopyableTableView*> listTables = mainWidget->findChildren<CopyableTableView*>();
     TemporaryLabel * errorLabel = mainWidget->findChild<TemporaryLabel*>();
-    QList<QPushButton*> pushButtons = mainWidget->findChildren<QPushButton*>();
+    QList<QPushButton*> pushButtons = window.findChildren<QPushButton*>();
     CopyableTableView * inTable = 0;
     CopyableTableView * outTable = 0;
     CopyableTableView * diffTable = 0;
+    CopyableTableView * gradTable = 0;
     for (int i = 0; i < listTables.size(); ++i)
     {
-      if (listTables[i]->model()->columnCount() == 2)
+      if (dynamic_cast<DifferentiationTableModel*>(listTables[i]->model()))
         diffTable = listTables[i];
+      else if (dynamic_cast<GradientTableModel*>(listTables[i]->model()))
+        gradTable = listTables[i];
       else if (dynamic_cast<CheckableHeaderView*>(listTables[i]->horizontalHeader()))
         outTable = listTables[i];
       else
@@ -46,11 +50,16 @@ private slots:
     }
     DifferentiationTableModel * diffTableModel = dynamic_cast<DifferentiationTableModel*>(diffTable->model());
     QPushButton * evaluateButton = 0;
+    QPushButton * evaluateGradButton = 0;
     for (int i = 0; i < pushButtons.size(); ++i)
     {
-      if (pushButtons[i]->text() == "Check model")
+      if (pushButtons[i]->text() == "Evaluate model")
       {
         evaluateButton = pushButtons[i];
+      }
+      if (pushButtons[i]->text() == "Evaluate gradient")
+      {
+        evaluateGradButton = pushButtons[i];
       }
     }
 
@@ -69,6 +78,7 @@ private slots:
     {
       QVERIFY2(listTables[i]->model()->rowCount() == 2, "Each table must have 2 lines");
     }
+    QVERIFY2(gradTable->model()->columnCount() == 2, "Gradient table must have two columns");
     QVERIFY2(item->getPhysicalModel().getInputs()[0] == Input("X0"), "wrong input");
     QVERIFY2(item->getPhysicalModel().getOutputs()[0] == Output("Y0"), "wrong output");
     QVERIFY2(diffTable->model()->data(diffTable->model()->index(0, 0)).toString() == "X0", "wrong name in diff Table");
@@ -92,9 +102,14 @@ private slots:
 
     // uncheck Y1 + evaluate
     outTable->model()->setData(outTable->model()->index(1, 0), Qt::Unchecked, Qt::CheckStateRole);
+    QVERIFY2(gradTable->model()->columnCount() == 1, "Gradient table must have one column");
     evaluateButton->click();
+    evaluateGradButton->click();
     QVERIFY2(outTable->model()->data(outTable->model()->index(0, 3)).toString() == "6", "wrong output value");
     QVERIFY2(outTable->model()->data(outTable->model()->index(1, 3)).toString() == "?", "wrong output value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(0, 0)).toString() == "2", "wrong gradient value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(1, 0)).toString() == "0", "wrong gradient value");
+
 
     // check Y1
     outTable->model()->setData(outTable->model()->index(1, 0), Qt::Checked, Qt::CheckStateRole);
@@ -102,12 +117,17 @@ private slots:
 
     // evaluate
     evaluateButton->click();
+    evaluateGradButton->click();
     QVERIFY2(outTable->model()->data(outTable->model()->index(1, 3)).toString() == "5", "wrong output value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(0, 1)).toString() == "1", "wrong gradient value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(1, 1)).toString() == "0", "wrong gradient value");
 
     // change an input value
     inTable->model()->setData(inTable->model()->index(0, 2), 7.);
     QVERIFY2(outTable->model()->data(outTable->model()->index(0, 3)).toString() == "?", "wrong output value");
     QVERIFY2(outTable->model()->data(outTable->model()->index(1, 3)).toString() == "?", "wrong output value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(0, 0)).toString() == "?", "wrong gradient value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(0, 1)).toString() == "?", "wrong gradient value");
 
     // uncheck all outputs
     outTable->model()->setData(outTable->model()->index(0, 0), Qt::Unchecked, Qt::CheckStateRole);
@@ -116,21 +136,32 @@ private slots:
 
     // evaluate
     evaluateButton->click();
+    evaluateGradButton->click();
     QVERIFY2(outTable->model()->data(outTable->model()->index(0, 3)).toString() == "?", "wrong output value");
     QVERIFY2(outTable->model()->data(outTable->model()->index(1, 3)).toString() == "?", "wrong output value");
+    QVERIFY2(gradTable->model()->columnCount() == 0, "Gradient table must have zero columns");
+    QVERIFY2(gradTable->model()->rowCount() == 2, "Gradient table must have two rows");
+
 
     // check all outputs + set wrong Y1 formula + evaluate
     outTable->model()->setData(outTable->model()->index(0, 0), Qt::Checked, Qt::CheckStateRole);
     outTable->model()->setData(outTable->model()->index(1, 0), Qt::Checked, Qt::CheckStateRole);
     outTable->model()->setData(outTable->model()->index(1, 2), "Input0 + ");
     evaluateButton->click();
+    evaluateGradButton->click();
     QVERIFY2(outTable->model()->data(outTable->model()->index(0, 3)).toString() == "?", "wrong output value");
     QVERIFY2(outTable->model()->data(outTable->model()->index(1, 3)).toString() == "?", "wrong output value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(0, 0)).toString() == "?", "wrong gradient value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(0, 1)).toString() == "?", "wrong gradient value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(1, 0)).toString() == "?", "wrong gradient value");
+    QVERIFY2(gradTable->model()->data(gradTable->model()->index(1, 1)).toString() == "?", "wrong gradient value");
+
     QVERIFY2(errorLabel->text().isEmpty() == false, "label not empty");
 
     // uncheck Y1 + evaluate
     outTable->model()->setData(outTable->model()->index(1, 0), Qt::Unchecked, Qt::CheckStateRole);
     evaluateButton->click();
+    evaluateGradButton->click();
     QVERIFY2(errorLabel->text().isEmpty() == true, "label must be empty");
 
     // change finite difference step

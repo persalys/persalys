@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel for the list of the outputs
+ *  @brief QAbstractTableModel to display gradient values
  *
  *  Copyright 2015-2023 EDF-Phimeca
  *
@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_OUTPUTTABLEMODEL_HXX
-#define PERSALYS_OUTPUTTABLEMODEL_HXX
+#ifndef PERSALYS_GRADIENTTABLEMODEL_HXX
+#define PERSALYS_GRADIENTTABLEMODEL_HXX
 
 #include "persalys/PhysicalModel.hxx"
 
@@ -27,34 +27,30 @@
 
 namespace PERSALYS
 {
-class PERSALYS_MODEL_API OutputTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API GradientTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  OutputTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  GradientTableModel(const PhysicalModel& physicalModel, QObject* parent = 0);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
-  int rowCount(const QModelIndex & parent  = QModelIndex()) const override;
-  QVariant data(const QModelIndex & index, int role) const override;
-  bool setData(const QModelIndex & index, const QVariant & value, int role) override;
-  Qt::ItemFlags flags(const QModelIndex & index) const override;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
-  bool isValid();
+  int columnCount(const QModelIndex& parent = QModelIndex()) const;
+  int rowCount(const QModelIndex& parent = QModelIndex()) const;
+  Qt::ItemFlags flags(const QModelIndex& index) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  QVariant data(const QModelIndex& index, int role) const;
+  bool setData(const QModelIndex& index, const QVariant& value, int role);
+  void setErrorMessage(const QString& message) {errorMessage_=message;};
+  QString getErrorMessage() const {return errorMessage_;};
 
 public slots:
   void updateData();
-  void addLine();
-  void removeLine(const QModelIndex & index);
-signals:
-  void errorMessageChanged(QString);
-  void outputNumberChanged();
-  void outputNameChanged();
-
+  void evaluateGradient();
 
 private:
   PhysicalModel physicalModel_;
+  OT::Matrix gradient_;
+  QString errorMessage_;
 };
 }
 #endif
