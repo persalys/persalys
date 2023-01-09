@@ -23,7 +23,7 @@ ENV PATH=/opt/rh/devtoolset-8/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtool
 WORKDIR /usr/local/src
 
 # swig
-RUN curl -fSsL https://github.com/swig/swig/archive/v4.1.0.tar.gz | tar xz && cd swig-4.1.0 \
+RUN curl -fSsL https://github.com/swig/swig/archive/v4.1.1.tar.gz | tar xz && cd swig-4.1.1 \
  && ./autogen.sh && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
@@ -82,15 +82,15 @@ RUN curl -fSsL https://www.openssl.org/source/openssl-1.1.1s.tar.gz | tar xz && 
  && ./config no-ssl2 no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz | tar xz && cd Python-3.10.8 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.10.9/Python-3.10.9.tgz | tar xz && cd Python-3.10.9 \
  && ./configure --enable-shared CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel "setuptools<65.6" cython pybind11 flake8
-RUN git clone -b v1.22.4 --depth 1 --recursive https://github.com/numpy/numpy.git && cd numpy \
+RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11 flake8
+RUN git clone -b v1.23.5 --depth 1 --recursive https://github.com/numpy/numpy.git && cd numpy \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
-RUN pip install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.8.1.tar.gz | tar xz && cd scipy-1.8.1 \
+RUN pip install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.9.3.tar.gz | tar xz && cd scipy-1.9.3 \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
 RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
@@ -128,12 +128,12 @@ RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.ta
 RUN pip install meson && curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.21.0/downloads/wayland-1.21.0.tar.xz | tar xJ && cd wayland-1.21.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.7/submodules/qtbase-everywhere-opensource-src-5.15.7.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.7 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.7/submodules/qtsvg-everywhere-opensource-src-5.15.7.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.7 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.7/submodules/qtx11extras-everywhere-opensource-src-5.15.7.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.7 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.7/submodules/qttools-everywhere-opensource-src-5.15.7.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.7 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.7/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.7.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.7 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.7/submodules/qtwayland-everywhere-opensource-src-5.15.7.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.7 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.8/submodules/qtbase-everywhere-opensource-src-5.15.8.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.8 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.8/submodules/qtsvg-everywhere-opensource-src-5.15.8.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.8 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.8/submodules/qtx11extras-everywhere-opensource-src-5.15.8.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.8 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.8/submodules/qttools-everywhere-opensource-src-5.15.8.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.8 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.8/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.8.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.8 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.8/submodules/qtwayland-everywhere-opensource-src-5.15.8.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.8 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj && cd qwt-6.2.0 \

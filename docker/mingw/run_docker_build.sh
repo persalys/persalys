@@ -54,8 +54,8 @@ curl -fSsL https://pypi.io/packages/py2.py3/p/pytz/pytz-2021.3-py2.py3-none-any.
 curl -fSsL https://pypi.io/packages/py2.py3/p/python_dateutil/python_dateutil-2.8.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/d/dill/dill-0.3.6-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp310/n/numpy/numpy-1.22.4-cp310-cp310-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp310/s/scipy/scipy-1.8.1-cp310-cp310-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp310/n/numpy/numpy-1.23.5-cp310-cp310-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp310/s/scipy/scipy-1.9.3-cp310-cp310-win_amd64.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/cp310/p/pandas/pandas-1.5.1-cp310-cp310-win_amd64.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
