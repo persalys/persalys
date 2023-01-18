@@ -34,9 +34,9 @@ cat > persalys.AppDir/AppRun <<\EOF
 #!/bin/sh
 HERE=$(dirname $(readlink -f "${0}"))
 export PATH=${HERE}/usr/bin/:${HERE}/usr/salome/bin:${HERE}/usr/salome/bin/salome:${PATH}
-export LD_LIBRARY_PATH=${HERE}/usr/lib/:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/salome/lib/salome:${LD_LIBRARY_PATH}
 export PYTHONHOME=${HERE}/usr/
-export PYTHONPATH=${HERE}/usr/lib/python3.6/site-packages/salome:${HERE}/usr/bin/salome:${HERE}/usr/salome/lib/python3.6/site-packages
+export PYTHONPATH=${HERE}/usr/lib/python3.6/site-packages/salome:${HERE}/usr/bin/salome:${HERE}/usr/salome/lib/python3.6/site-packages:${HERE}/usr/salome/bin/salome:${HERE}/usr/salome/lib/salome
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 
 # assumes fonts are provided on host machine
@@ -53,7 +53,6 @@ cp ${HERE}/salome_context.cfg ${HERE}/config_appli.xml /tmp
 sed -i "s|/home/devel/local|${HERE}/usr/salome|g" /tmp/salome_context.cfg /tmp/config_appli.xml
 rm -rf /tmp/appli
 python3 ${HERE}/usr/salome/bin/salome/appli_gen.py --prefix=/tmp/appli --config=/tmp/config_appli.xml
-/tmp/appli/salome -t
 
 /tmp/appli/salome shell -- ${HERE}/usr/bin/persalys "$@"
 EOF
