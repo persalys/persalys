@@ -19,7 +19,6 @@
  *
  */
 #include "persalys/CouplingPhysicalModel.hxx"
-#include "persalys/PythonScriptEvaluation.hxx"
 #include "persalys/BaseTools.hxx"
 #include "persalys/FileMemoizeFunction.hxx"
 

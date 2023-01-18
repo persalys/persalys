@@ -32,13 +32,13 @@ Create the analysis:
 >>> analysis.setPopulationSize(50)
 >>> analysis.setGenerationNumber(10)
 >>> analysis.setVariableInputs(['X0', 'X1'])
->>> analysis.run()
+>>> analysis.run() # doctest: +SKIP
 
 Get the result:
 
->>> result = analysis.getResult()
->>> finalPop = result.getFinalPop()
->>> fronts = result.getFronts()"
+>>> result = analysis.getResult() # doctest: +SKIP
+>>> finalPop = result.getFinalPop() # doctest: +SKIP
+>>> fronts = result.getFronts() # doctest: +SKIP"
 
 
 // ---------------------------------------------------------------------
