@@ -25,6 +25,8 @@
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/TemporaryLabel.hxx"
 
+#include <QPushButton>
+
 namespace PERSALYS
 {
 class PERSALYS_VIEW_API PhysicalModelWindowWidget : public QTabWidget
@@ -54,6 +56,8 @@ signals:
   void removeInputLine(QModelIndex);
   void removeOutputLine(QModelIndex);
   void resetMessageLabel();
+  void evaluateOutputsRequested();
+  void evaluateGradientRequested();
 
 private:
   PhysicalModel physicalModel_;

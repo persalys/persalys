@@ -23,6 +23,7 @@
 #include "persalys/PhysicalModelWindowWidget.hxx"
 #include "persalys/QtTools.hxx"
 #include "persalys/FileTools.hxx"
+#include "persalys/CheckModelButtonGroup.hxx"
 
 #include "Py2YacsDialog.hxx"
 
@@ -66,6 +67,14 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item, QWidg
   // error message
   errorMessageLabel_ = new TemporaryLabel;
   mainLayout->addWidget(errorMessageLabel_);
+
+  // buttons
+  CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+  connect(buttons, SIGNAL(evaluateOutputsRequested()), widget, SIGNAL(evaluateOutputsRequested()));
+  connect(buttons, SIGNAL(evaluateGradientRequested()), widget, SIGNAL(evaluateGradientRequested()));
+  mainLayout->addWidget(buttons);
+
+
 }
 
 

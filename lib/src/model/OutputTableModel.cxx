@@ -221,6 +221,7 @@ void OutputTableModel::addLine()
     ++i;
   physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.addOutput(Output('Y' + (OSS() << i).str()));
+  emit outputNumberChanged();
   physicalModel_.blockNotification();
   //
   QModelIndex lastIndex = index(rowCount() - 1, 0);
@@ -238,6 +239,7 @@ void OutputTableModel::removeLine(const QModelIndex & index)
   removeRows(index.row(), 1, index.parent());
   physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
+  emit outputNumberChanged();
   physicalModel_.blockNotification();
   endRemoveRows();
   emit headerDataChanged(Qt::Horizontal, 0, 0);

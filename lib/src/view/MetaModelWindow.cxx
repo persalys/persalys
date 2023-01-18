@@ -21,6 +21,7 @@
 #include "persalys/MetaModelWindow.hxx"
 
 #include "persalys/PhysicalModelWindowWidget.hxx"
+#include "persalys/CheckModelButtonGroup.hxx"
 
 #include <QVBoxLayout>
 
@@ -35,6 +36,14 @@ MetaModelWindow::MetaModelWindow(PhysicalModelItem * item, QWidget * parent)
 
   widgetLayout->addWidget(new TitleLabel(tr("Metamodel")));
 
-  widgetLayout->addWidget(new PhysicalModelWindowWidget(item));
+  PhysicalModelWindowWidget *widget = new PhysicalModelWindowWidget(item);
+  widgetLayout->addWidget(widget);
+
+  // buttons
+  CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+  connect(buttons, SIGNAL(evaluateOutputsRequested()), widget, SIGNAL(evaluateOutputsRequested()));
+  connect(buttons, SIGNAL(evaluateGradientRequested()), widget, SIGNAL(evaluateGradientRequested()));
+  widgetLayout->addWidget(buttons);
+
 }
 }

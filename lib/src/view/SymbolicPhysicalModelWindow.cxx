@@ -21,7 +21,7 @@
 #include "persalys/SymbolicPhysicalModelWindow.hxx"
 
 #include "persalys/PhysicalModelWindowWidget.hxx"
-
+#include "persalys/CheckModelButtonGroup.hxx"
 #include <QVBoxLayout>
 
 namespace PERSALYS
@@ -38,6 +38,14 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelItem * ite
     docLink = "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldsymbolicmodel";
   widgetLayout->addWidget(new TitleLabel(tr("Symbolic model"), docLink));
 
-  widgetLayout->addWidget(new PhysicalModelWindowWidget(item));
+  PhysicalModelWindowWidget *widget = new PhysicalModelWindowWidget(item);
+  widgetLayout->addWidget(widget);
+
+  // buttons
+  CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+  connect(buttons, SIGNAL(evaluateOutputsRequested()), widget, SIGNAL(evaluateOutputsRequested()));
+  connect(buttons, SIGNAL(evaluateGradientRequested()), widget, SIGNAL(evaluateGradientRequested()));
+  widgetLayout->addWidget(buttons);
+
 }
 }

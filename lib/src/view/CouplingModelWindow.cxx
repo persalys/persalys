@@ -21,6 +21,7 @@
 #include "persalys/CouplingModelWindow.hxx"
 
 #include "persalys/DifferentiationTableModel.hxx"
+#include "persalys/GradientTableModel.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/DoubleSpinBox.hxx"
@@ -34,6 +35,7 @@
 #include "persalys/LineEditWithQValidatorDelegate.hxx"
 #include "persalys/AnsysWizard.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/CheckModelButtonGroup.hxx"
 
 #include <QApplication>
 #include <QGroupBox>
@@ -84,6 +86,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
       stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(stepTabWidget_->count()));
       connect(csWidget, &CouplingStepWidget::updateStepRequested, [=](){
           updateStepTabWidget(item); });
+      connect(csWidget, SIGNAL(variableListChanged()), this, SIGNAL(variableListChanged()));
     });
   connect(stepTabWidget_, &DynamicTabWidget::removeTabRequested, [=](int index) {
       CouplingStepCollection csColl(model_->getSteps());
@@ -154,18 +157,8 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
       model_->blockNotification();
     });
 
-  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
-  evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   QLabel * timeInfo = new QLabel();
   tabLayout->addWidget(timeInfo, 3, 0);
-  connect(evaluateOutputsButton, &QPushButton::clicked,
-          [=] () {
-            timeInfo->clear();
-            evaluateOutputs();
-            if(model_->getEvalTime()>0)
-              timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(model_->getEvalTime()));
-          });
-  tabLayout->addWidget(evaluateOutputsButton, 2, 0, Qt::AlignLeft);
 
   // - multiprocessing
   QSettings settings;
@@ -201,6 +194,22 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
 
   tabLayout->addWidget(differentiationTableView);
+
+  label = new QLabel(tr("Gradient values"));
+  tabLayout->addWidget(label);
+
+  CopyableTableView * gradientTableView = new CopyableTableView;
+  gradientTableView->horizontalHeader()->setStretchLastSection(true);
+
+  GradientTableModel * gradientTableModel  = new GradientTableModel(item->getPhysicalModel(), gradientTableView);
+  gradientTableView->setModel(gradientTableModel);
+
+  // connections
+  connect(this, SIGNAL(variableListChanged()), gradientTableModel, SLOT(updateData()));
+
+
+  tabLayout->addWidget(gradientTableView);
+
   mainTabWidget->addTab(tab, tr("Differentiation"));
 
   //Summary tab
@@ -210,6 +219,23 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   tabLayout->addWidget(summaryTab);
   connect(summaryTab, SIGNAL(evaluationRequested()), this, SLOT(evaluateOutputs()));
   mainTabWidget->addTab(tab, tr("Summary"));
+
+  // buttons
+  CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+  connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [=] () {
+      timeInfo->clear();
+      evaluateOutputs();
+      if(model_->getEvalTime()>0)
+        timeInfo->setText(tr("Elapsed time") + ": "
+                          + QtOT::FormatDuration(model_->getEvalTime()));});
+
+  connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [=] () {
+      errorMessageLabel_->clear();
+      gradientTableModel->evaluateGradient();
+      if (!gradientTableModel->getErrorMessage().isEmpty())
+        errorMessageLabel_->setErrorMessage(gradientTableModel->getErrorMessage());});
+
+  mainLayout->addWidget(buttons);
 }
 
 void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)
@@ -820,6 +846,8 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   connect(inTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), item, SIGNAL(inputListDifferentiationChanged()));
   connect(item, &PhysicalModelItem::outputChanged, inTableModel, &InTableModel::updateData);
 
+  connect(inTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SIGNAL(variableListChanged()));
+
   inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
   addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
 
@@ -1149,6 +1177,9 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
   connect(outTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), item, SIGNAL(inputListDifferentiationChanged()));
   connect(item, &PhysicalModelItem::outputChanged, outTableModel, &OutTableModel::updateData);
 
+  connect(outTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SIGNAL(variableListChanged()));
+
+
   outTableView->setDisabled(outFileLineEdit->text().isEmpty());
   addRemoveWidget->setDisabled(outFileLineEdit->text().isEmpty());
 
@@ -1308,6 +1339,8 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       model->blockNotification();
       CouplingInputFileWidget * ciFileWidget = new CouplingInputFileWidget(item, model, indStep, inColl.getSize()-1);
       inTabWidget_->addTab(ciFileWidget, tr("File"));
+      connect(ciFileWidget, SIGNAL(variableListChanged()), this, SIGNAL(variableListChanged()));
+
     });
   connect(inTabWidget_, &DynamicTabWidget::removeTabRequested, [=](int index){
       CouplingStepCollection csColl(model->getSteps());
@@ -1354,6 +1387,8 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       model->blockNotification();
       CouplingOutputFileWidget * outFileWidget = new CouplingOutputFileWidget(item, model, indStep, outColl.getSize()-1);
       outTabWidget->addTab(outFileWidget, tr("File"));
+      connect(outFileWidget, SIGNAL(variableListChanged()), this, SIGNAL(variableListChanged()));
+
     });
   connect(outTabWidget, &DynamicTabWidget::removeTabRequested, [=](int index){
       CouplingStepCollection csColl(model->getSteps());
@@ -1478,13 +1513,6 @@ CouplingSummaryWidget::CouplingSummaryWidget(PhysicalModelItem * item)
 
   vbox->addWidget(verticalSplitter);
 
-  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
-  evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-  connect(evaluateOutputsButton, &QPushButton::clicked, [=](){
-      emit evaluationRequested();
-      qobject_cast<OutputTableModel*>(outputTableView_->model())->updateData();
-    });
-  vbox->addWidget(evaluateOutputsButton);
 
   setLayout(vbox);
 }

@@ -27,6 +27,7 @@
 #include "persalys/InputTableModel.hxx"
 #include "persalys/OutputTableModel.hxx"
 #include "persalys/DifferentiationTableModel.hxx"
+#include "persalys/GradientTableModel.hxx"
 #include "persalys/FieldModelEvaluation.hxx"
 #include "persalys/FieldModelEvaluationResultWindow.hxx"
 
@@ -35,7 +36,6 @@
 #include <QScrollBar>
 #include <QGroupBox>
 #include <QVBoxLayout>
-#include <QPushButton>
 #include <QCheckBox>
 #include <QScrollArea>
 #include <QSpinBox>
@@ -152,21 +152,15 @@ void PhysicalModelWindowWidget::buildInterface()
   // buttons
   QHBoxLayout * outputButtonsLayout = new QHBoxLayout;
 
-  // button Evaluate outputs -------------------------------------------
-  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
-  evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   QLabel * timeInfo = new QLabel();
-  connect(evaluateOutputsButton, &QPushButton::clicked,
-          [=] () {
-            timeInfo->clear();
-            evaluateOutputs();
-            if(physicalModel_.getEvalTime()>0)
-              timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
-          });
-  outputButtonsLayout->addWidget(evaluateOutputsButton);
   outputButtonsLayout->addWidget(timeInfo);
   outputsLayout->addLayout(outputButtonsLayout);
   outputButtonsLayout->addStretch();
+  connect(this, &PhysicalModelWindowWidget::evaluateOutputsRequested, [=] () {
+      timeInfo->clear();
+      evaluateOutputs();
+      if(physicalModel_.getEvalTime()>0)
+        timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));});
 
   // buttons Add/Remove output
   if (physicalModel_.getImplementation()->getClassName().find("Symbolic") != std::string::npos)
@@ -235,6 +229,32 @@ void PhysicalModelWindowWidget::buildInterface()
     connect(inputTableModel, SIGNAL(inputNameChanged()), differentiationTableModel, SLOT(updateData()));
 
     vbox->addWidget(differentiationTableView);
+
+    label = new QLabel(tr("Gradient values"));
+    vbox->addWidget(label);
+
+    CopyableTableView * gradientTableView = new CopyableTableView;
+    gradientTableView->horizontalHeader()->setStretchLastSection(true);
+
+    GradientTableModel * gradientTableModel  = new GradientTableModel(physicalModel_, gradientTableView);
+    gradientTableView->setModel(gradientTableModel);
+
+    // connections
+    connect(this, SIGNAL(updateInputTableData()), gradientTableModel, SLOT(updateData()));
+    connect(this, SIGNAL(updateOutputTableData()), gradientTableModel, SLOT(updateData()));
+
+    connect(inputTableModel, SIGNAL(inputNumberChanged()), gradientTableModel, SLOT(updateData()));
+    connect(inputTableModel, SIGNAL(inputNameChanged()), gradientTableModel, SLOT(updateData()));
+
+    connect(outputTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), gradientTableModel, SLOT(updateData()));
+
+    connect(this, &PhysicalModelWindowWidget::evaluateGradientRequested, [=] () {
+        errorMessageLabel_->clear();
+        gradientTableModel->evaluateGradient();
+        if (!gradientTableModel->getErrorMessage().isEmpty())
+          errorMessageLabel_->setErrorMessage(gradientTableModel->getErrorMessage());});
+
+    vbox->addWidget(gradientTableView);
 
     addTab(tab, tr("Differentiation"));
   }
@@ -391,4 +411,5 @@ void PhysicalModelWindowWidget::updateIndexParamLabel()
 {
   indexParamLabel_->setText(tr("Index parameter : %1").arg(physicalModel_.getMeshModel().getIndexParameters()[0].getName().c_str()));
 }
+
 }

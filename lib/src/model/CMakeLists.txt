@@ -9,6 +9,7 @@ ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( ExperimentTableModel.cxx )
 ot_add_source_file ( CorrelationTableModel.cxx )
 ot_add_source_file ( DifferentiationTableModel.cxx )
+ot_add_source_file ( GradientTableModel.cxx )
 ot_add_source_file ( DataModelTableModel.cxx )
 ot_add_source_file ( DataCleaningTableModel.cxx )
 ot_add_source_file ( DistributionsTableModel.cxx )
@@ -51,6 +52,7 @@ ot_install_header_file ( OutputTableModel.hxx )
 ot_install_header_file ( ExperimentTableModel.hxx )
 ot_install_header_file ( CorrelationTableModel.hxx )
 ot_install_header_file ( DifferentiationTableModel.hxx )
+ot_install_header_file ( GradientTableModel.hxx )
 ot_install_header_file ( CalibrationTableModel.hxx )
 ot_install_header_file ( ItemFactory.hxx )
 ot_install_header_file ( Item.hxx )
@@ -89,6 +91,7 @@ qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/ExperimentTableModel.hxx
                                     persalys/CorrelationTableModel.hxx
                                     persalys/DifferentiationTableModel.hxx
+                                    persalys/GradientTableModel.hxx
                                     persalys/DataModelTableModel.hxx
                                     persalys/DataCleaningTableModel.hxx
                                     persalys/DistributionsTableModel.hxx
