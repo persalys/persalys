@@ -11,7 +11,7 @@ result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFir
 
 
 class=TaylorExpansionMomentsAnalysis name=aTaylor4 physicalModel=myPhysicalModel interestVariables=[Y0]
-result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.84147] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01822] variance=class=Point name=Unnamed dimension=1 values=[64.2919]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.84147] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01808] variance=class=Point name=Unnamed dimension=1 values=[64.2897]
 #!/usr/bin/env python
 
 import openturns as ot
