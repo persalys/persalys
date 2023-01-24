@@ -25,6 +25,7 @@
 #include <QFileDialog>
 #include <QGridLayout>
 #include <QComboBox>
+#include <QSpinBox>
 #include <QStandardItem>
 #include <QLabel>
 #include <QMessageBox>
@@ -97,6 +98,15 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
   layout->addWidget(lblNumSep, ++row, 0);
   layout->addWidget(boxNumSep, row, 1);
 
+  QLabel * lblPrec = new QLabel(tr("Numerical precision:"));
+  QSpinBox * boxPrec = new QSpinBox;
+  boxPrec->setMinimum(1);
+  boxPrec->setMaximum(std::numeric_limits<double>::digits);
+  boxPrec->setValue(OT::ResourceMap::GetAsUnsignedInteger("Sample-CSVPrecision"));
+
+  layout->addWidget(lblPrec, ++row, 0);
+  layout->addWidget(boxPrec, row, 1);
+
   // Disable comma as numSep if already set as colSep
   QStandardItemModel *model = qobject_cast<QStandardItemModel *>(boxNumSep->model());
   Q_ASSERT(model != nullptr);
@@ -125,7 +135,9 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
     {
       sample.exportToCSVFile(fileName.toLocal8Bit().data(),
                              boxColSep->itemData(boxColSep->currentIndex()).toString().toStdString(),
-                             boxNumSep->itemData(boxNumSep->currentIndex()).toString().toStdString());
+                             boxNumSep->itemData(boxNumSep->currentIndex()).toString().toStdString(),
+                             (OT::UnsignedInteger)boxPrec->value(),
+                             "defaultfloat");
     }
     catch (std::exception & ex)
     {
