@@ -114,12 +114,12 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.9.8.ta
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source/boost_1_80_0.tar.bz2 | tar xj && cd boost_1_80_0 \
+RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2 | tar xj && cd boost_1_81_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem --with-serialization > /dev/null 2>&1 && cd - && rm -r boost*
 
 # pagmo
-RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.18.0.tar.gz | tar xz && cd pagmo2-2.18.0 && cmake -DPAGMO_WITH_EIGEN3=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
+RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.0.tar.gz | tar xz && cd pagmo2-2.19.0 && cmake -DPAGMO_WITH_EIGEN3=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
 
 # ninja
 RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja-1.11.1 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
