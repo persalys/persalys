@@ -1,3 +1,7 @@
+= 13.1.2 release (2023-01-26)
+ * fix persalys path with space 8717b7d4
+ * fix opengl bug 9ca2c351
+
 = 13.1.1 release (2022-12-08)
 
  * Multi-objective bugfix
