@@ -22,6 +22,7 @@
 #define PERSALYS_CHECKMODELBUTTONGROUP_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
 #include <QWidget>
 
@@ -32,9 +33,12 @@ namespace PERSALYS
     Q_OBJECT
   public:
     CheckModelButtonGroup(QWidget * parent = 0);
+    TemporaryLabel * getErrorMessageLabel() const {return errorMessageLabel_;}
   signals:
     void evaluateOutputsRequested();
     void evaluateGradientRequested();
+  private:
+    TemporaryLabel * errorMessageLabel_;
   };
 }
 #endif
