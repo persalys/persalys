@@ -65,3 +65,17 @@ except Exception as e:
 script = myStudy.getPythonScript()
 print(script)
 exec(script)
+
+# model definition clash bug
+x1 = persalys.Input("x1")
+x2 = persalys.Input("x2")
+code1 = "def _exec(x1, x2):\n    y = x1 + x2\n    return y\n"
+code2 = "def _exec(x1):\n    y = x1\n    return y\n"
+y = persalys.Output("y")
+model1 = persalys.PythonPhysicalModel("model1", [x1, x2], [y], code1)
+model2 = persalys.PythonPhysicalModel("model1", [x1, x2], [y], code2)
+f1 = model1.getFunction()
+y1 = f1([1.0, 2.0])
+f2 = model2.getFunction()
+y2 = f2([1.0])
+y1 = f1([2.0, 3.0])

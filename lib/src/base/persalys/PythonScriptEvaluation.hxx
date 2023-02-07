@@ -74,10 +74,11 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
-  mutable bool scriptHasBeenEvaluated_ = false;
   OT::UnsignedInteger inputDimension_ = 0;
   OT::UnsignedInteger outputDimension_ = 0;
   OT::String code_ = "";
+  mutable std::size_t codeHash_ = 0;
+  static std::size_t LastCodeHash_;
   bool isParallel_ = false;
   OT::UnsignedInteger processNumber_ = 0;
   OT::UnsignedInteger smallSize_ = 1;

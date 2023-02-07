@@ -32,6 +32,7 @@ using namespace OT;
 
 namespace PERSALYS
 {
+std::size_t PythonScriptEvaluation::LastCodeHash_ = 0;
 
 CLASSNAMEINIT(PythonScriptEvaluation)
 
@@ -52,6 +53,7 @@ PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariable
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
+  , codeHash_(std::hash<std::string>{}(code))
 {
   setInputDescription(inputVariablesNames);
   setOutputDescription(outputVariablesNames);
@@ -134,11 +136,11 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
     PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
 
     // define the script on the first run only to allow one to save a state
-    if (!scriptHasBeenEvaluated_)
+    if (LastCodeHash_ != codeHash_)
     {
       ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
+      LastCodeHash_ = codeHash_;
       handleExceptionTraceback();
-      scriptHasBeenEvaluated_ = true;
     }
 
     callsNumber_.increment();
@@ -196,7 +198,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 
   // code has to be separate
   String tempDir = Path::CreateTemporaryDirectory("persalys");
-  std::string code_mod = "code" + std::to_string(std::hash<std::string>{}(code_));
+  std::string code_mod = "code" + std::to_string(codeHash_);
   std::ofstream code_file;
   code_file.open(tempDir + Os::GetDirectorySeparator() + code_mod + ".py");
   code_file << code_ << "\n";
