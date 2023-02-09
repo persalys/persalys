@@ -237,18 +237,31 @@ namespace PERSALYS
     moResult_ = MultiObjectiveOptimizationAnalysisResult();
 
     // initialize final pop sample
+    // X | Y | C_i | _feasibility_ | _front_index_
+
     Sample finalPop = solver.getResult().getFinalPoints();
     finalPop.stack(solver.getResult().getFinalValues());
-    finalPop.stack(Sample(finalPop.getSize(), Point(1, -1)));
     Description finalPopDesc = getVariableInputs();
     finalPopDesc.add(getInterestVariables());
-    finalPopDesc.add(Description(1, "_front_index_"));
 
-    // If constraints, add feasibility
+    // If constraints, add them and feasibility
     if (problem.getEqualityConstraint().getInputDimension() || problem.getInequalityConstraint().getInputDimension()) {
+      // Build constraints sample
+      for (UnsignedInteger i=0; i<getRawEquations().getSize(); ++i)
+      {
+        std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+        std::smatch match;
+        std::regex_search(getRawEquations()[i], match, variable);
+        finalPopDesc.add(Description(1, match[1]));
+        finalPop.stack(getPhysicalModel().getFunction(Description(1, match[1]))(solver.getResult().getFinalPoints()));
+      }
       finalPop.stack(Sample(finalPop.getSize(), Point(1, 0)));
       finalPopDesc.add(Description(1, "_feasibility_"));
     }
+
+    // add fronts last
+    finalPop.stack(Sample(finalPop.getSize(), Point(1, -1)));
+    finalPopDesc.add(Description(1, "_front_index_"));
     finalPop.setDescription(finalPopDesc);
 
     // build fronts sample collection
@@ -261,7 +274,7 @@ namespace PERSALYS
       fronts[i].setDescription(getInterestVariables());
       // add front index and feasibility to final pop sample last 2 columns
       for (UnsignedInteger j=0; j<fronti.getSize(); ++j) {
-        finalPop(fronti[j], finalPop.getDimension() - 2) = i;
+        finalPop(fronti[j], finalPop.getDimension() - 1) = i;
         const Point point = solver.getResult().getFinalPoints()[fronti[j]];
         bool isFeasible = true;
         if (problem.getEqualityConstraint().getInputDimension()) {
@@ -274,7 +287,7 @@ namespace PERSALYS
             isFeasible &= problem.getInequalityConstraint()(point)[k] > 0.0;
           }
         }
-        finalPop(fronti[j], finalPop.getDimension() - 1) = (int)isFeasible;
+        finalPop(fronti[j], finalPop.getDimension() - 2) = (int)isFeasible;
       }
     }
     moResult_.setFinalPop(finalPop);
