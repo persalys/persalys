@@ -92,11 +92,11 @@ namespace PERSALYS
       switch (section)
       {
       case 0:
-        return tr("Left part");
+        return tr("Variable");
       case 1:
         return tr("Operator");
       case 2:
-        return tr("Right part");
+        return tr("Threshold");
       default:
         return QVariant();
       }

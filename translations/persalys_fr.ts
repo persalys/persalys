@@ -1071,8 +1071,8 @@
     <name>PERSALYS::ConstraintsTableModel</name>
     <message>
         <location filename="../lib/src/model/ConstraintsTableModel.cxx" line="95"/>
-        <source>Left part</source>
-        <translation>Partie gauche</translation>
+        <source>Variable</source>
+        <translation>Variable</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ConstraintsTableModel.cxx" line="97"/>
@@ -1081,8 +1081,8 @@
     </message>
     <message>
         <location filename="../lib/src/model/ConstraintsTableModel.cxx" line="99"/>
-        <source>Right part</source>
-        <translation>Partie droite</translation>
+        <source>Threshold</source>
+        <translation>Seuil</translation>
     </message>
 </context>
 <context>
@@ -3646,12 +3646,12 @@ centrale</translation>
 <context>
     <name>PERSALYS::GradientTableModel</name>
     <message>
-        <location filename="../lib/src/model/GradientTableModel.cxx" line="84"/>
+        <location filename="../lib/src/model/GradientTableModel.cxx" line="89"/>
         <source>Information: Gradient is null</source>
         <translation>Information: Le gradient est nul</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/GradientTableModel.cxx" line="126"/>
+        <location filename="../lib/src/model/GradientTableModel.cxx" line="144"/>
         <source>Not possible to evaluate the gradient: %1</source>
         <translation>Impossible d&apos;évaluer le gradient: %1</translation>
     </message>
@@ -6047,13 +6047,13 @@ supérieure</translation>
         <translation>Doc</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="219"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="222"/>
         <source>Only one output must be selected</source>
         <translation>Seulement une sortie doit être sélectionnée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="223"/>
-        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="304"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="226"/>
+        <location filename="../lib/src/view/OptimizationAlgoPage.cxx" line="307"/>
         <source>Cannot find a compatible algorithm</source>
         <translation>Aucun algorithme compatible n&apos;a été trouvé</translation>
     </message>
@@ -6312,27 +6312,27 @@ supérieure</translation>
         <translation>Choisir les entrées à optimiser. Définir le point de départ et les bornes de l&apos;algorithme d&apos;optimisation.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="235"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="233"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="238"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="236"/>
         <source>Problem type</source>
         <translation>Type d&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="241"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="239"/>
         <source>Minimization</source>
         <translation>Minimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="241"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="239"/>
         <source>Maximization</source>
         <translation>Maximisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/OptimizationWizard.cxx" line="247"/>
+        <location filename="../lib/src/view/OptimizationWizard.cxx" line="245"/>
         <source>Stopping criteria</source>
         <translation>Critères d&apos;arrêt</translation>
     </message>
@@ -7076,27 +7076,27 @@ métamodèle</translation>
         <translation>Valeur du gradient</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="260"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="259"/>
         <source>Differentiation</source>
         <translation>Différentiation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="377"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="376"/>
         <source>Not possible to evaluate the outputs</source>
         <translation>Impossible d&apos;évaluer les sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="397"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="396"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="402"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="401"/>
         <source>Not possible to evaluate the outputs %1</source>
         <translation>Impossible d&apos;évaluer les sorties %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="413"/>
+        <location filename="../lib/src/view/PhysicalModelWindowWidget.cxx" line="412"/>
         <source>Index parameter : %1</source>
         <translation>Paramètre d&apos;indexation : %1</translation>
     </message>
