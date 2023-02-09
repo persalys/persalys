@@ -81,7 +81,9 @@ namespace PERSALYS
     bool canBeLaunched(OT::String &errorMessage) const override;
 
     static OT::Description GetSolverNames(const OT::Interval& bounds,
-                                          const OT::Indices& types = OT::Indices());
+                                          const OT::Indices& types = OT::Indices(),
+                                          const OT::Function& eqFunc = OT::Function(),
+                                          const OT::Function& ineqFunc = OT::Function());
 
     /** Initial population size */
     void setPopulationSize(const OT::UnsignedInteger popSize);

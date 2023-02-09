@@ -72,8 +72,9 @@ public:
 signals:
   void outputSelected();
 
-protected slots:
+public slots:
   void initialize(OptimizationAnalysis&);
+protected slots:
   void updateRadioButtonsAlgoTable(QModelIndex);
   void updateFilters();
   void openDoc(QModelIndex);

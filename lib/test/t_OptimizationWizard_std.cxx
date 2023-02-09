@@ -54,7 +54,14 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    // - second page
+    // second page
+    ConstraintsPage * cstrPage = wizard.cstrPage_;
+    QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
+    wizard.next();
+    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
+    QVERIFY2(cstrPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+
+    // third page
     OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.algoPage_->findChild<OutputsSelectionGroupBox*>();
     TemporaryLabel * errorMessageLabel = wizard.algoPage_->findChild<TemporaryLabel*>();
     TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
@@ -69,7 +76,7 @@ private slots:
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
 
     wizard.next();
-    QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1"); // can not go to next page
+    QVERIFY2(wizard.currentId() == 2, "Current page ID must be 2"); // can not go to next page
 
     QRect rect = listWidget->visualItemRect(listWidget->item(0));
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // deselect all
@@ -151,7 +158,6 @@ private slots:
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 5), Qt::Checked, Qt::CheckStateRole);
 
     QVERIFY2(wizard.boundsPage_->validatePage(), "Page must be valid");
-    QVERIFY2(wizard.algoPage_->validatePage(), "Page must be valid");
 
     ConstraintsPage * cstrPage = wizard.cstrPage_;
     ConstraintsTableModel * cstrTableModel = cstrPage->getTableModel();
@@ -163,6 +169,8 @@ private slots:
     QVERIFY2(cstrTableModel->data(tableModel->index(0, 2)).toString() == "0", "wrong right part");
     cstrTableModel->removeLine(tableModel->index(0, 0));
     QVERIFY2(wizard.cstrPage_->validatePage(), "Page must be valid");
+
+    QVERIFY2(wizard.algoPage_->validatePage(), "Page must be valid");
 
     bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
     QVERIFY2(analysisEquality, "The two OptimizationAnalysis must be equal");

@@ -74,7 +74,10 @@ public:
   virtual void updateParameters();
 
   static OT::Description GetSolverNames();
-  static OT::Description GetSolverNames(const OT::Interval& bounds, const OT::Indices& types = OT::Indices());
+  static OT::Description GetSolverNames(const OT::Interval& bounds,
+                                        const OT::Indices& types = OT::Indices(),
+                                        const OT::Function& eqFunc = OT::Function(),
+                                        const OT::Function& ineqFunc = OT::Function());
 
   static std::map<OT::String, AlgorithmProperty> AlgorithmDictionary;
 
@@ -128,6 +131,8 @@ public:
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
+  OT::Function getEqualityConstraints();
+  OT::Function getInequalityConstraints();
 
   OT::OptimizationResult getResult() const;
 
@@ -144,8 +149,6 @@ protected:
   void initializeParameters();
   void initialize() override;
   void launch() override;
-  OT::Function getEqualityConstraints();
-  OT::Function getInequalityConstraints();
   OT::Function transformEquations(OT::Description& eqs);
   OT::Description inputNames_;
   OT::String solverName_;

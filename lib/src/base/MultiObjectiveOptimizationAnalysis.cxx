@@ -73,12 +73,21 @@ namespace PERSALYS
     return oss;
   }
 
-  Description MultiObjectiveOptimizationAnalysis::GetSolverNames(const Interval& bounds, const Indices& types)
+  Description MultiObjectiveOptimizationAnalysis::GetSolverNames(const Interval& bounds,
+                                                                 const Indices& types,
+                                                                 const Function& eqFunc,
+                                                                 const Function& ineqFunc)
   {
     // Dummy function to match a multi objective problem
-    OptimizationProblem problem(SymbolicFunction(Description(bounds.getDimension(), "x"), Description(bounds.getDimension(), "x^2")), Function(), Function(), bounds);
+    Function func = SymbolicFunction(Description(bounds.getDimension(), "x"),
+                                     Description(bounds.getDimension(), "x^2"));
+    OptimizationProblem problem(func, Function(), Function(), bounds);
     if (types.getSize())
       problem.setVariablesType(types);
+    if (eqFunc.getInputDimension())
+      problem.setEqualityConstraint(func);
+    if (ineqFunc.getInputDimension())
+      problem.setInequalityConstraint(func);
     return OptimizationAlgorithm::GetAlgorithmNames(problem);
   }
 

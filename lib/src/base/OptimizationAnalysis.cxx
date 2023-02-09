@@ -114,12 +114,21 @@ Description OptimizationAnalysis::GetSolverNames()
   return OptimizationAlgorithm::GetAlgorithmNames(problem);
 }
 
-Description OptimizationAnalysis::GetSolverNames(const Interval& bounds, const Indices& types)
+Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
+                                                 const Indices& types,
+                                                 const Function& eqFunc,
+                                                 const Function& ineqFunc)
 {
   // Dummy non-linear function respecting bounds dimension
-  OptimizationProblem problem(SymbolicFunction(Description(bounds.getDimension(), "x"), Description(1, "x^2")), Function(), Function(), bounds);
+  Function func = SymbolicFunction(Description(bounds.getDimension(), "x"),
+                                   Description(1, "x^2"));
+  OptimizationProblem problem(func, Function(), Function(), bounds);
   if (types.getSize())
     problem.setVariablesType(types);
+  if (eqFunc.getInputDimension())
+    problem.setEqualityConstraint(func);
+  if (ineqFunc.getInputDimension())
+    problem.setInequalityConstraint(func);
   Description names(OptimizationAlgorithm::GetAlgorithmNames(problem));
 
   // drop B-iFP
