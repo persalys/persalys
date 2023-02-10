@@ -84,6 +84,11 @@ namespace PERSALYS
     const QString methodName = analysis->getParameters()[2].second.c_str();
     titleLabel_ = new TitleLabel(type + " - " + methodName, "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#optimresult");
 
+    inputNames_ = QtOT::DescriptionToStringList(analysis->getVariableInputs());
+    outputNames_ = QtOT::DescriptionToStringList(analysis->getInterestVariables());
+    inAxisTitles_ = QtOT::GetVariableAxisLabels(analysis->getPhysicalModel(), analysis->getVariableInputs());
+    outAxisTitles_ = QtOT::GetVariableAxisLabels(analysis->getPhysicalModel(), analysis->getInterestVariables());
+
     // parameters widget
     setParameters(item->getAnalysis().getImplementation(), tr("Optimization parameters"));
 
@@ -113,7 +118,7 @@ namespace PERSALYS
       }
     }
 
-    FrontsGraphSetting * settingsWidget = new FrontsGraphSetting(listPlot, QtOT::DescriptionToStringList(analysis->getInterestVariables()), this);
+    FrontsGraphSetting * settingsWidget = new FrontsGraphSetting(listPlot, outputNames_, this);
     connect(settingsWidget, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
     scrollArea->setWidget(new WidgetBoundToDockWidget(stackedWidget, settingsWidget, this));
@@ -150,8 +155,8 @@ namespace PERSALYS
   {
     // 1- table tab
     // with paraview the table is always shown in order to use the selection behavior
-    PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-    tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, result_.getFinalPop(), getItem()), tr("Table"));
+    PVSpreadSheetViewWidget * pvSpreadSheet = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+    tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheet, result_.getFinalPop(), getItem()), tr("Table"));
 
     // 2- cobweb tab --------------------------------
     PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
@@ -176,15 +181,31 @@ namespace PERSALYS
 
     tabWidget_->addTab(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this), tr("Plot matrix"));
 
-    // 4- links model --------------------------------
+    // 4- scatter plots tab --------------------------------
+    // sample
+    PVXYChartViewWidget * scatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
+    scatterPlotWidget->PVViewWidget::setData(result_.getFinalPop());
+    scatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
+
+    ScatterSettingWidget * scatterSettingWidget = new ScatterSettingWidget(scatterPlotWidget,
+        designOfExperiment_.getSample(),
+        sampleRank,
+        inputNames_,
+        outputNames_,
+        this);
+    tabWidget_->addTab(new WidgetBoundToDockWidget(scatterPlotWidget, scatterSettingWidget, this), tr("Scatter plot"));
+
+    // 5- links model --------------------------------
     pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();
 
     // There are selection behavior errors if windows use the same links names: a link name must be unique.
     // The pointers are uniques, so we use them to create an unique name...find a better and easier way.
-    String aStr = (OSS() << pvSpreadSheetWidget->getProxy() << pvmatrixWidget->getProxy()).str();
-    linksModel->addSelectionLink(aStr.c_str(), pvSpreadSheetWidget->getProxy(), pvmatrixWidget->getProxy());
-    aStr = (OSS() << cobwebWidget->getProxy() << pvSpreadSheetWidget->getProxy()).str();
-    linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvSpreadSheetWidget->getProxy());
+    String aStr = (OSS() << pvSpreadSheet->getProxy() << pvmatrixWidget->getProxy()).str();
+    linksModel->addSelectionLink(aStr.c_str(), pvSpreadSheet->getProxy(), pvmatrixWidget->getProxy());
+    aStr = (OSS() << cobwebWidget->getProxy() << pvSpreadSheet->getProxy()).str();
+    linksModel->addSelectionLink(aStr.c_str(), cobwebWidget->getProxy(), pvSpreadSheet->getProxy());
+    aStr = (OSS() << scatterPlotWidget->getProxy() << pvSpreadSheet->getProxy()).str();
+    linksModel->addSelectionLink(aStr.c_str(), scatterPlotWidget->getProxy(), pvSpreadSheet->getProxy());
   }
 #endif
 

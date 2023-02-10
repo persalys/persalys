@@ -5791,45 +5791,50 @@ ou interaction</translation>
 <context>
     <name>PERSALYS::MultiObjectiveOptimizationResultWindow</name>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="88"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="93"/>
         <source>Optimization parameters</source>
         <translation>Paramètres d&apos;optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="120"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="125"/>
         <source>Fronts</source>
         <translation>Fronts</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="121"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="126"/>
         <source>Results</source>
         <translation>Résultats</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="134"/>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="154"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="159"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="139"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="144"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="143"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="148"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="171"/>
         <source>Parallel coordinates plot</source>
         <translation>Coordonnées parallèles</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="177"/>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="182"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MultiObjectiveOptimizationResultWindow.cxx" line="196"/>
+        <source>Scatter plot</source>
+        <translation>Diagramme de dispersion</translation>
     </message>
 </context>
 <context>

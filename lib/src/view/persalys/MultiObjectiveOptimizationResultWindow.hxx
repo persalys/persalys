@@ -49,6 +49,11 @@ private:
   MultiObjectiveOptimizationAnalysisResult result_;
   TitleLabel * titleLabel_;
   QTabWidget * tabWidget_;
+  QStringList inputNames_;
+  QStringList outputNames_;
+  QStringList inAxisTitles_;
+  QStringList outAxisTitles_;
+
 
 };
 }
