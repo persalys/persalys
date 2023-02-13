@@ -288,56 +288,57 @@ OptimizationProblem OptimizationAnalysis::defineProblem()
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
 
   Description allVar(variableInputs_);
-    allVar.add(inputNames_);
-    for (UnsignedInteger i = 0; i < allVar.getSize(); ++i)
+  allVar.add(inputNames_);
+
+  for (UnsignedInteger i = 0; i < allVar.getSize(); ++i)
+  {
+    if (!getPhysicalModel().hasInputNamed(allVar[i]))
+      throw InvalidArgumentException(HERE) << "The physical model does not contain an input variable named " << allVar[i];
+  }
+
+  // get bounds and fixed inputs values
+  if (getBounds().getDimension() != nbInputs)
+    throw InvalidArgumentException(HERE) << "The interval's dimension must be equal to the number of model's inputs";
+  Indices fixedInputsIndices;
+  Point fixedInputsValues;
+  Indices variablesType;
+  variableInputsIndices_ = Indices();
+  variableInputsValues_ = Point();
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+  {
+    if (!variableInputs_.contains(modelInputNames[i]))
     {
-      if (!getPhysicalModel().hasInputNamed(allVar[i]))
-        throw InvalidArgumentException(HERE) << "The physical model does not contain an input variable named " << allVar[i];
+      fixedInputsIndices.add(i);
+      fixedInputsValues.add(startingPoint_[i]);
     }
-
-    // get bounds and fixed inputs values
-    if (getBounds().getDimension() != nbInputs)
-      throw InvalidArgumentException(HERE) << "The interval's dimension must be equal to the number of model's inputs";
-    Indices fixedInputsIndices;
-    Point fixedInputsValues;
-    Indices variablesType;
-    variableInputsIndices_ = Indices();
-    variableInputsValues_ = Point();
-    for (UnsignedInteger i = 0; i < nbInputs; ++i)
+    else
     {
-      if (!variableInputs_.contains(modelInputNames[i]))
-      {
-        fixedInputsIndices.add(i);
-        fixedInputsValues.add(startingPoint_[i]);
-      }
-      else
-      {
-        variableInputsIndices_.add(i);
-        variablesType.add(variablesType_[i]);
-        variableInputsValues_.add(startingPoint_[i]);
-      }
+      variableInputsIndices_.add(i);
+      variablesType.add(variablesType_[i]);
+      variableInputsValues_.add(startingPoint_[i]);
     }
+  }
 
-    // check bounds
-    if (bounds_.getMarginal(variableInputsIndices_).isEmpty())
-      throw InvalidArgumentException(HERE) << "The lower bounds must be less than the upper bounds";
+  // check bounds
+  if (bounds_.getMarginal(variableInputsIndices_).isEmpty())
+    throw InvalidArgumentException(HERE) << "The lower bounds must be less than the upper bounds";
 
-    // set objective
-    Function objective = getPhysicalModel().getFunction(getInterestVariables());
-    Function equalityConstraints = getEqualityConstraints();
-    Function inequalityConstraints = getInequalityConstraints();
-    if (fixedInputsIndices.getSize()) {
-      objective = ParametricFunction(objective, fixedInputsIndices, fixedInputsValues);
-      if (equalityConstraints.getInputDimension())
-        equalityConstraints = ParametricFunction(equalityConstraints, fixedInputsIndices, fixedInputsValues);
-      if (inequalityConstraints.getInputDimension())
-        inequalityConstraints = ParametricFunction(inequalityConstraints, fixedInputsIndices, fixedInputsValues);
-    }
+  // set objective
+  Function objective = getPhysicalModel().getFunction(getInterestVariables());
+  Function equalityConstraints = getEqualityConstraints();
+  Function inequalityConstraints = getInequalityConstraints();
+  if (fixedInputsIndices.getSize()) {
+    objective = ParametricFunction(objective, fixedInputsIndices, fixedInputsValues);
+    if (equalityConstraints.getInputDimension())
+      equalityConstraints = ParametricFunction(equalityConstraints, fixedInputsIndices, fixedInputsValues);
+    if (inequalityConstraints.getInputDimension())
+      inequalityConstraints = ParametricFunction(inequalityConstraints, fixedInputsIndices, fixedInputsValues);
+  }
 
-    // set OptimizationProblem
-    OptimizationProblem problem(objective, equalityConstraints, inequalityConstraints, bounds_.getMarginal(variableInputsIndices_));
-    problem.setVariablesType(variablesType);
-    return problem;
+  // set OptimizationProblem
+  OptimizationProblem problem(objective, equalityConstraints, inequalityConstraints, bounds_.getMarginal(variableInputsIndices_));
+  problem.setVariablesType(variablesType);
+  return problem;
 
 }
 
