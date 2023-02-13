@@ -52,7 +52,6 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
   , isFirstPaint_(true)
   , inputTableView_(0)
   , outputTableView_(0)
-  , errorMessageLabel_(0)
   , indexParamLabel_(0)
 {
   connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateInputTableData()));
@@ -159,6 +158,7 @@ void PhysicalModelWindowWidget::buildInterface()
   connect(this, &PhysicalModelWindowWidget::evaluateOutputsRequested, [=] () {
       timeInfo->clear();
       evaluateOutputs();
+      setCurrentIndex(0);
       if(physicalModel_.getEvalTime()>0)
         timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));});
 
@@ -192,11 +192,9 @@ void PhysicalModelWindowWidget::buildInterface()
   }
 
   // - error message label
-  errorMessageLabel_ = new TemporaryLabel;
-  vbox->addWidget(errorMessageLabel_);
-  connect(this, SIGNAL(resetMessageLabel()), errorMessageLabel_, SLOT(reset()));
-  connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
-  connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
+  connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+  connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+
 
   addTab(scrollArea, tr("Definition"));
 
@@ -247,12 +245,11 @@ void PhysicalModelWindowWidget::buildInterface()
     connect(inputTableModel, SIGNAL(inputNameChanged()), gradientTableModel, SLOT(updateData()));
 
     connect(outputTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), gradientTableModel, SLOT(updateData()));
+    connect(gradientTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 
     connect(this, &PhysicalModelWindowWidget::evaluateGradientRequested, [=] () {
-        errorMessageLabel_->clear();
         gradientTableModel->evaluateGradient();
-        if (!gradientTableModel->getErrorMessage().isEmpty())
-          errorMessageLabel_->setErrorMessage(gradientTableModel->getErrorMessage());});
+        setCurrentIndex(1);});
 
     vbox->addWidget(gradientTableView);
 
@@ -367,13 +364,13 @@ void PhysicalModelWindowWidget::evaluateOutputs()
     // check
     if (!eval.getErrorMessage().empty())
     {
-      errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
+      emit errorMessageChanged(QString(eval.getErrorMessage().c_str()));
       physicalModel_.setEvalTime(0);
       return;
     }
     if (!outputSample.getSize())
     {
-      errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
+      emit errorMessageChanged(tr("Not possible to evaluate the outputs"));
       physicalModel_.setEvalTime(0);
       return;
     }
@@ -398,13 +395,13 @@ void PhysicalModelWindowWidget::evaluateOutputs()
     }
     catch (std::exception& ex)
     {
-      errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs %1").arg(ex.what()));
+      emit errorMessageChanged(tr("Not possible to evaluate the outputs %1").arg(ex.what()));
       physicalModel_.setEvalTime(0);
       return;
     }
     physicalModel_.setEvalTime(eval.getElapsedTime());
   }
-  errorMessageLabel_->reset();
+  emit resetMessageLabel();
 }
 
 void PhysicalModelWindowWidget::updateIndexParamLabel()

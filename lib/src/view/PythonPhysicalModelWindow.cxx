@@ -66,9 +66,6 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, Q
   PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateInputTableData()));
   connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
-  connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(resetMessageLabel()));
-  TemporaryLabel * errorMessageLabel = tablesWidget->findChild<TemporaryLabel *>();
-  connect(codeModel, SIGNAL(errorMessageChanged(QString)), errorMessageLabel, SLOT(setErrorMessage(QString)));
 
   horizontalSplitter->addWidget(tablesWidget);
 
@@ -79,6 +76,11 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, Q
   CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
   connect(buttons, SIGNAL(evaluateOutputsRequested()), tablesWidget, SIGNAL(evaluateOutputsRequested()));
   connect(buttons, SIGNAL(evaluateGradientRequested()), tablesWidget, SIGNAL(evaluateGradientRequested()));
+
+  connect(codeModel, SIGNAL(variablesChanged()), buttons->getErrorMessageLabel(), SIGNAL(resetMessageLabel()));
+  connect(codeModel, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
+  connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
+  connect(tablesWidget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageLabel(), SLOT(reset()));
   widgetLayout->addWidget(buttons);
 
 }

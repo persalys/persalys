@@ -43,6 +43,8 @@ MetaModelWindow::MetaModelWindow(PhysicalModelItem * item, QWidget * parent)
   CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
   connect(buttons, SIGNAL(evaluateOutputsRequested()), widget, SIGNAL(evaluateOutputsRequested()));
   connect(buttons, SIGNAL(evaluateGradientRequested()), widget, SIGNAL(evaluateGradientRequested()));
+  connect(widget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
+  connect(widget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageLabel(), SLOT(reset()));
   widgetLayout->addWidget(buttons);
 
 }

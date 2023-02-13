@@ -68,7 +68,8 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   mainLayout->addWidget(new TitleLabel(tr("Coupling model"), docLink));
 
   QTabWidget * mainTabWidget = new QTabWidget;
-  mainLayout->addWidget(mainTabWidget, 1, 0);
+  mainLayout->addWidget(mainTabWidget, 1, 0, 1, 2);
+  mainLayout->setColumnStretch(0, 1);
 
   QWidget * tab = new QWidget;
   QGridLayout * tabLayout = new QGridLayout(tab);
@@ -158,7 +159,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
     });
 
   QLabel * timeInfo = new QLabel();
-  tabLayout->addWidget(timeInfo, 3, 0);
+  mainLayout->addWidget(timeInfo, 2, 0);
 
   // - multiprocessing
   QSettings settings;
@@ -168,7 +169,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   // - error message label
   errorMessageLabel_ = new TemporaryLabel;
-  tabLayout->addWidget(errorMessageLabel_, 3, 0);
+  mainLayout->addWidget(errorMessageLabel_, 2, 0);
 
   // Tab : Finite difference step definition
   tab = new QWidget;
@@ -225,6 +226,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [=] () {
       timeInfo->clear();
       evaluateOutputs();
+      mainTabWidget->setCurrentIndex(2);
       if(model_->getEvalTime()>0)
         timeInfo->setText(tr("Elapsed time") + ": "
                           + QtOT::FormatDuration(model_->getEvalTime()));});
@@ -232,10 +234,11 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [=] () {
       errorMessageLabel_->clear();
       gradientTableModel->evaluateGradient();
+      mainTabWidget->setCurrentIndex(1);
       if (!gradientTableModel->getErrorMessage().isEmpty())
         errorMessageLabel_->setErrorMessage(gradientTableModel->getErrorMessage());});
 
-  mainLayout->addWidget(buttons);
+  mainLayout->addWidget(buttons, 2, 1);
 }
 
 void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)

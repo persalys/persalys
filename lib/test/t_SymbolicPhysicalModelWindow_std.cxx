@@ -5,6 +5,7 @@
 #include "persalys/DifferentiationTableModel.hxx"
 #include "persalys/GradientTableModel.hxx"
 #include "persalys/PhysicalModelDefinitionItem.hxx"
+#include "persalys/CheckModelButtonGroup.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -31,7 +32,7 @@ private slots:
     // get widgets
     PhysicalModelWindowWidget * mainWidget = window.findChild<PhysicalModelWindowWidget*>();
     QList<CopyableTableView*> listTables = mainWidget->findChildren<CopyableTableView*>();
-    TemporaryLabel * errorLabel = mainWidget->findChild<TemporaryLabel*>();
+    TemporaryLabel * errorLabel = window.findChild<CheckModelButtonGroup*>()->findChild<TemporaryLabel*>();
     QList<QPushButton*> pushButtons = window.findChildren<QPushButton*>();
     CopyableTableView * inTable = 0;
     CopyableTableView * outTable = 0;

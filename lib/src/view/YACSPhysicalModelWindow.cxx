@@ -64,14 +64,12 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item, QWidg
   PhysicalModelWindowWidget * widget = new PhysicalModelWindowWidget(item);
   mainLayout->addWidget(widget);
 
-  // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainLayout->addWidget(errorMessageLabel_);
-
   // buttons
   CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
   connect(buttons, SIGNAL(evaluateOutputsRequested()), widget, SIGNAL(evaluateOutputsRequested()));
   connect(buttons, SIGNAL(evaluateGradientRequested()), widget, SIGNAL(evaluateGradientRequested()));
+  connect(widget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
+  connect(widget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageLabel(), SLOT(reset()));
   mainLayout->addWidget(buttons);
 
 

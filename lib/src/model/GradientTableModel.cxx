@@ -129,7 +129,7 @@ void GradientTableModel::evaluateGradient()
 
   if (!eval.getErrorMessage().empty())
   {
-    setErrorMessage(eval.getErrorMessage().c_str());
+    emit errorMessageChanged(QString(eval.getErrorMessage().c_str()));
     return;
   }
 
@@ -141,7 +141,7 @@ void GradientTableModel::evaluateGradient()
   }
   catch (std::exception& ex)
   {
-    setErrorMessage(tr("Not possible to evaluate the gradient: %1").arg(ex.what()));
+    emit errorMessageChanged(tr("Not possible to evaluate the gradient: %1").arg(ex.what()));
     gradient_ = Matrix();
     return;
   }

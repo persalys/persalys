@@ -47,6 +47,9 @@ public slots:
   void updateData();
   void evaluateGradient();
 
+signals:
+  void errorMessageChanged(QString);
+
 private:
   PhysicalModel physicalModel_;
   OT::Matrix gradient_;

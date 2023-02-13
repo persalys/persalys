@@ -23,9 +23,9 @@
 
 #include "persalys/PhysicalModelItem.hxx"
 #include "persalys/CopyableTableView.hxx"
-#include "persalys/TemporaryLabel.hxx"
 
 #include <QPushButton>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -58,13 +58,13 @@ signals:
   void resetMessageLabel();
   void evaluateOutputsRequested();
   void evaluateGradientRequested();
+  void errorMessageChanged(QString);
 
 private:
   PhysicalModel physicalModel_;
   bool isFirstPaint_;
   CopyableTableView * inputTableView_;
   CopyableTableView * outputTableView_;
-  TemporaryLabel * errorMessageLabel_;
   QLabel * indexParamLabel_;
   OT::Scalar evalTime_ = 0;
 };

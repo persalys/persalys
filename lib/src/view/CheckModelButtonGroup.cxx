@@ -42,9 +42,14 @@ namespace PERSALYS
 
     QHBoxLayout * buttonLayout = new QHBoxLayout(this);
     buttonLayout->setContentsMargins(0, 0, 0, 0);
-    buttonLayout->addStretch();
+    errorMessageLabel_ = new TemporaryLabel;
+    buttonLayout->addWidget(errorMessageLabel_);
+    buttonLayout->setStretch(0,1);
     buttonLayout->addWidget(evaluateOutputsButton);
     buttonLayout->addWidget(evaluateGradientButton);
+
+    connect(this, SIGNAL(evaluateGradientRequested()), errorMessageLabel_, SLOT(reset()));
+    connect(this, SIGNAL(evaluateOutputsRequested()), errorMessageLabel_, SLOT(reset()));
   }
 
 }
