@@ -543,8 +543,28 @@ Function OptimizationAnalysis::transformEquations(Description& eqs)
 {
   if (!eqs.getSize())
     return Function();
-  Description vars = getPhysicalModel().getInputNames();
-  vars.add(getPhysicalModel().getOutputNames());
+  // Variables collection to construct constraints composed function
+  const Description outputs = getPhysicalModel().getOutputNames();
+  Description inputs;
+  for (UnsignedInteger i=0; i<getPhysicalModel().getInputNames().getSize(); ++i)
+  {
+    // Look if variable is defined as both an input and output
+    if(!outputs.contains(getPhysicalModel().getInputNames()[i]))
+      inputs.add(getPhysicalModel().getInputNames()[i]);
+    // If given variable 'X' is an  output, define a dummy 'X0' input variable
+    else
+    {
+      const String varName = getPhysicalModel().getInputNames()[i];
+      int j = 0;
+      while (getPhysicalModel().hasInputNamed((OSS() << varName << j).str()))
+        ++j;
+      inputs.add((OSS() << varName << j).str());
+    }
+  }
+
+  Description vars;
+  vars.add(inputs);
+  vars.add(outputs);
 
   // Functions construction
   // Aggregated(X->X, X->Y)

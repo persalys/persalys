@@ -37,3 +37,5 @@ optim.setMaximumResidualError(1e-06)
 optim.setMaximumConstraintError(1e-06)
 myStudy.add(optim)
 
+    [ y0 ]
+0 : [ 22 ]
