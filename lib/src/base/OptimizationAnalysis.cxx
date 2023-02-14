@@ -114,12 +114,21 @@ Description OptimizationAnalysis::GetSolverNames()
   return OptimizationAlgorithm::GetAlgorithmNames(problem);
 }
 
-Description OptimizationAnalysis::GetSolverNames(const Interval& bounds, const Indices& types)
+Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
+                                                 const Indices& types,
+                                                 const Function& eqFunc,
+                                                 const Function& ineqFunc)
 {
   // Dummy non-linear function respecting bounds dimension
-  OptimizationProblem problem(SymbolicFunction(Description(bounds.getDimension(), "x"), Description(1, "x^2")), Function(), Function(), bounds);
+  Function func = SymbolicFunction(Description(bounds.getDimension(), "x"),
+                                   Description(1, "x^2"));
+  OptimizationProblem problem(func, Function(), Function(), bounds);
   if (types.getSize())
     problem.setVariablesType(types);
+  if (eqFunc.getInputDimension())
+    problem.setEqualityConstraint(func);
+  if (ineqFunc.getInputDimension())
+    problem.setInequalityConstraint(func);
   Description names(OptimizationAlgorithm::GetAlgorithmNames(problem));
 
   // drop B-iFP
@@ -279,56 +288,57 @@ OptimizationProblem OptimizationAnalysis::defineProblem()
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
 
   Description allVar(variableInputs_);
-    allVar.add(inputNames_);
-    for (UnsignedInteger i = 0; i < allVar.getSize(); ++i)
+  allVar.add(inputNames_);
+
+  for (UnsignedInteger i = 0; i < allVar.getSize(); ++i)
+  {
+    if (!getPhysicalModel().hasInputNamed(allVar[i]))
+      throw InvalidArgumentException(HERE) << "The physical model does not contain an input variable named " << allVar[i];
+  }
+
+  // get bounds and fixed inputs values
+  if (getBounds().getDimension() != nbInputs)
+    throw InvalidArgumentException(HERE) << "The interval's dimension must be equal to the number of model's inputs";
+  Indices fixedInputsIndices;
+  Point fixedInputsValues;
+  Indices variablesType;
+  variableInputsIndices_ = Indices();
+  variableInputsValues_ = Point();
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+  {
+    if (!variableInputs_.contains(modelInputNames[i]))
     {
-      if (!getPhysicalModel().hasInputNamed(allVar[i]))
-        throw InvalidArgumentException(HERE) << "The physical model does not contain an input variable named " << allVar[i];
+      fixedInputsIndices.add(i);
+      fixedInputsValues.add(startingPoint_[i]);
     }
-
-    // get bounds and fixed inputs values
-    if (getBounds().getDimension() != nbInputs)
-      throw InvalidArgumentException(HERE) << "The interval's dimension must be equal to the number of model's inputs";
-    Indices fixedInputsIndices;
-    Point fixedInputsValues;
-    Indices variablesType;
-    variableInputsIndices_ = Indices();
-    variableInputsValues_ = Point();
-    for (UnsignedInteger i = 0; i < nbInputs; ++i)
+    else
     {
-      if (!variableInputs_.contains(modelInputNames[i]))
-      {
-        fixedInputsIndices.add(i);
-        fixedInputsValues.add(startingPoint_[i]);
-      }
-      else
-      {
-        variableInputsIndices_.add(i);
-        variablesType.add(variablesType_[i]);
-        variableInputsValues_.add(startingPoint_[i]);
-      }
+      variableInputsIndices_.add(i);
+      variablesType.add(variablesType_[i]);
+      variableInputsValues_.add(startingPoint_[i]);
     }
+  }
 
-    // check bounds
-    if (bounds_.getMarginal(variableInputsIndices_).isEmpty())
-      throw InvalidArgumentException(HERE) << "The lower bounds must be less than the upper bounds";
+  // check bounds
+  if (bounds_.getMarginal(variableInputsIndices_).isEmpty())
+    throw InvalidArgumentException(HERE) << "The lower bounds must be less than the upper bounds";
 
-    // set objective
-    Function objective = getPhysicalModel().getFunction(getInterestVariables());
-    Function equalityConstraints = getEqualityConstraints();
-    Function inequalityConstraints = getInequalityConstraints();
-    if (fixedInputsIndices.getSize()) {
-      objective = ParametricFunction(objective, fixedInputsIndices, fixedInputsValues);
-      if (equalityConstraints.getInputDimension())
-        equalityConstraints = ParametricFunction(equalityConstraints, fixedInputsIndices, fixedInputsValues);
-      if (inequalityConstraints.getInputDimension())
-        inequalityConstraints = ParametricFunction(inequalityConstraints, fixedInputsIndices, fixedInputsValues);
-    }
+  // set objective
+  Function objective = getPhysicalModel().getFunction(getInterestVariables());
+  Function equalityConstraints = getEqualityConstraints();
+  Function inequalityConstraints = getInequalityConstraints();
+  if (fixedInputsIndices.getSize()) {
+    objective = ParametricFunction(objective, fixedInputsIndices, fixedInputsValues);
+    if (equalityConstraints.getInputDimension())
+      equalityConstraints = ParametricFunction(equalityConstraints, fixedInputsIndices, fixedInputsValues);
+    if (inequalityConstraints.getInputDimension())
+      inequalityConstraints = ParametricFunction(inequalityConstraints, fixedInputsIndices, fixedInputsValues);
+  }
 
-    // set OptimizationProblem
-    OptimizationProblem problem(objective, equalityConstraints, inequalityConstraints, bounds_.getMarginal(variableInputsIndices_));
-    problem.setVariablesType(variablesType);
-    return problem;
+  // set OptimizationProblem
+  OptimizationProblem problem(objective, equalityConstraints, inequalityConstraints, bounds_.getMarginal(variableInputsIndices_));
+  problem.setVariablesType(variablesType);
+  return problem;
 
 }
 
@@ -534,8 +544,28 @@ Function OptimizationAnalysis::transformEquations(Description& eqs)
 {
   if (!eqs.getSize())
     return Function();
-  Description vars = getPhysicalModel().getInputNames();
-  vars.add(getPhysicalModel().getOutputNames());
+  // Variables collection to construct constraints composed function
+  const Description outputs = getPhysicalModel().getOutputNames();
+  Description inputs;
+  for (UnsignedInteger i=0; i<getPhysicalModel().getInputNames().getSize(); ++i)
+  {
+    // Look if variable is defined as both an input and output
+    if(!outputs.contains(getPhysicalModel().getInputNames()[i]))
+      inputs.add(getPhysicalModel().getInputNames()[i]);
+    // If given variable 'X' is an  output, define a dummy 'X0' input variable
+    else
+    {
+      const String varName = getPhysicalModel().getInputNames()[i];
+      int j = 0;
+      while (getPhysicalModel().hasInputNamed((OSS() << varName << j).str()))
+        ++j;
+      inputs.add((OSS() << varName << j).str());
+    }
+  }
+
+  Description vars;
+  vars.add(inputs);
+  vars.add(outputs);
 
   // Functions construction
   // Aggregated(X->X, X->Y)

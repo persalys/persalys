@@ -217,16 +217,14 @@ void OptimizationWizard::buildInterface()
   boundsPage_ = new OptimizationBoundsPage(tr("Choose the input variables to optimize. Define the starting point and the bounds of the optimization algorithm."), this);
   setPage(0, boundsPage_);
 
-  // -- 2nd page: algo page
+  // -- 2nd page: Constraints
+  cstrPage_ = new ConstraintsPage(this);
+  setPage(1, cstrPage_);
+
+  // -- 3rd page: Algo choice
   algoPage_ = new OptimizationAlgoPage(this);
   algoPage_->buildInterface();
-  setPage(1, algoPage_);
-
-
-  // -- third page: Constraints
-  cstrPage_ = new ConstraintsPage(this);
-  setPage(2, cstrPage_);
-
+  setPage(2, algoPage_);
 
   // algo parameter
   QWizardPage * page = new QWizardPage(this);
@@ -254,7 +252,7 @@ void OptimizationWizard::buildInterface()
   initialize(analysis_);
   //
   setStartId(0);
-  connect(boundsPage_, SIGNAL(currentAnalysisChanged(OptimizationAnalysis&)), algoPage_, SLOT(initialize(OptimizationAnalysis&)));
+  connect(boundsPage_, SIGNAL(currentAnalysisChanged(OptimizationAnalysis&)), cstrPage_, SLOT(initialize(OptimizationAnalysis&)));
 }
 
 
@@ -269,9 +267,12 @@ void OptimizationWizard::initialize(const Analysis& analysis)
   //algoPage_->initialize(analysis_);
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
   stoppingCriteriaLayout_->initialize(*analysis_ptr);
-  connect(algoPage_, &OptimizationAlgoPage::outputSelected, [=](){
-      cstrPage_->initialize(*analysis_ptr);});
-
+  connect(cstrPage_, &ConstraintsPage::constraintsDefined, [=](){
+      analysis_ptr->resetConstraints();
+      foreach( QString str, cstrPage_->getTableModel()->getConstraints() ) {
+        analysis_ptr->addConstraint(str.toStdString());
+      }
+      algoPage_->initialize(*analysis_ptr);});
 }
 
 
@@ -281,9 +282,9 @@ int OptimizationWizard::nextId() const
   {
     case 0: // starting point - type - bounds
       return 1;
-    case 1: // method
+    case 1: // constraints
       return 2;
-    case 2: //constraints
+    case 2: // method
       return 3;
     default: // optim parameters
       return -1;

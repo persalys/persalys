@@ -121,7 +121,10 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   algoTableModel_->setHorizontalHeaderItem(3, new QStandardItem(tr("Doc")));
 
   errorMessageLabel_->reset();
-  solverNames_ = OptimizationAnalysis::GetSolverNames(analysis.getBounds(), analysis.getVariablesType());
+  solverNames_ = OptimizationAnalysis::GetSolverNames(analysis.getBounds(),
+                                                      analysis.getVariablesType(),
+                                                      analysis.getEqualityConstraints(),
+                                                      analysis.getInequalityConstraints());
 
   for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i) {
     algoTableModel_->setNotEditableItem(i, 0, solverNames_[i].c_str());

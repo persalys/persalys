@@ -76,7 +76,7 @@ namespace PERSALYS
     algoTableModel_->setHorizontalHeaderItem(0, new QStandardItem(tr("Name")));
 
     errorMessageLabel_->reset();
-    solverNames_ = MultiObjectiveOptimizationAnalysis::GetSolverNames(analysis.getBounds(),analysis.getVariablesType());
+    solverNames_ = MultiObjectiveOptimizationAnalysis::GetSolverNames(analysis.getBounds(),analysis.getVariablesType(), analysis.getEqualityConstraints(), analysis.getInequalityConstraints());
 
     for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i) {
       algoTableModel_->setNotEditableItem(i, 0, solverNames_[i].c_str());
@@ -329,18 +329,18 @@ namespace PERSALYS
     boundsPage_ = new MultiObjectiveOptimizationBoundsPage(this);
     setPage(0, boundsPage_);
 
-    // -- 2nd page: Outputs and algo selection
+    // -- 2nd page: Constraints
+    cstrPage_ = new ConstraintsPage(this);
+    setPage(1, cstrPage_);
+
+    // -- 3rd page: Outputs and algo selection
     algoPage_ = new MultiObjectiveOptimizationAlgoPage(this);
     algoPage_->buildInterface();
-    setPage(1, algoPage_);
+    setPage(2, algoPage_);
 
-    // -- 3rd page: Objectives
+    // -- 4thd page: Objectives
     objPage_ = new MultiObjectiveDefinitionPage(this);
-    setPage(2, objPage_);
-
-    // -- 4th page: Constraints
-    cstrPage_ = new ConstraintsPage(this);
-    setPage(3, cstrPage_);
+    setPage(3, objPage_);
 
     // -- 5th page: Parameters
     QWizardPage * page = new QWizardPage(this);
@@ -368,19 +368,22 @@ namespace PERSALYS
       analysis_ptr->setInterestVariables(analysis_ptr->getPhysicalModel().getSelectedOutputsNames());
 
     boundsPage_->initialize(*analysis_ptr);
+    parametersLayout_->initialize(*analysis_ptr);
 
     connect(boundsPage_, &MultiObjectiveOptimizationBoundsPage::currentAnalysisChanged, [=](){
         analysis_ptr->setVariablesType(boundsPage_->getTableModel()->getAnalysis().getVariablesType());
+        cstrPage_->initialize(*analysis_ptr);});
+
+    connect(cstrPage_, &ConstraintsPage::constraintsDefined, [=](){
+        analysis_ptr->resetConstraints();
+        foreach( QString str, cstrPage_->getTableModel()->getConstraints() ) {
+          analysis_ptr->addConstraint(str.toStdString());
+        }
         algoPage_->initialize(*analysis_ptr);});
 
-    parametersLayout_->initialize(*analysis_ptr);
-    connect(algoPage_, &MultiObjectiveOptimizationAlgoPage::outputSelected, [=](){
+    connect(algoPage_, &MultiObjectiveOptimizationAlgoPage::outputSelected, [=]() {
         analysis_ptr->setInterestVariables(algoPage_->getInterestVariables());
         objPage_->update(*analysis_ptr);});
-
-    connect(objPage_, &MultiObjectiveDefinitionPage::objectivesDefined, [=]() {
-        analysis_ptr->setMinimization(objPage_->getTableModel()->getMinimization());
-        cstrPage_->initialize(*analysis_ptr);});
 
   }
 
@@ -390,11 +393,11 @@ namespace PERSALYS
     {
     case 0: // Bounds
       return 1;
-    case 1: // Algo
+    case 1: // Constraints
       return 2;
-    case 2: // Objectives
+    case 2: // Algo
       return 3;
-    case 3: // Constraints
+    case 3: // Objectives
       return 4;
     default:  // Params
       return -1;
