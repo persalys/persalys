@@ -89,7 +89,7 @@ CalibrationIntroPage::CalibrationIntroPage(QWidget * parent)
   methodLayout->addWidget(nonLinearLeastSquaresButton);
 
   // - Linear Gaussian
-  QRadioButton * linearGaussianButton = new QRadioButton(tr("Linear Gaussian") + " (BLUE)");
+  QRadioButton * linearGaussianButton = new QRadioButton(tr("Linear Gaussian"));
   registerField("linearGaussianButton", linearGaussianButton);
   methodGroup_->addButton(linearGaussianButton, CalibrationIntroPage::LinearGaussian);
   methodLayout->addWidget(linearGaussianButton);
