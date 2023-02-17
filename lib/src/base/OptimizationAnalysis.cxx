@@ -120,8 +120,8 @@ Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
                                                  const Function& ineqFunc)
 {
   // Dummy non-linear function respecting bounds dimension
-  Function func = SymbolicFunction(Description(bounds.getDimension(), "x"),
-                                   Description(1, "x^2"));
+  Function func = SymbolicFunction(Description::BuildDefault(bounds.getDimension(), "x"),
+                                   Description(1, "x0^2"));
   OptimizationProblem problem(func, Function(), Function(), bounds);
   if (types.getSize())
     problem.setVariablesType(types);
