@@ -1,4 +1,4 @@
-// Copyright (C) 2007-2020  CEA/DEN, EDF R&D, OPEN CASCADE
+// Copyright (C) 2007-2022  CEA/DEN, EDF R&D, OPEN CASCADE
 //
 // Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
 // CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
@@ -78,10 +78,17 @@ PyStdOut_flush(PyStdOut * /*self*/, PyObject * /*args*/)
   return Py_None;
 }
 
+static PyObject*
+PyStdOut_isatty(PyStdOut * /*self*/, PyObject */*args*/)
+{
+  return Py_False;
+}
+
 static PyMethodDef PyStdOut_methods[] = {
   {"write",  (PyCFunction)PyStdOut_write,  METH_VARARGS, PyDoc_STR("write(string) -> None")},
   {"flush",  (PyCFunction)PyStdOut_flush,  METH_NOARGS,  PyDoc_STR("flush() -> None")},
-  {NULL, (PyCFunction)NULL, 0, NULL}   /* sentinel */
+  {"isatty", (PyCFunction)PyStdOut_isatty, METH_NOARGS,  PyDoc_STR("isatty() -> bool")},
+  {NULL,     (PyCFunction)NULL,            0,            NULL}   /* sentinel */
 };
 
 static PyMemberDef PyStdOut_memberlist[] = {
@@ -403,7 +410,7 @@ std::string
 __join(const std::vector<std::string>& v, int begin=0, int end=-1)
 {
   if (end == -1)
-    end = v.size();
+    end = (int)v.size(); //!< TODO: conversion from size_t to int
   std::stringstream ss;
   for (int i = begin; i < end; ++i) {
     if (i != begin)
