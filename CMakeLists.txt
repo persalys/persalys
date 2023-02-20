@@ -8,7 +8,7 @@ option (USE_OTFMI "use otfmi" ON)
 option (USE_OTMORRIS "use otmorris" ON)
 option (USE_SPHINX "use sphinx" ON)
 option (USE_PARAVIEW "use ParaView" ON)
-set (PERSALYS_QT_VERSION 5 CACHE STRING "Qt version")
+set (PERSALYS_QT_VERSION_MAJOR 5 CACHE STRING "Qt version")
 
 # By default, build in Release mode. Must appear before project() command
 if ( NOT DEFINED CMAKE_BUILD_TYPE )
@@ -51,10 +51,10 @@ list (APPEND PERSALYS_PUBLIC_LIBRARIES ${Python_LIBRARIES})
 
 if (BUILD_GUI)
 
-  find_package (Qt${PERSALYS_QT_VERSION} COMPONENTS Widgets Test OpenGL CONFIG)
-  set (QT_LIBRARIES ${Qt${PERSALYS_QT_VERSION}Widgets_LIBRARIES} ${Qt${PERSALYS_QT_VERSION}OpenGL_LIBRARIES} ${Qt${PERSALYS_QT_VERSION}Test_LIBRARIES})
+  find_package (Qt${PERSALYS_QT_VERSION_MAJOR} COMPONENTS Widgets Test OpenGL CONFIG)
+  set (QT_LIBRARIES ${Qt${PERSALYS_QT_VERSION_MAJOR}Widgets_LIBRARIES} ${Qt${PERSALYS_QT_VERSION_MAJOR}OpenGL_LIBRARIES} ${Qt${PERSALYS_QT_VERSION_MAJOR}Test_LIBRARIES})
 
-  if (Qt${PERSALYS_QT_VERSION}Widgets_VERSION VERSION_LESS 5.15)
+  if (Qt${PERSALYS_QT_VERSION_MAJOR}Widgets_VERSION VERSION_LESS 5.15)
     macro (qt_wrap_cpp)
       qt5_wrap_cpp (${ARGN})
     endmacro ()
