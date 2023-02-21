@@ -574,7 +574,8 @@ The results window gathers several tabs:
 
   The user can de/select variables manually by:
       - changing the state of the check button associated with the variable in the table
-      - de/selecting points in the graphs (select point with a right-click, then click on de/select
+      - de/selecting points in the graphs (select points with a
+        right-click drag and drop rectangle, then click on de/select
         button of the context menu which appears).
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/morrisGraph_selection.png
