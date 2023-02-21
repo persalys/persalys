@@ -376,7 +376,11 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   const SquareMatrix K(C * C.transpose());
 
   // F
+#if OPENTURNS_VERSION >= 102100
+  const Basis basis = krigingResult.getBasis();
+#else
   const Basis basis = krigingResult.getBasisCollection()[0];
+#endif
   const UnsignedInteger basisDim = basis.getSize();
   Sample F(size, 0);
   for (UnsignedInteger i = 0; i < basisDim; ++i)

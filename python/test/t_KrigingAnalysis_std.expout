@@ -10,8 +10,8 @@ result= class=KrigingAnalysisResult krigingResultCollection=[KrigingResult(covar
 6 : [ -2.10243  ]
 7 : [  2.58837  ]
 8 : [ -1.15284  ]
-9 : [  2.74742  ], basis=[Basis( [class=LinearEvaluation name=Unnamed center=[0,0] constant=[1] linear=[[ 0 ]
- [ 0 ]]] )], trend coefficients=[[0.208352]])]
+9 : [  2.74742  ], basis=Basis( [class=LinearEvaluation name=Unnamed center=[0,0] constant=[1] linear=[[ 0 ]
+ [ 0 ]]] ), trend coefficients=[0.208352])]
 #!/usr/bin/env python
 
 import openturns as ot
