@@ -85,7 +85,7 @@ print(analysis3)
 analysis3.run()
 
 result3 = analysis3.getResult()
-print("result=", result3)
+#print("result=", result3)
 
 metaModel3 = result3.getResultForVariable("y0").getMetaModel()
 openturns.testing.assert_almost_equal(
