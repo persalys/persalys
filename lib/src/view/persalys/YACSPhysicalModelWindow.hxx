@@ -40,9 +40,11 @@ public :
 public slots:
   void buildSchemaDialogRequested();
 
+signals:
+  void resetMessageLabel();
+
 private:
   PhysicalModel physicalModel_;
-  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
