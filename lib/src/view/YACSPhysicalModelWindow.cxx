@@ -43,7 +43,6 @@ namespace PERSALYS
 YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
-  , errorMessageLabel_(0)
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
@@ -71,6 +70,8 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item, QWidg
   connect(widget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
   connect(widget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageLabel(), SLOT(reset()));
   mainLayout->addWidget(buttons);
+  connect(this, SIGNAL(resetMessageLabel()), buttons->getErrorMessageLabel(), SLOT(reset()));
+  mainLayout->addWidget(buttons);
 
 
 }
@@ -86,7 +87,7 @@ void YACSPhysicalModelWindow::buildSchemaDialogRequested()
   if (yacsDialog.exec())
   {
     model->setContent(yacsDialog.getScriptText());
-    errorMessageLabel_->reset();
+    emit resetMessageLabel();
   }
 }
 }
