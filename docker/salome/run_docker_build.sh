@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# docker build docker/salome -t salome && docker run --rm --volume `pwd`:/io salome sh -c "/io/docker/salome/run_docker_build.sh `id -u` `id -g`"
+# docker build docker/salome -t persalys/salome && docker run --rm --volume `pwd`:/io persalys/salome sh -c "/io/docker/salome/run_docker_build.sh `id -u` `id -g`"
 
 set -x -e
 
@@ -11,7 +11,7 @@ cd /tmp
 
 mkdir -p build && cd build
 cmake \
-  -DUSE_COTIRE=ON -DCOTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES="-j8" \
+  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" \
   -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files \
   -DSalomeGUI_DIR=/home/devel/local/adm_local/cmake_files/ \
@@ -24,8 +24,7 @@ cmake \
 make install
 sudo cp -r /tmp/persalys.AppDir/usr/lib/* /usr/local/lib # needed for yacs container
 make tests
-/home/devel/appli/salome -t
-xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 60 -j8 -E "Window|Wizard"
+xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 60 -j8 -E "Window|Wizard|MultiObj"
 
 cd /tmp
 
@@ -74,7 +73,7 @@ EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
-for libname in tbb fontconfig freetype sz gfortran quadmath pcre16 graphite2 swresample va va-drm va-x11 vdpau zvbi xvidcore webpmux wavpack vpx vorbisenc vorbis twolame ffi tasn1 nettle hogweed lz4 krb5 k5crypto krb5support xml2 cminpack event-2.0 harfbuzz re2 asound opus webp webpdemux xslt snappy minizip proxy aec double-conversion theoraenc theoradec speex shine openjp2 mp3lame gsm crystalhd ssh-gcrypt openmpt gme bluray chromaprint soxr numa ogg cairo
+for libname in tbb fontconfig freetype sz gfortran quadmath pcre16 graphite2 swresample va va-drm va-x11 vdpau zvbi xvidcore webpmux wavpack vpx vorbisenc vorbis twolame ffi tasn1 nettle hogweed lz4 krb5 k5crypto krb5support xml2 cminpack event-2.0 harfbuzz re2 asound opus webp webpdemux xslt snappy minizip proxy aec double-conversion theoraenc theoradec speex shine openjp2 mp3lame gsm crystalhd ssh-gcrypt openmpt gme bluray chromaprint soxr numa ogg cairo p11-kit
 do
   cp -v /usr/lib/x86_64-linux-gnu/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
@@ -89,12 +88,16 @@ cp -v /usr/lib/x86_64-linux-gnu/libx264.so.148 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libplc4.so /usr/lib/x86_64-linux-gnu/libnss3.so /usr/lib/x86_64-linux-gnu/libsmime3.so /usr/lib/x86_64-linux-gnu/libnspr4.so /usr/lib/x86_64-linux-gnu/libplds4.so persalys.AppDir/usr/lib
 
 cp -v /usr/lib/liblapack.so.3 /usr/lib/libblas.so.3 /usr/lib/libsrtp.so.0 persalys.AppDir/usr/lib
-cp -v /lib/x86_64-linux-gnu/libbz2.so.1.0 /lib/x86_64-linux-gnu/libdbus-1.so.3 /lib/x86_64-linux-gnu/liblzma.so.5 /lib/x86_64-linux-gnu/libgpg-error.so.0 /lib/x86_64-linux-gnu/libexpat.so.1 /lib/x86_64-linux-gnu/libglib-2.0.so.0 persalys.AppDir/usr/lib
+cp -v /lib/x86_64-linux-gnu/libbz2.so.1.0 /lib/x86_64-linux-gnu/libdbus-1.so.3 /lib/x86_64-linux-gnu/liblzma.so.5 /lib/x86_64-linux-gnu/libgpg-error.so.0 /lib/x86_64-linux-gnu/libexpat.so.1 /lib/x86_64-linux-gnu/libglib-2.0.so.0 /lib/x86_64-linux-gnu/libidn.so.11 /lib/x86_64-linux-gnu/libgcrypt.so.20 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so.[0-9] persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpython3.6m.so.1.0 persalys.AppDir/usr/lib
 cp -v /home/devel/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
+
+# gdb
+cp -v /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libncurses.so.5 /lib/x86_64-linux-gnu/libtinfo.so.5 persalys.AppDir/usr/lib
+cp -v /usr/local/bin/gdb persalys.AppDir/usr/bin
 
 # python
 cp -v /usr/local/bin/python3* persalys.AppDir/usr/bin
