@@ -21,7 +21,7 @@
 #ifndef PERSALYS_DISTRIBUTIONSCALEENGINE_HXX
 #define PERSALYS_DISTRIBUTIONSCALEENGINE_HXX
 
-#include "qwt_scale_engine.h"
+#include <qwt_scale_engine.h>
 #include "persalys/PersalysPrivate.hxx"
 
 namespace PERSALYS

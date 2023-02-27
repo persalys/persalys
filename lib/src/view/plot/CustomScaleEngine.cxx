@@ -21,8 +21,8 @@
 #include "persalys/CustomScaleEngine.hxx"
 
 #include <cmath>
-#include "qwt_math.h"
-#include "qwt_interval.h"
+#include <qwt_math.h>
+#include <qwt_interval.h>
 
 namespace PERSALYS
 {

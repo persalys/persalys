@@ -424,7 +424,6 @@ if (SalomeYACS_FOUND)
   target_link_libraries (persalysview ydefxgui)
 endif ()
 
-include_directories (${QWT_INCLUDE_DIRS})
 target_link_libraries (persalysview ${QWT_LIBRARIES})
 
 

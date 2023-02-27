@@ -60,7 +60,9 @@ set_target_properties ( persalysplot PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( persalysplot PROPERTIES SOVERSION ${LIB_SOVERSION} )
 target_link_libraries ( persalysplot persalysutils )
 
-include_directories (${QWT_INCLUDE_DIRS})
+
+target_include_directories (persalysplot PRIVATE ${QWT_INCLUDE_DIRS})
+
 target_link_libraries (persalysplot ${QT_LIBRARIES})
 target_link_libraries (persalysplot ${QWT_LIBRARIES})
 if (ParaView_FOUND)

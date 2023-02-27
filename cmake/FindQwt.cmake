@@ -14,7 +14,7 @@
 #  QWT_ROOT_DIR - root dir (ex. /usr/local)
 
 #=============================================================================
-# Copyright 2010-2016, Julien Schueller
+# Copyright 2010-2023, Julien Schueller
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -42,11 +42,10 @@
 # either expressed or implied, of the FreeBSD Project.
 #=============================================================================
 
-
 find_path (QWT_INCLUDE_DIR
   NAMES qwt_plot.h
   HINTS ${QT_INCLUDE_DIR}
-  PATH_SUFFIXES qwt qwt6 qwt5 qwt-qt5 qwt-qt4
+  PATH_SUFFIXES qwt qwt6 qt${QT_DEFAULT_MAJOR_VERSION}/qwt qt${QT_DEFAULT_MAJOR_VERSION}/qwt6
 )
 
 set (QWT_INCLUDE_DIRS ${QWT_INCLUDE_DIR})
@@ -80,7 +79,7 @@ endif ()
 
 
 find_library (QWT_LIBRARY
-  NAMES qwt qwt-qt5 qwt-qt4
+  NAMES qwt qwt-qt${QT_DEFAULT_MAJOR_VERSION}
   HINTS ${QT_LIBRARY_DIR}
 )
 
@@ -98,8 +97,9 @@ endif ()
 
 # handle the QUIETLY and REQUIRED arguments
 include (FindPackageHandleStandardArgs)
-find_package_handle_standard_args (Qwt REQUIRED_VARS QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH VERSION_VAR QWT_VERSION_STRING)
-
+find_package_handle_standard_args (Qwt
+  REQUIRED_VARS QWT_LIBRARY QWT_INCLUDE_DIR _QWT_VERSION_MATCH
+  VERSION_VAR QWT_VERSION_STRING)
 
 mark_as_advanced (
   QWT_LIBRARY
