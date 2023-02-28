@@ -2,57 +2,57 @@
 include (${SWIG_USE_FILE})
 
 include_directories (${OPENTURNS_INCLUDE_DIRS})
-include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
-add_definitions ( ${OPENTURNS_SWIG_DEFINITIONS} )
-include_directories ( ${OTMORRIS_INCLUDE_DIR}/otmorris/swig )
-include_directories ( ${INTERNAL_INCLUDE_DIRS} )
-include_directories ( ${Python_INCLUDE_DIRS} )
+include_directories (${OPENTURNS_SWIG_INCLUDE_DIRS})
+add_definitions (${OPENTURNS_SWIG_DEFINITIONS})
+if (OTMORRIS_FOUND)
+  include_directories (${OTMORRIS_INCLUDE_DIR}/otmorris/swig )
+endif ()
+include_directories (${INTERNAL_INCLUDE_DIRS})
+include_directories (${Python_INCLUDE_DIRS})
 
 set (CMAKE_SWIG_FLAGS "" CACHE STRING "SWIG flags for generating wrapper code")
 
 # allows one to pass compile flags like -O1 to reduce memory usage
 set (SWIG_COMPILE_FLAGS "" CACHE STRING "Additional flags used when compiling swig generated code")
 
-if (NOT DEFINED PYTHON_EXTENSION_MODULE_SUFFIX AND NOT CMAKE_CROSSCOMPILING)
-  execute_process (COMMAND ${Python_EXECUTABLE} -c "import importlib.machinery; print(importlib.machinery.EXTENSION_SUFFIXES[0])"
-                   OUTPUT_VARIABLE PYTHON_EXTENSION_MODULE_SUFFIX OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif ()
-
-add_custom_target( generate_docstrings )
-
 macro ( ot_add_python_module MODULENAME SOURCEFILE )
-  set_source_files_properties ( ${SOURCEFILE} PROPERTIES CPLUSPLUS ON )
-  set_source_files_properties ( ${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME} )
+  set_source_files_properties (${SOURCEFILE} PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties (${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME})
   ot_install_swig_file ( ${SOURCEFILE} )
   if (${ARGC} GREATER 2)
     set (SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS ${ARGN})
-    list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_docstrings)
   endif ()
 
-  set ( swig_other_sources )
-  foreach ( it ${ARGN} )
-    if ( ${it} MATCHES ".*\\.i$" )
-      ot_install_swig_file ( ${it} )
-    elseif(${it} MATCHES ".*_doc\\.i\\.in$")
-      # handle docstring generation
-      set (DOCSTRING_IN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${it})
-      get_filename_component (DOCSTRING_FILE_BASENAME ${DOCSTRING_IN_FILE} NAME_WE)
-      # https://github.com/swig/swig/issues/1273
-      option (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH "Force double escaping of backslashes" OFF)
-      mark_as_advanced (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-      set (TIMES x1)
-      if ((SWIG_VERSION VERSION_LESS 4) OR SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-        set (TIMES x2)
-      endif ()
-      add_custom_target (generate_${DOCSTRING_FILE_BASENAME}
-                          COMMAND ${CMAKE_COMMAND} -DDOCSTRING_IN_FILE=${DOCSTRING_IN_FILE} -DDOCSTRING_FILE=${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i -DTIMES=${TIMES} -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash.cmake
-                          DEPENDS ${DOCSTRING_IN_FILE})
-      add_dependencies ( generate_docstrings generate_${DOCSTRING_FILE_BASENAME})
-      list (APPEND SWIGFILES ${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i)
+  set (swig_other_sources)
+  set (docstring_sources)
+  foreach (it ${ARGN})
+    if (${it} MATCHES ".*\\.i$")
+      ot_install_swig_file (${it})
+    elseif (${it} MATCHES ".*_doc\\.i\\.in$")
+      list (APPEND docstring_sources ${it})
+
+      get_filename_component (DOCSTRING_FILE_BASENAME ${it} NAME_WE)
+      ot_install_swig_file (${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i)
     else ()
-      set (swig_other_sources ${swig_other_sources} "${it}")
+      list (APPEND swig_other_sources "${it}")
     endif ()
   endforeach ()
+
+  # https://github.com/swig/swig/issues/1273
+  option (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH "Force double escaping of backslashes" OFF)
+  mark_as_advanced (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
+  set (TIMES x1)
+  if ((SWIG_VERSION VERSION_LESS 4) OR SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
+    set (TIMES x2)
+  endif ()
+
+  # handle docstring generation
+  add_custom_target (generate_${MODULENAME}_docstrings
+                      COMMAND ${CMAKE_COMMAND} -DDOCSTRING_SOURCES="${docstring_sources}"
+                      -DCURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DTIMES=${TIMES}
+                      -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash.cmake
+                      DEPENDS ${docstring_sources})
+  list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_${MODULENAME}_docstrings)
 
   # swig_add_module is deprecated
   swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
@@ -60,12 +60,12 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
   # UseSWIG generates now standard target names
   set (module_target ${MODULENAME}_python)
 
-  swig_link_libraries (${MODULENAME}_python persalysbase)
+  swig_link_libraries (${module_target} persalysbase)
+  target_include_directories (${module_target} PRIVATE ${Python_INCLUDE_DIRS})
 
-  if (TARGET Python::MODULE)
-    target_link_libraries(${module_target} Python::MODULE)
+  if (TARGET Python::Module)
+    target_link_libraries (${module_target} Python::Module)
   else ()
-    include (TargetLinkLibrariesWithDynamicLookup)
     target_link_libraries_with_dynamic_lookup (${module_target} ${Python_LIBRARIES})
   endif ()
 
@@ -73,17 +73,13 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
 
   set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
 
-  if (DEFINED PYTHON_EXTENSION_MODULE_SUFFIX)
-    set_target_properties (${module_target} PROPERTIES SUFFIX "${PYTHON_EXTENSION_MODULE_SUFFIX}")
-  endif ()
+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
+           DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
+  install (TARGETS ${module_target}
+           LIBRARY DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
 
-  install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
-            DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
-  install ( TARGETS ${module_target}
-            LIBRARY DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/${MODULENAME})
-
-  list ( APPEND PERSALYS_PYTHON_MODULES ${MODULENAME} )
-endmacro ( ot_add_python_module )
+  list (APPEND PERSALYS_PYTHON_MODULES ${MODULENAME})
+endmacro ()
 
 ot_add_python_module (persalys persalys_module.i
                       Observer.i
@@ -193,10 +189,6 @@ install ( FILES __init__.py
           DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/persalys
         )
 
-install ( FILES ${SWIGFILES}
-          DESTINATION ${PERSALYS_SWIG_INCLUDE_PATH}
-        )
-
 if (SPHINX_FOUND)
 
   # create a build site-package from which sphinx can import
@@ -204,9 +196,7 @@ if (SPHINX_FOUND)
   execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys)
   foreach (module ${PERSALYS_PYTHON_MODULES})
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${module}.py)
-    set (module_target ${module}_python)
-    get_target_property (module_suffix ${module_target} SUFFIX)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}${module_suffix} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/_${module}${module_suffix})
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/_${module}.so)
   endforeach ()
   foreach (file __init__.py)
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${file})
