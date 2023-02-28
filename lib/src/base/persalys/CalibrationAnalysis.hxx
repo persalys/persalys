@@ -21,9 +21,9 @@
 #ifndef PERSALYS_CALIBRATIONANALYSIS_HXX
 #define PERSALYS_CALIBRATIONANALYSIS_HXX
 
-#include "PhysicalModelAnalysis.hxx"
-#include "DesignOfExperiment.hxx"
-#include "CalibrationAnalysisResult.hxx"
+#include "persalys/PhysicalModelAnalysis.hxx"
+#include "persalys/DesignOfExperiment.hxx"
+#include "persalys/CalibrationAnalysisResult.hxx"
 
 #include <openturns/CalibrationResult.hxx>
 #include <openturns/OptimizationAlgorithm.hxx>

@@ -21,7 +21,7 @@
 #ifndef PERSALYS_DESIGNOFEXPERIMENT_HXX
 #define PERSALYS_DESIGNOFEXPERIMENT_HXX
 
-#include "DesignOfExperimentImplementation.hxx"
+#include "persalys/DesignOfExperimentImplementation.hxx"
 
 namespace PERSALYS
 {

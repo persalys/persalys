@@ -21,11 +21,11 @@
 #ifndef PERSALYS_STUDYIMPLEMENTATION_HXX
 #define PERSALYS_STUDYIMPLEMENTATION_HXX
 
-#include "DesignOfExperiment.hxx"
-#include "DataModel.hxx"
-#include "Analysis.hxx"
-#include "LimitState.hxx"
-#include "Observer.hxx"
+#include "persalys/DesignOfExperiment.hxx"
+#include "persalys/DataModel.hxx"
+#include "persalys/Analysis.hxx"
+#include "persalys/LimitState.hxx"
+#include "persalys/Observer.hxx"
 
 namespace PERSALYS
 {

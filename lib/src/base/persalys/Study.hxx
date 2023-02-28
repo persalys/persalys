@@ -21,7 +21,7 @@
 #ifndef PERSALYS_STUDY_HXX
 #define PERSALYS_STUDY_HXX
 
-#include "StudyImplementation.hxx"
+#include "persalys/StudyImplementation.hxx"
 
 namespace PERSALYS
 {
