@@ -481,8 +481,6 @@ void PieChartView::draw(QPainter& painter)
   }
   painter.restore();
 
-  int keyNumber = 0;
-
   for (row = 0; row < model()->rowCount(rootIndex()); ++row)
   {
     QModelIndex index = model()->index(row, 1, rootIndex());
@@ -498,8 +496,6 @@ void PieChartView::draw(QPainter& painter)
       if (currentIndex() == labelIndex)
         option.state |= QStyle::State_HasFocus;
       itemDelegate()->paint(&painter, option, labelIndex);
-
-      ++keyNumber;
     }
   }
 }
