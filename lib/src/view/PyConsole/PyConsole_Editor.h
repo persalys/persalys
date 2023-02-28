@@ -38,7 +38,7 @@ class QEventLoop;
 
 class PYCONSOLE_EXPORT PyConsole_Editor : public QTextEdit
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   PyConsole_Editor( QWidget* = 0 );

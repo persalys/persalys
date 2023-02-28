@@ -268,10 +268,19 @@ void PyInterp_Interp::initPython()
     {
       changed_argv[i] = Py_DecodeLocale(_argv[i], NULL);
     }
-   
+
+#if PY_VERSION_HEX < 0x03080000
     Py_SetProgramName(changed_argv[0]);
     Py_Initialize(); // Initialize the interpreter
     PySys_SetArgv(_argc, changed_argv);
+#else
+    PyConfig config;
+    PyConfig_InitPythonConfig(&config);
+    PyStatus status = PyConfig_SetString(&config, &config.program_name, changed_argv[0]);
+    status = PyConfig_SetArgv(&config, _argc, changed_argv);
+    status = Py_InitializeFromConfig(&config);
+    PyConfig_Clear(&config);
+#endif
 
 #if PY_VERSION_HEX < 0x03070000
     PyEval_InitThreads(); // Create (and acquire) the Python global interpreter lock (GIL)
