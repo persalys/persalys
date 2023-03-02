@@ -43,8 +43,8 @@ analysis.run()
 
 chaosResult = analysis.getResult()
 sobolResult = chaosResult.getSobolResult()
-print("result=", chaosResult)
-print("functionalChaosResult", chaosResult.getFunctionalChaosResult())
+# print("result=", chaosResult)
+# print("functionalChaosResult", chaosResult.getFunctionalChaosResult())
 
 # Comparaison
 if '1.20' in ot.__version__:
