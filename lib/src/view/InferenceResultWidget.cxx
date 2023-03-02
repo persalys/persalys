@@ -345,7 +345,10 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
   if (infoButton_)
     infoButton_->show();
 
-  distParamTableModel_->setColumnCount(2);
+  if (currentFittingTestResult_.getParamConfidenceInterval().getSize())
+    distParamTableModel_->setColumnCount(4);
+  else
+    distParamTableModel_->setColumnCount(2);
 
   // fill table
   // -- used font for titles
@@ -354,6 +357,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
 
   Distribution distribution;
   int row = -1;
+
 
   if (current.isValid())
   {
@@ -364,6 +368,11 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     // -- set parameters
     distParamTableModel_->setNotEditableItem(++row, 0, tr("Parameters"));
     distParamTableView_->setSpan(row, 0, 1, 2);
+    if (currentFittingTestResult_.getParamConfidenceInterval().getSize())
+    {
+      distParamTableView_->setSpan(row, 2, 1, 2);
+      distParamTableModel_->setNotEditableItem(row, 2, tr("Parameters\nconfidence interval"));
+    }
     distParamTableModel_->setData(distParamTableModel_->index(row, 0), font, Qt::FontRole);
 
     const PointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[0];
@@ -372,6 +381,12 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
       const QString param(TranslationManager::GetTranslatedDistributionParameterName(parameters.getDescription()[i]));
       distParamTableModel_->setNotEditableHeaderItem(++row, 0, param);
       distParamTableModel_->setNotEditableItem(row, 1, parameters[i]);
+      if (currentFittingTestResult_.getParamConfidenceInterval().getSize())
+      {
+        const Interval paramBounds = currentFittingTestResult_.getParamConfidenceInterval()[variant.value<int>()];
+        distParamTableModel_->setNotEditableItem(row, 2, paramBounds.getLowerBound()[i]);
+        distParamTableModel_->setNotEditableItem(row, 3, paramBounds.getUpperBound()[i]);
+      }
     }
   }
   distParamTableModel_->setNotEditableItem(++row, 0, tr("Moments"));

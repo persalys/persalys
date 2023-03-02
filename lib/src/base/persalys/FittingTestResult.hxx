@@ -44,6 +44,7 @@ public:
   OT::String getVariableName() const;
   OT::Sample getValues() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
+  OT::Collection<OT::Interval> getParamConfidenceInterval() const;
   OT::Collection<OT::TestResult> getKolmogorovTestResults() const;
   OT::Point getBICResults() const;
   OT::Description getErrorMessages() const;
@@ -61,6 +62,7 @@ protected:
   OT::String variableName_;
   OT::Sample values_;
   OT::PersistentCollection< OT::Distribution > testedDistributions_;
+  OT::PersistentCollection< OT::Interval > paramCI_;
   OT::PersistentCollection< OT::TestResult > kolmogorovTestResults_;
   OT::Point bicResults_;
   OT::Description errorMessages_;

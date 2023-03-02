@@ -32,6 +32,8 @@
 #include <openturns/FittingTest.hxx>
 
 #include <QMenu>
+#include <QCheckBox>
+
 
 namespace PERSALYS
 {
@@ -65,6 +67,8 @@ private:
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
   ResizableStackedWidget * stackWidget_;
   DoubleSpinBox * levelSpinbox_;
+  QCheckBox * paramICCheckBox_;
+  DoubleSpinBox * icLevelSpinbox_;
   TemporaryLabel * errorMessageLabel_;
   bool pageValidity_;
   VariablesSelectionTableModel * varTableModel_;
