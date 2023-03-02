@@ -139,8 +139,8 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
     if (LastCodeHash_ != codeHash_)
     {
       ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
-      LastCodeHash_ = codeHash_;
       handleExceptionTraceback();
+      LastCodeHash_ = codeHash_;
     }
 
     callsNumber_.increment();
