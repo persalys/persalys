@@ -4,8 +4,6 @@ import openturns as ot
 import openturns.testing as ott
 import persalys
 
-ot.RandomGenerator.SetSeed(0)
-
 myStudy = persalys.Study("myStudy")
 
 # Model
@@ -49,8 +47,12 @@ print("result=", chaosResult)
 print("functionalChaosResult", chaosResult.getFunctionalChaosResult())
 
 # Comparaison
-mean = [0, 0.4883827512409983]
-variance = [0.8595249944148248, 0.8597699643961747]
+if '1.20' in ot.__version__:
+    mean = [0, 0.4883827512409983]  # ot<1.21
+    variance = [0.8595249944148248, 0.8597699643961747]
+else:
+    mean = [-0.0116172, 0.488383]
+    variance = [0.85977, 0.85977]
 firstOrderIndices = [
     [0.511719012189697, 0.4882809878103031],
     [0.5114868181064884, 0.48851318189351145],
@@ -60,10 +62,10 @@ totalIndices = [
     [0.5114868181064884, 0.48851318189351145],
 ]
 
-ott.assert_almost_equal(mean, chaosResult.getMean(), 1e-16)
-ott.assert_almost_equal(variance, chaosResult.getVariance(), 1e-16)
-ott.assert_almost_equal(firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-16)
-ott.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-16)
+ott.assert_almost_equal(mean, chaosResult.getMean())
+ott.assert_almost_equal(variance, chaosResult.getVariance())
+ott.assert_almost_equal(firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-3, 1e-3)
+ott.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-3, 1e-3)
 
 # Chaos 2 ##
 analysis2 = persalys.FunctionalChaosAnalysis("chaos_1", aDesign)
