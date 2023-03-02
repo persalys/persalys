@@ -29,7 +29,7 @@ RUN curl -fSsL https://github.com/swig/swig/archive/v4.1.1.tar.gz | tar xz && cd
 # ipopt
 RUN curl -fsSL https://bitbucket.org/petsc/pkg-metis/get/v5.1.0-p10.tar.bz2 | tar xj && cd petsc-pkg-metis-* && make config shared=1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r petsc*
 RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/1.6.2.tar.gz | tar xz && cd ThirdParty-Mumps-releases-1.6.2 && ./get.Mumps && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
-RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.10.tar.gz | tar xz && cd Ipopt-releases-3.14.10 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
+RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.11.tar.gz | tar xz && cd Ipopt-releases-3.14.11 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
 RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
@@ -64,10 +64,10 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.1.0.tar.gz
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.7.0.tar.gz | tar xz && cd oneTBB-2021.7.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
+RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.8.0.tar.gz | tar xz && cd oneTBB-2021.8.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v8.0.tar.gz | tar xz && cd primesieve-8.0 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v11.0.tar.gz | tar xz && cd primesieve-11.0 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -90,9 +90,9 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.10.9/Python-3.10.9.tgz | tar 
 RUN curl -fsSLO https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools cython pybind11 flake8
 RUN git clone -b v1.23.5 --depth 1 --recursive https://github.com/numpy/numpy.git && cd numpy \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
-RUN pip install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.9.3.tar.gz | tar xz && cd scipy-1.9.3 \
+RUN pip install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.9.3.tar.gz | tar xz --warning=no-timestamp && cd scipy-1.9.3 \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
-RUN pip install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
+RUN pip install lxml pandas "matplotlib<3.7" ipython sphinx numpydoc dill --upgrade
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v5.8.0.tar.gz | tar xz && cd sundials-5.8.0 \
@@ -170,7 +170,7 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
 RUN pip install git+https://github.com/openturns/otfmi@v0.15 && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.19.3 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.20.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cd OMCompiler && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd ../.. && rm -r OpenModelica*
