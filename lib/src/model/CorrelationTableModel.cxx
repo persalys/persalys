@@ -31,10 +31,11 @@ using namespace OT;
 namespace PERSALYS
 {
 
-CorrelationTableModel::CorrelationTableModel(const PhysicalModel &model, const OT::Distribution &copula, QObject *parent)
+CorrelationTableModel::CorrelationTableModel(const PhysicalModel &model, const OT::Distribution &copula, const Type type, QObject *parent)
   : QAbstractTableModel(parent)
   , physicalModel_(model)
   , copula_(copula)
+  , type_(type)
 {
 }
 
@@ -75,8 +76,17 @@ QVariant CorrelationTableModel::data(const QModelIndex & index, int role) const
     return QVariant();
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
-    return QString::number(copula_.getSpearmanCorrelation()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
-
+    switch(type_)
+    {
+    case CorrelationTableModel::Spearman:
+      return QString::number(copula_.getSpearmanCorrelation()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+    case CorrelationTableModel::Correlation:
+      return QString::number(copula_.getShapeMatrix()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+    case CorrelationTableModel::Kendall:
+      return QString::number(copula_.getKendallTau()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+    default:
+       throw InvalidArgumentException(HERE) << "Unknow correlation type";
+    }
   else if (role == Qt::BackgroundRole && index.row() >= index.column())
     return QBrush(Qt::lightGray);
 
@@ -94,18 +104,36 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     if (value.toDouble() < -1. || value.toDouble() > 1.)
       return false;
 
-    CorrelationMatrix correlation(copula_.getSpearmanCorrelation());
-    if (value.toDouble() == correlation(index.row(), index.column()))
-      return true;
 
     // update the physicalModel
-    correlation(index.row(), index.column()) = value.toDouble();
     emit errorMessageChanged("");
     try
     {
       physicalModel_.blockNotification("ProbabilisticModelItem");
       const Description oldDescription = copula_.getDescription();
-      copula_ = NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation));
+      CorrelationMatrix correlation;
+      switch(type_)
+      {
+      case CorrelationTableModel::Spearman:
+        correlation = copula_.getSpearmanCorrelation();
+        correlation(index.row(), index.column()) = value.toDouble();
+        copula_ = NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation));
+        break;
+      case CorrelationTableModel::Correlation:
+        correlation = copula_.getShapeMatrix();
+        correlation(index.row(), index.column()) = value.toDouble();
+        copula_ = NormalCopula(correlation);
+        break;
+      case CorrelationTableModel::Kendall:
+        correlation = copula_.getKendallTau();
+        correlation(index.row(), index.column()) = value.toDouble();
+        copula_ = NormalCopula(NormalCopula::GetCorrelationFromKendallCorrelation(correlation));
+        break;
+      default:
+        throw InvalidArgumentException(HERE) << "Unknow correlation type";
+      }
+      if (value.toDouble() == correlation(index.row(), index.column()))
+        return true;
       copula_.setDescription(oldDescription);
       physicalModel_.setCopula(oldDescription, copula_);
       emit dataChanged(index, index);
@@ -121,6 +149,13 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     physicalModel_.blockNotification();
   }
   return false;
+}
+
+
+void CorrelationTableModel::setType(Type type)
+{
+  type_ = type;
+  updateData();
 }
 
 
