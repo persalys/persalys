@@ -58,6 +58,13 @@ public:
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
 
+  bool getEstimateParametersConfidenceInterval() const {return estimateParamCI_;};
+  void setEstimateParametersConfidenceInterval(const bool estimateParamCI) {estimateParamCI_ = estimateParamCI;};
+
+  double getParametersConfidenceIntervalLevel() const {return paramCILevel_;};
+  void setParametersConfidenceIntervalLevel(const double paramCILevel) {paramCILevel_ = paramCILevel;};
+
+
   /** String converter */
   OT::String __repr__() const override;
 
@@ -75,6 +82,8 @@ private:
   std::map<OT::String, DistributionFactoryCollection> distFactoriesForEachInterestVar_;
   double level_;
   InferenceResult result_;
+  bool estimateParamCI_ = false;
+  double paramCILevel_ = 0.95;
 };
 }
 #endif

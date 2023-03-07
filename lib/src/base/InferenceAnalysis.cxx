@@ -209,6 +209,12 @@ void InferenceAnalysis::launch()
 
         // set fittingTestResult
         fittingTestResult.testedDistributions_.add(distribution);
+
+        if (estimateParamCI_) {
+          Distribution paramDist(distFactory.buildEstimator(sample.getMarginal(i)).getParameterDistribution());
+          fittingTestResult.paramCI_.add(paramDist.computeBilateralConfidenceInterval(paramCILevel_));
+        }
+
         fittingTestResult.kolmogorovTestResults_.add(testResult);
         fittingTestResult.bicResults_.add(bicResult);
       }
@@ -321,6 +327,8 @@ void InferenceAnalysis::save(Advocate& adv) const
   }
   adv.saveAttribute("distFactoriesCollection_", collection);
   adv.saveAttribute("level_", level_);
+  adv.saveAttribute("estimateParamCI_", estimateParamCI_);
+  adv.saveAttribute("paramCILevel_", paramCILevel_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -332,6 +340,10 @@ void InferenceAnalysis::load(Advocate& adv)
   PersistentCollection<Description> collection;
   adv.loadAttribute("distFactoriesCollection_", collection);
   adv.loadAttribute("level_", level_);
+  if (adv.hasAttribute("estimateParamCI_"))
+    adv.loadAttribute("estimateParamCI_", estimateParamCI_);
+  if (adv.hasAttribute("paramCILevel_"))
+    adv.loadAttribute("paramCILevel_", paramCILevel_);
   adv.loadAttribute("result_", result_);
 
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)

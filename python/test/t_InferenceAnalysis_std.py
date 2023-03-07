@@ -27,6 +27,7 @@ analysis.setInterestVariables(variables)
 factories = [ot.NormalFactory(), ot.GumbelFactory()]
 analysis.setDistributionsFactories("X3", factories)
 analysis.setLevel(0.1)
+analysis.setEstimateParametersConfidenceInterval(True)
 myStudy.add(analysis)
 print(analysis)
 

@@ -27,6 +27,7 @@
 #include "persalys/DoubleSpinBox.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <openturns/OTDistribution.hxx>
 #include <openturns/FittingTest.hxx>
@@ -183,6 +184,34 @@ void InferenceWizard::buildInterface()
 
   pageLayout->addWidget(ksGroupBox);
 
+  CollapsibleGroupBox * icGroupBox = new CollapsibleGroupBox(tr("Advanced Parameters"));
+  QGridLayout * paramICLayout = new QGridLayout(icGroupBox);
+  icGroupBox->setExpanded(inference_.getEstimateParametersConfidenceInterval());
+
+  QLabel * paramICLabel = new QLabel(tr("Estimate parameters confidence interval"));
+  paramICLayout->addWidget(paramICLabel, 0, 0);
+
+  paramICCheckBox_ = new QCheckBox;
+  paramICCheckBox_->setChecked(inference_.getEstimateParametersConfidenceInterval());
+  paramICLayout->addWidget(paramICCheckBox_, 0, 1);
+
+  paramICLabel = new QLabel(tr("Confidence interval level"));
+  paramICLayout->addWidget(paramICLabel, 1, 0);
+
+  icLevelSpinbox_ = new DoubleSpinBox;
+  icLevelSpinbox_->setRange(0.0 + 1.e-6, 1. - 1.e-6);
+  icLevelSpinbox_->setValue(inference_.getParametersConfidenceIntervalLevel());
+  icLevelSpinbox_->setEnabled(inference_.getEstimateParametersConfidenceInterval());
+
+  paramICLayout->addWidget(icLevelSpinbox_, 1, 1);
+  paramICLayout->setColumnStretch(2,1);
+  pageLayout->addWidget(icGroupBox);
+
+
+
+  connect(paramICCheckBox_, &QCheckBox::toggled, [=](bool toggled){
+      icLevelSpinbox_->setEnabled(toggled);});
+
   varTableView->selectRow(0);
 
   // error message
@@ -275,6 +304,9 @@ Analysis InferenceWizard::getAnalysis() const
   InferenceAnalysis newAnalysis(analysis_.getName(), doe);
   newAnalysis.setInterestVariables(interestVar_);
   newAnalysis.setLevel(levelSpinbox_->value());
+  newAnalysis.setEstimateParametersConfidenceInterval(paramICCheckBox_->isChecked());
+  newAnalysis.setParametersConfidenceIntervalLevel(icLevelSpinbox_->value());
+
 
   for (UnsignedInteger i = 0; i < interestVar_.getSize(); ++i)
   {
