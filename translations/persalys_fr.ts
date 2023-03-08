@@ -1327,12 +1327,22 @@ bayésien (BIC)</translation>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaWidget.cxx" line="147"/>
-        <source>Spearman&apos;s rank</source>
-        <translation>Rang de Spearman</translation>
+        <location filename="../lib/src/view/CopulaWidget.cxx" line="150"/>
+        <source>Spearman ranks</source>
+        <translation>Rangs de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaWidget.cxx" line="168"/>
+        <location filename="../lib/src/view/CopulaWidget.cxx" line="151"/>
+        <source>Correlation</source>
+        <translation>Corrélation</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaWidget.cxx" line="152"/>
+        <source>Kendall coefficients</source>
+        <translation>Coefficients de Kendall</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CopulaWidget.cxx" line="191"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
@@ -1353,7 +1363,7 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CorrelationTableModel</name>
     <message>
-        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="119"/>
+        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="150"/>
         <source>The correlation between %1 and %2 cannot be equal to &apos;%3&apos;.
  %4</source>
         <translation>La corrélation entre %1 et %2 ne peut pas être égale à &apos;%3&apos;.
@@ -4075,48 +4085,48 @@ des paramètres</translation>
 <context>
     <name>PERSALYS::InferenceWizard</name>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="90"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="91"/>
         <source>Inference</source>
         <translation>Inférence</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="98"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="99"/>
         <source>Firstly, select variables. Then for each variable, list distributions to infer from the sample.</source>
         <translation>D&apos;abord sélectionner des variables. Ensuite pour chaque variable, lister des distributions à inférer à partir de l&apos;échantillon.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="171"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="172"/>
         <source>Kolmogorov-Smirnov</source>
         <translation>Kolmogorov-Smirnov</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="173"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="174"/>
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="186"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="187"/>
         <source>Advanced Parameters</source>
         <translation>Paramètres avancés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="190"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="191"/>
         <source>Estimate parameters confidence interval</source>
         <translation>Estimer l&apos;intervalle de confiance des paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="197"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="198"/>
         <source>Confidence interval level</source>
         <translation>Niveau de l&apos;intervalle de confiance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="292"/>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="332"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="293"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="333"/>
         <source>Select at least one variable</source>
         <translation>Sélectionner au moins une variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceWizard.cxx" line="343"/>
+        <location filename="../lib/src/view/InferenceWizard.cxx" line="344"/>
         <source>At least one distribution must be tested for the selected variable &apos;%1&apos;</source>
         <translation>Au moins une distribution doit être testée pour la variable sélectionnée &apos;%1&apos;</translation>
     </message>

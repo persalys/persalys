@@ -144,7 +144,13 @@ void CopulaWidget::updateParameters()
   // ---- if Normal copula : show spearman correlation table
   if (copula_.getImplementation()->getClassName() == "NormalCopula")
   {
-    paramEditor_->setTitle(tr("Spearman's rank"));
+    QComboBox * paramComboBox = new QComboBox(paramEditor_);
+    groupBoxLayout->addWidget(paramComboBox, 0, 0);
+    paramComboBox->addItems(QStringList()
+                            << QString(tr("Spearman ranks"))
+                            << QString(tr("Kendall coefficients"))
+                            << QString(tr("Correlation")));
+    paramComboBox->setCurrentIndex(0);
 
     // correlation table view
     CopyableTableView * corrTableView = new CopyableTableView;
@@ -154,9 +160,26 @@ void CopulaWidget::updateParameters()
     corrDelegate->setSpinBoxType(SpinBoxDelegate::correlation);
     corrTableView->setItemDelegate(corrDelegate);
 
-    CorrelationTableModel * corrTableModel = new CorrelationTableModel(physicalModel_, copula_, corrTableView);
+    CorrelationTableModel * corrTableModel = new CorrelationTableModel(physicalModel_, copula_, CorrelationTableModel::Spearman, corrTableView);
     corrTableView->setModel(corrTableModel);
-    groupBoxLayout->addWidget(corrTableView, 0, 0);
+    groupBoxLayout->addWidget(corrTableView, 1, 0);
+
+    connect(paramComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+      switch(index)
+      {
+      case CorrelationTableModel::Spearman:
+        corrTableModel->setType(CorrelationTableModel::Spearman);
+        break;
+      case CorrelationTableModel::Correlation:
+        corrTableModel->setType(CorrelationTableModel::Correlation);
+        break;
+      case CorrelationTableModel::Kendall:
+        corrTableModel->setType(CorrelationTableModel::Kendall);
+        break;
+      default:
+        throw InvalidArgumentException(HERE) << "Unknow correlation type";
+      }
+    });
     connect(corrTableModel, SIGNAL(dataUpdated(OT::Distribution)), this, SLOT(updateCopulaFromCorrTable(OT::Distribution)));
     connect(corrTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(emitErrorMessage(QString)));
 
