@@ -79,8 +79,8 @@ namespace PERSALYS
                                                                  const Function& ineqFunc)
   {
     // Dummy function to match a multi objective problem
-    Function func = SymbolicFunction(Description(bounds.getDimension(), "x"),
-                                     Description(bounds.getDimension(), "x^2"));
+    Function func = SymbolicFunction(Description::BuildDefault(bounds.getDimension(), "x"),
+                                     Description(bounds.getDimension(), "x0^2"));
     OptimizationProblem problem(func, Function(), Function(), bounds);
     if (types.getSize())
       problem.setVariablesType(types);
