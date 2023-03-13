@@ -40,6 +40,9 @@ public:
   /** Virtual constructor */
   MonteCarloAnalysis * clone() const override;
 
+  OT::Scalar getMaximumConfidenceIntervalLength() const;
+  void setMaximumConfidenceIntervalLength(const OT::Scalar length);
+
   bool isConfidenceIntervalRequired() const;
   void setIsConfidenceIntervalRequired(const bool isConfidenceIntervalRequired);
 
@@ -66,6 +69,7 @@ protected:
   void launch() override;
 
 private:
+  OT::Scalar maximumConfidenceIntervalLength_;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
   DataAnalysisResult result_;

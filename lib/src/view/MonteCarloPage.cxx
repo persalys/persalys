@@ -51,7 +51,7 @@ void MonteCarloPage::buildInterface()
   /// simulation widgets
 
   // stopping criteria
-  stopCriteriaGroupBox_ = new StopCriteriaGroupBox;
+  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(StopCriteriaGroupBox::Time_Calls_CILength);
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
@@ -105,7 +105,7 @@ void MonteCarloPage::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
-  stopCriteriaGroupBox_->setMaximumCoefficientOfVariation(analysis_ptr->getMaximumCoefficientOfVariation());
+  stopCriteriaGroupBox_->setMaximumConfidenceIntervalLength(analysis_ptr->getMaximumConfidenceIntervalLength());
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
   stopCriteriaGroupBox_->setMaximumCalls(analysis_ptr->getMaximumCalls());
   blockSizeGroupBox_->setBlockSizeValue(analysis_ptr->getBlockSize());
@@ -120,7 +120,7 @@ Analysis MonteCarloPage::getAnalysis(const String& name, const PhysicalModel& ph
 {
   MonteCarloAnalysis analysis(name, physicalModel);
   analysis.setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
-  analysis.setMaximumCoefficientOfVariation(stopCriteriaGroupBox_->getMaximumCoefficientOfVariation());
+  analysis.setMaximumConfidenceIntervalLength(stopCriteriaGroupBox_->getMaximumConfidenceIntervalLength());
   analysis.setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
   analysis.setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
   analysis.setSeed(seedSpinbox_->value());
