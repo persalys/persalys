@@ -200,4 +200,14 @@ Indices ImportSampleWidget::getColumns(const Description &names) const
   }
   return columns;
 }
+
+Sample ImportSampleWidget::getData() const
+{
+  SampleTableModel * model = dynamic_cast<SampleTableModel*>(dataPreviewTableView_->model());
+  if (model)
+    return model->getSample();
+  else
+    throw InvalidArgumentException(HERE) << "Table model is not a SampleTableModel";
+}
+
 }

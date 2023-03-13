@@ -22,6 +22,7 @@
 
 #include "persalys/DoubleSpinBox.hxx"
 #include "persalys/StudyTreeViewModel.hxx"
+#include "persalys/FileTools.hxx"
 
 #include <QHeaderView>
 #include <QHBoxLayout>
@@ -126,6 +127,11 @@ void EditValuesWizard::buildInterface()
   connect(removeButton_, SIGNAL(clicked()), this, SLOT(removeSelectedValues()));
   optionLayout->addWidget(removeButton_);
 
+  QPushButton * importButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Import..."), this);
+  importButton->setToolTip(tr("Import a sample"));
+  connect(importButton, SIGNAL(clicked()), this, SLOT(importSample()));
+  optionLayout->addWidget(importButton);
+
   optionLayout->addStretch();
 
   QWizardPage * page = new QWizardPage;
@@ -163,6 +169,36 @@ void EditValuesWizard::addValue()
   model_->updateData(sample);
 
   check();
+}
+
+void EditValuesWizard::importSample()
+{
+  QWizard * importWizard = new QWizard;
+  ImportedDistributionPage * page = new ImportedDistributionPage;
+  importWizard->addPage(page);
+
+  if (importWizard->exec()) {
+    Sample newSample(page->getData().getSize(), 0);
+    // Columns from imported sample
+    newSample.stack(page->getData().getMarginal(Description(1, tr("Value").toStdString())));
+    const Description columnNames = page->getData().getDescription();
+    const Description::const_iterator it = std::find(columnNames.begin(),
+                                                     columnNames.end(),
+                                                     tr("Probability").toStdString());
+    // Widget has been used to specify probabilities
+    if (it != columnNames.end())
+      newSample.stack(page->getData().getMarginal(Description(1, tr("Probability").toStdString())));
+    else
+      // Columns with associated uniform probabilities
+      newSample.stack(Sample(page->getData().getSize(), Point(1, 1.)));
+    Description description(2);
+    description[0] = tr("Value").toStdString();
+    description[1] = tr("Probability").toStdString();
+    newSample.setDescription(description);
+
+    model_->updateData(newSample);
+    check();
+  }
 }
 
 
@@ -281,12 +317,43 @@ bool UserDefinedWizard::validateCurrentPage()
     errorMessageLabel_->setErrorMessage(tr("Define at least two values"));
     return false;
   }
-  Point proba(sample.getMarginal(1).asPoint());
-  const double sum = std::accumulate(proba.begin(), proba.end(), 0.0);
-  if (sum > 1 || sum <= 0)
+  return true;
+}
+
+ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
+  : QWizardPage(parent)
+{
+  QVBoxLayout * pageLayout = new QVBoxLayout(this);
+  sampleWidget_ = new ImportSampleWidget;
+  pageLayout->addWidget(sampleWidget_);
+
+  errorMessageLabel_ = new TemporaryLabel;
+  pageLayout->addWidget(errorMessageLabel_);
+
+  connect(sampleWidget_, &ImportSampleWidget::updateTableRequested, [=](const QString & fileName) {
+    errorMessageLabel_->setText("");
+    Sample sample = Tools::ImportSample(fileName.toStdString());
+    Indices allIndices = Indices(sample.getDimension());
+    allIndices.fill(0, 1);
+    Description description(2);
+    description[0] = tr("Value").toStdString();
+    description[1] = tr("Probability").toStdString();
+    sampleWidget_->updateWidgets(sample, sample.getDescription(), allIndices, description);});
+}
+
+bool ImportedDistributionPage::validatePage()
+{
+  const Description desc = getData().getDescription();
+  for (UnsignedInteger i=0; i<desc.getSize()-1; ++i)
   {
-    errorMessageLabel_->setErrorMessage(tr("The sum of probabilities must be in ]0, 1]"));
-    return false;
+    for (UnsignedInteger j=i+1; j<desc.getSize(); ++j)
+    {
+      if (desc[i] == desc[j] && desc[i] != "")
+      {
+        errorMessageLabel_->setErrorMessage(tr("Values and probabilities must be associated with one column"));
+        return false;
+      }
+    }
   }
   return true;
 }

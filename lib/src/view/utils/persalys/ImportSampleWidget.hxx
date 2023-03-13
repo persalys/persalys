@@ -30,7 +30,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API ImportSampleWidget : public QWidget
+class PERSALYS_UTILS_API ImportSampleWidget : public QWidget
 {
   Q_OBJECT
 
@@ -39,6 +39,8 @@ public:
   friend class MeshDefinitionWizard;
   friend class ImportObservationsPage;
   friend class TestMeshDefinitionWizard;
+  friend class EditValuesWizard;
+  friend class ImportedDistributionPage;
 
   ImportSampleWidget(QWidget *parent = 0);
 
@@ -48,6 +50,7 @@ protected:
   void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns, const OT::Description &comboItems);
   void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns);
   OT::Indices getColumns(const OT::Description& names) const;
+  OT::Sample getData() const;
 
 public slots:
   void openFileRequested();
