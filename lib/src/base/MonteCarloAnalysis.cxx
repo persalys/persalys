@@ -68,6 +68,18 @@ MonteCarloAnalysis* MonteCarloAnalysis::clone() const
 }
 
 
+Scalar MonteCarloAnalysis::getMaximumConfidenceIntervalLength() const
+{
+  return maximumConfidenceIntervalLength_;
+}
+
+
+void MonteCarloAnalysis::setMaximumConfidenceIntervalLength(const Scalar length)
+{
+  maximumConfidenceIntervalLength_ = length;
+}
+
+
 bool MonteCarloAnalysis::isConfidenceIntervalRequired() const
 {
   return isConfidenceIntervalRequired_;
