@@ -250,9 +250,12 @@ Sample Tools::ImportSample(const String& fileName)
   std::vector< String > separatorsList(3);
   separatorsList = {" ", ",", ";"};
   Sample sampleFromFile;
+  Sample testSample;
 
   std::vector<String> numSep(2);
   numSep = {".", ","};
+
+  UnsignedInteger maxNumberOfElements = 0;
 
   for (UnsignedInteger j = 0; j < numSep.size(); ++ j) {
     for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i) {
@@ -261,19 +264,22 @@ Sample Tools::ImportSample(const String& fileName)
       try
       {
         // import sample from the file
-        sampleFromFile = Sample::ImportFromTextFile(fileName, separatorsList[i], 0, numSep[j]);
+        testSample = Sample::ImportFromTextFile(fileName, separatorsList[i], 0, numSep[j]);
       }
       catch (const InternalException &)
       {
         // Locale not available
-        sampleFromFile.clear();
+        testSample.clear();
       }
-      if (sampleFromFile.getSize())
-        break;
+      // Select num/col separator pair leading to the largest sample
+      if (testSample.getSize() * testSample.getDimension() > maxNumberOfElements)
+      {
+        maxNumberOfElements = testSample.getSize() * testSample.getDimension();
+        sampleFromFile = testSample;
+      }
     }
-    if (sampleFromFile.getSize())
-      break;
   }
+
   if (!sampleFromFile.getSize())
     throw InvalidArgumentException(HERE) << "The file " << fileName << " does not contain a sample and/or the file encoding is not valid (use utf-8)";
 
