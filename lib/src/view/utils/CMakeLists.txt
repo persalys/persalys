@@ -31,6 +31,7 @@ ot_add_source_file (DocumentationToolButton.cxx)
 ot_add_source_file (EditButtonDelegate.cxx)
 ot_add_source_file (LinkableItemDelegate.cxx)
 ot_add_source_file (EditValuesWizard.cxx)
+ot_add_source_file (ImportSampleWidget.cxx)
 ot_add_source_file (ParametersTableView.cxx)
 
 ot_install_header_file ( ListWidgetWithCheckBox.hxx )
@@ -63,6 +64,8 @@ ot_install_header_file ( DocumentationToolButton.hxx )
 ot_install_header_file ( EditButtonDelegate.hxx )
 ot_install_header_file ( LinkableItemDelegate.hxx)
 ot_install_header_file ( EditValuesWizard.hxx )
+ot_install_header_file ( ImportSampleWidget.hxx )
+
 
 qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/ListWidgetWithCheckBox.hxx
@@ -92,6 +95,7 @@ qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/EditButtonDelegate.hxx
               persalys/LinkableItemDelegate.hxx
               persalys/EditValuesWizard.hxx
+              persalys/ImportSampleWidget.hxx
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})

@@ -23,6 +23,8 @@
 
 #include "persalys/SampleTableModel.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/ImportSampleWidget.hxx"
+
 
 #include <openturns/Distribution.hxx>
 
@@ -51,6 +53,7 @@ private slots:
   void removeSelectedValues();
   void checkButtons();
   virtual void addValue();
+  virtual void importSample();
 
 protected:
   void buildInterface();
@@ -106,6 +109,20 @@ public:
 
     return SampleTableModel::setData(index, value, role);
   }
+};
+
+class PERSALYS_UTILS_API ImportedDistributionPage : public QWizardPage
+{
+  Q_OBJECT
+
+public:
+  ImportedDistributionPage(QWidget *parent = 0);
+  bool validatePage();
+  OT::Sample getData() const {return sampleWidget_->getData();};
+
+private:
+  ImportSampleWidget * sampleWidget_;
+  TemporaryLabel * errorMessageLabel_;
 };
 }
 #endif
