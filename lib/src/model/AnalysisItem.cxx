@@ -23,6 +23,7 @@
 #include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/KrigingAnalysis.hxx"
+#include "persalys/PolynomialRegressionAnalysis.hxx"
 #include "persalys/StudyItem.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/MonteCarloAnalysis.hxx"
@@ -69,7 +70,8 @@ void AnalysisItem::buildActions()
     appendAction(modifyAction_);
   }
   if (analysisType == "FunctionalChaosAnalysis" ||
-      analysisType == "KrigingAnalysis")
+      analysisType == "KrigingAnalysis" ||
+      analysisType == "PolynomialRegressionAnalysis")
   {
     convertAction_ = new QAction(tr("Convert metamodel into physical model"), this);
     convertAction_->setStatusTip(tr("Add the metamodel in the study tree"));
@@ -212,6 +214,7 @@ void AnalysisItem::appendMetaModelItem()
 {
   FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get());
   KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
+  PolynomialRegressionAnalysis * regression = dynamic_cast<PolynomialRegressionAnalysis*>(analysis_.getImplementation().get());
   if (chaos)
   {
     getParentStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());
@@ -219,6 +222,10 @@ void AnalysisItem::appendMetaModelItem()
   else if (kriging)
   {
     getParentStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());
+  }
+  else if (regression)
+  {
+    getParentStudyItem()->appendMetaModelItem(regression->getResult().getMetaModel());
   }
 }
 
