@@ -2135,8 +2135,11 @@ YACS model
 - create a new study and add to it a YACS model
 
 - edit the model python code with:
-  ``def _exec(X0, X1):
-        Y0 = X0+X1
-        return Y0``
+
+  .. code-block:: python
+
+      def _exec(X0, X1):
+          Y0 = X0 + X1
+          return Y0
 
 - change X0 and X1 values and check Y0 value
