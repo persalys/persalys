@@ -2122,9 +2122,21 @@ FMU model
 
 - create a new study and add to it a FMI model
 
-- load the FUM file at python/test/fmu/linux64/deviation.fmu
+- load the FMU file at python/test/fmu/linux64/deviation.fmu
 
 - change the value of F and click on 'check model' button then check the values
 
   .. image:: /developer_manual/validation/fmuModel.png
       :align: center
+
+YACS model
+''''''''''
+
+- create a new study and add to it a YACS model
+
+- edit the model python code with:
+  ``def _exec(X0, X1):
+        Y0 = X0+X1
+        return Y0``
+
+- change X0 and X1 values and check Y0 value
