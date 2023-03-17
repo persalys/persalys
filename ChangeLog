@@ -1,3 +1,11 @@
+= 14.0 release (2023-03-19)
+
+ * Added Pearson and shape matrix NormalCopula parametrization
+ * Added import sample option for UserDefined distribution definition
+ * Inference: added confidence interval estimation for tested distributions parameters
+ * Added confidence interval length stopping criterion for CentralTendencyAnalysis
+ * Various bug fixes
+
 = 13.1 release (2022-11-25)
 
  * Allow to score independent copula in inference
