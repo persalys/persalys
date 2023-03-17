@@ -54,7 +54,7 @@ public:
   OT::Point getSkipColumns() const;
   OT::Point getSkipTokens() const;
 
-  OT::String checkOutputFile(OT::String fname) const;
+  OT::String checkOutputFile(OT::String fname, OT::String encoding="utf-8") const;
   /** String converter */
   OT::String __repr__() const override;
 

@@ -440,26 +440,36 @@ Models
   .. image:: /developer_manual/validation/model1.png
       :align: center
 
-- click on 'Check model' button below the outputs table
+- click on 'Evaluate model' button below the outputs table
     - fake_var is not evaluated
+
+- click on 'Evaluate gradient'
+    - View switches to Differentiation tab
+    - Check values
+
+  .. image:: /developer_manual/validation/model1grad.png
+      :align: center
+
+- click on 'Evaluate model'
+    - View switches back to 'Definition' tab
 
 - select lines 1 of the outputs table
     - first header item is checked
 
-- click on 'Check model' button
+- click on 'Evaluate model' button
     - fake_var is evaluated
 
 - change x2 value to 1.5 + press enter
-    - outputs values are reinitialized
+    - outputs values and gradient table are reinitialized
 
 - unselect all outputs
 
-- click on 'Check model' button
+- click on 'Evaluate model' button
     - nothing appends
 
 - check fake_var + change its formula to 'x1 +'
 
-- click on 'Check model' button
+- click on 'Evaluate model' button
     - error message 'Errors found when parsing expression etc.'
 
 - unselect fake_var + select y0, fake_y0 and y1
@@ -669,7 +679,11 @@ Deterministic analyses
       .. image:: /developer_manual/validation/optimization_wizard_2nd_page.png
           :align: center
 
-    - Second page check the values:
+    - Second page table is empty:
+
+      - Continue
+
+    - Third page check the values:
 
       .. image:: /developer_manual/validation/optimization_wizard_1st_page.png
           :align: center
@@ -682,9 +696,6 @@ Deterministic analyses
       - click on "doc" in the line containing "TNC"
       - web browser opens a link to "TNC" documentation
       - continue
-
-    - Third page table is empty:
-      - Continue
 
     - Fourth page check the values:
 
@@ -801,28 +812,6 @@ Deterministic analyses
 
       - 1st page:
 
-        - y0 and y1 as selected outputs.
-        - nsga2 as selected algorithm
-        - un-select y0, click on "Continue": Error message appears: "At least 2 outputs must be selected"
-        - select back y0, then continue
-
-      - 2nd page:
-
-        - y0: minimization, y1: minimization
-        - continue
-
-      - 3rd page:
-
-        - table has one line: "y0 > 2"
-        - click "Add": a new line "fake_var > 0" appears
-        - edit first line "y0 < 2"
-        - click on first line: selection should appear
-        - click on remove: first line is removed, 2nd line remains
-        - click again on remove: table is empty
-        - continue
-
-      - 4th page:
-
         - check values and checked/enabled states:
 
           .. image:: /developer_manual/validation/mooptim-inputtable.png
@@ -834,6 +823,28 @@ Deterministic analyses
         - click continue: row text color changes to red, message appears "The lower bounds must be less than the upper bounds"
         - set value -0.22 back to 0.22
         - click continue
+
+      - 2nd page:
+
+        - table has one line: "y0 > 2"
+        - click "Add": a new line "fake_var > 0" appears
+        - edit first line "y0 < 2"
+        - click on first line: selection should appear
+        - click on remove: first line is removed, 2nd line remains
+        - click again on remove: table is empty
+        - continue
+
+      - 3rd page:
+
+        - y0 and y1 as selected outputs.
+        - nsga2 as selected algorithm
+        - un-select y0, click on "Continue": Error message appears: "At least 2 outputs must be selected"
+        - select back y0, then continue
+
+      - 4th page:
+
+        - y0: minimization, y1: minimization
+        - continue
 
       - 5th page:
 
@@ -854,6 +865,8 @@ Deterministic analyses
       - check the export feature on the table tab
 
       - check that the parameters are unchanged
+
+      - check that selection is synchronised between paraview tabs
 
   - Calibration: item calibration
 
@@ -1183,7 +1196,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard_2nd_page.png
           :align: center
 
-      - Accuracy disabled: 0.01
+      - CI length disabled: 0.01
       - max time: 16m40s
       - max calls: 1000
       - block size: 100
@@ -1609,7 +1622,7 @@ Probabilistic analyses
       - a new item kriging appears in the tree view
       - click on its sub-item named 'Definition'
       - change the value of x2 to 1.6
-      - click on the Check model button
+      - click on the Evaluate model button
 
       .. image:: /developer_manual/validation/kriging_new_model.png
           :align: center
@@ -1778,6 +1791,7 @@ Probabilistic analyses
       - unselect all
       - select x_0 and add all the distributions
       - select x_1 and add the Beta distribution
+      - in advanced parameters, check estimate parameters confidence interval
 
     - click on the Finish button
 

@@ -235,6 +235,9 @@ void InferenceAnalysis::launch()
         fittingTestResult.kolmogorovTestResults_.add(testResult);
         fittingTestResult.bicResults_.add(SpecFunc::MaxScalar);
         fittingTestResult.errorMessages_[j] = message;
+        if (estimateParamCI_) {
+          fittingTestResult.paramCI_.add(Interval());
+        }
       }
     }
     result_.fittingTestResultCollection_.add(fittingTestResult);
