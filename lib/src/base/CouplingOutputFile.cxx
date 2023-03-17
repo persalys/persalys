@@ -113,25 +113,25 @@ Point CouplingOutputFile::getSkipColumns() const
   return skipColumns_;
 }
 
-String CouplingOutputFile::checkOutputFile(String fname) const
+String CouplingOutputFile::checkOutputFile(String fname, String encoding) const
 {
   OSS code;
   code << "import os\n";
   code << "import persalys\n";
   code << "import openturns.coupling_tools as otct\n";
-  code << "def exec():\n";
+  code << "def _check_file():\n";
   code << "    outfile = os.path.basename('"<<fname<<"')\n";
   code << "    output_file = persalys.CouplingOutputFile(outfile)\n";
   code << "    output_file.setVariables("
        << Parameters::GetOTDescriptionStr(getVariableNames())
-       <<", "<<Parameters::GetOTDescriptionStr(getTokens())
+       <<", "<<Parameters::GetOTDescriptionStr(EscapeSpecialCharacters(getTokens()))
        <<", "<< Parameters::GetOTPointStr(getSkipTokens())
        <<", "<< Parameters::GetOTPointStr(getSkipLines())
        <<", "<< Parameters::GetOTPointStr(getSkipColumns())<<")\n";
   code << "    all_vars = []\n";
   code << "    for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "        try:\n";
-  code << "            all_vars.append(otct.get_value('"<<fname<<"', token=token, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col)))\n";
+  code << "            all_vars.append(otct.get_value('"<<fname<<"', token=token, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding='"<<encoding<<"'))\n";
   code << "        except:\n";
   code << "            continue\n";
   code << "    return all_vars\n";
@@ -143,9 +143,9 @@ String CouplingOutputFile::checkOutputFile(String fname) const
   ScopedPyObjectPointer retValue(PyRun_String(code.str().c_str(), Py_file_input, dict, dict));
   handleExceptionTraceback();
 
-  PyObject * script = PyDict_GetItemString(dict, "exec");
+  PyObject * script = PyDict_GetItemString(dict, "_check_file");
   if (script == NULL)
-    throw InternalException(HERE) << "no exec function";
+    throw InternalException(HERE) << "no _check_file function";
 
   ScopedPyObjectPointer sampleResult(PyObject_CallObject(script, NULL));
   handleExceptionTraceback();

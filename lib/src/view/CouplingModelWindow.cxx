@@ -1216,7 +1216,7 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
       dlg->exec();
       QString fileName = dlg->selectedFiles()[0];
       CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
-      textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString())));
+      textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString(), model->getSteps()[indStep].getEncoding())));
     });
 }
 

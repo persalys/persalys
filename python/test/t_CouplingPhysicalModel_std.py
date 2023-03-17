@@ -21,6 +21,9 @@ with open("external_program.py", "w") as f:
     f.write('    f.write("Y0 [unit] = %.17e\\n" % Y0)\n')
     f.write('    f.write("$Y1=%.17e\\n" % Y1)\n')
 
+with open("outputRef.txt", "w") as f:
+    f.write("Y0 [unit] = 123.456\n")
+    f.write("$Y1=7.89\n")
 
 input_file = persalys.CouplingInputFile("input_template.txt")
 input_file.setConfiguredPath("input.txt")
@@ -36,7 +39,9 @@ step = persalys.CouplingStep(
     [resource_file],
     [output_file],
 )
+
 model = persalys.CouplingPhysicalModel("A", [step])
+print(output_file.checkOutputFile("outputRef.txt"))
 
 # single evaluation
 x = [1.0, 2.0, 3.0]
@@ -98,6 +103,7 @@ except TypeError:
 # cleanup
 os.remove("input_template.txt")
 os.remove("external_program.py")
+os.remove("outputRef.txt")
 
 
 # testcase D: parse output with table
