@@ -284,9 +284,21 @@ Sample Tools::ImportSample(const String& fileName)
     throw InvalidArgumentException(HERE) << "The file " << fileName << " does not contain a sample and/or the file encoding is not valid (use utf-8)";
 
   // check description encoding : only utf-8 is valid
-  const String descriptionStr = sampleFromFile.getDescription().__str__();
+  String descriptionStr = sampleFromFile.getDescription().__str__();
+  // if not, try ISO-8859 -> UTF8 conversion
   if (!IsUTF8(descriptionStr.c_str(), descriptionStr.size()))
-    throw InvalidArgumentException(HERE) << "The file must contain utf-8 characters";
+  {
+    Description newDesc;
+    for(UnsignedInteger i=0; i < sampleFromFile.getDescription().getSize(); ++i)
+    {
+      descriptionStr = sampleFromFile.getDescription()[i];
+      const String convertedStr = boost::locale::conv::to_utf<char>(descriptionStr,"Latin1");
+      if (!IsUTF8(convertedStr.c_str(), convertedStr.size()))
+        throw InvalidArgumentException(HERE) << "The file must contain utf-8 or ISO-8859 characters";
+      newDesc.add(convertedStr);
+    }
+    sampleFromFile.setDescription(newDesc);
+  }
 
   // deduplicate identifiers
   std::map<String, int> occurrences;
