@@ -22,6 +22,7 @@
 
 #include "persalys/DifferentiationTableModel.hxx"
 #include "persalys/GradientTableModel.hxx"
+#include "persalys/EnvironmentTableModel.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
 #include "persalys/DoubleSpinBox.hxx"
@@ -1316,8 +1317,33 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       model->setSteps(csColl);
       model->blockNotification();
     });
+
+  // Environment variables table
+  QTableView * envTableView = new QTableView;
+
+  envTableView->horizontalHeader()->setStretchLastSection(true);
+  envTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  advGroupBoxLayout->addWidget(envTableView, 2, 0, 1, 2);
+  AddRemoveWidget * addRemoveWidget = new AddRemoveWidget;
+  advGroupBoxLayout->addWidget(addRemoveWidget, 3, 1, 1, 2, Qt::AlignRight);
+
+  CouplingStep cs(model->getSteps()[indStep]);
+  EnvironmentTableModel * envTableModel = new EnvironmentTableModel(cs, envTableView);
+  envTableView->setModel(envTableModel);
+
+  connect(addRemoveWidget, SIGNAL(addRequested()), envTableModel, SLOT(addLine()));
+  connect(addRemoveWidget, SIGNAL(removeRequested()), envTableModel, SLOT(removeLine()));
+  connect(envTableModel, &EnvironmentTableModel::stepChanged, [=] () {
+    CouplingStepCollection csColl(model->getSteps());
+    csColl[indStep] = envTableModel->getStep();
+    model->blockNotification("PhysicalModelDefinitionItem");
+    model->setSteps(csColl);
+    model->blockNotification();
+  });
+
   advGroupBoxLayout->setColumnStretch(1,1);
-  advGroupBoxLayout->setRowStretch(1,1);
+  advGroupBoxLayout->setRowStretch(3,1);
+
   comTabLayout->setColumnStretch(1,1);
   comTabLayout->setRowStretch(4,1);
 
@@ -1414,7 +1440,6 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
   pyCodeLayout->addWidget(pyCodeWidget);
 
   // - fill in the QTabWidget
-  CouplingStep cs(model->getSteps()[indStep]);
   if (cs.getOutputFiles().getSize())
   {
     for (UnsignedInteger i = 0; i < cs.getOutputFiles().getSize(); ++i)

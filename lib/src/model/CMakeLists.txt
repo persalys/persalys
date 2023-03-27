@@ -4,6 +4,7 @@ ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( SampleTableModel.cxx )
 ot_add_source_file ( InputTableModel.cxx )
+ot_add_source_file ( EnvironmentTableModel.cxx )
 ot_add_source_file ( InputTableProbabilisticModel.cxx )
 ot_add_source_file ( OutputTableModel.cxx )
 ot_add_source_file ( ExperimentTableModel.cxx )
@@ -49,6 +50,7 @@ endif ()
 
 ot_install_header_file ( SampleTableModel.hxx )
 ot_install_header_file ( InputTableModel.hxx )
+ot_install_header_file ( EnvironmentTableModel.hxx )
 ot_install_header_file ( InputTableProbabilisticModel.hxx )
 ot_install_header_file ( OutputTableModel.hxx )
 ot_install_header_file ( ExperimentTableModel.hxx )
@@ -89,6 +91,7 @@ ot_install_header_file ( MorrisResultTableModel.hxx )
 endif ()
 
 qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
+                                    persalys/EnvironmentTableModel.hxx
                                     persalys/InputTableProbabilisticModel.hxx
                                     persalys/OutputTableModel.hxx
                                     persalys/SampleTableModel.hxx
