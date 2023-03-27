@@ -51,6 +51,11 @@ public:
   void setCommand(const OT::String & command);
   OT::String getCommand() const;
 
+  /* Environment accessor */
+  void setEnvironment(const OT::Description & keys, const OT::Description & values);
+  OT::Description getEnvironmentKeys() const;
+  OT::Description getEnvironmentValues() const;
+
   /* Whether the command is to be interpreted by the shell */
   void setIsShell(const OT::Bool isShell);
   OT::Bool getIsShell() const;
@@ -98,6 +103,9 @@ private:
   double timeOut_=-1;
   OT::String encoding_="utf-8";
   OT::String ppCode_="";
+  OT::Description envKeys_;
+  OT::Description envValues_;
+
 };
 
 }

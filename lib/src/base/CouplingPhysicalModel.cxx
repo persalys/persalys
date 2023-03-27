@@ -124,6 +124,10 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
     oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True": "False") << ")\n";
     if(!step.getCode().empty())
       oss << offset << "step" << i << ".setCode('" << step.getEscapedCode() << "')\n";
+    oss << offset << "step" << i << ".setEnvironment("
+        << Parameters::GetOTDescriptionStr(step.getEnvironmentKeys()) << ", "
+        << Parameters::GetOTDescriptionStr(step.getEnvironmentValues()) << ")\n";
+
     oss << offset << "steps.append(step"<<i<<")\n";
   }
   return oss;
@@ -249,7 +253,13 @@ void CouplingPhysicalModel::updateCode()
   code << "            timeout = step.getTimeOut()\n";
   code << "            if timeout <= 0:\n";
   code << "                timeout = None\n";
-  code << "            otct.execute(step.getCommand(), cwd=workdir, shell=step.getIsShell(), capture_output=True, timeout=timeout)\n";
+  code << "            if len(step.getEnvironmentKeys()) == 0:\n";
+  code << "                otct.execute(step.getCommand(), cwd=workdir, shell=step.getIsShell(), capture_output=True, timeout=timeout)\n";
+  code << "            else:\n";
+  code << "                env = os.environ.copy()\n";
+  code << "                for key, val in zip(step.getEnvironmentKeys(), step.getEnvironmentValues()):\n";
+  code << "                    env[key] = val\n";
+  code << "                otct.execute(step.getCommand(), cwd=workdir, shell=step.getIsShell(), capture_output=True, timeout=timeout, env=env)\n";
   code << "        for output_file in step.getOutputFiles():\n";
   code << "            if not output_file.getPath():\n";
   code << "                continue\n";

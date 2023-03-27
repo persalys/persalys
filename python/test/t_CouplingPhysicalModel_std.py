@@ -362,6 +362,29 @@ y = f(x)
 print(y)
 ott.assert_almost_equal(y, [6.0, 7.0, 39.0, 146.0])
 
+
+# test environment override
+with open("program4.py", "w") as f:
+    f.write('import persalys as prs\n')
+
+resource_file = persalys.CouplingResourceFile("program4.py")
+step5 = persalys.CouplingStep(sys.executable + " program4.py", [], [resource_file], [])
+step5.setEnvironment(['PYTHONPATH'], [''])
+model2 = persalys.CouplingPhysicalModel("envTest", [step1, step5])
+x = [1.0, 2.0, 3.0]
+f = model2.getFunction()
+try:
+    y = f(x)
+    print("FAIL")
+except Exception:
+    print("OK")
+
+# clean environment
+step5.setEnvironment(ot.Description(), ot.Description())
+model2 = persalys.CouplingPhysicalModel("envTest", [step1, step5])
+f = model2.getFunction()
+y = f(x)
+
 # cleanup
 os.remove("input1.txt.in")
 os.remove("program1.py")
@@ -369,6 +392,7 @@ os.remove("input2.txt.in")
 os.remove("program2.py")
 os.remove("input3.txt.in")
 os.remove("program3.py")
+os.remove("program4.py")
 
 # script
 myStudy = persalys.Study("myStudy")

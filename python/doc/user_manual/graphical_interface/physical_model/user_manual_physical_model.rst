@@ -247,9 +247,23 @@ next.
 Step definition is divided into several categories:
 
 - Command: used to define the command calling the external code. This
-  can be empty if one decides to set a pre-processing. In addition I/O
-  encoding (utf-8/latin-1) and command timeout (-1 for no time out)
-  can be set.
+  can be empty if one decides to set a pre-processing. The **Advanced
+  parameters** group box can be used to set:
+
+  - I/O encoding (utf-8/latin-1)
+
+  - command timeout (-1 for no time out)
+
+  - command-specific environment using the table:
+
+    - add/remove environment variables using the dedicated buttons
+
+    - the first column corresponds to the environment variables names
+
+    - the second column corresponds to its value
+
+    - this is useful for example to set a dedicated python environment
+      containing specific modules not in included in persalys
 
 .. image:: /user_manual/graphical_interface/physical_model/CPM_Command.png
     :align: center
