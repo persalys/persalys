@@ -301,8 +301,10 @@ void AnsysParser::generateTemplate(const String & templateFileName,
     templateFile << "parameter" << i << " = Parameters.GetParameter(Name=\""
                  << inputs_[i].getName() << "\")\n";
     templateFile << "designPoint1.SetParameterExpression(Parameter=parameter"
-                 << i << ", Expression=\"@" << inputs_[i].getName()
-                 << "@ [" << inputs_[i].getUnit() << "]\")\n";
+                 << i << ", Expression=\"@" << inputs_[i].getName() << "@";
+    if(inputs_[i].getUnit() != "")
+      templateFile << " [" << inputs_[i].getUnit() << "]";
+    templateFile << "\")\n";
   }
   templateFile << "designPoint1.Retained = True\n";
   templateFile << "Parameters.SetBaseDesignPoint(DesignPoint=designPoint1)\n";
