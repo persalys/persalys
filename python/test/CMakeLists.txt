@@ -66,6 +66,7 @@ endmacro ( ot_pyinstallcheck_test )
 
 if (NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   execute_process (COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Housing-prices-Boston.csv ${CMAKE_CURRENT_BINARY_DIR})
+  execute_process (COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/DonneesLatin1.csv ${CMAKE_CURRENT_BINARY_DIR})
 endif ()
 
 ot_pyinstallcheck_test (SymbolicPhysicalModel_std)

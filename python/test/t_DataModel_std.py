@@ -100,3 +100,10 @@ except Exception:
     # fr locale not available
     pass
 os.remove(filename)
+
+filename = "DonneesLatin1.csv"
+model4 = persalys.DataModel(
+    "myDataModel4", filename, [0, 1, 2, 3], [4, 5])
+
+myStudy.add(model4)
+print(model4.getSampleFromFile().getDescription())
