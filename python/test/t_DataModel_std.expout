@@ -577,3 +577,4 @@ myStudy.add(myDataModel3)
 aDataAnalysis = persalys.DataAnalysis('aDataAnalysis', myDataModel)
 myStudy.add(aDataAnalysis)
 
+[Année,Débit mesuré maximal (m3/s),Hauteur mesurée (m),Prévision modèle,Ecart donnée-modèle,H complet]
