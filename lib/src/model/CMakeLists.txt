@@ -40,6 +40,8 @@ ot_add_source_file ( ConstraintsTableModel.cxx )
 ot_add_source_file ( ObjectivesTableModel.cxx )
 ot_add_source_file ( TranslationManager.cxx )
 ot_add_source_file ( FileTools.cxx )
+ot_add_source_file ( AnsysSystemTableModel.cxx )
+ot_add_source_file ( AnsysVariableTableModel.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( MorrisTableModel.cxx )
   ot_add_source_file ( MorrisResultTableModel.cxx )
@@ -79,6 +81,8 @@ ot_install_header_file ( ConstraintsTableModel.hxx )
 ot_install_header_file ( ObjectivesTableModel.hxx )
 ot_install_header_file ( TranslationManager.hxx )
 ot_install_header_file ( FileTools.hxx )
+ot_install_header_file ( AnsysSystemTableModel.hxx )
+ot_install_header_file ( AnsysVariableTableModel.hxx )
 if (OTMORRIS_FOUND)
 ot_install_header_file ( MorrisTableModel.hxx )
 ot_install_header_file ( MorrisResultTableModel.hxx )
@@ -121,6 +125,8 @@ qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/ConstraintsTableModel.hxx
                                     persalys/ObjectivesTableModel.hxx
                                     persalys/TranslationManager.hxx
+                                    persalys/AnsysSystemTableModel.hxx
+                                    persalys/AnsysVariableTableModel.hxx
                                     persalys/FileTools.hxx)
 
 if (OTMORRIS_FOUND)
