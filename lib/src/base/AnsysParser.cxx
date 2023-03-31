@@ -56,7 +56,6 @@ void AnsysParser::loadData(const String & fileName)
   setModelFileName(fileName);
   Pointer<XMLDoc> doc = new XMLDoc(fileName);
 
-  //Pointer<XMLDoc> doc = new XMLDoc("~/Téléchargements/couplageAnsys/BEAM.wbpj");
   XML::Node root = XML::GetRootNode(*doc);
   inputs_.clear();
   outputs_.clear();
@@ -124,10 +123,18 @@ void AnsysParser::loadData(const String & fileName)
           std::regex valueUnitRegex("\"value\": \"([\\S]+)(?:\\s*\\[([^\\]]*)\\])?\"");
           String value("0.0");
           String unit;
+          String valueUnit;
           if (std::regex_search(data, what, valueUnitRegex))
           {
             value = what[1];
             unit = what[2];
+          }
+
+          std::regex expressionUnitRegex("\"Expression\": \"([^\"[]+)(?:.*)?\"");
+          String expression;
+          if (std::regex_search(data, what, expressionUnitRegex))
+          {
+            expression = what[1];
           }
 
           std::regex textRegex("\"DisplayText\": \"([^\"]*)\"");
@@ -137,8 +144,23 @@ void AnsysParser::loadData(const String & fileName)
             text = what[1];
           }
 
+          // Check wether the expression depends on other parameters
+          bool expressionIsValue = false;
+          try
+          {
+            std::stod(expression);
+            expressionIsValue = true;
+          }
+          catch (std::exception & exc)
+          {
+            // Do nothing
+          }
+
           if(variability == "Input")
-            inputs_.add(Input(variableName, std::stod(value), text, unit));
+          {
+            if(expressionIsValue)
+              inputs_.add(Input(variableName, std::stod(value), text, unit));
+          }
           else
             outputs_.add(Output(variableName, std::stod(value), text, unit));
         }
