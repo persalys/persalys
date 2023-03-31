@@ -159,7 +159,7 @@ if (BUILD_PYTHON)
     endif ()
     if (SPHINX_EXECUTABLE AND (DVISVGM_EXECUTABLE OR DVIPNG_EXECUTABLE))
       find_python_module (sphinx 1.8)
-      find_python_module (numpydoc 0.9)
+      find_python_module (numpydoc 0.7)
     endif ()
     if (NOT SPHINX_EXECUTABLE OR NOT SPHINX_FOUND OR NOT NUMPYDOC_FOUND)
       set (SPHINX_FOUND FALSE)
@@ -328,4 +328,3 @@ include (CPack)
 
 include (FeatureSummary)
 feature_summary (WHAT ALL)
-
