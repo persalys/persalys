@@ -123,57 +123,57 @@
 <context>
     <name>PERSALYS::AnalysisItem</name>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="65"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="66"/>
         <source>Modify</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="66"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="67"/>
         <source>Modify the analysis</source>
         <translation>Modifier l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="74"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="76"/>
         <source>Convert metamodel into physical model</source>
         <translation>Convertir le métamodèle en modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="75"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="77"/>
         <source>Add the metamodel in the study tree</source>
         <translation>Ajouter le métamodèle dans l&apos;arbre d&apos;étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="83"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="85"/>
         <source>Extract data at nodes</source>
         <translation>Extraction de données à des noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="92"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="94"/>
         <source>Convert into data model</source>
         <translation>Convertir en modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="93"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="95"/>
         <source>Add a data model in the study tree</source>
         <translation>Ajouter un modèle de données dans l&apos;arbre d&apos;étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="104"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="106"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="105"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="107"/>
         <source>Remove the analysis</source>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="186"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="188"/>
         <source>Can not modify a running analysis.</source>
         <translation>Impossible de modifier une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="255"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="262"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
@@ -1332,12 +1332,12 @@ bayésien (BIC)</translation>
         <translation>Rangs de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaWidget.cxx" line="151"/>
+        <location filename="../lib/src/view/CopulaWidget.cxx" line="152"/>
         <source>Correlation</source>
         <translation>Corrélation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaWidget.cxx" line="152"/>
+        <location filename="../lib/src/view/CopulaWidget.cxx" line="151"/>
         <source>Kendall coefficients</source>
         <translation>Coefficients de Kendall</translation>
     </message>
@@ -1363,7 +1363,7 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CorrelationTableModel</name>
     <message>
-        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="150"/>
+        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="147"/>
         <source>The correlation between %1 and %2 cannot be equal to &apos;%3&apos;.
  %4</source>
         <translation>La corrélation entre %1 et %2 ne peut pas être égale à &apos;%3&apos;.
@@ -2496,47 +2496,70 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::EditValuesWizard</name>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="94"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="95"/>
         <source>Define values</source>
         <translation>Définir des valeurs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="95"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="96"/>
         <source>Finish</source>
         <translation>Terminer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="96"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="97"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="111"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="112"/>
         <source>&lt;b&gt;Number of values:&lt;/b&gt;</source>
         <translation>&lt;b&gt;Nombre de valeurs :&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="118"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="119"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="119"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="120"/>
         <source>Add a value</source>
         <translation>Ajouter une valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="124"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="125"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="125"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="126"/>
         <source>Remove the selected values</source>
         <translation>Supprimer les valeurs sélectionnées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="216"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="130"/>
+        <source>Import...</source>
+        <translation>Importer...</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="131"/>
+        <source>Import a sample</source>
+        <translation>Importer un échantillon</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="183"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="195"/>
+        <source>Value</source>
+        <translation>Valeur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="187"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="190"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="196"/>
+        <source>Weight</source>
+        <translation>Poids</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="252"/>
         <source>Define at least two values</source>
         <translation>Définir au moins deux valeurs</translation>
     </message>
@@ -3786,49 +3809,49 @@ des étiquettes</translation>
 <context>
     <name>PERSALYS::ImportSampleWidget</name>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="59"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="59"/>
         <source>Data file</source>
         <translation>Fichier de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="67"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="67"/>
         <source>Search file</source>
         <translation>Chercher un fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="74"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="74"/>
         <source>File Preview</source>
         <translation>Prévisualisation du fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="81"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="81"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="102"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="102"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="104"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="104"/>
         <source>Data files (*.csv *.txt *.dat)</source>
         <translation>Données (*.csv *.txt *.dat)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="115"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="115"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="116"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="116"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/ImportSampleWidget.cxx" line="140"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="140"/>
         <source>Impossible to load the file.%1%2</source>
         <translation>Impossible de charger le fichier.%1%2</translation>
     </message>
@@ -3854,6 +3877,24 @@ des étiquettes</translation>
         <location filename="../lib/src/view/ImportedDesignPage.cxx" line="94"/>
         <source>Each variable must be associated with one column.</source>
         <translation>Chaque variable doit être associée à une colonne.</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::ImportedDistributionPage</name>
+    <message>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="339"/>
+        <source>Value</source>
+        <translation>Valeur</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="340"/>
+        <source>Weight</source>
+        <translation>Poids</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="353"/>
+        <source>Values and weights must be associated with one column</source>
+        <translation>Les valeurs et les poids doivent être associés à une colonne</translation>
     </message>
 </context>
 <context>
@@ -7703,14 +7744,6 @@ at</source>
     </message>
 </context>
 <context>
-    <name>PERSALYS::ProbabilityTableModel</name>
-    <message>
-        <location filename="../lib/src/view/utils/persalys/EditValuesWizard.hxx" line="103"/>
-        <source>Probability must be in ]0, 1[</source>
-        <translation>La probabilité doit être dans ]0, 1[</translation>
-    </message>
-</context>
-<context>
     <name>PERSALYS::PythonPhysicalModelWindow</name>
     <message>
         <location filename="../lib/src/view/PythonPhysicalModelWindow.cxx" line="44"/>
@@ -9670,24 +9703,19 @@ de la fonction</translation>
 <context>
     <name>PERSALYS::UserDefinedWizard</name>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="239"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="275"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="240"/>
-        <source>Probability</source>
-        <translation>Probabilité</translation>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="276"/>
+        <source>Weight</source>
+        <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="281"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="317"/>
         <source>Define at least two values</source>
         <translation>Définir au moins deux valeurs</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="288"/>
-        <source>The sum of probabilities must be in ]0, 1]</source>
-        <translation>La somme des probabilités doit être dans ]0, 1]</translation>
     </message>
 </context>
 <context>
@@ -9719,6 +9747,14 @@ de la fonction</translation>
         <location filename="../lib/src/view/persalys/InferenceWizard.hxx" line="96"/>
         <source>Export the data</source>
         <translation>Exporter les données</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::WeightTableModel</name>
+    <message>
+        <location filename="../lib/src/view/utils/persalys/EditValuesWizard.hxx" line="106"/>
+        <source>Weight must be in strictly positive</source>
+        <translation>Le poids doit être strictement positif</translation>
     </message>
 </context>
 <context>
@@ -9796,7 +9832,7 @@ de la fonction</translation>
         <location filename="../lib/src/view/PyConsole/PyConsole_Console.cxx" line="303"/>
         <location filename="../lib/src/view/PyConsole/PyConsole_Console.cxx" line="304"/>
         <source>EDIT_COPY_CMD</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../lib/src/view/PyConsole/PyConsole_Console.cxx" line="308"/>

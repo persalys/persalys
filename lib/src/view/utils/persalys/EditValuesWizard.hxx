@@ -86,12 +86,12 @@ private slots:
 };
 
 
-class PERSALYS_UTILS_API ProbabilityTableModel : public SampleTableModel
+class PERSALYS_UTILS_API WeightTableModel : public SampleTableModel
 {
   Q_OBJECT
 
 public:
-  ProbabilityTableModel(const OT::Sample & data, QObject * parent)
+  WeightTableModel(const OT::Sample & data, QObject * parent)
   : SampleTableModel(data, true, false, OT::Description(), parent)
   {
     Q_ASSERT(data.getDimension() == 2);
@@ -101,9 +101,9 @@ public:
   {
     if (!index.isValid())
       return false;
-    if (role == Qt::EditRole && index.column() == 1 && (value.toDouble() > 1 || value.toDouble() < 0))
+    if (role == Qt::EditRole && index.column() == 1 && !(value.toDouble() > 0))
     {
-      emit errorMessageChanged(tr("Probability must be in ]0, 1["));
+      emit errorMessageChanged(tr("Weight must be in strictly positive"));
       return false;
     }
 

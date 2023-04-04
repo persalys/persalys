@@ -184,16 +184,16 @@ void EditValuesWizard::importSample()
     const Description columnNames = page->getData().getDescription();
     const Description::const_iterator it = std::find(columnNames.begin(),
                                                      columnNames.end(),
-                                                     tr("Probability").toStdString());
+                                                     tr("Weight").toStdString());
     // Widget has been used to specify probabilities
     if (it != columnNames.end())
-      newSample.stack(page->getData().getMarginal(Description(1, tr("Probability").toStdString())));
+      newSample.stack(page->getData().getMarginal(Description(1, tr("Weight").toStdString())));
     else
       // Columns with associated uniform probabilities
       newSample.stack(Sample(page->getData().getSize(), Point(1, 1.)));
     Description description(2);
     description[0] = tr("Value").toStdString();
-    description[1] = tr("Probability").toStdString();
+    description[1] = tr("Weight").toStdString();
     newSample.setDescription(description);
 
     model_->updateData(newSample);
@@ -273,9 +273,9 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
   }
   Description description(2);
   description[0] = tr("Value").toStdString();
-  description[1] = tr("Probability").toStdString();
+  description[1] = tr("Weight").toStdString();
   sample.setDescription(description);
-  model_ = new ProbabilityTableModel(sample, this);
+  model_ = new WeightTableModel(sample, this);
   connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
   connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
 
@@ -337,7 +337,7 @@ ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
     allIndices.fill(0, 1);
     Description description(2);
     description[0] = tr("Value").toStdString();
-    description[1] = tr("Probability").toStdString();
+    description[1] = tr("Weight").toStdString();
     sampleWidget_->updateWidgets(sample, sample.getDescription(), allIndices, description);});
 }
 
@@ -350,7 +350,7 @@ bool ImportedDistributionPage::validatePage()
     {
       if (desc[i] == desc[j] && desc[i] != "")
       {
-        errorMessageLabel_->setErrorMessage(tr("Values and probabilities must be associated with one column"));
+        errorMessageLabel_->setErrorMessage(tr("Values and weights must be associated with one column"));
         return false;
       }
     }
