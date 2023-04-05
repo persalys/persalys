@@ -119,7 +119,7 @@ void PolynomialRegressionResultWindow::buildInterface()
     valuesList << QString::number(result_.getLinearModelResultCollection()[i].getAdjustedRSquared());
     ParametersTableView * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
     resultWidgetLayout->addWidget(basisTableView, 0, 0);
-    
+
     // table view
     CopyableTableView * coeffTableView = new CopyableTableView;
     coeffTableView->horizontalHeader()->hide();
@@ -202,7 +202,7 @@ void PolynomialRegressionResultWindow::buildInterface()
   tabLayout->addWidget(plotsStackedWidget);
 
   tabWidget->addTab(tab, tr("Adequation"));
-  
+
   // third tab : VALIDATION --------------------------------
   if (result_.getValidations().size())
   {
@@ -251,7 +251,7 @@ void PolynomialRegressionResultWindow::buildInterface()
         MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
             outputSample,
             j,
-            tr("Q2"),
+            tr("Q2 LOO"),
             this);
         plotStackedWidget->addWidget(validationWidget);
       }
@@ -267,7 +267,7 @@ void PolynomialRegressionResultWindow::buildInterface()
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     QTabWidget * residualTabWidget = new QTabWidget;
-    
+
     QWidget * resultWidget = new QWidget;
     QGridLayout * residualWidgetLayout = new QGridLayout(resultWidget);
 
@@ -323,7 +323,7 @@ void PolynomialRegressionResultWindow::buildInterface()
       const Normal noiseDistribution(result_.getLinearModelResultCollection()[i].getNoiseDistribution());
       QStringList namesList(tr("Standard deviation"));
       QStringList valuesList(QString::number(noiseDistribution.getStandardDeviation()[0]));
-      ParametersTableView * basisTableView = new ParametersTableView(namesList, valuesList, true, true);  
+      ParametersTableView * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
       resDistLayout->addWidget(basisTableView, 0, 0);
 
       PlotWidget * pdfPlot = new PlotWidget(tr("Residual distribution"));

@@ -3511,7 +3511,7 @@ centrale</translation>
         <translation>Taille de la base</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="151"/>
+        <location filename="../lib/src/view/FunctionalChaosPage.cxx" line="153"/>
         <source>Design of experiments size too small : %1. It must be greater or equal to C(degree+nbInputs, degree) = %2</source>
         <translation>La taille du plan d&apos;expériences est trop petite : %1. Elle doit être supérieure ou égale à C(degree+nbInputs, degree) = %2</translation>
     </message>
@@ -3657,8 +3657,8 @@ centrale</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="407"/>
-        <source>Q2</source>
-        <translation>Q2</translation>
+        <source>Q2 LOO</source>
+        <translation>Q2 LOO</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FunctionalChaosResultWindow.cxx" line="416"/>
@@ -4595,8 +4595,8 @@ des paramètres</translation>
     </message>
     <message>
         <location filename="../lib/src/view/KrigingResultWindow.cxx" line="203"/>
-        <source>Q2</source>
-        <translation>Q2</translation>
+        <source>Q2 LOO</source>
+        <translation>Q2 LOO</translation>
     </message>
     <message>
         <location filename="../lib/src/view/KrigingResultWindow.cxx" line="211"/>
@@ -7496,8 +7496,8 @@ at</source>
     </message>
     <message>
         <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="254"/>
-        <source>Q2</source>
-        <translation>Q2</translation>
+        <source>Q2 LOO</source>
+        <translation>Q2 LOO</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PolynomialRegressionResultWindow.cxx" line="262"/>

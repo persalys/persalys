@@ -123,7 +123,7 @@ void FunctionalChaosResultWindow::buildInterface()
       generalStackedWidget->addWidget(generalTableView);
     }
     summaryWidgetLayout->addWidget(generalStackedWidget);
-    
+
     QGroupBox * basisGroupBox = new QGroupBox(tr("Polynomial basis"));
     QVBoxLayout * basisGroupBoxLayout = new QVBoxLayout(basisGroupBox);
     ResizableStackedWidget * basisStackedWidget = new ResizableStackedWidget;
@@ -323,7 +323,7 @@ void FunctionalChaosResultWindow::buildInterface()
   tabLayout->addWidget(plotsStackedWidget);
 
   tabWidget->addTab(plotsStackedWidget, tr("Adequation"));
-  
+
   // third tab : SOBOL INDICES --------------------------------
   if (result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
   {
@@ -404,7 +404,7 @@ void FunctionalChaosResultWindow::buildInterface()
         MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
             outputSample,
             j,
-            tr("Q2"),
+            tr("Q2 LOO"),
             this);
         plotStackedWidget->addWidget(validationWidget);
       }

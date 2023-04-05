@@ -151,7 +151,7 @@ void KrigingResultWindow::buildInterface()
   tabLayout->addWidget(plotsStackedWidget);
 
   tabWidget->addTab(tab, tr("Adequation"));
-  
+
   // third tab : VALIDATION --------------------------------
   if (result_.getValidations().size())
   {
@@ -200,7 +200,7 @@ void KrigingResultWindow::buildInterface()
         MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
             outputSample,
             j,
-            tr("Q2"),
+            tr("Q2 LOO"),
             this);
         plotStackedWidget->addWidget(validationWidget);
       }
