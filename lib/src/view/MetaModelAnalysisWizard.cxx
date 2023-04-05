@@ -83,7 +83,7 @@ void MetaModelAnalysisWizard::buildInterface()
   // chaos page
   functionalChaosPage_ = new FunctionalChaosPage(this);
   setPage(Page_ChaosMethod, functionalChaosPage_);
-  connect(introPage_, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), functionalChaosPage_, SLOT(updateInputSampleSize(DesignOfExperiment)));
+  connect(introPage_, SIGNAL(designOfExperimentChanged(DesignOfExperiment)), functionalChaosPage_, SLOT(updateInputSampleSizeAndDimension(DesignOfExperiment)));
 
   // kriging page
   krigingPage_ = new KrigingPage(this);

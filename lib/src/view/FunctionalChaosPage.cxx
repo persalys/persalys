@@ -131,10 +131,12 @@ Analysis FunctionalChaosPage::getAnalysis(const String& name, const DesignOfExpe
 }
 
 
-void FunctionalChaosPage::updateInputSampleSize(DesignOfExperiment doe)
+void FunctionalChaosPage::updateInputSampleSizeAndDimension(DesignOfExperiment doe)
 {
   errorMessageLabel_->reset();
   inputSampleSize_ = doe.getInputSample().getSize();
+  inputSampleDimension_ = doe.getEffectiveInputIndices().getSize();
+  updateBasisSizeLabel();
 }
 
 

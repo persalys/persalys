@@ -50,7 +50,7 @@ protected:
   void buildInterface();
 
 public slots:
-  void updateInputSampleSize(DesignOfExperiment);
+  void updateInputSampleSizeAndDimension(DesignOfExperiment);
   void updateBasisLabel();
   void updateBasisSizeLabel();
 
