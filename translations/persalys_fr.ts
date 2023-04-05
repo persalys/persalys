@@ -5113,8 +5113,8 @@ des paramètres</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="53"/>
-        <source>Analytically</source>
-        <translation>Analytiquement</translation>
+        <source>Leave-one-out via analytical method</source>
+        <translation>Leave-one-out par méthode analytique</translation>
     </message>
     <message>
         <location filename="../lib/src/view/MetaModelValidationPage.cxx" line="58"/>

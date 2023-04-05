@@ -50,7 +50,7 @@ void MetaModelValidationPage::buildInterface()
   // Analytical
   analyticalCheckBox_ = new QCheckBox;
   validationLayout->addWidget(analyticalCheckBox_, ++row, 0);
-  validationLayout->addWidget(new QLabel(tr("Analytically")), row, 1);
+  validationLayout->addWidget(new QLabel(tr("Leave-one-out via analytical method")), row, 1);
 
   // Test Sample
   testSampleCheckBox_ = new QCheckBox;
