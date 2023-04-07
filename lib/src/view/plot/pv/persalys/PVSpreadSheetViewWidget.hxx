@@ -17,10 +17,10 @@ public:
     return PV_REPRESENTATION_TYPE;
   }
   static QWidget * GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item = 0);
-
+signals:
+  void exportDataRequested();
 public slots:
   void contextMenu(const QPoint & pos);
-  void exportData();
 public:
   static const char PV_VIEW_TYPE[];
   static const char PV_REPRESENTATION_TYPE[];

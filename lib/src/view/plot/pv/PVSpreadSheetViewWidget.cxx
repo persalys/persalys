@@ -44,19 +44,12 @@ void PVSpreadSheetViewWidget::contextMenu(const QPoint& pos)
 {
   // action
   QAction * exportDataAction = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
-  connect(exportDataAction, SIGNAL(triggered(bool)), this, SLOT(exportData()));
+  connect(exportDataAction, SIGNAL(triggered(bool)), this, SIGNAL(exportDataRequested()));
 
   // menu
   QMenu * contextMenu(new QMenu(this));
   contextMenu->addAction(exportDataAction);
   contextMenu->popup(mapToGlobal(pos));
-}
-
-
-void PVSpreadSheetViewWidget::exportData()
-{
-  pqActiveObjects::instance().setActivePort(getPort());
-  pqSaveDataReaction::saveActiveData();
 }
 
 
@@ -79,6 +72,7 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   SampleTableModel * tableModel = new SampleTableModel(sample, tableView);
   tableView->setModel(tableModel);
   connect(exportButton, SIGNAL(clicked()), tableView, SLOT(exportData()));
+  connect(pvWidget, SIGNAL(exportDataRequested()), tableView, SLOT(exportData()));
 
   //connect(exportButton, SIGNAL(clicked()), pvWidget, SLOT(exportData()));
   mainLayout->addLayout(hLayout);
@@ -86,7 +80,7 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   // - table
   pvWidget->setData(sample);
   if (item)
-    connect(item, SIGNAL(dataExportRequested()), pvWidget, SLOT(exportData()));
+    connect(item, SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
   mainLayout->addWidget(pvWidget);
 
   return mainWidget;
