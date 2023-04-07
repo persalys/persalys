@@ -68,16 +68,9 @@ void FunctionalChaosPage::buildInterface()
 
   pageLayout->addWidget(parametersBox);
 
-  // functional chaos advanced parameters
-  CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
-  advancedParamGroupBox->setTitle(tr("Advanced parameters"));
-  QGridLayout * advancedParamGroupBoxLayout = new QGridLayout(advancedParamGroupBox);
 
   sparseCheckBox_ = new QCheckBox(tr("Sparse"));
-  advancedParamGroupBoxLayout->addWidget(sparseCheckBox_, 0, 0);
-
-  advancedParamGroupBox->setExpanded(false);
-  pageLayout->addWidget(advancedParamGroupBox);
+  chaosParametersLayout->addWidget(sparseCheckBox_, 2, 0);
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
