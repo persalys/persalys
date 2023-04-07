@@ -36,7 +36,7 @@ class PERSALYS_VIEW_API StopCriteriaGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
-  enum Criteria {Time_Calls, Time_Calls_CoefVar, Time_Calls_CILength};
+  enum Criteria {Time_Calls, Time_Calls_CoefVar, Time_Calls_CILength, Time_Calls_CoefVar_CILength};
 
   // constructor
   StopCriteriaGroupBox(const Criteria criteria = Time_Calls_CoefVar, QWidget* parent = 0);
@@ -62,6 +62,7 @@ protected:
 
 signals:
   void criteriaChanged();
+  void maxiCILengthActivated(bool);
 
 private:
   Criteria criteria_;

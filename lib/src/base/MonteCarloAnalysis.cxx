@@ -25,6 +25,7 @@
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
+#include <openturns/DistFunc.hxx>
 
 #include <limits>
 
@@ -41,8 +42,6 @@ static Factory<MonteCarloAnalysis> Factory_MonteCarloAnalysis;
 MonteCarloAnalysis::MonteCarloAnalysis()
   : SimulationAnalysis()
   , WithStopCriteriaAnalysis()
-  , isConfidenceIntervalRequired_(true)
-  , levelConfidenceInterval_(0.95)
   , result_()
 {
   isDeterministicAnalysis_ = false;
@@ -53,8 +52,6 @@ MonteCarloAnalysis::MonteCarloAnalysis()
 MonteCarloAnalysis::MonteCarloAnalysis(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
   , WithStopCriteriaAnalysis()
-  , isConfidenceIntervalRequired_(true)
-  , levelConfidenceInterval_(0.95)
   , result_()
 {
   isDeterministicAnalysis_ = false;
@@ -136,6 +133,7 @@ void MonteCarloAnalysis::launch()
   const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
 
   Scalar coefficientOfVariation = -1.0;
+  Scalar confidenceInterval = -1.0;
   UnsignedInteger outerSampling = 0;
   TimeCriteria timeCriteria;
   const Scalar maxTime = getMaximumElapsedTime() > 0 ? getMaximumElapsedTime() : std::numeric_limits<double>::max();
@@ -144,6 +142,7 @@ void MonteCarloAnalysis::launch()
   while (!stopRequested_
          && (outerSampling < maximumOuterSampling)
          && (coefficientOfVariation == -1.0 || coefficientOfVariation > getMaximumCoefficientOfVariation())
+         && (confidenceInterval == -1.0 || confidenceInterval > getMaximumConfidenceIntervalLength())
          && (timeCriteria.getElapsedTime() < maxTime))
   {
     // progress
@@ -156,6 +155,7 @@ void MonteCarloAnalysis::launch()
     OSS oss;
     oss << "Number of iterations = " << outputSample.getSize() << "\n";
     oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
+    oss << "Confidence interval length = " << confidenceInterval << "\n";
     oss << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
     informationMessage_ = oss;
     notify("informationMessageUpdated");
@@ -197,19 +197,23 @@ void MonteCarloAnalysis::launch()
       const Point empiricalStd(outputSample.computeStandardDeviation());
 
       Scalar coefOfVar(0.);
+      Scalar CI(0.);
       for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++i)
       {
         if (std::abs(empiricalMean[i]) > SpecFunc::Precision)
         {
           const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
           coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
+          CI = 2.0 * sigma_i * DistFunc::qNormal(0.5*(1+levelConfidenceInterval_));
         }
         else
         {
           coefOfVar = -1;
+          CI = -1;
         }
       }
       coefficientOfVariation = coefOfVar;
+      confidenceInterval = CI;
     }
     timeCriteria.incrementElapsedTime();
     ++outerSampling;
@@ -251,6 +255,7 @@ Parameters MonteCarloAnalysis::getParameters() const
   if (isConfidenceIntervalRequired())
     param.add("Confidence level", (OSS() << getLevelConfidenceInterval() * 100).str() + "%");
   param.add(WithStopCriteriaAnalysis::getParameters());
+  param.add("Maximum confidence interval length", getMaximumConfidenceIntervalLength());
   param.add(SimulationAnalysis::getParameters());
 
   return param;
@@ -293,6 +298,7 @@ String MonteCarloAnalysis::__repr__() const
       << " levelConfidenceInterval=" << getLevelConfidenceInterval()
       << WithStopCriteriaAnalysis::__repr__()
       << " seed=" << getSeed()
+      << " maximumConfidenceIntervalLength=" << getMaximumConfidenceIntervalLength()
       << " blockSize=" << getBlockSize();
   return oss;
 }
@@ -303,6 +309,7 @@ void MonteCarloAnalysis::save(Advocate & adv) const
 {
   SimulationAnalysis::save(adv);
   WithStopCriteriaAnalysis::save(adv);
+  adv.saveAttribute("maximumConfidenceIntervalLength_", maximumConfidenceIntervalLength_);
   adv.saveAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
   adv.saveAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
   adv.saveAttribute("result_", result_);
@@ -324,5 +331,7 @@ void MonteCarloAnalysis::load(Advocate & adv)
     adv.loadAttribute("designOfExperiment_", experiment);
     result_.designOfExperiment_ = experiment;
   }
+  if (adv.hasAttribute("maximumConfidenceIntervalLength_"))
+    adv.loadAttribute("maximumConfidenceIntervalLength_", maximumConfidenceIntervalLength_);
 }
 }

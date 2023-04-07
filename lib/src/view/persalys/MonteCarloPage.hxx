@@ -46,6 +46,9 @@ public:
 protected:
   void buildInterface();
 
+protected slots:
+  void updateLevelCISpinbox();
+
 private:
   StopCriteriaGroupBox * stopCriteriaGroupBox_;
   BlockSizeGroupBox * blockSizeGroupBox_;

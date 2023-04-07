@@ -22,6 +22,8 @@
 
 #include "persalys/MonteCarloAnalysis.hxx"
 
+#include <openturns/DistFunc.hxx>
+
 using namespace OT;
 
 namespace PERSALYS
@@ -31,6 +33,8 @@ MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item, QWidget * pa
   : DataAnalysisWindow(item, parent)
 {
   hasMaximumCV_ = true;
+  hasMaximumCILength_ = true;
+
   if (dynamic_cast<MonteCarloAnalysis*>(item->getAnalysis().getImplementation().get()))
     initialize(item);
   else
@@ -47,6 +51,8 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
   result_ = analysis.getResult();
   designOfExperiment_ = result_.getDesignOfExperiment();
   failedInputSample_ = analysis.getFailedInputSample();
+  isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
+  levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();
 
   // set stop criteria message
   if (result_.getElapsedTime() >= analysis.getMaximumElapsedTime())
@@ -64,6 +70,9 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
       if (result_.getCoefficientOfVariation()[i].getSize() == 1 &&
           result_.getCoefficientOfVariation()[i][0] / sqrtSampleSize <= analysis.getMaximumCoefficientOfVariation())
         analysisStopCriteriaMessage_ = tr("Maximum coefficient of variation reached");
+      else if (result_.getStandardDeviation()[i].getSize() == 1 &&
+               2*result_.getStandardDeviation()[i][0]*DistFunc::qNormal(0.5*(1+levelConfidenceInterval_)) / sqrtSampleSize <= analysis.getMaximumConfidenceIntervalLength())
+        analysisStopCriteriaMessage_ = tr("Maximum confidence interval length reached");
     }
   }
 
@@ -72,9 +81,6 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
     analysisStopCriteriaMessage_ = tr("Stop requested");
 
   analysisErrorMessage_ = analysis.getWarningMessage().c_str();
-
-  isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
-  levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();
 
   sampleSizeTitle_ = tr("Number of calls") + " ";
 

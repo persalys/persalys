@@ -71,6 +71,28 @@ analysis3.run()
 result3 = analysis3.getResult()
 print("result=", result3)
 
+# Monte Carlo - test max CI length stopping criterion ##
+
+X2 = persalys.Input("X2", ot.Normal(0, 1))
+Y2 = persalys.Output("Y2")
+formula_Y2 = "X2*X2"
+
+model2 = persalys.SymbolicPhysicalModel(
+    "aModelPhys2", [X2], [Y2], [formula_Y2]
+)
+myStudy.add(model2)
+
+analysis4 = persalys.MonteCarloAnalysis("myMonteCarlo4", model2)
+analysis4.setMaximumConfidenceIntervalLength(0.1)
+analysis4.setInterestVariables(["Y2"])
+myStudy.add(analysis4)
+print(analysis4)
+
+analysis4.run()
+
+result4 = analysis4.getResult()
+print("result=", result4)
+
 # script
 script = myStudy.getPythonScript()
 print(script)

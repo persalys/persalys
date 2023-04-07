@@ -51,7 +51,7 @@ void MonteCarloPage::buildInterface()
   /// simulation widgets
 
   // stopping criteria
-  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(StopCriteriaGroupBox::Time_Calls_CILength);
+  stopCriteriaGroupBox_ = new StopCriteriaGroupBox(StopCriteriaGroupBox::Time_Calls_CoefVar_CILength);
   pageLayout->addWidget(stopCriteriaGroupBox_);
 
   // block size
@@ -64,24 +64,31 @@ void MonteCarloPage::buildInterface()
   QGridLayout * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
 
   // confidence interval
-  confidenceIntervalCheckBox_ = new QCheckBox(tr("Compute confidence interval at"));
+  confidenceIntervalCheckBox_ = new QCheckBox(tr("Compute confidence interval"));
   advancedWidgetsLayout->addWidget(confidenceIntervalCheckBox_, 0, 0);
 
   // confidence interval level
+  QLabel * ICLvlLabel = new QLabel(tr("Confidence interval level"));
+  advancedWidgetsLayout->addWidget(ICLvlLabel, 1, 0);
   levelConfidenceIntervalSpinbox_ = new DoubleSpinBox;
   levelConfidenceIntervalSpinbox_->setRange(0.0, 0.99);
   levelConfidenceIntervalSpinbox_->setSingleStep(0.01);
-  connect(confidenceIntervalCheckBox_, SIGNAL(toggled(bool)), levelConfidenceIntervalSpinbox_, SLOT(setEnabled(bool)));
-  advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox_, 0, 1);
+
+  connect(confidenceIntervalCheckBox_, SIGNAL(toggled(bool)),
+          this, SLOT(updateLevelCISpinbox()));
+  connect(stopCriteriaGroupBox_, SIGNAL(maxiCILengthActivated(bool)),
+          this, SLOT(updateLevelCISpinbox()));
+
+  advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox_, 1, 1);
 
   // seed
   QLabel * seedLabel = new QLabel(tr("Seed"));
-  advancedWidgetsLayout->addWidget(seedLabel, 1, 0);
+  advancedWidgetsLayout->addWidget(seedLabel, 2, 0);
 
   seedSpinbox_ = new QSpinBox;
   seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
-  advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
+  advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
 
   pageLayout->addWidget(advancedParamGroupBox);
 
@@ -106,12 +113,14 @@ void MonteCarloPage::initialize(const Analysis& analysis)
     return;
 
   stopCriteriaGroupBox_->setMaximumConfidenceIntervalLength(analysis_ptr->getMaximumConfidenceIntervalLength());
+  stopCriteriaGroupBox_->setMaximumCoefficientOfVariation(analysis_ptr->getMaximumCoefficientOfVariation());
   stopCriteriaGroupBox_->setMaximumElapsedTime(analysis_ptr->getMaximumElapsedTime());
   stopCriteriaGroupBox_->setMaximumCalls(analysis_ptr->getMaximumCalls());
   blockSizeGroupBox_->setBlockSizeValue(analysis_ptr->getBlockSize());
   confidenceIntervalCheckBox_->setChecked(analysis_ptr->isConfidenceIntervalRequired());
   levelConfidenceIntervalSpinbox_->setValue(analysis_ptr->getLevelConfidenceInterval());
-  levelConfidenceIntervalSpinbox_->setEnabled(analysis_ptr->isConfidenceIntervalRequired());
+  levelConfidenceIntervalSpinbox_->setEnabled(analysis_ptr->isConfidenceIntervalRequired() ||
+                                              analysis_ptr->getMaximumConfidenceIntervalLength() != -1);
   seedSpinbox_->setValue(analysis_ptr->getSeed());
 }
 
@@ -121,6 +130,7 @@ Analysis MonteCarloPage::getAnalysis(const String& name, const PhysicalModel& ph
   MonteCarloAnalysis analysis(name, physicalModel);
   analysis.setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
   analysis.setMaximumConfidenceIntervalLength(stopCriteriaGroupBox_->getMaximumConfidenceIntervalLength());
+  analysis.setMaximumCoefficientOfVariation(stopCriteriaGroupBox_->getMaximumCoefficientOfVariation());
   analysis.setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
   analysis.setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
   analysis.setSeed(seedSpinbox_->value());
@@ -154,5 +164,11 @@ bool MonteCarloPage::validatePage()
     return false;
 
   return true;
+}
+
+void MonteCarloPage::updateLevelCISpinbox()
+{
+  levelConfidenceIntervalSpinbox_->setEnabled(confidenceIntervalCheckBox_->isChecked() ||
+                                              stopCriteriaGroupBox_->getMaximumConfidenceIntervalLength() != -1);
 }
 }
