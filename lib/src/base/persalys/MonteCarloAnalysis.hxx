@@ -69,9 +69,9 @@ protected:
   void launch() override;
 
 private:
-  OT::Scalar maximumConfidenceIntervalLength_;
-  bool isConfidenceIntervalRequired_;
-  double levelConfidenceInterval_;
+  OT::Scalar maximumConfidenceIntervalLength_ = -1;
+  bool isConfidenceIntervalRequired_ = true;
+  double levelConfidenceInterval_ = 0.95;
   DataAnalysisResult result_;
 };
 }

@@ -47,6 +47,7 @@
 #endif
 
 #include <openturns/Normal.hxx>
+#include <openturns/DistFunc.hxx>
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -65,6 +66,7 @@ DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
   , designOfExperiment_()
   , result_()
   , hasMaximumCV_(false)
+  , hasMaximumCILength_(false)
   , analysisStopCriteriaMessage_()
   , analysisErrorMessage_()
   , failedInputSample_()
@@ -252,6 +254,24 @@ void DataAnalysisWindow::addSummaryTab()
         maxCoefOfVariation = std::max(result_.getCoefficientOfVariation()[i][0] / sqrtSampleSize, maxCoefOfVariation);
     valuesList << QString::number(maxCoefOfVariation);
   }
+
+  // - CI length
+  if (hasMaximumCILength_)
+  {
+    namesList << tr("Sample maximum CI length");
+    const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
+    const Scalar sqrtSampleSize = sqrt(designOfExperiment_.getInputSample().getSize());
+    Scalar maxCILength = 0.;
+    for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
+      if (result_.getStandardDeviation()[i].getSize() == 1)
+      {
+        Scalar CI = 2*result_.getStandardDeviation()[i][0]*DistFunc::qNormal(0.5*(1+levelConfidenceInterval_)) / sqrtSampleSize;
+        maxCILength = std::max(CI, maxCILength);
+      }
+    valuesList << QString::number(maxCILength);
+  }
+
+
 
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
   parametersGroupBoxLayout->addWidget(table);

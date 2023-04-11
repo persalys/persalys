@@ -51,8 +51,9 @@ StopCriteriaGroupBox::StopCriteriaGroupBox(const Criteria criteria, QWidget* par
 void StopCriteriaGroupBox::buildInterface()
 {
   QGridLayout * groupBoxLayout = new QGridLayout(this);
-
-  if (criteria_ == Time_Calls_CoefVar)
+  int row = -1;
+  if (criteria_ == Time_Calls_CoefVar ||
+      criteria_ == Time_Calls_CoefVar_CILength)
   {
     // Maximum coefficient of variation
     maxiCoefOfVarCheckBox_ = new QCheckBox(tr("Accuracy - coefficient of variation"));
@@ -61,14 +62,18 @@ void StopCriteriaGroupBox::buildInterface()
     maxiCoefficientOfVariationSpinbox_->setMaximum(1.);
     maxiCoefficientOfVariationSpinbox_->setSingleStep(0.01);
 
-    connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(criteriaChanged()));
-    connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
+    connect(maxiCoefficientOfVariationSpinbox_, SIGNAL(valueChanged(double)),
+            this, SIGNAL(criteriaChanged()));
+    connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)),
+            maxiCoefficientOfVariationSpinbox_, SLOT(setEnabled(bool)));
     connect(maxiCoefOfVarCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
-    groupBoxLayout->addWidget(maxiCoefOfVarCheckBox_, 0, 0);
-    groupBoxLayout->addWidget(maxiCoefficientOfVariationSpinbox_, 0, 1);
+    groupBoxLayout->addWidget(maxiCoefOfVarCheckBox_, ++row, 0);
+    groupBoxLayout->addWidget(maxiCoefficientOfVariationSpinbox_, row, 1);
   }
-  else if (criteria_ == Time_Calls_CILength)
+
+  if (criteria_ == Time_Calls_CILength ||
+      criteria_ == Time_Calls_CoefVar_CILength)
   {
     // Maximum confidence interval length
     maxiCILengthCheckBox_ = new QCheckBox(tr("Maximum confidence interval length"));
@@ -78,11 +83,14 @@ void StopCriteriaGroupBox::buildInterface()
     maxiCILengthSpinbox_->setSingleStep(0.01);
 
     connect(maxiCILengthSpinbox_, SIGNAL(valueChanged(double)), this, SIGNAL(criteriaChanged()));
-    connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)), maxiCILengthSpinbox_, SLOT(setEnabled(bool)));
+    connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)),
+            maxiCILengthSpinbox_, SLOT(setEnabled(bool)));
+    connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)),
+            this, SIGNAL(maxiCILengthActivated(bool)));
     connect(maxiCILengthCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
-    groupBoxLayout->addWidget(maxiCILengthCheckBox_, 0, 0);
-    groupBoxLayout->addWidget(maxiCILengthSpinbox_, 0, 1);
+    groupBoxLayout->addWidget(maxiCILengthCheckBox_, ++row, 0);
+    groupBoxLayout->addWidget(maxiCILengthSpinbox_, row, 1);
   }
 
   // Maximum time
@@ -93,8 +101,8 @@ void StopCriteriaGroupBox::buildInterface()
   connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), maxTimeLineEdit_, SLOT(setEnabled(bool)));
   connect(maxiTimeCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
-  groupBoxLayout->addWidget(maxiTimeCheckBox_, 1, 0);
-  groupBoxLayout->addWidget(maxTimeLineEdit_, 1, 1);
+  groupBoxLayout->addWidget(maxiTimeCheckBox_, ++row, 0);
+  groupBoxLayout->addWidget(maxTimeLineEdit_, row, 1);
 
   // Maximum function calls
   maxiCallsCheckBox_ = new QCheckBox(tr("Maximum calls"));
@@ -104,8 +112,8 @@ void StopCriteriaGroupBox::buildInterface()
   connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), maxiCallsSpinbox_, SLOT(setEnabled(bool)));
   connect(maxiCallsCheckBox_, SIGNAL(toggled(bool)), this, SIGNAL(criteriaChanged()));
 
-  groupBoxLayout->addWidget(maxiCallsCheckBox_, 2, 0);
-  groupBoxLayout->addWidget(maxiCallsSpinbox_, 2, 1);
+  groupBoxLayout->addWidget(maxiCallsCheckBox_, ++row, 0);
+  groupBoxLayout->addWidget(maxiCallsSpinbox_, row, 1);
 }
 
 
@@ -197,6 +205,11 @@ bool StopCriteriaGroupBox::isValid() const
             maxiCallsSpinbox_->isEnabled());
   else if (criteria_ == Time_Calls_CILength)
     return (maxiCILengthSpinbox_->isEnabled() ||
+            maxTimeLineEdit_->isEnabled() ||
+            maxiCallsSpinbox_->isEnabled());
+  else if (criteria_ == Time_Calls_CoefVar_CILength)
+    return (maxiCoefficientOfVariationSpinbox_->isEnabled() ||
+            maxiCILengthSpinbox_->isEnabled() ||
             maxTimeLineEdit_->isEnabled() ||
             maxiCallsSpinbox_->isEnabled());
   return false;

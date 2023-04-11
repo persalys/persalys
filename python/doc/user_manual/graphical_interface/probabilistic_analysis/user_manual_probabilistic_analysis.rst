@@ -453,6 +453,7 @@ The **Monte Carlo parameters** window allows one to define:
         :math:`CV = \frac{\sigma / \sqrt{n}}{\lvert \mu \rvert}` with :math:`n`: the number of simulations,
         :math:`\mu`: the mean, :math:`\sigma`: the standard deviation), (default: 0.01,
         expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
+      - the maximum confidence interval length (:math:`CIL = 2 \times \frac{\sigma}{\sqrt{n}} \times Q_{Normal} \left( \frac{1+IC_{level}}{2} \right)` with :math:`n`: the number of simulations and :math:`Q_{Normal}` the quantile of the normal distribution, the level can be set in **Advanced Parameters**)
       - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
       - the maximum sampling size (default: 10000, expected: integer)
   - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
@@ -462,6 +463,7 @@ The **Monte Carlo parameters** window allows one to define:
       - require the computation of the confidence interval (default: checked)
         at a given level (default: 0.95, expected: floating point or integer,
         in the interval :math:`\left[0;1 \right[`)
+
 
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/centralTendencyMC.png
