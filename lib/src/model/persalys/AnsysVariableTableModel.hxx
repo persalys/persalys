@@ -59,6 +59,7 @@ class PERSALYS_MODEL_API AnsysVariableTableModel : public QAbstractTableModel
 
   private:
     QMap <QString, VarInfo> varInfos_;
+    QStringList varInfoKeysSorted_;
     QString ansysVersion_;
   };
 }

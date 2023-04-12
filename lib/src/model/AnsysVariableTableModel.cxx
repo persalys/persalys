@@ -21,6 +21,8 @@
 
 #include "persalys/AnsysVariableTableModel.hxx"
 
+#include "persalys/QtTools.hxx"
+
 using namespace OT;
 
 namespace PERSALYS
@@ -51,8 +53,7 @@ namespace PERSALYS
     if (role == Qt::TextAlignmentRole)
       return Qt::AlignLeft;
 
-    QList<QString> keys(varInfos_.keys());
-    VarInfo info(varInfos_[keys[index.row()]]);
+    VarInfo info(varInfos_[varInfoKeysSorted_[index.row()]]);
 
     if (role == Qt::CheckStateRole && index.column() == 0)
     {
@@ -63,7 +64,7 @@ namespace PERSALYS
       switch(index.column())
       {
       case 0:
-        return keys[index.row()];
+        return varInfoKeysSorted_[index.row()];
       case 1:
         return info.inputOutput == 0 ? "Input" : "Output";
       case 2:
@@ -84,8 +85,7 @@ namespace PERSALYS
 
     if ((index.column() == 0) && (role == Qt::CheckStateRole))
     {
-      QList<QString> keys(varInfos_.keys());
-      varInfos_[keys[index.row()]].selected = (value.toInt() == Qt::Checked);
+      varInfos_[varInfoKeysSorted_[index.row()]].selected = (value.toInt() == Qt::Checked);
       QModelIndex topLeft = index;
       QModelIndex bottomRight = index;
       emit dataChanged(topLeft, bottomRight);
@@ -135,7 +135,7 @@ namespace PERSALYS
 
   QStringList AnsysVariableTableModel::getInputVariables() const{
     QStringList result;
-    foreach (QString varName, varInfos_.keys())
+    foreach (QString varName, varInfoKeysSorted_)
     {
       if (varInfos_[varName].selected && (varInfos_[varName].inputOutput == 0))
         result.append(varName);
@@ -145,7 +145,7 @@ namespace PERSALYS
 
   QStringList AnsysVariableTableModel::getOutputVariables() const{
     QStringList result;
-    foreach (QString varName, varInfos_.keys())
+    foreach (QString varName, varInfoKeysSorted_)
     {
       if (varInfos_[varName].selected && (varInfos_[varName].inputOutput > 0))
         result.append(varName);
@@ -180,6 +180,7 @@ namespace PERSALYS
       varInfo.unit = parser->getOutputVariables()[i].getUnit();
       varInfos_[QString(parser->getOutputVariables()[i].getName().c_str())] = varInfo;
     }
+    varInfoKeysSorted_ = QtOT::NaturalSorting(varInfos_.keys());
 
     emit layoutChanged();
   }

@@ -21,6 +21,8 @@
 
 #include "persalys/AnsysSystemTableModel.hxx"
 
+#include "persalys/QtTools.hxx"
+
 using namespace OT;
 
 namespace PERSALYS
@@ -53,8 +55,7 @@ namespace PERSALYS
     if (role == Qt::TextAlignmentRole)
       return Qt::AlignLeft;
 
-    QList<QString> keys(sysInfos_.keys());
-    SysInfo info(sysInfos_[keys[index.row()]]);
+    SysInfo info(sysInfos_[sysInfoKeysSorted_[index.row()]]);
 
     if (role == Qt::CheckStateRole)
     {
@@ -69,7 +70,7 @@ namespace PERSALYS
     switch(index.column())
     {
     case 0:
-      return keys[index.row()];
+      return sysInfoKeysSorted_[index.row()];
     case 1:
       return QString(info.text.c_str());
     case 2:
@@ -87,8 +88,7 @@ namespace PERSALYS
 
     if ((index.column() == 0) && (role == Qt::CheckStateRole))
     {
-      QList<QString> keys(sysInfos_.keys());
-      sysInfos_[keys[index.row()]].selected = (value.toInt() == Qt::Checked);
+      sysInfos_[sysInfoKeysSorted_[index.row()]].selected = (value.toInt() == Qt::Checked);
       QModelIndex topLeft = index;
       QModelIndex bottomRight = index;
       emit dataChanged(topLeft, bottomRight);
@@ -130,7 +130,7 @@ namespace PERSALYS
 
   QStringList AnsysSystemTableModel::getSystems() const{
     QStringList result;
-    foreach (QString sysName, sysInfos_.keys())
+    foreach (QString sysName, sysInfoKeysSorted_)
     {
       if (sysInfos_[sysName].selected)
         result.append(sysName);
@@ -148,6 +148,7 @@ namespace PERSALYS
       info.type = sys.second.second;
       sysInfos_[QString(sys.first.c_str())] = info;
     }
+    sysInfoKeysSorted_ = QtOT::NaturalSorting(sysInfos_.keys());
     emit layoutChanged();
   }
 }
