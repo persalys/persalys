@@ -53,6 +53,7 @@ namespace PERSALYS
 
   private:
     QMap <QString, SysInfo> sysInfos_;
+    QStringList sysInfoKeysSorted_;
   };
 }
 #endif

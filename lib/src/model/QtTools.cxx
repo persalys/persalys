@@ -20,7 +20,7 @@
  */
 #include "persalys/QtTools.hxx"
 
-#include <QTranslator>
+#include <QCollator>
 
 using namespace OT;
 
@@ -174,6 +174,19 @@ QString QtOT::FormatDuration(double seconds)
     }
   }
   return duration;
+}
+
+
+QStringList QtOT::NaturalSorting(const QStringList& list)
+{
+  QStringList sorted = list;
+
+  std::sort(sorted.begin(), sorted.end(), [=] (QString s1, QString s2) {
+       QCollator coll;
+       coll.setNumericMode(true);
+       return coll.compare(s1, s2) < 0;
+     });
+  return sorted;
 }
 
 }
