@@ -55,7 +55,7 @@ void PVSpreadSheetViewWidget::contextMenu(const QPoint& pos)
 }
 
 
-QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item)
+QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item, const OT::Description& errorDesc)
 {
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
@@ -79,7 +79,11 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   mainLayout->addLayout(hLayout);
 
   // - table
-  pvWidget->setData(sample);
+  if(errorDesc.getSize())
+    pvWidget->setData(sample, errorDesc);
+  else
+    pvWidget->setData(sample);
+
   if (item)
     connect(item, SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
   mainLayout->addWidget(pvWidget);

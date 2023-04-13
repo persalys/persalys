@@ -43,6 +43,7 @@ void DesignOfExperimentWindow::initialize(AnalysisItem* item)
   result_ = analysis.getResult();
   designOfExperiment_ = analysis.getResult().getDesignOfExperiment();
   failedInputSample_ = analysis.getFailedInputSample();
+  errorDescription_ = analysis.getErrorDescription();
   notEvaluatedInputSample_ = analysis.getNotEvaluatedInputSample();
 
   titleLabel_->setText(tr("Design of experiments"));

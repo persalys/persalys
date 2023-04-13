@@ -29,12 +29,12 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
+#include <openturns/BatchFailedException.hxx>
 #include <openturns/MemoizeEvaluation.hxx>
 #include <openturns/MarginalEvaluation.hxx>
 #include <openturns/SymbolicEvaluation.hxx>
 
 using namespace OT;
-
 namespace PERSALYS
 {
 
@@ -150,9 +150,6 @@ void DesignOfExperimentEvaluation::launch()
 
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
 
-  // to avoid failing whole blocks we make failed points succeed but mark them with nan
-  function.getEvaluation().getImplementation()->setCheckOutput(false);
-
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
   {
@@ -172,35 +169,45 @@ void DesignOfExperimentEvaluation::launch()
 
     // get input sample of size effectiveBlockSize
     const UnsignedInteger blockFirstIndex =  i * getBlockSize();
-    const Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
+    Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
 
     // Perform a block of simulations
     Sample blockOutputSample;
     Sample failedSample;
+    Description errorDesc;
     try
     {
       blockOutputSample = function(blockInputSample);
     }
-    catch (InternalException & ex)
+    catch (const OT::BatchFailedException & ex)
+    {
+      warningMessage_ = ex.what();
+      failedSample = blockInputSample.select(ex.getFailedIndices());
+      errorDesc = EscapeNewLines(ex.getErrorDescription());
+      blockOutputSample = ex.getOutputSample();
+      blockOutputSample.setDescription(getInterestVariables());
+      blockOutputSample = blockOutputSample.getMarginal(getInterestVariables());
+      blockInputSample = blockInputSample.select(ex.getSucceededIndices());
+    }
+    catch (const std::exception& ex)
     {
       failedSample = blockInputSample;
+      errorDesc = EscapeNewLines(Description(blockInputSample.getSize(), ex.what()));
       warningMessage_ = ex.what();
     }
 
-    if (!failedSample.getSize())
+    if (blockOutputSample.getSize())
     {
       outputSample.add(blockOutputSample);
       inputSample.add(blockInputSample);
     }
-    else
+    if (failedSample.getSize())
     {
       failedInputSample_.add(failedSample);
+      errorDescription_.add(errorDesc);
     }
     timeCriteria.incrementElapsedTime();
   }
-
-  // restore default
-  function.getEvaluation().getImplementation()->setCheckOutput(true);
 
   // mark points evaluating to nan as failed
   Indices failedIndices;
@@ -212,17 +219,20 @@ void DesignOfExperimentEvaluation::launch()
       {
         failedIndices.add(i);
         failedInputSample_.add(getOriginalInputSample()[i]);
+        errorDescription_.add((OSS() << Parameters::GetOTPointStr(getOriginalInputSample()[i])
+                               << ": Output is NaN").str());
         break;
       }
     }
   }
+
   for (UnsignedInteger i = 0; i < failedIndices.getSize(); ++ i)
   {
     inputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
     outputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
   }
 
-  if (!outputSample.getSize())
+  if (failedInputSample_.getSize() == getOriginalInputSample().getSize())
     throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model. " << warningMessage_;
 
   // set design of experiments

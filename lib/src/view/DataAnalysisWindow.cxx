@@ -570,23 +570,25 @@ void DataAnalysisWindow::addTableTab()
   }
   else
   {
-    QTabWidget * tablesTabWidget = new QTabWidget;
+    tablesTabWidget_ = new QTabWidget;
 
     // tab with well evaluated points
-    tablesTabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), designOfExperiment_.getSample()), tr("Points"));
+    tablesTabWidget_->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), designOfExperiment_.getSample()), tr("Points"));
 
     // tab with failed points
     if (failedInputSample_.getSize())
     {
-      tablesTabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), failedInputSample_), tr("Failed blocks"));
+      tablesTabWidget_->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), failedInputSample_), tr("Failed points"));
+      if (errorDescription_.getSize())
+        addErrorTable();
     }
     // tab with not evaluated points
     if (notEvaluatedInputSample_.getSize())
     {
-      tablesTabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), notEvaluatedInputSample_), tr("Non-evaluated points"));
+      tablesTabWidget_->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), notEvaluatedInputSample_), tr("Non-evaluated points"));
     }
 
-    tabWidget_->addTab(tablesTabWidget, tr("Table"));
+    tabWidget_->addTab(tablesTabWidget_, tr("Table"));
   }
 }
 
@@ -612,21 +614,25 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   else
   {
     // Table tab ------------------------------------------
-    QTabWidget * tablesTabWidget = new QTabWidget;
+    tablesTabWidget_ = new QTabWidget;
 
-    tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, designOfExperiment_.getSample(), getItem()), tr("Table"));
+    tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, designOfExperiment_.getSample(), getItem()), tr("Table"));
 
     // -- failed points tab
     if (failedInSampleSize)
     {
       PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(failedPointsTable, failedInputSample_, getItem()), tr("Failed points"));
+      tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(failedPointsTable, failedInputSample_, getItem()), tr("Failed points"));
+      if (errorDescription_.getSize()) {
+        PVSpreadSheetViewWidget * errorTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+        tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(errorTable, failedInputSample_, getItem(), errorDescription_), tr("Error messages"));
+      }
     }
     // -- not evaluated points tab
     if (notEvalInSampleSize)
     {
       PVSpreadSheetViewWidget * notEvaluatedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-      tablesTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(notEvaluatedPointsTable, notEvaluatedInputSample_, getItem()), tr("Non-evaluated points"));
+      tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(notEvaluatedPointsTable, notEvaluatedInputSample_, getItem()), tr("Non-evaluated points"));
     }
 
     // -- Parallel coordinates plot tab
@@ -660,7 +666,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // cobweb setting widget
       MultiPlotSettingWidget * cobwebSettingWidget = new MultiPlotSettingWidget(cobwebWidget, succeedAndFailedInS, succeedAndFailedInSRank, this);
 
-      tablesTabWidget->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Parallel coordinates plot"));
+      tablesTabWidget_->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Parallel coordinates plot"));
     }
 
     // -- scatter plots tab
@@ -716,10 +722,11 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // scatter plots setting widget
       ScatterSettingWidget * inSampleSettingWidget = new ScatterSettingWidget(sampleScatterPlotWidget, samples, rankSamples, this);
 
-      tablesTabWidget->addTab(new WidgetBoundToDockWidget(sampleScatterPlotWidget, inSampleSettingWidget, this), tr("Scatter plot"));
+      tablesTabWidget_->addTab(new WidgetBoundToDockWidget(sampleScatterPlotWidget, inSampleSettingWidget, this), tr("Scatter plot"));
     }
 
-    tabWidget_->addTab(tablesTabWidget, tr("Table"));
+    tabWidget_->addTab(tablesTabWidget_, tr("Table"));
+
   }
 
   // if only one variable or if only one point : do not need the following graphs
@@ -789,5 +796,32 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
 void DataAnalysisWindow::updateVariablesListVisibility(int indexTab)
 {
   variablesGroupBox_->setVisible(indexTab == 0 || indexTab == 1);
+}
+
+void DataAnalysisWindow::addErrorTable()
+{
+  QTableView * errorTable = new QTableView;
+
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  scrollArea->setWidget(errorTable);
+
+  CustomStandardItemModel* errorTableModel = new CustomStandardItemModel(failedInputSample_.getSize()+1, failedInputSample_.getDimension()+1, errorTable);
+  errorTable->setModel(errorTableModel);
+
+  // header
+  for (UnsignedInteger j = 0; j < failedInputSample_.getDimension(); ++j)
+    errorTableModel->setNotEditableHeaderItem(0, j, failedInputSample_.getDescription()[j].c_str());
+  errorTableModel->setNotEditableHeaderItem(0, failedInputSample_.getDimension(), tr("Error message"));
+
+  // Error Desc
+  for (UnsignedInteger i = 0; i < failedInputSample_.getSize(); ++i) {
+    for (UnsignedInteger j = 0; j < failedInputSample_.getDimension(); ++j)
+      errorTableModel->setNotEditableItem(i+1, j, failedInputSample_[i][j]);
+    errorTableModel->setNotEditableItem(i+1, failedInputSample_.getDimension(), errorDescription_[i].c_str());
+  }
+
+  errorTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  tablesTabWidget_->addTab(scrollArea, tr("Error messages"));
 }
 }

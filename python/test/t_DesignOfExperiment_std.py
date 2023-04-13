@@ -115,6 +115,24 @@ anOTStudy2.add(aDesign10)
 aDesign10.run()
 print("outs=", aDesign10.getResult().getDesignOfExperiment().getOutputSample())
 
+# Design of Experiment with failed points ##
+code = "import time\ndef _exec(X0,X1):\n    Y0 = 1/(X0+X1)\n    return Y0\n"
+model2 = persalys.PythonPhysicalModel("aModelPhys2", [X0, X1], [Y0], code)
+anOTStudy.add(model2)
+
+aDesign11 = persalys.GridDesignOfExperiment("aDesign_11", model2, [[-3, 0, 3], [-3, 0, 3]])
+anOTStudy.add(aDesign11)
+
+aDesign11.run()
+print("outs=", aDesign11.getErrorDescription())
+
+model2.setParallel(False)
+aDesign12 = persalys.GridDesignOfExperiment("aDesign_12", model2, [[-3, 0, 3], [-3, 0, 3]])
+anOTStudy.add(aDesign12)
+
+aDesign12.run()
+print("outs=", aDesign12.getErrorDescription())
+
 # script
 script = anOTStudy.getPythonScript()
 print(script)

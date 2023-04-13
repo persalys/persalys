@@ -21,7 +21,9 @@
 #include "persalys/YACSEvaluation.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/BatchFailedException.hxx>
 #include "persalys/InterpreterUnlocker.hxx"
+#include "persalys/BaseTools.hxx"
 #include <memory> //std::unique_ptr
 #include <cmath> //std::nan
 
@@ -145,48 +147,49 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   }
   ydefx::Launcher l;
   std::unique_ptr<ydefx::Job> myJob;
-  try
+  myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction_, jobSample, jobParams_));
+  if(myJob)
   {
-    myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction_, jobSample, jobParams_));
-    if(myJob)
-    {
-      myJob->wait();
-      if(!myJob->fetch())
-        throw NotDefinedException(HERE) << myJob->lastError();
+    myJob->wait();
+    if(!myJob->fetch())
+      throw NotDefinedException(HERE) << myJob->lastError();
 
-      // get results
-      UnsignedInteger sampleSize = jobSample.maxSize();
+    // get results
+    UnsignedInteger sampleSize = jobSample.maxSize();
+    Indices nokIdx;
+    Description errorDesc;
+    for(UnsignedInteger j = 0; j < sampleSize; ++j)
+    {
       for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
       {
         std::string name = getOutputVariablesNames()[i];
-        for(UnsignedInteger j = 0; j < sampleSize; ++j)
-          if (checkOutput_)
-          {
-            if(ydefx::ExecutionState::DONE == jobSample.pointState(j))
-              result(j, i) = jobSample.outputs<double>().get(name, j);
-            else// the point could not have been evaluated
-              throw InternalException(HERE)
-                << "\nThe evaluation of the point number " << j
-                << " is in error:" << jobSample.getError(j)
-                << "\nFor further details, see "
-                << jobParams_.work_directory() << "/logs directory on "
-                << jobParams_.resource_name() << ".";
-          }
-	  else
-            result(j, i) = jobSample.outputs<double>().get(name, j);
+        if(ydefx::ExecutionState::DONE == jobSample.pointState(j))
+        {
+          result(j, i) = jobSample.outputs<double>().get(name, j);
+        }
+        else// the point could not have been evaluated
+        {
+          nokIdx.add(j);
+          const String message = OSS()
+            << "\nThe evaluation of the point number " << j
+            << " is in error:" << jobSample.getError(j)
+            << "\nFor further details, see "
+            << jobParams_.work_directory() << "/logs directory on "
+            << jobParams_.resource_name() << ".";
+          errorDesc.add(message);
+          break;
+        }
       }
     }
-    else
-      throw NotDefinedException(HERE) << l.lastError();
+    if (nokIdx.getSize())
+    {
+      throw BatchFailedException(HERE, nokIdx, errorDesc,
+                                 nokIdx.complement(sampleSize),
+                                 result.select(nokIdx.complement(sampleSize)));
+    }
   }
-  catch (InternalException& e)
-  {
-    throw;
-  }
-  catch (std::exception& e)
-  {
-    throw NotDefinedException(HERE) << e.what();
-  }
+  else
+    throw NotDefinedException(HERE) << l.lastError();
   return result;
 }
 

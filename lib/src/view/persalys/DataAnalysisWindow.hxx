@@ -55,6 +55,7 @@ protected:
   void addPlotMatrixTab();
   void addScatterPlotsTab();
   virtual void addTableTab();
+  void addErrorTable();
 
 public slots:
   virtual void updateVariablesListVisibility(int indexTab);
@@ -69,6 +70,7 @@ protected:
   QString analysisStopCriteriaMessage_;
   QString analysisErrorMessage_;
   OT::Sample failedInputSample_;
+  OT::Description errorDescription_;
   OT::Sample notEvaluatedInputSample_;
   bool resultsSampleIsValid_;
   QString sampleSizeTitle_;
@@ -83,6 +85,7 @@ protected:
   QGroupBox * variablesGroupBox_;
   VariablesListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
+  QTabWidget * tablesTabWidget_;
 };
 }
 #endif
