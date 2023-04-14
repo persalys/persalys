@@ -75,6 +75,36 @@ String CouplingStep::getCommand() const
   return command_;
 }
 
+/* Environment accessor */
+void CouplingStep::setEnvironment(const Description & keys, const Description & values)
+{
+  if(keys.getSize() != values.getSize())
+    throw InvalidArgumentException(HERE) << " environment keys and values must be of the same size";
+  // avoid adding empty keys
+  Description newKeys = Description();
+  Description newValues = Description();
+  for (UnsignedInteger i=0; i<keys.getSize(); ++i)
+  {
+    if (keys[i].size())
+    {
+      newKeys.add(keys[i]);
+      newValues.add(values[i]);
+    }
+  }
+  envKeys_ = newKeys;
+  envValues_ = newValues;
+}
+
+Description CouplingStep::getEnvironmentKeys() const
+{
+  return envKeys_;
+}
+
+Description CouplingStep::getEnvironmentValues() const
+{
+  return envValues_;
+}
+
 /* Files accessor */
 void CouplingStep::setInputFiles(const CouplingInputFileCollection & inputFiles)
 {
@@ -204,7 +234,9 @@ String CouplingStep::__repr__() const
       << " resourceFiles=" << getResourceFiles()
       << " outputFiles=" << getOutputFiles()
       << " encoding=" << getEncoding()
-      << " ppCode=" << getCode();
+      << " ppCode=" << getCode()
+      << " envKeys=" << getEnvironmentKeys()
+      << " envValues=" << getEnvironmentValues();
   return oss;
 }
 
@@ -220,6 +252,9 @@ void CouplingStep::save(Advocate & adv) const
   adv.saveAttribute("timeOut_", timeOut_);
   adv.saveAttribute("encoding_", encoding_);
   adv.saveAttribute("ppCode_", ppCode_);
+  adv.saveAttribute("envKeys_", envKeys_);
+  adv.saveAttribute("envValues_", envValues_);
+
 }
 
 
@@ -236,8 +271,11 @@ void CouplingStep::load(Advocate & adv)
   adv.loadAttribute("encoding_", encoding_);
   if(adv.hasAttribute("ppCode_"))
     adv.loadAttribute("ppCode_", ppCode_);
-  else
-    ppCode_ = "";
+  if(adv.hasAttribute("envKeys_"))
+  {
+    adv.loadAttribute("envKeys_", envKeys_);
+    adv.loadAttribute("envValues_", envValues_);
+  }
 }
 
 }

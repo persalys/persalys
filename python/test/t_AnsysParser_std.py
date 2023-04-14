@@ -32,7 +32,7 @@ command = step.getCommand()
 step.setCommand(dict_exe[key_platform][1] + command)
 
 model.setSteps([step])
-x = [1.0, 2.0, 3.0, 4.0, 5.0]
+x = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
 f = model.getFunction()
 y = f(x)
 print(y)

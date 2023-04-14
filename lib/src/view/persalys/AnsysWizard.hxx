@@ -25,6 +25,8 @@
 #include "persalys/Wizard.hxx"
 #include "persalys/AnsysParser.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/AnsysVariableTableModel.hxx"
+#include "persalys/AnsysSystemTableModel.hxx"
 
 #include <QLineEdit>
 #include <QSpinBox>
@@ -32,72 +34,6 @@
 
 namespace PERSALYS
 {
-struct VarInfo {
-  double value;
-  int inputOutput;
-  OT::String unit;
-  OT::String text;
-  bool selected;
-  VarInfo();
-};
-
-struct SysInfo {
-  OT::String text;
-  OT::String type;
-  bool selected;
-  SysInfo();
-};
-
-class AnsysWizardVariablePage;
-
-class PERSALYS_VIEW_API AnsysVariableTableModel : public QAbstractTableModel
-{
-  Q_OBJECT
-public:
-  friend class AnsysWizardVariablePage;
-  AnsysVariableTableModel(QObject * parent = 0);
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  bool setData(const QModelIndex & index, const QVariant & value, int role);
-  Qt::ItemFlags flags(const QModelIndex & index) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
-  void loadData(AnsysParser* parser);
-
-  QString getAnsysVersion() const;
-  VarInfo getVarInfo(const QString & varName) const;
-  QStringList getInputVariables() const;
-  QStringList getOutputVariables() const;
-
-private:
-  QMap <QString, VarInfo> varInfos_;
-  QString ansysVersion_;
-};
-
-class AnsysWizardSystemPage;
-
-class AnsysSystemTableModel : public QAbstractTableModel
-{
-  Q_OBJECT
-public:
-  friend class AnsysWizardSystemPage;
-  AnsysSystemTableModel(QObject * parent = 0);
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  bool setData(const QModelIndex & index, const QVariant & value, int role);
-  Qt::ItemFlags flags(const QModelIndex & index) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
-  void loadData(AnsysParser* parser);
-
-  QStringList getSystems() const;
-
-private:
-  QMap <QString, SysInfo> sysInfos_;
-};
-
 class PERSALYS_VIEW_API AnsysWizardVariablePage : public QWizardPage
 {
   Q_OBJECT

@@ -20,290 +20,6 @@ using namespace OT;
 namespace PERSALYS
 {
 
-VarInfo::VarInfo()
-  : value(-1.0), inputOutput(-1), selected(true)
-{}
-
-SysInfo::SysInfo()
-  : text(""), selected(true)
-{}
-
-AnsysVariableTableModel::AnsysVariableTableModel(QObject * parent)
-  : QAbstractTableModel(parent)
-{}
-
-int AnsysVariableTableModel::columnCount(const QModelIndex & /*parent*/) const
-{
-  return 4;
-}
-
-int AnsysVariableTableModel::rowCount(const QModelIndex & /* parent */) const
-{
-  return varInfos_.count();
-}
-
-QVariant AnsysVariableTableModel::data(const QModelIndex & index, int role) const
-{
-  if (!index.isValid())
-    return QVariant();
-
-  if (role == Qt::TextAlignmentRole)
-    return Qt::AlignLeft;
-
-  QList<QString> keys(varInfos_.keys());
-  VarInfo info(varInfos_[keys[index.row()]]);
-
-  if (role == Qt::CheckStateRole && index.column() == 0)
-  {
-    return info.selected ? Qt::Checked : Qt::Unchecked;
-  }
-  else if (role == Qt::DisplayRole)
-  {
-    switch(index.column())
-    {
-    case 0:
-      return keys[index.row()];
-    case 1:
-      return info.inputOutput == 0 ? "Input" : "Output";
-    case 2:
-      return QString::number(info.value);
-    case 3:
-      return QString(info.unit.c_str());
-    default:
-      return QVariant();
-    }
-  }
-  return QVariant();
-}
-
-bool AnsysVariableTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
-{
-  if (!index.isValid())
-    return false;
-
-  if ((index.column() == 0) && (role == Qt::CheckStateRole))
-  {
-    QList<QString> keys(varInfos_.keys());
-    varInfos_[keys[index.row()]].selected = (value.toInt() == Qt::Checked);
-    QModelIndex topLeft = index;
-    QModelIndex bottomRight = index;
-    emit dataChanged(topLeft, bottomRight);
-    emit headerDataChanged(Qt::Horizontal, 0, 0);
-    return true;
-  }
-  return false;
-}
-
-Qt::ItemFlags AnsysVariableTableModel::flags(const QModelIndex & index) const
-{
-  Qt::ItemFlags mflags = QAbstractTableModel::flags(index);
-  if (index.column() == 0)
-  {
-    mflags &= ~Qt::ItemIsEditable;
-    mflags |= Qt::ItemIsUserCheckable;
-  }
-  return mflags;
-}
-
-QVariant AnsysVariableTableModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-  if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
-  {
-    switch (section)
-    {
-    case 0:
-      return tr("Variable");
-    case 1:
-      return tr("I/O");
-    case 2:
-      return tr("Value");
-    case 3:
-      return tr("Unit");
-    default:
-      return QVariant();
-    }
-  }
-  return QAbstractTableModel::headerData(section, orientation, role);
-}
-
-
-VarInfo AnsysVariableTableModel::getVarInfo(const QString & varName) const
-{
-  return varInfos_[varName];
-}
-
-QStringList AnsysVariableTableModel::getInputVariables() const{
-  QStringList result;
-  foreach (QString varName, varInfos_.keys())
-  {
-    if (varInfos_[varName].selected && (varInfos_[varName].inputOutput == 0))
-      result.append(varName);
-  }
-  return result;
-}
-
-QStringList AnsysVariableTableModel::getOutputVariables() const{
-  QStringList result;
-  foreach (QString varName, varInfos_.keys())
-  {
-    if (varInfos_[varName].selected && (varInfos_[varName].inputOutput > 0))
-      result.append(varName);
-  }
-  return result;
-}
-
-
-QString AnsysVariableTableModel::getAnsysVersion() const
-{
-  return ansysVersion_;
-}
-
-void AnsysVariableTableModel::loadData(AnsysParser* parser)
-{
-  varInfos_.clear();
-  for(UnsignedInteger i = 0; i < parser->getInputVariables().getSize(); ++i)
-  {
-    VarInfo varInfo;
-    varInfo.value = parser->getInputVariables()[i].getValue();
-    varInfo.inputOutput = 0;
-    varInfo.text = parser->getInputVariables()[i].getDescription();
-    varInfo.unit = parser->getInputVariables()[i].getUnit();
-    varInfos_[QString(parser->getInputVariables()[i].getName().c_str())] = varInfo;
-  }
-  for(UnsignedInteger i = 0; i < parser->getOutputVariables().getSize(); ++i)
-  {
-    VarInfo varInfo;
-    varInfo.value = parser->getOutputVariables()[i].getValue();
-    varInfo.inputOutput = 1;
-    varInfo.text = parser->getOutputVariables()[i].getDescription();
-    varInfo.unit = parser->getOutputVariables()[i].getUnit();
-    varInfos_[QString(parser->getOutputVariables()[i].getName().c_str())] = varInfo;
-  }
-
-  emit layoutChanged();
-}
-
-AnsysSystemTableModel::AnsysSystemTableModel(QObject * parent)
-  : QAbstractTableModel(parent)
-{}
-
-int AnsysSystemTableModel::columnCount(const QModelIndex & /*parent*/) const
-{
-  return 3;
-}
-
-int AnsysSystemTableModel::rowCount(const QModelIndex & /* parent */) const
-{
-  return sysInfos_.count();
-}
-
-QVariant AnsysSystemTableModel::data(const QModelIndex & index, int role) const
-{
-  if (!index.isValid())
-    return QVariant();
-
-  if (role == Qt::TextAlignmentRole)
-    return Qt::AlignLeft;
-
-  QList<QString> keys(sysInfos_.keys());
-  SysInfo info(sysInfos_[keys[index.row()]]);
-
-  if (role == Qt::CheckStateRole)
-  {
-    if (index.column() == 0)
-      return info.selected ? Qt::Checked : Qt::Unchecked;
-    else
-      return QVariant();
-  }
-
-  if (role != Qt::DisplayRole)
-    return QVariant();
-  switch(index.column())
-  {
-  case 0:
-    return keys[index.row()];
-  case 1:
-    return QString(info.text.c_str());
-  case 2:
-    return QString(info.type.c_str());
-  default:
-    return QVariant();
-  }
-  return QVariant();
-}
-
-bool AnsysSystemTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
-{
-  if (!index.isValid())
-    return false;
-
-  if ((index.column() == 0) && (role == Qt::CheckStateRole))
-  {
-    QList<QString> keys(sysInfos_.keys());
-    sysInfos_[keys[index.row()]].selected = (value.toInt() == Qt::Checked);
-    QModelIndex topLeft = index;
-    QModelIndex bottomRight = index;
-    emit dataChanged(topLeft, bottomRight);
-    emit headerDataChanged(Qt::Horizontal, 0, 0);
-    return true;
-  }
-  return false;
-}
-
-Qt::ItemFlags AnsysSystemTableModel::flags(const QModelIndex & index) const
-{
-  Qt::ItemFlags mflags = QAbstractTableModel::flags(index);
-  if (index.column() == 0)
-  {
-    mflags &= ~Qt::ItemIsEditable;
-    mflags |= Qt::ItemIsUserCheckable;
-  }
-  return mflags;
-}
-
-QVariant AnsysSystemTableModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-  if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
-  {
-    switch (section)
-    {
-    case 0:
-      return tr("System name");
-    case 1:
-      return tr("System header text");
-    case 2:
-      return tr("System type");
-    case 3:
-      return tr("Selected");
-    }
-  }
-  return QAbstractTableModel::headerData(section, orientation, role);
-}
-
-QStringList AnsysSystemTableModel::getSystems() const{
-  QStringList result;
-  foreach (QString sysName, sysInfos_.keys())
-  {
-    if (sysInfos_[sysName].selected)
-      result.append(sysName);
-  }
-  return result;
-}
-
-void AnsysSystemTableModel::loadData(AnsysParser* parser)
-{
-  sysInfos_.clear();
-  for (auto const& sys : parser->getSystems())
-  {
-    SysInfo info;
-    info.text = sys.second.first;
-    info.type = sys.second.second;
-    sysInfos_[QString(sys.first.c_str())] = info;
-  }
-  emit layoutChanged();
-}
-
-
 AnsysWizard::AnsysWizard(QWidget * parent)
   : Wizard(parent)
   , parser_(0)
@@ -320,9 +36,8 @@ AnsysWizard::AnsysWizard(QWidget * parent)
   connect(varPage_, &AnsysWizardVariablePage::executableFileFound, [=]() {
       parser_->setExecutableFileName(varPage_->executableLineEdit_->text().toStdString());
     });
-
-
 }
+
 
 void AnsysWizard::loadModel()
 {
@@ -348,6 +63,7 @@ void AnsysWizard::loadModel()
     varPage_->executableLineEdit_->setText(defaultExecutable);
   }
 }
+
 
 void AnsysWizard::validateVariables()
 {
@@ -378,17 +94,21 @@ void AnsysWizard::validateSystems()
   parser_->setSystems(sys);
 }
 
+
 QString AnsysWizard::getExecutableFileName() const{
   return varPage_->executableLineEdit_->text();
 }
+
 
 QString AnsysWizard::getModelFileName() const{
   return varPage_->modelFileLineEdit_->text();
 }
 
+
 AnsysParser* AnsysWizard::getParser() const {
   return parser_;
 }
+
 
 AnsysWizardVariablePage::AnsysWizardVariablePage(QWidget * parent)
   : QWizardPage(parent)
@@ -429,7 +149,6 @@ AnsysWizardVariablePage::AnsysWizardVariablePage(QWidget * parent)
   varTable_->verticalHeader()->hide();
   varTable_->setAlternatingRowColors(false);
   varTable_->hide();
-  varTable_->setMinimumSize(500, 400);
   varModel_ = new AnsysVariableTableModel;
   varTable_->setModel(varModel_);
   pageLayout->addWidget(varTable_);
@@ -442,6 +161,7 @@ AnsysWizardVariablePage::AnsysWizardVariablePage(QWidget * parent)
 
   setLayout(pageLayout);
 }
+
 
 void AnsysWizardVariablePage::findExecutableFile()
 {
@@ -474,6 +194,7 @@ void AnsysWizardVariablePage::findModelFile()
   }
 }
 
+
 bool AnsysWizardVariablePage::validatePage()
 {
   if(!QFile(executableLineEdit_->text()).exists())
@@ -495,6 +216,7 @@ bool AnsysWizardVariablePage::validatePage()
   emit executableFileFound();
   return QWizardPage::validatePage();
 }
+
 
 AnsysWizardSystemPage::AnsysWizardSystemPage(QWidget * parent)
   : QWizardPage(parent)

@@ -119,3 +119,35 @@ Returns
 -------
 output_files : sequence of :class:`~persalys.CouplingOutputFile`
     Output file metadatas"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::setEnvironment
+"Environment dictionary accessor.
+
+Parameters
+----------
+keys : :py:class:`openturns.Description`
+    Dictionary keys matching environment variables names
+values : :py:class:`openturns.Description`
+    Dictionary values matching environment variables values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getEnvironmentKeys
+"Environment variables names accessor.
+
+Returns
+-------
+keys : :py:class:`openturns.Description`
+    Dictionary keys matching environment variables name"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getEnvironmentValues
+"Environment variables values accessor.
+
+Returns
+-------
+values : :py:class:`openturns.Description`
+    Dictionary valuess matching environment variables values"
