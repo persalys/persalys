@@ -3,8 +3,10 @@
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/SampleTableModel.hxx"
 
-#include <pqSaveDataReaction.h>
+#include <pqSpreadSheetViewDecorator.h>
+#include <pqSpreadSheetViewModel.h>
 #include <pqActiveObjects.h>
+#include <pqSpreadSheetView.h>
 #include <pqApplicationCore.h>
 #include <vtkSMSourceProxy.h>
 #include <vtkSelection.h>
@@ -68,13 +70,12 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   hLayout->addWidget(exportButton);
 
   ExportableTableView * tableView = new ExportableTableView;
-  connect(item, SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
   SampleTableModel * tableModel = new SampleTableModel(sample, tableView);
   tableView->setModel(tableModel);
   connect(exportButton, SIGNAL(clicked()), tableView, SLOT(exportData()));
   connect(pvWidget, SIGNAL(exportDataRequested()), tableView, SLOT(exportData()));
 
-  //connect(exportButton, SIGNAL(clicked()), pvWidget, SLOT(exportData()));
+
   mainLayout->addLayout(hLayout);
 
   // - table
@@ -82,6 +83,24 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   if (item)
     connect(item, SIGNAL(dataExportRequested()), tableView, SLOT(exportData()));
   mainLayout->addWidget(pvWidget);
+
+  // add decorator
+  pqSpreadSheetView * view = dynamic_cast<pqSpreadSheetView*>(pvWidget->getView());
+  if (view)
+  {
+    new pqSpreadSheetViewDecorator(view);
+    // hide decorator header
+    // see header location at: pqSpreadSheetViewDecorator::pqSpreadSheetViewDecorator
+    // ParaView-v5.10.1/Qt/ApplicationComponents/pqSpreadSheetViewDecorator.cxx:361
+    QVBoxLayout* decoratorLayout = qobject_cast<QVBoxLayout*>(view->widget()->layout());
+    if(decoratorLayout)
+    {
+      QList<QWidget*> headerWidgets = decoratorLayout->findChildren<QWidget*>();
+      decoratorLayout->itemAt(0)->widget()->setVisible(false);
+    }
+    else
+      throw OT::InternalException(HERE) << "Cannot find header layout from PVSpreadSheetViewWidget";
+  }
 
   return mainWidget;
 }

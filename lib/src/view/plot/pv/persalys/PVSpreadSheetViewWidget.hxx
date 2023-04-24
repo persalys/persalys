@@ -21,6 +21,7 @@ signals:
   void exportDataRequested();
 public slots:
   void contextMenu(const QPoint & pos);
+
 public:
   static const char PV_VIEW_TYPE[];
   static const char PV_REPRESENTATION_TYPE[];

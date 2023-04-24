@@ -862,7 +862,7 @@ Deterministic analyses
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
-      - check the export feature on the table tab
+      - check the export and copy/paste features on the table tab
 
       - check that the parameters are unchanged
 
@@ -1128,6 +1128,7 @@ Designs of experiments
         - when clicking on the tab, the list view has been hidden
         - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
         - check the tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
+        - check that copying/pasting a few lines in the table works correctly
 
   - right click on onePointDesign, choose Evaluate:
 
