@@ -5,7 +5,7 @@ RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-qwt
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview510 > /dev/null 2>&1
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
-ENV ARCH=x86_64 PYMAJMIN=310
+ENV ARCH=x86_64 PYMAJMIN=311
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
@@ -30,7 +30,3 @@ RUN git clone https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp
 # fake otfmi
 RUN echo "__version__= '0.0'" > /tmp/otfmi.py && sudo mv /tmp/otfmi.py ${MINGW_PREFIX}/lib/python${PYMAJMIN}/otfmi.py
 
-# rebuild psl/curl/netcdf
-RUN git clone https://aur.archlinux.org/mingw-w64-libpsl.git /tmp/libpsl && cd /tmp/libpsl && makepkg -sfi --noconfirm && rm -r /tmp/libpsl
-RUN git clone https://aur.archlinux.org/mingw-w64-curl.git /tmp/curl && cd /tmp/curl && makepkg -sfi --noconfirm && rm -r /tmp/curl
-RUN git clone https://aur.archlinux.org/mingw-w64-netcdf.git /tmp/netcdf && cd /tmp/netcdf && makepkg -sfi --noconfirm && rm -r /tmp/netcdf
