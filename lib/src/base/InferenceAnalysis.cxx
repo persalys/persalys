@@ -192,17 +192,23 @@ void InferenceAnalysis::launch()
     fittingTestResult.values_ = sample.getMarginal(i);
     fittingTestResult.errorMessages_ = Description(nbDist);
 
+    const Sample sampleI(sample.getMarginal(i));
+    const Sample sortedSampleI(sampleI.sortUnique());
+
     for (UnsignedInteger j = 0; j < nbDist; ++j)
     {
-      DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
+      const DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
       try
       {
-        Distribution distribution(distFactory.build(sample.getMarginal(i)));
+        if (sortedSampleI.getSize() < 2)
+          throw InvalidArgumentException(HERE) << "constant sample";
+
+        const Distribution distribution(distFactory.build(sampleI));
         distribution.getMean(); // ensures mean is defined
         distribution.getStandardDeviation(); // ensures sttdev is defined
 
         // Kolmogorov test
-        TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_));
+        const TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_));
 
         // BIC test
         const Scalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
@@ -220,8 +226,8 @@ void InferenceAnalysis::launch()
       }
       catch (std::exception & ex)
       {
-        String str = distFactory.getImplementation()->getClassName();
-        const String distributionName = str.substr(0, str.find("Factory"));
+        const String cname = distFactory.getImplementation()->getClassName();
+        const String distributionName = cname.substr(0, cname.find("Factory"));
         const String message = OSS() << "Error when building the "
                                << distributionName
                                << " distribution with the sample of the variable "
