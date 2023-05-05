@@ -82,7 +82,7 @@ protected:
 
 protected:
   PVServerManagerInterface * smb_;
-  OT::Pointer<pqView> view_;
+  pqView * view_;
   QList< pqOutputPort * > ports_;
   QList< vtkSmartPointer<vtkTable> > tables_;
   QList< vtkSmartPointer<vtkSMProxy> > producerBases_;

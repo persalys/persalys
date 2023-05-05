@@ -19,6 +19,7 @@ public:
   static QWidget * GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item = 0, const OT::Description& errorDesc = OT::Description());
 signals:
   void exportDataRequested();
+  void copyDataRequested();
 public slots:
   void contextMenu(const QPoint & pos);
 

@@ -48,9 +48,13 @@ void PVSpreadSheetViewWidget::contextMenu(const QPoint& pos)
   QAction * exportDataAction = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
   connect(exportDataAction, SIGNAL(triggered(bool)), this, SIGNAL(exportDataRequested()));
 
+  QAction * copyDataAction = new QAction(QIcon(":/images/document-export.png"), tr("Copy"), this);
+  connect(copyDataAction, SIGNAL(triggered(bool)), this, SIGNAL(copyDataRequested()));
+
   // menu
   QMenu * contextMenu(new QMenu(this));
   contextMenu->addAction(exportDataAction);
+  contextMenu->addAction(copyDataAction);
   contextMenu->popup(mapToGlobal(pos));
 }
 
@@ -89,21 +93,21 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   mainLayout->addWidget(pvWidget);
 
   // add decorator
-  pqSpreadSheetView * view = dynamic_cast<pqSpreadSheetView*>(pvWidget->getView());
+  pqSpreadSheetView * view = qobject_cast<pqSpreadSheetView*>(pvWidget->getView());
   if (view)
   {
-    new pqSpreadSheetViewDecorator(view);
+    pqSpreadSheetViewDecorator * decorator = new pqSpreadSheetViewDecorator(view);
     // hide decorator header
     // see header location at: pqSpreadSheetViewDecorator::pqSpreadSheetViewDecorator
     // ParaView-v5.10.1/Qt/ApplicationComponents/pqSpreadSheetViewDecorator.cxx:361
     QVBoxLayout* decoratorLayout = qobject_cast<QVBoxLayout*>(view->widget()->layout());
     if(decoratorLayout)
     {
-      QList<QWidget*> headerWidgets = decoratorLayout->findChildren<QWidget*>();
       decoratorLayout->itemAt(0)->widget()->setVisible(false);
     }
     else
       throw OT::InternalException(HERE) << "Cannot find header layout from PVSpreadSheetViewWidget";
+    connect(pvWidget, SIGNAL(copyDataRequested()), decorator, SLOT(copyToClipboard()));
   }
 
   return mainWidget;

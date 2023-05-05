@@ -70,7 +70,7 @@ PVViewWidget::~PVViewWidget()
 
 pqView * PVViewWidget::getView() const
 {
-  return view_.get();
+  return view_;
 }
 
 
