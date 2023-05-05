@@ -2,6 +2,7 @@
 FROM debian:stretch
 MAINTAINER jschueller
 
+ADD sources.list /etc/apt/sources.list
 RUN apt-get -y update && apt-get -y install git g++ libxml2-dev doxygen graphviz libgraphviz-dev libhdf5-dev libcppunit-dev curl libboost-chrono-dev libboost-filesystem-dev libboost-date-time-dev libboost-regex-dev libboost-thread-dev libboost-signals-dev libboost-locale-dev libssl-dev pkgconf libqt5svg5-dev libqt5xmlpatterns5-dev libqt5webkit5-dev libqt5x11extras5-dev qtbase5-dev qttools5-dev qtwebengine5-dev liblapack-dev mesa-common-dev libfreetype6-dev tk-dev libxmu-dev libx11-dev libxi-dev qt5-default sudo libcminpack-dev net-tools xvfb procps xterm gdb vim locales libtbb-dev libffi-dev libgdbm-dev libncurses5-dev libexpat1-dev libpcre3-dev wget bison flex texinfo
 
 # locale
