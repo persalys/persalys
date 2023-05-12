@@ -158,6 +158,7 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("Method", tr("Method")));
   ParametersNames_.insert(type("Level", tr("Level")));
   ParametersNames_.insert(type("Kolmogorov-Smirnov", tr("Kolmogorov-Smirnov")));
+  ParametersNames_.insert(type("Lilliefors", tr("Lilliefors")));
   ParametersNames_.insert(type("Number of folds", tr("Number of folds")));
   ParametersNames_.insert(type("Percentage", tr("Percentage")));
   ParametersNames_.insert(type("Maximum confidence interval length", tr("Maximum confidence interval length")));

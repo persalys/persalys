@@ -1,12 +1,20 @@
 class=DataModel name=myDataModel fileName=data1.csv inputColumns=[0,2,3] outputColumns=[] inputNames=[X0,X2,X3] outputNames=[]
 class=InferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[X0,X3] level=0.1 interestVariable X0 distributionFactories=[NormalFactory] interestVariable X3 distributionFactories=[NormalFactory,GumbelFactory]
 result= class=InferenceResult FittingTestResultCollection=[class=FittingTestResult variableName=X0 testedDistributions=[Normal(mu = -0.0698719, sigma = 0.948364)] paramConfidenceInterval=[[-0.192328, 0.0525837]
-[0.861954, 1.03531]] kolmogorovTestResults=[class=TestResult name=Unnamed type=Kolmogorov Normal binaryQualityMeasure=true p-value threshold=0.1 p-value=0.927898 statistic=0.0309239 description=[Normal(mu = -0.0698719, sigma = 0.948364) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=1 values=[2.76653] error messages=[],class=FittingTestResult variableName=X3 testedDistributions=[Normal(mu = 0.651858, sigma = 1.37028),Gumbel(beta = 1.0684, gamma = 0.0351576)] paramConfidenceInterval=[[0.474923, 0.828793]
+[0.861954, 1.03531]] testResults=[class=TestResult name=Unnamed type=Kolmogorov Normal binaryQualityMeasure=true p-value threshold=0.1 p-value=0.927898 statistic=0.0309239 description=[Normal(mu = -0.0698719, sigma = 0.948364) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=1 values=[2.76653] error messages=[],class=FittingTestResult variableName=X3 testedDistributions=[Normal(mu = 0.651858, sigma = 1.37028),Gumbel(beta = 1.0684, gamma = 0.0351576)] paramConfidenceInterval=[[0.474923, 0.828793]
 [1.24543, 1.49591],[0.916758, 1.21274]
-[-0.107103, 0.18679]] kolmogorovTestResults=[class=TestResult name=Unnamed type=Kolmogorov Normal binaryQualityMeasure=false p-value threshold=0.1 p-value=0.00286352 statistic=0.103832 description=[Normal(mu = 0.651858, sigma = 1.37028) vs sample Unnamed],class=TestResult name=Unnamed type=Kolmogorov Gumbel binaryQualityMeasure=true p-value threshold=0.1 p-value=0.835684 statistic=0.0353023 description=[Gumbel(beta = 1.0684, gamma = 0.0351576) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=2 values=[3.5026,3.29942] error messages=[,]]
+[-0.107103, 0.18679]] testResults=[class=TestResult name=Unnamed type=Kolmogorov Normal binaryQualityMeasure=false p-value threshold=0.1 p-value=0.00286352 statistic=0.103832 description=[Normal(mu = 0.651858, sigma = 1.37028) vs sample Unnamed],class=TestResult name=Unnamed type=Kolmogorov Gumbel binaryQualityMeasure=true p-value threshold=0.1 p-value=0.835684 statistic=0.0353023 description=[Gumbel(beta = 1.0684, gamma = 0.0351576) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=2 values=[3.5026,3.29942] error messages=[,]]
 class=FittingTestResult variableName=X3 testedDistributions=[Normal(mu = 0.651858, sigma = 1.37028),Gumbel(beta = 1.0684, gamma = 0.0351576)] paramConfidenceInterval=[[0.474923, 0.828793]
 [1.24543, 1.49591],[0.916758, 1.21274]
-[-0.107103, 0.18679]] kolmogorovTestResults=[class=TestResult name=Unnamed type=Kolmogorov Normal binaryQualityMeasure=false p-value threshold=0.1 p-value=0.00286352 statistic=0.103832 description=[Normal(mu = 0.651858, sigma = 1.37028) vs sample Unnamed],class=TestResult name=Unnamed type=Kolmogorov Gumbel binaryQualityMeasure=true p-value threshold=0.1 p-value=0.835684 statistic=0.0353023 description=[Gumbel(beta = 1.0684, gamma = 0.0351576) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=2 values=[3.5026,3.29942] error messages=[,]
+[-0.107103, 0.18679]] testResults=[class=TestResult name=Unnamed type=Kolmogorov Normal binaryQualityMeasure=false p-value threshold=0.1 p-value=0.00286352 statistic=0.103832 description=[Normal(mu = 0.651858, sigma = 1.37028) vs sample Unnamed],class=TestResult name=Unnamed type=Kolmogorov Gumbel binaryQualityMeasure=true p-value threshold=0.1 p-value=0.835684 statistic=0.0353023 description=[Gumbel(beta = 1.0684, gamma = 0.0351576) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=2 values=[3.5026,3.29942] error messages=[,]
+class=InferenceAnalysis name=analysis2 designOfExperiment=myDataModel interestVariables=[X0,X3] level=0.1 interestVariable X0 distributionFactories=[NormalFactory] interestVariable X3 distributionFactories=[NormalFactory,GumbelFactory]
+result= class=InferenceResult FittingTestResultCollection=[class=FittingTestResult variableName=X0 testedDistributions=[Normal(mu = -0.0698719, sigma = 0.948364)] paramConfidenceInterval=[[-0.192328, 0.0525837]
+[0.861954, 1.03531]] testResults=[class=TestResult name=Unnamed type=Lilliefors Normal binaryQualityMeasure=true p-value threshold=0.1 p-value=0.697674 statistic=0.0309239 description=[Normal(mu = -0.0698719, sigma = 0.948364) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=1 values=[2.76653] error messages=[],class=FittingTestResult variableName=X3 testedDistributions=[Normal(mu = 0.651858, sigma = 1.37028),Gumbel(beta = 1.0684, gamma = 0.0351576)] paramConfidenceInterval=[[0.474923, 0.828793]
+[1.24543, 1.49591],[0.908298, 1.23979]
+[-0.117423, 0.19062]] testResults=[class=TestResult name=Unnamed type=Lilliefors Normal binaryQualityMeasure=false p-value threshold=0.1 p-value=0 statistic=0.103832 description=[Normal(mu = 0.651858, sigma = 1.37028) vs sample Unnamed],class=TestResult name=Unnamed type=Lilliefors Gumbel binaryQualityMeasure=true p-value threshold=0.1 p-value=0.52 statistic=0.0353023 description=[Gumbel(beta = 1.0684, gamma = 0.0351576) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=2 values=[3.5026,3.29942] error messages=[,]]
+class=FittingTestResult variableName=X3 testedDistributions=[Normal(mu = 0.651858, sigma = 1.37028),Gumbel(beta = 1.0684, gamma = 0.0351576)] paramConfidenceInterval=[[0.474923, 0.828793]
+[1.24543, 1.49591],[0.908298, 1.23979]
+[-0.117423, 0.19062]] testResults=[class=TestResult name=Unnamed type=Lilliefors Normal binaryQualityMeasure=false p-value threshold=0.1 p-value=0 statistic=0.103832 description=[Normal(mu = 0.651858, sigma = 1.37028) vs sample Unnamed],class=TestResult name=Unnamed type=Lilliefors Gumbel binaryQualityMeasure=true p-value threshold=0.1 p-value=0.52 statistic=0.0353023 description=[Gumbel(beta = 1.0684, gamma = 0.0351576) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=2 values=[3.5026,3.29942] error messages=[,]
 #!/usr/bin/env python
 
 import openturns as ot
@@ -29,4 +37,13 @@ factories = [ot.NormalFactory(), ot.GumbelFactory()]
 analysis.setDistributionsFactories('X3', factories)
 analysis.setLevel(0.1)
 myStudy.add(analysis)
+analysis2 = persalys.InferenceAnalysis('analysis2', myDataModel)
+interestVariables = ['X0', 'X3']
+analysis2.setInterestVariables(interestVariables)
+factories = [ot.NormalFactory()]
+analysis2.setDistributionsFactories('X0', factories)
+factories = [ot.NormalFactory(), ot.GumbelFactory()]
+analysis2.setDistributionsFactories('X3', factories)
+analysis2.setLevel(0.1)
+myStudy.add(analysis2)
 

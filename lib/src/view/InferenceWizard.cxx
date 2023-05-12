@@ -169,18 +169,37 @@ void InferenceWizard::buildInterface()
   pageLayout->addLayout(splitter);
 
   // level
-  QGroupBox * ksGroupBox = new QGroupBox(tr("Kolmogorov-Smirnov"));
+  QGroupBox * ksGroupBox = new QGroupBox(tr("Test type"));
   QGridLayout * levelLayout = new QGridLayout(ksGroupBox);
+
+  testTypeComboBox_ = new QComboBox;
+  QStringList types;
+  types << tr("Kolmogorov-Smirnov") << tr("Lilliefors");
+  testTypeComboBox_->addItems(types);
+  levelLayout->addWidget(testTypeComboBox_, 0, 0);
+
+  switch(inference_.getTestType())
+  {
+  case InferenceAnalysis::Lilliefors:
+    testTypeComboBox_->setCurrentIndex(1);
+    break;
+  case InferenceAnalysis::Kolmogorov:
+    testTypeComboBox_->setCurrentIndex(0);
+    break;
+  default:
+    throw InvalidArgumentException(HERE) << "Unknown test type.";
+  }
+
   QLabel * levelLabel = new QLabel(tr("Level"));
-  levelLayout->addWidget(levelLabel, 0, 0);
+  levelLayout->addWidget(levelLabel, 0, 1);
 
   levelSpinbox_ = new DoubleSpinBox;
   levelSpinbox_->setRange(0.0 + 1.e-6, 1. - 1.e-6);
   levelSpinbox_->setSingleStep(0.1);
   // display alpha
   levelSpinbox_->setValue(inference_.getLevel());
-  levelLayout->addWidget(levelSpinbox_, 0, 1);
-  levelLayout->setColumnStretch(1, 10);
+  levelLayout->addWidget(levelSpinbox_, 0, 2);
+  levelLayout->setColumnStretch(3, 1);
 
   pageLayout->addWidget(ksGroupBox);
 
@@ -188,29 +207,61 @@ void InferenceWizard::buildInterface()
   QGridLayout * paramICLayout = new QGridLayout(icGroupBox);
   icGroupBox->setExpanded(inference_.getEstimateParametersConfidenceInterval());
 
+  int row = 0;
   QLabel * paramICLabel = new QLabel(tr("Estimate parameters confidence interval"));
-  paramICLayout->addWidget(paramICLabel, 0, 0);
+  paramICLayout->addWidget(paramICLabel, row, 0);
 
   paramICCheckBox_ = new QCheckBox;
   paramICCheckBox_->setChecked(inference_.getEstimateParametersConfidenceInterval());
-  paramICLayout->addWidget(paramICCheckBox_, 0, 1);
+  paramICLayout->addWidget(paramICCheckBox_, row, 1);
 
   paramICLabel = new QLabel(tr("Confidence interval level"));
-  paramICLayout->addWidget(paramICLabel, 1, 0);
+  paramICLayout->addWidget(paramICLabel, ++row, 0);
 
   icLevelSpinbox_ = new DoubleSpinBox;
   icLevelSpinbox_->setRange(0.0 + 1.e-6, 1. - 1.e-6);
   icLevelSpinbox_->setValue(inference_.getParametersConfidenceIntervalLevel());
   icLevelSpinbox_->setEnabled(inference_.getEstimateParametersConfidenceInterval());
+  paramICLayout->addWidget(icLevelSpinbox_, row, 1);
 
-  paramICLayout->addWidget(icLevelSpinbox_, 1, 1);
+  label = new QLabel(tr("Lilliefors precision"));
+  paramICLayout->addWidget(label, ++row, 0);
+
+  bool enableLilliefors = testTypeComboBox_->currentIndex();
+  lillieforsPrecisionSpinbox_ = new DoubleSpinBox;
+  lillieforsPrecisionSpinbox_->setRange(0.0 + 1.e-6, 1. - 1.e-6);
+  lillieforsPrecisionSpinbox_->setSingleStep(0.01);
+  lillieforsPrecisionSpinbox_->setValue(inference_.getLillieforsPrecision());
+  lillieforsPrecisionSpinbox_->setEnabled(enableLilliefors);
+  paramICLayout->addWidget(lillieforsPrecisionSpinbox_, row, 1);
+
+  label = new QLabel(tr("Lilliefors minimum sampling size"));
+  paramICLayout->addWidget(label, ++row, 0);
+
+  lillieforsMinimumSamplingSizeSpinbox_ = new LogSpinBox;
+  lillieforsMinimumSamplingSizeSpinbox_->setValue(inference_.getLillieforsMinimumSamplingSize());
+  lillieforsMinimumSamplingSizeSpinbox_->setEnabled(enableLilliefors);
+  paramICLayout->addWidget(lillieforsMinimumSamplingSizeSpinbox_, row, 1);
+
+  label = new QLabel(tr("Lilliefors maximum sampling size"));
+  paramICLayout->addWidget(label, ++row, 0);
+
+  lillieforsMaximumSamplingSizeSpinbox_ = new LogSpinBox;
+  lillieforsMaximumSamplingSizeSpinbox_->setValue(inference_.getLillieforsMaximumSamplingSize());
+  lillieforsMaximumSamplingSizeSpinbox_->setEnabled(enableLilliefors);
+  paramICLayout->addWidget(lillieforsMaximumSamplingSizeSpinbox_, row, 1);
+
   paramICLayout->setColumnStretch(2,1);
   pageLayout->addWidget(icGroupBox);
 
-
-
   connect(paramICCheckBox_, &QCheckBox::toggled, [=](bool toggled){
       icLevelSpinbox_->setEnabled(toggled);});
+
+  connect(testTypeComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+    lillieforsPrecisionSpinbox_->setEnabled(index);
+    lillieforsMinimumSamplingSizeSpinbox_->setEnabled(index);
+    lillieforsMaximumSamplingSizeSpinbox_->setEnabled(index);
+  });
 
   varTableView->selectRow(0);
 
@@ -306,7 +357,13 @@ Analysis InferenceWizard::getAnalysis() const
   newAnalysis.setLevel(levelSpinbox_->value());
   newAnalysis.setEstimateParametersConfidenceInterval(paramICCheckBox_->isChecked());
   newAnalysis.setParametersConfidenceIntervalLevel(icLevelSpinbox_->value());
-
+  newAnalysis.setTestType(testTypeComboBox_->currentIndex());
+  if (newAnalysis.getTestType() == InferenceAnalysis::Lilliefors)
+  {
+    newAnalysis.setLillieforsPrecision(lillieforsPrecisionSpinbox_->value());
+    newAnalysis.setLillieforsMinimumSamplingSize(lillieforsMinimumSamplingSizeSpinbox_->value());
+    newAnalysis.setLillieforsMaximumSamplingSize(lillieforsMaximumSamplingSizeSpinbox_->value());
+  }
 
   for (UnsignedInteger i = 0; i < interestVar_.getSize(); ++i)
   {
