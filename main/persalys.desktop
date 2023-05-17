@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=Persalys
+Comment=Uncertainty propagation and data analysis
+Icon=persalys-icon
+TryExec=persalys
+Exec=persalys %u
+Terminal=false
+Categories=Science;Math;DataVisualization;
+Keywords=uncertainty;probability;

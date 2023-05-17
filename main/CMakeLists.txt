@@ -28,3 +28,11 @@ if (UNIX)
 endif ()
 
 install (TARGETS persalys DESTINATION bin)
+
+# desktop shortcut
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+  install (FILES persalys.desktop DESTINATION ${PERSALYS_DATA_PATH}/applications)
+  file (COPY ../images/Ps-icon-64.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  file (RENAME ${CMAKE_CURRENT_BINARY_DIR}/Ps-icon-64.png ${CMAKE_CURRENT_BINARY_DIR}/persalys-icon.png)
+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/persalys-icon.png DESTINATION ${PERSALYS_DATA_PATH}/icons/hicolor/64x64/apps/)
+endif ()
