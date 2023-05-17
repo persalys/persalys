@@ -64,10 +64,10 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.1.0.tar.gz
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.8.0.tar.gz | tar xz && cd oneTBB-2021.8.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
+RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.9.0.tar.gz | tar xz && cd oneTBB-2021.9.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v11.0.tar.gz | tar xz && cd primesieve-11.0 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v11.1.tar.gz | tar xz && cd primesieve-11.1 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -92,7 +92,7 @@ RUN git clone -b v1.23.5 --depth 1 --recursive https://github.com/numpy/numpy.gi
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
 RUN pip3 install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.9.3.tar.gz | tar xz --warning=no-timestamp && cd scipy-1.9.3 \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
-RUN pip3 install lxml pandas "matplotlib<3.7" ipython sphinx numpydoc dill --upgrade
+RUN pip3 install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v5.8.0.tar.gz | tar xz && cd sundials-5.8.0 \
@@ -125,7 +125,7 @@ RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.0.tar.gz | 
 RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja-1.11.1 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
 
 # wayland
-RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.21.0/downloads/wayland-1.21.0.tar.xz | tar xJ && cd wayland-1.21.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
+RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz | tar xJ && cd wayland-1.22.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
 RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.9/submodules/qtbase-everywhere-opensource-src-5.15.9.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.9 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
@@ -157,13 +157,13 @@ RUN curl -fSsL https://paraview.org/files/v5.10/ParaView-v5.10.1.tar.xz | tar xJ
  && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.20.1 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.21rc1 \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" \
-    -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+    -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.13 \
- && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPYTHON_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . \
+RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.14 \
+ && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . \
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi

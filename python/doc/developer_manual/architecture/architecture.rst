@@ -7,9 +7,9 @@ Dependencies
 Several dependencies are needed in order to build the GUI:
 
 - CMake >=3.13
-- OpenTURNS >=1.20.1
+- OpenTURNS >=1.21
 - `otfmi <https://github.com/openturns/otfmi>`_ >=0.14 (optional, for FMI support)
-- `otmorris <https://github.com/openturns/otmorris>`_ >=0.9 (optional, for Morris support)
+- `otmorris <https://github.com/openturns/otmorris>`_ >=0.14 (optional, for Morris support)
 - Qt >=5
 - Qwt >=6
 - Python >=3.5

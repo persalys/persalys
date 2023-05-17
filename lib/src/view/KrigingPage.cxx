@@ -189,7 +189,7 @@ void KrigingPage::initialize(const Analysis& analysis)
   generalizedModelParameterPLabel_->setVisible(covarianceModelName == "GeneralizedExponential");
 
   // basis
-  const UnsignedInteger basisDim = analysis_ptr->getBasis().getDimension();
+  const UnsignedInteger basisDim = analysis_ptr->getBasis().getInputDimension();
   const UnsignedInteger basisSize = analysis_ptr->getBasis().getSize();
   if (basisSize == (basisDim + 1))
     basisTypeComboBox_->setCurrentIndex(1);

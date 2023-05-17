@@ -116,11 +116,7 @@ void KrigingResultWindow::buildInterface()
     }
 
     // trend coef
-#if OPENTURNS_VERSION >= 102100
     QString trendCoefText = QtOT::PointToString(result_.getKrigingResultCollection()[i].getTrendCoefficients());
-#else
-    QString trendCoefText = QtOT::PointToString(result_.getKrigingResultCollection()[i].getTrendCoefficients()[0]);
-#endif
     ParametersWidget * trendCoefTable = new ParametersWidget(tr("Trend"), QStringList() << tr("Trend coefficients"), QStringList() << trendCoefText, true, true);
     resultWidgetLayout->addWidget(trendCoefTable);
     resultWidgetLayout->setRowStretch(optimizeParameters_ ? 2 : 1, 1);

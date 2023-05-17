@@ -153,8 +153,8 @@ void KrigingAnalysis::launch()
   if (getCovarianceModel().getInputDimension() != inputDimension)
     throw InvalidArgumentException(HERE) << "The covariance model spatial dimension (" << getCovarianceModel().getInputDimension()
                                          << ") must be equal to the number of effective inputs (" << inputDimension << ")";
-  if (getBasis().getDimension() != inputDimension)
-    throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getDimension()
+  if (getBasis().getInputDimension() != inputDimension)
+    throw InvalidArgumentException(HERE) << "The basis dimension (" << getBasis().getInputDimension()
                                          << ") must be equal to the number of effective inputs (" << inputDimension << ")";
   if (testSampleValidation() && inputSize * getTestSampleValidationPercentageOfPoints() / 100 < 3)
     throw InvalidArgumentException(HERE) << "Test sample validation: The test sample must contain at least three points. Here size * k / 100 = " << (inputSize * getTestSampleValidationPercentageOfPoints() / 100);
@@ -376,11 +376,7 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   const SquareMatrix K(C * C.transpose());
 
   // F
-#if OPENTURNS_VERSION >= 102100
   const Basis basis = krigingResult.getBasis();
-#else
-  const Basis basis = krigingResult.getBasisCollection()[0];
-#endif
   const UnsignedInteger basisDim = basis.getSize();
   Sample F(size, 0);
   for (UnsignedInteger i = 0; i < basisDim; ++i)
@@ -443,7 +439,7 @@ Parameters KrigingAnalysis::getParameters() const
   param.add("Scale", getCovarianceModel().getScale());
   param.add("Amplitude", getCovarianceModel().getAmplitude());
   String basisType("Constant");
-  const UnsignedInteger dim = getBasis().getDimension();
+  const UnsignedInteger dim = getBasis().getInputDimension();
   if (getBasis().getSize() == (dim + 1))
     basisType = "Linear";
   else if (getBasis().getSize() == ((dim + 1) * (dim + 2) / 2))
@@ -483,7 +479,7 @@ String KrigingAnalysis::getPythonScript() const
   }
   // basis
   const UnsignedInteger effectiveInputDim = getCovarianceModel().getScale().getSize();
-  const UnsignedInteger basisDim = getBasis().getDimension();
+  const UnsignedInteger basisDim = getBasis().getInputDimension();
 
   oss << getName() << ".setBasis(";
   if (getBasis().getSize() == (basisDim + 1))
