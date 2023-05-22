@@ -369,7 +369,7 @@ with open("program4.py", "w") as f:
 
 resource_file = persalys.CouplingResourceFile("program4.py")
 step5 = persalys.CouplingStep(sys.executable + " program4.py", [], [resource_file], [])
-step5.setEnvironment(['PYTHONPATH'], [''])
+step5.setEnvironment(['PYTHONPATH', 'PYTHONHOME'], ['', ''])
 model2 = persalys.CouplingPhysicalModel("envTest", [step1, step5])
 x = [1.0, 2.0, 3.0]
 f = model2.getFunction()
