@@ -2,7 +2,9 @@ FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-qwt
-RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview510 > /dev/null 2>&1
+RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-libharu mingw-w64-utf8cpp mingw-w64-cli11 mingw-w64-exprtk \
+ && git clone https://aur.archlinux.org/mingw-w64-paraview510.git /tmp/pv && cd /tmp/pv \
+ && sed -i "s|VTKM=OFF|VTKM=OFF -DPARAVIEW_ENABLE_XDMF2=OFF|g" PKGBUILD && makepkg -sfi --skippgpcheck --noconfirm > /dev/null 2>&1 && rm -rf /tmp/pv
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
 ENV ARCH=x86_64 PYMAJMIN=311
