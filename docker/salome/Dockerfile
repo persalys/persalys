@@ -2,7 +2,7 @@
 FROM debian:stretch
 MAINTAINER jschueller
 
-ADD sources.list /etc/apt/sources.list
+ADD sources.list /etc/apt/
 RUN apt-get -y update && apt-get -y install git g++ libxml2-dev doxygen graphviz libgraphviz-dev libhdf5-dev libcppunit-dev curl libboost-chrono-dev libboost-filesystem-dev libboost-date-time-dev libboost-regex-dev libboost-thread-dev libboost-signals-dev libboost-locale-dev libssl-dev pkgconf libqt5svg5-dev libqt5xmlpatterns5-dev libqt5webkit5-dev libqt5x11extras5-dev qtbase5-dev qttools5-dev qtwebengine5-dev liblapack-dev mesa-common-dev libfreetype6-dev tk-dev libxmu-dev libx11-dev libxi-dev qt5-default sudo libcminpack-dev net-tools xvfb procps xterm gdb vim locales libtbb-dev libffi-dev libgdbm-dev libncurses5-dev libexpat1-dev libpcre3-dev wget bison flex texinfo
 
 # locale
@@ -28,8 +28,8 @@ RUN curl -fsSLO https://bootstrap.pypa.io/pip/3.6/get-pip.py && python3 get-pip.
 RUN curl -fSsL https://ftp.gnu.org/gnu/gdb/gdb-7.12.tar.gz |tar xz && cd gdb-7.12 && ./configure --disable-tui --with-python=no && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r gdb*
 
 # omniorb
-RUN curl -L http://downloads.sourceforge.net/omniorb/omniORB-4.2.2.tar.bz2|tar xj && cd omniORB-4.2.2 && ./configure --with-openssl=/usr && make > /dev/null 2>&1 && make install && cd - && rm -r omniORB*
-RUN curl -L http://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.2/omniORBpy-4.2.2.tar.bz2|tar xj && cd omniORBpy-4.2.2 && ./configure && make > /dev/null 2>&1 && make install && cd - && rm -r omniORBpy*
+RUN curl -L https://downloads.sourceforge.net/omniorb/omniORB-4.2.2.tar.bz2|tar xj && cd omniORB-4.2.2 && ./configure --with-openssl=/usr && make > /dev/null 2>&1 && make install && cd - && rm -r omniORB*
+RUN curl -L https://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.2/omniORBpy-4.2.2.tar.bz2|tar xj && cd omniORBpy-4.2.2 && ./configure && make > /dev/null 2>&1 && make install && cd - && rm -r omniORBpy*
 
 # cmake
 RUN curl -fSsL https://cmake.org/files/v3.16/cmake-3.16.3.tar.gz | tar xz && cd cmake-3.16.3 && ./bootstrap --parallel=8 && make install > /dev/null 2>&1 && cd - && rm -r cmake*
@@ -43,7 +43,7 @@ RUN curl -fSsL http://downloads.sourceforge.net/qwt/qwt-6.1.2.tar.bz2 | tar xj &
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.21rc1 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.21rc1 && GIT_COMMITTER_EMAIL=michel@phimeca.com git cherry-pick ce7ec14 \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # libbatch
