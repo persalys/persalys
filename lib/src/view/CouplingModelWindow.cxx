@@ -168,10 +168,6 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   item->getPhysicalModel().setProcessNumber((UnsignedInteger)nProcesses);
   item->getPhysicalModel().setParallel(nProcesses != 1);
 
-  // - error message label
-  errorMessageLabel_ = new TemporaryLabel;
-  mainLayout->addWidget(errorMessageLabel_, 2, 0);
-
   // Tab : Finite difference step definition
   tab = new QWidget;
   tabLayout = new QGridLayout(tab);
@@ -224,7 +220,12 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   // buttons
   CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+
+  // - error message label
+  errorMessageLabel_ = buttons->getErrorMessageLabel();
+
   connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [=] () {
+      errorMessageLabel_->repaint();
       timeInfo->clear();
       evaluateOutputs();
       mainTabWidget->setCurrentIndex(2);
@@ -233,13 +234,13 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
                           + QtOT::FormatDuration(model_->getEvalTime()));});
 
   connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [=] () {
-      errorMessageLabel_->clear();
+      errorMessageLabel_->repaint();
       gradientTableModel->evaluateGradient();
       mainTabWidget->setCurrentIndex(1);
       if (!gradientTableModel->getErrorMessage().isEmpty())
         errorMessageLabel_->setErrorMessage(gradientTableModel->getErrorMessage());});
 
-  mainLayout->addWidget(buttons, 2, 1);
+  mainLayout->addWidget(buttons, 2, 0, 1, 2);
 }
 
 void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)
@@ -275,7 +276,6 @@ void CouplingModelWindow::evaluateOutputs()
   Sample outputSample(eval.getResult().getDesignOfExperiment().getOutputSample());
 
   // check
-  errorMessageLabel_->reset();
   if (!eval.getErrorMessage().empty())
   {
     errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
