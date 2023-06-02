@@ -67,6 +67,32 @@ int main(int argc, char *argv[])
 
     // Comparison
     assert_almost_equal(evalSample, resultSample, 1e-16);
+
+    String failingScript =
+      "from math import sqrt\n"
+      "def _exec(X0):\n"
+      "  Y0 = 1/sqrt(X0)\n"
+      "  return Y0";
+
+    YACSEvaluation eval(failingScript);
+    Sample X(3,1);
+    X(0, 0) = -1.;
+    X(1, 0) = 0.;
+    X(2, 0) = 1.;
+
+    Sample sample2(1, 1);
+    sample2(0, 0) = 1;
+
+    const Function f3(eval);
+    try
+    {
+      resultSample = f3(X);
+    }
+    catch (const BatchFailedException & exc)
+    {
+      resultSample = exc.getOutputSample();
+    }
+    assert_almost_equal(sample2, resultSample, 1e-16);
   }
   catch (TestFailed & ex)
   {

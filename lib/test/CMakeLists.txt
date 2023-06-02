@@ -102,6 +102,10 @@ include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
 ot_check_test ( PhysicalModel_std )
 ot_check_test ( Cogeneration_std )
+if (NOT CMAKE_CROSSCOMPILING)
+  ot_check_test ( PythonScriptEvaluation_std )
+endif()
+
 
 if (BUILD_GUI)
   include_directories (${CMAKE_CURRENT_BINARY_DIR}) # for mocs
