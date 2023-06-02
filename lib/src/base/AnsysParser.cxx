@@ -151,7 +151,7 @@ void AnsysParser::loadData(const String & fileName)
             std::stod(expression);
             expressionIsValue = true;
           }
-          catch (std::exception & exc)
+          catch (const std::exception &)
           {
             // Do nothing
           }

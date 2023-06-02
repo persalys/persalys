@@ -140,7 +140,7 @@ Sample PythonScriptFieldFunction::operator() (const Point & inP) const
       if (outS_t.getDimension() != getOutputMesh().getVerticesNumber() || outS_t.getSize() != outputModelDimension_)
         throw InvalidDimensionException(HERE);
     }
-    catch (std::exception& e)
+    catch (const std::exception &)
     {
       throw InvalidArgumentException(HERE) << "The Python Function must return " << outputModelDimension_ << " sequence objects of size equal to the mesh vertices number " << getOutputMesh().getVerticesNumber();
     }
@@ -158,7 +158,7 @@ Sample PythonScriptFieldFunction::operator() (const Point & inP) const
       if (outP.getSize() != getOutputMesh().getVerticesNumber())
         throw InvalidDimensionException(HERE);
     }
-    catch (std::exception& e)
+    catch (const std::exception &)
     {
       throw InvalidArgumentException(HERE) << "The Python Function must return a sequence object of size equal to the mesh vertices number " << getOutputMesh().getVerticesNumber();
     }
@@ -226,7 +226,7 @@ ProcessSample PythonScriptFieldFunction::operator() (const Sample & inS) const
   {
     ptr = buildCollectionFromPySequence< Sample >(sampleResult.get());
   }
-  catch (std::exception& e)
+  catch (const std::exception &)
   {
     throw InvalidArgumentException(HERE) << "The Python Function must return " << outputModelDimension_ << " sequence objects of size equal to the mesh vertices number " << getOutputMesh().getVerticesNumber();
   }

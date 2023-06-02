@@ -89,7 +89,7 @@ void ImportedDesignPage::checkColumns()
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }
-  catch(InvalidArgumentException & ex)
+  catch (const InvalidArgumentException &)
   {
     sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
     sampleWidget_->tableValidity_ = false;

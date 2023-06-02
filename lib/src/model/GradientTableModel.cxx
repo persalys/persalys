@@ -119,7 +119,7 @@ void GradientTableModel::evaluateGradient()
   {
     eval.run();
   }
-  catch (std::exception& ex)
+  catch (const std::exception &)
   {
     // do nothing
   }
@@ -139,7 +139,7 @@ void GradientTableModel::evaluateGradient()
     gradient_ = func.gradient(eval.getOriginalInputSample()[0]);
     emit dataChanged(this->index(0,0), this->index(rowCount(), columnCount()));
   }
-  catch (std::exception& ex)
+  catch (const std::exception & ex)
   {
     emit errorMessageChanged(tr("Not possible to evaluate the gradient: %1").arg(ex.what()));
     gradient_ = Matrix();

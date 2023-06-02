@@ -303,7 +303,7 @@ void DependenciesWidget::addCopula()
   // set copula, item might not be available (e.g. calibration wizard copula)
   try {
     physicalModel_.blockNotification("ProbabilisticModelItem");
-  } catch (std::exception &ex) { }
+  } catch (const std::exception &) { }
   physicalModel_.setCopula(selectedVars, newCopula);
   physicalModel_.blockNotification();
   // add a copula widget

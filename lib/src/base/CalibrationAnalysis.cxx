@@ -207,7 +207,7 @@ void CalibrationAnalysis::launch()
   {
     result_.confidenceInterval_ = distributionPosterior.computeBilateralConfidenceInterval(confidenceIntervalLength_);
   }
-  catch (std::exception &ex) { LOGWARN("Cannot compute the confidence interval"); }
+  catch (const std::exception &) { LOGWARN("Cannot compute the confidence interval"); }
   ResourceMap::SetAsUnsignedInteger("Normal-SmallDimension", oldValue1);
   ResourceMap::SetAsUnsignedInteger("Normal-MinimumNumberOfPoints", oldValue2);
 
@@ -222,7 +222,7 @@ void CalibrationAnalysis::launch()
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
     try { result_.priorResidualsPDF_[i] = kernel.build(priorResiduals.getMarginal(i)).drawPDF().getDrawables()[0].getData(); }
-    catch (std::exception &ex) { LOGWARN("Cannot build prior residual PDF"); }
+    catch (const std::exception &) { LOGWARN("Cannot build prior residual PDF"); }
   }
 
   // Posterior
@@ -233,7 +233,7 @@ void CalibrationAnalysis::launch()
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
     try { result_.posteriorResidualsPDF_[i] = kernel.build(posteriorResiduals.getMarginal(i)).drawPDF().getDrawables()[0].getData(); }
-    catch (std::exception &ex) { LOGWARN("Cannot build posterior residual PDF"); }
+    catch (const std::exception &) { LOGWARN("Cannot build posterior residual PDF"); }
   }
 }
 

@@ -33,7 +33,7 @@ void Worker::process(Analysis analysis)
   {
     analysis.run();
   }
-  catch (std::exception &ex)
+  catch (const std::exception &)
   {
   }
   emit processFinished();
