@@ -26,7 +26,7 @@
 namespace PERSALYS
 {
 
-TimeLineEdit::TimeLineEdit(const QString text, QWidget *parent)
+TimeLineEdit::TimeLineEdit(const QString & text, QWidget *parent)
   : QLineEdit(parent)
 {
   setInputMask("999\\d\\ 99\\h\\ 99\\m\\ 99\\s");
