@@ -33,6 +33,10 @@ list ( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 include (GNUInstallDirs)
 
 find_package (OpenTURNS 1.21 CONFIG REQUIRED)
+get_target_property (ot_features OT OPENTURNS_ENABLED_FEATURES)
+if (NOT ot_features MATCHES "hdf5")
+  message (FATAL_ERROR "OpenTURNS lacks hdf5 support")
+endif()
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 list (APPEND PERSALYS_PUBLIC_LIBRARIES ${OPENTURNS_LIBRARIES})
 
