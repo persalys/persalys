@@ -418,7 +418,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       case 4: // lower bounds
       {
         Interval::BoolCollection finiteLowerBounds = analysis_.getBounds().getFiniteLowerBound();
-        if (finiteLowerBounds[inputIndex] == value.toBool())
+        if ((Bool)finiteLowerBounds[inputIndex] == value.toBool())
           return false;
         finiteLowerBounds[inputIndex] = value.toBool();
         Interval newInterval(analysis_.getBounds());
@@ -431,7 +431,7 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       case 5: // upper bounds
       {
         Interval::BoolCollection finiteUpperBounds = analysis_.getBounds().getFiniteUpperBound();
-        if (finiteUpperBounds[inputIndex] == value.toBool())
+        if ((Bool)finiteUpperBounds[inputIndex] == value.toBool())
           return false;
         finiteUpperBounds[inputIndex] = value.toBool();
         Interval newInterval(analysis_.getBounds());
