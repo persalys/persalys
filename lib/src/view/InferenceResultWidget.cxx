@@ -20,6 +20,7 @@
  */
 #include "persalys/InferenceResultWidget.hxx"
 
+#include "persalys/InferenceAnalysis.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/RadioButtonDelegate.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
@@ -201,7 +202,6 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Distribution"));
   distTableModel_->setNotEditableHeaderItem(0, 1, tr("Bayesian\nInformation\nCriterion"));
   distTableModel_->setData(distTableModel_->index(0, 1), tr("Lower BIC value is better"), Qt::ToolTipRole);
-  distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
   distTableModel_->setNotEditableHeaderItem(1, 2, tr("p-value"));
   distTableModel_->setNotEditableHeaderItem(1, 3, tr("Acceptation") + "\n(" + QString::number(level) + ")");
   distTableView_->setSpan(0, 0, 2, 1);
@@ -210,6 +210,11 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
   // table
   // -- get results of the variable
   currentFittingTestResult_ = result.getFittingTestResultForVariable(variableName.toStdString());
+  // check test type and set header title
+  if(currentFittingTestResult_.getTestType() == InferenceAnalysis::Kolmogorov)
+    distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
+  else
+    distTableModel_->setNotEditableHeaderItem(0, 2, tr("Lilliefors"));
   // BIC values
   Point bicValues(currentFittingTestResult_.getBICResults());
   // number of tests
@@ -240,11 +245,11 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
     {
       distTableModel_->setNotEditableItem(cellRow, 1, bicValues[indices[i]], 3);
 
-      const Scalar pValue = currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getPValue();
+      const Scalar pValue = currentFittingTestResult_.getTestResults()[indices[i]].getPValue();
       distTableModel_->setNotEditableItem(cellRow, 2, pValue, 3);
 
       // if accepted
-      if (currentFittingTestResult_.getKolmogorovTestResults()[indices[i]].getBinaryQualityMeasure())
+      if (currentFittingTestResult_.getTestResults()[indices[i]].getBinaryQualityMeasure())
       {
         distTableModel_->setNotEditableItem(cellRow, 3, tr("yes"), Qt::green);
       }
@@ -276,7 +281,6 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
   distTableModel_->setItem(0, 2, new QStandardItem);
   distTableView_->resizeToContents();
   const int section2Size = distTableView_->horizontalHeader()->sectionSize(2);
-  distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
   distTableView_->setSpan(0, 2, 1, 2);
   const int subTitlesWidth = distTableView_->horizontalHeader()->sectionSize(1) + distTableView_->horizontalHeader()->sectionSize(2);
   const int widthCorrection = titleWidth - subTitlesWidth;
@@ -506,7 +510,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   }
   cdfPlot_->plotCurve(F_nx, QPen(Qt::blue, 2));
 
-  // compute Kolmogorov–Smirnov statistic : D_n = sup |F_n(x) - F(x)|
+  // compute fitting test statistic : D_n = sup |F_n(x) - F(x)|
   const Sample Fx(distribution.computeCDF(F_nx.getMarginal(0)));
   Sample KSStatistic(2, 2);
   for (UnsignedInteger i = 0; i < F_nx.getSize(); ++i)
@@ -520,7 +524,14 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     }
   }
   cdfPlot_->plotCurve(KSStatistic, QPen(Qt::red, 2));
-  cdfPlot_->setTitle(tr("CDF") + ": " + distName + " " + tr("(Kolmogorov–Smirnov statistic=%1)").arg(std::abs(KSStatistic(0, 1) - KSStatistic(1, 1))));
+  QString testName;
+  if(currentFittingTestResult_.getTestType() == InferenceAnalysis::Kolmogorov)
+    testName = QString(tr("Kolmogorov-Smirnov"));
+  else
+    testName = QString(tr("Lilliefors"));
+
+  cdfPlot_->setTitle(tr("CDF") + ": " + distName + " ("
+                     + testName + " " + tr("statistic=%1)").arg(std::abs(KSStatistic(0, 1) - KSStatistic(1, 1))));
 
   // -- qq plot
   Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));

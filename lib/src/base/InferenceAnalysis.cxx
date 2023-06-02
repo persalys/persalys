@@ -41,8 +41,11 @@ static Factory<PersistentCollection<Description> > Factory_PersistentCollection_
 InferenceAnalysis::InferenceAnalysis()
   : DesignOfExperimentAnalysis()
   , distFactoriesForEachInterestVar_()
-  , level_(0.05)
+  , lillieforsPrecision_(ResourceMap::GetAsScalar("FittingTest-LillieforsPrecision"))
+  , lillieforsMinimumSamplingSize_(ResourceMap::GetAsUnsignedInteger("FittingTest-LillieforsMinimumSamplingSize"))
+  , lillieforsMaximumSamplingSize_ (ResourceMap::GetAsUnsignedInteger("FittingTest-LillieforsMaximumSamplingSize"))
 {
+
 }
 
 
@@ -50,8 +53,11 @@ InferenceAnalysis::InferenceAnalysis()
 InferenceAnalysis::InferenceAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
   , distFactoriesForEachInterestVar_()
-  , level_(0.05)
+  , lillieforsPrecision_(ResourceMap::GetAsScalar("FittingTest-LillieforsPrecision"))
+  , lillieforsMinimumSamplingSize_(ResourceMap::GetAsUnsignedInteger("FittingTest-LillieforsMinimumSamplingSize"))
+  , lillieforsMaximumSamplingSize_ (ResourceMap::GetAsUnsignedInteger("FittingTest-LillieforsMaximumSamplingSize"))
 {
+
   if (designOfExperiment_.getSample().getSize())
     setInterestVariables(designOfExperiment_.getSample().getDescription());
 
@@ -150,6 +156,13 @@ void InferenceAnalysis::launch()
   if (!getInterestVariables().getSize())
     throw InvalidDimensionException(HERE) << "The number of variables to analyse must be greater than 0";
 
+  if (type_ == InferenceAnalysis::Lilliefors)
+  {
+    ResourceMap::SetAsScalar("FittingTest-LillieforsPrecision", lillieforsPrecision_);
+    ResourceMap::SetAsUnsignedInteger("FittingTest-LillieforsMinimumSamplingSize", lillieforsMinimumSamplingSize_);
+    ResourceMap::SetAsUnsignedInteger("FittingTest-LillieforsMaximumSamplingSize", lillieforsMaximumSamplingSize_);
+  }
+
   std::map<String, DistributionFactoryCollection>::iterator it;
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
@@ -179,37 +192,54 @@ void InferenceAnalysis::launch()
 
   const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
 
+  // total number of distribution to test
+  UnsignedInteger nTotalDist = 0;
+  for (const auto& collectionMapItem : distFactoriesForEachInterestVar_) {
+    nTotalDist += collectionMapItem.second.getSize();
+  }
+
   // inference
+  int distCounter = 0;
   for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
   {
-    progressValue_ = (int) (i * 100 / sample.getDimension());
-    notify("progressValueChanged");
-
     const UnsignedInteger nbDist = distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize();
 
     FittingTestResult fittingTestResult;
     fittingTestResult.variableName_ = sample.getDescription()[i];
     fittingTestResult.values_ = sample.getMarginal(i);
     fittingTestResult.errorMessages_ = Description(nbDist);
+    fittingTestResult.testType_ = type_;
 
     const Sample sampleI(sample.getMarginal(i));
     const Sample sortedSampleI(sampleI.sortUnique());
 
     for (UnsignedInteger j = 0; j < nbDist; ++j)
     {
+      progressValue_ = (int) (distCounter * 100 / (nTotalDist));
+      notify("progressValueChanged");
+
       const DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
       try
       {
         if (sortedSampleI.getSize() < 2)
           throw InvalidArgumentException(HERE) << "constant sample";
 
-        const Distribution distribution(distFactory.build(sampleI));
+        Distribution distribution(distFactory.build(sampleI));
         distribution.getMean(); // ensures mean is defined
         distribution.getStandardDeviation(); // ensures sttdev is defined
 
-        // Kolmogorov test
-        const TestResult testResult(FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_));
-
+        TestResult testResult;
+        switch(type_)
+        {
+        case InferenceAnalysis::Lilliefors:
+          testResult = FittingTest::Lilliefors(sample.getMarginal(i), distFactory, distribution, level_);
+          break;
+        case InferenceAnalysis::Kolmogorov:
+          testResult = FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_);
+          break;
+        default:
+          throw InvalidArgumentException(HERE) << "Unknown test type.";
+        }
         // BIC test
         const Scalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
 
@@ -221,7 +251,7 @@ void InferenceAnalysis::launch()
           fittingTestResult.paramCI_.add(paramDist.computeBilateralConfidenceInterval(paramCILevel_));
         }
 
-        fittingTestResult.kolmogorovTestResults_.add(testResult);
+        fittingTestResult.testResults_.add(testResult);
         fittingTestResult.bicResults_.add(bicResult);
       }
       catch (std::exception & ex)
@@ -238,13 +268,14 @@ void InferenceAnalysis::launch()
         // set fittingTestResult
         fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
         TestResult testResult;
-        fittingTestResult.kolmogorovTestResults_.add(testResult);
+        fittingTestResult.testResults_.add(testResult);
         fittingTestResult.bicResults_.add(SpecFunc::MaxScalar);
         fittingTestResult.errorMessages_[j] = message;
         if (estimateParamCI_) {
           fittingTestResult.paramCI_.add(Interval());
         }
       }
+      distCounter++;
     }
     result_.fittingTestResultCollection_.add(fittingTestResult);
   }
@@ -261,7 +292,17 @@ Parameters InferenceAnalysis::getParameters() const
 {
   Parameters param;
 
-  param.add("Method", "Kolmogorov-Smirnov");
+  switch(type_)
+  {
+  case InferenceAnalysis::Lilliefors:
+    param.add("Method", "Lilliefors");
+    break;
+  case InferenceAnalysis::Kolmogorov:
+    param.add("Method", "Kolmogorov-Smirnov");
+    break;
+  default:
+    throw InvalidArgumentException(HERE) << "Unknown test type.";
+  }
   param.add("Level", getLevel());
 
   return param;
@@ -300,6 +341,35 @@ bool InferenceAnalysis::hasValidResult() const
   return result_.getFittingTestResultCollection().getSize() != 0;
 }
 
+double InferenceAnalysis::getLillieforsPrecision() const
+{
+  return lillieforsPrecision_;
+}
+
+void InferenceAnalysis::setLillieforsPrecision(const double lillieforsPrecision)
+{
+  lillieforsPrecision_ = lillieforsPrecision;
+}
+
+int InferenceAnalysis::getLillieforsMinimumSamplingSize() const
+{
+  return lillieforsMinimumSamplingSize_;
+}
+
+void InferenceAnalysis::setLillieforsMinimumSamplingSize(const int lillieforsMinimumSamplingSize)
+{
+  lillieforsMinimumSamplingSize_ = lillieforsMinimumSamplingSize;
+}
+
+int InferenceAnalysis::getLillieforsMaximumSamplingSize() const
+{
+  return lillieforsMaximumSamplingSize_;
+}
+
+void InferenceAnalysis::setLillieforsMaximumSamplingSize(const int lillieforsMaximumSamplingSize)
+{
+  lillieforsMaximumSamplingSize_ = lillieforsMaximumSamplingSize;
+}
 
 String InferenceAnalysis::__repr__() const
 {
@@ -339,6 +409,11 @@ void InferenceAnalysis::save(Advocate& adv) const
   adv.saveAttribute("estimateParamCI_", estimateParamCI_);
   adv.saveAttribute("paramCILevel_", paramCILevel_);
   adv.saveAttribute("result_", result_);
+  adv.saveAttribute("type_", type_);
+  adv.saveAttribute("lillieforsPrecision_", lillieforsPrecision_);
+  adv.saveAttribute("lillieforsMinimumSamplingSize_", lillieforsMinimumSamplingSize_);
+  adv.saveAttribute("lillieforsMaximumSamplingSize_", lillieforsMaximumSamplingSize_);
+
 }
 
 
@@ -354,7 +429,13 @@ void InferenceAnalysis::load(Advocate& adv)
   if (adv.hasAttribute("paramCILevel_"))
     adv.loadAttribute("paramCILevel_", paramCILevel_);
   adv.loadAttribute("result_", result_);
-
+  if (adv.hasAttribute("type_"))
+  {
+    adv.loadAttribute("type_", type_);
+    adv.loadAttribute("lillieforsPrecision_", lillieforsPrecision_);
+    adv.loadAttribute("lillieforsMinimumSamplingSize_", lillieforsMinimumSamplingSize_);
+    adv.loadAttribute("lillieforsMaximumSamplingSize_", lillieforsMaximumSamplingSize_);
+  }
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
     DistributionFactoryCollection factoryCollection;

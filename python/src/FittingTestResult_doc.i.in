@@ -33,13 +33,13 @@ distributions : sequence of :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::FittingTestResult::getKolmogorovTestResults
-"Get the result of the Kolmogorov goodness-of-fit test.
+%feature("docstring") PERSALYS::FittingTestResult::getLillieforsTestResults
+"Get the result of the Lilliefors goodness-of-fit test.
 
 Returns
 -------
 results : sequence of :py:class:`openturns.TestResult`
-    Results of the Kolmogorov goodness-of-fit test for all the distributions"
+    Results of the Lilliefors goodness-of-fit test for all the distributions"
 
 // ---------------------------------------------------------------------
 

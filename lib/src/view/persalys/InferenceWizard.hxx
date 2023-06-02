@@ -26,6 +26,7 @@
 #include "persalys/VariablesSelectionTableModel.hxx"
 #include "persalys/TemporaryLabel.hxx"
 #include "persalys/DoubleSpinBox.hxx"
+#include "persalys/LogSpinBox.hxx"
 #include "persalys/CopyableTableView.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 
@@ -33,6 +34,7 @@
 
 #include <QMenu>
 #include <QCheckBox>
+#include <QComboBox>
 
 
 namespace PERSALYS
@@ -66,9 +68,13 @@ private:
   OT::Description interestVar_;
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
   ResizableStackedWidget * stackWidget_;
+  QComboBox * testTypeComboBox_;
   DoubleSpinBox * levelSpinbox_;
   QCheckBox * paramICCheckBox_;
   DoubleSpinBox * icLevelSpinbox_;
+  DoubleSpinBox * lillieforsPrecisionSpinbox_;
+  LogSpinBox * lillieforsMinimumSamplingSizeSpinbox_;
+  LogSpinBox * lillieforsMaximumSamplingSizeSpinbox_;
   TemporaryLabel * errorMessageLabel_;
   bool pageValidity_;
   VariablesSelectionTableModel * varTableModel_;

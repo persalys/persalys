@@ -45,9 +45,10 @@ public:
   OT::Sample getValues() const;
   OT::Collection<OT::Distribution> getTestedDistributions() const;
   OT::Collection<OT::Interval> getParamConfidenceInterval() const;
-  OT::Collection<OT::TestResult> getKolmogorovTestResults() const;
+  OT::Collection<OT::TestResult> getTestResults() const;
   OT::Point getBICResults() const;
   OT::Description getErrorMessages() const;
+  OT::UnsignedInteger getTestType() const {return testType_;};
 
   /** String converter */
   OT::String __repr__() const override;
@@ -63,9 +64,10 @@ protected:
   OT::Sample values_;
   OT::PersistentCollection< OT::Distribution > testedDistributions_;
   OT::PersistentCollection< OT::Interval > paramCI_;
-  OT::PersistentCollection< OT::TestResult > kolmogorovTestResults_;
+  OT::PersistentCollection< OT::TestResult > testResults_;
   OT::Point bicResults_;
   OT::Description errorMessages_;
+  OT::UnsignedInteger testType_ = 0; //Kolmogorov
 };
 }
 #endif

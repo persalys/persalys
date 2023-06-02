@@ -143,8 +143,7 @@ automatically selected in the other tabs.
 
 The inference analysis allows one to perform a Bayesian Information Criterion
 (`BIC <http://openturns.github.io/openturns/latest/theory/data_analysis/bic.html>`_) and
-a `Kolmogorov-Smirnov <http://openturns.github.io/openturns/latest/theory/data_analysis/kolmogorov_test.html>`_
-goodness-of-fit tests for 1-d continuous distributions.
+either a `Kolmogorov-Smirnov <http://openturns.github.io/openturns/latest/theory/data_analysis/kolmogorov_test.html>`_ or `Lilliefors <http://openturns.github.io/openturns/latest/auto_data_analysis/statistical_tests/plot_kolmogorov_test.html#case-2-the-distribution-parameters-are-estimated-from-the-sample>`_ goodness-of-fit tests for 1-d continuous distributions.
 
 New marginals inference can be created thanks to:
   - the context menu of the **Definition** item of the data model
@@ -188,9 +187,13 @@ When an analysis is required, a window appears, in order to set up:
 
       - To remove a distribution, select it in the table and click on **Remove**.
         Press the Ctrl or Shift key to select multiple lines.
-  - the Kolmogorov-Smirnov level such that :math:`\alpha = 1 - {\rm level}` is the risk of
+  - the Kolmogorov-Smirnov/Lilliefors level such that :math:`\alpha = 1 - {\rm level}` is the risk of
     committing a Type I error, that is an incorrect rejection of a true null hypothesis
     (default: 0.05., expected: float in the range :math:`]0, 1[`)
+  - **Advanced paramters** are as follows:
+
+    - Require an estimation of the tested distributions parameters confidence interval at a specified level
+    - Fine-tune Lilliefors parameters (precision, min/max sampling sizes)
 
 
 

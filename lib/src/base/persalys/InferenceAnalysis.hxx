@@ -33,6 +33,7 @@ class PERSALYS_BASE_API InferenceAnalysis : public DesignOfExperimentAnalysis
   CLASSNAME
 
 public:
+  enum TestType{Kolmogorov, Lilliefors};
   typedef OT::Collection<OT::DistributionFactory> DistributionFactoryCollection;
 
   /** Default constructor */
@@ -64,6 +65,18 @@ public:
   double getParametersConfidenceIntervalLevel() const {return paramCILevel_;};
   void setParametersConfidenceIntervalLevel(const double paramCILevel) {paramCILevel_ = paramCILevel;};
 
+  OT::UnsignedInteger getTestType() const {return type_;};
+  void setTestType(const OT::UnsignedInteger type) {type_ = type;};
+
+  double getLillieforsPrecision() const;
+  void setLillieforsPrecision(const double lillieforsPrecision);
+
+  int getLillieforsMinimumSamplingSize() const;
+  void setLillieforsMinimumSamplingSize(const int lillieforsMinimumSamplingSize);
+
+  int getLillieforsMaximumSamplingSize() const;
+  void setLillieforsMaximumSamplingSize(const int lillieforsMaximumSamplingSize);
+
 
   /** String converter */
   OT::String __repr__() const override;
@@ -80,10 +93,14 @@ protected:
 
 private:
   std::map<OT::String, DistributionFactoryCollection> distFactoriesForEachInterestVar_;
-  double level_;
+  double level_ = 0.05;
   InferenceResult result_;
   bool estimateParamCI_ = false;
   double paramCILevel_ = 0.95;
+  OT::UnsignedInteger type_ = InferenceAnalysis::Kolmogorov;
+  double lillieforsPrecision_ = 0.;
+  OT::UnsignedInteger lillieforsMinimumSamplingSize_ = 0;
+  OT::UnsignedInteger lillieforsMaximumSamplingSize_ = 0;
 };
 }
 #endif

@@ -71,9 +71,9 @@ Collection< Interval > FittingTestResult::getParamConfidenceInterval() const
 }
 
 
-Collection< TestResult > FittingTestResult::getKolmogorovTestResults() const
+Collection< TestResult > FittingTestResult::getTestResults() const
 {
-  return kolmogorovTestResults_;
+  return testResults_;
 }
 
 
@@ -97,7 +97,7 @@ String FittingTestResult::__repr__() const
       << " variableName=" << getVariableName()
       << " testedDistributions=" << getTestedDistributions()
       << " paramConfidenceInterval=" << getParamConfidenceInterval()
-      << " kolmogorovTestResults=" << getKolmogorovTestResults()
+      << " testResults=" << getTestResults()
       << " bicResults=" << getBICResults()
       << " error messages=" << getErrorMessages();
   return oss;
@@ -112,9 +112,10 @@ void FittingTestResult::save(Advocate& adv) const
   adv.saveAttribute("values_", values_);
   adv.saveAttribute("testedDistributions_", testedDistributions_);
   adv.saveAttribute("paramCI_", paramCI_);
-  adv.saveAttribute("kolmogorovTestResults_", kolmogorovTestResults_);
+  adv.saveAttribute("testResults_", testResults_);
   adv.saveAttribute("bicResults_", bicResults_);
   adv.saveAttribute("errorMessages_", errorMessages_);
+  adv.saveAttribute("testType_", testType_);
 }
 
 
@@ -127,8 +128,14 @@ void FittingTestResult::load(Advocate& adv)
   adv.loadAttribute("testedDistributions_", testedDistributions_);
   if (adv.hasAttribute("paramCI_"))
     adv.loadAttribute("paramCI_", paramCI_);
-  adv.loadAttribute("kolmogorovTestResults_", kolmogorovTestResults_);
+  // backwards compatibility
+  if (adv.hasAttribute("testResults_"))
+    adv.loadAttribute("testResults_", testResults_);
+  else
+    adv.loadAttribute("kolmogorovTestResults_", testResults_);
   adv.loadAttribute("bicResults_", bicResults_);
   adv.loadAttribute("errorMessages_", errorMessages_);
+  if (adv.hasAttribute("testType_"))
+    adv.loadAttribute("testType_", testType_);
 }
 }
