@@ -50,7 +50,6 @@
 #include <openturns/DistFunc.hxx>
 
 #include <QVBoxLayout>
-#include <QScrollArea>
 #include <QHeaderView>
 #include <QSplitter>
 #include <QSortFilterProxyModel>
@@ -800,28 +799,25 @@ void DataAnalysisWindow::updateVariablesListVisibility(int indexTab)
 
 void DataAnalysisWindow::addErrorTable()
 {
-  QTableView * errorTable = new QTableView;
-
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  scrollArea->setWidget(errorTable);
-
-  CustomStandardItemModel* errorTableModel = new CustomStandardItemModel(failedInputSample_.getSize()+1, failedInputSample_.getDimension()+1, errorTable);
+  ExportableTableView * errorTable = new ExportableTableView;
+  CustomStandardItemModel* errorTableModel = new CustomStandardItemModel(failedInputSample_.getSize()+1, failedInputSample_.getDimension()+2, errorTable);
   errorTable->setModel(errorTableModel);
 
   // header
   for (UnsignedInteger j = 0; j < failedInputSample_.getDimension(); ++j)
-    errorTableModel->setNotEditableHeaderItem(0, j, failedInputSample_.getDescription()[j].c_str());
-  errorTableModel->setNotEditableHeaderItem(0, failedInputSample_.getDimension(), tr("Error message"));
+    errorTableModel->setNotEditableHeaderItem(0, j+1, failedInputSample_.getDescription()[j].c_str());
+  errorTableModel->setNotEditableHeaderItem(0, 0, tr("Row ID"));
+  errorTableModel->setNotEditableHeaderItem(0, failedInputSample_.getDimension()+1, tr("Error message"));
 
   // Error Desc
   for (UnsignedInteger i = 0; i < failedInputSample_.getSize(); ++i) {
     for (UnsignedInteger j = 0; j < failedInputSample_.getDimension(); ++j)
-      errorTableModel->setNotEditableItem(i+1, j, failedInputSample_[i][j]);
-    errorTableModel->setNotEditableItem(i+1, failedInputSample_.getDimension(), errorDescription_[i].c_str());
+      errorTableModel->setNotEditableItem(i+1, j+1, failedInputSample_[i][j]);
+    errorTableModel->setNotEditableItem(i+1, failedInputSample_.getDimension()+1, errorDescription_[i].c_str());
+    errorTableModel->setNotEditableItem(i+1, 0, i);
   }
 
   errorTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-  tablesTabWidget_->addTab(scrollArea, tr("Error messages"));
+  tablesTabWidget_->addTab(errorTable, tr("Error messages"));
 }
 }
