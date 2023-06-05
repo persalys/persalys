@@ -65,6 +65,12 @@ target_include_directories (persalysplot PRIVATE ${QWT_INCLUDE_DIRS})
 
 target_link_libraries (persalysplot ${QT_LIBRARIES})
 target_link_libraries (persalysplot ${QWT_LIBRARIES})
+
+option (PERSALYS_QWT_DLL "assume qwt is compiled as shared lib" ON)
+if (WIN32 AND PERSALYS_QWT_DLL)
+  target_compile_definitions (persalysplot PRIVATE QWT_DLL)
+endif ()
+
 if (ParaView_FOUND)
   target_link_libraries (persalysplot persalysplotpv)
 endif ()
