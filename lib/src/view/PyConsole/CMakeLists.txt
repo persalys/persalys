@@ -43,7 +43,7 @@ endif ()
 target_link_libraries (persalyspyconsole persalyspyinterp)
 
 install ( TARGETS persalyspyconsole
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION ${PERSALYS_BIN_PATH}
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )

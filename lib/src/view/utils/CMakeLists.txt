@@ -118,7 +118,7 @@ target_link_libraries (persalysutils persalysbase persalysmodel)
 target_link_libraries (persalysutils ${QT_LIBRARIES})
 
 install ( TARGETS persalysutils
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION ${PERSALYS_BIN_PATH}
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
