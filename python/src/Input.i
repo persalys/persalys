@@ -54,7 +54,7 @@ template <>
   } else {
     try {
       $1 = OT::buildCollectionFromPySequence< PERSALYS::Input >( $input );
-    } catch (OT::InvalidArgumentException & ex) {
+    } catch (const OT::InvalidArgumentException &) {
       SWIG_exception(SWIG_TypeError, "Object passed as argument is not convertible to a collection of Input");
     }
   }

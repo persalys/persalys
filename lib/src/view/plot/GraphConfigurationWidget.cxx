@@ -179,7 +179,7 @@ void GraphConfigurationWidget::updateRange(QwtPlot::Axis ax)
     plotWidgets_[plotIndex_]->setAxisScale(ax, axisMinValueLineEdit_[axIndex]->value(), axisMaxValueLineEdit_[axIndex]->value());
     plotWidgets_[plotIndex_]->replot();
   }
-  catch (std::exception & ex)
+  catch (const std::exception &)
   {
     updateLineEdits();
     qDebug() << "GraphConfigurationWidget::updateRange: value not valid\n";
