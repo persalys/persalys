@@ -411,7 +411,6 @@ void FMIPhysicalModelWindow::updateFilters()
 
 void FMIPhysicalModelWindow::updateIOCount()
 {
-  int disabledVar = 0;
   int inVar = 0;
   int outVar = 0;
   Indices io(variablesTableModel_->getIO());
@@ -419,9 +418,6 @@ void FMIPhysicalModelWindow::updateIOCount()
   {
     switch(io[i])
     {
-      case 0:
-        ++ disabledVar;
-        break;
       case 1:
         ++ inVar;
         break;
