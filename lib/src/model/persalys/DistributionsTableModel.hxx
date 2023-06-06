@@ -33,7 +33,7 @@ class PERSALYS_MODEL_API DistributionsTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, const bool isCopulaList, QWidget *parent = 0);
+  DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, const bool isCopulaList, QWidget *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API CustomStandardItemModel : public QStandardItemModel
   Q_OBJECT
 
 public:
-  CustomStandardItemModel(int nbRows, int nbColumns, QObject * parent = 0);
+  CustomStandardItemModel(int nbRows, int nbColumns, QObject *parent = nullptr);
 
   void setNotEditableItem(const int row, const int column, const QString text, const QColor color = QColor());
   void setNotEditableItem(const int row, const int column, const double value, const int prec = 6);

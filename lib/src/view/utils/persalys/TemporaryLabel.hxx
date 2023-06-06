@@ -33,7 +33,7 @@ class PERSALYS_UTILS_API TemporaryLabel : public QLabel
   Q_OBJECT
 
 public:
-  TemporaryLabel(QWidget *parent = 0);
+  TemporaryLabel(QWidget *parent = nullptr);
 
 public slots:
   void reset();

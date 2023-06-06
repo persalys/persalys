@@ -36,7 +36,7 @@ class PERSALYS_VIEW_API DiagramWindow : public SubWindow
   Q_OBJECT
 
 public :
-  DiagramWindow(Item * item, QWidget * parent = 0);
+  DiagramWindow(Item * item, QWidget *parent = nullptr);
 
 protected:
   void appendButton(DiagramPushButton *button, const unsigned int row, DiagramPushButton *parentButton = 0);

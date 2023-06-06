@@ -32,8 +32,8 @@ class PERSALYS_MODEL_API OptimizationTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  OptimizationTableModel(QObject * parent = 0);
-  OptimizationTableModel(const OptimizationAnalysis & analysis, QObject * parent = 0);
+  OptimizationTableModel(QObject *parent = nullptr);
+  OptimizationTableModel(const OptimizationAnalysis & analysis, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;

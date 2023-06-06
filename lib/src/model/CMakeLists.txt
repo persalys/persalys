@@ -165,7 +165,7 @@ set_target_properties ( persalysmodel PROPERTIES SOVERSION ${LIB_SOVERSION} )
 target_link_libraries ( persalysmodel persalysbase ${QT_LIBRARIES})
 
 install ( TARGETS persalysmodel
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION ${PERSALYS_BIN_PATH}
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )

@@ -38,7 +38,7 @@ namespace PERSALYS
 class PERSALYS_UTILS_API HeaderlessTableView: public CopyableTableView
 {
 public:
-  explicit HeaderlessTableView(QWidget *parent = 0);
+  explicit HeaderlessTableView(QWidget *parent = nullptr);
 
   /*
    * @return The index of the column whose right hand boundary the cursor lies
@@ -68,7 +68,7 @@ private:
 class PERSALYS_UTILS_API ResizableHeaderlessTableView: public HeaderlessTableView
 {
 public:
-  explicit ResizableHeaderlessTableView(QWidget *parent = 0);
+  explicit ResizableHeaderlessTableView(QWidget *parent = nullptr);
 
   void resizeWithOptimalWidth();
 

@@ -36,7 +36,7 @@ namespace PERSALYS
   Q_OBJECT
 
 public:
-  MultiObjectiveOptimizationResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  MultiObjectiveOptimizationResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void initialize(AnalysisItem * item);

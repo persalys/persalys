@@ -32,8 +32,8 @@ class PERSALYS_UTILS_API ListWidgetWithCheckBox : public QListWidget
   Q_OBJECT
 
 public:
-  ListWidgetWithCheckBox(const QString &title, const QStringList &itemNames, QWidget * parent = 0);
-  ListWidgetWithCheckBox(const QString &title, const QStringList &itemNames, const QStringList &selectedItemNames, QWidget * parent = 0);
+  ListWidgetWithCheckBox(const QString &title, const QStringList &itemNames, QWidget *parent = nullptr);
+  ListWidgetWithCheckBox(const QString &title, const QStringList &itemNames, const QStringList &selectedItemNames, QWidget *parent = nullptr);
 
   QStringList getCheckedItemNames() const;
   QStringList getItemNames() const;

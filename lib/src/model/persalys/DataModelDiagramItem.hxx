@@ -54,12 +54,12 @@ signals:
   void metaModelValidityChanged(bool);
 
 private:
-  QAction * defineAction_ = 0;
-  QAction * newDataAnalysis_ = 0;
-  QAction * newInferenceAnalysis_ = 0;
-  QAction * newCopulaInferenceAnalysis_ = 0;
-  QAction * newMetaModel_ = 0;
-  QAction * removeAction_ = 0;
+  QAction * defineAction_ = nullptr;
+  QAction * newDataAnalysis_ = nullptr;
+  QAction * newInferenceAnalysis_ = nullptr;
+  QAction * newCopulaInferenceAnalysis_ = nullptr;
+  QAction * newMetaModel_ = nullptr;
+  QAction * removeAction_ = nullptr;
 };
 }
 #endif

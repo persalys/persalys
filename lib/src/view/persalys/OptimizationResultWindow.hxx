@@ -34,7 +34,7 @@ class PERSALYS_VIEW_API OptimizationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  OptimizationResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  OptimizationResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

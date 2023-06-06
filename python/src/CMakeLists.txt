@@ -297,5 +297,5 @@ if (SPHINX_FOUND)
   add_custom_target (sphinx_pdf DEPENDS ${SPHINX_BINARY_DIR}/latex/OpenTURNS.pdf)
   add_dependencies (sphinx_pdf sphinx_latex)
 
-  install (DIRECTORY ${SPHINX_BINARY_DIR}/html DESTINATION ${DOC_INSTALL_PATH})
+  install (DIRECTORY ${SPHINX_BINARY_DIR}/html DESTINATION ${PERSALYS_DOC_PATH})
 endif ()

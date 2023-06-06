@@ -68,10 +68,10 @@ protected:
 private:
   OT::String getModelName(const QString &baseName) const;
   Study study_;
-  QAction * exportAction_ = 0;
-  QAction * saveAction_ = 0;
-  QAction * saveAsAction_ = 0;
-  QAction * closeAction_ = 0;
+  QAction * exportAction_ = nullptr;
+  QAction * saveAction_ = nullptr;
+  QAction * saveAsAction_ = nullptr;
+  QAction * closeAction_ = nullptr;
 };
 }
 #endif

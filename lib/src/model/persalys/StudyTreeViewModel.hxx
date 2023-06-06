@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API StudyTreeViewModel : public QStandardItemModel, public 
   Q_OBJECT
 
 public:
-  StudyTreeViewModel(QObject *parent = 0);
+  StudyTreeViewModel(QObject *parent = nullptr);
 
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 

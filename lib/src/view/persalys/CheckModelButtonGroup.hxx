@@ -32,7 +32,7 @@ namespace PERSALYS
   {
     Q_OBJECT
   public:
-    CheckModelButtonGroup(QWidget * parent = 0);
+    CheckModelButtonGroup(QWidget *parent = nullptr);
     TemporaryLabel * getErrorMessageLabel() const {return errorMessageLabel_;}
   signals:
     void evaluateOutputsRequested();

@@ -33,7 +33,7 @@ namespace PERSALYS
   {
     Q_OBJECT
   public:
-    FloatDelegate(QObject *parent = 0)
+    FloatDelegate(QObject *parent = nullptr)
       : QItemDelegate(parent)
     {
     }

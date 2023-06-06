@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API SimulationReliabilityResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  SimulationReliabilityResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

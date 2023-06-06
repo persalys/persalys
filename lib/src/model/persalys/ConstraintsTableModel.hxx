@@ -35,7 +35,7 @@ namespace PERSALYS
     Q_OBJECT
 
   public:
-    ConstraintsTableModel(QObject * parent = 0);
+    ConstraintsTableModel(QObject *parent = nullptr);
     void updateTable(OptimizationAnalysis& analysis);
     int columnCount(const QModelIndex & parent = QModelIndex()) const override;
     int rowCount(const QModelIndex & parent = QModelIndex()) const override;

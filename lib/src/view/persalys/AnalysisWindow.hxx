@@ -37,7 +37,7 @@ class PERSALYS_VIEW_API AnalysisWindow : public SubWindow, LaunchParametersVisit
   Q_OBJECT
 
 public:
-  AnalysisWindow(AnalysisItem *item, StudyManager *manager, QWidget * parent = 0);
+  AnalysisWindow(AnalysisItem *item, StudyManager *manager, QWidget *parent = nullptr);
 
   virtual ~AnalysisWindow();
 

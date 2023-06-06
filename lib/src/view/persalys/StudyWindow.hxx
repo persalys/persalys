@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API StudyWindow : public SubWindow
   Q_OBJECT
 
 public:
-  StudyWindow(StudyItem * item, QWidget * parent = 0);
+  StudyWindow(StudyItem * item, QWidget *parent = nullptr);
 
   void buildInterface();
 

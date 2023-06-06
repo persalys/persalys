@@ -34,7 +34,7 @@ class PERSALYS_MODEL_API ExperimentTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  ExperimentTableModel(const GridDesignOfExperiment &designOfExperiment, QObject *parent = 0);
+  ExperimentTableModel(const GridDesignOfExperiment &designOfExperiment, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;

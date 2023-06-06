@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API PythonPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  PythonPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
+  PythonPhysicalModelWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
 };
 }
 #endif

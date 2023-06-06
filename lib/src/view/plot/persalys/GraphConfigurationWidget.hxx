@@ -37,7 +37,7 @@ class PERSALYS_PLOT_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  GraphConfigurationWidget(const QVector<PlotWidget *> &plotWidgets, QWidget *parent = 0);
+  GraphConfigurationWidget(const QVector<PlotWidget *> &plotWidgets, QWidget *parent = nullptr);
 
   int getCurrentPlotIndex() const;
 
@@ -72,8 +72,8 @@ class PERSALYS_PLOT_API SimpleGraphSetting : public GraphConfigurationWidget
   Q_OBJECT
 
 public:
-  SimpleGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, QWidget *parent = 0);
-  SimpleGraphSetting(PlotWidget *plotWidget, QWidget *parent = 0);
+  SimpleGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, QWidget *parent = nullptr);
+  SimpleGraphSetting(PlotWidget *plotWidget, QWidget *parent = nullptr);
 };
 
 
@@ -82,7 +82,7 @@ class PERSALYS_PLOT_API ScatterGraphSetting : public GraphConfigurationWidget
   Q_OBJECT
 
 public:
-  ScatterGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const QStringList &outputNames, QWidget *parent = 0);
+  ScatterGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const QStringList &outputNames, QWidget *parent = nullptr);
 public slots:
   void updateYComboBox();
   virtual void currentPlotIndexChanged(int i = 0);
@@ -99,8 +99,8 @@ class PERSALYS_PLOT_API PDFGraphSetting : public GraphConfigurationWidget
 
 public:
   enum PDFType {Distribution, Result, Copula, Ksi};
-  PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const PDFType type, QWidget *parent = 0);
-  PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const PDFType type, QWidget *parent = 0);
+  PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const PDFType type, QWidget *parent = nullptr);
+  PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const PDFType type, QWidget *parent = nullptr);
 public slots:
   void updateYComboBox();
   virtual void currentPlotIndexChanged(int i = 0);
@@ -116,7 +116,7 @@ class PERSALYS_PLOT_API BoxPlotGraphSetting : public GraphConfigurationWidget
   Q_OBJECT
 
 public:
-  BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, const QList<bool> & checked, QWidget *parent = 0);
+  BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList &inputNames, const QList<bool> & checked, QWidget *parent = nullptr);
 };
 
 
@@ -125,7 +125,7 @@ class PERSALYS_PLOT_API SensitivityIndicesGraphSetting : public GraphConfigurati
   Q_OBJECT
 
 public:
-  SensitivityIndicesGraphSetting(PlotWidget *plotWidget, QWidget *parent = 0);
+  SensitivityIndicesGraphSetting(PlotWidget *plotWidget, QWidget *parent = nullptr);
 };
 
 class PERSALYS_PLOT_API FrontsGraphSetting : public GraphConfigurationWidget
@@ -133,7 +133,7 @@ class PERSALYS_PLOT_API FrontsGraphSetting : public GraphConfigurationWidget
   Q_OBJECT
 
 public:
-  FrontsGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &outputNames, QWidget *parent = 0);
+  FrontsGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &outputNames, QWidget *parent = nullptr);
 public slots:
   void updateYComboBox();
   virtual void currentPlotIndexChanged(int i = 0);

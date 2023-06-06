@@ -35,8 +35,8 @@ class PERSALYS_UTILS_API TitledComboBox : public QComboBox
 public:
 /// Combo box which acts as a selection button
 /// use signals activated(int) or textActivated(QString)
-  TitledComboBox(const QString & title = QString(""), QWidget * parent = 0);
-  TitledComboBox(const QIcon & icon, const QString & title = QString(""), QWidget * parent = 0);
+  TitledComboBox(const QString & title = QString(""), QWidget *parent = nullptr);
+  TitledComboBox(const QIcon & icon, const QString & title = QString(""), QWidget *parent = nullptr);
 
 signals:
   void textActivated(QString);

@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API SobolResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  SobolResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  SobolResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

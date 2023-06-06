@@ -31,7 +31,7 @@ class PERSALYS_MODEL_API MultiObjectiveOptimizationTableModel : public Optimizat
   Q_OBJECT
 
 public:
-  MultiObjectiveOptimizationTableModel(const MultiObjectiveOptimizationAnalysis & analysis, QObject * parent = 0);
+  MultiObjectiveOptimizationTableModel(const MultiObjectiveOptimizationAnalysis & analysis, QObject *parent = nullptr);
 
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;
   QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;

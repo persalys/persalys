@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API CalibrationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  CalibrationResultWindow(AnalysisItem *item, QWidget *parent = 0);
+  CalibrationResultWindow(AnalysisItem *item, QWidget *parent = nullptr);
 
 protected:
   QTabWidget * getPredictionTabWidget(const OT::UnsignedInteger i);

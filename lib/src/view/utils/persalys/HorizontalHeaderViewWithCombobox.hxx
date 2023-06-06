@@ -33,7 +33,7 @@ class PERSALYS_UTILS_API HorizontalHeaderViewWithCombobox : public QHeaderView
   Q_OBJECT
 
 public:
-  HorizontalHeaderViewWithCombobox(QStringList comboBoxItems, QVector<int> columns, QWidget *parent = 0);
+  HorizontalHeaderViewWithCombobox(QStringList comboBoxItems, QVector<int> columns, QWidget *parent = nullptr);
 
   void showEvent(QShowEvent * e);
   void scrollContentsBy(int dx, int dy);

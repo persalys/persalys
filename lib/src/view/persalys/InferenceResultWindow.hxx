@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API InferenceResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  InferenceResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  InferenceResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

@@ -97,10 +97,9 @@ void FORMAnalysis::launch()
   {
     result_.formResult_.getEventProbabilitySensitivity();
   }
-  catch (InvalidArgumentException & ex)
+  catch (const InvalidArgumentException &)
   {
     // do nothing
-    // http://trac.openturns.org/ticket/916
     LOGWARN(" Error when computing the event probability sensitivity");
   }
 }

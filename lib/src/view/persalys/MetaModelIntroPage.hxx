@@ -41,7 +41,7 @@ class PERSALYS_VIEW_API MetaModelIntroPage : public QWizardPage
 public:
   enum Method {Chaos, Kriging, PolynomialRegression};
 
-  MetaModelIntroPage(QWidget* parent = 0);
+  MetaModelIntroPage(QWidget* parent = nullptr);
 
   virtual int nextId() const;
 
@@ -59,12 +59,12 @@ signals:
   void designOfExperimentChanged(DesignOfExperiment);
 
 private:
-  QComboBox * doesComboBox_ = 0;
-  QStandardItemModel * doesComboBoxModel_ = 0;
-  QLabel * doeLabel_ = 0;
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_ = 0;
-  QButtonGroup * methodGroup_ = 0;
-  TemporaryLabel * errorMessageLabel_ = 0;
+  QComboBox * doesComboBox_ = nullptr;
+  QStandardItemModel * doesComboBoxModel_ = nullptr;
+  QLabel * doeLabel_ = nullptr;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
+  QButtonGroup * methodGroup_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
   OT::Description interestVariables_;
 };
 }

@@ -33,7 +33,7 @@ class PERSALYS_UTILS_API ValueLineEdit : public QLineEdit
 
 public:
   // value constructor
-  ValueLineEdit(const double value = 0., QWidget *parent = 0);
+  ValueLineEdit(const double value = 0., QWidget *parent = nullptr);
 
   // value accessors
   void setValue(const double value, const bool enabled = true);

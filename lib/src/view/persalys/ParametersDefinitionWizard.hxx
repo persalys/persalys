@@ -31,7 +31,7 @@ namespace PERSALYS
 class ParametersTableModel: public QStandardItemModel
 {
 public:
-  ParametersTableModel(const OT::Description& names, const OT::Point& values, const QStringList& labels, QObject* parent = 0);
+  ParametersTableModel(const OT::Description& names, const OT::Point& values, const QStringList& labels, QObject *parent = nullptr);
 
   Qt::ItemFlags flags(const QModelIndex& index) const;
   QVariant data(const QModelIndex& index, int role) const;

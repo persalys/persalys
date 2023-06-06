@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API EnvironmentTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  EnvironmentTableModel(const CouplingStep & step, QObject * parent = 0);
+  EnvironmentTableModel(const CouplingStep & step, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

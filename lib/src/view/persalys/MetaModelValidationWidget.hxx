@@ -38,7 +38,7 @@ public:
                             const OT::Sample& outputSample,
                             const OT::UnsignedInteger indexOutput,
                             const QString measure = "",
-                            QWidget * parent = 0);
+                            QWidget *parent = nullptr);
 };
 }
 #endif

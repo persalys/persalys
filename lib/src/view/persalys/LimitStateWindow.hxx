@@ -37,7 +37,7 @@ class PERSALYS_VIEW_API LimitStateWindow : public SubWindow
 public:
   enum Operator {LessOperator, LessOrEqualOperator, GreaterOperator, GreaterOrEqualOperator};
 
-  LimitStateWindow(LimitStateItem * item, QWidget * parent = 0);
+  LimitStateWindow(LimitStateItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

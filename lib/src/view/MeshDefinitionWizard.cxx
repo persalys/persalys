@@ -172,7 +172,7 @@ void MeshDefinitionWizard::checkColumns()
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }
-  catch (InvalidArgumentException & ex)
+  catch (const InvalidArgumentException &)
   {
     sampleWidget_->errorMessageLabel_->setErrorMessage(tr("The parameter must be associated with one column."));
     sampleWidget_->tableValidity_ = false;

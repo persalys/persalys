@@ -33,8 +33,8 @@ class PERSALYS_UTILS_API SpinBoxDelegate : public QStyledItemDelegate
 public:
   enum spinboxType {noType, doubleValue, correlation, differentiationStep};
 
-  SpinBoxDelegate(QObject * parent = 0);
-  SpinBoxDelegate(const bool offsetForCheckBox, QObject * parent = 0);
+  SpinBoxDelegate(QObject *parent = nullptr);
+  SpinBoxDelegate(const bool offsetForCheckBox, QObject *parent = nullptr);
 
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;

@@ -353,7 +353,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
     {
       eval.run();
     }
-    catch (std::exception& ex)
+    catch (const std::exception &)
     {
       // do nothing
     }

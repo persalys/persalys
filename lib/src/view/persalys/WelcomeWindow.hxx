@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API WelcomeWindow : public QWidget
   Q_OBJECT
 
 public:
-  WelcomeWindow(const Actions* actions, QWidget * parent = 0);
+  WelcomeWindow(const Actions* actions, QWidget *parent = nullptr);
 };
 }
 #endif

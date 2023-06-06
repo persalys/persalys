@@ -29,7 +29,7 @@ namespace PERSALYS
 class PERSALYS_VIEW_API AnalysisWizard : public Wizard
 {
 public:
-  AnalysisWizard(const Analysis & analysis, QWidget * parent = 0);
+  AnalysisWizard(const Analysis & analysis, QWidget *parent = nullptr);
 
   // analysis accessor
   virtual Analysis getAnalysis() const;

@@ -68,11 +68,11 @@ signals:
 
 protected:
   Analysis analysis_;
-  QAction * modifyAction_ = 0;
-  QAction * convertAction_ = 0;
-  QAction * removeAction_ = 0;
+  QAction * modifyAction_ = nullptr;
+  QAction * convertAction_ = nullptr;
+  QAction * removeAction_ = nullptr;
 private:
-  QAction * extractDataAction_ = 0;
+  QAction * extractDataAction_ = nullptr;
 };
 }
 #endif

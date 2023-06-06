@@ -94,7 +94,7 @@ void ImportObservationsPage::checkColumns()
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }
-  catch (InvalidArgumentException & ex)
+  catch (const InvalidArgumentException &)
   {
     sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Define observations for at least an output variable and an input variable. A variable must be associated with only one column."));
     sampleWidget_->tableValidity_ = false;

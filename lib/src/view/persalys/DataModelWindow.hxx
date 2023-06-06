@@ -42,7 +42,7 @@ class PERSALYS_VIEW_API DataModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DesignOfExperimentItem * item, QWidget * parent = 0);
+  DataModelWindow(DesignOfExperimentItem * item, QWidget *parent = nullptr);
 
   virtual ~DataModelWindow();
 

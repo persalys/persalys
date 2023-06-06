@@ -11,33 +11,57 @@ option (USE_PARAVIEW "use ParaView" ON)
 set (PERSALYS_QT_MAJOR_VERSION 5 CACHE STRING "Qt version")
 
 # By default, build in Release mode. Must appear before project() command
-if ( NOT DEFINED CMAKE_BUILD_TYPE )
-   set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
-endif ()
+set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project (Persalys)
 
 if (POLICY CMP0020)
+  # Automatically link Qt executables to qtmain target on Windows
   cmake_policy (SET CMP0020 NEW)
 endif ()
 
 if (POLICY CMP0058)
+  # Ninja requires custom command byproducts to be explicit
   cmake_policy (SET CMP0058 NEW)
 endif()
 
-string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
+if (POLICY CMP0042)
+  # MACOSX_RPATH is enabled by default
+  cmake_policy(SET CMP0042 NEW)
+endif()
+
+string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 
 # set module dir to find custom scripts
-list ( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
+list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include (GNUInstallDirs)
 
+set (PERSALYS_LIBRARY_PATH ${CMAKE_INSTALL_LIBDIR})
+set (PERSALYS_BIN_PATH ${CMAKE_INSTALL_BINDIR})
+set (PERSALYS_INCLUDE_PATH ${CMAKE_INSTALL_INCLUDEDIR})
+set (PERSALYS_SWIG_INCLUDE_PATH ${PERSALYS_INCLUDE_PATH}/${PACKAGE_NAME}/swig)
+set (PERSALYS_DATA_PATH ${CMAKE_INSTALL_DATAROOTDIR})
+set (PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys)
+set (PERSALYS_DOC_PATH ${CMAKE_INSTALL_DATAROOTDIR}/${PACKAGE_NAME}/doc)
+
 find_package (OpenTURNS 1.21 CONFIG REQUIRED)
+get_target_property (ot_features OT OPENTURNS_ENABLED_FEATURES)
+if (NOT ot_features MATCHES "hdf5")
+  message (FATAL_ERROR "OpenTURNS lacks hdf5 support")
+endif()
 message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 list (APPEND PERSALYS_PUBLIC_LIBRARIES ${OPENTURNS_LIBRARIES})
 
 if (NOT BUILD_SHARED_LIBS)
   list (APPEND PERSALYS_DEFINITIONS "-DPERSALYS_STATIC -DPYINTERP_STATIC -DPYCONSOLE_STATIC")
+endif ()
+
+if (MSVC)
+  # Disable some warnings
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4197 /wd4244 /wd4251 /wd4267 /wd4996")
+  # for swig
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif ()
 
 find_package (Boost COMPONENTS filesystem locale REQUIRED)
@@ -118,13 +142,6 @@ if (USE_OTMORRIS)
     list (APPEND PERSALYS_PRIVATE_LIBRARIES ${OTMORRIS_LIBRARIES})
   endif ()
 endif ()
-
-set ( PERSALYS_LIBRARY_PATH ${CMAKE_INSTALL_LIBDIR} )
-set ( PERSALYS_INCLUDE_PATH include )
-set ( PERSALYS_SWIG_INCLUDE_PATH ${PERSALYS_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
-set ( PERSALYS_DATA_PATH share )
-set ( PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys )
-set ( DOC_INSTALL_PATH share/${PACKAGE_NAME}/doc )
 
 set (CMAKE_CXX_STANDARD 11)
 

@@ -66,32 +66,32 @@ signals:
   void wizardRequested(StudyItem*, const DesignOfExperiment& designOfExp);
 
 protected:
-  StudyItem * parentStudyItem_;
+  StudyItem * parentStudyItem_ = nullptr;
 
-  QAction * newSymbolicModel_ = 0;
-  QAction * newPythonModel_ = 0;
+  QAction * newSymbolicModel_ = nullptr;
+  QAction * newPythonModel_ = nullptr;
 #ifdef PERSALYS_HAVE_YACS
-  QAction * newYACSModel_ = 0;
+  QAction * newYACSModel_ = nullptr;
 #endif
 #ifdef PERSALYS_HAVE_OTFMI
-  QAction * newFMIModel_ = 0;
+  QAction * newFMIModel_ = nullptr;
 #endif
-  QAction * newCouplingModel_ = 0;
-  QAction * newSymbolicFieldModel_ = 0;
-  QAction * newPythonFieldModel_ = 0;
-  QAction * newDataModel_ = 0;
+  QAction * newCouplingModel_ = nullptr;
+  QAction * newSymbolicFieldModel_ = nullptr;
+  QAction * newPythonFieldModel_ = nullptr;
+  QAction * newDataModel_ = nullptr;
 
-  QAction * newModelEvaluation_ = 0;
-  QAction * newScreening_ = 0;
-  QAction * newOptimization_ = 0;
-  QAction * newMoOptimization_ = 0;
-  QAction * newDesignOfExperiment_ = 0;
-  QAction * newProbabilisticModel_ = 0;
-  QAction * newCentralTendency_ = 0;
-  QAction * newSensitivityAnalysis_ = 0;
+  QAction * newModelEvaluation_ = nullptr;
+  QAction * newScreening_ = nullptr;
+  QAction * newOptimization_ = nullptr;
+  QAction * newMoOptimization_ = nullptr;
+  QAction * newDesignOfExperiment_ = nullptr;
+  QAction * newProbabilisticModel_ = nullptr;
+  QAction * newCentralTendency_ = nullptr;
+  QAction * newSensitivityAnalysis_ = nullptr;
 
-  QAction * newLimitState_ = 0;
-  QAction * newObservations_ = 0;
+  QAction * newLimitState_ = nullptr;
+  QAction * newObservations_ = nullptr;
 };
 }
 #endif

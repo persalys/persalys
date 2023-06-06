@@ -42,7 +42,7 @@ public:
   friend class EditValuesWizard;
   friend class ImportedDistributionPage;
 
-  ImportSampleWidget(QWidget *parent = 0);
+  ImportSampleWidget(QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

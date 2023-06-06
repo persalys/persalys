@@ -36,7 +36,7 @@ class PERSALYS_VIEW_API CopulaInferenceResultWizard : public Wizard
   Q_OBJECT
 
 public:
-  CopulaInferenceResultWizard(const Study &study, const OT::Description &variables, QWidget *parent = 0);
+  CopulaInferenceResultWizard(const Study &study, const OT::Description &variables, QWidget *parent = nullptr);
 
   OT::Distribution getCopula() const;
 

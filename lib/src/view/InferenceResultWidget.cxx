@@ -413,7 +413,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     {
       distParamTableModel_->setNotEditableItem(++row, 1, distribution.getSkewness()[0]);
     }
-    catch (std::exception & ex)
+    catch (const std::exception &)
     {
       distParamTableModel_->setNotEditableItem(++row, 1, "-");
     }
@@ -421,7 +421,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     {
       distParamTableModel_->setNotEditableItem(++row, 1, distribution.getKurtosis()[0]);
     }
-    catch (std::exception & ex)
+    catch (const std::exception &)
     {
       distParamTableModel_->setNotEditableItem(++row, 1, "-");
     }

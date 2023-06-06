@@ -65,7 +65,7 @@ class PERSALYS_PLOT_API MorrisPlot : public PlotWidget
   Q_OBJECT
 
 public:
-  MorrisPlot(const QString &plotTypeName, const QPointF& initialMarkersCoord, QWidget *parent = 0);
+  MorrisPlot(const QString &plotTypeName, const QPointF& initialMarkersCoord, QWidget *parent = nullptr);
 
 public slots:
   void selectPoints(const QRectF&);

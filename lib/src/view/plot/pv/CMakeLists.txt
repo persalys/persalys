@@ -56,7 +56,7 @@ target_link_libraries ( persalysplotpv persalysutils )
 target_link_libraries (persalysplotpv ParaView::pqApplicationComponents ParaView::RemotingViews)
 
 install ( TARGETS persalysplotpv
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION ${PERSALYS_BIN_PATH}
   LIBRARY DESTINATION ${PERSALYS_LIBRARY_PATH}
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )

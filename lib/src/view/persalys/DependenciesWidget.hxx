@@ -37,8 +37,8 @@ class PERSALYS_VIEW_API DependenciesWidget : public QWidget
   Q_OBJECT
 
 public:
-  DependenciesWidget(PhysicalModelItem *item, QWidget *parent = 0);
-  DependenciesWidget(const PhysicalModel& model, QWidget *parent = 0);
+  DependenciesWidget(PhysicalModelItem *item, QWidget *parent = nullptr);
+  DependenciesWidget(const PhysicalModel& model, QWidget *parent = nullptr);
 
 public slots:
   void updateWidgets();

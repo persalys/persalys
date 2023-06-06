@@ -36,7 +36,7 @@ class PERSALYS_VIEW_API ImportedDesignPage : public QWizardPage
   friend class TestDesignOfExperimentWizard;
 
 public:
-  ImportedDesignPage(QWidget *parent = 0);
+  ImportedDesignPage(QWidget *parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis();

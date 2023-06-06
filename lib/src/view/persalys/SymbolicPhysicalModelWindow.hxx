@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API SymbolicPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  SymbolicPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
+  SymbolicPhysicalModelWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
 };
 }
 #endif

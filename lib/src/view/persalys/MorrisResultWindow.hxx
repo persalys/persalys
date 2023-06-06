@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API MorrisResultWindow : public DataAnalysisWindow
   Q_OBJECT
 
 public:
-  MorrisResultWindow(AnalysisItem *item, QWidget *parent = 0);
+  MorrisResultWindow(AnalysisItem *item, QWidget *parent = nullptr);
 
 protected:
   virtual void initialize(AnalysisItem* item);

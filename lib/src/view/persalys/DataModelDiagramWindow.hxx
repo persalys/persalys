@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API DataModelDiagramWindow : public DiagramWindow
   Q_OBJECT
 
 public :
-  DataModelDiagramWindow(DataModelDiagramItem * item, QWidget * parent = 0);
+  DataModelDiagramWindow(DataModelDiagramItem * item, QWidget *parent = nullptr);
 };
 }
 #endif

@@ -64,7 +64,7 @@ class PERSALYS_PLOT_API PlotWidget : public QwtPlot
 
 public:
   /// constructor
-  PlotWidget(const QString &plotTypeName = "", const bool disableZoom = false, QWidget *parent = 0);
+  PlotWidget(const QString &plotTypeName = "", const bool disableZoom = false, QWidget *parent = nullptr);
 
   /// plot a curve
   void plotCurve(QVector<QPointF> points, const QPen pen = QPen(Qt::black, 2),

@@ -36,7 +36,7 @@ class PERSALYS_VIEW_API MorrisPage : public QWizardPage
   Q_OBJECT
 
 public:
-  MorrisPage(QWidget* parent = 0);
+  MorrisPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   MorrisAnalysis getAnalysis() const;
@@ -48,9 +48,9 @@ protected:
   void buildInterface();
 
 private:
-  QTableView * tableView_ = 0;
-  MorrisTableModel * tableModel_ = 0;
-  TemporaryLabel * errorMessageLabel_ = 0;
+  QTableView * tableView_ = nullptr;
+  MorrisTableModel * tableModel_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 
 class PERSALYS_VIEW_API MorrisSecondPage : public QWizardPage
@@ -58,7 +58,7 @@ class PERSALYS_VIEW_API MorrisSecondPage : public QWizardPage
   Q_OBJECT
 
 public:
-  MorrisSecondPage(QWidget* parent = 0);
+  MorrisSecondPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   int getTrajectoriesNumber() const;
@@ -74,11 +74,11 @@ protected slots:
 
 private:
   OT::UnsignedInteger nbInputs_ = 0;
-  UIntSpinBox * trajNbSpinbox_ = 0;
-  UIntSpinBox * levelSpinbox_ = 0;
-  QSpinBox * seedSpinbox_ = 0;
-  QSpinBox * blockSpinbox_ = 0;
-  QLabel * nbSimuLabel_ = 0;
+  UIntSpinBox * trajNbSpinbox_ = nullptr;
+  UIntSpinBox * levelSpinbox_ = nullptr;
+  QSpinBox * seedSpinbox_ = nullptr;
+  QSpinBox * blockSpinbox_ = nullptr;
+  QLabel * nbSimuLabel_ = nullptr;
 };
 }
 #endif

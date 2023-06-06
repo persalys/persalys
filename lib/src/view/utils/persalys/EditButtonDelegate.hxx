@@ -34,7 +34,7 @@ class PERSALYS_UTILS_API EditButtonDelegate : public QStyledItemDelegate
   Q_OBJECT
 
 public:
-  EditButtonDelegate(QObject * parent = 0);
+  EditButtonDelegate(QObject *parent = nullptr);
 
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
@@ -51,7 +51,7 @@ class PERSALYS_UTILS_API EditValuesButton : public QPushButton
   Q_OBJECT
 
 public:
-  EditValuesButton(const QString &text, QWidget *parent = 0)
+  EditValuesButton(const QString &text, QWidget *parent = nullptr)
   : QPushButton(text, parent)
   , opened_(false)
   {};

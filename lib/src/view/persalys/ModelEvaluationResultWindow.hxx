@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API ModelEvaluationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  ModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  ModelEvaluationResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   virtual void setParameters(const Analysis& /*analysis*/, const QString& /*title*/)

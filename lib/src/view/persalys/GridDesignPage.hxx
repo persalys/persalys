@@ -35,7 +35,7 @@ class PERSALYS_VIEW_API GridDesignPage : public QWizardPage
   Q_OBJECT
 
 public:
-  GridDesignPage(QWidget *parent = 0);
+  GridDesignPage(QWidget *parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis();

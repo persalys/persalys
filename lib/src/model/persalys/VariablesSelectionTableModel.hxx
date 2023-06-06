@@ -34,7 +34,7 @@ class PERSALYS_MODEL_API VariablesSelectionTableModel : public QAbstractTableMod
   Q_OBJECT
 
 public:
-  VariablesSelectionTableModel(const OT::Description& variablesNames, const OT::Interval::BoolCollection& isVariablesChecked, QObject* parent = 0);
+  VariablesSelectionTableModel(const OT::Description& variablesNames, const OT::Interval::BoolCollection& isVariablesChecked, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex& parent = QModelIndex()) const;
   int rowCount(const QModelIndex& parent = QModelIndex()) const;

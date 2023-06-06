@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API MonteCarloResultWindow : public DataAnalysisWindow
   friend class TestMonteCarloResultWindow;
 
 public:
-  MonteCarloResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  MonteCarloResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void initialize(AnalysisItem* item);

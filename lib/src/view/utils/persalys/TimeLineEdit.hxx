@@ -32,9 +32,10 @@ class PERSALYS_UTILS_API TimeLineEdit : public QLineEdit
 
 public:
   // constructor with text
-  TimeLineEdit(const QString text = "", QWidget *parent = 0);
+  TimeLineEdit(const QString & text, QWidget *parent = nullptr);
+
   // constructor with seconds
-  TimeLineEdit(const unsigned int seconds = 0, QWidget *parent = 0);
+  TimeLineEdit(const unsigned int seconds = 0, QWidget *parent = nullptr);
 
   int getSeconds() const;
   void setSeconds(const int seconds);

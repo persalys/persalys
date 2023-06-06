@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API DifferentiationTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DifferentiationTableModel(const PhysicalModel& physicalModel, QObject* parent = 0);
+  DifferentiationTableModel(const PhysicalModel& physicalModel, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex& parent = QModelIndex()) const;
   int rowCount(const QModelIndex& parent = QModelIndex()) const;

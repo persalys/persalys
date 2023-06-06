@@ -33,7 +33,7 @@ class PERSALYS_UTILS_API ExportableTableView : public CopyableTableView
   Q_OBJECT
 
 public:
-  ExportableTableView(QWidget * parent = 0);
+  ExportableTableView(QWidget *parent = nullptr);
 
   void setExportableAsImage(const bool exportable);
 

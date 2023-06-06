@@ -34,7 +34,7 @@ class PERSALYS_VIEW_API StudyManager : public QObject
   Q_OBJECT
 
 public:
-  StudyManager(MainWidget * mainWidget, QObject * parent = 0);
+  StudyManager(MainWidget * mainWidget, QObject *parent = nullptr);
 
   bool analysisInProgress() const;
 

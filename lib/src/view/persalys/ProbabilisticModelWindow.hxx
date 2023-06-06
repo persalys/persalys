@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API ProbabilisticModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  ProbabilisticModelWindow(PhysicalModelItem *item, QWidget *parent = 0);
+  ProbabilisticModelWindow(PhysicalModelItem *item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

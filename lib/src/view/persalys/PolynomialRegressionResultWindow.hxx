@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API PolynomialRegressionResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  PolynomialRegressionResultWindow(AnalysisItem* item, QWidget * parent = 0);
+  PolynomialRegressionResultWindow(AnalysisItem* item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

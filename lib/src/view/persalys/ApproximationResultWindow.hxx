@@ -30,7 +30,7 @@ class PERSALYS_VIEW_API ApproximationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  ApproximationResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  ApproximationResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 };
 }
 #endif

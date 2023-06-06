@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API DataModelTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DataModelTableModel(DataModel* dataModel, QObject* parent = 0);
+  DataModelTableModel(DataModel* dataModel, QObject *parent = nullptr);
 
   int rowCount(const QModelIndex & parent = QModelIndex()) const;
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
