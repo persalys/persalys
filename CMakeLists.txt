@@ -60,6 +60,8 @@ endif ()
 if (MSVC)
   # Disable some warnings
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4197 /wd4244 /wd4251 /wd4267 /wd4996")
+  # for swig
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif ()
 
 find_package (Boost COMPONENTS filesystem locale REQUIRED)
