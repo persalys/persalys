@@ -33,7 +33,7 @@ class PERSALYS_VIEW_API StudyTreeView : public QTreeView
   Q_OBJECT
 
 public:
-  StudyTreeView(QWidget * parent = 0);
+  StudyTreeView(QWidget *parent = nullptr);
 
   Item * getCurrentItem() const;
   StudyItem * getItem(const int row) const;

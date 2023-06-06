@@ -34,8 +34,8 @@ class PERSALYS_VIEW_API FieldModelEvaluationResultWidget : public QWidget
   Q_OBJECT
 
 public:
-  FieldModelEvaluationResultWidget(const OT::Sample& inputSample, const OT::ProcessSample& ps, QWidget *parent = 0);
-  FieldModelEvaluationResultWidget(const OT::Sample& inputSample, const OT::ProcessSample& ps, const OT::Sample& meanS, const OT::Sample& lowQS, const OT::Sample& upQS, QWidget *parent = 0);
+  FieldModelEvaluationResultWidget(const OT::Sample& inputSample, const OT::ProcessSample& ps, QWidget *parent = nullptr);
+  FieldModelEvaluationResultWidget(const OT::Sample& inputSample, const OT::ProcessSample& ps, const OT::Sample& meanS, const OT::Sample& lowQS, const OT::Sample& upQS, QWidget *parent = nullptr);
 
   VariablesListWidget * getOutListWidget();
   QTabWidget * getTabWidget();
@@ -63,7 +63,7 @@ class PERSALYS_VIEW_API FieldModelEvaluationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  FieldModelEvaluationResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  FieldModelEvaluationResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
@@ -80,7 +80,7 @@ class PERSALYS_VIEW_API FieldCentralTendencyResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  FieldCentralTendencyResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  FieldCentralTendencyResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

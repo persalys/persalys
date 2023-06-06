@@ -41,7 +41,7 @@ public:
 
   enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import};
 
-  DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent = 0);
+  DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent = nullptr);
 
   int nextId() const;
   virtual Analysis getAnalysis() const;

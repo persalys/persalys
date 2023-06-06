@@ -34,7 +34,7 @@ class PERSALYS_VIEW_API TaylorExpansionMomentsResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  TaylorExpansionMomentsResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  TaylorExpansionMomentsResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   virtual void setParameters(const Analysis& /*analysis*/, const QString& /*title*/)

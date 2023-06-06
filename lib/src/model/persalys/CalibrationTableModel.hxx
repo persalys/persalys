@@ -35,7 +35,7 @@ class PERSALYS_MODEL_API CalibrationTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  CalibrationTableModel(QObject *parent = 0);
+  CalibrationTableModel(QObject *parent = nullptr);
 
   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;

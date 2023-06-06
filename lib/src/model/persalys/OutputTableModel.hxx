@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API OutputTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  OutputTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  OutputTableModel(const PhysicalModel & physicalModel, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
   int rowCount(const QModelIndex & parent  = QModelIndex()) const override;

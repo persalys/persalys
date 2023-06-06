@@ -34,7 +34,7 @@ class PERSALYS_UTILS_API CodeEditor : public QPlainTextEdit
   Q_OBJECT
 
 public:
-  CodeEditor(QWidget * parent = 0);
+  CodeEditor(QWidget *parent = nullptr);
 
   void lineNumberAreaPaintEvent(QPaintEvent * event);
   int lineNumberAreaWidth();
@@ -97,7 +97,7 @@ class PERSALYS_UTILS_API CodeDelegate : public QItemDelegate
   Q_OBJECT
 
 public:
-  CodeDelegate(QObject * parent = 0);
+  CodeDelegate(QObject *parent = nullptr);
 
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;

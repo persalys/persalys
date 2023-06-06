@@ -37,7 +37,7 @@ namespace PERSALYS
 class PERSALYS_VIEW_API ListWidgetItemDelegate : public QStyledItemDelegate
 {
   public:
-    ListWidgetItemDelegate(QObject* parent = 0)
+    ListWidgetItemDelegate(QObject *parent = nullptr)
         : QStyledItemDelegate(parent)
     {
     }
@@ -53,7 +53,7 @@ class PERSALYS_VIEW_API ListWidgetItemDelegate : public QStyledItemDelegate
 class PERSALYS_VIEW_API VariablesListWidget : public QListWidget
 {
 public:
-  VariablesListWidget(QWidget * parent = 0)
+  VariablesListWidget(QWidget *parent = nullptr)
     : QListWidget(parent)
   {
     // style sheet
@@ -72,7 +72,7 @@ class PERSALYS_VIEW_API ResultWindow : public SubWindow
   Q_OBJECT
 
 public:
-  ResultWindow(Item * item, QWidget * parent = 0);
+  ResultWindow(Item * item, QWidget *parent = nullptr);
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title);

@@ -74,7 +74,7 @@ namespace PERSALYS
 class PieChartModel : public QStandardItemModel
 {
 public:
-  PieChartModel(int rows, int columns, QObject * parent = 0)
+  PieChartModel(int rows, int columns, QObject *parent = nullptr)
     : QStandardItemModel(rows, columns, parent)
   {
   }

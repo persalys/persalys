@@ -31,9 +31,9 @@ class PERSALYS_UTILS_API LineEditWithQValidatorDelegate : public QStyledItemDele
   Q_OBJECT
 
 public:
-  LineEditWithQValidatorDelegate(QObject * parent = 0);
-  LineEditWithQValidatorDelegate(const bool offsetForCheckBox, QObject * parent = 0);
-  LineEditWithQValidatorDelegate(const QString & regex, QObject * parent = 0);
+  LineEditWithQValidatorDelegate(QObject *parent = nullptr);
+  LineEditWithQValidatorDelegate(const bool offsetForCheckBox, QObject *parent = nullptr);
+  LineEditWithQValidatorDelegate(const QString & regex, QObject *parent = nullptr);
 
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;

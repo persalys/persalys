@@ -37,7 +37,7 @@ class PERSALYS_MODEL_API MorrisResultTableModel : public QAbstractTableModel
 public:
   enum Mode {Edition, Display};
 
-  MorrisResultTableModel(MorrisResult &result, OT::UnsignedInteger outputIndex, const Mode mode, QObject *parent = 0);
+  MorrisResultTableModel(MorrisResult &result, OT::UnsignedInteger outputIndex, const Mode mode, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;

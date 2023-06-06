@@ -39,7 +39,7 @@ public:
   PVXYChartSettingWidget(PVXYChartViewWidget * pvViewWidget,
                          const QStringList &outputNames,
                          const bool isScatter,
-                         QWidget * parent = 0);
+                         QWidget *parent = nullptr);
 
 protected:
   void addXYAxisTabs();
@@ -69,7 +69,7 @@ class PERSALYS_PLOTPV_API XYChartSettingWidget : public PVXYChartSettingWidget
   Q_OBJECT
 
 public:
-  XYChartSettingWidget(PVXYChartViewWidget *pvViewWidget, QWidget *parent = 0);
+  XYChartSettingWidget(PVXYChartViewWidget *pvViewWidget, QWidget *parent = nullptr);
 };
 
 
@@ -78,7 +78,7 @@ class PERSALYS_PLOTPV_API BagChartSettingWidget : public PVXYChartSettingWidget
   Q_OBJECT
 
 public:
-  BagChartSettingWidget(PVXYChartViewWidget *pvViewWidget, QWidget *parent = 0);
+  BagChartSettingWidget(PVXYChartViewWidget *pvViewWidget, QWidget *parent = nullptr);
 };
 
 
@@ -87,8 +87,8 @@ class PERSALYS_PLOTPV_API TrajectoriesSettingWidget : public PVXYChartSettingWid
   Q_OBJECT
 
 public:
-  TrajectoriesSettingWidget(PVXYChartViewWidget *pvViewWidget, const QStringList &xAxisNames, const QStringList &dataNames, QWidget *parent = 0);
-  TrajectoriesSettingWidget(PVXYChartViewWidget *pvViewWidget, const QStringList &dataNames, QWidget *parent = 0);
+  TrajectoriesSettingWidget(PVXYChartViewWidget *pvViewWidget, const QStringList &xAxisNames, const QStringList &dataNames, QWidget *parent = nullptr);
+  TrajectoriesSettingWidget(PVXYChartViewWidget *pvViewWidget, const QStringList &dataNames, QWidget *parent = nullptr);
 };
 
 
@@ -102,19 +102,19 @@ public:
                        const OT::Collection<OT::Sample> &rankSamples,
                        const QStringList &inputNames,
                        const QStringList &outputNames,
-                       QWidget *parent = 0);
+                       QWidget *parent = nullptr);
 
   ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
                        const OT::Sample &sample,
                        const OT::Sample &rankSample,
                        const QStringList &inputNames,
                        const QStringList &outputNames,
-                       QWidget *parent = 0);
+                       QWidget *parent = nullptr);
 
   ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
                        const OT::Collection<OT::Sample> &samples,
                        const OT::Collection<OT::Sample> &rankSamples,
-                       QWidget *parent = 0);
+                       QWidget *parent = nullptr);
 
 public slots:
   void updateYComboBox();
@@ -129,7 +129,7 @@ public:
   MultiPDFSettingWidget(PVXYChartViewWidget *pvViewWidget,
                        const QStringList &inputNames,
                        const QStringList &outputNames,
-                       QWidget *parent = 0);
+                       QWidget *parent = nullptr);
 };
 }
 #endif

@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API FieldModelDiagramWindow : public DiagramWindow
   Q_OBJECT
 
 public :
-  FieldModelDiagramWindow(PhysicalModelDiagramItem * item, QWidget * parent = 0);
+  FieldModelDiagramWindow(PhysicalModelDiagramItem * item, QWidget *parent = nullptr);
 };
 }
 #endif

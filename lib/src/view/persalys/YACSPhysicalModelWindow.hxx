@@ -35,7 +35,7 @@ class PERSALYS_VIEW_API YACSPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  YACSPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
+  YACSPhysicalModelWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
 
 public slots:
   void buildSchemaDialogRequested();

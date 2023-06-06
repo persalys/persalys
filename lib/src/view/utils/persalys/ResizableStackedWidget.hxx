@@ -31,7 +31,7 @@ class PERSALYS_UTILS_API ResizableStackedWidget : public QStackedWidget
   Q_OBJECT
 
 public:
-  ResizableStackedWidget(QWidget * parent = 0);
+  ResizableStackedWidget(QWidget *parent = nullptr);
 
   QSize sizeHint() const;
   QSize minimumSizeHint() const;

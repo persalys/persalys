@@ -34,7 +34,7 @@ class PERSALYS_MODEL_API SampleTableProxyModel : public QSortFilterProxyModel
 {
   Q_OBJECT
 public:
-  SampleTableProxyModel(QObject *parent = 0)
+  SampleTableProxyModel(QObject *parent = nullptr)
   : QSortFilterProxyModel(parent)
   {}
 
@@ -53,10 +53,10 @@ class PERSALYS_MODEL_API SampleTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  SampleTableModel(const OT::Sample & data, const bool isEditable, const bool hasRowIDcolumn, const OT::Description& initialDescription, QObject * parent = 0);
-  SampleTableModel(const OT::Sample & data, QObject * parent = 0);
-  SampleTableModel(const OT::Sample & data, const bool isEditable, QObject *parent = 0);
-  SampleTableModel(const OT::Sample & data, const OT::Description& initialDescription, QObject * parent = 0);
+  SampleTableModel(const OT::Sample & data, const bool isEditable, const bool hasRowIDcolumn, const OT::Description& initialDescription, QObject *parent = nullptr);
+  SampleTableModel(const OT::Sample & data, QObject *parent = nullptr);
+  SampleTableModel(const OT::Sample & data, const bool isEditable, QObject *parent = nullptr);
+  SampleTableModel(const OT::Sample & data, const OT::Description& initialDescription, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;

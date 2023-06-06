@@ -48,7 +48,7 @@ class PERSALYS_VIEW_API DataTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DataTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  DataTableModel(const PhysicalModel & physicalModel, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;
@@ -93,7 +93,7 @@ class PERSALYS_VIEW_API EnumDelegate : public QItemDelegate
 {
   Q_OBJECT
 public:
-  EnumDelegate(QStringList & enumLabels, QObject *parent = 0)
+  EnumDelegate(QStringList & enumLabels, QObject *parent = nullptr)
     : QItemDelegate(parent)
     , enumLabels_(enumLabels)
   {
@@ -132,7 +132,7 @@ class DataFilterProxyModel : public QSortFilterProxyModel
   Q_OBJECT
 
 public:
-  DataFilterProxyModel(QObject *parent = 0);
+  DataFilterProxyModel(QObject *parent = nullptr);
 
   void setVariabilityFilter(const QList<int> & variabilityFilter);
   void setCausalityFilter(const QList<int> & causalityFilter);
@@ -175,7 +175,7 @@ class TreeModel : public QAbstractItemModel
   Q_OBJECT
 
 public:
-  explicit TreeModel(const QString &data, QObject *parent = 0);
+  explicit TreeModel(const QString &data, QObject *parent = nullptr);
   ~TreeModel();
 
   QVariant data(const QModelIndex &index, int role) const override;
@@ -200,7 +200,7 @@ private:
 class DeselectableTreeView : public QTreeView
 {
 public:
-  DeselectableTreeView(QWidget *parent = 0)
+  DeselectableTreeView(QWidget *parent = nullptr)
   : QTreeView(parent)
   {
     // style sheet
@@ -249,7 +249,7 @@ class PERSALYS_VIEW_API FMIPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
+  FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
 
 public slots:
   void selectImportFileDialogRequested();

@@ -83,12 +83,12 @@ protected:
   void buildActions();
 
 private:
-  QAction * defineAction_ = 0;
-  QAction * duplicateAction_ = 0;
-  QAction * removeAction_ = 0;
-  int limitStateCounter_;
-  int observationsCounter_;
-  int metamodelCounter_;
+  QAction * defineAction_ = nullptr;
+  QAction * duplicateAction_ = nullptr;
+  QAction * removeAction_ = nullptr;
+  int limitStateCounter_ = 0;
+  int observationsCounter_ = 0;
+  int metamodelCounter_ = 0;
   OT::Indices doeCounter_;
 };
 }

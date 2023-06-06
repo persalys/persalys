@@ -33,7 +33,7 @@ class PERSALYS_VIEW_API StatusBar : public QStatusBar
   Q_OBJECT
 
 public:
-  StatusBar(QWidget *parent = 0);
+  StatusBar(QWidget *parent = nullptr);
 
 public slots:
   void showErrorMessage(const QString & message);

@@ -45,8 +45,8 @@ class PERSALYS_VIEW_API MarginalsWidget : public QWidget
   Q_OBJECT
 
 public :
-  MarginalsWidget(PhysicalModelItem * item, QWidget * parent = 0);
-  MarginalsWidget(const PhysicalModel& model, QWidget * parent = 0);
+  MarginalsWidget(PhysicalModelItem * item, QWidget *parent = nullptr);
+  MarginalsWidget(const PhysicalModel& model, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
@@ -72,27 +72,27 @@ signals:
   void updateDependenciesRequested();
 
 private:
-  bool failSoftMode_;
+  bool failSoftMode_ = false;
   Study study_;
   PhysicalModel physicalModel_;
-  QTableView * inputTableView_ = 0;
-  InputTableProbabilisticModel * inputTableModel_ = 0;
-  ResizableStackedWidget * rightSideOfSplitterStackedWidget_ = 0;
-  ValueLineEdit * valueForDeterministicVariable_ = 0;
-  PlotWidget * pdfPlot_ = 0;
-  PlotWidget * cdfPlot_ = 0;
-  PlotWidget * quantilePlot_ = 0;
-  PlotWidget * survivalPlot_ = 0;
-  QComboBox * selectParametersTypeCombo_ = 0;
-  QLabel * parameterValuesLabel_[5];
-  ValueLineEdit * parameterValuesEdit_[5];
-  QToolButton * editButton_ = 0;
-  CollapsibleGroupBox * truncationParamGroupBox_ = 0;
-  QCheckBox * lowerBoundCheckBox_ = 0;
-  QCheckBox * upperBoundCheckBox_ = 0;
-  ValueLineEdit * lowerBoundLineEdit_ = 0;
-  ValueLineEdit * upperBoundLineEdit_ = 0;
-  TemporaryLabel * errorMessageLabel_ = 0;
+  QTableView * inputTableView_ = nullptr;
+  InputTableProbabilisticModel * inputTableModel_ = nullptr;
+  ResizableStackedWidget * rightSideOfSplitterStackedWidget_ = nullptr;
+  ValueLineEdit * valueForDeterministicVariable_ = nullptr;
+  PlotWidget * pdfPlot_ = nullptr;
+  PlotWidget * cdfPlot_ = nullptr;
+  PlotWidget * quantilePlot_ = nullptr;
+  PlotWidget * survivalPlot_ = nullptr;
+  QComboBox * selectParametersTypeCombo_ = nullptr;
+  QLabel * parameterValuesLabel_[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+  ValueLineEdit * parameterValuesEdit_[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+  QToolButton * editButton_ = nullptr;
+  CollapsibleGroupBox * truncationParamGroupBox_ = nullptr;
+  QCheckBox * lowerBoundCheckBox_ = nullptr;
+  QCheckBox * upperBoundCheckBox_ = nullptr;
+  ValueLineEdit * lowerBoundLineEdit_ = nullptr;
+  ValueLineEdit * upperBoundLineEdit_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

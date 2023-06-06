@@ -30,7 +30,7 @@ class PERSALYS_VIEW_API DataAnalysisResultWindow : public DataAnalysisWindow
   Q_OBJECT
 
 public:
-  DataAnalysisResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  DataAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void initialize(AnalysisItem* item);

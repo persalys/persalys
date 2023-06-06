@@ -42,9 +42,9 @@ class PERSALYS_UTILS_API EditValuesWizard : public QWizard
   Q_OBJECT
 
 public:
-  EditValuesWizard(QWidget *parent = 0);
-  EditValuesWizard(const OT::Sample &values, QWidget *parent = 0);
-  EditValuesWizard(const QString &variableName, const OT::Point &values, QWidget *parent = 0);
+  EditValuesWizard(QWidget *parent = nullptr);
+  EditValuesWizard(const OT::Sample &values, QWidget *parent = nullptr);
+  EditValuesWizard(const QString &variableName, const OT::Point &values, QWidget *parent = nullptr);
 
   OT::Point getValues(const OT::UnsignedInteger index = 0) const;
   virtual bool validateCurrentPage();
@@ -76,7 +76,7 @@ class PERSALYS_UTILS_API UserDefinedWizard : public EditValuesWizard
   Q_OBJECT
 
 public:
-  UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = 0);
+  UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = nullptr);
 
   OT::Distribution getDistribution() const;
   virtual bool validateCurrentPage();
@@ -116,7 +116,7 @@ class PERSALYS_UTILS_API ImportedDistributionPage : public QWizardPage
   Q_OBJECT
 
 public:
-  ImportedDistributionPage(QWidget *parent = 0);
+  ImportedDistributionPage(QWidget *parent = nullptr);
   bool validatePage();
   OT::Sample getData() const {return sampleWidget_->getData();};
 

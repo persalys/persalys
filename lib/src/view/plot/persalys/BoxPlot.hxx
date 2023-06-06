@@ -32,7 +32,7 @@ class PERSALYS_PLOT_API BoxPlot : public PlotWidget
   Q_OBJECT
 
 public:
-  BoxPlot(const QStringList &variableNames, QWidget *parent = 0);
+  BoxPlot(const QStringList &variableNames, QWidget *parent = nullptr);
 
   void addBoxPlot(const DataAnalysisResult &result, const OT::UnsignedInteger index);
 

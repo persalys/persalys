@@ -39,7 +39,7 @@ class PERSALYS_VIEW_API AnsysWizardVariablePage : public QWizardPage
   Q_OBJECT
 public:
   friend class AnsysWizard;
-  AnsysWizardVariablePage(QWidget * parent = 0);
+  AnsysWizardVariablePage(QWidget *parent = nullptr);
   virtual bool validatePage();
 
 public slots:
@@ -63,7 +63,7 @@ class PERSALYS_VIEW_API AnsysWizardSystemPage : public QWizardPage
   Q_OBJECT
 public:
   friend class AnsysWizard;
-  AnsysWizardSystemPage(QWidget * parent = 0);
+  AnsysWizardSystemPage(QWidget *parent = nullptr);
   virtual bool validatePage();
 
 private:
@@ -76,7 +76,7 @@ class PERSALYS_VIEW_API AnsysWizard : public Wizard
 {
   Q_OBJECT
 public:
-  AnsysWizard(QWidget * parent = 0);
+  AnsysWizard(QWidget *parent = nullptr);
 
   void validateVariables();
   void validateSystems();

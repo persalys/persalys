@@ -57,7 +57,6 @@ namespace PERSALYS
 
 MarginalsWidget::MarginalsWidget(PhysicalModelItem * item, QWidget * parent)
   : QWidget(parent)
-  , failSoftMode_(false)
   , study_(item->getParentStudyItem()->getStudy())
   , physicalModel_(item->getPhysicalModel())
 {
@@ -75,7 +74,6 @@ MarginalsWidget::MarginalsWidget(PhysicalModelItem * item, QWidget * parent)
 
 MarginalsWidget::MarginalsWidget(const PhysicalModel& model, QWidget * parent)
   : QWidget(parent)
-  , failSoftMode_(true)
   , study_()
   , physicalModel_(model)
 {

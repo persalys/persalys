@@ -42,7 +42,7 @@ class PERSALYS_MODEL_API AnsysVariableTableModel : public QAbstractTableModel
     Q_OBJECT
   public:
     //friend class AnsysWizardVariablePage;
-    AnsysVariableTableModel(QObject * parent = 0);
+    AnsysVariableTableModel(QObject *parent = nullptr);
     int columnCount(const QModelIndex & parent = QModelIndex()) const;
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role) const;

@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API CopulaInferenceResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  CopulaInferenceResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  CopulaInferenceResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

@@ -39,7 +39,7 @@ class PERSALYS_VIEW_API PolynomialRegressionPage : public QWizardPage
   Q_OBJECT
 
 public:
-  PolynomialRegressionPage(QWidget* parent = 0);
+  PolynomialRegressionPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;
@@ -50,8 +50,8 @@ protected:
 public slots:
 
 private:
-  QSpinBox * degreeSpinBox_ = 0;
-  QCheckBox * interactionCheckBox_ = 0;
+  QSpinBox * degreeSpinBox_ = nullptr;
+  QCheckBox * interactionCheckBox_ = nullptr;
   OT::Description inputsNames_;
 };
 }

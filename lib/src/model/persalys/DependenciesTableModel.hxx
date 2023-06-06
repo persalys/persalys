@@ -33,7 +33,7 @@ class PERSALYS_MODEL_API DependenciesTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DependenciesTableModel(const PhysicalModel &physicalModel, const bool failSoftMode, QObject *parent = 0);
+  DependenciesTableModel(const PhysicalModel &physicalModel, const bool failSoftMode, QObject *parent = nullptr);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;

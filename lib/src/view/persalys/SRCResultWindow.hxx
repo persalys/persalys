@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API SRCResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  SRCResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  SRCResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

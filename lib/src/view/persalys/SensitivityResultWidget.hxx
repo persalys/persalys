@@ -33,7 +33,7 @@ namespace PERSALYS
 class PERSALYS_VIEW_API IndicesProxyModel : public QSortFilterProxyModel
 {
 public:
-  IndicesProxyModel(QObject * parent = 0)
+  IndicesProxyModel(QObject *parent = nullptr)
     : QSortFilterProxyModel(parent)
   {
   }
@@ -62,7 +62,7 @@ public:
                           const OT::Description& inputNames,
                           const OT::String& outputName,
                           const Type type,
-                          QWidget * parent = 0);
+                          QWidget *parent = nullptr);
 
 public slots:
   void updateIndicesPlot(int, Qt::SortOrder);

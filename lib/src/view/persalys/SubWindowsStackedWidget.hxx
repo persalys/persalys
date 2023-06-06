@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API SubWindowsStackedWidget : public QStackedWidget
   Q_OBJECT
 
 public:
-  SubWindowsStackedWidget(QWidget * parent = 0);
+  SubWindowsStackedWidget(QWidget *parent = nullptr);
 
 public slots:
   int addSubWindow(SubWindow * win);

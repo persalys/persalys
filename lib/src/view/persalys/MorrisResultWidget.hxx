@@ -33,7 +33,7 @@ class PERSALYS_VIEW_API MorrisResultWidget : public QWidget
   Q_OBJECT
 
 public:
-  MorrisResultWidget(MorrisResult &result, const int outIndex, QWidget *parent = 0);
+  MorrisResultWidget(MorrisResult &result, const int outIndex, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

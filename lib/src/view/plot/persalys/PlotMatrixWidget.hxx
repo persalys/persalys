@@ -34,7 +34,7 @@ class PERSALYS_PLOT_API PlotMatrixWidget : public QWidget
   Q_OBJECT
 
 public:
-  PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample & sample2, QWidget * parent = 0);
+  PlotMatrixWidget(const OT::Sample & sample1, const OT::Sample & sample2, QWidget *parent = nullptr);
 
   QString getTitle() const;
   void setTitle(const QString & title);

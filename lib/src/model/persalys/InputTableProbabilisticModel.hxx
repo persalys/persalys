@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API InputTableProbabilisticModel : public QAbstractTableMod
   Q_OBJECT
 
 public:
-  InputTableProbabilisticModel(const PhysicalModel & physicalModel, const bool failSoftMode, QObject * parent = 0);
+  InputTableProbabilisticModel(const PhysicalModel & physicalModel, const bool failSoftMode, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;

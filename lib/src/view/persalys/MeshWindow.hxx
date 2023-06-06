@@ -40,7 +40,7 @@ class PERSALYS_VIEW_API MeshWindow : public SubWindow
   Q_OBJECT
 
 public:
-  MeshWindow(PhysicalModelItem * item, QWidget * parent = 0);
+  MeshWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
 
   void buildInterface();
 #ifdef PERSALYS_HAVE_PARAVIEW

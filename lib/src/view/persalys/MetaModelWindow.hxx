@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API MetaModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  MetaModelWindow(PhysicalModelItem * item, QWidget * parent = 0);
+  MetaModelWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
 
 private:
   PhysicalModel physicalModel_;

@@ -38,7 +38,7 @@ public:
                          const OT::Interval &totalIndicesIntervals,
                          const OT::Description &inputNames,
                          const QStringList &legendNames,
-                         QWidget *parent = 0);
+                         QWidget *parent = nullptr);
 
   void updatePlot(const OT::Point &firstOrderIndices,
                   const OT::Point &totalIndices,

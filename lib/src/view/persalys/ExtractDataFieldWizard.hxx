@@ -37,7 +37,7 @@ class PERSALYS_VIEW_API ExtractDataFieldWizard : public QDialog
 
 public:
 
-  ExtractDataFieldWizard(const Analysis& analysis, QWidget *parent = 0);
+  ExtractDataFieldWizard(const Analysis& analysis, QWidget *parent = nullptr);
 
   DataModel getDataModel();
 

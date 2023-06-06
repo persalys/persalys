@@ -34,7 +34,7 @@ class PERSALYS_VIEW_API MainWidget : public QWidget
   Q_OBJECT
 
 public:
-  MainWidget(QWidget * parent = 0);
+  MainWidget(QWidget *parent = nullptr);
   StudyTreeView * getStudyTree() const;
   SubWindowsStackedWidget * getSubWindowsStackedWidget() const;
   Actions * getActions() const;

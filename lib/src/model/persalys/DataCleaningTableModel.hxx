@@ -33,7 +33,7 @@ namespace PERSALYS
     Q_OBJECT
 
   public:
-    DataCleaningTableModel(DataCleaning * cleaner, QObject* parent = 0);
+    DataCleaningTableModel(DataCleaning * cleaner, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & parent = QModelIndex()) const override;

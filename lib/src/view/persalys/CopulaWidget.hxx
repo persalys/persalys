@@ -35,7 +35,7 @@ class PERSALYS_VIEW_API CopulaWidget : public QWidget
   Q_OBJECT
 
 public:
-  CopulaWidget(const PhysicalModel &model, const OT::Distribution &copula, QWidget *parent = 0);
+  CopulaWidget(const PhysicalModel &model, const OT::Distribution &copula, QWidget *parent = nullptr);
   void setCopula(const OT::Distribution &copula);
 
 public slots:

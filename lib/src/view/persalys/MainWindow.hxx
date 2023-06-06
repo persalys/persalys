@@ -36,7 +36,7 @@ class CustomDockWidget : public QDockWidget
   Q_OBJECT
 
 public:
-  CustomDockWidget(QString title, QWidget * parent=0)
+  CustomDockWidget(QString title, QWidget *parent = nullptr)
   : QDockWidget(title, parent)
   {}
 

@@ -34,11 +34,11 @@ namespace PERSALYS
 class PERSALYS_VIEW_API WindowFactory
 {
 public:
-  static SubWindow * GetWindow(Item* item, QWidget * parent = 0);
-  static SubWindow * GetPhysicalModelWindow(PhysicalModelItem* item, QWidget * parent = 0);
-  static SubWindow * GetDesignOfExperimentWindow(DesignOfExperimentItem* item, QWidget * parent = 0);
-  static AnalysisWizard * GetAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget * parent = 0);
-  static SubWindow * GetAnalysisWindow(AnalysisItem* item, QWidget * parent = 0);
+  static SubWindow * GetWindow(Item* item, QWidget *parent = nullptr);
+  static SubWindow * GetPhysicalModelWindow(PhysicalModelItem* item, QWidget *parent = nullptr);
+  static SubWindow * GetDesignOfExperimentWindow(DesignOfExperimentItem* item, QWidget *parent = nullptr);
+  static AnalysisWizard * GetAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget *parent = nullptr);
+  static SubWindow * GetAnalysisWindow(AnalysisItem* item, QWidget *parent = nullptr);
 };
 }
 #endif

@@ -30,7 +30,7 @@ class PERSALYS_UTILS_API UIntSpinBox : public DoubleSpinBox
   Q_OBJECT
 
 public:
-  UIntSpinBox(QWidget * parent = 0);
+  UIntSpinBox(QWidget *parent = nullptr);
 };
 }
 #endif

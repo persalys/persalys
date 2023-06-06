@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API MorrisTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  MorrisTableModel(const MorrisAnalysis & analysis, QObject * parent = 0);
+  MorrisTableModel(const MorrisAnalysis & analysis, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

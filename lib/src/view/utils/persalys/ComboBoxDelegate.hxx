@@ -33,8 +33,8 @@ class PERSALYS_UTILS_API ComboBoxDelegate : public QItemDelegate
   Q_OBJECT
 
 public:
-  ComboBoxDelegate(QObject * parent = 0);
-  ComboBoxDelegate(QPair<int, int> cell, QObject * parent = 0);
+  ComboBoxDelegate(QObject *parent = nullptr);
+  ComboBoxDelegate(QPair<int, int> cell, QObject *parent = nullptr);
 
   void setNoWheelEvent(const bool noWheelEvent);
   void addSeparatorIndex(const int index, const QString &text = "");

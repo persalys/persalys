@@ -39,7 +39,7 @@ namespace PERSALYS
   {
     Q_OBJECT
   public:
-    AnsysSystemTableModel(QObject * parent = 0);
+    AnsysSystemTableModel(QObject *parent = nullptr);
     int columnCount(const QModelIndex & parent = QModelIndex()) const;
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role) const;

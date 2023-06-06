@@ -40,7 +40,7 @@ class AlgoFilterProxyModel : public QSortFilterProxyModel
   Q_OBJECT
 
 public:
-  AlgoFilterProxyModel(QObject *parent = 0);
+  AlgoFilterProxyModel(QObject *parent = nullptr);
 
   void setDerivativeFilter(const QList<int> & derivativeFilter);
   void setLocalityFilter(const QList<int> & localityFilter);

@@ -66,9 +66,9 @@ public slots:
   void removeLine();
 
 private:
-  CouplingPhysicalModel * model_ = 0;
-  int indStep_;
-  int indFile_;
+  CouplingPhysicalModel * model_ = nullptr;
+  int indStep_ = 0;
+  int indFile_ = 0;
 };
 
 class PERSALYS_VIEW_API OutTableModel : public QAbstractTableModel
@@ -96,9 +96,9 @@ public slots:
   void removeLine();
 
 private:
-  CouplingPhysicalModel * model_ = 0;
-  int indStep_;
-  int indFile_;
+  CouplingPhysicalModel * model_ = nullptr;
+  int indStep_ = 0;
+  int indFile_ = 0;
 };
 
 
@@ -107,7 +107,7 @@ class PERSALYS_VIEW_API FilePathWidget : public QWidget
   Q_OBJECT
 
 public:
-  FilePathWidget(const QString &path="", QFileDialog::FileMode mode=QFileDialog::AnyFile, QWidget *parent=0)
+  FilePathWidget(const QString &path = "", QFileDialog::FileMode mode = QFileDialog::AnyFile, QWidget *parent = nullptr)
     : QWidget(parent)
   {
     QHBoxLayout * hLayout = new QHBoxLayout(this);
@@ -145,7 +145,7 @@ public:
 signals:
   void pathChanged(const QString&);
 private:
-    QLineEdit * edit_ = 0;
+    QLineEdit * edit_ = nullptr;
 };
 
 class PERSALYS_VIEW_API DynamicTabWidget : public QTabWidget
@@ -232,15 +232,15 @@ class PERSALYS_VIEW_API CouplingInputFileWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingInputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = 0);
+  CouplingInputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = nullptr);
   int getIndFile() const { return indFile_; };
   QString readFile(QFileInfo & fname) const;
   void compareFiles(QString & s1, QString & s2) const;
 signals:
   void variableListChanged();
 private:
-  int indStep_;
-  int indFile_;
+  int indStep_ = 0;
+  int indFile_ = 0;
 };
 
 
@@ -249,7 +249,7 @@ class PERSALYS_VIEW_API CouplingResourceFileWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingResourceFileWidget(CouplingPhysicalModel * model, const int indStep, QWidget *parent = 0);
+  CouplingResourceFileWidget(CouplingPhysicalModel * model, const int indStep, QWidget *parent = nullptr);
   void updateTable();
 
 signals:
@@ -257,9 +257,9 @@ signals:
 public slots:
   void editResource(QTableWidgetItem * newItem, bool isFile);
 private:
-  CouplingPhysicalModel * model_ = 0;
-  int indStep_;
-  QTableWidget * tableWidget_ = 0;
+  CouplingPhysicalModel * model_ = nullptr;
+  int indStep_ = 0;
+  QTableWidget * tableWidget_ = nullptr;
 };
 
 
@@ -268,7 +268,7 @@ class PERSALYS_VIEW_API CouplingOutputFileWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingOutputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = 0);
+  CouplingOutputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = nullptr);
 signals:
   void variableListChanged();
 };
@@ -279,7 +279,7 @@ class PERSALYS_VIEW_API CouplingStepWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingStepWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, QWidget *parent = 0);
+  CouplingStepWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, QWidget *parent = nullptr);
 public slots:
   void updateInputFileWidgets(PhysicalModelItem *item);
 signals:
@@ -289,8 +289,8 @@ signals:
 private:
   CouplingPhysicalModel * model_ = 0;
   int indStep_ = 0;
-  DynamicTabWidget * inTabWidget_ = 0;
-  CouplingResourceFileWidget * resourceFileWidget_ = 0;
+  DynamicTabWidget * inTabWidget_ = nullptr;
+  CouplingResourceFileWidget * resourceFileWidget_ = nullptr;
 };
 
 
@@ -299,16 +299,16 @@ class PERSALYS_VIEW_API CouplingModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  CouplingModelWindow(PhysicalModelItem *item, QWidget * parent = 0);
+  CouplingModelWindow(PhysicalModelItem *item, QWidget *parent = nullptr);
 public slots:
   void updateStepTabWidget(PhysicalModelItem *item);
   void evaluateOutputs();
 signals:
   void variableListChanged();
 private:
-  CouplingPhysicalModel * model_ = 0;
-  DynamicTabWidget * stepTabWidget_ = 0;
-  TemporaryLabel * errorMessageLabel_ = 0;
+  CouplingPhysicalModel * model_ = nullptr;
+  DynamicTabWidget * stepTabWidget_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 
 class PERSALYS_VIEW_API CouplingSummaryWidget : public QTabWidget
@@ -333,7 +333,7 @@ class PERSALYS_VIEW_API PythonCodeModel : public QAbstractTableModel
   Q_OBJECT
 
 public :
-  PythonCodeModel(PhysicalModelItem * item, int indStep, QWidget * parent = 0);
+  PythonCodeModel(PhysicalModelItem * item, int indStep, QWidget *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API PhysicalModelDiagramWindow : public DiagramWindow
   Q_OBJECT
 
 public :
-  PhysicalModelDiagramWindow(PhysicalModelDiagramItem * item, QWidget * parent = 0);
+  PhysicalModelDiagramWindow(PhysicalModelDiagramItem * item, QWidget *parent = nullptr);
 };
 }
 #endif

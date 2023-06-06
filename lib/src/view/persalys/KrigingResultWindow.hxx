@@ -31,7 +31,7 @@ class PERSALYS_VIEW_API KrigingResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  KrigingResultWindow(AnalysisItem* item, QWidget * parent = 0);
+  KrigingResultWindow(AnalysisItem* item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

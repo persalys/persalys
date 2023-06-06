@@ -40,7 +40,7 @@ class PERSALYS_VIEW_API Wizard : public QWizard
   Q_OBJECT
 
 public:
-  Wizard(QWidget * parent = 0);
+  Wizard(QWidget *parent = nullptr);
 
 public slots:
   void showHelp();

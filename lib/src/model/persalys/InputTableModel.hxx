@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API InputTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  InputTableModel(const PhysicalModel & physicalModel, QObject * parent = 0);
+  InputTableModel(const PhysicalModel & physicalModel, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

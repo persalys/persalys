@@ -50,7 +50,7 @@ public slots:
   void createEvaluation();
 
 private:
-  QAction * evaluateAction_ = 0;
+  QAction * evaluateAction_ = nullptr;
 };
 }
 #endif

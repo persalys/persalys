@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API ToolBar : public QToolBar
   Q_OBJECT
 
 public:
-  ToolBar(const Actions* actions, QWidget * parent = 0);
+  ToolBar(const Actions* actions, QWidget *parent = nullptr);
 
 protected:
   void buildActions(const Actions* actions);

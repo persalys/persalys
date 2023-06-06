@@ -31,8 +31,8 @@ class PERSALYS_PLOT_API ContourPlot : public PlotWidget
   Q_OBJECT
 
 public:
-  ContourPlot(const OT::Distribution &distribution, const bool isPDF = true, QWidget *parent = 0);
-  ContourPlot(const OT::Collection<OT::Drawable> &drawables, QWidget *parent = 0);
+  ContourPlot(const OT::Distribution &distribution, const bool isPDF = true, QWidget *parent = nullptr);
+  ContourPlot(const OT::Collection<OT::Drawable> &drawables, QWidget *parent = nullptr);
 
 public:
   void updateContour(const OT::Distribution &distribution, const bool isPDF);

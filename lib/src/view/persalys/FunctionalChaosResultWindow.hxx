@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API FunctionalChaosResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent = 0);
+  FunctionalChaosResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();

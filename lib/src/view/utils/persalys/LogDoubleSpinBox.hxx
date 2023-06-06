@@ -32,7 +32,7 @@ class PERSALYS_UTILS_API LogDoubleSpinBox : public DoubleSpinBox
   Q_OBJECT
 
 public:
-  LogDoubleSpinBox(QWidget *parent = 0);
+  LogDoubleSpinBox(QWidget *parent = nullptr);
 
   virtual void stepBy(int steps);
 

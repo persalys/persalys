@@ -33,7 +33,7 @@ namespace PERSALYS
   {
     Q_OBJECT
   public:
-    DataCleaningWizard(DataCleaning* cleaner, QWidget * parent = 0);
+    DataCleaningWizard(DataCleaning* cleaner, QWidget *parent = nullptr);
     void keyPressEvent(QKeyEvent * event);
     void launch();
 
