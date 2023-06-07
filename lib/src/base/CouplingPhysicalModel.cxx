@@ -162,10 +162,10 @@ void CouplingPhysicalModel::updateCode()
           outputNames.add(variableNames[k]);
       }
     }
-    if(!step.getCode().empty())
-      for(UnsignedInteger i=0; i<step.getPPOutputs().getSize(); ++i)
-        if(!outputNames.contains(step.getPPOutputs()[i]))
-          outputNames.add(step.getPPOutputs()[i]);
+    if (!step.getCode().empty())
+      for (UnsignedInteger j = 0; j < step.getPPOutputs().getSize(); ++ j)
+        if (!outputNames.contains(step.getPPOutputs()[j]))
+          outputNames.add(step.getPPOutputs()[j]);
   }
 
   // retrieve input variables
@@ -185,11 +185,11 @@ void CouplingPhysicalModel::updateCode()
           inputNames.add(variableNames[k]);
       }
     }
-    if(!step.getCode().empty())
-      for(UnsignedInteger i=0; i<step.getPPInputs().getSize(); ++i)
-        if(!inputNames.contains(step.getPPInputs()[i]) &&
-           !outputNames.contains(step.getPPInputs()[i]))
-          inputNames.add(step.getPPInputs()[i]);
+    if (!step.getCode().empty())
+      for (UnsignedInteger j = 0; j < step.getPPInputs().getSize(); ++ j)
+        if (!inputNames.contains(step.getPPInputs()[j]) &&
+            !outputNames.contains(step.getPPInputs()[j]))
+          inputNames.add(step.getPPInputs()[j]);
   }
   OSS code;
   code << "import tempfile\n";

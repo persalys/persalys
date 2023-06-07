@@ -52,9 +52,9 @@ namespace PERSALYS
         StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
         Q_ASSERT(study);
         for (UnsignedInteger i = 0; i < study->getAnalyses().getSize(); ++i) {
-          const MetaModelAnalysis * analysis = dynamic_cast<const MetaModelAnalysis*>(study->getAnalyses()[i].getImplementation().get());
-          if (analysis && analysis->hasValidResult()) {
-            QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(analysis->getName().c_str()));
+          const MetaModelAnalysis * mmanalysis = dynamic_cast<const MetaModelAnalysis*>(study->getAnalyses()[i].getImplementation().get());
+          if (mmanalysis && mmanalysis->hasValidResult()) {
+            QStandardItem * comboItem = new QStandardItem(QString::fromUtf8(mmanalysis->getName().c_str()));
             comboItem->setData(QVariant::fromValue(study->getAnalyses()[i]));
             mmsComboBoxModel_->appendRow(comboItem);
           }

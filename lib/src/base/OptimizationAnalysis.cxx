@@ -132,7 +132,7 @@ Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
   Description names(OptimizationAlgorithm::GetAlgorithmNames(problem));
 
   // drop B-iFP
-  const UnsignedInteger index = names.find("B-iFP");
+  UnsignedInteger index = names.find("B-iFP");
   if (index < names.getSize())
     names.erase(names.begin() + index);
 
@@ -140,7 +140,7 @@ Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
   const Description pagmoNames(Pagmo::GetAlgorithmNames());
   for (UnsignedInteger i = 0; i < pagmoNames.getSize(); ++ i)
   {
-    const UnsignedInteger index = names.find(pagmoNames[i]);
+    index = names.find(pagmoNames[i]);
     if (index < names.getSize())
       names.erase(names.begin() + index);
   }

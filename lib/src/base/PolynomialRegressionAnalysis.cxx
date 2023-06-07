@@ -259,11 +259,11 @@ void PolynomialRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysis
     // compute basis matrix at the points of inputSample
     const UnsignedInteger basisSize = reducedBasis.getSize();
     Matrix A(inputSample.getSize(), basisSize);
-    for (UnsignedInteger i = 0; i < basisSize; ++i)
+    for (UnsignedInteger k = 0; k < basisSize; ++ k)
     {
-      Sample outSample_i(reducedBasis[i](inputSample));
+      Sample outSample_k(reducedBasis[k](inputSample));
       for (UnsignedInteger j = 0; j < inputSample.getSize(); ++j)
-        A(j, i) = outSample_i(j, 0);
+        A(j, i) = outSample_k(j, 0);
     }
 
     // (A^t.A)
@@ -276,8 +276,8 @@ void PolynomialRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysis
     const Matrix H(A * AtA_inv * A.transpose());
 
     Point Hdiag(H.getNbColumns());
-    for (UnsignedInteger i = 0; i < H.getNbColumns(); ++i)
-      Hdiag[i] = H(i, i);
+    for (UnsignedInteger j = 0; j < H.getNbColumns(); ++ j)
+      Hdiag[j] = H(j, j);
 
     // sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ]
     Scalar quadraticResidual = 0.;

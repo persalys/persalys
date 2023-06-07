@@ -30,8 +30,6 @@ using namespace OT;
 namespace PERSALYS
 {
 
-static const char *colors[] = {"DarkOrchid", "SteelBlue"};
-
 SensitivityIndicesPlot::SensitivityIndicesPlot(const QString &plotTypeName,
                                                const Point &firstOrderIndices,
                                                const Point &totalIndices,
@@ -87,6 +85,8 @@ void SensitivityIndicesPlot::updatePlot(const Point &firstOrderIndices,
   double xOffset = 0.;
   if (totalIndices.getSize())
     xOffset = 0.1;
+
+  const char *colors[] = {"DarkOrchid", "SteelBlue"};
 
   // first order indices
   QwtSymbol * symbol = new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5));
