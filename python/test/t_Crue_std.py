@@ -14,10 +14,10 @@ dist_Ks = ot.TruncatedDistribution(
 dist_Zv = ot.Uniform(49.0, 51.0)
 dist_Zm = ot.Uniform(54.0, 56.0)
 
-Q = persalys.Input("Q", 1000.0, dist_Q, "Débit maximal annuel (m3/s)")
+Q = persalys.Input("Q", 1000.0, dist_Q, "Debit maximal annuel (m3/s)")
 Ks = persalys.Input("Ks", 30.0, dist_Ks, "Strickler (m^(1/3)/s)")
-Zv = persalys.Input("Zv", 50.0, dist_Zv, "Côte de la rivière en aval (m)")
-Zm = persalys.Input("Zm", 55.0, dist_Zm, "Côte de la rivière en amont (m)")
+Zv = persalys.Input("Zv", 50.0, dist_Zv, "Cote de la riviere en aval (m)")
+Zm = persalys.Input("Zm", 55.0, dist_Zm, "Cote de la riviere en amont (m)")
 S = persalys.Output("S", "Surverse (m)")
 
 model = persalys.SymbolicPhysicalModel(
