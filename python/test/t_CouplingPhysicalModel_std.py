@@ -375,6 +375,9 @@ x = [1.0, 2.0, 3.0]
 f = model2.getFunction()
 try:
     y = f(x)
+    # oddly conda still runs without PYTHONPATH/PYTHONHOME
+    if 'conda' in sys.version:
+        raise ValueError('oh wow')
     print("FAIL")
 except Exception:
     print("OK")
