@@ -88,6 +88,7 @@ std::map<OT::String, AlgorithmProperty> OptimizationAnalysis::AlgorithmDictionar
    {"B-OA",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
    {"B-QG",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
    {"B-Hyb",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
+   {"B-Ecp",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
    {"B-iFP",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
    {"Ipopt",                        AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ipopt.html"))},
    {"LEVENBERG_MARQUARD",           AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
@@ -131,16 +132,11 @@ Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
     problem.setInequalityConstraint(func);
   Description names(OptimizationAlgorithm::GetAlgorithmNames(problem));
 
-  // drop B-iFP
-  UnsignedInteger index = names.find("B-iFP");
-  if (index < names.getSize())
-    names.erase(names.begin() + index);
-
   // drop pagmo algos as they are parametrized by a sample instead of a single point
   const Description pagmoNames(Pagmo::GetAlgorithmNames());
   for (UnsignedInteger i = 0; i < pagmoNames.getSize(); ++ i)
   {
-    index = names.find(pagmoNames[i]);
+    const UnsignedInteger index = names.find(pagmoNames[i]);
     if (index < names.getSize())
       names.erase(names.begin() + index);
   }
