@@ -204,7 +204,9 @@ namespace PERSALYS
   {
     QStringList cstrList;
     for(int i=0; i<leftParts_.size(); ++i) {
-      cstrList << leftParts_[i] + operators_[i] + rightParts_[i];
+      QString variable = leftParts_[i];
+      cstrList << variable.replace(QRegularExpression("[^0-9a-zA-Z_]"), "_")
+        + operators_[i] + rightParts_[i];
     }
     return cstrList;
   }

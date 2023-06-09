@@ -21,11 +21,10 @@
 #include "persalys/FMIPhysicalModel.hxx"
 #include "persalys/PythonScriptEvaluation.hxx"
 #include "persalys/FMUInfo.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/MemoizeFunction.hxx>
-
-#include <regex>
 
 using namespace OT;
 
@@ -139,19 +138,8 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     const Description & outputNames)
 {
   // replace dots by underscores in variables names
-  Description inputNamesUnderscore;
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
-  {
-    String inputName(std::regex_replace(inputNames[i], std::regex("[^0-9a-zA-Z_]"), "_"));
-    inputNamesUnderscore.add(inputName);
-  }
-
-  Description outputNamesUnderscore;
-  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
-  {
-    String outputName(std::regex_replace(outputNames[i], std::regex("[^0-9a-zA-Z_]"), "_"));
-    outputNamesUnderscore.add(outputName);
-  }
+  Description inputNamesUnderscore = Tools::GetNormalizedVariables(inputNames);
+  Description outputNamesUnderscore = Tools::GetNormalizedVariables(outputNames);;
 
   OSS code;
   code << "import otfmi\n\n";

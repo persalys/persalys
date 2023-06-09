@@ -566,8 +566,10 @@ Function OptimizationAnalysis::transformEquations(Description& eqs)
   // Functions construction
   // Aggregated(X->X, X->Y)
   Collection<Function> funcModelColl;
+  const Description modelInputs = getPhysicalModel().getInputNames();
   // X->X
-  funcModelColl.add(SymbolicFunction(getPhysicalModel().getInputNames(), getPhysicalModel().getInputNames()));
+  funcModelColl.add(SymbolicFunction(Tools::GetNormalizedVariables(modelInputs),
+                                     Tools::GetNormalizedVariables(modelInputs)));
   // X->Y
   funcModelColl.add(getPhysicalModel().getFunction());
   AggregatedFunction funcModel = AggregatedFunction(funcModelColl);
@@ -575,7 +577,8 @@ Function OptimizationAnalysis::transformEquations(Description& eqs)
   // Aggregated C_i
   Collection<Function> funcC_i;
   for(UnsignedInteger i=0; i<eqs.getSize(); ++i)
-    funcC_i.add(SymbolicFunction(vars, Description(1, eqs[i])));
+    funcC_i.add(SymbolicFunction(Tools::GetNormalizedVariables(vars),
+                                 Description(1, eqs[i])));
 
   return ComposedFunction(AggregatedFunction(funcC_i), funcModel) ;
 }

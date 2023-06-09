@@ -207,19 +207,22 @@ Basis PolynomialRegressionAnalysis::getBasis() const
   Collection<Function> functions;
   const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
   Description inputVariables(Description::BuildDefault(inputDimension, "x"));
-  functions.add(SymbolicFunction(inputVariables, Description(1, "1")));
+  functions.add(SymbolicFunction(Tools::GetNormalizedVariables(inputVariables), Description(1, "1")));
   // degree 1 terms
   for (UnsignedInteger j = 0; j < inputDimension; ++ j)
-    functions.add(SymbolicFunction(inputVariables, Description(1, inputVariables[j])));
+    functions.add(SymbolicFunction(Tools::GetNormalizedVariables(inputVariables),
+                                   Description(1, Tools::GetNormalizedVariable(inputVariables[j]))));
   // degree 2 terms
   for (UnsignedInteger j = 0; j < inputDimension; ++ j)
     for (UnsignedInteger d = 2; d <= degree_; ++ d)
-      functions.add(SymbolicFunction(inputVariables, Description(1, OSS() << inputVariables[j] << "^" << d)));
+      functions.add(SymbolicFunction(Tools::GetNormalizedVariables(inputVariables),
+                                     Description(1, OSS() << Tools::GetNormalizedVariable(inputVariables[j]) << "^" << d)));
   // degree 2 interactions
   if (interaction_ && (degree_ >= 2))
     for (UnsignedInteger i = 0; i < inputDimension; ++ i)
       for (UnsignedInteger j = 0; j < i; ++ j)
-        functions.add(SymbolicFunction(inputVariables, Description(1, OSS() << inputVariables[i] << "*" << inputVariables[j])));
+        functions.add(SymbolicFunction(Tools::GetNormalizedVariables(inputVariables),
+                                       Description(1, OSS() << Tools::GetNormalizedVariable(inputVariables[i]) << "*" << Tools::GetNormalizedVariable(inputVariables[j]))));
   const Basis basis(functions);
   return basis;
 }

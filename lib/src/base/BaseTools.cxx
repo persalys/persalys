@@ -458,6 +458,20 @@ void Tools::ComputeBounds(const InputCollection& inputs, Point& startingPoint, I
   bounds.setUpperBound(upperBounds);
 }
 
+String Tools::GetNormalizedVariable(const String& variable)
+{
+  return std::regex_replace(variable, std::regex("[^0-9a-zA-Z_]"), "_");
+}
+
+Description Tools::GetNormalizedVariables(const Description& variables)
+{
+  Description normVariables(variables.getSize());
+  for (UnsignedInteger i = 0; i < variables.getSize(); ++ i)
+  {
+    normVariables[i] = GetNormalizedVariable(variables[i]);
+  }
+  return normVariables;
+}
 
 // TimeCriteria methods
 
