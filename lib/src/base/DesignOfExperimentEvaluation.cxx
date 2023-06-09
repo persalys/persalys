@@ -122,9 +122,7 @@ void DesignOfExperimentEvaluation::launch()
   if (!inputSampleSize)
     throw InvalidArgumentException(HERE) << "The design of experiments input sample is empty";
 
-  if (getBlockSize() > inputSampleSize)
-    throw InvalidValueException(HERE) << "The block size (" << getBlockSize()
-                                      << ") cannot be greater than the input sample size (" << inputSampleSize << ")";
+  const UnsignedInteger maxBlockSize = std::min(getBlockSize(), inputSampleSize);
 
   // input sample
   const Description inDescription(getOriginalInputSample().getDescription());
@@ -136,10 +134,10 @@ void DesignOfExperimentEvaluation::launch()
   failedInputSample_.setDescription(inDescription);
 
   // number of iterations
-  const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / getBlockSize()));
+  const UnsignedInteger nbIter = static_cast<UnsignedInteger>(ceil(1.0 * inputSampleSize / maxBlockSize));
   // last block size
-  const UnsignedInteger modulo = inputSampleSize % getBlockSize();
-  const UnsignedInteger lastBlockSize = modulo == 0 ? getBlockSize() : modulo;
+  const UnsignedInteger modulo = inputSampleSize % maxBlockSize;
+  const UnsignedInteger lastBlockSize = modulo == 0 ? maxBlockSize : modulo;
 
   // output = f(input)
   Sample outputSample(0, getInterestVariables().getSize());
@@ -165,10 +163,10 @@ void DesignOfExperimentEvaluation::launch()
     notify("informationMessageUpdated");
 
     // the last block can be smaller
-    const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
+    const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? maxBlockSize : lastBlockSize;
 
     // get input sample of size effectiveBlockSize
-    const UnsignedInteger blockFirstIndex =  i * getBlockSize();
+    const UnsignedInteger blockFirstIndex =  i * maxBlockSize;
     Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
 
     // Perform a block of simulations
