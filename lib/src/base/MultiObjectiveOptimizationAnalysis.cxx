@@ -245,7 +245,11 @@ namespace PERSALYS
     finalPopDesc.add(getInterestVariables());
 
     // If constraints, add them and feasibility
-    if (problem.getEqualityConstraint().getInputDimension() || problem.getInequalityConstraint().getInputDimension()) {
+    const Bool isConstrained = problem.getEqualityConstraint().getInputDimension() ||
+      problem.getInequalityConstraint().getInputDimension();
+
+    if (isConstrained)
+    {
       // Build constraints sample
       for (UnsignedInteger i=0; i<getRawEquations().getSize(); ++i)
       {
@@ -275,19 +279,22 @@ namespace PERSALYS
       // add front index and feasibility to final pop sample last 2 columns
       for (UnsignedInteger j=0; j<fronti.getSize(); ++j) {
         finalPop(fronti[j], finalPop.getDimension() - 1) = i;
-        const Point point = solver.getResult().getFinalPoints()[fronti[j]];
-        bool isFeasible = true;
-        if (problem.getEqualityConstraint().getInputDimension()) {
-          for (UnsignedInteger k=0; k<problem.getEqualityConstraint().getOutputDimension(); ++k) {
-            isFeasible &= std::abs(problem.getEqualityConstraint()(point)[k]) < getMaximumConstraintError();
+        if (isConstrained)
+        {
+          const Point point = solver.getResult().getFinalPoints()[fronti[j]];
+          bool isFeasible = true;
+          if (problem.getEqualityConstraint().getInputDimension()) {
+            for (UnsignedInteger k=0; k<problem.getEqualityConstraint().getOutputDimension(); ++k) {
+              isFeasible &= std::abs(problem.getEqualityConstraint()(point)[k]) < getMaximumConstraintError();
+            }
           }
-        }
-        if (problem.getInequalityConstraint().getInputDimension()) {
-          for (UnsignedInteger k=0; k<problem.getInequalityConstraint().getOutputDimension(); ++k) {
-            isFeasible &= problem.getInequalityConstraint()(point)[k] > 0.0;
+          if (problem.getInequalityConstraint().getInputDimension()) {
+            for (UnsignedInteger k=0; k<problem.getInequalityConstraint().getOutputDimension(); ++k) {
+              isFeasible &= problem.getInequalityConstraint()(point)[k] > 0.0;
+            }
           }
+          finalPop(fronti[j], finalPop.getDimension() - 2) = (int)isFeasible;
         }
-        finalPop(fronti[j], finalPop.getDimension() - 2) = (int)isFeasible;
       }
     }
     moResult_.setFinalPop(finalPop);
