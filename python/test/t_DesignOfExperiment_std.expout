@@ -102,6 +102,8 @@ outs=     [ Y0        ]
 7 : [  0.275507 ]
 8 : [  4.78088  ]
 9 : [  5.79249  ]
+outs= [Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n]
+outs= [Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n]
 #!/usr/bin/env python
 
 import openturns as ot
@@ -119,6 +121,21 @@ outputs = [Y0]
 formulas = ['sin(X0)+8*X1']
 aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 anOTStudy.add(aModelPhys)
+dist_X0 = ot.Normal(0, 1)
+X0 = persalys.Input('X0', 1, dist_X0, '')
+dist_X1 = ot.Normal(0, 1)
+X1 = persalys.Input('X1', 2, dist_X1, '')
+Y0 = persalys.Output('Y0', '')
+inputs = [X0, X1]
+outputs = [Y0]
+code = """
+import time
+def _exec(X0,X1):
+    Y0 = 1/(X0+X1)
+    return Y0
+"""
+aModelPhys2 = persalys.PythonPhysicalModel('aModelPhys2', inputs, outputs, code)
+anOTStudy.add(aModelPhys2)
 values = [[0.9, 1.1],
 [1.8, 2.2]]
 aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', aModelPhys, values)
@@ -155,6 +172,20 @@ aDesign_4.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_4.setInterestVariables(interestVariables)
 anOTStudy.add(aDesign_4)
+values = [[-3, 0, 3],
+[-3, 0, 3]]
+aDesign_11 = persalys.GridDesignOfExperiment('aDesign_11', aModelPhys2, values)
+aDesign_11.setBlockSize(1)
+interestVariables = ['Y0']
+aDesign_11.setInterestVariables(interestVariables)
+anOTStudy.add(aDesign_11)
+values = [[-3, 0, 3],
+[-3, 0, 3]]
+aDesign_12 = persalys.GridDesignOfExperiment('aDesign_12', aModelPhys2, values)
+aDesign_12.setBlockSize(1)
+interestVariables = ['Y0']
+aDesign_12.setInterestVariables(interestVariables)
+anOTStudy.add(aDesign_12)
 
 #!/usr/bin/env python
 

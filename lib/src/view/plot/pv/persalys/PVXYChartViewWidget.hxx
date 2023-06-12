@@ -19,7 +19,7 @@ public:
 
   PVXYChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type = Scatter);
   ~PVXYChartViewWidget();
-  virtual void setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames);
+  virtual void setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames) override;
   void setData(const OT::Sample& sample, const QColor color);
   virtual const char *getRepresentationName() const
   {

@@ -95,6 +95,7 @@ void SimulationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
   failedInputSample_.clear();
+  errorDescription_.clear();
 }
 
 
@@ -114,6 +115,7 @@ void SimulationAnalysis::save(Advocate & adv) const
 {
   PhysicalModelAnalysis::save(adv);
   adv.saveAttribute("failedInputSample_", failedInputSample_);
+  adv.saveAttribute("errorDescription_", errorDescription_);
   adv.saveAttribute("blockSize_", blockSize_);
   adv.saveAttribute("seed_", seed_);
 }
@@ -124,6 +126,8 @@ void SimulationAnalysis::load(Advocate & adv)
 {
   PhysicalModelAnalysis::load(adv);
   adv.loadAttribute("failedInputSample_", failedInputSample_);
+  if (adv.hasAttribute("errorDescription_"))
+    adv.loadAttribute("errorDescription_", errorDescription_);
   adv.loadAttribute("blockSize_", blockSize_);
   adv.loadAttribute("seed_", seed_);
 }

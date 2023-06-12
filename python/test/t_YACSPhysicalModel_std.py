@@ -40,3 +40,17 @@ y_ref = [1.0, 2.0, 3.0, 8.0]
 f = model.getFunction()
 y = f(x)
 # ott.assert_almost_equal(y, y_ref)
+
+pyscript = "def _exec(x1, x2):\n    y1, y2 = 1/x1, x2\n    return y1, y2\n"
+model = persalys.YACSPhysicalModel("myPhysicalModelError", [], [], pyscript)
+model.setParallel(True)
+model.setProcessNumber(4)
+
+X = [[0, 1], [1, 1]]
+
+design = persalys.FixedDesignOfExperiment("myDesign", model, X)
+design.run()
+print("outs=", design.getErrorDescription())
+
+Y_ref = [[1, 1]]
+ott.assert_almost_equal(design.getResult().getDesignOfExperiment().getOutputSample(), Y_ref)

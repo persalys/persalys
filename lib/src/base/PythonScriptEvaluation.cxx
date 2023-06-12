@@ -24,6 +24,7 @@
 #include "persalys/InterpreterUnlocker.hxx"
 #include "persalys/PythonEnvironment.hxx"
 #include "persalys/BaseTools.hxx"
+#include "persalys/AppliException.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
@@ -128,46 +129,35 @@ void PythonScriptEvaluation::resetCallsNumber()
 Point PythonScriptEvaluation::operator() (const Point & inP) const
 {
   Point outP;
+  InterpreterUnlocker iul;
+  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
+  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
 
-  try
+  // define the script on the first run only to allow one to save a state
+  if (LastCodeHash_ != codeHash_)
   {
-    InterpreterUnlocker iul;
-    PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
-    PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
-
-    // define the script on the first run only to allow one to save a state
-    if (LastCodeHash_ != codeHash_)
-    {
-      ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
-      handleExceptionTraceback();
-      LastCodeHash_ = codeHash_;
-    }
-
-    callsNumber_.increment();
-    PyObject * script = PyDict_GetItemString(dict, "_exec");
-    if (script == NULL)
-      throw InternalException(HERE) << "no _exec function";
-
-    ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
-    ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
+    ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
     handleExceptionTraceback();
-
-    if (getOutputDimension() > 1)
-    {
-      outP = convert<_PySequence_, Point>(outputList.get());
-    }
-    else
-    {
-      Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
-      outP = Point(1, value);
-    }
+    LastCodeHash_ = codeHash_;
   }
-  catch (Exception &)
+
+  callsNumber_.increment();
+  PyObject * script = PyDict_GetItemString(dict, "_exec");
+  if (script == NULL)
+    throw InternalException(HERE) << "no _exec function";
+
+  ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
+  ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
+  handleExceptionTraceback();
+
+  if (getOutputDimension() > 1)
   {
-    if (checkOutput_)
-      throw;
-    else
-      outP = Point(getOutputDimension(), std::numeric_limits<Scalar>::quiet_NaN());
+    outP = convert<_PySequence_, Point>(outputList.get());
+  }
+  else
+  {
+    Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
+    outP = Point(1, value);
   }
   return outP;
 }
@@ -177,7 +167,29 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 {
   const UnsignedInteger size = inS.getSize();
   if (!isParallel_ || (size <= smallSize_))
-    return EvaluationImplementation::operator() (inS);
+  {
+    Sample outS(0, getOutputDimension());
+    Indices nokIdx;
+    Description errorDesc;
+    for (UnsignedInteger i=0; i<inS.getSize(); ++i)
+    {
+      try
+      {
+        outS.add(operator() (inS[i]));
+      }
+      catch (const Exception& ex)
+      {
+        errorDesc.add(ex.what());
+        nokIdx.add(i);
+      }
+    }
+    if (nokIdx.getSize())
+      throw BatchFailedException(HERE, nokIdx, errorDesc,
+                                 nokIdx.complement(inS.getSize()), outS)
+        << (nokIdx.getSize() == 1 ? errorDesc[0] : "operator(Sample) partial fail");
+    return outS;
+
+  }
 
   const UnsignedInteger outDim = getOutputDimension();
   const UnsignedInteger inDim = inS.getDimension();
@@ -216,42 +228,65 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'pythonw.exe'))\n";
   oss << "    with ProcessPoolExecutor(max_workers=" << (processNumber_ > 0 ? std::to_string(processNumber_) : "None") << ") as executor:\n";
   oss << "        resu = {executor.submit(" << code_mod << "._exec, *x): x for x in X}\n";
-  oss << "        for future in as_completed(resu):\n";
+  oss << "        for future in resu:\n";
   oss << "            try:\n";
   oss << "                y = future.result()\n";
   oss << "            except Exception as exc:\n";
   oss << "                if hasattr(exc, 'message'):\n";
-  oss << "                    exc.message = exc.message + ' x = {}'.format(resu[future])\n";
-  if (checkOutput_)
-    oss << "                raise\n";
-  else
-    if (outDim < 2)
-      oss << "                future.result = lambda: float('nan')\n";
-    else
-      oss << "                future.result = lambda: [float('nan')] * " << std::to_string(outDim) << "\n";
+  oss << "                    exc.message = exc.message + ' x = {}'.format(x)\n";
+  oss << "                pass\n";
   if (outDim < 2)
-    oss << "        Y = [[task.result()] for task in resu]\n";
+    oss << "        Y = [[task.result()] for task in resu if task.exception() is None]\n";
   else
-    oss << "        Y = [task.result() for task in resu]\n";
+    oss << "        Y = [task.result() for task in resu if task.exception() is None]\n";
+  oss << "        exception = [str(task.exception()) for task in resu if task.exception() is not None]\n";
+  oss << "        okIdx  = [i for i, task in enumerate(resu) if task.exception() is None]\n";
+  oss << "        nokIdx = [i for i, task in enumerate(resu) if task.exception() is not None]\n";
 
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
   Os::DeleteDirectory(tempDir.c_str());
   handleExceptionTraceback();
 
+  // build output sample
   PyObject * sampleResult = PyDict_GetItemString(dict, "Y");
   if (sampleResult == NULL)
     throw InternalException(HERE) << "no Y";
-
-  // build output sample
   Sample outputSample(convert<_PySequence_, Sample>(sampleResult));
+
+  // get exception messages
+  PyObject * exceptionResult = PyDict_GetItemString(dict, "exception");
+  if (exceptionResult == NULL)
+    throw InternalException(HERE) << "no exception";
+  Description desc(convert<_PySequence_, Description>(exceptionResult));
+
+  // get suceeded indices
+  PyObject * okIdxResult = PyDict_GetItemString(dict, "okIdx");
+  if (okIdxResult == NULL)
+    throw InternalException(HERE) << "no okIdx";
+  Indices okIdx(convert<_PySequence_, Indices>(okIdxResult));
+
+  // get failed indices
+  PyObject * nokIdxResult = PyDict_GetItemString(dict, "nokIdx");
+  if (nokIdxResult == NULL)
+    throw InternalException(HERE) << "no nokIdx";
+  Indices nokIdx(convert<_PySequence_, Indices>(nokIdxResult));
+
+  // if all points failed, return an empty sample with correct dimension
+  if(!outputSample.getSize())
+    outputSample = Sample(0, getOutputDimension());
+
+  // if any failed indices, throw
+  if (nokIdx.getSize())
+    throw BatchFailedException(HERE, nokIdx, desc, okIdx, outputSample)
+      << (nokIdx.getSize() == 1 ? desc[0] : "operator(Sample) partial fail");
 
   // check
   if (outputSample.getSize() != size)
     throw InvalidArgumentException(HERE) << "Python Function returned a sequence object with incorrect size (got "
-                                          << outputSample.getSize() << ", expected " << size << ")";
+                                         << outputSample.getSize() << ", expected " << size << ")";
   if (outputSample.getDimension() != outDim)
     throw InvalidArgumentException(HERE) << "Python Function returned a sequence object with incorrect dimension (got "
-                                          << outputSample.getDimension() << ", expected " << outDim << ")";
+                                         << outputSample.getDimension() << ", expected " << outDim << ")";
 
   outputSample.setDescription(getOutputDescription());
   callsNumber_.fetchAndAdd(size);

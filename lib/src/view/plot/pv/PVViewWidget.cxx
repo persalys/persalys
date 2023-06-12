@@ -15,7 +15,6 @@
 #include <vtkSMSourceProxy.h>
 #include <vtkPVTrivialProducer.h>
 #include <vtkSMSaveScreenshotProxy.h>
-#include <vtkDoubleArray.h>
 #include <vtkSMPropertyHelper.h>
 #include <vtkSMProperty.h>
 
@@ -71,7 +70,7 @@ PVViewWidget::~PVViewWidget()
 
 pqView * PVViewWidget::getView() const
 {
-  return view_.get();
+  return view_;
 }
 
 
@@ -129,8 +128,8 @@ void PVViewWidget::resetDisplay()
   getView()->resetDisplay();
 }
 
-
-void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames)
+template <typename T>
+void PVViewWidget::setArrayData(const std::vector< std::vector<T> >& valuesByColumn, const std::vector<std::string>& columnNames)
 {
   pqObjectBuilder * builder(pqApplicationCore::instance()->getObjectBuilder());
   pqServer * serv(smb_->fetchServer());
@@ -155,6 +154,15 @@ void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByCol
   getView()->render();
 }
 
+void PVViewWidget::setData(const std::vector< std::vector<std::string> >& valuesByColumn, const std::vector<std::string>& columnNames)
+{
+  setArrayData(valuesByColumn, columnNames);
+}
+
+void PVViewWidget::setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames)
+{
+  setArrayData(valuesByColumn, columnNames);
+}
 
 void PVViewWidget::setData(const Sample& sample)
 {
@@ -173,8 +181,29 @@ void PVViewWidget::setData(const Sample& sample)
   setData(varData, varNames);
 }
 
+void PVViewWidget::setData(const OT::Sample& sample, const OT::Description& errorDesc)
+{
+  std::vector< std::vector<std::string> > varData(sample.getDimension()+1, std::vector<std::string>(sample.getSize()));
+  for (UnsignedInteger i = 0; i < sample.getSize(); ++i) {
+    for (UnsignedInteger j = 0; j < sample.getDimension(); ++j)
+      varData[j][i] = std::to_string(sample(i, j));
+    varData[sample.getDimension()][i] = errorDesc[i];
+  }
 
-void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valuesByColumn,
+
+  // name of each variable
+  Description desc(sample.getDescription());
+  std::vector<std::string> varNames(sample.getDimension());
+  std::copy(desc.begin(), desc.end(), varNames.begin());
+  varNames.push_back(tr("Error message").toStdString());
+
+  // build table
+  setData(varData, varNames);
+}
+
+
+template <typename T>
+void PVViewWidget::buildTableFrom(const std::vector< std::vector<T> >& valuesByColumn,
                                   const std::vector<std::string>& columnNames)
 {
   vtkSmartPointer<vtkTable> table;
@@ -194,7 +223,7 @@ void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valu
   const std::size_t nbSamples(valuesByColumn[0].size());
   for (std::size_t i = 0; i < sz; i++)
   {
-    vtkSmartPointer<vtkDoubleArray> arr(vtkSmartPointer<vtkDoubleArray>::New());
+    vtkSmartPointer<typename traitsArrayType< T >::Type> arr(vtkSmartPointer<typename traitsArrayType< T >::Type>::New());
     arr->SetName(columnNames[i].c_str());
 
     if (nbSamples != valuesByColumn[i].size())
@@ -205,7 +234,7 @@ void PVViewWidget::buildTableFrom(const std::vector< std::vector<double> >& valu
     }
     arr->SetNumberOfTuples(nbSamples);
     arr->SetNumberOfComponents(1);
-    double * pt(arr->GetPointer(0));
+    T * pt(arr->GetPointer(0));
     std::copy(valuesByColumn[i].begin(), valuesByColumn[i].end(), pt);
     table->AddColumn(arr);
   }
