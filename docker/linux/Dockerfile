@@ -32,7 +32,12 @@ RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/release
 RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.12.tar.gz | tar xz && cd Ipopt-releases-3.14.12 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
-RUN curl -fsSL https://www.coin-or.org/download/source/Bonmin/Bonmin-1.8.8.tgz | tar xz && cd Bonmin-1.8.8 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
+RUN curl -fsSL https://github.com/coin-or/CoinUtils/archive/refs/tags/releases/2.11.9.tar.gz | tar xz && cd CoinUtils-releases-2.11.9 && ./configure --prefix=/usr/local --with-blas-lib='-lblas' --with-lapack-lib='-llapack' --enable-dependency-linking && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r CoinUtils*
+RUN curl -fsSL https://github.com/coin-or/Osi/archive/refs/tags/releases/0.108.8.tar.gz | tar xz && cd Osi-releases-0.108.8 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Osi*
+RUN curl -fsSL https://github.com/coin-or/Clp/archive/refs/tags/releases/1.17.8.tar.gz | tar xz && cd Clp-releases-1.17.8 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Clp*
+RUN curl -fsSL https://github.com/coin-or/Cgl/archive/refs/tags/releases/0.60.7.tar.gz | tar xz && cd Cgl-releases-0.60.7 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Cgl*
+RUN curl -fsSL https://github.com/coin-or/Cbc/archive/refs/tags/releases/2.10.10.tar.gz | tar xz && cd Cbc-releases-2.10.10 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Cbc*
+RUN curl -fsSL https://github.com/coin-or/Bonmin/archive/refs/tags/releases/1.8.9.tar.gz | tar xz && cd Bonmin-releases-1.8.9 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
 
 # dlib
 RUN curl -L https://github.com/davisking/dlib/archive/v19.24.tar.gz | tar xz && cd dlib-19.24 \
