@@ -115,7 +115,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.10.3.tar.gz | tar xz && cd PyFMI-PyFMI-2.10.3 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.10.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.10.4 \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
