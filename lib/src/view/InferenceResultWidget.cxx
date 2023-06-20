@@ -536,8 +536,8 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   // -- qq plot
   Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));
   qqPlot_->setTitle(tr("Q-Q Plot") + ": " + distName);
-  qqPlot_->setAxisTitle(QwtPlot::yLeft, tr("Data quantiles"));
-  qqPlot_->setAxisTitle(QwtPlot::xBottom, tr("%1 theoretical quantiles").arg(distName));
+  qqPlot_->setAxisTitle(QwtPlot::xBottom, tr("Data quantiles"));
+  qqPlot_->setAxisTitle(QwtPlot::yLeft, tr("%1 theoretical quantiles").arg(distName));
   qqPlot_->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(Qt::blue, 5), QwtPlotCurve::Dots);
   qqPlot_->plotCurve(qqPlotGraph.getDrawable(0).getData());
 }
