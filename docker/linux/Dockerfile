@@ -164,7 +164,7 @@ RUN curl -fSsL https://paraview.org/files/v5.10/ParaView-v5.10.1.tar.xz | tar xJ
 # openturns
 RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.21 \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" \
-    -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+    -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
 RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.14 \
