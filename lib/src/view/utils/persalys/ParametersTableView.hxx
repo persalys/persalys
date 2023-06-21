@@ -27,9 +27,25 @@
 #include <openturns/Exception.hxx>
 
 #include <QHeaderView>
+#include <QIdentityProxyModel>
 
 namespace PERSALYS
 {
+
+class PERSALYS_UTILS_API LongStringProxy : public QIdentityProxyModel
+{
+  Q_OBJECT
+public:
+  LongStringProxy(int column, int lineLength, QObject * parent = nullptr)
+    : QIdentityProxyModel(parent)
+    , column_(column)
+    , lineLength_(lineLength){}
+  QVariant data(const QModelIndex & index, int role) const override;
+private:
+    int column_;
+    int lineLength_;
+};
+
 class PERSALYS_UTILS_API ParametersTableView : public CopyableTableView
 {
 public:

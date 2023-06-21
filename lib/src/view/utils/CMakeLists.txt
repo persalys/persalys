@@ -77,6 +77,7 @@ qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/LineEditWithQValidatorDelegate.hxx
               persalys/HorizontalHeaderViewWithCombobox.hxx
               persalys/ExportableTableView.hxx
+              persalys/ParametersTableView.hxx
               persalys/EditableExportableTableView.hxx
               persalys/CopyableTableView.hxx
               persalys/DoubleSpinBox.hxx
