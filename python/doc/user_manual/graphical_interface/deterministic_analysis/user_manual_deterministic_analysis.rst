@@ -99,11 +99,28 @@ selected in the **Input Sample definition** window. Then the next window allows 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentImport.png
     :align: center
 
-The user can also import a design of experiments, from an external file. It is then necessary
-to set the link between the columns of the imported design and the input variables of the
-physical model, by clicking on the column name (default : first column for the first input
-variable, second column for the second input variable, etc...).
+The user can also import a design of experiments, from an external
+file. It is then necessary to set the link between the columns of the
+imported design and the input (and optionally output) variables of the
+physical model, by clicking on the column name (default : first column
+for the first input variable, second column for the second input
+variable, etc...).
 
+Use case:
+"""""""""
+
+The user wants to use an already evaluated design of experiments in a
+csv file, knows the input variables distribution and wants to evaluate
+the polynomial chaos coefficients. The method is as follows:
+- create and empty model (for example symbolic)
+
+- define the input and output variables
+
+- create a probabilistic model and define the input distribution
+
+- create an imported design of experiment
+
+- the resulting metamodel will use probabilistic model distributions parameters
 
 .. _doeinputwindow:
 
