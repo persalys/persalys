@@ -26,8 +26,6 @@
 #include "persalys/QtTools.hxx"
 #include "persalys/DocumentationToolButton.hxx"
 
-#include <openturns/NLopt.hxx>
-
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QRadioButton>
