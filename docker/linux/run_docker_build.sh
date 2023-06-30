@@ -23,7 +23,7 @@ make install
 make tests
 xvfb-run -s "-screen 0 1024x768x24" ctest --output-on-failure --timeout 30 -j8
 
-cd /tmp/persalys.AppDir/usr/share/persalys/doc/; zip -r /tmp/persalys-doc.zip ./html/*; cd -
+cd /tmp/persalys.AppDir/usr/share/doc/persalys/; zip -r /tmp/persalys-doc.zip ./html/*; cd -
 
 cd /tmp
 

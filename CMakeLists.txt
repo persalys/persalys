@@ -13,7 +13,7 @@ set (PERSALYS_QT_MAJOR_VERSION 5 CACHE STRING "Qt version")
 # By default, build in Release mode. Must appear before project() command
 set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
-project (Persalys)
+project (persalys)
 
 if (POLICY CMP0020)
   # Automatically link Qt executables to qtmain target on Windows
@@ -43,7 +43,7 @@ set (PERSALYS_INCLUDE_PATH ${CMAKE_INSTALL_INCLUDEDIR})
 set (PERSALYS_SWIG_INCLUDE_PATH ${PERSALYS_INCLUDE_PATH}/${PACKAGE_NAME}/swig)
 set (PERSALYS_DATA_PATH ${CMAKE_INSTALL_DATAROOTDIR})
 set (PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys)
-set (PERSALYS_DOC_PATH ${CMAKE_INSTALL_DATAROOTDIR}/${PACKAGE_NAME}/doc)
+set (PERSALYS_DOC_PATH ${CMAKE_INSTALL_DOCDIR})
 
 find_package (OpenTURNS 1.21 CONFIG REQUIRED)
 get_target_property (ot_features OT OPENTURNS_ENABLED_FEATURES)
