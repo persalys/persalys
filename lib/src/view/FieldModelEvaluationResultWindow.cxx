@@ -806,7 +806,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
 
       bagChartStackedWidget->addWidget(new WidgetBoundToDockWidget(bagChartWidget, settingWidget, this));
 
-      String aStr = (OSS() << inPVTable->getProxy() << bagChartWidget->getProxy()).str();
+      aStr = (OSS() << inPVTable->getProxy() << bagChartWidget->getProxy()).str();
       linksModel->addSelectionLink(aStr.c_str(), fBagChartWidget->getProxy(), outPVGraph->getProxy());
     }
   }
