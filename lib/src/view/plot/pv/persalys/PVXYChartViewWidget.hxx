@@ -21,7 +21,7 @@ public:
   ~PVXYChartViewWidget();
   virtual void setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames) override;
   void setData(const OT::Sample& sample, const QColor color);
-  virtual const char *getRepresentationName() const
+  const char *getRepresentationName() const override
   {
     return PV_REPRESENTATION_TYPE[type_];
   }
