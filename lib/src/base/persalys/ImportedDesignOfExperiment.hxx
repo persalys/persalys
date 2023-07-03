@@ -39,12 +39,14 @@ public:
   ImportedDesignOfExperiment(const OT::String& name,
                              const PhysicalModel& physicalModel,
                              const OT::String& fileName,
-                             const OT::Indices& inputColumns);
+                             const OT::Indices& inputColumns,
+                             const OT::Indices& outputColumns = OT::Indices());
 
   /** Virtual constructor */
   ImportedDesignOfExperiment * clone() const override;
 
-  void setInputColumns(const OT::Indices &inputColumns);
+  void setColumns(const OT::Indices &inputColumns,
+                  const OT::Indices &outputColumns = OT::Indices()) override;
 
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;

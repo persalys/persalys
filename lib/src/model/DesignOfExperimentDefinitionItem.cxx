@@ -189,7 +189,8 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
   const bool wasValid = oldDoeEval->hasValidResult();
 
   DesignOfExperimentEvaluation * newDoeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
-  newDoeEval->setDesignOfExperiment(oldDoeEval->getResult().getDesignOfExperiment());
+  if(!newDoeEval->hasValidResult())
+    newDoeEval->setDesignOfExperiment(oldDoeEval->getResult().getDesignOfExperiment());
 
   // remove the item named Evaluation which is an AnalysisItem
   analysis_.getImplementation().get()->notifyAndRemove("AnalysisItem");
@@ -205,6 +206,11 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
 
   if (wasValid)
     emit designEvaluationUpdated(false);
+  if(analysis.hasValidResult()) {
+    emit designEvaluationUpdated(true);
+    fill();
+  }
+
   emit windowRequested(this, false);
 }
 

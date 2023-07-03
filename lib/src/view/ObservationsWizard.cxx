@@ -71,8 +71,20 @@ void ImportObservationsPage::checkColumns()
   const Description inputNames(observations_.getPhysicalModel().getInputNames());
   const Description outputNames(observations_.getPhysicalModel().getOutputNames());
 
-  Indices inColumns(sampleWidget_->getColumns(inputNames));
-  Indices outColumns(sampleWidget_->getColumns(outputNames));
+  Indices inColumns;
+  Indices outColumns;
+  try
+  {
+    inColumns = sampleWidget_->getColumns(inputNames);
+    outColumns = sampleWidget_->getColumns(outputNames);
+    sampleWidget_->tableValidity_ = true;
+    sampleWidget_->errorMessageLabel_->reset();
+  }
+  catch (const InvalidArgumentException &)
+  {
+    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
+    sampleWidget_->tableValidity_ = false;
+  }
 
   QStringList inNames;
   QStringList outNames;

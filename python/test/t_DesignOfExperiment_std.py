@@ -30,6 +30,14 @@ anOTStudy.add(aDesign2)
 aDesign2.run()
 print("outs=", aDesign2.getResult().getDesignOfExperiment().getOutputSample())
 
+# Design of Experiment - imported - already evaluated##
+aDesign2_1 = persalys.ImportedDesignOfExperiment("aDesign_2_1", model, filename, [0, 2], [1])
+anOTStudy.add(aDesign2_1)
+
+# Considered already evaluated, do not run it
+# aDesign2_1.run()
+print("outs=", aDesign2_1.getResult().getDesignOfExperiment().getOutputSample())
+
 # Design of Experiment ##
 aDesign3 = persalys.ProbabilisticDesignOfExperiment(
     "aDesign_3", model, 10, "QUASI_MONTE_CARLO"

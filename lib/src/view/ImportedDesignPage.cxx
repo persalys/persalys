@@ -58,6 +58,7 @@ void ImportedDesignPage::buildInterface()
   estimatedTimeValueLabel_->setVisible(estimatedTimeValueLabel_->text().toFloat()>1e-6);
   estimatedTimeLabel->setVisible(estimatedTimeValueLabel_->text().toFloat()>1e-6);
   connect(this, SIGNAL(showTime()), estimatedTimeLabel, SLOT(show()));
+  checkColumns();
 }
 
 
@@ -72,20 +73,25 @@ void ImportedDesignPage::setTable(const QString& fileName)
     estimatedTimeValueLabel_->setVisible(true);
     emit showTime();
   }
+  Description variableDescription(designOfExperiment_.getPhysicalModel().getInputNames());
+  variableDescription.add(designOfExperiment_.getPhysicalModel().getSelectedOutputsNames());
+  Indices variableColumns(designOfExperiment_.getInputColumns());
+  variableColumns.add(designOfExperiment_.getOutputColumns());
   sampleWidget_->updateWidgets(designOfExperiment_.getSampleFromFile(),
-                               designOfExperiment_.getPhysicalModel().getInputNames(),
-                               designOfExperiment_.getInputColumns());
+                               variableDescription,
+                               variableColumns);
 }
 
 
 void ImportedDesignPage::checkColumns()
 {
   const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
+  const Description outputNames = designOfExperiment_.getPhysicalModel().getSelectedOutputsNames();
 
   // try to update the design of experiments
   try
   {
-    designOfExperiment_.setInputColumns(sampleWidget_->getColumns(inputNames));
+    designOfExperiment_.setColumns(sampleWidget_->getColumns(inputNames), sampleWidget_->getColumns(outputNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorMessageLabel_->reset();
   }

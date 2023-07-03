@@ -14,6 +14,17 @@ outs=     [ Y0        ]
 7 : [  -6.42253 ]
 8 : [   3.26745 ]
 9 : [  -5.27323 ]
+outs=     [ Y0         ]
+0 : [ -1.26617   ]
+1 : [ -2.18139   ]
+2 : [  1.43725   ]
+3 : [ -0.470526  ]
+4 : [ -1.28289   ]
+5 : [  0.995793  ]
+6 : [  0.44549   ]
+7 : [ -1.03808   ]
+8 : [ -0.125498  ]
+9 : [  0.0702074 ]
 outs=     [ Y0        ]
 0 : [   0       ]
 1 : [  -4.77142 ]
@@ -149,6 +160,12 @@ aDesign_2.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_2.setInterestVariables(interestVariables)
 anOTStudy.add(aDesign_2)
+inputColumns = [0, 2]
+aDesign_2_1 = persalys.ImportedDesignOfExperiment('aDesign_2_1', aModelPhys, 'normal.csv', inputColumns)
+aDesign_2_1.setBlockSize(1)
+interestVariables = ['Y0']
+aDesign_2_1.setInterestVariables(interestVariables)
+anOTStudy.add(aDesign_2_1)
 aDesign_3 = persalys.ProbabilisticDesignOfExperiment('aDesign_3', aModelPhys, 10, 'QUASI_MONTE_CARLO')
 aDesign_3.setSeed(0)
 aDesign_3.setBlockSize(1)
