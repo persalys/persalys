@@ -51,12 +51,16 @@ ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name, const
 
 /* Constructor with parameters */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
-    const PhysicalModel& physicalModel,
-    const String& fileName,
-    const Indices& inputColumns)
+                                                       const PhysicalModel& physicalModel,
+                                                       const String& fileName,
+                                                       const Indices& inputColumns,
+                                                       const Indices& outputColumns)
   : DesignOfExperimentEvaluation(name, physicalModel)
-  , DataImport(fileName, inputColumns)
+  , DataImport(fileName, inputColumns, outputColumns)
 {
+  // If outputcolumns, set result
+  if(outputColumns.getSize())
+    setColumns(inputColumns, outputColumns);
 }
 
 
@@ -70,7 +74,7 @@ ImportedDesignOfExperiment* ImportedDesignOfExperiment::clone() const
 void ImportedDesignOfExperiment::check()
 {
   // try to use the same indices
-  setInputColumns(inputColumns_);
+  setColumns(inputColumns_, outputColumns_);
 }
 
 
@@ -84,16 +88,31 @@ Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*n
 }
 
 
-void ImportedDesignOfExperiment::setInputColumns(const Indices &inputColumns)
+void ImportedDesignOfExperiment::setColumns(const Indices &inputColumns,
+                                            const Indices &outputColumns)
 {
   // check columns
   if (inputColumns.getSize() != getPhysicalModel().getInputDimension())
     throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: " << getPhysicalModel().getInputDimension();
 
-  DataImport::setColumns(inputColumns, Indices());
-  // reset
-  originalInputSample_.clear();
-  initialize();
+  DataImport::setColumns(inputColumns, outputColumns);
+
+  // if outputColumns, consider the DoE already evaluated, set result
+  if(outputColumns.getSize())
+  {
+    Sample inS = sampleFromFile_.getMarginal(inputColumns);
+    inS.setDescription(getPhysicalModel().getInputNames());
+    Sample outS = sampleFromFile_.getMarginal(outputColumns);
+    outS.setDescription(getPhysicalModel().getSelectedOutputsNames());
+    result_.designOfExperiment_.setInputSample(inS);
+    result_.designOfExperiment_.setOutputSample(outS);
+  }
+  else
+  {
+    // reset
+    originalInputSample_.clear();
+    initialize();
+  }
 }
 
 
@@ -101,7 +120,7 @@ void ImportedDesignOfExperiment::setDefaultColumns()
 {
   Indices inputColumns(getPhysicalModel().getInputDimension());
   inputColumns.fill();
-  setInputColumns(inputColumns);
+  setColumns(inputColumns);
 }
 
 

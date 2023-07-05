@@ -34,6 +34,7 @@ public:
   friend class DesignOfExperimentEvaluation;
   friend class ModelEvaluation;
   friend class FieldModelEvaluation;
+  friend class ImportedDesignOfExperiment;
 
   /** Default constructor */
   EvaluationResult();

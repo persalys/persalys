@@ -189,15 +189,22 @@ Indices ImportSampleWidget::getColumns(const Description &names) const
 {
   Indices columns;
   // get the index of each item of names
+  QStringList addedVars;
   for (UnsignedInteger i = 0; i < names.getSize(); ++i)
   {
     for (int j = 0; j < dataPreviewTableView_->model()->columnCount(); ++j)
     {
       QString headerName_j(dataPreviewTableView_->model()->headerData(j, Qt::Horizontal).toString());
       if (names[i] == headerName_j.toStdString())
+      {
         columns.add(j);
+        addedVars.append(headerName_j);
+      }
     }
   }
+  if (addedVars.size())
+    if ((UnsignedInteger)QSet<QString>(addedVars.begin(), addedVars.end()).size() != columns.getSize())
+      throw InvalidArgumentException(HERE) << "Each variable must be present only once";
   return columns;
 }
 
