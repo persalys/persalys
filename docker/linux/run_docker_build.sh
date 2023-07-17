@@ -113,7 +113,6 @@ cp -rv /usr/local/lib/qt/plugins persalys.AppDir/usr/lib
 # paraview libs
 cp -v /usr/local/lib/libvtk* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpq* persalys.AppDir/usr/lib
-cp -v /usr/local/lib/libcatalyst.so.* persalys.AppDir/usr/lib
 mkdir -p persalys.AppDir/usr/lib/paraview/plugins
 cp -rv /usr/local/lib/paraview*/plugins/BagPlotViewsAndFilters persalys.AppDir/usr/lib/paraview/plugins
 

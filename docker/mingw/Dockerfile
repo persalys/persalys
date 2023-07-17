@@ -2,7 +2,7 @@ FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-qwt
-RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview510 > /dev/null 2>&1
+RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview  > /dev/null 2>&1
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
 ENV ARCH=x86_64 PYMAJMIN=311
