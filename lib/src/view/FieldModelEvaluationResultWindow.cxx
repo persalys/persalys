@@ -346,7 +346,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
 
         // CDF
         PlotWidget * cdfPlot = new PlotWidget(tr("distributionCDF"));
-        cdfPlot->plotHistogram(xi_sample.getMarginal(i), 1);
+        cdfPlot->plotHistogram(xi_sample.getMarginal(i), PlotWidget::CDF);
         cdfPlot->plotCurve(fittedDistribution.drawCDF().getDrawable(0).getData());
         cdfPlot->setTitle(tr("CDF:") + " " + QString("ξ%1").arg(i));
         cdfPlot->setAxisTitle(QwtPlot::xBottom, QString("ξ%1").arg(i));

@@ -31,6 +31,7 @@ result = analysis.getResult()
 print("result=", result)
 print("PDF=", result.getPDF())
 print("CDF=", result.getCDF())
+print("SurvivalFunction=", result.getSurvivalFunction())
 print("outliers=", result.getOutliers())
 
 # Comparaison

@@ -63,6 +63,8 @@ class PERSALYS_PLOT_API PlotWidget : public QwtPlot
   Q_OBJECT
 
 public:
+  enum HistoType {PDF, CDF, Survival, Other};
+
   /// constructor
   PlotWidget(const QString &plotTypeName = "", const bool disableZoom = false, QWidget *parent = nullptr);
 
@@ -78,18 +80,18 @@ public:
   void plotCDFCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
   void plotQuantileCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
   void plotSurvivalCurve(const OT::Distribution & distribution, const QPen pen = QPen(Qt::black, 2));
-  void plotHistogram(const OT::Sample & sample, const OT::UnsignedInteger graphType = 0, int barNumber = 0, QString title = "");
+  void plotHistogram(const OT::Sample & sample, const PlotWidget::HistoType graphType = PlotWidget::PDF, int barNumber = 0, QString title = "");
   void plotScatter(const OT::Sample & input, const OT::Sample & output,
                    QPen pen = QPen(Qt::blue, 4), QString Xtitle = "", QString Ytitle = "");
 
   void plotFronts(const OT::Collection<OT::Sample> & fronts,
                   const OT::UnsignedInteger idx1, const OT::UnsignedInteger idx2);
-  
+
   void plotContour(const OT::Collection<OT::Drawable>& drawables,
                    const OT::UnsignedInteger drawableIndex,
                    const bool displayGradient,
                    const bool isPDF);
-  
+
   /// clear plot
   void clear();
 

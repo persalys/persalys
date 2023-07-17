@@ -396,10 +396,11 @@ void PlotWidget::plotSurvivalCurve(const Distribution & distribution, const QPen
 
 // graphType = 0 -> PDF
 // graphType = 1 -> CDF
-// graphType = 2 -> other
-void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger graphType, int barNumber, QString title)
+// graphType = 2 -> survival function
+// graphType = 3 -> other
+void PlotWidget::plotHistogram(const Sample & sample, const PlotWidget::HistoType graphType, int barNumber, QString title)
 {
-  if (graphType > 2)
+  if (graphType > PlotWidget::Other)
     throw InvalidArgumentException(HERE) << "Type of graph not known " << graphType;
 
   const int size = (int)sample.getSize();
@@ -426,24 +427,38 @@ void PlotWidget::plotHistogram(const Sample & sample, const UnsignedInteger grap
       ++ histogramData[index];
   }
 
-  // if PDF or CDF
-  if (graphType < 2)
+  // if PDF, CDF or Survival
+  if (graphType < PlotWidget::Other)
   {
     double inverseArea = 1. / (size * width);
     for (int i = 0; i < barNumber; ++i)
       histogramData[i] *= inverseArea;
   }
 
-  //  if CDF
   double sum = 1.;
-  if (graphType == 1)
+  //  if CDF / Survival
+  switch(graphType)
   {
+  case PlotWidget::PDF:
+    break;
+  case PlotWidget::CDF:
     sum = histogramData[0];
     for (int i = 1; i < barNumber; i++)
     {
       sum += histogramData[i];
       histogramData[i] += histogramData[i - 1];
     }
+    break;
+  case PlotWidget::Survival:
+    sum = histogramData[barNumber - 1];
+    for (int i = barNumber - 2; i >= 0; i--)
+    {
+      sum += histogramData[i];
+      histogramData[i] += histogramData[i + 1];
+    }
+    break;
+  case PlotWidget::Other:
+    break;
   }
 
   // create histogram
@@ -794,7 +809,7 @@ void PlotWidget::plotContour(const Collection<Drawable>& drawables,
   setAxisScale(QwtPlot::yLeft, yInterval.minValue(), yInterval.maxValue());
 
   if (enableContourColorBar_)
-  { 
+  {
     // A color bar on the right axis
     QwtScaleWidget * rightAxis = axisWidget(QwtPlot::yRight);
     rightAxis->setTitle(tr("Density"));
