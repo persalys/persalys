@@ -56,6 +56,7 @@ InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidg
   , pdfPlot_(0)
   , cdfPlot_(0)
   , qqPlot_(0)
+  , survPlot_(0)
 {
   buildInterface();
 }
@@ -122,10 +123,14 @@ void InferenceResultWidget::buildInterface()
     // --- cdf
     cdfPlot_ = new PlotWidget(tr("distributionCDF"));
     pdf_cdfStackedWidget->addWidget(cdfPlot_);
+    // --- survival function
+    survPlot_ = new PlotWidget(tr("survivalFunction"));
+    pdf_cdfStackedWidget->addWidget(survPlot_);
     // --- GraphConfigurationWidget
     QVector<PlotWidget*> listpdf_cdfPlot;
     listpdf_cdfPlot.append(pdfPlot_);
     listpdf_cdfPlot.append(cdfPlot_);
+    listpdf_cdfPlot.append(survPlot_);
     pdf_cdfPlotSettingWidget_ = new PDFGraphSetting(listpdf_cdfPlot, PDFGraphSetting::Result, this);
     connect(pdf_cdfPlotSettingWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
@@ -454,6 +459,11 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     cdfPlot_->clear();
     qqPlot_->clear();
   }
+  if(survPlot_ && pdf_cdfPlotSettingWidget_)
+  {
+    pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 2 ? survPlot_->show() : survPlot_->hide();
+    survPlot_->clear();
+  }
 
   // update
   const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
@@ -540,6 +550,42 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   qqPlot_->setAxisTitle(QwtPlot::yLeft, tr("%1 theoretical quantiles").arg(distName));
   qqPlot_->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(Qt::blue, 5), QwtPlotCurve::Dots);
   qqPlot_->plotCurve(qqPlotGraph.getDrawable(0).getData());
+
+  // -- survival function plot
+  if(survPlot_)
+  {
+    survPlot_->plotSurvivalCurve(distribution);
+    const Sample S_nxOT(u.drawSurvivalFunction(xmin, xmax).getDrawable(0).getData());
+    Sample S_nx(0, 2);
+    for (UnsignedInteger i = 0; i < S_nxOT.getSize(); ++i)
+    {
+      S_nx.add(S_nxOT[i]);
+      if (i < S_nxOT.getSize() - 1)
+      {
+        Point interPt(2);
+        interPt[0] = S_nxOT(i+1, 0);
+        interPt[1] = S_nxOT(i, 1);
+        S_nx.add(interPt);
+      }
+    }
+    survPlot_->plotCurve(S_nx, QPen(Qt::blue, 2));
+    // compute fitting test statistic : D_n = sup |S_n(x) - S(x)|
+    const Sample Sx(distribution.computeSurvivalFunction(S_nx.getMarginal(0)));
+    KSStatistic = Sample(2, 2);
+    for (UnsignedInteger i = 0; i < S_nx.getSize(); ++i)
+    {
+      if (std::abs(S_nx(i, 1) - Sx(i, 0)) > std::abs(KSStatistic(0, 1) - KSStatistic(1, 1)))
+      {
+        KSStatistic(0, 1) = S_nx(i, 1);
+        KSStatistic(1, 1) = Sx(i, 0);
+        KSStatistic(0, 0) = S_nx(i, 0);
+        KSStatistic(1, 0) = S_nx(i, 0);
+      }
+    }
+    survPlot_->plotCurve(KSStatistic, QPen(Qt::red, 2));
+    survPlot_->setTitle(tr("Survival function") + ": " + distName + " ("
+                       + testName + " " + tr("statistic=%1)").arg(std::abs(KSStatistic(0, 1) - KSStatistic(1, 1))));
+  }
 }
 
 
