@@ -25,6 +25,8 @@
 #include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/PlotWidget.hxx"
+#include "persalys/GraphConfigurationWidget.hxx"
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include "persalys/PVServerManagerInterface.hxx"
@@ -172,6 +174,14 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     }
     pdfSamplePrior.setDescription(sampleDescription);
     pdfSamplePosterior.setDescription(sampleDescription);
+
+    // If only one point, draw vertical line for prior
+    if(pdfSamplePrior.getSize() == 1)
+    {
+      pdfSamplePrior.add(pdfSamplePrior[0]);
+      pdfSamplePrior[1][1] = 0.1 * pdfSamplePosterior.getMarginal(1).getMax()[0];
+    }
+
     pvWidget->setData(pdfSamplePrior, Qt::red);
     pvWidget->setData(pdfSamplePosterior, Qt::green);
     pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Prior")).toList(), 0);
@@ -340,6 +350,21 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   chartSetting = new TrajectoriesSettingWidget(pvWidget, labels, this);
 
   predTabWidget->addTab(new WidgetBoundToDockWidget(pvWidget, chartSetting, this), tr("Residuals"));
+
+  // - residuals QQ-plot
+
+  Graph qqPlotGraph(result_.getCalibrationResult().drawResidualsNormalPlot().getGraph(0, i));
+  PlotWidget * qqPlot = new PlotWidget(tr("qqPlot"));
+  SimpleGraphSetting * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot, this);
+  qqPlotSettingWidget->hide();
+  qqPlot->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(Qt::blue, 5), QwtPlotCurve::Dots);
+  qqPlot->plotCurve(qqPlotGraph.getDrawable(0).getData(), QPen(Qt::red, 1, Qt::DashDotLine));
+
+  qqPlot->setAxisTitle(QwtPlot::xBottom, tr("Residuals"));
+  qqPlot->setAxisTitle(QwtPlot::yLeft, tr("Standard normal quantiles"));
+
+  predTabWidget->addTab(new WidgetBoundToDockWidget(qqPlot, qqPlotSettingWidget, this), tr("Residuals QQ-plot"));
+
 #endif
 
   return predTabWidget;

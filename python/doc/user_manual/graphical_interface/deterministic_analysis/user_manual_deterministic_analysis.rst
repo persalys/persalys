@@ -1183,6 +1183,11 @@ The results window gathers the following tabs:
       .. image:: /user_manual/graphical_interface/deterministic_analysis/calibration_ResultWindow_residuals.png
           :align: center
 
+    - The **Residuals QQ-plot** tab displays the residuals after calibration versus the Gaussian hypothesis
+      - Blue points are the data and the red-dashed line in the Henry line
+
+      - see `example <http://openturns.github.io/openturns/master/auto_calibration/least_squares_and_gaussian_calibration/plot_calibration_chaboche.html#id1>`_ from OpenTURNS documentation
+
 - The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
 
 - The **Model** tab shows the model content used to perform the analysis.
