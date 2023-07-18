@@ -26,6 +26,7 @@
 #include "persalys/DoubleSpinBox.hxx"
 
 #include <QGroupBox>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -38,7 +39,7 @@ public:
                                 const bool isConfidenceIntervalRequired,
                                 const double levelConfidenceInterval,
                                 const OT::Indices& variablesIndices,
-                                QWidget* parent = 0);
+                                QWidget* parent = nullptr);
 
 protected:
   QWidget * getMomentsEstimateTableView(const OT::UnsignedInteger variableIndex);
@@ -46,17 +47,20 @@ protected:
 public slots:
   void updateSpinBoxes();
   void probaValueChanged(double proba);
+  void ciLevelValueChanged(double proba);
   void quantileValueChanged(double quantile);
   void setCurrentIndexStackedWidget(int index);
 
 private:
   DataAnalysisResult result_;
-  ResizableStackedWidget * stackedWidget_;
+  ResizableStackedWidget * stackedWidget_ = nullptr;
   bool isConfidenceIntervalRequired_;
   double levelConfidenceInterval_;
   OT::Indices variablesIndices_;
-  DoubleSpinBox * probaSpinBox_;
-  DoubleSpinBox * quantileSpinBox_;
+  DoubleSpinBox * probaSpinBox_ = nullptr;
+  DoubleSpinBox * quantileSpinBox_ = nullptr;
+  DoubleSpinBox * ciLevelSpinBox_ = nullptr;
+  QLabel * ciLabel_ = nullptr;
 };
 }
 #endif

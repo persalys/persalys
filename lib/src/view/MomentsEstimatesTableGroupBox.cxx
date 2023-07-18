@@ -78,11 +78,30 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
   quantileSpinBox_->setDecimals(8);
   quantLayout->addWidget(quantileSpinBox_, 0, 3);
 
+  // CI Level
+  label = new QLabel(tr("Confidence\ninterval level"));
+  quantLayout->addWidget(label, 1, 0);
+
+  ciLevelSpinBox_ = new DoubleSpinBox;
+  label->setBuddy(ciLevelSpinBox_);
+  ciLevelSpinBox_->setMinimum(0.0);
+  ciLevelSpinBox_->setMaximum(1.0);
+  ciLevelSpinBox_->setSingleStep(0.01);
+  quantLayout->addWidget(ciLevelSpinBox_, 1, 1);
+
+  // CI
+  label = new QLabel(tr("Confidence\ninterval"));
+  quantLayout->addWidget(label, 1, 2);
+  ciLabel_ = new QLabel();
+  quantLayout->addWidget(ciLabel_, 1, 3);
+
+
   quantLayout->setColumnStretch(1, 2);
   quantLayout->setColumnStretch(3, 2);
 
   connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
   connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));
+  connect(ciLevelSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(ciLevelValueChanged(double)));
 
   estimatesGroupBoxLayout->addLayout(quantLayout);
   updateSpinBoxes();
@@ -199,8 +218,10 @@ void MomentsEstimatesTableGroupBox::updateSpinBoxes()
     quantileSpinBox_->setSingleStep((max - min) / 100);
   }
   probaSpinBox_->setValue(0.5);
+  ciLevelSpinBox_->setValue(0.95);
   // if the previous value of probaSpinBox_ was 0.5, the signal valueChanged is not emitted
   probaValueChanged(0.5);
+  ciLevelValueChanged(0.95);
 }
 
 
@@ -211,6 +232,18 @@ void MomentsEstimatesTableGroupBox::probaValueChanged(double proba)
   // index of the variable in result_
   const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
   quantileSpinBox_->setValue(result_.getDesignOfExperiment().getSample().getMarginal(indexVar).computeQuantile(proba)[0]);
+}
+
+
+void MomentsEstimatesTableGroupBox::ciLevelValueChanged(double proba)
+{
+  SignalBlocker blocker(ciLabel_);
+
+  // index of the variable in result_
+  const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
+  const Sample marginal = result_.getDesignOfExperiment().getSample().getMarginal(indexVar);
+  ciLabel_->setText(QString("[") + QString::number(marginal.computeQuantile(0.5-proba/2)[0]) +
+                    QString(";") + QString::number(marginal.computeQuantile(0.5+proba/2)[0]) + QString("]"));
 }
 
 
