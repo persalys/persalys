@@ -213,7 +213,7 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 
   // plot histogram
   PlotWidget * plot = new PlotWidget(tr("histogram"));
-  plot->plotHistogram(result_.getDesignOfExperiment().getOutputSample(), 2, 0, tr("%1 distribution").arg(outputName));
+  plot->plotHistogram(result_.getDesignOfExperiment().getOutputSample(), PlotWidget::Other, 0, tr("%1 distribution").arg(outputName));
 
   // plot threshold
   Sample threshold(2, 2);

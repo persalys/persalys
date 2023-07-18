@@ -202,12 +202,14 @@ void DataAnalysis::launch()
     // pdf/cdf
     result_.pdf_.add(Sample());
     result_.cdf_.add(Sample());
+    result_.survFct_.add(Sample());
     try
     {
       KernelSmoothing gaussianKernel;
       Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
       result_.pdf_[i] = fittedDistribution.drawPDF().getDrawable(0).getData();
       result_.cdf_[i] = fittedDistribution.drawCDF().getDrawable(0).getData();
+      result_.survFct_[i] = fittedDistribution.drawSurvivalFunction().getDrawable(0).getData();
     }
     catch (std::exception &)
     {

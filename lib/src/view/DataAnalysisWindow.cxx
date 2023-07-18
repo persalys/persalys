@@ -349,7 +349,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
     // CDF
     PlotWidget * cdfPlot = new PlotWidget(tr("distributionCDF"));
-    cdfPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]), 1);
+    cdfPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]), PlotWidget::CDF);
     if (result_.getCDF()[ind[i]].getSize())
       cdfPlot->plotCurve(result_.getCDF()[ind[i]]);
     cdfPlot->setTitle(tr("CDF:") + " " + variablesNames[i]);
@@ -358,10 +358,25 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
     stackedWidget->addWidget(cdfPlot);
 
+    // Survival Function, backwards compatibility
+    PlotWidget * survPlot = new PlotWidget(tr("distributionSurvivalFunction"));
+    if (result_.getSurvivalFunction().getSize())
+    {
+      survPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]), PlotWidget::Survival);
+      if (result_.getSurvivalFunction()[ind[i]].getSize())
+        survPlot->plotCurve(result_.getSurvivalFunction()[ind[i]]);
+      survPlot->setTitle(tr("SurvivalFunction:") + " " + variablesNames[i]);
+      survPlot->setAxisTitle(QwtPlot::xBottom, variablesAxisTitles[i]);
+      survPlot->setAxisTitle(QwtPlot::yLeft, tr("SurvivalFunction"));
+      stackedWidget->addWidget(survPlot);
+    }
+
     // Graph Setting
     QVector<PlotWidget*> listPlotWidgets;
     listPlotWidgets.append(pdfPlot);
     listPlotWidgets.append(cdfPlot);
+    if (result_.getSurvivalFunction().getSize())
+      listPlotWidgets.append(survPlot);
     PDFGraphSetting * graphSetting = new PDFGraphSetting(listPlotWidgets, PDFGraphSetting::Result, this);
     connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 

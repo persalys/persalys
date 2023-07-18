@@ -50,6 +50,7 @@ DataAnalysisResult::DataAnalysisResult()
   , outliers_()
   , pdf_()
   , cdf_()
+  , survFct_()
 {
 
 }
@@ -74,6 +75,7 @@ DataAnalysisResult::DataAnalysisResult(const DesignOfExperiment& design)
   , outliers_()
   , pdf_()
   , cdf_()
+  , survFct_()
 {
 
 }
@@ -181,6 +183,12 @@ DataSample::SampleCollection DataAnalysisResult::getCDF() const
 }
 
 
+DataSample::SampleCollection DataAnalysisResult::getSurvivalFunction() const
+{
+  return survFct_;
+}
+
+
 /* String converter */
 String DataAnalysisResult::__repr__() const
 {
@@ -224,6 +232,7 @@ void DataAnalysisResult::save(Advocate & adv) const
   adv.saveAttribute("outliers_", outliers_);
   adv.saveAttribute("pdf_", pdf_);
   adv.saveAttribute("cdf_", cdf_);
+  adv.saveAttribute("survFct__", survFct_);
 }
 
 
@@ -247,5 +256,7 @@ void DataAnalysisResult::load(Advocate & adv)
   adv.loadAttribute("outliers_", outliers_);
   adv.loadAttribute("pdf_", pdf_);
   adv.loadAttribute("cdf_", cdf_);
+  if (adv.hasAttribute("survFct__"))
+    adv.loadAttribute("survFct_", survFct_);
 }
 }

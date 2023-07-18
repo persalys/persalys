@@ -65,6 +65,7 @@ public:
 
   DataSample::SampleCollection getPDF() const;
   DataSample::SampleCollection getCDF() const;
+  DataSample::SampleCollection getSurvivalFunction() const;
 
   /** String converter */
   OT::String __repr__() const override;
@@ -92,6 +93,7 @@ private:
   OT::PersistentCollection<OT::Point> outliers_;
   OT::PersistentCollection<OT::Sample> pdf_;
   OT::PersistentCollection<OT::Sample> cdf_;
+  OT::PersistentCollection<OT::Sample> survFct_;
 };
 }
 #endif

@@ -336,6 +336,8 @@ PDFGraphSetting::PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const
   QStringList reprs = QStringList() << tr("PDF") << tr("CDF");
   if (type == PDFGraphSetting::Distribution)
     reprs << tr("Quantile function") << tr("Survival function");
+  else if (type == PDFGraphSetting::Result && plotWidgets.size() > 2)
+    reprs << tr("Survival function");
   reprComboBox_ = new QComboBox;
   reprComboBox_->addItems(reprs);
   frameLayout_->addWidget(reprComboBox_, rowGrid, 0, 1, 2);
