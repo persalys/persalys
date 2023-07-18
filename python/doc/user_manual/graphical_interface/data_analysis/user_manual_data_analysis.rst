@@ -94,9 +94,11 @@ automatically selected in the other tabs.
 - The **Table** tab shows the input/output samples. The table can be exported (**Export** button).
 
   - Table interactivity:
-      - Left-click (optional: + Ctrl) on lines to select them
+      - Left-click on lines to select them (optional: + Ctrl for adding to current selection, + Shift for contiguous selection)
       - Left-click on column header to sort values in ascending or descending order
       - Left-click on a column header and drag it in another place to change columns order
+      - Right-click on table to export or copy to the clipboard (shortcut Ctrl+C) the current selection
+      - Ctrl+A selects all lines
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentTable.png
       :align: center
