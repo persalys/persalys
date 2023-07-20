@@ -251,7 +251,7 @@ Errors (abs., rel., res., con.)  1e-05
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.000221975         0.0206289                :math:`\left[0.000213; 0.000230945\right]`
+0.000221975         0.0206289                :math:`\left[0.000213, 0.000230949\right]`
 =================== ======================== =============================================
 
 3-2-2 Figures
@@ -472,7 +472,8 @@ Models
 - click on 'Evaluate model' button
     - error message 'Errors found when parsing expression etc.'
 
-- unselect fake_var + select y0, fake_y0 and y1
+- unselect fake_var + select y0, fake_y0 and y1, evaluate
+    - error message is cleared
 
 - change x2 value to 1.2 + press enter
 
@@ -664,6 +665,7 @@ Deterministic analyses
     - First page check the values:
 
       - x1 and x2 checked
+      - type: Continuous
       - starting point: [0.2, 1.2, 1.]
       - check table behavior:
 
@@ -691,7 +693,7 @@ Deterministic analyses
       - selected output: y1
       - method: TNC
       - change "Locality = Global"
-      - TNC no longer available algorithm changed to "GD_MLSL"
+      - TNC no longer available algorithm changed to "lbfgs"
       - revert "Locality" to "Any" and reselect "TNC"
       - click on "doc" in the line containing "TNC"
       - web browser opens a link to "TNC" documentation
@@ -753,6 +755,7 @@ Deterministic analyses
       - Number of trajectories: 10
       - Level: 4
       - Seed: 2
+      - Blocksize: 1
       - Number of simulations: 40
       - check page behavior:
 
@@ -817,11 +820,11 @@ Deterministic analyses
           .. image:: /developer_manual/validation/mooptim-inputtable.png
               :align: center
 
-        - uncheck all rows: header unchecked, 4th and 5th columns disabled, 3rd column enabled
-        - check header: all rows checked, 4th and 5th columns enabled, 3rd column disabled
-        - set value -0.22 in first row, 5th column
+        - uncheck all rows: header unchecked, 5th and 6th columns disabled, 4th column enabled
+        - check header: all rows checked, 5th and 6th columns enabled, 4th column disabled
+        - set value -0.22 in first row, 6th column
         - click continue: row text color changes to red, message appears "The lower bounds must be less than the upper bounds"
-        - set value -0.22 back to 0.22
+        - set value -0.22 back to 0.22, message disappears
         - click continue
 
       - 2nd page:
@@ -832,6 +835,7 @@ Deterministic analyses
         - click on first line: selection should appear
         - click on remove: first line is removed, 2nd line remains
         - click again on remove: table is empty
+        - add back the constraint "y0 > 2"
         - continue
 
       - 3rd page:
@@ -839,7 +843,8 @@ Deterministic analyses
         - y0 and y1 as selected outputs.
         - nsga2 as selected algorithm
         - un-select y0, click on "Continue": Error message appears: "At least 2 outputs must be selected"
-        - select back y0, then continue
+        - select back y0, message disappears,
+        - continue
 
       - 4th page:
 
@@ -849,7 +854,7 @@ Deterministic analyses
       - 5th page:
 
         - check values: Number of generations = 12, Initial population size = 60, Seed = 0, Constraint error = 1e-05
-        - Check that the two top spinbox only support non-signed integers
+        - Check that all spinboxes only support non-signed integers
         - Finish
 
     - Run the analysis and check the result:
@@ -978,7 +983,7 @@ Deterministic analyses
       - left side: 1 variable in the list view
       - right side, tabs: θ - Prediction - Parameters - Model
       - θ tab: 2 tabs: Optimal - PDF
-      - Prediction tab: 4 tabs: Table - vs Observations - vs Inputs - Residuals
+      - Prediction tab: 5 tabs: Table - vs Observations - vs Inputs - Residuals - Residuals QQ-plot
           - check the 3 first tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
@@ -1099,7 +1104,6 @@ Designs of experiments
       - finish
       - check the design of experiments window is updated: check the values of x2 have changed
 
-
 - check the evaluation result window:
 
   - right click on importDesign, choose Evaluate:
@@ -1122,6 +1126,9 @@ Designs of experiments
       - Summary and PDF/CDF tabs:
 
         - when changing the variable, the tabs are updated
+        - when changing either Probability or Empirical quantile spinboxes values both are updated
+        - when changing confidence interval level spinbox value, CI length is updated
+        - PDF, CDF and survival function are available in Graph settings widget from PDF/CDF tab plots
 
       - Other Plots tabs and Table tab:
 
@@ -1163,12 +1170,31 @@ Designs of experiments
 
           - a list view with a variable appears at the left side of the window
 
-        - Table tab has 3 tabs: Table - Failed points - Parallel coordinates plot
+        - Table tab has 4 tabs: Table - Failed points - Error messages - Parallel coordinates plot
 
           - check the parallel coordinates plot has 2 columns. The last one is named 'Status 0: failed; 1: ok'.
+          - check that Error messages tab table displays the failed point with the 'math domain error' message
 
           - additional columns can be displayed by checking them in the graph setting widget in the window bottom left corner
 
+
+  - Click on model1 definition item, select only y0:
+
+  - right click on importDesign and choose Modify:
+
+    - First page:
+        - type: Imported design
+        - continue
+
+    - Second page:
+
+      .. image:: /developer_manual/validation/design_3_wizard_2nd_page_eval.png
+          :align: center
+
+      - Data file: data_da.csv
+      - header items: ['x1', 'y0', 'x2', 'x3']
+      - finish
+      - check the evaluation is done and y0 has been evaluated
 
 - save the study, close it, reopen it, check all windows are correctly build, close the study.
 
@@ -1197,6 +1223,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/monteCarlo_central_tendency_wizard_2nd_page.png
           :align: center
 
+      - accuracy - CV disabled: 0.01
       - CI length disabled: 0.01
       - max time: 16m40s
       - max calls: 1000
@@ -1457,7 +1484,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/sobol_wizard_2nd_page.png
           :align: center
 
-      - max confidence interval length: 0.01
+      - max confidence interval length disabled: 0.01
       - max time: 16m40s
       - max calls: 1000
       - replication size: 100
@@ -1544,10 +1571,11 @@ Probabilistic analyses
 
     - Run, check the result window:
 
-      - check 6 tabs: Results - Adequation - Validation - Residual - Parameters - Model
+      - check 7 tabs: Results - Adequation - Validation - Residual - Error - Parameters - Model
       - on results tab formula: y0 = 1.64684 -0.668623 * x1 +0.0519163 * x1^2
       - on residual/PDF tab sigma= 0.67442
       - tabs are updated on output variable selection
+      - error tab warns about failure during validation
 
 
   - Kriging: kriging item
@@ -1635,7 +1663,7 @@ Probabilistic analyses
       - click on 'export as model'
       - select 'kriging', analysis parameters are displayed
       - click on 'Finish'
-      - a new item MetaModel_0 appears in the tree view
+      - a new item kirigin appears in the tree view
 
       .. image:: /developer_manual/validation/metamodel_export_wizard.png
           :align: center
@@ -1653,7 +1681,7 @@ Probabilistic analyses
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button and click immediately on the Stop button
-      - The result window does not contain the Validation tab
+      - The Validation tab contains only Analytical tab
 
   - Functional chaos: chaos_1 item
 
@@ -1674,6 +1702,8 @@ Probabilistic analyses
 
       - degree: 7
       - sparse: checked
+      - uncheck sparse, full basis -> basis, check sparse
+      - change degree to 8, basis size gets updated, change degree back to 7
       - continue
 
     - Third page check the values:
@@ -1793,6 +1823,8 @@ Probabilistic analyses
       - select x_0 and add all the distributions
       - select x_1 and add the Beta distribution
       - in advanced parameters, check estimate parameters confidence interval
+      - Change test type to Lilliefors, Lilliefors advanced parameters are enabled, change back to KS
+
 
     - click on the Finish button
 
@@ -1809,7 +1841,7 @@ Probabilistic analyses
       - when changing the variable, the tabs are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - the right side of the window contains 2 parts: a distributions list and 3 tabs PDF/CDF - Q-Q Plot - Parameters
-      - when selecting a distribution, the tab widget is updated
+      - when selecting a distribution, the tab widget is updated, confidence level on distribution aprameters are displayed next to parameters values in Parameters tab
       - check tables are well drawn
       - select x_0
       - select InverseNormal/LogUniform:
@@ -1831,7 +1863,7 @@ Probabilistic analyses
             :align: center
 
       - choose inference/x_0/Weibull, click on Finish
-      - check that the distribution of x_3 is Weibull now
+      - check that the distribution of x_3 is WeibullMin now
       - unselect x_3
 
   - Copula inference: copulaInference item
