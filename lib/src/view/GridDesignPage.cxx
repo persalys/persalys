@@ -79,8 +79,10 @@ void GridDesignPage::buildInterface()
 
   tableView_ = new ResizableHeaderlessTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
+  tableView_->resizeColumnsToContents();
   groupBoxLayout->addWidget(tableView_);
-  groupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
+  groupBoxLayout->addStretch();
+
 
   pageLayout->addWidget(groupBox);
 
@@ -169,8 +171,7 @@ void GridDesignPage::resizeEvent(QResizeEvent* event)
   {
     // tableView_->resizeWithOptimalWidth() : fixes the width -> the table is not resizable
     // when resizing the wizard, we want to resize the table too
-    tableView_->horizontalHeader()->setStretchLastSection(true);
-    tableView_->setFixedWidth(QWIDGETSIZE_MAX); // remove constraints
+    tableView_->resizeColumnsToContents();
   }
 }
 
