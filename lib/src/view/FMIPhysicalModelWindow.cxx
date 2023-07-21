@@ -55,6 +55,8 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   , variablesTableModel_(0)
   , errorMessageLabel_(0)
 {
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   widgetLayout->addWidget(new TitleLabel(tr("FMI model")));
@@ -62,6 +64,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   tabWidget_ = new QTabWidget;
 
   QWidget * propertiesWidget = new QWidget;
+  scrollArea->setWidget(propertiesWidget);
   QVBoxLayout * propertiesLayout = new QVBoxLayout(propertiesWidget);
 
   // Widgets to load XML file
@@ -104,7 +107,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   propertiesLayout->addWidget(propertiesTable_);
   propertiesLayout->addStretch();
 
-  tabWidget_->addTab(propertiesWidget, tr("Properties"));
+  tabWidget_->addTab(scrollArea, tr("Properties"));
 
   QWidget * variablesWidget = new QWidget;
 
