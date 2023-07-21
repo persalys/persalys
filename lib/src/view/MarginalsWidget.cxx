@@ -74,6 +74,7 @@ MarginalsWidget::MarginalsWidget(PhysicalModelItem * item, QWidget * parent)
 
 MarginalsWidget::MarginalsWidget(const PhysicalModel& model, QWidget * parent)
   : QWidget(parent)
+  , failSoftMode_(true)
   , study_()
   , physicalModel_(model)
 {

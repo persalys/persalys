@@ -138,10 +138,6 @@ AnsysWizardVariablePage::AnsysWizardVariablePage(QWidget * parent)
   gridLayout->addWidget(findFile, 2, 3);
   gridLayout->setColumnStretch(1, 2);
 
-
-  QVBoxLayout *pageLayout = new QVBoxLayout;
-  pageLayout->addLayout(gridLayout);
-
   varTable_ = new QTableView;    // - header view
   CheckableHeaderView * varTableHeaderView = new CheckableHeaderView;
   varTable_->setHorizontalHeader(varTableHeaderView);
@@ -151,15 +147,15 @@ AnsysWizardVariablePage::AnsysWizardVariablePage(QWidget * parent)
   varTable_->hide();
   varModel_ = new AnsysVariableTableModel;
   varTable_->setModel(varModel_);
-  pageLayout->addWidget(varTable_);
+  gridLayout->addWidget(varTable_, 3, 0, 1, 4);
+  gridLayout->setRowStretch(3, 2);
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
   connect(varModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
           errorMessageLabel_, SLOT(reset()));
-  gridLayout->addWidget(errorMessageLabel_, 3, 0, 1, 2);
-
-  setLayout(pageLayout);
+  gridLayout->addWidget(errorMessageLabel_, 4, 0, 1, 4);
+  setLayout(gridLayout);
 }
 
 
