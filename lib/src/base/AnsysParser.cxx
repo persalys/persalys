@@ -120,7 +120,7 @@ void AnsysParser::loadData(const String & fileName)
             variability = what[1];
           }
 
-          std::regex valueUnitRegex("\"value\": \"([\\S]+)(?:\\s*\\[([^\\]]*)\\])?\"");
+          std::regex valueUnitRegex("\"value\": [\"]*([\\S]+)(?:\\s*\\[([^\\]]*)\\])?[\"]*");
           String value("0.0");
           String unit;
           String valueUnit;
