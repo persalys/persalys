@@ -203,7 +203,11 @@ Indices ImportSampleWidget::getColumns(const Description &names) const
     }
   }
   if (addedVars.size())
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     if ((UnsignedInteger)QSet<QString>(addedVars.begin(), addedVars.end()).size() != columns.getSize())
+#else
+    if ((UnsignedInteger)addedVars.toSet().size() != columns.getSize())
+#endif
       throw InvalidArgumentException(HERE) << "Each variable must be present only once";
   return columns;
 }
