@@ -256,8 +256,12 @@ namespace PERSALYS
         std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
         std::smatch match;
         std::regex_search(getRawEquations()[i], match, variable);
-        finalPopDesc.add(Description(1, match[1]));
-        finalPop.stack(getPhysicalModel().getFunction(Description(1, match[1]))(solver.getResult().getFinalPoints()));
+        // If constraint variable is not already a model output
+        if (!finalPopDesc.contains(match[1]))
+        {
+          finalPopDesc.add(Description(1, match[1]));
+          finalPop.stack(getPhysicalModel().getFunction(Description(1, match[1]))(solver.getResult().getFinalPoints()));
+        }
       }
       finalPop.stack(Sample(finalPop.getSize(), Point(1, 0)));
       finalPopDesc.add(Description(1, "_feasibility_"));
