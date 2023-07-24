@@ -154,14 +154,10 @@ MultiPlotSettingWidget::MultiPlotSettingWidget(PVViewWidget *pvViewWidget, const
   samples_ = Collection<Sample>(1, sample);
   rankSamples_ = Collection<Sample>(1, sampleRank);
 
-  // variables names
-  for (int cc = 0; cc < (int)pvViewWidget_->getTable()->GetNumberOfColumns(); cc++)
-    plotNames_ << pvViewWidget_->getTable()->GetColumnName(cc);
-
   // add widgets
-
   QList<bool> checked;
   Description variablesNames = sample.getDescription();
+  plotNames_ = QtOT::DescriptionToStringList(variablesNames);
   Point max = sample.getMax();
   Point min = sample.getMin();
   for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i) {
