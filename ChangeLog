@@ -1,4 +1,13 @@
-= 14.1 release (in-progress)
+= 14.1 release (2023-07-25)
+
+ * Design of experiment failed points error handling
+ * Environment variables for coupling model command
+ * Calibration residuals QQ-plot
+ * Relative stopping criterion for MC analyses
+ * Partial copy-paste for sample tables
+ * Import an already evaluated design of experiment
+ * Survival function plots
+ * Various bug fixes
 
 = 14.0 release (2023-03-19)
 
