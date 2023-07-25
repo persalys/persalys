@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/PythonEnvironment.hxx"
+#include "persalys/InterpreterUnlocker.hxx"
 
 #include <openturns/PythonWrappingFunctions.hxx>
 
@@ -38,6 +39,17 @@ PythonEnvironment::PythonEnvironment()
   Py_DECREF(PyImport_ImportModule("threading"));
   PyEval_SaveThread(); /* Release the thread state */
   //here we do not have the Global Interpreter Lock
+}
+
+
+void PythonEnvironment::ensureStandardStreams()
+{
+  InterpreterUnlocker iul;
+  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
+  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
+  // make sure stderr/stdout are not None
+  PyRun_String("import sys as _sys; import io as _io; _sys.stdout = _io.StringIO() if _sys.stdout is None else _sys.stdout; _sys.stderr = _io.StringIO() if _sys.stderr is None else _sys.stderr", Py_file_input, dict, dict);
+  handleExceptionTraceback();
 }
 
 

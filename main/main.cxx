@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 
   // Python Environment
   PythonEnvironment env;
+  // make sure sys.stdout/stderr are not None on win32 because the Qt gui is disconnected from console
+  env.ensureStandardStreams();
   {
   // Application
   QApplication app(argc, argv);
