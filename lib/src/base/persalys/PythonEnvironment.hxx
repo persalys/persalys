@@ -34,6 +34,8 @@ public:
 
   virtual ~PythonEnvironment();
 
+  // make sure stderr/stdout are not None
+  void ensureStandardStreams();
 };
 
 void handleExceptionTraceback();
