@@ -39,7 +39,8 @@ public:
   FMUInfo();
 
   /** Constructor with parameters */
-  explicit FMUInfo(const OT::String & fileName);
+  explicit FMUInfo(const OT::String & fileName,
+                   const OT::String & fmuType = "auto");
 
   FMUInfo * clone() const override;
 
@@ -74,7 +75,7 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  void initialize();
+  void initialize(const OT::String & fmuType);
 
 private:
 

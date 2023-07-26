@@ -105,6 +105,18 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   propertiesTable_ = new ParametersTableView(namesList, valuesList, true, true);
   propertiesTable_->hide();
   propertiesLayout->addWidget(propertiesTable_);
+
+  CollapsibleGroupBox * advancedGroupBox = new CollapsibleGroupBox(tr("Advanced parameters"));
+  QHBoxLayout * typeLayout = new QHBoxLayout(advancedGroupBox);
+  QLabel *fmuTypeLabel = new QLabel(tr("FMU type"));
+  typeLayout->addWidget(fmuTypeLabel);
+  FMUTypeCombobox_ = new QComboBox;
+  FMUTypeCombobox_->addItems({ "auto", "ME", "CS" });
+  FMUTypeCombobox_->setCurrentText(getFMIPhysicalModel()->getFMUType().c_str());
+  typeLayout->addWidget(FMUTypeCombobox_);
+  typeLayout->addStretch();
+  propertiesLayout->addWidget(advancedGroupBox);
+
   propertiesLayout->addStretch();
 
   tabWidget_->addTab(scrollArea, tr("Properties"));
@@ -324,6 +336,7 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
       QApplication::setOverrideCursor(Qt::WaitCursor);
       try
       {
+        fmiModel->setFMUType(FMUTypeCombobox_->currentText().toStdString());
         fmiModel->setFMUFileName(fileName.toUtf8().data());
         errorMessageLabel_->reset();
       }

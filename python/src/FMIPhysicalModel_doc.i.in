@@ -11,6 +11,8 @@ outputs : sequence of :class:`~persalys.Output`
     Output variables (optional)
 fmuFile : str
     FMU file name
+fmuType : str, default='auto'
+    FMU type, either one of auto, ME or CS
 
 Notes
 -----
