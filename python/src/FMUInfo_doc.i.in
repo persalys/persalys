@@ -1,5 +1,12 @@
 %feature("docstring") PERSALYS::FMUInfo
-"Retrieve information from an FMU file."
+"Retrieve information from a FMU file.
+
+Parameters
+----------
+fmuFile : str
+    FMU file name
+fmuType : str, default='auto'
+    FMU type, either auto, ME or CS"
 
 // ---------------------------------------------------------------------
 

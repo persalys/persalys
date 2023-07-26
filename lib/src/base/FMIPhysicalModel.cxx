@@ -44,9 +44,11 @@ FMIPhysicalModel::FMIPhysicalModel(const String & name)
 
 /* Constructor with parameters */
 FMIPhysicalModel::FMIPhysicalModel(const String & name,
-                                   const String & fileName)
+                                   const String & fileName,
+                                   const String & fmuType)
   : PythonPhysicalModel(name)
 {
+  setFMUType(fmuType);
   setFMUFileName(fileName);
 }
 
@@ -55,7 +57,8 @@ FMIPhysicalModel::FMIPhysicalModel(const String & name,
 FMIPhysicalModel::FMIPhysicalModel(const String & name,
                                    const InputCollection & inputs,
                                    const OutputCollection & outputs,
-                                   const String & fileName)
+                                   const String & fileName,
+                                   const String & fmuType)
   : PythonPhysicalModel(name)
 {
   PhysicalModelImplementation::setInputs(inputs);
@@ -64,6 +67,7 @@ FMIPhysicalModel::FMIPhysicalModel(const String & name,
   Description inputNames(getInputNames());
   Description outputNames(getOutputNames());
 
+  setFMUType(fmuType);
   setFMUFileName(fileName);
 
   reassignVariables(inputNames, outputNames);
@@ -81,6 +85,16 @@ FMIPhysicalModel* FMIPhysicalModel::clone() const
 }
 
 
+String FMIPhysicalModel::getFMUType() const
+{
+  return fmuType_;
+}
+
+void FMIPhysicalModel::setFMUType(const String & fmuType)
+{
+  fmuType_ = fmuType;
+}
+
 String FMIPhysicalModel::getFMUFileName() const
 {
   return fmuFileName_;
@@ -89,7 +103,7 @@ String FMIPhysicalModel::getFMUFileName() const
 
 void FMIPhysicalModel::setFMUFileName(const String & fileName)
 {
-  fmuInfo_ = FMUInfo(fileName);
+  fmuInfo_ = FMUInfo(fileName, fmuType_);
   Description allVars(fmuInfo_.getVariableNames());
   Indices allCausalities(fmuInfo_.getCausality());
 
@@ -169,8 +183,9 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
       code << ", ";
   }
   code << "]\n";
+  code << "    kind = '" << fmuType_ << "'\n";
   code << "    if not hasattr(_exec, 'model_fmu'):\n";
-  code << "        _exec.model_fmu = otfmi.FMUFunction(path_fmu, inputs_fmu=inputs, outputs_fmu=outputs)\n";
+  code << "        _exec.model_fmu = otfmi.FMUFunction(path_fmu, inputs_fmu=inputs, outputs_fmu=outputs, kind=kind)\n";
   code << "    __X = [";
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
@@ -315,7 +330,8 @@ String FMIPhysicalModel::getPythonScript() const
   oss << "]\n";
 
   oss << "fmuFile = '" + getFMUFileName() + "'\n";
-  oss << getName() + " = persalys.FMIPhysicalModel('" + getName() + "', inputs, outputs, fmuFile)\n";
+  oss << "fmuType = '" + getFMUType() + "'\n";
+  oss << getName() + " = persalys.FMIPhysicalModel('" + getName() + "', inputs, outputs, fmuFile, fmuType)\n";
   if (isParallel())
     oss << getName() + ".setParallel(True)\n";
 
@@ -340,6 +356,7 @@ void FMIPhysicalModel::save(Advocate & adv) const
 {
   PythonPhysicalModel::save(adv);
   adv.saveAttribute("fmuFileName_", fmuFileName_);
+  adv.saveAttribute("fmuType_", fmuType_);
   adv.saveAttribute("fmuInfo_", fmuInfo_);
 }
 
@@ -349,6 +366,8 @@ void FMIPhysicalModel::load(Advocate & adv)
 {
   PythonPhysicalModel::load(adv);
   adv.loadAttribute("fmuFileName_", fmuFileName_);
+  if (adv.hasAttribute("fmuType_"))
+    adv.loadAttribute("fmuType_", fmuType_);
   adv.loadAttribute("fmuInfo_", fmuInfo_);
 }
 

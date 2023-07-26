@@ -39,14 +39,13 @@ FMUInfo::FMUInfo()
 }
 
 /* Constructor with parameters */
-FMUInfo::FMUInfo(const String & fileName)
+FMUInfo::FMUInfo(const String & fileName, const String & fmuType)
   : PersistentObject()
   , fileName_(fileName)
 {
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "Empty file name";
-
-  initialize();
+  initialize(fmuType);
 }
 
 
@@ -73,8 +72,11 @@ inline String StrOrBytesToString(PyObject * obj)
 }
 
 
-void FMUInfo::initialize()
+void FMUInfo::initialize(const String & fmuType)
 {
+  const Description fmuTypes = {"auto", "ME", "CS"};
+  if (!fmuTypes.contains(fmuType))
+    throw InvalidArgumentException(HERE) << "Invalid FMU type: " << fmuType;
   InterpreterUnlocker uil;
 
   ScopedPyObjectPointer otfmi_fmiModule(PyImport_ImportModule("otfmi.fmi")); // new reference
@@ -87,8 +89,9 @@ void FMUInfo::initialize()
   assert(load_fmuMethod);
 
   ScopedPyObjectPointer fileName_py(convert< String, _PyString_>(fileName_));
-  ScopedPyObjectPointer model(PyObject_CallFunctionObjArgs(load_fmuMethod, fileName_py.get(), NULL)); // new reference
-  // loading can fail if no binary for the target platform
+  ScopedPyObjectPointer kind(PyUnicode_FromString(fmuType.c_str())); // new reference
+  ScopedPyObjectPointer model(PyObject_CallFunctionObjArgs(load_fmuMethod, fileName_py.get(), kind.get(), NULL)); // new reference
+  // loading can fail if no binary for the target platform, or wrong kind
   handleException();
 
   PyObject * get_name_variableMethod = PyDict_GetItemString(otfmi_fmiDict, "get_name_variable");
@@ -120,10 +123,10 @@ void FMUInfo::initialize()
   for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++ i)
   {
     PyObject * elt = PySequence_Fast_GET_ITEM(startValues.get(), i);
-    if (PyFloat_Check(elt))
-      startValues_[i] = PyFloat_AsDouble(elt);
-    else if (PyLong_Check(elt))
-      startValues_[i] = PyLong_AsLongLong(elt);
+    if (isAPython<_PyFloat_>(elt))
+      startValues_[i] = convert< _PyFloat_, Scalar >(elt);
+    else if (isAPython<_PyInt_>(elt))
+      startValues_[i] = convert< _PyInt_, UnsignedInteger >(elt);
     else
       throw InternalException(HERE) << "Invalid start value type (must be float/int)";
   }

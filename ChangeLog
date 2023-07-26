@@ -1,5 +1,7 @@
 = 15.0 release (in-progress)
 
+ * Allow choose FMU ME/CS type (some provide both)
+
 = 14.1 release (2023-07-25)
 
  * Design of experiment failed points error handling
