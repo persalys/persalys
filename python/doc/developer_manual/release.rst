@@ -20,3 +20,9 @@ Release process
 8. In X.Y branch, create vX.Y tag
 
 9. Push X.Y branch, vX.Y tag
+
+10. Sync github mirror::
+
+      git remote add gh https://github.com/persalys/persalys.git
+      git push gh master
+      git push gh --tags
