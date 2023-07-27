@@ -102,7 +102,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   for (int i = 0; i < namesList.size(); ++ i)
     valuesList << QString(128, ' ');
 
-  propertiesTable_ = new ParametersTableView(namesList, valuesList, true, true);
+  propertiesTable_ = new ParametersTableView(namesList, valuesList, true, true, false);
   propertiesTable_->hide();
   propertiesLayout->addWidget(propertiesTable_);
 

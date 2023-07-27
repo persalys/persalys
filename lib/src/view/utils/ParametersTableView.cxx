@@ -30,6 +30,7 @@ ParametersTableView::ParametersTableView(const QStringList names,             //
                       const QStringList values,            // parameters values
                       const bool showGrid,         // show the grid of the table
                       const bool namesHasHeaderType, // parameters names display has table header
+                      const bool splitLongLines,
                       QWidget * parent)
     : CopyableTableView(parent)
   {
@@ -42,9 +43,14 @@ ParametersTableView::ParametersTableView(const QStringList names,             //
 
     // table model
     CustomStandardItemModel * tableModel = new CustomStandardItemModel(names.size(), 2, this);
-    LongStringProxy* proxy = new LongStringProxy(1, 50, this);
-    proxy->setSourceModel(tableModel);
-    setModel(proxy);
+    if (splitLongLines)
+    {
+      LongStringProxy* proxy = new LongStringProxy(1, 50, this);
+      proxy->setSourceModel(tableModel);
+      setModel(proxy);
+    }
+    else
+      setModel(tableModel);
 
     // vertical header
     for (int i = 0; i < names.size(); ++i)
