@@ -151,22 +151,26 @@ private:
 class TreeItem
 {
 public:
-  explicit TreeItem(const QList<QVariant> &data, TreeItem *parentItem = 0);
+  explicit TreeItem(const QList<QVariant> &data, TreeItem *parentItem = nullptr);
   ~TreeItem();
 
   void appendChild(TreeItem *child);
 
   TreeItem *child(int row);
+  void setChild(int row, TreeItem * child);
+  void clearChildren();
   int childCount() const;
   int columnCount() const;
   QVariant data(int column) const;
+  void setData(const QList<QVariant> &data);
   int row() const;
   TreeItem *parentItem();
+  void setParentItem(TreeItem *parentItem);
 
 private:
   QList<TreeItem*> m_childItems;
   QList<QVariant> m_itemData;
-  TreeItem *m_parentItem;
+  TreeItem *m_parentItem = nullptr;
 };
 
 
@@ -191,8 +195,9 @@ public:
   void setVariableNames(const OT::Description & variableNames);
 private:
   void setupModelData(const OT::Description & variableNames);
+  static void MergeNodes(TreeItem * node);
 
-  TreeItem *rootItem_;
+  TreeItem *rootItem_ = nullptr;
 };
 
 
