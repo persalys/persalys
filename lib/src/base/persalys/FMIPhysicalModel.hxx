@@ -37,20 +37,26 @@ public:
 
   /* Constructor with parameters */
   FMIPhysicalModel(const OT::String & name,
-                   const OT::String & fileName);
+                   const OT::String & fileName,
+                   const OT::String & fmuType = "auto");
 
   /* Constructor with parameters */
   FMIPhysicalModel(const OT::String & name,
                    const InputCollection & inputs,
                    const OutputCollection & outputs,
-                   const OT::String & fileName);
+                   const OT::String & fileName,
+                   const OT::String & fmuType = "auto");
 
   /** Virtual constructor */
   FMIPhysicalModel * clone() const override;
 
-  /** Accessor to the xml file name */
+  /** Accessor to the FMU file name */
   OT::String getFMUFileName() const;
   void setFMUFileName(const OT::String & fileName);
+
+  /** Accessor to the FMU type */
+  OT::String getFMUType() const;
+  void setFMUType(const OT::String & fmuType);
 
   /** Accessor to infos */
   FMUInfo getFMUInfo() const;
@@ -73,6 +79,7 @@ public:
 
 private:
   OT::String fmuFileName_;
+  OT::String fmuType_ = "auto";
   FMUInfo fmuInfo_;
 
 };

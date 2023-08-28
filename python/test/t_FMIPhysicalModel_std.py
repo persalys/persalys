@@ -11,7 +11,7 @@ myStudy = persalys.Study("myStudy")
 key_platform = (platform.system(), platform.architecture()[0])
 # Call to either 'platform.system' or 'platform.architecture' *after*
 # importing pyfmi causes a segfault.
-dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "32bit"): "win32"}
+dict_platform = {("Linux", "64bit"): "linux64", ("Windows", "64bit"): "win64"}
 
 path_here = os.path.dirname(os.path.abspath(__file__))
 try:
@@ -50,20 +50,3 @@ ott.assert_almost_equal(y, [12.3369])
 script = myStudy.getPythonScript()
 print("script=", script)
 exec(script)
-
-
-# compare with pyfmi directly
-if 0:
-    import pyfmi
-    import otfmi
-
-    # print(path_fmu)
-    model_fmu = model_fmu = otfmi.FMUFunction(
-        path_fmu, inputs_fmu=["E", "F", "I", "L"], outputs_fmu="y"
-    )
-
-    ml = pyfmi.load_fmu(path_fmu)
-    vars = ml.get_model_variables()
-    for var in vars.values():
-        print(var.name, var.value_reference)
-        # print(ml.get_real(var.value_reference))

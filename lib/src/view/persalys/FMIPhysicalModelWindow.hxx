@@ -151,22 +151,26 @@ private:
 class TreeItem
 {
 public:
-  explicit TreeItem(const QList<QVariant> &data, TreeItem *parentItem = 0);
+  explicit TreeItem(const QList<QVariant> &data, TreeItem *parentItem = nullptr);
   ~TreeItem();
 
   void appendChild(TreeItem *child);
 
   TreeItem *child(int row);
+  void setChild(int row, TreeItem * child);
+  void clearChildren();
   int childCount() const;
   int columnCount() const;
   QVariant data(int column) const;
+  void setData(const QList<QVariant> &data);
   int row() const;
   TreeItem *parentItem();
+  void setParentItem(TreeItem *parentItem);
 
 private:
   QList<TreeItem*> m_childItems;
   QList<QVariant> m_itemData;
-  TreeItem *m_parentItem;
+  TreeItem *m_parentItem = nullptr;
 };
 
 
@@ -191,8 +195,9 @@ public:
   void setVariableNames(const OT::Description & variableNames);
 private:
   void setupModelData(const OT::Description & variableNames);
+  static void MergeNodes(TreeItem * node);
 
-  TreeItem *rootItem_;
+  TreeItem *rootItem_ = nullptr;
 };
 
 
@@ -266,24 +271,25 @@ private:
   FMIPhysicalModel * getFMIPhysicalModel() const;
 
   PhysicalModel physicalModel_;
-  QLineEdit * FMUfileNameEdit_;
-  QLineEdit * filterTextEdit_;
-  QCheckBox * matchCaseCheckBox_;
-  QComboBox * searchFieldComboBox_;
-  ListWidgetWithCheckBox * variabilityField_;
-  ListWidgetWithCheckBox * causalityField_;
-  ListWidgetWithCheckBox * ioField_;
-  QCheckBox * filterCausalityComboBox_[7];
-  CopyableTableView * variablesTableView_;
-  DataTableModel * variablesTableModel_;
-  DataFilterProxyModel * proxyModel_;
-  TreeModel *tree_model_;
-  QTableView * propertiesTable_;
-  QLabel * ioCountLabel_;
-  QTabWidget * tabWidget_;
+  QLineEdit * FMUfileNameEdit_ = nullptr;
+  QComboBox * FMUTypeCombobox_ = nullptr;
+  QLineEdit * filterTextEdit_ = nullptr;
+  QCheckBox * matchCaseCheckBox_ = nullptr;
+  QComboBox * searchFieldComboBox_ = nullptr;
+  ListWidgetWithCheckBox * variabilityField_ = nullptr;
+  ListWidgetWithCheckBox * causalityField_ = nullptr;
+  ListWidgetWithCheckBox * ioField_ = nullptr;
+  QCheckBox * filterCausalityComboBox_[7] = {};
+  CopyableTableView * variablesTableView_ = nullptr;
+  DataTableModel * variablesTableModel_ = nullptr;
+  DataFilterProxyModel * proxyModel_ = nullptr;
+  TreeModel *tree_model_ = nullptr;
+  QTableView * propertiesTable_ = nullptr;
+  QLabel * ioCountLabel_ = nullptr;
+  QTabWidget * tabWidget_ = nullptr;
 
-  CopyableTableView * differentiationTableView_;
-  TemporaryLabel * errorMessageLabel_;
+  CopyableTableView * differentiationTableView_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

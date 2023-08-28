@@ -2150,17 +2150,25 @@ Field model
     - a wizard appears, click on Cancel
 
 
-FMU model
+FMI model
 '''''''''
 
 - create a new study and add to it a FMI model
 
 - load the FMU file at python/test/fmu/linux64/deviation.fmu
 
-- change the value of F and click on 'check model' button then check the values
+- there must be 4 input variables, 1 output
+
+- change the value of F=33e3 and click on 'check model' button then y=14.32
 
   .. image:: /developer_manual/validation/fmuModel.png
       :align: center
+
+- in the "Properties" tab the model type should be "Co-Simulation"
+
+- same on windows, load the FMU file at python/test/fmu/win64/deviation.fmu
+
+- select F as input, y as output, change the F value and evaluate
 
 YACS model
 ''''''''''

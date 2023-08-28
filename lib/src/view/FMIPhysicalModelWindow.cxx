@@ -102,9 +102,21 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   for (int i = 0; i < namesList.size(); ++ i)
     valuesList << QString(128, ' ');
 
-  propertiesTable_ = new ParametersTableView(namesList, valuesList, true, true);
+  propertiesTable_ = new ParametersTableView(namesList, valuesList, true, true, false);
   propertiesTable_->hide();
   propertiesLayout->addWidget(propertiesTable_);
+
+  CollapsibleGroupBox * advancedGroupBox = new CollapsibleGroupBox(tr("Advanced parameters"));
+  QHBoxLayout * typeLayout = new QHBoxLayout(advancedGroupBox);
+  QLabel *fmuTypeLabel = new QLabel(tr("FMU type"));
+  typeLayout->addWidget(fmuTypeLabel);
+  FMUTypeCombobox_ = new QComboBox;
+  FMUTypeCombobox_->addItems({ "auto", "ME", "CS" });
+  FMUTypeCombobox_->setCurrentText(getFMIPhysicalModel()->getFMUType().c_str());
+  typeLayout->addWidget(FMUTypeCombobox_);
+  typeLayout->addStretch();
+  propertiesLayout->addWidget(advancedGroupBox);
+
   propertiesLayout->addStretch();
 
   tabWidget_->addTab(scrollArea, tr("Properties"));
@@ -324,6 +336,7 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
       QApplication::setOverrideCursor(Qt::WaitCursor);
       try
       {
+        fmiModel->setFMUType(FMUTypeCombobox_->currentText().toStdString());
         fmiModel->setFMUFileName(fileName.toUtf8().data());
         errorMessageLabel_->reset();
       }
@@ -950,9 +963,9 @@ bool DataFilterProxyModel::filterAcceptsRow(int sourceRow,
 
 
 TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
+ : m_itemData(data)
+ , m_parentItem(parent)
 {
-  m_parentItem = parent;
-  m_itemData = data;
 }
 
 TreeItem::~TreeItem()
@@ -970,6 +983,16 @@ TreeItem *TreeItem::child(int row)
   return m_childItems.value(row);
 }
 
+void TreeItem::setChild(int row, TreeItem * child)
+{
+  m_childItems[row] = child;
+}
+
+void TreeItem::clearChildren()
+{
+  m_childItems.removeAll(nullptr);
+}
+
 int TreeItem::childCount() const
 {
   return m_childItems.count();
@@ -985,9 +1008,19 @@ QVariant TreeItem::data(int column) const
   return m_itemData.value(column);
 }
 
+void TreeItem::setData(const QList<QVariant> &data)
+{
+  m_itemData = data;
+}
+
 TreeItem *TreeItem::parentItem()
 {
   return m_parentItem;
+}
+
+void TreeItem::setParentItem(TreeItem * parentItem)
+{
+  m_parentItem = parentItem;
 }
 
 int TreeItem::row() const
@@ -1001,17 +1034,12 @@ int TreeItem::row() const
 TreeModel::TreeModel(const QString & /*file*/, QObject *parent)
   : QAbstractItemModel(parent)
 {
-  QList<QVariant> rootData;
-  rootData << tr("Variables");
+  QList<QVariant> rootData = {tr("Variables")};
   rootItem_ = new TreeItem(rootData);
-//     setupModelData(file, rootItem);
 }
 
 void TreeModel::setVariableNames(const Description & variableNames)
 {
-//   QList<QVariant> rootData;
-//   rootData << "Title" << "Summary";
-//   rootItem_ = new TreeItem(rootData);
   setupModelData(variableNames);
 }
 
@@ -1113,8 +1141,7 @@ void TreeModel::setupModelData(const Description & variableNames)
   if (rootItem_->childCount())
   {
     delete rootItem_;
-    QList<QVariant> rootData;
-    rootData << "Variable";
+    QList<QVariant> rootData = {"Variable"};
     rootItem_ = new TreeItem(rootData);
   }
 
@@ -1139,15 +1166,49 @@ void TreeModel::setupModelData(const Description & variableNames)
       else
       {
         // create new node
-        QList<QVariant> columnData;
-        columnData << chunk;
+        QList<QVariant> columnData = { chunk };
         newChild = new TreeItem(columnData, currentParent);
         currentParent->appendChild(newChild);
       }
       currentParent = newChild;
     }
   }
+
+  // simplify unnecessary depth in tree by merging nodes with 1 child
+  for (int i = 0; i < rootItem_->childCount(); ++ i)
+    MergeNodes(rootItem_->child(i));
+
   endResetModel();
+}
+
+void TreeModel::MergeNodes(TreeItem * node)
+{
+  while (node->childCount() == 1)
+  {
+    TreeItem *child = node->child(0);
+    const QString mergedString = node->data(0).toString() + "." + child->data(0).toString();
+    QList<QVariant> columnData = { mergedString };
+    node->setData(columnData);
+    // grand child 0
+    if (child->childCount())
+      node->setChild(0, child->child(0));
+    else
+    {
+      node->setChild(0, nullptr);
+      node->clearChildren();
+    }
+    // grand child 1-n
+    for (int i = 1; i < child->childCount(); ++ i)
+      node->appendChild(child->child(i));
+    for (int i = 0; i < child->childCount(); ++ i)
+    {
+      child->child(i)->setParentItem(node);
+      child->setChild(i, nullptr); // avoid ctor killing children
+    }
+    delete child;
+  }
+  for (int i = 0; i < node->childCount(); ++ i)
+    MergeNodes(node->child(i));
 }
 
 }

@@ -53,6 +53,7 @@ public:
                       const QStringList values,            // parameters values
                       const bool showGrid = false,         // show the grid of the table
                       const bool namesHasHeaderType = false, // parameters names display has table header
+                      const bool splitLongLines = true,    // split long lines
                       QWidget *parent = nullptr
                      );
 };
