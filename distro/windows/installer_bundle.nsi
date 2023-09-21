@@ -63,7 +63,7 @@ RequestExecutionLevel user
 !define MUI_LANGDLL_REGISTRY_VALUENAME "NSIS:Language"
 
 ; Welcome page
-!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of ${FULL_NAME} ${PRODUCT_VERSION}.\r\rThis installer has been tested on Windows 7 and 10. Although ${FULL_NAME} may work on it, other operating systems are not supported."
+!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of ${FULL_NAME} ${PRODUCT_VERSION}.\r\rThis installer requires Windows >= 10."
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 ;!insertmacro MUI_PAGE_LICENSE "COPYING.txt"
@@ -254,8 +254,6 @@ Section "!${PRODUCT_NAME} DLL & doc" SEC01
   SetOutPath "$MODULE_INSTALL_PATH"
   File "README.txt"
   File "persalys.ico"
-  File "persalys.vbs"
-  File "persalys-bundle.vbs"
 
   !insertmacro PRINT "Install doc in $MODULE_INSTALL_PATH\doc\."
   SetOutPath "$MODULE_INSTALL_PATH\doc\"
@@ -289,10 +287,10 @@ Section -AdditionalIcons
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\README.lnk" "$MODULE_INSTALL_PATH\README.txt" "" ""
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Documentation.lnk" "$MODULE_INSTALL_PATH\doc\html\index.html" "" ""
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall-${PRODUCT_NAME}.lnk" "$INSTDIR\${UNINST_EXE}" "" ""
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$MODULE_INSTALL_PATH\persalys-bundle.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$MODULE_INSTALL_PATH\persalys_launcher.exe" "" "$MODULE_INSTALL_PATH\persalys.ico"
 
   !insertmacro PRINT "Create desktop shortcut."
-  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$MODULE_INSTALL_PATH\persalys-bundle.vbs" "" "$MODULE_INSTALL_PATH\persalys.ico"
+  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$MODULE_INSTALL_PATH\persalys_launcher.exe" "" "$MODULE_INSTALL_PATH\persalys.ico"
 SectionEnd
 
 
