@@ -9,7 +9,7 @@ include_directories (${CMAKE_SOURCE_DIR}/lib/src/view/PyConsole)
 
 add_executable (persalys WIN32 main.cxx gui.rc)
 
-target_link_libraries (persalys persalysview)
+target_link_libraries (persalys PRIVATE persalysview)
 set_target_properties (persalys PROPERTIES UNITY_BUILD OFF)
 
 if (UNIX)
@@ -35,4 +35,12 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   file (COPY ../images/Ps-icon-64.png DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   file (RENAME ${CMAKE_CURRENT_BINARY_DIR}/Ps-icon-64.png ${CMAKE_CURRENT_BINARY_DIR}/persalys-icon.png)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/persalys-icon.png DESTINATION ${PERSALYS_DATA_PATH}/icons/hicolor/64x64/apps/)
+endif ()
+
+if (WIN32)
+  find_package (Boost COMPONENTS program_options REQUIRED)
+  add_executable (persalys_launcher launcher.cxx)
+  target_link_libraries (persalys_launcher PRIVATE Boost::filesystem Boost::program_options ws2_32)
+  set_target_properties (persalys_launcher PROPERTIES UNITY_BUILD OFF)
+  install (TARGETS persalys_launcher DESTINATION bin)
 endif ()

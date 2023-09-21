@@ -221,12 +221,12 @@ QString FileTools::GetDocumentationDirectoryPath()
   dirPath.cdUp();
 
   // case 2-1: on Linux when the documentation is built and put in the install directory
-  userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(INSTALL_PATH).arg(DOCUMENTATION_INSTALL_PATH));
+  userManualDir = QDir::toNativeSeparators(QString("%1/%2/html").arg(INSTALL_PATH).arg(DOCUMENTATION_INSTALL_PATH));
   if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
     return userManualDir;
 
   // case 2-2: on Linux when using the AppImage
-  userManualDir = QDir::toNativeSeparators(QString("%1/%2/html/").arg(dirPath.path()).arg(DOCUMENTATION_INSTALL_PATH));
+  userManualDir = QDir::toNativeSeparators(QString("%1/%2/html").arg(dirPath.path()).arg(DOCUMENTATION_INSTALL_PATH));
   if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
     return userManualDir;
 
@@ -243,7 +243,7 @@ QUrl FileTools::GetDocumentationUrl(const QString &urlLink, const docType type)
   if (QFileInfo(urlLink).isAbsolute())
     url = QUrl::fromLocalFile(QDir::toNativeSeparators(pathAndFragment[0]));
   else if (type == docGUI)
-    url = QUrl::fromLocalFile(QDir::toNativeSeparators(GetDocumentationDirectoryPath() + pathAndFragment[0]));
+    url = QUrl::fromLocalFile(QDir::toNativeSeparators(GetDocumentationDirectoryPath() + "/" + pathAndFragment[0]));
   else
     url = QUrl(OpenTURNSUrlLink + pathAndFragment[0]);
 
