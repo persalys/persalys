@@ -99,8 +99,8 @@ int main(int argc, char *argv[])
 
   // doc dir
   const std::string PERSALYS_HTML_PATH = (persalys_dir / "doc" / "html").string();
-  env["PERSALYS_HTML_DOCUMENTATION_PATH"] = PERSALYS_HTML_PATH;
-  std::cout << "PERSALYS_HTML_DOCUMENTATION_PATH=" << PERSALYS_HTML_PATH <<std::endl;
+  env["PERSALYS_HTML_PATH"] = PERSALYS_HTML_PATH;
+  std::cout << "PERSALYS_HTML_PATH=" << PERSALYS_HTML_PATH <<std::endl;
 #endif
 
   // fork process
