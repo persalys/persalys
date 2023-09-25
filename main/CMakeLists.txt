@@ -38,7 +38,6 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 endif ()
 
 if (WIN32)
-  find_package (Boost COMPONENTS program_options REQUIRED)
   add_executable (persalys_launcher launcher.cxx)
   target_link_libraries (persalys_launcher PRIVATE Boost::filesystem Boost::program_options ws2_32)
   set_target_properties (persalys_launcher PROPERTIES UNITY_BUILD OFF)

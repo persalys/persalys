@@ -64,7 +64,7 @@ if (MSVC)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif ()
 
-find_package (Boost COMPONENTS filesystem locale REQUIRED)
+find_package (Boost COMPONENTS filesystem locale program_options REQUIRED)
 list (APPEND PERSALYS_PRIVATE_LIBRARIES ${Boost_LIBRARIES})
 
 find_package (Python 3.5 COMPONENTS Interpreter Development REQUIRED)

@@ -14,7 +14,7 @@ Several dependencies are needed in order to build the GUI:
 - Qwt >=6
 - Python >=3.5
 - SWIG >=3
-- Boost.locale/filesystem
+- Boost.locale/filesystem/program_options
 - SalomeYACS (optional, for YACS support)
 - Sphinx >=1.8 (optional, for doc)
 - Numpydoc >=0.9 (optional, for doc)
