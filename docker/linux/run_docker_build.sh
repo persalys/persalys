@@ -92,7 +92,7 @@ do
 done
 cp -v /usr/local/lib64/libpagmo.so.* persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libtbb.so.* persalys.AppDir/usr/lib
-cp -v /usr/local/lib64/libdlib*.0 persalys.AppDir/usr/lib
+cp -v /usr/local/lib64/libdlib* persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libglog.so.1 persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libprimesieve.so.* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libboost* persalys.AppDir/usr/lib

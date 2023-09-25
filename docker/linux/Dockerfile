@@ -40,7 +40,7 @@ RUN curl -fsSL https://github.com/coin-or/Cbc/archive/refs/tags/releases/2.10.10
 RUN curl -fsSL https://github.com/coin-or/Bonmin/archive/refs/tags/releases/1.8.9.tar.gz | tar xz && cd Bonmin-releases-1.8.9 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
 
 # dlib
-RUN curl -L https://github.com/davisking/dlib/archive/v19.24.tar.gz | tar xz && cd dlib-19.24 \
+RUN curl -L https://github.com/davisking/dlib/archive/v19.24.2.tar.gz | tar xz && cd dlib-19.24.2 \
  && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install > /dev/null 2>&1 && cd - && rm -r dlib*
 
 # cminpack
@@ -52,7 +52,7 @@ RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.1.tar.gz | tar xz 
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
-RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.1/src/hdf5-1.14.1-2.tar.bz2 | tar xj && cd hdf5-1.14.1-2 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
+RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.2/src/hdf5-1.14.2.tar.bz2 | tar xj && cd hdf5-1.14.2 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen-3.4.0 \
@@ -87,12 +87,12 @@ RUN curl -fSsL https://www.openssl.org/source/openssl-3.1.0.tar.gz | tar xz && c
  && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.11.3/Python-3.11.3.tgz | tar xz && cd Python-3.11.3 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.11.5/Python-3.11.5.tgz | tar xz && cd Python-3.11.5 \
  && ./configure --enable-shared --enable-optimizations CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install -U pip wheel setuptools cython pybind11 flake8 meson
+RUN pip3 install -U pip wheel setuptools "cython<3" pybind11 flake8 meson
 RUN git clone -b v1.23.5 --depth 1 --recursive https://github.com/numpy/numpy.git && cd numpy \
  && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
 RUN pip3 install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.9.3.tar.gz | tar xz --warning=no-timestamp && cd scipy-1.9.3 \
@@ -119,9 +119,9 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.10.4.t
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.81.0/source/boost_1_81_0.tar.bz2 | tar xj && cd boost_1_81_0 \
+RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2 | tar xj && cd boost_1_83_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
- && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem --with-serialization > /dev/null 2>&1 && cd - && rm -r boost*
+ && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-filesystem --with-serialization --with-program_options > /dev/null 2>&1 && cd - && rm -r boost*
 
 # pagmo
 RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.0.tar.gz | tar xz && cd pagmo2-2.19.0 && cmake -DPAGMO_WITH_EIGEN3=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
@@ -147,7 +147,7 @@ RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.11/ParaView-v5.11.1.tar.xz | tar xJ && cd ParaView-v5.11.1 \
+RUN curl -fSsL https://paraview.org/files/v5.11/ParaView-v5.11.2.tar.xz | tar xJ && cd ParaView-v5.11.2 \
  && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/10335.patch | patch -p1 -d VTK \
  && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/10349.patch | patch -p1 -d VTK \
  && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/10350.patch | patch -p1 -d VTK \
