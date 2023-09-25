@@ -36,23 +36,29 @@ int main(int argc, char *argv[])
   bool opengl = true;
   bool mesa = true;
   bool wait = false;
+  bool verbose = false;
   po::options_description desc ("Allowed options");
   desc.add_options ()
     ("help,h", "print usage message")
     ("lang", po::value<std::string>(&lang), "Language en|fr")
     ("mesa", po::value<bool>(&mesa), "Enable software renderer 1|0")
     ("opengl", po::value<bool>(&opengl), "Enable OpenGL renderer 1|0")
-    ("wait", po::value<bool>(&wait), "Wait process 1|0");
+    ("wait", po::value<bool>(&wait), "Wait process 1|0")
+    ("verbose,V", po::value<bool>(&verbose), "Verbose mode 1|0");
   po::variables_map vm;
   po::store (po::command_line_parser (argc, argv).options (desc).run (), vm);
   po::notify (vm);
-  std::cout << "lang=" << lang << " opengl=" << opengl << " mesa=" << mesa << " wait=" << wait << std::endl;
+  if (verbose)
+    std::cout << "lang=" << lang << " opengl=" << opengl << " mesa=" << mesa << " wait=" << wait << std::endl;
 
   // set env
   fs::path persalys_dir = fs::system_complete(argv[0]).parent_path();
   fs::path python_dir = persalys_dir.parent_path().parent_path().parent_path();
-  std::cout << "persalys_dir=" << persalys_dir << std::endl;
-  std::cout << "python_dir=" << python_dir << std::endl;
+  if (verbose)
+  {
+    std::cout << "persalys_dir=" << persalys_dir << std::endl;
+    std::cout << "python_dir=" << python_dir << std::endl;
+  }
   auto env = boost::this_process::environment();
 
   // localization
@@ -68,22 +74,27 @@ int main(int argc, char *argv[])
   const char* env_path = std::getenv("PATH");
   const std::string PATH = python_dir.string() + ";" + (python_dir / "Scripts").string() + (env_path ? std::string(";") + env_path : "");
   env["PATH"] = PATH;
-  std::cout << "PATH=" << PATH <<std::endl;
+  if (verbose)
+    std::cout << "PATH=" << PATH <<std::endl;
 
   // PYTHONPATH
   const char* env_pythonpath = std::getenv("PYTHONPATH");
   const std::string PYTHONPATH = (python_dir / "python311.zip").string() + ";" + persalys_dir.parent_path().string() + (env_pythonpath ? std::string(";") + env_pythonpath : "");
   env["PYTHONPATH"] = PYTHONPATH;
-  std::cout << "PYTHONPATH=" << PYTHONPATH <<std::endl;
+  if (verbose)
+    std::cout << "PYTHONPATH=" << PYTHONPATH <<std::endl;
 
   // PYTHONHOME
   const std::string PYTHONHOME = python_dir.string();
   env["PYTHONHOME"] = PYTHONHOME;
+  if (verbose)
+    std::cout << "PYTHONHOME=" << PYTHONHOME <<std::endl;
 
   // Paraview plugin dir
   const std::string PV_PLUGIN_PATH = (persalys_dir / "BagPlotViewsAndFilters").string();
   env["PV_PLUGIN_PATH"] = PV_PLUGIN_PATH;
-  std::cout << "PV_PLUGIN_PATH=" << PV_PLUGIN_PATH <<std::endl;
+  if (verbose)
+    std::cout << "PV_PLUGIN_PATH=" << PV_PLUGIN_PATH <<std::endl;
 
   // matplotlib
   env["MPL_BACKEND"] = "TkAgg";
@@ -100,7 +111,8 @@ int main(int argc, char *argv[])
   // doc dir
   const std::string PERSALYS_HTML_PATH = (persalys_dir / "doc" / "html").string();
   env["PERSALYS_HTML_PATH"] = PERSALYS_HTML_PATH;
-  std::cout << "PERSALYS_HTML_PATH=" << PERSALYS_HTML_PATH <<std::endl;
+  if (verbose)
+    std::cout << "PERSALYS_HTML_PATH=" << PERSALYS_HTML_PATH <<std::endl;
 #endif
 
   // fork process
