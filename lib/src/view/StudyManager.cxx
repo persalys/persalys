@@ -388,9 +388,7 @@ bool StudyManager::save(StudyItem* studyItem)
   const QFileInfo file(QString::fromUtf8(studyItem->getStudy().getFileName().c_str()));
   if (file.exists())
   {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    studyItem->getStudy().save(QDir::toNativeSeparators(file.absoluteFilePath()).toUtf8().data());
-    QApplication::restoreOverrideCursor();
+    studyItem->save(QDir::toNativeSeparators(file.absoluteFilePath()).toUtf8().data());
     emit recentFilesListChanged(file.absoluteFilePath().toUtf8().data());
     return true;
   }
