@@ -7,7 +7,8 @@ Installation
 - Windows:
 
   * requirements: Windows>=10
-  * to use system OpenGL libs remove the provided opengl32.dll
+  * the default language setting can be overidden with the argument --lang=en|fr added to the launcher executable command-line
+  * The bundled software OpenGL renderer can be enabled/disabled with the argument --mesa=1|0
 
 - Linux:
 
@@ -17,9 +18,8 @@ Installation
 
 Environment variables:
 
-- LANG: can be set to en/fr to override the language on Windows, see persalys.vbs
-- LANGUAGE: same on Linux
-- PERSALYS_HTML_DOCUMENTATION_PATH: override path to the html documentation
+- LANGUAGE: can be set to en|fr to override the language on Linux
+- PERSALYS_HTML_PATH: override path to the html documentation
 - PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets)
 - PERSALYS_CALIBRATION_ENGINE: if defined to "adao" and adao support is enabled
   this switches to adao for calibration computations
