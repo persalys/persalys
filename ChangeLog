@@ -1,3 +1,8 @@
+= 14.1.1 release (2023-10-03)
+ * New windows binary launcher
+ * Fixed study files permissions check
+ * Improved FMU compatibility
+
 = 14.1 release (2023-07-25)
 
  * Design of experiment failed points error handling
