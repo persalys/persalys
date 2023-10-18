@@ -203,11 +203,18 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   ioCountLabel_ = new QLabel;
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-  connect(evaluateOutputsButton, SIGNAL(clicked(bool)), this, SLOT(evaluateOutputs()));
-  QHBoxLayout * evaluationLayout = new QHBoxLayout;
-  evaluationLayout->addWidget(ioCountLabel_);
-  evaluationLayout->addStretch();
-  evaluationLayout->addWidget(evaluateOutputsButton);
+  QLabel * timeInfo = new QLabel();
+  connect(evaluateOutputsButton, &QPushButton::clicked,  [=] (bool) {
+    timeInfo->clear();
+    evaluateOutputs();
+    if(physicalModel_.getEvalTime()>0)
+        timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
+  });
+  QGridLayout * evaluationLayout = new QGridLayout;
+  evaluationLayout->addWidget(ioCountLabel_, 0, 0);
+  evaluationLayout->setColumnStretch(0,2);
+  evaluationLayout->addWidget(timeInfo, 1, 0);
+  evaluationLayout->addWidget(evaluateOutputsButton, 0, 1);
   variablesLayout->addLayout(evaluationLayout);
 
   // error message
@@ -295,11 +302,13 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   if (!eval.getErrorMessage().empty())
   {
     errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
+    physicalModel_.setEvalTime(0);
     return;
   }
   if (!outputSample.getSize())
   {
     errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
+    physicalModel_.setEvalTime(0);
     return;
   }
 
