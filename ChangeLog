@@ -1,6 +1,9 @@
-= 15.0 release (in-progress)
+= 15.0 release (2023-10-19)
 
  * Allow choose FMU ME/CS type (some provide both)
+ * New windows binary launcher
+ * Fixed study files permissions check
+ * Added FMI model evaluation time
 
 = 14.1 release (2023-07-25)
 
