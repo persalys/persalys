@@ -13,7 +13,7 @@ Release process
 
 5. Upload tagged docker images (docker push)
 
-6. Create X.Y branch
+6. Create X.Y branch and protect it
 
 7. In X.Y branch, modify .gitlab-ci.yml to used tagged docker images
 
