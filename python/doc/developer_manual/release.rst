@@ -23,6 +23,6 @@ Release process
 
 10. Sync github mirror::
 
-      git remote add gh https://github.com/persalys/persalys.git
+      git remote add gh git@github.com:persalys/persalys.git
       git push gh master
       git push gh --tags
