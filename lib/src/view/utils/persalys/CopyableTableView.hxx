@@ -48,7 +48,7 @@ protected:
   /** format the text */
   QString getFormattedText() const;
 
-  QAction * copyAction_;
+  QAction * copyAction_ = nullptr;
 
 private:
   void buildActions();

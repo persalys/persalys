@@ -1357,12 +1357,12 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
   inTabLayout->addWidget(inTabWidget_);
   connect(inTabWidget_, &DynamicTabWidget::newTabRequested, [=](){
       CouplingStepCollection csColl(model->getSteps());
-      CouplingStep cs(csColl[indStep]);
-      CouplingInputFileCollection inColl(cs.getInputFiles());
+      CouplingStep cs2(csColl[indStep]);
+      CouplingInputFileCollection inColl(cs2.getInputFiles());
 
       inColl.add(CouplingInputFile());
-      cs.setInputFiles(inColl);
-      csColl[indStep] = cs;
+      cs2.setInputFiles(inColl);
+      csColl[indStep] = cs2;
       model->blockNotification("PhysicalModelDefinitionItem");
       model->setSteps(csColl);
       model->blockNotification();
@@ -1371,14 +1371,14 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       connect(ciFileWidget, SIGNAL(variableListChanged()), this, SIGNAL(variableListChanged()));
 
     });
-  connect(inTabWidget_, &DynamicTabWidget::removeTabRequested, [=](int index){
+  connect(inTabWidget_, &DynamicTabWidget::removeTabRequested, [=](int index2){
       CouplingStepCollection csColl(model->getSteps());
-      CouplingStep cs(csColl[indStep]);
-      CouplingInputFileCollection inColl(cs.getInputFiles());
+      CouplingStep cs2(csColl[indStep]);
+      CouplingInputFileCollection inColl(cs2.getInputFiles());
 
-      inColl.erase(inColl.begin() + index);
-      cs.setInputFiles(inColl);
-      csColl[indStep] = cs;
+      inColl.erase(inColl.begin() + index2);
+      cs2.setInputFiles(inColl);
+      csColl[indStep] = cs2;
       model->blockNotification("PhysicalModelDefinitionItem");
       model->setSteps(csColl);
       model->blockNotification();
@@ -1405,12 +1405,12 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
   outTabLayout->addWidget(outTabWidget);
   connect(outTabWidget, &DynamicTabWidget::newTabRequested, [=](){
       CouplingStepCollection csColl(model->getSteps());
-      CouplingStep cs(csColl[indStep]);
-      CouplingOutputFileCollection outColl(cs.getOutputFiles());
+      CouplingStep cs2(csColl[indStep]);
+      CouplingOutputFileCollection outColl(cs2.getOutputFiles());
 
       outColl.add(CouplingOutputFile());
-      cs.setOutputFiles(outColl);
-      csColl[indStep] = cs;
+      cs2.setOutputFiles(outColl);
+      csColl[indStep] = cs2;
       model->blockNotification("PhysicalModelDefinitionItem");
       model->setSteps(csColl);
       model->blockNotification();
@@ -1419,14 +1419,14 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       connect(outFileWidget, SIGNAL(variableListChanged()), this, SIGNAL(variableListChanged()));
 
     });
-  connect(outTabWidget, &DynamicTabWidget::removeTabRequested, [=](int index){
+  connect(outTabWidget, &DynamicTabWidget::removeTabRequested, [=](int index2){
       CouplingStepCollection csColl(model->getSteps());
-      CouplingStep cs(csColl[indStep]);
-      CouplingOutputFileCollection outColl(cs.getOutputFiles());
+      CouplingStep cs2(csColl[indStep]);
+      CouplingOutputFileCollection outColl(cs2.getOutputFiles());
 
-      outColl.erase(outColl.begin() + index);
-      cs.setOutputFiles(outColl);
-      csColl[indStep] = cs;
+      outColl.erase(outColl.begin() + index2);
+      cs2.setOutputFiles(outColl);
+      csColl[indStep] = cs2;
       model->blockNotification("PhysicalModelDefinitionItem");
       model->setSteps(csColl);
       model->blockNotification();

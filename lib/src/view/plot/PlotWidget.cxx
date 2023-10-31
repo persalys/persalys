@@ -247,16 +247,16 @@ void PlotWidget::plotCurve(double * x, double * y, int size, const QPen pen, Qwt
 }
 
 
-void PlotWidget::plotCurve(const Sample & data, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol, QString title)
+void PlotWidget::plotCurve(const Sample & sample, const QPen pen, QwtPlotCurve::CurveStyle style, QwtSymbol* symbol, QString title)
 {
-  const int size = data.getSize();
+  const int size = sample.getSize();
   double * x = new double[size];
   double * y = new double[size];
 
   for (int i = 0; i < size; ++ i)
   {
-    x[i] = data(i, 0);
-    y[i] = data(i, 1);
+    x[i] = sample(i, 0);
+    y[i] = sample(i, 1);
   }
   plotCurve(x, y, size, pen, style, symbol, title);
   delete[] x;
@@ -505,7 +505,7 @@ void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
 {
 
   const Description colors(Drawable().BuildRainbowPalette(allFronts.getSize()));
-  Sample data;
+  Sample sample;
   Indices indices;
   indices.add(idx1);
   indices.add(idx2);
@@ -513,18 +513,18 @@ void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
   for (UnsignedInteger j=0; j<allFronts.getSize(); ++j) {
     if (allFronts[j].getDimension()==2) {
       Sample front = allFronts[j].getMarginal(indices).sortAccordingToAComponent(0);
-      data = Sample(2*front.getSize()-1, 2);
+      sample = Sample(2*front.getSize()-1, 2);
       // Build front points and link them
       for (UnsignedInteger i=0; i<front.getSize(); ++i) {
-        data[2*i] = front[i];
+        sample[2*i] = front[i];
         if (i != front.getSize()-1) {
-          data(2*i+1, 0) = front(i+1, 0);
-          data(2*i+1, 1) = front(i, 1);
+          sample(2*i+1, 0) = front(i+1, 0);
+          sample(2*i+1, 1) = front(i, 1);
         }
       }
     } else {
       // Get side view marginals sub samples and plot only front points
-      data = allFronts[j].getMarginal(indices).sortAccordingToAComponent(0);
+      sample = allFronts[j].getMarginal(indices).sortAccordingToAComponent(0);
     }
     // Draw
     if (j<MaxVisibleVariableNumber) {
@@ -532,7 +532,7 @@ void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
                                          QBrush(colors[j].c_str()).color(),
                                          QPen(colors[j].c_str()).color(),
                                          QSize(7, 7));
-      plotCurve(data, QPen(colors[j].c_str()).color(),
+      plotCurve(sample, QPen(colors[j].c_str()).color(),
                 allFronts[j].getDimension()==2 ? QwtPlotCurve::Lines : QwtPlotCurve::Dots,
                 symbol, QString("front"+QString::number(j)));
     }
