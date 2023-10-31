@@ -28,7 +28,7 @@ class VTK_EXPORT vtkXYChartRepresentationColumns : public vtkXYChartRepresentati
 {
 public:
   static vtkXYChartRepresentationColumns* New();
-  vtkTypeMacro(vtkXYChartRepresentationColumns, vtkXYChartRepresentation);
+  vtkTypeMacro(vtkXYChartRepresentationColumns, vtkXYChartRepresentation)
   void PrintSelf(ostream& os, vtkIndent indent) override;
 
 protected:

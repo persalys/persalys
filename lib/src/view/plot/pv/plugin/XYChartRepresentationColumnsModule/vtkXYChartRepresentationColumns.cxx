@@ -17,7 +17,7 @@
 #include <vtkObjectFactory.h>
 #include <vtkChartXY.h>
 
-vtkStandardNewMacro(vtkXYChartRepresentationColumns);
+vtkStandardNewMacro(vtkXYChartRepresentationColumns)
 
 //----------------------------------------------------------------------------
 void vtkXYChartRepresentationColumns::PrintSelf(ostream& os, vtkIndent indent)
