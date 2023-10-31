@@ -78,8 +78,13 @@ exec(script)
 sample = ot.Normal(2).getSample(10)
 sample[0] = [1, 2]
 inColumns = [0, 1]
+have_fr_locale = True
 try:
     locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
+except Exception:
+    have_fr_locale = False
+
+if have_fr_locale:
     for col_sep in [";", ",", " "]:
         for num_sep in [".", ","]:
             if col_sep == num_sep:
@@ -97,14 +102,12 @@ try:
                 "wrong dimension sep=" + col_sep
             )
             assert model.getSampleFromFile().getSize() == 10, "wrong size"
-except Exception:
-    # fr locale not available
-    pass
-os.remove(filename)
+    os.remove(filename)
 
-filename = "DonneesLatin1.csv"
-model4 = persalys.DataModel(
-    "myDataModel4", filename, [0, 1, 2, 3], [4, 5])
+    # test latin1 chars
+    filename = "DonneesLatin1.csv"
+    model4 = persalys.DataModel(
+        "myDataModel4", filename, [0, 1, 2, 3], [4, 5])
 
-myStudy.add(model4)
-print(model4.getSampleFromFile().getDescription())
+    myStudy.add(model4)
+    assert "Ann" in model4.getSampleFromFile().getDescription()[0]
