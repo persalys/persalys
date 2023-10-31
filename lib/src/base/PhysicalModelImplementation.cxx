@@ -387,7 +387,7 @@ Description PhysicalModelImplementation::getInputNames() const
 }
 
 
-void PhysicalModelImplementation::updateFiniteDifferenceSteps() const
+void PhysicalModelImplementation::updateFiniteDifferenceSteps()
 {
   finiteDifferenceSteps_ = Point(getInputDimension());
   for (UnsignedInteger i = 0; i < getInputDimension(); ++i)
@@ -397,9 +397,6 @@ void PhysicalModelImplementation::updateFiniteDifferenceSteps() const
 
 Point PhysicalModelImplementation::getFiniteDifferenceSteps() const
 {
-  if (finiteDifferenceSteps_.getSize() != inputs_.getSize())
-    updateFiniteDifferenceSteps();
-
   return finiteDifferenceSteps_;
 }
 
