@@ -177,7 +177,7 @@ void CopulaWidget::updateParameters()
         corrTableModel->setType(CorrelationTableModel::Kendall);
         break;
       default:
-        throw InvalidArgumentException(HERE) << "Unknow correlation type";
+        throw InvalidArgumentException(HERE) << "Unknown correlation type";
       }
     });
     connect(corrTableModel, SIGNAL(dataUpdated(OT::Distribution)), this, SLOT(updateCopulaFromCorrTable(OT::Distribution)));
