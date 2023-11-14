@@ -33,26 +33,23 @@ namespace PERSALYS
 class CollapsibleGroupBoxPrivate
 {
 public:
-  CollapsibleGroupBoxPrivate(CollapsibleGroupBox *q);
+  CollapsibleGroupBoxPrivate(CollapsibleGroupBox *cgb);
   void updateChildrenVisibility(bool visible);
   void recalculateHeaderSize();
   QSize contentSize() const;
   QSize contentMinimumSize() const;
 
-  CollapsibleGroupBox *q;
+  CollapsibleGroupBox *q = nullptr;
   QString title;
-  bool isExpanded;
-  bool headerContainsMouse;
+  bool isExpanded = false;
+  bool headerContainsMouse = false;
   QSize headerSize;
-  int shortcutId;
+  int shortcutId = 0;
 };
 
 
-CollapsibleGroupBoxPrivate::CollapsibleGroupBoxPrivate(CollapsibleGroupBox* q)
-  : q(q)
-  , isExpanded(false)
-  , headerContainsMouse(false)
-  , shortcutId(0)
+CollapsibleGroupBoxPrivate::CollapsibleGroupBoxPrivate(CollapsibleGroupBox* cgb)
+  : q(cgb)
 {}
 
 

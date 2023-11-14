@@ -86,7 +86,7 @@ public:
 };
 
 
-PieChartView::PieChartView(const PointWithDescription& data, QWidget *parent)
+PieChartView::PieChartView(const PointWithDescription& values, QWidget *parent)
   : QAbstractItemView(parent)
   , margin_(8)
   , totalSize_(200)
@@ -107,7 +107,7 @@ PieChartView::PieChartView(const PointWithDescription& data, QWidget *parent)
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
   // set model
-  setData(data);
+  setData(values);
 
   // context menu
   setContextMenuPolicy(Qt::CustomContextMenu);
@@ -117,17 +117,17 @@ PieChartView::PieChartView(const PointWithDescription& data, QWidget *parent)
 
 void PieChartView::setData(const PointWithDescription& valuesAndDescription)
 {
-  PointWithDescription data(valuesAndDescription);
+  PointWithDescription values(valuesAndDescription);
 
   // check
-  UnsignedInteger size = data.getSize();
+  UnsignedInteger size = values.getSize();
   if (size == 0)
   {
     qDebug() << "In PieChartView::setData: no data";
     throw std::exception();
   }
 
-  Scalar l1Norm = data.norm1();
+  Scalar l1Norm = values.norm1();
   if (l1Norm == .0)
   {
     qDebug() << "In PieChartView::setData: norm is null";
@@ -137,13 +137,13 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
   // normalize
   for (UnsignedInteger i = 0; i < size; ++i)
   {
-    data[i] /= l1Norm;
-    data[i] *= 100;
+    values[i] /= l1Norm;
+    values[i] *= 100;
   }
 
   // colors
   QVector<QColor> colors;
-  colors = generateSegmentsColors((int)data.getSize());
+  colors = generateSegmentsColors((int)values.getSize());
 
   // model
   PieChartModel * standardItemModel = new PieChartModel(size, 2, this);
@@ -153,7 +153,7 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
 
   for (UnsignedInteger i = 0; i < size; ++i)
   {
-    const QString text = QString::fromUtf8(data.getDescription()[i].c_str());
+    const QString text = QString::fromUtf8(values.getDescription()[i].c_str());
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
     const int textWidth = fm.horizontalAdvance(text);
 #else
@@ -163,9 +163,9 @@ void PieChartView::setData(const PointWithDescription& valuesAndDescription)
       maxTextWidth = textWidth;
 
     standardItemModel->setData(standardItemModel->index(i, 0, QModelIndex()), text);
-    standardItemModel->setData(standardItemModel->index(i, 1, QModelIndex()), QString::number(data[i]));
+    standardItemModel->setData(standardItemModel->index(i, 1, QModelIndex()), QString::number(values[i]));
     standardItemModel->setData(standardItemModel->index(i, 0, QModelIndex()), colors[i], Qt::DecorationRole);
-    totalValue_ += data[i];
+    totalValue_ += values[i];
     ++validItems_;
   }
   setModel(standardItemModel);

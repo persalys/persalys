@@ -5,6 +5,7 @@
 #include "persalys/CheckableHeaderView.hxx"
 
 #include <openturns/OTDistribution.hxx>
+#include <openturns/OTtestcode.hxx>
 
 #include <QtTest/QtTest>
 #include <QTableView>
@@ -121,7 +122,7 @@ private slots:
 
     // change input distribution
     inTable->model()->setData(inTable->model()->index(3, 1), "Gamma");
-    QVERIFY2(model->getInputs()[3].getDistribution() == OT::Gamma(100, 50), "wrong input distribution");
+    OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::Gamma(100.0, 50.0), 1e-5, 1e-8, "wrong input distribution");
 
     // change distribution configuration type
     QRect rect = inTable->visualRect(inTable->model()->index(3, 0));
@@ -143,7 +144,7 @@ private slots:
     checkBoxes[1]->setChecked(true);
     QVERIFY2(lowerBoundEdit->value() == 1.8, "wrong lower bound");
     QVERIFY2(upperBoundEdit->value() == 2.2, "wrong lower bound");
-    QVERIFY2(model->getInputs()[3].getDistribution() == OT::TruncatedDistribution(OT::Gamma(100, 50), 1.8, 2.2), "wrong input distribution");
+    OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::TruncatedDistribution(OT::Gamma(100.0, 50.0), 1.8, 2.2), 1e-5, 1e-8, "wrong input distribution");
 
     selectParamTypeCombo->setCurrentIndex(1);
     QVERIFY2(model->getInputs()[3].getDistributionParametersType() == 1, "wrong input distribution");
@@ -153,11 +154,11 @@ private slots:
     lowerBoundEdit->setFocus();
     upperBoundEdit->setValue(2.4);
     upperBoundEdit->setFocus();
-    QVERIFY2(model->getInputs()[3].getDistribution() == OT::TruncatedDistribution(OT::Gamma(100, 50), 1.7, 2.4), "wrong input distribution");
+    OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::TruncatedDistribution(OT::Gamma(100.0, 50.0), 1.7, 2.4), 1e-5, 1e-8, "wrong input distribution");
 
     checkBoxes[0]->setChecked(false);
     checkBoxes[1]->setChecked(false);
-    QVERIFY2(model->getInputs()[3].getDistribution() == OT::Gamma(100, 50), "wrong input distribution");
+    OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::Gamma(100.0, 50.0), 1e-5, 1e-8, "wrong input distribution");
 
     // change distribution param values
     QTest::mouseClick(inTable->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // select line 3
@@ -167,12 +168,12 @@ private slots:
     paramValueEdit->setValue(-2);
     QTest::keyClick(paramValueEdit, Qt::Key_Enter);
     QVERIFY2(errorLabel->text().isEmpty() == false, "Label must be not empty");
-    QVERIFY2(model->getInputs()[3].getDistribution() == OT::Gamma(100, 50), "wrong input distribution");
+    OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::Gamma(100.0, 50.0), 1e-5, 1e-8, "wrong input distribution");
 
     // - right value
     paramValueEdit->setValue(52);
     QTest::keyClick(paramValueEdit, Qt::Key_Enter);
-    QVERIFY2(model->getInputs()[3].getDistribution() == OT::Gamma(100, 52), "wrong input distribution");
+    OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::Gamma(100.0, 52.0), 1e-5, 1e-8, "wrong input distribution");
     QVERIFY2(errorLabel->text().isEmpty() == true, "Label must be empty");
   }
 

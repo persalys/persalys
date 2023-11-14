@@ -104,8 +104,8 @@ QString CopyableTableView::getFormattedText() const
 
   for (int i = 0; i < list.size(); ++i)
   {
-    QVariant data = model()->data(previous);
-    QString text = data.toString();
+    QVariant modelData = model()->data(previous);
+    QString text = modelData.toString();
     result.append(text);
 
     QModelIndex index = list.at(i);

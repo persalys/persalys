@@ -182,7 +182,7 @@ QStringList QtOT::NaturalSorting(const QStringList& list)
   QStringList sorted = list;
 
   std::sort(sorted.begin(), sorted.end(), [=] (QString s1, QString s2) {
-       QCollator coll;
+       QCollator coll(QLocale::English);
        coll.setNumericMode(true);
        return coll.compare(s1, s2) < 0;
      });

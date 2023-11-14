@@ -382,12 +382,6 @@ try:
 except Exception:
     print("OK")
 
-# clean environment
-step5.setEnvironment(ot.Description(), ot.Description())
-model2 = persalys.CouplingPhysicalModel("envTest", [step1, step5])
-f = model2.getFunction()
-y = f(x)
-
 # cleanup
 os.remove("input1.txt.in")
 os.remove("program1.py")

@@ -85,7 +85,7 @@ QVariant CorrelationTableModel::data(const QModelIndex & index, int role) const
     case CorrelationTableModel::Kendall:
       return QString::number(copula_.getKendallTau()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
     default:
-       throw InvalidArgumentException(HERE) << "Unknow correlation type";
+       throw InvalidArgumentException(HERE) << "Unknown correlation type";
     }
   else if (role == Qt::BackgroundRole && index.row() >= index.column())
     return QBrush(Qt::lightGray);
@@ -130,7 +130,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
         copula_ = NormalCopula(NormalCopula::GetCorrelationFromKendallCorrelation(correlation));
         break;
       default:
-        throw InvalidArgumentException(HERE) << "Unknow correlation type";
+        throw InvalidArgumentException(HERE) << "Unknown correlation type";
       }
       if (value.toDouble() == correlation(index.row(), index.column()))
         return true;

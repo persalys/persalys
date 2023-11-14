@@ -35,7 +35,7 @@ class PERSALYS_VIEW_API ProbabilisticDesignPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum design {LHS, SALHS, MCLHS, MonteCarlo, QuasiMonteCarlo};
+  enum DesignType {LHS, SALHS, MCLHS, MonteCarlo, QuasiMonteCarlo};
 
   ProbabilisticDesignPage(QWidget* parent = 0);
 

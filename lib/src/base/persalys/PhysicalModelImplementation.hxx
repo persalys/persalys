@@ -147,7 +147,7 @@ protected:
   OT::String getProbaModelPythonScript() const;
   OT::String getCopulaPythonScript() const;
   OT::Point getFiniteDifferenceSteps() const;
-  void updateFiniteDifferenceSteps() const;
+  void updateFiniteDifferenceSteps();
 
 private:
   void inputsChanged();
@@ -157,9 +157,9 @@ protected:
 private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
-  mutable OT::ComposedCopula composedCopula_;
+  OT::ComposedCopula composedCopula_;
   MeshModel meshModel_;
-  mutable OT::Point finiteDifferenceSteps_;
+  OT::Point finiteDifferenceSteps_;
   OT::Bool isParallel_ = false;
   OT::UnsignedInteger processNumber_ = 1;
   OT::Scalar evalTime_ = 0.0;

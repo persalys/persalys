@@ -43,6 +43,7 @@
 #include <QApplication>
 #include <QTreeView>
 #include <QGroupBox>
+#include <QScrollArea>
 
 using namespace OT;
 
