@@ -100,7 +100,7 @@ RUN pip3 install -U pythran && curl -fSsL https://pypi.python.org/packages/sourc
 RUN pip3 install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
 # sundials
-RUN curl -fSsL https://github.com/LLNL/sundials/archive/v5.8.0.tar.gz | tar xz && cd sundials-5.8.0 \
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.6.2.tar.gz | tar xz && cd sundials-6.6.2 \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib .. \
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
@@ -110,12 +110,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.ta
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.4.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.4.1 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.4.3.tar.gz | tar xz && cd Assimulo-Assimulo-3.4.3 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.10.4.tar.gz | tar xz && cd PyFMI-PyFMI-2.10.4 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.11.0.tar.gz | tar xz && cd PyFMI-PyFMI-2.11.0 \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -172,7 +172,7 @@ RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git ch
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.15 && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.21.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.22.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cd OMCompiler && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && cd ../.. && rm -r OpenModelica*
