@@ -1203,6 +1203,19 @@ Probabilistic analyses
 
 - Import the file python/test/t_probabilistic_analyses.py
 
+  - Check the dependency copula in probabilisitc model definition
+
+      .. image:: /developer_manual/validation/proba_model_copula.png
+          :align: center
+
+  - If the parametrization combo box index changes, the correlation matrix gets updated
+
+  - Re-run evaluation item in probaDesgin, check the model has the copula with the correct correlation matrix
+
+      .. image:: /developer_manual/validation/proba_design_eval_model.png
+          :align: center
+
+
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
 - Check all the analyses wizards -> Right click on each item and choose Modify:
