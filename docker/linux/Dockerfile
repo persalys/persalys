@@ -138,7 +138,6 @@ RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodul
 RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtsvg-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
 RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtx11extras-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
 RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qttools-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtxmlpatterns-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtxmlpatterns-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtxmlpatterns*
 RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtwayland-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
@@ -155,8 +154,8 @@ RUN curl -fSsL https://paraview.org/files/v5.11/ParaView-v5.11.2.tar.xz | tar xJ
  && mkdir build && cd build \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
   -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-8/root/usr/bin/gfortran \
-  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_USE_VTKM=OFF \
-  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so .. \
+  -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
+  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so -DPARAVIEW_USE_VTKM=OFF .. \
  && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
 
 # openturns
