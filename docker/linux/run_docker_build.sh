@@ -96,11 +96,11 @@ cp -v /usr/local/lib64/libdlib* persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libglog.so.1 persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libprimesieve.so.* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libboost* persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libmetis* persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libGKlib* persalys.AppDir/usr/lib
+cp -r /usr/local/lib/libhdf5* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
 cp -rv /usr/local/etc/ persalys.AppDir/etc
-
-#hdf5
-cp -r /usr/local/lib/libhdf5* persalys.AppDir/usr/lib
 
 # qt libs
 for libname in Qt5XcbQpa Qt5DBus Qt5Widgets Qt5Gui Qt5Test Qt5Core Qt5PrintSupport Qt5OpenGL Qt5Svg Qt5Concurrent Qt5Help Qt5Network Qt5X11Extras Qt5Sql Qt5WaylandClient
