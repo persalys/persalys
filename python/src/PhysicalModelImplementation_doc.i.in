@@ -125,6 +125,22 @@ PERSALYS_PhysicalModel_getPythonScript_doc
 
 // ---------------------------------------------------------------------
 
+%define PERSALYS_PhysicalModel_exportStandalonePythonScript_doc
+"Export the model into a Python script.
+
+In the case of metamodels the script only depends on OpenTURNS
+and is meant to be used out of Persalys.
+
+Parameters
+----------
+fileName : str
+    Path of the exported script"
+%enddef
+%feature("docstring") PERSALYS::PhysicalModelImplementation::exportStandalonePythonScript
+PERSALYS_PhysicalModel_exportStandalonePythonScript_doc
+
+// ---------------------------------------------------------------------
+
 %define PERSALYS_PhysicalModel_setCopula_doc
 "Copula accessor.
 

@@ -128,6 +128,8 @@ public:
   virtual OT::String getHtmlDescription(const bool deterministic) const;
   virtual OT::String getPythonScript() const;
 
+  void exportStandalonePythonScript(const OT::String & fileName) const;
+
   /** String converter */
   OT::String __repr__() const override;
 

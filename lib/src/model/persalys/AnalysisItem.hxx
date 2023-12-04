@@ -52,6 +52,7 @@ public slots:
   void stopAnalysis();
   void modifyAnalysis();
   void appendMetaModelItem();
+  void exportMetaModel();
   void appendDataModelItem();
   virtual void removeAnalysis();
   void extractData();
@@ -61,6 +62,7 @@ signals:
   void progressValueChanged(int);
   void modifyAnalysisRequested(AnalysisItem*);
   void dataExtractionWizardRequested(StudyItem*, Analysis);
+  void pythonMetamodelExportRequested(PhysicalModel);
 
   void numberDesignEvaluationChanged(bool);
   void designEvaluationUpdated(bool);
@@ -70,6 +72,7 @@ protected:
   Analysis analysis_;
   QAction * modifyAction_ = nullptr;
   QAction * convertAction_ = nullptr;
+  QAction * exportAction_ = nullptr;
   QAction * removeAction_ = nullptr;
 private:
   QAction * extractDataAction_ = nullptr;

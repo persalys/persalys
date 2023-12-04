@@ -436,6 +436,11 @@ String PhysicalModel::getPythonScript() const
   return getImplementation()->getPythonScript();
 }
 
+void PhysicalModel::exportStandalonePythonScript(const String & fileName) const
+{
+  getImplementation()->exportStandalonePythonScript(fileName);
+}
+
 
 /* Method save() stores the object through the StorageManager */
 void PhysicalModel::save(Advocate& adv) const

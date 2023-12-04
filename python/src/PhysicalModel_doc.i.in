@@ -12,6 +12,8 @@ PERSALYS_PhysicalModel_addOutput_doc
 PERSALYS_PhysicalModel_getFunction_doc
 %feature("docstring") PERSALYS::PhysicalModel::getPythonScript
 PERSALYS_PhysicalModel_getPythonScript_doc
+%feature("docstring") PERSALYS::PhysicalModel::exportStandalonePythonScript
+PERSALYS_PhysicalModel_exportStandalonePythonScript_doc
 %feature("docstring") PERSALYS::PhysicalModel::setCopula
 PERSALYS_PhysicalModel_setCopula_doc
 %feature("docstring") PERSALYS::PhysicalModel::getCopula

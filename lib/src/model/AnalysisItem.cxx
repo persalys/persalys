@@ -77,8 +77,13 @@ void AnalysisItem::buildActions()
     convertAction_->setStatusTip(tr("Add the metamodel in the study tree"));
     connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendMetaModelItem()));
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
-
     appendAction(convertAction_);
+
+    exportAction_ = new QAction(tr("Export metamodel"), this);
+    exportAction_->setStatusTip(tr("Export to an independent Python script"));
+    connect(exportAction_, SIGNAL(triggered()), this, SLOT(exportMetaModel()));
+    exportAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
+    appendAction(exportAction_);
   }
   else if (analysisType == "FieldMonteCarloAnalysis")
   {
@@ -227,6 +232,29 @@ void AnalysisItem::appendMetaModelItem()
   {
     getParentStudyItem()->appendMetaModelItem(regression->getResult().getMetaModel());
   }
+}
+
+
+void AnalysisItem::exportMetaModel()
+{
+  FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get());
+  KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
+  PolynomialRegressionAnalysis * regression = dynamic_cast<PolynomialRegressionAnalysis*>(analysis_.getImplementation().get());
+  PhysicalModel metamodel;
+  if (chaos)
+  {
+    metamodel = chaos->getResult().getMetaModel();
+  }
+  else if (kriging)
+  {
+    metamodel = kriging->getResult().getMetaModel();
+  }
+  else if (regression)
+  {
+    metamodel = regression->getResult().getMetaModel();
+  }
+
+  emit pythonMetamodelExportRequested(metamodel);
 }
 
 

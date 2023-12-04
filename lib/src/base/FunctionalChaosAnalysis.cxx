@@ -20,8 +20,6 @@
  */
 #include "persalys/FunctionalChaosAnalysis.hxx"
 
-#include "persalys/MetaModel.hxx"
-
 #include <openturns/LinearEnumerateFunction.hxx>
 #include <openturns/FixedStrategy.hxx>
 #include <openturns/LeastSquaresStrategy.hxx>

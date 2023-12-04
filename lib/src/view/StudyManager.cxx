@@ -231,6 +231,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     connect(item, SIGNAL(windowRequested(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
     connect(item, SIGNAL(wizardRequested(StudyItem*, Analysis)), this, SLOT(openAnalysisWizard(StudyItem*, Analysis)));
     connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
+    connect(item, SIGNAL(pythonMetamodelExportRequested(PhysicalModel)), this, SLOT(exportMetamodelPython(PhysicalModel)));
   }
 
   // do removeSubWindow if the analysis run method has been launched from a Python script
@@ -348,6 +349,26 @@ void StudyManager::exportPythonScript()
     item->exportPythonScript(fileName);
 }
 
+
+void StudyManager::exportMetamodelPython(const PhysicalModel & metamodel)
+{
+  AnalysisItem * item = qobject_cast<AnalysisItem *>(sender());
+
+  if (!item)
+  {
+    qDebug() << "StudyManager::exportMetamodelPython : item NULL\n";
+    showErrorMessage(tr("Can not export the current study"));
+    return;
+  }
+
+  const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
+                           tr("Export Python..."),
+                           FileTools::GetCurrentDir() + QDir::separator() + item->data(Qt::DisplayRole).toString(),
+                           tr("Python source files (*.py)"));
+
+  if (!fileName.isEmpty())
+    metamodel.exportStandalonePythonScript(fileName.toStdString());
+}
 
 // --------------- SAVE FILE ---------------
 

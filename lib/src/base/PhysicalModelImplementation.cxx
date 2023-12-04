@@ -31,6 +31,8 @@
 #include <openturns/IndependentCopula.hxx>
 #include <openturns/CompositeRandomVector.hxx>
 #include <openturns/ParametricPointToFieldFunction.hxx>
+#include <openturns/XMLStorageManager.hxx>
+#include <openturns/Study.hxx>
 
 using namespace OT;
 
@@ -1028,6 +1030,40 @@ String PhysicalModelImplementation::getHtmlDescription(const bool deterministic)
 String PhysicalModelImplementation::getPythonScript() const
 {
   throw NotYetImplementedException(HERE) << "In PhysicalModelImplementation::getPythonScript()";
+}
+
+
+void PhysicalModelImplementation::exportStandalonePythonScript(const String & fileName) const
+{
+  const String extension(fileName.substr(fileName.size() - 3));
+  String filenameXML(fileName);
+  if (extension == ".py")
+    filenameXML = fileName.substr(0, fileName.size() - 3);
+  filenameXML += ".xml";
+  const String basenameXML = filenameXML.substr(filenameXML.find_last_of("/\\") + 1);
+
+  // write script
+  std::ofstream pythonFile;
+  pythonFile.open (fileName);
+  pythonFile << "#!/usr/bin/env python\n";
+  pythonFile << "import openturns as ot\n";
+  pythonFile << "import os\n\n";
+  pythonFile << "import os\n\n";
+  pythonFile << "metamodel = ot.Function()\n";
+  pythonFile << "study = ot.Study()\n";
+  pythonFile << "dirname = os.path.dirname(__file__)\n";
+  pythonFile << "fn = os.path.join(dirname, \"" + basenameXML + "\")\n";
+  pythonFile << "study.setStorageManager(ot.XMLStorageManager(fn))\n";
+  pythonFile << "study.load()\n";
+  pythonFile << "study.fillObject(\"metamodel\", metamodel)\n";
+  pythonFile.close();
+
+  // export xml
+  const Function metamodel(getFunction());
+  OT::Study study;
+  study.setStorageManager(XMLStorageManager(filenameXML));
+  study.add("metamodel", metamodel);
+  study.save();
 }
 
 

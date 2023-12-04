@@ -58,6 +58,7 @@ public slots:
   // import/export/save/open/close study
   void importPythonScript(const QString& fileName="");
   void exportPythonScript();
+  void exportMetamodelPython(const PhysicalModel & metamodel);
   void saveCurrent();
   void saveAsCurrent();
   bool save(StudyItem* item);

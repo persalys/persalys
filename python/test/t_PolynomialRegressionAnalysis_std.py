@@ -3,6 +3,9 @@
 import openturns as ot
 import openturns.testing
 import persalys
+import os
+import tempfile
+import shutil
 
 # ot.Log.Show(ot.Log.DBG)
 ot.TBB.Disable()
@@ -49,6 +52,12 @@ openturns.testing.assert_almost_equal(
     3.0e-5,
 )
 
+# test export
+temp_path = tempfile.mkdtemp()
+path_py = os.path.join(temp_path, "metamodel0.py")
+analysis.getResult().getMetaModel().exportStandalonePythonScript(path_py)
+assert os.path.exists(path_py)
+shutil.rmtree(temp_path)
 
 # boston price model
 datamodel = persalys.DataModel(

@@ -42,8 +42,8 @@ MetaModel::MetaModel(const String& name)
 /* Constructor with parameters */
 MetaModel::MetaModel(const OT::String& name, const OT::Function& function)
   : PhysicalModelImplementation(name)
-  , function_(function)
 {
+  setFunction(function);
 }
 
 

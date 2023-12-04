@@ -120,6 +120,8 @@ public:
   OT::String getHtmlDescription(const bool deterministic) const;
   OT::String getPythonScript() const;
 
+  void exportStandalonePythonScript(const OT::String & fileName) const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
