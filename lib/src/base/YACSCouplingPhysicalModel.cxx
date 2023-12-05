@@ -24,7 +24,7 @@
 #include "persalys/FileMemoizeFunction.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 using namespace OT;
 
@@ -96,14 +96,14 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
     {
       const CouplingInputFile inputFile(inputFiles[j]);
       // yacs wants absolute paths
-      inFiles.push_back(boost::filesystem::absolute(inputFile.getPath()).string());
+      inFiles.push_back(std::filesystem::absolute(inputFile.getPath()).string());
     }
     const CouplingResourceFileCollection resourceFiles(step.getResourceFiles());
     for (UnsignedInteger j = 0; j < resourceFiles.getSize(); ++ j)
     {
       const CouplingResourceFile resourceFile(resourceFiles[j]);
       // yacs wants absolute paths
-      inFiles.push_back(boost::filesystem::absolute(resourceFile.getPath()).string());
+      inFiles.push_back(std::filesystem::absolute(resourceFile.getPath()).string());
     }
   }
   jobParameters().in_files(inFiles);

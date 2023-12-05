@@ -28,7 +28,6 @@
 #include <openturns/WeibullMin.hxx>
 #include <openturns/ThresholdEventImplementation.hxx>
 
-#include <boost/filesystem.hpp>
 #include <locale>
 #include <codecvt>
 

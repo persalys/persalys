@@ -219,6 +219,11 @@ if (NOT DEFINED LIB_SOVERSION)
 endif ()
 set_target_properties (persalysbase PROPERTIES VERSION ${LIB_VERSION})
 set_target_properties (persalysbase PROPERTIES SOVERSION ${LIB_SOVERSION})
+set_target_properties (persalysbase PROPERTIES CXX_STANDARD 17)
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
+  target_link_libraries (persalysbase PRIVATE stdc++fs)
+endif ()
 
 target_link_libraries (persalysbase PUBLIC ${PERSALYS_PUBLIC_LIBRARIES})
 target_link_libraries (persalysbase PRIVATE ${PERSALYS_PRIVATE_LIBRARIES})

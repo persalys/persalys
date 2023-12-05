@@ -26,7 +26,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 using namespace OT;
 
@@ -55,7 +55,7 @@ CouplingOutputFile* CouplingOutputFile::clone() const
 /* Path accessor */
 void CouplingOutputFile::setPath(const String & path)
 {
-  if (boost::filesystem::path(path).is_absolute())
+  if (std::filesystem::path(path).is_absolute())
     throw InvalidArgumentException(HERE) << "Path must be relative";
   path_ = path;
 }
