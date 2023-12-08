@@ -22,6 +22,7 @@
 #define PERSALYS_PYTHONENVIRONMENT_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include <string>
 
 namespace PERSALYS
 {
@@ -34,8 +35,8 @@ public:
 
   virtual ~PythonEnvironment();
 
-  // make sure stderr/stdout are not None
-  void ensureStandardStreams();
+  // run command as string
+  void runString(const std::string & cmd);
 };
 
 void handleExceptionTraceback();
