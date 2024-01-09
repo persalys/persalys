@@ -49,6 +49,9 @@ public:
   /** Virtual constructor */
   Input * clone() const override;
 
+  /** Comparison operator */
+  OT::Bool operator ==(const Input & other) const;
+
   OT::Distribution getDistribution() const;
   void setDistribution(const OT::Distribution & distribution);
 
@@ -76,10 +79,10 @@ protected:
   OT::String getDistributionPythonScript() const;
 
 private:
-  bool isStochastic_;
+  bool isStochastic_ = false;
   OT::Distribution distribution_;
-  OT::UnsignedInteger distributionParametersType_;
-  double finiteDifferenceStep_;
+  OT::UnsignedInteger distributionParametersType_ = 0;
+  double finiteDifferenceStep_ = 0.0;
 };
 typedef OT::Collection<Input> InputCollection;
 }

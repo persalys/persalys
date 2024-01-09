@@ -225,7 +225,7 @@ namespace PERSALYS
 
     // build solver
     Pagmo solver(problem, solverName_, startingPop);
-    solver.setGenerationNumber(generationNumber_);
+    solver.setMaximumIterationNumber(generationNumber_);
     solver.setStopCallback(&AnalysisImplementation::Stop, this);
     solver.setProgressCallback(&UpdateProgressValue, this);
     solver.setMaximumConstraintError(getMaximumConstraintError());
