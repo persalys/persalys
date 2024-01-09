@@ -42,6 +42,9 @@ public:
   /** Virtual constructor */
   Output * clone() const override;
 
+  /** Comparison operator */
+  OT::Bool operator ==(const Output & other) const;
+
   bool isSelected() const;
   void setIsSelected(const bool isSelected);
 
@@ -60,8 +63,8 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
-  bool isSelected_;
-  bool hasBeenComputed_;
+  bool isSelected_ = true;
+  bool hasBeenComputed_ = false;
 };
 typedef OT::Collection<Output> OutputCollection;
 }

@@ -37,8 +37,6 @@ static Factory<Variable> Factory_Variable;
 /* Default constructor */
 Variable::Variable()
   : PersistentObject()
-  , value_(0.)
-  , description_("")
 {
 }
 
@@ -57,7 +55,6 @@ Variable::Variable(const String & name, const double & value, const String & des
 /* Constructor with parameters */
 Variable::Variable(const String & name, const String & description)
   : PersistentObject()
-  , value_(0.)
   , description_(description)
 {
   setName(name);
@@ -69,6 +66,12 @@ Variable* Variable::clone() const
   return new Variable(*this);
 }
 
+/* Comparison operator */
+Bool Variable::operator ==(const Variable & other) const
+{
+  if (this == &other) return true;
+  return (getName() == other.getName()) && (value_ == other.value_) && (description_ == other.description_) && (unit_ == other.unit_);
+}
 
 String Variable::__repr__() const
 {

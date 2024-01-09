@@ -41,6 +41,9 @@ public:
   /** Virtual constructor */
   Variable * clone() const override;
 
+  /** Comparison operator */
+  OT::Bool operator ==(const Variable & other) const;
+
   /** String converter */
   OT::String __repr__() const override;
 
@@ -67,9 +70,9 @@ protected:
   OT::String getEscapedDescription() const;
 
 private:
-  double value_;
+  double value_ = 0.0;
   OT::String description_;
-  OT::String unit_ = "";
+  OT::String unit_;
 };
 typedef OT::Collection<Variable> VariableCollection;
 }

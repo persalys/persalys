@@ -36,8 +36,6 @@ static Factory<Output> Factory_Output;
 /* Default constructor */
 Output::Output()
   : Variable()
-  , isSelected_(true)
-  , hasBeenComputed_(false)
 {
 }
 
@@ -45,8 +43,6 @@ Output::Output()
 /* Constructor with parameters */
 Output::Output(const String& name, const String& description, const String& unit)
   : Variable(name, 0., description, unit)
-  , isSelected_(true)
-  , hasBeenComputed_(false)
 {
 }
 
@@ -54,8 +50,6 @@ Output::Output(const String& name, const String& description, const String& unit
 Output::Output(const String& name, const double& value,
                const String& description, const String& unit)
   : Variable(name, value, description, unit)
-  , isSelected_(true)
-  , hasBeenComputed_(false)
 {
 }
 
@@ -65,6 +59,13 @@ Output* Output::clone() const
   return new Output(*this);
 }
 
+
+/* Comparison operator */
+Bool Output::operator ==(const Output & other) const
+{
+  if (this == &other) return true;
+  return Variable::operator==(other) && (isSelected_ == other.isSelected_) && (hasBeenComputed_ == other.hasBeenComputed_);
+}
 
 bool Output::isSelected() const
 {

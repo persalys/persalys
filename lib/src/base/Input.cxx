@@ -49,9 +49,7 @@ Input::Input()
 /* Constructor with parameters */
 Input::Input(const String& name)
   : Variable(name)
-  , isStochastic_(false)
   , distribution_(Dirac())
-  , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
@@ -61,9 +59,7 @@ Input::Input(const String& name)
 Input::Input(const String& name, const double& value, const Distribution& distribution,
              const String& description, const String& unit)
   : Variable(name, value, description, unit)
-  , isStochastic_(false)
   , distribution_(Dirac())
-  , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
   setDistribution(distribution);
@@ -74,9 +70,7 @@ Input::Input(const String& name, const double& value, const Distribution& distri
 Input::Input(const String& name, const Distribution& distribution,
              const String& description, const String& unit)
   : Variable(name, 0., description, unit)
-  , isStochastic_(false)
   , distribution_(Dirac())
-  , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
   setDistribution(distribution);
@@ -87,9 +81,7 @@ Input::Input(const String& name, const Distribution& distribution,
 Input::Input(const String& name, const double& value,
              const String& description, const String& unit)
   : Variable(name, value, description, unit)
-  , isStochastic_(false)
   , distribution_(Dirac())
-  , distributionParametersType_(0)
   , finiteDifferenceStep_(ResourceMap::GetAsScalar("NonCenteredFiniteDifferenceGradient-DefaultEpsilon"))
 {
 }
@@ -98,6 +90,14 @@ Input::Input(const String& name, const double& value,
 Input* Input::clone() const
 {
   return new Input(*this);
+}
+
+
+/* Comparison operator */
+Bool Input::operator ==(const Input & other) const
+{
+  if (this == &other) return true;
+  return Variable::operator==(other) && (isStochastic_ == other.isStochastic_) && (distribution_ == other.distribution_) && (distributionParametersType_ == other.distributionParametersType_) && (finiteDifferenceStep_ == other.finiteDifferenceStep_);
 }
 
 
