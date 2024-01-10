@@ -101,7 +101,7 @@ RUN pip3 install -U pythran && curl -fSsL https://pypi.python.org/packages/sourc
 RUN pip3 install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
 
 # sundials
-RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.6.2.tar.gz | tar xz && cd sundials-6.6.2 \
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials-6.7.0 \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib .. \
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
@@ -134,11 +134,11 @@ RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.ta
 RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz | tar xJ && cd wayland-1.22.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtbase-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.11 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtsvg-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtx11extras-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qttools-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.11/submodules/qtwayland-everywhere-opensource-src-5.15.11.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.11 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.12/submodules/qtbase-everywhere-opensource-src-5.15.12.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.12 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.12/submodules/qtsvg-everywhere-opensource-src-5.15.12.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.12 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.12/submodules/qtx11extras-everywhere-opensource-src-5.15.12.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.12 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.12/submodules/qttools-everywhere-opensource-src-5.15.12.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.12 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.12/submodules/qtwayland-everywhere-opensource-src-5.15.12.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.12 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj && cd qwt-6.2.0 \
