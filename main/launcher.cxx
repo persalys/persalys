@@ -19,14 +19,16 @@
  *
  */
 
-#include <boost/filesystem.hpp>
+#define BOOST_PROCESS_USE_STD_FS
 #include <boost/process.hpp>
 #include <boost/program_options.hpp>
+
+#include <filesystem>
 #include <cstdlib>
 #include <iostream>
 
 namespace po = boost::program_options;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace bp = boost::process;
 
 int main(int argc, char *argv[])
@@ -52,7 +54,7 @@ int main(int argc, char *argv[])
     std::cout << "lang=" << lang << " opengl=" << opengl << " mesa=" << mesa << " wait=" << wait << std::endl;
 
   // set env
-  fs::path persalys_dir = fs::system_complete(argv[0]).parent_path();
+  fs::path persalys_dir = fs::canonical(argv[0]).parent_path();
   fs::path python_dir = persalys_dir.parent_path().parent_path().parent_path();
   if (verbose)
   {

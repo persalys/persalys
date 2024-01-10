@@ -24,7 +24,7 @@
 
 #include "openturns/XMLToolbox.hxx"
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <regex>
 
 using namespace OT;
@@ -299,8 +299,8 @@ std::map<String, std::pair<String, String> > AnsysParser::getSystems() const
 void AnsysParser::generateTemplate(const int indStep)
 {
   String name = "input" + std::to_string(indStep) + ".wbjn.in";
-  templateFileName_ = (boost::filesystem::path(modelFileName_).parent_path()
-                       / boost::filesystem::path(name)).string();
+  templateFileName_ = (std::filesystem::path(modelFileName_).parent_path()
+                       / std::filesystem::path(name)).string();
   outputFileName_ = "output" + std::to_string(indStep) + ".csv";
   generateTemplate(templateFileName_, outputFileName_);
 }

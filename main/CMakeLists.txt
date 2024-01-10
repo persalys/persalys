@@ -39,7 +39,7 @@ endif ()
 
 if (WIN32)
   add_executable (persalys_launcher launcher.cxx)
-  target_link_libraries (persalys_launcher PRIVATE Boost::filesystem Boost::program_options ws2_32)
+  target_link_libraries (persalys_launcher PRIVATE Boost::program_options ws2_32)
   set_target_properties (persalys_launcher PROPERTIES UNITY_BUILD OFF)
   install (TARGETS persalys_launcher DESTINATION bin)
 endif ()

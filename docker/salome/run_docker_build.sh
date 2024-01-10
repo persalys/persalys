@@ -24,7 +24,7 @@ cmake \
 make install
 sudo cp -r /tmp/persalys.AppDir/usr/lib/* /usr/local/lib # needed for yacs container
 make tests
-xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 60 -j8 -E "Window|Wizard|MultiObj"
+xvfb-run -s "-screen 0 1024x768x24" /home/devel/appli/salome shell -- ctest --output-on-failure --timeout 60 -j8 -E "Window|Wizard"
 
 cd /tmp
 
@@ -72,22 +72,51 @@ EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
-for libname in tbb fontconfig freetype sz gfortran quadmath pcre16 graphite2 swresample va va-drm va-x11 vdpau zvbi xvidcore webpmux wavpack vpx vorbisenc vorbis twolame ffi tasn1 nettle hogweed lz4 krb5 k5crypto krb5support xml2 cminpack event-2.0 harfbuzz re2 asound opus webp webpdemux xslt snappy minizip proxy aec double-conversion theoraenc theoradec speex shine openjp2 mp3lame gsm crystalhd ssh-gcrypt openmpt gme bluray chromaprint soxr numa ogg cairo p11-kit
+for libname in tbb fontconfig freetype sz gfortran quadmath pcre16 graphite2 swresample va va-drm va-x11 vdpau zvbi xvidcore webpmux wavpack vpx vorbisenc vorbis twolame ffi tasn1 nettle hogweed lz4 krb5 k5crypto krb5support xml2 cminpack event-2.1 harfbuzz re2 asound opus webp webpdemux xslt snappy minizip proxy aec double-conversion theoraenc theoradec speex shine openjp2 mp3lame gsm crystalhd ssh-gcrypt openmpt gme bluray chromaprint soxr numa ogg cairo p11-kit
 do
   cp -v /usr/lib/x86_64-linux-gnu/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
 cp -v /usr/lib/x86_64-linux-gnu/libQt5*.so.[0-9] persalys.AppDir/usr/lib
+cp -v /usr/lib/libqwt-qt5.so.6 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libboost* persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libhdf5_*.so.100 /usr/lib/x86_64-linux-gnu/libgmp.so.10 persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libav*.so.57 /usr/lib/x86_64-linux-gnu/libavutil.so.55 persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libicu*.so.57 persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libgnutls.so.30 /usr/lib/x86_64-linux-gnu/libpng16.so.16 /usr/lib/x86_64-linux-gnu/libjpeg.so.62 /usr/lib/x86_64-linux-gnu/libprotobuf.so.10 persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libx265.so.95 persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libx264.so.148 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libhdf5_*.so.103 /usr/lib/x86_64-linux-gnu/libgmp.so.10 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libav*.so.58 /usr/lib/x86_64-linux-gnu/libavutil.so.56 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libicu*.so.63 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libgnutls.so.30 /usr/lib/x86_64-linux-gnu/libpng16.so.16 /usr/lib/x86_64-linux-gnu/libjpeg.so.62 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libx265.so.165 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libx264.so.155 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libaom.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libcodec2.so.0.8.1 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libplc4.so /usr/lib/x86_64-linux-gnu/libnss3.so /usr/lib/x86_64-linux-gnu/libsmime3.so /usr/lib/x86_64-linux-gnu/libnspr4.so /usr/lib/x86_64-linux-gnu/libplds4.so persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libpango-1.0.so.0 /usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 /usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libbrotlidec.so.1 /usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libmpg123.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libvorbisfile.so.3 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libunistring.so.2 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/librsvg-2.so.2 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libcroco-0.6.so.3 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libfribidi.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libnettle.so.6 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libpixman-1.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libhogweed.so.4 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libidn2.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libpathplan.so.4 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libgvc.so.6 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libcgraph.so.6 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libcdt.so.5 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libthai.so.0 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libdatrie.so.1 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libxdot.so.4 persalys.AppDir/usr/lib
+cp -v /usr/lib/x86_64-linux-gnu/libltdl.so.7 persalys.AppDir/usr/lib
 
-cp -v /usr/lib/liblapack.so.3 /usr/lib/libblas.so.3 /usr/lib/libsrtp.so.0 persalys.AppDir/usr/lib
-cp -v /lib/x86_64-linux-gnu/libbz2.so.1.0 /lib/x86_64-linux-gnu/libdbus-1.so.3 /lib/x86_64-linux-gnu/liblzma.so.5 /lib/x86_64-linux-gnu/libgpg-error.so.0 /lib/x86_64-linux-gnu/libexpat.so.1 /lib/x86_64-linux-gnu/libglib-2.0.so.0 /lib/x86_64-linux-gnu/libidn.so.11 /lib/x86_64-linux-gnu/libgcrypt.so.20 persalys.AppDir/usr/lib
+
+cp -v /usr/lib/x86_64-linux-gnu/liblapack.so.3 /usr/lib/x86_64-linux-gnu/libblas.so.3 persalys.AppDir/usr/lib
+cp -v /lib/x86_64-linux-gnu/libbz2.so.1.0 /lib/x86_64-linux-gnu/libdbus-1.so.3 /lib/x86_64-linux-gnu/liblzma.so.5 /lib/x86_64-linux-gnu/libgpg-error.so.0 /lib/x86_64-linux-gnu/libexpat.so.1 /lib/x86_64-linux-gnu/libidn.so.11 /lib/x86_64-linux-gnu/libgcrypt.so.20 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so.[0-9] persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libpython3.6m.so.1.0 persalys.AppDir/usr/lib
@@ -95,7 +124,7 @@ cp -v /home/devel/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
 
 # gdb
-cp -v /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libncurses.so.5 /lib/x86_64-linux-gnu/libtinfo.so.5 persalys.AppDir/usr/lib
+cp -v /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libncurses.so.6 /lib/x86_64-linux-gnu/libtinfo.so.6 persalys.AppDir/usr/lib
 cp -v /usr/local/bin/gdb persalys.AppDir/usr/bin
 
 # python

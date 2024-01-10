@@ -43,7 +43,13 @@ int main(int argc, char *argv[])
   // Python Environment
   PythonEnvironment env;
   // make sure sys.stdout/stderr are not None on win32 because the Qt gui is disconnected from console
-  env.ensureStandardStreams();
+  const std::string streamCMD = "import sys as _sys; import io as _io; _sys.stdout = _io.StringIO() if _sys.stdout is None else _sys.stdout; _sys.stderr = _io.StringIO() if _sys.stderr is None else _sys.stderr";
+  env.runString(streamCMD);
+#ifdef PERSALYS_NSIS
+  // allow extra modules to load msvc dlls from the Python root dir
+  const std::string dllCMD = "import os; os.add_dll_directory(os.environ['PYTHONHOME'])";
+  env.runString(dllCMD);
+#endif
   {
   // Application
   QApplication app(argc, argv);

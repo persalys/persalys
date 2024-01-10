@@ -9,7 +9,7 @@ cd /tmp
 
 mkdir -p build && cd build
 MOD_PREFIX=$PWD/install
-CXXFLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -D_GLIBCXX_ASSERTIONS" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF -DUSE_SALOME=OFF \
+CXXFLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -D_GLIBCXX_ASSERTIONS -DPERSALYS_NSIS" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF -DUSE_SALOME=OFF \
   -DCMAKE_INSTALL_PREFIX=${MOD_PREFIX} \
   -DPython_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
   -DPython_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
@@ -47,7 +47,7 @@ curl -fSsL https://anaconda.org/conda-forge/assimulo/3.4.3/download/win-64/assim
 cd Lib
 curl -fSsL https://anaconda.org/conda-forge/otfmi/0.15/download/noarch/otfmi-0.15-pyh6c4a22f_0.tar.bz2 | tar xj
 cd site-packages
-curl -fsSL https://pypi.io/packages/py2.py3/p/pip/pip-20.2-py2.py3-none-any.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/py2.py3/p/pip/pip-20.3.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py2.py3/s/six/six-1.16.0-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py2.py3/p/pytz/pytz-2021.3-py2.py3-none-any.whl | bsdtar -xf-

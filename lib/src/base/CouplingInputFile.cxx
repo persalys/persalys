@@ -26,7 +26,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 using namespace OT;
 
@@ -60,7 +60,7 @@ void CouplingInputFile::setPath(const String & path)
   if (getConfiguredPath().empty())
   {
     // by default the configured path is the basename of the template path, minus the ".in" extension
-    String configuredPath(boost::filesystem::path(path).filename().string());
+    String configuredPath(std::filesystem::path(path).filename().string());
     std::size_t pos = configuredPath.find(".in");
     if (pos != std::string::npos)
       configuredPath = configuredPath.substr(0, pos);
@@ -76,7 +76,7 @@ String CouplingInputFile::getPath() const
 /* Template path accessor */
 void CouplingInputFile::setConfiguredPath(const String & configuredPath)
 {
-  if (boost::filesystem::path(configuredPath).is_absolute())
+  if (std::filesystem::path(configuredPath).is_absolute())
     throw InvalidArgumentException(HERE) << "Configured path must be relative";
   configuredPath_ = configuredPath;
 }

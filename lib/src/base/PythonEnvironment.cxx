@@ -42,13 +42,12 @@ PythonEnvironment::PythonEnvironment()
 }
 
 
-void PythonEnvironment::ensureStandardStreams()
+void PythonEnvironment::runString(const std::string & cmd)
 {
   InterpreterUnlocker iul;
   PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
   PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
-  // make sure stderr/stdout are not None
-  PyRun_String("import sys as _sys; import io as _io; _sys.stdout = _io.StringIO() if _sys.stdout is None else _sys.stdout; _sys.stderr = _io.StringIO() if _sys.stderr is None else _sys.stderr", Py_file_input, dict, dict);
+  PyRun_String(cmd.c_str(), Py_file_input, dict, dict);
   handleExceptionTraceback();
 }
 

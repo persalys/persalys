@@ -22,8 +22,6 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 
-#include <boost/filesystem.hpp>
-
 using namespace OT;
 
 namespace PERSALYS

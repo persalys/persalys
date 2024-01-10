@@ -42,6 +42,11 @@
 # either expressed or implied, of the FreeBSD Project.
 #=============================================================================
 
+# older qt versions did not provide the cmake config files
+if (NOT DEFINED QT_DEFAULT_MAJOR_VERSION)
+  set (QT_DEFAULT_MAJOR_VERSION 5)
+endif ()
+
 find_path (QWT_INCLUDE_DIR
   NAMES qwt_plot.h
   HINTS ${QT_INCLUDE_DIR}
