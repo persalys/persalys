@@ -1048,7 +1048,6 @@ void PhysicalModelImplementation::exportStandalonePythonScript(const String & fi
   pythonFile << "#!/usr/bin/env python\n";
   pythonFile << "import openturns as ot\n";
   pythonFile << "import os\n\n";
-  pythonFile << "import os\n\n";
   pythonFile << "metamodel = ot.Function()\n";
   pythonFile << "study = ot.Study()\n";
   pythonFile << "dirname = os.path.dirname(__file__)\n";
