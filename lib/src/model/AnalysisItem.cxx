@@ -334,6 +334,10 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
   {
     convertAction_->setEnabled(analysis_.hasValidResult());
   }
+  else if (message == "metamodelAvailable" && exportAction_)
+  {
+    exportAction_->setEnabled(analysis_.hasValidResult());
+  }
   else if (message == "objectRemoved")
   {
     if (hasChildren())
