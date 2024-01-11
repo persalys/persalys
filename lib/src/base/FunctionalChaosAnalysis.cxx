@@ -225,6 +225,7 @@ void FunctionalChaosAnalysis::launch()
   buildMetaModel(result_, metamodelFunction);
 
   result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
+  notify("metamodelAvailable");
 
   // post process
   try

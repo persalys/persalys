@@ -188,6 +188,7 @@ void PolynomialRegressionAnalysis::launch()
   buildMetaModel(result_, metamodelFunction);
   result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
   result_.formulas_ = formulas;
+  notify("metamodelAvailable");
 
   // validations
   validateMetaModelResult(result_, effectiveInputSample);

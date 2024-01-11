@@ -230,6 +230,7 @@ void KrigingAnalysis::launch()
 
   buildMetaModel(result_, metamodelFunction);
   result_.metaModelOutputSample_ = metamodelFunction(effectiveInputSample);
+  notify("metamodelAvailable");
 
   // validations
   validateMetaModelResult(allResults, effectiveInputSample);

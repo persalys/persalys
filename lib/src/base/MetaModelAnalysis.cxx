@@ -383,8 +383,6 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
 
 void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
-  notify("metamodelAvailable");
-
   // check
   if (analyticalValidation_ || testSampleValidation_ || kFoldValidation_ || leaveOneOutValidation_)
   {
