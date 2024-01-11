@@ -363,7 +363,7 @@ void StudyManager::exportMetamodelPython(const PhysicalModel & metamodel)
 
   const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
                            tr("Export Python..."),
-                           FileTools::GetCurrentDir() + QDir::separator() + item->data(Qt::DisplayRole).toString(),
+                           FileTools::GetCurrentDir() + QDir::separator() + item->data(Qt::DisplayRole).toString() + QString(".py"),
                            tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
