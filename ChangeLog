@@ -1,3 +1,7 @@
+= 15.1 release (2024-01-12)
+
+ * Added metamodel export
+
 = 15.0 release (2023-10-19)
 
  * Allow choose FMU ME/CS type (some provide both)
