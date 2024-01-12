@@ -1621,9 +1621,6 @@ Probabilistic analyses
 
     - change the scale value of x1 to 2, then finish
 
-      .. image:: /developer_manual/validation/kriging_scale_wizard.png
-          :align: center
-
     - change the amplitude value to 2
 
       .. image:: /developer_manual/validation/kriging_wizard_scale_amplitude_updated.png
@@ -1658,6 +1655,24 @@ Probabilistic analyses
         .. image:: /developer_manual/validation/kriging_validation_result.png
             :align: center
 
+    - right click on the kriging item: choose 'Export metamodel'
+
+      - default file name is kriging.py
+      - click on 'Save'
+      - check kriging.py file content
+
+        .. code-block:: python
+
+            #!/usr/bin/env python
+            import openturns as ot
+            import os
+            metamodel = ot.Function()
+            study = ot.Study()
+            dirname = os.path.dirname(__file__)
+            fn = os.path.join(dirname, "kriging.xml")
+            study.setStorageManager(ot.XMLStorageManager(fn))
+            study.load()
+            study.fillObject("metamodel", metamodel)
 
     - right click on the kriging item: choose 'Convert metamodel into physical model'
 
@@ -1676,7 +1691,7 @@ Probabilistic analyses
       - click on 'export as model'
       - select 'kriging', analysis parameters are displayed
       - click on 'Finish'
-      - a new item kirigin appears in the tree view
+      - a new item kriging appears in the tree view
 
       .. image:: /developer_manual/validation/metamodel_export_wizard.png
           :align: center
@@ -1688,13 +1703,13 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
 
-      - default kriging parameters: Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1, Amplitude 1, continue
+      - default kriging parameters: Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1;1, Amplitude 1, continue
 
       - metamodel validation: for the computation of the predictivity factor Q2, only analytically is checked, finish
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button and click immediately on the Stop button
-      - The Validation tab contains only Analytical tab
+      - The Result window does not contain the Validation tab
 
   - Functional chaos: chaos_1 item
 

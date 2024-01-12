@@ -520,8 +520,13 @@ data model item or the design of experiments item.
 The context menu of this item contains these actions:
   - **Rename**: Rename the analysis
   - **Modify**: Reopen the setting window to change the analysis parameters
-  - **Convert metamodel into physical model** (default: disabled, enabled when the analysis
-    is successfully finished): Add the metamodel in the study tree
+  - **Convert metamodel into physical model** (default: disabled,
+    enabled when the analysis is successfully finished): Add the
+    metamodel in the study tree
+  - **Export metamodel** (default: disabled, enabled when the analysis
+    is successfully finished): Export the metamodel in a standalone
+    OpenTURNS study file (XML) which can be accessed by running the
+    generated python script
   - **Remove**: Remove the analysis from the study
 
 This item is associated with a window displaying the list of the parameters, a
