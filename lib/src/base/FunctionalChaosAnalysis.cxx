@@ -325,10 +325,8 @@ void FunctionalChaosAnalysis::postProcessFunctionalChaosResult(const Sample& inp
 void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
   if (stopRequested_)
-  {
-    analyticalValidation_ = false;
     return;
-  }
+
   informationMessage_ = "The analytical validation is running.";
   notify("informationMessageUpdated");
 

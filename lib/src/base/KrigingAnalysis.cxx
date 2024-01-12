@@ -357,10 +357,8 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
 void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
   if (stopRequested_)
-  {
-    analyticalValidation_ = false;
     return;
-  }
+
   informationMessage_ = "The analytical validation is running.";
   notify("informationMessageUpdated");
 
