@@ -420,7 +420,7 @@ void CodeHighlighter::highlightBlock(const QString &text)
     return;
   QRegularExpressionMatchIterator index;
   // Do other syntax formatting
-  for (const HighlightingRule &rule : qAsConst(highlightingRules)) {
+  for (const HighlightingRule &rule : std::as_const(highlightingRules)) {
     QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
     while (matchIterator.hasNext()) {
       QRegularExpressionMatch match = matchIterator.next();
@@ -433,11 +433,10 @@ void CodeHighlighter::highlightBlock(const QString &text)
 // Return a QTextCharFormat with the given attributes.
 QTextCharFormat CodeHighlighter::format(const QString &colorName, const QString &style)
 {
-  QColor color;
-  color.setNamedColor(colorName);
+  const QColor fgColor(colorName);
 
   QTextCharFormat format;
-  format.setForeground(color);
+  format.setForeground(fgColor);
 
   if(style.contains("bold"))
     format.setFontWeight(QFont::Bold);

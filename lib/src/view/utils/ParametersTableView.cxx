@@ -85,7 +85,7 @@ ParametersTableView::ParametersTableView(const QStringList names,             //
           pos += lineLength_;
           // add new line
           if(pos < value.size())
-            value.insert(value.indexOf(QRegExp("[\\s,+-]+"), pos)+1, '\n');
+            value.insert(value.indexOf(QRegularExpression("[\\s,+-]+"), pos) + 1, '\n');
         }
         value.replace(QString(","), QString(", "));
       }

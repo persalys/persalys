@@ -377,7 +377,7 @@ QColor PVXYChartViewWidget::getRepresentationColor(const int reprIndex) const
   {
     OSS oss;
     oss << "PVXYChartViewWidget::getRepresentationColor: the number of stored colors is "
-        << reprColors_.size()
+        << (long)reprColors_.size()
         << ". It must be "
         << getView()->getNumberOfRepresentations();
     throw InvalidArgumentException(HERE) << oss.str();

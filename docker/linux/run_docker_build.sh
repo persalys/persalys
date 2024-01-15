@@ -103,9 +103,9 @@ cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
 cp -rv /usr/local/etc/ persalys.AppDir/etc
 
 # qt libs
-for libname in Qt5XcbQpa Qt5DBus Qt5Widgets Qt5Gui Qt5Test Qt5Core Qt5PrintSupport Qt5OpenGL Qt5Svg Qt5Concurrent Qt5Help Qt5Network Qt5X11Extras Qt5Sql Qt5WaylandClient
+for libname in XcbQpa DBus Widgets Gui Test Core PrintSupport OpenGL Svg Concurrent Help Network X11Extras Sql WaylandClient
 do
-  cp -v /usr/local/lib/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
+  cp -v /usr/local/lib/libQt5${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
 cp -v /usr/local/lib/libqwt.so.6.* persalys.AppDir/usr/lib
 cp -rv /usr/local/lib/qt/plugins persalys.AppDir/usr/lib

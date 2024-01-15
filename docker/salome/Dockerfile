@@ -37,7 +37,7 @@ RUN curl -fSsL https://cmake.org/files/v3.16/cmake-3.16.3.tar.gz | tar xz && cd 
 RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/V7_5_3;sf=tgz" | tar xz && cd occt-V7_5_3 && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1 && cd - && rm -r occt*
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.21.3 \
+RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.22 \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # libbatch

@@ -425,7 +425,7 @@ BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList 
   QStringList visibleReprNames;
   for (int i=0; i<inputNames.size(); ++i) {
     if (visibleReprNames.size() < MaxVisibleVariableNumber && checked[i])
-      visibleReprNames << qAsConst(inputNames[i]);}
+      visibleReprNames << std::as_const(inputNames[i]);}
 
   ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames, visibleReprNames, this);
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), plotWidget, SLOT(setVariablesToShow(QStringList)));

@@ -392,9 +392,9 @@ void PVViewWidget::setRepresentationLabels(const QStringList& newLabels, const i
   {
     OSS oss;
     oss << "PVViewWidget::setRepresentationLabels: the number of given labels "
-        << newLabels.size()
+        << (long)newLabels.size()
         << " does not match the number of variables of the representation "
-        << labels.size() / 2;
+        << (long)labels.size() / 2;
     throw InvalidArgumentException(HERE) << oss.str();
   }
 
