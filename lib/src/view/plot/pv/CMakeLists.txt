@@ -61,10 +61,6 @@ install ( TARGETS persalysplotpv
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 
-# https://gitlab.kitware.com/paraview/paraview/issues/19358
-if (CMAKE_LIBRARY_OUTPUT_DIRECTORY STREQUAL "")
-  set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ".")
-endif ()
 # https://kitware.github.io/paraview-docs/latest/cxx/PluginHowto.html
 paraview_plugin_scan (
   PLUGIN_FILES "${CMAKE_CURRENT_SOURCE_DIR}/plugin/paraview.plugin"

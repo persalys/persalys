@@ -73,7 +73,7 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz
 RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.11.0.tar.gz | tar xz && cd oneTBB-2021.11.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v11.1.tar.gz | tar xz && cd primesieve-11.1 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.0.tar.gz | tar xz && cd primesieve-12.0 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -84,21 +84,21 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimag
  && appimagetool --version
 
 # openssl
-RUN curl -fSsL https://www.openssl.org/source/openssl-3.1.4.tar.gz | tar xz && cd openssl-3.1.4 \
+RUN curl -fSsL https://www.openssl.org/source/openssl-3.2.1.tar.gz | tar xz && cd openssl-3.2.1 \
  && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz | tar xz && cd Python-3.11.6 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.11.8/Python-3.11.8.tgz | tar xz && cd Python-3.11.8 \
  && ./configure --enable-shared --enable-optimizations CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install -U pip wheel setuptools "cython<3" pybind11 flake8 meson
-RUN git clone -b v1.23.5 --depth 1 --recursive https://github.com/numpy/numpy.git && cd numpy \
- && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
-RUN pip3 install -U pythran && curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.9.3.tar.gz | tar xz --warning=no-timestamp && cd scipy-1.9.3 \
- && python3 setup.py build ${MAKEFLAGS} > /dev/null 2>&1 && python3 setup.py install > /dev/null 2>&1 && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
-RUN pip3 install lxml pandas matplotlib ipython sphinx numpydoc dill --upgrade
+RUN curl -fSsL https://pypi.python.org/packages/source/n/numpy/numpy-1.23.5.tar.gz | tar xz && cd numpy-1.23.5 \
+  && pip3 install . && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
+RUN echo -e 'libdir=/usr/lib64\nName: OPENBLAS\nDescription: BLAS\nVersion: 3\nLibs: -L${libdir} -lblas -llapack' > /usr/lib64/pkgconfig/openblas.pc
+RUN curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.11.4.tar.gz | tar xz && cd scipy-1.11.4 \
+ && pip3 install . && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
+RUN pip3 install pandas matplotlib ipython sphinx numpydoc dill meson flake8 "cython<3" --upgrade --quiet
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials-6.7.0 \
@@ -122,13 +122,13 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.11.0.t
 # boost
 RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2 | tar xj && cd boost_1_83_0 \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
- && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-serialization --with-program_options > /dev/null 2>&1 && cd - && rm -r boost*
+ && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-serialization --with-program_options --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
 # pagmo
 RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.0.tar.gz | tar xz && cd pagmo2-2.19.0 && cmake -DPAGMO_WITH_EIGEN3=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
 
 # ninja
-RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja-1.11.1 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1
+RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja-1.11.1 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1 && cd - && rm -r ninja*
 
 # wayland
 RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz | tar xJ && cd wayland-1.22.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
@@ -147,35 +147,32 @@ RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.2.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.11/ParaView-v5.11.2.tar.xz | tar xJ && cd ParaView-v5.11.2 \
- && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/10335.patch | patch -p1 -d VTK \
- && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/10349.patch | patch -p1 -d VTK \
- && curl -L https://gitlab.kitware.com/vtk/vtk/-/merge_requests/10350.patch | patch -p1 -d VTK \
- && mkdir build && cd build \
- && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_PREFIX=/usr/local/ \
-  -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/gfortran \
+RUN curl -fSsL https://paraview.org/files/v5.12/ParaView-v5.12.0.tar.xz | tar xJ && cd ParaView-v5.12.0 \
+ && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
-  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so -DPARAVIEW_USE_VTKM=OFF .. \
- && make install > /dev/null 2>&1 && cd ../.. && rm -r ParaView*
+  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so -DPARAVIEW_USE_VTKM=OFF -DPARAVIEW_USE_FORTRAN=OFF \
+  -DPARAVIEW_PLUGINS_DEFAULT=OFF -DPARAVIEW_PLUGIN_ENABLE_BagPlotViewsAndFilters=ON -B build . \
+ && make install -C build > /dev/null 2>&1 && cd - && rm -r ParaView*
 
 # openturns
-RUN git clone https://github.com/openturns/openturns.git && cd openturns && git checkout v1.22 \
+RUN git clone -b v1.22 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" \
-    -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+    -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . \
+ && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
-RUN git clone https://github.com/openturns/otmorris.git && cd otmorris && git checkout v0.15 \
- && cmake -DUSE_SPHINX=OFF -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . \
+RUN git clone -b v0.15 --depth 1 https://github.com/openturns/otmorris.git && cd otmorris \
+ && cmake -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip3 install git+https://github.com/openturns/otfmi@v0.15 && python3 -c "import otfmi"
+RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.2 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.22.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.22.2 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
- && cd OMCompiler && autoconf && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
- && cd ../.. && rm -r OpenModelica*
+ && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
+ && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
 
 # devel user
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
