@@ -12,7 +12,7 @@ cd /tmp
 mkdir -p build && cd build
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
-  -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -D_GLIBCXX_ASSERTIONS -DPERSALYS_APPIMAGE" \
+  -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -DPERSALYS_APPIMAGE" \
   -DSWIG_COMPILE_FLAGS="-Wno-unused-parameter -Wno-shadow" \
   -DPython_EXECUTABLE=/usr/local/bin/python3 \
   -DSPHINX_FLAGS="-W -T -j8" \

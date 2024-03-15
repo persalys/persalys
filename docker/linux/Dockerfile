@@ -156,7 +156,7 @@ RUN curl -fSsL https://paraview.org/files/v5.12/ParaView-v5.12.0.tar.xz | tar xJ
 
 # openturns
 RUN git clone -b v1.22 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
- && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DCMAKE_CXX_FLAGS="-D_GLIBCXX_ASSERTIONS" \
+ && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
     -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 

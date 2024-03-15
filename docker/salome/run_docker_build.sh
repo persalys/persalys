@@ -12,7 +12,6 @@ cd /tmp
 mkdir -p build && cd build
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
-  -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS" \
   -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files \
   -DSalomeGUI_DIR=/home/devel/local/adm_local/cmake_files/ \
   -DSalomeYACS_DIR=/home/devel/local/adm/cmake/ \
