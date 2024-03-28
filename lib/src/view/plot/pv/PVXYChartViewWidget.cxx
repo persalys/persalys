@@ -160,8 +160,8 @@ void PVXYChartViewWidget::setAxisRange(const vtkAxis::Location ax, const double 
 {
   // set range
   chartXY_->GetAxis(ax)->SetBehavior(1);
-  chartXY_->GetAxis(ax)->SetMinimum(minValue);
-  chartXY_->GetAxis(ax)->SetMaximum(maxValue);
+  chartXY_->GetAxis(ax)->SetMinimum(minValue - std::abs(0.05*minValue));
+  chartXY_->GetAxis(ax)->SetMaximum(maxValue + std::abs(0.05*maxValue));
   getView()->resetDisplay();
 }
 
