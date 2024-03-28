@@ -111,7 +111,17 @@ QVariant DependenciesTableModel::data(const QModelIndex &index, int role) const
   else if (role == Qt::UserRole + 1)
   {
     const UnsignedInteger groupSize = copula_.getCopulaCollection()[index.row()].getDescription().getSize();
-    return (groupSize > 2 ? QStringList() << tr("Normal") : TranslationManager::GetAvailableCopulas()) << tr("Inference result");
+    if (groupSize > 2)
+    {
+      return QStringList() << tr("Normal");
+    }
+    else
+    {
+      QStringList fullList = TranslationManager::GetAvailableCopulas();
+      fullList.removeAll(tr("Independent"));
+      fullList << tr("Inference result");
+      return fullList;
+    }
   }
   else if (role == Qt::BackgroundRole)
   {
