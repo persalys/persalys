@@ -532,6 +532,9 @@ void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
                                          QBrush(colors[j].c_str()).color(),
                                          QPen(colors[j].c_str()).color(),
                                          QSize(7, 7));
+      setAxisTitle(QwtPlot::xBottom, QString(allFronts[j].getDescription()[idx1].c_str()));
+      setAxisTitle(QwtPlot::yLeft, QString(allFronts[j].getDescription()[idx2].c_str()));
+
       plotCurve(sample, QPen(colors[j].c_str()).color(),
                 allFronts[j].getDimension()==2 ? QwtPlotCurve::Lines : QwtPlotCurve::Dots,
                 symbol, QString("front"+QString::number(j)));
