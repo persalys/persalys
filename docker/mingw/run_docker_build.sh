@@ -57,6 +57,8 @@ curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-
 curl -fsSL https://pypi.io/packages/cp311/n/numpy/numpy-1.23.5-cp311-cp311-win_amd64.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/cp311/s/scipy/scipy-1.9.3-cp311-cp311-win_amd64.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/cp311/p/pandas/pandas-1.5.3-cp311-cp311-win_amd64.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py2.py3/o/openpyxl/openpyxl-3.1.2-py2.py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py3/e/et_xmlfile/et_xmlfile-1.1.0-py3-none-any.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
