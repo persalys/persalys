@@ -34,6 +34,7 @@ namespace PERSALYS
  *
  * The class that implement the evaluation of an analytical function.
  */
+
 class PERSALYS_BASE_API YACSEvaluation : public OT::EvaluationImplementation
 {
   CLASSNAME
@@ -87,6 +88,16 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
+  /** Stop callback */
+  typedef  OT::Bool (*StopCallback)(void * state);
+  virtual void setStopCallback(StopCallback callBack, void * state = nullptr);
+
+  void setIsRunning(const OT::Bool & isRunning) const {isRunning_ = isRunning;};
+  const OT::Bool getIsRunning(){return isRunning_;};
+
+  void setDump(const std::string & dump) const {dump_ = dump;};
+  const std::string getDump(){return dump_;};
+
 private:
   OT::Point inputValues_;
   OT::Description inDescription_;
@@ -94,6 +105,9 @@ private:
   ydefx::JobParametersProxy jobParams_;
   ydefx::PyStudyFunction studyFunction_;
   py2cpp::PyPtr jobModel_;
+  std::pair< StopCallback, void *> stopCallback_;
+  mutable OT::Bool isRunning_ = false;
+  mutable OT::String dump_;
 };
 }
 #endif

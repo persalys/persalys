@@ -78,6 +78,14 @@ NEW_PERSALYSEXCEPTION( InvalidValueException );
  */
 NEW_PERSALYSEXCEPTION( IOException );
 
+
+/**
+ * @class DetachedException
+ * @brief Raised when detaching YACSEvaluation
+ * @internal
+ */
+NEW_PERSALYSEXCEPTION( DetachedException );
+
 #undef NEW_PERSALYSEXCEPTION
 }
 #endif

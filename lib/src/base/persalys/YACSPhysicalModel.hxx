@@ -85,7 +85,8 @@ protected:
   virtual OT::String getJobParamsPythonScript() const;
 
 private:
-  YACSEvaluation evaluation_;
+  mutable YACSEvaluation evaluation_;
+  mutable OT::Function functionCache_;
 };
 }
 #endif

@@ -56,6 +56,8 @@ public:
   bool hasValidResult() const override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
+  static bool StopRequested(void* state);
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
 
