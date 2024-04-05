@@ -89,8 +89,12 @@ void DistributionsForInferenceWidget::buildInterface()
   addComboBox_->setEnabled(variables_.getSize() <= 2);
 
   buttonsLayout->addWidget(addComboBox_);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
   connect(addComboBox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
-  connect(addComboBox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
+#else
+  connect(addComboBox_, SIGNAL(activated(QString)), tableModel_, SLOT(appendDistribution(QString)));
+#endif
+  connect(addComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(addSelectedDistribution(int)));
 
   // Remove button
   QPushButton * removeButton = new QPushButton(tr("Remove"));
