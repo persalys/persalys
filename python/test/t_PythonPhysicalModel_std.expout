@@ -25,13 +25,13 @@ F = persalys.Input('F', 0, dist_F, 'Traction load')
 G = persalys.Output('G', 'deviation')
 inputs = [R, F]
 outputs = [G]
-code = """
+code = r'''
 from math import pi
 
 def _exec(R, F):
     G = 2*R-F/(pi*100.0)/0.
     return G
-"""
+'''
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myStudy.add(myPhysicalModel)
 plan_0 = persalys.FixedDesignOfExperiment('plan_0', myPhysicalModel)

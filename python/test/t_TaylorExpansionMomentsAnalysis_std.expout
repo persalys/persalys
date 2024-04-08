@@ -43,14 +43,14 @@ Y0 = persalys.Output('Y0', '')
 fake_Y0 = persalys.Output('fake_Y0', '')
 inputs = [X0, X1]
 outputs = [Y0, fake_Y0]
-code = """
+code = r'''
 from math import sin
 
 def _exec(X0, X1):
     Y0 = sin(X0) + 8*X1
     fake_Y0 = X0
     return Y0, fake_Y0
-"""
+'''
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myStudy.add(myPhysicalModel)
 aTaylor = persalys.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)

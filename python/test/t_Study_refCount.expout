@@ -9,10 +9,10 @@ X0 = persalys.Input('X0', 0, '')
 Y0 = persalys.Output('Y0', '')
 inputs = [X0]
 outputs = [Y0]
-code = """
+code = r'''
 def _exec(X0):
     Y0 = X0
-    return Y0"""
+    return Y0'''
 PhysicalModel_0 = persalys.PythonPhysicalModel('PhysicalModel_0', inputs, outputs, code)
 Study_0.add(PhysicalModel_0)
 

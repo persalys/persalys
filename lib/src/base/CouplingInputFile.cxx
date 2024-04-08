@@ -123,8 +123,8 @@ void CouplingInputFile::simulateInput(VariableCollection varColl) const
   code << "import os\n";
   code << "import openturns.coupling_tools as otct\n";
   code << "import persalys\n";
-  code << "input_file = persalys.CouplingInputFile('"<<EscapePath(getPath())<<"')\n";
-  code << "input_file.setConfiguredPath('" << EscapePath(getConfiguredPath())<<"')\n";
+  code << "input_file = persalys.CouplingInputFile(r'"<<getPath()<<"')\n";
+  code << "input_file.setConfiguredPath(r'" << getConfiguredPath()<<"')\n";
   code << "input_file.setVariables("
        << Parameters::GetOTDescriptionStr(getVariableNames())<<", "
        << Parameters::GetOTDescriptionStr(getTokens())<<", "
