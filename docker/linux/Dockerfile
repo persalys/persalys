@@ -3,7 +3,7 @@ MAINTAINER jschueller
 
 # utils
 RUN yum -y install epel-release centos-release-scl \
- && yum -y install wget git patch zip unzip bzip2 bsdtar perl perl-IPC-Cmd subversion gettext autoconf automake libtool sudo bison flex make which file \
+ && yum -y install wget git patch zip unzip bzip2 bsdtar perl perl-IPC-Cmd subversion gettext autoconf automake libtool sudo make which file \
   pcre-devel pcre2-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel \
   zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel gpg libffi-devel openssl-devel \
   libX11-devel libXt-devel libXext-devel libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel \
@@ -22,8 +22,12 @@ ENV LANG="en_US.UTF-8" MAKEFLAGS="-j8"
 ENV PATH=/opt/rh/devtoolset-9/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-9/root/usr/lib64:/opt/rh/devtoolset-9/root/usr/lib
 WORKDIR /usr/local/src
 
+# bison/flex
+RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison-3.8.2 && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
+RUN curl -fsSL https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz | tar xz && cd flex-2.6.4 && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1  && cd - && rm -r flex*
+
 # swig
-RUN curl -fSsL https://github.com/swig/swig/archive/v4.1.1.tar.gz | tar xz && cd swig-4.1.1 \
+RUN curl -fSsL https://github.com/swig/swig/archive/v4.2.1.tar.gz | tar xz && cd swig-4.2.1 \
  && ./autogen.sh && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
@@ -33,7 +37,7 @@ RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/release
 RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.13.tar.gz | tar xz && cd Ipopt-releases-3.14.13 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
-RUN curl -fsSL https://github.com/coin-or/CoinUtils/archive/refs/tags/releases/2.11.10.tar.gz | tar xz && cd CoinUtils-releases-2.11.10 && ./configure --prefix=/usr/local --with-blas-lib='-lblas' --with-lapack-lib='-llapack' --enable-dependency-linking && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r CoinUtils*
+RUN curl -fsSL https://github.com/coin-or/CoinUtils/archive/refs/tags/releases/2.11.11.tar.gz | tar xz && cd CoinUtils-releases-2.11.11 && ./configure --prefix=/usr/local --with-blas-lib='-lblas' --with-lapack-lib='-llapack' --enable-dependency-linking && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r CoinUtils*
 RUN curl -fsSL https://github.com/coin-or/Osi/archive/refs/tags/releases/0.108.9.tar.gz | tar xz && cd Osi-releases-0.108.9 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Osi*
 RUN curl -fsSL https://github.com/coin-or/Clp/archive/refs/tags/releases/1.17.9.tar.gz | tar xz && cd Clp-releases-1.17.9 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Clp*
 RUN curl -fsSL https://github.com/coin-or/Cgl/archive/refs/tags/releases/0.60.8.tar.gz | tar xz && cd Cgl-releases-0.60.8 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Cgl*
