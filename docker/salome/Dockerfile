@@ -21,7 +21,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz | tar xz
  && ./configure --enable-shared && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
 
 # pip
-RUN curl -fsSLO https://bootstrap.pypa.io/pip/3.6/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools numpy==1.15.1 scipy==0.19.1 psutil packaging openpyxl
+RUN curl -fsSLO https://bootstrap.pypa.io/pip/3.6/get-pip.py && python3 get-pip.py && pip install -U pip wheel setuptools numpy==1.15.1 scipy==0.19.1 psutil packaging
 
 # gdb
 RUN curl -fSsL https://ftp.gnu.org/gnu/gdb/gdb-8.2.1.tar.gz |tar xz && cd gdb-8.2.1 && ./configure --disable-tui --with-python=no && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r gdb*
