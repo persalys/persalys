@@ -1,7 +1,7 @@
 /**
  *  @brief QObject to translate words
  *
- *  Copyright 2015-2023 EDF-Phimeca
+ *  Copyright 2015-2024 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
