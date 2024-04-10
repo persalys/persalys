@@ -188,8 +188,11 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
   // set Background color
   const QString defaultColor = index.model()->data(index, Qt::BackgroundRole).value<QColor>().name();
   editor->lineEdit()->setStyleSheet("QLineEdit {background: " + defaultColor + ";}");
-
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
   connect(editor, SIGNAL(textActivated(QString)), this, SLOT(emitCommitData()));
+#else
+  connect(editor, SIGNAL(activated(QString)), this, SLOT(emitCommitData()));
+#endif
   return editor;
 }
 

@@ -94,17 +94,6 @@ private:
   bool stopRequested_;
 };
 
-inline OT::String EscapePath(const OT::FileName & filename)
-{
-  OT::FileName escapedPath = std::regex_replace(filename, std::regex("\\\\"), "\\\\\\\\");
-  return escapedPath;
-}
-
-inline OT::String EscapeQuotes(OT::String code)
-{
-  return std::regex_replace(code, std::regex("\'"), "\\\'");
-}
-
 inline OT::Description EscapeSpecialCharacters(const OT::Description & desc)
 {
   OT::Description escapedDesc;

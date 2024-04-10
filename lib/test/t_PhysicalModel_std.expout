@@ -28,10 +28,10 @@ C = persalys.Input('C', 0, dist_C, 'Valued thermal energy')
 Ep = persalys.Output('Ep', 'Primary energy savings')
 inputs = [Q, E, C]
 outputs = [Ep]
-code = """
+code = r'''
 def _exec(Q, E, C):
     Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))
-    return Ep"""
+    return Ep'''
 pythonModel1 = persalys.PythonPhysicalModel('pythonModel1', inputs, outputs, code)
 study1.add(pythonModel1)
 

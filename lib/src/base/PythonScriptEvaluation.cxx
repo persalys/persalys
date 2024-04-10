@@ -221,7 +221,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "from concurrent.futures import ProcessPoolExecutor, as_completed\n";
   oss << "import os\n";
   oss << "import sys\n";
-  oss << "sys.path.insert(0, '" << EscapePath(tempDir) << "')\n";
+  oss << "sys.path.insert(0, r'" << tempDir << "')\n";
   oss << "import " << code_mod <<"\n";
   oss << "if __name__== '__main__':\n";
   oss << "    if sys.platform == 'win32':\n";

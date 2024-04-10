@@ -388,7 +388,7 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
   OSS cmd;
   cmd << "\"" << getExecutableFileName() << "\""
       << " -B -F \"" << modelFileName_
-      << "\" -R input" << EscapePath(std::to_string(indStep)) << ".wbjn";
+      << "\" -R input" << std::to_string(indStep) << ".wbjn";
   cs.setCommand(cmd);
   cs.setIsShell(true);
   cs.setEnvironment(Description({"PYTHONPATH", "PYTHONHOME"}), Description(2, ""));
@@ -414,7 +414,7 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
       code << getOutputVariables()[i].getName() << ",";
     code << getOutputVariables()[getOutputVariables().getSize()-1].getName();
   }
-  cs.setCode(EscapeQuotes(code));
+  cs.setCode(code);
 
   csColl[indStep] = cs;
   model->setSteps(csColl);

@@ -1192,6 +1192,7 @@ void PhysicalModelImplementation::save(Advocate & adv) const
   adv.saveAttribute("outputs_", outputs_);
   adv.saveAttribute("composedCopula_", composedCopula_);
   adv.saveAttribute("meshModel_", meshModel_);
+  adv.saveAttribute("finiteDifferenceSteps_", finiteDifferenceSteps_);
   adv.saveAttribute("isParallel_", isParallel_);
   adv.saveAttribute("evalTime_", evalTime_);
   adv.saveAttribute("processNumber_", processNumber_);
@@ -1207,6 +1208,8 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("outputs_", outputs_);
   adv.loadAttribute("composedCopula_", composedCopula_);
   adv.loadAttribute("meshModel_", meshModel_);
+  if(adv.hasAttribute("finiteDifferenceSteps_"))
+    adv.loadAttribute("finiteDifferenceSteps_", finiteDifferenceSteps_);
   adv.loadAttribute("isParallel_", isParallel_);
   adv.loadAttribute("evalTime_", evalTime_);
   if(adv.hasAttribute("processNumber_"))

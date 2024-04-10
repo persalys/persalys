@@ -27,6 +27,7 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
+#include <QFrame>
 
 using namespace OT;
 
@@ -78,26 +79,36 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
   quantileSpinBox_->setDecimals(8);
   quantLayout->addWidget(quantileSpinBox_, 0, 3);
 
+  // Splitter
+  QFrame* line = new QFrame();
+  line->setGeometry(QRect(/* ... */));
+  line->setFrameShape(QFrame::HLine); // Replace by VLine for vertical line
+  line->setFrameShadow(QFrame::Sunken);
+  //QSplitter * splitter = new QSplitter(Qt::Horizontal);
+  //quantLayout->addWidget(splitter, 1, 0, 1, 5);
+  quantLayout->addWidget(line, 1, 0, 1, 5);
+
   // CI Level
-  label = new QLabel(tr("Confidence\ninterval level"));
-  quantLayout->addWidget(label, 1, 0);
+  label = new QLabel(tr("Variable confidence\ninterval level"));
+  quantLayout->addWidget(label, 2, 0);
 
   ciLevelSpinBox_ = new DoubleSpinBox;
   label->setBuddy(ciLevelSpinBox_);
   ciLevelSpinBox_->setMinimum(0.0);
   ciLevelSpinBox_->setMaximum(1.0);
   ciLevelSpinBox_->setSingleStep(0.01);
-  quantLayout->addWidget(ciLevelSpinBox_, 1, 1);
+  quantLayout->addWidget(ciLevelSpinBox_, 2, 1);
 
   // CI
-  label = new QLabel(tr("Confidence\ninterval"));
-  quantLayout->addWidget(label, 1, 2);
+  label = new QLabel(tr("Variable confidence\ninterval"));
+  quantLayout->addWidget(label, 2, 2);
   ciLabel_ = new QLabel();
-  quantLayout->addWidget(ciLabel_, 1, 3);
+  quantLayout->addWidget(ciLabel_, 2, 3);
 
 
   quantLayout->setColumnStretch(1, 2);
   quantLayout->setColumnStretch(3, 2);
+  quantLayout->setColumnStretch(5, 5);
 
   connect(probaSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(probaValueChanged(double)));
   connect(quantileSpinBox_, SIGNAL(valueChanged(double)), this, SLOT(quantileValueChanged(double)));

@@ -139,12 +139,12 @@ X1 = persalys.Input('X1', 2, dist_X1, '')
 Y0 = persalys.Output('Y0', '')
 inputs = [X0, X1]
 outputs = [Y0]
-code = """
+code = r'''
 import time
 def _exec(X0,X1):
     Y0 = 1/(X0+X1)
     return Y0
-"""
+'''
 aModelPhys2 = persalys.PythonPhysicalModel('aModelPhys2', inputs, outputs, code)
 anOTStudy.add(aModelPhys2)
 values = [[0.9, 1.1],

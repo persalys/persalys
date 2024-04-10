@@ -234,11 +234,7 @@ String PythonPhysicalModel::getPythonScript() const
   oss << "inputs = " << Parameters::GetOTDescriptionStr(getInputNames(), false) << "\n";
   oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
 
-  // escape triple quotes, backslashes
-  String escaped_code = std::regex_replace(getCode(), std::regex("\\\\"), "\\\\\\\\");
-  escaped_code = std::regex_replace(escaped_code, std::regex("\"\"\""), "\\\\\"\\\\\"\\\\\"");
-
-  oss << "code = \"\"\"\n" + escaped_code + "\"\"\"\n";
+  oss << "code = r'''\n" + getCode() + "'''\n";
 
   oss << getName() + " = persalys.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
   if (isParallel())

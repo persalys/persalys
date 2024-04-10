@@ -273,7 +273,7 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
   }
   Description description(2);
   description[0] = tr("Value").toStdString();
-  description[1] = tr("Weight").toStdString();
+  description[1] = tr("Weight (>0, optional)").toStdString();
   sample.setDescription(description);
   model_ = new WeightTableModel(sample, this);
   connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
@@ -285,19 +285,32 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
 
 void UserDefinedWizard::addValue()
 {
-  Point newpoint(model_->columnCount());
-  const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount()-1, 0)));
-  newpoint[0] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
-
-  Sample sample(model_->getSample());
-  Point proba(sample.getMarginal(1).asPoint());
-  // if sum < 1 : p = 1 - sum
-  // if sum >= 1 : p = 0
-  newpoint[1] = 1.0 - std::min(std::accumulate(proba.begin(), proba.end(), 0.0), 1.0);
-
-  sample.add(newpoint);
-  model_->updateData(sample);
-
+  if (proxy_->rowCount() && model_->columnCount()) {
+    Point newpoint(model_->columnCount());
+    const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount()-1, 0)));
+    newpoint[0] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
+    Sample sample(model_->getSample());
+    Point proba(sample.getMarginal(1).asPoint());
+    if (proba.getDimension())
+      newpoint[1] = proba[proba.getDimension()-1];
+    else
+      newpoint[1] = 1;
+    sample.add(newpoint);
+    model_->updateData(sample);
+  }
+  else // Table has been emptied
+  {
+    Point point(2);
+    point[0] = 0;
+    point[1] = 1;
+    Sample sample(0,2);
+    sample.add(point);
+    Description description(2);
+    description[0] = tr("Value").toStdString();
+    description[1] = tr("Weight (>0, optional)").toStdString();
+    sample.setDescription(description);
+    model_->updateData(sample);
+  }
   check();
 }
 

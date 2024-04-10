@@ -82,8 +82,10 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       const CouplingInputFile inputFile(inputFiles[j]);
       if (inputFile.getPath().empty())
         continue;
-      oss << offset << "input_file" << j << " = persalys.CouplingInputFile('"<<EscapePath(inputFile.getPath())<<"')\n";
-      oss << offset << "input_file" << j <<".setConfiguredPath('" << EscapePath(inputFile.getConfiguredPath())<<"')\n";
+      oss << offset << "input_file" << j << " = persalys.CouplingInputFile(r'"
+          << inputFile.getPath() << "')\n";
+      oss << offset << "input_file" << j <<".setConfiguredPath(r'"
+          << inputFile.getConfiguredPath() << "')\n";
       if (inputFile.getVariableNames().getSize() > 0)
         oss << offset << "input_file" << j <<".setVariables("
             << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "
@@ -98,7 +100,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       const CouplingResourceFile resourceFile(resourceFiles[j]);
       if (resourceFile.getPath().empty())
         continue;
-      oss << offset << "resource_file" << j << " = persalys.CouplingResourceFile('"<<EscapePath(resourceFile.getPath())<<"')\n";
+      oss << offset << "resource_file" << j << " = persalys.CouplingResourceFile(r'"
+          << resourceFile.getPath() << "')\n";
       oss << offset << "resource_files.append(resource_file"<<j<<")\n";
     }
     const CouplingOutputFileCollection outputFiles(step.getOutputFiles());
@@ -108,7 +111,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       const CouplingOutputFile outputFile(outputFiles[j]);
       if (outputFile.getPath().empty())
         continue;
-      oss << offset << "output_file" << j << " = persalys.CouplingOutputFile('"<<EscapePath(outputFile.getPath())<<"')\n";
+      oss << offset << "output_file" << j << " = persalys.CouplingOutputFile(r'"
+          << outputFile.getPath() << "')\n";
       if (outputFile.getVariableNames().getSize() > 0)
         oss << offset << "output_file" << j
 	    <<".setVariables("
@@ -120,10 +124,11 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
       oss << offset << "output_files.append(output_file"<<j<<")\n";
     }
     // escape backslashes and single quotes
-    oss << offset << "step" << i << " = persalys.CouplingStep('"<<EscapeQuotes(EscapePath(step.getCommand()))<<"', input_files, resource_files, output_files)\n";
+    oss << offset << "step" << i << " = persalys.CouplingStep(r'"
+        << step.getCommand() << "', input_files, resource_files, output_files)\n";
     oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True": "False") << ")\n";
     if(!step.getCode().empty())
-      oss << offset << "step" << i << ".setCode('" << step.getEscapedCode() << "')\n";
+      oss << offset << "step" << i << ".setCode(\"" << step.getEscapedCode() << "\")\n";
     oss << offset << "step" << i << ".setEnvironment("
         << Parameters::GetOTDescriptionStr(step.getEnvironmentKeys()) << ", "
         << Parameters::GetOTDescriptionStr(step.getEnvironmentValues()) << ")\n";
@@ -223,7 +228,7 @@ void CouplingPhysicalModel::updateCode()
   code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
   code << "    global workdir\n";
   if(!workDir_.empty())
-    code << "    workdir = os.path.join('"+EscapeQuotes(EscapePath(workDir_))+"', 'persalys_' + checksum.hexdigest())\n";
+    code << "    workdir = os.path.join(r'" << workDir_ << "', 'persalys_' + checksum.hexdigest())\n";
   else
     code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
   code << "    if not os.path.exists(workdir):\n";
@@ -386,7 +391,8 @@ String CouplingPhysicalModel::getPythonScript() const
   oss << getStepsMacro();
   oss << getName() + " = persalys." << getClassName() << "('" << getName() << "', inputs, outputs, steps)\n";
   oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True": "False") << ")\n";
-  oss << getName() + ".setCacheFiles('" << EscapePath(getCacheInputFile()) << "', '"<<EscapePath(getCacheOutputFile()) <<"')\n";
+  oss << getName() + ".setCacheFiles(r'" << getCacheInputFile()
+      << "', r'" << getCacheOutputFile() <<"')\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;
