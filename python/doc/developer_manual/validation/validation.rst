@@ -2212,3 +2212,17 @@ YACS model
           return Y0
 
 - change X0 and X1 values and check Y0 value
+
+- create a probalistic model and a probablitic design of experiments:
+
+  - default size: 100
+
+- evaluate the DoE, click run and quickly stop the analysis
+
+  - a message says that the job has been detached.
+
+  - save the study, close persalys
+
+  - re-open persalys and relaunch the analysis
+
+  - the DoE gets evaluated almost instantly

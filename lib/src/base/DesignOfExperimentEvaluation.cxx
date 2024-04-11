@@ -111,6 +111,12 @@ void DesignOfExperimentEvaluation::initialize()
 }
 
 
+bool DesignOfExperimentEvaluation::StopRequested(void* state)
+{
+  DesignOfExperimentEvaluation * p_it = reinterpret_cast<DesignOfExperimentEvaluation*>(state);
+  return p_it->stopRequested_;
+}
+
 void DesignOfExperimentEvaluation::launch()
 {
   // check
@@ -147,6 +153,17 @@ void DesignOfExperimentEvaluation::launch()
   TimeCriteria timeCriteria;
 
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
+
+#ifdef PERSALYS_HAVE_YACS
+  // YACS stopCallback
+  MemoizeEvaluation * evalM = dynamic_cast<MemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
+  if (evalM)
+  {
+    YACSEvaluation * eval = dynamic_cast<YACSEvaluation*>(evalM->getEvaluation().getImplementation().get());
+    if (eval)
+      eval->setStopCallback(&StopRequested, this);
+  }
+#endif
 
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
@@ -186,6 +203,10 @@ void DesignOfExperimentEvaluation::launch()
       blockOutputSample.setDescription(getInterestVariables());
       blockOutputSample = blockOutputSample.getMarginal(getInterestVariables());
       blockInputSample = blockInputSample.select(ex.getSucceededIndices());
+    }
+    catch (const DetachedException &)
+    {
+      throw DetachedException(HERE) << "__DETACHED_EXCEPTION__";
     }
     catch (const std::exception& ex)
     {

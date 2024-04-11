@@ -24,6 +24,7 @@
 #include <openturns/BatchFailedException.hxx>
 #include "persalys/InterpreterUnlocker.hxx"
 #include "persalys/BaseTools.hxx"
+#include <thread> //std::this_thread
 #include <memory> //std::unique_ptr
 #include <cmath> //std::nan
 
@@ -39,11 +40,6 @@ static Factory<YACSEvaluation> Factory_YACSEvaluation;
 /* Default constructor */
 YACSEvaluation::YACSEvaluation(const String & script)
   : EvaluationImplementation()
-  , inputValues_()
-  , inDescription_()
-  , outDescription_()
-  , jobParams_()
-  , studyFunction_()
 {
   if (!script.empty())
     setContent(script);
@@ -133,7 +129,6 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
 
   Sample result(inS.getSize(), getOutputDimension());
   result.setDescription(getOutputVariablesNames());
-
   py2cpp::PyPtr modelToUse;
   if(nullptr == jobModel_.get() )
   {
@@ -147,12 +142,38 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   }
   ydefx::Launcher l;
   std::unique_ptr<ydefx::Job> myJob;
-  myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction_, jobSample, jobParams_));
+  if (!isRunning_)
+  {
+    myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction_, jobSample, jobParams_));
+    setIsRunning(true);
+  }
+  else
+  {
+    myJob.reset(l.connectJob(dump_, jobSample));
+  }
   if(myJob)
   {
-    myJob->wait();
-    if(!myJob->fetch())
+    double progress = myJob->progress();
+    while(progress < 1.0)
+    {
+      if (stopCallback_.first)
+      {
+        const Bool stop = stopCallback_.first(stopCallback_.second);
+        if (stop) {
+          setDump(myJob->dump());
+          throw DetachedException(HERE) << "Job has been detached";
+        }
+      }
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+      progress = myJob->progress();
+    }
+    if (progress >= 1.0)
+      setIsRunning(false);
+
+    if(!myJob->fetch()){
+      setIsRunning(false);
       throw NotDefinedException(HERE) << myJob->lastError();
+    }
 
     // get results
     UnsignedInteger sampleSize = jobSample.maxSize();
@@ -258,6 +279,10 @@ void YACSEvaluation::setJobModel(const py2cpp::PyPtr& model)
   jobModel_ = model;
 }
 
+void YACSEvaluation::setStopCallback(StopCallback callBack, void * state)
+{
+  stopCallback_ = std::pair<StopCallback, void *>(callBack, state);
+}
 
 /* Method save() stores the object through the StorageManager */
 void YACSEvaluation::save(Advocate & adv) const
@@ -269,6 +294,8 @@ void YACSEvaluation::save(Advocate & adv) const
   for(const std::string& f : inFiles)
     listInputFiles.add(f);
   adv.saveAttribute("inputFiles_", listInputFiles);
+  adv.saveAttribute("dump_", dump_);
+  adv.saveAttribute("isRunning__", isRunning_);
 }
 
 
@@ -285,6 +312,10 @@ void YACSEvaluation::load(Advocate & adv)
   for(const std::string& f : listInputFiles)
     inFiles.push_back(f);
   jobParams_.in_files(inFiles);
+  if (adv.hasAttribute("dump_"))
+    adv.loadAttribute("dump_", dump_);
+  if (adv.hasAttribute("isRunning_"))
+    adv.loadAttribute("isRunning__", isRunning_);
 }
 
 

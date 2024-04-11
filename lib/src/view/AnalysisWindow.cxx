@@ -143,13 +143,22 @@ void AnalysisWindow::initializeWidgets()
   // if an error has occurred
   if (!analysisItem_->getAnalysis().getErrorMessage().empty())
   {
-    // progress bar value
-    progressBar_->setValue(100);
+    QString message;
+    if (analysisItem_->getAnalysis().getErrorMessage() == "__DETACHED_EXCEPTION__")
+    {
+      message = tr("No results yet, analysis has been detached. Click Run to reattach.");
+      messageLabel_->setMessage(message);
+    }
+    else
+    {
+      // progress bar value
+      progressBar_->setValue(100);
 
-    // messages
-    QString errorMessage = tr("No results are available. An error has occurred during the execution of the analysis.") + "\n";
-    errorMessage += analysisItem_->getAnalysis().getErrorMessage().c_str();
-    messageLabel_->setErrorMessage(errorMessage);
+      // messages
+      message = tr("No results are available. An error has occurred during the execution of the analysis.") + "\n";
+      message += analysisItem_->getAnalysis().getErrorMessage().c_str();
+      messageLabel_->setErrorMessage(message);
+    }
   }
   else // if no error
   {

@@ -160,16 +160,20 @@ void YACSPhysicalModel::updateData()
     else
       newOutputs[i] = Output(outputName);
   }
+  functionCache_ = Function();
   PhysicalModelImplementation::setOutputs(newOutputs);
 }
 
 
 Function YACSPhysicalModel::generateFunction(const Description & outputNames) const
 {
-  YACSEvaluation anEvaluation(evaluation_);
-  anEvaluation.setOutputVariablesNames(outputNames);
-
-  return MemoizeFunction(Function(anEvaluation));
+  if (!functionCache_.getEvaluation().getImplementation()->isActualImplementation())
+  {
+    YACSEvaluation anEvaluation(evaluation_);
+    anEvaluation.setOutputVariablesNames(outputNames);
+    functionCache_ = MemoizeFunction(anEvaluation);
+  }
+  return functionCache_;
 }
 
 
