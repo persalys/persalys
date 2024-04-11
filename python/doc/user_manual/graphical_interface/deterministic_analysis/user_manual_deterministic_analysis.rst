@@ -250,6 +250,8 @@ Its context menu has the following actions:
 This item is associated with a window showing the parameter list, a progress bar
 and Run/Stop buttons, to launch or stop the analysis.
 
+In case of a **YACSPhysicalModel** clicking the **Stop** button **detaches** the evaluation, confirmed by the display of a corresponding message in the evaluation window, under the progress bar. The current block will get evaluated. You **must** reattach the analysis to evaluate next blocks, so it is advisable to proceed with only one block for this given configuration: simply set the blocksize equal to the sample size. You can save and safely close the study/persalys. To later **reattach** the evaluation and eventually get the results *if* the analysis is complete, simply press the **Run** button again.
+
 .. image:: /user_manual/graphical_interface/deterministic_analysis/analysisWindow.png
     :align: center
 
