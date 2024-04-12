@@ -94,7 +94,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two SobolAnalysis must be equal");
   }
 
@@ -121,7 +121,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two SRCAnalysis must be equal");
   }
 
@@ -143,7 +143,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==SRCAnalysis("analysis", model).getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == SRCAnalysis("analysis", model).getParameters();
     QVERIFY2(analysisEquality, "The two SRCAnalysis must be equal");
   }
 };

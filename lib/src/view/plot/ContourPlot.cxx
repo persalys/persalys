@@ -45,7 +45,7 @@ ContourPlot::ContourPlot(const Collection<Drawable> &drawables, QWidget *parent)
 void ContourPlot::updateContour(const Distribution &distribution, const bool isPDF)
 {
   if (distribution.getDimension() != 2)
-    throw InvalidArgumentException(HERE)<< "In plotContour: distribution dimension must be 2";
+    throw InvalidArgumentException(HERE) << "In plotContour: distribution dimension must be 2";
 
   // plot
   if (isPDF)

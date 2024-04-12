@@ -28,32 +28,33 @@
 
 namespace PERSALYS
 {
-  struct SysInfo {
-    OT::String text;
-    OT::String type;
-    bool selected;
-    SysInfo();
-  };
+struct SysInfo
+{
+  OT::String text;
+  OT::String type;
+  bool selected;
+  SysInfo();
+};
 
-  class PERSALYS_MODEL_API AnsysSystemTableModel : public QAbstractTableModel
-  {
-    Q_OBJECT
-  public:
-    AnsysSystemTableModel(QObject *parent = nullptr);
-    int columnCount(const QModelIndex & parent = QModelIndex()) const;
-    int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    QVariant data(const QModelIndex & index, int role) const;
-    bool setData(const QModelIndex & index, const QVariant & value, int role);
-    Qt::ItemFlags flags(const QModelIndex & index) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+class PERSALYS_MODEL_API AnsysSystemTableModel : public QAbstractTableModel
+{
+  Q_OBJECT
+public:
+  AnsysSystemTableModel(QObject *parent = nullptr);
+  int columnCount(const QModelIndex & parent = QModelIndex()) const;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const;
+  QVariant data(const QModelIndex & index, int role) const;
+  bool setData(const QModelIndex & index, const QVariant & value, int role);
+  Qt::ItemFlags flags(const QModelIndex & index) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    void loadData(AnsysParser* parser);
+  void loadData(AnsysParser* parser);
 
-    QStringList getSystems() const;
+  QStringList getSystems() const;
 
-  private:
-    QMap <QString, SysInfo> sysInfos_;
-    QStringList sysInfoKeysSorted_;
-  };
+private:
+  QMap <QString, SysInfo> sysInfos_;
+  QStringList sysInfoKeysSorted_;
+};
 }
 #endif

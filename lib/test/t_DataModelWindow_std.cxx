@@ -94,14 +94,14 @@ private slots:
     {
       QString name_i(model->getInputNames()[i].c_str());
       QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i] + 1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
     col = model->getOutputColumns();
     for (UnsignedInteger i = 0; i < col.getSize(); ++i)
     {
       QString name_i(model->getOutputNames()[i].c_str());
       QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i] + 1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
 
     // resize column
@@ -127,7 +127,7 @@ private slots:
     // check
 
     // change number of variables
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().topLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().topLeft() + QPoint(5, 2));
     QVERIFY2(model->getInputColumns().contains(4) == true, "wrong input columns");
 
     variableModel->setData(variableModel->index(0, 4), Qt::Unchecked, Qt::CheckStateRole);
@@ -200,13 +200,13 @@ private slots:
     {
       QString name_i(inDesc[i].c_str());
       QVERIFY2(variableModel->data(variableModel->index(0, inCol[i])) == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(inCol[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
+      QVERIFY2(sampleTable->model()->headerData(inCol[i] + 1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
     for (UnsignedInteger i = 0; i < outCol.getSize(); ++i)
     {
       QString name_i(outDesc[i].c_str());
       QVERIFY2(variableModel->data(variableModel->index(0, outCol[i])) == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(outCol[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
+      QVERIFY2(sampleTable->model()->headerData(outCol[i] + 1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
 
     // change file name
@@ -234,14 +234,14 @@ private slots:
     {
       QString name_i(model->getInputNames()[i].c_str());
       QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i] + 1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
     col = model->getOutputColumns();
     for (UnsignedInteger i = 0; i < col.getSize(); ++i)
     {
       QString name_i(model->getOutputNames()[i].c_str());
       QVERIFY2(variableModel->data(variableModel->index(0, col[i])) == name_i, "wrong name in variable Table");
-      QVERIFY2(sampleTable->model()->headerData(col[i]+1, Qt::Horizontal) == name_i, "wrong name in sample Table");
+      QVERIFY2(sampleTable->model()->headerData(col[i] + 1, Qt::Horizontal) == name_i, "wrong name in sample Table");
     }
   }
 };

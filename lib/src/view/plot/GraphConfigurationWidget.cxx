@@ -61,7 +61,10 @@ GraphConfigurationWidget::GraphConfigurationWidget(const QVector<PlotWidget *> &
   frameLayout_->addWidget(label, 0, 0);
 
   titleLineEdit_ = new QLineEdit;
-  connect(titleLineEdit_, &QLineEdit::textChanged, [=](const QString& text) {plotWidgets_[plotIndex_]->setTitle(text);});
+  connect(titleLineEdit_, &QLineEdit::textChanged, [ = ](const QString & text)
+  {
+    plotWidgets_[plotIndex_]->setTitle(text);
+  });
   frameLayout_->addWidget(titleLineEdit_, 0, 1);
 
   propertiesTabWidget_ = new QTabWidget;
@@ -85,7 +88,10 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
     gridLayoutTab->addWidget(label, 0, 0);
 
     axisLabelLineEdit_[i] = new QLineEdit;
-    connect(axisLabelLineEdit_[i], &QLineEdit::textChanged, [=](const QString& text) {plotWidgets_[plotIndex_]->setAxisTitle(Axes[i], text);});
+    connect(axisLabelLineEdit_[i], &QLineEdit::textChanged, [ = ](const QString & text)
+    {
+      plotWidgets_[plotIndex_]->setAxisTitle(Axes[i], text);
+    });
     gridLayoutTab->addWidget(axisLabelLineEdit_[i], 0, 1);
 
     // min
@@ -93,7 +99,10 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
     gridLayoutTab->addWidget(label, 1, 0);
 
     axisMinValueLineEdit_[i] = new ValueLineEdit;
-    connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {updateRange(Axes[i]);});
+    connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [ = ]()
+    {
+      updateRange(Axes[i]);
+    });
     gridLayoutTab->addWidget(axisMinValueLineEdit_[i], 1, 1);
 
     // max
@@ -101,7 +110,10 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
     gridLayoutTab->addWidget(label, 2, 0);
 
     axisMaxValueLineEdit_[i] = new ValueLineEdit;
-    connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {updateRange(Axes[i]);});
+    connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [ = ]()
+    {
+      updateRange(Axes[i]);
+    });
     gridLayoutTab->addWidget(axisMaxValueLineEdit_[i], 2, 1);
 
     // label direction
@@ -116,7 +128,10 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
         hLayout->addWidget(label);
         hLayout->addWidget(labelOrientation, 1);
         gridLayoutTab->addLayout(hLayout, 3, 0, 1, 2);
-        connect(labelOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int idx) {plotWidgets_[plotIndex_]->setXLabelOrientation(idx);});
+        connect(labelOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), [ = ](int idx)
+        {
+          plotWidgets_[plotIndex_]->setXLabelOrientation(idx);
+        });
       }
       axisMinValueLineEdit_[i]->setEnabled(false);
       axisMaxValueLineEdit_[i]->setEnabled(false);
@@ -129,7 +144,10 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
       QToolButton * resetButton = new QToolButton;
       resetButton->setIcon(QIcon(":/images/view-refresh.svg"));
       resetButton->setToolTip(tr("Reset axis ranges"));
-      connect(resetButton, &QToolButton::clicked, [=]() {plotWidgets_[plotIndex_]->resetAxisRanges();});
+      connect(resetButton, &QToolButton::clicked, [ = ]()
+      {
+        plotWidgets_[plotIndex_]->resetAxisRanges();
+      });
       gridLayoutTab->addWidget(resetButton, 3, 1, Qt::AlignRight);
     }
     propertiesTabWidget_->addTab(tabVerticalAxis, Axes[i] == QwtPlot::xBottom ? tr("X-axis") : tr("Y-axis"));
@@ -191,7 +209,10 @@ void GraphConfigurationWidget::addExportLayout()
 {
   QHBoxLayout * exportLayout = new QHBoxLayout;
   QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
-  connect(button, &QPushButton::clicked, [=]() {plotWidgets_[plotIndex_]->exportPlot();});
+  connect(button, &QPushButton::clicked, [ = ]()
+  {
+    plotWidgets_[plotIndex_]->exportPlot();
+  });
   exportLayout->addWidget(button);
   exportLayout->addStretch();
 
@@ -423,9 +444,11 @@ BoxPlotGraphSetting::BoxPlotGraphSetting(BoxPlot *plotWidget, const QStringList 
 
   TitledComboBox * varComboBox = new TitledComboBox("-- " + tr("Select") + " --");
   QStringList visibleReprNames;
-  for (int i=0; i<inputNames.size(); ++i) {
+  for (int i = 0; i < inputNames.size(); ++i)
+  {
     if (visibleReprNames.size() < MaxVisibleVariableNumber && checked[i])
-      visibleReprNames << std::as_const(inputNames[i]);}
+      visibleReprNames << std::as_const(inputNames[i]);
+  }
 
   ListWidgetWithCheckBox * varListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", inputNames, visibleReprNames, this);
   connect(varListWidget, SIGNAL(checkedItemsChanged(QStringList)), plotWidget, SLOT(setVariablesToShow(QStringList)));

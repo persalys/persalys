@@ -50,12 +50,12 @@ Observations::Observations(const String& name, const PhysicalModel& physicalMode
 
 /* Constructor with parameters */
 Observations::Observations(const String &name,
-    const PhysicalModel &physicalModel,
-    const String &fileName,
-    const Indices &inputColumns,
-    const Indices &outputColumns,
-    const Description &inputNames,
-    const Description &outputNames)
+                           const PhysicalModel &physicalModel,
+                           const String &fileName,
+                           const Indices &inputColumns,
+                           const Indices &outputColumns,
+                           const Description &inputNames,
+                           const Description &outputNames)
   : DataModel(name)
 {
   physicalModel_ = physicalModel;

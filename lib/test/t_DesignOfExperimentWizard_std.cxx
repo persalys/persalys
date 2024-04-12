@@ -69,7 +69,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==doe.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == doe.getParameters();
     QVERIFY2(analysisEquality, "The two GridDesignOfExperiment must be equal");
   }
 
@@ -102,7 +102,7 @@ private slots:
     Point val2(3);
     val2[0] = bounds.getLowerBound()[1] + 100;
     val2[2] = bounds.getUpperBound()[1] + 300;
-    val2[1] = (val2[2] + val2[0])*0.5;
+    val2[1] = (val2[2] + val2[0]) * 0.5;
     values.add(val2);
     values.add(Point(1, 4500));
     GridDesignOfExperiment doe("analysis", model_, values);
@@ -128,7 +128,7 @@ private slots:
     // check table behavior
     QVERIFY2(doeModel->data(doeModel->index(0, 0), Qt::CheckStateRole) == Qt::Unchecked, "Header must be unchecked");
     for (int i = 1; i < 3; ++i)
-      QVERIFY2(doeModel->data(doeModel->index(i, 0), Qt::CheckStateRole)== Qt::Checked, "Rows must be checked");
+      QVERIFY2(doeModel->data(doeModel->index(i, 0), Qt::CheckStateRole) == Qt::Checked, "Rows must be checked");
     QVERIFY2(doeModel->data(doeModel->index(3, 0), Qt::CheckStateRole) == Qt::Unchecked, "Last row must be unchecked");
     QVERIFY2(doeModel->getDesignOfExperiment().getOriginalInputSample().getSize() == 6, "Wrong points number");
     QVERIFY2(doeModel->data(doeModel->index(1, 0)) == "Q", "wrong name");
@@ -162,7 +162,7 @@ private slots:
     doeModel->setData(doeModel->index(3, 5), "Deltas =", Qt::EditRole);
     QVERIFY2(doeModel->data(doeModel->index(3, 6)) == "-", "wrong delta");
 
-    doeModel->setData(doeModel->index(3, 4), bounds.getUpperBound()[2]*2, Qt::EditRole);
+    doeModel->setData(doeModel->index(3, 4), bounds.getUpperBound()[2] * 2, Qt::EditRole);
     QVERIFY2(doeModel->data(doeModel->index(3, 6)) == QString::number(bounds.getUpperBound()[2], 'g', 12), "wrong delta");
     QVERIFY2(doeModel->data(doeModel->index(3, 0), Qt::ForegroundRole) != QColor(Qt::red), "wrong color");
     QVERIFY2(doeModel->data(doeModel->index(3, 0), Qt::ToolTipRole).toString().isEmpty(), "wrong tooltip");
@@ -178,13 +178,13 @@ private slots:
     QVERIFY2(doeModel->data(doeModel->index(2, 6)) == QString::number(delta2, 'g', 12), "wrong delta");
 
     // change Delta
-    doeModel->setData(doeModel->index(1, 6), delta*2, Qt::EditRole);
+    doeModel->setData(doeModel->index(1, 6), delta * 2, Qt::EditRole);
     QVERIFY2(doeModel->data(doeModel->index(1, 6)) == QString::number(delta, 'g', 12), "wrong delta");
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
     QVERIFY2(label->text() == "12", "wrong DOE size Label");
 
-    doeModel->setData(doeModel->index(1, 6), delta*0.5, Qt::EditRole);
-    QVERIFY2(doeModel->data(doeModel->index(1, 6)) == QString::number(delta*0.5, 'g', 12), "wrong delta");
+    doeModel->setData(doeModel->index(1, 6), delta * 0.5, Qt::EditRole);
+    QVERIFY2(doeModel->data(doeModel->index(1, 6)) == QString::number(delta * 0.5, 'g', 12), "wrong delta");
     doeModel->setData(doeModel->index(1, 5), "Levels =", Qt::EditRole);
     QVERIFY2(doeModel->data(doeModel->index(1, 6)) == "3", "wrong level");
     QVERIFY2(label->text() == "18", "wrong DOE size Label");
@@ -213,7 +213,7 @@ private slots:
     QVERIFY2(doeModel->getDesignOfExperiment().getValues()[2] == Point(1, 4600), "wrong values");
     doeModel->setData(doeModel->index(3, 2), 4500, Qt::EditRole);
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==doe.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == doe.getParameters();
     QVERIFY2(analysisEquality, "The two GridDesignOfExperiment must be equal");
   }
 
@@ -241,7 +241,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==doe.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == doe.getParameters();
     QVERIFY2(analysisEquality, "The two ProbabilisticDesignOfExperiment must be equal");
   }
 
@@ -270,7 +270,7 @@ private slots:
     QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==doe.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == doe.getParameters();
     QVERIFY2(analysisEquality, "The two ImportedDesignOfExperiment must be equal");
   }
 
@@ -334,7 +334,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==doe.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == doe.getParameters();
     QVERIFY2(analysisEquality, "The two ImportedDesignOfExperiment must be equal");
 
     remove("normal.csv");
@@ -356,12 +356,12 @@ private slots:
     QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     buttonGroup->button(DesignOfExperimentIntroPage::Probabilistic)->click();
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
-    bool analysisEquality = wizard.getAnalysis().getParameters()==ProbabilisticDesignOfExperiment("analysis", model_).getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == ProbabilisticDesignOfExperiment("analysis", model_).getParameters();
     QVERIFY2(analysisEquality, "The two ProbabilisticDesignOfExperiment must be equal");
 
     buttonGroup->button(DesignOfExperimentIntroPage::Import)->click();
     QVERIFY2(wizard.nextId() == 3, "Next page ID must be 3");
-    analysisEquality = wizard.getAnalysis().getParameters()==ImportedDesignOfExperiment("analysis", model_).getParameters();
+    analysisEquality = wizard.getAnalysis().getParameters() == ImportedDesignOfExperiment("analysis", model_).getParameters();
     QVERIFY2(analysisEquality, "The two ImportedDesignOfExperiment must be equal");
   }
 };

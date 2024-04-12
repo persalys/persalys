@@ -109,7 +109,7 @@ void SobolAnalysis::setConfidenceLevel(const Scalar level)
   if (!(level >= 0.0) || !(level < 1.0))
     throw InvalidArgumentException(HERE) << "Confidence level value should be in ]0,1[. Here, confidence level=" << level;
   confidenceLevel_ = level;
- }
+}
 
 
 void SobolAnalysis::initialize()

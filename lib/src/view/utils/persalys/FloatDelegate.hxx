@@ -29,36 +29,36 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_UTILS_API FloatDelegate : public QItemDelegate
+class PERSALYS_UTILS_API FloatDelegate : public QItemDelegate
+{
+  Q_OBJECT
+public:
+  FloatDelegate(QObject *parent = nullptr)
+    : QItemDelegate(parent)
   {
-    Q_OBJECT
-  public:
-    FloatDelegate(QObject *parent = nullptr)
-      : QItemDelegate(parent)
-    {
-    }
+  }
 
-    QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override
-    {
-      DoubleSpinBox * editor = new DoubleSpinBox(parent);
-      return editor;
-    }
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override
+  {
+    DoubleSpinBox * editor = new DoubleSpinBox(parent);
+    return editor;
+  }
 
 
-    void setEditorData(QWidget * editor, const QModelIndex & index) const override
-    {
-      DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
-      double value = index.model()->data(index, Qt::EditRole).toDouble();
-      comboBox->setValue(value);
-    }
+  void setEditorData(QWidget * editor, const QModelIndex & index) const override
+  {
+    DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
+    double value = index.model()->data(index, Qt::EditRole).toDouble();
+    comboBox->setValue(value);
+  }
 
 
-    void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override
-    {
-      DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
-      model->setData(index, QString::number(comboBox->value()), Qt::EditRole);
-    }
+  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override
+  {
+    DoubleSpinBox * comboBox = static_cast<DoubleSpinBox*>(editor);
+    model->setData(index, QString::number(comboBox->value()), Qt::EditRole);
+  }
 
-  };
+};
 }
 #endif

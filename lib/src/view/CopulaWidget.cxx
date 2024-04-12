@@ -164,20 +164,21 @@ void CopulaWidget::updateParameters()
     corrTableView->setModel(corrTableModel);
     groupBoxLayout->addWidget(corrTableView, 1, 0);
 
-    connect(paramComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+    connect(paramComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [ = ](int index)
+    {
       switch(index)
       {
-      case CorrelationTableModel::Spearman:
-        corrTableModel->setType(CorrelationTableModel::Spearman);
-        break;
-      case CorrelationTableModel::Correlation:
-        corrTableModel->setType(CorrelationTableModel::Correlation);
-        break;
-      case CorrelationTableModel::Kendall:
-        corrTableModel->setType(CorrelationTableModel::Kendall);
-        break;
-      default:
-        throw InvalidArgumentException(HERE) << "Unknown correlation type";
+        case CorrelationTableModel::Spearman:
+          corrTableModel->setType(CorrelationTableModel::Spearman);
+          break;
+        case CorrelationTableModel::Correlation:
+          corrTableModel->setType(CorrelationTableModel::Correlation);
+          break;
+        case CorrelationTableModel::Kendall:
+          corrTableModel->setType(CorrelationTableModel::Kendall);
+          break;
+        default:
+          throw InvalidArgumentException(HERE) << "Unknown correlation type";
       }
     });
     connect(corrTableModel, SIGNAL(dataUpdated(OT::Distribution)), this, SLOT(updateCopulaFromCorrTable(OT::Distribution)));

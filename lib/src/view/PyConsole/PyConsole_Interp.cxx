@@ -61,7 +61,7 @@ PyConsole_Interp::~PyConsole_Interp()
 
 /*!
   \brief Performs specific actions before each Python command
-  
+
   Sets the variable "__IN_SALOME_GUI_CONSOLE" to True.
   This is not attached to a module (like salome_iapp.IN_SALOME_GUI_CONSOLE)
   since modules are shared across all interpreters in SALOME.
@@ -72,7 +72,7 @@ int PyConsole_Interp::beforeRun()
 {
   return PyRun_SimpleString("__builtins__.__IN_SALOME_GUI_CONSOLE=True");
 }
- 
+
 /*!
   \brief Performs specific actions after each Python command
 
@@ -97,47 +97,52 @@ int PyConsole_Interp::afterRun()
   \param[out] docString resulting docstring of single match
   \return \true if completion succeeded, \c false otherwise
 */
-bool PyConsole_Interp::runDirCommand( const QString& dirArgument, const QString& startMatch, 
+bool PyConsole_Interp::runDirCommand( const QString& dirArgument, const QString& startMatch,
                                       QStringList& matches, QString& docString )
 {
   static QStringList keywords;
-  if ( keywords.isEmpty() ) {
+  if ( keywords.isEmpty() )
+  {
     keywords << "and" << "as" << "assert" << "break" << "class" << "continue"
              << "def" << "del" << "elif" << "else" << "except" << "exec"
              << "finally" << "for" << "from" << "global" << "if" << "import"
              << "in" << "is" << "lambda" << "not" << "or" << "pass" << "print" << "raise"
              << "return" << "try" << "while" << "with" << "yield";
   }
-  
+
   // run dir() command and extract completions
   if ( !runDirAndExtract( dirArgument, startMatch, matches ) )
     return false;
-  
+
   // If dirArgument is empty, we append the __builtins__
-  if ( dirArgument.isEmpty() ) {
+  if ( dirArgument.isEmpty() )
+  {
     if ( !runDirAndExtract( QString( "__builtins__" ), startMatch, matches, false ) )
       return false;
-    
+
     // ... and we match on Python's keywords as well
-    foreach( QString keyword, keywords ) {
+    foreach( QString keyword, keywords )
+    {
       if ( keyword.startsWith( startMatch ) )
         matches.append( keyword );
     }
   }
-  
+
   // Try to get doc string of the first match
-  if ( matches.size() > 0 ) {
+  if ( matches.size() > 0 )
+  {
     QString cmd = QString( "%1.__doc__" ).arg( matches[0] );
     if ( !dirArgument.trimmed().isEmpty() )
       cmd.prepend( QString( "%1." ).arg( dirArgument ) );
-    
+
     PyObject* str = PyRun_String( cmd.toStdString().c_str(), Py_eval_input, _global_context, _local_context );
     if ( !str || str == Py_None || !PyUnicode_Check( str ) )
-      {
-        if ( !str )
-          PyErr_Clear();
-      }
-    else {
+    {
+      if ( !str )
+        PyErr_Clear();
+    }
+    else
+    {
       docString = QString( PyUnicode_AsUTF8( str ) );
     }
     Py_XDECREF( str );
@@ -156,16 +161,17 @@ bool PyConsole_Interp::runDirCommand( const QString& dirArgument, const QString&
   \return \c true if the call to dir() and parsing of the result succeeded, \false otherwise.
 */
 bool PyConsole_Interp::runDirAndExtract( const QString& dirArgument,
-                                         const QString& startMatch,
-                                         QStringList& result,
-                                         bool discardSwig ) const
+    const QString& startMatch,
+    QStringList& result,
+    bool discardSwig ) const
 {
   QRegularExpression re( "^[A-Z].+_[A-Z]+[a-z]+.+$" ); // REX to discard SWIG static method, e.g. MEDCouplingUMesh_Blabla
 
   // Execute dir() command
   QString command( "dir(" + dirArgument + ")" );
   PyObject* plst = PyRun_String( command.toStdString().c_str(), Py_eval_input, _global_context, _local_context );
-  if ( !plst || plst == Py_None ) {
+  if ( !plst || plst == Py_None )
+  {
     if ( !plst )
       PyErr_Clear();
     Py_XDECREF( plst );
@@ -173,7 +179,8 @@ bool PyConsole_Interp::runDirAndExtract( const QString& dirArgument,
   }
 
   // Check result
-  if ( !PySequence_Check( plst ) ) {
+  if ( !PySequence_Check( plst ) )
+  {
     // Should never happen ...
     Py_XDECREF( plst );
     return false;
@@ -181,19 +188,21 @@ bool PyConsole_Interp::runDirAndExtract( const QString& dirArgument,
 
   // Extract the returned list
   int n = PySequence_Length( plst );
-  for ( int i = 0; i < n; i++ ) {
+  for ( int i = 0; i < n; i++ )
+  {
     PyObject* it;
     it = PySequence_GetItem( plst, i );
     QString s( PyUnicode_AsUTF8( it ) );
     // if the method is not from swig, not static (guessed from the reg exp) and matches
     // what is already there
-    if ( s.startsWith( startMatch ) ) {
+    if ( s.startsWith( startMatch ) )
+    {
       if ( !discardSwig || ( !re.match( s ).hasMatch() && !s.contains( "swig" ) ) )
         result.append( s );
     }
     Py_DECREF( it );
   }
   Py_DECREF( plst );
-  
+
   return true;
 }

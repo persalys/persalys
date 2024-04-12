@@ -193,7 +193,7 @@ void MorrisResultWidget::buildInterface()
 
   QwtSlider* muStarSlider = new QwtSlider(Qt::Horizontal, this);
   muStarSlider->setScalePosition(QwtSlider::LeadingScale);
-  muStarSlider->setScale(0, noEffectBoundary/0.05);
+  muStarSlider->setScale(0, noEffectBoundary / 0.05);
   muStarSlider->setTotalSteps(100);
   muStarSlider->setValue(noEffectBoundary);
   mainSplitter->addWidget(muStarSlider);

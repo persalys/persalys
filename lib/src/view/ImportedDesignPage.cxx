@@ -55,8 +55,8 @@ void ImportedDesignPage::buildInterface()
   connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
   connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
 
-  estimatedTimeValueLabel_->setVisible(estimatedTimeValueLabel_->text().toFloat()>1e-6);
-  estimatedTimeLabel->setVisible(estimatedTimeValueLabel_->text().toFloat()>1e-6);
+  estimatedTimeValueLabel_->setVisible(estimatedTimeValueLabel_->text().toFloat() > 1e-6);
+  estimatedTimeLabel->setVisible(estimatedTimeValueLabel_->text().toFloat() > 1e-6);
   connect(this, SIGNAL(showTime()), estimatedTimeLabel, SLOT(show()));
   checkColumns();
 }
@@ -69,7 +69,8 @@ void ImportedDesignPage::setTable(const QString& fileName)
 
   // update widgets
   estimatedTimeValueLabel_->setText(QString::number(designOfExperiment_.getSampleFromFile().getSize()*designOfExperiment_.getPhysicalModel().getEvalTime()));
-  if(estimatedTimeValueLabel_->text().toFloat()>1e-6) {
+  if(estimatedTimeValueLabel_->text().toFloat() > 1e-6)
+  {
     estimatedTimeValueLabel_->setVisible(true);
     emit showTime();
   }

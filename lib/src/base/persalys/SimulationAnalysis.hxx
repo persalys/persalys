@@ -38,7 +38,10 @@ public:
   SimulationAnalysis * clone() const override;
 
   OT::Sample getFailedInputSample() const;
-  OT::Description getErrorDescription() const {return errorDescription_;};
+  OT::Description getErrorDescription() const
+  {
+    return errorDescription_;
+  };
 
   OT::UnsignedInteger getBlockSize() const;
   virtual void setBlockSize(const OT::UnsignedInteger size);

@@ -177,7 +177,8 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
   RandomGenerator::SetSeed(getSeed());
   SpaceFilling spaceFilling;
 
-  if (designName_ == "SALHS" || designName_ == "MCLHS") {
+  if (designName_ == "SALHS" || designName_ == "MCLHS")
+  {
     if (spaceFilling_ == "PhiP")
       spaceFilling = SpaceFillingPhiP();
     else if (spaceFilling_ == "minDist")
@@ -247,7 +248,8 @@ Parameters ProbabilisticDesignOfExperiment::getParameters() const
     designName = "Quasi-Monte Carlo";
   param.add("Design name", designName);
 
-  if (getDesignName() == "SALHS" || getDesignName() == "MCLHS") {
+  if (getDesignName() == "SALHS" || getDesignName() == "MCLHS")
+  {
     String spaceFilling = "PhiP";
     if(getSpaceFilling() == "minDist")
       spaceFilling = "minDist";
@@ -313,8 +315,8 @@ void ProbabilisticDesignOfExperiment::load(Advocate& adv)
   adv.loadAttribute("designName_", designName_);
   adv.loadAttribute("size_", size_);
   if(adv.hasAttribute("spaceFilling_"))
-     adv.loadAttribute("spaceFilling_", spaceFilling_);
+    adv.loadAttribute("spaceFilling_", spaceFilling_);
   if(adv.hasAttribute("mcLhsSize_"))
-     adv.loadAttribute("mcLhsSize_", mcLhsSize_);
+    adv.loadAttribute("mcLhsSize_", mcLhsSize_);
 }
 }

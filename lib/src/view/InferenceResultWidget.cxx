@@ -92,7 +92,7 @@ void InferenceResultWidget::buildInterface()
 
   distGroupBoxLayout->addWidget(distTableView_);
 
-  rightWidgetLayout->addWidget(distGroupBox, 0, Qt::AlignLeft|Qt::AlignTop);
+  rightWidgetLayout->addWidget(distGroupBox, 0, Qt::AlignLeft | Qt::AlignTop);
 
   // -- distribution parameters table
   // --- table view
@@ -513,7 +513,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     if (i < F_nxOT.getSize() - 1)
     {
       Point interPt(2);
-      interPt[0] = F_nxOT(i+1, 0);
+      interPt[0] = F_nxOT(i + 1, 0);
       interPt[1] = F_nxOT(i, 1);
       F_nx.add(interPt);
     }
@@ -563,7 +563,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
       if (i < S_nxOT.getSize() - 1)
       {
         Point interPt(2);
-        interPt[0] = S_nxOT(i+1, 0);
+        interPt[0] = S_nxOT(i + 1, 0);
         interPt[1] = S_nxOT(i, 1);
         S_nx.add(interPt);
       }
@@ -584,7 +584,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     }
     survPlot_->plotCurve(KSStatistic, QPen(Qt::red, 2));
     survPlot_->setTitle(tr("Survival function") + ": " + distName + " ("
-                       + testName + " " + tr("statistic=%1)").arg(std::abs(KSStatistic(0, 1) - KSStatistic(1, 1))));
+                        + testName + " " + tr("statistic=%1)").arg(std::abs(KSStatistic(0, 1) - KSStatistic(1, 1))));
   }
 }
 

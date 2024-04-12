@@ -104,7 +104,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two FunctionalChaosAnalysis must be equal");
   }
 
@@ -136,7 +136,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two KrigingAnalysis must be equal");
   }
 
@@ -158,7 +158,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==KrigingAnalysis("analysis", doe).getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == KrigingAnalysis("analysis", doe).getParameters();
     QVERIFY2(analysisEquality, "The two KrigingAnalysis must be equal");
   }
 
@@ -194,7 +194,7 @@ private slots:
     QVERIFY2(wizard.introPage_->getDesignOfExperiment().getName() == "analysis1", "The doe must be named : analysis1");
 
     comboBox->setCurrentIndex(1);
-    QVERIFY2(label->text().contains(QString::number(analysis1.getSize()*2)), "Wrong label");
+    QVERIFY2(label->text().contains(QString::number(analysis1.getSize() * 2)), "Wrong label");
     QVERIFY2(wizard.introPage_->getDesignOfExperiment().getName() == "analysis2", "The doe must be named : analysis2");
 
     QVERIFY2(wizard.nextId() == 1, "Next page ID must be 1");

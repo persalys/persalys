@@ -37,7 +37,7 @@ class CustomDockWidget : public QDockWidget
 
 public:
   CustomDockWidget(QString title, QWidget *parent = nullptr)
-  : QDockWidget(title, parent)
+    : QDockWidget(title, parent)
   {}
 
   void setVisible(bool visible) override

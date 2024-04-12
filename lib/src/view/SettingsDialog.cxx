@@ -36,77 +36,82 @@ using namespace OT;
 namespace PERSALYS
 {
 
-  SettingsDialog::SettingsDialog(QWidget* parent)
-    : QDialog(parent) {
-    setWindowIcon(QIcon(":/images/run-build.png"));
-    setWindowTitle(tr("Persalys settings"));
+SettingsDialog::SettingsDialog(QWidget* parent)
+  : QDialog(parent)
+{
+  setWindowIcon(QIcon(":/images/run-build.png"));
+  setWindowTitle(tr("Persalys settings"));
 
-    QVBoxLayout * mainLayout = new QVBoxLayout;
+  QVBoxLayout * mainLayout = new QVBoxLayout;
 
-    // header with logo, name and version
-    QFrame * headerFrame = new QFrame;
-    headerFrame->setFrameShape(QFrame::StyledPanel);
+  // header with logo, name and version
+  QFrame * headerFrame = new QFrame;
+  headerFrame->setFrameShape(QFrame::StyledPanel);
 
-    QHBoxLayout * headerLayout = new QHBoxLayout;
-    QLabel * logoLabel = new QLabel;
-    logoLabel->setPixmap(QPixmap(":/images/Ps-icon-64.png"));
-    headerLayout->addWidget(logoLabel);
+  QHBoxLayout * headerLayout = new QHBoxLayout;
+  QLabel * logoLabel = new QLabel;
+  logoLabel->setPixmap(QPixmap(":/images/Ps-icon-64.png"));
+  headerLayout->addWidget(logoLabel);
 
-    QLabel * phibootLabel = new QLabel("<font size=\"6\">Persalys</font><br>" + tr("Version %1").arg(PERSALYS_VERSION));
-    headerLayout->addWidget(phibootLabel);
-    headerLayout->addStretch();
+  QLabel * phibootLabel = new QLabel("<font size=\"6\">Persalys</font><br>" + tr("Version %1").arg(PERSALYS_VERSION));
+  headerLayout->addWidget(phibootLabel);
+  headerLayout->addStretch();
 
-    headerFrame->setLayout(headerLayout);
-    mainLayout->addWidget(headerFrame);
+  headerFrame->setLayout(headerLayout);
+  mainLayout->addWidget(headerFrame);
 
-    // tab widget
-    QTabWidget * tabWidget = new QTabWidget;
-    QWidget * tab = new QWidget;
+  // tab widget
+  QTabWidget * tabWidget = new QTabWidget;
+  QWidget * tab = new QWidget;
 
-    QGridLayout * tabLayout = new QGridLayout(tab);
+  QGridLayout * tabLayout = new QGridLayout(tab);
 
-    QLabel * nProcessesLabel = new QLabel(tr("Number of processes"));
-    nProcessesLabel->setToolTip("0: "+tr("all cores"));
-    tabLayout->addWidget(nProcessesLabel, 0, 0);
+  QLabel * nProcessesLabel = new QLabel(tr("Number of processes"));
+  nProcessesLabel->setToolTip("0: " + tr("all cores"));
+  tabLayout->addWidget(nProcessesLabel, 0, 0);
 
-    QSpinBox * nProcessesSpinBox = new QSpinBox;
-    nProcessesSpinBox->setToolTip("0: "+tr("all cores"));
-    nProcessesSpinBox->setMinimum(0);
-    nProcessesSpinBox->setMaximum(std::thread::hardware_concurrency());
+  QSpinBox * nProcessesSpinBox = new QSpinBox;
+  nProcessesSpinBox->setToolTip("0: " + tr("all cores"));
+  nProcessesSpinBox->setMinimum(0);
+  nProcessesSpinBox->setMaximum(std::thread::hardware_concurrency());
 
-    QLabel * reloadLabel = new QLabel(tr("Requires study reloading"));
-    tabLayout->addWidget(reloadLabel, 1, 0, 1, 2);
-    connect(nProcessesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), [=] (int i) {
-        QSettings settings;
-        reloadLabel->setVisible(i != settings.value("nProcesses"));
-      });
-
+  QLabel * reloadLabel = new QLabel(tr("Requires study reloading"));
+  tabLayout->addWidget(reloadLabel, 1, 0, 1, 2);
+  connect(nProcessesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), [ = ] (int i)
+  {
     QSettings settings;
-    nProcessesSpinBox->setValue(settings.value("nProcesses").toUInt());
-    tabLayout->addWidget(nProcessesSpinBox, 0, 1);
+    reloadLabel->setVisible(i != settings.value("nProcesses"));
+  });
 
-    tabWidget->addTab(tab, tr("&General"));
-    mainLayout->addWidget(tabWidget);
-    QDialogButtonBox * settingsButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+  QSettings settings;
+  nProcessesSpinBox->setValue(settings.value("nProcesses").toUInt());
+  tabLayout->addWidget(nProcessesSpinBox, 0, 1);
 
-    connect(settingsButtons, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(settingsButtons, &QDialogButtonBox::accepted, [=] {
-        setnProcesses(nProcessesSpinBox->value());
-        emit QDialog::accepted();
-      });
-    connect(settingsButtons, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  tabWidget->addTab(tab, tr("&General"));
+  mainLayout->addWidget(tabWidget);
+  QDialogButtonBox * settingsButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    mainLayout->addWidget(settingsButtons);
-    setLayout(mainLayout);
-  }
+  connect(settingsButtons, &QDialogButtonBox::accepted, this, &QDialog::accept);
+  connect(settingsButtons, &QDialogButtonBox::accepted, [ = ]
+  {
+    setnProcesses(nProcessesSpinBox->value());
+    emit QDialog::accepted();
+  });
+  connect(settingsButtons, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-  void SettingsDialog::setnProcesses(const UnsignedInteger n) {
-    processNumber_ = n;
-  }
+  mainLayout->addWidget(settingsButtons);
+  setLayout(mainLayout);
+}
 
-  UnsignedInteger SettingsDialog::getnProcesses() const {
-    return processNumber_;
-  }
+void SettingsDialog::setnProcesses(const UnsignedInteger n)
+{
+  processNumber_ = n;
+}
+
+UnsignedInteger SettingsDialog::getnProcesses() const
+{
+  return processNumber_;
+}
 
 
 

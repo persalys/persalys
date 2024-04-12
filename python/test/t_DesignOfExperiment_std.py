@@ -31,7 +31,9 @@ aDesign2.run()
 print("outs=", aDesign2.getResult().getDesignOfExperiment().getOutputSample())
 
 # Design of Experiment - imported - already evaluated##
-aDesign2_1 = persalys.ImportedDesignOfExperiment("aDesign_2_1", model, filename, [0, 2], [1])
+aDesign2_1 = persalys.ImportedDesignOfExperiment(
+    "aDesign_2_1", model, filename, [0, 2], [1]
+)
 anOTStudy.add(aDesign2_1)
 
 # Considered already evaluated, do not run it
@@ -128,14 +130,18 @@ code = "import time\ndef _exec(X0,X1):\n    Y0 = 1/(X0+X1)\n    return Y0\n"
 model2 = persalys.PythonPhysicalModel("aModelPhys2", [X0, X1], [Y0], code)
 anOTStudy.add(model2)
 
-aDesign11 = persalys.GridDesignOfExperiment("aDesign_11", model2, [[-3, 0, 3], [-3, 0, 3]])
+aDesign11 = persalys.GridDesignOfExperiment(
+    "aDesign_11", model2, [[-3, 0, 3], [-3, 0, 3]]
+)
 anOTStudy.add(aDesign11)
 
 aDesign11.run()
 print("outs=", aDesign11.getErrorDescription())
 
 model2.setParallel(False)
-aDesign12 = persalys.GridDesignOfExperiment("aDesign_12", model2, [[-3, 0, 3], [-3, 0, 3]])
+aDesign12 = persalys.GridDesignOfExperiment(
+    "aDesign_12", model2, [[-3, 0, 3], [-3, 0, 3]]
+)
 anOTStudy.add(aDesign12)
 
 aDesign12.run()

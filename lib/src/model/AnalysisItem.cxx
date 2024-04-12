@@ -168,7 +168,8 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   getParentStudyItem()->getStudy().getAnalysisByName(analysis.getName()).setImplementationAsPersistentObject(analysis.getImplementation());
 
   // the analysis has not result: disable convertAction_ action and extractDataAction_
-  if (convertAction_) {
+  if (convertAction_)
+  {
     convertAction_->setEnabled(analysis_.hasValidResult());
     emit numberMetamodelChanged(analysis_.hasValidResult());
   }
@@ -265,13 +266,18 @@ void AnalysisItem::appendDataModelItem()
 
   DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
   DataAnalysisResult result;
-  if(doeEval) {
+  if(doeEval)
+  {
     result = doeEval->getResult();
-  } else {
+  }
+  else
+  {
     MonteCarloAnalysis * analysis  = dynamic_cast<MonteCarloAnalysis*>(analysis_.getImplementation().get());
-    if(analysis) {
+    if(analysis)
+    {
       result = analysis->getResult();
-    } else
+    }
+    else
       return;
   }
 
@@ -309,9 +315,11 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
   if (message == "analysisFinished")
   {
     // if MetaModelAnalysis : enable convertAction_ action
-    if (convertAction_) {
+    if (convertAction_)
+    {
       convertAction_->setEnabled(true);
-      emit numberMetamodelChanged(true);}
+      emit numberMetamodelChanged(true);
+    }
     if (extractDataAction_)
       extractDataAction_->setEnabled(true);
   }
@@ -342,7 +350,8 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
   {
     if (hasChildren())
       qDebug() << "AnalysisItem::update(objectRemoved) has not to contain child\n";
-    if (convertAction_) {
+    if (convertAction_)
+    {
       emit numberMetamodelChanged(false);
     }
     emit removeRequested(row());

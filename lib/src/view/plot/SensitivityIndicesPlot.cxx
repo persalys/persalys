@@ -31,13 +31,13 @@ namespace PERSALYS
 {
 
 SensitivityIndicesPlot::SensitivityIndicesPlot(const QString &plotTypeName,
-                                               const Point &firstOrderIndices,
-                                               const Point &totalIndices,
-                                               const Interval &firstOrderIndicesIntervals,
-                                               const Interval &totalIndicesIntervals,
-                                               const Description &inputNames,
-                                               const QStringList &legendNames,
-                                               QWidget *parent)
+    const Point &firstOrderIndices,
+    const Point &totalIndices,
+    const Interval &firstOrderIndicesIntervals,
+    const Interval &totalIndicesIntervals,
+    const Description &inputNames,
+    const QStringList &legendNames,
+    QWidget *parent)
   : PlotWidget(plotTypeName, true, parent)
   , legendNames_(legendNames)
   , yMin_(0.)

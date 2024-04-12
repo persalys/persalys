@@ -33,9 +33,10 @@ AnsysWizard::AnsysWizard(QWidget * parent)
   addPage(sysPage_);
 
   connect(varPage_, SIGNAL(loadModelRequested()), this, SLOT(loadModel()));
-  connect(varPage_, &AnsysWizardVariablePage::executableFileFound, [=]() {
-      parser_->setExecutableFileName(varPage_->executableLineEdit_->text().toStdString());
-    });
+  connect(varPage_, &AnsysWizardVariablePage::executableFileFound, [ = ]()
+  {
+    parser_->setExecutableFileName(varPage_->executableLineEdit_->text().toStdString());
+  });
 }
 
 
@@ -53,12 +54,12 @@ void AnsysWizard::loadModel()
     QString defaultExecutable;
 #ifdef _WIN32
     defaultExecutable = "C:/Program Files/ANSYS Inc/v"
-      + QString(parser_->getAnsysVersion().c_str())
-      + "/Framework/bin/Win64/RunWB2.exe";
+                        + QString(parser_->getAnsysVersion().c_str())
+                        + "/Framework/bin/Win64/RunWB2.exe";
 #else
     defaultExecutable = "/ansys_inc/v"
-      + QString(parser_->getAnsysVersion().c_str())
-      + "/Framework/bin/Linux64/runwb2";
+                        + QString(parser_->getAnsysVersion().c_str())
+                        + "/Framework/bin/Linux64/runwb2";
 #endif
     varPage_->executableLineEdit_->setText(defaultExecutable);
   }
@@ -95,17 +96,20 @@ void AnsysWizard::validateSystems()
 }
 
 
-QString AnsysWizard::getExecutableFileName() const{
+QString AnsysWizard::getExecutableFileName() const
+{
   return varPage_->executableLineEdit_->text();
 }
 
 
-QString AnsysWizard::getModelFileName() const{
+QString AnsysWizard::getModelFileName() const
+{
   return varPage_->modelFileLineEdit_->text();
 }
 
 
-AnsysParser* AnsysWizard::getParser() const {
+AnsysParser* AnsysWizard::getParser() const
+{
   return parser_;
 }
 
@@ -163,12 +167,12 @@ void AnsysWizardVariablePage::findExecutableFile()
 {
 #ifdef _WIN32
   QString file = QFileDialog::getOpenFileName(this, tr("Select the solver"),
-                                              executableLineEdit_->text(),
-                                              tr("Executable file (*.exe);; All files (*)"));
+                 executableLineEdit_->text(),
+                 tr("Executable file (*.exe);; All files (*)"));
 #else
   QString file = QFileDialog::getOpenFileName(this, tr("Select the solver"),
-                                              executableLineEdit_->text(),
-                                              tr("All files (*)"));
+                 executableLineEdit_->text(),
+                 tr("All files (*)"));
 #endif
 
   if (!file.isEmpty())
@@ -181,7 +185,7 @@ void AnsysWizardVariablePage::findExecutableFile()
 void AnsysWizardVariablePage::findModelFile()
 {
   QString file = QFileDialog::getOpenFileName(this, tr("Select the model"), FileTools::GetCurrentDir(),
-                                              tr("Ansys model (*.wbpj);; All files (*)"));
+                 tr("Ansys model (*.wbpj);; All files (*)"));
   if (!file.isEmpty())
   {
     modelFileLineEdit_->setText(file);
@@ -204,7 +208,7 @@ bool AnsysWizardVariablePage::validatePage()
     return false;
   }
   if(varModel_->getInputVariables().isEmpty() &&
-     varModel_->getOutputVariables().isEmpty())
+      varModel_->getOutputVariables().isEmpty())
   {
     errorMessageLabel_->setErrorMessage(tr("Please select at least one variable."));
     return false;

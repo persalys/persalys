@@ -202,12 +202,14 @@ void MenuBar::updateConsoleStatus(const bool visibility)
   settings.setValue("pythonConsoleVisibility", visibility);
 }
 
-void MenuBar::openSettingsWindow() {
+void MenuBar::openSettingsWindow()
+{
   SettingsDialog * settingsDialog = new SettingsDialog(this);
-  connect(settingsDialog, &QDialog::accepted, [=]() {
-      QSettings settings;
-      settings.setValue("nProcesses", QVariant((uint)settingsDialog->getnProcesses()));
-    });
+  connect(settingsDialog, &QDialog::accepted, [ = ]()
+  {
+    QSettings settings;
+    settings.setValue("nProcesses", QVariant((uint)settingsDialog->getnProcesses()));
+  });
   settingsDialog->exec();
 }
 

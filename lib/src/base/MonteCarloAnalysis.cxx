@@ -204,7 +204,7 @@ void MonteCarloAnalysis::launch()
         {
           const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
           coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
-          CI = 2.0 * sigma_i * DistFunc::qNormal(0.5*(1+levelConfidenceInterval_));
+          CI = 2.0 * sigma_i * DistFunc::qNormal(0.5 * (1 + levelConfidenceInterval_));
         }
         else
         {

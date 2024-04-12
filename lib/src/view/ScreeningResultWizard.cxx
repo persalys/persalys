@@ -56,7 +56,7 @@ void ScreeningResultWizard::buildInterface()
   // choose InferenceAnalysis
   screeningResultsComboBox_ = new QComboBox;
   mainLayout->addWidget(new QLabel(tr("Morris analysis")), 0, 0);
-  mainLayout->addWidget(screeningResultsComboBox_ , 0, 1);
+  mainLayout->addWidget(screeningResultsComboBox_, 0, 1);
 
   for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
     if (study_.getAnalyses()[i].getImplementation()->getClassName() == "MorrisAnalysis")

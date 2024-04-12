@@ -27,29 +27,29 @@
 namespace PERSALYS
 {
 
-  CheckModelButtonGroup::CheckModelButtonGroup(QWidget * parent)
-    : QWidget(parent)
-  {
-    // button Evaluate outputs -------------------------------------------
-    QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate model"));
-    evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-    connect(evaluateOutputsButton, SIGNAL(clicked()), this, SIGNAL(evaluateOutputsRequested()));
+CheckModelButtonGroup::CheckModelButtonGroup(QWidget * parent)
+  : QWidget(parent)
+{
+  // button Evaluate outputs -------------------------------------------
+  QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate model"));
+  evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
+  connect(evaluateOutputsButton, SIGNAL(clicked()), this, SIGNAL(evaluateOutputsRequested()));
 
-    // button Evaluate gradient -------------------------------------------
-    QPushButton * evaluateGradientButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate gradient"));
-    evaluateGradientButton->setToolTip(tr("Evaluate the gradient"));
-    connect(evaluateGradientButton, SIGNAL(clicked()), this, SIGNAL(evaluateGradientRequested()));
+  // button Evaluate gradient -------------------------------------------
+  QPushButton * evaluateGradientButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate gradient"));
+  evaluateGradientButton->setToolTip(tr("Evaluate the gradient"));
+  connect(evaluateGradientButton, SIGNAL(clicked()), this, SIGNAL(evaluateGradientRequested()));
 
-    QHBoxLayout * buttonLayout = new QHBoxLayout(this);
-    buttonLayout->setContentsMargins(0, 0, 0, 0);
-    errorMessageLabel_ = new TemporaryLabel;
-    buttonLayout->addWidget(errorMessageLabel_);
-    buttonLayout->setStretch(0,1);
-    buttonLayout->addWidget(evaluateOutputsButton);
-    buttonLayout->addWidget(evaluateGradientButton);
+  QHBoxLayout * buttonLayout = new QHBoxLayout(this);
+  buttonLayout->setContentsMargins(0, 0, 0, 0);
+  errorMessageLabel_ = new TemporaryLabel;
+  buttonLayout->addWidget(errorMessageLabel_);
+  buttonLayout->setStretch(0, 1);
+  buttonLayout->addWidget(evaluateOutputsButton);
+  buttonLayout->addWidget(evaluateGradientButton);
 
-    connect(this, SIGNAL(evaluateGradientRequested()), errorMessageLabel_, SLOT(reset()));
-    connect(this, SIGNAL(evaluateOutputsRequested()), errorMessageLabel_, SLOT(reset()));
-  }
+  connect(this, SIGNAL(evaluateGradientRequested()), errorMessageLabel_, SLOT(reset()));
+  connect(this, SIGNAL(evaluateOutputsRequested()), errorMessageLabel_, SLOT(reset()));
+}
 
 }

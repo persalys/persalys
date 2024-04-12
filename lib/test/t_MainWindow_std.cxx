@@ -183,7 +183,7 @@ private slots:
             QAction * modifyAction = findAction(analysisItem->getActions(), "Modify");
             if (modifyAction)
             {
-              QTimer::singleShot(150, [=]()
+              QTimer::singleShot(150, [ = ]()
               {
                 QWidget * widget = QApplication::activeModalWidget();
                 std::cout << "Analysis= " << analysisItem->getAnalysis().getImplementation()->getClassName()
@@ -225,7 +225,7 @@ private slots:
 
     QDockWidget * consoleDockWidget = mainWindow_->findChild<QDockWidget*>();
     QTextEdit * console = consoleDockWidget->findChild<QTextEdit*>();
-    std::cout<<"Python console Message = "<<console->toPlainText().toStdString()<<std::endl;
+    std::cout << "Python console Message = " << console->toPlainText().toStdString() << std::endl;
     QVERIFY2(console->toPlainText().toStdString() == ">>> __file__ = \"test_field_analyses_exported.py\"; exec(open(u\"test_field_analyses_exported.py\", encoding=\"utf-8\").read())\n>>> ", "wrong message");
     QVERIFY(treeViewModel_->rowCount() == 1);
 

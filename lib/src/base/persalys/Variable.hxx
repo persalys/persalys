@@ -35,7 +35,7 @@ public:
   /** Default constructor */
   Variable();
   /** Constructor with parameters */
-  Variable(const OT::String & name, const double & value, const OT::String & description, const OT::String & unit ="");
+  Variable(const OT::String & name, const double & value, const OT::String & description, const OT::String & unit = "");
   Variable(const OT::String & name, const OT::String & description = "");
 
   /** Virtual constructor */

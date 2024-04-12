@@ -28,16 +28,16 @@ using namespace OT;
 namespace PERSALYS
 {
 
-  MultiObjectiveOptimizationTableModel::MultiObjectiveOptimizationTableModel(const MultiObjectiveOptimizationAnalysis & analysis, QObject * parent)
-    : OptimizationTableModel(parent)
-    , analysis_(analysis)
-  {
-    analysis_.updateParameters();
-    types_.clear();
-    const UnsignedInteger nbInputs = analysis_.getPhysicalModel().getInputs().getSize();
-    for (UnsignedInteger i = 0; i < nbInputs; ++i)
-      switch (analysis_.getVariablesType()[i])
-      {
+MultiObjectiveOptimizationTableModel::MultiObjectiveOptimizationTableModel(const MultiObjectiveOptimizationAnalysis & analysis, QObject * parent)
+  : OptimizationTableModel(parent)
+  , analysis_(analysis)
+{
+  analysis_.updateParameters();
+  types_.clear();
+  const UnsignedInteger nbInputs = analysis_.getPhysicalModel().getInputs().getSize();
+  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+    switch (analysis_.getVariablesType()[i])
+    {
       case OptimizationProblemImplementation::CONTINUOUS:
         types_ << tr("Continuous");
         break;
@@ -50,71 +50,72 @@ namespace PERSALYS
       default:
         throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
                                              << analysis_.getPhysicalModel().getInputNames()[i];
-      }
+    }
+}
+
+
+int MultiObjectiveOptimizationTableModel::rowCount(const QModelIndex & /*parent*/) const
+{
+  return analysis_.getPhysicalModel().getInputs().getSize() + 1;
+}
+
+
+Qt::ItemFlags MultiObjectiveOptimizationTableModel::flags(const QModelIndex & index) const
+{
+  Qt::ItemFlags result = QAbstractTableModel::flags(index);
+
+  if (index.column() == 0)
+  {
+    result |= Qt::ItemIsUserCheckable;
+    result &= ~Qt::ItemIsEditable;
+    result |= Qt::ItemIsSelectable;
   }
 
-
-  int MultiObjectiveOptimizationTableModel::rowCount(const QModelIndex & /*parent*/) const
+  // header
+  if (index.row() == 0)
   {
-    return analysis_.getPhysicalModel().getInputs().getSize() + 1;
+    return result &= ~Qt::ItemIsEditable;
   }
-
-
-  Qt::ItemFlags MultiObjectiveOptimizationTableModel::flags(const QModelIndex & index) const
+  // not header
+  else
   {
-    Qt::ItemFlags result = QAbstractTableModel::flags(index);
-
-    if (index.column() == 0)
+    const int inputIndex = index.row() - 1;
+    const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
+    if (index.column() == 2)
     {
-      result |= Qt::ItemIsUserCheckable;
-      result &= ~Qt::ItemIsEditable;
-      result |= Qt::ItemIsSelectable;
+      if (analysis_.getVariableInputs().contains(currentInputName))
+        result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
+      else
+        result &= ~Qt::ItemIsEnabled;
     }
-
-    // header
-    if (index.row() == 0)
+    else if (index.column() == 3)
     {
-      return result &= ~Qt::ItemIsEditable;
+      if (analysis_.getVariableInputs().contains(currentInputName))
+        result &= ~Qt::ItemIsEnabled;
+      else
+        result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
     }
-    // not header
-    else
+    else if (index.column() == 4 || index.column() == 5)
     {
-      const int inputIndex = index.row() - 1;
-      const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
-      if (index.column() == 2) {
-        if (analysis_.getVariableInputs().contains(currentInputName))
-          result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
-        else
-          result &= ~Qt::ItemIsEnabled;
-      }
-      else if (index.column() == 3)
-      {
-        if (analysis_.getVariableInputs().contains(currentInputName))
-          result &= ~Qt::ItemIsEnabled;
-        else
-          result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
-      }
-      else if (index.column() == 4 || index.column() == 5)
-      {
-        if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]) && analysis_.getVariablesType()[index.row() - 1] != OptimizationProblemImplementation::BINARY)
-          result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
-        else
-          result &= ~Qt::ItemIsEnabled;
-      }
+      if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]) && analysis_.getVariablesType()[index.row() - 1] != OptimizationProblemImplementation::BINARY)
+        result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
+      else
+        result &= ~Qt::ItemIsEnabled;
     }
-    return result;
   }
+  return result;
+}
 
 
-  QVariant MultiObjectiveOptimizationTableModel::data(const QModelIndex & ind, int role) const
+QVariant MultiObjectiveOptimizationTableModel::data(const QModelIndex & ind, int role) const
+{
+  // header
+  if (ind.row() == 0)
   {
-    // header
-    if (ind.row() == 0)
+    if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-      if (role == Qt::DisplayRole || role == Qt::EditRole)
+      switch (ind.column())
       {
-        switch (ind.column())
-        {
         case 0:
           return tr("Name");
         case 1:
@@ -129,33 +130,33 @@ namespace PERSALYS
           return tr("Upper\nbound");
         default:
           return QVariant();
-        }
       }
-      else if (role == Qt::CheckStateRole && ind.column() == 0)
-      {
-        const UnsignedInteger nbInputs = analysis_.getPhysicalModel().getInputNames().getSize();
-        return analysis_.getVariableInputs().getSize() == nbInputs ? Qt::Checked : Qt::Unchecked;
-      }
-      else if (role == Qt::BackgroundRole)
-      {
-        return QBrush("#f2f1f0");
-      }
-      else if (role == Qt::TextAlignmentRole)
-      {
-        return Qt::AlignCenter;
-      }
-      return QVariant();
     }
-
-    // not header
-
-    if (role == Qt::DisplayRole || role == Qt::EditRole)
+    else if (role == Qt::CheckStateRole && ind.column() == 0)
     {
-      const int inputIndex = ind.row() - 1;
-      const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
+      const UnsignedInteger nbInputs = analysis_.getPhysicalModel().getInputNames().getSize();
+      return analysis_.getVariableInputs().getSize() == nbInputs ? Qt::Checked : Qt::Unchecked;
+    }
+    else if (role == Qt::BackgroundRole)
+    {
+      return QBrush("#f2f1f0");
+    }
+    else if (role == Qt::TextAlignmentRole)
+    {
+      return Qt::AlignCenter;
+    }
+    return QVariant();
+  }
 
-      switch (ind.column())
-      {
+  // not header
+
+  if (role == Qt::DisplayRole || role == Qt::EditRole)
+  {
+    const int inputIndex = ind.row() - 1;
+    const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
+
+    switch (ind.column())
+    {
       case 0:
         return QString::fromUtf8(analysis_.getPhysicalModel().getInputs()[inputIndex].getName().c_str());
       case 1:
@@ -163,15 +164,15 @@ namespace PERSALYS
       case 2:
         switch(analysis_.getVariablesType()[inputIndex])
         {
-        case OptimizationProblemImplementation::CONTINUOUS:
-          return tr("Continuous");
-        case OptimizationProblemImplementation::INTEGER:
-          return tr("Integer");
-        case OptimizationProblemImplementation::BINARY:
-          return tr("Binary");
-        default:
-          throw InvalidArgumentException(HERE) << "Unknown variable type for variable"
-                                               << currentInputName;
+          case OptimizationProblemImplementation::CONTINUOUS:
+            return tr("Continuous");
+          case OptimizationProblemImplementation::INTEGER:
+            return tr("Integer");
+          case OptimizationProblemImplementation::BINARY:
+            return tr("Binary");
+          default:
+            throw InvalidArgumentException(HERE) << "Unknown variable type for variable"
+                                                 << currentInputName;
         }
       case 3:
         return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
@@ -181,69 +182,69 @@ namespace PERSALYS
         return QString::number(analysis_.getBounds().getUpperBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       default:
         return QVariant();
-      }
     }
-    else if (role == Qt::CheckStateRole)
-    {
-      const int inputIndex = ind.row() - 1;
+  }
+  else if (role == Qt::CheckStateRole)
+  {
+    const int inputIndex = ind.row() - 1;
 
-      switch (ind.column())
-      {
+    switch (ind.column())
+    {
       case 0:
         const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
         return analysis_.getVariableInputs().contains(currentInputName) ? Qt::Checked : Qt::Unchecked;
-      }
     }
-    else if ((role == Qt::ForegroundRole || role == Qt::ToolTipRole) && ind.column() == 0)
+  }
+  else if ((role == Qt::ForegroundRole || role == Qt::ToolTipRole) && ind.column() == 0)
+  {
+    const int inputIndex = ind.row() - 1;
+    const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
+    // check bounds
+    if (analysis_.getVariableInputs().contains(currentInputName))
     {
-      const int inputIndex = ind.row() - 1;
-      const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
-      // check bounds
-      if (analysis_.getVariableInputs().contains(currentInputName))
-      {
-        const Interval bounds(analysis_.getBounds().getMarginal(inputIndex));
-        if (role == Qt::ForegroundRole && (bounds.isEmpty()))
-          return QColor(Qt::red);
-        if (role == Qt::ToolTipRole && bounds.isEmpty())
-          return tr("The lower bound must be less than the upper bound");
-      }
+      const Interval bounds(analysis_.getBounds().getMarginal(inputIndex));
+      if (role == Qt::ForegroundRole && (bounds.isEmpty()))
+        return QColor(Qt::red);
+      if (role == Qt::ToolTipRole && bounds.isEmpty())
+        return tr("The lower bound must be less than the upper bound");
     }
-    else if (role == Qt::UserRole + 1 && ind.column() == 2)
-      return QStringList() << tr("Continuous") << tr("Integer") << tr("Binary");
-    else if (role == Qt::BackgroundRole && ind.column() == 2)
-      return QHeaderView(Qt::Horizontal).palette().color(QPalette::Window);
-    return QVariant();
+  }
+  else if (role == Qt::UserRole + 1 && ind.column() == 2)
+    return QStringList() << tr("Continuous") << tr("Integer") << tr("Binary");
+  else if (role == Qt::BackgroundRole && ind.column() == 2)
+    return QHeaderView(Qt::Horizontal).palette().color(QPalette::Window);
+  return QVariant();
+}
+
+
+bool MultiObjectiveOptimizationTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+  emit errorMessageChanged("");
+
+  // header
+  if (index.row() == 0)
+  {
+    // first column : select variables
+    if (role == Qt::CheckStateRole && index.column() == 0)
+    {
+      for (int i = 1; i < rowCount(); ++i)
+        if (data(this->index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
+          setData(this->index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
+
+      return true;
+    }
+    return false;
   }
 
+  // not header
 
-  bool MultiObjectiveOptimizationTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
+  if (role == Qt::EditRole)
   {
-    emit errorMessageChanged("");
+    const int inputIndex = index.row() - 1;
+    const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex].c_str();
 
-    // header
-    if (index.row() == 0)
+    switch (index.column())
     {
-      // first column : select variables
-      if (role == Qt::CheckStateRole && index.column() == 0)
-      {
-        for (int i = 1; i < rowCount(); ++i)
-          if (data(this->index(i, 0), role).toInt() != (value.toBool() ? Qt::Checked : Qt::Unchecked))
-            setData(this->index(i, 0), value.toBool() ? Qt::Checked : Qt::Unchecked, role);
-
-        return true;
-      }
-      return false;
-    }
-
-    // not header
-
-    if (role == Qt::EditRole)
-    {
-      const int inputIndex = index.row() - 1;
-      const String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex].c_str();
-
-      switch (index.column())
-      {
       case 2: // type
       {
         Indices values = analysis_.getVariablesType();
@@ -272,31 +273,32 @@ namespace PERSALYS
       case 4: // lower bounds
       {
         Point lowerBounds = analysis_.getBounds().getLowerBound();
-        switch (analysis_.getVariablesType()[inputIndex]) {
-        case OptimizationProblemImplementation::CONTINUOUS:
+        switch (analysis_.getVariablesType()[inputIndex])
         {
-          if (lowerBounds[inputIndex] == value.toDouble())
-            return false;
-          lowerBounds[inputIndex] = value.toDouble();
-          break;
-        }
-        case OptimizationProblemImplementation::INTEGER:
-        {
-          if (lowerBounds[inputIndex] == floor(value.toDouble()))
-            return false;
-          lowerBounds[inputIndex] = floor(value.toDouble());
-          break;
-        }
-        case OptimizationProblemImplementation::BINARY:
-        {
-          if (lowerBounds[inputIndex] == 0)
-            return false;
-          lowerBounds[inputIndex] = 0;
-          break;
-        }
-        default:
-          throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
-                                               << currentInputName;
+          case OptimizationProblemImplementation::CONTINUOUS:
+          {
+            if (lowerBounds[inputIndex] == value.toDouble())
+              return false;
+            lowerBounds[inputIndex] = value.toDouble();
+            break;
+          }
+          case OptimizationProblemImplementation::INTEGER:
+          {
+            if (lowerBounds[inputIndex] == floor(value.toDouble()))
+              return false;
+            lowerBounds[inputIndex] = floor(value.toDouble());
+            break;
+          }
+          case OptimizationProblemImplementation::BINARY:
+          {
+            if (lowerBounds[inputIndex] == 0)
+              return false;
+            lowerBounds[inputIndex] = 0;
+            break;
+          }
+          default:
+            throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                                 << currentInputName;
         }
         Interval newInterval(analysis_.getBounds());
         newInterval.setLowerBound(lowerBounds);
@@ -308,31 +310,32 @@ namespace PERSALYS
       case 5: // upper bounds
       {
         Point upperBounds = analysis_.getBounds().getUpperBound();
-        switch (analysis_.getVariablesType()[inputIndex]) {
-        case OptimizationProblemImplementation::CONTINUOUS:
+        switch (analysis_.getVariablesType()[inputIndex])
         {
-          if (upperBounds[inputIndex] == value.toDouble())
-            return false;
-          upperBounds[inputIndex] = value.toDouble();
-          break;
-        }
-        case OptimizationProblemImplementation::INTEGER:
-        {
-          if (upperBounds[inputIndex] == floor(value.toDouble()))
-            return false;
-          upperBounds[inputIndex] = floor(value.toDouble());
-          break;
-        }
-        case OptimizationProblemImplementation::BINARY:
-        {
-          if (upperBounds[inputIndex] == 1)
-            return false;
-          upperBounds[inputIndex] = 1;
-          break;
-        }
-        default:
-          throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
-                                               << currentInputName;
+          case OptimizationProblemImplementation::CONTINUOUS:
+          {
+            if (upperBounds[inputIndex] == value.toDouble())
+              return false;
+            upperBounds[inputIndex] = value.toDouble();
+            break;
+          }
+          case OptimizationProblemImplementation::INTEGER:
+          {
+            if (upperBounds[inputIndex] == floor(value.toDouble()))
+              return false;
+            upperBounds[inputIndex] = floor(value.toDouble());
+            break;
+          }
+          case OptimizationProblemImplementation::BINARY:
+          {
+            if (upperBounds[inputIndex] == 1)
+              return false;
+            upperBounds[inputIndex] = 1;
+            break;
+          }
+          default:
+            throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                                 << currentInputName;
         }
         Interval newInterval(analysis_.getBounds());
         newInterval.setUpperBound(upperBounds);
@@ -343,15 +346,15 @@ namespace PERSALYS
       }
       default:
         return false;
-      }
     }
-    else if (role == Qt::CheckStateRole)
-    {
-      const int inputIndex = index.row() - 1;
-      String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
+  }
+  else if (role == Qt::CheckStateRole)
+  {
+    const int inputIndex = index.row() - 1;
+    String currentInputName = analysis_.getPhysicalModel().getInputNames()[inputIndex];
 
-      switch (index.column())
-      {
+    switch (index.column())
+    {
       case 0: // input of interest
       {
         Description variableInputs = analysis_.getVariableInputs();
@@ -368,15 +371,15 @@ namespace PERSALYS
       }
       default:
         return false;
-      }
-      emit dataChanged(this->index(index.row(), 0), this->index(index.row(), 4));
     }
-    return true;
+    emit dataChanged(this->index(index.row(), 0), this->index(index.row(), 4));
   }
+  return true;
+}
 
 
-  MultiObjectiveOptimizationAnalysis MultiObjectiveOptimizationTableModel::getAnalysis() const
-  {
-    return analysis_;
-  }
+MultiObjectiveOptimizationAnalysis MultiObjectiveOptimizationTableModel::getAnalysis() const
+{
+  return analysis_;
+}
 }

@@ -45,10 +45,10 @@ SymbolicFieldModel::SymbolicFieldModel(const String& name)
 
 /* Constructor with parameters */
 SymbolicFieldModel::SymbolicFieldModel(const String& name,
-    const MeshModel& meshModel,
-    const InputCollection& inputs,
-    const OutputCollection& outputs,
-    const Description& formulas)
+                                       const MeshModel& meshModel,
+                                       const InputCollection& inputs,
+                                       const OutputCollection& outputs,
+                                       const Description& formulas)
   : SymbolicPhysicalModel(name, inputs, outputs, formulas)
 {
   hasMesh_ = true;

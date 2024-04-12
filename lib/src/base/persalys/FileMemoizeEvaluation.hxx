@@ -26,7 +26,8 @@
 #include "openturns/Evaluation.hxx"
 
 #include "persalys/PersalysPrivate.hxx"
-namespace PERSALYS {
+namespace PERSALYS
+{
 
 /**
  * @class FileMemoizeEvaluation

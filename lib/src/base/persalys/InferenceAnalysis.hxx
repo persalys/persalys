@@ -33,7 +33,7 @@ class PERSALYS_BASE_API InferenceAnalysis : public DesignOfExperimentAnalysis
   CLASSNAME
 
 public:
-  enum TestType{Kolmogorov, Lilliefors};
+  enum TestType {Kolmogorov, Lilliefors};
   typedef OT::Collection<OT::DistributionFactory> DistributionFactoryCollection;
 
   /** Default constructor */
@@ -59,14 +59,32 @@ public:
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
 
-  bool getEstimateParametersConfidenceInterval() const {return estimateParamCI_;};
-  void setEstimateParametersConfidenceInterval(const bool estimateParamCI) {estimateParamCI_ = estimateParamCI;};
+  bool getEstimateParametersConfidenceInterval() const
+  {
+    return estimateParamCI_;
+  };
+  void setEstimateParametersConfidenceInterval(const bool estimateParamCI)
+  {
+    estimateParamCI_ = estimateParamCI;
+  };
 
-  double getParametersConfidenceIntervalLevel() const {return paramCILevel_;};
-  void setParametersConfidenceIntervalLevel(const double paramCILevel) {paramCILevel_ = paramCILevel;};
+  double getParametersConfidenceIntervalLevel() const
+  {
+    return paramCILevel_;
+  };
+  void setParametersConfidenceIntervalLevel(const double paramCILevel)
+  {
+    paramCILevel_ = paramCILevel;
+  };
 
-  OT::UnsignedInteger getTestType() const {return type_;};
-  void setTestType(const OT::UnsignedInteger type) {type_ = type;};
+  OT::UnsignedInteger getTestType() const
+  {
+    return type_;
+  };
+  void setTestType(const OT::UnsignedInteger type)
+  {
+    type_ = type;
+  };
 
   double getLillieforsPrecision() const;
   void setLillieforsPrecision(const double lillieforsPrecision);

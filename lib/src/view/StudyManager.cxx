@@ -169,8 +169,10 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
 {
   MetaModelExportWizard * wizard = new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_);
 
-  if (wizard) {
-    if (wizard->exec()) {
+  if (wizard)
+  {
+    if (wizard->exec())
+    {
       FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(wizard->getAnalysis().getImplementation().get());
       if (chaos)
         item->appendMetaModelItem(chaos->getResult().getMetaModel());
@@ -179,7 +181,7 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
         item->appendMetaModelItem(kriging->getResult().getMetaModel());
       PolynomialRegressionAnalysis * linear = dynamic_cast<PolynomialRegressionAnalysis*>(wizard->getAnalysis().getImplementation().get());
       if (linear)
-	item->appendMetaModelItem(linear->getResult().getMetaModel());
+        item->appendMetaModelItem(linear->getResult().getMetaModel());
     }
     delete wizard;
   }
@@ -304,9 +306,9 @@ void StudyManager::importPythonScript(const QString &fileToImport)
   QString fileName = fileToImport;
   if (fileName.isEmpty())
     fileName = QFileDialog::getOpenFileName(mainWidget_,
-                           tr("Import Python..."),
-                           FileTools::GetCurrentDir(),
-                           tr("Python source files (*.py)"));
+                                            tr("Import Python..."),
+                                            FileTools::GetCurrentDir(),
+                                            tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
   {

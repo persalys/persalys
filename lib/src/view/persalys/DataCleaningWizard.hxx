@@ -29,26 +29,26 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_VIEW_API DataCleaningWizard : public Wizard
-  {
-    Q_OBJECT
-  public:
-    DataCleaningWizard(DataCleaning* cleaner, QWidget *parent = nullptr);
-    void keyPressEvent(QKeyEvent * event);
-    void launch();
+class PERSALYS_VIEW_API DataCleaningWizard : public Wizard
+{
+  Q_OBJECT
+public:
+  DataCleaningWizard(DataCleaning* cleaner, QWidget *parent = nullptr);
+  void keyPressEvent(QKeyEvent * event);
+  void launch();
 
-  protected:
-    void buildInterface();
-    void buildAnalysisPage();
+protected:
+  void buildInterface();
+  void buildAnalysisPage();
 
-  protected slots:
-    void updateUserValues();
+protected slots:
+  void updateUserValues();
 
-  private:
-    DataCleaning * cleaner_;
-    ValueLineEdit * lineEdit_;
-    DataCleaningTableModel * tableModel_;
-  };
+private:
+  DataCleaning * cleaner_;
+  ValueLineEdit * lineEdit_;
+  DataCleaningTableModel * tableModel_;
+};
 
 }
 #endif

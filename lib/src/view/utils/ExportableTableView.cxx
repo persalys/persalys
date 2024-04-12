@@ -72,10 +72,14 @@ void ExportableTableView::contextMenu(const QPoint & pos)
   contextMenu->popup(this->mapToGlobal(pos));
 }
 
-void ExportableTableView::mousePressEvent(QMouseEvent *e) {
-  if(e->button() == Qt::RightButton) {
+void ExportableTableView::mousePressEvent(QMouseEvent *e)
+{
+  if(e->button() == Qt::RightButton)
+  {
     return;
-  } else {
+  }
+  else
+  {
     QTableView::mousePressEvent(e);
   }
 }
@@ -100,22 +104,28 @@ void ExportableTableView::exportData()
     text = dynamic_cast<CustomStandardItemModel*>(model())->getFormattedText();
   }
 
-  if (sample.getSize()) {
-    if(selectionModel()->hasSelection()) {
+  if (sample.getSize())
+  {
+    if(selectionModel()->hasSelection())
+    {
       OT::Sample new_sample(0, sample.getDimension());
       QList<int> rows;
       new_sample.setDescription(sample.getDescription());
-      if(dynamic_cast<SampleTableModel*>(model())) {
+      if(dynamic_cast<SampleTableModel*>(model()))
+      {
         foreach( const QModelIndex & index, selectionModel()->selectedRows() )
           new_sample.add(sample[index.row()]);
-      } else if (dynamic_cast<QSortFilterProxyModel*>(model())) {
+      }
+      else if (dynamic_cast<QSortFilterProxyModel*>(model()))
+      {
         QSortFilterProxyModel* myProxy = dynamic_cast<QSortFilterProxyModel*>(model());
         QModelIndexList indexes = myProxy->mapSelectionToSource(selectionModel()->selection()).indexes();
         QModelIndex previous = indexes.first();
         indexes.removeFirst();
         new_sample.add(sample[previous.row()]);
-        foreach( const QModelIndex & index, indexes) {
-          if(index.row()!=previous.row())
+        foreach( const QModelIndex & index, indexes)
+        {
+          if(index.row() != previous.row())
             new_sample.add(sample[index.row()]);
           previous = index;
         }
@@ -123,7 +133,8 @@ void ExportableTableView::exportData()
       sample = new_sample;
     }
     FileTools::ExportData(sample, this);
-  } else if (!text.isEmpty())
+  }
+  else if (!text.isEmpty())
     FileTools::ExportData(text, this);
   else
     throw SimpleException(tr("Internal exception: cannot get the sample"));

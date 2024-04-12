@@ -322,15 +322,15 @@ void PlotWidget::plotCDFCurve(const Distribution & distribution, const QPen pen)
   if (drawable.getImplementation()->getClassName() == "Staircase")
   {
     Sample newDataCDF(0, 2);
-    for (UnsignedInteger i = 0; i < dataCDF.getSize()-1; ++i)
+    for (UnsignedInteger i = 0; i < dataCDF.getSize() - 1; ++i)
     {
       newDataCDF.add(dataCDF[i]);
       Point interPt(2);
-      interPt[0] = dataCDF(i+1, 0);
+      interPt[0] = dataCDF(i + 1, 0);
       interPt[1] = dataCDF(i, 1);
       newDataCDF.add(interPt);
     }
-    newDataCDF.add(dataCDF[dataCDF.getSize()-1]);
+    newDataCDF.add(dataCDF[dataCDF.getSize() - 1]);
     dataCDF = newDataCDF;
   }
   plotCurve(dataCDF, pen);
@@ -372,15 +372,15 @@ void PlotWidget::plotSurvivalCurve(const Distribution & distribution, const QPen
   if (drawable.getImplementation()->getClassName() == "Staircase")
   {
     Sample newDataSurv(0, 2);
-    for (UnsignedInteger i = 0; i < dataSurv.getSize()-1; ++i)
+    for (UnsignedInteger i = 0; i < dataSurv.getSize() - 1; ++i)
     {
       newDataSurv.add(dataSurv[i]);
       Point interPt(2);
       interPt[0] = dataSurv(i, 0);
-      interPt[1] = dataSurv(i+1, 1);
+      interPt[1] = dataSurv(i + 1, 1);
       newDataSurv.add(interPt);
     }
-    newDataSurv.add(dataSurv[dataSurv.getSize()-1]);
+    newDataSurv.add(dataSurv[dataSurv.getSize() - 1]);
     dataSurv = newDataSurv;
   }
 
@@ -439,26 +439,26 @@ void PlotWidget::plotHistogram(const Sample & sample, const PlotWidget::HistoTyp
   //  if CDF / Survival
   switch(graphType)
   {
-  case PlotWidget::PDF:
-    break;
-  case PlotWidget::CDF:
-    sum = histogramData[0];
-    for (int i = 1; i < barNumber; i++)
-    {
-      sum += histogramData[i];
-      histogramData[i] += histogramData[i - 1];
-    }
-    break;
-  case PlotWidget::Survival:
-    sum = histogramData[barNumber - 1];
-    for (int i = barNumber - 2; i >= 0; i--)
-    {
-      sum += histogramData[i];
-      histogramData[i] += histogramData[i + 1];
-    }
-    break;
-  case PlotWidget::Other:
-    break;
+    case PlotWidget::PDF:
+      break;
+    case PlotWidget::CDF:
+      sum = histogramData[0];
+      for (int i = 1; i < barNumber; i++)
+      {
+        sum += histogramData[i];
+        histogramData[i] += histogramData[i - 1];
+      }
+      break;
+    case PlotWidget::Survival:
+      sum = histogramData[barNumber - 1];
+      for (int i = barNumber - 2; i >= 0; i--)
+      {
+        sum += histogramData[i];
+        histogramData[i] += histogramData[i + 1];
+      }
+      break;
+    case PlotWidget::Other:
+      break;
   }
 
   // create histogram
@@ -510,24 +510,31 @@ void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
   indices.add(idx1);
   indices.add(idx2);
   // Loop over all fronts
-  for (UnsignedInteger j=0; j<allFronts.getSize(); ++j) {
-    if (allFronts[j].getDimension()==2) {
+  for (UnsignedInteger j = 0; j < allFronts.getSize(); ++j)
+  {
+    if (allFronts[j].getDimension() == 2)
+    {
       Sample front = allFronts[j].getMarginal(indices).sortAccordingToAComponent(0);
-      sample = Sample(2*front.getSize()-1, 2);
+      sample = Sample(2 * front.getSize() - 1, 2);
       // Build front points and link them
-      for (UnsignedInteger i=0; i<front.getSize(); ++i) {
-        sample[2*i] = front[i];
-        if (i != front.getSize()-1) {
-          sample(2*i+1, 0) = front(i+1, 0);
-          sample(2*i+1, 1) = front(i, 1);
+      for (UnsignedInteger i = 0; i < front.getSize(); ++i)
+      {
+        sample[2 * i] = front[i];
+        if (i != front.getSize() - 1)
+        {
+          sample(2 * i + 1, 0) = front(i + 1, 0);
+          sample(2 * i + 1, 1) = front(i, 1);
         }
       }
-    } else {
+    }
+    else
+    {
       // Get side view marginals sub samples and plot only front points
       sample = allFronts[j].getMarginal(indices).sortAccordingToAComponent(0);
     }
     // Draw
-    if (j<MaxVisibleVariableNumber) {
+    if (j < MaxVisibleVariableNumber)
+    {
       QwtSymbol * symbol = new QwtSymbol(QwtSymbol::Ellipse,
                                          QBrush(colors[j].c_str()).color(),
                                          QPen(colors[j].c_str()).color(),
@@ -536,8 +543,8 @@ void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
       setAxisTitle(QwtPlot::yLeft, QString(allFronts[j].getDescription()[idx2].c_str()));
 
       plotCurve(sample, QPen(colors[j].c_str()).color(),
-                allFronts[j].getDimension()==2 ? QwtPlotCurve::Lines : QwtPlotCurve::Dots,
-                symbol, QString("front"+QString::number(j)));
+                allFronts[j].getDimension() == 2 ? QwtPlotCurve::Lines : QwtPlotCurve::Dots,
+                symbol, QString("front" + QString::number(j)));
     }
   }
 
@@ -547,7 +554,7 @@ void PlotWidget::plotFronts(const OT::Collection<OT::Sample> & allFronts,
 
   // Loop over legend items ans set them checked
   QwtPlotItemList items = itemList();
-  for (int i=0; i<items.size(); i++)
+  for (int i = 0; i < items.size(); i++)
   {
     const QVariant itemInfo = itemToInfo(items[i]);
     QwtLegendLabel* legendLabel =
@@ -709,15 +716,15 @@ class RasterData : public QwtMatrixRasterData
 {
 public:
   RasterData(Contour *contour)
-  : QwtMatrixRasterData()
-  , dx_(contour->getX()(1, 0) - contour->getX()(0, 0))
-  , dy_(contour->getY()(1, 0) - contour->getY()(0, 0))
+    : QwtMatrixRasterData()
+    , dx_(contour->getX()(1, 0) - contour->getX()(0, 0))
+    , dy_(contour->getY()(1, 0) - contour->getY()(0, 0))
   {
     setResampleMode(QwtMatrixRasterData::BilinearInterpolation);
 
     QVector<double> zValues(contour->getData().getSize());
     Sample sample(contour->getData());
-    std::copy(&sample(0, 0), &sample(contour->getData().getSize()-1, 0)+1, zValues.begin());
+    std::copy(&sample(0, 0), &sample(contour->getData().getSize() - 1, 0) + 1, zValues.begin());
     setValueMatrix(zValues, contour->getX().getSize());
   };
 
@@ -743,7 +750,7 @@ class ColorMap : public QwtLinearColorMap
 {
 public:
   ColorMap(const QList<double> &levels)
-  : QwtLinearColorMap(Qt::darkBlue, Qt::darkRed)
+    : QwtLinearColorMap(Qt::darkBlue, Qt::darkRed)
   {
     const double maxLevel = levels[levels.size() - 1];
     const double minLevel = levels[0];
@@ -759,14 +766,14 @@ public:
 };
 
 void PlotWidget::plotContour(const Collection<Drawable>& drawables,
-                              const UnsignedInteger drawableIndex,
-                              const bool displayGradient,
-                              const bool isPDF)
+                             const UnsignedInteger drawableIndex,
+                             const bool displayGradient,
+                             const bool isPDF)
 {
   // contour
   Contour * contour = dynamic_cast<Contour*>(drawables[drawableIndex].getImplementation().get());
   if (!contour)
-    throw InvalidArgumentException(HERE)<< "In plotContour: the drawable is not a Contour";
+    throw InvalidArgumentException(HERE) << "In plotContour: the drawable is not a Contour";
 
   // spectrogram
   QwtPlotSpectrogram * spectrogram = new QwtPlotSpectrogram;

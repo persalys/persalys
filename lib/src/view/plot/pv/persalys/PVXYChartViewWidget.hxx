@@ -30,10 +30,10 @@ public:
   double getAxisRangeMaximum(const vtkAxis::Location ax);
   void setAxisRange(const vtkAxis::Location ax, const double minValue, const double maxValue);
   QString getAxisTitle(const vtkAxis::Location ax, const QString& varX, const QString& varY);
-  void setAxisTitle(const vtkAxis::Location ax, const QString& title, const QString& varX="", const QString& varY="");
+  void setAxisTitle(const vtkAxis::Location ax, const QString& title, const QString& varX = "", const QString& varY = "");
 
   QString getChartTitle(const QString& varX, const QString& varY);
-  void setChartTitle(const QString& title, const QString& varX="", const QString& varY="");
+  void setChartTitle(const QString& title, const QString& varX = "", const QString& varY = "");
   void setAxisTitles(const QStringList& variablesNames, const QStringList& titles);
   bool logScalingValidForAxis(const vtkAxis::Location ax);
   void setSerieColors(const QMap<QString, QColor>& colors);

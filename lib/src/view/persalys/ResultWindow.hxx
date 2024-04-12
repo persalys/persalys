@@ -36,17 +36,17 @@ namespace PERSALYS
 // custom QStyledItemDelegate for VariablesListWidget
 class PERSALYS_VIEW_API ListWidgetItemDelegate : public QStyledItemDelegate
 {
-  public:
-    ListWidgetItemDelegate(QObject *parent = nullptr)
-        : QStyledItemDelegate(parent)
-    {
-    }
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const
-    {
-      QSize result = QStyledItemDelegate::sizeHint (option, index);
-      result.setHeight(result.height() * 2);
-      return result;
-    }
+public:
+  ListWidgetItemDelegate(QObject *parent = nullptr)
+    : QStyledItemDelegate(parent)
+  {
+  }
+  QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const
+  {
+    QSize result = QStyledItemDelegate::sizeHint (option, index);
+    result.setHeight(result.height() * 2);
+    return result;
+  }
 };
 
 // custom QListWidget for all result windows

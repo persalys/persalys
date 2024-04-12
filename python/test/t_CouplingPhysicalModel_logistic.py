@@ -3,6 +3,7 @@
 import os
 import sys
 import persalys
+
 # import openturns as ot
 import openturns.testing as ott
 
@@ -32,7 +33,9 @@ with open("post_logistic.py", "w") as f:
     f.write("Y_mean = sum(Y) / len(Y)\n")
     f.write("Y_last = Y[-1]\n")
     f.write("try:\n    idx = next(i for i,y in enumerate(Y) if y > 100e6)\n")
-    f.write("    Y_mean_t = sum(Y[:idx]) / idx\nexcept StopIteration:\n    Y_mean_t = 0.0\n")
+    f.write(
+        "    Y_mean_t = sum(Y[:idx]) / idx\nexcept StopIteration:\n    Y_mean_t = 0.0\n"
+    )
     f.write('with open("output.txt", "w") as f:\n')
     f.write('    f.write("Y_min=%.17g\\n" % Y_min)\n')
     f.write('    f.write("Y_max=%.17g\\n" % Y_max)\n')

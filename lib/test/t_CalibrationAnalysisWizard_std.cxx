@@ -49,8 +49,12 @@ public:
     const int sampleSize = 100;
     Sample strainSample(eps.getDistribution().getSample(sampleSize));
     strainSample.setDescription(Description(1, "epsilon"));
-    Indices ind(3); ind.fill();
-    Point values(3); values[0] = 750e6; values[1] = 2750e6; values[2] = 10.;
+    Indices ind(3);
+    ind.fill();
+    Point values(3);
+    values[0] = 750e6;
+    values[1] = 2750e6;
+    values[2] = 10.;
     Function f(model.getFunction("sigma"));
     Sample outputStress(ParametricFunction(f, ind, values)(strainSample));
     int stressObservationNoiseSigma = 40.e6; // (Pa)
@@ -92,7 +96,7 @@ private slots:
     wizard.show();
 
     // checks
-    QVERIFY2(wizard.getAnalysis().getParameters()==analysis.getParameters(), "The two CalibrationAnalysis must be equal");
+    QVERIFY2(wizard.getAnalysis().getParameters() == analysis.getParameters(), "The two CalibrationAnalysis must be equal");
   }
 
 
@@ -110,7 +114,7 @@ private slots:
     // - first page
     QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     QVERIFY2(buttonGroup->checkedId() == CalibrationIntroPage::LinearLeastSquares, "Checked button must be LinearLeastSquares");
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two CalibrationAnalysis must be equal");
 
     wizard.next();
@@ -121,17 +125,17 @@ private slots:
     buttonGroup->button(CalibrationIntroPage::NonlinearLeastSquares)->click();
     QVERIFY2(wizard.nextId() == CalibrationAnalysisWizard::Page_Param, "Next page ID must be Page_Param");
     analysis.setMethodName("LeastSquaresNonlinear");
-    QVERIFY2(wizard.getAnalysis().getParameters()==analysis.getParameters(), "The two CalibrationAnalysis must be equal");
+    QVERIFY2(wizard.getAnalysis().getParameters() == analysis.getParameters(), "The two CalibrationAnalysis must be equal");
 
     buttonGroup->button(CalibrationIntroPage::LinearGaussian)->click();
     QVERIFY2(wizard.nextId() == CalibrationAnalysisWizard::Page_PriorDist, "Next page ID must be Page_PriorDist");
     analysis.setMethodName("GaussianLinear");
-    QVERIFY2(wizard.getAnalysis().getParameters()==analysis.getParameters(), "The two CalibrationAnalysis must be equal");
+    QVERIFY2(wizard.getAnalysis().getParameters() == analysis.getParameters(), "The two CalibrationAnalysis must be equal");
 
     buttonGroup->button(CalibrationIntroPage::NonlinearGaussian)->click();
     QVERIFY2(wizard.nextId() == CalibrationAnalysisWizard::Page_PriorDist, "Next page ID must be Page_PriorDist");
     analysis.setMethodName("GaussianNonlinear");
-    QVERIFY2(wizard.getAnalysis().getParameters()==analysis.getParameters(), "The two CalibrationAnalysis must be equal");
+    QVERIFY2(wizard.getAnalysis().getParameters() == analysis.getParameters(), "The two CalibrationAnalysis must be equal");
   }
 
 
@@ -210,7 +214,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(wizard.refPointPage_->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft() + QPoint(5, 2));
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!wizard.refPointPage_->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
     QVERIFY2(QtOT::DescriptionToStringList(wizard.refPointPage_->getFixedValues().getDescription()).join(",").toStdString() == "R,C,gam", "wrong fixed input names");
@@ -222,8 +226,8 @@ private slots:
     QVERIFY2(QtOT::DescriptionToStringList(wizard.refPointPage_->getFixedValues().getDescription()).join(",").toStdString() == "C,gam", "wrong fixed input names");
     QVERIFY2(wizard.priorDistPage_->getDistribution().getDescription() == Description(1, "R"), "wrong calibrated input names");
 
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft() + QPoint(5, 2));
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two CalibrationAnalysis must be equal");
   }
 };

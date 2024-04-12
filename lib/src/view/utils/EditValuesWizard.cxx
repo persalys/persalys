@@ -104,7 +104,7 @@ void EditValuesWizard::buildInterface()
   proxy_->sort(0);
   valueTable_->horizontalHeader()->setStretchLastSection(true);
   valueTable_->verticalHeader()->hide();
-  connect(valueTable_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(checkButtons()));
+  connect(valueTable_->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(checkButtons()));
 
   QVBoxLayout * optionLayout = new QVBoxLayout;
 
@@ -154,7 +154,7 @@ void EditValuesWizard::addValue()
     Point newpoint(model_->columnCount());
     for (int i = 0; i < model_->columnCount(); ++i)
     {
-      const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount()-1, i)));
+      const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount() - 1, i)));
       newpoint[i] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
     }
     sample.add(newpoint);
@@ -177,14 +177,15 @@ void EditValuesWizard::importSample()
   ImportedDistributionPage * page = new ImportedDistributionPage;
   importWizard->addPage(page);
 
-  if (importWizard->exec()) {
+  if (importWizard->exec())
+  {
     Sample newSample(page->getData().getSize(), 0);
     // Columns from imported sample
     newSample.stack(page->getData().getMarginal(Description(1, tr("Value").toStdString())));
     const Description columnNames = page->getData().getDescription();
     const Description::const_iterator it = std::find(columnNames.begin(),
-                                                     columnNames.end(),
-                                                     tr("Weight").toStdString());
+                                           columnNames.end(),
+                                           tr("Weight").toStdString());
     // Widget has been used to specify probabilities
     if (it != columnNames.end())
       newSample.stack(page->getData().getMarginal(Description(1, tr("Weight").toStdString())));
@@ -285,14 +286,15 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
 
 void UserDefinedWizard::addValue()
 {
-  if (proxy_->rowCount() && model_->columnCount()) {
+  if (proxy_->rowCount() && model_->columnCount())
+  {
     Point newpoint(model_->columnCount());
-    const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount()-1, 0)));
+    const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount() - 1, 0)));
     newpoint[0] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
     Sample sample(model_->getSample());
     Point proba(sample.getMarginal(1).asPoint());
     if (proba.getDimension())
-      newpoint[1] = proba[proba.getDimension()-1];
+      newpoint[1] = proba[proba.getDimension() - 1];
     else
       newpoint[1] = 1;
     sample.add(newpoint);
@@ -303,7 +305,7 @@ void UserDefinedWizard::addValue()
     Point point(2);
     point[0] = 0;
     point[1] = 1;
-    Sample sample(0,2);
+    Sample sample(0, 2);
     sample.add(point);
     Description description(2);
     description[0] = tr("Value").toStdString();
@@ -343,7 +345,8 @@ ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
   errorMessageLabel_ = new TemporaryLabel;
   pageLayout->addWidget(errorMessageLabel_);
 
-  connect(sampleWidget_, &ImportSampleWidget::updateTableRequested, [=](const QString & fileName) {
+  connect(sampleWidget_, &ImportSampleWidget::updateTableRequested, [ = ](const QString & fileName)
+  {
     errorMessageLabel_->setText("");
     Sample sample = Tools::ImportSample(fileName.toStdString());
     Indices allIndices = Indices(sample.getDimension());
@@ -351,15 +354,16 @@ ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
     Description description(2);
     description[0] = tr("Value").toStdString();
     description[1] = tr("Weight").toStdString();
-    sampleWidget_->updateWidgets(sample, sample.getDescription(), allIndices, description);});
+    sampleWidget_->updateWidgets(sample, sample.getDescription(), allIndices, description);
+  });
 }
 
 bool ImportedDistributionPage::validatePage()
 {
   const Description desc = getData().getDescription();
-  for (UnsignedInteger i=0; i<desc.getSize()-1; ++i)
+  for (UnsignedInteger i = 0; i < desc.getSize() - 1; ++i)
   {
-    for (UnsignedInteger j=i+1; j<desc.getSize(); ++j)
+    for (UnsignedInteger j = i + 1; j < desc.getSize(); ++j)
     {
       if (desc[i] == desc[j] && desc[i] != "")
       {

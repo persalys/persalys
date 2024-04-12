@@ -113,7 +113,7 @@ void PolynomialRegressionResultWindow::buildInterface()
     QStringList valuesList;
     valuesList << QString::number(analysis->getEffectiveInputSample().getDimension());
     valuesList << QString::number(analysis->getDegree());
-    valuesList << QString::fromStdString(analysis->getInteraction() ? "yes": "no");
+    valuesList << QString::fromStdString(analysis->getInteraction() ? "yes" : "no");
     valuesList << QString::fromStdString(result_.getFormulas()[i]);
     valuesList << QString::number(result_.getLinearModelResultCollection()[i].getRSquared());
     valuesList << QString::number(result_.getLinearModelResultCollection()[i].getAdjustedRSquared());
@@ -318,7 +318,8 @@ void PolynomialRegressionResultWindow::buildInterface()
     residualTabWidget->addTab(residualTableScrollArea, tr("Table"));
 
     // residual distribution
-    try {
+    try
+    {
       QGridLayout * resDistLayout = new QGridLayout;
       const Normal noiseDistribution(result_.getLinearModelResultCollection()[i].getNoiseDistribution());
       QStringList namesList(tr("Standard deviation"));

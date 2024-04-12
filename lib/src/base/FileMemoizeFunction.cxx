@@ -27,7 +27,8 @@
 
 using namespace OT;
 
-namespace PERSALYS {
+namespace PERSALYS
+{
 
 CLASSNAMEINIT(FileMemoizeFunction)
 

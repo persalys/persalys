@@ -36,8 +36,8 @@ DataImport::DataImport()
 
 /* Constructor with parameters */
 DataImport::DataImport(const String& fileName,
-                     const Indices& inputColumns,
-                     const Indices& outputColumns)
+                       const Indices& inputColumns,
+                       const Indices& outputColumns)
 {
   setFileName(fileName);
   setColumns(inputColumns, outputColumns);

@@ -58,7 +58,7 @@ CodeEditor::CodeEditor(QWidget * parent)
   connect(horizontalScrollBar(), SIGNAL(actionTriggered(int)), this, SLOT(updateHorizontalScrollBarValue()));
 
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
-  connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
+  connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
   connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 
   updateLineNumberAreaWidth(0);
@@ -81,28 +81,30 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
   if (e->key() == Qt::Key_Return)
   {
     int position = textCursor().position();
-    if(position>1)
+    if(position > 1)
       //Look for char before new line added by QPlainTextEdit::keyPressEvent
-      if(toPlainText().at(position-2) == ':')
+      if(toPlainText().at(position - 2) == ':')
         nIndent_++;
     emit codeEdited(this);
     QTextCursor cursor(textCursor());
     cursor.setPosition(position);
     setTextCursor(cursor);
-    for(uint i=0; i<nIndent_; i++)
+    for(uint i = 0; i < nIndent_; i++)
       cursor.insertText("    ");
   }
 
-  if(e->key() == Qt::Key_Backspace) {
+  if(e->key() == Qt::Key_Backspace)
+  {
     QTextCursor cursor(textCursor());
     cursor.select(QTextCursor::LineUnderCursor);
     //if empty line
-    if(!cursor.selectedText().contains(QRegularExpression("\\S+"))) {
+    if(!cursor.selectedText().contains(QRegularExpression("\\S+")))
+    {
       //clear it
       cursor.removeSelectedText();
-      if(nIndent_>0) nIndent_--;
+      if(nIndent_ > 0) nIndent_--;
       // add spaces corresponding to new indent
-      for(uint i=0; i<nIndent_; i++)
+      for(uint i = 0; i < nIndent_; i++)
         cursor.insertText("    ");
     }
     cursor.clearSelection();
@@ -116,20 +118,22 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 }
 
 
-void CodeEditor::mousePressEvent(QMouseEvent *e) {
+void CodeEditor::mousePressEvent(QMouseEvent *e)
+{
   QPlainTextEdit::mousePressEvent(e);
   if(e->button() == Qt::LeftButton)
     updateIndent();
 }
 
 
-void CodeEditor::updateIndent() {
+void CodeEditor::updateIndent()
+{
   QTextCursor cursor(textCursor());
   QString currentLine = cursor.block().text();
   QRegularExpression rex("^((\\ {4})+)");
   QRegularExpressionMatch match = rex.match(currentLine);
   if (match.hasMatch())
-    nIndent_ = match.capturedTexts().at(0).size()/4;
+    nIndent_ = match.capturedTexts().at(0).size() / 4;
   else
     nIndent_ = 0;
 }
@@ -267,10 +271,12 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
 {
-  if(obj == qobject_cast<CodeEditor*>(obj) && event->type() == QEvent::Wheel ) {
+  if(obj == qobject_cast<CodeEditor*>(obj) && event->type() == QEvent::Wheel )
+  {
     CodeEditor *editor = qobject_cast<CodeEditor*>(obj);
     QWheelEvent *wheel = static_cast<QWheelEvent*>(event);
-    if(wheel->modifiers() == Qt::ControlModifier) {
+    if(wheel->modifiers() == Qt::ControlModifier)
+    {
       if(wheel->angleDelta().y() > 0)
         editor->zoomIn(1);
       else
@@ -347,53 +353,57 @@ void CodeDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option,
 // ---------------- CodeHighlighter ---------------------------
 
 typedef QMap<QString, QTextCharFormat> FormatMap;
-static const FormatMap STYLES = {
-    { "keyword", CodeHighlighter::format("blue") },
-    { "operator", CodeHighlighter::format("red") },
-    { "brace", CodeHighlighter::format("steelblue", "bold") },
-    { "defclass", CodeHighlighter::format("black", "bold") },
-    { "string", CodeHighlighter::format("magenta") },
-    { "string2", CodeHighlighter::format("darkMagenta") },
-    { "comment", CodeHighlighter::format("darkGreen", "italic") },
-    { "self", CodeHighlighter::format("black", "italic") },
-    { "numbers", CodeHighlighter::format("brown") }
+static const FormatMap STYLES =
+{
+  { "keyword", CodeHighlighter::format("blue") },
+  { "operator", CodeHighlighter::format("red") },
+  { "brace", CodeHighlighter::format("steelblue", "bold") },
+  { "defclass", CodeHighlighter::format("black", "bold") },
+  { "string", CodeHighlighter::format("magenta") },
+  { "string2", CodeHighlighter::format("darkMagenta") },
+  { "comment", CodeHighlighter::format("darkGreen", "italic") },
+  { "self", CodeHighlighter::format("black", "italic") },
+  { "numbers", CodeHighlighter::format("brown") }
 };
 
-static const QStringList keywords = {
-    "and", "assert", "break", "class", "continue", "def",
-    "del", "elif", "else", "except", "exec", "finally",
-    "for", "from", "global", "if", "import", "in",
-    "is", "lambda", "not", "or", "pass", "print",
-    "raise", "return", "try", "while", "yield",
-    "None", "True", "False"
+static const QStringList keywords =
+{
+  "and", "assert", "break", "class", "continue", "def",
+  "del", "elif", "else", "except", "exec", "finally",
+  "for", "from", "global", "if", "import", "in",
+  "is", "lambda", "not", "or", "pass", "print",
+  "raise", "return", "try", "while", "yield",
+  "None", "True", "False"
 };
 
-static const QStringList operators = {
-    "=",
-    "==", "!=", "<", "<=", ">", ">=",
-    "\\+", "-", "\\*", "/", "//", "\\%", "\\*\\*",
-    "\\+=", "-=", "\\*=", "/=", "\\%=",
-    "\\^", "\\|", "\\&", "\\~", ">>", "<<"
+static const QStringList operators =
+{
+  "=",
+  "==", "!=", "<", "<=", ">", ">=",
+  "\\+", "-", "\\*", "/", "//", "\\%", "\\*\\*",
+  "\\+=", "-=", "\\*=", "/=", "\\%=",
+  "\\^", "\\|", "\\&", "\\~", ">>", "<<"
 };
 
-static const QStringList braces = {
-    "\\{", "\\}", "\\(", "\\)", "\\[", "\\]"
+static const QStringList braces =
+{
+  "\\{", "\\}", "\\(", "\\)", "\\[", "\\]"
 };
 
 CodeHighlighter::CodeHighlighter(QTextDocument *parent)
-    : QSyntaxHighlighter(parent)
+  : QSyntaxHighlighter(parent)
 {
   // Keyword, operator, and brace rules
   for(const QString &keyword : keywords)
-    {
-      QString pattern = QString("\\b%1\\b").arg(keyword);
-      highlightingRules += HighlightingRule(pattern, 0, STYLES["keyword"]);
-    }
+  {
+    QString pattern = QString("\\b%1\\b").arg(keyword);
+    highlightingRules += HighlightingRule(pattern, 0, STYLES["keyword"]);
+  }
 
-  for(const QString &pattern: operators)
+  for(const QString &pattern : operators)
     highlightingRules += HighlightingRule(pattern, 0, STYLES["operator"]);
 
-  for(const QString &pattern: braces)
+  for(const QString &pattern : braces)
     highlightingRules += HighlightingRule(pattern, 0, STYLES["brace"]);
 
   // All other rules
@@ -420,9 +430,11 @@ void CodeHighlighter::highlightBlock(const QString &text)
     return;
   QRegularExpressionMatchIterator index;
   // Do other syntax formatting
-  for (const HighlightingRule &rule : std::as_const(highlightingRules)) {
+  for (const HighlightingRule &rule : std::as_const(highlightingRules))
+  {
     QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
-    while (matchIterator.hasNext()) {
+    while (matchIterator.hasNext())
+    {
       QRegularExpressionMatch match = matchIterator.next();
       setFormat(match.capturedStart(), match.capturedLength(), rule.format);
     }

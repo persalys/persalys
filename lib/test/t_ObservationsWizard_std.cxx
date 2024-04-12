@@ -81,7 +81,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
 
-    QVERIFY2(wizard.getDesignOfExperiment().__repr__()==obs.__repr__(), "The two Observations must be equal");
+    QVERIFY2(wizard.getDesignOfExperiment().__repr__() == obs.__repr__(), "The two Observations must be equal");
 
     remove(filename.c_str());
   }

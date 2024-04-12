@@ -155,12 +155,14 @@ void PhysicalModelWindowWidget::buildInterface()
   outputButtonsLayout->addWidget(timeInfo);
   outputsLayout->addLayout(outputButtonsLayout);
   outputButtonsLayout->addStretch();
-  connect(this, &PhysicalModelWindowWidget::evaluateOutputsRequested, [=] () {
-      timeInfo->clear();
-      evaluateOutputs();
-      setCurrentIndex(0);
-      if(physicalModel_.getEvalTime()>0)
-        timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));});
+  connect(this, &PhysicalModelWindowWidget::evaluateOutputsRequested, [ = ] ()
+  {
+    timeInfo->clear();
+    evaluateOutputs();
+    setCurrentIndex(0);
+    if(physicalModel_.getEvalTime() > 0)
+      timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
+  });
 
   // buttons Add/Remove output
   if (physicalModel_.getImplementation()->getClassName().find("Symbolic") != std::string::npos)
@@ -184,7 +186,8 @@ void PhysicalModelWindowWidget::buildInterface()
   vbox->addWidget(verticalSplitter);
 
   // - multiprocessing
-  if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos) {
+  if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos)
+  {
     QSettings settings;
     const int nProcesses = settings.value("nProcesses").toUInt();
     physicalModel_.setProcessNumber((UnsignedInteger)nProcesses);
@@ -247,9 +250,11 @@ void PhysicalModelWindowWidget::buildInterface()
     connect(outputTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), gradientTableModel, SLOT(updateData()));
     connect(gradientTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 
-    connect(this, &PhysicalModelWindowWidget::evaluateGradientRequested, [=] () {
-        gradientTableModel->evaluateGradient();
-        setCurrentIndex(1);});
+    connect(this, &PhysicalModelWindowWidget::evaluateGradientRequested, [ = ] ()
+    {
+      gradientTableModel->evaluateGradient();
+      setCurrentIndex(1);
+    });
 
     vbox->addWidget(gradientTableView);
 

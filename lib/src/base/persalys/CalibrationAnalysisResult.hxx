@@ -41,10 +41,22 @@ public:
   /** Virtual constructor */
   CalibrationAnalysisResult * clone() const override;
 
-  OT::CalibrationResult getCalibrationResult() const {return calibrationResult_;};
-  OT::Interval getConfidenceInterval() const {return confidenceInterval_;};
-  DataSample::SampleCollection getPriorResidualsPDF() const {return priorResidualsPDF_;};
-  DataSample::SampleCollection getPosteriorResidualsPDF() const {return posteriorResidualsPDF_;};
+  OT::CalibrationResult getCalibrationResult() const
+  {
+    return calibrationResult_;
+  };
+  OT::Interval getConfidenceInterval() const
+  {
+    return confidenceInterval_;
+  };
+  DataSample::SampleCollection getPriorResidualsPDF() const
+  {
+    return priorResidualsPDF_;
+  };
+  DataSample::SampleCollection getPosteriorResidualsPDF() const
+  {
+    return posteriorResidualsPDF_;
+  };
 
   /** String converter */
   OT::String __repr__() const override;

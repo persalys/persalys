@@ -83,7 +83,7 @@ void CouplingStep::setEnvironment(const Description & keys, const Description & 
   // avoid adding empty keys
   Description newKeys = Description();
   Description newValues = Description();
-  for (UnsignedInteger i=0; i<keys.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < keys.getSize(); ++i)
   {
     if (keys[i].size())
     {
@@ -194,10 +194,12 @@ Description CouplingStep::getPPOutputs() const
   std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   std::regex returnOutput("return[ ]+([_a-zA-Z0-9, ]+)", std::regex::extended);
   std::smatch what;
-  if (std::regex_search(PPCode, what, returnOutput)) {
+  if (std::regex_search(PPCode, what, returnOutput))
+  {
     String outputList = what[1];
     std::string::const_iterator start = outputList.begin(), end = outputList.end();
-    while (std::regex_search(start, end, what, variable)) {
+    while (std::regex_search(start, end, what, variable))
+    {
       start = what[0].second;
       vars.add(what[1]);
     }
@@ -212,10 +214,12 @@ Description CouplingStep::getPPInputs() const
   std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   std::regex defFunc("def[ ]+[_a-zA-Z][_a-zA-Z0-9]*[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", std::regex::extended);
   std::smatch what;
-  if (std::regex_search(PPCode, what, defFunc)) {
+  if (std::regex_search(PPCode, what, defFunc))
+  {
     String outputList = what[1];
     std::string::const_iterator start = outputList.begin(), end = outputList.end();
-    while (std::regex_search(start, end, what, variable)) {
+    while (std::regex_search(start, end, what, variable))
+    {
       start = what[0].second;
       vars.add(what[1]);
     }

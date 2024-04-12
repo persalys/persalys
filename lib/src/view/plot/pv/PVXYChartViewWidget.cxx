@@ -21,14 +21,16 @@ using namespace OT;
 
 namespace PERSALYS
 {
-const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_VIEW_TYPE{
+const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_VIEW_TYPE
+{
   {PVXYChartViewWidget::Scatter, "XYChartView"},
   {PVXYChartViewWidget::TrajectoriesPoints, "XYChartView"},
   {PVXYChartViewWidget::Trajectories, "XYChartView"},
   {PVXYChartViewWidget::BagChart, "XYBagChartView"},
   {PVXYChartViewWidget::FunctionalBagChart, "XYFunctionalBagChartView"}};
 
-const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_REPRESENTATION_TYPE{
+const QMap<PVXYChartViewWidget::Type, const char*> PVXYChartViewWidget::PV_REPRESENTATION_TYPE
+{
   {PVXYChartViewWidget::Scatter, "XYChartRepresentation"},
   {PVXYChartViewWidget::TrajectoriesPoints, "XYChartRepresentation"},
   {PVXYChartViewWidget::Trajectories, "XYChartRepresentationColumns"},
@@ -160,8 +162,8 @@ void PVXYChartViewWidget::setAxisRange(const vtkAxis::Location ax, const double 
 {
   // set range
   chartXY_->GetAxis(ax)->SetBehavior(1);
-  chartXY_->GetAxis(ax)->SetMinimum(minValue - std::abs(0.05*minValue));
-  chartXY_->GetAxis(ax)->SetMaximum(maxValue + std::abs(0.05*maxValue));
+  chartXY_->GetAxis(ax)->SetMinimum(minValue - std::abs(0.05 * minValue));
+  chartXY_->GetAxis(ax)->SetMaximum(maxValue + std::abs(0.05 * maxValue));
   getView()->resetDisplay();
 }
 
@@ -289,7 +291,7 @@ void PVXYChartViewWidget::setSerieColors(const QMap<QString, QColor>& colors)
     QList<QVariant> value = pqSMAdaptor::getMultipleElementProperty(idvp);
     vtkSMPropertyHelper smph(idvp);
 
-    for (int cc = 0; cc < value.size()/4; cc++)
+    for (int cc = 0; cc < value.size() / 4; cc++)
     {
       QString name = value[4 * cc].toString();
       if (colors.contains(name))
@@ -317,7 +319,7 @@ void PVXYChartViewWidget::setSerieLineStyles(const QMap<QString, int>& styles)
     QList<QVariant> value = pqSMAdaptor::getMultipleElementProperty(idvp);
     vtkSMPropertyHelper smph(idvp);
 
-    for (int cc = 0; cc < value.size()/2; cc++)
+    for (int cc = 0; cc < value.size() / 2; cc++)
     {
       QString name = value[2 * cc].toString();
       if (styles.contains(name))

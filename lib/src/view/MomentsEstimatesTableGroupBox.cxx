@@ -253,8 +253,8 @@ void MomentsEstimatesTableGroupBox::ciLevelValueChanged(double proba)
   // index of the variable in result_
   const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
   const Sample marginal = result_.getDesignOfExperiment().getSample().getMarginal(indexVar);
-  ciLabel_->setText(QString("[") + QString::number(marginal.computeQuantile(0.5-proba/2)[0]) +
-                    QString(";") + QString::number(marginal.computeQuantile(0.5+proba/2)[0]) + QString("]"));
+  ciLabel_->setText(QString("[") + QString::number(marginal.computeQuantile(0.5 - proba / 2)[0]) +
+                    QString(";") + QString::number(marginal.computeQuantile(0.5 + proba / 2)[0]) + QString("]"));
 }
 
 

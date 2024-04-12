@@ -35,7 +35,7 @@ class PERSALYS_VIEW_API ObservationsWindow : public SubWindow
 
 public:
   ObservationsWindow(DesignOfExperimentItem *item, QWidget *parent)
-  : SubWindow(item, parent)
+    : SubWindow(item, parent)
   {
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(new TitleLabel(tr("Model observations"), "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#observationwindow"));

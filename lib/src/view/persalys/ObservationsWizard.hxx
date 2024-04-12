@@ -63,7 +63,7 @@ class PERSALYS_VIEW_API ObservationsWizard : public Wizard
 
 public:
   ObservationsWizard(const DesignOfExperiment &designOfExp, QWidget *parent = nullptr)
-  : Wizard(parent)
+    : Wizard(parent)
   {
     docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#observationwizard";
 

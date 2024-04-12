@@ -264,14 +264,14 @@ void FunctionalChaosResultWindow::buildInterface()
 
         Indices multiIndices(enumerateFunction(indices[varianceOrder[i].first]));
 
-        tableModel->setNotEditableItem(i+2, 0, varianceOrder[i].first);
-        tableModel->setNotEditableItem(i+2, 1, multiIndices.__str__().c_str());
-        tableModel->setNotEditableItem(i+2, 2, coefficients(i+1, outputIndex));
-        tableModel->setNotEditableItem(i+2, 3, QString("%1 %").arg(varianceOrder[i].second * 100, 0, 'f', 2));
+        tableModel->setNotEditableItem(i + 2, 0, varianceOrder[i].first);
+        tableModel->setNotEditableItem(i + 2, 1, multiIndices.__str__().c_str());
+        tableModel->setNotEditableItem(i + 2, 2, coefficients(i + 1, outputIndex));
+        tableModel->setNotEditableItem(i + 2, 3, QString("%1 %").arg(varianceOrder[i].second * 100, 0, 'f', 2));
         varPartSum += varianceOrder[i].second * 100;
       }
       tableModel->setNotEditableHeaderItem(tableModel->rowCount(), 0, tr("Sum"));
-      tableModel->setNotEditableItem(tableModel->rowCount()-1, 3, QString("%1 %").arg(varPartSum, 0, 'f', 2));
+      tableModel->setNotEditableItem(tableModel->rowCount() - 1, 3, QString("%1 %").arg(varPartSum, 0, 'f', 2));
 
       tableView->resizeToContents();
       varStackedWidget->addWidget(tableView);

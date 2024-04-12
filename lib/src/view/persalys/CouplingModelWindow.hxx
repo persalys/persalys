@@ -116,27 +116,31 @@ public:
     edit_ = new QLineEdit(path);
     hLayout->addWidget(edit_);
     edit_->setValidator(new QRegularExpressionValidator(QRegularExpression("([^\r\n]*)")));
-    connect(edit_, &QLineEdit::editingFinished, [=]() { emit pathChanged(edit_->text()); });
+    connect(edit_, &QLineEdit::editingFinished, [ = ]()
+    {
+      emit pathChanged(edit_->text());
+    });
 
     QToolButton * button = new QToolButton;
     button->setText("...");
     hLayout->addWidget(button);
 
     connect(button, &QToolButton::clicked,
-            [=]() {
-	      QFileDialog dialog;
-	      dialog.setFileMode(mode);
-	      QString fileName;
-	      if(mode == QFileDialog::Directory)
-		fileName = dialog.getExistingDirectory(this, tr("Choose directory"), FileTools::GetCurrentDir());
-	      else
-		fileName = dialog.getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
-	      if (fileName.isEmpty())
-		return;
-	      FileTools::SetCurrentDir(fileName);
-	      edit_->setText(fileName);
-	      emit pathChanged(fileName);
-	    });
+            [ = ]()
+    {
+      QFileDialog dialog;
+      dialog.setFileMode(mode);
+      QString fileName;
+      if(mode == QFileDialog::Directory)
+        fileName = dialog.getExistingDirectory(this, tr("Choose directory"), FileTools::GetCurrentDir());
+      else
+        fileName = dialog.getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
+      if (fileName.isEmpty())
+        return;
+      FileTools::SetCurrentDir(fileName);
+      edit_->setText(fileName);
+      emit pathChanged(fileName);
+    });
   }
   QString text()
   {
@@ -145,7 +149,7 @@ public:
 signals:
   void pathChanged(const QString&);
 private:
-    QLineEdit * edit_ = nullptr;
+  QLineEdit * edit_ = nullptr;
 };
 
 class PERSALYS_VIEW_API DynamicTabWidget : public QTabWidget
@@ -175,13 +179,13 @@ public:
   }
   virtual int addTab(QWidget *page, const QString &label)
   {
-    insertTab(count()-1, page, label);
-    setCurrentIndex(count()-2);
-    return count()-2;
+    insertTab(count() - 1, page, label);
+    setCurrentIndex(count() - 2);
+    return count() - 2;
   }
   virtual void clear()
   {
-    while (count()-1)
+    while (count() - 1)
       removeTab(0);
   }
   void tabCloseRequested(int index)
@@ -190,7 +194,7 @@ public:
     if (ret == QMessageBox::Yes)
     {
       removeTab(index);
-      setCurrentIndex(index-1);
+      setCurrentIndex(index - 1);
       emit removeTabRequested(index);
       if (count() < 2)
         emit newTabRequested();
@@ -233,7 +237,10 @@ class PERSALYS_VIEW_API CouplingInputFileWidget : public QWidget
 
 public:
   CouplingInputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = nullptr);
-  int getIndFile() const { return indFile_; };
+  int getIndFile() const
+  {
+    return indFile_;
+  };
   QString readFile(QFileInfo & fname) const;
   void compareFiles(QString & s1, QString & s2) const;
 signals:

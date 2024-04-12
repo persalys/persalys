@@ -127,9 +127,9 @@ class PERSALYS_PLOTPV_API MultiPDFSettingWidget : public PVXYChartSettingWidget
 
 public:
   MultiPDFSettingWidget(PVXYChartViewWidget *pvViewWidget,
-                       const QStringList &inputNames,
-                       const QStringList &outputNames,
-                       QWidget *parent = nullptr);
+                        const QStringList &inputNames,
+                        const QStringList &outputNames,
+                        QWidget *parent = nullptr);
 };
 }
 #endif

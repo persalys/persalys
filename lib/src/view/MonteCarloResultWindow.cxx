@@ -71,7 +71,7 @@ void MonteCarloResultWindow::initialize(AnalysisItem* item)
           result_.getCoefficientOfVariation()[i][0] / sqrtSampleSize <= analysis.getMaximumCoefficientOfVariation())
         analysisStopCriteriaMessage_ = tr("Maximum coefficient of variation reached");
       else if (result_.getStandardDeviation()[i].getSize() == 1 &&
-               2*result_.getStandardDeviation()[i][0]*DistFunc::qNormal(0.5*(1+levelConfidenceInterval_)) / sqrtSampleSize <= analysis.getMaximumConfidenceIntervalLength())
+               2 * result_.getStandardDeviation()[i][0]*DistFunc::qNormal(0.5 * (1 + levelConfidenceInterval_)) / sqrtSampleSize <= analysis.getMaximumConfidenceIntervalLength())
         analysisStopCriteriaMessage_ = tr("Maximum confidence interval length reached");
     }
   }

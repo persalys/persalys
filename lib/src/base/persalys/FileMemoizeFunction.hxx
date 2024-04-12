@@ -26,7 +26,8 @@
 #include <openturns/FunctionImplementation.hxx>
 
 
-namespace PERSALYS {
+namespace PERSALYS
+{
 
 /**
  * @class FileMemoizeFunction

@@ -35,17 +35,17 @@ class PERSALYS_BASE_API CovFunctionEvaluation : public OT::EvaluationImplementat
 public:
   /** Default constructor */
   CovFunctionEvaluation()
-  : OT::EvaluationImplementation()
-  , covModel_()
-  , inputDimension_(2)
-  , outputDimension_(1)
+    : OT::EvaluationImplementation()
+    , covModel_()
+    , inputDimension_(2)
+    , outputDimension_(1)
   {};
   /** Default constructor */
   CovFunctionEvaluation(const OT::CovarianceModel& covModel)
-  : OT::EvaluationImplementation()
-  , covModel_(covModel)
-  , inputDimension_(2)
-  , outputDimension_(1)
+    : OT::EvaluationImplementation()
+    , covModel_(covModel)
+    , inputDimension_(2)
+    , outputDimension_(1)
   {};
 
   /** Virtual constructor */
@@ -67,7 +67,7 @@ public:
   {
     OT::Scalar den = std::sqrt(covModel_(inP[0], inP[0])(0, 0) * covModel_(inP[1],  inP[1])(0, 0));
     if (den == 0.0)
-        return OT::Point(1, 0.);
+      return OT::Point(1, 0.);
     return OT::Point(1, covModel_(inP[0], inP[1])(0, 0) / den);
   }
 

@@ -82,7 +82,7 @@ QVariant MorrisResultTableModel::headerData(int section, Qt::Orientation orienta
       case 3:
         return tr("Non-linear effect\nor interaction");
       case 4:
-	return tr("Non-monotonic effect");
+        return tr("Non-monotonic effect");
       case 5:
         return tr("µ*");
       case 6:
@@ -131,9 +131,9 @@ QVariant MorrisResultTableModel::data(const QModelIndex & index, int role) const
       }
       case 4:
       {
-	if (std::abs(result_.getMeanElementaryEffects(outputIndex_)[inIndex]) != meanAbsEE)
+        if (std::abs(result_.getMeanElementaryEffects(outputIndex_)[inIndex]) != meanAbsEE)
           return "X";
-	return QVariant();
+        return QVariant();
       }
       case 5:
         return QString::number(meanAbsEE, 'g', StudyTreeViewModel::DefaultSignificantDigits);

@@ -37,7 +37,9 @@ print(f([[300.0, 75000.0], [400.0, 74000.0]]))
 
 # test operator() (sample)
 code = "from math import pi\nimport time\ndef _exec(R, F):\n"
-code += "    if R == 300.:\n      time.sleep(0.5)\n    G = 2*R-F/(pi*100.0)\n    return G\n"
+code += (
+    "    if R == 300.:\n      time.sleep(0.5)\n    G = 2*R-F/(pi*100.0)\n    return G\n"
+)
 model.setCode(code)
 plan_0 = persalys.FixedDesignOfExperiment(
     "plan_0", model, [[300.0, 75000.0], [400.0, 74000.0]]

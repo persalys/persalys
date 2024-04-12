@@ -178,14 +178,14 @@ Function YACSPhysicalModel::generateFunction(const Description & outputNames) co
 
 
 void YACSPhysicalModel::ReplaceInString(String& workString,
-                            const String& strToReplace,
-                            const String& newValue)
+                                        const String& strToReplace,
+                                        const String& newValue)
 {
   std::size_t pos = workString.find(strToReplace);
   while( pos != std::string::npos)
   {
     workString.replace(pos, strToReplace.size(), newValue);
-    pos = workString.find(strToReplace, pos+newValue.size());
+    pos = workString.find(strToReplace, pos + newValue.size());
   }
 }
 

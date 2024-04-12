@@ -47,7 +47,7 @@ sobolResult = chaosResult.getSobolResult()
 # print("functionalChaosResult", chaosResult.getFunctionalChaosResult())
 
 # Comparaison
-if '1.20' in ot.__version__:
+if "1.20" in ot.__version__:
     mean = [0, 0.4883827512409983]  # ot<1.21
     variance = [0.8595249944148248, 0.8597699643961747]
 else:
@@ -64,7 +64,9 @@ totalIndices = [
 
 ott.assert_almost_equal(mean, chaosResult.getMean())
 ott.assert_almost_equal(variance, chaosResult.getVariance())
-ott.assert_almost_equal(firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-3, 1e-3)
+ott.assert_almost_equal(
+    firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-3, 1e-3
+)
 ott.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-3, 1e-3)
 
 # Chaos 2 ##

@@ -172,7 +172,7 @@ private slots:
 
     QVERIFY2(wizard.algoPage_->validatePage(), "Page must be valid");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two OptimizationAnalysis must be equal");
 
 
@@ -204,7 +204,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two OptimizationAnalysis must be equal");
   }
 };

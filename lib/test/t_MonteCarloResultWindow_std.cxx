@@ -131,7 +131,7 @@ private slots:
     {
       window.tabWidget_->setCurrentIndex(i);
       bool isHidden = window.variablesGroupBox_->isHidden();
-      QVERIFY2((i > 1)? isHidden : !isHidden, "wrong list widget visibility");
+      QVERIFY2((i > 1) ? isHidden : !isHidden, "wrong list widget visibility");
     }
   }
 

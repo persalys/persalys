@@ -33,7 +33,7 @@ class PERSALYS_MODEL_API CorrelationTableModel : public QAbstractTableModel
 
 public:
   enum Type {Spearman, Kendall, Correlation};
-  CorrelationTableModel(const PhysicalModel &model, const OT::Distribution &copula, const Type=CorrelationTableModel::Spearman, QObject *parent = nullptr);
+  CorrelationTableModel(const PhysicalModel &model, const OT::Distribution &copula, const Type = CorrelationTableModel::Spearman, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const;
   int rowCount(const QModelIndex & parent = QModelIndex()) const;

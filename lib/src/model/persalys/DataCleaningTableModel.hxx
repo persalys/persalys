@@ -28,37 +28,37 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_MODEL_API DataCleaningTableModel : public QAbstractTableModel
-  {
-    Q_OBJECT
+class PERSALYS_MODEL_API DataCleaningTableModel : public QAbstractTableModel
+{
+  Q_OBJECT
 
-  public:
-    DataCleaningTableModel(DataCleaning * cleaner, QObject *parent = nullptr);
+public:
+  DataCleaningTableModel(DataCleaning * cleaner, QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex & parent = QModelIndex()) const override;
-    Qt::ItemFlags flags(const QModelIndex & index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
-    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
-    void updateReplacingValues(const OT::Point vals);
-    OT::Sample clean();
-    void updateData();
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
+  void updateReplacingValues(const OT::Point vals);
+  OT::Sample clean();
+  void updateData();
 
-    void prepareForRemoval();
-    void prepareForReplacement();
-    //signals:
-    //  void sampleChanged(const OT::Sample& sample);
-    //  void sampleDescriptionChanged(const OT::Description& description);
-    //  void errorMessageChanged(const QString & message);
-    //temporaryErrorMessageChanged(const QString & message);
+  void prepareForRemoval();
+  void prepareForReplacement();
+  //signals:
+  //  void sampleChanged(const OT::Sample& sample);
+  //  void sampleDescriptionChanged(const OT::Description& description);
+  //  void errorMessageChanged(const QString & message);
+  //temporaryErrorMessageChanged(const QString & message);
 
-  private:
-    DataCleaning * cleaner_;
-    OT::Description names_;
-    OT::Point values_;
-    OT::Indices selected_;
-    OT::Bool removalRequired_;
-  };
+private:
+  DataCleaning * cleaner_;
+  OT::Description names_;
+  OT::Point values_;
+  OT::Indices selected_;
+  OT::Bool removalRequired_;
+};
 }
 #endif

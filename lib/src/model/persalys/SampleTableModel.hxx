@@ -35,7 +35,7 @@ class PERSALYS_MODEL_API SampleTableProxyModel : public QSortFilterProxyModel
   Q_OBJECT
 public:
   SampleTableProxyModel(QObject *parent = nullptr)
-  : QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel(parent)
   {}
 
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const

@@ -86,9 +86,11 @@ void PVPlotSettingWidget::addSelectDataWidget(const QString &labelName, const QL
   else
   {
     reprNames = plotNames_;
-    for (int i=0; i<plotNames_.size(); ++i) {
+    for (int i = 0; i < plotNames_.size(); ++i)
+    {
       if (visibleReprNames.size() < MaxVisibleVariableNumber && (!checked.size() || checked[i]))
-        visibleReprNames << plotNames_[i];}
+        visibleReprNames << plotNames_[i];
+    }
   }
   ListWidgetWithCheckBox * reprListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, visibleReprNames, this);
   if (pvViewWidget_->getNumberOfRepresentations() > 1)
@@ -111,9 +113,11 @@ void PVPlotSettingWidget::addRankWidget(const bool checkState)
   QCheckBox * rankCheckBox = new QCheckBox(tr("Ranks"));
   rankCheckBox->setChecked(checkState);
   frameLayout_->addWidget(rankCheckBox, frameLayout_->rowCount(), 0, 1, 2);
-  connect(rankCheckBox, &QCheckBox::clicked, [=](bool isRank) {
-            for (UnsignedInteger i = 0; i < samples_.getSize(); ++i)
-              pvViewWidget_->updateTable(isRank ? rankSamples_[i] : samples_[i], i);});
+  connect(rankCheckBox, &QCheckBox::clicked, [ = ](bool isRank)
+  {
+    for (UnsignedInteger i = 0; i < samples_.getSize(); ++i)
+      pvViewWidget_->updateTable(isRank ? rankSamples_[i] : samples_[i], i);
+  });
 }
 
 
@@ -160,7 +164,8 @@ MultiPlotSettingWidget::MultiPlotSettingWidget(PVViewWidget *pvViewWidget, const
   plotNames_ = QtOT::DescriptionToStringList(variablesNames);
   Point max = sample.getMax();
   Point min = sample.getMin();
-  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i) {
+  for (UnsignedInteger i = 0; i < variablesNames.getSize(); ++i)
+  {
     checked << !(max[i] == min[i]);
   }
 

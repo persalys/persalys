@@ -264,7 +264,7 @@ void DataAnalysisWindow::addSummaryTab()
     for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
       if (result_.getStandardDeviation()[i].getSize() == 1)
       {
-        Scalar CI = 2*result_.getStandardDeviation()[i][0]*DistFunc::qNormal(0.5*(1+levelConfidenceInterval_)) / sqrtSampleSize;
+        Scalar CI = 2 * result_.getStandardDeviation()[i][0] * DistFunc::qNormal(0.5 * (1 + levelConfidenceInterval_)) / sqrtSampleSize;
         maxCILength = std::max(CI, maxCILength);
       }
     valuesList << QString::number(maxCILength);
@@ -417,7 +417,8 @@ void DataAnalysisWindow::addBoxPlotTab()
   Point max = designOfExperiment_.getSample().getMax();
   Point min = designOfExperiment_.getSample().getMin();
 
-  for (int i = 0; i < variablesNames.size(); ++i) {
+  for (int i = 0; i < variablesNames.size(); ++i)
+  {
     checked << !(max[ind[i]] == min[ind[i]]);
     plot->addBoxPlot(result_, ind[i]);
   }
@@ -637,7 +638,8 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
     {
       PVSpreadSheetViewWidget * failedPointsTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
       tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(failedPointsTable, failedInputSample_, getItem()), tr("Failed points"));
-      if (errorDescription_.getSize()) {
+      if (errorDescription_.getSize())
+      {
         PVSpreadSheetViewWidget * errorTable = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
         tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(errorTable, failedInputSample_, getItem(), errorDescription_), tr("Error messages"));
       }
@@ -815,21 +817,22 @@ void DataAnalysisWindow::updateVariablesListVisibility(int indexTab)
 void DataAnalysisWindow::addErrorTable()
 {
   ExportableTableView * errorTable = new ExportableTableView;
-  CustomStandardItemModel* errorTableModel = new CustomStandardItemModel(failedInputSample_.getSize()+1, failedInputSample_.getDimension()+2, errorTable);
+  CustomStandardItemModel* errorTableModel = new CustomStandardItemModel(failedInputSample_.getSize() + 1, failedInputSample_.getDimension() + 2, errorTable);
   errorTable->setModel(errorTableModel);
 
   // header
   for (UnsignedInteger j = 0; j < failedInputSample_.getDimension(); ++j)
-    errorTableModel->setNotEditableHeaderItem(0, j+1, failedInputSample_.getDescription()[j].c_str());
+    errorTableModel->setNotEditableHeaderItem(0, j + 1, failedInputSample_.getDescription()[j].c_str());
   errorTableModel->setNotEditableHeaderItem(0, 0, tr("Row ID"));
-  errorTableModel->setNotEditableHeaderItem(0, failedInputSample_.getDimension()+1, tr("Error message"));
+  errorTableModel->setNotEditableHeaderItem(0, failedInputSample_.getDimension() + 1, tr("Error message"));
 
   // Error Desc
-  for (UnsignedInteger i = 0; i < failedInputSample_.getSize(); ++i) {
+  for (UnsignedInteger i = 0; i < failedInputSample_.getSize(); ++i)
+  {
     for (UnsignedInteger j = 0; j < failedInputSample_.getDimension(); ++j)
-      errorTableModel->setNotEditableItem(i+1, j+1, failedInputSample_[i][j]);
-    errorTableModel->setNotEditableItem(i+1, failedInputSample_.getDimension()+1, errorDescription_[i].c_str());
-    errorTableModel->setNotEditableItem(i+1, 0, i);
+      errorTableModel->setNotEditableItem(i + 1, j + 1, failedInputSample_[i][j]);
+    errorTableModel->setNotEditableItem(i + 1, failedInputSample_.getDimension() + 1, errorDescription_[i].c_str());
+    errorTableModel->setNotEditableItem(i + 1, 0, i);
   }
 
   errorTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);

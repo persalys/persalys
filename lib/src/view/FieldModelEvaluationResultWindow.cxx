@@ -122,11 +122,11 @@ void FieldCentralTendencyResultWindow::buildInterface()
 
   // main splitter
   mainWidget_ = new FieldModelEvaluationResultWidget(inputSample_,
-                                                    result_.getProcessSample(),
-                                                    result_.getMeanSample(),
-                                                    result_.getLowerQuantileSample(),
-                                                    result_.getUpperQuantileSample(),
-                                                    this);
+      result_.getProcessSample(),
+      result_.getMeanSample(),
+      result_.getLowerQuantileSample(),
+      result_.getUpperQuantileSample(),
+      this);
 
   // display Karhunen-Loeve Result
   addDecompositionTab();
@@ -446,11 +446,11 @@ FieldModelEvaluationResultWidget::FieldModelEvaluationResultWidget(const Sample&
 
 
 FieldModelEvaluationResultWidget::FieldModelEvaluationResultWidget(const Sample& inputSample,
-                                                                   const ProcessSample& ps,
-                                                                   const Sample& meanS,
-                                                                   const Sample& qInfS,
-                                                                   const Sample& qSupS,
-                                                                   QWidget *parent)
+    const ProcessSample& ps,
+    const Sample& meanS,
+    const Sample& qInfS,
+    const Sample& qSupS,
+    QWidget *parent)
   : QWidget(parent)
   , outListWidget_(0)
   , tabWidget_(0)
@@ -772,8 +772,8 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     outPVGraph->setAxisToShow(fieldSamplet.getDescription());
 
     TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph,
-                                                                                     QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
-                                                                                     this);
+        QtOT::DescriptionToStringList(fieldSamplet.getDescription()),
+        this);
 
     trajStackedWidget->addWidget(new WidgetBoundToDockWidget(outPVGraph, scatterSettingWidget, this));
 

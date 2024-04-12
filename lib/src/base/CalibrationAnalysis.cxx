@@ -207,7 +207,10 @@ void CalibrationAnalysis::launch()
   {
     result_.confidenceInterval_ = distributionPosterior.computeBilateralConfidenceInterval(confidenceIntervalLength_);
   }
-  catch (const std::exception &) { LOGWARN("Cannot compute the confidence interval"); }
+  catch (const std::exception &)
+  {
+    LOGWARN("Cannot compute the confidence interval");
+  }
   ResourceMap::SetAsUnsignedInteger("Normal-SmallDimension", oldValue1);
   ResourceMap::SetAsUnsignedInteger("Normal-MinimumNumberOfPoints", oldValue2);
 
@@ -221,8 +224,14 @@ void CalibrationAnalysis::launch()
   const Sample priorResiduals(getObservations().getOutputSample() - result_.calibrationResult_.getOutputAtPriorMean());
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
-    try { result_.priorResidualsPDF_[i] = kernel.build(priorResiduals.getMarginal(i)).drawPDF().getDrawables()[0].getData(); }
-    catch (const std::exception &) { LOGWARN("Cannot build prior residual PDF"); }
+    try
+    {
+      result_.priorResidualsPDF_[i] = kernel.build(priorResiduals.getMarginal(i)).drawPDF().getDrawables()[0].getData();
+    }
+    catch (const std::exception &)
+    {
+      LOGWARN("Cannot build prior residual PDF");
+    }
   }
 
   // Posterior
@@ -232,8 +241,14 @@ void CalibrationAnalysis::launch()
   Collection<Sample> posteriorResidualPDF(outputsOfInterest.getSize());
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
-    try { result_.posteriorResidualsPDF_[i] = kernel.build(posteriorResiduals.getMarginal(i)).drawPDF().getDrawables()[0].getData(); }
-    catch (const std::exception &) { LOGWARN("Cannot build posterior residual PDF"); }
+    try
+    {
+      result_.posteriorResidualsPDF_[i] = kernel.build(posteriorResiduals.getMarginal(i)).drawPDF().getDrawables()[0].getData();
+    }
+    catch (const std::exception &)
+    {
+      LOGWARN("Cannot build posterior residual PDF");
+    }
   }
 }
 
@@ -251,12 +266,12 @@ void CalibrationAnalysis::runCalibrationAlgorithm(const Function &paramFunction)
   if (calibrationEngine == "adao")
   {
     AdaoCalibration algo(getMethodName(),
-                          paramFunction,
-                          getObservations().getInputSample(),
-                          getObservations().getOutputSample(),
-                          thetaPrior,
-                          priorCovariance,
-                          errorCovariance_);
+                         paramFunction,
+                         getObservations().getInputSample(),
+                         getObservations().getOutputSample(),
+                         thetaPrior,
+                         priorCovariance,
+                         errorCovariance_);
     algo.run();
     result_.calibrationResult_ = algo.getResult();
   }
@@ -266,22 +281,22 @@ void CalibrationAnalysis::runCalibrationAlgorithm(const Function &paramFunction)
     if (getMethodName() == "LeastSquaresLinear")
     {
       LinearLeastSquaresCalibration algo(paramFunction,
-                                        getObservations().getInputSample(),
-                                        getObservations().getOutputSample(),
-                                        thetaPrior,
-                                        ResourceMap::GetAsString("LinearLeastSquaresCalibration-Method"));
+                                         getObservations().getInputSample(),
+                                         getObservations().getOutputSample(),
+                                         thetaPrior,
+                                         ResourceMap::GetAsString("LinearLeastSquaresCalibration-Method"));
       algo.run();
       result_.calibrationResult_ = algo.getResult();
     }
     else if (getMethodName() == "GaussianLinear")
     {
       GaussianLinearCalibration algo(paramFunction,
-                                    getObservations().getInputSample(),
-                                    getObservations().getOutputSample(),
-                                    thetaPrior,
-                                    priorCovariance,
-                                    errorCovariance_,
-                                    ResourceMap::GetAsString("GaussianLinearCalibration-Method"));
+                                     getObservations().getInputSample(),
+                                     getObservations().getOutputSample(),
+                                     thetaPrior,
+                                     priorCovariance,
+                                     errorCovariance_,
+                                     ResourceMap::GetAsString("GaussianLinearCalibration-Method"));
       algo.run();
       result_.calibrationResult_ = algo.getResult();
     }
@@ -397,7 +412,7 @@ void CalibrationAnalysis::check(const Description &calibratedInputs, const Distr
 
 
 void CalibrationAnalysis::setCalibratedInputs(const Description &calibratedInputs, const Distribution &priorDistribution,
-                                              const Description &fixedInputs, const Point &fixedValues)
+    const Description &fixedInputs, const Point &fixedValues)
 {
   // check arguments
   check(calibratedInputs, priorDistribution, fixedInputs, fixedValues);
@@ -525,14 +540,14 @@ String CalibrationAnalysis::getPythonScript() const
   else
   {
     oss <<  Parameters::GetOTCorrelationMatrixStr(priorDistribution_.getCorrelation());
-    oss << "priorDistribution = ot.Normal(" << Parameters::GetOTPointStr(priorDistribution_.getMean()) <<", "
-                                            << Parameters::GetOTPointStr(priorDistribution_.getStandardDeviation()) << ", R)\n";
+    oss << "priorDistribution = ot.Normal(" << Parameters::GetOTPointStr(priorDistribution_.getMean()) << ", "
+        << Parameters::GetOTPointStr(priorDistribution_.getStandardDeviation()) << ", R)\n";
   }
   oss << getName() << ".setCalibratedInputs(" << Parameters::GetOTDescriptionStr(getCalibratedInputs())
-                                              << ", priorDistribution"
-                                              << ", " << Parameters::GetOTDescriptionStr(getFixedInputs().getDescription())
-                                              << ", " << Parameters::GetOTPointStr(getFixedInputs())
-                                              << ")\n";
+      << ", priorDistribution"
+      << ", " << Parameters::GetOTDescriptionStr(getFixedInputs().getDescription())
+      << ", " << Parameters::GetOTPointStr(getFixedInputs())
+      << ")\n";
   oss << getName() << ".setConfidenceIntervalLength(" << getConfidenceIntervalLength() << ")\n";
 
   if (getMethodName().compare(0, 8, "Gaussian") == 0)

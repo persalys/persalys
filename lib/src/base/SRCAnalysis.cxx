@@ -202,11 +202,11 @@ void SRCAnalysis::launch()
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
     Point upperBound(signedSRCBootstrap[i].computeQuantilePerComponent(alpha));
-    Point lowerBound(signedSRCBootstrap[i].computeQuantilePerComponent(1-alpha));
+    Point lowerBound(signedSRCBootstrap[i].computeQuantilePerComponent(1 - alpha));
     signedSRCInterval[i] = Interval(lowerBound, upperBound);
 
     Point upperBound2(unscaledSRCBootstrap[i].computeQuantilePerComponent(alpha));
-    Point lowerBound2(unscaledSRCBootstrap[i].computeQuantilePerComponent(1-alpha));
+    Point lowerBound2(unscaledSRCBootstrap[i].computeQuantilePerComponent(1 - alpha));
     unscaledSRCInterval[i] = Interval(lowerBound2, upperBound2);
   }
   result_.indicesInterval_ = unscaledSRCInterval;

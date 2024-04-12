@@ -52,18 +52,36 @@ class PERSALYS_UTILS_API EditValuesButton : public QPushButton
 
 public:
   EditValuesButton(const QString &text, QWidget *parent = nullptr)
-  : QPushButton(text, parent)
-  , opened_(false)
+    : QPushButton(text, parent)
+    , opened_(false)
   {};
 
-  void setValues(const OT::Point &values) { values_ = values; }
-  OT::Point values() const { return values_; }
+  void setValues(const OT::Point &values)
+  {
+    values_ = values;
+  }
+  OT::Point values() const
+  {
+    return values_;
+  }
 
-  void setParameterName(const OT::String &parameterName) { parameterName_ = parameterName; }
-  OT::String parameterName() { return parameterName_; }
+  void setParameterName(const OT::String &parameterName)
+  {
+    parameterName_ = parameterName;
+  }
+  OT::String parameterName()
+  {
+    return parameterName_;
+  }
 
-  OT::Bool isOpened() const { return opened_; }
-  void setOpened(const OT::Bool opened) { opened_ = opened; }
+  OT::Bool isOpened() const
+  {
+    return opened_;
+  }
+  void setOpened(const OT::Bool opened)
+  {
+    opened_ = opened;
+  }
 
 private:
   OT::Bool opened_;

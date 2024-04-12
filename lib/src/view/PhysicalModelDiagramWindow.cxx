@@ -68,7 +68,8 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   appendButton(optimizationCreationButton, ++row, modelDefinitionButton);
 
-  if (OT::PlatformInfo::HasFeature("pagmo")) {
+  if (OT::PlatformInfo::HasFeature("pagmo"))
+  {
     DiagramPushButton * moOptimizationCreationButton = new DiagramPushButton;
     moOptimizationCreationButton->setText(tr("Multi-objective\noptimization"));
     moOptimizationCreationButton->setWhatsThis(tr("Multi-objective optimization of the model function"));

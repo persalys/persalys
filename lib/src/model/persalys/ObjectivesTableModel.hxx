@@ -29,35 +29,35 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_MODEL_API ObjectivesTableModel : public QAbstractTableModel
-  {
-    Q_OBJECT
+class PERSALYS_MODEL_API ObjectivesTableModel : public QAbstractTableModel
+{
+  Q_OBJECT
 
-  public:
-    ObjectivesTableModel(QObject *parent = nullptr);
-    void updateTable(MultiObjectiveOptimizationAnalysis& analysis);
+public:
+  ObjectivesTableModel(QObject *parent = nullptr);
+  void updateTable(MultiObjectiveOptimizationAnalysis& analysis);
 
-    int columnCount(const QModelIndex & parent = QModelIndex()) const override;
-    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex & index, int role) const override;
-    bool setData(const QModelIndex & index, const QVariant & value, int role) override;
-    Qt::ItemFlags flags(const QModelIndex & index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    OT::Description getMinimization() const;
-    bool isValid();
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex & index, int role) const override;
+  bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  OT::Description getMinimization() const;
+  bool isValid();
 
-  public slots:
-    void updateData();
+public slots:
+  void updateData();
 
-  signals:
-    void errorMessageChanged(QString);
+signals:
+  void errorMessageChanged(QString);
 //    void inputNumberChanged();
 //    void inputNameChanged();
 
-  private:
-    QStringList vars_;
-    QStringList settings_;
-    OT::Description minimization_;
-  };
+private:
+  QStringList vars_;
+  QStringList settings_;
+  OT::Description minimization_;
+};
 }
 #endif

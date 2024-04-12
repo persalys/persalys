@@ -41,72 +41,74 @@ typedef AlgorithmProperty::Derivative Derivative;
 typedef AlgorithmProperty::Priority Priority;
 
 std::map<OT::String, AlgorithmProperty> OptimizationAnalysis::AlgorithmDictionary =
-  {{"AUGLAG",                       AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"AUGLAG_EQ",                    AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GD_MLSL",                      AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"), Priority::Medium)},
-   {"GD_MLSL_LDS",                  AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GD_STOGO",                     AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GD_STOGO_RAND",                AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_AGS",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_CRS2_LM",                   AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_DIRECT",                    AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_DIRECT_L",                  AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_DIRECT_L_NOSCAL",           AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_DIRECT_L_RAND",             AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_DIRECT_L_RAND_NOSCAL",      AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_DIRECT_NOSCAL",             AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_ESCH",                      AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_ISRES",                     AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_MLSL",                      AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"), Priority::Medium)},
-   {"GN_MLSL_LDS",                  AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_ORIG_DIRECT",               AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"GN_ORIG_DIRECT_L",             AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"G_MLSL",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"G_MLSL_LDS",                   AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_AUGLAG",                    AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_AUGLAG_EQ",                 AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_CCSAQ",                     AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_LBFGS",                     AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"), Priority::Medium)},
-   {"LD_MMA",                       AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_SLSQP",                     AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_TNEWTON",                   AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_TNEWTON_PRECOND",           AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_TNEWTON_PRECOND_RESTART",   AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_TNEWTON_RESTART",           AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_VAR1",                      AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LD_VAR2",                      AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_AUGLAG",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_AUGLAG_EQ",                 AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_BOBYQA",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_COBYLA",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_NELDERMEAD",                AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_NEWUOA",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_NEWUOA_BOUND",              AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_PRAXIS",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"LN_SBPLX",                     AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
-   {"B-BB",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
-   {"B-OA",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
-   {"B-QG",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
-   {"B-Hyb",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
-   {"B-Ecp",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
-   {"B-iFP",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
-   {"Ipopt",                        AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ipopt.html"))},
-   {"LEVENBERG_MARQUARD",           AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
-   {"DOGLEG",                       AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
-   {"STEEPEST_DESCENT",             AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
-   {"NONLINEAR_CONJUGATE_GRADIENT", AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
-   {"LBFGS",                        AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"), Priority::Medium)},
-   {"BFGS",                         AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
-   {"Cobyla",                       AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Cobyla.html"), Priority::High)},
-   {"lbfgs",                        AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"), Priority::Medium)},
-   {"bfgs",                         AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"global",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"cg",                           AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"newton",                       AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"least_squares",                AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"least_squares_lm",             AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"trust_region",                 AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
-   {"TNC",                          AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.TNC.html"))}};
+{
+  {"AUGLAG",                       AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"AUGLAG_EQ",                    AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GD_MLSL",                      AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"), Priority::Medium)},
+  {"GD_MLSL_LDS",                  AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GD_STOGO",                     AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GD_STOGO_RAND",                AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_AGS",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_CRS2_LM",                   AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_DIRECT",                    AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_DIRECT_L",                  AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_DIRECT_L_NOSCAL",           AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_DIRECT_L_RAND",             AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_DIRECT_L_RAND_NOSCAL",      AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_DIRECT_NOSCAL",             AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_ESCH",                      AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_ISRES",                     AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_MLSL",                      AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"), Priority::Medium)},
+  {"GN_MLSL_LDS",                  AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_ORIG_DIRECT",               AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"GN_ORIG_DIRECT_L",             AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"G_MLSL",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"G_MLSL_LDS",                   AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_AUGLAG",                    AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_AUGLAG_EQ",                 AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_CCSAQ",                     AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_LBFGS",                     AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"), Priority::Medium)},
+  {"LD_MMA",                       AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_SLSQP",                     AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_TNEWTON",                   AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_TNEWTON_PRECOND",           AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_TNEWTON_PRECOND_RESTART",   AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_TNEWTON_RESTART",           AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_VAR1",                      AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LD_VAR2",                      AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_AUGLAG",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_AUGLAG_EQ",                 AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_BOBYQA",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_COBYLA",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_NELDERMEAD",                AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_NEWUOA",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_NEWUOA_BOUND",              AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_PRAXIS",                    AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"LN_SBPLX",                     AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.NLopt.html"))},
+  {"B-BB",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
+  {"B-OA",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
+  {"B-QG",                         AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
+  {"B-Hyb",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
+  {"B-Ecp",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
+  {"B-iFP",                        AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Bonmin.html"))},
+  {"Ipopt",                        AlgorithmProperty(Locality::Local,  Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ipopt.html"))},
+  {"LEVENBERG_MARQUARD",           AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
+  {"DOGLEG",                       AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
+  {"STEEPEST_DESCENT",             AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
+  {"NONLINEAR_CONJUGATE_GRADIENT", AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
+  {"LBFGS",                        AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"), Priority::Medium)},
+  {"BFGS",                         AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Ceres.html"))},
+  {"Cobyla",                       AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Cobyla.html"), Priority::High)},
+  {"lbfgs",                        AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"), Priority::Medium)},
+  {"bfgs",                         AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+  {"global",                       AlgorithmProperty(Locality::Global, Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+  {"cg",                           AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+  {"newton",                       AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+  {"least_squares",                AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+  {"least_squares_lm",             AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+  {"trust_region",                 AlgorithmProperty(Locality::Global, Derivative::First, OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Dlib.html"))},
+  {"TNC",                          AlgorithmProperty(Locality::Local,  Derivative::None,  OT::String("http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.TNC.html"))}
+};
 
 Description OptimizationAnalysis::GetSolverNames()
 {
@@ -116,9 +118,9 @@ Description OptimizationAnalysis::GetSolverNames()
 }
 
 Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
-                                                 const Indices& types,
-                                                 const Function& eqFunc,
-                                                 const Function& ineqFunc)
+    const Indices& types,
+    const Function& eqFunc,
+    const Function& ineqFunc)
 {
   // Dummy non-linear function respecting bounds dimension
   Function func = SymbolicFunction(Description::BuildDefault(bounds.getDimension(), "x"),
@@ -323,7 +325,8 @@ OptimizationProblem OptimizationAnalysis::defineProblem()
   Function objective = getPhysicalModel().getFunction(getInterestVariables());
   Function equalityConstraints = getEqualityConstraints();
   Function inequalityConstraints = getInequalityConstraints();
-  if (fixedInputsIndices.getSize()) {
+  if (fixedInputsIndices.getSize())
+  {
     objective = ParametricFunction(objective, fixedInputsIndices, fixedInputsValues);
     if (equalityConstraints.getInputDimension())
       equalityConstraints = ParametricFunction(equalityConstraints, fixedInputsIndices, fixedInputsValues);
@@ -510,8 +513,8 @@ void OptimizationAnalysis::addConstraint(const String& equation)
 }
 
 void OptimizationAnalysis::addConstraint(const String& leftPart,
-                                         const String& op,
-                                         const String& rightPart)
+    const String& op,
+    const String& rightPart)
 {
   rawEqs_.add(leftPart + op + rightPart);
   const String cstrCoef = "-1.0";
@@ -523,7 +526,7 @@ void OptimizationAnalysis::addConstraint(const String& leftPart,
     cstrEquation << leftPart << cstrCoef << "*("
                  << rightPart << ")";
 
-  if (op=="=")
+  if (op == "=")
     eqFunc_.add(cstrEquation.str());
   else
     ineqFunc_.add(cstrEquation.str());
@@ -543,7 +546,7 @@ Function OptimizationAnalysis::transformEquations(Description& eqs)
   // Variables collection to construct constraints composed function
   const Description outputs = getPhysicalModel().getOutputNames();
   Description inputs;
-  for (UnsignedInteger i=0; i<getPhysicalModel().getInputNames().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < getPhysicalModel().getInputNames().getSize(); ++i)
   {
     // Look if variable is defined as both an input and output
     if(!outputs.contains(getPhysicalModel().getInputNames()[i]))
@@ -576,7 +579,7 @@ Function OptimizationAnalysis::transformEquations(Description& eqs)
 
   // Aggregated C_i
   Collection<Function> funcC_i;
-  for(UnsignedInteger i=0; i<eqs.getSize(); ++i)
+  for(UnsignedInteger i = 0; i < eqs.getSize(); ++i)
     funcC_i.add(SymbolicFunction(Tools::GetNormalizedVariables(vars),
                                  Description(1, eqs[i])));
 

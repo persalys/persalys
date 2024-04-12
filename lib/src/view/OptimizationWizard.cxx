@@ -100,7 +100,8 @@ void OptimizationBoundsPage::initialize(const Analysis& analysis)
 
 void OptimizationBoundsPage::updateTable()
 {
-  for (int row=1; row<tableModel_->rowCount(); ++row) {
+  for (int row = 1; row < tableModel_->rowCount(); ++row)
+  {
     if(tableModel_->getAnalysis().getVariableInputs().contains(tableModel_->getAnalysis().getPhysicalModel().getInputNames()[row - 1]))
       tableView_->openPersistentEditor(tableModel_->index(row, 2));
     else
@@ -267,12 +268,15 @@ void OptimizationWizard::initialize(const Analysis& analysis)
   //algoPage_->initialize(analysis_);
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
   stoppingCriteriaLayout_->initialize(*analysis_ptr);
-  connect(cstrPage_, &ConstraintsPage::constraintsDefined, [=](){
-      analysis_ptr->resetConstraints();
-      foreach( QString str, cstrPage_->getTableModel()->getConstraints() ) {
-        analysis_ptr->addConstraint(str.toStdString());
-      }
-      algoPage_->initialize(*analysis_ptr);});
+  connect(cstrPage_, &ConstraintsPage::constraintsDefined, [ = ]()
+  {
+    analysis_ptr->resetConstraints();
+    foreach( QString str, cstrPage_->getTableModel()->getConstraints() )
+    {
+      analysis_ptr->addConstraint(str.toStdString());
+    }
+    algoPage_->initialize(*analysis_ptr);
+  });
 }
 
 
@@ -305,7 +309,8 @@ Analysis OptimizationWizard::getAnalysis() const
 
   // Constraints
   optim.resetConstraints();
-  foreach( QString str, cstrPage_->getTableModel()->getConstraints() ) {
+  foreach( QString str, cstrPage_->getTableModel()->getConstraints() )
+  {
     optim.addConstraint(str.toStdString());
   }
 

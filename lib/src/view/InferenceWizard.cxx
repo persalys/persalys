@@ -180,14 +180,14 @@ void InferenceWizard::buildInterface()
 
   switch(inference_.getTestType())
   {
-  case InferenceAnalysis::Lilliefors:
-    testTypeComboBox_->setCurrentIndex(1);
-    break;
-  case InferenceAnalysis::Kolmogorov:
-    testTypeComboBox_->setCurrentIndex(0);
-    break;
-  default:
-    throw InvalidArgumentException(HERE) << "Unknown test type.";
+    case InferenceAnalysis::Lilliefors:
+      testTypeComboBox_->setCurrentIndex(1);
+      break;
+    case InferenceAnalysis::Kolmogorov:
+      testTypeComboBox_->setCurrentIndex(0);
+      break;
+    default:
+      throw InvalidArgumentException(HERE) << "Unknown test type.";
   }
 
   QLabel * levelLabel = new QLabel(tr("Level"));
@@ -251,13 +251,16 @@ void InferenceWizard::buildInterface()
   lillieforsMaximumSamplingSizeSpinbox_->setEnabled(enableLilliefors);
   paramICLayout->addWidget(lillieforsMaximumSamplingSizeSpinbox_, row, 1);
 
-  paramICLayout->setColumnStretch(2,1);
+  paramICLayout->setColumnStretch(2, 1);
   pageLayout->addWidget(icGroupBox);
 
-  connect(paramICCheckBox_, &QCheckBox::toggled, [=](bool toggled){
-      icLevelSpinbox_->setEnabled(toggled);});
+  connect(paramICCheckBox_, &QCheckBox::toggled, [ = ](bool toggled)
+  {
+    icLevelSpinbox_->setEnabled(toggled);
+  });
 
-  connect(testTypeComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+  connect(testTypeComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged), [ = ](int index)
+  {
     lillieforsPrecisionSpinbox_->setEnabled(index);
     lillieforsMinimumSamplingSizeSpinbox_->setEnabled(index);
     lillieforsMaximumSamplingSizeSpinbox_->setEnabled(index);

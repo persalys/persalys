@@ -435,8 +435,8 @@ void PieChartView::draw(QPainter& painter)
 #else
   QBrush background = viewOptions().palette.base();
   QPen foreground(viewOptions().palette.color(QPalette::WindowText));
-#endif  
- 
+#endif
+
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(foreground);
 

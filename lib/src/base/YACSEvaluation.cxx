@@ -96,7 +96,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   if(!studyFunction_.isValid())
   {
     Log::Error(OSS() << "Invalid study function: " << studyFunction_.errors()
-                     << "\n");
+               << "\n");
     throw InvalidArgumentException(HERE) << "The study function is incorrect: "
                                          << studyFunction_.errors() ;
   }
@@ -106,9 +106,9 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   if (inputNames.size() != inS.getDimension())
   {
     Log::Error(OSS() <<
-    "In YACSEvaluation::operator(): inputNames.size() != inS.getDimension()\n");
+               "In YACSEvaluation::operator(): inputNames.size() != inS.getDimension()\n");
     throw InvalidArgumentException(HERE) << "The dimension of the input sample "
-                                       << inS.getDimension() << " is not valid";
+                                         << inS.getDimension() << " is not valid";
   }
   ydefx::Sample<double> jobSample;
   // set default value for not computed and failed points
@@ -159,7 +159,8 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
       if (stopCallback_.first)
       {
         const Bool stop = stopCallback_.first(stopCallback_.second);
-        if (stop) {
+        if (stop)
+        {
           setDump(myJob->dump());
           throw DetachedException(HERE) << "Job has been detached";
         }
@@ -170,7 +171,8 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
     if (progress >= 1.0)
       setIsRunning(false);
 
-    if(!myJob->fetch()){
+    if(!myJob->fetch())
+    {
       setIsRunning(false);
       throw NotDefinedException(HERE) << myJob->lastError();
     }
@@ -192,11 +194,11 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
         {
           nokIdx.add(j);
           const String message = OSS()
-            << "\nThe evaluation of the point number " << j
-            << " is in error:" << jobSample.getError(j)
-            << "\nFor further details, see "
-            << jobParams_.work_directory() << "/logs directory on "
-            << jobParams_.resource_name() << ".";
+                                 << "\nThe evaluation of the point number " << j
+                                 << " is in error:" << jobSample.getError(j)
+                                 << "\nFor further details, see "
+                                 << jobParams_.work_directory() << "/logs directory on "
+                                 << jobParams_.resource_name() << ".";
           errorDesc.add(message);
           break;
         }

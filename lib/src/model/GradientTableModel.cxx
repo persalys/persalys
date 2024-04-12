@@ -71,7 +71,8 @@ QVariant GradientTableModel::data(const QModelIndex& index, int role) const
     return QVariant();
 
   if ((int)gradient_.getNbRows() != rowCount() ||
-      (int)gradient_.getNbColumns() != columnCount()) {
+      (int)gradient_.getNbColumns() != columnCount())
+  {
     if (role == Qt::DisplayRole)
       return QString("?");
     else
@@ -82,7 +83,8 @@ QVariant GradientTableModel::data(const QModelIndex& index, int role) const
   {
     return QString::number(gradient_(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
   }
-  if (gradient_(index.row(), index.column()) == 0) {
+  if (gradient_(index.row(), index.column()) == 0)
+  {
     if (role == Qt::DecorationRole)
       return QIcon(":/images/task-attention.png");
     if (role == Qt::ToolTipRole)
@@ -137,7 +139,7 @@ void GradientTableModel::evaluateGradient()
   {
     Function func = physicalModel_.getFunction(physicalModel_.getSelectedOutputsNames());
     gradient_ = func.gradient(eval.getOriginalInputSample()[0]);
-    emit dataChanged(this->index(0,0), this->index(rowCount(), columnCount()));
+    emit dataChanged(this->index(0, 0), this->index(rowCount(), columnCount()));
   }
   catch (const std::exception & ex)
   {

@@ -32,33 +32,36 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_VIEW_API ConstraintsPage: public QWizardPage
+class PERSALYS_VIEW_API ConstraintsPage: public QWizardPage
+{
+  Q_OBJECT
+
+  friend class TestOptimizationWizard;
+
+public:
+  ConstraintsPage(QWidget* parent = 0);
+  bool validatePage() override;
+  void resizeEvent(QResizeEvent *event) override;
+  ConstraintsTableModel* getTableModel() const
   {
-    Q_OBJECT
-
-    friend class TestOptimizationWizard;
-
-  public:
-    ConstraintsPage(QWidget* parent = 0);
-    bool validatePage() override;
-    void resizeEvent(QResizeEvent *event) override;
-    ConstraintsTableModel* getTableModel() const {return cstrTableModel_;};
-
-  signals:
-    void constraintsDefined();
-    void removeInputLine(QModelIndex);
-
-  public slots:
-    void initialize(OptimizationAnalysis&);
-    void removeInputLine();
-    void addInputLine();
-
-  private:
-    void updateView();
-    ConstraintsTableModel* cstrTableModel_;
-    QTableView * cstrTableView_;
-    TemporaryLabel* errorMessageLabel_;
+    return cstrTableModel_;
   };
+
+signals:
+  void constraintsDefined();
+  void removeInputLine(QModelIndex);
+
+public slots:
+  void initialize(OptimizationAnalysis&);
+  void removeInputLine();
+  void addInputLine();
+
+private:
+  void updateView();
+  ConstraintsTableModel* cstrTableModel_;
+  QTableView * cstrTableView_;
+  TemporaryLabel* errorMessageLabel_;
+};
 
 
 }

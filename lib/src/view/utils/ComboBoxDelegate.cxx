@@ -107,7 +107,7 @@ QSize ComboBoxWithSeparatorDelegate::sizeHint(const QStyleOptionViewItem &option
 {
   QString type = index.data(Qt::AccessibleDescriptionRole).toString();
   if(type == QLatin1String("separator"))
-      return QSize(0, 10);
+    return QSize(0, 10);
   return QItemDelegate::sizeHint(option, index);
 }
 
@@ -115,9 +115,9 @@ QSize ComboBoxWithSeparatorDelegate::sizeHint(const QStyleOptionViewItem &option
 // -- ModelForComboBoxWithSeparator
 
 ModelForComboBoxWithSeparator::ModelForComboBoxWithSeparator(const QStringList &allItems,
-                                                             const QList<int> separatorIndex,
-                                                             const QStringList &separatorText,
-                                                             QWidget *parent)
+    const QList<int> separatorIndex,
+    const QStringList &separatorText,
+    QWidget *parent)
   : QStandardItemModel(parent)
 {
   for (int i = 0; i < allItems.size(); ++i)

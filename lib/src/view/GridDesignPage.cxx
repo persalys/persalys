@@ -68,8 +68,8 @@ void GridDesignPage::buildInterface()
   sizeLayout->setSizeConstraint(QLayout::SetFixedSize);
   pageLayout->addWidget(aWidget);
 
-  DOETimeLabel_->setVisible(DOETimeLabel_->text().toFloat()>1e-6);
-  timeLabel->setVisible(DOETimeLabel_->text().toFloat()>1e-6);
+  DOETimeLabel_->setVisible(DOETimeLabel_->text().toFloat() > 1e-6);
+  timeLabel->setVisible(DOETimeLabel_->text().toFloat() > 1e-6);
 
   connect(this, SIGNAL(showTime()), timeLabel, SLOT(show()));
 
@@ -116,13 +116,15 @@ void GridDesignPage::initialize(const Analysis& analysis)
   connect(tableModel_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
   tableView_->setModel(tableModel_);
   connect(tableModel_, &ExperimentTableModel::doeSizeChanged,
-          [=](const QString& text) {
-            DOETimeLabel_->setText(QString::number(text.toDouble()*tableModel_->getDesignOfExperiment().getPhysicalModel().getEvalTime()));
-            if(DOETimeLabel_->text().toFloat()>1e-6) {
-              DOETimeLabel_->setVisible(true);
-              emit showTime();
-            }
-          });
+          [ = ](const QString & text)
+  {
+    DOETimeLabel_->setText(QString::number(text.toDouble()*tableModel_->getDesignOfExperiment().getPhysicalModel().getEvalTime()));
+    if(DOETimeLabel_->text().toFloat() > 1e-6)
+    {
+      DOETimeLabel_->setVisible(true);
+      emit showTime();
+    }
+  });
 
   tableView_->setModel(tableModel_);
 

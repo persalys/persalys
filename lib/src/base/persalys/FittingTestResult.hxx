@@ -48,7 +48,10 @@ public:
   OT::Collection<OT::TestResult> getTestResults() const;
   OT::Point getBICResults() const;
   OT::Description getErrorMessages() const;
-  OT::UnsignedInteger getTestType() const {return testType_;};
+  OT::UnsignedInteger getTestType() const
+  {
+    return testType_;
+  };
 
   /** String converter */
   OT::String __repr__() const override;

@@ -30,31 +30,31 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_MODEL_API ConstraintsTableModel : public QAbstractTableModel
-  {
-    Q_OBJECT
+class PERSALYS_MODEL_API ConstraintsTableModel : public QAbstractTableModel
+{
+  Q_OBJECT
 
-  public:
-    ConstraintsTableModel(QObject *parent = nullptr);
-    void updateTable(OptimizationAnalysis& analysis);
-    int columnCount(const QModelIndex & parent = QModelIndex()) const override;
-    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
-    bool setData(const QModelIndex & index, const QVariant & value, int role) override;
-    Qt::ItemFlags flags(const QModelIndex & index) const override;
-    QStringList getConstraints() const;
+public:
+  ConstraintsTableModel(QObject *parent = nullptr);
+  void updateTable(OptimizationAnalysis& analysis);
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
+  QStringList getConstraints() const;
 
-  public slots:
-    void updateData();
-    void addLine();
-    void removeLine(const QModelIndex & index);
+public slots:
+  void updateData();
+  void addLine();
+  void removeLine(const QModelIndex & index);
 
-  private:
-    QStringList vars_;
-    QStringList leftParts_;
-    QStringList operators_;
-    QStringList rightParts_;
-  };
+private:
+  QStringList vars_;
+  QStringList leftParts_;
+  QStringList operators_;
+  QStringList rightParts_;
+};
 }
 #endif

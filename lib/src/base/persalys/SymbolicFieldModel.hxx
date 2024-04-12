@@ -34,10 +34,10 @@ public:
   SymbolicFieldModel(const OT::String& name = "Unnamed");
   /** Constructor with parameters */
   SymbolicFieldModel(const OT::String& name,
-                        const MeshModel& meshModel,
-                        const InputCollection& inputs,
-                        const OutputCollection& outputs,
-                        const OT::Description& formulas);
+                     const MeshModel& meshModel,
+                     const InputCollection& inputs,
+                     const OutputCollection& outputs,
+                     const OT::Description& formulas);
 
   /** Virtual constructor */
   SymbolicFieldModel * clone() const override;

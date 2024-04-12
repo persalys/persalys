@@ -52,20 +52,20 @@ private slots:
   void testSorting()
   {
     QStringList list = QStringList() << QString("X23")
-                                     << QString("P2")
-                                     << QString("P5")
-                                     << QString("P890")
-                                     << QString("P1")
-                                     << QString("A1452")
-                                     << QString("P12");
+                       << QString("P2")
+                       << QString("P5")
+                       << QString("P890")
+                       << QString("P1")
+                       << QString("A1452")
+                       << QString("P12");
     QStringList listSorted = QtOT::NaturalSorting(list);
     QStringList refSortedList = QStringList() << QString("A1452")
-                                              << QString("P1")
-                                              << QString("P2")
-                                              << QString("P5")
-                                              << QString("P12")
-                                              << QString("P890")
-                                              << QString("X23");
+                                << QString("P1")
+                                << QString("P2")
+                                << QString("P5")
+                                << QString("P12")
+                                << QString("P890")
+                                << QString("X23");
     QVERIFY2(listSorted == refSortedList, "The string lists must be equal");
   }
 };

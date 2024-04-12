@@ -82,7 +82,7 @@ void YACSPhysicalModelWindow::buildSchemaDialogRequested()
   Py2YacsDialog yacsDialog(this);
   yacsDialog.setExportXml(false);
   YACSPhysicalModel* model = dynamic_cast<YACSPhysicalModel*>
-                                     (physicalModel_.getImplementation().get());
+                             (physicalModel_.getImplementation().get());
   yacsDialog.setScriptText(model->getContent());
   if (yacsDialog.exec())
   {

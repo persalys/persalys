@@ -34,8 +34,8 @@ public:
   DataImport();
   /** Constructor with parameters */
   DataImport(const OT::String & fileName,
-            const OT::Indices & inputColumns,
-            const OT::Indices & outputColumns = OT::Indices());
+             const OT::Indices & inputColumns,
+             const OT::Indices & outputColumns = OT::Indices());
 
   virtual ~DataImport();
 

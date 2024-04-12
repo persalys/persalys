@@ -53,4 +53,6 @@ design.run()
 print("outs=", design.getErrorDescription())
 
 Y_ref = [[1, 1]]
-ott.assert_almost_equal(design.getResult().getDesignOfExperiment().getOutputSample(), Y_ref)
+ott.assert_almost_equal(
+    design.getResult().getDesignOfExperiment().getOutputSample(), Y_ref
+)

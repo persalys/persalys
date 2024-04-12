@@ -78,14 +78,14 @@ QVariant CorrelationTableModel::data(const QModelIndex & index, int role) const
   if (role == Qt::DisplayRole || role == Qt::EditRole)
     switch(type_)
     {
-    case CorrelationTableModel::Spearman:
-      return QString::number(copula_.getSpearmanCorrelation()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
-    case CorrelationTableModel::Correlation:
-      return QString::number(copula_.getShapeMatrix()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
-    case CorrelationTableModel::Kendall:
-      return QString::number(copula_.getKendallTau()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
-    default:
-       throw InvalidArgumentException(HERE) << "Unknown correlation type";
+      case CorrelationTableModel::Spearman:
+        return QString::number(copula_.getSpearmanCorrelation()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      case CorrelationTableModel::Correlation:
+        return QString::number(copula_.getShapeMatrix()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      case CorrelationTableModel::Kendall:
+        return QString::number(copula_.getKendallTau()(index.row(), index.column()), 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      default:
+        throw InvalidArgumentException(HERE) << "Unknown correlation type";
     }
   else if (role == Qt::BackgroundRole && index.row() >= index.column())
     return QBrush(Qt::lightGray);
@@ -114,29 +114,29 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
       CorrelationMatrix correlation;
       switch(type_)
       {
-      case CorrelationTableModel::Spearman:
-        correlation = copula_.getSpearmanCorrelation();
-        if (value.toDouble() == correlation(index.row(), index.column()))
-          return true;
-        correlation(index.row(), index.column()) = value.toDouble();
-        copula_ = NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation));
-        break;
-      case CorrelationTableModel::Correlation:
-        correlation = copula_.getShapeMatrix();
-        if (value.toDouble() == correlation(index.row(), index.column()))
-          return true;
-        correlation(index.row(), index.column()) = value.toDouble();
-        copula_ = NormalCopula(correlation);
-        break;
-      case CorrelationTableModel::Kendall:
-        correlation = copula_.getKendallTau();
-        if (value.toDouble() == correlation(index.row(), index.column()))
-          return true;
-        correlation(index.row(), index.column()) = value.toDouble();
-        copula_ = NormalCopula(NormalCopula::GetCorrelationFromKendallCorrelation(correlation));
-        break;
-      default:
-        throw InvalidArgumentException(HERE) << "Unknown correlation type";
+        case CorrelationTableModel::Spearman:
+          correlation = copula_.getSpearmanCorrelation();
+          if (value.toDouble() == correlation(index.row(), index.column()))
+            return true;
+          correlation(index.row(), index.column()) = value.toDouble();
+          copula_ = NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(correlation));
+          break;
+        case CorrelationTableModel::Correlation:
+          correlation = copula_.getShapeMatrix();
+          if (value.toDouble() == correlation(index.row(), index.column()))
+            return true;
+          correlation(index.row(), index.column()) = value.toDouble();
+          copula_ = NormalCopula(correlation);
+          break;
+        case CorrelationTableModel::Kendall:
+          correlation = copula_.getKendallTau();
+          if (value.toDouble() == correlation(index.row(), index.column()))
+            return true;
+          correlation(index.row(), index.column()) = value.toDouble();
+          copula_ = NormalCopula(NormalCopula::GetCorrelationFromKendallCorrelation(correlation));
+          break;
+        default:
+          throw InvalidArgumentException(HERE) << "Unknown correlation type";
       }
       copula_.setDescription(oldDescription);
       physicalModel_.setCopula(oldDescription, copula_);

@@ -451,7 +451,7 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
         for (int j = 0; j < nbValues; ++j)
         {
           text += QString::number(inputDist.getParametersCollection()[i][j], 'g', StudyTreeViewModel::DefaultSignificantDigits);
-          if (j < nbValues-1)
+          if (j < nbValues - 1)
             text += ", ";
         }
         parameterValuesEdit_[i]->setText(text);

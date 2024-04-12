@@ -194,7 +194,8 @@ void InferenceAnalysis::launch()
 
   // total number of distribution to test
   UnsignedInteger nTotalDist = 0;
-  for (const auto& collectionMapItem : distFactoriesForEachInterestVar_) {
+  for (const auto& collectionMapItem : distFactoriesForEachInterestVar_)
+  {
     nTotalDist += collectionMapItem.second.getSize();
   }
 
@@ -231,14 +232,14 @@ void InferenceAnalysis::launch()
         TestResult testResult;
         switch(type_)
         {
-        case InferenceAnalysis::Lilliefors:
-          testResult = FittingTest::Lilliefors(sample.getMarginal(i), distFactory, distribution, level_);
-          break;
-        case InferenceAnalysis::Kolmogorov:
-          testResult = FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_);
-          break;
-        default:
-          throw InvalidArgumentException(HERE) << "Unknown test type.";
+          case InferenceAnalysis::Lilliefors:
+            testResult = FittingTest::Lilliefors(sample.getMarginal(i), distFactory, distribution, level_);
+            break;
+          case InferenceAnalysis::Kolmogorov:
+            testResult = FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_);
+            break;
+          default:
+            throw InvalidArgumentException(HERE) << "Unknown test type.";
         }
         // BIC test
         const Scalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
@@ -246,7 +247,8 @@ void InferenceAnalysis::launch()
         // set fittingTestResult
         fittingTestResult.testedDistributions_.add(distribution);
 
-        if (estimateParamCI_) {
+        if (estimateParamCI_)
+        {
           Distribution paramDist(distFactory.buildEstimator(sample.getMarginal(i)).getParameterDistribution());
           fittingTestResult.paramCI_.add(paramDist.computeBilateralConfidenceInterval(paramCILevel_));
         }
@@ -271,7 +273,8 @@ void InferenceAnalysis::launch()
         fittingTestResult.testResults_.add(testResult);
         fittingTestResult.bicResults_.add(SpecFunc::MaxScalar);
         fittingTestResult.errorMessages_[j] = message;
-        if (estimateParamCI_) {
+        if (estimateParamCI_)
+        {
           fittingTestResult.paramCI_.add(Interval());
         }
       }
@@ -294,14 +297,14 @@ Parameters InferenceAnalysis::getParameters() const
 
   switch(type_)
   {
-  case InferenceAnalysis::Lilliefors:
-    param.add("Method", "Lilliefors");
-    break;
-  case InferenceAnalysis::Kolmogorov:
-    param.add("Method", "Kolmogorov-Smirnov");
-    break;
-  default:
-    throw InvalidArgumentException(HERE) << "Unknown test type.";
+    case InferenceAnalysis::Lilliefors:
+      param.add("Method", "Lilliefors");
+      break;
+    case InferenceAnalysis::Kolmogorov:
+      param.add("Method", "Kolmogorov-Smirnov");
+      break;
+    default:
+      throw InvalidArgumentException(HERE) << "Unknown test type.";
   }
   param.add("Level", getLevel());
 

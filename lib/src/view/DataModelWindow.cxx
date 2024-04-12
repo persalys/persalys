@@ -221,12 +221,13 @@ void DataModelWindow::buildInterface()
 
   // connections
   connect(tableModel_, SIGNAL(sampleChanged(OT::Sample)), dataTableModel, SLOT(updateData(OT::Sample)));
-  connect(dataTableModel, &SampleTableModel::sampleChanged, [=]() {
-      dataModel_->setSample(dataTableModel->getSample());
-      tableModel_->updateData();
-      sampleSizeLabel_->setText(QString::number(dataModel_->getSample().getSize()));
-      updateTableView();
-    });
+  connect(dataTableModel, &SampleTableModel::sampleChanged, [ = ]()
+  {
+    dataModel_->setSample(dataTableModel->getSample());
+    tableModel_->updateData();
+    sampleSizeLabel_->setText(QString::number(dataModel_->getSample().getSize()));
+    updateTableView();
+  });
   connect(tableModel_, SIGNAL(sampleDescriptionChanged(OT::Description)), dataTableModel, SLOT(updateHeaderData(OT::Description)));
   connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
   connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
@@ -248,9 +249,11 @@ void DataModelWindow::buildInterface()
   updateTableView();
 }
 
-void DataModelWindow::launchCleaningWizard() {
+void DataModelWindow::launchCleaningWizard()
+{
   errorMessageLabel_->reset();
-  if(!dataModel_->getSample().getSize()) {
+  if(!dataModel_->getSample().getSize())
+  {
     errorMessageLabel_->setText(tr("Sample must not be empty"));
     return;
   }
@@ -368,13 +371,15 @@ void DataModelWindow::updateTableView()
 
   dataTableView1_->sortByColumn(0, Qt::AscendingOrder);
 
-  if(dataModel_->getSampleFromFile().getSize()) {
+  if(dataModel_->getSampleFromFile().getSize())
+  {
     // use comboboxes to define the variable type
     for (int i = 0; i < tableModel_->columnCount(); ++i)
       tableView_->openPersistentEditor(tableModel_->index(1, i));
 
     // if first time here
-    if (!dynamic_cast<CheckableHeaderView*>(tableView_->verticalHeader())) {
+    if (!dynamic_cast<CheckableHeaderView*>(tableView_->verticalHeader()))
+    {
       // make tableView_ checkable if not done yet
       // table header view
       CheckableHeaderView * tableHeaderView = new CheckableHeaderView(Qt::Vertical);

@@ -36,7 +36,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    bool analysisEquality = wizard.getMesh().getPythonScript()==meshModel.getPythonScript();
+    bool analysisEquality = wizard.getMesh().getPythonScript() == meshModel.getPythonScript();
     QVERIFY2(analysisEquality, "The two GridMeshModel must be equal");
 
     wizard.tableModel_->setData(wizard.tableModel_->index(0, 2), 14., Qt::EditRole);
@@ -55,7 +55,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    analysisEquality = wizard.getMesh().getPythonScript()==meshModel.getPythonScript();
+    analysisEquality = wizard.getMesh().getPythonScript() == meshModel.getPythonScript();
     QVERIFY2(analysisEquality, "The two GridMeshModel must be equal");
   }
 
@@ -106,7 +106,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    bool analysisEquality = wizard.getMesh().getPythonScript()==meshModel.getPythonScript();
+    bool analysisEquality = wizard.getMesh().getPythonScript() == meshModel.getPythonScript();
     QVERIFY2(analysisEquality, "The two ImportedMeshModel must be equal");
   }
 
@@ -136,7 +136,7 @@ private slots:
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
-    bool analysisEquality = wizard.getMesh().getPythonScript()==ImportedMeshModel(file.fileName().toStdString()).getPythonScript();
+    bool analysisEquality = wizard.getMesh().getPythonScript() == ImportedMeshModel(file.fileName().toStdString()).getPythonScript();
     QVERIFY2(analysisEquality, "The two ImportedMeshModel must be equal");
   }
 };

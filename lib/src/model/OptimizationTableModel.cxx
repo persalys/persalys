@@ -45,18 +45,18 @@ OptimizationTableModel::OptimizationTableModel(const OptimizationAnalysis & anal
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
     switch (analysis_.getVariablesType()[i])
     {
-    case OptimizationProblemImplementation::CONTINUOUS:
-      types_ << tr("Continuous");
-      break;
-    case OptimizationProblemImplementation::INTEGER:
-      types_ << tr("Integer");
-      break;
-    case OptimizationProblemImplementation::BINARY:
-      types_ << tr("Binary");
-      break;
-    default:
-      throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
-                                           << analysis_.getPhysicalModel().getInputNames()[i];
+      case OptimizationProblemImplementation::CONTINUOUS:
+        types_ << tr("Continuous");
+        break;
+      case OptimizationProblemImplementation::INTEGER:
+        types_ << tr("Integer");
+        break;
+      case OptimizationProblemImplementation::BINARY:
+        types_ << tr("Binary");
+        break;
+      default:
+        throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                             << analysis_.getPhysicalModel().getInputNames()[i];
     }
 }
 
@@ -92,7 +92,8 @@ Qt::ItemFlags OptimizationTableModel::flags(const QModelIndex & index) const
   // not header
   else
   {
-    if (index.column() == 2) {
+    if (index.column() == 2)
+    {
       if (analysis_.getVariableInputs().contains(analysis_.getPhysicalModel().getInputNames()[index.row() - 1]))
         result |= Qt::ItemIsEditable | Qt::ItemIsEnabled;
       else
@@ -318,31 +319,32 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       case 4: // lower bounds
       {
         Point lowerBounds = analysis_.getBounds().getLowerBound();
-        switch (analysis_.getVariablesType()[inputIndex]) {
-        case OptimizationProblemImplementation::CONTINUOUS:
+        switch (analysis_.getVariablesType()[inputIndex])
         {
-          if (lowerBounds[inputIndex] == value.toDouble())
-            return false;
-          lowerBounds[inputIndex] = value.toDouble();
-          break;
-        }
-        case OptimizationProblemImplementation::INTEGER:
-        {
-          if (lowerBounds[inputIndex] == floor(value.toDouble()))
-            return false;
-          lowerBounds[inputIndex] = floor(value.toDouble());
-          break;
-        }
-        case OptimizationProblemImplementation::BINARY:
-        {
-          if (lowerBounds[inputIndex] == 0)
-            return false;
-          lowerBounds[inputIndex] = 0;
-          break;
-        }
-        default:
-          throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
-                                               << currentInputName.toStdString();
+          case OptimizationProblemImplementation::CONTINUOUS:
+          {
+            if (lowerBounds[inputIndex] == value.toDouble())
+              return false;
+            lowerBounds[inputIndex] = value.toDouble();
+            break;
+          }
+          case OptimizationProblemImplementation::INTEGER:
+          {
+            if (lowerBounds[inputIndex] == floor(value.toDouble()))
+              return false;
+            lowerBounds[inputIndex] = floor(value.toDouble());
+            break;
+          }
+          case OptimizationProblemImplementation::BINARY:
+          {
+            if (lowerBounds[inputIndex] == 0)
+              return false;
+            lowerBounds[inputIndex] = 0;
+            break;
+          }
+          default:
+            throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                                 << currentInputName.toStdString();
         }
         Interval newInterval(analysis_.getBounds());
         newInterval.setLowerBound(lowerBounds);
@@ -354,31 +356,32 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       case 5: // upper bounds
       {
         Point upperBounds = analysis_.getBounds().getUpperBound();
-        switch (analysis_.getVariablesType()[inputIndex]) {
-        case OptimizationProblemImplementation::CONTINUOUS:
+        switch (analysis_.getVariablesType()[inputIndex])
         {
-          if (upperBounds[inputIndex] == value.toDouble())
-            return false;
-          upperBounds[inputIndex] = value.toDouble();
-          break;
-        }
-        case OptimizationProblemImplementation::INTEGER:
-        {
-          if (upperBounds[inputIndex] == floor(value.toDouble()))
-            return false;
-          upperBounds[inputIndex] = floor(value.toDouble());
-          break;
-        }
-        case OptimizationProblemImplementation::BINARY:
-        {
-          if (upperBounds[inputIndex] == 1)
-            return false;
-          upperBounds[inputIndex] = 1;
-          break;
-        }
-        default:
-          throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
-                                               << currentInputName.toStdString();
+          case OptimizationProblemImplementation::CONTINUOUS:
+          {
+            if (upperBounds[inputIndex] == value.toDouble())
+              return false;
+            upperBounds[inputIndex] = value.toDouble();
+            break;
+          }
+          case OptimizationProblemImplementation::INTEGER:
+          {
+            if (upperBounds[inputIndex] == floor(value.toDouble()))
+              return false;
+            upperBounds[inputIndex] = floor(value.toDouble());
+            break;
+          }
+          case OptimizationProblemImplementation::BINARY:
+          {
+            if (upperBounds[inputIndex] == 1)
+              return false;
+            upperBounds[inputIndex] = 1;
+            break;
+          }
+          default:
+            throw InvalidArgumentException(HERE) << "Unknown variable type for variable "
+                                                 << currentInputName.toStdString();
         }
         Interval newInterval(analysis_.getBounds());
         newInterval.setUpperBound(upperBounds);
@@ -405,7 +408,8 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
         if (value.toBool() && !variableInputs.contains(currentInputName))
           variableInputs.add(currentInputName);
         // if variable is deselected, its type defaults to continuous
-        else if (!value.toBool() && variableInputs.contains(currentInputName)) {
+        else if (!value.toBool() && variableInputs.contains(currentInputName))
+        {
           variableInputs.erase(std::remove(variableInputs.begin(), variableInputs.end(), currentInputName), variableInputs.end());
           setData(this->index(index.row(), 2), QVariant(tr("Continuous")), Qt::EditRole);
         }

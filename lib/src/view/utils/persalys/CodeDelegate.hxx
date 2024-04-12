@@ -72,8 +72,8 @@ class PERSALYS_UTILS_API LineNumberArea : public QWidget
 {
 public:
   LineNumberArea(CodeEditor *editor)
-  : QWidget(editor)
-  , codeEditor_(editor)
+    : QWidget(editor)
+    , codeEditor_(editor)
   {
   }
 
@@ -89,7 +89,7 @@ protected:
   }
 
 private:
-    CodeEditor * codeEditor_;
+  CodeEditor * codeEditor_;
 };
 
 class PERSALYS_UTILS_API CodeDelegate : public QItemDelegate

@@ -95,7 +95,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two MonteCarloAnalysis must be equal");
   }
 
@@ -118,7 +118,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two TaylorExpansionMomentsAnalysis must be equal");
   }
 
@@ -140,7 +140,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==TaylorExpansionMomentsAnalysis("analysis", model).getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == TaylorExpansionMomentsAnalysis("analysis", model).getParameters();
     QVERIFY2(analysisEquality, "The two TaylorExpansionMomentsAnalysis must be equal");
   }
 };

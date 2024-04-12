@@ -65,7 +65,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two MonteCarloReliabilityAnalysis must be equal");
   }
 
@@ -98,7 +98,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two FORMImportanceSamplingAnalysis must be equal");
   }
 
@@ -125,7 +125,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two FORMAnalysis must be equal");
   }
 
@@ -152,7 +152,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters()==analysis.getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two SORMAnalysis must be equal");
   }
 
@@ -173,17 +173,17 @@ private slots:
 
     buttonGroup->button(ReliabilityIntroPage::FORM_IS)->click();
     QVERIFY2(wizard.nextId() == 1, "Next page ID must be 1");
-    bool analysisEquality = wizard.getAnalysis().getParameters()==FORMImportanceSamplingAnalysis("analysis", limitState).getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == FORMImportanceSamplingAnalysis("analysis", limitState).getParameters();
     QVERIFY2(analysisEquality, "The two FORMImportanceSamplingAnalysis must be equal");
 
     buttonGroup->button(ReliabilityIntroPage::FORM)->click();
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
-    analysisEquality = wizard.getAnalysis().getParameters()==FORMAnalysis("analysis", limitState).getParameters();
+    analysisEquality = wizard.getAnalysis().getParameters() == FORMAnalysis("analysis", limitState).getParameters();
     QVERIFY2(analysisEquality, "The two FORMAnalysis must be equal");
 
     buttonGroup->button(ReliabilityIntroPage::SORM)->click();
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
-    analysisEquality = wizard.getAnalysis().getParameters()==SORMAnalysis("analysis", limitState).getParameters();
+    analysisEquality = wizard.getAnalysis().getParameters() == SORMAnalysis("analysis", limitState).getParameters();
     QVERIFY2(analysisEquality, "The two SORMAnalysis must be equal");
   }
 

@@ -212,7 +212,7 @@ String GridDesignOfExperiment::getPythonScript() const
   OSS oss;
   oss << "values = [";
   for (UnsignedInteger i = 0; i < values_.getSize(); ++i)
-    oss << Parameters::GetOTPointStr(values_[i]) << (i < values_.getSize()-1 ? ",\n" : "]\n");
+    oss << Parameters::GetOTPointStr(values_[i]) << (i < values_.getSize() - 1 ? ",\n" : "]\n");
   oss << getName() << " = persalys.GridDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", values)\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

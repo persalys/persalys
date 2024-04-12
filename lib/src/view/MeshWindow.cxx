@@ -77,10 +77,10 @@ void MeshWindow::buildInterface()
 
   // fill in table
   QStringList headerLabels = QStringList() << tr("Name")
-                                           << tr("Description")
-                                           << tr("Minimum")
-                                           << tr("Maximum")
-                                           << tr("Number of nodes");
+                             << tr("Description")
+                             << tr("Minimum")
+                             << tr("Maximum")
+                             << tr("Number of nodes");
   tableModel_ = new CustomStandardItemModel(1, headerLabels.size(), tableView_);
   tableView_->setModel(tableModel_);
 
@@ -212,11 +212,11 @@ void MeshWindow::updatePlot()
 //   // graph
 //   WidgetBoundToDockWidget * mainWidget = new WidgetBoundToDockWidget(this);
 //   QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
-// 
+//
 //   PVXYChartViewWidget * plotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
 // //   plotWidget->setData(designOfExperiment_.getInputSample(), Qt::blue);
 //   mainWidgetLayout->addWidget(plotWidget);
-// 
+//
 //   // scatter plots setting widget
 //   PVXYChartSettingWidget * settingWidget = new PVXYChartSettingWidget(plotWidget,
 //       Sample(),
@@ -228,20 +228,20 @@ void MeshWindow::updatePlot()
 //       PVXYChartSettingWidget::NoType,
 //       this);
 //   mainWidget->setDockWidget(settingWidget);
-// 
+//
 //   tabWidget_->addTab(plotWidget, tr("Mesh"));
-// 
+//
 //   // table
 //   QWidget * tableView_ = new QWidget;
 //   QVBoxLayout * tableViewLayout = new QVBoxLayout(tableView_);
-// 
+//
 //   // with paraview the table is always shown in order to use the selection behavior
 //   PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
 // //   pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
 //   connect(getItem(), SIGNAL(dataExportRequested()), pvSpreadSheetWidget, SLOT(exportData()));
-// 
+//
 //   tableViewLayout->addWidget(pvSpreadSheetWidget);
-// 
+//
 //   tabWidget_->addTab(tableView_, tr("Table"));
 // }
 

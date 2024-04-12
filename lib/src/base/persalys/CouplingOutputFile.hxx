@@ -47,14 +47,14 @@ public:
   /** Variables accessor */
   void setVariables(const OT::Description & variableNames, const OT::Description & tokens,
                     const OT::Point & skipTokens,
-		    const OT::Point & skipLines, const OT::Point & skipColumns);
+                    const OT::Point & skipLines, const OT::Point & skipColumns);
   OT::Description getVariableNames() const;
   OT::Description getTokens() const;
   OT::Point getSkipLines() const;
   OT::Point getSkipColumns() const;
   OT::Point getSkipTokens() const;
 
-  OT::String checkOutputFile(OT::String fname, OT::String encoding="utf-8") const;
+  OT::String checkOutputFile(OT::String fname, OT::String encoding = "utf-8") const;
   /** String converter */
   OT::String __repr__() const override;
 

@@ -66,7 +66,8 @@ public:
   static QStringList NaturalSorting(const QStringList& list);
 };
 
-static const QMap<QString, QString> ApplicationColor{
+static const QMap<QString, QString> ApplicationColor
+{
   {"darkColor", "#003366"},
   {"mediumColor", "#336699"},
   {"lightColor", "#6699cc"},

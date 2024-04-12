@@ -120,36 +120,39 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
 
   errorMessageLabel_->reset();
   solverNames_ = OptimizationAnalysis::GetSolverNames(analysis.getBounds(),
-                                                      analysis.getVariablesType(),
-                                                      analysis.getEqualityConstraints(),
-                                                      analysis.getInequalityConstraints());
+                 analysis.getVariablesType(),
+                 analysis.getEqualityConstraints(),
+                 analysis.getInequalityConstraints());
 
-  for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i) {
+  for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i)
+  {
     algoTableModel_->setNotEditableItem(i, 0, solverNames_[i].c_str());
     algoTableModel_->setData(algoTableModel_->index(i, 0), (int)i, Qt::UserRole);
-    switch(OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]].getLocality()) {
-    case 0:
-      algoTableModel_->setNotEditableItem(i, 1, "Local");
-      break;
-    case 1:
-      algoTableModel_->setNotEditableItem(i, 1, "Global");
-      break;
-    case 2:
-      algoTableModel_->setNotEditableItem(i, 1, "L/G");
-      break;
+    switch(OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]].getLocality())
+    {
+      case 0:
+        algoTableModel_->setNotEditableItem(i, 1, "Local");
+        break;
+      case 1:
+        algoTableModel_->setNotEditableItem(i, 1, "Global");
+        break;
+      case 2:
+        algoTableModel_->setNotEditableItem(i, 1, "L/G");
+        break;
     }
-    switch(OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]].getDerivative()) {
-    case 0:
-      algoTableModel_->setNotEditableItem(i, 2, "None");
-      break;
-    case 1:
-      algoTableModel_->setNotEditableItem(i, 2, "First");
-      break;
-    case 2:
-      algoTableModel_->setNotEditableItem(i, 2, "Any");
-      break;
+    switch(OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]].getDerivative())
+    {
+      case 0:
+        algoTableModel_->setNotEditableItem(i, 2, "None");
+        break;
+      case 1:
+        algoTableModel_->setNotEditableItem(i, 2, "First");
+        break;
+      case 2:
+        algoTableModel_->setNotEditableItem(i, 2, "Any");
+        break;
     }
-    const String docString = "<a href=\""+OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]].getDoc()+"\">doc</a>";
+    const String docString = "<a href=\"" + OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]].getDoc() + "\">doc</a>";
     algoTableModel_->setNotEditableItem(i, 3, QString::fromStdString(docString));
     algoTableModel_->setData(algoTableModel_->index(i, 3), (QString)OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]].getDoc().c_str(), Qt::UserRole);
 
@@ -165,14 +168,16 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   const Description::const_iterator it = std::find(solverNames_.begin(), solverNames_.end(), methodName);
   UnsignedInteger index = 0;
   //if algo is no longer compatible default to Cobyla
-  if (solverNames_.getSize()) {
-    if (it!=solverNames_.end())
+  if (solverNames_.getSize())
+  {
+    if (it != solverNames_.end())
       index = it - solverNames_.begin();
-    else {
+    else
+    {
       index = std::find(solverNames_.begin(), solverNames_.end(), "Cobyla") - solverNames_.begin();
       if (index == solverNames_.getSize())
         index = 0;
-      LOGWARN(OSS() << "Optimization problem has changed and " << methodName << " algorithm is no longer available... Using " << solverNames_[index] <<" as default.");
+      LOGWARN(OSS() << "Optimization problem has changed and " << methodName << " algorithm is no longer available... Using " << solverNames_[index] << " as default.");
     }
     algoTableView_->selectRow(index);
     algoTableModel_->setData(algoTableModel_->index(index, 0), true, Qt::CheckStateRole);
@@ -220,7 +225,8 @@ bool OptimizationAlgoPage::validatePage()
     errorMessageLabel_->setErrorMessage(tr("Only one output must be selected"));
     return false;
   }
-  if (!solverNames_.getSize()) {
+  if (!solverNames_.getSize())
+  {
     errorMessageLabel_->setErrorMessage(tr("Cannot find a compatible algorithm"));
     return false;
   }
@@ -258,19 +264,21 @@ void OptimizationAlgoPage::openDoc(QModelIndex current)
 }
 
 
-void OptimizationAlgoPage::updateFilters() {
+void OptimizationAlgoPage::updateFilters()
+{
   errorMessageLabel_->reset();
   const int derivIndex = derivativeCombobox_->currentIndex();
   const int localIndex = localityCombobox_->currentIndex();
   QList<int> selectedDerivative;
   QList<int> selectedLocality;
 
-  for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++ i) {
+  for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++ i)
+  {
     AlgorithmProperty property = OptimizationAnalysis::AlgorithmDictionary[solverNames_[i]];
     if (property.getDerivative() == derivIndex ||
         derivIndex == AlgorithmProperty::AnyD)
       selectedDerivative.append(i);
-    if (property.getLocality() == localIndex||
+    if (property.getLocality() == localIndex ||
         localIndex == AlgorithmProperty::AnyL)
       selectedLocality.append(i);
   }
@@ -279,16 +287,21 @@ void OptimizationAlgoPage::updateFilters() {
   proxyModel_->setLocalityFilter(selectedLocality);
 
   // if selected algo got filtered take the non filtered algo with highest priority
-  for (int i = 0; i < algoTableModel_->rowCount(); ++i) {
-    if (algoTableModel_->data(algoTableModel_->index(i, 0), Qt::CheckStateRole).toBool()) {
+  for (int i = 0; i < algoTableModel_->rowCount(); ++i)
+  {
+    if (algoTableModel_->data(algoTableModel_->index(i, 0), Qt::CheckStateRole).toBool())
+    {
       const int selectedIndex = algoTableModel_->index(i, 0).row();
-      if (!proxyModel_->mapFromSource(proxyModel_->sourceModel()->index(selectedIndex,0)).isValid()) {
+      if (!proxyModel_->mapFromSource(proxyModel_->sourceModel()->index(selectedIndex, 0)).isValid())
+      {
         algoTableModel_->setData(algoTableModel_->index(i, 0), false, Qt::CheckStateRole);
         int prioIndex = proxyModel_->mapToSource(proxyModel_->index(0, 0)).row();
-        for(int j = 1; j<proxyModel_->rowCount(); ++j) {
+        for(int j = 1; j < proxyModel_->rowCount(); ++j)
+        {
           const int modelIndex = proxyModel_->mapToSource(proxyModel_->index(j, 0)).row();
           if (algoTableModel_->data(algoTableModel_->index(modelIndex, 4), Qt::UserRole).toInt() >
-              algoTableModel_->data(algoTableModel_->index(prioIndex, 4), Qt::UserRole).toInt()) {
+              algoTableModel_->data(algoTableModel_->index(prioIndex, 4), Qt::UserRole).toInt())
+          {
             prioIndex = proxyModel_->mapToSource(proxyModel_->index(j, 0)).row();
           }
         }
@@ -300,7 +313,8 @@ void OptimizationAlgoPage::updateFilters() {
 
   // If all algos get filtered, default to first so that the previous for loop can correctly
   // take place during next update
-  if (!selectedLocality.size() || !selectedDerivative.size()) {
+  if (!selectedLocality.size() || !selectedDerivative.size())
+  {
     algoTableModel_->setData(algoTableModel_->index(0, 0), true, Qt::CheckStateRole);
     errorMessageLabel_->setErrorMessage(tr("Cannot find a compatible algorithm"));
   }
@@ -324,7 +338,8 @@ void AlgoFilterProxyModel::setLocalityFilter(const QList<int> & localityFilter)
   invalidateFilter();
 }
 
-bool AlgoFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const {
+bool AlgoFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
   QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
   return derivativeFilter_.contains(index.row()) && localityFilter_.contains(index.row());
 }

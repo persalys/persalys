@@ -92,11 +92,23 @@ public:
   typedef  OT::Bool (*StopCallback)(void * state);
   virtual void setStopCallback(StopCallback callBack, void * state = nullptr);
 
-  void setIsRunning(const OT::Bool & isRunning) const {isRunning_ = isRunning;};
-  const OT::Bool getIsRunning(){return isRunning_;};
+  void setIsRunning(const OT::Bool & isRunning) const
+  {
+    isRunning_ = isRunning;
+  };
+  const OT::Bool getIsRunning()
+  {
+    return isRunning_;
+  };
 
-  void setDump(const std::string & dump) const {dump_ = dump;};
-  const std::string getDump(){return dump_;};
+  void setDump(const std::string & dump) const
+  {
+    dump_ = dump;
+  };
+  const std::string getDump()
+  {
+    return dump_;
+  };
 
 private:
   OT::Point inputValues_;

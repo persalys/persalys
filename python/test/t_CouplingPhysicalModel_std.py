@@ -61,7 +61,7 @@ ott.assert_almost_equal(stddev, [math.sqrt(3.0), 1.415], 0.3, 0.3)
 
 # post-processing
 code = 'import random\ndef _exec2(Y0, Y1):\n    A=r\\"U\\U-N\\N-u\\u-x\\x\\"\n    z = random.random()\n'
-code += '    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n'
+code += "    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n"
 step.setCode(code)
 model = persalys.CouplingPhysicalModel("A", [step])
 f = model.getFunction()
@@ -365,19 +365,19 @@ ott.assert_almost_equal(y, [6.0, 7.0, 39.0, 146.0])
 
 # test environment override
 with open("program4.py", "w") as f:
-    f.write('import persalys as prs\n')
+    f.write("import persalys as prs\n")
 
 resource_file = persalys.CouplingResourceFile("program4.py")
 step5 = persalys.CouplingStep(sys.executable + " program4.py", [], [resource_file], [])
-step5.setEnvironment(['PYTHONPATH', 'PYTHONHOME'], ['', ''])
+step5.setEnvironment(["PYTHONPATH", "PYTHONHOME"], ["", ""])
 model2 = persalys.CouplingPhysicalModel("envTest", [step1, step5])
 x = [1.0, 2.0, 3.0]
 f = model2.getFunction()
 try:
     y = f(x)
     # oddly conda still runs without PYTHONPATH/PYTHONHOME
-    if 'conda' in sys.version:
-        raise ValueError('oh wow')
+    if "conda" in sys.version:
+        raise ValueError("oh wow")
     print("FAIL")
 except Exception:
     print("OK")

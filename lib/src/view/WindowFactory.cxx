@@ -233,7 +233,7 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   }
   else if (analysisType == "FunctionalChaosAnalysis" ||
            analysisType == "KrigingAnalysis" ||
-	   analysisType == "PolynomialRegressionAnalysis")
+           analysisType == "PolynomialRegressionAnalysis")
   {
     wizard = new MetaModelAnalysisWizard(analysis, isGeneralWizard, parent);
   }

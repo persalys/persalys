@@ -47,10 +47,10 @@ PythonFieldModel::PythonFieldModel(const String& name)
 
 /* Constructor with parameters */
 PythonFieldModel::PythonFieldModel(const String& name,
-    const MeshModel& meshModel,
-    const InputCollection& inputs,
-    const OutputCollection& outputs,
-    const String& code)
+                                   const MeshModel& meshModel,
+                                   const InputCollection& inputs,
+                                   const OutputCollection& outputs,
+                                   const String& code)
   : PythonPhysicalModel(name, inputs, outputs, code)
 {
   hasMesh_ = true;

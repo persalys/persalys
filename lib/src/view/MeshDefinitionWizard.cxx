@@ -61,10 +61,10 @@ void MeshDefinitionWizard::buildInterface()
 
   // build table
   QStringList headerLabels = QStringList() << tr("Name")
-                                           << tr("Description")
-                                           << tr("Minimum")
-                                           << tr("Maximum")
-                                           << tr("Number of nodes");
+                             << tr("Description")
+                             << tr("Minimum")
+                             << tr("Maximum")
+                             << tr("Number of nodes");
 
   tableView_ = new CopyableTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);

@@ -14,7 +14,7 @@ const char PVParCooViewWidget::PV_VIEW_TYPE[] = "ParallelCoordinatesChartView";
 const char PVParCooViewWidget::PV_REPRESENTATION_TYPE[] = "ParallelCoordinatesRepresentation";
 
 PVParCooViewWidget::PVParCooViewWidget(QWidget *parent, PVServerManagerInterface *smb)
-  : PVViewWidget(parent, smb , PV_VIEW_TYPE)
+  : PVViewWidget(parent, smb, PV_VIEW_TYPE)
 {
   pqContextView * viewC(dynamic_cast<pqContextView *>(getView()));
   if(!viewC)

@@ -42,7 +42,7 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   outputLayout->addWidget(outputsComboBox_);
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidget(namesLabel_);
-  scrollArea->setFixedHeight(namesLabel_->height()+20);
+  scrollArea->setFixedHeight(namesLabel_->height() + 20);
   outputLayout->addWidget(scrollArea);
 }
 
@@ -61,7 +61,7 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* par
   outputLayout->addWidget(outputsComboBox_);
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidget(namesLabel_);
-  scrollArea->setFixedHeight(namesLabel_->height()+20);
+  scrollArea->setFixedHeight(namesLabel_->height() + 20);
   outputLayout->addWidget(scrollArea);
 }
 
@@ -81,7 +81,7 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidget(namesLabel_);
-  scrollArea->setFixedHeight(namesLabel_->height()+20);
+  scrollArea->setFixedHeight(namesLabel_->height() + 20);
   outputLayout->addWidget(scrollArea);
   updateComboBoxModel(outputsNames, interestVariables);
 }

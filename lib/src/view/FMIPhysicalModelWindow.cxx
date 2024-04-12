@@ -205,15 +205,16 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
   QLabel * timeInfo = new QLabel();
-  connect(evaluateOutputsButton, &QPushButton::clicked,  [=] (bool) {
+  connect(evaluateOutputsButton, &QPushButton::clicked,  [ = ] (bool)
+  {
     timeInfo->clear();
     evaluateOutputs();
-    if(physicalModel_.getEvalTime()>0)
-        timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
+    if(physicalModel_.getEvalTime() > 0)
+      timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
   });
   QGridLayout * evaluationLayout = new QGridLayout;
   evaluationLayout->addWidget(ioCountLabel_, 0, 0);
-  evaluationLayout->setColumnStretch(0,2);
+  evaluationLayout->setColumnStretch(0, 2);
   evaluationLayout->addWidget(timeInfo, 1, 0);
   evaluationLayout->addWidget(evaluateOutputsButton, 0, 1);
   variablesLayout->addLayout(evaluationLayout);
@@ -460,7 +461,7 @@ void FMIPhysicalModelWindow::updateIOCount()
 void FMIPhysicalModelWindow::updatePersistentEditor()
 {
   // leave the comboboxes apparent to suggest the column is editable
-  for(int iRow =0; iRow < proxyModel_->rowCount(proxyModel_->index(0, 4)); ++ iRow)
+  for(int iRow = 0; iRow < proxyModel_->rowCount(proxyModel_->index(0, 4)); ++ iRow)
     variablesTableView_->openPersistentEditor(proxyModel_->index(iRow, 4));
 }
 
@@ -973,8 +974,8 @@ bool DataFilterProxyModel::filterAcceptsRow(int sourceRow,
 
 
 TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
- : m_itemData(data)
- , m_parentItem(parent)
+  : m_itemData(data)
+  , m_parentItem(parent)
 {
 }
 

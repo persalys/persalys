@@ -51,12 +51,12 @@ PythonScriptFieldFunction::PythonScriptFieldFunction()
 
 /* Constructor with parameters */
 PythonScriptFieldFunction::PythonScriptFieldFunction(const Description& inputVariablesNames,
-                                               const Description& outputVariablesNames,
-                                               const Indices & outputIndices,
-                                               const UnsignedInteger outputModelDimension,
-                                               const String& code,
-                                               const Mesh& mesh,
-                                               const Bool isParallel)
+    const Description& outputVariablesNames,
+    const Indices & outputIndices,
+    const UnsignedInteger outputModelDimension,
+    const String& code,
+    const Mesh& mesh,
+    const Bool isParallel)
   : PointToFieldFunctionImplementation(inputVariablesNames.getSize(), mesh, outputIndices.getSize())
   , scriptHasBeenEvaluated_(false)
   , outputIndices_(outputIndices)
@@ -234,7 +234,7 @@ ProcessSample PythonScriptFieldFunction::operator() (const Sample & inS) const
   // check
   if (ptr->getSize() != size)
     throw InvalidArgumentException(HERE) << "The Python Function returned a sequence object with incorrect size (got "
-                                          << ptr->getSize() << ", expected input sample size " << size << ")";
+                                         << ptr->getSize() << ", expected input sample size " << size << ")";
 
   ProcessSample outPS(getOutputMesh(), ptr->getSize(), outputModelDimension_);
   for (UnsignedInteger k = 0; k < ptr->getSize(); ++k)
@@ -243,10 +243,10 @@ ProcessSample PythonScriptFieldFunction::operator() (const Sample & inS) const
     // check
     if (outS_k.getDimension() != getOutputMesh().getVerticesNumber())
       throw InvalidArgumentException(HERE) << "The Python Function returned a sequence object with incorrect size (got "
-                                            << outS_k.getDimension() << ", expected mesh vertices number " << getOutputMesh().getVerticesNumber() << ")";
+                                           << outS_k.getDimension() << ", expected mesh vertices number " << getOutputMesh().getVerticesNumber() << ")";
     if (outS_k.getSize() != outputModelDimension_)
       throw InvalidArgumentException(HERE) << "The Python Function returned a sequence object with incorrect dimension (got "
-                                            << outS_k.getSize() << ", expected outputs number " << outputModelDimension_ << ")";
+                                           << outS_k.getSize() << ", expected outputs number " << outputModelDimension_ << ")";
 
     Sample outS(outS_k.getDimension(), outS_k.getSize());
     for (UnsignedInteger i = 0; i < outS.getSize(); ++i)

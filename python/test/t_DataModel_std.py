@@ -106,8 +106,7 @@ if have_fr_locale:
 
     # test latin1 chars
     filename = "DonneesLatin1.csv"
-    model4 = persalys.DataModel(
-        "myDataModel4", filename, [0, 1, 2, 3], [4, 5])
+    model4 = persalys.DataModel("myDataModel4", filename, [0, 1, 2, 3], [4, 5])
 
     myStudy.add(model4)
     assert "Ann" in model4.getSampleFromFile().getDescription()[0]

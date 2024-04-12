@@ -75,6 +75,6 @@ private:
   PlotWidget * cdfPlot_ = nullptr;
   PlotWidget * qqPlot_ = nullptr;
   PlotWidget * survPlot_ = nullptr;
-  };
+};
 }
 #endif

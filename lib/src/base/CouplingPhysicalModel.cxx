@@ -36,7 +36,7 @@ static Factory<PersistentCollection<CouplingStep> > Factory_PersistentCollection
 
 /* Default constructor */
 CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
-                                             const CouplingStepCollection & steps)
+    const CouplingStepCollection & steps)
   : PythonPhysicalModel(name)
   , cleanupWorkDirectory_(true)
 {
@@ -45,9 +45,9 @@ CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
 
 /* Default constructor */
 CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
-                                             const InputCollection & inputs,
-                                             const OutputCollection & outputs,
-                                             const CouplingStepCollection & steps)
+    const InputCollection & inputs,
+    const OutputCollection & outputs,
+    const CouplingStepCollection & steps)
   : PythonPhysicalModel(name)
   , cleanupWorkDirectory_(true)
 {
@@ -84,14 +84,14 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
         continue;
       oss << offset << "input_file" << j << " = persalys.CouplingInputFile(r'"
           << inputFile.getPath() << "')\n";
-      oss << offset << "input_file" << j <<".setConfiguredPath(r'"
+      oss << offset << "input_file" << j << ".setConfiguredPath(r'"
           << inputFile.getConfiguredPath() << "')\n";
       if (inputFile.getVariableNames().getSize() > 0)
-        oss << offset << "input_file" << j <<".setVariables("
-            << Parameters::GetOTDescriptionStr(inputFile.getVariableNames())<<", "
-            << Parameters::GetOTDescriptionStr(inputFile.getTokens())<<", "
-            << Parameters::GetOTDescriptionStr(inputFile.getFormats())<<")\n";
-      oss << offset << "input_files.append(input_file"<<j<<")\n";
+        oss << offset << "input_file" << j << ".setVariables("
+            << Parameters::GetOTDescriptionStr(inputFile.getVariableNames()) << ", "
+            << Parameters::GetOTDescriptionStr(inputFile.getTokens()) << ", "
+            << Parameters::GetOTDescriptionStr(inputFile.getFormats()) << ")\n";
+      oss << offset << "input_files.append(input_file" << j << ")\n";
     }
     const CouplingResourceFileCollection resourceFiles(step.getResourceFiles());
     oss << offset << "resource_files = []\n";
@@ -102,7 +102,7 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
         continue;
       oss << offset << "resource_file" << j << " = persalys.CouplingResourceFile(r'"
           << resourceFile.getPath() << "')\n";
-      oss << offset << "resource_files.append(resource_file"<<j<<")\n";
+      oss << offset << "resource_files.append(resource_file" << j << ")\n";
     }
     const CouplingOutputFileCollection outputFiles(step.getOutputFiles());
     oss << offset << "output_files = []\n";
@@ -115,25 +115,25 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
           << outputFile.getPath() << "')\n";
       if (outputFile.getVariableNames().getSize() > 0)
         oss << offset << "output_file" << j
-	    <<".setVariables("
-	    << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())
-	    <<", "<<Parameters::GetOTDescriptionStr(EscapeSpecialCharacters(outputFile.getTokens()))
-	    <<", "<< Parameters::GetOTPointStr(outputFile.getSkipTokens())
-	    <<", "<< Parameters::GetOTPointStr(outputFile.getSkipLines())
-	    <<", "<< Parameters::GetOTPointStr(outputFile.getSkipColumns())<<")\n";
-      oss << offset << "output_files.append(output_file"<<j<<")\n";
+            << ".setVariables("
+            << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())
+            << ", " << Parameters::GetOTDescriptionStr(EscapeSpecialCharacters(outputFile.getTokens()))
+            << ", " << Parameters::GetOTPointStr(outputFile.getSkipTokens())
+            << ", " << Parameters::GetOTPointStr(outputFile.getSkipLines())
+            << ", " << Parameters::GetOTPointStr(outputFile.getSkipColumns()) << ")\n";
+      oss << offset << "output_files.append(output_file" << j << ")\n";
     }
     // escape backslashes and single quotes
     oss << offset << "step" << i << " = persalys.CouplingStep(r'"
         << step.getCommand() << "', input_files, resource_files, output_files)\n";
-    oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True": "False") << ")\n";
+    oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True" : "False") << ")\n";
     if(!step.getCode().empty())
       oss << offset << "step" << i << ".setCode(\"" << step.getEscapedCode() << "\")\n";
     oss << offset << "step" << i << ".setEnvironment("
         << Parameters::GetOTDescriptionStr(step.getEnvironmentKeys()) << ", "
         << Parameters::GetOTDescriptionStr(step.getEnvironmentValues()) << ")\n";
 
-    oss << offset << "steps.append(step"<<i<<")\n";
+    oss << offset << "steps.append(step" << i << ")\n";
   }
   return oss;
 }
@@ -304,7 +304,7 @@ void CouplingPhysicalModel::updateCode()
 
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
-    code << "    " << outputNames[i] <<" = all_vars['" << outputNames[i] << "']\n";
+    code << "    " << outputNames[i] << " = all_vars['" << outputNames[i] << "']\n";
   }
   code << "    return ";
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
@@ -390,9 +390,9 @@ String CouplingPhysicalModel::getPythonScript() const
 
   oss << getStepsMacro();
   oss << getName() + " = persalys." << getClassName() << "('" << getName() << "', inputs, outputs, steps)\n";
-  oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True": "False") << ")\n";
+  oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True" : "False") << ")\n";
   oss << getName() + ".setCacheFiles(r'" << getCacheInputFile()
-      << "', r'" << getCacheOutputFile() <<"')\n";
+      << "', r'" << getCacheOutputFile() << "')\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;

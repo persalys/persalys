@@ -115,9 +115,9 @@ private slots:
     QVERIFY2(model->getInputs()[3].isStochastic() == true, "wrong input status");
     QVERIFY2(model->getInputs()[3].getDistribution() == OT::Normal(2, 0.2), "wrong input distribution");
 
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft() + QPoint(5, 2));
     QVERIFY2(model->hasStochasticInputs() == false, "no stochastic inputs");
-    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft()+QPoint(5,2));
+    QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft() + QPoint(5, 2));
     QVERIFY2(model->hasStochasticInputs() == true, "must have stochastic inputs");
 
     // change input distribution

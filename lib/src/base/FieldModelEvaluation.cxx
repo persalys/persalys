@@ -51,8 +51,8 @@ FieldModelEvaluation::FieldModelEvaluation(const String& name, const PhysicalMod
 
 /* Constructor with parameters */
 FieldModelEvaluation::FieldModelEvaluation(const String& name,
-                                 const PhysicalModel& physicalModel,
-                                 const Point& inP)
+    const PhysicalModel& physicalModel,
+    const Point& inP)
   : ModelEvaluation(name, physicalModel, inP)
   , processSample_()
 {

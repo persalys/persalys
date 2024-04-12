@@ -120,7 +120,7 @@ void MonteCarloPage::initialize(const Analysis& analysis)
   confidenceIntervalCheckBox_->setChecked(analysis_ptr->isConfidenceIntervalRequired());
   levelConfidenceIntervalSpinbox_->setValue(analysis_ptr->getLevelConfidenceInterval());
   levelConfidenceIntervalSpinbox_->setEnabled(analysis_ptr->isConfidenceIntervalRequired() ||
-                                              analysis_ptr->getMaximumConfidenceIntervalLength() != -1);
+      analysis_ptr->getMaximumConfidenceIntervalLength() != -1);
   seedSpinbox_->setValue(analysis_ptr->getSeed());
 }
 
@@ -169,6 +169,6 @@ bool MonteCarloPage::validatePage()
 void MonteCarloPage::updateLevelCISpinbox()
 {
   levelConfidenceIntervalSpinbox_->setEnabled(confidenceIntervalCheckBox_->isChecked() ||
-                                              stopCriteriaGroupBox_->getMaximumConfidenceIntervalLength() != -1);
+      stopCriteriaGroupBox_->getMaximumConfidenceIntervalLength() != -1);
 }
 }

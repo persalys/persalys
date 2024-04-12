@@ -58,7 +58,10 @@ public:
   void setAxisToShow(const OT::Description& sampleDescription);
   virtual const char *getRepresentationName() const = 0;
   void updateTable(const OT::Sample& sample, const OT::UnsignedInteger repr_ind = 0);
-  pqOutputPort *getPort(const OT::UnsignedInteger ind = 0) const { return ports_[ind]; };
+  pqOutputPort *getPort(const OT::UnsignedInteger ind = 0) const
+  {
+    return ports_[ind];
+  };
   int getNumberOfRepresentations() const;
   QStringList getRepresentationLabels(const int reprIndex = 0) const;
   void setRepresentationLabels(const QStringList& labels, const int reprIndex = 0);
@@ -72,7 +75,7 @@ public slots:
 
 protected:
   template <typename T>
-    void setArrayData(const std::vector< std::vector<T> >& valuesByColumn, const std::vector<std::string>& columnNames);
+  void setArrayData(const std::vector< std::vector<T> >& valuesByColumn, const std::vector<std::string>& columnNames);
   QMainWindow *findMWInHierachy();
   bool eventFilter(QObject *obj, QEvent *event);
   pqView *getView() const;

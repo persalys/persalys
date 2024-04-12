@@ -192,7 +192,7 @@ void FunctionalChaosAnalysis::launch()
   const Point stddev(effectiveOutputSample.computeStandardDeviation());
   for (UnsignedInteger i = 0; i < outputDimension; ++ i)
     if (!(stddev[i] > 0.0))
-      throw InvalidArgumentException(HERE) << "No variance for output variable "<< outputVariables[i];
+      throw InvalidArgumentException(HERE) << "No variance for output variable " << outputVariables[i];
 
 
 

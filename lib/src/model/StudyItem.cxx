@@ -66,34 +66,61 @@ void StudyItem::buildActions()
 {
   // new model actions
   newSymbolicModel_ = new QAction(tr("Symbolic model"), this);
-  connect(newSymbolicModel_, &QAction::triggered, [=](){ study_.add(new SymbolicPhysicalModel(getModelName(tr("SymbolicModel_")))); });
+  connect(newSymbolicModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new SymbolicPhysicalModel(getModelName(tr("SymbolicModel_"))));
+  });
 
   newPythonModel_ = new QAction(tr("Python model"), this);
-  connect(newPythonModel_, &QAction::triggered, [=](){ study_.add(new PythonPhysicalModel(getModelName(tr("PythonModel_")))); });
+  connect(newPythonModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new PythonPhysicalModel(getModelName(tr("PythonModel_"))));
+  });
 
   newCouplingModel_ = new QAction(tr("Coupling model"), this);
 #ifdef PERSALYS_HAVE_YACS
   newYACSModel_ = new QAction(tr("YACS model"), this);
-  connect(newYACSModel_, &QAction::triggered, [=](){ study_.add(new YACSPhysicalModel(getModelName(tr("YACSModel_")))); });
+  connect(newYACSModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new YACSPhysicalModel(getModelName(tr("YACSModel_"))));
+  });
 
-  connect(newCouplingModel_, &QAction::triggered, [=](){ study_.add(new YACSCouplingPhysicalModel(getModelName(tr("CouplingModel_")))); });
+  connect(newCouplingModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new YACSCouplingPhysicalModel(getModelName(tr("CouplingModel_"))));
+  });
 #else
-  connect(newCouplingModel_, &QAction::triggered, [=](){ study_.add(new CouplingPhysicalModel(getModelName(tr("CouplingModel_")))); });
+  connect(newCouplingModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new CouplingPhysicalModel(getModelName(tr("CouplingModel_"))));
+  });
 #endif
 #ifdef PERSALYS_HAVE_OTFMI
   newFMIModel_ = new QAction(tr("FMI model"), this);
-  connect(newFMIModel_, &QAction::triggered, [=](){ study_.add(new FMIPhysicalModel(getModelName(tr("FMIModel_")))); });
+  connect(newFMIModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new FMIPhysicalModel(getModelName(tr("FMIModel_"))));
+  });
 #endif
 
   // new model actions
   newSymbolicFieldModel_ = new QAction(tr("Symbolic Field model"), this);
-  connect(newSymbolicFieldModel_, &QAction::triggered, [=](){ study_.add(new SymbolicFieldModel(getModelName(tr("SymbolicModel_")))); });
+  connect(newSymbolicFieldModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new SymbolicFieldModel(getModelName(tr("SymbolicModel_"))));
+  });
 
   newPythonFieldModel_ = new QAction(tr("Python Field model"), this);
-  connect(newPythonFieldModel_, &QAction::triggered, [=](){ study_.add(new PythonFieldModel(getModelName(tr("PythonModel_")))); });
+  connect(newPythonFieldModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new PythonFieldModel(getModelName(tr("PythonModel_"))));
+  });
 
   newDataModel_ = new QAction(tr("Data model"), this);
-  connect(newDataModel_, &QAction::triggered, [=](){ study_.add(new DataModel(study_.getAvailableDataModelName(tr("DataModel_").toStdString()))); });
+  connect(newDataModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(new DataModel(study_.getAvailableDataModelName(tr("DataModel_").toStdString())));
+  });
 
   // export action
   exportAction_ = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
@@ -239,9 +266,12 @@ bool StudyItem::save(const QString& filename)
 
   // write file
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  try {
+  try
+  {
     study_.save(QDir::toNativeSeparators(fileName).toUtf8().constData());
-  } catch (...) { // TODO: Update exception handling for OTv1.22
+  }
+  catch (...)     // TODO: Update exception handling for OTv1.22
+  {
     emit showErrorMessageRequested(tr("Cannot save file %1:\n%2").arg(fileName).arg(file.errorString()));
     QApplication::restoreOverrideCursor();
     return false;

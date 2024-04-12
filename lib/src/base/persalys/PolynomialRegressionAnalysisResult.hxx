@@ -46,7 +46,7 @@ public:
   OT::LinearModelResult getResultForVariable(const OT::String& variableName) const;
 
   OT::Description getFormulas() const;
-  
+
   /** String converter */
   OT::String __repr__() const override;
 

@@ -110,10 +110,12 @@ inline OT::Description EscapeNewLines(const OT::Description & desc)
   return escapedDesc;
 }
 
-inline void ValidateVariables(const OT::Description & desc) {
+inline void ValidateVariables(const OT::Description & desc)
+{
   std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   std::smatch what;
-  for (OT::UnsignedInteger i=0; i < desc.getSize(); ++ i) {
+  for (OT::UnsignedInteger i = 0; i < desc.getSize(); ++ i)
+  {
     if (!std::regex_match(desc[i], what, variable))
       throw OT::InvalidArgumentException(HERE) << "Invalid variable name";
   }

@@ -242,9 +242,11 @@ void PhysicalModelDiagramItem::requestMetaModelCreation()
 void PhysicalModelDiagramItem::requestMetaModelExport()
 {
   Study study(getParentStudyItem()->getStudy());
-  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i) {
+  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
+  {
     const MetaModelAnalysis * analysis = dynamic_cast<const MetaModelAnalysis*>(study.getAnalyses()[i].getImplementation().get());
-    if (analysis && analysis->hasValidResult()) {
+    if (analysis && analysis->hasValidResult())
+    {
       emit mmExportWizardRequested(getParentStudyItem(), study.getAnalyses()[i], true);
       return;
     }
@@ -393,7 +395,7 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
 
     // connections
     connect(newItem, SIGNAL(numberDesignEvaluationChanged(bool)), this, SLOT(requestDesignOfExperimentRemoval(bool)));
-    connect(newItem, SIGNAL(designEvaluationUpdated(bool)), this , SLOT(updateDesignEvaluationCounter(bool)));
+    connect(newItem, SIGNAL(designEvaluationUpdated(bool)), this, SLOT(updateDesignEvaluationCounter(bool)));
 
     // append item
     // search title, parent item of the new item
@@ -415,9 +417,11 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
     emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
     emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
 
-  } else if (analysisName == "FunctionalChaosAnalysis" ||
-             analysisName == "KrigingAnalysis" ||
-	     analysisName == "PolynomialRegressionAnalysis") {
+  }
+  else if (analysisName == "FunctionalChaosAnalysis" ||
+           analysisName == "KrigingAnalysis" ||
+           analysisName == "PolynomialRegressionAnalysis")
+  {
     AnalysisItem * newItem = dynamic_cast<AnalysisItem*>(analysis.getImplementation().get()->getObserver("AnalysisItem"));
     // connections
     connect(newItem, SIGNAL(numberMetamodelChanged(bool)), this, SLOT(updateMetamodelCounter(bool)));
@@ -426,7 +430,9 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
       ++metamodelCounter_;
     emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
 
-  } else {
+  }
+  else
+  {
     appendAnalysisItem(analysis);
   }
 
@@ -501,7 +507,8 @@ void PhysicalModelDiagramItem::updateDesignEvaluationCounter(bool increment)
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
 }
 
-void PhysicalModelDiagramItem::updateMetamodelCounter(bool increment) {
+void PhysicalModelDiagramItem::updateMetamodelCounter(bool increment)
+{
   if (increment)
     ++metamodelCounter_;
   else

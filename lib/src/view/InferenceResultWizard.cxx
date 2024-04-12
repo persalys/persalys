@@ -62,7 +62,7 @@ void InferenceResultWizard::buildInterface()
   // choose InferenceAnalysis
   inferenceResultsComboBox_ = new QComboBox;
   topWidgetLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
-  topWidgetLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
+  topWidgetLayout->addWidget(inferenceResultsComboBox_, 0, 1);
 
   for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
     if (study_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis")

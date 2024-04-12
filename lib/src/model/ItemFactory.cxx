@@ -239,68 +239,86 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     action = new QAction(QIcon(":/images/modelEvaluation.png"), tr("Evaluation"), this);
     action->setStatusTip(tr("Create a new model evaluation"));
     if (!model.hasMesh())
-      connect(action, &QAction::triggered, [=]() {
+      connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           ModelEvaluation(availableAnalysisName(tr("evaluation_")), model));});
+                           ModelEvaluation(availableAnalysisName(tr("evaluation_")), model));
+    });
     else
-      connect(action, &QAction::triggered, [=]() {
+      connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           FieldModelEvaluation(availableAnalysisName(tr("evaluation_")), model));});
+                           FieldModelEvaluation(availableAnalysisName(tr("evaluation_")), model));
+    });
   }
   else if (analysisName == "DesignOfExperiment")
   {
     action = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
     action->setStatusTip(tr("Create a new design of experiments"));
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           GridDesignOfExperiment(availableAnalysisName(tr("design_")), model));});
+                           GridDesignOfExperiment(availableAnalysisName(tr("design_")), model));
+    });
   }
 #ifdef PERSALYS_HAVE_OTMORRIS
   else if (analysisName == "Screening")
   {
     action = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
     action->setStatusTip(tr("Create a new screening"));
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           MorrisAnalysis(availableAnalysisName(tr("screening_")), model));});
+                           MorrisAnalysis(availableAnalysisName(tr("screening_")), model));
+    });
   }
 #endif
   else if (analysisName == "Optimization")
   {
     action = new QAction(QIcon(":/images/optimize.png"), tr("Optimization"), this);
     action->setStatusTip(tr("Create a new model optimization"));
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           OptimizationAnalysis(availableAnalysisName(tr("optimization_")), model));});
+                           OptimizationAnalysis(availableAnalysisName(tr("optimization_")), model));
+    });
   }
   else if (analysisName == "MultiObjectiveOptimization")
   {
     action = new QAction(QIcon(":/images/optimize.png"), tr("Multi-objective optimization"), this);
     action->setStatusTip(tr("Create a new model multi-objective optimization"));
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           MultiObjectiveOptimizationAnalysis(availableAnalysisName(tr("mo-optimization_")), model));});
+                           MultiObjectiveOptimizationAnalysis(availableAnalysisName(tr("mo-optimization_")), model));
+    });
   }
   else if (analysisName == "Sensitivity")
   {
     action = new QAction(QIcon(":/images/sensitivity.png"), tr("Sensitivity"), this);
     action->setStatusTip(tr("Create a new sensitivity analysis"));
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           SobolAnalysis(availableAnalysisName(tr("sensitivity_")), model));});
+                           SobolAnalysis(availableAnalysisName(tr("sensitivity_")), model));
+    });
   }
   else if (analysisName == "CentralTendency")
   {
     action = new QAction(QIcon(":/images/centralTendency.png"), tr("Central tendency"), this);
     action->setStatusTip(tr("Create a new central tendency"));
     if (!model.hasMesh())
-      connect(action, &QAction::triggered, [=]() {
+      connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           MonteCarloAnalysis(availableAnalysisName(tr("centralTendency_")), model));});
+                           MonteCarloAnalysis(availableAnalysisName(tr("centralTendency_")), model));
+    });
     else
-      connect(action, &QAction::triggered, [=]() {
+      connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                           FieldMonteCarloAnalysis(availableAnalysisName(tr("centralTendency_")), model));});
+                           FieldMonteCarloAnalysis(availableAnalysisName(tr("centralTendency_")), model));
+    });
   }
   return action;
 }
@@ -314,36 +332,48 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfE
   {
     action = new QAction(tr("Data analysis"), this);
     action->setStatusTip(tr("Analyse the data sample"));
-    connect(action, &QAction::triggered, [=]() {
-      getParentStudyItem()->getStudy().add(DataAnalysis(availableAnalysisName(tr("dataAnalysis_")), doe));});
+    connect(action, &QAction::triggered, [ = ]()
+    {
+      getParentStudyItem()->getStudy().add(DataAnalysis(availableAnalysisName(tr("dataAnalysis_")), doe));
+    });
   }
   else if (analysisName == "Metamodel")
   {
     action = new QAction(tr("Metamodel"), this);
     action->setStatusTip(tr("Create a new metamodel"));
-    connect(action, &QAction::triggered, [=]() {newAnalysis("Metamodel", doe);});
+    connect(action, &QAction::triggered, [ = ]()
+    {
+      newAnalysis("Metamodel", doe);
+    });
   }
   else if (analysisName == "Inference")
   {
     action = new QAction(tr("Marginals inference"), this);
     action->setStatusTip(tr("Marginals inference"));
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                             InferenceAnalysis(availableAnalysisName(tr("marginalsInference_")), doe));});
+                           InferenceAnalysis(availableAnalysisName(tr("marginalsInference_")), doe));
+    });
   }
   else if (analysisName == "CopulaInference")
   {
     action = new QAction(tr("Dependence inference"), this);
     action->setStatusTip(tr("Dependence inference"));
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [ = ]()
+    {
       emit wizardRequested(getParentStudyItem(),
-                             CopulaInferenceAnalysis(availableAnalysisName(tr("dependenceInference_")), doe));});
+                           CopulaInferenceAnalysis(availableAnalysisName(tr("dependenceInference_")), doe));
+    });
   }
   else if (analysisName == "Calibration")
   {
     action = new QAction(QIcon(":/images/calibration.png"), tr("Calibration"), this);
     action->setStatusTip(tr("Create a new calibration"));
-    connect(action, &QAction::triggered, [=]() {newAnalysis("Calibration", doe);});
+    connect(action, &QAction::triggered, [ = ]()
+    {
+      newAnalysis("Calibration", doe);
+    });
   }
   else
   {
@@ -359,7 +389,10 @@ QAction * ItemFactory::createAction(const QString &analysisName, const LimitStat
   {
     QAction * action = new QAction(tr("Threshold exceedance"), this);
     action->setStatusTip(tr("Create a new threshold exceedance"));
-    connect(action, &QAction::triggered, [=]() {newAnalysis("ThresholdExceedance", limitState);});
+    connect(action, &QAction::triggered, [ = ]()
+    {
+      newAnalysis("ThresholdExceedance", limitState);
+    });
     return action;
   }
   qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
@@ -373,7 +406,10 @@ QAction * ItemFactory::createAction(const QString &analysisName, const Analysis 
   {
     QAction * action = new QAction(tr("Metamodel"), this);
     action->setStatusTip(tr("Create a new metamodel"));
-    connect(action, &QAction::triggered, [=]() {newAnalysis("Metamodel", analysis);});
+    connect(action, &QAction::triggered, [ = ]()
+    {
+      newAnalysis("Metamodel", analysis);
+    });
     return action;
   }
   qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";

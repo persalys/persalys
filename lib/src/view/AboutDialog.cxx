@@ -85,11 +85,11 @@ AboutDialog::AboutDialog(QWidget* parent)
   QLabel * descriptionLabel = new QLabel(tr("Persalys, an user interface for uncertainty analysis"));
   tabLayout->addWidget(descriptionLabel);
 
-   QLabel * linkLabel = new QLabel;
-   linkLabel->setText("<a href=\"https://www.persalys.fr\">www.persalys.fr</a>");
-   linkLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-   linkLabel->setOpenExternalLinks(true);
-   tabLayout->addWidget(linkLabel);
+  QLabel * linkLabel = new QLabel;
+  linkLabel->setText("<a href=\"https://www.persalys.fr\">www.persalys.fr</a>");
+  linkLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+  linkLabel->setOpenExternalLinks(true);
+  tabLayout->addWidget(linkLabel);
 
   QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2024 EDF-Phimeca"));
   tabLayout->addWidget(copyrightLabel);

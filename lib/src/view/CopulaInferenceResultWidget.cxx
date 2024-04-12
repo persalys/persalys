@@ -123,7 +123,7 @@ void CopulaInferenceResultWidget::buildInterface()
 
   distGroupBoxLayout->addWidget(distTableView_);
 
-  rightWidgetLayout->addWidget(distGroupBox, 0, Qt::AlignLeft|Qt::AlignTop);
+  rightWidgetLayout->addWidget(distGroupBox, 0, Qt::AlignLeft | Qt::AlignTop);
 
   // -- for each copula, display PDF-CDF/parameters
   ResizableStackedWidget * paramStackWidget = new ResizableStackedWidget;

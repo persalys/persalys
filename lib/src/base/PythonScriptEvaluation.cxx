@@ -48,13 +48,13 @@ PythonScriptEvaluation::PythonScriptEvaluation()
 
 /* Constructor with parameters */
 PythonScriptEvaluation::PythonScriptEvaluation(const Description & inputVariablesNames,
-                                               const Description & outputVariablesNames,
-                                               const String & code)
+    const Description & outputVariablesNames,
+    const String & code)
   : EvaluationImplementation()
   , inputDimension_(inputVariablesNames.getSize())
   , outputDimension_(outputVariablesNames.getSize())
   , code_(code)
-  , codeHash_(std::hash<std::string>{}(code))
+  , codeHash_(std::hash<std::string> {}(code))
 {
   setInputDescription(inputVariablesNames);
   setOutputDescription(outputVariablesNames);
@@ -171,7 +171,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
     Sample outS(0, getOutputDimension());
     Indices nokIdx;
     Description errorDesc;
-    for (UnsignedInteger i=0; i<inS.getSize(); ++i)
+    for (UnsignedInteger i = 0; i < inS.getSize(); ++i)
     {
       try
       {
@@ -186,7 +186,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
     if (nokIdx.getSize())
       throw BatchFailedException(HERE, nokIdx, errorDesc,
                                  nokIdx.complement(inS.getSize()), outS)
-        << (nokIdx.getSize() == 1 ? errorDesc[0] : "operator(Sample) partial fail");
+          << (nokIdx.getSize() == 1 ? errorDesc[0] : "operator(Sample) partial fail");
     return outS;
 
   }
@@ -222,7 +222,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "import os\n";
   oss << "import sys\n";
   oss << "sys.path.insert(0, r'" << tempDir << "')\n";
-  oss << "import " << code_mod <<"\n";
+  oss << "import " << code_mod << "\n";
   oss << "if __name__== '__main__':\n";
   oss << "    if sys.platform == 'win32':\n";
   oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'pythonw.exe'))\n";
@@ -278,7 +278,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   // if any failed indices, throw
   if (nokIdx.getSize())
     throw BatchFailedException(HERE, nokIdx, desc, okIdx, outputSample)
-      << (nokIdx.getSize() == 1 ? desc[0] : "operator(Sample) partial fail");
+        << (nokIdx.getSize() == 1 ? desc[0] : "operator(Sample) partial fail");
 
   // check
   if (outputSample.getSize() != size)

@@ -19,7 +19,8 @@ PVBagChartViewWidget::PVBagChartViewWidget(QWidget *parent, PVServerManagerInter
   : PVXYChartViewWidget(parent, smb, (!filtersource ? FunctionalBagChart : BagChart))
   , filtersource_(filtersource)
 {
-  if (filtersource) {
+  if (filtersource)
+  {
     producerBases_.append(filtersource_->getProxy());
     vtkSMSourceProxy::SafeDownCast(filtersource_->getProxy())->UpdatePipeline();
 
@@ -48,7 +49,8 @@ pqPipelineSource * PVBagChartViewWidget::getFilterSource()
 void PVBagChartViewWidget::setData(const std::vector<std::vector<double> >& valuesByColumn,
                                    const std::vector<std::string>& columnNames)
 {
-  if (filtersource_) {
+  if (filtersource_)
+  {
     return;
   }
   buildTableFrom(valuesByColumn, columnNames);
@@ -80,10 +82,11 @@ void PVBagChartViewWidget::setData(const std::vector<std::vector<double> >& valu
   // Set the column names to be processed - it excludes the last one (mesh)
   vtkSMPropertyHelper(sourceProxy->GetProperty("SelectArrays")).RemoveAllValues();
   vtkSMPropertyHelper(sourceProxy->GetProperty("SelectArrays"))
-    .SetNumberOfElements(tables_[tables_.size() - 1]->GetNumberOfColumns()-1);
-  for (int i = 0; i < nCols-1; i++) {
+  .SetNumberOfElements(tables_[tables_.size() - 1]->GetNumberOfColumns() - 1);
+  for (int i = 0; i < nCols - 1; i++)
+  {
     vtkSMPropertyHelper(sourceProxy->GetProperty("SelectArrays"))
-      .Set(i, tables_[tables_.size() - 1]->GetColumn(i)->GetName());
+    .Set(i, tables_[tables_.size() - 1]->GetColumn(i)->GetName());
   }
   sourceProxy->UpdateProperty("SelectArrays");
 
@@ -91,13 +94,13 @@ void PVBagChartViewWidget::setData(const std::vector<std::vector<double> >& valu
 
   // create a new representation
   pqDataRepresentation* newRepr(builder->createDataRepresentation(
-    filtersource_->getOutputPort(0), getView(), getRepresentationName()));
+                                  filtersource_->getOutputPort(0), getView(), getRepresentationName()));
   newRepr->setVisible(1);
 
   ////////////////////////////////////////
   // Use our user column for the X-axis of the functional bag plot representation
   auto* reprProxy = newRepr->getProxy();
-  vtkSMPropertyHelper(reprProxy->GetProperty("XArrayName")).Set(axisLabels_[tables_[tables_.size() - 1]->GetColumn(nCols-1)->GetName()].toUtf8().constData());
+  vtkSMPropertyHelper(reprProxy->GetProperty("XArrayName")).Set(axisLabels_[tables_[tables_.size() - 1]->GetColumn(nCols - 1)->GetName()].toUtf8().constData());
   vtkSMPropertyHelper(reprProxy->GetProperty("UseIndexForXAxis")).Set(false);
   reprProxy->UpdateProperty("UseIndexForXAxis");
   reprProxy->UpdateProperty("XArrayName");

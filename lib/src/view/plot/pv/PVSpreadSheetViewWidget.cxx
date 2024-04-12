@@ -79,21 +79,22 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   ExportableTableView * tableView = new ExportableTableView;
   if(errorDesc.getSize())
   {
-    CustomStandardItemModel* tableModel = new CustomStandardItemModel(sample.getSize()+1, sample.getDimension()+2, tableView);
+    CustomStandardItemModel* tableModel = new CustomStandardItemModel(sample.getSize() + 1, sample.getDimension() + 2, tableView);
 
     // header
     tableModel->setNotEditableHeaderItem(0, 0, tr("Row ID"));
     for (OT::UnsignedInteger j = 0; j < sample.getDimension(); ++j)
-      tableModel->setNotEditableHeaderItem(0, j+1, sample.getDescription()[j].c_str());
-    tableModel->setNotEditableHeaderItem(0, sample.getDimension()+1,
+      tableModel->setNotEditableHeaderItem(0, j + 1, sample.getDescription()[j].c_str());
+    tableModel->setNotEditableHeaderItem(0, sample.getDimension() + 1,
                                          tr("Error message"));
 
     // Error Desc
-    for (OT::UnsignedInteger i = 0; i < sample.getSize(); ++i) {
-      tableModel->setNotEditableItem(i+1, 0, i);
+    for (OT::UnsignedInteger i = 0; i < sample.getSize(); ++i)
+    {
+      tableModel->setNotEditableItem(i + 1, 0, i);
       for (OT::UnsignedInteger j = 0; j < sample.getDimension(); ++j)
-        tableModel->setNotEditableItem(i+1, j+1, sample[i][j]);
-      tableModel->setNotEditableItem(i+1, sample.getDimension()+1,
+        tableModel->setNotEditableItem(i + 1, j + 1, sample[i][j]);
+      tableModel->setNotEditableItem(i + 1, sample.getDimension() + 1,
                                      errorDesc[i].c_str());
     }
 

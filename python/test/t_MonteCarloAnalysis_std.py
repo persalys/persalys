@@ -77,9 +77,7 @@ X2 = persalys.Input("X2", ot.Normal(0, 1))
 Y2 = persalys.Output("Y2")
 formula_Y2 = "X2*X2"
 
-model2 = persalys.SymbolicPhysicalModel(
-    "aModelPhys2", [X2], [Y2], [formula_Y2]
-)
+model2 = persalys.SymbolicPhysicalModel("aModelPhys2", [X2], [Y2], [formula_Y2])
 myStudy.add(model2)
 
 analysis4 = persalys.MonteCarloAnalysis("myMonteCarlo4", model2)

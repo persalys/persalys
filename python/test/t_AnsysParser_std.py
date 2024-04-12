@@ -1,6 +1,7 @@
 import os
 import platform
 import persalys
+
 # import openturns as ot
 import openturns.testing as ott
 

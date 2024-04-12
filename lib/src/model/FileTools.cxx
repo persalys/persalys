@@ -76,9 +76,9 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
   QLabel * lblColSep = new QLabel(tr("Column separator:"));
   QComboBox * boxColSep = new QComboBox;
   boxColSep->addItems(colSepLabels);
-  boxColSep->setItemData(0,",");
-  boxColSep->setItemData(1,";");
-  boxColSep->setItemData(2," ");
+  boxColSep->setItemData(0, ",");
+  boxColSep->setItemData(1, ";");
+  boxColSep->setItemData(2, " ");
   boxColSep->setCurrentIndex(0);
 
   QGridLayout * layout = static_cast<QGridLayout*>(dlg->layout());
@@ -91,8 +91,8 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
   QLabel * lblNumSep = new QLabel(tr("Numerical separator:"));
   QComboBox * boxNumSep = new QComboBox;
   boxNumSep->addItems(numSepLabels);
-  boxNumSep->setItemData(0,".");
-  boxNumSep->setItemData(1,",");
+  boxNumSep->setItemData(0, ".");
+  boxNumSep->setItemData(1, ",");
   boxNumSep->setCurrentIndex(0);
 
   layout->addWidget(lblNumSep, ++row, 0);
@@ -113,12 +113,13 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
 
   QStandardItem *commaItem = model->item(1);
   commaItem->setFlags(boxColSep->currentIndex() == 0 ? commaItem->flags() & ~Qt::ItemIsEnabled
-                 : commaItem->flags() | Qt::ItemIsEnabled);
+                      : commaItem->flags() | Qt::ItemIsEnabled);
 
-  connect(boxColSep, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
-      commaItem->setFlags(index == 0 ? commaItem->flags() & ~Qt::ItemIsEnabled
-                     : commaItem->flags() | Qt::ItemIsEnabled);
-    });
+  connect(boxColSep, QOverload<int>::of(&QComboBox::currentIndexChanged), [ = ](int index)
+  {
+    commaItem->setFlags(index == 0 ? commaItem->flags() & ~Qt::ItemIsEnabled
+                        : commaItem->flags() | Qt::ItemIsEnabled);
+  });
 
   QString fileName;
   if(dlg->exec())

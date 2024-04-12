@@ -92,7 +92,7 @@ class PERSALYS_UTILS_API WeightTableModel : public SampleTableModel
 
 public:
   WeightTableModel(const OT::Sample & data, QObject * parent)
-  : SampleTableModel(data, true, false, OT::Description(), parent)
+    : SampleTableModel(data, true, false, OT::Description(), parent)
   {
     Q_ASSERT(data.getDimension() == 2);
   }
@@ -118,7 +118,10 @@ class PERSALYS_UTILS_API ImportedDistributionPage : public QWizardPage
 public:
   ImportedDistributionPage(QWidget *parent = nullptr);
   bool validatePage();
-  OT::Sample getData() const {return sampleWidget_->getData();};
+  OT::Sample getData() const
+  {
+    return sampleWidget_->getData();
+  };
 
 private:
   ImportSampleWidget * sampleWidget_;

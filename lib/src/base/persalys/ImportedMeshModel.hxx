@@ -34,8 +34,8 @@ public:
   /** Default constructor */
   ImportedMeshModel();
   /** Constructor with parameters */
-  ImportedMeshModel(const OT::String& fileName, const OT::Indices& columns=OT::Indices(1, 0));
-  ImportedMeshModel(const VariableCollection& parameters, const OT::String& fileName, const OT::Indices& columns=OT::Indices(1, 0));
+  ImportedMeshModel(const OT::String& fileName, const OT::Indices& columns = OT::Indices(1, 0));
+  ImportedMeshModel(const VariableCollection& parameters, const OT::String& fileName, const OT::Indices& columns = OT::Indices(1, 0));
 
   /** Virtual constructor */
   ImportedMeshModel * clone() const override;

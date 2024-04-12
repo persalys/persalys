@@ -94,7 +94,7 @@ void CouplingInputFile::setVariables(const Description & variableNames,
   if (variableNames.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Variable names size must match tokens size";
   ValidateVariables(variableNames);
-  variableNames_= variableNames;
+  variableNames_ = variableNames;
   tokens_ = tokens;
   formats_ = formats;
 }
@@ -123,16 +123,17 @@ void CouplingInputFile::simulateInput(VariableCollection varColl) const
   code << "import os\n";
   code << "import openturns.coupling_tools as otct\n";
   code << "import persalys\n";
-  code << "input_file = persalys.CouplingInputFile(r'"<<getPath()<<"')\n";
-  code << "input_file.setConfiguredPath(r'" << getConfiguredPath()<<"')\n";
+  code << "input_file = persalys.CouplingInputFile(r'" << getPath() << "')\n";
+  code << "input_file.setConfiguredPath(r'" << getConfiguredPath() << "')\n";
   code << "input_file.setVariables("
-       << Parameters::GetOTDescriptionStr(getVariableNames())<<", "
-       << Parameters::GetOTDescriptionStr(getTokens())<<", "
-       << Parameters::GetOTDescriptionStr(getFormats())<<")\n";
+       << Parameters::GetOTDescriptionStr(getVariableNames()) << ", "
+       << Parameters::GetOTDescriptionStr(getTokens()) << ", "
+       << Parameters::GetOTDescriptionStr(getFormats()) << ")\n";
   code << "all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(variableNames) << ", [";
   for (UnsignedInteger i = 0; i < varColl.getSize(); ++ i)
   {
-    if(variableNames.contains(varColl[i].getName())) {
+    if(variableNames.contains(varColl[i].getName()))
+    {
       code << varColl[i].getValue();
       if (i < varColl.getSize() - 1)
         code << ", ";

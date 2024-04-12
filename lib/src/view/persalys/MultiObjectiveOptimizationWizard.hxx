@@ -31,121 +31,139 @@
 namespace PERSALYS
 {
 
-  class PERSALYS_VIEW_API MultiObjectiveOptimizationAlgoPage : public OptimizationAlgoPage
+class PERSALYS_VIEW_API MultiObjectiveOptimizationAlgoPage : public OptimizationAlgoPage
+{
+  Q_OBJECT
+public:
+  MultiObjectiveOptimizationAlgoPage(QWidget* parent = 0);
+
+  bool validatePage() override;
+  void buildInterface();
+
+public slots:
+  void initialize(MultiObjectiveOptimizationAnalysis& analysis);
+protected slots:
+  void updateRadioButtonsAlgoTable(QModelIndex);
+  void openDoc(QModelIndex);
+};
+
+class PERSALYS_VIEW_API MultiObjectiveDefinitionPage: public QWizardPage
+{
+  Q_OBJECT
+public:
+  MultiObjectiveDefinitionPage(QWidget* parent = 0);
+  OT::Description getMinimization() const;
+  bool validatePage() override;
+  ObjectivesTableModel * getTableModel() const
   {
-    Q_OBJECT
-  public:
-    MultiObjectiveOptimizationAlgoPage(QWidget* parent = 0);
-
-    bool validatePage() override;
-    void buildInterface();
-
-  public slots:
-    void initialize(MultiObjectiveOptimizationAnalysis& analysis);
-  protected slots:
-    void updateRadioButtonsAlgoTable(QModelIndex);
-    void openDoc(QModelIndex);
+    return objTableModel_;
   };
 
-  class PERSALYS_VIEW_API MultiObjectiveDefinitionPage: public QWizardPage
+public slots:
+  void update(MultiObjectiveOptimizationAnalysis& analysis);
+
+signals:
+  void objectivesDefined();
+
+private:
+  QTableView * objTableView_;
+  ObjectivesTableModel * objTableModel_;
+  TemporaryLabel * errorMessageLabel_;
+};
+
+class PERSALYS_VIEW_API MultiObjectiveOptimizationBoundsPage : public QWizardPage
+{
+  Q_OBJECT
+
+  friend class TestOptimizationWizard;
+
+public:
+  MultiObjectiveOptimizationBoundsPage(QWidget* parent = 0);
+
+  void initialize(const Analysis& analysis);
+  bool validatePage();
+  ResizableHeaderlessTableView * getTableView() const
   {
-    Q_OBJECT
-  public:
-    MultiObjectiveDefinitionPage(QWidget* parent = 0);
-    OT::Description getMinimization() const;
-    bool validatePage() override;
-    ObjectivesTableModel * getTableModel() const {return objTableModel_;};
-
-  public slots:
-    void update(MultiObjectiveOptimizationAnalysis& analysis);
-
-  signals:
-    void objectivesDefined();
-
-  private:
-    QTableView * objTableView_;
-    ObjectivesTableModel * objTableModel_;
-    TemporaryLabel * errorMessageLabel_;
+    return tableView_;
   };
-
-  class PERSALYS_VIEW_API MultiObjectiveOptimizationBoundsPage : public QWizardPage
+  MultiObjectiveOptimizationTableModel * getTableModel() const
   {
-    Q_OBJECT
-
-    friend class TestOptimizationWizard;
-
-  public:
-    MultiObjectiveOptimizationBoundsPage(QWidget* parent = 0);
-
-    void initialize(const Analysis& analysis);
-    bool validatePage();
-    ResizableHeaderlessTableView * getTableView() const {return tableView_;};
-    MultiObjectiveOptimizationTableModel * getTableModel() const {return tableModel_;};
-  signals:
-    void currentAnalysisChanged();
-  protected slots:
-    void updateTable();
-  private:
-    ResizableHeaderlessTableView * tableView_;
-    MultiObjectiveOptimizationTableModel * tableModel_;
-    TemporaryLabel * errorMessageLabel_;
-
+    return tableModel_;
   };
+signals:
+  void currentAnalysisChanged();
+protected slots:
+  void updateTable();
+private:
+  ResizableHeaderlessTableView * tableView_;
+  MultiObjectiveOptimizationTableModel * tableModel_;
+  TemporaryLabel * errorMessageLabel_;
 
-  class PERSALYS_VIEW_API MultiObjectiveOptimizationParameters : public QGridLayout
+};
+
+class PERSALYS_VIEW_API MultiObjectiveOptimizationParameters : public QGridLayout
+{
+  Q_OBJECT
+
+public:
+  MultiObjectiveOptimizationParameters(QWidget* parent = 0);
+  template <class T>
+  void initialize(const T& optimAlgo)
   {
-    Q_OBJECT
-
-  public:
-    MultiObjectiveOptimizationParameters(QWidget* parent = 0);
-    template <class T>
-    void initialize(const T& optimAlgo)
-    {
-      generationSpinBox_->setValue(optimAlgo.getGenerationNumber());
-      popSizeSpinBox_->setValue(optimAlgo.getPopulationSize());
-      seedLineEdit_->setValue(optimAlgo.getSeed());
-      constraintErrSpinBox_->setValue(optimAlgo.getMaximumConstraintError());
-    }
-    template <class T>
-    void updateAlgorithm(T& optimAlgo)
-    {
-      optimAlgo.setGenerationNumber(generationSpinBox_->value());
-      optimAlgo.setPopulationSize(popSizeSpinBox_->value());
-      optimAlgo.setSeed(seedLineEdit_->value());
-      optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
-    }
-    UIntSpinBox * getGenerationSpinBox() const {return generationSpinBox_;}
-    UIntSpinBox * getPopSizeSpinBox() const {return popSizeSpinBox_;}
-    ValueLineEdit * getSeedLineEdit_() const {return seedLineEdit_;}
-
-  private:
-    UIntSpinBox * generationSpinBox_;
-    UIntSpinBox * popSizeSpinBox_;
-    ValueLineEdit * seedLineEdit_;
-    LogDoubleSpinBox * constraintErrSpinBox_;
-
-  };
-
-  class PERSALYS_VIEW_API MultiObjectiveOptimizationWizard : public AnalysisWizard
+    generationSpinBox_->setValue(optimAlgo.getGenerationNumber());
+    popSizeSpinBox_->setValue(optimAlgo.getPopulationSize());
+    seedLineEdit_->setValue(optimAlgo.getSeed());
+    constraintErrSpinBox_->setValue(optimAlgo.getMaximumConstraintError());
+  }
+  template <class T>
+  void updateAlgorithm(T& optimAlgo)
   {
-    Q_OBJECT
+    optimAlgo.setGenerationNumber(generationSpinBox_->value());
+    optimAlgo.setPopulationSize(popSizeSpinBox_->value());
+    optimAlgo.setSeed(seedLineEdit_->value());
+    optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
+  }
+  UIntSpinBox * getGenerationSpinBox() const
+  {
+    return generationSpinBox_;
+  }
+  UIntSpinBox * getPopSizeSpinBox() const
+  {
+    return popSizeSpinBox_;
+  }
+  ValueLineEdit * getSeedLineEdit_() const
+  {
+    return seedLineEdit_;
+  }
 
-  public:
-    MultiObjectiveOptimizationWizard(const Analysis& analysis, QWidget* parent = 0);
-    void buildInterface();
-    int nextId() const override;
-    Analysis getAnalysis() const override;
+private:
+  UIntSpinBox * generationSpinBox_;
+  UIntSpinBox * popSizeSpinBox_;
+  ValueLineEdit * seedLineEdit_;
+  LogDoubleSpinBox * constraintErrSpinBox_;
 
-  protected:
-    void initialize(const Analysis& analysis);
+};
 
-  private:
-    MultiObjectiveOptimizationAlgoPage * algoPage_;
-    MultiObjectiveDefinitionPage * objPage_;
-    ConstraintsPage * cstrPage_;
-    MultiObjectiveOptimizationBoundsPage * boundsPage_;
-    MultiObjectiveOptimizationParameters * parametersLayout_;
-  };
+class PERSALYS_VIEW_API MultiObjectiveOptimizationWizard : public AnalysisWizard
+{
+  Q_OBJECT
+
+public:
+  MultiObjectiveOptimizationWizard(const Analysis& analysis, QWidget* parent = 0);
+  void buildInterface();
+  int nextId() const override;
+  Analysis getAnalysis() const override;
+
+protected:
+  void initialize(const Analysis& analysis);
+
+private:
+  MultiObjectiveOptimizationAlgoPage * algoPage_;
+  MultiObjectiveDefinitionPage * objPage_;
+  ConstraintsPage * cstrPage_;
+  MultiObjectiveOptimizationBoundsPage * boundsPage_;
+  MultiObjectiveOptimizationParameters * parametersLayout_;
+};
 
 }
 #endif

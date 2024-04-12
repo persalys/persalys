@@ -183,8 +183,9 @@ void PVViewWidget::setData(const Sample& sample)
 
 void PVViewWidget::setData(const OT::Sample& sample, const OT::Description& errorDesc)
 {
-  std::vector< std::vector<std::string> > varData(sample.getDimension()+1, std::vector<std::string>(sample.getSize()));
-  for (UnsignedInteger i = 0; i < sample.getSize(); ++i) {
+  std::vector< std::vector<std::string> > varData(sample.getDimension() + 1, std::vector<std::string>(sample.getSize()));
+  for (UnsignedInteger i = 0; i < sample.getSize(); ++i)
+  {
     for (UnsignedInteger j = 0; j < sample.getDimension(); ++j)
       varData[j][i] = std::to_string(sample(i, j));
     varData[sample.getDimension()][i] = errorDesc[i];

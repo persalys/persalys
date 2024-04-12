@@ -257,8 +257,10 @@ Sample Tools::ImportSample(const String& fileName)
 
   UnsignedInteger maxNumberOfElements = 0;
 
-  for (UnsignedInteger j = 0; j < numSep.size(); ++ j) {
-    for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i) {
+  for (UnsignedInteger j = 0; j < numSep.size(); ++ j)
+  {
+    for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
+    {
       if (separatorsList[i] == numSep[j])
         continue;
       try
@@ -289,10 +291,10 @@ Sample Tools::ImportSample(const String& fileName)
   if (!IsUTF8(descriptionStr.c_str(), descriptionStr.size()))
   {
     Description newDesc;
-    for(UnsignedInteger i=0; i < sampleFromFile.getDescription().getSize(); ++i)
+    for(UnsignedInteger i = 0; i < sampleFromFile.getDescription().getSize(); ++i)
     {
       descriptionStr = sampleFromFile.getDescription()[i];
-      const String convertedStr = boost::locale::conv::to_utf<char>(descriptionStr,"Latin1");
+      const String convertedStr = boost::locale::conv::to_utf<char>(descriptionStr, "Latin1");
       if (!IsUTF8(convertedStr.c_str(), convertedStr.size()))
         throw InvalidArgumentException(HERE) << "The file must contain utf-8 or ISO-8859 characters";
       newDesc.add(convertedStr);
@@ -370,7 +372,7 @@ int Tools::IsUTF8(const char *data, size_t size)
 
     /* Check continuation bytes: bit 7 should be set, bit 6 should be
      * unset (b10xxxxxx). */
-    for (i=1; i < code_length; i++)
+    for (i = 1; i < code_length; i++)
     {
       if ((str[i] & 0xC0) != 0x80)
         return 0;
@@ -387,7 +389,7 @@ int Tools::IsUTF8(const char *data, size_t size)
     {
       /* 3 bytes sequence: U+0800..U+FFFF */
       ch = ((str[0] & 0x0f) << 12) + ((str[1] & 0x3f) << 6) +
-          (str[2] & 0x3f);
+           (str[2] & 0x3f);
       /* (0xff & 0x0f) << 12 | (0xff & 0x3f) << 6 | (0xff & 0x3f) = 0xffff,
                so ch <= 0xffff */
       if (ch < 0x0800)
@@ -402,7 +404,7 @@ int Tools::IsUTF8(const char *data, size_t size)
     {
       /* 4 bytes sequence: U+10000..U+10FFFF */
       ch = ((str[0] & 0x07) << 18) + ((str[1] & 0x3f) << 12) +
-          ((str[2] & 0x3f) << 6) + (str[3] & 0x3f);
+           ((str[2] & 0x3f) << 6) + (str[3] & 0x3f);
       if ((ch < 0x10000) || (0x10FFFF < ch))
         return 0;
     }

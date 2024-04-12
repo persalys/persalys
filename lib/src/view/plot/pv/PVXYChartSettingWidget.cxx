@@ -56,7 +56,10 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget *pvViewWidget
   frameLayout_->addWidget(label, rowGrid, 0, 1, 1);
 
   titleLineEdit_ = new QLineEdit;
-  connect(titleLineEdit_, &QLineEdit::textChanged, [=](const QString &newValue) {pvXYViewWidget_->setChartTitle(newValue, xAxisComboBox_->currentText(), yAxisComboBox_->currentText());});
+  connect(titleLineEdit_, &QLineEdit::textChanged, [ = ](const QString & newValue)
+  {
+    pvXYViewWidget_->setChartTitle(newValue, xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
+  });
   frameLayout_->addWidget(titleLineEdit_, rowGrid, 1, 1, 1);
 
   // Axis comboboxes : default hidden
@@ -85,9 +88,15 @@ void PVXYChartSettingWidget::addXYAxisTabs()
 
     axisLabelLineEdit_[i] = new QLineEdit;
     if (!yAxisComboBox_->currentText().isEmpty() || plotNames_.size() == 0)
-      connect(axisLabelLineEdit_[i], &QLineEdit::editingFinished, [=]() {pvXYViewWidget_->setAxisTitle(Axes[i], axisLabelLineEdit_[i]->text(), xAxisComboBox_->currentText(), yAxisComboBox_->currentText());});
+      connect(axisLabelLineEdit_[i], &QLineEdit::editingFinished, [ = ]()
+    {
+      pvXYViewWidget_->setAxisTitle(Axes[i], axisLabelLineEdit_[i]->text(), xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
+    });
     else
-      connect(axisLabelLineEdit_[i], &QLineEdit::editingFinished, [=]() {pvXYViewWidget_->setAxisTitle(Axes[i], axisLabelLineEdit_[i]->text(), xAxisComboBox_->currentText(), plotNames_[0]);});
+      connect(axisLabelLineEdit_[i], &QLineEdit::editingFinished, [ = ]()
+    {
+      pvXYViewWidget_->setAxisTitle(Axes[i], axisLabelLineEdit_[i]->text(), xAxisComboBox_->currentText(), plotNames_[0]);
+    });
     gridLayoutTab->addWidget(axisLabelLineEdit_[i], 0, 1, 1, 1);
 
     // min
@@ -95,7 +104,10 @@ void PVXYChartSettingWidget::addXYAxisTabs()
     gridLayoutTab->addWidget(label, 1, 0, 1, 1);
 
     axisMinValueLineEdit_[i] = new ValueLineEdit;
-    connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {pvXYViewWidget_->setAxisRange(Axes[i], axisMinValueLineEdit_[i]->value(), axisMaxValueLineEdit_[i]->value());});
+    connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [ = ]()
+    {
+      pvXYViewWidget_->setAxisRange(Axes[i], axisMinValueLineEdit_[i]->value(), axisMaxValueLineEdit_[i]->value());
+    });
     gridLayoutTab->addWidget(axisMinValueLineEdit_[i], 1, 1, 1, 1);
 
     // max
@@ -103,13 +115,19 @@ void PVXYChartSettingWidget::addXYAxisTabs()
     gridLayoutTab->addWidget(label, 2, 0, 1, 1);
 
     axisMaxValueLineEdit_[i] = new ValueLineEdit;
-    connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [=]() {pvXYViewWidget_->setAxisRange(Axes[i], axisMinValueLineEdit_[i]->value(), axisMaxValueLineEdit_[i]->value());});
+    connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [ = ]()
+    {
+      pvXYViewWidget_->setAxisRange(Axes[i], axisMinValueLineEdit_[i]->value(), axisMaxValueLineEdit_[i]->value());
+    });
     gridLayoutTab->addWidget(axisMaxValueLineEdit_[i], 2, 1, 1, 1);
 
     QHBoxLayout * hLayout = new QHBoxLayout;
     // log scale
     axisLogScaleCheckBox_[i] = new QCheckBox(tr("Log scale"));
-    connect(axisLogScaleCheckBox_[i], &QCheckBox::clicked, [=](bool checked) {pvXYViewWidget_->setLogScale(Axes[i], checked);});
+    connect(axisLogScaleCheckBox_[i], &QCheckBox::clicked, [ = ](bool checked)
+    {
+      pvXYViewWidget_->setLogScale(Axes[i], checked);
+    });
     hLayout->addWidget(axisLogScaleCheckBox_[i]);
 
     // reset axis
@@ -157,7 +175,10 @@ void PVXYChartSettingWidget::addMarkerTab(const bool canChangeColor)
   markerStyles->addItem(tr("Circle"), vtkPlotPoints::CIRCLE);
   markerStyles->addItem(tr("Diamond"), vtkPlotPoints::DIAMOND);
   markerStyles->setCurrentIndex(pvXYViewWidget_->getMarkerStyle());
-  connect(markerStyles, &QComboBox::currentTextChanged, [=]() {pvXYViewWidget_->setMarkerStyle(markerStyles->currentData().toInt());});
+  connect(markerStyles, &QComboBox::currentTextChanged, [ = ]()
+  {
+    pvXYViewWidget_->setMarkerStyle(markerStyles->currentData().toInt());
+  });
   widgetLayout->addWidget(markerStyles, 1, 1);
 
   // marker size
@@ -274,7 +295,10 @@ TrajectoriesSettingWidget::TrajectoriesSettingWidget(PVXYChartViewWidget *pvView
     frameLayout_->addWidget(label, rowGrid, 0, 1, 1);
     xAxisComboBox_->setVisible(true);
     xAxisComboBox_->addItems(xAxisNames);
-    connect(xAxisComboBox_, &QComboBox::currentTextChanged, [=]() {pvXYViewWidget_->setXAxisData(xAxisComboBox_->currentText());});
+    connect(xAxisComboBox_, &QComboBox::currentTextChanged, [ = ]()
+    {
+      pvXYViewWidget_->setXAxisData(xAxisComboBox_->currentText());
+    });
     frameLayout_->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
   }
 
@@ -299,11 +323,11 @@ TrajectoriesSettingWidget::TrajectoriesSettingWidget(PVXYChartViewWidget *pvView
 // ------------- ScatterSettingWidget -------------
 
 ScatterSettingWidget::ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
-                                           const Collection<Sample> &samples,
-                                           const Collection<Sample> &rankSamples,
-                                           const QStringList &inputNames,
-                                           const QStringList &outputNames,
-                                           QWidget *parent)
+    const Collection<Sample> &samples,
+    const Collection<Sample> &rankSamples,
+    const QStringList &inputNames,
+    const QStringList &outputNames,
+    QWidget *parent)
   : PVXYChartSettingWidget(pvViewWidget, QStringList(), true, parent)
 {
   samples_ = samples;
@@ -333,7 +357,10 @@ ScatterSettingWidget::ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
 
   connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateYComboBox()));
   frameLayout_->addWidget(yAxisComboBox_, rowGrid, 1, 1, 1);
-  connect(yAxisComboBox_, &QComboBox::currentTextChanged, [=]() {pvXYViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());});
+  connect(yAxisComboBox_, &QComboBox::currentTextChanged, [ = ]()
+  {
+    pvXYViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
+  });
 
   if (pvXYViewWidget_->getNumberOfRepresentations() > 1)
     addSelectDataWidget(tr("Data"));
@@ -355,20 +382,20 @@ ScatterSettingWidget::ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
 
 
 ScatterSettingWidget::ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
-                                           const Sample &sample,
-                                           const Sample &rankSample,
-                                           const QStringList &inputNames,
-                                           const QStringList &outputNames,
-                                           QWidget *parent)
+    const Sample &sample,
+    const Sample &rankSample,
+    const QStringList &inputNames,
+    const QStringList &outputNames,
+    QWidget *parent)
   : ScatterSettingWidget(pvViewWidget, Collection<Sample>(1, sample), Collection<Sample>(1, rankSample), inputNames, outputNames, parent)
 {
 }
 
 
 ScatterSettingWidget::ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
-                                           const Collection<Sample> &samples,
-                                           const Collection<Sample> &rankSamples,
-                                           QWidget *parent)
+    const Collection<Sample> &samples,
+    const Collection<Sample> &rankSamples,
+    QWidget *parent)
   : ScatterSettingWidget(pvViewWidget, samples, rankSamples, QtOT::DescriptionToStringList(samples[0].getDescription()), QStringList(), parent)
 {
 }
@@ -410,9 +437,9 @@ void ScatterSettingWidget::updateYComboBox()
 // ------------- ScatterSettingWidget -------------
 
 MultiPDFSettingWidget::MultiPDFSettingWidget(PVXYChartViewWidget *pvViewWidget,
-                                           const QStringList &inputNames,
-                                           const QStringList &outputNames,
-                                           QWidget *parent)
+    const QStringList &inputNames,
+    const QStringList &outputNames,
+    QWidget *parent)
   : PVXYChartSettingWidget(pvViewWidget, QStringList(), false, parent)
 {
   int rowGrid = frameLayout_->rowCount();
@@ -431,7 +458,10 @@ MultiPDFSettingWidget::MultiPDFSettingWidget(PVXYChartViewWidget *pvViewWidget,
   frameLayout_->addWidget(xAxisComboBox_, rowGrid, 1, 1, 1);
 
   connect(xAxisComboBox_, SIGNAL(currentIndexChanged(int)), yAxisComboBox_, SLOT(setCurrentIndex(int)));
-  connect(yAxisComboBox_, &QComboBox::currentTextChanged, [=]() {pvXYViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());});
+  connect(yAxisComboBox_, &QComboBox::currentTextChanged, [ = ]()
+  {
+    pvXYViewWidget_->showChart(xAxisComboBox_->currentText(), yAxisComboBox_->currentText());
+  });
 
   if (pvXYViewWidget_->getNumberOfRepresentations() > 1)
     addSelectDataWidget(tr("Data"));

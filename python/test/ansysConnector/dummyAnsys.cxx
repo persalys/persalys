@@ -4,7 +4,8 @@
 #include <fstream>
 using namespace std;
 
-int main () {
+int main ()
+{
   ofstream myfile;
   myfile.open ("output0.csv", std::ios::trunc);
   myfile << "# \n";

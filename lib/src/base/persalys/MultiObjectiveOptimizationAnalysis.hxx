@@ -27,108 +27,126 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_BASE_API MultiObjectiveOptimizationAnalysisResult : public OT::PersistentObject
+class PERSALYS_BASE_API MultiObjectiveOptimizationAnalysisResult : public OT::PersistentObject
+{
+  CLASSNAME
+public:
+  /** Default constructor */
+  MultiObjectiveOptimizationAnalysisResult();
+
+  /** Virtual constructor */
+  MultiObjectiveOptimizationAnalysisResult * clone() const override;
+
+  OT::Collection<OT::Sample> getFronts() const
   {
-    CLASSNAME
-      public:
-    /** Default constructor */
-    MultiObjectiveOptimizationAnalysisResult();
-
-    /** Virtual constructor */
-    MultiObjectiveOptimizationAnalysisResult * clone() const override;
-
-    OT::Collection<OT::Sample> getFronts() const {return fronts_;};
-    void setFronts(const OT::Collection<OT::Sample>& fronts) {fronts_=fronts;};
-
-    OT::Sample getFinalPop() const {return finalPop_;};
-    void setFinalPop(const OT::Sample& finalPop) {finalPop_=finalPop;};
-
-    /** Method save() stores the object through the StorageManager */
-    void save(OT::Advocate & adv) const override;
-
-    /** Method load() reloads the object from the StorageManager */
-    void load(OT::Advocate & adv) override;
-
-    /** String converter */
-    OT::String __repr__() const override;
-
-  private:
-    OT::PersistentCollection<OT::Sample> fronts_;
-    OT::Sample finalPop_;
-
+    return fronts_;
+  };
+  void setFronts(const OT::Collection<OT::Sample>& fronts)
+  {
+    fronts_ = fronts;
   };
 
-  class PERSALYS_BASE_API MultiObjectiveOptimizationAnalysis : public OptimizationAnalysis
+  OT::Sample getFinalPop() const
   {
-    CLASSNAME
-      public:
-    /** Default constructor */
-    MultiObjectiveOptimizationAnalysis();
-
-    /** Constructor with parameters */
-    MultiObjectiveOptimizationAnalysis(const OT::String & name,
-                                       const PhysicalModel & physicalModel,
-                                       const OT::String & solverName = "nsga2");
-
-    /** Virtual constructor */
-    MultiObjectiveOptimizationAnalysis * clone() const override;
-
-    void setInterestVariables(const OT::Description& variablesNames) override;
-    void setSolverName(const OT::String& name) override;
-
-    void initialize() override;
-    void updateParameters() override;
-    bool canBeLaunched(OT::String &errorMessage) const override;
-
-    static OT::Description GetSolverNames(const OT::Interval& bounds,
-                                          const OT::Indices& types = OT::Indices(),
-                                          const OT::Function& eqFunc = OT::Function(),
-                                          const OT::Function& ineqFunc = OT::Function());
-
-    /** Initial population size */
-    void setPopulationSize(const OT::UnsignedInteger popSize);
-    OT::UnsignedInteger getPopulationSize() const;
-
-    /** Number of generations to evolve */
-    void setGenerationNumber(const OT::UnsignedInteger generationNumber);
-    OT::UnsignedInteger getGenerationNumber() const;
-
-    /** Objectives */
-    OT::Description getMinimization() const;
-    void setMinimization(const OT::Description& varNames);
-
-    /** Seed */
-    void setSeed(const OT::UnsignedInteger & seed) {seed_=seed;};
-    OT::UnsignedInteger getSeed() const {return seed_;};
-
-    /** Result **/
-    bool hasValidResult() const override;
-    MultiObjectiveOptimizationAnalysisResult getResult() const;
-
-    /** Parameters **/
-    Parameters getParameters() const override;
-
-    OT::String getPythonScript() const override;
-
-    /** String converter */
-    OT::String __repr__() const override;
-
-    /** Method save() stores the object through the StorageManager */
-    void save(OT::Advocate & adv) const override;
-
-    /** Method load() reloads the object from the StorageManager */
-    void load(OT::Advocate & adv) override;
-
-  protected:
-    void launch() override;
-
-  private:
-    OT::UnsignedInteger startingPopSize_ = 50;
-    OT::UnsignedInteger generationNumber_ = 10;
-    OT::UnsignedInteger seed_ = 0;
-    OT::Description areMinimization_;
-    MultiObjectiveOptimizationAnalysisResult moResult_;
+    return finalPop_;
   };
+  void setFinalPop(const OT::Sample& finalPop)
+  {
+    finalPop_ = finalPop;
+  };
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const override;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv) override;
+
+  /** String converter */
+  OT::String __repr__() const override;
+
+private:
+  OT::PersistentCollection<OT::Sample> fronts_;
+  OT::Sample finalPop_;
+
+};
+
+class PERSALYS_BASE_API MultiObjectiveOptimizationAnalysis : public OptimizationAnalysis
+{
+  CLASSNAME
+public:
+  /** Default constructor */
+  MultiObjectiveOptimizationAnalysis();
+
+  /** Constructor with parameters */
+  MultiObjectiveOptimizationAnalysis(const OT::String & name,
+                                     const PhysicalModel & physicalModel,
+                                     const OT::String & solverName = "nsga2");
+
+  /** Virtual constructor */
+  MultiObjectiveOptimizationAnalysis * clone() const override;
+
+  void setInterestVariables(const OT::Description& variablesNames) override;
+  void setSolverName(const OT::String& name) override;
+
+  void initialize() override;
+  void updateParameters() override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
+
+  static OT::Description GetSolverNames(const OT::Interval& bounds,
+                                        const OT::Indices& types = OT::Indices(),
+                                        const OT::Function& eqFunc = OT::Function(),
+                                        const OT::Function& ineqFunc = OT::Function());
+
+  /** Initial population size */
+  void setPopulationSize(const OT::UnsignedInteger popSize);
+  OT::UnsignedInteger getPopulationSize() const;
+
+  /** Number of generations to evolve */
+  void setGenerationNumber(const OT::UnsignedInteger generationNumber);
+  OT::UnsignedInteger getGenerationNumber() const;
+
+  /** Objectives */
+  OT::Description getMinimization() const;
+  void setMinimization(const OT::Description& varNames);
+
+  /** Seed */
+  void setSeed(const OT::UnsignedInteger & seed)
+  {
+    seed_ = seed;
+  };
+  OT::UnsignedInteger getSeed() const
+  {
+    return seed_;
+  };
+
+  /** Result **/
+  bool hasValidResult() const override;
+  MultiObjectiveOptimizationAnalysisResult getResult() const;
+
+  /** Parameters **/
+  Parameters getParameters() const override;
+
+  OT::String getPythonScript() const override;
+
+  /** String converter */
+  OT::String __repr__() const override;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const override;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv) override;
+
+protected:
+  void launch() override;
+
+private:
+  OT::UnsignedInteger startingPopSize_ = 50;
+  OT::UnsignedInteger generationNumber_ = 10;
+  OT::UnsignedInteger seed_ = 0;
+  OT::Description areMinimization_;
+  MultiObjectiveOptimizationAnalysisResult moResult_;
+};
 }
 
 #endif

@@ -163,7 +163,7 @@ void KrigingAnalysis::launch()
   const Point stddev(effectiveOutputSample.computeStandardDeviation());
   for (UnsignedInteger i = 0; i < outputDimension; ++ i)
     if (!(stddev[i] > 0.0))
-      throw InvalidArgumentException(HERE) << "No variance for output variable "<< outputVariables[i];
+      throw InvalidArgumentException(HERE) << "No variance for output variable " << outputVariables[i];
 
   // Kriging
 
@@ -185,7 +185,7 @@ void KrigingAnalysis::launch()
     const Point stddevInput(effectiveInputSample.computeStandardDeviation());
     SquareMatrix linear(inputDimension);
     for (UnsignedInteger j = 0; j < inputDimension; ++ j)
-        linear(j, j) = (std::abs(stddevInput[j]) > 1e-12) ? 1.0 / stddevInput[j] : 1.0;
+      linear(j, j) = (std::abs(stddevInput[j]) > 1e-12) ? 1.0 / stddevInput[j] : 1.0;
     const Point zero(inputDimension, 0.0);
     normalization_ = LinearFunction(mean, zero, linear);
 

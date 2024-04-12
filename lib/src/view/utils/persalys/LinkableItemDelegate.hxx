@@ -27,19 +27,22 @@
 
 #include <QStyledItemDelegate>
 
-namespace PERSALYS {
-  class PERSALYS_UTILS_API LinkableItemDelegate : public QStyledItemDelegate {
-    Q_OBJECT
+namespace PERSALYS
+{
+class PERSALYS_UTILS_API LinkableItemDelegate : public QStyledItemDelegate
+{
+  Q_OBJECT
 
-  public:
-    LinkableItemDelegate(const int firstRowWithButton, QObject *parent)
-      : QStyledItemDelegate(parent)
-      , firstRowWithButton_(firstRowWithButton) { }
+public:
+  LinkableItemDelegate(const int firstRowWithButton, QObject *parent)
+    : QStyledItemDelegate(parent)
+    , firstRowWithButton_(firstRowWithButton) { }
 
-  protected:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-  private:
-    int firstRowWithButton_;};
+protected:
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+private:
+  int firstRowWithButton_;
+};
 }
 #endif

@@ -26,26 +26,26 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_UTILS_API EditableExportableTableView : public ExportableTableView
-  {
-    Q_OBJECT
+class PERSALYS_UTILS_API EditableExportableTableView : public ExportableTableView
+{
+  Q_OBJECT
 
-  public:
-    EditableExportableTableView(QWidget* parent = 0);
+public:
+  EditableExportableTableView(QWidget* parent = 0);
 
-  public slots:
-    void contextMenu(const QPoint & pos);
-    void addRow();
-    void removeRows();
+public slots:
+  void contextMenu(const QPoint & pos);
+  void addRow();
+  void removeRows();
 
-  signals:
-    void cleanRequested();
+signals:
+  void cleanRequested();
 
-  private:
-    QAction * addRowAction_;
-    QAction * removeRowAction_;
-    QAction * cleanAction_;
-  };
+private:
+  QAction * addRowAction_;
+  QAction * removeRowAction_;
+  QAction * cleanAction_;
+};
 }
 
 #endif

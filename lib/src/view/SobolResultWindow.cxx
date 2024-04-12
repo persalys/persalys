@@ -124,21 +124,23 @@ void SobolResultWindow::buildInterface()
   tabWidget->addTab(scrollArea, tr("Indices"));
 
   // aggregated tab -----------------------------------------
-  if(nbOutputs > 1 && result_.getAggregatedFirstOrderIndices().getSize()) {
+  if(nbOutputs > 1 && result_.getAggregatedFirstOrderIndices().getSize())
+  {
     SensitivityResultWidget * aggregatedIndicesResultWidget = new SensitivityResultWidget(
-        result_.getAggregatedFirstOrderIndices(),
-        result_.getAggregatedFirstOrderIndicesInterval(),
-        result_.getAggregatedTotalIndices(),
-        result_.getAggregatedTotalIndicesInterval(),
-        result_.getInputNames(),
-        result_.getOutputNames().__str__(),
-        SensitivityResultWidget::Sobol,
-        this);
+      result_.getAggregatedFirstOrderIndices(),
+      result_.getAggregatedFirstOrderIndicesInterval(),
+      result_.getAggregatedTotalIndices(),
+      result_.getAggregatedTotalIndicesInterval(),
+      result_.getInputNames(),
+      result_.getOutputNames().__str__(),
+      SensitivityResultWidget::Sobol,
+      this);
     tabWidget->addTab(aggregatedIndicesResultWidget, tr("Aggregated Indices"));
   }
 
   // stopping criteria
-  if (result_.getElapsedTime() > 0. && result_.getCallsNumber()) {
+  if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
+  {
     widget = new QWidget;
     QGridLayout * gbox = new QGridLayout(widget);
     QStringList namesList;
@@ -153,8 +155,8 @@ void SobolResultWindow::buildInterface()
 
     ParametersWidget * parametersWidget = new ParametersWidget(tr("Stopping criteria"), namesList, valuesList, true, true);
     gbox->addWidget(parametersWidget, 0, 0);
-    gbox->setColumnStretch(1,1);
-    gbox->setRowStretch(1,1);
+    gbox->setColumnStretch(1, 1);
+    gbox->setRowStretch(1, 1);
     tabWidget->addTab(widget, tr("Stopping criteria"));
   }
 

@@ -209,7 +209,7 @@ void SampleTableModel::updateData(const Sample& data)
 bool SampleTableModel::removeRows(int row, int count, const QModelIndex &)
 {
   beginRemoveRows(QModelIndex(), row, row + count - 1);
-  data_.erase(row, row+count);
+  data_.erase(row, row + count);
   endRemoveRows();
   updateData(data_);
   emit sampleChanged();
@@ -218,7 +218,7 @@ bool SampleTableModel::removeRows(int row, int count, const QModelIndex &)
 
 bool SampleTableModel::insertRows(int row, int count, const QModelIndex &)
 {
-  beginInsertRows(QModelIndex(), row, row+count);
+  beginInsertRows(QModelIndex(), row, row + count);
   data_.add(Point(data_.getDimension(), 0.));
   updateData(data_);
   endInsertRows();

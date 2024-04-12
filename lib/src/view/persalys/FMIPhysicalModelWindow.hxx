@@ -206,7 +206,7 @@ class DeselectableTreeView : public QTreeView
 {
 public:
   DeselectableTreeView(QWidget *parent = nullptr)
-  : QTreeView(parent)
+    : QTreeView(parent)
   {
     // style sheet
     const QString styleSheet = " QTreeView::item:selected { background-color: #a5d3a1;\

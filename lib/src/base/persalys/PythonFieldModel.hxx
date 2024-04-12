@@ -37,10 +37,10 @@ public:
   PythonFieldModel(const OT::String& name = "Unnamed");
   /** Constructor with parameters */
   PythonFieldModel(const OT::String& name,
-                      const MeshModel& meshModel,
-                      const InputCollection & inputs,
-                      const OutputCollection & outputs,
-                      const OT::String & code);
+                   const MeshModel& meshModel,
+                   const InputCollection & inputs,
+                   const OutputCollection & outputs,
+                   const OT::String & code);
 
   /** Virtual constructor */
   PythonFieldModel * clone() const override;

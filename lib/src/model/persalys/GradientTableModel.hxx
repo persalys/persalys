@@ -40,8 +40,14 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
   QVariant data(const QModelIndex& index, int role) const;
   bool setData(const QModelIndex& index, const QVariant& value, int role);
-  void setErrorMessage(const QString& message) {errorMessage_=message;};
-  QString getErrorMessage() const {return errorMessage_;};
+  void setErrorMessage(const QString& message)
+  {
+    errorMessage_ = message;
+  };
+  QString getErrorMessage() const
+  {
+    return errorMessage_;
+  };
 
 public slots:
   void updateData();

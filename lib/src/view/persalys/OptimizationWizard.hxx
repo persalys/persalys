@@ -47,8 +47,14 @@ public:
 
   void initialize(const Analysis& analysis);
   bool validatePage();
-  ResizableHeaderlessTableView * getTableView() const {return tableView_;};
-  OptimizationTableModel * getTableModel() const {return tableModel_;};
+  ResizableHeaderlessTableView * getTableView() const
+  {
+    return tableView_;
+  };
+  OptimizationTableModel * getTableModel() const
+  {
+    return tableModel_;
+  };
 signals:
   void currentAnalysisChanged(OptimizationAnalysis&);
 protected slots:
@@ -86,7 +92,10 @@ public:
     optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
     optimAlgo.setMaximumAbsoluteError(absoluteErrSpinBox_->value());
   }
-  UIntSpinBox * getEvaluationSpinBox() const {return evaluationsSpinBox_;}
+  UIntSpinBox * getEvaluationSpinBox() const
+  {
+    return evaluationsSpinBox_;
+  }
 
 private:
   UIntSpinBox * evaluationsSpinBox_;

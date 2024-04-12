@@ -66,8 +66,10 @@ void DesignOfExperimentDefinitionItem::buildActions()
   evaluateAction_ = new QAction(QIcon(":/images/system-run.png"), tr("Evaluate"), this);
   evaluateAction_->setStatusTip(tr("Evaluate the design of experiments"));
   connect(evaluateAction_, SIGNAL(triggered()), this, SLOT(createEvaluation()));
-  connect(this, &DesignOfExperimentDefinitionItem::designEvaluationUpdated, [=]() {
-      convertAction_->setEnabled(getAnalysis().getImplementation()->hasValidResult());});
+  connect(this, &DesignOfExperimentDefinitionItem::designEvaluationUpdated, [ = ]()
+  {
+    convertAction_->setEnabled(getAnalysis().getImplementation()->hasValidResult());
+  });
 
   appendAction(evaluateAction_);
 
@@ -176,7 +178,8 @@ void DesignOfExperimentDefinitionItem::appendItem(const Analysis& analysis)
   analysis.getImplementation().get()->addObserver(analysis_.getImplementation().get()->getObserver("PhysicalModelDiagramItem"));
   analysis.getImplementation().get()->addObserver(getParentStudyItem());
   const MetaModelAnalysis * mmAnalysis = dynamic_cast<const MetaModelAnalysis*>(analysis.getImplementation().get());
-  if(mmAnalysis) {
+  if(mmAnalysis)
+  {
     Observer * observer = analysis.getImplementation().get()->getObserver("PhysicalModelDiagramItem");
     observer->appendItem(analysis);
   }
@@ -206,7 +209,8 @@ void DesignOfExperimentDefinitionItem::updateAnalysis(const Analysis & analysis)
 
   if (wasValid)
     emit designEvaluationUpdated(false);
-  if(analysis.hasValidResult()) {
+  if(analysis.hasValidResult())
+  {
     emit designEvaluationUpdated(true);
     fill();
   }

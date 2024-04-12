@@ -64,7 +64,7 @@ void CopulaInferenceResultWizard::buildInterface()
   // choose CopulaInferenceAnalysis
   inferenceResultsComboBox_ = new QComboBox;
   topWidgetLayout->addWidget(new QLabel(tr("Inference analysis")), 0, 0);
-  topWidgetLayout->addWidget(inferenceResultsComboBox_ , 0, 1);
+  topWidgetLayout->addWidget(inferenceResultsComboBox_, 0, 1);
 
   for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
     if (study_.getAnalyses()[i].getImplementation()->getClassName() == "CopulaInferenceAnalysis")
@@ -87,8 +87,8 @@ void CopulaInferenceResultWizard::buildInterface()
     tableView_->setModel(tableModel);
     for (UnsignedInteger i = 0; i < variables_.getSize(); ++i)
     {
-      tableModel->setData(tableModel->index(0, i) , QtOT::DescriptionToStringList(variables_), Qt::UserRole + 1);
-      tableModel->setData(tableModel->index(0, i) , QColor(Qt::white), Qt::BackgroundRole);
+      tableModel->setData(tableModel->index(0, i), QtOT::DescriptionToStringList(variables_), Qt::UserRole + 1);
+      tableModel->setData(tableModel->index(0, i), QColor(Qt::white), Qt::BackgroundRole);
     }
     // - delegate
     ComboBoxDelegate * delegate = new ComboBoxDelegate(tableView_);

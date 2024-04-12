@@ -100,7 +100,10 @@ CalibrationIntroPage::CalibrationIntroPage(QWidget * parent)
   methodGroup_->addButton(nonLinearGaussianButton, CalibrationIntroPage::NonlinearGaussian);
   methodLayout->addWidget(nonLinearGaussianButton);
 
-  connect(methodGroup_, static_cast<void(QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked), [=](QAbstractButton * button){emit methodChanged(methodGroup_->id(button));});
+  connect(methodGroup_, static_cast<void(QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked), [ = ](QAbstractButton * button)
+  {
+    emit methodChanged(methodGroup_->id(button));
+  });
 
   pageLayout->addWidget(methodBox);
 }
@@ -196,7 +199,10 @@ CalibrationReferencePointPage::CalibrationReferencePointPage(/*const PhysicalMod
   tableView_->setSelectionMode(QAbstractItemView::NoSelection);
   tableModel_ = new CalibrationTableModel(tableView_);
   connect(tableModel_, SIGNAL(modelChanged(PhysicalModel)), this, SIGNAL(modelChanged(PhysicalModel)));
-  connect(tableModel_, &CalibrationTableModel::modelChanged, [=](const PhysicalModel &model) {calibratedLabel_->setText(QString::number(model.getStochasticInputNames().getSize()));});
+  connect(tableModel_, &CalibrationTableModel::modelChanged, [ = ](const PhysicalModel & model)
+  {
+    calibratedLabel_->setText(QString::number(model.getStochasticInputNames().getSize()));
+  });
   tableView_->setModel(tableModel_);
   pageLayout->addWidget(tableView_, 0, Qt::AlignTop);
 
@@ -474,8 +480,8 @@ void CalibrationAnalysisWizard::buildInterface()
 
   // third page : prior distribution
   priorDistPage_ = new CalibrationDistributionPage(tr("Gaussian prior distribution"),
-                                                   tr("Define the covariance matrix of the parameters θ to calibrate."),
-                                                   this);
+      tr("Define the covariance matrix of the parameters θ to calibrate."),
+      this);
 
   connect(refPointPage_, SIGNAL(modelChanged(PhysicalModel)), priorDistPage_, SLOT(updateData(PhysicalModel)));
   setPage(Page_PriorDist, priorDistPage_);
@@ -483,8 +489,8 @@ void CalibrationAnalysisWizard::buildInterface()
 
   // fourth page : observations error distribution
   obsErrorDistPage_ = new CalibrationDistributionPage(tr("Gaussian distribution of the output observations error"),
-                                                      tr("Define the covariance matrix of the output observations error."),
-                                                      this);
+      tr("Define the covariance matrix of the output observations error."),
+      this);
   setPage(Page_ObsErrorDist, obsErrorDistPage_);
 
   initializePages();

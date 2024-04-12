@@ -158,9 +158,11 @@ myStudy.add(optim)
 
 # multi-objective optimization
 if ot.PlatformInfo.HasFeature("pagmo"):
-    mooptim = persalys.MultiObjectiveOptimizationAnalysis("mo-optim", symbolicModel, "nsga2")
+    mooptim = persalys.MultiObjectiveOptimizationAnalysis(
+        "mo-optim", symbolicModel, "nsga2"
+    )
     mooptim.setInterestVariables(["y0", "y1"])
-    mooptim.addConstraint('y0    > 2')
+    mooptim.addConstraint("y0    > 2")
     mooptim.setPopulationSize(60)
     mooptim.setGenerationNumber(12)
     mooptim.setVariableInputs(["x1", "x2", "x3"])

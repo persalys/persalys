@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
   OStream fullprint(std::cout);
 
   String pyscript =
-"def _exec(x, y, p):\n"
-"  w, z=3*x+4*y+p,x+y+p\n"
-"  return w,z\n";
+    "def _exec(x, y, p):\n"
+    "  w, z=3*x+4*y+p,x+y+p\n"
+    "  return w,z\n";
 
   try
   {
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
       "  return Y0";
 
     YACSEvaluation eval(failingScript);
-    Sample X(3,1);
+    Sample X(3, 1);
     X(0, 0) = -1.;
     X(1, 0) = 0.;
     X(2, 0) = 1.;

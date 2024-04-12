@@ -51,10 +51,10 @@ ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name, const
 
 /* Constructor with parameters */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
-                                                       const PhysicalModel& physicalModel,
-                                                       const String& fileName,
-                                                       const Indices& inputColumns,
-                                                       const Indices& outputColumns)
+    const PhysicalModel& physicalModel,
+    const String& fileName,
+    const Indices& inputColumns,
+    const Indices& outputColumns)
   : DesignOfExperimentEvaluation(name, physicalModel)
   , DataImport(fileName, inputColumns, outputColumns)
 {
@@ -89,7 +89,7 @@ Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*n
 
 
 void ImportedDesignOfExperiment::setColumns(const Indices &inputColumns,
-                                            const Indices &outputColumns)
+    const Indices &outputColumns)
 {
   // check columns
   if (inputColumns.getSize() != getPhysicalModel().getInputDimension())

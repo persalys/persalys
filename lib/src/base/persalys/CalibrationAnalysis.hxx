@@ -45,35 +45,65 @@ public:
 
   Observer * getParentObserver() const override;
 
-  DesignOfExperiment getObservations() const {return observations_;};
+  DesignOfExperiment getObservations() const
+  {
+    return observations_;
+  };
 
-  CalibrationAnalysisResult getResult() const {return result_;};
+  CalibrationAnalysisResult getResult() const
+  {
+    return result_;
+  };
 
   void updateParameters();
 
   static OT::Description GetMethodNames();
 
-  OT::String getMethodName() const {return methodName_;};
+  OT::String getMethodName() const
+  {
+    return methodName_;
+  };
   void setMethodName(const OT::String &name);
 
-  OT::OptimizationAlgorithm getOptimizationAlgorithm() const {return optimizationAlgorithm_;};
+  OT::OptimizationAlgorithm getOptimizationAlgorithm() const
+  {
+    return optimizationAlgorithm_;
+  };
   void setOptimizationAlgorithm(const OT::OptimizationAlgorithm& solver);
 
-  OT::PointWithDescription getFixedInputs() const {return fixedValues_;};
+  OT::PointWithDescription getFixedInputs() const
+  {
+    return fixedValues_;
+  };
 
-  OT::Description getCalibratedInputs() const {return priorDistribution_.getDescription();};
+  OT::Description getCalibratedInputs() const
+  {
+    return priorDistribution_.getDescription();
+  };
   void setCalibratedInputs(const OT::Description &calibratedInputs, const OT::Distribution &priorDistribution,
-                           const OT::Description &fixedInputs=OT::Description(), const OT::Point &fixedValues=OT::Point());
+                           const OT::Description &fixedInputs = OT::Description(), const OT::Point &fixedValues = OT::Point());
 
-  OT::Distribution getPriorDistribution() const {return priorDistribution_;};
+  OT::Distribution getPriorDistribution() const
+  {
+    return priorDistribution_;
+  };
 
-  OT::CovarianceMatrix getErrorCovariance() const {return errorCovariance_;};
+  OT::CovarianceMatrix getErrorCovariance() const
+  {
+    return errorCovariance_;
+  };
   void setErrorCovariance(const OT::CovarianceMatrix& matrix);
 
-  OT::Scalar getConfidenceIntervalLength() const {return confidenceIntervalLength_;};
+  OT::Scalar getConfidenceIntervalLength() const
+  {
+    return confidenceIntervalLength_;
+  };
   void setConfidenceIntervalLength(const OT::Scalar);
 
-  OT::UnsignedInteger getBootStrapSize() const {return bootStrapSize_;};
+  OT::UnsignedInteger getBootStrapSize() const
+  {
+    return bootStrapSize_;
+  };
   void setBootStrapSize(const OT::UnsignedInteger);
 
   Parameters getParameters() const override;

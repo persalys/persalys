@@ -154,19 +154,22 @@ Study Study::Open(const String & xmlFileName)
 {
   OT::Study study;
   Study openedStudy;
-  try {
+  try
+  {
     study.setStorageManager(XMLH5StorageManager(xmlFileName));
     study.load();
     study.fillObject("aStudy", openedStudy);
   }
-  catch (Exception &) {
+  catch (Exception &)
+  {
     // if setting XMLH5SM fails, it may be due to missing H5 file or pure XML study
     // therefore, XML file is scrutinised to find any H5 dataset
     Pointer<XMLDoc> doc = new XMLDoc(xmlFileName);
     XML::Node root = XML::GetRootNode(*doc);
     XML::Node node = XML::GetFirstChild(root);
     // loop over all xml nodes
-    while( node ) {
+    while( node )
+    {
       std::regex h5dataset(".+\\.h5\\:\\/[0-9]+");
       OT::String nodeVal = XML::GetNodeValue(XML::FindElementByName(node, XML_STMGR::string_tag::Get() ));
       // if H5 DS is found, throw exception

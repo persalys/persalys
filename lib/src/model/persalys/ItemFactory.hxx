@@ -39,7 +39,10 @@ public:
   ItemFactory();
   virtual ~ItemFactory();
 
-  StudyItem * getParentStudyItem() { return parentStudyItem_; };
+  StudyItem * getParentStudyItem()
+  {
+    return parentStudyItem_;
+  };
   OT::String availableAnalysisName(const QString &baseName);
   QString getParentTitleType(const QString &objectName) const;
   Item * getTitleItem(const QString &objectName);

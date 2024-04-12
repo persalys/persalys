@@ -72,9 +72,9 @@ bool PyConsole_PrintEvent::isError() const
   \param d docstring of the match (in case if there is sinlge match)
 */
 PyConsole_CompletionEvent::PyConsole_CompletionEvent( PyInterp_Request* request,
-                                                      bool s,
-                                                      const QStringList& ms,
-                                                      const QString& doc )
+    bool s,
+    const QStringList& ms,
+    const QString& doc )
   : PyInterp_Event( (QEvent::Type)EVENT_ID, request ),
     myStatus( s ), myMatches( ms ), myDoc( doc )
 {}

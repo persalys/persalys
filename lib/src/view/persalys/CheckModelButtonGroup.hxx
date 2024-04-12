@@ -28,17 +28,20 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_VIEW_API CheckModelButtonGroup : public QWidget
+class PERSALYS_VIEW_API CheckModelButtonGroup : public QWidget
+{
+  Q_OBJECT
+public:
+  CheckModelButtonGroup(QWidget *parent = nullptr);
+  TemporaryLabel * getErrorMessageLabel() const
   {
-    Q_OBJECT
-  public:
-    CheckModelButtonGroup(QWidget *parent = nullptr);
-    TemporaryLabel * getErrorMessageLabel() const {return errorMessageLabel_;}
-  signals:
-    void evaluateOutputsRequested();
-    void evaluateGradientRequested();
-  private:
-    TemporaryLabel * errorMessageLabel_;
-  };
+    return errorMessageLabel_;
+  }
+signals:
+  void evaluateOutputsRequested();
+  void evaluateGradientRequested();
+private:
+  TemporaryLabel * errorMessageLabel_;
+};
 }
 #endif

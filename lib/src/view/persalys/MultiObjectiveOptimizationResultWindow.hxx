@@ -31,7 +31,7 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_VIEW_API MultiObjectiveOptimizationResultWindow : public  DataAnalysisWindow //ResultWindow
+class PERSALYS_VIEW_API MultiObjectiveOptimizationResultWindow : public  DataAnalysisWindow //ResultWindow
 {
   Q_OBJECT
 

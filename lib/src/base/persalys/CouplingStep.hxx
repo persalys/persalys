@@ -27,9 +27,9 @@
 
 namespace PERSALYS
 {
-  typedef OT::Collection<CouplingInputFile> CouplingInputFileCollection;
-  typedef OT::Collection<CouplingResourceFile> CouplingResourceFileCollection;
-  typedef OT::Collection<CouplingOutputFile> CouplingOutputFileCollection;
+typedef OT::Collection<CouplingInputFile> CouplingInputFileCollection;
+typedef OT::Collection<CouplingResourceFile> CouplingResourceFileCollection;
+typedef OT::Collection<CouplingOutputFile> CouplingOutputFileCollection;
 
 class PERSALYS_BASE_API CouplingStep : public OT::PersistentObject
 {
@@ -100,9 +100,9 @@ private:
   OT::PersistentCollection<CouplingInputFile> inputFiles_;
   OT::PersistentCollection<CouplingResourceFile> resourceFiles_;
   OT::PersistentCollection<CouplingOutputFile> outputFiles_;
-  double timeOut_=-1;
-  OT::String encoding_="utf-8";
-  OT::String ppCode_="";
+  double timeOut_ = -1;
+  OT::String encoding_ = "utf-8";
+  OT::String ppCode_ = "";
   OT::Description envKeys_;
   OT::Description envValues_;
 

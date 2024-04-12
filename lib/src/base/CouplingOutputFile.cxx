@@ -67,10 +67,10 @@ String CouplingOutputFile::getPath() const
 
 /* Variables accessor */
 void CouplingOutputFile::setVariables(const Description & variableNames,
-				      const Description & tokens,
-				      const OT::Point & skipTokens,
-				      const OT::Point & skipLines,
-				      const OT::Point & skipColumns)
+                                      const Description & tokens,
+                                      const OT::Point & skipTokens,
+                                      const OT::Point & skipLines,
+                                      const OT::Point & skipColumns)
 {
   if (variableNames.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Variable names size must match tokens size";
@@ -81,7 +81,7 @@ void CouplingOutputFile::setVariables(const Description & variableNames,
   if (skipTokens.getSize() != tokens.getSize())
     throw InvalidArgumentException(HERE) << "Skip tokens size must match tokens size";
   ValidateVariables(variableNames);
-  variableNames_= variableNames;
+  variableNames_ = variableNames;
   tokens_ = tokens;
   skipTokens_ = skipTokens;
   skipLines_ = skipLines;
@@ -120,18 +120,18 @@ String CouplingOutputFile::checkOutputFile(String fname, String encoding) const
   code << "import persalys\n";
   code << "import openturns.coupling_tools as otct\n";
   code << "def _check_file():\n";
-  code << "    outfile = os.path.basename('"<<fname<<"')\n";
+  code << "    outfile = os.path.basename('" << fname << "')\n";
   code << "    output_file = persalys.CouplingOutputFile(outfile)\n";
   code << "    output_file.setVariables("
        << Parameters::GetOTDescriptionStr(getVariableNames())
-       <<", "<<Parameters::GetOTDescriptionStr(EscapeSpecialCharacters(getTokens()))
-       <<", "<< Parameters::GetOTPointStr(getSkipTokens())
-       <<", "<< Parameters::GetOTPointStr(getSkipLines())
-       <<", "<< Parameters::GetOTPointStr(getSkipColumns())<<")\n";
+       << ", " << Parameters::GetOTDescriptionStr(EscapeSpecialCharacters(getTokens()))
+       << ", " << Parameters::GetOTPointStr(getSkipTokens())
+       << ", " << Parameters::GetOTPointStr(getSkipLines())
+       << ", " << Parameters::GetOTPointStr(getSkipColumns()) << ")\n";
   code << "    all_vars = []\n";
   code << "    for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "        try:\n";
-  code << "            all_vars.append(otct.get_value('"<<fname<<"', token=token, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding='"<<encoding<<"'))\n";
+  code << "            all_vars.append(otct.get_value('" << fname << "', token=token, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding='" << encoding << "'))\n";
   code << "        except:\n";
   code << "            continue\n";
   code << "    return all_vars\n";
@@ -152,15 +152,16 @@ String CouplingOutputFile::checkOutputFile(String fname, String encoding) const
 
   Point outSample(convert<_PySequence_, Point>(sampleResult.get()));
   OSS output;
-  if(outSample.getSize()!=getVariableNames().getSize()) {
+  if(outSample.getSize() != getVariableNames().getSize())
+  {
     OSS outMessage;
     outMessage << "Python Function returned a sequence object with incorrect size (got ";
     outMessage << outSample.getSize() << ", expected ";
     outMessage << getVariableNames().getSize() << ")";
     return outMessage.str();
   }
-  for(unsigned int i=0; i<outSample.getSize(); ++i)
-    output<<getVariableNames()[i].c_str()<<"="<<std::to_string(outSample.at(i)).c_str()<<"\n";
+  for(unsigned int i = 0; i < outSample.getSize(); ++i)
+    output << getVariableNames()[i].c_str() << "=" << std::to_string(outSample.at(i)).c_str() << "\n";
   return output.str().c_str();
 }
 

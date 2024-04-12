@@ -334,7 +334,7 @@ void AnsysParser::generateTemplate(const String & templateFileName,
   int i = 1;
   for (auto const& sys : systems_)
   {
-    templateFile << "system" << i << " = GetSystem(Name=\"" << sys.first <<"\")\n";
+    templateFile << "system" << i << " = GetSystem(Name=\"" << sys.first << "\")\n";
     templateFile << "system" << i << ".Update(AllDependencies=True)\n";
     ++i;
   }
@@ -370,7 +370,7 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
   for (UnsignedInteger i = 0; i < inputs.getSize(); ++i)
   {
     inNames.add(inputs[i].getName());
-    inTokens.add("@"+inputs[i].getName()+"@");
+    inTokens.add("@" + inputs[i].getName() + "@");
     inFormats.add("{}");
     if(!model->hasInputNamed(inputs[i].getName()))
       model->PhysicalModelImplementation::addInput(inputs[i]);
@@ -398,7 +398,7 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
   {
     code << "def read_output():\n";
     code << "    import os\n";
-    code << "    with open(os.path.join(workdir, '" << getOutputFileName() <<"'), 'r') as f:\n";
+    code << "    with open(os.path.join(workdir, '" << getOutputFileName() << "'), 'r') as f:\n";
     code << "        for line in f.read().splitlines():\n";
     code << "            if line.startswith('N'):# 'Name|Nom' en|fr|de, !jp\n";
     code << "                names = line.split(',')[1:]\n";
@@ -410,9 +410,9 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
       code << "    " << getOutputVariables()[i].getName() << " = float(results['"
            << getOutputVariables()[i].getName() << "'])\n";
     code << "    return ";
-    for(UnsignedInteger i = 0; i < getOutputVariables().getSize()-1; ++i)
+    for(UnsignedInteger i = 0; i < getOutputVariables().getSize() - 1; ++i)
       code << getOutputVariables()[i].getName() << ",";
-    code << getOutputVariables()[getOutputVariables().getSize()-1].getName();
+    code << getOutputVariables()[getOutputVariables().getSize() - 1].getName();
   }
   cs.setCode(code);
 

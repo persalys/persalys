@@ -125,7 +125,7 @@ QStringList QtOT::GetVariableAxisLabels(const PhysicalModel &model, const Descri
 QString QtOT::FormatDuration(double seconds)
 {
   // convert seconds
-  double sec = std::fmod(seconds,60.);
+  double sec = std::fmod(seconds, 60.);
   int minutes = seconds / 60;
   int hours = minutes / 60;
   minutes %= 60;
@@ -157,7 +157,7 @@ QString QtOT::FormatDuration(double seconds)
   {
     if (sec < 1.) // Display ms
     {
-      duration += QString::number((int)(sec*1000));
+      duration += QString::number((int)(sec * 1000));
       duration += "ms";
     }
     else
@@ -181,11 +181,12 @@ QStringList QtOT::NaturalSorting(const QStringList& list)
 {
   QStringList sorted = list;
 
-  std::sort(sorted.begin(), sorted.end(), [=] (QString s1, QString s2) {
-       QCollator coll(QLocale::English);
-       coll.setNumericMode(true);
-       return coll.compare(s1, s2) < 0;
-     });
+  std::sort(sorted.begin(), sorted.end(), [ = ] (QString s1, QString s2)
+  {
+    QCollator coll(QLocale::English);
+    coll.setNumericMode(true);
+    return coll.compare(s1, s2) < 0;
+  });
   return sorted;
 }
 

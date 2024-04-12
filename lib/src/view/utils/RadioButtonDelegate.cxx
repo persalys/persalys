@@ -24,33 +24,33 @@
 namespace PERSALYS
 {
 
-  void RadioButtonDelegate::paint(QPainter* painter,
-             const QStyleOptionViewItem& option,
-             const QModelIndex& index) const
+void RadioButtonDelegate::paint(QPainter* painter,
+                                const QStyleOptionViewItem& option,
+                                const QModelIndex& index) const
+{
+  if (index.row() < firstRowWithButton_)
   {
-    if (index.row() < firstRowWithButton_)
-    {
-      QStyledItemDelegate::paint(painter, option, index);
-      return;
-    }
-
-    // draw a radio button
-    QStyleOptionButton optionButton;
-    optionButton.rect = option.rect;
-    // add margin before the radio button
-    const int buttonMargin = 3;
-    optionButton.rect.translate(buttonMargin, 0);
-    optionButton.text  = index.data(Qt::DisplayRole).toString();
-
-    if (index.data(Qt::CheckStateRole).toBool())
-      optionButton.state |= QStyle::State_On;
-    else
-      optionButton.state |= QStyle::State_Off;
-
-    optionButton.state |= QStyle::State_Enabled;
-
-    QApplication::style()->drawControl(QStyle::CE_RadioButton, &optionButton, painter);
+    QStyledItemDelegate::paint(painter, option, index);
+    return;
   }
+
+  // draw a radio button
+  QStyleOptionButton optionButton;
+  optionButton.rect = option.rect;
+  // add margin before the radio button
+  const int buttonMargin = 3;
+  optionButton.rect.translate(buttonMargin, 0);
+  optionButton.text  = index.data(Qt::DisplayRole).toString();
+
+  if (index.data(Qt::CheckStateRole).toBool())
+    optionButton.state |= QStyle::State_On;
+  else
+    optionButton.state |= QStyle::State_Off;
+
+  optionButton.state |= QStyle::State_Enabled;
+
+  QApplication::style()->drawControl(QStyle::CE_RadioButton, &optionButton, painter);
+}
 
 
 }

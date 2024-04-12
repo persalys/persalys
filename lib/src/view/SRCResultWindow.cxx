@@ -103,8 +103,8 @@ void SRCResultWindow::buildInterface()
     {
       QStringList namesList;
       namesList << tr("Elapsed time")
-                  << tr("Number of calls")
-                  << tr("R2");
+                << tr("Number of calls")
+                << tr("R2");
 
       QStringList valuesList;
       valuesList << QtOT::FormatDuration(result_.getElapsedTime())
@@ -115,8 +115,8 @@ void SRCResultWindow::buildInterface()
     }
 
     // indices graph and table
-    Interval indicesInterval = result_.getIndicesInterval().getSize() == nbOutputs? result_.getIndicesInterval()[i] : Interval();
-    Interval signedIndicesInterval = result_.getSignedIndicesInterval().getSize() == nbOutputs? result_.getSignedIndicesInterval()[i] : Interval();
+    Interval indicesInterval = result_.getIndicesInterval().getSize() == nbOutputs ? result_.getIndicesInterval()[i] : Interval();
+    Interval signedIndicesInterval = result_.getSignedIndicesInterval().getSize() == nbOutputs ? result_.getSignedIndicesInterval()[i] : Interval();
     SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getIndices()[i],
         indicesInterval,
         result_.getSignedIndices().getSize() == nbOutputs ? result_.getSignedIndices()[i] : Point(),

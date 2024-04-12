@@ -30,23 +30,24 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_VIEW_API MetaModelExportWizard : public Wizard {
-    Q_OBJECT
+class PERSALYS_VIEW_API MetaModelExportWizard : public Wizard
+{
+  Q_OBJECT
 
-  public:
-    MetaModelExportWizard(const Analysis& model, bool isGeneralWizard = false, QWidget* parent = 0);
-    Analysis getAnalysis() const;
+public:
+  MetaModelExportWizard(const Analysis& model, bool isGeneralWizard = false, QWidget* parent = 0);
+  Analysis getAnalysis() const;
 
-  protected:
-    void buildInterface();
-  protected slots:
-    void updateWidgets();
+protected:
+  void buildInterface();
+protected slots:
+  void updateWidgets();
 
-  private:
-    QComboBox * mmsComboBox_;
-    QStandardItemModel * mmsComboBoxModel_;
-    QVBoxLayout * parametersLayout_;
-  };
+private:
+  QComboBox * mmsComboBox_;
+  QStandardItemModel * mmsComboBoxModel_;
+  QVBoxLayout * parametersLayout_;
+};
 }
 
 #endif

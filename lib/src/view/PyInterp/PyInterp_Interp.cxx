@@ -56,16 +56,18 @@ static PyObject*
 PyStdOut_write(PyStdOut *self, PyObject *args)
 {
   char *c;
-  if (!PyArg_ParseTuple(args, "s",&c))
+  if (!PyArg_ParseTuple(args, "s", &c))
     return NULL;
-  if(self->_cb==NULL) {
+  if(self->_cb == NULL)
+  {
     if ( self->_iscerr )
       std::cerr << c ;
     else
       std::cout << c ;
   }
-  else {
-    self->_cb(self->_data,c);
+  else
+  {
+    self->_cb(self->_data, c);
   }
   Py_INCREF(Py_None);
   return Py_None;
@@ -84,20 +86,25 @@ PyStdOut_isatty(PyStdOut * /*self*/, PyObject */*args*/)
   return Py_False;
 }
 
-static PyMethodDef PyStdOut_methods[] = {
+static PyMethodDef PyStdOut_methods[] =
+{
   {"write",  (PyCFunction)PyStdOut_write,  METH_VARARGS, PyDoc_STR("write(string) -> None")},
   {"flush",  (PyCFunction)PyStdOut_flush,  METH_NOARGS,  PyDoc_STR("flush() -> None")},
   {"isatty", (PyCFunction)PyStdOut_isatty, METH_NOARGS,  PyDoc_STR("isatty() -> bool")},
   {NULL,     (PyCFunction)NULL,            0,            NULL}   /* sentinel */
 };
 
-static PyMemberDef PyStdOut_memberlist[] = {
-  {(char*)"softspace", T_INT,  offsetof(PyStdOut, softspace), 0,
-   (char*)"flag indicating that a space needs to be printed; used by print"},
+static PyMemberDef PyStdOut_memberlist[] =
+{
+  {
+    (char*)"softspace", T_INT,  offsetof(PyStdOut, softspace), 0,
+    (char*)"flag indicating that a space needs to be printed; used by print"
+  },
   {NULL, 0, 0, 0, NULL} /* Sentinel */
 };
 
-static PyTypeObject PyStdOut_Type = {
+static PyTypeObject PyStdOut_Type =
+{
   /* The ob_type field must be initialized in the module init function
    * to be portable to Windows without using C++. */
   PyVarObject_HEAD_INIT(NULL, 0)
@@ -234,14 +241,15 @@ void PyInterp_Interp::initialize()
   // used to interpret & compile commands - this is really imported here
   // and only added again (with PyImport_AddModule) later on
   PyObjWrapper m(PyImport_ImportModule("codeop"));
-  if(!m) {
+  if(!m)
+  {
     PyErr_Print();
     return;
   }
 
   // Create python objects to capture stdout and stderr
-  _vout=(PyObject*)newPyStdOut( false ); // stdout
-  _verr=(PyObject*)newPyStdOut( true );  // stderr
+  _vout = (PyObject*)newPyStdOut( false ); // stdout
+  _verr = (PyObject*)newPyStdOut( true ); // stderr
 
   // All the initRun outputs are redirected to the standard output (console)
   initRun();
@@ -264,7 +272,8 @@ void PyInterp_Interp::destroy()
  */
 void PyInterp_Interp::initPython()
 {
-  if (!Py_IsInitialized()){
+  if (!Py_IsInitialized())
+  {
     // Python is not initialized
     wchar_t **changed_argv = new wchar_t*[_argc]; // Setting arguments
     for (int i = 0; i < _argc; i++)
@@ -328,7 +337,8 @@ bool PyInterp_Interp::initRun()
 bool PyInterp_Interp::initContext()
 {
   PyObject *m = PyImport_AddModule("__main__");  // interpreter main module (module context)
-  if(!m){
+  if(!m)
+  {
     PyErr_Print();
     return false;
   }
@@ -362,14 +372,16 @@ void PyInterp_Interp::closeContext()
 static int run_command(const char *command, PyObject * global_ctxt, PyObject * local_ctxt)
 {
   PyObject *m = PyImport_AddModule("codeop");
-  if(!m) {
+  if(!m)
+  {
     // Fatal error. No way to go on.
     PyErr_Print();
     return -1;
   }
 
-  PyObjWrapper v(PyObject_CallMethod(m,(char*)"compile_command",(char*)"s",command));
-  if(!v) {
+  PyObjWrapper v(PyObject_CallMethod(m, (char*)"compile_command", (char*)"s", command));
+  if(!v)
+  {
     // Error encountered. It should be SyntaxError,
     //so we don't write out traceback
     PyObjWrapper exception, value, tb;
@@ -378,13 +390,16 @@ static int run_command(const char *command, PyObject * global_ctxt, PyObject * l
     PyErr_Display(exception, value, NULL);
     return -1;
   }
-  else if (v == Py_None) {
+  else if (v == Py_None)
+  {
     // Incomplete text we return 1 : we need a complete text to execute
     return 1;
   }
-  else {
-    PyObjWrapper r(PyEval_EvalCode((PyObject *)(void *)v,global_ctxt, local_ctxt));
-    if(!r) {
+  else
+  {
+    PyObjWrapper r(PyEval_EvalCode((PyObject *)(void *)v, global_ctxt, local_ctxt));
+    if(!r)
+    {
       // Execution error. We return -1
       PyErr_Print();
       return -1;
@@ -394,14 +409,16 @@ static int run_command(const char *command, PyObject * global_ctxt, PyObject * l
   }
 }
 
-void replaceAll(std::string& str, const std::string& from, const std::string& to) {
-    if(from.empty())
-        return;
-    size_t start_pos = 0;
-    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-    }
+void replaceAll(std::string& str, const std::string& from, const std::string& to)
+{
+  if(from.empty())
+    return;
+  size_t start_pos = 0;
+  while((start_pos = str.find(from, start_pos)) != std::string::npos)
+  {
+    str.replace(start_pos, from.length(), to);
+    start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+  }
 }
 
 std::vector<std::string>
@@ -411,7 +428,8 @@ __split(const std::string& str, char delimiter)
   std::stringstream ss(str); // Turn the string into a stream.
   std::string tok;
 
-  while (getline(ss, tok, delimiter)) {
+  while (getline(ss, tok, delimiter))
+  {
     internal.push_back(tok);
   }
 
@@ -419,12 +437,13 @@ __split(const std::string& str, char delimiter)
 }
 
 std::string
-__join(const std::vector<std::string>& v, int begin=0, int end=-1)
+__join(const std::vector<std::string>& v, int begin = 0, int end = -1)
 {
   if (end == -1)
     end = (int)v.size(); //!< TODO: conversion from size_t to int
   std::stringstream ss;
-  for (int i = begin; i < end; ++i) {
+  for (int i = begin; i < end; ++i)
+  {
     if (i != begin)
       ss << ",";
     ss << v[i];
@@ -443,31 +462,35 @@ __getArgsList(std::string argsString)
   // We have to split argsString to obtain a 9 string elements list
   std::vector<std::string> x = __split(argsString, ',');
   bool containsList = (argsString.find('[') != std::string::npos);
-  if (containsList) {
+  if (containsList)
+  {
     std::vector<int> listBeginIndices, listEndIndices;
-    for (int pos = 0; pos < (int)x.size(); ++pos) {
+    for (int pos = 0; pos < (int)x.size(); ++pos)
+    {
       if (x[pos][0] == '[')
         listBeginIndices.push_back(pos);
-      else if (x[pos][x[pos].size()-1] == ']')
+      else if (x[pos][x[pos].size() - 1] == ']')
         listEndIndices.push_back(pos);
     }
     std::vector<std::string> extractedArgs;
     int start = 0;
-    for (int pos = 0; pos < (int)listBeginIndices.size(); ++pos) {
+    for (int pos = 0; pos < (int)listBeginIndices.size(); ++pos)
+    {
       int lbeg = listBeginIndices[pos];
       int lend = listEndIndices[pos];
       if (lbeg > start)
         for (int k = start; k < lbeg; ++k)
           extractedArgs.push_back(x[k]);
-      extractedArgs.push_back(__join(x, lbeg, lend+1));
-      start = lend+1;
+      extractedArgs.push_back(__join(x, lbeg, lend + 1));
+      start = lend + 1;
     }
     if (start < (int)x.size())
       for (int k = start; k < (int)x.size(); ++k)
         extractedArgs.push_back(x[k]);
     return extractedArgs;
   }
-  else {
+  else
+  {
     return x;
   }
 }
@@ -493,21 +516,24 @@ static int compile_command(const char *command, PyObject * global_ctxt, PyObject
 
   QRegularExpression rx("exec\\s*\\(.*open\\s*\\(\\s*(.*)\\s*\\)\\s*\\.\\s*read\\s*\\(\\)(\\s*,\\s*args\\s*=\\s*\\(.*\\))\\s*\\)");
   QRegularExpressionMatch match = rx.match(command);
-  if (match.hasMatch()) {
+  if (match.hasMatch())
+  {
     commandArgs = match.captured(2).remove(0, match.captured(2).indexOf("(")); // arguments of command
-    commandArgs.insert(commandArgs.indexOf('(')+1, match.captured(1).split(",")[0].trimmed() + ","); // prepend arguments list by the script file itself
+    commandArgs.insert(commandArgs.indexOf('(') + 1, match.captured(1).split(",")[0].trimmed() + ","); // prepend arguments list by the script file itself
     singleCommand = singleCommand.remove(match.capturedStart(2), match.captured(2).size()); // command for execution without arguments
   }
 
-  if (commandArgs.isEmpty()) {
+  if (commandArgs.isEmpty())
+  {
     return run_command(singleCommand.toStdString().c_str(), global_ctxt, local_ctxt);
   }
-  else {
+  else
+  {
     ///////////////std::vector<std::string> argList = __getArgsList(commandArgs);
     QString preCommandBegin = "import sys; save_argv = sys.argv; sys.argv=list(";
     QString preCommandEnd = ");";
     QString postCommand = ";sys.argv=save_argv";
-    QString completeCommand = preCommandBegin+commandArgs+preCommandEnd+singleCommand.trimmed()+postCommand;
+    QString completeCommand = preCommandBegin + commandArgs + preCommandEnd + singleCommand.trimmed() + postCommand;
     return run_command(completeCommand.toStdString().c_str(), global_ctxt, local_ctxt);
   }
 }
@@ -552,7 +578,8 @@ int PyInterp_Interp::afterRun()
 */
 int PyInterp_Interp::simpleRun(const char *command, const bool addToHistory)
 {
-  if( addToHistory && strcmp(command,"") != 0 ) {
+  if( addToHistory && strcmp(command, "") != 0 )
+  {
     _history.push_back(command);
     _ith = _history.end();
   }
@@ -565,14 +592,14 @@ int PyInterp_Interp::simpleRun(const char *command, const bool addToHistory)
   Py_INCREF(oldErr);
 
   // Redirect outputs to SALOME Python console before treatment
-  PySys_SetObject((char*)"stderr",_verr);
-  PySys_SetObject((char*)"stdout",_vout);
+  PySys_SetObject((char*)"stderr", _verr);
+  PySys_SetObject((char*)"stdout", _vout);
 
   int ier = compile_command(command, _global_context, _local_context);
 
   // Outputs are redirected to what they were before
-  PySys_SetObject((char*)"stdout",oldOut);
-  PySys_SetObject((char*)"stderr",oldErr);
+  PySys_SetObject((char*)"stdout", oldOut);
+  PySys_SetObject((char*)"stderr", oldErr);
 
   return ier;
 }
@@ -583,7 +610,8 @@ int PyInterp_Interp::simpleRun(const char *command, const bool addToHistory)
 */
 const char * PyInterp_Interp::getPrevious()
 {
-  if(_ith != _history.begin()){
+  if(_ith != _history.begin())
+  {
     _ith--;
     return (*_ith).c_str();
   }
@@ -597,7 +625,8 @@ const char * PyInterp_Interp::getPrevious()
 */
 const char * PyInterp_Interp::getNext()
 {
-  if(_ith != _history.end()){
+  if(_ith != _history.end())
+  {
     _ith++;
   }
   if (_ith == _history.end())
@@ -613,8 +642,8 @@ const char * PyInterp_Interp::getNext()
 */
 void PyInterp_Interp::setvoutcb(PyOutChanged* cb, void* data)
 {
-  ((PyStdOut*)_vout)->_cb=cb;
-  ((PyStdOut*)_vout)->_data=data;
+  ((PyStdOut*)_vout)->_cb = cb;
+  ((PyStdOut*)_vout)->_data = data;
 }
 
 /*!
@@ -624,8 +653,8 @@ void PyInterp_Interp::setvoutcb(PyOutChanged* cb, void* data)
 */
 void PyInterp_Interp::setverrcb(PyOutChanged* cb, void* data)
 {
-  ((PyStdOut*)_verr)->_cb=cb;
-  ((PyStdOut*)_verr)->_data=data;
+  ((PyStdOut*)_verr)->_cb = cb;
+  ((PyStdOut*)_verr)->_data = data;
 }
 
 /*!

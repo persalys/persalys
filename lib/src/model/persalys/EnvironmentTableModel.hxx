@@ -42,7 +42,10 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
   bool isValid();
-  CouplingStep getStep() const {return step_;};
+  CouplingStep getStep() const
+  {
+    return step_;
+  };
 
 signals:
   void stepChanged();

@@ -88,7 +88,7 @@ void GridMeshModel::setParameters(const Interval& bounds, const Indices& nbNodes
 
   // build mesh
   Indices nbMesh(nbNodes_.getSize());
-  for (UnsignedInteger i =0; i < nbNodes_.getSize(); ++i)
+  for (UnsignedInteger i = 0; i < nbNodes_.getSize(); ++i)
     nbMesh[i] = nbNodes_[i] - 1;
   Mesh mesh(IntervalMesher(nbMesh).build(bounds_));
   Sample sample(mesh.getVertices());
