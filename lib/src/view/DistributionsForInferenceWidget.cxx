@@ -94,7 +94,7 @@ void DistributionsForInferenceWidget::buildInterface()
 #else
   connect(addComboBox_, SIGNAL(activated(QString)), tableModel_, SLOT(appendDistribution(QString)));
 #endif
-  connect(addComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(addSelectedDistribution(int)));
+  connect(addComboBox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
 
   // Remove button
   QPushButton * removeButton = new QPushButton(tr("Remove"));
