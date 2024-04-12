@@ -1,3 +1,10 @@
+= 16.0 release (2024-04-12)
+
+ * Allow to detach YACS design of experiment analysis
+ * Added openpyxl support
+ * Removed probabilistic model independent copulae
+ * Various bug fixes
+
 = 15.1 release (2024-01-12)
 
  * Added metamodel export
