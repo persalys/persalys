@@ -20,8 +20,8 @@
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="94"/>
-        <source>Copyright 2015-2023 EDF-Phimeca</source>
-        <translation>Copyright 2015-2023 EDF-Phimeca</translation>
+        <source>Copyright 2015-2024 EDF-Phimeca</source>
+        <translation>Copyright 2015-2024 EDF-Phimeca</translation>
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="102"/>
@@ -206,32 +206,37 @@
         <translation>Arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="150"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="149"/>
+        <source>No results yet, analysis has been detached. Click Run to reattach.</source>
+        <translation>Pas encore de résultats, l&apos;analyse est détachée. Cliquez sur Lancer pour rattacher</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="158"/>
         <source>No results are available. An error has occurred during the execution of the analysis.</source>
         <translation>Aucun résultat n&apos;est disponible. Une erreur est survenue durant l&apos;exécution de l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="163"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="172"/>
         <source>The analysis is ready to be launched.</source>
         <translation>L&apos;analyse est prête à être lancée.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="174"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="183"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="174"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="183"/>
         <source>An analysis is already running</source>
         <translation>Une analyse est déjà en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="189"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="198"/>
         <source>The analysis is running</source>
         <translation>L&apos;analyse est en cours d&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/AnalysisWindow.cxx" line="204"/>
+        <location filename="../lib/src/view/AnalysisWindow.cxx" line="213"/>
         <source>Stop in progress</source>
         <translation>Arrêt en cours</translation>
     </message>
@@ -2246,13 +2251,18 @@ métamodèle</translation>
         <translation>Copule</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="114"/>
+        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="116"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="114"/>
-        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="167"/>
+        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="121"/>
+        <source>Independent</source>
+        <translation>Indépendante</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="122"/>
+        <location filename="../lib/src/model/DependenciesTableModel.cxx" line="177"/>
         <source>Inference result</source>
         <translation>Résultat d&apos;inférence</translation>
     </message>
@@ -2486,8 +2496,8 @@ métamodèle</translation>
     <name>PERSALYS::DistributionsForInferenceWidget</name>
     <message>
         <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="60"/>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="109"/>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="156"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="113"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="160"/>
         <source>All</source>
         <translation>Tout</translation>
     </message>
@@ -2497,7 +2507,7 @@ métamodèle</translation>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="96"/>
+        <location filename="../lib/src/view/DistributionsForInferenceWidget.cxx" line="100"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
@@ -3963,17 +3973,17 @@ des étiquettes</translation>
 <context>
     <name>PERSALYS::ImportedDistributionPage</name>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="339"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="352"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="340"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="353"/>
         <source>Weight</source>
         <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="353"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="366"/>
         <source>Values and weights must be associated with one column</source>
         <translation>Les valeurs et les poids doivent être associés à une colonne</translation>
     </message>
@@ -5476,81 +5486,81 @@ extremum</translation>
 <context>
     <name>PERSALYS::MomentsEstimatesTableGroupBox</name>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="41"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="42"/>
         <source>Moments estimates</source>
         <translation>Estimations des moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="136"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="92"/>
+        <source>Variable confidence
+interval level</source>
+        <translation>Niveau de l&apos;intervalle
+de confiance de la variable</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="103"/>
+        <source>Variable confidence
+interval</source>
+        <translation>Intervalle de confiance
+de la variable</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="147"/>
         <source>Estimate</source>
         <translation>Estimation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="126"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="137"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="62"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="63"/>
         <source>Probability</source>
         <translation>Probabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="73"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="74"/>
         <source>Empirical quantile</source>
         <translation>Quantile empirique</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="82"/>
-        <source>Confidence
-interval level</source>
-        <translation>Niveau de l&apos;intervalle
-de confiance</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="93"/>
-        <source>Confidence
-interval</source>
-        <translation>Intervalle
-de confiance</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="127"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="138"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="128"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="139"/>
         <source>Coefficient of variation</source>
         <translation>Coefficient de variation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="129"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="140"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="130"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="141"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="131"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="142"/>
         <source>First quartile</source>
         <translation>Premier quartile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="132"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="143"/>
         <source>Third quartile</source>
         <translation>Troisième quartile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="137"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="148"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="139"/>
+        <location filename="../lib/src/view/MomentsEstimatesTableGroupBox.cxx" line="150"/>
         <source>Confidence interval
 at</source>
         <translation>Intervalle de confiance
@@ -7491,7 +7501,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="299"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="815"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="818"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
@@ -7522,38 +7532,38 @@ métamodèle</translation>
         <translation>Fonction de survie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="636"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="642"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="651"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="659"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="674"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="680"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="688"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="694"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="639"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="645"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="654"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="662"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="677"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="683"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="691"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="697"/>
         <source>scatterplot</source>
         <translation>diagrammeDispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="638"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="644"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="655"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="663"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="676"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="682"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="690"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="696"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="641"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="647"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="658"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="666"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="679"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="685"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="693"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="699"/>
         <source>Scatter plot:</source>
         <translation>Diagramme de dispersion :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="638"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="644"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="655"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="663"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="676"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="682"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="690"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="696"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="641"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="647"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="658"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="666"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="679"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="685"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="693"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="699"/>
         <source>vs</source>
         <translation>vs</translation>
     </message>
@@ -8297,14 +8307,14 @@ de l&apos;indice total</translation>
         <source>Squared SRC
 confidence interval</source>
         <translation>Intervalle de confiance
-du SRC</translation>
+du SRC carré</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="91"/>
         <source>SRC
 confidence interval</source>
         <translation>Intervalle de confiance
-du SRC carré</translation>
+du SRC</translation>
     </message>
     <message>
         <location filename="../lib/src/view/SensitivityResultWidget.cxx" line="151"/>
@@ -9884,16 +9894,18 @@ de la fonction</translation>
     <name>PERSALYS::UserDefinedWizard</name>
     <message>
         <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="275"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="309"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
         <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="276"/>
-        <source>Weight</source>
-        <translation>Poids</translation>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="310"/>
+        <source>Weight (&gt;0, optional)</source>
+        <translation>Poids (&gt;0, optionnel)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="317"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="330"/>
         <source>Define at least two values</source>
         <translation>Définir au moins deux valeurs</translation>
     </message>
