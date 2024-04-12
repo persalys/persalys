@@ -634,6 +634,8 @@ Deterministic analyses
 
 - Each analysis item is associated with a window with a table of parameters (optional), a progress bar and a button 'Run' and a disabled button 'Stop'
 
+- Import the file python/test/t_deterministic_analyses.py
+
 - Check all the analyses wizards -> Right click on each item and choose Modify:
 
   - Evaluation: item evaluation1
@@ -1178,7 +1180,7 @@ Designs of experiments
           - additional columns can be displayed by checking them in the graph setting widget in the window bottom left corner
 
 
-  - Click on model1 definition item, select only y0:
+  - Click on symbolicModel definition item, select only y0:
 
   - right click on importDesign and choose Modify:
 
@@ -1548,7 +1550,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/src_wizard_2nd_page.png
           :align: center
 
-      - sample size: 1000
+      - sample size: 200
       - block size: 1
       - seed: 2
 
@@ -1705,7 +1707,7 @@ Probabilistic analyses
 
       - default kriging parameters: Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1;1, Amplitude 1, continue
 
-      - metamodel validation: for the computation of the predictivity factor Q2, only analytically is checked, finish
+      - metamodel validation: for the computation of the predictivity factor Q2, only 'Leave-one-out via analytical method' is checked, finish
 
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button and click immediately on the Stop button
@@ -1785,7 +1787,7 @@ Probabilistic analyses
 
     - Third page check the values:
 
-      - only Analytically is checked
+      - only 'Leave-one-out via analytical method' is checked
 
     - click on the Finish button
 
@@ -1826,7 +1828,7 @@ Probabilistic analyses
       - Summary tab:
 
         - check tables are well drawn
-        - 2 types of extrema tables: one for the output x_1 and one for inputs x_0, x_1 and x_3
+        - 2 types of extrema tables: one for the output x_1 and one for inputs x_0, x_2 and x_3
         - Moments estimates table has the columns: Estimate - Value - Confidence interval at 95%
         - there are bounds only for Mean and Standard deviation
         - check probability and quantile spinboxes behavior
@@ -1884,15 +1886,15 @@ Probabilistic analyses
 
       - go on the Probabilistic model window of model1, tab 'Marginals'
       - select the x3 variable
-      - choose Inference result in the combo box of the variable x_3
+      - choose Inference result in the combo box of the variable x3
       - a wizard appears, check its behavior (update of the tables when changing the items selection, etc.)
 
         .. image:: /developer_manual/validation/inferenceResultWizard.png
             :align: center
 
-      - choose inference/x_0/Weibull, click on Finish
-      - check that the distribution of x_3 is WeibullMin now
-      - unselect x_3
+      - choose inference/x_0/WeibullMin, click on Finish
+      - check that the distribution of x3 is WeibullMin now
+      - unselect x3
 
   - Copula inference: copulaInference item
 
