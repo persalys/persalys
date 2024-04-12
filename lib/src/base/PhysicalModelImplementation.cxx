@@ -1210,6 +1210,8 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("meshModel_", meshModel_);
   if(adv.hasAttribute("finiteDifferenceSteps_"))
     adv.loadAttribute("finiteDifferenceSteps_", finiteDifferenceSteps_);
+  else
+    finiteDifferenceSteps_ = Point(getInputDimension(), 1e-7);
   adv.loadAttribute("isParallel_", isParallel_);
   adv.loadAttribute("evalTime_", evalTime_);
   if(adv.hasAttribute("processNumber_"))
