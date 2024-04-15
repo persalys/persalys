@@ -1,4 +1,4 @@
-; 
+;
 ; Setup script in order to create a windows auto-installer for OpenTURNS module.
 ;
 ; To lauch the creation of the installer :
@@ -90,7 +90,7 @@ RequestExecutionLevel user
 Function DirectoryEmptyLeave
   ; Check if the installation folder is empty
   IfFileExists "$INSTDIR\*.*" 0 skip_abort
-    MessageBox MB_YESNO|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not empty. $\rDo you want to change the installation directory ?" /SD IDYES IDNO skip_abort
+    MessageBox MB_OK|MB_ICONEXCLAMATION "The installation directory you have chosen, $INSTDIR, is not empty. $\rPlease select an empty directory." /SD IDOK
     Abort
   skip_abort:
 FunctionEnd
@@ -118,7 +118,7 @@ ShowUnInstDetails show
 
 Var UserInstall
 
-; Check that current user has administrator privileges 
+; Check that current user has administrator privileges
 ; if ok : set UserInstall to 0, if not : set UserInstall to 1
 !macro CHECK_USER_INSTALL WARN_MSG
   StrCpy $UserInstall "0"
@@ -267,7 +267,7 @@ Section "!${PRODUCT_NAME} DLL & doc" SEC01
   !insertmacro PRINT "Put ${PRODUCT_NAME} in windows registry."
   WriteRegStr ${PRODUCT_ROOT_KEY} ${PRODUCT_DIR_REGKEY} "${PRODUCT_NAME}" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_ROOT_KEY} ${PRODUCT_DIR_REGKEY} "InstallPath" "$INSTDIR"
- 
+
   !insertmacro PRINT "Install uninstaller in $INSTDIR\${UNINST_EXE}."
   WriteUninstaller "$INSTDIR\${UNINST_EXE}"
   WriteRegStr ${PRODUCT_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
@@ -337,4 +337,3 @@ Section Uninstall
   SetAutoClose false
 
 SectionEnd
-
