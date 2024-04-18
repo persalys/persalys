@@ -202,16 +202,17 @@ Function .onInit
   ; if already installed, uninstall previous.
   ReadRegStr $0 ${PRODUCT_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" "${PRODUCT_NAME}"
   ${If} $0 != ""
-    MessageBox MB_YESNO|MB_ICONEXCLAMATION "${PRODUCT_NAME} $0 is already installed in directory $INSTDIR. $\rDo you want to uninstall this installed version (recommended)?" /SD IDYES IDNO skip_uninstall
+    ReadRegStr $1 ${PRODUCT_ROOT_KEY} "${PRODUCT_DIR_REGKEY}" "InstallPath"
+    MessageBox MB_YESNO|MB_ICONEXCLAMATION "${PRODUCT_NAME} $0 is already installed in directory $1. $\rDo you want to uninstall this installed version (recommended)?" /SD IDYES IDNO skip_uninstall
 
     ; copy uninstaller to temp dir in order to erase the whole ot dir
     ; _? option permit to avoid uninstaller to copy itself to tempdir. it permit too to make ExecWait work
-    CopyFiles "$INSTDIR\${UNINST_EXE}" $TEMP
+    CopyFiles "$1\${UNINST_EXE}" $TEMP
     IfSilent 0 +3
     ; silent uninstall
-    ExecWait '"$TEMP\${UNINST_EXE}" /S _?=$INSTDIR'
+    ExecWait '"$TEMP\${UNINST_EXE}" /S _?=$1'
     Goto +2
-    ExecWait '"$TEMP\${UNINST_EXE}" _?=$INSTDIR'
+    ExecWait '"$TEMP\${UNINST_EXE}" _?=$1'
 
     skip_uninstall:
   ${EndIf}
