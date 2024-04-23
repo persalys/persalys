@@ -23,12 +23,21 @@
 #include <boost/process.hpp>
 #include <boost/program_options.hpp>
 
+#ifdef PERSALYS_HAVE_YACS
+#include <experimental/filesystem>
+#else
 #include <filesystem>
+#endif
 #include <cstdlib>
 #include <iostream>
 
 namespace po = boost::program_options;
+#ifdef PERSALYS_HAVE_YACS
+namespace fs = std::experimental::filesystem;
+#else
 namespace fs = std::filesystem;
+#endif
+
 namespace bp = boost::process;
 
 int main(int argc, char *argv[])
