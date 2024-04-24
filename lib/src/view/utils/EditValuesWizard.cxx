@@ -351,9 +351,10 @@ ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
     Sample sample = Tools::ImportSample(fileName.toStdString());
     Indices allIndices = Indices(sample.getDimension());
     allIndices.fill(0, 1);
-    Description description(2);
-    description[0] = tr("Value").toStdString();
-    description[1] = tr("Weight").toStdString();
+    Description description;
+    description.add(tr("Value").toStdString());
+    if (sample.getDimension() > 1)
+      description.add(tr("Weight").toStdString());
     sampleWidget_->updateWidgets(sample, sample.getDescription(), allIndices, description);
   });
 }
