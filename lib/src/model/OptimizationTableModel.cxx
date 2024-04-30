@@ -404,7 +404,6 @@ bool OptimizationTableModel::setData(const QModelIndex & index, const QVariant &
       case 0: // input of interest
       {
         Description variableInputs = analysis_.getVariableInputs();
-        Indices variablesType = analysis_.getVariablesType();
         if (value.toBool() && !variableInputs.contains(currentInputName))
           variableInputs.add(currentInputName);
         // if variable is deselected, its type defaults to continuous

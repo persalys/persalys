@@ -360,7 +360,6 @@ void AnsysParser::populateCouplingStep(CouplingPhysicalModel *model,
   CouplingStep cs(csColl[indStep]);
 
   CouplingInputFileCollection inColl;
-  CouplingOutputFileCollection outColl;
 
   CouplingInputFile inFile(getTemplateFileName());
   const InputCollection inputs = getInputVariables();

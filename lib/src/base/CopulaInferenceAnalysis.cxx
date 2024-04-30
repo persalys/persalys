@@ -226,8 +226,6 @@ void CopulaInferenceAnalysis::initialize()
 
 void CopulaInferenceAnalysis::launch()
 {
-  const UnsignedInteger sizeKendall = 100;
-
   // for each set:
   std::map<Description, DistributionFactoryCollection>::iterator it;
   for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
@@ -255,8 +253,6 @@ void CopulaInferenceAnalysis::launch()
     sample = (sample.rank() + 0.5) / sample.getSize();
 
     Sample splitSample(sample);
-    if (sample.getSize() > sizeKendall)
-      Sample otherSample = splitSample.split(sizeKendall);
 
     // CopulaInferenceSetResult
     CopulaInferenceSetResult inferenceSetResult;

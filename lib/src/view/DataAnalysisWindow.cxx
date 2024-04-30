@@ -724,9 +724,6 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
       // allInputsSample rank
       const Sample allInputsSampleRank(allInputsSample.rank() / allInputsSample.getSize());
-      const Sample inputsRank(allInputsSampleRank, 0, inSampleSize);
-      const Sample failedInputsRank(allInputsSampleRank, inSampleSize, inSampleSize + failedInSampleSize);
-      const Sample notEvaluatedInputsRank(allInputsSampleRank, inSampleSize + failedInSampleSize, allInputsSampleRank.getSize());
 
       Collection<Sample> rankSamples;
       rankSamples.add(Sample(allInputsSampleRank, 0, inSampleSize));

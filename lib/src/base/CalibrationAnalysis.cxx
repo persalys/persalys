@@ -238,7 +238,6 @@ void CalibrationAnalysis::launch()
 
   // - residuals kernel smoothing
   const Sample posteriorResiduals(getObservations().getOutputSample() - result_.calibrationResult_.getOutputAtPosteriorMean());
-  Collection<Sample> posteriorResidualPDF(outputsOfInterest.getSize());
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
     try

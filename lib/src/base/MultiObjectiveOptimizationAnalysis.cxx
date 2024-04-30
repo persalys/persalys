@@ -175,7 +175,6 @@ void MultiObjectiveOptimizationAnalysis::initialize()
 void MultiObjectiveOptimizationAnalysis::launch()
 {
   RandomGenerator::SetSeed(getSeed());
-  const Description modelInputNames(getPhysicalModel().getInputNames());
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
   // check
   if (getInterestVariables().getSize() < 2)

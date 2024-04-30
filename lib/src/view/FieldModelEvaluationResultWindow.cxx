@@ -622,7 +622,6 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   const QStringList outNames(QtOT::DescriptionToStringList(processSample_.getField(0).getValues().getDescription()));
   const QStringList meshParamName = QStringList() << QString::fromUtf8(processSample_.getMesh().getDescription()[0].c_str());
   const Description meshNodesNames(Description::BuildDefault(nbNodes, processSample_.getMesh().getDescription()[0]));
-  const Description colors(Drawable().BuildDefaultPalette(nbInputPt));
 
   // input table tab
   QTabWidget * inTabWidget = new QTabWidget;
