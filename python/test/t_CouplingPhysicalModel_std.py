@@ -90,7 +90,7 @@ f = model.getFunction()
 try:
     f(x)
     print("FAIL")
-except Exception:
+except RuntimeError:
     print("OK")
 
 try:
@@ -274,7 +274,7 @@ f = persalys.PhysicalModel(model).getFunction()
 for i in range(5):
     y = f(x)
 print(y)
-print("n calls=", f.getCallsNumber())
+print("n calls=", f.getEvaluationCallsNumber())
 
 ott.assert_almost_equal(y, [6.0, 7.0])
 
