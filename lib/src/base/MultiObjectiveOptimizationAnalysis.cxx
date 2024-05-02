@@ -144,11 +144,13 @@ void MultiObjectiveOptimizationAnalysis::updateParameters()
   const Point lowerBounds(bounds_.getLowerBound());
   const Point upperBounds(bounds_.getUpperBound());
   const Description variableInputs(variableInputs_);
+  const Indices types(variablesType_);
 
   initializeParameters();
 
   Point newLowerBounds(bounds_.getLowerBound());
   Point newUpperBounds(bounds_.getUpperBound());
+  Indices newTypes(inputNames_.getSize());
 
   for (UnsignedInteger i = 0; i < inputNames_.getSize(); ++ i)
   {
@@ -158,12 +160,14 @@ void MultiObjectiveOptimizationAnalysis::updateParameters()
       startingPoint_[i] = startingPoint[it - inputNames.begin()];
       newLowerBounds[i] = lowerBounds[it - inputNames.begin()];
       newUpperBounds[i] = upperBounds[it - inputNames.begin()];
+      newTypes[i] = types[it - inputNames.begin()];
       if (!variableInputs.contains(inputNames_[i]))
         variableInputs_.erase(std::remove(variableInputs_.begin(), variableInputs_.end(), inputNames_[i]), variableInputs_.end());
     }
   }
   bounds_.setLowerBound(newLowerBounds);
   bounds_.setUpperBound(newUpperBounds);
+  variablesType_ = newTypes;
 }
 
 void MultiObjectiveOptimizationAnalysis::initialize()

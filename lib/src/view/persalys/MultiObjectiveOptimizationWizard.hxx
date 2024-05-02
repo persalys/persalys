@@ -90,8 +90,6 @@ public:
   {
     return tableModel_;
   };
-signals:
-  void currentAnalysisChanged();
 protected slots:
   void updateTable();
 private:

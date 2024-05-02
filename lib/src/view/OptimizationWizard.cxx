@@ -137,15 +137,6 @@ bool OptimizationBoundsPage::validatePage()
     errorMessageLabel_->setErrorMessage(tr("At least one variable must vary"));
     return false;
   }
-
-
-  OptimizationAnalysis dummyAnalysis = tableModel_->getAnalysis();
-  dummyAnalysis.setBounds(getTableModel()->getAnalysis().getBounds());
-  dummyAnalysis.setVariableInputs(getTableModel()->getAnalysis().getVariableInputs());
-  dummyAnalysis.setStartingPoint(getTableModel()->getAnalysis().getStartingPoint());
-  dummyAnalysis.setVariablesType(getTableModel()->getAnalysis().getVariablesType());
-  //analysis_.updateParameters();
-  emit currentAnalysisChanged(dummyAnalysis);
   return QWizardPage::validatePage();
 }
 
@@ -253,7 +244,6 @@ void OptimizationWizard::buildInterface()
   initialize(analysis_);
   //
   setStartId(0);
-  connect(boundsPage_, SIGNAL(currentAnalysisChanged(OptimizationAnalysis&)), cstrPage_, SLOT(initialize(OptimizationAnalysis&)));
 }
 
 
@@ -264,18 +254,25 @@ void OptimizationWizard::initialize(const Analysis& analysis)
   if (!analysis_ptr)
     return;
 
-  boundsPage_->initialize(analysis_);
-  //algoPage_->initialize(analysis_);
+  boundsPage_->initialize(*analysis_ptr);
   pbTypeComboBox_->setCurrentIndex(analysis_ptr->getMinimization() ? 0 : 1);
   stoppingCriteriaLayout_->initialize(*analysis_ptr);
+  cstrPage_->initialize(*analysis_ptr);
+
   connect(cstrPage_, &ConstraintsPage::constraintsDefined, [ = ]()
   {
-    analysis_ptr->resetConstraints();
+    // Need to retrieve bounds and variables type before choosing the algo
+    OptimizationAnalysis dummyAnalysis = boundsPage_->getTableModel()->getAnalysis();
+    dummyAnalysis.setBounds(boundsPage_->getTableModel()->getAnalysis().getBounds());
+    dummyAnalysis.setVariableInputs(boundsPage_->getTableModel()->getAnalysis().getVariableInputs());
+    dummyAnalysis.setStartingPoint(boundsPage_->getTableModel()->getAnalysis().getStartingPoint());
+    dummyAnalysis.setVariablesType(boundsPage_->getTableModel()->getAnalysis().getVariablesType());
+    // Also need constraints
     foreach( QString str, cstrPage_->getTableModel()->getConstraints() )
     {
-      analysis_ptr->addConstraint(str.toStdString());
+      dummyAnalysis.addConstraint(str.toStdString());
     }
-    algoPage_->initialize(*analysis_ptr);
+    algoPage_->initialize(dummyAnalysis);
   });
 }
 

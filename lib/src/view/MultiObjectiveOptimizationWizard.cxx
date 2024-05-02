@@ -272,13 +272,6 @@ bool MultiObjectiveOptimizationBoundsPage::validatePage()
     return false;
   }
 
-  MultiObjectiveOptimizationAnalysis dummyAnalysis = tableModel_->getAnalysis();
-  dummyAnalysis.setBounds(getTableModel()->getAnalysis().getBounds());
-  dummyAnalysis.setVariableInputs(getTableModel()->getAnalysis().getVariableInputs());
-  dummyAnalysis.setVariablesType(getTableModel()->getAnalysis().getVariablesType());
-  //analysis_.updateParameters();
-  emit currentAnalysisChanged();
-
   return QWizardPage::validatePage();
 }
 
@@ -371,19 +364,19 @@ void MultiObjectiveOptimizationWizard::initialize(const Analysis& analysis)
 
   boundsPage_->initialize(*analysis_ptr);
   parametersLayout_->initialize(*analysis_ptr);
-
-  connect(boundsPage_, &MultiObjectiveOptimizationBoundsPage::currentAnalysisChanged, [ = ]()
-  {
-    analysis_ptr->setVariablesType(boundsPage_->getTableModel()->getAnalysis().getVariablesType());
-    cstrPage_->initialize(*analysis_ptr);
-  });
+  cstrPage_->initialize(*analysis_ptr);
 
   connect(cstrPage_, &ConstraintsPage::constraintsDefined, [ = ]()
   {
-    analysis_ptr->resetConstraints();
+    // Need to retrieve bounds and variables type before choosing the algo
+    MultiObjectiveOptimizationAnalysis dummyAnalysis = boundsPage_->getTableModel()->getAnalysis();
+    dummyAnalysis.setBounds(boundsPage_->getTableModel()->getAnalysis().getBounds());
+    dummyAnalysis.setVariableInputs(boundsPage_->getTableModel()->getAnalysis().getVariableInputs());
+    dummyAnalysis.setVariablesType(boundsPage_->getTableModel()->getAnalysis().getVariablesType());
+    // Also need constraints
     foreach( QString str, cstrPage_->getTableModel()->getConstraints() )
     {
-      analysis_ptr->addConstraint(str.toStdString());
+      dummyAnalysis.addConstraint(str.toStdString());
     }
     algoPage_->initialize(*analysis_ptr);
   });

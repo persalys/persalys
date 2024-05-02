@@ -211,11 +211,13 @@ void OptimizationAnalysis::updateParameters()
   const Interval::BoolCollection finiteLowerBounds(bounds_.getFiniteLowerBound());
   const Interval::BoolCollection finiteUpperBounds(bounds_.getFiniteUpperBound());
   const Description variableInputs(variableInputs_);
+  const Indices types(variablesType_);
 
   initializeParameters();
 
   Point newLowerBounds(bounds_.getLowerBound());
   Point newUpperBounds(bounds_.getUpperBound());
+  Indices newTypes(inputNames_.getSize());
   Interval::BoolCollection newFiniteLowerBounds(bounds_.getFiniteLowerBound());
   Interval::BoolCollection newFiniteUpperBounds(bounds_.getFiniteUpperBound());
 
@@ -229,6 +231,7 @@ void OptimizationAnalysis::updateParameters()
       newUpperBounds[i] = upperBounds[it - inputNames.begin()];
       newFiniteLowerBounds[i] = finiteLowerBounds[it - inputNames.begin()];
       newFiniteUpperBounds[i] = finiteUpperBounds[it - inputNames.begin()];
+      newTypes[i] = types[it - inputNames.begin()];
       if (!variableInputs.contains(inputNames_[i]))
         variableInputs_.erase(std::remove(variableInputs_.begin(), variableInputs_.end(), inputNames_[i]), variableInputs_.end());
     }
@@ -237,6 +240,7 @@ void OptimizationAnalysis::updateParameters()
   bounds_.setUpperBound(newUpperBounds);
   bounds_.setFiniteLowerBound(newFiniteLowerBounds);
   bounds_.setFiniteUpperBound(newFiniteUpperBounds);
+  variablesType_ = newTypes;
 }
 
 
@@ -370,7 +374,7 @@ Bool OptimizationAnalysis::getMinimization() const
 void OptimizationAnalysis::setVariablesType(const Indices& variablesType)
 {
   if (variablesType.getSize() != getPhysicalModel().getInputDimension())
-    throw InvalidArgumentException(HERE) << "The size of variables type to the number of model's inputs";
+    throw InvalidArgumentException(HERE) << "The size of variables type must be equal to the number of model's inputs";
   variablesType_ = variablesType;
 }
 
