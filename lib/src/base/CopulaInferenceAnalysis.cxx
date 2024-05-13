@@ -20,9 +20,9 @@
  */
 #include "persalys/CopulaInferenceAnalysis.hxx"
 
-#include "persalys/DistributionDictionary.hxx"
 #include "persalys/CopulaInferenceSetResult.hxx"
 
+#include <openturns/DistributionFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/Combinations.hxx>
 #include <openturns/VisualTest.hxx>
@@ -300,7 +300,7 @@ void CopulaInferenceAnalysis::launch()
                                << ex.what()
                                << "\n";
         // set fittingTestResult
-        inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
+        inferenceSetResult.testedDistributions_.add(DistributionFactory::GetByName(distributionName+"Factory").build());
         ProcessSample kendallPlotDataCollection;
         inferenceSetResult.bicResults_.add(SpecFunc::MaxScalar);
         inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);

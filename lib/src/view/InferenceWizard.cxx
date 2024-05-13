@@ -21,7 +21,6 @@
 #include "persalys/InferenceWizard.hxx"
 
 #include "persalys/CheckableHeaderView.hxx"
-#include "persalys/DistributionDictionary.hxx"
 #include "persalys/DistributionsForInferenceWidget.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/DoubleSpinBox.hxx"
@@ -295,7 +294,7 @@ void InferenceWizard::updateDistListForVar(QStringList dist)
   for (int i = 0; i < dist.size(); ++i)
   {
     const String distName = TranslationManager::GetDistributionName(dist[i]);
-    distCollection.add(DistributionDictionary::BuildDistributionFactory(distName));
+    distCollection.add(DistributionFactory::GetByName(distName+"Factory"));
   }
 
   distFactoriesForEachInterestVar_[currentVarName_] = distCollection;
