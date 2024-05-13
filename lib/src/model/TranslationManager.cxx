@@ -56,6 +56,7 @@ void TranslationManager::InitializeDistributionsNames()
   DistributionsNames_.insert(type("Poisson", "Poisson"));
   DistributionsNames_.insert(type("Rayleigh", "Rayleigh"));
   DistributionsNames_.insert(type("Skellam", "Skellam"));
+  DistributionsNames_.insert(type("SmoothedUniform", tr("Smoothed uniform")));
   DistributionsNames_.insert(type("Student", "Student"));
   DistributionsNames_.insert(type("Trapezoidal", tr("Trapezoidal")));
   DistributionsNames_.insert(type("Triangular", tr("Triangular")));
