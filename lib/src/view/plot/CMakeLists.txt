@@ -82,8 +82,3 @@ install ( TARGETS persalysplot
   ARCHIVE DESTINATION ${PERSALYS_LIBRARY_PATH}
 )
 
-# include/qwt/qwt_point_3d.h:55:33: error: extra ‘;’ [-Werror=pedantic]
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-  target_compile_options (persalysplot PUBLIC "-Wno-error=pedantic")
-endif ()
-

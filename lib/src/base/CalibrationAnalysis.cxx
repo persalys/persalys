@@ -25,7 +25,6 @@
 #endif
 
 #include <openturns/JointDistribution.hxx>
-#include <openturns/MemoizeFunction.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ParametricFunction.hxx>
 #include <openturns/LinearLeastSquaresCalibration.hxx>
@@ -33,11 +32,7 @@
 #include <openturns/GaussianLinearCalibration.hxx>
 #include <openturns/GaussianNonLinearCalibration.hxx>
 #include <openturns/Dirac.hxx>
-#include <openturns/TNC.hxx>
-#include <openturns/SobolSequence.hxx>
 #include <openturns/Normal.hxx>
-#include <openturns/LowDiscrepancyExperiment.hxx>
-#include <openturns/MultiStart.hxx>
 #include <openturns/KernelSmoothing.hxx>
 #include <openturns/MarginalDistribution.hxx>
 #include <openturns/NormalCopula.hxx>
