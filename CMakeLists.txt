@@ -45,7 +45,7 @@ set (PERSALYS_DATA_PATH ${CMAKE_INSTALL_DATAROOTDIR})
 set (PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys)
 set (PERSALYS_DOC_PATH ${CMAKE_INSTALL_DOCDIR})
 
-find_package (OpenTURNS 1.22 CONFIG REQUIRED)
+find_package (OpenTURNS 1.23 CONFIG REQUIRED)
 get_target_property (ot_features OT OPENTURNS_ENABLED_FEATURES)
 if (NOT ot_features MATCHES "hdf5")
   message (FATAL_ERROR "OpenTURNS lacks hdf5 support")
