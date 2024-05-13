@@ -222,7 +222,7 @@ void MultiObjectiveOptimizationAnalysis::launch()
     }
   }
 
-  ComposedDistribution distribution(distColl);
+  JointDistribution distribution(distColl);
   SimulatedAnnealingLHS doe(LHSExperiment(distribution, startingPopSize_),
                             SpaceFillingPhiP(), GeometricProfile());
 

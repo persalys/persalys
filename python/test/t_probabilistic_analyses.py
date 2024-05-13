@@ -36,9 +36,9 @@ myStudy.add(model1)
 
 # model 3 ##
 filename = "data_pa.csv"
-cDist = ot.ComposedDistribution(
+cDist = ot.JointDistribution(
     [ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
-    ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]),
+    ot.BlockIndependentCopula([ot.IndependentCopula(2), ot.GumbelCopula()]),
 )
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, " ")

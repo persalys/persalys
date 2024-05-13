@@ -1,10 +1,10 @@
-class=SymbolicPhysicalModel inputs=[class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= finiteDifferenceStep=1e-07] outputs=[class=Output name=Y0 description=output_1] copula=class=ComposedCopula name=ComposedCopula dimension=1 copula[0]=class=IndependentCopula name=IndependentCopula dimension=1 isParallel=false formulas=[sin(X0)+8*X1]
+class=SymbolicPhysicalModel inputs=[class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= finiteDifferenceStep=1e-07] outputs=[class=Output name=Y0 description=output_1] copula=class=BlockIndependentCopula name=BlockIndependentCopula dimension=1 copula[0]=class=IndependentCopula name=IndependentCopula dimension=1 isParallel=false formulas=[sin(X0)+8*X1]
 function= MemoizeEvaluation([X0,X1]->[sin(X0)+8*X1])
 formulas= [sin(X0)+8*X1]
 formula_Y0= sin(X0)+8*X1
 stochastic var= [X0]
-distribution= ComposedDistribution(Normal(mu = 0, sigma = 1))
-copula= ComposedCopula(IndependentCopula(dimension = 1))
+distribution= JointDistribution(Normal(mu = 0, sigma = 1))
+copula= BlockIndependentCopula(IndependentCopula(dimension = 1))
 output_YO= class=Output name=Y0 description=output_1
 input_XO= class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07
 inputs names= [X0,X1]
@@ -13,18 +13,18 @@ hasY0 True
 hasX0 True
 inputs= [class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0 finiteDifferenceStep=1e-05]
 stochastic var= [X0,X1]
-distribution= ComposedDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), ComposedCopula(NormalCopula(R = [[ 1    0.25 ]
+distribution= JointDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), BlockIndependentCopula(NormalCopula(R = [[ 1    0.25 ]
  [ 0.25 1    ]])))
-copula= ComposedCopula(NormalCopula(R = [[ 1    0.25 ]
+copula= BlockIndependentCopula(NormalCopula(R = [[ 1    0.25 ]
  [ 0.25 1    ]]))
 outputs= [class=Output name=Y0 description=output_1]
 inputs= [class=Input name=X0 value=1 description=aDescription distribution=class=Normal name=Normal dimension=1 mean=class=Point name=Unnamed dimension=1 values=[0] sigma=class=Point name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] finiteDifferenceStep=1e-07,class=Input name=X1 value=2 description= distribution=class=LogNormal name=LogNormal dimension=1 muLog=0 sigmaLog=1 gamma=0 finiteDifferenceStep=1e-05,class=Input name=X_2 value=10 description= finiteDifferenceStep=1e-07]
-copula= ComposedCopula(NormalCopula(R = [[ 1    0.25 ]
+copula= BlockIndependentCopula(NormalCopula(R = [[ 1    0.25 ]
  [ 0.25 1    ]]))
 stochastic var= [X0,X1,X4,X5]
-distribution= ComposedDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), Normal(mu = 0, sigma = 1), Normal(mu = 0, sigma = 1), ComposedCopula(NormalCopula(R = [[ 1    0.25 ]
+distribution= JointDistribution(Normal(mu = 0, sigma = 1), LogNormal(muLog = 0, sigmaLog = 1, gamma = 0), Normal(mu = 0, sigma = 1), Normal(mu = 0, sigma = 1), BlockIndependentCopula(NormalCopula(R = [[ 1    0.25 ]
  [ 0.25 1    ]]), IndependentCopula(dimension = 2)))
-copula= ComposedCopula(NormalCopula(R = [[ 1    0.25 ]
+copula= BlockIndependentCopula(NormalCopula(R = [[ 1    0.25 ]
  [ 0.25 1    ]]), IndependentCopula(dimension = 2))
 formula_Y1= sin(X0)+8*X1+X2
 outputs= [class=Output name=Y0 description=output_1,class=Output name=Y_1 description=]

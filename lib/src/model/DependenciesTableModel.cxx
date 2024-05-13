@@ -161,7 +161,7 @@ void DependenciesTableModel::updateCopula()
   }
   else
   {
-    copula_ = ComposedCopula();
+    copula_ = BlockIndependentCopula();
     copula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
 }

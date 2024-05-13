@@ -34,8 +34,8 @@ pythonModel = persalys.PythonPhysicalModel('pythonModel', [x1, x2, x3], [y0], co
 myStudy.add(pythonModel)
 
 filename = 'data.csv'
-cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
-                                ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
+cDist = ot.JointDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
+                                ot.BlockIndependentCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, ' ')
 
@@ -44,7 +44,7 @@ sample.exportToCSVFile(filename, ' ')
 # fixed design ##
 ot.RandomGenerator.SetSeed(0)
 fixedDesign = persalys.FixedDesignOfExperiment('fixedDesign', symbolicModel)
-inputSample = ot.LHSExperiment(ot.ComposedDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
+inputSample = ot.LHSExperiment(ot.JointDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
 fixedDesign.setOriginalInputSample(inputSample)
 fixedDesign.run()

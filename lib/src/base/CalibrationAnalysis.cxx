@@ -24,6 +24,7 @@
 # include "persalys/AdaoCalibration.hxx"
 #endif
 
+#include <openturns/JointDistribution.hxx>
 #include <openturns/MemoizeFunction.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ParametricFunction.hxx>
@@ -112,7 +113,7 @@ void CalibrationAnalysis::initializeParameters()
 
   // set prior distribution
   Point candidate;
-  ComposedDistribution::DistributionCollection marginals;
+  JointDistribution::DistributionCollection marginals;
   Description calibratedInputs;
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
@@ -124,7 +125,7 @@ void CalibrationAnalysis::initializeParameters()
       marginals.add(Dirac(value_i));
     }
   }
-  priorDistribution_ = ComposedDistribution(marginals);
+  priorDistribution_ = JointDistribution(marginals);
   priorDistribution_.setDescription(calibratedInputs);
 
   // set error covariance
@@ -374,11 +375,11 @@ void CalibrationAnalysis::check(const Description &calibratedInputs, const Distr
     if (!priorDistribution.hasIndependentCopula())
     {
       Distribution copula(priorDistribution.getCopula());
-      // can have copula = NormalCopula / ComposedCopula / MarginalDistribution
+      // can have copula = NormalCopula / BlockIndependentCopula / MarginalDistribution
       MarginalDistribution * margDist = dynamic_cast<MarginalDistribution *>(copula.getImplementation().get());
       if (margDist)
         copula = margDist->getDistribution();
-      ComposedCopula * composedCopula = dynamic_cast<ComposedCopula *>(copula.getImplementation().get());
+      BlockIndependentCopula * composedCopula = dynamic_cast<BlockIndependentCopula *>(copula.getImplementation().get());
 
       bool normalCopulaFound = false;
       // check if composedCopula contains only NormalCopula (with potentially IndependentCopula)
@@ -437,7 +438,7 @@ void CalibrationAnalysis::setMethodName(const String &newMethod)
     throw InvalidArgumentException(HERE) << "Error: the given method name=" << newMethod << " is unknown. " << GetMethodNames();
 
   // update prior distribution if modification of method
-  ComposedDistribution::DistributionCollection marginals;
+  JointDistribution::DistributionCollection marginals;
   const Description calibratedInputs(priorDistribution_.getDescription());
   const Point oldValues(priorDistribution_.getMean());
   // old method = Gaussian / new method = Least Squares => prior dist = Dirac
@@ -447,7 +448,7 @@ void CalibrationAnalysis::setMethodName(const String &newMethod)
     {
       marginals.add(Dirac(oldValues[i]));
     }
-    priorDistribution_ = ComposedDistribution(marginals);
+    priorDistribution_ = JointDistribution(marginals);
     priorDistribution_.setDescription(calibratedInputs);
   }
   // old method = Least Squares / new method = Gaussian => prior dist = Gaussian
@@ -458,7 +459,7 @@ void CalibrationAnalysis::setMethodName(const String &newMethod)
       Distribution normal(DistributionDictionary::BuildDistribution("Normal", oldValues[i]));
       marginals.add(normal);
     }
-    priorDistribution_ = ComposedDistribution(marginals);
+    priorDistribution_ = JointDistribution(marginals);
     priorDistribution_.setDescription(calibratedInputs);
   }
 

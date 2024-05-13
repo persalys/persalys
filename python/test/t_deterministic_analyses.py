@@ -73,9 +73,9 @@ couplingModel.setCleanupWorkDirectory(True)
 couplingModel.setCacheFiles("", "")
 myStudy.add(couplingModel)
 filename = "data_da.csv"
-cDist = ot.ComposedDistribution(
+cDist = ot.JointDistribution(
     [ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
-    ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]),
+    ot.BlockIndependentCopula([ot.IndependentCopula(2), ot.GumbelCopula()]),
 )
 sample = cDist.getSample(200)
 sample.add([float("nan"), float("inf"), 0.0, 0.0])
@@ -87,7 +87,7 @@ sample.exportToCSVFile(filename, " ")
 ot.RandomGenerator.SetSeed(0)
 fixedDesign = persalys.FixedDesignOfExperiment("fixedDesign", symbolicModel)
 inputSample = ot.LHSExperiment(
-    ot.ComposedDistribution([ot.Uniform(0.0, 10.0), ot.Uniform(0.0, 10.0)]), 10
+    ot.JointDistribution([ot.Uniform(0.0, 10.0), ot.Uniform(0.0, 10.0)]), 10
 ).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
 fixedDesign.setOriginalInputSample(inputSample)

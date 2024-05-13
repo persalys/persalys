@@ -207,6 +207,6 @@ sample : :py:class:`openturns.Sample`
 
 Returns
 -------
-distribution : :py:class:`openturns.ComposedDistribution`
+distribution : :py:class:`openturns.JointDistribution`
     The distribution defined in the probabilistic model or a distribution composed
     of Uniform laws if there is no stochastic input variable."
