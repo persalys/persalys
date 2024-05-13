@@ -119,7 +119,7 @@ Parameters FORMAnalysis::getParameters() const
   param.add("Output of interest", getLimitState().getOutputName());
   param.add("Optimization algorithm", getOptimizationAlgorithm().getImplementation()->getClassName());
   param.add("Physical starting point", getPhysicalStartingPoint());
-  param.add("Maximum evaluation number", getOptimizationAlgorithm().getMaximumEvaluationNumber());
+  param.add("Maximum number of calls", getOptimizationAlgorithm().getMaximumCallsNumber());
   param.add("Maximum absolute error", getOptimizationAlgorithm().getMaximumAbsoluteError());
   param.add("Maximum relative error", getOptimizationAlgorithm().getMaximumRelativeError());
   param.add("Maximum residual error", getOptimizationAlgorithm().getMaximumResidualError());
@@ -137,7 +137,7 @@ String FORMAnalysis::getPythonScript() const
   oss << getName() << ".setPhysicalStartingPoint(" << Parameters::GetOTPointStr(getPhysicalStartingPoint()) << ")\n";
   // optimization algo
   oss << "optimizationAlgo = ot." << getOptimizationAlgorithm().getImplementation()->getClassName() << "()\n";
-  oss << "optimizationAlgo.setMaximumEvaluationNumber(" << getOptimizationAlgorithm().getMaximumEvaluationNumber() << ")\n";
+  oss << "optimizationAlgo.setMaximumCallsNumber(" << getOptimizationAlgorithm().getMaximumCallsNumber() << ")\n";
   oss << "optimizationAlgo.setMaximumAbsoluteError(" << getOptimizationAlgorithm().getMaximumAbsoluteError() << ")\n";
   oss << "optimizationAlgo.setMaximumRelativeError(" << getOptimizationAlgorithm().getMaximumRelativeError() << ")\n";
   oss << "optimizationAlgo.setMaximumResidualError(" << getOptimizationAlgorithm().getMaximumResidualError() << ")\n";

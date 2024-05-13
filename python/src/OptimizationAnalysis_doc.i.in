@@ -116,13 +116,13 @@ maximumConstraintError : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::setMaximumEvaluationNumber
-"Accessor to maximum allowed number of evaluations.
+%feature("docstring") PERSALYS::OptimizationAnalysis::setMaximumCallsNumber
+"Accessor to maximum allowed number of calls.
 
 Parameters
 ----------
 N : int
-    Maximum allowed number of evaluations."
+    Maximum allowed number of calls."
 
 // ---------------------------------------------------------------------
 

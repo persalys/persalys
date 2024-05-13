@@ -136,7 +136,7 @@ String FORMImportanceSamplingAnalysis::getPythonScript() const
   oss << getName() << ".setPhysicalStartingPoint(" << Parameters::GetOTPointStr(getPhysicalStartingPoint()) << ")\n";
   // optimization algo
   oss << "optimizationAlgo = ot." << getOptimizationAlgorithm().getImplementation()->getClassName() << "()\n";
-  oss << "optimizationAlgo.setMaximumEvaluationNumber(" << getOptimizationAlgorithm().getMaximumEvaluationNumber() << ")\n";
+  oss << "optimizationAlgo.setMaximumCallsNumber(" << getOptimizationAlgorithm().getMaximumCallsNumber() << ")\n";
   oss << "optimizationAlgo.setMaximumAbsoluteError(" << getOptimizationAlgorithm().getMaximumAbsoluteError() << ")\n";
   oss << "optimizationAlgo.setMaximumRelativeError(" << getOptimizationAlgorithm().getMaximumRelativeError() << ")\n";
   oss << "optimizationAlgo.setMaximumResidualError(" << getOptimizationAlgorithm().getMaximumResidualError() << ")\n";

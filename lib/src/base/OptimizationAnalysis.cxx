@@ -149,7 +149,7 @@ Description OptimizationAnalysis::GetSolverNames(const Interval& bounds,
 OptimizationAnalysis::OptimizationAnalysis()
   : PhysicalModelAnalysis()
   , solverName_("Cobyla")
-  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIterationNumber"))
+  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumCallsNumber"))
   , maximumAbsoluteError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumAbsoluteError"))
   , maximumRelativeError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumRelativeError"))
   , maximumResidualError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumResidualError"))
@@ -165,7 +165,7 @@ OptimizationAnalysis::OptimizationAnalysis(const String& name,
   : PhysicalModelAnalysis(name, physicalModel)
   , inputNames_(getPhysicalModel().getInputNames())
   , solverName_(algorithmName)
-  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumIterationNumber"))
+  , maximumEvaluationNumber_(ResourceMap::GetAsUnsignedInteger("OptimizationAlgorithm-DefaultMaximumCallsNumber"))
   , maximumAbsoluteError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumAbsoluteError"))
   , maximumRelativeError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumRelativeError"))
   , maximumResidualError_(ResourceMap::GetAsScalar("OptimizationAlgorithm-DefaultMaximumResidualError"))
@@ -265,7 +265,7 @@ void OptimizationAnalysis::launch()
   OptimizationAlgorithm solver(OptimizationAlgorithm::Build(solverName_));
   solver.setProblem(problem);
   solver.setStartingPoint(variableInputsValues_);
-  solver.setMaximumEvaluationNumber(getMaximumEvaluationNumber());
+  solver.setMaximumCallsNumber(getMaximumCallsNumber());
   solver.setMaximumAbsoluteError(getMaximumAbsoluteError());
   solver.setMaximumRelativeError(getMaximumRelativeError());
   solver.setMaximumResidualError(getMaximumResidualError());
@@ -410,14 +410,14 @@ void OptimizationAnalysis::setStartingPoint(const Point & startingPoint)
 
 
 /* Maximum iterations number accessor */
-UnsignedInteger OptimizationAnalysis::getMaximumEvaluationNumber() const
+UnsignedInteger OptimizationAnalysis::getMaximumCallsNumber() const
 {
   return maximumEvaluationNumber_;
 }
 
 
 /* Maximum iterations number accessor */
-void OptimizationAnalysis::setMaximumEvaluationNumber(const UnsignedInteger maximumEvaluationNumber)
+void OptimizationAnalysis::setMaximumCallsNumber(const UnsignedInteger maximumEvaluationNumber)
 {
   maximumEvaluationNumber_ = maximumEvaluationNumber;
 }
@@ -621,7 +621,7 @@ Parameters OptimizationAnalysis::getParameters() const
     constraints = "None";
   param.add("Constraints", constraints);
 
-  param.add("Maximum number of function evaluations", getMaximumEvaluationNumber());
+  param.add("Maximum number of calls", getMaximumCallsNumber());
   param.add("Maximum absolute error", getMaximumAbsoluteError());
   param.add("Maximum relative error", getMaximumRelativeError());
   param.add("Maximum residual error", getMaximumResidualError());
@@ -681,7 +681,7 @@ String OptimizationAnalysis::getPythonScript() const
   oss << getName() << ".setVariableInputs(" << Parameters::GetOTDescriptionStr(getVariableInputs()) << ")\n";
   oss << getName() << ".setVariablesType(" << Parameters::GetOTIndicesStr(getVariablesType()) << ")\n";
 
-  oss << getName() << ".setMaximumEvaluationNumber(" << getMaximumEvaluationNumber() << ")\n";
+  oss << getName() << ".setMaximumCallsNumber(" << getMaximumCallsNumber() << ")\n";
   oss << getName() << ".setMaximumAbsoluteError(" << getMaximumAbsoluteError() << ")\n";
   oss << getName() << ".setMaximumRelativeError(" << getMaximumRelativeError() << ")\n";
   oss << getName() << ".setMaximumResidualError(" << getMaximumResidualError() << ")\n";
@@ -708,7 +708,7 @@ String OptimizationAnalysis::__repr__() const
       << " isMinimization=" << getMinimization()
       << " starting point=" << getStartingPoint()
       << " constraints=" << getRawEquations()
-      << " maximumEvaluationNumber=" << getMaximumEvaluationNumber()
+      << " maximumCallsNumber=" << getMaximumCallsNumber()
       << " maximumAbsoluteError=" << getMaximumAbsoluteError()
       << " maximumRelativeError=" << getMaximumRelativeError()
       << " maximumResidualError=" << getMaximumResidualError()

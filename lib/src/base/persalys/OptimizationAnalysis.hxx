@@ -112,8 +112,8 @@ public:
   };
 
   /** Maximum evaluations number accessor */
-  void setMaximumEvaluationNumber(const OT::UnsignedInteger maximumEvaluationNumber);
-  OT::UnsignedInteger getMaximumEvaluationNumber() const;
+  void setMaximumCallsNumber(const OT::UnsignedInteger maximumCallsNumber);
+  OT::UnsignedInteger getMaximumCallsNumber() const;
 
   /** Maximum absolute error accessor */
   OT::Scalar getMaximumAbsoluteError() const;

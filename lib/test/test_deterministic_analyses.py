@@ -95,7 +95,7 @@ except:
 optim = persalys.OptimizationAnalysis('optim', symbolicModel, 'TNC')
 optim.setInterestVariables(['y1'])
 optim.setVariableInputs(['x1', 'x2'])
-optim.setMaximumEvaluationNumber(150)
+optim.setMaximumCallsNumber(150)
 optim.setMaximumAbsoluteError(1e-6)
 optim.setMaximumRelativeError(1e-6)
 optim.setMaximumResidualError(1e-6)
@@ -129,7 +129,7 @@ calibration.setBootStrapSize(25)
 calibration.setConfidenceIntervalLength(0.99)
 
 optimAlgo = calibration.getOptimizationAlgorithm()
-optimAlgo.setMaximumEvaluationNumber(50)
+optimAlgo.setMaximumCallsNumber(50)
 optimAlgo.setMaximumAbsoluteError(1e-6)
 optimAlgo.setMaximumRelativeError(1e-6)
 optimAlgo.setMaximumResidualError(1e-6)
@@ -137,5 +137,3 @@ optimAlgo.setMaximumConstraintError(1e-6)
 calibration.setOptimizationAlgorithm(optimAlgo)
 
 myStudy.add(calibration)
-
-

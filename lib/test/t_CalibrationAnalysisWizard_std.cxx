@@ -88,7 +88,7 @@ private slots:
     R2(0, 0) = 0.2;
     analysis.setErrorCovariance(R2);
     OptimizationAlgorithm optimAlgo(analysis.getOptimizationAlgorithm());
-    optimAlgo.setMaximumEvaluationNumber(75);
+    optimAlgo.setMaximumCallsNumber(75);
     optimAlgo.setMaximumAbsoluteError(1e-4);
     analysis.setOptimizationAlgorithm(optimAlgo);
 

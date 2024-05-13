@@ -1,4 +1,4 @@
-class=SORMAnalysis name=mySORM limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 optimization algorithm=class=OptimizationAlgorithm implementation=class=AbdoRackwitz class=OptimizationAlgorithmImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoEvaluation name=Unnamed gradientImplementation=class=NoGradient name=Unnamed hessianImplementation=class=NoHessian name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=Point name=Unnamed dimension=2 values=[1,1] maximumIterationNumber=100 maximumEvaluationNumber=1000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 tau=0.5 omega=0.0001 smooth=1.2 physicalStartingPoint=class=Point name=Unnamed dimension=2 values=[1,1]
+class=SORMAnalysis name=mySORM limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 optimization algorithm=class=OptimizationAlgorithm implementation=class=AbdoRackwitz class=OptimizationAlgorithmImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoEvaluation name=Unnamed gradientImplementation=class=NoGradient name=Unnamed hessianImplementation=class=NoHessian name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=Point name=Unnamed dimension=2 values=[1,1] maximumIterationNumber=100 maximumCallsNumber=1000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 tau=0.5 omega=0.0001 smooth=1.2 physicalStartingPoint=class=Point name=Unnamed dimension=2 values=[1,1]
 result= Probability estimate    (Breitung)=0.0763276
 Generalised reliability (Breitung)=1.43022
 Probability estimate    (Hohenbichler)=0.0747247
@@ -6,7 +6,7 @@ Generalised reliability (Hohenbichler)=1.44148
 Probability estimate (Tvedt)=0.0745014
 Generalised reliability (Tvedt)1.44306
 
-class=SORMAnalysis name=mySORM2 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 optimization algorithm=class=OptimizationAlgorithm implementation=class=AbdoRackwitz class=OptimizationAlgorithmImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoEvaluation name=Unnamed gradientImplementation=class=NoGradient name=Unnamed hessianImplementation=class=NoHessian name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=Point name=Unnamed dimension=2 values=[1,1] maximumIterationNumber=100 maximumEvaluationNumber=1000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 tau=0.5 omega=0.0001 smooth=1.2 physicalStartingPoint=class=Point name=Unnamed dimension=2 values=[1,1]
+class=SORMAnalysis name=mySORM2 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 optimization algorithm=class=OptimizationAlgorithm implementation=class=AbdoRackwitz class=OptimizationAlgorithmImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoEvaluation name=Unnamed gradientImplementation=class=NoGradient name=Unnamed hessianImplementation=class=NoHessian name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=Point name=Unnamed dimension=2 values=[1,1] maximumIterationNumber=100 maximumCallsNumber=1000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 tau=0.5 omega=0.0001 smooth=1.2 physicalStartingPoint=class=Point name=Unnamed dimension=2 values=[1,1]
 result= Probability estimate    (Breitung)=0.119408
 Generalised reliability (Breitung)=1.17795
 Probability estimate    (Hohenbichler)=0.116627
@@ -14,7 +14,7 @@ Generalised reliability (Hohenbichler)=1.19202
 Probability estimate (Tvedt)=0.116275
 Generalised reliability (Tvedt)1.19381
 
-class=SORMAnalysis name=mySORM3 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 optimization algorithm=class=OptimizationAlgorithm implementation=class=AbdoRackwitz class=OptimizationAlgorithmImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoEvaluation name=Unnamed gradientImplementation=class=NoGradient name=Unnamed hessianImplementation=class=NoHessian name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=Point name=Unnamed dimension=2 values=[1.08161,2.38966] maximumIterationNumber=100 maximumEvaluationNumber=1000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 tau=0.5 omega=0.0001 smooth=1.2 physicalStartingPoint=class=Point name=Unnamed dimension=2 values=[1.08161,2.38966]
+class=SORMAnalysis name=mySORM3 limitState=class=LimitStateImplementation name=aLimitState physicalModel=aModelPhys outputName=Y0 operator=class=Greater name=Unnamed threshold=20 optimization algorithm=class=OptimizationAlgorithm implementation=class=AbdoRackwitz class=OptimizationAlgorithmImplementation problem=class=OptimizationProblem implementation=class=OptimizationProblemImplementation objective=class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[] evaluationImplementation=class=NoEvaluation name=Unnamed gradientImplementation=class=NoGradient name=Unnamed hessianImplementation=class=NoHessian name=Unnamed equality constraint=none inequality constraint=none bounds=none minimization=true dimension=0 startingPoint=class=Point name=Unnamed dimension=2 values=[1.08161,2.38966] maximumIterationNumber=100 maximumCallsNumber=1000 maximumAbsoluteError=1e-05 maximumRelativeError=1e-05 maximumResidualError=1e-05 maximumConstraintError=1e-05 tau=0.5 omega=0.0001 smooth=1.2 physicalStartingPoint=class=Point name=Unnamed dimension=2 values=[1.08161,2.38966]
 result= Probability estimate    (Breitung)=0.119408
 Generalised reliability (Breitung)=1.17795
 Probability estimate    (Hohenbichler)=0.116627
@@ -45,7 +45,7 @@ myStudy.add(aLimitState)
 mySORM = persalys.SORMAnalysis('mySORM', aLimitState)
 mySORM.setPhysicalStartingPoint([1, 1])
 optimizationAlgo = ot.AbdoRackwitz()
-optimizationAlgo.setMaximumEvaluationNumber(1000)
+optimizationAlgo.setMaximumCallsNumber(1000)
 optimizationAlgo.setMaximumAbsoluteError(1e-05)
 optimizationAlgo.setMaximumRelativeError(1e-05)
 optimizationAlgo.setMaximumResidualError(1e-05)
@@ -55,7 +55,7 @@ myStudy.add(mySORM)
 mySORM2 = persalys.SORMAnalysis('mySORM2', aLimitState)
 mySORM2.setPhysicalStartingPoint([1, 1])
 optimizationAlgo = ot.AbdoRackwitz()
-optimizationAlgo.setMaximumEvaluationNumber(1000)
+optimizationAlgo.setMaximumCallsNumber(1000)
 optimizationAlgo.setMaximumAbsoluteError(1e-05)
 optimizationAlgo.setMaximumRelativeError(1e-05)
 optimizationAlgo.setMaximumResidualError(1e-05)
@@ -65,7 +65,7 @@ myStudy.add(mySORM2)
 mySORM3 = persalys.SORMAnalysis('mySORM3', aLimitState)
 mySORM3.setPhysicalStartingPoint([1.08161, 2.38966])
 optimizationAlgo = ot.AbdoRackwitz()
-optimizationAlgo.setMaximumEvaluationNumber(1000)
+optimizationAlgo.setMaximumCallsNumber(1000)
 optimizationAlgo.setMaximumAbsoluteError(1e-05)
 optimizationAlgo.setMaximumRelativeError(1e-05)
 optimizationAlgo.setMaximumResidualError(1e-05)

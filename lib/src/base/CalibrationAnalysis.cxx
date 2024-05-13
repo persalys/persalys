@@ -518,7 +518,7 @@ Parameters CalibrationAnalysis::getParameters() const
   if (getMethodName().compare(getMethodName().size() - 9, 9, "Nonlinear") == 0)
   {
     param.add("Bootstrap resampling size", getBootStrapSize());
-    param.add("Maximum number of function evaluations", getOptimizationAlgorithm().getMaximumEvaluationNumber());
+    param.add("Maximum number of calls", getOptimizationAlgorithm().getMaximumCallsNumber());
     param.add("Maximum absolute error", getOptimizationAlgorithm().getMaximumAbsoluteError());
     param.add("Maximum relative error", getOptimizationAlgorithm().getMaximumRelativeError());
     param.add("Maximum residual error", getOptimizationAlgorithm().getMaximumResidualError());
@@ -572,7 +572,7 @@ String CalibrationAnalysis::getPythonScript() const
     oss << getName() << ".setBootStrapSize(" << getBootStrapSize() << ")\n";
     // optimization algo
     oss << "optimizationAlgo = " << getName() << ".getOptimizationAlgorithm()\n";
-    oss << "optimizationAlgo.setMaximumEvaluationNumber(" << getOptimizationAlgorithm().getMaximumEvaluationNumber() << ")\n";
+    oss << "optimizationAlgo.setMaximumCallsNumber(" << getOptimizationAlgorithm().getMaximumCallsNumber() << ")\n";
     oss << "optimizationAlgo.setMaximumAbsoluteError(" << getOptimizationAlgorithm().getMaximumAbsoluteError() << ")\n";
     oss << "optimizationAlgo.setMaximumRelativeError(" << getOptimizationAlgorithm().getMaximumRelativeError() << ")\n";
     oss << "optimizationAlgo.setMaximumResidualError(" << getOptimizationAlgorithm().getMaximumResidualError() << ")\n";
@@ -621,7 +621,7 @@ String CalibrationAnalysis::__repr__() const
   if (getMethodName().compare(getMethodName().size() - 9, 9, "Nonlinear") == 0)
   {
     oss << " bootStrapSize=" << getBootStrapSize()
-        << " maximumEvaluationNumber=" << getOptimizationAlgorithm().getMaximumEvaluationNumber()
+        << " maximumCallsNumber=" << getOptimizationAlgorithm().getMaximumCallsNumber()
         << " maximumAbsoluteError=" << getOptimizationAlgorithm().getMaximumAbsoluteError()
         << " maximumRelativeError=" << getOptimizationAlgorithm().getMaximumRelativeError()
         << " maximumResidualError=" << getOptimizationAlgorithm().getMaximumResidualError()
