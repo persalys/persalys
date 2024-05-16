@@ -23,7 +23,6 @@
 #include "persalys/TranslationManager.hxx"
 #include "persalys/DistributionsForInferenceWidget.hxx"
 #include "persalys/QtTools.hxx"
-#include "persalys/DistributionDictionary.hxx"
 #include "persalys/CheckableHeaderView.hxx"
 
 #include <openturns/NormalCopulaFactory.hxx>
@@ -192,7 +191,7 @@ void CopulaInferenceWizard::updateDistForVars(const Description& vars, const QSt
   for (int i = 0; i < dist.size(); ++i)
   {
     const String distName = TranslationManager::GetCopulaName(dist[i]);
-    factories.add(DistributionDictionary::BuildCopulaFactory(distName));
+    factories.add(DistributionFactory::GetByName(distName+"Factory"));
   }
   distForVars_[vars] = factories;
 }

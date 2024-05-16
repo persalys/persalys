@@ -27,6 +27,7 @@
 #include <openturns/NormalFactory.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
+
 using namespace OT;
 
 namespace PERSALYS
@@ -444,7 +445,7 @@ void InferenceAnalysis::load(Advocate& adv)
     DistributionFactoryCollection factoryCollection;
     if (collection.getSize() == getInterestVariables().getSize())
       for (UnsignedInteger j = 0; j < collection[i].getSize(); ++j)
-        factoryCollection.add(DistributionDictionary::BuildDistributionFactory(collection[i][j]));
+        factoryCollection.add(DistributionFactory::GetByName(collection[i][j]+"Factory"));
     distFactoriesForEachInterestVar_[getInterestVariables()[i]] = factoryCollection;
   }
 }

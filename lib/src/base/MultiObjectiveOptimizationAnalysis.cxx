@@ -175,7 +175,6 @@ void MultiObjectiveOptimizationAnalysis::initialize()
 void MultiObjectiveOptimizationAnalysis::launch()
 {
   RandomGenerator::SetSeed(getSeed());
-  const Description modelInputNames(getPhysicalModel().getInputNames());
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
   // check
   if (getInterestVariables().getSize() < 2)
@@ -223,7 +222,7 @@ void MultiObjectiveOptimizationAnalysis::launch()
     }
   }
 
-  ComposedDistribution distribution(distColl);
+  JointDistribution distribution(distColl);
   SimulatedAnnealingLHS doe(LHSExperiment(distribution, startingPopSize_),
                             SpaceFillingPhiP(), GeometricProfile());
 
@@ -231,11 +230,7 @@ void MultiObjectiveOptimizationAnalysis::launch()
 
   // build solver
   Pagmo solver(problem, solverName_, startingPop);
-#if OPENTURNS_VERSION >= 102300
   solver.setMaximumIterationNumber(generationNumber_);
-#else
-  solver.setGenerationNumber(generationNumber_);
-#endif
   solver.setStopCallback(&AnalysisImplementation::Stop, this);
   solver.setProgressCallback(&UpdateProgressValue, this);
   solver.setMaximumConstraintError(getMaximumConstraintError());

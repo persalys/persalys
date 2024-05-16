@@ -26,6 +26,7 @@
 #include <openturns/CenteredFiniteDifferenceHessian.hxx>
 #include <openturns/NormalCopula.hxx>
 #include <openturns/TruncatedDistribution.hxx>
+#include <openturns/JointDistribution.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ParametricFunction.hxx>
 #include <openturns/IndependentCopula.hxx>
@@ -48,12 +49,12 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name)
   , Observable()
   , inputs_()
   , outputs_()
-  , composedCopula_()
+  , blockIndependentCopula_()
   , finiteDifferenceSteps_()
 {
   setName(name);
-  // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-  composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
+  // by default a BlockIndependentCopula contain an IndependentCopula with the description ("X0","X1")
+  blockIndependentCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
 }
 
 
@@ -65,7 +66,7 @@ PhysicalModelImplementation::PhysicalModelImplementation(const String & name,
   , Observable()
   , inputs_()
   , outputs_()
-  , composedCopula_()
+  , blockIndependentCopula_()
   , finiteDifferenceSteps_()
 {
   setName(name);
@@ -153,10 +154,10 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 
   inputs_ = inputs;
 
-  // update composedCopula_
-  composedCopula_ = ComposedCopula();
-  // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-  composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
+  // update blockIndependentCopula_
+  blockIndependentCopula_ = BlockIndependentCopula();
+  // by default a BlockIndependentCopula contain an IndependentCopula with the description ("X0","X1")
+  blockIndependentCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
 
   inputsChanged();
 }
@@ -173,10 +174,10 @@ void PhysicalModelImplementation::setInputName(const String & inputName, const S
   Input& input = getInputByName(inputName);
   input.setName(newName);
 
-  // update composedCopula_ description
+  // update blockIndependentCopula_ description
   if (input.isStochastic())
   {
-    Collection<Distribution> coll(composedCopula_.getCopulaCollection());
+    Collection<Distribution> coll(blockIndependentCopula_.getCopulaCollection());
     for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
     {
       Description copulaDescription(coll[i].getDescription());
@@ -191,7 +192,7 @@ void PhysicalModelImplementation::setInputName(const String & inputName, const S
         }
       }
     }
-    composedCopula_.setCopulaCollection(coll);
+    blockIndependentCopula_.setCopulaCollection(coll);
     notify("copulaChanged");
   }
 
@@ -309,7 +310,7 @@ void PhysicalModelImplementation::updateCopula()
 {
   const Description stochasticInput(getStochasticInputNames());
 
-  Collection<Distribution> coll(composedCopula_.getCopulaCollection());
+  Collection<Distribution> coll(blockIndependentCopula_.getCopulaCollection());
   std::set<UnsignedInteger> indicesToRemove;
 
   // remove IndependentCopula
@@ -364,16 +365,16 @@ void PhysicalModelImplementation::updateCopula()
     newColl.add(indpCop);
   }
 
-  // update composedCopula_
+  // update blockIndependentCopula_
   if (newColl.getSize())
   {
-    composedCopula_.setCopulaCollection(newColl);
+    blockIndependentCopula_.setCopulaCollection(newColl);
   }
   else
   {
-    composedCopula_ = ComposedCopula();
-    // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-    composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
+    blockIndependentCopula_ = BlockIndependentCopula();
+    // by default a BlockIndependentCopula contain an IndependentCopula with the description ("X0","X1")
+    blockIndependentCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
 
   notify("copulaChanged");
@@ -572,10 +573,10 @@ Description PhysicalModelImplementation::getSelectedOutputsNames() const
 
 Distribution PhysicalModelImplementation::getDistribution() const
 {
-  Description copulaDescription(composedCopula_.getDescription());
+  Description copulaDescription(blockIndependentCopula_.getDescription());
   Indices copulaMarginals;
 
-  ComposedDistribution::DistributionCollection marginals;
+  JointDistribution::DistributionCollection marginals;
   for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
   {
     if (inputs_[i].isStochastic())
@@ -586,11 +587,11 @@ Distribution PhysicalModelImplementation::getDistribution() const
     }
   }
 
-  // we cannot build a ComposedDistribution with an empty collection
+  // we cannot build a JointDistribution with an empty collection
   if (!marginals.getSize())
     return Distribution();
 
-  return ComposedDistribution(marginals, composedCopula_.getMarginal(copulaMarginals));
+  return JointDistribution(marginals, blockIndependentCopula_.getMarginal(copulaMarginals));
 }
 
 
@@ -756,7 +757,7 @@ PointToFieldFunction PhysicalModelImplementation::getRestrictedPointToFieldFunct
 
 Distribution PhysicalModelImplementation::getCopula() const
 {
-  Description copulaDescription(composedCopula_.getDescription());
+  Description copulaDescription(blockIndependentCopula_.getDescription());
   Indices copulaMarginals;
 
   for (UnsignedInteger i = 0; i < inputs_.getSize(); ++i)
@@ -767,13 +768,13 @@ Distribution PhysicalModelImplementation::getCopula() const
       copulaMarginals.add(it - copulaDescription.begin());
     }
   }
-  return copulaMarginals.getSize() > 0 ? composedCopula_.getMarginal(copulaMarginals) : composedCopula_;
+  return copulaMarginals.getSize() > 0 ? blockIndependentCopula_.getMarginal(copulaMarginals) : blockIndependentCopula_;
 }
 
 
 Collection<Distribution> PhysicalModelImplementation::getCopulaCollection() const
 {
-  return composedCopula_.getCopulaCollection();
+  return blockIndependentCopula_.getCopulaCollection();
 }
 
 
@@ -794,7 +795,7 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
   if (!copula.isCopula())
     throw InvalidArgumentException(HERE) << "The provided distribution is not a copula";
 
-  Collection<Distribution> coll(composedCopula_.getCopulaCollection());
+  Collection<Distribution> coll(blockIndependentCopula_.getCopulaCollection());
   std::set<UnsignedInteger> indicesToRemove;
 
   // remove copula if its description contains an input name of the list
@@ -848,16 +849,16 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
     }
   }
 
-  // update composedCopula_
+  // update blockIndependentCopula_
   if (newColl.getSize())
   {
-    composedCopula_.setCopulaCollection(newColl);
+    blockIndependentCopula_.setCopulaCollection(newColl);
   }
   else
   {
-    composedCopula_ = ComposedCopula();
-    // by default a ComposedCopula contain an IndependentCopula with the description ("X0","X1")
-    composedCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
+    blockIndependentCopula_ = BlockIndependentCopula();
+    // by default a BlockIndependentCopula contain an IndependentCopula with the description ("X0","X1")
+    blockIndependentCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
   updateCopula();
 
@@ -1137,21 +1138,21 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   OSS oss;
   oss.setPrecision(12);
 
-  for (UnsignedInteger i = 0; i < composedCopula_.getCopulaCollection().getSize(); ++i)
+  for (UnsignedInteger i = 0; i < blockIndependentCopula_.getCopulaCollection().getSize(); ++i)
   {
-    Distribution composedCopula_i = composedCopula_.getCopulaCollection()[i];
+    Distribution blockIndependentCopula_i = blockIndependentCopula_.getCopulaCollection()[i];
 
-    if (composedCopula_i.getImplementation()->getClassName() == "NormalCopula")
+    if (blockIndependentCopula_i.getImplementation()->getClassName() == "NormalCopula")
     {
-      oss << Parameters::GetOTNormalCopulaStr(composedCopula_i);
-      oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(composedCopula_i.getDescription()) << ", copula)\n";
+      oss << Parameters::GetOTNormalCopulaStr(blockIndependentCopula_i);
+      oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(blockIndependentCopula_i.getDescription()) << ", copula)\n";
     }
     else
     {
-      if (composedCopula_i.getImplementation()->getClassName() != "IndependentCopula")
+      if (blockIndependentCopula_i.getImplementation()->getClassName() != "IndependentCopula")
       {
-        oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(composedCopula_i.getDescription()) << ", ";
-        oss << "ot." << composedCopula_i.getImplementation()->getClassName() << "(" << composedCopula_i.getParameter()[0] << "))\n";
+        oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(blockIndependentCopula_i.getDescription()) << ", ";
+        oss << "ot." << blockIndependentCopula_i.getImplementation()->getClassName() << "(" << blockIndependentCopula_i.getParameter()[0] << "))\n";
       }
     }
   }
@@ -1190,7 +1191,7 @@ void PhysicalModelImplementation::save(Advocate & adv) const
   adv.saveAttribute("hasMesh_", hasMesh_);
   adv.saveAttribute("inputs_", inputs_);
   adv.saveAttribute("outputs_", outputs_);
-  adv.saveAttribute("composedCopula_", composedCopula_);
+  adv.saveAttribute("blockIndependentCopula_", blockIndependentCopula_);
   adv.saveAttribute("meshModel_", meshModel_);
   adv.saveAttribute("finiteDifferenceSteps_", finiteDifferenceSteps_);
   adv.saveAttribute("isParallel_", isParallel_);
@@ -1206,7 +1207,14 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("hasMesh_", hasMesh_);
   adv.loadAttribute("inputs_", inputs_);
   adv.loadAttribute("outputs_", outputs_);
-  adv.loadAttribute("composedCopula_", composedCopula_);
+  if (adv.hasAttribute("composedCopula_"))
+  {
+    ComposedCopula copula;
+    adv.loadAttribute("composedCopula_", copula);
+    blockIndependentCopula_ = BlockIndependentCopula(copula.getCopulaCollection());
+  }
+  else
+    adv.loadAttribute("blockIndependentCopula_", blockIndependentCopula_);
   adv.loadAttribute("meshModel_", meshModel_);
   if(adv.hasAttribute("finiteDifferenceSteps_"))
     adv.loadAttribute("finiteDifferenceSteps_", finiteDifferenceSteps_);

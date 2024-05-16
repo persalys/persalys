@@ -11,6 +11,8 @@ functionalChaosResult FunctionalChaosResult
 - indices size=15
 - relative errors=[0.0291624]
 - residuals=[0.0228881]
+- is least squares=true
+- is model selection=false
 
 | Index | Multi-index   | Coefficient   |
 |-------|---------------|---------------|

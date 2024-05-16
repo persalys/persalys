@@ -20,9 +20,9 @@
  */
 #include "persalys/CopulaInferenceAnalysis.hxx"
 
-#include "persalys/DistributionDictionary.hxx"
 #include "persalys/CopulaInferenceSetResult.hxx"
 
+#include <openturns/DistributionFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/Combinations.hxx>
 #include <openturns/VisualTest.hxx>
@@ -226,8 +226,6 @@ void CopulaInferenceAnalysis::initialize()
 
 void CopulaInferenceAnalysis::launch()
 {
-  const UnsignedInteger sizeKendall = 100;
-
   // for each set:
   std::map<Description, DistributionFactoryCollection>::iterator it;
   for (it = distFactoriesForSetVar_.begin(); it != distFactoriesForSetVar_.end(); ++it)
@@ -255,8 +253,6 @@ void CopulaInferenceAnalysis::launch()
     sample = (sample.rank() + 0.5) / sample.getSize();
 
     Sample splitSample(sample);
-    if (sample.getSize() > sizeKendall)
-      Sample otherSample = splitSample.split(sizeKendall);
 
     // CopulaInferenceSetResult
     CopulaInferenceSetResult inferenceSetResult;
@@ -304,7 +300,7 @@ void CopulaInferenceAnalysis::launch()
                                << ex.what()
                                << "\n";
         // set fittingTestResult
-        inferenceSetResult.testedDistributions_.add(DistributionDictionary::BuildCopulaFactory(distributionName).build());
+        inferenceSetResult.testedDistributions_.add(DistributionFactory::GetByName(distributionName+"Factory").build());
         ProcessSample kendallPlotDataCollection;
         inferenceSetResult.bicResults_.add(SpecFunc::MaxScalar);
         inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);

@@ -13,7 +13,8 @@ f.out     [ y0  y1  y2  ]
 4 : [  36 108 299 ]
 5 : [  38 114 336 ]
 f.hits 4
-f.calls 6
+f.calls 10
+f.evals 6
 f2.in     [ x1 x2 ]
 0 : [  1  2 ]
 1 : [ 10 20 ]
@@ -29,4 +30,5 @@ f2.out     [ y0  y1  y2  ]
 4 : [  36 108 299 ]
 5 : [  38 114 336 ]
 f2.hits 10
-f2.calls 0
+f2.calls 10
+f2.evals 0

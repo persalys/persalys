@@ -31,7 +31,7 @@ namespace PERSALYS
 std::vector<String> DistributionDictionary::ContinuousDistributions_ =
 {
   "Arcsine", "Beta", "ChiSquare", "Exponential", "Gamma", "Gumbel", "InverseNormal",
-  "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", /*"SmoothedUniform", */ "Student",
+  "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", "SmoothedUniform", "Student",
   "Trapezoidal", "Triangular", "Uniform", "WeibullMax", "WeibullMin"
 };
 std::vector<String> DistributionDictionary::DiscreteDistributions_ =
@@ -39,53 +39,6 @@ std::vector<String> DistributionDictionary::DiscreteDistributions_ =
   "Bernoulli", "Geometric", "Binomial", "Geometric", "Hypergeometric", "NegativeBinomial",
   "Poisson", "Skellam", "UserDefined", "ZipfMandelbrot"
 };
-
-
-/* Build a distribution factory */
-DistributionFactory DistributionDictionary::BuildDistributionFactory(const String & distributionName)
-{
-  if (distributionName == "Arcsine") return ArcsineFactory();
-  else if (distributionName == "Beta") return BetaFactory();
-  else if (distributionName == "ChiSquare") return ChiSquareFactory();
-  else if (distributionName == "Exponential") return ExponentialFactory();
-  else if (distributionName == "Gamma") return GammaFactory();
-  else if (distributionName == "Gumbel") return GumbelFactory();
-  else if (distributionName == "InverseNormal") return InverseNormalFactory();
-  else if (distributionName == "Laplace") return LaplaceFactory();
-  else if (distributionName == "Logistic") return LogisticFactory();
-  else if (distributionName == "LogNormal") return LogNormalFactory();
-  else if (distributionName == "LogUniform") return LogUniformFactory();
-  else if (distributionName == "Normal") return NormalFactory();
-  else if (distributionName == "Pareto") return ParetoFactory();
-  else if (distributionName == "Rayleigh") return RayleighFactory();
-  else if (distributionName == "Student") return StudentFactory();
-  else if (distributionName == "Trapezoidal") return TrapezoidalFactory();
-  else if (distributionName == "Triangular") return TriangularFactory();
-  else if (distributionName == "Uniform") return UniformFactory();
-  else if (distributionName == "WeibullMax") return WeibullMaxFactory();
-  else if (distributionName == "WeibullMin") return WeibullMinFactory();
-  else if (distributionName == "Weibull") return WeibullMinFactory();
-  else
-  {
-    throw InvalidArgumentException(HERE) << "DistributionDictionary::BuildDistributionFactory unknown distribution: " << distributionName;
-  }
-}
-
-
-/* Build a copula factory */
-DistributionFactory DistributionDictionary::BuildCopulaFactory(const String& distributionName)
-{
-  if (distributionName == "AliMikhailHaq") return AliMikhailHaqCopulaFactory();
-  else if (distributionName == "Bernstein") return BernsteinCopulaFactory();
-  else if (distributionName == "Clayton") return ClaytonCopulaFactory();
-  else if (distributionName == "FarlieGumbelMorgenstern") return FarlieGumbelMorgensternCopulaFactory();
-  else if (distributionName == "Frank") return FrankCopulaFactory();
-  else if (distributionName == "Gumbel") return GumbelCopulaFactory();
-  else if (distributionName == "Independent") return IndependentCopulaFactory();
-  else if (distributionName == "Normal") return NormalCopulaFactory();
-  else
-    throw InvalidArgumentException(HERE) << "DistributionDictionary::BuildCopulaFactory unknown copula: " << distributionName;
-}
 
 
 /* Build a distribution with native parameters from the mean value */

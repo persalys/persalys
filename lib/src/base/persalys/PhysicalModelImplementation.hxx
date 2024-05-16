@@ -30,8 +30,7 @@
 #include <openturns/Function.hxx>
 #include <openturns/PointToFieldFunction.hxx>
 #include <openturns/RandomVector.hxx>
-#include <openturns/ComposedDistribution.hxx>
-#include <openturns/ComposedCopula.hxx>
+#include <openturns/BlockIndependentCopula.hxx>
 
 namespace PERSALYS
 {
@@ -159,7 +158,7 @@ protected:
 private:
   OT::PersistentCollection<Input> inputs_;
   OT::PersistentCollection<Output> outputs_;
-  OT::ComposedCopula composedCopula_;
+  OT::BlockIndependentCopula blockIndependentCopula_;
   MeshModel meshModel_;
   OT::Point finiteDifferenceSteps_;
   OT::Bool isParallel_ = false;

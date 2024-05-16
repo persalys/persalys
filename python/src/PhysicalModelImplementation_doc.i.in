@@ -159,7 +159,7 @@ PERSALYS_PhysicalModel_setCopula_doc
 
 Parameters
 ----------
-Distribution : :py:class:`openturns.ComposedDistribution`
+Distribution : :py:class:`openturns.JointDistribution`
     The composed distribution (marginals and dependence)"
 %enddef
 %feature("docstring") PERSALYS::PhysicalModelImplementation::getDistribution

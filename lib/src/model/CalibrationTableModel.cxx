@@ -41,7 +41,6 @@ CalibrationTableModel::CalibrationTableModel(QObject *parent)
 void CalibrationTableModel::updateData(const PhysicalModel &model)
 {
   beginResetModel();
-  Description previousInputs(fakeModel_.getInputNames());
   InputCollection inputs;
   for (UnsignedInteger i = 0; i < model.getInputDimension(); ++i)
   {

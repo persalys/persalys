@@ -154,16 +154,8 @@ void DesignOfExperimentEvaluation::launch()
 
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
 
-#ifdef PERSALYS_HAVE_YACS
-  // YACS stopCallback
-  MemoizeEvaluation * evalM = dynamic_cast<MemoizeEvaluation*>(function.getEvaluation().getImplementation().get());
-  if (evalM)
-  {
-    YACSEvaluation * eval = dynamic_cast<YACSEvaluation*>(evalM->getEvaluation().getImplementation().get());
-    if (eval)
-      eval->setStopCallback(&StopRequested, this);
-  }
-#endif
+  // stopCallback
+  function.setStopCallback(&StopRequested, this);
 
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)

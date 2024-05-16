@@ -223,7 +223,6 @@ void EditValuesWizard::removeSelectedValues()
   Sample sample(model_->getSample());
   foreach (int row, selectedRow)
   {
-    Point point(sample[row]);
     sample.erase(row);
   }
   model_->updateData(sample);

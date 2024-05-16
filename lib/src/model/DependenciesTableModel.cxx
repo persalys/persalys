@@ -21,9 +21,9 @@
 #include "persalys/DependenciesTableModel.hxx"
 
 #include "persalys/TranslationManager.hxx"
-#include "persalys/DistributionDictionary.hxx"
 
 #include <openturns/IndependentCopula.hxx>
+#include <openturns/DistributionFactory.hxx>
 
 #include <QColor>
 
@@ -161,7 +161,7 @@ void DependenciesTableModel::updateCopula()
   }
   else
   {
-    copula_ = ComposedCopula();
+    copula_ = BlockIndependentCopula();
     copula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
 }
@@ -192,7 +192,7 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
   // the built copula has a dimension equal to 2
   // if dimension > 2 : do not enter here because there is for now only the Normal copula
   // improve this part if another copula is added in OpenTURNS
-  Distribution copula(DistributionDictionary::BuildCopulaFactory(newCopula).build());
+  Distribution copula(DistributionFactory::GetByName(newCopula+"Factory").build());
 
   // update the copula
   physicalModel_.blockNotification("ProbabilisticModelItem");

@@ -34,8 +34,8 @@ pythonModel = persalys.PythonPhysicalModel('pythonModel', [x1, x2, x3], [y0], co
 myStudy.add(pythonModel)
 
 filename = 'data.csv'
-cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
-                                ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
+cDist = ot.JointDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
+                                ot.BlockIndependentCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, ' ')
 
@@ -44,7 +44,7 @@ sample.exportToCSVFile(filename, ' ')
 # fixed design ##
 ot.RandomGenerator.SetSeed(0)
 fixedDesign = persalys.FixedDesignOfExperiment('fixedDesign', symbolicModel)
-inputSample = ot.LHSExperiment(ot.ComposedDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
+inputSample = ot.LHSExperiment(ot.JointDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
 fixedDesign.setOriginalInputSample(inputSample)
 fixedDesign.run()
@@ -95,7 +95,7 @@ except:
 optim = persalys.OptimizationAnalysis('optim', symbolicModel, 'TNC')
 optim.setInterestVariables(['y1'])
 optim.setVariableInputs(['x1', 'x2'])
-optim.setMaximumEvaluationNumber(150)
+optim.setMaximumCallsNumber(150)
 optim.setMaximumAbsoluteError(1e-6)
 optim.setMaximumRelativeError(1e-6)
 optim.setMaximumResidualError(1e-6)
@@ -129,7 +129,7 @@ calibration.setBootStrapSize(25)
 calibration.setConfidenceIntervalLength(0.99)
 
 optimAlgo = calibration.getOptimizationAlgorithm()
-optimAlgo.setMaximumEvaluationNumber(50)
+optimAlgo.setMaximumCallsNumber(50)
 optimAlgo.setMaximumAbsoluteError(1e-6)
 optimAlgo.setMaximumRelativeError(1e-6)
 optimAlgo.setMaximumResidualError(1e-6)
@@ -137,5 +137,3 @@ optimAlgo.setMaximumConstraintError(1e-6)
 calibration.setOptimizationAlgorithm(optimAlgo)
 
 myStudy.add(calibration)
-
-

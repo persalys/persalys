@@ -58,12 +58,6 @@ public:
   /** Comparison operator */
   OT::Bool operator ==(const FileMemoizeFunction & other) const;
 
-  /** Operator () */
-  OT::Point operator() (const OT::Point & inPoint) const override;
-
-  /** Operator () */
-  OT::Sample operator() (const OT::Sample & inSample) const override;
-
   /** @brief Enable the internal cache
    *
    * The cache stores previously computed output values, so calling the cache before processing the %Function

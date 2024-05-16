@@ -57,7 +57,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   if (formAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
-    maximumEvaluationNumber_ = formAnalysis->getOptimizationAlgorithm().getMaximumEvaluationNumber();
+    maximumEvaluationNumber_ = formAnalysis->getOptimizationAlgorithm().getMaximumCallsNumber();
 
     // analysis parameters
     analysisParameters = analysis.getParameters();
@@ -66,7 +66,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   if (formISAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
-    maximumEvaluationNumber_ = formISAnalysis->getOptimizationAlgorithm().getMaximumEvaluationNumber();
+    maximumEvaluationNumber_ = formISAnalysis->getOptimizationAlgorithm().getMaximumCallsNumber();
 
     // analysis parameters
     FORMAnalysis aFakeAnalysis("Unnamed", formISAnalysis->getLimitState());
@@ -107,7 +107,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
   if (sormAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
-    maximumEvaluationNumber_ = sormAnalysis->getOptimizationAlgorithm().getMaximumEvaluationNumber();
+    maximumEvaluationNumber_ = sormAnalysis->getOptimizationAlgorithm().getMaximumCallsNumber();
 
     // analysis parameters
     analysisParameters = analysis.getParameters();
@@ -252,14 +252,14 @@ void ApproximationResultTabWidget::buildInterface()
   QGroupBox * groupBox = new QGroupBox(tr("Optimization result"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
   namesList.clear();
-  namesList << tr("Evaluation number")
+  namesList << tr("Calls number")
             << tr("Absolute error")
             << tr("Relative error")
             << tr("Residual error")
             << tr("Constraint error");
 
   valuesList.clear();
-  valuesList << QString::number(result_.getOptimizationResult().getEvaluationNumber())
+  valuesList << QString::number(result_.getOptimizationResult().getCallsNumber())
              << QString::number(result_.getOptimizationResult().getAbsoluteError())
              << QString::number(result_.getOptimizationResult().getRelativeError())
              << QString::number(result_.getOptimizationResult().getResidualError())
@@ -268,7 +268,7 @@ void ApproximationResultTabWidget::buildInterface()
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
 
   // add warning if Maximum iteration number reached
-  if (result_.getOptimizationResult().getEvaluationNumber() == maximumEvaluationNumber_)
+  if (result_.getOptimizationResult().getCallsNumber() == maximumEvaluationNumber_)
   {
     table->model()->setData(table->model()->index(0, 1), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
     table->model()->setData(table->model()->index(0, 1), tr("Maximum iterations number reached"), Qt::ToolTipRole);

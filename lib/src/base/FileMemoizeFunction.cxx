@@ -66,18 +66,6 @@ String FileMemoizeFunction::__repr__() const
   return FunctionImplementation::__repr__();
 }
 
-/** Operator () */
-Point FileMemoizeFunction::operator() (const Point & inPoint) const
-{
-  return getEvaluation().operator()(inPoint);
-}
-
-/** Operator () */
-Sample FileMemoizeFunction::operator() (const Sample & inSample) const
-{
-  return getEvaluation().operator()(inSample);
-}
-
 /* Function implementation accessors */
 void FileMemoizeFunction::setEvaluation(const Evaluation & evaluation)
 {

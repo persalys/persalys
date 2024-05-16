@@ -273,7 +273,6 @@ void SobolAnalysis::launch()
       // initialization
       RandomGenerator::SetSeed(getSeed());
 
-      const Description outputName(1, getInterestVariables()[i]);
       MartinezSensitivityAlgorithm estimator_i;
       estimator_i.setUseAsymptoticDistribution(true);
       SobolSimulationAlgorithm algo_i(getPhysicalModel().getDistribution(),

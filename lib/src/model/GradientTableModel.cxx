@@ -126,9 +126,6 @@ void GradientTableModel::evaluateGradient()
     // do nothing
   }
 
-  // get result
-  Sample outputSample(eval.getResult().getDesignOfExperiment().getOutputSample());
-
   if (!eval.getErrorMessage().empty())
   {
     emit errorMessageChanged(QString(eval.getErrorMessage().c_str()));

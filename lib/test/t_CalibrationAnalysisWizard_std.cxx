@@ -10,6 +10,7 @@
 #include <openturns/Uniform.hxx>
 #include <openturns/ParametricFunction.hxx>
 #include <openturns/NormalCopula.hxx>
+#include <openturns/JointDistribution.hxx>
 
 #include <QtTest/QtTest>
 
@@ -77,17 +78,17 @@ private slots:
     Description calibratedIn(2);
     calibratedIn[0] = "R";
     calibratedIn[1] = "C";
-    ComposedDistribution::DistributionCollection coll(2, Normal(5., 0.2));
+    JointDistribution::DistributionCollection coll(2, Normal(5., 0.2));
     CorrelationMatrix R(2);
     R(0, 0) = 0.2;
-    analysis.setCalibratedInputs(calibratedIn, ComposedDistribution(coll, NormalCopula(R)), Description(1, "gam"), Point(1, 7.5));
+    analysis.setCalibratedInputs(calibratedIn, JointDistribution(coll, NormalCopula(R)), Description(1, "gam"), Point(1, 7.5));
     analysis.setConfidenceIntervalLength(0.99);
     analysis.setBootStrapSize(50);
     CorrelationMatrix R2(1);
     R2(0, 0) = 0.2;
     analysis.setErrorCovariance(R2);
     OptimizationAlgorithm optimAlgo(analysis.getOptimizationAlgorithm());
-    optimAlgo.setMaximumEvaluationNumber(75);
+    optimAlgo.setMaximumCallsNumber(75);
     optimAlgo.setMaximumAbsoluteError(1e-4);
     analysis.setOptimizationAlgorithm(optimAlgo);
 

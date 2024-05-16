@@ -31,6 +31,7 @@
 #include <openturns/Normal.hxx>
 #include <openturns/Dirac.hxx>
 #include <openturns/NormalCopula.hxx>
+#include <openturns/JointDistribution.hxx>
 
 #include <QVBoxLayout>
 #include <QRadioButton>
@@ -563,7 +564,7 @@ void CalibrationAnalysisWizard::initializePages()
   {
     // build a NormalCopula
     // cannot take only priorDistribution.getCopula() because pm.setCopula
-    // does not manage MarginalDistribution and ComposedCopula
+    // does not manage MarginalDistribution and BlockIndependentCopula
     // We get first the indices of the correlated inputs
     CorrelationMatrix m(analysis_ptr->getPriorDistribution().getSpearmanCorrelation());
     QSet<int> ind;
@@ -677,7 +678,7 @@ Analysis CalibrationAnalysisWizard::getAnalysis() const
   // if least squares algorithm
   else
   {
-    ComposedDistribution distribution(ComposedDistribution::DistributionCollection(refPointPage_->getCalibratedInputs().getSize(), Dirac()));
+    JointDistribution distribution(JointDistribution::DistributionCollection(refPointPage_->getCalibratedInputs().getSize(), Dirac()));
     distribution.setParameter(refPointPage_->getCalibratedInputs());
     calibration.setCalibratedInputs(refPointPage_->getCalibratedInputs().getDescription(),
                                     distribution,

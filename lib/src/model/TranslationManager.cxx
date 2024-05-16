@@ -56,6 +56,7 @@ void TranslationManager::InitializeDistributionsNames()
   DistributionsNames_.insert(type("Poisson", "Poisson"));
   DistributionsNames_.insert(type("Rayleigh", "Rayleigh"));
   DistributionsNames_.insert(type("Skellam", "Skellam"));
+  DistributionsNames_.insert(type("SmoothedUniform", tr("Smoothed uniform")));
   DistributionsNames_.insert(type("Student", "Student"));
   DistributionsNames_.insert(type("Trapezoidal", tr("Trapezoidal")));
   DistributionsNames_.insert(type("Triangular", tr("Triangular")));
@@ -197,7 +198,7 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert(type("θ prior", tr("θ prior")));
   ParametersNames_.insert(type("Confidence interval length", tr("Confidence interval length")));
   ParametersNames_.insert(type("Bootstrap resampling size", tr("Bootstrap resampling size")));
-  ParametersNames_.insert(type("Maximum number of function evaluations", tr("Maximum number of function evaluations")));
+  ParametersNames_.insert(type("Maximum number of calls", tr("Maximum number of calls")));
   ParametersNames_.insert(type("Number of generations", tr("Number of generations")));
   ParametersNames_.insert(type("Initial population size", tr("Initial population size")));
   ParametersNames_.insert(type("Initial population size", tr("Initial population size")));

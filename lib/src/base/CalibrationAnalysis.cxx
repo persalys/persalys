@@ -24,6 +24,7 @@
 # include "persalys/AdaoCalibration.hxx"
 #endif
 
+#include <openturns/JointDistribution.hxx>
 #include <openturns/MemoizeFunction.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ParametricFunction.hxx>
@@ -112,7 +113,7 @@ void CalibrationAnalysis::initializeParameters()
 
   // set prior distribution
   Point candidate;
-  ComposedDistribution::DistributionCollection marginals;
+  JointDistribution::DistributionCollection marginals;
   Description calibratedInputs;
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
@@ -124,7 +125,7 @@ void CalibrationAnalysis::initializeParameters()
       marginals.add(Dirac(value_i));
     }
   }
-  priorDistribution_ = ComposedDistribution(marginals);
+  priorDistribution_ = JointDistribution(marginals);
   priorDistribution_.setDescription(calibratedInputs);
 
   // set error covariance
@@ -238,7 +239,6 @@ void CalibrationAnalysis::launch()
 
   // - residuals kernel smoothing
   const Sample posteriorResiduals(getObservations().getOutputSample() - result_.calibrationResult_.getOutputAtPosteriorMean());
-  Collection<Sample> posteriorResidualPDF(outputsOfInterest.getSize());
   for (UnsignedInteger i = 0; i < outputsOfInterest.getSize(); ++i)
   {
     try
@@ -375,11 +375,11 @@ void CalibrationAnalysis::check(const Description &calibratedInputs, const Distr
     if (!priorDistribution.hasIndependentCopula())
     {
       Distribution copula(priorDistribution.getCopula());
-      // can have copula = NormalCopula / ComposedCopula / MarginalDistribution
+      // can have copula = NormalCopula / BlockIndependentCopula / MarginalDistribution
       MarginalDistribution * margDist = dynamic_cast<MarginalDistribution *>(copula.getImplementation().get());
       if (margDist)
         copula = margDist->getDistribution();
-      ComposedCopula * composedCopula = dynamic_cast<ComposedCopula *>(copula.getImplementation().get());
+      BlockIndependentCopula * composedCopula = dynamic_cast<BlockIndependentCopula *>(copula.getImplementation().get());
 
       bool normalCopulaFound = false;
       // check if composedCopula contains only NormalCopula (with potentially IndependentCopula)
@@ -438,7 +438,7 @@ void CalibrationAnalysis::setMethodName(const String &newMethod)
     throw InvalidArgumentException(HERE) << "Error: the given method name=" << newMethod << " is unknown. " << GetMethodNames();
 
   // update prior distribution if modification of method
-  ComposedDistribution::DistributionCollection marginals;
+  JointDistribution::DistributionCollection marginals;
   const Description calibratedInputs(priorDistribution_.getDescription());
   const Point oldValues(priorDistribution_.getMean());
   // old method = Gaussian / new method = Least Squares => prior dist = Dirac
@@ -448,7 +448,7 @@ void CalibrationAnalysis::setMethodName(const String &newMethod)
     {
       marginals.add(Dirac(oldValues[i]));
     }
-    priorDistribution_ = ComposedDistribution(marginals);
+    priorDistribution_ = JointDistribution(marginals);
     priorDistribution_.setDescription(calibratedInputs);
   }
   // old method = Least Squares / new method = Gaussian => prior dist = Gaussian
@@ -459,7 +459,7 @@ void CalibrationAnalysis::setMethodName(const String &newMethod)
       Distribution normal(DistributionDictionary::BuildDistribution("Normal", oldValues[i]));
       marginals.add(normal);
     }
-    priorDistribution_ = ComposedDistribution(marginals);
+    priorDistribution_ = JointDistribution(marginals);
     priorDistribution_.setDescription(calibratedInputs);
   }
 
@@ -518,7 +518,7 @@ Parameters CalibrationAnalysis::getParameters() const
   if (getMethodName().compare(getMethodName().size() - 9, 9, "Nonlinear") == 0)
   {
     param.add("Bootstrap resampling size", getBootStrapSize());
-    param.add("Maximum number of function evaluations", getOptimizationAlgorithm().getMaximumEvaluationNumber());
+    param.add("Maximum number of calls", getOptimizationAlgorithm().getMaximumCallsNumber());
     param.add("Maximum absolute error", getOptimizationAlgorithm().getMaximumAbsoluteError());
     param.add("Maximum relative error", getOptimizationAlgorithm().getMaximumRelativeError());
     param.add("Maximum residual error", getOptimizationAlgorithm().getMaximumResidualError());
@@ -572,7 +572,7 @@ String CalibrationAnalysis::getPythonScript() const
     oss << getName() << ".setBootStrapSize(" << getBootStrapSize() << ")\n";
     // optimization algo
     oss << "optimizationAlgo = " << getName() << ".getOptimizationAlgorithm()\n";
-    oss << "optimizationAlgo.setMaximumEvaluationNumber(" << getOptimizationAlgorithm().getMaximumEvaluationNumber() << ")\n";
+    oss << "optimizationAlgo.setMaximumCallsNumber(" << getOptimizationAlgorithm().getMaximumCallsNumber() << ")\n";
     oss << "optimizationAlgo.setMaximumAbsoluteError(" << getOptimizationAlgorithm().getMaximumAbsoluteError() << ")\n";
     oss << "optimizationAlgo.setMaximumRelativeError(" << getOptimizationAlgorithm().getMaximumRelativeError() << ")\n";
     oss << "optimizationAlgo.setMaximumResidualError(" << getOptimizationAlgorithm().getMaximumResidualError() << ")\n";
@@ -621,7 +621,7 @@ String CalibrationAnalysis::__repr__() const
   if (getMethodName().compare(getMethodName().size() - 9, 9, "Nonlinear") == 0)
   {
     oss << " bootStrapSize=" << getBootStrapSize()
-        << " maximumEvaluationNumber=" << getOptimizationAlgorithm().getMaximumEvaluationNumber()
+        << " maximumCallsNumber=" << getOptimizationAlgorithm().getMaximumCallsNumber()
         << " maximumAbsoluteError=" << getOptimizationAlgorithm().getMaximumAbsoluteError()
         << " maximumRelativeError=" << getOptimizationAlgorithm().getMaximumRelativeError()
         << " maximumResidualError=" << getOptimizationAlgorithm().getMaximumResidualError()

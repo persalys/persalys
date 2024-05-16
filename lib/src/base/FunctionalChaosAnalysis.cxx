@@ -20,6 +20,7 @@
  */
 #include "persalys/FunctionalChaosAnalysis.hxx"
 
+#include <openturns/JointDistribution.hxx>
 #include <openturns/LinearEnumerateFunction.hxx>
 #include <openturns/FixedStrategy.hxx>
 #include <openturns/LeastSquaresStrategy.hxx>
@@ -129,7 +130,7 @@ Distribution FunctionalChaosAnalysis::getDistribution()
             coll[i] = designOfExperiment_.getPhysicalModel().getInputByName(inputVariablesNames[i]).getDistribution();
           else
             coll[i] = FunctionalChaosAlgorithm::BuildDistribution(effectiveInputSample.getMarginal(i));
-        distribution_ = ComposedDistribution(coll);
+        distribution_ = JointDistribution(coll);
       }
     }
     // build distribution from sample:

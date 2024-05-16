@@ -58,7 +58,7 @@ protected:
 private:
   bool failSoftMode_;
   PhysicalModel physicalModel_;
-  OT::ComposedCopula copula_;
+  OT::BlockIndependentCopula copula_;
 };
 }
 #endif

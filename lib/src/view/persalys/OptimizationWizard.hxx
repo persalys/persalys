@@ -77,7 +77,7 @@ public:
   template <class T>
   void initialize(const T& optimAlgo)
   {
-    evaluationsSpinBox_->setValue(optimAlgo.getMaximumEvaluationNumber());
+    evaluationsSpinBox_->setValue(optimAlgo.getMaximumCallsNumber());
     absoluteErrSpinBox_->setValue(optimAlgo.getMaximumAbsoluteError());
     relativeErrSpinBox_->setValue(optimAlgo.getMaximumRelativeError());
     residualErrSpinBox_->setValue(optimAlgo.getMaximumResidualError());
@@ -86,7 +86,7 @@ public:
   template <class T>
   void updateAlgorithm(T& optimAlgo)
   {
-    optimAlgo.setMaximumEvaluationNumber(evaluationsSpinBox_->value());
+    optimAlgo.setMaximumCallsNumber(evaluationsSpinBox_->value());
     optimAlgo.setMaximumRelativeError(relativeErrSpinBox_->value());
     optimAlgo.setMaximumResidualError(residualErrSpinBox_->value());
     optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());

@@ -32,7 +32,7 @@ ApproximationAnalysis::ApproximationAnalysis()
   : optimizationAlgorithm_(AbdoRackwitz())
   , physicalStartingPoint_()
 {
-  optimizationAlgorithm_.setMaximumEvaluationNumber(1000);
+  optimizationAlgorithm_.setMaximumCallsNumber(1000);
 }
 
 
