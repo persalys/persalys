@@ -86,7 +86,9 @@ set(BASE_SOURCEFILES DistributionDictionary.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx)
+  set_source_files_properties (YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 endif ()
+
 if (AdaoCppLayer_FOUND)
   list (APPEND BASE_SOURCEFILES AdaoCalibration.cxx)
 endif ()

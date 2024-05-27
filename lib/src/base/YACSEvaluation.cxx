@@ -24,6 +24,7 @@
 #include <openturns/BatchFailedException.hxx>
 #include "persalys/InterpreterUnlocker.hxx"
 #include "persalys/BaseTools.hxx"
+#include "persalys/AppliException.hxx"
 #include <thread> //std::this_thread
 #include <memory> //std::unique_ptr
 #include <cmath> //std::nan
