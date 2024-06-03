@@ -55,8 +55,6 @@ public:
   {
     return tableModel_;
   };
-signals:
-  void currentAnalysisChanged(OptimizationAnalysis&);
 protected slots:
   void updateTable();
 
