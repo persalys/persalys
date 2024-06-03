@@ -1,6 +1,6 @@
 class=OptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=Cobyla isMinimization=true starting point=class=Point name=Unnamed dimension=2 values=[0.5,0.5] constraints=[Y0<600.0] maximumCallsNumber=150 maximumAbsoluteError=1e-06 maximumRelativeError=1e-06 maximumResidualError=1e-06 maximumConstraintError=1e-06 bounds=[[-5, 5],[0, 0]] variable inputs=[X0] variable types=[0,0]
-x= [5]
-y= [578]
+x= [5,0.5]
+y= [5,578]
 #!/usr/bin/env python
 
 import openturns as ot
@@ -37,5 +37,9 @@ optim.setMaximumResidualError(1e-06)
 optim.setMaximumConstraintError(1e-06)
 myStudy.add(optim)
 
+ParametricEvaluation(([[X0,X1,X20,Y0,X2]->[600.0-1.0*(Y0)]])o([[X0,X1,X2]->[X0,X1,X2],MemoizeEvaluation([X0,X1,X2] code=def _exec(X0,X1,X2):
+    Y00 = X0
+    Y0 = 3*(X0-5)**2 + 8*(X1+8)**2
+    return Y0,X2)]), parameters positions=[1,2], parameters=[X1 : 0.5, X2 : 0], input positions=[0])
     [ y0 ]
 0 : [ 22 ]
