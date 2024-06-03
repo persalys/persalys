@@ -188,6 +188,7 @@ void KrigingAnalysis::launch()
       linear(j, j) = (std::abs(stddevInput[j]) > 1e-12) ? 1.0 / stddevInput[j] : 1.0;
     const Point zero(inputDimension, 0.0);
     normalization_ = LinearFunction(mean, zero, linear);
+    normalization_.setInputDescription(effectiveInputSample.getDescription());
 
     // build algo
     KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
