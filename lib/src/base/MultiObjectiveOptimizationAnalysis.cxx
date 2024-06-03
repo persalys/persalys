@@ -248,30 +248,45 @@ void MultiObjectiveOptimizationAnalysis::launch()
   // initialize final pop sample
   // X | Y | C_i | _feasibility_ | _front_index_
 
-  Sample finalPop = solver.getResult().getFinalPoints();
+  // Build complete finalPop sample
+  // Add (non-)frozen inputs
+  const Description inputNames = getPhysicalModel().getInputNames();
+  Sample finalPop(solver.getResult().getFinalPoints().getSize(), 0);
+  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
+  {
+    const UnsignedInteger j = variableInputsIndices_.find(i);
+    if (j < variableInputsIndices_.getSize())
+      finalPop.stack(solver.getResult().getFinalPoints().getMarginal(j));
+    else
+      finalPop.stack(Sample(finalPop.getSize(), Point(1, startingPoint_[i])));
+  }
+
+  // Copy input sample
+  const Sample finalPoints = finalPop;
+
+  // Add outputs of interest
   finalPop.stack(solver.getResult().getFinalValues());
-  Description finalPopDesc = getVariableInputs();
+  Description finalPopDesc = getPhysicalModel().getInputNames();
   finalPopDesc.add(getInterestVariables());
 
-  // If constraints, add them and feasibility
+
+  // Add outputs of non interest (including constraints)
+  const Description outputNames = getPhysicalModel().getSelectedOutputsNames();
+  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
+  {
+    if (!finalPopDesc.contains(outputNames[i]))
+    {
+      finalPopDesc.add(outputNames[i]);
+      finalPop.stack(getPhysicalModel().getFunction(Description(1, outputNames[i]))(finalPoints));
+    }
+  }
+
+  // If constraints, add feasibility
   const Bool isConstrained = problem.getEqualityConstraint().getInputDimension() ||
                              problem.getInequalityConstraint().getInputDimension();
 
   if (isConstrained)
   {
-    // Build constraints sample
-    for (UnsignedInteger i = 0; i < getRawEquations().getSize(); ++i)
-    {
-      std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
-      std::smatch match;
-      std::regex_search(getRawEquations()[i], match, variable);
-      // If constraint variable is not already a model output
-      if (!finalPopDesc.contains(match[1]))
-      {
-        finalPopDesc.add(Description(1, match[1]));
-        finalPop.stack(getPhysicalModel().getFunction(Description(1, match[1]))(solver.getResult().getFinalPoints()));
-      }
-    }
     finalPop.stack(Sample(finalPop.getSize(), Point(1, 0)));
     finalPopDesc.add(Description(1, "_feasibility_"));
   }
@@ -382,7 +397,7 @@ String MultiObjectiveOptimizationAnalysis::getPythonScript() const
 
   oss << getName() << " = persalys.MultiObjectiveOptimizationAnalysis('" << getName() << "', " << getPhysicalModel().getName() << ", '" << solverName_ << "')\n";
   // interest output
-  if (getInterestVariables().getSize() < getPhysicalModel().getOutputNames().getSize())
+  if (getInterestVariables().getSize() < getPhysicalModel().getSelectedOutputsNames().getSize())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
     oss << getName() << ".setInterestVariables(interestVariables)\n";
