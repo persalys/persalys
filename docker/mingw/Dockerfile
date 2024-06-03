@@ -9,7 +9,7 @@ ENV ARCH=x86_64 PYMAJMIN=311
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone -b v1.23rc1 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
+RUN git clone -b v1.23 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
   && ${ARCH}-w64-mingw32-cmake \
   -DPython_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPython_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPython_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
