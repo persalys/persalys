@@ -87,7 +87,7 @@ void InferenceResultWizard::buildInterface()
   mainLayout->addWidget(errorMessageLabel_);
 
   // update tables
-  connect(variablesComboBox_, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateInferenceResultWidget(QString)));
+  connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateInferenceResultWidget(int)));
   connect(inferenceResultsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVariablesComboBox(int)));
   updateVariablesComboBox(0);
 
@@ -118,11 +118,12 @@ void InferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
 }
 
 
-void InferenceResultWizard::updateInferenceResultWidget(QString variableName)
+void InferenceResultWizard::updateInferenceResultWidget(int index)
 {
   if (!(inferenceResultsComboBox_ && inferenceResultWidget_))
     return;
 
+  const QString variableName = variablesComboBox_->itemText(index);
   clearErrorMessage();
 
   if (inferenceResultsComboBox_->count())

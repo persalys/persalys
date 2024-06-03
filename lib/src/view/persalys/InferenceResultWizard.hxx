@@ -48,7 +48,7 @@ protected:
 public slots:
   void clearErrorMessage();
   void updateVariablesComboBox(int);
-  void updateInferenceResultWidget(QString);
+  void updateInferenceResultWidget(int);
 
 private:
   Study study_;

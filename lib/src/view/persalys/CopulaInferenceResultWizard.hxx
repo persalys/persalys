@@ -47,7 +47,7 @@ protected:
 
 public slots:
   void updateVariablesComboBox(int);
-  void updateVariablesTable(const QString &text);
+  void updateVariablesTable(int);
 
 private:
   Study study_;
