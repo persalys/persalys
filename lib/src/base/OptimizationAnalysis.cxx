@@ -282,6 +282,13 @@ void OptimizationAnalysis::launch()
 
   // set result
   result_ = solver.getResult();
+  Point optimalPoint = startingPoint_;
+  for (UnsignedInteger i = 0; i < result_.getOptimalPoint().getDimension(); ++i)
+    optimalPoint[variableInputsIndices_[i]] = result_.getOptimalPoint()[i];
+  const Point result = getPhysicalModel().getFunction(getPhysicalModel().getOutputNames())(optimalPoint);
+  result_.setOptimalPoint(optimalPoint);
+  result_.setOptimalValue(result);
+
 }
 
 OptimizationProblem OptimizationAnalysis::defineProblem()

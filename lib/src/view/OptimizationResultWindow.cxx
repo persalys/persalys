@@ -119,20 +119,33 @@ void OptimizationResultWindow::buildInterface()
       << tr("Value"));
 
   // output
-  optimTableModel->setNotEditableHeaderItem(0, 0, tr("Output"));
-  optimTableModel->setNotEditableItem(0, 1, outputName);
-  optimTableModel->setNotEditableItem(0, 2, result_.getOptimalValue()[0]);
+  const UnsignedInteger nbOutputs = result_.getOptimalValue().getSize();
+  if (nbOutputs > 1) {
+    optimTableModel->setNotEditableHeaderItem(0, 0, tr("Outputs"));
+    optimTableView->setSpan(0, 0, nbOutputs, 1);
+  }
+  else
+    optimTableModel->setNotEditableHeaderItem(0, 0, tr("Output"));
+
+  const OptimizationAnalysis * analysis(dynamic_cast<OptimizationAnalysis*>(dynamic_cast<AnalysisItem*>(getItem())->getAnalysis().getImplementation().get()));
+  const Description outputNames = analysis->getPhysicalModel().getFunction().getOutputDescription();
+
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+  {
+    optimTableModel->setNotEditableItem(i, 1, QString(outputNames[i].c_str()));
+    optimTableModel->setNotEditableItem(i, 2, result_.getOptimalValue()[i]);
+  }
 
   // inputs
   const QString rowTitle = tr("Inputs");
-  optimTableModel->setNotEditableHeaderItem(1, 0, rowTitle);
+  optimTableModel->setNotEditableHeaderItem(nbOutputs, 0, rowTitle);
   if (nbInputs > 1)
-    optimTableView->setSpan(1, 0, nbInputs, 1);
+    optimTableView->setSpan(nbOutputs, 0, nbInputs, 1);
 
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
-    optimTableModel->setNotEditableItem(i + 1, 1, QString::fromUtf8(result_.getProblem().getObjective().getInputDescription()[i].c_str()));
-    optimTableModel->setNotEditableItem(i + 1, 2, result_.getOptimalPoint()[i]);
+    optimTableModel->setNotEditableItem(i + nbOutputs, 1, QString::fromUtf8(analysis->getPhysicalModel().getInputNames()[i].c_str()));
+    optimTableModel->setNotEditableItem(i + nbOutputs, 2, result_.getOptimalPoint()[i]);
   }
 
   // resize table
