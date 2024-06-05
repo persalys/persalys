@@ -33,7 +33,7 @@ RUN curl -fSsL https://github.com/swig/swig/archive/v4.2.1.tar.gz | tar xz && cd
 # ipopt
 RUN curl -fsSL https://github.com/KarypisLab/GKlib/archive/refs/tags/METIS-v5.1.1-DistDGL-0.5.tar.gz | tar xz && cd GKlib-METIS-v5.1.1-DistDGL-0.5 && curl -L https://github.com/KarypisLab/GKlib/commit/33b8c8bb.patch | patch -p1 && sed -i "s|march=native|march=nocona|g" GKlibSystem.cmake && cmake -DBUILD_SHARED_LIBS=ON . && make install > /dev/null 2>&1 && cd - && rm -r GKlib*
 RUN curl -fsSL https://github.com/KarypisLab/METIS/archive/v5.2.1.tar.gz | tar xz && cd METIS-5.2.1 && mkdir -p build/xinclude && sed -i "s|//#define IDXTYPEWIDTH 32|#define IDXTYPEWIDTH 32|g" include/metis.h && sed -i "s|//#define REALTYPEWIDTH 32|#define REALTYPEWIDTH 64|g" include/metis.h && cp include/metis.h include/CMakeLists.txt build/xinclude && echo "target_link_libraries(metis GKlib)" >> libmetis/CMakeLists.txt && sed -i "s|march=native|march=nocona|g" conf/gkbuild.cmake && cmake -DSHARED=ON . && make install > /dev/null 2>&1 && cd - && rm -r METIS*
-RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/3.0.6.tar.gz | tar xz && cd ThirdParty-Mumps-releases-3.0.6 && ./get.Mumps && FFLAGS="-O2 -fallow-argument-mismatch" ./configure --prefix=/usr/local && make -j1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
+RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/3.0.7.tar.gz | tar xz && cd ThirdParty-Mumps-releases-3.0.7 && ./get.Mumps && FFLAGS="-O2 -fallow-argument-mismatch" ./configure --prefix=/usr/local && make -j1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
 RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.16.tar.gz | tar xz && cd Ipopt-releases-3.14.16 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
@@ -49,8 +49,8 @@ RUN curl -L https://github.com/davisking/dlib/archive/v19.24.4.tar.gz | tar xz &
  && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install > /dev/null 2>&1 && cd - && rm -r dlib*
 
 # cminpack
-RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.8.tar.gz | tar xz && cd cminpack-1.3.8 \
- && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
+RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.9.tar.gz | tar xz && cd cminpack-1.3.9 \
+ && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d -DUSE_BLAS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
 RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.1.tar.gz | tar xz && cd nlopt-2.7.1 \
@@ -116,7 +116,7 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.ta
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.5.0.tar.gz | tar xz && cd Assimulo-Assimulo-3.5.0 \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.5.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.5.1 \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
@@ -139,11 +139,11 @@ RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.ta
 RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz | tar xJ && cd wayland-1.22.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.13/submodules/qtbase-everywhere-opensource-src-5.15.13.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.13 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.13/submodules/qtsvg-everywhere-opensource-src-5.15.13.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.13 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.13/submodules/qtx11extras-everywhere-opensource-src-5.15.13.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.13 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.13/submodules/qttools-everywhere-opensource-src-5.15.13.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.13 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/5.15/5.15.13/submodules/qtwayland-everywhere-opensource-src-5.15.13.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.13 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtbase-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.14 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtsvg-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtx11extras-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qttools-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtwayland-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt-6.3.0 \
@@ -152,7 +152,7 @@ RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.12/ParaView-v5.12.0.tar.xz | tar xJ && cd ParaView-v5.12.0 \
+RUN curl -fSsL https://paraview.org/files/v5.12/ParaView-v5.12.1.tar.xz | tar xJ && cd ParaView-v5.12.1 \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so -DPARAVIEW_USE_VTKM=OFF -DPARAVIEW_USE_FORTRAN=OFF \
@@ -160,7 +160,7 @@ RUN curl -fSsL https://paraview.org/files/v5.12/ParaView-v5.12.0.tar.xz | tar xJ
  && make install -C build > /dev/null 2>&1 && cd - && rm -r ParaView*
 
 # openturns
-RUN git clone -b v1.23rc1 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+RUN git clone -b v1.23 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
     -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r openturns*
