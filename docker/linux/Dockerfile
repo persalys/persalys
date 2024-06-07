@@ -4,7 +4,7 @@ MAINTAINER jschueller
 # utils
 RUN yum -y install epel-release centos-release-scl \
  && yum -y install wget git patch zip unzip bzip2 bsdtar perl perl-IPC-Cmd subversion gettext autoconf automake libtool sudo make which file \
-  pcre-devel pcre2-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel \
+  pcre-devel pcre2-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel libtree-ldd texinfo \
   zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel gpg libffi-devel openssl-devel \
   libX11-devel libXt-devel libXext-devel libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel \
   xorg-x11-server-Xvfb mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers libxkbcommon-x11-devel \
@@ -21,6 +21,9 @@ RUN yum -y install epel-release centos-release-scl \
 ENV LANG="en_US.UTF-8" MAKEFLAGS="-j8"
 ENV PATH=/opt/rh/devtoolset-9/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-9/root/usr/lib64:/opt/rh/devtoolset-9/root/usr/lib
 WORKDIR /usr/local/src
+
+# gdb
+RUN curl -fSsL https://ftp.gnu.org/gnu/gdb/gdb-8.3.1.tar.gz |tar xz && cd gdb-8.3.1 && ./configure --with-python=no && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r gdb*
 
 # bison/flex
 RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison-3.8.2 && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
@@ -92,18 +95,17 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimag
 RUN curl -fSsL https://www.openssl.org/source/openssl-3.3.0.tar.gz | tar xz && cd openssl-3.3.0 \
  && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
+# libffi
+RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-3.4.6.tar.gz | tar xz && cd libffi-3.4.6 \
+ && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
+
 # python
 RUN curl -fSsL https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz | tar xz && cd Python-3.11.9 \
- && ./configure --enable-shared --enable-optimizations CFLAGS="-I/opt/ssl/include" LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
- && python3 -V && python3 -c "import ssl" && cd - && rm -r Python*
+ && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
+ && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN curl -fSsL https://pypi.python.org/packages/source/n/numpy/numpy-1.23.5.tar.gz | tar xz && cd numpy-1.23.5 \
-  && pip3 install . && cd - && python3 -c "import numpy" && cd - && rm -r numpy*
-RUN echo -e 'libdir=/usr/lib64\nName: OPENBLAS\nDescription: BLAS\nVersion: 3\nLibs: -L${libdir} -lblas -llapack' > /usr/lib64/pkgconfig/openblas.pc
-RUN curl -fSsL https://pypi.python.org/packages/source/s/scipy/scipy-1.11.4.tar.gz | tar xz && cd scipy-1.11.4 \
- && pip3 install . && cd - && python3 -c "import scipy.linalg" && cd - && rm -r scipy*
-RUN pip3 install pandas matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl cython --upgrade --quiet
+RUN pip3 install numpy==1.26.4 scipy==1.13.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl cython --upgrade --quiet
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials-6.7.0 \

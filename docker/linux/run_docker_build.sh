@@ -35,7 +35,8 @@ HERE=$(dirname $(readlink -f "${0}"))
 export PATH=${HERE}/usr/bin/:${PATH}
 export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/lib/omc/
 export PYTHONHOME=${HERE}/usr/
-export PYTHONPATH=
+export PYTHONUSERBASE=${HOME}/.persalys_base
+export PYTHONPATH=${PYTHONUSERBASE}/lib/python3.11/site-packages
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 export PV_PLUGIN_PATH=${HERE}/usr/lib/paraview/plugins/BagPlotViewsAndFilters
 
@@ -123,6 +124,10 @@ cp -rv /usr/local/share/omc persalys.AppDir/usr/share
 cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 persalys.AppDir/usr/lib
 cp -v /usr/local/bin/omc persalys.AppDir/usr/bin
 cp -v /usr/local/lib/libsundials* persalys.AppDir/usr/lib
+
+# gdb
+cp -v /usr/local/bin/gdb* persalys.AppDir/usr/bin
+cp -v /usr/lib64/libtinfo.so.5 /usr/lib64/libncursesw.so.5 /usr/lib64/libpanelw.so.5 persalys.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/lib/plugins/platforms/libqxcb.so
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys

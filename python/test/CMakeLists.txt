@@ -96,7 +96,7 @@ ot_pyinstallcheck_test (Observations_std)
 ot_pyinstallcheck_test (CalibrationAnalysis_std)
 ot_pyinstallcheck_test (Study_refCount)
 ot_pyinstallcheck_test (Encoding_std)
-ot_pyinstallcheck_test (docstring)
+ot_pyinstallcheck_test (docstring IGNOREOUT)
 ot_pyinstallcheck_test (FileMemoizeFunction_std)
 ot_pyinstallcheck_test (DataCleaning_std)
 

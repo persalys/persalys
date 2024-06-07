@@ -5,6 +5,7 @@ import persalys
 # import openturns as ot
 import os
 import shutil
+import sys
 from glob import glob
 from tempfile import mkdtemp
 import doctest
@@ -37,3 +38,5 @@ print(("%s %5d tests failed" % ("TOTAL ".ljust(60, "."), total_failure_count)))
 # Delete temporary working directory for IO tests
 os.chdir("..")
 shutil.rmtree(work_dir)
+
+sys.exit(total_failure_count)

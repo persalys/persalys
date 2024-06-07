@@ -185,7 +185,7 @@ if (SalomeYACS_FOUND)
   set_property (TARGET persalys_python APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YACS=1)
 endif ()
 
-install ( FILES __init__.py
+install ( FILES __init__.py nopip.py
           DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/persalys
         )
 
