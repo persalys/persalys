@@ -109,7 +109,9 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
     emit errorMessageChanged("");
     try
     {
-      physicalModel_.blockNotification("ProbabilisticModelItem");
+      // physicalModel_ has no item if coming from CalibrationWizard
+      if (physicalModel_.getImplementation()->getObserver("ProbabilisticModelItem"))
+        physicalModel_.blockNotification("ProbabilisticModelItem");
       const Description oldDescription = copula_.getDescription();
       CorrelationMatrix correlation;
       switch(type_)
