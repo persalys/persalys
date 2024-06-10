@@ -300,7 +300,7 @@ void CopulaInferenceAnalysis::launch()
                                << ex.what()
                                << "\n";
         // set fittingTestResult
-        inferenceSetResult.testedDistributions_.add(DistributionFactory::GetByName(distributionName+"Factory").build());
+        inferenceSetResult.testedDistributions_.add(DistributionFactory::GetByName(distributionName+"CopulaFactory").build());
         ProcessSample kendallPlotDataCollection;
         inferenceSetResult.bicResults_.add(SpecFunc::MaxScalar);
         inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);

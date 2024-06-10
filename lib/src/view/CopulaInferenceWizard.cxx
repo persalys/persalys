@@ -191,7 +191,7 @@ void CopulaInferenceWizard::updateDistForVars(const Description& vars, const QSt
   for (int i = 0; i < dist.size(); ++i)
   {
     const String distName = TranslationManager::GetCopulaName(dist[i]);
-    factories.add(DistributionFactory::GetByName(distName+"Factory"));
+    factories.add(DistributionFactory::GetByName(distName+"CopulaFactory"));
   }
   distForVars_[vars] = factories;
 }

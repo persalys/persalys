@@ -192,7 +192,7 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
   // the built copula has a dimension equal to 2
   // if dimension > 2 : do not enter here because there is for now only the Normal copula
   // improve this part if another copula is added in OpenTURNS
-  Distribution copula(DistributionFactory::GetByName(newCopula+"Factory").build());
+  Distribution copula(DistributionFactory::GetByName(newCopula+"CopulaFactory").build());
 
   // update the copula
   physicalModel_.blockNotification("ProbabilisticModelItem");
