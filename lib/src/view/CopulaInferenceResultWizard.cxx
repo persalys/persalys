@@ -104,7 +104,7 @@ void CopulaInferenceResultWizard::buildInterface()
     topWidgetLayout->addWidget(tableView_, 2, 0, 1, 2);
 
     // signal to update the table
-    connect(variablesComboBox_, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateVariablesTable(QString)));
+    connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVariablesTable(int)));
   }
 
   mainLayout->addWidget(topWidget);
@@ -197,13 +197,14 @@ void CopulaInferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
     variablesComboBox_->blockSignals(false);
     variablesComboBox_->setCurrentIndex(0);
     inferenceResultStackWidget_->setCurrentIndex(0);
-    updateVariablesTable(variablesComboBox_->currentText());
+    updateVariablesTable(variablesComboBox_->currentIndex());
   }
 }
 
 
-void CopulaInferenceResultWizard::updateVariablesTable(const QString &text)
+void CopulaInferenceResultWizard::updateVariablesTable(int index)
 {
+  const QString text = variablesComboBox_->itemText(index);
   if (!tableView_ || text.isEmpty())
     return;
 

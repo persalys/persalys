@@ -88,7 +88,7 @@ void ScreeningResultWizard::buildInterface()
   mainLayout->addWidget(errorMessageLabel_, 3, 0, 1, 2);
 
   // connections
-  connect(variablesComboBox_, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateTableModel(QString)));
+  connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableModel(int)));
   connect(screeningResultsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVariablesComboBox(int)));
 
   addPage(page);
@@ -116,7 +116,7 @@ void ScreeningResultWizard::updateVariablesComboBox(const int currentAnalysis)
 }
 
 
-void ScreeningResultWizard::updateTableModel(const QString& /*variableName*/)
+void ScreeningResultWizard::updateTableModel(const int index)
 {
   if (!screeningResultsComboBox_ || !variablesComboBox_ || !tableModel_)
     return;
@@ -126,7 +126,7 @@ void ScreeningResultWizard::updateTableModel(const QString& /*variableName*/)
   const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
   MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
-  tableModel_->updateData(result, variablesComboBox_->currentIndex());
+  tableModel_->updateData(result, index);
 }
 
 
