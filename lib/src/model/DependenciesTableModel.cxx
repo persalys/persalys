@@ -192,10 +192,12 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
   // the built copula has a dimension equal to 2
   // if dimension > 2 : do not enter here because there is for now only the Normal copula
   // improve this part if another copula is added in OpenTURNS
-  Distribution copula(DistributionFactory::GetByName(newCopula+"Factory").build());
+  Distribution copula(DistributionFactory::GetByName(newCopula+"CopulaFactory").build());
 
+  // physicalModel_ has no item if coming from CalibrationWizard
+  if (physicalModel_.getImplementation()->getObserver("ProbabilisticModelItem"))
+    physicalModel_.blockNotification("ProbabilisticModelItem");
   // update the copula
-  physicalModel_.blockNotification("ProbabilisticModelItem");
   const Description vars(copula_.getCopulaCollection()[index.row()].getDescription());
   physicalModel_.setCopula(vars, copula);
   physicalModel_.blockNotification();
@@ -211,7 +213,9 @@ void DependenciesTableModel::removeLine(const QModelIndex &index)
 {
   beginRemoveRows(index.parent(), index.row(), index.row());
   removeRows(index.row(), 1, index.parent());
-  physicalModel_.blockNotification("ProbabilisticModelItem");
+  // physicalModel_ has no item if coming from CalibrationWizard
+  if (physicalModel_.getImplementation()->getObserver("ProbabilisticModelItem"))
+    physicalModel_.blockNotification("ProbabilisticModelItem");
   const Description copulaVar(copula_.getCopulaCollection()[index.row()].getDescription());
   physicalModel_.setCopula(copulaVar, IndependentCopula(copulaVar.getSize()));
   physicalModel_.blockNotification();
