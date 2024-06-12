@@ -65,7 +65,7 @@ curl -fSsL https://pypi.io/packages/py3/e/et_xmlfile/et_xmlfile-1.1.0-py3-none-a
 curl -fSsL https://pypi.io/packages/py3/j/jinja2/jinja2-3.1.4-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/cp311/m/markupsafe/MarkupSafe-2.1.5-cp311-cp311-win_amd64.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/p/pythonfmu/pythonfmu-0.6.3-py3-none-any.whl | bsdtar -xf-
-
+curl -fSsL https://pypi.io/packages/py3/n/nopip/nopip-0.2.2-py3-none-any.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build

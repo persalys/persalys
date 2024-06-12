@@ -105,7 +105,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz | tar 
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install numpy==1.26.4 scipy==1.13.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl cython --upgrade --quiet
+RUN pip3 install numpy==1.26.4 scipy==1.13.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython --upgrade --quiet
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials-6.7.0 \
