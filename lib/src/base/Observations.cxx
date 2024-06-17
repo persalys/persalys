@@ -109,10 +109,54 @@ void Observations::removeAllObservers()
 
 void Observations::setDefaultColumns()
 {
-  setColumns(Indices(1, 0),
-             Description(1, getPhysicalModel().getInputNames()[0]),
-             Indices(1, 1),
-             Description(1, getPhysicalModel().getOutputNames()[0]));
+  Bool inFound = false;
+  Bool outFound = false;
+  const Description inputs = getPhysicalModel().getInputNames();
+  const Description outputs = getPhysicalModel().getOutputNames();
+  Indices inIdx, outIdx;
+  Description inDesc, outDesc;
+
+  // Check if file header contains model variables
+  for (UnsignedInteger i=0; i < sampleFromFile_.getDescription().getSize(); ++i)
+  {
+    if (inputs.contains(sampleFromFile_.getDescription()[i]))
+    {
+      inIdx.add(i);
+      inDesc.add(sampleFromFile_.getDescription()[i]);
+      inFound = true;
+    }
+    if (outputs.contains(sampleFromFile_.getDescription()[i]))
+    {
+      outIdx.add(i);
+      outDesc.add(sampleFromFile_.getDescription()[i]);
+      outFound = true;
+    }
+  }
+
+  // Default columns if no inputs and/or outputs have been found
+  // If no inputs found assign first unassigned column to first model input
+  if (!inFound)
+  {
+    UnsignedInteger i = 0;
+    if (outFound)
+      while (outIdx.contains(i))
+        ++i;
+
+    inIdx = Indices(1, i);
+    inDesc = Description(1, getPhysicalModel().getInputNames()[0]);
+  }
+
+  // If no outputs found assign first unassigned column to first model output
+  if (!outFound)
+  {
+    UnsignedInteger i = 0;
+    while (inIdx.contains(i))
+      ++i;
+    outIdx = Indices(1, i);
+    outDesc = Description(1, getPhysicalModel().getOutputNames()[0]);
+  }
+
+  setColumns(inIdx, inDesc, outIdx, outDesc);
 }
 
 
