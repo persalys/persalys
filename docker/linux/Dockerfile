@@ -119,11 +119,13 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.ta
 
 # assimulo
 RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.5.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.5.1 \
+ && rm setup.cfg \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.13.0.tar.gz | tar xz && cd PyFMI-PyFMI-2.13.0 \
+ && rm setup.cfg \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -138,7 +140,8 @@ RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.0.tar.gz | 
 RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja-1.11.1 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1 && cd - && rm -r ninja*
 
 # wayland
-RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.22.0/downloads/wayland-1.22.0.tar.xz | tar xJ && cd wayland-1.22.0 && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
+RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.23.0/downloads/wayland-1.23.0.tar.xz | tar xJ && cd wayland* \
+ && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
 RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtbase-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.14 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
@@ -176,7 +179,7 @@ RUN git clone -b v0.16 --depth 1 https://github.com/openturns/otmorris.git && cd
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.3 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.22.4 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.23.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
