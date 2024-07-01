@@ -176,7 +176,7 @@ RUN git clone -b v0.16 --depth 1 https://github.com/openturns/otmorris.git && cd
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.3 --quiet && python3 -c "import otfmi"
+RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.4 --quiet && python3 -c "import otfmi"
 
 # openmodelica
 RUN git clone -b v1.23.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
