@@ -20,6 +20,23 @@ User manual - First steps
     should have this if Persalys is installed in user mode, the target
     will be ``C:\Users\<user_name>\AppData\Local\Persalys\Lib\site-packages\persalys\persalys_launcher.exe --lang en``
 
+- Persalys Python environment can be amended with additional packages
+  by using the included nopip module. Additional modules can be
+  installed for standalone versions only (installed Windows installer
+  or Linux AppImage) by typing in the following in Persalys :ref:`Python
+  console <pythonconsole>`:
+
+  .. code::
+
+     from nopip import install
+     install.modules(["<module_name>", "--user"], verbose=True)
+
+
+  where ``<module_name>`` is the module name provided to the usual pip
+  install command. Modules are installed in ``~/.persalys_base`` on
+  Linux and in ``<USER_DIR>\AppData\Roaming\Persalys\`` on Windows
+
+
 1- Getting started with the graphical interface
 ===============================================
 
@@ -44,8 +61,10 @@ windows (model definition or result window) open, surrounded by:
   .. image:: /user_manual/graphical_interface/getting_started/menuBar.png
       :align: center
 
+.. _pythonconsole:
 
-- The **Python console** shown by default,
+- The **Python console** shown by default, can be used to type in and
+  run Python commands within Persalys environment.
 
   .. image:: /user_manual/graphical_interface/getting_started/pythonConsole.png
       :align: center
