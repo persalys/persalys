@@ -2,6 +2,24 @@
 User manual - First steps
 =========================
 
+0- Configuration
+================
+
+- To override the default language, it is advised to proceed as follows:
+
+  - Linux: you must launch the appImage with the LANGUAGE environment
+    variable LANGUAGE set to en/fr as follows:
+
+  .. code::
+
+     LANGUAGE=en ./persalys-x.x.x-x86_64.AppImage
+
+  - Windows: you must add an argument to the launcher. Modify the
+    target link of the shortcut in the start menu and/or in the
+    desktop and add the argument ``--lang en`` or ``--lang fr``.  You
+    should have this if Persalys is installed in user mode, the target
+    will be ``C:\Users\<user_name>\AppData\Local\Persalys\Lib\site-packages\persalys\persalys_launcher.exe --lang en``
+
 1- Getting started with the graphical interface
 ===============================================
 
