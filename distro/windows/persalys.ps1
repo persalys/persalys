@@ -1,13 +1,14 @@
 # add Python directories
 $env:PYTHONHOME = "$PSScriptRoot\..\..\.."
-$env:PYTHONPATH = "$PSScriptRoot\..\..\..\python311.zip;$PSScriptRoot\..;$env:PYTHONPATH"
+$env:PYTHONUSERBASE = "$env:APPDATA\Persalys"
+$env:PYTHONPATH = "$PSScriptRoot\..\..\..\python311.zip;$PSScriptRoot\..;$env:PYTHONUSERBASE\Python311\site-packages"
 $env:PATH = "$PSScriptRoot\..\..\..;$PSScriptRoot\..\..\..\Scripts;$env:PATH"
 
 # ParaView plugins
 $env:PV_PLUGIN_PATH = "$PSScriptRoot\BagPlotViewsAndFilters"
 
 # documentation path
-$env:PERSALYS_HTML_DOCUMENTATION_PATH = "$PSScriptRoot\doc\html"
+$env:PERSALYS_HTML_PATH = "$PSScriptRoot\doc\html"
 
 # https://github.com/pal1000/mesa-dist-win/blob/master/readme.md#opengl-context-configuration-override
 $env:GALLIUM_DRIVER = "llvmpipe"
