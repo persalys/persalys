@@ -86,26 +86,45 @@ int main(int argc, char *argv[])
   const std::string PATH = python_dir.string() + ";" + (python_dir / "Scripts").string() + (env_path ? std::string(";") + env_path : "");
   env["PATH"] = PATH;
   if (verbose)
-    std::cout << "PATH=" << PATH <<std::endl;
-
-  // PYTHONPATH
-  const char* env_pythonpath = std::getenv("PYTHONPATH");
-  const std::string PYTHONPATH = (python_dir / "python311.zip").string() + ";" + persalys_dir.parent_path().string() + (env_pythonpath ? std::string(";") + env_pythonpath : "");
-  env["PYTHONPATH"] = PYTHONPATH;
-  if (verbose)
-    std::cout << "PYTHONPATH=" << PYTHONPATH <<std::endl;
+    std::cout << "PATH=" << PATH << std::endl;
 
   // PYTHONHOME
   const std::string PYTHONHOME = python_dir.string();
   env["PYTHONHOME"] = PYTHONHOME;
   if (verbose)
-    std::cout << "PYTHONHOME=" << PYTHONHOME <<std::endl;
+    std::cout << "PYTHONHOME=" << PYTHONHOME << std::endl;
+
+  // PYTHONUSERBASE
+  const char* env_appdata = std::getenv("APPDATA");
+  const fs::path pythonuserbase_dir = env_appdata ? (fs::canonical(env_appdata) / "Persalys") : fs::path();
+  if (!pythonuserbase_dir.empty())
+  {
+    env["PYTHONUSERBASE"] = pythonuserbase_dir.string();
+    if (verbose)
+      std::cout << "PYTHONUSERBASE=" << pythonuserbase_dir.string() << std::endl;
+
+    // we cannot load from PYTHONUSERBASE if the directory doesnt exist prior to app launch
+    try
+    {
+      fs::create_directories(pythonuserbase_dir / "Python311" / "site-packages");
+    }
+    catch (const std::filesystem::filesystem_error &)
+    {
+    }
+  }
+
+  // PYTHONPATH
+  const std::string PYTHONPATH = (python_dir / "python311.zip").string() + ";" + persalys_dir.parent_path().string()
+    + (pythonuserbase_dir.empty() ? "" : ";" + (pythonuserbase_dir / "Python311" / "site-packages").string());
+  env["PYTHONPATH"] = PYTHONPATH;
+  if (verbose)
+    std::cout << "PYTHONPATH=" << PYTHONPATH << std::endl;
 
   // Paraview plugin dir
   const std::string PV_PLUGIN_PATH = (persalys_dir / "BagPlotViewsAndFilters").string();
   env["PV_PLUGIN_PATH"] = PV_PLUGIN_PATH;
   if (verbose)
-    std::cout << "PV_PLUGIN_PATH=" << PV_PLUGIN_PATH <<std::endl;
+    std::cout << "PV_PLUGIN_PATH=" << PV_PLUGIN_PATH << std::endl;
 
   // matplotlib
   env["MPL_BACKEND"] = "TkAgg";
@@ -123,7 +142,7 @@ int main(int argc, char *argv[])
   const std::string PERSALYS_HTML_PATH = (persalys_dir / "doc" / "html").string();
   env["PERSALYS_HTML_PATH"] = PERSALYS_HTML_PATH;
   if (verbose)
-    std::cout << "PERSALYS_HTML_PATH=" << PERSALYS_HTML_PATH <<std::endl;
+    std::cout << "PERSALYS_HTML_PATH=" << PERSALYS_HTML_PATH << std::endl;
 #endif
 
   // fork process
