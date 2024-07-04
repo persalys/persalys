@@ -2187,18 +2187,24 @@ FMI model
 
 - load the FMU file at python/test/fmu/linux64/deviation.fmu
 
-- there must be 4 input variables, 1 output
-
-- change the value of F=33e3 and click on 'check model' button then y=14.32
+  - there must be 4 input variables, 1 output
+  - change the value of F=33e3 and click on 'check model' button then y=14.32
 
   .. image:: /developer_manual/validation/fmuModel.png
       :align: center
 
-- in the "Properties" tab the model type should be "Co-Simulation"
+  - in the "Properties" tab the model type should be "Co-Simulation"
+  - same on windows, load the FMU file at python/test/fmu/win64/deviation.fmu
+  - select F as input, y as output, change the F value and evaluate
 
-- same on windows, load the FMU file at python/test/fmu/win64/deviation.fmu
+- load the FMU file at python/test/fmu/linux64/epid.fmu
 
-- select F as input, y as output, change the F value and evaluate
+  - all variables are disabled
+  - set infection_rate and healing_rate as inputs, infected as output
+  - change the value of healing_rate=0.01 and click on 'check model' button then infected=430.300
+  - in the "Properties" tab the model type should be "Model Exchange"
+  - same on windows, load the FMU file at python/test/fmu/win64/epid.fmu
+
 
 YACS model
 ''''''''''
