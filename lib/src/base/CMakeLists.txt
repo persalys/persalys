@@ -229,6 +229,7 @@ endif ()
 
 target_link_libraries (persalysbase PUBLIC ${PERSALYS_PUBLIC_LIBRARIES})
 target_link_libraries (persalysbase PRIVATE ${PERSALYS_PRIVATE_LIBRARIES})
+target_link_libraries (persalysbase PRIVATE Boost::locale)
 
 install (TARGETS persalysbase
   RUNTIME DESTINATION ${PERSALYS_BIN_PATH}
