@@ -285,7 +285,7 @@ void OptimizationAnalysis::launch()
   Point optimalPoint = startingPoint_;
   for (UnsignedInteger i = 0; i < result_.getOptimalPoint().getDimension(); ++i)
     optimalPoint[variableInputsIndices_[i]] = result_.getOptimalPoint()[i];
-  const Point result = getPhysicalModel().getFunction(getPhysicalModel().getOutputNames())(optimalPoint);
+  const Point result = getPhysicalModel().getFunction(getPhysicalModel().getSelectedOutputsNames())(optimalPoint);
   result_.setOptimalPoint(optimalPoint);
   result_.setOptimalValue(result);
 

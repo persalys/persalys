@@ -1,6 +1,6 @@
 class=OptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=Cobyla isMinimization=true starting point=class=Point name=Unnamed dimension=2 values=[0.5,0.5] constraints=[Y0<600.0] maximumCallsNumber=150 maximumAbsoluteError=1e-06 maximumRelativeError=1e-06 maximumResidualError=1e-06 maximumConstraintError=1e-06 bounds=[[-5, 5],[0, 0]] variable inputs=[X0] variable types=[0,0]
 x= [5,0.5]
-y= [5,578]
+y= [578]
 #!/usr/bin/env python
 
 import openturns as ot

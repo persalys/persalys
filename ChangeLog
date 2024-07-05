@@ -1,3 +1,9 @@
+= 16.1 release (2024-07-05)
+
+ * Added nopip module for Python modules installation
+ * Automatic detection for observations variables
+ * Various bug fixes
+
 = 16.0 release (2024-04-12)
 
  * Allow to detach YACS design of experiment analysis
