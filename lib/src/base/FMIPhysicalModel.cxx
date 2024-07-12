@@ -185,7 +185,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
   code << "]\n";
   code << "    kind = '" << fmuType_ << "'\n";
   code << "    if not hasattr(_exec, 'model_fmu'):\n";
-  code << "        _exec.model_fmu = otfmi.FMUFunction(path_fmu, inputs_fmu=inputs, outputs_fmu=outputs, kind=kind)\n";
+  code << "        _exec.model_fmu = otfmi.OpenTURNSFMUFunction(path_fmu, inputs_fmu=inputs, outputs_fmu=outputs, kind=kind)\n";
   code << "    __X = [";
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
@@ -253,7 +253,6 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     }
   }
 }
-
 
 Function FMIPhysicalModel::getFunction() const
 {

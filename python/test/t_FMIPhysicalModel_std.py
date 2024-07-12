@@ -31,6 +31,7 @@ y = persalys.Output("y", "deviation")
 inputs = [E, F, II, L]
 outputs = [y]
 model = persalys.FMIPhysicalModel("myPhysicalModel", inputs, outputs, path_fmu)
+model.setParallel(True)
 myStudy.add(model)
 
 E_d = ot.Beta(0.93, 3.2 - 0.93, 28000000.0, 48000000.0)
@@ -38,11 +39,11 @@ F_d = ot.LogNormalMuSigma(30000.0, 9000.0, 15000.0).getDistribution()
 L_d = ot.Uniform(250.0, 260.0)
 I_d = ot.Beta(2.5, 4.0 - 2.5, 310.0, 450.0)
 distribution = ot.JointDistribution([E_d, F_d, I_d, L_d])
-x = distribution.getMean()
+x = [distribution.getMean(), distribution.computeQuantile(0.5)]
 
 f = model.getFunction()
 y = f(x)
-ott.assert_almost_equal(y, [12.3369])
+ott.assert_almost_equal(y, [[12.3369], [12.8965]])
 
 # ME model
 
@@ -55,12 +56,14 @@ infected = persalys.Output("infected")
 inputs = [healing_rate, infection_rate]
 outputs = [infected]
 model2 = persalys.FMIPhysicalModel("myPhysicalModel2", inputs, outputs, path_fmu)
+model2.setParallel(True)
 myStudy.add(model2)
-x = [0.01, 0.004]
+x = [[0.01, 0.004],
+     [0.03, 0.014]]
 
 f = model2.getFunction()
 y = f(x)
-ott.assert_almost_equal(y, [434.668])
+ott.assert_almost_equal(y, [[434.668], [159.367]])
 
 # script
 script = myStudy.getPythonScript()
