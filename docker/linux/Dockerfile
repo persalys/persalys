@@ -2,8 +2,12 @@ FROM centos:7
 MAINTAINER jschueller
 
 # utils
-RUN yum -y install epel-release centos-release-scl \
- && yum -y install wget git patch zip unzip bzip2 bsdtar perl perl-IPC-Cmd subversion gettext autoconf automake libtool sudo make which file \
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
+ && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
+ && yum -y install epel-release centos-release-scl \
+ && sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-SCLo-scl*.repo \
+ && sed -i 's|#[ ]*baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-SCLo-scl*.repo \
+ && yum -y install wget git patch zip unzip bzip2 bsdtar perl perl-IPC-Cmd gettext autoconf automake libtool sudo make which file \
   pcre-devel pcre2-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel libtree-ldd texinfo \
   zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel gpg libffi-devel openssl-devel \
   libX11-devel libXt-devel libXext-devel libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel \
