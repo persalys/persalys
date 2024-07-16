@@ -48,7 +48,7 @@ curl -fSsL https://anaconda.org/conda-forge/assimulo/3.5.2/download/win-64/assim
 curl -fSsL https://anaconda.org/conda-forge/sundials/7.1.1/download/win-64/sundials-7.1.1-h62746c2_0.conda | bsdtar -x && tar -xf pkg-sundials-7.1.1-h62746c2_0.tar.zst
 cp -r Library/bin/*.dll . && rm -r Library info pkg-*.zst info-*.zst
 cd Lib
-curl -fSsL https://anaconda.org/conda-forge/otfmi/0.16.4/download/noarch/otfmi-0.16.4-pyhff2d567_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.16.4-pyhff2d567_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/otfmi/0.16.5/download/noarch/otfmi-0.16.5-pyhff2d567_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.16.5-pyhff2d567_0.tar.zst
 cd site-packages
 curl -fsSL https://pypi.io/packages/py3/p/pip/pip-24.1.1-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
