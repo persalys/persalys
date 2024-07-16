@@ -108,7 +108,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz | tar 
 RUN pip3 install numpy==1.26.4 scipy==1.13.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython --upgrade --quiet
 
 # sundials
-RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials-6.7.0 \
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials* \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib .. \
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
@@ -118,14 +118,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.ta
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.5.1.tar.gz | tar xz && cd Assimulo-Assimulo-3.5.1 \
- && rm setup.cfg \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.5.2.tar.gz | tar xz && cd Assimulo* \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.13.0.tar.gz | tar xz && cd PyFMI-PyFMI-2.13.0 \
- && rm setup.cfg \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.13.1.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -179,7 +177,7 @@ RUN git clone -b v0.16 --depth 1 https://github.com/openturns/otmorris.git && cd
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.4 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.23.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.23.1 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
