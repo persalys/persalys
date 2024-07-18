@@ -40,7 +40,7 @@ curl -fSsL https://anaconda.org/conda-forge/vs2015_runtime/14.16.27012/download/
 cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns Lib/site-packages
 cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/openturns
-rm Lib/site-packages/openturns/{libvtk,libboost,libLLVM,Qt,python}*.dll
+rm Lib/site-packages/openturns/{libvtk,libboost,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
 
 curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.13.1/download/win-64/pyfmi-2.13.1-py311h0a17f05_0.conda | bsdtar -x && tar -xf pkg-pyfmi-2.13.1-py311h0a17f05_0.tar.zst
