@@ -64,6 +64,7 @@ public slots:
   void removePhysicalModel();
   void newLimitState();
   void newObservations();
+  void requestOpenProperties();
 
 signals:
   // signal for diagram
@@ -86,6 +87,7 @@ private:
   QAction * defineAction_ = nullptr;
   QAction * duplicateAction_ = nullptr;
   QAction * removeAction_ = nullptr;
+  QAction * propertiesAction_ = nullptr;
   int limitStateCounter_ = 0;
   int observationsCounter_ = 0;
   int metamodelCounter_ = 0;

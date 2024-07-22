@@ -185,15 +185,6 @@ void PhysicalModelWindowWidget::buildInterface()
 
   vbox->addWidget(verticalSplitter);
 
-  // - multiprocessing
-  if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos)
-  {
-    QSettings settings;
-    const int processNumber = settings.value("ProcessNumber").toUInt();
-    physicalModel_.setProcessNumber((UnsignedInteger)processNumber);
-    physicalModel_.setParallel(processNumber != 1);
-  }
-
   // - error message label
   connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
   connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));

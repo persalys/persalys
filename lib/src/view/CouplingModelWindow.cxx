@@ -174,12 +174,6 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   QLabel * timeInfo = new QLabel();
   mainLayout->addWidget(timeInfo, 2, 0);
 
-  // - multiprocessing
-  QSettings settings;
-  const int processNumber = settings.value("ProcessNumber").toUInt();
-  item->getPhysicalModel().setProcessNumber((UnsignedInteger)processNumber);
-  item->getPhysicalModel().setParallel(processNumber != 1);
-
   // Tab : Finite difference step definition
   tab = new QWidget;
   tabLayout = new QGridLayout(tab);
