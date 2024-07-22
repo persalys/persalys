@@ -260,9 +260,9 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   FMIPhysicalModel* fmiModel = getFMIPhysicalModel();
   // multiprocessing
   QSettings settings;
-  const int nProcesses = settings.value("nProcesses").toUInt();
-  fmiModel->setProcessNumber((UnsignedInteger)nProcesses);
-  fmiModel->setParallel(nProcesses != 1);
+  const int processNumber = settings.value("ProcessNumber").toUInt();
+  fmiModel->setProcessNumber((UnsignedInteger)processNumber);
+  fmiModel->setParallel(processNumber != 1);
   if (!fmiModel->getFMUInfo().getFileName().empty())
   {
     loadModel(fmiModel->getFMUInfo());

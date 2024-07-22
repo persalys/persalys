@@ -54,6 +54,7 @@ if (OTFMI_FOUND)
   ot_add_source_file ( FMIPhysicalModelWindow.cxx)
 endif ()
 ot_add_source_file ( CheckModelButtonGroup.cxx )
+ot_add_source_file ( ProcessNumberSpinBox.cxx )
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWizard.cxx )
 ot_add_source_file ( DesignOfExperimentWindow.cxx )
@@ -187,6 +188,7 @@ if (OTFMI_FOUND)
   ot_install_header_file (FMIPhysicalModelWindow.hxx)
 endif ()
 ot_install_header_file ( CheckModelButtonGroup.hxx )
+ot_install_header_file ( ProcessNumberSpinBox.hxx )
 ot_install_header_file ( ProbabilisticModelWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWizard.hxx )
 ot_install_header_file ( DesignOfExperimentWindow.hxx )
@@ -299,6 +301,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/PythonPhysicalModelWindow.hxx
                                   persalys/MetaModelWindow.hxx
                                   persalys/CheckModelButtonGroup.hxx
+                                  persalys/ProcessNumberSpinBox.hxx
                                   persalys/ProbabilisticModelWindow.hxx
                                   persalys/DesignOfExperimentWizard.hxx
                                   persalys/DesignOfExperimentWindow.hxx

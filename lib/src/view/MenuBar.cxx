@@ -208,7 +208,7 @@ void MenuBar::openSettingsWindow()
   connect(settingsDialog, &QDialog::accepted, [ = ]()
   {
     QSettings settings;
-    settings.setValue("nProcesses", QVariant((uint)settingsDialog->getnProcesses()));
+    settings.setValue("PythonPhysicalModel-DefaultProcessNumber", QVariant((uint)settingsDialog->getProcessNumber()));
   });
   settingsDialog->exec();
 }

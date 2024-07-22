@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QDialog
+ *  @brief QWidget to set model process number
  *
  *  Copyright 2015-2024 EDF-Phimeca
  *
@@ -18,27 +18,36 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_PERSALYSDIALOG_HXX
-#define PERSALYS_PERSALYSDIALOG_HXX
+#ifndef PERSALYS_PROCESSNUMBERSPINBOX_HXX
+#define PERSALYS_PROCESSNUMBERSPINBOX_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#include "persalys/UIntSpinBox.hxx"
 
 #include <openturns/OTType.hxx>
+#include <QWidget>
+#include <QLabel>
 
-#include <QDialog>
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API SettingsDialog : public QDialog
-{
-  Q_OBJECT
+  class PERSALYS_VIEW_API ProcessNumberSpinBox : public QWidget
+  {
+    Q_OBJECT
 
-public:
-  SettingsDialog(QWidget* parent = 0);
+  public:
+    ProcessNumberSpinBox(QWidget *parent=0);
+    void setTitle(const QString& title);
+    void setToolTip(const QString& text);
 
-  void setProcessNumber(const OT::UnsignedInteger n);
-  OT::UnsignedInteger getProcessNumber() const;
+  public slots:
+    void setProcessNumber(const OT::UnsignedInteger& n);
+    OT::UnsignedInteger getProcessNumber() const;
 
-};
+  signals:
+    void valueChanged(const OT::UnsignedInteger& n);
+  private:
+    UIntSpinBox * spinBox_ = nullptr;
+    QLabel * label_ = nullptr;
+  };
 }
 #endif

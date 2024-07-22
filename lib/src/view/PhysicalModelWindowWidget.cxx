@@ -189,9 +189,9 @@ void PhysicalModelWindowWidget::buildInterface()
   if (physicalModel_.getImplementation()->getClassName().find("Python") != std::string::npos)
   {
     QSettings settings;
-    const int nProcesses = settings.value("nProcesses").toUInt();
-    physicalModel_.setProcessNumber((UnsignedInteger)nProcesses);
-    physicalModel_.setParallel(nProcesses != 1);
+    const int processNumber = settings.value("ProcessNumber").toUInt();
+    physicalModel_.setProcessNumber((UnsignedInteger)processNumber);
+    physicalModel_.setParallel(processNumber != 1);
   }
 
   // - error message label

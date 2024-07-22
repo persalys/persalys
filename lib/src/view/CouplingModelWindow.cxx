@@ -176,9 +176,9 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   // - multiprocessing
   QSettings settings;
-  const int nProcesses = settings.value("nProcesses").toUInt();
-  item->getPhysicalModel().setProcessNumber((UnsignedInteger)nProcesses);
-  item->getPhysicalModel().setParallel(nProcesses != 1);
+  const int processNumber = settings.value("ProcessNumber").toUInt();
+  item->getPhysicalModel().setProcessNumber((UnsignedInteger)processNumber);
+  item->getPhysicalModel().setParallel(processNumber != 1);
 
   // Tab : Finite difference step definition
   tab = new QWidget;
