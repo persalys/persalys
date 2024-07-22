@@ -25,6 +25,7 @@
 
 #include <openturns/OTType.hxx>
 #include <regex>
+#include <thread>
 
 namespace PERSALYS
 {
@@ -119,6 +120,11 @@ inline void ValidateVariables(const OT::Description & desc)
     if (!std::regex_match(desc[i], what, variable))
       throw OT::InvalidArgumentException(HERE) << "Invalid variable name";
   }
+}
+
+inline OT::UnsignedInteger GetNumberOfPhysicalCores()
+{
+  return std::max(std::thread::hardware_concurrency()/2, 1u);
 }
 
 }
