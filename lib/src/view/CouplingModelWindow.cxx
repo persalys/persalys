@@ -1247,10 +1247,12 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
     QFileDialog * dlg = new QFileDialog(this);
     dlg->setFileMode(QFileDialog::AnyFile);
     dlg->setOption(QFileDialog::DontUseNativeDialog, true);
-    dlg->exec();
-    QString fileName = dlg->selectedFiles()[0];
-    CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
-    textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString(), model->getSteps()[indStep].getEncoding())));
+    if (dlg->exec())
+    {
+      QString fileName = dlg->selectedFiles()[0];
+      CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
+      textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString(), model->getSteps()[indStep].getEncoding())));
+    }
   });
 }
 

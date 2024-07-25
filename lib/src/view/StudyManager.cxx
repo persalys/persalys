@@ -206,7 +206,7 @@ void StudyManager::openProperties(Item* item)
         model->setProcessNumber(propertiesDialog->getProcessNumber());
         model->setParallel(propertiesDialog->getProcessNumber() != 1);
       });
-      propertiesDialog->exec();
+      propertiesDialog->open();
     }
   }
 }

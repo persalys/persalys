@@ -192,7 +192,7 @@ void MenuBar::openUserManual()
 void MenuBar::openAboutDialog()
 {
   AboutDialog aboutDialog(this);
-  aboutDialog.exec();
+  aboutDialog.open();
 }
 
 
@@ -210,7 +210,7 @@ void MenuBar::openSettingsWindow()
     QSettings settings;
     settings.setValue("PythonPhysicalModel-DefaultProcessNumber", QVariant((uint)settingsDialog->getProcessNumber()));
   });
-  settingsDialog->exec();
+  settingsDialog->open();
 }
 
 }
