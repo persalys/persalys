@@ -90,9 +90,9 @@ void MenuBar::buildActions(const Actions* actions)
   pythonConsoleDisplayAction_->setCheckable(true);
   toolsMenu->addAction(pythonConsoleDisplayAction_);
 
-  action = new QAction(QIcon(":/images/run-build.png"), tr("Settings"), this);
-  connect(action, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
-  toolsMenu->addAction(action);
+  settingsDisplayAction_ = new QAction(QIcon(":/images/run-build.png"), tr("Settings"), this);
+  connect(settingsDisplayAction_, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
+  toolsMenu->addAction(settingsDisplayAction_);
 
   addMenu(toolsMenu);
 
@@ -116,6 +116,12 @@ void MenuBar::buildActions(const Actions* actions)
 QAction * MenuBar::pythonConsoleDisplayAction() const
 {
   return pythonConsoleDisplayAction_;
+}
+
+
+QAction * MenuBar::settingsDisplayAction() const
+{
+  return settingsDisplayAction_;
 }
 
 
