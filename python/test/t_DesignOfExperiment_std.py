@@ -128,6 +128,7 @@ print("outs=", aDesign10.getResult().getDesignOfExperiment().getOutputSample())
 # Design of Experiment with failed points ##
 code = "import time\ndef _exec(X0,X1):\n    Y0 = 1/(X0+X1)\n    return Y0\n"
 model2 = persalys.PythonPhysicalModel("aModelPhys2", [X0, X1], [Y0], code)
+model2.setProcessNumber(1)
 anOTStudy.add(model2)
 
 aDesign11 = persalys.GridDesignOfExperiment(

@@ -89,7 +89,7 @@ y = persalys.Output("y")
 y_fake = persalys.Output("y_fake")
 print(inputs)
 model = persalys.PythonPhysicalModel("MorrisModel", inputs, [y, y_fake], code)
-
+model.setProcessNumber(1)
 myStudy.add(model)
 
 # Morris ##

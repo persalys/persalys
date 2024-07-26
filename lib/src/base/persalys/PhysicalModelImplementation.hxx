@@ -28,6 +28,7 @@
 #include "LaunchParametersVisitor.hxx"
 
 #include <openturns/Function.hxx>
+#include <openturns/ResourceMap.hxx>
 #include <openturns/PointToFieldFunction.hxx>
 #include <openturns/RandomVector.hxx>
 #include <openturns/BlockIndependentCopula.hxx>
@@ -162,7 +163,7 @@ private:
   MeshModel meshModel_;
   OT::Point finiteDifferenceSteps_;
   OT::Bool isParallel_ = false;
-  OT::UnsignedInteger processNumber_ = 1;
+  OT::UnsignedInteger processNumber_ = OT::ResourceMap::GetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber");
   OT::Scalar evalTime_ = 0.0;
 };
 }

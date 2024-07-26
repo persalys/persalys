@@ -19,6 +19,7 @@ def test():
     PhysicalModel_0 = persalys.PythonPhysicalModel(
         "PhysicalModel_0", inputCollection, outputCollection, code
     )
+    PhysicalModel_0.setProcessNumber(1)
     Study_0.add(PhysicalModel_0)
     print(Study_0.getPythonScript())
 
