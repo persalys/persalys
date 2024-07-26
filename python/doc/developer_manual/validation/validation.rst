@@ -435,6 +435,9 @@ Models
 
 - Import the file ../python/test/t_deterministic_analyses.py
 
+- Right click on 'symbolicModel'
+  - Rename, Define (greyed out), Duplicate, Remove
+
 - click on 'Definition' child item of 'symbolicModel' item
 
   .. image:: /developer_manual/validation/model1.png
@@ -478,6 +481,22 @@ Models
 - change x2 value to 1.2 + press enter
 
 - check the doc link
+
+- Right click on 'pythonModel'
+
+  - Rename, Define (greyed out), Duplicate, Remove, Properties
+
+  - Click Properties
+
+  - Value should be corresponding to the value specified in Tools>Settings
+
+  - Change the value then press OK
+
+  - Save the study as a new study, close it and re-open it
+
+  - Open 'pythonModel' properties again.
+
+  - Its value is the one you just set, the default value in Tools>Settings is unchanged
 
 - click on 'Definition' child item of 'pythonModel' item
 
