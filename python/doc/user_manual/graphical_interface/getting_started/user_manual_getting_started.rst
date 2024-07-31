@@ -153,13 +153,16 @@ The **File** menu gathers the following shortcuts:
 
 - **Exit**: Quit the interface.
 
-View Menu
-~~~~~~~~~
+Tools Menu
+~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/getting_started/viewMenu.png
     :align: center
 
-The **View** menu allows the user to display/hide the Python console.
+The **Tools** menu allows the user to :
+
+- display/hide the Python console
+- set the default number of processes for Python/Coupling/FMI physical models
 
 Help Menu
 ~~~~~~~~~

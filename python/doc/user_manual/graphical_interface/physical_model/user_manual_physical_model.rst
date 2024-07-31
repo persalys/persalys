@@ -32,6 +32,7 @@ Different actions are available through the context menu of the model (by right 
   - **Define the model**: Open a new window to define the model
   - **Duplicate the model**: Create a copy of the model in the study tree
   - **Remove**: Remove the model and all the analyses depending on it
+  - **Properties**: Allows to specify the number of processes used by the model (only for Python/Coupling/FMI physical models)
 
 .. image:: /user_manual/graphical_interface/physical_model/physicalModelNameContextMenu.png
     :align: center
