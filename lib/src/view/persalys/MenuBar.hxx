@@ -35,6 +35,7 @@ public:
   enum { NbMaxRecentFiles = 5 };
   MenuBar(const Actions* actions);
   QAction * pythonConsoleDisplayAction() const;
+  QAction * settingsDisplayAction() const;
 
 protected:
   void buildActions(const Actions* actions);
@@ -57,6 +58,7 @@ private:
   QMenu * recentFilesMenu_;
   QAction * recentFileActions_[NbMaxRecentFiles];
   QAction * pythonConsoleDisplayAction_;
+  QAction * settingsDisplayAction_;
 };
 }
 #endif

@@ -66,6 +66,7 @@ signals:
   void doeEvaluationWizardRequested(const Analysis&, const bool isGeneralWizard = false);
   void mmExportWizardRequested(StudyItem*, const Analysis&, const bool isGeneralWizard = false);
   void wizardRequested(const PhysicalModel&);
+  void openPropertiesRequested();
   void wizardRequested(StudyItem*, const DesignOfExperiment& designOfExp);
 
 protected:

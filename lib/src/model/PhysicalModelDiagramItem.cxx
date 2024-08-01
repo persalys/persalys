@@ -30,6 +30,7 @@
 #include "persalys/ObservationsItem.hxx"
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/KrigingAnalysis.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 
 #include <openturns/PlatformInfo.hxx>
 
@@ -104,6 +105,16 @@ void PhysicalModelDiagramItem::buildActions()
   appendAction(duplicateAction_);
   appendSeparator();
   appendAction(removeAction_);
+
+  // Physical model properties action (Python PM only)
+  PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(getPhysicalModel().getImplementation().get());
+  if (model)
+  {
+    propertiesAction_ = new QAction(QIcon(":/images/documentinfo.png"), tr("Properties"), this);
+    propertiesAction_->setStatusTip(tr("Physical model properties"));
+    connect(propertiesAction_, SIGNAL(triggered()), this, SLOT(requestOpenProperties()));
+    appendAction(propertiesAction_);
+  }
 }
 
 
@@ -250,6 +261,16 @@ void PhysicalModelDiagramItem::requestMetaModelExport()
       emit mmExportWizardRequested(getParentStudyItem(), study.getAnalyses()[i], true);
       return;
     }
+  }
+}
+
+void PhysicalModelDiagramItem::requestOpenProperties()
+{
+  // Only if it is a PythonPhysicalModel
+  PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
+  if (model)
+  {
+    emit openPropertiesRequested();
   }
 }
 

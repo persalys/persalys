@@ -33,6 +33,8 @@
 #include "persalys/PolynomialRegressionAnalysis.hxx"
 #include "persalys/KrigingAnalysis.hxx"
 #include "persalys/FunctionalChaosAnalysis.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
+#include "persalys/PropertiesDialog.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -188,6 +190,28 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
 }
 
 
+void StudyManager::openProperties(Item* item)
+{
+  PhysicalModelItem * pmItem = dynamic_cast<PhysicalModelItem*>(item);
+  if (pmItem)
+  {
+    PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(pmItem->getPhysicalModel().getImplementation().get());
+    if (model)
+    {
+      PropertiesDialog * propertiesDialog = new PropertiesDialog;
+      propertiesDialog->setWindowTitle(QString(model->getName().c_str()));
+      propertiesDialog->setProcessNumber(model->getProcessNumber());
+      connect(propertiesDialog, &QDialog::accepted, [ = ]()
+      {
+        model->setProcessNumber(propertiesDialog->getProcessNumber());
+        model->setParallel(propertiesDialog->getProcessNumber() != 1);
+      });
+      propertiesDialog->open();
+    }
+  }
+}
+
+
 // --------------- WINDOW CREATION ---------------
 
 
@@ -203,6 +227,9 @@ void StudyManager::createWindow(Item *item)
   connect(item, SIGNAL(wizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(StudyItem*, Analysis, bool)));
   connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
   connect(item, SIGNAL(mmExportWizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openMetamodelExportWizard(StudyItem*, Analysis, bool)));
+  connect(item, &Item::openPropertiesRequested, [ = ] () {
+    openProperties(item);
+  });
   connect(item, SIGNAL(wizardRequested(StudyItem*, DesignOfExperiment)), this, SLOT(openObservationsWizard(StudyItem*, DesignOfExperiment)));
 
   connect(item, SIGNAL(windowRequested(Item*)), this, SLOT(createWindow(Item*)));

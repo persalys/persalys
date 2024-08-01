@@ -54,6 +54,7 @@ if (OTFMI_FOUND)
   ot_add_source_file ( FMIPhysicalModelWindow.cxx)
 endif ()
 ot_add_source_file ( CheckModelButtonGroup.cxx )
+ot_add_source_file ( ProcessNumberSpinBox.cxx )
 ot_add_source_file ( ProbabilisticModelWindow.cxx )
 ot_add_source_file ( DesignOfExperimentWizard.cxx )
 ot_add_source_file ( DesignOfExperimentWindow.cxx )
@@ -115,6 +116,7 @@ ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
 ot_add_source_file ( AboutDialog.cxx )
 ot_add_source_file ( SettingsDialog.cxx )
+ot_add_source_file ( PropertiesDialog.cxx )
 ot_add_source_file ( MeshDefinitionWizard.cxx )
 ot_add_source_file ( FieldModelEvaluationResultWindow.cxx )
 ot_add_source_file ( FieldMonteCarloWizard.cxx )
@@ -187,6 +189,7 @@ if (OTFMI_FOUND)
   ot_install_header_file (FMIPhysicalModelWindow.hxx)
 endif ()
 ot_install_header_file ( CheckModelButtonGroup.hxx )
+ot_install_header_file ( ProcessNumberSpinBox.hxx )
 ot_install_header_file ( ProbabilisticModelWindow.hxx )
 ot_install_header_file ( DesignOfExperimentWizard.hxx )
 ot_install_header_file ( DesignOfExperimentWindow.hxx )
@@ -241,6 +244,7 @@ ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
 ot_install_header_file ( AboutDialog.hxx )
 ot_install_header_file ( SettingsDialog.hxx )
+ot_install_header_file ( PropertiesDialog.hxx )
 ot_install_header_file ( MeshDefinitionWizard.hxx )
 ot_install_header_file ( FieldModelEvaluationResultWindow.hxx )
 ot_install_header_file ( FieldMonteCarloWizard.hxx )
@@ -299,6 +303,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/PythonPhysicalModelWindow.hxx
                                   persalys/MetaModelWindow.hxx
                                   persalys/CheckModelButtonGroup.hxx
+                                  persalys/ProcessNumberSpinBox.hxx
                                   persalys/ProbabilisticModelWindow.hxx
                                   persalys/DesignOfExperimentWizard.hxx
                                   persalys/DesignOfExperimentWindow.hxx
@@ -361,6 +366,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CopulaInferenceResultWizard.hxx
                                   persalys/AboutDialog.hxx
                                   persalys/SettingsDialog.hxx
+                                  persalys/PropertiesDialog.hxx
                                   persalys/MeshDefinitionWizard.hxx
                                   persalys/FieldModelEvaluationResultWindow.hxx
                                   persalys/FieldMonteCarloWizard.hxx

@@ -2,7 +2,8 @@
 ot_add_current_dir_to_include_dirs ()
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
-set(BASE_SOURCEFILES DistributionDictionary.cxx
+set(BASE_SOURCEFILES PersalysResourceMap.cxx
+                     DistributionDictionary.cxx
                      BaseTools.cxx
                      AppliException.cxx
                      Observer.cxx Observable.cxx Study.cxx StudyImplementation.cxx
@@ -93,6 +94,7 @@ if (AdaoCppLayer_FOUND)
   list (APPEND BASE_SOURCEFILES AdaoCalibration.cxx)
 endif ()
 
+ot_install_header_file ( PersalysResourceMap.hxx )
 ot_install_header_file ( DistributionDictionary.hxx )
 ot_install_header_file ( BaseTools.hxx )
 ot_install_header_file ( AppliException.hxx )

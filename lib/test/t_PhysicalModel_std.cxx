@@ -54,10 +54,10 @@ int main(int /*argc*/, char ** /*argv*/)
 
   String code = "def _exec(Q, E, C):\n    Ep = 1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))\n    return Ep";
   PythonPhysicalModel pythonModel("pythonModel1", inputCollection, outputCollection, code);
+  pythonModel.setProcessNumber(1);
   study.add(pythonModel);
   std::cout << pythonModel.getFunction()(x) << std::endl;
 
   std::cout << study.getPythonScript() << std::endl;
   return EXIT_SUCCESS;
 }
-

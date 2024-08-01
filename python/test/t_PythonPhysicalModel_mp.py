@@ -32,6 +32,7 @@ model.setCode(
     "from math import pi\n\ndef _exec(R, F):\n    G = 2*R-F/(pi*100.0)\n    return G\n"
 )
 model.setParallel(True)
+model.setProcessNumber(2)
 f = model.getFunction()
 print(f([[300.0, 75000.0]]))
 print(f([[300.0, 75000.0], [400.0, 74000.0]]))

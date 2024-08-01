@@ -18,10 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_PERSALYSDIALOG_HXX
-#define PERSALYS_PERSALYSDIALOG_HXX
+#ifndef PERSALYS_PROPERTIESDIALOG_HXX
+#define PERSALYS_PROPERTIESDIALOG_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include "persalys/ProcessNumberSpinBox.hxx"
 
 #include <openturns/OTType.hxx>
 
@@ -29,16 +30,19 @@
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API SettingsDialog : public QDialog
-{
-  Q_OBJECT
+  class PERSALYS_VIEW_API PropertiesDialog : public QDialog
+  {
+    Q_OBJECT
 
-public:
-  SettingsDialog(QWidget* parent = 0);
+  public:
+    PropertiesDialog(QWidget* parent = 0);
 
-  void setProcessNumber(const OT::UnsignedInteger n);
-  OT::UnsignedInteger getProcessNumber() const;
+    void setProcessNumber(const OT::UnsignedInteger n) { processNumberSpinBox_->setProcessNumber(n);};
+    OT::UnsignedInteger getProcessNumber() const {return processNumberSpinBox_->getProcessNumber();};
 
-};
+  private:
+    ProcessNumberSpinBox * processNumberSpinBox_ = nullptr;
+  };
+
 }
 #endif

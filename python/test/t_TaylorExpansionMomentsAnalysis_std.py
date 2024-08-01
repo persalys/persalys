@@ -49,6 +49,7 @@ print("\n")
 # test definition gradient with PythonPhysicalModel
 code = "from math import sin\n\ndef _exec(X0, X1):\n    Y0 = sin(X0) + 8*X1\n    fake_Y0 = X0\n    return Y0, fake_Y0\n"
 model2 = persalys.PythonPhysicalModel("myPhysicalModel", [X0, X1], [Y0], code)
+model2.setProcessNumber(1)
 myStudy.add(model2)
 
 # default finite difference steps

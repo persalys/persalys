@@ -84,19 +84,11 @@ int main(int argc, char *argv[])
   if (pyConsoleTranslator.load("PyConsole_msg_" + QLocale::system().name(), ":/translations"))
     app.installTranslator(&pyConsoleTranslator);
 
-  // increase function cache
-  OT::ResourceMap::SetAsUnsignedInteger("Cache-MaxSize", 16384);
-
   // set number of parallel processes
-  if (!QSettings().contains("nProcesses"))
-  {
-#ifdef _WIN32
-    // ProcessPoolExecutor startup penalty is much higher
-    QSettings().setValue("nProcesses", 1);
-#else
-    QSettings().setValue("nProcesses", QThread::idealThreadCount());
-#endif
-  }
+  if (!QSettings().contains("PythonPhysicalModel-DefaultProcessNumber"))
+    QSettings().setValue("PythonPhysicalModel-DefaultProcessNumber", QVariant((uint)(OT::ResourceMap::GetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber"))));
+  else
+    OT::ResourceMap::SetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", QSettings().value("PythonPhysicalModel-DefaultProcessNumber").toUInt());
 
   // main window
   MainWindow window;

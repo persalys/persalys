@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QDialog
+ *  @brief Custom ResourceMap keys
  *
  *  Copyright 2015-2024 EDF-Phimeca
  *
@@ -18,27 +18,22 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_PERSALYSDIALOG_HXX
-#define PERSALYS_PERSALYSDIALOG_HXX
 
+#ifndef PERSALYS_RESOURCEMAP_HXX
+#define PERSALYS_RESOURCEMAP_HXX
+
+#include <openturns/Object.hxx>
 #include "persalys/PersalysPrivate.hxx"
-
-#include <openturns/OTType.hxx>
-
-#include <QDialog>
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API SettingsDialog : public QDialog
-{
-  Q_OBJECT
 
-public:
-  SettingsDialog(QWidget* parent = 0);
+  struct PERSALYS_BASE_API PersalysResourceMap_init
+  {
+    PersalysResourceMap_init();
+  };
 
-  void setProcessNumber(const OT::UnsignedInteger n);
-  OT::UnsignedInteger getProcessNumber() const;
+  static PersalysResourceMap_init __PersalysResourceMap_initializer;
 
-};
 }
 #endif

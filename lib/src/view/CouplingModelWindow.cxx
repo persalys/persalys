@@ -174,12 +174,6 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   QLabel * timeInfo = new QLabel();
   mainLayout->addWidget(timeInfo, 2, 0);
 
-  // - multiprocessing
-  QSettings settings;
-  const int nProcesses = settings.value("nProcesses").toUInt();
-  item->getPhysicalModel().setProcessNumber((UnsignedInteger)nProcesses);
-  item->getPhysicalModel().setParallel(nProcesses != 1);
-
   // Tab : Finite difference step definition
   tab = new QWidget;
   tabLayout = new QGridLayout(tab);
@@ -1253,10 +1247,12 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
     QFileDialog * dlg = new QFileDialog(this);
     dlg->setFileMode(QFileDialog::AnyFile);
     dlg->setOption(QFileDialog::DontUseNativeDialog, true);
-    dlg->exec();
-    QString fileName = dlg->selectedFiles()[0];
-    CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
-    textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString(), model->getSteps()[indStep].getEncoding())));
+    if (dlg->exec())
+    {
+      QString fileName = dlg->selectedFiles()[0];
+      CouplingOutputFileCollection outColl(model->getSteps()[indStep].getOutputFiles());
+      textLabel->setText(QString::fromStdString(outColl[indFile].checkOutputFile(fileName.toStdString(), model->getSteps()[indStep].getEncoding())));
+    }
   });
 }
 

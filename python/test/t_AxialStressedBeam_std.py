@@ -16,6 +16,7 @@ G = persalys.Output("G", "Stress difference (Pa)")
 
 code = "from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return G\n"
 model = persalys.PythonPhysicalModel("myPhysicalModel", [R, F], [G], code)
+model.setProcessNumber(1)
 myStudy.add(model)
 
 f = model.getFunction()

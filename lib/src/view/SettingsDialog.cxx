@@ -21,6 +21,7 @@
 
 #include "persalys/SettingsDialog.hxx"
 #include "persalys/SubWindow.hxx"
+#include "persalys/ProcessNumberSpinBox.hxx"
 
 #include <QVBoxLayout>
 #include <QSettings>
@@ -28,8 +29,6 @@
 #include <QSpinBox>
 #include <QTabWidget>
 #include <QDialogButtonBox>
-
-#include <thread>
 
 using namespace OT;
 
@@ -66,26 +65,12 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
   QGridLayout * tabLayout = new QGridLayout(tab);
 
-  QLabel * nProcessesLabel = new QLabel(tr("Number of processes"));
-  nProcessesLabel->setToolTip("0: " + tr("all cores"));
-  tabLayout->addWidget(nProcessesLabel, 0, 0);
-
-  QSpinBox * nProcessesSpinBox = new QSpinBox;
-  nProcessesSpinBox->setToolTip("0: " + tr("all cores"));
-  nProcessesSpinBox->setMinimum(0);
-  nProcessesSpinBox->setMaximum(std::thread::hardware_concurrency());
-
-  QLabel * reloadLabel = new QLabel(tr("Requires study reloading"));
-  tabLayout->addWidget(reloadLabel, 1, 0, 1, 2);
-  connect(nProcessesSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), [ = ] (int i)
-  {
-    QSettings settings;
-    reloadLabel->setVisible(i != settings.value("nProcesses"));
-  });
-
+  ProcessNumberSpinBox * processNumberSpinBox = new ProcessNumberSpinBox;
+  processNumberSpinBox->setTitle(tr("Default number of processes:"));
+  processNumberSpinBox->setToolTip(tr("(only for Python/Coupling/FMI models)"));
   QSettings settings;
-  nProcessesSpinBox->setValue(settings.value("nProcesses").toUInt());
-  tabLayout->addWidget(nProcessesSpinBox, 0, 1);
+  processNumberSpinBox->setProcessNumber(settings.value("PythonPhysicalModel-DefaultProcessNumber").toUInt());
+  tabLayout->addWidget(processNumberSpinBox, 0, 0, 1, 2);
 
   tabWidget->addTab(tab, tr("&General"));
   mainLayout->addWidget(tabWidget);
@@ -94,7 +79,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
   connect(settingsButtons, &QDialogButtonBox::accepted, this, &QDialog::accept);
   connect(settingsButtons, &QDialogButtonBox::accepted, [ = ]
   {
-    setnProcesses(nProcessesSpinBox->value());
+    setProcessNumber(processNumberSpinBox->getProcessNumber());
     emit QDialog::accepted();
   });
   connect(settingsButtons, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -103,14 +88,14 @@ SettingsDialog::SettingsDialog(QWidget* parent)
   setLayout(mainLayout);
 }
 
-void SettingsDialog::setnProcesses(const UnsignedInteger n)
+void SettingsDialog::setProcessNumber(const UnsignedInteger n)
 {
-  processNumber_ = n;
+  ResourceMap::SetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", n);
 }
 
-UnsignedInteger SettingsDialog::getnProcesses() const
+UnsignedInteger SettingsDialog::getProcessNumber() const
 {
-  return processNumber_;
+  return ResourceMap::GetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber");
 }
 
 

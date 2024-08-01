@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QDialog
+ *  @brief Custom ResourceMap keys
  *
  *  Copyright 2015-2024 EDF-Phimeca
  *
@@ -18,27 +18,32 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_PERSALYSDIALOG_HXX
-#define PERSALYS_PERSALYSDIALOG_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#include "persalys/PersalysResourceMap.hxx"
+#include "persalys/BaseTools.hxx"
 
-#include <openturns/OTType.hxx>
+#include <openturns/ResourceMap.hxx>
+#include <mutex>
 
-#include <QDialog>
+using namespace OT;
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API SettingsDialog : public QDialog
-{
-  Q_OBJECT
 
-public:
-  SettingsDialog(QWidget* parent = 0);
-
-  void setProcessNumber(const OT::UnsignedInteger n);
-  OT::UnsignedInteger getProcessNumber() const;
-
-};
-}
+  PersalysResourceMap_init::PersalysResourceMap_init()
+  {
+    static std::once_flag flag;
+    std::call_once(flag, [&]()
+    {
+      // increase function cache
+      OT::ResourceMap::SetAsUnsignedInteger("Cache-MaxSize", 16384);
+#ifdef _WIN32
+      // ProcessPoolExecutor startup penalty is much higher
+      OT::ResourceMap::AddAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", 1);
+#else
+      OT::ResourceMap::AddAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", GetNumberOfPhysicalCores());
 #endif
+    });
+  }
+
+}
