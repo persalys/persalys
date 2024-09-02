@@ -198,7 +198,7 @@ void MenuBar::openUserManual()
 void MenuBar::openAboutDialog()
 {
   AboutDialog aboutDialog(this);
-  aboutDialog.open();
+  aboutDialog.exec();
 }
 
 
