@@ -319,6 +319,15 @@ Open documentation
 
   - the documentation is opened in a web browser
 
+About
+`````
+
+- click Menu->Help->About Persalys
+
+  - a popup displays:
+
+    - a link to the website and copyright info
+    - the dependencies librairies and their versions
 
 New Study
 ```````````
