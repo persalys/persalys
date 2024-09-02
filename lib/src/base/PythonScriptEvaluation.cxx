@@ -29,6 +29,8 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
 
+#include <filesystem>
+
 using namespace OT;
 
 namespace PERSALYS
@@ -209,10 +211,11 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   PyDict_SetItemString(dict, "X", inputSample.get());
 
   // code has to be separate
-  String tempDir = Path::CreateTemporaryDirectory("persalys");
+  std::filesystem::path tempDir = std::filesystem::temp_directory_path() / "persalys";
+  std::filesystem::create_directory(tempDir);
   std::string code_mod = "code" + std::to_string(codeHash_);
   std::ofstream code_file;
-  code_file.open(tempDir + Os::GetDirectorySeparator() + code_mod + ".py");
+  code_file.open((tempDir / (code_mod + ".py")).string());
   code_file << code_ << "\n";
   code_file.close();
 
@@ -244,7 +247,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "        nokIdx = [i for i, task in enumerate(resu) if task.exception() is not None]\n";
 
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
-  Os::DeleteDirectory(tempDir.c_str());
+  std::filesystem::remove_all(tempDir);
   handleExceptionTraceback();
 
   // build output sample
