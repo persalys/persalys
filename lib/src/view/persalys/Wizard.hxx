@@ -28,10 +28,8 @@
 #include <QWizard>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
-#if QT_VERSION < 0x060000
-Q_DECLARE_METATYPE(PERSALYS::DesignOfExperiment)
-Q_DECLARE_METATYPE(PERSALYS::DesignOfExperimentDefinitionItem*)
-#endif
+#include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(PERSALYS::DesignOfExperiment)
+                                //     Q_DECLARE_METATYPE(PERSALYS::DesignOfExperimentDefinitionItem*)
 
 namespace PERSALYS
 {

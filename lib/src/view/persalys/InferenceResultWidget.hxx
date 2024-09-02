@@ -32,9 +32,7 @@
 #include <QTabWidget>
 #include <QScrollArea>
 
-#if QT_VERSION < 0x060000
-Q_DECLARE_METATYPE(OT::Distribution)
-#endif
+#include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 
 namespace PERSALYS
 {

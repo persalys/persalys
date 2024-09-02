@@ -25,7 +25,7 @@
 
 #include <QAbstractTableModel>
 
-Q_DECLARE_METATYPE(OT::Point)
+#include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(OT::Point)
 
 namespace PERSALYS
 {
