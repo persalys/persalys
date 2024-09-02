@@ -27,67 +27,67 @@ ENV PATH=/opt/rh/devtoolset-9/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtool
 WORKDIR /usr/local/src
 
 # gdb
-RUN curl -fSsL https://ftp.gnu.org/gnu/gdb/gdb-8.3.1.tar.gz |tar xz && cd gdb-8.3.1 && ./configure --with-python=no && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r gdb*
+RUN curl -fSsL https://ftp.gnu.org/gnu/gdb/gdb-8.3.1.tar.gz |tar xz && cd gdb* && ./configure --with-python=no && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r gdb*
 
 # bison/flex
-RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison-3.8.2 && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
+RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison* && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
 RUN curl -fsSL https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz | tar xz && cd flex-2.6.4 && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1  && cd - && rm -r flex*
 
 # swig
-RUN curl -fSsL https://github.com/swig/swig/archive/v4.2.1.tar.gz | tar xz && cd swig-4.2.1 \
+RUN curl -fSsL https://github.com/swig/swig/archive/v4.2.1.tar.gz | tar xz && cd swig* \
  && ./autogen.sh && ./configure --without-alllang && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
-RUN curl -fsSL https://github.com/KarypisLab/GKlib/archive/refs/tags/METIS-v5.1.1-DistDGL-0.5.tar.gz | tar xz && cd GKlib-METIS-v5.1.1-DistDGL-0.5 && curl -L https://github.com/KarypisLab/GKlib/commit/33b8c8bb.patch | patch -p1 && sed -i "s|march=native|march=nocona|g" GKlibSystem.cmake && cmake -DBUILD_SHARED_LIBS=ON . && make install > /dev/null 2>&1 && cd - && rm -r GKlib*
+RUN curl -fsSL https://github.com/KarypisLab/GKlib/archive/refs/tags/METIS-v5.1.1-DistDGL-0.5.tar.gz | tar xz && cd GKlib* && curl -L https://github.com/KarypisLab/GKlib/commit/33b8c8bb.patch | patch -p1 && sed -i "s|march=native|march=nocona|g" GKlibSystem.cmake && cmake -DBUILD_SHARED_LIBS=ON . && make install > /dev/null 2>&1 && cd - && rm -r GKlib*
 RUN curl -fsSL https://github.com/KarypisLab/METIS/archive/v5.2.1.tar.gz | tar xz && cd METIS-5.2.1 && mkdir -p build/xinclude && sed -i "s|//#define IDXTYPEWIDTH 32|#define IDXTYPEWIDTH 32|g" include/metis.h && sed -i "s|//#define REALTYPEWIDTH 32|#define REALTYPEWIDTH 64|g" include/metis.h && cp include/metis.h include/CMakeLists.txt build/xinclude && echo "target_link_libraries(metis GKlib)" >> libmetis/CMakeLists.txt && sed -i "s|march=native|march=nocona|g" conf/gkbuild.cmake && cmake -DSHARED=ON . && make install > /dev/null 2>&1 && cd - && rm -r METIS*
-RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/3.0.7.tar.gz | tar xz && cd ThirdParty-Mumps-releases-3.0.7 && ./get.Mumps && FFLAGS="-O2 -fallow-argument-mismatch" ./configure --prefix=/usr/local && make -j1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
-RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.16.tar.gz | tar xz && cd Ipopt-releases-3.14.16 && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
+RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/3.0.7.tar.gz | tar xz && cd ThirdParty-Mumps* && ./get.Mumps && FFLAGS="-O2 -fallow-argument-mismatch" ./configure --prefix=/usr/local && make -j1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
+RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.16.tar.gz | tar xz && cd Ipopt* && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
-RUN curl -fsSL https://github.com/coin-or/CoinUtils/archive/refs/tags/releases/2.11.11.tar.gz | tar xz && cd CoinUtils-releases-2.11.11 && ./configure --prefix=/usr/local --with-blas-lib='-lblas' --with-lapack-lib='-llapack' --enable-dependency-linking && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r CoinUtils*
-RUN curl -fsSL https://github.com/coin-or/Osi/archive/refs/tags/releases/0.108.9.tar.gz | tar xz && cd Osi-releases-0.108.9 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Osi*
-RUN curl -fsSL https://github.com/coin-or/Clp/archive/refs/tags/releases/1.17.9.tar.gz | tar xz && cd Clp-releases-1.17.9 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Clp*
-RUN curl -fsSL https://github.com/coin-or/Cgl/archive/refs/tags/releases/0.60.8.tar.gz | tar xz && cd Cgl-releases-0.60.8 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Cgl*
-RUN curl -fsSL https://github.com/coin-or/Cbc/archive/refs/tags/releases/2.10.11.tar.gz | tar xz && cd Cbc-releases-2.10.11 && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Cbc*
-RUN curl -fsSL https://github.com/coin-or/Bonmin/archive/refs/tags/releases/1.8.9.tar.gz | tar xz && cd Bonmin-releases-1.8.9 && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
+RUN curl -fsSL https://github.com/coin-or/CoinUtils/archive/refs/tags/releases/2.11.12.tar.gz | tar xz && cd CoinUtils* && ./configure --prefix=/usr/local --with-blas-lib='-lblas' --with-lapack-lib='-llapack' --enable-dependency-linking && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r CoinUtils*
+RUN curl -fsSL https://github.com/coin-or/Osi/archive/refs/tags/releases/0.108.10.tar.gz | tar xz && cd Osi* && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Osi*
+RUN curl -fsSL https://github.com/coin-or/Clp/archive/refs/tags/releases/1.17.10.tar.gz | tar xz && cd Clp* && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Clp*
+RUN curl -fsSL https://github.com/coin-or/Cgl/archive/refs/tags/releases/0.60.9.tar.gz | tar xz && cd Cgl* && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Cgl*
+RUN curl -fsSL https://github.com/coin-or/Cbc/archive/refs/tags/releases/2.10.12.tar.gz | tar xz && cd Cbc* && ./configure --prefix=/usr/local && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Cbc*
+RUN curl -fsSL https://github.com/coin-or/Bonmin/archive/refs/tags/releases/1.8.9.tar.gz | tar xz && cd Bonmin* && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
 
 # dlib
-RUN curl -L https://github.com/davisking/dlib/archive/v19.24.4.tar.gz | tar xz && cd dlib-19.24.4 \
+RUN curl -L https://github.com/davisking/dlib/archive/v19.24.6.tar.gz | tar xz && cd dlib* \
  && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install > /dev/null 2>&1 && cd - && rm -r dlib*
 
 # cminpack
-RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.9.tar.gz | tar xz && cd cminpack-1.3.9 \
+RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.9.tar.gz | tar xz && cd cminpack* \
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d -DUSE_BLAS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
-RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.7.1.tar.gz | tar xz && cd nlopt-2.7.1 \
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.8.0.tar.gz | tar xz && cd nlopt* \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
-RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.3/src/hdf5-1.14.3.tar.bz2 | tar xj && cd hdf5-1.14.3 && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
+RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.3/src/hdf5-1.14.3.tar.bz2 | tar xj && cd hdf5* && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
 
 # nanoflann
-RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.5.5.tar.gz | tar xz && cd nanoflann-1.5.5 && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
+RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.6.1.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
 
 # eigen
-RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen-3.4.0 \
+RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen* \
  && mkdir build && cd build && cmake .. && make install > /dev/null 2>&1 && cd - && rm -r eigen*
 
 # spectra
-RUN curl -fsSL https://github.com/yixuan/spectra/archive/v1.0.1.tar.gz | tar xz && cd spectra-1.0.1 && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
+RUN curl -fsSL https://github.com/yixuan/spectra/archive/v1.0.1.tar.gz | tar xz && cd spectra* && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
 
 # glog
-RUN curl -fsSL https://github.com/google/glog/archive/v0.6.0.tar.gz | tar xz && cd glog-0.6.0 && cmake . && make install > /dev/null 2>&1 && cd - && rm -rf glog*
+RUN curl -fsSL https://github.com/google/glog/archive/v0.6.0.tar.gz | tar xz && cd glog* && cmake . && make install > /dev/null 2>&1 && cd - && rm -rf glog*
 
 # ceres
-RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz | tar xz && cd ceres-solver-2.2.0 \
+RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz | tar xz && cd ceres* \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.12.0.tar.gz | tar xz && cd oneTBB-2021.12.0 && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
+RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.12.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.3.tar.gz | tar xz && cd primesieve-12.3 && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.4.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -96,15 +96,15 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimag
  && appimagetool --version
 
 # openssl
-RUN curl -fSsL https://www.openssl.org/source/openssl-3.3.0.tar.gz | tar xz && cd openssl-3.3.0 \
+RUN curl -fSsL https://www.openssl.org/source/openssl-3.3.0.tar.gz | tar xz && cd openssl* \
  && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # libffi
-RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-3.4.6.tar.gz | tar xz && cd libffi-3.4.6 \
+RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-3.4.6.tar.gz | tar xz && cd libffi* \
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz | tar xz && cd Python-3.11.9 \
+RUN curl -fSsL https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
@@ -118,7 +118,7 @@ RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz &
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.tar.gz | tar xz && cd fmi-library-2.4.1 \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.tar.gz | tar xz && cd fmi-library* \
  && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
 
 # assimulo
@@ -127,39 +127,39 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.13.1.tar.gz | tar xz && cd PyFMI* \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.14.0.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.bz2 | tar xj && cd boost_1_83_0 \
+RUN curl -fSsL https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-serialization --with-program_options --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
 # pagmo
-RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.0.tar.gz | tar xz && cd pagmo2-2.19.0 && cmake -DPAGMO_WITH_EIGEN3=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
+RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.1.tar.gz | tar xz && cd pagmo* && cmake -DPAGMO_WITH_EIGEN3=ON -DCMAKE_UNITY_BUILD=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
 
 # ninja
-RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja-1.11.1 && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1 && cd - && rm -r ninja*
+RUN curl -fSsL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja* && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1 && cd - && rm -r ninja*
 
 # wayland
 RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.23.0/downloads/wayland-1.23.0.tar.xz | tar xJ && cd wayland* \
  && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtbase-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtbase-everywhere-src-5.15.14 && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtsvg-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtsvg-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtx11extras-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtx11extras-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qttools-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qttools-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtwayland-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtwayland-everywhere-src-5.15.14 && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtbase-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtsvg-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtx11extras-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qttools-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtwayland-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
-RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt-6.3.0 \
+RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt* \
  && sed -i "s|QWT_INSTALL_PREFIX    = /usr/local/qwt-\$\$QWT_VERSION|QWT_INSTALL_PREFIX = /usr/local|g" qwtconfig.pri \
  && sed -i "s|{QWT_INSTALL_PREFIX}/include|{QWT_INSTALL_PREFIX}/include/qwt|g" qwtconfig.pri \
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.12/ParaView-v5.12.1.tar.xz | tar xJ && cd ParaView-v5.12.1 \
+RUN curl -fSsL https://paraview.org/files/v5.13/ParaView-v5.13.0.tar.xz | tar xJ && cd ParaView* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so -DPARAVIEW_USE_VTKM=OFF -DPARAVIEW_USE_FORTRAN=OFF \
