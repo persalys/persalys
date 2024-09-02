@@ -22,12 +22,28 @@
 #define PERSALYS_QTTOOLS_HXX
 
 #include "persalys/PhysicalModel.hxx"
+#include "persalys/MorrisResult.hxx"
+#include "persalys/DesignOfExperimentDefinitionItem.hxx"
 
 #include <openturns/OTType.hxx>
 
 #include <QColor>
 #include <QMap>
 #include <QObject>
+
+#if QT_VERSION < 0x060000
+Q_DECLARE_METATYPE(OT::Point)
+Q_DECLARE_METATYPE(OT::Indices)
+Q_DECLARE_METATYPE(OT::Description)
+Q_DECLARE_METATYPE(OT::Distribution)
+
+Q_DECLARE_METATYPE(PERSALYS::MorrisResult)
+Q_DECLARE_METATYPE(PERSALYS::Analysis)
+Q_DECLARE_METATYPE(PERSALYS::LimitState)
+Q_DECLARE_METATYPE(PERSALYS::DesignOfExperiment)
+Q_DECLARE_METATYPE(PERSALYS::DesignOfExperimentDefinitionItem*)
+Q_DECLARE_METATYPE(PERSALYS::PhysicalModel)
+#endif
 
 namespace PERSALYS
 {

@@ -31,7 +31,7 @@
 #include <QGroupBox>
 #include <QDebug>
 
-Q_DECLARE_METATYPE(PERSALYS::Analysis)
+#include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(PERSALYS::Analysis)
 
 using namespace OT;
 

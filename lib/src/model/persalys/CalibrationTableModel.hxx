@@ -26,7 +26,7 @@
 #include <QAbstractTableModel>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
 
-Q_DECLARE_METATYPE(PERSALYS::PhysicalModel)
+#include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(PERSALYS::PhysicalModel)
 
 namespace PERSALYS
 {

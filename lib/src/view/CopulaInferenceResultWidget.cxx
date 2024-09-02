@@ -23,7 +23,7 @@
 #include "persalys/RadioButtonDelegate.hxx"
 #include "persalys/CopulaParametersTabWidget.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
-#include "persalys/InferenceResultWidget.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
+#include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 #include "persalys/TranslationManager.hxx"
 #include "persalys/TemporaryLabel.hxx"
 

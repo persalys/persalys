@@ -25,8 +25,8 @@
 
 #include <QAbstractTableModel>
 
-Q_DECLARE_METATYPE(PERSALYS::MorrisResult)
-Q_DECLARE_METATYPE(OT::Indices)
+#include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(PERSALYS::MorrisResult)
+                                //     Q_DECLARE_METATYPE(OT::Indices)
 
 namespace PERSALYS
 {
