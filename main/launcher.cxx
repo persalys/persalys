@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     // we cannot load from PYTHONUSERBASE if the directory doesnt exist prior to app launch
     try
     {
-      fs::create_directories(pythonuserbase_dir / "Python311" / "site-packages");
+      fs::create_directories(pythonuserbase_dir / "Python312" / "site-packages");
     }
     catch (const std::filesystem::filesystem_error &)
     {
@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
   }
 
   // PYTHONPATH
-  const std::string PYTHONPATH = (python_dir / "python311.zip").string() + ";" + persalys_dir.parent_path().string()
-    + (pythonuserbase_dir.empty() ? "" : ";" + (pythonuserbase_dir / "Python311" / "site-packages").string());
+  const std::string PYTHONPATH = (python_dir / "python312.zip").string() + ";" + persalys_dir.parent_path().string()
+    + (pythonuserbase_dir.empty() ? "" : ";" + (pythonuserbase_dir / "Python312" / "site-packages").string());
   env["PYTHONPATH"] = PYTHONPATH;
   if (verbose)
     std::cout << "PYTHONPATH=" << PYTHONPATH << std::endl;

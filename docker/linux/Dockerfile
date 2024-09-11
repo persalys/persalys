@@ -104,12 +104,12 @@ RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz | tar xz && cd Python* \
+RUN curl -fSsL https://www.python.org/ftp/python/3.12.6/Python-3.12.6.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install numpy==1.26.4 scipy==1.13.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython --upgrade --quiet
+RUN pip3 install numpy==1.26.4 scipy==1.13.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials* \
@@ -128,6 +128,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
 
 # pyfmi
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.14.0.tar.gz | tar xz && cd PyFMI* \
+ && curl -L https://github.com/modelon-community/PyFMI/pull/265.patch | patch -p1 \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -146,11 +147,11 @@ RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.23.0/
  && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtbase-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtsvg-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtx11extras-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qttools-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.14/submodules/qtwayland-everywhere-opensource-src-5.15.14.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtbase-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtsvg-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtx11extras-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qttools-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtwayland-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt* \

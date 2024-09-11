@@ -1,7 +1,7 @@
 # add Python directories
 $env:PYTHONHOME = "$PSScriptRoot\..\..\.."
 $env:PYTHONUSERBASE = "$env:APPDATA\Persalys"
-$env:PYTHONPATH = "$PSScriptRoot\..\..\..\python311.zip;$PSScriptRoot\..;$env:PYTHONUSERBASE\Python311\site-packages"
+$env:PYTHONPATH = "$PSScriptRoot\..\..\..\python312.zip;$PSScriptRoot\..;$env:PYTHONUSERBASE\Python312\site-packages"
 $env:PATH = "$PSScriptRoot\..\..\..;$PSScriptRoot\..\..\..\Scripts;$env:PATH"
 
 # ParaView plugins
