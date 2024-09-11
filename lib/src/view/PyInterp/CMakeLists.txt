@@ -35,9 +35,6 @@ set_target_properties (persalyspyinterp PROPERTIES SOVERSION ${LIB_SOVERSION})
 target_include_directories (persalyspyinterp PUBLIC ${Python_INCLUDE_DIRS})
 target_link_libraries (persalyspyinterp ${QT_LIBRARIES})
 target_link_libraries (persalyspyinterp ${Python_LIBRARIES})
-if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-  target_compile_definitions (persalyspyinterp PRIVATE MS_WIN64)
-endif ()
 
 install ( TARGETS persalyspyinterp
   RUNTIME DESTINATION ${PERSALYS_BIN_PATH}
