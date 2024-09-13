@@ -28,6 +28,7 @@
 #include "persalys/QtTools.hxx"
 
 #include <openturns/Contour.hxx>
+#include <openturns/HistogramFactory.hxx>
 
 #include <QMenu>
 #include <QFileDialog>
@@ -407,14 +408,17 @@ void PlotWidget::plotHistogram(const Sample & sample, const PlotWidget::HistoTyp
   if (size == 0) throw InvalidArgumentException(HERE) << "Cannot draw an histogram based on an empty sample.";
 
   // compute bar number
-  if (barNumber <= 0)
-    barNumber = ceil(1.0 + log(std::max(size, 1)) / log(2));
-
-  // compute data
-  double sampleMin = sample.getMin()[0];
-  double width = (sample.getMax()[0] - sampleMin) / barNumber;
-  if (width < 1e-12)
+  const double sampleMin = sample.getMin()[0];
+  const double sampleMax = sample.getMax()[0];
+  if (sampleMax - sampleMin < 1e-12)
     return;
+
+  const double Q1 = sample.computeQuantile(0.25)[0];
+  const double Q3 = sample.computeQuantile(0.75)[0];
+  const double width = HistogramFactory().computeBandwidth(sample, Q3 - Q1 > 1e-12);
+
+  if (barNumber <= 0)
+    barNumber = ceil((sampleMax - sampleMin)/width);
 
   Point histogramData(barNumber);
 
