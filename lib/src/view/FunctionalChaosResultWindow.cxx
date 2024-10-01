@@ -33,6 +33,7 @@
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/KPermutationsDistribution.hxx>
 #include <openturns/FunctionalChaosSobolIndices.hxx>
+#include <openturns/MetaModelValidation.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -115,10 +116,10 @@ void FunctionalChaosResultWindow::buildInterface()
     for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
     {
       QStringList namesList;
-      namesList << tr("Residual") << "R2";
+      namesList << tr("Residual") << tr("Relative error (%)");
       QStringList valuesList;
       valuesList << QString::number(result_.getFunctionalChaosResult().getResiduals()[outputIndex]);
-      valuesList << QString::number(result_.getFunctionalChaosResult().getRelativeErrors()[outputIndex]);
+      valuesList << QString::number(100.*result_.getFunctionalChaosResult().getRelativeErrors()[outputIndex]);
       ParametersTableView * generalTableView = new ParametersTableView(namesList, valuesList, true, true);
       generalStackedWidget->addWidget(generalTableView);
     }
