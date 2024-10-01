@@ -36,7 +36,7 @@ std::vector<String> DistributionDictionary::ContinuousDistributions_ =
 };
 std::vector<String> DistributionDictionary::DiscreteDistributions_ =
 {
-  "Bernoulli", "Geometric", "Binomial", "Geometric", "Hypergeometric", "NegativeBinomial",
+  "Bernoulli", "Geometric", "Binomial", "Hypergeometric", "NegativeBinomial",
   "Poisson", "Skellam", "UserDefined", "ZipfMandelbrot"
 };
 
