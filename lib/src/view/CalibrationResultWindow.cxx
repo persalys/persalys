@@ -292,6 +292,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   pvWidget->setChartTitle(tr("Predictions vs observations"));
   pvWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Observations"));
   pvWidget->setAxisTitle(vtkAxis::LEFT, tr("Predictions"));
+  pvWidget->getLegend()->SetHorizontalAlignment(vtkChartLegend::LEFT);
 
   TrajectoriesSettingWidget * chartSetting = new TrajectoriesSettingWidget(pvWidget, labels, this);
 
@@ -312,6 +313,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   pvWidget->setXAxisData(observations_.getInputSample().getDescription()[0].c_str());
   pvWidget->setAxisToShow(outDescription);
   pvWidget->setAxisTitle(vtkAxis::LEFT, tr("Predictions"));
+  pvWidget->getLegend()->SetHorizontalAlignment(vtkChartLegend::LEFT);
 
   chartSetting = new TrajectoriesSettingWidget(pvWidget, obsInNames, labels, this);
 
