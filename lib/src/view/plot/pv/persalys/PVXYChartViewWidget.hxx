@@ -5,6 +5,7 @@
 
 #include <vtkChartXY.h>
 #include <vtkAxis.h>
+#include <vtkChartLegend.h>
 
 #include <QSet>
 
@@ -43,6 +44,7 @@ public:
   void setMarkerStyle(const int markerStyle);
   int getMarkerStyle() const;
   void setShowLegend(const bool show);
+  vtkChartLegend * getLegend() const;
 
 protected:
   void setPlotStyle();

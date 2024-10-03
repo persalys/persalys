@@ -456,4 +456,10 @@ void PVXYChartViewWidget::setShowLegend(const bool show)
 {
   chartXY_->SetShowLegend(show);
 }
+
+vtkChartLegend * PVXYChartViewWidget::getLegend() const
+{
+  return chartXY_->GetLegend();
+}
+
 }
