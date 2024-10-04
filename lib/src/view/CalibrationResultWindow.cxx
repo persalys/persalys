@@ -139,6 +139,15 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
 
   thetaGroupBoxLayout->addWidget(thetaTableView);
   tabLayout->addWidget(thetaGroupBox, 0, Qt::AlignTop);
+
+  QString labelText = tr("Observation error standard deviation:\n");
+  labelText += QString("σ = ")
+    + QString::number(result_.getCalibrationResult().getObservationsError().getStandardDeviation()[0]);
+
+  QLabel * label = new QLabel(labelText);
+  label->setTextInteractionFlags(Qt::TextSelectableByMouse);
+  tabLayout->addWidget(label);
+
   tabLayout->addStretch();
   scrollArea->setWidget(tab);
 
