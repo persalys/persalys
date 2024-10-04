@@ -47,6 +47,7 @@ analysis.run()
 myStudy.add(analysis)
 print("analysis=", analysis)
 print("result=", analysis.getResult())
+print("isBayesian=", analysis.getResult().isBayesian())
 
 # Least Squares Non linear
 analysis2 = persalys.CalibrationAnalysis("myAnalysis2", observations)
@@ -55,6 +56,7 @@ analysis2.setCalibratedInputs(["R", "C"], ot.Dirac([700e6, 2400e6]), ["gam"], [7
 analysis2.run()
 myStudy.add(analysis2)
 print("analysis=", analysis2)
+print("isBayesian=", analysis2.getResult().isBayesian())
 
 # Gaussian linear calibration
 analysis3 = persalys.CalibrationAnalysis("myAnalysis3", observations)
@@ -66,6 +68,7 @@ analysis3.setErrorCovariance(errorCovariance)
 analysis3.run()
 myStudy.add(analysis3)
 print("analysis=", analysis3)
+print("isBayesian=", analysis3.getResult().isBayesian())
 
 # Gaussian non linear calibration
 analysis4 = persalys.CalibrationAnalysis("myAnalysis4", observations)
@@ -80,6 +83,7 @@ analysis4.setOptimizationAlgorithm(optimizationAlgo)
 analysis4.run()
 myStudy.add(analysis4)
 print("analysis=", analysis4)
+print("isBayesian=", analysis4.getResult().isBayesian())
 
 
 # analysis check
