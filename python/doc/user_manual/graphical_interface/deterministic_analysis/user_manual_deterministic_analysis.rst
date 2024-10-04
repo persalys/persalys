@@ -1192,6 +1192,8 @@ The results window gathers the following tabs:
 
       - see `example <http://openturns.github.io/openturns/master/auto_calibration/least_squares_and_gaussian_calibration/plot_calibration_chaboche.html#id1>`__ from OpenTURNS documentation
 
+      .. image:: /user_manual/graphical_interface/deterministic_analysis/calibration_ResultWindow_residualsQQ.png
+
 - The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
 
 - The **Model** tab shows the model content used to perform the analysis.
