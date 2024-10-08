@@ -53,10 +53,6 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv);
 
-protected:
-  /** Stop callback */
-  static OT::Bool Stop(void * p);
-
 private:
   OT::UnsignedInteger maximumCalls_;
   OT::Scalar maximumCoefficientOfVariation_;

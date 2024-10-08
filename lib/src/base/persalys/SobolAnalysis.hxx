@@ -56,8 +56,6 @@ public:
   bool hasValidResult() const override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
-  void stop() override;
-
   /** String converter */
   OT::String __repr__() const override;
 
@@ -73,7 +71,6 @@ protected:
   void launch() override;
 
 private:
-  TimeCriteria timeCriteria_;
   OT::Scalar maximumConfidenceIntervalLength_;
   OT::UnsignedInteger replicationSize_;
   OT::Scalar confidenceLevel_;

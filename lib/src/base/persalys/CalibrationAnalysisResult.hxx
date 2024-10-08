@@ -58,11 +58,6 @@ public:
     return posteriorResidualsPDF_;
   };
 
-  OT::Bool isBayesian() const
-  {
-    return isBayesian_;
-  }
-
   /** String converter */
   OT::String __repr__() const override;
 
@@ -77,7 +72,6 @@ private:
   OT::Interval confidenceInterval_;
   OT::PersistentCollection<OT::Sample> priorResidualsPDF_;
   OT::PersistentCollection<OT::Sample> posteriorResidualsPDF_;
-  OT::Bool isBayesian_ = false;
 };
 }
 #endif

@@ -62,7 +62,6 @@ void CalibrationAnalysisResult::save(Advocate & adv) const
   adv.saveAttribute("confidenceInterval_", confidenceInterval_);
   adv.saveAttribute("priorResidualsPDF_", priorResidualsPDF_);
   adv.saveAttribute("posteriorResidualsPDF_", posteriorResidualsPDF_);
-  adv.saveAttribute("isBayesian_", isBayesian_);
 }
 
 
@@ -74,7 +73,5 @@ void CalibrationAnalysisResult::load(Advocate & adv)
   adv.loadAttribute("confidenceInterval_", confidenceInterval_);
   adv.loadAttribute("priorResidualsPDF_", priorResidualsPDF_);
   adv.loadAttribute("posteriorResidualsPDF_", posteriorResidualsPDF_);
-  if (adv.hasAttribute("isBayesian_"))
-    adv.loadAttribute("isBayesian_", isBayesian_);
 }
 }

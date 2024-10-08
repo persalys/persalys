@@ -245,8 +245,6 @@ void CalibrationAnalysis::launch()
       LOGWARN("Cannot build posterior residual PDF");
     }
   }
-  if (methodName_.find("Gaussian") != std::string::npos)
-    result_.isBayesian_ = true;
 }
 
 

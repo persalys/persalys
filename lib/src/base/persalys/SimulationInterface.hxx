@@ -53,6 +53,9 @@ public:
   /** Maximum coefficient of variation accessor */
   void setMaximumCoefficientOfVariation(const OT::Scalar maximumCoefficientOfVariation);
 
+  /** Maximum time accessor */
+  void setMaximumTimeDuration(const OT::Scalar maximumTimeDuration);
+
   /** Block size accessor */
   void setBlockSize(const OT::UnsignedInteger blockSize);
 
