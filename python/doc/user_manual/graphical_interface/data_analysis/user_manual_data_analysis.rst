@@ -540,31 +540,32 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
 4-2-1 Functional chaos
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_plot.png
+.. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_moments.png
     :align: center
 
 The results window gathers:
 
-- The **Metamodel** tab shows different information about the selected output (left column):
-    - Number of points
-    - Relative error: :math:`\displaystyle rel = \frac{\sum_{i=0}^N (y_i - \hat{y_i})^2}{\sum_{i=0}^N {(y_i - \bar{y})^2}}`
-    - Residual: :math:`\displaystyle res = \frac{\sqrt{\sum_{i=0}^N (y_i - \hat{y_i})^2}}{N}`.
-    - The fitting curve between the physical model output values (**Real otput values**) and the
-      metamodel values (**Prediction**).
-      The reference diagonal (in black) is built with the physical model output values.
-
-        - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
-        - Graph interactivity:
-           - Left-click to translate the graph
-           - Mouse wheel up/down to zoom in/zoom out
-
-- The **Results** tab presents different parameter, for a selected output (left column):
+- The **Results** tab shows different information about the selected output (left column):
+    - `Residual <https://openturns.github.io/openturns/master/user_manual/response_surface/_generated/openturns.FunctionalChaosResult.html?highlight=functionalchaosresult#openturns.FunctionalChaosResult.getResiduals>`_
+    - `Relative error <https://openturns.github.io/openturns/master/user_manual/response_surface/_generated/openturns.FunctionalChaosResult.html?highlight=functionalchaosresult#openturns.FunctionalChaosResult.getRelativeErrors>`_
     - first and second order moments
     - polynomial basis: dimension, maximum degree, full/truncated size
     - part of variance explained by each polynom
 
-    .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_moments.png
-        :align: center
+
+.. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_plot.png
+    :align: center
+
+- The **Adequation** tab shows the fitting curve between the physical
+  model output values (**Real otput values**) and the metamodel values
+  (**Prediction**). The reference diagonal (in black) is built with the
+  physical model output values.
+
+  - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
+  - Graph interactivity:
+
+    - Left-click to translate the graph
+    - Mouse wheel up/down to zoom in/zoom out
 
 - The **Sobol indices** tab includes, for a selected output (left column):
 

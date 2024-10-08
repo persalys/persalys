@@ -139,6 +139,15 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
 
   thetaGroupBoxLayout->addWidget(thetaTableView);
   tabLayout->addWidget(thetaGroupBox, 0, Qt::AlignTop);
+
+  QString labelText = tr("Observation error standard deviation:\n");
+  labelText += QString("σ = ")
+    + QString::number(result_.getCalibrationResult().getObservationsError().getStandardDeviation()[0]);
+
+  QLabel * label = new QLabel(labelText);
+  label->setTextInteractionFlags(Qt::TextSelectableByMouse);
+  tabLayout->addWidget(label);
+
   tabLayout->addStretch();
   scrollArea->setWidget(tab);
 
@@ -184,8 +193,16 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
 
     pvWidget->setData(pdfSamplePrior, Qt::red);
     pvWidget->setData(pdfSamplePosterior, Qt::green);
-    pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Prior")).toList(), 0);
-    pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Posterior")).toList(), 1);
+    if (result_.isBayesian())
+    {
+      pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Prior")).toList(), 0);
+      pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Posterior")).toList(), 1);
+    }
+    else
+    {
+      pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Initial")).toList(), 0);
+      pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Calibrated")).toList(), 1);
+    }
     for (UnsignedInteger i = 0; i < nbInputs; ++i)
     {
       const QString varX(calibratedInputNames[i].c_str());
@@ -235,14 +252,21 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   (void)i;
 #ifdef PERSALYS_HAVE_PARAVIEW
 
-  QMap<QString, QColor> Colors_ = {{QObject::tr("Data"), Qt::blue}, {QObject::tr("Prior"), Qt::red}, {QObject::tr("Posterior"), Qt::green}};
+  QMap<QString, QColor> Colors_ = {
+    {QObject::tr("Data"), Qt::blue},
+    {QObject::tr("Prior"), Qt::red},
+    {QObject::tr("Posterior"), Qt::green},
+    {QObject::tr("Observations"), Qt::blue},
+    {QObject::tr("Initial"), Qt::red},
+    {QObject::tr("Calibrated"), Qt::green}
+  };
 
   // get descriptions
   const Description obsInDescription(observations_.getInputSample().getDescription());
   const QStringList obsInNames(QtOT::DescriptionToStringList(obsInDescription));
   const QStringList obsInLabels(QtOT::GetVariableAxisLabels(observations_.getPhysicalModel(), obsInDescription));
 
-  QStringList labels(QStringList() << tr("Data") << tr("Prior"));
+  QStringList labels(QStringList() << tr("Observations") << tr("Initial"));
 
   // output samples
   const Sample outputObs(observations_.getOutputSample().getMarginal(i));
@@ -252,7 +276,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   if (result_.getCalibrationResult().getOutputAtPosteriorMean().getSize())
   {
     outputSamples.stack(result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(i));
-    labels << tr("Posterior");
+    labels << tr("Calibrated");
   }
   const Description outDescription(QtOT::StringListToDescription(labels));
   outputSamples.setDescription(outDescription);
@@ -266,11 +290,11 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   // + residual samples
   sample.stack(outputObs - result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(i));
-  sampleDescription.add(tr("Prior residuals").toStdString());
+  sampleDescription.add(tr("Initial residuals").toStdString());
   if (result_.getCalibrationResult().getOutputAtPosteriorMean().getSize())
   {
     sample.stack(outputObs - result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(i));
-    sampleDescription.add(tr("Posterior residuals").toStdString());
+    sampleDescription.add(tr("Calibrated residuals").toStdString());
   }
   sample.setDescription(sampleDescription);
 
@@ -287,11 +311,12 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   pvWidget->PVViewWidget::setData(outputSamples);
   pvWidget->setSerieColors(Colors_);
 //   pvWidget->setSerieLineStyles(QMap<QString, int>{{tr("Data"), 1}}); // if line : pb with log scale (points order)
-  pvWidget->setXAxisData(tr("Data"));
+  pvWidget->setXAxisData(tr("Observations"));
   pvWidget->setAxisToShow(outDescription);
   pvWidget->setChartTitle(tr("Predictions vs observations"));
   pvWidget->setAxisTitle(vtkAxis::BOTTOM, tr("Observations"));
   pvWidget->setAxisTitle(vtkAxis::LEFT, tr("Predictions"));
+  pvWidget->getLegend()->SetHorizontalAlignment(vtkChartLegend::LEFT);
 
   TrajectoriesSettingWidget * chartSetting = new TrajectoriesSettingWidget(pvWidget, labels, this);
 
@@ -312,6 +337,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   pvWidget->setXAxisData(observations_.getInputSample().getDescription()[0].c_str());
   pvWidget->setAxisToShow(outDescription);
   pvWidget->setAxisTitle(vtkAxis::LEFT, tr("Predictions"));
+  pvWidget->getLegend()->SetHorizontalAlignment(vtkChartLegend::LEFT);
 
   chartSetting = new TrajectoriesSettingWidget(pvWidget, obsInNames, labels, this);
 
@@ -328,17 +354,22 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   Graph residualPDF(observationsError.drawPDF());
   pvWidget->setData(residualPDF.getDrawables()[0].getData(), Colors_[tr("Data")]);
-  pvWidget->setRepresentationLabels(QStringList() << tr("Data") << tr("Data"));
+  if (result_.isBayesian())
+    pvWidget->setRepresentationLabels(QStringList() << tr("Normal, hypothesis")
+                                      << tr("Normal, hypothesis"));
+  else
+    pvWidget->setRepresentationLabels(QStringList() << tr("Normal, estimated")
+                                      << tr("Normal, estimated"));
 
   if (result_.getPriorResidualsPDF()[i].getSize())
   {
     pvWidget->setData(result_.getPriorResidualsPDF()[i], Colors_[tr("Prior")]);
-    pvWidget->setRepresentationLabels(QStringList() << tr("Prior") << tr("Prior"), 1);
+    pvWidget->setRepresentationLabels(QStringList() << tr("Initial") << tr("Initial"), 1);
   }
   if (result_.getPosteriorResidualsPDF()[i].getSize())
   {
     pvWidget->setData(result_.getPosteriorResidualsPDF()[i], Colors_[tr("Posterior")]);
-    pvWidget->setRepresentationLabels(QStringList() << tr("Posterior") << tr("Posterior"), 2);
+    pvWidget->setRepresentationLabels(QStringList() << tr("Calibrated") << tr("Calibrated"), 2);
   }
 
   pvWidget->setXAxisData("v0");

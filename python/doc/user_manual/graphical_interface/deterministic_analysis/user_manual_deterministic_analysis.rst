@@ -1128,7 +1128,9 @@ when the user selects points on one of these representations, the same points ar
 The results window gathers the following tabs:
 
 - The **θ** tab includes:
-    - The optimal point and its confidence interval (**Optimal** tab)
+    - The **Optimal** tab which displays:
+         - The optimal point and its confidence interval
+         - The observations error standard deviation, which is, for gaussian cases an hypothesis (see `example <https://openturns.github.io/openturns/latest/auto_calibration/least_squares_and_gaussian_calibration/plot_calibration_chaboche.html#sphx-glr-auto-calibration-least-squares-and-gaussian-calibration-plot-calibration-chaboche-py>`_)
     - The prior and posterior PDF of the calibrated inputs (**PDF** tab)
 
 - The **Prediction** tab includes, for a selected output (left column):
@@ -1188,7 +1190,9 @@ The results window gathers the following tabs:
     - The **Residuals QQ-plot** tab displays the residuals after calibration versus the Gaussian hypothesis
       - Blue points are the data and the red-dashed line in the Henry line
 
-      - see `example <http://openturns.github.io/openturns/master/auto_calibration/least_squares_and_gaussian_calibration/plot_calibration_chaboche.html#id1>`_ from OpenTURNS documentation
+      - see `example <http://openturns.github.io/openturns/master/auto_calibration/least_squares_and_gaussian_calibration/plot_calibration_chaboche.html#id1>`__ from OpenTURNS documentation
+
+      .. image:: /user_manual/graphical_interface/deterministic_analysis/calibration_ResultWindow_residualsQQ.png
 
 - The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
 
