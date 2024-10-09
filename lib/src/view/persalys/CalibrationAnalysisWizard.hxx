@@ -161,6 +161,7 @@ protected:
 public slots:
   void updatePages(const DesignOfExperiment&);
   void initializePages();
+  void fitContent(int);
 
 private:
   QList<DesignOfExperiment> observationsList_;
@@ -169,6 +170,7 @@ private:
   CalibrationDistributionPage * priorDistPage_;
   CalibrationDistributionPage * obsErrorDistPage_;
   CalibrationParametersPage * paramPage_;
+  QSize defaultSize_;
 };
 }
 #endif
