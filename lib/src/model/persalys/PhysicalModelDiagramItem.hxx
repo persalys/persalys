@@ -59,7 +59,7 @@ public slots:
   void requestObservationsRemoval();
   void requestCalibrationCreation();
   void updateDesignEvaluationCounter(bool);
-  void updateMetamodelCounter(bool);
+  void updateMetamodelCounter(int);
   void duplicatePhysicalModel();
   void removePhysicalModel();
   void newLimitState();
