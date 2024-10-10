@@ -42,7 +42,9 @@ DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringLi
   if (variables_.getSize() == 1)
     allDistributions_ = TranslationManager::GetTranslatedContinuousDistributions();
   else if (variables_.getSize() > 2)
-    allDistributions_ << TranslationManager::GetTranslatedCopulaName("Normal");
+    allDistributions_ << TranslationManager::GetTranslatedCopulaName("Normal")
+                      << TranslationManager::GetTranslatedCopulaName("Student")
+                      << TranslationManager::GetTranslatedCopulaName("Independent");
   else
     allDistributions_ = TranslationManager::GetAvailableCopulas();
 
@@ -86,7 +88,6 @@ void DistributionsForInferenceWidget::buildInterface()
   buttonsLayout->addStretch();
   addComboBox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
   addComboBox_->addItems(notUsedDistributions);
-  addComboBox_->setEnabled(variables_.getSize() <= 2);
 
   buttonsLayout->addWidget(addComboBox_);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -99,7 +100,6 @@ void DistributionsForInferenceWidget::buildInterface()
   // Remove button
   QPushButton * removeButton = new QPushButton(tr("Remove"));
   removeButton->setIcon(QIcon(":/images/list-remove.png"));
-  removeButton->setEnabled(variables_.getSize() <= 2);
   connect(removeButton, SIGNAL(pressed()), this, SLOT(removeSelectedDistribution()));
   buttonsLayout->addWidget(removeButton);
 
