@@ -1,3 +1,14 @@
+= 17.0 release (2024-10-11)
+
+ * Added global parallelization setting
+ * Added specific Python/Coupling/FMI/YACS models properties (parallelization)
+ * Fixed FMI model parallelization
+ * Fixed histograms bandwidth
+ * Fixed calibration result plots legends
+ * Python 3.12 support
+ * ParaView 5.12 support
+ * Various bug fixes
+
 = 16.1 release (2024-07-05)
 
  * Added nopip module for Python modules installation
