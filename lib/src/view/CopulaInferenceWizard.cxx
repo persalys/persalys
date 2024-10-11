@@ -27,6 +27,10 @@
 
 #include <openturns/NormalCopulaFactory.hxx>
 
+#if OPENTURNS_VERSION < 102400
+#include <openturns/IndependentCopulaFactory.hxx>
+#endif
+
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QToolButton>
@@ -190,8 +194,18 @@ void CopulaInferenceWizard::updateDistForVars(const Description& vars, const QSt
   CopulaInferenceAnalysis::DistributionFactoryCollection factories;
   for (int i = 0; i < dist.size(); ++i)
   {
+#if OPENTURNS_VERSION < 102400
+    if (dist[i].contains("Independent"))
+      factories.add(IndependentCopulaFactory());
+    else
+    {
+      const String distName = TranslationManager::GetCopulaName(dist[i]);
+      factories.add(DistributionFactory::GetByName(distName+"CopulaFactory"));
+    }
+#else
     const String distName = TranslationManager::GetCopulaName(dist[i]);
     factories.add(DistributionFactory::GetByName(distName+"CopulaFactory"));
+#endif
   }
   distForVars_[vars] = factories;
 }

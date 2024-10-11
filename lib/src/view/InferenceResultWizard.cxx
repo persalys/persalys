@@ -44,7 +44,7 @@ InferenceResultWizard::InferenceResultWizard(const Study& study, QWidget* parent
   , errorMessageLabel_(0)
 {
   buildInterface();
-  resize(1000, 600);
+  adjustSize();//resize(1000, 600);
 }
 
 

@@ -156,6 +156,7 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
 {
   std::vector<Observer*> copyObservers(analysis_.getImplementation()->getObservers());
   // update analysis_
+  const bool wasValid = analysis_.hasValidResult();
   analysis_ = analysis;
   // set the observers
   for (auto obs : copyObservers)
@@ -171,7 +172,10 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   if (convertAction_)
   {
     convertAction_->setEnabled(analysis_.hasValidResult());
-    emit numberMetamodelChanged(analysis_.hasValidResult());
+    if (wasValid)
+      emit numberMetamodelChanged(analysis_.hasValidResult() ? 0 : -1);
+    else
+      emit numberMetamodelChanged(analysis_.hasValidResult() ? 1 : 0);
   }
   if (extractDataAction_)
     extractDataAction_->setEnabled(analysis_.hasValidResult());
@@ -318,7 +322,7 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
     if (convertAction_)
     {
       convertAction_->setEnabled(true);
-      emit numberMetamodelChanged(true);
+      emit numberMetamodelChanged(1);
     }
     if (extractDataAction_)
       extractDataAction_->setEnabled(true);
@@ -352,7 +356,7 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
       qDebug() << "AnalysisItem::update(objectRemoved) has not to contain child\n";
     if (convertAction_)
     {
-      emit numberMetamodelChanged(false);
+      emit numberMetamodelChanged(-1);
     }
     emit removeRequested(row());
   }

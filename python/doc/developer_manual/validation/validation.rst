@@ -308,7 +308,6 @@ Settings Menu
 
 - click Menu->Tools->Settings
   - Spinbox to set the number of parallel processes
-  - A warning stating that the study requires reloading is displayed
 
 - close the menu
 
@@ -1936,7 +1935,7 @@ Probabilistic analyses
       - choose item 'All' in the list of Add button => add all copulas in the list
       - remove items in the copulas table: use ctrl key (to select items one by one), use shift key (to select adjacent items)
       - add/remove groups with the arrows
-      - if there are at least 3 variables in a group: only the Normal copula is proposed
+      - if there are at least 3 variables in a group: only the Normal/Student/Independent copulas are proposed
       - select a variable + empty the copulas list + click on Finish
 
         - error message 'At least one copula etc.'
@@ -2137,8 +2136,18 @@ Physical model
     - the 'MetaModel creation' button of the diagram is enabled
 
 - click on the 'MetaModel creation' button of the diagram
-    - a wizard appears, click on Continue button then on Finish button
+    - a wizard appears, click on Continue button several times then on Finish button, an item 'metaModel_0' appears, click on it
+    - click on the 'Run' button
     - the 'Export as model' buttons is enabled
+
+- redo the previous action
+
+- click on the 'Export as model' button of the diagram
+    - a wizard appears, there are 2 items in the combo box
+    - right click then 'Remove' on 'metaModel_0' item
+    - right click then 'Modify' on 'metaModel_1' item
+    - go through all the wizard pages then finish
+    - do not run the MetaModel analysis, check that the 'Metamodel creation' diagram button is greyed out
 
 - click on the 'Probabilistic model definition' button of the diagram
     - a window appears, select X0

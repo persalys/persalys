@@ -109,7 +109,6 @@ CalibrationIntroPage::CalibrationIntroPage(QWidget * parent)
   pageLayout->addWidget(methodBox);
 }
 
-
 void CalibrationIntroPage::initialize(const Analysis& analysis, QList<DesignOfExperiment> observationsList)
 {
   // limit state
@@ -460,7 +459,11 @@ CalibrationAnalysisWizard::CalibrationAnalysisWizard(const Analysis &analysis, c
   {
     observationsList_.append(observations);
   }
+  // store default size for when pages get resized;
+  defaultSize_ = size();
   buildInterface();
+
+  connect(this, SIGNAL(currentIdChanged(int)), this, SLOT(fitContent(int)));
 }
 
 
@@ -690,4 +693,22 @@ Analysis CalibrationAnalysisWizard::getAnalysis() const
 
   return calibration;
 }
+
+void CalibrationAnalysisWizard::fitContent(int /*id*/)
+{
+  // adjust size for pages w. MarginalsWidget, reset size for others
+  switch (currentId())
+  {
+  case Page_PriorDist:
+  case Page_ObsErrorDist:
+    adjustSize();
+    return;
+  default:
+    resize(defaultSize_);
+    return;
+  }
+}
+
+
+
 }

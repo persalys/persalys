@@ -445,7 +445,7 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
   {
     AnalysisItem * newItem = dynamic_cast<AnalysisItem*>(analysis.getImplementation().get()->getObserver("AnalysisItem"));
     // connections
-    connect(newItem, SIGNAL(numberMetamodelChanged(bool)), this, SLOT(updateMetamodelCounter(bool)));
+    connect(newItem, SIGNAL(numberMetamodelChanged(int)), this, SLOT(updateMetamodelCounter(int)));
 
     if(newItem->getAnalysis().hasValidResult())
       ++metamodelCounter_;
@@ -528,12 +528,11 @@ void PhysicalModelDiagramItem::updateDesignEvaluationCounter(bool increment)
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
 }
 
-void PhysicalModelDiagramItem::updateMetamodelCounter(bool increment)
+void PhysicalModelDiagramItem::updateMetamodelCounter(int increment)
 {
-  if (increment)
-    ++metamodelCounter_;
-  else
-    --metamodelCounter_;
+  metamodelCounter_ += increment;
+  if (metamodelCounter_ < 0)
+    metamodelCounter_ = 0;
   emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
 }
 
