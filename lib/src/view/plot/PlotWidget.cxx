@@ -808,7 +808,11 @@ void PlotWidget::plotContour(const Collection<Drawable>& drawables,
   {
     Contour * contour2 = dynamic_cast<Contour*>(drawables[i].getImplementation().get());
     if (contour2)
-      levels.append(drawables[i].getLevels()[0]);
+    {
+      const Point levelsI(drawables[i].getLevels());
+      for (UnsignedInteger j = 0; j < levelsI.getSize(); ++ j)
+        levels.append(levelsI[j]);
+    }
   }
   std::sort(levels.begin(), levels.end());
   spectrogram->setContourLevels(levels);
