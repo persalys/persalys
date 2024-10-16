@@ -29,6 +29,7 @@
 
 #if OPENTURNS_VERSION < 102400
 #include <openturns/IndependentCopulaFactory.hxx>
+#include <openturns/StudentCopulaFactory.hxx>
 #endif
 
 #include <QVBoxLayout>
@@ -197,6 +198,8 @@ void CopulaInferenceWizard::updateDistForVars(const Description& vars, const QSt
 #if OPENTURNS_VERSION < 102400
     if (dist[i].contains("Independent"))
       factories.add(IndependentCopulaFactory());
+    else if (dist[i].contains("Student"))
+      factories.add(StudentCopulaFactory());
     else
     {
       const String distName = TranslationManager::GetCopulaName(dist[i]);
