@@ -221,16 +221,22 @@ void InferenceAnalysis::launch()
       notify("progressValueChanged");
 
       const DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
+      const String cname = distFactory.getImplementation()->getClassName();
+      const String distributionName = cname.substr(0, cname.find("Factory"));
+      Distribution distribution = DistributionDictionary::BuildDistribution(distributionName, 0);
+      TestResult testResult;
+      Scalar bicResult = SpecFunc::MaxScalar;
+      Interval paramCI = Interval();
+      Bool inferenceOK = false;
       try
       {
         if (sortedSampleI.getSize() < 2)
           throw InvalidArgumentException(HERE) << "constant sample";
 
-        Distribution distribution(distFactory.build(sampleI));
+        distribution = distFactory.build(sampleI);
         distribution.getMean(); // ensures mean is defined
         distribution.getStandardDeviation(); // ensures sttdev is defined
 
-        TestResult testResult;
         switch(type_)
         {
           case InferenceAnalysis::Lilliefors:
@@ -243,42 +249,48 @@ void InferenceAnalysis::launch()
             throw InvalidArgumentException(HERE) << "Unknown test type.";
         }
         // BIC test
-        const Scalar bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
-
+        bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
+        inferenceOK = true;
         // set fittingTestResult
-        fittingTestResult.testedDistributions_.add(distribution);
-
         if (estimateParamCI_)
         {
           Distribution paramDist(distFactory.buildEstimator(sample.getMarginal(i)).getParameterDistribution());
-          fittingTestResult.paramCI_.add(paramDist.computeBilateralConfidenceInterval(paramCILevel_));
+          paramCI = paramDist.computeBilateralConfidenceInterval(paramCILevel_);
         }
-
-        fittingTestResult.testResults_.add(testResult);
-        fittingTestResult.bicResults_.add(bicResult);
       }
       catch (std::exception & ex)
       {
-        const String cname = distFactory.getImplementation()->getClassName();
-        const String distributionName = cname.substr(0, cname.find("Factory"));
-        const String message = OSS() << "Error when building the "
-                               << distributionName
-                               << " distribution with the sample of the variable "
-                               << sample.getDescription()[i]
-                               << ". "
-                               << ex.what()
-                               << "\n";
-        // set fittingTestResult
-        fittingTestResult.testedDistributions_.add(DistributionDictionary::BuildDistribution(distributionName, 0));
-        TestResult testResult;
-        fittingTestResult.testResults_.add(testResult);
-        fittingTestResult.bicResults_.add(SpecFunc::MaxScalar);
-        fittingTestResult.errorMessages_[j] = message;
-        if (estimateParamCI_)
+        if (inferenceOK)
         {
-          fittingTestResult.paramCI_.add(Interval());
+          const String message = OSS() << "Error when estimating the "
+                                       << distributionName
+                                       << " parameters confidence interval with the sample of the variable "
+                                       << sample.getDescription()[i]
+                                       << ". "
+                                       << ex.what()
+                                       << "\n";
+          fittingTestResult.errorMessages_[j] = message;
+        }
+        else
+        {
+          const String message = OSS() << "Error when building the "
+                                       << distributionName
+                                       << " distribution with the sample of the variable "
+                                       << sample.getDescription()[i]
+                                       << ". "
+                                       << ex.what()
+                                       << "\n";
+          fittingTestResult.errorMessages_[j] = message;
         }
       }
+
+      // set fittingTestResult
+      fittingTestResult.testedDistributions_.add(distribution);
+      fittingTestResult.testResults_.add(testResult);
+      fittingTestResult.bicResults_.add(bicResult);
+      if (estimateParamCI_)
+        fittingTestResult.paramCI_.add(paramCI);
+
       distCounter++;
     }
     result_.fittingTestResultCollection_.add(fittingTestResult);
