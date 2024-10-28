@@ -43,7 +43,7 @@ YACSEvaluation::YACSEvaluation(const String & script)
   : EvaluationImplementation()
 {
   if (!script.empty())
-    setContent(script);
+    setCode(script);
   jobParams_.configureResource("localhost");
   jobParams_.createTmpResultDirectory();
 }
@@ -59,7 +59,7 @@ YACSEvaluation* YACSEvaluation::clone() const
 /* Comparison operator */
 Bool YACSEvaluation::operator ==(const YACSEvaluation & other) const
 {
-  return (studyFunction_.content() == other.studyFunction_.content());
+  return (getCode() == other.getCode());
 }
 
 
@@ -69,7 +69,7 @@ String YACSEvaluation::__repr__() const
   OSS oss(true);
   oss << "class=" << YACSEvaluation::GetClassName()
       << " name=" << getName()
-      << " code=" << studyFunction_.content();
+      << " code=" << getCode();
   return oss;
 }
 
@@ -78,7 +78,7 @@ String YACSEvaluation::__repr__() const
 String YACSEvaluation::__str__(const String & offset) const
 {
   OSS oss(false);
-  oss << offset << getInputDescription() << " code=" << studyFunction_.content();
+  oss << offset << getInputDescription() << " code=" << getCode();
   return oss;
 }
 
@@ -94,16 +94,15 @@ Point YACSEvaluation::operator() (const Point & inP) const
 Sample YACSEvaluation::operator() (const Sample & inS) const
 {
   InterpreterUnlocker iul;
-  if(!studyFunction_.isValid())
+  ydefx::PyStudyFunction studyFunction;
+  studyFunction.loadString(getCode());
+  if(getCode().empty())
   {
-    Log::Error(OSS() << "Invalid study function: " << studyFunction_.errors()
-               << "\n");
-    throw InvalidArgumentException(HERE) << "The study function is incorrect: "
-                                         << studyFunction_.errors() ;
+    throw InvalidArgumentException(HERE) << "The script is empty.";
   }
 
-  std::list<std::string> inputNames = studyFunction_.inputNames();
-  std::list<std::string> outputNames = studyFunction_.outputNames();
+  std::list<std::string> inputNames = studyFunction.inputNames();
+  std::list<std::string> outputNames = studyFunction.outputNames();
   if (inputNames.size() != inS.getDimension())
   {
     Log::Error(OSS() <<
@@ -145,7 +144,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   std::unique_ptr<ydefx::Job> myJob;
   if (!isRunning_)
   {
-    myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction_, jobSample, jobParams_));
+    myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction, jobSample, jobParams_));
     setIsRunning(true);
   }
   else
@@ -291,14 +290,14 @@ void YACSEvaluation::setStopCallback(StopCallback callBack, void * state)
 void YACSEvaluation::save(Advocate & adv) const
 {
   EvaluationImplementation::save(adv);
-  adv.saveAttribute("code_", studyFunction_.content());
+  adv.saveAttribute("code_", code_);
   Description listInputFiles;
   std::list<std::string> inFiles = jobParams_.in_files();
   for(const std::string& f : inFiles)
     listInputFiles.add(f);
   adv.saveAttribute("inputFiles_", listInputFiles);
   adv.saveAttribute("dump_", dump_);
-  adv.saveAttribute("isRunning__", isRunning_);
+  adv.saveAttribute("isRunning_", isRunning_);
 }
 
 
@@ -306,9 +305,7 @@ void YACSEvaluation::save(Advocate & adv) const
 void YACSEvaluation::load(Advocate & adv)
 {
   EvaluationImplementation::load(adv);
-  std::string value;
-  adv.loadAttribute("code_", value);
-  setContent(value);
+  adv.loadAttribute("code_", code_);
   Description listInputFiles;
   adv.loadAttribute("inputFiles_", listInputFiles);
   std::list<std::string> inFiles;
@@ -318,29 +315,31 @@ void YACSEvaluation::load(Advocate & adv)
   if (adv.hasAttribute("dump_"))
     adv.loadAttribute("dump_", dump_);
   if (adv.hasAttribute("isRunning_"))
-    adv.loadAttribute("isRunning__", isRunning_);
+    adv.loadAttribute("isRunning_", isRunning_);
 }
 
 
 /* Accessor to the formulas */
-OT::String YACSEvaluation::getContent() const
+OT::String YACSEvaluation::getCode() const
 {
-  return studyFunction_.content();
+  return code_;
 }
 
 
-void YACSEvaluation::setContent(const OT::String & pyScript)
+void YACSEvaluation::setCode(const OT::String & code)
 {
   inputValues_.clear();
   inDescription_.clear();
   outDescription_.clear();
 
-  studyFunction_.loadString(pyScript);
-  if(!studyFunction_.isValid())
-    return;
+  ydefx::PyStudyFunction studyFunction;
+  studyFunction.loadString(code);
+  if(!studyFunction.isValid())
+    throw InvalidArgumentException(HERE) << "Invalid YACS script code";
 
-  std::list<std::string> inputNames = studyFunction_.inputNames();
-  std::list<std::string> outputNames = studyFunction_.outputNames();
+  std::list<std::string> inputNames = studyFunction.inputNames();
+  std::list<std::string> outputNames = studyFunction.outputNames();
+  code_ = code;
 
   for(const std::string& name : inputNames)
   {

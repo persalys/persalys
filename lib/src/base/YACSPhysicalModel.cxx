@@ -64,37 +64,37 @@ YACSPhysicalModel* YACSPhysicalModel::clone() const
 
 void YACSPhysicalModel::setInputs(const InputCollection & inputs)
 {
-  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::addInput(const Input & input)
 {
-  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::removeInput(const String & inputName)
 {
-  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::setOutputs(const OutputCollection & outputs)
 {
-  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::addOutput(const Output & output)
 {
-  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a YACS model";
 }
 
 
 void YACSPhysicalModel::removeOutput(const String & outputName)
 {
-  throw NotYetImplementedException(HERE) << "Use setContent to modify a YACS model";
+  throw NotYetImplementedException(HERE) << "Use setCode to modify a YACS model";
 }
 
 
@@ -116,17 +116,17 @@ void YACSPhysicalModel::setJobModel(const py2cpp::PyPtr& model)
 }
 
 
-String YACSPhysicalModel::getContent() const
+String YACSPhysicalModel::getCode() const
 {
-  return evaluation_.getContent();
+  return evaluation_.getCode();
 }
 
 
-void YACSPhysicalModel::setContent(const String & script)
+void YACSPhysicalModel::setCode(const String & code)
 {
   try
   {
-    evaluation_.setContent(script);
+    evaluation_.setCode(code);
   }
   catch (std::exception & ex)
   {
@@ -211,7 +211,7 @@ String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "</table></p>";
   oss << "<h3>Content</h3>";
   oss << "<pre>";
-  String code = getContent();
+  String code = getCode();
   // replace all "<" by "&lt;"
   ReplaceInString(code, "<", "&lt;");
   oss << code;
@@ -235,7 +235,7 @@ String YACSPhysicalModel::getPythonScript() const
   oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
 
   // replace ''' by """
-  std::string myString = getContent();
+  std::string myString = getCode();
   ReplaceInString(myString, "'''", "\"\"\"");
 
   oss << "code = '''" << myString << "'''\n";

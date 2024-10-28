@@ -24,7 +24,7 @@ CouplingPhysicalModel"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::YACSCouplingPhysicalModel::getContent
+%feature("docstring") PERSALYS::YACSCouplingPhysicalModel::getCode
 "Script content of the model.
 
 Returns
@@ -34,7 +34,7 @@ result : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::YACSCouplingPhysicalModel::setContent
+%feature("docstring") PERSALYS::YACSCouplingPhysicalModel::setCode
 "Modify the script content of the model.
 
 Parameters
