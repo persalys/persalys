@@ -44,7 +44,7 @@ SobolAnalysis::SobolAnalysis()
   : SimulationAnalysis()
   , WithStopCriteriaAnalysis()
   , maximumConfidenceIntervalLength_(ResourceMap::GetAsScalar("SobolSimulationAlgorithm-DefaultIndexQuantileEpsilon"))
-  , replicationSize_(ResourceMap::GetAsUnsignedInteger("SobolSimulationAlgorithm-DefaultBlockSize"))
+  , replicationSize_(ResourceMap::GetAsUnsignedInteger("SobolSimulationAlgorithm-DefaultExperimentSize"))
   , confidenceLevel_(1 - ResourceMap::GetAsScalar("SobolSimulationAlgorithm-DefaultIndexQuantileLevel"))
   , result_()
 {
@@ -56,7 +56,7 @@ SobolAnalysis::SobolAnalysis()
 SobolAnalysis::SobolAnalysis(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
   , maximumConfidenceIntervalLength_(ResourceMap::GetAsScalar("SobolSimulationAlgorithm-DefaultIndexQuantileEpsilon"))
-  , replicationSize_(ResourceMap::GetAsUnsignedInteger("SobolSimulationAlgorithm-DefaultBlockSize"))
+  , replicationSize_(ResourceMap::GetAsUnsignedInteger("SobolSimulationAlgorithm-DefaultExperimentSize"))
   , confidenceLevel_(1 - ResourceMap::GetAsScalar("SobolSimulationAlgorithm-DefaultIndexQuantileLevel"))
   , result_()
 {
@@ -174,7 +174,7 @@ void SobolAnalysis::UpdateProgressValue(double percent, void * data)
   }
 
   // set information message
-  oss << "Elapsed time = " << analysisStruct->analysis_->timeCriteria_.getElapsedTime() << " s\n";
+  oss << "Elapsed time = " << analysisStruct->simulation_->getResult().getTimeDuration() << " s\n";
   analysisStruct->analysis_->informationMessage_ = oss;
   analysisStruct->analysis_->notify("informationMessageUpdated");
 }
@@ -210,15 +210,15 @@ void SobolAnalysis::launch()
   SobolSimulationAlgorithm algo(getPhysicalModel().getDistribution(), function, estimator);
 
   algo.setMaximumOuterSampling(maximumOuterSampling);
-  algo.setBatchSize(getBlockSize());
-  algo.setBlockSize(getReplicationSize());
+  algo.setBlockSize(getBlockSize());
+  algo.setExperimentSize(getReplicationSize());
   algo.setIndexQuantileEpsilon(getMaximumConfidenceIntervalLength());
   algo.setIndexQuantileLevel(level);
 
   // set callbacks
-  timeCriteria_.setStartTime(TimeCriteria::Now());
-  timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime() > 0 ? getMaximumElapsedTime() : std::numeric_limits<double>::max());
-  algo.setStopCallback(&WithStopCriteriaAnalysis::Stop, &timeCriteria_);
+  if (getMaximumElapsedTime() > 0)
+    algo.setMaximumTimeDuration(getMaximumElapsedTime());
+  algo.setStopCallback(&AnalysisImplementation::Stop, this);
   SobolAnalysisStruct analysisStruc(this, &algo);
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 
@@ -228,7 +228,7 @@ void SobolAnalysis::launch()
   // set results
   result_.outputNames_ = getInterestVariables();
   result_.callsNumber_ = function.getOutputHistory().getSize();
-  result_.elapsedTime_ = timeCriteria_.getElapsedTime();
+  result_.elapsedTime_ = algo.getResult().getTimeDuration();
 
   result_.firstOrderIndices_ = Sample(0, nbInputs);
   result_.firstOrderIndices_.setDescription(getPhysicalModel().getStochasticInputNames());
@@ -280,8 +280,8 @@ void SobolAnalysis::launch()
                                       estimator_i);
 
       algo_i.setMaximumOuterSampling(outerSampling);
-      algo_i.setBatchSize(getReplicationSize());
-      algo_i.setBlockSize(getReplicationSize());
+      algo_i.setExperimentSize(getReplicationSize());
+      algo_i.setBlockSize(getBlockSize());
       algo_i.setIndexQuantileEpsilon(-1.0);
       algo_i.setIndexQuantileLevel(1.0 - getConfidenceLevel());
 
@@ -302,14 +302,6 @@ void SobolAnalysis::launch()
   }
   function.disableHistory();
 }
-
-
-void SobolAnalysis::stop()
-{
-  AnalysisImplementation::stop();
-  timeCriteria_.stop();
-}
-
 
 SobolResult SobolAnalysis::getResult() const
 {

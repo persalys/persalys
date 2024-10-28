@@ -115,4 +115,10 @@ void SimulationInterface::setStopCallback(SimulationInterface::StopCallback call
 {
   getImplementation()->setStopCallback(callBack, data);
 }
+
+void SimulationInterface::setMaximumTimeDuration(const Scalar maximumTimeDuration)
+{
+  getImplementation()->setMaximumTimeDuration(maximumTimeDuration);
+}
+
 }

@@ -35,8 +35,6 @@ namespace PERSALYS
     static std::once_flag flag;
     std::call_once(flag, [&]()
     {
-      // increase function cache
-      OT::ResourceMap::SetAsUnsignedInteger("Cache-MaxSize", 16384);
 #ifdef _WIN32
       // ProcessPoolExecutor startup penalty is much higher
       OT::ResourceMap::AddAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", 1);

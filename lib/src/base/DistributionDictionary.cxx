@@ -36,8 +36,8 @@ std::vector<String> DistributionDictionary::ContinuousDistributions_ =
 };
 std::vector<String> DistributionDictionary::DiscreteDistributions_ =
 {
-  "Bernoulli", "Geometric", "Binomial", "Hypergeometric", "NegativeBinomial",
-  "Poisson", "Skellam", "UserDefined", "ZipfMandelbrot"
+  "Bernoulli", "Binomial", "Geometric", "Hypergeometric",
+  "Poisson", "Polya", "Skellam", "UserDefined", "ZipfMandelbrot"
 };
 
 
@@ -120,9 +120,9 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
 
       return LogUniform(muLog - sqrt(3.0) * sigmaLog, muLog + sqrt(3.0) * sigmaLog);
     }
-    else if (distributionName == "NegativeBinomial")
+    else if (distributionName == "Polya")
     {
-      return NegativeBinomial();
+      return Polya();
     }
     else if (distributionName == "Normal")
     {

@@ -50,10 +50,10 @@ void TranslationManager::InitializeDistributionsNames()
   DistributionsNames_.insert(type("Logistic", tr("Logistic")));
   DistributionsNames_.insert(type("LogNormal", tr("LogNormal")));
   DistributionsNames_.insert(type("LogUniform", tr("LogUniform")));
-  DistributionsNames_.insert(type("NegativeBinomial", tr("NegativeBinomial")));
   DistributionsNames_.insert(type("Normal", tr("Normal")));
   DistributionsNames_.insert(type("Pareto", "Pareto"));
   DistributionsNames_.insert(type("Poisson", "Poisson"));
+  DistributionsNames_.insert(type("Polya", "Polya"));
   DistributionsNames_.insert(type("Rayleigh", "Rayleigh"));
   DistributionsNames_.insert(type("Skellam", "Skellam"));
   DistributionsNames_.insert(type("SmoothedUniform", tr("Smoothed uniform")));

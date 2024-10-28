@@ -37,8 +37,6 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
   : ReliabilityAnalysis()
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , blockSize_(10)
-  , timeCriteria_()
 {
   setMaximumCoefficientOfVariation(0.1);
 }
@@ -50,8 +48,6 @@ SimulationReliabilityAnalysis::SimulationReliabilityAnalysis(const String& name,
   : ReliabilityAnalysis(name, limitState)
   , WithStopCriteriaAnalysis()
   , seed_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , blockSize_(10)
-  , timeCriteria_()
 {
   setMaximumCoefficientOfVariation(0.1);
 }
@@ -95,7 +91,7 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
   OSS oss;
   oss << "Number of iterations = " << analysisStruct->simulation_.getResult().getOuterSampling() << "\n";
   oss << "Coefficient of variation = " << analysisStruct->simulation_.getResult().getCoefficientOfVariation() << "\n";
-  oss << "Elapsed time = " << analysisStruct->analysis_->timeCriteria_.getElapsedTime() << " s\n";
+  oss << "Elapsed time = " << analysisStruct->simulation_.getResult().getTimeDuration() << " s\n";
   analysisStruct->analysis_->informationMessage_ = oss;
   analysisStruct->analysis_->notify("informationMessageUpdated");
 }
@@ -136,7 +132,6 @@ void SimulationReliabilityAnalysis::setBlockSize(const UnsignedInteger size)
 void SimulationReliabilityAnalysis::initialize()
 {
   AnalysisImplementation::initialize();
-  timeCriteria_ = TimeCriteria();
   result_ = SimulationReliabilityResult();
 }
 
@@ -146,8 +141,7 @@ void SimulationReliabilityAnalysis::launch()
   // initialization
   RandomGenerator::SetSeed(getSeed());
 
-  Description outputName(1);
-  outputName[0] = getLimitState().getOutputName();
+  Description outputName = {getLimitState().getOutputName()};
 
   // get function
   MemoizeFunction function(getPhysicalModel().getRestrictedFunction(outputName));
@@ -172,9 +166,9 @@ void SimulationReliabilityAnalysis::launch()
   algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
   algo.setBlockSize(getBlockSize());
 
-  timeCriteria_.setStartTime(TimeCriteria::Now());
-  timeCriteria_.setMaxElapsedTime(getMaximumElapsedTime() > 0 ? getMaximumElapsedTime() : std::numeric_limits<double>::max());
-  algo.setStopCallback(&WithStopCriteriaAnalysis::Stop, &timeCriteria_);
+  if (getMaximumElapsedTime() > 0)
+    algo.setMaximumTimeDuration(getMaximumElapsedTime());
+  algo.setStopCallback(&AnalysisImplementation::Stop, this);
   SimuReliabilityAnalysisStruct analysisStruc(this, algo);
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 
@@ -198,17 +192,11 @@ void SimulationReliabilityAnalysis::launch()
                                         graph.getDrawables()[1].getData(),
                                         graph.getDrawables()[2].getData());
 
-  result_.elapsedTime_ = timeCriteria_.getElapsedTime();
+  result_.elapsedTime_ = algo.getResult().getTimeDuration();
 
   function.disableHistory();
 }
 
-
-void SimulationReliabilityAnalysis::stop()
-{
-  AnalysisImplementation::stop();
-  timeCriteria_.stop();
-}
 
 
 SimulationReliabilityResult SimulationReliabilityAnalysis::getResult() const

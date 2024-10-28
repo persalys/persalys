@@ -24,10 +24,6 @@
 
 #include <openturns/DistributionFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
-#if OPENTURNS_VERSION < 102400
-#include <openturns/IndependentCopulaFactory.hxx>
-#include <openturns/StudentCopulaFactory.hxx>
-#endif
 #include <openturns/Combinations.hxx>
 #include <openturns/VisualTest.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -304,18 +300,7 @@ void CopulaInferenceAnalysis::launch()
                                << ex.what()
                                << "\n";
         // set fittingTestResult
-#if OPENTURNS_VERSION < 102400
-        if (distributionName == "Independent")
-          inferenceSetResult.testedDistributions_.add(IndependentCopulaFactory().build());
-        else if (distributionName == "Student")
-          inferenceSetResult.testedDistributions_.add(StudentCopulaFactory().build());
-        else
-        {
-          inferenceSetResult.testedDistributions_.add(DistributionFactory::GetByName(distributionName+"CopulaFactory").build());
-        }
-#else
-        inferenceSetResult.testedDistributions_.add(DistributionFactory::GetByName(distributionName+"CopulaFactory").build());
-#endif
+        inferenceSetResult.testedDistributions_.add(DistributionFactory::GetByName(distributionName + "CopulaFactory").build());
 
         ProcessSample kendallPlotDataCollection;
         inferenceSetResult.bicResults_.add(SpecFunc::MaxScalar);

@@ -173,7 +173,7 @@ void MorrisAnalysis::launch()
 
   // build a Morris experiment
   const UnsignedInteger nbInputs = getPhysicalModel().getInputDimension();
-  MorrisExperimentGrid morris_experiment(Indices(nbInputs, level_), bounds_, trajectoriesNumber_);
+  MorrisExperimentGrid morris_experiment(Indices(nbInputs, level_), trajectoriesNumber_, bounds_);
   morris_experiment.setJumpStep(Indices(nbInputs, std::floor(level_ * 0.5)));
 
   // generate input sample

@@ -479,7 +479,6 @@ Description Tools::GetNormalizedVariables(const Description& variables)
 
 void TimeCriteria::setStartTime(const Scalar startTime)
 {
-  stopRequested_ = false;
   startTime_ = startTime;
 }
 Scalar TimeCriteria::getStartTime() const
@@ -490,10 +489,7 @@ void TimeCriteria::setMaxElapsedTime(const Scalar seconds)
 {
   maximumElapsedTime_ = seconds;
 }
-void TimeCriteria::stop()
-{
-  stopRequested_ = true;
-}
+
 void TimeCriteria::incrementElapsedTime()
 {
   elapsedTime_ = Now() - startTime_;

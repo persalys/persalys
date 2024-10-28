@@ -266,7 +266,7 @@ void OptimizationAnalysis::launch()
   problem.setMinimization(isMinimization_);
 
   // build solver
-  OptimizationAlgorithm solver(OptimizationAlgorithm::Build(solverName_));
+  OptimizationAlgorithm solver(OptimizationAlgorithm::GetByName(solverName_));
   solver.setProblem(problem);
   solver.setStartingPoint(variableInputsValues_);
   solver.setMaximumCallsNumber(getMaximumCallsNumber());

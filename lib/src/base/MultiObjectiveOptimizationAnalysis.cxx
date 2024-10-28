@@ -27,6 +27,7 @@
 #include <openturns/SimulatedAnnealingLHS.hxx>
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/UserDefined.hxx>
+#include <openturns/OptimizationAlgorithm.hxx>
 
 using namespace OT;
 

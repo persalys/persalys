@@ -76,13 +76,11 @@ class PERSALYS_BASE_API TimeCriteria
   friend class WithStopCriteriaAnalysis;
 
 public:
-  TimeCriteria() : startTime_(Now()), elapsedTime_(0.), maximumElapsedTime_(0.), stopRequested_(false)
-  {};
+  TimeCriteria() : startTime_(Now()) {};
   virtual ~TimeCriteria() {};
   void setStartTime(const OT::Scalar startTime);
   OT::Scalar getStartTime() const;
   void setMaxElapsedTime(const OT::Scalar seconds);
-  void stop();
   void incrementElapsedTime();
   OT::Scalar getElapsedTime() const;
   /** System time in seconds */
@@ -90,9 +88,8 @@ public:
 
 private:
   OT::Scalar startTime_;
-  mutable OT::Scalar elapsedTime_;
-  OT::Scalar maximumElapsedTime_;
-  bool stopRequested_;
+  mutable OT::Scalar elapsedTime_ = 0.0;
+  OT::Scalar maximumElapsedTime_ = 0.0;
 };
 
 inline OT::Description EscapeSpecialCharacters(const OT::Description & desc)

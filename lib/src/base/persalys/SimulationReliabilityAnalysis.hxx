@@ -54,8 +54,6 @@ public:
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
 
-  void stop() override;
-
   /** String converter */
   OT::String __repr__() const override;
 
@@ -72,9 +70,8 @@ protected:
   static void UpdateProgressValue(double percent, void* data);
 
 private:
-  OT::UnsignedInteger seed_;
-  OT::UnsignedInteger blockSize_;
-  TimeCriteria timeCriteria_;
+  OT::UnsignedInteger seed_ = 0;
+  OT::UnsignedInteger blockSize_ = 10;
 protected:
   SimulationReliabilityResult result_;
 };

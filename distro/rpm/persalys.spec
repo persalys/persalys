@@ -2,20 +2,14 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 
 %define __cmake %{_bindir}/cmake
-%define _cmake_lib_suffix64 -DLIB_SUFFIX=64
 %define cmake \
 CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
 CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
 FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
-%__cmake \\\
--DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \\\
-%if "%{?_lib}" == "lib64" \
-%{?_cmake_lib_suffix64} \\\
-%endif \
--DBUILD_SHARED_LIBS:BOOL=ON
+%__cmake -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}
 
 Name:           persalys
-Version:        17.0
+Version:        17.1dev
 Release:        0%{?dist}
 Summary:        GUI for OpenTURNS
 Group:          System Environment/Libraries
@@ -73,7 +67,6 @@ Python textual interface to Persalys uncertainty library
 %build
 %cmake -DCMAKE_INSTALL_PREFIX=/usr \
        -DINSTALL_DESTDIR:PATH=%{buildroot} \
-       -DUSE_SPHINX=OFF \
        -DUSE_SALOME=OFF .
 make %{?_smp_mflags}
 

@@ -44,15 +44,6 @@ WithStopCriteriaAnalysis::~WithStopCriteriaAnalysis()
 {
 }
 
-
-bool WithStopCriteriaAnalysis::Stop(void * p)
-{
-  TimeCriteria * arg = (TimeCriteria*)p;
-  arg->incrementElapsedTime();
-  return arg->stopRequested_ || (arg->elapsedTime_ > arg->maximumElapsedTime_);
-}
-
-
 UnsignedInteger WithStopCriteriaAnalysis::getMaximumCalls() const
 {
   return maximumCalls_;

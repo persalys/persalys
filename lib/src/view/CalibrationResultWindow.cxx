@@ -193,7 +193,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
 
     pvWidget->setData(pdfSamplePrior, Qt::red);
     pvWidget->setData(pdfSamplePosterior, Qt::green);
-    if (result_.isBayesian())
+    if (result_.getCalibrationResult().isBayesian())
     {
       pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Prior")).toList(), 0);
       pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Posterior")).toList(), 1);
@@ -354,7 +354,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   Graph residualPDF(observationsError.drawPDF());
   pvWidget->setData(residualPDF.getDrawables()[0].getData(), Colors_[tr("Data")]);
-  if (result_.isBayesian())
+  if (result_.getCalibrationResult().isBayesian())
     pvWidget->setRepresentationLabels(QStringList() << tr("Normal, hypothesis")
                                       << tr("Normal, hypothesis"));
   else

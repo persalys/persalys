@@ -15,7 +15,7 @@ cmake \
   -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -DPERSALYS_APPIMAGE" \
   -DCMAKE_SWIG_FLAGS="-Werror" -DSWIG_COMPILE_FLAGS="-Wno-unused-parameter -Wno-shadow" \
   -DPython_EXECUTABLE=/usr/local/bin/python3 \
-  -DSPHINX_FLAGS="-W -T -j8" \
+  -DUSE_SPHINX=ON -DSPHINX_FLAGS="-W -T -j8" \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr -DCMAKE_INSTALL_LIBDIR=lib \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so \
   /io
