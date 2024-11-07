@@ -303,6 +303,28 @@ Console Python
 
   - console hidden
 
+- check nopip is working properly on Linux
+
+  - remove the directory ~/.persalys_base
+  - type the following in the Python console
+
+  .. code-block:: python
+
+      from nopip import install
+      install.modules(["coolprop", "--user"], verbose=True)
+      import CoolProp
+
+- check nopip is working properly on Windows
+
+  - remove the directory %LOCALAPPDATA%\Roaming\Persalys
+  - type the following in the Python console
+
+  .. code-block:: python
+
+      from nopip import install
+      install.modules(["coolprop", "--user"], verbose=True)
+      import CoolProp
+
 Settings Menu
 `````````````
 

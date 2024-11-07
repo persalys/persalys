@@ -36,7 +36,7 @@ export PATH=${HERE}/usr/bin/:${PATH}
 export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/lib/omc/
 export PYTHONHOME=${HERE}/usr/
 export PYTHONUSERBASE=${HOME}/.persalys_base
-export PYTHONPATH=${PYTHONUSERBASE}/lib/python3.11/site-packages
+export PYTHONPATH=${PYTHONUSERBASE}/lib/python3.12/site-packages
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 export PV_PLUGIN_PATH=${HERE}/usr/lib/paraview/plugins/BagPlotViewsAndFilters
 
