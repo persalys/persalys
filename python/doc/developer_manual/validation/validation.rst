@@ -1261,6 +1261,8 @@ Probabilistic analyses
 
   - If the parametrization combo box index changes, the correlation matrix gets updated
 
+  - The copula graph shows 10 contour levels with the "Rainbow" palette
+
   - Re-run evaluation item in probaDesgin, check the model has the copula with the correct correlation matrix
 
       .. image:: /developer_manual/validation/proba_design_eval_model.png
