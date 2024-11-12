@@ -1,27 +1,19 @@
-FROM centos:7
+FROM almalinux:8
 
-# utils
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
- && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* \
- && yum -y install epel-release centos-release-scl \
- && sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-SCLo-scl*.repo \
- && sed -i 's|#[ ]*baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-SCLo-scl*.repo \
- && yum -y install wget git patch zip unzip bzip2 bsdtar perl perl-IPC-Cmd gettext autoconf automake libtool sudo make which file \
+RUN yum -y install almalinux-release-devel epel-release && yum config-manager --set-enabled powertools && yum upgrade -y \
+ && yum -y install wget git patch zip unzip bzip2 bsdtar perl-IPC-Cmd gettext autoconf automake libtool sudo make which file cmake \
   pcre-devel pcre2-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel libtree-ldd texinfo \
-  zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel gpg libffi-devel openssl-devel \
-  libX11-devel libXt-devel libXext-devel libXrender-devel gtk2-devel dbus-devel libSM-devel libICE-devel libXrandr-devel \
-  xorg-x11-server-Xvfb mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers libxkbcommon-x11-devel \
-  freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel \
-  xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xorg-x11-util-macros xcb-util-cursor-devel \
-  java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel curl-devel \
-  texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin tex-preview pandoc dvisvgm \
-  devtoolset-11-gcc devtoolset-11-gcc-c++ devtoolset-11-gcc-gfortran devtoolset-11-binutils \
- && sed -i "s|override_install_langs|#override_install_langs|g" /etc/yum.conf && yum -y reinstall glibc-common && localedef -i en_US -f UTF-8 C.UTF-8 \
- && mkdir -p /usr/share/texlive/texmf-local/tex/latex/ && cd /usr/share/texlive/texmf-local/tex/latex \
- && curl -fsSL http://mirrors.ctan.org/macros/latex/contrib/anyfontsize.zip | bsdtar -xf- && mktexlsr
+  zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel libpcap-devel libffi-devel openssl-devel \
+  freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel dbus-devel java-11-openjdk libicu-devel curl-devel \
+  libX11-devel libXt-devel libXext-devel libXrender-devel libSM-devel libICE-devel libXrandr-devel \
+  xorg-x11-server-Xvfb xorg-x11-util-macros libxkbcommon-x11-devel \
+  mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers \
+  xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xcb-util-cursor-devel \
+  texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin texlive-anyfontsize tex-preview pandoc dvisvgm \
+  gcc-toolset-13-gcc-c++ gcc-toolset-13-gcc-gfortran glibc-locale-source && localedef -i en_US -f UTF-8 en_US.UTF-8
 
-ENV LANG="en_US.UTF-8" MAKEFLAGS="-j8"
-ENV PATH=/opt/rh/devtoolset-11/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib64:/opt/rh/devtoolset-11/root/usr/lib
+ENV LANG="en_US.utf8" MAKEFLAGS="-j8"
+ENV PATH=/opt/rh/gcc-toolset-13/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/gcc-toolset-13/root/usr/lib64:/usr/local/lib
 WORKDIR /usr/local/src
 
 # gdb

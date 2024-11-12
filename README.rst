@@ -12,7 +12,7 @@ Installation
 
 - Linux:
 
-  * requirements: glibc>=2.17, X11/Wayland, OpenGL>=3.2, FUSE
+  * requirements: glibc>=2.28, X11/Wayland, OpenGL>=3.2, FUSE
   * no install required, just run the .AppImage
   * use non snap-sandboxed browser for doc links: https://bugs.launchpad.net/snapd/+bug/1972762
 

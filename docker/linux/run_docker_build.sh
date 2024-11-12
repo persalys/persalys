@@ -65,17 +65,17 @@ EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
-for libname in lapack blas quadmath xml2 gfortran ffi lzma harfbuzz mpfr mpc crypt freetype fontconfig
+for libname in lapack blas cblas quadmath xml2 gfortran ffi lzma harfbuzz mpfr mpc crypt freetype fontconfig
 do
   cp -v /usr/lib64/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
-cp -v /usr/lib64/libssl.so.10 /usr/lib64/libcrypto.so.10 persalys.AppDir/usr/lib
+cp -v /usr/lib64/libssl.so.1.1 /usr/lib64/libcrypto.so.1.1 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libgmp.so.10 persalys.AppDir/usr/lib
-cp -v /usr/lib64/libtcl8.5.so /usr/lib64/libtk8.5.so persalys.AppDir/usr/lib
+cp -v /usr/lib64/libtcl8.6.so /usr/lib64/libtk8.6.so persalys.AppDir/usr/lib
 cp -v /usr/lib64/atlas/lib*.so.3 persalys.AppDir/usr/lib
-cp -v /usr/lib64/libpng15.so.15 persalys.AppDir/usr/lib
+cp -v /usr/lib64/libpng16.so.16 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libjpeg.so.62 persalys.AppDir/usr/lib
-cp -v /usr/lib64/libicu*.so.50 persalys.AppDir/usr/lib
+cp -v /usr/lib64/libicu*.so.60 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libxcb-*.so.[0-9] persalys.AppDir/usr/lib && rm persalys.AppDir/usr/lib/libxcb-dri3.so.0
 cp -v /usr/lib64/libfreebl3.so persalys.AppDir/usr/lib
 cp -v /lib64/libpcre2-16.so.0 persalys.AppDir/usr/lib
@@ -123,14 +123,13 @@ cp -rv /usr/local/lib64/paraview*/plugins/BagPlotViewsAndFilters persalys.AppDir
 cp -rv /usr/local/lib64/omc persalys.AppDir/usr/lib
 cp -rv /usr/local/include/omc persalys.AppDir/usr/include
 cp -rv /usr/local/share/omc persalys.AppDir/usr/share
-cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 persalys.AppDir/usr/lib
 cp -v /usr/local/bin/omc persalys.AppDir/usr/bin
 cp -v /usr/local/lib/libsundials* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libfmilib* persalys.AppDir/usr/lib
 
 # gdb
 cp -v /usr/local/bin/gdb* persalys.AppDir/usr/bin
-cp -v /usr/lib64/libtinfo.so.5 /usr/lib64/libncursesw.so.5 /usr/lib64/libpanelw.so.5 persalys.AppDir/usr/lib
+cp -v /usr/lib64/libtinfo.so.6 /usr/lib64/libncursesw.so.6 /usr/lib64/libpanelw.so.6 persalys.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/lib/plugins/platforms/libqxcb.so
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys
