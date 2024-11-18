@@ -60,14 +60,14 @@ RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.9.tar.gz | tar 
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d -DUSE_BLAS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
-RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.8.0.tar.gz | tar xz && cd nlopt* \
- && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_MATLAB=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.9.0.tar.gz | tar xz && cd nlopt* \
+ && cmake -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_UNITY_BUILD=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
 RUN curl -fsSL https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.14/hdf5-1.14.3/src/hdf5-1.14.3.tar.bz2 | tar xj && cd hdf5* && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
 
 # nanoflann
-RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.6.1.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
+RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.6.2.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen* \
@@ -84,10 +84,10 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.12.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
+RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2022.0.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.4.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.6.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -109,7 +109,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.12.7/Python-3.12.7.tgz | tar 
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install numpy==1.26.4 scipy==1.13.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
+RUN pip3 install numpy==2.1.3 scipy==1.14.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials* \
@@ -127,8 +127,7 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.14.0.tar.gz | tar xz && cd PyFMI* \
- && curl -L https://github.com/modelon-community/PyFMI/pull/265.patch | patch -p1 \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.16.0.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
@@ -147,11 +146,11 @@ RUN curl -fSsL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.23.0/
  && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtbase-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtsvg-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtx11extras-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qttools-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.15/submodules/qtwayland-everywhere-opensource-src-5.15.15.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.16/submodules/qtbase-everywhere-opensource-src-5.15.16.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.16/submodules/qtsvg-everywhere-opensource-src-5.15.16.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.16/submodules/qtx11extras-everywhere-opensource-src-5.15.16.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.16/submodules/qttools-everywhere-opensource-src-5.15.16.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://qt-mirror.dannhauer.de/archive/qt/5.15/5.15.16/submodules/qtwayland-everywhere-opensource-src-5.15.16.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt* \
@@ -161,6 +160,7 @@ RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
 
 # paraview
 RUN curl -fSsL https://paraview.org/files/v5.13/ParaView-v5.13.1.tar.xz | tar xJ && cd ParaView* \
+ && curl -L https://gitlab.kitware.com/vtk/vtk/merge_requests/11555.patch | patch -p1 -d VTK \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so -DPARAVIEW_USE_VTKM=OFF -DPARAVIEW_USE_FORTRAN=OFF \
@@ -168,9 +168,9 @@ RUN curl -fSsL https://paraview.org/files/v5.13/ParaView-v5.13.1.tar.xz | tar xJ
  && make install -C build > /dev/null 2>&1 && cd - && rm -r ParaView*
 
 # openturns
-RUN git clone -b v1.24rc1 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+RUN git clone -b v1.24 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
-    -DPython_EXECUTABLE=/usr/local/bin/python3 -DUSE_SPHINX=OFF -DCMAKE_INSTALL_LIBDIR=lib . \
+    -DPython_EXECUTABLE=/usr/local/bin/python3 -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
@@ -179,10 +179,10 @@ RUN git clone -b v0.17 --depth 1 https://github.com/openturns/otmorris.git && cd
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.5 --quiet && python3 -c "import otfmi"
+RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.6 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.24.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.24.2 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
