@@ -3,7 +3,7 @@
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::YACSPhysicalModel::getContent
+%feature("docstring") PERSALYS::YACSPhysicalModel::getCode
 "Script content of the model.
 
 Returns
@@ -13,7 +13,7 @@ result : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::YACSPhysicalModel::setContent
+%feature("docstring") PERSALYS::YACSPhysicalModel::setCode
 "Modify the script content of the model.
 
 Parameters

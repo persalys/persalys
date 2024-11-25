@@ -52,8 +52,8 @@ public:
   void removeOutput(const OT::String & outputName);
 
   /** Accessor to the text script of the model (python, xml, whatever). */
-  OT::String getContent() const;
-  void setContent(const OT::String & script);
+  OT::String getCode() const;
+  void setCode(const OT::String & code);
 
   /** Accesor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();

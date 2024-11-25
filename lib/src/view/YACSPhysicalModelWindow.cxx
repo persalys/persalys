@@ -83,10 +83,10 @@ void YACSPhysicalModelWindow::buildSchemaDialogRequested()
   yacsDialog.setExportXml(false);
   YACSPhysicalModel* model = dynamic_cast<YACSPhysicalModel*>
                              (physicalModel_.getImplementation().get());
-  yacsDialog.setScriptText(model->getContent());
+  yacsDialog.setScriptText(model->getCode());
   if (yacsDialog.exec())
   {
-    model->setContent(yacsDialog.getScriptText());
+    model->setCode(yacsDialog.getScriptText());
     emit resetMessageLabel();
   }
 }

@@ -39,10 +39,16 @@ int main(int argc, char *argv[])
     "  w, z=3*x+4*y+p,x+y+p\n"
     "  return w,z\n";
 
+  String pyscript2 =
+    "def _exec(x, y, p):\n"
+    "  w, z=3*x+4*y+p+1,x+y+p\n"
+    "  return w,z\n";
+
   try
   {
     PythonEnvironment env;
     YACSPhysicalModel myPhysicalModel("myPhysicalModel", InputCollection(), OutputCollection(), pyscript);
+
     Sample inputSample(3, 3);
     inputSample(0, 0) = 1;
     inputSample(1, 0) = 2;
@@ -62,11 +68,24 @@ int main(int argc, char *argv[])
     evalSample(2, 0) = 25.;
     evalSample(2, 1) = 10.;
 
+    Sample evalSample2(3, 2);
+    evalSample2(0, 0) = 16.;
+    evalSample2(0, 1) = 7.;
+    evalSample2(1, 0) = 24.;
+    evalSample2(1, 1) = 10.;
+    evalSample2(2, 0) = 26.;
+    evalSample2(2, 1) = 10.;
+
     Sample resultSample(myPhysicalModel.getFunction()(inputSample));
     std::cout << resultSample << std::endl;
+    myPhysicalModel.setCode(pyscript2);
+    Sample resultSample2(myPhysicalModel.getFunction()(inputSample));
+    std::cout << resultSample2 << std::endl;
+
 
     // Comparison
     assert_almost_equal(evalSample, resultSample, 1e-16);
+    assert_almost_equal(evalSample2, resultSample2, 1e-16);
 
     String failingScript =
       "from math import sqrt\n"

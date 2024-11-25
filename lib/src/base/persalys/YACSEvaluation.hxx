@@ -72,8 +72,8 @@ public:
   OT::UnsignedInteger getOutputDimension() const override;
 
   /** Accessor to the formulas */
-  OT::String getContent() const;
-  void setContent(const OT::String & pyScript);
+  OT::String getCode() const;
+  void setCode(const OT::String & code);
 
   /** Accessor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();
@@ -115,7 +115,7 @@ private:
   OT::Description inDescription_;
   OT::Description outDescription_;
   ydefx::JobParametersProxy jobParams_;
-  ydefx::PyStudyFunction studyFunction_;
+  OT::String code_ = "";
   py2cpp::PyPtr jobModel_;
   std::pair< StopCallback, void *> stopCallback_;
   mutable OT::Bool isRunning_ = false;

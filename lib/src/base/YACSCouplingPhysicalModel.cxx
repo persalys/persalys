@@ -78,7 +78,7 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
   CouplingPhysicalModel::setCode(script);
   try
   {
-    evaluation_.setContent(script);
+    evaluation_.setCode(script);
   }
   catch (std::exception & ex)
   {
