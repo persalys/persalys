@@ -39,6 +39,7 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
   , evaluation_()
 {
+  setCode("def _exec(X0):\n    Y0 = X0\n    return Y0");
   updateData();
 }
 

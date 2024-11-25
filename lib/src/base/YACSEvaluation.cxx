@@ -44,8 +44,6 @@ YACSEvaluation::YACSEvaluation(const String & script)
 {
   if (!script.empty())
     setCode(script);
-  jobParams_.configureResource("localhost");
-  jobParams_.createTmpResultDirectory();
 }
 
 
@@ -103,13 +101,11 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
 
   std::list<std::string> inputNames = studyFunction.inputNames();
   std::list<std::string> outputNames = studyFunction.outputNames();
+
   if (inputNames.size() != inS.getDimension())
-  {
-    Log::Error(OSS() <<
-               "In YACSEvaluation::operator(): inputNames.size() != inS.getDimension()\n");
     throw InvalidArgumentException(HERE) << "The dimension of the input sample "
                                          << inS.getDimension() << " is not valid";
-  }
+
   ydefx::Sample<double> jobSample;
   // set default value for not computed and failed points
   jobSample.outputs<double>().setDefault(std::nan(""));
@@ -331,6 +327,12 @@ void YACSEvaluation::setCode(const OT::String & code)
   inputValues_.clear();
   inDescription_.clear();
   outDescription_.clear();
+  jobParams_ = ydefx::JobParametersProxy();
+  jobParams_.configureResource("localhost");
+  std::stringstream ss;
+  ss << jobParams_.work_directory() << "/persalys_" << std::to_string(std::hash<std::string> {}(code));
+  jobParams_.work_directory(ss.str());
+  jobParams_.createTmpResultDirectory();
 
   ydefx::PyStudyFunction studyFunction;
   studyFunction.loadString(code);
