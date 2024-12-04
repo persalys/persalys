@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.15)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option ( BUILD_GUI                    "Build the GUI"                                                         ON )
@@ -159,9 +159,6 @@ if (BUILD_PYTHON)
   endif ()
 
   include (FindPythonModule)
-  if (NOT TARGET Python::Module)
-    include (TargetLinkLibrariesWithDynamicLookup)
-  endif ()
 
   if (USE_SPHINX)
     find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
