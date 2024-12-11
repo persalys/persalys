@@ -52,3 +52,7 @@ print("result=", result2)
 script = myStudy.getPythonScript()
 print(script)
 exec(script)
+
+# check getImplementation
+analysis3 = persalys.Analysis(analysis2).getImplementation()
+assert analysis3.getSimulationsNumber() == 1000

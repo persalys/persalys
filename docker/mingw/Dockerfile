@@ -9,11 +9,11 @@ ENV ARCH=x86_64 PYMAJMIN=312
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone -b v1.24rc1 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
+RUN git clone -b v1.24 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
   && ${ARCH}-w64-mingw32-cmake \
   -DPython_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPython_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPython_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
-  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DUSE_SPHINX=OFF . \
+  -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . \
   && make > /dev/null 2>&1 && sudo make install > /dev/null \
   && sudo ${ARCH}-w64-mingw32-strip --strip-unneeded ${MINGW_PREFIX}/bin/libOT.dll ${MINGW_PREFIX}/Lib/site-packages/openturns/*.pyd \
   && rm -r /tmp/openturns*

@@ -1,15 +1,21 @@
 #!/bin/bash
 
-echo -e "1. linux\n2. mingw\n3. salome\n\n> "
-read choice
+if test "$#" -lt 1
+then
+  echo -e "1. linux\n2. mingw\n3. salome\n\n> "
+  read choice
+else
+  choice="$1"
+fi
+
 case $choice in
-  1)
+  "1" | "linux")
     img="linux"
     ;;
-  2)
+  "2" | "mingw")
     img="mingw"
     ;;
-  3)
+  "3" | "salome")
     img="salome"
     ;;
   *)

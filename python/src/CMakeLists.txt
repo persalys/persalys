@@ -8,7 +8,6 @@ if (OTMORRIS_FOUND)
   include_directories (${OTMORRIS_INCLUDE_DIR}/otmorris/swig)
 endif ()
 include_directories (${INTERNAL_INCLUDE_DIRS})
-include_directories (${Python_INCLUDE_DIRS})
 
 set (CMAKE_SWIG_FLAGS "" CACHE STRING "SWIG flags for generating wrapper code")
 
@@ -60,17 +59,10 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
   # UseSWIG generates now standard target names
   set (module_target ${MODULENAME}_python)
 
-  swig_link_libraries (${module_target} persalysbase)
-  target_include_directories (${module_target} PRIVATE ${Python_INCLUDE_DIRS})
-
-  if (TARGET Python::Module)
-    target_link_libraries (${module_target} Python::Module)
-  else ()
-    target_link_libraries_with_dynamic_lookup (${module_target} ${Python_LIBRARIES})
-  endif ()
+  target_link_libraries (${module_target} persalysbase)
+  target_link_libraries (${module_target} Python::Module)
 
   set_target_properties (${module_target} PROPERTIES OUTPUT_NAME ${MODULENAME})
-
   set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
 
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
