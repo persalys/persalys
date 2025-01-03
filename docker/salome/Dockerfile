@@ -23,11 +23,11 @@ RUN curl -L https://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.5/
 RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/SALOME_9_13_V7_8_0;sf=tgz" | tar xz && cd occt* && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1 && cd - && rm -r occt*
 
 # openturns
-RUN git clone -b v1.24rc1 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
- && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+RUN git clone -b v1.24 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+ && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # libbatch
-RUN git clone -b V2_5_0 --depth 1 https://git.salome-platform.org/gitpub/tools/libbatch.git && cd libbatch && cmake . && make install > /dev/null 2>&1 && cd - && rm -r libbatch
+RUN git clone -b V2_5_0 --depth 1 https://github.com/SalomePlatform/libbatch.git && cd libbatch && cmake . && make install > /dev/null 2>&1 && cd - && rm -r libbatch
 
 # uname -p => unknown
 RUN cd /tmp && sudo mv /bin/uname /bin/uname.orig && echo -n "#!/bin/sh\nuname.orig \"\$@\"|sed 's|unknown|x86_64|g'\n" > uname && chmod a+rx ./uname && sudo mv ./uname /bin/uname && uname  -p
