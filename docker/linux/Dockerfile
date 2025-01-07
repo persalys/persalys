@@ -131,7 +131,7 @@ RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.16.0.t
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.bz2 | tar xj && cd boost* \
+RUN curl -fSsL https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-serialization --with-program_options --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
