@@ -61,6 +61,15 @@ MeshWindow::MeshWindow(PhysicalModelItem * item, QWidget * parent)
 }
 
 
+MeshWindow::MeshWindow(DataFieldModelItem * item, QWidget * parent)
+  : SubWindow(item, parent)
+  , dataMeshItem_(item)
+{
+  connect(item, SIGNAL(meshChanged()), this, SLOT(updateTable()));
+
+  buildInterface();
+}
+
 void MeshWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
@@ -86,7 +95,7 @@ void MeshWindow::buildInterface()
 
   // fill in table
   tableModel_->setHorizontalHeaderLabels(headerLabels);
-  const MeshModel meshModel(meshItem_->getPhysicalModel().getMeshModel());
+  const MeshModel meshModel = getMeshModel();
   const Variable param(meshModel.getIndexParameters()[0]);
   tableModel_->setItem(0, 0, new QStandardItem(QString::fromUtf8(param.getName().c_str())));
   tableModel_->setItem(0, 1, new QStandardItem(QString::fromUtf8(param.getDescription().c_str())));
@@ -147,18 +156,21 @@ void MeshWindow::resizeEvent(QResizeEvent* event)
 
 void MeshWindow::editMesh()
 {
-  MeshDefinitionWizard wizard(meshItem_->getPhysicalModel().getMeshModel(), this);
+  MeshDefinitionWizard wizard(getMeshModel(), (Bool)dataMeshItem_, this);
   if (wizard.exec())
   {
     MeshModel meshModel(wizard.getMesh());
-    meshItem_->getPhysicalModel().setMeshModel(meshModel);
+    if (meshItem_)
+      meshItem_->getPhysicalModel().setMeshModel(meshModel);
+    if (dataMeshItem_)
+      dataMeshItem_->getDataFieldModel().setMeshModel(meshModel);
   }
 }
 
 
 void MeshWindow::updateTable()
 {
-  const MeshModel meshModel(meshItem_->getPhysicalModel().getMeshModel());
+  const MeshModel meshModel = getMeshModel();
   const Variable param(meshModel.getIndexParameters()[0]);
   tableModel_->setData(tableModel_->index(0, 0), param.getName().c_str());
   tableModel_->setData(tableModel_->index(0, 1), param.getDescription().c_str());
@@ -172,7 +184,7 @@ void MeshWindow::updateTable()
 
 void MeshWindow::updateModel(QStandardItem *item)
 {
-  MeshModel meshModel(meshItem_->getPhysicalModel().getMeshModel());
+  MeshModel meshModel(getMeshModel());
   Variable param(meshModel.getIndexParameters()[0]);
   if (item->column() == 0)
     param.setName(item->text().toStdString());
@@ -181,16 +193,25 @@ void MeshWindow::updateModel(QStandardItem *item)
   VariableCollection coll;
   coll.add(param);
   meshModel.setIndexParameters(coll);
-  meshItem_->getPhysicalModel().blockNotification("MeshItem");
-  meshItem_->getPhysicalModel().setMeshModel(meshModel);
-  meshItem_->getPhysicalModel().blockNotification();
+  if (meshItem_)
+  {
+    meshItem_->getPhysicalModel().blockNotification("MeshItem");
+    meshItem_->getPhysicalModel().setMeshModel(meshModel);
+    meshItem_->getPhysicalModel().blockNotification();
+  }
+  else if (dataMeshItem_)
+  {
+    dataMeshItem_->getDataFieldModel().blockNotification("DataMeshItem");
+    dataMeshItem_->getDataFieldModel().setMeshModel(meshModel);
+    dataMeshItem_->getDataFieldModel().blockNotification();
+  }
   updatePlot();
 }
 
 
 void MeshWindow::updatePlot()
 {
-  MeshModel meshModel(meshItem_->getPhysicalModel().getMeshModel());
+  MeshModel meshModel(getMeshModel());
 
   // update nodes table
   Sample sample(meshModel.getMesh().getVertices());
@@ -276,5 +297,15 @@ void MeshWindow::addWidgetsTabs()
 
   tabWidget_->addTab(nodesView_, tr("Nodes"));
   updatePlot();
+}
+
+MeshModel MeshWindow::getMeshModel() const
+{
+  if (meshItem_)
+    return meshItem_->getPhysicalModel().getMeshModel();
+  else if (dataMeshItem_)
+    return dataMeshItem_->getDataFieldModel().getMeshModel();
+  else
+    throw InvalidArgumentException(HERE) << "MeshWindow::getMeshModel : cannot get MeshModel";
 }
 }

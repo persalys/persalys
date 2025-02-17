@@ -29,6 +29,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QToolButton>
+#include <QRadioButton>
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -37,13 +38,10 @@ using namespace OT;
 namespace PERSALYS
 {
 
-ImportSampleWidget::ImportSampleWidget(QWidget* parent)
+ImportSampleWidget::ImportSampleWidget(QWidget* parent, bool chooseOrder)
   : QWidget(parent)
   , tableValidity_(false)
-  , filePathLineEdit_(0)
-  , dataPreviewTableView_(0)
-  , DOESizeLabel_(0)
-  , errorMessageLabel_(0)
+  , chooseOrder_(chooseOrder)
 {
   buildInterface();
 }
@@ -68,7 +66,36 @@ void ImportSampleWidget::buildInterface()
   connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
   hboxLayout->addWidget(openFileButton);
 
-  mainGridLayout->addLayout(hboxLayout, 0, 0, 1, 3);
+  int row = 0;
+  mainGridLayout->addLayout(hboxLayout, row++, 0, 1, 3);
+
+  if (chooseOrder_)
+  {
+    QHBoxLayout * buttonsLayout = new QHBoxLayout;
+    orderButtonGroup_ = new QButtonGroup(this);
+    QRadioButton * orderButton = new QRadioButton(tr("Columns"));
+    orderButtonGroup_->addButton(orderButton, Tools::Columns);
+    buttonsLayout->addWidget(orderButton);
+
+    orderButton = new QRadioButton(tr("Rows"));
+    orderButtonGroup_->addButton(orderButton, Tools::Rows);
+    orderButtonGroup_->button(Tools::Columns)->click();
+    orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
+    orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
+    buttonsLayout->addWidget(orderButton);
+    buttonsLayout->addStretch();
+
+    mainGridLayout->addLayout(buttonsLayout, row++, 0, 1, 3);
+
+    connect(orderButtonGroup_, &QButtonGroup::idClicked, [=] (int) {
+      setData(filePathLineEdit_->text());
+    });
+
+    connect(filePathLineEdit_, &QLineEdit::textChanged, [=] (QString) {
+      orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
+      orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
+    });
+  }
 
   // file preview
   QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
@@ -88,11 +115,11 @@ void ImportSampleWidget::buildInterface()
   dataPreviewTableView_ = new ExportableTableView(groupBox);
   gridLayout->addWidget(dataPreviewTableView_, 1, 0, 1, 1);
 
-  mainGridLayout->addWidget(groupBox, 1, 0, 1, 1);
+  mainGridLayout->addWidget(groupBox, row++, 0, 1, 1);
 
   // error message
   errorMessageLabel_ = new TemporaryLabel;
-  mainGridLayout->addWidget(errorMessageLabel_, 2, 0, 1, 1);
+  mainGridLayout->addWidget(errorMessageLabel_, row++, 0, 1, 1);
 }
 
 
@@ -221,4 +248,11 @@ Sample ImportSampleWidget::getData() const
     throw InvalidArgumentException(HERE) << "Table model is not a SampleTableModel";
 }
 
+Tools::DataOrder ImportSampleWidget::getDataOrder() const
+{
+  if (orderButtonGroup_)
+    return static_cast<Tools::DataOrder>(orderButtonGroup_->checkedId());
+  else
+    return Tools::Columns;
+}
 }

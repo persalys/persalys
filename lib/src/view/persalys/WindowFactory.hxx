@@ -26,6 +26,7 @@
 #include "persalys/PhysicalModelItem.hxx"
 #include "persalys/AnalysisItem.hxx"
 #include "persalys/DesignOfExperimentItem.hxx"
+#include "persalys/DataFieldModelItem.hxx"
 
 #include <QWidget>
 
@@ -37,6 +38,7 @@ public:
   static SubWindow * GetWindow(Item* item, QWidget *parent = nullptr);
   static SubWindow * GetPhysicalModelWindow(PhysicalModelItem* item, QWidget *parent = nullptr);
   static SubWindow * GetDesignOfExperimentWindow(DesignOfExperimentItem* item, QWidget *parent = nullptr);
+  static SubWindow * GetDataFieldModelWindow(DataFieldModelItem *item, QWidget *parent = nullptr);
   static AnalysisWizard * GetAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget *parent = nullptr);
   static SubWindow * GetAnalysisWindow(AnalysisItem* item, QWidget *parent = nullptr);
 };

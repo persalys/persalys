@@ -24,6 +24,8 @@ ot_add_source_file ( PhysicalModelDiagramWindow.cxx )
 ot_add_source_file ( FieldModelDiagramWindow.cxx )
 ot_add_source_file ( DataModelDiagramWindow.cxx )
 ot_add_source_file ( DataModelWindow.cxx )
+ot_add_source_file ( DataFieldModelDiagramWindow.cxx )
+ot_add_source_file ( DataFieldModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
@@ -154,6 +156,7 @@ ot_install_header_file ( MeshWindow.hxx )
 ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
 ot_install_header_file ( FieldModelDiagramWindow.hxx )
 ot_install_header_file ( DataModelDiagramWindow.hxx )
+ot_install_header_file ( DataFieldModelDiagramWindow.hxx )
 ot_install_header_file ( ResultWindow.hxx )
 ot_install_header_file ( BlockSizeGroupBox.hxx )
 ot_install_header_file ( MinMaxTableGroupBox.hxx )
@@ -161,6 +164,7 @@ ot_install_header_file ( MomentsEstimatesTableGroupBox.hxx )
 ot_install_header_file ( OutputsSelectionGroupBox.hxx )
 ot_install_header_file ( ParametersWidget.hxx )
 ot_install_header_file ( DataModelWindow.hxx )
+ot_install_header_file ( DataFieldModelWindow.hxx )
 ot_install_header_file ( DataAnalysisWindow.hxx )
 ot_install_header_file ( DataAnalysisResultWindow.hxx )
 ot_install_header_file ( AnalysisWindow.hxx )
@@ -282,6 +286,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/PhysicalModelDiagramWindow.hxx
                                   persalys/FieldModelDiagramWindow.hxx
                                   persalys/DataModelDiagramWindow.hxx
+                                  persalys/DataFieldModelDiagramWindow.hxx
                                   persalys/ResultWindow.hxx
                                   persalys/AnalysisWindow.hxx
                                   persalys/BlockSizeGroupBox.hxx
@@ -289,6 +294,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/MomentsEstimatesTableGroupBox.hxx
                                   persalys/OutputsSelectionGroupBox.hxx
                                   persalys/DataModelWindow.hxx
+                                  persalys/DataFieldModelWindow.hxx
                                   persalys/DataAnalysisWindow.hxx
                                   persalys/DataAnalysisResultWindow.hxx
                                   persalys/StudyTreeView.hxx

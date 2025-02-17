@@ -100,25 +100,25 @@ void FieldModelEvaluationResultWindow::buildInterface()
 
 
 /////////////////
-FieldCentralTendencyResultWindow::FieldCentralTendencyResultWindow(AnalysisItem * item, QWidget * parent)
+FieldAnalysisResultWindow::FieldAnalysisResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
-  , inputSample_(dynamic_cast<FieldMonteCarloAnalysis*>(item->getAnalysis().getImplementation().get())->getResult().getDesignOfExperiment().getInputSample())
-  , result_(dynamic_cast<FieldMonteCarloAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
+  , inputSample_()
+  , result_()
   , errorMessage_(item->getAnalysis().getWarningMessage().c_str())
   , mainWidget_(0)
 {
-  // parameters widget
-  setParameters(item->getAnalysis(), tr("Central tendency parameters"));
-
-  buildInterface();
 }
 
 
-void FieldCentralTendencyResultWindow::buildInterface()
+void FieldAnalysisResultWindow::buildInterface()
 {
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
-
-  widgetLayout->addWidget(new TitleLabel(tr("Monte Carlo method"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmontecarloresult"));
+  // if coming from FieldModel Central Tendency
+  if (inputSample_.getSize())
+    widgetLayout->addWidget(new TitleLabel(tr("Monte Carlo method"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmontecarloresult"));
+  // coming from data field model analysis
+  else
+    widgetLayout->addWidget(new TitleLabel(tr("Data fields decomposition"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmontecarloresult"));
 
   // main splitter
   mainWidget_ = new FieldModelEvaluationResultWidget(inputSample_,
@@ -156,7 +156,7 @@ void FieldCentralTendencyResultWindow::buildInterface()
 }
 
 
-void FieldCentralTendencyResultWindow::addDecompositionTab()
+void FieldAnalysisResultWindow::addDecompositionTab()
 {
   bool canUseParaview = false;
 #ifdef PERSALYS_HAVE_PARAVIEW
@@ -393,7 +393,7 @@ void FieldCentralTendencyResultWindow::addDecompositionTab()
 }
 
 
-void FieldCentralTendencyResultWindow::addCorrelationTab()
+void FieldAnalysisResultWindow::addCorrelationTab()
 {
   const UnsignedInteger nbOutput = result_.getProcessSample().getDimension();
   if (result_.getCorrelationFunction().getSize() != nbOutput)
@@ -518,7 +518,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
 {
   // get model info
   const UnsignedInteger nbOutput = processSample_.getDimension();
-  const UnsignedInteger nbInputPt = inputSample_.getSize();
+  const UnsignedInteger nbInputPt = processSample_.getSize();
   const UnsignedInteger nbNodes = processSample_.getMesh().getVerticesNumber();
   const QStringList outNames(QtOT::DescriptionToStringList(processSample_.getField(0).getValues().getDescription()));
   const QString meshParamName = QString::fromUtf8(processSample_.getMesh().getDescription()[0].c_str());
@@ -603,12 +603,15 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
   tab = new QWidget;
   tabLayout = new QHBoxLayout(tab);
   // -- inputs table
-  ExportableTableView * tableView = new ExportableTableView;
-  SampleTableModel * tableModel = new SampleTableModel(inputSample_, tableView);
-  tableView->setModel(tableModel);
-  tabLayout->addWidget(tableView);
+  if (inputSample_.getSize())
+  {
+    ExportableTableView * tableView = new ExportableTableView;
+    SampleTableModel * tableModel = new SampleTableModel(inputSample_, tableView);
+    tableView->setModel(tableModel);
+    tabLayout->addWidget(tableView);
 
-  tabWidget_->addTab(tab, tr("Input"));
+    tabWidget_->addTab(tab, tr("Input"));
+  }
 }
 
 
@@ -617,7 +620,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
 {
   // get model info
   const UnsignedInteger nbOutput = processSample_.getDimension();
-  const UnsignedInteger nbInputPt = inputSample_.getSize();
+  const UnsignedInteger nbInputPt = processSample_.getSize();
   const UnsignedInteger nbNodes = processSample_.getMesh().getVerticesNumber();
   const QStringList outNames(QtOT::DescriptionToStringList(processSample_.getField(0).getValues().getDescription()));
   const QStringList meshParamName = QStringList() << QString::fromUtf8(processSample_.getMesh().getDescription()[0].c_str());
@@ -633,7 +636,7 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();
 
   PVMatrixPlotViewWidget * pvmatrixWidget = 0;
-  if (nbInputPt > 1)
+  if (nbInputPt > 1 && inputSample_.getSize())
   {
     const Sample sampleRank(inputSample_.rank() / inputSample_.getSize());
     // Plot matrix
@@ -811,7 +814,33 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
   }
 
   tabWidget_->addTab(outTabWidget, tr("Result"));
-  tabWidget_->addTab(inTabWidget, tr("Input"));
+  if (inputSample_.getSize())
+    tabWidget_->addTab(inTabWidget, tr("Input"));
 }
+
 #endif
+
+FieldCentralTendencyResultWindow::FieldCentralTendencyResultWindow(AnalysisItem * item, QWidget * parent)
+  : FieldAnalysisResultWindow(item, parent)
+{
+  inputSample_ = dynamic_cast<FieldMonteCarloAnalysis*>(item->getAnalysis().getImplementation().get())->getResult().getDesignOfExperiment().getInputSample();
+  result_ = dynamic_cast<FieldMonteCarloAnalysis*>(item->getAnalysis().getImplementation().get())->getResult();
+
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Data field analysis parameters"));
+  buildInterface();
+}
+
+
+DataFieldAnalysisResultWindow::DataFieldAnalysisResultWindow (AnalysisItem * item, QWidget * parent)
+  : FieldAnalysisResultWindow(item, parent)
+{
+  inputSample_ = Sample();
+  result_ = dynamic_cast<FieldKarhunenLoeveAnalysis*>(item->getAnalysis().getImplementation().get())->getResult();
+
+  // parameters widget
+  setParameters(item->getAnalysis(), tr("Central tendency parameters"));
+  buildInterface();
+}
+
 }
