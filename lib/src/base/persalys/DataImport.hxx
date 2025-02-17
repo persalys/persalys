@@ -22,6 +22,7 @@
 #define PERSALYS_DATAIMPORT_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/Sample.hxx>
 
@@ -30,6 +31,7 @@ namespace PERSALYS
 class PERSALYS_BASE_API DataImport
 {
 public:
+
   /** Default constructor */
   DataImport();
   /** Constructor with parameters */
@@ -40,7 +42,8 @@ public:
   virtual ~DataImport();
 
   OT::String getFileName() const;
-  void setFileName(const OT::String& fileName);
+  void setFileName(const OT::String& fileName,
+                   const Tools::DataOrder order = Tools::DataOrder::Columns);
 
   OT::Indices getInputColumns() const;
   OT::Indices getOutputColumns() const;
@@ -59,6 +62,8 @@ public:
 protected:
   virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns);
   virtual OT::Sample importSample(const OT::String& fileName);
+  virtual OT::Sample importSample(const OT::String& fileName,
+                                  const Tools::DataOrder order);
   virtual void check();
   virtual void setDefaultColumns();
 

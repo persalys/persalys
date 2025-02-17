@@ -22,6 +22,7 @@
 #define PERSALYS_IMPORTEDMESHMODEL_HXX
 
 #include "MeshModelImplementation.hxx"
+#include "BaseTools.hxx"
 #include "DataImport.hxx"
 
 namespace PERSALYS
@@ -34,8 +35,15 @@ public:
   /** Default constructor */
   ImportedMeshModel();
   /** Constructor with parameters */
-  ImportedMeshModel(const OT::String& fileName, const OT::Indices& columns = OT::Indices(1, 0));
-  ImportedMeshModel(const VariableCollection& parameters, const OT::String& fileName, const OT::Indices& columns = OT::Indices(1, 0));
+  ImportedMeshModel(const OT::String& fileName,
+                    const OT::Indices& columns=OT::Indices(1, 0));
+  ImportedMeshModel(const VariableCollection& parameters,
+                    const OT::String& fileName,
+                    const OT::Indices& columns=OT::Indices(1, 0));
+  ImportedMeshModel(const VariableCollection& parameters,
+                    const OT::String& fileName,
+                    const OT::Indices& columns,
+                    const Tools::DataOrder order);
 
   /** Virtual constructor */
   ImportedMeshModel * clone() const override;
@@ -57,8 +65,12 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  OT::Sample importSample(const OT::String& fileName) override;
+  OT::Sample importSample(const OT::String& fileName,
+                          const Tools::DataOrder order = Tools::DataOrder::Columns) override;
   void setDefaultColumns() override;
+
+private:
+  Tools::DataOrder order_ = Tools::Columns;
 };
 }
 #endif

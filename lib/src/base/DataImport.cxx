@@ -55,13 +55,13 @@ String DataImport::getFileName() const
 }
 
 
-void DataImport::setFileName(const String& fileName)
+void DataImport::setFileName(const String& fileName, const Tools::DataOrder order)
 {
   if (fileName.empty())
     throw InvalidArgumentException(HERE) << "The file name cannot be empty";
 
   // get sample from file
-  sampleFromFile_ = importSample(fileName);
+  sampleFromFile_ = importSample(fileName, order);
 
   // save file path
   const String oldFileName = fileName_;
@@ -124,11 +124,14 @@ void DataImport::setColumns(const Indices &inputColumns,
   outputColumns_ = outputColumns;
 }
 
-
 Sample DataImport::importSample(const String& fileName)
 {
-  Sample sampleFromFile(Tools::ImportSample(Tools::GetLocaleString(fileName)));
-  return sampleFromFile;
+  return Tools::ImportSample(Tools::GetLocaleString(fileName));
+}
+
+Sample DataImport::importSample(const String& fileName, const Tools::DataOrder order)
+{
+  return Tools::ImportSample(Tools::GetLocaleString(fileName), order);
 }
 
 

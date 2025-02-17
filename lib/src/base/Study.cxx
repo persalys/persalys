@@ -287,6 +287,35 @@ void Study::remove(const DesignOfExperiment& designOfExperiment)
 }
 
 
+// ----- FIELD DATA MODEL -----
+Collection< DataFieldModel > Study::getDataFieldModels() const
+{
+  return getImplementation()->getDataFieldModels();
+}
+
+
+DataFieldModel& Study::getDataFieldModelByName(const String& dataModelName)
+{
+  return getImplementation()->getDataFieldModelByName(dataModelName);
+}
+
+
+String Study::getAvailableDataFieldModelName(const String& modelRootName) const
+{
+  return getImplementation()->getAvailableDataFieldModelName(modelRootName);
+}
+
+void Study::add(const DataFieldModel& dataFieldModel)
+{
+  getImplementation()->add(dataFieldModel);
+}
+
+
+void Study::remove(const DataFieldModel& dataFieldModel)
+{
+  getImplementation()->remove(dataFieldModel);
+}
+
 // ----- PHYSICAL MODEL -----
 Collection<PhysicalModel> Study::getPhysicalModels() const
 {

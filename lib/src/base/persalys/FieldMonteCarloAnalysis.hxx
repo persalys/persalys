@@ -23,77 +23,10 @@
 
 #include "SimulationAnalysis.hxx"
 #include "WithStopCriteriaAnalysis.hxx"
-#include "FieldMonteCarloResult.hxx"
+#include "FieldKarhunenLoeveAnalysis.hxx"
 
 namespace PERSALYS
 {
-
-class PERSALYS_BASE_API CovFunctionEvaluation : public OT::EvaluationImplementation
-{
-  CLASSNAME
-
-public:
-  /** Default constructor */
-  CovFunctionEvaluation()
-    : OT::EvaluationImplementation()
-    , covModel_()
-    , inputDimension_(2)
-    , outputDimension_(1)
-  {};
-  /** Default constructor */
-  CovFunctionEvaluation(const OT::CovarianceModel& covModel)
-    : OT::EvaluationImplementation()
-    , covModel_(covModel)
-    , inputDimension_(2)
-    , outputDimension_(1)
-  {};
-
-  /** Virtual constructor */
-  CovFunctionEvaluation * clone() const override
-  {
-    return new CovFunctionEvaluation(*this);
-  };
-
-  /** Accessor for input point dimension */
-  OT::UnsignedInteger getInputDimension() const override
-  {
-    return inputDimension_;
-  };
-  OT::UnsignedInteger getOutputDimension() const override
-  {
-    return outputDimension_;
-  };
-  OT::Point operator() (const OT::Point & inP) const override
-  {
-    OT::Scalar den = std::sqrt(covModel_(inP[0], inP[0])(0, 0) * covModel_(inP[1],  inP[1])(0, 0));
-    if (den == 0.0)
-      return OT::Point(1, 0.);
-    return OT::Point(1, covModel_(inP[0], inP[1])(0, 0) / den);
-  }
-
-  /* Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const override
-  {
-    EvaluationImplementation::save(adv);
-    adv.saveAttribute("covModel_", covModel_);
-    adv.saveAttribute("inputDimension_", inputDimension_);
-    adv.saveAttribute("outputDimension_", outputDimension_);
-  }
-  /* Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv) override
-  {
-    EvaluationImplementation::load(adv);
-    adv.loadAttribute("covModel_", covModel_);
-    adv.loadAttribute("inputDimension_", inputDimension_);
-    adv.loadAttribute("outputDimension_", outputDimension_);
-  }
-
-private:
-  OT::CovarianceModel covModel_;
-  OT::UnsignedInteger inputDimension_;
-  OT::UnsignedInteger outputDimension_;
-};
-
 
 class PERSALYS_BASE_API FieldMonteCarloAnalysis : public SimulationAnalysis, public WithStopCriteriaAnalysis
 {
@@ -108,19 +41,19 @@ public:
   /** Virtual constructor */
   FieldMonteCarloAnalysis * clone() const override;
 
-  /* Threshold accessors */
-  OT::Scalar getKarhunenLoeveThreshold() const;
-  void setKarhunenLoeveThreshold(const OT::Scalar threshold);
-
-  /* Quantile probability accessors */
-  OT::Scalar getQuantileLevel() const;
-  void setQuantileLevel(const OT::Scalar proba);
-
-  FieldMonteCarloResult getResult() const;
-
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
+
+  /* Threshold accessors */
+  OT::Scalar getKarhunenLoeveThreshold() const {return karhunenLoeveAnalysis_.getKarhunenLoeveThreshold();};
+  void setKarhunenLoeveThreshold(const OT::Scalar threshold){karhunenLoeveAnalysis_.setKarhunenLoeveThreshold(threshold);};
+
+  /* Quantile probability accessors */
+  OT::Scalar getQuantileLevel() const {return karhunenLoeveAnalysis_.getQuantileLevel();};
+  void setQuantileLevel(const OT::Scalar proba) {karhunenLoeveAnalysis_.setQuantileLevel(proba);};
+
+  FieldMonteCarloResult getResult() const {return karhunenLoeveAnalysis_.getResult();};
 
   /** String converter */
   OT::String __repr__() const override;
@@ -136,9 +69,7 @@ protected:
   void launch() override;
 
 private:
-  OT::Scalar karhunenLoeveThreshold_;
-  OT::Scalar quantileLevel_;
-  FieldMonteCarloResult result_;
+  FieldKarhunenLoeveAnalysis karhunenLoeveAnalysis_;
 };
 }
 #endif

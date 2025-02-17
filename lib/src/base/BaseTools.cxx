@@ -130,6 +130,33 @@ String Parameters::GetOTSampleStr(const Sample& values)
   return sampleOss;
 }
 
+String Parameters::GetOTSampleCollectionStr(const ProcessSample& processSample)
+{
+  OSS strOut;
+  if (!processSample.getSize())
+    return strOut;
+
+  // SampleCollection
+  strOut << "[";
+  for(UnsignedInteger iTraj=0; iTraj<processSample.getSize(); iTraj++)
+  {
+    strOut << "[ ";
+    for(UnsignedInteger iTime=0; iTime<processSample[iTraj].getSize(); ++iTime)
+    {
+      strOut << GetOTPointStr(processSample[iTraj][iTime], ",");
+      if (iTime < processSample[iTraj].getSize() - 1)
+        strOut << ", ";
+    }
+    strOut << "]";
+    if (iTraj < processSample.getSize() - 1)
+      strOut << ",\n ";
+  }
+  strOut << "]\n";
+  // Mesh
+  //strOut << "
+  return strOut;
+}
+
 
 String Parameters::GetOTPointStr(const Point& values, const String& separator)
 {
@@ -245,7 +272,7 @@ Description Parameters::GetOTIntervalDescription(const Interval& interval)
 }
 
 
-Sample Tools::ImportSample(const String& fileName)
+Sample Tools::ImportSample(const String& fileName, const DataOrder order)
 {
   std::vector< String > separatorsList(3);
   separatorsList = {" ", ",", ";"};
@@ -317,7 +344,23 @@ Sample Tools::ImportSample(const String& fileName)
     }
   }
   sampleFromFile.setDescription(description);
-  return sampleFromFile;
+
+  // Enventually transpose sample
+  switch (order)
+  {
+  case Columns:
+    return sampleFromFile;
+  case Rows:
+  {
+    Sample transposedSample(sampleFromFile.getDimension(), sampleFromFile.getSize());
+    for(UnsignedInteger j=0; j<sampleFromFile.getDimension(); ++j)
+      for(UnsignedInteger i=0; i<sampleFromFile.getSize(); ++i)
+        transposedSample(j,i) = sampleFromFile(i,j);
+    return transposedSample;
+  }
+  default:
+    throw InvalidArgumentException(HERE) << "Unknown data order";
+  }
 }
 
 
