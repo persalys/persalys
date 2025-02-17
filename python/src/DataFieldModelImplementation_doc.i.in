@@ -1,0 +1,8 @@
+%define PERSALYS_DataFieldModel_doc
+"Defines field evaluation from external data and mesh.
+
+Parameters
+----------
+
+"
+%enddef

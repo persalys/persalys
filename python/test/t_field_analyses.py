@@ -49,3 +49,14 @@ Study_0.add(mcAnalysis1)
 evaluation1 = persalys.FieldModelEvaluation("evaluation", PhysicalModel_1)
 evaluation1.setInterestVariables(["z", "z2"])
 Study_0.add(evaluation1)
+
+# data field model
+meshModel = persalys.GridMeshModel(
+    [persalys.Variable("t", "date")], ot.Interval([1], [12]), [12])
+
+model = persalys.DataFieldModel("dataFieldModel", meshModel)
+model.importProcessSample("elNino.csv", persalys.Tools.Columns)
+Study_0.add(model)
+
+analysis1 = persalys.FieldKarhunenLoeveAnalysis("myAnalysis", model)
+Study_0.add(analysis1)

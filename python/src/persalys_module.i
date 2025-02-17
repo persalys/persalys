@@ -91,6 +91,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 
 // The new classes
 %include persalys/PersalysPrivate.hxx
+%include persalys/BaseTools.hxx
 %include Observer.i
 %include Observable.i
 
@@ -122,6 +123,8 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
 %include DataModel.i
+%include DataFieldModelImplementation.i
+%include DataFieldModel.i
 %include Observations.i
 %include EvaluationResult.i
 %include DataAnalysisResult.i
@@ -138,6 +141,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i
 %include FieldMonteCarloResult.i
+%include FieldKarhunenLoeveAnalysis.i
 %include FieldMonteCarloAnalysis.i
 %include TaylorExpansionMomentsAnalysis.i
 %include SobolResult.i
