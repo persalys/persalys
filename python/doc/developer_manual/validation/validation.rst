@@ -375,6 +375,8 @@ New Study
 
     - Data model
 
+    - Data field model
+
 - click Menu->File->New
 
   - item Study_1 appears in the tree view
@@ -2103,6 +2105,54 @@ Field analyses
       - Input tab, tabs: Table
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
+- dataFieldModel item
+  - Three subitems Mesh, Definition, myAnalysis
+  - Click on Mesh
+  - Change the number of nodes
+  - Click on Definition: a message has appeared "Mesh vertices number (xxx) must match field discretization (12)."
+  - Running the analysis will show an error message: "Error: cannot build a Field with a number of values=12 different from the number of vertices=xxx"
+  - Revert changes on number of nodes
+  - The message disappears
+  - Click on Definition
+  - Edit one of the table cells to 'inf'
+  - A message appears: "The model is not valid. Check data and/or mesh numerical validity."
+  - Running the anlaysis wont do anything
+  - Right click on the table > Clean > Remove
+  - The message disappears
+  - Click on Mesh
+  - Change the number of nodes
+  - Click on Definition: a message has appeared "Mesh vertices number (xxx) must match field discretization (12)."
+  - Reload the 'elNino.csv' file
+  - The message disappears and the number of nodes in the mesh has changed
+  - Run the analysis
+  - Three tabs: Result, Decomposition, Correlation
+
+    - Result has 5 sub-tabs: Trajectories, Mean trajectory, Functionnal bag chart, Bag chart, Table
+
+      - Check that the slection is syncrhonized betwwen the sub-tabs
+
+    - Decomposition has 3 sub-tabs: Modes, Eigenvalues, ξi (with 2 sub-sub-tabs: PDF, Plot matrix)
+
+      - Check the eigenvalues tab table values:
+
+==== ========== =====================
+Mode Eigenvalue Cumulative eigenvalue
+==== ========== =====================
+0    8.28164    0.638103
+1    2.98989    0.868474
+2    0.873921   0.93581
+3    0.201917   0.951368
+4    0.183993   0.965545
+5    0.121622   0.974916
+6    0.109646   0.983364
+7    0.0673099  0.98855
+8    0.0513501  0.992507
+9    0.0431195  0.995829
+10   0.0319597  0.998292
+11   0.0221718  1
+==== ========== =====================
+
+
 - save the study, close it, reopen it, check all windows are correctly built, close the study.
 
 
@@ -2197,7 +2247,7 @@ Data model
 
 - click on 'Data model' button of the window of myOTStudy
     - the item dataModel_0 appears in the tree view
-    - a new Data model diagram window appears in the mdiArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+    - a new Data model diagram window appears in the midArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled
 
   .. image:: /developer_manual/validation/dataModelDiagramWindow.png
@@ -2213,6 +2263,20 @@ Data model
 
 - save the current study, reopen
     - in the window of the 'Definition' item of the data model: click on the reload button
+
+Data field model
+''''''''''''''''
+
+- click on 'Data field model' button of the window of myOTStudy
+    - the item DataFieldModel_0 appears in the tree view (with 2 items: Definition and Mesh
+      - two associated
+    - click on 'DataFieldModel_0': a new Data field model diagram window appears in the midArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+    - only the 'Model definition' button is enabled, click it
+    - 'Definition' gets the focus
+    - click on the '...' button, import the file elNino.csv
+    - click on 'Mesh' item
+    - change the number of nodes to 12
+    - 'Data analysis' button in the diagram window is activated
 
 
 Field model
