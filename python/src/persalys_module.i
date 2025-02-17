@@ -12,6 +12,12 @@
 %include exception.i
 %ignore *::load(OT::Advocate & adv);
 %ignore *::save(OT::Advocate & adv) const;
+%ignore *::GetClassName();
+%ignore *::canBeLaunched(OT::String &) const;
+%ignore *::getParentObserver() const;
+%ignore *::getElapsedTime() const;
+%ignore *::launch();
+
 
 %import base_module.i
 %import uncertainty_module.i

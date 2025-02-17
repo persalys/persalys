@@ -45,3 +45,53 @@ Returns
 -------
 analysis : :class:`persalys.FieldKarhunenLoeveAnalysis`
     Karhunen-Loeve analysis"
+
+// --------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getKarhunenLoeveThreshold
+"Accessor to the limit ratio on eigenvalues.
+
+Returns
+-------
+threshold : float, positive
+    The threshold s defined in :py:meth:`openturns.KarhunenLoeveAlgorithm.setThreshold`"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::setKarhunenLoeveThreshold
+"Accessor to the limit ratio on eigenvalues.
+
+Parameters
+----------
+threshold : float, positive
+    The threshold s defined in :py:meth:`openturns.KarhunenLoeveAlgorithm.getThreshold`"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getQuantileLevel
+"Probability level accessor.
+
+Returns
+-------
+level : float
+    Probability level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::setQuantileLevel
+"Probability level accessor.
+
+Parameters
+----------
+level : float, :math:`0 < p < 1`
+    Probability level"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getResult
+"Result accessor.
+
+Returns
+-------
+result : :class:`persalys.FieldMonteCarloResult`
+    Result"

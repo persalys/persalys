@@ -24,6 +24,7 @@ Model creation
     PythonFieldModel
     FMIPhysicalModel
     DataModel
+    DataFieldModel
     DataCleaning
     MetaModel
 
@@ -163,6 +164,7 @@ Data analysis
     CopulaInferenceAnalysis
     CopulaInferenceResult
     CopulaInferenceSetResult
+    FieldKarhunenLoeveAnalysis
 
 Metamodel
 ---------

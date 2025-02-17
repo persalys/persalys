@@ -63,3 +63,12 @@ Returns
 design : :class:`~persalys.DesignOfExperiment`
     Design of experiments, result of the analysis"
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SimulationAnalysis::getErrorDescription
+"Design of experiments accessor.
+
+Returns
+-------
+errorDesc : :class:`~openturns.Description`
+    :class:`~openturns.Description` containing messages from failed points."

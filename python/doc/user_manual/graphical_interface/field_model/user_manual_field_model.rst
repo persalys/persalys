@@ -46,8 +46,8 @@ The model item is associated with a **Study workflow** window.
     :align: center
 
 This diagram displays the possible actions an user can perform in real time. An action
-is active when its box is in dark green and when a previous one is valid. A box is disabled when its box
-is in light green, and the previous one is not valid.
+is active when its box is in dark blue and when a previous one is valid. A box is disabled when its box
+is in light blue, and the previous one is not valid.
 When the mouse pointer is hovered over a box, an information message appears at the bottom of
 the window in order to specify what sort of actions the box proposes. If the box is disabled the
 message indicates why the previous one is not valid.
