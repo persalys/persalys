@@ -26,6 +26,7 @@
 #include "persalys/InferenceAnalysis.hxx"
 #include "persalys/CopulaInferenceAnalysis.hxx"
 #include "persalys/DataAnalysis.hxx"
+#include "persalys/FieldKarhunenLoeveAnalysis.hxx"
 #include "persalys/FieldModelEvaluation.hxx"
 #include "persalys/FieldMonteCarloAnalysis.hxx"
 #include "persalys/MonteCarloAnalysis.hxx"
@@ -70,6 +71,8 @@ QString ItemFactory::getParentTitleType(const QString &objectName) const
       return "MetaModelsTitle";
     else if (objectName == "DataModel")
       return "DataModelsTitle";
+    else if (objectName == "DataFieldModel")
+      return "DataFieldModelsTitle";
     else
       return "PhysicalModelsTitle";
   }
@@ -118,6 +121,12 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
       item = new Item(tr("Data models"), "DataModelsTitle");
       item->setData(QIcon(":/images/dataModel.png"), Qt::DecorationRole);
       item->appendAction(newDataModel_);
+    }
+    else if (objectName == "DataFieldModel")
+    {
+      item = new Item(tr("Field data models"), "DataFieldModelsTitle");
+      item->setData(QIcon(":/images/dataModel.png"), Qt::DecorationRole);
+      item->appendAction(newDataFieldModel_);
     }
     else
     {
@@ -392,6 +401,22 @@ QAction * ItemFactory::createAction(const QString &analysisName, const LimitStat
     connect(action, &QAction::triggered, [ = ]()
     {
       newAnalysis("ThresholdExceedance", limitState);
+    });
+    return action;
+  }
+  qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
+  return 0;
+}
+
+
+QAction * ItemFactory::createAction(const QString &analysisName, const DataFieldModel &dataFieldModel)
+{
+  if (analysisName == "FieldKarhunenLoeveAnalysis")
+  {
+    QAction * action = new QAction(tr("Field data analysis"), this);
+    action->setStatusTip(tr("Analyze data and create a Karhunene-Loeve decomposition"));
+    connect(action, &QAction::triggered, [ = ]() {
+      getParentStudyItem()->getStudy().add(FieldKarhunenLoeveAnalysis(availableAnalysisName(tr("fieldDataAnalysis_")), dataFieldModel));
     });
     return action;
   }

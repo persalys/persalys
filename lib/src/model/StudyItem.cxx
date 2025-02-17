@@ -34,6 +34,7 @@
 #include "persalys/ReliabilityAnalysis.hxx"
 #include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/CouplingPhysicalModel.hxx"
+#include "persalys/DataFieldModel.hxx"
 
 #ifdef PERSALYS_HAVE_OTFMI
 #include "persalys/FMIPhysicalModel.hxx"
@@ -122,6 +123,12 @@ void StudyItem::buildActions()
     study_.add(new DataModel(study_.getAvailableDataModelName(tr("DataModel_").toStdString())));
   });
 
+  newDataFieldModel_ = new QAction(tr("Data Field model"), this);
+  connect(newDataFieldModel_, &QAction::triggered, [ = ]()
+  {
+    study_.add(DataFieldModel(study_.getAvailableDataFieldModelName(tr("DataFieldModel_").toStdString())));
+  });
+
   // export action
   exportAction_ = new QAction(QIcon(":/images/document-export.png"), tr("Export Python"), this);
   connect(exportAction_, SIGNAL(triggered()), this, SIGNAL(exportRequested()));
@@ -152,6 +159,7 @@ void StudyItem::buildActions()
   appendAction(newPythonFieldModel_);
   appendAction(newCouplingModel_);
   appendAction(newDataModel_);
+  appendAction(newDataFieldModel_);
   appendSeparator();
   appendAction(exportAction_);
   appendAction(saveAction_);
@@ -295,7 +303,6 @@ void StudyItem::appendItem(const DesignOfExperiment &dataModel)
 {
   if (!dataModel.hasPhysicalModel())
   {
-    // new Data model item
     DataModelDiagramItem * newItem = new DataModelDiagramItem(dataModel);
     Item * titleItem = getTitleItemNamed("DataModel");
     titleItem->appendRow(newItem);
@@ -322,6 +329,21 @@ void StudyItem::appendItem(const PhysicalModel &physicalModel)
   // new Physical model item
   PhysicalModelDiagramItem * newModelItem = new PhysicalModelDiagramItem(physicalModel);
   Item * titleItem = getTitleItemNamed(physicalModel.getImplementation()->getClassName().c_str());
+  titleItem->appendRow(newModelItem);
+
+  // signal for StudyTreeView to create the window
+  emit windowRequested(newModelItem);
+
+  // Add sub items
+  newModelItem->fill();
+}
+
+
+void StudyItem::appendItem(const DataFieldModel &dataModel)
+{
+  // new Physical model item
+  DataFieldModelDiagramItem * newModelItem = new DataFieldModelDiagramItem(dataModel);
+  Item * titleItem = getTitleItemNamed("DataFieldModel");
   titleItem->appendRow(newModelItem);
 
   // signal for StudyTreeView to create the window

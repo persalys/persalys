@@ -61,7 +61,8 @@ void AnalysisItem::buildActions()
   const QString analysisType(analysis_.getImplementation()->getClassName().c_str());
   // modify analysis action
   if (analysisType != "DataAnalysis" &&
-      analysisType != "ImportanceSamplingAnalysis") // there is no wizard associated with these analyses <=> impossible to modify them
+      analysisType != "ImportanceSamplingAnalysis" &&
+      analysisType != "FieldKarhunenLoeveAnalysis") // there is no wizard associated with these analyses <=> impossible to modify them
   {
     modifyAction_ = new QAction(QIcon(":/images/run-build.png"), tr("Modify"), this);
     modifyAction_->setStatusTip(tr("Modify the analysis"));

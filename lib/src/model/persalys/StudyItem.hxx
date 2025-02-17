@@ -23,6 +23,8 @@
 
 #include "persalys/PhysicalModelDiagramItem.hxx"
 #include "persalys/DataModelDiagramItem.hxx"
+#include "persalys/DataFieldModelDiagramItem.hxx"
+
 #include "persalys/Study.hxx"
 
 namespace PERSALYS
@@ -39,6 +41,7 @@ public:
   void update(Observable * source, const OT::String & message);
 
   virtual void appendItem(const DesignOfExperiment & dataModel);
+  void appendItem(const DataFieldModel & dataModel);
   void appendItem(const PhysicalModel & physicalModel);
   virtual void appendItem(const LimitState & limitState);
   virtual void appendItem(const Analysis & analysis);

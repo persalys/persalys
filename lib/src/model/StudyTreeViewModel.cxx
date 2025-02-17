@@ -79,6 +79,12 @@ void StudyTreeViewModel::appendItem(const Study & study)
     study.getDataModels()[i].addObserver(study.getImplementation().get());
   }
 
+  for (UnsignedInteger i = 0; i < study.getDataFieldModels().getSize(); ++i)
+  {
+    studyItem->appendItem(study.getDataFieldModels()[i]);
+    study.getDataFieldModels()[i].addObserver(study.getImplementation().get());
+  }
+
   for (UnsignedInteger i = 0; i < study.getLimitStates().getSize(); ++i)
   {
     studyItem->appendItem(study.getLimitStates()[i]);
