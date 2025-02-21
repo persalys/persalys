@@ -2,7 +2,7 @@
 /**
  *  @brief Defines physical models thanks analytical formulas and mesh
  *
- *  Copyright 2015-2024 EDF-Phimeca
+ *  Copyright 2015-2025 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by

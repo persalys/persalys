@@ -20,8 +20,8 @@
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="94"/>
-        <source>Copyright 2015-2024 EDF-Phimeca</source>
-        <translation>Copyright 2015-2024 EDF-Phimeca</translation>
+        <source>Copyright 2015-2025 EDF-Phimeca</source>
+        <translation>Copyright 2015-2025 EDF-Phimeca</translation>
     </message>
     <message>
         <location filename="../lib/src/view/AboutDialog.cxx" line="102"/>

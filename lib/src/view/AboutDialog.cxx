@@ -2,7 +2,7 @@
 /**
  *  @brief QDialog
  *
- *  Copyright 2015-2024 EDF-Phimeca
+ *  Copyright 2015-2025 EDF-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -91,7 +91,7 @@ AboutDialog::AboutDialog(QWidget* parent)
   linkLabel->setOpenExternalLinks(true);
   tabLayout->addWidget(linkLabel);
 
-  QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2024 EDF-Phimeca"));
+  QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2025 EDF-Phimeca"));
   tabLayout->addWidget(copyrightLabel);
 
   //QLabel * licenseLabel = new QLabel("<a>"+tr("License:")+"&nbsp;<a href=\"https://www.gnu.org/licenses/lgpl-3.0.en.html\">GNU Lesser General Public License Version 3</a>");
