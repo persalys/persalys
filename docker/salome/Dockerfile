@@ -23,11 +23,11 @@ RUN curl -L https://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.5/
 RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/SALOME_9_13_V7_8_0;sf=tgz" | tar xz && cd occt* && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1 && cd - && rm -r occt*
 
 # openturns
-RUN git clone -b v1.24rc1 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
- && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" -DUSE_SPHINX=OFF . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
+RUN git clone -b v1.24 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+ && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # libbatch
-RUN git clone -b V2_5_0 --depth 1 https://git.salome-platform.org/gitpub/tools/libbatch.git && cd libbatch && cmake . && make install > /dev/null 2>&1 && cd - && rm -r libbatch
+RUN git clone -b V2_5_0 --depth 1 https://github.com/SalomePlatform/libbatch.git && cd libbatch && cmake . && make install > /dev/null 2>&1 && cd - && rm -r libbatch
 
 # uname -p => unknown
 RUN cd /tmp && sudo mv /bin/uname /bin/uname.orig && echo -n "#!/bin/sh\nuname.orig \"\$@\"|sed 's|unknown|x86_64|g'\n" > uname && chmod a+rx ./uname && sudo mv ./uname /bin/uname && uname  -p
@@ -50,32 +50,32 @@ WORKDIR /home/devel/src
 RUN git config --global user.email devel@a.b && git config --global user.name devel
 
 # salome-configuration
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/configuration.git && cd configuration && sed -i "s|NO_SYSTEM_ENVIRONMENT_PATH||g" cmake/SalomeMacros.cmake
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/configuration.git && cd configuration && sed -i "s|NO_SYSTEM_ENVIRONMENT_PATH||g" cmake/SalomeMacros.cmake
 
 # salome-kernel
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/kernel.git && cd kernel && cmake -DSALOME_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOME_USE_LIBBATCH=ON -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/kernel.git && cd kernel && cmake -DSALOME_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOME_USE_LIBBATCH=ON -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1
 
 # salome-boostrap
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/salome_bootstrap.git && cd salome_bootstrap && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/salome_bootstrap.git && cd salome_bootstrap && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1
 ENV PYTHONPATH /home/devel/src/salome_bootstrap/__SALOME_BOOTSTRAP__/:$PYTHONPATH
 
 # salome-gui
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/gui.git && cd gui && sed -i "137iFIND_PACKAGE(SalomeGraphviz)" CMakeLists.txt && echo "set_target_properties (LightApp PROPERTIES EXCLUDE_FROM_ALL TRUE)" >> src/LightApp/CMakeLists.txt && sed -i "2135,2160d" src/LightApp/LightApp_Application.cxx && git diff && cmake -LAH -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOMEBOOTSTRAP_ROOT_DIR=/home/devel/src/salome_bootstrap -DKERNEL_ROOT_DIR=/home/devel/local -DSALOME_USE_VTKVIEWER=OFF -DSALOME_BUILD_DOC=OFF -DSALOME_USE_PVVIEWER=OFF -DSALOME_USE_PV3DVIEWER=OFF -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PLOT2DVIEWER=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local -DSALOME_CMAKE_DEBUG=ON . && make install && cd - && rm -rf gui*
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/gui.git && cd gui && sed -i "137iFIND_PACKAGE(SalomeGraphviz)" CMakeLists.txt && echo "set_target_properties (LightApp PROPERTIES EXCLUDE_FROM_ALL TRUE)" >> src/LightApp/CMakeLists.txt && curl -L https://github.com/SalomePlatform/gui/pull/3.patch | patch -p1 && git diff && cmake -LAH -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSALOMEBOOTSTRAP_ROOT_DIR=/home/devel/src/salome_bootstrap -DKERNEL_ROOT_DIR=/home/devel/local -DSALOME_USE_VTKVIEWER=OFF -DSALOME_BUILD_DOC=OFF -DSALOME_USE_PVVIEWER=OFF -DSALOME_USE_PV3DVIEWER=OFF -DSALOME_USE_VTKVIEWER=OFF -DSALOME_USE_PLOT2DVIEWER=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local -DSALOME_CMAKE_DEBUG=ON . && make install && cd - && rm -rf gui*
 
 # salome-yacs
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/yacs.git && cd yacs && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r yacs*
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/yacs.git && cd yacs && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DKERNEL_ROOT_DIR=/home/devel/local -DGUI_ROOT_DIR=/home/devel/local -DSALOME_BUILD_DOC=OFF -DSALOME_YACS_USE_DSC=OFF -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r yacs*
 
 # py2cpp
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/py2cpp.git && cd py2cpp && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r py2cpp*
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/py2cpp.git && cd py2cpp && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r py2cpp*
 
 # ydefx
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/ydefx.git && cd ydefx && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local -DKERNEL_ROOT_DIR=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r ydefx*
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/ydefx.git && cd ydefx && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local -DKERNEL_ROOT_DIR=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r ydefx*
 
 # adao
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/adao.git && cd adao && CURRENT_SOFTWARE_INSTALL_DIR=/usr/local cmake -DADAO_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration . && make > /dev/null 2>&1 && sudo make install > /dev/null 2>&1 && cd - && sudo rm -r adao*
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/adao.git && cd adao && CURRENT_SOFTWARE_INSTALL_DIR=/usr/local cmake -DADAO_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration . && make > /dev/null 2>&1 && sudo make install > /dev/null 2>&1 && cd - && sudo rm -r adao*
 
 # adao_interface
-RUN git clone -b V9_13_0 --depth 1 https://github.com/SalomePlatform/adao_interface.git && cd adao_interface && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DPY2CPP_ROOT_DIR=/home/devel/local -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && sudo rm -r adao*
+RUN git clone -b V9_14_0 --depth 1 https://github.com/SalomePlatform/adao_interface.git && cd adao_interface && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DPY2CPP_ROOT_DIR=/home/devel/local -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && sudo rm -r adao*
 
 # finalize install
 ENV LD_LIBRARY_PATH /usr/local/lib/:/home/devel/local/lib/:/home/devel/local/lib/salome

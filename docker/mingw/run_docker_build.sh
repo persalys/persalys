@@ -9,8 +9,9 @@ cd /tmp
 
 mkdir -p build && cd build
 MOD_PREFIX=$PWD/install
-CXXFLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -DPERSALYS_NSIS -fuse-ld=lld" ${ARCH}-w64-mingw32-cmake -DUSE_SPHINX=OFF -DUSE_SALOME=OFF \
+CXXFLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -DPERSALYS_NSIS" ${ARCH}-w64-mingw32-cmake -DUSE_SALOME=OFF \
   -DCMAKE_INSTALL_PREFIX=${MOD_PREFIX} \
+  -DCMAKE_LINKER_TYPE=LLD \
   -DPython_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
   -DPython_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPython_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
