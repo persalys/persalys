@@ -23,6 +23,7 @@
 
 #include "persalys/SubWindow.hxx"
 #include "persalys/PhysicalModelItem.hxx"
+#include "persalys/DataFieldModelItem.hxx"
 #include "persalys/PlotWidget.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
 #include "persalys/ExportableTableView.hxx"
@@ -41,6 +42,7 @@ class PERSALYS_VIEW_API MeshWindow : public SubWindow
 
 public:
   MeshWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
+  MeshWindow(DataFieldModelItem * item, QWidget *parent = nullptr);
 
   void buildInterface();
 #ifdef PERSALYS_HAVE_PARAVIEW
@@ -51,6 +53,7 @@ public:
 
 protected:
   virtual void resizeEvent(QResizeEvent * event);
+  MeshModel getMeshModel() const;
 
 public slots:
   void updateTable();
@@ -58,14 +61,15 @@ public slots:
   void editMesh();
 
 private:
-  PhysicalModelItem * meshItem_;
-  QLabel * isRegularLabel_;
-  CopyableTableView * tableView_;
-  CustomStandardItemModel * tableModel_;
-  PlotWidget * meshPlot_;
-  SampleTableModel * nodesModel_;
-  ExportableTableView * nodesView_;
-  QTabWidget * tabWidget_;
+  PhysicalModelItem * meshItem_ = nullptr;
+  DataFieldModelItem * dataMeshItem_ = nullptr;
+  QLabel * isRegularLabel_ = nullptr;
+  CopyableTableView * tableView_ = nullptr;
+  CustomStandardItemModel * tableModel_ = nullptr;
+  PlotWidget * meshPlot_ = nullptr;
+  SampleTableModel * nodesModel_ = nullptr;
+  ExportableTableView * nodesView_ = nullptr;
+  QTabWidget * tabWidget_ = nullptr;
 };
 }
 #endif

@@ -41,7 +41,7 @@ class PERSALYS_VIEW_API MeshDefinitionWizard : public Wizard
 
 public:
   enum Method {Grid, Import};
-  MeshDefinitionWizard(const MeshModel& mesh, QWidget* parent = 0);
+  MeshDefinitionWizard(const MeshModel& mesh, const OT::Bool allowColumns = false, QWidget* parent = 0);
 
   MeshModel getMesh() const;
   virtual bool validateCurrentPage();
@@ -56,6 +56,7 @@ public slots:
 
 private:
   MeshModel mesh_;
+  OT::Bool allowColumns_;
   QButtonGroup * methodGroup_;
   ImportSampleWidget * sampleWidget_;
   CopyableTableView * tableView_;

@@ -57,6 +57,7 @@ public:
   Analysis createAnalysis(const QString &analysisName, const Analysis &analysis);
 
   QAction * createAction(const QString &analysisName, const PhysicalModel &model);
+  QAction * createAction(const QString &analysisName, const DataFieldModel &model);
   QAction * createAction(const QString &analysisName, const DesignOfExperiment &doe);
   QAction * createAction(const QString &analysisName, const LimitState &limitState);
   QAction * createAction(const QString &analysisName, const Analysis &analysis);
@@ -84,6 +85,7 @@ protected:
   QAction * newSymbolicFieldModel_ = nullptr;
   QAction * newPythonFieldModel_ = nullptr;
   QAction * newDataModel_ = nullptr;
+  QAction * newDataFieldModel_ = nullptr;
 
   QAction * newModelEvaluation_ = nullptr;
   QAction * newScreening_ = nullptr;

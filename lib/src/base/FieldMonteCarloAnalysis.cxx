@@ -22,10 +22,6 @@
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/KarhunenLoeveSVDAlgorithm.hxx>
-#include <openturns/PiecewiseLinearEvaluation.hxx>
-#include <openturns/InverseTrendTransform.hxx>
-#include <openturns/NonStationaryCovarianceModelFactory.hxx>
 
 #include <limits>
 
@@ -38,17 +34,11 @@ CLASSNAMEINIT(FieldMonteCarloAnalysis)
 
 static Factory<FieldMonteCarloAnalysis> Factory_FieldMonteCarloAnalysis;
 
-CLASSNAMEINIT(CovFunctionEvaluation)
-static Factory<CovFunctionEvaluation> Factory_CovFunctionEvaluation;
-
-
 /* Default constructor */
 FieldMonteCarloAnalysis::FieldMonteCarloAnalysis()
   : SimulationAnalysis()
   , WithStopCriteriaAnalysis()
-  , karhunenLoeveThreshold_(1.e-5)
-  , quantileLevel_(0.05)
-  , result_()
+  , karhunenLoeveAnalysis_()
 {
   setMaximumCalls(1000);
   isDeterministicAnalysis_ = false;
@@ -59,9 +49,7 @@ FieldMonteCarloAnalysis::FieldMonteCarloAnalysis()
 FieldMonteCarloAnalysis::FieldMonteCarloAnalysis(const String& name, const PhysicalModel& physicalModel)
   : SimulationAnalysis(name, physicalModel)
   , WithStopCriteriaAnalysis()
-  , karhunenLoeveThreshold_(1.e-5)
-  , quantileLevel_(0.05)
-  , result_()
+  , karhunenLoeveAnalysis_()
 {
   setMaximumCalls(1000);
   isDeterministicAnalysis_ = false;
@@ -78,7 +66,6 @@ FieldMonteCarloAnalysis* FieldMonteCarloAnalysis::clone() const
 void FieldMonteCarloAnalysis::initialize()
 {
   SimulationAnalysis::initialize();
-  result_ = FieldMonteCarloResult();
 }
 
 
@@ -164,91 +151,30 @@ void FieldMonteCarloAnalysis::launch()
   if (!processSample.getSize())
     throw InvalidValueException(HERE) << "Monte Carlo analysis failed. The output process sample is empty. " << warningMessage_;
 
+  // set KL analysis
+  DataFieldModel model("model", getPhysicalModel().getMeshModel(), processSample);
+  karhunenLoeveAnalysis_ = FieldKarhunenLoeveAnalysis("analysis", model);
+
   // set design of experiments
-  result_.designOfExperiment_.setInputSample(effectiveInputSample);
+  karhunenLoeveAnalysis_.result_.designOfExperiment_.setInputSample(effectiveInputSample);
 
   informationMessage_ = "Post processing in progress";
   notify("informationMessageUpdated");
 
   // Compute mean/quantiles process sample
-  result_.meanSample_ = processSample.computeMean().getValues();
-  result_.lowerQuantileSample_ = processSample.computeQuantilePerComponent(quantileLevel_).getValues();
-  result_.upperQuantileSample_ = processSample.computeQuantilePerComponent(1 - quantileLevel_).getValues();
+  karhunenLoeveAnalysis_.result_.meanSample_ = processSample.computeMean().getValues();
+  karhunenLoeveAnalysis_.result_.lowerQuantileSample_ = processSample.computeQuantilePerComponent(karhunenLoeveAnalysis_.quantileLevel_).getValues();
+  karhunenLoeveAnalysis_.result_.upperQuantileSample_ = processSample.computeQuantilePerComponent(1 - karhunenLoeveAnalysis_.quantileLevel_).getValues();
 
-  // Compute the KL decomposition of the output and correlation
-  informationMessage_ = "Karhunen-Loeve algorithm in progress";
-  notify("informationMessageUpdated");
-  // get mesh info
-  const Point vertices(getPhysicalModel().getMeshModel().getMesh().getVertices().asPoint());
-  try
-  {
-    for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
-    {
-      ProcessSample ps_i(processSample.getMarginal(i));
-      // Compute the KL decomposition
-      KarhunenLoeveSVDAlgorithm algoKL(ps_i, getKarhunenLoeveThreshold());
-      algoKL.run();
-      result_.karhunenLoeveResults_.add(algoKL.getResult());
-      // compute correlation
-      TrendTransform meanTransform(PiecewiseLinearEvaluation(vertices, result_.meanSample_.getMarginal(i)), getPhysicalModel().getMeshModel().getMesh());
-      InverseTrendTransform meanInverseTransform(meanTransform.getInverse());
-      ProcessSample sample_centered(meanInverseTransform(ps_i));
-
-      CovarianceModel covariance(NonStationaryCovarianceModelFactory().build(sample_centered, true));
-      Function f(new CovFunctionEvaluation(covariance));
-      result_.correlationFunction_.add(f);
-
-      Sample xi_sample(algoKL.getResult().project(sample_centered));
-      xi_sample.setDescription(Description::BuildDefault(algoKL.getResult().getEigenvalues().getSize(), "Xi_"));
-      result_.xiSamples_.add(xi_sample);
-    }
-  }
-  catch (std::exception & ex)
-  {
-    warningMessage_ = ex.what();
-  }
-
+  karhunenLoeveAnalysis_.launch();
   // set result
-  result_.processSample_ = processSample;
-  result_.elapsedTime_ = TimeCriteria::Now() - startTime;
+  karhunenLoeveAnalysis_.result_.elapsedTime_ = TimeCriteria::Now() - startTime;
+
 }
-
-
-Scalar FieldMonteCarloAnalysis::getKarhunenLoeveThreshold() const
-{
-  return karhunenLoeveThreshold_;
-}
-
-
-void FieldMonteCarloAnalysis::setKarhunenLoeveThreshold(const Scalar threshold)
-{
-  karhunenLoeveThreshold_ = threshold;
-}
-
-
-Scalar FieldMonteCarloAnalysis::getQuantileLevel() const
-{
-  return quantileLevel_;
-}
-
-
-void FieldMonteCarloAnalysis::setQuantileLevel(const Scalar level)
-{
-  if (!(level >= 0.0) || !(level <= 1.0))
-    throw InvalidArgumentException(HERE) << "Error: cannot compute a quantile for a probability level outside of [0, 1]";
-  quantileLevel_ = level;
-}
-
-
-FieldMonteCarloResult FieldMonteCarloAnalysis::getResult() const
-{
-  return result_;
-}
-
 
 bool FieldMonteCarloAnalysis::hasValidResult() const
 {
-  return result_.getProcessSample().getSize() != 0;
+  return getResult().getProcessSample().getSize() != 0;
 }
 
 
@@ -282,8 +208,10 @@ String FieldMonteCarloAnalysis::getPythonScript() const
     oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
-  oss << getName() << ".setKarhunenLoeveThreshold(" << getKarhunenLoeveThreshold() << ")\n";
-  oss << getName() << ".setQuantileLevel(" << getQuantileLevel() << ")\n";
+  oss << getName() << ".setKarhunenLoeveThreshold("
+      << getKarhunenLoeveThreshold() << ")\n";
+  oss << getName() << ".setQuantileLevel("
+      << getQuantileLevel() << ")\n";
 
   return oss;
 }
@@ -297,8 +225,8 @@ String FieldMonteCarloAnalysis::__repr__() const
       << WithStopCriteriaAnalysis::__repr__()
       << " seed=" << getSeed()
       << " blockSize=" << getBlockSize()
-      << " Karhunen-Loeve threshold=" << getKarhunenLoeveThreshold()
-      << " quantile level=" << getQuantileLevel();
+      << karhunenLoeveAnalysis_.__repr__();
+
   return oss;
 }
 
@@ -308,9 +236,7 @@ void FieldMonteCarloAnalysis::save(Advocate & adv) const
 {
   SimulationAnalysis::save(adv);
   WithStopCriteriaAnalysis::save(adv);
-  adv.saveAttribute("karhunenLoeveThreshold_", karhunenLoeveThreshold_);
-  adv.saveAttribute("quantileLevel_", quantileLevel_);
-  adv.saveAttribute("result_", result_);
+  adv.saveAttribute("karhunenLoeveAnalysis_", karhunenLoeveAnalysis_);
 }
 
 
@@ -319,8 +245,20 @@ void FieldMonteCarloAnalysis::load(Advocate & adv)
 {
   SimulationAnalysis::load(adv);
   WithStopCriteriaAnalysis::load(adv);
-  adv.loadAttribute("karhunenLoeveThreshold_", karhunenLoeveThreshold_);
-  adv.loadAttribute("quantileLevel_", quantileLevel_);
-  adv.loadAttribute("result_", result_);
+  if (adv.hasAttribute("karhunenLoeveAnalysis_"))
+    adv.loadAttribute("karhunenLoeveAnalysis_", karhunenLoeveAnalysis_);
+  else
+  {
+    karhunenLoeveAnalysis_ = FieldKarhunenLoeveAnalysis();
+    Scalar karhunenLoeveThreshold;
+    adv.loadAttribute("karhunenLoeveThreshold_", karhunenLoeveThreshold);
+    Scalar quantileLevel;
+    adv.loadAttribute("quantileLevel_", quantileLevel);
+    FieldMonteCarloResult result;
+    adv.loadAttribute("result_", result);
+    karhunenLoeveAnalysis_.result_ = result;
+    setKarhunenLoeveThreshold(karhunenLoeveThreshold);
+    setQuantileLevel(quantileLevel);
+  }
 }
 }

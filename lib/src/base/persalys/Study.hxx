@@ -68,6 +68,12 @@ public:
   void add(const DesignOfExperiment& designOfExperiment);
   void remove(const DesignOfExperiment& designOfExperiment);
 
+  OT::Collection<DataFieldModel> getDataFieldModels() const;
+  DataFieldModel& getDataFieldModelByName(const OT::String& dataModelName);
+  OT::String getAvailableDataFieldModelName(const OT::String& modelRootName) const;
+  void add(const DataFieldModel& dataFieldModel);
+  void remove(const DataFieldModel& dataFieldModel);
+
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
   OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName) const;

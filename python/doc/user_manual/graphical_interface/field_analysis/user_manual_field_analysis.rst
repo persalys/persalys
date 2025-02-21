@@ -23,7 +23,7 @@ Create a new model evaluation through:
 
     .. image:: /user_manual/graphical_interface/field_analysis/model_diagram.png
         :align: center
- 
+
   - The **New evaluation** item in the context menu of the **Evaluation** section
 
     .. image:: /user_manual/graphical_interface/field_analysis/evaluation_contextMenu.png
@@ -88,7 +88,7 @@ This window gathers the following tabs:
 
       - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
-          - Left-click on column header to sort values in ascending or descending order 
+          - Left-click on column header to sort values in ascending or descending order
           - Left-click on a column header and drag it in another place to change columns order
 
       .. image:: /user_manual/graphical_interface/field_analysis/eval_window_table_traj.png
@@ -100,7 +100,7 @@ This window gathers the following tabs:
 
       - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
-          - Left-click on column header to sort values in ascending or descending order 
+          - Left-click on column header to sort values in ascending or descending order
           - Left-click on a column header and drag it in another place to change columns order
 
       .. image:: /user_manual/graphical_interface/field_analysis/eval_window_table_input.png
@@ -201,7 +201,7 @@ The results window gathers the following tabs:
 
       - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
-          - Left-click on column header to sort values in ascending or descending order 
+          - Left-click on column header to sort values in ascending or descending order
           - Left-click on a column header and drag it in another place to change columns order
 
       .. image:: /user_manual/graphical_interface/field_analysis/MC_window_table_traj.png
@@ -245,7 +245,7 @@ The results window gathers the following tabs:
 
       - Table interactivity:
           - Left-click (optional: + Ctrl) on lines to select them
-          - Left-click on column header to sort values in ascending or descending order 
+          - Left-click on column header to sort values in ascending or descending order
           - Left-click on a column header and drag it in another place to change columns order
 
       .. image:: /user_manual/graphical_interface/field_analysis/MC_window_table_input.png
@@ -333,3 +333,34 @@ The results window gathers the following tabs:
 - The **Model** tab shows the model content used to perform the analysis.
 
 
+3- Data field analysis
+======================
+
+Data field analyses for data field models are the equivalent of the central tendency analysis for anlaytical field models coupled with a probabilistic model
+
+New data field analysis can be created thanks to:
+  - the context menu of the data field model item
+
+    .. image:: /user_manual/graphical_interface/field_analysis/dataFieldAnalysisContextMenu.png
+        :align: center
+
+  - the **Data analysis** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/data_model/dataFieldModelDiagram.png
+        :align: center
+
+2-1 Launch
+''''''''''
+
+When the **Data field analysis** window is created through either of
+the two means described above, a new element appears in the study
+tree.
+
+Simply click on the **Run** buitton to launch it
+
+2-2 Results
+'''''''''''
+
+You will find the same **Result**, **Decomposition** and
+**Correlation** tabs as in :ref:`fieldmontecarloresult`. The other
+missing tabs are not relevant for an already evaluated field model

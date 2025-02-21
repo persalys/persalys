@@ -24,6 +24,7 @@
 #include "persalys/DesignOfExperimentAnalysis.hxx"
 #include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/CalibrationAnalysis.hxx"
+#include "persalys/FieldKarhunenLoeveAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/Study.hxx>
@@ -42,7 +43,7 @@ static Factory<PersistentCollection<PhysicalModel> > Factory_PersistentCollectio
 static Factory<PersistentCollection<DesignOfExperiment> > Factory_PersistentCollection_DesignOfExperiment;
 static Factory<PersistentCollection<LimitState> > Factory_PersistentCollection_LimitState;
 static Factory<PersistentCollection<Analysis> > Factory_PersistentCollection_Analysis;
-
+static Factory<PersistentCollection<DataFieldModel> > Factory_PersistentCollection_DataFieldModel;
 
 /* Default constructor */
 StudyImplementation::StudyImplementation(const String& name)
@@ -61,6 +62,7 @@ StudyImplementation::~StudyImplementation()
   limitStates_.clear();
   physicalModels_.clear();
   dataModels_.clear();
+  dataFieldModels_.clear();
 }
 
 
@@ -149,6 +151,10 @@ void StudyImplementation::clear()
   for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
     dataModels_[i].getImplementation()->removeAllObservers();
 
+  // remove all the datafieldmodels
+  for (UnsignedInteger i = 0; i < dataFieldModels_.getSize(); ++i)
+    dataFieldModels_[i].getImplementation()->removeAllObservers();
+
   // remove all the physical models
   for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
     physicalModels_[i].getImplementation()->removeAllObservers();
@@ -218,13 +224,12 @@ void StudyImplementation::add(const DesignOfExperiment& designOfExperiment)
 
 void StudyImplementation::remove(const DesignOfExperiment& designOfExperiment)
 {
-  if (!dataModels_.contains(designOfExperiment))
+  if (!(dataModels_.contains(designOfExperiment)))
     return;
 
   // remove analyses/observers depending on designOfExperiment
   clear(designOfExperiment);
   designOfExperiment.getImplementation().get()->removeAllObservers();
-
   dataModels_.erase(std::remove(dataModels_.begin(), dataModels_.end(), designOfExperiment), dataModels_.end());
 }
 
@@ -240,6 +245,87 @@ void StudyImplementation::clear(const DesignOfExperiment& designOfExperiment)
 
     if ((analysis_ptr1 && analysis_ptr1->getDesignOfExperiment() == designOfExperiment) ||
         (analysis_ptr2 && analysis_ptr2->getObservations() == designOfExperiment))
+    {
+      (*iter).getImplementation()->removeAllObservers();
+      iter = analyses_.erase(iter);
+    }
+    else
+    {
+      ++iter;
+    }
+  }
+}
+
+
+// ----- FIELD DATA MODEL -----
+ Collection< DataFieldModel > StudyImplementation::getDataFieldModels() const
+ {
+   return dataFieldModels_;
+ }
+
+
+ DataFieldModel& StudyImplementation::getDataFieldModelByName(const String& dataModelName)
+ {
+   for (UnsignedInteger i = 0; i < dataFieldModels_.getSize(); ++i)
+     if (dataFieldModels_[i].getName() == dataModelName)
+       return dataFieldModels_[i];
+   throw InvalidArgumentException(HERE) << "The given name " << dataModelName << " does not correspond to a data model of the study.\n";
+ }
+
+
+ bool StudyImplementation::hasDataFieldModelNamed(const String& dataModelName) const
+ {
+   for (UnsignedInteger i = 0; i < dataFieldModels_.getSize(); ++i)
+     if (dataFieldModels_[i].getName() == dataModelName)
+       return true;
+   return false;
+ }
+
+
+ String StudyImplementation::getAvailableDataFieldModelName(const String& modelRootName) const
+ {
+   int i = 0;
+   while (hasDataFieldModelNamed(modelRootName + (OSS() << i).str()))
+     ++i;
+   return modelRootName + (OSS() << i).str();
+ }
+
+
+void StudyImplementation::add(const DataFieldModel & dataFieldModel)
+{
+  if (hasDataFieldModelNamed(dataFieldModel.getName()))
+    throw InvalidArgumentException(HERE) << "The study already contains a data field model named " << dataFieldModel.getName();
+
+  dataFieldModels_.add(dataFieldModel);
+
+  dataFieldModel.getImplementation().get()->addObserver(this);
+  if (Observer * obs = getObserver("StudyItem"))
+    obs->appendItem(dataFieldModel);
+  modified_ = true;
+  notify("statusChanged");
+}
+
+
+void StudyImplementation::remove(const DataFieldModel & dataFieldModel)
+{
+  if (!(dataFieldModels_.contains(dataFieldModel)))
+    return;
+
+  // remove analyses/observers depending on designOfExperiment
+  clear(dataFieldModel);
+  dataFieldModel.getImplementation().get()->removeAllObservers();
+  dataFieldModels_.erase(std::remove(dataFieldModels_.begin(), dataFieldModels_.end(), dataFieldModel), dataFieldModels_.end());
+}
+
+
+void StudyImplementation::clear(const DataFieldModel & dataFieldModel)
+{
+  // remove all the analyses
+  PersistentCollection<Analysis>::iterator iter = analyses_.begin();
+  while (iter != analyses_.end())
+  {
+    FieldKarhunenLoeveAnalysis * analysis_ptr = dynamic_cast<FieldKarhunenLoeveAnalysis*>((*iter).getImplementation().get());
+    if (analysis_ptr && analysis_ptr->getDataFieldModel() == dataFieldModel)
     {
       (*iter).getImplementation()->removeAllObservers();
       iter = analyses_.erase(iter);
@@ -431,7 +517,7 @@ void StudyImplementation::add(const Analysis& analysis)
     }
     else
     {
-      if (!dataModels_.contains(dm_analysis_ptr->getDesignOfExperiment()))
+      if (!(dataModels_.contains(dm_analysis_ptr->getDesignOfExperiment())))
         throw InvalidArgumentException(HERE) << "The analysis has been created with a data model not belonging to the study.";
     }
   }
@@ -592,6 +678,11 @@ String StudyImplementation::getPythonScript()
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
   }
+  for (Collection<DataFieldModel>::iterator it = dataFieldModels_.begin(); it != dataFieldModels_.end(); ++it)
+  {
+    result += (*it).getPythonScript();
+    result += getName() + ".add(" + (*it).getName() + ")\n";
+  }
   for (Collection<LimitState>::iterator it = limitStates_.begin(); it != limitStates_.end(); ++it)
   {
     result += (*it).getPythonScript();
@@ -624,6 +715,7 @@ void StudyImplementation::save(Advocate& adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute("dataModels_", dataModels_);
+  adv.saveAttribute("dataFieldModels_", dataFieldModels_);
   adv.saveAttribute("physicalModels_", physicalModels_);
   adv.saveAttribute("limitStates_", limitStates_);
   adv.saveAttribute("analyses_", analyses_);
@@ -635,6 +727,8 @@ void StudyImplementation::load(Advocate& adv)
 {
   PersistentObject::load(adv);
   adv.loadAttribute("dataModels_", dataModels_);
+  if (adv.hasAttribute("dataFieldModels_"))
+    adv.loadAttribute("dataFieldModels_", dataFieldModels_);
   adv.loadAttribute("physicalModels_", physicalModels_);
   adv.loadAttribute("limitStates_", limitStates_);
   adv.loadAttribute("analyses_", analyses_);

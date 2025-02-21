@@ -64,6 +64,25 @@ mcAnalysis2.run()
 result2 = mcAnalysis2.getResult()
 print("eigen values=", result2.getKarhunenLoeveResults()[0].getEigenvalues())
 
+# export z evaluation in csv
+processSample = mcAnalysis1.getResult().getProcessSample()
+
+fieldSample = ot.Sample(0, meshModel.getMesh().getVertices().getSize())
+for field in processSample:
+    fieldSample.add(field.getMarginal(1).asPoint())
+fieldSample.exportToCSVFile("zDoe.csv")
+
+# import DoE in DataFieldModel
+dataModel = persalys.DataFieldModel("dataModel", meshModel)
+dataModel.importProcessSample("zDoe.csv", persalys.Tools.Columns)
+Study_0.add(dataModel)
+
+analysis3 = persalys.FieldKarhunenLoeveAnalysis("analysis3", dataModel)
+analysis3.run()
+result3 = analysis3.getResult()
+print(result1.getXiSamples()[0] == result3.getXiSamples()[0])
+Study_0.add(analysis3)
+
 # script
 script = Study_0.getPythonScript()
 print(script)

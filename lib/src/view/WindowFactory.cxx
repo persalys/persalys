@@ -24,10 +24,13 @@
 #include "persalys/LimitStateItem.hxx"
 #include "persalys/PhysicalModelDiagramItem.hxx"
 #include "persalys/DataModelDiagramItem.hxx"
+#include "persalys/DataFieldModelDiagramItem.hxx"
+#include "persalys/DataFieldModelDefinitionItem.hxx"
 
 #include "persalys/StudyWindow.hxx"
 #include "persalys/LimitStateWindow.hxx"
 #include "persalys/DataModelDiagramWindow.hxx"
+#include "persalys/DataFieldModelDiagramWindow.hxx"
 #include "persalys/PhysicalModelDiagramWindow.hxx"
 #include "persalys/FieldModelDiagramWindow.hxx"
 #include "persalys/SymbolicPhysicalModelWindow.hxx"
@@ -45,6 +48,7 @@
 
 #include "persalys/ObservationsWindow.hxx"
 #include "persalys/DataModelWindow.hxx"
+#include "persalys/DataFieldModelWindow.hxx"
 
 #include "persalys/DesignOfExperimentWindow.hxx"
 #include "persalys/DataAnalysisResultWindow.hxx"
@@ -92,7 +96,7 @@ namespace PERSALYS
 SubWindow * WindowFactory::GetWindow(Item *item, QWidget *parent)
 {
   SubWindow * window = 0;
-
+  const QString itemType = item->data(Qt::UserRole).toString();
   // if study item
   if (StudyItem * studyItem = dynamic_cast<StudyItem *>(item))
   {
@@ -113,6 +117,12 @@ SubWindow * WindowFactory::GetWindow(Item *item, QWidget *parent)
   {
     window = GetDesignOfExperimentWindow(dmItem, parent);
   }
+  // if field data model item
+  else if (DataFieldModelItem * fdmItem = dynamic_cast<DataFieldModelItem *>(item))
+  {
+    window = GetDataFieldModelWindow(fdmItem, parent);
+  }
+
   return window;
 }
 
@@ -178,6 +188,29 @@ SubWindow * WindowFactory::GetPhysicalModelWindow(PhysicalModelItem *item, QWidg
   else
   {
     qDebug() << "Error: In createNewPhysicalModelWindow: impossible to create PhysicalModelWindow\n";
+  }
+
+  return 0;
+}
+
+
+SubWindow * WindowFactory::GetDataFieldModelWindow(DataFieldModelItem *item, QWidget *parent)
+{
+  // if diagram item
+  if (DataFieldModelDiagramItem * dmDiagramItem = dynamic_cast<DataFieldModelDiagramItem *>(item))
+  {
+    return new DataFieldModelDiagramWindow(dmDiagramItem, parent);
+  }
+
+  // if model definition item
+  const QString itemType = item->data(Qt::UserRole).toString();
+  if (itemType == "DataFieldModelDefinitionItem")
+  {
+    return new DataFieldModelWindow(item, parent);
+  }
+  else if (itemType == "DataMeshItem")
+  {
+    return new MeshWindow(item, parent);
   }
 
   return 0;
@@ -289,7 +322,6 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
 SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent)
 {
   const QString analysisType = item->data(Qt::UserRole).toString();
-
   if (analysisType == "DesignOfExperimentDefinitionItem")
     return new DesignOfExperimentInputWindow(item, parent);
 
@@ -328,6 +360,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   else if (analysisType == "FieldMonteCarloAnalysis")
   {
     resultWindow = new FieldCentralTendencyResultWindow(item, parent);
+  }
+  else if (analysisType == "FieldKarhunenLoeveAnalysis")
+  {
+    resultWindow = new DataFieldAnalysisResultWindow(item, parent);
   }
   else if (analysisType == "TaylorExpansionMomentsAnalysis")
   {

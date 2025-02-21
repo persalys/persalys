@@ -75,23 +75,39 @@ private:
 };
 
 
-class PERSALYS_VIEW_API FieldCentralTendencyResultWindow : public ResultWindow
+class PERSALYS_VIEW_API FieldAnalysisResultWindow : public ResultWindow
 {
   Q_OBJECT
 
 public:
-  FieldCentralTendencyResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
+  FieldAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
   void addDecompositionTab();
   void addCorrelationTab();
-
-private:
   OT::Sample inputSample_;
   FieldMonteCarloResult result_;
+
+private:
   QString errorMessage_;
   FieldModelEvaluationResultWidget * mainWidget_;
+};
+
+
+class PERSALYS_VIEW_API FieldCentralTendencyResultWindow : public FieldAnalysisResultWindow
+{
+  Q_OBJECT
+public:
+  FieldCentralTendencyResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
+};
+
+
+class PERSALYS_VIEW_API DataFieldAnalysisResultWindow : public FieldAnalysisResultWindow
+{
+  Q_OBJECT
+public:
+  DataFieldAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 };
 }
 #endif

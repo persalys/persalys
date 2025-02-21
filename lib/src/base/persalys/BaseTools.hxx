@@ -24,11 +24,13 @@
 #include "Input.hxx"
 
 #include <openturns/OTType.hxx>
+#include <openturns/ProcessSample.hxx>
 #include <regex>
 #include <thread>
 
 namespace PERSALYS
 {
+#ifndef SWIG
 // class to build a collection of parameters
 class PERSALYS_BASE_API Parameters
 {
@@ -47,6 +49,7 @@ public:
   std::pair<OT::String, OT::String> operator[](const OT::UnsignedInteger index) const;
   bool operator==(const Parameters& other) const;
   static OT::String GetOTSampleStr(const OT::Sample& values);
+  static OT::String GetOTSampleCollectionStr(const OT::ProcessSample& processSample);
   static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ",");
   static OT::String GetOTDescriptionStr(const OT::Description& values, const bool quote = true);
   static OT::String GetOTIndicesStr(const OT::Indices& values);
@@ -58,19 +61,22 @@ public:
 private:
   OT::Collection<std::pair<OT::String, OT::String> > pairsCollection_;
 };
-
+#endif
 class PERSALYS_BASE_API Tools
 {
 public:
-  static OT::Sample ImportSample(const OT::String& fileName);
+  enum DataOrder {Columns, Rows};
+#ifndef SWIG
+  static OT::Sample ImportSample(const OT::String& fileName, const DataOrder order=Columns);
   static OT::String GetLocaleString(const OT::String& str);
   static int IsUTF8(const char *data, size_t size);
   static void ComputeBounds(const InputCollection& inputs, OT::Point& startingPoint, OT::Interval& bounds);
   static OT::String GetNormalizedVariable(const OT::String& variable);
   static OT::Description GetNormalizedVariables(const OT::Description& variables);
+#endif
 };
 
-
+#ifndef SWIG
 class PERSALYS_BASE_API TimeCriteria
 {
   friend class WithStopCriteriaAnalysis;
@@ -123,6 +129,6 @@ inline OT::UnsignedInteger GetNumberOfPhysicalCores()
 {
   return std::max(std::thread::hardware_concurrency()/2, 1u);
 }
-
+#endif
 }
 #endif

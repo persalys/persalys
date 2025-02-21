@@ -81,6 +81,8 @@ ot_add_python_module (persalys persalys_module.i
                       Output.i Output_doc.i.in
                       DataSample.i DataSample_doc.i.in
                       DataImport.i DataImport_doc.i.in
+                      DataFieldModel.i DataFieldModel_doc.i.in
+                      DataFieldModelImplementation.i DataFieldModelImplementation_doc.i.in
                       MeshModelImplementation.i MeshModelImplementation_doc.i.in
                       MeshModel.i MeshModel_doc.i.in
                       GridMeshModel.i GridMeshModel_doc.i.in
@@ -122,6 +124,7 @@ ot_add_python_module (persalys persalys_module.i
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
                       FieldMonteCarloResult.i FieldMonteCarloResult_doc.i.in
                       FieldMonteCarloAnalysis.i FieldMonteCarloAnalysis_doc.i.in
+                      FieldKarhunenLoeveAnalysis.i FieldKarhunenLoeveAnalysis_doc.i.in
                       TaylorExpansionMomentsResult.i TaylorExpansionMomentsResult_doc.i.in
                       TaylorExpansionMomentsAnalysis.i TaylorExpansionMomentsAnalysis_doc.i.in
                       SobolResult.i SobolResult_doc.i.in

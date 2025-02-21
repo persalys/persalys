@@ -41,19 +41,36 @@ ImportedMeshModel::ImportedMeshModel()
 
 
 /* Constructor with parameters */
-ImportedMeshModel::ImportedMeshModel(const String &fileName, const Indices &columns)
+ImportedMeshModel::ImportedMeshModel(const String &fileName,
+                                     const Indices &columns)
   : MeshModelImplementation()
-  , DataImport(fileName, columns)
+  , DataImport(fileName, columns, Indices())
 {
   setParameterColumns(columns);
 }
 
 
 /* Constructor with parameters */
-ImportedMeshModel::ImportedMeshModel(const VariableCollection &parameters, const String &fileName, const Indices &columns)
+ImportedMeshModel::ImportedMeshModel(const VariableCollection &parameters,
+                                     const String &fileName,
+                                     const Indices &columns)
   : MeshModelImplementation()
-  , DataImport(fileName, columns)
+  , DataImport(fileName, columns, Indices())
 {
+  setIndexParameters(parameters);
+  setParameterColumns(columns);
+}
+
+ImportedMeshModel::ImportedMeshModel(const VariableCollection &parameters,
+                                     const String &fileName,
+                                     const Indices &columns,
+                                     const Tools::DataOrder order)
+  : MeshModelImplementation()
+  , DataImport()
+  , order_(order)
+{
+  fileName_ = fileName;
+  sampleFromFile_ = Tools::ImportSample(fileName, order);
   setIndexParameters(parameters);
   setParameterColumns(columns);
 }
@@ -66,9 +83,10 @@ ImportedMeshModel* ImportedMeshModel::clone() const
 }
 
 
-Sample ImportedMeshModel::importSample(const String& fileName)
+Sample ImportedMeshModel::importSample(const String& fileName,
+                                       const Tools::DataOrder order)
 {
-  Sample sampleFromFile(DataImport::importSample(fileName));
+  Sample sampleFromFile(DataImport::importSample(fileName, order));
 
   // check sampleFromFile size
   if (sampleFromFile.getSize() < 2)

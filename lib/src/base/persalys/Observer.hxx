@@ -29,6 +29,7 @@ namespace PERSALYS
 {
 class Observable;
 class PhysicalModel;
+class DataFieldModel;
 class Analysis;
 class LimitState;
 class DesignOfExperiment;
@@ -44,6 +45,7 @@ public:
   OT::String getType() const;
   virtual void update(Observable * source, const OT::String & message) = 0;
   virtual void appendItem(const PhysicalModel &/*model*/) {};
+  virtual void appendItem(const DataFieldModel &/*model*/) {};
   virtual void appendItem(const Analysis &/*analysis*/) {};
   virtual void appendItem(const LimitState &/*limitState*/) {};
   virtual void appendItem(const DesignOfExperiment &/*doe*/) {};

@@ -10,6 +10,8 @@ set(BASE_SOURCEFILES PersalysResourceMap.cxx
                      Variable.cxx Input.cxx Output.cxx
                      DataSample.cxx
                      DataImport.cxx
+                     DataFieldModel.cxx
+                     DataFieldModelImplementation.cxx
                      DataModel.cxx
                      MeshModel.cxx MeshModelImplementation.cxx
                      GridMeshModel.cxx
@@ -35,6 +37,7 @@ set(BASE_SOURCEFILES PersalysResourceMap.cxx
                      ModelEvaluation.cxx
                      FieldModelEvaluation.cxx
                      DesignOfExperimentEvaluation.cxx
+                     FieldKarhunenLoeveAnalysis.cxx
                      MonteCarloAnalysis.cxx TaylorExpansionMomentsResult.cxx
                      FieldMonteCarloAnalysis.cxx FieldMonteCarloResult.cxx
                      TaylorExpansionMomentsAnalysis.cxx SobolResult.cxx SobolAnalysis.cxx
@@ -103,6 +106,8 @@ ot_install_header_file ( Input.hxx )
 ot_install_header_file ( Output.hxx )
 ot_install_header_file ( DataSample.hxx )
 ot_install_header_file ( DataImport.hxx )
+ot_install_header_file ( DataFieldModel.hxx )
+ot_install_header_file ( DataFieldModelImplementation.hxx )
 ot_install_header_file ( MeshModel.hxx )
 ot_install_header_file ( MeshModelImplementation.hxx )
 ot_install_header_file ( GridMeshModel.hxx )
@@ -134,6 +139,7 @@ ot_install_header_file ( WithStopCriteriaAnalysis.hxx )
 ot_install_header_file ( DataAnalysisResult.hxx )
 ot_install_header_file ( DataAnalysis.hxx )
 ot_install_header_file ( DesignOfExperimentEvaluation.hxx )
+ot_install_header_file ( FieldKarhunenLoeveAnalysis.hxx )
 ot_install_header_file ( ModelEvaluation.hxx )
 ot_install_header_file ( FieldModelEvaluation.hxx )
 ot_install_header_file ( MonteCarloAnalysis.hxx )

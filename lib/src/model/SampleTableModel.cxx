@@ -220,8 +220,8 @@ bool SampleTableModel::insertRows(int row, int count, const QModelIndex &)
 {
   beginInsertRows(QModelIndex(), row, row + count);
   data_.add(Point(data_.getDimension(), 0.));
-  updateData(data_);
   endInsertRows();
+  updateData(data_);
   emit sampleChanged();
   return true;
 }

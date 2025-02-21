@@ -23,10 +23,12 @@
 
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/TemporaryLabel.hxx"
+#include "persalys/DataImport.hxx"
 
 #include <openturns/OTType.hxx>
 
 #include <QLineEdit>
+#include <QButtonGroup>
 
 namespace PERSALYS
 {
@@ -41,8 +43,9 @@ public:
   friend class TestMeshDefinitionWizard;
   friend class EditValuesWizard;
   friend class ImportedDistributionPage;
+  friend class DataFieldModelWindow;
 
-  ImportSampleWidget(QWidget *parent = nullptr);
+  ImportSampleWidget(QWidget *parent = nullptr, bool chooseOrder = false);
 
 protected:
   void buildInterface();
@@ -51,6 +54,7 @@ protected:
   void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns);
   OT::Indices getColumns(const OT::Description& names) const;
   OT::Sample getData() const;
+  Tools::DataOrder getDataOrder() const;
 
 public slots:
   void openFileRequested();
@@ -60,10 +64,12 @@ signals:
 
 protected:
   bool tableValidity_;
-  QLineEdit * filePathLineEdit_;
-  ExportableTableView * dataPreviewTableView_;
-  QLabel * DOESizeLabel_;
-  TemporaryLabel * errorMessageLabel_;
+  QLineEdit * filePathLineEdit_ = nullptr;
+  ExportableTableView * dataPreviewTableView_ = nullptr;
+  QLabel * DOESizeLabel_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
+  bool chooseOrder_ = false;
+  QButtonGroup * orderButtonGroup_ = nullptr;
 };
 }
 #endif

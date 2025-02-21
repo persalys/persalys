@@ -31,9 +31,10 @@ using namespace OT;
 namespace PERSALYS
 {
 
-MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, QWidget* parent)
+MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, Bool allowColumns, QWidget* parent)
   : Wizard(parent)
   , mesh_(mesh)
+  , allowColumns_(allowColumns)
   , methodGroup_(0)
   , tableModel_(0)
   , errorMessageLabel_(0)
@@ -105,7 +106,7 @@ void MeshDefinitionWizard::buildInterface()
   methodGroup_->addButton(importButton, MeshDefinitionWizard::Import);
   pageLayout->addWidget(importButton);
 
-  sampleWidget_ = new ImportSampleWidget;
+  sampleWidget_ = new ImportSampleWidget(this, allowColumns_);
   pageLayout->addWidget(sampleWidget_);
   connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
   connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
@@ -153,7 +154,7 @@ void MeshDefinitionWizard::resizeEvent(QResizeEvent* event)
 void MeshDefinitionWizard::setTable(const QString& fileName)
 {
   // set file name
-  importedMesh_.setFileName(fileName.toUtf8().data());
+  importedMesh_.setFileName(fileName.toUtf8().data(), sampleWidget_->getDataOrder());
   // update widgets
   sampleWidget_->updateWidgets(importedMesh_.getSampleFromFile(),
                                Description(1, mesh_.getIndexParameters()[0].getName()),
@@ -190,7 +191,7 @@ MeshModel MeshDefinitionWizard::getMesh() const
   }
   else
   {
-    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), importedMesh_.getFileName(), importedMesh_.getInputColumns());
+    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), importedMesh_.getFileName(), importedMesh_.getInputColumns(), sampleWidget_->getDataOrder());
   }
   return newMesh;
 }

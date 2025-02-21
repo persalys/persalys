@@ -67,7 +67,6 @@ void EditableExportableTableView::addRow()
 {
   QAbstractItemModel * sourceModel = dynamic_cast<QSortFilterProxyModel*>(model())->sourceModel();
   sourceModel->insertRows(sourceModel->rowCount() - 1, 1);
-
 }
 
 void EditableExportableTableView::removeRows()

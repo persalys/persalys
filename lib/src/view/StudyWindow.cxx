@@ -184,8 +184,6 @@ void StudyWindow::buildInterface()
   connect(button, SIGNAL(clicked()), studyItem_->newDataModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
 
-  layout->setRowStretch(row, 1);
-
   // functionalities list
   textEdit = new QLabel;
   text = QString("- %1\n- %2\n- %3\n- %4")
@@ -194,7 +192,13 @@ void StudyWindow::buildInterface()
          .arg(tr("Dependence inference"))
          .arg(tr("Metamodel"));
   textEdit->setText(text);
-  layout->addWidget(textEdit, row, 1, Qt::AlignLeft | Qt::AlignTop);
+  layout->addWidget(textEdit, row, 1, 2, 1, Qt::AlignLeft | Qt::AlignTop);
+
+  button = new DiagramPushButton(tr("Field Data model"));
+  button->setStatusTip(tr("Import a process sample to create a field model"));
+  connect(button, SIGNAL(clicked()), studyItem_->newDataFieldModel_, SIGNAL(triggered()));
+  layout->addWidget(button, ++row, 0, Qt::AlignTop);
+  layout->setRowStretch(row, 1);
 
   layout->setRowStretch(++row, 4);
 }

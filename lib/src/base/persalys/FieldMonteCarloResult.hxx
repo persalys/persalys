@@ -34,6 +34,7 @@ class PERSALYS_BASE_API FieldMonteCarloResult : public EvaluationResult
 
 public:
   friend class FieldMonteCarloAnalysis;
+  friend class FieldKarhunenLoeveAnalysis;
 
   /** Default constructor */
   FieldMonteCarloResult();

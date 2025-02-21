@@ -18,15 +18,19 @@ ot_add_source_file ( CalibrationTableModel.cxx )
 ot_add_source_file ( ItemFactory.cxx )
 ot_add_source_file ( Item.cxx )
 ot_add_source_file ( MeshItem.cxx )
+ot_add_source_file ( DataMeshItem.cxx )
 ot_add_source_file ( PhysicalModelDiagramItem.cxx )
 ot_add_source_file ( PhysicalModelDefinitionItem.cxx )
 ot_add_source_file ( LimitStateItem.cxx )
 ot_add_source_file ( DesignOfExperimentItem.cxx )
 ot_add_source_file ( DesignOfExperimentDefinitionItem.cxx )
 ot_add_source_file ( DataModelDiagramItem.cxx )
+ot_add_source_file ( DataFieldModelDiagramItem.cxx )
 ot_add_source_file ( DataModelDefinitionItem.cxx )
+ot_add_source_file ( DataFieldModelDefinitionItem.cxx )
 ot_add_source_file ( ProbabilisticModelItem.cxx )
 ot_add_source_file ( PhysicalModelItem.cxx )
+ot_add_source_file ( DataFieldModelItem.cxx )
 ot_add_source_file ( StudyItem.cxx )
 ot_add_source_file ( AnalysisItem.cxx )
 ot_add_source_file ( ObservationsItem.cxx )
@@ -63,6 +67,7 @@ ot_install_header_file ( CalibrationTableModel.hxx )
 ot_install_header_file ( ItemFactory.hxx )
 ot_install_header_file ( Item.hxx )
 ot_install_header_file ( MeshItem.hxx )
+ot_install_header_file ( DataMeshItem.hxx )
 ot_install_header_file ( PhysicalModelDiagramItem.hxx )
 ot_install_header_file ( PhysicalModelDefinitionItem.hxx )
 ot_install_header_file ( AnalysisItem.hxx )
@@ -70,9 +75,12 @@ ot_install_header_file ( LimitStateItem.hxx )
 ot_install_header_file ( DesignOfExperimentItem.hxx )
 ot_install_header_file ( DesignOfExperimentDefinitionItem.hxx )
 ot_install_header_file ( DataModelDiagramItem.hxx )
+ot_install_header_file ( DataFieldModelDiagramItem.hxx )
 ot_install_header_file ( DataModelDefinitionItem.hxx )
+ot_install_header_file ( DataFieldModelDefinitionItem.hxx )
 ot_install_header_file ( ProbabilisticModelItem.hxx )
 ot_install_header_file ( PhysicalModelItem.hxx )
+ot_install_header_file ( DataFieldModelItem.hxx )
 ot_install_header_file ( StudyItem.hxx )
 ot_install_header_file ( ObservationsItem.hxx )
 ot_install_header_file ( StudyTreeViewModel.hxx )
@@ -109,6 +117,7 @@ qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/ItemFactory.hxx
                                     persalys/Item.hxx
                                     persalys/MeshItem.hxx
+                                    persalys/DataMeshItem.hxx
                                     persalys/PhysicalModelDiagramItem.hxx
                                     persalys/PhysicalModelDefinitionItem.hxx
                                     persalys/AnalysisItem.hxx
@@ -117,9 +126,12 @@ qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/DesignOfExperimentItem.hxx
                                     persalys/DesignOfExperimentDefinitionItem.hxx
                                     persalys/DataModelDiagramItem.hxx
+                                    persalys/DataFieldModelDiagramItem.hxx
                                     persalys/DataModelDefinitionItem.hxx
+                                    persalys/DataFieldModelDefinitionItem.hxx
                                     persalys/ProbabilisticModelItem.hxx
                                     persalys/PhysicalModelItem.hxx
+                                    persalys/DataFieldModelItem.hxx
                                     persalys/StudyItem.hxx
                                     persalys/ObservationsItem.hxx
                                     persalys/CodeModel.hxx
