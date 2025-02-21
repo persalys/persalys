@@ -59,10 +59,10 @@ MetaModelValidationWidget::MetaModelValidationWidget(const MetaModelValidationRe
       namesList << TranslationManager::GetTranslatedParameterName(result.getParameters().getDescription()[i]);
       valuesList << QString::number(result.getParameters()[i]);
     }
-    if (result.getResiduals().getSize() == outSample.getDimension())
+    if (result.getMeanSquaredError().getSize() == outSample.getDimension())
     {
-      namesList << tr("Residual");
-      valuesList << QString::number(result.getResiduals()[indexOutput]);
+      namesList << tr("MSE");
+      valuesList << QString::number(result.getMeanSquaredError()[indexOutput]);
     }
     Q_ASSERT(indexOutput < result.getQ2().getSize());
     namesList << measure;

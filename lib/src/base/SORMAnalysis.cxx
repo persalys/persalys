@@ -81,11 +81,13 @@ void SORMAnalysis::launch()
   ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
-  optimizationAlgorithm_.setStopCallback(&AnalysisImplementation::Stop, this);
-  optimizationAlgorithm_.setProgressCallback(&UpdateProgressValue, this);
+  OptimizationAlgorithm solver(getOptimizationAlgorithm());
+  solver.setStopCallback(&AnalysisImplementation::Stop, this);
+  solver.setProgressCallback(&UpdateProgressValue, this);
+  solver.setStartingPoint(getPhysicalStartingPoint());
 
   // create OT::FORM
-  SORM algo(getOptimizationAlgorithm(), event, getPhysicalStartingPoint());
+  SORM algo(solver, event);
 
   // run algo
   algo.run();

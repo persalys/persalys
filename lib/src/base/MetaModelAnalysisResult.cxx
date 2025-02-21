@@ -21,6 +21,7 @@
 #include "persalys/MetaModelAnalysisResult.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/MetaModelValidation.hxx>
 
 using namespace OT;
 
@@ -66,6 +67,15 @@ Sample MetaModelAnalysisResult::getMetaModelOutputSample() const
   return metaModelOutputSample_;
 }
 
+Point MetaModelAnalysisResult::getMeanSquaredError() const
+{
+  return mse_;
+}
+
+Point MetaModelAnalysisResult::getR2Score() const
+{
+  return r2_;
+}
 
 MetaModelValidationResult MetaModelAnalysisResult::getAnalyticalValidation() const
 {
@@ -123,6 +133,8 @@ void MetaModelAnalysisResult::save(Advocate& adv) const
   adv.saveAttribute("metaModel_", metaModel_);
   adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("metaModelOutputSample_", metaModelOutputSample_);
+  adv.saveAttribute("mse_", mse_);
+  adv.saveAttribute("r2_", r2_);
   adv.saveAttribute("analyticalValidation_", analyticalValidation_);
   adv.saveAttribute("testSampleValidation_", testSampleValidation_);
   adv.saveAttribute("kFoldValidation_", kFoldValidation_);
@@ -137,6 +149,17 @@ void MetaModelAnalysisResult::load(Advocate& adv)
   adv.loadAttribute("metaModel_", metaModel_);
   adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("metaModelOutputSample_", metaModelOutputSample_);
+  if (adv.hasAttribute("mse_"))
+  {
+    adv.loadAttribute("mse_", mse_);
+    adv.loadAttribute("r2_", r2_);
+  }
+  else
+  {
+    MetaModelValidation validation(outputSample_, metaModelOutputSample_);
+    mse_ = validation.computeMeanSquaredError();
+    r2_ = validation.computeR2Score();
+  }
   adv.loadAttribute("analyticalValidation_", analyticalValidation_);
   adv.loadAttribute("testSampleValidation_", testSampleValidation_);
   adv.loadAttribute("kFoldValidation_", kFoldValidation_);

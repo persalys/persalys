@@ -46,8 +46,6 @@ template <>
 
 %include FieldMonteCarloResult_doc.i
 
-%template(KarhunenLoeveResultCollection) OT::Collection<OT::KarhunenLoeveResult>;
-
 %include persalys/FieldMonteCarloResult.hxx
 namespace PERSALYS {
 

@@ -547,8 +547,8 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
 The results window gathers:
 
 - The **Results** tab shows different information about the selected output (left column):
-    - `Residual <https://openturns.github.io/openturns/master/user_manual/response_surface/_generated/openturns.FunctionalChaosResult.html?highlight=functionalchaosresult#openturns.FunctionalChaosResult.getResiduals>`_
-    - `Relative error <https://openturns.github.io/openturns/master/user_manual/response_surface/_generated/openturns.FunctionalChaosResult.html?highlight=functionalchaosresult#openturns.FunctionalChaosResult.getRelativeErrors>`_
+    - `MSE <https://openturns.github.io/openturns/latest/user_manual/response_surface/_generated/openturns.MetaModelValidation.html#openturns.MetaModelValidation.computeMeanSquaredError>`_
+    - `R2  <https://openturns.github.io/openturns/latest/user_manual/response_surface/_generated/openturns.MetaModelValidation.html#openturns.MetaModelValidation.computeR2Score>`_
     - first and second order moments
     - polynomial basis: dimension, maximum degree, full/truncated size
     - part of variance explained by each polynom
@@ -709,7 +709,7 @@ From there, the user can choose:
       large enough to ensure quantile validity. Minimum required
       sample size is dependent on the target probability and is given
       by a method based on
-      `Wilks <https://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Wilks.html>`_
+      `QuantileConfidence <https://openturns.github.io/openturns/latest/user_manual/_generated/openturns.QuantileConfidence.html>`_
 
   - tails can be chosen by clicking the corresponding checkboxes
 

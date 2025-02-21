@@ -78,7 +78,7 @@ protected:
   virtual OT::Function runAlgoMarginal(const OT::Sample& inputSample, const OT::Sample& outputSample);
 
   void buildMetaModel(MetaModelAnalysisResult& result, const OT::Function& function);
-  void computeError(const OT::Sample& metaOutSample, const OT::Sample& outSample, OT::Point& error, OT::Point& q2);
+  void computeError(const OT::Sample& metaOutSample, const OT::Sample& outSample, OT::Point& mse, OT::Point& q2);
   void validateMetaModelResult(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
   virtual void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);
   void computeTestSampleValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample);

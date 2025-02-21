@@ -126,12 +126,12 @@ void DataImport::setColumns(const Indices &inputColumns,
 
 Sample DataImport::importSample(const String& fileName)
 {
-  return Tools::ImportSample(Tools::GetLocaleString(fileName));
+  return Tools::ImportSample(fileName);
 }
 
 Sample DataImport::importSample(const String& fileName, const Tools::DataOrder order)
 {
-  return Tools::ImportSample(Tools::GetLocaleString(fileName), order);
+  return Tools::ImportSample(fileName, order);
 }
 
 

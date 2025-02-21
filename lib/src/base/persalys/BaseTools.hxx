@@ -68,8 +68,6 @@ public:
   enum DataOrder {Columns, Rows};
 #ifndef SWIG
   static OT::Sample ImportSample(const OT::String& fileName, const DataOrder order=Columns);
-  static OT::String GetLocaleString(const OT::String& str);
-  static int IsUTF8(const char *data, size_t size);
   static void ComputeBounds(const InputCollection& inputs, OT::Point& startingPoint, OT::Interval& bounds);
   static OT::String GetNormalizedVariable(const OT::String& variable);
   static OT::Description GetNormalizedVariables(const OT::Description& variables);

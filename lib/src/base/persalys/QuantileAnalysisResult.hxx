@@ -51,7 +51,7 @@ public:
 
   OT::UnsignedInteger getSize() const {return quantiles_.size();}
   SampleCollection getQuantiles(const OT::String& varName) {return quantiles_[varName];}
-  OT::Indices getWilksValidity(const OT::String& varName, TailType tailType) {return wilksValidity_[std::make_pair(varName,tailType)];}
+  OT::Indices getSampleSizeValidity(const OT::String& varName, TailType tailType) {return wilksValidity_[std::make_pair(varName,tailType)];}
   OT::Scalar getPValue(const OT::String& varName, TailType tailType) {return pValue_[std::make_pair(varName,tailType)];}
 
   OT::UnsignedInteger getType() const {return type_;}

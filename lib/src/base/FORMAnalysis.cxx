@@ -63,8 +63,6 @@ void FORMAnalysis::initialize()
   // clear result
   AnalysisImplementation::initialize();
   result_ = FORMAnalysisResult();
-  optimizationAlgorithm_.setStopCallback(&AnalysisImplementation::Stop, this);
-  optimizationAlgorithm_.setProgressCallback(&UpdateProgressValue, this);
   notify("progressValueChanged");
 }
 
@@ -83,8 +81,13 @@ void FORMAnalysis::launch()
   ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
   event.setDescription(outputName);
 
+  OptimizationAlgorithm solver(getOptimizationAlgorithm());
+  solver.setStopCallback(&AnalysisImplementation::Stop, this);
+  solver.setProgressCallback(&UpdateProgressValue, this);
+  solver.setStartingPoint(getPhysicalStartingPoint());
+
   // create OT::FORM
-  FORM algo(getOptimizationAlgorithm(), event, getPhysicalStartingPoint());
+  FORM algo(solver, event);
 
   // run algo
   algo.run();

@@ -314,7 +314,7 @@ namespace PERSALYS
       if (analysis_.getType() == QuantileAnalysisResult::MonteCarlo)
       {
         const UnsignedInteger size = analysis_.getDesignOfExperiment().getSample().getSize();
-        const Indices validity = analysis_.computeWilksValidity(values_[varIndex], size, static_cast<QuantileAnalysisResult::TailType>(getTailTypes()[varIndex]));
+        const Indices validity = analysis_.computeSampleSizeValidity(values_[varIndex], size, static_cast<QuantileAnalysisResult::TailType>(getTailTypes()[varIndex]));
         for (UnsignedInteger i=0; i<validity.getSize(); ++i)
         {
           if (!validity[i])

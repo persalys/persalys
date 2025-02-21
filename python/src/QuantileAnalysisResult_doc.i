@@ -51,7 +51,7 @@ type : enum
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::QuantileAnalysisResult::getWilksValidity
+%feature("docstring") PERSALYS::QuantileAnalysisResult::getSampleSizeValidity
 "Validity accessor.
 
 Parameters
@@ -65,7 +65,7 @@ tailType : enum
 
 Returns
 -------
-validity : :py:class:`openturns.Interval.BoolCollection`
+validity : :py:class:`openturns.Indices`
     Indicates for each target probability if the quantile is valid or not."
 
 %ignore PERSALYS::QuantileAnalysisResult::getSize;

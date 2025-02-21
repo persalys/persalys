@@ -13,6 +13,6 @@
 %ignore PERSALYS::QuantileAnalysis::getDefaultTargetProbability;
 %ignore PERSALYS::QuantileAnalysis::setDefaultTargetProbability;
 %ignore PERSALYS::QuantileAnalysis::checkThresholdCompatibility;
-%ignore PERSALYS::QuantileAnalysis::computeWilksValidity;
+%ignore PERSALYS::QuantileAnalysis::computeSampleSizeValidity;
 %ignore PERSALYS::QuantileAnalysis::plotGPD;
 %ignore PERSALYS::QuantileAnalysis::plotMeanExcess;

@@ -93,7 +93,7 @@ namespace PERSALYS
     OT::Graph plotMeanExcess(int iMarg, int iTail);
     OT::Graph plotGPD(int iMarg, int iTail, OT::Scalar minProba);
 
-    OT::Indices computeWilksValidity(const OT::Point & probaValue, const OT::UnsignedInteger & sampleSize, const QuantileAnalysisResult::TailType & tail) const;
+    OT::Indices computeSampleSizeValidity(const OT::Point & probaValue, const OT::UnsignedInteger & sampleSize, const QuantileAnalysisResult::TailType & tail) const;
 
   protected:
     void initialize() override;
