@@ -35,7 +35,7 @@ toc_object_entries = False
 extensions = ['sphinx.ext.autodoc']
 
 extensions.append('sphinx.ext.autodoc')
-autodoc_default_options = {'members': None, 'inherited-members': None}
+autodoc_default_options = {'members': None, 'inherited-members': None, 'exclude-members': 'thisown'}
 
 extensions.append('sphinx.ext.intersphinx')
 intersphinx_mapping = {'python': ('http://openturns.github.io/openturns/master', 'openturns-objects.txt')}
