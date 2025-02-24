@@ -216,10 +216,12 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
   // -- get results of the variable
   currentFittingTestResult_ = result.getFittingTestResultForVariable(variableName.toStdString());
   // check test type and set header title
+  QString testName;
   if(currentFittingTestResult_.getTestType() == InferenceAnalysis::Kolmogorov)
-    distTableModel_->setNotEditableHeaderItem(0, 2, tr("Kolmogorov-Smirnov"));
+    testName = tr("Kolmogorov-Smirnov");
   else
-    distTableModel_->setNotEditableHeaderItem(0, 2, tr("Lilliefors"));
+    testName = tr("Lilliefors");
+  distTableModel_->setNotEditableHeaderItem(0, 2, testName);
   // BIC values
   Point bicValues(currentFittingTestResult_.getBICResults());
   // number of tests
@@ -286,6 +288,7 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
   distTableModel_->setItem(0, 2, new QStandardItem);
   distTableView_->resizeToContents();
   const int section2Size = distTableView_->horizontalHeader()->sectionSize(2);
+  distTableModel_->setNotEditableHeaderItem(0, 2, testName);
   distTableView_->setSpan(0, 2, 1, 2);
   const int subTitlesWidth = distTableView_->horizontalHeader()->sectionSize(1) + distTableView_->horizontalHeader()->sectionSize(2);
   const int widthCorrection = titleWidth - subTitlesWidth;

@@ -81,7 +81,7 @@ Description MultiObjectiveOptimizationAnalysis::GetSolverNames(const Interval& b
 {
   // Dummy function to match a multi objective problem
   Function func = SymbolicFunction(Description::BuildDefault(bounds.getDimension(), "x"),
-                                   Description(bounds.getDimension(), "x0^2"));
+                                   Description(2, "x0^2"));
   OptimizationProblem problem(func, Function(), Function(), bounds);
   if (types.getSize())
     problem.setVariablesType(types);
