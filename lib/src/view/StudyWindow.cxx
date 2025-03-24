@@ -92,8 +92,8 @@ void StudyWindow::buildInterface()
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
 
 #ifdef PERSALYS_HAVE_YACS
-  button = new DiagramPushButton(tr("YACS model"));
-  button->setStatusTip(tr("Create a physical model defined with an YACS file"));
+  button = new DiagramPushButton(tr("Python model on cluster"));
+  button->setStatusTip(tr("Create a physical model defined with a Python script intended to run on a cluster"));
   connect(button, SIGNAL(clicked()), studyItem_->newYACSModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
   ++nbModels;

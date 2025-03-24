@@ -80,7 +80,7 @@ void StudyItem::buildActions()
 
   newCouplingModel_ = new QAction(tr("Coupling model"), this);
 #ifdef PERSALYS_HAVE_YACS
-  newYACSModel_ = new QAction(tr("YACS model"), this);
+  newYACSModel_ = new QAction(tr("Python model on cluster"), this);
   connect(newYACSModel_, &QAction::triggered, [ = ]()
   {
     study_.add(new YACSPhysicalModel(getModelName(tr("YACSModel_"))));

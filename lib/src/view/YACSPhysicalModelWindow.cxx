@@ -46,7 +46,7 @@ YACSPhysicalModelWindow::YACSPhysicalModelWindow(PhysicalModelItem * item, QWidg
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("YACS model")));
+  mainLayout->addWidget(new TitleLabel(tr("Python model on cluster")));
 
   // Widgets to load XML file
   QHBoxLayout * fieldsLayout = new QHBoxLayout;
