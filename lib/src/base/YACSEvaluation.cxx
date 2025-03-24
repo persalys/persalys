@@ -150,7 +150,8 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   if(myJob)
   {
     double progress = myJob->progress();
-    while(progress < 1.0)
+    String state = myJob->state();
+    while(progress < 1.0 && state != "FINISHED" && state != "ERROR" && state != "FAILED")
     {
       if (stopCallback_.first)
       {
@@ -163,8 +164,9 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
       }
       std::this_thread::sleep_for(std::chrono::seconds(1));
       progress = myJob->progress();
+      state = myJob->state();
     }
-    if (progress >= 1.0)
+    if (progress >= 1.0 || state != "RUNNING")
       setIsRunning(false);
 
     if(!myJob->fetch())

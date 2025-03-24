@@ -365,7 +365,7 @@ New Study
 
     - Coupling
 
-    - YACS model (optional)
+    - Python model on cluster (optional)
 
     - FMI model (optional)
 
@@ -2331,10 +2331,10 @@ FMI model
   - same on windows, load the FMU file at python/test/fmu/win64/epid.fmu
 
 
-YACS model
-''''''''''
+Python model on cluster
+'''''''''''''''''''''''
 
-- create a new study and add to it a YACS model
+- create a new study and add to it a Python model on cluster
 
 - edit the model python code with:
 

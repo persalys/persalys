@@ -1,5 +1,5 @@
 %feature("docstring") PERSALYS::YACSPhysicalModel
-"Physical model using YACS."
+"Python physical model inteded to run on a cluster. Uses YACS scheme."
 
 // ---------------------------------------------------------------------
 

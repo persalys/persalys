@@ -8,7 +8,7 @@ Several types of physical models are available:
   - **Symbolic model**: Physical model defined with analytical formulas
   - **Python model**: Physical model defined with a Python script
   - **Coupling model**: Physical model to wrap an external code using file-exchange
-  - **YACS model**: Physical model defined with a YACS scheme (optional)
+  - **Python model on cluster**: Physical model defined with a Python script intended to run on a cluster (optional)
   - **FMI model**: Physical model defined with a FMU file (optional)
 
 1- Creation
@@ -339,8 +339,8 @@ on data contained in an Ansys workbench project. It consists in two steps:
 
 .. _vectyacsmodel:
 
-2-4 *YACS model*: define a physical model with an XML file
--------------------------------------------------------------------
+2-4 *Python model on cluster*: define a physical model with a Python editor intended to run on a cluster
+--------------------------------------------------------------------------------------------------------
 
 A physical model can be defined by loading an XML file, previously generated for example with Salome,
 which contains:
@@ -357,7 +357,7 @@ used to test the physical model. To save the output values, the user should use 
 .. _vectfmimodel:
 
 2-5 *FMI model*: define a physical model from an FMU file
-------------------------------------------------------------------
+---------------------------------------------------------
 
 A physical model can be defined by loading a FMU file, previously generated
 by OpenModelica for example.

@@ -212,7 +212,7 @@ It proposes to create models:
   - Models defined with a vector function:
      - **Symbolic model**: Physical model defined with analytical formulas
      - **Python model**: Physical model defined with a Python script
-     - **YACS model**: Physical model defined with a YACS scheme (optional)
+     - **Python model on cluster**: Physical model defined with a Python script intended to run on a cluster (optional)
      - **FMI model**: Physical model defined with a FMU file (optional)
   - Models defined with a field function:
      - **Symbolic Field model**: Physical model defined with analytical formulas and a mesh
