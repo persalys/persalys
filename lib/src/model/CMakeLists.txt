@@ -39,6 +39,8 @@ ot_add_source_file ( CodeModel.cxx)
 ot_add_source_file ( VariablesSelectionTableModel.cxx)
 ot_add_source_file ( CustomStandardItemModel.cxx )
 ot_add_source_file ( DependenciesTableModel.cxx )
+ot_add_source_file ( QuantileTableModel.cxx )
+ot_add_source_file ( QuantileThresholdTableModel.cxx )
 ot_add_source_file ( OptimizationTableModel.cxx )
 ot_add_source_file ( MultiObjectiveOptimizationTableModel.cxx )
 ot_add_source_file ( ConstraintsTableModel.cxx )
@@ -87,6 +89,8 @@ ot_install_header_file ( StudyTreeViewModel.hxx )
 ot_install_header_file ( VariablesSelectionTableModel.hxx )
 ot_install_header_file ( CustomStandardItemModel.hxx )
 ot_install_header_file ( DependenciesTableModel.hxx )
+ot_install_header_file ( QuantileTableModel.hxx )
+ot_install_header_file ( QuantileThresholdTableModel.hxx )
 ot_install_header_file ( OptimizationTableModel.hxx )
 ot_install_header_file ( MultiObjectiveOptimizationTableModel.hxx )
 ot_install_header_file ( ConstraintsTableModel.hxx )
@@ -138,6 +142,8 @@ qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/VariablesSelectionTableModel.hxx
                                     persalys/CustomStandardItemModel.hxx
                                     persalys/DependenciesTableModel.hxx
+                                    persalys/QuantileTableModel.hxx
+                                    persalys/QuantileThresholdTableModel.hxx
                                     persalys/OptimizationTableModel.hxx
                                     persalys/MultiObjectiveOptimizationTableModel.hxx
                                     persalys/ConstraintsTableModel.hxx

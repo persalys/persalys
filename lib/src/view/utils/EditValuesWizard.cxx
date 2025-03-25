@@ -38,7 +38,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-EditValuesWizard::EditValuesWizard(QWidget *parent)
+EditValuesWizard::EditValuesWizard(QWidget *parent, OT::UnsignedInteger nMinValues, Scalar factor)
   : QWizard(parent)
   , model_(0)
   , proxy_(new QSortFilterProxyModel(this))
@@ -47,11 +47,13 @@ EditValuesWizard::EditValuesWizard(QWidget *parent)
   , valueTable_(new QTableView(this))
   , valueNumber_(new QLabel("0"))
   , removeButton_(0)
+  , nMinValues_(nMinValues)
+  , factor_(factor)
 {
 }
 
 
-EditValuesWizard::EditValuesWizard(const Sample &values, QWidget *parent)
+EditValuesWizard::EditValuesWizard(const Sample &values, QWidget *parent, OT::UnsignedInteger nMinValues, Scalar factor)
   : QWizard(parent)
   , model_(new SampleTableModel(values, true, false, Description(), this))
   , proxy_(new QSortFilterProxyModel(this))
@@ -60,12 +62,14 @@ EditValuesWizard::EditValuesWizard(const Sample &values, QWidget *parent)
   , valueTable_(new QTableView(this))
   , valueNumber_(new QLabel("0"))
   , removeButton_(0)
+  , nMinValues_(nMinValues)
+  , factor_(factor)
 {
   buildInterface();
 }
 
 
-EditValuesWizard::EditValuesWizard(const QString &variableName, const Point &values, QWidget *parent)
+EditValuesWizard::EditValuesWizard(const QString &variableName, const Point &values, QWidget *parent, OT::UnsignedInteger nMinValues, Scalar factor)
   : QWizard(parent)
   , model_(0)
   , proxy_(new QSortFilterProxyModel(this))
@@ -74,6 +78,8 @@ EditValuesWizard::EditValuesWizard(const QString &variableName, const Point &val
   , valueTable_(new QTableView(this))
   , valueNumber_(new QLabel("0"))
   , removeButton_(0)
+  , nMinValues_(nMinValues)
+  , factor_(factor)
 {
   Point points(values);
   // remove duplicates
@@ -118,7 +124,7 @@ void EditValuesWizard::buildInterface()
   // add button
   QPushButton * addButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"), this);
   addButton->setToolTip(tr("Add a value"));
-  connect(addButton, SIGNAL(clicked()), this, SLOT(addValue()));
+  connect(addButton, &QPushButton::clicked, [ = ] () {addValue(factor_);});
   optionLayout->addWidget(addButton);
 
   // remove button
@@ -146,7 +152,7 @@ void EditValuesWizard::buildInterface()
 }
 
 
-void EditValuesWizard::addValue()
+void EditValuesWizard::addValue(Scalar factor)
 {
   Sample sample(model_->getSample());
   if (sample.getSize())
@@ -154,8 +160,21 @@ void EditValuesWizard::addValue()
     Point newpoint(model_->columnCount());
     for (int i = 0; i < model_->columnCount(); ++i)
     {
-      const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount() - 1, i)));
-      newpoint[i] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
+      if (factor == 1)
+      {
+        const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount() - 1, i)));
+        newpoint[i] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() + 1;
+      }
+      else if (factor < 1)
+      {
+        const QModelIndex smallerValueIndex(proxy_->mapToSource(proxy_->index(0, i)));
+        newpoint[i] = model_->data(smallerValueIndex, Qt::UserRole).toDouble() * factor;
+      }
+      else
+      {
+        const QModelIndex greaterValueIndex(proxy_->mapToSource(proxy_->index(proxy_->rowCount() - 1, i)));
+        newpoint[i] = model_->data(greaterValueIndex, Qt::UserRole).toDouble() * factor;
+      }
     }
     sample.add(newpoint);
   }
@@ -247,9 +266,10 @@ void EditValuesWizard::check()
 
 bool EditValuesWizard::validateCurrentPage()
 {
-  if (model_->getSample().getSize() < 2)
+  if (nMinValues_ && model_->getSample().getSize() < nMinValues_)
   {
-    errorMessageLabel_->setErrorMessage(tr("Define at least two values"));
+    errorMessageLabel_->setErrorMessage(tr("Number of value(s) must be at least ")
+                                        + QString::number(nMinValues_));
     return false;
   }
   return true;
@@ -283,7 +303,7 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
 }
 
 
-void UserDefinedWizard::addValue()
+void UserDefinedWizard::addValue(Scalar)
 {
   if (proxy_->rowCount() && model_->columnCount())
   {
@@ -321,18 +341,6 @@ Distribution UserDefinedWizard::getDistribution() const
   return UserDefined(model_->getSample().getMarginal(0), getValues(1));
 }
 
-
-bool UserDefinedWizard::validateCurrentPage()
-{
-  errorMessageLabel_->reset();
-  Sample sample(model_->getSample());
-  if (sample.getSize() < 2)
-  {
-    errorMessageLabel_->setErrorMessage(tr("Define at least two values"));
-    return false;
-  }
-  return true;
-}
 
 ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
   : QWizardPage(parent)

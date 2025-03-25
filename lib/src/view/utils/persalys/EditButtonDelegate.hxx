@@ -34,7 +34,7 @@ class PERSALYS_UTILS_API EditButtonDelegate : public QStyledItemDelegate
   Q_OBJECT
 
 public:
-  EditButtonDelegate(QObject *parent = nullptr);
+  EditButtonDelegate(QObject *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
 
   QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
   void setEditorData(QWidget * editor, const QModelIndex & index) const;
@@ -43,6 +43,9 @@ public:
 
 public slots:
   void editRequest();
+private:
+  OT::UnsignedInteger nMinValues_ = 0;
+  OT::Scalar factor_ = 1.;
 };
 
 

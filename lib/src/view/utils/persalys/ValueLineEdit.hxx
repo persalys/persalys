@@ -24,6 +24,7 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 #include "persalys/PersalysPrivate.hxx"
+#include <openturns/OTType.hxx>
 
 namespace PERSALYS
 {
@@ -48,6 +49,23 @@ public:
 protected:
   virtual bool event(QEvent * event);
   virtual void keyPressEvent(QKeyEvent *e);
+};
+
+class PERSALYS_UTILS_API ValuesLineEdit : public QLineEdit
+{
+  Q_OBJECT
+
+public:
+  // value constructor
+  ValuesLineEdit(const OT::Point values = OT::Point(), QWidget *parent = nullptr);
+
+  // value accessors
+  void setValues(const OT::Point values, const bool enabled = true);
+  OT::Point values();
+
+//protected:
+//  virtual bool event(QEvent * event);
+//  virtual void keyPressEvent(QKeyEvent *e);
 };
 }
 #endif

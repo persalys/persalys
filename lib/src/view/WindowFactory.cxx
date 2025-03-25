@@ -52,6 +52,7 @@
 
 #include "persalys/DesignOfExperimentWindow.hxx"
 #include "persalys/DataAnalysisResultWindow.hxx"
+#include "persalys/QuantileAnalysisResultWindow.hxx"
 #include "persalys/ModelEvaluationResultWindow.hxx"
 #include "persalys/OptimizationResultWindow.hxx"
 #include "persalys/MultiObjectiveOptimizationResultWindow.hxx"
@@ -87,6 +88,7 @@
 #include "persalys/MetaModelExportWizard.hxx"
 #include "persalys/CopulaInferenceWizard.hxx"
 #include "persalys/CalibrationAnalysisWizard.hxx"
+#include "persalys/QuantileAnalysisWizard.hxx"
 
 #include <QDebug>
 
@@ -310,6 +312,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   {
     wizard = new CalibrationAnalysisWizard(analysis, isGeneralWizard, parent);
   }
+  else if (analysisType == "QuantileAnalysis")
+  {
+    wizard = new QuantileAnalysisWizard(analysis, parent);
+  }
   else
   {
     qDebug() << "Error: In GetAnalysisWizard: analysisType " << analysisType << " not recognized.\n";
@@ -421,6 +427,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
     // if DesignOfExperimentEvaluation FixedDesignOfExperiment GridDesignOfExperiment
     // ImportedDesignOfExperiment ProbabilisticDesignOfExperiment
     resultWindow = new DesignOfExperimentWindow(item, parent);
+  }
+  else if (analysisType == "QuantileAnalysis")
+  {
+    resultWindow = new QuantileAnalysisResultWindow(item, parent);
   }
   else
   {

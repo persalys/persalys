@@ -165,6 +165,8 @@ Data analysis
     CopulaInferenceResult
     CopulaInferenceSetResult
     FieldKarhunenLoeveAnalysis
+    QuantileAnalysis
+    QuantileAnalysisResult
 
 Metamodel
 ---------

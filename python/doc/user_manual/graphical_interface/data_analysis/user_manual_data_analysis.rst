@@ -7,6 +7,7 @@ The interface allows one to perform the following types of data analysis:
   - Marginals inferences
   - Dependence inferences
   - Metamodels creation
+  - Quantile estimation
 
 1- Data analysis
 ================
@@ -654,3 +655,118 @@ The results window gathers:
          :align: center
 
 - The **Parameters** tab summarizes the parameters of the metamodel creation.
+
+5- Quantile estimation
+======================
+
+Quantile estimation can be performed on any marginal of a DataModel
+via two methods:
+
+- Monte Carlo : Marginal distribution is inferred using a Kernel Smoothing (KS) distribution
+- Generalized Pareto : Marginal tail distribution is inferred using extreme value theory
+
+Inferred distribution are then used to estimate user-specified
+quantiles and their associated confidence intervals.
+
+.. _quantileanalysis:
+
+5-1 Definition
+''''''''''''''
+
+Quantile estimation analysis can be created thanks to:
+  - the context menu of the **Definition** item of the data model
+
+    .. image:: /user_manual/graphical_interface/data_analysis/quantileAnalysisdefContextMenu.png
+        :align: center
+
+  - the **Quantile analysis** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
+        :align: center
+
+From there, the user can choose:
+- on which marginal(s) quantiles will be estimated marginal
+
+- which method will be used
+
+  - **Monte Carlo** (MC)
+
+  - **Excess with Generalized Pareto distribution** (GPD)
+
+    .. image:: /user_manual/graphical_interface/data_analysis/quantileFirstPage.png
+        :align: center
+
+- the next steps consists in defining the distribution tails and
+  probabilities associated the quantiles to estimate (:math:`q`).
+
+  - target probabilities (:math:`P_t`) can be defined:
+
+    - globally defined using the topmost field
+
+    - individually by typing in the cell or by clicking the [...] button on each row
+
+    - for the **Monte Carlo** method, the sample size **must** be
+      large enough to ensure quantile validity. Minimum required
+      sample size is dependent on the target probability and is given
+      by a method based on
+      `Wilks <https://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Wilks.html>`_
+
+  - tails can be chosen by clicking the corresponding checkboxes
+
+    - lower tail: will estimate :math:`q_{low}`, such as, :math:`P(X<q_{low}) = P_t`
+
+    - upper tail: will estimate :math:`q_{up}`, such as, :math:`P(X>q_{up}) = P_t`
+
+    - bilateral : will estimate both :math:`q_{low}` and :math:`q_{up}`, such as, :math:`P(X<q_{low} \cup X>q_{up}) = P_t`, assuming :math:`P(X<q_{low}) = P(X>q_{up}) = P_t/2`
+
+    .. image:: /user_manual/graphical_interface/data_analysis/quantileSecondPage.png
+        :align: center
+
+- if **Excess with Generalized Pareto distribution** has been chosen,
+  the analysis definition shows a third and final page to specify tail distribution(s)
+
+  - This page consists in two tabs:
+
+    - **Threshold**: the user can specifiy the quantile/probabillity
+      below/beyond which the marginal excess sample is defined. The
+      excess sample size is also displayed.
+
+    - **Mean excess**: displays a plot for each marginal and each side
+      of the distribution, aimed at helping the user to choose an
+      appropriate threshold. See this `example <https://openturns.github.io/openturns/latest/auto_data_analysis/distribution_fitting/plot_estimate_gpd_dowjones.html>`_ for more details.
+
+    .. image:: /user_manual/graphical_interface/data_analysis/quantileThirdPage1.png
+        :align: center
+
+    .. image:: /user_manual/graphical_interface/data_analysis/quantileThirdPage2.png
+        :align: center
+
+
+.. _quantileresult:
+
+5-2 Results
+'''''''''''
+
+When the analysis is finished, the following window appears, presenting two tabs:
+
+- **Quantiles** tab displays a table for each of the selected
+  marginals, containing the estimated quantiles.
+
+  - If **Excess with Generalized Pareto distribution** has been
+    chosen, there is an additional table displaying the
+    Kolmogorov-Smirnov fitting test P-value between the Generalized
+    Pareto distribution and the excess sample.
+
+    .. image:: /user_manual/graphical_interface/data_analysis/quantile_analysis_summary.png
+        :align: center
+
+- **CDF** tab displays for each tail (lower/upper):
+
+  - the empirical CDF/Survival function of the marginal sample (in black)
+
+  - the estimated quantile(s) and its/their confidence interval(s) (in blue)
+
+  - the excess-inferred Generalized Pareto (if any, in red)
+
+    .. image:: /user_manual/graphical_interface/data_analysis/quantile_analysis_summary2.png
+        :align: center

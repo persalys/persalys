@@ -46,6 +46,15 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 
   appendButton(dataAnalysisButton, row, modelDefinitionButton);
 
+  DiagramPushButton * quantileAnalysisButton = new DiagramPushButton;
+  quantileAnalysisButton->setText(tr("Quantile\nanalysis"));
+  quantileAnalysisButton->setWhatsThis(tr("Estimate quantiles"));
+  quantileAnalysisButton->setErrorMessage(tr("Define at least one variable"));
+  connect(quantileAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newQuantileAnalysis_, SIGNAL(triggered()));
+  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool)), quantileAnalysisButton, SLOT(setEnabled(bool)));
+
+  appendButton(quantileAnalysisButton, ++row, modelDefinitionButton);
+
   DiagramPushButton * inferenceButton = new DiagramPushButton;
   inferenceButton->setText(tr("Marginals\ninference"));
   inferenceButton->setWhatsThis(tr("Make an inference analysis for variables with given distributions"));

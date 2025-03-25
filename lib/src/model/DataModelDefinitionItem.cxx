@@ -43,6 +43,7 @@ DataModelDefinitionItem::DataModelDefinitionItem(const DesignOfExperiment &doe, 
     // add actions
     appendSeparator(tr("Analysis"));
     appendAction(diagramItem->newDataAnalysis_);
+    appendAction(diagramItem->newQuantileAnalysis_);
     appendAction(diagramItem->newInferenceAnalysis_);
     appendAction(diagramItem->newCopulaInferenceAnalysis_);
     appendAction(diagramItem->newMetaModel_);

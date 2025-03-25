@@ -34,6 +34,7 @@ set(BASE_SOURCEFILES PersalysResourceMap.cxx
                      PhysicalModelAnalysis.cxx DesignOfExperimentAnalysis.cxx
                      WithStopCriteriaAnalysis.cxx
                      DataAnalysisResult.cxx DataAnalysis.cxx
+                     QuantileAnalysisResult.cxx QuantileAnalysis.cxx
                      ModelEvaluation.cxx
                      FieldModelEvaluation.cxx
                      DesignOfExperimentEvaluation.cxx
@@ -138,6 +139,8 @@ ot_install_header_file ( SimulationAnalysis.hxx )
 ot_install_header_file ( WithStopCriteriaAnalysis.hxx )
 ot_install_header_file ( DataAnalysisResult.hxx )
 ot_install_header_file ( DataAnalysis.hxx )
+ot_install_header_file ( QuantileAnalysisResult.hxx )
+ot_install_header_file ( QuantileAnalysis.hxx )
 ot_install_header_file ( DesignOfExperimentEvaluation.hxx )
 ot_install_header_file ( FieldKarhunenLoeveAnalysis.hxx )
 ot_install_header_file ( ModelEvaluation.hxx )

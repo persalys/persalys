@@ -28,6 +28,7 @@ ot_add_source_file ( DataFieldModelDiagramWindow.cxx )
 ot_add_source_file ( DataFieldModelWindow.cxx )
 ot_add_source_file ( DataAnalysisWindow.cxx )
 ot_add_source_file ( DataAnalysisResultWindow.cxx )
+ot_add_source_file ( QuantileAnalysisResultWindow.cxx )
 ot_add_source_file ( AnalysisWizard.cxx )
 ot_add_source_file ( WelcomeWindow.cxx )
 ot_add_source_file ( StudyWindow.cxx )
@@ -66,6 +67,7 @@ ot_add_source_file ( ModelEvaluationResultWindow.cxx )
 ot_add_source_file ( CentralTendencyIntroPage.cxx )
 ot_add_source_file ( MonteCarloPage.cxx )
 ot_add_source_file ( CentralTendencyWizard.cxx )
+ot_add_source_file ( QuantileAnalysisWizard.cxx )
 ot_add_source_file ( MonteCarloResultWindow.cxx )
 ot_add_source_file ( TaylorExpansionMomentsResultWindow.cxx )
 ot_add_source_file ( SensitivityResultWidget.cxx )
@@ -167,11 +169,13 @@ ot_install_header_file ( DataModelWindow.hxx )
 ot_install_header_file ( DataFieldModelWindow.hxx )
 ot_install_header_file ( DataAnalysisWindow.hxx )
 ot_install_header_file ( DataAnalysisResultWindow.hxx )
+ot_install_header_file ( QuantileAnalysisResultWindow.hxx )
 ot_install_header_file ( AnalysisWindow.hxx )
 ot_install_header_file ( ModelEvaluationWizard.hxx )
 ot_install_header_file ( CentralTendencyIntroPage.hxx )
 ot_install_header_file ( MonteCarloPage.hxx )
 ot_install_header_file ( CentralTendencyWizard.hxx )
+ot_install_header_file ( QuantileAnalysisWizard.hxx )
 ot_install_header_file ( SensitivityIntroPage.hxx )
 ot_install_header_file ( SobolPage.hxx )
 ot_install_header_file ( SRCPage.hxx )
@@ -297,6 +301,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/DataFieldModelWindow.hxx
                                   persalys/DataAnalysisWindow.hxx
                                   persalys/DataAnalysisResultWindow.hxx
+                                  persalys/QuantileAnalysisResultWindow.hxx
                                   persalys/StudyTreeView.hxx
                                   persalys/DesignOfExperimentIntroPage.hxx
                                   persalys/GridDesignPage.hxx
@@ -318,6 +323,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CentralTendencyIntroPage.hxx
                                   persalys/MonteCarloPage.hxx
                                   persalys/CentralTendencyWizard.hxx
+                                  persalys/QuantileAnalysisWizard.hxx
                                   persalys/MonteCarloResultWindow.hxx
                                   persalys/TaylorExpansionMomentsResultWindow.hxx
                                   persalys/SensitivityResultWidget.hxx

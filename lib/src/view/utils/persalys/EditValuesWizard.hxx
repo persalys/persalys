@@ -42,9 +42,9 @@ class PERSALYS_UTILS_API EditValuesWizard : public QWizard
   Q_OBJECT
 
 public:
-  EditValuesWizard(QWidget *parent = nullptr);
-  EditValuesWizard(const OT::Sample &values, QWidget *parent = nullptr);
-  EditValuesWizard(const QString &variableName, const OT::Point &values, QWidget *parent = nullptr);
+  EditValuesWizard(QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
+  EditValuesWizard(const OT::Sample &values, QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
+  EditValuesWizard(const QString &variableName, const OT::Point &values, QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
 
   OT::Point getValues(const OT::UnsignedInteger index = 0) const;
   virtual bool validateCurrentPage();
@@ -52,7 +52,7 @@ public:
 private slots:
   void removeSelectedValues();
   void checkButtons();
-  virtual void addValue();
+  virtual void addValue(OT::Scalar factor);
   virtual void importSample();
 
 protected:
@@ -68,6 +68,9 @@ private:
   QTableView * valueTable_;
   QLabel * valueNumber_;
   QPushButton * removeButton_;
+  OT::UnsignedInteger nMinValues_ = 2;
+  OT::Scalar factor_ = 1.;
+
 };
 
 
@@ -79,10 +82,9 @@ public:
   UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = nullptr);
 
   OT::Distribution getDistribution() const;
-  virtual bool validateCurrentPage();
 
 private slots:
-  virtual void addValue();
+  virtual void addValue(OT::Scalar);
 };
 
 
