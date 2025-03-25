@@ -23,8 +23,11 @@
 
 #include "persalys/AppliException.hxx"
 #include "persalys/StudyTreeViewModel.hxx"
+#include "persalys/QtTools.hxx"
 
 #include <QDoubleValidator>
+
+using namespace OT;
 
 namespace PERSALYS
 {
@@ -92,4 +95,34 @@ void ValueLineEdit::keyPressEvent(QKeyEvent *e)
   if (e->key() == Qt::Key_Return && validator()->validate(value, pos) != QValidator::Acceptable)
     emit editingFinished();
 }
+
+ValuesLineEdit::ValuesLineEdit(const Point values, QWidget *parent)
+  : QLineEdit(parent)
+{
+  QString numberPattern = QString("(\\d+\\.*\\d*e{0,1}[+-]*\\d*)");
+  QRegExp regEx = QRegExp(numberPattern + "(;{1}\\s*" + numberPattern + ")*$");
+  QRegExpValidator * validator = new QRegExpValidator(regEx);
+  setValidator(validator);
+  setValues(values);
+}
+
+void ValuesLineEdit::setValues(const Point values, const bool enabled)
+{
+  setText(QtOT::PointToString(values));
+  //TODO setText(QString::number(value, 'g', precision_));
+  setEnabled(enabled);
+}
+
+
+Point ValuesLineEdit::values()
+{
+  QStringList valueList = text().split(";");
+  Point values;
+  foreach (QString value, valueList)
+  {
+    values.add(value.toDouble());
+  }
+  return values;
+}
+
 }

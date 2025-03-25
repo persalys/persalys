@@ -56,6 +56,7 @@ signals:
 private:
   QAction * defineAction_ = nullptr;
   QAction * newDataAnalysis_ = nullptr;
+  QAction * newQuantileAnalysis_ = nullptr;
   QAction * newInferenceAnalysis_ = nullptr;
   QAction * newCopulaInferenceAnalysis_ = nullptr;
   QAction * newMetaModel_ = nullptr;

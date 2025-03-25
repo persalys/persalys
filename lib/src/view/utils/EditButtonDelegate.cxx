@@ -27,8 +27,10 @@ using namespace OT;
 namespace PERSALYS
 {
 
-EditButtonDelegate::EditButtonDelegate(QObject *parent)
+  EditButtonDelegate::EditButtonDelegate(QObject *parent, UnsignedInteger nMinValues, Scalar factor)
   : QStyledItemDelegate(parent)
+  , nMinValues_(nMinValues)
+  , factor_(factor)
 {
 }
 
@@ -44,7 +46,7 @@ QWidget* EditButtonDelegate::createEditor(QWidget *parent, const QStyleOptionVie
 void EditButtonDelegate::editRequest()
 {
   EditValuesButton * editor = qobject_cast<EditValuesButton *>(sender());
-  EditValuesWizard wizard(editor->parameterName().c_str(), editor->values());
+  EditValuesWizard wizard(editor->parameterName().c_str(), editor->values(), nullptr, nMinValues_, factor_);
   if (wizard.exec())
   {
     editor->setValues(wizard.getValues());

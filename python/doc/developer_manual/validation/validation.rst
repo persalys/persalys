@@ -650,6 +650,12 @@ Models
 
   - a message stating the sample contains invalid values should be displayed
 
+  - right-click on 'Definition' child item of 'importDataModel' item
+
+    - click Quantile analysis
+
+      - a message stating the sample contains invalid values should be displayed
+
   - find the troublesome line at the end of the sample, select it then
     right-click on it and delete it using the popup menu
 
@@ -662,6 +668,55 @@ Models
   - choose one of the replacement/removing feature
 
   - the troublesome line and message are gone
+
+  - right-click on 'Definition' child item of 'importDataModel' item
+
+    - click Quantile analysis
+
+    - check the doc link
+
+      - Continue
+
+        - the page shows an error message : Sample size is too small to ensure quantile validity...
+
+        - set default target probability to 0.05 : the message disappears
+
+    - go back
+
+      - choose GDP, click continue
+
+        - click the lower header check box : all lower checkboxes are checked
+
+        - edit the default value line edit : only numbers are accepted
+
+        - edit one of the marginal target probability line edit : only numbers are accepted
+
+        - click on one of the '...' button
+
+          - check add/remove buttons behave appropriately
+
+          - cancel
+
+        - click continue
+
+          - check that if you change one of the threshold/cdf threshold, the other values are updated
+
+          - change all lower/upper CDF thresholds to 0.1/0.9
+
+          - click mean excess tab : check that the plots are
+            correctly displayed and the drop down menu changes the
+            current plot
+
+        - click Finsih then run the analysis
+
+          - check the results
+
+  .. image:: /developer_manual/validation/validationQuantile1.png
+      :align: center
+
+  .. image:: /developer_manual/validation/validationQuantile2.png
+      :align: center
+
 
 - check the doc link
 

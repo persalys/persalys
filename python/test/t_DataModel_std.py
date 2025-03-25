@@ -69,6 +69,62 @@ print("outputSample=", model3.getOutputSample())
 print("min=", model3.getListXMin())
 print("max=", model3.getListXMax())
 
+# Quantile analysis
+# Model 4
+filename = "data_500.csv"
+ot.RandomGenerator.SetSeed(0)
+ot.Normal(3).getSample(500).exportToCSVFile(filename)
+inColumns = [0, 1, 2]
+
+model4 = persalys.DataModel("myDataModel4", filename, inColumns)
+myStudy.add(model4)
+print(model4)
+print("inputNames=", model4.getInputNames())
+print("outputNames=", model4.getOutputNames())
+
+ot.ResourceMap.SetAsString("GeneralizedParetoFactory-DefaultOptimizationAlgorithm", "LD_SLSQP")
+
+# Monte Carlo
+analysis2 = persalys.QuantileAnalysis("aQuantileAnalysis", model4)
+analysis2.setTargetProbabilities([[1e-2, 1e-3], [6e-3], [1e-1, 1e-2, 1e-3]])
+analysis2.setTailTypes(
+    [persalys.QuantileAnalysisResult.Upper | persalys.QuantileAnalysisResult.Lower | persalys.QuantileAnalysisResult.Bilateral,
+     persalys.QuantileAnalysisResult.Lower,
+     persalys.QuantileAnalysisResult.Bilateral])
+
+analysis2.setType(persalys.QuantileAnalysisResult.MonteCarlo)
+myStudy.add(analysis2)
+analysis2.run()
+print(analysis2.getResult())
+
+# Generalized Pareto
+# test wrong threshold
+analysis2.setType(persalys.QuantileAnalysisResult.GeneralizedPareto)
+try:
+    analysis2.run()
+except Exception as e:
+    print(e)
+analysis2.setTargetProbabilities([[1e-2, 1e-3], [6e-3], [2e-2, 1e-2, 1e-3]])
+analysis2.run()
+print(analysis2.getResult())
+
+# correct threshold
+analysis2.setThreshold(ot.Sample([[-1.2] * 3, [1.3] * 3]))
+print(analysis2.getCDFThreshold())
+analysis2.run()
+print(analysis2.getResult())
+
+# test interest variables
+analysis2.setInterestVariables(["X0", "X2"])
+analysis2.setTailTypes(
+    [persalys.QuantileAnalysisResult.Upper | persalys.QuantileAnalysisResult.Lower | persalys.QuantileAnalysisResult.Bilateral,
+     persalys.QuantileAnalysisResult.Bilateral])
+analysis2.setTargetProbabilities([[1e-2, 1e-3], [2e-2, 1e-2, 1e-3]])
+analysis2.setThreshold(ot.Sample([[-1.2] * 2, [1.3] * 2]))
+print(analysis2.getCDFThreshold())
+analysis2.run()
+print(analysis2.getResult())
+
 # script
 script = myStudy.getPythonScript()
 print(script)
@@ -97,16 +153,16 @@ if have_fr_locale:
                         if j < len(p) - 1:
                             csv.write(col_sep)
                     csv.write("\n")
-            model = persalys.DataModel("myDataModel2", filename, inColumns)
-            assert model.getSampleFromFile().getDimension() == 2, (
+            model5 = persalys.DataModel("myDataModel5", filename, inColumns)
+            assert model5.getSampleFromFile().getDimension() == 2, (
                 "wrong dimension sep=" + col_sep
             )
-            assert model.getSampleFromFile().getSize() == 10, "wrong size"
+            assert model5.getSampleFromFile().getSize() == 10, "wrong size"
     os.remove(filename)
 
     # test latin1 chars
     filename = "DonneesLatin1.csv"
-    model4 = persalys.DataModel("myDataModel4", filename, [0, 1, 2, 3], [4, 5])
+    model5 = persalys.DataModel("myDataModel5", filename, [0, 1, 2, 3], [4, 5])
 
-    myStudy.add(model4)
-    assert "Ann" in model4.getSampleFromFile().getDescription()[0]
+    myStudy.add(model5)
+    assert "Ann" in model5.getSampleFromFile().getDescription()[0]

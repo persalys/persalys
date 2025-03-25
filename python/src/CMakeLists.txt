@@ -111,6 +111,8 @@ ot_add_python_module (persalys persalys_module.i
                       DesignOfExperimentEvaluation.i DesignOfExperimentEvaluation_doc.i.in
                       DataAnalysisResult.i DataAnalysisResult_doc.i.in
                       DataAnalysis.i DataAnalysis_doc.i.in
+                      QuantileAnalysisResult.i QuantileAnalysisResult_doc.i.in
+                      QuantileAnalysis.i QuantileAnalysis_doc.i.in
                       ModelEvaluation.i ModelEvaluation_doc.i.in
                       FieldModelEvaluation.i FieldModelEvaluation_doc.i.in
                       DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i.in

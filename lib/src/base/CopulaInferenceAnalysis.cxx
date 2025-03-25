@@ -79,6 +79,10 @@ CopulaInferenceAnalysis::CopulaInferenceAnalysis(const String &name, const Desig
 
 Collection<Description> CopulaInferenceAnalysis::buildDefaultVariablesGroups()
 {
+  Collection<Description> groups;
+  if (!designOfExperiment_.getSample().getSize())
+    return groups;
+
   // Spearman correlation matrix
   CorrelationMatrix C(designOfExperiment_.getSample().computeSpearmanCorrelation());
 
@@ -91,7 +95,6 @@ Collection<Description> CopulaInferenceAnalysis::buildDefaultVariablesGroups()
       C(i, j) = (std::abs(C(i, j)) > epsilon) ? 1.0 : 0.0;
 
   // find groups of dependent variables
-  Collection<Description> groups;
   Collection<Indices> components = ConnectedComponents(C);
 
   for (UnsignedInteger i = 0; i < components.getSize(); ++i)
@@ -151,7 +154,6 @@ CopulaInferenceAnalysis* CopulaInferenceAnalysis::clone() const
 {
   return new CopulaInferenceAnalysis(*this);
 }
-
 
 CopulaInferenceAnalysis::DistributionFactoryCollection CopulaInferenceAnalysis::getDistributionsFactories(const Description& variablesNames) const
 {

@@ -31,6 +31,7 @@
 #include "persalys/FieldMonteCarloAnalysis.hxx"
 #include "persalys/MonteCarloAnalysis.hxx"
 #include "persalys/SobolAnalysis.hxx"
+#include "persalys/QuantileAnalysis.hxx"
 #include "persalys/MonteCarloReliabilityAnalysis.hxx"
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/MultiObjectiveOptimizationAnalysis.hxx"
@@ -384,6 +385,17 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfE
       newAnalysis("Calibration", doe);
     });
   }
+  else if (analysisName == "QuantileAnalysis")
+  {
+    action = new QAction(QIcon(":/images/sensitivity.png"), tr("Quantile"), this);
+    action->setStatusTip(tr("Create a new quantile analysis"));
+    connect(action, &QAction::triggered, [ = ]()
+    {
+      emit wizardRequested(getParentStudyItem(),
+                           QuantileAnalysis(availableAnalysisName(tr("quantile_")), doe));
+    });
+  }
+
   else
   {
     qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";

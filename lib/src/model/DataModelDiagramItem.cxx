@@ -45,6 +45,7 @@ void DataModelDiagramItem::buildActions()
 
   // new analyses
   newDataAnalysis_ = createAction("DataAnalysis", getDesignOfExperiment());
+  newQuantileAnalysis_ = createAction("QuantileAnalysis", getDesignOfExperiment());
   newInferenceAnalysis_ = createAction("Inference", getDesignOfExperiment());
   newCopulaInferenceAnalysis_ = createAction("CopulaInference", getDesignOfExperiment());
   newMetaModel_ = createAction("Metamodel", getDesignOfExperiment());

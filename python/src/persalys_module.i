@@ -134,6 +134,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include Observations.i
 %include EvaluationResult.i
 %include DataAnalysisResult.i
+%include QuantileAnalysisResult.i
 %include DesignOfExperimentAnalysis.i
 %include SimulationAnalysis.i
 %include DesignOfExperimentEvaluation.i
@@ -144,6 +145,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include ModelEvaluation.i
 %include FieldModelEvaluation.i
 %include DataAnalysis.i
+%include QuantileAnalysis.i
 %include TaylorExpansionMomentsResult.i
 %include MonteCarloAnalysis.i
 %include FieldMonteCarloResult.i
