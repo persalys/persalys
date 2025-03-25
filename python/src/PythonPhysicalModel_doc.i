@@ -1,5 +1,5 @@
 %feature("docstring") PERSALYS::PythonPhysicalModel
-"Create a physical model defined by Python code.
+R"RAW(Create a physical model defined by Python code.
 
 Parameters
 ----------
@@ -29,7 +29,8 @@ Create the model:
 >>> G = persalys.Output('G', 'deviation')
 >>> code = 'from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    return G\n'
 >>> model = persalys.PythonPhysicalModel('myPhysicalModel', [R, F], [G], code)
->>> y = model.getFunction()([300.0,75000.0])"
+>>> y = model.getFunction()([300.0,75000.0])
+)RAW"
 
 // ---------------------------------------------------------------------
 

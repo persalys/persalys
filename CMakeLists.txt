@@ -153,7 +153,7 @@ endif ()
 list (APPEND PERSALYS_DEFINITIONS -DDOCUMENTATION_INSTALL_PATH="${PERSALYS_DOC_PATH}")
 
 if (BUILD_PYTHON)
-  find_package (SWIG 3)
+  find_package (SWIG 4)
   if (SWIG_FOUND)
     include (${SWIG_USE_FILE})
   endif ()

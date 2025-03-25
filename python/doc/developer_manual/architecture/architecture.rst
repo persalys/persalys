@@ -13,7 +13,7 @@ Several dependencies are needed in order to build the GUI:
 - Qt >=5
 - Qwt >=6
 - Python >=3.6
-- SWIG >=3
+- SWIG >=4
 - Boost.locale/program_options
 - SalomeYACS (optional, for YACS support)
 - Sphinx >=1.8 (optional, for doc)

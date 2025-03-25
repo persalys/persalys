@@ -27,33 +27,11 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
   foreach (it ${ARGN})
     if (${it} MATCHES ".*\\.i$")
       ot_install_swig_file (${it})
-    elseif (${it} MATCHES ".*_doc\\.i\\.in$")
-      list (APPEND docstring_sources ${it})
-
-      get_filename_component (DOCSTRING_FILE_BASENAME ${it} NAME_WE)
-      ot_install_swig_file (${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i)
     else ()
       list (APPEND swig_other_sources "${it}")
     endif ()
   endforeach ()
 
-  # https://github.com/swig/swig/issues/1273
-  option (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH "Force double escaping of backslashes" OFF)
-  mark_as_advanced (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-  set (TIMES x1)
-  if ((SWIG_VERSION VERSION_LESS 4) OR SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-    set (TIMES x2)
-  endif ()
-
-  # handle docstring generation
-  add_custom_target (generate_${MODULENAME}_docstrings
-                      COMMAND ${CMAKE_COMMAND} -DDOCSTRING_SOURCES="${docstring_sources}"
-                      -DCURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DTIMES=${TIMES}
-                      -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash.cmake
-                      DEPENDS ${docstring_sources})
-  list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_${MODULENAME}_docstrings)
-
-  # swig_add_module is deprecated
   swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
 
   # UseSWIG generates now standard target names
@@ -76,106 +54,106 @@ endmacro ()
 ot_add_python_module (persalys persalys_module.i
                       Observer.i
                       Observable.i
-                      Variable.i Variable_doc.i.in
-                      Input.i Input_doc.i.in
-                      Output.i Output_doc.i.in
-                      DataSample.i DataSample_doc.i.in
-                      DataImport.i DataImport_doc.i.in
-                      DataFieldModel.i DataFieldModel_doc.i.in
-                      DataFieldModelImplementation.i DataFieldModelImplementation_doc.i.in
-                      MeshModelImplementation.i MeshModelImplementation_doc.i.in
-                      MeshModel.i MeshModel_doc.i.in
-                      GridMeshModel.i GridMeshModel_doc.i.in
-                      ImportedMeshModel.i ImportedMeshModel_doc.i.in
-                      PhysicalModelImplementation.i PhysicalModelImplementation_doc.i.in
-                      SymbolicPhysicalModel.i SymbolicPhysicalModel_doc.i.in
-                      PythonPhysicalModel.i PythonPhysicalModel_doc.i.in
-                      SymbolicFieldModel.i SymbolicFieldModel_doc.i.in
-                      PythonFieldModel.i PythonFieldModel_doc.i.in
-                      MetaModel.i MetaModel_doc.i.in
-                      PhysicalModel.i PhysicalModel_doc.i.in
-                      YACSPhysicalModel.i YACSPhysicalModel_doc.i.in
-                      YACSCouplingPhysicalModel.i YACSCouplingPhysicalModel_doc.i.in
-                      FMIPhysicalModel.i FMIPhysicalModel_doc.i.in
-                      FMUInfo.i FMUInfo_doc.i.in
-                      LimitStateImplementation.i LimitStateImplementation_doc.i.in
-                      LimitState.i LimitState_doc.i.in
-                      AnalysisResult.i AnalysisResult_doc.i.in
-                      EvaluationResult.i EvaluationResult_doc.i.in
-                      AnalysisImplementation.i AnalysisImplementation_doc.i.in
-                      DesignOfExperimentAnalysis.i DesignOfExperimentAnalysis_doc.i.in
-                      PhysicalModelAnalysis.i PhysicalModelAnalysis_doc.i.in
-                      Analysis.i Analysis_doc.i.in
-                      WithStopCriteriaAnalysis.i WithStopCriteriaAnalysis_doc.i.in
-                      SimulationAnalysis.i SimulationAnalysis_doc.i.in
-                      DesignOfExperimentEvaluation.i DesignOfExperimentEvaluation_doc.i.in
-                      DataAnalysisResult.i DataAnalysisResult_doc.i.in
-                      DataAnalysis.i DataAnalysis_doc.i.in
-                      QuantileAnalysisResult.i QuantileAnalysisResult_doc.i.in
-                      QuantileAnalysis.i QuantileAnalysis_doc.i.in
-                      ModelEvaluation.i ModelEvaluation_doc.i.in
-                      FieldModelEvaluation.i FieldModelEvaluation_doc.i.in
-                      DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i.in
-                      DesignOfExperiment.i DesignOfExperiment_doc.i.in
-                      FixedDesignOfExperiment.i FixedDesignOfExperiment_doc.i.in
-                      GridDesignOfExperiment.i GridDesignOfExperiment_doc.i.in
-                      ImportedDesignOfExperiment.i ImportedDesignOfExperiment_doc.i.in
-                      ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i.in
-                      DataModel.i DataModel_doc.i.in
-                      Observations.i Observations_doc.i.in
-                      MonteCarloAnalysis.i MonteCarloAnalysis_doc.i.in
-                      FieldMonteCarloResult.i FieldMonteCarloResult_doc.i.in
-                      FieldMonteCarloAnalysis.i FieldMonteCarloAnalysis_doc.i.in
-                      FieldKarhunenLoeveAnalysis.i FieldKarhunenLoeveAnalysis_doc.i.in
-                      TaylorExpansionMomentsResult.i TaylorExpansionMomentsResult_doc.i.in
-                      TaylorExpansionMomentsAnalysis.i TaylorExpansionMomentsAnalysis_doc.i.in
-                      SobolResult.i SobolResult_doc.i.in
-                      SobolAnalysis.i SobolAnalysis_doc.i.in
-                      SRCResult.i SRCResult_doc.i.in
-                      SRCAnalysis.i SRCAnalysis_doc.i.in
-                      MorrisResult.i MorrisResult_doc.i.in
-                      MorrisAnalysis.i MorrisAnalysis_doc.i.in
-                      ReliabilityAnalysis.i ReliabilityAnalysis_doc.i.in
-                      SimulationReliabilityAnalysis.i SimulationReliabilityAnalysis_doc.i.in
-                      SimulationReliabilityResult.i SimulationReliabilityResult_doc.i.in
-                      MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i.in
-                      ImportanceSamplingAnalysis.i ImportanceSamplingAnalysis_doc.i.in
-                      ApproximationAnalysis.i ApproximationAnalysis_doc.i.in
-                      FORMAnalysisResult.i FORMAnalysisResult_doc.i.in
-                      FORMAnalysis.i FORMAnalysis_doc.i.in
-                      SORMAnalysisResult.i SORMAnalysisResult_doc.i.in
-                      SORMAnalysis.i SORMAnalysis_doc.i.in
-                      FORMImportanceSamplingAnalysis.i FORMImportanceSamplingAnalysis_doc.i.in
-                      MetaModelValidationResult.i MetaModelValidationResult_doc.i.in
-                      MetaModelAnalysisResult.i MetaModelAnalysisResult_doc.i.in
-                      MetaModelAnalysis.i MetaModelAnalysis_doc.i.in
-                      FunctionalChaosAnalysisResult.i FunctionalChaosAnalysisResult_doc.i.in
-                      FunctionalChaosAnalysis.i FunctionalChaosAnalysis_doc.i.in
-                      KrigingAnalysisResult.i KrigingAnalysisResult_doc.i.in
-                      KrigingAnalysis.i KrigingAnalysis_doc.i.in
-                      PolynomialRegressionAnalysisResult.i PolynomialRegressionAnalysisResult_doc.i.in
-                      PolynomialRegressionAnalysis.i PolynomialRegressionAnalysis_doc.i.in
-                      FittingTestResult.i FittingTestResult_doc.i.in
-                      InferenceResult.i InferenceResult_doc.i.in
-                      InferenceAnalysis.i InferenceAnalysis_doc.i.in
-                      CopulaInferenceSetResult.i CopulaInferenceSetResult_doc.i.in
-                      CopulaInferenceResult.i CopulaInferenceResult_doc.i.in
-                      CopulaInferenceAnalysis.i CopulaInferenceAnalysis_doc.i.in
-                      OptimizationAnalysis.i OptimizationAnalysis_doc.i.in
-                      MultiObjectiveOptimizationAnalysis.i MultiObjectiveOptimizationAnalysis_doc.i.in
-                      CalibrationAnalysis.i CalibrationAnalysis_doc.i.in
-                      CalibrationAnalysisResult.i CalibrationAnalysisResult_doc.i.in
+                      Variable.i Variable_doc.i
+                      Input.i Input_doc.i
+                      Output.i Output_doc.i
+                      DataSample.i DataSample_doc.i
+                      DataImport.i DataImport_doc.i
+                      DataFieldModel.i DataFieldModel_doc.i
+                      DataFieldModelImplementation.i DataFieldModelImplementation_doc.i
+                      MeshModelImplementation.i MeshModelImplementation_doc.i
+                      MeshModel.i MeshModel_doc.i
+                      GridMeshModel.i GridMeshModel_doc.i
+                      ImportedMeshModel.i ImportedMeshModel_doc.i
+                      PhysicalModelImplementation.i PhysicalModelImplementation_doc.i
+                      SymbolicPhysicalModel.i SymbolicPhysicalModel_doc.i
+                      PythonPhysicalModel.i PythonPhysicalModel_doc.i
+                      SymbolicFieldModel.i SymbolicFieldModel_doc.i
+                      PythonFieldModel.i PythonFieldModel_doc.i
+                      MetaModel.i MetaModel_doc.i
+                      PhysicalModel.i PhysicalModel_doc.i
+                      YACSPhysicalModel.i YACSPhysicalModel_doc.i
+                      YACSCouplingPhysicalModel.i YACSCouplingPhysicalModel_doc.i
+                      FMIPhysicalModel.i FMIPhysicalModel_doc.i
+                      FMUInfo.i FMUInfo_doc.i
+                      LimitStateImplementation.i LimitStateImplementation_doc.i
+                      LimitState.i LimitState_doc.i
+                      AnalysisResult.i AnalysisResult_doc.i
+                      EvaluationResult.i EvaluationResult_doc.i
+                      AnalysisImplementation.i AnalysisImplementation_doc.i
+                      DesignOfExperimentAnalysis.i DesignOfExperimentAnalysis_doc.i
+                      PhysicalModelAnalysis.i PhysicalModelAnalysis_doc.i
+                      Analysis.i Analysis_doc.i
+                      WithStopCriteriaAnalysis.i WithStopCriteriaAnalysis_doc.i
+                      SimulationAnalysis.i SimulationAnalysis_doc.i
+                      DesignOfExperimentEvaluation.i DesignOfExperimentEvaluation_doc.i
+                      DataAnalysisResult.i DataAnalysisResult_doc.i
+                      DataAnalysis.i DataAnalysis_doc.i
+                      QuantileAnalysisResult.i QuantileAnalysisResult_doc.i
+                      QuantileAnalysis.i QuantileAnalysis_doc.i
+                      ModelEvaluation.i ModelEvaluation_doc.i
+                      FieldModelEvaluation.i FieldModelEvaluation_doc.i
+                      DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i
+                      DesignOfExperiment.i DesignOfExperiment_doc.i
+                      FixedDesignOfExperiment.i FixedDesignOfExperiment_doc.i
+                      GridDesignOfExperiment.i GridDesignOfExperiment_doc.i
+                      ImportedDesignOfExperiment.i ImportedDesignOfExperiment_doc.i
+                      ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i
+                      DataModel.i DataModel_doc.i
+                      Observations.i Observations_doc.i
+                      MonteCarloAnalysis.i MonteCarloAnalysis_doc.i
+                      FieldMonteCarloResult.i FieldMonteCarloResult_doc.i
+                      FieldMonteCarloAnalysis.i FieldMonteCarloAnalysis_doc.i
+                      FieldKarhunenLoeveAnalysis.i FieldKarhunenLoeveAnalysis_doc.i
+                      TaylorExpansionMomentsResult.i TaylorExpansionMomentsResult_doc.i
+                      TaylorExpansionMomentsAnalysis.i TaylorExpansionMomentsAnalysis_doc.i
+                      SobolResult.i SobolResult_doc.i
+                      SobolAnalysis.i SobolAnalysis_doc.i
+                      SRCResult.i SRCResult_doc.i
+                      SRCAnalysis.i SRCAnalysis_doc.i
+                      MorrisResult.i MorrisResult_doc.i
+                      MorrisAnalysis.i MorrisAnalysis_doc.i
+                      ReliabilityAnalysis.i ReliabilityAnalysis_doc.i
+                      SimulationReliabilityAnalysis.i SimulationReliabilityAnalysis_doc.i
+                      SimulationReliabilityResult.i SimulationReliabilityResult_doc.i
+                      MonteCarloReliabilityAnalysis.i MonteCarloReliabilityAnalysis_doc.i
+                      ImportanceSamplingAnalysis.i ImportanceSamplingAnalysis_doc.i
+                      ApproximationAnalysis.i ApproximationAnalysis_doc.i
+                      FORMAnalysisResult.i FORMAnalysisResult_doc.i
+                      FORMAnalysis.i FORMAnalysis_doc.i
+                      SORMAnalysisResult.i SORMAnalysisResult_doc.i
+                      SORMAnalysis.i SORMAnalysis_doc.i
+                      FORMImportanceSamplingAnalysis.i FORMImportanceSamplingAnalysis_doc.i
+                      MetaModelValidationResult.i MetaModelValidationResult_doc.i
+                      MetaModelAnalysisResult.i MetaModelAnalysisResult_doc.i
+                      MetaModelAnalysis.i MetaModelAnalysis_doc.i
+                      FunctionalChaosAnalysisResult.i FunctionalChaosAnalysisResult_doc.i
+                      FunctionalChaosAnalysis.i FunctionalChaosAnalysis_doc.i
+                      KrigingAnalysisResult.i KrigingAnalysisResult_doc.i
+                      KrigingAnalysis.i KrigingAnalysis_doc.i
+                      PolynomialRegressionAnalysisResult.i PolynomialRegressionAnalysisResult_doc.i
+                      PolynomialRegressionAnalysis.i PolynomialRegressionAnalysis_doc.i
+                      FittingTestResult.i FittingTestResult_doc.i
+                      InferenceResult.i InferenceResult_doc.i
+                      InferenceAnalysis.i InferenceAnalysis_doc.i
+                      CopulaInferenceSetResult.i CopulaInferenceSetResult_doc.i
+                      CopulaInferenceResult.i CopulaInferenceResult_doc.i
+                      CopulaInferenceAnalysis.i CopulaInferenceAnalysis_doc.i
+                      OptimizationAnalysis.i OptimizationAnalysis_doc.i
+                      MultiObjectiveOptimizationAnalysis.i MultiObjectiveOptimizationAnalysis_doc.i
+                      CalibrationAnalysis.i CalibrationAnalysis_doc.i
+                      CalibrationAnalysisResult.i CalibrationAnalysisResult_doc.i
                       StudyImplementation.i
-                      Study.i Study_doc.i.in
-                      CouplingInputFile.i CouplingInputFile_doc.i.in
-                      CouplingResourceFile.i CouplingResourceFile_doc.i.in
-                      CouplingOutputFile.i CouplingOutputFile_doc.i.in
-                      CouplingStep.i CouplingStep_doc.i.in
-                      CouplingPhysicalModel.i CouplingPhysicalModel_doc.i.in
+                      Study.i Study_doc.i
+                      CouplingInputFile.i CouplingInputFile_doc.i
+                      CouplingResourceFile.i CouplingResourceFile_doc.i
+                      CouplingOutputFile.i CouplingOutputFile_doc.i
+                      CouplingStep.i CouplingStep_doc.i
+                      CouplingPhysicalModel.i CouplingPhysicalModel_doc.i
                       FileMemoizeEvaluation.i
-                      FileMemoizeFunction.i FileMemoizeFunction_doc.i.in
-                      DataCleaning.i DataCleaning_doc.i.in
-                      AnsysParser.i AnsysParser_doc.i.in
+                      FileMemoizeFunction.i FileMemoizeFunction_doc.i
+                      DataCleaning.i DataCleaning_doc.i
+                      AnsysParser.i AnsysParser_doc.i
                     )
 
 if (SalomeYACS_FOUND)
