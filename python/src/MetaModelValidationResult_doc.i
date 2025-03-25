@@ -24,7 +24,7 @@ sample : :py:class:`openturns.Sample`
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::MetaModelValidationResult::getResiduals
-"Residuals accessor.
+R"RAW(Residuals accessor.
 
 Returns
 -------
@@ -32,12 +32,12 @@ error : :py:class:`openturns.Point`
     The errors are defined as follows for each output of the model:
     :math:`\displaystyle \frac{\sqrt{\sum_{i=1}^N (y_i - \hat{y_i})^2}}{N}`
     with :math:`y_i` the :math:`N` model's values and :math:`\hat{y_i}` the
-    prediction."
+    prediction.)RAW"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::MetaModelValidationResult::getQ2
-"Q2 accessor.
+R"RAW(Q2 accessor.
 
 Returns
 -------
@@ -46,4 +46,4 @@ q2 : :py:class:`openturns.Point`
     each output of the model:
     :math:`1 - \displaystyle \frac{\sum_{i=1}^N (y_i - \hat{y_i})^2}{(N-1) {\rm Var}\left[ \underline{Y} \right]}`
     with :math:`\underline{Y}` the vector of the :math:`N` model's values
-    :math:`y_i` and :math:`\hat{y_i}` the prediction."
+    :math:`y_i` and :math:`\hat{y_i}` the prediction.)RAW"

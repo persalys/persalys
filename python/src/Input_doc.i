@@ -65,7 +65,7 @@ parametersType : int
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::Input::setFiniteDifferenceStep
-"Finite difference step accessor.
+R"RAW(Finite difference step accessor.
 
 Parameters
 ----------
@@ -95,7 +95,7 @@ Second order centered finite difference scheme:
                                         f_k(x + \epsilon_i - \epsilon_j) +
                                         f_k(x - \epsilon_i - \epsilon_j) -
                                         f_k(x - \epsilon_i + \epsilon_j)}
-                                     {4 \epsilon_i \epsilon_j}"
+                                     {4 \epsilon_i \epsilon_j})RAW"
 
 // ---------------------------------------------------------------------
 

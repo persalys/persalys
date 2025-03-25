@@ -1,5 +1,5 @@
 %feature("docstring") PERSALYS::PythonFieldModel
-"Create a physical model defined by Python code and a mesh.
+R"RAW(Create a physical model defined by Python code and a mesh.
 
 Parameters
 ----------
@@ -39,4 +39,5 @@ Create the model:
 >>> code = 'from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    return z'
 >>> model = persalys.PythonFieldModel('aModel', meshModel, [z0, v0, m, c], [z], code)
 
->>> y = model.getPointToFieldFunction()([100, 55, 80, 15])"
+>>> y = model.getPointToFieldFunction()([100, 55, 80, 15])
+)RAW"

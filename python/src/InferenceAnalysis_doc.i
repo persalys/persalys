@@ -34,24 +34,24 @@ Get the result:
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::InferenceAnalysis::getLevel
-"Level accessor.
+R"RAW(Level accessor.
 
 Returns
 -------
 level : float, :math:`0 < {\rm level} < 1`, optional
     The risk of committing a Type I error, that is an incorrect rejection of a true
-    null hypothesis"
+    null hypothesis)RAW"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::InferenceAnalysis::setLevel
-"Level accessor.
+R"RAW(Level accessor.
 
 Parameters
 ----------
 level : float, :math:`0 < {\rm level} < 1`, optional
     The risk of committing a Type I error, that is an incorrect rejection of a true
-    null hypothesis"
+    null hypothesis)RAW"
 
 // ---------------------------------------------------------------------
 
