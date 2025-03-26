@@ -374,7 +374,7 @@ void FieldAnalysisResultWindow::addDecompositionTab()
         pvmatrixWidget->setAxisToShow(xi_sample.getDescription());
 
         // setting widget
-        PVPlotSettingWidget * matrixSettingWidget = new PVPlotSettingWidget(pvmatrixWidget, this);
+        MultiPlotSettingWidget * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, xi_sample, Sample(), this);
 
         xiMatrixStackedWidget->addWidget(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this));
       }
