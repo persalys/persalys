@@ -186,17 +186,27 @@ void DataFieldModelWindow::setTable(const QString& fileName)
 void DataFieldModelWindow::updateProcessSample()
 {
   errorMessageLabel_->reset();
-  dataModel_.setSampleAsProcessSample(tableModel_->getSample());
-  // Override mesh model if incompatible
-  if (tableModel_->getSample().getDimension() != dataModel_.getMeshModel().getMesh().getVerticesNumber())
+  // The process sample must not be empty
+  if (tableModel_->getSample().getSize())
   {
-    if (dynamic_cast<GridMeshModel*>(dataModel_.getMeshModel().getImplementation().get()))//ClassName() == "GridMeshModel")
-      dataModel_.setMeshModel(GridMeshModel(Interval(0, 1), Indices(1, tableModel_->getSample().getDimension())));
-    else
-      errorMessageLabel_->setErrorMessage(tr("Mesh vertices number (")
-                                          + QString::number(dataModel_.getMeshModel().getMesh().getVerticesNumber())
-                                          + ") must match field discretization ("
-                                          + QString::number(tableModel_->getSample().getDimension()) + QString(")."));
+    dataModel_.setSampleAsProcessSample(tableModel_->getSample());
+    // Override mesh model if incompatible
+    if (tableModel_->getSample().getDimension() != dataModel_.getMeshModel().getMesh().getVerticesNumber())
+    {
+      if (dynamic_cast<GridMeshModel*>(dataModel_.getMeshModel().getImplementation().get()))
+      {
+        // Notifications are blocked if mesh definition is coming from meshWindow
+        // They are unblocked here to overwrite incompatible mesh
+        dataModel_.blockNotification();
+        dataModel_.setMeshModel(GridMeshModel(Interval(0, 1), Indices(1, tableModel_->getSample().getDimension())));
+        dataModel_.getImplementation().get()->notify("meshOverwritten");
+      }
+      else
+        errorMessageLabel_->setErrorMessage(tr("Mesh vertices number (")
+                                            + QString::number(dataModel_.getMeshModel().getMesh().getVerticesNumber())
+                                            + ") must match field discretization ("
+                                            + QString::number(tableModel_->getSample().getDimension()) + QString(")."));
+    }
   }
   else if (!dataModel_.isValid())
     errorMessageLabel_->setErrorMessage(tr("The model is not valid. Check data and/or mesh numerical validity."));

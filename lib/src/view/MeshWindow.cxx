@@ -66,7 +66,7 @@ MeshWindow::MeshWindow(DataFieldModelItem * item, QWidget * parent)
   , dataMeshItem_(item)
 {
   connect(item, SIGNAL(meshChanged()), this, SLOT(updateTable()));
-
+  connect(item, SIGNAL(meshOverwritten()), this, SIGNAL(meshOverwritten()));
   buildInterface();
 }
 
@@ -122,18 +122,20 @@ void MeshWindow::buildInterface()
   isRegularLabel_ = new QLabel(tr("Regular mesh : %1").arg(meshModel.getMesh().isRegular() ? tr("Yes") : tr("No")));
   groupBoxLayout->addWidget(isRegularLabel_, 1, 0);
 
+  // Error message if mesh gets overwritten
+  errorMessageLabel_ = new TemporaryLabel;
+  groupBoxLayout->addWidget(errorMessageLabel_, 2, 0);
   mainLayout->addWidget(groupBox);
+
+  connect(this, &MeshWindow::meshOverwritten, [ = ] ()
+  {
+    errorMessageLabel_->setTemporaryErrorMessage(tr("Warning: Specified mesh is incompatbile and has been reset."));
+  });
 
   // mesh display
   tabWidget_ = new QTabWidget;
   bool canUseParaview = false;
-// #ifdef PERSALYS_HAVE_PARAVIEW
-//   if (OTguiSubWindow::SupportsOpenGL_3_2())
-//   {
-//     addParaviewWidgetsTabs();
-//     canUseParaview = true;
-//   }
-// #endif
+
   if (!canUseParaview)
   {
     addWidgetsTabs();
@@ -201,11 +203,17 @@ void MeshWindow::updateModel(QStandardItem *item)
   }
   else if (dataMeshItem_)
   {
+    // notifications are blocked to avoid infinite loop
     dataMeshItem_->getDataFieldModel().blockNotification("DataMeshItem");
+    // but setting mesh model implies meshChanged signal which is connected to
+    // DataFieldModelWindow::updateProcessSample and mesh can be overwritten there if not compatible
+    // if so we need to catch notify("meshOverwritten") to set errorMessageLabel_ warning
     dataMeshItem_->getDataFieldModel().setMeshModel(meshModel);
     dataMeshItem_->getDataFieldModel().blockNotification();
   }
   updatePlot();
+  // Need table update in case mesh gets overwritten
+  updateTable();
 }
 
 
@@ -228,44 +236,6 @@ void MeshWindow::updatePlot()
   meshPlot_->plotCurve(sample, QPen(Qt::black, 2), QwtPlotCurve::Lines, new QwtSymbol(QwtSymbol::XCross, Qt::red, QPen(Qt::red), QSize(7, 7)));
 }
 
-// void MeshWindow::addParaviewWidgetsTabs()
-// {
-//   // graph
-//   WidgetBoundToDockWidget * mainWidget = new WidgetBoundToDockWidget(this);
-//   QVBoxLayout * mainWidgetLayout = new QVBoxLayout(mainWidget);
-//
-//   PVXYChartViewWidget * plotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-// //   plotWidget->setData(designOfExperiment_.getInputSample(), Qt::blue);
-//   mainWidgetLayout->addWidget(plotWidget);
-//
-//   // scatter plots setting widget
-//   PVXYChartSettingWidget * settingWidget = new PVXYChartSettingWidget(plotWidget,
-//       Sample(),
-//       Sample(),
-//       Sample(),
-//       Sample(),
-//       Sample(),
-//       Sample(),
-//       PVXYChartSettingWidget::NoType,
-//       this);
-//   mainWidget->setDockWidget(settingWidget);
-//
-//   tabWidget_->addTab(plotWidget, tr("Mesh"));
-//
-//   // table
-//   QWidget * tableView_ = new QWidget;
-//   QVBoxLayout * tableViewLayout = new QVBoxLayout(tableView_);
-//
-//   // with paraview the table is always shown in order to use the selection behavior
-//   PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
-// //   pvSpreadSheetWidget->setData(designOfExperiment_.getSample());
-//   connect(getItem(), SIGNAL(dataExportRequested()), pvSpreadSheetWidget, SLOT(exportData()));
-//
-//   tableViewLayout->addWidget(pvSpreadSheetWidget);
-//
-//   tabWidget_->addTab(tableView_, tr("Table"));
-// }
-
 
 void MeshWindow::addWidgetsTabs()
 {
@@ -273,9 +243,6 @@ void MeshWindow::addWidgetsTabs()
   scrollArea->setWidgetResizable(true);
   // Mesh
   meshPlot_ = new PlotWidget;
-//   meshPlot->plotCurve();
-//   meshPlot_->setTitle(tr("Number of nodes = ") + " ");
-//   meshPlot_->setAxisTitle(QwtPlot::xBottom, "time");
 
   // Graph Setting
   SimpleGraphSetting * graphSetting = new SimpleGraphSetting(meshPlot_, this);
@@ -285,7 +252,6 @@ void MeshWindow::addWidgetsTabs()
 
   // nodes
   nodesView_ = new ExportableTableView;
-//   connect(getItem(), SIGNAL(dataExportRequested()), nodesView, SLOT(exportData()));
   nodesView_->setSortingEnabled(true);
   nodesModel_ = new SampleTableModel(Sample(), nodesView_);
 
