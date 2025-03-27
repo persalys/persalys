@@ -28,6 +28,7 @@
 #include "persalys/CustomStandardItemModel.hxx"
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/SampleTableModel.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
 #include <QTabWidget>
 #include <QStandardItem>
@@ -60,6 +61,9 @@ public slots:
   void updateModel(QStandardItem *item);
   void editMesh();
 
+signals:
+  void meshOverwritten();
+
 private:
   PhysicalModelItem * meshItem_ = nullptr;
   DataFieldModelItem * dataMeshItem_ = nullptr;
@@ -70,6 +74,7 @@ private:
   SampleTableModel * nodesModel_ = nullptr;
   ExportableTableView * nodesView_ = nullptr;
   QTabWidget * tabWidget_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

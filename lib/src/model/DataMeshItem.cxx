@@ -58,5 +58,10 @@ void DataMeshItem::update(Observable* /*source*/, const String & message)
   {
     emit removeRequested(row());
   }
+  else if (message == "meshOverwritten")
+  {
+    emit meshOverwritten();
+  }
+
 }
 }

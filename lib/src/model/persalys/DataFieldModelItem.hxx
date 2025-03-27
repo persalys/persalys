@@ -38,6 +38,7 @@ public:
 signals:
   void outputChanged();
   void meshChanged();
+  void meshOverwritten();
 
 protected:
   DataFieldModel dataModel_;
