@@ -14,11 +14,10 @@ set ( PYINSTALLCHECK_ENVIRONMENT "OPENTURNS_CONFIG_PATH=${INSTALL_DESTDIR}${SYSC
 
 add_executable(dummyAnsys ansysConnector/dummyAnsys.cxx)
 
-set ( PYINSTALLCHECK_TO_BE_RUN )
 macro ( ot_pyinstallcheck_test TESTNAME )
-  set ( TESTNAME_TGT t_${TESTNAME} )
-  set ( TESTNAME_SRC ${TESTNAME_TGT}.py )
-  set ( TESTNAME_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_SRC})
+  set (TEST_TARGET t_${TESTNAME})
+  set (TESTNAME_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_TARGET}.py)
+
   set (_IGNOREOUT OFF)
   foreach (_ARG ${ARGN})
     if (${_ARG} MATCHES IGNOREOUT)
@@ -27,17 +26,16 @@ macro ( ot_pyinstallcheck_test TESTNAME )
   endforeach ()
 
   if (_IGNOREOUT)
-    set ( COMMAND "( ${Python_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
+    add_test (NAME pyinstallcheck_${TESTNAME} COMMAND ${Python_EXECUTABLE} ${TESTNAME_LOC})
   else ()
-    set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
-    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} )
-    set ( COMMAND "( ${Python_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
+    set (OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_TARGET}.expout)
+    if (NOT EXISTS ${OUTFILE_LOC})
+      message (SEND_ERROR "Missing file ${OUTFILE_LOC}")
+    endif ()
+    add_test (pyinstallcheck_${TESTNAME} "sh" "-c" "( ${Python_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TEST_TARGET}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TEST_TARGET}.out" )
   endif ()
 
-  add_test ( pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}" )
-
   set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
-  list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
 endmacro ()
 
 if (NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
@@ -113,5 +111,4 @@ if (SalomeYACS_FOUND)
 endif ()
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
-                    DEPENDS ${PYINSTALLCHECK_TO_BE_RUN}
                     COMMENT "Run Python post-installation tests" )
