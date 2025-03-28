@@ -117,7 +117,7 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
         oss << offset << "output_file" << j
             << ".setVariables("
             << Parameters::GetOTDescriptionStr(outputFile.getVariableNames())
-            << ", " << Parameters::GetOTDescriptionStr(EscapeSpecialCharacters(outputFile.getTokens()))
+            << ", " << Parameters::GetOTDescriptionStr(outputFile.getTokens())
             << ", " << Parameters::GetOTPointStr(outputFile.getSkipTokens())
             << ", " << Parameters::GetOTPointStr(outputFile.getSkipLines())
             << ", " << Parameters::GetOTPointStr(outputFile.getSkipColumns()) << ")\n";
@@ -270,7 +270,8 @@ void CouplingPhysicalModel::updateCode()
   code << "                continue\n";
   code << "            outfile = os.path.join(workdir, output_file.getPath())\n";
   code << "            for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
-  code << "                all_vars[varname] = otct.get_value(outfile, token=token, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding=step.getEncoding())\n";
+  code << "                token_esc = re.escape(token)\n";
+  code << "                all_vars[varname] = otct.get_value(outfile, token=token_esc, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding=step.getEncoding())\n";
   code << "        if step.getCode():\n";
   code << "            script = step.getCode()\n";
 

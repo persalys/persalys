@@ -98,14 +98,6 @@ private:
   OT::Scalar maximumElapsedTime_ = 0.0;
 };
 
-inline OT::Description EscapeSpecialCharacters(const OT::Description & desc)
-{
-  OT::Description escapedDesc;
-  for(OT::UnsignedInteger i = 0; i < desc.getSize(); ++i)
-    escapedDesc.add(std::regex_replace(desc[i], std::regex("[^0-9a-zA-Z]"), "\\$&"));
-  return escapedDesc;
-}
-
 inline OT::Description EscapeNewLines(const OT::Description & desc)
 {
   OT::Description escapedDesc;
