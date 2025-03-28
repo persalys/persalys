@@ -78,7 +78,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
 
   // title
-  widgetLayout->addWidget(new TitleLabel("Calibration", "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#calibrationresult"));
+  widgetLayout->addWidget(new TitleLabel(tr("Calibration"), "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#calibrationresult"));
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
