@@ -32,9 +32,8 @@ endif ()
 set_target_properties (persalyspyinterp PROPERTIES VERSION ${LIB_VERSION})
 set_target_properties (persalyspyinterp PROPERTIES SOVERSION ${LIB_SOVERSION})
 
-target_include_directories (persalyspyinterp PUBLIC ${Python_INCLUDE_DIRS})
 target_link_libraries (persalyspyinterp ${QT_LIBRARIES})
-target_link_libraries (persalyspyinterp ${Python_LIBRARIES})
+target_link_libraries (persalyspyinterp Python::Python)
 
 install ( TARGETS persalyspyinterp
   RUNTIME DESTINATION ${PERSALYS_BIN_PATH}

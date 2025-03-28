@@ -72,7 +72,6 @@ else ()
 endif ()
 
 find_package (Python 3.6 COMPONENTS Interpreter Development REQUIRED)
-list (APPEND PERSALYS_PUBLIC_LIBRARIES ${Python_LIBRARIES})
 
 if (BUILD_GUI)
 

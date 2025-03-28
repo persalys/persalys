@@ -35,7 +35,7 @@ set_target_properties (persalyspyconsole PROPERTIES VERSION ${LIB_VERSION})
 set_target_properties (persalyspyconsole PROPERTIES SOVERSION ${LIB_SOVERSION})
 
 target_link_libraries (persalyspyconsole ${QT_LIBRARIES})
-target_link_libraries (persalyspyconsole ${Python_LIBRARIES})
+target_link_libraries (persalyspyconsole Python::Python)
 
 target_link_libraries (persalyspyconsole persalyspyinterp)
 
