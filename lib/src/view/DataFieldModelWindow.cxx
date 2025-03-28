@@ -208,7 +208,7 @@ void DataFieldModelWindow::updateProcessSample()
                                             + QString::number(tableModel_->getSample().getDimension()) + QString(")."));
     }
   }
-  else if (!dataModel_.isValid())
+  if (!dataModel_.isValid())
     errorMessageLabel_->setErrorMessage(tr("The model is not valid. Check data and/or mesh numerical validity."));
 }
 

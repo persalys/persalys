@@ -140,7 +140,7 @@ String Parameters::GetOTSampleCollectionStr(const ProcessSample& processSample)
   strOut << "[";
   for(UnsignedInteger iTraj=0; iTraj<processSample.getSize(); iTraj++)
   {
-    strOut << "[ ";
+    strOut << "[";
     for(UnsignedInteger iTime=0; iTime<processSample[iTraj].getSize(); ++iTime)
     {
       strOut << GetOTPointStr(processSample[iTraj][iTime], ",");

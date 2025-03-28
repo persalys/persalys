@@ -146,10 +146,10 @@ namespace PERSALYS
     OSS oss;
     // mesh
     oss << getMeshModel().getPythonScript();
-    oss << "collection=" << Parameters::GetOTSampleCollectionStr(getProcessSample());
-    oss << "mesh=" << getMeshModel().getName() << ".getMesh()\n";
-    oss << "pSample=ot.ProcessSample(mesh, collection)\n";
-    oss << getName() << "= persalys.DataFieldModel('" << getName() << "', "
+    oss << "collection = " << Parameters::GetOTSampleCollectionStr(getProcessSample());
+    oss << "mesh = " << getMeshModel().getName() << ".getMesh()\n";
+    oss << "pSample = ot.ProcessSample(mesh, collection)\n";
+    oss << getName() << " = persalys.DataFieldModel('" << getName() << "', "
         << getMeshModel().getName() << ", pSample)\n";
 
     return oss;
