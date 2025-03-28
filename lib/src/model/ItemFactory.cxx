@@ -300,7 +300,7 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     connect(action, &QAction::triggered, [ = ]()
     {
       emit wizardRequested(getParentStudyItem(),
-                           MultiObjectiveOptimizationAnalysis(availableAnalysisName(tr("mo-optimization_")), model));
+                           MultiObjectiveOptimizationAnalysis(availableAnalysisName(tr("multiObjectiveOptimization_")), model));
     });
   }
   else if (analysisName == "Sensitivity")

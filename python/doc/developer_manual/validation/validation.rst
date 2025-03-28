@@ -917,7 +917,7 @@ Deterministic analyses
       - check that x_3 is unselected, x_1 and x_2 distribution parameters are unchanged
       - uncheck x_2
 
-  - Multi-objective optimization: item mo-optim
+  - Multi-objective optimization: item mooptim
 
     - Check analysis parameters values:
 
