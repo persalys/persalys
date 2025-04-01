@@ -22,6 +22,10 @@ RUN curl -L https://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.5/
 # opencascade
 RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/SALOME_9_13_V7_8_0;sf=tgz" | tar xz && cd occt* && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1 && cd - && rm -r occt*
 
+# nlopt
+RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.9.0.tar.gz | tar xz && cd nlopt* \
+ && cmake -DCMAKE_UNITY_BUILD=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
+
 # openturns
 RUN git clone -b v1.24 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
