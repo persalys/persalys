@@ -1,18 +1,19 @@
 linux:
   script:
-    - ./utils/build_locally.sh linux
+    - docker pull persalys/linux:18.0
+    - docker run --rm --volume `pwd`:/io persalys/linux:18.0 sh -c "/io/docker/linux/run_docker_build.sh"
   except:
     - tags
-
 mingw:
   script:
-    - ./utils/build_locally.sh mingw
+    - docker pull persalys/mingw:18.0
+    - docker run --rm --volume `pwd`:/io persalys/mingw:18.0 sh -c "/io/docker/mingw/run_docker_build.sh"
   except:
     - tags
-
 linux-tag:
   script:
-    - ./utils/build_locally.sh linux
+    - docker pull persalys/linux:18.0
+    - docker run --rm --volume `pwd`:/io persalys/linux:18.0 sh -c "/io/docker/linux/run_docker_build.sh `id -u` `id -g`"
   artifacts:
     name: persalys-appimage
     paths:
@@ -20,10 +21,10 @@ linux-tag:
     expire_in: 2 yrs
   only:
     - tags
-
 mingw-tag:
   script:
-    - ./utils/build_locally.sh mingw
+    - docker pull persalys/mingw:18.0
+    - docker run --rm --volume `pwd`:/io persalys/mingw:18.0 sh -c "/io/docker/mingw/run_docker_build.sh `id -u` `id -g`"
   artifacts:
     name: persalys-exe
     paths:
@@ -31,4 +32,3 @@ mingw-tag:
     expire_in: 2 yrs
   only:
     - tags
-
