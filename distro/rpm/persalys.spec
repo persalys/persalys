@@ -9,7 +9,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 %__cmake -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}
 
 Name:           persalys
-Version:        17.1dev
+Version:        18.0
 Release:        0%{?dist}
 Summary:        GUI for OpenTURNS
 Group:          System Environment/Libraries
