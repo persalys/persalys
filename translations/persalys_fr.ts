@@ -123,67 +123,67 @@
 <context>
     <name>PERSALYS::AnalysisItem</name>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="66"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="67"/>
         <source>Modify</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="67"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="68"/>
         <source>Modify the analysis</source>
         <translation>Modifier l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="76"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="77"/>
         <source>Convert metamodel into physical model</source>
         <translation>Convertir le métamodèle en modèle physique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="77"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="78"/>
         <source>Add the metamodel in the study tree</source>
         <translation>Ajouter le métamodèle dans l&apos;arbre d&apos;étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="82"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="83"/>
         <source>Export metamodel</source>
         <translation>Exporter le métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="83"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="84"/>
         <source>Export to an independent Python script</source>
         <translation>Exporter dans un script indépendant</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="90"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="91"/>
         <source>Extract data at nodes</source>
         <translation>Extraction de données à des noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="99"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="100"/>
         <source>Convert into data model</source>
         <translation>Convertir en modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="100"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="101"/>
         <source>Add a data model in the study tree</source>
         <translation>Ajouter un modèle de données dans l&apos;arbre d&apos;étude</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="111"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="112"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="112"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="113"/>
         <source>Remove the analysis</source>
         <translation>Supprimer l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="198"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="199"/>
         <source>Can not modify a running analysis.</source>
         <translation>Impossible de modifier une analyse en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/AnalysisItem.cxx" line="300"/>
+        <location filename="../lib/src/model/AnalysisItem.cxx" line="301"/>
         <source>Can not remove a running analysis.</source>
         <translation>Impossible de supprimer une analyse en cours d&apos;exécution.</translation>
     </message>
@@ -815,6 +815,11 @@
         <translation>Paramètres de calage</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="81"/>
+        <source>Calibration</source>
+        <translation>Calage</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="87"/>
         <source>Output</source>
         <translation>Sortie</translation>
@@ -1278,47 +1283,47 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CopulaInferenceWizard</name>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="75"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="71"/>
         <source>Copula inference</source>
         <translation>Inférence de copule</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="84"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="80"/>
         <source>Firstly, define groups of variables. Then for each group, list copulas to infer from the sample.</source>
         <translation>Définir d&apos;abord des groupes de variables. Ensuite, pour chaque groupe, lister des copules à inférer à partir de l&apos;échantillon.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="120"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="116"/>
         <source>Remove the selected group of variables</source>
         <translation>Supprimer le groupe de variables sélectionné</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="242"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="228"/>
         <source>Define groups of at least two variables</source>
         <translation>Définir des groupes d&apos;au moins deux variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="113"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="109"/>
         <source>Add a group of variables</source>
         <translation>Ajouter un groupe de variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="140"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="136"/>
         <source>Groups</source>
         <translation>Groupes</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="254"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="240"/>
         <source>This group of variables already exists</source>
         <translation>Ce groupe de variables existe déjà</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="301"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="287"/>
         <source>Define at least one group of variables associated with a list of copulas</source>
         <translation>Définir au moins un groupe de variables associé à une liste de copules</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="311"/>
+        <location filename="../lib/src/view/CopulaInferenceWizard.cxx" line="297"/>
         <source>At least one copula must be tested for the selected group of variables &apos;%1&apos;</source>
         <translation>Au moins une copule doit être testée pour le groupe de variables &apos;%1&apos;</translation>
     </message>
@@ -1911,6 +1916,170 @@ bayésien (BIC)</translation>
     </message>
 </context>
 <context>
+    <name>PERSALYS::DataFieldAnalysisResultWindow</name>
+    <message>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="842"/>
+        <source>Central tendency parameters</source>
+        <translation>Paramètres de l&apos;analyse en tendance centrale</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::DataFieldModelDefinitionItem</name>
+    <message>
+        <location filename="../lib/src/model/DataFieldModelDefinitionItem.cxx" line="36"/>
+        <source>Definition</source>
+        <translation>Définition</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataFieldModelDefinitionItem.cxx" line="45"/>
+        <source>Analysis</source>
+        <translation>Analyse</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::DataFieldModelDiagramItem</name>
+    <message>
+        <location filename="../lib/src/model/DataFieldModelDiagramItem.cxx" line="45"/>
+        <source>Define the model</source>
+        <translation>Définir le modèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataFieldModelDiagramItem.cxx" line="46"/>
+        <source>Define the data model</source>
+        <translation>Définir le modèle de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataFieldModelDiagramItem.cxx" line="53"/>
+        <source>Remove</source>
+        <translation>Supprimer</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataFieldModelDiagramItem.cxx" line="54"/>
+        <source>Remove the data model</source>
+        <translation>Supprimer le modèle de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/DataFieldModelDiagramItem.cxx" line="132"/>
+        <source>Can not remove a data field model when an analysis is running.</source>
+        <translation>Impossible de supprimer un modèle de champ de données lorsqu&apos;une analyse est en cours</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::DataFieldModelDiagramWindow</name>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelDiagramWindow.cxx" line="34"/>
+        <source>Model
+definition</source>
+        <translation>Définition
+du
+modèle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelDiagramWindow.cxx" line="35"/>
+        <source>Import a data file and define the input and output variables</source>
+        <translation>Importer un fichier de données et définir les variables d&apos;entrée et de sortie</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelDiagramWindow.cxx" line="41"/>
+        <source>Data
+analysis</source>
+        <translation>Analyse
+de
+données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelDiagramWindow.cxx" line="42"/>
+        <source>Analyse each variable</source>
+        <translation>Analyser chaque variable</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelDiagramWindow.cxx" line="43"/>
+        <source>Define at least one variable</source>
+        <translation>Définir au moins une variable</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::DataFieldModelWindow</name>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="67"/>
+        <source>Data Field model</source>
+        <translation>Modèle de champ de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="82"/>
+        <source>Data file</source>
+        <translation>Fichier de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="90"/>
+        <source>Search file</source>
+        <translation>Chercher un fichier</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="100"/>
+        <source>Columns</source>
+        <translation>Colonnes</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="104"/>
+        <source>Rows</source>
+        <translation>Lignes</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="155"/>
+        <source>Sample must not be empty</source>
+        <translation>L&apos;échantillon ne doit pas être vide</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="179"/>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="231"/>
+        <source>Warning</source>
+        <translation>Attention</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="180"/>
+        <source>Cannot update the table.
+%1</source>
+        <translation>Impossible de mettre à jour la table.
+%1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="205"/>
+        <source>Mesh vertices number (</source>
+        <translation>Le nombre de vertex du maillage (</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="212"/>
+        <source>The model is not valid. Check data and/or mesh numerical validity.</source>
+        <translation>Le modèle n&apos;est pas valide. Vérfiez les données et/ou le maillage.</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="218"/>
+        <source>Data to import...</source>
+        <translation>Importer des données...</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="220"/>
+        <source>Data files (*.csv *.txt *.dat)</source>
+        <translation>Données (*.csv *.txt *.dat)</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="232"/>
+        <source>Cannot read file %1:
+%2</source>
+        <translation>impossible de lire le fichier %1:
+%2</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::DataMeshItem</name>
+    <message>
+        <location filename="../lib/src/model/DataMeshItem.cxx" line="33"/>
+        <source>Mesh</source>
+        <translation>Maillage</translation>
+    </message>
+</context>
+<context>
     <name>PERSALYS::DataModelDefinitionItem</name>
     <message>
         <location filename="../lib/src/model/DataModelDefinitionItem.cxx" line="35"/>
@@ -1936,17 +2105,17 @@ bayésien (BIC)</translation>
         <translation>Définir le modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="53"/>
+        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="54"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="54"/>
+        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="55"/>
         <source>Remove the data model</source>
         <translation>Supprimer le modèle de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="144"/>
+        <location filename="../lib/src/model/DataModelDiagramItem.cxx" line="145"/>
         <source>Can not remove a design of experiments when an analysis is running.</source>
         <translation>Impossible de supprimer un plan d&apos;expériences lorsqu&apos;une analyse est en cours d&apos;exécution.</translation>
     </message>
@@ -1982,40 +2151,53 @@ données</translation>
     <message>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="43"/>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="52"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="61"/>
         <source>Define at least one variable</source>
         <translation>Définir au moins une variable</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="50"/>
+        <source>Quantile
+analysis</source>
+        <translation>Analyse
+de quantile</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="51"/>
+        <source>Estimate quantiles</source>
+        <translation>Estimer des quantiles</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="59"/>
         <source>Marginals
 inference</source>
         <translation>Inférence des
 lois marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="59"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="68"/>
         <source>Dependence
 inference</source>
         <translation>Inférence de
 la dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="60"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="69"/>
         <source>Test the dependence of the variables</source>
         <translation>Teste la dépendance de variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="61"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="70"/>
         <source>Define at least two variables</source>
         <translation>Définir au moins deux variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="51"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="60"/>
         <source>Make an inference analysis for variables with given distributions</source>
         <translation>Réaliser une analyse d&apos;inférence de variables avec des distributions données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="68"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="77"/>
         <source>Metamodel
 creation</source>
         <translation>Création
@@ -2023,12 +2205,12 @@ d&apos;un
 métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="69"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="78"/>
         <source>Two methods : Kriging and Functional chaos</source>
         <translation>Deux méthodes : Krigeage et chaos fonctionnel</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="70"/>
+        <location filename="../lib/src/view/DataModelDiagramWindow.cxx" line="79"/>
         <source>Define at least one input variable and one output variable</source>
         <translation>Définir au moins une variable d&apos;entrée et une variable de sortie</translation>
     </message>
@@ -2586,72 +2768,72 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::EditValuesWizard</name>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="95"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="101"/>
         <source>Define values</source>
         <translation>Définir des valeurs</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="96"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="102"/>
         <source>Finish</source>
         <translation>Terminer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="97"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="103"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="112"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="118"/>
         <source>&lt;b&gt;Number of values:&lt;/b&gt;</source>
         <translation>&lt;b&gt;Nombre de valeurs :&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="119"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="125"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="120"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="126"/>
         <source>Add a value</source>
         <translation>Ajouter une valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="125"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="131"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="126"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="132"/>
         <source>Remove the selected values</source>
         <translation>Supprimer les valeurs sélectionnées</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="130"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="136"/>
         <source>Import...</source>
         <translation>Importer...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="131"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="137"/>
         <source>Import a sample</source>
         <translation>Importer un échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="184"/>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="196"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="203"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="215"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="188"/>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="191"/>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="197"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="207"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="210"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="216"/>
         <source>Weight</source>
         <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="252"/>
-        <source>Define at least two values</source>
-        <translation>Définir au moins deux valeurs</translation>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="271"/>
+        <source>Number of value(s) must be at least </source>
+        <translation>Le nombre de valeur doit être au moins de </translation>
     </message>
 </context>
 <context>
@@ -3091,16 +3273,16 @@ métamodèle</translation>
     </message>
 </context>
 <context>
-    <name>PERSALYS::FieldCentralTendencyResultWindow</name>
+    <name>PERSALYS::FieldAnalysisResultWindow</name>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="111"/>
-        <source>Central tendency parameters</source>
-        <translation>Paramètres de l&apos;analyse en tendance centrale</translation>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="118"/>
+        <source>Monte Carlo method</source>
+        <translation>Méthode de Monte-Carlo</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="121"/>
-        <source>Monte Carlo method</source>
-        <translation>Méthode de Monte-Carlo</translation>
+        <source>Data fields decomposition</source>
+        <translation>Décomposition des champs de données</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="141"/>
@@ -3177,6 +3359,12 @@ cumulée des
 valeurs propres</translation>
     </message>
     <message>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="265"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="289"/>
+        <source>Mode %1</source>
+        <translation>Mode %1</translation>
+    </message>
+    <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="305"/>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="308"/>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="309"/>
@@ -3187,12 +3375,6 @@ valeurs propres</translation>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="309"/>
         <source>Cumulative eigenvalue sum</source>
         <translation>Somme cumulée des valeurs propres</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="265"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="289"/>
-        <source>Mode %1</source>
-        <translation>Mode %1</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="336"/>
@@ -3238,6 +3420,14 @@ valeurs propres</translation>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="428"/>
         <source>Correlation</source>
         <translation>Corrélation</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::FieldCentralTendencyResultWindow</name>
+    <message>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="830"/>
+        <source>Data field analysis parameters</source>
+        <translation>Paramètres de l&apos;analyse de champ de données</translation>
     </message>
 </context>
 <context>
@@ -3319,34 +3509,34 @@ centrale</translation>
         <translation>Sorties</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="611"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="814"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="613"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="818"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="569"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="631"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="714"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="634"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="717"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="600"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="813"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="816"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="648"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="651"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="545"/>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="552"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="658"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="767"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="661"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="770"/>
         <source>Trajectory</source>
         <translation>Trajectoire</translation>
     </message>
@@ -3358,49 +3548,49 @@ centrale</translation>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="545"/>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="552"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="658"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="767"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="661"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="770"/>
         <source>Trajectories</source>
         <translation>Trajectoires</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="709"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="712"/>
         <source>Bag chart</source>
         <translation>Bag chart</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="705"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="708"/>
         <source>Functional bag chart</source>
         <translation>Functional bag chart</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="588"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="688"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="790"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="691"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="793"/>
         <source>Quantiles</source>
         <translation>Quantiles</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="596"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="668"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="671"/>
         <source>Mean trajectory</source>
         <translation>Trajectoire moyenne</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="578"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="684"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="687"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="582"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="684"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="687"/>
         <source>Quantile 95%</source>
         <translation>Quantile 95%</translation>
     </message>
     <message>
         <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="586"/>
-        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="684"/>
+        <location filename="../lib/src/view/FieldModelEvaluationResultWindow.cxx" line="687"/>
         <source>Quantile 5%</source>
         <translation>Quantile 5%</translation>
     </message>
@@ -3932,49 +4122,59 @@ des étiquettes</translation>
 <context>
     <name>PERSALYS::ImportSampleWidget</name>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="59"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="57"/>
         <source>Data file</source>
         <translation>Fichier de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="67"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="65"/>
         <source>Search file</source>
         <translation>Chercher un fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="74"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="76"/>
+        <source>Columns</source>
+        <translation>Colonnes</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="80"/>
+        <source>Rows</source>
+        <translation>Lignes</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="101"/>
         <source>File Preview</source>
         <translation>Prévisualisation du fichier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="81"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="108"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="102"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="129"/>
         <source>Data to import...</source>
         <translation>Importer des données...</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="104"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="131"/>
         <source>Data files (*.csv *.txt *.dat)</source>
         <translation>Données (*.csv *.txt *.dat)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="115"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="142"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="116"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="143"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1 :
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="140"/>
+        <location filename="../lib/src/view/utils/ImportSampleWidget.cxx" line="167"/>
         <source>Impossible to load the file.%1%2</source>
         <translation>Impossible de charger le fichier.%1%2</translation>
     </message>
@@ -4005,17 +4205,17 @@ des étiquettes</translation>
 <context>
     <name>PERSALYS::ImportedDistributionPage</name>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="354"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="362"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="356"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="364"/>
         <source>Weight</source>
         <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="370"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="378"/>
         <source>Values and weights must be associated with one column</source>
         <translation>Les valeurs et les poids doivent être associés à une colonne</translation>
     </message>
@@ -4077,13 +4277,13 @@ des étiquettes</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="158"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="548"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="551"/>
         <source>Q-Q Plot</source>
         <translation>Diagramme Q-Q</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InferenceResultWidget.cxx" line="175"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="378"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="381"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
@@ -4112,8 +4312,8 @@ bayésien (BIC)</translation>
         <translation>Mieux vaut une valeur de BIC faible</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="220"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="539"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="221"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="542"/>
         <source>Kolmogorov-Smirnov</source>
         <translation>Kolmogorov-Smirnov</translation>
     </message>
@@ -4133,86 +4333,86 @@ bayésien (BIC)</translation>
         <translation>Acceptation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="222"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="541"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="223"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="544"/>
         <source>Lilliefors</source>
         <translation>Lilliefors</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="259"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="261"/>
         <source>yes</source>
         <translation>oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="263"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="265"/>
         <source>no</source>
         <translation>non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="270"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="272"/>
         <source>failed</source>
         <translation>échoué</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="383"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="386"/>
         <source>Parameters
 confidence interval</source>
         <translation>Intervalle de confiance
 des paramètres</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="401"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="404"/>
         <source>Moments</source>
         <translation>Moments</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="405"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="408"/>
         <source>Mean</source>
         <translation>Moyenne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="406"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="409"/>
         <source>Standard deviation</source>
         <translation>Écart type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="407"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="410"/>
         <source>Skewness</source>
         <translation>Asymétrie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="408"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="411"/>
         <source>Kurtosis</source>
         <translation>Aplatissement</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="493"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="496"/>
         <source>PDF</source>
         <translation>PDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="543"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="546"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="544"/>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="587"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="547"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="590"/>
         <source>statistic=%1)</source>
         <translation>statistique=%1)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="586"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="589"/>
         <source>Survival function</source>
         <translation>Fonction de survie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="549"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="552"/>
         <source>Data quantiles</source>
         <translation>Quantiles des données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="550"/>
+        <location filename="../lib/src/view/InferenceResultWidget.cxx" line="553"/>
         <source>%1 theoretical quantiles</source>
         <translation>Quantiles théoriques de %1</translation>
     </message>
@@ -4387,226 +4587,261 @@ des paramètres</translation>
 <context>
     <name>PERSALYS::ItemFactory</name>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="113"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="117"/>
         <source>Metamodels</source>
         <translation>Métamodèles</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="118"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="122"/>
         <source>Data models</source>
         <translation>Modèles de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="124"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="128"/>
+        <source>Field data models</source>
+        <translation>Modèles de champ de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="134"/>
         <source>Physical models</source>
         <translation>Modèles physiques</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="140"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="239"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="150"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="249"/>
         <source>Evaluation</source>
         <translation>Évaluation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="147"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="267"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="157"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="277"/>
         <source>Screening</source>
         <translation>Criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="154"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="278"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="164"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="288"/>
         <source>Optimization</source>
         <translation>Optimisation</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="162"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="288"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="172"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="298"/>
         <source>Multi-objective optimization</source>
         <translation>Optimisation multi-objectifs</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="169"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="179"/>
         <source>Designs of experiments</source>
         <translation>Plans d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="177"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="308"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="187"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="318"/>
         <source>Central tendency</source>
         <translation>Tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="184"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="298"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="194"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="308"/>
         <source>Sensitivity</source>
         <translation>Sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="190"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="200"/>
         <source>Reliability</source>
         <translation>Fiabilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="196"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="371"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="206"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="381"/>
         <source>Calibration</source>
         <translation>Calage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="208"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="219"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="218"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="229"/>
         <source>metaModel_</source>
         <translation>métamodèle_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="210"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="220"/>
         <source>calibration_</source>
         <translation>calage_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="228"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="238"/>
         <source>reliability_</source>
         <translation>fiabilité_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="240"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="250"/>
         <source>Create a new model evaluation</source>
         <translation>Créer une nouvelle évaluation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="245"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="251"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="255"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="261"/>
         <source>evaluation_</source>
         <translation>évaluation_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="256"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="266"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="257"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="267"/>
         <source>Create a new design of experiments</source>
         <translation>Créer un nouveau plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="261"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="271"/>
         <source>design_</source>
         <translation>plan_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="268"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="278"/>
         <source>Create a new screening</source>
         <translation>Créer un nouveau criblage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="272"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="282"/>
         <source>screening_</source>
         <translation>criblage_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="279"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="289"/>
         <source>Create a new model optimization</source>
         <translation>Créer une nouvelle optimisation du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="283"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="293"/>
         <source>optimization_</source>
         <translation>optimisation_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="289"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="299"/>
         <source>Create a new model multi-objective optimization</source>
         <translation>Créer une nouvelle optimisation multi-objectifs du modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="293"/>
-        <source>mo-optimization_</source>
-        <translation>optimisation-mo_</translation>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="303"/>
+        <source>multiObjectiveOptimization_</source>
+        <translation>optimisationMultiObjectif</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="299"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="428"/>
+        <source>Field data analysis</source>
+        <translation>Analyse de champ de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="429"/>
+        <source>Analyze data and create a Karhunene-Loeve decomposition</source>
+        <translation>Anlyser les données et créer une décompisiton de Karhunene-Loeve</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="431"/>
+        <source>fieldDataAnalysis_</source>
+        <translation>modeleChampDonnees</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="309"/>
         <source>Create a new sensitivity analysis</source>
         <translation>Créer une nouvelle analyse de sensibilité</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="303"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="313"/>
         <source>sensitivity_</source>
         <translation>sensibilité_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="309"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="319"/>
         <source>Create a new central tendency</source>
         <translation>Créer une nouvelle analyse en tendance centrale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="314"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="320"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="324"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="330"/>
         <source>centralTendency_</source>
         <translation>tendanceCentrale_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="333"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="343"/>
         <source>Data analysis</source>
         <translation>Analyse de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="334"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="344"/>
         <source>Analyse the data sample</source>
         <translation>Analyser l&apos;échantillon de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="337"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="347"/>
         <source>dataAnalysis_</source>
         <translation>analyseDonnées_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="342"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="407"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="352"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="444"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="343"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="408"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="353"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="445"/>
         <source>Create a new metamodel</source>
         <translation>Créer un nouveau métamodèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="351"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="352"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="361"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="362"/>
         <source>Marginals inference</source>
         <translation>Inférence des lois marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="356"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="366"/>
         <source>marginalsInference_</source>
         <translation>inferenceMarginales_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="361"/>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="362"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="371"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="372"/>
         <source>Dependence inference</source>
         <translation>Inférence de la dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="366"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="376"/>
         <source>dependenceInference_</source>
         <translation>inférenceDépendance_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="372"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="382"/>
         <source>Create a new calibration</source>
         <translation>Créer un nouveau calage</translation>
     </message>
     <message>
         <location filename="../lib/src/model/ItemFactory.cxx" line="390"/>
+        <source>Quantile</source>
+        <translation>Quantile</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="391"/>
+        <source>Create a new quantile analysis</source>
+        <translation>Créer une nouvelle analyse de quantile</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="395"/>
+        <source>quantile_</source>
+        <translation>quantile_</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="411"/>
         <source>Threshold exceedance</source>
         <translation>Dépassement de seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/ItemFactory.cxx" line="391"/>
+        <location filename="../lib/src/model/ItemFactory.cxx" line="412"/>
         <source>Create a new threshold exceedance</source>
         <translation>Créer un nouveau calcul de probabilité de dépassement de seuil</translation>
     </message>
@@ -5058,63 +5293,63 @@ des paramètres</translation>
 <context>
     <name>PERSALYS::MeshDefinitionWizard</name>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="47"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="48"/>
         <source>Mesh definition</source>
         <translation>Définition du maillage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="51"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="52"/>
         <source>Define the mesh</source>
         <translation>Définir le maillage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="58"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="59"/>
         <source>Regular mesh</source>
         <translation>Maillage régulier</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="63"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="64"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="64"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="65"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="65"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="66"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="66"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="67"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="67"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="68"/>
         <source>Number of nodes</source>
         <translation>Nombre de noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="104"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="105"/>
         <source>Import mesh</source>
         <translatorcomment>Importer le maillage</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="177"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="178"/>
         <source>The parameter must be associated with one column.</source>
         <translation>Le paramètre doit être associé à une colonne.</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="206"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="207"/>
         <source>The lower bound must be less than the upper bound</source>
         <translation>La borne inférieure doit être inférieure à la borne supérieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="208"/>
+        <location filename="../lib/src/view/MeshDefinitionWizard.cxx" line="209"/>
         <source>The mesh must contain at least two nodes</source>
         <translation>Le maillage doit contenir au moins deux noeuds</translation>
     </message>
@@ -5130,66 +5365,71 @@ des paramètres</translation>
 <context>
     <name>PERSALYS::MeshWindow</name>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="68"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="263"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="77"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="251"/>
         <source>Mesh</source>
         <translation>Maillage</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="71"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="80"/>
         <source>Index parameter</source>
         <translation>Paramètre d&apos;indexation</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="79"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="88"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="80"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="89"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="81"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="90"/>
         <source>Minimum</source>
         <translation>Minimum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="82"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="91"/>
         <source>Maximum</source>
         <translation>Maximum</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="83"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="92"/>
         <source>Number of nodes</source>
         <translation>Nombre de noeuds</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="113"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="169"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="122"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="183"/>
         <source>Regular mesh : %1</source>
         <translation>Maillage régulier : %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="113"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="169"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="122"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="183"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="113"/>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="169"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="122"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="183"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="205"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="132"/>
+        <source>Warning: Specified mesh is incompatbile and has been reset.</source>
+        <translation>Attention: Le maillage spécifié est incompatbile et a été réinitialisé</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="234"/>
         <source>Number of nodes = %1</source>
         <translation>Nombre de noeuds = %1</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/MeshWindow.cxx" line="277"/>
+        <location filename="../lib/src/view/MeshWindow.cxx" line="264"/>
         <source>Nodes</source>
         <translation>Noeuds</translation>
     </message>
@@ -7548,7 +7788,7 @@ métamodèle</translation>
     </message>
     <message>
         <location filename="../lib/src/view/plot/PlotWidget.cxx" line="300"/>
-        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="829"/>
+        <location filename="../lib/src/view/plot/PlotWidget.cxx" line="833"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
@@ -7993,6 +8233,241 @@ at</source>
         <location filename="../lib/src/model/QtTools.cxx" line="140"/>
         <source>d</source>
         <translation>j</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::QuantileAnalysisIntroPage</name>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="40"/>
+        <source>Quantile estimation - Interest variables</source>
+        <translation>Estimation de quantile - Variables d&apos;intérêt</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="45"/>
+        <source>Variable(s) of interest</source>
+        <translation>Variable(s) d&apos;intérêt</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="49"/>
+        <source>Method</source>
+        <translation>Méthode</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="55"/>
+        <source>Monte Carlo</source>
+        <translation>Monte-Carlo</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="61"/>
+        <source>Excess with Generalized Pareto distribution</source>
+        <translation>Excès avec distribution de Pareto Généralisée</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="105"/>
+        <source>At least 1 outputs must be selected</source>
+        <translation>Au moins 1 sortie doit être sélectionnée</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::QuantileAnalysisProbabilityPage</name>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="136"/>
+        <source>Target probability</source>
+        <translation>Probabilité cible</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="139"/>
+        <source>Default target probabilities, separated with &apos;;&apos;</source>
+        <translation>Probabilités cible par défaut, séparées par &apos;;&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::QuantileAnalysisResultWindow</name>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="51"/>
+        <source>Quantile analysis</source>
+        <translation>Analyse de quantile</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="67"/>
+        <source>Output</source>
+        <translation>Sortie</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="163"/>
+        <source>Target probability</source>
+        <translation>Probabilité cible</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="164"/>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="165"/>
+        <source>Quantile</source>
+        <translation>Quantile</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="166"/>
+        <source>Confidence Interval @</source>
+        <translation>Interval de confiance à</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="227"/>
+        <source>Tail type</source>
+        <translation>Type de queue</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="228"/>
+        <source>GPD P-value</source>
+        <translation>P-valeur de la GPD</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="233"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="421"/>
+        <source>Lower</source>
+        <translation>Basse</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="239"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="429"/>
+        <source>Upper</source>
+        <translation>Haute</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="252"/>
+        <source>Quantiles</source>
+        <translation>Quantiles</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="442"/>
+        <source>CDF</source>
+        <translation>CDF</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::QuantileAnalysisThresholdPage</name>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="243"/>
+        <source>Threshold</source>
+        <translation>Seuil</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="256"/>
+        <source>Mean excess</source>
+        <translation>Mean excess</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="292"/>
+        <source>Lower</source>
+        <translation>Basse</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="292"/>
+        <source>Upper</source>
+        <translation>Haute</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="338"/>
+        <source>Mean Excess</source>
+        <translation>Mean Excess</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::QuantileAnalysisWizard</name>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisWizard.cxx" line="365"/>
+        <source>Quantile Analysis</source>
+        <translation>Anlyse de quantile</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::QuantileTableModel</name>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="113"/>
+        <source>Variable</source>
+        <translation>Variable</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="115"/>
+        <source>Lower</source>
+        <translation>Basse</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="117"/>
+        <source>Upper</source>
+        <translation>Haute</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="119"/>
+        <source>Bilateral</source>
+        <translation>Bilatérale</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="121"/>
+        <source>Target probability</source>
+        <translation>Probabilité cible</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="299"/>
+        <source>Select at least one tail for variable </source>
+        <translation>Sélectionnez au moins une queue pour la variable </translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="311"/>
+        <source>Sample size is too small to ensure quantile validity at specified target probability for variable </source>
+        <translation>La taille de l&apos;échantillon est trop petite pour assurer un quantile valide à la probabilité choisie pour la variable </translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="311"/>
+        <source>
+You must increase target probability or use excess with Generalized pareto distribution</source>
+        <translation>
+Vous devez augmenter la probabilité cible ou utiliser la méthode des excès avec distribution de pareto généralisée</translation>
+    </message>
+</context>
+<context>
+    <name>PERSALYS::QuantileThresholdTableModel</name>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="113"/>
+        <source>Variable</source>
+        <translation>Variable</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="115"/>
+        <source>CDF threshold</source>
+        <translation>Seuil de la CDF</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="117"/>
+        <source>Threshold</source>
+        <translation>Seuil</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="119"/>
+        <source>Excess sample size</source>
+        <translation>Taille de l&apos;échantillon des excès</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="131"/>
+        <source>Upper</source>
+        <translation>Haute</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="133"/>
+        <source>Lower</source>
+        <translation>Basse</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="238"/>
+        <source>Chosen CDF threshold must be greater than the target probability.</source>
+        <translation>Le seuil de la CDF choisi doit être supérieur à la probabilité cible</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="240"/>
+        <source>Chosen CDF threshold must be lower than the target probability.</source>
+        <translation>Le seuil de la CDF choisi doit être inférieur à la probabilité cible</translation>
     </message>
 </context>
 <context>
@@ -8741,113 +9216,123 @@ at</source>
 <context>
     <name>PERSALYS::StudyItem</name>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="68"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="69"/>
         <source>Symbolic model</source>
         <translation>Modèle symbolique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="74"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="75"/>
         <source>Python model</source>
         <translation>Modèle Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="80"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="81"/>
         <source>Coupling model</source>
         <translation>Modèle de couplage</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="82"/>
-        <source>YACS model</source>
-        <translation>Modèle YACS</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="90"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="95"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="91"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="96"/>
         <source>CouplingModel_</source>
         <translation>ModèleCouplage_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="99"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="100"/>
         <source>FMI model</source>
         <translation>Modèle FMI</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="107"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="108"/>
         <source>Symbolic Field model</source>
         <translation>Modèle de champ symbolique</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="113"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="114"/>
         <source>Python Field model</source>
         <translation>Modèle de champ Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="119"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="120"/>
         <source>Data model</source>
         <translation>Modèle de données</translation>
     </message>
     <message>
         <location filename="../lib/src/model/StudyItem.cxx" line="126"/>
+        <source>Data Field model</source>
+        <translation>Modèle de champ de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/StudyItem.cxx" line="129"/>
+        <source>DataFieldModel_</source>
+        <translation>ModeleChampDonnees</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/StudyItem.cxx" line="133"/>
         <source>Export Python</source>
         <translation>Export Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="130"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="137"/>
         <source>Save</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="134"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="141"/>
         <source>Save As...</source>
         <translation>Sauvegarder sous...</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="138"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="145"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="142"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="149"/>
         <source>Model</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="71"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="110"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="72"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="111"/>
         <source>SymbolicModel_</source>
         <translation>ModèleSymbolique_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="77"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="116"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="78"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="117"/>
         <source>PythonModel_</source>
         <translation>ModèlePython_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="85"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="83"/>
+        <source>Python model on cluster</source>
+        <translation>Modèle Python sur cluster</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/model/StudyItem.cxx" line="86"/>
         <source>YACSModel_</source>
         <translation>ModèleYACS_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="102"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="103"/>
         <source>FMIModel_</source>
         <translation>ModèleFMI_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="122"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="123"/>
         <source>DataModel_</source>
         <translation>ModèleDonnées_</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="218"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="226"/>
         <source>Cannot read file %1:
 %2</source>
         <translation>Impossible de lire le fichier %1:
 %2</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/StudyItem.cxx" line="263"/>
-        <location filename="../lib/src/model/StudyItem.cxx" line="275"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="271"/>
+        <location filename="../lib/src/model/StudyItem.cxx" line="283"/>
         <source>Cannot save file %1:
 %2</source>
         <translation>Impossible de sauvegarder le fichier %1:
@@ -9018,16 +9503,6 @@ Les objets ne sont peut-être pas ouverts.
         <translation>Créer un modèle physique défini par un script Python</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="95"/>
-        <source>YACS model</source>
-        <translation>Modèle YACS</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="96"/>
-        <source>Create a physical model defined with an YACS file</source>
-        <translation>Créer un modèle physique défini avec un fichier YACS</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/StudyWindow.cxx" line="103"/>
         <source>FMI model</source>
         <translation>Modèle FMI</translation>
@@ -9051,6 +9526,16 @@ Les objets ne sont peut-être pas ouverts.
         <location filename="../lib/src/view/StudyWindow.cxx" line="72"/>
         <source>Vector function</source>
         <translation>Fonction vectorielle</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="95"/>
+        <source>Python model on cluster</source>
+        <translation>Modèle Python sur cluster</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="96"/>
+        <source>Create a physical model defined with a Python script intended to run on a cluster</source>
+        <translation>Créer un modèle physique défini par un script Python et destiné à être lancé sur un cluster</translation>
     </message>
     <message>
         <location filename="../lib/src/view/StudyWindow.cxx" line="104"/>
@@ -9106,7 +9591,7 @@ Les objets ne sont peut-être pas ouverts.
     </message>
     <message>
         <location filename="../lib/src/view/StudyWindow.cxx" line="127"/>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="195"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="193"/>
         <source>Metamodel</source>
         <translation>Métamodèle</translation>
     </message>
@@ -9146,19 +9631,29 @@ Les objets ne sont peut-être pas ouverts.
         <translation>Importer un échantillon de données pour créer un modèle</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="192"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="190"/>
         <source>Data analysis</source>
         <translation>Analyse de données</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="193"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="191"/>
         <source>Marginals inference</source>
         <translation>Inférence des lois marginales</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/StudyWindow.cxx" line="194"/>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="192"/>
         <source>Dependence inference</source>
         <translation>Inférence de la dépendance</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="197"/>
+        <source>Data Field model</source>
+        <translation>Modèle de champ de données</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/StudyWindow.cxx" line="198"/>
+        <source>Import a process sample to create a field model</source>
+        <translation>Importer un échantillon pour créer un modèle de champ</translation>
     </message>
 </context>
 <context>
@@ -9303,7 +9798,7 @@ Les objets ne sont peut-être pas ouverts.
         <translation>LogUniforme</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="54"/>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="53"/>
         <location filename="../lib/src/model/TranslationManager.cxx" line="80"/>
         <source>Normal</source>
         <translation>Normale</translation>
@@ -9382,11 +9877,6 @@ Les objets ne sont peut-être pas ouverts.
         <location filename="../lib/src/model/TranslationManager.cxx" line="47"/>
         <source>Hypergeometric</source>
         <translation>Hypergéométrique</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/TranslationManager.cxx" line="53"/>
-        <source>NegativeBinomial</source>
-        <translation>Binômiale négative</translation>
     </message>
     <message>
         <location filename="../lib/src/model/TranslationManager.cxx" line="59"/>
@@ -9946,21 +10436,16 @@ par Bootstrap</translation>
 <context>
     <name>PERSALYS::UserDefinedWizard</name>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="275"/>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="310"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="295"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="330"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="276"/>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="311"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="296"/>
+        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="331"/>
         <source>Weight (&gt;0, optional)</source>
         <translation>Poids (&gt;0, optionnel)</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/view/utils/EditValuesWizard.cxx" line="331"/>
-        <source>Define at least two values</source>
-        <translation>Définir au moins deux valeurs</translation>
     </message>
 </context>
 <context>
@@ -9997,7 +10482,7 @@ par Bootstrap</translation>
 <context>
     <name>PERSALYS::WeightTableModel</name>
     <message>
-        <location filename="../lib/src/view/utils/persalys/EditValuesWizard.hxx" line="106"/>
+        <location filename="../lib/src/view/utils/persalys/EditValuesWizard.hxx" line="108"/>
         <source>Weight must be in strictly positive</source>
         <translation>Le poids doit être strictement positif</translation>
     </message>
@@ -10062,8 +10547,8 @@ par Bootstrap</translation>
     <name>PERSALYS::YACSPhysicalModelWindow</name>
     <message>
         <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="49"/>
-        <source>YACS model</source>
-        <translation>Modèle YACS</translation>
+        <source>Python model on cluster</source>
+        <translation>Modèle Python sur cluster</translation>
     </message>
     <message>
         <location filename="../lib/src/view/YACSPhysicalModelWindow.cxx" line="56"/>

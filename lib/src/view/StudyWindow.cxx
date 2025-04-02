@@ -194,7 +194,7 @@ void StudyWindow::buildInterface()
   textEdit->setText(text);
   layout->addWidget(textEdit, row, 1, 2, 1, Qt::AlignLeft | Qt::AlignTop);
 
-  button = new DiagramPushButton(tr("Field Data model"));
+  button = new DiagramPushButton(tr("Data Field model"));
   button->setStatusTip(tr("Import a process sample to create a field model"));
   connect(button, SIGNAL(clicked()), studyItem_->newDataFieldModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
