@@ -82,8 +82,6 @@ print(model4)
 print("inputNames=", model4.getInputNames())
 print("outputNames=", model4.getOutputNames())
 
-ot.ResourceMap.SetAsString("GeneralizedParetoFactory-DefaultOptimizationAlgorithm", "LD_SLSQP")
-
 # Monte Carlo
 analysis2 = persalys.QuantileAnalysis("aQuantileAnalysis", model4)
 analysis2.setTargetProbabilities([[1e-2, 1e-3], [6e-3], [1e-1, 1e-2, 1e-3]])
