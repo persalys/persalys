@@ -100,7 +100,7 @@ String PythonFieldModel::getPythonScript() const
   oss << "code = '" << escaped_code << "'\n";
 
   // define model
-  oss << getName() << " = persalys.PythonFieldModel('" << getName() << "'," << getMeshModel().getName() << ", inputs, outputs, code)\n";
+  oss << getName() << " = persalys.PythonFieldModel('" << getName() << "', " << getMeshModel().getName() << ", inputs, outputs, code)\n";
 
   if (isParallel())
     oss << getName() << ".setParallel(True)\n";

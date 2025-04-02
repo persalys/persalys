@@ -316,7 +316,7 @@ Console Python
 
 - check nopip is working properly on Windows
 
-  - remove the directory %LOCALAPPDATA%\Roaming\Persalys
+  - remove the directory %LOCALAPPDATA%\\Roaming\\Persalys
   - type the following in the Python console
 
   .. code-block:: python
@@ -689,6 +689,8 @@ Models
 
         - edit the default value line edit : only numbers are accepted
 
+          - set default target probability to 0.05
+
         - edit one of the marginal target probability line edit : only numbers are accepted
 
         - click on one of the '...' button
@@ -699,9 +701,11 @@ Models
 
         - click continue
 
-          - check that if you change one of the threshold/cdf threshold, the other values are updated
+          - the column lower shows red values with a message 'Chosen CDF threshold must be greater than the target probability.'
 
           - change all lower/upper CDF thresholds to 0.1/0.9
+
+            - check that if you change one of the threshold/cdf threshold, the other values are updated
 
           - click mean excess tab : check that the plots are
             correctly displayed and the drop down menu changes the
@@ -910,10 +914,10 @@ Deterministic analyses
 
       - check the table is read-only
       - click on Finish
-      - check that x_3 is unselected
+      - check that x_3 is unselected, x_1 and x_2 distribution parameters are unchanged
       - uncheck x_2
 
-  - Multi-objective optimization: item mo-optim
+  - Multi-objective optimization: item mooptim
 
     - Check analysis parameters values:
 
@@ -1098,6 +1102,7 @@ Deterministic analyses
 
 Designs of experiments
 ''''''''''''''''''''''
+- Import again the file python/test/t_deterministic_analyses.py
 
 - check the wizards:
 
@@ -1633,7 +1638,7 @@ Probabilistic analyses
       - Indices tab:
 
         - can not zoom the plot
-        - Click on the 2 last sections headers of the table:
+        - Click on the 2 table header sections to sort according to first/total order indices:
 
           - the table values are sorted
 
@@ -2161,24 +2166,22 @@ Field analyses
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
 - dataFieldModel item
+
   - Three subitems Mesh, Definition, myAnalysis
   - Click on Mesh
+  - The mesh has 12 nodes
   - Change the number of nodes
-  - Click on Definition: a message has appeared "Mesh vertices number (xxx) must match field discretization (12)."
-  - Running the analysis will show an error message: "Error: cannot build a Field with a number of values=12 different from the number of vertices=xxx"
-  - Revert changes on number of nodes
-  - The message disappears
+  - A message has appeared "Warning: Specified mesh is incompatbile and has been reset."
+  - The number of nodes remains unchanged
+  - The message disappears after a while
   - Click on Definition
   - Edit one of the table cells to 'inf'
   - A message appears: "The model is not valid. Check data and/or mesh numerical validity."
   - Running the anlaysis wont do anything
-  - Right click on the table > Clean > Remove
+  - Right click on the table > Clean > Remove > Finish
   - The message disappears
-  - Click on Mesh
-  - Change the number of nodes
-  - Click on Definition: a message has appeared "Mesh vertices number (xxx) must match field discretization (12)."
   - Reload the 'elNino.csv' file
-  - The message disappears and the number of nodes in the mesh has changed
+  - The message disappears
   - Run the analysis
   - Three tabs: Result, Decomposition, Correlation
 
@@ -2237,6 +2240,12 @@ Physical model
 - In the model window: add a second input
     - the 'Screening' and 'Observations' buttons of the diagram is enabled
 
+- In the model window: add a second output
+    - the 'Multi-objective optimization' button is enabled
+
+- click on the 'Multi-objective optimization' button of the diagram
+    - a wizard appears, click on Cancel
+
 - click on the 'Screening' button of the diagram
     - a wizard appears, click on Cancel
 
@@ -2276,7 +2285,7 @@ Physical model
     - right click then 'Remove' on 'metaModel_0' item
     - right click then 'Modify' on 'metaModel_1' item
     - go through all the wizard pages then finish
-    - do not run the MetaModel analysis, check that the 'Metamodel creation' diagram button is greyed out
+    - do not run the MetaModel analysis, check that the 'Export as model' diagram button is greyed out
 
 - click on the 'Probabilistic model definition' button of the diagram
     - a window appears, select X0
@@ -2323,14 +2332,13 @@ Data field model
 ''''''''''''''''
 
 - click on 'Data field model' button of the window of myOTStudy
-    - the item DataFieldModel_0 appears in the tree view (with 2 items: Definition and Mesh
-      - two associated
+    - the item DataFieldModel_0 appears in the tree view (with 2 items: Definition and Mesh)
     - click on 'DataFieldModel_0': a new Data field model diagram window appears in the midArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled, click it
     - 'Definition' gets the focus
     - click on the '...' button, import the file elNino.csv
     - click on 'Mesh' item
-    - change the number of nodes to 12
+    - the number of nodes is set to 12, with a warning message that the mesh has been overwritten
     - 'Data analysis' button in the diagram window is activated
 
 
@@ -2405,7 +2413,11 @@ Python model on cluster
 
   - default size: 100
 
-- evaluate the DoE, click run and quickly stop the analysis
+- evaluate the DoE,
+
+  - block size = sample size = 100
+
+  - click run and quickly stop the analysis
 
   - a message says that the job has been detached.
 

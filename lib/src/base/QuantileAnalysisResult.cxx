@@ -65,22 +65,9 @@ String QuantileAnalysisResult::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
-//      << " type=" << getType()
-      // << " tail type=" << getTailTypes()
       << " quantiles=";
   for (auto const& qqq : quantiles_)
-    oss << qqq.first << ": " << qqq.second;
-  oss << " validity=";
-  if (type_ == QuantileAnalysisResult::MonteCarlo)
-  {
-    for (auto const& val : wilksValidity_)
-      oss << " " << val.first << ": " << val.second;
-  }
-  if (type_ == QuantileAnalysisResult::GeneralizedPareto)
-  {
-    for (auto const& val : pValue_)
-      oss << " " << val.first << ": " << val.second;
-  }
+    oss << qqq.first << ": " << qqq.second << " ";
   return oss;
 }
 

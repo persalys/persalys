@@ -159,7 +159,7 @@ myStudy.add(optim)
 # multi-objective optimization
 if ot.PlatformInfo.HasFeature("pagmo"):
     mooptim = persalys.MultiObjectiveOptimizationAnalysis(
-        "mo-optim", symbolicModel, "nsga2"
+        "mooptim", symbolicModel, "nsga2"
     )
     mooptim.setInterestVariables(["y0", "y1"])
     mooptim.addConstraint("y0    > 2")

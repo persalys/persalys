@@ -82,8 +82,6 @@ print(model4)
 print("inputNames=", model4.getInputNames())
 print("outputNames=", model4.getOutputNames())
 
-ot.ResourceMap.SetAsString("GeneralizedParetoFactory-DefaultOptimizationAlgorithm", "LD_SLSQP")
-
 # Monte Carlo
 analysis2 = persalys.QuantileAnalysis("aQuantileAnalysis", model4)
 analysis2.setTargetProbabilities([[1e-2, 1e-3], [6e-3], [1e-1, 1e-2, 1e-3]])
@@ -95,7 +93,41 @@ analysis2.setTailTypes(
 analysis2.setType(persalys.QuantileAnalysisResult.MonteCarlo)
 myStudy.add(analysis2)
 analysis2.run()
-print(analysis2.getResult())
+result = analysis2.getResult()
+
+x0ref = [[[-2.46389, -2.23369, -2.0035],
+          [-2.51804, -2.4067, -2.29536]],
+         [[1.92083, 2.30459, 2.68835],
+          [2.85639, 3.15958, 3.46277]],
+         [[-2.47455, -2.29006, -2.10558],
+          [-2.48545, -2.4067, -2.32795]],
+         [[2.41487, 3.02799, 3.64111],
+          [2.94514, 3.15958, 3.37402]]]
+
+x1ref = [[[-3.36709, -2.84159, -2.31609]]]
+
+x2ref = [[[-1.73368, -1.5705, -1.40732],
+          [-3.6264, -2.98535, -2.3443],
+          [-3.32293, -3.09834, -2.87375]],
+         [[1.51902, 1.69843, 1.87784],
+          [2.29461, 2.5038, 2.71299],
+          [2.53902, 2.63821, 2.7374]]]
+
+for i, qx in enumerate(result.getQuantiles('X0')):
+    for j, qxi in enumerate(qx):
+        openturns.testing.assert_almost_equal(qxi, x0ref[i][j])
+for i, qx in enumerate(result.getQuantiles('X1')):
+    for j, qxi in enumerate(qx):
+        openturns.testing.assert_almost_equal(qxi, x1ref[i][j])
+for i, qx in enumerate(result.getQuantiles('X2')):
+    for j, qxi in enumerate(qx):
+        openturns.testing.assert_almost_equal(qxi, x2ref[i][j])
+
+print(result.getWilksValidity('X0', persalys.QuantileAnalysisResult.Upper))
+print(result.getWilksValidity('X0', persalys.QuantileAnalysisResult.Lower))
+print(result.getWilksValidity('X0', persalys.QuantileAnalysisResult.Bilateral))
+print(result.getWilksValidity('X1', persalys.QuantileAnalysisResult.Lower))
+print(result.getWilksValidity('X2', persalys.QuantileAnalysisResult.Bilateral))
 
 # Generalized Pareto
 # test wrong threshold
@@ -106,13 +138,49 @@ except Exception as e:
     print(e)
 analysis2.setTargetProbabilities([[1e-2, 1e-3], [6e-3], [2e-2, 1e-2, 1e-3]])
 analysis2.run()
-print(analysis2.getResult())
 
 # correct threshold
+ot.RandomGenerator.SetSeed(0)
 analysis2.setThreshold(ot.Sample([[-1.2] * 3, [1.3] * 3]))
 print(analysis2.getCDFThreshold())
 analysis2.run()
-print(analysis2.getResult())
+
+lower = persalys.QuantileAnalysisResult.Lower
+upper = persalys.QuantileAnalysisResult.Upper
+result = analysis2.getResult()
+x0ref = [[[-2.25066, -2.13742, -1.97106],
+          [-2.63007, -2.42975, -2.00384]],
+         [[2.0336, 2.39169, 2.66636],
+          [2.10793, 3.24011, 3.91598]],
+         [[-2.40182, -2.26008, -2.10424],
+          [-2.72218, -2.47166, -2.13712]],
+         [[2.29473, 2.68407, 3.05917],
+          [2.35091, 3.43519, 4.37443]]]
+
+x1ref = [[[-3.20317, -2.67809, -2.29305]]]
+
+x2ref = [[[-2.5951, -2.33329, -2.05612],
+          [-2.90863, -2.60824, -2.09622],
+          [-4.16267, -3.37042, -2.1222]],
+         [[2.1073, 2.30144, 2.43061],
+          [2.14865, 2.43789, 2.55157],
+          [2.17072, 2.67384, 2.85496]]]
+
+for i, qx in enumerate(result.getQuantiles('X0')):
+    for j, qxi in enumerate(qx):
+        openturns.testing.assert_almost_equal(qxi, x0ref[i][j])
+for i, qx in enumerate(result.getQuantiles('X1')):
+    for j, qxi in enumerate(qx):
+        openturns.testing.assert_almost_equal(qxi, x1ref[i][j])
+for i, qx in enumerate(result.getQuantiles('X2')):
+    for j, qxi in enumerate(qx):
+        openturns.testing.assert_almost_equal(qxi, x2ref[i][j])
+
+openturns.testing.assert_almost_equal(result.getPValue('X0', upper), 0.847489013, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X0', lower), 0.633769532, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X1', lower), 0.957051222, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X2', upper), 0.409330454, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X2', lower), 0.556529202, 1e-3)
 
 # test interest variables
 analysis2.setInterestVariables(["X0", "X2"])
@@ -123,7 +191,6 @@ analysis2.setTargetProbabilities([[1e-2, 1e-3], [2e-2, 1e-2, 1e-3]])
 analysis2.setThreshold(ot.Sample([[-1.2] * 2, [1.3] * 2]))
 print(analysis2.getCDFThreshold())
 analysis2.run()
-print(analysis2.getResult())
 
 # script
 script = myStudy.getPythonScript()

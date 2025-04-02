@@ -362,7 +362,6 @@ y = f(x)
 print(y)
 ott.assert_almost_equal(y, [6.0, 7.0, 39.0, 146.0])
 
-
 # test environment override
 with open("program4.py", "w") as f:
     f.write("import persalys as prs\n")

@@ -304,6 +304,7 @@ void YACSEvaluation::load(Advocate & adv)
 {
   EvaluationImplementation::load(adv);
   adv.loadAttribute("code_", code_);
+  setCode(code_);
   Description listInputFiles;
   adv.loadAttribute("inputFiles_", listInputFiles);
   std::list<std::string> inFiles;
