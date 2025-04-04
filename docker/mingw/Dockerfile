@@ -2,11 +2,10 @@ FROM openturns/archlinux-mingw:latest
 MAINTAINER jschueller
 
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-qwt
-RUN aurman -Syu --noconfirm --noedit --pgp_fetch protobuf-dllexport
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-paraview  > /dev/null 2>&1
 RUN aurman -Syu --noconfirm --noedit --pgp_fetch mingw-w64-mesa
 
-ENV ARCH=x86_64 PYMAJMIN=312
+ENV ARCH=x86_64 PYMAJMIN=313
 ENV MINGW_PREFIX /usr/${ARCH}-w64-mingw32
 
 # openturns

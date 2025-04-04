@@ -167,6 +167,9 @@ static PyTypeObject PyStdOut_Type =
 #if PY_VERSION_HEX >= 0x030C0000
   0,                            /*tp_watched*/
 #endif
+#if PY_VERSION_HEX >= 0x030D0000
+  0,                            /* tp_versions_used */
+#endif
 };
 
 #define PyStdOut_Check(v)  ((v)->ob_type == &PyStdOut_Type)

@@ -44,12 +44,12 @@ cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/opent
 rm Lib/site-packages/openturns/{libvtk,libboost,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
 
-curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.14.0/download/win-64/pyfmi-2.14.0-py312h1a27103_1.conda | bsdtar -x && tar -xf pkg-pyfmi-2.14.0-py312h1a27103_1.tar.zst
-curl -fSsL https://anaconda.org/conda-forge/assimulo/3.5.2/download/win-64/assimulo-3.5.2-py312h5d292b3_1.conda | bsdtar -x && tar -xf pkg-assimulo-3.5.2-py312h5d292b3_1.tar.zst
-curl -fSsL https://anaconda.org/conda-forge/sundials/7.1.1/download/win-64/sundials-7.1.1-h62746c2_0.conda | bsdtar -x && tar -xf pkg-sundials-7.1.1-h62746c2_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.17.0/download/win-64/pyfmi-2.17.0-py313h8e081ca_0.conda | bsdtar -x && tar -xf pkg-pyfmi-2.17.0-py313h8e081ca_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/assimulo/3.7.0/download/win-64/assimulo-3.7.0-py313he6753d5_0.conda | bsdtar -x && tar -xf pkg-assimulo-3.7.0-py313he6753d5_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/sundials/7.3.0/download/win-64/sundials-7.3.0-hdaf6363_0.conda | bsdtar -x && tar -xf pkg-sundials-7.3.0-hdaf6363_0.tar.zst
 cp -r Library/bin/*.dll . && rm -r Library info pkg-*.zst info-*.zst
 cd Lib
-curl -fSsL https://anaconda.org/conda-forge/otfmi/0.16.5/download/noarch/otfmi-0.16.5-pyhff2d567_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.16.5-pyhff2d567_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/otfmi/0.16.6/download/noarch/otfmi-0.16.6-pyhd8ed1ab_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.16.6-pyhd8ed1ab_0.tar.zst
 cd site-packages
 curl -fsSL https://pypi.io/packages/py3/p/pip/pip-24.1.1-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
@@ -58,14 +58,14 @@ curl -fSsL https://pypi.io/packages/py2.py3/p/pytz/pytz-2021.3-py2.py3-none-any.
 curl -fSsL https://pypi.io/packages/py2.py3/p/python_dateutil/python_dateutil-2.8.2-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/d/dill/dill-0.3.8-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp312/n/numpy/numpy-1.26.4-cp312-cp312-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp312/s/scipy/scipy-1.13.1-cp312-cp312-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp312/p/pandas/pandas-2.2.2-cp312-cp312-win_amd64.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py2.py3/o/openpyxl/openpyxl-3.1.2-py2.py3-none-any.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp313/n/numpy/numpy-2.2.4-cp313-cp313-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp313/s/scipy/scipy-1.15.2-cp313-cp313-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp313/p/pandas/pandas-2.2.3-cp313-cp313-win_amd64.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py2.py3/o/openpyxl/openpyxl-3.1.5-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/e/et_xmlfile/et_xmlfile-1.1.0-py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/j/jinja2/jinja2-3.1.4-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/cp312/m/markupsafe/MarkupSafe-2.1.5-cp312-cp312-win_amd64.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/p/pythonfmu/pythonfmu-0.6.3-py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py3/p/pythonfmu/pythonfmu-0.6.6-py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/n/nopip/nopip-0.2.2-py3-none-any.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat

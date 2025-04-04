@@ -96,7 +96,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimag
  && appimagetool --version
 
 # openssl
-RUN curl -fSsL https://www.openssl.org/source/openssl-3.3.0.tar.gz | tar xz && cd openssl* \
+RUN curl -fSsL https://www.openssl.org/source/openssl-3.5.0.tar.gz | tar xz && cd openssl* \
  && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
 
 # libffi
@@ -104,12 +104,12 @@ RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.12.8/Python-3.12.8.tgz | tar xz && cd Python* \
+RUN curl -fSsL https://www.python.org/ftp/python/3.13.3/Python-3.13.3.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install numpy==2.1.3 scipy==1.14.1 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
+RUN pip3 install numpy==2.2.4 scipy==1.15.2 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
 
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials* \
@@ -118,20 +118,20 @@ RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz &
  && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/2.4.1.tar.gz | tar xz && cd fmi-library* \
- && cd build && cmake -DFMILIB_INSTALL_PREFIX=/usr/local .. && make install > /dev/null 2>&1 && cd ../.. && rm -r fmi*
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/3.0.tar.gz | tar xz && cd fmi-library* \
+ && cmake -B build . && make install -C build > /dev/null 2>&1 && cd - && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.6.0.tar.gz | tar xz && cd Assimulo* \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.0.tar.gz | tar xz && cd Assimulo* \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.16.3.tar.gz | tar xz && cd PyFMI* \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.17.0.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
-RUN curl -fSsL https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.bz2 | tar xj && cd boost* \
+RUN curl -fSsL https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-serialization --with-program_options --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
@@ -159,7 +159,7 @@ RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.13/ParaView-v5.13.2.tar.xz | tar xJ && cd ParaView* \
+RUN curl -fSsL https://paraview.org/files/v5.13/ParaView-v5.13.3.tar.xz | tar xJ && cd ParaView* \
  && curl -L https://gitlab.kitware.com/vtk/vtk/merge_requests/11555.patch | patch -p1 -d VTK \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
@@ -182,7 +182,7 @@ RUN git clone -b v0.17 --depth 1 https://github.com/openturns/otmorris.git && cd
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.6 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.24.2 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.25.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
