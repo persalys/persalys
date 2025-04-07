@@ -27,6 +27,7 @@
 #include "persalys/PlotWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
+#include "persalys/TemporaryLabel.hxx"
 
 #include <openturns/UserDefined.hxx>
 
@@ -156,99 +157,106 @@ namespace PERSALYS
         probaModifier.add(4);
       }
 
-      CustomStandardItemModel * tableModel;
-      tableModel = new CustomStandardItemModel(nLines, 4, tableView);
-
-      tableView->setModel(tableModel);
-      tableModel->setNotEditableHeaderItem(0, 0, tr("Target probability"));
-      tableModel->setNotEditableHeaderItem(0, 1, tr("Type"));
-      tableModel->setNotEditableHeaderItem(0, 2, tr("Quantile"));
-      tableModel->setNotEditableHeaderItem(0, 3, tr("Confidence Interval @") + QString::number(analysis->getConfidenceIntervalLevel()*100) + "%");
-
-      // fill the table
-      int row = 1;
-      for (UnsignedInteger i=0; i<ordered.getSize(); ++i)
+      if (fullTailTypes.getSize() != quantiles.getSize())
       {
-        int rowBlock = row;
-        tableModel->setNotEditableItem(rowBlock, 0, QString::number(targetProbas[iMarg][i]));
-        for (UnsignedInteger j=0; j<ordered[i].getSize(); ++j)
-        {
-          if (fullTailTypes.getSize() != ordered[i].getSize())
-            throw InvalidArgumentException(HERE) << "Incompatible tail types and quantiles numbers.";
-
-          Scalar proba;
-          switch (probaModifier[j])
-          {
-          case 1:
-            proba = targetProbas[iMarg][i];
-            break;
-          case 2:
-            proba = 1. - targetProbas[iMarg][i];
-            break;
-          case 3:
-            proba = 0.5*targetProbas[iMarg][i];
-            break;
-          case 4:
-            proba = 1. - 0.5*targetProbas[iMarg][i];
-            break;
-          default:
-            throw;
-          }
-          const int prec = (int)(std::abs(std::log10(targetProbas[iMarg][i])) + 2);
-          const QString sign = fullTailTypes[j] == QuantileAnalysisResult::Lower ? " < q) = " : " > q) = ";
-          const QString probaStr = "P(" + QString(varName.c_str()) + sign + QString::number(proba, 'g', prec);
-          tableModel->setNotEditableItem(row, 1, probaStr);
-          tableModel->setNotEditableItem(row, 2, QString::number(ordered[i][j][1]));
-          tableModel->setNotEditableItem(row, 3, "[" + QString::number(ordered[i][j][0]) + ";" + QString::number(ordered[i][j][2]) + "]");
-          row++;
-        }
-        // merge cells with at least 2 identical target proba
-        if (fullTailTypes.getSize() > 1)
-          tableView->setSpan(rowBlock, 0, fullTailTypes.getSize(), 1);
+        TemporaryLabel * label = new TemporaryLabel();
+        label->setErrorMessage(tr("No valid results for variable ") + QString(varName.c_str()));
+        tabLayout->addWidget(label);
       }
-
-      tableView->resizeColumnsToContents();
-      tabLayout->addWidget(tableView);
-
-      // validity for GDP
-      if (analysis->getType() == QuantileAnalysisResult::GeneralizedPareto)
+      else
       {
-        // table widget
-        ExportableTableView * tableViewVal = new ExportableTableView;
-        tableViewVal->horizontalHeader()->hide();
-        tableViewVal->verticalHeader()->hide();
 
-        CustomStandardItemModel * tableModelVal;
-        if (fullTailTypes.getSize() == 1)
-          tableModelVal = new CustomStandardItemModel(2, 2, tableView);
-        else
-          tableModelVal = new CustomStandardItemModel(3, 2, tableView);
-        tableViewVal->setModel(tableModelVal);
-        tableModelVal->setNotEditableHeaderItem(0, 0, tr("Tail type"));
-        tableModelVal->setNotEditableHeaderItem(0, 1, tr("GPD P-value"));
-        row = 1;
-        if (tailTypes[iMarg] & QuantileAnalysisResult::Lower ||
-            tailTypes[iMarg] & QuantileAnalysisResult::Bilateral)
+        CustomStandardItemModel * tableModel;
+        tableModel = new CustomStandardItemModel(nLines, 4, tableView);
+
+        tableView->setModel(tableModel);
+        tableModel->setNotEditableHeaderItem(0, 0, tr("Target probability"));
+        tableModel->setNotEditableHeaderItem(0, 1, tr("Type"));
+        tableModel->setNotEditableHeaderItem(0, 2, tr("Quantile"));
+        tableModel->setNotEditableHeaderItem(0, 3, tr("Confidence Interval @") + QString::number(analysis->getConfidenceIntervalLevel()*100) + "%");
+
+        // fill the table
+        int row = 1;
+        for (UnsignedInteger i=0; i<ordered.getSize(); ++i)
         {
-          tableModelVal->setNotEditableHeaderItem(row, 0, tr("Lower"));
-          tableModelVal->setNotEditableItem(row++, 1, analysis->getResult().getPValue(varName, QuantileAnalysisResult::Lower));
-        }
-        if (tailTypes[iMarg] & QuantileAnalysisResult::Upper ||
-            tailTypes[iMarg] & QuantileAnalysisResult::Bilateral)
-        {
-          tableModelVal->setNotEditableHeaderItem(row, 0, tr("Upper"));
-          tableModelVal->setNotEditableItem(row++, 1, analysis->getResult().getPValue(varName, QuantileAnalysisResult::Upper));
+          int rowBlock = row;
+          tableModel->setNotEditableItem(rowBlock, 0, QString::number(targetProbas[iMarg][i]));
+          for (UnsignedInteger j=0; j<ordered[i].getSize(); ++j)
+          {
+            if (fullTailTypes.getSize() != ordered[i].getSize())
+              throw InvalidArgumentException(HERE) << "Incompatible tail types and quantiles numbers.";
+
+            Scalar proba;
+            switch (probaModifier[j])
+            {
+            case 1:
+              proba = targetProbas[iMarg][i];
+              break;
+            case 2:
+              proba = 1. - targetProbas[iMarg][i];
+              break;
+            case 3:
+              proba = 0.5*targetProbas[iMarg][i];
+              break;
+            case 4:
+              proba = 1. - 0.5*targetProbas[iMarg][i];
+              break;
+            default:
+              throw;
+            }
+            const int prec = (int)(std::abs(std::log10(targetProbas[iMarg][i])) + 2);
+            const QString sign = fullTailTypes[j] == QuantileAnalysisResult::Lower ? " < q) = " : " > q) = ";
+            const QString probaStr = "P(" + QString(varName.c_str()) + sign + QString::number(proba, 'g', prec);
+            tableModel->setNotEditableItem(row, 1, probaStr);
+            tableModel->setNotEditableItem(row, 2, QString::number(ordered[i][j][1]));
+            tableModel->setNotEditableItem(row, 3, "[" + QString::number(ordered[i][j][0]) + ";" + QString::number(ordered[i][j][2]) + "]");
+            row++;
+          }
+          // merge cells with at least 2 identical target proba
+          if (fullTailTypes.getSize() > 1)
+            tableView->setSpan(rowBlock, 0, fullTailTypes.getSize(), 1);
         }
 
-        tableViewVal->resizeColumnsToContents();
-        tabLayout->addWidget(tableViewVal);
-        tabLayout->setStretch(0, 4);
+        tableView->resizeColumnsToContents();
+        tabLayout->addWidget(tableView);
+
+        // validity for GDP
+        if (analysis->getType() == QuantileAnalysisResult::GeneralizedPareto)
+        {
+          // table widget
+          ExportableTableView * tableViewVal = new ExportableTableView;
+          tableViewVal->horizontalHeader()->hide();
+          tableViewVal->verticalHeader()->hide();
+
+          CustomStandardItemModel * tableModelVal;
+          if (fullTailTypes.getSize() == 1)
+            tableModelVal = new CustomStandardItemModel(2, 2, tableView);
+          else
+            tableModelVal = new CustomStandardItemModel(3, 2, tableView);
+          tableViewVal->setModel(tableModelVal);
+          tableModelVal->setNotEditableHeaderItem(0, 0, tr("Tail type"));
+          tableModelVal->setNotEditableHeaderItem(0, 1, tr("GPD P-value"));
+          row = 1;
+          if (tailTypes[iMarg] & QuantileAnalysisResult::Lower ||
+              tailTypes[iMarg] & QuantileAnalysisResult::Bilateral)
+          {
+            tableModelVal->setNotEditableHeaderItem(row, 0, tr("Lower"));
+            tableModelVal->setNotEditableItem(row++, 1, analysis->getResult().getPValue(varName, QuantileAnalysisResult::Lower));
+          }
+          if (tailTypes[iMarg] & QuantileAnalysisResult::Upper ||
+              tailTypes[iMarg] & QuantileAnalysisResult::Bilateral)
+          {
+            tableModelVal->setNotEditableHeaderItem(row, 0, tr("Upper"));
+            tableModelVal->setNotEditableItem(row++, 1, analysis->getResult().getPValue(varName, QuantileAnalysisResult::Upper));
+          }
+
+          tableViewVal->resizeColumnsToContents();
+          tabLayout->addWidget(tableViewVal);
+          tabLayout->setStretch(0, 4);
+        }
       }
       tabStackedWidget->addWidget(tabWidget);
-
-
     }
-    //scrollArea->setWidget(tabStackedWidget);
     tabWidget_->addTab(tabStackedWidget, tr("Quantiles"));
   }
 
@@ -287,74 +295,9 @@ namespace PERSALYS
       QWidget * tabWidget = new QWidget;
       QGridLayout * tabLayout = new QGridLayout(tabWidget);
       QComboBox * tailComboBox = new QComboBox;
-      tabLayout->addWidget(tailComboBox, 0, 0, 1, 1);
-
       ResizableStackedWidget * stackedPlots = new ResizableStackedWidget;
-      tabLayout->addWidget(stackedPlots, 1, 0, 1, 2);
-
-      tabLayout->setColumnStretch(1, 3);
       connect(tailComboBox, SIGNAL(currentIndexChanged(int)),
               stackedPlots, SLOT(setCurrentIndex(int)));
-
-
-      const Point::const_iterator minProba_it = std::min_element(targetProbas[iMarg].begin(),
-                                                                 targetProbas[iMarg].end());
-      Scalar minProba = *minProba_it * 0.5;
-      if (currentType & QuantileAnalysisResult::Bilateral)
-        minProba *= 0.5;
-
-      // Get CDF x-range
-      ResourceMap::SetAsScalar("Distribution-QMin", 0.5 * minProba);
-      ResourceMap::SetAsScalar("Distribution-QMax", 1 - 0.5 * minProba);
-      ResourceMap::SetAsUnsignedInteger("Distribution-DefaultPointNumber", 513);
-
-      // get data
-      const Distribution dist = UserDefined(sample.getMarginal(iMarg));
-      const Sample rawData = dist.drawCDF().getDrawable(0).getData();
-
-      // remove 0 for y-log scale
-      // cdf
-      Sample cleanedCdfData(0, 2);
-      // 1 - cdf
-      Sample cleanedSurData(0, 2);
-      for (UnsignedInteger j=0; j<rawData.getSize(); ++j)
-      {
-        if (rawData(j, 1) != 0)
-          cleanedCdfData.add(rawData[j]);
-        if (rawData(j, 1) != 1)
-        {
-          Point point = Point(2);
-          point[0] = rawData(j, 0);
-          point[1] = 1 - rawData(j,1);
-          cleanedSurData.add(point);
-        }
-      }
-
-      // y-log scale
-      QwtLogScaleEngine * ylogScaleLower = new QwtLogScaleEngine();
-      QwtLogScaleEngine * ylogScaleUpper = new QwtLogScaleEngine();
-      if (currentType & QuantileAnalysisResult::Bilateral)
-        minProba *= 0.5;
-      QwtScaleDiv yDivLower = ylogScaleLower->divideScale(minProba, 1., 2, 10, 1.0);
-      QwtScaleDiv yDivUpper = ylogScaleUpper->divideScale(minProba, 1., 2, 10, 1.0);
-
-      // plot empirical CDF/SurvFct
-      PlotWidget * plotWidgetLower = new PlotWidget;
-      plotWidgetLower->setAxisAutoScale(QwtPlot::yLeft, false);
-      plotWidgetLower->setAxisScaleEngine(QwtPlot::yLeft, ylogScaleLower);
-      plotWidgetLower->setAxisScaleDiv(QwtPlot::yLeft, yDivLower);
-
-
-      if (drawLower)
-        plotWidgetLower->plotCurve(cleanedCdfData, QPen(Qt::black, 2));
-
-      PlotWidget * plotWidgetUpper = new PlotWidget;
-      plotWidgetUpper->setAxisAutoScale(QwtPlot::yLeft, false);
-      plotWidgetUpper->setAxisScaleEngine(QwtPlot::yLeft, ylogScaleUpper);
-      plotWidgetUpper->setAxisScaleDiv(QwtPlot::yLeft, yDivUpper);
-
-      if (drawUpper)
-        plotWidgetUpper->plotCurve(cleanedSurData, QPen(Qt::black, 2));
 
       Point probaModifier;
       Indices fullTailTypes;
@@ -377,60 +320,128 @@ namespace PERSALYS
       }
 
       if (fullTailTypes.getSize() != quantiles.getSize())
-        throw InvalidArgumentException(HERE) << "QuantileAnalysisResultWindow::addPlotTab : Quantiles size incompatible with number of tails";
-
-      // Add Q-/Q/Q+, and threshold/GPD cdf if any
-      for (UnsignedInteger iTail = 0; iTail < quantiles.getSize(); ++iTail)
       {
-        for (UnsignedInteger iProba = 0; iProba < targetProbas[iMarg].getSize(); ++iProba)
-        {
-          Sample qData = Sample::BuildFromPoint(quantiles[iTail][iProba]);
-          qData.stack(Sample::BuildFromPoint(Point(3, targetProbas[iMarg][iProba] * probaModifier[iTail])));
-          QwtSymbol* symbol = new QwtSymbol(QwtSymbol::Rect, QBrush(Qt::blue), QPen(Qt::blue), QSize(2, 6));
-          if (fullTailTypes[iTail] == QuantileAnalysisResult::Lower)
-          {
+        TemporaryLabel * label = new TemporaryLabel();
+        label->setErrorMessage(tr("No valid results for variable ") + QString(varName.c_str()));
+        tabLayout->addWidget(label);
+      }
+      else
+      {
+        tabLayout->addWidget(stackedPlots, 1, 0, 1, 2);
+        tabLayout->addWidget(tailComboBox, 0, 0, 1, 1);
+        tabLayout->setColumnStretch(1, 3);
 
-            plotWidgetLower->plotCurve(qData, QPen(Qt::blue, 2), QwtPlotCurve::Lines, symbol);
-            if (analysis->getType() == QuantileAnalysisResult::GeneralizedPareto)
-            {
-              plotWidgetLower->plotCurve(analysis->plotGPD(iMarg, 0, minProba).getDrawable(0).getData(),
-                                         QPen(Qt::red, 2));
-              plotWidgetLower->plotScatter(Sample(1, Point(1, analysis->getThreshold()(0, iMarg))),
-                                           Sample(1, Point(1, analysis->getCDFThreshold()(0, iMarg))),
-                                           QPen(Qt::blue, 6));
-            }
-          }
-          else if (fullTailTypes[iTail] == QuantileAnalysisResult::Upper)
+        const Point::const_iterator minProba_it = std::min_element(targetProbas[iMarg].begin(),
+                                                                   targetProbas[iMarg].end());
+        Scalar minProba = *minProba_it * 0.5;
+        if (currentType & QuantileAnalysisResult::Bilateral)
+          minProba *= 0.5;
+
+        // Get CDF x-range
+        ResourceMap::SetAsScalar("Distribution-QMin", 0.5 * minProba);
+        ResourceMap::SetAsScalar("Distribution-QMax", 1 - 0.5 * minProba);
+        ResourceMap::SetAsUnsignedInteger("Distribution-DefaultPointNumber", 513);
+
+        // get data
+        const Distribution dist = UserDefined(sample.getMarginal(iMarg));
+        const Sample rawData = dist.drawCDF().getDrawable(0).getData();
+
+        // remove 0 for y-log scale
+        // cdf
+        Sample cleanedCdfData(0, 2);
+        // 1 - cdf
+        Sample cleanedSurData(0, 2);
+        for (UnsignedInteger j=0; j<rawData.getSize(); ++j)
+        {
+          if (rawData(j, 1) != 0)
+            cleanedCdfData.add(rawData[j]);
+          if (rawData(j, 1) != 1)
           {
-            plotWidgetUpper->plotCurve(qData, QPen(Qt::blue, 2), QwtPlotCurve::Lines, symbol);
-            if (analysis->getType() == QuantileAnalysisResult::GeneralizedPareto)
+            Point point = Point(2);
+            point[0] = rawData(j, 0);
+            point[1] = 1 - rawData(j,1);
+            cleanedSurData.add(point);
+          }
+        }
+
+        // y-log scale
+        QwtLogScaleEngine * ylogScaleLower = new QwtLogScaleEngine();
+        QwtLogScaleEngine * ylogScaleUpper = new QwtLogScaleEngine();
+        if (currentType & QuantileAnalysisResult::Bilateral)
+          minProba *= 0.5;
+        QwtScaleDiv yDivLower = ylogScaleLower->divideScale(minProba, 1., 2, 10, 1.0);
+        QwtScaleDiv yDivUpper = ylogScaleUpper->divideScale(minProba, 1., 2, 10, 1.0);
+
+        // plot empirical CDF/SurvFct
+        PlotWidget * plotWidgetLower = new PlotWidget;
+        plotWidgetLower->setAxisAutoScale(QwtPlot::yLeft, false);
+        plotWidgetLower->setAxisScaleEngine(QwtPlot::yLeft, ylogScaleLower);
+        plotWidgetLower->setAxisScaleDiv(QwtPlot::yLeft, yDivLower);
+
+        if (drawLower)
+          plotWidgetLower->plotCurve(cleanedCdfData, QPen(Qt::black, 2));
+
+        PlotWidget * plotWidgetUpper = new PlotWidget;
+        plotWidgetUpper->setAxisAutoScale(QwtPlot::yLeft, false);
+        plotWidgetUpper->setAxisScaleEngine(QwtPlot::yLeft, ylogScaleUpper);
+        plotWidgetUpper->setAxisScaleDiv(QwtPlot::yLeft, yDivUpper);
+
+        if (drawUpper)
+          plotWidgetUpper->plotCurve(cleanedSurData, QPen(Qt::black, 2));
+
+        // Add Q-/Q/Q+, and threshold/GPD cdf if any
+        for (UnsignedInteger iTail = 0; iTail < quantiles.getSize(); ++iTail)
+        {
+          for (UnsignedInteger iProba = 0; iProba < targetProbas[iMarg].getSize(); ++iProba)
+          {
+            Sample qData = Sample::BuildFromPoint(quantiles[iTail][iProba]);
+            qData.stack(Sample::BuildFromPoint(Point(3, targetProbas[iMarg][iProba] * probaModifier[iTail])));
+            QwtSymbol* symbol = new QwtSymbol(QwtSymbol::Rect, QBrush(Qt::blue), QPen(Qt::blue), QSize(2, 6));
+            if (fullTailTypes[iTail] == QuantileAnalysisResult::Lower)
             {
-              plotWidgetUpper->plotCurve(analysis->plotGPD(iMarg, 1, minProba).getDrawable(0).getData(),
-                                         QPen(Qt::red, 2));
-              plotWidgetUpper->plotScatter(Sample(1, Point(1, analysis->getThreshold()(1, iMarg))),
-                                           Sample(1, Point(1, 1.-analysis->getCDFThreshold()(1, iMarg))),
-                                           QPen(Qt::blue, 6));
+
+              plotWidgetLower->plotCurve(qData, QPen(Qt::blue, 2), QwtPlotCurve::Lines, symbol);
+              if (analysis->getType() == QuantileAnalysisResult::GeneralizedPareto)
+              {
+                plotWidgetLower->plotCurve(analysis->plotGPD(iMarg, 0, minProba).getDrawable(0).getData(),
+                                           QPen(Qt::red, 2));
+                plotWidgetLower->plotScatter(Sample(1, Point(1, analysis->getThreshold()(0, iMarg))),
+                                             Sample(1, Point(1, analysis->getCDFThreshold()(0, iMarg))),
+                                             QPen(Qt::blue, 6));
+              }
+            }
+            else if (fullTailTypes[iTail] == QuantileAnalysisResult::Upper)
+            {
+              plotWidgetUpper->plotCurve(qData, QPen(Qt::blue, 2), QwtPlotCurve::Lines, symbol);
+              if (analysis->getType() == QuantileAnalysisResult::GeneralizedPareto)
+              {
+                plotWidgetUpper->plotCurve(analysis->plotGPD(iMarg, 1, minProba).getDrawable(0).getData(),
+                                           QPen(Qt::red, 2));
+                plotWidgetUpper->plotScatter(Sample(1, Point(1, analysis->getThreshold()(1, iMarg))),
+                                             Sample(1, Point(1, 1.-analysis->getCDFThreshold()(1, iMarg))),
+                                             QPen(Qt::blue, 6));
+              }
             }
           }
         }
-      }
 
 
-      if (drawLower)
-      {
-        tailComboBox->addItems(QStringList() << tr("Lower"));
-        SimpleGraphSetting * graphSettingWidgetLower = new SimpleGraphSetting(plotWidgetLower, this);
-        plotWidgetLower->setAxisTitle(QwtPlot::yLeft, QString("P(" + QString(varName.c_str()) + " < x)"));
-        plotWidgetLower->setAxisTitle(QwtPlot::xBottom, QString(varName.c_str()));
-        stackedPlots->addWidget(new WidgetBoundToDockWidget(plotWidgetLower, graphSettingWidgetLower, this));
-      }
-      if (drawUpper)
-      {
-        tailComboBox->addItems(QStringList() << tr("Upper"));
-        SimpleGraphSetting * graphSettingWidgetUpper = new SimpleGraphSetting(plotWidgetUpper, this);
-        plotWidgetUpper->setAxisTitle(QwtPlot::yLeft, QString("P(" + QString(varName.c_str()) + " > x)"));
-        plotWidgetUpper->setAxisTitle(QwtPlot::xBottom, QString(varName.c_str()));
-        stackedPlots->addWidget(new WidgetBoundToDockWidget(plotWidgetUpper, graphSettingWidgetUpper, this));
+        if (drawLower)
+        {
+          tailComboBox->addItems(QStringList() << tr("Lower"));
+          SimpleGraphSetting * graphSettingWidgetLower = new SimpleGraphSetting(plotWidgetLower, this);
+          plotWidgetLower->setAxisTitle(QwtPlot::yLeft, QString("P(" + QString(varName.c_str()) + " < x)"));
+          plotWidgetLower->setAxisTitle(QwtPlot::xBottom, QString(varName.c_str()));
+          stackedPlots->addWidget(new WidgetBoundToDockWidget(plotWidgetLower, graphSettingWidgetLower, this));
+        }
+        if (drawUpper)
+        {
+          tailComboBox->addItems(QStringList() << tr("Upper"));
+          SimpleGraphSetting * graphSettingWidgetUpper = new SimpleGraphSetting(plotWidgetUpper, this);
+          plotWidgetUpper->setAxisTitle(QwtPlot::yLeft, QString("P(" + QString(varName.c_str()) + " > x)"));
+          plotWidgetUpper->setAxisTitle(QwtPlot::xBottom, QString(varName.c_str()));
+          stackedPlots->addWidget(new WidgetBoundToDockWidget(plotWidgetUpper, graphSettingWidgetUpper, this));
+        }
       }
       tabStackedWidget->addWidget(tabWidget);
     } // end for marginal
