@@ -37,8 +37,26 @@ namespace PERSALYS
     : QAbstractTableModel(parent)
     , analysis_(analysis)
   {
-    cdfThreshold_ = analysis_.getCDFThreshold().getMarginal(analysis_.getInterestVariables());
-    threshold_ = analysis_.getThreshold().getMarginal(analysis_.getInterestVariables());
+    // reset thresholds if variables have changed
+    if (analysis_.getCDFThreshold().getDimension() != analysis_.getInterestVariables().getSize() ||
+        analysis_.getThreshold().getDimension() != analysis_.getInterestVariables().getSize())
+    {
+      const Sample sample = analysis.getDesignOfExperiment().getSample().getMarginal(analysis.getInterestVariables());
+      cdfThreshold_ = Sample(2, sample.getDimension());
+      cdfThreshold_.setDescription(sample.getDescription());
+      cdfThreshold_[0] = Point(sample.getDimension(), 0.05);
+      cdfThreshold_[1] = Point(sample.getDimension(), 0.95);
+
+      threshold_ = Sample(2, sample.getDimension());
+      threshold_.setDescription(sample.getDescription());
+      threshold_[0] = sample.computeQuantilePerComponent(0.05);
+      threshold_[1] = sample.computeQuantilePerComponent(0.95);
+    }
+    else
+    {
+      cdfThreshold_ = analysis_.getCDFThreshold().getMarginal(analysis_.getInterestVariables());
+      threshold_ = analysis_.getThreshold().getMarginal(analysis_.getInterestVariables());
+    }
   }
 
   int QuantileThresholdTableModel::columnCount(const QModelIndex & /*parent*/) const
