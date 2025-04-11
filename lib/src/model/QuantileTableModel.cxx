@@ -37,6 +37,17 @@ namespace PERSALYS
   {
     types_ = Sample(analysis_.getInterestVariables().getSize(), 3);
     Collection<Point> values;
+
+    // reset tail types if variables have changed
+    if (analysis_.getTailTypes().getSize() != analysis_.getInterestVariables().getSize())
+    {
+      analysis_.setTailTypes(Indices(analysis_.getInterestVariables().getSize(), 2));
+      Collection<Point> coll;
+      for (UnsignedInteger iMarg=0; iMarg<analysis_.getInterestVariables().getSize(); ++iMarg)
+        coll.add(analysis_.getDefaultTargetProbability());
+      analysis_.setTargetProbabilities(coll);
+    }
+
     for (UnsignedInteger iMarg=0; iMarg<analysis_.getInterestVariables().getSize(); ++iMarg)
     {
       if (analysis_.getTailTypes()[iMarg] & QuantileAnalysisResult::Lower)

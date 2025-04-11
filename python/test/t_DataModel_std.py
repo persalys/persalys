@@ -148,23 +148,23 @@ analysis2.run()
 lower = persalys.QuantileAnalysisResult.Lower
 upper = persalys.QuantileAnalysisResult.Upper
 result = analysis2.getResult()
-x0ref = [[[-2.25066, -2.13742, -1.97106],
-          [-2.63007, -2.42975, -2.00384]],
-         [[2.0336, 2.39169, 2.66636],
-          [2.10793, 3.24011, 3.91598]],
-         [[-2.40182, -2.26008, -2.10424],
-          [-2.72218, -2.47166, -2.13712]],
-         [[2.29473, 2.68407, 3.05917],
-          [2.35091, 3.43519, 4.37443]]]
+x0ref = [[[-2.44824, -2.00098, -1.77584],
+          [-3.41554, -2.30532, -1.81387]],
+         [[1.963, 2.39031, 2.80089],
+          [2.00437, 3.32964, 4.43636]],
+         [[-2.792, -2.12135, -1.85867],
+          [-3.78112, -2.3562, -1.89605]],
+         [[2.1527, 2.70119, 3.29286],
+          [2.21385, 3.56467, 5.04221]]]
 
-x1ref = [[[-3.20317, -2.67809, -2.29305]]]
+x1ref = [[[-3.41533, -2.61337, -2.14595]]]
 
-x2ref = [[[-2.5951, -2.33329, -2.05612],
-          [-2.90863, -2.60824, -2.09622],
-          [-4.16267, -3.37042, -2.1222]],
-         [[2.1073, 2.30144, 2.43061],
-          [2.14865, 2.43789, 2.55157],
-          [2.17072, 2.67384, 2.85496]]]
+x2ref = [[[-2.69465, -2.37834, -1.91663],
+          [-3.03319, -2.68309, -1.95693],
+          [-4.48605, -3.59798, -1.98668]],
+         [[1.85113, 2.16798, 2.66877],
+          [1.88352, 2.30282, 2.93784],
+          [1.9117, 2.56313, 3.89188]]]
 
 for i, qx in enumerate(result.getQuantiles('X0')):
     for j, qxi in enumerate(qx):
@@ -176,11 +176,11 @@ for i, qx in enumerate(result.getQuantiles('X2')):
     for j, qxi in enumerate(qx):
         openturns.testing.assert_almost_equal(qxi, x2ref[i][j])
 
-openturns.testing.assert_almost_equal(result.getPValue('X0', upper), 0.847489013, 1e-3)
-openturns.testing.assert_almost_equal(result.getPValue('X0', lower), 0.633769532, 1e-3)
-openturns.testing.assert_almost_equal(result.getPValue('X1', lower), 0.957051222, 1e-3)
-openturns.testing.assert_almost_equal(result.getPValue('X2', upper), 0.409330454, 1e-3)
-openturns.testing.assert_almost_equal(result.getPValue('X2', lower), 0.556529202, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X0', upper), 0.9378335994, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X0', lower), 0.5392217742, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X1', lower), 0.9037923523, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X2', upper), 0.0674410269, 1e-3)
+openturns.testing.assert_almost_equal(result.getPValue('X2', lower), 0.4360724055, 1e-3)
 
 # test interest variables
 analysis2.setInterestVariables(["X0", "X2"])

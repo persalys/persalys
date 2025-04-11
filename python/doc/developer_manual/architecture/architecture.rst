@@ -73,3 +73,27 @@ Here is the global class diagram for each layer:
 
 .. image:: class_diagram.png
     :align: center
+
+Details on implementing a new type of object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Pull request ``!523`` shows the implementation of a new type of object intended to be used in a study, along with its associated analysis and results
+- Start by implementing ``Object`` and ``ObjectImplementation`` classes
+- A new type of object ``Object`` must belong to either one of the existing or a new ``Collection`` as ``StudyImplementation`` attributes, along with the appropriate ``StudyImplementation`` methods (``getObjects``, ``getObjectByName``, ``hasObjectNamed``, ``getAvailableObjectName``, ``add``, ``remove``)
+
+- Implement in ``src/model``
+
+  - ``ObjectItem`` : base class
+  - ``ObjectDefinitionItem`` : for handling ``Object`` and study tree interactions
+  - ``ObjectDiagramItem`` : for handling ``Object`` and diagram window interactions
+
+- Create an action in ``src/model/ItemFactory`` intended to add the ``Object`` to the study
+- This action is connected to a new button in ``src/view/StudyWindow``
+- ``Observer`` class must implement a dedicated ``appendItem(const Object&)`` method, this allows to call a new ``ObjectWindow``
+
+- Implement in ``src/view``
+
+  - ``ObjectDiagramWindow`` : dedicated ``Object`` diagram window
+  - ``ObjectWindow`` : dedicated ``Object`` window for ``Object`` definition
+
+- Add a case in ``WindowFactory::GetWindow``, based on the ``src/model/ObjectItem`` to allow the instantiation of the two ``ObjectWindow`` and ``ObjectDiagramWindow``

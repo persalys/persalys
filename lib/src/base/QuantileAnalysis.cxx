@@ -133,7 +133,7 @@ namespace PERSALYS
       for (UnsignedInteger i=0; i < xData.getSize(); ++i)
       {
         Point point(2);
-        point[0] = xData(i, 0);
+        point[0] = xData(i, 0) + threshold_(1, iMarg);
         point[1] = gpdMap_[mapPair].computeComplementaryCDF( xData(i, 0) ) * (1 - cdfThreshold_(1, iMarg));
         if (point[1] >= minProba && point[0] >= threshold_(1, iMarg))
           cleanedData.add(point);
@@ -145,7 +145,7 @@ namespace PERSALYS
       for (UnsignedInteger i=0; i < xData.getSize(); ++i)
       {
         Point point(2);
-        point[0] = - 1.0 * xData(i, 0);
+        point[0] = - 1.0 * xData(i, 0) + threshold_(0, iMarg);
         point[1] = gpdMap_[mapPair].computeComplementaryCDF( xData(i, 0) ) * (cdfThreshold_(0, iMarg));
         if (point[1] >= minProba && point[0] <= threshold_(0, iMarg))
           cleanedData.add(point);
@@ -298,6 +298,8 @@ namespace PERSALYS
   void QuantileAnalysis::launchGeneralizedPareto(const Sample & sample, const Sample & threshold, const Sample & cdfThreshold)
   {
     checkThresholdCompatibility();
+    const Scalar bootstrapErrorTolerance = ResourceMap::GetAsScalar("DistributionFactory-BootstrapErrorTolerance");
+    ResourceMap::SetAsScalar("DistributionFactory-BootstrapErrorTolerance", 0.25);
     for (UnsignedInteger iMarg=0; iMarg<sample.getDimension(); ++iMarg)
     {
       if (stopRequested_)
@@ -342,33 +344,33 @@ namespace PERSALYS
       Scalar pvalueUpper(0);
       if ((tailTypes_[iMarg] & QuantileAnalysisResult::Lower) | (tailTypes_[iMarg] & QuantileAnalysisResult::Bilateral))
       {
-        DistributionFactoryLikelihoodResult estimatorLower = GeneralizedParetoFactory().buildMethodOfLikelihoodMaximizationEstimator(-1. * sampleMarg, -1 * threshold(0, iMarg));
-        distributionLower = estimatorLower.getDistribution();
-        const std::pair<int,int> mapPair = std::make_pair(iMarg, 0);
-        gpdMap_[mapPair] = distributionLower;
-        parametersSampleLower = estimatorLower.getParameterDistribution().getSample(paramSampleSize_);
         Sample peaksSampleLower(0, 1);
         for (UnsignedInteger m=0; m<sampleMarg.getSize(); ++m)
         {
           if (sampleMarg(m, 0) < threshold(0, iMarg))
-            peaksSampleLower.add(-1. * sampleMarg[m]);
+            peaksSampleLower.add(Point(1, threshold(0, iMarg) - sampleMarg(m, 0)));
         }
+        DistributionFactoryResult estimatorLower = GeneralizedParetoFactory().buildEstimator(peaksSampleLower);
+        distributionLower = estimatorLower.getDistribution();
+        const std::pair<int,int> mapPair = std::make_pair(iMarg, 0);
+        gpdMap_[mapPair] = distributionLower;
+        parametersSampleLower = estimatorLower.getParameterDistribution().getSample(paramSampleSize_);
         pvalueLower = FittingTest::Kolmogorov(peaksSampleLower, distributionLower).getPValue();
         result_.pValue_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Lower)] = pvalueLower;
       }
       if ((tailTypes_[iMarg] & QuantileAnalysisResult::Upper) | (tailTypes_[iMarg] & QuantileAnalysisResult::Bilateral))
       {
-        DistributionFactoryLikelihoodResult estimatorUpper = GeneralizedParetoFactory().buildMethodOfLikelihoodMaximizationEstimator(sampleMarg, threshold(1, iMarg));
-        distributionUpper = estimatorUpper.getDistribution();
-        const std::pair<int,int> mapPair = std::make_pair(iMarg, 1);
-        gpdMap_[mapPair] = distributionUpper;
-        parametersSampleUpper = estimatorUpper.getParameterDistribution().getSample(paramSampleSize_);
         Sample peaksSampleUpper(0, 1);
         for (UnsignedInteger m=0; m<sampleMarg.getSize(); ++m)
         {
           if (sampleMarg(m, 0) > threshold(1, iMarg))
-            peaksSampleUpper.add(sampleMarg[m]);
+            peaksSampleUpper.add(Point(1, sampleMarg(m, 0) - threshold(1, iMarg)));
         }
+        DistributionFactoryResult estimatorUpper = GeneralizedParetoFactory().buildEstimator(peaksSampleUpper);
+        distributionUpper = estimatorUpper.getDistribution();
+        const std::pair<int,int> mapPair = std::make_pair(iMarg, 1);
+        gpdMap_[mapPair] = distributionUpper;
+        parametersSampleUpper = estimatorUpper.getParameterDistribution().getSample(paramSampleSize_);
         pvalueUpper = FittingTest::Kolmogorov(peaksSampleUpper, distributionUpper).getPValue();
         result_.pValue_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Upper)] = pvalueUpper;
       }
@@ -381,6 +383,7 @@ namespace PERSALYS
         Distribution distribution = GeneralizedPareto();
         Scalar pvalue;
         Scalar coefTail;
+        UnsignedInteger tail;
         switch (fullTailTypes[iTail])
         {
         case QuantileAnalysisResult::Lower:
@@ -388,12 +391,14 @@ namespace PERSALYS
           distribution = distributionLower;
           pvalue = pvalueLower;
           coefTail = -1;
+          tail = 0;
           break;
         case QuantileAnalysisResult::Upper:
           parametersSample = parametersSampleUpper;
           distribution = distributionUpper;
           pvalue = pvalueUpper;
           coefTail = 1;
+          tail = 1;
           break;
         default:
           throw InvalidArgumentException(HERE) << "Unknown tail type\n";
@@ -410,13 +415,15 @@ namespace PERSALYS
           {
             try
             {
-              // accept failure of some quantile evaluations because of sigma < 0
+              // sigma can be < 0
+              if (parametersSample(l, 0) < 0)
+                parametersSample(l, 0) = -1.0 * parametersSample(l, 0);
               distributionParametric.setParameter(parametersSample[l]);
-              pareto_quantiles.add(coefTail * distributionParametric.computeQuantile(probaValues(iTail, iProba), true));
+              pareto_quantiles.add(coefTail * distributionParametric.computeQuantile(probaValues(iTail, iProba), true) + Point(1, threshold(tail, iMarg)));
             }
-            catch (Exception &)
+            catch (const Exception& exc)
             {
-              // pass
+              std::cout << exc.what() << std::endl;// pass
             }
           }
           const Scalar error = (1.0 * paramSampleSize_ - pareto_quantiles.getSize()) / paramSampleSize_;
@@ -427,7 +434,7 @@ namespace PERSALYS
           else if (error > 0.0)
             LOGWARN(OSS() << "Some parameter samples errored (" << error << ") for " << sample.getDescription()[iMarg] << " with tail (" << fullTailTypes[iTail] << ") and target probability (" << targetProbas_[iMarg][iProba] << ") in launchGeneralizedPareto");
           quantile(iProba, 0) = pareto_quantiles.computeQuantile((1. - ciLevel_) / 2.)[0];
-          quantile(iProba, 1) = coefTail * distribution.computeQuantile(probaValues(iTail, iProba), true)[0];
+          quantile(iProba, 1) = coefTail * distribution.computeQuantile(probaValues(iTail, iProba), true)[0] + threshold(tail, iMarg);
           quantile(iProba, 2) = pareto_quantiles.computeQuantile(1. - (1. - ciLevel_) / 2.)[0];
           validity[iProba] = pvalue;
         }
@@ -438,6 +445,7 @@ namespace PERSALYS
       // Store for each marginal
       result_.quantiles_[sample.getDescription()[iMarg]] = quantilesMarg;
     }
+    ResourceMap::SetAsScalar("DistributionFactory-BootstrapErrorTolerance", bootstrapErrorTolerance);
   }
 
   QuantileAnalysisResult QuantileAnalysis::getResult() const
@@ -538,7 +546,4 @@ namespace PERSALYS
     for (UnsignedInteger i=0; i<keys1.getSize(); ++i)
       gpdMap_[std::make_pair(keys1[i], keys2[i])] = gpdMap[i];
   }
-
-
-
 }
