@@ -64,7 +64,7 @@ if (MSVC)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif ()
 
-find_package (Boost CONFIG COMPONENTS locale program_options)
+find_package (Boost CONFIG COMPONENTS locale program_options process)
 if (Boost_FOUND)
   message(STATUS "Found Boost: ${Boost_DIR} (found suitable version \"${Boost_VERSION}\")")
 else ()

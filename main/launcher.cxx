@@ -19,7 +19,11 @@
  *
  */
 
-#define BOOST_PROCESS_USE_STD_FS
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
+#include <boost/version.hpp>
 #include <boost/process.hpp>
 #include <boost/program_options.hpp>
 
@@ -70,7 +74,12 @@ int main(int argc, char *argv[])
     std::cout << "persalys_dir=" << persalys_dir << std::endl;
     std::cout << "python_dir=" << python_dir << std::endl;
   }
-  auto env = boost::this_process::environment();
+
+#if BOOST_VERSION >= 108800
+  std::unordered_map<std::string, std::string> env;
+#else
+  boost::process::environment env;
+#endif
 
   // localization
   if (lang.size())
@@ -145,7 +154,16 @@ int main(int argc, char *argv[])
     std::cout << "PERSALYS_HTML_PATH=" << PERSALYS_HTML_PATH << std::endl;
 #endif
 
-  // fork process
+// fork process
+#if BOOST_VERSION >= 108800
+  boost::asio::io_context ctx;
+  auto exe = bp::environment::find_executable("persalys");
+  bp::process proc(ctx, exe, {}, bp::process_environment(env));
+  if (wait)
+    return proc.wait();
+  else
+    proc.detach();
+#else
   bp::child proc("persalys", env);
   if (wait)
   {
@@ -154,5 +172,6 @@ int main(int argc, char *argv[])
   }
   else
     proc.detach();
+#endif
   return EXIT_SUCCESS;
 }
