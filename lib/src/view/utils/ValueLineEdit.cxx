@@ -99,9 +99,9 @@ void ValueLineEdit::keyPressEvent(QKeyEvent *e)
 ValuesLineEdit::ValuesLineEdit(const Point values, QWidget *parent)
   : QLineEdit(parent)
 {
-  QString numberPattern = QString("(\\d+\\.*\\d*e{0,1}[+-]*\\d*)");
-  QRegExp regEx = QRegExp(numberPattern + "(;{1}\\s*" + numberPattern + ")*$");
-  QRegExpValidator * validator = new QRegExpValidator(regEx);
+  const QString numberPattern("(\\d+\\.*\\d*e{0,1}[+-]*\\d*)");
+  const QRegularExpression regEx(numberPattern + "(;{1}\\s*" + numberPattern + ")*$");
+  QRegularExpressionValidator * validator = new QRegularExpressionValidator(regEx);
   setValidator(validator);
   setValues(values);
 }
