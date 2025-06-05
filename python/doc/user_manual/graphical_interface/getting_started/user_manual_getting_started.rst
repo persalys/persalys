@@ -7,18 +7,17 @@ User manual - First steps
 
 - To override the default language, it is advised to proceed as follows:
 
+  - Windows: In the properties of the Persalys desktop shortcut (right-click/Properties)
+    modify the target field of the shortcut to add the argument ``--lang en`` or ``--lang fr``.
+    If Persalys is installed in user mode it should look like this:
+    ``C:\Users\<user_name>\AppData\Local\Persalys\Lib\site-packages\persalys\persalys_launcher.exe --lang en``
+
   - Linux: you must launch the appImage with the LANGUAGE environment
     variable LANGUAGE set to en/fr as follows:
 
   .. code::
 
-     LANGUAGE=en ./persalys-x.x.x-x86_64.AppImage
-
-  - Windows: you must add an argument to the launcher. Modify the
-    target link of the shortcut in the start menu and/or in the
-    desktop and add the argument ``--lang en`` or ``--lang fr``.  You
-    should have this if Persalys is installed in user mode, the target
-    will be ``C:\Users\<user_name>\AppData\Local\Persalys\Lib\site-packages\persalys\persalys_launcher.exe --lang en``
+     LANGUAGE=en ./persalys-x.y.*.AppImage
 
 - Persalys Python environment can be amended with additional packages
   by using the included nopip module. Additional modules can be
@@ -35,6 +34,13 @@ User manual - First steps
   where ``<module_name>`` is the module name provided to the usual pip
   install command. Modules are installed in ``~/.persalys_base`` on
   Linux and in ``<USER_DIR>\AppData\Roaming\Persalys\`` on Windows
+
+- On Linux the AppImage binary requires the libfuse2 package to run
+  which might not be installed by default, for example on Ubuntu:
+
+  .. code::
+
+     sudo apt install libfuse2t64
 
 
 1- Getting started with the graphical interface
