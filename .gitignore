@@ -3,4 +3,4 @@ build*/
 *.exe
 *.AppImage
 *doc.zip
-
+.vscode

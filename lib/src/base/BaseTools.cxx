@@ -518,6 +518,18 @@ Description Tools::GetNormalizedVariables(const Description& variables)
   return normVariables;
 }
 
+/* Method escapeHtml() escapes HTML special characters in a string using regex */
+String Tools::escapeHtml(const String &text)
+{
+  String result = text;
+  result = std::regex_replace(result, std::regex("&"), "&amp;");
+  result = std::regex_replace(result, std::regex("<"), "&lt;");
+  result = std::regex_replace(result, std::regex(">"), "&gt;");
+  result = std::regex_replace(result, std::regex("\""), "&quot;");
+  result = std::regex_replace(result, std::regex("'"), "&#39;");
+  return result;
+}
+
 // TimeCriteria methods
 
 void TimeCriteria::setStartTime(const Scalar startTime)

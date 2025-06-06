@@ -74,6 +74,8 @@ public:
   static OT::String GetNormalizedVariable(const OT::String& variable);
   static OT::Description GetNormalizedVariables(const OT::Description& variables);
 #endif
+  /** Method escapeHtml() escapes HTML special characters in a string */
+  static OT::String escapeHtml(const OT::String &text);
 };
 
 #ifndef SWIG
