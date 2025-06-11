@@ -240,20 +240,18 @@ void FunctionalChaosResultWindow::buildInterface()
       CopyableTableView * tableView = new CopyableTableView;
       tableView->verticalHeader()->hide();
       tableView->horizontalHeader()->hide();
-      CustomStandardItemModel * tableModel = new CustomStandardItemModel(1, 4, tableView);
+      CustomStandardItemModel * tableModel = new CustomStandardItemModel(1, 3, tableView);
       tableView->setModel(tableModel);
 
       // row
       tableModel->setNotEditableHeaderItem(0, 0, tr("Index"));
       tableModel->setNotEditableHeaderItem(0, 1, tr("Multi-indice"));
-      tableModel->setNotEditableHeaderItem(0, 2, tr("Coefficient"));
-      tableModel->setNotEditableHeaderItem(0, 3, tr("Part of variance") + "\n(" + tr("Threshold") + QString(" : %1 %").arg(ResourceMap::GetAsScalar("FunctionalChaosSobolIndices-VariancePartThreshold") * 100) + ")");
+      tableModel->setNotEditableHeaderItem(0, 2, tr("Part of variance") + "\n(" + tr("Threshold") + QString(" : %1 %").arg(ResourceMap::GetAsScalar("FunctionalChaosSobolIndices-VariancePartThreshold") * 100) + ")");
 
       // first coefficient
       tableModel->setNotEditableItem(1, 0, indices[0]);
       tableModel->setNotEditableItem(1, 1, enumerateFunction(indices[0]).__str__().c_str());
-      tableModel->setNotEditableItem(1, 2, coefficients(0, outputIndex));
-      tableModel->setNotEditableItem(1, 3, "-");
+      tableModel->setNotEditableItem(1, 2, "-");
 
       // part of variance
       Scalar varPartSum = 0;
@@ -267,12 +265,11 @@ void FunctionalChaosResultWindow::buildInterface()
 
         tableModel->setNotEditableItem(i + 2, 0, varianceOrder[i].first);
         tableModel->setNotEditableItem(i + 2, 1, multiIndices.__str__().c_str());
-        tableModel->setNotEditableItem(i + 2, 2, coefficients(i + 1, outputIndex));
-        tableModel->setNotEditableItem(i + 2, 3, QString("%1 %").arg(varianceOrder[i].second * 100, 0, 'f', 2));
+        tableModel->setNotEditableItem(i + 2, 2, QString("%1 %").arg(varianceOrder[i].second * 100, 0, 'f', 2));
         varPartSum += varianceOrder[i].second * 100;
       }
       tableModel->setNotEditableHeaderItem(tableModel->rowCount(), 0, tr("Sum"));
-      tableModel->setNotEditableItem(tableModel->rowCount() - 1, 3, QString("%1 %").arg(varPartSum, 0, 'f', 2));
+      tableModel->setNotEditableItem(tableModel->rowCount() - 1, 2, QString("%1 %").arg(varPartSum, 0, 'f', 2));
 
       tableView->resizeToContents();
       varStackedWidget->addWidget(tableView);
