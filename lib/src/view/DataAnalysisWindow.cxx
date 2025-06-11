@@ -66,12 +66,12 @@ DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
   , result_()
   , hasMaximumCV_(false)
   , hasMaximumCILength_(false)
+  , sampleSizeTitle_(tr("Total sample size"))
   , analysisStopCriteriaMessage_()
   , analysisErrorMessage_()
   , failedInputSample_()
   , notEvaluatedInputSample_()
   , resultsSampleIsValid_(true)
-  , sampleSizeTitle_(tr("Sample size"))
   , inputNames_(QStringList())
   , inAxisTitles_(QStringList())
   , outputNames_(QStringList())
@@ -232,12 +232,30 @@ void DataAnalysisWindow::addSummaryTab()
   // parameters values
   QStringList namesList;
   QStringList valuesList;
+
   // - sample size
   namesList << sampleSizeTitle_;
-  valuesList << QString::number(designOfExperiment_.getSample().getSize());
+
+  const OT::UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
+
+  valuesList << QString::number(totalSampleSize);
+
   // - elapsed time
   if (result_.getElapsedTime() > 0.)
   {
+    if (QString(metaObject()->className()) != "PERSALYS::MonteCarloResultWindow")
+    {
+      namesList << tr("Evaluated samples") << tr("Failed samples");
+      const OT::UnsignedInteger evaluatedSamples = totalSampleSize - notEvaluatedInputSample_.getSize();
+      const OT::UnsignedInteger failedSamples = failedInputSample_.getSize();
+      const double evaluatedPercent = totalSampleSize > 0 ? 100.0 * static_cast<double>(evaluatedSamples) / static_cast<double>(totalSampleSize) : 100.0;
+      const double failedPercent = evaluatedSamples > 0 ? 100.0 * static_cast<double>(failedSamples) / static_cast<double>(evaluatedSamples) : 100.0;
+
+      valuesList << QString("%1 (%2%)").arg(evaluatedSamples).arg(QString::number(evaluatedPercent, 'f', 2));
+      valuesList << QString("%1 (%2%)").arg(failedSamples).arg(QString::number(failedPercent, 'f', 2));
+    }
+
+
     namesList << tr("Elapsed time");
     valuesList << QtOT::FormatDuration(result_.getElapsedTime());
   }
@@ -269,8 +287,6 @@ void DataAnalysisWindow::addSummaryTab()
       }
     valuesList << QString::number(maxCILength);
   }
-
-
 
   ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
   parametersGroupBoxLayout->addWidget(table);

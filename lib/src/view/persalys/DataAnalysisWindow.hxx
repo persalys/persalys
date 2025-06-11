@@ -67,13 +67,13 @@ protected:
   DataAnalysisResult result_;
   bool hasMaximumCV_;
   bool hasMaximumCILength_;
+  QString sampleSizeTitle_;
   QString analysisStopCriteriaMessage_;
   QString analysisErrorMessage_;
   OT::Sample failedInputSample_;
   OT::Description errorDescription_;
   OT::Sample notEvaluatedInputSample_;
   bool resultsSampleIsValid_;
-  QString sampleSizeTitle_;
   QStringList inputNames_;
   QStringList inAxisTitles_;
   QStringList outputNames_;
