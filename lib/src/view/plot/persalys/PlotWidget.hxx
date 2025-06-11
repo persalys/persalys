@@ -119,11 +119,13 @@ signals:
 
 private:
   void updateScaleParameters(const OT::Distribution & distribution);
+  void changeXLabelOrientation();
 
 private:
 // TODO  QwtPlotGrid * grid_;
   QString plotTypeName_;
   bool enableContourColorBar_ = true;
+  int xLabelOrientation_ = 0; // 0: horizontal, 1: slanting, 2: vertical
 };
 }
 #endif
