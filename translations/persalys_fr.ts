@@ -989,23 +989,28 @@
     </message>
     <message>
         <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="379"/>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="383"/>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="394"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="400"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="411"/>
         <source>Residuals</source>
         <translation>Résidus</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="388"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="396"/>
+        <source>Residuals standard deviation after calibration (assuming gaussian residuals): σ = %1</source>
+        <translation>Écart-type des résidus après calibration (en supposant les résidus gaussien) : σ = %1</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="405"/>
         <source>qqPlot</source>
         <translation>diagrammeQQ</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="395"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="412"/>
         <source>Standard normal quantiles</source>
         <translation>Quantiles normaux standards</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="397"/>
+        <location filename="../lib/src/view/CalibrationResultWindow.cxx" line="414"/>
         <source>Residuals QQ-plot</source>
         <translation>Diagramme Q-Q des résidus</translation>
     </message>
