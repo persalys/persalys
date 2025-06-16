@@ -1669,47 +1669,42 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::DataAnalysisWindow</name>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="74"/>
-        <source>Sample size</source>
-        <translation>Taille d&apos;échantillon</translation>
-    </message>
-    <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="123"/>
         <source>Variables</source>
         <translation>Variables</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="241"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="260"/>
         <source>Elapsed time</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="308"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="325"/>
         <source>Summary</source>
         <translation>Résumé</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="387"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="404"/>
         <source>PDF/CDF</source>
         <translation>PDF/CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="430"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="447"/>
         <source>Box plots</source>
         <translation>Boîtes à moustaches</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="553"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="776"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="570"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="793"/>
         <source>Plot matrix</source>
         <translation>Tableau de diagrammes de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="584"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="606"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="627"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="634"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="741"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="601"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="623"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="644"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="651"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="758"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
@@ -1717,6 +1712,11 @@ bayésien (BIC)</translation>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="191"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="69"/>
+        <source>Total sample Size</source>
+        <translation>Taille totale de l&apos;échantillon</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="195"/>
@@ -1729,130 +1729,140 @@ bayésien (BIC)</translation>
         <translation>Critères d&apos;arrêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="247"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="249"/>
+        <source>Evaluated samples</source>
+        <translation>Échantillons évalués</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="249"/>
+        <source>Failed samples</source>
+        <translation>Échantillons échoués</translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="266"/>
         <source>Sample mean CV</source>
         <translation>CV de la moyenne de l&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="260"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="279"/>
         <source>Sample maximum CI length</source>
         <translation>Longueur de l&apos;IC max de l&apos;échantillon</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="340"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="357"/>
         <source>distributionPDF</source>
         <translation>distributionPDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="344"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="361"/>
         <source>PDF:</source>
         <translation>PDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="346"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="363"/>
         <source>Density</source>
         <translation>Densité</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="351"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="368"/>
         <source>distributionCDF</source>
         <translation>distributionCDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="355"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="372"/>
         <source>CDF:</source>
         <translation>CDF :</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="357"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="374"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="362"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="379"/>
         <source>distributionSurvivalFunction</source>
         <translation>distributionFonctionSurvie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="368"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="385"/>
         <source>SurvivalFunction:</source>
         <translation>Fonction de survie:</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="370"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="387"/>
         <source>SurvivalFunction</source>
         <translation>Fonction de survie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="446"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="463"/>
         <source>Spearman&apos;s matrix estimate</source>
         <translation>Estimation de la matrice de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="526"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="543"/>
         <source>Spearman&apos;s coefficient</source>
         <translation>Coefficient de Spearman</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="541"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="558"/>
         <source>Dependence</source>
         <translation>Dépendance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="574"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="738"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="792"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="591"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="755"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="809"/>
         <source>Scatter plot</source>
         <translation>Diagramme de dispersion</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="591"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="608"/>
         <source>Points</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="823"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="840"/>
         <source>Row ID</source>
         <translation>Ligne</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="824"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="841"/>
         <source>Error message</source>
         <translation>Message d&apos;erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="603"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="651"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="713"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="620"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="668"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="730"/>
         <source>Non-evaluated points</source>
         <translation>Points non évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="644"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="836"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="661"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="853"/>
         <source>Error messages</source>
         <translation>Messages d&apos;erreur</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="685"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="765"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="702"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="782"/>
         <source>Parallel coordinates plot</source>
         <translation>Coordonnées parallèles</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="700"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="717"/>
         <source>Evaluated points</source>
         <translation>Points évalués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="596"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="640"/>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="706"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="613"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="657"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="723"/>
         <source>Failed points</source>
         <translation>Points échoués</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="675"/>
+        <location filename="../lib/src/view/DataAnalysisWindow.cxx" line="692"/>
         <source>Status
 0: failed; 1: ok</source>
         <translation>Statut
@@ -2662,12 +2672,12 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::DesignOfExperimentWindow</name>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="53"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="55"/>
         <source>Design of experiments evaluation parameters</source>
         <translation>Paramètres d&apos;évaluation du plan d&apos;expériences</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="49"/>
+        <location filename="../lib/src/view/DesignOfExperimentWindow.cxx" line="51"/>
         <source>Design of experiments</source>
         <translation>Plan d&apos;expériences</translation>
     </message>
@@ -8284,64 +8294,70 @@ at</source>
 <context>
     <name>PERSALYS::QuantileAnalysisResultWindow</name>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="51"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="52"/>
         <source>Quantile analysis</source>
         <translation>Analyse de quantile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="67"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="68"/>
         <source>Output</source>
         <translation>Sortie</translation>
     </message>
     <message>
         <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="163"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="325"/>
+        <source>No valid results for variable </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="173"/>
         <source>Target probability</source>
         <translation>Probabilité cible</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="164"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="174"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="165"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="175"/>
         <source>Quantile</source>
         <translation>Quantile</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="166"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="176"/>
         <source>Confidence Interval @</source>
         <translation>Interval de confiance à</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="227"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="237"/>
         <source>Tail type</source>
         <translation>Type de queue</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="228"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="238"/>
         <source>GPD P-value</source>
         <translation>P-valeur de la GPD</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="233"/>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="421"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="243"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="431"/>
         <source>Lower</source>
         <translation>Basse</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="239"/>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="429"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="249"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="439"/>
         <source>Upper</source>
         <translation>Haute</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="252"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="260"/>
         <source>Quantiles</source>
         <translation>Quantiles</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="442"/>
+        <location filename="../lib/src/view/QuantileAnalysisResultWindow.cxx" line="453"/>
         <source>CDF</source>
         <translation>CDF</translation>
     </message>
@@ -8385,42 +8401,42 @@ at</source>
 <context>
     <name>PERSALYS::QuantileTableModel</name>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="113"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="124"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="115"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="126"/>
         <source>Lower</source>
         <translation>Basse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="117"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="128"/>
         <source>Upper</source>
         <translation>Haute</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="119"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="130"/>
         <source>Bilateral</source>
         <translation>Bilatérale</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="121"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="132"/>
         <source>Target probability</source>
         <translation>Probabilité cible</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="299"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="310"/>
         <source>Select at least one tail for variable </source>
         <translation>Sélectionnez au moins une queue pour la variable </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="311"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="322"/>
         <source>Sample size is too small to ensure quantile validity at specified target probability for variable </source>
         <translation>La taille de l&apos;échantillon est trop petite pour assurer un quantile valide à la probabilité choisie pour la variable </translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileTableModel.cxx" line="311"/>
+        <location filename="../lib/src/model/QuantileTableModel.cxx" line="322"/>
         <source>
 You must increase target probability or use excess with Generalized pareto distribution</source>
         <translation>
@@ -8430,42 +8446,42 @@ Vous devez augmenter la probabilité cible ou utiliser la méthode des excès av
 <context>
     <name>PERSALYS::QuantileThresholdTableModel</name>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="113"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="131"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="115"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="133"/>
         <source>CDF threshold</source>
         <translation>Seuil de la CDF</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="117"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="135"/>
         <source>Threshold</source>
         <translation>Seuil</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="119"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="137"/>
         <source>Excess sample size</source>
         <translation>Taille de l&apos;échantillon des excès</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="131"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="149"/>
         <source>Upper</source>
         <translation>Haute</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="133"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="151"/>
         <source>Lower</source>
         <translation>Basse</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="238"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="256"/>
         <source>Chosen CDF threshold must be greater than the target probability.</source>
         <translation>Le seuil de la CDF choisi doit être supérieur à la probabilité cible</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="240"/>
+        <location filename="../lib/src/model/QuantileThresholdTableModel.cxx" line="258"/>
         <source>Chosen CDF threshold must be lower than the target probability.</source>
         <translation>Le seuil de la CDF choisi doit être inférieur à la probabilité cible</translation>
     </message>
