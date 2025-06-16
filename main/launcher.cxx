@@ -155,16 +155,18 @@ int main(int argc, char *argv[])
 #endif
 
 // fork process
+const std::string persalys_exe = (persalys_dir / "persalys.exe").string();
+if (verbose)
+  std::cout << "persalys_exe=" << persalys_exe << std::endl;
 #if BOOST_VERSION >= 108800
   boost::asio::io_context ctx;
-  auto exe = bp::environment::find_executable("persalys");
-  bp::process proc(ctx, exe, {}, bp::process_environment(env));
+  bp::process proc(ctx, persalys_exe, {}, bp::process_environment(env));
   if (wait)
     return proc.wait();
   else
     proc.detach();
 #else
-  bp::child proc("persalys", env);
+  bp::child proc(persalys_exe, env);
   if (wait)
   {
     proc.wait();
