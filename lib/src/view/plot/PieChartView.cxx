@@ -62,6 +62,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QPainterPath>
+#include <QStyledItemDelegate>
 
 #include <cmath>
 
@@ -85,6 +86,33 @@ public:
   }
 };
 
+class PieChartLegendDelegate : public QStyledItemDelegate
+{
+public:
+  using QStyledItemDelegate::QStyledItemDelegate;
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+  {
+    QVariant colorVar = index.data(Qt::DecorationRole);
+    QRect rect = option.rect;
+    int size = rect.height() * 0.6;
+    QRect colorRect(rect.left() + 2, rect.center().y() - size/2, size, size);
+
+    if (colorVar.isValid())
+    {
+      QColor color = colorVar.value<QColor>();
+      painter->save();
+      painter->setBrush(color);
+      painter->setPen(Qt::NoPen);
+      painter->drawRect(colorRect);
+      painter->restore();
+    }
+
+    QStyleOptionViewItem opt(option);
+    opt.rect.setLeft(colorRect.right() + 6);
+
+    QStyledItemDelegate::paint(painter, opt, index);
+  }
+};
 
 PieChartView::PieChartView(const PointWithDescription& values, QWidget *parent)
   : QAbstractItemView(parent)
@@ -105,6 +133,8 @@ PieChartView::PieChartView(const PointWithDescription& values, QWidget *parent)
 
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  setItemDelegate(new PieChartLegendDelegate(this));
 
   // set model
   setData(values);
