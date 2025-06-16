@@ -187,10 +187,22 @@ Analysis GridDesignPage::getAnalysis()
 
 bool GridDesignPage::validatePage()
 {
-  if (!(tableModel_->getInterval().getVolume() > 0.0))
+  Indices selectedIndices;
+  for (int i = 1; i < tableModel_->rowCount(); ++i)
   {
-    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
-    return false;
+    QModelIndex idx = tableModel_->index(i, 0);
+    if (tableModel_->data(idx, Qt::CheckStateRole).toInt() == Qt::Checked)
+      selectedIndices.add(i - 1);
+  }
+
+  if (!selectedIndices.isEmpty())
+  {
+    Interval selectedInterval = tableModel_->getInterval().getMarginal(selectedIndices);
+    if (!(selectedInterval.getVolume() > 0.0))
+    {
+      errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds for selected variables"));
+      return false;
+    }
   }
 
   return true;
