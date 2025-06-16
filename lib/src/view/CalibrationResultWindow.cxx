@@ -380,7 +380,22 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   chartSetting = new TrajectoriesSettingWidget(pvWidget, labels, this);
 
-  predTabWidget->addTab(new WidgetBoundToDockWidget(pvWidget, chartSetting, this), tr("Residuals"));
+  QWidget *residualsTab = new QWidget;
+  QVBoxLayout *residualsLayout = new QVBoxLayout(residualsTab);
+
+  QWidget *graphContainer = new QWidget;
+  QVBoxLayout *graphLayout = new QVBoxLayout(graphContainer);
+  graphLayout->setContentsMargins(0, 0, 0, 0);
+  graphLayout->addWidget(new WidgetBoundToDockWidget(pvWidget, chartSetting, this));
+  graphContainer->setLayout(graphLayout);
+  residualsLayout->addWidget(graphContainer, 1);
+
+  const double std = result_.getCalibrationResult().getObservationsError().getStandardDeviation()[i];
+  QString stdLabel = tr("Residuals standard deviation (assuming gaussian distribution): σ = %1").arg(std);
+  QLabel * stdLabelWidget = new QLabel(stdLabel);
+  residualsLayout->addWidget(stdLabelWidget);
+
+  predTabWidget->addTab(residualsTab, tr("Residuals"));
 
   // - residuals QQ-plot
 
