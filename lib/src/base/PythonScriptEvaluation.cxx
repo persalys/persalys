@@ -211,7 +211,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   PyDict_SetItemString(dict, "X", inputSample.get());
 
   // code has to be separate
-  std::filesystem::path tempDir = std::filesystem::temp_directory_path() / "persalys";
+  std::filesystem::path tempDir = std::filesystem::temp_directory_path() / ("persalys_" + std::to_string(codeHash_));
   std::filesystem::create_directory(tempDir);
   std::string code_mod = "code" + std::to_string(codeHash_);
   std::ofstream code_file;
