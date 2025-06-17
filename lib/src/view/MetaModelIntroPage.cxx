@@ -75,8 +75,8 @@ MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
   methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::Chaos);
   methodLayout->addWidget(buttonToChooseMethod);
 
-  // Kriging
-  buttonToChooseMethod = new QRadioButton(tr("Kriging"));
+  // GPR
+  buttonToChooseMethod = new QRadioButton(tr("Gaussian Process (kriging)"));
   methodGroup_->addButton(buttonToChooseMethod, MetaModelIntroPage::Kriging);
   methodLayout->addWidget(buttonToChooseMethod);
 

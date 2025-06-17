@@ -10,8 +10,7 @@ option (USE_SPHINX "use sphinx" OFF)
 option (USE_PARAVIEW "use ParaView" ON)
 set (PERSALYS_QT_MAJOR_VERSION 5 CACHE STRING "Qt version")
 
-# By default, build in Release mode. Must appear before project() command
-set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
+set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project (persalys)
 
@@ -45,7 +44,7 @@ set (PERSALYS_DATA_PATH ${CMAKE_INSTALL_DATAROOTDIR})
 set (PERSALYS_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/persalys)
 set (PERSALYS_DOC_PATH ${CMAKE_INSTALL_DOCDIR})
 
-find_package (OpenTURNS 1.24 CONFIG REQUIRED)
+find_package (OpenTURNS 1.25 CONFIG REQUIRED)
 get_target_property (ot_features OT OPENTURNS_ENABLED_FEATURES)
 if (NOT ot_features MATCHES "hdf5")
   message (FATAL_ERROR "OpenTURNS lacks hdf5 support")
@@ -64,11 +63,11 @@ if (MSVC)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif ()
 
-find_package (Boost CONFIG COMPONENTS locale program_options process)
+find_package (Boost CONFIG COMPONENTS program_options process)
 if (Boost_FOUND)
   message(STATUS "Found Boost: ${Boost_DIR} (found suitable version \"${Boost_VERSION}\")")
 else ()
-  find_package (Boost MODULE COMPONENTS locale program_options REQUIRED)
+  find_package (Boost MODULE COMPONENTS program_options REQUIRED)
 endif ()
 
 find_package (Python 3.6 COMPONENTS Interpreter Development REQUIRED)
@@ -140,7 +139,7 @@ if (USE_OTFMI)
 endif ()
 
 if (USE_OTMORRIS)
-  find_package (OTMORRIS 0.17 CONFIG)
+  find_package (OTMORRIS 0.18 CONFIG)
   if (OTMORRIS_FOUND)
     message (STATUS "Found OTMORRIS: ${OTMORRIS_DIR} (found version \"${OTMORRIS_VERSION}\")")
     list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_OTMORRIS)

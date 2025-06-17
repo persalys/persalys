@@ -4,7 +4,6 @@ import openturns as ot
 import openturns.testing
 import persalys
 import os
-import locale
 
 myStudy = persalys.Study("myStudy")
 
@@ -123,11 +122,11 @@ for i, qx in enumerate(result.getQuantiles('X2')):
     for j, qxi in enumerate(qx):
         openturns.testing.assert_almost_equal(qxi, x2ref[i][j])
 
-print(result.getWilksValidity('X0', persalys.QuantileAnalysisResult.Upper))
-print(result.getWilksValidity('X0', persalys.QuantileAnalysisResult.Lower))
-print(result.getWilksValidity('X0', persalys.QuantileAnalysisResult.Bilateral))
-print(result.getWilksValidity('X1', persalys.QuantileAnalysisResult.Lower))
-print(result.getWilksValidity('X2', persalys.QuantileAnalysisResult.Bilateral))
+print(result.getSampleSizeValidity('X0', persalys.QuantileAnalysisResult.Upper))
+print(result.getSampleSizeValidity('X0', persalys.QuantileAnalysisResult.Lower))
+print(result.getSampleSizeValidity('X0', persalys.QuantileAnalysisResult.Bilateral))
+print(result.getSampleSizeValidity('X1', persalys.QuantileAnalysisResult.Lower))
+print(result.getSampleSizeValidity('X2', persalys.QuantileAnalysisResult.Bilateral))
 
 # Generalized Pareto
 # test wrong threshold
@@ -201,35 +200,22 @@ exec(script)
 sample = ot.Normal(2).getSample(10)
 sample[0] = [1, 2]
 inColumns = [0, 1]
-have_fr_locale = True
-try:
-    locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
-except Exception:
-    have_fr_locale = False
 
-if have_fr_locale:
-    for col_sep in [";", ",", " "]:
-        for num_sep in [".", ","]:
-            if col_sep == num_sep:
-                continue
-            with open(filename, "w") as csv:
-                csv.write('"x"' + col_sep + ' "y"\n')
-                for p in sample:
-                    for j in range(len(p)):
-                        csv.write(str(p[j]).replace(".", num_sep))
-                        if j < len(p) - 1:
-                            csv.write(col_sep)
-                    csv.write("\n")
-            model5 = persalys.DataModel("myDataModel5", filename, inColumns)
-            assert model5.getSampleFromFile().getDimension() == 2, (
-                "wrong dimension sep=" + col_sep
-            )
-            assert model5.getSampleFromFile().getSize() == 10, "wrong size"
-    os.remove(filename)
-
-    # test latin1 chars
-    filename = "DonneesLatin1.csv"
-    model5 = persalys.DataModel("myDataModel5", filename, [0, 1, 2, 3], [4, 5])
-
-    myStudy.add(model5)
-    assert "Ann" in model5.getSampleFromFile().getDescription()[0]
+for col_sep in [";", ",", " "]:
+    for num_sep in [".", ","]:
+        if col_sep == num_sep:
+            continue
+        with open(filename, "w") as csv:
+            csv.write('"x"' + col_sep + '"y"\n')
+            for p in sample:
+                for j in range(len(p)):
+                    csv.write(str(p[j]).replace(".", num_sep))
+                    if j < len(p) - 1:
+                        csv.write(col_sep)
+                csv.write("\n")
+        model = persalys.DataModel("myDataModel2", filename, inColumns)
+        assert model.getSampleFromFile().getDimension() == 2, (
+            "wrong dimension sep=" + col_sep
+        )
+        assert model.getSampleFromFile().getSize() == 10, "wrong size"
+os.remove(filename)

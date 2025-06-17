@@ -48,8 +48,10 @@ public:
   PhysicalModel getMetaModel() const;
 
   OT::Sample getOutputSample() const;
-
   OT::Sample getMetaModelOutputSample() const;
+
+  OT::Point getMeanSquaredError() const;
+  OT::Point getR2Score() const;
 
   MetaModelValidationResult getAnalyticalValidation() const;
   MetaModelValidationResult getTestSampleValidation() const;
@@ -75,6 +77,8 @@ protected:
   MetaModelValidationResult looValidation_;
   OT::Sample outputSample_;
   OT::Sample metaModelOutputSample_;
+  OT::Point mse_;
+  OT::Point r2_;
 };
 }
 #endif

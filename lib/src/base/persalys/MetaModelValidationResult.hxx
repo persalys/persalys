@@ -44,7 +44,7 @@ public:
   MetaModelValidationResult(const OT::String& name);
   MetaModelValidationResult(const OT::Sample& metaModelSample,
                             const OT::Point& q2,
-                            const OT::Point& residuals);
+                            const OT::Point& mse);
 
   /** Virtual constructor */
   MetaModelValidationResult * clone() const override;
@@ -53,7 +53,7 @@ public:
   OT::String getName() const;
   OT::PointWithDescription getParameters() const;
   OT::Sample getMetaModelOutputSample() const;
-  OT::Point getResiduals() const;
+  OT::Point getMeanSquaredError() const;
   OT::Point getQ2() const;
 
   /** String converter */
@@ -73,7 +73,7 @@ protected:
   OT::PointWithDescription parameters_;
   OT::Sample metaModelSample_;
   OT::Point q2_;
-  OT::Point residuals_;
+  OT::Point mse_;
 };
 }
 #endif

@@ -46,7 +46,8 @@ analysis = persalys.CalibrationAnalysis("myAnalysis", observations)
 analysis.run()
 myStudy.add(analysis)
 print("analysis=", analysis)
-print("result=", analysis.getResult())
+thetaMAP = analysis.getResult().getCalibrationResult().getParameterMAP()
+ott.assert_almost_equal(thetaMAP, [7.47009e+08, 2.73521e+09, 10.1291], 1e-2, 1)
 print("isBayesian=", analysis.getResult().getCalibrationResult().isBayesian())
 
 # Least Squares Non linear
@@ -163,24 +164,17 @@ print("thetaMAP CI=\n", analysis.getResult().getConfidenceInterval())
 
 # print("\nthetaMAP=", analysis2.getResult().getCalibrationResult().getParameterMAP())
 # print("thetaMAP CI=\n", analysis2.getResult().getConfidenceInterval())
-ott.assert_almost_equal(
-    analysis2.getResult().getCalibrationResult().getParameterMAP(),
-    [7.73108e08, 3.55285e09],
-    1e-2,
-    1,
-)
+thetaMAP = analysis2.getResult().getCalibrationResult().getParameterMAP()
+ott.assert_almost_equal(thetaMAP, [7.73108e08, 3.55285e09], 1e-2, 1)
+
 
 print("\nthetaMAP=", analysis3.getResult().getCalibrationResult().getParameterMAP())
 print("thetaMAP CI=\n", analysis3.getResult().getConfidenceInterval())
 
 # print("\nthetaMAP=", analysis4.getResult().getCalibrationResult().getParameterMAP())
 # print("thetaMAP CI=\n", analysis4.getResult().getConfidenceInterval())
-ott.assert_almost_equal(
-    analysis4.getResult().getCalibrationResult().getParameterMAP(),
-    [7.47517e08, 2.83374e09, 9.58942],
-    1e-2,
-    1,
-)
+thetaMAP = analysis4.getResult().getCalibrationResult().getParameterMAP()
+ott.assert_almost_equal(thetaMAP, [7.47517e08, 2.83374e09, 9.58942], 1e-2, 1)
 
 print("\nthetaMAP=", analysis5.getResult().getCalibrationResult().getParameterMAP())
 print("thetaMAP CI=\n", analysis5.getResult().getConfidenceInterval())

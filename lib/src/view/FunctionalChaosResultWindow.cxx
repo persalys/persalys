@@ -116,10 +116,10 @@ void FunctionalChaosResultWindow::buildInterface()
     for (UnsignedInteger outputIndex = 0; outputIndex < nbOutputs; ++outputIndex)
     {
       QStringList namesList;
-      namesList << tr("Residual") << tr("Relative error (%)");
+      namesList << tr("MSE") << tr("R2");
       QStringList valuesList;
-      valuesList << QString::number(result_.getFunctionalChaosResult().getResiduals()[outputIndex]);
-      valuesList << QString::number(100.*result_.getFunctionalChaosResult().getRelativeErrors()[outputIndex]);
+      valuesList << QString::number(result_.getMeanSquaredError()[outputIndex]);
+      valuesList << QString::number(result_.getR2Score()[outputIndex]);
       ParametersTableView * generalTableView = new ParametersTableView(namesList, valuesList, true, true);
       generalStackedWidget->addWidget(generalTableView);
     }
@@ -311,8 +311,8 @@ void FunctionalChaosResultWindow::buildInterface()
   ResizableStackedWidget * plotsStackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotsStackedWidget, SLOT(setCurrentIndex(int)));
   MetaModelValidationResult fakeResu(result_.getMetaModelOutputSample(),
-                                     result_.getFunctionalChaosResult().getRelativeErrors(),
-                                     result_.getFunctionalChaosResult().getResiduals());
+                                     result_.getMeanSquaredError(),
+                                     result_.getR2Score());
   for (UnsignedInteger i = 0; i < nbOutputs; ++ i)
   {
     MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(fakeResu, result_.getOutputSample(), i, "", this);

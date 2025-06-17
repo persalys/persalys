@@ -407,7 +407,7 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
         result.analyticalValidation_.metaModelSample_(i, 0) -= S_inv(i, j) / S_inv(i, i) * result.outputSample_(j, 0);
 
   // Compute Q2
-  computeError(result.analyticalValidation_.metaModelSample_, result.outputSample_, result.analyticalValidation_.residuals_, result.analyticalValidation_.q2_);
+  computeError(result.analyticalValidation_.metaModelSample_, result.outputSample_, result.analyticalValidation_.mse_, result.analyticalValidation_.q2_);
 }
 
 

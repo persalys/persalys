@@ -27,7 +27,7 @@
 #include <openturns/GeneralizedParetoFactory.hxx>
 #include <openturns/GeneralizedPareto.hxx>
 #include <openturns/FittingTest.hxx>
-#include <openturns/Wilks.hxx>
+#include <openturns/QuantileConfidence.hxx>
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/Curve.hxx>
 #include <openturns/SymbolicFunction.hxx>
@@ -114,7 +114,7 @@ namespace PERSALYS
         {
           Sample data = -1. * graph.getDrawable(i).getData().getMarginal(0);
           data.stack(graph.getDrawable(i).getData().getMarginal(1));
-          newGraph.setDrawable(Curve(data, graph.getDrawable(i).getLegend()), i);
+          newGraph.setDrawable(i, Curve(data, graph.getDrawable(i).getLegend()));
         }
         meanExcessGraphMap_[mapPair] = newGraph;
       }
@@ -221,29 +221,21 @@ namespace PERSALYS
     }
   }
 
-  Indices QuantileAnalysis::computeWilksValidity(const Point & probaValues, const UnsignedInteger & sampleSize, const QuantileAnalysisResult::TailType & tail) const
+  Indices QuantileAnalysis::computeSampleSizeValidity(const Point & probaValues, const UnsignedInteger & sampleSize, const QuantileAnalysisResult::TailType & tail) const
   {
-    // TODO: use QuantileConfidence::computeUnilateralMinimumSampleSize/computeBilateralMinimumSampleSize
-    Indices wilks(probaValues.getDimension());
+    Indices validity(probaValues.getDimension());
     for (UnsignedInteger iProba=0; iProba<probaValues.getDimension(); ++iProba)
     {
-      Scalar nApprox = 0.0;
+      const QuantileConfidence quantileConfidence(probaValues[iProba], ciLevel_);
+      UnsignedInteger minSize = 0;
       if (tail & QuantileAnalysisResult::Lower || tail & QuantileAnalysisResult::Upper)
-        nApprox = std::max(std::ceil(std::log1p(-ciLevel_) / std::log1p(-probaValues[iProba])), nApprox);
-      if (tail & QuantileAnalysisResult::Bilateral)
-      {
-        const Scalar gamma = std::max(probaValues[iProba], 1.0 - probaValues[iProba]);
-        const Scalar nMin = std::ceil(std::log1p(-ciLevel_) / std::log(gamma));
-        const Scalar nMax = std::ceil((std::log1p(-ciLevel_) - std::log(2)) / std::log(gamma));
-        const SymbolicFunction residualFunction(Description({"n", "alpha", "beta"}), Description({"1 - alpha^n - (1 - alpha)^n - beta"}));
-        const ParametricFunction residualParametric(residualFunction, Indices({1, 2}), Point({probaValues[iProba], ciLevel_}));
-        Brent solver;
-        const Scalar root = solver.solve(residualParametric, 0.0, nMin - 1, nMax);
-        nApprox = std::max(std::ceil(root), nApprox);
-      }
-      wilks[iProba] = (int)(std::ceil(nApprox) <= sampleSize);
+	// always use tail=false since alpha=1-probaValues for upper quantile
+        minSize = quantileConfidence.computeUnilateralMinimumSampleSize(0, false);
+      else
+	minSize = quantileConfidence.computeBilateralMinimumSampleSize();
+      validity[iProba] = (sampleSize >= minSize);
     }
-    return wilks;
+    return validity;
   }
 
   void QuantileAnalysis::launchMonteCarlo(const Sample & sample)
@@ -263,18 +255,18 @@ namespace PERSALYS
       if (tailTypes_[iMarg] & QuantileAnalysisResult::Lower)
       {
         probaValues.add(targetProbas_[iMarg]);
-        result_.wilksValidity_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Lower)] = computeWilksValidity(targetProbas_[iMarg], sampleSize, QuantileAnalysisResult::Lower);
+        result_.wilksValidity_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Lower)] = computeSampleSizeValidity(targetProbas_[iMarg], sampleSize, QuantileAnalysisResult::Lower);
       }
       if (tailTypes_[iMarg] & QuantileAnalysisResult::Upper)
       {
         probaValues.add(Point(targetProbas_[iMarg].getDimension(), 1.) - targetProbas_[iMarg]);
-        result_.wilksValidity_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Upper)] = computeWilksValidity(targetProbas_[iMarg], sampleSize, QuantileAnalysisResult::Upper);
+        result_.wilksValidity_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Upper)] = computeSampleSizeValidity(targetProbas_[iMarg], sampleSize, QuantileAnalysisResult::Upper);
       }
       if (tailTypes_[iMarg] & QuantileAnalysisResult::Bilateral)
       {
         probaValues.add(0.5 * targetProbas_[iMarg]);
         probaValues.add(Point(targetProbas_[iMarg].getDimension(), 1.) - 0.5 * targetProbas_[iMarg]);
-        result_.wilksValidity_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Bilateral)] = computeWilksValidity(targetProbas_[iMarg], sampleSize, QuantileAnalysisResult::Bilateral);
+        result_.wilksValidity_[std::make_pair(sample.getDescription()[iMarg], QuantileAnalysisResult::Bilateral)] = computeSampleSizeValidity(targetProbas_[iMarg], sampleSize, QuantileAnalysisResult::Bilateral);
       }
 
       for (UnsignedInteger iTail=0; iTail<probaValues.getSize(); ++iTail)

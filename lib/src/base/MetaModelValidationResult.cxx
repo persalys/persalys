@@ -48,12 +48,12 @@ MetaModelValidationResult::MetaModelValidationResult(const String& name)
 
 MetaModelValidationResult::MetaModelValidationResult(const Sample& metaModelSample,
     const Point& q2,
-    const Point& residuals)
+    const Point& mse)
   : PersistentObject()
   , name_("")
   , metaModelSample_(metaModelSample)
   , q2_(q2)
-  , residuals_(residuals)
+  , mse_(mse)
 {
 }
 
@@ -66,7 +66,7 @@ MetaModelValidationResult * MetaModelValidationResult::clone() const
 
 void MetaModelValidationResult::add(const MetaModelValidationResult& other)
 {
-  if ((other.getMetaModelOutputSample().getDimension() * other.q2_.getDimension() * other.residuals_.getDimension()) != 1)
+  if ((other.getMetaModelOutputSample().getDimension() * other.q2_.getDimension() * other.mse_.getDimension()) != 1)
     throw InvalidArgumentException(HERE) << "Method misused: the result must contain only one result";
 
   if (!metaModelSample_.getSize())
@@ -82,7 +82,7 @@ void MetaModelValidationResult::add(const MetaModelValidationResult& other)
     metaModelSample_.stack(other.metaModelSample_);
   }
   q2_.add(other.q2_[0]);
-  residuals_.add(other.residuals_[0]);
+  mse_.add(other.mse_[0]);
 }
 
 
@@ -104,9 +104,9 @@ Sample MetaModelValidationResult::getMetaModelOutputSample() const
 }
 
 
-Point MetaModelValidationResult::getResiduals() const
+Point MetaModelValidationResult::getMeanSquaredError() const
 {
-  return residuals_;
+  return mse_;
 }
 
 
@@ -123,7 +123,7 @@ String MetaModelValidationResult::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " parameters=" << getParameters()
-      << " residuals=" << getResiduals()
+      << " mse=" << getMeanSquaredError()
       << " q2=" << getQ2();
   return oss;
 }
@@ -137,7 +137,7 @@ void MetaModelValidationResult::save(Advocate& adv) const
   adv.saveAttribute("parameters_", parameters_);
   adv.saveAttribute("metaModelSample_", metaModelSample_);
   adv.saveAttribute("q2_", q2_);
-  adv.saveAttribute("residuals_", residuals_);
+  adv.saveAttribute("residuals_", mse_);
 }
 
 
@@ -149,6 +149,6 @@ void MetaModelValidationResult::load(Advocate& adv)
   adv.loadAttribute("parameters_", parameters_);
   adv.loadAttribute("metaModelSample_", metaModelSample_);
   adv.loadAttribute("q2_", q2_);
-  adv.loadAttribute("residuals_", residuals_);
+  adv.loadAttribute("residuals_", mse_);
 }
 }

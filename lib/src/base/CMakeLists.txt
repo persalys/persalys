@@ -237,7 +237,6 @@ endif ()
 
 target_link_libraries (persalysbase PUBLIC ${PERSALYS_PUBLIC_LIBRARIES})
 target_link_libraries (persalysbase PRIVATE ${PERSALYS_PRIVATE_LIBRARIES})
-target_link_libraries (persalysbase PRIVATE Boost::locale)
 target_link_libraries (persalysbase PRIVATE Python::Python)
 
 install (TARGETS persalysbase

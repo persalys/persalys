@@ -26,6 +26,7 @@
 #include <openturns/KPermutationsDistribution.hxx>
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/AggregatedFunction.hxx>
+#include <openturns/MetaModelValidation.hxx>
 
 using namespace OT;
 
@@ -347,42 +348,18 @@ Function MetaModelAnalysis::runAlgoMarginal(const OT::Sample& /*inputSample*/, c
   throw NotYetImplementedException(HERE) << "MetaModelAnalysis::runAlgoMarginal";
 }
 
-void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& outSample, Point& residuals, Point& q2)
+void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& outSample, Point& mse, Point& q2)
 {
-  // check
-  if (!outSample.getSize())
-    throw InvalidValueException(HERE) << "Problem during the validation of the metamodel: outputSample is empty.\n";
-  if (!metaOutSample.getSize())
-    throw InvalidValueException(HERE) << "Problem during the validation of the metamodel: metaOutSample is empty.\n";
-
-  const UnsignedInteger size = outSample.getSize();
-  const UnsignedInteger dimension = outSample.getDimension();
-
-  // var Y
-  const Point variance(outSample.computeVariance());
-
-  residuals = Point(dimension);
-  q2 = Point(dimension);
-
-  for (UnsignedInteger i = 0; i < dimension; ++i)
-  {
-    // sum[ (ŷ_j/j - y_j)^2 ]
-    double quadraticResidual = 0.;
-    for (UnsignedInteger j = 0; j < size; ++j)
-    {
-      const double diff = metaOutSample(j, i) - outSample(j, i);
-      quadraticResidual += diff * diff;
-    }
-    // sqrt ( sum[ (ŷ_j/j - y_j)^2 ] ) / n
-    residuals[i] = sqrt(quadraticResidual) / size;
-    // 1 - sum[ (ŷ_j/j - y_j)^2 ] / (n-1) / Var Y
-    q2[i] = 1.0 - (quadraticResidual / (size - 1.0)) / variance[i];
-  }
+  MetaModelValidation validation(outSample, metaOutSample);
+  mse = validation.computeMeanSquaredError();
+  q2 = validation.computeR2Score();
 }
 
 
 void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
+  computeError(result.outputSample_, result.metaModelOutputSample_, result.mse_, result.r2_);
+
   // check
   if (analyticalValidation_ || testSampleValidation_ || kFoldValidation_ || leaveOneOutValidation_)
   {
@@ -500,7 +477,7 @@ void MetaModelAnalysis::computeTestSampleValidation(MetaModelAnalysisResult& res
   result.testSampleValidation_.parameters_ = getTestSampleValidationParameters();
 
   // compute Q2
-  computeError(result.testSampleValidation_.metaModelSample_, testOutputSample, result.testSampleValidation_.residuals_, result.testSampleValidation_.q2_);
+  computeError(result.testSampleValidation_.metaModelSample_, testOutputSample, result.testSampleValidation_.mse_, result.testSampleValidation_.q2_);
 }
 
 
@@ -583,7 +560,7 @@ void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, 
   // fill result
   result.kFoldValidation_.metaModelSample_ = metaModelSample;
   // compute the mean of the q2
-  result.kFoldValidation_.residuals_ = residuals / nbFolds_;
+  result.kFoldValidation_.mse_ = residuals / nbFolds_;
   result.kFoldValidation_.q2_ = q2 / nbFolds_;
 
   result.kFoldValidation_.parameters_ = getKFoldValidationParameters();
@@ -626,7 +603,7 @@ void MetaModelAnalysis::computeLOOValidation(MetaModelAnalysisResult& result, co
   result.looValidation_.metaModelSample_ = metaModelSample;
 
   // compute Q2
-  computeError(result.looValidation_.metaModelSample_, result.outputSample_, result.looValidation_.residuals_, result.looValidation_.q2_);
+  computeError(result.looValidation_.metaModelSample_, result.outputSample_, result.looValidation_.mse_, result.looValidation_.q2_);
 }
 
 

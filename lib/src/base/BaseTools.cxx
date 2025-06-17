@@ -20,8 +20,6 @@
  */
 #include "persalys/BaseTools.hxx"
 
-#include <boost/locale.hpp>
-
 #include <stdint.h>
 #include <chrono>
 
@@ -295,9 +293,9 @@ Sample Tools::ImportSample(const String& fileName, const DataOrder order)
         // import sample from the file
         testSample = Sample::ImportFromTextFile(fileName, separatorsList[i], 0, numSep[j]);
       }
-      catch (const InternalException &)
+      catch (const InvalidArgumentException &)
       {
-        // Locale not available
+        // wrong separator
         testSample.clear();
       }
       // Select num/col separator pair leading to the largest sample
@@ -311,23 +309,6 @@ Sample Tools::ImportSample(const String& fileName, const DataOrder order)
 
   if (!sampleFromFile.getSize())
     throw InvalidArgumentException(HERE) << "The file " << fileName << " does not contain a sample and/or the file encoding is not valid (use utf-8)";
-
-  // check description encoding : only utf-8 is valid
-  String descriptionStr = sampleFromFile.getDescription().__str__();
-  // if not, try ISO-8859 -> UTF8 conversion
-  if (!IsUTF8(descriptionStr.c_str(), descriptionStr.size()))
-  {
-    Description newDesc;
-    for(UnsignedInteger i = 0; i < sampleFromFile.getDescription().getSize(); ++i)
-    {
-      descriptionStr = sampleFromFile.getDescription()[i];
-      const String convertedStr = boost::locale::conv::to_utf<char>(descriptionStr, "Latin1");
-      if (!IsUTF8(convertedStr.c_str(), convertedStr.size()))
-        throw InvalidArgumentException(HERE) << "The file must contain utf-8 or ISO-8859 characters";
-      newDesc.add(convertedStr);
-    }
-    sampleFromFile.setDescription(newDesc);
-  }
 
   // deduplicate identifiers
   std::map<String, int> occurrences;
@@ -361,99 +342,6 @@ Sample Tools::ImportSample(const String& fileName, const DataOrder order)
   default:
     throw InvalidArgumentException(HERE) << "Unknown data order";
   }
-}
-
-
-String Tools::GetLocaleString(const String& str)
-{
-  boost::locale::generator g;
-  g.locale_cache_enabled(true);
-  std::locale loc = g(boost::locale::util::get_system_locale());
-
-  return boost::locale::conv::from_utf<char>(str, loc);;
-}
-
-
-// code found at https://unicodebook.readthedocs.io/guess_encoding.html#is-utf-8
-int Tools::IsUTF8(const char *data, size_t size)
-{
-  const unsigned char *str = (unsigned char*)data;
-  const unsigned char *end = str + size;
-  unsigned char byte;
-  unsigned int code_length, i;
-  uint32_t ch;
-  while (str != end)
-  {
-    byte = *str;
-    if (byte <= 0x7F)
-    {
-      /* 1 byte sequence: U+0000..U+007F */
-      str += 1;
-      continue;
-    }
-
-    if (0xC2 <= byte && byte <= 0xDF)
-      /* 0b110xxxxx: 2 bytes sequence */
-      code_length = 2;
-    else if (0xE0 <= byte && byte <= 0xEF)
-      /* 0b1110xxxx: 3 bytes sequence */
-      code_length = 3;
-    else if (0xF0 <= byte && byte <= 0xF4)
-      /* 0b11110xxx: 4 bytes sequence */
-      code_length = 4;
-    else
-    {
-      /* invalid first byte of a multibyte character */
-      return 0;
-    }
-
-    if (str + (code_length - 1) >= end)
-    {
-      /* truncated string or invalid byte sequence */
-      return 0;
-    }
-
-    /* Check continuation bytes: bit 7 should be set, bit 6 should be
-     * unset (b10xxxxxx). */
-    for (i = 1; i < code_length; i++)
-    {
-      if ((str[i] & 0xC0) != 0x80)
-        return 0;
-    }
-
-    if (code_length == 2)
-    {
-      /* 2 bytes sequence: U+0080..U+07FF */
-      ch = ((str[0] & 0x1f) << 6) + (str[1] & 0x3f);
-      /* str[0] >= 0xC2, so ch >= 0x0080.
-               str[0] <= 0xDF, (str[1] & 0x3f) <= 0x3f, so ch <= 0x07ff */
-    }
-    else if (code_length == 3)
-    {
-      /* 3 bytes sequence: U+0800..U+FFFF */
-      ch = ((str[0] & 0x0f) << 12) + ((str[1] & 0x3f) << 6) +
-           (str[2] & 0x3f);
-      /* (0xff & 0x0f) << 12 | (0xff & 0x3f) << 6 | (0xff & 0x3f) = 0xffff,
-               so ch <= 0xffff */
-      if (ch < 0x0800)
-        return 0;
-
-      /* surrogates (U+D800-U+DFFF) are invalid in UTF-8:
-               test if (0xD800 <= ch && ch <= 0xDFFF) */
-      if ((ch >> 11) == 0x1b)
-        return 0;
-    }
-    else if (code_length == 4)
-    {
-      /* 4 bytes sequence: U+10000..U+10FFFF */
-      ch = ((str[0] & 0x07) << 18) + ((str[1] & 0x3f) << 12) +
-           ((str[2] & 0x3f) << 6) + (str[3] & 0x3f);
-      if ((ch < 0x10000) || (0x10FFFF < ch))
-        return 0;
-    }
-    str += code_length;
-  }
-  return 1;
 }
 
 

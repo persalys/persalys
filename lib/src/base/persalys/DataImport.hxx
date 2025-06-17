@@ -62,8 +62,7 @@ public:
 protected:
   virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns);
   virtual OT::Sample importSample(const OT::String& fileName);
-  virtual OT::Sample importSample(const OT::String& fileName,
-                                  const Tools::DataOrder order);
+  virtual OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder order);
   virtual void check();
   virtual void setDefaultColumns();
 
