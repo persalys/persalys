@@ -53,11 +53,11 @@ RUN curl -fsSL https://github.com/coin-or/Cbc/archive/refs/tags/releases/2.10.12
 RUN curl -fsSL https://github.com/coin-or/Bonmin/archive/refs/tags/releases/1.8.9.tar.gz | tar xz && cd Bonmin* && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
 
 # dlib
-RUN curl -L https://github.com/davisking/dlib/archive/v19.24.6.tar.gz | tar xz && cd dlib* \
- && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release .. && make install > /dev/null 2>&1 && cd - && rm -r dlib*
+RUN curl -L https://github.com/davisking/dlib/archive/v20.0.tar.gz | tar xz && cd dlib* \
+ && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -B build . && cd build && make install > /dev/null 2>&1 && cd - && rm -r dlib*
 
 # cminpack
-RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.9.tar.gz | tar xz && cd cminpack* \
+RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.11.tar.gz | tar xz && cd cminpack* \
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d -DUSE_BLAS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
@@ -65,30 +65,30 @@ RUN curl -fSsL https://github.com/stevengj/nlopt/archive/v2.10.0.tar.gz | tar xz
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_UNITY_BUILD=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_JAVA=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
-RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/hdf5_1.14.5/hdf5-1.14.5.tar.gz | tar xz && cd hdf5* && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
+RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/hdf5_1.14.6/hdf5-1.14.6.tar.gz | tar xz && cd hdf5* && ./configure --enable-cxx --prefix=/usr/local --disable-tests --disable-tools && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r hdf5*
 
 # nanoflann
-RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.7.0.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
+RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.7.1.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen* \
- && mkdir build && cd build && cmake .. && make install > /dev/null 2>&1 && cd - && rm -r eigen*
+ && cmake -B build . && cd build && make install > /dev/null 2>&1 && cd - && rm -r eigen*
 
 # spectra
 RUN curl -fsSL https://github.com/yixuan/spectra/archive/v1.1.0.tar.gz | tar xz && cd spectra* && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
 
 # glog
-RUN curl -fsSL https://github.com/google/glog/archive/v0.6.0.tar.gz | tar xz && cd glog* && cmake . && make install > /dev/null 2>&1 && cd - && rm -rf glog*
+RUN curl -fsSL https://github.com/google/glog/archive/v0.7.1.tar.gz | tar xz && cd glog* && cmake . && make install > /dev/null 2>&1 && cd - && rm -rf glog*
 
 # ceres
 RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz | tar xz && cd ceres* \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2022.0.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
+RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2022.1.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.6.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.8.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
@@ -113,10 +113,10 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.13.3/Python-3.13.3.tgz | tar 
 RUN pip3 install numpy==2.2.4 scipy==1.15.2 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
 
 # sundials
-RUN curl -fSsL https://github.com/LLNL/sundials/archive/v6.7.0.tar.gz | tar xz && cd sundials* \
- && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
-    -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib .. \
- && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v7.3.0.tar.gz | tar xz && cd sundials* \
+ && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
+    -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib -B build . \
+ && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
 RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/3.0.3.tar.gz | tar xz && cd fmi-library* \
@@ -128,13 +128,13 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.17.1.tar.gz | tar xz && cd PyFMI* \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.17.2.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # boost
 RUN curl -fSsL https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
- && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-locale --with-serialization --with-program_options --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
+ && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-graph --with-chrono --with-serialization --with-program_options --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
 
 # pagmo
 RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.1.tar.gz | tar xz && cd pagmo* && cmake -DPAGMO_WITH_EIGEN3=ON -DCMAKE_UNITY_BUILD=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
@@ -183,7 +183,7 @@ RUN git clone -b v0.18 --depth 1 https://github.com/openturns/otmorris.git && cd
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.6 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.25.0 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.25.1 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*

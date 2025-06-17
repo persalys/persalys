@@ -95,7 +95,7 @@ done
 cp -v /usr/local/lib64/libpagmo.so.* persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libtbb.so.* persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libdlib* persalys.AppDir/usr/lib
-cp -v /usr/local/lib64/libglog.so.1 persalys.AppDir/usr/lib
+cp -v /usr/local/lib64/libglog.so.2 persalys.AppDir/usr/lib
 cp -v /usr/local/lib64/libprimesieve.so.* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libboost* persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libmetis* persalys.AppDir/usr/lib
@@ -125,6 +125,7 @@ cp -rv /usr/local/share/omc persalys.AppDir/usr/share
 cp -v /usr/lib64/liblpsolve55.so /lib64/libuuid.so.1 /lib64/libexpat.so.1 persalys.AppDir/usr/lib
 cp -v /usr/local/bin/omc persalys.AppDir/usr/bin
 cp -v /usr/local/lib/libsundials* persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libfmilib* persalys.AppDir/usr/lib
 
 # gdb
 cp -v /usr/local/bin/gdb* persalys.AppDir/usr/bin
