@@ -275,18 +275,18 @@ void CouplingPhysicalModel::updateCode()
   code << "        if step.getCode():\n";
   code << "            script = step.getCode()\n";
 
-  code << "            regexsearch = re.search('def (\\w*)\\(.*\\):', script)\n";
+  code << "            regexsearch = re.search(r'def (\\w*)\\(.*\\):', script)\n";
   code << "            if regexsearch is not None:\n";
   code << "                script_funcname = regexsearch.group(1)\n";
   code << "            else:\n";
   code << "                raise RuntimeError('Could not find extra processing function name')\n";
 
-  code << "            regexsearch = re.search('def \\w+\\(([\\w, ]+)\\):', script)\n";
+  code << "            regexsearch = re.search(r'def \\w+\\(([\\w, ]+)\\):', script)\n";
   code << "            if regexsearch is not None:\n";
   code << "                script_invars = regexsearch.group(1).replace(' ', '').split(',')\n";
   code << "            else:\n";
   code << "                script_invars = []\n";
-  code << "            regexsearch = re.search('return ([\\w, ]+)', script)\n";
+  code << "            regexsearch = re.search(r'return ([\\w, ]+)', script)\n";
   code << "            if regexsearch is not None:\n";
   code << "                script_outvars = regexsearch.group(1).replace(' ', '').split(',')\n";
   code << "            else:\n";
