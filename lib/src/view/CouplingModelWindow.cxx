@@ -374,26 +374,26 @@ QVariant InTableModel::data(const QModelIndex & index, int role) const
         return QString::fromUtf8(inName.c_str());
       case 1:
       {
-        const bool isInput = model_->hasInputNamed(inName);
-        if (isInput)
+        if (model_->hasInputNamed(inName))
           return QString::fromUtf8(model_->getInputByName(inName).getDescription().c_str());
-        else
+        else if (model_->hasOutputNamed(inName))
           return QString::fromUtf8(model_->getOutputByName(inName).getDescription().c_str());
+        return QVariant();
       }
       case 2:
         return QString::fromUtf8(getInputFile().getTokens()[index.row()].c_str());
       case 3:
       {
-        const bool isInput = model_->hasInputNamed(inName);
-        if (isInput)
+        if (model_->hasInputNamed(inName))
           return QString::number(model_->getInputByName(inName).getValue(), 'g', StudyTreeViewModel::DefaultSignificantDigits);
-        else
+        else if (model_->hasOutputNamed(inName))
         {
           Output output(model_->getOutputByName(inName));
           if (!output.hasBeenComputed())
             return QString("?");
           return QString::number(output.getValue(), 'g', StudyTreeViewModel::DefaultSignificantDigits);
         }
+        return QVariant();
       }
       case 4:
       {
