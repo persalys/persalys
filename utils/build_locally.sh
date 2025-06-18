@@ -1,22 +1,25 @@
 #!/bin/bash
+# Usage: ./utils/build_locally.sh [variant] [img_ver]
+
+set -x -e
 
 if test "$#" -lt 1
 then
   echo -e "1. linux\n2. mingw\n3. salome\n\n> "
-  read choice
+  read variant
 else
-  choice="$1"
+  variant="$1"
 fi
 
-case $choice in
+case $variant in
   "1" | "linux")
-    img="linux"
+    variant="linux"
     ;;
   "2" | "mingw")
-    img="mingw"
+    variant="mingw"
     ;;
   "3" | "salome")
-    img="salome"
+    variant="salome"
     ;;
   *)
     echo "sorry?"
@@ -24,4 +27,13 @@ case $choice in
     ;;
 esac
 
-docker build docker/${img} -t persalys/${img} && docker run --rm --volume `pwd`:/io persalys/${img} sh -c "/io/docker/${img}/run_docker_build.sh `id -u` `id -g`"
+if test "$#" -lt 2
+then
+  img="persalys/${variant}"
+  docker build docker/${variant} -t ${img}
+else
+  img="persalys/${variant}:$2"
+  docker pull ${img}
+fi
+
+docker run --rm --volume `pwd`:/io ${img} sh -c "/io/docker/${variant}/run_docker_build.sh `id -u` `id -g`"
