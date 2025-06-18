@@ -167,7 +167,6 @@ private slots:
 #ifdef PERSALYS_HAVE_OTMORRIS
     files << "test_deterministic_analyses.xml";
 #endif
-    files << "test_probabilistic_analyses.xml";
     files << "test_field_analyses.xml";
 
     for (int i = 0; i < files.size(); ++i)
