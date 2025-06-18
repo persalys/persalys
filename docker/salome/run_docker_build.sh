@@ -9,9 +9,9 @@ gid=$2
 
 cd /tmp
 
-mkdir -p build && cd build
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
+  -DUSE_SALOME=ON \
   -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files \
   -DSalomeGUI_DIR=/home/devel/local/adm_local/cmake_files/ \
   -DSalomeYACS_DIR=/home/devel/local/adm/cmake/ \
@@ -19,7 +19,8 @@ cmake \
   -DPy2cpp_DIR=/home/devel/local/lib/cmake/py2cpp \
   -DAdaoCppLayer_ROOT_DIR=/home/devel/local/ \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr \
-  /io
+  -B build /io
+cd build
 make install
 sudo cp -r /tmp/persalys.AppDir/usr/lib/* /usr/local/lib # needed for yacs container
 make tests
