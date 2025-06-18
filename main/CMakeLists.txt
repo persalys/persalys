@@ -37,7 +37,9 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/persalys-icon.png DESTINATION ${PERSALYS_DATA_PATH}/icons/hicolor/64x64/apps/)
 endif ()
 
-if (WIN32)
+if (WIN32 AND PERSALYS_BUILD_NSIS)
+  target_compile_definitions(persalys PRIVATE PERSALYS_NSIS)
+
   add_executable (persalys_launcher launcher.cxx)
   target_link_libraries (persalys_launcher PRIVATE Boost::program_options ws2_32)
   if (TARGET Boost::process)
