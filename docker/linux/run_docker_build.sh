@@ -9,7 +9,6 @@ export MAKEFLAGS="-j8"
 cd /io && ./utils/lint.sh
 cd /tmp
 
-mkdir -p build && cd build
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -DPERSALYS_APPIMAGE" \
@@ -18,7 +17,8 @@ cmake \
   -DUSE_SPHINX=ON -DSPHINX_FLAGS="-W -T -j8" \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr -DCMAKE_INSTALL_LIBDIR=lib \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so \
-  /io
+  -B build /io
+cd build
 make install
 make tests
 xvfb-run -s "-screen 0 1024x768x24" ctest --output-on-failure --timeout 30 -j8

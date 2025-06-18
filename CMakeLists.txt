@@ -5,7 +5,7 @@ option (BUILD_GUI                    "Build the GUI"                            
 option (BUILD_SHARED_LIBS            "Build shared libraries"                                                ON)
 option (PERSALYS_BUILD_NSIS          "Build for NSIS installer"                                              OFF)
 
-option (USE_SALOME "use salome" ON)
+option (USE_SALOME "use salome" OFF)
 option (USE_OTFMI "use otfmi" ON)
 option (USE_OTMORRIS "use otmorris" ON)
 option (USE_SPHINX "use sphinx" OFF)
