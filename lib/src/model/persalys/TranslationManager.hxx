@@ -24,21 +24,56 @@
 
 #include <QObject>
 
-#ifndef Q_MOC_RUN
-#include <boost/bimap.hpp>
-#endif
+#include <map>
 
 namespace PERSALYS
 {
+
+template<typename T1> class TranslationMap
+{
+public:
+  typedef std::map<T1, T1> map_type;
+
+  void insert(const T1 elt1, const T1 elt2)
+  {
+    left[elt1] = elt2;
+    right[elt2] = elt1;
+  }
+
+  T1 translate(const T1 & elt) const
+  {
+    const typename map_type::const_iterator it = left.find(elt);
+    if (it != left.end())
+      return it->second;
+    else
+      return elt;
+  }
+
+  T1 untranslate(const T1 & elt) const
+  {
+    const typename map_type::const_iterator it = right.find(elt);
+    if (it != right.end())
+      return it->second;
+    else
+      return elt;
+  }
+
+  bool empty() const
+  {
+    return left.empty();
+  }
+
+  map_type left;
+  map_type right;
+};
+
+
 class PERSALYS_MODEL_API TranslationManager : public QObject
 {
   Q_OBJECT
 
 public:
-#ifndef Q_MOC_RUN
-  typedef boost::bimap< QString, QString > bimap_type;
-  typedef bimap_type::value_type type;
-#endif
+  typedef TranslationMap<QString> bimap_type;
 
   static QString GetTranslatedDistributionName(const std::string& name);
   static QString GetTranslatedCopulaName(const std::string& name);
@@ -57,13 +92,12 @@ private:
   static void InitializeDistributionsParametersNames();
   static void InitializeParametersNames();
   static void InitializeErrorMessages();
-#ifndef Q_MOC_RUN
+
   static bimap_type DistributionsNames_;
   static bimap_type CopulasNames_;
   static bimap_type DistributionsParametersNames_;
   static bimap_type ParametersNames_;
   static bimap_type ErrorMessages_;
-#endif
 };
 }
 #endif
