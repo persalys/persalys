@@ -113,7 +113,7 @@ Point CouplingOutputFile::getSkipColumns() const
   return skipColumns_;
 }
 
-String CouplingOutputFile::checkOutputFile(String fname, String encoding) const
+String CouplingOutputFile::checkOutputFile(const String fname, const String encoding) const
 {
   OSS code;
   code << "import os\n";
@@ -129,42 +129,73 @@ String CouplingOutputFile::checkOutputFile(String fname, String encoding) const
        << ", " << Parameters::GetOTPointStr(getSkipTokens())
        << ", " << Parameters::GetOTPointStr(getSkipLines())
        << ", " << Parameters::GetOTPointStr(getSkipColumns()) << ")\n";
-  code << "    all_vars = []\n";
+  code << "    varnames = []\n";
+  code << "    values = []\n";
   code << "    for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "        try:\n";
   code << "            token_esc = re.escape(token)\n";
-  code << "            all_vars.append(otct.get_value('" << fname << "', token=token_esc, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding='" << encoding << "'))\n";
+  code << "            value = otct.get_value('" << fname << "', token=token_esc, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding='" << encoding << "')\n";
   code << "        except:\n";
-  code << "            continue\n";
-  code << "    return all_vars\n";
+  code << "            value = None\n";
+  code << "        varnames.append(varname)\n";
+  code << "        values.append(value)\n";
+  code << "    return varnames, values\n";
 
   InterpreterUnlocker iul;
-  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
-  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
+  PyObject * const module = PyImport_AddModule("__main__"); // Borrowed reference
+  PyObject * const dict = PyModule_GetDict(module); // Borrowed reference
 
   ScopedPyObjectPointer retValue(PyRun_String(code.str().c_str(), Py_file_input, dict, dict));
   handleExceptionTraceback();
 
-  PyObject * script = PyDict_GetItemString(dict, "_check_file");
+  PyObject * const script = PyDict_GetItemString(dict, "_check_file");
   if (script == NULL)
     throw InternalException(HERE) << "no _check_file function";
 
-  ScopedPyObjectPointer sampleResult(PyObject_CallObject(script, NULL));
+  ScopedPyObjectPointer result(PyObject_CallObject(script, NULL));
   handleExceptionTraceback();
 
-  Point outSample(convert<_PySequence_, Point>(sampleResult.get()));
+  // result est un tuple (varnames, values)
+  if (!PyTuple_Check(result.get()) || PyTuple_Size(result.get()) != 2)
+    throw InternalException(HERE) << "Python script did not return a tuple of size 2";
+
+  PyObject * const pyVarNames = PyTuple_GetItem(result.get(), 0); // borrowed
+  PyObject * const pyValues = PyTuple_GetItem(result.get(), 1);   // borrowed
+
+  const Description varNames = convert<_PySequence_, Description>(pyVarNames);
+
+  Description missingVars;
   OSS output;
-  if(outSample.getSize() != getVariableNames().getSize())
+
+  for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
   {
-    OSS outMessage;
-    outMessage << "Python Function returned a sequence object with incorrect size (got ";
-    outMessage << outSample.getSize() << ", expected ";
-    outMessage << getVariableNames().getSize() << ")";
-    return outMessage.str();
+    ScopedPyObjectPointer pyValue(PySequence_GetItem(pyValues, i)); // New reference
+    const String & varName = varNames[i];
+
+    if (pyValue.get() == Py_None)
+    {
+      missingVars.add(varName);
+    }
+    else
+    {
+      const Scalar value = convert<_PyFloat_, Scalar>(pyValue.get());
+      output << varName << "=" << value << "\n";
+    }
   }
-  for(unsigned int i = 0; i < outSample.getSize(); ++i)
-    output << getVariableNames()[i].c_str() << "=" << std::to_string(outSample.at(i)).c_str() << "\n";
-  return output.str().c_str();
+
+  OSS resultMessage;
+  if (!missingVars.isEmpty())
+  {
+    resultMessage << "The following variables could not be found: ";
+    for (UnsignedInteger i = 0; i < missingVars.getSize(); ++i)
+    {
+      if (i > 0) resultMessage << ", ";
+      resultMessage << missingVars[i];
+    }
+    resultMessage << "\n";
+  }
+  resultMessage << output.str();
+  return resultMessage.str();
 }
 
 /* String converter */
