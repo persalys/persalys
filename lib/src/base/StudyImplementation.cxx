@@ -696,11 +696,32 @@ String StudyImplementation::getPythonScript()
   return result;
 }
 
+/// @brief used to store the version of Persalys inside the XML file
+class XMLH5VersionStorageManager: public XMLH5StorageManager
+{
+public:
+  explicit XMLH5VersionStorageManager(const String& fileName)
+    : XMLH5StorageManager(fileName) {}
+
+  XMLH5VersionStorageManager * clone() const override
+  {
+    return new XMLH5VersionStorageManager(*this);
+  }
+
+  using XMLH5StorageManager::initialize; 
+  void initialize(const SaveAction caller) override
+  {
+    XMLH5StorageManager::initialize(caller);
+    XML::Node root = this->p_state_->root_;
+    XML::SetAttribute(root, "persalys_version", PERSALYS_VERSION);
+  }
+
+};
 
 void StudyImplementation::save(const String& xmlFileName)
 {
   OT::Study study;
-  study.setStorageManager(XMLH5StorageManager(xmlFileName));
+  study.setStorageManager(XMLH5VersionStorageManager(xmlFileName));
   study.add("aStudy", this->clone());
   study.save();
 
