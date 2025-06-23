@@ -5,17 +5,17 @@ Release process
 
 1. Update translations
 
-2. Increment version number X.Y (utils/setVersionNumber.sh)
+2. Set version number X.Y (utils/setVersionNumber.sh X.Y)
 
 3. Update Changelog
 
 4. Update distro/windows/persalys-doc.zip
 
-5. Upload tagged docker images (docker push)
+5. Upload tagged docker images (utils/docker_push.sh X.Y)
 
 6. Create X.Y branch and protect it
 
-7. In X.Y branch, modify .gitlab-ci.yml to used tagged docker images
+7. In X.Y branch, modify .gitlab-ci.yml to add X.Y version argument to build_locally.sh to use tagged images
 
 8. In X.Y branch, create vX.Y tag
 
@@ -26,3 +26,5 @@ Release process
       git remote add gh git@github.com:persalys/persalys.git
       git push gh master
       git push gh --tags
+
+11. In master, set version X.(Y+1)dev
