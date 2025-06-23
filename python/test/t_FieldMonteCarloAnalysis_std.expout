@@ -62,7 +62,7 @@ result= class=FieldMonteCarloResult name=Unnamed processSample_=class=ProcessSam
 29 : [  1.17723     0.899351   -0.428898   -0.640026   -0.140481    0.00226795 ]] correlationFunction_=[EvaluationImplementation,EvaluationImplementation]
 eigen values= [35286.2,551.26,270.795,22.3289,13.0978,1.82423] [141145,2205.04,1083.18,89.3155,52.3911,7.29694]
 class=FieldMonteCarloAnalysis name=mcAnalysis2 physicalModel=PhysicalModel_1 interestVariables=[z2] maximumCalls=100 maximumCoefficientOfVariation=0.01 maximumElapsedTime=50 seed=0 blockSize=10 Karhunen-Loeve threshold=1e-05 quantile level=0.05
-eigen values= [110985,2982.14,1467.11,162.664,108.997,26.8557,11.3351,4.82782]
+eigen values= [109794,2697.66,1510.29,116.941,84.0901,17.2662,5.22389]
 True
 #!/usr/bin/env python
 
