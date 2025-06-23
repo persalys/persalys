@@ -56,6 +56,11 @@ void ProbabilisticDesignPage::buildInterface()
   buttonToChooseDesign->setToolTip(tr("Latin Hypercube Sampling"));
   buttonToChooseDesign->setChecked(true);
 
+  lhsWarningLabel_ = new QLabel(tr("Warning: LHS is designed for independent variables. With dependent inputs, the sample may not preserve LHS properties and results can be less reliable."));
+  lhsWarningLabel_->setWordWrap(true);
+  lhsWarningLabel_->setStyleSheet("color: orange;");
+  lhsWarningLabel_->setVisible(false);
+
   QLabel * cbLabel = new QLabel(tr("Optimisation algorithm"));
   optimComboBox_ = new QComboBox;
   optimComboBox_->addItem(tr("None"), ProbabilisticDesignPage::LHS);
@@ -66,6 +71,7 @@ void ProbabilisticDesignPage::buildInterface()
   if(designsGroup_->checkedId() < 3)
     optimComboBox_->setCurrentIndex(designsGroup_->checkedId());
   designGroupBoxLayout->addWidget(buttonToChooseDesign, 0, 0);
+  designGroupBoxLayout->addWidget(lhsWarningLabel_, 1, 0, 1, 2);
 
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Optimisation"));
@@ -116,11 +122,11 @@ void ProbabilisticDesignPage::buildInterface()
   designGroupBoxLayout->addWidget(advancedParamGroupBox, 0, 1);
   buttonToChooseDesign = new QRadioButton(tr("Monte Carlo"));
   designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::MonteCarlo);
-  designGroupBoxLayout->addWidget(buttonToChooseDesign, 1, 0);
+  designGroupBoxLayout->addWidget(buttonToChooseDesign, 2, 0);
 
   buttonToChooseDesign = new QRadioButton(tr("Quasi-Monte Carlo"));
   designsGroup_->addButton(buttonToChooseDesign, ProbabilisticDesignPage::QuasiMonteCarlo);
-  designGroupBoxLayout->addWidget(buttonToChooseDesign, 2, 0);
+  designGroupBoxLayout->addWidget(buttonToChooseDesign, 3, 0);
 
   pageLayout->addWidget(designGroupBox);
 
@@ -189,12 +195,7 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
 
   // check the independence of the copula
   const bool independentCopula = doe_ptr->getPhysicalModel().getCopula().hasIndependentCopula();
-  if (!independentCopula)
-  {
-    designsGroup_->button(ProbabilisticDesignPage::LHS)->setEnabled(false);
-    designsGroup_->button(ProbabilisticDesignPage::LHS)->setToolTip(tr("The physical model does not have an independent copula"));
-    designsGroup_->button(ProbabilisticDesignPage::MonteCarlo)->click(); // default
-  }
+  lhsWarningLabel_->setVisible(!independentCopula);
 
   // initialize widgets if the analysis is already a ProbabilisticDesignOfExperiment
   const ProbabilisticDesignOfExperiment * probaDoe_ptr = dynamic_cast<const ProbabilisticDesignOfExperiment*>(doe_ptr);

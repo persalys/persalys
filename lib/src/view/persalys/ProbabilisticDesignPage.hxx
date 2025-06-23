@@ -27,6 +27,7 @@
 #include <QWizardPage>
 #include <QButtonGroup>
 #include <QComboBox>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -51,13 +52,14 @@ signals:
   void showTime();
 
 private:
-  QButtonGroup * designsGroup_;
-  QComboBox * optimComboBox_;
-  QComboBox * spaceFillingComboBox_;
-  LogSpinBox * sampleSizeSpinbox_;
-  LogSpinBox * mcLhsSizeSB_;
-  QSpinBox * seedSpinbox_;
-  OT::Scalar modelEvalTime_;
+  QButtonGroup * designsGroup_ = nullptr;
+  QComboBox * optimComboBox_ = nullptr;
+  QComboBox * spaceFillingComboBox_ = nullptr;
+  LogSpinBox * sampleSizeSpinbox_ = nullptr;
+  LogSpinBox * mcLhsSizeSB_ = nullptr;
+  QSpinBox * seedSpinbox_ = nullptr;
+  OT::Scalar modelEvalTime_ = 0.0;
+  QLabel * lhsWarningLabel_ = nullptr;
 };
 }
 #endif
