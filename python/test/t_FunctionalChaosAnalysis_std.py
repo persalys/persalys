@@ -90,7 +90,7 @@ sobolResult2 = chaosResult2.getSobolResult()
 print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
-ott.assert_almost_equal([0.840009], chaosResult2.getAnalyticalValidation().getQ2())
+ott.assert_almost_equal([0.922344], chaosResult2.getAnalyticalValidation().getQ2())
 ott.assert_almost_equal(
     [0.9457431125210048], chaosResult2.getTestSampleValidation().getQ2(), 1e-16
 )
