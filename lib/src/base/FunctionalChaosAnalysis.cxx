@@ -35,6 +35,7 @@
 #include <openturns/FunctionalChaosRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
+#include <openturns/FunctionalChaosValidation.hxx>
 
 using namespace OT;
 
@@ -333,57 +334,11 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
 
   // retrieve chaos result
   FunctionalChaosAnalysisResult chaosResult(*dynamic_cast<FunctionalChaosAnalysisResult*>(&result));
-
-  // get polynom basis
-  Basis reducedBasis(chaosResult.getFunctionalChaosResult().getReducedBasis());
-  // get marginals transformation
-  const Function transformation(chaosResult.getFunctionalChaosResult().getTransformation());
-
-  // compute basis matrix at the points of inputSample
-  const UnsignedInteger basisSize = reducedBasis.getSize();
-  const UnsignedInteger sampleSize = result.outputSample_.getSize();
-  Matrix A(inputSample.getSize(), basisSize);
-  for (UnsignedInteger i = 0; i < basisSize; ++i)
-  {
-    Sample outSample_i(reducedBasis[i](transformation(inputSample)));
-    for (UnsignedInteger j = 0; j < inputSample.getSize(); ++j)
-      A(j, i) = outSample_i(j, 0);
-  }
-
-  // (A^t.A)
-  CovarianceMatrix AtA(A.computeGram(true));
-
-  // (A^t.A)^{-1}
-  const Matrix AtA_inv(AtA.solveLinearSystem(IdentityMatrix(basisSize)).getImplementation());
-
-  // A.(A^t.A)^{-1}.A^t
-  const Matrix H(A * AtA_inv * A.transpose());
-
-  Point Hdiag(H.getNbColumns());
-  for (UnsignedInteger i = 0; i < H.getNbColumns(); ++i)
-    Hdiag[i] = H(i, i);
-
-  // compute Q2
-  Point q2(result.outputSample_.getDimension());
-  const Point variance(result.outputSample_.computeVariance());
-
-  const Scalar traceInverse = AtA_inv.getImplementation()->computeTrace();
-  const Scalar correctingFactor = (1.0 * sampleSize) / (sampleSize - basisSize) * (1.0 + traceInverse);
-
-  for (UnsignedInteger i = 0; i < result.outputSample_.getDimension(); ++i)
-  {
-    // sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ]
-    Scalar quadraticResidual = 0.;
-    for (UnsignedInteger j = 0; j < sampleSize; ++j)
-    {
-      const Scalar diff = (result.metaModelOutputSample_(j, i) - result.outputSample_(j, i)) / (1 - Hdiag[j]);
-      quadraticResidual += diff * diff;
-    }
-    // 1 - sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ] / (n-1) / Var Y
-    q2[i] = 1.0 - correctingFactor * (quadraticResidual / (sampleSize - 1.0)) / variance[i];
-  }
-
-  result.analyticalValidation_.q2_ = q2;
+  const UnsignedInteger size = inputSample.getSize();
+  LeaveOneOutSplitter splitter(size);
+  FunctionalChaosValidation validation(chaosResult.getFunctionalChaosResult(), splitter);
+  Point r2 = validation.computeR2Score();
+  result.analyticalValidation_.q2_ = r2;
 }
 
 
