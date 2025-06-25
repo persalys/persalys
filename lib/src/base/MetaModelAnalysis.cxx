@@ -297,6 +297,16 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
     }
   }
 
+  // copy the distribution
+  if (isDistributionComputed_ && distribution_.getDimension() == inputsNames.getSize())
+  {
+    for (UnsignedInteger i = 0; i < inputsNames.getSize(); ++i)
+    {
+      const Distribution marginal = distribution_.getMarginal(i);
+      metaModel.setDistribution(inputsNames[i], marginal);
+    }
+  }
+
   // copula
   if (designOfExperiment_.getPhysicalModel().hasStochasticInputs())
   {
