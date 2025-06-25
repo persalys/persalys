@@ -104,7 +104,7 @@ void FunctionalChaosResultWindow::buildInterface()
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab : MOMENTS --------------------------------
-  if (result_.getMean().getSize() == nbOutputs && result_.getVariance().getSize() == nbOutputs)
+  if (result_.getMean().getSize() == nbOutputs && result_.getVariance().getSize() == nbOutputs && result_.getMeanSquaredError().getSize() == nbOutputs)
   {
     QScrollArea * scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);

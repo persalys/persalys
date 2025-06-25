@@ -591,7 +591,10 @@ Distribution PhysicalModelImplementation::getDistribution() const
   if (!marginals.getSize())
     return Distribution();
 
-  return JointDistribution(marginals, blockIndependentCopula_.getMarginal(copulaMarginals));
+  JointDistribution result(marginals, blockIndependentCopula_.getMarginal(copulaMarginals));
+  // disable parallel generation so that we get identical samples regardless of the block size to benefit from caching
+  result.setParallel(false);
+  return result;
 }
 
 
