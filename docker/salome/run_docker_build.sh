@@ -86,7 +86,7 @@ cp -v /usr/lib/x86_64-linux-gnu/libgnutls.so.30 /usr/lib/x86_64-linux-gnu/libpng
 cp -v /usr/lib/x86_64-linux-gnu/libaom.so.0 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so.[0-9] persalys.AppDir/usr/lib
-cp -v /usr/local/lib/libOT.so.0.25 persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libOT.so.0.26 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libpython3.9.so.1.0 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/liblapack.so.3 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libblas.so.3 persalys.AppDir/usr/lib
