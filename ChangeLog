@@ -1,9 +1,11 @@
-= 18.1 release (wip)
+= 18.1 release (2025-06-25)
 
  * Consistent metamodel error measures (MSE, R2)
  * New CSV parser from OpenTURNS 1.25 allowing missing values, unicode chars
  * Coupling model fixes
  * Boost dependency is now optional (only required for nsis installer)
+ * Probabilistic model is now exported when creating a metamodel with FCE from a data model
+ * Various bug fixes
 
 = 18.0 release (2025-04-02)
 
