@@ -153,7 +153,7 @@ This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test
 ====== ======================== ===================================
  Name  Description              Distribution
 ====== ======================== ===================================
-Q      River flow               Gumbel(alpha=0.00179211, beta=1013)
+Q      River flow               Gumbel(beta=0.00179211, gamma=1013)
 Ks     Manning-Strickler factor Normal(30, 7.5)
 Zm     River's depth upstream   Uniform(54,56)
 Zv     River's depth downstream Uniform(49, 51)
@@ -237,7 +237,7 @@ Seed                             0
 Block size                       1000
 -------------------------------- --------------------
 Algorithm                        Abdo-Rackwitz
-Physical starting point          1013; 30.001; 50; 55
+Physical starting point          1013; 30.001; 55; 50
 Number of evaluations            1000
 Errors (abs., rel., res., con.)  1e-05
 ================================ ====================
@@ -251,7 +251,7 @@ Errors (abs., rel., res., con.)  1e-05
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.000221975         0.0206289                :math:`\left[0.000213, 0.000230949\right]`
+0.000218778               :math:`\left[0.00021021, 0.000227535\right]`
 =================== ======================== =============================================
 
 3-2-2 Figures
