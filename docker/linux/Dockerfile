@@ -169,7 +169,7 @@ RUN curl -fSsL https://paraview.org/files/v5.13/ParaView-v5.13.3.tar.xz | tar xJ
  && make install -C build > /dev/null 2>&1 && cd - && rm -r ParaView*
 
 # openturns
-RUN git clone -b v1.25 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+RUN git clone -b v1.25.1 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
     -DPython_EXECUTABLE=/usr/local/bin/python3 -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r openturns*
