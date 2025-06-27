@@ -65,7 +65,7 @@ curl -fsSL https://pypi.io/packages/cp313/p/pandas/pandas-2.2.3-cp313-cp313-win_
 curl -fSsL https://pypi.io/packages/py2.py3/o/openpyxl/openpyxl-3.1.5-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/e/et_xmlfile/et_xmlfile-1.1.0-py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/j/jinja2/jinja2-3.1.4-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp312/m/markupsafe/MarkupSafe-2.1.5-cp312-cp312-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp313/m/markupsafe/MarkupSafe-3.0.2-cp313-cp313-win_amd64.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/p/pythonfmu/pythonfmu-0.6.6-py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/n/nopip/nopip-0.2.2-py3-none-any.whl | bsdtar -xf-
 cd ../..
