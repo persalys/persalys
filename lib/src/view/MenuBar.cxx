@@ -181,12 +181,7 @@ void MenuBar::openUserManual()
 {
   const QString userManualFile(QDir::toNativeSeparators(FileTools::GetDocumentationDirectoryPath() + "/index.html"));
 
-  // if file exists
-  if (QFileInfo(userManualFile).exists())
-  {
-    FileTools::OpenUrl(QUrl::fromLocalFile(userManualFile));
-  }
-  else
+  if (!(QFileInfo(userManualFile).exists() && FileTools::OpenUrl(QUrl::fromLocalFile(userManualFile))))
   {
     QMessageBox::critical(this,
                           tr("Error"),

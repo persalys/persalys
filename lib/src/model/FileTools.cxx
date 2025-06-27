@@ -256,7 +256,7 @@ QUrl FileTools::GetDocumentationUrl(const QString &urlLink, const docType type)
 }
 
 
-void FileTools::OpenUrl(const QUrl& url)
+bool FileTools::OpenUrl(const QUrl& url)
 {
 #ifdef _WIN32
   // workaround for Windows if the url has a fragment
@@ -274,8 +274,7 @@ void FileTools::OpenUrl(const QUrl& url)
       stream << htmlText;
       file.close();
       // open the file
-      QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
-      return;
+      return QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
     }
   }
 #elif defined(PERSALYS_APPIMAGE) && QT_VERSION >= QT_VERSION_CHECK(5,10,0)
@@ -287,8 +286,8 @@ void FileTools::OpenUrl(const QUrl& url)
   process.setProgram("xdg-open");
   process.setArguments(QStringList() << url.toString());
   if (process.startDetached())
-    return;
+    return true;
 #endif
-  QDesktopServices::openUrl(url);
+  return QDesktopServices::openUrl(url);
 }
 }

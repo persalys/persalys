@@ -45,7 +45,7 @@ public:
   static QString GetDocumentationDirectoryPath();
   static QUrl GetDocumentationUrl(const QString &urlLink, const docType type);
   static const QString OpenTURNSUrlLink;
-  static void OpenUrl(const QUrl& url);
+  static bool OpenUrl(const QUrl& url);
 };
 }
 #endif
