@@ -77,8 +77,16 @@ int main(int argc, char *argv[])
 
 #if BOOST_VERSION >= 108800
   std::unordered_map<std::string, std::string> env;
+  for (const auto ke : boost::process::environment::current())
+  {
+    const std::string key = std::get<0>(ke).string();
+    const std::string value = std::get<1>(ke).string();
+    env[key] = value;
+    if (verbose)
+      std::cout << key << "=" << value << std::endl;
+  }
 #else
-  boost::process::environment env;
+  boost::process::environment env = boost::this_process::environment();
 #endif
 
   // localization
