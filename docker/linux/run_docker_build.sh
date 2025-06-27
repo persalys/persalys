@@ -106,9 +106,9 @@ cp -v /usr/local/lib/libOT.so.0.* persalys.AppDir/usr/lib
 cp -rv /usr/local/etc/ persalys.AppDir/etc
 
 # qt libs
-for libname in XcbQpa DBus Widgets Gui Test Core PrintSupport OpenGL Svg Concurrent Help Network X11Extras Sql WaylandClient
+for libname in XcbQpa DBus Widgets Gui Test Core PrintSupport OpenGL Svg Concurrent Help Network Sql WaylandClient OpenGLWidgets Core5Compat
 do
-  cp -v /usr/local/lib/libQt5${libname}.so.[0-9] persalys.AppDir/usr/lib
+  cp -v /usr/local/lib/libQt6${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
 cp -v /usr/local/lib/libqwt.so.6.* persalys.AppDir/usr/lib
 cp -rv /usr/local/lib/qt/plugins persalys.AppDir/usr/lib
