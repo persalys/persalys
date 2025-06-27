@@ -346,7 +346,7 @@ void CalibrationParametersPage::buildInterface()
   sampleSizeLayout->addWidget(sampleSizeLabel);
   bootStrapSizeSpinBox_ = new UIntSpinBox;
   bootStrapSizeSpinBox_->setMinimum(1);
-  bootStrapSizeSpinBox_->setSingleStep(5);;
+  bootStrapSizeSpinBox_->setSingleStep(5);
   connect(bootstrapCheckBox_, SIGNAL(clicked(bool)), bootStrapSizeSpinBox_, SLOT(setEnabled(bool)));
   sampleSizeLayout->addWidget(bootStrapSizeSpinBox_);
   bootStrapLayout->addLayout(sampleSizeLayout, 1, 1);

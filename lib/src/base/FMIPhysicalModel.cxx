@@ -153,7 +153,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
 {
   // replace dots by underscores in variables names
   Description inputNamesUnderscore = Tools::GetNormalizedVariables(inputNames);
-  Description outputNamesUnderscore = Tools::GetNormalizedVariables(outputNames);;
+  Description outputNamesUnderscore = Tools::GetNormalizedVariables(outputNames);
 
   OSS code;
   code << "import otfmi\n\n";

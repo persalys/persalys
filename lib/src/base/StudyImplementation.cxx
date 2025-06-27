@@ -396,7 +396,7 @@ void StudyImplementation::clear(const PhysicalModel& physicalModel)
     if ((*iter).getPhysicalModel() == physicalModel)
     {
       clear(*iter);
-      (*iter).getImplementation()->removeAllObservers();;
+      (*iter).getImplementation()->removeAllObservers();
       iter = limitStates_.erase(iter);
     }
     else
@@ -604,7 +604,7 @@ String StudyImplementation::getAvailableLimitStateName(const String & rootName) 
 void StudyImplementation::add(const LimitState& limitState)
 {
   if (limitStates_.contains(limitState))
-    throw InvalidArgumentException(HERE) << "The study already contains this limit state";;
+    throw InvalidArgumentException(HERE) << "The study already contains this limit state";
 
   if (!physicalModels_.contains(limitState.getPhysicalModel()))
     throw InvalidArgumentException(HERE) << "The limit state has been created with a physical model not belonging to the study.";

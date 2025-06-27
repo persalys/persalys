@@ -157,7 +157,7 @@ void MenuBar::updateRecentFilesActionsList()
   for (int i = 0; i < numRecentFiles; ++i)
   {
     QFileInfo info = QFileInfo(files[i]);
-    QString text = QString("%1  [%2]").arg(info.baseName()).arg(info.absoluteFilePath());;
+    QString text = QString("%1  [%2]").arg(info.baseName()).arg(info.absoluteFilePath());
     recentFileActions_[i]->setText(text);
     recentFileActions_[i]->setData(files[i]);
     recentFileActions_[i]->setVisible(true);
