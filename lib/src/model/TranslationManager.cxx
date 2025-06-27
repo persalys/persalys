@@ -63,7 +63,6 @@ void TranslationManager::InitializeDistributionsNames()
   DistributionsNames_.insert("Uniform", tr("Uniform"));
   DistributionsNames_.insert("WeibullMax", "WeibullMax");
   DistributionsNames_.insert("WeibullMin", "WeibullMin");
-  DistributionsNames_.insert("Weibull", "WeibullMin");
   DistributionsNames_.insert("ZipfMandelbrot", "Zipf-Mandelbrot");
 }
 

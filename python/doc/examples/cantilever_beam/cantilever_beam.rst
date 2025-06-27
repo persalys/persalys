@@ -20,10 +20,10 @@ a- Inputs
 ====== ======================== ==============================================
  Name  Description              Distribution
 ====== ======================== ==============================================
-E      Young's modulus          Beta(r=0.93, t=3.2, a=2.8e7, b=4.8e7)
+E      Young's modulus          Beta(alpha=0.93, beta=3.2, a=2.8e7, b=4.8e7)
 F      Charge applied           LogNormal(mu=30000., sigma=9000., gamma=15000)
 L      Length                   Uniform(a=250, b=260)
-I      Section modulus          Beta(r=2.5, t=4., a=3.1e2, b=4.5e2))
+I      Section modulus          Beta(alpha=2.5, beta=4., a=3.1e2, b=4.5e2))
 ====== ======================== ==============================================
 
 The input variables :math:`L` and :math:`I` are dependent. The dependence structure

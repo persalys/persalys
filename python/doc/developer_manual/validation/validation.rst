@@ -153,7 +153,7 @@ This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test
 ====== ======================== ===================================
  Name  Description              Distribution
 ====== ======================== ===================================
-Q      River flow               Gumbel(alpha=0.00179211, beta=1013)
+Q      River flow               Gumbel(beta=0.00179211, gamma=1013)
 Ks     Manning-Strickler factor Normal(30, 7.5)
 Zm     River's depth upstream   Uniform(54,56)
 Zv     River's depth downstream Uniform(49, 51)
@@ -237,7 +237,7 @@ Seed                             0
 Block size                       1000
 -------------------------------- --------------------
 Algorithm                        Abdo-Rackwitz
-Physical starting point          1013; 30.001; 50; 55
+Physical starting point          1013; 30.001; 55; 50
 Number of evaluations            1000
 Errors (abs., rel., res., con.)  1e-05
 ================================ ====================
@@ -251,7 +251,7 @@ Errors (abs., rel., res., con.)  1e-05
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.000221975         0.0206289                :math:`\left[0.000213, 0.000230949\right]`
+0.000218778         0.0204222                :math:`\left[0.00021021, 0.000227535\right]`
 =================== ======================== =============================================
 
 3-2-2 Figures
@@ -1867,10 +1867,11 @@ Probabilistic analyses
           :align: center
 
       - left side: 1 variable in the list view
-      - right side, tabs: Results - Adequation - Sobol indices - Validation - Parameters - Model
+      - right side, tabs: Results - Adequation - Sobol indices - Validation - Error - Parameters - Model
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn
-      - Validation tab has 3 tabs: Analytical, Test sample, K-Fold
+      - Validation tab has 2 tabs: Test sample, K-Fold
+      - Erro tab shows message: Analytical validation failed: ...
 
 
   - chaos_2
@@ -1913,7 +1914,7 @@ Probabilistic analyses
           :align: center
 
       - left side: 2 variables in the list view
-      - right side: tabs Results - Adequation - Sobol indices - Validation - Parameters - Model
+      - right side: tabs Results - Adequation - Sobol indices - Error - Parameters - Model
       - when changing the variable, the tabs are updated
       - when metamodel plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn
@@ -2085,7 +2086,7 @@ Designs of experiments
           :align: center
 
       - Monte Carlo selected
-      - LHS disabled: check the tooltip is 'The physical model does not have an independent copula'
+      - A warning appears under LHS: LHS is designed for independent variables.
       - sample size: 100
       - seed: 0
       - cancel
@@ -2196,18 +2197,18 @@ Field analyses
 ==== ========== =====================
 Mode Eigenvalue Cumulative eigenvalue
 ==== ========== =====================
-0    8.28164    0.638103
-1    2.98989    0.868474
-2    0.873921   0.93581
-3    0.201917   0.951368
-4    0.183993   0.965545
-5    0.121622   0.974916
-6    0.109646   0.983364
-7    0.0673099  0.98855
-8    0.0513501  0.992507
-9    0.0431195  0.995829
-10   0.0319597  0.998292
-11   0.0221718  1
+0    0.752877   0.638103
+1    0.271008   0.868474
+2    0.0794474  0.93581
+3    0.0183561  0.951368
+4    0.0167266  0.965545
+5    0.0110566  0.974916
+6    0.00996778 0.983364
+7    0.00611909 0.98855
+8    0.00466819 0.992507
+9    0.00391995 0.995829
+10   0.00290543 0.998292
+11   0.00201561 1
 ==== ========== =====================
 
 
