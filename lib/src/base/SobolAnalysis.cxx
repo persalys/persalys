@@ -237,6 +237,10 @@ void SobolAnalysis::launch()
   SobolSimulationResult sobolResult(algo.getResult());
   const UnsignedInteger outerSampling = sobolResult.getOuterSampling();
 
+  // TODO: should be fixed on OT side by 1.26
+  if (!outerSampling)
+    throw NotDefinedException(HERE) << "Could not complete 1 iteration; check the replication size";
+
   Scalar foCILength = 0.;
   Scalar toCILength = 0.;
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
