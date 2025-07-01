@@ -178,8 +178,9 @@ void StudyWindow::buildInterface()
 
   // functionalities list
   textEdit = new QLabel;
-  text = QString("- %1\n- %2\n- %3\n- %4")
+  text = QString("- %1\n- %2\n- %3\n- %4\n- %5")
          .arg(tr("Data analysis"))
+         .arg(tr("Sensitivity analysis"))
          .arg(tr("Marginals inference"))
          .arg(tr("Dependence inference"))
          .arg(tr("Metamodel"));

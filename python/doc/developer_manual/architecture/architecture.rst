@@ -98,3 +98,15 @@ Details on implementing a new type of object
   - ``ObjectWindow`` : dedicated ``Object`` window for ``Object`` definition
 
 - Add a case in ``WindowFactory::GetWindow``, based on the ``src/model/ObjectItem`` to allow the instantiation of the two ``ObjectWindow`` and ``ObjectDiagramWindow``
+
+Implementing a new type of analysis
+-----------------------------------
+
+- Create necessary base classes (``{Type}Analysis`` and ``{Type}AnalysisResult``)
+- Add .i and _doc.i files for SWIG in ``python/src``
+- Create a python test in ``python/test``
+- Create the Window classes in ``src/view``
+- Edit ``src/view/WindowFactory.cxx``, ``src/view/{ModelType}DiagramWindow.cxx``
+- Edit ``ItemFactory::createAction`` in ``src/model/ItemFactory.cxx``
+- Create action in ``src/model/{ModelType}DiagramItem.cxx``
+- Add user documentation

@@ -1,9 +1,10 @@
 ===========================
-User manual - Data analyses
+User manual - Data analysis
 ===========================
 
 The interface allows one to perform the following types of data analysis:
-  - Data analyses to get moments, minimum, maximum, PDF, etc.
+  - Data analysis to get moments, minimum, maximum, PDF, etc.
+  - Sensitivity analysis to get first order Sobol' indices
   - Marginals inferences
   - Dependence inferences
   - Metamodels creation
@@ -139,9 +140,56 @@ automatically selected in the other tabs.
   .. image:: /user_manual/graphical_interface/data_analysis/data_model_analysis_scatterplot.png
       :align: center
 
+.. _sensitivityAnalysis:
+
+2- Sensitivity analysis
+=======================
+
+The sensitivity analysis allows one to assess the influence of input variables on output variables.
+Here, the first order Sobol' indices are computed using the :py:class:`openturns.experimental.RankSobolSensitivityAlgorithm`.
+
+2-1 Creation
+''''''''''''''
+A new sensitivity analysis can be created through:
+  - the context menu of the **Definition** item of the data model
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
+        :align: center
+
+  - the **Data analysis** box of the model diagram
+
+    .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
+        :align: center
+
+When the analysis is required, a new item is added in the study tree below the data model item.
+
+Its context menu has the following actions:
+  - **Rename**: Rename the analysis
+  - **Remove**: Remove the analysis from the study
+
+This item is associated with a window showing a
+progress bar and Run/Stop buttons, to launch or stop the analysis.
+
+.. image:: /user_manual/graphical_interface/data_analysis/dataSensitivityAnalysisWindow.png
+    :align: center
+
+.. _datasensitivityanalysisresult:
+
+2-2 Results
+'''''''''''''
+
+When the analysis is finished or stopped, the following window appears.
+
+.. image:: /user_manual/graphical_interface/data_analysis/dataSensitivityAnalysisResultWindow.png
+    :align: center
+
+In the top box, you can select the output variable. The window then shows the first Sobol' indices for each input variable both in the graph and in the table. You can sort the table by any column by clicking on the column header. The graph will also be sorted according to the table. 
+
+If the Spearman test detects a dependence between two variables, a warning will be displayed at the top of the window. Remember that the Sobol' indices are only valid for independent variables. If the variables are dependent, the Sobol' indices may not be accurate. You should always make sure that the input variables are independent before interpreting the Sobol' indices.
+
 .. _inferenceAnalysis:
 
-2- Marginals inference
+3- Marginals inference
 ======================
 
 The inference analysis allows one to perform a Bayesian Information Criterion
@@ -161,7 +209,7 @@ New marginals inference can be created thanks to:
 
 .. _marginalsinferencewizard:
 
-2-1 Definition
+3-1 Definition
 ''''''''''''''
 
 .. image:: /user_manual/graphical_interface/data_analysis/inference_wizard.png
@@ -200,7 +248,7 @@ When an analysis is required, a window appears, in order to set up:
 
 
 
-2-2 Launch
+3-2 Launch
 ''''''''''
 
 When the analysis is required, a new item is added in the study tree below the data model item.
@@ -218,7 +266,7 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. _marginalsinferenceresult:
 
-2-3 Results
+3-3 Results
 '''''''''''
 
 When the analysis is finished or stopped, a window appears.
@@ -272,7 +320,7 @@ The result can be used in the :ref:`Probabilistic model window <inferenceresultw
 
 .. _dependenceInference:
 
-3- Dependence inference
+4- Dependence inference
 =======================
 
 The dependence inference allows one to infer copulas on the sample of the data model.
@@ -290,7 +338,7 @@ This analysis can be created thanks to:
 
 .. _dependenceinferencewizard:
 
-3-1 Definition
+4-1 Definition
 ''''''''''''''
 
 When an analysis is required, a window appears:
@@ -328,7 +376,7 @@ To remove a group:
   - Select a group in the second table
   - Click on the left arrow
 
-3-2 Launch
+4-2 Launch
 '''''''''''
 
 When the analysis is required, a new item is added in the study tree below the data model item.
@@ -346,7 +394,7 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. _dependenceinferenceresult:
 
-3-3 Results
+4-3 Results
 '''''''''''
 
 When the analysis is finished or stopped, a window appears:
@@ -397,7 +445,7 @@ The window gathers:
 
 The result can be used in the :ref:`Probabilistic model window <dependenceinferenceresultwizard>`.
 
-4- Metamodel creation
+5- Metamodel creation
 ======================
 
 To perform this analysis, the data model or the design of experiments must contain an output sample.
@@ -425,7 +473,7 @@ A new metamodel can be created in 4 different ways:
 
 .. _metamodelwizard:
 
-4-1 Definition
+5-1 Definition
 ''''''''''''''
 
 When an analysis is required, a window appears, in order to set up:
@@ -435,7 +483,7 @@ When an analysis is required, a window appears, in order to set up:
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_wizard.png
     :align: center
 
-4-1-1 Linear regression
+5-1-1 Linear regression
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The **Linear regression** window allows one to define:
@@ -443,7 +491,7 @@ The **Linear regression** window allows one to define:
 
 Refer to :class:`~persalys.PolynomialRegressionAnalysis` for implementation details.
 
-4-1-2 Functional chaos
+5-1-2 Functional chaos
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_functional_chaos_wizard.png
@@ -455,7 +503,7 @@ The **Functional chaos parameters** window allows one to define:
 
 Refer to :class:`~persalys.FunctionalChaosAnalysis` for implementation details.
 
-4-1-3 Kriging
+5-1-3 Kriging
 ~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_kriging_wizard.png
@@ -490,7 +538,7 @@ The **Kriging parameters** window allows one to define:
 
 Refer to :class:`~persalys.KrigingAnalysis` for implementation details.
 
-4-1-3 Validation
+5-1-3 Validation
 ~~~~~~~~~~~~~~~~
 
 In the following window, the generated metamodel can be validated, with three different methods:
@@ -509,7 +557,7 @@ See more details on cross-validation `here <https://openturns.github.io/openturn
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_validation_page.png
     :align: center
 
-4-2 Results
+5-2 Results
 '''''''''''
 
 When the window is validated, a new element appears in the study tree below the
@@ -535,7 +583,7 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
 
 .. _functionalchaosresult:
 
-4-2-1 Functional chaos
+5-2-1 Functional chaos
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_moments.png
@@ -614,7 +662,7 @@ The results window gathers:
 
 .. _krigingresult:
 
-4-2-2 Kriging
+5-2-2 Kriging
 ~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_kriging_plot.png
@@ -653,7 +701,7 @@ The results window gathers:
 
 - The **Parameters** tab summarizes the parameters of the metamodel creation.
 
-5- Quantile estimation
+6- Quantile estimation
 ======================
 
 Quantile estimation can be performed on any marginal of a DataModel
@@ -667,7 +715,7 @@ quantiles and their associated confidence intervals.
 
 .. _quantileanalysis:
 
-5-1 Definition
+6-1 Definition
 ''''''''''''''
 
 Quantile estimation analysis can be created thanks to:
@@ -741,7 +789,7 @@ From there, the user can choose:
 
 .. _quantileresult:
 
-5-2 Results
+6-2 Results
 '''''''''''
 
 When the analysis is finished, the following window appears, presenting two tabs:

@@ -88,6 +88,8 @@ set(BASE_SOURCEFILES PersalysResourceMap.cxx
                      FMIPhysicalModel.cxx
                      FMUInfo.cxx
                      AnsysParser.cxx
+                     DataSensitivityAnalysis.cxx
+                     DataSensitivityAnalysisResult.cxx
                      )
 if (SalomeYACS_FOUND)
   list (APPEND BASE_SOURCEFILES YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx)
@@ -205,6 +207,8 @@ ot_install_header_file (MorrisAnalysis.hxx)
 ot_install_header_file (MorrisResult.hxx)
 ot_install_header_file (YACSPhysicalModel.hxx)
 ot_install_header_file (YACSEvaluation.hxx)
+ot_install_header_file (DataSensitivityAnalysis.hxx)
+ot_install_header_file (DataSensitivityAnalysisResult.hxx)
 
 
 add_library (persalysbase ${BASE_SOURCEFILES})

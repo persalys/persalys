@@ -154,6 +154,8 @@ ot_add_python_module (persalys persalys_module.i
                       FileMemoizeFunction.i FileMemoizeFunction_doc.i
                       DataCleaning.i DataCleaning_doc.i
                       AnsysParser.i AnsysParser_doc.i
+                      DataSensitivityAnalysisResult.i DataSensitivityAnalysisResult_doc.i
+                      DataSensitivityAnalysis.i DataSensitivityAnalysis_doc.i
                     )
 
 if (SalomeYACS_FOUND)

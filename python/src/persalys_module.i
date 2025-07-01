@@ -200,3 +200,5 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include FileMemoizeEvaluation.i
 %include FileMemoizeFunction.i
 %include AnsysParser.i
+%include DataSensitivityAnalysisResult.i
+%include DataSensitivityAnalysis.i

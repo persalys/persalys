@@ -4,3 +4,4 @@ build*/
 *.AppImage
 *doc.zip
 .vscode
+CMakeLists.txt.user

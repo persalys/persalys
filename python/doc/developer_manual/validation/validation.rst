@@ -2322,6 +2322,7 @@ Data model
     - click on the '...' button, import the file data.csv
     - the first three columns are inputs and the last one is an output
     - all the buttons are enabled in the diagram
+    - check that 'Sensitivity analysis' button is enabled only if there are at least two inputs and one output
     - check that 'Dependence inference' button is enabled only if there are more than one variable
     - check that 'Metamodel creation' button is enabled only if there are at least one output and one input
     - if all the columns are disabled, all the buttons of the diagram are disabled

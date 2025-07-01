@@ -127,6 +127,7 @@ ot_add_source_file ( CalibrationResultWindow.cxx )
 ot_add_source_file ( CouplingModelWindow.cxx )
 ot_add_source_file ( DataCleaningWizard.cxx )
 ot_add_source_file ( AnsysWizard.cxx )
+ot_add_source_file (DataSensitivityAnalysisResultWindow.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -264,6 +265,7 @@ if (OTMORRIS_FOUND)
   ot_install_header_file ( MorrisResultWindow.hxx )
   ot_install_header_file ( ScreeningResultWizard.hxx )
 endif ()
+ot_install_header_file ( DataSensitivityAnalysisResultWindow.hxx )
 
 qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/MainWidget.hxx
@@ -381,6 +383,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CouplingModelWindow.hxx
                                   persalys/DataCleaningWizard.hxx
                                   persalys/AnsysWizard.hxx
+                                  persalys/DataSensitivityAnalysisResultWindow.hxx
                                   )
 
 

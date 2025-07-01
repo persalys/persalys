@@ -49,6 +49,7 @@ void DataModelDiagramItem::buildActions()
   newInferenceAnalysis_ = createAction("Inference", getDesignOfExperiment());
   newCopulaInferenceAnalysis_ = createAction("CopulaInference", getDesignOfExperiment());
   newMetaModel_ = createAction("Metamodel", getDesignOfExperiment());
+  newDataSensitivityAnalysis_ = createAction("DataSensitivityAnalysis", getDesignOfExperiment());
 
   // remove data model
   removeAction_ = new QAction(QIcon(":/images/window-close.png"), tr("Remove"), this);
@@ -77,6 +78,7 @@ void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
     emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0 && validDOE);
     emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1 && validDOE);
     emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize() && validDOE);
+    emit dataSensitivityValidityChanged(designOfExperiment_.getInputSample().getSize() > 0 && designOfExperiment_.getInputSample().getDimension() > 1 && designOfExperiment_.getOutputSample().getSize() > 0 && validDOE);
   }
   else if (message == "analysisLaunched")
   {
@@ -106,6 +108,7 @@ void DataModelDiagramItem::fill()
   emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0 && validDOE);
   emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1 && validDOE);
   emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize() && validDOE);
+  emit dataSensitivityValidityChanged(designOfExperiment_.getInputSample().getSize() > 0 && designOfExperiment_.getInputSample().getDimension() > 1 && designOfExperiment_.getOutputSample().getSize() > 0 && validDOE);
 }
 
 

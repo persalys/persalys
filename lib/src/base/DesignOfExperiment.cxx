@@ -165,5 +165,4 @@ Indices DesignOfExperiment::getEffectiveInputIndices() const
   return getImplementation()->getEffectiveInputIndices();
 }
 
-
 }

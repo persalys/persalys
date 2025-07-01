@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define data sample
+ *  @brief Results of a data sensitivity analysis
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,39 +18,40 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_DATASAMPLE_HXX
-#define PERSALYS_DATASAMPLE_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#ifndef PERSALYS_DATASENSITIVITYANALYSISRESULT_HXX
+#define PERSALYS_DATASENSITIVITYANALYSISRESULT_HXX
 
-#include <openturns/OTType.hxx>
+#include "EvaluationResult.hxx"
+
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API DataSample : public OT::PersistentObject
+class PERSALYS_BASE_API DataSensitivityAnalysisResult : public EvaluationResult
 {
+  CLASSNAME
+
 public:
-  typedef OT::Collection<OT::Sample> SampleCollection;
+
+  friend class DataSensitivityAnalysis;
 
   /** Default constructor */
-  DataSample();
+  DataSensitivityAnalysisResult();
+
   /** Constructor with parameters */
-  DataSample(const OT::Sample & inSample, const OT::Sample & outSample);
+  explicit DataSensitivityAnalysisResult(const DesignOfExperiment& design);
 
   /** Virtual constructor */
-  DataSample * clone() const override;
+  DataSensitivityAnalysisResult* clone() const override;
 
-  virtual OT::Sample getInputSample() const;
-  virtual void setInputSample(const OT::Sample & sample);
+  /** Accessors */
+  const OT::Collection<OT::Point>& getFirstOrderIndices() const;
+  const OT::Collection<OT::Interval>& getFirstOrderIndicesInterval() const;
+  bool isIndependent() const;
+  const OT::String& getIndependenceWarningMessage() const;
 
-  virtual OT::Sample getOutputSample() const;
-  virtual void setOutputSample(const OT::Sample & sample);
-
-  SampleCollection getListXMin() const;
-  SampleCollection getListXMax() const;
-
-  OT::Sample getSample() const;
-  bool isValid() const;
+  /** String converter */
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
@@ -59,14 +60,13 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
-  void searchMinMax() const;
+  OT::PersistentCollection<OT::Point> firstOrderIndices_;
+  OT::PersistentCollection<OT::Interval> firstOrderIndicesInterval_;
+  bool isIndependent_ = true;
+  OT::String independenceWarningMessage_; // used to store the warning message if the variables are not independent
 
-private:
-  OT::Sample inputSample_;
-  OT::Sample outputSample_;
-  mutable OT::Sample sample_;
-  mutable OT::PersistentCollection<OT::Sample> listXMin_;
-  mutable OT::PersistentCollection<OT::Sample> listXMax_;
 };
-}
-#endif
+
+} // namespace PERSALYS
+
+#endif // PERSALYS_DATASENSITIVITYANALYSISRESULT_HXX

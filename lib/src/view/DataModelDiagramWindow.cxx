@@ -46,6 +46,15 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 
   appendButton(dataAnalysisButton, row, modelDefinitionButton);
 
+  DiagramPushButton * sensitivityAnalysisButton = new DiagramPushButton;
+  sensitivityAnalysisButton->setText(tr("Sensitivity\nanalysis"));
+  sensitivityAnalysisButton->setWhatsThis(tr("Compute Rank Sobol' indices"));
+  sensitivityAnalysisButton->setErrorMessage(tr("Define at least two input variable and one output"));
+  connect(sensitivityAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newDataSensitivityAnalysis_, SIGNAL(triggered()));
+  connect(dataModelDiagramItem, SIGNAL(dataSensitivityValidityChanged(bool)), sensitivityAnalysisButton, SLOT(setEnabled(bool)));
+
+  appendButton(sensitivityAnalysisButton, ++row, modelDefinitionButton);
+
   DiagramPushButton * quantileAnalysisButton = new DiagramPushButton;
   quantileAnalysisButton->setText(tr("Quantile\nanalysis"));
   quantileAnalysisButton->setWhatsThis(tr("Estimate quantiles"));

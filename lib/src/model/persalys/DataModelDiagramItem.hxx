@@ -52,10 +52,12 @@ signals:
   void dataModelValidityChanged(bool);
   void dependenciesValidityChanged(bool);
   void metaModelValidityChanged(bool);
+  void dataSensitivityValidityChanged(bool);
 
 private:
   QAction * defineAction_ = nullptr;
   QAction * newDataAnalysis_ = nullptr;
+  QAction * newDataSensitivityAnalysis_ = nullptr;
   QAction * newQuantileAnalysis_ = nullptr;
   QAction * newInferenceAnalysis_ = nullptr;
   QAction * newCopulaInferenceAnalysis_ = nullptr;

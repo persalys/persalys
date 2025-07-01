@@ -68,6 +68,7 @@
 #include "persalys/FieldMonteCarloWizard.hxx"
 #include "persalys/CalibrationResultWindow.hxx"
 #include "persalys/DesignOfExperimentInputWindow.hxx"
+#include "persalys/DataSensitivityAnalysisResultWindow.hxx"
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/ScreeningAnalysisWizard.hxx"
 #include "persalys/MorrisResultWindow.hxx"
@@ -422,6 +423,10 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
   else if (analysisType == "QuantileAnalysis")
   {
     resultWindow = new QuantileAnalysisResultWindow(item, parent);
+  }
+  else if (analysisType == "DataSensitivityAnalysis")
+  {
+    resultWindow = new DataSensitivityAnalysisResultWindow(item, parent);
   }
   else
   {

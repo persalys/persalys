@@ -161,6 +161,8 @@ Data analysis
 
     DataAnalysis
     DataAnalysisResult
+    DataSensitivityAnalysis
+    DataSensitivityAnalysisResult
     InferenceAnalysis
     InferenceResult
     FittingTestResult
