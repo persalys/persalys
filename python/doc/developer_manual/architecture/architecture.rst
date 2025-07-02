@@ -10,7 +10,7 @@ Several dependencies are needed in order to build the GUI:
 - OpenTURNS >=1.25
 - `otfmi <https://github.com/openturns/otfmi>`_ >=0.14 (optional, for FMI support)
 - `otmorris <https://github.com/openturns/otmorris>`_ >=0.18 (optional, for Morris support)
-- Qt >=5
+- Qt >=5.12
 - Qwt >=6
 - Python >=3.6
 - SWIG >=4

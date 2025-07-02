@@ -382,16 +382,9 @@ void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
 
 void FMIPhysicalModelWindow::updateFilters()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
   QRegularExpression::PatternOptions options = matchCaseCheckBox_->isChecked() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption;
   QRegularExpression regExp(QRegularExpression::escape(filterTextEdit_->text()), options);
   proxyModel_->setFilterRegularExpression(regExp);
-#else
-  QRegExp::PatternSyntax syntax = QRegExp::FixedString;
-  Qt::CaseSensitivity caseSensitivity = matchCaseCheckBox_->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-  QRegExp regExp(filterTextEdit_->text(), caseSensitivity, syntax);
-  proxyModel_->setFilterRegExp(regExp);
-#endif
   proxyModel_->setFilterKeyColumn(searchFieldComboBox_->currentIndex());
 
   // filter variability
@@ -946,11 +939,7 @@ bool DataFilterProxyModel::filterAcceptsRow(int sourceRow,
   // matches text regex
   QModelIndex index01 = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,12,0)
   const bool textMatch = sourceModel()->data(index01).toString().contains(filterRegularExpression());
-#else
-  const bool textMatch = sourceModel()->data(index01).toString().contains(filterRegExp());
-#endif
 
   // matches variability
   QModelIndex index2 = sourceModel()->index(sourceRow, 2, sourceParent);

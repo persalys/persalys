@@ -277,7 +277,7 @@ bool FileTools::OpenUrl(const QUrl& url)
       return QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
     }
   }
-#elif defined(PERSALYS_APPIMAGE) && QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+#elif defined(PERSALYS_APPIMAGE)
   // the browser process fails in the inherited AppImage env
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   env.remove("LD_LIBRARY_PATH");

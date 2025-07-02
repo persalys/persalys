@@ -87,11 +87,7 @@ void ComboBoxWithSeparatorDelegate::paint(QPainter *painter, const QStyleOptionV
   else if (index.data(Qt::AccessibleDescriptionRole).toString() == QLatin1String("child"))
   {
     QStyleOptionViewItem childOption = option;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
     int indent = option.fontMetrics.horizontalAdvance(QString(4, QChar(' ')));
-#else
-    int indent = painter->fontMetrics().width(QString(4, QChar(' ')));
-#endif
     childOption.rect.adjust(indent, 0, 0, 0);
     childOption.textElideMode = Qt::ElideNone;
     QItemDelegate::paint(painter, childOption, index);
