@@ -37,14 +37,8 @@ void CustomScaleEngine::autoScale(int maxNumSteps, double & x1, double & x2, dou
   QwtInterval interval(x1, x2);
   interval = interval.normalized();
 
-  // qwt version problem
-#if (QWT_VERSION >= 0x050200)
   interval.setMinValue(interval.minValue() - lowerMargin());
   interval.setMaxValue(interval.maxValue() + upperMargin());
-#else
-  interval.setMinValue(interval.minValue() - loMargin());
-  interval.setMaxValue(interval.maxValue() + hiMargin());
-#endif
 
   if (testAttribute(QwtScaleEngine::Symmetric))
     interval = interval.symmetrize(reference());
