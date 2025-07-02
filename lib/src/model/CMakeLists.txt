@@ -172,6 +172,10 @@ else ()
   target_compile_definitions (persalysmodel PUBLIC PERSALYS_MODEL_STATIC)
 endif ()
 
+if (PERSALYS_BUILD_APPIMAGE)
+  target_compile_definitions(persalysmodel PRIVATE PERSALYS_APPIMAGE)
+endif ()
+
 if ( NOT DEFINED LIB_VERSION )
   set ( LIB_VERSION 0.0.0 )
 endif ()
