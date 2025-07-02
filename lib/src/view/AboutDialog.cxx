@@ -35,11 +35,7 @@
 #include <patchlevel.h>
 #include <qwt.h>
 #ifdef PERSALYS_HAVE_PARAVIEW
-#ifdef PERSALYS_HAVE_PARAVIEW511
 #include <vtkPVVersion.h>
-#else
-#include <vtkPVConfig.h> // deprecated
-#endif
 #endif
 #ifdef PERSALYS_HAVE_YACS
 #include <YACS_version.h>

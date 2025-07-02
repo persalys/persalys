@@ -11,11 +11,12 @@ cd /tmp
 
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
-  -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror -DPERSALYS_APPIMAGE" \
+  -DCMAKE_CXX_FLAGS="-g -Wall -Wextra -Wpedantic -Wshadow -Werror" \
   -DCMAKE_SWIG_FLAGS="-Werror" -DSWIG_COMPILE_FLAGS="-Wno-unused-parameter -Wno-shadow" \
   -DPython_EXECUTABLE=/usr/local/bin/python3 \
   -DUSE_SPHINX=ON -DSPHINX_FLAGS="-W -T -j8" \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr -DCMAKE_INSTALL_LIBDIR=lib \
+  -DPERSALYS_BUILD_APPIMAGE=ON \
   -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so \
   -B build /io
 cd build
@@ -79,6 +80,7 @@ cp -v /usr/lib64/libicu*.so.50 persalys.AppDir/usr/lib
 cp -v /usr/lib64/libxcb-*.so.[0-9] persalys.AppDir/usr/lib && rm persalys.AppDir/usr/lib/libxcb-dri3.so.0
 cp -v /usr/lib64/libfreebl3.so persalys.AppDir/usr/lib
 cp -v /lib64/libpcre2-16.so.0 persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libbacktrace.so.0 persalys.AppDir/usr/lib
 
 # python
 sudo ln -sf /usr/local/bin/python3 /usr/local/bin/python

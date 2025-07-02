@@ -8,7 +8,7 @@ gid=$2
 cd /tmp
 
 MOD_PREFIX=$PWD/build/install
-CXXFLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror" ${ARCH}-w64-mingw32-cmake \
+CXXFLAGS="-g -Wall -Wextra -Wpedantic -Wshadow -Werror" ${ARCH}-w64-mingw32-cmake \
   -DCMAKE_INSTALL_PREFIX=${MOD_PREFIX} \
   -DCMAKE_LINKER_TYPE=LLD \
   -DPython_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
@@ -19,7 +19,7 @@ CXXFLAGS="-Wall -Wextra -Wpedantic -Wshadow -Werror" ${ARCH}-w64-mingw32-cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -B build /io
 cd build
 make install
-${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/bin/*.dll ${MOD_PREFIX}/Lib/site-packages/persalys/*.pyd
+${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/Lib/site-packages/persalys/*.pyd
 make tests
 cp ${MOD_PREFIX}/bin/*.dll ${MOD_PREFIX}/Lib/site-packages/persalys/
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin

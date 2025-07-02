@@ -16,13 +16,13 @@ RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
   xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xorg-x11-util-macros xcb-util-cursor-devel \
   java-1.8.0-openjdk expat-devel lpsolve-devel libuuid-devel curl-devel \
   texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin tex-preview pandoc dvisvgm \
-  devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-gcc-gfortran devtoolset-9-binutils \
+  devtoolset-11-gcc devtoolset-11-gcc-c++ devtoolset-11-gcc-gfortran devtoolset-11-binutils \
  && sed -i "s|override_install_langs|#override_install_langs|g" /etc/yum.conf && yum -y reinstall glibc-common && localedef -i en_US -f UTF-8 C.UTF-8 \
  && mkdir -p /usr/share/texlive/texmf-local/tex/latex/ && cd /usr/share/texlive/texmf-local/tex/latex \
  && curl -fsSL http://mirrors.ctan.org/macros/latex/contrib/anyfontsize.zip | bsdtar -xf- && mktexlsr
 
 ENV LANG="en_US.UTF-8" MAKEFLAGS="-j8"
-ENV PATH=/opt/rh/devtoolset-9/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-9/root/usr/lib64:/opt/rh/devtoolset-9/root/usr/lib
+ENV PATH=/opt/rh/devtoolset-11/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoolset-11/root/usr/lib64:/opt/rh/devtoolset-11/root/usr/lib
 WORKDIR /usr/local/src
 
 # gdb
@@ -130,6 +130,10 @@ RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
 # pyfmi
 RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.17.2.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
+
+# libbacktrace
+RUN git clone --depth 1 https://github.com/ianlancetaylor/libbacktrace.git && cd libbacktrace \
+ && autoreconf -fi && ./configure --enable-shared --disable-static && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libbacktrace*
 
 # boost
 RUN curl -fSsL https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2 | tar xj && cd boost* \

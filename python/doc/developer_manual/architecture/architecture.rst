@@ -10,15 +10,16 @@ Several dependencies are needed in order to build the GUI:
 - OpenTURNS >=1.25
 - `otfmi <https://github.com/openturns/otfmi>`_ >=0.14 (optional, for FMI support)
 - `otmorris <https://github.com/openturns/otmorris>`_ >=0.18 (optional, for Morris support)
-- Qt >=5.12
+- Qt >=5.15
 - Qwt >=6
 - Python >=3.6
 - SWIG >=4
 - Boost.program_options (optional, for win32 launcher)
+- Boost.stacktrace (/backtrace) library (optional, to dump the call stack)
 - SalomeYACS (optional, for YACS support)
 - Sphinx >=1.8 (optional, for doc)
 - Numpydoc >=0.9 (optional, for doc)
-- ParaView >=5.8 (optional, for visualization)
+- ParaView >=5.11 (optional, for visualization)
 
 
 Compilation
