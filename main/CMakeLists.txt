@@ -33,9 +33,13 @@ if (PERSALYS_BUILD_NSIS)
   target_compile_definitions(persalys PRIVATE PERSALYS_NSIS)
 endif ()
 
-if (USE_STACKTRACE AND Boost_FOUND)
+if (boost_stacktrace_backtrace_FOUND OR (Boost_FOUND AND LIBBACKTRACE_FOUND))
   target_compile_definitions(persalys PRIVATE PERSALYS_STACKTRACE)
-  target_link_libraries (persalys PRIVATE backtrace)
+  if (TARGET Boost::stacktrace_backtrace)
+    target_link_libraries (persalys PRIVATE Boost::stacktrace_backtrace)
+  else ()
+    target_link_libraries (persalys PRIVATE libbacktrace::libbacktrace)
+  endif ()
 endif ()
 
 # desktop shortcut
