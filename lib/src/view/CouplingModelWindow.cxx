@@ -834,6 +834,7 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   layout->addWidget(templateFileLabel, ++row, 0);
 
   FilePathWidget * templateFileLineEdit = new FilePathWidget(model->getSteps()[indStep].getInputFiles()[indFile].getPath().c_str());
+  templateFileLineEdit->checkFileExists();
   layout->addWidget(templateFileLineEdit, row, 1);
 
   // input model file path
@@ -865,10 +866,13 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
   addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
 
-  connect(templateFileLineEdit, &FilePathWidget::pathChanged, [ = ](const QString & text)
+  connect(templateFileLineEdit, &FilePathWidget::pathChanged, [=](const QString & text)
   {
+    templateFileLineEdit->checkFileExists();
+
     inTableView->setDisabled(text.isEmpty() || fileLineEdit->text().isEmpty());
     addRemoveWidget->setDisabled(text.isEmpty() || fileLineEdit->text().isEmpty());
+
     // update model
     CouplingStepCollection csColl(model->getSteps());
     CouplingStep cs(csColl[indStep]);
@@ -1024,13 +1028,16 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
   resGroupBoxLayout->addWidget(addRemoveWidget, 1, 0, Qt::AlignRight);
 
   updateTable();
-  connect(tableWidget_, &QTableWidget::itemChanged, [ = ](QTableWidgetItem * item)
+  connect(tableWidget_, &QTableWidget::itemChanged, [=](QTableWidgetItem * item)
   {
     CouplingStepCollection csColl(model_->getSteps());
     CouplingStep cs(csColl[indStep_]);
     CouplingResourceFileCollection inColl(cs.getResourceFiles());
 
-    inColl[item->data(Qt::UserRole).toInt()].setPath(item->data(Qt::DisplayRole).toString().toUtf8().constData());
+    const QString fileName = item->data(Qt::DisplayRole).toString();
+    inColl[item->data(Qt::UserRole).toInt()].setPath(fileName.toUtf8().constData());
+    item->setData(Qt::BackgroundRole, QColor(QFile(fileName).exists() ? "white" : "orange"));
+
     cs.setResourceFiles(inColl);
     csColl[indStep_] = cs;
     model_->blockNotification("PhysicalModelDefinitionItem");
@@ -1038,7 +1045,7 @@ CouplingResourceFileWidget::CouplingResourceFileWidget(CouplingPhysicalModel *mo
     model_->blockNotification();
   });
 
-  connect(addRemoveWidget, &AddRemoveWidget::addRequested, [ = ]()
+  connect(addRemoveWidget, &AddRemoveWidget::addRequested, [=]()
   {
     CouplingStepCollection csColl(model->getSteps());
     CouplingStep cs(csColl[indStep_]);
@@ -1115,8 +1122,11 @@ void CouplingResourceFileWidget::updateTable()
         ++row;
         tableWidget_->setRowCount(row + 1);
 
-        QTableWidgetItem * newItem = new QTableWidgetItem(cs.getResourceFiles()[i].getPath().c_str());
+        const QString fileName = QString::fromStdString(cs.getResourceFiles()[i].getPath());
+        QTableWidgetItem * newItem = new QTableWidgetItem(fileName);
         newItem->setData(Qt::UserRole, int(i));
+        newItem->setData(Qt::BackgroundRole, QColor(QFile(fileName).exists() ? "white" : "orange"));
+
         tableWidget_->setItem(row, 0, newItem);
 
         QToolButton * tb = new QToolButton;

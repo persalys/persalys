@@ -146,6 +146,12 @@ public:
   {
     return edit_->text();
   }
+
+  void checkFileExists()
+  {
+    edit_->setStyleSheet(QFile(text()).exists() ? "" : "QLineEdit {background-color: orange;}");
+  }
+
 signals:
   void pathChanged(const QString&);
 private:
