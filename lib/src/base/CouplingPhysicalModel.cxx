@@ -253,7 +253,7 @@ void CouplingPhysicalModel::updateCode()
   code << "                    shutil.rmtree(dest)\n";
   code << "                shutil.copytree(resource_file.getPath(), dest)\n";
   code << "            else:\n";
-  code << "                raise ValueError('cannot handle file:', resource_file.getPath())\n";
+  code << "                raise FileNotFoundError(resource_file.getPath())\n";
   code << "        if len(step.getCommand()) > 0:\n";
   code << "            timeout = step.getTimeOut()\n";
   code << "            if timeout <= 0:\n";
