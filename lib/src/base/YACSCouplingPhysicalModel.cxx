@@ -95,6 +95,8 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
     for (UnsignedInteger j = 0; j < inputFiles.getSize(); ++ j)
     {
       const CouplingInputFile inputFile(inputFiles[j]);
+      if (inputFile.getPath().empty())
+        continue;
       // yacs wants absolute paths
       inFiles.push_back(std::filesystem::absolute(inputFile.getPath()).string());
     }
@@ -102,6 +104,8 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
     for (UnsignedInteger j = 0; j < resourceFiles.getSize(); ++ j)
     {
       const CouplingResourceFile resourceFile(resourceFiles[j]);
+      if (resourceFile.getPath().empty())
+        continue;
       // yacs wants absolute paths
       inFiles.push_back(std::filesystem::absolute(resourceFile.getPath()).string());
     }
