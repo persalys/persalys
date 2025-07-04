@@ -18,9 +18,12 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/CodeModel.hxx"
 
 #include "persalys/PythonPhysicalModel.hxx"
+#ifdef PERSALYS_HAVE_YACS
+#include "persalys/YACSPhysicalModel.hxx"
+#endif
+#include "persalys/CodeModel.hxx"
 
 using namespace OT;
 
@@ -53,8 +56,14 @@ QVariant CodeModel::data(const QModelIndex & index, int role) const
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    PythonPhysicalModel *pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
-    return pyModel ? QString::fromUtf8(pyModel->getCode().c_str()) : "";
+#ifdef PERSALYS_HAVE_YACS
+      YACSPhysicalModel *yacsModel = dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get());
+      if (yacsModel)
+        return QString::fromStdString(yacsModel->getCode());
+#endif
+    const PythonPhysicalModel *pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
+    if (pyModel)
+      return QString::fromStdString(pyModel->getCode());
   }
   return QVariant();
 }
@@ -70,7 +79,14 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
     physicalModel_.blockNotification("PhysicalModelDefinitionItem");
     try
     {
-      dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->setCode(value.toString().toUtf8().data());
+#ifdef PERSALYS_HAVE_YACS
+      YACSPhysicalModel *yacsModel = dynamic_cast<YACSPhysicalModel*>(physicalModel_.getImplementation().get());
+      if (yacsModel)
+        yacsModel->setCode(value.toString().toStdString());
+#endif
+      PythonPhysicalModel *pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
+      if (pyModel)
+        pyModel->setCode(value.toString().toStdString());
     }
     catch (std::exception& ex)
     {
