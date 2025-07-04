@@ -76,8 +76,6 @@ public:
 
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
-  static void ReplaceInString(OT::String & workString, const OT::String & strToReplace, const OT::String & newValue);
-
 protected:
   void updateData();
 

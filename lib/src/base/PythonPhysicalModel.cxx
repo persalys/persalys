@@ -207,7 +207,7 @@ String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "<h3>Python code</h3>";
   oss << "<pre>";
   String code = getCode();
-  code = Tools::escapeHtml(code);
+  code = Tools::EscapeHTML(code);
   oss << code;
   oss << "</pre>";
 

@@ -24,6 +24,8 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/MemoizeFunction.hxx>
 
+#include <regex>
+
 using namespace OT;
 
 
@@ -178,18 +180,6 @@ Function YACSPhysicalModel::generateFunction(const Description & outputNames) co
 }
 
 
-void YACSPhysicalModel::ReplaceInString(String& workString,
-                                        const String& strToReplace,
-                                        const String& newValue)
-{
-  std::size_t pos = workString.find(strToReplace);
-  while( pos != std::string::npos)
-  {
-    workString.replace(pos, strToReplace.size(), newValue);
-    pos = workString.find(strToReplace, pos + newValue.size());
-  }
-}
-
 String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
 {
   OSS oss;
@@ -214,8 +204,7 @@ String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "<pre>";
   String code = getCode();
   // replace all "<" by "&lt;"
-  ReplaceInString(code, "<", "&lt;");
-  oss << code;
+  oss << Tools::EscapeHTML(code);
   oss << "</pre>";
 
   return oss;
@@ -236,10 +225,10 @@ String YACSPhysicalModel::getPythonScript() const
   oss << "outputs = " << Parameters::GetOTDescriptionStr(getOutputNames(), false) << "\n";
 
   // replace ''' by """
-  std::string myString = getCode();
-  ReplaceInString(myString, "'''", "\"\"\"");
+  std::string code = getCode();
+  std::regex_replace(code, std::regex("'''"), "\"\"\"");
 
-  oss << "code = '''" << myString << "'''\n";
+  oss << "code = '''" << code << "'''\n";
   oss << getName()
       << " = persalys.YACSPhysicalModel('" << getName() << "'"
       << ", inputs, outputs, code)\n";

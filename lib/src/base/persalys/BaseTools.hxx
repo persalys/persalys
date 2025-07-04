@@ -71,9 +71,10 @@ public:
   static void ComputeBounds(const InputCollection& inputs, OT::Point& startingPoint, OT::Interval& bounds);
   static OT::String GetNormalizedVariable(const OT::String& variable);
   static OT::Description GetNormalizedVariables(const OT::Description& variables);
+
+  /** Method EscapeHTML() escapes HTML special characters in a string */
+  static OT::String EscapeHTML(const OT::String &text);
 #endif
-  /** Method escapeHtml() escapes HTML special characters in a string */
-  static OT::String escapeHtml(const OT::String &text);
 };
 
 #ifndef SWIG

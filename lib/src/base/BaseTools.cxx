@@ -406,8 +406,8 @@ Description Tools::GetNormalizedVariables(const Description& variables)
   return normVariables;
 }
 
-/* Method escapeHtml() escapes HTML special characters in a string using regex */
-String Tools::escapeHtml(const String &text)
+/* Method EscapeHTML() escapes HTML special characters in a string using regex */
+String Tools::EscapeHTML(const String &text)
 {
   String result = text;
   result = std::regex_replace(result, std::regex("&"), "&amp;");
