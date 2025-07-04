@@ -340,7 +340,7 @@ void YACSEvaluation::setCode(const OT::String & code)
   ydefx::PyStudyFunction studyFunction;
   studyFunction.loadString(code);
   if(!studyFunction.isValid())
-    throw InvalidArgumentException(HERE) << "Invalid YACS script code";
+    throw InvalidArgumentException(HERE) << studyFunction.errors();
 
   std::list<std::string> inputNames = studyFunction.inputNames();
   std::list<std::string> outputNames = studyFunction.outputNames();
