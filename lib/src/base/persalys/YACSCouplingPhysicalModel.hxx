@@ -60,8 +60,6 @@ public:
   OT::String __repr__() const override;
 
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
-
-  OT::Function getFunction() const;
 protected:
 
   OT::Function generateFunction(const OT::Description & outputNames) const override;

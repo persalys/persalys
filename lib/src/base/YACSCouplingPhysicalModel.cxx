@@ -113,10 +113,6 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
   jobParameters().in_files(inFiles);
 }
 
-Function YACSCouplingPhysicalModel::getFunction() const
-{
-  return generateFunction(getOutputNames());
-}
 
 Function YACSCouplingPhysicalModel::generateFunction(const Description & outputNames) const
 {
