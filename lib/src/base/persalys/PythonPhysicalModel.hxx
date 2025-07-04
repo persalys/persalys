@@ -68,9 +68,6 @@ public:
   void setParallel(const OT::Bool flag) override;
   void resetCallsNumber();
 
-  void setEvalTime(const OT::Scalar& evalTime);
-  OT::Scalar getEvalTime() const;
-
 protected:
   OT::Function generateFunction(const OT::Description & outputNames) const override;
 

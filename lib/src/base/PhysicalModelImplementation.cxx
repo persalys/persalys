@@ -1163,7 +1163,7 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   return oss;
 }
 
-void PhysicalModelImplementation::setEvalTime(const OT::Scalar & evalTime)
+void PhysicalModelImplementation::setEvalTime(const OT::Scalar evalTime)
 {
   evalTime_ = evalTime;
 }

@@ -115,7 +115,7 @@ public:
   void setMeshModel(const MeshModel& meshModel);
 
   OT::Scalar getEvalTime() const;
-  void setEvalTime(const OT::Scalar& evalTime);
+  void setEvalTime(const OT::Scalar evalTime);
 
   OT::Bool isParallel() const;
   virtual void setParallel(const OT::Bool flag);
