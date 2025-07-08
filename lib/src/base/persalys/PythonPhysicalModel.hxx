@@ -42,8 +42,9 @@ public:
   /** Virtual constructor */
   PythonPhysicalModel * clone() const override;
 
+  /** Accessor to the code */
   virtual void setCode(const OT::String & code);
-  OT::String getCode() const;
+  virtual OT::String getCode() const;
 
   OT::String getHtmlDescription(const bool deterministic) const override;
   OT::String getPythonScript() const override;
@@ -71,9 +72,10 @@ public:
 protected:
   OT::Function generateFunction(const OT::Description & outputNames) const override;
 
+  mutable OT::Function functionCache_;
+
 private:
   OT::String code_;
-  mutable OT::Function functionCache_;
 };
 
 }

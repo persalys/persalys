@@ -38,11 +38,9 @@ static Factory<YACSPhysicalModel> Factory_YACSPhysicalModel;
 
 /* Default constructor */
 YACSPhysicalModel::YACSPhysicalModel(const String & name)
-  : PhysicalModelImplementation(name)
-  , evaluation_()
+  : PythonPhysicalModel(name)
 {
-  setCode("def _exec(X0):\n    Y0 = X0\n    return Y0");
-  updateData();
+  // Nothing to do
 }
 
 
@@ -50,11 +48,10 @@ YACSPhysicalModel::YACSPhysicalModel(const String & name)
 YACSPhysicalModel::YACSPhysicalModel(const String & name,
                                      const InputCollection & inputs,
                                      const OutputCollection & outputs,
-                                     const String & script)
-  : PhysicalModelImplementation(name, inputs, outputs)
-  , evaluation_(script)
+                                     const String & code)
+  : PythonPhysicalModel(name, inputs, outputs, "")
 {
-  updateData();
+  setCode(code);
 }
 
 
@@ -113,14 +110,9 @@ const ydefx::JobParametersProxy& YACSPhysicalModel::jobParameters()const
 }
 
 
-String YACSPhysicalModel::getCode() const
-{
-  return evaluation_.getCode();
-}
-
-
 void YACSPhysicalModel::setCode(const String & code)
 {
+  PythonPhysicalModel::setCode(code);
   try
   {
     evaluation_.setCode(code);
@@ -129,41 +121,13 @@ void YACSPhysicalModel::setCode(const String & code)
   {
     throw InvalidArgumentException(HERE) << "Error in the script.\n" << ex.what();
   }
-  updateData();
-}
-
-
-void YACSPhysicalModel::updateData()
-{
-  unsigned int size = evaluation_.getInputDimension();
-  InputCollection newInputs(size);
-  for (unsigned int i = 0; i < size; ++ i)
-  {
-    const String inputName(evaluation_.getInputVariablesNames()[i]);
-    if (hasInputNamed(inputName))
-      newInputs[i] = getInputByName(inputName);
-    else
-      newInputs[i] = Input(inputName, evaluation_.getInputValues()[i]);
-  }
-  PhysicalModelImplementation::setInputs(newInputs);
-
-  size = evaluation_.getOutputDimension();
-  OutputCollection newOutputs(size);
-  for (unsigned int i = 0; i < size; ++ i)
-  {
-    const String outputName(evaluation_.getOutputVariablesNames()[i]);
-    if (hasOutputNamed(outputName))
-      newOutputs[i] = getOutputByName(outputName);
-    else
-      newOutputs[i] = Output(outputName);
-  }
-  functionCache_ = Function();
-  PhysicalModelImplementation::setOutputs(newOutputs);
 }
 
 
 Function YACSPhysicalModel::generateFunction(const Description & outputNames) const
 {
+  if (!useYACS_)
+    return PythonPhysicalModel::generateFunction(outputNames);
   if (!functionCache_.getEvaluation().getImplementation()->isActualImplementation())
   {
     YACSEvaluation anEvaluation(evaluation_);
@@ -171,37 +135,6 @@ Function YACSPhysicalModel::generateFunction(const Description & outputNames) co
     functionCache_ = MemoizeFunction(anEvaluation);
   }
   return functionCache_;
-}
-
-
-String YACSPhysicalModel::getHtmlDescription(const bool deterministic) const
-{
-  OSS oss;
-  oss << PhysicalModelImplementation::getHtmlDescription(deterministic);
-  oss << "<h3>Outputs</h3><p>";
-  oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
-  oss << "<tr>";
-  oss << "  <th>Name</th>";
-  oss << "  <th>Description</th>";
-  oss << "</tr>";
-  for (UnsignedInteger i = 0; i < getOutputDimension(); ++i)
-  {
-    oss << "<tr>";
-    oss << "  <td>" << getOutputNames()[i] << "</td>";
-    const String desc(getOutputs()[i].getDescription());
-    oss << "  <td>" << (desc.empty() ? "-" : desc) << "</td>";
-    oss << "</tr>";
-  }
-  oss << "</table></p>";
-  oss << "</table></p>";
-  oss << "<h3>Content</h3>";
-  oss << "<pre>";
-  String code = getCode();
-  // replace all "<" by "&lt;"
-  oss << Tools::EscapeHTML(code);
-  oss << "</pre>";
-
-  return oss;
 }
 
 
@@ -325,11 +258,28 @@ OT::String YACSPhysicalModel::getJobParamsPythonScript() const
 }
 
 
+/* Use YACS backend or Python backend */
+void YACSPhysicalModel::setUseYACS(const Bool useYACS)
+{
+  if (useYACS != useYACS_)
+  {
+    useYACS_ = useYACS;
+    functionCache_ = Function();
+  }
+}
+
+
+Bool YACSPhysicalModel::getUseYACS() const
+{
+  return useYACS_;
+}
+
+
 /** String converter */
 String YACSPhysicalModel::__repr__() const
 {
   OSS oss;
-  oss << PhysicalModelImplementation::__repr__()
+  oss << PythonPhysicalModel::__repr__()
       << " evaluation=" << evaluation_;
   return oss;
 }
@@ -338,16 +288,21 @@ String YACSPhysicalModel::__repr__() const
 /* Method save() stores the object through the StorageManager */
 void YACSPhysicalModel::save(Advocate & adv) const
 {
-  PhysicalModelImplementation::save(adv);
+  PythonPhysicalModel::save(adv);
   adv.saveAttribute("evaluation_", evaluation_);
+  adv.saveAttribute("useYACS_", useYACS_);
 }
 
 
 /* Method load() reloads the object from the StorageManager */
 void YACSPhysicalModel::load(Advocate & adv)
 {
-  PhysicalModelImplementation::load(adv);
+  PythonPhysicalModel::load(adv);
   adv.loadAttribute("evaluation_", evaluation_);
+  if (adv.hasAttribute("useYACS_"))
+    adv.loadAttribute("useYACS_", useYACS_);
+  else
+    useYACS_ = true;
 }
 
 

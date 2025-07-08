@@ -21,12 +21,12 @@
 #ifndef PERSALYS_YACSPHYSICALMODEL_HXX
 #define PERSALYS_YACSPHYSICALMODEL_HXX
 
-#include "persalys/PhysicalModelImplementation.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 #include "persalys/YACSEvaluation.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API YACSPhysicalModel : public PhysicalModelImplementation
+class PERSALYS_BASE_API YACSPhysicalModel : public PythonPhysicalModel
 {
   CLASSNAME
 
@@ -38,7 +38,7 @@ public:
   YACSPhysicalModel(const OT::String & name,
                     const InputCollection & inputs,
                     const OutputCollection & outputs,
-                    const OT::String & script);
+                    const OT::String & code);
 
   /** Virtual constructor */
   YACSPhysicalModel * clone() const override;
@@ -51,15 +51,17 @@ public:
   void addOutput(const Output & output);
   void removeOutput(const OT::String & outputName);
 
-  /** Accessor to the text script of the model (python, xml, whatever). */
-  OT::String getCode() const;
-  void setCode(const OT::String & code);
+  /** Accessor to the code */
+  void setCode(const OT::String & code) override;
+
+  /** Use YACS backend or Python backend */
+  void setUseYACS(const OT::Bool useYACS);
+  OT::Bool getUseYACS() const;
 
   /** Accesor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
 
-  OT::String getHtmlDescription(const bool deterministic) const override;
   OT::String getPythonScript() const override;
 
   /** Method save() stores the object through the StorageManager */
@@ -74,14 +76,12 @@ public:
   virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
 protected:
-  void updateData();
-
   OT::Function generateFunction(const OT::Description & outputNames) const override;
   virtual OT::String getJobParamsPythonScript() const;
 
 private:
   mutable YACSEvaluation evaluation_;
-  mutable OT::Function functionCache_;
+  OT::Bool useYACS_ = false;
 };
 }
 #endif

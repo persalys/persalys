@@ -97,7 +97,8 @@ void PythonPhysicalModel::setCode(const String & code)
       }
     }
 
-    std::regex returnOutput("    return[ ]+([_a-zA-Z0-9, ]+)");
+    // Allow 2-spaces indent as well to match YACS behavior
+    std::regex returnOutput("  (?:  )?return[ ]+([_a-zA-Z0-9, ]+)");
     if (inExecScope && std::regex_match(line, what, returnOutput))
     {
       String outputList = what[1];
