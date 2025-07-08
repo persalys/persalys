@@ -124,11 +124,11 @@ cp /usr/lib/x86_64-linux-gnu/libQt5XcbQpa.so.5 persalys.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib:$PWD/persalys.AppDir/usr/salome:$PWD/persalys.AppDir/usr/salome/lib ldd persalys.AppDir/usr/bin/persalys
 
-appimagetool -v persalys.AppDir persalys-`cat /io/VERSION`-`uname -p`.AppImage
+appimagetool -v persalys.AppDir persalys-salome-`cat /io/VERSION`-`uname -p`.AppImage
 
 # copy to host with same permission
 if test -n "${uid}" -a -n "${gid}"
 then
-  sudo cp persalys*.AppImage /io
+  sudo cp persalys-salome*.AppImage /io
   sudo chown ${uid}:${gid} /io/persalys*.AppImage
 fi
