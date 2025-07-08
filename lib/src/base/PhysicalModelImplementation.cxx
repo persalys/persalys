@@ -1231,9 +1231,4 @@ void PhysicalModelImplementation::load(Advocate & adv)
 }
 
 
-/* Nothing to do at this level. Overloaded in child classes if needed.*/
-void PhysicalModelImplementation::acceptLaunchParameters(LaunchParametersVisitor* /*visitor*/)
-{
-}
-
 }

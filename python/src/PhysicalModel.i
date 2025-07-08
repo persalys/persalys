@@ -30,7 +30,6 @@ template <>
 
 %ignore *::addObserver;
 %ignore *::blockNotification;
-%ignore *::acceptLaunchParameters;
 %ignore *::getHtmlDescription;
 %ignore *::getCopulaCollection;
 

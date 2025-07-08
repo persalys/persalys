@@ -295,8 +295,4 @@ void AnalysisImplementation::load(Advocate & adv)
 }
 
 
-/* To be implemented in child classes. */
-void AnalysisImplementation::acceptLaunchParameters(LaunchParametersVisitor* /*visitor*/)
-{
-}
 }

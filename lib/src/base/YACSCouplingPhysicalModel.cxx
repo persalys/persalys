@@ -247,8 +247,4 @@ void YACSCouplingPhysicalModel::load(Advocate & adv)
 }
 
 
-void YACSCouplingPhysicalModel::acceptLaunchParameters(LaunchParametersVisitor* visitor)
-{
-  visitor->visitYACS(this);
-}
 }

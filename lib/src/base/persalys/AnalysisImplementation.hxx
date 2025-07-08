@@ -23,7 +23,6 @@
 
 #include "PhysicalModel.hxx"
 #include "BaseTools.hxx"
-#include "LaunchParametersVisitor.hxx"
 
 class Study;
 namespace PERSALYS
@@ -76,8 +75,6 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
-
-  virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
 protected:
   virtual void initialize();

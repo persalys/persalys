@@ -7,7 +7,6 @@
 %ignore *::getInformationMessage;
 %ignore *::getProgressValue;
 %ignore *::stop;
-%ignore *::acceptLaunchParameters;
 %ignore PERSALYS::AnalysisImplementation::getParameters;
 
 %include AnalysisImplementation_doc.i

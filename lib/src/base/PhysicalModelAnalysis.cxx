@@ -109,8 +109,4 @@ void PhysicalModelAnalysis::load(Advocate & adv)
     setInterestVariables(physicalModel_.getSelectedOutputsNames());
 }
 
-void PhysicalModelAnalysis::acceptLaunchParameters(LaunchParametersVisitor* visitor)
-{
-  physicalModel_.getImplementation()->acceptLaunchParameters(visitor);
-}
 }

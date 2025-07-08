@@ -25,7 +25,6 @@
 #include "Output.hxx"
 #include "Observable.hxx"
 #include "MeshModel.hxx"
-#include "LaunchParametersVisitor.hxx"
 
 #include <openturns/Function.hxx>
 #include <openturns/ResourceMap.hxx>
@@ -138,8 +137,6 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
-
-  virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;

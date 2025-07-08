@@ -25,8 +25,6 @@
 
 namespace PERSALYS
 {
-class LaunchParametersVisitor;
-
 class PERSALYS_BASE_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 {
   CLASSNAME
@@ -71,7 +69,6 @@ public:
   /** override this method in order to emit a notification */
   void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj) override;
 
-  void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 };
 }
 #endif

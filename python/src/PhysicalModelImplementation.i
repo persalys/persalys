@@ -3,7 +3,6 @@
 %{
 #include "persalys/PhysicalModelImplementation.hxx"
 %}
-%ignore *::acceptLaunchParameters;
 
 %include PhysicalModelImplementation_doc.i
 

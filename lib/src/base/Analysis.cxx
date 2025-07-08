@@ -168,8 +168,4 @@ void Analysis::setImplementationAsPersistentObject(const ImplementationAsPersist
 }
 
 
-void Analysis::acceptLaunchParameters(LaunchParametersVisitor* visitor)
-{
-  getImplementation()->acceptLaunchParameters(visitor);
-}
 }

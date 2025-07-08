@@ -18,12 +18,6 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifdef PERSALYS_HAVE_YACS
-#include "persalys/YACSPhysicalModel.hxx" //includes python.h. Has to be done before any Qt include
-#include "persalys/YACSCouplingPhysicalModel.hxx"
-#include <ydefx/ResourceWidget.hxx>
-#endif
-
 #include "persalys/Controller.hxx"   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 
 #include "persalys/AnalysisWindow.hxx"
@@ -119,13 +113,6 @@ void AnalysisWindow::buildInterface()
 
   mainLayout->setRowStretch(4, 1);
 
-  launchParameters_ = 0;
-  analysisItem_->getAnalysis().acceptLaunchParameters(this);
-  if (launchParameters_)
-  {
-    mainLayout->addWidget(launchParameters_, 4, 0, 1, 3);
-  }
-
   scrollArea->setWidget(mainWidget);
 
   // initialization
@@ -187,10 +174,6 @@ void AnalysisWindow::launchAnalysis()
   // enable stop button
   stopButton_->setEnabled(true);
 
-  // launchParameters_ should never be enabled again after the analysis is launched
-  if (launchParameters_)
-    launchParameters_->setEnabled(false);
-
   // start indefinite/busy progress bar
   progressBar_->setRange(0, 0);
   progressBar_->setValue(10);
@@ -231,19 +214,4 @@ void AnalysisWindow::updateProgressBar(const int value)
 }
 
 
-#ifdef PERSALYS_HAVE_YACS
-void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
-{
-  ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
-  launchParameters_ = rw;
-}
-
-void AnalysisWindow::visitYACS(YACSCouplingPhysicalModel* model)
-{
-  ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
-  launchParameters_ = rw;
-}
-
-
-#endif
 }

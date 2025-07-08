@@ -55,8 +55,6 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-  void acceptLaunchParameters(LaunchParametersVisitor* visitor) override;
-
 protected:
   DesignOfExperiment designOfExperiment_;
 };

@@ -23,7 +23,6 @@
 
 #include "persalys/SubWindow.hxx"
 #include "persalys/AnalysisItem.hxx"
-#include "persalys/LaunchParametersVisitor.hxx"
 #include "persalys/TemporaryLabel.hxx"
 
 #include <QPushButton>
@@ -32,7 +31,7 @@
 namespace PERSALYS
 {
 class StudyManager;
-class PERSALYS_VIEW_API AnalysisWindow : public SubWindow, LaunchParametersVisitor
+class PERSALYS_VIEW_API AnalysisWindow : public SubWindow
 {
   Q_OBJECT
 
@@ -46,10 +45,6 @@ public:
 protected:
   void buildInterface();
   void initializeWidgets();
-#ifdef PERSALYS_HAVE_YACS
-  virtual void visitYACS(YACSPhysicalModel* model);
-  virtual void visitYACS(YACSCouplingPhysicalModel* model);
-#endif
 
 protected slots:
   void launchAnalysis();
@@ -63,7 +58,6 @@ private:
   QPushButton * runButton_;
   QPushButton * stopButton_;
   TemporaryLabel * messageLabel_;
-  QWidget * launchParameters_;
 };
 }
 #endif
