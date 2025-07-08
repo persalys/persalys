@@ -9,8 +9,6 @@
 namespace PERSALYS {
 
 %extend YACSCouplingPhysicalModel {
-YACSCouplingPhysicalModel(const YACSCouplingPhysicalModel & other)
-{ return new PERSALYS::YACSCouplingPhysicalModel(other); }
 
 PyObject* jobParameters()
 { return py2cpp::toPy($self->jobParameters());}
@@ -18,5 +16,7 @@ PyObject* jobParameters()
 } }
 
 %ignore PERSALYS::YACSCouplingPhysicalModel::jobParameters;
+
+%copyctor PERSALYS::YACSCouplingPhysicalModel;
 
 %include persalys/YACSCouplingPhysicalModel.hxx
