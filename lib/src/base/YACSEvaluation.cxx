@@ -273,12 +273,6 @@ const ydefx::JobParametersProxy& YACSEvaluation::jobParameters() const
 }
 
 
-/** The job model is a python object which drives the execution of the job.*/
-void YACSEvaluation::setJobModel(const py2cpp::PyPtr& model)
-{
-  jobModel_ = model;
-}
-
 void YACSEvaluation::setStopCallback(StopCallback callBack, void * state)
 {
   stopCallback_ = std::pair<StopCallback, void *>(callBack, state);

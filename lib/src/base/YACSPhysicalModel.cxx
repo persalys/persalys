@@ -113,12 +113,6 @@ const ydefx::JobParametersProxy& YACSPhysicalModel::jobParameters()const
 }
 
 
-void YACSPhysicalModel::setJobModel(const py2cpp::PyPtr& model)
-{
-  evaluation_.setJobModel(model);
-}
-
-
 String YACSPhysicalModel::getCode() const
 {
   return evaluation_.getCode();
