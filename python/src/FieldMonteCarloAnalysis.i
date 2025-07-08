@@ -6,9 +6,6 @@
 
 %include FieldMonteCarloAnalysis_doc.i
 
+%copyctor PERSALYS::FieldMonteCarloAnalysis;
+
 %include persalys/FieldMonteCarloAnalysis.hxx
-namespace PERSALYS {
-
-%extend FieldMonteCarloAnalysis { FieldMonteCarloAnalysis(const FieldMonteCarloAnalysis & other) { return new PERSALYS::FieldMonteCarloAnalysis(other); } 
-
-} }

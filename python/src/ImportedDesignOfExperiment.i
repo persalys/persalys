@@ -8,9 +8,6 @@
 
 %include ImportedDesignOfExperiment_doc.i
 
+%copyctor PERSALYS::ImportedDesignOfExperiment;
+
 %include persalys/ImportedDesignOfExperiment.hxx
-namespace PERSALYS {
-
-%extend ImportedDesignOfExperiment { ImportedDesignOfExperiment(const ImportedDesignOfExperiment & other) { return new PERSALYS::ImportedDesignOfExperiment(other); } 
-
-} }

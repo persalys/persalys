@@ -6,9 +6,6 @@
 
 %include DataSample_doc.i
 
+%copyctor PERSALYS::DataSample;
+
 %include persalys/DataSample.hxx
-namespace PERSALYS {
-
-%extend DataSample { DataSample(const DataSample & other) { return new PERSALYS::DataSample(other); } 
-
-} }

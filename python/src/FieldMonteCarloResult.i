@@ -46,9 +46,6 @@ template <>
 
 %include FieldMonteCarloResult_doc.i
 
+%copyctor PERSALYS::FieldMonteCarloResult;
+
 %include persalys/FieldMonteCarloResult.hxx
-namespace PERSALYS {
-
-%extend FieldMonteCarloResult { FieldMonteCarloResult(const FieldMonteCarloResult & other) { return new PERSALYS::FieldMonteCarloResult(other); } 
-
-} }

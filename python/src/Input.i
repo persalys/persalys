@@ -67,9 +67,6 @@ template <>
 
 %apply const InputCollection & { const PERSALYS::InputCollection & };
 
+%copyctor PERSALYS::Input;
+
 %include persalys/Input.hxx
-namespace PERSALYS {
-
-%extend Input { Input(const Input & other) { return new PERSALYS::Input(other); } 
-
-} }

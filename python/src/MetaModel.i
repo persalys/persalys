@@ -6,9 +6,6 @@
 
 %include MetaModel_doc.i
 
+%copyctor PERSALYS::MetaModel;
+
 %include persalys/MetaModel.hxx
-namespace PERSALYS {
-
-%extend MetaModel { MetaModel(const MetaModel & other) { return new PERSALYS::MetaModel(other); } 
-
-} }

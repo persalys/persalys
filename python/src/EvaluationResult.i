@@ -6,9 +6,6 @@
 
 %include EvaluationResult_doc.i
 
+%copyctor PERSALYS::EvaluationResult;
+
 %include persalys/EvaluationResult.hxx
-namespace PERSALYS {
-
-%extend EvaluationResult { EvaluationResult(const EvaluationResult & other) { return new PERSALYS::EvaluationResult(other); } 
-
-} }

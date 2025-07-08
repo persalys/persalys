@@ -8,10 +8,12 @@
 
 %ignore PERSALYS::SimulationAnalysis::getParameters;
 
+%copyctor PERSALYS::SimulationAnalysis;
+
 %include persalys/SimulationAnalysis.hxx
 namespace PERSALYS {
 
-%extend SimulationAnalysis { SimulationAnalysis(const SimulationAnalysis & other) { return new PERSALYS::SimulationAnalysis(other); } 
+%extend SimulationAnalysis {
 
 std::string __repr__() {
   return "SimulationAnalysis";

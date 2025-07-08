@@ -39,10 +39,12 @@ template <>
 PERSALYSTypedInterfaceObjectHelper(PhysicalModel)
 PERSALYSTypedCollectionInterfaceObjectHelper(PhysicalModel)
 
+%copyctor PERSALYS::PhysicalModel;
+
 %include persalys/PhysicalModel.hxx
 namespace PERSALYS {
 
-%extend PhysicalModel { PhysicalModel(const PhysicalModel & other) { return new PERSALYS::PhysicalModel(other); } 
+%extend PhysicalModel {
 
 std::string __repr__() {
   return "PhysicalModel";

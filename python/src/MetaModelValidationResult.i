@@ -8,10 +8,12 @@
 
 %include MetaModelValidationResult_doc.i
 
+%copyctor PERSALYS::MetaModelValidationResult;
+
 %include persalys/MetaModelValidationResult.hxx
 namespace PERSALYS {
 
-%extend MetaModelValidationResult { MetaModelValidationResult(const MetaModelValidationResult & other) { return new PERSALYS::MetaModelValidationResult(other); } 
+%extend MetaModelValidationResult {
 
 std::string __repr__() {
   return "MetaModelValidationResult";

@@ -8,9 +8,6 @@
 
 %ignore PERSALYS::OptimizationAnalysis::updateParameters;
 
+%copyctor PERSALYS::OptimizationAnalysis;
+
 %include persalys/OptimizationAnalysis.hxx
-namespace PERSALYS {
-
-%extend OptimizationAnalysis { OptimizationAnalysis(const OptimizationAnalysis & other) { return new PERSALYS::OptimizationAnalysis(other); } 
-
-} }

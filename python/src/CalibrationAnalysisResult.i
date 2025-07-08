@@ -6,9 +6,6 @@
 
 %include CalibrationAnalysisResult_doc.i
 
+%copyctor PERSALYS::CalibrationAnalysisResult;
+
 %include persalys/CalibrationAnalysisResult.hxx
-namespace PERSALYS {
-
-%extend CalibrationAnalysisResult { CalibrationAnalysisResult(const CalibrationAnalysisResult & other) { return new PERSALYS::CalibrationAnalysisResult(other); } 
-
-} }

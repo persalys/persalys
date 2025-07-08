@@ -12,10 +12,12 @@
 
 %include AnalysisImplementation_doc.i
 
+%copyctor PERSALYS::AnalysisImplementation;
+
 %include persalys/AnalysisImplementation.hxx
 namespace PERSALYS {
 
-%extend AnalysisImplementation { AnalysisImplementation(const AnalysisImplementation & other) { return new PERSALYS::AnalysisImplementation(other); } 
+%extend AnalysisImplementation {
 
 std::string __repr__() {
   return "AnalysisImplementation";

@@ -8,9 +8,6 @@
 
 %ignore PERSALYS::MorrisAnalysis::updateParameters;
 
+%copyctor PERSALYS::MorrisAnalysis;
+
 %include persalys/MorrisAnalysis.hxx
-namespace PERSALYS {
-
-%extend MorrisAnalysis { MorrisAnalysis(const MorrisAnalysis & other) { return new PERSALYS::MorrisAnalysis(other); } 
-
-} }

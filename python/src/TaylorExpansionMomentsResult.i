@@ -6,9 +6,6 @@
 
 %include TaylorExpansionMomentsResult_doc.i
 
+%copyctor PERSALYS::TaylorExpansionMomentsResult;
+
 %include persalys/TaylorExpansionMomentsResult.hxx
-namespace PERSALYS {
-
-%extend TaylorExpansionMomentsResult { TaylorExpansionMomentsResult(const TaylorExpansionMomentsResult & other) { return new PERSALYS::TaylorExpansionMomentsResult(other); } 
-
-} }

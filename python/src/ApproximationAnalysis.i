@@ -6,9 +6,6 @@
 
 %include ApproximationAnalysis_doc.i
 
+%copyctor PERSALYS::ApproximationAnalysis;
+
 %include persalys/ApproximationAnalysis.hxx
-namespace PERSALYS {
-
-%extend ApproximationAnalysis { ApproximationAnalysis(const ApproximationAnalysis & other) { return new PERSALYS::ApproximationAnalysis(other); } 
-
-} }

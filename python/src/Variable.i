@@ -67,10 +67,12 @@ template <>
 
 %apply const VariableCollection & { const PERSALYS::VariableCollection & };
 
+%copyctor PERSALYS::Variable;
+
 %include persalys/Variable.hxx
 namespace PERSALYS {
 
-%extend Variable { Variable(const Variable & other) { return new PERSALYS::Variable(other); } 
+%extend Variable {
 
 std::string __repr__() {
   return "Variable";

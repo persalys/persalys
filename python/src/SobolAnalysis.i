@@ -6,9 +6,6 @@
 
 %include SobolAnalysis_doc.i
 
+%copyctor PERSALYS::SobolAnalysis;
+
 %include persalys/SobolAnalysis.hxx
-namespace PERSALYS {
-
-%extend SobolAnalysis { SobolAnalysis(const SobolAnalysis & other) { return new PERSALYS::SobolAnalysis(other); } 
-
-} }

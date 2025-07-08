@@ -6,9 +6,6 @@
 
 %include FunctionalChaosAnalysisResult_doc.i
 
+%copyctor PERSALYS::FunctionalChaosAnalysisResult;
+
 %include persalys/FunctionalChaosAnalysisResult.hxx
-namespace PERSALYS {
-
-%extend FunctionalChaosAnalysisResult { FunctionalChaosAnalysisResult(const FunctionalChaosAnalysisResult & other) { return new PERSALYS::FunctionalChaosAnalysisResult(other); } 
-
-} }

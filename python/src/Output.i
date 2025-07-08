@@ -67,9 +67,6 @@ template <>
 
 %apply const OutputCollection & { const PERSALYS::OutputCollection & };
 
+%copyctor PERSALYS::Output;
+
 %include persalys/Output.hxx
-namespace PERSALYS {
-
-%extend Output { Output(const Output & other) { return new PERSALYS::Output(other); } 
-
-} }

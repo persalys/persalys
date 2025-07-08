@@ -6,9 +6,6 @@
 
 %include FMUInfo_doc.i
 
+%copyctor PERSALYS::FMUInfo;
+
 %include persalys/FMUInfo.hxx
-namespace PERSALYS {
-
-%extend FMUInfo { FMUInfo(const FMUInfo & other) { return new PERSALYS::FMUInfo(other); } 
-
-} }

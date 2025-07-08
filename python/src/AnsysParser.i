@@ -6,9 +6,6 @@
 
 %include AnsysParser_doc.i
 
+%copyctor PERSALYS::AnsysParser;
+
 %include persalys/AnsysParser.hxx
-namespace PERSALYS {
-
-%extend AnsysParser { AnsysParser(const AnsysParser & other) { return new PERSALYS::AnsysParser(other); }
-
-} }

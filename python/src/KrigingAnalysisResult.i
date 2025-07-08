@@ -48,9 +48,6 @@ template <>
 
 %template(KrigingResultCollection) OT::Collection<OT::KrigingResult>;
 
+%copyctor PERSALYS::KrigingAnalysisResult;
+
 %include persalys/KrigingAnalysisResult.hxx
-namespace PERSALYS {
-
-%extend KrigingAnalysisResult { KrigingAnalysisResult(const KrigingAnalysisResult & other) { return new PERSALYS::KrigingAnalysisResult(other); } 
-
-} }

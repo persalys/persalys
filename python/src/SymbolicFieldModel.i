@@ -6,9 +6,6 @@
 
 %include SymbolicFieldModel_doc.i
 
+%copyctor PERSALYS::SymbolicFieldModel;
+
 %include persalys/SymbolicFieldModel.hxx
-namespace PERSALYS {
-
-%extend SymbolicFieldModel { SymbolicFieldModel(const SymbolicFieldModel & other) { return new PERSALYS::SymbolicFieldModel(other); } 
-
-} }

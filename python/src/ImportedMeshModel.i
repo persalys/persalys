@@ -6,9 +6,6 @@
 
 %include ImportedMeshModel_doc.i
 
+%copyctor PERSALYS::ImportedMeshModel;
+
 %include persalys/ImportedMeshModel.hxx
-namespace PERSALYS {
-
-%extend ImportedMeshModel { ImportedMeshModel(const ImportedMeshModel & other) { return new PERSALYS::ImportedMeshModel(other); } 
-
-} }

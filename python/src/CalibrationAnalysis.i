@@ -8,9 +8,6 @@
 
 %ignore PERSALYS::CalibrationAnalysis::updateParameters;
 
+%copyctor PERSALYS::CalibrationAnalysis;
+
 %include persalys/CalibrationAnalysis.hxx
-namespace PERSALYS {
-
-%extend CalibrationAnalysis { CalibrationAnalysis(const CalibrationAnalysis & other) { return new PERSALYS::CalibrationAnalysis(other); } 
-
-} }

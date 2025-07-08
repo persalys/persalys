@@ -8,9 +8,6 @@
 
 %ignore *::resetCallsNumber;
 
+%copyctor PERSALYS::PythonPhysicalModel;
+
 %include persalys/PythonPhysicalModel.hxx
-namespace PERSALYS {
-
-%extend PythonPhysicalModel { PythonPhysicalModel(const PythonPhysicalModel & other) { return new PERSALYS::PythonPhysicalModel(other); } 
-
-} }

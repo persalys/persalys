@@ -178,11 +178,6 @@ namespace OT {
     || OT::canConvertCollectionObjectFromPySequence< PERSALYS::CouplingOutputFile >($input);
 }
 
-
+%copyctor PERSALYS::CouplingStep;
 
 %include persalys/CouplingStep.hxx
-namespace PERSALYS {
-
-%extend CouplingStep { CouplingStep(const CouplingStep & other) { return new PERSALYS::CouplingStep(other); } 
-
-} }

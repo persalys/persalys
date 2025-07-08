@@ -6,9 +6,6 @@
 
 %include PolynomialRegressionAnalysis_doc.i
 
+%copyctor PERSALYS::PolynomialRegressionAnalysis;
+
 %include persalys/PolynomialRegressionAnalysis.hxx
-namespace PERSALYS {
-
-%extend PolynomialRegressionAnalysis { PolynomialRegressionAnalysis(const PolynomialRegressionAnalysis & other) { return new PERSALYS::PolynomialRegressionAnalysis(other); } 
-
-} }

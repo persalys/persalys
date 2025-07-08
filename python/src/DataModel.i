@@ -6,9 +6,6 @@
 
 %include DataModel_doc.i
 
+%copyctor PERSALYS::DataModel;
+
 %include persalys/DataModel.hxx
-namespace PERSALYS {
-
-%extend DataModel { DataModel(const DataModel & other) { return new PERSALYS::DataModel(other); } 
-
-} }

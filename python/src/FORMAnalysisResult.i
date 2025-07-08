@@ -6,9 +6,6 @@
 
 %include FORMAnalysisResult_doc.i
 
+%copyctor PERSALYS::FORMAnalysisResult;
+
 %include persalys/FORMAnalysisResult.hxx
-namespace PERSALYS {
-
-%extend FORMAnalysisResult { FORMAnalysisResult(const FORMAnalysisResult & other) { return new PERSALYS::FORMAnalysisResult(other); } 
-
-} }

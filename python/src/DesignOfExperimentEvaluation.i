@@ -8,9 +8,6 @@
 
 %include DesignOfExperimentEvaluation_doc.i
 
+%copyctor PERSALYS::DesignOfExperimentEvaluation;
+
 %include persalys/DesignOfExperimentEvaluation.hxx
-namespace PERSALYS {
-
-%extend DesignOfExperimentEvaluation { DesignOfExperimentEvaluation(const DesignOfExperimentEvaluation & other) { return new PERSALYS::DesignOfExperimentEvaluation(other); } 
-
-} }

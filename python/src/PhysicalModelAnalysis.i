@@ -6,10 +6,12 @@
 
 %include PhysicalModelAnalysis_doc.i
 
+%copyctor PERSALYS::PhysicalModelAnalysis;
+
 %include persalys/PhysicalModelAnalysis.hxx
 namespace PERSALYS {
 
-%extend PhysicalModelAnalysis { PhysicalModelAnalysis(const PhysicalModelAnalysis & other) { return new PERSALYS::PhysicalModelAnalysis(other); } 
+%extend PhysicalModelAnalysis {
 
 std::string __repr__() {
   return "PhysicalModelAnalysis";

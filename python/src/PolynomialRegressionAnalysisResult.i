@@ -46,9 +46,6 @@ template <>
 
 %include PolynomialRegressionAnalysisResult_doc.i
 
+%copyctor PERSALYS::PolynomialRegressionAnalysisResult;
+
 %include persalys/PolynomialRegressionAnalysisResult.hxx
-namespace PERSALYS {
-
-%extend PolynomialRegressionAnalysisResult { PolynomialRegressionAnalysisResult(const PolynomialRegressionAnalysisResult & other) { return new PERSALYS::PolynomialRegressionAnalysisResult(other); } 
-
-} }

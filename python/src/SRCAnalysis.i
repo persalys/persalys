@@ -6,9 +6,6 @@
 
 %include SRCAnalysis_doc.i
 
+%copyctor PERSALYS::SRCAnalysis;
+
 %include persalys/SRCAnalysis.hxx
-namespace PERSALYS {
-
-%extend SRCAnalysis { SRCAnalysis(const SRCAnalysis & other) { return new PERSALYS::SRCAnalysis(other); } 
-
-} }

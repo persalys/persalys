@@ -6,9 +6,6 @@
 
 %include FMIPhysicalModel_doc.i
 
+%copyctor PERSALYS::FMIPhysicalModel;
+
 %include persalys/FMIPhysicalModel.hxx
-namespace PERSALYS {
-
-%extend FMIPhysicalModel { FMIPhysicalModel(const FMIPhysicalModel & other) { return new PERSALYS::FMIPhysicalModel(other); } 
-
-} }

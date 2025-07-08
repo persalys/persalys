@@ -6,9 +6,6 @@
 
 %include CouplingInputFile_doc.i
 
+%copyctor PERSALYS::CouplingInputFile;
+
 %include persalys/CouplingInputFile.hxx
-namespace PERSALYS {
-
-%extend CouplingInputFile { CouplingInputFile(const CouplingInputFile & other) { return new PERSALYS::CouplingInputFile(other); } 
-
-} }

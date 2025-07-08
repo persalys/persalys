@@ -10,9 +10,6 @@
 %ignore *::getHtmlDescription;
 %ignore *::getCopulaCollection;
 
+%copyctor PERSALYS::PhysicalModelImplementation;
+
 %include persalys/PhysicalModelImplementation.hxx
-namespace PERSALYS {
-
-%extend PhysicalModelImplementation { PhysicalModelImplementation(const PhysicalModelImplementation & other) { return new PERSALYS::PhysicalModelImplementation(other); } 
-
-} }

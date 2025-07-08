@@ -6,9 +6,6 @@
 
 %include MorrisResult_doc.i
 
+%copyctor PERSALYS::MorrisResult;
+
 %include persalys/MorrisResult.hxx
-namespace PERSALYS {
-
-%extend MorrisResult { MorrisResult(const MorrisResult & other) { return new PERSALYS::MorrisResult(other); } 
-
-} }

@@ -8,9 +8,6 @@
 
 %include MeshModelImplementation_doc.i
 
+%copyctor PERSALYS::MeshModelImplementation;
+
 %include persalys/MeshModelImplementation.hxx
-namespace PERSALYS {
-
-%extend MeshModelImplementation { MeshModelImplementation(const MeshModelImplementation & other) { return new PERSALYS::MeshModelImplementation(other); } 
-
-} }

@@ -6,9 +6,6 @@
 
 %include SimulationReliabilityAnalysis_doc.i
 
+%copyctor PERSALYS::SimulationReliabilityAnalysis;
+
 %include persalys/SimulationReliabilityAnalysis.hxx
-namespace PERSALYS {
-
-%extend SimulationReliabilityAnalysis { SimulationReliabilityAnalysis(const SimulationReliabilityAnalysis & other) { return new PERSALYS::SimulationReliabilityAnalysis(other); } 
-
-} }

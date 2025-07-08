@@ -6,9 +6,6 @@
 
 %include ImportanceSamplingAnalysis_doc.i
 
+%copyctor PERSALYS::ImportanceSamplingAnalysis;
+
 %include persalys/ImportanceSamplingAnalysis.hxx
-namespace PERSALYS {
-
-%extend ImportanceSamplingAnalysis { ImportanceSamplingAnalysis(const ImportanceSamplingAnalysis & other) { return new PERSALYS::ImportanceSamplingAnalysis(other); } 
-
-} }

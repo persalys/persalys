@@ -6,9 +6,6 @@
 
 %include InferenceAnalysis_doc.i
 
+%copyctor PERSALYS::InferenceAnalysis;
+
 %include persalys/InferenceAnalysis.hxx
-namespace PERSALYS {
-
-%extend InferenceAnalysis { InferenceAnalysis(const InferenceAnalysis & other) { return new PERSALYS::InferenceAnalysis(other); } 
-
-} }

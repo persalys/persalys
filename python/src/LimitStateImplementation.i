@@ -6,9 +6,6 @@
 
 %include LimitStateImplementation_doc.i
 
+%copyctor PERSALYS::LimitStateImplementation;
+
 %include persalys/LimitStateImplementation.hxx
-namespace PERSALYS {
-
-%extend LimitStateImplementation { LimitStateImplementation(const LimitStateImplementation & other) { return new PERSALYS::LimitStateImplementation(other); } 
-
-} }

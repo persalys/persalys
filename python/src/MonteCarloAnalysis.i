@@ -6,9 +6,6 @@
 
 %include MonteCarloAnalysis_doc.i
 
+%copyctor PERSALYS::MonteCarloAnalysis;
+
 %include persalys/MonteCarloAnalysis.hxx
-namespace PERSALYS {
-
-%extend MonteCarloAnalysis { MonteCarloAnalysis(const MonteCarloAnalysis & other) { return new PERSALYS::MonteCarloAnalysis(other); } 
-
-} }

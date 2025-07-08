@@ -6,10 +6,12 @@
 
 %include ReliabilityAnalysis_doc.i
 
+%copyctor PERSALYS::ReliabilityAnalysis;
+
 %include persalys/ReliabilityAnalysis.hxx
 namespace PERSALYS {
 
-%extend ReliabilityAnalysis { ReliabilityAnalysis(const ReliabilityAnalysis & other) { return new PERSALYS::ReliabilityAnalysis(other); } 
+%extend ReliabilityAnalysis {
 
 std::string __repr__() {
   return "ReliabilityAnalysis";

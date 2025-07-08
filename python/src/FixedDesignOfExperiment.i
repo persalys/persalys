@@ -8,9 +8,6 @@
 
 %include FixedDesignOfExperiment_doc.i
 
+%copyctor PERSALYS::FixedDesignOfExperiment;
+
 %include persalys/FixedDesignOfExperiment.hxx
-namespace PERSALYS {
-
-%extend FixedDesignOfExperiment { FixedDesignOfExperiment(const FixedDesignOfExperiment & other) { return new PERSALYS::FixedDesignOfExperiment(other); } 
-
-} }

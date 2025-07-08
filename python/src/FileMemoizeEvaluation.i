@@ -4,5 +4,6 @@
 #include "persalys/FileMemoizeEvaluation.hxx"
 %}
 
+%copyctor PERSALYS::FileMemoizeEvaluation;
+
 %include persalys/FileMemoizeEvaluation.hxx
-namespace PERSALYS{ %extend FileMemoizeEvaluation { FileMemoizeEvaluation(const FileMemoizeEvaluation & other) { return new PERSALYS::FileMemoizeEvaluation(other); } } }

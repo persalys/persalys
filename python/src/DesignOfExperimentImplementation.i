@@ -6,10 +6,12 @@
 
 %include DesignOfExperimentImplementation_doc.i
 
+%copyctor PERSALYS::DesignOfExperimentImplementation;
+
 %include persalys/DesignOfExperimentImplementation.hxx
 namespace PERSALYS {
 
-%extend DesignOfExperimentImplementation { DesignOfExperimentImplementation(const DesignOfExperimentImplementation & other) { return new PERSALYS::DesignOfExperimentImplementation(other); } 
+%extend DesignOfExperimentImplementation {
 
 std::string __repr__() {
   return "DesignOfExperimentImplementation";

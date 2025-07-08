@@ -6,9 +6,6 @@
 
 %include FORMImportanceSamplingAnalysis_doc.i
 
+%copyctor PERSALYS::FORMImportanceSamplingAnalysis;
+
 %include persalys/FORMImportanceSamplingAnalysis.hxx
-namespace PERSALYS {
-
-%extend FORMImportanceSamplingAnalysis { FORMImportanceSamplingAnalysis(const FORMImportanceSamplingAnalysis & other) { return new PERSALYS::FORMImportanceSamplingAnalysis(other); } 
-
-} }

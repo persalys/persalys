@@ -6,9 +6,6 @@
 
 %include DataCleaning_doc.i
 
+%copyctor PERSALYS::DataCleaning;
+
 %include persalys/DataCleaning.hxx
-namespace PERSALYS {
-
-%extend DataCleaning { DataCleaning(const DataCleaning & other) { return new PERSALYS::DataCleaning(other); }
-
-} }

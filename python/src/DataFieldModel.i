@@ -35,10 +35,12 @@ template <>
 PERSALYSTypedInterfaceObjectHelper(DataFieldModel)
 PERSALYSTypedCollectionInterfaceObjectHelper(DataFieldModel)
 
+%copyctor PERSALYS::DataFieldModel;
+
 %include persalys/DataFieldModel.hxx
 namespace PERSALYS {
 
-%extend DataFieldModel { DataFieldModel(const DataFieldModel & other) { return new PERSALYS::DataFieldModel(other); }
+%extend DataFieldModel {
 
 std::string __repr__() {
   return "DataFieldModel";

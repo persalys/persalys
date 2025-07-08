@@ -8,9 +8,6 @@
 
 %include ProbabilisticDesignOfExperiment_doc.i
 
+%copyctor PERSALYS::ProbabilisticDesignOfExperiment;
+
 %include persalys/ProbabilisticDesignOfExperiment.hxx
-namespace PERSALYS {
-
-%extend ProbabilisticDesignOfExperiment { ProbabilisticDesignOfExperiment(const ProbabilisticDesignOfExperiment & other) { return new PERSALYS::ProbabilisticDesignOfExperiment(other); } 
-
-} }

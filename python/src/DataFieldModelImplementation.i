@@ -6,9 +6,6 @@
 
 %include DataFieldModelImplementation_doc.i
 
+%copyctor PERSALYS::DataFieldModelImplementation;
+
 %include persalys/DataFieldModelImplementation.hxx
-namespace PERSALYS {
-
-%extend DataFieldModelImplementation { DataFieldModelImplementation(const DataFieldModelImplementation & other) { return new PERSALYS::DataFieldModelImplementation(other); }
-
-} }

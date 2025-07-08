@@ -43,10 +43,12 @@ template <>
 PERSALYSTypedInterfaceObjectHelper(Study)
 PERSALYSTypedCollectionInterfaceObjectHelper(Study)
 
+%copyctor PERSALYS::Study;
+
 %include persalys/Study.hxx
 namespace PERSALYS {
 
-%extend Study { Study(const Study & other) { return new PERSALYS::Study(other); }
+%extend Study {
 
 std::string __repr__() {
   return "Study";

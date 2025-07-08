@@ -6,9 +6,6 @@
 
 %include TaylorExpansionMomentsAnalysis_doc.i
 
+%copyctor PERSALYS::TaylorExpansionMomentsAnalysis;
+
 %include persalys/TaylorExpansionMomentsAnalysis.hxx
-namespace PERSALYS {
-
-%extend TaylorExpansionMomentsAnalysis { TaylorExpansionMomentsAnalysis(const TaylorExpansionMomentsAnalysis & other) { return new PERSALYS::TaylorExpansionMomentsAnalysis(other); } 
-
-} }

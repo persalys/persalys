@@ -64,10 +64,6 @@ namespace OT {
     || OT::canConvertCollectionObjectFromPySequence< PERSALYS::CouplingStep >( $input );
 }
 
+%copyctor PERSALYS::CouplingPhysicalModel;
 
 %include persalys/CouplingPhysicalModel.hxx
-namespace PERSALYS {
-
-%extend CouplingPhysicalModel { CouplingPhysicalModel(const CouplingPhysicalModel & other) { return new PERSALYS::CouplingPhysicalModel(other); } 
-
-} }

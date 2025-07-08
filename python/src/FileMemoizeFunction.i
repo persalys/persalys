@@ -6,5 +6,6 @@
 
 %include FileMemoizeFunction_doc.i
 
+%copyctor PERSALYS::FileMemoizeFunction;
+
 %include persalys/FileMemoizeFunction.hxx
-namespace PERSALYS{ %extend FileMemoizeFunction { FileMemoizeFunction(const FileMemoizeFunction & other) { return new PERSALYS::FileMemoizeFunction(other); } } }

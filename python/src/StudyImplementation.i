@@ -6,9 +6,6 @@
 
 %ignore PERSALYS::StudyImplementation::setFileName;
 
+%copyctor PERSALYS::StudyImplementation;
+
 %include persalys/StudyImplementation.hxx
-namespace PERSALYS {
-
-%extend StudyImplementation { StudyImplementation(const StudyImplementation & other) { return new PERSALYS::StudyImplementation(other); } 
-
-} }

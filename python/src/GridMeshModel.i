@@ -6,9 +6,6 @@
 
 %include GridMeshModel_doc.i
 
+%copyctor PERSALYS::GridMeshModel;
+
 %include persalys/GridMeshModel.hxx
-namespace PERSALYS {
-
-%extend GridMeshModel { GridMeshModel(const GridMeshModel & other) { return new PERSALYS::GridMeshModel(other); } 
-
-} }

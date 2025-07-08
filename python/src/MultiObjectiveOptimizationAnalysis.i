@@ -8,11 +8,6 @@
 
 %ignore PERSALYS::MultiObjectiveOptimizationAnalysis::updateParameters;
 
+%copyctor PERSALYS::MultiObjectiveOptimizationAnalysis;
+
 %include persalys/MultiObjectiveOptimizationAnalysis.hxx
-namespace PERSALYS {
-
-%extend MultiObjectiveOptimizationAnalysis { MultiObjectiveOptimizationAnalysis(const MultiObjectiveOptimizationAnalysis & other) { return new PERSALYS::MultiObjectiveOptimizationAnalysis(other); }
-
-}
-
-}

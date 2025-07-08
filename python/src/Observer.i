@@ -4,11 +4,12 @@
 #include "persalys/Observer.hxx"
 %}
 
+%copyctor PERSALYS::Observer;
 
 %include persalys/Observer.hxx
 namespace PERSALYS {
 
-%extend Observer { Observer(const Observer & other) { return new PERSALYS::Observer(other); } 
+%extend Observer {
 
 std::string __repr__() {
   return "Observer";

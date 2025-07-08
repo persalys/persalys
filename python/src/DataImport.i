@@ -6,9 +6,6 @@
 
 %include DataImport_doc.i
 
+%copyctor PERSALYS::DataImport;
+
 %include persalys/DataImport.hxx
-namespace PERSALYS {
-
-%extend DataImport { DataImport(const DataImport & other) { return new PERSALYS::DataImport(other); } 
-
-} }

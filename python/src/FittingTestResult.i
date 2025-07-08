@@ -46,12 +46,8 @@ template <>
 
 %include FittingTestResult_doc.i
 
+%copyctor PERSALYS::FittingTestResult;
+
 %include persalys/FittingTestResult.hxx
 
 %template(FittingTestResultCollection) OT::Collection<PERSALYS::FittingTestResult>;
-
-namespace PERSALYS {
-
-%extend FittingTestResult { FittingTestResult(const FittingTestResult & other) { return new PERSALYS::FittingTestResult(other); } 
-
-} }

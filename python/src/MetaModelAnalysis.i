@@ -6,9 +6,6 @@
 
 %include MetaModelAnalysis_doc.i
 
+%copyctor PERSALYS::MetaModelAnalysis;
+
 %include persalys/MetaModelAnalysis.hxx
-namespace PERSALYS {
-
-%extend MetaModelAnalysis { MetaModelAnalysis(const MetaModelAnalysis & other) { return new PERSALYS::MetaModelAnalysis(other); } 
-
-} }

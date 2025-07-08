@@ -46,12 +46,8 @@ template <>
 
 %include CopulaInferenceSetResult_doc.i
 
+%copyctor PERSALYS::CopulaInferenceSetResult;
+
 %include persalys/CopulaInferenceSetResult.hxx
 
 %template(CopulaInferenceSetResultCollection) OT::Collection<PERSALYS::CopulaInferenceSetResult>;
-
-namespace PERSALYS {
-
-%extend CopulaInferenceSetResult { CopulaInferenceSetResult(const CopulaInferenceSetResult & other) { return new PERSALYS::CopulaInferenceSetResult(other); } 
-
-} }

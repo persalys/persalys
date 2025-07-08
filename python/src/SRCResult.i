@@ -6,9 +6,6 @@
 
 %include SRCResult_doc.i
 
+%copyctor PERSALYS::SRCResult;
+
 %include persalys/SRCResult.hxx
-namespace PERSALYS {
-
-%extend SRCResult { SRCResult(const SRCResult & other) { return new PERSALYS::SRCResult(other); } 
-
-} }

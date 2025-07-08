@@ -6,9 +6,6 @@
 
 %include FieldModelEvaluation_doc.i
 
+%copyctor PERSALYS::FieldModelEvaluation;
+
 %include persalys/FieldModelEvaluation.hxx
-namespace PERSALYS {
-
-%extend FieldModelEvaluation { FieldModelEvaluation(const FieldModelEvaluation & other) { return new PERSALYS::FieldModelEvaluation(other); } 
-
-} }

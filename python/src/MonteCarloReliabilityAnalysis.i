@@ -6,9 +6,6 @@
 
 %include MonteCarloReliabilityAnalysis_doc.i
 
+%copyctor PERSALYS::MonteCarloReliabilityAnalysis;
+
 %include persalys/MonteCarloReliabilityAnalysis.hxx
-namespace PERSALYS {
-
-%extend MonteCarloReliabilityAnalysis { MonteCarloReliabilityAnalysis(const MonteCarloReliabilityAnalysis & other) { return new PERSALYS::MonteCarloReliabilityAnalysis(other); } 
-
-} }

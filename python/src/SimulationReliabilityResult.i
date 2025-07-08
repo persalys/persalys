@@ -8,9 +8,6 @@
 
 %ignore PERSALYS::SimulationReliabilityResult::getParameters;
 
+%copyctor PERSALYS::SimulationReliabilityResult;
+
 %include persalys/SimulationReliabilityResult.hxx
-namespace PERSALYS {
-
-%extend SimulationReliabilityResult { SimulationReliabilityResult(const SimulationReliabilityResult & other) { return new PERSALYS::SimulationReliabilityResult(other); } 
-
-} }

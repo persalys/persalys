@@ -6,9 +6,6 @@
 
 %include AnalysisResult_doc.i
 
+%copyctor PERSALYS::AnalysisResult;
+
 %include persalys/AnalysisResult.hxx
-namespace PERSALYS {
-
-%extend AnalysisResult { AnalysisResult(const AnalysisResult & other) { return new PERSALYS::AnalysisResult(other); } 
-
-} }

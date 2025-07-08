@@ -35,10 +35,12 @@ template <>
 PERSALYSTypedInterfaceObjectHelper(Analysis)
 PERSALYSTypedCollectionInterfaceObjectHelper(Analysis)
 
+%copyctor PERSALYS::Analysis;
+
 %include persalys/Analysis.hxx
 namespace PERSALYS {
 
-%extend Analysis { Analysis(const Analysis & other) { return new PERSALYS::Analysis(other); } 
+%extend Analysis {
 
 std::string __repr__() {
   return "Analysis";

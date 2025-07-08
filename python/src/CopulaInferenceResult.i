@@ -6,9 +6,6 @@
 
 %include CopulaInferenceResult_doc.i
 
+%copyctor PERSALYS::CopulaInferenceResult;
+
 %include persalys/CopulaInferenceResult.hxx
-namespace PERSALYS {
-
-%extend CopulaInferenceResult { CopulaInferenceResult(const CopulaInferenceResult & other) { return new PERSALYS::CopulaInferenceResult(other); } 
-
-} }

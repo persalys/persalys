@@ -6,9 +6,6 @@
 
 %include CouplingOutputFile_doc.i
 
+%copyctor PERSALYS::CouplingOutputFile;
+
 %include persalys/CouplingOutputFile.hxx
-namespace PERSALYS {
-
-%extend CouplingOutputFile { CouplingOutputFile(const CouplingOutputFile & other) { return new PERSALYS::CouplingOutputFile(other); } 
-
-} }

@@ -6,9 +6,6 @@
 
 %include SymbolicPhysicalModel_doc.i
 
+%copyctor PERSALYS::SymbolicPhysicalModel;
+
 %include persalys/SymbolicPhysicalModel.hxx
-namespace PERSALYS {
-
-%extend SymbolicPhysicalModel { SymbolicPhysicalModel(const SymbolicPhysicalModel & other) { return new PERSALYS::SymbolicPhysicalModel(other); } 
-
-} }

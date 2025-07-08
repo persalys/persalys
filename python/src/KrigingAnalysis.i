@@ -6,9 +6,6 @@
 
 %include KrigingAnalysis_doc.i
 
+%copyctor PERSALYS::KrigingAnalysis;
+
 %include persalys/KrigingAnalysis.hxx
-namespace PERSALYS {
-
-%extend KrigingAnalysis { KrigingAnalysis(const KrigingAnalysis & other) { return new PERSALYS::KrigingAnalysis(other); } 
-
-} }

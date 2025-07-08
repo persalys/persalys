@@ -6,9 +6,6 @@
 
 %include SORMAnalysisResult_doc.i
 
+%copyctor PERSALYS::SORMAnalysisResult;
+
 %include persalys/SORMAnalysisResult.hxx
-namespace PERSALYS {
-
-%extend SORMAnalysisResult { SORMAnalysisResult(const SORMAnalysisResult & other) { return new PERSALYS::SORMAnalysisResult(other); } 
-
-} }

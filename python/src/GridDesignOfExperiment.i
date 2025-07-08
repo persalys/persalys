@@ -43,9 +43,6 @@ namespace OT {
     || OT::canConvertCollectionObjectFromPySequence<OT::Point>($input);
 }
 
+%copyctor PERSALYS::GridDesignOfExperiment;
+
 %include persalys/GridDesignOfExperiment.hxx
-namespace PERSALYS {
-
-%extend GridDesignOfExperiment { GridDesignOfExperiment(const GridDesignOfExperiment & other) { return new PERSALYS::GridDesignOfExperiment(other); } 
-
-} }

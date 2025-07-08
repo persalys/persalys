@@ -33,10 +33,12 @@ template <>
 PERSALYSTypedInterfaceObjectHelper(LimitState)
 PERSALYSTypedCollectionInterfaceObjectHelper(LimitState)
 
+%copyctor PERSALYS::LimitState;
+
 %include persalys/LimitState.hxx
 namespace PERSALYS {
 
-%extend LimitState { LimitState(const LimitState & other) { return new PERSALYS::LimitState(other); } 
+%extend LimitState {
 
 std::string __repr__() {
   return "LimitState";

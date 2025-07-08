@@ -6,9 +6,6 @@
 
 %include CouplingResourceFile_doc.i
 
+%copyctor PERSALYS::CouplingResourceFile;
+
 %include persalys/CouplingResourceFile.hxx
-namespace PERSALYS {
-
-%extend CouplingResourceFile { CouplingResourceFile(const CouplingResourceFile & other) { return new PERSALYS::CouplingResourceFile(other); } 
-
-} }

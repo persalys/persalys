@@ -33,9 +33,6 @@ template <>
 PERSALYSTypedInterfaceObjectHelper(MeshModel)
 PERSALYSTypedCollectionInterfaceObjectHelper(MeshModel)
 
+%copyctor PERSALYS::MeshModel;
+
 %include persalys/MeshModel.hxx
-namespace PERSALYS {
-
-%extend MeshModel { MeshModel(const MeshModel & other) { return new PERSALYS::MeshModel(other); } 
-
-} }
