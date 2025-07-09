@@ -75,9 +75,6 @@ protected:
 
   QAction * newSymbolicModel_ = nullptr;
   QAction * newPythonModel_ = nullptr;
-#ifdef PERSALYS_HAVE_YACS
-  QAction * newYACSModel_ = nullptr;
-#endif
 #ifdef PERSALYS_HAVE_OTFMI
   QAction * newFMIModel_ = nullptr;
 #endif

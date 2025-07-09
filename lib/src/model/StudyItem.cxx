@@ -75,16 +75,12 @@ void StudyItem::buildActions()
   newPythonModel_ = new QAction(tr("Python model"), this);
   connect(newPythonModel_, &QAction::triggered, [ = ]()
   {
-    study_.add(new PythonPhysicalModel(getModelName(tr("PythonModel_"))));
-  });
-
 #ifdef PERSALYS_HAVE_YACS
-  newYACSModel_ = new QAction(tr("Python model on cluster"), this);
-  connect(newYACSModel_, &QAction::triggered, [ = ]()
-  {
-    study_.add(new YACSPhysicalModel(getModelName(tr("YACSModel_"))));
-  });
+    study_.add(new YACSPhysicalModel(getModelName(tr("PythonModel_"))));
+#else
+    study_.add(new PythonPhysicalModel(getModelName(tr("PythonModel_"))));
 #endif
+  });
 
   newCouplingModel_ = new QAction(tr("Coupling model"), this);
   connect(newCouplingModel_, &QAction::triggered, [ = ]()
@@ -149,9 +145,6 @@ void StudyItem::buildActions()
   appendSeparator(tr("Model"));
   appendAction(newSymbolicModel_);
   appendAction(newPythonModel_);
-#ifdef PERSALYS_HAVE_YACS
-  appendAction(newYACSModel_);
-#endif
 #ifdef PERSALYS_HAVE_OTFMI
   appendAction(newFMIModel_);
 #endif

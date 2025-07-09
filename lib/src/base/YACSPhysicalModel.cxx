@@ -159,7 +159,9 @@ String YACSPhysicalModel::getPythonScript() const
   oss << getName()
       << " = persalys.YACSPhysicalModel('" << getName() << "'"
       << ", inputs, outputs, code)\n";
-  oss << getJobParamsPythonScript();
+  oss << getName() << ".setUseYACS(" << (useYACS_ ? "True" : "False") << ")\n";
+  if (useYACS_)
+    oss << getJobParamsPythonScript();
 
   oss << getProbaModelPythonScript();
   oss << PhysicalModelImplementation::getCopulaPythonScript();
@@ -304,6 +306,7 @@ void YACSPhysicalModel::load(Advocate & adv)
   else
     useYACS_ = true;
 }
+
 
 
 }

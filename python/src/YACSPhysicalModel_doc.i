@@ -27,8 +27,26 @@ script : str
 "Launching parameters accessor.
 
 Returns
-----------
+-------
 result : :py:class:'pydefx.parameters.Parameters'
     job parameters structure"
 
 // ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::YACSPhysicalModel::setUseYACS
+"Launching parameters accessor.
+
+Parameters
+----------
+useYACS : bool
+    Whether to use the YACS backend instead of the Python backend"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::YACSPhysicalModel::getUseYACS
+"Launching parameters accessor.
+
+Returns
+-------
+useYACS : bool
+    Whether to use the YACS backend instead of the Python backend"

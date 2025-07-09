@@ -8,7 +8,6 @@ Several types of physical models are available:
   - **Symbolic model**: Physical model defined with analytical formulas
   - **Python model**: Physical model defined with a Python script
   - **Coupling model**: Physical model to wrap an external code using file-exchange
-  - **Python model on cluster**: Physical model defined with a Python script intended to run on a cluster (optional)
   - **FMI model**: Physical model defined with a FMU file (optional)
 
 1- Creation
@@ -90,7 +89,7 @@ and the finite difference step of each variable (**Differentiation** tab).
 .. _vectsymbolicmodel:
 
 2-1 *Symbolic model*: define a physical model with analytical formulas
--------------------------------------------------------------------------------
+----------------------------------------------------------------------
 
 .. image:: /user_manual/graphical_interface/physical_model/symbolicPhysicalModel.png
     :align: center
@@ -186,7 +185,7 @@ Available constants
 .. _vectpythonmodel:
 
 2-2 *Python model*: define a physical model with a Python editor
--------------------------------------------------------------------------
+----------------------------------------------------------------
 
 .. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel_default.png
     :align: center
@@ -224,10 +223,17 @@ Here is an example of an error message transmission, when we tried to compute sq
 .. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel_error.png
     :align: center
 
+In the context of the SALOME platform, HPC settings can also be enabled though the properties contextual menu
+(right-click on the model root node above the **Definition** node, then choose **Properties**):
+
+.. image:: /user_manual/graphical_interface/physical_model/pythonPhysicalModel_properties.png
+    :align: center
+
+
 .. _vectcouplingmodel:
 
 2-3 *Coupling model*: define a physical model to wrap an external code using file-exchange
---------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 
 2-3-1 *Definition*
 ~~~~~~~~~~~~~~~~~~
@@ -309,6 +315,9 @@ Step definition is divided into several categories:
 .. image:: /user_manual/graphical_interface/physical_model/CPM_ExtraProcessing.png
     :align: center
 
+In the context of the SALOME platform, HPC settings can also be enabled though the properties contextual menu
+(right-click on the model root node above the **Definition** node, then choose **Properties**):
+
 2-3-1 *Ansys wizard*
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -336,23 +345,6 @@ on data contained in an Ansys workbench project. It consists in two steps:
   returned by the ansys solver (in the form of a csv file) are
   processed in the extra processing tab where some python code is
   automatically generated to parse coupling step output values.
-
-.. _vectyacsmodel:
-
-2-4 *Python model on cluster*: define a physical model with a Python editor intended to run on a cluster
---------------------------------------------------------------------------------------------------------
-
-A physical model can be defined by loading an XML file, previously generated for example with Salome,
-which contains:
-
-- Definitions for the input and output variables;
-
-- Computation parameters;
-
-- Actions to be performed to evaluate the model (for instance, a call to Code_Aster solver)
-
-The **Check model** button computes the output values based on inputs and the YACS scheme. It shall be
-used to test the physical model. To save the output values, the user should use the :ref:`Model evaluation <modelEvaluation>`.
 
 .. _vectfmimodel:
 

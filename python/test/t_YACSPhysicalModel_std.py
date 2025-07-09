@@ -8,6 +8,7 @@ import persalys
 pyscript = "def _exec(x, y, p):\n    w, z = 3*x+4*y+p,x+y+p\n    return w, z\n"
 
 model = persalys.YACSPhysicalModel("myPhysicalModel", [], [], pyscript)
+model.setUseYACS(True)
 
 X = [[1, 2, 4], [2, 3, 5], [6, 1, 3]]
 
@@ -35,6 +36,7 @@ exec(script)
 # test for output variables order
 pyscript = "def _exec(inp1):\n    aaa,bbb,ddd,ccc = 1.,2.,3.,inp1\n    return aaa,bbb,ddd,ccc\n"
 model = persalys.YACSPhysicalModel("order", [], [], pyscript)
+model.setUseYACS(True)
 x = [8.0]
 y_ref = [1.0, 2.0, 3.0, 8.0]
 f = model.getFunction()
@@ -43,6 +45,7 @@ y = f(x)
 
 pyscript = "def _exec(x1, x2):\n    y1, y2 = 1/x1, x2\n    return y1, y2\n"
 model = persalys.YACSPhysicalModel("myPhysicalModelError", [], [], pyscript)
+model.setUseYACS(True)
 model.setParallel(True)
 model.setProcessNumber(4)
 
