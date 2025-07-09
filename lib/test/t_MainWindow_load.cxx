@@ -1,7 +1,6 @@
 #include "persalys/MainWidget.hxx"
 #include "persalys/MainWindow.hxx"
 #include "persalys/MenuBar.hxx"
-#include "persalys/SettingsDialog.hxx"
 #include "persalys/PythonEnvironment.hxx"
 #include "persalys/AnalysisWindow.hxx"
 #include "persalys/ResultWindow.hxx"

@@ -116,7 +116,6 @@ ot_add_source_file ( CopulaWidget.cxx )
 ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
 ot_add_source_file ( AboutDialog.cxx )
-ot_add_source_file ( SettingsDialog.cxx )
 ot_add_source_file ( PythonPhysicalModelPropertiesDialog.cxx )
 ot_add_source_file ( MeshDefinitionWizard.cxx )
 ot_add_source_file ( FieldModelEvaluationResultWindow.cxx )
@@ -245,7 +244,6 @@ ot_install_header_file ( CopulaWidget.hxx )
 ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
 ot_install_header_file ( AboutDialog.hxx )
-ot_install_header_file ( SettingsDialog.hxx )
 ot_install_header_file ( PythonPhysicalModelPropertiesDialog.hxx )
 ot_install_header_file ( MeshDefinitionWizard.hxx )
 ot_install_header_file ( FieldModelEvaluationResultWindow.hxx )
@@ -371,7 +369,6 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CopulaInferenceWizard.hxx
                                   persalys/CopulaInferenceResultWizard.hxx
                                   persalys/AboutDialog.hxx
-                                  persalys/SettingsDialog.hxx
                                   persalys/PythonPhysicalModelPropertiesDialog.hxx
                                   persalys/MeshDefinitionWizard.hxx
                                   persalys/FieldModelEvaluationResultWindow.hxx

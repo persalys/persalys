@@ -1,7 +1,6 @@
 #include "persalys/MainWidget.hxx"
 #include "persalys/MainWindow.hxx"
 #include "persalys/MenuBar.hxx"
-#include "persalys/SettingsDialog.hxx"
 #include "persalys/PythonEnvironment.hxx"
 #include "persalys/AnalysisWindow.hxx"
 #include "persalys/ResultWindow.hxx"
@@ -78,22 +77,6 @@ private slots:
     QVERIFY(consoleDockWidget->isVisible() == false);
     consoleAction->trigger();
     QVERIFY(consoleDockWidget->isVisible() == true);
-  }
-
-  void TestSettings()
-  {
-    // get widgets
-    MenuBar * menuBar = mainWindow_->findChild<MenuBar*>();
-    QAction * settingsAction = menuBar->settingsDisplayAction();
-      settingsAction->trigger();
-    SettingsDialog * settingsDialog = menuBar->findChild<SettingsDialog*>();
-    std::cout << settingsDialog->getProcessNumber()<< std::endl;
-    QVERIFY(settingsDialog->getProcessNumber()
-            == OT::ResourceMap::GetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber"));
-    const UnsignedInteger nProc = 2;
-    settingsDialog->setProcessNumber(2);
-    settingsDialog->accept();
-    QVERIFY(OT::ResourceMap::GetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber") == nProc);
   }
 
 
