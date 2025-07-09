@@ -110,7 +110,7 @@ void PhysicalModelDiagramItem::buildActions()
   PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(getPhysicalModel().getImplementation().get());
   if (model)
   {
-    propertiesAction_ = new QAction(QIcon(":/images/documentinfo.png"), tr("Properties"), this);
+    propertiesAction_ = new QAction(QIcon(":/images/run-build.png"), tr("Properties"), this);
     propertiesAction_->setStatusTip(tr("Physical model properties"));
     connect(propertiesAction_, SIGNAL(triggered()), this, SLOT(requestOpenProperties()));
     appendAction(propertiesAction_);

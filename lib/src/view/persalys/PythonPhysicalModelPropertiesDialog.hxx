@@ -18,11 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_PROPERTIESDIALOG_HXX
-#define PERSALYS_PROPERTIESDIALOG_HXX
+#ifndef PERSALYS_PYTHONPHYSICALMODELPROPERTIESDIALOG_HXX
+#define PERSALYS_PYTHONPHYSICALMODELPROPERTIESDIALOG_HXX
 
 #include "persalys/PersalysPrivate.hxx"
-#include "persalys/ProcessNumberSpinBox.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 
 #include <openturns/OTType.hxx>
 
@@ -30,18 +30,15 @@
 
 namespace PERSALYS
 {
-  class PERSALYS_VIEW_API PropertiesDialog : public QDialog
+  class PERSALYS_VIEW_API PythonPhysicalModelPropertiesDialog : public QDialog
   {
     Q_OBJECT
 
   public:
-    PropertiesDialog(QWidget* parent = 0);
-
-    void setProcessNumber(const OT::UnsignedInteger n) { processNumberSpinBox_->setProcessNumber(n);};
-    OT::UnsignedInteger getProcessNumber() const {return processNumberSpinBox_->getProcessNumber();};
+    PythonPhysicalModelPropertiesDialog(PythonPhysicalModel* model, QWidget* parent = nullptr);
 
   private:
-    ProcessNumberSpinBox * processNumberSpinBox_ = nullptr;
+
   };
 
 }

@@ -117,7 +117,7 @@ ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
 ot_add_source_file ( AboutDialog.cxx )
 ot_add_source_file ( SettingsDialog.cxx )
-ot_add_source_file ( PropertiesDialog.cxx )
+ot_add_source_file ( PythonPhysicalModelPropertiesDialog.cxx )
 ot_add_source_file ( MeshDefinitionWizard.cxx )
 ot_add_source_file ( FieldModelEvaluationResultWindow.cxx )
 ot_add_source_file ( FieldMonteCarloWizard.cxx )
@@ -246,7 +246,7 @@ ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
 ot_install_header_file ( AboutDialog.hxx )
 ot_install_header_file ( SettingsDialog.hxx )
-ot_install_header_file ( PropertiesDialog.hxx )
+ot_install_header_file ( PythonPhysicalModelPropertiesDialog.hxx )
 ot_install_header_file ( MeshDefinitionWizard.hxx )
 ot_install_header_file ( FieldModelEvaluationResultWindow.hxx )
 ot_install_header_file ( FieldMonteCarloWizard.hxx )
@@ -372,7 +372,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CopulaInferenceResultWizard.hxx
                                   persalys/AboutDialog.hxx
                                   persalys/SettingsDialog.hxx
-                                  persalys/PropertiesDialog.hxx
+                                  persalys/PythonPhysicalModelPropertiesDialog.hxx
                                   persalys/MeshDefinitionWizard.hxx
                                   persalys/FieldModelEvaluationResultWindow.hxx
                                   persalys/FieldMonteCarloWizard.hxx
@@ -388,7 +388,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
 
 
 if (SalomeYACS_FOUND)
-  set_source_files_properties (AnalysisWindow.cxx PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
+  set_source_files_properties (AnalysisWindow.cxx PythonPhysicalModelPropertiesDialog.cxx PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
 endif ()
 
 if (OTFMI_FOUND)
