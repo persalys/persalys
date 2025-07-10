@@ -16,6 +16,7 @@ CXXFLAGS="-g -Wall -Wextra -Wpedantic -Wshadow -Werror" ${ARCH}-w64-mingw32-cmak
   -DPython_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
   -DSWIG_COMPILE_FLAGS="-Wno-unused-parameter -Wno-shadow" \
   -DPERSALYS_BUILD_NSIS=ON \
+  -DUSE_STACKTRACE=ON \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -B build /io
 cd build
 make install

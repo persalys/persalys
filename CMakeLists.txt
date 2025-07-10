@@ -11,7 +11,7 @@ option (USE_OTFMI "use otfmi" ON)
 option (USE_OTMORRIS "use otmorris" ON)
 option (USE_SPHINX "use sphinx" OFF)
 option (USE_PARAVIEW "use ParaView" ON)
-option (USE_STACKTRACE "use Boost.stacktrace" ON)
+option (USE_STACKTRACE "use Boost.stacktrace" OFF)
 set (PERSALYS_QT_MAJOR_VERSION 5 CACHE STRING "Qt version")
 
 set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
