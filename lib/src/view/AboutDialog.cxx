@@ -78,7 +78,7 @@ AboutDialog::AboutDialog(QWidget* parent)
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
-  QLabel * descriptionLabel = new QLabel(tr("Persalys, an user interface for uncertainty analysis"));
+  QLabel * descriptionLabel = new QLabel(tr("Persalys, a user interface for uncertainty analysis"));
   tabLayout->addWidget(descriptionLabel);
 
   QLabel * linkLabel = new QLabel;
@@ -90,11 +90,7 @@ AboutDialog::AboutDialog(QWidget* parent)
   QLabel * copyrightLabel = new QLabel(tr("Copyright 2015-2025 EDF-Phimeca"));
   tabLayout->addWidget(copyrightLabel);
 
-  //QLabel * licenseLabel = new QLabel("<a>"+tr("License:")+"&nbsp;<a href=\"https://www.gnu.org/licenses/lgpl-3.0.en.html\">GNU Lesser General Public License Version 3</a>");
-  //licenseLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-  //licenseLabel->setOpenExternalLinks(true);
-  //tabLayout->addWidget(licenseLabel);
-
+  tabLayout->addStretch();
   tabWidget->addTab(tab, tr("&About"));
 
   // Libraries tab
