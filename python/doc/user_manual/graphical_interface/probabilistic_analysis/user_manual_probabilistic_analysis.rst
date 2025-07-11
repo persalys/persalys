@@ -269,9 +269,10 @@ The **Simulation methods** window allows one to define:
       - the maximum coefficient of variation for the probability, (default: 0.01,
         expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
       - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
-      - the maximum sampling size (default: 10000, expected: integer)
-  - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
-    purposes (default=1; expected= integer). It must be less than the maximum sampling size.
+      - the maximum sampling size (default: 10000)
+  - **Evaluation parameter**:
+      - the block size (default=1): defines the maximum number of samples queued for evaluation by the physical model,
+        see :ref:`design of experiment evaluation <doeevalwizard>` for more details
   - **Advanced Parameters** (default: hidden): the seed of the random generator (default: 0,
     positive integer expected)
 
@@ -456,8 +457,9 @@ The **Monte Carlo parameters** window allows one to define:
       - the maximum confidence interval length (:math:`CIL = 2 \times \frac{\sigma}{\sqrt{n}} \times Q_{Normal} \left( \frac{1+IC_{level}}{2} \right)` with :math:`n`: the number of simulations and :math:`Q_{Normal}` the quantile of the normal distribution, the level can be set in **Advanced Parameters**)
       - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
       - the maximum sampling size (default: 10000, expected: integer)
-  - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
-    purposes (default=1; expected= integer). It must be less than the maximum sampling size.
+  - **Evaluation parameter**:
+      - the block size (default=1): defines the maximum number of samples queued for evaluation by the physical model,
+        see :ref:`deterministic design of experiment evaluation <doeevalwizard>` for more details
   - **Advanced Parameters** (default: hidden):
       - the seed of the random generator (default: 0, positive integer expected)
       - require the computation of the confidence interval (default: checked)
@@ -649,16 +651,16 @@ The **Sobol parameters** window allows one to define:
       - the maximum confidence interval length of the first order indices (default: 0.01,
         expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
       - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
-      - the maximum calls (default: 10000, expected: integer)
+      - the maximum calls (default=10000)
   - **Evaluation parameters**:
-      - the replication size (default=1000; expected= integer).
+      - the replication size (default=1000).
           - The label **Number of calls by iteration** is updated according to its value.
           - At each iteration of the algorithm, the model is evaluated *nbEval* times:
               :math:`nbEval = (nbInputs + 2) * replicationSize`
               with *nbInputs*, the number of stochastic input variables
           - The maximum calls must be greater than *nbEval*
-      - the block size – the number of runs launched simultaneously – for parallelization
-        purposes (default=1; expected= integer).
+      - the block size (default=1): defines the maximum number of samples queued for evaluation by the physical model,
+        see :ref:`deterministic design of experiment evaluation <doeevalwizard>` for more details
   - **Advanced Parameters** (default: hidden):
       - the confidence level (default: 0.95; float expected).
       - the seed of the random generator (default: 0, positive integer expected)
@@ -674,9 +676,9 @@ See the :ref:`Sensitivity <SobolExample>` section in the example guide.
 
 The **SRC parameters** window allows one to define:
   - **Evaluation parameters**:
-     - the sample size (default: 10000, integer expected)
-     - the block size – the number of runs launched simultaneously – for parallelization
-       purposes (default=1; expected= integer). It must be less than the sample size.
+     - the sample size (default=10000)
+     - the block size (default=1): defines the maximum number of samples queued for evaluation by the physical model,
+       see :ref:`deterministic design of experiment evaluation <doeevalwizard>` for more details
   - **Advanced Parameters** (default: hidden): the seed of the random generator
     (default: 0, positive integer expected)
 
