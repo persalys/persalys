@@ -1,11 +1,10 @@
 %feature("docstring") PERSALYS::KrigingAnalysisResult
 "Get the results of a Kriging analysis.
 
-Notes
------
-Structure created by the method run() of
-:class:`~persalys.KrigingAnalysis`, and obtained thanks to the method
-getResult()."
+See Also
+--------
+KrigingAnalysis
+"
 
 // ---------------------------------------------------------------------
 
@@ -14,7 +13,7 @@ getResult()."
 
 Returns
 -------
-results : sequence of :class:`openturns.KrigingResult`
+results : sequence of `openturns.KrigingResult`
     The kriging results of all the outputs of interest"
 
 // ---------------------------------------------------------------------
@@ -29,5 +28,5 @@ variable : str
 
 Returns
 -------
-result : py:class:`openturns.KrigingResult`
+result : `openturns.KrigingResult`
     The kriging result of the variable"

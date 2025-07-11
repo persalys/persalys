@@ -316,9 +316,8 @@ The windows allows one to set up:
     - Click on the **Add** combo box
     - Select a copula in the list (or all of them with the **All** item):
 
-        - *For a pair of variables* : bivariate
-          `copulas <http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.Copula.html>`_
-          are available (Ali-Mikhail-Haq, Clayton, Farlie-Gumbel-Morgenstern, Frank, Gumbel, Normal)
+        - *For a pair of variables* : bivariate copulas are available
+          (Ali-Mikhail-Haq, Clayton, Farlie-Gumbel-Morgenstern, Frank, Gumbel, Normal)
         - *For a group with more than two variables*: only the Normal copula is available
           (**Add** and **Remove** buttons are then disabled)
 
@@ -442,7 +441,7 @@ When an analysis is required, a window appears, in order to set up:
 The **Linear regression** window allows one to define:
   - **Parameters**: polynomial degree (default: 1, expected: integer in [1, 2]), interaction terms (if degree>1 only)
 
-Refer to :class:`~persalsys.PolynomialRegressionAnalysis` for implementation details.
+Refer to :class:`~persalys.PolynomialRegressionAnalysis` for implementation details.
 
 4-1-2 Functional chaos
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -454,7 +453,7 @@ The **Functional chaos parameters** window allows one to define:
   - **Parameters**: chaos degree (default: 2, expected: integer greater or equal to 1)
   - **Advanced Parameters** (default: hidden): sparse chaos (default: not sparse)
 
-Refer to :class:`~persalsys.FunctionalChaosAnalysis` for implementation details.
+Refer to :class:`~persalys.FunctionalChaosAnalysis` for implementation details.
 
 4-1-3 Kriging
 ~~~~~~~~~~~~~
@@ -489,7 +488,7 @@ The **Kriging parameters** window allows one to define:
 
      - Amplitude of the process (default: 1., positive float expected)
 
-Refer to :class:`~persalsys.KrigingAnalysis` for implementation details.
+Refer to :class:`~persalys.KrigingAnalysis` for implementation details.
 
 4-1-3 Validation
 ~~~~~~~~~~~~~~~~

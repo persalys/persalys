@@ -146,7 +146,7 @@ PERSALYS_PhysicalModel_exportStandalonePythonScript_doc
 
 Parameters
 ----------
-copula : :py:class:`openturns.Copula`
+copula : :py:class:`openturns.Distribution`
     The copula"
 %enddef
 %feature("docstring") PERSALYS::PhysicalModelImplementation::setCopula
@@ -172,7 +172,7 @@ PERSALYS_PhysicalModel_getDistribution_doc
 
 Parameters
 ----------
-copula : :py:class:`openturns.Copula`
+copula : :py:class:`openturns.Distribution`
     The copula"
 %enddef
 %feature("docstring") PERSALYS::PhysicalModelImplementation::getCopula

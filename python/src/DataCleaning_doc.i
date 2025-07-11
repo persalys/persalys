@@ -1,5 +1,7 @@
 %feature("docstring") PERSALYS::DataCleaning
-"DataModel sample manipulation. Allows one to remove/replace irrelevant/erroneous values on-the-fly.
+"DataModel sample cleaning.
+
+Allows one to remove/replace irrelevant/erroneous values on-the-fly.
 
 Parameters
 ----------
@@ -22,12 +24,12 @@ Examples
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::removeAllNans
-"Removes Nans/Infs in sample"
+"Removes Nans/Infs in sample."
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::replaceAllNans
-"Replaces Nans/Infs in sample point by point values
+"Replaces Nans/Infs in sample point by point values.
 
 Parameters
 ----------
@@ -37,7 +39,7 @@ point : openturns.Point
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::removeNansByColumn
-"Removes Nans/Infs in sample column
+"Removes Nans/Infs in sample column.
 
 Parameters
 ----------
@@ -47,13 +49,13 @@ col : int
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::replaceNansByColumn
-"Replaces Nans/Infs in sample column by value
+"Replaces Nans/Infs in sample column by value.
 
 Parameters
 ----------
 col : int
    Column index to clean
-val : openturns.Scalar
+val : float
    Replacement value"
 // ---------------------------------------------------------------------
 
@@ -75,7 +77,7 @@ Evaluates number of Nans/Infs for each marginal"
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::getSample
-"Sample accessor
+"Sample accessor.
 
 Returns
 -------
@@ -85,7 +87,7 @@ sample : :py:class:`openturns.Sample`
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::getMedian
-"Median accessor
+"Median accessor.
 
 Returns
 -------
@@ -94,7 +96,7 @@ median : :py:class:`openturns.Point`"
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::getMean
-"Mean accessor
+"Mean accessor.
 
 Returns
 -------
@@ -103,7 +105,8 @@ mean : :py:class:`openturns.Point`"
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::getMAD
-"MAD accessor
+"MAD accessor.
+
 Returns
 -------
 MAD : :py:class:`openturns.Point`"
@@ -111,15 +114,17 @@ MAD : :py:class:`openturns.Point`"
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::getGeometricMAD
-"Geom. MAD accessor
+"Geom. MAD accessor.
+
 Returns
 -------
-geomMad : :py:class:`openturns.Scalar`"
+geomMad : float"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataCleaning::getNanNumbers
-"Returns number of Nans/Infs in each sample column
+"Returns number of Nans/Infs in each sample column.
+
 Returns
 -------
 nNans : :py:class:`openturns.Point`"

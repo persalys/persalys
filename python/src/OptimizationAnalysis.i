@@ -6,6 +6,7 @@
 
 %include OptimizationAnalysis_doc.i
 
+%ignore PERSALYS::AlgorithmProperty;
 %ignore PERSALYS::OptimizationAnalysis::updateParameters;
 
 %copyctor PERSALYS::OptimizationAnalysis;

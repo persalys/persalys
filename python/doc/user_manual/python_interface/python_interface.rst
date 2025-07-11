@@ -22,6 +22,7 @@ Model creation
     SymbolicFieldModel
     PythonPhysicalModel
     PythonFieldModel
+    FMUInfo
     FMIPhysicalModel
     DataModel
     DataFieldModel
@@ -61,7 +62,7 @@ Optimization
 
     OptimizationAnalysis
     MultiObjectiveOptimizationAnalysis
-
+    MultiObjectiveOptimizationAnalysisResult
 
 Screening
 ---------
@@ -132,7 +133,9 @@ Reliability analysis
     MonteCarloReliabilityAnalysis
     FORMImportanceSamplingAnalysis
     ImportanceSamplingAnalysis
+    FORMAnalysisResult
     FORMAnalysis
+    SORMAnalysisResult
     SORMAnalysis
     SimulationReliabilityResult
 
@@ -202,3 +205,12 @@ Function caching
     :template: class.rst_t
 
     FileMemoizeFunction
+
+Base classes
+------------
+.. autosummary::
+    :toctree: _generated/
+    :template: class.rst_t
+
+    Analysis
+    AnalysisImplementation

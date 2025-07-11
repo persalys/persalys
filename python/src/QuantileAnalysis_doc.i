@@ -150,7 +150,7 @@ seed : int
 Returns
 -------
 
-targetProba : :py:class:`openturns.PointCollection`
+targetProba : sequence of :py:class:`openturns.Point`
     Collection (size: number of marginals) of points (dimension: number of terget probabilities for each marginals) for which the quantiles are estimated."
 
 // ---------------------------------------------------------------------
@@ -161,7 +161,7 @@ targetProba : :py:class:`openturns.PointCollection`
 Parameters
 ----------
 
-targetProba : :py:class:`openturns.PointCollection`
+targetProba : sequence of :py:class:`openturns.Point`
     Collection (size: number of marginals) of points (dimension: number of terget probabilities for each marginals) for which the quantiles are estimated."
 
 // ---------------------------------------------------------------------

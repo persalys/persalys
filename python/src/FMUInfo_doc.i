@@ -166,5 +166,5 @@ startKeys : :py:class:`openturns.Description`
 
 Returns
 -------
-startValues : :py:class:`openturns.NumericalPoint`
+startValues : :py:class:`openturns.Point`
     Default values"

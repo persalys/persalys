@@ -2,7 +2,7 @@
 "Function proxy with a CSV file cache.
 
 When this function is evaluated, it calls the
-:class:`~openturns.Function` passed as argument, and caches
+:py:class:`openturns.Function` passed as argument, and caches
 values with CSV files.
 
 Parameters
@@ -16,7 +16,7 @@ output_file : str
 
 See also
 --------
-Function
+openturns.MemoizeFunction
 
 Examples
 --------

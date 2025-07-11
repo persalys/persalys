@@ -34,8 +34,9 @@ varName : str
 Returns
 -------
 
-quantile : :py:class:`openturns.SampleCollection`
-    Each item in the collection contains the quantiles for a given tail type, each point in each item contains the quantile and its confidence interval for a given target probability."
+quantile : sequence of :py:class:`openturns.Sample`
+    Each item in the collection contains the quantiles for a given tail type,
+    each point in each item contains the quantile and its confidence interval for a given target probability."
 
 
 // ---------------------------------------------------------------------

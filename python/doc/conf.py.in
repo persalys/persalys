@@ -272,3 +272,6 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+# If true, Sphinx will warn about all references where the target cannot be found.
+nitpicky = True
