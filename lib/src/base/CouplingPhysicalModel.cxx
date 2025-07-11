@@ -38,7 +38,6 @@ static Factory<PersistentCollection<CouplingStep> > Factory_PersistentCollection
 CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
     const CouplingStepCollection & steps)
   : PythonPhysicalModel(name)
-  , cleanupWorkDirectory_(true)
 {
   setSteps(steps);
 }
@@ -49,7 +48,6 @@ CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
     const OutputCollection & outputs,
     const CouplingStepCollection & steps)
   : PythonPhysicalModel(name)
-  , cleanupWorkDirectory_(true)
 {
   PhysicalModelImplementation::setInputs(inputs);
   PhysicalModelImplementation::setOutputs(outputs);

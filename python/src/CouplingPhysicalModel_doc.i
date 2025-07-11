@@ -120,3 +120,23 @@ input_file : str
     Cache input file name.
 output_file : str
     Cache output file name."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::setWorkDir
+"Working directory accessor.
+
+Parameters
+----------
+workDir : str
+    Working directory path."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::getWorkDir
+"Working directory accessor.
+
+Returns
+-------
+workDir : str
+    Working directory path."
