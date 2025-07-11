@@ -38,8 +38,6 @@ class PERSALYS_VIEW_API AnalysisWindow : public SubWindow
 public:
   AnalysisWindow(AnalysisItem *item, StudyManager *manager, QWidget *parent = nullptr);
 
-  virtual ~AnalysisWindow();
-
   void setErrorMessage(QString message);
 
 protected:
@@ -49,15 +47,17 @@ protected:
 protected slots:
   void launchAnalysis();
   void stopAnalysis();
+  void detachAnalysis();
   void updateProgressBar(const int value);
 
 private:
-  StudyManager * studyManager_;
-  AnalysisItem * analysisItem_;
-  QProgressBar * progressBar_;
-  QPushButton * runButton_;
-  QPushButton * stopButton_;
-  TemporaryLabel * messageLabel_;
+  StudyManager * studyManager_ = nullptr;
+  AnalysisItem * analysisItem_ = nullptr;
+  QProgressBar * progressBar_ = nullptr;
+  QPushButton * runButton_ = nullptr;
+  QPushButton * stopButton_ = nullptr;
+  QPushButton * detachButton_ = nullptr;
+  TemporaryLabel * messageLabel_ = nullptr;
 };
 }
 #endif

@@ -143,6 +143,12 @@ bool Analysis::canBeLaunched(String &errorMessage) const
 }
 
 
+bool Analysis::canBeDetached() const
+{
+  return getImplementation()->canBeDetached();
+}
+
+
 Parameters Analysis::getParameters() const
 {
   return getImplementation()->getParameters();
@@ -158,6 +164,12 @@ String Analysis::getPythonScript() const
 void Analysis::stop()
 {
   getImplementation()->stop();
+}
+
+
+void Analysis::detach()
+{
+  getImplementation()->detach();
 }
 
 

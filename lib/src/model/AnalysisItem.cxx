@@ -191,6 +191,12 @@ void AnalysisItem::stopAnalysis()
 }
 
 
+void AnalysisItem::detachAnalysis()
+{
+  analysis_.detach();
+}
+
+
 void AnalysisItem::modifyAnalysis()
 {
   // check if the analysis is running

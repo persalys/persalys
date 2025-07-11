@@ -23,10 +23,6 @@
 #include "persalys/BaseTools.hxx"
 #include "persalys/DataAnalysis.hxx"
 
-#ifdef PERSALYS_HAVE_YACS
-#include "persalys/YACSEvaluation.hxx"
-#endif
-
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 #include <openturns/BatchFailedException.hxx>
@@ -111,12 +107,6 @@ void DesignOfExperimentEvaluation::initialize()
 }
 
 
-bool DesignOfExperimentEvaluation::StopRequested(void* state)
-{
-  DesignOfExperimentEvaluation * p_it = reinterpret_cast<DesignOfExperimentEvaluation*>(state);
-  return p_it->stopRequested_;
-}
-
 void DesignOfExperimentEvaluation::launch()
 {
   // check
@@ -155,7 +145,7 @@ void DesignOfExperimentEvaluation::launch()
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
 
   // stopCallback
-  function.setStopCallback(&StopRequested, this);
+  function.setStopCallback(&AnalysisImplementation::Detach, this);
 
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)

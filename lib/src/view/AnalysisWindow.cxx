@@ -41,19 +41,8 @@ AnalysisWindow::AnalysisWindow(AnalysisItem* item, StudyManager *manager, QWidge
   : SubWindow(item, parent)
   , studyManager_(manager)
   , analysisItem_(item)
-  , progressBar_(0)
-  , runButton_(0)
-  , stopButton_(0)
-  , messageLabel_(0)
 {
   buildInterface();
-}
-
-
-AnalysisWindow::~AnalysisWindow()
-{
-  analysisItem_ = 0;
-  studyManager_ = 0;
 }
 
 
@@ -86,7 +75,7 @@ void AnalysisWindow::buildInterface()
   QPalette p = progressBar_->palette();
   p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
   progressBar_->setPalette(p);
-  mainLayout->addWidget(progressBar_, 1, 2);
+  mainLayout->addWidget(progressBar_, 1, 3);
   connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
 
   // buttons
@@ -103,7 +92,15 @@ void AnalysisWindow::buildInterface()
   stopButton_->setEnabled(false);
   connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(stopAnalysis()));
   mainLayout->addWidget(stopButton_, 1, 1);
-  mainLayout->setColumnStretch(2, 1);
+
+  // - detach button
+  detachButton_ = new QPushButton(tr("Detach"));
+  detachButton_->setToolTip(tr("Continue running offline"));
+  detachButton_->setIcon(QIcon(":/images/offline.png"));
+  detachButton_->setEnabled(false);
+  connect(detachButton_, SIGNAL(clicked(bool)), this, SLOT(detachAnalysis()));
+  mainLayout->addWidget(detachButton_, 1, 2);
+  mainLayout->setColumnStretch(3, 1);
 
   // information message
   messageLabel_ = new TemporaryLabel;
@@ -171,8 +168,9 @@ void AnalysisWindow::launchAnalysis()
     return;
   }
 
-  // enable stop button
+  // enable stop buttons
   stopButton_->setEnabled(true);
+  detachButton_->setEnabled(analysisItem_->getAnalysis().canBeDetached());
 
   // start indefinite/busy progress bar
   progressBar_->setRange(0, 0);
@@ -195,11 +193,29 @@ void AnalysisWindow::stopAnalysis()
   // add a message in case the analysis take too much time to end
   messageLabel_->setText(messageLabel_->text() + "\n" + tr("Stop in progress"));
 
-  // disable stop button
+  // disable stop buttons
   stopButton_->setEnabled(false);
+  detachButton_->setEnabled(false);
 
   // stop the analysis
   analysisItem_->stopAnalysis();
+}
+
+
+void AnalysisWindow::detachAnalysis()
+{
+  if (analysisItem_->getAnalysis().canBeDetached())
+  {
+    // add a message in case the analysis take too much time to end
+    messageLabel_->setText(messageLabel_->text() + "\n" + tr("Detach in progress"));
+
+    // disable stop buttons
+    stopButton_->setEnabled(false);
+    detachButton_->setEnabled(false);
+
+    // detach the analysis
+    analysisItem_->detachAnalysis();
+  }
 }
 
 

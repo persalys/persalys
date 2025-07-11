@@ -53,7 +53,9 @@ public:
   virtual void run();
   virtual OT::String getPythonScript() const;
   virtual bool hasValidResult() const;
+
   virtual bool canBeLaunched(OT::String &errorMessage) const;
+  virtual bool canBeDetached() const;
 
   bool isReliabilityAnalysis() const;
 
@@ -68,7 +70,9 @@ public:
   int getProgressValue() const;
   OT::String getHtmlDescription() const;
   OT::Scalar getElapsedTime() const;
+
   virtual void stop();
+  virtual void detach();
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
@@ -80,20 +84,22 @@ protected:
   virtual void initialize();
   virtual void launch();
   static bool Stop(void * p);
+  static bool Detach(void * p);
   static void UpdateProgressValue(double percent, void * data);
 
 protected:
-  bool isReliabilityAnalysis_;
-  bool isDeterministicAnalysis_;
+  bool isReliabilityAnalysis_ = false;
+  bool isDeterministicAnalysis_ = true;
   OT::String informationMessage_;
   OT::String warningMessage_;
-  bool stopRequested_;
-  int progressValue_;
+  bool stopRequested_ = false;
+  bool detachRequested_ = false;
+  int progressValue_ = 0;
   OT::String modelHtmlDescription_;
 
 private:
-  OT::Scalar elapsedTime_;
-  bool isRunning_;
+  OT::Scalar elapsedTime_ = 0.0;
+  bool isRunning_ = false;
   OT::String errorMessage_;
   OT::Description interestVariables_;
 };

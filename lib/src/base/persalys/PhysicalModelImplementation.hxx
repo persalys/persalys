@@ -138,6 +138,8 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
+  virtual bool canBeDetached() const;
+
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;
   virtual OT::PointToFieldFunction generatePointToFieldFunction(const OT::Description & outputNames) const;

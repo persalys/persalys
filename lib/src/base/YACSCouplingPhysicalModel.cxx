@@ -247,4 +247,10 @@ void YACSCouplingPhysicalModel::load(Advocate & adv)
 }
 
 
+bool YACSCouplingPhysicalModel::canBeDetached() const
+{
+  return true;
+}
+
+
 }

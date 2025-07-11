@@ -50,6 +50,7 @@ public slots:
   void processStatusChanged();
   virtual void updateAnalysis(const Analysis & analysis);
   void stopAnalysis();
+  void detachAnalysis();
   void modifyAnalysis();
   void appendMetaModelItem();
   void exportMetaModel();

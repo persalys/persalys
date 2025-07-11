@@ -1231,4 +1231,9 @@ void PhysicalModelImplementation::load(Advocate & adv)
 }
 
 
+bool PhysicalModelImplementation::canBeDetached() const
+{
+  return false;
+}
+
 }

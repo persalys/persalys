@@ -308,5 +308,10 @@ void YACSPhysicalModel::load(Advocate & adv)
 }
 
 
+bool YACSPhysicalModel::canBeDetached() const
+{
+  return useYACS_;
+}
+
 
 }
