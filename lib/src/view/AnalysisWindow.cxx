@@ -70,14 +70,6 @@ void AnalysisWindow::buildInterface()
     mainLayout->addWidget(parametersWidget_, 0, 0, 1, 3);
   }
 
-  // progress bar
-  progressBar_ = new QProgressBar;
-  QPalette p = progressBar_->palette();
-  p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
-  progressBar_->setPalette(p);
-  mainLayout->addWidget(progressBar_, 1, 3);
-  connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
-
   // buttons
   // - run button
   runButton_ = new QPushButton(tr("Run"));
@@ -88,7 +80,8 @@ void AnalysisWindow::buildInterface()
 
   // - stop button
   stopButton_ = new QPushButton(tr("Stop"));
-  stopButton_->setIcon(QIcon(":/images/process-stop.png"));
+  stopButton_->setToolTip(tr("Clean exit after current block"));
+  stopButton_->setIcon(QIcon(":/images/kt-stop-all.png"));
   stopButton_->setEnabled(false);
   connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(stopAnalysis()));
   mainLayout->addWidget(stopButton_, 1, 1);
@@ -102,10 +95,18 @@ void AnalysisWindow::buildInterface()
   mainLayout->addWidget(detachButton_, 1, 2);
   mainLayout->setColumnStretch(3, 1);
 
+  // progress bar
+  progressBar_ = new QProgressBar;
+  QPalette p = progressBar_->palette();
+  p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
+  progressBar_->setPalette(p);
+  mainLayout->addWidget(progressBar_, 2, 0, 1, 3);
+  connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
+
   // information message
   messageLabel_ = new TemporaryLabel;
   messageLabel_->setTextFormat(Qt::PlainText);
-  mainLayout->addWidget(messageLabel_, 2, 0, 1, 3);
+  mainLayout->addWidget(messageLabel_, 3, 0, 1, 3);
   connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
 
   mainLayout->setRowStretch(4, 1);
