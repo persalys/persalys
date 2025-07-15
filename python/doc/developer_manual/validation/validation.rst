@@ -2398,17 +2398,25 @@ FMI model
 Python model on cluster
 '''''''''''''''''''''''
 
-- create a new study and add to it a Python model on cluster
+- create a new study and add a Python physical model
 
 - edit the model python code with:
 
   .. code-block:: python
 
       def _exec(X0, X1):
-          Y0 = X0 + X1
+          Y0 = X0 + 8*X1 + 3
           return Y0
 
-- change X0 and X1 values and check Y0 value
+- change X0=1 and X1=2 values and check evaluation Y0=20 value almost instantly
+
+- right-click Properties on the model node above the Definition node, then select HPC mode with 4 cores
+
+- check evaluation Y0=20 value, must take roughly 5 seconds
+
+- create a full factorial design of experiments with all 2 variables (4 points), block size set to 4
+
+- right-click to evaluate it: it must take 5 seconds to evaluate the whole design at once
 
 - create a probalistic model and a probablitic design of experiments:
 

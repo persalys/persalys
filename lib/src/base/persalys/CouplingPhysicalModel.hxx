@@ -53,9 +53,6 @@ public:
   OT::String getHtmlDescription(const bool deterministic) const override;
   OT::String getPythonScript() const override;
 
-  /** Update python code if advanced config has changed **/
-  void updateCode();
-
   /** Whether the work dir is discarded */
   void setCleanupWorkDirectory(const OT::Bool cleanupWorkDirectory);
   OT::Bool getCleanupWorkDirectory() const;
@@ -80,11 +77,14 @@ public:
 protected:
   OT::Function generateFunction(const OT::Description & outputNames) const override;
 
+  /** Update python code if advanced config has changed **/
+  void updateCode();
+
   OT::String getStepsMacro(const OT::String & offset = "") const;
 private:
   // list of steps
   OT::PersistentCollection<CouplingStep> steps_;
-  OT::Bool cleanupWorkDirectory_;
+  OT::Bool cleanupWorkDirectory_ = true;
   OT::FileName cacheInputFile_;
   OT::FileName cacheOutputFile_;
   OT::FileName workDir_;

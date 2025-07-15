@@ -97,7 +97,8 @@ void PythonPhysicalModel::setCode(const String & code)
       }
     }
 
-    std::regex returnOutput("    return[ ]+([_a-zA-Z0-9, ]+)");
+    // Allow 2-spaces indent as well to match YACS behavior
+    std::regex returnOutput("  (?:  )?return[ ]+([_a-zA-Z0-9, ]+)");
     if (inExecScope && std::regex_match(line, what, returnOutput))
     {
       String outputList = what[1];
@@ -207,7 +208,7 @@ String PythonPhysicalModel::getHtmlDescription(const bool deterministic) const
   oss << "<h3>Python code</h3>";
   oss << "<pre>";
   String code = getCode();
-  code = Tools::escapeHtml(code);
+  code = Tools::EscapeHTML(code);
   oss << code;
   oss << "</pre>";
 
@@ -299,16 +300,6 @@ void PythonPhysicalModel::addOutput(const Output & /*output*/)
 void PythonPhysicalModel::removeOutput(const String & /*outputName*/)
 {
   throw NotYetImplementedException(HERE) << "Use setCode to modify a PythonPhysicalModel";
-}
-
-void PythonPhysicalModel::setEvalTime(const Scalar& evalTime)
-{
-  PhysicalModelImplementation::setEvalTime(evalTime);
-}
-
-Scalar PythonPhysicalModel::getEvalTime() const
-{
-  return PhysicalModelImplementation::getEvalTime();
 }
 
 }

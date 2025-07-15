@@ -47,7 +47,6 @@ public slots:
   void clearRecentFilesActions();
   void openUserManual();
   void openAboutDialog();
-  void openSettingsWindow();
   void updateConsoleStatus(const bool visibility);
 signals:
   void openStudy(QString);

@@ -1,3 +1,7 @@
+= 19.0 release (wip)
+
+ * Merge YACS/Python model
+
 = 18.1 release (2025-06-25)
 
  * Consistent metamodel error measures (MSE, R2)

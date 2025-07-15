@@ -32,16 +32,6 @@ namespace PERSALYS
 AnalysisImplementation::AnalysisImplementation()
   : PersistentObject()
   , Observable()
-  , isReliabilityAnalysis_(false)
-  , isDeterministicAnalysis_(true)
-  , informationMessage_("")
-  , warningMessage_("")
-  , stopRequested_(false)
-  , progressValue_(0)
-  , modelHtmlDescription_("")
-  , isRunning_(false)
-  , errorMessage_("")
-  , interestVariables_()
 {
 }
 
@@ -50,16 +40,6 @@ AnalysisImplementation::AnalysisImplementation()
 AnalysisImplementation::AnalysisImplementation(const String & name)
   : PersistentObject()
   , Observable()
-  , isReliabilityAnalysis_(false)
-  , isDeterministicAnalysis_(true)
-  , informationMessage_("")
-  , warningMessage_("")
-  , stopRequested_(false)
-  , progressValue_(0)
-  , modelHtmlDescription_("")
-  , isRunning_(false)
-  , errorMessage_("")
-  , interestVariables_()
 {
   setName(name);
 }
@@ -143,8 +123,10 @@ void AnalysisImplementation::initialize()
   errorMessage_ = "";
   warningMessage_ = "";
   stopRequested_ = false;
+  detachRequested_ = false;
   progressValue_ = 0;
   modelHtmlDescription_ = "";
+  elapsedTime_ = 0.0;
 
   // if the model is a PythonPhysicalModel: reset the calls number
   // do not need this operation for the other models because
@@ -168,6 +150,7 @@ Scalar AnalysisImplementation::getElapsedTime() const
 {
   return elapsedTime_;
 }
+
 void AnalysisImplementation::run()
 {
   TimeCriteria tc;
@@ -232,6 +215,12 @@ bool AnalysisImplementation::canBeLaunched(String & /*errorMessage*/) const
 }
 
 
+bool AnalysisImplementation::canBeDetached() const
+{
+  return false;
+}
+
+
 String AnalysisImplementation::getPythonScript() const
 {
   return "";
@@ -257,6 +246,19 @@ bool AnalysisImplementation::Stop(void * p)
 }
 
 
+void AnalysisImplementation::detach()
+{
+  detachRequested_ = true;
+}
+
+
+bool AnalysisImplementation::Detach(void * p)
+{
+  AnalysisImplementation * arg = (AnalysisImplementation*)p;
+  return arg->detachRequested_;
+}
+
+
 void AnalysisImplementation::UpdateProgressValue(double percent, void * data)
 {
   AnalysisImplementation * analysis = static_cast<AnalysisImplementation*>(data);
@@ -264,7 +266,7 @@ void AnalysisImplementation::UpdateProgressValue(double percent, void * data)
     return;
 
   // set progress value
-  analysis->progressValue_ = (int) percent;
+  analysis->progressValue_ = static_cast<int>(percent);
   analysis->notify("progressValueChanged");
 }
 
@@ -295,8 +297,4 @@ void AnalysisImplementation::load(Advocate & adv)
 }
 
 
-/* To be implemented in child classes. */
-void AnalysisImplementation::acceptLaunchParameters(LaunchParametersVisitor* /*visitor*/)
-{
-}
 }

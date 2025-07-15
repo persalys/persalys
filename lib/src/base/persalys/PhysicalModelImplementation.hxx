@@ -25,7 +25,6 @@
 #include "Output.hxx"
 #include "Observable.hxx"
 #include "MeshModel.hxx"
-#include "LaunchParametersVisitor.hxx"
 
 #include <openturns/Function.hxx>
 #include <openturns/ResourceMap.hxx>
@@ -115,7 +114,7 @@ public:
   void setMeshModel(const MeshModel& meshModel);
 
   OT::Scalar getEvalTime() const;
-  void setEvalTime(const OT::Scalar& evalTime);
+  void setEvalTime(const OT::Scalar evalTime);
 
   OT::Bool isParallel() const;
   virtual void setParallel(const OT::Bool flag);
@@ -139,7 +138,7 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-  virtual void acceptLaunchParameters(LaunchParametersVisitor* visitor);
+  virtual bool canBeDetached() const;
 
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;

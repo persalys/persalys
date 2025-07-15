@@ -199,7 +199,7 @@ String SymbolicPhysicalModel::getHtmlDescription(const bool deterministic) const
     oss << "  <td>" << getOutputNames()[i] << "</td>";
     const String desc(getOutputs()[i].getDescription());
     oss << "  <td>" << (desc.empty() ? "-" : desc) << "</td>";
-    oss << "  <td>" << Tools::escapeHtml(getFormulas()[i]) << "</td>";
+    oss << "  <td>" << Tools::EscapeHTML(getFormulas()[i]) << "</td>";
     oss << "</tr>";
   }
   oss << "</table></p>";

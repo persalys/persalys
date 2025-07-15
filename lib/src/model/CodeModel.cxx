@@ -18,9 +18,9 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/CodeModel.hxx"
 
 #include "persalys/PythonPhysicalModel.hxx"
+#include "persalys/CodeModel.hxx"
 
 using namespace OT;
 
@@ -53,8 +53,9 @@ QVariant CodeModel::data(const QModelIndex & index, int role) const
 
   if (role == Qt::DisplayRole || role == Qt::EditRole)
   {
-    PythonPhysicalModel *pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
-    return pyModel ? QString::fromUtf8(pyModel->getCode().c_str()) : "";
+    const PythonPhysicalModel *pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
+    if (pyModel)
+      return QString::fromStdString(pyModel->getCode());
   }
   return QVariant();
 }
@@ -70,7 +71,9 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
     physicalModel_.blockNotification("PhysicalModelDefinitionItem");
     try
     {
-      dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get())->setCode(value.toString().toUtf8().data());
+      PythonPhysicalModel *pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
+      if (pyModel)
+        pyModel->setCode(value.toString().toStdString());
     }
     catch (std::exception& ex)
     {

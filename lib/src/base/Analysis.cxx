@@ -143,6 +143,12 @@ bool Analysis::canBeLaunched(String &errorMessage) const
 }
 
 
+bool Analysis::canBeDetached() const
+{
+  return getImplementation()->canBeDetached();
+}
+
+
 Parameters Analysis::getParameters() const
 {
   return getImplementation()->getParameters();
@@ -161,6 +167,12 @@ void Analysis::stop()
 }
 
 
+void Analysis::detach()
+{
+  getImplementation()->detach();
+}
+
+
 void Analysis::setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj)
 {
   TypedInterfaceObject< AnalysisImplementation >::setImplementationAsPersistentObject(obj);
@@ -168,8 +180,4 @@ void Analysis::setImplementationAsPersistentObject(const ImplementationAsPersist
 }
 
 
-void Analysis::acceptLaunchParameters(LaunchParametersVisitor* visitor)
-{
-  getImplementation()->acceptLaunchParameters(visitor);
-}
 }

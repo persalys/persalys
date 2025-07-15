@@ -4,10 +4,13 @@
 #include "persalys/AnalysisImplementation.hxx"
 %}
 
-%ignore *::getInformationMessage;
-%ignore *::getProgressValue;
-%ignore *::stop;
-%ignore *::acceptLaunchParameters;
+%ignore PERSALYS::AnalysisImplementation::getInformationMessage;
+%ignore PERSALYS::AnalysisImplementation::getProgressValue;
+%ignore PERSALYS::AnalysisImplementation::stop;
+%ignore PERSALYS::AnalysisImplementation::detach;
+%ignore PERSALYS::AnalysisImplementation::canBeLaunched;
+%ignore PERSALYS::AnalysisImplementation::canBeDetached;
+%ignore PERSALYS::AnalysisImplementation::getElapsedTime;
 %ignore PERSALYS::AnalysisImplementation::getParameters;
 
 %include AnalysisImplementation_doc.i

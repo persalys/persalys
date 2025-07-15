@@ -120,11 +120,4 @@ void DesignOfExperimentAnalysis::load(Advocate & adv)
 }
 
 
-void DesignOfExperimentAnalysis::acceptLaunchParameters(LaunchParametersVisitor* visitor)
-{
-  if(designOfExperiment_.hasPhysicalModel())
-  {
-    designOfExperiment_.getPhysicalModel().getImplementation()->acceptLaunchParameters(visitor);
-  }
-}
 }

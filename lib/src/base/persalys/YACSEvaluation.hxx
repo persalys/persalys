@@ -79,9 +79,6 @@ public:
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
 
-  /** The job model is a python object which drives the execution of the job.*/
-  void setJobModel(const py2cpp::PyPtr& model);
-
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
 

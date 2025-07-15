@@ -18,12 +18,6 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifdef PERSALYS_HAVE_YACS
-#include "persalys/YACSPhysicalModel.hxx" //includes python.h. Has to be done before any Qt include
-#include "persalys/YACSCouplingPhysicalModel.hxx"
-#include <ydefx/ResourceWidget.hxx>
-#endif
-
 #include "persalys/Controller.hxx"   // !!! WARNING !!! THIS INCLUDE MUST BE THE VERY FIRST !!!
 
 #include "persalys/AnalysisWindow.hxx"
@@ -47,19 +41,8 @@ AnalysisWindow::AnalysisWindow(AnalysisItem* item, StudyManager *manager, QWidge
   : SubWindow(item, parent)
   , studyManager_(manager)
   , analysisItem_(item)
-  , progressBar_(0)
-  , runButton_(0)
-  , stopButton_(0)
-  , messageLabel_(0)
 {
   buildInterface();
-}
-
-
-AnalysisWindow::~AnalysisWindow()
-{
-  analysisItem_ = 0;
-  studyManager_ = 0;
 }
 
 
@@ -87,14 +70,6 @@ void AnalysisWindow::buildInterface()
     mainLayout->addWidget(parametersWidget_, 0, 0, 1, 3);
   }
 
-  // progress bar
-  progressBar_ = new QProgressBar;
-  QPalette p = progressBar_->palette();
-  p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
-  progressBar_->setPalette(p);
-  mainLayout->addWidget(progressBar_, 1, 2);
-  connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
-
   // buttons
   // - run button
   runButton_ = new QPushButton(tr("Run"));
@@ -105,26 +80,36 @@ void AnalysisWindow::buildInterface()
 
   // - stop button
   stopButton_ = new QPushButton(tr("Stop"));
-  stopButton_->setIcon(QIcon(":/images/process-stop.png"));
+  stopButton_->setToolTip(tr("Clean exit after current block"));
+  stopButton_->setIcon(QIcon(":/images/kt-stop-all.png"));
   stopButton_->setEnabled(false);
   connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(stopAnalysis()));
   mainLayout->addWidget(stopButton_, 1, 1);
-  mainLayout->setColumnStretch(2, 1);
+
+  // - detach button
+  detachButton_ = new QPushButton(tr("Detach"));
+  detachButton_->setToolTip(tr("Continue running offline"));
+  detachButton_->setIcon(QIcon(":/images/offline.png"));
+  detachButton_->setEnabled(false);
+  connect(detachButton_, SIGNAL(clicked(bool)), this, SLOT(detachAnalysis()));
+  mainLayout->addWidget(detachButton_, 1, 2);
+  mainLayout->setColumnStretch(3, 1);
+
+  // progress bar
+  progressBar_ = new QProgressBar;
+  QPalette p = progressBar_->palette();
+  p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
+  progressBar_->setPalette(p);
+  mainLayout->addWidget(progressBar_, 2, 0, 1, 3);
+  connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
 
   // information message
   messageLabel_ = new TemporaryLabel;
   messageLabel_->setTextFormat(Qt::PlainText);
-  mainLayout->addWidget(messageLabel_, 2, 0, 1, 3);
+  mainLayout->addWidget(messageLabel_, 3, 0, 1, 3);
   connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
 
   mainLayout->setRowStretch(4, 1);
-
-  launchParameters_ = 0;
-  analysisItem_->getAnalysis().acceptLaunchParameters(this);
-  if (launchParameters_)
-  {
-    mainLayout->addWidget(launchParameters_, 4, 0, 1, 3);
-  }
 
   scrollArea->setWidget(mainWidget);
 
@@ -184,12 +169,9 @@ void AnalysisWindow::launchAnalysis()
     return;
   }
 
-  // enable stop button
+  // enable stop buttons
   stopButton_->setEnabled(true);
-
-  // launchParameters_ should never be enabled again after the analysis is launched
-  if (launchParameters_)
-    launchParameters_->setEnabled(false);
+  detachButton_->setEnabled(analysisItem_->getAnalysis().canBeDetached());
 
   // start indefinite/busy progress bar
   progressBar_->setRange(0, 0);
@@ -212,11 +194,29 @@ void AnalysisWindow::stopAnalysis()
   // add a message in case the analysis take too much time to end
   messageLabel_->setText(messageLabel_->text() + "\n" + tr("Stop in progress"));
 
-  // disable stop button
+  // disable stop buttons
   stopButton_->setEnabled(false);
+  detachButton_->setEnabled(false);
 
   // stop the analysis
   analysisItem_->stopAnalysis();
+}
+
+
+void AnalysisWindow::detachAnalysis()
+{
+  if (analysisItem_->getAnalysis().canBeDetached())
+  {
+    // add a message in case the analysis take too much time to end
+    messageLabel_->setText(messageLabel_->text() + "\n" + tr("Detach in progress"));
+
+    // disable stop buttons
+    stopButton_->setEnabled(false);
+    detachButton_->setEnabled(false);
+
+    // detach the analysis
+    analysisItem_->detachAnalysis();
+  }
 }
 
 
@@ -231,19 +231,4 @@ void AnalysisWindow::updateProgressBar(const int value)
 }
 
 
-#ifdef PERSALYS_HAVE_YACS
-void AnalysisWindow::visitYACS(YACSPhysicalModel* model)
-{
-  ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
-  launchParameters_ = rw;
-}
-
-void AnalysisWindow::visitYACS(YACSCouplingPhysicalModel* model)
-{
-  ydefx::ResourceWidget* rw = new ydefx::ResourceWidget(model->jobParameters());
-  launchParameters_ = rw;
-}
-
-
-#endif
 }

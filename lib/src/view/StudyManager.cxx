@@ -34,7 +34,7 @@
 #include "persalys/KrigingAnalysis.hxx"
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
-#include "persalys/PropertiesDialog.hxx"
+#include "persalys/PythonPhysicalModelPropertiesDialog.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -192,20 +192,13 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
 
 void StudyManager::openProperties(Item* item)
 {
-  PhysicalModelItem * pmItem = dynamic_cast<PhysicalModelItem*>(item);
+  const PhysicalModelItem * pmItem = dynamic_cast<PhysicalModelItem*>(item);
   if (pmItem)
   {
     PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(pmItem->getPhysicalModel().getImplementation().get());
     if (model)
     {
-      PropertiesDialog * propertiesDialog = new PropertiesDialog;
-      propertiesDialog->setWindowTitle(QString(model->getName().c_str()));
-      propertiesDialog->setProcessNumber(model->getProcessNumber());
-      connect(propertiesDialog, &QDialog::accepted, [ = ]()
-      {
-        model->setProcessNumber(propertiesDialog->getProcessNumber());
-        model->setParallel(propertiesDialog->getProcessNumber() != 1);
-      });
+      PythonPhysicalModelPropertiesDialog * propertiesDialog = new PythonPhysicalModelPropertiesDialog(model);
       propertiesDialog->open();
     }
   }

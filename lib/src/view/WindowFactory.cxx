@@ -36,9 +36,6 @@
 #include "persalys/SymbolicPhysicalModelWindow.hxx"
 #include "persalys/PythonPhysicalModelWindow.hxx"
 #include "persalys/MetaModelWindow.hxx"
-#ifdef PERSALYS_HAVE_YACS
-#include "persalys/YACSPhysicalModelWindow.hxx"
-#endif
 #ifdef PERSALYS_HAVE_OTFMI
 #include "persalys/FMIPhysicalModelWindow.hxx"
 #endif
@@ -163,7 +160,7 @@ SubWindow * WindowFactory::GetPhysicalModelWindow(PhysicalModelItem *item, QWidg
   {
     return new SymbolicPhysicalModelWindow(item, parent);
   }
-  else if (physicalModelType.contains("Python"))
+  else if (physicalModelType.contains("Python") || (physicalModelType == "YACSPhysicalModel"))
   {
     return new PythonPhysicalModelWindow(item, parent);
   }
@@ -171,19 +168,13 @@ SubWindow * WindowFactory::GetPhysicalModelWindow(PhysicalModelItem *item, QWidg
   {
     return new MetaModelWindow(item, parent);
   }
-#ifdef PERSALYS_HAVE_YACS
-  else if (physicalModelType == "YACSPhysicalModel")
-  {
-    return new YACSPhysicalModelWindow(item, parent);
-  }
-#endif
 #ifdef PERSALYS_HAVE_OTFMI
   else if (physicalModelType == "FMIPhysicalModel")
   {
     return new FMIPhysicalModelWindow(item, parent);
   }
 #endif
-  else if ((physicalModelType == "CouplingPhysicalModel") || (physicalModelType == "YACSCouplingPhysicalModel"))
+  else if (physicalModelType.contains("CouplingPhysicalModel"))
   {
     return new CouplingModelWindow(item, parent);
   }

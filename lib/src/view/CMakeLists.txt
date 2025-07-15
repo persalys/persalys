@@ -50,9 +50,6 @@ ot_add_source_file ( PhysicalModelWindowWidget.cxx )
 ot_add_source_file ( SymbolicPhysicalModelWindow.cxx )
 ot_add_source_file ( PythonPhysicalModelWindow.cxx )
 ot_add_source_file ( MetaModelWindow.cxx )
-if (SalomeYACS_FOUND)
-  ot_add_source_file ( YACSPhysicalModelWindow.cxx)
-endif ()
 if (OTFMI_FOUND)
   ot_add_source_file ( FMIPhysicalModelWindow.cxx)
 endif ()
@@ -119,8 +116,7 @@ ot_add_source_file ( CopulaWidget.cxx )
 ot_add_source_file ( CopulaInferenceWizard.cxx )
 ot_add_source_file ( CopulaInferenceResultWizard.cxx )
 ot_add_source_file ( AboutDialog.cxx )
-ot_add_source_file ( SettingsDialog.cxx )
-ot_add_source_file ( PropertiesDialog.cxx )
+ot_add_source_file ( PythonPhysicalModelPropertiesDialog.cxx )
 ot_add_source_file ( MeshDefinitionWizard.cxx )
 ot_add_source_file ( FieldModelEvaluationResultWindow.cxx )
 ot_add_source_file ( FieldMonteCarloWizard.cxx )
@@ -190,9 +186,6 @@ ot_install_header_file ( PhysicalModelWindowWidget.hxx )
 ot_install_header_file ( SymbolicPhysicalModelWindow.hxx )
 ot_install_header_file ( PythonPhysicalModelWindow.hxx )
 ot_install_header_file ( MetaModelWindow.hxx )
-if (SalomeYACS_FOUND)
-  ot_install_header_file (YACSPhysicalModelWindow.hxx)
-endif ()
 if (OTFMI_FOUND)
   ot_install_header_file (FMIPhysicalModelWindow.hxx)
 endif ()
@@ -251,8 +244,7 @@ ot_install_header_file ( CopulaWidget.hxx )
 ot_install_header_file ( CopulaInferenceWizard.hxx )
 ot_install_header_file ( CopulaInferenceResultWizard.hxx )
 ot_install_header_file ( AboutDialog.hxx )
-ot_install_header_file ( SettingsDialog.hxx )
-ot_install_header_file ( PropertiesDialog.hxx )
+ot_install_header_file ( PythonPhysicalModelPropertiesDialog.hxx )
 ot_install_header_file ( MeshDefinitionWizard.hxx )
 ot_install_header_file ( FieldModelEvaluationResultWindow.hxx )
 ot_install_header_file ( FieldMonteCarloWizard.hxx )
@@ -377,8 +369,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/CopulaInferenceWizard.hxx
                                   persalys/CopulaInferenceResultWizard.hxx
                                   persalys/AboutDialog.hxx
-                                  persalys/SettingsDialog.hxx
-                                  persalys/PropertiesDialog.hxx
+                                  persalys/PythonPhysicalModelPropertiesDialog.hxx
                                   persalys/MeshDefinitionWizard.hxx
                                   persalys/FieldModelEvaluationResultWindow.hxx
                                   persalys/FieldMonteCarloWizard.hxx
@@ -394,8 +385,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
 
 
 if (SalomeYACS_FOUND)
-  set_source_files_properties (AnalysisWindow.cxx YACSPhysicalModelWindow.cxx PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
-  qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/YACSPhysicalModelWindow.hxx)
+  set_source_files_properties (AnalysisWindow.cxx PythonPhysicalModelPropertiesDialog.cxx PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON) # FIXME: Python/Qt conflict due to YACS
 endif ()
 
 if (OTFMI_FOUND)

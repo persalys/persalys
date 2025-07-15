@@ -18,10 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_PERSALYSDIALOG_HXX
-#define PERSALYS_PERSALYSDIALOG_HXX
+#ifndef PERSALYS_PYTHONPHYSICALMODELPROPERTIESDIALOG_HXX
+#define PERSALYS_PYTHONPHYSICALMODELPROPERTIESDIALOG_HXX
 
 #include "persalys/PersalysPrivate.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 
 #include <openturns/OTType.hxx>
 
@@ -29,16 +30,16 @@
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API SettingsDialog : public QDialog
-{
-  Q_OBJECT
+  class PERSALYS_VIEW_API PythonPhysicalModelPropertiesDialog : public QDialog
+  {
+    Q_OBJECT
 
-public:
-  SettingsDialog(QWidget* parent = 0);
+  public:
+    PythonPhysicalModelPropertiesDialog(PythonPhysicalModel* model, QWidget* parent = nullptr);
 
-  void setProcessNumber(const OT::UnsignedInteger n);
-  OT::UnsignedInteger getProcessNumber() const;
+  private:
 
-};
+  };
+
 }
 #endif

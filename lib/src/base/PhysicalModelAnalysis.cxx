@@ -73,6 +73,12 @@ bool PhysicalModelAnalysis::canBeLaunched(String &errorMessage) const
 }
 
 
+bool PhysicalModelAnalysis::canBeDetached() const
+{
+  return getPhysicalModel().getImplementation()->canBeDetached();
+}
+
+
 void PhysicalModelAnalysis::run()
 {
   AnalysisImplementation::run();
@@ -109,8 +115,4 @@ void PhysicalModelAnalysis::load(Advocate & adv)
     setInterestVariables(physicalModel_.getSelectedOutputsNames());
 }
 
-void PhysicalModelAnalysis::acceptLaunchParameters(LaunchParametersVisitor* visitor)
-{
-  physicalModel_.getImplementation()->acceptLaunchParameters(visitor);
-}
 }

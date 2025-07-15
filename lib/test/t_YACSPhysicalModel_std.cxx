@@ -47,7 +47,9 @@ int main(int argc, char *argv[])
   try
   {
     PythonEnvironment env;
-    YACSPhysicalModel myPhysicalModel("myPhysicalModel", InputCollection(), OutputCollection(), pyscript);
+    InputCollection inputs = {Input("x"), Input("y"), Input("p")};
+    OutputCollection outputs = {Output("w"), Output("z")};
+    YACSPhysicalModel myPhysicalModel("myPhysicalModel", inputs, outputs, pyscript);
 
     Sample inputSample(3, 3);
     inputSample(0, 0) = 1;
@@ -76,14 +78,21 @@ int main(int argc, char *argv[])
     evalSample2(2, 0) = 26.;
     evalSample2(2, 1) = 10.;
 
+    // evaluation with default Python backend
+    Sample resultSample0(myPhysicalModel.getFunction()(inputSample));
+    std::cout << resultSample0 << std::endl;
+
+    // evaluation with actual YACS backend
+    myPhysicalModel.setUseYACS(true);
     Sample resultSample(myPhysicalModel.getFunction()(inputSample));
     std::cout << resultSample << std::endl;
+
     myPhysicalModel.setCode(pyscript2);
     Sample resultSample2(myPhysicalModel.getFunction()(inputSample));
     std::cout << resultSample2 << std::endl;
 
-
     // Comparison
+    assert_almost_equal(evalSample, resultSample0, 1e-16);
     assert_almost_equal(evalSample, resultSample, 1e-16);
     assert_almost_equal(evalSample2, resultSample2, 1e-16);
 

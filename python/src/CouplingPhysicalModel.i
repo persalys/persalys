@@ -43,8 +43,6 @@ namespace OT {
 }
 %}
 
-%include CouplingPhysicalModel_doc.i
-
 %template(CouplingStepCollection) OT::Collection<PERSALYS::CouplingStep>;
 
 %typemap(in) const PERSALYS::CouplingStepCollection & {
@@ -63,6 +61,8 @@ namespace OT {
   $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
     || OT::canConvertCollectionObjectFromPySequence< PERSALYS::CouplingStep >( $input );
 }
+
+%include CouplingPhysicalModel_doc.i
 
 %copyctor PERSALYS::CouplingPhysicalModel;
 

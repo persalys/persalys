@@ -1163,7 +1163,7 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
   return oss;
 }
 
-void PhysicalModelImplementation::setEvalTime(const OT::Scalar & evalTime)
+void PhysicalModelImplementation::setEvalTime(const OT::Scalar evalTime)
 {
   evalTime_ = evalTime;
 }
@@ -1231,9 +1231,9 @@ void PhysicalModelImplementation::load(Advocate & adv)
 }
 
 
-/* Nothing to do at this level. Overloaded in child classes if needed.*/
-void PhysicalModelImplementation::acceptLaunchParameters(LaunchParametersVisitor* /*visitor*/)
+bool PhysicalModelImplementation::canBeDetached() const
 {
+  return false;
 }
 
 }

@@ -25,8 +25,6 @@
 
 namespace PERSALYS
 {
-class LaunchParametersVisitor;
-
 class PERSALYS_BASE_API Analysis : public OT::TypedInterfaceObject<AnalysisImplementation>
 {
   CLASSNAME
@@ -64,14 +62,16 @@ public:
   Parameters getParameters() const;
   OT::String getPythonScript() const;
   bool hasValidResult() const;
+
   bool canBeLaunched(OT::String &errorMessage) const;
+  bool canBeDetached() const;
 
   void stop();
+  void detach();
 
   /** override this method in order to emit a notification */
   void setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj) override;
 
-  void acceptLaunchParameters(LaunchParametersVisitor* visitor);
 };
 }
 #endif

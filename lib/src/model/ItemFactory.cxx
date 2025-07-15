@@ -136,9 +136,6 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
       item->appendAction(newSymbolicModel_);
       item->appendAction(newPythonModel_);
       item->appendAction(newCouplingModel_);
-#ifdef PERSALYS_HAVE_YACS
-      item->appendAction(newYACSModel_);
-#endif
 #ifdef PERSALYS_HAVE_OTFMI
       item->appendAction(newFMIModel_);
 #endif

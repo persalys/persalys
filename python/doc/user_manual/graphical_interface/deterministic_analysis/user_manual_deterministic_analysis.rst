@@ -225,10 +225,24 @@ New design of experiments can be evaluated through:
 1-2-1 Definition
 ~~~~~~~~~~~~~~~~
 
-When an evaluation is required, a window appears, in order to set up:
+When a design of experiments evaluation is required, a window appears, in order to set up:
   - the output variables of interest: at least one must be selected to validate the window
-  - the block size – the number of runs launched simultaneously – for parallelization
-    purposes (default=1; expected= integer). It must be less than the input sample size.
+  - the block size: defines the maximum number of samples queued for evaluation by the physical model,
+    regardless if the latter supports parallel evaluation or not.
+
+    Actual parallelization of the evaluations of the same block also depends on the type of the physical model;
+    for example the **Python** model allows for parallel evaluations depending on its allocated process number setting.
+    In that case it would usually be set to match the process number, but other use-cases are possible.
+
+    Default is 1.
+
+    Note that progress reports or analysis stopping event check happen at the completion of a block,
+    so larger block sizes will trigger updates less frequently.
+
+    More generally outside of the context of design of experiments evaluation,
+    some of the analysis do not support block evaluations like some optimization algorithms,
+    in that case evaluations may be submitted one by one (preventing to benefit from parallelization),
+    or submitted by arbitrary block size for example when evaluating finite difference gradients.
 
   .. image:: /user_manual/graphical_interface/deterministic_analysis/designOfExperimentEvaluationWizard.png
       :align: center
@@ -250,7 +264,13 @@ Its context menu has the following actions:
 This item is associated with a window showing the parameter list, a progress bar
 and Run/Stop buttons, to launch or stop the analysis.
 
-In case of a **YACSPhysicalModel** clicking the **Stop** button **detaches** the evaluation, confirmed by the display of a corresponding message in the evaluation window, under the progress bar. The current block will get evaluated. You **must** reattach the analysis to evaluate next blocks, so it is advisable to proceed with only one block for this given configuration: simply set the blocksize equal to the sample size. You can save and safely close the study/persalys. To later **reattach** the evaluation and eventually get the results *if* the analysis is complete, simply press the **Run** button again.
+In case of a **Python** or **Coupling** physical model with cluster mode enabled, clicking the **Stop** button **detaches** the evaluation,
+confirmed by the display of a corresponding message in the evaluation window, under the progress bar.
+The current block will get evaluated.
+You **must** reattach the analysis to evaluate next blocks,
+so it is advisable to proceed with only one block for this given configuration: simply set the blocksize equal to the sample size.
+You can save and safely close the study/persalys. To later **reattach** the evaluation and eventually get the results *if* the analysis is complete,
+simply reload the study and press the **Run** button again.
 
 .. image:: /user_manual/graphical_interface/deterministic_analysis/analysisWindow.png
     :align: center

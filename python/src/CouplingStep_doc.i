@@ -151,3 +151,23 @@ Returns
 -------
 values : :py:class:`openturns.Description`
     Dictionary valuess matching environment variables values"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::setCode
+"Code accessor.
+
+Parameters
+----------
+code : str
+    Post-processing code"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getCode
+"Code accessor.
+
+Returns
+-------
+code : str
+    Post-processing code"

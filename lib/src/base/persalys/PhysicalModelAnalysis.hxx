@@ -42,6 +42,8 @@ public:
   PhysicalModel getPhysicalModel() const;
 
   bool canBeLaunched(OT::String &errorMessage) const override;
+  bool canBeDetached() const override;
+
   void run() override;
 
   /** String converter */
@@ -52,8 +54,6 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
-
-  void acceptLaunchParameters(LaunchParametersVisitor* visitor) override;
 
 private:
   PhysicalModel physicalModel_;
