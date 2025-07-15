@@ -171,3 +171,23 @@ Returns
 -------
 code : str
     Post-processing code"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::setTimeout
+"Timeout accessor.
+
+Parameters
+----------
+timeOut : float
+    Command timeout in seconds"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingStep::getTimeout
+"Timeout accessor.
+
+Returns
+-------
+timeOut : float
+    Command timeout in seconds"

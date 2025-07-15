@@ -116,23 +116,46 @@ result : :class:`~persalys.MultiObjectiveOptimizationAnalysisResult`
 %feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysisResult
 "Multi-objective optimization analysis result."
 
-%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysisResult::getFinalPop
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysisResult::setFinalPop
 "Accessor to final population.
 
 Parameters
 ----------
 finalPop : :class:`~openturns.Sample`
-    Final population sample. Final points (Xi) and values (Yi) are stacked together with an additional column containing the front index of each point.
+    Final population sample. Final points (Xi) and values (Yi) are stacked together with an additional column containing the front index of each point."
 
-+----+----+---------------+
-| Xi | Yi | _front_index_ |
-+----+----+---------------+
-|    |    |               |"
+// ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysisResult::getFronts
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysisResult::getFinalPop
+"Accessor to final population.
+
+Returns
+-------
+finalPop : :class:`~openturns.Sample`
+    Final population sample. Final points (Xi) and values (Yi) are stacked together with an additional column containing the front index of each point."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysisResult::setFronts
 "Accessor to fronts data.
 
 Parameters
 ----------
 finalPop : Collection of :class:`~openturns.Sample`
-    Collection of fronts sample. Each collection item contains final points (Xi). The i^{th} items contains points from front_i."
+    Collection of fronts sample.
+    Each collection item contains final points (Xi).
+    The i^{th} items contains points from front_i."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysisResult::getFronts
+"Accessor to fronts data.
+
+Returns
+-------
+finalPop : Collection of :class:`~openturns.Sample`
+    Collection of fronts sample.
+    Each collection item contains final points (Xi).
+    The i^{th} items contains points from front_i."

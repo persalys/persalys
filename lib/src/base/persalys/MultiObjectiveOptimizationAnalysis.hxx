@@ -88,7 +88,6 @@ public:
   void setInterestVariables(const OT::Description& variablesNames) override;
   void setSolverName(const OT::String& name) override;
 
-  void initialize() override;
   void updateParameters() override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
@@ -139,6 +138,7 @@ public:
 
 protected:
   void launch() override;
+  void initialize() override;
 
 private:
   OT::UnsignedInteger startingPopSize_ = 50;

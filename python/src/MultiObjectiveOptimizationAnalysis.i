@@ -8,6 +8,7 @@
 
 %ignore PERSALYS::MultiObjectiveOptimizationAnalysis::updateParameters;
 
+%copyctor PERSALYS::MultiObjectiveOptimizationAnalysisResult;
 %copyctor PERSALYS::MultiObjectiveOptimizationAnalysis;
 
 %include persalys/MultiObjectiveOptimizationAnalysis.hxx

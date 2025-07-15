@@ -56,7 +56,7 @@ public:
   OT::Description getFormats() const;
 
   /** Simulating input file creation */
-  void simulateInput(VariableCollection varColl) const;
+  void simulateInput(const VariableCollection & varColl) const;
 
   /** String converter */
   OT::String __repr__() const override;

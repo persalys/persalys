@@ -64,3 +64,23 @@ Returns
 -------
 value : float
     Default value"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::Variable::setUnit
+"Unit accessor.
+
+Parameters
+----------
+unit : str
+    Physical quantity unit, if applicable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::Variable::getUnit
+"Unit accessor.
+
+Returns
+-------
+unit : str
+    Physical quantity unit, if applicable"

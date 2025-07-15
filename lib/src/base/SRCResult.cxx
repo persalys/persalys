@@ -34,11 +34,6 @@ static Factory<SRCResult> Factory_SRCResult;
 /* Default constructor */
 SRCResult::SRCResult()
   : EvaluationResult()
-  , outputNames_()
-  , indices_()
-  , signedIndices_()
-  , indicesInterval_()
-  , callsNumber_(0)
 {
 }
 

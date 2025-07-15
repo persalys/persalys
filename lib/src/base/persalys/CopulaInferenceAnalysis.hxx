@@ -48,7 +48,6 @@ public:
 
   DistributionFactoryCollection getDistributionsFactories(const OT::Description& variablesNames) const;
   void setDistributionsFactories(const OT::Description& variablesNames, const DistributionFactoryCollection& distributionsFactories);
-  OT::Collection<OT::Description> buildDefaultVariablesGroups();
   OT::Collection<OT::Description> getVariablesGroups();
 
   CopulaInferenceResult getResult() const;
@@ -67,6 +66,7 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
+  OT::Collection<OT::Description> buildDefaultVariablesGroups();
   void initialize() override;
   void launch() override;
 

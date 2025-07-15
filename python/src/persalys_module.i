@@ -28,7 +28,7 @@ OTDefaultCollectionConvertFunctions(DistributionFactory)
 
 OTgetImplementationHelper(PERSALYS, Interface, Implementation)
 
-%template(Implementation ## TypedInterfaceObject)           OT::TypedInterfaceObject<PERSALYS::Implementation>;
+%template(_ ## Implementation ## TypedInterfaceObject) OT::TypedInterfaceObject<PERSALYS::Implementation>;
 
 %typemap(in) const PERSALYS::Interface &
 {

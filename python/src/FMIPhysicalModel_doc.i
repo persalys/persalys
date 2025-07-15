@@ -51,3 +51,23 @@ Returns
 -------
 fmuInfo : :class:`~persalys.FMUInfo`
     FMU infos"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FMIPhysicalModel::setFMUType
+"FMU type accessor.
+
+Parameters
+----------
+fmuType : str, default='auto'
+    FMU type, either one of auto, ME or CS"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FMIPhysicalModel::getFMUType
+"FMU type accessor.
+
+Returns
+-------
+fmuType : str, default='auto'
+    FMU type, either one of auto, ME or CS"

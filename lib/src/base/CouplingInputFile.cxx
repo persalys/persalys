@@ -115,7 +115,7 @@ Description CouplingInputFile::getFormats() const
 }
 
 /* Simulating input file creation */
-void CouplingInputFile::simulateInput(VariableCollection varColl) const
+void CouplingInputFile::simulateInput(const VariableCollection & varColl) const
 {
   const Description variableNames(getVariableNames());
   OSS code;

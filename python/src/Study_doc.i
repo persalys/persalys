@@ -278,6 +278,41 @@ model : :class:`~persalys.DataModel`
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::Study::getAvailableDataFieldModelName
+"Available name for a data field model accessor.
+
+Returns
+-------
+name : str
+    Available name for a data field model"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::Study::getDataFieldModels
+"Data field model accessor.
+
+Returns
+-------
+models : sequence of :class:`~persalys.DataFieldModel`
+    Data field models"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::Study::getDataFieldModelByName
+"Data field model accessor.
+
+Parameters
+----------
+name : str
+    The data field model name
+
+Returns
+-------
+model : :class:`~persalys.DataFieldModel`
+    Data field model"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::Study::getAvailableAnalysisName
 "Available name for an analysis accessor.
 

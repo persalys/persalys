@@ -66,7 +66,7 @@ private:
   OT::PersistentCollection<OT::Interval> indicesInterval_;
   OT::PersistentCollection<OT::Interval> signedIndicesInterval_;
   OT::Point r2_;
-  OT::UnsignedInteger callsNumber_;
+  OT::UnsignedInteger callsNumber_ = 0;
 };
 }
 #endif

@@ -30,3 +30,13 @@ Returns
 -------
 indices : :py:class:`openturns.Point`
     SRC indices"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SRCResult::getCallsNumber
+"Number of calls accessor.
+
+Returns
+-------
+calls : int
+    Number of function calls"
