@@ -3,7 +3,7 @@ User manual for graphical interface
 ===================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    /user_manual/graphical_interface/getting_started/user_manual_getting_started
    /user_manual/graphical_interface/physical_model/user_manual_physical_model
