@@ -44,7 +44,6 @@ MonteCarloAnalysis::MonteCarloAnalysis()
   , WithStopCriteriaAnalysis()
   , result_()
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -54,7 +53,6 @@ MonteCarloAnalysis::MonteCarloAnalysis(const String& name, const PhysicalModel& 
   , WithStopCriteriaAnalysis()
   , result_()
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -288,6 +286,21 @@ bool MonteCarloAnalysis::hasValidResult() const
   return result_.getDesignOfExperiment().getSample().getSize() != 0;
 }
 
+bool MonteCarloAnalysis::canBeLaunched(String &errorMessage) const
+{
+  return MonteCarloAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
+}
+
+bool MonteCarloAnalysis::CanBeLaunched(String &errorMessage, const PhysicalModel &physicalModel)
+{
+  if(!PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel))
+    return false;
+
+  if(!physicalModel.hasStochasticInputs())
+    errorMessage = "The model must have stochastic inputs";
+  
+  return errorMessage.empty();
+}
 
 /* String converter */
 String MonteCarloAnalysis::__repr__() const

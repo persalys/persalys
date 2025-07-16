@@ -52,6 +52,9 @@ public slots:
   void openProperties(Item* item);
   void modifyAnalysis(AnalysisItem* item);
 
+  // open windows
+  void openAnalysisWindow(StudyItem* item, const Analysis& analysis);
+
   // create windows
   void createWindow(Item *item);
   void createAnalysisWindow(AnalysisItem* item, const bool createConnections = true);

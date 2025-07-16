@@ -119,9 +119,9 @@ int Analysis::getProgressValue() const
 }
 
 
-String Analysis::getHtmlDescription() const
+String Analysis::getHTMLDescription() const
 {
-  return getImplementation()->getHtmlDescription();
+  return getImplementation()->getHTMLDescription();
 }
 
 

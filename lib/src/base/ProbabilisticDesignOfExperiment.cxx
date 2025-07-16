@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 
 #include <openturns/MonteCarloExperiment.hxx>
 #include <openturns/LHSExperiment.hxx>
@@ -79,7 +80,6 @@ ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment()
   , spaceFilling_("PhiP")
   , size_(ResourceMap::GetAsUnsignedInteger("WeightedExperiment-DefaultSize"))
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -93,7 +93,6 @@ ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment(const String& n
   , size_(0)
   , mcLhsSize_(mcLhsSize)
 {
-  isDeterministicAnalysis_ = false;
   setDesignName(designName);
   setSpaceFilling(spaceFilling);
   setSize(size);
@@ -280,6 +279,10 @@ String ProbabilisticDesignOfExperiment::getPythonScript() const
   return oss;
 }
 
+bool ProbabilisticDesignOfExperiment::canBeLaunched(String &errorMessage) const
+{
+  return MonteCarloAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
+}
 
 /* String converter */
 String ProbabilisticDesignOfExperiment::__repr__() const

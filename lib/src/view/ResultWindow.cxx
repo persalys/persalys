@@ -59,12 +59,12 @@ void ResultWindow::setParameters(const Analysis& analysis, const QString& title)
 
 void ResultWindow::setModelDescription(const Analysis& analysis)
 {
-  if (analysis.getHtmlDescription().empty())
+  if (analysis.getHTMLDescription().empty())
     return;
 
   QString modelString = "<!DOCTYPE html>\n<html>\n";
   // get model html description
-  modelString += analysis.getHtmlDescription().c_str();
+  modelString += analysis.getHTMLDescription().c_str();
 
   // translate the description
   const QStringList beginMarker = QStringList() << "<h3>" << "<center>" << "<th>";

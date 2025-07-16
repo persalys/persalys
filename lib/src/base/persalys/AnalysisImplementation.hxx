@@ -68,7 +68,7 @@ public:
   OT::String getErrorMessage() const;
   OT::String getWarningMessage() const;
   int getProgressValue() const;
-  OT::String getHtmlDescription() const;
+  OT::String getHTMLDescription() const;
   OT::Scalar getElapsedTime() const;
 
   virtual void stop();
@@ -89,7 +89,6 @@ protected:
 
 protected:
   bool isReliabilityAnalysis_ = false;
-  bool isDeterministicAnalysis_ = true;
   OT::String informationMessage_;
   OT::String warningMessage_;
   bool stopRequested_ = false;

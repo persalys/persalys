@@ -46,15 +46,6 @@ FieldModelDiagramWindow::FieldModelDiagramWindow(PhysicalModelDiagramItem * phys
 
   appendButton(modelEvaluationButton, 0, modelDefinitionButton);
 
-//   DiagramPushButton * doeCreationButton = new DiagramPushButton;
-//   doeCreationButton->setText(tr("Design of\nexperiments\ncreation"));
-//   doeCreationButton->setWhatsThis(tr("Create manually a design of experiments or import one"));
-//   doeCreationButton->setErrorMessage(tr("Define at least one input variable"));
-
-//   connect(doeCreationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SIGNAL(designOfExperimentRequested()));
-//   connect(physicalModelDiagramItem, SIGNAL(inputNumberValidityChanged(bool)), doeCreationButton, SLOT(setEnabled(bool)));
-
-
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
   probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependence"));
@@ -62,15 +53,6 @@ FieldModelDiagramWindow::FieldModelDiagramWindow(PhysicalModelDiagramItem * phys
   connect(probaModelButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(appendProbabilisticModelItem()));
   connect(physicalModelDiagramItem, SIGNAL(inputNumberValidityChanged(bool)), probaModelButton, SLOT(setEnabled(bool)));
   appendButton(probaModelButton, 1, modelDefinitionButton);
-
-//   DiagramPushButton * doeEvaluationButton = new DiagramPushButton;
-//   doeEvaluationButton->setText(tr("Design of\nexperiments\nevaluation"));
-//   doeEvaluationButton->setWhatsThis(tr("Evaluate the model at the points of the design of experiments"));
-//   doeEvaluationButton->setErrorMessage(tr("Create at least one design of experiments and define output variables in the model"));
-
-//   connect(doeEvaluationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestDesignOfExperimentEvaluation()));
-//   connect(physicalModelDiagramItem, SIGNAL(doeNumberValidityChanged(bool)), doeEvaluationButton, SLOT(setEnabled(bool)));
-
 
   DiagramPushButton * centralTendencyButton = new DiagramPushButton;
   centralTendencyButton->setText(tr("Central\ntendency"));

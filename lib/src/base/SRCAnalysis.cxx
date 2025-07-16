@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/SRCAnalysis.hxx"
+#include "persalys/SobolAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/CorrelationAnalysis.hxx>
@@ -40,7 +41,6 @@ SRCAnalysis::SRCAnalysis()
   , simulationsNumber_(10000)
   , result_()
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -50,7 +50,6 @@ SRCAnalysis::SRCAnalysis(const String & name, const PhysicalModel & physicalMode
   , simulationsNumber_(nbSimu)
   , result_()
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -267,13 +266,7 @@ bool SRCAnalysis::hasValidResult() const
 
 bool SRCAnalysis::canBeLaunched(String &errorMessage) const
 {
-  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
-  if (!canBeLaunched)
-    return false;
-  // pm must have independent copula
-  if (!getPhysicalModel().getCopula().hasIndependentCopula())
-    errorMessage = "The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.";
-  return errorMessage.empty();
+  return SobolAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
 }
 
 

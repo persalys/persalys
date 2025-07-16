@@ -12,6 +12,7 @@
 %ignore PERSALYS::AnalysisImplementation::canBeDetached;
 %ignore PERSALYS::AnalysisImplementation::getElapsedTime;
 %ignore PERSALYS::AnalysisImplementation::getParameters;
+%ignore *::CanBeLaunched;
 
 %include AnalysisImplementation_doc.i
 

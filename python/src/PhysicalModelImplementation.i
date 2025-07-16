@@ -6,7 +6,7 @@
 
 %include PhysicalModelImplementation_doc.i
 
-%ignore *::getHtmlDescription;
+%ignore *::getHTMLDescription;
 %ignore *::getCopulaCollection;
 %ignore PERSALYS::PhysicalModelImplementation::canBeDetached;
 

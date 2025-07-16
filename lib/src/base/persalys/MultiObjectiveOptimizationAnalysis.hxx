@@ -91,6 +91,8 @@ public:
   void updateParameters() override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
+  static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
+
   static OT::Description GetSolverNames(const OT::Interval& bounds,
                                         const OT::Indices& types = OT::Indices(),
                                         const OT::Function& eqFunc = OT::Function(),

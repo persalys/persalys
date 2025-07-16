@@ -63,6 +63,8 @@ public:
 
   bool canBeLaunched(OT::String &errorMessage) const override;
 
+  static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment &doe);
+
   /** String converter */
   OT::String __repr__() const override;
 

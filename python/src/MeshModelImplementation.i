@@ -4,7 +4,7 @@
 #include "persalys/MeshModelImplementation.hxx"
 %}
 
-%ignore *::getHtmlDescription;
+%ignore *::getHTMLDescription;
 
 %include MeshModelImplementation_doc.i
 

@@ -136,10 +136,10 @@ Indices ImportedMeshModel::getNumberOfNodes() const
 }
 
 
-String ImportedMeshModel::getHtmlDescription() const
+String ImportedMeshModel::getHTMLDescription() const
 {
   OSS oss;
-  oss << MeshModelImplementation::getHtmlDescription();
+  oss << MeshModelImplementation::getHTMLDescription();
   oss << "<p>File path : " << fileName_ << "</p>";
 
   return oss;

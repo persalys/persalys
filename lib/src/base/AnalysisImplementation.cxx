@@ -227,7 +227,7 @@ String AnalysisImplementation::getPythonScript() const
 }
 
 
-String AnalysisImplementation::getHtmlDescription() const
+String AnalysisImplementation::getHTMLDescription() const
 {
   return modelHtmlDescription_;
 }
@@ -278,7 +278,6 @@ void AnalysisImplementation::save(Advocate & adv) const
   adv.saveAttribute("errorMessage_", errorMessage_);
   adv.saveAttribute("warningMessage_", warningMessage_);
   adv.saveAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
-  adv.saveAttribute("isDeterministicAnalysis_", isDeterministicAnalysis_);
   adv.saveAttribute("interestVariables_", interestVariables_);
   adv.saveAttribute("modelHtmlDescription_", modelHtmlDescription_);
 }
@@ -291,7 +290,6 @@ void AnalysisImplementation::load(Advocate & adv)
   adv.loadAttribute("errorMessage_", errorMessage_);
   adv.loadAttribute("warningMessage_", warningMessage_);
   adv.loadAttribute("isReliabilityAnalysis_", isReliabilityAnalysis_);
-  adv.loadAttribute("isDeterministicAnalysis_", isDeterministicAnalysis_);
   adv.loadAttribute("interestVariables_", interestVariables_);
   adv.loadAttribute("modelHtmlDescription_", modelHtmlDescription_);
 }

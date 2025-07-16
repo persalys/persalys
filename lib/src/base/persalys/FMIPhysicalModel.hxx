@@ -63,7 +63,7 @@ public:
 
   OT::Function getFunction() const;
 
-  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
 
   OT::String __repr__() const override;

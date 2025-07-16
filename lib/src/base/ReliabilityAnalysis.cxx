@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/ReliabilityAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 
 using namespace OT;
 
@@ -30,7 +31,6 @@ ReliabilityAnalysis::ReliabilityAnalysis()
   : PhysicalModelAnalysis()
 {
   isReliabilityAnalysis_ = true;
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -40,7 +40,6 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
   , limitState_(limitState)
 {
   isReliabilityAnalysis_ = true;
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -95,15 +94,18 @@ void ReliabilityAnalysis::run()
 
 bool ReliabilityAnalysis::canBeLaunched(String &errorMessage) const
 {
-  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
-  if (!canBeLaunched)
+  return ReliabilityAnalysis::CanBeLaunched(errorMessage, getPhysicalModel(), limitState_);
+}
+
+bool ReliabilityAnalysis::CanBeLaunched(String &errorMessage, const PhysicalModel &physicalModel, const LimitState &limitState)
+{
+  if (!MonteCarloAnalysis::CanBeLaunched(errorMessage, physicalModel))
     return false;
-  if (!getLimitState().isValid())
+  
+  if (!limitState.isValid())
     errorMessage = "The limit state is not valid.";
   return errorMessage.empty();
 }
-
-
 /* String converter */
 String ReliabilityAnalysis::__repr__() const
 {

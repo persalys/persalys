@@ -20,3 +20,4 @@ Parameters
 ----------
 model : :class:`~persalys.PhysicalModel`
     Physical model"
+

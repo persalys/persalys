@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/FieldMonteCarloAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -41,7 +42,6 @@ FieldMonteCarloAnalysis::FieldMonteCarloAnalysis()
   , karhunenLoeveAnalysis_()
 {
   setMaximumCalls(1000);
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -52,7 +52,6 @@ FieldMonteCarloAnalysis::FieldMonteCarloAnalysis(const String& name, const Physi
   , karhunenLoeveAnalysis_()
 {
   setMaximumCalls(1000);
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -214,6 +213,11 @@ String FieldMonteCarloAnalysis::getPythonScript() const
       << getQuantileLevel() << ")\n";
 
   return oss;
+}
+
+bool FieldMonteCarloAnalysis::canBeLaunched(String &errorMessage) const
+{
+  return MonteCarloAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
 }
 
 

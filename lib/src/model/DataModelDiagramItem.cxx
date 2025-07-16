@@ -18,8 +18,11 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/DataModelDiagramItem.hxx"
+#include "persalys/DataSensitivityAnalysis.hxx"
+#include "persalys/CopulaInferenceAnalysis.hxx"
+#include "persalys/MetaModelAnalysis.hxx"
 
+#include "persalys/DataModelDiagramItem.hxx"
 #include "persalys/StudyItem.hxx"
 
 #include <QDebug>
@@ -74,11 +77,11 @@ void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
     }
     // emit signals to DataModelDiagramWindow
     // to update the diagram (arrow color and button availability)
-    const bool validDOE = designOfExperiment_.isValid();
-    emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0 && validDOE);
-    emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1 && validDOE);
-    emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize() && validDOE);
-    emit dataSensitivityValidityChanged(designOfExperiment_.getInputSample().getSize() > 0 && designOfExperiment_.getInputSample().getDimension() > 1 && designOfExperiment_.getOutputSample().getSize() > 0 && validDOE);
+    String errorMessage;
+    emit dataModelValidityChanged(DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+    emit dataSensitivityValidityChanged(DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+    emit dependenciesValidityChanged(CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+    emit metaModelValidityChanged(MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
   }
   else if (message == "analysisLaunched")
   {
@@ -104,11 +107,11 @@ void DataModelDiagramItem::fill()
     appendDataModelItem();
 
   // update diagram (arrow color and button availability)
-  const bool validDOE = designOfExperiment_.isValid();
-  emit dataModelValidityChanged(designOfExperiment_.getSample().getSize() > 0 && validDOE);
-  emit dependenciesValidityChanged(designOfExperiment_.getSample().getDimension() > 1 && validDOE);
-  emit metaModelValidityChanged(designOfExperiment_.getInputSample().getSize() && designOfExperiment_.getOutputSample().getSize() && validDOE);
-  emit dataSensitivityValidityChanged(designOfExperiment_.getInputSample().getSize() > 0 && designOfExperiment_.getInputSample().getDimension() > 1 && designOfExperiment_.getOutputSample().getSize() > 0 && validDOE);
+  String errorMessage;
+  emit dataModelValidityChanged(DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+  emit dataSensitivityValidityChanged(DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+  emit dependenciesValidityChanged(CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+  emit metaModelValidityChanged(MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
 }
 
 

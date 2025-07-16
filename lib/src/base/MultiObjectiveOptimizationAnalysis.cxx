@@ -130,10 +130,14 @@ void MultiObjectiveOptimizationAnalysis::setInterestVariables(const Description&
 
 bool MultiObjectiveOptimizationAnalysis::canBeLaunched(String &errorMessage) const
 {
-  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
-  if (!canBeLaunched)
+  return MultiObjectiveOptimizationAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
+}
+
+bool MultiObjectiveOptimizationAnalysis::CanBeLaunched(String &errorMessage, const PhysicalModel &physicalModel)
+{
+  if (!PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel))
     return false;
-  if (getPhysicalModel().getOutputDimension() < 2)
+  if (physicalModel.getOutputDimension() < 2)
     errorMessage = "The physical model must have at least two outputs.";
   return errorMessage.empty();
 }

@@ -46,7 +46,7 @@ public:
   virtual OT::Interval getBounds() const;
   virtual OT::Indices getNumberOfNodes() const;
 
-  virtual OT::String getHtmlDescription() const;
+  virtual OT::String getHTMLDescription() const;
   virtual OT::String getPythonScript() const;
 
   /** String converter */

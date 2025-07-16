@@ -49,7 +49,7 @@ public:
   OT::Interval getBounds() const;
   OT::Indices getNumberOfNodes() const;
 
-  virtual OT::String getHtmlDescription() const;
+  virtual OT::String getHTMLDescription() const;
   virtual OT::String getPythonScript() const;
 
   /** Method save() stores the object through the StorageManager */

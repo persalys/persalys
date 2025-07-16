@@ -50,7 +50,7 @@ public:
   void setSteps(const CouplingStepCollection & steps);
   CouplingStepCollection getSteps() const;
 
-  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
 
   /** Whether the work dir is discarded */

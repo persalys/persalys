@@ -56,7 +56,7 @@ public:
   OT::String getErrorMessage() const;
   OT::String getWarningMessage() const;
   int getProgressValue() const;
-  OT::String getHtmlDescription() const;
+  OT::String getHTMLDescription() const;
 
   void run();
   Parameters getParameters() const;

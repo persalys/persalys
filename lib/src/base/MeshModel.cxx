@@ -94,9 +94,9 @@ Indices MeshModel::getNumberOfNodes() const
 }
 
 
-String MeshModel::getHtmlDescription() const
+String MeshModel::getHTMLDescription() const
 {
-  return getImplementation()->getHtmlDescription();
+  return getImplementation()->getHTMLDescription();
 }
 
 

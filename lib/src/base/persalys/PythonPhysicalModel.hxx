@@ -46,7 +46,7 @@ public:
   virtual void setCode(const OT::String & code);
   virtual OT::String getCode() const;
 
-  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
 
   /** String converter */
