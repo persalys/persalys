@@ -95,20 +95,6 @@ if (BUILD_GUI)
   find_package (Qt${PERSALYS_QT_MAJOR_VERSION} COMPONENTS Widgets Test OpenGL CONFIG)
   set (QT_LIBRARIES ${Qt${PERSALYS_QT_MAJOR_VERSION}Widgets_LIBRARIES} ${Qt${PERSALYS_QT_MAJOR_VERSION}OpenGL_LIBRARIES} ${Qt${PERSALYS_QT_MAJOR_VERSION}Test_LIBRARIES})
 
-  if (Qt${PERSALYS_QT_MAJOR_VERSION}Widgets_VERSION VERSION_LESS 5.15)
-    macro (qt_wrap_cpp)
-      qt5_wrap_cpp (${ARGN})
-    endmacro ()
-
-    macro (qt_add_resources)
-      qt5_add_resources (${ARGN})
-    endmacro ()
-
-    macro (qt_generate_moc)
-      qt5_generate_moc (${ARGN})
-    endmacro ()
-  endif ()
-
   find_package (Qwt 6 REQUIRED)
 
   if (USE_PARAVIEW)
