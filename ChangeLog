@@ -1,6 +1,7 @@
 = 19.0 release (wip)
 
  * Merge YACS/Python model
+ * Added sensitivity analysis for data models using rank Sobol algorithm
 
 = 18.1 release (2025-06-25)
 

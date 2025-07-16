@@ -176,4 +176,5 @@ void DesignOfExperimentImplementation::load(Advocate& adv)
   adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);
   adv.loadAttribute("physicalModel_", physicalModel_);
 }
-}
+
+} // END namespace PERSALYS

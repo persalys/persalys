@@ -35,6 +35,7 @@
 #include "persalys/MonteCarloReliabilityAnalysis.hxx"
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/MultiObjectiveOptimizationAnalysis.hxx"
+#include "persalys/DataSensitivityAnalysis.hxx"
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/MorrisAnalysis.hxx"
 #endif
@@ -342,6 +343,15 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfE
     connect(action, &QAction::triggered, [ = ]()
     {
       getParentStudyItem()->getStudy().add(DataAnalysis(availableAnalysisName(tr("dataAnalysis_")), doe));
+    });
+  }
+  else if (analysisName == "DataSensitivityAnalysis")
+  {
+    action = new QAction(tr("Sensitivity analysis"), this);
+    action->setStatusTip(tr("compute Rank Sobol' indices"));
+    connect(action, &QAction::triggered, [ this, doe ]()
+    {
+      getParentStudyItem()->getStudy().add(DataSensitivityAnalysis(availableAnalysisName(tr("dataSensitivity_")), doe));
     });
   }
   else if (analysisName == "Metamodel")

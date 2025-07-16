@@ -50,6 +50,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   , plot_(0)
   , proxyModel_(0)
 {
+  qRegisterMetaType<ColumnRole>("ColumnRole");
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
   QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
@@ -57,8 +58,8 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   // set info
   QString graphTitle;
   QString defaultFileName;
-  QStringList tableTitles(tr("Input"));
   QStringList legendNames;
+  QStringList tableTitles(tr("Input"));
   if (type == SensitivityResultWidget::Sobol)
   {
     graphTitle = tr("Sobol sensitivity indices:");
@@ -69,11 +70,14 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     {
       tableTitles << tr("First order index\nconfidence interval");
     }
-    tableTitles << tr("Total index");
-    legendNames << tr("Total index");
-    if (totalIndicesIntervals.getDimension() == totalIndices.getSize())
+    if (!totalIndices.isEmpty())
     {
-      tableTitles << tr("Total index\nconfidence interval");
+      tableTitles << tr("Total index");
+      legendNames << tr("Total index");
+      if (totalIndicesIntervals.getDimension() == totalIndices.getSize())
+      {
+        tableTitles << tr("Total index\nconfidence interval");
+      }
     }
   }
   else if (type == SensitivityResultWidget::SRC)
@@ -114,6 +118,21 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
 
   CustomStandardItemModel * indicesTableModel = new CustomStandardItemModel(inputNames.getSize(), 0, tableView);
   indicesTableModel->setHorizontalHeaderLabels(tableTitles);
+
+  for (int col = 0; col < tableTitles.size(); ++col)
+  {
+    QVariant roleValue;
+    switch (col)
+    {
+      case 0: roleValue = QVariant::fromValue(InputColumn); break;
+      case 1: roleValue = QVariant::fromValue(FirstOrderIndexColumn); break;
+      case 2: roleValue = QVariant::fromValue(FirstOrderIntervalColumn); break;
+      case 3: roleValue = QVariant::fromValue(TotalIndexColumn); break;
+      case 4: roleValue = QVariant::fromValue(TotalIntervalColumn); break;
+      default: roleValue = QVariant(); break;
+    }
+    indicesTableModel->setHeaderData(col, Qt::Horizontal, roleValue, Qt::UserRole + 10);
+  }
 
   // fill table
   Scalar sumFirstIndices = 0.;
@@ -208,7 +227,7 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
   if (!proxyModel_)
     throw InternalException(HERE) << "SensitivityResultWidget::updateIndicesPlot: not defined table\n";
 
-  const UnsignedInteger nbInputs = proxyModel_->rowCount();
+  const int nbInputs = proxyModel_->rowCount();
   Point sortedFirstOrderIndices(nbInputs);
   Point sortedTotalIndices;
   Description sortedInputNames(nbInputs);
@@ -217,23 +236,37 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
   Point sortedTOIntervalLowerBounds;
   Point sortedTOIntervalUpperBounds;
 
-  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+  int nbCols = proxyModel_->columnCount();
+  for (int row = 0; row < nbInputs; ++row)
   {
-    sortedInputNames[i] = proxyModel_->data(proxyModel_->index(i, 0)).toString().toStdString();
-    sortedFirstOrderIndices[i] = proxyModel_->data(proxyModel_->index(i, 1), Qt::UserRole + 1).toDouble();
-    // Sobol result
-    if (proxyModel_->columnCount() == 5)
+    for (int col = 0; col < nbCols; ++col)
     {
-      sortedFOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 2).toDouble());
-      sortedFOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 3).toDouble());
-      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 3), Qt::UserRole + 1).toDouble());
-      sortedTOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 2).toDouble());
-      sortedTOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(i, 4), Qt::UserRole + 3).toDouble());
-    }
-    // Functional chaos result
-    else if (proxyModel_->columnCount() == 3)
-    {
-      sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(i, 2), Qt::UserRole + 1).toDouble());
+      QVariant colRoleVar = proxyModel_->headerData(col, Qt::Horizontal, Qt::UserRole + 10);
+      if (!colRoleVar.isValid()) continue;
+      ColumnRole colRole = static_cast<ColumnRole>(colRoleVar.toInt());
+
+      switch (colRole)
+      {
+        case InputColumn:
+          sortedInputNames[row] = proxyModel_->data(proxyModel_->index(row, col)).toString().toStdString();
+          break;
+        case FirstOrderIndexColumn:
+          sortedFirstOrderIndices[row] = proxyModel_->data(proxyModel_->index(row, col), Qt::UserRole + 1).toDouble();
+          break;
+        case FirstOrderIntervalColumn:
+          sortedFOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(row, col), Qt::UserRole + 2).toDouble());
+          sortedFOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(row, col), Qt::UserRole + 3).toDouble());
+          break;
+        case TotalIndexColumn:
+          sortedTotalIndices.add(proxyModel_->data(proxyModel_->index(row, col), Qt::UserRole + 1).toDouble());
+          break;
+        case TotalIntervalColumn:
+          sortedTOIntervalLowerBounds.add(proxyModel_->data(proxyModel_->index(row, col), Qt::UserRole + 2).toDouble());
+          sortedTOIntervalUpperBounds.add(proxyModel_->data(proxyModel_->index(row, col), Qt::UserRole + 3).toDouble());
+          break;
+        default:
+          break;
+      }
     }
   }
 

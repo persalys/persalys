@@ -55,6 +55,14 @@ class PERSALYS_VIEW_API SensitivityResultWidget : public QWidget
 public:
   enum Type {Sobol, SRC};
 
+  enum ColumnRole {
+    InputColumn = 0,
+    FirstOrderIndexColumn,
+    FirstOrderIntervalColumn,
+    TotalIndexColumn,
+    TotalIntervalColumn
+  };
+
   SensitivityResultWidget(const OT::Point& firstIndices,
                           const OT::Interval& firstIndicesIntervals,
                           const OT::Point& totalIndices,
@@ -71,5 +79,10 @@ private:
   SensitivityIndicesPlot * plot_;
   IndicesProxyModel * proxyModel_;
 };
-}
+} // namespace PERSALYS
+
+#if QT_VERSION < 0x060000
+Q_DECLARE_METATYPE(PERSALYS::SensitivityResultWidget::ColumnRole)
+#endif
+
 #endif

@@ -557,7 +557,6 @@ void DataAnalysisWindow::addDependenceTab()
   tabWidget_->addTab(mainWidget, tr("Dependence"));
 }
 
-
 void DataAnalysisWindow::addPlotMatrixTab()
 {
   PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(designOfExperiment_.getSample(), designOfExperiment_.getSample());

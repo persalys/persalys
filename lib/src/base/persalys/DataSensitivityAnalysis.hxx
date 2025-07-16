@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define data sample
+ *  @brief Base class to make a sensitivity analysis of a data model
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,39 +18,35 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_DATASAMPLE_HXX
-#define PERSALYS_DATASAMPLE_HXX
 
-#include "persalys/PersalysPrivate.hxx"
+#include "DesignOfExperimentAnalysis.hxx"
+#include "DataSensitivityAnalysisResult.hxx"
 
-#include <openturns/OTType.hxx>
+#ifndef PERSALYS_DATASENSITIVITYANALYSIS_HXX
+#define PERSALYS_DATASENSITIVITYANALYSIS_HXX
 
-namespace PERSALYS
+ namespace PERSALYS
 {
-class PERSALYS_BASE_API DataSample : public OT::PersistentObject
+class PERSALYS_BASE_API DataSensitivityAnalysis : public DesignOfExperimentAnalysis
 {
+  CLASSNAME
 public:
-  typedef OT::Collection<OT::Sample> SampleCollection;
+  /** constructors */
+  DataSensitivityAnalysis();
 
-  /** Default constructor */
-  DataSample();
   /** Constructor with parameters */
-  DataSample(const OT::Sample & inSample, const OT::Sample & outSample);
+  explicit DataSensitivityAnalysis(const OT::String &name, const DesignOfExperiment& design);
 
   /** Virtual constructor */
-  DataSample * clone() const override;
+  DataSensitivityAnalysis * clone() const override;
 
-  virtual OT::Sample getInputSample() const;
-  virtual void setInputSample(const OT::Sample & sample);
+  bool canBeLaunched(OT::String &errorMessage) const override;
+  bool hasValidResult() const override;
 
-  virtual OT::Sample getOutputSample() const;
-  virtual void setOutputSample(const OT::Sample & sample);
+  const DataSensitivityAnalysisResult& getResult() const;
 
-  SampleCollection getListXMin() const;
-  SampleCollection getListXMax() const;
-
-  OT::Sample getSample() const;
-  bool isValid() const;
+  /** String converter */
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
@@ -58,15 +54,14 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-private:
-  void searchMinMax() const;
+protected:
+  void initialize() override;
+  void launch() override;
 
 private:
-  OT::Sample inputSample_;
-  OT::Sample outputSample_;
-  mutable OT::Sample sample_;
-  mutable OT::PersistentCollection<OT::Sample> listXMin_;
-  mutable OT::PersistentCollection<OT::Sample> listXMax_;
+  DataSensitivityAnalysisResult result_;
 };
-}
-#endif
+
+} // namespace PERSALYS
+
+ #endif // PERSALYS_DATASENSITIVITYANALYSIS_HXX

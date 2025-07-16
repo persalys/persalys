@@ -51,7 +51,7 @@ public:
 
   void initialize();
   void setInputSample(const OT::Sample & sample) override;
-  void setOutputSample(const OT::Sample & sample);
+  void setOutputSample(const OT::Sample & sample) override;
 
   OT::Indices getEffectiveInputIndices() const;
 
@@ -66,6 +66,7 @@ public:
 protected:
   bool hasPhysicalModel_;
   PhysicalModel physicalModel_;
+
 };
 }
 #endif
