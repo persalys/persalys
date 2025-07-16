@@ -41,7 +41,7 @@ class PERSALYS_VIEW_API MeshDefinitionWizard : public Wizard
 
 public:
   enum Method {Grid, Import};
-  MeshDefinitionWizard(const MeshModel& mesh, const OT::Bool allowColumns = false, QWidget* parent = 0);
+  MeshDefinitionWizard(const MeshModel& mesh, const OT::Bool allowColumns = false, QWidget* parent = nullptr);
 
   MeshModel getMesh() const;
   virtual bool validateCurrentPage();
@@ -56,14 +56,14 @@ public slots:
 
 private:
   MeshModel mesh_;
-  OT::Bool allowColumns_;
-  QButtonGroup * methodGroup_;
-  ImportSampleWidget * sampleWidget_;
-  CopyableTableView * tableView_;
-  CustomStandardItemModel * tableModel_;
+  OT::Bool allowColumns_ = false;
+  QButtonGroup * methodGroup_ = nullptr;
+  ImportSampleWidget * sampleWidget_ = nullptr;
+  CopyableTableView * tableView_ = nullptr;
+  CustomStandardItemModel * tableModel_ = nullptr;
   GridMeshModel gridMesh_;
   ImportedMeshModel importedMesh_;
-  TemporaryLabel * errorMessageLabel_;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

@@ -35,9 +35,6 @@ MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, Bool allowColu
   : Wizard(parent)
   , mesh_(mesh)
   , allowColumns_(allowColumns)
-  , methodGroup_(0)
-  , tableModel_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -69,7 +66,6 @@ void MeshDefinitionWizard::buildInterface()
 
   tableView_ = new CopyableTableView;
   tableView_->setEditTriggers(QTableView::AllEditTriggers);
-  tableView_->horizontalHeader()->setStretchLastSection(true);
   tableView_->verticalHeader()->hide();
 
   tableModel_ = new CustomStandardItemModel(1, headerLabels.size(), tableView_);
@@ -90,7 +86,7 @@ void MeshDefinitionWizard::buildInterface()
   tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
 
   // resize table
-  tableView_->resizeWithOptimalHeight();
+  tableView_->resizeColumnsToContents();
 
   QWidget * aWidget = new QWidget;
   QVBoxLayout * aLayout = new QVBoxLayout(aWidget);
