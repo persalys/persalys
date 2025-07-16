@@ -494,19 +494,17 @@ Refer to :class:`~persalys.KrigingAnalysis` for implementation details.
 ~~~~~~~~~~~~~~~~
 
 In the following window, the generated metamodel can be validated, with three different methods:
-  - *Analytically* (default): This method corresponds to an approximation of the Leave-one-out method result.
-      - For more information about Kriging, see O. Dubrule, Cross Validation of Kriging in a Unique Neighborhood,
-        Mathematical Geology,1983.
-      - For more information about Functional chaos, see G. Blatman, Adaptive sparse polynomial chaos
-        expansions for uncertainty propagation and sensitivity analysis.,
-        PhD thesis. Blaise Pascal University-Clermont II, France, 2009.
+  - *Analytically* (default): This method corresponds to an analytical evaluation of the Leave-one-out method result.
+    Note that this method is not available when the metamodel involves selection, like functional chaos with the *sparse* option enabled.
   - *Using a test sample*: The data sample is divided into two subsamples, by picking points randomly (default seed = 1):
     training sample (default: 80% of the sample points) and test sample
     (default: 20% of the sample points).
     A new metamodel is built with the training sample and is validated with the test sample.
-  - *Using the* `K-Fold <http://openturns.github.io/openturns/latest/theory/meta_modeling/cross_validation.html>`_ *method*:
+  - *Using the K-Fold method*:
     Define the number of folds (default: 5, expected: integer greater than 1) and specify how the
     folds are generated (default seed:1).
+
+See more details on cross-validation `here <https://openturns.github.io/openturns/latest/theory/meta_modeling/cross_validation.html>`_.
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_validation_page.png
     :align: center
