@@ -93,7 +93,7 @@ find_package (Python 3.6 COMPONENTS Interpreter Development REQUIRED)
 if (BUILD_GUI)
 
   find_package (Qt${PERSALYS_QT_MAJOR_VERSION} COMPONENTS Widgets Test OpenGL CONFIG)
-  set (QT_LIBRARIES ${Qt${PERSALYS_QT_MAJOR_VERSION}Widgets_LIBRARIES} ${Qt${PERSALYS_QT_MAJOR_VERSION}OpenGL_LIBRARIES} ${Qt${PERSALYS_QT_MAJOR_VERSION}Test_LIBRARIES})
+  set (QT_LIBRARIES Qt::Widgets Qt::OpenGL Qt::Test)
 
   find_package (Qwt 6 REQUIRED)
 
