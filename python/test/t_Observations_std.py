@@ -24,7 +24,7 @@ model = persalys.SymbolicPhysicalModel(
 anOTStudy.add(model)
 
 # Observations ##
-filename = "normal2.csv"
+filename = "obs_normal2.csv"
 sample = ot.Normal(8).getSample(10)
 sample.exportToCSVFile(filename)
 
