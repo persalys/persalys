@@ -20,6 +20,7 @@
  */
 
 #include "persalys/Controller.hxx"
+#include "persalys/AnalysisItem.hxx"
 
 #include <QThread>
 #include <QMetaType> // mandatory to specify it to avoid windows compilation problem
@@ -45,6 +46,7 @@ Controller::Controller()
 {
   qRegisterMetaType<PERSALYS::PhysicalModel>("PhysicalModel");
   qRegisterMetaType<PERSALYS::Analysis>("Analysis");
+  qRegisterMetaType<PERSALYS::AnalysisItem*>("AnalysisItem*");
 
   // new thread
   QThread * workerThread = new QThread;
