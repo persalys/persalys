@@ -62,7 +62,7 @@ namespace PERSALYS
     MeshModel getMeshModel() const;
 
     /** String converter **/
-    OT::String __repr__() const;
+    OT::String __repr__() const override;
 
     OT::ProcessSample getProcessSample() const;
     OT::Sample getProcessSampleAsSample() const;

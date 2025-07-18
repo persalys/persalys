@@ -46,7 +46,7 @@ namespace PERSALYS
                                  const OT::ProcessSample & processSample);
 
     /** Virtual constructor */
-    DataFieldModelImplementation* clone() const;
+    DataFieldModelImplementation* clone() const override;
 
     virtual void setName(const OT::String & name);
 
@@ -63,7 +63,7 @@ namespace PERSALYS
     MeshModel getMeshModel() const;
 
     /** String converter **/
-    OT::String __repr__() const;
+    OT::String __repr__() const override;
 
     /** Method save() stores the object through the StorageManager */
     void save(OT::Advocate & adv) const override;
