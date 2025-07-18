@@ -47,8 +47,8 @@ namespace PERSALYS
     OT::UnsignedInteger getType() const;
     OT::Description getInterestVariables() const;
 
-    virtual int nextId() const;
-    virtual bool validatePage();
+    int nextId() const override;
+    bool validatePage() override;
 
   signals:
     void outputSelected();
