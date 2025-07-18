@@ -49,10 +49,10 @@ public slots:
   void removeDesignOfExperiment();
 signals:
   // signal for diagram
-  void dataModelValidityChanged(bool);
-  void dependenciesValidityChanged(bool);
-  void metaModelValidityChanged(bool);
-  void dataSensitivityValidityChanged(bool);
+  void dataModelValidityChanged(bool, QString);
+  void dependenciesValidityChanged(bool, QString);
+  void metaModelValidityChanged(bool, QString);
+  void dataSensitivityValidityChanged(bool, QString);
 
 private:
   QAction * defineAction_ = nullptr;

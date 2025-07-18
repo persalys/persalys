@@ -51,7 +51,7 @@ namespace PERSALYS
     void removeDataFieldModel();
   signals:
     // signal for diagram
-    void modelValidityChanged(bool);
+    void modelValidityChanged(bool, QString);
 
   private:
     QAction * defineAction_ = nullptr;

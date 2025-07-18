@@ -174,17 +174,36 @@ void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
   // emit signals to PhysicalModelDiagramWindow
   // to update diagram (arrow color and button availability)
   String errorMessage;
-  emit physicalModelValidityChanged(PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel_));
-  emit twoInputsValidityChanged(MorrisAnalysis::CanBeLaunched(errorMessage, physicalModel_));
-  emit inputNumberValidityChanged(DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, physicalModel_));
-  emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
-  emit outputNumberValidityChanged(MultiObjectiveOptimizationAnalysis::CanBeLaunched(errorMessage, physicalModel_));
-  emit dependenceValidityChanged(SobolAnalysis::CanBeLaunched(errorMessage, physicalModel_));
-  emit probabilisticModelValidityChanged(MonteCarloAnalysis::CanBeLaunched(errorMessage, physicalModel_));
-  emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
-  emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
-  emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
-  emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
+  QString qErrorMessage;
+  bool validity;
+  // CanBeLaunched need to be called before emit otherwise errorMessage might be sent before being modified
+  validity = PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel_);
+  emit physicalModelValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = MorrisAnalysis::CanBeLaunched(errorMessage, physicalModel_);
+  emit twoInputsValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, physicalModel_);
+  emit inputNumberValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = MultiObjectiveOptimizationAnalysis::CanBeLaunched(errorMessage, physicalModel_);
+  emit outputNumberValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = SobolAnalysis::CanBeLaunched(errorMessage, physicalModel_);
+  emit dependenceValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = MonteCarloAnalysis::CanBeLaunched(errorMessage, physicalModel_);
+  emit probabilisticModelValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = physicalModel_.isValid() && doeCounter_[0] > 0;
+  qErrorMessage = tr("Create at least one design of experiments and define output variables in the model");
+  emit doeNumberValidityChanged(validity, qErrorMessage);
+  validity = physicalModel_.isValid() && doeCounter_[1] > 0;
+  qErrorMessage = tr("Define at least one design of experiments which contains output values");
+  emit doeEvaluationNumberValidityChanged(validity, qErrorMessage);
+  validity = physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0;
+  qErrorMessage = tr("Define output variables in the model and at least one limit state");
+  emit limitStateNumberValidityChanged(validity, qErrorMessage);
+  validity = physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0;
+  qErrorMessage = tr("Define observations of the model");
+  emit observationsNumberValidityChanged(validity, qErrorMessage);
+  validity = physicalModel_.isValid() && metamodelCounter_ > 0;
+  qErrorMessage = tr("Metamodel must first be created");
+  emit metamodelNumberValidityChanged(validity, qErrorMessage);
 }
 
 
@@ -440,8 +459,8 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
     if (newItem->getAnalysis().hasValidResult())
       ++doeCounter_[1];
 
-    emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
-    emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
+    emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0, tr("Create at least one design of experiments and define output variables in the model"));
+    emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0, tr("Define at least one design of experiments which contains output values"));
 
   }
   else if (analysisName == "FunctionalChaosAnalysis" ||
@@ -454,7 +473,7 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
 
     if(newItem->getAnalysis().hasValidResult())
       ++metamodelCounter_;
-    emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
+    emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0, tr("Metamodel must first be created"));
 
   }
   else
@@ -484,7 +503,7 @@ void PhysicalModelDiagramItem::appendItem(const LimitState& limitState)
 
   // signal for diagram window : update diagram
   ++limitStateCounter_;
-  emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+  emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0, tr("Define output variables in the model and at least one limit state"));
 }
 
 
@@ -503,7 +522,7 @@ void PhysicalModelDiagramItem::appendItem(const DesignOfExperiment &designOfExp)
 
   // signal for diagram window : update diagram
   ++observationsCounter_;
-  emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
+  emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0, tr("Define observations of the model"));
 }
 
 
@@ -511,7 +530,7 @@ void PhysicalModelDiagramItem::requestLimitStateRemoval()
 {
   // signal for diagram window : update diagram
   --limitStateCounter_;
-  emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
+  emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0, tr("Define output variables in the model and at least one limit state"));
 }
 
 
@@ -519,7 +538,7 @@ void PhysicalModelDiagramItem::requestObservationsRemoval()
 {
   // signal for diagram window : update diagram
   --observationsCounter_;
-  emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0);
+  emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0, tr("Define observations of the model"));
 }
 
 
@@ -530,7 +549,7 @@ void PhysicalModelDiagramItem::updateDesignEvaluationCounter(bool increment)
     ++doeCounter_[1];
   else
     --doeCounter_[1];
-  emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
+  emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0, tr("Define at least one design of experiments which contains output values"));
 }
 
 void PhysicalModelDiagramItem::updateMetamodelCounter(int increment)
@@ -538,7 +557,7 @@ void PhysicalModelDiagramItem::updateMetamodelCounter(int increment)
   metamodelCounter_ += increment;
   if (metamodelCounter_ < 0)
     metamodelCounter_ = 0;
-  emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0);
+  emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0, tr("Metamodel must first be created"));
 }
 
 void PhysicalModelDiagramItem::requestDesignOfExperimentRemoval(bool isValid)
@@ -548,7 +567,7 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentRemoval(bool isValid)
   if (isValid)
     --doeCounter_[1];
 
-  emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
-  emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
+  emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0, tr("Create at least one design of experiments and define output variables in the model"));
+  emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0, tr("Define at least one design of experiments which contains output values"));
 }
 }

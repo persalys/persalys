@@ -40,9 +40,8 @@ DataFieldModelDiagramWindow::DataFieldModelDiagramWindow(DataFieldModelDiagramIt
   DiagramPushButton * dataAnalysisButton = new DiagramPushButton;
   dataAnalysisButton->setText(tr("Data\nanalysis"));
   dataAnalysisButton->setWhatsThis(tr("Analyse each variable"));
-  dataAnalysisButton->setErrorMessage(tr("Define at least one variable"));
   connect(dataAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newDataAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(modelValidityChanged(bool)), dataAnalysisButton, SLOT(setEnabled(bool)));
+  connect(dataModelDiagramItem, SIGNAL(modelValidityChanged(bool, QString)), dataAnalysisButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(dataAnalysisButton, row, modelDefinitionButton);
 

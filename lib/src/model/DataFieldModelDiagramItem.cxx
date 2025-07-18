@@ -152,6 +152,7 @@ namespace PERSALYS
     // emit signals to DataFielModelDiagramWindow
     // to update diagram (arrow color and button availability)
     String errorMessage;
-    emit modelValidityChanged(FieldKarhunenLoeveAnalysis::CanBeLaunched(errorMessage, dataModel_));
+    bool validity = FieldKarhunenLoeveAnalysis::CanBeLaunched(errorMessage, dataModel_);
+    emit modelValidityChanged(validity, QString(errorMessage.c_str()));
   }
 }

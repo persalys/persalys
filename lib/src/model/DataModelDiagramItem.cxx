@@ -78,10 +78,16 @@ void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
     // emit signals to DataModelDiagramWindow
     // to update the diagram (arrow color and button availability)
     String errorMessage;
-    emit dataModelValidityChanged(DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
-    emit dataSensitivityValidityChanged(DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
-    emit dependenciesValidityChanged(CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
-    emit metaModelValidityChanged(MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+    bool validity;
+    // CanBeLaunched need to be called before emit otherwise errorMessage might be sent before being modified
+    validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
+    emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
+    validity = DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+    emit dataSensitivityValidityChanged(validity, QString(errorMessage.c_str()));
+    validity = CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+    emit dependenciesValidityChanged(validity, QString(errorMessage.c_str()));
+    validity = MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+    emit metaModelValidityChanged(validity, QString(errorMessage.c_str()));
   }
   else if (message == "analysisLaunched")
   {
@@ -108,10 +114,15 @@ void DataModelDiagramItem::fill()
 
   // update diagram (arrow color and button availability)
   String errorMessage;
-  emit dataModelValidityChanged(DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
-  emit dataSensitivityValidityChanged(DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
-  emit dependenciesValidityChanged(CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
-  emit metaModelValidityChanged(MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_));
+  bool validity;
+  validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+  emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+  emit dataSensitivityValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+  emit dependenciesValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+  emit metaModelValidityChanged(validity, QString(errorMessage.c_str()));
 }
 
 
