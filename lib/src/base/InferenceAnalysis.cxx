@@ -82,7 +82,7 @@ InferenceAnalysis* InferenceAnalysis::clone() const
 InferenceAnalysis::DistributionFactoryCollection InferenceAnalysis::getDistributionsFactories(const String& variableName) const
 {
   if (!designOfExperiment_.getSample().getDescription().contains(variableName))
-    throw InvalidArgumentException(HERE) << "Error: the given variable name does not match a variable of the model";
+    throw InvalidArgumentException(HERE) << "Error: the variable " << variableName << " from marginal inference does not match a variable of the model";
 
   std::map<String, DistributionFactoryCollection>::const_iterator it(distFactoriesForEachInterestVar_.find(variableName));
   if (it == distFactoriesForEachInterestVar_.end())
