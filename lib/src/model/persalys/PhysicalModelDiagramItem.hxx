@@ -68,17 +68,17 @@ public slots:
 
 signals:
   // signal for diagram
-  void inputNumberValidityChanged(bool);
-  void twoInputsValidityChanged(bool);
-  void outputNumberValidityChanged(bool);
-  void physicalModelValidityChanged(bool);
-  void probabilisticModelValidityChanged(bool);
-  void dependenceValidityChanged(bool);
-  void limitStateNumberValidityChanged(bool);
-  void doeNumberValidityChanged(bool);
-  void doeEvaluationNumberValidityChanged(bool);
-  void metamodelNumberValidityChanged(bool);
-  void observationsNumberValidityChanged(bool);
+  void inputNumberValidityChanged(bool, QString);
+  void twoInputsValidityChanged(bool, QString);
+  void outputNumberValidityChanged(bool, QString);
+  void physicalModelValidityChanged(bool, QString);
+  void probabilisticModelValidityChanged(bool, QString);
+  void dependenceValidityChanged(bool, QString);
+  void limitStateNumberValidityChanged(bool, QString);
+  void doeNumberValidityChanged(bool, QString);
+  void doeEvaluationNumberValidityChanged(bool, QString);
+  void metamodelNumberValidityChanged(bool, QString);
+  void observationsNumberValidityChanged(bool, QString);
 
 protected:
   void buildActions();

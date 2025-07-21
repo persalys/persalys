@@ -48,6 +48,7 @@ protected:
   QMap<DiagramPushButton*, DiagramPushButton*> buttons_;
   QMap<DiagramPushButton*, QGraphicsProxyWidget*> proxies_;
   QTextEdit * textArea_;
+  QMap<DiagramPushButton*, QGraphicsProxyWidget*> overlayProxies_;
 };
 }
 #endif

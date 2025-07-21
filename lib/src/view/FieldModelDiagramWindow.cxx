@@ -40,26 +40,23 @@ FieldModelDiagramWindow::FieldModelDiagramWindow(PhysicalModelDiagramItem * phys
   DiagramPushButton * modelEvaluationButton = new DiagramPushButton;
   modelEvaluationButton->setText(tr("Model\nevaluation"));
   modelEvaluationButton->setWhatsThis(tr("Evaluate the model at a given point"));
-  modelEvaluationButton->setErrorMessage(tr("Define input and output variables in the model"));
   connect(modelEvaluationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newModelEvaluation_, SIGNAL(triggered()));
-  connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool)), modelEvaluationButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(physicalModelValidityChanged(bool, QString)), modelEvaluationButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(modelEvaluationButton, 0, modelDefinitionButton);
 
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
   probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependence"));
-  probaModelButton->setErrorMessage(tr("Define at least one input variable"));
   connect(probaModelButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(appendProbabilisticModelItem()));
-  connect(physicalModelDiagramItem, SIGNAL(inputNumberValidityChanged(bool)), probaModelButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(inputNumberValidityChanged(bool, QString)), probaModelButton, SLOT(setEnabled(bool, QString)));
   appendButton(probaModelButton, 1, modelDefinitionButton);
 
   DiagramPushButton * centralTendencyButton = new DiagramPushButton;
   centralTendencyButton->setText(tr("Central\ntendency"));
   centralTendencyButton->setWhatsThis(tr("Two methods : Monte Carlo and Taylor expansion"));
-  centralTendencyButton->setErrorMessage(tr("Define stochastic input variables and output variables in the model"));
   connect(centralTendencyButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newCentralTendency_, SIGNAL(triggered()));
-  connect(physicalModelDiagramItem, SIGNAL(probabilisticModelValidityChanged(bool)), centralTendencyButton, SLOT(setEnabled(bool)));
+  connect(physicalModelDiagramItem, SIGNAL(probabilisticModelValidityChanged(bool, QString)), centralTendencyButton, SLOT(setEnabled(bool, QString)));
   appendButton(centralTendencyButton, 1, probaModelButton);
 
   updateDiagram();

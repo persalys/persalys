@@ -25,9 +25,35 @@
 
 #include <QPushButton>
 #include <QPaintEvent>
+#include <QPainter>
+#include <iostream>
 
 namespace PERSALYS
 {
+
+class DiagramPushButton;
+
+class HoverOverlay: public QWidget
+{
+    Q_OBJECT
+public:
+    explicit HoverOverlay(const DiagramPushButton *target);
+
+    inline void setErrorMessage(QString errorMessage)
+    {errorMessage_ = errorMessage;}
+
+signals:
+    void messageChanged(QString);
+
+protected:
+    void enterEvent(QEvent*) override;
+    void leaveEvent(QEvent*) override;
+
+private:
+    const DiagramPushButton * target_;
+    QString errorMessage_;
+};
+
 class PERSALYS_UTILS_API DiagramPushButton : public QPushButton
 {
   Q_OBJECT
@@ -35,24 +61,22 @@ class PERSALYS_UTILS_API DiagramPushButton : public QPushButton
 public:
   DiagramPushButton(const QString& text = "", QWidget* parent = 0);
 
-  void setErrorMessage(const QString& text);
-
   virtual void paintEvent(QPaintEvent *);
-  virtual void enterEvent(QEvent* event);
-  virtual void leaveEvent(QEvent* event);
   virtual void mousePressEvent(QMouseEvent *event);
 
+  HoverOverlay * createOverlay();
+  HoverOverlay * getOverlay() const;
+
 public slots:
-  void setEnabled(bool enabled);
+  void setEnabled(bool enabled, QString errorMessage = "");
 signals:
   void buttonInFocus(QString);
   void buttonOutFocus();
-  void messageChanged(QString);
   void enabledChanged(bool);
 
 private:
-  QString errorMessage_;
-  bool valid_;
+  HoverOverlay *overlay_ = nullptr;
 };
+
 }
 #endif

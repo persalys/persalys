@@ -28,10 +28,32 @@
 namespace PERSALYS
 {
 
+HoverOverlay::HoverOverlay(const DiagramPushButton *target): 
+  QWidget(nullptr), target_(target), errorMessage_()
+{
+  setAttribute(Qt::WA_NoSystemBackground);
+}
+
+void HoverOverlay::enterEvent(QEvent*) 
+{
+  // emit message to update the QTextEdit of the diagram window
+  const QString errorMessage = "<p>" + target_->whatsThis() + QString("<p><font color=red>%1</font>").arg(errorMessage_);
+  emit messageChanged(target_->isEnabled() ? target_->whatsThis() : errorMessage);
+
+  // override cursor
+  if (!target_->isEnabled())
+    setCursor(Qt::ForbiddenCursor);
+  else
+    unsetCursor();
+}
+
+void HoverOverlay::leaveEvent(QEvent*)
+{
+  emit messageChanged("");
+}
+
 DiagramPushButton::DiagramPushButton(const QString& text, QWidget* parent)
   : QPushButton(text, parent)
-  , errorMessage_("")
-  , valid_(true)
 {
   setAttribute(Qt::WA_TranslucentBackground);
 
@@ -55,18 +77,12 @@ DiagramPushButton::DiagramPushButton(const QString& text, QWidget* parent)
 }
 
 
-void DiagramPushButton::setErrorMessage(const QString& text)
-{
-  errorMessage_ = text;
-}
-
-
 void DiagramPushButton::paintEvent(QPaintEvent*)
 {
   QStyleOptionButton option;
   initStyleOption(&option);
 
-  if (!valid_)
+  if (!isEnabled())
     option.state &= ~QStyle::State_Enabled;
 
   QPainter painter(this);
@@ -74,40 +90,32 @@ void DiagramPushButton::paintEvent(QPaintEvent*)
   style()->drawControl(QStyle::CE_PushButton, &option, &painter, this);
 }
 
-
-void DiagramPushButton::enterEvent(QEvent* /*event*/)
-{
-  // emit message to update the QTextEdit of the diagram window
-  const QString errorMessage = "<p>" + whatsThis() + QString("<p><font color=red>%1</font>").arg(errorMessage_);
-  emit messageChanged(valid_ ? whatsThis() : errorMessage);
-
-  // override cursor
-  if (!valid_)
-    setCursor(Qt::ForbiddenCursor);
-  else
-    unsetCursor();
-}
-
-
-void DiagramPushButton::leaveEvent(QEvent* /*event*/)
-{
-  emit messageChanged("");
-}
-
-
 void DiagramPushButton::mousePressEvent(QMouseEvent* event)
 {
-  if (!valid_)
+  if (!isEnabled())
     return;
 
   QAbstractButton::mousePressEvent(event);
 }
 
-
-void DiagramPushButton::setEnabled(bool enabled)
+void DiagramPushButton::setEnabled(bool enabled, QString errorMessage)
 {
-  valid_ = enabled;
   QPushButton::setEnabled(enabled);
+  overlay_->setErrorMessage(errorMessage);
   emit enabledChanged(enabled);
 }
+
+HoverOverlay * DiagramPushButton::createOverlay()
+{
+  if (!overlay_)
+    overlay_ = new HoverOverlay(this);
+  
+  return overlay_;
+}
+
+HoverOverlay * DiagramPushButton::getOverlay() const
+{
+  return overlay_;
+}
+
 }

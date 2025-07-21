@@ -40,54 +40,48 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   DiagramPushButton * dataAnalysisButton = new DiagramPushButton;
   dataAnalysisButton->setText(tr("Data\nanalysis"));
   dataAnalysisButton->setWhatsThis(tr("Analyse each variable"));
-  dataAnalysisButton->setErrorMessage(tr("Define at least one variable"));
   connect(dataAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newDataAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool)), dataAnalysisButton, SLOT(setEnabled(bool)));
+  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool, QString)), dataAnalysisButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(dataAnalysisButton, row, modelDefinitionButton);
 
   DiagramPushButton * sensitivityAnalysisButton = new DiagramPushButton;
   sensitivityAnalysisButton->setText(tr("Sensitivity\nanalysis"));
   sensitivityAnalysisButton->setWhatsThis(tr("Compute Rank Sobol' indices"));
-  sensitivityAnalysisButton->setErrorMessage(tr("Define at least two input variable and one output"));
   connect(sensitivityAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newDataSensitivityAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataSensitivityValidityChanged(bool)), sensitivityAnalysisButton, SLOT(setEnabled(bool)));
+  connect(dataModelDiagramItem, SIGNAL(dataSensitivityValidityChanged(bool, QString)), sensitivityAnalysisButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(sensitivityAnalysisButton, ++row, modelDefinitionButton);
 
   DiagramPushButton * quantileAnalysisButton = new DiagramPushButton;
   quantileAnalysisButton->setText(tr("Quantile\nanalysis"));
   quantileAnalysisButton->setWhatsThis(tr("Estimate quantiles"));
-  quantileAnalysisButton->setErrorMessage(tr("Define at least one variable"));
   connect(quantileAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newQuantileAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool)), quantileAnalysisButton, SLOT(setEnabled(bool)));
+  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool, QString)), quantileAnalysisButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(quantileAnalysisButton, ++row, modelDefinitionButton);
 
   DiagramPushButton * inferenceButton = new DiagramPushButton;
   inferenceButton->setText(tr("Marginals\ninference"));
   inferenceButton->setWhatsThis(tr("Make an inference analysis for variables with given distributions"));
-  inferenceButton->setErrorMessage(tr("Define at least one variable"));
   connect(inferenceButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newInferenceAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool)), inferenceButton, SLOT(setEnabled(bool)));
+  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool, QString)), inferenceButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(inferenceButton, ++row, modelDefinitionButton);
 
   DiagramPushButton * copulaInferenceButton = new DiagramPushButton;
   copulaInferenceButton->setText(tr("Dependence\ninference"));
   copulaInferenceButton->setWhatsThis(tr("Test the dependence of the variables"));
-  copulaInferenceButton->setErrorMessage(tr("Define at least two variables"));
   connect(copulaInferenceButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newCopulaInferenceAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dependenciesValidityChanged(bool)), copulaInferenceButton, SLOT(setEnabled(bool)));
+  connect(dataModelDiagramItem, SIGNAL(dependenciesValidityChanged(bool, QString)), copulaInferenceButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(copulaInferenceButton, ++row, modelDefinitionButton);
 
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
   metamodelButton->setWhatsThis(tr("Two methods : Kriging and Functional chaos"));
-  metamodelButton->setErrorMessage(tr("Define at least one input variable and one output variable"));
-  connect(dataModelDiagramItem, SIGNAL(metaModelValidityChanged(bool)), metamodelButton, SLOT(setEnabled(bool)));
   connect(metamodelButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newMetaModel_, SIGNAL(triggered()));
+  connect(dataModelDiagramItem, SIGNAL(metaModelValidityChanged(bool, QString)), metamodelButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(metamodelButton, ++row, modelDefinitionButton);
 

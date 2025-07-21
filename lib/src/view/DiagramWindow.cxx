@@ -40,9 +40,9 @@ DiagramWindow::DiagramWindow(Item * item, QWidget * parent)
   mainLayout->addWidget(titleLabel_);
 
   // Widgets
-  QSplitter * splitter = new QSplitter(Qt::Vertical);
+  auto *splitter = new QSplitter(Qt::Vertical);
 
-  QGraphicsView * graphView = new QGraphicsView(this);
+  auto *graphView = new QGraphicsView(this);
   scene_ = new QGraphicsScene(this);
 
   // -- set scene --
@@ -63,9 +63,7 @@ DiagramWindow::DiagramWindow(Item * item, QWidget * parent)
 void DiagramWindow::appendButton(DiagramPushButton *button, const unsigned int row, DiagramPushButton *parentButton)
 {
   buttons_[button] = parentButton;
-  QGraphicsProxyWidget * proxy = new QGraphicsProxyWidget;
-  proxy->setWidget(button);
-  scene_->addItem(proxy);
+  QGraphicsProxyWidget *proxy = scene_->addWidget(button);
   if (!parentButton)
     proxy->setPos(0, row);
   else
@@ -75,6 +73,15 @@ void DiagramWindow::appendButton(DiagramPushButton *button, const unsigned int r
     columnNumber_ = std::max(columnNumber_, (int)proxy->x());
   }
   proxies_[button] = proxy;
+  
+  QGraphicsProxyWidget *overlayProxy = scene_->addWidget(button->createOverlay());
+  overlayProxy->setPos(proxy->pos());
+  overlayProxy->setZValue(proxy->zValue() + 1);
+  overlayProxy->setAcceptHoverEvents(true);
+  overlayProxy->setAcceptedMouseButtons(Qt::NoButton);
+  overlayProxy->setFlag(QGraphicsItem::ItemIsSelectable, false);
+  overlayProxy->setFlag(QGraphicsItem::ItemIsFocusable, false);
+  overlayProxies_[button] = overlayProxy;
 }
 
 
@@ -85,13 +92,13 @@ void DiagramWindow::updateDiagram()
   int boxWidth = 0;
   int boxHeight = 0;
 
-  for (int i = 0; i < buttons.size(); ++i)
+  for (auto const *button : buttons)
   {
     // connection with textArea_ to display messages
-    connect(buttons[i], SIGNAL(messageChanged(QString)), textArea_, SLOT(setHtml(QString)));
+    connect(button->getOverlay(), SIGNAL(messageChanged(QString)), textArea_, SLOT(setHtml(QString)));
     // get button max size
-    boxWidth = std::max(boxWidth, buttons[i]->width());
-    boxHeight = std::max(boxHeight, buttons[i]->height());
+    boxWidth = std::max(boxWidth, button->width());
+    boxHeight = std::max(boxHeight, button->height());
   }
 
   const int horizontalSpace = 60;
@@ -99,14 +106,16 @@ void DiagramWindow::updateDiagram()
   const int rowPos = boxHeight + verticalSpace;
   const int columnPos = boxWidth + horizontalSpace;
 
-  for (int i = 0; i < buttons.size(); ++i)
+  for (auto *button : buttons)
   {
     // resize button : we want that all the buttons have the same dimensions
-    buttons[i]->resize(boxWidth, boxHeight);
+    button->resize(boxWidth, boxHeight);
+    button->getOverlay()->resize(boxWidth, boxHeight);
 
     // set button position
-    const QPointF newPos(proxies_[buttons[i]]->pos().x() * columnPos, proxies_[buttons[i]]->pos().y() * rowPos);
-    proxies_[buttons[i]]->setPos(newPos);
+    const QPointF newPos(proxies_[button]->pos().x() * columnPos, proxies_[button]->pos().y() * rowPos);
+    proxies_[button]->setPos(newPos);
+    overlayProxies_[button]->setPos(newPos);
   }
 
   // arrows : do it after resizing/moving buttons
@@ -114,17 +123,17 @@ void DiagramWindow::updateDiagram()
   const QPointF hOffset(boxWidth + buttonMargin, boxHeight * 0.5);
   const QPointF vOffset(-buttonMargin, boxHeight * 0.5);
 
-  for (int i = 0; i < buttons.size(); ++i)
+  for (auto *button : buttons)
   {
-    if (proxies_[buttons[i]]->pos().x() > 0)
+    if (proxies_[button]->pos().x() > 0)
     {
-      Q_ASSERT(proxies_.contains(buttons_[buttons[i]]));
-      const QPointF parentPos(proxies_[buttons_[buttons[i]]]->pos());
-      const QPointF newPos(proxies_[buttons[i]]->pos().x(), proxies_[buttons[i]]->pos().y());
+      Q_ASSERT(proxies_.contains(buttons_[button]));
+      const QPointF parentPos(proxies_[buttons_[button]]->pos());
+      const QPointF newPos(proxies_[button]->pos().x(), proxies_[button]->pos().y());
 
-      Arrow * arrow = new Arrow(parentPos + hOffset, newPos + vOffset);
+      auto * arrow = new Arrow(parentPos + hOffset, newPos + vOffset);
 
-      connect(buttons[i], SIGNAL(enabledChanged(bool)), arrow, SLOT(setValidity(bool)));
+      connect(button, SIGNAL(enabledChanged(bool)), arrow, SLOT(setValidity(bool)));
       scene_->addItem(arrow);
     }
   }
