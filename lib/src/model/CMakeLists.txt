@@ -182,9 +182,10 @@ endif ()
 if ( NOT DEFINED LIB_SOVERSION )
   set ( LIB_SOVERSION 0 )
 endif ()
-set_target_properties ( persalysmodel PROPERTIES VERSION ${LIB_VERSION} )
-set_target_properties ( persalysmodel PROPERTIES SOVERSION ${LIB_SOVERSION} )
-target_link_libraries ( persalysmodel persalysbase ${QT_LIBRARIES})
+set_target_properties (persalysmodel PROPERTIES VERSION ${LIB_VERSION})
+set_target_properties (persalysmodel PROPERTIES SOVERSION ${LIB_SOVERSION})
+set_target_properties (persalysmodel PROPERTIES CXX_STANDARD 17)
+target_link_libraries (persalysmodel persalysbase ${QT_LIBRARIES})
 
 install ( TARGETS persalysmodel
   RUNTIME DESTINATION ${PERSALYS_BIN_PATH}
