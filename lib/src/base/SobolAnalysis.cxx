@@ -48,7 +48,6 @@ SobolAnalysis::SobolAnalysis()
   , confidenceLevel_(1 - ResourceMap::GetAsScalar("SobolSimulationAlgorithm-DefaultIndexQuantileLevel"))
   , result_()
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -60,7 +59,6 @@ SobolAnalysis::SobolAnalysis(const String& name, const PhysicalModel& physicalMo
   , confidenceLevel_(1 - ResourceMap::GetAsScalar("SobolSimulationAlgorithm-DefaultIndexQuantileLevel"))
   , result_()
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -360,12 +358,19 @@ bool SobolAnalysis::hasValidResult() const
 
 bool SobolAnalysis::canBeLaunched(String &errorMessage) const
 {
-  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
-  if (!canBeLaunched)
+  return SobolAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
+}
+
+bool SobolAnalysis::CanBeLaunched(String &errorMessage, const PhysicalModel &physicalModel)
+{
+  if (!PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel))
     return false;
+  if (!physicalModel.hasStochasticInputs())
+    errorMessage = "The model must have stochastic inputs.";
   // pm must have independent copula
-  if (!getPhysicalModel().getCopula().hasIndependentCopula())
+  if (!physicalModel.getCopula().hasIndependentCopula())
     errorMessage = "The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.";
+
   return errorMessage.empty();
 }
 

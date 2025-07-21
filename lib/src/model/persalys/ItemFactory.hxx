@@ -69,6 +69,7 @@ signals:
   void wizardRequested(const PhysicalModel&);
   void openPropertiesRequested();
   void wizardRequested(StudyItem*, const DesignOfExperiment& designOfExp);
+  void analysisRequested(StudyItem*, const Analysis&);
 
 protected:
   StudyItem * parentStudyItem_ = nullptr;

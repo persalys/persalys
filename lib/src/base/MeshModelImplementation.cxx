@@ -84,7 +84,7 @@ Indices MeshModelImplementation::getNumberOfNodes() const
 }
 
 
-String MeshModelImplementation::getHtmlDescription() const
+String MeshModelImplementation::getHTMLDescription() const
 {
   OSS oss;
 

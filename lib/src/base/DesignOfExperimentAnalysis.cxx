@@ -72,14 +72,7 @@ DesignOfExperiment DesignOfExperimentAnalysis::getDesignOfExperiment() const
 
 bool DesignOfExperimentAnalysis::canBeLaunched(String &errorMessage) const
 {
-  // doe must be not empty
-  if (!getDesignOfExperiment().getSample().getSize())
-    errorMessage = "The sample must be not empty.";
-  // values must be valid
-  if (!getDesignOfExperiment().isValid())
-    errorMessage = "The sample contains invalid values.";
-
-  return errorMessage.empty();
+  return DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
 }
 
 
@@ -87,7 +80,7 @@ void DesignOfExperimentAnalysis::run()
 {
   AnalysisImplementation::run();
   if (designOfExperiment_.hasPhysicalModel())
-    modelHtmlDescription_ = designOfExperiment_.getPhysicalModel().getHtmlDescription(false);
+    modelHtmlDescription_ = designOfExperiment_.getPhysicalModel().getHTMLDescription();
 }
 
 
@@ -116,8 +109,20 @@ void DesignOfExperimentAnalysis::load(Advocate & adv)
   AnalysisImplementation::load(adv);
   adv.loadAttribute("designOfExperiment_", designOfExperiment_);
   if (!getInterestVariables().getSize())
-    setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
+    setInterestVariables(designOfExperiment_.getOutputSample().getDescription()); 
 }
 
+bool DesignOfExperimentAnalysis::CanBeLaunched(String & errorMessage, const DesignOfExperiment &doe)
+{
+  errorMessage.clear();
+  // doe must be not empty
+  if (!doe.getSample().getSize())
+    errorMessage = "The sample must be not empty.";
+  // values must be valid
+  if (!doe.isValid())
+    errorMessage = "The sample contains invalid values.";
+
+  return errorMessage.empty();
+}
 
 }

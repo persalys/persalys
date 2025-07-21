@@ -49,12 +49,7 @@ DataSensitivityAnalysis * DataSensitivityAnalysis::clone() const
 
 bool DataSensitivityAnalysis::canBeLaunched(String &errorMessage) const
 {
-  if (const bool canBeLaunched = DesignOfExperimentAnalysis::canBeLaunched(errorMessage); !canBeLaunched)
-    return false;
-  // doe must have in/output data
-  if (!getDesignOfExperiment().getOutputSample().getSize() || !getDesignOfExperiment().getInputSample().getSize())
-    errorMessage = "The design of experiments must contain data for input and output variables.";
-  return errorMessage.empty();
+  return DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
 }
 
 bool DataSensitivityAnalysis::hasValidResult() const
@@ -131,6 +126,18 @@ void DataSensitivityAnalysis::load(OT::Advocate & adv)
 {
   DesignOfExperimentAnalysis::load(adv);
   adv.loadAttribute("result_", result_); 
+}
+
+bool DataSensitivityAnalysis::CanBeLaunched(String &errorMessage, const DesignOfExperiment &doe)
+{
+  if (!DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, doe))
+    return false;
+  // doe must have in/output data
+  if (!doe.getOutputSample().getSize() || !doe.getInputSample().getSize())
+    errorMessage = "The sample must contain data for input and output variables.";
+  if (doe.getInputSample().getDimension() < 2)
+    errorMessage = "The sample must contain at least two input variables.";
+  return errorMessage.empty();
 }
 
 } // namespace PERSALYS

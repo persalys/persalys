@@ -30,7 +30,7 @@ template <>
 
 %ignore *::addObserver;
 %ignore *::blockNotification;
-%ignore *::getHtmlDescription;
+%ignore *::getHTMLDescription;
 %ignore *::getCopulaCollection;
 
 %include PhysicalModel_doc.i

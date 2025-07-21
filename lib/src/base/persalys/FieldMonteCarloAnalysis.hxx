@@ -55,6 +55,8 @@ public:
 
   FieldMonteCarloResult getResult() const {return karhunenLoeveAnalysis_.getResult();};
 
+  bool canBeLaunched(OT::String &errorMessage) const override;
+
   /** String converter */
   OT::String __repr__() const override;
 

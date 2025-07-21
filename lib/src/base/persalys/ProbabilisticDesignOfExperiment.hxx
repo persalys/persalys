@@ -64,6 +64,8 @@ public:
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
 
+  bool canBeLaunched(OT::String &errorMessage) const override;
+
   /** String converter */
   OT::String __repr__() const override;
 

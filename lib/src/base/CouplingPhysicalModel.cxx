@@ -324,10 +324,10 @@ Function CouplingPhysicalModel::generateFunction(const Description & outputNames
 }
 
 
-String CouplingPhysicalModel::getHtmlDescription(const bool deterministic) const
+String CouplingPhysicalModel::getHTMLDescription() const
 {
   OSS oss;
-  oss << PhysicalModelImplementation::getHtmlDescription(deterministic);
+  oss << PhysicalModelImplementation::getHTMLDescription();
   oss << "<h3>Outputs</h3><p>";
   oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
   oss << "<tr>";

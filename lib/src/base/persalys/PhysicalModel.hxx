@@ -117,7 +117,7 @@ public:
 
   bool isValid() const;
 
-  OT::String getHtmlDescription(const bool deterministic) const;
+  OT::String getHTMLDescription() const;
   OT::String getPythonScript() const;
 
   void exportStandalonePythonScript(const OT::String & fileName) const;

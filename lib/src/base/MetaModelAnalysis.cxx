@@ -62,8 +62,6 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
   , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
-  if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
-    isDeterministicAnalysis_ = false;
   if (designOfExperiment_.getOutputSample().getSize())
     setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
 }
@@ -89,8 +87,6 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
     throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiments";
   }
   designOfExperiment_ = analysis_ptr->getResult().getDesignOfExperiment();
-  if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
-    isDeterministicAnalysis_ = false;
   setInterestVariables(analysis_ptr->getInterestVariables());
 }
 
@@ -619,15 +615,19 @@ void MetaModelAnalysis::computeLOOValidation(MetaModelAnalysisResult& result, co
 
 bool MetaModelAnalysis::canBeLaunched(String &errorMessage) const
 {
-  const bool canBeLaunched = DesignOfExperimentAnalysis::canBeLaunched(errorMessage);
-  if (!canBeLaunched)
+  return MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+}
+
+
+bool MetaModelAnalysis::CanBeLaunched(String &errorMessage, const DesignOfExperiment &doe)
+{
+  if (!DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, doe))
     return false;
   // doe must have in/output data
-  if (!getDesignOfExperiment().getOutputSample().getSize() || !getDesignOfExperiment().getInputSample().getSize())
+  if (!doe.getOutputSample().getSize() || !doe.getInputSample().getSize())
     errorMessage = "The design of experiments must contain data for input and output variables.";
   return errorMessage.empty();
 }
-
 
 /* String converter */
 String MetaModelAnalysis::__repr__() const

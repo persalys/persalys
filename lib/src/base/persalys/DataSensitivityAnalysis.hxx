@@ -54,6 +54,8 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
+  static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment &doe);
+
 protected:
   void initialize() override;
   void launch() override;

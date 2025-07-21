@@ -56,6 +56,8 @@ public:
   bool hasValidResult() const override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
+  static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
+
   /** String converter */
   OT::String __repr__() const override;
 

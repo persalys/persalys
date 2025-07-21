@@ -205,6 +205,23 @@ void StudyManager::openProperties(Item* item)
 }
 
 
+// --------------- OPEN ANALYSIS WINDOW ---------------
+
+void StudyManager::openAnalysisWindow(StudyItem *item, const Analysis &analysis)
+{
+  Q_ASSERT(item);
+  String errorMessage = "";
+  if (!analysis.canBeLaunched(errorMessage))
+  {
+    showErrorMessage(TranslationManager::GetTranslatedErrorMessage(errorMessage));
+  }
+  else
+  {
+    item->getStudy().add(analysis);
+  }
+}
+
+
 // --------------- WINDOW CREATION ---------------
 
 
@@ -224,6 +241,8 @@ void StudyManager::createWindow(Item *item)
     openProperties(item);
   });
   connect(item, SIGNAL(wizardRequested(StudyItem*, DesignOfExperiment)), this, SLOT(openObservationsWizard(StudyItem*, DesignOfExperiment)));
+
+  connect(item, SIGNAL(analysisRequested(StudyItem*, Analysis)), this, SLOT(openAnalysisWindow(StudyItem*, Analysis)));
 
   connect(item, SIGNAL(windowRequested(Item*)), this, SLOT(createWindow(Item*)));
   connect(item, SIGNAL(windowRequested(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));

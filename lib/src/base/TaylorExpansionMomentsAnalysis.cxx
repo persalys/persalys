@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/TaylorExpansionMomentsAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 
 #include <openturns/TaylorExpansionMoments.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -36,7 +37,6 @@ static Factory<TaylorExpansionMomentsAnalysis> Factory_TaylorExpansionMomentsAna
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
   : PhysicalModelAnalysis()
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -44,7 +44,6 @@ TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis()
 TaylorExpansionMomentsAnalysis::TaylorExpansionMomentsAnalysis(const String & name, const PhysicalModel & physicalModel)
   : PhysicalModelAnalysis(name, physicalModel)
 {
-  isDeterministicAnalysis_ = false;
 }
 
 
@@ -119,6 +118,12 @@ bool TaylorExpansionMomentsAnalysis::hasValidResult() const
 {
   return getResult().getOutputNames().getSize() != 0;
 }
+
+bool TaylorExpansionMomentsAnalysis::canBeLaunched(String &errorMessage) const
+{
+  return MonteCarloAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
+}
+
 
 
 /* String converter */

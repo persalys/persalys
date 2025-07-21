@@ -54,6 +54,9 @@ public:
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
+  bool canBeLaunched(OT::String &errorMessage) const override;
+
+  static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
 
   /** String converter */
   OT::String __repr__() const override;

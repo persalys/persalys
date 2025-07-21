@@ -358,12 +358,7 @@ bool CopulaInferenceAnalysis::hasValidResult() const
 
 bool CopulaInferenceAnalysis::canBeLaunched(String &errorMessage) const
 {
-  const bool canBeLaunched = DesignOfExperimentAnalysis::canBeLaunched(errorMessage);
-  if (!canBeLaunched)
-    return false;
-  if (designOfExperiment_.getSample().getDimension() < 2)
-    errorMessage = "The model must contain at least two variables.";
-  return errorMessage.empty();
+  return CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
 }
 
 
@@ -417,5 +412,16 @@ void CopulaInferenceAnalysis::load(Advocate& adv)
   {
     distFactoriesForSetVar_[listSets[i]] = listFactories[i];
   }
+
 }
+
+bool CopulaInferenceAnalysis::CanBeLaunched(String &errorMessage, const DesignOfExperiment &doe)
+{
+  if (!DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, doe))
+    return false;
+  if (doe.getSample().getDimension() < 2)
+    errorMessage = "The model must contain at least two variables.";
+  return errorMessage.empty();
+}
+
 }

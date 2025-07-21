@@ -208,7 +208,21 @@ namespace PERSALYS
 
   bool FieldKarhunenLoeveAnalysis::hasValidResult() const
   {
-    return getResult().getXiSamples().getSize() != 0;
+    return getResult().getXiSamples().getSize();
+  }
+
+  bool FieldKarhunenLoeveAnalysis::canBeLaunched(String &errorMessage) const
+  {
+    return FieldKarhunenLoeveAnalysis::CanBeLaunched(errorMessage, model_);
+  }
+
+  bool FieldKarhunenLoeveAnalysis::CanBeLaunched(String &errorMessage, const DataFieldModel &dataFieldModel)
+  {
+    errorMessage.clear();
+    if(!dataFieldModel.isValid())
+      errorMessage = "Invalid field model. Ensure that the mesh and data are not empty, contain no invalid values, and are mutually compatible.";
+    
+    return errorMessage.empty();
   }
 
   void FieldKarhunenLoeveAnalysis::setQuantileLevel(const Scalar level)

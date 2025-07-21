@@ -329,15 +329,18 @@ bool MorrisAnalysis::hasValidResult() const
 
 bool MorrisAnalysis::canBeLaunched(String &errorMessage) const
 {
-  const bool canBeLaunched = PhysicalModelAnalysis::canBeLaunched(errorMessage);
-  if (!canBeLaunched)
+  return MorrisAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
+}
+
+bool MorrisAnalysis::CanBeLaunched(String &errorMessage, const PhysicalModel &physicalModel)
+{
+  if (!PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel))
     return false;
   // pm must have more than 2 inputs
-  if (getPhysicalModel().getInputDimension() < 2)
+  if (physicalModel.getInputDimension() < 2)
     errorMessage = "The physical model must have at least two inputs.";
   return errorMessage.empty();
 }
-
 
 /* String converter */
 String MorrisAnalysis::__repr__() const

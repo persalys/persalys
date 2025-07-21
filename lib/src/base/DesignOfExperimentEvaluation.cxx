@@ -272,8 +272,14 @@ DataAnalysisResult DesignOfExperimentEvaluation::getResult() const
 
 bool DesignOfExperimentEvaluation::canBeLaunched(String &errorMessage) const
 {
+  return DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, getPhysicalModel());
+}
+
+bool DesignOfExperimentEvaluation::CanBeLaunched(String &errorMessage, const PhysicalModel &physicalModel)
+{
+  errorMessage.clear();
   // pm must have inputs
-  if (!getPhysicalModel().getInputDimension())
+  if (!physicalModel.getInputDimension())
     errorMessage = "The physical model must have inputs.";
   return errorMessage.empty();
 }

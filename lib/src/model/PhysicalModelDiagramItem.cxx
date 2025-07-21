@@ -31,6 +31,10 @@
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/KrigingAnalysis.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
+#include "persalys/MorrisAnalysis.hxx"
+#include "persalys/MultiObjectiveOptimizationAnalysis.hxx"
+#include "persalys/SobolAnalysis.hxx"
+#include "persalys/MonteCarloAnalysis.hxx"
 
 #include <openturns/PlatformInfo.hxx>
 
@@ -169,13 +173,14 @@ void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
 {
   // emit signals to PhysicalModelDiagramWindow
   // to update diagram (arrow color and button availability)
-  emit inputNumberValidityChanged(physicalModel_.getInputDimension());
-  emit twoInputsValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1);
-  emit outputNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getOutputDimension() > 1 );
-  emit physicalModelValidityChanged(physicalModel_.isValid());
-  emit probabilisticModelValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs());
-  emit dependenceValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && physicalModel_.getCopula().hasIndependentCopula());
+  String errorMessage;
+  emit physicalModelValidityChanged(PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel_));
+  emit twoInputsValidityChanged(MorrisAnalysis::CanBeLaunched(errorMessage, physicalModel_));
+  emit inputNumberValidityChanged(DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, physicalModel_));
   emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0);
+  emit outputNumberValidityChanged(MultiObjectiveOptimizationAnalysis::CanBeLaunched(errorMessage, physicalModel_));
+  emit dependenceValidityChanged(SobolAnalysis::CanBeLaunched(errorMessage, physicalModel_));
+  emit probabilisticModelValidityChanged(MonteCarloAnalysis::CanBeLaunched(errorMessage, physicalModel_));
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0);
   emit limitStateNumberValidityChanged(physicalModel_.isValid() && physicalModel_.hasStochasticInputs() && limitStateCounter_ > 0);
   emit observationsNumberValidityChanged(physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0);
@@ -371,9 +376,9 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
 void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 {
   // check
-  if (!physicalModel_.getInputDimension())
+  if(String errorMessage; !DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, physicalModel_))
   {
-    emit showErrorMessageRequested(tr("The physical model must have inputs."));
+    emit showErrorMessageRequested(QString(errorMessage.c_str()));
     return;
   }
   // do nothing if the item already exists

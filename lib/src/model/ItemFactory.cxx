@@ -342,7 +342,7 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfE
     action->setStatusTip(tr("Analyse the data sample"));
     connect(action, &QAction::triggered, [ = ]()
     {
-      getParentStudyItem()->getStudy().add(DataAnalysis(availableAnalysisName(tr("dataAnalysis_")), doe));
+      emit analysisRequested(getParentStudyItem(), DataAnalysis(availableAnalysisName(tr("dataAnalysis_")), doe));
     });
   }
   else if (analysisName == "DataSensitivityAnalysis")
@@ -351,7 +351,8 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfE
     action->setStatusTip(tr("compute Rank Sobol' indices"));
     connect(action, &QAction::triggered, [ this, doe ]()
     {
-      getParentStudyItem()->getStudy().add(DataSensitivityAnalysis(availableAnalysisName(tr("dataSensitivity_")), doe));
+      emit analysisRequested(getParentStudyItem(),
+                           DataSensitivityAnalysis(availableAnalysisName(tr("dataSensitivity_")), doe));
     });
   }
   else if (analysisName == "Metamodel")
@@ -435,7 +436,7 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DataField
     QAction * action = new QAction(tr("Field data analysis"), this);
     action->setStatusTip(tr("Analyze data and create a Karhunene-Loeve decomposition"));
     connect(action, &QAction::triggered, [ = ]() {
-      getParentStudyItem()->getStudy().add(FieldKarhunenLoeveAnalysis(availableAnalysisName(tr("fieldDataAnalysis_")), dataFieldModel));
+      emit analysisRequested(getParentStudyItem(), FieldKarhunenLoeveAnalysis(availableAnalysisName(tr("fieldDataAnalysis_")), dataFieldModel));
     });
     return action;
   }

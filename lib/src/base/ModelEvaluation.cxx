@@ -130,7 +130,7 @@ String ModelEvaluation::getPythonScript() const
 
 bool ModelEvaluation::canBeLaunched(String &errorMessage) const
 {
-  return PhysicalModelAnalysis::canBeLaunched(errorMessage);
+  return PhysicalModelAnalysis::CanBeLaunched(errorMessage, getPhysicalModel());
 }
 
 

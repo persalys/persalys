@@ -22,6 +22,7 @@
 #include "persalys/DataFieldModelDefinitionItem.hxx"
 #include "persalys/DataMeshItem.hxx"
 #include "persalys/StudyItem.hxx"
+#include "persalys/FieldKarhunenLoeveAnalysis.hxx"
 
 #include <QDebug>
 
@@ -150,6 +151,7 @@ namespace PERSALYS
   {
     // emit signals to DataFielModelDiagramWindow
     // to update diagram (arrow color and button availability)
-    emit modelValidityChanged(dataModel_.isValid());
+    String errorMessage;
+    emit modelValidityChanged(FieldKarhunenLoeveAnalysis::CanBeLaunched(errorMessage, dataModel_));
   }
 }

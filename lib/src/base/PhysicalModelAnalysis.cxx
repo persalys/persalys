@@ -63,13 +63,7 @@ PhysicalModel PhysicalModelAnalysis::getPhysicalModel() const
 
 bool PhysicalModelAnalysis::canBeLaunched(String &errorMessage) const
 {
-  // pm must have in/outputs
-  if (!getPhysicalModel().isValid())
-    errorMessage = "The physical model must have inputs and at least a selected output.";
-  // if probabilistic analysis : must have stochastic inputs
-  if (!isDeterministicAnalysis_ && !getPhysicalModel().hasStochasticInputs())
-    errorMessage = "The physical model must have stochastic inputs.";
-  return errorMessage.empty();
+  return PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel_);
 }
 
 
@@ -83,7 +77,7 @@ void PhysicalModelAnalysis::run()
 {
   AnalysisImplementation::run();
   physicalModel_.setEvalTime(getElapsedTime());
-  modelHtmlDescription_ = physicalModel_.getHtmlDescription(isDeterministicAnalysis_);
+  modelHtmlDescription_ = physicalModel_.getHTMLDescription();
 }
 
 
@@ -113,6 +107,16 @@ void PhysicalModelAnalysis::load(Advocate & adv)
   adv.loadAttribute("physicalModel_", physicalModel_);
   if (!getInterestVariables().getSize() && !isReliabilityAnalysis())
     setInterestVariables(physicalModel_.getSelectedOutputsNames());
+}
+
+bool PhysicalModelAnalysis::CanBeLaunched(String &errorMessage, const PhysicalModel &physicalModel)
+{
+  errorMessage.clear();
+  // pm must have in/outputs
+  if (!physicalModel.isValid())
+    errorMessage = "The physical model must have inputs and at least a selected output.";
+
+  return errorMessage.empty();
 }
 
 }

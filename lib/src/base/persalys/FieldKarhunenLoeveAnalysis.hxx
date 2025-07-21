@@ -58,6 +58,9 @@ namespace PERSALYS
 
     FieldMonteCarloResult getResult() const;
     bool hasValidResult() const override;
+    bool canBeLaunched(OT::String &errorMessage) const override;
+
+    static bool CanBeLaunched(OT::String &errorMessage, const DataFieldModel &dataFieldModel);
 
     OT::String getPythonScript() const override;
 

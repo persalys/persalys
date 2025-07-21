@@ -52,7 +52,7 @@ public:
   OT::String getFormula(const OT::String& outputName) const;
   void setFormula(const OT::String& outputName, const OT::String& formula);
 
-  OT::String getHtmlDescription(const bool deterministic) const override;
+  OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
 
   /** String converter */

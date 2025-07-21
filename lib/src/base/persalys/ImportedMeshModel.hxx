@@ -52,7 +52,7 @@ public:
   OT::Interval getBounds() const override;
   OT::Indices getNumberOfNodes() const override;
 
-  OT::String getHtmlDescription() const override;
+  OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
 
   /** String converter */
