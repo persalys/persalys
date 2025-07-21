@@ -91,7 +91,7 @@ RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2022.1.0.
 RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.8.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
-RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
+RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/obsolete-appimagetool-x86_64.AppImage -O appimagetool-x86_64.AppImage \
  && chmod a+rx appimagetool-x86_64.AppImage && ./appimagetool-x86_64.AppImage --appimage-extract \
  && chmod -R a+rx squashfs-root && ln -s /usr/local/src/squashfs-root/AppRun /usr/bin/appimagetool \
  && appimagetool --version

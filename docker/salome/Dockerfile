@@ -33,7 +33,7 @@ RUN git clone -b V2_5_0 --depth 1 https://github.com/SalomePlatform/libbatch.git
 RUN cd /tmp && sudo mv /bin/uname /bin/uname.orig && echo -n "#!/bin/sh\nuname.orig \"\$@\"|sed 's|unknown|x86_64|g'\n" > uname && chmod a+rx ./uname && sudo mv ./uname /bin/uname && uname  -p
 
 # appimagetool
-RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
+RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/obsolete-appimagetool-x86_64.AppImage -O appimagetool-x86_64.AppImage \
  && chmod a+rx appimagetool-x86_64.AppImage \
  && ./appimagetool-x86_64.AppImage --appimage-extract \
  && chmod -R a+rx squashfs-root \
