@@ -368,7 +368,18 @@ void StudyManager::exportPythonScript()
                            tr("Python source files (*.py)"));
 
   if (!fileName.isEmpty())
-    item->exportPythonScript(fileName);
+    try
+    {
+      item->exportPythonScript(fileName);
+    }
+    catch (const std::exception &ex)
+    {
+      showErrorMessage(tr("An error occurred during export:\n%1").arg(ex.what()));
+    }
+    catch (...)
+    {
+      showErrorMessage(tr("An unknown error occurred during export."));
+    }
 }
 
 
