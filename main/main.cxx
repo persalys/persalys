@@ -46,7 +46,7 @@
 
 namespace fs = std::filesystem;
 
-static void PrintStack(int /*signum*/)
+static void PrintStack(int signum)
 {
   // write stack to stderr
   std::ostringstream oss1;
@@ -92,6 +92,10 @@ static void PrintStack(int /*signum*/)
   {
     std::cerr << "Failed to write stack trace into " << fileName << ": " << exc.what() << std::endl << std::flush;
   }
+
+  // Restore default handler and re-raise the signal to avoid infinite loop
+  std::signal(signum, SIG_DFL);
+  std::raise(signum);
 }
 #endif
 
