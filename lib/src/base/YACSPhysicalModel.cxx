@@ -270,6 +270,18 @@ void YACSPhysicalModel::setUseYACS(const Bool useYACS)
   {
     useYACS_ = useYACS;
     functionCache_ = Function();
+
+    if (useYACS)
+    {
+      try
+      {
+        evaluation_.setCode(getCode());
+      }
+      catch (std::exception & ex)
+      {
+        // just to keep in sync
+      }
+    }
   }
 }
 
