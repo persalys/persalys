@@ -211,12 +211,19 @@ void FileTools::ExportImage(const QImage& image, QWidget * parent)
 
 QString FileTools::GetDocumentationDirectoryPath()
 {
-  // case 1: try to use an environment variable
+  // case 1: try to use the environment variable
   QString userManualDir = std::getenv("PERSALYS_HTML_PATH");
-  if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
-    return userManualDir;
+  if (!userManualDir.isEmpty())
+  {
+    if (QDir(userManualDir).exists())
+      return userManualDir;
+    else
+    {
+      LOGWARN("PERSALYS_HTML_PATH is set to a non-existing directory");
+    }
+  }
 
-  // case 2: search the path of the documentation
+  // case 2: on Windows search the path of the application
   const QString appliDirPath(QCoreApplication::applicationDirPath());
   QDir dirPath(appliDirPath);
   dirPath.cdUp();
@@ -231,6 +238,7 @@ QString FileTools::GetDocumentationDirectoryPath()
   if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
     return userManualDir;
 
+  LOGWARN("Documentation directory not found in standard paths: set PERSALYS_HTML_PATH environment variable");
   return "";
 }
 
