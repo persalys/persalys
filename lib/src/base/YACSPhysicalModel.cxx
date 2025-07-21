@@ -113,13 +113,16 @@ const ydefx::JobParametersProxy& YACSPhysicalModel::jobParameters()const
 void YACSPhysicalModel::setCode(const String & code)
 {
   PythonPhysicalModel::setCode(code);
-  try
+  if (useYACS_)
   {
-    evaluation_.setCode(code);
-  }
-  catch (std::exception & ex)
-  {
-    throw InvalidArgumentException(HERE) << "Error in the script.\n" << ex.what();
+    try
+    {
+      evaluation_.setCode(code);
+    }
+    catch (std::exception & ex)
+    {
+      throw InvalidArgumentException(HERE) << "Error in the script.\n" << ex.what();
+    }
   }
 }
 
