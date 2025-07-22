@@ -34,7 +34,11 @@ HoverOverlay::HoverOverlay(const DiagramPushButton *target):
   setAttribute(Qt::WA_NoSystemBackground);
 }
 
-void HoverOverlay::enterEvent(QEvent*) 
+#if QT_VERSION_CHECK(6,0,0)
+void HoverOverlay::enterEvent(QEnterEvent*)
+#else
+void HoverOverlay::enterEvent(QEvent*)
+#endif
 {
   // emit message to update the QTextEdit of the diagram window
   const QString errorMessage = "<p>" + target_->whatsThis() + QString("<p><font color=red>%1</font>").arg(errorMessage_);
