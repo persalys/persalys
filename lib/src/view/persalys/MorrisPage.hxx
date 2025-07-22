@@ -36,13 +36,13 @@ class PERSALYS_VIEW_API MorrisPage : public QWizardPage
   Q_OBJECT
 
 public:
-  MorrisPage(QWidget* parent = nullptr);
+  explicit MorrisPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   MorrisAnalysis getAnalysis() const;
 
-  virtual int nextId() const;
-  virtual bool validatePage();
+  int nextId() const override;
+  bool validatePage() override;
 
 protected:
   void buildInterface();
@@ -58,7 +58,7 @@ class PERSALYS_VIEW_API MorrisSecondPage : public QWizardPage
   Q_OBJECT
 
 public:
-  MorrisSecondPage(QWidget* parent = nullptr);
+  explicit MorrisSecondPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   int getTrajectoriesNumber() const;

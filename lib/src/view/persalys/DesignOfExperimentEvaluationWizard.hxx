@@ -45,7 +45,7 @@ public:
   DesignOfExperimentEvaluationWizard(const Analysis& analysis, bool isGeneralWizard = false, QWidget* parent = 0);
 
   Analysis getAnalysis() const;
-  virtual bool validateCurrentPage();
+  bool validateCurrentPage() override;
 
 protected slots:
   void buildInterface();

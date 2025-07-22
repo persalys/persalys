@@ -49,10 +49,6 @@ namespace PERSALYS
 PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
   : QTabWidget()
   , physicalModel_(item->getPhysicalModel())
-  , isFirstPaint_(true)
-  , inputTableView_(0)
-  , outputTableView_(0)
-  , indexParamLabel_(0)
 {
   connect(item, SIGNAL(numberInputsChanged()), this, SIGNAL(updateInputTableData()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SIGNAL(updateInputTableData()));

@@ -35,7 +35,7 @@ public:
 
   DesignOfExperiment getDesignOfExperiment() const;
 
-  void setData(const QVariant & value, int role);
+  void setData(const QVariant & value, int role) override;
 
 signals:
   void variablesChanged();

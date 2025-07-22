@@ -37,18 +37,18 @@ public:
   enum {Page_Intro, Page_Morris, Page_Morris2};
   enum Method {Morris};
 
-  ScreeningAnalysisWizard(const Analysis& analysis, QWidget* parent = 0);
+  explicit ScreeningAnalysisWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
-  virtual Analysis getAnalysis() const;
-  virtual int nextId() const;
+  Analysis getAnalysis() const override;
+  int nextId() const override;
 
 protected:
   void buildInterface();
 
 private:
-  ScreeningIntroPage * introPage_;
-  MorrisPage * morrisPage_;
-  MorrisSecondPage * morrisSecondPage_;
+  ScreeningIntroPage * introPage_ = nullptr;
+  MorrisPage * morrisPage_ = nullptr;
+  MorrisSecondPage * morrisSecondPage_ = nullptr;
 };
 }
 #endif

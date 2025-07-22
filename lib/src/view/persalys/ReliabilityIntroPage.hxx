@@ -45,7 +45,7 @@ public:
 
   ReliabilityIntroPage(QWidget* parent = 0);
 
-  virtual int nextId() const;
+  int nextId() const override;
 
   void initialize(const Analysis& analysis, QList<LimitState> limitStatesList);
   LimitState getLimitState() const;

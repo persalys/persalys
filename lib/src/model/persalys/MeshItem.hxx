@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API MeshItem : public PhysicalModelItem
 public:
   MeshItem(const PhysicalModel & physicalModel);
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 
 protected:
   void buildActions();

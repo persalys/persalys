@@ -38,16 +38,16 @@ class PERSALYS_MODEL_API StudyItem : public Item, public Observer
 public:
   StudyItem(const Study & study);
 
-  void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 
-  virtual void appendItem(const DesignOfExperiment & dataModel);
-  void appendItem(const DataFieldModel & dataModel);
-  void appendItem(const PhysicalModel & physicalModel);
-  virtual void appendItem(const LimitState & limitState);
-  virtual void appendItem(const Analysis & analysis);
+  void appendItem(const DesignOfExperiment & dataModel) override;
+  void appendItem(const DataFieldModel & dataModel) override;
+  void appendItem(const PhysicalModel & physicalModel) override;
+  void appendItem(const LimitState & limitState) override;
+  void appendItem(const Analysis & analysis) override;
 
-  virtual QVariant data(int role) const;
-  void setData(const QVariant & value, int role);
+  QVariant data(int role) const override;
+  void setData(const QVariant & value, int role) override;
   Study getStudy() const;
 
   void exportPythonScript(const QString& fileName);

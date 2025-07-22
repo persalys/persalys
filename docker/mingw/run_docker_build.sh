@@ -8,13 +8,13 @@ gid=$2
 cd /tmp
 
 MOD_PREFIX=$PWD/build/install
-CXXFLAGS="-g -Wall -Wextra -Wpedantic -Wshadow -Werror" ${ARCH}-w64-mingw32-cmake \
+CXXFLAGS="-g -Wall -Wextra -Wpedantic -Wshadow -Wsuggest-override -Werror" ${ARCH}-w64-mingw32-cmake \
   -DCMAKE_INSTALL_PREFIX=${MOD_PREFIX} \
   -DCMAKE_LINKER_TYPE=LLD \
   -DPython_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} \
   -DPython_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
   -DPython_EXECUTABLE=/usr/bin/${ARCH}-w64-mingw32-python${PYMAJMIN}-bin \
-  -DSWIG_COMPILE_FLAGS="-Wno-unused-parameter -Wno-shadow" \
+  -DSWIG_COMPILE_FLAGS="-Wno-unused-parameter -Wno-shadow -Wno-suggest-override" \
   -DPERSALYS_BUILD_NSIS=ON \
   -DUSE_STACKTRACE=ON \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -B build /io

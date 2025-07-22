@@ -40,8 +40,8 @@ public:
 
   void setDockWidget(QWidget*);
 
-  virtual void showEvent(QShowEvent*);
-  virtual void hideEvent(QHideEvent*);
+  void showEvent(QShowEvent*) override;
+  void hideEvent(QHideEvent*) override;
 
 protected:
   void showDockWidget();

@@ -35,10 +35,11 @@ class PERSALYS_MODEL_API DistributionsTableModel : public QAbstractTableModel
 public:
   DistributionsTableModel(const QStringList &distributions, const QStringList &availableDistributions, const bool isCopulaList, QWidget *parent = nullptr);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex & index, int role) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
   QStringList getDistributions() const;
 
 public slots:

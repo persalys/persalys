@@ -32,16 +32,16 @@ class PERSALYS_VIEW_API MorrisResultWindow : public DataAnalysisWindow
   Q_OBJECT
 
 public:
-  MorrisResultWindow(AnalysisItem *item, QWidget *parent = nullptr);
+  explicit MorrisResultWindow(AnalysisItem *item, QWidget *parent = nullptr);
 
 protected:
   virtual void initialize(AnalysisItem* item);
-  virtual void fillListWidget();
-  virtual void fillTabWidget();
+  void fillListWidget() override;
+  void fillTabWidget() override;
   void addEffectsTab();
 
 public slots:
-  virtual void updateVariablesListVisibility(int indexTab);
+  void updateVariablesListVisibility(int indexTab) override;
 
 private:
   MorrisResult& morrisResult_;

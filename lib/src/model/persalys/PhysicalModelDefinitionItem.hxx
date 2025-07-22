@@ -35,7 +35,7 @@ class PERSALYS_MODEL_API PhysicalModelDefinitionItem : public PhysicalModelItem
 public:
   PhysicalModelDefinitionItem(const PhysicalModel &physicalModel, const PhysicalModelDiagramItem *diagramItem = 0);
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 };
 }
 #endif

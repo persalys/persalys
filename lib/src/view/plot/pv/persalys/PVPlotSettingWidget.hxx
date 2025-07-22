@@ -35,8 +35,8 @@ class PERSALYS_PLOTPV_API PVPlotSettingWidget : public QWidget
 public:
   PVPlotSettingWidget(PVViewWidget* pvViewWidget, QWidget* parent = 0);
 
-  virtual QSize sizeHint() const;
-  virtual QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
 
 protected:
   void addSelectDataWidget(const QString &labelName, const QList<bool> &checked = QList<bool>());

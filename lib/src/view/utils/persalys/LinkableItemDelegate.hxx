@@ -39,10 +39,10 @@ public:
     , firstRowWithButton_(firstRowWithButton) { }
 
 protected:
-  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 private:
-  int firstRowWithButton_;
+  int firstRowWithButton_ = 0;
 };
 }
 #endif

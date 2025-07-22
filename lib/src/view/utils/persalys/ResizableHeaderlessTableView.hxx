@@ -47,7 +47,7 @@ public:
   int column_index() const;
 
 protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event) override;
 
   /*
    * Called whenever the cursor enters or leaves a column boundary.  if
@@ -73,12 +73,12 @@ public:
   void resizeWithOptimalWidth();
 
 protected:
-  virtual bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event) override;
   /*
    * Override entered_column_boundary to update the cursor sprite when
    * entering/leaving a column boundary.
    */
-  virtual void entered_column_boundary(bool entered);
+  void entered_column_boundary(bool entered) override;
 
 private:
   bool dragging_;

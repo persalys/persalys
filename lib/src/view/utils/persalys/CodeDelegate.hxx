@@ -97,15 +97,15 @@ class PERSALYS_UTILS_API CodeDelegate : public QItemDelegate
   Q_OBJECT
 
 public:
-  CodeDelegate(QObject *parent = nullptr);
+  explicit CodeDelegate(QObject *parent = nullptr);
 
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
-  void setEditorData(QWidget * editor, const QModelIndex & index) const;
-  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
-  void paint(QPainter *painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
+  void setEditorData(QWidget * editor, const QModelIndex & index) const override;
+  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override;
+  void paint(QPainter *painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
 
 protected:
-  bool eventFilter(QObject *obj, QEvent *ev);
+  bool eventFilter(QObject *obj, QEvent *ev) override;
 };
 
 class PERSALYS_UTILS_API CodeHighlighter : public QSyntaxHighlighter
@@ -113,7 +113,7 @@ class PERSALYS_UTILS_API CodeHighlighter : public QSyntaxHighlighter
   Q_OBJECT
 
 public:
-  explicit CodeHighlighter(QTextDocument * parent = 0);
+  explicit CodeHighlighter(QTextDocument * parent = nullptr);
   static QTextCharFormat format(const QString &colorName, const QString &style = QString());
 
 protected:

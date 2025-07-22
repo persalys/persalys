@@ -35,25 +35,25 @@ class PERSALYS_VIEW_API GridDesignPage : public QWizardPage
   Q_OBJECT
 
 public:
-  GridDesignPage(QWidget *parent = nullptr);
+  explicit GridDesignPage(QWidget *parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis();
-  bool validatePage();
+  bool validatePage() override;
 
 signals:
   void showTime();
 
 protected:
   void buildInterface();
-  virtual void resizeEvent(QResizeEvent * event);
+  void resizeEvent(QResizeEvent * event) override;
 
 private:
-  ResizableHeaderlessTableView * tableView_;
-  ExperimentTableModel * tableModel_;
-  QLabel * DOESizeLabel_;
-  QLabel * DOETimeLabel_;
-  TemporaryLabel * errorMessageLabel_;
+  ResizableHeaderlessTableView * tableView_ = nullptr;
+  ExperimentTableModel * tableModel_ = nullptr;
+  QLabel * DOESizeLabel_ = nullptr;
+  QLabel * DOETimeLabel_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

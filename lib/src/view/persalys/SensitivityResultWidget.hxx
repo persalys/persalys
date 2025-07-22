@@ -33,12 +33,12 @@ namespace PERSALYS
 class PERSALYS_VIEW_API IndicesProxyModel : public QSortFilterProxyModel
 {
 public:
-  IndicesProxyModel(QObject *parent = nullptr)
+  explicit IndicesProxyModel(QObject *parent = nullptr)
     : QSortFilterProxyModel(parent)
   {
   }
 
-  bool lessThan(const QModelIndex& left, const QModelIndex& right) const
+  bool lessThan(const QModelIndex& left, const QModelIndex& right) const override
   {
     if (!sourceModel()->data(left, Qt::UserRole).toBool())
       return false;
@@ -76,8 +76,8 @@ public slots:
   void updateIndicesPlot(int, Qt::SortOrder);
 
 private:
-  SensitivityIndicesPlot * plot_;
-  IndicesProxyModel * proxyModel_;
+  SensitivityIndicesPlot * plot_ = nullptr;
+  IndicesProxyModel * proxyModel_ = nullptr;
 };
 } // namespace PERSALYS
 

@@ -16,7 +16,7 @@ public:
 
   ~PVBagChartViewWidget();
 
-  virtual void setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames);
+  void setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames) override;
 
   int getUserQuantile() const;
   void setUserQuantile(const int quantile);

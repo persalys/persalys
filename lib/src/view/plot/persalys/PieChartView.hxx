@@ -67,34 +67,33 @@ class PERSALYS_PLOT_API PieChartView: public QAbstractItemView
   Q_OBJECT
 
 public:
-  PieChartView(const OT::PointWithDescription& data, QWidget* parent = 0);
+  explicit PieChartView(const OT::PointWithDescription& data, QWidget* parent = 0);
 
   void setData(const OT::PointWithDescription& data);
   void setPlotName(const QString& plotName);
 
-  virtual QModelIndex indexAt(const QPoint &point) const;
-  virtual QRect visualRect(const QModelIndex &index) const;
-  virtual void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
+  QModelIndex indexAt(const QPoint &point) const override;
+  QRect visualRect(const QModelIndex &index) const override;
+  void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
 
 protected:
-  virtual bool isIndexHidden(const QModelIndex &index) const;
-  virtual int horizontalOffset() const;
-  virtual int verticalOffset() const;
+  bool isIndexHidden(const QModelIndex &index) const override;
+  int horizontalOffset() const override;
+  int verticalOffset() const override;
 
-  virtual void mousePressEvent(QMouseEvent *event);
-  virtual void mouseMoveEvent(QMouseEvent *event);
-  virtual void mouseReleaseEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
 
-  virtual QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction,
-                                 Qt::KeyboardModifiers modifiers);
+  QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
 
   virtual void draw(QPainter& devicePainter);
-  virtual void paintEvent(QPaintEvent *event);
-  virtual void resizeEvent(QResizeEvent *event);
+  void paintEvent(QPaintEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
 
-  virtual void setSelection(const QRect&, QItemSelectionModel::SelectionFlags command);
+  void setSelection(const QRect&, QItemSelectionModel::SelectionFlags command) override;
 
-  virtual QRegion visualRegionForSelection(const QItemSelection &selection) const;
+  QRegion visualRegionForSelection(const QItemSelection &selection) const override;
 
   QVector<QColor> generateSegmentsColors(const int nbColors) const;
 
@@ -106,7 +105,7 @@ private:
   QRect itemRect(const QModelIndex &item) const;
   QRegion itemRegion(const QModelIndex &index) const;
   int rows(const QModelIndex &index = QModelIndex()) const;
-  virtual void updateGeometries();
+  void updateGeometries() override;
 
 private:
   int margin_;

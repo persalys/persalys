@@ -33,7 +33,7 @@ namespace PERSALYS
   public:
     DataFieldModelDefinitionItem(const DataFieldModel & dataModel, const DataFieldModelDiagramItem * diagramItem = 0);
 
-    virtual void update(Observable * source, const OT::String & message);
+    void update(Observable * source, const OT::String & message) override;
   };
 }
 #endif

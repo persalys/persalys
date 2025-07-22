@@ -78,8 +78,8 @@ namespace PERSALYS
     OT::Indices getTailTypes() const {
       return tableModel_->getTailTypes();
     }
-    virtual int nextId() const;
-    virtual bool validatePage();
+    int nextId() const override;
+    bool validatePage() override;
 
   signals:
     void probabilitiesSelected();
@@ -104,8 +104,8 @@ namespace PERSALYS
     void initialize(const Analysis& analysis);
     Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
 
-    virtual int nextId() const;
-    virtual bool validatePage();
+    int nextId() const override;
+    bool validatePage() override;
 
     OT::Sample getThreshold() const {
       return tableModel_->getThreshold();
@@ -134,8 +134,8 @@ namespace PERSALYS
     QuantileAnalysisWizard(const Analysis& analysis, QWidget* parent = 0);
     void initialize(const Analysis& analysis);
 
-    virtual Analysis getAnalysis() const;
-    virtual int nextId() const;
+    Analysis getAnalysis() const override;
+    int nextId() const override;
 
   protected:
     void buildInterface();

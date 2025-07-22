@@ -34,12 +34,12 @@ class PERSALYS_VIEW_API PhysicalModelWindowWidget : public QTabWidget
   Q_OBJECT
 
 public :
-  PhysicalModelWindowWidget(PhysicalModelItem * item);
+  explicit PhysicalModelWindowWidget(PhysicalModelItem * item);
 
 protected:
   void buildInterface();
-  virtual void resizeEvent(QResizeEvent * event);
-  virtual void paintEvent(QPaintEvent * event);
+  void resizeEvent(QResizeEvent * event) override;
+  void paintEvent(QPaintEvent * event) override;
 
 public slots:
   void removeInputLine();
@@ -62,11 +62,11 @@ signals:
 
 private:
   PhysicalModel physicalModel_;
-  bool isFirstPaint_;
-  CopyableTableView * inputTableView_;
-  CopyableTableView * outputTableView_;
-  QLabel * indexParamLabel_;
-  OT::Scalar evalTime_ = 0;
+  bool isFirstPaint_ = true;
+  CopyableTableView * inputTableView_ = nullptr;
+  CopyableTableView * outputTableView_ = nullptr;
+  QLabel * indexParamLabel_ = nullptr;
+  OT::Scalar evalTime_ = 0.0;
 };
 }
 #endif

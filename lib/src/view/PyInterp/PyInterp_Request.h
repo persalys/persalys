@@ -104,7 +104,7 @@ protected:
   PyInterp_Interp*  getInterp() const { return myInterp; }
 
   // Performs safe execution of the request
-  virtual void      safeExecute();
+  void              safeExecute() override;
 
 private:
   PyInterp_Interp*  myInterp;

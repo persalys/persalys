@@ -12,7 +12,7 @@ class PERSALYS_PLOTPV_API PVSpreadSheetViewWidget : public PVViewWidget
 public:
   PVSpreadSheetViewWidget(QWidget *parent, PVServerManagerInterface *smb);
   ~PVSpreadSheetViewWidget();
-  virtual const char *getRepresentationName() const
+  const char *getRepresentationName() const override
   {
     return PV_REPRESENTATION_TYPE;
   }

@@ -79,7 +79,7 @@ public:
 
   OT::PointWithDescription getFixedValues() const;
   OT::PointWithDescription getCalibratedInputs() const;
-  virtual bool validatePage();
+  bool validatePage() override;
 
 public slots:
   void updateData(const PhysicalModel& model);
@@ -88,11 +88,11 @@ signals:
 
 private:
   PhysicalModel model_;
-  QLabel * calibratedLabel_;
-  QLabel * fixedLabel_;
-  ExportableTableView * tableView_;
-  CalibrationTableModel * tableModel_;
-  TemporaryLabel * errorMessageLabel_;
+  QLabel * calibratedLabel_ = nullptr;
+  QLabel * fixedLabel_ = nullptr;
+  ExportableTableView * tableView_ = nullptr;
+  CalibrationTableModel * tableModel_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 
 
@@ -124,7 +124,7 @@ public:
   CalibrationParametersPage(QWidget* parent = 0);
   void initialize(const Analysis& analysis);
   void updateAnalysis(CalibrationAnalysis * analysis_ptr);
-  virtual void initializePage();
+  void initializePage() override;
 
 protected:
   void buildInterface();
@@ -152,8 +152,8 @@ public:
 
   CalibrationAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
-  virtual Analysis getAnalysis() const;
-  virtual int nextId() const;
+  Analysis getAnalysis() const override;
+  int nextId() const override;
 
 protected:
   void buildInterface();

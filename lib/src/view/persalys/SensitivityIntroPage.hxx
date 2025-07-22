@@ -44,8 +44,8 @@ public:
   OT::Description getInterestVariables() const;
   int getMethodId() const;
 
-  virtual int nextId() const;
-  virtual bool validatePage();
+  int nextId() const override;
+  bool validatePage() override;
 
 private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_;

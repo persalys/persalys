@@ -41,7 +41,7 @@ public:
   void initialize(const Analysis& analysis);
   void updateMetamodelValidation(Analysis& analysis);
 
-  virtual bool validatePage();
+  bool validatePage() override;
 
 protected:
   void buildInterface();

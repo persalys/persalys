@@ -40,11 +40,9 @@ public:
   }
 
 
-  void paint(QPainter* painter,
-             const QStyleOptionViewItem& option,
-             const QModelIndex& index) const;
+  void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
-  virtual QSize sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
+  QSize sizeHint(const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const override
   {
     const QSize buttonSize = QRadioButton(index.data(Qt::DisplayRole).toString()).sizeHint();
     const int buttonMargin = 3;

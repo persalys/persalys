@@ -12,7 +12,7 @@ class PERSALYS_PLOTPV_API PVMatrixPlotViewWidget : public PVViewWidget
 public:
   PVMatrixPlotViewWidget(QWidget *parent, PVServerManagerInterface *smb);
   ~PVMatrixPlotViewWidget();
-  virtual const char *getRepresentationName() const
+  const char *getRepresentationName() const override
   {
     return PV_REPRESENTATION_TYPE;
   }

@@ -35,12 +35,12 @@ namespace PERSALYS
   public:
     DataFieldModelDiagramItem(const DataFieldModel& dataModel);
 
-    void setData(const QVariant & value, int role);
+    void setData(const QVariant & value, int role) override;
 
-    virtual void update(Observable* source, const OT::String& message);
+    void update(Observable* source, const OT::String& message) override;
 
     void fill();
-    virtual void appendItem(const Analysis& analysis);
+    void appendItem(const Analysis& analysis) override;
     void updateDiagramBoxesValidity();
 
   protected:

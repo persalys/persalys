@@ -67,7 +67,7 @@ public:
 
   bool           isLogging() const;
 
-  virtual QSize  sizeHint() const;
+  QSize          sizeHint() const override;
 
   bool           startLog( const QString& );
   bool           dump( const QString& );
@@ -84,13 +84,13 @@ public slots:
   void           stopLog();
 
 protected:
-  virtual void   dropEvent( QDropEvent* );
-  virtual void   mousePressEvent( QMouseEvent* );
-  virtual void   mouseReleaseEvent( QMouseEvent* );
-  virtual void   keyPressEvent ( QKeyEvent* );
-  virtual void   customEvent( QEvent* );
+  void           dropEvent( QDropEvent* ) override;
+  void           mousePressEvent( QMouseEvent* ) override;
+  void           mouseReleaseEvent( QMouseEvent* ) override;
+  void           keyPressEvent ( QKeyEvent* ) override;
+  void           customEvent( QEvent* ) override;
 
-  virtual void   insertFromMimeData( const QMimeData* );
+  void           insertFromMimeData( const QMimeData* ) override;
 
   void           putLog( const QString& );
 

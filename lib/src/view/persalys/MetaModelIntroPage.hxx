@@ -41,16 +41,16 @@ class PERSALYS_VIEW_API MetaModelIntroPage : public QWizardPage
 public:
   enum Method {Chaos, Kriging, PolynomialRegression};
 
-  MetaModelIntroPage(QWidget* parent = nullptr);
+  explicit MetaModelIntroPage(QWidget* parent = nullptr);
 
-  virtual int nextId() const;
+  int nextId() const override;
 
   void initialize(const Analysis& analysis, QList<DesignOfExperiment> doesList);
   DesignOfExperiment getDesignOfExperiment() const;
   OT::Description getInterestVariables() const;
   int getMethodId() const;
 
-  virtual bool validatePage();
+  bool validatePage() override;
 
 public slots:
   void updateDesignOfExperiment(int);

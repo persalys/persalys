@@ -38,18 +38,17 @@ class PERSALYS_VIEW_API ScreeningIntroPage : public QWizardPage
 public:
   enum Method {Morris};
 
-  ScreeningIntroPage(QWidget* parent = 0);
+  explicit ScreeningIntroPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   OT::Description getInterestVariables() const;
 
-  virtual int nextId() const;
-  virtual bool validatePage();
+  int nextId() const override;
+  bool validatePage() override;
 
 private:
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-//   QButtonGroup * methodGroup_;
-  TemporaryLabel * errorMessageLabel_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

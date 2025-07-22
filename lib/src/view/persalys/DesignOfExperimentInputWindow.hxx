@@ -31,10 +31,10 @@ class PERSALYS_VIEW_API DesignOfExperimentInputWindow : public DataAnalysisWindo
   Q_OBJECT
 
 public:
-  DesignOfExperimentInputWindow(AnalysisItem * item, QWidget *parent = nullptr);
+  explicit DesignOfExperimentInputWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 public slots:
-  virtual void updateVariablesListVisibility(int indexTab);
+  void updateVariablesListVisibility(int indexTab) override;
 };
 }
 #endif

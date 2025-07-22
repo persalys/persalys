@@ -36,11 +36,11 @@ class PERSALYS_VIEW_API ImportedDesignPage : public QWizardPage
   friend class TestDesignOfExperimentWizard;
 
 public:
-  ImportedDesignPage(QWidget *parent = nullptr);
+  explicit ImportedDesignPage(QWidget *parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis();
-  bool validatePage();
+  bool validatePage() override;
 
 signals:
   void showTime();
@@ -53,9 +53,9 @@ public slots:
   void checkColumns();
 
 private:
-  ImportSampleWidget * sampleWidget_;
+  ImportSampleWidget * sampleWidget_ = nullptr;
   ImportedDesignOfExperiment designOfExperiment_;
-  QLabel * estimatedTimeValueLabel_;
+  QLabel * estimatedTimeValueLabel_ = nullptr;
 
 };
 }

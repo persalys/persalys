@@ -37,12 +37,12 @@ public:
   QuantileTableModel(QObject *parent = nullptr);
   explicit QuantileTableModel(const QuantileAnalysis & analysis, QObject *parent = nullptr);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-  virtual bool setData(const QModelIndex & index, const QVariant & value, int role);
-  virtual Qt::ItemFlags flags(const QModelIndex & index) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  virtual int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
+  virtual bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+  virtual Qt::ItemFlags flags(const QModelIndex & index) const override;
 
   OT::Collection<OT::Point> getTargetProbabilities() const;
   OT::Indices getTailTypes() const;

@@ -38,13 +38,13 @@ public:
 
   Arrow(QPointF startP, QPointF endP, QGraphicsItem* parent = 0);
 
-  virtual int type() const;
-  virtual QRectF boundingRect() const;
-  virtual QPainterPath shape() const;
+  int type() const override;
+  QRectF boundingRect() const override;
+  QPainterPath shape() const override;
   void setColor(const QColor &color);
 
 protected:
-  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
 
 public slots:
   void setValidity(bool);

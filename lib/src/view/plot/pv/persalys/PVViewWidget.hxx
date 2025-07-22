@@ -77,7 +77,7 @@ protected:
   template <typename T>
   void setArrayData(const std::vector< std::vector<T> >& valuesByColumn, const std::vector<std::string>& columnNames);
   QMainWindow *findMWInHierachy();
-  bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event) override;
   pqView *getView() const;
 
   template <typename T>

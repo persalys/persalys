@@ -44,7 +44,7 @@ public:
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;
 
-  virtual bool validatePage();
+  bool validatePage() override;
 
 protected:
   void buildInterface();

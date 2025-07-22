@@ -32,7 +32,7 @@ class PERSALYS_PLOT_API CustomScaleDraw : public QwtScaleDraw
 public:
   CustomScaleDraw();
 
-  virtual QwtText label(double v) const;
+  QwtText label(double v) const override;
 };
 }
 #endif

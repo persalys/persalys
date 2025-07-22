@@ -39,8 +39,8 @@ class PERSALYS_VIEW_API AnsysWizardVariablePage : public QWizardPage
   Q_OBJECT
 public:
   friend class AnsysWizard;
-  AnsysWizardVariablePage(QWidget *parent = nullptr);
-  virtual bool validatePage();
+  explicit AnsysWizardVariablePage(QWidget *parent = nullptr);
+  bool validatePage() override;
 
 public slots:
   void findExecutableFile();
@@ -51,11 +51,11 @@ signals:
   void executableFileFound();
 
 private:
-  TemporaryLabel * errorMessageLabel_;
-  QLineEdit * executableLineEdit_;
-  QLineEdit * modelFileLineEdit_;
-  AnsysVariableTableModel * varModel_;
-  QTableView * varTable_;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
+  QLineEdit * executableLineEdit_ = nullptr;
+  QLineEdit * modelFileLineEdit_ = nullptr;
+  AnsysVariableTableModel * varModel_ = nullptr;
+  QTableView * varTable_ = nullptr;
 };
 
 class PERSALYS_VIEW_API AnsysWizardSystemPage : public QWizardPage
@@ -63,20 +63,20 @@ class PERSALYS_VIEW_API AnsysWizardSystemPage : public QWizardPage
   Q_OBJECT
 public:
   friend class AnsysWizard;
-  AnsysWizardSystemPage(QWidget *parent = nullptr);
-  virtual bool validatePage();
+  explicit AnsysWizardSystemPage(QWidget *parent = nullptr);
+  bool validatePage() override;
 
 private:
-  TemporaryLabel * errorMessageLabel_;
-  AnsysSystemTableModel * sysModel_;
-  QTableView * sysTable_;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
+  AnsysSystemTableModel * sysModel_ = nullptr;
+  QTableView * sysTable_ = nullptr;
 };
 
 class PERSALYS_VIEW_API AnsysWizard : public Wizard
 {
   Q_OBJECT
 public:
-  AnsysWizard(QWidget *parent = nullptr);
+  explicit AnsysWizard(QWidget *parent = nullptr);
 
   void validateVariables();
   void validateSystems();
@@ -89,9 +89,9 @@ public slots:
   void loadModel();
 
 private:
-  AnsysParser * parser_;
-  AnsysWizardVariablePage * varPage_;
-  AnsysWizardSystemPage * sysPage_;
+  AnsysParser * parser_ = nullptr;
+  AnsysWizardVariablePage * varPage_ = nullptr;
+  AnsysWizardSystemPage * sysPage_ = nullptr;
 };
 }
 #endif // PMS_ANSYSWIZARD_H

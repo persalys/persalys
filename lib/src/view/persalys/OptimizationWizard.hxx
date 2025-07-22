@@ -43,10 +43,10 @@ class PERSALYS_VIEW_API OptimizationBoundsPage : public QWizardPage
   friend class TestOptimizationWizard;
 
 public:
-  OptimizationBoundsPage(const QString& subTitle, QWidget* parent = 0);
+  explicit OptimizationBoundsPage(const QString& subTitle, QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
-  bool validatePage();
+  bool validatePage() override;
   ResizableHeaderlessTableView * getTableView() const
   {
     return tableView_;
@@ -59,9 +59,9 @@ protected slots:
   void updateTable();
 
 private:
-  ResizableHeaderlessTableView * tableView_;
-  OptimizationTableModel * tableModel_;
-  TemporaryLabel * errorMessageLabel_;
+  ResizableHeaderlessTableView * tableView_ = nullptr;
+  OptimizationTableModel * tableModel_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 
 };
 
@@ -96,11 +96,11 @@ public:
   }
 
 private:
-  UIntSpinBox * evaluationsSpinBox_;
-  LogDoubleSpinBox * absoluteErrSpinBox_;
-  LogDoubleSpinBox * relativeErrSpinBox_;
-  LogDoubleSpinBox * residualErrSpinBox_;
-  LogDoubleSpinBox * constraintErrSpinBox_;
+  UIntSpinBox * evaluationsSpinBox_ = nullptr;
+  LogDoubleSpinBox * absoluteErrSpinBox_ = nullptr;
+  LogDoubleSpinBox * relativeErrSpinBox_ = nullptr;
+  LogDoubleSpinBox * residualErrSpinBox_ = nullptr;
+  LogDoubleSpinBox * constraintErrSpinBox_ = nullptr;
 };
 
 
@@ -111,22 +111,22 @@ class PERSALYS_VIEW_API OptimizationWizard : public AnalysisWizard
   friend class TestOptimizationWizard;
 
 public:
-  OptimizationWizard(const Analysis& analysis, QWidget* parent = 0);
+  explicit OptimizationWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
-  virtual int nextId() const;
-  virtual Analysis getAnalysis() const;
+  int nextId() const override;
+  Analysis getAnalysis() const override;
 
 protected:
   void buildInterface();
   void initialize(const Analysis& analysis);
-  virtual void resizeEvent(QResizeEvent * event);
+  void resizeEvent(QResizeEvent * event) override;
 
 private:
-  OptimizationAlgoPage * algoPage_;
-  OptimizationBoundsPage * boundsPage_;
-  ConstraintsPage * cstrPage_;
-  QComboBox * pbTypeComboBox_;
-  OptimizationStoppingCriteria * stoppingCriteriaLayout_;
+  OptimizationAlgoPage * algoPage_ = nullptr;
+  OptimizationBoundsPage * boundsPage_ = nullptr;
+  ConstraintsPage * cstrPage_ = nullptr;
+  QComboBox * pbTypeComboBox_ = nullptr;
+  OptimizationStoppingCriteria * stoppingCriteriaLayout_ = nullptr;
 };
 }
 #endif

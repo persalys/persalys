@@ -68,7 +68,7 @@ public :
   SimpleException(const QString& text);
   virtual ~SimpleException() throw();
   QString text() const;
-  virtual const char* what() const throw();
+  const char* what() const noexcept override;
 };
 
 class PERSALYS_MODEL_API QtOT

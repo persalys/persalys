@@ -332,7 +332,7 @@ public :
   CouplingSummaryWidget(PhysicalModelItem * item);
 
 protected slots:
-  void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event) override;
 signals:
   void evaluationRequested();
 private:
@@ -348,11 +348,11 @@ class PERSALYS_VIEW_API PythonCodeModel : public QAbstractTableModel
 public :
   PythonCodeModel(PhysicalModelItem * item, int indStep, QWidget *parent = nullptr);
 
-  int columnCount(const QModelIndex & parent = QModelIndex()) const;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const;
-  QVariant data(const QModelIndex & index, int role) const;
-  bool setData(const QModelIndex & index, const QVariant & value, int role);
-  Qt::ItemFlags flags(const QModelIndex & index) const;
+  int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex & index, int role) const override;
+  bool setData(const QModelIndex & index, const QVariant & value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex & index) const override;
 
 public slots:
   void updateData();

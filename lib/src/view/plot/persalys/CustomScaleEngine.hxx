@@ -32,7 +32,7 @@ class PERSALYS_PLOT_API CustomScaleEngine : public QwtLinearScaleEngine
 public:
   CustomScaleEngine();
 
-  virtual void autoScale(int maxNumSteps, double & x1, double & x2, double & stepSize) const;
+  void autoScale(int maxNumSteps, double & x1, double & x2, double & stepSize) const override;
 
 protected:
   QwtInterval aligne(const QwtInterval & interval, const double & stepSize, const int & maxNumSteps) const;

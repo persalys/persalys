@@ -39,8 +39,8 @@ public:
 
   ReliabilityAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
 
-  virtual Analysis getAnalysis() const;
-  virtual int nextId() const;
+  Analysis getAnalysis() const override;
+  int nextId() const override;
 
 protected:
   void buildInterface();

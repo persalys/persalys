@@ -53,7 +53,7 @@ public:
   void updatePlot();
 
 protected:
-  virtual void resizeEvent(QResizeEvent * event);
+  void resizeEvent(QResizeEvent * event) override;
   MeshModel getMeshModel() const;
 
 public slots:

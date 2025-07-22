@@ -40,13 +40,13 @@ class AlgoFilterProxyModel : public QSortFilterProxyModel
   Q_OBJECT
 
 public:
-  AlgoFilterProxyModel(QObject *parent = nullptr);
+  explicit AlgoFilterProxyModel(QObject *parent = nullptr);
 
   void setDerivativeFilter(const QList<int> & derivativeFilter);
   void setLocalityFilter(const QList<int> & localityFilter);
 
 protected:
-  virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+  bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
   QList<int> derivativeFilter_;
@@ -61,12 +61,12 @@ class PERSALYS_VIEW_API OptimizationAlgoPage : public QWizardPage
   friend class TestOptimizationWizard;
 
 public:
-  OptimizationAlgoPage(QWidget* parent = 0);
-  OT::Description getInterestVariables() const;
+  explicit OptimizationAlgoPage(QWidget* parent = nullptr);
 
+  OT::Description getInterestVariables() const;
   OT::String getSolverName() const;
 
-  virtual bool validatePage();
+  bool validatePage() override;
   void buildInterface();
 
 signals:
@@ -81,15 +81,15 @@ protected slots:
 
 protected:
   OT::Description solverNames_;
-  QTableView * algoTableView_;
-  CustomStandardItemModel * algoTableModel_;
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  TemporaryLabel * errorMessageLabel_;
+  QTableView * algoTableView_ = nullptr;
+  CustomStandardItemModel * algoTableModel_ = nullptr;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 
 private:
-  AlgoFilterProxyModel * proxyModel_;
-  QComboBox * derivativeCombobox_;
-  QComboBox * localityCombobox_;
+  AlgoFilterProxyModel * proxyModel_ = nullptr;
+  QComboBox * derivativeCombobox_ = nullptr;
+  QComboBox * localityCombobox_ = nullptr;
 };
 
 

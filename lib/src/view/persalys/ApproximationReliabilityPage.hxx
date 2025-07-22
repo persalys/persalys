@@ -46,7 +46,7 @@ public:
   OT::OptimizationAlgorithm getOptimizationAlgorithm() const;
   void updateAnalysis(const Analysis& analysis);
 
-  virtual bool validatePage();
+  bool validatePage() override;
 
 protected:
   void buildInterface();

@@ -66,7 +66,7 @@ class PERSALYS_PLOT_API StaticPlotCurveItem : public QwtPlotCurve
 {
 public:
   StaticPlotCurveItem() {};
-  virtual int rtti() const
+  int rtti() const override
   {
     return 1001;
   };
@@ -740,7 +740,7 @@ public:
   };
 
 
-  QRectF pixelHint(const QRectF & /*area*/) const
+  QRectF pixelHint(const QRectF & /*area*/) const override
   {
     const QwtInterval intervalX(interval(Qt::XAxis));
     const QwtInterval intervalY(interval(Qt::YAxis));

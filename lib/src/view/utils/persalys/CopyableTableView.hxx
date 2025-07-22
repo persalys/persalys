@@ -36,8 +36,8 @@ public:
   /** Default constructor */
   CopyableTableView(QWidget *parent = nullptr);
 
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
   void resizeToContents();
   void resizeWithOptimalHeight();
 

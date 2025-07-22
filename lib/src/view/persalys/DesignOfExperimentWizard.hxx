@@ -41,19 +41,19 @@ public:
 
   enum {Page_Intro, Page_Deterministic, Page_Probabilistic, Page_Import};
 
-  DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent = nullptr);
+  explicit DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent = nullptr);
 
-  int nextId() const;
-  virtual Analysis getAnalysis() const;
+  int nextId() const override;
+  Analysis getAnalysis() const override;
 
 protected:
   void buildInterface();
 
 private:
-  DesignOfExperimentIntroPage * introPage_;
-  GridDesignPage * gridPage_;
-  ProbabilisticDesignPage * probaPage_;
-  ImportedDesignPage * importPage_;
+  DesignOfExperimentIntroPage * introPage_ = nullptr;
+  GridDesignPage * gridPage_ = nullptr;
+  ProbabilisticDesignPage * probaPage_ = nullptr;
+  ImportedDesignPage * importPage_ = nullptr;
 };
 }
 #endif

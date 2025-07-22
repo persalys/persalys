@@ -32,20 +32,20 @@ class PERSALYS_MODEL_API DesignOfExperimentDefinitionItem : public AnalysisItem
 public:
   DesignOfExperimentDefinitionItem(const Analysis& analysis);
 
-  virtual QVariant data(int role) const;
+  QVariant data(int role) const override;
   OT::Sample getOriginalInputSample() const;
 
-  virtual void appendItem(const Analysis& analysis);
+  void appendItem(const Analysis& analysis) override;
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
   void fill();
 
 protected:
-  virtual void buildActions();
+  void buildActions() override;
 
 public slots:
-  virtual void updateAnalysis(const Analysis & analysis);
-  virtual void removeAnalysis();
+  void updateAnalysis(const Analysis & analysis) override;
+  void removeAnalysis() override;
   void appendEvaluationItem();
   void createEvaluation();
 

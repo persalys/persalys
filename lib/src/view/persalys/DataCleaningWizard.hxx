@@ -34,7 +34,7 @@ class PERSALYS_VIEW_API DataCleaningWizard : public Wizard
   Q_OBJECT
 public:
   DataCleaningWizard(DataCleaning* cleaner, QWidget *parent = nullptr);
-  void keyPressEvent(QKeyEvent * event);
+  void keyPressEvent(QKeyEvent * event) override;
   void launch();
 
 protected:

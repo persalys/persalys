@@ -41,8 +41,8 @@ public:
 
   int getCurrentPlotIndex() const;
 
-  virtual QSize sizeHint() const;
-  virtual QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
 
 protected:
   void addXYAxisTabs(const bool xAxisWithLabels = false);
@@ -85,7 +85,7 @@ public:
   ScatterGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const QStringList &outputNames, QWidget *parent = nullptr);
 public slots:
   void updateYComboBox();
-  virtual void currentPlotIndexChanged(int i = 0);
+  void currentPlotIndexChanged(int i = 0) override;
 private:
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;
@@ -103,7 +103,7 @@ public:
   PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const PDFType type, QWidget *parent = nullptr);
 public slots:
   void updateYComboBox();
-  virtual void currentPlotIndexChanged(int i = 0);
+  void currentPlotIndexChanged(int i = 0) override;
 private:
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;
@@ -136,7 +136,7 @@ public:
   FrontsGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &outputNames, QWidget *parent = nullptr);
 public slots:
   void updateYComboBox();
-  virtual void currentPlotIndexChanged(int i = 0);
+  void currentPlotIndexChanged(int i = 0) override;
 private:
   QComboBox * xAxisComboBox_;
   QComboBox * yAxisComboBox_;

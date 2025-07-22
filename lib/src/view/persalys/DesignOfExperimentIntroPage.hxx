@@ -36,15 +36,15 @@ class PERSALYS_VIEW_API DesignOfExperimentIntroPage : public QWizardPage
 public:
   enum Method {Deterministic, Probabilistic, Import};
 
-  DesignOfExperimentIntroPage(QWidget* parent = 0);
+  explicit DesignOfExperimentIntroPage(QWidget* parent = nullptr);
 
-  virtual int nextId() const;
+  int nextId() const override;
   int getMethodId() const;
 
   void initialize(const Analysis& analysis);
 
 private:
-  QButtonGroup * methodGroup_;
+  QButtonGroup * methodGroup_ = nullptr;
 };
 }
 #endif

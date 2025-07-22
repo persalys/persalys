@@ -34,7 +34,7 @@ public:
   EditableExportableTableView(QWidget* parent = 0);
 
 public slots:
-  void contextMenu(const QPoint & pos);
+  void contextMenu(const QPoint & pos) override;
   void addRow();
   void removeRows();
 

@@ -43,9 +43,7 @@ public:
   }
 
 
-  void paint(QPainter* painter,
-             const QStyleOptionViewItem& option,
-             const QModelIndex& index) const
+  void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
   {
     painter->save();
 
@@ -72,7 +70,7 @@ public:
   }
 
 
-  QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const
+  QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const override
   {
     QSize result = QStyledItemDelegate::sizeHint(option, index);
     if (index.data(Qt::UserRole).toString().contains("Title") ||

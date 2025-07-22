@@ -40,7 +40,7 @@ public:
 
   OT::Distribution getCopula() const;
 
-  virtual bool validateCurrentPage();
+  bool validateCurrentPage() override;
 
 protected:
   void buildInterface();

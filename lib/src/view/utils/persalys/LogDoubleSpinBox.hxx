@@ -34,7 +34,7 @@ class PERSALYS_UTILS_API LogDoubleSpinBox : public DoubleSpinBox
 public:
   LogDoubleSpinBox(QWidget *parent = nullptr);
 
-  virtual void stepBy(int steps);
+  void stepBy(int steps) override;
 
   void setApplyToAllInContextMenu(const bool apply);
 
@@ -42,7 +42,7 @@ signals:
   void applyToAllRequested(double);
 
 protected:
-  virtual void contextMenuEvent(QContextMenuEvent * event);
+  void contextMenuEvent(QContextMenuEvent * event) override;
 
 private:
   bool applyToAllInContextMenu_;

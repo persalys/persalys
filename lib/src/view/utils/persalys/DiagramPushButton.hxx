@@ -50,7 +50,7 @@ protected:
     void leaveEvent(QEvent*) override;
 
 private:
-    const DiagramPushButton * target_;
+    const DiagramPushButton * target_ = nullptr;
     QString errorMessage_;
 };
 
@@ -59,10 +59,10 @@ class PERSALYS_UTILS_API DiagramPushButton : public QPushButton
   Q_OBJECT
 
 public:
-  DiagramPushButton(const QString& text = "", QWidget* parent = 0);
+  explicit DiagramPushButton(const QString& text = "", QWidget* parent = nullptr);
 
-  virtual void paintEvent(QPaintEvent *);
-  virtual void mousePressEvent(QMouseEvent *event);
+  void paintEvent(QPaintEvent *) override;
+  void mousePressEvent(QMouseEvent *event) override;
 
   HoverOverlay * createOverlay();
   HoverOverlay * getOverlay() const;

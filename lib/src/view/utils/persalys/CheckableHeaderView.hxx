@@ -36,13 +36,13 @@ class PERSALYS_UTILS_API CheckableHeaderView : public QHeaderView
 public:
   CheckableHeaderView(Qt::Orientation orientation = Qt::Horizontal, QWidget* parent = 0);
 
-  virtual void setModel(QAbstractItemModel* model);
+  void setModel(QAbstractItemModel* model) override;
   bool isChecked() const;
 
 protected:
   int getMinimumSectionSize() const;
-  virtual void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const;
-  virtual void mousePressEvent(QMouseEvent *event);
+  void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const override;
+  void mousePressEvent(QMouseEvent *event) override;
 
 public slots:
   void updateCheckState(const Qt::Orientation = Qt::Horizontal);

@@ -45,7 +45,7 @@ public:
   {
   }
 
-  virtual QwtText label(double value) const
+  QwtText label(double value) const override
   {
     const int index = qRound(value);
     if (index >= 0 && index < labels_.size())
@@ -107,7 +107,7 @@ public:
 
 public slots:
   void contextMenu(const QPoint & pos);
-  virtual void replot();
+  void replot() override;
   void exportPlot();
   void setXLabelOrientation(int);
   void resetAxisRanges();

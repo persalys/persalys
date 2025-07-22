@@ -47,7 +47,7 @@ public:
   void                        Exec( PyInterp_Request* );
 
 private:
-  virtual void                run();
+  void                        run() override;
   void                        processRequest( PyInterp_Request* );
 
 private slots:

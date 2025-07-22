@@ -88,7 +88,7 @@ protected:
   void                createActions();
   void                updateActions();
 
-  virtual void        contextMenuEvent( QContextMenuEvent* );
+  void                contextMenuEvent( QContextMenuEvent* ) override;
 
 private:
   void                init( PyConsole_Editor* );

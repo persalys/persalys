@@ -47,7 +47,7 @@ public:
   EditValuesWizard(const QString &variableName, const OT::Point &values, QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
 
   OT::Point getValues(const OT::UnsignedInteger index = 0) const;
-  virtual bool validateCurrentPage();
+  bool validateCurrentPage() override;
 
 private slots:
   void removeSelectedValues();
@@ -84,7 +84,7 @@ public:
   OT::Distribution getDistribution() const;
 
 private slots:
-  virtual void addValue(OT::Scalar);
+  void addValue(OT::Scalar) override;
 };
 
 
@@ -99,7 +99,7 @@ public:
     Q_ASSERT(data.getDimension() == 2);
   }
 
-  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole)
+  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override
   {
     if (!index.isValid())
       return false;
@@ -119,7 +119,7 @@ class PERSALYS_UTILS_API ImportedDistributionPage : public QWizardPage
 
 public:
   ImportedDistributionPage(QWidget *parent = nullptr);
-  bool validatePage();
+  bool validatePage() override;
   OT::Sample getData() const
   {
     return sampleWidget_->getData();

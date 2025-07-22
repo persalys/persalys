@@ -37,8 +37,8 @@ class PYCONSOLE_EXPORT PyConsole_Interp : public PyInterp_Interp
 public:
   PyConsole_Interp();
 
-  virtual int afterRun();
-  virtual int beforeRun();
+  int afterRun() override;
+  int beforeRun() override;
 
 protected:
   

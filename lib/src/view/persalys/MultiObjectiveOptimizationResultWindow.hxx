@@ -41,7 +41,7 @@ public:
 protected:
   void initialize(AnalysisItem * item);
 #ifdef PERSALYS_HAVE_PARAVIEW
-  void addParaviewWidgetsTabs();
+  void addParaviewWidgetsTabs() override;
 #endif
   //void buildInterface();
 

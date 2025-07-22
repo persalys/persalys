@@ -35,11 +35,11 @@ class PERSALYS_VIEW_API ScreeningResultWizard : public Wizard
   Q_OBJECT
 
 public:
-  ScreeningResultWizard(const Study& study, const PhysicalModel& model, QWidget* parent = 0);
+  explicit ScreeningResultWizard(const Study& study, const PhysicalModel& model, QWidget* parent = nullptr);
 
   OT::Indices getInputsSelection() const;
 
-  virtual bool validateCurrentPage();
+  bool validateCurrentPage() override;
 
 protected:
   void buildInterface();
@@ -52,10 +52,10 @@ public slots:
 private:
   Study study_;
   PhysicalModel model_;
-  QComboBox * screeningResultsComboBox_;
-  QComboBox * variablesComboBox_;
-  MorrisResultTableModel * tableModel_;
-  QLabel * errorMessageLabel_;
+  QComboBox * screeningResultsComboBox_ = nullptr;
+  QComboBox * variablesComboBox_ = nullptr;
+  MorrisResultTableModel * tableModel_ = nullptr;
+  QLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

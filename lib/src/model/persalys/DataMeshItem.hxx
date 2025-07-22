@@ -32,7 +32,7 @@ class PERSALYS_MODEL_API DataMeshItem : public DataFieldModelItem
 public:
   DataMeshItem(const DataFieldModel& dataModel);
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 
 protected:
   void buildActions();

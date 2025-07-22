@@ -46,7 +46,7 @@ class PERSALYS_VIEW_API DataFieldModelWindow : public SubWindow
 
 public:
   DataFieldModelWindow(DataFieldModelItem * item, QWidget *parent = nullptr);
-  virtual void showEvent(QShowEvent*);
+  void showEvent(QShowEvent*) override;
 
 protected:
   void buildInterface();

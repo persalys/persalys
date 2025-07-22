@@ -36,12 +36,12 @@ class PERSALYS_MODEL_API ExperimentTableModel : public QAbstractTableModel
 public:
   ExperimentTableModel(const GridDesignOfExperiment &designOfExperiment, QObject *parent = nullptr);
 
-  int columnCount(const QModelIndex &parent = QModelIndex()) const;
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-  bool setData(const QModelIndex &index, const QVariant &value, int role);
-  Qt::ItemFlags flags(const QModelIndex &index) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
   GridDesignOfExperiment getDesignOfExperiment() const;
   OT::Interval getInterval() const;
 

@@ -36,8 +36,8 @@ public:
   PyConsole_ExecCommand( PyInterp_Interp*, const QString&, QObject*, bool = false );
 
 protected:
-  virtual void execute();
-  virtual QEvent* createEvent();
+  void execute() override;
+  QEvent* createEvent() override;
 
 private:
   QString myCommand;   //!< Python command
@@ -50,8 +50,8 @@ public:
   PyConsole_CompletionCommand( PyInterp_Interp*, const QString&, const QString&, QObject*, bool = false );
 
 protected:
-  virtual void execute();
-  virtual QEvent* createEvent();
+  void execute() override;
+  QEvent* createEvent() override;
 
 private:
   QString     myDirArg;       //!< String to be passed to the dir() comman

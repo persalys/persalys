@@ -38,7 +38,7 @@ public:
   Item * getCurrentItem() const;
   StudyItem * getItem(const int row) const;
 
-  virtual void mousePressEvent(QMouseEvent*);
+  void mousePressEvent(QMouseEvent*) override;
 
 public slots:
   void onCustomContextMenu(const QPoint& point);

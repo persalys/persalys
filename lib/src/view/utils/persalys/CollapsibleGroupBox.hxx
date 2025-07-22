@@ -74,8 +74,8 @@ public:
    */
   bool isExpanded() const;
 
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
 
 public Q_SLOTS:
   /**
@@ -105,14 +105,14 @@ Q_SIGNALS:
   void expandedChanged();
 
 protected:
-  void paintEvent(QPaintEvent*);
+  void paintEvent(QPaintEvent*) override;
 
-  bool event(QEvent*);
-  void mousePressEvent(QMouseEvent*);
-  void mouseMoveEvent(QMouseEvent*);
-  void leaveEvent(QEvent*);
-  void keyPressEvent(QKeyEvent*);
-  void resizeEvent(QResizeEvent*);
+  bool event(QEvent*) override;
+  void mousePressEvent(QMouseEvent*) override;
+  void mouseMoveEvent(QMouseEvent*) override;
+  void leaveEvent(QEvent*) override;
+  void keyPressEvent(QKeyEvent*) override;
+  void resizeEvent(QResizeEvent*) override;
 
 private:
   CollapsibleGroupBoxPrivate *const d;

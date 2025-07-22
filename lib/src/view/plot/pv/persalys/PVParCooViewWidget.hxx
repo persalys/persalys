@@ -12,7 +12,7 @@ class PERSALYS_PLOTPV_API PVParCooViewWidget : public PVViewWidget
 public:
   PVParCooViewWidget(QWidget *parent, PVServerManagerInterface *smb);
   ~PVParCooViewWidget();
-  virtual const char *getRepresentationName() const
+  const char *getRepresentationName() const override
   {
     return PV_REPRESENTATION_TYPE;
   }

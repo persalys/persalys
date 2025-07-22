@@ -35,7 +35,7 @@ public:
   {
   };
 
-  virtual int rtti() const
+  int rtti() const override
   {
     return QwtPlotItem::Rtti_PlotUserItem + index_;
   };
@@ -63,7 +63,7 @@ public:
   {
   }
 
-  virtual QwtScaleDiv divideScale(double /*x1*/, double /*x2*/, int /*numMajorSteps*/, int /*numMinorSteps*/, double /*stepSize*/) const
+  QwtScaleDiv divideScale(double /*x1*/, double /*x2*/, int /*numMajorSteps*/, int /*numMinorSteps*/, double /*stepSize*/) const override
   {
     QList<double> ticks[QwtScaleDiv::NTickTypes];
     for (int i = 0; i < varIndices_.size(); ++i)

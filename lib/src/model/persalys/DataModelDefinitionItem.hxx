@@ -33,7 +33,7 @@ class PERSALYS_MODEL_API DataModelDefinitionItem : public DesignOfExperimentItem
 public:
   DataModelDefinitionItem(const DesignOfExperiment & designOfExperiment, const DataModelDiagramItem * diagramItem = 0);
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 };
 }
 #endif

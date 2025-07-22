@@ -39,21 +39,21 @@ class PERSALYS_VIEW_API MetaModelAnalysisWizard : public AnalysisWizard
 public:
   enum {Page_Intro, Page_ChaosMethod, Page_KrigingMethod, Page_Validation, Page_PolynomialRegressionMethod};
 
-  MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
+  MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = nullptr);
 
-  virtual Analysis getAnalysis() const;
-  virtual int nextId() const;
+  Analysis getAnalysis() const override;
+  int nextId() const override;
 
 protected:
   void buildInterface();
 
 private:
   QList<DesignOfExperiment> doeList_;
-  MetaModelIntroPage * introPage_ = 0;
-  KrigingPage * krigingPage_ = 0;
-  FunctionalChaosPage * functionalChaosPage_ = 0;
-  MetaModelValidationPage * validationPage_ = 0;
-  PolynomialRegressionPage * linearModelPage_ = 0;
+  MetaModelIntroPage * introPage_ = nullptr;
+  KrigingPage * krigingPage_ = nullptr;
+  FunctionalChaosPage * functionalChaosPage_ = nullptr;
+  MetaModelValidationPage * validationPage_ = nullptr;
+  PolynomialRegressionPage * linearModelPage_ = nullptr;
 };
 }
 #endif

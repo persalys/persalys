@@ -42,8 +42,8 @@ signals:
   void textActivated(QString);
 
 protected:
-  void paintEvent(QPaintEvent *);
-  void wheelEvent(QWheelEvent *);
+  void paintEvent(QPaintEvent *) override;
+  void wheelEvent(QWheelEvent *) override;
 
 private:
   QString title_;

@@ -40,8 +40,8 @@ public:
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
 
-  virtual int nextId() const;
-  virtual bool validatePage();
+  int nextId() const override;
+  bool validatePage() override;
 
 protected:
   void buildInterface();

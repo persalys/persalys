@@ -40,14 +40,15 @@ public:
     setFocusPolicy(Qt::ClickFocus);
   }
 
-  virtual void wheelEvent(QWheelEvent *e)
+  void wheelEvent(QWheelEvent *e) override
   {
     // if no focus : no signal currentIndexChanged emitted -> wrong behavior
     // so if no focus : do nothing
     if (hasFocus() && !neverWheelEvent_)
       QComboBox::wheelEvent(e);
   }
-  virtual void keyPressEvent(QKeyEvent *e)
+
+  void keyPressEvent(QKeyEvent *e) override
   {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
     if (keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Up ||

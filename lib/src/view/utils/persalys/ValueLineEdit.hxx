@@ -47,8 +47,8 @@ public:
   void deactivate();
 
 protected:
-  virtual bool event(QEvent * event);
-  virtual void keyPressEvent(QKeyEvent *e);
+  bool event(QEvent * event) override;
+  void keyPressEvent(QKeyEvent *e) override;
 };
 
 class PERSALYS_UTILS_API ValuesLineEdit : public QLineEdit

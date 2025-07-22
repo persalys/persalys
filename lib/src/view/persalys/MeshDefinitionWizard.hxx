@@ -41,14 +41,14 @@ class PERSALYS_VIEW_API MeshDefinitionWizard : public Wizard
 
 public:
   enum Method {Grid, Import};
-  MeshDefinitionWizard(const MeshModel& mesh, const OT::Bool allowColumns = false, QWidget* parent = nullptr);
+  explicit MeshDefinitionWizard(const MeshModel& mesh, const OT::Bool allowColumns = false, QWidget* parent = nullptr);
 
   MeshModel getMesh() const;
-  virtual bool validateCurrentPage();
+  bool validateCurrentPage() override;
 
 protected:
   void buildInterface();
-  virtual void resizeEvent(QResizeEvent * event);
+  void resizeEvent(QResizeEvent * event) override;
 
 public slots:
   void setTable(const QString& fileName);

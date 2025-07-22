@@ -41,7 +41,7 @@ public:
   void initialize(const Analysis& analysis);
   void updateAnalysis(const Analysis& analysis);
 
-  virtual bool validatePage();
+  bool validatePage() override;
 
 protected:
   void buildInterface();

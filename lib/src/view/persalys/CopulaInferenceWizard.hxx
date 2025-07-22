@@ -38,8 +38,8 @@ class PERSALYS_VIEW_API CopulaInferenceWizard : public AnalysisWizard
 public :
   CopulaInferenceWizard(const Analysis& analysis, QWidget* parent = 0);
 
-  virtual Analysis getAnalysis() const;
-  virtual bool validateCurrentPage();
+  Analysis getAnalysis() const override;
+  bool validateCurrentPage() override;
 
 protected:
   void buildInterface();

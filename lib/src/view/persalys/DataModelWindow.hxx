@@ -46,11 +46,11 @@ public:
 
   virtual ~DataModelWindow();
 
-  virtual void showEvent(QShowEvent*);
+  void showEvent(QShowEvent*) override;
 
 protected:
   void buildInterface();
-  void resizeEvent(QResizeEvent* event);
+  void resizeEvent(QResizeEvent* event) override;
   void updateTable(const QString& fileName);
 
 public slots:

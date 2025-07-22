@@ -42,7 +42,7 @@ public :
   void setBase(int base);
   int base() const;
 
-  virtual void stepBy(int steps);
+  void stepBy(int steps) override;
 
 private:
   int base_;

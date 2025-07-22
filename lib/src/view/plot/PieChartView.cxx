@@ -80,7 +80,7 @@ public:
   {
   }
 
-  Qt::ItemFlags flags(const QModelIndex & index) const
+  Qt::ItemFlags flags(const QModelIndex & index) const override
   {
     return QStandardItemModel::flags(index) & ~Qt::ItemIsEditable;
   }

@@ -36,8 +36,8 @@ class PERSALYS_PLOT_API PlotMatrixConfigurationWidget : public QWidget
 public:
   PlotMatrixConfigurationWidget(PlotMatrixWidget * plotMatrix, QWidget* parent = 0);
 
-  virtual QSize sizeHint() const;
-  virtual QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
 
 public slots:
   void showXY(bool);

@@ -42,7 +42,7 @@ public:
   DataModel getDataModel();
 
 public slots:
-  virtual void done(int r);
+  void done(int r) override;
   void updateSelectedNodes(const QList<int>& nodes);
 
 private:

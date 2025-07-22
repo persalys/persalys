@@ -37,17 +37,17 @@ class PERSALYS_VIEW_API ModelEvaluationWizard : public AnalysisWizard
   friend class TestModelEvaluationWizard;
 
 public:
-  ModelEvaluationWizard(const Analysis& analysis, QWidget* parent = 0);
+  explicit ModelEvaluationWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
-  virtual bool validateCurrentPage();
+  bool validateCurrentPage() override;
 
 protected:
   void buildInterface();
 
 private:
-  QTableWidget * table_;
-  OutputsSelectionGroupBox * outputsGroupBox_;
-  TemporaryLabel * errorMessageLabel_;
+  QTableWidget * table_ = nullptr;
+  OutputsSelectionGroupBox * outputsGroupBox_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

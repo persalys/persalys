@@ -40,7 +40,7 @@ public:
 
   void initialize(const DesignOfExperiment& designOfExp);
   DesignOfExperiment getDesignOfExperiment();
-  bool validatePage();
+  bool validatePage() override;
 
 protected:
   void buildInterface();

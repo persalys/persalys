@@ -38,22 +38,22 @@ class PERSALYS_VIEW_API CentralTendencyIntroPage : public QWizardPage
 public:
   enum Method {MonteCarlo, TaylorExpansionMoments};
 
-  CentralTendencyIntroPage(QWidget* parent = 0);
+  explicit CentralTendencyIntroPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   OT::Description getInterestVariables() const;
   int getMethodId() const;
 
-  virtual int nextId() const;
-  virtual bool validatePage();
+  int nextId() const override;
+  bool validatePage() override;
 
 public slots:
   void updateFinalPage();
 
 private:
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  QButtonGroup * methodGroup_;
-  TemporaryLabel * errorMessageLabel_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
+  QButtonGroup * methodGroup_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
   OT::Description interestVariables_;
 };
 }

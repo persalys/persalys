@@ -38,8 +38,8 @@ public:
 
   CentralTendencyWizard(const Analysis& analysis, QWidget* parent = 0);
 
-  virtual Analysis getAnalysis() const;
-  virtual int nextId() const;
+  Analysis getAnalysis() const override;
+  int nextId() const override;
 
 protected:
   void buildInterface();

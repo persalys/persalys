@@ -78,10 +78,10 @@ class PERSALYS_VIEW_API MultiObjectiveOptimizationBoundsPage : public QWizardPag
   friend class TestOptimizationWizard;
 
 public:
-  MultiObjectiveOptimizationBoundsPage(QWidget* parent = 0);
+  explicit MultiObjectiveOptimizationBoundsPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
-  bool validatePage();
+  bool validatePage() override;
   ResizableHeaderlessTableView * getTableView() const
   {
     return tableView_;
@@ -93,9 +93,9 @@ public:
 protected slots:
   void updateTable();
 private:
-  ResizableHeaderlessTableView * tableView_;
-  MultiObjectiveOptimizationTableModel * tableModel_;
-  TemporaryLabel * errorMessageLabel_;
+  ResizableHeaderlessTableView * tableView_ = nullptr;
+  MultiObjectiveOptimizationTableModel * tableModel_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 
 };
 
@@ -104,7 +104,8 @@ class PERSALYS_VIEW_API MultiObjectiveOptimizationParameters : public QGridLayou
   Q_OBJECT
 
 public:
-  MultiObjectiveOptimizationParameters(QWidget* parent = 0);
+  explicit MultiObjectiveOptimizationParameters(QWidget* parent = nullptr);
+
   template <class T>
   void initialize(const T& optimAlgo)
   {
@@ -113,6 +114,7 @@ public:
     seedLineEdit_->setValue(optimAlgo.getSeed());
     constraintErrSpinBox_->setValue(optimAlgo.getMaximumConstraintError());
   }
+
   template <class T>
   void updateAlgorithm(T& optimAlgo)
   {
@@ -147,7 +149,7 @@ class PERSALYS_VIEW_API MultiObjectiveOptimizationWizard : public AnalysisWizard
   Q_OBJECT
 
 public:
-  MultiObjectiveOptimizationWizard(const Analysis& analysis, QWidget* parent = 0);
+  explicit MultiObjectiveOptimizationWizard(const Analysis& analysis, QWidget* parent = nullptr);
   void buildInterface();
   int nextId() const override;
   Analysis getAnalysis() const override;
@@ -156,11 +158,11 @@ protected:
   void initialize(const Analysis& analysis);
 
 private:
-  MultiObjectiveOptimizationAlgoPage * algoPage_;
-  MultiObjectiveDefinitionPage * objPage_;
-  ConstraintsPage * cstrPage_;
-  MultiObjectiveOptimizationBoundsPage * boundsPage_;
-  MultiObjectiveOptimizationParameters * parametersLayout_;
+  MultiObjectiveOptimizationAlgoPage * algoPage_ = nullptr;
+  MultiObjectiveDefinitionPage * objPage_ = nullptr;
+  ConstraintsPage * cstrPage_ = nullptr;
+  MultiObjectiveOptimizationBoundsPage * boundsPage_ = nullptr;
+  MultiObjectiveOptimizationParameters * parametersLayout_ = nullptr;
 };
 
 }

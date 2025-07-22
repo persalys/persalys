@@ -36,22 +36,22 @@ class PERSALYS_VIEW_API FieldMonteCarloWizard : public AnalysisWizard
   friend class TestFieldMonteCarloWizard;
 
 public:
-  FieldMonteCarloWizard(const Analysis& analysis, QWidget* parent = 0);
+  explicit FieldMonteCarloWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
-  virtual Analysis getAnalysis() const;
-  virtual bool validateCurrentPage();
+  Analysis getAnalysis() const override;
+  bool validateCurrentPage() override;
 
 protected:
   void buildInterface();
 
 private:
-  OutputsSelectionGroupBox * outputsGroupBox_;
+  OutputsSelectionGroupBox * outputsGroupBox_ = nullptr;
   OT::Description interestVariables_;
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  DoubleSpinBox * klSpinbox_;
-  QSpinBox * seedSpinbox_;
-  TemporaryLabel * errorMessageLabel_;
+  StopCriteriaGroupBox * stopCriteriaGroupBox_ = nullptr;
+  BlockSizeGroupBox * blockSizeGroupBox_ = nullptr;
+  DoubleSpinBox * klSpinbox_ = nullptr;
+  QSpinBox * seedSpinbox_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
 };
 }
 #endif

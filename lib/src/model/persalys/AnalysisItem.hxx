@@ -36,12 +36,12 @@ public:
   AnalysisItem(const Analysis & analysis);
   AnalysisItem(const Analysis & analysis, const OT::String &typeName);
 
-  virtual QVariant data(int role) const;
-  void setData(const QVariant & value, int role);
+  QVariant data(int role) const override;
+  void setData(const QVariant & value, int role) override;
 
   Analysis getAnalysis() const;
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 
 protected:
   virtual void buildActions();

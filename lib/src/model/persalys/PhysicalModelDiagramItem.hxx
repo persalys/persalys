@@ -37,14 +37,14 @@ class PERSALYS_MODEL_API PhysicalModelDiagramItem : public PhysicalModelItem
 public:
   PhysicalModelDiagramItem(const PhysicalModel & physicalModel);
 
-  void setData(const QVariant & value, int role);
+  void setData(const QVariant & value, int role) override;
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 
   void fill();
-  virtual void appendItem(const Analysis& analysis);
-  virtual void appendItem(const LimitState& limitState);
-  virtual void appendItem(const DesignOfExperiment& designOfExp);
+  virtual void appendItem(const Analysis& analysis) override;
+  virtual void appendItem(const LimitState& limitState) override;
+  virtual void appendItem(const DesignOfExperiment& designOfExp) override;
   void updateDiagramBoxesValidity();
 
 public slots:

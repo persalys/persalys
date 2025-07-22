@@ -39,10 +39,10 @@ public:
   void setNoWheelEvent(const bool noWheelEvent);
   void addSeparatorIndex(const int index, const QString &text = "");
 
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
-  void setEditorData(QWidget * editor, const QModelIndex & index) const;
-  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
-  void updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
+  void setEditorData(QWidget * editor, const QModelIndex & index) const override;
+  void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override;
+  void updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
 
 public slots:
   void emitCommitData();
@@ -60,8 +60,8 @@ class PERSALYS_UTILS_API ComboBoxWithSeparatorDelegate : public QItemDelegate
 public:
   ComboBoxWithSeparatorDelegate(QObject *parent);
 
-  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 

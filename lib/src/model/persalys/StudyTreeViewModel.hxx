@@ -34,12 +34,12 @@ class PERSALYS_MODEL_API StudyTreeViewModel : public QStandardItemModel, public 
 public:
   StudyTreeViewModel(QObject *parent = nullptr);
 
-  virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
   using Observer::appendItem;
-  void appendItem(const Study & study);
+  virtual void appendItem(const Study & study);
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 
 signals:
   void windowRequested(Item*);

@@ -44,10 +44,10 @@ class PERSALYS_VIEW_API InferenceWizard : public AnalysisWizard
   Q_OBJECT
 
 public :
-  InferenceWizard(const Analysis& analysis, QWidget* parent = 0);
+  explicit InferenceWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
-  virtual Analysis getAnalysis() const;
-  virtual bool validateCurrentPage();
+  Analysis getAnalysis() const override;
+  bool validateCurrentPage() override;
 
 protected:
   void initialize();
@@ -67,17 +67,17 @@ private:
   InferenceAnalysis inference_;
   OT::Description interestVar_;
   std::map<OT::String, OT::FittingTest::DistributionFactoryCollection> distFactoriesForEachInterestVar_;
-  ResizableStackedWidget * stackWidget_;
-  QComboBox * testTypeComboBox_;
-  DoubleSpinBox * levelSpinbox_;
-  QCheckBox * paramICCheckBox_;
-  DoubleSpinBox * icLevelSpinbox_;
-  DoubleSpinBox * lillieforsPrecisionSpinbox_;
-  LogSpinBox * lillieforsMinimumSamplingSizeSpinbox_;
-  LogSpinBox * lillieforsMaximumSamplingSizeSpinbox_;
-  TemporaryLabel * errorMessageLabel_;
-  bool pageValidity_;
-  VariablesSelectionTableModel * varTableModel_;
+  ResizableStackedWidget * stackWidget_ = nullptr;
+  QComboBox * testTypeComboBox_ = nullptr;
+  DoubleSpinBox * levelSpinbox_ = nullptr;
+  QCheckBox * paramICCheckBox_ = nullptr;
+  DoubleSpinBox * icLevelSpinbox_ = nullptr;
+  DoubleSpinBox * lillieforsPrecisionSpinbox_ = nullptr;
+  LogSpinBox * lillieforsMinimumSamplingSizeSpinbox_ = nullptr;
+  LogSpinBox * lillieforsMaximumSamplingSizeSpinbox_ = nullptr;
+  TemporaryLabel * errorMessageLabel_ = nullptr;
+  bool pageValidity_ = false;
+  VariablesSelectionTableModel * varTableModel_ = nullptr;
 };
 
 class VariablesTableView : public CopyableTableView
@@ -85,7 +85,7 @@ class VariablesTableView : public CopyableTableView
   Q_OBJECT
 
 public:
-  VariablesTableView(QWidget* parent = 0)
+  explicit VariablesTableView(QWidget* parent = nullptr)
     : CopyableTableView(parent)
   {
     setContextMenuPolicy(Qt::CustomContextMenu);

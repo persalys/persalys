@@ -33,7 +33,7 @@ class PERSALYS_MODEL_API ProbabilisticModelItem : public PhysicalModelItem
 public:
   ProbabilisticModelItem(const PhysicalModel &physicalModel, const PhysicalModelDiagramItem *diagramItem = 0);
 
-  virtual void update(Observable * source, const OT::String & message);
+  void update(Observable * source, const OT::String & message) override;
 };
 }
 #endif

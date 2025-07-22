@@ -36,10 +36,10 @@ class PERSALYS_MODEL_API DataModelDiagramItem : public DesignOfExperimentItem
 public:
   DataModelDiagramItem(const DesignOfExperiment& designOfExperiment);
 
-  virtual void update(Observable* source, const OT::String& message);
+  void update(Observable* source, const OT::String& message) override;
 
   void fill();
-  virtual void appendItem(const Analysis& analysis);
+  void appendItem(const Analysis& analysis) override;
 
 protected:
   void buildActions();

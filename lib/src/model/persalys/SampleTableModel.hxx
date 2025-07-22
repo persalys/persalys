@@ -38,7 +38,7 @@ public:
     : QSortFilterProxyModel(parent)
   {}
 
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override
   {
     // do not sort the vertical header items
     if (orientation == Qt::Vertical && role == Qt::DisplayRole)
