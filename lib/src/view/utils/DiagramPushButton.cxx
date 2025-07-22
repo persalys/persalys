@@ -34,7 +34,7 @@ HoverOverlay::HoverOverlay(const DiagramPushButton *target):
   setAttribute(Qt::WA_NoSystemBackground);
 }
 
-#if QT_VERSION_CHECK(6,0,0)
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
 void HoverOverlay::enterEvent(QEnterEvent*)
 #else
 void HoverOverlay::enterEvent(QEvent*)

@@ -33,13 +33,14 @@ class PERSALYS_UTILS_API DocumentationToolButton : public QToolButton
   Q_OBJECT
 
 public:
-  DocumentationToolButton(const QString& urlLink, const FileTools::docType type = FileTools::docGUI, QWidget *parent = nullptr);
+  explicit DocumentationToolButton(const QString& urlLink, const FileTools::docType type = FileTools::docGUI, QWidget *parent = nullptr);
 
 public slots:
   void openUrl();
 
 private:
-  QUrl urlLink_;
+  QString urlLink_;
+  FileTools::docType type_ = FileTools::docGUI;
 };
 }
 #endif

@@ -25,7 +25,8 @@ namespace PERSALYS
 
 DocumentationToolButton::DocumentationToolButton(const QString& urlLink, const FileTools::docType type, QWidget *parent)
   : QToolButton(parent)
-  , urlLink_()
+  , urlLink_(urlLink)
+  , type_(type)
 {
   setIcon(QIcon(":/images/documentinfo.png"));
   QString toolTip = tr("Open documentation");
@@ -34,16 +35,12 @@ DocumentationToolButton::DocumentationToolButton(const QString& urlLink, const F
   setToolTip(toolTip);
 
   if (!urlLink.isEmpty())
-  {
-    urlLink_ = FileTools::GetDocumentationUrl(urlLink, type);
-
     connect(this, SIGNAL(clicked()), this, SLOT(openUrl()));
-  }
 }
 
 
 void DocumentationToolButton::openUrl()
 {
-  FileTools::OpenUrl(urlLink_);
+  FileTools::OpenUrl(FileTools::GetDocumentationUrl(urlLink_, type_));
 }
 }

@@ -219,7 +219,7 @@ QString FileTools::GetDocumentationDirectoryPath()
       return userManualDir;
     else
     {
-      LOGWARN("PERSALYS_HTML_PATH is set to a non-existing directory");
+      LOGWARN(OT::OSS() << "PERSALYS_HTML_PATH is set to a non-existing directory" << userManualDir.toStdString());
     }
   }
 
@@ -238,7 +238,7 @@ QString FileTools::GetDocumentationDirectoryPath()
   if (!userManualDir.isEmpty() && QDir(userManualDir).exists())
     return userManualDir;
 
-  LOGWARN("Documentation directory not found in standard paths: set PERSALYS_HTML_PATH environment variable");
+  LOGWARN("Documentation directory not found in standard paths");
   return "";
 }
 
