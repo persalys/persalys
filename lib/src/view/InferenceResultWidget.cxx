@@ -44,19 +44,6 @@ namespace PERSALYS
 InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidget* parent)
   : QScrollArea(parent)
   , displayPDF_QQPlot_(displayPDF_QQPlot)
-  , tabWidget_(0)
-  , currentFittingTestResult_()
-  , distTableView_(0)
-  , distTableModel_(0)
-  , distParamTableView_(0)
-  , distParamTableModel_(0)
-  , infoButton_(0)
-  , analysisErrorMessageLabel_(0)
-  , pdf_cdfPlotSettingWidget_(0)
-  , pdfPlot_(0)
-  , cdfPlot_(0)
-  , qqPlot_(0)
-  , survPlot_(0)
 {
   buildInterface();
 }
@@ -123,6 +110,9 @@ void InferenceResultWidget::buildInterface()
     // --- cdf
     cdfPlot_ = new PlotWidget(tr("distributionCDF"));
     pdf_cdfStackedWidget->addWidget(cdfPlot_);
+    // --- quantile function
+    quantilePlot_ = new PlotWidget(tr("distributionQuantile"));
+    pdf_cdfStackedWidget->addWidget(quantilePlot_);
     // --- survival function
     survPlot_ = new PlotWidget(tr("survivalFunction"));
     pdf_cdfStackedWidget->addWidget(survPlot_);
@@ -130,8 +120,9 @@ void InferenceResultWidget::buildInterface()
     QVector<PlotWidget*> listpdf_cdfPlot;
     listpdf_cdfPlot.append(pdfPlot_);
     listpdf_cdfPlot.append(cdfPlot_);
+    listpdf_cdfPlot.append(quantilePlot_);
     listpdf_cdfPlot.append(survPlot_);
-    pdf_cdfPlotSettingWidget_ = new PDFGraphSetting(listpdf_cdfPlot, PDFGraphSetting::Result, this);
+    pdf_cdfPlotSettingWidget_ = new PDFGraphSetting(listpdf_cdfPlot, PDFGraphSetting::Distribution, this);
     connect(pdf_cdfPlotSettingWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
     scrollArea->setWidget(new WidgetBoundToDockWidget(pdf_cdfStackedWidget, pdf_cdfPlotSettingWidget_, this));
@@ -462,9 +453,14 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
     cdfPlot_->clear();
     qqPlot_->clear();
   }
+  if(quantilePlot_ && pdf_cdfPlotSettingWidget_)
+  {
+    pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 2 ? quantilePlot_->show() : quantilePlot_->hide();
+    quantilePlot_->clear();
+  }
   if(survPlot_ && pdf_cdfPlotSettingWidget_)
   {
-    pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 2 ? survPlot_->show() : survPlot_->hide();
+    pdf_cdfPlotSettingWidget_->getCurrentPlotIndex() == 3 ? survPlot_->show() : survPlot_->hide();
     survPlot_->clear();
   }
 
@@ -545,6 +541,13 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
 
   cdfPlot_->setTitle(tr("CDF") + ": " + distName + " ("
                      + testName + " " + tr("statistic=%1)").arg(std::abs(KSStatistic(0, 1) - KSStatistic(1, 1))));
+
+  // -- quantile plot
+  if (quantilePlot_)
+  {
+    quantilePlot_->plotQuantileCurve(distribution);
+    quantilePlot_->setTitle(tr("Quantile function") + ": " + distName);
+  }
 
   // -- qq plot
   Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));

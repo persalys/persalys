@@ -98,7 +98,7 @@ class PERSALYS_PLOT_API PDFGraphSetting : public GraphConfigurationWidget
   Q_OBJECT
 
 public:
-  enum PDFType {Distribution, Result, Copula, Ksi};
+  enum PDFType {Distribution, Copula, Ksi};
   PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const PDFType type, QWidget *parent = nullptr);
   PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const PDFType type, QWidget *parent = nullptr);
 public slots:
