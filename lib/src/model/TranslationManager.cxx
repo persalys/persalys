@@ -77,6 +77,7 @@ void TranslationManager::InitializeCopulasNames()
   CopulasNames_.insert("Gumbel", "Gumbel");
   CopulasNames_.insert("Independent", "Independent");
   CopulasNames_.insert("Normal", tr("Normal"));
+  CopulasNames_.insert("Student", tr("Student"));
 }
 
 

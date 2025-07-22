@@ -1,9 +1,6 @@
 class=DataModel name=myDataModel fileName=data2.csv inputColumns=[0,2,3] outputColumns=[] inputNames=[X0,X2,X3] outputNames=[]
-class=CopulaInferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[] setOfVariables [X0,X3] distributionFactories=[NormalCopulaFactory,GumbelCopulaFactory]
-result= class=CopulaInferenceResult copulaInferenceSetResultCollection=[class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[0.0177483,0.0207956] error messages=[,]]
-class=CopulaInferenceSetResult setOfVariablesNames=[X0,X3] testedDistributions=[NormalCopula(R = [[ 1         0.0580361 ]
- [ 0.0580361 1         ]]),GumbelCopula(theta = 1.03839)] BIC results=class=Point name=Unnamed dimension=2 values=[0.0177483,0.0207956] error messages=[,]
+class=CopulaInferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[] setOfVariables [X0,X3] distributionFactories=[ClaytonCopulaFactory,FrankCopulaFactory,GumbelCopulaFactory,NormalCopulaFactory,StudentCopulaFactory]
+[-1.1243,-1.51731,-1.52743,-1.68148,-1.66472]
 #!/usr/bin/env python
 
 import openturns as ot
@@ -19,7 +16,7 @@ myDataModel = persalys.DataModel('myDataModel', 'data2.csv', inputColumns, outpu
 myStudy.add(myDataModel)
 analysis = persalys.CopulaInferenceAnalysis('analysis', myDataModel)
 variablesSet = ['X0', 'X3']
-factories = [ot.NormalCopulaFactory(), ot.GumbelCopulaFactory()]
+factories = [ot.ClaytonCopulaFactory(), ot.FrankCopulaFactory(), ot.GumbelCopulaFactory(), ot.NormalCopulaFactory(), ot.StudentCopulaFactory()]
 analysis.setDistributionsFactories(variablesSet, factories)
 myStudy.add(analysis)
 
