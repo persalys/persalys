@@ -393,7 +393,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
     listPlotWidgets.append(cdfPlot);
     if (result_.getSurvivalFunction().getSize())
       listPlotWidgets.append(survPlot);
-    PDFGraphSetting * graphSetting = new PDFGraphSetting(listPlotWidgets, PDFGraphSetting::Result, this);
+    PDFGraphSetting * graphSetting = new PDFGraphSetting(listPlotWidgets, PDFGraphSetting::Distribution, this);
     connect(graphSetting, SIGNAL(currentPlotChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
     tabStackedWidget->addWidget(new WidgetBoundToDockWidget(stackedWidget, graphSetting, this));

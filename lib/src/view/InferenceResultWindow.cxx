@@ -69,16 +69,11 @@ void InferenceResultWindow::buildInterface()
   mainWidget->addWidget(variablesGroupBox);
   mainWidget->setStretchFactor(0, 1);
 
-  // tabs for results
-  QTabWidget * tabWidget = new QTabWidget;
-
   inferenceResultWidget_ = new InferenceResultWidget(true, this);
-
-  tabWidget->addTab(inferenceResultWidget_, tr("Summary"));
 
   listVariables->setCurrentRow(0);
 
-  mainWidget->addWidget(tabWidget);
+  mainWidget->addWidget(inferenceResultWidget_);
   mainWidget->setStretchFactor(1, 10);
 
   widgetLayout->addWidget(mainWidget, 1);
