@@ -142,7 +142,6 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
     handleExceptionTraceback();
     LastCodeHash_ = codeHash_;
   }
-
   callsNumber_.increment();
   PyObject * script = PyDict_GetItemString(dict, "_exec");
   if (script == NULL)
@@ -154,13 +153,14 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 
   if (getOutputDimension() > 1)
   {
-    outP = convert<_PySequence_, Point>(outputList.get());
+    outP = checkAndConvert<_PySequence_, Point>(outputList.get());
   }
   else
   {
-    Scalar value = convert<_PyFloat_, Scalar>(outputList.get());
+    Scalar value = checkAndConvert<_PyFloat_, Scalar>(outputList.get());
     outP = Point(1, value);
   }
+
   return outP;
 }
 

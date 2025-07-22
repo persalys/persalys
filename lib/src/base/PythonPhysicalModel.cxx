@@ -74,21 +74,23 @@ void PythonPhysicalModel::setCode(const String & code)
 
   std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
   bool inExecScope = false;
-  for (unsigned int i = 0; i < lines.size(); ++ i)
+  for (String line: lines)
   {
-    String line = lines[i];
-
+    // skip empty lines
+    if (line.empty())
+      continue;
     // we know that we are outside the _exec scope when the line begins with a character (different from space)
-    if (inExecScope && line[0] != ' ' && line.size() != 0)
+    if (inExecScope && line[0] != ' ')
       inExecScope = false;
 
-    std::regex defFunction("def[ ]+_exec[ ]*\\(([_a-zA-Z0-9, ]*)\\)[ ]*:", std::regex::extended);
+    std::regex defFunction(R"(def\s+_exec\s*\(([\w, ]*)\)\s*:)");
     std::smatch what;
     if (std::regex_match(line, what, defFunction))
     {
       inExecScope = true;
       String inputList = what[1];
-      std::string::const_iterator start = inputList.begin(), end = inputList.end();
+      std::string::const_iterator start = inputList.begin();
+      std::string::const_iterator end = inputList.end();
       inputVariables.clear();
       while (std::regex_search(start, end, what, variable))
       {
@@ -98,17 +100,28 @@ void PythonPhysicalModel::setCode(const String & code)
     }
 
     // Allow 2-spaces indent as well to match YACS behavior
-    std::regex returnOutput("  (?:  )?return[ ]+([_a-zA-Z0-9, ]+)");
+    std::regex returnOutput(R"(  (?:  )?return\s+(?:\(([\w, ]+)\)|\[([\w, ]+)\]|([\w, ]+)))");
     if (inExecScope && std::regex_match(line, what, returnOutput))
     {
-      String outputList = what[1];
-      std::string::const_iterator start = outputList.begin(), end = outputList.end();
+      String outputList;
+      for(unsigned int i = 1; i < what.size(); ++i)
+      {
+        if (what[i].matched)
+        {
+          outputList = what[i];
+          break;
+        }
+      }
+
+      std::string::const_iterator start = outputList.begin();
+      std::string::const_iterator end = outputList.end();
       outputVariables.clear();
       while (std::regex_search(start, end, what, variable))
       {
         start = what[0].second;
         outputVariables.add(what[1]);
       }
+      break; // we found the return statement, no need to continue
     }
   }
 
