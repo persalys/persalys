@@ -2,6 +2,8 @@
 
  * Merge YACS/Python model
  * Added sensitivity analysis for data models using rank Sobol algorithm
+ * Allow to use Student copula in dependency inference
+ * Print stack traces to console and archive them in text files for debugging purposes
 
 = 18.1 release (2025-06-25)
 
