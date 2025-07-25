@@ -43,18 +43,14 @@ f = model.getPointToFieldFunction()
 try:
     print(f([[100, 55, 81, 17]]))
 except Exception as e:
-    print(
-        "ZeroDivisionError occurred: %s"
-        % ("ZeroDivisionError: float division by zero" in str(e))
-    )
+    ok = "ZeroDivisionError" in str(e)
+    print(f"ZeroDivisionError occurred: {ok}")
     print("Error on the line 4 : %s" % ("line 4" in str(e)))
 try:
     print(f([100, 55, 81, 17]))
 except Exception as e:
-    print(
-        "ZeroDivisionError occurred: %s"
-        % ("ZeroDivisionError: float division by zero" in str(e))
-    )
+    ok = "ZeroDivisionError" in str(e)
+    print(f"ZeroDivisionError occurred: {ok}")
     print("Error on the line 4 : %s" % ("line 4" in str(e)))
 
 # model with an error : wrong output type

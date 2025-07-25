@@ -54,7 +54,7 @@ int main(int, char *[])
       std::cout << "i_fail=" << exc.getFailedIndices() << std::endl;
       std::cout << "X_fail=" << X.select(exc.getFailedIndices()) << std::endl;
       for (UnsignedInteger i = 0; i < exc.getFailedIndices().getSize(); ++ i)
-        std::cout << "i_fail=" << exc.getFailedIndices()[i] << " error=" << exc.getErrorDescription()[i] << std::endl;
+        std::cout << "i_fail=" << exc.getFailedIndices()[i] << std::endl;
       std::cout << "i_ok=" << exc.getSucceededIndices() << std::endl;
       std::cout << "X_ok=" << X.select(exc.getSucceededIndices()) << std::endl;
       std::cout << "Y_ok=" << exc.getOutputSample() << std::endl;

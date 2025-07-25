@@ -229,7 +229,9 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   oss << "if __name__== '__main__':\n";
   oss << "    if sys.platform == 'win32':\n";
   oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'pythonw.exe'))\n";
-  oss << "    with ProcessPoolExecutor(max_workers=" << (processNumber_ > 0 ? std::to_string(processNumber_) : "None") << ") as executor:\n";
+  oss << "    ctx = mp.get_context('fork') if sys.platform.startswith('linux') else None\n";
+  const String max_workers = (processNumber_ > 0) ? std::to_string(processNumber_) : "None";
+  oss << "    with ProcessPoolExecutor(max_workers=" << max_workers << ", mp_context=ctx) as executor:\n";
   oss << "        resu = {executor.submit(" << code_mod << "._exec, *x): x for x in X}\n";
   oss << "        for future in resu:\n";
   oss << "            try:\n";

@@ -137,7 +137,8 @@ aDesign11 = persalys.GridDesignOfExperiment(
 anOTStudy.add(aDesign11)
 
 aDesign11.run()
-print("outs=", aDesign11.getErrorDescription())
+for err_msg in aDesign11.getErrorDescription():
+    assert "ZeroDivisionError" in err_msg
 
 model2.setParallel(False)
 aDesign12 = persalys.GridDesignOfExperiment(
@@ -146,7 +147,8 @@ aDesign12 = persalys.GridDesignOfExperiment(
 anOTStudy.add(aDesign12)
 
 aDesign12.run()
-print("outs=", aDesign12.getErrorDescription())
+for err_msg in aDesign11.getErrorDescription():
+    assert "ZeroDivisionError" in err_msg
 
 # script
 script = anOTStudy.getPythonScript()

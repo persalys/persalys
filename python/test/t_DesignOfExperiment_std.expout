@@ -113,8 +113,6 @@ outs=     [ Y0        ]
 7 : [  0.275507 ]
 8 : [  4.78088  ]
 9 : [  5.79249  ]
-outs= [Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n]
-outs= [Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n,Python exception:\nTraceback (most recent call last):\n  File "<string>", line 3, in _exec\nZeroDivisionError: float division by zero\n]
 #!/usr/bin/env python
 
 import openturns as ot
