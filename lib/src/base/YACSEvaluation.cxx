@@ -192,11 +192,9 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
         {
           nokIdx.add(j);
           const String message = OSS()
-                                 << "\nThe evaluation of the point number " << j
-                                 << " is in error:" << jobSample.getError(j)
-                                 << "\nFor further details, see "
-                                 << jobParams_.work_directory() << "/logs directory on "
-                                 << jobParams_.resource_name() << ".";
+                                 << "The evaluation of the point number " << j << " is in error: " << jobSample.getError(j)
+                                 << "\nFor further details, see " << jobParams_.work_directory()
+                                 << "/logs directory on " << jobParams_.resource_name() << ".\n";
           errorDesc.add(message);
           break;
         }
@@ -205,8 +203,8 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
     if (nokIdx.getSize())
     {
       throw BatchFailedException(HERE, nokIdx, errorDesc,
-                                 nokIdx.complement(sampleSize),
-                                 result.select(nokIdx.complement(sampleSize)));
+                                 nokIdx.complement(sampleSize), result.select(nokIdx.complement(sampleSize)))
+        << (nokIdx.getSize() == 1 ? errorDesc[0] : "operator(Sample) partial fail");
     }
   }
   else

@@ -234,7 +234,7 @@ void DesignOfExperimentEvaluation::launch()
   }
 
   if (failedInputSample_.getSize() == getOriginalInputSample().getSize())
-    throw InvalidRangeException(HERE) << "All the evaluations have failed. Check the model. " << warningMessage_;
+    throw InvalidRangeException(HERE) << "All the evaluations have failed.\n" << warningMessage_;
 
   // set design of experiments
   result_.designOfExperiment_.setInputSample(inputSample);
