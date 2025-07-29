@@ -35,14 +35,14 @@ RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd b
 RUN curl -fSsLO https://github.com/Kitware/CMake/releases/download/v3.28.3/cmake-3.28.3-linux-x86_64.sh && sh ./cmake-3.28.3-linux-x86_64.sh --skip-license --prefix=/usr/local && rm cmake* && cmake --version
 
 # swig
-RUN curl -fSsL https://github.com/swig/swig/archive/v4.3.0.tar.gz | tar xz && cd swig* \
+RUN curl -fSsL https://github.com/swig/swig/archive/v4.3.1.tar.gz | tar xz && cd swig* \
  && cmake . && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
 RUN curl -fsSL https://github.com/KarypisLab/GKlib/archive/refs/tags/METIS-v5.1.1-DistDGL-0.5.tar.gz | tar xz && cd GKlib* && curl -L https://github.com/KarypisLab/GKlib/commit/33b8c8bb.patch | patch -p1 && sed -i "s|march=native|march=nocona|g" GKlibSystem.cmake && cmake -DBUILD_SHARED_LIBS=ON . && make install > /dev/null 2>&1 && cd - && rm -r GKlib*
 RUN curl -fsSL https://github.com/KarypisLab/METIS/archive/v5.2.1.tar.gz | tar xz && cd METIS-5.2.1 && mkdir -p build/xinclude && sed -i "s|//#define IDXTYPEWIDTH 32|#define IDXTYPEWIDTH 32|g" include/metis.h && sed -i "s|//#define REALTYPEWIDTH 32|#define REALTYPEWIDTH 64|g" include/metis.h && cp include/metis.h include/CMakeLists.txt build/xinclude && echo "target_link_libraries(metis GKlib)" >> libmetis/CMakeLists.txt && sed -i "s|march=native|march=nocona|g" conf/gkbuild.cmake && cmake -DSHARED=ON . && make install > /dev/null 2>&1 && cd - && rm -r METIS*
 RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/3.0.7.tar.gz | tar xz && cd ThirdParty-Mumps* && ./get.Mumps && FFLAGS="-O2 -fallow-argument-mismatch" ./configure --prefix=/usr/local && make -j1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
-RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.17.tar.gz | tar xz && cd Ipopt* && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
+RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.18.tar.gz | tar xz && cd Ipopt* && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
 RUN curl -fsSL https://github.com/coin-or/CoinUtils/archive/refs/tags/releases/2.11.12.tar.gz | tar xz && cd CoinUtils* && ./configure --prefix=/usr/local --with-blas-lib='-lblas' --with-lapack-lib='-llapack' --enable-dependency-linking && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r CoinUtils*
@@ -75,7 +75,7 @@ RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar
  && cmake -B build . && cd build && make install > /dev/null 2>&1 && cd - && rm -r eigen*
 
 # spectra
-RUN curl -fsSL https://github.com/yixuan/spectra/archive/v1.1.0.tar.gz | tar xz && cd spectra* && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
+RUN curl -fsSL https://github.com/yixuan/spectra/archive/v1.2.0.tar.gz | tar xz && cd spectra* && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
 
 # glog
 RUN curl -fsSL https://github.com/google/glog/archive/v0.7.1.tar.gz | tar xz && cd glog* && cmake . && make install > /dev/null 2>&1 && cd - && rm -rf glog*
@@ -105,7 +105,7 @@ RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.13.3/Python-3.13.3.tgz | tar xz && cd Python* \
+RUN curl -fSsL https://www.python.org/ftp/python/3.13.5/Python-3.13.5.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
@@ -113,22 +113,22 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.13.3/Python-3.13.3.tgz | tar 
 RUN pip3 install numpy==2.2.4 scipy==1.15.2 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
 
 # sundials
-RUN curl -fSsL https://github.com/LLNL/sundials/archive/v7.3.0.tar.gz | tar xz && cd sundials* \
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v7.4.0.tar.gz | tar xz && cd sundials* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib -B build . \
  && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
-RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/3.0.3.tar.gz | tar xz && cd fmi-library* \
+RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/3.0.4.tar.gz | tar xz && cd fmi-library* \
  && cmake -DFMILIB_BUILD_STATIC_LIB=OFF -DFMILIB_BUILD_TESTS=OFF -DCMAKE_INSTALL_LIBDIR=lib -B build . && make install -C build > /dev/null 2>&1 && cd - && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.0.tar.gz | tar xz && cd Assimulo* \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.1.tar.gz | tar xz && cd Assimulo* \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.17.2.tar.gz | tar xz && cd PyFMI* \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.18.0.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # libbacktrace
