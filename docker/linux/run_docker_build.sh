@@ -18,7 +18,6 @@ cmake \
   -DUSE_STACKTRACE=ON \
   -DCMAKE_INSTALL_PREFIX=/tmp/persalys.AppDir/usr -DCMAKE_INSTALL_LIBDIR=lib \
   -DPERSALYS_BUILD_APPIMAGE=ON \
-  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so \
   -B build /io
 cd build
 make install
@@ -116,10 +115,10 @@ cp -v /usr/local/lib/libqwt.so.6.* persalys.AppDir/usr/lib
 cp -rv /usr/local/lib/qt/plugins persalys.AppDir/usr/lib
 
 # paraview libs
-cp -v /usr/local/lib/libvtk* persalys.AppDir/usr/lib
-cp -v /usr/local/lib/libpq* persalys.AppDir/usr/lib
+cp -v /usr/local/lib64/libvtk* persalys.AppDir/usr/lib
+cp -v /usr/local/lib64/libpq* persalys.AppDir/usr/lib
 mkdir -p persalys.AppDir/usr/lib/paraview/plugins
-cp -rv /usr/local/lib/paraview*/plugins/BagPlotViewsAndFilters persalys.AppDir/usr/lib/paraview/plugins
+cp -rv /usr/local/lib64/paraview*/plugins/BagPlotViewsAndFilters persalys.AppDir/usr/lib/paraview/plugins
 
 # modelica
 cp -rv /usr/local/lib64/omc persalys.AppDir/usr/lib

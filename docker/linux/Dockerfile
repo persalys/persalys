@@ -164,11 +164,10 @@ RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v5.13/ParaView-v5.13.3.tar.xz | tar xJ && cd ParaView* \
- && curl -L https://gitlab.kitware.com/vtk/vtk/merge_requests/11555.patch | patch -p1 -d VTK \
- && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib \
+RUN curl -fSsL https://paraview.org/files/v6.0/ParaView-v6.0.0.tar.xz | tar xJ && cd ParaView* \
+ && cmake -DCMAKE_BUILD_TYPE=Release \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
-  -DOPENGL_opengl_LIBRARY=/usr/lib64/libGL.so -DPARAVIEW_USE_VTKM=OFF -DPARAVIEW_USE_FORTRAN=OFF \
+  -DPARAVIEW_USE_VISKORES=OFF -DPARAVIEW_USE_FORTRAN=OFF -DPARAVIEW_ENABLE_XDMF2=OFF \
   -DPARAVIEW_PLUGINS_DEFAULT=OFF -DPARAVIEW_PLUGIN_ENABLE_BagPlotViewsAndFilters=ON -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r ParaView*
 
