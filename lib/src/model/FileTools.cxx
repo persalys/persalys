@@ -140,7 +140,7 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
                              (OT::UnsignedInteger)boxPrec->value(),
                              "defaultfloat");
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ") + ex.what());
     }
@@ -169,7 +169,7 @@ void FileTools::ExportData(const QString& text, QWidget * parent)
       QTextStream stream(&file);
       stream << text;
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       QMessageBox::warning(QApplication::activeWindow(), tr("Warning"), tr("Impossible to export the data. ") + ex.what());
     }

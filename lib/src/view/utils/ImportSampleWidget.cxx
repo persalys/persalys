@@ -159,7 +159,7 @@ void ImportSampleWidget::setData(const QString& fileName)
     emit updateTableRequested(fileName);
     tableValidity_ = true;
   }
-  catch (std::exception & ex)
+  catch (const std::exception & ex)
   {
     dataPreviewTableView_->setModel(0);
     // DOE size

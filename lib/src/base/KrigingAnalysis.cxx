@@ -281,7 +281,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
         computeAnalyticalValidation(results[i], inputSample);
       }
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       analyticalValidation_ = false;
       warningMessage_ += OSS() << "Analytical validation failed: " << ex.what() << "\n";
@@ -298,7 +298,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
         computeTestSampleValidation(results[i], inputSample);
       }
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       testSampleValidation_ = false;
       warningMessage_ += OSS() << "Test sample validation failed: " << ex.what() << "\n";
@@ -315,7 +315,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
         computeKFoldValidation(results[i], inputSample);
       }
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       kFoldValidation_ = false;
       warningMessage_ += OSS() << "K-Fold validation failed: " << ex.what() << "\n";
@@ -332,7 +332,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
         computeLOOValidation(results[i], inputSample);
       }
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       leaveOneOutValidation_ = false;
       warningMessage_ += OSS() << "Leave-one-out validation failed: " << ex.what() << "\n";

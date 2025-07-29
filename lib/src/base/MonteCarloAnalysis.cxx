@@ -170,7 +170,7 @@ void MonteCarloAnalysis::launch()
     {
       blockOutputSample = function(blockInputSample);
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       failedInputSample_ = blockInputSample;
       warningMessage_ = ex.what();

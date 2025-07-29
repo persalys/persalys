@@ -73,7 +73,7 @@ void FileMemoizeEvaluation::setEvaluation(const Evaluation & evaluation)
       if (outSample.getDimension() != evaluation.getOutputDimension())
         throw InvalidDimensionException(HERE) << "Output dimension has changed. Try clearing cache.";
     }
-    catch (FileNotFoundException &)
+    catch (const FileNotFoundException &)
     {
       // one of the files do not exist: write empty files
       clearCache();
@@ -109,7 +109,7 @@ void FileMemoizeEvaluation::setCacheFiles(const OT::FileName & inputFile, const 
       if (outSample.getDimension() != evaluation_.getOutputDimension())
         throw InvalidDimensionException(HERE) << "Output dimension has changed. Try clearing cache.";
     }
-    catch (FileNotFoundException &)
+    catch (const FileNotFoundException &)
     {
       // one of the files do not exist: write empty files
       clearCache();

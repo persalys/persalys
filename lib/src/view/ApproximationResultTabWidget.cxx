@@ -187,7 +187,7 @@ void ApproximationResultTabWidget::buildInterface()
       valuesList[0] = QString::number(sormResult_.getEventProbabilityBreitung());
       valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexBreitung());
     }
-    catch (std::exception &ex)
+    catch (const std::exception &ex)
     {
       valuesList[0] = "-";
       valuesList[1] = "-";
@@ -208,7 +208,7 @@ void ApproximationResultTabWidget::buildInterface()
       valuesList[0] = QString::number(sormResult_.getEventProbabilityHohenbichler());
       valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexHohenbichler());
     }
-    catch (std::exception &ex)
+    catch (const std::exception &ex)
     {
       valuesList[0] = "-";
       valuesList[1] = "-";
@@ -229,7 +229,7 @@ void ApproximationResultTabWidget::buildInterface()
       valuesList[0] = QString::number(sormResult_.getEventProbabilityTvedt());
       valuesList[1] = QString::number(sormResult_.getGeneralisedReliabilityIndexTvedt());
     }
-    catch (std::exception &ex)
+    catch (const std::exception &ex)
     {
       valuesList[0] = "-";
       valuesList[1] = "-";
@@ -426,7 +426,7 @@ void ApproximationResultTabWidget::buildInterface()
 
     addTab(scrollArea, tr("Sensitivities"));
   }
-  catch (std::exception& ex)
+  catch (const std::exception& ex)
   {
     QLabel * errorLabel = new QLabel;
     errorLabel->setStyleSheet("QLabel { color : red; }");

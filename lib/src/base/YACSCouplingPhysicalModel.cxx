@@ -80,7 +80,7 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
   {
     evaluation_.setCode(script);
   }
-  catch (std::exception & ex)
+  catch (const std::exception & ex)
   {
     throw InvalidArgumentException(HERE) << "Error in the script:\n" << ex.what();
   }

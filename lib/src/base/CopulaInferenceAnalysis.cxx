@@ -290,7 +290,7 @@ void CopulaInferenceAnalysis::launch()
         }
         inferenceSetResult.kendallPlotData_.add(kendallPlotDataCollection);
       }
-      catch (std::exception & ex)
+      catch (const std::exception & ex)
       {
         String str = it->second[i].getImplementation()->getClassName();
         const String distributionName = str.substr(0, str.find("Copula"));

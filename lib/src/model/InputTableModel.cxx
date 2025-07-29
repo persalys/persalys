@@ -109,7 +109,7 @@ bool InputTableModel::setData(const QModelIndex & index, const QVariant & value,
           physicalModel_.setInputName(input.getName(), value.toString().toUtf8().constData());
           emit inputNameChanged();
         }
-        catch (std::exception & ex)
+        catch (const std::exception & ex)
         {
           emit errorMessageChanged(ex.what());
         }

@@ -146,7 +146,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
       emit dataUpdated(copula_);
       return true;
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       QString input1 = QString::fromUtf8(copula_.getDescription()[index.row()].c_str());
       QString input2 = QString::fromUtf8(copula_.getDescription()[index.column()].c_str());

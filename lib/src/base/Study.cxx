@@ -160,7 +160,7 @@ Study Study::Open(const String & xmlFileName)
     study.load();
     study.fillObject("aStudy", openedStudy);
   }
-  catch (Exception &)
+  catch (const Exception &)
   {
     // if setting XMLH5SM fails, it may be due to missing H5 file or pure XML study
     // therefore, XML file is scrutinised to find any H5 dataset

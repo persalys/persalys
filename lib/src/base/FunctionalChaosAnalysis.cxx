@@ -234,7 +234,7 @@ void FunctionalChaosAnalysis::launch()
   {
     postProcessFunctionalChaosResult(effectiveInputSample);
   }
-  catch (std::exception & ex)
+  catch (const std::exception & ex)
   {
     warningMessage_ = OSS() << "Error when computing Sobol indices and moments.\n" << ex.what() << "\nTry to increase the size of the design of experiments.\n";
   }

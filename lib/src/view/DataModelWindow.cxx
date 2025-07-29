@@ -312,7 +312,7 @@ void DataModelWindow::updateTable(const QString& fileName)
     dataModel_->setFileName(fileName.toUtf8().data());
     filePathLineEdit_->setText(fileName);
   }
-  catch (std::exception& ex)
+  catch (const std::exception& ex)
   {
     QMessageBox::warning(this,
                          tr("Warning"),

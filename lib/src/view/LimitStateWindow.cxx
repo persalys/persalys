@@ -199,7 +199,7 @@ void LimitStateWindow::updateThreshold()
     limitState_.blockNotification();
     errorMessageLabel_->reset();
   }
-  catch(std::exception & ex)
+  catch (const std::exception & ex)
   {
     updateThresholdWidget();
     errorMessageLabel_->setTemporaryErrorMessage(ex.what());

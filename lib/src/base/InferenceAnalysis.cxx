@@ -258,7 +258,7 @@ void InferenceAnalysis::launch()
           paramCI = paramDist.computeBilateralConfidenceInterval(paramCILevel_);
         }
       }
-      catch (std::exception & ex)
+      catch (const std::exception & ex)
       {
         if (inferenceOK)
         {

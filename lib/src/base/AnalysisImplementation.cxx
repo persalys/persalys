@@ -167,7 +167,7 @@ void AnalysisImplementation::run()
     elapsedTime_ = tc.getElapsedTime();
     notify("analysisFinished");
   }
-  catch (std::exception & ex)
+  catch (const std::exception & ex)
   {
     errorMessage_ +=  ex.what();
     isRunning_ = false;

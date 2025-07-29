@@ -382,7 +382,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
     {
       computeAnalyticalValidation(result, inputSample);
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       warningMessage_ += OSS() << "Analytical validation failed: " << ex.what() << "\n";
     }
@@ -395,7 +395,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
     {
       computeTestSampleValidation(result, inputSample);
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       warningMessage_ += OSS() << "Test sample validation failed: " << ex.what() << "\n";
     }
@@ -408,7 +408,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
     {
       computeKFoldValidation(result, inputSample);
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       warningMessage_ += OSS() << "K-Fold validation failed: " << ex.what() << "\n";
     }
@@ -421,7 +421,7 @@ void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result,
     {
       computeLOOValidation(result, inputSample);
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       warningMessage_ += OSS() << "Leave-one-out validation failed: " << ex.what() << "\n";
     }

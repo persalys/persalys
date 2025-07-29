@@ -187,7 +187,7 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
       throw InvalidArgumentException(HERE) << "The given distribution " << distributionName << " is not available.";
     }
   }
-  catch (InvalidArgumentException & ex)
+  catch (const InvalidArgumentException & ex)
   {
     Log::Error(OSS() << "DistributionDictionary::BuildDistribution: Error when creating the distribution " << distributionName << "\n");
     throw InvalidArgumentException(HERE) << ex.what();

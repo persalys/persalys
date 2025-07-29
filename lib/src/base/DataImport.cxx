@@ -78,7 +78,7 @@ void DataImport::setFileName(const String& fileName, const Tools::DataOrder orde
       check();
       validArg = true;
     }
-    catch (std::exception &)
+    catch (const std::exception &)
     {
       // if the file content has changed
     }

@@ -954,7 +954,7 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
       {
         inColl[indFile].simulateInput(varColl);
       }
-      catch (std::exception & ex)
+      catch (const std::exception & ex)
       {
         temTextLabel->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
         temTextLabel->setText(ex.what());

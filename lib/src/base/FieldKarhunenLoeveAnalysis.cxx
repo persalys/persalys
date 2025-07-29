@@ -182,7 +182,7 @@ namespace PERSALYS
         result_.xiSamples_.add(xi_sample);
       }
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       warningMessage_ = ex.what();
     }

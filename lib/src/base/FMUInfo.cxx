@@ -64,7 +64,7 @@ inline String StrOrBytesToString(PyObject * obj)
     // pyfmi >=2.5.1
     return checkAndConvert<_PyString_, String>(obj);
   }
-  catch (InvalidArgumentException &)
+  catch (const InvalidArgumentException &)
   {
     // pyfmi <2.5.1
     return checkAndConvert<_PyBytes_, String>(obj);

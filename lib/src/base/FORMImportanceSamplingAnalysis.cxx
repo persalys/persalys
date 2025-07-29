@@ -91,7 +91,7 @@ void FORMImportanceSamplingAnalysis::launch()
     // set FORM result
     FORMResult_ = formAnalysis.getResult().getFORMResult();
   }
-  catch (std::exception &ex)
+  catch (const std::exception &ex)
   {
     throw InternalException(HERE) << "Error when processing the FORM analysis.\n" << ex.what();
   }

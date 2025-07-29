@@ -261,7 +261,7 @@ void CopulaWidget::updateCopulaFromLineEdit()
     physicalModel_.blockNotification();
     updatePlots();
   }
-  catch (std::exception &ex)
+  catch (const std::exception &ex)
   {
     emit emitErrorMessage(ex.what());
     paramValueEdit_->setValue(oldValue);

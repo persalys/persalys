@@ -150,7 +150,7 @@ bool OutputTableModel::setData(const QModelIndex & index, const QVariant & value
         {
           physicalModel_.setOutputName(output.getName(), value.toString().toUtf8().constData());
         }
-        catch (std::exception & ex)
+        catch (const std::exception & ex)
         {
           emit errorMessageChanged(ex.what());
         }

@@ -287,7 +287,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     if (window)
       updateView(window);
   }
-  catch (std::exception& ex)
+  catch (const std::exception& ex)
   {
     qDebug() << "Error when building the analysis window : " << ex.what();
     message = tr("Impossible to create a result window");
@@ -533,7 +533,7 @@ void StudyManager::open(const QString& recentFileName)
     emit recentFilesListChanged(fileName);
     QApplication::restoreOverrideCursor();
   }
-  catch (std::exception & ex)
+  catch (const std::exception & ex)
   {
     QApplication::restoreOverrideCursor();
     showErrorMessage(tr("An error has occurred when reading the file '%1'. \nMaybe objects are not opened.\n").arg(fileName) + ex.what());

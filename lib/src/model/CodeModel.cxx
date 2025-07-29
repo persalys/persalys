@@ -75,7 +75,7 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
       if (pyModel)
         pyModel->setCode(value.toString().toStdString());
     }
-    catch (std::exception& ex)
+    catch (const std::exception& ex)
     {
       physicalModel_.blockNotification();
       emit errorMessageChanged(ex.what());

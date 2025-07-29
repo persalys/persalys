@@ -581,7 +581,7 @@ void MarginalsWidget::distributionParametersChanged()
       physicalModel_.blockNotification();
       updatePlots();
     }
-    catch(std::exception & ex)
+    catch (const std::exception & ex)
     {
       physicalModel_.blockNotification();
       qDebug() << "MarginalsWidget::distributionParametersChanged invalid parameters:"
@@ -614,7 +614,7 @@ void MarginalsWidget::distributionParametersChanged()
       physicalModel_.blockNotification();
       updatePlots();
     }
-    catch(std::exception & ex)
+    catch (const std::exception & ex)
     {
       physicalModel_.blockNotification();
       qDebug() << "MarginalsWidget::distributionParametersChanged invalid parameters:"
@@ -673,7 +673,7 @@ void MarginalsWidget::truncationParametersChanged()
 
     updatePlots();
   }
-  catch (std::exception & ex)
+  catch (const std::exception & ex)
   {
     physicalModel_.blockNotification();
     qDebug() << "Error: MarginalsWidget::truncationParametersChanged\n";
@@ -788,7 +788,7 @@ void MarginalsWidget::truncationParametersStateChanged()
     // update plots
     updatePlots();
   }
-  catch (std::exception & ex)
+  catch (const std::exception & ex)
   {
     qDebug() << "Error: MarginalsWidget::truncationParametersStateChanged\n";
     updateTruncationParametersWidgets(index);

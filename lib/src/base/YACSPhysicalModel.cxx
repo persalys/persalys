@@ -119,7 +119,7 @@ void YACSPhysicalModel::setCode(const String & code)
     {
       evaluation_.setCode(code);
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       throw InvalidArgumentException(HERE) << "Error in the script.\n" << ex.what();
     }
@@ -277,7 +277,7 @@ void YACSPhysicalModel::setUseYACS(const Bool useYACS)
       {
         evaluation_.setCode(getCode());
       }
-      catch (std::exception & ex)
+      catch (const std::exception & ex)
       {
         // just to keep in sync
       }

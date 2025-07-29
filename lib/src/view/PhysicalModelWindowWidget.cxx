@@ -385,7 +385,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
       addTab(widget, tr("Evaluation"));
       setCurrentIndex(2);
     }
-    catch (std::exception& ex)
+    catch (const std::exception& ex)
     {
       emit errorMessageChanged(tr("Not possible to evaluate the outputs %1").arg(ex.what()));
       physicalModel_.setEvalTime(0);

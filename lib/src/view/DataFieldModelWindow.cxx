@@ -173,7 +173,7 @@ void DataFieldModelWindow::setTable(const QString& fileName)
     filePathLineEdit_->setText(fileName);
     tableModel_->updateData(Tools::ImportSample(fileName.toStdString(), static_cast<Tools::DataOrder>(orderButtonGroup_->checkedId())));
   }
-  catch (std::exception& ex)
+  catch (const std::exception& ex)
   {
     QMessageBox::warning(this,
                          tr("Warning"),

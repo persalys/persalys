@@ -124,7 +124,7 @@ void FieldMonteCarloAnalysis::launch()
       for (UnsignedInteger i = 0; i < processSample_block.getSize(); ++i)
         processSample.add(processSample_block[i]);
     }
-    catch (std::exception & ex)
+    catch (const std::exception & ex)
     {
       failedInputSample_ = blockInputSample;
       warningMessage_ = ex.what();

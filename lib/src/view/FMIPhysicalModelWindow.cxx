@@ -292,7 +292,7 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   {
     eval.run();
   }
-  catch (std::exception& ex)
+  catch (const std::exception& ex)
   {
     // do nothing
   }
@@ -351,7 +351,7 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
         fmiModel->setFMUFileName(fileName.toUtf8().data());
         errorMessageLabel_->reset();
       }
-      catch (std::exception & ex)
+      catch (const std::exception & ex)
       {
         errorMessageLabel_->setErrorMessage(ex.what());
       }
