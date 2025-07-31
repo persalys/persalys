@@ -32,3 +32,8 @@ mingw-tag:
   only:
     - tags
 
+fedora:
+  script:
+    - ./utils/build_locally.sh fedora
+  except:
+    - tags

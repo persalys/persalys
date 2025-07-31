@@ -21,6 +21,9 @@ case $variant in
   "3" | "salome")
     variant="salome"
     ;;
+  "4" | "fedora")
+    variant="fedora"
+    ;;
   *)
     echo "sorry?"
     exit 1
