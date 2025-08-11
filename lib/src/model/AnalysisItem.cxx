@@ -27,6 +27,7 @@
 #include "persalys/StudyItem.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/MonteCarloAnalysis.hxx"
+#include "persalys/MorrisAnalysis.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
 
 
@@ -111,14 +112,15 @@ void AnalysisItem::buildActions()
       extractDataAction_->setEnabled(false);
   }
   else if (analysisType.contains("DesignOfExperiment") ||
-           analysisType == "MonteCarloAnalysis")
+           analysisType == "MonteCarloAnalysis" || 
+           analysisType == "MorrisAnalysis")
   {
     convertAction_ = new QAction(tr("Convert into data model"), this);
     convertAction_->setStatusTip(tr("Add a data model in the study tree"));
     connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendDataModelItem()));
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(convertAction_);
-    if(analysisType != "MonteCarloAnalysis")
+    if(analysisType != "MonteCarloAnalysis" && analysisType != "MorrisAnalysis")
       return; // no remove action for these analyses
   }
 
@@ -273,27 +275,24 @@ void AnalysisItem::appendDataModelItem()
   if (!getParentStudyItem())
     return;
 
-  const auto * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
-  DataAnalysisResult result;
-  if(doeEval)
-  {
+  EvaluationResult result;
+  AnalysisImplementation * implementation = analysis_.getImplementation().get();
+  const auto * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
+  const auto * MCAnalysis = dynamic_cast<MonteCarloAnalysis*>(implementation);
+  auto * morrisAnalysis = dynamic_cast<MorrisAnalysis*>(implementation);
+  if (doeEval)
     result = doeEval->getResult();
-  }
+  else if (MCAnalysis)
+    result = MCAnalysis->getResult();
+  else if (morrisAnalysis)
+    result = morrisAnalysis->getResult();
   else
-  {
-    const auto * analysis  = dynamic_cast<MonteCarloAnalysis*>(analysis_.getImplementation().get());
-    if(analysis)
-    {
-      result = analysis->getResult();
-    }
-    else
-      return;
-  }
+    return;
 
   // create the data model
   const String newName = getParentStudyItem()->getStudy().getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString());
   DataModel * newModel = new DataModel(newName, result.getDesignOfExperiment());
-  getParentStudyItem()->getStudy().add(newModel);
+  getParentStudyItem()->getStudy().add(newModel);  // implicit conversion DesignOfExperiment(DesignOfExperimentImplementation*)
 }
 
 
