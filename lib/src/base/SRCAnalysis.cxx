@@ -219,6 +219,13 @@ void SRCAnalysis::launch()
     LOGWARN("The model does not have an independent copula, the result of the sensitivity analysis could be false.");
     warningMessage_ = "The model does not have an independent copula, the result of the sensitivity analysis could be false.";
   }
+
+  DesignOfExperiment doe;
+
+  doe.setInputSample(effectiveInputSample);
+  outputSample.setDescription(getInterestVariables());
+  doe.setOutputSample(outputSample);
+  result_.setDesignOfExperiment(doe);
 }
 
 

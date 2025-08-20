@@ -37,6 +37,8 @@ public:
   /** Constructor with parameters */
   DesignOfExperimentEvaluation(const OT::String& name, const PhysicalModel& physicalModel);
 
+  DesignOfExperimentEvaluation(const OT::String &name, const PhysicalModel &physicalModel, const DataAnalysisResult &DataAnalysisResult);
+
   /** Virtual constructor */
   DesignOfExperimentEvaluation * clone() const override;
 

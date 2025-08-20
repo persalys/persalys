@@ -11,3 +11,12 @@ Returns
 -------
 design : :class:`~persalys.DesignOfExperiment`
     Design of experiments containing the analysed points"
+
+
+%feature("docstring") PERSALYS::EvaluationResult::setDesignOfExperiment
+"Design of experiments accessor.
+
+Args
+------
+doe: :class:`~persalys.DesignOfExperiment`
+    Design od experiments to be used"

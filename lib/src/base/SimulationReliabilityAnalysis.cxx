@@ -186,11 +186,17 @@ void SimulationReliabilityAnalysis::launch()
     }
   }
 
+  Sample outSample = function.getOutputHistory();
+  outSample.setDescription(function.getOutputDescription());
+  Sample inSample = function.getInputHistory();
+  inSample.setDescription(function.getInputDescription());
+
   result_ = SimulationReliabilityResult(algo.getResult(),
-                                        function.getOutputHistory(),
+                                        outSample,
                                         graph.getDrawables()[0].getData(),
                                         graph.getDrawables()[1].getData(),
-                                        graph.getDrawables()[2].getData());
+                                        graph.getDrawables()[2].getData(),
+                                        inSample);
 
   result_.elapsedTime_ = algo.getResult().getTimeDuration();
 

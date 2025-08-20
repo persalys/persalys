@@ -43,7 +43,8 @@ SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimula
     const Sample& outputSample,
     const Sample& convergenceSample,
     const Sample& convergenceSampleLowerBound,
-    const Sample& convergenceSampleUpperBound
+    const Sample& convergenceSampleUpperBound,
+    const Sample& inputSample
                                                         )
   : EvaluationResult()
   , simulationResult_(simulationResults)
@@ -52,6 +53,7 @@ SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimula
   , convergenceSampleUpperBound_(convergenceSampleUpperBound)
 {
   designOfExperiment_.setOutputSample(outputSample);
+  designOfExperiment_.setInputSample(inputSample);
 }
 
 

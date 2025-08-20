@@ -83,12 +83,19 @@ void Observable::notify(const String & message)
 {
   // do not use for (std::vector<Observer*>::iterator it = observers_.begin(); it != observers_.end(); ++it)
   // avoid problem if an observer is added in the list observers_ in the update function
-  for (int i = 0; i < (int)observers_.size(); ++i)
+  try
   {
-    if (observers_[i]->getType() != blockedObserverType_)
+    for (int i = 0; i < (int)observers_.size(); ++i)
     {
-      observers_[i]->update(this, message);
+      if (observers_[i]->getType() != blockedObserverType_)
+      {
+        observers_[i]->update(this, message);
+      }
     }
+  }
+  catch (Exception &e)
+  {
+    std::cerr << "Observable::notify catched exception " << e.what() << std::endl;
   }
 }
 
