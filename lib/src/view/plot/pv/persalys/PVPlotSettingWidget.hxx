@@ -41,7 +41,11 @@ public:
 protected:
   void addSelectDataWidget(const QString &labelName, const QList<bool> &checked = QList<bool>());
   void addRankWidget(const bool checkState);
+  void addQWTWidget(const bool checkState);
   void addExportLayout();
+
+signals:
+  void displayQWTPlotMatrix(bool);
 
 protected:
   PVViewWidget * pvViewWidget_;

@@ -23,6 +23,7 @@
 
 #include "persalys/ResultWindow.hxx"
 #include "persalys/DataAnalysisResult.hxx"
+#include "persalys/WidgetBoundToDockWidget.hxx"
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include "persalys/PVSpreadSheetViewWidget.hxx"
@@ -53,6 +54,7 @@ protected:
   virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet = 0);
 #endif
   void addPlotMatrixTab();
+  void removePlotMatrixTab();
   void addScatterPlotsTab();
   virtual void addTableTab();
   void addErrorTable();
@@ -86,6 +88,11 @@ protected:
   VariablesListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
   QTabWidget * tablesTabWidget_;
+
+private:
+  WidgetBoundToDockWidget * boundPlotMatrixWidget_ = nullptr;
+  int plotMatrixTabIndex_ = -1;
+  bool canUseParaview_ = false;
 };
 }
 #endif
