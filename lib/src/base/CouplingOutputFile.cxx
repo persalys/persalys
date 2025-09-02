@@ -113,8 +113,11 @@ Point CouplingOutputFile::getSkipColumns() const
   return skipColumns_;
 }
 
-String CouplingOutputFile::checkOutputFile(const String fname, const String encoding) const
+String CouplingOutputFile::checkOutputFile(const String &fname, const String &encoding) const
 {
+  if (encoding.empty())
+    LOGWARN("Warning: no encoding passed to CouplingOutputFile::checkOutputFile. Using openTURNS default value (sys.getdefaultencoding())");
+  
   OSS code;
   code << "import os\n";
   code << "import re\n";
@@ -134,7 +137,10 @@ String CouplingOutputFile::checkOutputFile(const String fname, const String enco
   code << "    for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "        try:\n";
   code << "            token_esc = re.escape(token)\n";
-  code << "            value = otct.get_value('" << fname << "', token=token_esc, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding='" << encoding << "')\n";
+  code << "            value = otct.get_value('" << fname << "', token=token_esc, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col)";
+  if (!encoding.empty())
+    code << ", encoding='" << encoding << "'";
+  code << ")\n";
   code << "        except:\n";
   code << "            value = None\n";
   code << "        varnames.append(varname)\n";

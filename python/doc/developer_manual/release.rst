@@ -3,7 +3,7 @@
 Release process
 ===============
 
-1. Update translations
+1. Update translations (make sure everything is green)
 
 2. Set version number X.Y (utils/setVersionNumber.sh X.Y)
 

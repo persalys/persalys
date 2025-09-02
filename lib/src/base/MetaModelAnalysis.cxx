@@ -299,7 +299,9 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
     for (UnsignedInteger i = 0; i < inputsNames.getSize(); ++i)
     {
       const Distribution marginal = distribution_.getMarginal(i);
-      metaModel.setDistribution(inputsNames[i], marginal);
+      const String inputName = inputsNames[i];
+      metaModel.setDistribution(inputName, marginal);
+      metaModel.getInputByName(inputName).setValue(marginal.getMean().at(0));
     }
   }
 
