@@ -7,3 +7,4 @@ ENV MAKEFLAGS="-j8"
 RUN git clone --depth 1 -b v1.25.1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" -DCMAKE_LINKER_TYPE=MOLD . \
  && make install && cd - && rm -r openturns
+ENV FLEXIBLAS=NETLIB
