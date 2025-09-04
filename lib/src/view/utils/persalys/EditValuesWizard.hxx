@@ -49,6 +49,8 @@ public:
   OT::Point getValues(const OT::UnsignedInteger index = 0) const;
   bool validateCurrentPage() override;
 
+  virtual OT::Distribution getDistribution() const;
+
 private slots:
   void removeSelectedValues();
   void checkButtons();
@@ -62,6 +64,7 @@ protected:
   SampleTableModel * model_;
   QSortFilterProxyModel * proxy_;
   TemporaryLabel * errorMessageLabel_;
+  bool sortValues_ = true;
 
 private:
   OT::Description sampleDescription_;
@@ -81,12 +84,28 @@ class PERSALYS_UTILS_API UserDefinedWizard : public EditValuesWizard
 public:
   UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = nullptr);
 
-  OT::Distribution getDistribution() const;
+  OT::Distribution getDistribution() const override;
 
 private slots:
   void addValue(OT::Scalar) override;
 };
 
+class PERSALYS_UTILS_API HistogramWizard: public EditValuesWizard
+{
+  Q_OBJECT
+
+public:
+  HistogramWizard(const OT::Scalar first, const OT::Point &widths, const OT::Point &heights, QWidget *parent = nullptr);
+
+  OT::Distribution getDistribution() const override;
+
+private slots:
+  void addValue(OT::Scalar) override;
+
+private:
+  OT::Scalar first_ = 0.;
+  OT::Description sampleDescription_;
+};
 
 class PERSALYS_UTILS_API WeightTableModel : public SampleTableModel
 {
@@ -106,6 +125,31 @@ public:
     if (role == Qt::EditRole && index.column() == 1 && !(value.toDouble() > 0))
     {
       emit errorMessageChanged(tr("Weight must be in strictly positive"));
+      return false;
+    }
+
+    return SampleTableModel::setData(index, value, role);
+  }
+};
+
+class PERSALYS_UTILS_API HistogramTableModel: public SampleTableModel
+{
+  Q_OBJECT
+
+public:
+  HistogramTableModel(const OT::Sample &data, QObject *parent):
+    SampleTableModel(data, true, false, OT::Description(), parent)
+  {
+    Q_ASSERT(data.getDimension() == 2);
+  }
+
+  bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override
+  {
+    if (!index.isValid())
+      return false;
+    if (role == Qt::EditRole && !(value.toDouble() > 0))
+    {
+      emit errorMessageChanged(tr("Width and heights must be strictly positive"));
       return false;
     }
 

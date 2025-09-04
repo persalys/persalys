@@ -399,7 +399,7 @@ void PlotWidget::plotSurvivalCurve(const Distribution & distribution, const QPen
 // graphType = 1 -> CDF
 // graphType = 2 -> survival function
 // graphType = 3 -> other
-void PlotWidget::plotHistogram(const Sample & sample, const PlotWidget::HistoType graphType, int barNumber, QString title)
+void PlotWidget::plotHistogram(const Sample & sample, const PlotWidget::HistoType graphType, int barNumber, const QString &title)
 {
   if (graphType > PlotWidget::Other)
     throw InvalidArgumentException(HERE) << "Type of graph not known " << graphType;
@@ -418,23 +418,23 @@ void PlotWidget::plotHistogram(const Sample & sample, const PlotWidget::HistoTyp
   const double width = HistogramFactory().computeBandwidth(sample, Q3 - Q1 > 1e-12);
 
   if (barNumber <= 0)
-    barNumber = ceil((sampleMax - sampleMin)/width);
+    barNumber = static_cast<int>(ceil((sampleMax - sampleMin)/width + 0.5));
 
+  const Scalar delta = ResourceMap::GetAsScalar("Distribution-DefaultQuantileEpsilon") * (sampleMax - sampleMin);
+  const Scalar hOpt = ((sampleMax - sampleMin) + delta) / barNumber;
   Point histogramData(barNumber);
+  const Scalar step = 1.0 / hOpt;
 
   for (int i = 0; i < size; ++i)
   {
-    int index = static_cast< int >((sample(i, 0) - sampleMin) / width);
-    // x=xmax -> index=barnumber, so bound it
-    index = std::min(index, barNumber - 1);
-    if (!(index > barNumber || index < 0))
-      ++ histogramData[index];
+    const UnsignedInteger index = static_cast<UnsignedInteger>(floor((sample(i, 0) - sampleMin) * step));
+    ++ histogramData[index];
   }
 
   // if PDF, CDF or Survival
   if (graphType < PlotWidget::Other)
   {
-    double inverseArea = 1. / (size * width);
+    double inverseArea = 1. / (hOpt * size);
     for (int i = 0; i < barNumber; ++i)
       histogramData[i] *= inverseArea;
   }
@@ -472,7 +472,7 @@ void PlotWidget::plotHistogram(const Sample & sample, const PlotWidget::HistoTyp
   QVector<QwtIntervalSample> samples(barNumber);
   for (int i = 0; i < barNumber; i++)
   {
-    QwtInterval interval(sampleMin + i * width, sampleMin + (i + 1)*width);
+    QwtInterval interval(sampleMin + i * hOpt, sampleMin + (i + 1)*hOpt);
     samples[i] = QwtIntervalSample(histogramData[i] / sum, interval);
   }
 

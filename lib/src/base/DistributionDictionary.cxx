@@ -30,7 +30,7 @@ namespace PERSALYS
 
 std::vector<String> DistributionDictionary::ContinuousDistributions_ =
 {
-  "Arcsine", "Beta", "ChiSquare", "Exponential", "Gamma", "Gumbel", "InverseNormal",
+  "Arcsine", "Beta", "ChiSquare", "Exponential", "Gamma", "Gumbel", "Histogram", "InverseNormal",
   "Laplace", "Logistic", "LogNormal", "LogUniform", "Normal", "Rayleigh", "SmoothedUniform", "Student",
   "Trapezoidal", "Triangular", "Uniform", "WeibullMax", "WeibullMin"
 };
@@ -82,6 +82,14 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     else if (distributionName == "Gumbel")
     {
       return GumbelMuSigma(mu, sigma).getDistribution();
+    }
+    else if (distributionName == "Histogram")
+    {
+      const Point widths = {0.3, 0.7};
+      const Point heights = {0.7, 0.3};
+      const Scalar first = 0.;
+
+      return Histogram(first, widths, heights);
     }
     else if (distributionName == "Hypergeometric")
     {
@@ -233,6 +241,16 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
     GumbelMuSigma d2;
     nPWithDesc = d2.inverse(distribution.getParameter());
     nPWithDesc.setDescription(d2.getDescription());
+    nPWithDescColl.add(nPWithDesc);
+  }
+  else if (distributionName == "Histogram")
+  {
+    nPWithDesc = PointWithDescription(3);
+
+    const Description description = {"first", "width", "height"};
+    nPWithDesc.setDescription(description);
+    
+    nPWithDescColl.clear();
     nPWithDescColl.add(nPWithDesc);
   }
   else if (distributionName == "LogNormal")

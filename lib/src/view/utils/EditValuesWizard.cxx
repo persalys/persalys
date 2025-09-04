@@ -20,6 +20,9 @@
  */
 #include "persalys/EditValuesWizard.hxx"
 
+#include <openturns/UserDefined.hxx>
+#include <openturns/Histogram.hxx>
+
 #include "persalys/DoubleSpinBox.hxx"
 #include "persalys/StudyTreeViewModel.hxx"
 #include "persalys/FileTools.hxx"
@@ -31,7 +34,6 @@
 #include <QFileDialog>
 #include <QDialogButtonBox>
 #include <cfloat>
-#include <openturns/UserDefined.hxx>
 
 using namespace OT;
 
@@ -107,7 +109,8 @@ void EditValuesWizard::buildInterface()
   proxy_->setSourceModel(model_);
   proxy_->setSortRole(Qt::UserRole);
   valueTable_->setModel(proxy_);
-  proxy_->sort(0);
+  if (sortValues_)
+    proxy_->sort(0);
   valueTable_->horizontalHeader()->setStretchLastSection(true);
   valueTable_->verticalHeader()->hide();
   connect(valueTable_->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(checkButtons()));
@@ -258,7 +261,8 @@ Point EditValuesWizard::getValues(const UnsignedInteger index) const
 
 void EditValuesWizard::check()
 {
-  proxy_->sort(0);
+  if (sortValues_)
+    proxy_->sort(0);
   valueNumber_->setText(QString::number(model_->getSample().getSize()));
   checkButtons();
 }
@@ -273,6 +277,11 @@ bool EditValuesWizard::validateCurrentPage()
     return false;
   }
   return true;
+}
+
+Distribution EditValuesWizard::getDistribution() const
+{
+  throw NotDefinedException(HERE);
 }
 
 
@@ -341,6 +350,55 @@ Distribution UserDefinedWizard::getDistribution() const
   return UserDefined(model_->getSample().getMarginal(0), getValues(1));
 }
 
+HistogramWizard::HistogramWizard(Scalar first, const Point &widths, const Point &heights, QWidget *parent): 
+  EditValuesWizard(parent),
+  first_(first)
+{
+  const UnsignedInteger nbIntervals = widths.getSize();
+  Q_ASSERT(nbIntervals);
+  Q_ASSERT(heights.getSize() == nbIntervals);
+
+
+  Sample sample(nbIntervals, 2);
+  for (UnsignedInteger j = 0 ; j < nbIntervals ; ++j)
+    sample(j, 0) = widths[j];
+  for (UnsignedInteger j = 0 ; j < nbIntervals ; ++j)
+    sample(j, 1) = heights[j];
+  sampleDescription_ = Description(2);
+  sampleDescription_[0] = tr("Width").toStdString();
+  sampleDescription_[1] = tr("Height").toStdString();
+  sample.setDescription(sampleDescription_);
+  model_ = new HistogramTableModel(sample, this);
+
+  connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
+  connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+
+  sortValues_ = false;
+
+  buildInterface();
+}
+
+Distribution HistogramWizard::getDistribution() const
+{
+  return Histogram(first_, getValues(0), getValues(1));
+}
+
+void HistogramWizard::addValue(Scalar)
+{
+  Sample sample(0, 2);
+  Point newpoint(2, 1.);
+
+  sample = model_->getSample();
+  const Point widths(sample.getMarginal(0).asPoint());
+  const Point heights(sample.getMarginal(1).asPoint());
+  const UnsignedInteger dim = widths.getDimension();
+  if (dim)
+    newpoint = {widths[dim-1], heights[dim-1]};
+
+  sample.add(newpoint);
+  sample.setDescription(sampleDescription_); // in case table has been emptied
+  model_->updateData(sample);
+}
 
 ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
   : QWizardPage(parent)

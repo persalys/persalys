@@ -20,6 +20,7 @@
  */
 #include "persalys/InferenceResultWidget.hxx"
 
+#include "persalys/BaseTools.hxx"
 #include "persalys/InferenceAnalysis.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/RadioButtonDelegate.hxx"
@@ -30,6 +31,7 @@
 
 #include <openturns/VisualTest.hxx>
 #include <openturns/UserDefined.hxx>
+#include <openturns/Histogram.hxx>
 
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -367,6 +369,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     // -- get distribution
     const QVariant variant = distTableModel_->data(distTableModel_->index(current.row(), 0), Qt::UserRole);
     distribution = currentFittingTestResult_.getTestedDistributions()[variant.value<int>()];
+    const auto histogram = dynamic_cast<Histogram*>(distribution.getImplementation().get());
 
     // -- set parameters
     distParamTableModel_->setNotEditableItem(++row, 0, tr("Parameters"));
@@ -379,16 +382,33 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     distParamTableModel_->setData(distParamTableModel_->index(row, 0), font, Qt::FontRole);
 
     const PointWithDescription parameters = DistributionDictionary::GetParametersCollection(distribution)[0];
-    for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
+    if (histogram)
     {
-      const QString param(TranslationManager::GetTranslatedDistributionParameterName(parameters.getDescription()[i]));
-      distParamTableModel_->setNotEditableHeaderItem(++row, 0, param);
-      distParamTableModel_->setNotEditableItem(row, 1, parameters[i]);
-      if (currentFittingTestResult_.getParamConfidenceInterval().getSize())
+      for (UnsignedInteger i = 0 ; i < 3 ; ++i)
       {
-        const Interval paramBounds = currentFittingTestResult_.getParamConfidenceInterval()[variant.value<int>()];
-        distParamTableModel_->setNotEditableItem(row, 2, paramBounds.getLowerBound()[i]);
-        distParamTableModel_->setNotEditableItem(row, 3, paramBounds.getUpperBound()[i]);
+        const QString param(TranslationManager::GetTranslatedDistributionParameterName(parameters.getDescription()[i]));
+        distParamTableModel_->setNotEditableHeaderItem(++row, 0, param);
+        if (i == 0)
+          distParamTableModel_->setNotEditableItem(row, 1, histogram->getFirst());
+        else if (i == 1)
+          distParamTableModel_->setNotEditableItem(row, 1, Parameters::GetOTPointStr(histogram->getWidth()).c_str());
+        else
+          distParamTableModel_->setNotEditableItem(row, 1, Parameters::GetOTPointStr(histogram->getHeight()).c_str());
+      }
+    }
+    else
+    {
+      for (UnsignedInteger i = 0; i < parameters.getSize(); ++i)
+      {
+        const QString param(TranslationManager::GetTranslatedDistributionParameterName(parameters.getDescription()[i]));
+        distParamTableModel_->setNotEditableHeaderItem(++row, 0, param);
+        distParamTableModel_->setNotEditableItem(row, 1, parameters[i]);
+        if (currentFittingTestResult_.getParamConfidenceInterval().getSize())
+        {
+          const Interval paramBounds = currentFittingTestResult_.getParamConfidenceInterval()[variant.value<int>()];
+          distParamTableModel_->setNotEditableItem(row, 2, paramBounds.getLowerBound()[i]);
+          distParamTableModel_->setNotEditableItem(row, 3, paramBounds.getUpperBound()[i]);
+        }
       }
     }
   }
@@ -403,7 +423,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
 
   if (current.isValid())
   {
-    row = distribution.getParameterDescription().getSize() + 1;
+    row -= 4;
 
     // -- set moments
     distParamTableModel_->setNotEditableItem(++row, 1, distribution.getMean()[0]);
@@ -488,6 +508,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
 
   // update pdf
   pdfPlot_->plotHistogram(currentFittingTestResult_.getValues());
+
   pdfPlot_->plotPDFCurve(distribution);
   pdfPlot_->setTitle(tr("PDF") + ": " + distName);
 
