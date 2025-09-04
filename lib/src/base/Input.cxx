@@ -21,10 +21,12 @@
 #include "persalys/Input.hxx"
 
 #include "persalys/DistributionDictionary.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/Dirac.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/UserDefined.hxx>
 
 using namespace OT;
 
@@ -167,19 +169,7 @@ String Input::getDistributionPythonScript() const
   OSS oss;
 
   String distributionName = distribution_.getImplementation()->getClassName();
-  if (distributionName != "TruncatedDistribution")
-  {
-    oss << "dist_" << getName() << " = ot." << distributionName << "(";
-    PointWithDescription parameters = distribution_.getParametersCollection()[0];
-    for (unsigned int i = 0; i < parameters.getSize(); ++ i)
-    {
-      oss << parameters[i];
-      if (i < parameters.getSize() - 1)
-        oss << ", ";
-    }
-    oss << ")\n";
-  }
-  else
+  if (distributionName == "TruncatedDistribution")
   {
     TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(distribution_.getImplementation().get());
     Distribution distribution = truncatedDistribution.getDistribution();
@@ -205,6 +195,21 @@ String Input::getDistributionPythonScript() const
     }
     else  // both sides truncation
       oss << "ot.Interval(" << bounds.getLowerBound()[0] << ", " << bounds.getUpperBound()[0] << "))\n";
+  }
+  else if (distributionName == "UserDefined")
+  {
+    const UserDefined distribution = *dynamic_cast<UserDefined*>(distribution_.getImplementation().get());
+    const String valuesVarName = "values_" + getName();
+    const String weightsVarName = "weights_" + getName();
+    oss << valuesVarName << " = " << Parameters::GetOTSampleStr(distribution.getX());
+    oss << weightsVarName << " = " << Parameters::GetOTPointStr(distribution.getP()) << "\n";
+    oss << "dist_" << getName() << " = ot." << distributionName << "(" << valuesVarName << ", " << weightsVarName << ")\n"; 
+  }
+  else
+  {
+    oss << "dist_" << getName() << " = ot." << distributionName << "(";
+    const PointWithDescription parameters = distribution_.getParameter();
+    oss << Parameters::GetOTPointStr(parameters, ", ", false) << ")\n";
   }
   return oss;
 }

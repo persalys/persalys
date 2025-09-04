@@ -141,7 +141,7 @@ String Parameters::GetOTSampleCollectionStr(const ProcessSample& processSample)
     strOut << "[";
     for(UnsignedInteger iTime=0; iTime<processSample[iTraj].getSize(); ++iTime)
     {
-      strOut << GetOTPointStr(processSample[iTraj][iTime], ",");
+      strOut << GetOTPointStr(processSample[iTraj][iTime]);
       if (iTime < processSample[iTraj].getSize() - 1)
         strOut << ", ";
     }
@@ -156,17 +156,23 @@ String Parameters::GetOTSampleCollectionStr(const ProcessSample& processSample)
 }
 
 
-String Parameters::GetOTPointStr(const Point& values, const String& separator)
+String Parameters::GetOTPointStr(const Point& values, const String& separator, bool useBrackets)
 {
-  String valuesStr = "[";
+  if (values.isEmpty())
+    return useBrackets ? "[]" : "";
+
+  OSS oss;
+  if (useBrackets) oss << "[";
+
   for (UnsignedInteger i = 0; i < values.getSize(); ++i)
   {
-    valuesStr += OSS() << values[i];
-    if (i < values.getSize() - 1)
-      valuesStr += separator + " ";
+    if (i > 0) oss << separator;
+    oss << values[i];
   }
-  valuesStr += "]";
-  return valuesStr;
+
+  if (useBrackets) oss << "]";
+
+  return oss.str();
 }
 
 

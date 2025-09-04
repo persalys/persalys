@@ -50,7 +50,7 @@ public:
   bool operator==(const Parameters& other) const;
   static OT::String GetOTSampleStr(const OT::Sample& values);
   static OT::String GetOTSampleCollectionStr(const OT::ProcessSample& processSample);
-  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ",");
+  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ", ", bool useBrackets = true);
   static OT::String GetOTDescriptionStr(const OT::Description& values, const bool quote = true);
   static OT::String GetOTIndicesStr(const OT::Indices& values);
   static OT::String GetOTBoolCollectionStr(const OT::Interval::BoolCollection& values);
