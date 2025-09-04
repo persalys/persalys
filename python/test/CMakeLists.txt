@@ -100,6 +100,7 @@ ot_pyinstallcheck_test (docstring IGNOREOUT)
 ot_pyinstallcheck_test (FileMemoizeFunction_std)
 ot_pyinstallcheck_test (DataCleaning_std)
 ot_pyinstallcheck_test (DataSensitivityAnalysis_std)
+ot_pyinstallcheck_test (Input_std IGNOREOUT)
 
 ot_pyinstallcheck_test (probabilistic_analyses IGNOREOUT)
 ot_pyinstallcheck_test (field_analyses IGNOREOUT)
