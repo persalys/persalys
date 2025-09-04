@@ -120,6 +120,14 @@ void PVPlotSettingWidget::addRankWidget(const bool checkState)
   });
 }
 
+void PVPlotSettingWidget::addQWTWidget(const bool checkState)
+{
+  auto * checkBox = new QCheckBox(tr("Display full plot matrix"));
+  checkBox->setChecked(checkState);
+  frameLayout_->addWidget(checkBox, frameLayout_->rowCount(), 0, 1, 2);
+  connect(checkBox, &QCheckBox::clicked, this, &PVPlotSettingWidget::displayQWTPlotMatrix);
+}
+
 
 void PVPlotSettingWidget::addExportLayout()
 {
@@ -171,6 +179,7 @@ MultiPlotSettingWidget::MultiPlotSettingWidget(PVViewWidget *pvViewWidget, const
 
   addSelectDataWidget(tr("Variables"), checked);
   addRankWidget(true);
+  addQWTWidget(false);
   addExportLayout();
   frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 }

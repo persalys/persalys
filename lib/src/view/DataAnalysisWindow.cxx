@@ -27,7 +27,6 @@
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/SampleTableModel.hxx"
-#include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/PlotMatrixConfigurationWidget.hxx"
 #include "persalys/TemporaryLabel.hxx"
@@ -165,15 +164,14 @@ void DataAnalysisWindow::fillTabWidget()
     // tab: correlation
     addDependenceTab();
   }
-  bool canUseParaview = false;
 #ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::SupportsOpenGL_3_2())
   {
     addParaviewWidgetsTabs();
-    canUseParaview = true;
+    canUseParaview_ = true;
   }
 #endif
-  if (!canUseParaview)
+  if (!canUseParaview_)
   {
     // tab: Table --------------------------------
     addTableTab();
@@ -559,15 +557,27 @@ void DataAnalysisWindow::addDependenceTab()
 
 void DataAnalysisWindow::addPlotMatrixTab()
 {
-  PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(designOfExperiment_.getSample(), designOfExperiment_.getSample());
-  plotMatrixWidget->setInputNames(inputNames_);
-  plotMatrixWidget->setOutputNames(outputNames_);
+  if (!boundPlotMatrixWidget_)
+  {
+    PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(designOfExperiment_.getSample(), designOfExperiment_.getSample());
+    plotMatrixWidget->setInputNames(inputNames_);
+    plotMatrixWidget->setOutputNames(outputNames_);
 
-  PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(plotMatrixWidget, this);
+    PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(plotMatrixWidget, this);
+    boundPlotMatrixWidget_ = new WidgetBoundToDockWidget(plotMatrixWidget, plotMatrixSettingWidget, this);
+  }
 
-  tabWidget_->addTab(new WidgetBoundToDockWidget(plotMatrixWidget, plotMatrixSettingWidget, this), tr("Plot matrix"));
+  const QString tabName = canUseParaview_ ? tr("Full Plot Matrix") : tr("Plot matrix");
+  plotMatrixTabIndex_ = tabWidget_->addTab(boundPlotMatrixWidget_, tabName);
 }
 
+void DataAnalysisWindow::removePlotMatrixTab()
+{
+  if (plotMatrixTabIndex_ > 0)
+    tabWidget_->removeTab(plotMatrixTabIndex_);
+  
+  plotMatrixTabIndex_ = -1;
+}
 
 void DataAnalysisWindow::addScatterPlotsTab()
 {
@@ -787,6 +797,12 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
 
   // setting widget
   MultiPlotSettingWidget * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, designOfExperiment_.getSample(), sampleRank, this);
+  connect(matrixSettingWidget, &MultiPlotSettingWidget::displayQWTPlotMatrix, [this](bool displayQWT){
+    if (displayQWT)
+      addPlotMatrixTab();
+    else
+      removePlotMatrixTab();
+  });
 
   tabWidget_->addTab(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this), tr("Plot matrix"));
 
