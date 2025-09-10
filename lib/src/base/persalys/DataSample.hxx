@@ -50,6 +50,7 @@ public:
   SampleCollection getListXMax() const;
 
   OT::Sample getSample() const;
+  OT::Sample getMarginalWithoutNaN(const OT::UnsignedInteger index) const;
   bool isValid() const;
 
   /** Method save() stores the object through the StorageManager */
@@ -60,6 +61,7 @@ public:
 
 private:
   void searchMinMax() const;
+  static bool containsNaN(const OT::Sample &sample);
 
 private:
   OT::Sample inputSample_;
@@ -67,6 +69,7 @@ private:
   mutable OT::Sample sample_;
   mutable OT::PersistentCollection<OT::Sample> listXMin_;
   mutable OT::PersistentCollection<OT::Sample> listXMax_;
+  bool containsNaN_ = false;
 };
 }
 #endif

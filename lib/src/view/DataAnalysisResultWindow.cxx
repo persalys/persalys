@@ -21,8 +21,16 @@
 #include "persalys/DataAnalysisResultWindow.hxx"
 
 #include "persalys/DataAnalysis.hxx"
+#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ParametersTableView.hxx"
+#include "persalys/MomentsEstimatesTableGroupBox.hxx"
+#include "persalys/MinMaxTableGroupBox.hxx"
 
 #include <QGridLayout>
+
+#ifdef PERSALYS_HAVE_PARAVIEW
+#include "persalys/PVServerManagerSingleton.hxx"
+#endif // PERSALYS_HAVE_PARAVIEW
 
 using namespace OT;
 
@@ -41,7 +49,7 @@ DataAnalysisResultWindow::DataAnalysisResultWindow(AnalysisItem * item, QWidget 
 }
 
 
-void DataAnalysisResultWindow::initialize(AnalysisItem* item)
+void DataAnalysisResultWindow::initialize(const AnalysisItem* item)
 {
   DataAnalysis analysis(*dynamic_cast<DataAnalysis*>(item->getAnalysis().getImplementation().get()));
 
@@ -57,24 +65,121 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
 
 void DataAnalysisResultWindow::addSummaryTab()
 {
-  QScrollArea * scrollArea = new QScrollArea;
+  auto * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  QWidget * tab = new QWidget;
-  QGridLayout * tabLayout = new QGridLayout(tab);
+  auto * tab = new QWidget;
+  auto * tabLayout = new QGridLayout(tab);
 
   // -- results --
   int row = 0;
+
+  auto * parametersGroupBox = new QGroupBox();
+  auto * parametersGroupBoxLayout = new QVBoxLayout(parametersGroupBox);
+
+  if (!analysisErrorMessage_.isEmpty())
+  {
+    auto * analysisErrorMessageLabel = new TemporaryLabel;
+    analysisErrorMessageLabel->setErrorMessage(analysisErrorMessage_);
+    parametersGroupBoxLayout->addWidget(analysisErrorMessageLabel);
+  }
 
   // parameters values
   QStringList namesList;
   QStringList valuesList;
 
-  namesList << sampleSizeTitle_;
   const OT::UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
 
+  // if there are NaNs
+  if (result_.getEffectiveSize().getDimension())
+  {
+    namesList << tr("Original sample size");
+    valuesList << QString::number(designOfExperiment_.getSample().getSize());
+    namesList << tr("Marginal sample size");
+    summaryValuesListSampleSizeIndex_ = valuesList.size();
+    valuesList << QString::number(result_.getEffectiveSize()[variablesListWidget_->item(0)->data(Qt::UserRole).toInt()]);
+  }
+  else
+  {
+    namesList << sampleSizeTitle_;
+    valuesList << QString::number(totalSampleSize);
+  }
   
+  namesList << tr("Multivariate sample size");
+  valuesList << QString::number(result_.getMultivariateDoE().getSample().getSize());
 
+  auto * table = new ParametersTableView(namesList, valuesList, true, true);
+  if (result_.getEffectiveSize().getDimension())
+  {
+    connect (variablesListWidget_, &VariablesListWidget::currentRowChanged, [this, table] (int index) {
+      int realIndex = variablesListWidget_->item(index)->data(Qt::UserRole).toInt();
+      table->setValueAt(summaryValuesListSampleSizeIndex_, QString::number(result_.getEffectiveSize()[realIndex]));
+    });
+  }
+  parametersGroupBoxLayout->addWidget(table);
+  tabLayout->addWidget(parametersGroupBox, row, 0);
+
+    // moments estimation
+  if (result_.getMean().getSize())
+  {
+    // we want to display output results before the input results
+    // input indices
+    Indices inInd(inputNames_.size());
+    inInd.fill();
+    // output indices
+    Indices ind(outputNames_.size());
+    ind.fill(inputNames_.size());
+    // indices with good order
+    ind.add(inInd);
+
+    auto * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
+        isConfidenceIntervalRequired_,
+        levelConfidenceInterval_,
+        ind);
+
+    tabLayout->addWidget(estimatesGroupBox, ++row, 0);
+    connect(variablesListWidget_, &VariablesListWidget::currentRowChanged, estimatesGroupBox, &MomentsEstimatesTableGroupBox::setCurrentIndexStackedWidget);
+
+  // min/max table
+  auto * minMaxTableGroupBox = new MinMaxTableGroupBox(result_.getMultivariateDoE(), false);
+  tabLayout->addWidget(minMaxTableGroupBox, ++row, 0);
+  connect(variablesListWidget_, &VariablesListWidget::currentRowChanged, minMaxTableGroupBox, &MinMaxTableGroupBox::setCurrentIndexStackedWidget);
+
+  tabLayout->setRowStretch(++row, 1);
+  scrollArea->setWidget(tab);
+  tabWidget_->addTab(scrollArea, tr("Summary"));
+  }
 }
 
+void DataAnalysisResultWindow::addDependenceTab()
+{
+  designOfExperiment_ = result_.getMultivariateDoE();
+  DataAnalysisWindow::addDependenceTab();
+  designOfExperiment_ = result_.getDesignOfExperiment();
 }
+
+void DataAnalysisResultWindow::addScatterPlotsTab()
+{
+  designOfExperiment_ = result_.getMultivariateDoE();
+  DataAnalysisWindow::addScatterPlotsTab();
+  designOfExperiment_ = result_.getDesignOfExperiment();
+}
+
+#ifdef PERSALYS_HAVE_PARAVIEW
+
+void DataAnalysisResultWindow::addParaviewWidgetsTabs()
+{
+  const Sample sample = result_.getMultivariateDoE().getSample();
+
+  // table tab
+  auto * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+  tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, sample, getItem()), tr("Table"));
+
+  // if only one variable or if only one point : do not need the following graphs
+  if (sample.getDimension() > 1 && sample.getSize() > 1)
+    addParaviewPlotWidgetsTabs(pvSpreadSheetWidget, sample);
+}
+
+#endif // PERSALYS_HAVE_PARAVIEW
+
+} // namespace PERSALYS

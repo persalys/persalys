@@ -349,10 +349,11 @@ void DataAnalysisWindow::addPDF_CDFTab()
   for (int i = 0; i < variablesNames.size(); ++i)
   {
     ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+    Sample marginalNoNan = designOfExperiment_.getMarginalWithoutNaN(ind[i]);
 
     // PDF
     PlotWidget * pdfPlot = new PlotWidget(tr("distributionPDF"));
-    pdfPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]));
+    pdfPlot->plotHistogram(marginalNoNan);
     if (result_.getPDF()[ind[i]].getSize())
       pdfPlot->plotCurve(result_.getPDF()[ind[i]]);
     pdfPlot->setTitle(tr("PDF:") + " " + variablesNames[i]);
@@ -363,7 +364,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
     // CDF
     PlotWidget * cdfPlot = new PlotWidget(tr("distributionCDF"));
-    cdfPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]), PlotWidget::CDF);
+    cdfPlot->plotHistogram(marginalNoNan, PlotWidget::CDF);
     if (result_.getCDF()[ind[i]].getSize())
       cdfPlot->plotCurve(result_.getCDF()[ind[i]]);
     cdfPlot->setTitle(tr("CDF:") + " " + variablesNames[i]);
@@ -376,7 +377,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
     PlotWidget * survPlot = new PlotWidget(tr("distributionSurvivalFunction"));
     if (result_.getSurvivalFunction().getSize())
     {
-      survPlot->plotHistogram(designOfExperiment_.getSample().getMarginal(ind[i]), PlotWidget::Survival);
+      survPlot->plotHistogram(marginalNoNan, PlotWidget::Survival);
       if (result_.getSurvivalFunction()[ind[i]].getSize())
         survPlot->plotCurve(result_.getSurvivalFunction()[ind[i]]);
       survPlot->setTitle(tr("SurvivalFunction:") + " " + variablesNames[i]);
@@ -447,12 +448,13 @@ void DataAnalysisWindow::addBoxPlotTab()
 
 void DataAnalysisWindow::addDependenceTab()
 {
-  const CorrelationMatrix C(designOfExperiment_.getSample().computeSpearmanCorrelation());
-  const UnsignedInteger dim = designOfExperiment_.getSample().getDimension();
+  const Sample sample = designOfExperiment_.getSample();
+  const CorrelationMatrix C(sample.computeSpearmanCorrelation());
+  const UnsignedInteger dim = sample.getDimension();
 
   // consider only significantly non-zero correlations
   const double alpha = 0.05;
-  const double epsilon = Normal().computeQuantile(1 - alpha)[0] / std::sqrt(designOfExperiment_.getSample().getSize() - 1);
+  const double epsilon = Normal().computeQuantile(1 - alpha)[0] / std::sqrt(sample.getSize() - 1);
 
   QWidget * mainWidget = new QWidget;
   QVBoxLayout * mainLayout = new QVBoxLayout(mainWidget);
@@ -503,7 +505,7 @@ void DataAnalysisWindow::addDependenceTab()
       tableModel->setItem(i, j, item);
     }
   }
-  QStringList headers(QtOT::DescriptionToStringList(designOfExperiment_.getSample().getDescription()));
+  QStringList headers(QtOT::DescriptionToStringList(sample.getDescription()));
   tableModel->setHorizontalHeaderLabels(headers);
   tableModel->setVerticalHeaderLabels(headers);
 
@@ -559,7 +561,8 @@ void DataAnalysisWindow::addPlotMatrixTab()
 {
   if (!boundPlotMatrixWidget_)
   {
-    PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(designOfExperiment_.getSample(), designOfExperiment_.getSample());
+    const Sample sample = result_.getMultivariateDoE().getSample();
+    PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(sample, sample);
     plotMatrixWidget->setInputNames(inputNames_);
     plotMatrixWidget->setOutputNames(outputNames_);
 
@@ -639,8 +642,10 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // get data info
   const UnsignedInteger failedInSampleSize = failedInputSample_.getSize();
   const UnsignedInteger notEvalInSampleSize = notEvaluatedInputSample_.getSize();
-  const UnsignedInteger inSampleSize = designOfExperiment_.getInputSample().getSize();
-  const UnsignedInteger inSampleDim = designOfExperiment_.getInputSample().getDimension();
+  const Sample sample = designOfExperiment_.getSample();
+  const Sample inSample = designOfExperiment_.getInputSample();
+  const UnsignedInteger inSampleSize = inSample.getSize();
+  const UnsignedInteger inSampleDim = inSample.getDimension();
 
   // table tab
   // with paraview the table is always shown in order to use the selection behavior
@@ -649,14 +654,14 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   // if no failed points and no not evaluated points:
   if (!failedInSampleSize && !notEvalInSampleSize)
   {
-    tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, designOfExperiment_.getSample(), getItem()), tr("Table"));
+    tabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, sample, getItem()), tr("Table"));
   }
   else
   {
     // Table tab ------------------------------------------
     tablesTabWidget_ = new QTabWidget;
 
-    tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, designOfExperiment_.getSample(), getItem()), tr("Table"));
+    tablesTabWidget_->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, sample, getItem()), tr("Table"));
 
     // -- failed points tab
     if (failedInSampleSize)
@@ -682,7 +687,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
 
       // input sample + failed input sample
-      Sample succeedAndFailedInS(designOfExperiment_.getInputSample());
+      Sample succeedAndFailedInS(inSample);
       succeedAndFailedInS.add(failedInputSample_);
 
       Sample succeedAndFailedInSRank(succeedAndFailedInS.rank() / succeedAndFailedInS.getSize());
@@ -696,7 +701,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       succeedAndFailedInSRank.stack(statusColumnSample);
 
       // set columns name
-      Description desc(designOfExperiment_.getInputSample().getDescription());
+      Description desc(inSample.getDescription());
       desc.add(tr("Status\n0: failed; 1: ok").toUtf8().constData());
       succeedAndFailedInS.setDescription(desc);
       succeedAndFailedInSRank.setDescription(desc);
@@ -719,9 +724,9 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
     if (canBuildScatterPlot)
     {
       // input sample
-      samples.add(designOfExperiment_.getInputSample());
+      samples.add(inSample);
       PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-      sampleScatterPlotWidget->setData(designOfExperiment_.getInputSample(), Qt::green);
+      sampleScatterPlotWidget->setData(inSample, Qt::green);
       sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Evaluated points")).toList(), 0);
       // failed input sample
       if (failedInSampleSize)
@@ -741,7 +746,7 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
 
       // samples rank
       // allInputsSample : input sample + failed input sample + not evaluated input sample
-      Sample allInputsSample(designOfExperiment_.getInputSample());
+      Sample allInputsSample(inSample);
       if (failedInSampleSize)
         allInputsSample.add(failedInputSample_);
       if (notEvalInSampleSize)
@@ -768,35 +773,35 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
   }
 
   // if only one variable or if only one point : do not need the following graphs
-  if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
-    addParaviewPlotWidgetsTabs(pvSpreadSheetWidget);
+  if (sample.getDimension() > 1 && sample.getSize() > 1)
+    addParaviewPlotWidgetsTabs(pvSpreadSheetWidget, sample);
 }
 
 
-void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pvSpreadSheet)
+void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pvSpreadSheet, const Sample &sample)
 {
   Q_ASSERT(pvSpreadSheet);
 
   // 1- cobweb tab --------------------------------
-  PVParCooViewWidget * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
-  const Sample sampleRank(designOfExperiment_.getSample().rank() / designOfExperiment_.getSample().getSize());
+  auto * cobwebWidget = new PVParCooViewWidget(this, PVServerManagerSingleton::Get());
+  const Sample sampleRank(sample.rank() / static_cast<Scalar>(sample.getSize()));
   cobwebWidget->setData(sampleRank);
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
-  cobwebWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
+  cobwebWidget->setAxisToShow(sample.getDescription());
 
   // setting widget
-  MultiPlotSettingWidget * cobwebSettingWidget = new MultiPlotSettingWidget(cobwebWidget, designOfExperiment_.getSample(), sampleRank, this);
+  auto * cobwebSettingWidget = new MultiPlotSettingWidget(cobwebWidget, sample, sampleRank, this);
 
   tabWidget_->addTab(new WidgetBoundToDockWidget(cobwebWidget, cobwebSettingWidget, this), tr("Parallel coordinates plot"));
 
   // 2- plot matrix tab --------------------------------
-  PVMatrixPlotViewWidget * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
+  auto * pvmatrixWidget = new PVMatrixPlotViewWidget(this, PVServerManagerSingleton::Get());
   pvmatrixWidget->setData(sampleRank);
   // the variables are automatically sorted : use setAxisToShow with the order of the sample
-  pvmatrixWidget->setAxisToShow(designOfExperiment_.getSample().getDescription());
+  pvmatrixWidget->setAxisToShow(sample.getDescription());
 
   // setting widget
-  MultiPlotSettingWidget * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, designOfExperiment_.getSample(), sampleRank, this);
+  auto * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, sample, sampleRank, this);
   connect(matrixSettingWidget, &MultiPlotSettingWidget::displayQWTPlotMatrix, [this](bool displayQWT){
     if (displayQWT)
       addPlotMatrixTab();
@@ -808,13 +813,13 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
 
   // 3- scatter plots tab --------------------------------
   // sample
-  PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-  sampleScatterPlotWidget->PVViewWidget::setData(designOfExperiment_.getSample());
+  auto * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
+  sampleScatterPlotWidget->PVViewWidget::setData(sample);
   if ((inputNames_ + outputNames_) != (inAxisTitles_ + outAxisTitles_))
     sampleScatterPlotWidget->setAxisTitles(inputNames_ + outputNames_, inAxisTitles_ + outAxisTitles_);
 
-  ScatterSettingWidget * scatterSettingWidget = new ScatterSettingWidget(sampleScatterPlotWidget,
-      designOfExperiment_.getSample(),
+  auto * scatterSettingWidget = new ScatterSettingWidget(sampleScatterPlotWidget,
+      sample,
       sampleRank,
       inputNames_,
       outputNames_,
@@ -825,8 +830,6 @@ void DataAnalysisWindow::addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget * pv
   // 4- links model --------------------------------
   pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();
 
-  // There are selection behavior errors if windows use the same links names: a link name must be unique.
-  // The pointers are uniques, so we use them to create an unique name...find a better and easier way.
   String aStr = (OSS() << pvSpreadSheet->getProxy() << pvmatrixWidget->getProxy()).str();
   linksModel->addSelectionLink(aStr.c_str(), pvSpreadSheet->getProxy(), pvmatrixWidget->getProxy());
   aStr = (OSS() << cobwebWidget->getProxy() << pvSpreadSheet->getProxy()).str();

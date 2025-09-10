@@ -30,11 +30,6 @@ namespace PERSALYS
 /* Default constructor */
 DataSample::DataSample()
   : PersistentObject()
-  , inputSample_()
-  , outputSample_()
-  , sample_()
-  , listXMin_()
-  , listXMax_()
 {
 }
 
@@ -44,13 +39,12 @@ DataSample::DataSample(const Sample & inSample, const Sample & outSample)
   : PersistentObject()
   , inputSample_(inSample)
   , outputSample_(outSample)
-  , sample_()
-  , listXMin_()
-  , listXMax_()
 {
-  if (getInputSample().getSize() && getOutputSample().getSize())
-    if (getInputSample().getSize() != getOutputSample().getSize())
-      throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
+  const UnsignedInteger inSize = inSample.getSize();
+  const UnsignedInteger outSize = outSample.getSize();
+  if (inSize && outSize && inSize != outSize)
+    throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
+  containsNaN_ = containsNaN(inSample) || containsNaN(outSample);
 }
 
 
@@ -73,6 +67,7 @@ void DataSample::setInputSample(const Sample & sample)
   sample_ = Sample();
   listXMin_.clear();
   listXMax_.clear();
+  containsNaN_ = containsNaN_ || containsNaN(sample);
 }
 
 
@@ -88,6 +83,7 @@ void DataSample::setOutputSample(const Sample & sample)
   sample_ = Sample();
   listXMin_.clear();
   listXMax_.clear();
+  containsNaN_ = containsNaN_ || containsNaN(sample);
 }
 
 
@@ -185,6 +181,22 @@ Sample DataSample::getSample() const
   return sample_;
 }
 
+Sample DataSample::getMarginalWithoutNaN(const UnsignedInteger index) const
+{
+  const Sample marginal = getSample().getMarginal(index);
+  if (!containsNaN_)
+    return marginal;
+  
+  Sample marginalNoNaN;
+  for (UnsignedInteger j = 0 ; j < marginal.getSize() ; j++)
+  {
+    if (!std::isnan(marginal(j,0)))
+      marginalNoNaN.add(marginal[j]);
+  }
+
+  return marginalNoNaN;
+}
+
 
 bool DataSample::isValid() const
 {
@@ -199,6 +211,22 @@ bool DataSample::isValid() const
     }
   }
   return true;
+}
+
+bool DataSample::containsNaN(const Sample &sample)
+{
+  bool containsNaN = false;
+  for (UnsignedInteger i = 0 ; !containsNaN && i < sample.getSize() ; i++)
+  {
+    for(UnsignedInteger j = 0 ; j < sample.getDimension() ; j++)
+    {
+      containsNaN = !std::isnan(sample(i,j));
+      if(containsNaN)
+        break;
+    }
+  }
+
+  return containsNaN;
 }
 
 

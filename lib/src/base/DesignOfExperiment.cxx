@@ -114,6 +114,10 @@ Sample DesignOfExperiment::getSample() const
   return getImplementation()->getSample();
 }
 
+Sample DesignOfExperiment::getMarginalWithoutNaN(const UnsignedInteger i) const
+{
+  return getImplementation()->getMarginalWithoutNaN(i);
+}
 
 void DesignOfExperiment::setInputSample(const Sample& sample)
 {

@@ -199,3 +199,24 @@ Returns
 -------
 design : :class:`~persalys.DesignOfExperiment`
     Design of experiments containing the points really analysed"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataAnalysisResult::getEffectiveSize
+"Effective size accessor.
+
+Returns
+-------
+design : :class:`openturns.Point`
+    Number of non NaN values for each marginal"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataAnalysisResult::getMultivariateDoE
+"Multivariate design of experiments accessor.
+
+Returns
+-------
+design : :class:`~persalys.DesignOfExperiment`
+    Design of experiments where all rows containing NaN values have been removed."
+

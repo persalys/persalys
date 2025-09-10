@@ -38,7 +38,7 @@ class PERSALYS_VIEW_API DataAnalysisWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  DataAnalysisWindow(Item * item, QWidget *parent = nullptr);
+  explicit DataAnalysisWindow(Item * item, QWidget *parent = nullptr);
 
 protected:
   void initializeVariablesNames();
@@ -48,14 +48,14 @@ protected:
   virtual void addSummaryTab();
   void addPDF_CDFTab();
   void addBoxPlotTab();
-  void addDependenceTab();
+  virtual void addDependenceTab();
 #ifdef PERSALYS_HAVE_PARAVIEW
   virtual void addParaviewWidgetsTabs();
-  virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet = 0);
+  virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet, const OT::Sample &sample);
 #endif
   void addPlotMatrixTab();
   void removePlotMatrixTab();
-  void addScatterPlotsTab();
+  virtual void addScatterPlotsTab();
   virtual void addTableTab();
   void addErrorTable();
 
