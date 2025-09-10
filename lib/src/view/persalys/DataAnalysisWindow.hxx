@@ -88,6 +88,7 @@ protected:
   VariablesListWidget * variablesListWidget_;
   QTabWidget * tabWidget_;
   QTabWidget * tablesTabWidget_;
+  int summaryValuesListSampleSizeIndex_ = 0;
 
 private:
   WidgetBoundToDockWidget * boundPlotMatrixWidget_ = nullptr;

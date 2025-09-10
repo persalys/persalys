@@ -22,6 +22,8 @@
 
 #include "persalys/DataAnalysis.hxx"
 
+#include <QGridLayout>
+
 using namespace OT;
 
 namespace PERSALYS
@@ -52,4 +54,27 @@ void DataAnalysisResultWindow::initialize(AnalysisItem* item)
   titleLabel_->setText(tr("Data analysis"));
   titleLabel_->setDocLink("user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#dataanalysisresult");
 }
+
+void DataAnalysisResultWindow::addSummaryTab()
+{
+  QScrollArea * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
+  QWidget * tab = new QWidget;
+  QGridLayout * tabLayout = new QGridLayout(tab);
+
+  // -- results --
+  int row = 0;
+
+  // parameters values
+  QStringList namesList;
+  QStringList valuesList;
+
+  namesList << sampleSizeTitle_;
+  const OT::UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
+
+  
+
+}
+
 }

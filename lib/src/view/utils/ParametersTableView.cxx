@@ -43,30 +43,37 @@ ParametersTableView::ParametersTableView(const QStringList names,             //
   verticalHeader()->hide();
 
   // table model
-  CustomStandardItemModel * tableModel = new CustomStandardItemModel(names.size(), 2, this);
+  tableModel_ = new CustomStandardItemModel(names.size(), 2, this);
   if (splitLongLines)
   {
     LongStringProxy* proxy = new LongStringProxy(1, 50, this);
-    proxy->setSourceModel(tableModel);
+    proxy->setSourceModel(tableModel_);
     setModel(proxy);
   }
   else
-    setModel(tableModel);
+    setModel(tableModel_);
 
   // vertical header
   for (int i = 0; i < names.size(); ++i)
   {
     if (namesHasHeaderType)
-      tableModel->setNotEditableHeaderItem(i, 0, names[i]);
+      tableModel_->setNotEditableHeaderItem(i, 0, names[i]);
     else
-      tableModel->setNotEditableItem(i, 0, names[i]);
-    tableModel->setNotEditableItem(i, 1, values[i]);
+      tableModel_->setNotEditableItem(i, 0, names[i]);
+    tableModel_->setNotEditableItem(i, 1, values[i]);
   }
 
   // show grid
   setShowGrid(showGrid);
 
   // resize to contents
+  resizeToContents();
+}
+
+void ParametersTableView::setValueAt(int row, const QString &value)
+{
+  if (!tableModel_) return;
+  tableModel_->setNotEditableItem(row, 1, value);
   resizeToContents();
 }
 

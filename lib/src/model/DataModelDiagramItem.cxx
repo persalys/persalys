@@ -21,6 +21,7 @@
 #include "persalys/DataSensitivityAnalysis.hxx"
 #include "persalys/CopulaInferenceAnalysis.hxx"
 #include "persalys/MetaModelAnalysis.hxx"
+#include "persalys/DataAnalysis.hxx"
 
 #include "persalys/DataModelDiagramItem.hxx"
 #include "persalys/StudyItem.hxx"
@@ -80,7 +81,7 @@ void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
     String errorMessage;
     bool validity;
     // CanBeLaunched need to be called before emit otherwise errorMessage might be sent before being modified
-    validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
+    validity = DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
     emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
     validity = DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
     emit dataSensitivityValidityChanged(validity, QString(errorMessage.c_str()));

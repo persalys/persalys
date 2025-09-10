@@ -80,6 +80,8 @@ void DataAnalysis::launch()
 
   if (!sample.getSize())
     throw InvalidDimensionException(HERE) << "The sample is empty";
+  
+  Point effectiveSize(sample.getDimension());
 
   for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
   {
@@ -89,13 +91,24 @@ void DataAnalysis::launch()
     progressValue_ = (int) (i * 100 / sample.getDimension());
     notify("progressValueChanged");
 
+    const Sample marginal = sample.getMarginal(i);
+    Sample marginalNoNaN;
+
+    for (UnsignedInteger j = 0 ; j < marginal.getSize() ; j++)
+    {
+      if (!std::isnan(marginal[j][0]))
+        marginalNoNaN.add(marginal[j]);
+    }
+
+    effectiveSize.at(i) = static_cast<double>(marginalNoNaN.getSize());
+
     // min/max
-    result_.min_.add(sample.getMarginal(i).getMin());
-    result_.max_.add(sample.getMarginal(i).getMax());
+    result_.min_.add(marginalNoNaN.getMin());
+    result_.max_.add(marginalNoNaN.getMax());
 
     // moments
-    result_.mean_.add(sample.getMarginal(i).computeMean());
-    result_.median_.add(sample.getMarginal(i).computeMedian());
+    result_.mean_.add(marginalNoNaN.computeMean());
+    result_.median_.add(marginalNoNaN.computeMedian());
 
     result_.standardDeviation_.add(Point());
     result_.coefficientOfVariation_.add(Point());
@@ -104,12 +117,12 @@ void DataAnalysis::launch()
     result_.kurtosis_.add(Point());
     try
     {
-      result_.standardDeviation_[i] = sample.getMarginal(i).computeStandardDeviation();
+      result_.standardDeviation_[i] = marginalNoNaN.computeStandardDeviation();
       if (std::abs(result_.mean_[i][0]) > SpecFunc::Precision)
         result_.coefficientOfVariation_[i] = result_.standardDeviation_[i] / std::abs(result_.mean_[i][0]);
-      result_.variance_[i] = sample.getMarginal(i).computeVariance();
-      result_.skewness_[i] = sample.getMarginal(i).computeSkewness();
-      result_.kurtosis_[i] = sample.getMarginal(i).computeKurtosis();
+      result_.variance_[i] = marginalNoNaN.computeVariance();
+      result_.skewness_[i] = marginalNoNaN.computeSkewness();
+      result_.kurtosis_[i] = marginalNoNaN.computeKurtosis();
     }
     catch (const std::exception &)
     {
@@ -117,8 +130,8 @@ void DataAnalysis::launch()
     }
 
     // quartiles
-    result_.firstQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.25));
-    result_.thirdQuartile_.add(sample.getMarginal(i).computeQuantilePerComponent(0.75));
+    result_.firstQuartile_.add(marginalNoNaN.computeQuantilePerComponent(0.25));
+    result_.thirdQuartile_.add(marginalNoNaN.computeQuantilePerComponent(0.75));
 
     // Confidence Intervals
     if (isConfidenceIntervalRequired_)
@@ -140,7 +153,7 @@ void DataAnalysis::launch()
       {
         const Normal X(0, 1);
         const double f = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
-        double delta(f * result_.standardDeviation_[i][0] / sqrt(sample.getSize()));
+        double delta(f * result_.standardDeviation_[i][0] / sqrt(static_cast<double>(marginalNoNaN.getSize())));
 
         meanLowerBounds[i] = result_.mean_[i][0] - delta;
         meanUpperBounds[i] = result_.mean_[i][0] + delta;
@@ -166,10 +179,10 @@ void DataAnalysis::launch()
 
       result_.stdConfidenceInterval_ = Interval(result_.min_.getSize());
 
-      if (result_.variance_[i].getDimension() && sample.getSize() > 1)
+      if (result_.variance_[i].getDimension() && marginalNoNaN.getSize() > 1)
       {
         // TODO : use Normal Distribution?
-        const UnsignedInteger nbSimu = sample.getSize();
+        const UnsignedInteger nbSimu = marginalNoNaN.getSize();
         const ChiSquare X(nbSimu - 1);
         // low
         const double f1 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
@@ -195,9 +208,9 @@ void DataAnalysis::launch()
     result_.outliers_.add(Point());
     const double lowerBound(result_.firstQuartile_[i][0] - 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
     const double upperBound(result_.thirdQuartile_[i][0] + 1.5 * (result_.thirdQuartile_[i][0] - result_.firstQuartile_[i][0]));
-    for (UnsignedInteger j = 0; j < sample.getSize(); ++j)
-      if (sample(j, i) < lowerBound || sample(j, i) > upperBound)
-        result_.outliers_[i].add(sample(j, i));
+    for (UnsignedInteger j = 0; j < marginalNoNaN.getSize(); ++j)
+      if (marginalNoNaN(j, 0) < lowerBound || marginalNoNaN(j, 0) > upperBound)
+        result_.outliers_[i].add(marginalNoNaN(j, 0));
 
     // pdf/cdf
     result_.pdf_.add(Sample());
@@ -206,7 +219,7 @@ void DataAnalysis::launch()
     try
     {
       KernelSmoothing gaussianKernel;
-      Distribution fittedDistribution(gaussianKernel.build(sample.getMarginal(i)));
+      Distribution fittedDistribution(gaussianKernel.build(marginalNoNaN));
       result_.pdf_[i] = fittedDistribution.drawPDF().getDrawable(0).getData();
       result_.cdf_[i] = fittedDistribution.drawCDF().getDrawable(0).getData();
       result_.survFct_[i] = fittedDistribution.drawSurvivalFunction().getDrawable(0).getData();
@@ -260,6 +273,8 @@ void DataAnalysis::launch()
       result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));
     }
   }
+
+  result_.effectiveSize_ = effectiveSize;
 }
 
 
@@ -307,6 +322,20 @@ bool DataAnalysis::hasValidResult() const
   return getResult().getMean().getSize() != 0;
 }
 
+bool DataAnalysis::CanBeLaunched(String & errorMessage, const DesignOfExperiment &doe)
+{
+  errorMessage.clear();
+  // doe must be not empty
+  if (!doe.getSample().getSize())
+    errorMessage = "The sample must be not empty.";
+
+  return errorMessage.empty();
+}
+
+bool DataAnalysis::canBeLaunched(String & errorMessage) const
+{
+  return DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+}
 
 /* String converter */
 String DataAnalysis::__repr__() const
