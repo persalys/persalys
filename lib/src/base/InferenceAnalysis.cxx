@@ -226,7 +226,7 @@ void InferenceAnalysis::launch()
       Distribution distribution = DistributionDictionary::BuildDistribution(distributionName, 0);
       TestResult testResult;
       Scalar bicResult = SpecFunc::MaxScalar;
-      Interval paramCI = Interval();
+      Interval paramCI;
       Bool inferenceOK = false;
       try
       {

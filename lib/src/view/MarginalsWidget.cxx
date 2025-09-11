@@ -42,6 +42,7 @@
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/TruncatedNormal.hxx>
 #include <openturns/UserDefined.hxx>
+#include <openturns/Histogram.hxx>
 
 #include <QSplitter>
 #include <QScrollArea>
@@ -439,12 +440,7 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
       parameterValuesLabel_[i]->setText(TranslationManager::GetTranslatedDistributionParameterName(parametersName[i]));
       parameterValuesLabel_[i]->show();
       editButton_->hide();
-      if (distName != "UserDefined")
-      {
-        parameterValuesEdit_[i]->setValue(parameters[parametersType][i]);
-        parameterValuesEdit_[i]->setReadOnly(false);
-      }
-      else
+      if (distName == "UserDefined")
       {
         QString text;
         const int nbValues = inputDist.getParametersCollection()[0].getSize();
@@ -457,6 +453,38 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
         parameterValuesEdit_[i]->setText(text);
         editButton_->show();
         parameterValuesEdit_[i]->setReadOnly(true);
+      }
+      else if (distName == "Histogram")
+      {
+        const Histogram dist = *dynamic_cast<Histogram*>(inputDist.getImplementation().get());
+        if(i == 0)
+        {
+          parameterValuesEdit_[i]->setValue(dist.getFirst());
+          parameterValuesEdit_[i]->setReadOnly(false);
+        }
+        else
+        {
+          QString text;
+          Point histParameters;
+          if (i == 1)
+            histParameters = dist.getWidth();
+          else
+            histParameters = dist.getHeight();
+          
+          for (UnsignedInteger j = 0 ; j < histParameters.getSize() ; j++)
+          {
+            if (j > 0) text += ", ";
+            text += QString::number(histParameters[j], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+          }
+          parameterValuesEdit_[i]->setText(text);
+          parameterValuesEdit_[i]->setReadOnly(true);
+        }
+        editButton_->show();
+      }
+      else
+      {
+        parameterValuesEdit_[i]->setValue(parameters[parametersType][i]);
+        parameterValuesEdit_[i]->setReadOnly(false);
       }
       parameterValuesEdit_[i]->show();
     }
@@ -489,9 +517,9 @@ void MarginalsWidget::updateTruncationParametersWidgets(const QModelIndex & inde
   truncationParamGroupBox_->setExpanded(false);
 
   const Input input(physicalModel_.getInputs()[index.row()]);
-  truncationParamGroupBox_->setVisible(!input.getDistribution().isDiscrete());
-
   const String distName = input.getDistribution().getImplementation()->getClassName();
+  truncationParamGroupBox_->setVisible(!input.getDistribution().isDiscrete() && distName != "Histogram");
+
   if (distName != "TruncatedDistribution" && distName != "TruncatedNormal")
     return;
 
@@ -589,6 +617,31 @@ void MarginalsWidget::distributionParametersChanged()
       updateDistributionParametersWidgets(index);
       errorMessageLabel_->setTemporaryErrorMessage(ex.what());
     }
+  }
+  else if (distName == "Histogram")
+  {
+    PointWithDescription parameters = DistributionDictionary::GetParametersCollection(inputDist)[parametersType];
+    try
+    {
+      auto *histogram = dynamic_cast<Histogram*>(inputDist.getImplementation().get());
+      histogram->setFirst(parameterValuesEdit_[0]->value());
+      
+      // outside proba model like in calibration, avoid blockNotification to throw if the gui item is not found
+      if (physicalModel_.getImplementation()->getObserver("ProbabilisticModelItem"))
+        physicalModel_.blockNotification("ProbabilisticModelItem");
+      physicalModel_.setDistribution(input.getName(), inputDist);
+      physicalModel_.blockNotification();
+      updatePlots();
+    }
+    catch (const std::exception & ex)
+    {
+      physicalModel_.blockNotification();
+      qDebug() << "MarginalsWidget::distributionParametersChanged invalid parameters:"
+               << parameters.__str__().data() << " for distribution:" << distName.data();
+      updateDistributionParametersWidgets(index);
+      errorMessageLabel_->setTemporaryErrorMessage(ex.what());
+    }
+    
   }
   else
   {
@@ -882,12 +935,21 @@ void MarginalsWidget::openValuesDefinitionWizard()
   Distribution inputDist = input.getDistribution();
   String distName = inputDist.getImplementation()->getClassName();
 
-  UserDefinedWizard wizard(inputDist.getParametersCollection(), this);
-  if (wizard.exec())
+  EditValuesWizard * wizard;
+  if (distName == "Histogram")
+  {
+    Histogram histogram = *dynamic_cast<Histogram*>(inputDist.getImplementation().get());
+    wizard = new HistogramWizard(histogram.getFirst(), histogram.getWidth(), histogram.getHeight(), this);
+  }
+  else
+  {
+    wizard = new UserDefinedWizard(inputDist.getParametersCollection(), this);
+  }
+  if (wizard->exec())
   {
     // update the input
     physicalModel_.blockNotification("ProbabilisticModelItem");
-    physicalModel_.setDistribution(input.getName(), wizard.getDistribution());
+    physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
     physicalModel_.setDistributionParametersType(input.getName(), 0);
     physicalModel_.blockNotification();
     updateDistributionWidgets(index);

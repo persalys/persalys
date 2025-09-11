@@ -27,6 +27,7 @@
 #include <openturns/Dirac.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/UserDefined.hxx>
+#include <openturns/Histogram.hxx>
 
 using namespace OT;
 
@@ -203,7 +204,18 @@ String Input::getDistributionPythonScript() const
     const String weightsVarName = "weights_" + getName();
     oss << valuesVarName << " = " << Parameters::GetOTSampleStr(distribution.getX());
     oss << weightsVarName << " = " << Parameters::GetOTPointStr(distribution.getP()) << "\n";
-    oss << "dist_" << getName() << " = ot." << distributionName << "(" << valuesVarName << ", " << weightsVarName << ")\n"; 
+    oss << "dist_" << getName() << " = ot.UserDefined(" << valuesVarName << ", " << weightsVarName << ")\n"; 
+  }
+  else if (distributionName == "Histogram")
+  {
+    const Histogram distribution = *dynamic_cast<Histogram*>(distribution_.getImplementation().get());
+    const String firstVarName = "first_" + getName();
+    const String widthVarName = "width_" + getName();
+    const String heightVarName = "height_" + getName();
+    oss << firstVarName << " = " << distribution.getFirst() << "\n";
+    oss << widthVarName << " = " << Parameters::GetOTPointStr(distribution.getWidth()) << "\n";
+    oss << heightVarName << " = " << Parameters::GetOTPointStr(distribution.getHeight()) << "\n";
+    oss << "dist_" << getName() << " = ot.Histogram(" << firstVarName << ", " << widthVarName << ", " << heightVarName << ")\n";
   }
   else
   {
