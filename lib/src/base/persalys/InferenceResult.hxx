@@ -31,7 +31,7 @@ class PERSALYS_BASE_API InferenceResult : public AnalysisResult
   CLASSNAME
 
 public:
-  typedef OT::Collection<FittingTestResult> FittingTestResultCollection;
+  using  FittingTestResultCollection = OT::Collection<FittingTestResult>;
 
   friend class InferenceAnalysis;
 
@@ -43,6 +43,7 @@ public:
 
   FittingTestResultCollection getFittingTestResultCollection() const;
   FittingTestResult getFittingTestResultForVariable(const OT::String & variableName) const;
+  OT::UnsignedInteger getOriginalSampleSize() const;
 
   /** String converter */
   OT::String __repr__() const override;
@@ -55,6 +56,7 @@ public:
 
 private:
   OT::PersistentCollection< FittingTestResult > fittingTestResultCollection_;
+  OT::UnsignedInteger originalSampleSize_ = 0;
 };
 }
 #endif

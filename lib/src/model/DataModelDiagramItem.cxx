@@ -82,6 +82,8 @@ void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
     bool validity;
     // CanBeLaunched need to be called before emit otherwise errorMessage might be sent before being modified
     validity = DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
+    emit dataSizeValidityChanged(validity, QString(errorMessage.c_str()));
+    validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
     emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
     validity = DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
     emit dataSensitivityValidityChanged(validity, QString(errorMessage.c_str()));
@@ -116,6 +118,8 @@ void DataModelDiagramItem::fill()
   // update diagram (arrow color and button availability)
   String errorMessage;
   bool validity;
+  validity = DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
+  emit dataSizeValidityChanged(validity, QString(errorMessage.c_str()));
   validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
   emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
   validity = DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);

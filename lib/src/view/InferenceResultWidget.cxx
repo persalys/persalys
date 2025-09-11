@@ -55,12 +55,23 @@ void InferenceResultWidget::buildInterface()
 {
   setWidgetResizable(true);
 
-  QWidget * rightWidget = new QWidget;
-  QHBoxLayout * rightWidgetLayout = new QHBoxLayout(rightWidget);
+  auto * mainWidget = new QWidget;
+  auto * mainLayout = new QHBoxLayout(mainWidget);
+  auto * leftLayout = new QVBoxLayout;
+  mainLayout->addLayout(leftLayout);
+
+
+  // -- sizes table
+  auto * sizeGroupBox = new QGroupBox(tr("Sample size"));
+  sizeGroupBox->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+  auto * sizeGroupBoxLayout = new QVBoxLayout(sizeGroupBox);
+  sizeTable_ = new ParametersTableView(QStringList{tr("Orignal sample size"), tr("Marginal sample size")}, QStringList{"",""}, true, true);
+  sizeGroupBoxLayout->addWidget(sizeTable_);
+  leftLayout->addWidget(sizeGroupBox, 0, Qt::AlignLeft);
 
   // -- distributions table
-  QGroupBox * distGroupBox = new QGroupBox(tr("Distributions"));
-  QVBoxLayout * distGroupBoxLayout = new QVBoxLayout(distGroupBox);
+  auto * distGroupBox = new QGroupBox(tr("Distributions"));
+  auto * distGroupBoxLayout = new QVBoxLayout(distGroupBox);
 
   // --- table view
   distTableView_ = new ExportableTableView;
@@ -81,7 +92,9 @@ void InferenceResultWidget::buildInterface()
 
   distGroupBoxLayout->addWidget(distTableView_);
 
-  rightWidgetLayout->addWidget(distGroupBox, 0, Qt::AlignLeft | Qt::AlignTop);
+  distGroupBox->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+  leftLayout->addWidget(distGroupBox, 0, Qt::AlignLeft);
+  leftLayout->addStretch();
 
   // -- distribution parameters table
   // --- table view
@@ -167,7 +180,7 @@ void InferenceResultWidget::buildInterface()
     scrollArea->setWidget(paramWidget);
     tabWidget_->addTab(scrollArea, tr("Parameters"));
 
-    rightWidgetLayout->addWidget(tabWidget_);
+    mainLayout->addWidget(tabWidget_);
   }
   else
   {
@@ -178,14 +191,18 @@ void InferenceResultWidget::buildInterface()
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
-    rightWidgetLayout->addWidget(paramGroupBox);
+    mainLayout->addWidget(paramGroupBox);
   }
-  setWidget(rightWidget);
+  setWidget(mainWidget);
 }
 
 
 void InferenceResultWidget::updateDistributionTable(const double level, const InferenceResult& result, const QString& variableName)
 {
+  
+  sizeTable_->setValueAt(0, QString::number(result.getOriginalSampleSize()));
+  sizeTable_->setValueAt(1, QString::number(result.getFittingTestResultForVariable(variableName.toStdString()).getValues().getSize()));
+
   // check
   if (!(distTableModel_ && distTableView_))
     return;

@@ -28,6 +28,7 @@
 #include "persalys/DocumentationToolButton.hxx"
 #include "persalys/TemporaryLabel.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
+#include "persalys/ParametersTableView.hxx"
 
 #include <QTabWidget>
 #include <QScrollArea>
@@ -74,6 +75,7 @@ private:
   PlotWidget * qqPlot_ = nullptr;
   PlotWidget * survPlot_ = nullptr;
   PlotWidget * quantilePlot_ = nullptr;
+  ParametersTableView * sizeTable_ = nullptr;
 };
 }
 #endif

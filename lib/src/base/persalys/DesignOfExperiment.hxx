@@ -57,7 +57,7 @@ public:
   OT::Sample getInputSample() const;
   OT::Sample getOutputSample() const;
   OT::Sample getSample() const;
-  OT::Sample getMarginalWithoutNaN(const OT::UnsignedInteger i) const;
+  OT::Sample getMarginalWithoutNaN(const OT::UnsignedInteger index) const;
   void setInputSample(const OT::Sample & sample);
   void setOutputSample(const OT::Sample & sample);
   bool isValid() const;

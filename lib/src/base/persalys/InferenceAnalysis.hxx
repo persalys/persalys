@@ -59,6 +59,8 @@ public:
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
 
+  bool canBeLaunched(OT::String &errorMessage) const override;
+
   bool getEstimateParametersConfidenceInterval() const
   {
     return estimateParamCI_;
@@ -110,7 +112,10 @@ protected:
   void launch() override;
 
 private:
-  std::map<OT::String, DistributionFactoryCollection> distFactoriesForEachInterestVar_;
+  FittingTestResult runInferenceOnVariable(const OT::Sample &sample, const DistributionFactoryCollection &distFactoriesColl, int &distCounter, const int nTotalDist);
+
+private:
+  std::map<OT::String, DistributionFactoryCollection, std::less<>> distFactoriesForEachInterestVar_;
   double level_ = 0.05;
   InferenceResult result_;
   bool estimateParamCI_ = false;

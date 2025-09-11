@@ -65,6 +65,14 @@ FittingTestResult InferenceResult::getFittingTestResultForVariable(const String&
   throw InvalidArgumentException(HERE) << "No result for a variable named " << variableName;
 }
 
+UnsignedInteger InferenceResult::getOriginalSampleSize() const
+{
+  if (originalSampleSize_)
+    return originalSampleSize_;
+  else
+    return fittingTestResultCollection_[0].getValues().getSize();
+}
+
 
 /* String converter */
 String InferenceResult::__repr__() const
@@ -81,6 +89,7 @@ void InferenceResult::save(Advocate& adv) const
 {
   AnalysisResult::save(adv);
   adv.saveAttribute("fittingTestResultCollection_", fittingTestResultCollection_);
+  adv.saveAttribute("originalSampleSize_", originalSampleSize_);
 }
 
 
@@ -89,5 +98,7 @@ void InferenceResult::load(Advocate& adv)
 {
   AnalysisResult::load(adv);
   adv.loadAttribute("fittingTestResultCollection_", fittingTestResultCollection_);
+  if (adv.hasAttribute("originalSampleSize_"))
+    adv.loadAttribute("originalSampleSize_", originalSampleSize_);
 }
 }

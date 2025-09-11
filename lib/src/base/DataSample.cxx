@@ -188,12 +188,13 @@ Sample DataSample::getMarginalWithoutNaN(const UnsignedInteger index) const
     return marginal;
   
   Sample marginalNoNaN;
-  for (UnsignedInteger j = 0 ; j < marginal.getSize() ; j++)
+  for (UnsignedInteger i = 0 ; i < marginal.getSize() ; i++)
   {
-    if (!std::isnan(marginal(j,0)))
-      marginalNoNaN.add(marginal[j]);
+    if (!std::isnan(marginal(i,0)))
+      marginalNoNaN.add(marginal[i]);
   }
 
+  marginalNoNaN.setDescription(marginal.getDescription());
   return marginalNoNaN;
 }
 
