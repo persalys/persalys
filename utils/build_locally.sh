@@ -39,4 +39,4 @@ else
   docker pull ${img}
 fi
 
-docker run --rm --volume `pwd`:/io ${img} sh -c "/io/docker/${variant}/run_docker_build.sh `id -u` `id -g`"
+docker run --rm --volume `pwd`:/io ${img} sh -c "/io/docker/${variant}/run_docker_build.sh `id -u`:`id -g`"

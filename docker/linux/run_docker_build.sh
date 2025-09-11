@@ -2,8 +2,7 @@
 
 set -x -e
 
-uid=$1
-gid=$2
+UID_GID=$1
 
 export MAKEFLAGS="-j8"
 cd /io && ./utils/lint.sh
@@ -136,11 +135,12 @@ cp -v /usr/lib64/libtinfo.so.5 /usr/lib64/libncursesw.so.5 /usr/lib64/libpanelw.
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/lib/plugins/platforms/libqxcb.so
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib ldd persalys.AppDir/usr/bin/persalys
 
-appimagetool -v persalys.AppDir persalys-`cat /io/VERSION`-`uname -p`.AppImage
+APPIMAGE_FILE=persalys-`cat /io/VERSION`-`uname -p`.AppImage
+appimagetool -v persalys.AppDir ${APPIMAGE_FILE}
 
 # copy to host with same permission
-if test -n "${uid}" -a -n "${gid}"
+if test -n "${UID_GID}"
 then
-  sudo cp persalys*.AppImage persalys-doc.zip /io
-  sudo chown ${uid}:${gid} /io/persalys*.AppImage /io/persalys-doc.zip
+  sudo chown ${UID_GID} ${APPIMAGE_FILE} persalys-doc.zip
+  sudo cp ${APPIMAGE_FILE} persalys-doc.zip /io
 fi

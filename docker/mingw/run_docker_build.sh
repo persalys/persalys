@@ -2,8 +2,7 @@
 
 set -x -e
 
-uid=$1
-gid=$2
+UID_GID=$1
 
 cd /tmp
 
@@ -75,8 +74,8 @@ cd /tmp/build
 makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DPYTHON_PREFIX=/tmp/python_root -DPYBASEVER=${PYMAJMIN:0:1}.${PYMAJMIN:1} -DARCH=${ARCH} installer_bundle.nsi
 
 # copy to host with same permission
-if test -n "${uid}" -a -n "${gid}"
+if test -n "${UID_GID}"
 then
-  sudo cp persalys*.exe /io
-  sudo chown ${uid}:${gid} /io/persalys*.exe
+  sudo chown persalys-${VERSION}-*.exe
+  sudo cp persalys-${VERSION}-*.exe /io
 fi

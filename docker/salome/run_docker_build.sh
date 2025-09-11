@@ -1,11 +1,10 @@
 #!/bin/sh
 
-# docker build docker/salome -t persalys/salome && docker run --rm --volume `pwd`:/io persalys/salome sh -c "/io/docker/salome/run_docker_build.sh `id -u` `id -g`"
+# docker build docker/salome -t persalys/salome && docker run --rm --volume `pwd`:/io persalys/salome sh -c "/io/docker/salome/run_docker_build.sh `id -u`:`id -g`"
 
 set -x -e
 
-uid=$1
-gid=$2
+UID_GID=$1
 
 cd /tmp
 
@@ -124,11 +123,12 @@ cp /usr/lib/x86_64-linux-gnu/libQt5XcbQpa.so.5 persalys.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib:$PWD/persalys.AppDir/usr/salome:$PWD/persalys.AppDir/usr/salome/lib ldd persalys.AppDir/usr/bin/persalys
 
-appimagetool -v persalys.AppDir persalys-salome-`cat /io/VERSION`-`uname -p`.AppImage
+APPIMAGE_FILE=persalys-salome-`cat /io/VERSION`-`uname -p`.AppImage
+appimagetool -v persalys.AppDir ${APPIMAGE_FILE}
 
 # copy to host with same permission
-if test -n "${uid}" -a -n "${gid}"
+if test -n "${UID_GID}"
 then
-  sudo cp persalys-salome*.AppImage /io
-  sudo chown ${uid}:${gid} /io/persalys*.AppImage
+  sudo chown ${UID_GID} ${APPIMAGE_FILE}
+  sudo cp ${APPIMAGE_FILE} /io
 fi
