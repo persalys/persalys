@@ -23,6 +23,7 @@
 #include "persalys/ListWidgetWithCheckBox.hxx"
 #include "persalys/TitledComboBox.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/PVMatrixPlotViewWidget.hxx"
 
 #include <QPushButton>
 #include <QScrollArea>
@@ -179,7 +180,8 @@ MultiPlotSettingWidget::MultiPlotSettingWidget(PVViewWidget *pvViewWidget, const
 
   addSelectDataWidget(tr("Variables"), checked);
   addRankWidget(true);
-  addQWTWidget(false);
+  if (dynamic_cast<PVMatrixPlotViewWidget*>(pvViewWidget))
+    addQWTWidget(false);
   addExportLayout();
   frameLayout_->setRowStretch(frameLayout_->rowCount(), 1);
 }
