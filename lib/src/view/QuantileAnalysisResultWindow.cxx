@@ -186,7 +186,7 @@ namespace PERSALYS
             if (fullTailTypes.getSize() != ordered[i].getSize())
               throw InvalidArgumentException(HERE) << "Incompatible tail types and quantiles numbers.";
 
-            Scalar proba;
+            Scalar proba = 0.0;
             switch (probaModifier[j])
             {
             case 1:
@@ -202,7 +202,7 @@ namespace PERSALYS
               proba = 1. - 0.5*targetProbas[iMarg][i];
               break;
             default:
-              throw;
+	      throw InvalidArgumentException(HERE) << "invalid modifier: " << probaModifier[j];
             }
             const int prec = (int)(std::abs(std::log10(targetProbas[iMarg][i])) + 2);
             const QString sign = fullTailTypes[j] == QuantileAnalysisResult::Lower ? " < q) = " : " > q) = ";
