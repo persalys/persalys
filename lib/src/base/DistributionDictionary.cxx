@@ -85,9 +85,9 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     }
     else if (distributionName == "Histogram")
     {
-      const Point widths = {0.3, 0.7};
+      const Point widths = {sigma, 2*sigma};
       const Point heights = {0.7, 0.3};
-      const Scalar first = 0.;
+      const Scalar first = mu - sigma;
 
       return Histogram(first, widths, heights);
     }
@@ -175,8 +175,9 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     else if (distributionName == "UserDefined")
     {
       Sample values(2, 1);
-      values(1, 0) = 1.;
-      return UserDefined(values, Point(2, 0.5));
+      values(0, 0) = mu - sigma;
+      values(1, 0) = mu + sigma;
+      return UserDefined(values);
     }
     else if (distributionName == "WeibullMax")
     {
