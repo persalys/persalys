@@ -152,6 +152,7 @@ void Variable::save(Advocate & adv) const
   PersistentObject::save(adv);
   adv.saveAttribute("value_", value_);
   adv.saveAttribute("description_", description_);
+  adv.saveAttribute("unit_", unit_);
 }
 
 
@@ -161,5 +162,7 @@ void Variable::load(Advocate & adv)
   PersistentObject::load(adv);
   adv.loadAttribute("value_", value_);
   adv.loadAttribute("description_", description_);
+  if (adv.hasAttribute("unit_"))
+    adv.loadAttribute("unit_", unit_);
 }
 }
