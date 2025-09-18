@@ -33,9 +33,7 @@ namespace PERSALYS
   CName::~CName () throw() {}
 
 DEFINE_PERSALYSEXCEPTION( PhysicalModelNotValidException )
-DEFINE_PERSALYSEXCEPTION( AnalysisExecutionFailedException )
 DEFINE_PERSALYSEXCEPTION( InvalidValueException )
-DEFINE_PERSALYSEXCEPTION( IOException )
 DEFINE_PERSALYSEXCEPTION( DetachedException )
 
 #undef DEFINE_PERSALYSEXCEPTION

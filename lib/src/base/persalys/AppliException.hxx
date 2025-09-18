@@ -56,27 +56,11 @@ NEW_PERSALYSEXCEPTION( PhysicalModelNotValidException );
 
 
 /**
- * @class AnalysisExecutionFailedException
- * @brief Raised when analysis execution has failed
- * @internal
- */
-NEW_PERSALYSEXCEPTION( AnalysisExecutionFailedException );
-
-
-/**
  * @class InvalidValueException
  * @brief Raised when a value is not valid
  * @internal
  */
 NEW_PERSALYSEXCEPTION( InvalidValueException );
-
-
-/**
- * @class IOException
- * @brief Raised when using files
- * @internal
- */
-NEW_PERSALYSEXCEPTION( IOException );
 
 
 /**
