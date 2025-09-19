@@ -89,7 +89,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
     model_->setSteps(csColl);
     model_->blockNotification();
     CouplingStepWidget * csWidget = new CouplingStepWidget(item, model_, csColl.getSize() - 1);
-    stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(stepTabWidget_->count()));
+    stepTabWidget_->addTab(csWidget, tr("Step") + " " + QString::number(stepTabWidget_->count()));
     connect(csWidget, &CouplingStepWidget::updateStepRequested, [ = ]()
     {
       updateStepTabWidget(item);
@@ -260,7 +260,7 @@ void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)
   for (UnsignedInteger i = 0; i < model_->getSteps().getSize(); ++i)
   {
     CouplingStepWidget * csWidget = new CouplingStepWidget(item, model_, i);
-    stepTabWidget_->addTab(csWidget, tr("Command") + " " + QString::number(i + 1));
+    stepTabWidget_->addTab(csWidget, tr("Step") + " " + QString::number(i + 1));
   }
 
   if (stepTabWidget_->count() < 2)
@@ -830,7 +830,7 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   int row = -1;
 
   // template file path
-  QLabel * templateFileLabel = new QLabel(tr("Template file"));
+  QLabel * templateFileLabel = new QLabel(tr("Template file (absolute)"));
   layout->addWidget(templateFileLabel, ++row, 0);
 
   FilePathWidget * templateFileLineEdit = new FilePathWidget(model->getSteps()[indStep].getInputFiles()[indFile].getPath().c_str());
@@ -838,7 +838,7 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   layout->addWidget(templateFileLineEdit, row, 1);
 
   // input model file path
-  QLabel * fileLabel = new QLabel(tr("Configured file"));
+  QLabel * fileLabel = new QLabel(tr("Configured file (relative)"));
   layout->addWidget(fileLabel, ++row, 0);
 
   QLineEdit * fileLineEdit = new QLineEdit;
@@ -1199,7 +1199,7 @@ CouplingOutputFileWidget::CouplingOutputFileWidget(PhysicalModelItem *item, Coup
   int row = -1;
 
   // output file path
-  QLabel * outFileLabel = new QLabel(tr("Output file"));
+  QLabel * outFileLabel = new QLabel(tr("Output file (relative)"));
   layout->addWidget(outFileLabel, ++row, 0);
 
   QLineEdit * outFileLineEdit = new QLineEdit;

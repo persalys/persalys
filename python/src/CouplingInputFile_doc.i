@@ -23,7 +23,7 @@ CouplingStep, CouplingResourceFile, CouplingOutputFile"
 Parameters
 ----------
 path : str
-    Path to the template file."
+    Path to the template input file, preferably absolute."
 
 // ---------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ path : str
 Returns
 -------
 path : str
-    Path to the template file."
+    Path to the template input file, preferably absolute."
 
 // ---------------------------------------------------------------------
 
@@ -43,9 +43,8 @@ path : str
 Parameters
 ----------
 configured_path : str
-    Configured file path, must be relative.
-    It is interpreted as the path to the file with the actual input values
-    relatively to the temporary working directory."
+    Relative path of the input file after replacement of input values in the working directory.
+    It must be relative as each evaluation is isolated in its own temporary directory."
 
 // ---------------------------------------------------------------------
 
@@ -55,7 +54,8 @@ configured_path : str
 Returns
 -------
 configured_path : str
-    Configured file path."
+    Relative path of the input file after replacement of input values in the working directory.
+    It must be relative as each evaluation is isolated in its own temporary directory."
 
 // ---------------------------------------------------------------------
 
