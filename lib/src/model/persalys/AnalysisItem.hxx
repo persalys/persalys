@@ -52,11 +52,11 @@ public slots:
   void stopAnalysis();
   void detachAnalysis();
   void modifyAnalysis();
-  void appendMetaModelItem();
   void exportMetaModel();
   void appendDataModelItem();
   virtual void removeAnalysis();
   void extractData();
+
 signals:
   void analysisRemoved(QStandardItem*);
   void messageChanged(QString);
@@ -68,6 +68,9 @@ signals:
   void numberDesignEvaluationChanged(bool);
   void designEvaluationUpdated(bool);
   void numberMetamodelChanged(int);
+
+private:
+  PhysicalModel getMetaModel() const;
 
 protected:
   Analysis analysis_;

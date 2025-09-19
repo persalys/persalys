@@ -169,22 +169,25 @@ void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &a
 
 void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& analysis, const bool isGeneralWizard)
 {
-  MetaModelExportWizard * wizard = new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_);
+  auto * wizard = new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_);
 
   if (wizard)
   {
     if (wizard->exec())
     {
-      FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(wizard->getAnalysis().getImplementation().get());
-      if (chaos)
-        item->appendMetaModelItem(chaos->getResult().getMetaModel());
-      KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(wizard->getAnalysis().getImplementation().get());
-      if(kriging)
-        item->appendMetaModelItem(kriging->getResult().getMetaModel());
-      PolynomialRegressionAnalysis * linear = dynamic_cast<PolynomialRegressionAnalysis*>(wizard->getAnalysis().getImplementation().get());
-      if (linear)
-        item->appendMetaModelItem(linear->getResult().getMetaModel());
+      PhysicalModel metaModel;
+      AnalysisImplementation * implementation(wizard->getAnalysis().getImplementation().get());
+      
+      if (const auto * chaos = dynamic_cast<FunctionalChaosAnalysis*>(implementation); chaos)
+        metaModel = chaos->getResult().getMetaModel();
+      if(const auto * kriging = dynamic_cast<KrigingAnalysis*>(implementation); kriging)
+        metaModel = kriging->getResult().getMetaModel();
+      if (const auto * linear = dynamic_cast<PolynomialRegressionAnalysis*>(implementation); linear)
+        metaModel = linear->getResult().getMetaModel();
+      
+      item->appendMetaModelItem(metaModel);
     }
+    
     delete wizard;
   }
 }

@@ -77,7 +77,9 @@ void AnalysisItem::buildActions()
   {
     convertAction_ = new QAction(tr("Convert metamodel into physical model"), this);
     convertAction_->setStatusTip(tr("Add the metamodel in the study tree"));
-    connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendMetaModelItem()));
+    connect(convertAction_, &QAction::triggered, [this](){
+      getParentStudyItem()->appendMetaModelItem(getMetaModel());
+    });
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(convertAction_);
 
@@ -227,26 +229,25 @@ void AnalysisItem::modifyAnalysis()
   }
 }
 
-
-void AnalysisItem::appendMetaModelItem()
+PhysicalModel AnalysisItem::getMetaModel() const
 {
-  FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get());
-  KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
-  PolynomialRegressionAnalysis * regression = dynamic_cast<PolynomialRegressionAnalysis*>(analysis_.getImplementation().get());
-  if (chaos)
-  {
-    getParentStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());
-  }
-  else if (kriging)
-  {
-    getParentStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());
-  }
-  else if (regression)
-  {
-    getParentStudyItem()->appendMetaModelItem(regression->getResult().getMetaModel());
-  }
-}
+  PhysicalModel metaModel;
 
+  if (const auto * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get()); chaos)
+  {
+    metaModel = chaos->getResult().getMetaModel();
+  }
+  else if (const auto * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get()); kriging)
+  {
+    metaModel = kriging->getResult().getMetaModel();
+  }
+  else if (const auto * regression = dynamic_cast<PolynomialRegressionAnalysis*>(analysis_.getImplementation().get()); regression)
+  {
+    metaModel = regression->getResult().getMetaModel();
+  }
+
+  return metaModel;
+}
 
 void AnalysisItem::exportMetaModel()
 {
