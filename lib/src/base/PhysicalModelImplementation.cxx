@@ -1016,11 +1016,7 @@ String PhysicalModelImplementation::getPythonScript() const
 
 void PhysicalModelImplementation::exportStandalonePythonScript(const String & fileName) const
 {
-  const String extension(fileName.substr(fileName.size() - 3));
-  String filenameXML(fileName);
-  if (extension == ".py")
-    filenameXML = fileName.substr(0, fileName.size() - 3);
-  filenameXML += ".xml";
+  String filenameXML = fileName + ".xml";
   const String basenameXML = filenameXML.substr(filenameXML.find_last_of("/\\") + 1);
 
   // write script
