@@ -27,6 +27,7 @@
 #include <openturns/ProcessSample.hxx>
 #include <regex>
 #include <thread>
+#include <algorithm>
 
 namespace PERSALYS
 {
@@ -122,6 +123,14 @@ inline OT::UnsignedInteger GetNumberOfPhysicalCores()
 {
   return std::max(std::thread::hardware_concurrency()/2, 1u);
 }
+
+template <typename TIObject>
+bool collectionAlreadyContainsName(const OT::Collection<TIObject>& coll, const OT::String& name)
+{
+  return std::count_if(coll.begin(), coll.end(),
+                       [&](const TIObject& obj){ return obj.getName() == name; }) >= 1u;
+}
+
 #endif
 }
 #endif
