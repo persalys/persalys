@@ -262,18 +262,25 @@ Collection< DesignOfExperiment > Study::getDataModels() const
   return getImplementation()->getDataModels();
 }
 
-
 DesignOfExperiment& Study::getDataModelByName(const String& dataModelName)
 {
   return getImplementation()->getDataModelByName(dataModelName);
 }
 
+const DesignOfExperiment& Study::getDataModelByName(const String& dataModelName) const
+{
+  return getImplementation()->getDataModelByName(dataModelName);
+}
 
 String Study::getAvailableDataModelName(const String& modelRootName) const
 {
   return getImplementation()->getAvailableDataModelName(modelRootName);
 }
 
+bool Study::hasDataModelNamed(const String & name) const
+{
+  return getImplementation()->hasDataModelNamed(name);
+}
 
 void Study::add(const DesignOfExperiment& designOfExperiment)
 {
@@ -293,16 +300,24 @@ Collection< DataFieldModel > Study::getDataFieldModels() const
   return getImplementation()->getDataFieldModels();
 }
 
-
 DataFieldModel& Study::getDataFieldModelByName(const String& dataModelName)
 {
   return getImplementation()->getDataFieldModelByName(dataModelName);
 }
 
+const DataFieldModel& Study::getDataFieldModelByName(const String& dataModelName) const
+{
+  return getImplementation()->getDataFieldModelByName(dataModelName);
+}
 
 String Study::getAvailableDataFieldModelName(const String& modelRootName) const
 {
   return getImplementation()->getAvailableDataFieldModelName(modelRootName);
+}
+
+bool Study::hasDataFieldModelNamed(const String & name) const
+{
+  return getImplementation()->hasDataFieldModelNamed(name);
 }
 
 void Study::add(const DataFieldModel& dataFieldModel)
@@ -322,18 +337,25 @@ Collection<PhysicalModel> Study::getPhysicalModels() const
   return getImplementation()->getPhysicalModels();
 }
 
-
 PhysicalModel& Study::getPhysicalModelByName(const String& physicalModelName)
 {
   return getImplementation()->getPhysicalModelByName(physicalModelName);
 }
 
+const PhysicalModel& Study::getPhysicalModelByName(const String& physicalModelName) const
+{
+  return getImplementation()->getPhysicalModelByName(physicalModelName);
+}
 
 String Study::getAvailablePhysicalModelName(const String& physicalModelRootName) const
 {
   return getImplementation()->getAvailablePhysicalModelName(physicalModelRootName);
 }
 
+bool Study::hasPhysicalModelNamed(const String & name) const
+{
+  return getImplementation()->hasPhysicalModelNamed(name);
+}
 
 void Study::add(const PhysicalModel& physicalModel)
 {
@@ -353,18 +375,25 @@ Collection<Analysis> Study::getAnalyses() const
   return getImplementation()->getAnalyses();
 }
 
-
 Analysis& Study::getAnalysisByName(const String& analysisName)
 {
   return getImplementation()->getAnalysisByName(analysisName);
 }
 
+const Analysis& Study::getAnalysisByName(const String& analysisName) const
+{
+  return getImplementation()->getAnalysisByName(analysisName);
+}
 
 String Study::getAvailableAnalysisName(const String& rootName) const
 {
   return getImplementation()->getAvailableAnalysisName(rootName);
 }
 
+bool Study::hasAnalysisNamed(const String & name) const
+{
+  return getImplementation()->hasAnalysisNamed(name);
+}
 
 void Study::add(const Analysis& analysis)
 {
@@ -384,12 +413,15 @@ Collection<LimitState> Study::getLimitStates() const
   return getImplementation()->getLimitStates();
 }
 
-
 String Study::getAvailableLimitStateName(const String & rootName) const
 {
   return getImplementation()->getAvailableLimitStateName(rootName);
 }
 
+bool Study::hasLimitStateNamed(const String & name) const
+{
+  return getImplementation()->hasLimitStateNamed(name);
+}
 
 void Study::add(const LimitState& limitState)
 {

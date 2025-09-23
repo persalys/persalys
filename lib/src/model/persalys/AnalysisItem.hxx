@@ -52,6 +52,7 @@ public slots:
   void stopAnalysis();
   void detachAnalysis();
   void modifyAnalysis();
+  void addPythonMetaModel();
   void exportMetaModel();
   void appendDataModelItem();
   virtual void removeAnalysis();
@@ -80,6 +81,7 @@ protected:
   QAction * removeAction_ = nullptr;
 private:
   QAction * extractDataAction_ = nullptr;
+  QAction * convertPythonAction_ = nullptr;
 };
 }
 #endif

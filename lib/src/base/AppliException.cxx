@@ -37,4 +37,21 @@ DEFINE_PERSALYSEXCEPTION( InvalidValueException )
 DEFINE_PERSALYSEXCEPTION( DetachedException )
 
 #undef DEFINE_PERSALYSEXCEPTION
+
+static const char * const DuplicateItemExceptionName = "DuplicateItemException";
+static const PERSALYS::DuplicateItemException DuplicateItemExceptionObj(HERE, PERSALYS::DuplicateItemException::ItemType::Other);
+
+
+PERSALYS::DuplicateItemException::DuplicateItemException(const OT::PointInSourceFile &point, ItemType type)
+  : OT::Exception(point, DuplicateItemExceptionName)
+  , itemType(type)
+{}
+
+PERSALYS::DuplicateItemException::~DuplicateItemException() throw() = default;
+
+PERSALYS::DuplicateItemException::ItemType PERSALYS::DuplicateItemException::getItemType() const
+{
+  return itemType;
+}
+
 }

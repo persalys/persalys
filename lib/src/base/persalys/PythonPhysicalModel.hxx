@@ -21,23 +21,29 @@
 #ifndef PERSALYS_PYTHONPHYSICALMODEL_HXX
 #define PERSALYS_PYTHONPHYSICALMODEL_HXX
 
-#include "PhysicalModelImplementation.hxx"
+#include "PhysicalModel.hxx"
 
 namespace PERSALYS
 {
+
+class Study;
+class MetaModelAnalysis;
+
 class PERSALYS_BASE_API PythonPhysicalModel : public PhysicalModelImplementation
 {
   CLASSNAME
 
 public:
   /** Default constructor */
-  PythonPhysicalModel(const OT::String & name = "Unnamed");
+  explicit PythonPhysicalModel(const OT::String & name = "Unnamed");
 
   /** Constructor with parameters */
   PythonPhysicalModel(const OT::String & name,
                       const InputCollection & inputs,
                       const OutputCollection & outputs,
                       const OT::String & code);
+  
+  PythonPhysicalModel(const MetaModelAnalysis &metaModelAnalysis, const PhysicalModel &metaModel, const Study &study);
 
   /** Virtual constructor */
   PythonPhysicalModel * clone() const override;

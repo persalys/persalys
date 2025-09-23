@@ -1,16 +1,28 @@
 %feature("docstring") PERSALYS::PythonPhysicalModel
 R"RAW(Create a physical model defined by Python code.
 
+Available constructors:
+    PythonPhysicalModel(*name* = "Unnamed")
+    PythonPhysicalModel(*name, inputs, outputs, code*)
+    PythonPhysicalModel(*metaModelAnalysis, metaModel, study*)
+
 Parameters
 ----------
 name : str
     Name
 inputs : sequence of :class:`~persalys.Input`
-    Input variables (optional)
+    Input variables
 outputs : sequence of :class:`~persalys.Output`
-    Output variables (optional)
+    Output variables
 code : str
-    Code string (optional)
+    Code string
+metaModelAnalysis : :class:`~persalys.MetaModelAnalysis`
+    metamodel analysis to use inside the python model
+metaModel : :class:`~persalys.PhysicalModel`
+    The metamodel created by the metamodel analysis
+    obtained by metaModelAnalysis.getImplementation().getResult().getMetaModel()
+study : :class:`~persalys.Study`
+    The study to which the metamodel analysis is attached.
 
 Notes
 -----

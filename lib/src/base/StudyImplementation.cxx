@@ -189,6 +189,15 @@ DesignOfExperiment& StudyImplementation::getDataModelByName(const String& dataMo
 }
 
 
+const DesignOfExperiment& StudyImplementation::getDataModelByName(const String& dataModelName) const
+{
+  for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
+    if (dataModels_[i].getName() == dataModelName)
+      return dataModels_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << dataModelName << " does not correspond to a data model of the study.\n";
+}
+
+
 bool StudyImplementation::hasDataModelNamed(const String& dataModelName) const
 {
   for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
@@ -273,6 +282,15 @@ void StudyImplementation::clear(const DesignOfExperiment& designOfExperiment)
  }
 
 
+ const DataFieldModel& StudyImplementation::getDataFieldModelByName(const String& dataModelName) const
+ {
+   for (UnsignedInteger i = 0; i < dataFieldModels_.getSize(); ++i)
+     if (dataFieldModels_[i].getName() == dataModelName)
+       return dataFieldModels_[i];
+   throw InvalidArgumentException(HERE) << "The given name " << dataModelName << " does not correspond to a data model of the study.\n";
+ }
+
+
  bool StudyImplementation::hasDataFieldModelNamed(const String& dataModelName) const
  {
    for (UnsignedInteger i = 0; i < dataFieldModels_.getSize(); ++i)
@@ -346,6 +364,15 @@ Collection<PhysicalModel> StudyImplementation::getPhysicalModels() const
 
 
 PhysicalModel& StudyImplementation::getPhysicalModelByName(const String& physicalModelName)
+{
+  for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
+    if (physicalModels_[i].getName() == physicalModelName)
+      return physicalModels_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << physicalModelName << " does not correspond to a physical model of the study.\n";
+}
+
+
+const PhysicalModel& StudyImplementation::getPhysicalModelByName(const String& physicalModelName) const
 {
   for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
     if (physicalModels_[i].getName() == physicalModelName)
@@ -452,6 +479,15 @@ Collection<Analysis> StudyImplementation::getAnalyses() const
 
 
 Analysis& StudyImplementation::getAnalysisByName(const String& analysisName)
+{
+  for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
+    if (analyses_[i].getName() == analysisName)
+      return analyses_[i];
+  throw InvalidArgumentException(HERE) << "The given name " << analysisName << " does not correspond to an analysis of the study.\n";
+}
+
+
+const Analysis& StudyImplementation::getAnalysisByName(const String& analysisName) const
 {
   for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
     if (analyses_[i].getName() == analysisName)

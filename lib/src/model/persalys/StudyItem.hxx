@@ -46,7 +46,8 @@ public:
   void appendItem(const LimitState & limitState) override;
   void appendItem(const Analysis & analysis) override;
 
-  void appendMetaModelItem(PhysicalModel metaModel);
+  OT::String appendMetaModelItem(PhysicalModel metaModel);
+  OT::String appendPythonMetaModelItem(PhysicalModel metaModel);
 
   QVariant data(int role) const override;
   void setData(const QVariant & value, int role) override;

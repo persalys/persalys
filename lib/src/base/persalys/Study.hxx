@@ -64,30 +64,39 @@ public:
 
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);
+  const DesignOfExperiment& getDataModelByName(const OT::String& dataModelName) const;
   OT::String getAvailableDataModelName(const OT::String& modelRootName) const;
+  bool hasDataModelNamed(const OT::String &name) const;
   void add(const DesignOfExperiment& designOfExperiment);
   void remove(const DesignOfExperiment& designOfExperiment);
 
   OT::Collection<DataFieldModel> getDataFieldModels() const;
   DataFieldModel& getDataFieldModelByName(const OT::String& dataModelName);
+  const DataFieldModel& getDataFieldModelByName(const OT::String& dataModelName) const;
   OT::String getAvailableDataFieldModelName(const OT::String& modelRootName) const;
+  bool hasDataFieldModelNamed(const OT::String &name) const;
   void add(const DataFieldModel& dataFieldModel);
   void remove(const DataFieldModel& dataFieldModel);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
+  const PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName) const;
   OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName) const;
+  bool hasPhysicalModelNamed(const OT::String &name) const;
   void add(const PhysicalModel& physicalModel);
   void remove(const PhysicalModel& physicalModel);
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis& getAnalysisByName(const OT::String& analysisName);
+  const Analysis& getAnalysisByName(const OT::String& analysisName) const;
   OT::String getAvailableAnalysisName(const OT::String& rootName) const;
+  bool hasAnalysisNamed(const OT::String &name) const;
   void add(const Analysis& analysis);
   void remove(const Analysis& analysis);
 
   OT::Collection<LimitState> getLimitStates() const;
   OT::String getAvailableLimitStateName(const OT::String & rootName) const;
+  bool hasLimitStateNamed(const OT::String &name) const;
   void add(const LimitState& limitState);
   void remove(const LimitState& limitState);
 

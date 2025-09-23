@@ -316,10 +316,40 @@ void StudyItem::appendItem(const DesignOfExperiment &dataModel)
   }
 }
 
-void StudyItem::appendMetaModelItem(PhysicalModel metaModel)
+String StudyItem::appendMetaModelItem(PhysicalModel metaModel)
 {
-  metaModel.setName(study_.getAvailablePhysicalModelName("Symbolic_metaModel_"));
-  study_.add(metaModel);
+  String originalName(metaModel.getName());
+  if (!study_.hasPhysicalModelNamed("Symbolic_"+originalName))
+  {
+    metaModel.setName("Symbolic_"+originalName);
+    study_.add(metaModel);
+    return "Symbolic_"+originalName;
+  }
+  else
+  {
+    String newName(study_.getAvailablePhysicalModelName("Sybmolic_"+originalName+"_"));
+    metaModel.setName(newName);
+    study_.add(metaModel);
+    return newName;
+  }
+}
+
+String StudyItem::appendPythonMetaModelItem(PhysicalModel metaModel)
+{
+  String originalName(metaModel.getName());
+  if (!study_.hasPhysicalModelNamed("Python_"+originalName))
+  {
+    metaModel.setName("Python_"+originalName);
+    study_.add(metaModel);
+    return "Python_"+originalName;
+  }
+  else
+  {
+    String newName(study_.getAvailablePhysicalModelName("Python_"+originalName+"_"));
+    metaModel.setName(newName);
+    study_.add(metaModel);
+    return newName;
+  }
 }
 
 
