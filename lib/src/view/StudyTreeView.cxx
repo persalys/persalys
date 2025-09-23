@@ -23,7 +23,6 @@
 #include "persalys/LineEditWithQValidatorDelegate.hxx"
 #include "persalys/QtTools.hxx"
 #include "persalys/LimitStateItem.hxx"
-#include "persalys/BaseTools.hxx"
 
 #include <QMenu>
 #include <QHeaderView>
@@ -118,15 +117,15 @@ public:
     bool nameTaken = false;
     
     if (dynamic_cast<DesignOfExperimentItem*>(stdItem))
-      nameTaken = collectionAlreadyContainsName(study.getDataModels(), newName);
+      nameTaken = study.hasDataModelNamed(newName);
     else if (dynamic_cast<DataFieldModelItem*>(stdItem))
-      nameTaken = collectionAlreadyContainsName(study.getDataFieldModels(), newName);
+      nameTaken = study.hasDataFieldModelNamed(newName);
     else if (dynamic_cast<PhysicalModelItem*>(stdItem))
-      nameTaken = collectionAlreadyContainsName(study.getPhysicalModels(), newName);
+      nameTaken = study.hasPhysicalModelNamed(newName);
     else if (dynamic_cast<AnalysisItem*>(stdItem))
-      nameTaken = collectionAlreadyContainsName(study.getAnalyses(), newName);
+      nameTaken = study.hasAnalysisNamed(newName);
     else if (dynamic_cast<LimitStateItem*>(stdItem))
-      nameTaken = collectionAlreadyContainsName(study.getLimitStates(), newName);
+      nameTaken = study.hasLimitStateNamed(newName);
     else if (dynamic_cast<StudyItem*>(stdItem))
       nameTaken = Study::HasInstanceNamed(newName);
 

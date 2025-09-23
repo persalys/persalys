@@ -125,13 +125,6 @@ inline OT::UnsignedInteger GetNumberOfPhysicalCores()
 }
 
 template <typename TIObject>
-bool collectionAlreadyContainsName(const OT::Collection<TIObject>& coll, const OT::String& name)
-{
-  return std::count_if(coll.begin(), coll.end(),
-                       [&](const TIObject& obj){ return obj.getName() == name; }) >= 1u;
-}
-
-template <typename TIObject>
 bool hasMoreThanOneObjectWithName(const OT::Collection<TIObject> &coll, const OT::String &name)
 {
   return std::count_if(coll.begin(), coll.end(),
