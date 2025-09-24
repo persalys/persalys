@@ -40,6 +40,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QDebug>
+#include <QPointer>
 
 using namespace OT;
 
@@ -169,27 +170,15 @@ void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &a
 
 void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& analysis, const bool isGeneralWizard)
 {
-  auto * wizard = new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_);
+  QPointer<MetaModelExportWizard> wizard(new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_));
+  wizard->setAttribute(Qt::WA_DeleteOnClose);
 
-  if (wizard)
-  {
-    if (wizard->exec())
-    {
-      PhysicalModel metaModel;
-      AnalysisImplementation * implementation(wizard->getAnalysis().getImplementation().get());
-      
-      if (const auto * chaos = dynamic_cast<FunctionalChaosAnalysis*>(implementation); chaos)
-        metaModel = chaos->getResult().getMetaModel();
-      if(const auto * kriging = dynamic_cast<KrigingAnalysis*>(implementation); kriging)
-        metaModel = kriging->getResult().getMetaModel();
-      if (const auto * linear = dynamic_cast<PolynomialRegressionAnalysis*>(implementation); linear)
-        metaModel = linear->getResult().getMetaModel();
-      
-      item->appendMetaModelItem(metaModel);
-    }
-    
-    delete wizard;
-  }
+  connect(wizard, &QDialog::accepted, [item, wizard](){
+    const auto * metaModelAnalysis = dynamic_cast<MetaModelAnalysis*>(wizard->getAnalysis().getImplementation().get());
+    item->appendMetaModelItem(metaModelAnalysis->getMetaModel());
+  });
+
+  wizard->open();
 }
 
 

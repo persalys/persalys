@@ -81,7 +81,8 @@ void AnalysisItem::buildActions()
     convertAction_ = new QAction(tr("Convert metamodel into physical model"), this);
     convertAction_->setStatusTip(tr("Add the metamodel in the study tree"));
     connect(convertAction_, &QAction::triggered, [this](){
-      getParentStudyItem()->appendMetaModelItem(getMetaModel());
+      const auto * analysis = dynamic_cast<MetaModelAnalysis*>(analysis_.getImplementation().get());
+      getParentStudyItem()->appendMetaModelItem(analysis->getMetaModel());
     });
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(convertAction_);
@@ -94,7 +95,10 @@ void AnalysisItem::buildActions()
 
     exportAction_ = new QAction(tr("Export metamodel"), this);
     exportAction_->setStatusTip(tr("Export to an independent Python script"));
-    connect(exportAction_, SIGNAL(triggered()), this, SLOT(exportMetaModel()));
+    connect(exportAction_, &QAction::triggered, [this](){
+      const auto * analysis = dynamic_cast<MetaModelAnalysis*>(analysis_.getImplementation().get());
+      emit pythonMetamodelExportRequested(analysis->getMetaModel());
+    });
     exportAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(exportAction_);
   }
@@ -238,26 +242,12 @@ void AnalysisItem::modifyAnalysis()
   }
 }
 
-PhysicalModel AnalysisItem::getMetaModel() const
-{
-  PhysicalModel metaModel;
-
-  if (const auto * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get()); chaos)
-    metaModel = chaos->getResult().getMetaModel();
-  else if (const auto * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get()); kriging)
-    metaModel = kriging->getResult().getMetaModel();
-  else if (const auto * regression = dynamic_cast<PolynomialRegressionAnalysis*>(analysis_.getImplementation().get()); regression)
-    metaModel = regression->getResult().getMetaModel();
-
-  return metaModel;
-}
-
 void AnalysisItem::addPythonMetaModel()
 {
   try
   {
-    MetaModelAnalysis analysis = *dynamic_cast<MetaModelAnalysis*>(analysis_.getImplementation().get());
-    getParentStudyItem()->appendPythonMetaModelItem(PythonPhysicalModel(analysis, getMetaModel(), getParentStudyItem()->getStudy()));
+    const auto * analysis = dynamic_cast<MetaModelAnalysis*>(analysis_.getImplementation().get());
+    getParentStudyItem()->appendPythonMetaModelItem(analysis->asPythonPhysicalModel(getParentStudyItem()->getStudy()));
   }
   catch (InvalidArgumentException &e)
   {
@@ -275,27 +265,8 @@ void AnalysisItem::addPythonMetaModel()
       warningMessage = e.what();
     
     QMessageBox::warning(QApplication::activeWindow(), warningTitle, warningMessage);
-  } 
+  }
 }
-
-void AnalysisItem::exportMetaModel()
-{
-  AnalysisImplementation * implementation = analysis_.getImplementation().get();
-  const auto * chaos      = dynamic_cast<FunctionalChaosAnalysis*>(implementation);
-  const auto * kriging    = dynamic_cast<KrigingAnalysis*>(implementation);
-  const auto * regression = dynamic_cast<PolynomialRegressionAnalysis*>(implementation);
-
-  PhysicalModel metamodel;
-  if (chaos)
-    metamodel = chaos->getResult().getMetaModel();
-  else if (kriging)
-    metamodel = kriging->getResult().getMetaModel();
-  else if (regression)
-    metamodel = regression->getResult().getMetaModel();
-
-  emit pythonMetamodelExportRequested(metamodel);
-}
-
 
 void AnalysisItem::appendDataModelItem()
 {

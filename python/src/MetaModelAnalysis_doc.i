@@ -7,6 +7,20 @@ Can only be used through its derived classes.
 See :class:`~persalys.FunctionalChaosAnalysis`,
 :class:`~persalys.KrigingAnalysis`"
 
+// --------------------------------------------------------------------
+%feature("docstring") PERSALYS::MetaModelAnalysis::asPythonPhysicalModel
+"Create a Python model wrapping the metamodel created by the analysis.
+
+Parameters
+----------
+study : :class:`~persalys.Study`
+    The study to which the analysis belong
+
+Returns
+----------
+model : :class:`~persalys.PythonPhysicalModel`
+    The python model"
+
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::MetaModelAnalysis::leaveOneOutValidation
@@ -210,3 +224,13 @@ Returns
 distribution : :py:class:`openturns.JointDistribution`
     The distribution defined in the probabilistic model or a distribution composed
     of Uniform laws if there is no stochastic input variable."
+
+// --------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::MetaModelAnalysis::getMetaModel
+"metamodel accessor.
+
+Returns
+-------
+metamodel : :class:`~persalys.PhysicalModel`
+    The metamodel created by the analysis"

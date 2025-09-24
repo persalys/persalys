@@ -53,7 +53,6 @@ public slots:
   void detachAnalysis();
   void modifyAnalysis();
   void addPythonMetaModel();
-  void exportMetaModel();
   void appendDataModelItem();
   virtual void removeAnalysis();
   void extractData();
@@ -69,9 +68,6 @@ signals:
   void numberDesignEvaluationChanged(bool);
   void designEvaluationUpdated(bool);
   void numberMetamodelChanged(int);
-
-private:
-  PhysicalModel getMetaModel() const;
 
 protected:
   Analysis analysis_;

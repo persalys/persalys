@@ -295,6 +295,11 @@ void PolynomialRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysis
   result.analyticalValidation_.q2_ = q2;
 }
 
+PhysicalModel PolynomialRegressionAnalysis::getMetaModel() const
+{
+  return result_.getMetaModel();
+}
+
 PolynomialRegressionAnalysisResult PolynomialRegressionAnalysis::getResult() const
 {
   return result_;

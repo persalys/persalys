@@ -410,6 +410,10 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   computeError(result.analyticalValidation_.metaModelSample_, result.outputSample_, result.analyticalValidation_.mse_, result.analyticalValidation_.q2_);
 }
 
+PhysicalModel KrigingAnalysis::getMetaModel() const
+{
+  return result_.getMetaModel();
+}
 
 KrigingAnalysisResult KrigingAnalysis::getResult() const
 {
