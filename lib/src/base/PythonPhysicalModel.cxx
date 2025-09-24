@@ -103,7 +103,7 @@ PythonPhysicalModel::PythonPhysicalModel(const MetaModelAnalysis &metaModelAnaly
   OSS code;
   code << "import persalys\n";
   code << "\n";
-  code << "study = [s for s in persalys.Study.GetInstances() if s.getName() == '" << study.getName() << "'][0]\n";
+  code << "study = persalys.Study.GetInstanceByName( '" << study.getName() << "')\n";
   code << "metamodel_function = study.getAnalysisByName('" << analysisName << "').getImplementation().getResult().getMetaModel().getFunction()\n";
   code << "\n";
   code << "def _exec(" << inputNamesString  << "):\n";

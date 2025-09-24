@@ -30,10 +30,11 @@ class PERSALYS_BASE_API Study : public OT::TypedInterfaceObject<StudyImplementat
   CLASSNAME
 
 public:
-  typedef OT::Pointer<StudyImplementation> Implementation;
+  using Implementation = OT::Pointer<StudyImplementation>;
 
   // static methods
   static OT::Collection<PERSALYS::Study> GetInstances();
+  static Study GetInstanceByName(const OT::String & studyName);
   static OT::Description GetFileNames();
   static bool HasInstanceNamed(const OT::String& studyName);
   static OT::String GetAvailableName(const OT::String& rootName);

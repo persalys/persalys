@@ -105,6 +105,14 @@ bool Study::HasInstanceNamed(const String & studyName)
   return false;
 }
 
+Study Study::GetInstanceByName(const String & studyName)
+{
+  for (PersistentCollection<Study >::iterator it = studies_.begin(); it != studies_.end(); ++it)
+    if ((*it).getImplementation().get()->getName() == studyName)
+      return *it;
+  throw InvalidArgumentException(HERE) << "No study named " << studyName << " was found.";
+}
+
 
 String Study::GetAvailableName(const String& rootName)
 {
@@ -459,4 +467,5 @@ void Study::load(Advocate& adv)
 {
   getImplementation()->load(adv);
 }
+
 }
