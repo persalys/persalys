@@ -57,16 +57,16 @@ curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-an
 curl -fsSL https://pypi.io/packages/py2.py3/s/six/six-1.16.0-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py2.py3/p/pytz/pytz-2021.3-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py2.py3/p/python_dateutil/python_dateutil-2.8.2-py2.py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/d/dill/dill-0.3.8-py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py3/d/dill/dill-0.4.0-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp313/n/numpy/numpy-2.2.4-cp313-cp313-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp313/s/scipy/scipy-1.15.2-cp313-cp313-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp313/p/pandas/pandas-2.2.3-cp313-cp313-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp313/n/numpy/numpy-2.3.3-cp313-cp313-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp313/s/scipy/scipy-1.16.2-cp313-cp313-win_amd64.whl | bsdtar -xf-
+curl -fsSL https://pypi.io/packages/cp313/p/pandas/pandas-2.3.3-cp313-cp313-win_amd64.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py2.py3/o/openpyxl/openpyxl-3.1.5-py2.py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/e/et_xmlfile/et_xmlfile-1.1.0-py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/j/jinja2/jinja2-3.1.4-py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py3/j/jinja2/jinja2-3.1.6-py3-none-any.whl | bsdtar -xf-
 curl -fsSL https://pypi.io/packages/cp313/m/markupsafe/MarkupSafe-3.0.2-cp313-cp313-win_amd64.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/p/pythonfmu/pythonfmu-0.6.6-py3-none-any.whl | bsdtar -xf-
+curl -fSsL https://pypi.io/packages/py3/p/pythonfmu/pythonfmu-0.6.9-py3-none-any.whl | bsdtar -xf-
 curl -fSsL https://pypi.io/packages/py3/n/nopip/nopip-0.2.2-py3-none-any.whl | bsdtar -xf-
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat

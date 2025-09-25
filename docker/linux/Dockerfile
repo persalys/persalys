@@ -26,7 +26,7 @@ ENV PATH=/opt/rh/devtoolset-11/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/devtoo
 WORKDIR /usr/local/src
 
 # gdb
-RUN curl -fSsL https://ftp.gnu.org/gnu/gdb/gdb-8.3.1.tar.gz |tar xz && cd gdb* && ./configure --with-python=no && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r gdb*
+RUN curl -fSsL https://sourceware.org/pub/gdb/releases/gdb-8.3.1.tar.gz |tar xz && cd gdb* && ./configure --with-python=no && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r gdb*
 
 # bison
 RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison* && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
@@ -71,7 +71,7 @@ RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/hdf5_1.14.6/hdf5-1.14.6.
 RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.7.1.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
 
 # eigen
-RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2 | tar xj && cd eigen* \
+RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.bz2 | tar xj && cd eigen* \
  && cmake -B build . && cd build && make install > /dev/null 2>&1 && cd - && rm -r eigen*
 
 # spectra
@@ -88,7 +88,7 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz
 RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2022.1.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.8.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.9.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/obsolete-appimagetool-x86_64.AppImage -O appimagetool-x86_64.AppImage \
@@ -105,15 +105,15 @@ RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fSsL https://www.python.org/ftp/python/3.13.5/Python-3.13.5.tgz | tar xz && cd Python* \
+RUN curl -fSsL https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install numpy==2.2.4 scipy==1.15.2 matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
+RUN pip3 install "numpy<2.4" "scipy<1.17" matplotlib ipython sphinx numpydoc dill meson flake8 openpyxl nopip cython setuptools --upgrade --quiet
 
 # sundials
-RUN curl -fSsL https://github.com/LLNL/sundials/archive/v7.4.0.tar.gz | tar xz && cd sundials* \
+RUN curl -fSsL https://github.com/LLNL/sundials/archive/v7.5.0.tar.gz | tar xz && cd sundials* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
     -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib -B build . \
  && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
@@ -123,12 +123,12 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/3.0.4.ta
  && cmake -DFMILIB_BUILD_STATIC_LIB=OFF -DFMILIB_BUILD_TESTS=OFF -DCMAKE_INSTALL_LIBDIR=lib -B build . && make install -C build > /dev/null 2>&1 && cd - && rm -r fmi*
 
 # assimulo
-RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.1.tar.gz | tar xz && cd Assimulo* \
+RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.2.tar.gz | tar xz && cd Assimulo* \
  && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.18.0.tar.gz | tar xz && cd PyFMI* \
+RUN curl -fSsL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.18.3.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # libbacktrace
@@ -164,7 +164,7 @@ RUN curl -fSsL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fSsL https://paraview.org/files/v6.0/ParaView-v6.0.0.tar.xz | tar xJ && cd ParaView* \
+RUN curl -fSsL https://paraview.org/files/v6.0/ParaView-v6.0.1.tar.xz | tar xJ && cd ParaView* \
  && cmake -DCMAKE_BUILD_TYPE=Release \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
   -DPARAVIEW_USE_VISKORES=OFF -DPARAVIEW_USE_FORTRAN=OFF -DPARAVIEW_ENABLE_XDMF2=OFF \
