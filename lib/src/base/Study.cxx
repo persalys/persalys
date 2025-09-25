@@ -275,11 +275,6 @@ DesignOfExperiment& Study::getDataModelByName(const String& dataModelName)
   return getImplementation()->getDataModelByName(dataModelName);
 }
 
-const DesignOfExperiment& Study::getDataModelByName(const String& dataModelName) const
-{
-  return getImplementation()->getDataModelByName(dataModelName);
-}
-
 String Study::getAvailableDataModelName(const String& modelRootName) const
 {
   return getImplementation()->getAvailableDataModelName(modelRootName);
@@ -309,11 +304,6 @@ Collection< DataFieldModel > Study::getDataFieldModels() const
 }
 
 DataFieldModel& Study::getDataFieldModelByName(const String& dataModelName)
-{
-  return getImplementation()->getDataFieldModelByName(dataModelName);
-}
-
-const DataFieldModel& Study::getDataFieldModelByName(const String& dataModelName) const
 {
   return getImplementation()->getDataFieldModelByName(dataModelName);
 }
@@ -350,11 +340,6 @@ PhysicalModel& Study::getPhysicalModelByName(const String& physicalModelName)
   return getImplementation()->getPhysicalModelByName(physicalModelName);
 }
 
-const PhysicalModel& Study::getPhysicalModelByName(const String& physicalModelName) const
-{
-  return getImplementation()->getPhysicalModelByName(physicalModelName);
-}
-
 String Study::getAvailablePhysicalModelName(const String& physicalModelRootName) const
 {
   return getImplementation()->getAvailablePhysicalModelName(physicalModelRootName);
@@ -384,11 +369,6 @@ Collection<Analysis> Study::getAnalyses() const
 }
 
 Analysis& Study::getAnalysisByName(const String& analysisName)
-{
-  return getImplementation()->getAnalysisByName(analysisName);
-}
-
-const Analysis& Study::getAnalysisByName(const String& analysisName) const
 {
   return getImplementation()->getAnalysisByName(analysisName);
 }

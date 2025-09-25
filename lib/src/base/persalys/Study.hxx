@@ -65,7 +65,6 @@ public:
 
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);
-  const DesignOfExperiment& getDataModelByName(const OT::String& dataModelName) const;
   OT::String getAvailableDataModelName(const OT::String& modelRootName) const;
   bool hasDataModelNamed(const OT::String &name) const;
   void add(const DesignOfExperiment& designOfExperiment);
@@ -73,7 +72,6 @@ public:
 
   OT::Collection<DataFieldModel> getDataFieldModels() const;
   DataFieldModel& getDataFieldModelByName(const OT::String& dataModelName);
-  const DataFieldModel& getDataFieldModelByName(const OT::String& dataModelName) const;
   OT::String getAvailableDataFieldModelName(const OT::String& modelRootName) const;
   bool hasDataFieldModelNamed(const OT::String &name) const;
   void add(const DataFieldModel& dataFieldModel);
@@ -81,7 +79,6 @@ public:
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
-  const PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName) const;
   OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName) const;
   bool hasPhysicalModelNamed(const OT::String &name) const;
   void add(const PhysicalModel& physicalModel);
@@ -89,7 +86,6 @@ public:
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis& getAnalysisByName(const OT::String& analysisName);
-  const Analysis& getAnalysisByName(const OT::String& analysisName) const;
   OT::String getAvailableAnalysisName(const OT::String& rootName) const;
   bool hasAnalysisNamed(const OT::String &name) const;
   void add(const Analysis& analysis);
