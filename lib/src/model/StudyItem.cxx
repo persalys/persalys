@@ -318,16 +318,16 @@ void StudyItem::appendItem(const DesignOfExperiment &dataModel)
 
 String StudyItem::appendMetaModelItem(PhysicalModel metaModel)
 {
-  String originalName(metaModel.getName());
-  if (!study_.hasPhysicalModelNamed("Symbolic_"+originalName))
+  const String symbolicName("Symbolic_"+metaModel.getName());
+  if (!study_.hasPhysicalModelNamed(symbolicName))
   {
-    metaModel.setName("Symbolic_"+originalName);
+    metaModel.setName(symbolicName);
     study_.add(metaModel);
-    return "Symbolic_"+originalName;
+    return symbolicName;
   }
   else
   {
-    String newName(study_.getAvailablePhysicalModelName("Sybmolic_"+originalName+"_"));
+    String newName(study_.getAvailablePhysicalModelName(symbolicName+"_"));
     metaModel.setName(newName);
     study_.add(metaModel);
     return newName;
