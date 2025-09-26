@@ -193,12 +193,7 @@ String CouplingOutputFile::checkOutputFile(const String &fname, const String &en
   if (!missingVars.isEmpty())
   {
     resultMessage << "The following variables could not be found: ";
-    for (UnsignedInteger i = 0; i < missingVars.getSize(); ++i)
-    {
-      if (i > 0) resultMessage << ", ";
-      resultMessage << missingVars[i];
-    }
-    resultMessage << "\n";
+    resultMessage << Parameters::GetOTDescriptionStr(missingVars, false, false)  << "\n";
   }
   resultMessage << output.str();
   return resultMessage.str();

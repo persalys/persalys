@@ -51,13 +51,39 @@ public:
   bool operator==(const Parameters& other) const;
   static OT::String GetOTSampleStr(const OT::Sample& values);
   static OT::String GetOTSampleCollectionStr(const OT::ProcessSample& processSample);
-  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ", ", bool useBrackets = true);
-  static OT::String GetOTDescriptionStr(const OT::Description& values, const bool quote = true);
+  static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ", ", const bool useBrackets = true);
+  static OT::String GetOTPointWithDescriptionStr(const OT::PointWithDescription& values);
+  static OT::String GetOTDescriptionStr(const OT::Description& values, const bool quote = true, const bool useBrackets = true);
   static OT::String GetOTIndicesStr(const OT::Indices& values);
   static OT::String GetOTBoolCollectionStr(const OT::Interval::BoolCollection& values);
   static OT::String GetOTCorrelationMatrixStr(const OT::CorrelationMatrix &correlationMatrix);
   static OT::String GetOTNormalCopulaStr(const OT::Distribution &distribution);
   static OT::Description GetOTIntervalDescription(const OT::Interval& interval);
+
+private:
+  template <typename T>
+  static OT::String GetStr(const T& values, const OT::String &separator, const bool useBrackets, const bool quote)
+  {
+    if (values.isEmpty())
+      return useBrackets ? "[]" : "";
+
+    OT::OSS oss;
+    if (useBrackets)
+      oss << "[";
+    
+    const OT::String quoteStr(quote ? "'" : "");
+    OT::UnsignedInteger lastIndex = values.getSize() - 1u;
+    for (OT::UnsignedInteger i = 0 ; i < lastIndex ; ++i)
+    {
+      oss << quoteStr << values[i] << quoteStr << separator;
+    }
+    oss << quoteStr << values[lastIndex] << quoteStr;
+  
+    if (useBrackets)
+      oss << "]";
+    
+    return oss.str();
+  }
 
 private:
   OT::Collection<std::pair<OT::String, OT::String> > pairsCollection_;

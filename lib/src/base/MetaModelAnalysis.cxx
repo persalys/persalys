@@ -82,7 +82,7 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
   , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
-  DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
+  const auto * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
 
   if (!analysis_ptr)
   {
@@ -105,27 +105,8 @@ PythonPhysicalModel MetaModelAnalysis::asPythonPhysicalModel(const Study &study)
 
   PhysicalModel metaModel = getMetaModel();
 
-  Description inputNames = metaModel.getInputNames();
-  UnsignedInteger lastInputIndex = inputNames.getSize() - 1u;
-
-  Description outputNames = metaModel.getOutputNames();
-  UnsignedInteger lastOutputIndex = outputNames.getSize() - 1u;
-
-  OSS inputNamesStream;
-  for (UnsignedInteger i = 0 ; i < lastInputIndex ; ++i)
-  {
-    inputNamesStream << inputNames[i] << ", ";
-  }
-  inputNamesStream << inputNames[lastInputIndex];
-  const String inputNamesString(inputNamesStream.str());
-
-  OSS outputNamesStream;
-  for (UnsignedInteger i = 0 ; i < lastOutputIndex ; ++i)
-  {
-    outputNamesStream << outputNames[i] << ", ";
-  }
-  outputNamesStream << outputNames[lastOutputIndex];
-  const String outputNamesString(outputNamesStream.str());
+  const String inputNamesString(Parameters::GetOTDescriptionStr(metaModel.getInputNames(), false, false));
+  const String outputNamesString(Parameters::GetOTDescriptionStr(metaModel.getOutputNames(), false, false));
 
   OSS code;
   code << "import persalys\n";
@@ -135,7 +116,7 @@ PythonPhysicalModel MetaModelAnalysis::asPythonPhysicalModel(const Study &study)
   code << "\n";
   code << "def _exec(" << inputNamesString  << "):\n";
   code << "    " << outputNamesString  << " = metamodel_function([" << inputNamesString << "])";
-  if (lastOutputIndex == 0u)
+  if (metaModel.getOutputDimension() <= 1u)
     code << "[0]";          // metamodel_function returns a Point so in dimension 1 we need to extract the value
   code << "\n";
   code << "    return " << outputNamesString << "\n";

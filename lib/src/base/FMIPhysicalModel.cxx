@@ -152,67 +152,29 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     const Description & outputNames)
 {
   // replace dots by underscores in variables names
-  Description inputNamesUnderscore = Tools::GetNormalizedVariables(inputNames);
-  Description outputNamesUnderscore = Tools::GetNormalizedVariables(outputNames);
+  const Description inputNamesUnderscore = Tools::GetNormalizedVariables(inputNames);
+  const Description outputNamesUnderscore = Tools::GetNormalizedVariables(outputNames);
+
+  const String inputNamesUnderscoreStr(Parameters::GetOTDescriptionStr(inputNamesUnderscore, false, false));
+  const String outputNamesUnderscoreStr(Parameters::GetOTDescriptionStr(outputNamesUnderscore, false, false));
 
   OSS code;
   code << "import otfmi\n\n";
 
-  code << "def _exec(";
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
-  {
-    code << inputNamesUnderscore[i];
-    if (i < inputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "):\n";
+  code << "def _exec(" << inputNamesUnderscoreStr << "):\n";
   code << "    path_fmu = '" << fmuFileName_ << "'\n";
-  code << "    inputs = [";
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
-  {
-    code << "'" << inputNames[i] << "'";
-    if (i < inputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "]\n";
-  code << "    outputs = [";
-  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
-  {
-    code << "'" << outputNames[i] << "'";
-    if (i < outputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "]\n";
+  code << "    inputs = " << Parameters::GetOTDescriptionStr(inputNames) << "\n";
+  code << "    outputs = " << Parameters::GetOTDescriptionStr(outputNames) << "\n";
   code << "    kind = '" << fmuType_ << "'\n";
   code << "    if not hasattr(_exec, 'model_fmu'):\n";
   code << "        _exec.model_fmu = otfmi.OpenTURNSFMUFunction(path_fmu, inputs_fmu=inputs, outputs_fmu=outputs, kind=kind)\n";
-  code << "    __X = [";
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
-  {
-    code << inputNamesUnderscore[i];
-    if (i < inputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "]\n";
+  code << "    __X = [" << inputNamesUnderscoreStr << "]\n";
 
-  code << "    ";
-  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
-  {
-    code << outputNamesUnderscore[i];
-    if (i < outputNames.getSize() - 1)
-      code << ", ";
-  }
+  code << "    " << outputNamesUnderscoreStr;
   // Function always returns a sequence
   code << " = _exec.model_fmu(__X)" << (outputNames.getSize() == 1 ? "[0]" : "") << "\n";
 
-  code << "    return ";
-  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
-  {
-    code << outputNamesUnderscore[i];
-    if (i < outputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "\n";
+  code << "    return " << outputNamesUnderscoreStr << "\n";
 
   // save values because setCode drops renamed variables
   std::map<String, Scalar> valueMap;

@@ -64,7 +64,8 @@ outputs = [sigma, fakeSigma]
 formulas = ['R + C * (1 - exp(-gam * strain))', '2*(R + C * (1 - exp(-gam * strain)))']
 model1 = persalys.SymbolicPhysicalModel('model1', inputs, outputs, formulas)
 myStudy.add(model1)
-inputSample = ot.Sample([[0.0440914],
+inputSample = ot.Sample([
+[0.0440914],
 [0.0617964],
 [0.00946934],
 [0.00227519],
@@ -166,7 +167,8 @@ inputSample = ot.Sample([[0.0440914],
 [0.0524821]]
 )
 inputSample.setDescription(['strain'])
-outputSample = ot.Sample([[1.73068e+09],
+outputSample = ot.Sample([
+[1.73068e+09],
 [2.12389e+09],
 [1.00927e+09],
 [8.29825e+08],
