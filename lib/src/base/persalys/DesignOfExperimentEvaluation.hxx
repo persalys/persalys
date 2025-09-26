@@ -58,6 +58,8 @@ public:
   bool hasValidResult() const override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
+  void setEvaluations(const OT::Sample &outputSample);
+
   static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
 
   /** Method save() stores the object through the StorageManager */

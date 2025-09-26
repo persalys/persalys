@@ -31,3 +31,13 @@ Returns
 -------
 sample : :py:class:`openturns.Sample`
     Points of the design of experiments which were not evaluated"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DesignOfExperimentEvaluation::setEvaluations
+"Add evaluations for the design of experiments
+
+Parameters
+----------
+outputSample : :py::class:`openturns.Sample`
+    sample containing values for the output variables"

@@ -58,6 +58,7 @@ public slots:
   virtual void removeAnalysis();
   void extractData();
   void exportDoE();
+
 signals:
   void analysisRemoved(QStandardItem*);
   void messageChanged(QString);
@@ -65,6 +66,7 @@ signals:
   void modifyAnalysisRequested(AnalysisItem*);
   void dataExtractionWizardRequested(StudyItem*, Analysis);
   void pythonMetamodelExportRequested(PhysicalModel);
+  void evaluationsImportRequested(const StudyItem*, const Analysis&);
 
   void numberDesignEvaluationChanged(bool);
   void designEvaluationUpdated(bool);
@@ -76,9 +78,11 @@ protected:
   QAction * convertAction_ = nullptr;
   QAction * exportAction_ = nullptr;
   QAction * removeAction_ = nullptr;
-  QAction * exportDoEAction_ = nullptr;
+  QAction * addEvaluationsAction_ = nullptr;
+
 private:
   QAction * extractDataAction_ = nullptr;
+  QAction * exportDoEAction_ = nullptr;
   QAction * convertPythonAction_ = nullptr;
 };
 }

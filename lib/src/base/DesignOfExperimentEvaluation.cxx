@@ -257,6 +257,37 @@ void DesignOfExperimentEvaluation::launch()
   result_.elapsedTime_ = timeCriteria.getElapsedTime();
 }
 
+void DesignOfExperimentEvaluation::setEvaluations(const Sample &outputSample)
+{
+  TimeCriteria tc;
+  isRunning_ = true;
+  notify("analysisLaunched");
+  initialize();
+
+  result_.designOfExperiment_.setInputSample(originalInputSample_);
+  result_.designOfExperiment_.setOutputSample(outputSample);
+
+  // time
+  TimeCriteria timeCriteria;
+
+  // compute data analysis
+  DataAnalysis dataAnalysis("", result_.designOfExperiment_);
+  dataAnalysis.setIsConfidenceIntervalRequired(false);
+  dataAnalysis.run();
+
+  // set result
+  result_ = dataAnalysis.getResult();
+  timeCriteria.incrementElapsedTime();
+  result_.elapsedTime_ = timeCriteria.getElapsedTime();
+
+  isRunning_ = false;
+  tc.incrementElapsedTime();
+  elapsedTime_ = tc.getElapsedTime();
+  notify("analysisFinished");
+
+  physicalModel_.setEvalTime(getElapsedTime());
+  modelHtmlDescription_ = physicalModel_.getHTMLDescription();
+}
 
 Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 {
@@ -268,7 +299,6 @@ Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 
   return Sample();
 }
-
 
 DataAnalysisResult DesignOfExperimentEvaluation::getResult() const
 {

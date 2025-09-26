@@ -60,6 +60,14 @@ void DesignOfExperimentDefinitionItem::buildActions()
   convertAction_->setEnabled(getAnalysis().getImplementation()->hasValidResult());
   appendAction(convertAction_);
 
+  addEvaluationsAction_ = new QAction(tr("Add evaluations"), this);
+  addEvaluationsAction_->setStatusTip(tr("Import evaluations from a csv file"));
+  connect(addEvaluationsAction_, &QAction::triggered, [this](){
+    emit evaluationsImportRequested(getParentStudyItem(), getAnalysis());
+  });  // open ImportEvaluationsWizard via StudyManager
+  addEvaluationsAction_->setEnabled(!analysis_.hasValidResult());
+  appendAction(addEvaluationsAction_);
+
   appendSeparator(tr("Analysis"));
 
   // evaluate design of experiments action
