@@ -188,9 +188,8 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
     if (nokIdx.getSize())
       throw BatchFailedException(HERE, nokIdx, errorDesc,
                                  nokIdx.complement(inS.getSize()), outS)
-          << (nokIdx.getSize() == 1 ? errorDesc[0] : "operator(Sample) partial fail");
+          << "Batch evaluation " << nokIdx.getSize() << "/" << size << " failed: " << errorDesc[nokIdx[0]];
     return outS;
-
   }
 
   const UnsignedInteger outDim = getOutputDimension();
@@ -262,7 +261,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   PyObject * exceptionResult = PyDict_GetItemString(dict, "exception");
   if (exceptionResult == NULL)
     throw InternalException(HERE) << "no exception";
-  Description desc(convert<_PySequence_, Description>(exceptionResult));
+  Description errorDesc(convert<_PySequence_, Description>(exceptionResult));
 
   // get suceeded indices
   PyObject * okIdxResult = PyDict_GetItemString(dict, "okIdx");
@@ -282,8 +281,8 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 
   // if any failed indices, throw
   if (nokIdx.getSize())
-    throw BatchFailedException(HERE, nokIdx, desc, okIdx, outputSample)
-        << (nokIdx.getSize() == 1 ? desc[0] : "operator(Sample) partial fail");
+    throw BatchFailedException(HERE, nokIdx, errorDesc, okIdx, outputSample)
+        << "Batch evaluation " << nokIdx.getSize() << "/" << size << " failed: " << errorDesc[nokIdx[0]];
 
   // check
   if (outputSample.getSize() != size)
