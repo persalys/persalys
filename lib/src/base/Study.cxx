@@ -125,11 +125,11 @@ String Study::GetAvailableName(const String& rootName)
 
 void Study::Add(const Study& study)
 {
+  if (studies_.contains(study))
+    throw InvalidArgumentException(HERE) << "The study already exists\n";
+  studies_.add(study);
   if (studyObserver_)
   {
-    if (studies_.contains(study))
-      throw InvalidArgumentException(HERE) << "The study already exists\n";
-    studies_.add(study);
     studyObserver_->update(study.getImplementation().get(), "addStudy");
   }
 }

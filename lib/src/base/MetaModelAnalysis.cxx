@@ -111,8 +111,9 @@ PythonPhysicalModel MetaModelAnalysis::asPythonPhysicalModel(const Study &study)
   OSS code;
   code << "import persalys\n";
   code << "\n";
-  code << "study = persalys.Study.GetInstanceByName( '" << study.getName() << "')\n";
-  code << "metamodel_function = study.getAnalysisByName('" << getName() << "').getImplementation().getResult().getMetaModel().getFunction()\n";
+  code << "study = persalys.Study.GetInstanceByName('" << study.getName() << "')\n";
+  code << "analysis = study.getAnalysisByName('" << getName() << "').getImplementation()\n";
+  code << "metamodel_function = analysis.getResult().getMetaModel().getFunction()\n";
   code << "\n";
   code << "def _exec(" << inputNamesString  << "):\n";
   code << "    " << outputNamesString  << " = metamodel_function([" << inputNamesString << "])";
