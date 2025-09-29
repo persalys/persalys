@@ -152,6 +152,7 @@ void GridDesignPage::initialize(const Analysis& analysis)
   }
 
   // resize table
+  tableView_->horizontalHeader()->setMinimumSectionSize(50);
   tableView_->resizeWithOptimalWidth();
   // if too many variables: no fixed height + use scrollbar
   if (tableView_->model()->rowCount() < RowNumberToScrollTable)
