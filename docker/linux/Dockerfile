@@ -186,7 +186,8 @@ RUN git clone -b v0.18 --depth 1 https://github.com/openturns/otmorris.git && cd
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.6 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.25.1 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+RUN git clone -b v1.25.2 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
+ && curl -L https://github.com/OpenModelica/OpenModelica/pull/14391.patch | patch -p1 \
  && git submodule update --init --recursive OMCompiler/3rdParty \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*

@@ -238,24 +238,25 @@ In the context of the SALOME platform, HPC settings can also be enabled though t
 2-3-1 *Definition*
 ~~~~~~~~~~~~~~~~~~
 
-A physical model can be defined to wrap an external code. I/O can be
-cached in dedicated files. Remember to clear it when significant
-changes are made on the model. Working directory (local temp area by
-default) can be explicitly set. The checkbox allows the user to keep
-the working directory once the model has run. The **Check model**
-button runs the model on the defined input values. It shall be used to
-test the physical model. To save the output values, the user should
-use the :ref:`Model evaluation <modelEvaluation>`.
+This type of physical model allows to drive an external black-box code through file exchange.
+For each evaluation input files are generated from input variables values and template input files.
+Then the black-box code is run using the provided command, which will write output files.
+Finally output variables are read from the code output files.
+Each evaluation is isolated in a temporary working directory to avoid clobbering input/output files.
+It is possible to keep the temporary working directories.
+Extra resource files can be specified to be copied in the working directory.
 
-A coupling model is divided into steps (one per tab), each with its
-own parameters. Output from a given step can be used as input in the
-next.
+The **Check model** button evaluates the model on the defined input values to
+test the physical model.
+A coupling model is divided into steps (one per tab), each with its own parameters.
+Output from a given step can be used as input in the next.
 
 Step definition is divided into several categories:
 
-- Command: used to define the command calling the external code. This
-  can be empty if one decides to set a pre-processing. The **Advanced
-  parameters** group box can be used to set:
+- Command: used to define the command calling the external code.
+  The command is executed in a temporary working directory to isolate input/output files from different evaluations.
+  The command can be empty if one decides to set a pre-processing.
+  The **Advanced parameters** group box can be used to set:
 
   - I/O encoding (utf-8/latin-1)
 
@@ -275,16 +276,18 @@ Step definition is divided into several categories:
 .. image:: /user_manual/graphical_interface/physical_model/CPM_Command.png
     :align: center
 
-- Inputs: used to locate the template file that will be used to
-  generate inputs files for the command. Each input variable is
-  associated to a token that will tell the coupling model code where
-  to find it in the input file. Template file correctness can be
-  evaluated using the "check input button". Template and generated
-  input files will be displayed side-by-side for visual inspection and
-  validation. If an input is defined as output in one of the previous
-  step, a question mark will be displayed as its default value. When
-  checking the template, it will default to zero in the generated
-  input file.
+- Input: allows to generate an input file needed prior the execution of the command.
+  Each file is formatted from a template input file and from a list of input variables.
+  The path to the input file must be relative as it will be located in a temporary working directory.
+  whereas the path to the template input file is expected to be absolute.
+  Each input variable is associated to a token that will tell the coupling model code where
+  to find it in the input file.
+  Template file correctness can be evaluated using the "check input button".
+  Template and generated input files will be displayed side-by-side for visual inspection and
+  validation.
+  If an input is defined as output in one of the previous step,
+  a question mark will be displayed as its default value.
+  When checking the template, it will default to zero in the generated input file.
 
 .. image:: /user_manual/graphical_interface/physical_model/CPM_Input.png
     :align: center
@@ -295,14 +298,14 @@ Step definition is divided into several categories:
 .. image:: /user_manual/graphical_interface/physical_model/CPM_Resource.png
     :align: center
 
-- Outputs: used to specify the output file name and specify where to
-  find the output variables in it. Similarly to the Inputs section,
-  output variables are associated to a token. In addition, numerical
-  format can be specified as in https://pyformat.info/ set of "new
-  rules". Generated output files can be inspected using the "check
-  output button". When clicked it will ask the user to choose a
-  generated output file and will try to retrieve the output variables
-  values.
+- Output: used to specify the output file name and specify where to
+  find the output variables in it.
+  The output file path must be relative as it will be located in a temporary working directory.
+  Similarly to the Input section, output variables are associated to a token.
+  In addition, numerical format can be specified as in https://pyformat.info/ set of "new rules".
+  Generated output files can be inspected using the "check output button".
+  When clicked it will ask the user to choose a generated output file and
+  will try to retrieve the output variables values.
 
 .. image:: /user_manual/graphical_interface/physical_model/CPM_Output.png
     :align: center
@@ -314,6 +317,8 @@ Step definition is divided into several categories:
 
 .. image:: /user_manual/graphical_interface/physical_model/CPM_ExtraProcessing.png
     :align: center
+
+Refer to :ref:`logistic_coupling_example` for a coupling model example.
 
 In the context of the SALOME platform, HPC settings can also be enabled though the properties contextual menu
 (right-click on the model root node above the **Definition** node, then choose **Properties**):

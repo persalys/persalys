@@ -1,5 +1,7 @@
-Logistic model
---------------
+.. _logistic_coupling_example:
+
+Logistic growth model with coupling
+-----------------------------------
 
 Here we will demonstrate some coupling model capabilities on the
 `logistic model <https://openturns.github.io/openturns/latest/usecases/use_case_logistic.html>`_
@@ -111,10 +113,10 @@ and write them into the *output.txt* file.
 
 Our coupling will consists in several steps:
 
-- generating input variables from *input.txt.in*
+- generating the input file *input.txt* with actual input variable values from the template file *input.txt.in*.
 - running *program.py*
 - running *post.py*
-- reading output values from *output.txt*
+- reading output values from the output file *output.txt*
 
 2-1 Create the study
 ''''''''''''''''''''
@@ -145,7 +147,10 @@ following window.
 .. image:: modelDefinition1.png
     :align: center
 
-Fill the **Command** box with `python program.py`
+Fill the **Command** box with `python program.py`.
+On Windows, you will need to specify the full path to the Python executable located in the Persalys installation folder
+since the system call to run executables from subprocess.run ignores the PATH variable,
+something like `C:\\Users\\michel\\AppData\\Local\\Persalys\\python.exe` depending on the actual installation folder.
 
 Go to the *Input* sub-tab, browse for the path to *input.txt.in* for the
 **Template file** field, and the **Configured file** field is automatically set to *input.txt*.
