@@ -28,9 +28,9 @@ namespace PERSALYS
 {
 
 ParametersTableView::ParametersTableView(const QStringList names,             // parameters names
-    const QStringList values,            // parameters values
-    const bool showGrid,         // show the grid of the table
-    const bool namesHasHeaderType, // parameters names display has table header
+    const QStringList values,                                                 // parameters values
+    const bool showGrid,                                                      // show the grid of the table
+    const bool namesHasHeaderType,                                            // parameters names display has table header
     const bool splitLongLines,
     QWidget * parent)
   : CopyableTableView(parent)
@@ -46,7 +46,7 @@ ParametersTableView::ParametersTableView(const QStringList names,             //
   tableModel_ = new CustomStandardItemModel(names.size(), 2, this);
   if (splitLongLines)
   {
-    LongStringProxy* proxy = new LongStringProxy(1, 50, this);
+    auto * proxy = new LongStringProxy(1, 50, this);
     proxy->setSourceModel(tableModel_);
     setModel(proxy);
   }
@@ -70,10 +70,10 @@ ParametersTableView::ParametersTableView(const QStringList names,             //
   resizeToContents();
 }
 
-void ParametersTableView::setValueAt(int row, const QString &value)
+void ParametersTableView::setValueAt(int row, const QString &value, const QColor bgColor)
 {
   if (!tableModel_) return;
-  tableModel_->setNotEditableItem(row, 1, value);
+  tableModel_->setNotEditableItem(row, 1, value, QColor(), bgColor);
   resizeToContents();
 }
 

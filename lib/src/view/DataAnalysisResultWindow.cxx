@@ -106,16 +106,25 @@ void DataAnalysisResultWindow::addSummaryTab()
   }
   
   namesList << tr("Multivariate sample size");
-  valuesList << QString::number(result_.getMultivariateDoE().getSample().getSize());
+  const UnsignedInteger multivariateSampleSize = result_.getMultivariateDoE().getSample().getSize();
+  valuesList << QString::number(multivariateSampleSize);
 
   auto * table = new ParametersTableView(namesList, valuesList, true, true);
   if (result_.getEffectiveSize().getDimension())
   {
-    connect (variablesListWidget_, &VariablesListWidget::currentRowChanged, [this, table] (int index) {
+    connect (variablesListWidget_, &VariablesListWidget::currentRowChanged, [this, table, totalSampleSize] (int index) {
       int realIndex = variablesListWidget_->item(index)->data(Qt::UserRole).toInt();
-      table->setValueAt(summaryValuesListSampleSizeIndex_, QString::number(result_.getEffectiveSize()[realIndex]));
+      const UnsignedInteger effectiveSize = static_cast<UnsignedInteger>(result_.getEffectiveSize()[realIndex]);
+      const QColor color = effectiveSize != totalSampleSize ? QColor(Qt::red) : QColor();
+      table->setValueAt(summaryValuesListSampleSizeIndex_, QString::number(effectiveSize), color);
     });
   }
+
+  if (multivariateSampleSize != totalSampleSize)
+  {
+    table->setValueAt(valuesList.size()-1, QString::number(multivariateSampleSize), QColor(Qt::red));
+  }
+
   parametersGroupBoxLayout->addWidget(table);
   tabLayout->addWidget(parametersGroupBox, row, 0);
 

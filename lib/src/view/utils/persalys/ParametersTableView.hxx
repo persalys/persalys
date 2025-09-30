@@ -30,6 +30,7 @@
 #include <QIdentityProxyModel>
 #include <QPointer>
 #include <QStringList>
+#include <QColor>
 
 namespace PERSALYS
 {
@@ -59,8 +60,7 @@ public:
                       QWidget *parent = nullptr
                      );
 
-  void setValueAt(int row, const QString &value);
-
+  void setValueAt(const int row, const QString &value, const QColor backgroundColor = QColor());
 private:
   QPointer<CustomStandardItemModel> tableModel_;
 };
