@@ -143,6 +143,7 @@ QWidget* MinMaxTableGroupBox::getForOutputMinMaxTableView(const DesignOfExperime
   }
 
   // resize table
+  minMaxTableView->horizontalHeader()->setMinimumSectionSize(100);
   minMaxTableView->resizeToContents();
   // 2nd row height correction because of the span
   if (nbInputs > 1)
