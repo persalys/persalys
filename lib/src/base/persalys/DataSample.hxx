@@ -62,6 +62,9 @@ public:
 private:
   void searchMinMax() const;
   static bool containsNaN(const OT::Sample &sample);
+  static bool containsNonNaN(const OT::Sample &sample);
+  static bool containsType(const OT::Sample &sample, const bool typeIsNotNaN);
+  static OT::Sample removeNaNMarginals(const OT::Sample &sample);
 
 private:
   OT::Sample inputSample_;
@@ -69,7 +72,8 @@ private:
   mutable OT::Sample sample_;
   mutable OT::PersistentCollection<OT::Sample> listXMin_;
   mutable OT::PersistentCollection<OT::Sample> listXMax_;
-  bool containsNaN_ = false;
+  bool inputContainsNaN_ = false;
+  bool outputContainsNaN_ = false;
 };
 }
 #endif

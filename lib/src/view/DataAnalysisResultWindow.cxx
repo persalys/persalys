@@ -93,9 +93,9 @@ void DataAnalysisResultWindow::addSummaryTab()
   // if there are NaNs
   if (result_.getEffectiveSize().getDimension())
   {
-    namesList << tr("Original sample size");
+    namesList << tr("Sample size");
     valuesList << QString::number(designOfExperiment_.getSample().getSize());
-    namesList << tr("Marginal sample size");
+    namesList << tr("Valid marginal size");
     summaryValuesListSampleSizeIndex_ = valuesList.size();
     valuesList << QString::number(result_.getEffectiveSize()[variablesListWidget_->item(0)->data(Qt::UserRole).toInt()]);
   }
@@ -105,19 +105,22 @@ void DataAnalysisResultWindow::addSummaryTab()
     valuesList << QString::number(totalSampleSize);
   }
   
-  namesList << tr("Multivariate sample size");
+  namesList << tr("Valid multivariate size");
   const UnsignedInteger multivariateSampleSize = result_.getMultivariateDoE().getSample().getSize();
+  doMultivariate_ = multivariateSampleSize > 0;
   valuesList << QString::number(multivariateSampleSize);
 
   auto * table = new ParametersTableView(namesList, valuesList, true, true);
+  auto updateEffectiveSize = [this, table, totalSampleSize] (int index) {
+    int realIndex = variablesListWidget_->item(index)->data(Qt::UserRole).toInt();
+    const UnsignedInteger effectiveSize = static_cast<UnsignedInteger>(result_.getEffectiveSize()[realIndex]);
+    const QColor color = effectiveSize != totalSampleSize ? QColor(Qt::red) : QColor();
+    table->setValueAt(summaryValuesListSampleSizeIndex_, QString::number(effectiveSize), color);
+  };
   if (result_.getEffectiveSize().getDimension())
   {
-    connect (variablesListWidget_, &VariablesListWidget::currentRowChanged, [this, table, totalSampleSize] (int index) {
-      int realIndex = variablesListWidget_->item(index)->data(Qt::UserRole).toInt();
-      const UnsignedInteger effectiveSize = static_cast<UnsignedInteger>(result_.getEffectiveSize()[realIndex]);
-      const QColor color = effectiveSize != totalSampleSize ? QColor(Qt::red) : QColor();
-      table->setValueAt(summaryValuesListSampleSizeIndex_, QString::number(effectiveSize), color);
-    });
+    updateEffectiveSize(0);
+    connect (variablesListWidget_, &VariablesListWidget::currentRowChanged, updateEffectiveSize);
   }
 
   if (multivariateSampleSize != totalSampleSize)
@@ -150,9 +153,12 @@ void DataAnalysisResultWindow::addSummaryTab()
     connect(variablesListWidget_, &VariablesListWidget::currentRowChanged, estimatesGroupBox, &MomentsEstimatesTableGroupBox::setCurrentIndexStackedWidget);
 
   // min/max table
-  auto * minMaxTableGroupBox = new MinMaxTableGroupBox(result_.getMultivariateDoE(), false);
-  tabLayout->addWidget(minMaxTableGroupBox, ++row, 0);
-  connect(variablesListWidget_, &VariablesListWidget::currentRowChanged, minMaxTableGroupBox, &MinMaxTableGroupBox::setCurrentIndexStackedWidget);
+  if (doMultivariate_)
+  {
+    auto * minMaxTableGroupBox = new MinMaxTableGroupBox(result_.getMultivariateDoE(), false);
+    tabLayout->addWidget(minMaxTableGroupBox, ++row, 0);
+    connect(variablesListWidget_, &VariablesListWidget::currentRowChanged, minMaxTableGroupBox, &MinMaxTableGroupBox::setCurrentIndexStackedWidget);
+  }
 
   tabLayout->setRowStretch(++row, 1);
   scrollArea->setWidget(tab);
@@ -162,6 +168,9 @@ void DataAnalysisResultWindow::addSummaryTab()
 
 void DataAnalysisResultWindow::addDependenceTab()
 {
+  if (!doMultivariate_)
+    return;
+  
   designOfExperiment_ = result_.getMultivariateDoE();
   DataAnalysisWindow::addDependenceTab();
   designOfExperiment_ = result_.getDesignOfExperiment();
@@ -169,6 +178,9 @@ void DataAnalysisResultWindow::addDependenceTab()
 
 void DataAnalysisResultWindow::addScatterPlotsTab()
 {
+  if (!doMultivariate_)
+    return;
+  
   designOfExperiment_ = result_.getMultivariateDoE();
   DataAnalysisWindow::addScatterPlotsTab();
   designOfExperiment_ = result_.getDesignOfExperiment();
@@ -178,6 +190,9 @@ void DataAnalysisResultWindow::addScatterPlotsTab()
 
 void DataAnalysisResultWindow::addParaviewWidgetsTabs()
 {
+  if (!doMultivariate_)
+    return;
+  
   const Sample sample = result_.getMultivariateDoE().getSample();
 
   // table tab

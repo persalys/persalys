@@ -89,6 +89,7 @@ protected:
   QTabWidget * tabWidget_;
   QTabWidget * tablesTabWidget_;
   int summaryValuesListSampleSizeIndex_ = 0;
+  bool doMultivariate_  = true;               // can be set to false in DataAnalysisResultWindow
 
 private:
   WidgetBoundToDockWidget * boundPlotMatrixWidget_ = nullptr;

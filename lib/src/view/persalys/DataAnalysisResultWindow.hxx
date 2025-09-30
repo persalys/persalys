@@ -41,6 +41,7 @@ public:
 
 protected:
   void initialize(const AnalysisItem* item);
+
 };
 }
 #endif

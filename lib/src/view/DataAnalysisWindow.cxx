@@ -171,7 +171,7 @@ void DataAnalysisWindow::fillTabWidget()
     canUseParaview_ = true;
   }
 #endif
-  if (!canUseParaview_)
+  if (!canUseParaview_ && doMultivariate_)
   {
     // tab: Table --------------------------------
     addTableTab();

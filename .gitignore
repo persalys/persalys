@@ -5,3 +5,4 @@ build*/
 *doc.zip
 .vscode
 CMakeLists.txt.user
+.cache
