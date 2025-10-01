@@ -24,9 +24,13 @@
 #include "DesignOfExperimentAnalysis.hxx"
 #include "Analysis.hxx"
 #include "MetaModelAnalysisResult.hxx"
+#include "PythonPhysicalModel.hxx"
 
 namespace PERSALYS
 {
+
+class Study;
+
 class PERSALYS_BASE_API MetaModelAnalysis : public DesignOfExperimentAnalysis
 {
 public:
@@ -35,6 +39,8 @@ public:
   /** Constructor with parameters */
   MetaModelAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
   MetaModelAnalysis(const OT::String& name, const Analysis& analysis);
+
+  PythonPhysicalModel asPythonPhysicalModel(const Study &study) const; 
 
   bool analyticalValidation() const;
   void setAnalyticalValidation(const bool validation);
@@ -60,6 +66,8 @@ public:
 
   OT::Sample getEffectiveInputSample() const;
   OT::Sample getEffectiveOutputSample() const;
+
+  virtual PhysicalModel getMetaModel() const;
 
   bool canBeLaunched(OT::String &errorMessage) const override;
 

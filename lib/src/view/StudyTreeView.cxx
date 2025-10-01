@@ -22,11 +22,14 @@
 
 #include "persalys/LineEditWithQValidatorDelegate.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/LimitStateItem.hxx"
 
 #include <QMenu>
 #include <QHeaderView>
 #include <QPainter>
 #include <QApplication>
+#include <QMessageBox>
+#include <QLineEdit>
 
 using namespace OT;
 
@@ -83,6 +86,56 @@ public:
       result.setHeight(result.height() * 1.5);
     }
     return result;
+  }
+
+  void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
+  {
+    const auto * lineEdit = qobject_cast<QLineEdit*>(editor);
+    if (!lineEdit)
+    {
+      LineEditWithQValidatorDelegate::setModelData(editor, model, index);
+      return;
+    }
+
+    const auto * itemModel = qobject_cast<QStandardItemModel*>(model);
+    if (!itemModel)
+    {
+      LineEditWithQValidatorDelegate::setModelData(editor, model, index);
+      return;
+    }
+
+    QStandardItem* stdItem = itemModel->itemFromIndex(index);
+    auto * baseItem = dynamic_cast<Item*>(stdItem);
+    if (!baseItem)
+    {
+      LineEditWithQValidatorDelegate::setModelData(editor, model, index);
+      return;
+    }
+
+    const String newName(lineEdit->text().toStdString());
+    const Study study(baseItem->getParentStudyItem()->getStudy());
+    bool nameTaken = false;
+    
+    if (dynamic_cast<DesignOfExperimentItem*>(stdItem))
+      nameTaken = study.hasDataModelNamed(newName);
+    else if (dynamic_cast<DataFieldModelItem*>(stdItem))
+      nameTaken = study.hasDataFieldModelNamed(newName);
+    else if (dynamic_cast<PhysicalModelItem*>(stdItem))
+      nameTaken = study.hasPhysicalModelNamed(newName);
+    else if (dynamic_cast<AnalysisItem*>(stdItem))
+      nameTaken = study.hasAnalysisNamed(newName);
+    else if (dynamic_cast<LimitStateItem*>(stdItem))
+      nameTaken = study.hasLimitStateNamed(newName);
+    else if (dynamic_cast<StudyItem*>(stdItem))
+      nameTaken = Study::HasInstanceNamed(newName);
+
+    if (nameTaken)
+    {
+      QMessageBox::warning(QApplication::activeWindow(), tr("Name unavailable"), tr("This name is already taken"));
+      return;
+    }
+    
+    LineEditWithQValidatorDelegate::setModelData(editor, model, index);
   }
 };
 
@@ -197,7 +250,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   QList<QAction*> actions;
 
   // get actions defined in the current item
-  Item * item = dynamic_cast<Item*>(currentItem);
+  auto * item = dynamic_cast<Item*>(currentItem);
   if (item)
     actions = item->getActions();
 
@@ -216,17 +269,16 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
   // build the context menu
   QMenu contextMenu(this);
   contextMenu.addActions(actions);
-  QAction * triggeredAction = contextMenu.exec(viewport()->mapToGlobal(point));
+  const QAction * triggeredAction = contextMenu.exec(viewport()->mapToGlobal(point));
 
   // if rename action
   if (triggeredAction && triggeredAction == renameAction)
   {
     // start editing the item
-    emit edit(index);
+    edit(index);
     delete renameAction;
   }
 }
-
 
 void StudyTreeView::selectedItemChanged(const QModelIndex& currentIndex, const QModelIndex& /*previousIndex*/)
 {

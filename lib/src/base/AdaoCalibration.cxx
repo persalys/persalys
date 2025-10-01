@@ -382,10 +382,7 @@ void PERSALYS::AdaoCalibration::run()
   }
   Point parameterMap( Collection<double>(vect.begin(), vect.end()) );
   parameterMap = this->postProcessResult(parameterMap);
-  std::for_each(parameterMap.begin(), parameterMap.end(), [](const double & elt)
-  {
-    std::cerr << elt << ", ";
-  });
+
   //End of first
   Dirac parameterPriorDistribution( thetaPrior );
   parameterPriorDistribution.setDescription( model_.getParameterDescription() );

@@ -1016,11 +1016,7 @@ String PhysicalModelImplementation::getPythonScript() const
 
 void PhysicalModelImplementation::exportStandalonePythonScript(const String & fileName) const
 {
-  const String extension(fileName.substr(fileName.size() - 3));
-  String filenameXML(fileName);
-  if (extension == ".py")
-    filenameXML = fileName.substr(0, fileName.size() - 3);
-  filenameXML += ".xml";
+  String filenameXML = fileName + ".xml";
   const String basenameXML = filenameXML.substr(filenameXML.find_last_of("/\\") + 1);
 
   // write script
@@ -1067,28 +1063,14 @@ String PhysicalModelImplementation::getProbaModelPythonScript() const
       if (distributionName != "TruncatedDistribution")
       {
         oss << "dist_" << inputPythonName << " = ot." << distributionName << "(";
-        PointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (UnsignedInteger j = 0; j < parameters.getSize(); ++ j)
-        {
-          oss << parameters[j];
-          if (j < parameters.getSize() - 1)
-            oss << ", ";
-        }
-        oss << ")\n";
+        oss << Parameters::GetOTPointWithDescriptionStr(distribution.getParametersCollection()[0]) <<  ")\n";
       }
       else
       {
         TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(distribution.getImplementation().get());
         distribution = truncatedDistribution.getDistribution();
         oss << "dist_" << inputPythonName << " = ot." << distribution.getImplementation()->getClassName() << "(";
-        PointWithDescription parameters = distribution.getParametersCollection()[0];
-        for (UnsignedInteger j = 0; j < parameters.getSize(); ++ j)
-        {
-          oss << parameters[j];
-          if (j < parameters.getSize() - 1)
-            oss << ", ";
-        }
-        oss << ")\n";
+        oss << Parameters::GetOTPointWithDescriptionStr(distribution.getParametersCollection()[0]) <<  ")\n";
         oss << "dist_" << inputPythonName << " = ot." << distributionName << "(";
         oss << "dist_" << inputPythonName << ", ";
 

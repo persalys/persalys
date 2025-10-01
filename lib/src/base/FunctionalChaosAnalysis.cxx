@@ -341,6 +341,10 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
   result.analyticalValidation_.q2_ = r2;
 }
 
+PhysicalModel FunctionalChaosAnalysis::getMetaModel() const
+{
+  return result_.getMetaModel();
+}
 
 FunctionalChaosAnalysisResult FunctionalChaosAnalysis::getResult() const
 {

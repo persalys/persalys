@@ -194,6 +194,7 @@ void CouplingPhysicalModel::updateCode()
             !outputNames.contains(step.getPPInputs()[j]))
           inputNames.add(step.getPPInputs()[j]);
   }
+  const String inputNamesStr(Parameters::GetOTDescriptionStr(inputNames, false, false));
   OSS code;
   code << "import tempfile\n";
   code << "import openturns.coupling_tools as otct\n";
@@ -203,24 +204,10 @@ void CouplingPhysicalModel::updateCode()
   code << "import re\n";
   code << "import hashlib\n";
   code << "import struct\n\n";
-  code << "def _exec(";
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
-  {
-    code << inputNames[i];
-    if (i < inputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "):\n";
+  code << "def _exec(" <<  inputNamesStr << "):\n";
 
   code << getStepsMacro("    ");
-  code << "    all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(inputNames) << ", [";
-  for (UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
-  {
-    code << inputNames[i];
-    if (i < inputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "]))\n";
+  code << "    all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(inputNames) << ", [" << inputNamesStr << "]))\n";
 
   code << "    checksum = hashlib.sha1()\n";
   code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
@@ -305,14 +292,7 @@ void CouplingPhysicalModel::updateCode()
   {
     code << "    " << outputNames[i] << " = all_vars['" << outputNames[i] << "']\n";
   }
-  code << "    return ";
-  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
-  {
-    code << outputNames[i];
-    if (i < outputNames.getSize() - 1)
-      code << ", ";
-  }
-  code << "\n";
+  code << "    return " << Parameters::GetOTDescriptionStr(outputNames, false, false) << "\n";
   setCode(code);
 
   notify("stepsChanged");

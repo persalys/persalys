@@ -71,5 +71,27 @@ NEW_PERSALYSEXCEPTION( InvalidValueException );
 NEW_PERSALYSEXCEPTION( DetachedException );
 
 #undef NEW_PERSALYSEXCEPTION
+
+class PERSALYS_BASE_API DuplicateItemException: public OT::Exception
+{
+public:
+  enum class ItemType {Study, DoE, dataFieldModel, PhysicalModel, Analysis, LimitState, Other};
+
+  DuplicateItemException(const OT::PointInSourceFile &point, ItemType itemType);
+  ~DuplicateItemException() throw() override;
+
+  template <class T> DuplicateItemException & operator << (T obj)
+  {
+    this->Exception::operator << ( obj );
+    return *this;
+  }
+
+  ItemType getItemType() const;
+
+private:
+  ItemType itemType;
+};
+
 }
+
 #endif

@@ -58,6 +58,8 @@ public:
   OT::String getPythonScript() const override;
   bool hasValidResult() const override;
 
+  PhysicalModel getMetaModel() const override;
+
   /** String converter */
   OT::String __repr__() const override;
 

@@ -46,6 +46,9 @@ public:
   void appendItem(const LimitState & limitState) override;
   void appendItem(const Analysis & analysis) override;
 
+  OT::String appendMetaModelItem(PhysicalModel metaModel);
+  OT::String appendPythonMetaModelItem(PhysicalModel metaModel);
+
   QVariant data(int role) const override;
   void setData(const QVariant & value, int role) override;
   Study getStudy() const;
@@ -61,7 +64,7 @@ public slots:
   void emitSaveAs();
   bool save(const QString&);
   void emitClose();
-  void appendMetaModelItem(PhysicalModel metaModel);
+
 signals:
   void statusChanged();
 

@@ -27,9 +27,12 @@
 #include "persalys/StudyItem.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/MonteCarloAnalysis.hxx"
+#include "persalys/PythonPhysicalModel.hxx"
 
 
 #include <QDebug>
+#include <QMessageBox>
+#include <QApplication>
 
 using namespace OT;
 
@@ -77,13 +80,25 @@ void AnalysisItem::buildActions()
   {
     convertAction_ = new QAction(tr("Convert metamodel into physical model"), this);
     convertAction_->setStatusTip(tr("Add the metamodel in the study tree"));
-    connect(convertAction_, SIGNAL(triggered()), this, SLOT(appendMetaModelItem()));
+    connect(convertAction_, &QAction::triggered, [this](){
+      const auto * analysis = dynamic_cast<MetaModelAnalysis*>(analysis_.getImplementation().get());
+      getParentStudyItem()->appendMetaModelItem(analysis->getMetaModel());
+    });
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(convertAction_);
 
+    convertPythonAction_ = new QAction(tr("Convert metamodel into python model"), this);
+    convertPythonAction_->setStatusTip(tr("Import the metamodel inside a python model and add the model to the study"));
+    connect(convertPythonAction_, &QAction::triggered, this, &AnalysisItem::addPythonMetaModel);
+    convertPythonAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
+    appendAction(convertPythonAction_);
+
     exportAction_ = new QAction(tr("Export metamodel"), this);
     exportAction_->setStatusTip(tr("Export to an independent Python script"));
-    connect(exportAction_, SIGNAL(triggered()), this, SLOT(exportMetaModel()));
+    connect(exportAction_, &QAction::triggered, [this](){
+      const auto * analysis = dynamic_cast<MetaModelAnalysis*>(analysis_.getImplementation().get());
+      emit pythonMetamodelExportRequested(analysis->getMetaModel());
+    });
     exportAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(exportAction_);
   }
@@ -227,56 +242,38 @@ void AnalysisItem::modifyAnalysis()
   }
 }
 
-
-void AnalysisItem::appendMetaModelItem()
+void AnalysisItem::addPythonMetaModel()
 {
-  FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get());
-  KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
-  PolynomialRegressionAnalysis * regression = dynamic_cast<PolynomialRegressionAnalysis*>(analysis_.getImplementation().get());
-  if (chaos)
+  try
   {
-    getParentStudyItem()->appendMetaModelItem(chaos->getResult().getMetaModel());
+    const auto * analysis = dynamic_cast<MetaModelAnalysis*>(analysis_.getImplementation().get());
+    getParentStudyItem()->appendPythonMetaModelItem(analysis->asPythonPhysicalModel(getParentStudyItem()->getStudy()));
   }
-  else if (kriging)
+  catch (InvalidArgumentException &e)
   {
-    getParentStudyItem()->appendMetaModelItem(kriging->getResult().getMetaModel());
+    QMessageBox::warning(QApplication::activeWindow(), tr("Impossible to retrieve the metamodel via Persalys Python API"), e.what());
   }
-  else if (regression)
+  catch (DuplicateItemException &e)
   {
-    getParentStudyItem()->appendMetaModelItem(regression->getResult().getMetaModel());
+    QString warningTitle(tr("Impossible to retrieve the metamodel via Persalys Python API"));
+    QString warningMessage;
+    if (e.getItemType() == DuplicateItemException::ItemType::Study)
+      warningMessage = tr("Two or more studies are opened with name %1. Try renaming one.").arg(getParentStudyItem()->getStudy().getName().c_str());
+    else if (e.getItemType() == DuplicateItemException::ItemType::Analysis)
+      warningMessage = tr("Two or more analysis are named %1 inside the study. Try renaming one.").arg(analysis_.getName().c_str());
+    else
+      warningMessage = e.what();
+    
+    QMessageBox::warning(QApplication::activeWindow(), warningTitle, warningMessage);
   }
 }
-
-
-void AnalysisItem::exportMetaModel()
-{
-  FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(analysis_.getImplementation().get());
-  KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(analysis_.getImplementation().get());
-  PolynomialRegressionAnalysis * regression = dynamic_cast<PolynomialRegressionAnalysis*>(analysis_.getImplementation().get());
-  PhysicalModel metamodel;
-  if (chaos)
-  {
-    metamodel = chaos->getResult().getMetaModel();
-  }
-  else if (kriging)
-  {
-    metamodel = kriging->getResult().getMetaModel();
-  }
-  else if (regression)
-  {
-    metamodel = regression->getResult().getMetaModel();
-  }
-
-  emit pythonMetamodelExportRequested(metamodel);
-}
-
 
 void AnalysisItem::appendDataModelItem()
 {
   if (!getParentStudyItem())
     return;
 
-  DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
+  const auto * doeEval = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
   DataAnalysisResult result;
   if(doeEval)
   {
@@ -284,7 +281,7 @@ void AnalysisItem::appendDataModelItem()
   }
   else
   {
-    MonteCarloAnalysis * analysis  = dynamic_cast<MonteCarloAnalysis*>(analysis_.getImplementation().get());
+    const auto * analysis  = dynamic_cast<MonteCarloAnalysis*>(analysis_.getImplementation().get());
     if(analysis)
     {
       result = analysis->getResult();
@@ -332,6 +329,10 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
       convertAction_->setEnabled(true);
       emit numberMetamodelChanged(1);
     }
+    if (convertPythonAction_)
+    {
+      convertPythonAction_->setEnabled(true);
+    }
     if (extractDataAction_)
       extractDataAction_->setEnabled(true);
   }
@@ -350,9 +351,12 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
     // emit signal to AnalysisWindow to update the progress bar
     emit progressValueChanged(analysis_.getProgressValue());
   }
-  else if (message == "doeChanged" && convertAction_)
+  else if (message == "doeChanged")
   {
-    convertAction_->setEnabled(analysis_.hasValidResult());
+    if (convertAction_)
+      convertAction_->setEnabled(analysis_.hasValidResult());
+    if (convertPythonAction_)
+      convertPythonAction_->setEnabled(analysis_.hasValidResult());
   }
   else if (message == "metamodelAvailable" && exportAction_)
   {

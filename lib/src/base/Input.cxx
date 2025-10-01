@@ -175,14 +175,7 @@ String Input::getDistributionPythonScript() const
     TruncatedDistribution truncatedDistribution = *dynamic_cast<TruncatedDistribution*>(distribution_.getImplementation().get());
     Distribution distribution = truncatedDistribution.getDistribution();
     oss << "dist_" << getName() << " = ot." << distribution.getImplementation()->getClassName() << "(";
-    PointWithDescription parameters = distribution.getParametersCollection()[0];
-    for (unsigned int i = 0; i < parameters.getSize(); ++ i)
-    {
-      oss << parameters[i];
-      if (i < parameters.getSize() - 1)
-        oss << ", ";
-    }
-    oss << ")\n";
+    oss << Parameters::GetOTPointWithDescriptionStr(distribution.getParametersCollection()[0]) <<  ")\n";
     oss << "dist_" << getName() << " = ot." << distributionName << "(";
     oss << "dist_" << getName() << ", ";
 

@@ -30,10 +30,11 @@ class PERSALYS_BASE_API Study : public OT::TypedInterfaceObject<StudyImplementat
   CLASSNAME
 
 public:
-  typedef OT::Pointer<StudyImplementation> Implementation;
+  using Implementation = OT::Pointer<StudyImplementation>;
 
   // static methods
   static OT::Collection<PERSALYS::Study> GetInstances();
+  static Study GetInstanceByName(const OT::String & studyName);
   static OT::Description GetFileNames();
   static bool HasInstanceNamed(const OT::String& studyName);
   static OT::String GetAvailableName(const OT::String& rootName);
@@ -65,29 +66,34 @@ public:
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);
   OT::String getAvailableDataModelName(const OT::String& modelRootName) const;
+  bool hasDataModelNamed(const OT::String &name) const;
   void add(const DesignOfExperiment& designOfExperiment);
   void remove(const DesignOfExperiment& designOfExperiment);
 
   OT::Collection<DataFieldModel> getDataFieldModels() const;
   DataFieldModel& getDataFieldModelByName(const OT::String& dataModelName);
   OT::String getAvailableDataFieldModelName(const OT::String& modelRootName) const;
+  bool hasDataFieldModelNamed(const OT::String &name) const;
   void add(const DataFieldModel& dataFieldModel);
   void remove(const DataFieldModel& dataFieldModel);
 
   OT::Collection<PhysicalModel> getPhysicalModels() const;
   PhysicalModel& getPhysicalModelByName(const OT::String& physicalModelName);
   OT::String getAvailablePhysicalModelName(const OT::String& physicalModelRootName) const;
+  bool hasPhysicalModelNamed(const OT::String &name) const;
   void add(const PhysicalModel& physicalModel);
   void remove(const PhysicalModel& physicalModel);
 
   OT::Collection<Analysis> getAnalyses() const;
   Analysis& getAnalysisByName(const OT::String& analysisName);
   OT::String getAvailableAnalysisName(const OT::String& rootName) const;
+  bool hasAnalysisNamed(const OT::String &name) const;
   void add(const Analysis& analysis);
   void remove(const Analysis& analysis);
 
   OT::Collection<LimitState> getLimitStates() const;
   OT::String getAvailableLimitStateName(const OT::String & rootName) const;
+  bool hasLimitStateNamed(const OT::String &name) const;
   void add(const LimitState& limitState);
   void remove(const LimitState& limitState);
 

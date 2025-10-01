@@ -22,6 +22,8 @@
 
 #include "persalys/MetaModel.hxx"
 #include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/BaseTools.hxx"
+#include "persalys/Study.hxx"
 
 #include <openturns/KPermutationsDistribution.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -80,7 +82,7 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
   , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
-  DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
+  const auto * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
 
   if (!analysis_ptr)
   {
@@ -90,6 +92,38 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysi
   setInterestVariables(analysis_ptr->getInterestVariables());
 }
 
+PythonPhysicalModel MetaModelAnalysis::asPythonPhysicalModel(const Study &study) const
+{
+  if (hasMoreThanOneObjectWithName(Study::GetInstances(), study.getName()))
+    throw DuplicateItemException(HERE, DuplicateItemException::ItemType::Study) << "Two or more studies are opened with the same name";
+  
+  if (hasMoreThanOneObjectWithName(study.getAnalyses(), getName()))
+    throw DuplicateItemException(HERE, DuplicateItemException::ItemType::Analysis) << "There are more than one analysis in the study with name " << getName();
+
+  if (!study.hasAnalysisNamed(getName()))
+    throw InvalidArgumentException(HERE) << "There is no analysis named " << getName()<< " in the study " << study.getName();
+
+  PhysicalModel metaModel = getMetaModel();
+
+  const String inputNamesString(Parameters::GetOTDescriptionStr(metaModel.getInputNames(), false, false));
+  const String outputNamesString(Parameters::GetOTDescriptionStr(metaModel.getOutputNames(), false, false));
+
+  OSS code;
+  code << "import persalys\n";
+  code << "\n";
+  code << "study = persalys.Study.GetInstanceByName('" << study.getName() << "')\n";
+  code << "analysis = study.getAnalysisByName('" << getName() << "').getImplementation()\n";
+  code << "metamodel_function = analysis.getResult().getMetaModel().getFunction()\n";
+  code << "\n";
+  code << "def _exec(" << inputNamesString  << "):\n";
+  code << "    " << outputNamesString  << " = metamodel_function([" << inputNamesString << "])";
+  if (metaModel.getOutputDimension() <= 1u)
+    code << "[0]";          // metamodel_function returns a Point so in dimension 1 we need to extract the value
+  code << "\n";
+  code << "    return " << outputNamesString << "\n";
+
+  return PythonPhysicalModel(getName(), metaModel.getInputs(), metaModel.getOutputs(), code.str());
+}
 
 bool MetaModelAnalysis::analyticalValidation() const
 {
@@ -612,6 +646,11 @@ void MetaModelAnalysis::computeLOOValidation(MetaModelAnalysisResult& result, co
 
   // compute Q2
   computeError(result.looValidation_.metaModelSample_, result.outputSample_, result.looValidation_.mse_, result.looValidation_.q2_);
+}
+
+PhysicalModel MetaModelAnalysis::getMetaModel() const
+{
+  throw NotYetImplementedException(HERE) << "This function is only defined in children classes";
 }
 
 

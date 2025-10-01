@@ -40,6 +40,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QDebug>
+#include <QPointer>
 
 using namespace OT;
 
@@ -169,24 +170,15 @@ void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &a
 
 void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& analysis, const bool isGeneralWizard)
 {
-  MetaModelExportWizard * wizard = new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_);
+  QPointer<MetaModelExportWizard> wizard(new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_));
+  wizard->setAttribute(Qt::WA_DeleteOnClose);
 
-  if (wizard)
-  {
-    if (wizard->exec())
-    {
-      FunctionalChaosAnalysis * chaos = dynamic_cast<FunctionalChaosAnalysis*>(wizard->getAnalysis().getImplementation().get());
-      if (chaos)
-        item->appendMetaModelItem(chaos->getResult().getMetaModel());
-      KrigingAnalysis * kriging = dynamic_cast<KrigingAnalysis*>(wizard->getAnalysis().getImplementation().get());
-      if(kriging)
-        item->appendMetaModelItem(kriging->getResult().getMetaModel());
-      PolynomialRegressionAnalysis * linear = dynamic_cast<PolynomialRegressionAnalysis*>(wizard->getAnalysis().getImplementation().get());
-      if (linear)
-        item->appendMetaModelItem(linear->getResult().getMetaModel());
-    }
-    delete wizard;
-  }
+  connect(wizard, &QDialog::accepted, [item, wizard](){
+    const auto * metaModelAnalysis = dynamic_cast<MetaModelAnalysis*>(wizard->getAnalysis().getImplementation().get());
+    item->appendMetaModelItem(metaModelAnalysis->getMetaModel());
+  });
+
+  wizard->open();
 }
 
 
@@ -413,10 +405,14 @@ void StudyManager::exportMetamodelPython(const PhysicalModel & metamodel)
     return;
   }
 
-  const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
+  QString fileName = QFileDialog::getSaveFileName(mainWidget_,
                            tr("Export Python..."),
                            FileTools::GetCurrentDir() + QDir::separator() + item->data(Qt::DisplayRole).toString() + QString(".py"),
                            tr("Python source files (*.py)"));
+
+  const QFileInfo fi(fileName);
+  if (fi.suffix().isEmpty())
+    fileName += ".py";
 
   if (!fileName.isEmpty())
     metamodel.exportStandalonePythonScript(fileName.toStdString());

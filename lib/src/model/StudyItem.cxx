@@ -316,6 +316,42 @@ void StudyItem::appendItem(const DesignOfExperiment &dataModel)
   }
 }
 
+String StudyItem::appendMetaModelItem(PhysicalModel metaModel)
+{
+  const String symbolicName("Symbolic_"+metaModel.getName());
+  if (!study_.hasPhysicalModelNamed(symbolicName))
+  {
+    metaModel.setName(symbolicName);
+    study_.add(metaModel);
+    return symbolicName;
+  }
+  else
+  {
+    String newName(study_.getAvailablePhysicalModelName(symbolicName+"_"));
+    metaModel.setName(newName);
+    study_.add(metaModel);
+    return newName;
+  }
+}
+
+String StudyItem::appendPythonMetaModelItem(PhysicalModel metaModel)
+{
+  String originalName(metaModel.getName());
+  if (!study_.hasPhysicalModelNamed("Python_"+originalName))
+  {
+    metaModel.setName("Python_"+originalName);
+    study_.add(metaModel);
+    return "Python_"+originalName;
+  }
+  else
+  {
+    String newName(study_.getAvailablePhysicalModelName("Python_"+originalName+"_"));
+    metaModel.setName(newName);
+    study_.add(metaModel);
+    return newName;
+  }
+}
+
 
 void StudyItem::appendItem(const PhysicalModel &physicalModel)
 {
@@ -369,15 +405,6 @@ void StudyItem::appendItem(const Analysis &analysis)
   else
     qDebug() << "In StudyItem::appendItem: No item added for the analysis named " << analysis.getName().data() << ". No found observer\n";
 }
-
-
-void StudyItem::appendMetaModelItem(PhysicalModel metaModel)
-{
-  const String availableName = metaModel.getName();
-  metaModel.setName(availableName);
-  study_.add(metaModel);
-}
-
 
 QVariant StudyItem::data(int role) const
 {

@@ -113,12 +113,12 @@ bool Parameters::operator==(const Parameters& other) const
 String Parameters::GetOTSampleStr(const Sample& values)
 {
   OSS sampleOss;
-  sampleOss << "[";
+  sampleOss << "[\n";
   for (UnsignedInteger i = 0; i < values.getSize(); ++i)
   {
     sampleOss << "[";
     Point pt(values[i]);
-    std::copy(pt.begin(), pt.end(), OSS_iterator<Scalar>(sampleOss, ","));
+    std::copy(pt.begin(), pt.end(), OSS_iterator<Scalar>(sampleOss, ", "));
     sampleOss << "]";
     if (i < (values.getSize() - 1))
       sampleOss << ",\n";
@@ -158,63 +158,38 @@ String Parameters::GetOTSampleCollectionStr(const ProcessSample& processSample)
 
 String Parameters::GetOTPointStr(const Point& values, const String& separator, bool useBrackets)
 {
-  if (values.isEmpty())
-    return useBrackets ? "[]" : "";
-
-  OSS oss;
-  if (useBrackets) oss << "[";
-
-  for (UnsignedInteger i = 0; i < values.getSize(); ++i)
-  {
-    if (i > 0) oss << separator;
-    oss << values[i];
-  }
-
-  if (useBrackets) oss << "]";
-
-  return oss.str();
+  return GetStr(values, separator, useBrackets, false);
 }
 
+String Parameters::GetOTPointWithDescriptionStr(const PointWithDescription& values)
+{
+  return GetStr(values, ", ", false, false);
+}
 
 String Parameters::GetOTIndicesStr(const Indices& values)
 {
-  String valuesStr = "[";
-  for (UnsignedInteger i = 0; i < values.getSize(); ++i)
-  {
-    valuesStr += OSS() << values[i];
-    if (i < values.getSize() - 1)
-      valuesStr += ", ";
-  }
-  valuesStr += "]";
-  return valuesStr;
+  return GetStr(values, ", ", true, false);
 }
 
-
-String Parameters::GetOTDescriptionStr(const Description& values, const bool quote)
+String Parameters::GetOTDescriptionStr(const Description& values, const bool quote, bool useBrackets)
 {
-  String valuesStr = "[";
-  for (UnsignedInteger i = 0; i < values.getSize(); ++i)
-  {
-    valuesStr += OSS() << (quote ? "'" : "") << values[i] << (quote ? "'" : "");
-    if (i < values.getSize() - 1)
-      valuesStr += ", ";
-  }
-  valuesStr += "]";
-  return valuesStr;
+  return GetStr(values, ", ", useBrackets, quote);
 }
-
 
 String Parameters::GetOTBoolCollectionStr(const Interval::BoolCollection& values)
 {
-  String valuesStr = "[";
-  for (UnsignedInteger i = 0; i < values.getSize(); ++i)
+  OSS oss;
+  oss << "[";
+
+  for (UnsignedInteger i = 0 ; i < values.getSize() ; ++i)
   {
-    valuesStr += values[i] ? "True" : "False";
-    if (i < values.getSize() - 1)
-      valuesStr += ", ";
+    if (i > 0)
+      oss << ", ";
+    oss << (values[i] ? "True" : "False");
   }
-  valuesStr += "]";
-  return valuesStr;
+  oss << "]";
+
+  return oss.str();
 }
 
 

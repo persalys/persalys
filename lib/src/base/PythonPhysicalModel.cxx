@@ -55,7 +55,6 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name,
   setCode(code);
 }
 
-
 /* Virtual constructor */
 PythonPhysicalModel* PythonPhysicalModel::clone() const
 {

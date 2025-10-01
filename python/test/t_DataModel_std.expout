@@ -859,8 +859,9 @@ aQuantileAnalysis.setInterestVariables(['X0', 'X2'])
 aQuantileAnalysis.setTargetProbabilities([[0.01, 0.001],[0.02, 0.01, 0.001]])
 aQuantileAnalysis.setTailTypes([7, 4])
 aQuantileAnalysis.setType(1)
-aQuantileAnalysis.setThreshold([[-1.2,-1.2],
-[1.3,1.3]]
+aQuantileAnalysis.setThreshold([
+[-1.2, -1.2],
+[1.3, 1.3]]
 )
 myStudy.add(aQuantileAnalysis)
 

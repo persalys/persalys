@@ -90,23 +90,7 @@ String FixedDesignOfExperiment::getPythonScript() const
   OSS oss;
 
   oss << getName() << " = persalys.FixedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
-
-  oss << "inputSample = [\n";
-  for (UnsignedInteger i = 0; i < getOriginalInputSample().getSize(); ++i)
-  {
-    oss << "[";
-    for (UnsignedInteger j = 0; j < getOriginalInputSample().getDimension(); ++j)
-    {
-      oss << getOriginalInputSample()(i, j);
-      if (j < (getOriginalInputSample().getDimension() - 1))
-        oss << ", ";
-    }
-    oss << "]";
-    if (i < (getOriginalInputSample().getSize() - 1))
-      oss << ",\n";
-  }
-  oss << "]\n";
-
+  oss << "inputSample = " << Parameters::GetOTSampleStr(getOriginalInputSample());
   oss << getName() << ".setOriginalInputSample(inputSample)\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

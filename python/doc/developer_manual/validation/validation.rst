@@ -1810,6 +1810,13 @@ Probabilistic analyses
 
       .. image:: /developer_manual/validation/metamodel_export_wizard.png
           :align: center
+    
+    - right click on the kriging item: choose 'Convert metamodel into python model'
+
+      - a new item named 'Python_kriging' appears in the tree view
+      - click on its sub-item named 'Definition'
+      - change the value of x2 to 1.6
+      - click on the Evaluate model button
 
     - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 

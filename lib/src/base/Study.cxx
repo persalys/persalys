@@ -105,6 +105,14 @@ bool Study::HasInstanceNamed(const String & studyName)
   return false;
 }
 
+Study Study::GetInstanceByName(const String & studyName)
+{
+  for (PersistentCollection<Study >::iterator it = studies_.begin(); it != studies_.end(); ++it)
+    if ((*it).getImplementation().get()->getName() == studyName)
+      return *it;
+  throw InvalidArgumentException(HERE) << "No study named " << studyName << " was found.";
+}
+
 
 String Study::GetAvailableName(const String& rootName)
 {
@@ -117,11 +125,11 @@ String Study::GetAvailableName(const String& rootName)
 
 void Study::Add(const Study& study)
 {
+  if (studies_.contains(study))
+    throw InvalidArgumentException(HERE) << "The study already exists\n";
+  studies_.add(study);
   if (studyObserver_)
   {
-    if (studies_.contains(study))
-      throw InvalidArgumentException(HERE) << "The study already exists\n";
-    studies_.add(study);
     studyObserver_->update(study.getImplementation().get(), "addStudy");
   }
 }
@@ -262,18 +270,20 @@ Collection< DesignOfExperiment > Study::getDataModels() const
   return getImplementation()->getDataModels();
 }
 
-
 DesignOfExperiment& Study::getDataModelByName(const String& dataModelName)
 {
   return getImplementation()->getDataModelByName(dataModelName);
 }
-
 
 String Study::getAvailableDataModelName(const String& modelRootName) const
 {
   return getImplementation()->getAvailableDataModelName(modelRootName);
 }
 
+bool Study::hasDataModelNamed(const String & name) const
+{
+  return getImplementation()->hasDataModelNamed(name);
+}
 
 void Study::add(const DesignOfExperiment& designOfExperiment)
 {
@@ -293,16 +303,19 @@ Collection< DataFieldModel > Study::getDataFieldModels() const
   return getImplementation()->getDataFieldModels();
 }
 
-
 DataFieldModel& Study::getDataFieldModelByName(const String& dataModelName)
 {
   return getImplementation()->getDataFieldModelByName(dataModelName);
 }
 
-
 String Study::getAvailableDataFieldModelName(const String& modelRootName) const
 {
   return getImplementation()->getAvailableDataFieldModelName(modelRootName);
+}
+
+bool Study::hasDataFieldModelNamed(const String & name) const
+{
+  return getImplementation()->hasDataFieldModelNamed(name);
 }
 
 void Study::add(const DataFieldModel& dataFieldModel)
@@ -322,18 +335,20 @@ Collection<PhysicalModel> Study::getPhysicalModels() const
   return getImplementation()->getPhysicalModels();
 }
 
-
 PhysicalModel& Study::getPhysicalModelByName(const String& physicalModelName)
 {
   return getImplementation()->getPhysicalModelByName(physicalModelName);
 }
-
 
 String Study::getAvailablePhysicalModelName(const String& physicalModelRootName) const
 {
   return getImplementation()->getAvailablePhysicalModelName(physicalModelRootName);
 }
 
+bool Study::hasPhysicalModelNamed(const String & name) const
+{
+  return getImplementation()->hasPhysicalModelNamed(name);
+}
 
 void Study::add(const PhysicalModel& physicalModel)
 {
@@ -353,18 +368,20 @@ Collection<Analysis> Study::getAnalyses() const
   return getImplementation()->getAnalyses();
 }
 
-
 Analysis& Study::getAnalysisByName(const String& analysisName)
 {
   return getImplementation()->getAnalysisByName(analysisName);
 }
-
 
 String Study::getAvailableAnalysisName(const String& rootName) const
 {
   return getImplementation()->getAvailableAnalysisName(rootName);
 }
 
+bool Study::hasAnalysisNamed(const String & name) const
+{
+  return getImplementation()->hasAnalysisNamed(name);
+}
 
 void Study::add(const Analysis& analysis)
 {
@@ -384,12 +401,15 @@ Collection<LimitState> Study::getLimitStates() const
   return getImplementation()->getLimitStates();
 }
 
-
 String Study::getAvailableLimitStateName(const String & rootName) const
 {
   return getImplementation()->getAvailableLimitStateName(rootName);
 }
 
+bool Study::hasLimitStateNamed(const String & name) const
+{
+  return getImplementation()->hasLimitStateNamed(name);
+}
 
 void Study::add(const LimitState& limitState)
 {
@@ -427,4 +447,5 @@ void Study::load(Advocate& adv)
 {
   getImplementation()->load(adv);
 }
+
 }

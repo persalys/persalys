@@ -1,16 +1,20 @@
 %feature("docstring") PERSALYS::PythonPhysicalModel
 R"RAW(Create a physical model defined by Python code.
 
+Available constructors:
+    PythonPhysicalModel(*name* = "Unnamed")
+    PythonPhysicalModel(*name, inputs, outputs, code*)
+
 Parameters
 ----------
 name : str
     Name
 inputs : sequence of :class:`~persalys.Input`
-    Input variables (optional)
+    Input variables
 outputs : sequence of :class:`~persalys.Output`
-    Output variables (optional)
+    Output variables
 code : str
-    Code string (optional)
+    Code string
 
 Notes
 -----
