@@ -33,6 +33,7 @@
 #include "persalys/SobolAnalysis.hxx"
 #include "persalys/SRCAnalysis.hxx"
 #include "persalys/MultiObjectiveOptimizationAnalysis.hxx"
+#include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
 
 
@@ -118,7 +119,8 @@ void AnalysisItem::buildActions()
   }
   else if (analysisType.contains("DesignOfExperiment") ||
            analysisType == "MonteCarloAnalysis" || 
-           analysisType == "MorrisAnalysis")
+           analysisType == "MorrisAnalysis" ||
+           analysisType == "CalibrationAnalysis")
   {
     convertAction_ = new QAction(tr("Convert into data model"), this);
     convertAction_->setStatusTip(tr("Add a data model in the study tree"));
@@ -299,24 +301,68 @@ void AnalysisItem::appendDataModelItem()
   if (!getParentStudyItem())
     return;
 
+  Study study{getParentStudyItem()->getStudy()};
+
   EvaluationResult result;
   AnalysisImplementation * implementation = analysis_.getImplementation().get();
-  const auto * doeEval        = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
-  const auto * MCAnalysis     = dynamic_cast<MonteCarloAnalysis*>(implementation);
-  const auto * morrisAnalysis = dynamic_cast<MorrisAnalysis*>(implementation);
+  const auto * doeEval              = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
+  const auto * MCAnalysis           = dynamic_cast<MonteCarloAnalysis*>(implementation);
+  const auto * morrisAnalysis       = dynamic_cast<MorrisAnalysis*>(implementation);
+  const auto * calibrationAnalysis  = dynamic_cast<CalibrationAnalysis*>(implementation);
+
   if (doeEval)
     result = doeEval->getResult();
   else if (MCAnalysis)
     result = MCAnalysis->getResult();
   else if (morrisAnalysis)
     result = morrisAnalysis->getResult();
+  else if (calibrationAnalysis)
+  {
+    CalibrationResult calibrationResult = calibrationAnalysis->getResult().getCalibrationResult();
+    const String newName{study.getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString())};
+
+    const DesignOfExperiment observations = calibrationAnalysis->getObservations();
+    const Sample obsInput{observations.getInputSample()};
+    const Sample obsOutput{observations.getOutputSample()};
+    const Description obsOutputDescr{obsOutput.getDescription()};
+
+    Sample inSample{obsInput};
+    inSample.stack(obsOutput);
+    Description inSampleDescription{inSample.getDescription()};
+    inSample.stack(obsOutput - calibrationResult.getOutputAtPriorMean());
+    for (UnsignedInteger i = 0 ; i < obsOutput.getDimension() ; ++i)
+    {
+      inSampleDescription.add(tr("Initial residuals for %1").arg(QString{obsOutputDescr[i].c_str()}).toStdString());
+    }
+    inSample.setDescription(inSampleDescription);
+
+    Sample outSample{calibrationResult.getOutputAtPosteriorMean()};
+    Description outSampleDescription;
+    for (UnsignedInteger i = 0 ; i < obsOutput.getDimension() ; ++i)
+    {
+      outSampleDescription.add(tr("Calibrated %1").arg(QString{obsOutputDescr[i].c_str()}).toStdString());
+    }
+    if (calibrationResult.getOutputAtPosteriorMean().getSize())
+    {
+      outSample.stack(obsOutput - calibrationResult.getOutputAtPosteriorMean());
+      for (UnsignedInteger i = 0 ; i < obsOutput.getDimension() ; ++i)
+      {
+        outSampleDescription.add(tr("Calibrated residuals for %1").arg(QString{obsOutputDescr[i].c_str()}).toStdString());
+      }
+    }
+    outSample.setDescription(outSampleDescription);
+
+    auto * newModel = new DataModel(newName, inSample, outSample);
+    study.add(newModel);
+    return;
+  }
   else
     return;
 
   // create the data model
-  const String newName = getParentStudyItem()->getStudy().getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString());
-  DataModel * newModel = new DataModel(newName, result.getDesignOfExperiment());
-  getParentStudyItem()->getStudy().add(newModel);  // implicit conversion DesignOfExperiment(DesignOfExperimentImplementation*)
+  const String newName{study.getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString())};
+  auto * newModel = new DataModel(newName, result.getDesignOfExperiment());
+  study.add(newModel);  // implicit conversion DesignOfExperiment(DesignOfExperimentImplementation*)
 }
 
 void AnalysisItem::addDoEToStudy(const StudyItem * studyItem, const String &name, const PhysicalModel &model, const DesignOfExperiment &doe) const
