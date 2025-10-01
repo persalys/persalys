@@ -273,8 +273,9 @@ void DataAnalysis::launch()
 
   if (containsNaN)
   {
-    const Sample inputSample = result_.designOfExperiment_.getInputSample();
+    const Sample inputSample  = result_.designOfExperiment_.getInputSample();
     const Sample outputSample = result_.designOfExperiment_.getOutputSample();
+    const bool existsOutput = outputSample.getSize();
     Sample noNaNInputSample(0, inputSample.getDimension());
     Sample noNaNOutputSample(0, outputSample.getDimension());
     for (UnsignedInteger i = 0 ; i < inputSample.getSize() ; i++)
@@ -287,7 +288,7 @@ void DataAnalysis::launch()
         if (rowContainsNaN)
           break;
       }
-      for (UnsignedInteger j = 0 ; j < outputSample.getDimension() ; j++)
+      for (UnsignedInteger j = 0 ; existsOutput && j < outputSample.getDimension() ; j++)
       {
         const Scalar value = outputSample(i, j);
         rowContainsNaN = rowContainsNaN || std::isnan(value);
@@ -297,13 +298,17 @@ void DataAnalysis::launch()
       if (!rowContainsNaN)
       {
         noNaNInputSample.add(inputSample[i]);
-        noNaNOutputSample.add(outputSample[i]);
+        if (existsOutput)
+          noNaNOutputSample.add(outputSample[i]);
       }
     }
     noNaNInputSample.setDescription(result_.designOfExperiment_.getInputSample().getDescription());
-    noNaNOutputSample.setDescription(result_.designOfExperiment_.getOutputSample().getDescription());
     result_.multiVariateDoE_.setInputSample(noNaNInputSample);
-    result_.multiVariateDoE_.setOutputSample(noNaNOutputSample); 
+    if (existsOutput)
+    {
+      noNaNOutputSample.setDescription(result_.designOfExperiment_.getOutputSample().getDescription());
+      result_.multiVariateDoE_.setOutputSample(noNaNOutputSample); 
+    }
   }
   else
     result_.multiVariateDoE_ = result_.designOfExperiment_;
