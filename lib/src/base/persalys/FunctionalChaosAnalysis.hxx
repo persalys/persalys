@@ -74,13 +74,11 @@ protected:
   OT::Function runAlgo(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
   OT::FunctionalChaosAlgorithm buildFunctionalChaosAlgorithm(const OT::Sample & inputSample, const OT::Sample & outputSample);
   void postProcessFunctionalChaosResult(const OT::Sample& inputSample);
-  OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection getPolynomialFamilyCollection();
   void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample) override;
 
 private:
-  OT::OrthogonalProductPolynomialFactory::PolynomialFamilyCollection polynomialFamilyCollection_;
-  OT::UnsignedInteger chaosDegree_;
-  bool sparseChaos_;
+  OT::UnsignedInteger chaosDegree_ = 2;
+  bool sparseChaos_ = false;
   FunctionalChaosAnalysisResult result_;
 };
 }

@@ -47,27 +47,15 @@ sobolResult = chaosResult.getSobolResult()
 # print("functionalChaosResult", chaosResult.getFunctionalChaosResult())
 
 # Comparaison
-if "1.20" in ot.__version__:
-    mean = [0, 0.4883827512409983]  # ot<1.21
-    variance = [0.8595249944148248, 0.8597699643961747]
-else:
-    mean = [-0.0116172, 0.488383]
-    variance = [0.85977, 0.85977]
-firstOrderIndices = [
-    [0.511719012189697, 0.4882809878103031],
-    [0.5114868181064884, 0.48851318189351145],
-]
-totalIndices = [
-    [0.511719012189697, 0.4882809878103031],
-    [0.5114868181064884, 0.48851318189351145],
-]
+mean_ref = [-0.0114672, 0.488533]
+variance_ref = [0.872994] * 2
+fo_ref = [[0.52165, 0.47835]] * 2
+to_ref = [[0.52165, 0.47835]] * 2
 
-ott.assert_almost_equal(mean, chaosResult.getMean())
-ott.assert_almost_equal(variance, chaosResult.getVariance())
-ott.assert_almost_equal(
-    firstOrderIndices, sobolResult.getFirstOrderIndices(), 1e-3, 1e-3
-)
-ott.assert_almost_equal(totalIndices, sobolResult.getTotalIndices(), 1e-3, 1e-3)
+ott.assert_almost_equal(chaosResult.getMean(), mean_ref)
+ott.assert_almost_equal(chaosResult.getVariance(), variance_ref)
+ott.assert_almost_equal(sobolResult.getFirstOrderIndices(), fo_ref, 1e-3, 1e-3)
+ott.assert_almost_equal(sobolResult.getTotalIndices(), to_ref, 1e-3, 1e-3)
 
 # Chaos 2 ##
 analysis2 = persalys.FunctionalChaosAnalysis("chaos_1", aDesign)
@@ -90,19 +78,15 @@ sobolResult2 = chaosResult2.getSobolResult()
 print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
-ott.assert_almost_equal([0.922344], chaosResult2.getAnalyticalValidation().getQ2())
-ott.assert_almost_equal(
-    [0.9457431125210048], chaosResult2.getTestSampleValidation().getQ2(), 1e-16
-)
-ott.assert_almost_equal(
-    [0.9143738630455855], chaosResult2.getKFoldValidation().getQ2(), 1e-16
-)
+ott.assert_almost_equal(chaosResult2.getAnalyticalValidation().getQ2(), [0.942161])
+ott.assert_almost_equal(chaosResult2.getTestSampleValidation().getQ2(), [0.926247])
+ott.assert_almost_equal(chaosResult2.getKFoldValidation().getQ2(), [0.923696])
 
 # extract metamodel
 metamodel = chaosResult2.getMetaModel()
 ott.assert_almost_equal(metamodel.getFunction().getInputDimension(), 2)
 ott.assert_almost_equal(metamodel.getFunction().getOutputDimension(), 1)
-ott.assert_almost_equal(metamodel.getFunction()([0.5] * 2), [2.17011])
+ott.assert_almost_equal(metamodel.getFunction()([0.5] * 2), [2.11503])
 
 
 # script

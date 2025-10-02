@@ -21,16 +21,6 @@
 #include "persalys/FunctionalChaosAnalysis.hxx"
 
 #include <openturns/JointDistribution.hxx>
-#include <openturns/LinearEnumerateFunction.hxx>
-#include <openturns/FixedStrategy.hxx>
-#include <openturns/LeastSquaresStrategy.hxx>
-#include <openturns/KFold.hxx>
-#include <openturns/BasisSequenceFactory.hxx>
-#include <openturns/LeastSquaresMetaModelSelectionFactory.hxx>
-#include <openturns/LegendreFactory.hxx>
-#include <openturns/LARS.hxx>
-#include <openturns/Uniform.hxx>
-#include <openturns/StandardDistributionPolynomialFactory.hxx>
 #include <openturns/FunctionalChaosSobolIndices.hxx>
 #include <openturns/FunctionalChaosRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -49,10 +39,6 @@ static Factory<FunctionalChaosAnalysis> Factory_FunctionalChaosAnalysis;
 /* Default constructor */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis()
   : MetaModelAnalysis()
-  , polynomialFamilyCollection_()
-  , chaosDegree_(2)
-  , sparseChaos_(false)
-  , result_()
 {
 }
 
@@ -60,10 +46,6 @@ FunctionalChaosAnalysis::FunctionalChaosAnalysis()
 /* Constructor with parameters */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
-  , polynomialFamilyCollection_()
-  , chaosDegree_(2)
-  , sparseChaos_(false)
-  , result_()
 {
 }
 
@@ -71,10 +53,6 @@ FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String& name, const Desig
 /* Constructor with parameters */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String& name, const Analysis& analysis)
   : MetaModelAnalysis(name, analysis)
-  , polynomialFamilyCollection_()
-  , chaosDegree_(2)
-  , sparseChaos_(false)
-  , result_()
 {
 }
 
@@ -147,29 +125,10 @@ Distribution FunctionalChaosAnalysis::getDistribution()
 }
 
 
-OrthogonalProductPolynomialFactory::PolynomialFamilyCollection FunctionalChaosAnalysis::getPolynomialFamilyCollection()
-{
-  if (polynomialFamilyCollection_.isEmpty())
-  {
-    // distribution:
-    const Distribution distribution(getDistribution());
-
-    // adaptiveStrategy
-    for (UnsignedInteger i = 0; i < distribution.getDimension(); ++i)
-    {
-      const StandardDistributionPolynomialFactory factory(distribution.getMarginal(i));
-      polynomialFamilyCollection_.add(factory);
-    }
-  }
-  return polynomialFamilyCollection_;
-}
-
-
 void FunctionalChaosAnalysis::initialize()
 {
   AnalysisImplementation::initialize();
   isDistributionComputed_ = false;
-  polynomialFamilyCollection_.clear();
   result_ = FunctionalChaosAnalysisResult();
 }
 
@@ -255,31 +214,9 @@ Function FunctionalChaosAnalysis::runAlgo(const Sample& inputSample, const Sampl
 
 FunctionalChaosAlgorithm FunctionalChaosAnalysis::buildFunctionalChaosAlgorithm(const Sample& inputSample, const Sample& outputSample)
 {
-  const UnsignedInteger inputDimension = inputSample.getDimension();
-  const LinearEnumerateFunction phi(inputDimension);
-
-  // adaptiveStrategy
-  const OrthogonalProductPolynomialFactory multivariateBasis(getPolynomialFamilyCollection(), phi);
-  const UnsignedInteger baseDim = LinearEnumerateFunction(inputDimension).getStrataCumulatedCardinal(chaosDegree_);
-  const FixedStrategy adaptiveStrategy(multivariateBasis, baseDim);
-
-  // projectionStrategy
-  LeastSquaresStrategy projectionStrategy;
-  if (sparseChaos_)
-  {
-    BasisSequenceFactory basisSequenceFactory = LARS();
-    basisSequenceFactory.setMaximumRelativeConvergence(-1.0);
-    projectionStrategy = LeastSquaresStrategy(LeastSquaresMetaModelSelectionFactory(basisSequenceFactory,
-                         KFold()));
-  }
-
-  // FunctionalChaosAlgorithm
-  FunctionalChaosAlgorithm functionalChaos(inputSample,
-      outputSample,
-      getDistribution(),
-      adaptiveStrategy,
-      projectionStrategy);
-
+  ResourceMap::SetAsUnsignedInteger("FunctionalChaosAlgorithm-MaximumTotalDegree", chaosDegree_);
+  ResourceMap::SetAsBool("FunctionalChaosAlgorithm-Sparse", sparseChaos_);
+  const FunctionalChaosAlgorithm functionalChaos(inputSample, outputSample, getDistribution());
   return functionalChaos;
 }
 

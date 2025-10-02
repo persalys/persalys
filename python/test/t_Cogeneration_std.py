@@ -161,28 +161,8 @@ chaos.run()
 chaosResult = chaos.getResult()
 
 # Comparaison
-openturns.testing.assert_almost_equal(
-    0.6356916720224053, chaosResult.getSobolResult().getFirstOrderIndices()[0][0], 1e-16
-)
-openturns.testing.assert_almost_equal(
-    0.04806204987068495,
-    chaosResult.getSobolResult().getFirstOrderIndices()[0][1],
-    1e-17,
-)
-openturns.testing.assert_almost_equal(
-    0.31620207904361813,
-    chaosResult.getSobolResult().getFirstOrderIndices()[0][2],
-    1e-17,
-)
-openturns.testing.assert_almost_equal(
-    0.6357266809805613, chaosResult.getSobolResult().getTotalIndices()[0][0], 1e-16
-)
-openturns.testing.assert_almost_equal(
-    0.04807585948286413, chaosResult.getSobolResult().getTotalIndices()[0][1], 1e-17
-)
-openturns.testing.assert_almost_equal(
-    0.3162416585998657, chaosResult.getSobolResult().getTotalIndices()[0][2], 1e-17
-)
+openturns.testing.assert_almost_equal(chaosResult.getSobolResult().getFirstOrderIndices()[0], [0.63572, 0.0480642, 0.316216])
+openturns.testing.assert_almost_equal(chaosResult.getSobolResult().getTotalIndices()[0], [0.63572, 0.0480642, 0.316216])
 
 # script
 script = myStudy.getPythonScript()
