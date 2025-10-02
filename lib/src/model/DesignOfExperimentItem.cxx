@@ -25,7 +25,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType)
+DesignOfExperimentItem::DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String &observerType)
   : Item(QString::fromUtf8(designOfExperiment.getName().c_str()), observerType.c_str())
   , Observer(observerType)
   , designOfExperiment_(designOfExperiment)

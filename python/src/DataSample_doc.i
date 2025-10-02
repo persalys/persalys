@@ -55,6 +55,23 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::DataSample::getMarginalWithoutNaN
+"Returns a marginal sample with NaN values removed.
+
+Parameters
+----------
+index : int
+    Index of the wanted marginal
+
+Returns
+-------
+sample : :py:class:`openturns.Sample`
+    A subsample of the present sample with the requested marginal
+    with NaN values removed."
+
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::DataSample::getListXMax
 "List of input values.
 

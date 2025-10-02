@@ -41,7 +41,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   dataAnalysisButton->setText(tr("Data\nanalysis"));
   dataAnalysisButton->setWhatsThis(tr("Analyse each variable"));
   connect(dataAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newDataAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool, QString)), dataAnalysisButton, SLOT(setEnabled(bool, QString)));
+  connect(dataModelDiagramItem, SIGNAL(dataSizeValidityChanged(bool, QString)), dataAnalysisButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(dataAnalysisButton, row, modelDefinitionButton);
 
@@ -65,7 +65,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
   inferenceButton->setText(tr("Marginals\ninference"));
   inferenceButton->setWhatsThis(tr("Make an inference analysis for variables with given distributions"));
   connect(inferenceButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newInferenceAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool, QString)), inferenceButton, SLOT(setEnabled(bool, QString)));
+  connect(dataModelDiagramItem, SIGNAL(dataSizeValidityChanged(bool, QString)), inferenceButton, SLOT(setEnabled(bool, QString)));
 
   appendButton(inferenceButton, ++row, modelDefinitionButton);
 

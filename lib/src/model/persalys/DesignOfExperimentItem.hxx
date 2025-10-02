@@ -31,7 +31,7 @@ class PERSALYS_MODEL_API DesignOfExperimentItem : public Item, public Observer
   Q_OBJECT
 
 public:
-  DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String observerType);
+  DesignOfExperimentItem(const DesignOfExperiment& designOfExperiment, const OT::String &observerType);
 
   DesignOfExperiment getDesignOfExperiment() const;
 

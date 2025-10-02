@@ -30,10 +30,18 @@ class PERSALYS_VIEW_API DataAnalysisResultWindow : public DataAnalysisWindow
   Q_OBJECT
 
 public:
-  DataAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
+  explicit DataAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
+
+  void addSummaryTab() override;
+  void addDependenceTab() override;
+  void addScatterPlotsTab() override;
+#ifdef PERSALYS_HAVE_PARAVIEW
+  void addParaviewWidgetsTabs() override;
+#endif // PERSALYS_HAVE_PARAVIEW
 
 protected:
-  void initialize(AnalysisItem* item);
+  void initialize(const AnalysisItem* item);
+
 };
 }
 #endif

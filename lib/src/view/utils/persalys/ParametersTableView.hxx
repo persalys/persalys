@@ -28,6 +28,9 @@
 
 #include <QHeaderView>
 #include <QIdentityProxyModel>
+#include <QPointer>
+#include <QStringList>
+#include <QColor>
 
 namespace PERSALYS
 {
@@ -56,6 +59,10 @@ public:
                       const bool splitLongLines = true,    // split long lines
                       QWidget *parent = nullptr
                      );
+
+  void setValueAt(const int row, const QString &value, const QColor backgroundColor = QColor());
+private:
+  QPointer<CustomStandardItemModel> tableModel_;
 };
 }
 #endif

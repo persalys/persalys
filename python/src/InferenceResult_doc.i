@@ -31,3 +31,13 @@ Returns
 -------
 result : :class:`~persalys.FittingTestResult`
     The fitting test result of the variable"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::InferenceResult::getOriginalSampleSize
+"original sample size accessor
+
+Returns
+-------
+originalSampleSize : int
+    The size of the data sample"

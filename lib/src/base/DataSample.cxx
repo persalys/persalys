@@ -30,11 +30,6 @@ namespace PERSALYS
 /* Default constructor */
 DataSample::DataSample()
   : PersistentObject()
-  , inputSample_()
-  , outputSample_()
-  , sample_()
-  , listXMin_()
-  , listXMax_()
 {
 }
 
@@ -42,15 +37,15 @@ DataSample::DataSample()
 /* Constructor with parameters */
 DataSample::DataSample(const Sample & inSample, const Sample & outSample)
   : PersistentObject()
-  , inputSample_(inSample)
-  , outputSample_(outSample)
-  , sample_()
-  , listXMin_()
-  , listXMax_()
+  , inputSample_(removeNaNMarginals(inSample))
+  , outputSample_(removeNaNMarginals(outSample))
 {
-  if (getInputSample().getSize() && getOutputSample().getSize())
-    if (getInputSample().getSize() != getOutputSample().getSize())
-      throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
+  const UnsignedInteger inSize = inSample.getSize();
+  const UnsignedInteger outSize = outSample.getSize();
+  if (inSize && outSize && inSize != outSize)
+    throw InvalidDimensionException(HERE) << "The input sample and the output sample must have the same size";
+  inputContainsNaN_ = containsNaN(inSample);
+  outputContainsNaN_ = containsNaN(outSample);
 }
 
 
@@ -69,7 +64,10 @@ Sample DataSample::getInputSample() const
 
 void DataSample::setInputSample(const Sample & sample)
 {
-  inputSample_ = sample;
+  inputContainsNaN_ = containsNaN(sample);
+  inputSample_ = inputContainsNaN_ ? removeNaNMarginals(sample) : sample;
+  if (inputContainsNaN_)
+    inputContainsNaN_ = containsNaN(inputSample_);
   sample_ = Sample();
   listXMin_.clear();
   listXMax_.clear();
@@ -84,7 +82,10 @@ Sample DataSample::getOutputSample() const
 
 void DataSample::setOutputSample(const Sample & sample)
 {
-  outputSample_ = sample;
+  outputContainsNaN_ = containsNaN(sample);
+  outputSample_ = outputContainsNaN_ ? removeNaNMarginals(sample) : sample;
+  if (outputContainsNaN_)
+    outputContainsNaN_ = containsNaN(outputSample_);
   sample_ = Sample();
   listXMin_.clear();
   listXMax_.clear();
@@ -185,6 +186,23 @@ Sample DataSample::getSample() const
   return sample_;
 }
 
+Sample DataSample::getMarginalWithoutNaN(const UnsignedInteger index) const
+{
+  const Sample marginal = getSample().getMarginal(index);
+  if (!(inputContainsNaN_ || outputContainsNaN_))
+    return marginal;
+  
+  Sample marginalNoNaN;
+  for (UnsignedInteger i = 0 ; i < marginal.getSize() ; i++)
+  {
+    if (!std::isnan(marginal(i,0)))
+      marginalNoNaN.add(marginal[i]);
+  }
+
+  marginalNoNaN.setDescription(marginal.getDescription());
+  return marginalNoNaN;
+}
+
 
 bool DataSample::isValid() const
 {
@@ -201,6 +219,45 @@ bool DataSample::isValid() const
   return true;
 }
 
+bool DataSample::containsType(const Sample &sample, const bool type)
+{
+  bool containsType = false;
+  for (UnsignedInteger i = 0 ; !containsType && i < sample.getSize() ; ++i)
+  {
+    for(UnsignedInteger j = 0 ; j < sample.getDimension() ; ++j)
+    {
+      containsType = (type != std::isnan(sample(i,j)));
+      if(containsType)
+        break;
+    }
+  }
+
+  return containsType;
+}
+
+bool DataSample::containsNaN(const Sample &sample)
+{
+  return containsType(sample, false);
+}
+
+bool DataSample::containsNonNaN(const Sample &sample)
+{
+  return containsType(sample, true);
+}
+
+Sample DataSample::removeNaNMarginals(const Sample &sample)
+{ 
+  Indices noNaNMarginals;
+
+  for(UnsignedInteger i = 0 ; i < sample.getDimension() ; ++i)
+  {
+    Sample marginalSample(sample.getMarginal(i));
+    if (containsNonNaN(marginalSample))
+      noNaNMarginals.add(i);
+  }
+
+  return sample.getMarginal(noNaNMarginals);
+}
 
 /* Method save() stores the object through the StorageManager */
 void DataSample::save(Advocate & adv) const
@@ -210,6 +267,8 @@ void DataSample::save(Advocate & adv) const
   adv.saveAttribute("outputSample_", outputSample_);
   adv.saveAttribute("listXMin_", listXMin_);
   adv.saveAttribute("listXMax_", listXMax_);
+  adv.saveAttribute("inputContainsNaN_", inputContainsNaN_);
+  adv.saveAttribute("outputContainsNaN_", outputContainsNaN_);
 }
 
 
@@ -221,5 +280,10 @@ void DataSample::load(Advocate & adv)
   adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("listXMin_", listXMin_);
   adv.loadAttribute("listXMax_", listXMax_);
+  if (adv.hasAttribute("inputContainsnaN_"))
+  {
+    adv.loadAttribute("inputContainsNaN_", inputContainsNaN_);
+    adv.loadAttribute("outputContainsNaN_", outputContainsNaN_);
+  }
 }
 }

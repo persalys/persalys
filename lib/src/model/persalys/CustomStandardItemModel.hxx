@@ -34,7 +34,7 @@ class PERSALYS_MODEL_API CustomStandardItemModel : public QStandardItemModel
 public:
   CustomStandardItemModel(int nbRows, int nbColumns, QObject *parent = nullptr);
 
-  void setNotEditableItem(const int row, const int column, const QString text, const QColor color = QColor());
+  void setNotEditableItem(const int row, const int column, const QString text, const QColor textColor = QColor(), const QColor backgroundColor = QColor());
   void setNotEditableItem(const int row, const int column, const double value, const int prec = 6);
   void setNotEditableHeaderItem(const int row, const int column, const QString text);
   QString getFormattedText() const;

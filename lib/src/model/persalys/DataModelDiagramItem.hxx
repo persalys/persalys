@@ -49,6 +49,7 @@ public slots:
   void removeDesignOfExperiment();
 signals:
   // signal for diagram
+  void dataSizeValidityChanged(bool, QString);
   void dataModelValidityChanged(bool, QString);
   void dependenciesValidityChanged(bool, QString);
   void metaModelValidityChanged(bool, QString);

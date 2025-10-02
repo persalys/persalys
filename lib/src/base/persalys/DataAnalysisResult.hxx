@@ -62,6 +62,8 @@ public:
   OT::Interval getMeanConfidenceInterval() const;
   OT::Interval getStdConfidenceInterval() const;
   PointCollection getOutliers() const;
+  OT::Point getEffectiveSize() const;
+  DesignOfExperiment getMultivariateDoE() const;
 
   DataSample::SampleCollection getPDF() const;
   DataSample::SampleCollection getCDF() const;
@@ -94,6 +96,8 @@ private:
   OT::PersistentCollection<OT::Sample> pdf_;
   OT::PersistentCollection<OT::Sample> cdf_;
   OT::PersistentCollection<OT::Sample> survFct_;
+  OT::Point effectiveSize_;
+  DesignOfExperiment multiVariateDoE_;
 };
 }
 #endif

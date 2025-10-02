@@ -34,23 +34,6 @@ static Factory<DataAnalysisResult> Factory_DataAnalysisResult;
 /* Default constructor */
 DataAnalysisResult::DataAnalysisResult()
   : EvaluationResult()
-  , min_()
-  , max_()
-  , mean_()
-  , coefficientOfVariation_()
-  , median_()
-  , standardDeviation_()
-  , variance_()
-  , skewness_()
-  , kurtosis_()
-  , firstQuartile_()
-  , thirdQuartile_()
-  , meanConfidenceInterval_()
-  , stdConfidenceInterval_()
-  , outliers_()
-  , pdf_()
-  , cdf_()
-  , survFct_()
 {
 
 }
@@ -59,23 +42,6 @@ DataAnalysisResult::DataAnalysisResult()
 /* Constructor with parameters */
 DataAnalysisResult::DataAnalysisResult(const DesignOfExperiment& design)
   : EvaluationResult(design)
-  , min_()
-  , max_()
-  , mean_()
-  , coefficientOfVariation_()
-  , median_()
-  , standardDeviation_()
-  , variance_()
-  , skewness_()
-  , kurtosis_()
-  , firstQuartile_()
-  , thirdQuartile_()
-  , meanConfidenceInterval_()
-  , stdConfidenceInterval_()
-  , outliers_()
-  , pdf_()
-  , cdf_()
-  , survFct_()
 {
 
 }
@@ -170,6 +136,16 @@ DataAnalysisResult::PointCollection DataAnalysisResult::getOutliers() const
   return outliers_;
 }
 
+Point DataAnalysisResult::getEffectiveSize() const
+{
+  return effectiveSize_;
+}
+
+DesignOfExperiment DataAnalysisResult::getMultivariateDoE() const
+{
+  return multiVariateDoE_;
+}
+
 
 DataSample::SampleCollection DataAnalysisResult::getPDF() const
 {
@@ -208,6 +184,8 @@ String DataAnalysisResult::__repr__() const
       << " thirdQuartile=" << getThirdQuartile()
       << " meanConfidenceInterval=" << getMeanConfidenceInterval()
       << " stdConfidenceInterval=" << getStdConfidenceInterval();
+    if (effectiveSize_.getDimension())
+      oss << " effectiveSize=" << getEffectiveSize().__str__();
   return oss;
 }
 
@@ -233,6 +211,8 @@ void DataAnalysisResult::save(Advocate & adv) const
   adv.saveAttribute("pdf_", pdf_);
   adv.saveAttribute("cdf_", cdf_);
   adv.saveAttribute("survFct__", survFct_);
+  adv.saveAttribute("effectiveSize_", effectiveSize_);
+  adv.saveAttribute("multiVariateDoE_", multiVariateDoE_);
 }
 
 
@@ -256,7 +236,13 @@ void DataAnalysisResult::load(Advocate & adv)
   adv.loadAttribute("outliers_", outliers_);
   adv.loadAttribute("pdf_", pdf_);
   adv.loadAttribute("cdf_", cdf_);
-  if (adv.hasAttribute("survFct__"))
+  if (adv.hasAttribute("survFct_"))
     adv.loadAttribute("survFct_", survFct_);
+  if (adv.hasAttribute("effectiveSize_"))
+    adv.loadAttribute("effectiveSize_", effectiveSize_);
+  if (adv.hasAttribute("multiVariateDoE_"))
+    adv.loadAttribute("multiVariateDoE_", multiVariateDoE_);
+  else
+    multiVariateDoE_ = designOfExperiment_;
 }
 }

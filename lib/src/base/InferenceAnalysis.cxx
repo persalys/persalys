@@ -21,6 +21,7 @@
 #include "persalys/InferenceAnalysis.hxx"
 
 #include "persalys/DistributionDictionary.hxx"
+#include "persalys/DataAnalysis.hxx"
 
 #include <openturns/SpecFunc.hxx>
 #include <openturns/FittingTest.hxx>
@@ -35,8 +36,8 @@ namespace PERSALYS
 
 CLASSNAMEINIT(InferenceAnalysis)
 
-static Factory<InferenceAnalysis> Factory_InferenceAnalysis;
-static Factory<PersistentCollection<Description> > Factory_PersistentCollection_Description;
+const static Factory<InferenceAnalysis> Factory_InferenceAnalysis;
+const static Factory<PersistentCollection<Description> > Factory_PersistentCollection_Description;
 
 /* Default constructor */
 InferenceAnalysis::InferenceAnalysis()
@@ -60,7 +61,7 @@ InferenceAnalysis::InferenceAnalysis(const String& name, const DesignOfExperimen
 {
 
   if (designOfExperiment_.getSample().getSize())
-    setInterestVariables(designOfExperiment_.getSample().getDescription());
+    InferenceAnalysis::setInterestVariables(designOfExperiment_.getSample().getDescription());
 
   // by default we test the Normal distribution for all the variables of the DOE
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
@@ -84,7 +85,7 @@ InferenceAnalysis::DistributionFactoryCollection InferenceAnalysis::getDistribut
   if (!designOfExperiment_.getSample().getDescription().contains(variableName))
     throw InvalidArgumentException(HERE) << "Error: the variable " << variableName << " from marginal inference does not match a variable of the model";
 
-  std::map<String, DistributionFactoryCollection>::const_iterator it(distFactoriesForEachInterestVar_.find(variableName));
+  std::map<String, DistributionFactoryCollection, std::less<>>::const_iterator it(distFactoriesForEachInterestVar_.find(variableName));
   if (it == distFactoriesForEachInterestVar_.end())
     throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the variable " << variableName;
 
@@ -134,8 +135,7 @@ void InferenceAnalysis::setInterestVariables(const Description& variablesNames)
   DesignOfExperimentAnalysis::setInterestVariables(variablesNames);
   // list vars to remove
   Description toRemove;
-  std::map<String, DistributionFactoryCollection>::iterator it;
-  for (it = distFactoriesForEachInterestVar_.begin(); it != distFactoriesForEachInterestVar_.end(); ++it)
+  for (auto it = distFactoriesForEachInterestVar_.begin(); it != distFactoriesForEachInterestVar_.end(); ++it)
     if (!variablesNames.contains(it->first))
       toRemove.add(it->first);
   // remove vars
@@ -157,6 +157,7 @@ void InferenceAnalysis::launch()
   if (!getInterestVariables().getSize())
     throw InvalidDimensionException(HERE) << "The number of variables to analyse must be greater than 0";
 
+  // setting OT default values
   if (type_ == InferenceAnalysis::Lilliefors)
   {
     ResourceMap::SetAsScalar("FittingTest-LillieforsPrecision", lillieforsPrecision_);
@@ -164,139 +165,143 @@ void InferenceAnalysis::launch()
     ResourceMap::SetAsUnsignedInteger("FittingTest-LillieforsMaximumSamplingSize", lillieforsMaximumSamplingSize_);
   }
 
-  std::map<String, DistributionFactoryCollection>::iterator it;
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
+  // checking that each variable has a distribution factor collection
+  Description interestVariables = getInterestVariables();
+  for (UnsignedInteger i = 0 ; i < interestVariables.getSize() ; ++i)
   {
-    it = distFactoriesForEachInterestVar_.find(getInterestVariables()[i]);
+    auto it = distFactoriesForEachInterestVar_.find(interestVariables[i]);
     if (it == distFactoriesForEachInterestVar_.end())
       throw InvalidArgumentException(HERE) << "Error: no distribution factories set for the variable " << getInterestVariables()[i];
   }
 
-  // get marginals
-  Indices indices;
-  for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
+  // total number of distributions to test
+  int nTotalDist = 0;
+  for (const auto& [var, distFactoriesColl] : distFactoriesForEachInterestVar_)
+  {
+      nTotalDist += distFactoriesColl.getSize();
+  }
+
+  int distCounter = 0;
+  Description description = designOfExperiment_.getSample().getDescription();
+  for (UnsignedInteger varIndex = 0 ; varIndex < interestVariables.getSize() ; varIndex++)
   {
     bool outputFound = false;
-    for (UnsignedInteger j = 0; j < designOfExperiment_.getSample().getDescription().getSize(); ++j)
+    UnsignedInteger doeIndex;
+    for (UnsignedInteger j = 0 ; j < description.getSize() ; ++j)
     {
-      if (designOfExperiment_.getSample().getDescription()[j] == getInterestVariables()[i])
+      outputFound = description[j] == interestVariables[varIndex];
+      if (outputFound)
       {
-        indices.add(j);
-        outputFound = true;
+        doeIndex = j;
         break;
       }
     }
     if (!outputFound)
-      throw InvalidArgumentException(HERE) << "The variable to analyse " << getInterestVariables()[i]
-                                           << " is not a variable of the model " << designOfExperiment_.getSample().getDescription();
-  }
-
-  const Sample sample(designOfExperiment_.getSample().getMarginal(indices));
-
-  // total number of distribution to test
-  UnsignedInteger nTotalDist = 0;
-  for (const auto& collectionMapItem : distFactoriesForEachInterestVar_)
-  {
-    nTotalDist += collectionMapItem.second.getSize();
-  }
-
-  // inference
-  int distCounter = 0;
-  for (UnsignedInteger i = 0; i < sample.getDimension(); ++i)
-  {
-    const UnsignedInteger nbDist = distFactoriesForEachInterestVar_[sample.getDescription()[i]].getSize();
-
-    FittingTestResult fittingTestResult;
-    fittingTestResult.variableName_ = sample.getDescription()[i];
-    fittingTestResult.values_ = sample.getMarginal(i);
-    fittingTestResult.errorMessages_ = Description(nbDist);
-    fittingTestResult.testType_ = type_;
-
-    const Sample sampleI(sample.getMarginal(i));
-    const Sample sortedSampleI(sampleI.sortUnique());
-
-    for (UnsignedInteger j = 0; j < nbDist; ++j)
-    {
-      progressValue_ = (int) (distCounter * 100 / (nTotalDist));
-      notify("progressValueChanged");
-
-      const DistributionFactory distFactory(distFactoriesForEachInterestVar_[sample.getDescription()[i]][j]);
-      const String cname = distFactory.getImplementation()->getClassName();
-      const String distributionName = cname.substr(0, cname.find("Factory"));
-      Distribution distribution = DistributionDictionary::BuildDistribution(distributionName, 0);
-      TestResult testResult;
-      Scalar bicResult = SpecFunc::MaxScalar;
-      Interval paramCI;
-      Bool inferenceOK = false;
-      try
-      {
-        if (sortedSampleI.getSize() < 2)
-          throw InvalidArgumentException(HERE) << "constant sample";
-
-        distribution = distFactory.build(sampleI);
-        distribution.getMean(); // ensures mean is defined
-        distribution.getStandardDeviation(); // ensures sttdev is defined
-
-        switch(type_)
-        {
-          case InferenceAnalysis::Lilliefors:
-            testResult = FittingTest::Lilliefors(sample.getMarginal(i), distFactory, distribution, level_);
-            break;
-          case InferenceAnalysis::Kolmogorov:
-            testResult = FittingTest::Kolmogorov(sample.getMarginal(i), distribution, level_);
-            break;
-          default:
-            throw InvalidArgumentException(HERE) << "Unknown test type.";
-        }
-        // BIC test
-        bicResult = FittingTest::BIC(sample.getMarginal(i), distribution, distribution.getParameterDimension());
-        inferenceOK = true;
-        // set fittingTestResult
-        if (estimateParamCI_)
-        {
-          Distribution paramDist(distFactory.buildEstimator(sample.getMarginal(i)).getParameterDistribution());
-          paramCI = paramDist.computeBilateralConfidenceInterval(paramCILevel_);
-        }
-      }
-      catch (const std::exception & ex)
-      {
-        if (inferenceOK)
-        {
-          const String message = OSS() << "Error when estimating the "
-                                       << distributionName
-                                       << " parameters confidence interval with the sample of the variable "
-                                       << sample.getDescription()[i]
-                                       << ". "
-                                       << ex.what()
-                                       << "\n";
-          fittingTestResult.errorMessages_[j] = message;
-        }
-        else
-        {
-          const String message = OSS() << "Error when building the "
-                                       << distributionName
-                                       << " distribution with the sample of the variable "
-                                       << sample.getDescription()[i]
-                                       << ". "
-                                       << ex.what()
-                                       << "\n";
-          fittingTestResult.errorMessages_[j] = message;
-        }
-      }
-
-      // set fittingTestResult
-      fittingTestResult.testedDistributions_.add(distribution);
-      fittingTestResult.testResults_.add(testResult);
-      fittingTestResult.bicResults_.add(bicResult);
-      if (estimateParamCI_)
-        fittingTestResult.paramCI_.add(paramCI);
-
-      distCounter++;
-    }
-    result_.fittingTestResultCollection_.add(fittingTestResult);
+      throw InvalidArgumentException(HERE) << "The variable to analyse " << interestVariables[varIndex] << " is not a variable of the model " << description;
+    
+    const Sample sample{designOfExperiment_.getMarginalWithoutNaN(doeIndex)};
+    result_.fittingTestResultCollection_.add(runInferenceOnVariable(sample, distFactoriesForEachInterestVar_.at(sample.getDescription()[0]),  distCounter, nTotalDist));
+    result_.originalSampleSize_ = designOfExperiment_.getSample().getSize();
   }
 }
 
+FittingTestResult InferenceAnalysis::runInferenceOnVariable(const OT::Sample &sample, const DistributionFactoryCollection &distFactoriesColl,  int &distCounter, const int nTotalDist)
+{
+  const UnsignedInteger nbDist = distFactoriesColl.getSize();
+
+  FittingTestResult fittingTestResult;
+  fittingTestResult.variableName_ = sample.getDescription()[0];
+  fittingTestResult.values_ = sample;
+  fittingTestResult.errorMessages_ = Description(nbDist);
+  fittingTestResult.testType_ = type_;
+
+  const Sample sortedSample{sample.sortUnique()};
+
+  for (UnsignedInteger j = 0 ; j < nbDist ; j++)
+  {
+    progressValue_ = distCounter*100/nTotalDist;
+    notify("progressValueChanged");
+
+    const DistributionFactory distFactory{distFactoriesColl.at(j)};
+    const String cname = distFactory.getImplementation()->getClassName();
+    const String distributionName = cname.substr(0, cname.find("Factory"));
+    Distribution distribution = DistributionDictionary::BuildDistribution(distributionName, 0);
+    TestResult testResult;
+    Scalar bicResult = SpecFunc::MaxScalar;
+    Interval paramCI;
+    bool inferenceOK = false;
+    try
+    {
+      if (sortedSample.getSize() < 2)
+        throw InvalidArgumentException(HERE) << "constant sample";
+      
+      distribution = distFactory.build(sample);
+      distribution.getMean();                     // ensures mean is defined
+      distribution.getStandardDeviation();        // ensures sttdev is defined
+
+      switch(type_)
+      {
+        case InferenceAnalysis::Lilliefors:
+          testResult = FittingTest::Lilliefors(sample, distFactory, distribution, level_);
+          break;
+        
+        case InferenceAnalysis::Kolmogorov:
+          testResult = FittingTest::Kolmogorov(sample, distribution, level_);
+          break;
+        
+        default:
+          throw InvalidArgumentException(HERE) << "Unkown test type.";
+      }
+
+      // BIC test
+      bicResult = FittingTest::BIC(sample, distribution, distribution.getParameterDimension());
+      inferenceOK = true;
+
+      // set fittingTestResult
+      if (estimateParamCI_)
+      {
+        Distribution paramDist{distFactory.buildEstimator(sample).getParameterDistribution()};
+        paramCI = paramDist.computeBilateralConfidenceInterval(paramCILevel_);
+      }
+    }
+    catch (const std::exception &ex)
+    {
+      if (inferenceOK)
+      {
+        const String message = OSS() << "Error when estimating the "
+                                      << distributionName
+                                      << " parameters confidence interval with the sample of the variable "
+                                      << sample.getDescription()[0]
+                                      << ". "
+                                      << ex.what()
+                                      << "\n";
+        fittingTestResult.errorMessages_[j] = message;
+      }
+      else
+      {
+        const String message = OSS() << "Error when building the "
+                                      << distributionName
+                                      << " distribution with the sample of the variable "
+                                      << sample.getDescription()[0]
+                                      << ". "
+                                      << ex.what()
+                                      << "\n";
+        fittingTestResult.errorMessages_[j] = message;
+      }
+    }
+
+    // set fittingTestResult
+    fittingTestResult.testedDistributions_.add(distribution);
+    fittingTestResult.testResults_.add(testResult);
+    fittingTestResult.bicResults_.add(bicResult);
+    if (estimateParamCI_)
+      fittingTestResult.paramCI_.add(paramCI);
+    
+    distCounter++;
+  }
+
+  return fittingTestResult;
+}
 
 InferenceResult InferenceAnalysis::getResult() const
 {
@@ -385,6 +390,11 @@ int InferenceAnalysis::getLillieforsMaximumSamplingSize() const
 void InferenceAnalysis::setLillieforsMaximumSamplingSize(const int lillieforsMaximumSamplingSize)
 {
   lillieforsMaximumSamplingSize_ = lillieforsMaximumSamplingSize;
+}
+
+bool InferenceAnalysis::canBeLaunched(String &errorMessage) const
+{
+  return DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
 }
 
 String InferenceAnalysis::__repr__() const

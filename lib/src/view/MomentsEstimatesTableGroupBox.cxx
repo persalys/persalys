@@ -242,7 +242,7 @@ void MomentsEstimatesTableGroupBox::probaValueChanged(double proba)
 
   // index of the variable in result_
   const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
-  quantileSpinBox_->setValue(result_.getDesignOfExperiment().getSample().getMarginal(indexVar).computeQuantile(proba)[0]);
+  quantileSpinBox_->setValue(result_.getDesignOfExperiment().getMarginalWithoutNaN(indexVar).computeQuantile(proba)[0]);
 }
 
 
@@ -252,7 +252,7 @@ void MomentsEstimatesTableGroupBox::ciLevelValueChanged(double proba)
 
   // index of the variable in result_
   const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
-  const Sample marginal = result_.getDesignOfExperiment().getSample().getMarginal(indexVar);
+  const Sample marginal = result_.getDesignOfExperiment().getMarginalWithoutNaN(indexVar);
   ciLabel_->setText(QString("[") + QString::number(marginal.computeQuantile(0.5 - proba / 2)[0]) +
                     QString(";") + QString::number(marginal.computeQuantile(0.5 + proba / 2)[0]) + QString("]"));
 }
@@ -264,12 +264,13 @@ void MomentsEstimatesTableGroupBox::quantileValueChanged(double quantile)
 
   // index of the variable in result_
   const UnsignedInteger indexVar = variablesIndices_[stackedWidget_->currentIndex()];
+  const Sample marginal = result_.getDesignOfExperiment().getMarginalWithoutNaN(indexVar);
 
   double cdf = 0.0;
-  const double p = 1.0 / double(result_.getDesignOfExperiment().getSample().getSize());
+  const double p = 1.0 / double(marginal.getSize());
 
-  for (UnsignedInteger j = 0; j < result_.getDesignOfExperiment().getSample().getSize(); ++j)
-    if (result_.getDesignOfExperiment().getSample()[j][indexVar] < quantile)
+  for (UnsignedInteger j = 0; j < marginal.getSize(); ++j)
+    if (marginal(j,0) < quantile)
       cdf += p;
 
   probaSpinBox_->setValue(cdf);
