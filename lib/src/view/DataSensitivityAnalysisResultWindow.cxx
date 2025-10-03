@@ -22,11 +22,13 @@
 #include "persalys/DataSensitivityAnalysis.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/SensitivityResultWidget.hxx"
+#include "persalys/ParametersTableView.hxx"
 
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QScrollArea>
 #include <QComboBox>
+#include <QTextEdit>
 
 using namespace OT;
 
@@ -44,7 +46,7 @@ DataSensitivityAnalysisResultWindow::DataSensitivityAnalysisResultWindow(Analysi
   buildInterface();
 }
 
-void DataSensitivityAnalysisResultWindow::initialize(AnalysisItem* item)
+void DataSensitivityAnalysisResultWindow::initialize(const AnalysisItem* item)
 {
   DataSensitivityAnalysis analysis = *dynamic_cast<DataSensitivityAnalysis*>(item->getAnalysis().getImplementation().get());
   result_ = analysis.getResult();
@@ -74,40 +76,65 @@ void DataSensitivityAnalysisResultWindow::buildInterface()
   // get output info
   initializeVariablesNames();
 
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  auto * widgetLayout = new QVBoxLayout(this);
 
   widgetLayout->addWidget(new TitleLabel(tr("Sensitivity analysis results"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#datasensitivityanalysisresult"));
 
-  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+  auto * mainWidget = new QSplitter(Qt::Horizontal);
 
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  QWidget * widget = new QWidget;
-  QVBoxLayout * vbox = new QVBoxLayout(widget);
+  auto outputsGroupBox = new QGroupBox(tr("Variables"));
+  auto * groupBoxLayout = new QVBoxLayout(outputsGroupBox);
 
-  QComboBox * outputsListWidget = new QComboBox;
-  outputsListWidget->addItems(outputNames_);
-  vbox->addWidget(outputsListWidget);
+  outputsListWidget_ = new VariablesListWidget;
+  outputsListWidget_->addItems(outputNames_);
+  groupBoxLayout->addWidget(outputsListWidget_);
+
+  mainWidget->addWidget(outputsGroupBox);
+  mainWidget->setStretchFactor(0, 1);
+
+  auto tabWidget = new QTabWidget;
+  addSobolTab(tabWidget);
+  addSRCTab(tabWidget);
+
+  auto * widget = new QWidget;
+  auto * vbox = new QVBoxLayout(widget);
+
+  vbox->addWidget(tabWidget);
+
+  mainWidget->addWidget(widget);
+  mainWidget->setStretchFactor(1, 10);
+
+  widgetLayout->addWidget(mainWidget, 1);
 
   // Display warning message if not empty
   if (!result_.isIndependent())
   {
     auto message = QString::fromStdString(result_.getIndependenceWarningMessage());
-    auto warningLabel = new QLabel(message);
-    warningLabel->setStyleSheet("QLabel { color : orange; font-weight: bold; }");
-    warningLabel->setWordWrap(true);
-    vbox->addWidget(warningLabel);
+    auto warningTextEdit = new QTextEdit();
+    warningTextEdit->setPlainText(message);
+    warningTextEdit->setReadOnly(true);
+    warningTextEdit->setStyleSheet("QTextEdit { color : orange; font-weight: bold; background-color: transparent; border: 1px solid orange; }");
+    warningTextEdit->setFixedHeight(80);
+    warningTextEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    warningTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    widgetLayout->addWidget(warningTextEdit);
   }
+}
 
-  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget, SIGNAL(currentIndexChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+void DataSensitivityAnalysisResultWindow::addSobolTab(QTabWidget * tabWidget)
+{
+  auto * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
 
-  const auto firstOrderIndices = result_.getFirstOrderIndices();
-  const auto firstOrderIndicesInterval = result_.getFirstOrderIndicesInterval();
+  auto * stackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget_, &VariablesListWidget::currentRowChanged, stackedWidget, &ResizableStackedWidget::setCurrentIndex);
+
+  const auto firstOrderIndices = result_.getFirstOrderSobolIndices();
+  const auto firstOrderIndicesInterval = result_.getFirstOrderSobolIndicesInterval();
   const UnsignedInteger nbOutputs = firstOrderIndices.getSize();
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
-    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(
+    auto * indicesResultWidget = new SensitivityResultWidget(
         firstOrderIndices[i],
         firstOrderIndicesInterval[i],
         Point(),
@@ -118,14 +145,67 @@ void DataSensitivityAnalysisResultWindow::buildInterface()
         this);
     stackedWidget->addWidget(indicesResultWidget);
   }
-  vbox->addWidget(stackedWidget, 1);
 
+  scrollArea->setWidget(stackedWidget);
+  tabWidget->addTab(scrollArea, tr("Rank Sobol'"));
+}
+
+/*adapted from SRCResultWindow::buildInterface*/
+void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
+{
+  const UnsignedInteger nbOutputs = designOfExperiment_.getOutputSample().getDimension();
+
+  auto * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+  auto * widget = new QWidget;
+  auto * vbox = new QVBoxLayout(widget);
+
+  // - indices graph and table
+  auto * stackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget_, &VariablesListWidget::currentRowChanged, stackedWidget, &ResizableStackedWidget::setCurrentIndex);
+
+  const Sample signedSRCIndices{result_.getSignedSRCIndices()};
+  const Sample SRCIndices{result_.getSRCIndices()};
+  const auto signedSRCIndicesInterval = result_.getSignedSRCIndicesInterval();
+  const auto SRCIndicesInterval = result_.getSRCIndicesInterval();
+  const Point r2 = result_.getR2();
+
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+  {
+    auto * indicesWidget = new QWidget;
+    auto * indicesLayout = new QVBoxLayout(indicesWidget);
+
+    // table
+    if (r2.getSize() == nbOutputs)
+    {
+      QStringList namesList;
+      namesList << tr("R2");
+
+      QStringList valuesList;
+      valuesList << QString::number(r2[i]);
+      auto * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
+      indicesLayout->addWidget(basisTableView);
+    }
+
+    // indices graph and table
+    Interval indicesInterval = SRCIndicesInterval.getSize() == nbOutputs ? SRCIndicesInterval[i] : Interval();
+    Interval signedIndicesInterval = signedSRCIndicesInterval.getSize() == nbOutputs ? signedSRCIndicesInterval[i] : Interval();
+    auto * indicesResultWidget = new SensitivityResultWidget(SRCIndices[i],
+        indicesInterval,
+        signedSRCIndices.getSize() == nbOutputs ? signedSRCIndices[i] : Point(),
+        signedIndicesInterval,
+        QtOT::StringListToDescription(inputNames_),
+        outputNames_[i].toStdString(),
+        SensitivityResultWidget::SRC,
+        this);
+    indicesLayout->addWidget(indicesResultWidget);
+    stackedWidget->addWidget(indicesWidget);
+  }
+  vbox->addWidget(stackedWidget);
+
+  vbox->setContentsMargins(0, 0, 0, 0);
   scrollArea->setWidget(widget);
-
-  mainWidget->addWidget(scrollArea);
-  mainWidget->setStretchFactor(0, 1);
-
-  widgetLayout->addWidget(mainWidget, 1);
+  tabWidget->addTab(scrollArea, tr("SRC"));
 }
 
 } // namespace PERSALYS

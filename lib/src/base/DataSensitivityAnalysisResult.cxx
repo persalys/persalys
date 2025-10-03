@@ -45,14 +45,39 @@ DataSensitivityAnalysisResult* DataSensitivityAnalysisResult::clone() const
   return new DataSensitivityAnalysisResult(*this);
 }
 
-const Collection<Point>& DataSensitivityAnalysisResult::getFirstOrderIndices() const
+const Collection<Point>& DataSensitivityAnalysisResult::getFirstOrderSobolIndices() const
 {
-  return firstOrderIndices_;
+  return firstOrderSobolIndices_;
 }
 
-const Collection<Interval>& DataSensitivityAnalysisResult::getFirstOrderIndicesInterval() const
+const Collection<Interval>& DataSensitivityAnalysisResult::getFirstOrderSobolIndicesInterval() const
 {
-  return firstOrderIndicesInterval_;
+  return firstOrderSobolIndicesInterval_;
+}
+
+const Sample& DataSensitivityAnalysisResult::getSRCIndices() const
+{
+  return SRCIndices_;
+}
+
+const Sample& DataSensitivityAnalysisResult::getSignedSRCIndices() const
+{
+  return signedSRCIndices_;
+}
+
+const Collection<Interval>& DataSensitivityAnalysisResult::getSRCIndicesInterval() const
+{
+  return SRCIndicesInterval_;
+}
+
+const Collection<Interval>& DataSensitivityAnalysisResult::getSignedSRCIndicesInterval() const
+{
+  return signedSRCIndicesInterval_;
+}
+
+const Point& DataSensitivityAnalysisResult::getR2() const
+{
+  return r2_;
 }
 
 bool DataSensitivityAnalysisResult::isIndependent() const
@@ -69,8 +94,8 @@ const OT::String& DataSensitivityAnalysisResult::getIndependenceWarningMessage()
 String DataSensitivityAnalysisResult::__repr__() const
 {
   return OSS() << "class=" << getClassName()
-               << " firstOrderIndices=" << firstOrderIndices_
-               << " firstOrderIndicesInterval=" << firstOrderIndicesInterval_
+               << " firstOrderSobolIndices=" << firstOrderSobolIndices_
+               << " firstOrderSobolIndicesInterval=" << firstOrderSobolIndicesInterval_
                << " isIndependent=" << isIndependent_
                << " independenceWarningMessage=" << independenceWarningMessage_;
 }
@@ -79,8 +104,13 @@ String DataSensitivityAnalysisResult::__repr__() const
 void DataSensitivityAnalysisResult::save(OT::Advocate & adv) const
 {
   EvaluationResult::save(adv);
-  adv.saveAttribute("firstOrderIndices_", firstOrderIndices_);
-  adv.saveAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
+  adv.saveAttribute("firstOrderSobolIndices_", firstOrderSobolIndices_);
+  adv.saveAttribute("firstOrderSobolIndicesInterval_", firstOrderSobolIndicesInterval_);
+  adv.saveAttribute("SRCIndices_", SRCIndices_);
+  adv.saveAttribute("signedSRCIndices_", signedSRCIndices_);
+  adv.saveAttribute("SRCIndicesInterval_", SRCIndicesInterval_);
+  adv.saveAttribute("signedSRCIndicesInterval_", signedSRCIndicesInterval_);
+  adv.saveAttribute("r2_", r2_);
   adv.saveAttribute("isIndependent_", isIndependent_);
   adv.saveAttribute("independenceWarningMessage_", independenceWarningMessage_);
 }
@@ -89,8 +119,13 @@ void DataSensitivityAnalysisResult::save(OT::Advocate & adv) const
 void DataSensitivityAnalysisResult::load(OT::Advocate & adv)
 {
   EvaluationResult::load(adv);
-  adv.loadAttribute("firstOrderIndices_", firstOrderIndices_);
-  adv.loadAttribute("firstOrderIndicesInterval_", firstOrderIndicesInterval_);
+  adv.loadAttribute("firstOrderSobolIndices_", firstOrderSobolIndices_);
+  adv.loadAttribute("firstOrderSobolIndicesInterval_", firstOrderSobolIndicesInterval_);
+  adv.loadAttribute("SRCIndices_", SRCIndices_);
+  adv.loadAttribute("signedSRCIndices_", signedSRCIndices_);
+  adv.loadAttribute("SRCIndicesInterval_", SRCIndicesInterval_);
+  adv.loadAttribute("signedSRCIndicesInterval_", signedSRCIndicesInterval_);
+  adv.loadAttribute("r2_", r2_);
   adv.loadAttribute("isIndependent_", isIndependent_);
   adv.loadAttribute("independenceWarningMessage_", independenceWarningMessage_);
 }

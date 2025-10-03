@@ -20,9 +20,12 @@
  */
 
 #include "persalys/DataSensitivityAnalysis.hxx"
+
 #include <openturns/RankSobolSensitivityAlgorithm.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/HypothesisTest.hxx>
+#include <openturns/CorrelationAnalysis.hxx>
+#include <openturns/BootstrapExperiment.hxx>
 
 using namespace OT;
 
@@ -54,7 +57,7 @@ bool DataSensitivityAnalysis::canBeLaunched(String &errorMessage) const
 
 bool DataSensitivityAnalysis::hasValidResult() const
 {
-  return !result_.getFirstOrderIndices().isEmpty() && result_.getFirstOrderIndicesInterval().getSize() == result_.getFirstOrderIndices().getSize();
+  return !result_.getFirstOrderSobolIndices().isEmpty() && result_.getFirstOrderSobolIndicesInterval().getSize() == result_.getFirstOrderSobolIndices().getSize();
 }
 
 const DataSensitivityAnalysisResult & DataSensitivityAnalysis::getResult() const
@@ -71,22 +74,110 @@ void DataSensitivityAnalysis::initialize()
 
 void DataSensitivityAnalysis::launch()
 {
-  const Sample outSample = designOfExperiment_.getOutputSample();
+  computeSobolIndices();
+  computeSRCIndices();
+  checkIndependance();
+}
+
+void DataSensitivityAnalysis::computeSobolIndices()
+{
+  const Sample outSample{designOfExperiment_.getOutputSample()};
   Sample marginalOutSample;
-  const Sample inSample = designOfExperiment_.getInputSample();
-  const Description inputNames = inSample.getDescription();
-  const auto nbInputs = inSample.getDimension();
+  const Sample inSample{designOfExperiment_.getInputSample()};
   const auto nbOutputs = outSample.getDimension();
 
   for(UnsignedInteger i = 0 ; i < nbOutputs; ++i)
   {
     marginalOutSample = outSample.getMarginal(i);
     auto algo = RankSobolSensitivityAlgorithm(inSample, marginalOutSample);  // change to setDesign when OT has been fixed (OT > 1.25)
-    result_.firstOrderIndices_.add(algo.getFirstOrderIndices());
-    result_.firstOrderIndicesInterval_.add(algo.getFirstOrderIndicesInterval());
+    result_.firstOrderSobolIndices_.add(algo.getFirstOrderIndices());
+    result_.firstOrderSobolIndicesInterval_.add(algo.getFirstOrderIndicesInterval());
+  }
+}
+
+/* adapted from SRCAnalysis::launch */
+void DataSensitivityAnalysis::computeSRCIndices()
+{
+  const Sample inputSample{designOfExperiment_.getInputSample()};
+  const Sample outputSample{designOfExperiment_.getOutputSample()};
+
+  const UnsignedInteger nbOutputs = outputSample.getDimension();
+  const UnsignedInteger nbInputs  = inputSample.getDimension();
+
+  Sample indices{0, inputSample.getDimension()};
+  Sample signedIndices{0, inputSample.getDimension()};
+  Point r2(nbOutputs);
+
+  for(UnsignedInteger i = 0 ; i < nbOutputs ; ++i)
+  {
+    const Point signedSRC{CorrelationAnalysis{inputSample, outputSample.getMarginal(i)}.computeSRC()};
+    signedIndices.add(signedSRC);
+    Point unscaledSRC;
+    for(UnsignedInteger j = 0 ; j < nbInputs ; ++j)
+    {
+      const Scalar squaredSRC = signedSRC[j] * signedSRC[j];
+      unscaledSRC.add(squaredSRC);
+      r2[i] += squaredSRC;
+    }
+    indices.add(unscaledSRC);
   }
 
-  /*independence check*/
+  // set results
+  indices.setDescription(inputSample.getDescription());
+  result_.SRCIndices_       = indices;
+  result_.signedSRCIndices_ = signedIndices;
+  result_.r2_               = r2;
+
+  // Compute bootstrap confidence intervals
+  const UnsignedInteger bootstrapSize = ResourceMap::GetAsUnsignedInteger("SobolIndicesAlgorithm-DefaultBootstrapSize");
+  const Scalar alpha = ResourceMap::GetAsScalar("SobolIndicesAlgorithm-DefaultBootstrapConfidenceLevel");
+  Indices inIndices(nbInputs);
+  inIndices.fill();
+
+  // - get bootstrap experiment
+  Sample sample{inputSample};
+  sample.stack(outputSample);
+  BootstrapExperiment bootstrapExp{sample};
+  // - compute signed SRC
+  Collection signedSRCBootstrap(nbOutputs, Sample{0, nbInputs});
+  Collection unscaledSRCBootstrap(nbOutputs, Sample{0, nbInputs});
+  for (UnsignedInteger i = 0; i < bootstrapSize; ++i)
+  {
+    const Sample bootstrapSample{bootstrapExp.generate()};
+    for (UnsignedInteger j = 0; j < nbOutputs; ++j)
+    {
+      const Point signedSRC{CorrelationAnalysis{bootstrapSample.getMarginal(inIndices), bootstrapSample.getMarginal(nbInputs + j)}.computeSRC()};
+      signedSRCBootstrap[j].add(signedSRC);
+
+      Point unscaledSRC;
+      for (UnsignedInteger k = 0; k < nbInputs; ++k)
+        unscaledSRC.add(signedSRC[k] * signedSRC[k]);
+      unscaledSRCBootstrap[j].add(unscaledSRC);
+    }
+  }
+  // - compute bounds
+  PersistentCollection<Interval> signedSRCInterval{nbOutputs};
+  PersistentCollection<Interval> unscaledSRCInterval{nbOutputs};
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+  {
+    Point upperBound{signedSRCBootstrap[i].computeQuantilePerComponent(alpha)};
+    Point lowerBound{signedSRCBootstrap[i].computeQuantilePerComponent(1 - alpha)};
+    signedSRCInterval[i] = Interval(lowerBound, upperBound);
+
+    Point upperBound2{unscaledSRCBootstrap[i].computeQuantilePerComponent(alpha)};
+    Point lowerBound2{unscaledSRCBootstrap[i].computeQuantilePerComponent(1 - alpha)};
+    unscaledSRCInterval[i] = Interval(lowerBound2, upperBound2);
+  }
+  result_.SRCIndicesInterval_ = unscaledSRCInterval;
+  result_.signedSRCIndicesInterval_ = signedSRCInterval;
+}
+
+void DataSensitivityAnalysis::checkIndependance()
+{
+  const Sample inSample{designOfExperiment_.getInputSample()};
+  const Description inputNames{inSample.getDescription()};
+  const auto nbInputs = inSample.getDimension();
+
   OSS warningMessage;
   warningMessage << "Warning: ";
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
@@ -97,7 +188,7 @@ void DataSensitivityAnalysis::launch()
       const bool isIndependent = testResult.getBinaryQualityMeasure();
       if (!isIndependent)
       {
-        warningMessage << "Variables " << inputNames[i] << " and " << inputNames[j] << " are not independent (Spearman test failed with p-value " << testResult.getPValue() << "). ";
+        warningMessage << "Variables " << inputNames[i] << " and " << inputNames[j] << " are not independent (Spearman test failed with p-value " << testResult.getPValue() << ").\n";
       }
       result_.isIndependent_ = result_.isIndependent_ && isIndependent;
     }

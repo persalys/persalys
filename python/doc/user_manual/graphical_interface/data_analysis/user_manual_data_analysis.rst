@@ -146,7 +146,7 @@ automatically selected in the other tabs.
 =======================
 
 The sensitivity analysis allows one to assess the influence of input variables on output variables.
-Here, the first order Sobol' indices are computed using the :py:class:`openturns.experimental.RankSobolSensitivityAlgorithm`.
+Here, the first order Sobol' indices are computed using the :py:class:`openturns.experimental.RankSobolSensitivityAlgorithm` along with the SRC indices.
 
 2-1 Creation
 ''''''''''''''
@@ -183,9 +183,9 @@ When the analysis is finished or stopped, the following window appears.
 .. image:: /user_manual/graphical_interface/data_analysis/dataSensitivityAnalysisResultWindow.png
     :align: center
 
-In the top box, you can select the output variable. The window then shows the first Sobol' indices for each input variable both in the graph and in the table. You can sort the table by any column by clicking on the column header. The graph will also be sorted according to the table. 
+On the left, you can select the output variable. The first tab shows the first order Sobol' indices for each input variable in both the graph and the table. You can sort the table by any column by clicking on the column header. The graph will be sorted in the same way as the table. The second tab displays signed and squared SRC indices in the same way and the :math: `R^2` coefficient at the top.
 
-If the Spearman test detects a dependence between two variables, a warning will be displayed at the top of the window. Remember that the Sobol' indices are only valid for independent variables. If the variables are dependent, the Sobol' indices may not be accurate. You should always make sure that the input variables are independent before interpreting the Sobol' indices.
+If the Spearman test detects a dependency between two variables, a warning will be displayed at the top of the window. Remember that both Sobol' and SRC indices are only valid for independent variables. Always ensure that the input variables are independent before interpreting the sensitivity indices. SRC indices only measure linear relationship between an output and the input vector. Since they are in that case calculated on ranks, Sobol' indices can measure any monotonic relationship.
 
 .. _inferenceAnalysis:
 

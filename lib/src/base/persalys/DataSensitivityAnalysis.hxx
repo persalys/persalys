@@ -61,6 +61,11 @@ protected:
   void launch() override;
 
 private:
+  void computeSobolIndices();
+  void computeSRCIndices();
+  void checkIndependance();
+
+private:
   DataSensitivityAnalysisResult result_;
 };
 
