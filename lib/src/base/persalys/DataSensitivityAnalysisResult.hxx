@@ -45,8 +45,15 @@ public:
   DataSensitivityAnalysisResult* clone() const override;
 
   /** Accessors */
-  const OT::Collection<OT::Point>& getFirstOrderIndices() const;
-  const OT::Collection<OT::Interval>& getFirstOrderIndicesInterval() const;
+  const OT::Collection<OT::Point>& getFirstOrderSobolIndices() const;
+  const OT::Collection<OT::Interval>& getFirstOrderSobolIndicesInterval() const;
+
+  const OT::Sample& getSRCIndices() const;
+  const OT::Sample& getSignedSRCIndices() const;
+  const OT::Collection<OT::Interval>& getSRCIndicesInterval() const;
+  const OT::Collection<OT::Interval>& getSignedSRCIndicesInterval() const;
+  const OT::Point& getR2() const;
+
   bool isIndependent() const;
   const OT::String& getIndependenceWarningMessage() const;
 
@@ -60,8 +67,15 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
-  OT::PersistentCollection<OT::Point> firstOrderIndices_;
-  OT::PersistentCollection<OT::Interval> firstOrderIndicesInterval_;
+  OT::PersistentCollection<OT::Point> firstOrderSobolIndices_;
+  OT::PersistentCollection<OT::Interval> firstOrderSobolIndicesInterval_;
+
+  OT::Sample SRCIndices_;
+  OT::Sample signedSRCIndices_;
+  OT::Point r2_;
+  OT::PersistentCollection<OT::Interval> SRCIndicesInterval_;
+  OT::PersistentCollection<OT::Interval> signedSRCIndicesInterval_;
+
   bool isIndependent_ = true;
   OT::String independenceWarningMessage_; // used to store the warning message if the variables are not independent
 

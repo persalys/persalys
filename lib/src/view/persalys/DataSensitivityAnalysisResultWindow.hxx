@@ -25,6 +25,8 @@
 #include "persalys/ResultWindow.hxx"
 #include "persalys/DataSensitivityAnalysisResult.hxx"
 
+#include <QTabWidget>
+
 namespace PERSALYS
 {
 class PERSALYS_VIEW_API DataSensitivityAnalysisResultWindow : public ResultWindow
@@ -35,9 +37,13 @@ public:
   DataSensitivityAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
-  void initialize(AnalysisItem* item);
+  void initialize(const AnalysisItem* item);
   void initializeVariablesNames();
   void buildInterface();
+
+private:
+  void addSobolTab(QTabWidget * tabWidget);
+  void addSRCTab(QTabWidget * tabWidget);
   
 protected:
   DataSensitivityAnalysisResult result_;
@@ -46,6 +52,7 @@ protected:
   QStringList inAxisTitles_;
   QStringList outAxisTitles_;
   QStringList outputNames_;
+  VariablesListWidget * outputsListWidget_ = nullptr;
 };
 
 } // namespace PERSALYS

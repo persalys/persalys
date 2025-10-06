@@ -22,7 +22,7 @@ analysis1.run()
 
 result1 = analysis1.getResult()
 ott.assert_almost_equal(
-    result1.getFirstOrderIndices()[0],
+    result1.getFirstOrderSobolIndices()[0],
     [
         0.269789,
         0.712661,
@@ -40,7 +40,7 @@ ott.assert_almost_equal(
     ],
 )
 ott.assert_almost_equal(
-    result1.getFirstOrderIndicesInterval()[0].getLowerBound(),
+    result1.getFirstOrderSobolIndicesInterval()[0].getLowerBound(),
     [
         0.190449,
         0.0968657,
@@ -58,7 +58,7 @@ ott.assert_almost_equal(
     ],
 )
 ott.assert_almost_equal(
-    result1.getFirstOrderIndicesInterval()[0].getUpperBound(),
+    result1.getFirstOrderSobolIndicesInterval()[0].getUpperBound(),
     [
         0.363531,
         0.307685,
@@ -75,6 +75,41 @@ ott.assert_almost_equal(
         0.699414,
     ],
 )
+
+ott.assert_almost_equal(
+    result1.getSignedSRCIndices(),
+    [
+        [
+            -0.100175,
+            0.117651,
+            0.0155602,
+            0.0742493,
+            -0.224215,
+            0.290666,
+            0.00229872,
+            -0.33788,
+            0.289376,
+            -0.225936,
+            -0.22444,
+            0.0932346,
+            -0.407997,
+        ]
+    ],
+)
+ott.assert_almost_equal(
+    result1.getSRCIndices(), [[x**2 for x in result1.getSignedSRCIndices()[0]]]
+)
+
+ott.assert_almost_equal(
+    result1.getSignedSRCIndicesInterval()[0].getLowerBound()[:3],
+    [-0.151228, 0.0624121, -0.0406055],
+)
+ott.assert_almost_equal(
+    result1.getSignedSRCIndicesInterval()[0].getUpperBound()[:3],
+    [-0.0307025, 0.171362, 0.0924589],
+)
+
+ott.assert_almost_equal(result1.getR2()[0], 0.638872)
 
 # +++++++++++++++++++++++++++++++++ Model 2 +++++++++++++++++++++++++++++++++ #
 # Model with several outputs and dependences between inputs
@@ -129,10 +164,10 @@ analysis2.run()
 
 result2 = analysis2.getResult()
 for i in range(3):
-    print(f"Output Y{i} first order indices: ", result2.getFirstOrderIndices()[i])
+    print(f"Output Y{i} first order indices: ", result2.getFirstOrderSobolIndices()[i])
     print(
         f"Output Y{i} first order indices intervals: ",
-        result2.getFirstOrderIndicesInterval()[i],
+        result2.getFirstOrderSobolIndicesInterval()[i],
     )
 
 print("Is independent ?", result2.isIndependent())

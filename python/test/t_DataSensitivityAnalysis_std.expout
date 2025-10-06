@@ -22,4 +22,6 @@ Output Y2 first order indices intervals:  [-0.0433121, 0.141488]
 [0.103848, 0.291101]
 [0.102388, 0.28865]
 Is independent ? False
-Warning message:  Warning: Variables X0 and X2 are not independent (Spearman test failed with p-value 8.46081e-13). Variables X3 and X4 are not independent (Spearman test failed with p-value 0.038646). 
+Warning message:  Warning: Variables X0 and X2 are not independent (Spearman test failed with p-value 8.46081e-13).
+Variables X3 and X4 are not independent (Spearman test failed with p-value 0.038646).
+
