@@ -29,6 +29,7 @@
 #include "persalys/ResizableHeaderlessTableView.hxx"
 #include "persalys/ValueLineEdit.hxx"
 #include "persalys/PlotWidget.hxx"
+#include "persalys/DoubleSpinBox.hxx"
 
 #include <QButtonGroup>
 #include <QLineEdit>
@@ -41,7 +42,7 @@ namespace PERSALYS
     Q_OBJECT
 
   public:
-    QuantileAnalysisIntroPage(QWidget* parent = 0);
+    explicit QuantileAnalysisIntroPage(QWidget* parent = nullptr);
 
     void initialize(const Analysis& analysis);
     OT::UnsignedInteger getType() const;
@@ -54,9 +55,9 @@ namespace PERSALYS
     void outputSelected();
 
   private:
-    OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
-    QButtonGroup * methodGroup_ = nullptr;
-    TemporaryLabel * errorMessageLabel_ = nullptr;
+    OutputsSelectionGroupBox * outputsSelectionGroupBox_  = nullptr;
+    QButtonGroup * methodGroup_                           = nullptr;
+    TemporaryLabel * errorMessageLabel_                   = nullptr;
     OT::Description interestVariables_;
   };
 
@@ -65,10 +66,9 @@ namespace PERSALYS
     Q_OBJECT
 
   public:
-    QuantileAnalysisProbabilityPage(QWidget* parent = 0);
+    explicit QuantileAnalysisProbabilityPage(QWidget* parent = nullptr);
 
     void initialize(const Analysis& analysis);
-    Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
     OT::Point getDefaultTargetProbability() const {return targetLineEdit_->values();};
 
     OT::Collection<OT::Point> getTargetProbabilities() const {
@@ -81,16 +81,21 @@ namespace PERSALYS
     int nextId() const override;
     bool validatePage() override;
 
+    double getCILevel() const {return levelConfidenceIntervalSpinbox_->value();};
+
   signals:
     void probabilitiesSelected();
+  
   protected:
     void buildInterface();
     void keyPressEvent (QKeyEvent * event) override;
+  
   private:
-    ResizableHeaderlessTableView * tableView_ = nullptr;
-    QuantileTableModel * tableModel_ = nullptr;
-    TemporaryLabel * errorMessageLabel_ = nullptr;
-    ValuesLineEdit * targetLineEdit_ = nullptr;
+    ResizableHeaderlessTableView * tableView_       = nullptr;
+    QuantileTableModel * tableModel_                = nullptr;
+    TemporaryLabel * errorMessageLabel_             = nullptr;
+    ValuesLineEdit * targetLineEdit_                = nullptr;
+    DoubleSpinBox * levelConfidenceIntervalSpinbox_ = nullptr;
 
   };
 
@@ -99,7 +104,7 @@ namespace PERSALYS
     Q_OBJECT
 
   public:
-    QuantileAnalysisThresholdPage(QWidget* parent = 0);
+    explicit QuantileAnalysisThresholdPage(QWidget* parent = nullptr);
 
     void initialize(const Analysis& analysis);
     Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
@@ -114,14 +119,14 @@ namespace PERSALYS
     void thresholdSelected();
   protected:
     void buildInterface();
-    void plotMeanExcess(OT::Graph graph, const QString& varName);
+    void plotMeanExcess(const OT::Graph &graph, const QString& varName);
   private:
     ResizableHeaderlessTableView * tableView_ = nullptr;
     QuantileThresholdTableModel * tableModel_ = nullptr;
-    TemporaryLabel * errorMessageLabel_ = nullptr;
-    QComboBox * marginalComboBox_ = nullptr;
-    QComboBox * tailComboBox_ = nullptr;
-    PlotWidget * plotWidget_ = nullptr;
+    TemporaryLabel * errorMessageLabel_       = nullptr;
+    QComboBox * marginalComboBox_             = nullptr;
+    QComboBox * tailComboBox_                 = nullptr;
+    PlotWidget * plotWidget_                  = nullptr;
   };
 
   class PERSALYS_VIEW_API QuantileAnalysisWizard : public AnalysisWizard
@@ -131,7 +136,7 @@ namespace PERSALYS
   public:
     enum {Page_Intro, Page_Probability, Page_Threshold};
 
-    QuantileAnalysisWizard(const Analysis& analysis, QWidget* parent = 0);
+    explicit QuantileAnalysisWizard(const Analysis& analysis, QWidget* parent = nullptr);
     void initialize(const Analysis& analysis);
 
     Analysis getAnalysis() const override;
@@ -141,9 +146,9 @@ namespace PERSALYS
     void buildInterface();
 
   private:
-    QuantileAnalysisIntroPage * introPage_ = nullptr;
-    QuantileAnalysisProbabilityPage * probabilityPage_ = nullptr;
-    QuantileAnalysisThresholdPage * thresholdPage_ = nullptr;
+    QuantileAnalysisIntroPage * introPage_              = nullptr;
+    QuantileAnalysisProbabilityPage * probabilityPage_  = nullptr;
+    QuantileAnalysisThresholdPage * thresholdPage_      = nullptr;
   };
 }
 #endif

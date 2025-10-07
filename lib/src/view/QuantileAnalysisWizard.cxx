@@ -23,6 +23,7 @@
 
 #include "persalys/EditButtonDelegate.hxx"
 #include "persalys/LineEditWithQValidatorDelegate.hxx"
+#include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QVBoxLayout>
 #include <QRadioButton>
@@ -33,6 +34,8 @@ using namespace OT;
 
 namespace PERSALYS
 {
+
+  /************************ Intro page ******************************/
 
   QuantileAnalysisIntroPage::QuantileAnalysisIntroPage(QWidget* parent)
     : QWizardPage(parent)
@@ -72,7 +75,6 @@ namespace PERSALYS
     pageLayout->addWidget(errorMessageLabel_);
   }
 
-
   void QuantileAnalysisIntroPage::initialize(const Analysis& analysis)
   {
 
@@ -92,7 +94,6 @@ namespace PERSALYS
     outputsSelectionGroupBox_->updateComboBoxModel(analysis_ptr->getDesignOfExperiment().getSample().getDescription(), analysis_ptr->getInterestVariables());
   }
 
-
   int QuantileAnalysisIntroPage::nextId() const
   {
     return QuantileAnalysisWizard::Page_Probability;
@@ -109,12 +110,10 @@ namespace PERSALYS
     return QWizardPage::validatePage();
   }
 
-
   UnsignedInteger QuantileAnalysisIntroPage::getType() const
   {
     return methodGroup_->checkedId();
   }
-
 
   Description QuantileAnalysisIntroPage::getInterestVariables() const
   {
@@ -127,16 +126,18 @@ namespace PERSALYS
     return outputNames;
   }
 
+  /********************* Probability page ***************************/
+
   QuantileAnalysisProbabilityPage::QuantileAnalysisProbabilityPage(QWidget* parent)
     : QWizardPage(parent)
   {
-    QVBoxLayout * pageLayout = new QVBoxLayout(this);
+    auto * pageLayout = new QVBoxLayout(this);
 
     // Default target
-    QGroupBox * targetBox = new QGroupBox(tr("Target probability"));
-    QVBoxLayout * targetLayout = new QVBoxLayout(targetBox);
+    auto * targetBox = new QGroupBox(tr("Target probability"));
+    auto * targetLayout = new QVBoxLayout(targetBox);
 
-    QLabel * label = new QLabel(tr("Default target probabilities, separated with ';'"));
+    auto * label = new QLabel(tr("Default target probabilities, separated with ';'"));
     targetLayout->addWidget(label);
     targetLineEdit_ = new ValuesLineEdit;
     targetLayout->addWidget(targetLineEdit_);
@@ -150,14 +151,30 @@ namespace PERSALYS
     targetLayout->addStretch();
     pageLayout->addWidget(targetBox);
 
+    //// advanced parameters
+    auto * advancedParamGroupBox = new CollapsibleGroupBox;
+    advancedParamGroupBox->setTitle(tr("Advanced parameters"));
+    auto * advancedWidgetsLayout = new QGridLayout(advancedParamGroupBox);
+
+    // confidence interval level
+    auto * ICLvlLabel = new QLabel(tr("Confidence interval level"));
+    advancedWidgetsLayout->addWidget(ICLvlLabel, 1, 0);
+    levelConfidenceIntervalSpinbox_ = new DoubleSpinBox;
+    levelConfidenceIntervalSpinbox_->setRange(0.0, 0.99);
+    levelConfidenceIntervalSpinbox_->setSingleStep(0.01);
+
+    advancedWidgetsLayout->addWidget(levelConfidenceIntervalSpinbox_, 1, 1);
+
+    pageLayout->addWidget(advancedParamGroupBox);
+
+    //// error message
     errorMessageLabel_ = new TemporaryLabel;
     pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
   }
 
-
   void QuantileAnalysisProbabilityPage::initialize(const Analysis& analysis)
   {
-    const QuantileAnalysis * analysis_ptr = dynamic_cast<const QuantileAnalysis*>(analysis.getImplementation().get());
+    const auto * analysis_ptr = dynamic_cast<const QuantileAnalysis*>(analysis.getImplementation().get());
 
     if (!analysis_ptr)
       return;
@@ -179,12 +196,12 @@ namespace PERSALYS
     tableView_->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
     tableView_->horizontalHeader()->setSectionResizeMode(5, QHeaderView::ResizeToContents);
 
-    const QString numberPattern = QString("(\\d+\\.*\\d*e{0,1}[+-]*\\d*)");
+    const auto numberPattern = QString("(\\d+\\.*\\d*e{0,1}[+-]*\\d*)");
     const QString numbersPattern = numberPattern + "(;{1}\\s*" + numberPattern + ")*$";
-    LineEditWithQValidatorDelegate * delegate1 = new LineEditWithQValidatorDelegate(numbersPattern, tableView_);
+    auto * delegate1 = new LineEditWithQValidatorDelegate(numbersPattern, tableView_);
     tableView_->setItemDelegateForColumn(4, delegate1);
 
-    EditButtonDelegate * delegate2 = new EditButtonDelegate(tableView_, 1, 0.1);
+    auto * delegate2 = new EditButtonDelegate(tableView_, 1, 0.1);
     tableView_->setItemDelegateForColumn(5, delegate2);
 
     for (int i = 1; i < tableModel_->rowCount(); ++i)
@@ -196,12 +213,14 @@ namespace PERSALYS
     // resize table
     // tableView_->resizeWithOptimalWidth();
 
-    connect(targetLineEdit_, &QLineEdit::editingFinished, [ = ] () {
+    connect(targetLineEdit_, &QLineEdit::editingFinished, [this] () {
       Collection<OT::Point> values;
       for (int i = 1; i < tableModel_->rowCount(); ++i)
         values.add(targetLineEdit_->values());
       tableModel_->setValues(values);
     });
+
+    levelConfidenceIntervalSpinbox_->setValue(analysis_ptr->getConfidenceIntervalLevel());
   }
 
   int QuantileAnalysisProbabilityPage::nextId() const
@@ -223,6 +242,7 @@ namespace PERSALYS
       event->accept();
   }
 
+  /********************** Threshold page ****************************/
 
   QuantileAnalysisThresholdPage::QuantileAnalysisThresholdPage(QWidget* parent)
     : QWizardPage(parent)
@@ -258,8 +278,6 @@ namespace PERSALYS
     errorMessageLabel_ = new TemporaryLabel;
     pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
   }
-
-
 
   void QuantileAnalysisThresholdPage::initialize(const Analysis& analysis)
   {
@@ -312,7 +330,7 @@ namespace PERSALYS
 
   }
 
-  void QuantileAnalysisThresholdPage::plotMeanExcess(Graph graph, const QString& varName)
+  void QuantileAnalysisThresholdPage::plotMeanExcess(const Graph &graph, const QString& varName)
   {
     plotWidget_->clear();
     QwtSymbol* symbol1 = new QwtSymbol(QwtSymbol::Ellipse,
@@ -353,6 +371,8 @@ namespace PERSALYS
 
     return QWizardPage::validatePage();
   }
+
+  /************************** Wizard ********************************/
 
   QuantileAnalysisWizard::QuantileAnalysisWizard(const Analysis& analysis, QWidget* parent)
     : AnalysisWizard(analysis, parent)
@@ -428,7 +448,7 @@ namespace PERSALYS
 
   Analysis QuantileAnalysisWizard::getAnalysis() const
   {
-    QuantileAnalysis * analysis_ptr = dynamic_cast<QuantileAnalysis*>(analysis_.getImplementation().get());
+    const auto * analysis_ptr = dynamic_cast<QuantileAnalysis*>(analysis_.getImplementation().get());
 
     if (!analysis_ptr)
       throw InvalidArgumentException(HERE) << "QuantileAnalysisWizard::getAnalysis : Invalid analysis";
@@ -441,6 +461,7 @@ namespace PERSALYS
     analysis.setTargetProbabilities(probabilityPage_->getTargetProbabilities());
     if (introPage_->getType() == QuantileAnalysisResult::GeneralizedPareto)
       analysis.setThreshold(thresholdPage_->getThreshold());
+    analysis.setConfidenceIntervalLevel(probabilityPage_->getCILevel());
     return analysis;
   }
 }
