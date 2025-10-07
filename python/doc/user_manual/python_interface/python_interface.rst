@@ -1,3 +1,5 @@
+.. _user-manual-python-interface:
+
 ====================================
 User manual for the Python interface
 ====================================
