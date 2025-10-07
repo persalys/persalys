@@ -13,3 +13,4 @@ User manual for graphical interface
    /user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis
    /user_manual/graphical_interface/data_analysis/user_manual_data_analysis
    /user_manual/graphical_interface/field_analysis/user_manual_field_analysis
+   /user_manual/graphical_interface/python_console/user_interface_python_console

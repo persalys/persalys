@@ -8,6 +8,7 @@ See :class:`~persalys.FunctionalChaosAnalysis`,
 :class:`~persalys.KrigingAnalysis`"
 
 // --------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::MetaModelAnalysis::asPythonPhysicalModel
 "Create a Python model wrapping the metamodel created by the analysis.
 
