@@ -48,7 +48,7 @@ script : str
 "Launching parameters accessor.
 
 Returns
-----------
+-------
 result : :py:class:'pydefx.parameters.Parameters'
     job parameters structure"
 

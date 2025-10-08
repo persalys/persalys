@@ -18,7 +18,7 @@ study : :class:`~persalys.Study`
     The study to which the analysis belong
 
 Returns
-----------
+-------
 model : :class:`~persalys.PythonPhysicalModel`
     The python model"
 
