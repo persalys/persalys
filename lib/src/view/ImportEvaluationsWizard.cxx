@@ -1,6 +1,5 @@
-//                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the results of data analysis
+ *  @brief QWizard to import design of experiment evaluations
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,31 +17,29 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_DATAANALYSISRESULTWINDOW_HXX
-#define PERSALYS_DATAANALYSISRESULTWINDOW_HXX
 
-#include "persalys/DataAnalysisWindow.hxx"
+#include "persalys/ImportEvaluationsWizard.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API DataAnalysisResultWindow : public DataAnalysisWindow
+
+ImportEvaluationsWizard::ImportEvaluationsWizard(const Analysis &designOfExperiment, QWidget *parent): AnalysisWizard(designOfExperiment, parent)
 {
-  Q_OBJECT
-
-public:
-  explicit DataAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
-
-  void addSummaryTab() override;
-  void addDependenceTab() override;
-  void addScatterPlotsTab() override;
-  void addPlotMatrixTab() override;
-#ifdef PERSALYS_HAVE_PARAVIEW
-  void addParaviewWidgetsTabs() override;
-#endif // PERSALYS_HAVE_PARAVIEW
-
-protected:
-  void initialize(const AnalysisItem* item);
-
-};
+  buildInterface();
 }
-#endif
+
+void ImportEvaluationsWizard::buildInterface()
+{
+  setWindowTitle(tr("Import design of experiments evaluations"));
+
+  importPage_ = new ImportedDesignPage(this);
+  importPage_->initialize(analysis_);
+  addPage(importPage_);
+}
+
+Analysis ImportEvaluationsWizard::getAnalysis() const
+{
+  return importPage_->getAnalysis();
+}
+
+} // namespace PERSALYS

@@ -47,6 +47,8 @@ public:
 
   DesignOfExperiment getDesignOfExperiment() const;
 
+  void setDesignOfExperiment(const DesignOfExperiment &doe);
+
   /** String converter */
   OT::String __repr__() const override;
 

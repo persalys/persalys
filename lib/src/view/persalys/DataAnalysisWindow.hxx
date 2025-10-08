@@ -53,7 +53,7 @@ protected:
   virtual void addParaviewWidgetsTabs();
   virtual void addParaviewPlotWidgetsTabs(PVSpreadSheetViewWidget* pvSpreadSheet, const OT::Sample &sample);
 #endif
-  void addPlotMatrixTab();
+  virtual void addPlotMatrixTab();
   void removePlotMatrixTab();
   virtual void addScatterPlotsTab();
   virtual void addTableTab();

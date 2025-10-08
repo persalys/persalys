@@ -266,7 +266,7 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     connect(action, &QAction::triggered, [ = ]()
     {
       emit wizardRequested(getParentStudyItem(),
-                           GridDesignOfExperiment(availableAnalysisName(tr("design_")), model));
+                           GridDesignOfExperiment(availableAnalysisName(tr("design_")), model));      // implicit conversion: Analysis(const AnalysisImplementation &)
     });
   }
 #ifdef PERSALYS_HAVE_OTMORRIS

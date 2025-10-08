@@ -37,6 +37,8 @@ public:
   /** Constructor with parameters */
   DesignOfExperimentEvaluation(const OT::String& name, const PhysicalModel& physicalModel);
 
+  DesignOfExperimentEvaluation(const OT::String &name, const PhysicalModel &physicalModel, const DataAnalysisResult &DataAnalysisResult);
+
   /** Virtual constructor */
   DesignOfExperimentEvaluation * clone() const override;
 
@@ -55,6 +57,8 @@ public:
   Parameters getParameters() const override;
   bool hasValidResult() const override;
   bool canBeLaunched(OT::String &errorMessage) const override;
+
+  void setEvaluations(const OT::Sample &outputSample);
 
   static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
 

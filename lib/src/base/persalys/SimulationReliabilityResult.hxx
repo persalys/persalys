@@ -41,7 +41,8 @@ public:
                               const OT::Sample& outputSample,
                               const OT::Sample& convergenceSample,
                               const OT::Sample& convergenceSampleLowerBound,
-                              const OT::Sample& convergenceSampleUpperBound);
+                              const OT::Sample& convergenceSampleUpperBound,
+                              const OT::Sample& inputSample = OT::Sample());
 
   /** Virtual constructor */
   SimulationReliabilityResult * clone() const override;

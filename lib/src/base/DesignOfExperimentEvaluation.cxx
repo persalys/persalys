@@ -55,6 +55,12 @@ DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const String& name, c
 {
 }
 
+DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const String &name, const PhysicalModel &physicalModel, const DataAnalysisResult &result)
+  : SimulationAnalysis(name, physicalModel)
+  , originalInputSample_(result.getDesignOfExperiment().getInputSample())
+  , result_(result)
+{
+}
 
 /* Virtual constructor */
 DesignOfExperimentEvaluation* DesignOfExperimentEvaluation::clone() const
@@ -251,6 +257,37 @@ void DesignOfExperimentEvaluation::launch()
   result_.elapsedTime_ = timeCriteria.getElapsedTime();
 }
 
+void DesignOfExperimentEvaluation::setEvaluations(const Sample &outputSample)
+{
+  TimeCriteria tc;
+  isRunning_ = true;
+  notify("analysisLaunched");
+  initialize();
+
+  result_.designOfExperiment_.setInputSample(originalInputSample_);
+  result_.designOfExperiment_.setOutputSample(outputSample);
+
+  // time
+  TimeCriteria timeCriteria;
+
+  // compute data analysis
+  DataAnalysis dataAnalysis("", result_.designOfExperiment_);
+  dataAnalysis.setIsConfidenceIntervalRequired(false);
+  dataAnalysis.run();
+
+  // set result
+  result_ = dataAnalysis.getResult();
+  timeCriteria.incrementElapsedTime();
+  result_.elapsedTime_ = timeCriteria.getElapsedTime();
+
+  isRunning_ = false;
+  tc.incrementElapsedTime();
+  elapsedTime_ = tc.getElapsedTime();
+  notify("analysisFinished");
+
+  physicalModel_.setEvalTime(getElapsedTime());
+  modelHtmlDescription_ = physicalModel_.getHTMLDescription();
+}
 
 Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 {
@@ -262,7 +299,6 @@ Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
 
   return Sample();
 }
-
 
 DataAnalysisResult DesignOfExperimentEvaluation::getResult() const
 {
@@ -290,21 +326,24 @@ Parameters DesignOfExperimentEvaluation::getParameters() const
   Parameters param;
 
   param.add("Outputs of interest", getInterestVariables().__str__());
-  param.add("Sample size", getOriginalInputSample().getSize());
-
-  OSS values;
-  const Point minValues(getOriginalInputSample().getMin());
-  const Point maxValues(getOriginalInputSample().getMax());
-  for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
+  const UnsignedInteger sampleSize = getOriginalInputSample().getSize();
+  param.add("Sample size", sampleSize);
+  if (sampleSize)
   {
-    if (minValues[i] != maxValues[i])
-      values << getOriginalInputSample().getDescription()[i] << " : [" << minValues[i] << ", " << maxValues[i] << "]";
-    else
-      values << getOriginalInputSample().getDescription()[i] << " : " << minValues[i];
-    if (i < getOriginalInputSample().getDimension() - 1)
-      values << "\n";
+    OSS values;
+    const Point minValues(getOriginalInputSample().getMin());
+    const Point maxValues(getOriginalInputSample().getMax());
+    for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
+    {
+      if (minValues[i] != maxValues[i])
+        values << getOriginalInputSample().getDescription()[i] << " : [" << minValues[i] << ", " << maxValues[i] << "]";
+      else
+        values << getOriginalInputSample().getDescription()[i] << " : " << minValues[i];
+      if (i < getOriginalInputSample().getDimension() - 1)
+        values << "\n";
+    }
+    param.add("Values", values);
   }
-  param.add("Values", values);
 
   param.add("Block size", getBlockSize());
 

@@ -60,6 +60,10 @@ DesignOfExperiment EvaluationResult::getDesignOfExperiment() const
   return designOfExperiment_;
 }
 
+void EvaluationResult::setDesignOfExperiment(const DesignOfExperiment &doe)
+{
+  designOfExperiment_ = doe;
+}
 
 /* String converter */
 String EvaluationResult::__repr__() const

@@ -45,6 +45,7 @@ public:
 
 protected:
   virtual void buildActions();
+  void addDoEToStudy(const StudyItem * studyItem, const OT::String &name, const PhysicalModel &model, const DesignOfExperiment &doe) const;
 
 public slots:
   void processStatusChanged();
@@ -56,6 +57,7 @@ public slots:
   void appendDataModelItem();
   virtual void removeAnalysis();
   void extractData();
+  void exportDoE();
 
 signals:
   void analysisRemoved(QStandardItem*);
@@ -64,6 +66,7 @@ signals:
   void modifyAnalysisRequested(AnalysisItem*);
   void dataExtractionWizardRequested(StudyItem*, Analysis);
   void pythonMetamodelExportRequested(PhysicalModel);
+  void evaluationsImportRequested(const StudyItem*, const Analysis&);
 
   void numberDesignEvaluationChanged(bool);
   void designEvaluationUpdated(bool);
@@ -75,8 +78,11 @@ protected:
   QAction * convertAction_ = nullptr;
   QAction * exportAction_ = nullptr;
   QAction * removeAction_ = nullptr;
+  QAction * addEvaluationsAction_ = nullptr;
+
 private:
   QAction * extractDataAction_ = nullptr;
+  QAction * exportDoEAction_ = nullptr;
   QAction * convertPythonAction_ = nullptr;
 };
 }

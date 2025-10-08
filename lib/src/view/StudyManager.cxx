@@ -35,6 +35,7 @@
 #include "persalys/FunctionalChaosAnalysis.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
 #include "persalys/PythonPhysicalModelPropertiesDialog.hxx"
+#include "persalys/ImportEvaluationsWizard.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -140,6 +141,33 @@ void StudyManager::openDesignOfExperimentEvaluationWizard(const Analysis& analys
   }
 }
 
+void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Analysis &analysis)
+{
+
+  QPointer<ImportEvaluationsWizard> wizard(new ImportEvaluationsWizard(analysis, mainWidget_));
+  wizard->setAttribute(Qt::WA_DeleteOnClose);
+
+  connect(wizard, &QDialog::accepted, [item, analysis, wizard](){
+      const auto * implementation = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
+      Analysis newAnalysis(wizard->getAnalysis());
+      const auto * newImplementation = dynamic_cast<DesignOfExperimentEvaluation*>(newAnalysis.getImplementation().get());
+
+      DesignOfExperimentEvaluation * modifiedImplementation(implementation->clone());
+      try
+      {
+        modifiedImplementation->setEvaluations(newImplementation->getResult().getDesignOfExperiment().getOutputSample());
+        Analysis modifiedAnalysis(modifiedImplementation);
+        item->getStudy().remove(analysis);
+        item->getStudy().add(modifiedAnalysis);
+      }
+      catch (InvalidDimensionException&)
+      {
+        QMessageBox::warning(QApplication::activeWindow(), tr("Invalid dimension"), tr("The input and output samples must have the same size."));
+      }
+  });
+
+  wizard->open();
+}
 
 void StudyManager::openObservationsWizard(StudyItem *item, const DesignOfExperiment &designOfExp)
 {
@@ -265,6 +293,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     connect(item, SIGNAL(wizardRequested(StudyItem*, Analysis)), this, SLOT(openAnalysisWizard(StudyItem*, Analysis)));
     connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
     connect(item, SIGNAL(pythonMetamodelExportRequested(PhysicalModel)), this, SLOT(exportMetamodelPython(PhysicalModel)));
+    connect(item, &AnalysisItem::evaluationsImportRequested, this,  &StudyManager::openImportEvaluationsWizard);
   }
 
   // do removeSubWindow if the analysis run method has been launched from a Python script
@@ -279,9 +308,14 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     if (window)
       updateView(window);
   }
+  catch (const Exception &e)
+  {
+    qDebug() << e.where() << ": " << e.what();
+    message = tr("Impossible to create a result window");
+  }
   catch (const std::exception& ex)
   {
-    qDebug() << "Error when building the analysis window : " << ex.what();
+    qDebug() << "Error when building the analysis window: " << ": " << ex.what();
     message = tr("Impossible to create a result window");
   }
 

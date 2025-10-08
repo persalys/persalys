@@ -25,6 +25,7 @@
 #include "persalys/ParametersWidget.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 #include "persalys/StudyManager.hxx"
 
@@ -63,6 +64,13 @@ void AnalysisWindow::buildInterface()
   scrollArea->setWidgetResizable(true);
 
   // analysis parameters widget
+  Analysis analysis = analysisItem_->getAnalysis();
+  auto * implementation = analysis.getImplementation().get();
+  auto * doeEvalImplementation = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
+
+  if (doeEvalImplementation)
+    Parameters parameters = doeEvalImplementation->getParameters();
+
   const Parameters analysisParameters(analysisItem_->getAnalysis().getImplementation()->getParameters());
   if (analysisParameters.getSize())
   {

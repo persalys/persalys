@@ -95,10 +95,10 @@ protected:
   bool detachRequested_ = false;
   int progressValue_ = 0;
   OT::String modelHtmlDescription_;
-
-private:
   OT::Scalar elapsedTime_ = 0.0;
   bool isRunning_ = false;
+
+private:
   OT::String errorMessage_;
   OT::Description interestVariables_;
 };

@@ -57,7 +57,7 @@ public:
 
   static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel & physicalModel);
 
-private:
+protected:
   PhysicalModel physicalModel_;
 };
 }

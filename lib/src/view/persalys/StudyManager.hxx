@@ -51,6 +51,7 @@ public slots:
   void openMetamodelExportWizard(StudyItem *item, const Analysis& model, const bool isGeneralWizard = false);
   void openProperties(Item* item);
   void modifyAnalysis(AnalysisItem* item);
+  void openImportEvaluationsWizard(const StudyItem *item, const Analysis &analysis);
 
   // open windows
   void openAnalysisWindow(StudyItem* item, const Analysis& analysis);
