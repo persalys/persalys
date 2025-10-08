@@ -42,6 +42,10 @@ static Factory<YACSEvaluation> Factory_YACSEvaluation;
 YACSEvaluation::YACSEvaluation(const String & script)
   : EvaluationImplementation()
 {
+  jobParams_ = ydefx::JobParametersProxy();
+  jobParams_.configureResource("localhost");
+  defaultWorkDirectory_ = jobParams_.work_directory();
+
   if (!script.empty())
     setCode(script);
 }
@@ -281,13 +285,39 @@ void YACSEvaluation::save(Advocate & adv) const
 {
   EvaluationImplementation::save(adv);
   adv.saveAttribute("code_", code_);
+  adv.saveAttribute("dump_", dump_);
+  adv.saveAttribute("isRunning_", isRunning_);
   Description listInputFiles;
   std::list<std::string> inFiles = jobParams_.in_files();
   for(const std::string& f : inFiles)
     listInputFiles.add(f);
   adv.saveAttribute("inputFiles_", listInputFiles);
-  adv.saveAttribute("dump_", dump_);
-  adv.saveAttribute("isRunning_", isRunning_);
+  adv.saveAttribute("job_name", jobParams_.job_name());
+  adv.saveAttribute("job_type", jobParams_.job_type());
+  adv.saveAttribute("job_file", jobParams_.job_file());
+  adv.saveAttribute("pre_command", jobParams_.pre_command());
+  adv.saveAttribute("env_file", jobParams_.env_file());
+  adv.saveAttribute("work_directory", jobParams_.work_directory());
+  adv.saveAttribute("local_directory", jobParams_.local_directory());
+  adv.saveAttribute("result_directory", jobParams_.result_directory());
+  adv.saveAttribute("maximum_duration", jobParams_.maximum_duration());
+  adv.saveAttribute("resource_name", jobParams_.resource_name());
+  const UnsignedInteger nb_proc = jobParams_.nb_proc();
+  adv.saveAttribute("nb_proc", nb_proc);
+  const UnsignedInteger mem_mb = jobParams_.mem_mb();
+  adv.saveAttribute("mem_mb", mem_mb);
+  const UnsignedInteger nb_node = jobParams_.nb_node();
+  adv.saveAttribute("nb_node", nb_node);
+  const UnsignedInteger nb_proc_per_node = jobParams_.nb_proc_per_node();
+  adv.saveAttribute("nb_proc_per_node", nb_proc_per_node);
+  adv.saveAttribute("queue", jobParams_.queue());
+  adv.saveAttribute("partition", jobParams_.partition());
+  adv.saveAttribute("exclusive", jobParams_.exclusive());
+  adv.saveAttribute("mem_per_cpu", (UnsignedInteger)jobParams_.mem_per_cpu());
+  adv.saveAttribute("wckey", jobParams_.wckey());
+  adv.saveAttribute("extra_params", jobParams_.extra_params());
+  const UnsignedInteger nb_branches = jobParams_.nb_branches();
+  adv.saveAttribute("nb_branches", nb_branches);
 }
 
 
@@ -296,17 +326,83 @@ void YACSEvaluation::load(Advocate & adv)
 {
   EvaluationImplementation::load(adv);
   adv.loadAttribute("code_", code_);
-  setCode(code_);
+  if (adv.hasAttribute("dump_"))
+    adv.loadAttribute("dump_", dump_);
+  if (adv.hasAttribute("isRunning_"))
+    adv.loadAttribute("isRunning_", isRunning_);
   Description listInputFiles;
   adv.loadAttribute("inputFiles_", listInputFiles);
   std::list<std::string> inFiles;
   for(const std::string& f : listInputFiles)
     inFiles.push_back(f);
   jobParams_.in_files(inFiles);
-  if (adv.hasAttribute("dump_"))
-    adv.loadAttribute("dump_", dump_);
-  if (adv.hasAttribute("isRunning_"))
-    adv.loadAttribute("isRunning_", isRunning_);
+  if (adv.hasAttribute("job_name"))
+  {
+    String job_name;
+    String job_type;
+    String job_file;
+    String pre_command;
+    String env_file;
+    String work_directory;
+    String local_directory;
+    String result_directory;
+    String maximum_duration;
+    String resource_name;
+    UnsignedInteger nb_proc = 0;
+    UnsignedInteger mem_mb = 0;
+    UnsignedInteger nb_node = 0;
+    UnsignedInteger nb_proc_per_node = 0;
+    String queue;
+    String partition;
+    Bool exclusive = false;
+    UnsignedInteger mem_per_cpu = 0;
+    String wckey;
+    String extra_params;
+    UnsignedInteger nb_branches = 0;
+    adv.loadAttribute("job_name", job_name);
+    adv.loadAttribute("job_type", job_type);
+    adv.loadAttribute("job_file", job_file);
+    adv.loadAttribute("pre_command", pre_command);
+    adv.loadAttribute("env_file", env_file);
+    adv.loadAttribute("work_directory", work_directory);
+    adv.loadAttribute("local_directory", local_directory);
+    adv.loadAttribute("result_directory", result_directory);
+    adv.loadAttribute("maximum_duration", maximum_duration);
+    adv.loadAttribute("resource_name", resource_name);
+    adv.loadAttribute("nb_proc", nb_proc);
+    adv.loadAttribute("mem_mb", mem_mb);
+    adv.loadAttribute("nb_node", nb_node);
+    adv.loadAttribute("nb_proc_per_node", nb_proc_per_node);
+    adv.loadAttribute("queue", queue);
+    adv.loadAttribute("partition", partition);
+    adv.loadAttribute("exclusive", exclusive);
+    adv.loadAttribute("mem_per_cpu", mem_per_cpu);
+    adv.loadAttribute("wckey", wckey);
+    adv.loadAttribute("extra_params", extra_params);
+    adv.loadAttribute("nb_branches", nb_branches);
+    jobParams_.job_name(job_name);
+    jobParams_.job_type(job_type);
+    jobParams_.job_file(job_file);
+    jobParams_.pre_command(pre_command);
+    jobParams_.env_file(env_file);
+    jobParams_.work_directory(work_directory);
+    jobParams_.local_directory(local_directory);
+    jobParams_.result_directory(result_directory);
+    jobParams_.maximum_duration(maximum_duration);
+    jobParams_.resource_name(resource_name);
+    jobParams_.nb_proc(nb_proc);
+    jobParams_.mem_mb(mem_mb);
+    jobParams_.nb_node(nb_node);
+    jobParams_.nb_proc_per_node(nb_proc_per_node);
+    jobParams_.queue(queue);
+    jobParams_.partition(partition);
+    jobParams_.exclusive(exclusive);
+    jobParams_.mem_per_cpu(mem_per_cpu);
+    jobParams_.wckey(wckey);
+    jobParams_.extra_params(extra_params);
+    jobParams_.nb_branches(nb_branches);
+  }
+  setCode(code_);
 }
 
 
@@ -322,10 +418,9 @@ void YACSEvaluation::setCode(const OT::String & code)
   inputValues_.clear();
   inDescription_.clear();
   outDescription_.clear();
-  jobParams_ = ydefx::JobParametersProxy();
-  jobParams_.configureResource("localhost");
+
   std::stringstream ss;
-  ss << jobParams_.work_directory() << "/persalys_" << std::to_string(std::hash<std::string> {}(code));
+  ss << defaultWorkDirectory_ << "/persalys_" << std::to_string(std::hash<std::string> {}(code));
   jobParams_.work_directory(ss.str());
   jobParams_.createTmpResultDirectory();
 
