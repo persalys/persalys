@@ -20,6 +20,7 @@ myStudy.add(limitState)
 # IS ##
 analysis = persalys.ImportanceSamplingAnalysis("myIS", limitState)
 analysis.setMaximumCalls(1000)
+analysis.setBlockSize(10)
 analysis.setSeed(2)
 myStudy.add(analysis)
 print(analysis)
@@ -47,6 +48,7 @@ model.setFormula("Y0", "sin(X0) + 8*X1 + X2")
 
 analysis3 = persalys.ImportanceSamplingAnalysis("myIS3", limitState)
 analysis3.setMaximumCalls(1000)
+analysis3.setBlockSize(10)
 myStudy.add(analysis3)
 print(analysis3)
 
@@ -58,6 +60,7 @@ print("result=", result3)
 # IS ##
 analysis4 = persalys.ImportanceSamplingAnalysis("myIS4", limitState)
 analysis4.setMaximumCalls(1000)
+analysis4.setBlockSize(10)
 analysis4.setMaximumCoefficientOfVariation(-1.0)
 analysis4.setStandardSpaceDesignPoint([0.0686039, 1.14043])
 

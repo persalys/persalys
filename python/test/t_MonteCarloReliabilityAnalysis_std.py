@@ -20,6 +20,7 @@ myStudy.add(limitState)
 # Monte Carlo ##
 analysis = persalys.MonteCarloReliabilityAnalysis("myMonteCarlo", limitState)
 analysis.setMaximumCalls(1000)
+analysis.setBlockSize(10)
 analysis.setSeed(2)
 myStudy.add(analysis)
 print(analysis)
@@ -47,6 +48,7 @@ model.setFormula("Y0", "sin(X0) + 8*X1 + X2")
 
 analysis3 = persalys.MonteCarloReliabilityAnalysis("myMonteCarlo3", limitState)
 analysis3.setMaximumCalls(1000)
+analysis3.setBlockSize(10)
 myStudy.add(analysis3)
 print(analysis3)
 
