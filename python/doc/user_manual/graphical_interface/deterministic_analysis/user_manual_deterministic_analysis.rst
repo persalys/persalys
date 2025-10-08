@@ -262,19 +262,23 @@ Its context menu has the following actions:
   - **Metamodel**: Create a new metamodel.
 
 This item is associated with a window showing the parameter list, a progress bar
-and Run/Stop buttons, to launch or stop the analysis.
+and Run/Stop buttons to launch or stop the analysis.
 
-In case of a **Python** or **Coupling** physical model with cluster mode enabled, clicking the **Stop** button **detaches** the evaluation,
-confirmed by the display of a corresponding message in the evaluation window, under the progress bar.
-The current block will get evaluated.
-You **must** reattach the analysis to evaluate next blocks,
-so it is advisable to proceed with only one block for this given configuration: simply set the blocksize equal to the sample size.
-You can save and safely close the study/persalys. To later **reattach** the evaluation and eventually get the results *if* the analysis is complete,
-simply reload the study and press the **Run** button again.
+The Stop button will request the analysis to stop cleanly after the completion of the evaluation of the current block.
 
-.. image:: /user_manual/graphical_interface/deterministic_analysis/analysisWindow.png
+In case of a **Python** or **Coupling** physical model with cluster mode enabled,
+the **Detach** button allows to continue evaluating the current block of simulations offline.
+
+To continue the analysis (after eventually having saved/reloaded for another session), press the **Run** button again.
+Meanwhile, if the evaluations of the current block have finished, the analysis should update to the next block.
+In this cases one may want to set the block size to the total number of simulations
+so that the analysis not only completes the current block but all simulations when you reconnect.
+
+.. image:: /user_manual/graphical_interface/deterministic_analysis/detach1.png
     :align: center
 
+.. image:: /user_manual/graphical_interface/deterministic_analysis/detach2.png
+    :align: center
 
 .. _doeevalresult:
 
