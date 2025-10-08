@@ -83,6 +83,7 @@ myStudy.add(limitState)
 # Monte Carlo ##
 montecarloSimu = persalys.MonteCarloReliabilityAnalysis("myMonteCarloSimu", limitState)
 montecarloSimu.setMaximumCalls(10000)
+montecarloSimu.setBlockSize(10)
 myStudy.add(montecarloSimu)
 montecarloSimu.run()
 montecarloSimuResult = montecarloSimu.getResult()

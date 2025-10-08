@@ -71,7 +71,7 @@ protected:
 
 private:
   OT::UnsignedInteger seed_ = 0;
-  OT::UnsignedInteger blockSize_ = 10;
+  OT::UnsignedInteger blockSize_ = 1;
 protected:
   SimulationReliabilityResult result_;
 };

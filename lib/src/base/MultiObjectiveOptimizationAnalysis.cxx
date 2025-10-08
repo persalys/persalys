@@ -240,6 +240,7 @@ void MultiObjectiveOptimizationAnalysis::launch()
   // build solver
   Pagmo solver(problem, solverName_, startingPop);
   solver.setMaximumIterationNumber(generationNumber_);
+  solver.setBlockSize(blockSize_);
   solver.setStopCallback(&AnalysisImplementation::Stop, this);
   solver.setProgressCallback(&UpdateProgressValue, this);
   solver.setMaximumConstraintError(getMaximumConstraintError());
@@ -417,7 +418,7 @@ String MultiObjectiveOptimizationAnalysis::getPythonScript() const
   oss << getName() << ".setBounds(bounds)\n";
   oss << getName() << ".setPopulationSize(" << getPopulationSize() << ")\n";
   oss << getName() << ".setGenerationNumber(" << getGenerationNumber() << ")\n";
-
+  oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setVariableInputs(" << Parameters::GetOTDescriptionStr(getVariableInputs()) << ")\n";
   oss << getName() << ".setVariablesType(" << Parameters::GetOTIndicesStr(getVariablesType()) << ")\n";
   return oss;
@@ -432,6 +433,7 @@ String MultiObjectiveOptimizationAnalysis::__repr__() const
       << " physicalModel=" << getPhysicalModel().getName()
       << " algorithmName=" << getSolverName()
       << " number of generations=" << getGenerationNumber()
+      << " blockSize=" << getBlockSize()
       << " starting population size=" << getPopulationSize()
       << " bounds=" << Parameters::GetOTIntervalDescription(getBounds())
       << " variable inputs=" << getVariableInputs()
@@ -472,6 +474,7 @@ Parameters MultiObjectiveOptimizationAnalysis::getParameters() const
   }
   param.add("Bounds", varInputs);
   param.add("Number of generations", getGenerationNumber());
+  param.add("Block size", getBlockSize());
   param.add("Initial population size", getPopulationSize());
 
   if (fixedInputs.getSize())
@@ -507,6 +510,27 @@ Parameters MultiObjectiveOptimizationAnalysis::getParameters() const
   return param;
 }
 
+void MultiObjectiveOptimizationAnalysis::setSeed(const UnsignedInteger seed)
+{
+  seed_ = seed;
+}
+
+UnsignedInteger MultiObjectiveOptimizationAnalysis::getSeed() const
+{
+  return seed_;
+}
+
+/* Block size accessor */
+void MultiObjectiveOptimizationAnalysis::setBlockSize(const OT::UnsignedInteger blockSize)
+{
+  blockSize_ = blockSize;
+}
+
+OT::UnsignedInteger MultiObjectiveOptimizationAnalysis::getBlockSize() const
+{
+  return blockSize_;
+}
+
 void MultiObjectiveOptimizationAnalysis::save(Advocate & adv) const
 {
   OptimizationAnalysis::save(adv);
@@ -515,6 +539,7 @@ void MultiObjectiveOptimizationAnalysis::save(Advocate & adv) const
   adv.saveAttribute("seed_", seed_);
   adv.saveAttribute("areMinimization_", areMinimization_);
   adv.saveAttribute("moResult_", moResult_);
+  adv.saveAttribute("blockSize_", blockSize_);
 }
 
 void MultiObjectiveOptimizationAnalysis::load(Advocate & adv)
@@ -525,6 +550,8 @@ void MultiObjectiveOptimizationAnalysis::load(Advocate & adv)
   adv.loadAttribute("seed_", seed_);
   adv.loadAttribute("areMinimization_", areMinimization_);
   adv.loadAttribute("moResult_", moResult_);
+  if (adv.hasAttribute("blockSize_"))
+    adv.loadAttribute("blockSize_", blockSize_);
 }
 
 

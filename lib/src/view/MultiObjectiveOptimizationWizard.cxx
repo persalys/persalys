@@ -311,6 +311,14 @@ MultiObjectiveOptimizationParameters::MultiObjectiveOptimizationParameters(QWidg
   constraintErrSpinBox_->setRange(std::numeric_limits<double>::min(), 1.0);
   addWidget(constraintErrSpinBox_, 3, 1);
 
+  // Block size
+  label = new QLabel(tr("Block size"));
+  addWidget(label, 4, 0);
+  blockSizeSpinBox_ = new UIntSpinBox;
+  blockSizeSpinBox_->setRange(1, 2e9);
+  label->setBuddy(blockSizeSpinBox_);
+  addWidget(blockSizeSpinBox_, 4, 1);
+
   setColumnStretch(0, 1);
 
 }

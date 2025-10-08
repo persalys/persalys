@@ -257,6 +257,9 @@ void DesignOfExperimentDefinitionItem::createEvaluation()
   }
 
   // emit signal to StudyTreeView to open a wizard
+  DesignOfExperimentEvaluation *eval_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis_.getImplementation().get());
+  if (eval_ptr)
+    eval_ptr->setBlockSize(GetNumberOfPhysicalCores());
   emit doeEvaluationWizardRequested(analysis_);
 }
 

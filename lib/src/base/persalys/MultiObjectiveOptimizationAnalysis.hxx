@@ -110,16 +110,14 @@ public:
   OT::Description getMinimization() const;
   void setMinimization(const OT::Description& varNames);
 
-  /** Seed */
-  void setSeed(const OT::UnsignedInteger & seed)
-  {
-    seed_ = seed;
-  };
-  OT::UnsignedInteger getSeed() const
-  {
-    return seed_;
-  };
+  /** Seed accessor */
+  void setSeed(const OT::UnsignedInteger seed);
+  OT::UnsignedInteger getSeed() const;
 
+  /** Block size accessor */
+  void setBlockSize(const OT::UnsignedInteger blockSize);
+  OT::UnsignedInteger getBlockSize() const;
+  
   /** Result **/
   bool hasValidResult() const override;
   MultiObjectiveOptimizationAnalysisResult getResult() const;
@@ -145,6 +143,7 @@ protected:
 private:
   OT::UnsignedInteger startingPopSize_ = 50;
   OT::UnsignedInteger generationNumber_ = 10;
+  OT::UnsignedInteger blockSize_ = 1;
   OT::UnsignedInteger seed_ = 0;
   OT::Description areMinimization_;
   MultiObjectiveOptimizationAnalysisResult moResult_;

@@ -85,11 +85,11 @@ public:
   ResizableHeaderlessTableView * getTableView() const
   {
     return tableView_;
-  };
+  }
   MultiObjectiveOptimizationTableModel * getTableModel() const
   {
     return tableModel_;
-  };
+  }
 protected slots:
   void updateTable();
 private:
@@ -113,6 +113,7 @@ public:
     popSizeSpinBox_->setValue(optimAlgo.getPopulationSize());
     seedLineEdit_->setValue(optimAlgo.getSeed());
     constraintErrSpinBox_->setValue(optimAlgo.getMaximumConstraintError());
+    blockSizeSpinBox_->setValue(optimAlgo.getBlockSize());
   }
 
   template <class T>
@@ -122,26 +123,15 @@ public:
     optimAlgo.setPopulationSize(popSizeSpinBox_->value());
     optimAlgo.setSeed(seedLineEdit_->value());
     optimAlgo.setMaximumConstraintError(constraintErrSpinBox_->value());
-  }
-  UIntSpinBox * getGenerationSpinBox() const
-  {
-    return generationSpinBox_;
-  }
-  UIntSpinBox * getPopSizeSpinBox() const
-  {
-    return popSizeSpinBox_;
-  }
-  ValueLineEdit * getSeedLineEdit_() const
-  {
-    return seedLineEdit_;
+    optimAlgo.setBlockSize(blockSizeSpinBox_->value());
   }
 
 private:
-  UIntSpinBox * generationSpinBox_;
-  UIntSpinBox * popSizeSpinBox_;
-  ValueLineEdit * seedLineEdit_;
-  LogDoubleSpinBox * constraintErrSpinBox_;
-
+  UIntSpinBox * generationSpinBox_ = nullptr;
+  UIntSpinBox * popSizeSpinBox_ = nullptr;
+  ValueLineEdit * seedLineEdit_ = nullptr;
+  LogDoubleSpinBox * constraintErrSpinBox_ = nullptr;
+  UIntSpinBox *blockSizeSpinBox_ = nullptr;
 };
 
 class PERSALYS_VIEW_API MultiObjectiveOptimizationWizard : public AnalysisWizard
