@@ -308,9 +308,14 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     if (window)
       updateView(window);
   }
+  catch (const Exception &e)
+  {
+    qDebug() << e.where() << ": " << e.what();
+    message = tr("Impossible to create a result window");
+  }
   catch (const std::exception& ex)
   {
-    qDebug() << "Error when building the analysis window : " << ex.what();
+    qDebug() << "Error when building the analysis window: " << ": " << ex.what();
     message = tr("Impossible to create a result window");
   }
 

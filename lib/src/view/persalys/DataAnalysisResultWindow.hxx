@@ -35,6 +35,7 @@ public:
   void addSummaryTab() override;
   void addDependenceTab() override;
   void addScatterPlotsTab() override;
+  void addPlotMatrixTab() override;
 #ifdef PERSALYS_HAVE_PARAVIEW
   void addParaviewWidgetsTabs() override;
 #endif // PERSALYS_HAVE_PARAVIEW

@@ -186,6 +186,13 @@ void DataAnalysisResultWindow::addScatterPlotsTab()
   designOfExperiment_ = result_.getDesignOfExperiment();
 }
 
+void DataAnalysisResultWindow::addPlotMatrixTab()
+{
+  designOfExperiment_ = result_.getMultivariateDoE();
+  DataAnalysisWindow::addPlotMatrixTab();
+  designOfExperiment_ = result_.getDesignOfExperiment();
+}
+
 #ifdef PERSALYS_HAVE_PARAVIEW
 
 void DataAnalysisResultWindow::addParaviewWidgetsTabs()

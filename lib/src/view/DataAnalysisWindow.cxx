@@ -561,7 +561,7 @@ void DataAnalysisWindow::addPlotMatrixTab()
 {
   if (!boundPlotMatrixWidget_)
   {
-    const Sample sample = result_.getMultivariateDoE().getSample();
+    const Sample sample{designOfExperiment_.getSample()};
     PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(sample, sample);
     plotMatrixWidget->setInputNames(inputNames_);
     plotMatrixWidget->setOutputNames(outputNames_);
