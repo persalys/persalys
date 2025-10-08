@@ -1,4 +1,4 @@
-analysis= class=MultiObjectiveOptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=nsga2 number of generations=10 starting population size=50 bounds=[[0, 5],[0, 0],[0, 5]] variable inputs=[X0,X1] variable types=[0,0,2] variables of interest=[Y0,Y1] minimization=[Y0,Y2,Y1] constraints=[Y0<3.] maximumConstraintError=1e-05 seed=0
+analysis= class=MultiObjectiveOptimizationAnalysis name=optim physicalModel=aModelPhys algorithmName=nsga2 number of generations=10 blockSize=1 starting population size=50 bounds=[[0, 5],[0, 0],[0, 5]] variable inputs=[X0,X1] variable types=[0,0,2] variables of interest=[Y0,Y1] minimization=[Y0,Y2,Y1] constraints=[Y0<3.] maximumConstraintError=1e-05 seed=0
 results=
  class=MultiObjectiveOptimizationAnalysisResult fronts=[    [ Y0        Y1        ]
 0 : [ 0.0118802 0.992246  ],    [ Y0        Y1        ]
@@ -126,6 +126,7 @@ optim.addConstraint("Y0<3.")
 optim.setBounds(bounds)
 optim.setPopulationSize(50)
 optim.setGenerationNumber(10)
+optim.setBlockSize(1)
 optim.setVariableInputs(['X0', 'X1'])
 optim.setVariablesType([0, 0, 2])
 myStudy.add(optim)

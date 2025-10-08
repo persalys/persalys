@@ -43,7 +43,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::getGenerationNumber
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::getGenerationNumber
 "Accessor to the number of generations.
 
 Returns
@@ -53,7 +53,7 @@ generationNumber : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::setGenerationNumber
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::setGenerationNumber
 "Accessor to the number of generations.
 
 Parameters
@@ -63,7 +63,7 @@ generationNumber : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::getSeed
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::getSeed
 "Accessor to random generator seed.
 
 Returns
@@ -73,7 +73,7 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::setSeed
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::setSeed
 "Accessor to random generator seed.
 
 Parameters
@@ -83,7 +83,27 @@ seed : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::getPopulationSize
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::getBlockSize
+"Accessor to the block size.
+
+Returns
+-------
+blockSize : int
+    Maximum number of samples queued for evaluation."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::setBlockSize
+"Accessor to the block size.
+
+Parameters
+----------
+blockSize : int
+    Maximum number of samples queued for evaluation."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::getPopulationSize
 "Accessor to popSize.
 
 Returns
@@ -93,7 +113,7 @@ popSize : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::setPopulationSize
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::setPopulationSize
 "Accessor to popSize.
 
 Parameters
@@ -103,7 +123,7 @@ popSize : int
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::OptimizationAnalysis::getResult
+%feature("docstring") PERSALYS::MultiObjectiveOptimizationAnalysis::getResult
 "Accessor to result.
 
 Returns
