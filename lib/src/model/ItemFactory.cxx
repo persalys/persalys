@@ -20,7 +20,6 @@
  */
 #include "persalys/ItemFactory.hxx"
 
-#include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/PolynomialRegressionAnalysis.hxx"
 #include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/InferenceAnalysis.hxx"
@@ -39,7 +38,7 @@
 #ifdef PERSALYS_HAVE_OTMORRIS
 #include "persalys/MorrisAnalysis.hxx"
 #endif
-
+#include "persalys/BaseTools.hxx"
 #include "persalys/StudyItem.hxx"
 
 #include <openturns/PlatformInfo.hxx>
@@ -233,9 +232,13 @@ Analysis ItemFactory::createAnalysis(const QString &analysisName, const Analysis
 Analysis ItemFactory::createAnalysis(const QString &analysisName, const LimitState &limitState)
 {
   if (analysisName == "ThresholdExceedance")
-    return new MonteCarloReliabilityAnalysis(availableAnalysisName(tr("reliability_")), limitState);
+  {
+    MonteCarloReliabilityAnalysis analysis(availableAnalysisName(tr("reliability_")), limitState);
+    analysis.setBlockSize(GetNumberOfPhysicalCores());
+    return analysis.clone();
+  }
   qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
-  return 0;
+  return nullptr;
 }
 
 
@@ -276,8 +279,9 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     action->setStatusTip(tr("Create a new screening"));
     connect(action, &QAction::triggered, [ = ]()
     {
-      emit wizardRequested(getParentStudyItem(),
-                           MorrisAnalysis(availableAnalysisName(tr("screening_")), model));
+      MorrisAnalysis analysis(availableAnalysisName(tr("screening_")), model);
+      analysis.setBlockSize(GetNumberOfPhysicalCores());
+      emit wizardRequested(getParentStudyItem(), analysis);
     });
   }
 #endif
@@ -297,8 +301,9 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     action->setStatusTip(tr("Create a new model multi-objective optimization"));
     connect(action, &QAction::triggered, [ = ]()
     {
-      emit wizardRequested(getParentStudyItem(),
-                           MultiObjectiveOptimizationAnalysis(availableAnalysisName(tr("multiObjectiveOptimization_")), model));
+      MultiObjectiveOptimizationAnalysis analysis(availableAnalysisName(tr("multiObjectiveOptimization_")), model);
+      analysis.setBlockSize(GetNumberOfPhysicalCores());
+      emit wizardRequested(getParentStudyItem(), analysis);
     });
   }
   else if (analysisName == "Sensitivity")
@@ -307,8 +312,9 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     action->setStatusTip(tr("Create a new sensitivity analysis"));
     connect(action, &QAction::triggered, [ = ]()
     {
-      emit wizardRequested(getParentStudyItem(),
-                           SobolAnalysis(availableAnalysisName(tr("sensitivity_")), model));
+      SobolAnalysis analysis(availableAnalysisName(tr("sensitivity_")), model);
+      analysis.setBlockSize(GetNumberOfPhysicalCores());
+      emit wizardRequested(getParentStudyItem(), analysis);
     });
   }
   else if (analysisName == "CentralTendency")
@@ -318,14 +324,16 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     if (!model.hasMesh())
       connect(action, &QAction::triggered, [ = ]()
     {
-      emit wizardRequested(getParentStudyItem(),
-                           MonteCarloAnalysis(availableAnalysisName(tr("centralTendency_")), model));
+      MonteCarloAnalysis analysis(availableAnalysisName(tr("centralTendency_")), model);
+      analysis.setBlockSize(GetNumberOfPhysicalCores());
+      emit wizardRequested(getParentStudyItem(), analysis);
     });
     else
       connect(action, &QAction::triggered, [ = ]()
     {
-      emit wizardRequested(getParentStudyItem(),
-                           FieldMonteCarloAnalysis(availableAnalysisName(tr("centralTendency_")), model));
+      FieldMonteCarloAnalysis analysis(availableAnalysisName(tr("centralTendency_")), model);
+      analysis.setBlockSize(GetNumberOfPhysicalCores());
+      emit wizardRequested(getParentStudyItem(), analysis);
     });
   }
   return action;
