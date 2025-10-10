@@ -1,9 +1,17 @@
-= 19.0 release (wip)
+= 19.0 release (2025-10-10)
 
- * Merge YACS/Python model
- * Added sensitivity analysis for data models using rank Sobol algorithm
+ * Added sensitivity analysis for data models using rank Sobol/SRC indices
  * Allow to use Student copula in dependency inference
+ * Added Histogram distribution
+ * Added a button to create a python model encapsulating a metamodel
+ * Data analyses can now be performed on datasets containing missing/nan values
+ * Design of experiments of simulation analyses can now be exported
+ * Added the possibility to import evaluations for a design of experiments
+ * Added the possibility to display full plot matrix when using ParaView
+ * Default block size is set to the number of processors
+ * Improve YACS integration
  * Print stack traces to console and archive them in text files for debugging purposes
+ * Various bug fixes
 
 = 18.1 release (2025-06-25)
 

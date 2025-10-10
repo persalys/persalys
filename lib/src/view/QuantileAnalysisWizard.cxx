@@ -301,6 +301,8 @@ namespace PERSALYS
 
     connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
 
+    tableModel_->validateCurrentValues();
+
     // plot widget
     if (marginalComboBox_->count())
       marginalComboBox_->clear();
@@ -366,6 +368,9 @@ namespace PERSALYS
 
   bool QuantileAnalysisThresholdPage::validatePage()
   {
+    if (tableModel_)
+      tableModel_->validateCurrentValues();
+
     if (!errorMessageLabel_->text().isEmpty())
       return false;
 

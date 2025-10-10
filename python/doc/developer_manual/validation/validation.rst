@@ -109,8 +109,8 @@ The points are generated according to the structure of a box design of experimen
 This deterministic design of experiments has 8 points obtained by regularly discretizing
 the pavement :math:`[10035.5, 10364.5] \times [2975.33, 3024.67] \times [3901.31, 4098.69]`.
 
-The minimum value of :math:`Ep` is 0.0292232 with X=[10364.5 2975.33 3901.31].
-The maximum value of :math:`Ep` is 0.0892884 with X=[10035.5 3024.67 4098.69].
+The minimum value of :math:`Ep` is 0.0292239 with X=[10364.5 2975.33 3901.31].
+The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
 
 
 3-2-1 Figures
@@ -154,7 +154,7 @@ This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test
  Name  Description              Distribution
 ====== ======================== ===================================
 Q      River flow               Gumbel(beta=0.00179211, gamma=1013)
-Ks     Manning-Strickler factor Normal(30, 7.5)
+Ks     Manning-Strickler factor Normal(30, 7.5) truncated at 0
 Zm     River's depth upstream   Uniform(54,56)
 Zv     River's depth downstream Uniform(49, 51)
 ====== ======================== ===================================
@@ -325,14 +325,6 @@ Console Python
       install.modules(["coolprop", "--user"], verbose=True)
       import CoolProp
 
-Settings Menu
-`````````````
-
-- click Menu->Tools->Settings
-  - Spinbox to set the number of parallel processes
-
-- close the menu
-
 Open documentation
 ``````````````````
 
@@ -410,9 +402,12 @@ Rename Study
   - the item is renamed
 
 - left-click select Study_3, press F2, rename Study_3 as myOTStudy3, press enter
+  
+- rename Study_0 as myOTStudy. A pop-up opens to inform you the name is already taken. Close the pop-up. The name stays Study_0
 
 Save/open Study
 ````````````````````
+- Close myOTStudy2 and myOTStudy3
 
 - save myOTStudy with Menu->File->save, close with Menu->File->close, reopen with Menu->File->open
 
@@ -520,15 +515,11 @@ Models
 
   - Click Properties
 
-  - Value should be corresponding to the value specified in Tools>Settings
-
   - Change the value then press OK
 
   - Save the study as a new study, close it and re-open it
 
   - Open 'pythonModel' properties again.
-
-  - Its value is the one you just set, the default value in Tools>Settings is unchanged
 
 - click on 'Definition' child item of 'pythonModel' item
 
@@ -1941,7 +1932,7 @@ Probabilistic analyses
         - x_1 the output is the first item of the list
 
       - right side, tabs: Summary - PDF/CDF - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
-      - when changing the variable, the tabs (Summary - PDF/CDF - Box plots) are updated
+      - when changing the variable, the tabs (Summary - PDF/CDF) are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
@@ -2434,7 +2425,7 @@ Python model on cluster
 
   - block size = sample size = 100
 
-  - click run and quickly stop the analysis
+  - click run and quickly detach the analysis
 
   - a message says that the job has been detached.
 
