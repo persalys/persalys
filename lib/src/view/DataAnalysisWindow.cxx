@@ -238,6 +238,7 @@ void DataAnalysisWindow::addSummaryTab()
 
   valuesList << QString::number(totalSampleSize);
 
+  Indices changeColorIndex;
   // - elapsed time
   if (result_.getElapsedTime() > 0.)
   {
@@ -246,6 +247,10 @@ void DataAnalysisWindow::addSummaryTab()
       namesList << tr("Evaluated samples") << tr("Failed samples");
       const OT::UnsignedInteger evaluatedSamples = totalSampleSize - notEvaluatedInputSample_.getSize();
       const OT::UnsignedInteger failedSamples = failedInputSample_.getSize();
+      if (notEvaluatedInputSample_.getSize())
+        changeColorIndex.add(namesList.size() - 2);
+      if (failedInputSample_.getSize())
+        changeColorIndex.add(namesList.size() - 1);
       const double evaluatedPercent = totalSampleSize > 0 ? 100.0 * static_cast<double>(evaluatedSamples) / static_cast<double>(totalSampleSize) : 100.0;
       const double failedPercent = evaluatedSamples > 0 ? 100.0 * static_cast<double>(failedSamples) / static_cast<double>(evaluatedSamples) : 100.0;
 
@@ -262,7 +267,7 @@ void DataAnalysisWindow::addSummaryTab()
   {
     namesList << tr("Sample mean CV");
     const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
-    const Scalar sqrtSampleSize = sqrt(designOfExperiment_.getInputSample().getSize());
+    const Scalar sqrtSampleSize = sqrt(static_cast<Scalar>(designOfExperiment_.getInputSample().getSize()));
     Scalar maxCoefOfVariation = 0.;
     for (UnsignedInteger i = nbInputs; i < result_.getCoefficientOfVariation().getSize(); ++i)
       if (result_.getCoefficientOfVariation()[i].getSize() == 1)
@@ -286,7 +291,12 @@ void DataAnalysisWindow::addSummaryTab()
     valuesList << QString::number(maxCILength);
   }
 
-  ParametersTableView * table = new ParametersTableView(namesList, valuesList, true, true);
+  auto * table = new ParametersTableView(namesList, valuesList, true, true);
+  for (UnsignedInteger i = 0 ; i < changeColorIndex.getSize() ; ++i)
+  {
+    const int index = static_cast<int>(changeColorIndex[i]);
+    table->setValueAt(index, valuesList[index], QColor("orange"));
+  }
   parametersGroupBoxLayout->addWidget(table);
   tabLayout->addWidget(parametersGroupBox, row, 0);
 
