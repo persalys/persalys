@@ -21,10 +21,20 @@ Release process
 
 9. Push X.Y branch, vX.Y tag
 
-10. Sync github mirror::
+10. Sync github code mirror::
 
       git remote add gh git@github.com:persalys/persalys.git
       git push gh master
       git push gh --tags
 
-11. In master, set version X.(Y+1)dev
+11. Sync documentation repo::
+
+    git clone git@github.com:persalys/persalys.github.io.git
+    cd persalys.github.io
+    git rm persalys/latest -r
+    mv ../persalys/html persalys/latest # copy from local html files
+    cp -r persalys/latest persalys/X.Y
+    git add persalys/latest persalys/X.Y -r
+    git commit -am "latest -> X.Y"
+
+12. In master, set version X.(Y+1)dev
