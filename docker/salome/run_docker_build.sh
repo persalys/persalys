@@ -129,6 +129,6 @@ appimagetool -v persalys.AppDir ${APPIMAGE_FILE}
 # copy to host with same permission
 if test -n "${UID_GID}"
 then
-  sudo chown ${UID_GID} ${APPIMAGE_FILE}
   sudo cp ${APPIMAGE_FILE} /io
+  sudo chown ${UID_GID} /io/${APPIMAGE_FILE}
 fi
