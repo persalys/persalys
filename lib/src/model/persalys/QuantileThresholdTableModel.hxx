@@ -45,6 +45,8 @@ public:
   QuantileAnalysis getAnalysis() const {return analysis_;}
   OT::Sample getThreshold() const {return threshold_;}
 
+  void validateCurrentValues();
+
 protected:
   void checkValues(const QModelIndex & index);
 

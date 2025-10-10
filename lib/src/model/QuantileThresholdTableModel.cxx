@@ -259,4 +259,56 @@ namespace PERSALYS
     }
   }
 
+  void QuantileThresholdTableModel::validateCurrentValues()
+  {
+    try
+    {
+      analysis_.setThreshold(threshold_);
+      analysis_.checkThresholdCompatibility();
+      emit errorMessageChanged("");
+    }
+    catch (const InvalidArgumentException&)
+    {
+      const Indices tails = analysis_.getTailTypes();
+      const Collection<Point> targetPs = analysis_.getTargetProbabilities();
+      const UnsignedInteger n = analysis_.getInterestVariables().getSize();
+
+      for (UnsignedInteger i = 0; i < n; ++i)
+      {
+        const double p = targetPs[i].normInf();
+        switch (tails[i])
+        {
+        case QuantileAnalysisResult::Upper:
+          if (p >= 1.0 - cdfThreshold_(1, i))
+          {
+            emit errorMessageChanged(tr("Chosen CDF threshold must be lower than the target probability."));
+            return;
+          }
+          break;
+        case QuantileAnalysisResult::Lower:
+          if (p >= cdfThreshold_(0, i))
+          {
+            emit errorMessageChanged(tr("Chosen CDF threshold must be greater than the target probability."));
+            return;
+          }
+          break;
+        default:
+          if (p >= cdfThreshold_(0, i))
+          {
+            emit errorMessageChanged(tr("Chosen CDF threshold must be greater than the target probability."));
+            return;
+          }
+          if (p >= 1.0 - cdfThreshold_(1, i))
+          {
+            emit errorMessageChanged(tr("Chosen CDF threshold must be lower than the target probability."));
+            return;
+          }
+          break;
+        }
+      }
+
+      emit errorMessageChanged(tr("Invalid threshold selection."));
+    }
+  }
+
 }
