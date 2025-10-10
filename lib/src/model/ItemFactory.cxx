@@ -268,8 +268,9 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
     action->setStatusTip(tr("Create a new design of experiments"));
     connect(action, &QAction::triggered, [ = ]()
     {
-      emit wizardRequested(getParentStudyItem(),
-                           GridDesignOfExperiment(availableAnalysisName(tr("design_")), model));      // implicit conversion: Analysis(const AnalysisImplementation &)
+      GridDesignOfExperiment analysis(availableAnalysisName(tr("design_")), model);
+      analysis.setBlockSize(GetNumberOfPhysicalCores());
+      emit wizardRequested(getParentStudyItem(), analysis);
     });
   }
 #ifdef PERSALYS_HAVE_OTMORRIS
