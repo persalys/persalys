@@ -76,7 +76,7 @@ Description ProbabilisticDesignOfExperiment::GetSpaceFillings()
 
 ProbabilisticDesignOfExperiment::ProbabilisticDesignOfExperiment()
   : DesignOfExperimentEvaluation()
-  , designName_("LHS")
+  , designName_("MONTE_CARLO")
   , spaceFilling_("PhiP")
   , size_(ResourceMap::GetAsUnsignedInteger("WeightedExperiment-DefaultSize"))
 {

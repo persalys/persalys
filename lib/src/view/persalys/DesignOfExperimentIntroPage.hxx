@@ -41,7 +41,7 @@ public:
   int nextId() const override;
   int getMethodId() const;
 
-  void initialize(const Analysis& analysis);
+  void initialize(const Analysis& analysis) const;
 
 private:
   QButtonGroup * methodGroup_ = nullptr;

@@ -25,10 +25,6 @@ namespace PERSALYS
 
 DesignOfExperimentWizard::DesignOfExperimentWizard(const Analysis & designOfExperiment, QWidget *parent)
   : AnalysisWizard(designOfExperiment, parent)
-  , introPage_(0)
-  , gridPage_(0)
-  , probaPage_(0)
-  , importPage_(0)
 {
   buildInterface();
 }
