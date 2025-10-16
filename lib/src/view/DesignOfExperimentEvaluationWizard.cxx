@@ -36,12 +36,6 @@ namespace PERSALYS
 
 DesignOfExperimentEvaluationWizard::DesignOfExperimentEvaluationWizard(const Analysis& analysis, bool isGeneralWizard, QWidget* parent)
   : Wizard(parent)
-  , doesComboBox_(0)
-  , doesComboBoxModel_(0)
-  , doeLabel_(0)
-  , outputsSelectionGroupBox_(0)
-  , blockSizeGroupBox_(0)
-  , errorMessageLabel_(0)
 {
   // check analysis
   DesignOfExperimentEvaluation * currentDoe = dynamic_cast<DesignOfExperimentEvaluation *>(analysis.getImplementation().get());

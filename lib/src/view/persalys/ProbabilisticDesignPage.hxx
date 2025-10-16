@@ -25,9 +25,9 @@
 #include "persalys/LogSpinBox.hxx"
 
 #include <QWizardPage>
+#include <QLabel>
 #include <QButtonGroup>
 #include <QComboBox>
-#include <QLabel>
 
 namespace PERSALYS
 {
@@ -36,30 +36,28 @@ class PERSALYS_VIEW_API ProbabilisticDesignPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum DesignType {LHS, SALHS, MCLHS, MonteCarlo, QuasiMonteCarlo};
+  enum DesignType {MonteCarlo, LHS, SALHS, MCLHS, QuasiMonteCarlo};
 
-  ProbabilisticDesignPage(QWidget* parent = 0);
+  explicit ProbabilisticDesignPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& designOfExperiment);
   Analysis getAnalysis(const OT::String& name, const PhysicalModel& model) const;
 
-protected:
+private:
   void buildInterface();
-
-public slots:
-signals:
-  void designOfExperimentChanged(const Analysis & designOfExperiment);
-  void showTime();
+  void updateEstimatedDuration();
 
 private:
-  QButtonGroup * designsGroup_ = nullptr;
-  QComboBox * optimComboBox_ = nullptr;
-  QComboBox * spaceFillingComboBox_ = nullptr;
-  LogSpinBox * sampleSizeSpinbox_ = nullptr;
-  LogSpinBox * mcLhsSizeSB_ = nullptr;
-  QSpinBox * seedSpinbox_ = nullptr;
-  OT::Scalar modelEvalTime_ = 0.0;
-  QLabel * lhsWarningLabel_ = nullptr;
+  OT::Scalar modelEvalTime_           = 0.0;
+  QLabel * lhsWarningLabel_           = nullptr;
+  QButtonGroup * designButtonsGroup_  = nullptr;
+  QComboBox * optimComboBox_          = nullptr;
+  LogSpinBox * mcLhsSizeSB_           = nullptr;
+  QComboBox * spaceFillingComboBox_   = nullptr;
+  LogSpinBox * sampleSizeSpinBox_     = nullptr;
+  QSpinBox * seedSpinBox_             = nullptr;
+  QLabel * sampleTimeLabel_           = nullptr;
+  QLabel * sampleTimeValueLabel_      = nullptr;
 };
-}
+} // namespace PERSALYS
 #endif

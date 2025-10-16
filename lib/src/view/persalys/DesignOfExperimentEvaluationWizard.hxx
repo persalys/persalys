@@ -52,12 +52,12 @@ protected slots:
   void updateWidgets();
 
 private:
-  QComboBox * doesComboBox_;
-  QStandardItemModel * doesComboBoxModel_;
-  QLabel * doeLabel_;
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  TemporaryLabel * errorMessageLabel_;
+  QComboBox                 * doesComboBox_             = nullptr;
+  QStandardItemModel        * doesComboBoxModel_        = nullptr;
+  QLabel                    * doeLabel_                 = nullptr;
+  OutputsSelectionGroupBox  * outputsSelectionGroupBox_ = nullptr;
+  BlockSizeGroupBox         * blockSizeGroupBox_        = nullptr;
+  TemporaryLabel            * errorMessageLabel_        = nullptr;
 };
 }
 #endif
