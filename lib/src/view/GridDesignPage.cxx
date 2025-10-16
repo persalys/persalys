@@ -36,10 +36,6 @@ namespace PERSALYS
 
 GridDesignPage::GridDesignPage(QWidget* parent)
   : QWizardPage(parent)
-  , tableView_(0)
-  , tableModel_(0)
-  , DOESizeLabel_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -179,7 +175,7 @@ void GridDesignPage::resizeEvent(QResizeEvent* event)
 }
 
 
-Analysis GridDesignPage::getAnalysis()
+Analysis GridDesignPage::getAnalysis() const
 {
   Q_ASSERT(tableModel_);
   return tableModel_->getDesignOfExperiment();

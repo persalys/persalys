@@ -273,13 +273,13 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
       {
         ProbabilisticDesignOfExperiment analysis{availableAnalysisName(tr("design_")), model};
         analysis.setBlockSize(GetNumberOfPhysicalCores());
-        emit wizardRequested(getParentStudyItem(), analysis);
+        emit wizardRequested(getParentStudyItem(), analysis); // implicit conversion: Analysis(const AnalysisImplementation &)
       }
       else
       {
         GridDesignOfExperiment analysis(availableAnalysisName(tr("design_")), model);
         analysis.setBlockSize(GetNumberOfPhysicalCores());
-        emit wizardRequested(getParentStudyItem(), analysis);
+        emit wizardRequested(getParentStudyItem(), analysis); // implicit conversion: Analysis(const AnalysisImplementation &)
       }
     });
   }

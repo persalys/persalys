@@ -190,6 +190,8 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
   
   modelEvalTime_ = doe->getPhysicalModel().getEvalTime();
 
+  blockSize_ = doe->getBlockSize();
+
   // check copula independance
   const bool independentCopula = doe->getPhysicalModel().getCopula().hasIndependentCopula();
   lhsWarningLabel_->setVisible(!independentCopula);
@@ -281,6 +283,8 @@ Analysis ProbabilisticDesignPage::getAnalysis(const String &name, const Physical
   };
 
   doe.setSeed(seedSpinBox_->value());
+  doe.setBlockSize(blockSize_);
+  
   return doe;
 }
 

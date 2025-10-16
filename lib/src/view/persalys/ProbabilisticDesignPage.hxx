@@ -48,16 +48,18 @@ private:
   void updateEstimatedDuration();
 
 private:
-  OT::Scalar modelEvalTime_           = 0.0;
-  QLabel * lhsWarningLabel_           = nullptr;
-  QButtonGroup * designButtonsGroup_  = nullptr;
-  QComboBox * optimComboBox_          = nullptr;
-  LogSpinBox * mcLhsSizeSB_           = nullptr;
-  QComboBox * spaceFillingComboBox_   = nullptr;
-  LogSpinBox * sampleSizeSpinBox_     = nullptr;
-  QSpinBox * seedSpinBox_             = nullptr;
-  QLabel * sampleTimeLabel_           = nullptr;
-  QLabel * sampleTimeValueLabel_      = nullptr;
+  OT::Scalar      modelEvalTime_        = 0.0;
+  int             blockSize_            = 1;
+  QLabel        * lhsWarningLabel_      = nullptr;
+  QButtonGroup  * designButtonsGroup_   = nullptr;
+  QComboBox     * optimComboBox_        = nullptr;
+  LogSpinBox    * mcLhsSizeSB_          = nullptr;
+  QComboBox     * spaceFillingComboBox_ = nullptr;
+  LogSpinBox    * sampleSizeSpinBox_    = nullptr;
+  QSpinBox      * seedSpinBox_          = nullptr;
+  QLabel        * sampleTimeLabel_      = nullptr;
+  QLabel        * sampleTimeValueLabel_ = nullptr;
 };
+
 } // namespace PERSALYS
 #endif

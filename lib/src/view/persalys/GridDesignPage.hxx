@@ -38,7 +38,7 @@ public:
   explicit GridDesignPage(QWidget *parent = nullptr);
 
   void initialize(const Analysis& analysis);
-  Analysis getAnalysis();
+  Analysis getAnalysis() const;
   bool validatePage() override;
 
 signals:
@@ -49,11 +49,11 @@ protected:
   void resizeEvent(QResizeEvent * event) override;
 
 private:
-  ResizableHeaderlessTableView * tableView_ = nullptr;
-  ExperimentTableModel * tableModel_ = nullptr;
-  QLabel * DOESizeLabel_ = nullptr;
-  QLabel * DOETimeLabel_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ResizableHeaderlessTableView  * tableView_          = nullptr;
+  ExperimentTableModel          * tableModel_         = nullptr;
+  QLabel                        * DOESizeLabel_       = nullptr;
+  QLabel                        * DOETimeLabel_       = nullptr;
+  TemporaryLabel                * errorMessageLabel_  = nullptr;
 };
 }
 #endif
