@@ -106,7 +106,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   scrollArea->setWidget(new WidgetBoundToDockWidget(plot_, graphSetting, this));
 
   mainSplitter->addWidget(scrollArea);
-  mainSplitter->setStretchFactor(0, 2);
+  mainSplitter->setStretchFactor(0, 6);
 
   QWidget * subWidget = new QWidget;
   QVBoxLayout * subWidgetLayout = new QVBoxLayout(subWidget);
@@ -216,7 +216,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   subWidgetLayout->setContentsMargins(0, 0, 0, 0);
 
   mainSplitter->addWidget(subWidget);
-  mainSplitter->setStretchFactor(1, 1);
+  mainSplitter->setStretchFactor(1, 4);
   mainLayout->addWidget(mainSplitter);
   mainLayout->setContentsMargins(0, 0, 0, 0);
 }

@@ -38,11 +38,18 @@ protected:
   void buildInterface();
 
 private:
-  FunctionalChaosAnalysisResult result_;
-  bool hasValidSobolResult_;
-  OT::UnsignedInteger maxDegree_;
-  bool sparse_;
+  void addMomentsTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs);
+  void addAdequationTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs);
+  void addSobolTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs);
+  void addValidationTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs);
+  void addErrorTab(QTabWidget * tabWidget) const;
+
+private:
   QString errorMessage_;
+  FunctionalChaosAnalysisResult result_;
+  bool hasValidSobolResult_ = true;
+  OT::UnsignedInteger maxDegree_ = 0;
+  bool sparse_ = false;
 };
 }
 #endif
