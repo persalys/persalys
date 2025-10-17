@@ -38,6 +38,10 @@ public:
   void setNotEditableItem(const int row, const int column, const double value, const int prec = 6);
   void setNotEditableHeaderItem(const int row, const int column, const QString text);
   QString getFormattedText() const;
+  void setIncludeHeadersInExport(bool enable);
+
+private:
+  bool includeHeadersInExport_ = false;
 };
 }
 #endif

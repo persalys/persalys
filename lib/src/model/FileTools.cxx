@@ -108,7 +108,7 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
   layout->addWidget(boxPrec, row, 1);
 
   // Disable comma as numSep if already set as colSep
-  QStandardItemModel *model = qobject_cast<QStandardItemModel *>(boxNumSep->model());
+  const QStandardItemModel *model = qobject_cast<QStandardItemModel *>(boxNumSep->model());
   Q_ASSERT(model != nullptr);
 
   QStandardItem *commaItem = model->item(1);
