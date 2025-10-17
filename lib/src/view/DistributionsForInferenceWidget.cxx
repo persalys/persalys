@@ -35,9 +35,6 @@ DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringLi
   : QWidget(parent)
   , variables_(variables)
   , distributions_(distributions)
-  , tableView_(0)
-  , tableModel_(0)
-  , addComboBox_(0)
 {
   if (variables_.getSize() == 1)
     allDistributions_ = TranslationManager::GetTranslatedContinuousDistributions();
@@ -85,17 +82,26 @@ void DistributionsForInferenceWidget::buildInterface()
 
   // Add button
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
-  buttonsLayout->addStretch();
+
+  auto* addAllForAllButton = new QPushButton(tr("Add all distributions to all variables"));
+  addAllForAllButton->setIcon(QIcon(":/images/list-add.png"));
+  addAllForAllButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  connect(addAllForAllButton, &QPushButton::clicked, this, 
+    &DistributionsForInferenceWidget::addAllDistributionsToAllVariablesRequested);  // signal received by InferenceWizard
+  buttonsLayout->addWidget(addAllForAllButton);
+
   addComboBox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
   addComboBox_->addItems(notUsedDistributions);
+  addComboBox_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  buttonsLayout->addWidget(addComboBox_, 1); // stretch factor = 1
 
-  buttonsLayout->addWidget(addComboBox_);
   connect(addComboBox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
   connect(addComboBox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
 
   // Remove button
   QPushButton * removeButton = new QPushButton(tr("Remove"));
   removeButton->setIcon(QIcon(":/images/list-remove.png"));
+  removeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   connect(removeButton, SIGNAL(pressed()), this, SLOT(removeSelectedDistribution()));
   buttonsLayout->addWidget(removeButton);
 
