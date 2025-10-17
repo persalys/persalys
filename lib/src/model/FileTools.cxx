@@ -183,7 +183,7 @@ void FileTools::ExportImage(const QImage& image, QWidget * parent)
   QString fileName = QFileDialog::getSaveFileName(parent,
                      tr("Export image"),
                      GetCurrentDir() + QDir::separator() + tr("image"),
-                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
+                     tr("Images (*.png *.bmp *.jpg *.jpeg *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())
   {

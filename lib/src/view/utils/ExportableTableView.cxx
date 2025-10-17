@@ -32,6 +32,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QPainter>
 
 namespace PERSALYS
 {
@@ -118,7 +119,7 @@ void ExportableTableView::exportData()
       }
       else if (dynamic_cast<QSortFilterProxyModel*>(model()))
       {
-        QSortFilterProxyModel* myProxy = dynamic_cast<QSortFilterProxyModel*>(model());
+        const QSortFilterProxyModel* myProxy = dynamic_cast<QSortFilterProxyModel*>(model());
         QModelIndexList indexes = myProxy->mapSelectionToSource(selectionModel()->selection()).indexes();
         QModelIndex previous = indexes.first();
         indexes.removeFirst();
@@ -144,11 +145,49 @@ void ExportableTableView::exportData()
 void ExportableTableView::exportImage()
 {
   const QMargins margins(contentsMargins());
-  const int w = horizontalHeader()->length() + verticalHeader()->width();
-  const int h = verticalHeader()->length() + horizontalHeader()->height();
 
-  QImage image(QSize(w + margins.left() + margins.right(), h + margins.top() + margins.bottom()), QImage::Format_ARGB32_Premultiplied);
-  render(&image);
+  const int contentWidth = horizontalHeader()->length()
+                           + (verticalHeader()->isVisible() ? verticalHeader()->width() : 0)
+                           + 2 * frameWidth();
+  const int contentHeight = verticalHeader()->length()
+                            + (horizontalHeader()->isVisible() ? horizontalHeader()->height() : 0)
+                            + 2 * frameWidth();
+
+  // offscreen view to render the full table
+  QTableView offscreen;
+  offscreen.setModel(model());
+  offscreen.setItemDelegate(itemDelegate());
+  offscreen.setAlternatingRowColors(alternatingRowColors());
+  offscreen.setShowGrid(showGrid());
+  offscreen.setWordWrap(wordWrap());
+  offscreen.setFont(font());
+  offscreen.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  offscreen.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  offscreen.horizontalHeader()->setVisible(horizontalHeader()->isVisible());
+  offscreen.verticalHeader()->setVisible(verticalHeader()->isVisible());
+
+  // reproduce current sizes
+  const int cols = model() ? model()->columnCount() : 0;
+  const int rows = model() ? model()->rowCount() : 0;
+  for (int c = 0; c < cols; ++c)
+    offscreen.setColumnWidth(c, columnWidth(c));
+  for (int r = 0; r < rows; ++r)
+    offscreen.setRowHeight(r, rowHeight(r));
+
+  // set sufficient render size
+  offscreen.resize(contentWidth, contentHeight);
+  offscreen.setFixedSize(contentWidth, contentHeight);
+  offscreen.updateGeometry();
+  offscreen.doItemsLayout();
+
+  // image render
+  const int imgW = contentWidth + margins.left() + margins.right();
+  const int imgH = contentHeight + margins.top() + margins.bottom();
+  QImage image(QSize(imgW, imgH), QImage::Format_ARGB32_Premultiplied);
+  image.fill(palette().base().color());
+  QPainter painter(&image);
+  painter.translate(margins.left(), margins.top());
+  offscreen.render(&painter);
 
   FileTools::ExportImage(image, this);
 }
