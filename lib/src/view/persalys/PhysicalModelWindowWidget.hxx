@@ -23,6 +23,8 @@
 
 #include "persalys/PhysicalModelItem.hxx"
 #include "persalys/CopyableTableView.hxx"
+#include "persalys/InputTableModel.hxx"
+#include "persalys/OutputTableModel.hxx"
 
 #include <QPushButton>
 #include <QLabel>
@@ -34,12 +36,16 @@ class PERSALYS_VIEW_API PhysicalModelWindowWidget : public QTabWidget
   Q_OBJECT
 
 public :
-  explicit PhysicalModelWindowWidget(PhysicalModelItem * item);
+  explicit PhysicalModelWindowWidget(const PhysicalModelItem * item);
 
 protected:
   void buildInterface();
   void resizeEvent(QResizeEvent * event) override;
   void paintEvent(QPaintEvent * event) override;
+
+private:
+  void addDefinitionTab();
+  void addDifferentiationTab();
 
 public slots:
   void removeInputLine();
@@ -61,12 +67,14 @@ signals:
   void errorMessageChanged(QString);
 
 private:
-  PhysicalModel physicalModel_;
-  bool isFirstPaint_ = true;
-  CopyableTableView * inputTableView_ = nullptr;
-  CopyableTableView * outputTableView_ = nullptr;
-  QLabel * indexParamLabel_ = nullptr;
-  OT::Scalar evalTime_ = 0.0;
+  PhysicalModel       physicalModel_;
+  bool                isFirstPaint_     = true;
+  OT::Scalar          evalTime_         = 0.0;
+  CopyableTableView * inputTableView_   = nullptr;
+  CopyableTableView * outputTableView_  = nullptr;
+  QLabel            * indexParamLabel_  = nullptr;
+  InputTableModel   * inputTableModel_  = nullptr;
+  OutputTableModel  * outputTableModel_ = nullptr;
 };
 }
 #endif

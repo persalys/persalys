@@ -35,8 +35,6 @@ namespace PERSALYS
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
 {
-//  setFocusPolicy(Qt::ClickFocus);
-
   QVBoxLayout * widgetLayout = new QVBoxLayout(this);
   QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectpythonmodel");
   if (item->getPhysicalModel().hasMesh())
@@ -73,7 +71,7 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, Q
   widgetLayout->addWidget(horizontalSplitter, 1);
 
   // buttons
-  CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+  CheckModelButtonGroup *buttons = new CheckModelButtonGroup(this, !item->getPhysicalModel().hasMesh());
   connect(buttons, SIGNAL(evaluateOutputsRequested()), tablesWidget, SIGNAL(evaluateOutputsRequested()));
   connect(buttons, SIGNAL(evaluateGradientRequested()), tablesWidget, SIGNAL(evaluateGradientRequested()));
 
