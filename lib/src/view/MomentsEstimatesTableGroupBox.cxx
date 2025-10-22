@@ -89,7 +89,7 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
   quantLayout->addWidget(line, 1, 0, 1, 5);
 
   // CI Level
-  label = new QLabel(tr("Variable confidence\ninterval level"));
+  label = new QLabel(tr("Proportion of the population\ncontained inside the interval"));
   quantLayout->addWidget(label, 2, 0);
 
   ciLevelSpinBox_ = new DoubleSpinBox;
@@ -100,7 +100,7 @@ MomentsEstimatesTableGroupBox::MomentsEstimatesTableGroupBox(const DataAnalysisR
   quantLayout->addWidget(ciLevelSpinBox_, 2, 1);
 
   // CI
-  label = new QLabel(tr("Variable confidence\ninterval"));
+  label = new QLabel(tr("Prediction interval"));
   quantLayout->addWidget(label, 2, 2);
   ciLabel_ = new QLabel();
   quantLayout->addWidget(ciLabel_, 2, 3);
