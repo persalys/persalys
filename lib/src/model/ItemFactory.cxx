@@ -40,6 +40,7 @@
 #endif
 #include "persalys/BaseTools.hxx"
 #include "persalys/StudyItem.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
 
 #include <openturns/PlatformInfo.hxx>
 
@@ -266,11 +267,20 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
   {
     action = new QAction(QIcon(":/images/designOfExperiment.png"), tr("Design of experiments"), this);
     action->setStatusTip(tr("Create a new design of experiments"));
-    connect(action, &QAction::triggered, [ = ]()
+    connect(action, &QAction::triggered, [this, model]()
     {
-      GridDesignOfExperiment analysis(availableAnalysisName(tr("design_")), model);
-      analysis.setBlockSize(GetNumberOfPhysicalCores());
-      emit wizardRequested(getParentStudyItem(), analysis);
+      if (model.hasStochasticInputs())
+      {
+        ProbabilisticDesignOfExperiment analysis{availableAnalysisName(tr("design_")), model};
+        analysis.setBlockSize(GetNumberOfPhysicalCores());
+        emit wizardRequested(getParentStudyItem(), analysis); // implicit conversion: Analysis(const AnalysisImplementation &)
+      }
+      else
+      {
+        GridDesignOfExperiment analysis(availableAnalysisName(tr("design_")), model);
+        analysis.setBlockSize(GetNumberOfPhysicalCores());
+        emit wizardRequested(getParentStudyItem(), analysis); // implicit conversion: Analysis(const AnalysisImplementation &)
+      }
     });
   }
 #ifdef PERSALYS_HAVE_OTMORRIS

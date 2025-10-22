@@ -50,10 +50,10 @@ protected:
   void buildInterface();
 
 private:
-  DesignOfExperimentIntroPage * introPage_ = nullptr;
-  GridDesignPage * gridPage_ = nullptr;
-  ProbabilisticDesignPage * probaPage_ = nullptr;
-  ImportedDesignPage * importPage_ = nullptr;
+  DesignOfExperimentIntroPage * introPage_  = nullptr;
+  GridDesignPage              * gridPage_   = nullptr;
+  ProbabilisticDesignPage     * probaPage_  = nullptr;
+  ImportedDesignPage          * importPage_ = nullptr;
 };
 }
 #endif

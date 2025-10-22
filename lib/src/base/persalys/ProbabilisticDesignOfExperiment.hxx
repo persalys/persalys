@@ -36,7 +36,7 @@ public:
   ProbabilisticDesignOfExperiment(const OT::String& name,
                                   const PhysicalModel& physicalModel,
                                   const OT::UnsignedInteger size = OT::ResourceMap::GetAsUnsignedInteger("WeightedExperiment-DefaultSize"),
-                                  const OT::String& designName = "LHS",
+                                  const OT::String& designName = "MONTE_CARLO",
                                   const OT::String& spaceFilling = "PhiP",
                                   const OT::UnsignedInteger mcLhsSize = 1000);
 

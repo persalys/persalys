@@ -230,7 +230,7 @@ private slots:
     // checks
 
     // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    const auto * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     QVERIFY2(buttonGroup->checkedId() == DesignOfExperimentIntroPage::Probabilistic, "Checked button must be Probabilistic");
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
 

@@ -66,12 +66,14 @@ DesignOfExperimentIntroPage::DesignOfExperimentIntroPage(QWidget* parent)
   registerField("deterministicButton", deterministicButton);
   registerField("probaButton", probaButton);
   registerField("importButton", importButton);
+
+  probaButton->setChecked(true);
 }
 
 
-void DesignOfExperimentIntroPage::initialize(const Analysis& analysis)
+void DesignOfExperimentIntroPage::initialize(const Analysis& analysis) const
 {
-  const DesignOfExperimentEvaluation * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
+  const auto * analysis_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
   if (!analysis_ptr)
     return;
 
@@ -79,17 +81,19 @@ void DesignOfExperimentIntroPage::initialize(const Analysis& analysis)
   {
     methodGroup_->button(DesignOfExperimentIntroPage::Probabilistic)->setToolTip(tr("The physical model has no stochastic inputs"));
     methodGroup_->button(DesignOfExperimentIntroPage::Probabilistic)->setEnabled(false);
+    methodGroup_->button(DesignOfExperimentIntroPage::Deterministic)->setChecked(true);
   }
 
-  // method
-  const String analysisName = analysis.getImplementation()->getClassName();
+  if (const auto * grid_doe = dynamic_cast<const GridDesignOfExperiment*>(analysis_ptr); grid_doe)
+  {
+    methodGroup_->button(DesignOfExperimentIntroPage::Deterministic)->setChecked(true);
+    return;
+  }
 
-  if (analysisName == "ProbabilisticDesignOfExperiment" && analysis_ptr->getPhysicalModel().hasStochasticInputs())
-    methodGroup_->button(DesignOfExperimentIntroPage::Probabilistic)->click();
-  else if (analysisName == "ImportedDesignOfExperiment")
-    methodGroup_->button(DesignOfExperimentIntroPage::Import)->click();
-  else
-    methodGroup_->button(DesignOfExperimentIntroPage::Deterministic)->click();
+  if (const auto * import_doe = dynamic_cast<const ImportedDesignOfExperiment*>(analysis_ptr); import_doe)
+  {
+    methodGroup_->button(DesignOfExperimentIntroPage::Import)->setChecked(true);
+  }
 }
 
 
