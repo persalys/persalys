@@ -31,10 +31,11 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList &distributions, const Description &variables, QWidget *parent)
+DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList &distributions, const Description &variables, QWidget *parent, bool isCopulaInference)
   : QWidget(parent)
   , variables_(variables)
   , distributions_(distributions)
+  , isCopulaInference_(isCopulaInference)
 {
   if (variables_.getSize() == 1)
     allDistributions_ = TranslationManager::GetTranslatedContinuousDistributions();
@@ -80,20 +81,14 @@ void DistributionsForInferenceWidget::buildInterface()
   tableView_->setModel(tableModel_);
   tableView_->selectRow(0);
 
-  // Add button
+  // buttons
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
+  buttonsLayout->addStretch();
 
-  auto* addAllForAllButton = new QPushButton(tr("Add all distributions to all variables"));
-  addAllForAllButton->setIcon(QIcon(":/images/list-add.png"));
-  addAllForAllButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  connect(addAllForAllButton, &QPushButton::clicked, this, 
-    &DistributionsForInferenceWidget::addAllDistributionsToAllVariablesRequested);  // signal received by InferenceWizard
-  buttonsLayout->addWidget(addAllForAllButton);
-
+  // add button
   addComboBox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
   addComboBox_->addItems(notUsedDistributions);
-  addComboBox_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-  buttonsLayout->addWidget(addComboBox_, 1); // stretch factor = 1
+  buttonsLayout->addWidget(addComboBox_);
 
   connect(addComboBox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
   connect(addComboBox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
@@ -101,9 +96,19 @@ void DistributionsForInferenceWidget::buildInterface()
   // Remove button
   QPushButton * removeButton = new QPushButton(tr("Remove"));
   removeButton->setIcon(QIcon(":/images/list-remove.png"));
-  removeButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   connect(removeButton, SIGNAL(pressed()), this, SLOT(removeSelectedDistribution()));
   buttonsLayout->addWidget(removeButton);
+
+  // Add all button
+  if(!isCopulaInference_)
+  {
+    auto* applySelectedForAllButton = new QPushButton(tr("Apply to all"));
+    applySelectedForAllButton->setIcon(QIcon(":/images/add-all"));
+    applySelectedForAllButton->setToolTip(tr("Replace the distribution for all variables by the distributions for the current variable"));
+    connect(applySelectedForAllButton, &QPushButton::clicked, this,
+      &DistributionsForInferenceWidget::applySelectedDistributionsToAllVariablesRequested);
+    buttonsLayout->addWidget(applySelectedForAllButton);
+  }
 
   mainLayout->addLayout(buttonsLayout);
 }

@@ -56,5 +56,6 @@
         <file>images/view-refresh.svg</file>
         <file>images/clean.png</file>
         <file>images/workbench32X32.png</file>
+        <file>images/add-all.png</file>
     </qresource>
 </RCC>

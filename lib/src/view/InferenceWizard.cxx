@@ -153,8 +153,8 @@ void InferenceWizard::buildInterface()
 
     DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, Description(1, varNames[i]), this);
     connect(distWidget, SIGNAL(distributionsListChanged(QStringList)), this, SLOT(updateDistListForVar(QStringList)));
-    connect(distWidget, &DistributionsForInferenceWidget::addAllDistributionsToAllVariablesRequested, 
-      this, &InferenceWizard::addAllDistributionsToAllVariables);
+    connect(distWidget, &DistributionsForInferenceWidget::applySelectedDistributionsToAllVariablesRequested,
+      this, &InferenceWizard::applyCurrentDistToAll);
 
     stackWidget_->addWidget(distWidget);
   }
@@ -312,18 +312,21 @@ void InferenceWizard::applyCurrentDistToAll()
 
   const Description varNames(inference_.getDesignOfExperiment().getSample().getDescription());
   FittingTest::DistributionFactoryCollection distCollection(distFactoriesForEachInterestVar_[currentVarName_]);
+
   for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
   {
-    if (interestVar_.contains(varNames[i]))
+    const String & varName = varNames[i];
+    if (interestVar_.contains(varName))
     {
-      distFactoriesForEachInterestVar_[interestVar_[i]] = distCollection;
+      distFactoriesForEachInterestVar_[varName] = distCollection;
+
       QStringList dist;
       for (UnsignedInteger j = 0; j < distCollection.getSize(); ++j)
       {
         String str = distCollection[j].getImplementation()->getClassName();
         dist << TranslationManager::GetTranslatedDistributionName(str.substr(0, str.find("Factory")));
       }
-      DistributionsForInferenceWidget * distWidget = static_cast<DistributionsForInferenceWidget *>(stackWidget_->widget(i));
+      auto * distWidget = static_cast<DistributionsForInferenceWidget *>(stackWidget_->widget(static_cast<int>(i)));
       distWidget->updateDistributions(dist);
     }
   }
