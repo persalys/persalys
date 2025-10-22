@@ -41,6 +41,7 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QDebug>
+#include <QTextEdit>
 
 using namespace OT;
 
@@ -49,10 +50,6 @@ namespace PERSALYS
 
 FunctionalChaosResultWindow::FunctionalChaosResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
-  , result_()
-  , hasValidSobolResult_(true)
-  , maxDegree_(0)
-  , sparse_(false)
   , errorMessage_(item->getAnalysis().getWarningMessage().c_str())
 {
   FunctionalChaosAnalysis * chaos(dynamic_cast<FunctionalChaosAnalysis*>(item->getAnalysis().getImplementation().get()));
@@ -79,7 +76,7 @@ inline bool varianceComparison(const std::pair<UnsignedInteger, Scalar> &a, cons
 
 void FunctionalChaosResultWindow::buildInterface()
 {
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  auto * widgetLayout = new QVBoxLayout(this);
 
   widgetLayout->addWidget(new TitleLabel(tr("Functional chaos"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#functionalchaosresult"));
 
@@ -87,23 +84,44 @@ void FunctionalChaosResultWindow::buildInterface()
   const UnsignedInteger nbOutputs = result_.getOutputSample().getDescription().getSize();
 
   // main splitter
-  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+  auto * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Outputs"));
-  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+  auto * outputsGroupBox = new QGroupBox(tr("Outputs"));
+  auto * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  VariablesListWidget * outputsListWidget = new VariablesListWidget;
+  auto * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputSample().getDescription()));
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
 
-  // - tab widget
-  QTabWidget * tabWidget = new QTabWidget;
+  auto * tabWidget = new QTabWidget;
 
-  // first tab : MOMENTS --------------------------------
+  addMomentsTab(tabWidget, outputsListWidget, nbOutputs);
+  addAdequationTab(tabWidget, outputsListWidget, nbOutputs);
+  if (result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
+    addSobolTab(tabWidget, outputsListWidget, nbOutputs);
+  if (result_.getValidations().size())
+    addValidationTab(tabWidget, outputsListWidget, nbOutputs);
+  if (!errorMessage_.isEmpty())
+    addErrorTab(tabWidget);
+  if (parametersWidget_)
+    tabWidget->addTab(parametersWidget_, tr("Parameters"));
+  if (modelDescriptionWidget_)
+    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
+
+  // set widgets
+  mainWidget->addWidget(tabWidget);
+  mainWidget->setStretchFactor(1, 10);
+  outputsListWidget->setCurrentRow(0);
+
+  widgetLayout->addWidget(mainWidget, 1);
+}
+
+void FunctionalChaosResultWindow::addMomentsTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs)
+{
   if (result_.getMean().getSize() == nbOutputs && result_.getVariance().getSize() == nbOutputs && result_.getMeanSquaredError().getSize() == nbOutputs)
   {
     QScrollArea * scrollArea = new QScrollArea;
@@ -280,13 +298,6 @@ void FunctionalChaosResultWindow::buildInterface()
 
     summaryWidgetLayout->setRowStretch(3, 1);
 
-    if (!hasValidSobolResult_)
-    {
-      TemporaryLabel * errorLabel = new TemporaryLabel;
-      errorLabel->setErrorMessage(tr("The data distribution has not an independent copula, the results could be false."));
-      summaryWidgetLayout->addWidget(errorLabel);
-    }
-
     scrollArea->setWidget(summaryWidget);
     tabWidget->addTab(scrollArea, tr("Results"));
   }
@@ -303,8 +314,10 @@ void FunctionalChaosResultWindow::buildInterface()
       tabWidget->addTab(summaryWidget, tr("Results"));
     }
   }
+}
 
-  // second tab : adequation graph --------------------------------
+void FunctionalChaosResultWindow::addAdequationTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs)
+{
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
 
@@ -321,124 +334,114 @@ void FunctionalChaosResultWindow::buildInterface()
   tabLayout->addWidget(plotsStackedWidget);
 
   tabWidget->addTab(plotsStackedWidget, tr("Adequation"));
-
-  // third tab : SOBOL INDICES --------------------------------
-  if (result_.getSobolResult().getOutputNames().getSize() == nbOutputs)
-  {
-    QScrollArea * sobolScrollArea = new QScrollArea;
-    sobolScrollArea->setWidgetResizable(true);
-    QWidget * widget = new QWidget;
-    QVBoxLayout * vbox = new QVBoxLayout(widget);
-    ResizableStackedWidget * sobolStackedWidget = new ResizableStackedWidget;
-    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
-    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
-    {
-      SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
-          Interval(),
-          result_.getSobolResult().getTotalIndices()[i],
-          Interval(),
-          result_.getSobolResult().getInputNames(),
-          result_.getSobolResult().getOutputNames()[i],
-          SensitivityResultWidget::Sobol,
-          this);
-      sobolStackedWidget->addWidget(sobolResultWidget);
-    }
-    vbox->addWidget(sobolStackedWidget);
-    if (!hasValidSobolResult_)
-    {
-      vbox->addStretch();
-      TemporaryLabel * errorLabel = new TemporaryLabel;
-      errorLabel->setErrorMessage(tr("The data distribution has not an independent copula, the Sobol indices could be false."));
-      vbox->addWidget(errorLabel);
-    }
-    sobolScrollArea->setWidget(widget);
-    tabWidget->addTab(sobolScrollArea, tr("Sobol indices"));
-  }
-
-  // fourth tab : VALIDATION --------------------------------
-  if (result_.getValidations().size())
-  {
-    QTabWidget * validationTabWidget = new QTabWidget;
-
-    for (UnsignedInteger i = 0; i < result_.getValidations().size(); ++i)
-    {
-      tab = new QWidget;
-      tabLayout = new QVBoxLayout(tab);
-
-      ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
-      connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
-
-      // retrieve the output sample
-      Sample outputSample(result_.getOutputSample());
-      if (result_.getValidations()[i].getName() == "Test sample")
-      {
-        // search seed: we know the index of the seed but this method is more robust
-        UnsignedInteger seed = 0;
-        bool parameterFound = false;
-        for (UnsignedInteger j = 0; j < result_.getValidations()[i].getParameters().getSize(); ++j)
-        {
-          if (result_.getValidations()[i].getParameters().getDescription()[j] == "Seed")
-          {
-            seed = result_.getValidations()[i].getParameters()[j];
-            parameterFound = true;
-          }
-        }
-        Q_ASSERT(parameterFound);
-        RandomGenerator::SetSeed(seed);
-        const UnsignedInteger testSampleSize = result_.getValidations()[i].getMetaModelOutputSample().getSize();
-        Point indicesTestSample(KPermutationsDistribution(testSampleSize, outputSample.getSize()).getRealization());
-        outputSample = Sample(testSampleSize, nbOutputs);
-        outputSample.setDescription(result_.getOutputSample().getDescription());
-        std::sort(indicesTestSample.begin(), indicesTestSample.end());
-
-        for (UnsignedInteger j = 0; j < testSampleSize; ++j)
-        {
-          outputSample[j] = result_.getOutputSample()[indicesTestSample[j]];
-        }
-      }
-      // validation widget
-      for (UnsignedInteger j = 0; j < nbOutputs; ++j)
-      {
-        MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
-            outputSample,
-            j,
-            tr("Q2 LOO"),
-            this);
-        plotStackedWidget->addWidget(validationWidget);
-      }
-      tabLayout->addWidget(plotStackedWidget);
-
-      validationTabWidget->addTab(plotStackedWidget, TranslationManager::GetTranslatedParameterName(result_.getValidations()[i].getName()));
-    }
-
-    tabWidget->addTab(validationTabWidget, tr("Validation"));
-  }
-
-  // tab : ERRORS --------------------------------
-  if (!errorMessage_.isEmpty())
-  {
-    QWidget * indicesWidget = new QWidget;
-    QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
-    TemporaryLabel * errorLabel = new TemporaryLabel;
-    errorLabel->setErrorMessage(errorMessage_);
-    indicesWidgetLayout->addWidget(errorLabel);
-    indicesWidgetLayout->addStretch();
-    tabWidget->addTab(indicesWidget, tr("Error"));
-  }
-
-  // tab : PARAMETERS --------------------------------
-  if (parametersWidget_)
-    tabWidget->addTab(parametersWidget_, tr("Parameters"));
-
-  // tab : model description --------------------------------
-  if (modelDescriptionWidget_)
-    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
-
-  // set widgets
-  mainWidget->addWidget(tabWidget);
-  mainWidget->setStretchFactor(1, 10);
-  outputsListWidget->setCurrentRow(0);
-
-  widgetLayout->addWidget(mainWidget, 1);
 }
+
+void FunctionalChaosResultWindow::addSobolTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs)
+{
+  QScrollArea * sobolScrollArea = new QScrollArea;
+  sobolScrollArea->setWidgetResizable(true);
+  QWidget * widget = new QWidget;
+  QVBoxLayout * vbox = new QVBoxLayout(widget);
+  ResizableStackedWidget * sobolStackedWidget = new ResizableStackedWidget;
+  connect(outputsListWidget, SIGNAL(currentRowChanged(int)), sobolStackedWidget, SLOT(setCurrentIndex(int)));
+
+  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+  {
+    SensitivityResultWidget * sobolResultWidget = new SensitivityResultWidget(result_.getSobolResult().getFirstOrderIndices()[i],
+        Interval(),
+        result_.getSobolResult().getTotalIndices()[i],
+        Interval(),
+        result_.getSobolResult().getInputNames(),
+        result_.getSobolResult().getOutputNames()[i],
+        SensitivityResultWidget::Sobol,
+        this);
+    sobolStackedWidget->addWidget(sobolResultWidget);
+  }
+  vbox->addWidget(sobolStackedWidget);
+
+  if (!hasValidSobolResult_)
+  {
+    QString message{tr("The data distribution does not have an independent copula, be careful with your interpreation of the Sobol' indices")};
+    auto warningTextEdit = new QTextEdit();
+    warningTextEdit->setPlainText(message);
+    warningTextEdit->setReadOnly(true);
+    warningTextEdit->setStyleSheet("QTextEdit { color : orange; font-weight: bold; background-color: transparent; border: 1px solid orange; }");
+    warningTextEdit->setFixedHeight(45);
+    vbox->addWidget(warningTextEdit);
+  }
+
+  sobolScrollArea->setWidget(widget);
+  tabWidget->addTab(sobolScrollArea, tr("Sobol indices"));
+}
+
+void FunctionalChaosResultWindow::addValidationTab(QTabWidget * tabWidget, const VariablesListWidget * outputsListWidget, const OT::UnsignedInteger nbOutputs)
+{
+  QTabWidget * validationTabWidget = new QTabWidget;
+
+  for (UnsignedInteger i = 0; i < result_.getValidations().size(); ++i)
+  {
+    QWidget * tab = new QWidget;
+    QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+
+    ResizableStackedWidget * plotStackedWidget = new ResizableStackedWidget;
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), plotStackedWidget, SLOT(setCurrentIndex(int)));
+
+    // retrieve the output sample
+    Sample outputSample(result_.getOutputSample());
+    if (result_.getValidations()[i].getName() == "Test sample")
+    {
+      // search seed: we know the index of the seed but this method is more robust
+      UnsignedInteger seed = 0;
+      bool parameterFound = false;
+      for (UnsignedInteger j = 0; j < result_.getValidations()[i].getParameters().getSize(); ++j)
+      {
+        if (result_.getValidations()[i].getParameters().getDescription()[j] == "Seed")
+        {
+          seed = result_.getValidations()[i].getParameters()[j];
+          parameterFound = true;
+        }
+      }
+      Q_ASSERT(parameterFound);
+      RandomGenerator::SetSeed(seed);
+      const UnsignedInteger testSampleSize = result_.getValidations()[i].getMetaModelOutputSample().getSize();
+      Point indicesTestSample(KPermutationsDistribution(testSampleSize, outputSample.getSize()).getRealization());
+      outputSample = Sample(testSampleSize, nbOutputs);
+      outputSample.setDescription(result_.getOutputSample().getDescription());
+      std::sort(indicesTestSample.begin(), indicesTestSample.end());
+
+      for (UnsignedInteger j = 0; j < testSampleSize; ++j)
+      {
+        outputSample[j] = result_.getOutputSample()[indicesTestSample[j]];
+      }
+    }
+    // validation widget
+    for (UnsignedInteger j = 0; j < nbOutputs; ++j)
+    {
+      MetaModelValidationWidget * validationWidget = new MetaModelValidationWidget(result_.getValidations()[i],
+          outputSample,
+          j,
+          tr("Q2 LOO"),
+          this);
+      plotStackedWidget->addWidget(validationWidget);
+    }
+    tabLayout->addWidget(plotStackedWidget);
+
+    validationTabWidget->addTab(plotStackedWidget, TranslationManager::GetTranslatedParameterName(result_.getValidations()[i].getName()));
+  }
+
+  tabWidget->addTab(validationTabWidget, tr("Validation"));
+}
+
+void FunctionalChaosResultWindow::addErrorTab(QTabWidget * tabWidget) const
+{
+  QWidget * indicesWidget = new QWidget;
+  QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
+  TemporaryLabel * errorLabel = new TemporaryLabel;
+  errorLabel->setErrorMessage(errorMessage_);
+  indicesWidgetLayout->addWidget(errorLabel);
+  indicesWidgetLayout->addStretch();
+  tabWidget->addTab(indicesWidget, tr("Error"));
+}
+
+
 }
