@@ -65,20 +65,48 @@ void CustomStandardItemModel::setNotEditableHeaderItem(const int row, const int 
 }
 
 
+void CustomStandardItemModel::setIncludeHeadersInExport(const bool enable)
+{
+  includeHeadersInExport_ = enable;
+}
+
+
 QString CustomStandardItemModel::getFormattedText() const
 {
   QString result;
+  const int cols = columnCount();
+  const int rows = rowCount();
 
-  for (int i = 0; i < rowCount(); ++i)
+  auto appendLine = [&result](const QStringList &cells)
   {
-    for (int j = 0; j < columnCount(); ++j)
+    result.append(cells.join(","));
+    result.append('\n');
+  };
+
+  if (includeHeadersInExport_ && cols > 0)
+  {
+    QStringList headerCells;
+    headerCells << QString();
+    for (int j = 0; j < cols; ++j)
+      headerCells << headerData(j, Qt::Horizontal).toString();
+    appendLine(headerCells);
+  }
+
+  for (int i = 0; i < rows; ++i)
+  {
+    QStringList cells;
+    if (includeHeadersInExport_)
+      cells << headerData(i, Qt::Vertical).toString();
+
+    for (int j = 0; j < cols; ++j)
     {
-      if (data(index(i, j), Qt::UserRole + 10).isNull())
-        result.append(data(index(i, j)).toString().simplified()); // simplified() = rm '\t', '\n', '\v', '\f', '\r', ' '
+      const QVariant numericValue = data(index(i, j), Qt::UserRole + 10);
+      if (numericValue.isNull())
+        cells << data(index(i, j)).toString().simplified();
       else
-        result.append(QString::number(data(index(i, j), Qt::UserRole + 10).toDouble(), 'g', StudyTreeViewModel::DefaultSignificantDigits));
-      result.append(j < columnCount() - 1 ? ',' : '\n');
+        cells << QString::number(numericValue.toDouble(), 'g', StudyTreeViewModel::DefaultSignificantDigits);
     }
+    appendLine(cells);
   }
   return result;
 }

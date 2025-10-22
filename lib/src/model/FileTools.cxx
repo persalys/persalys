@@ -108,7 +108,7 @@ void FileTools::ExportData(const OT::Sample& sample, QWidget * parent)
   layout->addWidget(boxPrec, row, 1);
 
   // Disable comma as numSep if already set as colSep
-  QStandardItemModel *model = qobject_cast<QStandardItemModel *>(boxNumSep->model());
+  const QStandardItemModel *model = qobject_cast<QStandardItemModel *>(boxNumSep->model());
   Q_ASSERT(model != nullptr);
 
   QStandardItem *commaItem = model->item(1);
@@ -183,7 +183,7 @@ void FileTools::ExportImage(const QImage& image, QWidget * parent)
   QString fileName = QFileDialog::getSaveFileName(parent,
                      tr("Export image"),
                      GetCurrentDir() + QDir::separator() + tr("image"),
-                     tr("Images (*.bmp *.jpg *.jpeg *.png *.ppm *.xbm *.xpm *.tiff)"));
+                     tr("Images (*.png *.bmp *.jpg *.jpeg *.ppm *.xbm *.xpm *.tiff)"));
 
   if (!fileName.isEmpty())
   {

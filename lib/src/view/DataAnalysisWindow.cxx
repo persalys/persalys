@@ -518,6 +518,7 @@ void DataAnalysisWindow::addDependenceTab()
   QStringList headers(QtOT::DescriptionToStringList(sample.getDescription()));
   tableModel->setHorizontalHeaderLabels(headers);
   tableModel->setVerticalHeaderLabels(headers);
+  tableModel->setIncludeHeadersInExport(true);
 
   tableView->setModel(tableModel);
   tableView->resizeColumnsToContents();
