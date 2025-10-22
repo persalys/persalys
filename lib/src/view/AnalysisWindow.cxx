@@ -179,6 +179,7 @@ void AnalysisWindow::launchAnalysis()
 
   // enable stop buttons
   stopButton_->setEnabled(true);
+  runButton_->setEnabled(false);
   detachButton_->setEnabled(analysisItem_->getAnalysis().canBeDetached());
 
   // start indefinite/busy progress bar
