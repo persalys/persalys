@@ -58,7 +58,14 @@ ott.assert_almost_equal(sobolResult.getFirstOrderIndices(), fo_ref, 1e-3, 1e-3)
 ott.assert_almost_equal(sobolResult.getTotalIndices(), to_ref, 1e-3, 1e-3)
 
 # Chaos 2 ##
-analysis2 = persalys.FunctionalChaosAnalysis("chaos_1", aDesign)
+R = ot.CorrelationMatrix(2, [1, 0.5, 0.5, 1])
+model.setCopula(["xi1", "xi2"], ot.NormalCopula(R))
+
+design2 = persalys.ProbabilisticDesignOfExperiment("design2", model, 200, "MONTE_CARLO")
+myStudy.add(design2)
+design2.run()
+
+analysis2 = persalys.FunctionalChaosAnalysis("chaos_1", design2)
 analysis2.setChaosDegree(4)
 analysis2.setAnalyticalValidation(True)
 analysis2.setTestSampleValidation(True)
@@ -78,16 +85,17 @@ sobolResult2 = chaosResult2.getSobolResult()
 print("result=", chaosResult2)
 print("functionalChaosResult", chaosResult2.getFunctionalChaosResult())
 
-ott.assert_almost_equal(chaosResult2.getAnalyticalValidation().getQ2(), [0.942161])
-ott.assert_almost_equal(chaosResult2.getTestSampleValidation().getQ2(), [0.926247])
-ott.assert_almost_equal(chaosResult2.getKFoldValidation().getQ2(), [0.923696])
+ott.assert_almost_equal(chaosResult2.getAnalyticalValidation().getQ2(), [0.609145])
+ott.assert_almost_equal(chaosResult2.getTestSampleValidation().getQ2(), [0.595006])
+ott.assert_almost_equal(chaosResult2.getKFoldValidation().getQ2(), [0.601799])
 
 # extract metamodel
 metamodel = chaosResult2.getMetaModel()
 ott.assert_almost_equal(metamodel.getFunction().getInputDimension(), 2)
 ott.assert_almost_equal(metamodel.getFunction().getOutputDimension(), 1)
-ott.assert_almost_equal(metamodel.getFunction()([0.5] * 2), [2.11503])
-
+ott.assert_almost_equal(metamodel.getFunction()([0.5] * 2), [2.23523])
+ott.assert_almost_equal(metamodel.getInputByName("xi1").getDistribution(), ot.Uniform(0., 10.))
+assert model.getCopula() == ot.BlockIndependentCopula([ot.NormalCopula(ot.CorrelationMatrix(2, [1, 0.5, 0.5, 1]))])
 
 # script
 script = myStudy.getPythonScript()

@@ -337,6 +337,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
       metaModel.setDistribution(inputName, marginal);
       metaModel.getInputByName(inputName).setValue(marginal.getMean().at(0));
     }
+    metaModel.setCopula(inputsNames, distribution_.getCopula());
   }
 
   // copula
