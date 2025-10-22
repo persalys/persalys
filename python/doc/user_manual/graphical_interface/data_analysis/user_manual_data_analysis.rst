@@ -701,6 +701,30 @@ The results window gathers:
 
 - The **Parameters** tab summarizes the parameters of the metamodel creation.
 
+5-3 Export
+''''''''''
+
+5-3-1 Export as a physical model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can export the metamodel as a physical model to perform analyses on it as with any physical model. 
+To do so, right-click on the metamodel analysis and select **Convert metamodel into physical model**. 
+If the metamodel is based on a physical model, the probabilistic model of the inputs is exported with the metamodel. 
+If the metamodel is a functional chaos metamodel built from a data model, the probabilistic model inferred during the analysis is exported as well. 
+
+.. image:: /user_manual/graphical_interface/data_analysis/convert_into_physical_model.png
+  :align: center
+
+5-3-2 Export as a python model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The metamodel can also be embedded inside a Python model to add a pre- or post-processing step. 
+To do this, right-click on the metamodel analysis and select **Convert metamodel into python model**.
+
+.. image:: /user_manual/graphical_interface/data_analysis/convert_into_python_model.png
+  :align: center
+
+
 6- Quantile estimation
 ======================
 
