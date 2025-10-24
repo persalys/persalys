@@ -20,8 +20,6 @@
  */
 #include "persalys/DataSample.hxx"
 
-#include <openturns/SpecFunc.hxx>
-
 using namespace OT;
 
 namespace PERSALYS
@@ -210,7 +208,7 @@ bool DataSample::isValid() const
   {
     for (UnsignedInteger j = 0; j < sample_.getDimension(); ++j)
     {
-      if (!SpecFunc::IsNormal(sample_(i, j)))
+      if (!std::isfinite(sample_(i, j)))
       {
         return false;
       }

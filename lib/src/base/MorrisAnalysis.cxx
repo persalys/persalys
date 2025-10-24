@@ -21,7 +21,6 @@
 #include "persalys/MorrisAnalysis.hxx"
 
 #include <openturns/RandomGenerator.hxx>
-#include <openturns/SpecFunc.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 #include <algorithm>

@@ -140,7 +140,7 @@ namespace PERSALYS
     // Check data does not contain invalid values
     for (UnsignedInteger i=0; i<sample.getSize(); ++i)
       for (UnsignedInteger j = 0; j < sample.getDimension(); ++j)
-        if (!SpecFunc::IsNormal(sample(i, j)))
+        if (!std::isfinite(sample(i, j)))
           return false;
 
     // Ensure mesh and data compatibility

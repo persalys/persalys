@@ -24,7 +24,6 @@
 #include "persalys/DataAnalysis.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/SpecFunc.hxx>
 #include <openturns/BatchFailedException.hxx>
 #include <openturns/MemoizeEvaluation.hxx>
 #include <openturns/MarginalEvaluation.hxx>
@@ -222,7 +221,7 @@ void DesignOfExperimentEvaluation::launch()
   {
     for (UnsignedInteger j = 0; j < outputSample.getDimension(); ++j)
     {
-      if (!SpecFunc::IsNormal(outputSample(i, j)))
+      if (!std::isfinite(outputSample(i, j)))
       {
         failedIndices.add(i);
         failedInputSample_.add(getOriginalInputSample()[i]);

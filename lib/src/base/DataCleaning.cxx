@@ -20,8 +20,6 @@
  */
 #include "persalys/DataCleaning.hxx"
 
-#include <openturns/SpecFunc.hxx>
-
 using namespace OT;
 
 namespace PERSALYS
@@ -52,7 +50,7 @@ void DataCleaning::removeAllNans()
     Bool nanFound = false;
     for(UnsignedInteger j = 0; j < sample_.getDimension(); ++j)
     {
-      if(!SpecFunc::IsNormal(sample_(i, j)))
+      if(!std::isfinite(sample_(i, j)))
       {
         nanFound = true;
         break;
@@ -73,7 +71,7 @@ void DataCleaning::replaceAllNans(const Point& point)
   {
     for(UnsignedInteger j = 0; j < sample_.getDimension(); ++j)
     {
-      if(!SpecFunc::IsNormal(sample_(i, j)))
+      if(!std::isfinite(sample_(i, j)))
       {
         sample_(i, j) = point[j];
       }
@@ -89,7 +87,7 @@ void DataCleaning::removeNansByColumn(const UnsignedInteger col)
   Sample sample(0, sample_.getDimension());
   for(UnsignedInteger i = 0; i < sample_.getSize(); ++i)
   {
-    if(SpecFunc::IsNormal(sample_(i, col)))
+    if(std::isfinite(sample_(i, col)))
     {
       sample.add(sample_[i]);
     }
@@ -104,7 +102,7 @@ void DataCleaning::replaceNansByColumn(const UnsignedInteger col, const OT::Scal
     return;
   for(UnsignedInteger i = 0; i < sample_.getSize(); ++i)
   {
-    if(!SpecFunc::IsNormal(sample_(i, col)))
+    if(!std::isfinite(sample_(i, col)))
     {
       sample_(i, col) = val;
     }
@@ -141,7 +139,7 @@ void DataCleaning::analyseSample()
     Sample cleanedSample(0, 1);
     for(UnsignedInteger i = 0; i < sample.getSize(); ++i)
     {
-      if(!SpecFunc::IsNormal(sample(i, 0)))
+      if(!std::isfinite(sample(i, 0)))
       {
         nanFounds_[j]++;
       }

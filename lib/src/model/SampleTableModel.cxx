@@ -154,8 +154,8 @@ QVariant SampleTableModel::data(const QModelIndex & index, int role) const
 
   else if (role == Qt::BackgroundRole)
   {
-    if ((hasRowIDcolumn_ && index.column() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))) ||
-        (!hasRowIDcolumn_ && index.row() != 0 && !SpecFunc::IsNormal(data_(dataRowIndex, dataColIndex))))
+    if ((hasRowIDcolumn_ && index.column() != 0 && !std::isfinite(data_(dataRowIndex, dataColIndex))) ||
+        (!hasRowIDcolumn_ && index.row() != 0 && !std::isfinite(data_(dataRowIndex, dataColIndex))))
       return QColor(Qt::red);
   }
 
