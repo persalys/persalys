@@ -312,7 +312,8 @@ automatically selected in the other tabs.
         :align: center
 
 - The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
-  of the variables. They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
+  of the variables.
+  They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
 
   - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:
@@ -552,7 +553,7 @@ In the third window (**Morris Parameters**), the user can set up:
 3-2 Launch
 ''''''''''''''
 
-When the « Screening analysis » window is validated, a new element appears in
+When the **Screening analysis** window is validated, a new element appears in
 the study tree, below **Screening**.
 
 Its context menu has the following actions:
@@ -784,7 +785,7 @@ In the third window set up:
 4-2 Launch
 ''''''''''
 
-When the « Optimization » window is validated, a new element appears in the study tree, below
+When the **Optimization** window is validated, a new element appears in the study tree, below
 **Optimization**.
 
 Its context menu has the following actions:
@@ -930,7 +931,7 @@ In the fifth and last window, the user can specify the evolutive algorithm param
 5-2 Launch
 ''''''''''
 
-When the « Multi-objective optimization » window is validated, a new element appears in the study tree, below
+When the **Multi-objective optimization** window is validated, a new element appears in the study tree, below
 **Multi-objective optimization**.
 
 Its context menu has the following actions:
@@ -1116,7 +1117,7 @@ In the last window set up:
 7-2 Launch
 ''''''''''
 
-When the « Calibration » window is validated, a new element appears in the study tree, below
+When the **Calibration** window is validated, a new element appears in the study tree, below
 the observations item.
 
 Its context menu has the following actions:
@@ -1151,7 +1152,7 @@ when the user selects points on one of these representations, the same points ar
 
 The results window gathers the following tabs:
 
-- The **θ** tab includes:
+- The **Theta** tab includes:
     - The **Optimal** tab which displays:
          - The optimal point and its confidence interval
          - The observations error standard deviation, which is, for gaussian cases an hypothesis (see `example <https://openturns.github.io/openturns/latest/auto_calibration/least_squares_and_gaussian_calibration/plot_calibration_chaboche.html#sphx-glr-auto-calibration-least-squares-and-gaussian-calibration-plot-calibration-chaboche-py>`_)

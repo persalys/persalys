@@ -402,7 +402,7 @@ Rename Study
   - the item is renamed
 
 - left-click select Study_3, press F2, rename Study_3 as myOTStudy3, press enter
-  
+
 - rename Study_0 as myOTStudy. A pop-up opens to inform you the name is already taken. Close the pop-up. The name stays Study_0
 
 Save/open Study
@@ -411,7 +411,9 @@ Save/open Study
 
 - save myOTStudy with Menu->File->save, close with Menu->File->close, reopen with Menu->File->open
 
-- right click on myOTStudy, choose Rename, rename myOTStudy by myOTStudy1, save myOTStudy1 with the icon of the tool bar, close with right click + close, reopen with the icon of the tool bar
+- right click on myOTStudy, choose Rename, rename myOTStudy by myOTStudy1,
+  save myOTStudy1 with the icon of the tool bar, close with right click + close,
+  reopen with the icon of the tool bar
 
 - rename myOTStudy1 by myOTStudy2, save myOTStudy2 in pressing CTRL + S, close with right click + close, reopen with press keys CTRL + O
 
@@ -1084,8 +1086,8 @@ Deterministic analyses
           :align: center
 
       - left side: 1 variable in the list view
-      - right side, tabs: θ - Prediction - Parameters - Model
-      - θ tab: 2 tabs: Optimal - PDF
+      - right side, tabs: theta - Prediction - Parameters - Model
+      - theta tab: 2 tabs: Optimal - PDF
       - Prediction tab: 5 tabs: Table - vs Observations - vs Inputs - Residuals - Residuals QQ-plot
           - check the 3 first tabs with Paraview graphs are linked (do several selections in a tab and check the selection is the same in the others tabs)
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
@@ -1714,7 +1716,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/kriging_wizard_2nd_page.png
           :align: center
 
-      - covariance model: Matérn
+      - covariance model: Matern
       - nu: 1.5
       - trend: Linear
       - optimize covariance model parameters: checked
@@ -1801,7 +1803,7 @@ Probabilistic analyses
 
       .. image:: /developer_manual/validation/metamodel_export_wizard.png
           :align: center
-    
+
     - right click on the kriging item: choose 'Convert metamodel into python model'
 
       - a new item named 'Python_kriging' appears in the tree view
@@ -2132,8 +2134,8 @@ Field analyses
       - right side, tabs: Result - Input - Decomposition - Correlation - Parameters - Model
       - Result tab, tabs: Trajectories - Mean trajectory - Functional bag chart - Bag chart - Table
       - Input tab, tabs: Table - Plot matrix
-      - Decomposition tab, tabs: Modes - Eigenvalues - ξi
-      - ξi tab, tabs: PDF - Plot matrix
+      - Decomposition tab, tabs: Modes - Eigenvalues - xi
+      - xi tab, tabs: PDF - Plot matrix
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check the tabs (Trajectories - Functional bag chart - Bag chart - Table) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
@@ -2188,7 +2190,7 @@ Field analyses
 
       - Check that the slection is syncrhonized betwwen the sub-tabs
 
-    - Decomposition has 3 sub-tabs: Modes, Eigenvalues, ξi (with 2 sub-sub-tabs: PDF, Plot matrix)
+    - Decomposition has 3 sub-tabs: Modes, Eigenvalues, xi (with 2 sub-sub-tabs: PDF, Plot matrix)
 
       - Check the eigenvalues tab table values:
 
@@ -2333,7 +2335,8 @@ Data field model
 
 - click on 'Data field model' button of the window of myOTStudy
     - the item DataFieldModel_0 appears in the tree view (with 2 items: Definition and Mesh)
-    - click on 'DataFieldModel_0': a new Data field model diagram window appears in the midArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+    - click on 'DataFieldModel_0': a new Data field model diagram window appears in the midArea,
+      check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled, click it
     - 'Definition' gets the focus
     - click on the '...' button, import the file elNino.csv

@@ -80,7 +80,9 @@ Details on implementing a new type of object
 
 - Pull request ``!523`` shows the implementation of a new type of object intended to be used in a study, along with its associated analysis and results
 - Start by implementing ``Object`` and ``ObjectImplementation`` classes
-- A new type of object ``Object`` must belong to either one of the existing or a new ``Collection`` as ``StudyImplementation`` attributes, along with the appropriate ``StudyImplementation`` methods (``getObjects``, ``getObjectByName``, ``hasObjectNamed``, ``getAvailableObjectName``, ``add``, ``remove``)
+- A new type of object ``Object`` must belong to either one of the existing or a new ``Collection`` as ``StudyImplementation`` attributes,
+  along with the appropriate ``StudyImplementation`` methods
+  (``getObjects``, ``getObjectByName``, ``hasObjectNamed``, ``getAvailableObjectName``, ``add``, ``remove``)
 
 - Implement in ``src/model``
 
@@ -97,7 +99,8 @@ Details on implementing a new type of object
   - ``ObjectDiagramWindow`` : dedicated ``Object`` diagram window
   - ``ObjectWindow`` : dedicated ``Object`` window for ``Object`` definition
 
-- Add a case in ``WindowFactory::GetWindow``, based on the ``src/model/ObjectItem`` to allow the instantiation of the two ``ObjectWindow`` and ``ObjectDiagramWindow``
+- Add a case in ``WindowFactory::GetWindow``, based on the ``src/model/ObjectItem``
+  to allow the instantiation of the two ``ObjectWindow`` and ``ObjectDiagramWindow``
 
 Implementing a new type of analysis
 -----------------------------------
@@ -110,3 +113,4 @@ Implementing a new type of analysis
 - Edit ``ItemFactory::createAction`` in ``src/model/ItemFactory.cxx``
 - Create action in ``src/model/{ModelType}DiagramItem.cxx``
 - Add user documentation
+

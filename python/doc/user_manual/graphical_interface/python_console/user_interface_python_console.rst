@@ -2,7 +2,10 @@
 User manual - Get started with the Python console
 =================================================
 
-In this section, you will learn how to use the Python console to manipulate Persalys objects. The Python API documentation can be found here: :ref:`user-manual-python-interface`. If the Python console is not open in Persalys, you can open it from the Tools menu. The prerequisites for this section are that you are already familiar with Persalys and have basic Python knowledge.
+In this section, you will learn how to use the Python console to manipulate Persalys objects.
+The Python API documentation can be found here: :ref:`user-manual-python-interface`.
+If the Python console is not open in Persalys, you can open it from the Tools menu.
+The prerequisites for this section are that you are already familiar with Persalys and have basic Python knowledge.
 
 1- Walkthrough example
 ======================
@@ -15,7 +18,8 @@ First, import the Persalys Python package.
 
     import persalys
 
-Let's start by opening Persalys and clicking on the New Study button. A study named Study_0 is created. You can use the static GetInstanceByName method from the :py:class:`persalys.Study` to access it:
+Let's start by opening Persalys and clicking on the New Study button. A study named Study_0 is created.
+You can use the static GetInstanceByName method from the :py:class:`persalys.Study` to access it:
 
 .. code::
 
@@ -38,7 +42,8 @@ Remove study_1:
 
     persalys.Study.Remove(study_1)
 
-Add a Symbolic model to the remaining study and create a definition with one or more input variables and at least one output via the GUI. You can access the model in Python with:
+Add a Symbolic model to the remaining study and create a definition with one or more input variables and at least one output via the GUI.
+You can access the model in Python with:
 
 .. code::
 
@@ -74,4 +79,5 @@ You can check the result with:
 .. image:: /user_manual/graphical_interface/python_console/step_4.png
     :align: center
 
-Now that we have covered the basic usage of the Python console, with the help of the Python interface documentation you should be able to manipulate every Persalys object in Python.
+Now that we have covered the basic usage of the Python console,
+with the help of the Python interface documentation you should be able to manipulate every Persalys object in Python.

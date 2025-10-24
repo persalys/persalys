@@ -101,8 +101,8 @@ distribution.
 On the left, choose among the proposed distributions, the one fitting the best the current
 distribution (**Distributions** table). The **BIC**, **p-value** and the **Acceptation** columns
 give indications on the distributions for which the inference analysis worked well
-(high p-value, “yes” status)
-or not (low p-value, “no”/”failed” status). The distributions whose inference analysis failed
+(high p-value, **yes** status)
+or not (low p-value, **no**/**failed** status). The distributions whose inference analysis failed
 are given for information:
 it is not possible to select them and validate the window.
 
@@ -179,7 +179,7 @@ Here the user can generate the inferred distribution, from an existing inference
   - Select the result for a group of variables (**Group of variables** combo box)
   - The table below shows the list of copulas.
     The **Bayesian Information Criterion** is provided to inform about how well
-    the inference analysis performed: if it failed (indicated by ‘-‘),
+    the inference analysis performed: if it failed (indicated by **-**),
     the copula is kept listed for information but it is not possible to
     validate the window.
     Select a copula among the list: the current copula PDF, Kendall plot and parameters
@@ -454,7 +454,9 @@ The **Monte Carlo parameters** window allows one to define:
         :math:`CV = \frac{\sigma / \sqrt{n}}{\lvert \mu \rvert}` with :math:`n`: the number of simulations,
         :math:`\mu`: the mean, :math:`\sigma`: the standard deviation), (default: 0.01,
         expected: a floating point or an integer, in the interval :math:`\left[0;1 \right]`)
-      - the maximum confidence interval length (:math:`CIL = 2 \times \frac{\sigma}{\sqrt{n}} \times Q_{Normal} \left( \frac{1+IC_{level}}{2} \right)` with :math:`n`: the number of simulations and :math:`Q_{Normal}` the quantile of the normal distribution, the level can be set in **Advanced Parameters**)
+      - the maximum confidence interval length (:math:`CIL = 2 \times \frac{\sigma}{\sqrt{n}} \times Q_{Normal} \left( \frac{1+IC_{level}}{2} \right)`
+        with :math:`n`: the number of simulations and :math:`Q_{Normal}` the quantile of the normal distribution,
+        the level can be set in **Advanced Parameters**)
       - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
       - the maximum sampling size (default: 10000, expected: integer)
   - **Evaluation parameter**:
@@ -531,7 +533,8 @@ The results window gathers the following tabs:
       :align: center
 
 - The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
-  of the variables. They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
+  of the variables.
+  They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
 
     - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
     - Graph interactivity:

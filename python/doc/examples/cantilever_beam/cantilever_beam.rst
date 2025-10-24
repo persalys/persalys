@@ -1,7 +1,7 @@
 Deviation of a cantilever beam
 ------------------------------
 
-This example has been presented in the ESREL 2007 conference in the paper [Dutfoy2009]_.
+This example has been presented in the ESREL 2007 conference in the paper [dutfoy2009]_.
 It is described in the OpenTURNS examples.
 
 This example is a simple beam, restrained at one side and stressed by a
@@ -276,7 +276,9 @@ Check the radio button **Deterministic** in the wizard which appears and click o
 .. image:: DOE_wizard.png
     :align: center
 
-In the next table, you can set the grid parameters. By default, all lines are unchecked: the design of experiments contains only point. Check the **Name** column to make all the inputs variable.
+In the next table, you can set the grid parameters.
+By default, all lines are unchecked: the design of experiments contains only point.
+Check the **Name** column to make all the inputs variable.
 
 .. image:: deterministic_design_of_experiment.png
     :align: center
@@ -364,7 +366,7 @@ method. To access advanced parameters, expand the **Advanced parameters** group.
 Define at least one criterion to stop the algorithm.
 
 In the current example, add a third criterion by selecting the **Maximum calls**
-check button. 
+check button.
 
 Changing **Replication size** will update the max number of calls by iteration:
 Indeed the algorithm build two input samples with a size equal to the block size value
@@ -608,11 +610,11 @@ choose **Threshold exceedance** in the context menu of the limit state item in t
 
 Select the **FORM-Importance sampling** method and click on **Continue** button.
 The following page allows one to change the parameters of the Importance sampling analysis.
-It’s the same page as the one for the Monte Carlo method.
+It is the same page as the one for the Monte Carlo method.
 
 Click on **Continue** button.
 The following page enables setting the parameters of the FORM analysis.
-It’s the same page as the one for the FORM method.
+It is the same page as the one for the FORM method.
 
 The analysis consists in performing firstly a FORM analysis, then the computed design point
 is used to initialize the Importance sampling analysis.
@@ -661,7 +663,7 @@ Select **Probabilistic** and click on **Continue** button.
 The methods LHS and Quasi-Monte Carlo are not available because the model
 contains dependent stochastic input variables.
 
-Keep the default values. Click on **Finish** button 
+Keep the default values. Click on **Finish** button.
 
 Choose **Evaluate** in the context menu of the new design of experiments item.
 Launch the evaluation by clicking on the **Run** button of the window which
@@ -873,7 +875,7 @@ this is in agreement with the :ref:`distribution <probaModelExample>` used to
 Choose **Inference** in the context menu of the sub-item **Definition** of the model.
 
 A window appears:
-  - In the current example, we choose to select 3 variables (E,F,I) : uncheck L.
+  - In the current example, we choose to select 3 variables (E,F,I): uncheck L.
   - Add all the distributions for the other variables by choosing the **All** item in the combo box **Add**.
   - Click on the **Finish** button.
 

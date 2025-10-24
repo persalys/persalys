@@ -71,7 +71,8 @@ automatically selected in the other tabs.
       :align: center
 
 - The **Box plots** tab presents the `box plot <https://commons.wikimedia.org/w/index.php?curid=14524285>`_
-  of the variables. They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
+  of the variables.
+  They are rescaled for each variable (:math:`x`), using mean (:math:`\mu`) and standard deviation (:math:`\sigma`): :math:`y = (x - \mu)/\sigma`
 
   - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
   - Graph interactivity:
@@ -183,9 +184,17 @@ When the analysis is finished or stopped, the following window appears.
 .. image:: /user_manual/graphical_interface/data_analysis/dataSensitivityAnalysisResultWindow.png
     :align: center
 
-On the left, you can select the output variable. The first tab shows the first order Sobol' indices for each input variable in both the graph and the table. You can sort the table by any column by clicking on the column header. The graph will be sorted in the same way as the table. The second tab displays signed and squared SRC indices in the same way and the :math: `R^2` coefficient at the top.
+On the left, you can select the output variable.
+The first tab shows the first order Sobol' indices for each input variable in both the graph and the table.
+You can sort the table by any column by clicking on the column header.
+The graph will be sorted in the same way as the table.
+The second tab displays signed and squared SRC indices in the same way and the :math: `R^2` coefficient at the top.
 
-If the Spearman test detects a dependency between two variables, a warning will be displayed at the top of the window. Remember that both Sobol' and SRC indices are only valid for independent variables. Always ensure that the input variables are independent before interpreting the sensitivity indices. SRC indices only measure linear relationship between an output and the input vector. Since they are in that case calculated on ranks, Sobol' indices can measure any monotonic relationship.
+If the Spearman test detects a dependency between two variables, a warning will be displayed at the top of the window.
+Remember that both Sobol' and SRC indices are only valid for independent variables.
+Always ensure that the input variables are independent before interpreting the sensitivity indices.
+SRC indices only measure linear relationship between an output and the input vector.
+Since they are in that case calculated on ranks, Sobol' indices can measure any monotonic relationship.
 
 .. _inferenceAnalysis:
 
@@ -512,7 +521,7 @@ Refer to :class:`~persalys.FunctionalChaosAnalysis` for implementation details.
 The **Kriging parameters** window allows one to define:
   - **Parameters**:
      - *The type of covariance model*: Squared exponential (default), Absolute exponential,
-       Generalized exponential, Matérn model
+       Generalized exponential, Matern model
      - *Parameters of the covariance model* (default: hidden, visible if a model is chosen):
          - **Generalized exponential**: parameter **p**,
            exponent of the euclidean norm (default: 1., positive float expected)
@@ -520,7 +529,7 @@ The **Kriging parameters** window allows one to define:
          .. image:: /user_manual/graphical_interface/data_analysis/kriging_p_parameter.png
               :align: center
 
-         - **Matérn**: coefficient **nu** (default: 1.5, positive float expected)
+         - **Matern**: coefficient **nu** (default: 1.5, positive float expected)
 
          .. image:: /user_manual/graphical_interface/data_analysis/kriging_nu_parameter.png
               :align: center
@@ -707,10 +716,10 @@ The results window gathers:
 5-3-1 Export as a physical model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can export the metamodel as a physical model to perform analyses on it as with any physical model. 
-To do so, right-click on the metamodel analysis and select **Convert metamodel into physical model**. 
-If the metamodel is based on a physical model, the probabilistic model of the inputs is exported with the metamodel. 
-If the metamodel is a functional chaos metamodel built from a data model, the probabilistic model inferred during the analysis is exported as well. 
+You can export the metamodel as a physical model to perform analyses on it as with any physical model.
+To do so, right-click on the metamodel analysis and select **Convert metamodel into physical model**.
+If the metamodel is based on a physical model, the probabilistic model of the inputs is exported with the metamodel.
+If the metamodel is a functional chaos metamodel built from a data model, the probabilistic model inferred during the analysis is exported as well.
 
 .. image:: /user_manual/graphical_interface/data_analysis/convert_into_physical_model.png
   :align: center
@@ -718,7 +727,7 @@ If the metamodel is a functional chaos metamodel built from a data model, the pr
 5-3-2 Export as a python model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The metamodel can also be embedded inside a Python model to add a pre- or post-processing step. 
+The metamodel can also be embedded inside a Python model to add a pre- or post-processing step.
 To do this, right-click on the metamodel analysis and select **Convert metamodel into python model**.
 
 .. image:: /user_manual/graphical_interface/data_analysis/convert_into_python_model.png
@@ -786,7 +795,8 @@ From there, the user can choose:
 
     - upper tail: will estimate :math:`q_{up}`, such as, :math:`P(X>q_{up}) = P_t`
 
-    - bilateral : will estimate both :math:`q_{low}` and :math:`q_{up}`, such as, :math:`P(X<q_{low} \cup X>q_{up}) = P_t`, assuming :math:`P(X<q_{low}) = P(X>q_{up}) = P_t/2`
+    - bilateral : will estimate both :math:`q_{low}` and :math:`q_{up}`,
+      such as :math:`P(X<q_{low} \cup X>q_{up}) = P_t`, assuming :math:`P(X<q_{low}) = P(X>q_{up}) = P_t/2`
 
     .. image:: /user_manual/graphical_interface/data_analysis/quantileSecondPage.png
         :align: center

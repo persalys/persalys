@@ -49,7 +49,7 @@ When an evaluation is required, a window appears, in order to set up:
 1-2 Launch
 '''''''''''
 
-When the «Model Evaluation» window is validated, a new element appears in the study
+When the **Model Evaluation** window is validated, a new element appears in the study
 tree, below **Evaluation**.
 
 Its context menu has the following actions:
@@ -140,7 +140,7 @@ When an analysis is required, a window appears, in order to set up:
   - **Stopping criteria** of the algorithm (Select at least one criterion to validate the window):
       - the maximum computation time in days(d), hours(h), minutes(m) or seconds(s) (default: one minute)
       - the maximum sampling size (default: 10000, expected: integer)
-  - **Evaluation parameter**: the block size – the number of runs launched simultaneously – for parallelization
+  - **Evaluation parameter**: the block size - the number of runs launched simultaneously - for parallelization
     purposes (default=1; expected= integer). It must be less than the maximum sampling size.
   - **Advanced Parameters** (default: hidden):
       - the `Karhunen-Loeve <http://openturns.github.io/openturns/latest/user_manual/_generated/openturns.KarhunenLoeveAlgorithm.html>`_
@@ -290,13 +290,13 @@ The results window gathers the following tabs:
         .. image:: /user_manual/graphical_interface/field_analysis/MC_window_eigenvalues.png
             :align: center
 
-    - the **ξi** tab shows the projections of the trajectories in the Karhunen-Loeve decomposition:
+    - the **xi** tab shows the projections of the trajectories in the Karhunen-Loeve decomposition:
 
-      - the **PDF/CDF** tab presents the PDF/CDF of the **ξi** sample
+      - the **PDF/CDF** tab presents the PDF/CDF of the **xi** sample
         together with the distribution PDF
 
         - Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters and
-          select the **ξi** and the graphic type: PDF or CDF (default: PDF)
+          select the **xi** and the graphic type: PDF or CDF (default: PDF)
         - Graph interactivity:
             - Right-click to select the points of trajectories
             - Left-click to translate the graph
@@ -306,7 +306,7 @@ The results window gathers the following tabs:
             :align: center
 
       - The **Plot matrix** tab: histograms of the distribution of each variable (diagonal) and
-        scatter plots between each couple of **ξi** variables (off-diagonal).
+        scatter plots between each couple of **xi** variables (off-diagonal).
 
         - Use the :ref:`Graph settings <firstgraphsettings>` window to set up graphical parameters.
         - Graph interactivity:
