@@ -24,8 +24,6 @@
 #include "persalys/LineEditWithQValidatorDelegate.hxx"
 #include "persalys/CheckableHeaderView.hxx"
 #include "persalys/SpinBoxDelegate.hxx"
-#include "persalys/InputTableModel.hxx"
-#include "persalys/OutputTableModel.hxx"
 #include "persalys/DifferentiationTableModel.hxx"
 #include "persalys/GradientTableModel.hxx"
 #include "persalys/FieldModelEvaluation.hxx"
@@ -46,7 +44,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
+PhysicalModelWindowWidget::PhysicalModelWindowWidget(const PhysicalModelItem * item)
   : QTabWidget()
   , physicalModel_(item->getPhysicalModel())
 {
@@ -56,7 +54,8 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
   connect(item, SIGNAL(numberOutputsChanged()), this, SIGNAL(updateOutputTableData()));
   connect(item, SIGNAL(outputChanged()), this, SIGNAL(updateOutputTableData()));
 
-  connect(item, SIGNAL(inputListDifferentiationChanged()), this, SIGNAL(updateDifferentiationTableData()));
+  if (!physicalModel_.hasMesh())
+    connect(item, SIGNAL(inputListDifferentiationChanged()), this, SIGNAL(updateDifferentiationTableData()));
 
   connect(item, SIGNAL(meshChanged()), this, SLOT(updateIndexParamLabel()));
 
@@ -65,6 +64,13 @@ PhysicalModelWindowWidget::PhysicalModelWindowWidget(PhysicalModelItem * item)
 
 
 void PhysicalModelWindowWidget::buildInterface()
+{
+  addDefinitionTab();
+  if (!physicalModel_.hasMesh())
+    addDifferentiationTab();
+}
+
+void PhysicalModelWindowWidget::addDefinitionTab()
 {
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -84,11 +90,11 @@ void PhysicalModelWindowWidget::buildInterface()
   inputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(inputTableView_));
   inputTableView_->horizontalHeader()->setStretchLastSection(true);
 
-  InputTableModel * inputTableModel = new InputTableModel(physicalModel_, inputTableView_);
-  inputTableView_->setModel(inputTableModel);
+  inputTableModel_ = new InputTableModel(physicalModel_, inputTableView_);
+  inputTableView_->setModel(inputTableModel_);
 
   // connections
-  connect(this, SIGNAL(updateInputTableData()), inputTableModel, SLOT(updateData()));
+  connect(this, SIGNAL(updateInputTableData()), inputTableModel_, SLOT(updateData()));
 
   inputsLayout->addWidget(inputTableView_);
 
@@ -97,12 +103,12 @@ void PhysicalModelWindowWidget::buildInterface()
   {
     QPushButton * addInputLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addInputLineButton->setToolTip(tr("Add an input"));
-    connect(addInputLineButton, SIGNAL(clicked(bool)), inputTableModel, SLOT(addLine()));
+    connect(addInputLineButton, SIGNAL(clicked(bool)), inputTableModel_, SLOT(addLine()));
 
     QPushButton * removeInputLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
     removeInputLineButton->setToolTip(tr("Remove the selected input"));
     connect(removeInputLineButton, SIGNAL(clicked(bool)), this, SLOT(removeInputLine()));
-    connect(this, SIGNAL(removeInputLine(QModelIndex)), inputTableModel, SLOT(removeLine(QModelIndex)));
+    connect(this, SIGNAL(removeInputLine(QModelIndex)), inputTableModel_, SLOT(removeLine(QModelIndex)));
 
     QHBoxLayout * buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch();
@@ -131,8 +137,8 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setEditTriggers(QTableView::AllEditTriggers);
   outputTableView_->setItemDelegateForColumn(0, new LineEditWithQValidatorDelegate(true, outputTableView_));
 
-  OutputTableModel * outputTableModel = new OutputTableModel(physicalModel_, outputTableView_);
-  outputTableView_->setModel(outputTableModel);
+  outputTableModel_ = new OutputTableModel(physicalModel_, outputTableView_);
+  outputTableView_->setModel(outputTableModel_);
 
   // table header view
   CheckableHeaderView * outputTableHeaderView = new CheckableHeaderView;
@@ -140,7 +146,7 @@ void PhysicalModelWindowWidget::buildInterface()
   outputTableView_->setHorizontalHeader(outputTableHeaderView);
 
   // connections
-  connect(this, SIGNAL(updateOutputTableData()), outputTableModel, SLOT(updateData()));
+  connect(this, SIGNAL(updateOutputTableData()), outputTableModel_, SLOT(updateData()));
 
   outputsLayout->addWidget(outputTableView_);
 
@@ -165,12 +171,12 @@ void PhysicalModelWindowWidget::buildInterface()
   {
     QPushButton * addOutputLineButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     addOutputLineButton->setToolTip(tr("Add an output"));
-    connect(addOutputLineButton, SIGNAL(clicked(bool)), outputTableModel, SLOT(addLine()));
+    connect(addOutputLineButton, SIGNAL(clicked(bool)), outputTableModel_, SLOT(addLine()));
 
     QPushButton * removeOutputLineButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
     removeOutputLineButton->setToolTip(tr("Remove the selected output"));
     connect(removeOutputLineButton, SIGNAL(clicked(bool)), this, SLOT(removeOutputLine()));
-    connect(this, SIGNAL(removeOutputLine(QModelIndex)), outputTableModel, SLOT(removeLine(QModelIndex)));
+    connect(this, SIGNAL(removeOutputLine(QModelIndex)), outputTableModel_, SLOT(removeLine(QModelIndex)));
 
     outputButtonsLayout->addWidget(addOutputLineButton);
     outputButtonsLayout->addWidget(removeOutputLineButton);
@@ -182,73 +188,74 @@ void PhysicalModelWindowWidget::buildInterface()
   vbox->addWidget(verticalSplitter);
 
   // - error message label
-  connect(inputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
-  connect(outputTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+  connect(inputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+  connect(outputTableModel_, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
 
 
   addTab(scrollArea, tr("Definition"));
+}
 
-  // differentiation
+void PhysicalModelWindowWidget::addDifferentiationTab()
+{
+  auto * tab = new QWidget;
+  auto * vbox = new QVBoxLayout(tab);
+
   if (physicalModel_.getImplementation()->getClassName() != "MetaModel")
   {
-    tab = new QWidget;
-    vbox = new QVBoxLayout(tab);
-
-    QLabel * label = new QLabel(tr("Finite difference step definition"));
+    auto * label = new QLabel(tr("Finite difference step definition"));
     label->setStyleSheet("QLabel {font: bold;}");
     vbox->addWidget(label);
 
-    CopyableTableView * differentiationTableView = new CopyableTableView;
+    auto * differentiationTableView = new CopyableTableView;
     differentiationTableView->horizontalHeader()->setStretchLastSection(true);
 
-    SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(differentiationTableView);
+    auto * spinBoxDelegate = new SpinBoxDelegate(differentiationTableView);
     spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::differentiationStep);
     differentiationTableView->setItemDelegateForColumn(1, spinBoxDelegate);
     differentiationTableView->setEditTriggers(QTableView::AllEditTriggers);
 
-    DifferentiationTableModel * differentiationTableModel  = new DifferentiationTableModel(physicalModel_, differentiationTableView);
+    auto * differentiationTableModel  = new DifferentiationTableModel(physicalModel_, differentiationTableView);
     differentiationTableView->setModel(differentiationTableModel);
 
     // connections
     connect(spinBoxDelegate, SIGNAL(applyToAllRequested(double)), differentiationTableModel, SLOT(applyValueToAll(double)));
     connect(this, SIGNAL(updateInputTableData()), differentiationTableModel, SLOT(updateData()));
     connect(this, SIGNAL(updateDifferentiationTableData()), differentiationTableModel, SLOT(updateData()));
-    connect(inputTableModel, SIGNAL(inputNumberChanged()), differentiationTableModel, SLOT(updateData()));
-    connect(inputTableModel, SIGNAL(inputNameChanged()), differentiationTableModel, SLOT(updateData()));
+    connect(inputTableModel_, SIGNAL(inputNumberChanged()), differentiationTableModel, SLOT(updateData()));
+    connect(inputTableModel_, SIGNAL(inputNameChanged()), differentiationTableModel, SLOT(updateData()));
 
     vbox->addWidget(differentiationTableView);
-
-    label = new QLabel(tr("Gradient values"));
-    vbox->addWidget(label);
-
-    CopyableTableView * gradientTableView = new CopyableTableView;
-    gradientTableView->horizontalHeader()->setStretchLastSection(true);
-
-    GradientTableModel * gradientTableModel  = new GradientTableModel(physicalModel_, gradientTableView);
-    gradientTableView->setModel(gradientTableModel);
-
-    // connections
-    connect(this, SIGNAL(updateInputTableData()), gradientTableModel, SLOT(updateData()));
-    connect(this, SIGNAL(updateOutputTableData()), gradientTableModel, SLOT(updateData()));
-
-    connect(inputTableModel, SIGNAL(inputNumberChanged()), gradientTableModel, SLOT(updateData()));
-    connect(inputTableModel, SIGNAL(inputNameChanged()), gradientTableModel, SLOT(updateData()));
-
-    connect(outputTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), gradientTableModel, SLOT(updateData()));
-    connect(gradientTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
-
-    connect(this, &PhysicalModelWindowWidget::evaluateGradientRequested, [ = ] ()
-    {
-      gradientTableModel->evaluateGradient();
-      setCurrentIndex(1);
-    });
-
-    vbox->addWidget(gradientTableView);
-
-    addTab(tab, tr("Differentiation"));
   }
-}
 
+  auto * label = new QLabel(tr("Gradient values"));
+  vbox->addWidget(label);
+
+  auto * gradientTableView = new CopyableTableView;
+  gradientTableView->horizontalHeader()->setStretchLastSection(true);
+
+  auto * gradientTableModel  = new GradientTableModel(physicalModel_, gradientTableView);
+  gradientTableView->setModel(gradientTableModel);
+
+  // connections
+  connect(this, SIGNAL(updateInputTableData()), gradientTableModel, SLOT(updateData()));
+  connect(this, SIGNAL(updateOutputTableData()), gradientTableModel, SLOT(updateData()));
+
+  connect(inputTableModel_, SIGNAL(inputNumberChanged()), gradientTableModel, SLOT(updateData()));
+  connect(inputTableModel_, SIGNAL(inputNameChanged()), gradientTableModel, SLOT(updateData()));
+
+  connect(outputTableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), gradientTableModel, SLOT(updateData()));
+  connect(gradientTableModel, SIGNAL(errorMessageChanged(QString)), this, SIGNAL(errorMessageChanged(QString)));
+
+  connect(this, &PhysicalModelWindowWidget::evaluateGradientRequested, [ = ] ()
+  {
+    gradientTableModel->evaluateGradient();
+    setCurrentIndex(1);
+  });
+
+  vbox->addWidget(gradientTableView);
+
+  addTab(tab, tr("Differentiation"));
+}
 
 void PhysicalModelWindowWidget::resizeEvent(QResizeEvent* event)
 {
@@ -335,7 +342,6 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   // if no outputs do nothing
   if (!physicalModel_.getSelectedOutputsNames().getSize())
     return;
-  removeTab(2);
 
   // evaluate
   if (!physicalModel_.hasMesh())
@@ -374,6 +380,7 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   }
   else
   {
+    removeTab(1);
     FieldModelEvaluation eval("anEval", physicalModel_);
     try
     {

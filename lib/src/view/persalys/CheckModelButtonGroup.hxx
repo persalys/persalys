@@ -32,16 +32,19 @@ class PERSALYS_VIEW_API CheckModelButtonGroup : public QWidget
 {
   Q_OBJECT
 public:
-  CheckModelButtonGroup(QWidget *parent = nullptr);
+  explicit CheckModelButtonGroup(QWidget *parent = nullptr, bool isDifferentiable = true);
   TemporaryLabel * getErrorMessageLabel() const
   {
     return errorMessageLabel_;
   }
+
 signals:
   void evaluateOutputsRequested();
   void evaluateGradientRequested();
+
 private:
   TemporaryLabel * errorMessageLabel_;
+  bool isDifferentiable_ = true;
 };
 }
 #endif

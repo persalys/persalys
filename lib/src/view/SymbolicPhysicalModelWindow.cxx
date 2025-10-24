@@ -31,18 +31,18 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelItem * ite
   : SubWindow(item, parent)
 {
   // Widgets
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  auto * widgetLayout = new QVBoxLayout(this);
 
   QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectsymbolicmodel");
   if (item->getPhysicalModel().hasMesh())
     docLink = "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldsymbolicmodel";
   widgetLayout->addWidget(new TitleLabel(tr("Symbolic model"), docLink));
 
-  PhysicalModelWindowWidget *widget = new PhysicalModelWindowWidget(item);
+  auto *widget = new PhysicalModelWindowWidget(item);
   widgetLayout->addWidget(widget);
 
   // buttons
-  CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
+  auto *buttons = new CheckModelButtonGroup(this, !item->getPhysicalModel().hasMesh());
   connect(buttons, SIGNAL(evaluateOutputsRequested()), widget, SIGNAL(evaluateOutputsRequested()));
   connect(buttons, SIGNAL(evaluateGradientRequested()), widget, SIGNAL(evaluateGradientRequested()));
   connect(widget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
