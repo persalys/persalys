@@ -203,14 +203,18 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
 
   connect(wizard, &QDialog::accepted, [item, wizard](){
     const auto * metaModelAnalysis = dynamic_cast<MetaModelAnalysis*>(wizard->getAnalysis().getImplementation().get());
-    item->appendMetaModelItem(metaModelAnalysis->getMetaModel());
+    const MetaModelExportWizard::ExportType exportType = wizard->getExportType();
+    if (exportType == MetaModelExportWizard::Symbolic)
+      item->appendMetaModelItem(metaModelAnalysis->getMetaModel());
+    else
+      item->appendPythonMetaModelItem(metaModelAnalysis->asPythonPhysicalModel(item->getStudy()));
   });
 
   wizard->open();
 }
 
 
-void StudyManager::openProperties(Item* item)
+void StudyManager::openProperties(Item* item) const
 {
   const PhysicalModelItem * pmItem = dynamic_cast<PhysicalModelItem*>(item);
   if (pmItem)

@@ -30,6 +30,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QDebug>
+#include <QRadioButton>
 
 #include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(PERSALYS::Analysis)
 
@@ -39,11 +40,7 @@ namespace PERSALYS
 {
 MetaModelExportWizard::MetaModelExportWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : Wizard(parent)
-  , mmsComboBox_(0)
-  , mmsComboBoxModel_(0)
-  , parametersLayout_(0)
 {
-
   buildInterface();
 
   // set list of Metamodel analysis items
@@ -51,7 +48,7 @@ MetaModelExportWizard::MetaModelExportWizard(const Analysis& analysis, const boo
   {
     if (Observer * obs = analysis.getImplementation().get()->getObserver("Study"))
     {
-      StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
+      const auto * study = dynamic_cast<StudyImplementation*>(obs);
       Q_ASSERT(study);
       for (UnsignedInteger i = 0; i < study->getAnalyses().getSize(); ++i)
       {
@@ -72,17 +69,18 @@ MetaModelExportWizard::MetaModelExportWizard(const Analysis& analysis, const boo
     comboItem->setData(QVariant::fromValue(analysis));
     mmsComboBoxModel_->appendRow(comboItem);
   }
+
   updateWidgets();
 }
 
 void MetaModelExportWizard::buildInterface()
 {
   // set window title
-  setWindowTitle(tr("Export metamodel as a physical model"));
+  setWindowTitle(tr("Export metamodel"));
 
   // create a page
   QWizardPage * page = new QWizardPage(this);
-  page->setTitle(tr("Export metamodel as a physical model"));
+  page->setTitle(tr("Export metamodel as a physical or python model"));
   QVBoxLayout * pageLayout = new QVBoxLayout(page);
 
   // label
@@ -96,6 +94,23 @@ void MetaModelExportWizard::buildInterface()
 
   mmsComboBox_->setModel(mmsComboBoxModel_);
   groupBoxLayout->addWidget(mmsComboBox_);
+
+  auto * exportTypeGB      = new QGroupBox(tr("Export type"));
+  auto * exportTypeLayout  = new QVBoxLayout(exportTypeGB);
+  exportTypeGroup_         = new QButtonGroup(this);
+
+  //symbolic model
+  auto * exportTypeButton = new QRadioButton(tr("Raw metamodel"));
+  exportTypeLayout->addWidget(exportTypeButton);
+  exportTypeGroup_->addButton(exportTypeButton, MetaModelExportWizard::Symbolic);
+  exportTypeButton->click();
+
+  // python model
+  exportTypeButton = new QRadioButton(tr("Python model"));
+  exportTypeLayout->addWidget(exportTypeButton);
+  exportTypeGroup_->addButton(exportTypeButton, MetaModelExportWizard::Python);
+
+  pageLayout->addWidget(exportTypeGB);
 
   parametersLayout_ = new QVBoxLayout;
   pageLayout->addLayout(parametersLayout_);
@@ -116,7 +131,13 @@ Analysis MetaModelExportWizard::getAnalysis() const
   QVariant variant = mmsComboBoxModel_->item(itemRow)->data();
   if (variant.canConvert<Analysis>())
     return variant.value<Analysis>();
+  
   return Analysis();
+}
+
+MetaModelExportWizard::ExportType MetaModelExportWizard::getExportType() const
+{
+  return static_cast<MetaModelExportWizard::ExportType>(exportTypeGroup_->checkedId());
 }
 
 void MetaModelExportWizard::updateWidgets()
