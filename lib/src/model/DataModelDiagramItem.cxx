@@ -91,6 +91,9 @@ void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
     emit dependenciesValidityChanged(validity, QString(errorMessage.c_str()));
     validity = MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
     emit metaModelValidityChanged(validity, QString(errorMessage.c_str()));
+    validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_) && metamodelCounter_ > 0;
+    QString mmNumberMessage = errorMessage.empty() ? tr("Metamodel must first be created") : QString{errorMessage.c_str()};
+    emit metamodelNumberValidityChanged(validity, mmNumberMessage);
   }
   else if (message == "analysisLaunched")
   {
@@ -128,6 +131,9 @@ void DataModelDiagramItem::fill()
   emit dependenciesValidityChanged(validity, QString(errorMessage.c_str()));
   validity = MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
   emit metaModelValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_) && metamodelCounter_ > 0;
+  QString mmNumberMessage = errorMessage.empty() ? tr("Metamodel must first be created") : QString{errorMessage.c_str()};
+  emit metamodelNumberValidityChanged(validity, mmNumberMessage);
 }
 
 
@@ -156,6 +162,24 @@ void DataModelDiagramItem::appendItem(const Analysis& analysis)
   appendAnalysisItem(analysis);
   analysis.getImplementation().get()->addObserver(this);
   analysis.getImplementation().get()->addObserver(getParentStudyItem());
+
+  const QString analysisName {analysis.getImplementation()->getClassName().c_str()};
+  if (analysisName == "FunctionalChaosAnalysis" ||
+    analysisName == "KrigingAnalysis" ||
+    analysisName == "PolynomialRegressionAnalysis")
+  {
+    const auto * newItem = dynamic_cast<AnalysisItem*>(analysis.getImplementation().get()->getObserver("AnalysisItem"));
+    connect(newItem, &AnalysisItem::numberMetamodelChanged, this, &DataModelDiagramItem::updateMetamodelCounter);
+
+    if(newItem->getAnalysis().hasValidResult())
+      ++metamodelCounter_;
+
+    OT::String errorMessage; 
+    emit metamodelNumberValidityChanged(
+      MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_) && metamodelCounter_ > 0,
+      errorMessage.empty() ? tr("Metamodel must first be created") : QString{errorMessage.c_str()}
+    );
+  }
 }
 
 
@@ -171,4 +195,30 @@ void DataModelDiagramItem::removeDesignOfExperiment()
   if (getParentStudyItem())
     getParentStudyItem()->getStudy().remove(DesignOfExperiment(designOfExperiment_));
 }
+
+void DataModelDiagramItem::updateMetamodelCounter(int increment)
+{
+  metamodelCounter_ += increment;
+  if (metamodelCounter_ < 0)
+    metamodelCounter_ = 0;
+
+  OT::String errorMessage;
+  emit metamodelNumberValidityChanged(
+    MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_) && metamodelCounter_ > 0,
+    errorMessage.empty() ? tr("Metamodel must first be created") : QString{errorMessage.c_str()}
+  );
 }
+
+void DataModelDiagramItem::requestMetaModelExport()
+{
+  Study study(getParentStudyItem()->getStudy());
+  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
+  {
+    const auto * analysis = dynamic_cast<const MetaModelAnalysis*>(study.getAnalyses()[i].getImplementation().get());
+    if (analysis && analysis->hasValidResult())
+      // declared in ItemFactory, connected to StudyManager
+      emit mmExportWizardRequested(getParentStudyItem(), study.getAnalyses()[i], true);
+  }
+}
+
+} // namespace PERSALYS
