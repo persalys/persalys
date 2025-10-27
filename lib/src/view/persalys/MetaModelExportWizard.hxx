@@ -27,6 +27,7 @@
 #include <QStandardItemModel>
 #include <QComboBox>
 #include <QVBoxLayout>
+#include <QButtonGroup>
 
 namespace PERSALYS
 {
@@ -35,8 +36,12 @@ class PERSALYS_VIEW_API MetaModelExportWizard : public Wizard
   Q_OBJECT
 
 public:
+  enum ExportType {Symbolic, Python};
+
   MetaModelExportWizard(const Analysis& model, bool isGeneralWizard = false, QWidget* parent = 0);
+
   Analysis getAnalysis() const;
+  ExportType getExportType() const;
 
 protected:
   void buildInterface();
@@ -44,9 +49,10 @@ protected slots:
   void updateWidgets();
 
 private:
-  QComboBox * mmsComboBox_;
-  QStandardItemModel * mmsComboBoxModel_;
-  QVBoxLayout * parametersLayout_;
+  QComboBox           * mmsComboBox_      = nullptr;
+  QStandardItemModel  * mmsComboBoxModel_ = nullptr;
+  QVBoxLayout         * parametersLayout_ = nullptr;
+  QButtonGroup        * exportTypeGroup_  = nullptr;
 };
 }
 
