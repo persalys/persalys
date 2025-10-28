@@ -211,14 +211,10 @@ void DataModelDiagramItem::updateMetamodelCounter(int increment)
 
 void DataModelDiagramItem::requestMetaModelExport()
 {
-  Study study(getParentStudyItem()->getStudy());
-  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
-  {
-    const auto * analysis = dynamic_cast<const MetaModelAnalysis*>(study.getAnalyses()[i].getImplementation().get());
-    if (analysis && analysis->hasValidResult())
-      // declared in ItemFactory, connected to StudyManager
-      emit mmExportWizardRequested(getParentStudyItem(), study.getAnalyses()[i], true);
-  }
+  const Study study{getParentStudyItem()->getStudy()};
+  // we can pass any analysis as it is just used by the wizard to get the Study observer
+  // declared in ItemFactory, connected to StudyManager
+  emit mmExportWizardRequested(getParentStudyItem(), study.getAnalyses()[0], true);
 }
 
 } // namespace PERSALYS
