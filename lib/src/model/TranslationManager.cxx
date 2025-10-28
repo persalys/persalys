@@ -224,6 +224,9 @@ void TranslationManager::InitializeErrorMessages()
   ErrorMessages_.insert("The physical model must have stochastic inputs.", tr("The physical model must have stochastic inputs."));
   ErrorMessages_.insert("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.", tr("The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent."));
   ErrorMessages_.insert("The limit state is not valid.", tr("The limit state is not valid."));
+  //GridMeshModel::setParameters
+  ErrorMessages_.insert("The lower bounds must be less than the upper bounds", tr("The lower bounds must be less than the upper bounds"));
+  ErrorMessages_.insert("The mesh must contain at least two node", tr("The mesh must contain at least two node"));
 }
 
 

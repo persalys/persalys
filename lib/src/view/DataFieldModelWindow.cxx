@@ -29,6 +29,7 @@
 #include "persalys/ImportedMeshModel.hxx"
 #include "persalys/DataCleaningWizard.hxx"
 #include "persalys/GridMeshModel.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -197,9 +198,17 @@ void DataFieldModelWindow::updateProcessSample()
       {
         // Notifications are blocked if mesh definition is coming from meshWindow
         // They are unblocked here to overwrite incompatible mesh
-        dataModel_.blockNotification();
-        dataModel_.setMeshModel(GridMeshModel(Interval(0, 1), Indices(1, tableModel_->getSample().getDimension())));
-        dataModel_.getImplementation().get()->notify("meshOverwritten");
+        try
+        {
+          dataModel_.blockNotification();
+          dataModel_.setMeshModel(GridMeshModel(Interval(0, 1), Indices(1, tableModel_->getSample().getDimension())));
+          dataModel_.getImplementation().get()->notify("meshOverwritten");
+        }
+        catch (const InvalidArgumentException &e)
+        {
+          errorMessageLabel_->setErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
+        }
+        
       }
       else
         errorMessageLabel_->setErrorMessage(tr("Mesh vertices number (")
@@ -208,7 +217,7 @@ void DataFieldModelWindow::updateProcessSample()
                                             + QString::number(tableModel_->getSample().getDimension()) + QString(")."));
     }
   }
-  if (!dataModel_.isValid())
+  if (!dataModel_.isValid() && errorMessageLabel_->text().isEmpty())
     errorMessageLabel_->setErrorMessage(tr("The model is not valid. Check data and/or mesh numerical validity."));
 }
 
