@@ -28,6 +28,7 @@
 #include <openturns/MemoizeEvaluation.hxx>
 #include <openturns/MarginalEvaluation.hxx>
 #include <openturns/SymbolicEvaluation.hxx>
+#include <openturns/OTtestcode.hxx>
 
 using namespace OT;
 namespace PERSALYS
@@ -286,6 +287,12 @@ void DesignOfExperimentEvaluation::setEvaluations(const Sample &outputSample)
 
   physicalModel_.setEvalTime(getElapsedTime());
   modelHtmlDescription_ = physicalModel_.getHTMLDescription();
+}
+
+void DesignOfExperimentEvaluation::checkAndSetEvaluations(const DesignOfExperiment &evaluatedDoE)
+{
+  Test::assert_almost_equal(originalInputSample_, evaluatedDoE.getInputSample());
+  setEvaluations(evaluatedDoE.getOutputSample());
 }
 
 Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const

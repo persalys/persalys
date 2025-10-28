@@ -43,6 +43,8 @@
 #include <QDebug>
 #include <QPointer>
 
+#include <openturns/OTtestcode.hxx>
+
 using namespace OT;
 
 namespace PERSALYS
@@ -155,14 +157,31 @@ void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Anal
       DesignOfExperimentEvaluation * modifiedImplementation(implementation->clone());
       try
       {
-        modifiedImplementation->setEvaluations(newImplementation->getResult().getDesignOfExperiment().getOutputSample());
+        modifiedImplementation->checkAndSetEvaluations(newImplementation->getResult().getDesignOfExperiment());
         Analysis modifiedAnalysis(modifiedImplementation);
         item->getStudy().remove(analysis);
         item->getStudy().add(modifiedAnalysis);
       }
-      catch (InvalidDimensionException&)
+      catch (const InvalidArgumentException &e)
       {
-        QMessageBox::warning(QApplication::activeWindow(), tr("Invalid dimension"), tr("The input and output samples must have the same size."));
+        const QString message{e.what()};
+        if (message.contains("The physical model does not contain an output named"))
+          QMessageBox::warning(QApplication::activeWindow(),
+            tr("Select corresponding output"),
+            tr("Please select which column corresponds to which output.")
+          );
+        else
+          QMessageBox::warning(QApplication::activeWindow(),
+            tr("Invalid dimension"),
+            tr("The sample constained in the CSV must have the same size and dimension as the one contained in this design of experiment.")
+          );
+      }
+      catch (const Test::TestFailed&)
+      {
+        QMessageBox::warning(QApplication::activeWindow(),
+          tr("Wrong values"),
+          tr("The input values contained in the CSV file do not match the values of this design of experiments.")
+        );
       }
   });
 

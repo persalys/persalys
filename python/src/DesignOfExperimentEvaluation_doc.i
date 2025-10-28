@@ -41,3 +41,15 @@ Parameters
 ----------
 outputSample : :py::class:`openturns.Sample`
     sample containing values for the output variables"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DesignOfExperimentEvaluation::checkAndSetEvaluations
+"Checks that the input values of the given DOE 
+correspond to the current DOE and copy the evaluations 
+of the given DOE to the current DOE
+
+Parameters
+----------
+evaluatedDoE : :py::class:`~persalys.DesignOfExperiment`
+    Design of experiments containing evaluations to copy"
