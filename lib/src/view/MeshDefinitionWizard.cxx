@@ -31,10 +31,11 @@ using namespace OT;
 namespace PERSALYS
 {
 
-MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, Bool allowColumns, QWidget* parent)
+MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, Bool allowColumns, QWidget* parent, bool isDataField)
   : Wizard(parent)
   , mesh_(mesh)
   , allowColumns_(allowColumns)
+  , isDataField_(isDataField)
 {
   buildInterface();
 }
@@ -75,15 +76,23 @@ void MeshDefinitionWizard::buildInterface()
   tableModel_->setNotEditableItem(0, 1, QString::fromUtf8(param.getDescription().c_str()));
   tableModel_->setItem(0, 2, new QStandardItem(QString::number(mesh_.getBounds().getLowerBound()[0])));
   tableModel_->setItem(0, 3, new QStandardItem(QString::number(mesh_.getBounds().getUpperBound()[0])));
-  tableModel_->setItem(0, 4, new QStandardItem(QString::number(mesh_.getNumberOfNodes()[0])));
+  if (isDataField_)
+  {
+    tableModel_->setNotEditableItem(0, 4, QString::number(mesh_.getNumberOfNodes()[0]));
+    tableModel_->item(0, 4)->setEnabled(false);
+  }
+  else
+    tableModel_->setItem(0, 4, new QStandardItem(QString::number(mesh_.getNumberOfNodes()[0])));
   tableView_->setModel(tableModel_);
 
   SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView_);
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
   for (int i = 2; i < tableModel_->columnCount() - 1; ++i)
     tableView_->setItemDelegateForColumn(i, spinBoxDelegate);
-  spinBoxDelegate = new SpinBoxDelegate(tableView_);
-  tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
+  if (!isDataField_) {
+    spinBoxDelegate = new SpinBoxDelegate(tableView_);
+    tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
+  }
 
   // resize table
   tableView_->resizeColumnsToContents();

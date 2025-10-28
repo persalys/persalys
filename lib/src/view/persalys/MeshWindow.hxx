@@ -65,16 +65,18 @@ signals:
   void meshOverwritten();
 
 private:
-  PhysicalModelItem * meshItem_ = nullptr;
-  DataFieldModelItem * dataMeshItem_ = nullptr;
-  QLabel * isRegularLabel_ = nullptr;
-  CopyableTableView * tableView_ = nullptr;
-  CustomStandardItemModel * tableModel_ = nullptr;
-  PlotWidget * meshPlot_ = nullptr;
-  SampleTableModel * nodesModel_ = nullptr;
-  ExportableTableView * nodesView_ = nullptr;
-  QTabWidget * tabWidget_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  bool isDataField_ = false;
+
+  PhysicalModelItem       * meshItem_           = nullptr;
+  DataFieldModelItem      * dataMeshItem_       = nullptr;
+  QLabel                  * isRegularLabel_     = nullptr;
+  CopyableTableView       * tableView_          = nullptr;
+  CustomStandardItemModel * tableModel_         = nullptr;
+  PlotWidget              * meshPlot_           = nullptr;
+  SampleTableModel        * nodesModel_         = nullptr;
+  ExportableTableView     * nodesView_          = nullptr;
+  QTabWidget              * tabWidget_          = nullptr;
+  TemporaryLabel          * errorMessageLabel_  = nullptr;
 };
 }
 #endif

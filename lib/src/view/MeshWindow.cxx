@@ -53,6 +53,7 @@ namespace PERSALYS
 
 MeshWindow::MeshWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
+  , isDataField_(false)
   , meshItem_(item)
 {
   connect(item, SIGNAL(meshChanged()), this, SLOT(updateTable()));
@@ -63,6 +64,7 @@ MeshWindow::MeshWindow(PhysicalModelItem * item, QWidget * parent)
 
 MeshWindow::MeshWindow(DataFieldModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
+  , isDataField_(true)
   , dataMeshItem_(item)
 {
   connect(item, SIGNAL(meshChanged()), this, SLOT(updateTable()));
@@ -101,7 +103,7 @@ void MeshWindow::buildInterface()
   tableModel_->setItem(0, 1, new QStandardItem(QString::fromUtf8(param.getDescription().c_str())));
   tableModel_->setNotEditableItem(0, 2, meshModel.getBounds().getLowerBound()[0]);
   tableModel_->setNotEditableItem(0, 3, meshModel.getBounds().getUpperBound()[0]);
-  tableModel_->setNotEditableItem(0, 4, meshModel.getNumberOfNodes()[0]);
+  tableModel_->setNotEditableItem(0, 4, static_cast<double>(meshModel.getNumberOfNodes()[0]));
   tableModel_->item(0, 2)->setEnabled(false);
   tableModel_->item(0, 3)->setEnabled(false);
   tableModel_->item(0, 4)->setEnabled(false);
@@ -127,7 +129,7 @@ void MeshWindow::buildInterface()
   groupBoxLayout->addWidget(errorMessageLabel_, 2, 0);
   mainLayout->addWidget(groupBox);
 
-  connect(this, &MeshWindow::meshOverwritten, [ = ] ()
+  connect(this, &MeshWindow::meshOverwritten, [this] ()
   {
     errorMessageLabel_->setTemporaryErrorMessage(tr("Warning: Specified mesh is incompatbile and has been reset."));
   });
@@ -158,7 +160,7 @@ void MeshWindow::resizeEvent(QResizeEvent* event)
 
 void MeshWindow::editMesh()
 {
-  MeshDefinitionWizard wizard(getMeshModel(), (Bool)dataMeshItem_, this);
+  MeshDefinitionWizard wizard(getMeshModel(), (Bool)dataMeshItem_, this, isDataField_);
   if (wizard.exec())
   {
     MeshModel meshModel(wizard.getMesh());
