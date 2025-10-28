@@ -58,6 +58,12 @@ public:
   bool hasValidResult() const override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
+  /**
+   * Checks that the input values of the given DOE
+   * correspond to the current DOE and copy the evaluations
+   * of the given DOE to the current DOE
+   */
+  void checkAndSetEvaluations(const DesignOfExperiment &evaluatedDoE);
   void setEvaluations(const OT::Sample &outputSample);
 
   static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
