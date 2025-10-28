@@ -75,9 +75,6 @@ void DataFieldModelWindow::buildInterface()
   QGridLayout * mainGridLayout = new QGridLayout(mainWidget);
   scrollArea->setWidget(mainWidget);
 
-  //QGroupBox * groupBox = new QGroupBox(tr("Fields"));
-  //QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
-
   // file line edit
   QHBoxLayout * hboxLayout = new QHBoxLayout;
   QLabel * label = new QLabel(tr("Data file"));
@@ -98,11 +95,11 @@ void DataFieldModelWindow::buildInterface()
   // column/row radio button
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
   orderButtonGroup_ = new QButtonGroup(this);
-  QRadioButton * orderButton = new QRadioButton(tr("Columns"));
+  QRadioButton * orderButton = new QRadioButton(tr("One column in the CSV file\ncorresponds to one time step\nand one row to one variable"));
   orderButtonGroup_->addButton(orderButton, Tools::Columns);
   buttonsLayout->addWidget(orderButton);
 
-  orderButton = new QRadioButton(tr("Rows"));
+  orderButton = new QRadioButton(tr("One row in the CSV file\ncorresponds to one time step\nand one column to one variable"));
   orderButtonGroup_->addButton(orderButton, Tools::Rows);
   orderButtonGroup_->button(Tools::Columns)->click();
   orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
@@ -112,11 +109,11 @@ void DataFieldModelWindow::buildInterface()
 
   mainGridLayout->addLayout(buttonsLayout, row++, 0, 1, 3);
 
-  connect(orderButtonGroup_, &QButtonGroup::idClicked, [=] (int) {
+  connect(orderButtonGroup_, &QButtonGroup::idClicked, [this] (int) {
     setTable(filePathLineEdit_->text());
   });
 
-  connect(filePathLineEdit_, &QLineEdit::textChanged, [=] (QString) {
+  connect(filePathLineEdit_, &QLineEdit::textChanged, [this] (QString) {
     orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
     orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
   });
