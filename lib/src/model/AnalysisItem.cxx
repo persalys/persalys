@@ -133,10 +133,9 @@ void AnalysisItem::buildActions()
   }
 
   // DoE export
-  if (analysisType.contains("MonteCarlo")
+  if ((analysisType.contains("MonteCarlo") && !analysisType.contains("field", Qt::CaseInsensitive))
       || analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis"
       || analysisType == "FORMImportanceSamplingAnalysis"
-//      || analysisType.contains("Optimization")
       || analysisType == "MorrisAnalysis"
       || analysisType == "MultiObjectiveOptimizationAnalysis"
     )
