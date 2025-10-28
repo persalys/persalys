@@ -85,6 +85,14 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 
   appendButton(metamodelButton, ++row, modelDefinitionButton);
 
+  DiagramPushButton * metamodelExportButton = new DiagramPushButton;
+  metamodelExportButton->setText(tr("Export\nas model"));
+  metamodelExportButton->setWhatsThis(tr("Export metamodel as model"));
+  connect(dataModelDiagramItem, SIGNAL(metamodelNumberValidityChanged(bool, QString)), metamodelExportButton, SLOT(setEnabled(bool, QString)));
+  connect(metamodelExportButton, SIGNAL(clicked(bool)), dataModelDiagramItem, SLOT(requestMetaModelExport()));
+
+  appendButton(metamodelExportButton, row, metamodelButton);
+
   updateDiagram();
 }
 }

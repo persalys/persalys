@@ -34,7 +34,7 @@ class PERSALYS_MODEL_API DataModelDiagramItem : public DesignOfExperimentItem
   friend class DataModelDiagramWindow;
 
 public:
-  DataModelDiagramItem(const DesignOfExperiment& designOfExperiment);
+  explicit DataModelDiagramItem(const DesignOfExperiment& designOfExperiment);
 
   void update(Observable* source, const OT::String& message) override;
 
@@ -47,6 +47,9 @@ protected:
 public slots:
   void appendDataModelItem();
   void removeDesignOfExperiment();
+  void updateMetamodelCounter(int);
+  void requestMetaModelExport();
+
 signals:
   // signal for diagram
   void dataSizeValidityChanged(bool, QString);
@@ -54,16 +57,19 @@ signals:
   void dependenciesValidityChanged(bool, QString);
   void metaModelValidityChanged(bool, QString);
   void dataSensitivityValidityChanged(bool, QString);
+  void metamodelNumberValidityChanged(bool, QString);
 
 private:
-  QAction * defineAction_ = nullptr;
-  QAction * newDataAnalysis_ = nullptr;
+  QAction * defineAction_               = nullptr;
+  QAction * newDataAnalysis_            = nullptr;
   QAction * newDataSensitivityAnalysis_ = nullptr;
-  QAction * newQuantileAnalysis_ = nullptr;
-  QAction * newInferenceAnalysis_ = nullptr;
+  QAction * newQuantileAnalysis_        = nullptr;
+  QAction * newInferenceAnalysis_       = nullptr;
   QAction * newCopulaInferenceAnalysis_ = nullptr;
-  QAction * newMetaModel_ = nullptr;
-  QAction * removeAction_ = nullptr;
+  QAction * newMetaModel_               = nullptr;
+  QAction * removeAction_               = nullptr;
+
+  int metamodelCounter_ = 0;
 };
 }
 #endif
