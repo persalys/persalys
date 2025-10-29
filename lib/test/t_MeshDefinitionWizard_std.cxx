@@ -75,7 +75,7 @@ private slots:
     wizard.show();
 
     // checks
-    ImportSampleWidget * sampleWidget = wizard.sampleWidget_;
+    auto * sampleWidget = wizard.sampleWidget_;
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
     QVERIFY2(!static_cast<QWidget*>(wizard.tableModel_->parent())->isEnabled(), "Table view must be not enabled");
@@ -121,7 +121,7 @@ private slots:
     wizard.show();
 
     // checks
-    ImportSampleWidget * sampleWidget = wizard.sampleWidget_;
+    auto * sampleWidget = wizard.sampleWidget_;
     wizard.methodGroup_->button(MeshDefinitionWizard::Import)->click();
     QVERIFY2(sampleWidget->dataPreviewTableView_->isEnabled(), "Table view must be enabled");
 

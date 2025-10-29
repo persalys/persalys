@@ -23,7 +23,7 @@
 
 #include "persalys/Wizard.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
-#include "persalys/ImportSampleWidget.hxx"
+#include "persalys/ImportMeshWidget.hxx"
 #include "persalys/GridMeshModel.hxx"
 #include "persalys/ImportedMeshModel.hxx"
 #include "persalys/CopyableTableView.hxx"
@@ -62,7 +62,7 @@ private:
   ImportedMeshModel       importedMesh_;
 
   QButtonGroup            * methodGroup_        = nullptr;
-  ImportSampleWidget      * sampleWidget_       = nullptr;
+  ImportMeshWidget        * sampleWidget_       = nullptr;
   CopyableTableView       * tableView_          = nullptr;
   CustomStandardItemModel * tableModel_         = nullptr;
   TemporaryLabel          * errorMessageLabel_  = nullptr;

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget to import sample
+ *  @brief QWidget to import mesh
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/ImportSampleWidget.hxx"
+#include "persalys/ImportMeshWidget.hxx"
 
 #include "persalys/HorizontalHeaderViewWithCombobox.hxx"
 #include "persalys/SampleTableModel.hxx"
@@ -38,7 +38,7 @@ using namespace OT;
 namespace PERSALYS
 {
 
-ImportSampleWidget::ImportSampleWidget(QWidget* parent, bool chooseOrder)
+ImportMeshWidget::ImportMeshWidget(QWidget* parent, bool chooseOrder)
   : QWidget(parent)
   , tableValidity_(false)
   , chooseOrder_(chooseOrder)
@@ -47,7 +47,7 @@ ImportSampleWidget::ImportSampleWidget(QWidget* parent, bool chooseOrder)
 }
 
 
-void ImportSampleWidget::buildInterface()
+void ImportMeshWidget::buildInterface()
 {
   QGridLayout * mainGridLayout = new QGridLayout(this);
   mainGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -73,27 +73,32 @@ void ImportSampleWidget::buildInterface()
   {
     QHBoxLayout * buttonsLayout = new QHBoxLayout;
     orderButtonGroup_ = new QButtonGroup(this);
-    QRadioButton * orderButton = new QRadioButton(tr("Columns"));
+
+    QRadioButton * orderButton = new QRadioButton(tr("All the time steps are stored in one row"));
+    orderButtonGroup_->addButton(orderButton, Tools::Rows);
+    buttonsLayout->addWidget(orderButton);
+
+    orderButton = new QRadioButton(tr("All the time steps are stored in one column"));
     orderButtonGroup_->addButton(orderButton, Tools::Columns);
     buttonsLayout->addWidget(orderButton);
 
-    orderButton = new QRadioButton(tr("Rows"));
-    orderButtonGroup_->addButton(orderButton, Tools::Rows);
-    orderButtonGroup_->button(Tools::Columns)->click();
-    orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-    orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-    buttonsLayout->addWidget(orderButton);
-    buttonsLayout->addStretch();
+    orderButtonGroup_->button(Tools::Rows)->click();
 
+    const bool exists = QFile(filePathLineEdit_->text()).exists();
+    orderButtonGroup_->button(Tools::Rows)->setEnabled(exists);
+    orderButtonGroup_->button(Tools::Columns)->setEnabled(exists);
+
+    buttonsLayout->addStretch();
     mainGridLayout->addLayout(buttonsLayout, row++, 0, 1, 3);
 
     connect(orderButtonGroup_, &QButtonGroup::idClicked, [this] (int) {
-      setData(filePathLineEdit_->text());
+    setData(filePathLineEdit_->text());
     });
 
     connect(filePathLineEdit_, &QLineEdit::textChanged, [this] (QString) {
-      orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-      orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
+    const bool fileExists = QFile(filePathLineEdit_->text()).exists();
+    orderButtonGroup_->button(Tools::Rows)->setEnabled(fileExists);
+    orderButtonGroup_->button(Tools::Columns)->setEnabled(fileExists);
     });
   }
 
@@ -122,8 +127,7 @@ void ImportSampleWidget::buildInterface()
   mainGridLayout->addWidget(errorMessageLabel_, row++, 0, 1, 1);
 }
 
-
-void ImportSampleWidget::openFileRequested()
+void ImportMeshWidget::openFileRequested()
 {
   QString fileName = QFileDialog::getOpenFileName(this,
                      tr("Data to import..."),
@@ -150,7 +154,7 @@ void ImportSampleWidget::openFileRequested()
 }
 
 
-void ImportSampleWidget::setData(const QString& fileName)
+void ImportMeshWidget::setData(const QString& fileName)
 {
   filePathLineEdit_->setText(fileName);
   try
@@ -170,7 +174,7 @@ void ImportSampleWidget::setData(const QString& fileName)
 }
 
 
-void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns, const Description &comboItems)
+void ImportMeshWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns, const Description &comboItems)
 {
   Sample sample(fileSample);
   const Description initialDescription(sample.getDescription());
@@ -206,13 +210,13 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
 }
 
 
-void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns)
+void ImportMeshWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns)
 {
   updateWidgets(fileSample, variableNames, variablecolumns, variableNames);
 }
 
 
-Indices ImportSampleWidget::getColumns(const Description &names) const
+Indices ImportMeshWidget::getColumns(const Description &names) const
 {
   Indices columns;
   // get the index of each item of names
@@ -235,7 +239,7 @@ Indices ImportSampleWidget::getColumns(const Description &names) const
   return columns;
 }
 
-Sample ImportSampleWidget::getData() const
+Sample ImportMeshWidget::getData() const
 {
   const SampleTableModel * model = dynamic_cast<SampleTableModel*>(dataPreviewTableView_->model());
   if (model)
@@ -244,7 +248,7 @@ Sample ImportSampleWidget::getData() const
     throw InvalidArgumentException(HERE) << "Table model is not a SampleTableModel";
 }
 
-Tools::DataOrder ImportSampleWidget::getDataOrder() const
+Tools::DataOrder ImportMeshWidget::getDataOrder() const
 {
   if (orderButtonGroup_)
     return static_cast<Tools::DataOrder>(orderButtonGroup_->checkedId());

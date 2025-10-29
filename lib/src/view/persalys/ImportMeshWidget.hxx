@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget to import sample
+ *  @brief QWidget to import mesh
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_IMPORTSAMPLEWIDGET_HXX
-#define PERSALYS_IMPORTSAMPLEWIDGET_HXX
+#ifndef PERSALYS_IMPORTMESHWIDGET_HXX
+#define PERSALYS_IMPORTMESHWIDGET_HXX
 
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/TemporaryLabel.hxx"
@@ -32,18 +32,15 @@
 
 namespace PERSALYS
 {
-class PERSALYS_UTILS_API ImportSampleWidget : public QWidget
+class ImportMeshWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  friend class ImportedDesignPage;
-  friend class ImportObservationsPage;
-  friend class EditValuesWizard;
-  friend class ImportedDistributionPage;
-  friend class DataFieldModelWindow;
+  friend class MeshDefinitionWizard;
+  friend class TestMeshDefinitionWizard;
 
-  explicit ImportSampleWidget(QWidget *parent = nullptr, bool chooseOrder = false);
+  explicit ImportMeshWidget(QWidget *parent = nullptr, bool chooseOrder = false);
 
 protected:
   void buildInterface();

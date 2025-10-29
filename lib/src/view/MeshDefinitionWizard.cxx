@@ -111,7 +111,7 @@ void MeshDefinitionWizard::buildInterface()
   methodGroup_->addButton(importButton, MeshDefinitionWizard::Import);
   pageLayout->addWidget(importButton);
 
-  sampleWidget_ = new ImportSampleWidget(this, allowColumns_);
+  sampleWidget_ = new ImportMeshWidget(this, allowColumns_);
   pageLayout->addWidget(sampleWidget_);
   connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
   connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
