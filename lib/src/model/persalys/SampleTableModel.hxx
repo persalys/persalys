@@ -38,7 +38,8 @@ public:
     : QSortFilterProxyModel(parent)
   {}
 
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override
+  QVariant headerData(int section, Qt::Orientation orientation, 
+    int role = Qt::DisplayRole) const override
   {
     // do not sort the vertical header items
     if (orientation == Qt::Vertical && role == Qt::DisplayRole)
@@ -53,25 +54,47 @@ class PERSALYS_MODEL_API SampleTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  SampleTableModel(const OT::Sample & data, const bool isEditable, const bool hasRowIDcolumn, const OT::Description& initialDescription, QObject *parent = nullptr);
-  SampleTableModel(const OT::Sample & data, QObject *parent = nullptr);
-  SampleTableModel(const OT::Sample & data, const bool isEditable, QObject *parent = nullptr);
-  SampleTableModel(const OT::Sample & data, const OT::Description& initialDescription, QObject *parent = nullptr);
+  SampleTableModel(const OT::Sample & data, 
+    const bool isEditable, 
+    const bool hasRowIDcolumn, 
+    const OT::Description& initialDescription, 
+    QObject *parent = nullptr);
+  
+  explicit SampleTableModel(const OT::Sample & data, 
+    QObject *parent = nullptr);
+  
+  SampleTableModel(const OT::Sample & data, 
+    const bool isEditable, 
+    QObject *parent = nullptr);
+
+  SampleTableModel(const OT::Sample & data, 
+    const OT::Description& initialDescription, 
+    QObject *parent = nullptr);
+  
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
-  int rowCount(const QModelIndex & parent = QModelIndex()) const override;
-  Qt::ItemFlags flags(const QModelIndex & index) const override;
-  QVariant data(const QModelIndex & index, int role) const override;
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-  bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole) override;
-  bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
-  bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
-  bool removeRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
+  int rowCount(const QModelIndex & parent = QModelIndex())    const override;
+
+  Qt::ItemFlags flags(const QModelIndex & index)              const override;
+  QVariant      data(const QModelIndex & index, int role)     const override;
+  QVariant      headerData(int section, 
+    Qt::Orientation orientation, 
+    int role = Qt::DisplayRole)                               const override;
+
+  bool setHeaderData(int section, Qt::Orientation orientation, 
+    const QVariant& value, int role = Qt::EditRole)                 override;
+  bool setData(const QModelIndex & index, const QVariant & value, 
+    int role = Qt::EditRole)                                        override;
+  bool insertRows(int row, int count, 
+    const QModelIndex &index = QModelIndex())                       override;
+  bool removeRows(int row, int count, 
+    const QModelIndex &index = QModelIndex())                       override;
   OT::Sample getSample() const;
 
 public slots:
   void updateHeaderData(const OT::Description & header);
   void updateData(const OT::Sample & data);
+
 signals:
   void errorMessageChanged(const QString &message);
   void sampleChanged();

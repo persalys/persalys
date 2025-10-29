@@ -34,7 +34,6 @@
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QToolButton>
-//#include <QGroupBox>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QScrollBar>
@@ -65,7 +64,8 @@ void DataFieldModelWindow::showEvent(QShowEvent* event)
 void DataFieldModelWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  mainLayout->addWidget(new TitleLabel(tr("Data Field model"), "user_manual/graphical_interface/data_model/user_manual_data_model.html#datafieldmodel"));
+  mainLayout->addWidget(new TitleLabel(tr("Data Field model"), 
+  "user_manual/graphical_interface/data_model/user_manual_data_model.html#datafieldmodel"));
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -99,11 +99,12 @@ void DataFieldModelWindow::buildInterface()
   orderButtonGroup_->addButton(orderButton, Tools::Columns);
   buttonsLayout->addWidget(orderButton);
 
+  bool fileExists = QFile(filePathLineEdit_->text()).exists();
   orderButton = new QRadioButton(tr("One row in the CSV file\ncorresponds to one time step\nand one column to one variable"));
   orderButtonGroup_->addButton(orderButton, Tools::Rows);
   orderButtonGroup_->button(Tools::Columns)->click();
-  orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-  orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
+  orderButtonGroup_->button(0)->setEnabled(fileExists);
+  orderButtonGroup_->button(1)->setEnabled(fileExists);
   buttonsLayout->addWidget(orderButton);
   buttonsLayout->addStretch();
 
@@ -114,8 +115,21 @@ void DataFieldModelWindow::buildInterface()
   });
 
   connect(filePathLineEdit_, &QLineEdit::textChanged, [this] (QString) {
-    orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-    orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
+    bool exists = QFile(filePathLineEdit_->text()).exists();
+    orderButtonGroup_->button(0)->setEnabled(exists);
+    orderButtonGroup_->button(1)->setEnabled(exists);
+  });
+
+  includeMeshCB_ = new QCheckBox(tr("Data contains mesh as first row/column"));
+  includeMeshCB_->setEnabled(fileExists);
+  mainGridLayout->addWidget(includeMeshCB_, row++, 0);
+
+  connect(filePathLineEdit_, &QLineEdit::textChanged, [this] (QString) {
+    includeMeshCB_->setEnabled(QFile(filePathLineEdit_->text()).exists());
+  });
+
+  connect(includeMeshCB_, &QCheckBox::clicked, [this] () {
+    setTable(filePathLineEdit_->text());
   });
 
   tableModel_ = new SampleTableModel(dataModel_.getProcessSampleAsSample(), true, this);
@@ -162,21 +176,37 @@ void DataFieldModelWindow::launchCleaningWizard()
 
 void DataFieldModelWindow::setTable(const QString& fileName)
 {
-  // re-initialization
-  errorMessageLabel_->reset();
-  // try to retrieve data from the selected file
+  filePathLineEdit_->setText(fileName);
+
   try
   {
-    // update file name
-    filePathLineEdit_->setText(fileName);
-    tableModel_->updateData(Tools::ImportSample(fileName.toStdString(), static_cast<Tools::DataOrder>(orderButtonGroup_->checkedId())));
+    auto order = static_cast<Tools::DataOrder>(orderButtonGroup_->checkedId());
+    Sample fileSample{
+      Tools::ImportSample(fileName.toStdString(), order)
+    };
+
+    if(! includeMeshCB_->isChecked())
+      tableModel_->updateData(fileSample);
+    else
+    {
+      const Sample fileData = fileSample.split(1);
+      tableModel_->updateData(fileData);
+
+      // order for data and mesh is inverted
+      order = order == Tools::DataOrder::Columns ? Tools::DataOrder::Rows : Tools::DataOrder::Columns;
+      MeshModel newMesh{ImportedMeshModel(
+                          dataModel_.getMeshModel().getIndexParameters(), 
+                          fileName.toStdString(), 
+                          Indices(1, 0), 
+                          order)};
+      dataModel_.setMeshModel(newMesh);
+    }
   }
-  catch (const std::exception& ex)
+  catch (const InvalidArgumentException &e)
   {
-    QMessageBox::warning(this,
-                         tr("Warning"),
-                         tr("Cannot update the table.\n%1").arg(ex.what()));
+    errorMessageLabel_->setErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
   }
+
   updateProcessSample();
 }
 
@@ -184,34 +214,29 @@ void DataFieldModelWindow::setTable(const QString& fileName)
 void DataFieldModelWindow::updateProcessSample()
 {
   errorMessageLabel_->reset();
+
   // The process sample must not be empty
   if (tableModel_->getSample().getSize())
   {
     dataModel_.setSampleAsProcessSample(tableModel_->getSample());
     // Override mesh model if incompatible
-    if (tableModel_->getSample().getDimension() != dataModel_.getMeshModel().getMesh().getVerticesNumber())
+    bool isImportedMesh = dynamic_cast<ImportedMeshModel*>(dataModel_.getMeshModel().getImplementation().get());
+    if ((tableModel_->getSample().getDimension() != dataModel_.getMeshModel().getMesh().getVerticesNumber())
+        || (!includeMeshCB_->isChecked() && isImportedMesh) // if the user check and then uncheck the check box
+    )
     {
-      if (dynamic_cast<GridMeshModel*>(dataModel_.getMeshModel().getImplementation().get()))
+      try
       {
-        // Notifications are blocked if mesh definition is coming from meshWindow
-        // They are unblocked here to overwrite incompatible mesh
-        try
-        {
+        if (!isImportedMesh)
           dataModel_.blockNotification();
-          dataModel_.setMeshModel(GridMeshModel(Interval(0, 1), Indices(1, tableModel_->getSample().getDimension())));
+        dataModel_.setMeshModel(GridMeshModel(Interval(0, 1), Indices(1, tableModel_->getSample().getDimension())));
+        if (!isImportedMesh)
           dataModel_.getImplementation().get()->notify("meshOverwritten");
-        }
-        catch (const InvalidArgumentException &e)
-        {
-          errorMessageLabel_->setErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
-        }
-        
       }
-      else
-        errorMessageLabel_->setErrorMessage(tr("Mesh vertices number (")
-                                            + QString::number(dataModel_.getMeshModel().getMesh().getVerticesNumber())
-                                            + ") must match field discretization ("
-                                            + QString::number(tableModel_->getSample().getDimension()) + QString(")."));
+      catch (const InvalidArgumentException &e)
+      {
+        errorMessageLabel_->setErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
+      }
     }
   }
   if (!dataModel_.isValid() && errorMessageLabel_->text().isEmpty())

@@ -125,8 +125,8 @@ void MeshDefinitionWizard::buildInterface()
   connect(importButton, SIGNAL(toggled(bool)), errorMessageLabel_, SLOT(setDisabled(bool)));
 
   // initialize widgets
-  ImportedMeshModel * importedMeshModel = dynamic_cast<ImportedMeshModel*>(mesh_.getImplementation().get());
-  GridMeshModel * gridMeshModel = dynamic_cast<GridMeshModel*>(mesh_.getImplementation().get());
+  const auto * importedMeshModel = dynamic_cast<ImportedMeshModel*> (mesh_.getImplementation().get());
+  const auto * gridMeshModel     = dynamic_cast<GridMeshModel*>     (mesh_.getImplementation().get());
 
   if (importedMeshModel)
   {
