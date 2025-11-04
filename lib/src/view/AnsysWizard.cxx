@@ -22,7 +22,6 @@ namespace PERSALYS
 
 AnsysWizard::AnsysWizard(QWidget * parent)
   : Wizard(parent)
-  , parser_(0)
 {
   docLink_ = "user_manual/graphical_interface/physical_model/user_manual_physical_model.html#ansys-wizard";
   setWindowTitle(tr("Persalys: Ansys coupling"));
@@ -33,7 +32,7 @@ AnsysWizard::AnsysWizard(QWidget * parent)
   addPage(sysPage_);
 
   connect(varPage_, SIGNAL(loadModelRequested()), this, SLOT(loadModel()));
-  connect(varPage_, &AnsysWizardVariablePage::executableFileFound, [ = ]()
+  connect(varPage_, &AnsysWizardVariablePage::executableFileFound, [this]()
   {
     parser_->setExecutableFileName(varPage_->executableLineEdit_->text().toStdString());
   });
@@ -42,26 +41,33 @@ AnsysWizard::AnsysWizard(QWidget * parent)
 
 void AnsysWizard::loadModel()
 {
-  parser_ = new AnsysParser(varPage_->modelFileLineEdit_->text().toStdString());
-  varPage_->varModel_->loadData(parser_);
-  varPage_->varTable_->show();
+  varPage_->errorMessageLabel_->reset();
+  try {
+    parser_ = new AnsysParser(varPage_->modelFileLineEdit_->text().toStdString());
+    varPage_->varModel_->loadData(parser_);
+    varPage_->varTable_->show();
+  
+    sysPage_->sysModel_->loadData(parser_);
+    sysPage_->sysTable_->show();
 
-  sysPage_->sysModel_->loadData(parser_);
-  sysPage_->sysTable_->show();
-
-  if (getExecutableFileName().isEmpty())
-  {
-    QString defaultExecutable;
+    if (getExecutableFileName().isEmpty())
+    {
+      QString defaultExecutable;
 #ifdef _WIN32
-    defaultExecutable = "C:/Program Files/ANSYS Inc/v"
-                        + QString(parser_->getAnsysVersion().c_str())
-                        + "/Framework/bin/Win64/RunWB2.exe";
+      defaultExecutable = "C:/Program Files/ANSYS Inc/v"
+                          + QString(parser_->getAnsysVersion().c_str())
+                          + "/Framework/bin/Win64/RunWB2.exe";
 #else
-    defaultExecutable = "/ansys_inc/v"
-                        + QString(parser_->getAnsysVersion().c_str())
-                        + "/Framework/bin/Linux64/runwb2";
+      defaultExecutable = "/ansys_inc/v"
+                          + QString(parser_->getAnsysVersion().c_str())
+                          + "/Framework/bin/Linux64/runwb2";
 #endif
-    varPage_->executableLineEdit_->setText(defaultExecutable);
+      varPage_->executableLineEdit_->setText(defaultExecutable);
+    }
+  }
+  catch (const XMLParserException&)
+  {
+    varPage_->errorMessageLabel_->setErrorMessage(tr("Error: could not parse XML file. Check that the file is a valid UTF-8 XML file."));
   }
 }
 
@@ -116,7 +122,6 @@ AnsysParser* AnsysWizard::getParser() const
 
 AnsysWizardVariablePage::AnsysWizardVariablePage(QWidget * parent)
   : QWizardPage(parent)
-  , errorMessageLabel_(0)
 {
   setSubTitle(tr("Variable selection"));
   QGridLayout *gridLayout = new QGridLayout;

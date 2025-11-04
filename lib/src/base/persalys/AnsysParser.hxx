@@ -35,7 +35,7 @@ public:
   /** Default constructor */
   AnsysParser();
 
-  AnsysParser(const OT::String & fileName);
+  explicit AnsysParser(const OT::String & fileName);
 
   /** Load data from ansys file */
   void loadData(const OT::String & fileName);

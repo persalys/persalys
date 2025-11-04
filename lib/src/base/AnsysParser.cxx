@@ -36,17 +36,11 @@ CLASSNAMEINIT(AnsysParser)
 
 AnsysParser::AnsysParser()
   : Object()
-  , inputs_()
-  , outputs_()
-  , systems_()
 {
 }
 
 AnsysParser::AnsysParser(const String & fileName)
   : Object()
-  , inputs_()
-  , outputs_()
-  , systems_()
 {
   loadData(fileName);
 }
