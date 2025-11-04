@@ -51,11 +51,11 @@ signals:
   void executableFileFound();
 
 private:
-  TemporaryLabel * errorMessageLabel_ = nullptr;
-  QLineEdit * executableLineEdit_ = nullptr;
-  QLineEdit * modelFileLineEdit_ = nullptr;
-  AnsysVariableTableModel * varModel_ = nullptr;
-  QTableView * varTable_ = nullptr;
+  TemporaryLabel          * errorMessageLabel_  = nullptr;
+  QLineEdit               * executableLineEdit_ = nullptr;
+  QLineEdit               * modelFileLineEdit_  = nullptr;
+  AnsysVariableTableModel * varModel_           = nullptr;
+  QTableView              * varTable_           = nullptr;
 };
 
 class PERSALYS_VIEW_API AnsysWizardSystemPage : public QWizardPage
@@ -67,9 +67,9 @@ public:
   bool validatePage() override;
 
 private:
-  TemporaryLabel * errorMessageLabel_ = nullptr;
-  AnsysSystemTableModel * sysModel_ = nullptr;
-  QTableView * sysTable_ = nullptr;
+  TemporaryLabel        * errorMessageLabel_  = nullptr;
+  AnsysSystemTableModel * sysModel_           = nullptr;
+  QTableView            * sysTable_           = nullptr;
 };
 
 class PERSALYS_VIEW_API AnsysWizard : public Wizard
@@ -89,9 +89,9 @@ public slots:
   void loadModel();
 
 private:
-  AnsysParser * parser_ = nullptr;
+  AnsysParser             * parser_  = nullptr;
   AnsysWizardVariablePage * varPage_ = nullptr;
-  AnsysWizardSystemPage * sysPage_ = nullptr;
+  AnsysWizardSystemPage   * sysPage_ = nullptr;
 };
 }
 #endif // PMS_ANSYSWIZARD_H

@@ -51,6 +51,7 @@
 #include <QTextStream>
 #include <QSplitter>
 #include <QSettings>
+#include <QPointer>
 
 using namespace OT;
 
@@ -1510,11 +1511,12 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
     outTabWidget->newTabRequested();
 
   // Update step if Ansys wizard has been ran
-  connect(ansysTb, &QToolButton::clicked, [ = ]()
+  connect(ansysTb, &QToolButton::clicked, [this, model, indStep, item]()
   {
-    AnsysWizard * wizard = new AnsysWizard(this);
-    if(wizard->exec())
-    {
+    QPointer<AnsysWizard> wizard{new AnsysWizard(this)};
+    wizard->setAttribute(Qt::WA_DeleteOnClose);
+
+    connect(wizard, &QDialog::accepted, [=]() {
       wizard->validateVariables();
       wizard->validateSystems();
 
@@ -1522,10 +1524,12 @@ CouplingStepWidget::CouplingStepWidget(PhysicalModelItem *item, CouplingPhysical
       wizard->getParser()->populateCouplingStep(model, indStep);
       model->blockNotification();
 
-      item->update(0, "inputValueChanged");
-      item->update(0, "codeChanged");
+      item->update(nullptr, "inputValueChanged");
+      item->update(nullptr, "codeChanged");
       emit updateStepRequested();
-    }
+    });
+
+    wizard->open();
   });
 
   mainLayout->addStretch();
