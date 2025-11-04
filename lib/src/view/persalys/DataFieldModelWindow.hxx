@@ -60,13 +60,14 @@ public slots:
 
 private:
   DataFieldModel              dataModel_;
+  bool                        forceUpdateProcessSample_ = false;
 
-  SampleTableModel            * tableModel_         = nullptr;
-  QLineEdit                   * filePathLineEdit_   = nullptr;
-  QButtonGroup                * orderButtonGroup_   = nullptr;
-  EditableExportableTableView * dataTableView_      = nullptr;
-  TemporaryLabel              * errorMessageLabel_  = nullptr;
-  QCheckBox                   * includeMeshCB_      = nullptr;
+  SampleTableModel            * tableModel_             = nullptr;
+  QLineEdit                   * filePathLineEdit_       = nullptr;
+  QButtonGroup                * orderButtonGroup_       = nullptr;
+  EditableExportableTableView * dataTableView_          = nullptr;
+  TemporaryLabel              * errorMessageLabel_      = nullptr;
+  QCheckBox                   * includeMeshCB_          = nullptr;
 };
 
 } // namespace PERSALYS

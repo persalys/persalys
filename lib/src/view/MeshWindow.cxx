@@ -160,7 +160,7 @@ void MeshWindow::resizeEvent(QResizeEvent* event)
 
 void MeshWindow::editMesh()
 {
-  MeshDefinitionWizard wizard(getMeshModel(), (Bool)dataMeshItem_, this, isDataField_);
+  MeshDefinitionWizard wizard(getMeshModel(), this, isDataField_);
   if (wizard.exec())
   {
     MeshModel meshModel(wizard.getMesh());

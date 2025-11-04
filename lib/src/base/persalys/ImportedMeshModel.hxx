@@ -34,18 +34,12 @@ class PERSALYS_BASE_API ImportedMeshModel : public MeshModelImplementation, publ
 public:
   /** Default constructor */
   ImportedMeshModel();
+
   /** Constructor with parameters */
-  explicit ImportedMeshModel(const OT::String& fileName,
-                    const OT::Indices& columns=OT::Indices(1, 0));
-  
-  ImportedMeshModel(const VariableCollection& parameters,
-                    const OT::String& fileName,
-                    const OT::Indices& columns=OT::Indices(1, 0));
-  
-  ImportedMeshModel(const VariableCollection& parameters,
-                    const OT::String& fileName,
-                    const OT::Indices& columns,
-                    const Tools::DataOrder order);
+  explicit ImportedMeshModel(const OT::String& filename, 
+    const VariableCollection &parameters = {Variable("t")},
+    const OT::Indices &columns = OT::Indices(1, 0),
+    const Tools::DataOrder order = Tools::DataOrder::Unknown);
 
   /** Virtual constructor */
   ImportedMeshModel * clone() const override;
@@ -53,6 +47,10 @@ public:
   void setParameterColumns(const OT::Indices &inputColumns);
   OT::Interval getBounds() const override;
   OT::Indices getNumberOfNodes() const override;
+
+  inline void setMeshFilename(const OT::String &filename) {
+    setFileName(filename, Tools::DataOrder::Unknown);
+  };
 
   OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
@@ -67,12 +65,11 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  OT::Sample importSample(const OT::String& fileName,
-                          const Tools::DataOrder order = Tools::DataOrder::Columns) override;
+  OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder order = Tools::DataOrder::Columns) override;
   void setDefaultColumns() override;
 
 private:
-  Tools::DataOrder order_ = Tools::Columns;
+  Tools::DataOrder order_ = Tools::DataOrder::Unknown;
 };
 }
 #endif

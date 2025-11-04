@@ -21,20 +21,21 @@
 #include "persalys/MeshDefinitionWizard.hxx"
 
 #include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QHBoxLayout>
 #include <QRadioButton>
 #include <QHeaderView>
+#include <QMessageBox>
 
 using namespace OT;
 
 namespace PERSALYS
 {
 
-MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, Bool allowColumns, QWidget* parent, bool isDataField)
+MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh,  QWidget* parent, bool isDataField)
   : Wizard(parent)
   , mesh_(mesh)
-  , allowColumns_(allowColumns)
   , isDataField_(isDataField)
 {
   buildInterface();
@@ -111,7 +112,7 @@ void MeshDefinitionWizard::buildInterface()
   methodGroup_->addButton(importButton, MeshDefinitionWizard::Import);
   pageLayout->addWidget(importButton);
 
-  sampleWidget_ = new ImportMeshWidget(this, allowColumns_);
+  sampleWidget_ = new ImportMeshWidget(this);
   pageLayout->addWidget(sampleWidget_);
   connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
   connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
@@ -158,12 +159,10 @@ void MeshDefinitionWizard::resizeEvent(QResizeEvent* event)
 
 void MeshDefinitionWizard::setTable(const QString& fileName)
 {
-  // set file name
-  importedMesh_.setFileName(fileName.toUtf8().data(), sampleWidget_->getDataOrder());
-  // update widgets
+  importedMesh_.setMeshFilename(fileName.toUtf8().data());
   sampleWidget_->updateWidgets(importedMesh_.getSampleFromFile(),
-                               Description(1, mesh_.getIndexParameters()[0].getName()),
-                               importedMesh_.getInputColumns());
+                              Description(1, mesh_.getIndexParameters()[0].getName()),
+                              importedMesh_.getInputColumns());
 }
 
 
@@ -196,7 +195,7 @@ MeshModel MeshDefinitionWizard::getMesh() const
   }
   else
   {
-    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), importedMesh_.getFileName(), importedMesh_.getInputColumns(), sampleWidget_->getDataOrder());
+    newMesh = ImportedMeshModel(importedMesh_.getFileName(), mesh_.getIndexParameters());
   }
   return newMesh;
 }

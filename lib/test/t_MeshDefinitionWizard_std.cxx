@@ -88,21 +88,13 @@ private slots:
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
-    OT::Sample(2, OT::Point(2, 2.5)).exportToCSVFile(file.fileName().toStdString());
+    OT::Sample(1, OT::Point(2, 2.5)).exportToCSVFile(file.fileName().toStdString());
     sampleWidget->setData(file.fileName());
     sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
-    sampleWidget->dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "t", Qt::DisplayRole);
-    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
-
     sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "t", Qt::DisplayRole);
-    QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
-
-    sampleWidget->dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 

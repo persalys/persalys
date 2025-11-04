@@ -39,42 +39,17 @@ ImportedMeshModel::ImportedMeshModel()
 {
 }
 
-
-/* Constructor with parameters */
-ImportedMeshModel::ImportedMeshModel(const String &fileName,
-                                     const Indices &columns)
-  : MeshModelImplementation()
-  , DataImport(fileName, columns, Indices())
-{
-  setParameterColumns(columns);
-}
-
-
-/* Constructor with parameters */
-ImportedMeshModel::ImportedMeshModel(const VariableCollection &parameters,
-                                     const String &fileName,
-                                     const Indices &columns)
-  : MeshModelImplementation()
-  , DataImport(fileName, columns, Indices())
-{
-  setIndexParameters(parameters);
-  setParameterColumns(columns);
-}
-
-ImportedMeshModel::ImportedMeshModel(const VariableCollection &parameters,
-                                     const String &fileName,
-                                     const Indices &columns,
-                                     const Tools::DataOrder order)
+ImportedMeshModel::ImportedMeshModel(const String &filename, 
+  const VariableCollection &parameters, const Indices &columns, 
+  const Tools::DataOrder order)
   : MeshModelImplementation()
   , DataImport()
-  , order_(order)
+  , order_ (order)
 {
-  fileName_ = fileName;
-  sampleFromFile_ = Tools::ImportSample(fileName, order);
+  setFileName(filename, order);
   setIndexParameters(parameters);
   setParameterColumns(columns);
 }
-
 
 /* Virtual constructor */
 ImportedMeshModel* ImportedMeshModel::clone() const
@@ -82,11 +57,10 @@ ImportedMeshModel* ImportedMeshModel::clone() const
   return new ImportedMeshModel(*this);
 }
 
-
 Sample ImportedMeshModel::importSample(const String& fileName,
                                        const Tools::DataOrder order)
 {
-  Sample sampleFromFile(DataImport::importSample(fileName, order));
+  Sample sampleFromFile{DataImport::importSample(fileName, order)};
 
   // check sampleFromFile size
   if (sampleFromFile.getSize() < 2)
@@ -101,25 +75,28 @@ void ImportedMeshModel::setDefaultColumns()
   setColumns(Indices(1, 0), Indices());
 }
 
-
 void ImportedMeshModel::setParameterColumns(const Indices& inputColumns)
 {
+  VariableCollection indexParameters{getIndexParameters()};
   // check columns
-  if (inputColumns.getSize() != getIndexParameters().getSize())
-    throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " << getIndexParameters().getSize();
+  if (inputColumns.getSize() != indexParameters.getSize())
+    throw InvalidArgumentException(HERE) 
+    << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " 
+    << indexParameters.getSize();
 
   DataImport::setColumns(inputColumns, Indices());
 
   // build mesh
   Sample sample(getSampleFromFile().getMarginal(inputColumns_));
-  sample.setDescription(Description(1, getIndexParameters()[0].getName()));
+  sample.setDescription(Description(1, indexParameters[0].getName()));
 
-  Collection<Indices> simplices(sample.getSize() - 1, Indices(2));
+  Collection simplices(sample.getSize() - 1, Indices(2));
   for (UnsignedInteger i = 0; i < simplices.getSize(); ++i)
   {
     simplices[i][0] = i;
     simplices[i][1] = i + 1;
   }
+
   mesh_ = Mesh(sample, IndicesCollection(simplices));
 }
 
@@ -145,7 +122,6 @@ String ImportedMeshModel::getHTMLDescription() const
   return oss;
 }
 
-
 String ImportedMeshModel::getPythonScript() const
 {
   OSS oss;
@@ -158,7 +134,23 @@ String ImportedMeshModel::getPythonScript() const
     paramNames.add(getIndexParameters()[i].getName());
   }
 
-  oss << getName() << " = persalys.ImportedMeshModel(" << Parameters::GetOTDescriptionStr(paramNames, false) << ", '" << fileName_ << "', " << inputColumns_.__str__() << ")\n";
+  oss << getName() << " = persalys.ImportedMeshModel('" << fileName_ << "', " << Parameters::GetOTDescriptionStr(paramNames, false) << ", " << inputColumns_.__str__();
+
+  switch (order_)
+  {
+    case Tools::DataOrder::Rows:
+      oss << ", persalys.Tools.Rows";
+      break;
+    
+    case Tools::DataOrder::Columns:
+      oss << ", persalys.Tools.Columns";
+      break;
+    
+    default:
+      break;
+  }
+
+  oss << ")\n";
 
   return oss;
 }
@@ -183,6 +175,7 @@ void ImportedMeshModel::save(Advocate & adv) const
 {
   MeshModelImplementation::save(adv);
   DataImport::save(adv);
+  adv.saveAttribute("order_", static_cast<UnsignedInteger>(order_));
 }
 
 
@@ -191,5 +184,8 @@ void ImportedMeshModel::load(Advocate & adv)
 {
   MeshModelImplementation::load(adv);
   DataImport::load(adv);
+  UnsignedInteger order;
+  adv.loadAttribute("order_", order);
+  order_ = static_cast<Tools::DataOrder>(order);
 }
 }

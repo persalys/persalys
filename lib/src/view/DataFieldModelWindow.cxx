@@ -129,6 +129,7 @@ void DataFieldModelWindow::buildInterface()
   });
 
   connect(includeMeshCB_, &QCheckBox::clicked, [this] () {
+    forceUpdateProcessSample_ = !includeMeshCB_->isChecked();
     setTable(filePathLineEdit_->text());
   });
 
@@ -195,8 +196,8 @@ void DataFieldModelWindow::setTable(const QString& fileName)
       // order for data and mesh is inverted
       order = order == Tools::DataOrder::Columns ? Tools::DataOrder::Rows : Tools::DataOrder::Columns;
       MeshModel newMesh{ImportedMeshModel(
-                          dataModel_.getMeshModel().getIndexParameters(), 
                           fileName.toStdString(), 
+                          dataModel_.getMeshModel().getIndexParameters(),
                           Indices(1, 0), 
                           order)};
       dataModel_.setMeshModel(newMesh);
@@ -220,18 +221,15 @@ void DataFieldModelWindow::updateProcessSample()
   {
     dataModel_.setSampleAsProcessSample(tableModel_->getSample());
     // Override mesh model if incompatible
-    bool isImportedMesh = dynamic_cast<ImportedMeshModel*>(dataModel_.getMeshModel().getImplementation().get());
     if ((tableModel_->getSample().getDimension() != dataModel_.getMeshModel().getMesh().getVerticesNumber())
-        || (!includeMeshCB_->isChecked() && isImportedMesh) // if the user check and then uncheck the check box
-    )
+        || forceUpdateProcessSample_)
     {
+      forceUpdateProcessSample_ = false;
       try
       {
-        if (!isImportedMesh)
-          dataModel_.blockNotification();
+        dataModel_.blockNotification();
         dataModel_.setMeshModel(GridMeshModel(Interval(0, 1), Indices(1, tableModel_->getSample().getDimension())));
-        if (!isImportedMesh)
-          dataModel_.getImplementation().get()->notify("meshOverwritten");
+        dataModel_.getImplementation().get()->notify("meshOverwritten");
       }
       catch (const InvalidArgumentException &e)
       {

@@ -38,10 +38,9 @@ using namespace OT;
 namespace PERSALYS
 {
 
-ImportMeshWidget::ImportMeshWidget(QWidget* parent, bool chooseOrder)
+ImportMeshWidget::ImportMeshWidget(QWidget* parent)
   : QWidget(parent)
   , tableValidity_(false)
-  , chooseOrder_(chooseOrder)
 {
   buildInterface();
 }
@@ -68,39 +67,6 @@ void ImportMeshWidget::buildInterface()
 
   int row = 0;
   mainGridLayout->addLayout(hboxLayout, row++, 0, 1, 3);
-
-  if (chooseOrder_)
-  {
-    QHBoxLayout * buttonsLayout = new QHBoxLayout;
-    orderButtonGroup_ = new QButtonGroup(this);
-
-    QRadioButton * orderButton = new QRadioButton(tr("All the time steps are stored in one row"));
-    orderButtonGroup_->addButton(orderButton, Tools::Rows);
-    buttonsLayout->addWidget(orderButton);
-
-    orderButton = new QRadioButton(tr("All the time steps are stored in one column"));
-    orderButtonGroup_->addButton(orderButton, Tools::Columns);
-    buttonsLayout->addWidget(orderButton);
-
-    orderButtonGroup_->button(Tools::Rows)->click();
-
-    const bool exists = QFile(filePathLineEdit_->text()).exists();
-    orderButtonGroup_->button(Tools::Rows)->setEnabled(exists);
-    orderButtonGroup_->button(Tools::Columns)->setEnabled(exists);
-
-    buttonsLayout->addStretch();
-    mainGridLayout->addLayout(buttonsLayout, row++, 0, 1, 3);
-
-    connect(orderButtonGroup_, &QButtonGroup::idClicked, [this] (int) {
-    setData(filePathLineEdit_->text());
-    });
-
-    connect(filePathLineEdit_, &QLineEdit::textChanged, [this] (QString) {
-    const bool fileExists = QFile(filePathLineEdit_->text()).exists();
-    orderButtonGroup_->button(Tools::Rows)->setEnabled(fileExists);
-    orderButtonGroup_->button(Tools::Columns)->setEnabled(fileExists);
-    });
-  }
 
   // file preview
   QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
@@ -160,15 +126,15 @@ void ImportMeshWidget::setData(const QString& fileName)
   try
   {
     errorMessageLabel_->reset();
-    emit updateTableRequested(fileName);
+    emit updateTableRequested(fileName); // connected to MeshDefinitionWizard::setTable
     tableValidity_ = true;
   }
-  catch (const std::exception & ex)
+  catch (const Exception &e)
   {
-    dataPreviewTableView_->setModel(0);
+    dataPreviewTableView_->setModel(nullptr);
     // DOE size
     DOESizeLabel_->setText("");
-    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(ex.what()));
+    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(e.what()));
     tableValidity_ = false;
   }
 }
@@ -187,7 +153,7 @@ void ImportMeshWidget::updateWidgets(const Sample& fileSample, const Description
 
   // set table model
   dataPreviewTableView_->setModel(new SampleTableModel(sample, initialDescription, dataPreviewTableView_));
-  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SIGNAL(checkColumnsRequested()));
+  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SIGNAL(checkColumnsRequested())); // connected to MeshDefinitionWizard::checkColumns
 
   // set comboboxes items: each of them contains the input Names and an empty item
   QStringList comboBoxItems;
@@ -196,7 +162,7 @@ void ImportMeshWidget::updateWidgets(const Sample& fileSample, const Description
   comboBoxItems << "";
 
   // set horizontal header view
-  QVector<int> columnsWithCombo(sample.getDimension());
+  QVector<int> columnsWithCombo((int) sample.getDimension());
   for (int i = 0; i < columnsWithCombo.size(); ++i)
     columnsWithCombo[i] = i;
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
@@ -248,11 +214,4 @@ Sample ImportMeshWidget::getData() const
     throw InvalidArgumentException(HERE) << "Table model is not a SampleTableModel";
 }
 
-Tools::DataOrder ImportMeshWidget::getDataOrder() const
-{
-  if (orderButtonGroup_)
-    return static_cast<Tools::DataOrder>(orderButtonGroup_->checkedId());
-  else
-    return Tools::Columns;
-}
 }

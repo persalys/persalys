@@ -26,7 +26,7 @@ print(meshModel2)
 
 # mesh model
 meshModel3 = persalys.ImportedMeshModel(
-    [persalys.Variable("z", "aDescription")], "mesh.csv", ot.Indices(1, 0)
+    "mesh.csv", [persalys.Variable("z", "aDescription")], ot.Indices(1, 0)
 )
 
 print(meshModel3)

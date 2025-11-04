@@ -41,7 +41,7 @@ class PERSALYS_VIEW_API MeshDefinitionWizard : public Wizard
 
 public:
   enum Method {Grid, Import};
-  explicit MeshDefinitionWizard(const MeshModel& mesh, const OT::Bool allowColumns = false, QWidget* parent = nullptr, bool isDataField = false);
+  explicit MeshDefinitionWizard(const MeshModel& mesh, QWidget* parent = nullptr, bool isDataField = false);
 
   MeshModel getMesh() const;
   bool validateCurrentPage() override;
@@ -56,7 +56,6 @@ public slots:
 
 private:
   MeshModel               mesh_;
-  OT::Bool                allowColumns_         = false;
   OT::Bool                isDataField_          = false;
   GridMeshModel           gridMesh_;
   ImportedMeshModel       importedMesh_;

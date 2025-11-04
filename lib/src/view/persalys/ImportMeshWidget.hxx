@@ -32,7 +32,7 @@
 
 namespace PERSALYS
 {
-class ImportMeshWidget : public QWidget
+class PERSALYS_VIEW_API  ImportMeshWidget : public QWidget
 {
   Q_OBJECT
 
@@ -40,7 +40,7 @@ public:
   friend class MeshDefinitionWizard;
   friend class TestMeshDefinitionWizard;
 
-  explicit ImportMeshWidget(QWidget *parent = nullptr, bool chooseOrder = false);
+  explicit ImportMeshWidget(QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
@@ -49,7 +49,6 @@ protected:
   void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns);
   OT::Indices getColumns(const OT::Description& names) const;
   OT::Sample getData() const;
-  Tools::DataOrder getDataOrder() const;
 
 public slots:
   void openFileRequested();
@@ -59,13 +58,11 @@ signals:
 
 private:
   bool                tableValidity_          = false;
-  bool                chooseOrder_            = false;
 
   QLineEdit           * filePathLineEdit_     = nullptr;
   ExportableTableView * dataPreviewTableView_ = nullptr;
   QLabel              * DOESizeLabel_         = nullptr;
   TemporaryLabel      * errorMessageLabel_    = nullptr;
-  QButtonGroup        * orderButtonGroup_     = nullptr;
 };
 }
 #endif
