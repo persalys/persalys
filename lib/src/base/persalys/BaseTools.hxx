@@ -31,7 +31,9 @@
 
 namespace PERSALYS
 {
+
 #ifndef SWIG
+
 // class to build a collection of parameters
 class PERSALYS_BASE_API Parameters
 {
@@ -88,20 +90,28 @@ private:
 private:
   OT::Collection<std::pair<OT::String, OT::String> > pairsCollection_;
 };
-#endif
+
+#endif // SWIG
+
 class PERSALYS_BASE_API Tools
 {
 public:
-  enum DataOrder {Columns, Rows};
+  enum DataOrder {Columns, Rows, Unkown};
+
 #ifndef SWIG
   static OT::Sample ImportSample(const OT::String& fileName, const DataOrder order=Columns);
+  static OT::Sample ImportMesh(const OT::String &filename);
   static void ComputeBounds(const InputCollection& inputs, OT::Point& startingPoint, OT::Interval& bounds);
   static OT::String GetNormalizedVariable(const OT::String& variable);
   static OT::Description GetNormalizedVariables(const OT::Description& variables);
+  static OT::Sample transposeSample(const OT::Sample &sample);
 
   /** Method EscapeHTML() escapes HTML special characters in a string */
   static OT::String EscapeHTML(const OT::String &text);
-#endif
+
+private:
+  static OT::Sample ImportRawSample(const OT::String &filename);
+#endif // SWIG
 };
 
 #ifndef SWIG
@@ -157,6 +167,7 @@ bool hasMoreThanOneObjectWithName(const OT::Collection<TIObject> &coll, const OT
                        [&](const TIObject& obj){ return obj.getName() == name; }) >= 2u;
 }
 
-#endif
-}
-#endif
+#endif // SWIG
+} // namespace PERSALY
+
+#endif // PERSALYS_BASETOOLS_HXX

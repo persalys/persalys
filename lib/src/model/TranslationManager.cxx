@@ -227,6 +227,10 @@ void TranslationManager::InitializeErrorMessages()
   //GridMeshModel::setParameters
   ErrorMessages_.insert("The lower bounds must be less than the upper bounds", tr("The lower bounds must be less than the upper bounds"));
   ErrorMessages_.insert("The mesh must contain at least two node", tr("The mesh must contain at least two node"));
+  // Tools
+  ErrorMessages_.insert("The file does not contain a sample and/or the file encoding is not valid (use utf-8)", tr("The file does not contain a sample and/or the file encoding is not valid (use utf-8)"));
+  ErrorMessages_.insert("Unknown data order", tr("Unknown data order"));
+  ErrorMessages_.insert("The file contains more than one row or column. It must only contain the mesh.", tr("The file contains more than one row or column. It must only contain the mesh."));
 }
 
 
