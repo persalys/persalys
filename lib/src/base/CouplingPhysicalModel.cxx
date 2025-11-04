@@ -142,10 +142,8 @@ void CouplingPhysicalModel::setSteps(const CouplingStepCollection & steps)
   updateCode();
 }
 
-void CouplingPhysicalModel::updateCode()
+Description CouplingPhysicalModel::getStepsOutputNames(const CouplingStepCollection &steps) const
 {
-  CouplingStepCollection steps = getSteps();
-  Description inputNames;
   Description outputNames;
 
   // retrieve output variables
@@ -171,6 +169,13 @@ void CouplingPhysicalModel::updateCode()
           outputNames.add(step.getPPOutputs()[j]);
   }
 
+  return outputNames;
+}
+
+Description CouplingPhysicalModel::getStepsInputNames(const CouplingStepCollection &steps, const Description &outputNames) const
+{
+  Description inputNames;
+
   // retrieve input variables
   for (UnsignedInteger i = 0; i < steps.getSize(); ++ i)
   {
@@ -194,6 +199,12 @@ void CouplingPhysicalModel::updateCode()
             !outputNames.contains(step.getPPInputs()[j]))
           inputNames.add(step.getPPInputs()[j]);
   }
+
+  return inputNames;
+}
+
+String CouplingPhysicalModel::writeLocalCode(const Description &inputNames, const Description &outputNames) const
+{
   const String inputNamesStr(Parameters::GetOTDescriptionStr(inputNames, false, false));
   OSS code;
   code << "import tempfile\n";
@@ -293,7 +304,28 @@ void CouplingPhysicalModel::updateCode()
     code << "    " << outputNames[i] << " = all_vars['" << outputNames[i] << "']\n";
   }
   code << "    return " << Parameters::GetOTDescriptionStr(outputNames, false, false) << "\n";
-  setCode(code);
+
+  return code;
+}
+
+String CouplingPhysicalModel::writeRemoteCode(const Description &inputNames, const Description &outputNames) const
+{
+  throw NotYetImplementedException(HERE);
+}
+
+void CouplingPhysicalModel::updateCode()
+{
+  const CouplingStepCollection steps = getSteps();
+  const Description outputNames{getStepsOutputNames(steps)};
+  const Description inputNames{getStepsInputNames(steps, outputNames)};
+
+  OT::String code;
+  if (hostname_.empty())
+    code = writeLocalCode(inputNames, outputNames);
+  else
+    code = writeRemoteCode(inputNames, outputNames);
+
+  PythonPhysicalModel::setCode(code);
 
   notify("stepsChanged");
 }
@@ -372,6 +404,7 @@ String CouplingPhysicalModel::getPythonScript() const
   oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True" : "False") << ")\n";
   oss << getName() + ".setCacheFiles(r'" << getCacheInputFile()
       << "', r'" << getCacheOutputFile() << "')\n";
+  oss << getName() + ".setHostname('" << getHostname() << "')\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;
@@ -383,7 +416,8 @@ String CouplingPhysicalModel::__repr__() const
 {
   OSS oss;
   oss << PhysicalModelImplementation::__repr__()
-      << " steps=" << getSteps();
+      << " steps=" << getSteps()
+      << " hostname=" << hostname_;
   return oss;
 }
 
@@ -436,6 +470,7 @@ void CouplingPhysicalModel::save(Advocate & adv) const
   adv.saveAttribute("cacheInputFile_", cacheInputFile_);
   adv.saveAttribute("cacheOutputFile_", cacheOutputFile_);
   adv.saveAttribute("workDir_", workDir_);
+  adv.saveAttribute("hostname_", hostname_);
 }
 
 
@@ -448,6 +483,8 @@ void CouplingPhysicalModel::load(Advocate & adv)
   adv.loadAttribute("cacheInputFile_", cacheInputFile_);
   adv.loadAttribute("cacheOutputFile_", cacheOutputFile_);
   adv.loadAttribute("workDir_", workDir_);
+  if (adv.hasAttribute("hostname_"))
+    adv.loadAttribute("hostname_", hostname_);
 }
 
 

@@ -140,3 +140,19 @@ Returns
 -------
 workDir : str
     Working directory path."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::setHostname
+"Hostname accessor.
+
+Parameters
+----------
+hostname : str
+    Name of the host where the model is executed."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::CouplingPhysicalModel::setLocal
+"Set the model to be executed locally.
+Use setHostname to execute it on a remote host."
