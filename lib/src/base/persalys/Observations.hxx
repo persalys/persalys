@@ -65,7 +65,7 @@ public:
   OT::String __repr__() const override;
 
 protected:
-  OT::Sample importSample(const OT::String& fileName) override;
+  OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder = Tools::DataOrder::Columns) override;
   void setDefaultColumns() override;
   void update() override;
   virtual void orderSamples();

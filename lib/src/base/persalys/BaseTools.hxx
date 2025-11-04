@@ -96,7 +96,7 @@ private:
 class PERSALYS_BASE_API Tools
 {
 public:
-  enum DataOrder {Columns, Rows, Unkown};
+  enum DataOrder {Columns, Rows, Unknown};
 
 #ifndef SWIG
   static OT::Sample ImportSample(const OT::String& fileName, const DataOrder order=Columns);

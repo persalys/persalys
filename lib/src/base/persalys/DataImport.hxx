@@ -33,13 +33,14 @@ class PERSALYS_BASE_API DataImport
 public:
 
   /** Default constructor */
-  DataImport();
+  DataImport() = default;
+
   /** Constructor with parameters */
   DataImport(const OT::String & fileName,
              const OT::Indices & inputColumns,
              const OT::Indices & outputColumns = OT::Indices());
 
-  virtual ~DataImport();
+  virtual ~DataImport() = default;
 
   OT::String getFileName() const;
   void setFileName(const OT::String& fileName,
@@ -61,8 +62,7 @@ public:
 
 protected:
   virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns);
-  virtual OT::Sample importSample(const OT::String& fileName);
-  virtual OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder order);
+  virtual OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder order = Tools::DataOrder::Columns);
   virtual void check();
   virtual void setDefaultColumns();
 
