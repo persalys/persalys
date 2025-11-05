@@ -50,11 +50,11 @@ public:
   void setSteps(const CouplingStepCollection & steps);
   CouplingStepCollection getSteps() const;
 
-  inline void setHostname(const OT::String &hostname) {
+  inline void setHostname(std::string_view hostname) {
     hostname_ = hostname;
   }
   inline void setLocal() {
-    setHostname(OT::String());
+    setHostname(std::string_view());
   }
 
   OT::String getHTMLDescription() const override;

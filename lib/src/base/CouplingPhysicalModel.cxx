@@ -203,9 +203,11 @@ Description CouplingPhysicalModel::getStepsInputNames(const CouplingStepCollecti
   return inputNames;
 }
 
-String CouplingPhysicalModel::writeLocalCode(const Description &inputNames, const Description &outputNames) const
+String CouplingPhysicalModel::writeLocalCode(const Description & inputNames, 
+  const Description & outputNames) const
 {
   const String inputNamesStr(Parameters::GetOTDescriptionStr(inputNames, false, false));
+
   OSS code;
   code << "import tempfile\n";
   code << "import openturns.coupling_tools as otct\n";
@@ -214,40 +216,48 @@ String CouplingPhysicalModel::writeLocalCode(const Description &inputNames, cons
   code << "import os\n";
   code << "import re\n";
   code << "import hashlib\n";
-  code << "import struct\n\n";
-  code << "def _exec(" <<  inputNamesStr << "):\n";
-
+  code << "import struct\n";
+  code << "from pathlib import Path\n\n";
+  code << "FUNC_PATTERN = re.compile(r'def\\s+(\\w+)\\(.*?\\):')\n";
+  code << "ARGS_PATTERN = re.compile(r'def\\s+\\w+\\(([\\w, ]*)\\):')\n";
+  code << "RETURN_PATTERN = re.compile(r'return\\s+([\\w, ]+)')\n\n";
+  code << "def _exec(" << inputNamesStr << "):\n";
   code << getStepsMacro("    ");
   code << "    all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(inputNames) << ", [" << inputNamesStr << "]))\n";
-
   code << "    checksum = hashlib.sha1()\n";
-  code << "    [checksum.update(hex(struct.unpack('<Q', struct.pack('<d', x))[0]).encode()) for x in all_vars.values()]\n";
+  code << "    for value in all_vars.values():\n";
+  code << "        checksum.update(hex(struct.unpack('<Q', struct.pack('<d', value))[0]).encode())\n";
   code << "    global workdir\n";
-  if(!workDir_.empty())
-    code << "    workdir = os.path.join(r'" << workDir_ << "', 'persalys_' + checksum.hexdigest())\n";
+  if (!workDir_.empty())
+    code << "    workdir = Path(r'" << workDir_ << "') / ('persalys_' + checksum.hexdigest())\n";
   else
-    code << "    workdir = os.path.join(tempfile.gettempdir(), 'persalys_' + checksum.hexdigest())\n";
-  code << "    if not os.path.exists(workdir):\n";
-  code << "        os.makedirs(workdir)\n";
+    code << "    workdir = Path(tempfile.gettempdir()) / ('persalys_' + checksum.hexdigest())\n";
+  code << "    workdir = workdir.resolve()\n";
+  code << "    if not workdir.exists():\n";
+  code << "        workdir.mkdir(parents=True, exist_ok=True)\n";
+  code << "    def _require_var(var_name):\n";
+  code << "        if var_name not in all_vars:\n";
+  code << "            raise KeyError(f\"Variable '{var_name}' is undefined\")\n";
+  code << "        return all_vars[var_name]\n";
   code << "    for step in steps:\n";
   code << "        for input_file in step.getInputFiles():\n";
   code << "            if not input_file.getPath():\n";
   code << "                continue\n";
-  code << "            input_values = [all_vars[varname] for varname in input_file.getVariableNames()]\n";
+  code << "            input_values = [_require_var(varname) for varname in input_file.getVariableNames()]\n";
   code << "            formats = input_file.getFormats()\n";
   code << "            if formats.isBlank():\n";
   code << "                formats = None\n";
-  code << "            otct.replace(input_file.getPath(), os.path.join(workdir, input_file.getConfiguredPath()), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
+  code << "            target = workdir / input_file.getConfiguredPath()\n";
+  code << "            target.parent.mkdir(parents=True, exist_ok=True)\n";
+  code << "            otct.replace(input_file.getPath(), str(target), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
   code << "        for resource_file in step.getResourceFiles():\n";
   code << "            if not resource_file.getPath():\n";
   code << "                continue\n";
-  code << "            if os.path.isfile(resource_file.getPath()):\n";
-  code << "                shutil.copy(resource_file.getPath(), os.path.join(workdir, os.path.basename(resource_file.getPath())))\n";
-  code << "            elif os.path.isdir(resource_file.getPath()):\n";
-  code << "                dest = os.path.join(workdir, os.path.basename(resource_file.getPath()))\n";
-  code << "                if os.path.exists(dest):\n";
-  code << "                    shutil.rmtree(dest)\n";
-  code << "                shutil.copytree(resource_file.getPath(), dest)\n";
+  code << "            src_path = Path(resource_file.getPath())\n";
+  code << "            if src_path.is_file():\n";
+  code << "                shutil.copy2(src_path, workdir / src_path.name)\n";
+  code << "            elif src_path.is_dir():\n";
+  code << "                shutil.copytree(src_path, workdir / src_path.name, dirs_exist_ok=True)\n";
   code << "            else:\n";
   code << "                raise FileNotFoundError(resource_file.getPath())\n";
   code << "        if len(step.getCommand()) > 0:\n";
@@ -255,36 +265,34 @@ String CouplingPhysicalModel::writeLocalCode(const Description &inputNames, cons
   code << "            if timeout <= 0:\n";
   code << "                timeout = None\n";
   code << "            if len(step.getEnvironmentKeys()) == 0:\n";
-  code << "                otct.execute(step.getCommand(), cwd=workdir, shell=step.getIsShell(), capture_output=True, timeout=timeout)\n";
+  code << "                otct.execute(step.getCommand(), cwd=str(workdir), shell=step.getIsShell(), capture_output=True, timeout=timeout)\n";
   code << "            else:\n";
   code << "                env = os.environ.copy()\n";
   code << "                for key, val in zip(step.getEnvironmentKeys(), step.getEnvironmentValues()):\n";
   code << "                    env[key] = val\n";
-  code << "                otct.execute(step.getCommand(), cwd=workdir, shell=step.getIsShell(), capture_output=True, timeout=timeout, env=env)\n";
+  code << "                otct.execute(step.getCommand(), cwd=str(workdir), shell=step.getIsShell(), capture_output=True, timeout=timeout, env=env)\n";
   code << "        for output_file in step.getOutputFiles():\n";
   code << "            if not output_file.getPath():\n";
   code << "                continue\n";
-  code << "            outfile = os.path.join(workdir, output_file.getPath())\n";
+  code << "            outfile = workdir / output_file.getPath()\n";
+  code << "            outfile_str = str(outfile)\n";
   code << "            for varname, token, skip_tok, skip_line, skip_col in zip(output_file.getVariableNames(), output_file.getTokens(), output_file.getSkipTokens(), output_file.getSkipLines(), output_file.getSkipColumns()):\n";
   code << "                token_esc = re.escape(token)\n";
-  code << "                all_vars[varname] = otct.get_value(outfile, token=token_esc, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding=step.getEncoding())\n";
+  code << "                all_vars[varname] = otct.get_value(outfile_str, token=token_esc, skip_token=int(skip_tok), skip_line=int(skip_line), skip_col=int(skip_col), encoding=step.getEncoding())\n";
   code << "        if step.getCode():\n";
   code << "            script = step.getCode()\n";
-
-  code << "            regexsearch = re.search(r'def (\\w*)\\(.*\\):', script)\n";
-  code << "            if regexsearch is not None:\n";
-  code << "                script_funcname = regexsearch.group(1)\n";
-  code << "            else:\n";
+  code << "            func_match = FUNC_PATTERN.search(script)\n";
+  code << "            if func_match is None:\n";
   code << "                raise RuntimeError('Could not find extra processing function name')\n";
-
-  code << "            regexsearch = re.search(r'def \\w+\\(([\\w, ]+)\\):', script)\n";
-  code << "            if regexsearch is not None:\n";
-  code << "                script_invars = regexsearch.group(1).replace(' ', '').split(',')\n";
+  code << "            script_funcname = func_match.group(1)\n";
+  code << "            args_match = ARGS_PATTERN.search(script)\n";
+  code << "            if args_match is not None and args_match.group(1):\n";
+  code << "                script_invars = [name for name in args_match.group(1).replace(' ', '').split(',') if name]\n";
   code << "            else:\n";
   code << "                script_invars = []\n";
-  code << "            regexsearch = re.search(r'return ([\\w, ]+)', script)\n";
-  code << "            if regexsearch is not None:\n";
-  code << "                script_outvars = regexsearch.group(1).replace(' ', '').split(',')\n";
+  code << "            return_match = RETURN_PATTERN.search(script)\n";
+  code << "            if return_match is not None and return_match.group(1):\n";
+  code << "                script_outvars = [name for name in return_match.group(1).replace(' ', '').split(',') if name]\n";
   code << "            else:\n";
   code << "                script_outvars = []\n";
   code << "            exec_script = script+'\\nscript_output__ = '+script_funcname+'('+ ', '.join([str(all_vars[var]) for var in script_invars]) + ')\\n'\n";
@@ -304,7 +312,6 @@ String CouplingPhysicalModel::writeLocalCode(const Description &inputNames, cons
     code << "    " << outputNames[i] << " = all_vars['" << outputNames[i] << "']\n";
   }
   code << "    return " << Parameters::GetOTDescriptionStr(outputNames, false, false) << "\n";
-
   return code;
 }
 
@@ -341,7 +348,7 @@ String CouplingPhysicalModel::getHTMLDescription() const
   OSS oss;
   oss << PhysicalModelImplementation::getHTMLDescription();
   oss << "<h3>Outputs</h3><p>";
-  oss << "<table style=\"width:100%\" border=\"1\" cellpadding=\"5\">";
+  oss << R"(<table style="width:100%" border="1" cellpadding="5">)";
   oss << "<tr>";
   oss << "  <th>Name</th>";
   oss << "  <th>Description</th>";
