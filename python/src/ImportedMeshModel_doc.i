@@ -1,20 +1,17 @@
 %feature("docstring") PERSALYS::ImportedMeshModel
 "Create a model with imported meshes
 
-Available constructors:
-    ImportedMeshModel(*filename, parameters, columns, order*)
-
 Parameters
 ----------
-fileName : *str*
+fileName : str
     Name of a data file to load
-parameters : *sequence of :class:`persalys.Variable`, optional*
+parameters : sequence of :class:`persalys.Variable`, optional
     Sequence of index parameters. By default
     the index parameter is named **t**
-columns : *sequence of int, optional*
+columns : sequence of int, optional 
     Indices of columns in files to consider. The sequence dimension
     must have a dimension equal to the number of index parameters
-order : *int, optional*
+order : int, optional
     Data order in the file. Possible values are:
     - persalys.Tools.Unknown (default) : the file contains 1D data and order will be inferred automatically
     - persalys.tools.Columns : each time step is stored in a different columns
