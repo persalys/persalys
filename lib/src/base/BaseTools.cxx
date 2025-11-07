@@ -250,29 +250,27 @@ Description Parameters::GetOTIntervalDescription(const Interval& interval)
   return resu;
 }
 
+// ------------------------ Tools --------------------------------------
 
-Sample Tools::ImportSample(const String& fileName, const DataOrder order)
+Sample Tools::ImportRawSample(const String &fileName)
 {
-  std::vector< String > separatorsList(3);
-  separatorsList = {" ", ",", ";"};
+  std::vector<String> separatorsList{" ", ",", ";"};
+  std::vector<String> numSepList{".", ","};
+
   Sample sampleFromFile;
   Sample testSample;
 
-  std::vector<String> numSep(2);
-  numSep = {".", ","};
-
   UnsignedInteger maxNumberOfElements = 0;
 
-  for (UnsignedInteger j = 0; j < numSep.size(); ++ j)
+  for (const String &numSep : numSepList)
   {
-    for (UnsignedInteger i = 0; i < separatorsList.size(); ++ i)
+    for (const String &separator : separatorsList)
     {
-      if (separatorsList[i] == numSep[j])
+      if (separator == numSep)
         continue;
       try
       {
-        // import sample from the file
-        testSample = Sample::ImportFromTextFile(fileName, separatorsList[i], 0, numSep[j]);
+        testSample = Sample::ImportFromTextFile(fileName, separator, 0, numSep);
       }
       catch (const InvalidArgumentException &)
       {
@@ -289,14 +287,14 @@ Sample Tools::ImportSample(const String& fileName, const DataOrder order)
   }
 
   if (!sampleFromFile.getSize())
-    throw InvalidArgumentException(HERE) << "The file " << fileName << " does not contain a sample and/or the file encoding is not valid (use utf-8)";
+    throw InvalidArgumentException(HERE) << "The file does not contain a sample and/or the file encoding is not valid (use utf-8)";
 
   // deduplicate identifiers
-  std::map<String, int> occurrences;
+  std::map<String, int, std::less<>> occurrences;
   Description description(sampleFromFile.getDescription());
   for (UnsignedInteger i = 0; i < description.getSize(); ++ i)
   {
-    std::map<String, int>::iterator it = occurrences.find(description[i]);
+    std::map<String, int, std::less<>>::iterator it = occurrences.find(description[i]);
     if (it == occurrences.end())
       occurrences[description[i]] = 1;
     else
@@ -307,22 +305,46 @@ Sample Tools::ImportSample(const String& fileName, const DataOrder order)
   }
   sampleFromFile.setDescription(description);
 
-  // Enventually transpose sample
+  return sampleFromFile;
+}
+
+Sample Tools::transposeSample(const Sample &sample)
+{
+  Sample transposedSample(sample.getDimension(), sample.getSize());
+
+  for(UnsignedInteger j=0; j<sample.getDimension(); ++j)
+    for(UnsignedInteger i=0; i<sample.getSize(); ++i)
+      transposedSample(j,i) = sample(i,j);
+  
+  return transposedSample;
+}
+
+Sample Tools::ImportSample(const String& fileName, const DataOrder order)
+{
+  const Sample sampleFromFile{ImportRawSample(fileName)};
+
   switch (order)
   {
-  case Columns:
-    return sampleFromFile;
-  case Rows:
-  {
-    Sample transposedSample(sampleFromFile.getDimension(), sampleFromFile.getSize());
-    for(UnsignedInteger j=0; j<sampleFromFile.getDimension(); ++j)
-      for(UnsignedInteger i=0; i<sampleFromFile.getSize(); ++i)
-        transposedSample(j,i) = sampleFromFile(i,j);
-    return transposedSample;
+    case Columns:
+      return sampleFromFile;
+    case Rows:
+      return transposeSample(sampleFromFile);
+    default:
+      throw InvalidArgumentException(HERE) << "Unknown data order";
   }
-  default:
-    throw InvalidArgumentException(HERE) << "Unknown data order";
-  }
+}
+
+Sample Tools::ImportMesh(const String &filename)
+{
+  const Sample sampleFromFile{ImportRawSample(filename)};
+
+  if (sampleFromFile.getSize() > 1 && sampleFromFile.getDimension() > 1)
+    throw InvalidArgumentException(HERE) << "The file contains more than one row or column. It must only contain the mesh.";
+
+  if (sampleFromFile.getDimension() > sampleFromFile.getSize())
+    return transposeSample(sampleFromFile);
+  
+  return sampleFromFile;
 }
 
 

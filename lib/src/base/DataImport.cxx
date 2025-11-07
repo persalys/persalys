@@ -27,33 +27,19 @@ using namespace OT;
 namespace PERSALYS
 {
 
-/* Default constructor */
-DataImport::DataImport()
-{
-
-}
-
-
 /* Constructor with parameters */
 DataImport::DataImport(const String& fileName,
                        const Indices& inputColumns,
                        const Indices& outputColumns)
 {
-  setFileName(fileName);
-  setColumns(inputColumns, outputColumns);
+  DataImport::setFileName(fileName);
+  DataImport::setColumns(inputColumns, outputColumns);
 }
-
-
-DataImport::~DataImport()
-{
-}
-
 
 String DataImport::getFileName() const
 {
   return fileName_;
 }
-
 
 void DataImport::setFileName(const String& fileName, const Tools::DataOrder order)
 {
@@ -124,13 +110,11 @@ void DataImport::setColumns(const Indices &inputColumns,
   outputColumns_ = outputColumns;
 }
 
-Sample DataImport::importSample(const String& fileName)
-{
-  return Tools::ImportSample(fileName);
-}
-
 Sample DataImport::importSample(const String& fileName, const Tools::DataOrder order)
 {
+  if (order == Tools::DataOrder::Unknown)
+    return Tools::ImportMesh(fileName);
+  
   return Tools::ImportSample(fileName, order);
 }
 

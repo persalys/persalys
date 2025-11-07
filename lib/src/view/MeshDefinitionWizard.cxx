@@ -21,20 +21,22 @@
 #include "persalys/MeshDefinitionWizard.hxx"
 
 #include "persalys/SpinBoxDelegate.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QHBoxLayout>
 #include <QRadioButton>
 #include <QHeaderView>
+#include <QMessageBox>
 
 using namespace OT;
 
 namespace PERSALYS
 {
 
-MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh, Bool allowColumns, QWidget* parent)
+MeshDefinitionWizard::MeshDefinitionWizard(const MeshModel& mesh,  QWidget* parent, bool isDataField)
   : Wizard(parent)
   , mesh_(mesh)
-  , allowColumns_(allowColumns)
+  , isDataField_(isDataField)
 {
   buildInterface();
 }
@@ -75,15 +77,23 @@ void MeshDefinitionWizard::buildInterface()
   tableModel_->setNotEditableItem(0, 1, QString::fromUtf8(param.getDescription().c_str()));
   tableModel_->setItem(0, 2, new QStandardItem(QString::number(mesh_.getBounds().getLowerBound()[0])));
   tableModel_->setItem(0, 3, new QStandardItem(QString::number(mesh_.getBounds().getUpperBound()[0])));
-  tableModel_->setItem(0, 4, new QStandardItem(QString::number(mesh_.getNumberOfNodes()[0])));
+  if (isDataField_)
+  {
+    tableModel_->setNotEditableItem(0, 4, QString::number(mesh_.getNumberOfNodes()[0]));
+    tableModel_->item(0, 4)->setEnabled(false);
+  }
+  else
+    tableModel_->setItem(0, 4, new QStandardItem(QString::number(mesh_.getNumberOfNodes()[0])));
   tableView_->setModel(tableModel_);
 
   SpinBoxDelegate * spinBoxDelegate = new SpinBoxDelegate(tableView_);
   spinBoxDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
   for (int i = 2; i < tableModel_->columnCount() - 1; ++i)
     tableView_->setItemDelegateForColumn(i, spinBoxDelegate);
-  spinBoxDelegate = new SpinBoxDelegate(tableView_);
-  tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
+  if (!isDataField_) {
+    spinBoxDelegate = new SpinBoxDelegate(tableView_);
+    tableView_->setItemDelegateForColumn(4, spinBoxDelegate);
+  }
 
   // resize table
   tableView_->resizeColumnsToContents();
@@ -102,7 +112,7 @@ void MeshDefinitionWizard::buildInterface()
   methodGroup_->addButton(importButton, MeshDefinitionWizard::Import);
   pageLayout->addWidget(importButton);
 
-  sampleWidget_ = new ImportSampleWidget(this, allowColumns_);
+  sampleWidget_ = new ImportMeshWidget(this);
   pageLayout->addWidget(sampleWidget_);
   connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
   connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
@@ -116,8 +126,8 @@ void MeshDefinitionWizard::buildInterface()
   connect(importButton, SIGNAL(toggled(bool)), errorMessageLabel_, SLOT(setDisabled(bool)));
 
   // initialize widgets
-  ImportedMeshModel * importedMeshModel = dynamic_cast<ImportedMeshModel*>(mesh_.getImplementation().get());
-  GridMeshModel * gridMeshModel = dynamic_cast<GridMeshModel*>(mesh_.getImplementation().get());
+  const auto * importedMeshModel = dynamic_cast<ImportedMeshModel*> (mesh_.getImplementation().get());
+  const auto * gridMeshModel     = dynamic_cast<GridMeshModel*>     (mesh_.getImplementation().get());
 
   if (importedMeshModel)
   {
@@ -149,12 +159,10 @@ void MeshDefinitionWizard::resizeEvent(QResizeEvent* event)
 
 void MeshDefinitionWizard::setTable(const QString& fileName)
 {
-  // set file name
-  importedMesh_.setFileName(fileName.toUtf8().data(), sampleWidget_->getDataOrder());
-  // update widgets
+  importedMesh_.setMeshFilename(fileName.toUtf8().data());
   sampleWidget_->updateWidgets(importedMesh_.getSampleFromFile(),
-                               Description(1, mesh_.getIndexParameters()[0].getName()),
-                               importedMesh_.getInputColumns());
+                              Description(1, mesh_.getIndexParameters()[0].getName()),
+                              importedMesh_.getInputColumns());
 }
 
 
@@ -187,7 +195,7 @@ MeshModel MeshDefinitionWizard::getMesh() const
   }
   else
   {
-    newMesh = ImportedMeshModel(mesh_.getIndexParameters(), importedMesh_.getFileName(), importedMesh_.getInputColumns(), sampleWidget_->getDataOrder());
+    newMesh = ImportedMeshModel(importedMesh_.getFileName(), mesh_.getIndexParameters());
   }
   return newMesh;
 }

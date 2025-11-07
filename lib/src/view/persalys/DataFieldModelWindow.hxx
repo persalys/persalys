@@ -32,6 +32,7 @@
 #include <QLineEdit>
 #include <QResizeEvent>
 #include <QButtonGroup>
+#include <QCheckBox>
 
 
 namespace PERSALYS
@@ -45,7 +46,7 @@ class PERSALYS_VIEW_API DataFieldModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  DataFieldModelWindow(DataFieldModelItem * item, QWidget *parent = nullptr);
+  explicit DataFieldModelWindow(DataFieldModelItem * item, QWidget *parent = nullptr);
   void showEvent(QShowEvent*) override;
 
 protected:
@@ -58,12 +59,17 @@ public slots:
   void launchCleaningWizard();
 
 private:
-  DataFieldModel dataModel_;
-  SampleTableModel * tableModel_ = nullptr;
-  QLineEdit * filePathLineEdit_ = nullptr;
-  QButtonGroup * orderButtonGroup_ = nullptr;
-  EditableExportableTableView * dataTableView_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  DataFieldModel              dataModel_;
+  bool                        forceUpdateProcessSample_ = false;
+
+  SampleTableModel            * tableModel_             = nullptr;
+  QLineEdit                   * filePathLineEdit_       = nullptr;
+  QButtonGroup                * orderButtonGroup_       = nullptr;
+  EditableExportableTableView * dataTableView_          = nullptr;
+  TemporaryLabel              * errorMessageLabel_      = nullptr;
+  QCheckBox                   * includeMeshCB_          = nullptr;
 };
-}
-#endif
+
+} // namespace PERSALYS
+
+#endif // PERSALYS_DATAFIELDMODELWINDOW_HXX

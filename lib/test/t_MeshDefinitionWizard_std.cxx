@@ -75,7 +75,7 @@ private slots:
     wizard.show();
 
     // checks
-    ImportSampleWidget * sampleWidget = wizard.sampleWidget_;
+    auto * sampleWidget = wizard.sampleWidget_;
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
     QVERIFY2(!static_cast<QWidget*>(wizard.tableModel_->parent())->isEnabled(), "Table view must be not enabled");
@@ -88,21 +88,13 @@ private slots:
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
-    OT::Sample(2, OT::Point(2, 2.5)).exportToCSVFile(file.fileName().toStdString());
+    OT::Sample(1, OT::Point(2, 2.5)).exportToCSVFile(file.fileName().toStdString());
     sampleWidget->setData(file.fileName());
     sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
     QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
 
-    sampleWidget->dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "t", Qt::DisplayRole);
-    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
-
     sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "t", Qt::DisplayRole);
-    QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
-
-    sampleWidget->dataPreviewTableView_->model()->setHeaderData(1, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
@@ -121,7 +113,7 @@ private slots:
     wizard.show();
 
     // checks
-    ImportSampleWidget * sampleWidget = wizard.sampleWidget_;
+    auto * sampleWidget = wizard.sampleWidget_;
     wizard.methodGroup_->button(MeshDefinitionWizard::Import)->click();
     QVERIFY2(sampleWidget->dataPreviewTableView_->isEnabled(), "Table view must be enabled");
 

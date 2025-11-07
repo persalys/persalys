@@ -156,41 +156,8 @@ When the mouse pointer is hovered over a box, an information message appears at 
 the window in order to specify what sort of actions the box proposes. If the box is disabled the
 message indicates why the previous one is not valid.
 
-Mesh item
-'''''''''
 
-The model item is associated with a **Mesh** window.
-
-.. image:: /user_manual/graphical_interface/field_model/defaultMeshWindow.png
-    :align: center
-
-This window allows one to define a 1D mesh. The default mesh contains *10 nodes* in the range *[0, 1]*.
-
-2- Mesh definition
-==================
-
-The window shows the index parameter name, description, bounds and number.
-
-To edit the index parameters, double-click on the column of interest (ex: name, description).
-
-  .. image:: /user_manual/graphical_interface/field_model/indexParamTable.png
-      :align: center
-
-
-To modify the mesh click on **...** button: The window shows
-two ways to define a mesh:
-
- - *Regular mesh*: define the bounds (default: [0, 1], expected: floats) and the number of nodes (default: 10, expected: positive integer)
-
-  .. image:: /user_manual/graphical_interface/field_model/meshWizard.png
-      :align: center
-
- - *Imported mesh*: load a file and choose one of its columns (default: first column)
-
-  .. image:: /user_manual/graphical_interface/field_model/importMeshWizard.png
-      :align: center
-
-3- Model definition
+2- Model definition
 ===================
 
 A data field model can be defined by clicking on the **Definition**
@@ -200,19 +167,17 @@ item, leading to the following window:
     :align: center
 
 When clicking on the **...** button, a dialog box offers to select
-a file (.txt or .csv): validate the dialog box, load the file and its content is displayed in
+a file (.txt or .csv): validate the dialog box, load the file and then its content is displayed in
 the table below.
 
 In the table, rows correpond to trajectories and columns contain field
 values data indexed on same mesh nodes. *Warning:* The number of mesh
 vertices must be compatible with the number of column tables.
 
-The appropriate data order can be chosen by selecting Colmuns/Rows
-with the dedicated radio button:
+The appropriate data order can be chosen by selecting the appropriate radio button.
 
- - *Columns* will preserve the data order as read in the file
-
- - *Rows* will transpose the data read in the file
+If your data file contains the mesh as first row or column, you can click the
+checkbox to read it directly form the file.
 
 The table containing sample data can be edited using the right click
 popup menu:
@@ -232,3 +197,35 @@ popup menu:
 
 .. image:: /user_manual/graphical_interface/data_model/datacleaning.png
     :align: center
+
+3- Mesh definition
+==================
+
+
+The model item is associated with a **Mesh** window.
+
+.. image:: /user_manual/graphical_interface/data_model/defaultMeshWindow.png
+    :align: center
+
+This window allows one to define a 1D mesh. The default mesh contains *10 nodes* in the range *[0, 1]*.
+
+The window shows the index parameter name, description, bounds and number.
+
+To edit the index parameters, double-click on the column of interest (ex: name, description).
+
+  .. image:: /user_manual/graphical_interface/field_model/indexParamTable.png
+      :align: center
+
+
+To modify the mesh click on **...** button: The window shows
+two ways to define a mesh:
+
+ - *Regular mesh*: define the bounds (default: [0, 1], expected: floats) and the number of nodes (default: 10, expected: positive integer)
+
+  .. image:: /user_manual/graphical_interface/field_model/meshWizard.png
+      :align: center
+
+ - *Imported mesh*: Load a file containing only the mesh (in one row or one column, with or without header).
+
+  .. image:: /user_manual/graphical_interface/field_model/importMeshWizard.png
+      :align: center

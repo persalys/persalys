@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget to import sample
+ *  @brief QWidget to import mesh
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include "persalys/ImportSampleWidget.hxx"
+#include "persalys/ImportMeshWidget.hxx"
 
 #include "persalys/HorizontalHeaderViewWithCombobox.hxx"
 #include "persalys/SampleTableModel.hxx"
@@ -38,16 +38,15 @@ using namespace OT;
 namespace PERSALYS
 {
 
-ImportSampleWidget::ImportSampleWidget(QWidget* parent, bool chooseOrder)
+ImportMeshWidget::ImportMeshWidget(QWidget* parent)
   : QWidget(parent)
   , tableValidity_(false)
-  , chooseOrder_(chooseOrder)
 {
   buildInterface();
 }
 
 
-void ImportSampleWidget::buildInterface()
+void ImportMeshWidget::buildInterface()
 {
   QGridLayout * mainGridLayout = new QGridLayout(this);
   mainGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -68,34 +67,6 @@ void ImportSampleWidget::buildInterface()
 
   int row = 0;
   mainGridLayout->addLayout(hboxLayout, row++, 0, 1, 3);
-
-  if (chooseOrder_)
-  {
-    QHBoxLayout * buttonsLayout = new QHBoxLayout;
-    orderButtonGroup_ = new QButtonGroup(this);
-    QRadioButton * orderButton = new QRadioButton(tr("Columns"));
-    orderButtonGroup_->addButton(orderButton, Tools::Columns);
-    buttonsLayout->addWidget(orderButton);
-
-    orderButton = new QRadioButton(tr("Rows"));
-    orderButtonGroup_->addButton(orderButton, Tools::Rows);
-    orderButtonGroup_->button(Tools::Columns)->click();
-    orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-    orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-    buttonsLayout->addWidget(orderButton);
-    buttonsLayout->addStretch();
-
-    mainGridLayout->addLayout(buttonsLayout, row++, 0, 1, 3);
-
-    connect(orderButtonGroup_, &QButtonGroup::idClicked, [this] (int) {
-      setData(filePathLineEdit_->text());
-    });
-
-    connect(filePathLineEdit_, &QLineEdit::textChanged, [this] (QString) {
-      orderButtonGroup_->button(0)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-      orderButtonGroup_->button(1)->setEnabled(QFile(filePathLineEdit_->text()).exists());
-    });
-  }
 
   // file preview
   QGroupBox * groupBox = new QGroupBox(tr("File Preview"));
@@ -122,8 +93,7 @@ void ImportSampleWidget::buildInterface()
   mainGridLayout->addWidget(errorMessageLabel_, row++, 0, 1, 1);
 }
 
-
-void ImportSampleWidget::openFileRequested()
+void ImportMeshWidget::openFileRequested()
 {
   QString fileName = QFileDialog::getOpenFileName(this,
                      tr("Data to import..."),
@@ -150,27 +120,27 @@ void ImportSampleWidget::openFileRequested()
 }
 
 
-void ImportSampleWidget::setData(const QString& fileName)
+void ImportMeshWidget::setData(const QString& fileName)
 {
   filePathLineEdit_->setText(fileName);
   try
   {
     errorMessageLabel_->reset();
-    emit updateTableRequested(fileName);
+    emit updateTableRequested(fileName); // connected to MeshDefinitionWizard::setTable
     tableValidity_ = true;
   }
-  catch (const std::exception & ex)
+  catch (const Exception &e)
   {
-    dataPreviewTableView_->setModel(0);
+    dataPreviewTableView_->setModel(nullptr);
     // DOE size
     DOESizeLabel_->setText("");
-    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(ex.what()));
+    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(e.what()));
     tableValidity_ = false;
   }
 }
 
 
-void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns, const Description &comboItems)
+void ImportMeshWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns, const Description &comboItems)
 {
   Sample sample(fileSample);
   const Description initialDescription(sample.getDescription());
@@ -183,7 +153,7 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
 
   // set table model
   dataPreviewTableView_->setModel(new SampleTableModel(sample, initialDescription, dataPreviewTableView_));
-  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SIGNAL(checkColumnsRequested()));
+  connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SIGNAL(checkColumnsRequested())); // connected to MeshDefinitionWizard::checkColumns
 
   // set comboboxes items: each of them contains the input Names and an empty item
   QStringList comboBoxItems;
@@ -192,7 +162,7 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
   comboBoxItems << "";
 
   // set horizontal header view
-  QVector<int> columnsWithCombo(sample.getDimension());
+  QVector<int> columnsWithCombo((int) sample.getDimension());
   for (int i = 0; i < columnsWithCombo.size(); ++i)
     columnsWithCombo[i] = i;
   HorizontalHeaderViewWithCombobox * header = new HorizontalHeaderViewWithCombobox(comboBoxItems, columnsWithCombo, dataPreviewTableView_);
@@ -206,13 +176,13 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
 }
 
 
-void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns)
+void ImportMeshWidget::updateWidgets(const Sample& fileSample, const Description& variableNames, const Indices& variablecolumns)
 {
   updateWidgets(fileSample, variableNames, variablecolumns, variableNames);
 }
 
 
-Indices ImportSampleWidget::getColumns(const Description &names) const
+Indices ImportMeshWidget::getColumns(const Description &names) const
 {
   Indices columns;
   // get the index of each item of names
@@ -235,7 +205,7 @@ Indices ImportSampleWidget::getColumns(const Description &names) const
   return columns;
 }
 
-Sample ImportSampleWidget::getData() const
+Sample ImportMeshWidget::getData() const
 {
   const SampleTableModel * model = dynamic_cast<SampleTableModel*>(dataPreviewTableView_->model());
   if (model)
@@ -244,11 +214,4 @@ Sample ImportSampleWidget::getData() const
     throw InvalidArgumentException(HERE) << "Table model is not a SampleTableModel";
 }
 
-Tools::DataOrder ImportSampleWidget::getDataOrder() const
-{
-  if (orderButtonGroup_)
-    return static_cast<Tools::DataOrder>(orderButtonGroup_->checkedId());
-  else
-    return Tools::Columns;
-}
 }

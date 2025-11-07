@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QWidget to import sample
+ *  @brief QWidget to import mesh
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_IMPORTSAMPLEWIDGET_HXX
-#define PERSALYS_IMPORTSAMPLEWIDGET_HXX
+#ifndef PERSALYS_IMPORTMESHWIDGET_HXX
+#define PERSALYS_IMPORTMESHWIDGET_HXX
 
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/TemporaryLabel.hxx"
@@ -32,18 +32,15 @@
 
 namespace PERSALYS
 {
-class PERSALYS_UTILS_API ImportSampleWidget : public QWidget
+class PERSALYS_VIEW_API  ImportMeshWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  friend class ImportedDesignPage;
-  friend class ImportObservationsPage;
-  friend class EditValuesWizard;
-  friend class ImportedDistributionPage;
-  friend class DataFieldModelWindow;
+  friend class MeshDefinitionWizard;
+  friend class TestMeshDefinitionWizard;
 
-  explicit ImportSampleWidget(QWidget *parent = nullptr, bool chooseOrder = false);
+  explicit ImportMeshWidget(QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
@@ -52,7 +49,6 @@ protected:
   void updateWidgets(const OT::Sample& fileSample, const OT::Description& variableNames, const OT::Indices& variablecolumns);
   OT::Indices getColumns(const OT::Description& names) const;
   OT::Sample getData() const;
-  Tools::DataOrder getDataOrder() const;
 
 public slots:
   void openFileRequested();
@@ -62,13 +58,11 @@ signals:
 
 private:
   bool                tableValidity_          = false;
-  bool                chooseOrder_            = false;
 
   QLineEdit           * filePathLineEdit_     = nullptr;
   ExportableTableView * dataPreviewTableView_ = nullptr;
   QLabel              * DOESizeLabel_         = nullptr;
   TemporaryLabel      * errorMessageLabel_    = nullptr;
-  QButtonGroup        * orderButtonGroup_     = nullptr;
 };
 }
 #endif

@@ -35,8 +35,6 @@ static Factory<MeshModelImplementation> Factory_MeshModelImplementation;
 
 MeshModelImplementation::MeshModelImplementation()
   : PersistentObject()
-  , mesh_()
-  , indexParameters_()
 {
   PersistentObject::setName("meshModel");
   indexParameters_.add(Variable("t"));

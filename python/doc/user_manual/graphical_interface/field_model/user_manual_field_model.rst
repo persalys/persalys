@@ -90,7 +90,7 @@ two ways to define a mesh:
   .. image:: /user_manual/graphical_interface/field_model/meshWizard.png
       :align: center
 
- - *Imported mesh*: load a file and choose one of its columns (default: first column)
+ - *Imported mesh*: Load a file containing only the mesh (in one row or one column, with or without header).
 
   .. image:: /user_manual/graphical_interface/field_model/importMeshWizard.png
       :align: center

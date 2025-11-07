@@ -236,7 +236,7 @@ void Observations::orderSamples()
 }
 
 
-Sample Observations::importSample(const String &fileName)
+Sample Observations::importSample(const String &fileName, const Tools::DataOrder)
 {
   Sample sampleFromFile(DataImport::importSample(fileName));
 

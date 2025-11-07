@@ -1,19 +1,21 @@
 %feature("docstring") PERSALYS::ImportedMeshModel
 "Create a model with imported meshes
 
-Available constructors:
-    ImportedMeshModel(*parameters, fileName, columns*)
-
 Parameters
 ----------
-parameters : sequence of :class:`persalys.Variable`
-    Sequence of index parameters (optional). By default
-    the index parameter is named **t**
 fileName : str
     Name of a data file to load
-columns : sequence of int
+parameters : sequence of :class:`persalys.Variable`, optional
+    Sequence of index parameters. By default
+    the index parameter is named **t**
+columns : sequence of int, optional 
     Indices of columns in files to consider. The sequence dimension
     must have a dimension equal to the number of index parameters
+order : int, optional
+    Data order in the file. Possible values are:
+    - persalys.Tools.Unknown (default) : the file contains 1D data and order will be inferred automatically
+    - persalys.tools.Columns : each time step is stored in a different columns
+    - persalys.tools.Rows : each time step is stored in a different row
 
 Examples
 --------
@@ -25,7 +27,7 @@ Create the mesh model:
 >>> mesh = ot.IntervalMesher(ot.Indices(1, 20)).build(ot.Interval(0., 12.))
 >>> mesh.getVertices().exportToCSVFile('mesh.csv')
 
->>> meshModel = persalys.ImportedMeshModel([persalys.Variable('x', 'aDescription')], 'mesh.csv', [0])
+>>> meshModel = persalys.ImportedMeshModel('mesh.csv', [persalys.Variable('x', 'aDescription')], [0])
 
 Create the model:
 

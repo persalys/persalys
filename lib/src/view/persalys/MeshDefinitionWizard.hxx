@@ -23,7 +23,7 @@
 
 #include "persalys/Wizard.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
-#include "persalys/ImportSampleWidget.hxx"
+#include "persalys/ImportMeshWidget.hxx"
 #include "persalys/GridMeshModel.hxx"
 #include "persalys/ImportedMeshModel.hxx"
 #include "persalys/CopyableTableView.hxx"
@@ -41,7 +41,7 @@ class PERSALYS_VIEW_API MeshDefinitionWizard : public Wizard
 
 public:
   enum Method {Grid, Import};
-  explicit MeshDefinitionWizard(const MeshModel& mesh, const OT::Bool allowColumns = false, QWidget* parent = nullptr);
+  explicit MeshDefinitionWizard(const MeshModel& mesh, QWidget* parent = nullptr, bool isDataField = false);
 
   MeshModel getMesh() const;
   bool validateCurrentPage() override;
@@ -55,15 +55,16 @@ public slots:
   void checkColumns();
 
 private:
-  MeshModel mesh_;
-  OT::Bool allowColumns_ = false;
-  QButtonGroup * methodGroup_ = nullptr;
-  ImportSampleWidget * sampleWidget_ = nullptr;
-  CopyableTableView * tableView_ = nullptr;
-  CustomStandardItemModel * tableModel_ = nullptr;
-  GridMeshModel gridMesh_;
-  ImportedMeshModel importedMesh_;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  MeshModel               mesh_;
+  OT::Bool                isDataField_          = false;
+  GridMeshModel           gridMesh_;
+  ImportedMeshModel       importedMesh_;
+
+  QButtonGroup            * methodGroup_        = nullptr;
+  ImportMeshWidget        * sampleWidget_       = nullptr;
+  CopyableTableView       * tableView_          = nullptr;
+  CustomStandardItemModel * tableModel_         = nullptr;
+  TemporaryLabel          * errorMessageLabel_  = nullptr;
 };
 }
 #endif
