@@ -88,6 +88,35 @@ void PolynomialRegressionAnalysis::setInteraction(const Bool interaction)
   interaction_ = interaction;
 }
 
+Bool PolynomialRegressionAnalysis::getStepwise() const
+{
+  return stepwise_;
+}
+
+void PolynomialRegressionAnalysis::setStepwise(const Bool stepwise)
+{
+  stepwise_ = stepwise;
+}
+
+LinearModelStepwiseAlgorithm::Direction PolynomialRegressionAnalysis::getDirection() const
+{
+  return direction_;
+}
+
+void PolynomialRegressionAnalysis::setDirection(const LinearModelStepwiseAlgorithm::Direction direction)
+{
+  direction_ = direction;
+}
+
+PolynomialRegressionAnalysis::PenaltyCriteria PolynomialRegressionAnalysis::getPenalty() const
+{
+  return penalty_;
+}
+
+void PolynomialRegressionAnalysis::setPenalty(const PenaltyCriteria penalty)
+{
+  penalty_ = penalty;
+}
 
 void PolynomialRegressionAnalysis::initialize()
 {
@@ -98,13 +127,16 @@ void PolynomialRegressionAnalysis::initialize()
 
 void PolynomialRegressionAnalysis::launch()
 {
+  treatResults(computeResults());
+}
+
+Collection <LinearModelResult> PolynomialRegressionAnalysis::computeResults()
+{
   // get effective samples
-  const Sample effectiveInputSample(getEffectiveInputSample());
-  const Sample effectiveOutputSample(getEffectiveOutputSample());
-  const UnsignedInteger inputSize = effectiveInputSample.getSize();
-  const UnsignedInteger inputDimension = effectiveInputSample.getDimension();
+  const Sample effectiveInputSample{getEffectiveInputSample()};
+  const Sample effectiveOutputSample{getEffectiveOutputSample()};
+  const UnsignedInteger inputSize       = effectiveInputSample.getSize();
   const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
-  const Description inputVariables(effectiveInputSample.getDescription());
 
   // check
   if (inputSize * designOfExperiment_.getOutputSample().getSize() == 0)
@@ -126,12 +158,22 @@ void PolynomialRegressionAnalysis::launch()
     informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
     notify("informationMessageUpdated");
 
-    LinearModelStepwiseAlgorithm algo(buildAlgo(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
+    Algorithm algo{buildAlgo(effectiveInputSample, effectiveOutputSample.getMarginal(i))};
     algo.run();
     allResults.add(algo.getResult());
   }
 
-  const UnsignedInteger effectiveDim = allResults.getSize();
+  return allResults;
+}
+
+void PolynomialRegressionAnalysis::treatResults(const Collection<LinearModelResult> & allResults)
+{  
+  const Sample effectiveInputSample{getEffectiveInputSample()};
+  const Sample effectiveOutputSample{getEffectiveOutputSample()};
+  const Description inputVariables{effectiveInputSample.getDescription()};
+  const UnsignedInteger inputDimension  = effectiveInputSample.getDimension();
+  const UnsignedInteger effectiveDim    = allResults.getSize();
+
   // set result_
   Function::FunctionCollection metaModelCollection(effectiveDim);
   Indices computedOutputIndices(effectiveDim);
@@ -197,8 +239,9 @@ void PolynomialRegressionAnalysis::launch()
 
 Function PolynomialRegressionAnalysis::runAlgoMarginal(const Sample& inputSample, const Sample& outputSample)
 {
-  LinearModelStepwiseAlgorithm algo(buildAlgo(inputSample, outputSample));
+  Algorithm algo{buildAlgo(inputSample, outputSample)};
   algo.run();
+
   return algo.getResult().getMetaModel();
 }
 
@@ -228,13 +271,36 @@ Basis PolynomialRegressionAnalysis::getBasis() const
   return basis;
 }
 
-LinearModelStepwiseAlgorithm PolynomialRegressionAnalysis::buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample)
+PolynomialRegressionAnalysis::Algorithm PolynomialRegressionAnalysis::buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample) const
 {
-  const Indices minimalIndices(1, 0);
-  const Indices startIndices(1, 0);
+  Algorithm algo;
 
-  LinearModelStepwiseAlgorithm algo(inputSample, outputSample, getBasis(), minimalIndices, LinearModelStepwiseAlgorithm::BOTH, startIndices);
-  algo.setPenalty(std::log(inputSample.getSize()));
+  if (stepwise_)
+  {
+    const Indices minimalIndices(1, 0);
+    const Indices startIndices = direction_ == LinearModelStepwiseAlgorithm::BOTH ? Indices(1, 0) : Indices();
+
+    algo = LinearModelStepwiseAlgorithm(inputSample, outputSample, getBasis(), minimalIndices, direction_, startIndices);
+    Scalar computedPenalty;
+    switch (penalty_)
+    {
+      case AIC:
+        computedPenalty = 2.;
+        break;
+      
+      case BIC:
+        computedPenalty = std::log(inputSample.getSize());
+        break;
+      
+      default:
+        throw InvalidArgumentException(HERE) << "Invalid penalty argument";
+    }
+
+    algo.setPenalty(computedPenalty);
+  }
+  else
+    algo = LinearModelAlgorithm(inputSample, outputSample, getBasis());
+
   return algo;
 }
 
@@ -290,7 +356,7 @@ void PolynomialRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysis
     }
 
     // 1 - sum[ ((ŷ_j - y_j) / (1 - h_j))^2 ] / (n-1) / Var Y
-    q2[i] = 1.0 - (quadraticResidual / (sampleSize - 1.0)) / variance[i];
+    q2[i] = 1.0 - (quadraticResidual / ((double) sampleSize - 1.0)) / variance[i];
   }
   result.analyticalValidation_.q2_ = q2;
 }
@@ -314,6 +380,30 @@ Parameters PolynomialRegressionAnalysis::getParameters() const
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Interaction", getInteraction() ? "yes" : "no");
   param.add("Degree", getDegree());
+  param.add("Stepwise", getStepwise() ? "yes" : "no");
+  if (stepwise_)
+  {
+    switch (direction_)
+    {
+      case LinearModelStepwiseAlgorithm::FORWARD:
+        param.add("Direction", "forward");
+        break;
+      
+      case LinearModelStepwiseAlgorithm::BACKWARD:
+        param.add("Direction", "backward");
+        break;
+      
+      case LinearModelStepwiseAlgorithm::BOTH:
+        param.add("Direction", "both");
+        break;
+      
+      default:
+        break;
+    }
+
+    param.add("Penalty criteria", penalty_ == BIC ? "BIC" : "AIC");
+  }
+  
   return param;
 }
 
@@ -332,6 +422,34 @@ String PolynomialRegressionAnalysis::getPythonScript() const
   }
   oss << getName() << ".setDegree(" << getDegree() << ")\n";
   oss << getName() << ".setInteraction(" << (getInteraction() ? "True" : "False") << ")\n";
+  oss << getName() << ".setStepwise(" << (getStepwise() ? "True" : "False") << ")\n";
+  if (stepwise_)
+  {
+    String direction = "ot.LinearModelStepwiseAlgorithm.";
+    switch (direction_) {
+      case LinearModelStepwiseAlgorithm::FORWARD:
+        direction.append("FORWARD");
+        break;
+      
+      case LinearModelStepwiseAlgorithm::BACKWARD:
+        direction.append("BACKWARD");
+        break;
+      
+      case LinearModelStepwiseAlgorithm::BOTH:
+        direction.append("BOTH");
+        break;
+      
+      default:
+        direction.append("BOTH");
+    }
+
+    const String penalty = penalty_ == AIC  ? "persalys.PolynomialRegressionAnalysis.AIC" 
+                                            : "persalys.PolynomialRegressionAnalysis.BIC";
+                                            
+    oss << getName() << ".setDirection(" << direction << ")\n";
+    oss << getName() << ".setPenalty(" << penalty << ")\n";
+  }
+
   return oss;
 }
 
@@ -348,7 +466,46 @@ String PolynomialRegressionAnalysis::__repr__() const
   OSS oss;
   oss << MetaModelAnalysis::__repr__()
       << " degree=" << getDegree()
-      << " interaction=" << getInteraction();
+      << " interaction=" << getInteraction()
+      << " stepwise=" << getStepwise();
+  if (stepwise_)
+  {
+    oss << " direction=";
+    switch (direction_)
+    {
+      case LinearModelStepwiseAlgorithm::FORWARD:
+        oss << "forward";
+        break;
+      
+      case LinearModelStepwiseAlgorithm::BACKWARD:
+        oss << "backward";
+        break;
+      
+      case LinearModelStepwiseAlgorithm::BOTH:
+        oss << "both";
+        break;
+      
+      default:
+        oss << getDirection();
+        break;
+    }
+
+    oss << " penalty=";
+    switch (penalty_)
+    {
+      case AIC:
+        oss << "AIC";
+        break;
+      
+      case BIC:
+        oss << "BIC";
+        break;
+      
+      default:
+        oss << getPenalty();
+        break;
+    }
+  }
   return oss;
 }
 
@@ -360,6 +517,9 @@ void PolynomialRegressionAnalysis::save(Advocate& adv) const
   adv.saveAttribute("degree_", degree_);
   adv.saveAttribute("interaction_", interaction_);
   adv.saveAttribute("result_", result_);
+  adv.saveAttribute("stepwise_", stepwise_);
+  adv.saveAttribute("direction_", static_cast<UnsignedInteger>(direction_));
+  adv.saveAttribute("penalty_", static_cast<UnsignedInteger>(penalty_));
 }
 
 
@@ -370,5 +530,21 @@ void PolynomialRegressionAnalysis::load(Advocate& adv)
   adv.loadAttribute("degree_", degree_);
   adv.loadAttribute("interaction_", interaction_);
   adv.loadAttribute("result_", result_);
+  if (adv.hasAttribute("stepwise_"))
+  {
+    adv.loadAttribute("stepwise_", stepwise_);
+    UnsignedInteger direction, penalty;
+    adv.loadAttribute("direction_", direction);
+    adv.loadAttribute("penalty_", penalty);
+    direction_  = static_cast<LinearModelStepwiseAlgorithm::Direction>(direction);
+    penalty_    = static_cast<PenaltyCriteria>(penalty); 
+  }
+  else
+  {
+    // default values before 19.1
+    stepwise_ = true;
+    direction_ = LinearModelStepwiseAlgorithm::BOTH;
+    penalty_ = BIC;
+  }
 }
 }

@@ -26,6 +26,7 @@
 #include "PolynomialRegressionAnalysisResult.hxx"
 
 #include <openturns/LinearModelStepwiseAlgorithm.hxx>
+#include <openturns/LinearModelAlgorithm.hxx>
 
 namespace PERSALYS
 {
@@ -33,7 +34,45 @@ class PERSALYS_BASE_API PolynomialRegressionAnalysis : public MetaModelAnalysis
 {
   CLASSNAME
 
+private:
+  class Algorithm
+  {
+    public:
+      Algorithm() {}
+
+      Algorithm(const OT::LinearModelAlgorithm &algo)
+      : stepwise_(false)
+      , algo_(algo)
+      {}
+
+      Algorithm(const OT::LinearModelStepwiseAlgorithm &algo)
+      : stepwise_(true)
+      , stepwiseAlgo_(algo)
+      {}
+
+      inline void run() {
+        stepwise_ ? stepwiseAlgo_.run() : algo_.run();
+      }
+
+      inline OT::LinearModelResult getResult() {
+        return stepwise_ ? stepwiseAlgo_.getResult() : algo_.getResult();
+      }
+
+      void setPenalty(const OT::Scalar penalty) {
+        if (!stepwise_)
+          throw OT::NotDefinedException(HERE) << "Cannot set penalty to non stepwise regression";
+        stepwiseAlgo_.setPenalty(penalty);
+      }
+
+    private:
+      bool stepwise_;
+      OT::LinearModelAlgorithm algo_;
+      OT::LinearModelStepwiseAlgorithm stepwiseAlgo_;
+  };
+
 public:
+  enum PenaltyCriteria {AIC, BIC};
+
   /** Default constructor */
   PolynomialRegressionAnalysis();
 
@@ -49,6 +88,15 @@ public:
 
   OT::Bool getInteraction() const;
   void setInteraction(const OT::Bool interaction);
+
+  OT::Bool getStepwise() const;
+  void setStepwise(const OT::Bool stepwise);
+
+  OT::LinearModelStepwiseAlgorithm::Direction getDirection() const;
+  void setDirection(const OT::LinearModelStepwiseAlgorithm::Direction direction);
+
+  PenaltyCriteria getPenalty() const;
+  void setPenalty(const PenaltyCriteria penalty);
 
   PolynomialRegressionAnalysisResult getResult() const;
 
@@ -73,13 +121,19 @@ protected:
   void computeAnalyticalValidation(MetaModelAnalysisResult& result, const OT::Sample& inputSample) override;
 
 private:
+  OT::Collection<OT::LinearModelResult> computeResults();
+  void treatResults(const OT::Collection<OT::LinearModelResult> & results);
   OT::Function runAlgoMarginal(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
-  OT::LinearModelStepwiseAlgorithm buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample);
+  Algorithm buildAlgo(const OT::Sample & inputSample, const OT::Sample & outputSample) const;
   OT::Basis getBasis() const;
 
-  PolynomialRegressionAnalysisResult result_;
-  OT::Bool interaction_ = false;
-  OT::UnsignedInteger degree_ = 1;
+private:
+  PolynomialRegressionAnalysisResult          result_;
+  OT::Bool                                    interaction_  = false;
+  OT::UnsignedInteger                         degree_       = 1u;
+  OT::Bool                                    stepwise_     = true;
+  OT::LinearModelStepwiseAlgorithm::Direction direction_    = OT::LinearModelStepwiseAlgorithm::BOTH;
+  PenaltyCriteria                             penalty_      = PenaltyCriteria::BIC;
 };
 }
 #endif

@@ -43,7 +43,7 @@ public:
   {
     return parentStudyItem_;
   };
-  OT::String availableAnalysisName(const QString &baseName);
+  OT::String availableAnalysisName(const QString &baseName) const;
   QString getParentTitleType(const QString &objectName) const;
   Item * getTitleItem(const QString &objectName);
 

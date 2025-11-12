@@ -444,7 +444,7 @@ QAction * ItemFactory::createAction(const QString &analysisName, const LimitStat
     return action;
   }
   qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
-  return 0;
+  return nullptr;
 }
 
 
@@ -460,7 +460,7 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DataField
     return action;
   }
   qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
-  return 0;
+  return nullptr;
 }
 
 
@@ -470,18 +470,18 @@ QAction * ItemFactory::createAction(const QString &analysisName, const Analysis 
   {
     QAction * action = new QAction(tr("Metamodel"), this);
     action->setStatusTip(tr("Create a new metamodel"));
-    connect(action, &QAction::triggered, [ = ]()
+    connect(action, &QAction::triggered, [this, analysis]()
     {
       newAnalysis("Metamodel", analysis);
     });
     return action;
   }
   qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
-  return 0;
+  return nullptr;
 }
 
 
-String ItemFactory::availableAnalysisName(const QString &baseName)
+String ItemFactory::availableAnalysisName(const QString &baseName) const
 {
   return parentStudyItem_->getStudy().getAvailableAnalysisName(baseName.toStdString());
 }

@@ -38,9 +38,23 @@ aDesign.run()
 analysis = persalys.PolynomialRegressionAnalysis("lm_0", aDesign)
 analysis.setDegree(2)
 analysis.setInteraction(True)
+analysis.setDirection(ot.LinearModelStepwiseAlgorithm.FORWARD)
+analysis.setPenalty(persalys.PolynomialRegressionAnalysis.AIC)
 myStudy.add(analysis)
 print(analysis)
 
+analysis.run()
+print(analysis.getResult())
+metaModel = analysis.getResult().getResultForVariable("y0").getMetaModel()
+
+openturns.testing.assert_almost_equal(
+    aDesign.getResult().getDesignOfExperiment().getOutputSample(),
+    metaModel(validationInputSample),
+    3.0e-5,
+    3.0e-5,
+)
+
+analysis.setStepwise(False)
 analysis.run()
 print(analysis.getResult())
 metaModel = analysis.getResult().getResultForVariable("y0").getMetaModel()
