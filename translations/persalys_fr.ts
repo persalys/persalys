@@ -10062,6 +10062,11 @@ Les objets ne sont peut-être pas ouverts.
         <translation>Uniforme lissée</translation>
     </message>
     <message>
+        <location filename="../lib/src/model/TranslationManager.cxx" line="78"/>
+        <source>Independent</source>
+        <translation>Indépendante</translation>
+    </message>
+    <message>
         <location filename="../lib/src/model/TranslationManager.cxx" line="80"/>
         <source>Student</source>
         <translation>Student</translation>
