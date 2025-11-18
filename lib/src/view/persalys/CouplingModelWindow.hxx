@@ -107,34 +107,32 @@ class PERSALYS_VIEW_API FilePathWidget : public QWidget
   Q_OBJECT
 
 public:
-  FilePathWidget(const QString &path = "", QFileDialog::FileMode mode = QFileDialog::AnyFile, QWidget *parent = nullptr)
+  explicit FilePathWidget(const QString &path = "", 
+    QFileDialog::FileMode mode = QFileDialog::AnyFile, 
+    QWidget *parent = nullptr)
     : QWidget(parent)
+    , edit_(new QLineEdit(path))
   {
-    QHBoxLayout * hLayout = new QHBoxLayout(this);
+    auto * hLayout = new QHBoxLayout(this);
     hLayout->setContentsMargins(0, 0, 0, 0);
-
-    edit_ = new QLineEdit(path);
     hLayout->addWidget(edit_);
     edit_->setValidator(new QRegularExpressionValidator(QRegularExpression("([^\r\n]*)")));
-    connect(edit_, &QLineEdit::editingFinished, [ = ]()
+    connect(edit_, &QLineEdit::editingFinished, [this] ()
     {
       emit pathChanged(edit_->text());
     });
 
-    QToolButton * button = new QToolButton;
+    auto * button = new QToolButton;
     button->setText("...");
     hLayout->addWidget(button);
 
-    connect(button, &QToolButton::clicked,
-            [ = ]()
+    connect(button, &QToolButton::clicked, [mode, this] ()
     {
-      QFileDialog dialog;
-      dialog.setFileMode(mode);
       QString fileName;
       if(mode == QFileDialog::Directory)
-        fileName = dialog.getExistingDirectory(this, tr("Choose directory"), FileTools::GetCurrentDir());
+        fileName = QFileDialog::getExistingDirectory(this, tr("Choose directory"), FileTools::GetCurrentDir());
       else
-        fileName = dialog.getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
+        fileName = QFileDialog::getOpenFileName(this, tr("Search file"), FileTools::GetCurrentDir());
       if (fileName.isEmpty())
         return;
       FileTools::SetCurrentDir(fileName);
@@ -142,7 +140,8 @@ public:
       emit pathChanged(fileName);
     });
   }
-  QString text()
+
+  inline QString text() const
   {
     return edit_->text();
   }
@@ -154,6 +153,7 @@ public:
 
 signals:
   void pathChanged(const QString&);
+
 private:
   QLineEdit * edit_ = nullptr;
 };
@@ -167,7 +167,7 @@ public:
   {
     setTabsClosable(true);
     // Create button what must be placed in tabs row
-    QToolButton * tb = new QToolButton;
+    auto * tb = new QToolButton;
     tb->setIcon(QIcon(":/images/list-add.png"));
     tb->setAutoRaise(true);
     connect(tb, SIGNAL(clicked(bool)), this, SIGNAL(newTabRequested()));
@@ -183,17 +183,20 @@ public:
     sheet += "QTabBar::tab:disabled {border: 1px solid #C4C4C3; padding: 2px; border-bottom: 0px; border-radius: 2px;}";
     tabBar()->setStyleSheet(sheet);
   }
+
   virtual int addTab(QWidget *page, const QString &label)
   {
     insertTab(count() - 1, page, label);
     setCurrentIndex(count() - 2);
     return count() - 2;
   }
+
   virtual void clear()
   {
     while (count() - 1)
       removeTab(0);
   }
+
   void tabCloseRequested(int index)
   {
     int ret = QMessageBox::question(this, tr("Remove"), tr("Do you really want to remove the variables?"));
@@ -206,6 +209,7 @@ public:
         emit newTabRequested();
     }
   }
+
 signals:
   void newTabRequested();
   void removeTabRequested(int);
@@ -219,18 +223,19 @@ class PERSALYS_VIEW_API AddRemoveWidget : public QWidget
 public:
   AddRemoveWidget()
   {
-    QPushButton * addButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
+    auto * addButton = new QPushButton(QIcon(":/images/list-add.png"), tr("Add"));
     connect(addButton, SIGNAL(clicked(bool)), this, SIGNAL(addRequested()));
 
-    QPushButton * removeButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
+    auto * removeButton = new QPushButton(QIcon(":/images/list-remove.png"), tr("Remove"));
     connect(removeButton, SIGNAL(clicked(bool)), this, SIGNAL(removeRequested()));
 
-    QHBoxLayout * buttonsLayout = new QHBoxLayout(this);
+    auto * buttonsLayout = new QHBoxLayout(this);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(addButton);
     buttonsLayout->addWidget(removeButton);
   }
+
 signals:
   void addRequested();
   void removeRequested();
@@ -242,18 +247,34 @@ class PERSALYS_VIEW_API CouplingInputFileWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingInputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = nullptr);
-  int getIndFile() const
+  CouplingInputFileWidget(const PhysicalModelItem *item, 
+    CouplingPhysicalModel * model, 
+    const int indStep, 
+    const int indFile, 
+    QWidget *parent = nullptr
+  );
+
+  inline int getIndFile() const
   {
     return indFile_;
   };
-  QString readFile(QFileInfo & fname) const;
-  void compareFiles(QString & s1, QString & s2) const;
+
+  QString readFile(const QFileInfo & fname) const;
+  void compareFiles(const QString & s1, QString & s2) const;
+
+private slots:
+  void checkTemplate();
+
 signals:
   void variableListChanged();
+
 private:
-  int indStep_ = 0;
-  int indFile_ = 0;
+  CouplingPhysicalModel * model_        = nullptr;
+  int                   indStep_        = 0;
+  int                   indFile_        = 0;
+  QLabel                * temTextLabel_ = nullptr;
+  QLabel                * simTextLabel_ = nullptr;
+
 };
 
 
@@ -262,17 +283,23 @@ class PERSALYS_VIEW_API CouplingResourceFileWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingResourceFileWidget(CouplingPhysicalModel * model, const int indStep, QWidget *parent = nullptr);
+  CouplingResourceFileWidget(CouplingPhysicalModel * model, 
+    const int indStep, 
+    QWidget *parent = nullptr
+  );
+
   void updateTable();
 
 signals:
   void couplingResourceCollectionModified();
+
 public slots:
   void editResource(QTableWidgetItem * newItem, bool isFile);
+
 private:
-  CouplingPhysicalModel * model_ = nullptr;
-  int indStep_ = 0;
-  QTableWidget * tableWidget_ = nullptr;
+  CouplingPhysicalModel * model_        = nullptr;
+  int                   indStep_        = 0;
+  QTableWidget          * tableWidget_  = nullptr;
 };
 
 
@@ -281,7 +308,13 @@ class PERSALYS_VIEW_API CouplingOutputFileWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingOutputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, const int indFile, QWidget *parent = nullptr);
+  CouplingOutputFileWidget(PhysicalModelItem *item, 
+    CouplingPhysicalModel * model, 
+    const int indStep, 
+    const int indFile, 
+    QWidget *parent = nullptr
+  );
+
 signals:
   void variableListChanged();
 };
@@ -292,18 +325,24 @@ class PERSALYS_VIEW_API CouplingStepWidget : public QWidget
   Q_OBJECT
 
 public:
-  CouplingStepWidget(PhysicalModelItem *item, CouplingPhysicalModel * model, const int indStep, QWidget *parent = nullptr);
+  CouplingStepWidget(PhysicalModelItem *item, 
+    CouplingPhysicalModel * model, 
+    const int indStep, 
+    QWidget *parent = nullptr
+  );
+
 public slots:
   void updateInputFileWidgets(PhysicalModelItem *item);
+
 signals:
   void variableListChanged();
   void updateStepRequested();
 
 private:
-  CouplingPhysicalModel * model_ = 0;
-  int indStep_ = 0;
-  DynamicTabWidget * inTabWidget_ = nullptr;
-  CouplingResourceFileWidget * resourceFileWidget_ = nullptr;
+  CouplingPhysicalModel       * model_              = nullptr;
+  int                         indStep_              = 0;
+  DynamicTabWidget            * inTabWidget_        = nullptr;
+  CouplingResourceFileWidget  * resourceFileWidget_ = nullptr;
 };
 
 
@@ -312,16 +351,19 @@ class PERSALYS_VIEW_API CouplingModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  CouplingModelWindow(PhysicalModelItem *item, QWidget *parent = nullptr);
+  explicit CouplingModelWindow(PhysicalModelItem *item, QWidget *parent = nullptr);
+
 public slots:
   void updateStepTabWidget(PhysicalModelItem *item);
   void evaluateOutputs();
+
 signals:
   void variableListChanged();
+
 private:
-  CouplingPhysicalModel * model_ = nullptr;
-  DynamicTabWidget * stepTabWidget_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  CouplingPhysicalModel * model_              = nullptr;
+  DynamicTabWidget      * stepTabWidget_      = nullptr;
+  TemporaryLabel        * errorMessageLabel_  = nullptr;
 };
 
 class PERSALYS_VIEW_API CouplingSummaryWidget : public QTabWidget
@@ -329,12 +371,14 @@ class PERSALYS_VIEW_API CouplingSummaryWidget : public QTabWidget
   Q_OBJECT
 
 public :
-  CouplingSummaryWidget(PhysicalModelItem * item);
+  explicit CouplingSummaryWidget(PhysicalModelItem * item);
 
 protected slots:
   void showEvent(QShowEvent *event) override;
+
 signals:
   void evaluationRequested();
+
 private:
   PhysicalModel model_;
   CopyableTableView * inputTableView_;
@@ -359,6 +403,7 @@ public slots:
 
 signals:
   void dataChanged();
+
 private :
   PhysicalModel model_;
   int indStep_;
@@ -370,6 +415,7 @@ class PERSALYS_VIEW_API PythonCodeWidget : public QWidget
 
 public :
   PythonCodeWidget(PhysicalModelItem * item, const int indStep, QWidget *parent);
+
 signals :
   void codeChanged();
 };

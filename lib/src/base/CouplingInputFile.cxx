@@ -134,7 +134,7 @@ void CouplingInputFile::simulateInput(const VariableCollection & varColl) const
   {
     if(variableNames.contains(varColl[i].getName()))
     {
-      code << varColl[i].getValue();
+      code << "float(" << varColl[i].getValue() << ")";
       if (i < varColl.getSize() - 1)
         code << ", ";
     }
@@ -147,8 +147,8 @@ void CouplingInputFile::simulateInput(const VariableCollection & varColl) const
   code << "otct.replace(input_file.getPath(), os.path.join(tempfile.gettempdir(), input_file.getConfiguredPath()), tokens=input_file.getTokens(), values=input_values, formats=formats)\n";
 
   InterpreterUnlocker iul;
-  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
-  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
+  PyObject * module = PyImport_AddModule("__main__"); // Borrowed reference.
+  PyObject * dict   = PyModule_GetDict(module);       // Borrowed reference.
   ScopedPyObjectPointer retValue(PyRun_String(code.str().c_str(), Py_file_input, dict, dict));
   handleExceptionTraceback();
 }

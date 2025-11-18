@@ -821,8 +821,13 @@ void OutTableModel::removeLine()
 
 // Widget for Coupling Input file
 
-CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, CouplingPhysicalModel *model, const int indStep, const int indFile, QWidget *parent)
+CouplingInputFileWidget::CouplingInputFileWidget(const PhysicalModelItem *item, 
+  CouplingPhysicalModel *model, 
+  const int indStep, 
+  const int indFile, 
+  QWidget *parent)
   : QWidget(parent)
+  , model_(model)
   , indStep_(indStep)
   , indFile_(indFile)
 {
@@ -859,15 +864,16 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
 
   connect(addRemoveWidget, &AddRemoveWidget::addRequested, inTableModel, &InTableModel::addLine);
   connect(addRemoveWidget, &AddRemoveWidget::removeRequested, inTableModel, &InTableModel::removeLine);
-  connect(inTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), item, SIGNAL(inputListDifferentiationChanged()));
+  connect(inTableModel, &InTableModel::dataChanged, item, &PhysicalModelItem::inputListDifferentiationChanged);
   connect(item, &PhysicalModelItem::outputChanged, inTableModel, &InTableModel::updateData);
 
-  connect(inTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SIGNAL(variableListChanged()));
+  connect(inTableModel, &InTableModel::dataChanged, this, &CouplingInputFileWidget::variableListChanged); // indirectly connected to gradientTableModel->updataData at line 213
 
   inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
   addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
 
-  connect(templateFileLineEdit, &FilePathWidget::pathChanged, [=](const QString & text)
+  connect(templateFileLineEdit, &FilePathWidget::pathChanged, 
+    [this, templateFileLineEdit, inTableView, fileLineEdit, addRemoveWidget] (const QString & text)
   {
     templateFileLineEdit->checkFileExists();
 
@@ -875,38 +881,41 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
     addRemoveWidget->setDisabled(text.isEmpty() || fileLineEdit->text().isEmpty());
 
     // update model
-    CouplingStepCollection csColl(model->getSteps());
-    CouplingStep cs(csColl[indStep]);
+    CouplingStepCollection csColl(model_->getSteps());
+    CouplingStep cs(csColl[indStep_]);
     CouplingInputFileCollection inColl(cs.getInputFiles());
 
-    inColl[indFile].setPath(text.toUtf8().constData());
+    inColl[indFile_].setPath(text.toUtf8().constData());
     cs.setInputFiles(inColl);
-    csColl[indStep] = cs;
-    model->blockNotification("PhysicalModelDefinitionItem");
-    model->setSteps(csColl);
-    model->blockNotification();
+    csColl[indStep_] = cs;
+    model_->blockNotification("PhysicalModelDefinitionItem");
+    model_->setSteps(csColl);
+    model_->blockNotification();
 
     // refresh configured path in case it was uninitialized
-    fileLineEdit->setText(inColl[indFile].getConfiguredPath().c_str());
+    fileLineEdit->setText(inColl[indFile_].getConfiguredPath().c_str());
   });
-  connect(fileLineEdit, &QLineEdit::editingFinished, [ = ]()
+
+  connect(fileLineEdit, &QLineEdit::editingFinished, 
+    [this, fileLineEdit, inTableView, templateFileLineEdit, addRemoveWidget]()
   {
     if (QFileInfo(fileLineEdit->text()).isAbsolute())
       fileLineEdit->setText(QFileInfo(fileLineEdit->text()).fileName());
 
     inTableView->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
     addRemoveWidget->setDisabled(templateFileLineEdit->text().isEmpty() || fileLineEdit->text().isEmpty());
+    
     // update model
-    CouplingStepCollection csColl(model->getSteps());
-    CouplingStep cs(csColl[indStep]);
+    CouplingStepCollection csColl(model_->getSteps());
+    CouplingStep cs(csColl[indStep_]);
     CouplingInputFileCollection inColl(cs.getInputFiles());
 
-    inColl[indFile].setConfiguredPath(fileLineEdit->text().toUtf8().constData());
+    inColl[indFile_].setConfiguredPath(fileLineEdit->text().toUtf8().constData());
     cs.setInputFiles(inColl);
-    csColl[indStep] = cs;
-    model->blockNotification("PhysicalModelDefinitionItem");
-    model->setSteps(csColl);
-    model->blockNotification();
+    csColl[indStep_] = cs;
+    model_->blockNotification("PhysicalModelDefinitionItem");
+    model_->setSteps(csColl);
+    model_->blockNotification();
   });
 
   QPushButton * checkTemplateButton = new QPushButton(tr("Check template file"));
@@ -915,63 +924,66 @@ CouplingInputFileWidget::CouplingInputFileWidget(PhysicalModelItem *item, Coupli
   CollapsibleGroupBox * inputLayoutBox = new CollapsibleGroupBox(tr("Template/input comparison"));
   layout->addWidget(inputLayoutBox, ++row, 0, 1, 3);
   QHBoxLayout * inputLayout = new QHBoxLayout(inputLayoutBox);
-  QLabel * temTextLabel = new QLabel("");
-  QLabel * simTextLabel = new QLabel("");
-  temTextLabel->setTextFormat(Qt::AutoText);
-  simTextLabel->setTextFormat(Qt::AutoText);
-  inputLayout->addWidget(temTextLabel, 0, Qt::AlignTop);
-  inputLayout->addWidget(simTextLabel, 1, Qt::AlignTop);
+  temTextLabel_ = new QLabel("");
+  simTextLabel_ = new QLabel("");
+  temTextLabel_->setTextFormat(Qt::AutoText);
+  simTextLabel_->setTextFormat(Qt::AutoText);
+  inputLayout->addWidget(temTextLabel_, 0, Qt::AlignTop);
+  inputLayout->addWidget(simTextLabel_, 1, Qt::AlignTop);
   inputLayout->setStretch(0, 1);
   inputLayout->setStretch(1, 1);
 
-  connect(checkTemplateButton, &QPushButton::clicked, [ = ]()
-  {
-    temTextLabel->clear();
-    temTextLabel->setStyleSheet("");
-    simTextLabel->clear();
-    CouplingStepCollection csColl(model->getSteps());
-    CouplingStep cs(csColl[indStep]);
-    CouplingInputFileCollection inColl(cs.getInputFiles());
-
-    QFileInfo temFile(inColl[indFile].getPath().c_str());
-    QFileInfo simFile(QDir::temp().absolutePath() + "/" + inColl[indFile].getConfiguredPath().c_str());
-
-    VariableCollection varColl;
-    const InputCollection inVar = model->getInputs();
-    const OutputCollection outVar = model->getOutputs();
-
-    for(UnsignedInteger i = 0; i < inVar.getSize(); ++i)
-      varColl.add(Variable(inVar[i].getName(), inVar[i].getValue(), inVar[i].getDescription()));
-    for(UnsignedInteger i = 0; i < outVar.getSize(); ++i)
-      varColl.add(Variable(outVar[i].getName(), outVar[i].getValue(), outVar[i].getDescription()));
-
-    if(!temFile.exists())
-      temTextLabel->setText(tr("Template file not found") + "\n");
-    else if(!temFile.isReadable())
-      temTextLabel->setText(tr("Template file not readable") + "\n");
-    else
-    {
-      try
-      {
-        inColl[indFile].simulateInput(varColl);
-      }
-      catch (const std::exception & ex)
-      {
-        temTextLabel->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
-        temTextLabel->setText(ex.what());
-        return;
-      }
-      QString temText(readFile(temFile));
-      QString simText(readFile(simFile));
-      compareFiles(temText, simText);
-
-      temTextLabel->setText(temText);
-      simTextLabel->setText(simText);
-    }
-  });
+  connect(checkTemplateButton, &QPushButton::clicked, this, &CouplingInputFileWidget::checkTemplate);
 }
 
-void CouplingInputFileWidget::compareFiles(QString & s1, QString & s2) const
+void CouplingInputFileWidget::checkTemplate()
+{
+  temTextLabel_->clear();
+  temTextLabel_->setStyleSheet("");
+  simTextLabel_->clear();
+
+  CouplingStepCollection csColl(model_->getSteps());
+  CouplingStep cs(csColl[indStep_]);
+  CouplingInputFileCollection inColl(cs.getInputFiles());
+
+  QFileInfo temFile(inColl[indFile_].getPath().c_str());
+  QFileInfo simFile(QDir::temp().absolutePath() + "/" + inColl[indFile_].getConfiguredPath().c_str());
+
+  VariableCollection varColl;
+  const InputCollection inVar = model_->getInputs();
+  const OutputCollection outVar = model_->getOutputs();
+
+  for(UnsignedInteger i = 0; i < inVar.getSize(); ++i)
+    varColl.add(Variable(inVar[i].getName(), inVar[i].getValue(), inVar[i].getDescription()));
+  for(UnsignedInteger i = 0; i < outVar.getSize(); ++i)
+    varColl.add(Variable(outVar[i].getName(), outVar[i].getValue(), outVar[i].getDescription()));
+
+  if(!temFile.exists())
+    temTextLabel_->setText(tr("Template file not found") + "\n");
+  else if(!temFile.isReadable())
+    temTextLabel_->setText(tr("Template file not readable") + "\n");
+  else
+  {
+    try
+    {
+      inColl[indFile_].simulateInput(varColl);
+    }
+    catch (const std::exception & ex)
+    {
+      temTextLabel_->setStyleSheet("QLabel {color: red;} QLabel::disabled{color: darkgray;}");
+      temTextLabel_->setText(ex.what());
+      return;
+    }
+    QString temText(readFile(temFile));
+    QString simText(readFile(simFile));
+    compareFiles(temText, simText);
+
+    temTextLabel_->setText(temText);
+    simTextLabel_->setText(simText);
+  }
+}
+
+void CouplingInputFileWidget::compareFiles(const QString & s1, QString & s2) const
 {
   QList<QString> l1 = s1.split("\n");
   QList<QString> l2 = s2.split("\n");
@@ -981,7 +993,7 @@ void CouplingInputFileWidget::compareFiles(QString & s1, QString & s2) const
   {
     if(l1[i] != l2[i])
     {
-      l2[i].replace(l2[i], QString("<font color=\"red\">" + l2[i].toHtmlEscaped() + "</font>"));
+      l2[i].replace(l2[i], QString("<font color=\"blue\">" + l2[i].toHtmlEscaped() + "</font>"));
       s2.append(l2[i] + "<br>");
     }
     else
@@ -991,7 +1003,7 @@ void CouplingInputFileWidget::compareFiles(QString & s1, QString & s2) const
   }
 }
 
-QString CouplingInputFileWidget::readFile(QFileInfo & fname) const
+QString CouplingInputFileWidget::readFile(const QFileInfo & fname) const
 {
   QFile file(fname.filePath());
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
