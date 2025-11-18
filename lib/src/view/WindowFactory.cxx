@@ -236,7 +236,7 @@ SubWindow * WindowFactory::GetDesignOfExperimentWindow(DesignOfExperimentItem *i
 
 AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget * parent)
 {
-  AnalysisWizard * wizard = 0;
+  AnalysisWizard * wizard = nullptr;
 
   const QString analysisType = analysis.getImplementation()->getClassName().c_str();
 

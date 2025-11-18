@@ -35,6 +35,12 @@ using namespace OT;
 namespace PERSALYS
 {
 
+QString PolynomialRegressionPage::FORWARD   = tr("forward");
+QString PolynomialRegressionPage::BACKWARD  = tr("backward");
+QString PolynomialRegressionPage::BOTH      = tr("both");
+QString PolynomialRegressionPage::AIC       = tr("AIC");
+QString PolynomialRegressionPage::BIC       = tr("BIC");
+
 PolynomialRegressionPage::PolynomialRegressionPage(QWidget* parent)
   : QWizardPage(parent)
 {
@@ -46,11 +52,10 @@ void PolynomialRegressionPage::buildInterface()
 {
   setTitle(tr("Linear regression parameters"));
 
-  QVBoxLayout * pageLayout = new QVBoxLayout(this);
+  auto * pageLayout = new QVBoxLayout(this);
 
-  // Kriging parameters group
-  QGroupBox * parametersBox = new QGroupBox(tr("Parameters"));
-  QGridLayout * parametersLayout = new QGridLayout(parametersBox);
+  auto * parametersBox = new QGroupBox(tr("Parameters"));
+  auto * parametersLayout = new QGridLayout(parametersBox);
 
   // correlation model
   parametersLayout->addWidget(new QLabel(tr("Degree")), 0, 0);
@@ -65,24 +70,68 @@ void PolynomialRegressionPage::buildInterface()
   interactionCheckBox_ = new QCheckBox;
   parametersLayout->addWidget(interactionCheckBox_, 1, 1);
 
-  pageLayout->addWidget(parametersBox);
+  // Stepwise
+  parametersLayout->addWidget(new QLabel(tr("Stepwise")), 2, 0);
+  stepwiseCheckBox_ = new QCheckBox;
+  parametersLayout->addWidget(stepwiseCheckBox_, 2, 1);
 
-  initialize(PolynomialRegressionAnalysis());
+  // Advenced parameters
+  auto * advancedGroupBox = new CollapsibleGroupBox(tr("Advanced parameters"));
+  auto * advancedGroupBoxLayout = new QGridLayout(advancedGroupBox);
+  parametersLayout->addWidget(advancedGroupBox, 3, 0);
+
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Direction")), 0, 0);
+  directionComboBox_ = new QComboBox();
+  directionComboBox_->addItem(FORWARD, LinearModelStepwiseAlgorithm::FORWARD);
+  directionComboBox_->addItem(BACKWARD, LinearModelStepwiseAlgorithm::BACKWARD);
+  directionComboBox_->addItem(BOTH, LinearModelStepwiseAlgorithm::BOTH);
+  advancedGroupBoxLayout->addWidget(directionComboBox_, 0, 1);
+
+  advancedGroupBoxLayout->addWidget(new QLabel(tr("Penalty criteria")), 1, 0);
+  penaltyCriteriaComboBox_ = new QComboBox();
+  penaltyCriteriaComboBox_->addItem(BIC, PolynomialRegressionAnalysis::BIC);
+  penaltyCriteriaComboBox_->addItem(AIC, PolynomialRegressionAnalysis::AIC);
+  advancedGroupBoxLayout->addWidget(penaltyCriteriaComboBox_, 1, 1);
+
+#if QT_VERSION < 0x060700
+  connect(stepwiseCheckBox_, &QCheckBox::stateChanged, [advancedGroupBox] (int state) {
+#else
+  connect(stepwiseCheckBox_, &QCheckBox::checkStateChanged, [advancedGroupBox] (Qt::CheckState state) {
+#endif
+    advancedGroupBox->setVisible(state);
+  });
+
+  pageLayout->addWidget(parametersBox);
 }
 
 
 void PolynomialRegressionPage::initialize(const Analysis& analysis)
 {
-  const PolynomialRegressionAnalysis * analysis_ptr = dynamic_cast<const PolynomialRegressionAnalysis*>(analysis.getImplementation().get());
+  const auto * analysis_ptr = dynamic_cast<const PolynomialRegressionAnalysis*>(analysis.getImplementation().get());
 
   if (!analysis_ptr)
     return;
 
-  const Description inputNames = analysis_ptr->getDesignOfExperiment().getInputSample().getMarginal(analysis_ptr->getDesignOfExperiment().getEffectiveInputIndices()).getDescription();
-  inputsNames_ = inputNames;
-
-  degreeSpinBox_->setValue(analysis_ptr->getDegree());
+  degreeSpinBox_->setValue((int) analysis_ptr->getDegree());
   interactionCheckBox_->setChecked(analysis_ptr->getInteraction());
+  stepwiseCheckBox_->setChecked(analysis_ptr->getStepwise());
+  switch (analysis_ptr->getDirection())
+  {
+    case LinearModelStepwiseAlgorithm::FORWARD:
+      directionComboBox_->setCurrentText(FORWARD);
+      break;
+    
+    case LinearModelStepwiseAlgorithm::BACKWARD:
+    directionComboBox_->setCurrentText(BACKWARD);
+    break;
+  
+    case LinearModelStepwiseAlgorithm::BOTH:
+    directionComboBox_->setCurrentText(BOTH);
+    break;
+  }
+
+  analysis_ptr->getPenalty() == PolynomialRegressionAnalysis::PenaltyCriteria::AIC  ? penaltyCriteriaComboBox_->setCurrentText(AIC)
+                                                                                    : penaltyCriteriaComboBox_->setCurrentText(BIC);
 }
 
 
@@ -91,6 +140,10 @@ Analysis PolynomialRegressionPage::getAnalysis(const String& name, const DesignO
   PolynomialRegressionAnalysis analysis(name, doe);
   analysis.setDegree(degreeSpinBox_->value());
   analysis.setInteraction(interactionCheckBox_->isChecked());
+  analysis.setStepwise(stepwiseCheckBox_->isChecked());
+  analysis.setDirection(static_cast<LinearModelStepwiseAlgorithm::Direction>(directionComboBox_->currentData().toInt()));
+  analysis.setPenalty(static_cast<PolynomialRegressionAnalysis::PenaltyCriteria>(penaltyCriteriaComboBox_->currentData().toInt()));
+
   return analysis;
 }
 

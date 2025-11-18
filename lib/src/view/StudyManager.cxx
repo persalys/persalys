@@ -106,13 +106,16 @@ void StudyManager::openAnalysisWizard(StudyItem *item, const Analysis &analysis,
     return;
   }
 
-  AnalysisWizard * wizard = WindowFactory::GetAnalysisWizard(analysis, isGeneralWizard, mainWidget_);
+  QPointer<AnalysisWizard> wizard{WindowFactory::GetAnalysisWizard(analysis, isGeneralWizard, mainWidget_)};
 
   if (wizard)
   {
-    if (wizard->exec())
+    wizard->setAttribute(Qt::WA_DeleteOnClose);
+    connect(wizard, &QDialog::accepted, [item, wizard]() {
       item->getStudy().add(wizard->getAnalysis());
-    delete wizard;
+    });
+
+    wizard->open();
   }
 }
 
@@ -120,13 +123,14 @@ void StudyManager::openAnalysisWizard(StudyItem *item, const Analysis &analysis,
 void StudyManager::modifyAnalysis(AnalysisItem* item)
 {
   Q_ASSERT(item);
-  AnalysisWizard * wizard = WindowFactory::GetAnalysisWizard(item->getAnalysis(), false, mainWidget_);
+  QPointer<AnalysisWizard> wizard{WindowFactory::GetAnalysisWizard(item->getAnalysis(), false, mainWidget_)};
 
   if (wizard)
   {
-    if (wizard->exec())
+    wizard->setAttribute(Qt::WA_DeleteOnClose);
+    connect(wizard, &QDialog::accepted, [item, wizard]() {
       item->updateAnalysis(wizard->getAnalysis());
-    delete wizard;
+    });
   }
 }
 

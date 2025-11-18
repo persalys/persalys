@@ -1,5 +1,5 @@
 %feature("docstring") PERSALYS::PolynomialRegressionAnalysis
-"Polynomial stepwise regression.
+"Polynomial regression (stepwise or plain).
 
 Allows one to select of the most suitable polynomial (canonical) basis for a linear
 regression model with the help of the stepwise algorithm.
@@ -12,6 +12,8 @@ name : str
     Name
 designOfExperiment : :class:`~persalys.DesignOfExperiment`
     Design of experiments
+
+By default, stepwise regression is used with both direction and BIC penalty criteria.
 
 Examples
 --------
@@ -40,6 +42,9 @@ Create the linear regression analysis:
 >>> lm = persalys.PolynomialRegressionAnalysis('lm', aDesign)
 >>> lm.setDegree(1)
 >>> lm.setInteraction(False)
+>>> lm.setStepwise(True)
+>>> lm.setDirection(ot.LinearModelStepwiseAlgorithm.BOTH)
+>>> lm.setPenalty(persalys.PolynomialRegressionAnalysis.BIC)
 >>> lm.run()
 
 Get the result:
@@ -85,6 +90,67 @@ Parameters
 ----------
 interaction : bool
     Whether to include interaction terms in the basis"
+
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::getStepwise
+"Accessor to the stepwise flag.
+
+Returns
+-------
+stepwise : bool
+    Whether to use stepwise regression or not."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::setStepwise
+"Accessor to the stepwise flag.
+
+Parameters
+----------
+stepwise : bool
+    Whether to use stepwise regression or not."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::getDirection
+"Accessor to the stepwise direction.
+
+Returns
+-------
+direction : int
+    Stepwise direction."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::setDirection
+"Accessor to the stepwise direction.
+
+Parameters
+----------
+direction : int
+    Stepwise direction. Possible values are `openturns.LinearModelStepwiseAlgorithm.FORWARD`, `openturns.LinearModelStepwiseAlgorithm.BACKWARD` and `openturns.LinearModelStepwiseAlgorithm.BOTH`."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::getPenalty
+"Accessor to the penalty criteria.
+
+Returns
+-------
+penalty : int
+    Penalty criteria."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::PolynomialRegressionAnalysis::setPenalty
+"Accessor to the penalty criteria.
+
+Parameters
+----------
+penalty : int
+    Penalty criteria. Possible values are `persalys.PolynomialRegressionAnalysis.AIC` and `persalys.PolynomialRegressionAnalysis.BIC`."
 
 // ---------------------------------------------------------------------
 

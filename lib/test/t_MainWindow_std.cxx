@@ -14,6 +14,8 @@
 #include <QApplication>
 #include <QStandardItemModel>
 #include <QTextEdit>
+#include <QMetaType>
+#include <QPointer>
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include <pqPVApplicationCore.h>
@@ -29,12 +31,12 @@ namespace PERSALYS
 
 QAction* findAction(QList<QAction*> actions, QString text)
 {
-  for (int i = 0; i < actions.size(); ++i)
+  for (QAction * action : actions)
   {
-    if (actions[i]->text() == text)
-      return actions[i];
+    if (action->text() == text)
+      return action;
   }
-  return 0;
+  return nullptr;
 }
 
 
@@ -52,6 +54,8 @@ private:
 private slots:
   void initTestCase()
   {
+    qRegisterMetaType<AnalysisItem*>("AnalysisItem*");
+
     mainWindow_ = new MainWindow;
     mainWindow_->show();
 
@@ -65,7 +69,7 @@ private slots:
   void TestPythonConsole()
   {
     // get widgets
-    MenuBar * menuBar = mainWindow_->findChild<MenuBar*>();
+    const auto * menuBar = mainWindow_->findChild<MenuBar*>();
     QDockWidget * consoleDockWidget = mainWindow_->findChild<QDockWidget*>();
 
     // test python console visibility
@@ -83,9 +87,9 @@ private slots:
   void TestActions()
   {
     // get widgets
-    MenuBar * menuBar = mainWindow_->findChild<MenuBar*>();
+    const MenuBar * menuBar = mainWindow_->findChild<MenuBar*>();
     QList<QAction*> actions = menuBar->actions();
-    QAction * fileAction = findAction(actions, "&File");
+    const QAction * fileAction = findAction(actions, "&File");
     QList<QAction*> fileMenuActions = fileAction->menu()->actions();
 
     // test: Ctrl+S without any study
@@ -93,7 +97,7 @@ private slots:
 
     // test new study action
     mainWidget_->getActions()->newAction()->trigger();
-    StudyItem * studyItem = static_cast<StudyItem*>(treeViewModel_->item(0));
+    auto * studyItem = static_cast<StudyItem*>(treeViewModel_->item(0));
     studyItem->getStudy().save("myStudy.xml");
     QVERIFY(treeViewModel_->rowCount() == 1);
 
@@ -126,9 +130,8 @@ private slots:
     QVERIFY(treeViewModel_->rowCount() == 0);
 
     // open recent study
-    QAction * recentAction = findAction(fileMenuActions, "Open Recent");
-    QList<QAction*> recentMenuActions = recentAction->menu()->actions();
-    if (recentMenuActions.size() && !recentMenuActions[0]->text().isEmpty()) // does not work on Windows
+    const QAction * recentAction = findAction(fileMenuActions, "Open Recent");
+    if (QList<QAction*> recentMenuActions = recentAction->menu()->actions(); recentMenuActions.size() && !recentMenuActions[0]->text().isEmpty()) // does not work on Windows
     {
       recentMenuActions[0]->trigger();
       QVERIFY(treeViewModel_->rowCount() == 1);
@@ -152,21 +155,21 @@ private slots:
 #endif
     files << "test_field_analyses.xml";
 
-    for (int i = 0; i < files.size(); ++i)
+    for (const QString &file : files)
     {
       // open the study
-      PERSALYS::Study theStudy(PERSALYS::Study::Open(files[i].toStdString()));
+      PERSALYS::Study theStudy(PERSALYS::Study::Open(file.toStdString()));
       PERSALYS::Study::Add(theStudy);
       QVERIFY(treeViewModel_->rowCount() == 1);
 
       // check the result windows type
       for (int j = 0; j < stackedWidget_->count(); ++ j)
       {
-        SubWindow * subWindow = dynamic_cast<SubWindow*>(stackedWidget_->widget(j));
+        auto * subWindow = dynamic_cast<SubWindow*>(stackedWidget_->widget(j));
         if (subWindow)
         {
-          AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(subWindow->getItem());
-          DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(subWindow->getItem());
+          auto * analysisItem = dynamic_cast<AnalysisItem*>(subWindow->getItem());
+          const auto * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(subWindow->getItem());
           if (analysisItem && !doeItem)
           {
             if (analysisItem->getAnalysis().hasValidResult())
@@ -182,11 +185,17 @@ private slots:
             QAction * modifyAction = findAction(analysisItem->getActions(), "Modify");
             if (modifyAction)
             {
-              QTimer::singleShot(150, [ = ]()
+              QPointer<AnalysisItem> analysisItemGuard(analysisItem);
+              QTimer::singleShot(150, [analysisItemGuard]()
               {
                 QWidget * widget = QApplication::activeModalWidget();
-                std::cout << "Analysis= " << analysisItem->getAnalysis().getImplementation()->getClassName()
-                          << " - Wizard= " << widget->metaObject()->className() << std::endl;
+                if (!widget)
+                  return;
+                if (analysisItemGuard)
+                {
+                  std::cout << "Analysis= " << analysisItemGuard->getAnalysis().getImplementation()->getClassName()
+                            << " - Wizard= " << widget->metaObject()->className() << std::endl;
+                }
                 widget->close();
               });
               modifyAction->trigger();
@@ -212,7 +221,7 @@ private slots:
     const QString scriptFileName("test_field_analyses_exported.py");
 
     // test: export
-    StudyItem * studyItem = static_cast<StudyItem*>(treeViewModel_->item(0));
+    auto * studyItem = static_cast<StudyItem*>(treeViewModel_->item(0));
     studyItem->exportPythonScript(scriptFileName);
 
     mainWidget_->getActions()->closeAction()->trigger();
@@ -222,8 +231,8 @@ private slots:
     QVERIFY(QFile(scriptFileName).exists());
     manager_->importPythonScript(scriptFileName);
 
-    QDockWidget * consoleDockWidget = mainWindow_->findChild<QDockWidget*>();
-    QTextEdit * console = consoleDockWidget->findChild<QTextEdit*>();
+    const QDockWidget * consoleDockWidget = mainWindow_->findChild<QDockWidget*>();
+    const QTextEdit * console = consoleDockWidget->findChild<QTextEdit*>();
     std::cout << "Python console Message = " << console->toPlainText().toStdString() << std::endl;
     QVERIFY2(console->toPlainText().toStdString() == ">>> __file__ = \"test_field_analyses_exported.py\"; exec(open(u\"test_field_analyses_exported.py\", encoding=\"utf-8\").read())\n>>> ", "wrong message");
     QVERIFY(treeViewModel_->rowCount() == 1);
@@ -234,22 +243,22 @@ private slots:
     // check window
     QList<AnalysisWindow *> analysisWindows = stackedWidget_->findChildren<AnalysisWindow *>();
     QVERIFY(analysisWindows.size() == 3);
-    for (int i = 0; i < analysisWindows.size(); ++i)
+    for (AnalysisWindow * & analysisWindow : analysisWindows)
     {
-      AnalysisItem * item = dynamic_cast<AnalysisItem*>(analysisWindows[i]->getItem());
-      QVERIFY(item != 0);
+      const auto * item = dynamic_cast<AnalysisItem*>(analysisWindow->getItem());
+      QVERIFY(item != nullptr);
       ++analysesCounter;
       // launch evaluations
       if (dynamic_cast<ModelEvaluation*>(item->getAnalysis().getImplementation().get()))
       {
-        QPushButton * runButton = analysisWindows[i]->findChild<QPushButton*>("runbutton");
-        analysisWindows[i] = 0;
-        QVERIFY(runButton != 0);
+        QPushButton * runButton = analysisWindow->findChild<QPushButton*>("runbutton");
+        analysisWindow = nullptr;
+        QVERIFY(runButton != nullptr);
         QSignalSpy spy(item, SIGNAL(windowRequested(AnalysisItem*, bool)));
         runButton->click();
         // Wait 2 sec for result
         spy.wait(2000);
-        // Check if we had a timeout or actually signal was raised
+        // Check if we had a timeout or if the signal was actually raised
         QCOMPARE(spy.count(), 1);
       }
     }
@@ -258,23 +267,23 @@ private slots:
     int oneEvalFinished = 0;
     for (UnsignedInteger i = 0; i < theStudy.getAnalyses().getSize(); ++i)
     {
-      Item * item = dynamic_cast<Item*>(theStudy.getAnalyses()[i].getImplementation().get()->getObserver("AnalysisItem"));
-      QVERIFY(item != 0);
+      const auto * item = dynamic_cast<Item*>(theStudy.getAnalyses()[i].getImplementation().get()->getObserver("AnalysisItem"));
+      QVERIFY(item != nullptr);
       for (int j = 0; j < stackedWidget_->count(); ++j)
       {
-        SubWindow * window = dynamic_cast<SubWindow*>(stackedWidget_->widget(j));
+        auto * window = dynamic_cast<SubWindow*>(stackedWidget_->widget(j));
         if (window && window->getItem() == item)
         {
           if (theStudy.getAnalyses()[i].hasValidResult())
           {
-            QVERIFY(dynamic_cast<ResultWindow*>(window) != 0);
+            QVERIFY(dynamic_cast<ResultWindow*>(window) != nullptr);
             ++oneEvalFinished;
           }
           else
           {
-            QVERIFY(dynamic_cast<AnalysisWindow*>(window) != 0);
-            QLabel * messageLabel = window->findChild<QLabel*>();
-            QVERIFY(messageLabel != 0);
+            QVERIFY(dynamic_cast<AnalysisWindow*>(window) != nullptr);
+            const auto * messageLabel = window->findChild<QLabel*>();
+            QVERIFY(messageLabel != nullptr);
             if (!theStudy.getAnalyses()[i].getErrorMessage().empty())
             {
               QVERIFY(messageLabel->text().contains(theStudy.getAnalyses()[i].getErrorMessage().c_str()));

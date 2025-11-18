@@ -32,7 +32,7 @@ namespace PERSALYS
 MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
 {
-  DesignOfExperimentAnalysis * doeAnalysis = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get());
+  const auto * doeAnalysis = dynamic_cast<DesignOfExperimentAnalysis*>(analysis_.getImplementation().get());
   Q_ASSERT(doeAnalysis);
   const DesignOfExperiment doe = doeAnalysis->getDesignOfExperiment();
 
@@ -44,12 +44,12 @@ MetaModelAnalysisWizard::MetaModelAnalysisWizard(const Analysis& analysis, const
     // get list of Designs Of Experiment of the current physical model
     if (Observer * obs = model.getImplementation().get()->getObserver("Study"))
     {
-      StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
+      const auto * study = dynamic_cast<StudyImplementation*>(obs);
       Q_ASSERT(study);
       for (UnsignedInteger i = 0; i < study->getAnalyses().getSize(); ++i)
       {
-        DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study->getAnalyses()[i].getImplementation().get());
-        ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+        const auto * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study->getAnalyses()[i].getImplementation().get());
+        const auto * modelEval = dynamic_cast<ModelEvaluation *>(study->getAnalyses()[i].getImplementation().get());
         if (doeEval && !modelEval && doeEval->getPhysicalModel() == model && doeEval->hasValidResult())
         {
           doeList_.append(doeEval->getResult().getDesignOfExperiment());

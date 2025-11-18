@@ -30,6 +30,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QComboBox>
 
 namespace PERSALYS
 {
@@ -39,7 +40,7 @@ class PERSALYS_VIEW_API PolynomialRegressionPage : public QWizardPage
   Q_OBJECT
 
 public:
-  PolynomialRegressionPage(QWidget* parent = nullptr);
+  explicit PolynomialRegressionPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;
@@ -47,12 +48,14 @@ public:
 protected:
   void buildInterface();
 
-public slots:
-
 private:
-  QSpinBox * degreeSpinBox_ = nullptr;
-  QCheckBox * interactionCheckBox_ = nullptr;
-  OT::Description inputsNames_;
+  QSpinBox        * degreeSpinBox_            = nullptr;
+  QCheckBox       * interactionCheckBox_      = nullptr;
+  QCheckBox       * stepwiseCheckBox_         = nullptr;
+  QComboBox       * directionComboBox_        = nullptr;
+  QComboBox       * penaltyCriteriaComboBox_  = nullptr;
+
+  static QString FORWARD, BACKWARD, BOTH, BIC, AIC;
 };
 }
 #endif
