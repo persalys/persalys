@@ -57,7 +57,8 @@ public slots:
   void selectedVarChanged(QModelIndex, QModelIndex);
   void updateDistListForVar(QStringList);
   void applyCurrentDistToAll();
-  void updateInterestVar(OT::Description, OT::String);
+  void updateInterestVar(const OT::Description&, const OT::String&);
+  void addAllDistributionsToAllVariables();
 signals:
   void currentVarChanged(int);
   void currentVarChecked(bool);
@@ -76,7 +77,7 @@ private:
   LogSpinBox * lillieforsMinimumSamplingSizeSpinbox_ = nullptr;
   LogSpinBox * lillieforsMaximumSamplingSizeSpinbox_ = nullptr;
   TemporaryLabel * errorMessageLabel_ = nullptr;
-  bool pageValidity_ = false;
+  bool pageValidity_ = true;
   VariablesSelectionTableModel * varTableModel_ = nullptr;
 };
 

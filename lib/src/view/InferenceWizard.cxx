@@ -33,6 +33,8 @@
 
 #include <QHBoxLayout>
 #include <QGroupBox>
+#include <QPushButton>
+#include <QIcon>
 
 using namespace OT;
 
@@ -41,13 +43,6 @@ namespace PERSALYS
 
 InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
-  , currentVarName_("")
-  , inference_()
-  , interestVar_()
-  , distFactoriesForEachInterestVar_()
-  , errorMessageLabel_(0)
-  , pageValidity_(true)
-  , varTableModel_(0)
 {
   initialize();
 
@@ -57,7 +52,7 @@ InferenceWizard::InferenceWizard(const Analysis& analysis, QWidget* parent)
 
 void InferenceWizard::initialize()
 {
-  InferenceAnalysis * analysis_ptr = dynamic_cast<InferenceAnalysis*>(analysis_.getImplementation().get());
+  const InferenceAnalysis * analysis_ptr = dynamic_cast<InferenceAnalysis*>(analysis_.getImplementation().get());
   Q_ASSERT(analysis_ptr);
   inference_ = *analysis_ptr;
 
@@ -158,6 +153,8 @@ void InferenceWizard::buildInterface()
 
     DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, Description(1, varNames[i]), this);
     connect(distWidget, SIGNAL(distributionsListChanged(QStringList)), this, SLOT(updateDistListForVar(QStringList)));
+    connect(distWidget, &DistributionsForInferenceWidget::applySelectedDistributionsToAllVariablesRequested,
+      this, &InferenceWizard::applyCurrentDistToAll);
 
     stackWidget_->addWidget(distWidget);
   }
@@ -315,25 +312,54 @@ void InferenceWizard::applyCurrentDistToAll()
 
   const Description varNames(inference_.getDesignOfExperiment().getSample().getDescription());
   FittingTest::DistributionFactoryCollection distCollection(distFactoriesForEachInterestVar_[currentVarName_]);
+
   for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
   {
-    if (interestVar_.contains(varNames[i]))
+    const String & varName = varNames[i];
+    if (interestVar_.contains(varName))
     {
-      distFactoriesForEachInterestVar_[interestVar_[i]] = distCollection;
+      distFactoriesForEachInterestVar_[varName] = distCollection;
+
       QStringList dist;
       for (UnsignedInteger j = 0; j < distCollection.getSize(); ++j)
       {
         String str = distCollection[j].getImplementation()->getClassName();
         dist << TranslationManager::GetTranslatedDistributionName(str.substr(0, str.find("Factory")));
       }
-      DistributionsForInferenceWidget * distWidget = static_cast<DistributionsForInferenceWidget *>(stackWidget_->widget(i));
+      auto * distWidget = static_cast<DistributionsForInferenceWidget *>(stackWidget_->widget(static_cast<int>(i)));
       distWidget->updateDistributions(dist);
     }
   }
 }
 
+void InferenceWizard::addAllDistributionsToAllVariables()
+{
+  errorMessageLabel_->reset();
 
-void InferenceWizard::updateInterestVar(Description interestVar, String varName)
+  QStringList allDist = TranslationManager::GetTranslatedContinuousDistributions();
+
+  const Description varNames(inference_.getDesignOfExperiment().getSample().getDescription());
+  for (UnsignedInteger i = 0; i < varNames.getSize(); ++i)
+  {
+    const String & varName = varNames[i];
+    if (!interestVar_.contains(varName))
+      continue;
+
+    FittingTest::DistributionFactoryCollection distCollection;
+    for (const QString &dist : allDist)
+    {
+      const String distName = TranslationManager::GetDistributionName(dist);
+      distCollection.add(DistributionFactory::GetByName(distName + "Factory"));
+    }
+    distFactoriesForEachInterestVar_[varName] = distCollection;
+
+    auto * distWidget = static_cast<DistributionsForInferenceWidget *>(stackWidget_->widget(static_cast<int>(i)));
+    distWidget->updateDistributions(allDist);
+  }
+}
+
+
+void InferenceWizard::updateInterestVar(const Description &interestVar, const String &varName)
 {
   errorMessageLabel_->reset();
   pageValidity_ = true;

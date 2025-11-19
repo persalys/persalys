@@ -157,7 +157,7 @@ void CopulaInferenceWizard::buildInterface()
       dist << TranslationManager::GetTranslatedCopulaName(str.substr(0, str.find("Copula")));
     }
 
-    DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, vars, this);
+    DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, vars, this, true);
     connect(distWidget, SIGNAL(distributionsListChanged(OT::Description, QStringList)), this, SLOT(updateDistForVars(OT::Description, QStringList)));
 
     stackedWidget_->addWidget(distWidget);
@@ -256,7 +256,7 @@ void CopulaInferenceWizard::defineGroup()
 
   QStringList dist(TranslationManager::GetTranslatedCopulaName("Normal"));
 
-  DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, selectedVars, this);
+  DistributionsForInferenceWidget * distWidget = new DistributionsForInferenceWidget(dist, selectedVars, this, true);
   connect(distWidget, SIGNAL(distributionsListChanged(OT::Description, QStringList)), this, SLOT(updateDistForVars(OT::Description, QStringList)));
 
   stackedWidget_->addWidget(distWidget);

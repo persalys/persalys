@@ -31,13 +31,11 @@ using namespace OT;
 namespace PERSALYS
 {
 
-DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList &distributions, const Description &variables, QWidget *parent)
+DistributionsForInferenceWidget::DistributionsForInferenceWidget(const QStringList &distributions, const Description &variables, QWidget *parent, bool isCopulaInference)
   : QWidget(parent)
   , variables_(variables)
   , distributions_(distributions)
-  , tableView_(0)
-  , tableModel_(0)
-  , addComboBox_(0)
+  , isCopulaInference_(isCopulaInference)
 {
   if (variables_.getSize() == 1)
     allDistributions_ = TranslationManager::GetTranslatedContinuousDistributions();
@@ -83,13 +81,15 @@ void DistributionsForInferenceWidget::buildInterface()
   tableView_->setModel(tableModel_);
   tableView_->selectRow(0);
 
-  // Add button
+  // buttons
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
   buttonsLayout->addStretch();
+
+  // add button
   addComboBox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
   addComboBox_->addItems(notUsedDistributions);
-
   buttonsLayout->addWidget(addComboBox_);
+
   connect(addComboBox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));
   connect(addComboBox_, SIGNAL(activated(int)), this, SLOT(addSelectedDistribution(int)));
 
@@ -98,6 +98,17 @@ void DistributionsForInferenceWidget::buildInterface()
   removeButton->setIcon(QIcon(":/images/list-remove.png"));
   connect(removeButton, SIGNAL(pressed()), this, SLOT(removeSelectedDistribution()));
   buttonsLayout->addWidget(removeButton);
+
+  // Add all button
+  if(!isCopulaInference_)
+  {
+    auto* applySelectedForAllButton = new QPushButton(tr("Apply to all"));
+    applySelectedForAllButton->setIcon(QIcon(":/images/add-all"));
+    applySelectedForAllButton->setToolTip(tr("Replace the distribution for all variables by the distributions for the current variable"));
+    connect(applySelectedForAllButton, &QPushButton::clicked, this,
+      &DistributionsForInferenceWidget::applySelectedDistributionsToAllVariablesRequested);
+    buttonsLayout->addWidget(applySelectedForAllButton);
+  }
 
   mainLayout->addLayout(buttonsLayout);
 }

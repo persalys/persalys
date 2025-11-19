@@ -38,7 +38,7 @@ class PERSALYS_VIEW_API DistributionsForInferenceWidget : public QWidget
   Q_OBJECT
 
 public :
-  DistributionsForInferenceWidget(const QStringList & distributions, const OT::Description &variables, QWidget* parent = 0);
+  DistributionsForInferenceWidget(const QStringList & distributions, const OT::Description &variables, QWidget* parent = nullptr, bool isCopulaInference=false);
 
   void updateDistributions(const QStringList& distributions);
 
@@ -51,14 +51,16 @@ public slots:
 signals:
   void distributionsListChanged(QStringList);
   void distributionsListChanged(const OT::Description &variables, const QStringList &dist);
+  void applySelectedDistributionsToAllVariablesRequested();
 
 private:
   OT::Description variables_;
-  QStringList allDistributions_;
   QStringList distributions_;
-  QTableView * tableView_;
-  DistributionsTableModel * tableModel_;
-  TitledComboBox * addComboBox_;
+  QStringList allDistributions_;
+  bool isCopulaInference_                   = false;
+  QTableView                * tableView_    = nullptr;
+  DistributionsTableModel   * tableModel_   = nullptr;
+  TitledComboBox            * addComboBox_  = nullptr;
 };
 }
 #endif
