@@ -37,4 +37,12 @@ Release process
       git add persalys/latest persalys/X.Y -r
       git commit -am "latest -> X.Y"
 
-12. In master, set version X.(Y+1)dev
+12. Get the AppImage and exe files
+
+13. Sign the exe installer following instructions from https://git.phimeca.com/phimeca/signature-code
+
+14. Upload the AppImage and the signed exe on phicloud.
+
+15. Update Persalys website
+
+16. In master, set version X.(Y+1)dev
