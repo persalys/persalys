@@ -331,6 +331,13 @@ public:
     QWidget *parent = nullptr
   );
 
+private:
+  void setupCommandTab(QTabWidget *stepTabWidget);
+  void setupInputTab(QTabWidget *stepTabWidget);
+  void setupResourceTab(QTabWidget *stepTabWidget);
+  void setupOutputTab(QTabWidget *stepTabWidget);
+  void setupAdditionalProcessingTab(QTabWidget *stepTabWidget);
+
 public slots:
   void updateInputFileWidgets(PhysicalModelItem *item);
 
@@ -339,6 +346,7 @@ signals:
   void updateStepRequested();
 
 private:
+  PhysicalModelItem           * item_               = nullptr;
   CouplingPhysicalModel       * model_              = nullptr;
   int                         indStep_              = 0;
   DynamicTabWidget            * inTabWidget_        = nullptr;
