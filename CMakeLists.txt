@@ -18,21 +18,6 @@ set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project (persalys)
 
-if (POLICY CMP0020)
-  # Automatically link Qt executables to qtmain target on Windows
-  cmake_policy (SET CMP0020 NEW)
-endif ()
-
-if (POLICY CMP0058)
-  # Ninja requires custom command byproducts to be explicit
-  cmake_policy (SET CMP0058 NEW)
-endif()
-
-if (POLICY CMP0042)
-  # MACOSX_RPATH is enabled by default
-  cmake_policy(SET CMP0042 NEW)
-endif()
-
 string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 
 # set module dir to find custom scripts
@@ -198,18 +183,6 @@ endforeach ()
 # RPATH settings
 set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH} ${OTMORRIS_LIBRARY_DIRS})
 set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-if (POLICY CMP0042)
-  # MACOSX_RPATH is enabled by default
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if (POLICY CMP0078)
-  # UseSWIG generates standard target names
-  cmake_policy(SET CMP0078 NEW)
-endif()
-if (POLICY CMP0086)
-  # UseSWIG honors SWIG_MODULE_NAME via -module flag
-  cmake_policy(SET CMP0086 NEW)
-endif()
 
 # Some useful macros to ease CMakeLists.txt file writing
 set (SOURCEFILES "" CACHE INTERNAL "List of source files to compile")
