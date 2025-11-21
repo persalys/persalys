@@ -31,7 +31,7 @@ class PERSALYS_UTILS_API EditableExportableTableView : public ExportableTableVie
   Q_OBJECT
 
 public:
-  EditableExportableTableView(QWidget* parent = 0);
+  EditableExportableTableView(QWidget* parent = nullptr);
 
 public slots:
   void contextMenu(const QPoint & pos) override;
