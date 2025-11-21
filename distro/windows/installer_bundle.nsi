@@ -190,7 +190,7 @@ Function .onInit
   !insertmacro SET_MENU_CONTEXT
 
   ${If} "$UserInstall" == "1"
-    StrCpy $INSTDIR "$LOCALAPPDATA\${PRODUCT_NAME}"
+    StrCpy $INSTDIR "$LOCALAPPDATA\Programs\${PRODUCT_NAME}"
   ${Else}
     StrCpy $INSTDIR "$PROGRAMFILES64\${PRODUCT_NAME}"
   ${EndIf}
