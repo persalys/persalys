@@ -80,8 +80,47 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   QGridLayout * tabLayout = new QGridLayout(tab);
   mainTabWidget->addTab(tab, tr("Definition"));
 
+  auto * sshLayout = new QHBoxLayout;
+  tabLayout->addLayout(sshLayout, 0, 0, 1, 2);
+
+  auto * runViaSshCheckBox = new QCheckBox(tr("Run via ssh"));
+  sshLayout->addWidget(runViaSshCheckBox);
+
+  auto * hostnameLabel = new QLabel(tr("Hostname"));
+  auto * hostnameLineEdit = new QLineEdit(QString::fromStdString(model_->getHostname()));
+  hostnameLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("([^\r\n]*)"), hostnameLineEdit));
+  sshLayout->addWidget(hostnameLabel);
+  sshLayout->addWidget(hostnameLineEdit);
+  sshLayout->addStretch();
+
+  const bool runViaSsh = !model_->getHostname().empty();
+  runViaSshCheckBox->setChecked(runViaSsh);
+  hostnameLabel->setVisible(runViaSsh);
+  hostnameLineEdit->setVisible(runViaSsh);
+
+  connect(runViaSshCheckBox, &QCheckBox::toggled, [this, hostnameLabel, hostnameLineEdit](bool toggled)
+  {
+    hostnameLabel->setVisible(toggled);
+    hostnameLineEdit->setVisible(toggled);
+    model_->blockNotification("PhysicalModelDefinitionItem");
+    if (!toggled)
+      model_->setLocal();
+    else
+      model_->setHostname(hostnameLineEdit->text().toUtf8().constData());
+    model_->blockNotification();
+  });
+
+  connect(hostnameLineEdit, &QLineEdit::editingFinished, [this, runViaSshCheckBox, hostnameLineEdit]()
+  {
+    if (!runViaSshCheckBox->isChecked())
+      return;
+    model_->blockNotification("PhysicalModelDefinitionItem");
+    model_->setHostname(hostnameLineEdit->text().toUtf8().constData());
+    model_->blockNotification();
+  });
+
   stepTabWidget_ = new DynamicTabWidget;
-  tabLayout->addWidget(stepTabWidget_, 0, 0);
+  tabLayout->addWidget(stepTabWidget_, 1, 0, 1, 2);
   connect(stepTabWidget_, &DynamicTabWidget::newTabRequested, [ = ]()
   {
     CouplingStepCollection csColl(model_->getSteps());
@@ -111,7 +150,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   CollapsibleGroupBox * advancedGroupBox = new CollapsibleGroupBox(tr("Advanced parameters"));
   QGridLayout * advancedGroupBoxLayout = new QGridLayout(advancedGroupBox);
-  tabLayout->addWidget(advancedGroupBox, 1, 0);
+  tabLayout->addWidget(advancedGroupBox, 2, 0, 1, 2);
 
   advancedGroupBoxLayout->addWidget(new QLabel(tr("Cache input file")), 0, 0);
   advancedGroupBoxLayout->addWidget(new QLabel(tr("Cache output file")), 1, 0);
@@ -1349,7 +1388,8 @@ void CouplingStepWidget::setupCommandTab(QTabWidget *stepTabWidget)
     model_->blockNotification();
   });
 
-  auto * ansysTb = new QPushButton(QIcon(":/images/workbench32X32.png"), tr("Run ansys wizard"), this);
+  auto * ansysTb = new QPushButton(QIcon(":/images/workbench32X32.png"),
+                                          tr("Run ansys wizard"), this);
   comTabLayout->addWidget(ansysTb, 2, 0);
 
   auto * advGroupBox = new CollapsibleGroupBox(tr("Advanced"));
