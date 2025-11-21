@@ -13,13 +13,7 @@ The purpose of this example is to check:
 
 The obtained results must be equal to the analytical values.
 
-.. container:: toggle
-
-    .. container:: header
-
-        Show/Hide Code
-
-    .. literalinclude:: ../../t_Cogeneration_std.py
+.. literalinclude:: ../../t_Cogeneration_std.py
 
 1- Problem statement
 ````````````````````
@@ -134,13 +128,7 @@ Test case 2: Flood
 
 This test-case originates from [ProtoOTGUI2014]_ and can be found in python/test/t_Crue_std.py.
 
-.. container:: toggle
-
-    .. container:: header
-
-        Show/Hide Code
-
-    .. literalinclude:: ../../t_Crue_std.py
+.. literalinclude:: ../../t_Crue_std.py
 
 1- Problem statement
 ````````````````````
