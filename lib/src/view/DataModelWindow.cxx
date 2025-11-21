@@ -44,15 +44,6 @@ namespace PERSALYS
 
 DataModelWindow::DataModelWindow(DesignOfExperimentItem * item, QWidget * parent)
   : SubWindow(item, parent)
-  , dataModel_(0)
-  , tableView_(0)
-  , tableModel_(0)
-  , dataTableView1_(0)
-  , dataTableView2_(0)
-  , filePathLineEdit_(0)
-  , defaultLineEditPalette_()
-  , sampleSizeLabel_(0)
-  , errorMessageLabel_(0)
 {
   dataModel_ = dynamic_cast<DataModel*>(item->getDesignOfExperiment().getImplementation().get());
   if (!dataModel_)
@@ -73,7 +64,7 @@ void DataModelWindow::showEvent(QShowEvent* event)
 
 DataModelWindow::~DataModelWindow()
 {
-  dataModel_ = 0;
+  dataModel_ = nullptr;
 }
 
 
@@ -156,6 +147,27 @@ void DataModelWindow::buildInterface()
   sizeLayout->addWidget(sizeLabel, 0, 0);
   sampleSizeLabel_ = new QLabel;
   sizeLayout->addWidget(sampleSizeLabel_, 0, 1);
+
+  QToolButton * addRowButton = new QToolButton;
+  addRowButton->setIcon(QIcon(":/images/list-add.png"));
+  addRowButton->setToolTip(tr("Add row"));
+  sizeLayout->addWidget(addRowButton, 0, 2);
+
+  QToolButton * removeRowButton = new QToolButton;
+  removeRowButton->setIcon(QIcon(":/images/list-remove.png"));
+  removeRowButton->setToolTip(tr("Remove row(s)"));
+  sizeLayout->addWidget(removeRowButton, 0, 3);
+
+  QToolButton * cleanButton = new QToolButton;
+  cleanButton->setIcon(QIcon(":/images/clean.png"));
+  cleanButton->setToolTip(tr("Clean"));
+  sizeLayout->addWidget(cleanButton, 0, 4);
+
+  QToolButton * exportButton = new QToolButton;
+  exportButton->setIcon(QIcon(":/images/document-export.png"));
+  exportButton->setToolTip(tr("Export"));
+  sizeLayout->addWidget(exportButton, 0, 5);
+
   sizeLayout->setColumnStretch(1, 1);
   sizeLayout->setSizeConstraint(QLayout::SetFixedSize);
   gridLayout->addLayout(sizeLayout, 0, 0);
@@ -243,6 +255,11 @@ void DataModelWindow::buildInterface()
   connect(dataTableView2_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeVariablesTableColumn(int, int, int)));
   connect(dataTableView2_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sortSectionChanged(int, Qt::SortOrder)));
   connect(dataTableView2_, SIGNAL(cleanRequested()), this, SLOT(launchCleaningWizard()));
+
+  connect(addRowButton, SIGNAL(clicked()), dataTableView2_, SLOT(addRow()));
+  connect(removeRowButton, SIGNAL(clicked()), dataTableView2_, SLOT(removeRows()));
+  connect(cleanButton, SIGNAL(clicked()), this, SLOT(launchCleaningWizard()));
+  connect(exportButton, SIGNAL(clicked()), dataTableView2_, SLOT(exportData()));
 
 
   // fill tables

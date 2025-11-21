@@ -31,9 +31,6 @@ namespace PERSALYS
 
 EditableExportableTableView::EditableExportableTableView(QWidget* parent)
   : ExportableTableView(parent)
-  , addRowAction_(0)
-  , removeRowAction_(0)
-  , cleanAction_(0)
 {
 
   addRowAction_ = new QAction(QIcon(":/images/list-add.png"), tr("Add row"), this);
@@ -43,9 +40,9 @@ EditableExportableTableView::EditableExportableTableView(QWidget* parent)
 
   connect(addRowAction_, SIGNAL(triggered()), this, SLOT(addRow()));
   connect(removeRowAction_, SIGNAL(triggered()), this, SLOT(removeRows()));
-  connect(cleanAction_, &QAction::triggered, [ = ]()
+  connect(cleanAction_, &QAction::triggered, [this]()
   {
-    emit cleanRequested();
+    emit cleanRequested();  // connected to DataModelWindow::launchCleaningWizard
   });
   setContextMenuPolicy(Qt::CustomContextMenu);
 }
@@ -71,7 +68,7 @@ void EditableExportableTableView::addRow()
 
 void EditableExportableTableView::removeRows()
 {
-  QSortFilterProxyModel* myProxy = dynamic_cast<QSortFilterProxyModel*>(model());
+  const auto * myProxy = dynamic_cast<QSortFilterProxyModel*>(model());
   QAbstractItemModel * sourceModel = myProxy->sourceModel();
   QItemSelection selection(selectionModel()->selection());
   QList<int> rows;
