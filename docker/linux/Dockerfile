@@ -171,18 +171,18 @@ RUN curl -fSsL https://paraview.org/files/v6.0/ParaView-v6.0.1.tar.xz | tar xJ &
  && make install -C build > /dev/null 2>&1 && cd - && rm -r ParaView*
 
 # openturns
-RUN git clone -b v1.25.1 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+RUN git clone -b v1.26 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
     -DPython_EXECUTABLE=/usr/local/bin/python3 -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
-RUN git clone -b v0.18 --depth 1 https://github.com/openturns/otmorris.git && cd otmorris \
+RUN git clone -b v0.19 --depth 1 https://github.com/openturns/otmorris.git && cd otmorris \
  && cmake -DPython_EXECUTABLE=/usr/local/bin/python3 -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip3 install git+https://github.com/openturns/otfmi@v0.16.6 --quiet && python3 -c "import otfmi"
+RUN pip3 install git+https://github.com/openturns/otfmi@v0.17 --quiet && python3 -c "import otfmi"
 
 # openmodelica
 RUN git clone -b v1.25.5 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \

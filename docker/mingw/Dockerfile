@@ -8,7 +8,7 @@ ENV ARCH=x86_64 PYMAJMIN=313
 ENV MINGW_PREFIX=/usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone -b v1.25.1 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
+RUN git clone -b v1.26 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
   && ${ARCH}-w64-mingw32-cmake \
   -DCMAKE_LINKER_TYPE=LLD \
   -DBLA_VENDOR=Generic \
@@ -20,7 +20,7 @@ RUN git clone -b v1.25.1 --depth 1 https://github.com/openturns/openturns.git /t
   && rm -r /tmp/openturns*
 
 # otmorris
-RUN git clone -b v0.18 --depth 1 https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
+RUN git clone -b v0.19 --depth 1 https://github.com/openturns/otmorris.git /tmp/otmorris && cd /tmp/otmorris \
   && ${ARCH}-w64-mingw32-cmake \
   -DCMAKE_LINKER_TYPE=LLD \
   -DPython_INCLUDE_DIR=${MINGW_PREFIX}/include/python${PYMAJMIN} -DPython_LIBRARY=${MINGW_PREFIX}/lib/libpython${PYMAJMIN}.dll.a \
