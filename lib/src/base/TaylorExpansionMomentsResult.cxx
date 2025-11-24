@@ -43,13 +43,15 @@ TaylorExpansionMomentsResult::TaylorExpansionMomentsResult(const OT::Description
     const OT::Point & meanFirstOrder,
     const OT::Point & meanSecondOrder,
     const OT::Point & standardDeviation,
-    const OT::Point & variance)
+    const OT::Point & variance,
+    const OT::Point & importanceFactors)
   : AnalysisResult()
   , outputNames_(outputNames)
   , meanFirstOrder_(meanFirstOrder)
   , meanSecondOrder_(meanSecondOrder)
   , standardDeviation_(standardDeviation)
   , variance_(variance)
+  , importanceFactors_(importanceFactors)
 {
 }
 
@@ -90,6 +92,11 @@ Point TaylorExpansionMomentsResult::getVariance() const
   return variance_;
 }
 
+Point TaylorExpansionMomentsResult::getImportanceFactors() const
+{
+  return importanceFactors_;
+}
+
 
 /* String converter */
 String TaylorExpansionMomentsResult::__repr__() const
@@ -101,7 +108,8 @@ String TaylorExpansionMomentsResult::__repr__() const
       << " meanFirstOrder=" << getMeanFirstOrder()
       << " meanSecondOrder=" << getMeanSecondOrder()
       << " standardDeviation=" << getStandardDeviation()
-      << " variance=" << getVariance();
+      << " variance=" << getVariance()
+      << " importance factors=" << getImportanceFactors();
   return oss;
 }
 
@@ -115,6 +123,7 @@ void TaylorExpansionMomentsResult::save(Advocate & adv) const
   adv.saveAttribute("meanSecondOrder_", meanSecondOrder_);
   adv.saveAttribute("standardDeviation_", standardDeviation_);
   adv.saveAttribute("variance_", variance_);
+  adv.saveAttribute("importanceFactors_", importanceFactors_);
 }
 
 
@@ -127,5 +136,7 @@ void TaylorExpansionMomentsResult::load(Advocate & adv)
   adv.loadAttribute("meanSecondOrder_", meanSecondOrder_);
   adv.loadAttribute("standardDeviation_", standardDeviation_);
   adv.loadAttribute("variance_", variance_);
+  if (adv.hasAttribute("importanceFactors_"))
+    adv.loadAttribute("importanceFactors_", importanceFactors_);
 }
 }

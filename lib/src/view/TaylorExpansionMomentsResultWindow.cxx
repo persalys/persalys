@@ -118,6 +118,44 @@ void TaylorExpansionMomentsResultWindow::buildInterface()
   momentsVbox->addWidget(momentsTablesWidget);
   tabLayout->addWidget(momentsGroupBox, 0, Qt::AlignTop);
 
+  // importance factors
+  if (nbOutputs == 1u)
+  {
+    auto * importanceFactorsGroupBox = new QGroupBox(tr("Importance factors"));
+    auto * importanceFactorsVbox = new QVBoxLayout(importanceFactorsGroupBox);
+
+    auto * importanceFactorsTable = new CopyableTableView;
+    importanceFactorsTable->horizontalHeader()->hide();
+    importanceFactorsTable->verticalHeader()->hide();
+
+    Point importanceFactors = result_.getImportanceFactors();
+    int nbInputs = (int) importanceFactors.getSize();
+    auto * importanceFactorsTableModel = new CustomStandardItemModel(nbInputs, 2, importanceFactorsTable);
+
+    // horizontal header
+    importanceFactorsTableModel->setNotEditableHeaderItem(0, 0, tr("Input"));
+    importanceFactorsTableModel->setNotEditableHeaderItem(0, 1, tr("Importance factor"));
+
+    // Retrieve input names
+    const auto * item = dynamic_cast<AnalysisItem*>(getItem());
+    const auto * analysis = dynamic_cast<TaylorExpansionMomentsAnalysis*>(item->getAnalysis().getImplementation().get());
+    Description inputNames = analysis->getPhysicalModel().getInputNames();
+
+    for (int i = 0; i < nbInputs; ++i)
+    {
+      importanceFactorsTableModel->setNotEditableHeaderItem(i+1, 0, QString::fromStdString(inputNames[i]));
+      importanceFactorsTableModel->setNotEditableItem(i+1, 1, importanceFactors[i]);
+    }
+
+    // resize table
+    importanceFactorsTable->setModel(importanceFactorsTableModel);
+    importanceFactorsTable->resizeToContents();
+    importanceFactorsVbox->addWidget(importanceFactorsTable);
+
+    tabLayout->addWidget(importanceFactorsGroupBox, 0, Qt::AlignTop);
+  }
+  tabLayout->addStretch(1);
+
   tabWidget->addTab(tab, tr("Summary"));
 
   // tab : model description --------------------------------

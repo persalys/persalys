@@ -79,7 +79,11 @@ void TaylorExpansionMomentsAnalysis::launch()
   for (UnsignedInteger i = 0; i < variance.getDimension(); ++i)
     standardDeviation[i] = sqrt(variance[i]);
 
-  result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance);
+  Point importanceFactors;
+  if (getInterestVariables().getSize() == 1u)
+    importanceFactors = algoTaylorExpansionMoments.getImportanceFactors();
+
+  result_ = TaylorExpansionMomentsResult(getInterestVariables(), meanFirstOrder, meanSecondOrder, standardDeviation, variance, importanceFactors);
 }
 
 
@@ -116,7 +120,7 @@ String TaylorExpansionMomentsAnalysis::getPythonScript() const
 
 bool TaylorExpansionMomentsAnalysis::hasValidResult() const
 {
-  return getResult().getOutputNames().getSize() != 0;
+  return !getResult().getOutputNames().isEmpty();
 }
 
 bool TaylorExpansionMomentsAnalysis::canBeLaunched(String &errorMessage) const
