@@ -235,9 +235,6 @@ In the context of the SALOME platform, HPC settings can also be enabled though t
 2-3 *Coupling model*: define a physical model to wrap an external code using file-exchange
 ------------------------------------------------------------------------------------------
 
-2-3-1 *Definition*
-~~~~~~~~~~~~~~~~~~
-
 This type of physical model allows to drive an external black-box code through file exchange.
 For each evaluation input files are generated from input variables values and template input files.
 Then the black-box code is run using the provided command, which will write output files.
@@ -246,10 +243,13 @@ Each evaluation is isolated in a temporary working directory to avoid clobbering
 It is possible to keep the temporary working directories.
 Extra resource files can be specified to be copied in the working directory.
 
-The **Check model** button evaluates the model on the defined input values to
+The **Evaluate model** button evaluates the model on the defined input values to
 test the physical model.
 A coupling model is divided into steps (one per tab), each with its own parameters.
 Output from a given step can be used as input in the next.
+
+2-3-1 *Definition*
+~~~~~~~~~~~~~~~~~~
 
 Step definition is divided into several categories:
 
@@ -321,9 +321,17 @@ Step definition is divided into several categories:
 Refer to :ref:`logistic_coupling_example` for a coupling model example.
 
 In the context of the SALOME platform, HPC settings can also be enabled though the properties contextual menu
-(right-click on the model root node above the **Definition** node, then choose **Properties**):
+(right-click on the model root node above the **Definition** node, then choose **Properties**).
 
-2-3-1 *Ansys wizard*
+A coupling model can be executed on a UNIX remote host using the Run via SSH checkbox.
+Then the name of the remote host must be specified in the corresponding text field.
+You must be able to connect to the host without password prompt (using ssh keys for example).
+
+In the advanced parameters, you can set cache input and output files and specify a path for the working directory.
+You can also choose to keep the working directory, meaning it wont be deleted after each evaluation.
+If the model is set to run on a remote host, the working directory refers to the remote working directory.
+
+2-3-2 *Ansys wizard*
 ~~~~~~~~~~~~~~~~~~~~
 
 A wizard is available to pre-populate coupling step information based
