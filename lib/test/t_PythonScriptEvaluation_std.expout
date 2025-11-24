@@ -60,4 +60,3 @@ f(X_ok)=    [ Y0       ]
 7 : [ 1.09794  ]
 8 : [ 0.900371 ]
 9 : [ 0.890593 ]
-what=Batch evaluation 4/10 failed: math domain error

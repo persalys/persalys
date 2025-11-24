@@ -59,7 +59,10 @@ int main(int, char *[])
       std::cout << "X_ok=" << X.select(exc.getSucceededIndices()) << std::endl;
       std::cout << "Y_ok=" << exc.getOutputSample() << std::endl;
       std::cout << "f(X_ok)=" << f3(X.select(exc.getSucceededIndices())) << std::endl;
-      std::cout << "what=" << exc.what() << std::endl;
+      const String msg(exc.what());
+      std::cerr << "what=" << msg << std::endl;
+      if (msg.substr(0, 28) != "Batch evaluation 4/10 failed")
+        throw InvalidArgumentException(HERE) << "wrong exception";
     }
   }
   catch (const TestFailed & ex)

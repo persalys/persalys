@@ -33,9 +33,9 @@ cat > persalys.AppDir/AppRun <<\EOF
 #!/bin/sh
 HERE=$(dirname $(readlink -f "${0}"))
 export PATH=${HERE}/usr/bin/:${HERE}/usr/salome/bin:${HERE}/usr/salome/bin/salome:${PATH}
-export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/salome/lib/salome:${HERE}/usr/salome/lib:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=${HERE}/usr/lib/:${HERE}/usr/salome/lib/salome:${HERE}/usr/salome/lib:${HERE}/usr/salome/__RUN_SALOME__/lib/salome:${LD_LIBRARY_PATH}
 export PYTHONHOME=${HERE}/usr/
-export PYTHONPATH=${HERE}/usr/lib/python3.9/site-packages/salome:${HERE}/usr/lib/python3.9/site-packages:${HERE}/usr/bin/salome:${HERE}/usr/salome/lib/python3.9/site-packages:${HERE}/usr/salome/bin/salome:${HERE}/usr/salome/lib/salome
+export PYTHONPATH=${HERE}/usr/lib/python3.9/site-packages/salome:${HERE}/usr/lib/python3.9/site-packages:${HERE}/usr/bin/salome:${HERE}/usr/salome/lib/python3.9/site-packages:${HERE}/usr/salome/bin/salome:${HERE}/usr/salome/lib/salome:${HERE}/usr/salome/__RUN_SALOME__/lib/salome
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 
 # assumes fonts are provided on host machine

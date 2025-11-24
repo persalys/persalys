@@ -165,7 +165,8 @@ void FileTools::ExportData(const QString& text, QWidget * parent)
     QFile file(fileName.toLocal8Bit().data());
     try
     {
-      file.open(QIODevice::WriteOnly);
+      if (!file.open(QIODevice::WriteOnly))
+	throw FileOpenException(HERE) << "Cannot open " << fileName.toStdString() << " for writing";
       QTextStream stream(&file);
       stream << text;
     }
