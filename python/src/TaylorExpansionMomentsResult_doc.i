@@ -38,7 +38,7 @@ mean : :py:class:`openturns.Point`
 
 Returns
 -------
-mean : :py:class:`openturns.Point`
+deviation : :py:class:`openturns.Point`
     Standard deviation"
 
 // ---------------------------------------------------------------------
@@ -48,5 +48,16 @@ mean : :py:class:`openturns.Point`
 
 Returns
 -------
-mean : :py:class:`openturns.Point`
+variance : :py:class:`openturns.Point`
     Variance"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::TaylorExpansionMomentsResult::getImportanceFactors
+"Importance factors accessor.
+
+Returns
+-------
+importanceFactors : :py:class:`openturns.Point`
+    Importance factors"
+

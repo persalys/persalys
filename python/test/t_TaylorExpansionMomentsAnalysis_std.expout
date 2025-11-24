@@ -1,17 +1,17 @@
 class=TaylorExpansionMomentsAnalysis name=aTaylor physicalModel=aModelPhys interestVariables=[Y0]
-result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.42074] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01822] variance=class=Point name=Unnamed dimension=1 values=[64.2919]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.42074] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01822] variance=class=Point name=Unnamed dimension=1 values=[64.2919] importance factors=class=Point name=Unnamed dimension=2 values=[0.00454064,0.995459]
 
 
 class=TaylorExpansionMomentsAnalysis name=aTaylor2 physicalModel=aModelPhys interestVariables=[Y1]
-result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y1] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[18.8415] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[18.4207] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01822] variance=class=Point name=Unnamed dimension=1 values=[64.2919]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y1] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[18.8415] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[18.4207] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01822] variance=class=Point name=Unnamed dimension=1 values=[64.2919] importance factors=class=Point name=Unnamed dimension=2 values=[0.00454064,0.995459]
 
 
 class=TaylorExpansionMomentsAnalysis name=aTaylor3 physicalModel=myPhysicalModel interestVariables=[Y0]
-result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.84147] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01822] variance=class=Point name=Unnamed dimension=1 values=[64.2919]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.84147] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01822] variance=class=Point name=Unnamed dimension=1 values=[64.2919] importance factors=class=Point name=Unnamed dimension=2 values=[0.00454064,0.995459]
 
 
 class=TaylorExpansionMomentsAnalysis name=aTaylor4 physicalModel=myPhysicalModel interestVariables=[Y0]
-result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.84147] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01808] variance=class=Point name=Unnamed dimension=1 values=[64.2897]
+result= class=TaylorExpansionMomentsResult name=Unnamed outputNames=[Y0] meanFirstOrder=class=Point name=Unnamed dimension=1 values=[8.84147] meanSecondOrder=class=Point name=Unnamed dimension=1 values=[8.84147] standardDeviation=class=Point name=Unnamed dimension=1 values=[8.01808] variance=class=Point name=Unnamed dimension=1 values=[64.2897] importance factors=class=Point name=Unnamed dimension=2 values=[0.00450547,0.995495]
 #!/usr/bin/env python
 
 import openturns as ot

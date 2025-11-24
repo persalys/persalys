@@ -24,6 +24,7 @@
 #include "AnalysisResult.hxx"
 
 #include <openturns/OTType.hxx>
+#include <openturns/Sample.hxx>
 
 namespace PERSALYS
 {
@@ -38,7 +39,8 @@ public:
   TaylorExpansionMomentsResult(const OT::Description & outputNames, const OT::Point & meanFirstOrder,
                                const OT::Point & meanSecondOrder,
                                const OT::Point & standardDeviation,
-                               const OT::Point & variance);
+                               const OT::Point & variance,
+                               const OT::Point & importanceFactors);
 
   /** Virtual constructor */
   TaylorExpansionMomentsResult * clone() const override;
@@ -48,6 +50,7 @@ public:
   OT::Point getMeanSecondOrder() const;
   OT::Point getStandardDeviation() const;
   OT::Point getVariance() const;
+  OT::Point getImportanceFactors() const;
 
   /** String converter */
   OT::String __repr__() const override;
@@ -64,6 +67,7 @@ private:
   OT::Point meanSecondOrder_;
   OT::Point standardDeviation_;
   OT::Point variance_;
+  OT::Point importanceFactors_;
 };
 }
 #endif
