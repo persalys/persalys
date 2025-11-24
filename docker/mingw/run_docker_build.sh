@@ -49,25 +49,13 @@ curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.19.0/download/win-64/pyfmi-2
 curl -fSsL https://anaconda.org/conda-forge/assimulo/3.7.2/download/win-64/assimulo-3.7.2-py313habcb892_1.conda | bsdtar -x && tar -xf pkg-assimulo-3.7.2-py313habcb892_1.tar.zst
 curl -fSsL https://anaconda.org/conda-forge/sundials/7.4.0/download/win-64/sundials-7.4.0-h59e65cd_0.conda | bsdtar -x && tar -xf pkg-sundials-7.4.0-h59e65cd_0.tar.zst
 cp -r Library/bin/*.dll . && rm -r Library info pkg-*.zst info-*.zst
+
 cd Lib
 curl -fSsL https://anaconda.org/conda-forge/otfmi/0.17/download/noarch/otfmi-0.17-pyhd8ed1ab_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.17-pyhd8ed1ab_0.tar.zst
 cd site-packages
-curl -fsSL https://pypi.io/packages/py3/p/pip/pip-24.1.1-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/py2.py3/w/wheel/wheel-0.34.2-py2.py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/py2.py3/s/six/six-1.16.0-py2.py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py2.py3/p/pytz/pytz-2021.3-py2.py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py2.py3/p/python_dateutil/python_dateutil-2.8.2-py2.py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/d/dill/dill-0.4.0-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/py3/s/setuptools/setuptools-49.2.0-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp313/n/numpy/numpy-2.3.3-cp313-cp313-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp313/s/scipy/scipy-1.16.2-cp313-cp313-win_amd64.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp313/p/pandas/pandas-2.3.3-cp313-cp313-win_amd64.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py2.py3/o/openpyxl/openpyxl-3.1.5-py2.py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/e/et_xmlfile/et_xmlfile-1.1.0-py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/j/jinja2/jinja2-3.1.6-py3-none-any.whl | bsdtar -xf-
-curl -fsSL https://pypi.io/packages/cp313/m/markupsafe/MarkupSafe-3.0.2-cp313-cp313-win_amd64.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/p/pythonfmu/pythonfmu-0.6.9-py3-none-any.whl | bsdtar -xf-
-curl -fSsL https://pypi.io/packages/py3/n/nopip/nopip-0.2.2-py3-none-any.whl | bsdtar -xf-
+
+python -m pip install --target . --platform win_amd64 --python-version ${PYMAJMIN:0:1}.${PYMAJMIN:1} --only-binary=:all: \
+  pip scipy pandas openpyxl jinja2 pythonfmu nopip paramiko
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
