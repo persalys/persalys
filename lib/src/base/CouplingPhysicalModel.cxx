@@ -347,10 +347,7 @@ String CouplingPhysicalModel::writeRemoteCode(const Description & inputNames, co
   code << "    for value in all_vars.values():\n";
   code << "        checksum.update(hex(struct.unpack('<Q', struct.pack('<d', value))[0]).encode())\n";
   code << "    global workdir\n";
-  if (!workDir_.empty())
-    code << "    workdir = Path(r'" << workDir_ << "') / ('persalys_' + checksum.hexdigest())\n";
-  else
-    code << "    workdir = Path(gettempdir()) / ('persalys_' + checksum.hexdigest())\n";
+  code << "    workdir = Path(gettempdir()) / ('persalys_' + checksum.hexdigest())\n";
   code << "    workdir = workdir.resolve()\n";
   code << "    if not workdir.exists():\n";
   code << "        workdir.mkdir(parents=True, exist_ok=True)\n";
@@ -359,7 +356,10 @@ String CouplingPhysicalModel::writeRemoteCode(const Description & inputNames, co
   code << "            raise KeyError(f\"Variable '{var_name}' is undefined\")\n";
   code << "        return all_vars[var_name]\n";
   code << "    hostname = r'" << hostname_ << "'\n";
-  code << "    remote_base = PurePosixPath('/tmp')\n";
+  if (!workDir_.empty())
+    code << "    remote_base = PurePosixPath(r'" << workDir_ << "')\n";
+  else
+    code << "    remote_base = PurePosixPath('/tmp')\n";
   code << "    remote_workdir = remote_base / ('persalys_' + checksum.hexdigest())\n";
   code << "    ssh = paramiko.SSHClient()\n";
   code << "    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())\n";
@@ -472,9 +472,17 @@ String CouplingPhysicalModel::writeRemoteCode(const Description & inputNames, co
   code << "            for var, value in zip(script_outvars, script_output__):\n";
   code << "                all_vars[var] = value\n";
   code << "    sftp.close()\n";
-  code << "    ssh.close()\n";
   if (cleanupWorkDirectory_)
-    code << "    shutil.rmtree(workdir)\n";
+  {
+    code << "    try:\n";
+    code<<R"(        safe_remote = str(remote_workdir).replace("'", "'\\''"))" << "\n";
+    code << "        stdin, stdout, stderr = ssh.exec_command(f\"rm -rf '{safe_remote}'\")\n";
+    code << "        stdout.channel.recv_exit_status()\n";
+    code << "    except Exception:\n";
+    code << "        pass\n";
+  }
+  code << "    ssh.close()\n";
+  code << "    shutil.rmtree(workdir, ignore_errors=True)\n";
   for (UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
     code << "    " << outputNames[i] << " = all_vars['" << outputNames[i] << "']\n";
