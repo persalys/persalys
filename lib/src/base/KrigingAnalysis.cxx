@@ -23,7 +23,13 @@
 #include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/BaseTools.hxx"
 
-#include <openturns/OTBase.hxx>
+#include <openturns/GaussianProcessFitter.hxx>
+#include <openturns/ConstantBasisFactory.hxx>
+#include <openturns/SquaredExponential.hxx>
+#include <openturns/AggregatedFunction.hxx>
+#include <openturns/GeneralizedExponential.hxx>
+#include <openturns/MaternModel.hxx>
+#include <openturns/PersistentObjectFactory.hxx>
 
 using namespace OT;
 
@@ -180,30 +186,17 @@ void KrigingAnalysis::launch()
     informationMessage_ = "Creation of a meta model for the variable " + outputVariables[i] + " in progress.\n";
     notify("informationMessageUpdated");
 
-    // normalization was removed in 1.16
-    const Point mean(effectiveInputSample.computeMean());
-    const Point stddevInput(effectiveInputSample.computeStandardDeviation());
-    SquareMatrix linear(inputDimension);
-    for (UnsignedInteger j = 0; j < inputDimension; ++ j)
-      linear(j, j) = (std::abs(stddevInput[j]) > 1e-12) ? 1.0 / stddevInput[j] : 1.0;
-    const Point zero(inputDimension, 0.0);
-    normalization_ = LinearFunction(mean, zero, linear);
-    normalization_.setInputDescription(effectiveInputSample.getDescription());
-
     // build algo
-    KrigingAlgorithm kriging(buildKrigingAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i)));
+    GaussianProcessRegression gpr(buildGPRAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i), optimizeParameters_));
 
     // run algo
-    kriging.run();
+    gpr.run();
 
     // get results
     KrigingAnalysisResult result_i;
     result_i.outputSample_ = effectiveOutputSample.getMarginal(i);
-    KrigingResult result(kriging.getResult());
-
-    // take normalization into account
-    result.setMetaModel(ComposedFunction(result.getMetaModel(), normalization_));
-    result_i.krigingResultCollection_.add(result);
+    GaussianProcessRegressionResult result(gpr.getResult());
+    result_i.gprResultCollection_.add(result);
 
     optimalCovarianceModel_ = result.getCovarianceModel();
 
@@ -219,8 +212,8 @@ void KrigingAnalysis::launch()
   result_.outputSample_ = effectiveOutputSample.getMarginal(computedOutputIndices);
   for (UnsignedInteger i = 0; i < effectiveDim; ++i)
   {
-    result_.krigingResultCollection_.add(allResults[i].krigingResultCollection_[0]);
-    metaModelCollection.add(allResults[i].krigingResultCollection_[0].getMetaModel());
+    result_.gprResultCollection_.add(allResults[i].gprResultCollection_[0]);
+    metaModelCollection.add(allResults[i].gprResultCollection_[0].getMetaModel());
   }
 
   // build metamodel
@@ -240,30 +233,29 @@ void KrigingAnalysis::launch()
 
 Function KrigingAnalysis::runAlgoMarginal(const Sample& inputSample, const Sample& outputSample)
 {
-  KrigingAlgorithm kriging(buildKrigingAlgorithm(inputSample, outputSample, true));
-  kriging.setOptimizeParameters(false);
-  kriging.run();
-
-  return ComposedFunction(kriging.getResult().getMetaModel(), normalization_);
+  GaussianProcessRegression gpr(buildGPRAlgorithm(inputSample, outputSample, false, true));
+  gpr.run();
+  return gpr.getResult().getMetaModel();
 }
 
 
-KrigingAlgorithm KrigingAnalysis::buildKrigingAlgorithm(const Sample& inputSample,
+GaussianProcessRegression KrigingAnalysis::buildGPRAlgorithm(const Sample& inputSample,
     const Sample& outputSample,
+    const bool optimizeParameters,
     const bool useOptimalCovModel)
 {
   if (outputSample.getDimension() != 1)
-    throw InternalException(HERE) << "KrigingAnalysis::buildKrigingAlgorithm: the output sample must have a dimension of 1";
+    throw InternalException(HERE) << "KrigingAnalysis::buildGPRAlgorithm: the output sample must have a dimension of 1";
   if (useOptimalCovModel && (optimalCovarianceModel_.getOutputDimension() > 1))
-    throw InternalException(HERE) << "KrigingAnalysis::buildKrigingAlgorithm: the optimal covariance model must have a dimension of 1";
+    throw InternalException(HERE) << "KrigingAnalysis::buildGPRAlgorithm: the optimal covariance model must have a dimension of 1";
 
-  KrigingAlgorithm algo(normalization_(inputSample),
+  GaussianProcessFitter fitter(inputSample,
                         outputSample,
                         useOptimalCovModel ? optimalCovarianceModel_ : covarianceModel_,
                         getBasis());
-
-  algo.setOptimizeParameters(optimizeParameters_);
-
+  fitter.setOptimizeParameters(optimizeParameters);
+  fitter.run();
+  GaussianProcessRegression algo(fitter.getResult());
   return algo;
 }
 
@@ -277,7 +269,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
     {
       for (UnsignedInteger i = 0; i < results.getSize(); ++i)
       {
-        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        optimalCovarianceModel_ = results[i].gprResultCollection_[0].getCovarianceModel();
         computeAnalyticalValidation(results[i], inputSample);
       }
     }
@@ -294,7 +286,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
     {
       for (UnsignedInteger i = 0; i < results.getSize(); ++i)
       {
-        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        optimalCovarianceModel_ = results[i].gprResultCollection_[0].getCovarianceModel();
         computeTestSampleValidation(results[i], inputSample);
       }
     }
@@ -311,7 +303,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
     {
       for (UnsignedInteger i = 0; i < results.getSize(); ++i)
       {
-        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        optimalCovarianceModel_ = results[i].gprResultCollection_[0].getCovarianceModel();
         computeKFoldValidation(results[i], inputSample);
       }
     }
@@ -328,7 +320,7 @@ void KrigingAnalysis::validateMetaModelResult(Collection<KrigingAnalysisResult> 
     {
       for (UnsignedInteger i = 0; i < results.getSize(); ++i)
       {
-        optimalCovarianceModel_ = results[i].krigingResultCollection_[0].getCovarianceModel();
+        optimalCovarianceModel_ = results[i].gprResultCollection_[0].getCovarianceModel();
         computeLOOValidation(results[i], inputSample);
       }
     }
@@ -364,23 +356,20 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   notify("informationMessageUpdated");
 
   // retrieve kriging result
-  KrigingResult krigingResult = dynamic_cast<KrigingAnalysisResult*>(&result)->getKrigingResultCollection()[0];
+  const GaussianProcessRegressionResult gprResult(dynamic_cast<KrigingAnalysisResult*>(&result)->getGPRResultCollection()[0]);
   const UnsignedInteger size = inputSample.getSize();
 
-  // normalize input sample
-  Sample normalized_inputSample(normalization_(inputSample));
-
   // correlation matrix
-  CovarianceMatrix R(krigingResult.getCovarianceModel().discretize(normalized_inputSample));
+  CovarianceMatrix R(gprResult.getCovarianceModel().discretize(inputSample));
   const TriangularMatrix C(R.computeCholesky());
   const SquareMatrix K(C * C.transpose());
 
   // F
-  const Basis basis = krigingResult.getBasis();
+  const Basis basis = gprResult.getBasis();
   const UnsignedInteger basisDim = basis.getSize();
   Sample F(size, 0);
   for (UnsignedInteger i = 0; i < basisDim; ++i)
-    F.stack(basis[i](normalized_inputSample));
+    F.stack(basis[i](inputSample));
 
   // S
   SquareMatrix S(size + basisDim);

@@ -25,7 +25,7 @@
 #include "Analysis.hxx"
 #include "KrigingAnalysisResult.hxx"
 
-#include <openturns/KrigingAlgorithm.hxx>
+#include <openturns/GaussianProcessRegression.hxx>
 
 namespace PERSALYS
 {
@@ -71,8 +71,9 @@ public:
 
 private:
   OT::Function runAlgoMarginal(const OT::Sample& inputSample, const OT::Sample& outputSample) override;
-  OT::KrigingAlgorithm buildKrigingAlgorithm(const OT::Sample& inputSample,
+  OT::GaussianProcessRegression buildGPRAlgorithm(const OT::Sample& inputSample,
       const OT::Sample& outputSample,
+      const bool optimizeParameters = true,
       const bool useOptimalCovModel = false);
 
 protected:
@@ -84,7 +85,6 @@ protected:
 private:
   OT::Basis basis_;
   OT::CovarianceModel covarianceModel_;
-  OT::Function normalization_;
   KrigingAnalysisResult result_;
   OT::CovarianceModel optimalCovarianceModel_;
   bool optimizeParameters_;

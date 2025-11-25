@@ -21,6 +21,7 @@
 #include "persalys/KrigingAnalysisResult.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/KrigingResult.hxx>
 
 using namespace OT;
 
@@ -30,7 +31,8 @@ namespace PERSALYS
 CLASSNAMEINIT(KrigingAnalysisResult)
 
 static Factory<KrigingAnalysisResult> Factory_KrigingAnalysisResult;
-static Factory<PersistentCollection<KrigingResult> > Factory_PersistentCollection_KrigingResult;
+static Factory<PersistentCollection<GaussianProcessRegressionResult> > Factory_PersistentCollection_GaussianProcessRegressionResult;
+static Factory<PersistentCollection<KrigingResult> > Factory_PersistentCollection_KrigingResult;// for retro compatibility
 
 /* Default constructor */
 KrigingAnalysisResult::KrigingAnalysisResult()
@@ -46,20 +48,20 @@ KrigingAnalysisResult* KrigingAnalysisResult::clone() const
 }
 
 
-KrigingAnalysisResult::KrigingResultCollection KrigingAnalysisResult::getKrigingResultCollection() const
+KrigingAnalysisResult::GaussianProcessRegressionResultCollection KrigingAnalysisResult::getGPRResultCollection() const
 {
-  return krigingResultCollection_;
+  return gprResultCollection_;
 }
 
 
-KrigingResult KrigingAnalysisResult::getResultForVariable(const String& variableName) const
+GaussianProcessRegressionResult KrigingAnalysisResult::getResultForVariable(const String& variableName) const
 {
-  if (!krigingResultCollection_.getSize())
+  if (!gprResultCollection_.getSize())
     throw InvalidArgumentException(HERE) << "There is no kriging result";
 
-  for (UnsignedInteger i = 0; i < krigingResultCollection_.getSize(); ++ i)
-    if (krigingResultCollection_[i].getOutputSample().getDescription()[0] == variableName)
-      return krigingResultCollection_[i];
+  for (UnsignedInteger i = 0; i < gprResultCollection_.getSize(); ++ i)
+    if (gprResultCollection_[i].getOutputSample().getDescription()[0] == variableName)
+      return gprResultCollection_[i];
 
   throw InvalidArgumentException(HERE) << "No result for a variable named " << variableName;
 }
@@ -70,7 +72,7 @@ String KrigingAnalysisResult::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
-      << " krigingResultCollection=" << getKrigingResultCollection();
+      << " gprResultCollection=" << getGPRResultCollection();
   return oss;
 }
 
@@ -79,7 +81,7 @@ String KrigingAnalysisResult::__repr__() const
 void KrigingAnalysisResult::save(Advocate& adv) const
 {
   MetaModelAnalysisResult::save(adv);
-  adv.saveAttribute("krigingResultCollection_", krigingResultCollection_);
+  adv.saveAttribute("gprResultCollection_", gprResultCollection_);
 }
 
 
@@ -87,6 +89,31 @@ void KrigingAnalysisResult::save(Advocate& adv) const
 void KrigingAnalysisResult::load(Advocate& adv)
 {
   MetaModelAnalysisResult::load(adv);
-  adv.loadAttribute("krigingResultCollection_", krigingResultCollection_);
+  if (adv.hasAttribute("gprResultCollection_"))
+    adv.loadAttribute("gprResultCollection_", gprResultCollection_);
+  else
+  {
+    // persalys <19.1
+    OT::PersistentCollection< OT::KrigingResult > krigingResultCollection;
+    adv.loadAttribute("krigingResultCollection_", krigingResultCollection);
+    const UnsignedInteger size = krigingResultCollection.getSize();
+    gprResultCollection_.resize(size);
+    for (UnsignedInteger i = 0; i < size; ++ i)
+    {
+      const KrigingResult krigingResult(krigingResultCollection[i]);
+      const GaussianProcessFitterResult fitterResult(krigingResult.getInputSample(),
+                                                     krigingResult.getOutputSample(),
+                                                     krigingResult.getMetaModel(),
+                                                     Matrix(),// regression matrix
+                                                     krigingResult.getBasis(),
+                                                     krigingResult.getTrendCoefficients(),
+                                                     krigingResult.getCovarianceModel(),
+                                                     0.0, // optimal likelihood
+                                                     GaussianProcessFitterResult::LAPACK);
+      const GaussianProcessRegressionResult gprResult(fitterResult, krigingResult.getCovarianceCoefficients());
+      gprResultCollection_[i] = gprResult;
+    }
+  }
 }
+
 }
