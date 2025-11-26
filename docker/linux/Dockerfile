@@ -123,7 +123,7 @@ RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/3.0.4.ta
 
 # assimulo
 RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.2.tar.gz | tar xz && cd Assimulo* \
- && python3 setup.py install --extra-fortran-link-flags="-shared" --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
+ && python3 setup.py install --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
@@ -187,7 +187,8 @@ RUN pip3 install git+https://github.com/openturns/otfmi@v0.17 --quiet && python3
 # openmodelica
 RUN git clone -b v1.25.5 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
  && git submodule update --init --recursive OMCompiler/3rdParty \
- && cmake -DCMAKE_BUILD_TYPE=Release -DOM_USE_CCACHE=OFF -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ -B build . \
+ && cmake -DCMAKE_BUILD_TYPE=Release -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ \
+          -DOM_OMC_ENABLE_FORTRAN=OFF -DOM_OMC_ENABLE_IPOPT=OFF -DOM_USE_CCACHE=OFF -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
 
 # devel user
