@@ -23,7 +23,7 @@
 
 #include "MetaModelAnalysisResult.hxx"
 
-#include <openturns/KrigingResult.hxx>
+#include <openturns/GaussianProcessRegressionResult.hxx>
 
 namespace PERSALYS
 {
@@ -34,7 +34,7 @@ class PERSALYS_BASE_API KrigingAnalysisResult : public MetaModelAnalysisResult
 public:
 
   friend class KrigingAnalysis;
-  typedef OT::Collection< OT::KrigingResult > KrigingResultCollection;
+  typedef OT::Collection< OT::GaussianProcessRegressionResult > GaussianProcessRegressionResultCollection;
 
   /** Default constructor */
   KrigingAnalysisResult();
@@ -42,8 +42,8 @@ public:
   /** Virtual constructor */
   KrigingAnalysisResult * clone() const override;
 
-  KrigingResultCollection getKrigingResultCollection() const;
-  OT::KrigingResult getResultForVariable(const OT::String& variableName) const;
+  GaussianProcessRegressionResultCollection getGPRResultCollection() const;
+  OT::GaussianProcessRegressionResult getResultForVariable(const OT::String& variableName) const;
 
   /** String converter */
   OT::String __repr__() const override;
@@ -55,7 +55,7 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  OT::PersistentCollection< OT::KrigingResult > krigingResultCollection_;
+  OT::PersistentCollection< OT::GaussianProcessRegressionResult > gprResultCollection_;
 };
 }
 #endif

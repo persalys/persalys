@@ -108,15 +108,15 @@ void KrigingResultWindow::buildInterface()
                 << tr("Amplitude");
 
       QStringList valuesList;
-      valuesList << QtOT::PointToString(result_.getKrigingResultCollection()[i].getCovarianceModel().getScale())
-                 << QtOT::PointToString(result_.getKrigingResultCollection()[i].getCovarianceModel().getAmplitude());
+      valuesList << QtOT::PointToString(result_.getGPRResultCollection()[i].getCovarianceModel().getScale())
+                 << QtOT::PointToString(result_.getGPRResultCollection()[i].getCovarianceModel().getAmplitude());
 
       ParametersWidget * table = new ParametersWidget(tr("Optimized covariance model parameters"), namesList, valuesList, true, true);
       resultWidgetLayout->addWidget(table);
     }
 
     // trend coef
-    QString trendCoefText = QtOT::PointToString(result_.getKrigingResultCollection()[i].getTrendCoefficients());
+    QString trendCoefText = QtOT::PointToString(result_.getGPRResultCollection()[i].getTrendCoefficients());
     ParametersWidget * trendCoefTable = new ParametersWidget(tr("Trend"), QStringList() << tr("Trend coefficients"), QStringList() << trendCoefText, true, true);
     resultWidgetLayout->addWidget(trendCoefTable);
     resultWidgetLayout->setRowStretch(optimizeParameters_ ? 2 : 1, 1);
