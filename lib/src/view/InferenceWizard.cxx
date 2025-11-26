@@ -28,7 +28,6 @@
 #include "persalys/QtTools.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
 
-#include <openturns/OTDistribution.hxx>
 #include <openturns/FittingTest.hxx>
 
 #include <QHBoxLayout>
