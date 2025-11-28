@@ -50,11 +50,8 @@ public:
   void setSteps(const CouplingStepCollection & steps);
   CouplingStepCollection getSteps() const;
 
-  void setHostname(const OT::String & hostname);
-  inline void setLocal() {
-    setHostname(OT::String());
-  }
-  inline OT::String getHostname() const {
+  void setSSHHostname(const OT::String & hostname);
+  inline OT::String getSSHHostname() const {
     return hostname_;
   }
 

@@ -66,7 +66,7 @@ CouplingStepCollection CouplingPhysicalModel::getSteps() const
   return steps_;
 }
 
-void CouplingPhysicalModel::setHostname(const String & hostname)
+void CouplingPhysicalModel::setSSHHostname(const String & hostname)
 {
   hostname_ = hostname;
   updateCode();
@@ -583,7 +583,7 @@ String CouplingPhysicalModel::getPythonScript() const
   oss << getName() + ".setCleanupWorkDirectory(" << (getCleanupWorkDirectory() ? "True" : "False") << ")\n";
   oss << getName() + ".setCacheFiles(r'" << getCacheInputFile()
       << "', r'" << getCacheOutputFile() << "')\n";
-  oss << getName() + ".setHostname('" << getHostname() << "')\n";
+  oss << getName() + ".setSSHHostname('" << getSSHHostname() << "')\n";
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 
   return oss;

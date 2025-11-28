@@ -125,6 +125,7 @@ output_file : str
 
 %feature("docstring") PERSALYS::CouplingPhysicalModel::setWorkDir
 "Working directory accessor.
+
 Remote working directory if a hostname is set.
 
 Parameters
@@ -144,9 +145,11 @@ workDir : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CouplingPhysicalModel::setHostname
+%feature("docstring") PERSALYS::CouplingPhysicalModel::setSSHHostname
 "Hostname accessor.
+
 If set, the model is executed on the given remote host using SSH.
+If empty, the model is executed locally.
 
 Parameters
 ----------
@@ -155,6 +158,11 @@ hostname : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CouplingPhysicalModel::setLocal
-"Set the model to be executed locally.
-Use setHostname to execute it on a remote host."
+%feature("docstring") PERSALYS::CouplingPhysicalModel::getSSHHostname
+"Hostname accessor.
+
+Returns
+-------
+hostname : str
+    Name of the host where the model is executed.
+    Empty if local execution"

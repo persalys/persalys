@@ -87,13 +87,13 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   sshLayout->addWidget(runViaSshCheckBox);
 
   auto * hostnameLabel = new QLabel(tr("Hostname"));
-  auto * hostnameLineEdit = new QLineEdit(QString::fromStdString(model_->getHostname()));
+  auto * hostnameLineEdit = new QLineEdit(QString::fromStdString(model_->getSSHHostname()));
   hostnameLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("([^\r\n]*)"), hostnameLineEdit));
   sshLayout->addWidget(hostnameLabel);
   sshLayout->addWidget(hostnameLineEdit);
   sshLayout->addStretch();
 
-  const bool runViaSsh = !model_->getHostname().empty();
+  const bool runViaSsh = !model_->getSSHHostname().empty();
   runViaSshCheckBox->setChecked(runViaSsh);
   hostnameLabel->setVisible(runViaSsh);
   hostnameLineEdit->setVisible(runViaSsh);
@@ -104,9 +104,9 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
     hostnameLineEdit->setVisible(toggled);
     model_->blockNotification("PhysicalModelDefinitionItem");
     if (!toggled)
-      model_->setLocal();
+      model_->setSSHHostname("");
     else
-      model_->setHostname(hostnameLineEdit->text().toUtf8().constData());
+      model_->setSSHHostname(hostnameLineEdit->text().toUtf8().constData());
     model_->blockNotification();
   });
 
@@ -115,7 +115,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
     if (!runViaSshCheckBox->isChecked())
       return;
     model_->blockNotification("PhysicalModelDefinitionItem");
-    model_->setHostname(hostnameLineEdit->text().toUtf8().constData());
+    model_->setSSHHostname(hostnameLineEdit->text().toUtf8().constData());
     model_->blockNotification();
   });
 
