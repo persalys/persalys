@@ -4,11 +4,11 @@ RUN apt-get -y update && apt-get -y install file gdb git g++ cmake python3 pytho
 
 # locale
 RUN echo "en_US.UTF-8 UTF-8\nfr_FR.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
-ENV LANG en_US.UTF-8
+ENV LANG=en_US.UTF-8
 
 WORKDIR /usr/local/src
-ENV MAKEFLAGS "-j8"
-ENV LD_LIBRARY_PATH /usr/local/lib/
+ENV MAKEFLAGS="-j8"
+ENV LD_LIBRARY_PATH=/usr/local/lib/
 
 # pip
 RUN pip3 install psutil packaging numpy==1.21.1 scipy==1.6.2
@@ -42,7 +42,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/obsolet
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel
-ENV USER devel
+ENV USER=devel
 RUN mkdir /home/devel/src
 WORKDIR /home/devel/src
 RUN git config --global user.email devel@a.b && git config --global user.name devel
@@ -52,7 +52,7 @@ RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/configurati
 
 # salome-boostrap
 RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/salome_bootstrap.git && cd salome_bootstrap && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1
-ENV PYTHONPATH /home/devel/src/salome_bootstrap/__SALOME_BOOTSTRAP__/:$PYTHONPATH
+ENV PYTHONPATH=/home/devel/src/salome_bootstrap/__SALOME_BOOTSTRAP__/:$PYTHONPATH
 ENV SALOMEBOOTSTRAP_ROOT_DIR=/home/devel/local
 
 # salome-kernel
@@ -77,8 +77,8 @@ RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/adao.git &&
 RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/adao_interface.git && cd adao_interface && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DPY2CPP_ROOT_DIR=/home/devel/local -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && sudo rm -r adao*
 
 # finalize install
-ENV LD_LIBRARY_PATH /usr/local/lib/:/home/devel/local/lib/:/home/devel/local/lib/salome:/home/devel/local/__RUN_SALOME__/lib/salome/
-ENV PYTHONPATH /usr/local/lib/python3.9/site-packages:/usr/local/lib/python3.9/site-packages:/home/devel/local/lib/python3.9/site-packages/salome:/home/devel/local/bin/salome:/home/devel/local/lib/salome/:/home/devel/local/__RUN_SALOME__/lib/salome/
+ENV LD_LIBRARY_PATH=/usr/local/lib/:/home/devel/local/lib/:/home/devel/local/lib/salome:/home/devel/local/__RUN_SALOME__/lib/salome/
+ENV PYTHONPATH=/usr/local/lib/python3.9/site-packages:/usr/local/lib/python3.9/site-packages:/home/devel/local/lib/python3.9/site-packages/salome:/home/devel/local/bin/salome:/home/devel/local/lib/salome/:/home/devel/local/__RUN_SALOME__/lib/salome/
 ENV LDFLAGS=-L/home/devel/local/__RUN_SALOME__/lib/salome/
 
 # salome virtual app
