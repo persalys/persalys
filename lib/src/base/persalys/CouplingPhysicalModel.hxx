@@ -90,8 +90,11 @@ protected:
   OT::Description getStepsOutputNames(const CouplingStepCollection &steps) const;
   OT::Description getStepsInputNames(const CouplingStepCollection &steps, const OT::Description &outputNames) const;
 
-  OT::String writeLocalCode(const OT::Description &inputNames, const OT::Description &outputNames) const;
-  OT::String writeRemoteCode(const OT::Description &inputNames, const OT::Description &outputNames) const;
+  OT::String writeCode(const OT::Description &inputNames, const OT::Description &outputNames) const;
+
+private:
+  OT::String pythonImports() const;
+  OT::String pythonFunctions() const;
 
 private:
   // list of steps
@@ -101,6 +104,11 @@ private:
   OT::FileName cacheInputFile_;
   OT::FileName cacheOutputFile_;
   OT::FileName workDir_;
+
+  // python function names
+  static OT::String pyStepsFunc_;
+  static OT::String pyLocalDirFunc_;
+  static OT::String pyRemoteMkdirFunc_;
 };
 }
 #endif
