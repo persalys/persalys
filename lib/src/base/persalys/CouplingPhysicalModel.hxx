@@ -51,9 +51,7 @@ public:
   CouplingStepCollection getSteps() const;
 
   void setSSHHostname(const OT::String & hostname);
-  inline OT::String getSSHHostname() const {
-    return hostname_;
-  }
+  OT::String getSSHHostname() const;
 
   OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
@@ -98,17 +96,12 @@ private:
 
 private:
   // list of steps
-  OT::String hostname_;
+  OT::String SSHHostname_;
   OT::PersistentCollection<CouplingStep> steps_;
   OT::Bool cleanupWorkDirectory_ = true;
   OT::FileName cacheInputFile_;
   OT::FileName cacheOutputFile_;
   OT::FileName workDir_;
-
-  // python function names
-  static OT::String pyStepsFunc_;
-  static OT::String pyLocalDirFunc_;
-  static OT::String pyRemoteMkdirFunc_;
 };
 }
 #endif

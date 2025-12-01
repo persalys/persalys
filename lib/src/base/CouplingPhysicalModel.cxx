@@ -34,10 +34,6 @@ CLASSNAMEINIT(CouplingPhysicalModel)
 static Factory<CouplingPhysicalModel> Factory_CouplingPhysicalModel;
 static Factory<PersistentCollection<CouplingStep> > Factory_PersistentCollectionCouplingStep;
 
-String CouplingPhysicalModel::pyStepsFunc_        = "build_steps_list";
-String CouplingPhysicalModel::pyLocalDirFunc_     = "create_local_dir";
-String CouplingPhysicalModel::pyRemoteMkdirFunc_  = "remote_mkdir_p";
-
 /* Default constructor */
 CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
     const CouplingStepCollection & steps)
@@ -72,8 +68,13 @@ CouplingStepCollection CouplingPhysicalModel::getSteps() const
 
 void CouplingPhysicalModel::setSSHHostname(const String & hostname)
 {
-  hostname_ = hostname;
+  SSHHostname_ = hostname;
   updateCode();
+}
+
+String CouplingPhysicalModel::getSSHHostname() const
+{
+  return SSHHostname_;
 }
 
 String CouplingPhysicalModel::getStepsMacro(const String & offset) const
@@ -226,38 +227,36 @@ import struct
 from pathlib import Path, PurePosixPath
 )";
 
-  if (!hostname_.empty())
+  if (!SSHHostname_.empty())
     code += "import paramiko\n";
   
-  code += R"(
-FUNC_PATTERN = re.compile(r'def\s+(\w+)\(.*?\):')
-ARGS_PATTERN = re.compile(r'def\s+\w+\(([\w, ]*)\):')
-RETURN_PATTERN = re.compile(r'return\s+([\w, ]+)')
-)";
-  
-    return code;
+  return code;
 }
 
 String CouplingPhysicalModel::pythonFunctions() const
 {
   OSS stepsFunc;
-  stepsFunc << "def " << pyStepsFunc_ << "():\n";
+  stepsFunc << "def build_steps_list():\n";
   stepsFunc << getStepsMacro("    ");
   stepsFunc << "    \n";
   stepsFunc << "    return steps\n";
 
   OSS localDirFunc;
-  localDirFunc << "def " << pyLocalDirFunc_ << "(checksum):\n";
-  localDirFunc << "    global workdir\n";
-  if (hostname_.empty() && !workDir_.empty()){
-  localDirFunc << "    workdir = Path(r'" << workDir_ << "') / ('persalys_' + checksum.hexdigest())\n";}
-  else{
-  localDirFunc << "    workdir = Path(gettempdir()) / ('persalys_' + checksum.hexdigest())\n";}
+  localDirFunc << "def create_local_dir(checksum):\n";
+  localDirFunc << "    global workdir\n"; // required by AnsysParser
+  if (SSHHostname_.empty() && !workDir_.empty())
+  {
+  localDirFunc << "    workdir = Path(r'" << workDir_ << "') / ('persalys_' + checksum.hexdigest())\n";
+  }
+  else
+  {
+  localDirFunc << "    workdir = Path(gettempdir()) / ('persalys_' + checksum.hexdigest())\n";
+  }
   localDirFunc << "    if not workdir.exists():\n";
   localDirFunc << "        workdir.mkdir(parents=True, exist_ok=True)\n";
 
   OSS remoteMkdirFunc;
-  remoteMkdirFunc << "def " << pyRemoteMkdirFunc_ << "(path: PurePosixPath, ssh):\n";
+  remoteMkdirFunc << "def remote_mkdir_p(path: PurePosixPath, ssh):\n";
   remoteMkdirFunc << 
   R"(    # use Unix mkdir -p on the remote host, ensure proper quoting
     path_str = str(path)
@@ -273,7 +272,7 @@ String CouplingPhysicalModel::pythonFunctions() const
   code << stepsFunc.str();
   code << "\n";
   code << localDirFunc.str();
-  if(!hostname_.empty())
+  if(!SSHHostname_.empty())
   {
     code << "\n";
     code << remoteMkdirFunc.str();
@@ -292,7 +291,11 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << pythonFunctions();
   code << "\n";
   code << "def _exec(" << inputNamesStr << "):\n";
-  code << "    steps = " << pyStepsFunc_ << "()\n";
+  code<<R"(    FUNC_PATTERN = re.compile(r'def\s+(\w+)\(.*?\):'))" << "\n";
+  code<<R"(    ARGS_PATTERN = re.compile(r'def\s+\w+\(([\w, ]*)\):'))" << "\n";
+  code<<R"(    RETURN_PATTERN = re.compile(r'return\s+([\w, ]+)'))" << "\n";
+  code << "    \n";
+  code << "    steps = build_steps_list()\n";
   code << "    all_vars = dict(zip(" << Parameters::GetOTDescriptionStr(inputNames) << ", [" << inputNamesStr << "]))\n";
   code << "    def _require_var(var_name):\n";
   code << "        if var_name not in all_vars:\n";
@@ -302,11 +305,11 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "    checksum = hashlib.sha1()\n";
   code << "    for value in all_vars.values():\n";
   code << "        checksum.update(hex(struct.unpack('<Q', struct.pack('<d', value))[0]).encode())\n";
-  code << "    " << pyLocalDirFunc_ << "(checksum)\n";
+  code << "    create_local_dir(checksum)\n";
   code << "    \n";
-  if (!hostname_.empty())
+  if (!SSHHostname_.empty())
   {
-  code << "    hostname = r'" << hostname_ << "'\n";
+  code << "    hostname = r'" << SSHHostname_ << "'\n";
     if (!workDir_.empty())
     {
   code << "    remote_base = PurePosixPath(r'" << workDir_ << "')\n";
@@ -321,7 +324,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())\n";
   code << "    ssh.connect(hostname)\n";
   code << "    sftp = ssh.open_sftp()\n";
-  code << "    " << pyRemoteMkdirFunc_ << "(remote_workdir, ssh)\n";
+  code << "    remote_mkdir_p(remote_workdir, ssh)\n";
   }
   code << "    for step in steps:\n";
   code << "        for input_file in step.getInputFiles():\n";
@@ -335,10 +338,10 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            target.parent.mkdir(parents=True, exist_ok=True)\n";
   code << "            otct.replace(input_file.getPath(), str(target), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
   code << "\n";
-  if(!hostname_.empty())
+  if(!SSHHostname_.empty())
   {
   code << "            remote_target = remote_workdir / input_file.getConfiguredPath()\n";
-  code << "            " << pyRemoteMkdirFunc_  << "(remote_target.parent, ssh)\n";
+  code << "            remote_mkdir_p(remote_target.parent, ssh)\n";
   code << "            sftp.put(str(target), str(remote_target))\n";
   code << "\n";
   }
@@ -348,7 +351,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            src_path = Path(resource_file.getPath())\n";
   code << "            \n";
   code << "            if src_path.is_file():\n";
-  if(hostname_.empty())
+  if(SSHHostname_.empty())
   {
   code << "                shutil.copy2(src_path, workdir / src_path.name)\n";
   code << "            elif src_path.is_dir():\n";
@@ -359,7 +362,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "                local_res = workdir / src_path.name\n";
   code << "                shutil.copy2(src_path, local_res)\n";
   code << "                remote_res = remote_workdir / src_path.name\n";
-  code << "                " << pyRemoteMkdirFunc_ << "(remote_res.parent, ssh)\n";
+  code << "                remote_mkdir_p(remote_res.parent, ssh)\n";
   code << "                sftp.put(str(local_res), str(remote_res))\n";
   code << "            elif src_path.is_dir():\n";
   code << "                dst_dir = workdir / src_path.name\n";
@@ -367,7 +370,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "                for root, dirs, files in os.walk(dst_dir):\n";
   code << "                    rel_root = Path(root).relative_to(workdir)\n";
   code<<R"(                    remote_root = remote_workdir / PurePosixPath(str(rel_root).replace('\\', '/')))" << "\n";
-  code << "                    " << pyRemoteMkdirFunc_ << "(remote_root, ssh)\n";
+  code << "                    remote_mkdir_p(remote_root, ssh)\n";
   code << "                    for f in files:\n";
   code << "                        local_f = Path(root) / f\n";
   code << "                        remote_f = remote_root / f\n";
@@ -381,7 +384,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            if timeout <= 0:\n";
   code << "                timeout = None\n";
   code << "        \n";
-  if(hostname_.empty())
+  if(SSHHostname_.empty())
   {
   code << "            if len(step.getEnvironmentKeys()) == 0:\n";
   code << "                otct.execute(step.getCommand(), cwd=str(workdir), shell=step.getIsShell(), capture_output=True, timeout=timeout)\n";
@@ -415,7 +418,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            if not output_file.getPath():\n";
   code << "                continue\n";
   code << "            \n";
-  if(hostname_.empty())
+  if(SSHHostname_.empty())
   {
   code << "            outfile = workdir / output_file.getPath()\n";
   code << "            outfile_str = str(outfile)\n";
@@ -428,7 +431,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            remote_out = remote_workdir / output_file.getPath()\n";
   code << "            local_out = workdir / output_file.getPath()\n";
   code << "            local_out.parent.mkdir(parents=True, exist_ok=True)\n";
-  code << "            " << pyRemoteMkdirFunc_ << "(remote_out.parent, ssh)\n";
+  code << "            remote_mkdir_p(remote_out.parent, ssh)\n";
   code << "            try:\n";
   code << "                sftp.get(str(remote_out), str(local_out))\n";
   code << "            except IOError:\n";
@@ -464,7 +467,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            for var, value in zip(script_outvars, script_output__):\n";
   code << "                all_vars[var] = value\n";
   code << "    \n";
-  if (!hostname_.empty())
+  if (!SSHHostname_.empty())
   {
   code << "    sftp.close()\n";
     if (cleanupWorkDirectory_)
@@ -478,7 +481,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
     }
   code << "    ssh.close()\n";
   }
-  if(!hostname_.empty() || cleanupWorkDirectory_)
+  if(!SSHHostname_.empty() || cleanupWorkDirectory_)
   {
   code << "    shutil.rmtree(workdir)\n";
   }
@@ -592,7 +595,7 @@ String CouplingPhysicalModel::__repr__() const
   OSS oss;
   oss << PhysicalModelImplementation::__repr__()
       << " steps=" << getSteps()
-      << " hostname=" << hostname_;
+      << " hostname=" << SSHHostname_;
   return oss;
 }
 
@@ -645,7 +648,7 @@ void CouplingPhysicalModel::save(Advocate & adv) const
   adv.saveAttribute("cacheInputFile_", cacheInputFile_);
   adv.saveAttribute("cacheOutputFile_", cacheOutputFile_);
   adv.saveAttribute("workDir_", workDir_);
-  adv.saveAttribute("hostname_", hostname_);
+  adv.saveAttribute("SSHHostname_", SSHHostname_);
 }
 
 
@@ -658,8 +661,8 @@ void CouplingPhysicalModel::load(Advocate & adv)
   adv.loadAttribute("cacheInputFile_", cacheInputFile_);
   adv.loadAttribute("cacheOutputFile_", cacheOutputFile_);
   adv.loadAttribute("workDir_", workDir_);
-  if (adv.hasAttribute("hostname_"))
-    adv.loadAttribute("hostname_", hostname_);
+  if (adv.hasAttribute("SSHHostname_"))
+    adv.loadAttribute("SSHHostname_", SSHHostname_);
 }
 
 
