@@ -414,7 +414,7 @@ Parameters KrigingAnalysis::getParameters() const
 {
   Parameters param;
 
-  param.add("Algorithm", "Kriging");
+  param.add("Algorithm", "Gaussian Process");
   param.add("Outputs of interest", getInterestVariables().__str__());
 
   param.add("Covariance model", getCovarianceModel().getImplementation()->getClassName());

@@ -53,13 +53,13 @@ CentralTendencyIntroPage::CentralTendencyIntroPage(QWidget* parent)
   methodGroup_ = new QButtonGroup(this);
   connect(methodGroup_, SIGNAL(buttonClicked(QAbstractButton *)), this, SLOT(updateFinalPage()));
 
-  // Chaos
+  // MC
   QRadioButton * buttonToChooseMethodMC = new QRadioButton(tr("Monte Carlo"));
   buttonToChooseMethodMC->setChecked(true);
   methodGroup_->addButton(buttonToChooseMethodMC, CentralTendencyIntroPage::MonteCarlo);
   methodLayout->addWidget(buttonToChooseMethodMC);
 
-  // Kriging
+  // Taylor 
   QRadioButton * buttonToChooseMethodTaylor = new QRadioButton(tr("Taylor expansion"));
   methodGroup_->addButton(buttonToChooseMethodTaylor, CentralTendencyIntroPage::TaylorExpansionMoments);
   methodLayout->addWidget(buttonToChooseMethodTaylor);

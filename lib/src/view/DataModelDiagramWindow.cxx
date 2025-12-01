@@ -79,7 +79,7 @@ DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelD
 
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
-  metamodelButton->setWhatsThis(tr("Two methods : Kriging and Functional chaos"));
+  metamodelButton->setWhatsThis(tr("Two methods: Gaussian Process and Functional chaos"));
   connect(metamodelButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newMetaModel_, SIGNAL(triggered()));
   connect(dataModelDiagramItem, SIGNAL(metaModelValidityChanged(bool, QString)), metamodelButton, SLOT(setEnabled(bool, QString)));
 

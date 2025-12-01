@@ -1687,7 +1687,7 @@ Probabilistic analyses
       - error tab warns about failure during validation
 
 
-  - Kriging: kriging item
+  - Gaussian Process: kriging item
 
     - First page check the values:
 
@@ -1696,7 +1696,7 @@ Probabilistic analyses
 
       - design of experiments: probaDesign
       - selected outputs: y0, y1
-      - method: Kriging
+      - method: Gaussian Process
       - continue
 
     - Second page check the values:
@@ -1736,7 +1736,7 @@ Probabilistic analyses
       - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
       - click on the 'Run' button
 
-    - check the Kriging result window:
+    - check the Gaussian Process result window:
 
       .. image:: /developer_manual/validation/kriging_result.png
           :align: center
@@ -1801,12 +1801,12 @@ Probabilistic analyses
 
     - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
 
-      - choose the Kriging method, select all the output variables, continue:
+      - choose the Gaussian Process method, select all the output variables, continue:
 
       .. image:: /developer_manual/validation/design_3_kriging_wizard.png
           :align: center
 
-      - default kriging parameters: Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1;1, Amplitude 1, continue
+      - default GP parameters: Squared exponential covariance model, Constant trend basis type, optimize covariance model parameters checked, Scale 1;1;1, Amplitude 1, continue
 
       - metamodel validation: for the computation of the predictivity factor Q2, only 'Leave-one-out via analytical method' is checked, finish
 

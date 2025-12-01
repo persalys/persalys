@@ -37,17 +37,6 @@ namespace PERSALYS
 
 KrigingPage::KrigingPage(QWidget* parent)
   : QWizardPage(parent)
-  , covarianceModelComboBox_(0)
-  , maternParameterNuLabel_(0)
-  , maternParameterNuSpinBox_(0)
-  , generalizedModelParameterPLabel_(0)
-  , generalizedModelParameterPSpinBox_(0)
-  , basisTypeComboBox_(0)
-  , optimizationCheckBox_(0)
-  , scaleLineEdit_(0)
-  , inputsNames_()
-  , scales_()
-  , amplitudeSpinBox_(0)
 {
   buildInterface();
 }
@@ -55,7 +44,7 @@ KrigingPage::KrigingPage(QWidget* parent)
 
 void KrigingPage::buildInterface()
 {
-  setTitle(tr("Kriging parameters"));
+  setTitle(tr("Gaussian Process parameters"));
 
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
 

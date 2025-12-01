@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Kriging analysis result
+ *  @brief Polynomial regression analysis result
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *

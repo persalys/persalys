@@ -54,17 +54,17 @@ public slots:
   void openScaleDefinitionWizard();
 
 private:
-  QComboBox * covarianceModelComboBox_;
-  QLabel * maternParameterNuLabel_;
-  DoubleSpinBox * maternParameterNuSpinBox_;
-  QLabel * generalizedModelParameterPLabel_;
-  DoubleSpinBox * generalizedModelParameterPSpinBox_;
-  QComboBox * basisTypeComboBox_;
-  QCheckBox * optimizationCheckBox_;
-  QLineEdit * scaleLineEdit_;
+  QComboBox * covarianceModelComboBox_ = nullptr;
+  QLabel * maternParameterNuLabel_ = nullptr;
+  DoubleSpinBox * maternParameterNuSpinBox_ = nullptr;
+  QLabel * generalizedModelParameterPLabel_ = nullptr;
+  DoubleSpinBox * generalizedModelParameterPSpinBox_ = nullptr;
+  QComboBox * basisTypeComboBox_ = nullptr;
+  QCheckBox * optimizationCheckBox_ = nullptr;
+  QLineEdit * scaleLineEdit_ = nullptr;
   OT::Description inputsNames_;
   OT::Point scales_;
-  DoubleSpinBox * amplitudeSpinBox_;
+  DoubleSpinBox * amplitudeSpinBox_ = nullptr;
 };
 }
 #endif

@@ -487,7 +487,7 @@ A new metamodel can be created in 4 different ways:
 
 When an analysis is required, a window appears, in order to set up:
   - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
-  - the method: polynomial regression (default), functional chaos or kriging
+  - the method: polynomial regression (default), functional chaos or Gaussian process
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_wizard.png
     :align: center
@@ -512,13 +512,13 @@ The **Functional chaos parameters** window allows one to define:
 
 Refer to :class:`~persalys.FunctionalChaosAnalysis` for implementation details.
 
-5-1-3 Kriging
-~~~~~~~~~~~~~
+5-1-3 Gaussian Process
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_kriging_wizard.png
     :align: center
 
-The **Kriging parameters** window allows one to define:
+The **Gaussian Process parameters** window allows one to define:
   - **Parameters**:
      - *The type of covariance model*: Squared exponential (default), Absolute exponential,
        Generalized exponential, Matern model
@@ -671,8 +671,8 @@ The results window gathers:
 
 .. _krigingresult:
 
-5-2-2 Kriging
-~~~~~~~~~~~~~
+5-2-2 Gaussian Process
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: /user_manual/graphical_interface/data_analysis/metaModel_result_window_kriging_plot.png
     :align: center

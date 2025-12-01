@@ -125,7 +125,7 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert("Analytical validation", tr("Analytical validation"));
   ParametersNames_.insert("Test sample validation", tr("Test sample validation"));
   ParametersNames_.insert("KFold validation", tr("KFold validation"));
-  ParametersNames_.insert("Kriging", tr("Kriging"));
+  ParametersNames_.insert("Gaussian Process", tr("Gaussian Process"));
   ParametersNames_.insert("yes", tr("yes"));
   ParametersNames_.insert("no", tr("no"));
   ParametersNames_.insert("Constant", tr("Constant"));

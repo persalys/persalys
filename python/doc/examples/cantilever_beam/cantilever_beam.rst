@@ -736,12 +736,11 @@ The analysis computes a surrogate model which can be retrieved and checked:
       .. image:: metamodel_definition.png
           :align: center
 
-7-3 Kriging
-'''''''''''
+7-3 Gaussian Process
+''''''''''''''''''''
 
-For more details on the computation of a metamodel by the method of
-`Kriging <http://openturns.github.io/openturns/latest/theory/meta_modeling/kriging.html>`_,
-you can consult the OpenTURNS documentation.
+For more details on the computation of a metamodel by Gaussian Process, see the OpenTURNS documentation of
+`Gaussian Process Regression <https://openturns.github.io/openturns/latest/theory/meta_modeling/gaussian_process_regression.html>`_.
 
 7-3-1 Definition
 ****************
@@ -752,7 +751,7 @@ design of experiments item.
 .. image:: metamodel_wizard.png
     :align: center
 
-Select the **Kriging** method and click on **Continue** button.
+Select the **Gaussian Process** method and click on **Continue** button.
 
 .. image:: kriging_page.png
     :align: center
