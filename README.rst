@@ -1,25 +1,14 @@
 Persalys
 ========
-OpenTURNS-based GUI for uncertainty treatment
 
-Installation
-------------
-- Windows:
+Persalys is a GUI dedicated to the treatment of uncertainty and the management of variabilities.
+The software is a tool between the computer simulation, probabilistic analyses and the data sciences.
 
-  * requirements: Windows>=10
-  * the default language setting can be overidden with the argument --lang=en|fr added to the launcher executable command-line
-  * The bundled software OpenGL renderer can be enabled/disabled with the argument --mesa=1|0
+Up-to-date information can be found at https://persalys.fr/.
 
-- Linux:
+The documentation of the latest release is available here: https://persalys.github.io/persalys/latest/.
 
-  * requirements: glibc>=2.28, X11/Wayland, OpenGL>=3.2, FUSE
-  * no install required, just run the .AppImage
-  * use non snap-sandboxed browser for doc links: https://bugs.launchpad.net/snapd/+bug/1972762
-
-Environment variables:
-
-- LANGUAGE: can be set to en|fr to override the language on Linux
-- PERSALYS_HTML_PATH: override path to the html documentation
-- PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets)
-- PERSALYS_CALIBRATION_ENGINE: if defined to "adao" and adao support is enabled
-  this switches to adao for calibration computations
+License
+-------
+Persalys is free software distributed under the GNU Lesser General Public License version 3 or, at your option, any later version.
+The terms of the GNU LGPL version 3 can be found in the files ``COPYING`` and ``COPYING.LESSER``.

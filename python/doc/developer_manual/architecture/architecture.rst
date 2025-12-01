@@ -21,27 +21,34 @@ Several dependencies are needed in order to build the GUI:
 - Numpydoc >=0.9 (optional, for doc)
 - ParaView >=5.11 (optional, for visualization)
 
+Environment variables
+---------------------
+
+- LANGUAGE: can be set to en|fr to override the language on Linux
+- PERSALYS_HTML_PATH: override path to the html documentation
+- PERSALYS_NO_GL: if defined, this disables OpenGL (used for ParaView widgets)
+- PERSALYS_CALIBRATION_ENGINE: if defined to "adao" and adao support is enabled
+  this switches to adao for calibration computations
 
 Compilation
 -----------
 
 .. code::
 
-    git clone https://git.phimeca.com/ot-edf/otgui.git persalys
+    git clone https://github.com/persalys/persalys.git
     cd persalys
-    mkdir -p build && cd build
     cmake \
       -DCMAKE_INSTALL_PREFIX=$PWD/install \
       -DOpenTURNS_DIR=$PWD/../../openturns/build/install/lib/cmake/openturns \
       -DParaView_DIR=$PWD/../../paraview/build/install/lib/cmake/paraview \
       -DOTMORRIS_DIR=$PWD/../../otmorris/build/install/lib/cmake/otmorris \
-      ..
-    make install
+      -B build .
+    cmake --build build --target install
 
 
 To run it::
 
-    persalys.sh
+    ./build/persalys.sh
 
 
 Translation
