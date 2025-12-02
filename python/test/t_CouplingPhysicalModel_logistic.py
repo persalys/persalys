@@ -7,6 +7,8 @@ import persalys
 # import openturns as ot
 import openturns.testing as ott
 
+ssh_hostname = ""
+
 with open("input_logistic.txt.in", "w") as f:
     f.write("y0=@y0@\n")
     f.write("a=@a@\n")
@@ -68,6 +70,7 @@ step2 = persalys.CouplingStep(
 )
 
 model = persalys.CouplingPhysicalModel("logistic", [step1, step2])
+model.setSSHHostname(ssh_hostname)
 print(model.getInputNames())
 print(model.getOutputNames())
 assert model.getInputNames() == ["y0", "a", "b"]
