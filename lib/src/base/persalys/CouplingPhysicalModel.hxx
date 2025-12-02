@@ -26,7 +26,7 @@
 
 namespace PERSALYS
 {
-typedef OT::Collection<CouplingStep> CouplingStepCollection;
+using CouplingStepCollection = OT::Collection<CouplingStep>;
 
 class PERSALYS_BASE_API CouplingPhysicalModel : public PythonPhysicalModel
 {
@@ -49,6 +49,9 @@ public:
   /** Accessor to the steps */
   void setSteps(const CouplingStepCollection & steps);
   CouplingStepCollection getSteps() const;
+
+  void setSSHHostname(const OT::String & hostname);
+  OT::String getSSHHostname() const;
 
   OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
@@ -81,8 +84,19 @@ protected:
   void updateCode();
 
   OT::String getStepsMacro(const OT::String & offset = "") const;
+
+  OT::Description getStepsOutputNames(const CouplingStepCollection &steps) const;
+  OT::Description getStepsInputNames(const CouplingStepCollection &steps, const OT::Description &outputNames) const;
+
+  OT::String writeCode(const OT::Description &inputNames, const OT::Description &outputNames) const;
+
+private:
+  OT::String pythonImports() const;
+  OT::String pythonFunctions() const;
+
 private:
   // list of steps
+  OT::String SSHHostname_;
   OT::PersistentCollection<CouplingStep> steps_;
   OT::Bool cleanupWorkDirectory_ = true;
   OT::FileName cacheInputFile_;

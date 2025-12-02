@@ -7,6 +7,8 @@ import persalys
 import openturns as ot
 import openturns.testing as ott
 
+ssh_hostname = ""
+
 # testcase A: parse output with tokens
 with open("input_template.txt", "w") as f:
     f.write("X0=@X0\n")
@@ -41,6 +43,7 @@ step = persalys.CouplingStep(
 )
 
 model = persalys.CouplingPhysicalModel("A", [step])
+model.setSSHHostname(ssh_hostname)
 print(output_file.checkOutputFile("outputRef.txt"))
 
 # single evaluation
@@ -63,7 +66,8 @@ ott.assert_almost_equal(stddev, [math.sqrt(3.0), 1.415], 0.3, 0.3)
 code = 'import random\ndef _exec2(Y0, Y1):\n    A=r\\"U\\U-N\\N-u\\u-x\\x\\"\n    z = random.random()\n'
 code += "    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n"
 step.setCode(code)
-model = persalys.CouplingPhysicalModel("A", [step])
+model = persalys.CouplingPhysicalModel("B", [step])
+model.setSSHHostname(ssh_hostname)
 f = model.getFunction()
 y = f(x)
 print(y)
@@ -73,7 +77,8 @@ ott.assert_almost_equal(y, [6.0, 7.0, 27.0, 48.0])
 step.setCode(
     "def _exe-c2(Y0, Y1):\n    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n"
 )
-model = persalys.CouplingPhysicalModel("A", [step])
+model = persalys.CouplingPhysicalModel("C", [step])
+model.setSSHHostname(ssh_hostname)
 f = model.getFunction()
 try:
     f(x)
@@ -85,7 +90,8 @@ except Exception:
 step.setCode(
     "def _exec2(Y-0, Y1):\n    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n"
 )
-model = persalys.CouplingPhysicalModel("A", [step])
+model = persalys.CouplingPhysicalModel("D", [step])
+model.setSSHHostname(ssh_hostname)
 f = model.getFunction()
 try:
     f(x)
@@ -133,7 +139,8 @@ step = persalys.CouplingStep(
     [resource_file],
     [output_file],
 )
-model = persalys.CouplingPhysicalModel("D", [step])
+model = persalys.CouplingPhysicalModel("E", [step])
+model.setSSHHostname(ssh_hostname)
 
 # single evaluation
 x = [1.0, 2.0, 3.0]
@@ -174,7 +181,8 @@ step = persalys.CouplingStep(
     [resource_file],
     [output_file],
 )
-model = persalys.CouplingPhysicalModel("E", [step])
+model = persalys.CouplingPhysicalModel("F", [step])
+model.setSSHHostname(ssh_hostname)
 
 # single evaluation
 x = [1.0, 2.0, 3.0]
@@ -217,6 +225,7 @@ step = persalys.CouplingStep(
     [output_file],
 )
 model = persalys.CouplingPhysicalModel("reuse1", [step])
+model.setSSHHostname(ssh_hostname)
 # leave work dir
 model.setCleanupWorkDirectory(False)
 
@@ -230,6 +239,7 @@ ott.assert_almost_equal(y, [6.0, 7.0])
 # reuse previous work dir, with an empty command
 step = persalys.CouplingStep("", [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel("reuse2", [step])
+model.setSSHHostname(ssh_hostname)
 f = model.getFunction()
 y = f(x)
 ott.assert_almost_equal(y, [6.0, 7.0])
@@ -266,6 +276,7 @@ step = persalys.CouplingStep(
     [output_file],
 )
 model = persalys.CouplingPhysicalModel("csvcache", [step])
+model.setSSHHostname(ssh_hostname)
 model.setCacheFiles("in.csv", "out.csv")
 
 # single evaluation
@@ -352,6 +363,7 @@ step4 = persalys.CouplingStep("echo 42", [], [], [])
 step4.setIsShell(True)
 
 model = persalys.CouplingPhysicalModel("multi", [step1, step2, step3, step4])
+model.setSSHHostname(ssh_hostname)
 print("input variables=", model.getInputNames())
 print("output variables=", model.getOutputNames())
 

@@ -20,6 +20,7 @@ Several dependencies are needed in order to build the GUI:
 - Sphinx >=1.8 (optional, for doc)
 - Numpydoc >=0.9 (optional, for doc)
 - ParaView >=5.11 (optional, for visualization)
+- Paramiko >= 2.12.0 (optional, for ssh coupling models)
 
 Environment variables
 ---------------------

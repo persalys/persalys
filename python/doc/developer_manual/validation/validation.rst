@@ -1,7 +1,6 @@
 Validation
 ==========
 
-
 Test case 1: Cogeneration
 -------------------------
 
@@ -272,7 +271,7 @@ Open
   .. image:: /developer_manual/validation/welcomeWindow.png
       :align: center
 
-Console Python
+Python Console
 ````````````````
 
 - open persalys
@@ -2425,3 +2424,10 @@ Python model on cluster
   - re-open persalys and relaunch the analysis
 
   - the DoE gets evaluated almost instantly
+
+SSH Coupling
+''''''''''''
+
+In CouplingPhysicalModel_std and CouplingPhysicalModel_logistic python tests,
+change the ssh_hostname variable to the name of a server you can connect to by ssh without password (using ssh keys).
+Then run the tests to validate the SSH coupling feature.
