@@ -32,6 +32,7 @@
 
 #include <QTabWidget>
 #include <QScrollArea>
+#include <QLabel>
 
 #include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 
@@ -76,6 +77,7 @@ private:
   PlotWidget * survPlot_ = nullptr;
   PlotWidget * quantilePlot_ = nullptr;
   ParametersTableView * sizeTable_ = nullptr;
+  QLabel * qqPlotWarningLabel_ = nullptr;
 };
 }
 #endif

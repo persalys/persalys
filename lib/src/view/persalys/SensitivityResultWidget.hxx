@@ -76,7 +76,7 @@ public slots:
   void updateIndicesPlot(int, Qt::SortOrder);
 
 private:
-  SensitivityIndicesPlot * plot_ = nullptr;
+  SensitivityIndicesPlot * plot_  = nullptr;
   IndicesProxyModel * proxyModel_ = nullptr;
 };
 } // namespace PERSALYS

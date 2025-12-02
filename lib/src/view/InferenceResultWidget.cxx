@@ -37,6 +37,7 @@
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QDesktopServices>
+#include <QLabel>
 
 using namespace OT;
 
@@ -154,6 +155,12 @@ void InferenceResultWidget::buildInterface()
     // --- qq plot
     qqPlot_ = new PlotWidget(tr("qqPlot"));
     plotWidgetLayout->addWidget(qqPlot_);
+
+    qqPlotWarningLabel_ = new QLabel;
+    qqPlotWarningLabel_->setStyleSheet("QLabel { color : orange; font-weight: bold; background-color: transparent; border: 1px solid orange; }");
+    qqPlotWarningLabel_->hide();
+    plotWidgetLayout->addWidget(qqPlotWarningLabel_);
+
     // --- GraphConfigurationWidget
     SimpleGraphSetting * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot_, this);
     qqPlotSettingWidget->hide();
@@ -587,7 +594,19 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   }
 
   // -- qq plot
-  Graph qqPlotGraph(VisualTest::DrawQQplot(currentFittingTestResult_.getValues(), distribution));
+  Sample sampleValues = currentFittingTestResult_.getValues();
+  if (sampleValues.getSize() > 10000)
+  {
+    sampleValues.split(10000);
+    qqPlotWarningLabel_->setText(tr("Warning: Only the first 10000 points are being displayed."));
+    qqPlotWarningLabel_->show();
+  }
+  else
+  {
+    qqPlotWarningLabel_->hide();
+  }
+
+  Graph qqPlotGraph(VisualTest::DrawQQplot(sampleValues, distribution));
   qqPlot_->setTitle(tr("Q-Q Plot") + ": " + distName);
   qqPlot_->setAxisTitle(QwtPlot::xBottom, tr("Data quantiles"));
   qqPlot_->setAxisTitle(QwtPlot::yLeft, tr("%1 theoretical quantiles").arg(distName));

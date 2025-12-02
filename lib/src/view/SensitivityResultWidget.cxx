@@ -47,8 +47,6 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     const Type type,
     QWidget * parent)
   : QWidget(parent)
-  , plot_(0)
-  , proxyModel_(0)
 {
   qRegisterMetaType<ColumnRole>("ColumnRole");
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
