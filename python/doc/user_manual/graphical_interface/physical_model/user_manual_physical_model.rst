@@ -323,7 +323,7 @@ Refer to :ref:`logistic_coupling_example` for a coupling model example.
 In the context of the SALOME platform, HPC settings can also be enabled though the properties contextual menu
 (right-click on the model root node above the **Definition** node, then choose **Properties**).
 
-A coupling model can be executed on a UNIX remote host using the Run via SSH checkbox.
+A coupling model can be executed on a UNIX remote host using the ``Run via SSH`` checkbox.
 Then the name of the remote host must be specified in the corresponding text field.
 You must be able to connect to the host without password prompt (using ssh keys for example).
 
