@@ -22,9 +22,6 @@ RUN curl -fSsL https://sourceware.org/pub/gdb/releases/gdb-8.3.1.tar.gz |tar xz 
 # bison
 RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison* && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
 
-# cmake
-RUN curl -fSsLO https://github.com/Kitware/CMake/releases/download/v3.28.3/cmake-3.28.3-linux-x86_64.sh && sh ./cmake-3.28.3-linux-x86_64.sh --skip-license --prefix=/usr/local && rm cmake* && cmake --version
-
 # swig
 RUN curl -fSsL https://github.com/swig/swig/archive/v4.4.0.tar.gz | tar xz && cd swig* \
  && cmake . && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
@@ -44,7 +41,7 @@ RUN curl -fsSL https://github.com/coin-or/Cbc/archive/refs/tags/releases/2.10.12
 RUN curl -fsSL https://github.com/coin-or/Bonmin/archive/refs/tags/releases/1.8.9.tar.gz | tar xz && cd Bonmin* && ./configure --prefix=/usr/local --with-ipopt-lib="$(pkg-config --libs ipopt)" --with-ipopt-incdir="/usr/local/include/coin-or/" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Bonmin*
 
 # dlib
-RUN curl -L https://github.com/davisking/dlib/archive/v20.0.tar.gz | tar xz && cd dlib* \
+RUN curl -fsSL https://github.com/davisking/dlib/archive/v20.0.tar.gz | tar xz && cd dlib* \
  && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -B build . && cd build && make install > /dev/null 2>&1 && cd - && rm -r dlib*
 
 # cminpack
