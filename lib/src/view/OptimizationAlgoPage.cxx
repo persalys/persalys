@@ -328,14 +328,26 @@ AlgoFilterProxyModel::AlgoFilterProxyModel(QObject *parent)
 
 void AlgoFilterProxyModel::setDerivativeFilter(const QList<int> & derivativeFilter)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+  beginFilterChange();
+  derivativeFilter_ = derivativeFilter;
+  endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
   derivativeFilter_ = derivativeFilter;
   invalidateFilter();
+#endif
 }
 
 void AlgoFilterProxyModel::setLocalityFilter(const QList<int> & localityFilter)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+  beginFilterChange();
+  localityFilter_ = localityFilter;
+  endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
   localityFilter_ = localityFilter;
   invalidateFilter();
+#endif
 }
 
 bool AlgoFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const

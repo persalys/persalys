@@ -917,20 +917,38 @@ DataFilterProxyModel::DataFilterProxyModel(QObject *parent)
 
 void DataFilterProxyModel::setVariabilityFilter(const QList<int> & variabilityFilter)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+  beginFilterChange();
+  variabilityFilter_ = variabilityFilter;
+  endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
   variabilityFilter_ = variabilityFilter;
   invalidateFilter();
+#endif
 }
 
 void DataFilterProxyModel::setCausalityFilter(const QList<int> & causalityFilter)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+  beginFilterChange();
+  causalityFilter_ = causalityFilter;
+  endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
   causalityFilter_ = causalityFilter;
   invalidateFilter();
+#endif
 }
 
 void DataFilterProxyModel::setIOFilter(const QList<int> & ioFilter)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+  beginFilterChange();
+  ioFilter_ = ioFilter;
+  endFilterChange(QSortFilterProxyModel::Direction::Rows);
+#else
   ioFilter_ = ioFilter;
   invalidateFilter();
+#endif
 }
 
 bool DataFilterProxyModel::filterAcceptsRow(int sourceRow,
