@@ -34,18 +34,14 @@
 namespace PERSALYS
 {
 
-static const QwtPlot::Axis Axes[2] = {QwtPlot::xBottom, QwtPlot::yLeft};
+static const std::array<QwtPlot::Axis, 2> Axes = {QwtPlot::xBottom, QwtPlot::yLeft};
 
 GraphConfigurationWidget::GraphConfigurationWidget(const QVector<PlotWidget *> &plotWidgets, QWidget *parent)
   : QWidget(parent)
   , plotWidgets_(plotWidgets)
-  , plotIndex_(0)
-  , frameLayout_(0)
-  , propertiesTabWidget_(0)
-  , titleLineEdit_(0)
 {
-  for (int i = 0; i < plotWidgets_.size(); ++i)
-    connect(plotWidgets_[i], SIGNAL(plotChanged()), this, SLOT(updateLineEdits()));
+  for (const PlotWidget * plotWidget : std::as_const(plotWidgets_))
+    connect(plotWidget, &PlotWidget::plotChanged, this, &GraphConfigurationWidget::updateLineEdits);
 
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   mainLayout->setContentsMargins(0, 0, 0, 0);
@@ -61,7 +57,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(const QVector<PlotWidget *> &
   frameLayout_->addWidget(label, 0, 0);
 
   titleLineEdit_ = new QLineEdit;
-  connect(titleLineEdit_, &QLineEdit::textChanged, [ = ](const QString & text)
+  connect(titleLineEdit_, &QLineEdit::textChanged, [this](const QString & text)
   {
     plotWidgets_[plotIndex_]->setTitle(text);
   });
@@ -71,7 +67,7 @@ GraphConfigurationWidget::GraphConfigurationWidget(const QVector<PlotWidget *> &
 
   scrollArea->setWidget(frame);
   mainLayout->addWidget(scrollArea);
-  setVisible(false);
+  QWidget::setVisible(false);
 }
 
 
@@ -88,7 +84,7 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
     gridLayoutTab->addWidget(label, 0, 0);
 
     axisLabelLineEdit_[i] = new QLineEdit;
-    connect(axisLabelLineEdit_[i], &QLineEdit::textChanged, [ = ](const QString & text)
+    connect(axisLabelLineEdit_[i], &QLineEdit::textChanged, [this, i](const QString & text)
     {
       plotWidgets_[plotIndex_]->setAxisTitle(Axes[i], text);
     });
@@ -99,7 +95,7 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
     gridLayoutTab->addWidget(label, 1, 0);
 
     axisMinValueLineEdit_[i] = new ValueLineEdit;
-    connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [ = ]()
+    connect(axisMinValueLineEdit_[i], &ValueLineEdit::editingFinished, [this, i]()
     {
       updateRange(Axes[i]);
     });
@@ -110,7 +106,7 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
     gridLayoutTab->addWidget(label, 2, 0);
 
     axisMaxValueLineEdit_[i] = new ValueLineEdit;
-    connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [ = ]()
+    connect(axisMaxValueLineEdit_[i], &ValueLineEdit::editingFinished, [this, i]()
     {
       updateRange(Axes[i]);
     });
@@ -128,7 +124,7 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
         hLayout->addWidget(label);
         hLayout->addWidget(labelOrientation, 1);
         gridLayoutTab->addLayout(hLayout, 3, 0, 1, 2);
-        connect(labelOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), [ = ](int idx)
+        connect(labelOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int idx)
         {
           plotWidgets_[plotIndex_]->setXLabelOrientation(idx);
         });
@@ -144,7 +140,7 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
       QToolButton * resetButton = new QToolButton;
       resetButton->setIcon(QIcon(":/images/view-refresh.svg"));
       resetButton->setToolTip(tr("Reset axis ranges"));
-      connect(resetButton, &QToolButton::clicked, [ = ]()
+      connect(resetButton, &QToolButton::clicked, [this]()
       {
         plotWidgets_[plotIndex_]->resetAxisRanges();
       });
@@ -209,7 +205,7 @@ void GraphConfigurationWidget::addExportLayout()
 {
   QHBoxLayout * exportLayout = new QHBoxLayout;
   QPushButton * button = new QPushButton(QIcon(":/images/document-export-table.png"), tr("Export"));
-  connect(button, &QPushButton::clicked, [ = ]()
+  connect(button, &QPushButton::clicked, [this]()
   {
     plotWidgets_[plotIndex_]->exportPlot();
   });
@@ -349,14 +345,23 @@ void ScatterGraphSetting::currentPlotIndexChanged(int /*i*/)
 
 PDFGraphSetting::PDFGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, const PDFType type, QWidget *parent)
   : GraphConfigurationWidget(plotWidgets, parent)
-  , xAxisComboBox_(0)
-  , yAxisComboBox_(0)
 {
   int rowGrid = frameLayout_->rowCount();
   // distribution representation choice
   QStringList reprs = QStringList() << tr("PDF") << tr("CDF");
   if (type == PDFGraphSetting::Distribution)
-    reprs << tr("Quantile function") << tr("Survival function");
+  {
+    // temporary fix
+    // Quantile functions have yet not been implemented for data analyses
+    // Implement them or completely remove them (they are implemented for proba model)
+    if (plotWidgets_.size() > 3)
+      reprs << tr("Quantile function") << tr("Survival function");
+    else if (plotWidgets_.size() == 3)
+      reprs << tr("Survival function");
+    
+    // Survival functions where not implemented at first
+    // so if plotWidgets size is 2, it contains only PDF and CDF
+  }
   reprComboBox_ = new QComboBox;
   reprComboBox_->addItems(reprs);
   frameLayout_->addWidget(reprComboBox_, rowGrid, 0, 1, 2);

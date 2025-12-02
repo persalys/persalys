@@ -60,7 +60,6 @@ void InferenceResultWidget::buildInterface()
   auto * leftLayout = new QVBoxLayout;
   mainLayout->addLayout(leftLayout);
 
-
   // -- sizes table
   auto * sizeGroupBox = new QGroupBox(tr("Sample size"));
   sizeGroupBox->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);

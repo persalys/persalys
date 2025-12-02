@@ -33,10 +33,8 @@ namespace PERSALYS
 
 InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)
-  , level_(0)
-  , result_()
 {
-  InferenceAnalysis * analysis = dynamic_cast<InferenceAnalysis*>(item->getAnalysis().getImplementation().get());
+  const auto * analysis = dynamic_cast<InferenceAnalysis*>(item->getAnalysis().getImplementation().get());
   Q_ASSERT(analysis);
   level_ = analysis->getLevel();
   result_ = analysis->getResult();

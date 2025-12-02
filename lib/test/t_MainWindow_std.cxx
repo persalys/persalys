@@ -176,11 +176,11 @@ private slots:
             {
               std::cout << "Analysis= " << analysisItem->getAnalysis().getImplementation()->getClassName()
                         << " - Window= " << subWindow->metaObject()->className() << std::endl;
-              QVERIFY(dynamic_cast<ResultWindow*>(subWindow) != 0);
+              QVERIFY(dynamic_cast<ResultWindow*>(subWindow) != nullptr);
             }
             else
             {
-              QVERIFY(dynamic_cast<AnalysisWindow*>(subWindow) != 0);
+              QVERIFY(dynamic_cast<AnalysisWindow*>(subWindow) != nullptr);
             }
             QAction * modifyAction = findAction(analysisItem->getActions(), "Modify");
             if (modifyAction)

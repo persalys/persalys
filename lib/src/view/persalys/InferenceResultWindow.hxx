@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API InferenceResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  InferenceResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
+  explicit InferenceResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
@@ -41,9 +41,9 @@ public slots:
   void updateInferenceResultWidget(QString);
 
 private:
-  double level_;
+  double level_ = 0.0;
   InferenceResult result_;
-  InferenceResultWidget * inferenceResultWidget_;
+  InferenceResultWidget * inferenceResultWidget_ = nullptr;
 };
 }
 #endif

@@ -63,8 +63,8 @@ MarginalsWidget::MarginalsWidget(PhysicalModelItem * item, QWidget * parent)
 {
   for (UnsignedInteger i = 0; i < 5; ++i)
   {
-    parameterValuesLabel_[i] = 0;
-    parameterValuesEdit_[i] = 0;
+    parameterValuesLabel_[i] = nullptr;
+    parameterValuesEdit_[i] = nullptr;
   }
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
@@ -81,8 +81,8 @@ MarginalsWidget::MarginalsWidget(const PhysicalModel& model, QWidget * parent)
 {
   for (UnsignedInteger i = 0; i < 5; ++i)
   {
-    parameterValuesLabel_[i] = 0;
-    parameterValuesEdit_[i] = 0;
+    parameterValuesLabel_[i] = nullptr;
+    parameterValuesEdit_[i] = nullptr;
   }
   buildInterface();
 }
