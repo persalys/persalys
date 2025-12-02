@@ -118,7 +118,7 @@ void FieldAnalysisResultWindow::buildInterface()
     widgetLayout->addWidget(new TitleLabel(tr("Monte Carlo method"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmontecarloresult"));
   // coming from data field model analysis
   else
-    widgetLayout->addWidget(new TitleLabel(tr("Data fields decomposition"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmontecarloresult"));
+    widgetLayout->addWidget(new TitleLabel(tr("Field data sets decomposition"), "user_manual/graphical_interface/field_analysis/user_manual_field_analysis.html#fieldmontecarloresult"));
 
   // main splitter
   mainWidget_ = new FieldModelEvaluationResultWidget(inputSample_,
@@ -827,7 +827,7 @@ FieldCentralTendencyResultWindow::FieldCentralTendencyResultWindow(AnalysisItem 
   result_ = dynamic_cast<FieldMonteCarloAnalysis*>(item->getAnalysis().getImplementation().get())->getResult();
 
   // parameters widget
-  setParameters(item->getAnalysis(), tr("Data field analysis parameters"));
+  setParameters(item->getAnalysis(), tr("Field data set analysis parameters"));
   buildInterface();
 }
 

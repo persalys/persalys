@@ -120,7 +120,7 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
     }
     else if (objectName == "DataModel")
     {
-      item = new Item(tr("Data models"), "DataModelsTitle");
+      item = new Item(tr("Data sets"), "DataModelsTitle");
       item->setData(QIcon(":/images/dataModel.png"), Qt::DecorationRole);
       item->appendAction(newDataModel_);
     }

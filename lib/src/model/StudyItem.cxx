@@ -113,16 +113,16 @@ void StudyItem::buildActions()
     study_.add(new PythonFieldModel(getModelName(tr("PythonModel_"))));
   });
 
-  newDataModel_ = new QAction(tr("Data model"), this);
+  newDataModel_ = new QAction(tr("Data set"), this);
   connect(newDataModel_, &QAction::triggered, [ = ]()
   {
-    study_.add(new DataModel(study_.getAvailableDataModelName(tr("DataModel_").toStdString())));
+    study_.add(new DataModel(study_.getAvailableDataModelName(tr("DataSet_").toStdString())));
   });
 
-  newDataFieldModel_ = new QAction(tr("Data Field model"), this);
+  newDataFieldModel_ = new QAction(tr("Field data set"), this);
   connect(newDataFieldModel_, &QAction::triggered, [ = ]()
   {
-    study_.add(DataFieldModel(study_.getAvailableDataFieldModelName(tr("DataFieldModel_").toStdString())));
+    study_.add(DataFieldModel(study_.getAvailableDataFieldModelName(tr("FieldDataSet_").toStdString())));
   });
 
   // export action
