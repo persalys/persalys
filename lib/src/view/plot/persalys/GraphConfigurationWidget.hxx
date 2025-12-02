@@ -37,7 +37,7 @@ class PERSALYS_PLOT_API GraphConfigurationWidget : public QWidget
   Q_OBJECT
 
 public:
-  GraphConfigurationWidget(const QVector<PlotWidget *> &plotWidgets, QWidget *parent = nullptr);
+  explicit GraphConfigurationWidget(const QVector<PlotWidget *> &plotWidgets, QWidget *parent = nullptr);
 
   int getCurrentPlotIndex() const;
 
@@ -56,14 +56,14 @@ signals:
   void currentPlotChanged(int i = 0);
 
 protected:
-  QVector<PlotWidget *> plotWidgets_;
-  int plotIndex_;
-  QGridLayout * frameLayout_;
-  QTabWidget * propertiesTabWidget_;
-  QLineEdit * titleLineEdit_;
-  QLineEdit * axisLabelLineEdit_[2];
-  ValueLineEdit * axisMinValueLineEdit_[2];
-  ValueLineEdit * axisMaxValueLineEdit_[2];
+  QVector<PlotWidget *>         plotWidgets_;
+  int                           plotIndex_             = 0;
+  QGridLayout                   * frameLayout_         = nullptr;
+  QTabWidget                    * propertiesTabWidget_ = nullptr;
+  QLineEdit                     * titleLineEdit_       = nullptr;
+  std::array<QLineEdit*, 2>     axisLabelLineEdit_     = {nullptr, nullptr};
+  std::array<ValueLineEdit*, 2> axisMinValueLineEdit_  = {nullptr, nullptr};
+  std::array<ValueLineEdit*, 2> axisMaxValueLineEdit_  = {nullptr, nullptr};
 };
 
 
@@ -73,7 +73,7 @@ class PERSALYS_PLOT_API SimpleGraphSetting : public GraphConfigurationWidget
 
 public:
   SimpleGraphSetting(const QVector<PlotWidget *> &plotWidgets, const QStringList &inputNames, QWidget *parent = nullptr);
-  SimpleGraphSetting(PlotWidget *plotWidget, QWidget *parent = nullptr);
+  explicit SimpleGraphSetting(PlotWidget *plotWidget, QWidget *parent = nullptr);
 };
 
 
@@ -87,9 +87,9 @@ public slots:
   void updateYComboBox();
   void currentPlotIndexChanged(int i = 0) override;
 private:
-  QComboBox * xAxisComboBox_;
-  QComboBox * yAxisComboBox_;
-  QCheckBox * rankCheckBox_;
+  QComboBox * xAxisComboBox_  = nullptr;
+  QComboBox * yAxisComboBox_  = nullptr;
+  QCheckBox * rankCheckBox_   = nullptr;
 };
 
 
@@ -105,9 +105,9 @@ public slots:
   void updateYComboBox();
   void currentPlotIndexChanged(int i = 0) override;
 private:
-  QComboBox * xAxisComboBox_;
-  QComboBox * yAxisComboBox_;
-  QComboBox * reprComboBox_;
+  QComboBox * xAxisComboBox_  = nullptr;
+  QComboBox * yAxisComboBox_  = nullptr;
+  QComboBox * reprComboBox_   = nullptr;
 };
 
 
@@ -125,7 +125,7 @@ class PERSALYS_PLOT_API SensitivityIndicesGraphSetting : public GraphConfigurati
   Q_OBJECT
 
 public:
-  SensitivityIndicesGraphSetting(PlotWidget *plotWidget, QWidget *parent = nullptr);
+  explicit SensitivityIndicesGraphSetting(PlotWidget *plotWidget, QWidget *parent = nullptr);
 };
 
 class PERSALYS_PLOT_API FrontsGraphSetting : public GraphConfigurationWidget
@@ -138,8 +138,8 @@ public slots:
   void updateYComboBox();
   void currentPlotIndexChanged(int i = 0) override;
 private:
-  QComboBox * xAxisComboBox_;
-  QComboBox * yAxisComboBox_;
+  QComboBox * xAxisComboBox_ = nullptr;
+  QComboBox * yAxisComboBox_ = nullptr;
 
 };
 }
