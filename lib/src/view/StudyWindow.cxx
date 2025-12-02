@@ -171,7 +171,7 @@ void StudyWindow::buildInterface()
   hLayout->addWidget(hLineFrame, 1);
   layout->addLayout(hLayout, ++row, 0, 1, 2);
 
-  button = new DiagramPushButton(tr("Data model"));
+  button = new DiagramPushButton(tr("Data set"));
   button->setStatusTip(tr("Import a sample to create a model"));
   connect(button, SIGNAL(clicked()), studyItem_->newDataModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);
@@ -187,7 +187,7 @@ void StudyWindow::buildInterface()
   textEdit->setText(text);
   layout->addWidget(textEdit, row, 1, 2, 1, Qt::AlignLeft | Qt::AlignTop);
 
-  button = new DiagramPushButton(tr("Data Field model"));
+  button = new DiagramPushButton(tr("Field data set"));
   button->setStatusTip(tr("Import a process sample to create a field model"));
   connect(button, SIGNAL(clicked()), studyItem_->newDataFieldModel_, SIGNAL(triggered()));
   layout->addWidget(button, ++row, 0, Qt::AlignTop);

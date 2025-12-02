@@ -64,7 +64,7 @@ void DataFieldModelWindow::showEvent(QShowEvent* event)
 void DataFieldModelWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  mainLayout->addWidget(new TitleLabel(tr("Data Field model"), 
+  mainLayout->addWidget(new TitleLabel(tr("Field data set"), 
   "user_manual/graphical_interface/data_model/user_manual_data_model.html#datafieldmodel"));
 
   QScrollArea * scrollArea = new QScrollArea;
