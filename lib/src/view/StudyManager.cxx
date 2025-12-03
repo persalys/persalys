@@ -131,6 +131,8 @@ void StudyManager::modifyAnalysis(AnalysisItem* item)
     connect(wizard, &QDialog::accepted, [item, wizard]() {
       item->updateAnalysis(wizard->getAnalysis());
     });
+
+    wizard->open();
   }
 }
 
