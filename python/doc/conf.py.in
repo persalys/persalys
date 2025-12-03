@@ -275,3 +275,6 @@ texinfo_documents = [
 
 # If true, Sphinx will warn about all references where the target cannot be found.
 nitpicky = True
+
+# needed by numpydoc for now with sphinx 9.x
+autodoc_use_legacy_class_based = True
