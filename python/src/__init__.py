@@ -15,4 +15,4 @@ import openturns as _ot
 
 from .persalys import *
 
-__version__ = "19.1dev"
+__version__ = "19.1"
