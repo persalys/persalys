@@ -110,7 +110,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   DiagramPushButton * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
-  metamodelButton->setWhatsThis(tr("Two methods: Gaussian Process and Functional chaos"));
+  metamodelButton->setWhatsThis(tr("Build a computationally cheap approximation model from input-output data"));
   connect(physicalModelDiagramItem, SIGNAL(doeEvaluationNumberValidityChanged(bool, QString)), metamodelButton, SLOT(setEnabled(bool, QString)));
   connect(metamodelButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestMetaModelCreation()));
 
