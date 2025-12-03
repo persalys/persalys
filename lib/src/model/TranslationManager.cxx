@@ -226,7 +226,7 @@ void TranslationManager::InitializeErrorMessages()
   ErrorMessages_.insert("The limit state is not valid.", tr("The limit state is not valid."));
   //GridMeshModel::setParameters
   ErrorMessages_.insert("The lower bounds must be less than the upper bounds", tr("The lower bounds must be less than the upper bounds"));
-  ErrorMessages_.insert("The mesh must contain at least two node", tr("The mesh must contain at least two node"));
+  ErrorMessages_.insert("The mesh must contain at least two node", tr("The mesh must contain at least two nodes"));
   // Tools
   ErrorMessages_.insert("The file does not contain a sample and/or the file encoding is not valid (use utf-8)", tr("The file does not contain a sample and/or the file encoding is not valid (use utf-8)"));
   ErrorMessages_.insert("Unknown data order", tr("Unknown data order"));
