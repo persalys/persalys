@@ -336,7 +336,7 @@ New Study
 
   - item Study_0 appears in the tree view
 
-  - a 'study' window with 6(+2) buttons appears:
+  - a 'study' window with 7(+2) buttons appears:
 
     - Symbolic model
 
@@ -352,9 +352,9 @@ New Study
 
     - Python Field Model
 
-    - Data model
+    - Data set
 
-    - Data field model
+    - Field data set
 
 - click Menu->File->New
 
@@ -2158,10 +2158,7 @@ Field analyses
   - Three subitems Mesh, Definition, myAnalysis
   - Click on Mesh
   - The mesh has 12 nodes
-  - Change the number of nodes
-  - A message has appeared "Warning: Specified mesh is incompatbile and has been reset."
-  - The number of nodes remains unchanged
-  - The message disappears after a while
+  - You can't change the number of nodes
   - Click on Definition
   - Edit one of the table cells to 'inf'
   - A message appears: "The model is not valid. Check data and/or mesh numerical validity."
@@ -2294,12 +2291,12 @@ Physical model
 - click on the 'Reliability' button of the diagram
     - a wizard appears, there are 2 items in the combo box in Limit state group box, click on Cancel
 
-Data model
+Data set
 ''''''''''
 
-- click on 'Data model' button of the window of myOTStudy
-    - the item dataModel_0 appears in the tree view
-    - a new Data model diagram window appears in the midArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
+- click on 'Data set' button of the window of myOTStudy
+    - the item dataSet_0 appears in the tree view
+    - a new Data set diagram window appears in the midArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled
 
   .. image:: /developer_manual/validation/dataModelDiagramWindow.png
@@ -2308,27 +2305,27 @@ Data model
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
     - click on the '...' button, import the file data.csv
     - the first three columns are inputs and the last one is an output
-    - all the buttons are enabled in the diagram
+    - all the buttons are enabled in the diagram except 'export as model'
     - check that 'Sensitivity analysis' button is enabled only if there are at least two inputs and one output
     - check that 'Dependence inference' button is enabled only if there are more than one variable
     - check that 'Metamodel creation' button is enabled only if there are at least one output and one input
     - if all the columns are disabled, all the buttons of the diagram are disabled
 
 - save the current study, reopen
-    - in the window of the 'Definition' item of the data model: click on the reload button
+    - in the window of the 'Definition' item of the data set: click on the reload button
 
-Data field model
+Field data set
 ''''''''''''''''
 
-- click on 'Data field model' button of the window of myOTStudy
-    - the item DataFieldModel_0 appears in the tree view (with 2 items: Definition and Mesh)
-    - click on 'DataFieldModel_0': a new Data field model diagram window appears in the midArea,
+- click on 'Field data set' button of the window of myOTStudy
+    - the item FieldDataSet_0 appears in the tree view (with 2 items: Definition and Mesh)
+    - click on 'FieldDataSet_0': a new Data field model diagram window appears in the midArea,
       check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled, click it
     - 'Definition' gets the focus
     - click on the '...' button, import the file elNino.csv
     - click on 'Mesh' item
-    - the number of nodes is set to 12, with a warning message that the mesh has been overwritten
+    - the number of nodes is set to 12, and a message warns you that the mesh has been overwritten
     - 'Data analysis' button in the diagram window is activated
 
 

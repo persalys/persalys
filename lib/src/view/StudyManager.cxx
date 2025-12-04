@@ -131,6 +131,8 @@ void StudyManager::modifyAnalysis(AnalysisItem* item)
     connect(wizard, &QDialog::accepted, [item, wizard]() {
       item->updateAnalysis(wizard->getAnalysis());
     });
+
+    wizard->open();
   }
 }
 
@@ -177,7 +179,7 @@ void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Anal
         else
           QMessageBox::warning(QApplication::activeWindow(),
             tr("Invalid dimension"),
-            tr("The sample constained in the CSV must have the same size and dimension as the one contained in this design of experiment.")
+            tr("The sample contained in the CSV must have the same size and dimension as the one contained in this design of experiment.")
           );
       }
       catch (const Test::TestFailed&)

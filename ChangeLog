@@ -1,3 +1,10 @@
+= 19.1 release (2025-12-5)
+ * Various ergonomics improvements
+ * Added the possibility to run coupling models on remote machines via SSH
+ * Added plain regression analysis and advanced parameters for stepwise regression
+ * changed default installation path on windows in user mode
+ * Various bug fixes
+
 = 19.0 release (2025-10-10)
 
  * Added sensitivity analysis for data models using rank Sobol/SRC indices

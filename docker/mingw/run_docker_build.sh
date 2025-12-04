@@ -38,6 +38,7 @@ PYVER=`${ARCH}-w64-mingw32-python${PYMAJMIN}-bin -V|sed "s|.*Python \([0-9\.]*\)
 mkdir -p python_root/Lib/site-packages && cd python_root
 curl -fSsL https://www.python.org/ftp/python/${PYVER}/python-${PYVER}-embed-amd64.zip | bsdtar -xf-
 echo 'Lib\\site-packages' >> python${PYMAJMIN}._pth
+echo 'import site' >> python${PYMAJMIN}._pth        # required to be able to install modules in user mode
 curl -fSsL https://anaconda.org/conda-forge/vs2015_runtime/14.16.27012/download/win-64/vs2015_runtime-14.16.27012-h30e32a0_2.tar.bz2 | tar xj
 cp -r /usr/${ARCH}-w64-mingw32/Lib/site-packages/openturns Lib/site-packages
 cp /usr/${ARCH}-w64-mingw32/bin/*.dll Lib/site-packages/openturns
