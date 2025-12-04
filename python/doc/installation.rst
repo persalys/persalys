@@ -18,7 +18,7 @@ Linux
 -----
 Requirements:
 
-  - glibc >=2.28 (Debian >=11, Ubuntu >=20, Fedora >=29, RHEL >=8, ...)
+  - glibc >=2.28 (Debian 10+, Ubuntu 18.10+, Fedora 29+, CentOS/RHEL 8+)
   - X11/Wayland with OpenGL >=3.2
   - FUSE userspace filesystem
 
