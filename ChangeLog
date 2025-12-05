@@ -1,5 +1,9 @@
 = 19.1 release (2025-12-5)
- * Various ergonomics improvements
+
+ * Various ergonomics improvements including
+   * A new button to copy the distributions selected for a marginal to all the other ones in inference
+   * The possibility to load the mesh along with the data for fields data set
+   * Making probabilistic and Monte-Carlo the default choices for DOE creation
  * Added the possibility to run coupling models on remote machines via SSH
  * Added plain regression analysis and advanced parameters for stepwise regression
  * changed default installation path on windows in user mode
