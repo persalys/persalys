@@ -40,17 +40,12 @@ namespace PERSALYS
 SobolResultWindow::SobolResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_()
-  , warningMessage_("")
 {
   const SobolAnalysis * sobolAnalysis = dynamic_cast<const SobolAnalysis*>(item->getAnalysis().getImplementation().get());
   if (!sobolAnalysis)
     throw InvalidArgumentException(HERE) << "SobolResultWindow: the analysis is not a SobolAnalysis";
 
   result_ = sobolAnalysis->getResult();
-
-  // add warning if the model does not have an independent copula
-  if (!sobolAnalysis->getWarningMessage().empty())
-    warningMessage_ = tr("The model does not have an independent copula, the result could be false.");
 
   // parameters widget
   setParameters(item->getAnalysis(), tr("Sensitivity analysis parameters"));
@@ -114,12 +109,6 @@ void SobolResultWindow::buildInterface()
   }
   vbox->addWidget(stackedWidget, 1);
 
-  // add a warning (if the model does not have an independent copula when doing a SensitivityAnalysis)
-  if (!warningMessage_.isEmpty())
-  {
-    QLabel * warningLabel = new QLabel(QString("<font color=red>%1</font>").arg(warningMessage_));
-    vbox->addWidget(warningLabel);
-  }
   scrollArea->setWidget(widget);
   tabWidget->addTab(scrollArea, tr("Indices"));
 

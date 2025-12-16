@@ -23,10 +23,11 @@
 
 #include "persalys/Analysis.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/ExperimentTableModel.hxx"
 
 #include <QWizardPage>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -53,7 +54,7 @@ private:
   ExperimentTableModel          * tableModel_         = nullptr;
   QLabel                        * DOESizeLabel_       = nullptr;
   QLabel                        * DOETimeLabel_       = nullptr;
-  TemporaryLabel                * errorMessageLabel_  = nullptr;
+  ErrorWidget                   * errorWidget_  = nullptr;
 };
 }
 #endif

@@ -1,6 +1,7 @@
 #include "persalys/MorrisAnalysis.hxx"
 #include "persalys/ScreeningAnalysisWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -50,24 +51,24 @@ private slots:
 
     // - first page
     OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.introPage_->findChild<OutputsSelectionGroupBox*>();
-    TemporaryLabel * errorMessageLabel = wizard.introPage_->findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.introPage_->findChild<ErrorWidget*>();
     TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
     ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
 
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QTest::mouseClick(comboBox, Qt::LeftButton); // open listwidget
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // deselect all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     wizard.next();
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0"); // can not go to next page
 
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // select all
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
   }
 
 
@@ -85,12 +86,12 @@ private slots:
 
     // - second page
     wizard.next();
-    TemporaryLabel * errorMessageLabel = wizard.morrisPage_->findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.morrisPage_->findChild<ErrorWidget*>();
     MorrisTableModel * tableModel = wizard.morrisPage_->findChild<MorrisTableModel*>();
 
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QVERIFY2(tableModel->data(tableModel->index(0, 0)).toString() == "Q", "wrong name");
     QVERIFY2(tableModel->data(tableModel->index(0, 1)).toString() == "Primary energy", "wrong description");
@@ -99,11 +100,11 @@ private slots:
 
     tableModel->setData(tableModel->index(0, 2), 10500, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     tableModel->setData(tableModel->index(0, 2), initBounds.getLowerBound()[0], Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two MorrisAnalysis must be equal");

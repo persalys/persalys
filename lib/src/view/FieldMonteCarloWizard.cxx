@@ -100,11 +100,11 @@ void FieldMonteCarloWizard::buildInterface()
   pageLayout->addStretch();
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
-  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorMessageLabel_, SLOT(reset()));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  errorWidget_ = new ErrorWidget;
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
+  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorWidget_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorWidget_, SLOT(reset()));
+  pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
 
   addPage(page);
 }
@@ -142,7 +142,7 @@ bool FieldMonteCarloWizard::validateCurrentPage()
       errorMessage = tr("The maximum time must not be null");
   }
 
-  errorMessageLabel_->setErrorMessage(errorMessage);
+  errorWidget_->setFramelessErrorMessage(errorMessage);
 
   return errorMessage.isEmpty() ? QWizard::validateCurrentPage() : false;
 }

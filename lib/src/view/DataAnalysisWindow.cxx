@@ -28,9 +28,9 @@
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/SampleTableModel.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
-#include "persalys/PlotMatrixConfigurationWidget.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/BoxPlot.hxx"
+#include "persalys/PlotMatrixConfigurationWidget.hxx"
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include "persalys/PVServerManagerInterface.hxx"
@@ -222,8 +222,8 @@ void DataAnalysisWindow::addSummaryTab()
   // - if algo with an error message
   if (!analysisErrorMessage_.isEmpty())
   {
-    TemporaryLabel * analysisErrorMessageLabel = new TemporaryLabel;
-    analysisErrorMessageLabel->setErrorMessage(analysisErrorMessage_);
+    ErrorWidget * analysisErrorMessageLabel = new ErrorWidget;
+    analysisErrorMessageLabel->setFramelessErrorMessage(analysisErrorMessage_);
     parametersGroupBoxLayout->addWidget(analysisErrorMessageLabel);
   }
 

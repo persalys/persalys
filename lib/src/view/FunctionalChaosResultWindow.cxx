@@ -27,7 +27,7 @@
 #include "persalys/SensitivityResultWidget.hxx"
 #include "persalys/QtTools.hxx"
 #include "persalys/TranslationManager.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/SpecFunc.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -41,7 +41,6 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QDebug>
-#include <QTextEdit>
 
 using namespace OT;
 
@@ -307,9 +306,9 @@ void FunctionalChaosResultWindow::addMomentsTab(QTabWidget * tabWidget, const Va
     {
       QWidget * summaryWidget = new QWidget;
       QVBoxLayout * summaryWidgetLayout = new QVBoxLayout(summaryWidget);
-      QLabel * errorLabel = new QLabel(errorMessage_);
-      errorLabel->setWordWrap(true);
-      summaryWidgetLayout->addWidget(errorLabel);
+      auto * errorWidget = new ErrorWidget;
+      errorWidget->setMessage(errorMessage_);
+      summaryWidgetLayout->addWidget(errorWidget);
       summaryWidgetLayout->addStretch();
       tabWidget->addTab(summaryWidget, tr("Results"));
     }
@@ -362,12 +361,9 @@ void FunctionalChaosResultWindow::addSobolTab(QTabWidget * tabWidget, const Vari
   if (!hasValidSobolResult_)
   {
     QString message{tr("The data distribution does not have an independent copula, be careful with your interpreation of the Sobol' indices")};
-    auto warningTextEdit = new QTextEdit();
-    warningTextEdit->setPlainText(message);
-    warningTextEdit->setReadOnly(true);
-    warningTextEdit->setStyleSheet("QTextEdit { color : orange; font-weight: bold; background-color: transparent; border: 1px solid orange; }");
-    warningTextEdit->setFixedHeight(45);
-    vbox->addWidget(warningTextEdit);
+    auto * warningWidget = new ErrorWidget;
+    warningWidget->setMessage(message, ErrorWidget::Warning);
+    vbox->addWidget(warningWidget);
   }
 
   sobolScrollArea->setWidget(widget);
@@ -436,8 +432,8 @@ void FunctionalChaosResultWindow::addErrorTab(QTabWidget * tabWidget) const
 {
   QWidget * indicesWidget = new QWidget;
   QVBoxLayout * indicesWidgetLayout = new QVBoxLayout(indicesWidget);
-  TemporaryLabel * errorLabel = new TemporaryLabel;
-  errorLabel->setErrorMessage(errorMessage_);
+  ErrorWidget * errorLabel = new ErrorWidget;
+  errorLabel->setFramelessErrorMessage(errorMessage_);
   indicesWidgetLayout->addWidget(errorLabel);
   indicesWidgetLayout->addStretch();
   tabWidget->addTab(indicesWidget, tr("Error"));

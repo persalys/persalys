@@ -36,7 +36,7 @@ namespace PERSALYS
 LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , limitState_(item->getLimitState())
-  , errorMessageLabel_(0)
+  , errorWidget_(0)
 {
   buildInterface();
 
@@ -93,8 +93,8 @@ void LimitStateWindow::buildInterface()
   connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
   gridLayout->addWidget(thresholdLineEdit_, row, 2);
 
-  errorMessageLabel_ = new TemporaryLabel;
-  gridLayout->addWidget(errorMessageLabel_, ++row, 0, 1, 3);
+  errorWidget_ = new ErrorWidget;
+  gridLayout->addWidget(errorWidget_, ++row, 0, 1, 3);
 
   gridLayout->setRowStretch(++row, 2);
 
@@ -109,7 +109,7 @@ void LimitStateWindow::buildInterface()
 
 void LimitStateWindow::updateOutputsList()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   SignalBlocker blocker(outputsComboBox_);
   outputsComboBox_->clear();
   QStringList items;
@@ -121,7 +121,7 @@ void LimitStateWindow::updateOutputsList()
 
   if (index == -1)
   {
-    errorMessageLabel_->setErrorMessage(tr("The output name is not valid."));
+    errorWidget_->setFramelessErrorMessage(tr("The output name is not valid."));
   }
   outputsComboBox_->setCurrentIndex(index);
 }
@@ -159,7 +159,7 @@ void LimitStateWindow::updateThresholdWidget()
 
 void LimitStateWindow::updateOutput(int index)
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   limitState_.blockNotification("LimitStateItem");
   limitState_.setOutputName(outputsComboBox_->itemText(index).toStdString());
   limitState_.blockNotification();
@@ -197,12 +197,12 @@ void LimitStateWindow::updateThreshold()
     limitState_.blockNotification("LimitStateItem");
     limitState_.setThreshold(thresholdLineEdit_->value());
     limitState_.blockNotification();
-    errorMessageLabel_->reset();
+    errorWidget_->reset();
   }
   catch (const std::exception & ex)
   {
     updateThresholdWidget();
-    errorMessageLabel_->setTemporaryErrorMessage(ex.what());
+    errorWidget_->setFramelessErrorMessage(ex.what());
   }
 }
 }

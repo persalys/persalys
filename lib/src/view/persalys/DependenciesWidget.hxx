@@ -25,7 +25,7 @@
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/VariablesSelectionTableModel.hxx"
 #include "persalys/DependenciesTableModel.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/Study.hxx"
 
 #include <QTableView>
@@ -58,12 +58,12 @@ private:
   bool failSoftMode_;
   Study study_;
   PhysicalModel physicalModel_;
-  VariablesSelectionTableModel * varTableModel_;
-  ResizableStackedWidget * rightSideOfSplitterStackedWidget_;
-  ResizableStackedWidget * copulaStackedWidget_;
-  QTableView * tableView_;
-  DependenciesTableModel * tableModel_;
-  TemporaryLabel * errorMessageLabel_;
+  VariablesSelectionTableModel * varTableModel_ = nullptr;
+  ResizableStackedWidget * rightSideOfSplitterStackedWidget_ = nullptr;
+  ResizableStackedWidget * copulaStackedWidget_ = nullptr;
+  QTableView * tableView_ = nullptr;
+  DependenciesTableModel * tableModel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

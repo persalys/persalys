@@ -24,7 +24,7 @@
 #include "persalys/Analysis.hxx"
 #include "persalys/StopCriteriaGroupBox.hxx"
 #include "persalys/BlockSizeGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 
@@ -50,12 +50,12 @@ protected slots:
   void updateLevelCISpinbox();
 
 private:
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  QCheckBox * confidenceIntervalCheckBox_;
-  DoubleSpinBox * levelConfidenceIntervalSpinbox_;
-  QSpinBox * seedSpinbox_;
-  TemporaryLabel * errorMessageLabel_;
+  StopCriteriaGroupBox  * stopCriteriaGroupBox_           = nullptr;
+  BlockSizeGroupBox     * blockSizeGroupBox_              = nullptr;
+  QCheckBox             * confidenceIntervalCheckBox_     = nullptr;
+  DoubleSpinBox         * levelConfidenceIntervalSpinbox_ = nullptr;
+  QSpinBox              * seedSpinbox_                    = nullptr;
+  ErrorWidget           * errorWidget_              = nullptr;
 };
 }
 #endif

@@ -24,7 +24,6 @@
 
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/ConstraintsTableModel.hxx"
-#include "persalys/TemporaryLabel.hxx"
 
 #include <QWizardPage>
 #include <QTableView>
@@ -39,7 +38,7 @@ class PERSALYS_VIEW_API ConstraintsPage: public QWizardPage
   friend class TestOptimizationWizard;
 
 public:
-  ConstraintsPage(QWidget* parent = 0);
+  explicit ConstraintsPage(QWidget* parent = nullptr);
   bool validatePage() override;
   void resizeEvent(QResizeEvent *event) override;
   ConstraintsTableModel* getTableModel() const
@@ -60,7 +59,6 @@ private:
   void updateView();
   ConstraintsTableModel* cstrTableModel_;
   QTableView * cstrTableView_;
-  TemporaryLabel* errorMessageLabel_;
 };
 
 

@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QLabel>
 
 using namespace OT;
 

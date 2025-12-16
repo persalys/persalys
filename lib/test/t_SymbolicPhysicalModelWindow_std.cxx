@@ -6,6 +6,7 @@
 #include "persalys/GradientTableModel.hxx"
 #include "persalys/PhysicalModelDefinitionItem.hxx"
 #include "persalys/CheckModelButtonGroup.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -32,7 +33,7 @@ private slots:
     // get widgets
     PhysicalModelWindowWidget * mainWidget = window.findChild<PhysicalModelWindowWidget*>();
     QList<CopyableTableView*> listTables = mainWidget->findChildren<CopyableTableView*>();
-    TemporaryLabel * errorLabel = window.findChild<CheckModelButtonGroup*>()->findChild<TemporaryLabel*>();
+    ErrorWidget * errorLabel = window.findChild<CheckModelButtonGroup*>()->findChild<ErrorWidget*>();
     QList<QPushButton*> pushButtons = window.findChildren<QPushButton*>();
     CopyableTableView * inTable = 0;
     CopyableTableView * outTable = 0;
@@ -157,13 +158,13 @@ private slots:
     QVERIFY2(gradTable->model()->data(gradTable->model()->index(1, 0)).toString() == "?", "wrong gradient value");
     QVERIFY2(gradTable->model()->data(gradTable->model()->index(1, 1)).toString() == "?", "wrong gradient value");
 
-    QVERIFY2(errorLabel->text().isEmpty() == false, "label not empty");
+    QVERIFY2(errorLabel->toPlainText().isEmpty() == false, "label not empty");
 
     // uncheck Y1 + evaluate
     outTable->model()->setData(outTable->model()->index(1, 0), Qt::Unchecked, Qt::CheckStateRole);
     evaluateButton->click();
     evaluateGradButton->click();
-    QVERIFY2(errorLabel->text().isEmpty() == true, "label must be empty");
+    QVERIFY2(errorLabel->toPlainText().isEmpty() == true, "label must be empty");
 
     // change finite difference step
     diffTable->model()->setData(diffTable->model()->index(0, 1), 1e-3);

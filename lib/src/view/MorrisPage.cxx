@@ -60,8 +60,8 @@ void MorrisPage::buildInterface()
   pageLayout->addWidget(groupBox);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
 }
 
 
@@ -74,7 +74,7 @@ void MorrisPage::initialize(const Analysis& analysis)
 
   // table
   tableModel_ = new MorrisTableModel(*analysis_ptr, tableView_);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
   // SpinBoxDelegate for editable the cells
@@ -114,7 +114,7 @@ bool MorrisPage::validatePage()
   // check bounds
   if (tableModel_->getAnalysis().getBounds().isEmpty())
   {
-    errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
+    errorWidget_->setFramelessErrorMessage(tr("The lower bounds must be less than the upper bounds"));
     return false;
   }
   // check number of variables which vary
@@ -128,7 +128,7 @@ bool MorrisPage::validatePage()
   }
   if (counter < 2)
   {
-    errorMessageLabel_->setErrorMessage(tr("At least two variables must vary."));
+    errorWidget_->setFramelessErrorMessage(tr("At least two variables must vary."));
     return false;
   }
 

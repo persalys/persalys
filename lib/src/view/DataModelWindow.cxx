@@ -111,8 +111,8 @@ void DataModelWindow::buildInterface()
   mainGridLayout->addLayout(hboxLayout, ++row, 0);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainGridLayout->addWidget(errorMessageLabel_, ++row, 0);
+  errorWidget_ = new ErrorWidget;
+  mainGridLayout->addWidget(errorWidget_, ++row, 0);
 
   // variables table
   QGroupBox * groupBox = new QGroupBox(tr("Variables"));
@@ -241,8 +241,8 @@ void DataModelWindow::buildInterface()
     updateTableView();
   });
   connect(tableModel_, SIGNAL(sampleDescriptionChanged(OT::Description)), dataTableModel, SLOT(updateHeaderData(OT::Description)));
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
-  connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setFramelessErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
 
   connect(tableView_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeDataTableColumn(int, int, int)));
   connect(tableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), dataTableView2_->horizontalScrollBar(), SLOT(setValue(int)));
@@ -268,10 +268,10 @@ void DataModelWindow::buildInterface()
 
 void DataModelWindow::launchCleaningWizard()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   if(!dataModel_->getSample().getSize())
   {
-    errorMessageLabel_->setText(tr("Sample must not be empty"));
+    errorWidget_->setFramelessErrorMessage(tr("Sample must not be empty"));
     return;
   }
   DataCleaning* cleaner = new DataCleaning(dataModel_->getSample());
@@ -320,7 +320,7 @@ void DataModelWindow::resizeVariablesTableColumn(int column, int /*oldWidth*/, i
 void DataModelWindow::updateTable(const QString& fileName)
 {
   // re-initialization
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
 
   // try to retrieve data from the selected file
   try
@@ -367,7 +367,7 @@ void DataModelWindow::openFileRequested()
 
 void DataModelWindow::refreshTable()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   if (!filePathLineEdit_->text().isEmpty())
   {
     updateTable(filePathLineEdit_->text());

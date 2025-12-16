@@ -75,10 +75,10 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, Q
   connect(buttons, SIGNAL(evaluateOutputsRequested()), tablesWidget, SIGNAL(evaluateOutputsRequested()));
   connect(buttons, SIGNAL(evaluateGradientRequested()), tablesWidget, SIGNAL(evaluateGradientRequested()));
 
-  connect(codeModel, SIGNAL(variablesChanged()), buttons->getErrorMessageLabel(), SLOT(reset()));
-  connect(codeModel, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
-  connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
-  connect(tablesWidget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageLabel(), SLOT(reset()));
+  connect(codeModel, SIGNAL(variablesChanged()), buttons->getErrorMessageWidget(), SLOT(reset()));
+  connect(codeModel, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageWidget(), SLOT(setFramelessErrorMessage(QString)));
+  connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageWidget(), SLOT(setFramelessErrorMessage(QString)));
+  connect(tablesWidget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageWidget(), SLOT(reset()));
   widgetLayout->addWidget(buttons);
 
 }

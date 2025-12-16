@@ -26,7 +26,7 @@
 #include "persalys/InputTableProbabilisticModel.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
 #include "persalys/ValueLineEdit.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/Study.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 
@@ -37,6 +37,7 @@
 #include <QCheckBox>
 #include <QStackedWidget>
 #include <QToolButton>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -92,7 +93,7 @@ private:
   QCheckBox                     * upperBoundCheckBox_               = nullptr;
   ValueLineEdit                 * lowerBoundLineEdit_               = nullptr;
   ValueLineEdit                 * upperBoundLineEdit_               = nullptr;
-  TemporaryLabel                * errorMessageLabel_                = nullptr;
+  ErrorWidget                   * errorWidget_                = nullptr;
 };
 }
 #endif

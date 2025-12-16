@@ -155,17 +155,17 @@ void DataFieldModelWindow::buildInterface()
   connect(dataTableView_, SIGNAL(cleanRequested()), this, SLOT(launchCleaningWizard()));
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainGridLayout->addWidget(errorMessageLabel_, ++row, 0, 1, 3);
+  errorWidget_ = new ErrorWidget;
+  mainGridLayout->addWidget(errorWidget_, ++row, 0, 1, 3);
 
 }
 
 void DataFieldModelWindow::launchCleaningWizard()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   if(!tableModel_->getSample().getSize())
   {
-    errorMessageLabel_->setText(tr("Sample must not be empty"));
+    errorWidget_->setFramelessErrorMessage(tr("Sample must not be empty"));
     return;
   }
   DataCleaning* cleaner = new DataCleaning(tableModel_->getSample());
@@ -205,7 +205,7 @@ void DataFieldModelWindow::setTable(const QString& fileName)
   }
   catch (const InvalidArgumentException &e)
   {
-    errorMessageLabel_->setErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
+    errorWidget_->setFramelessErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
   }
 
   updateProcessSample();
@@ -214,7 +214,7 @@ void DataFieldModelWindow::setTable(const QString& fileName)
 
 void DataFieldModelWindow::updateProcessSample()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
 
   // The process sample must not be empty
   if (tableModel_->getSample().getSize())
@@ -233,12 +233,12 @@ void DataFieldModelWindow::updateProcessSample()
       }
       catch (const InvalidArgumentException &e)
       {
-        errorMessageLabel_->setErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
+        errorWidget_->setFramelessErrorMessage(TranslationManager::GetTranslatedErrorMessage(e.what()));
       }
     }
   }
-  if (!dataModel_.isValid() && errorMessageLabel_->text().isEmpty())
-    errorMessageLabel_->setErrorMessage(tr("The model is not valid. Check data and/or mesh numerical validity."));
+  if (!dataModel_.isValid() && errorWidget_->toPlainText().isEmpty())
+    errorWidget_->setFramelessErrorMessage(tr("The model is not valid. Check data and/or mesh numerical validity."));
 }
 
 void DataFieldModelWindow::openFileRequested()

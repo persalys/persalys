@@ -25,7 +25,7 @@
 #include "persalys/CopulaInferenceAnalysis.hxx"
 #include "persalys/VariablesSelectionTableModel.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QTableView>
 
@@ -54,11 +54,11 @@ signals:
 
 private:
   std::map<OT::Description, CopulaInferenceAnalysis::DistributionFactoryCollection> distForVars_;
-  VariablesSelectionTableModel * varTableModel_;
-  QTableView * tableView_;
-  QStandardItemModel * tableModel_;
-  ResizableStackedWidget * stackedWidget_;
-  TemporaryLabel * errorMessageLabel_;
+  VariablesSelectionTableModel * varTableModel_ = nullptr;
+  QTableView * tableView_ = nullptr;
+  QStandardItemModel * tableModel_ = nullptr;
+  ResizableStackedWidget * stackedWidget_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

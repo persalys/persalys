@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QToolButton>
 #include <QHeaderView>
+#include <QLabel>
 
 using namespace OT;
 
@@ -167,9 +168,9 @@ void CopulaInferenceWizard::buildInterface()
   pageLayout->addLayout(hSplitter);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_);
-  connect(varTableModel_, SIGNAL(selectionChanged(OT::Description, OT::String)), errorMessageLabel_, SLOT(reset()));
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_);
+  connect(varTableModel_, SIGNAL(selectionChanged(OT::Description, OT::String)), errorWidget_, SLOT(reset()));
 
   tableView_->selectRow(0);
 
@@ -186,7 +187,7 @@ void CopulaInferenceWizard::selectedItemChanged(const QModelIndex &current, cons
 
 void CopulaInferenceWizard::updateDistForVars(const Description& vars, const QStringList& dist)
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   CopulaInferenceAnalysis::DistributionFactoryCollection factories;
   for (int i = 0; i < dist.size(); ++i)
   {
@@ -218,7 +219,7 @@ void CopulaInferenceWizard::removeGroup()
 
 void CopulaInferenceWizard::defineGroup()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   Description selectedVars(varTableModel_->getSelectedVariables());
 
   // check if at least two variables
@@ -241,7 +242,7 @@ void CopulaInferenceWizard::defineGroup()
   }
   if (!errorMessage.isEmpty())
   {
-    errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
+    errorWidget_->setTemporaryFramelessErrorMessage(errorMessage);
     return;
   }
 
@@ -285,7 +286,7 @@ bool CopulaInferenceWizard::validateCurrentPage()
   if (!tableModel_->rowCount())
   {
     const QString errorMessage = tr("Define at least one group of variables associated with a list of copulas");
-    errorMessageLabel_->setErrorMessage(errorMessage);
+    errorWidget_->setFramelessErrorMessage(errorMessage);
     return false;
   }
   // check there are at least a copula to test for each group of variables
@@ -295,7 +296,7 @@ bool CopulaInferenceWizard::validateCurrentPage()
     if (!it->second.getSize())
     {
       const QString errorMessage = tr("At least one copula must be tested for the selected group of variables '%1'").arg(it->first.__str__().c_str());
-      errorMessageLabel_->setErrorMessage(errorMessage);
+      errorWidget_->setFramelessErrorMessage(errorMessage);
       return false;
     }
   }

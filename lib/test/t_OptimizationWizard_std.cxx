@@ -1,6 +1,7 @@
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/OptimizationWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -39,7 +40,7 @@ private:
   SymbolicPhysicalModel model;
 
 private slots:
-  void TestOutputsSelection()
+  void TestOutputsSelection() const
   {
     // create the analysis
     OptimizationAnalysis analysis("analysis", model);
@@ -49,31 +50,29 @@ private slots:
     wizard.show();
 
     // checks
-    OptimizationBoundsPage * boundsPage = wizard.boundsPage_;
+    const OptimizationBoundsPage * boundsPage = wizard.boundsPage_;
     wizard.next();
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     // second page
-    ConstraintsPage * cstrPage = wizard.cstrPage_;
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
     wizard.next();
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(cstrPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
 
     // third page
-    OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.algoPage_->findChild<OutputsSelectionGroupBox*>();
-    TemporaryLabel * errorMessageLabel = wizard.algoPage_->findChild<TemporaryLabel*>();
+    const OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.algoPage_->findChild<OutputsSelectionGroupBox*>();
+    const ErrorWidget * errorMessageLabel = wizard.algoPage_->findChild<ErrorWidget*>();
     TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
-    ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
+    const ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
 
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QTest::mouseClick(comboBox, Qt::LeftButton); // open listwidget
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // select all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     wizard.next();
     QVERIFY2(wizard.currentId() == 2, "Current page ID must be 2"); // can not go to next page
@@ -81,15 +80,15 @@ private slots:
     QRect rect = listWidget->visualItemRect(listWidget->item(0));
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // deselect all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     rect = listWidget->visualItemRect(listWidget->item(1));
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton, Qt::NoModifier, rect.center()); // check row 1
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
   }
 
-  void TestOptimTable()
+  void TestOptimTable() const
   {
     // create the analysis
     OptimizationAnalysis analysis("analysis", model);
@@ -123,18 +122,18 @@ private slots:
     // change value
     tableModel->setData(tableModel->index(1, 3), 10400, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
     tableModel->setData(tableModel->index(1, 3), 10200, Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     // change lower bound
     tableModel->setData(tableModel->index(1, 4), 10400, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
     tableModel->setData(tableModel->index(1, 4), initBounds.getLowerBound()[0], Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     // change variable check state
     wizard.boundsPage_->tableModel_->setData(tableModel->index(3, 0), Qt::Checked, Qt::CheckStateRole);
@@ -142,11 +141,11 @@ private slots:
 
     wizard.boundsPage_->tableModel_->setData(tableModel->index(0, 0), Qt::Unchecked, Qt::CheckStateRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 0), Qt::Checked, Qt::CheckStateRole);
     wizard.boundsPage_->tableModel_->setData(tableModel->index(2, 0), Qt::Checked, Qt::CheckStateRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     // change bounds check state
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 4), Qt::Unchecked, Qt::CheckStateRole);
@@ -159,7 +158,7 @@ private slots:
 
     QVERIFY2(wizard.boundsPage_->validatePage(), "Page must be valid");
 
-    ConstraintsPage * cstrPage = wizard.cstrPage_;
+    const ConstraintsPage * cstrPage = wizard.cstrPage_;
     ConstraintsTableModel * cstrTableModel = cstrPage->getTableModel();
 
     QVERIFY2(cstrTableModel->rowCount() == 0, "Table must be empty");
@@ -178,7 +177,7 @@ private slots:
 
   }
 
-  void TestOptimisation()
+  void TestOptimisation() const
   {
     // create the analysis
     OptimizationAnalysis analysis("analysis", model);

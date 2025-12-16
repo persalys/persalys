@@ -2,6 +2,7 @@
 #include "persalys/SRCAnalysis.hxx"
 #include "persalys/SensitivityAnalysisWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -49,24 +50,24 @@ private slots:
 
     // - first page
     OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.introPage_->findChild<OutputsSelectionGroupBox*>();
-    TemporaryLabel * errorMessageLabel = wizard.introPage_->findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.introPage_->findChild<ErrorWidget*>();
     TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
     ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
 
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QTest::mouseClick(comboBox, Qt::LeftButton); // open listwidget
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // deselect all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     wizard.next();
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0"); // can not go to next page
 
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // select all
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
   }
 
 
@@ -87,10 +88,10 @@ private slots:
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
     // - second page
     wizard.next();
-    TemporaryLabel * errorMessageLabel = wizard.sobolPage_->findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.sobolPage_->findChild<ErrorWidget*>();
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 

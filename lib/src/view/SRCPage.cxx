@@ -34,10 +34,6 @@ namespace PERSALYS
 
 SRCPage::SRCPage(QWidget* parent)
   : QWizardPage(parent)
-  , sampleSizeSpinbox_(0)
-  , blockSizeSpinbox_(0)
-  , seedSpinbox_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -93,11 +89,11 @@ void SRCPage::buildInterface()
   pageLayout->addStretch();
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(sampleSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(reset()));
-  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), errorMessageLabel_, SLOT(reset()));
+  errorWidget_ = new ErrorWidget;
+  connect(sampleSizeSpinbox_, SIGNAL(valueChanged(double)), errorWidget_, SLOT(reset()));
+  connect(blockSizeSpinbox_, SIGNAL(valueChanged(double)), errorWidget_, SLOT(reset()));
 
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_);
 
   initialize(SRCAnalysis());
 }
@@ -137,7 +133,7 @@ bool SRCPage::validatePage()
 {
   if (sampleSizeSpinbox_->value() < blockSizeSpinbox_->value())
   {
-    errorMessageLabel_->setErrorMessage(tr("The sample size cannot be less than the block size"));
+    errorWidget_->setFramelessErrorMessage(tr("The sample size cannot be less than the block size"));
     return false;
   }
   return true;

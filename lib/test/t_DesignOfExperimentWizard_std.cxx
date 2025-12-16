@@ -4,6 +4,7 @@
 #include "persalys/DesignOfExperimentWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
 #include "persalys/SampleTableModel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -53,18 +54,18 @@ private slots:
     // checks
 
     // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    const QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     QVERIFY2(buttonGroup->checkedId() == DesignOfExperimentIntroPage::Deterministic, "Checked button must be Deterministic");
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
 
     // - second page
     wizard.next();
-    TemporaryLabel * errorMessageLabel = wizard.gridPage_->findChild<TemporaryLabel*>();
+    const ErrorWidget * errorMessageLabel = wizard.gridPage_->findChild<ErrorWidget*>();
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
-    ExperimentTableModel * doeModel = wizard.gridPage_->findChild<ExperimentTableModel*>();
+    const ExperimentTableModel * doeModel = wizard.gridPage_->findChild<ExperimentTableModel*>();
     QVERIFY2(doeModel->data(doeModel->index(0, 0), Qt::CheckStateRole).toInt() == Qt::Unchecked, "Header must be unchecked");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
@@ -83,14 +84,14 @@ private slots:
     designPage->initialize(doe);
 
     ExperimentTableModel * doeModel = designPage->findChild<ExperimentTableModel*>();
-    QLabel * label = designPage->findChild<QLabel*>("DOETimeLabel");
+    const QLabel * label = designPage->findChild<QLabel*>("DOETimeLabel");
     QVERIFY2(label->text() == "1", "wrong DOE time label");
     // change doe size
     doeModel->setData(doeModel->index(0, 0), 1, Qt::CheckStateRole);//check first var
     QVERIFY2(label->text() == "8", "wrong DOE time label");
   }
 
-  void TestGridDefinitionTable()
+  void TestGridDefinitionTable() const
   {
     // create the analysis
     const Interval bounds(GridDesignOfExperiment::GetDefaultBounds(model_));
@@ -112,15 +113,14 @@ private slots:
     wizard.show();
 
     ExperimentTableModel * doeModel = wizard.gridPage_->findChild<ExperimentTableModel*>();
-    TemporaryLabel * errorMessageLabel = wizard.gridPage_->findChild<TemporaryLabel*>();
-    QLabel * label = wizard.gridPage_->findChild<QLabel*>("DOESizeLabel");
+    const ErrorWidget * errorMessageLabel = wizard.gridPage_->findChild<ErrorWidget*>();
+    const QLabel * label = wizard.gridPage_->findChild<QLabel*>("DOESizeLabel");
 
     // checks second page
-
     wizard.next();
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
     QVERIFY2(label->text() == "6", "wrong DOE size Label");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
@@ -180,7 +180,7 @@ private slots:
     // change Delta
     doeModel->setData(doeModel->index(1, 6), delta * 2, Qt::EditRole);
     QVERIFY2(doeModel->data(doeModel->index(1, 6)) == QString::number(delta, 'g', 12), "wrong delta");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
     QVERIFY2(label->text() == "12", "wrong DOE size Label");
 
     doeModel->setData(doeModel->index(1, 6), delta * 0.5, Qt::EditRole);
@@ -218,7 +218,7 @@ private slots:
   }
 
 
-  void TestProbabilistic()
+  void TestProbabilistic() const
   {
     // create the analysis
     ProbabilisticDesignOfExperiment doe("analysis", model_);
@@ -246,7 +246,7 @@ private slots:
   }
 
 
-  void TestImportEmpty()
+  void TestImportEmpty() const
   {
     // create the analysis
     ImportedDesignOfExperiment doe("analysis", model_);
@@ -258,16 +258,16 @@ private slots:
     // checks
 
     // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    const QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     QVERIFY2(buttonGroup->checkedId() == DesignOfExperimentIntroPage::Import, "Checked button must be Import");
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
 
     // - second page
     wizard.next();
-    TemporaryLabel * errorMessageLabel = wizard.importPage_->findChild<TemporaryLabel*>();
+    const ErrorWidget * errorMessageLabel = wizard.importPage_->findChild<ErrorWidget*>();
     QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
     bool analysisEquality = wizard.getAnalysis().getParameters() == doe.getParameters();
@@ -275,7 +275,7 @@ private slots:
   }
 
 
-  void TestImport()
+  void TestImport() const
   {
     // create the analysis
     const String filename = "normal.csv";
@@ -293,17 +293,17 @@ private slots:
     // checks
 
     // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    const QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     QVERIFY2(buttonGroup->checkedId() == DesignOfExperimentIntroPage::Import, "Checked button must be Import");
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
 
     // - second page
     wizard.next();
-    QLineEdit * fileLineEdit = wizard.importPage_->findChild<QLineEdit*>();
-    TemporaryLabel * errorMessageLabel = wizard.importPage_->findChild<TemporaryLabel*>();
+    const QLineEdit * fileLineEdit = wizard.importPage_->findChild<QLineEdit*>();
+    const ErrorWidget * errorMessageLabel = wizard.importPage_->findChild<ErrorWidget*>();
     QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
     QVERIFY2(fileLineEdit->text() == filename.c_str(), "wrong filename");
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
@@ -320,19 +320,19 @@ private slots:
 
     model->setHeaderData(0, Qt::Horizontal, "E", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     model->setHeaderData(0, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     model->setHeaderData(1, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     model->setHeaderData(1, Qt::Horizontal, "E", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     bool analysisEquality = wizard.getAnalysis().getParameters() == doe.getParameters();
     QVERIFY2(analysisEquality, "The two ImportedDesignOfExperiment must be equal");
@@ -341,7 +341,7 @@ private slots:
   }
 
 
-  void TestAnalysisModification()
+  void TestAnalysisModification() const
   {
     // create the analysis
     GridDesignOfExperiment doe("analysis", model_);
@@ -353,7 +353,7 @@ private slots:
     // checks
 
     // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    const QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     buttonGroup->button(DesignOfExperimentIntroPage::Probabilistic)->click();
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
     bool analysisEquality = wizard.getAnalysis().getParameters() == ProbabilisticDesignOfExperiment("analysis", model_).getParameters();

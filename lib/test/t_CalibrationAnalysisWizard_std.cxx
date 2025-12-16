@@ -113,7 +113,7 @@ private slots:
     // checks
 
     // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    const QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
     QVERIFY2(buttonGroup->checkedId() == CalibrationIntroPage::LinearLeastSquares, "Checked button must be LinearLeastSquares");
     bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two CalibrationAnalysis must be equal");
@@ -181,7 +181,7 @@ private slots:
 
     // checks
     QComboBox * comboBox = wizard.introPage_->findChild<QComboBox*>();
-    QLabel * label = wizard.introPage_->findChild<QLabel*>();
+    const QLabel * label = wizard.introPage_->findChild<QLabel*>();
     QVERIFY2(comboBox->count() == 2, "The combobox must have two items");
     QVERIFY2(label->text() == text1, "Wrong observations label");
     QVERIFY2(wizard.introPage_->getObservations().getName() == "obs1", "The observations must be named : obs1");
@@ -213,11 +213,11 @@ private slots:
     wizard.next();
 
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.refPointPage_->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(wizard.refPointPage_->errorMessageWidget_->toPlainText().isEmpty(), "Label must be empty");
 
     QTest::mousePress(headerView->viewport(), Qt::LeftButton, Qt::NoModifier, headerView->viewport()->rect().bottomLeft() + QPoint(5, 2));
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!wizard.refPointPage_->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!wizard.refPointPage_->errorMessageWidget_->toPlainText().isEmpty(), "Label must be not empty");
     QVERIFY2(QtOT::DescriptionToStringList(wizard.refPointPage_->getFixedValues().getDescription()).join(",").toStdString() == "R,C,gam", "wrong fixed input names");
     QVERIFY2(wizard.priorDistPage_->getDistribution() == Distribution(), "wrong calibrated input number");
 

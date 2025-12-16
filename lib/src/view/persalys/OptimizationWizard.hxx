@@ -29,6 +29,7 @@
 #include "persalys/OptimizationAlgoPage.hxx"
 #include "persalys/ConstraintsPage.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QGridLayout>
 #include <QHeaderView>
@@ -61,7 +62,7 @@ protected slots:
 private:
   ResizableHeaderlessTableView * tableView_ = nullptr;
   OptimizationTableModel * tableModel_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 
 };
 

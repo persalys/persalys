@@ -40,7 +40,7 @@ public:
                             const OT::Sample& sample,
                             const OT::ProcessSample & kendallPlotData,
                             const bool displaySetting = true,
-                            QWidget* parent = 0);
+                            QWidget* parent = nullptr);
 
 protected:
   void buildInterface();
@@ -54,7 +54,6 @@ private:
   OT::Sample sample_;
   OT::ProcessSample kendallPlotData_;
   bool displaySetting_;
-  QLabel * analysisErrorMessageLabel_;
 };
 }
 #endif

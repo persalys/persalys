@@ -27,7 +27,7 @@
 #include "persalys/ListWidgetWithCheckBox.hxx"
 #include "persalys/FMUInfo.hxx"
 #include "persalys/FMIPhysicalModel.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QLineEdit>
 #include <QCheckBox>
@@ -48,7 +48,7 @@ class PERSALYS_VIEW_API DataTableModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  DataTableModel(const PhysicalModel & physicalModel, QObject *parent = nullptr);
+  explicit DataTableModel(const PhysicalModel & physicalModel, QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;
@@ -93,7 +93,7 @@ class PERSALYS_VIEW_API EnumDelegate : public QItemDelegate
 {
   Q_OBJECT
 public:
-  EnumDelegate(QStringList & enumLabels, QObject *parent = nullptr)
+  explicit EnumDelegate(QStringList & enumLabels, QObject *parent = nullptr)
     : QItemDelegate(parent)
     , enumLabels_(enumLabels)
   {
@@ -118,7 +118,7 @@ public:
 
   void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override
   {
-    QComboBox * comboBox = static_cast<QComboBox*>(editor);
+    const QComboBox * comboBox = static_cast<QComboBox*>(editor);
     model->setData(index, QString::number(comboBox->currentIndex()), Qt::EditRole);
   }
 
@@ -132,7 +132,7 @@ class DataFilterProxyModel : public QSortFilterProxyModel
   Q_OBJECT
 
 public:
-  DataFilterProxyModel(QObject *parent = nullptr);
+  explicit DataFilterProxyModel(QObject *parent = nullptr);
 
   void setVariabilityFilter(const QList<int> & variabilityFilter);
   void setCausalityFilter(const QList<int> & causalityFilter);
@@ -180,7 +180,7 @@ class TreeModel : public QAbstractItemModel
 
 public:
   explicit TreeModel(const QString &data, QObject *parent = nullptr);
-  ~TreeModel();
+  ~TreeModel() override;
 
   QVariant data(const QModelIndex &index, int role) const override;
   Qt::ItemFlags flags(const QModelIndex &index) const override;
@@ -205,7 +205,7 @@ private:
 class DeselectableTreeView : public QTreeView
 {
 public:
-  DeselectableTreeView(QWidget *parent = nullptr)
+  explicit DeselectableTreeView(QWidget *parent = nullptr)
     : QTreeView(parent)
   {
     // style sheet
@@ -254,7 +254,7 @@ class PERSALYS_VIEW_API FMIPhysicalModelWindow : public SubWindow
   Q_OBJECT
 
 public :
-  FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
+  explicit FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget *parent = nullptr);
 
 public slots:
   void selectImportFileDialogRequested();
@@ -289,7 +289,7 @@ private:
   QTabWidget * tabWidget_ = nullptr;
 
   CopyableTableView * differentiationTableView_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

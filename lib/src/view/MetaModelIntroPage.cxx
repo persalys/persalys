@@ -83,11 +83,11 @@ MetaModelIntroPage::MetaModelIntroPage(QWidget* parent)
   pageLayout->addWidget(methodBox);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
+  errorWidget_ = new ErrorWidget;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
 
   pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_);
 }
 
 
@@ -199,7 +199,7 @@ bool MetaModelIntroPage::validatePage()
 {
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setErrorMessage(tr("At least one output must be selected"));
+    errorWidget_->setFramelessErrorMessage(tr("At least one output must be selected"));
     return false;
   }
   return QWizardPage::validatePage();

@@ -49,7 +49,7 @@ AnalysisWindow::AnalysisWindow(AnalysisItem* item, StudyManager *manager, QWidge
 
 void AnalysisWindow::setErrorMessage(QString message)
 {
-  messageLabel_->setErrorMessage(message);
+  messageWidget_->setMessage(message, ErrorWidget::Error, false, false);
 }
 
 
@@ -112,10 +112,11 @@ void AnalysisWindow::buildInterface()
   connect(analysisItem_, SIGNAL(progressValueChanged(int)), this, SLOT(updateProgressBar(int)));
 
   // information message
-  messageLabel_ = new TemporaryLabel;
-  messageLabel_->setTextFormat(Qt::PlainText);
-  mainLayout->addWidget(messageLabel_, 3, 0, 1, 3);
-  connect(analysisItem_, SIGNAL(messageChanged(QString)), messageLabel_, SLOT(setText(QString)));
+  messageWidget_ = new ErrorWidget;
+  mainLayout->addWidget(messageWidget_, 3, 0, 1, 3);
+  connect(analysisItem_, &AnalysisItem::messageChanged, messageWidget_, [this](const QString & msg){
+    messageWidget_->setMessage(msg, ErrorWidget::Information, false, false);
+  });
 
   mainLayout->setRowStretch(4, 1);
 
@@ -140,7 +141,7 @@ void AnalysisWindow::initializeWidgets()
     if (analysisItem_->getAnalysis().getErrorMessage() == "__DETACHED_EXCEPTION__")
     {
       message = tr("No results yet, analysis has been detached. Click Run to reattach.");
-      messageLabel_->setMessage(message);
+      messageWidget_->setMessage(message, ErrorWidget::Information, false, false);
     }
     else
     {
@@ -150,7 +151,7 @@ void AnalysisWindow::initializeWidgets()
       // messages
       message = tr("No results are available. An error has occurred during the execution of the analysis.") + "\n";
       message += analysisItem_->getAnalysis().getErrorMessage().c_str();
-      messageLabel_->setErrorMessage(message);
+      messageWidget_->setMessage(message, ErrorWidget::Error, false, false);
     }
   }
   else // if no error
@@ -162,7 +163,7 @@ void AnalysisWindow::initializeWidgets()
       progressBar_->setValue(0);
 
       // messages
-      messageLabel_->setMessage(tr("The analysis is ready to be launched.") + "\n");
+      messageWidget_->setMessage(tr("The analysis is ready to be launched."), ErrorWidget::Information, false, false);
     }
   }
 }
@@ -186,7 +187,7 @@ void AnalysisWindow::launchAnalysis()
   progressBar_->setRange(0, 0);
   progressBar_->setValue(10);
   // messages
-  messageLabel_->setMessage(tr("The analysis is running"));
+  messageWidget_->setMessage(tr("The analysis is running"), ErrorWidget::Information, false, false);
 
   // create controller
   Controller * controller = new Controller;
@@ -201,7 +202,7 @@ void AnalysisWindow::launchAnalysis()
 void AnalysisWindow::stopAnalysis()
 {
   // add a message in case the analysis take too much time to end
-  messageLabel_->setText(messageLabel_->text() + "\n" + tr("Stop in progress"));
+  messageWidget_->setMessage(messageWidget_->toPlainText() + "\n" + tr("Stop in progress"), ErrorWidget::Information, false, false);
 
   // disable stop buttons
   stopButton_->setEnabled(false);
@@ -217,7 +218,7 @@ void AnalysisWindow::detachAnalysis()
   if (analysisItem_->getAnalysis().canBeDetached())
   {
     // add a message in case the analysis take too much time to end
-    messageLabel_->setText(messageLabel_->text() + "\n" + tr("Detach in progress"));
+    messageWidget_->setMessage(messageWidget_->toPlainText() + "\n" + tr("Detach in progress"), ErrorWidget::Information, false, false);
 
     // disable stop buttons
     stopButton_->setEnabled(false);

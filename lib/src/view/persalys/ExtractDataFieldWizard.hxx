@@ -24,7 +24,7 @@
 #include "persalys/FieldMonteCarloAnalysis.hxx"
 #include "persalys/Analysis.hxx"
 #include "persalys/DataModel.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QDialog>
 
@@ -46,9 +46,9 @@ public slots:
   void updateSelectedNodes(const QList<int>& nodes);
 
 private:
-  FieldMonteCarloAnalysis * analysis_;
+  FieldMonteCarloAnalysis * analysis_ = nullptr;
   QList<int> nodes_;
-  TemporaryLabel * errorMessageLabel_;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

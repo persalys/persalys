@@ -83,8 +83,8 @@ void GridDesignPage::buildInterface()
   pageLayout->addWidget(groupBox);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
 }
 
 
@@ -108,7 +108,7 @@ void GridDesignPage::initialize(const Analysis& analysis)
 
   // fill table
   tableModel_ = new ExperimentTableModel(doe, this);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
   connect(tableModel_, SIGNAL(doeSizeChanged(QString)), DOESizeLabel_, SLOT(setText(QString)));
   tableView_->setModel(tableModel_);
   connect(tableModel_, &ExperimentTableModel::doeSizeChanged,
@@ -197,7 +197,7 @@ bool GridDesignPage::validatePage()
     Interval selectedInterval = tableModel_->getInterval().getMarginal(selectedIndices);
     if (!(selectedInterval.getVolume() > 0.0))
     {
-      errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds for selected variables"));
+      errorWidget_->setFramelessErrorMessage(tr("The lower bounds must be less than the upper bounds for selected variables"));
       return false;
     }
   }

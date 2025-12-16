@@ -22,13 +22,14 @@
 #define PERSALYS_IMPORTSAMPLEWIDGET_HXX
 
 #include "persalys/ExportableTableView.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/DataImport.hxx"
 
 #include <openturns/OTType.hxx>
 
 #include <QLineEdit>
 #include <QButtonGroup>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -68,7 +69,7 @@ private:
   QLineEdit           * filePathLineEdit_     = nullptr;
   ExportableTableView * dataPreviewTableView_ = nullptr;
   QLabel              * DOESizeLabel_         = nullptr;
-  TemporaryLabel      * errorMessageLabel_    = nullptr;
+  ErrorWidget         * errorWidget_    = nullptr;
   QButtonGroup        * orderButtonGroup_     = nullptr;
 };
 }

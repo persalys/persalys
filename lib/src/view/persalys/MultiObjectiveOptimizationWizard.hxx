@@ -27,6 +27,7 @@
 #include "persalys/MultiObjectiveOptimizationTableModel.hxx"
 #include "persalys/ObjectivesTableModel.hxx"
 #include "persalys/ValueLineEdit.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 namespace PERSALYS
 {
@@ -66,9 +67,9 @@ signals:
   void objectivesDefined();
 
 private:
-  QTableView * objTableView_;
-  ObjectivesTableModel * objTableModel_;
-  TemporaryLabel * errorMessageLabel_;
+  QTableView * objTableView_ = nullptr;
+  ObjectivesTableModel * objTableModel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 
 class PERSALYS_VIEW_API MultiObjectiveOptimizationBoundsPage : public QWizardPage
@@ -95,7 +96,7 @@ protected slots:
 private:
   ResizableHeaderlessTableView * tableView_ = nullptr;
   MultiObjectiveOptimizationTableModel * tableModel_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 
 };
 

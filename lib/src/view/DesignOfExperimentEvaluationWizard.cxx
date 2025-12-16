@@ -114,12 +114,12 @@ void DesignOfExperimentEvaluationWizard::buildInterface()
   pageLayout->addWidget(blockSizeGroupBox_);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
+  errorWidget_ = new ErrorWidget;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorWidget_, SLOT(reset()));
 
   pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_);
 
   addPage(page);
 }
@@ -180,7 +180,7 @@ bool DesignOfExperimentEvaluationWizard::validateCurrentPage()
   {
     message = tr("At least one output must be selected");
   }
-  errorMessageLabel_->setErrorMessage(message);
+  errorWidget_->setFramelessErrorMessage(message);
   if (!message.isEmpty())
     return false;
 

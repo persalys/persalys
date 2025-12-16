@@ -7,6 +7,7 @@
 #include "persalys/DesignOfExperimentInputWindow.hxx"
 #include "persalys/Actions.hxx"
 #include "persalys/ModelEvaluation.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include "openturns/OTtestcode.hxx"
 
@@ -282,11 +283,11 @@ private slots:
           else
           {
             QVERIFY(dynamic_cast<AnalysisWindow*>(window) != nullptr);
-            const auto * messageLabel = window->findChild<QLabel*>();
+            const auto * messageLabel = window->findChild<ErrorWidget*>();
             QVERIFY(messageLabel != nullptr);
             if (!theStudy.getAnalyses()[i].getErrorMessage().empty())
             {
-              QVERIFY(messageLabel->text().contains(theStudy.getAnalyses()[i].getErrorMessage().c_str()));
+              QVERIFY((messageLabel->toPlainText() + "\n").contains(theStudy.getAnalyses()[i].getErrorMessage().c_str()));
               ++oneEvalFailed;
             }
           }

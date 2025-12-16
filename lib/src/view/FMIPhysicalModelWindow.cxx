@@ -54,7 +54,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   : SubWindow(item, parent)
   , physicalModel_(item->getPhysicalModel())
   , variablesTableModel_(0)
-  , errorMessageLabel_(0)
+  , errorWidget_(0)
 {
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -220,8 +220,8 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   variablesLayout->addLayout(evaluationLayout);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  variablesLayout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  variablesLayout->addWidget(errorWidget_);
 
   tabWidget_->addTab(variablesWidget, tr("Variables"));
 
@@ -275,14 +275,14 @@ void FMIPhysicalModelWindow::evaluateOutputs()
 {
   if (!physicalModel_.getInputDimension())
   {
-    errorMessageLabel_->setErrorMessage(tr("No inputs"));
+    errorWidget_->setFramelessErrorMessage(tr("No inputs"));
     return;
   }
 
   // if no outputs do nothing
   if (!physicalModel_.getSelectedOutputsNames().getSize())
   {
-    errorMessageLabel_->setErrorMessage(tr("No outputs"));
+    errorWidget_->setFramelessErrorMessage(tr("No outputs"));
     return;
   }
 
@@ -303,13 +303,13 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   // check
   if (!eval.getErrorMessage().empty())
   {
-    errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
+    errorWidget_->setFramelessErrorMessage(eval.getErrorMessage().c_str());
     physicalModel_.setEvalTime(0);
     return;
   }
   if (!outputSample.getSize())
   {
-    errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
+    errorWidget_->setFramelessErrorMessage(tr("Not possible to evaluate the outputs"));
     physicalModel_.setEvalTime(0);
     return;
   }
@@ -319,7 +319,7 @@ void FMIPhysicalModelWindow::evaluateOutputs()
   {
     physicalModel_.setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
   }
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
 }
 
 
@@ -349,11 +349,11 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
       {
         fmiModel->setFMUType(FMUTypeCombobox_->currentText().toStdString());
         fmiModel->setFMUFileName(fileName.toUtf8().data());
-        errorMessageLabel_->reset();
+        errorWidget_->reset();
       }
       catch (const std::exception & ex)
       {
-        errorMessageLabel_->setErrorMessage(ex.what());
+        errorWidget_->setFramelessErrorMessage(ex.what());
       }
       loadModel(fmiModel->getFMUInfo());
       QApplication::restoreOverrideCursor();

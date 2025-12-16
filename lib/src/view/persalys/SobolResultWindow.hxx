@@ -31,14 +31,13 @@ class PERSALYS_VIEW_API SobolResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  SobolResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
+  explicit SobolResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
 
 private:
   SobolResult result_;
-  QString warningMessage_;
 };
 }
 #endif

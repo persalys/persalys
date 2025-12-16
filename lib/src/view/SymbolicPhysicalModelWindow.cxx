@@ -45,8 +45,8 @@ SymbolicPhysicalModelWindow::SymbolicPhysicalModelWindow(PhysicalModelItem * ite
   auto *buttons = new CheckModelButtonGroup(this, !item->getPhysicalModel().hasMesh());
   connect(buttons, SIGNAL(evaluateOutputsRequested()), widget, SIGNAL(evaluateOutputsRequested()));
   connect(buttons, SIGNAL(evaluateGradientRequested()), widget, SIGNAL(evaluateGradientRequested()));
-  connect(widget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageLabel(), SLOT(setErrorMessage(QString)));
-  connect(widget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageLabel(), SLOT(reset()));
+  connect(widget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageWidget(), SLOT(setFramelessErrorMessage(QString)));
+  connect(widget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageWidget(), SLOT(reset()));
   widgetLayout->addWidget(buttons);
 
 }

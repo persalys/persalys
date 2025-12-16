@@ -33,10 +33,6 @@ namespace PERSALYS
 
 CentralTendencyIntroPage::CentralTendencyIntroPage(QWidget* parent)
   : QWizardPage(parent)
-  , outputsSelectionGroupBox_(0)
-  , methodGroup_(0)
-  , errorMessageLabel_(0)
-  , interestVariables_()
 {
   setTitle(tr("Central tendency methods"));
 
@@ -67,11 +63,11 @@ CentralTendencyIntroPage::CentralTendencyIntroPage(QWidget* parent)
   pageLayout->addWidget(methodBox);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
+  errorMessageWidget_ = new ErrorWidget;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageWidget_, SLOT(reset()));
 
   pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorMessageWidget_);
 }
 
 
@@ -131,7 +127,7 @@ bool CentralTendencyIntroPage::validatePage()
 {
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setErrorMessage(tr("At least one output must be selected"));
+    errorMessageWidget_->setMessage(tr("At least one output must be selected"));
     return false;
   }
   return QWizardPage::validatePage();

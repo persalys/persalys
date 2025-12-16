@@ -28,7 +28,7 @@
 #include "persalys/CustomStandardItemModel.hxx"
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/SampleTableModel.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QTabWidget>
 #include <QStandardItem>
@@ -76,7 +76,7 @@ private:
   SampleTableModel        * nodesModel_         = nullptr;
   ExportableTableView     * nodesView_          = nullptr;
   QTabWidget              * tabWidget_          = nullptr;
-  TemporaryLabel          * errorMessageLabel_  = nullptr;
+  ErrorWidget             * errorWidget_  = nullptr;
 };
 }
 #endif

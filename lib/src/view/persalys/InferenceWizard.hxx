@@ -24,7 +24,7 @@
 #include "persalys/AnalysisWizard.hxx"
 #include "persalys/InferenceAnalysis.hxx"
 #include "persalys/VariablesSelectionTableModel.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/DoubleSpinBox.hxx"
 #include "persalys/LogSpinBox.hxx"
 #include "persalys/CopyableTableView.hxx"
@@ -76,7 +76,7 @@ private:
   DoubleSpinBox * lillieforsPrecisionSpinbox_ = nullptr;
   LogSpinBox * lillieforsMinimumSamplingSizeSpinbox_ = nullptr;
   LogSpinBox * lillieforsMaximumSamplingSizeSpinbox_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
   bool pageValidity_ = true;
   VariablesSelectionTableModel * varTableModel_ = nullptr;
 };

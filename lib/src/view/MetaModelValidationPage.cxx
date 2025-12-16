@@ -100,21 +100,15 @@ void MetaModelValidationPage::buildInterface()
   kFoldLayout->addWidget(seedKFoldSpinBox_);
   validationLayout->addLayout(kFoldLayout, ++row, 1, Qt::AlignLeft);
 
-  // LOO
-//   looCheckBox_ = new QCheckBox;
-//   validationLayout->addWidget(looCheckBox_, ++row, 0);
-//   validationLayout->addWidget(new QLabel(tr("By Leave-one-out method")), row, 1);
-
   validationLayout->setColumnStretch(2, 1);
 
-  pageLayout->addWidget(validationGroupBox);
+  pageLayout->addWidget(validationGroupBox, 8);
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
+  errorWidget_ = new ErrorWidget;
 
   pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_, 2);
 
   initialize(PolynomialRegressionAnalysis());
 }
@@ -146,7 +140,6 @@ void MetaModelValidationPage::initialize(const Analysis& analysis)
   analyticalCheckBox_->setChecked(analysis_ptr->analyticalValidation());
   testSampleCheckBox_->setChecked(analysis_ptr->testSampleValidation());
   kFoldCheckBox_->setChecked(analysis_ptr->kFoldValidation());
-//   looCheckBox_->setChecked(analysis_ptr->leaveOneOutValidation());
 
   percentageOfPointsSpinBox_->setValue(analysis_ptr->getTestSampleValidationPercentageOfPoints());
   percentageOfPointsSpinBox_->setEnabled(testSampleCheckBox_->isChecked());
@@ -167,7 +160,6 @@ void MetaModelValidationPage::updateMetamodelValidation(Analysis& analysis)
   analysis_ptr->setAnalyticalValidation(analyticalCheckBox_->isChecked());
   analysis_ptr->setTestSampleValidation(testSampleCheckBox_->isChecked());
   analysis_ptr->setKFoldValidation(kFoldCheckBox_->isChecked());
-//   analysis_ptr->setLeaveOneOutValidation(looCheckBox_->isChecked());
   analysis_ptr->setTestSampleValidationPercentageOfPoints(percentageOfPointsSpinBox_->value());
   analysis_ptr->setTestSampleValidationSeed(seedTestSampleSpinBox_->value());
   analysis_ptr->setKFoldValidationNumberOfFolds(nbFoldsSpinBox_->value());
@@ -177,13 +169,13 @@ void MetaModelValidationPage::updateMetamodelValidation(Analysis& analysis)
 
 bool MetaModelValidationPage::validatePage()
 {
-  errorMessageLabel_->setText("");
+  errorWidget_->reset();
 
   if (testSampleCheckBox_->isChecked() && inputSampleSize_ * percentageOfPointsSpinBox_->value() / 100 < 3)
   {
     const QString errorMessage = tr("Test sample validation: The test sample must contain at least three points. Here size * k / 100 = %1")
                                  .arg(percentageOfPointsSpinBox_->value());
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+    errorWidget_->setMessage(errorMessage);
     return false;
   }
 
@@ -191,7 +183,7 @@ bool MetaModelValidationPage::validatePage()
   {
     const QString errorMessage = tr("K-Fold validation: each fold must contain at least three points. Here size / k = %1")
                                  .arg(inputSampleSize_ / nbFoldsSpinBox_->value());
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(errorMessage));
+    errorWidget_->setMessage(errorMessage);
     return false;
   }
   return QWizardPage::validatePage();

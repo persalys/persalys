@@ -290,8 +290,8 @@ void MarginalsWidget::buildInterface()
   mainLayout->addWidget(hSplitter, 1);
 
   // QLabel for temporary error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainLayout->addWidget(errorMessageLabel_, 0);
+  errorWidget_ = new ErrorWidget;
+  mainLayout->addWidget(errorWidget_, 0);
 
   updateProbabilisticModel();
 }
@@ -558,7 +558,7 @@ void MarginalsWidget::updatePlots()
 
 void MarginalsWidget::distributionParametersChanged()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   const QModelIndex index = inputTableView_->currentIndex();
   const Input input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDist = input.getDistribution();
@@ -615,7 +615,7 @@ void MarginalsWidget::distributionParametersChanged()
       qDebug() << "MarginalsWidget::distributionParametersChanged invalid parameters:"
                << parameters.__str__().data() << " for distribution:" << distName.data();
       updateDistributionParametersWidgets(index);
-      errorMessageLabel_->setTemporaryErrorMessage(ex.what());
+      errorWidget_->setTemporaryFramelessErrorMessage(ex.what());
     }
   }
   else if (distName == "Histogram")
@@ -639,7 +639,7 @@ void MarginalsWidget::distributionParametersChanged()
       qDebug() << "MarginalsWidget::distributionParametersChanged invalid parameters:"
                << parameters.__str__().data() << " for distribution:" << distName.data();
       updateDistributionParametersWidgets(index);
-      errorMessageLabel_->setTemporaryErrorMessage(ex.what());
+      errorWidget_->setTemporaryFramelessErrorMessage(ex.what());
     }
     
   }
@@ -673,7 +673,7 @@ void MarginalsWidget::distributionParametersChanged()
       qDebug() << "MarginalsWidget::distributionParametersChanged invalid parameters:"
                << parameters.__str__().data() << " for distribution:" << distName.data();
       updateDistributionParametersWidgets(index);
-      errorMessageLabel_->setTemporaryErrorMessage(ex.what());
+      errorWidget_->setTemporaryFramelessErrorMessage(ex.what());
     }
   }
 }
@@ -690,7 +690,7 @@ void MarginalsWidget::typeDistributionParametersChanged(int comboIndex)
 
 void MarginalsWidget::truncationParametersChanged()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   const QModelIndex index = inputTableView_->currentIndex();
   const Input input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDist = input.getDistribution();
@@ -731,14 +731,14 @@ void MarginalsWidget::truncationParametersChanged()
     physicalModel_.blockNotification();
     qDebug() << "Error: MarginalsWidget::truncationParametersChanged\n";
     updateTruncationParametersWidgets(index);
-    errorMessageLabel_->setTemporaryErrorMessage(ex.what());
+    errorWidget_->setTemporaryFramelessErrorMessage(ex.what());
   }
 }
 
 
 void MarginalsWidget::truncationParametersStateChanged()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   const QModelIndex index = inputTableView_->currentIndex();
   const Input input(physicalModel_.getInputs()[index.row()]);
   Distribution inputDist = input.getDistribution();
@@ -845,7 +845,7 @@ void MarginalsWidget::truncationParametersStateChanged()
   {
     qDebug() << "Error: MarginalsWidget::truncationParametersStateChanged\n";
     updateTruncationParametersWidgets(index);
-    errorMessageLabel_->setTemporaryErrorMessage(ex.what());
+    errorWidget_->setTemporaryFramelessErrorMessage(ex.what());
   }
   physicalModel_.blockNotification();
 }
@@ -867,7 +867,7 @@ void MarginalsWidget::openWizardToChooseInferenceResult(const QModelIndex& input
   // error message if no inference analyses
   if (!studyHasInferenceResults)
   {
-    QMessageBox::critical(this, tr("Error"), tr("The current study has not inference analyses results."));
+    QMessageBox::critical(this, tr("Error"), tr("The current study has no inference analysis result."));
     return;
   }
   // open a wizard to choose a result
@@ -902,7 +902,7 @@ void MarginalsWidget::openWizardToChooseScreeningResult()
   // error message if no screening analyses
   if (!studyHasScreeningResults)
   {
-    QMessageBox::critical(this, tr("Error"), tr("The current study has not screening analyses results."));
+    QMessageBox::critical(this, tr("Error"), tr("The current study has no screening analysis result."));
     return;
   }
   // open a wizard to choose a result

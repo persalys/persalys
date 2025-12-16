@@ -22,12 +22,13 @@
 #define PERSALYS_MORRISPAGE_HXX
 
 #include "persalys/Analysis.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/UIntSpinBox.hxx"
 #include "persalys/MorrisTableModel.hxx"
 
 #include <QTableView>
 #include <QWizardPage>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -50,7 +51,7 @@ protected:
 private:
   QTableView * tableView_ = nullptr;
   MorrisTableModel * tableModel_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 
 class PERSALYS_VIEW_API MorrisSecondPage : public QWizardPage

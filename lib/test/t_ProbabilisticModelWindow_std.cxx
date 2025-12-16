@@ -3,6 +3,7 @@
 #include "persalys/MarginalsWidget.hxx"
 #include "persalys/StudyTreeViewModel.hxx"
 #include "persalys/CheckableHeaderView.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTDistribution.hxx>
 #include <openturns/OTtestcode.hxx>
@@ -59,10 +60,10 @@ private slots:
     // get widgets
     MarginalsWidget * mainWidget = window->findChild<MarginalsWidget*>();
     QTableView * table = mainWidget->findChild<QTableView*>();
-    TemporaryLabel * errorLabel = mainWidget->findChild<TemporaryLabel*>();
+    ErrorWidget * errorLabel = mainWidget->findChild<ErrorWidget*>();
 
     // check
-    QVERIFY2(errorLabel->text().isEmpty() == true, "Label must be empty");
+    QVERIFY2(errorLabel->toPlainText().isEmpty() == true, "Label must be empty");
     QVERIFY2(table->model()->rowCount() == (int)model->getInputDimension(), "wrong number of rows");
     for (int i = 0; i < table->model()->rowCount(); ++i)
     {
@@ -96,7 +97,7 @@ private slots:
     ValueLineEdit * lowerBoundEdit = mainWidget->findChild<ValueLineEdit*>("lowerBound");
     ValueLineEdit * upperBoundEdit = mainWidget->findChild<ValueLineEdit*>("upperBound");
     QComboBox * selectParamTypeCombo = mainWidget->findChild<QComboBox*>("paramTypeCombo");
-    TemporaryLabel * errorLabel = mainWidget->findChild<TemporaryLabel*>();
+    ErrorWidget * errorLabel = mainWidget->findChild<ErrorWidget*>();
 
     // check
 
@@ -167,14 +168,14 @@ private slots:
     paramValueEdit = mainWidget->findChild<ValueLineEdit*>("paramValueEdit_1");
     paramValueEdit->setValue(-2);
     QTest::keyClick(paramValueEdit, Qt::Key_Enter);
-    QVERIFY2(errorLabel->text().isEmpty() == false, "Label must be not empty");
+    QVERIFY2(errorLabel->toPlainText().isEmpty() == false, "Label must be not empty");
     OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::Gamma(100.0, 50.0), 1e-5, 1e-8, "wrong input distribution");
 
     // - right value
     paramValueEdit->setValue(52);
     QTest::keyClick(paramValueEdit, Qt::Key_Enter);
     OT::Test::assert_almost_equal(model->getInputs()[3].getDistribution(), OT::Gamma(100.0, 52.0), 1e-5, 1e-8, "wrong input distribution");
-    QVERIFY2(errorLabel->text().isEmpty() == true, "Label must be empty");
+    QVERIFY2(errorLabel->toPlainText().isEmpty() == true, "Label must be empty");
   }
 
 

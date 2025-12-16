@@ -34,26 +34,26 @@ private slots:
     QVERIFY2(!wizard.sampleWidget_->dataPreviewTableView_->isEnabled(), "Table view must be not enabled");
     QVERIFY2(static_cast<QWidget*>(wizard.tableModel_->parent())->isEnabled(), "Table view must be enabled");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(wizard.errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     bool analysisEquality = wizard.getMesh().getPythonScript() == meshModel.getPythonScript();
     QVERIFY2(analysisEquality, "The two GridMeshModel must be equal");
 
     wizard.tableModel_->setData(wizard.tableModel_->index(0, 2), 14., Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!wizard.errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!wizard.errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
 
     wizard.tableModel_->setData(wizard.tableModel_->index(0, 2), 0., Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(wizard.errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     wizard.tableModel_->setData(wizard.tableModel_->index(0, 4), 1, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!wizard.errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!wizard.errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
 
     wizard.tableModel_->setData(wizard.tableModel_->index(0, 4), 5, Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(wizard.errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(wizard.errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     analysisEquality = wizard.getMesh().getPythonScript() == meshModel.getPythonScript();
     QVERIFY2(analysisEquality, "The two GridMeshModel must be equal");
@@ -81,22 +81,22 @@ private slots:
     QVERIFY2(!static_cast<QWidget*>(wizard.tableModel_->parent())->isEnabled(), "Table view must be not enabled");
     QVERIFY2(sampleWidget->dataPreviewTableView_->isEnabled(), "Table view must be enabled");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(sampleWidget->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     OT::Sample(1, OT::Point(1, 2.5)).exportToCSVFile(file.fileName().toStdString());
     sampleWidget->setData(file.fileName());
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!sampleWidget->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
 
     OT::Sample(1, OT::Point(2, 2.5)).exportToCSVFile(file.fileName().toStdString());
     sampleWidget->setData(file.fileName());
     sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!sampleWidget->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
 
     sampleWidget->dataPreviewTableView_->model()->setHeaderData(0, Qt::Horizontal, "t", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(sampleWidget->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     bool analysisEquality = wizard.getMesh().getPythonScript() == meshModel.getPythonScript();
     QVERIFY2(analysisEquality, "The two ImportedMeshModel must be equal");
@@ -121,12 +121,12 @@ private slots:
     QVERIFY2(file.open(), "Can not open the file");
     sampleWidget->setData(file.fileName());
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!sampleWidget->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
 
     OT::Sample(2, OT::Point(1, 2.5)).exportToCSVFile(file.fileName().toStdString());
     sampleWidget->setData(file.fileName());
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(sampleWidget->errorMessageLabel_->text().isEmpty(), "Label must be empty");
+    QVERIFY2(sampleWidget->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
 
     bool analysisEquality = wizard.getMesh().getPythonScript() == ImportedMeshModel(file.fileName().toStdString()).getPythonScript();
     QVERIFY2(analysisEquality, "The two ImportedMeshModel must be equal");

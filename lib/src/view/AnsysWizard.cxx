@@ -41,7 +41,7 @@ AnsysWizard::AnsysWizard(QWidget * parent)
 
 void AnsysWizard::loadModel()
 {
-  varPage_->errorMessageLabel_->reset();
+  varPage_->errorMessageWidget_->reset();
   try {
     parser_ = new AnsysParser(varPage_->modelFileLineEdit_->text().toStdString());
     varPage_->varModel_->loadData(parser_);
@@ -67,7 +67,7 @@ void AnsysWizard::loadModel()
   }
   catch (const XMLParserException&)
   {
-    varPage_->errorMessageLabel_->setErrorMessage(tr("Error: could not parse XML file. Check that the file is a valid UTF-8 XML file."));
+    varPage_->errorMessageWidget_->setMessage(tr("Error: could not parse XML file. Check that the file is a valid UTF-8 XML file."));
   }
 }
 
@@ -160,10 +160,10 @@ AnsysWizardVariablePage::AnsysWizardVariablePage(QWidget * parent)
   gridLayout->setRowStretch(3, 2);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
+  errorMessageWidget_ = new ErrorWidget;
   connect(varModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-          errorMessageLabel_, SLOT(reset()));
-  gridLayout->addWidget(errorMessageLabel_, 4, 0, 1, 4);
+          errorMessageWidget_, SLOT(reset()));
+  gridLayout->addWidget(errorMessageWidget_, 4, 0, 1, 4);
   setLayout(gridLayout);
 }
 
@@ -204,18 +204,18 @@ bool AnsysWizardVariablePage::validatePage()
 {
   if(!QFile(executableLineEdit_->text()).exists())
   {
-    errorMessageLabel_->setErrorMessage(tr("Cannot find Ansys solver."));
+    errorMessageWidget_->setMessage(tr("Cannot find Ansys solver."));
     return false;
   }
   if(!QFile(modelFileLineEdit_->text()).exists())
   {
-    errorMessageLabel_->setErrorMessage(tr("Cannot find project file."));
+    errorMessageWidget_->setMessage(tr("Cannot find project file."));
     return false;
   }
   if(varModel_->getInputVariables().isEmpty() &&
       varModel_->getOutputVariables().isEmpty())
   {
-    errorMessageLabel_->setErrorMessage(tr("Please select at least one variable."));
+    errorMessageWidget_->setMessage(tr("Please select at least one variable."));
     return false;
   }
   emit executableFileFound();
@@ -225,7 +225,6 @@ bool AnsysWizardVariablePage::validatePage()
 
 AnsysWizardSystemPage::AnsysWizardSystemPage(QWidget * parent)
   : QWizardPage(parent)
-  , errorMessageLabel_(0)
 {
   setSubTitle(tr("System selection"));
 
@@ -246,10 +245,10 @@ AnsysWizardSystemPage::AnsysWizardSystemPage(QWidget * parent)
   pageLayout->addWidget(sysTable_);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
+  errorMessageWidget_ = new ErrorWidget;
   connect(sysModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
-          errorMessageLabel_, SLOT(reset()));
-  pageLayout->addWidget(errorMessageLabel_);
+          errorMessageWidget_, SLOT(reset()));
+  pageLayout->addWidget(errorMessageWidget_);
 
   setLayout(pageLayout);
 }
@@ -258,7 +257,7 @@ bool AnsysWizardSystemPage::validatePage()
 {
   if(sysModel_->getSystems().isEmpty())
   {
-    errorMessageLabel_->setErrorMessage(tr("Please select at least one system."));
+    errorMessageWidget_->setMessage(tr("Please select at least one system."));
     return false;
   }
   return QWizardPage::validatePage();

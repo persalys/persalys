@@ -73,8 +73,6 @@ ConstraintsPage::ConstraintsPage(QWidget* parent)
   groupBoxLayout->setRowStretch(1, 1);
   pageLayout->addWidget(groupBox);
 
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
 }
 
 bool ConstraintsPage::validatePage()

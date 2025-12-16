@@ -25,7 +25,7 @@
 #include "persalys/PhysicalModelItem.hxx"
 #include "persalys/CouplingPhysicalModel.hxx"
 #include "persalys/FileTools.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/CopyableTableView.hxx"
 
 #include <QPushButton>
@@ -371,7 +371,7 @@ signals:
 private:
   CouplingPhysicalModel * model_              = nullptr;
   DynamicTabWidget      * stepTabWidget_      = nullptr;
-  TemporaryLabel        * errorMessageLabel_  = nullptr;
+  ErrorWidget           * errorMessageWidget_ = nullptr;
 };
 
 class PERSALYS_VIEW_API CouplingSummaryWidget : public QTabWidget

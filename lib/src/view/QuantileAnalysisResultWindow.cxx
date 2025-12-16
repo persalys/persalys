@@ -27,7 +27,7 @@
 #include "persalys/PlotWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/UserDefined.hxx>
 
@@ -159,8 +159,8 @@ namespace PERSALYS
 
       if (fullTailTypes.getSize() != quantiles.getSize())
       {
-        TemporaryLabel * label = new TemporaryLabel();
-        label->setErrorMessage(tr("No valid results for variable ") + QString(varName.c_str()));
+        ErrorWidget * label = new ErrorWidget();
+        label->setFramelessErrorMessage(tr("No valid results for variable ") + QString(varName.c_str()));
         tabLayout->addWidget(label);
       }
       else
@@ -321,8 +321,8 @@ namespace PERSALYS
 
       if (fullTailTypes.getSize() != quantiles.getSize())
       {
-        TemporaryLabel * label = new TemporaryLabel();
-        label->setErrorMessage(tr("No valid results for variable ") + QString(varName.c_str()));
+        ErrorWidget * label = new ErrorWidget();
+        label->setFramelessErrorMessage(tr("No valid results for variable ") + QString(varName.c_str()));
         tabLayout->addWidget(label);
       }
       else

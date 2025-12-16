@@ -36,10 +36,6 @@ ScreeningResultWizard::ScreeningResultWizard(const Study& study, const PhysicalM
   : Wizard(parent)
   , study_(study)
   , model_(model)
-  , screeningResultsComboBox_(0)
-  , variablesComboBox_(0)
-  , tableModel_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -83,9 +79,8 @@ void ScreeningResultWizard::buildInterface()
   }
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  mainLayout->addWidget(errorMessageLabel_, 3, 0, 1, 2);
+  errorWidget_ = new ErrorWidget;
+  mainLayout->addWidget(errorWidget_, 3, 0, 1, 2);
 
   // connections
   connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTableModel(int)));
@@ -108,7 +103,7 @@ void ScreeningResultWizard::updateVariablesComboBox(const int currentAnalysis)
   if (screeningResultsComboBox_->count())
   {
     const int analysisIndex = screeningResultsComboBox_->itemData(currentAnalysis).toInt();
-    MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+    const MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
     variablesNames = QtOT::DescriptionToStringList(result.getDesignOfExperiment().getOutputSample().getDescription());
   }
@@ -136,7 +131,7 @@ Indices ScreeningResultWizard::getInputsSelection() const
     return Indices();
 
   const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
-  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+  const MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
   return result.getInputsSelection(variablesComboBox_->currentIndex());
 }
@@ -144,8 +139,8 @@ Indices ScreeningResultWizard::getInputsSelection() const
 
 void ScreeningResultWizard::clearErrorMessage()
 {
-  if (errorMessageLabel_)
-    errorMessageLabel_->setText("");
+  if (errorWidget_)
+    errorWidget_->reset();
 }
 
 
@@ -153,16 +148,16 @@ bool ScreeningResultWizard::validateCurrentPage()
 {
   if (!screeningResultsComboBox_ || !screeningResultsComboBox_->count())
   {
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(tr("The current study has not screening analyses results.")));
+    errorWidget_->setMessage(tr("The current study has no screening analysis result."));
     return false;
   }
 
   const int analysisIndex = screeningResultsComboBox_->itemData(screeningResultsComboBox_->currentIndex()).toInt();
-  MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
+  const MorrisResult& result(dynamic_cast<MorrisAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get())->getResult());
 
   if (result.getDesignOfExperiment().getInputSample().getDimension() != model_.getInputDimension())
   {
-    errorMessageLabel_->setText(QString("<font color=red>%1</font>").arg(tr("The selected analysis must contain as many results as there are inputs in the model %1.").arg(model_.getInputDimension())));
+    errorWidget_->setMessage(tr("The selected analysis must contain as many results as there are inputs in the model. There are currently %2 results for %1 inputs.").arg(model_.getInputDimension()).arg(result.getDesignOfExperiment().getInputSample().getDimension()));
     return false;
   }
 

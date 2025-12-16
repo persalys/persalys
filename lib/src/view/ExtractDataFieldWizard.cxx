@@ -28,6 +28,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QList>
+#include <QLabel>
 
 using namespace OT;
 
@@ -36,9 +37,6 @@ namespace PERSALYS
 
 ExtractDataFieldWizard::ExtractDataFieldWizard(const Analysis& analysis, QWidget *parent)
   : QDialog(parent)
-  , analysis_(0)
-  , nodes_()
-  , errorMessageLabel_(0)
 {
   setWindowTitle(tr("Extract data at nodes of the mesh"));
 
@@ -67,8 +65,8 @@ ExtractDataFieldWizard::ExtractDataFieldWizard(const Analysis& analysis, QWidget
   layout->addWidget(combo);
 
   // error message label
-  errorMessageLabel_ = new TemporaryLabel;
-  layout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  layout->addWidget(errorWidget_);
 
   // cancel and ok buttons
   QHBoxLayout * buttonsLayout = new QHBoxLayout;
@@ -126,7 +124,7 @@ DataModel ExtractDataFieldWizard::getDataModel()
 void ExtractDataFieldWizard::updateSelectedNodes(const QList<int>& nodes)
 {
   nodes_ = nodes;
-  errorMessageLabel_->setErrorMessage(nodes_.size() < 1 ? tr("Select at least one node") : "");
+  errorWidget_->setFramelessErrorMessage(nodes_.size() < 1 ? tr("Select at least one node") : "");
 }
 
 

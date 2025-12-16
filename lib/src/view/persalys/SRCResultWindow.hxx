@@ -38,7 +38,6 @@ protected:
 
 private:
   SRCResult result_;
-  QString warningMessage_;
 };
 }
 #endif

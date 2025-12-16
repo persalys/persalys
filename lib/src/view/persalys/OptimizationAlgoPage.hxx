@@ -24,7 +24,7 @@
 #include "persalys/Analysis.hxx"
 #include "persalys/OptimizationAnalysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
 
 #include <QWizardPage>
@@ -84,7 +84,7 @@ protected:
   QTableView * algoTableView_ = nullptr;
   CustomStandardItemModel * algoTableModel_ = nullptr;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 
 private:
   AlgoFilterProxyModel * proxyModel_ = nullptr;

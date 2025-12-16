@@ -24,7 +24,7 @@
 #include "persalys/DesignOfExperiment.hxx"
 #include "persalys/Analysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 #include <QComboBox>
@@ -64,7 +64,7 @@ private:
   QLabel * doeLabel_ = nullptr;
   OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
   QButtonGroup * methodGroup_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
   OT::Description interestVariables_;
 };
 }

@@ -125,13 +125,13 @@ void MeshWindow::buildInterface()
   groupBoxLayout->addWidget(isRegularLabel_, 1, 0);
 
   // Error message if mesh gets overwritten
-  errorMessageLabel_ = new TemporaryLabel;
-  groupBoxLayout->addWidget(errorMessageLabel_, 2, 0);
+  errorWidget_ = new ErrorWidget;
+  groupBoxLayout->addWidget(errorWidget_, 2, 0);
   mainLayout->addWidget(groupBox);
 
   connect(this, &MeshWindow::meshOverwritten, [this] ()
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("Warning: Specified mesh is incompatbile and has been reset."));
+    errorWidget_->setTemporaryFramelessErrorMessage(tr("Warning: Specified mesh is incompatbile and has been reset."));
   });
 
   // mesh display
@@ -209,7 +209,7 @@ void MeshWindow::updateModel(QStandardItem *item)
     dataMeshItem_->getDataFieldModel().blockNotification("DataMeshItem");
     // but setting mesh model implies meshChanged signal which is connected to
     // DataFieldModelWindow::updateProcessSample and mesh can be overwritten there if not compatible
-    // if so we need to catch notify("meshOverwritten") to set errorMessageLabel_ warning
+    // if so we need to catch notify("meshOverwritten") to set errorWidget_ warning
     dataMeshItem_->getDataFieldModel().setMeshModel(meshModel);
     dataMeshItem_->getDataFieldModel().blockNotification();
   }

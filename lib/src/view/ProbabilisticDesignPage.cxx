@@ -65,9 +65,9 @@ void ProbabilisticDesignPage::buildInterface()
   designGroupBoxLayout->addWidget(lhsButton, 1, 0);
 
   // LHS Warning
-  lhsWarningLabel_ = new QLabel(tr("Warning: LHS is designed for independent variables. With dependent inputs, the sample may not preserve LHS properties and results can be less reliable."));
-  lhsWarningLabel_->setWordWrap(true);
-  lhsWarningLabel_->setStyleSheet("color: orange;");
+  lhsWarningLabel_ = new ErrorWidget;
+  lhsWarningLabel_->setMessage(tr("Warning: LHS is designed for independent variables. With dependent inputs, the sample may not preserve LHS properties and results can be less reliable."), ErrorWidget::Warning);
+  //lhsWarningLabel_->setHeight(85);
   lhsWarningLabel_->setVisible(false);
   designGroupBoxLayout->addWidget(lhsWarningLabel_, 2, 0);
 

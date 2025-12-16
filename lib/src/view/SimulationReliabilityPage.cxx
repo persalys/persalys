@@ -24,6 +24,7 @@
 #include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QVBoxLayout>
+#include <QLabel>
 
 using namespace OT;
 
@@ -32,10 +33,6 @@ namespace PERSALYS
 
 SimulationReliabilityPage::SimulationReliabilityPage(QWidget* parent)
   : QWizardPage(parent)
-  , stopCriteriaGroupBox_(0)
-  , blockSizeGroupBox_(0)
-  , seedSpinbox_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -74,12 +71,12 @@ void SimulationReliabilityPage::buildInterface()
   pageLayout->addWidget(advancedParamGroupBox);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorMessageLabel_, SLOT(reset()));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
+  errorWidget_ = new ErrorWidget;
+  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorWidget_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorWidget_, SLOT(reset()));
 
   pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_);
 
   initialize(MonteCarloReliabilityAnalysis());
 }
@@ -127,7 +124,7 @@ bool SimulationReliabilityPage::validatePage()
       errorMessage = tr("The maximum time must not be null");
   }
 
-  errorMessageLabel_->setErrorMessage(errorMessage);
+  errorWidget_->setFramelessErrorMessage(errorMessage);
   if (!errorMessage.isEmpty())
     return false;
 

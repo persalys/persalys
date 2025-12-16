@@ -2,6 +2,7 @@
 #include "persalys/DesignOfExperimentEvaluationWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
 #include "persalys/Study.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -49,24 +50,24 @@ private slots:
 
     // - first page
     OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.findChild<OutputsSelectionGroupBox*>();
-    TemporaryLabel * errorMessageLabel = wizard.findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.findChild<ErrorWidget*>();
     TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
     ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
 
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QTest::mouseClick(comboBox, Qt::LeftButton); // open listwidget
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // deselect all
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     wizard.next();
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0"); // can not go to next page
 
     QTest::mouseClick(listWidget->viewport(), Qt::LeftButton); // select all
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
   }
 
 

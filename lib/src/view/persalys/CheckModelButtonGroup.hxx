@@ -22,7 +22,7 @@
 #define PERSALYS_CHECKMODELBUTTONGROUP_HXX
 
 #include "persalys/PersalysPrivate.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWidget>
 
@@ -33,9 +33,9 @@ class PERSALYS_VIEW_API CheckModelButtonGroup : public QWidget
   Q_OBJECT
 public:
   explicit CheckModelButtonGroup(QWidget *parent = nullptr, bool isDifferentiable = true);
-  TemporaryLabel * getErrorMessageLabel() const
+  ErrorWidget * getErrorMessageWidget() const
   {
-    return errorMessageLabel_;
+    return errorMessageWidget_;
   }
 
 signals:
@@ -43,7 +43,7 @@ signals:
   void evaluateGradientRequested();
 
 private:
-  TemporaryLabel * errorMessageLabel_;
+  ErrorWidget * errorMessageWidget_ = nullptr;
   bool isDifferentiable_ = true;
 };
 }

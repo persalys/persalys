@@ -29,6 +29,7 @@
 #include "persalys/CopulaInferenceResultWizard.hxx"
 #include "persalys/StudyItem.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/NormalCopula.hxx>
 
@@ -146,9 +147,9 @@ void DependenciesWidget::buildInterface()
   // 1- If physical model has not dependent variables: use a dummy widget
   QWidget * dummyWidget = new QWidget;
   QVBoxLayout * dummyWidgetLayout = new QVBoxLayout(dummyWidget);
-  QLabel * messLabel = new QLabel(tr("To define dependence, the model must have at least two independent stochastic variables."));
-  messLabel->setWordWrap(true);
-  dummyWidgetLayout->addWidget(messLabel);
+  ErrorWidget * messageWidget = new ErrorWidget;
+  messageWidget->setMessage(tr("To define dependence, the model must have at least two independent stochastic variables."), ErrorWidget::Information, false, false);
+  dummyWidgetLayout->addWidget(messageWidget);
   dummyWidgetLayout->addStretch();
   rightSideOfSplitterStackedWidget_->addWidget(dummyWidget);
 
@@ -165,8 +166,8 @@ void DependenciesWidget::buildInterface()
   mainLayout->addWidget(mainSplitter, 1);
 
   // QLabel for temporary error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  errorWidget_ = new ErrorWidget;
+  mainLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
 
   // update widgets
   updateWidgets();
@@ -204,7 +205,7 @@ void DependenciesWidget::updateWidgets()
   {
     CopulaWidget * newWidget = new CopulaWidget(physicalModel_, coll[i], this);
     copulaStackedWidget_->addWidget(newWidget);
-    connect(newWidget, SIGNAL(emitErrorMessage(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+    connect(newWidget, SIGNAL(emitErrorMessage(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
   }
 
   // update table
@@ -275,7 +276,7 @@ void DependenciesWidget::addCopula()
   // check if at least two variables
   if (selectedVars.getSize() < 2)
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("Define at least one group of two variables"));
+    errorWidget_->setTemporaryFramelessErrorMessage(tr("Define at least one group of two variables"));
     return;
   }
   // check the variables are not used elsewhere
@@ -291,7 +292,7 @@ void DependenciesWidget::addCopula()
     if (varsInCopula.contains(selectedVars[i]))
     {
       const QString errorMessage(tr("The variable %1 is already used to define a copula").arg(selectedVars[i].c_str()));
-      errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
+      errorWidget_->setTemporaryFramelessErrorMessage(errorMessage);
       return;
     }
   }
@@ -310,7 +311,7 @@ void DependenciesWidget::addCopula()
   physicalModel_.blockNotification();
   // add a copula widget
   CopulaWidget * newWidget = new CopulaWidget(physicalModel_, newCopula, this);
-  connect(newWidget, SIGNAL(emitErrorMessage(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(newWidget, SIGNAL(emitErrorMessage(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
   copulaStackedWidget_->addWidget(newWidget);
 
   // update table

@@ -28,6 +28,7 @@
 #include "persalys/OptimizationWizard.hxx"
 #include "persalys/CalibrationTableModel.hxx"
 #include "persalys/ExportableTableView.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OptimizationAlgorithm.hxx>
 
@@ -92,7 +93,7 @@ private:
   QLabel                * fixedLabel_         = nullptr;
   ExportableTableView   * tableView_          = nullptr;
   CalibrationTableModel * tableModel_         = nullptr;
-  TemporaryLabel        * errorMessageLabel_  = nullptr;
+  ErrorWidget           * errorMessageWidget_ = nullptr;
 };
 
 

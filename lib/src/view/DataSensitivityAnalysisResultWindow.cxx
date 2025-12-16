@@ -23,12 +23,12 @@
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/SensitivityResultWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QScrollArea>
 #include <QComboBox>
-#include <QTextEdit>
 
 using namespace OT;
 
@@ -110,14 +110,10 @@ void DataSensitivityAnalysisResultWindow::buildInterface()
   if (!result_.isIndependent())
   {
     auto message = QString::fromStdString(result_.getIndependenceWarningMessage());
-    auto warningTextEdit = new QTextEdit();
-    warningTextEdit->setPlainText(message);
-    warningTextEdit->setReadOnly(true);
-    warningTextEdit->setStyleSheet("QTextEdit { color : orange; font-weight: bold; background-color: transparent; border: 1px solid orange; }");
-    warningTextEdit->setFixedHeight(80);
-    warningTextEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    warningTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    widgetLayout->addWidget(warningTextEdit);
+    auto * warningLabel = new ErrorWidget;
+    warningLabel->setMessage(message, ErrorWidget::Warning);
+    warningLabel->setHeight(80); // fixed height because message can be long if there are many dependent inputs
+    widgetLayout->addWidget(warningLabel);
   }
 }
 

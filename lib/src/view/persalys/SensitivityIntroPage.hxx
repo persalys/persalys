@@ -23,7 +23,7 @@
 
 #include "persalys/Analysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 #include <QButtonGroup>
@@ -48,9 +48,9 @@ public:
   bool validatePage() override;
 
 private:
-  OutputsSelectionGroupBox * outputsSelectionGroupBox_;
-  QButtonGroup * methodGroup_;
-  TemporaryLabel * errorMessageLabel_;
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
+  QButtonGroup * methodGroup_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif
