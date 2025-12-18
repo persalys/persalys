@@ -39,7 +39,7 @@ public:
   explicit ImportedDesignPage(QWidget *parent = nullptr);
 
   void initialize(const Analysis& analysis);
-  Analysis getAnalysis();
+  Analysis getAnalysis() const;
   bool validatePage() override;
 
 signals:

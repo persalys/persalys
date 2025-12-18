@@ -53,7 +53,7 @@ DataAnalysis::DataAnalysis(const String & name, const DesignOfExperiment & desig
   , result_()
 {
   if (designOfExperiment_.getSample().getSize())
-    setInterestVariables(designOfExperiment_.getSample().getDescription());
+    AnalysisImplementation::setInterestVariables(designOfExperiment_.getSample().getDescription());
 }
 
 

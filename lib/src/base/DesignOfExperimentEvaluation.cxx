@@ -217,27 +217,7 @@ void DesignOfExperimentEvaluation::launch()
   }
 
   // mark points evaluating to nan as failed
-  Indices failedIndices;
-  for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)
-  {
-    for (UnsignedInteger j = 0; j < outputSample.getDimension(); ++j)
-    {
-      if (!std::isfinite(outputSample(i, j)))
-      {
-        failedIndices.add(i);
-        failedInputSample_.add(getOriginalInputSample()[i]);
-        errorDescription_.add((OSS() << Parameters::GetOTPointStr(getOriginalInputSample()[i])
-                               << ": Output is NaN").str());
-        break;
-      }
-    }
-  }
-
-  for (UnsignedInteger i = 0; i < failedIndices.getSize(); ++ i)
-  {
-    inputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
-    outputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
-  }
+  removeNaN(inputSample, outputSample);
 
   if (failedInputSample_.getSize() == getOriginalInputSample().getSize())
     throw InvalidRangeException(HERE) << "All the evaluations have failed.\n" << warningMessage_;
@@ -257,13 +237,17 @@ void DesignOfExperimentEvaluation::launch()
   result_.elapsedTime_ = timeCriteria.getElapsedTime();
 }
 
-void DesignOfExperimentEvaluation::setEvaluations(const Sample &outputSample)
+void DesignOfExperimentEvaluation::setEvaluations(Sample &outputSample)
 {
   TimeCriteria tc;
   isRunning_ = true;
   notify("analysisLaunched");
   initialize();
 
+  failedInputSample_ = Sample(0, originalInputSample_.getDimension());
+  failedInputSample_.setDescription(originalInputSample_.getDescription());
+
+  removeNaN(originalInputSample_, outputSample);
   result_.designOfExperiment_.setInputSample(originalInputSample_);
   result_.designOfExperiment_.setOutputSample(outputSample);
 
@@ -292,7 +276,8 @@ void DesignOfExperimentEvaluation::setEvaluations(const Sample &outputSample)
 void DesignOfExperimentEvaluation::checkAndSetEvaluations(const DesignOfExperiment &evaluatedDoE)
 {
   Test::assert_almost_equal(originalInputSample_, evaluatedDoE.getInputSample());
-  setEvaluations(evaluatedDoE.getOutputSample());
+  Sample outputSample = evaluatedDoE.getOutputSample();
+  setEvaluations(outputSample);
 }
 
 Sample DesignOfExperimentEvaluation::getNotEvaluatedInputSample() const
@@ -362,6 +347,31 @@ bool DesignOfExperimentEvaluation::hasValidResult() const
   return result_.getDesignOfExperiment().getSample().getSize() != 0;
 }
 
+
+void DesignOfExperimentEvaluation::removeNaN(OT::Sample & inputSample, OT::Sample & outputSample)
+{
+  Indices failedIndices;
+  for (UnsignedInteger i = 0; i < outputSample.getSize(); ++i)
+  {
+    for (UnsignedInteger j = 0; j < outputSample.getDimension(); ++j)
+    {
+      if (!std::isfinite(outputSample(i, j)))
+      {
+        failedIndices.add(i);
+        failedInputSample_.add(getOriginalInputSample()[i]);
+        errorDescription_.add((OSS() << Parameters::GetOTPointStr(getOriginalInputSample()[i])
+                               << ": Output is NaN").str());
+        break;
+      }
+    }
+  }
+
+  for (UnsignedInteger i = 0; i < failedIndices.getSize(); ++ i)
+  {
+    inputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
+    outputSample.erase(failedIndices[failedIndices.getSize() - 1 - i]);
+  }
+}
 
 /* Method save() stores the object through the StorageManager */
 void DesignOfExperimentEvaluation::save(Advocate& adv) const
