@@ -1,3 +1,7 @@
+= 19.1.1 release (2026-01-05)
+
+ * changed OpenTURNS version to 1.26.1 fixing an issue with pagmo
+ 
 = 19.1 release (2025-12-5)
 
  * Various ergonomics improvements including
