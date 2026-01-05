@@ -47,8 +47,8 @@ cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/opent
 rm Lib/site-packages/openturns/{libvtk,libboost,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
 
-curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.19.0/download/win-64/pyfmi-2.19.0-py313h0591002_2.conda | bsdtar -x && tar -xf pkg-pyfmi-2.19.0-py313h0591002_2.tar.zst
-curl -fSsL https://anaconda.org/conda-forge/assimulo/3.7.2/download/win-64/assimulo-3.7.2-py313habcb892_1.conda | bsdtar -x && tar -xf pkg-assimulo-3.7.2-py313habcb892_1.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.20.0/download/win-64/pyfmi-2.20.0-py314hc0c34d8_0.conda | bsdtar -x && tar -xf pkg-pyfmi-2.20.0-py314hc0c34d8_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/assimulo/3.7.2/download/win-64/assimulo-3.7.2-py314h4128953_1.conda | bsdtar -x && tar -xf pkg-assimulo-3.7.2-py314h4128953_1.tar.zst
 curl -fSsL https://anaconda.org/conda-forge/sundials/7.4.0/download/win-64/sundials-7.4.0-h59e65cd_0.conda | bsdtar -x && tar -xf pkg-sundials-7.4.0-h59e65cd_0.tar.zst
 cp -r Library/bin/*.dll . && rm -r Library info pkg-*.zst info-*.zst
 
