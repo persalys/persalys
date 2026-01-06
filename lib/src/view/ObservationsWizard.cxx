@@ -116,7 +116,7 @@ void ImportObservationsPage::checkColumns()
 
 void ImportObservationsPage::initialize(const DesignOfExperiment& designOfExp)
 {
-  Observations * obs_ptr = dynamic_cast<Observations*>(designOfExp.getImplementation().get());
+  const auto * obs_ptr = dynamic_cast<const Observations*>(designOfExp.getImplementation().get());
 
   Q_ASSERT(obs_ptr);
 
@@ -126,7 +126,7 @@ void ImportObservationsPage::initialize(const DesignOfExperiment& designOfExp)
 }
 
 
-DesignOfExperiment ImportObservationsPage::getDesignOfExperiment()
+DesignOfExperiment ImportObservationsPage::getDesignOfExperiment() const
 {
   return observations_;
 }

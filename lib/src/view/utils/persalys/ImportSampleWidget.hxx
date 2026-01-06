@@ -56,6 +56,7 @@ protected:
 
 public slots:
   void openFileRequested();
+  
 signals:
   void updateTableRequested(const QString & fileName);
   void checkColumnsRequested();

@@ -42,9 +42,9 @@ public:
   void update(Observable * source, const OT::String & message) override;
 
   void fill();
-  virtual void appendItem(const Analysis& analysis) override;
-  virtual void appendItem(const LimitState& limitState) override;
-  virtual void appendItem(const DesignOfExperiment& designOfExp) override;
+  void appendItem(const Analysis& analysis) override;
+  void appendItem(const LimitState& limitState) override;
+  void appendItem(const DesignOfExperiment& designOfExp) override;
   void updateDiagramBoxesValidity();
 
 public slots:

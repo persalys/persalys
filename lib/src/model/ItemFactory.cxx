@@ -53,14 +53,13 @@ namespace PERSALYS
 
 ItemFactory::ItemFactory()
   : QObject()
-  , parentStudyItem_(0)
 {
 }
 
 
 ItemFactory::~ItemFactory()
 {
-  parentStudyItem_ = 0;
+  parentStudyItem_ = nullptr;
 }
 
 
@@ -210,27 +209,27 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
 }
 
 
-Analysis ItemFactory::createAnalysis(const QString &analysisName, const DesignOfExperiment &doe)
+Analysis ItemFactory::createAnalysis(const QString &analysisName, const DesignOfExperiment &doe) const
 {
   if (analysisName == "Metamodel")
     return new PolynomialRegressionAnalysis(availableAnalysisName(tr("metaModel_")), doe);
   else if (analysisName == "Calibration")
     return new CalibrationAnalysis(availableAnalysisName(tr("calibration_")), doe);
   qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
-  return 0;
+  return nullptr;
 }
 
 
-Analysis ItemFactory::createAnalysis(const QString &analysisName, const Analysis &inAnalysis)
+Analysis ItemFactory::createAnalysis(const QString &analysisName, const Analysis &inAnalysis) const
 {
   if (analysisName == "Metamodel")
     return new PolynomialRegressionAnalysis(availableAnalysisName(tr("metaModel_")), inAnalysis);
   qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
-  return 0;
+  return nullptr;
 }
 
 
-Analysis ItemFactory::createAnalysis(const QString &analysisName, const LimitState &limitState)
+Analysis ItemFactory::createAnalysis(const QString &analysisName, const LimitState &limitState) const
 {
   if (analysisName == "ThresholdExceedance")
   {

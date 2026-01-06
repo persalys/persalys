@@ -32,7 +32,7 @@ namespace PERSALYS
 class PERSALYS_VIEW_API TitleLabel : public QWidget
 {
 public:
-  TitleLabel(const QString &text = "", const QString &docLink = "", QWidget *parent = nullptr);
+  explicit TitleLabel(const QString &text = "", const QString &docLink = "", QWidget *parent = nullptr);
 
   void setText(const QString& text);
   void setDocLink(const QString& link);
@@ -47,9 +47,9 @@ class PERSALYS_VIEW_API SubWindow : public QWidget
   Q_OBJECT
 
 public:
-  SubWindow(Item * item, QWidget *parent = nullptr);
+  explicit SubWindow(Item * item, QWidget *parent = nullptr);
 
-  virtual ~SubWindow();
+  ~SubWindow() override;
 
   Item * getItem() const;
 

@@ -231,6 +231,9 @@ void TranslationManager::InitializeErrorMessages()
   ErrorMessages_.insert("The file does not contain a sample and/or the file encoding is not valid (use utf-8)", tr("The file does not contain a sample and/or the file encoding is not valid (use utf-8)"));
   ErrorMessages_.insert("Unknown data order", tr("Unknown data order"));
   ErrorMessages_.insert("The file contains more than one row or column. It must only contain the mesh.", tr("The file contains more than one row or column. It must only contain the mesh."));
+  // CalibrationAnalysis
+  ErrorMessages_.insert("The Design Of Experiment must be built from a physical model", tr("The Design Of Experiment must be built from a physical model"));
+  ErrorMessages_.insert("At least an input variable must be calibrated. Here, all the input variables are observed.", tr("At least an input variable must be calibrated. Here, all the input variables are observed."));
 }
 
 

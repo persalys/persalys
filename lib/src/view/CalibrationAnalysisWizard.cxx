@@ -44,10 +44,6 @@ namespace PERSALYS
 
 CalibrationIntroPage::CalibrationIntroPage(QWidget * parent)
   : QWizardPage(parent)
-  , observationsComboBox_(0)
-  , observationsComboBoxModel_(0)
-  , observationsLabel_(0)
-  , methodGroup_(0)
 {
   setTitle(tr("Calibration parameters"));
 
@@ -64,7 +60,6 @@ CalibrationIntroPage::CalibrationIntroPage(QWidget * parent)
   observationsComboBox_->setModel(observationsComboBoxModel_);
 
   observationsLabel_ = new QLabel;
-//   observationsLabel_->setObjectName("observationsLabel_");
   observationsLayout->addWidget(observationsLabel_);
 
   pageLayout->addWidget(observationsBox);
@@ -172,9 +167,8 @@ void CalibrationIntroPage::changeObservationsLabel(int index)
 // -----------------------------------------------------
 
 
-CalibrationReferencePointPage::CalibrationReferencePointPage(/*const PhysicalModel& model,*/ QWidget *parent)
+CalibrationReferencePointPage::CalibrationReferencePointPage(QWidget *parent)
   : QWizardPage(parent)
-  , tableModel_(0)
 {
   setSubTitle(tr("Choose the input variables to calibrate and define the reference point of the algorithm"));
   QVBoxLayout * pageLayout = new QVBoxLayout(this);
@@ -309,7 +303,6 @@ Distribution CalibrationDistributionPage::getDistribution() const
 
 CalibrationParametersPage::CalibrationParametersPage(QWidget *parent)
   : QWizardPage(parent)
-  , stoppingCriteriaLayout_(0)
 {
   buildInterface();
 }
@@ -429,12 +422,6 @@ void CalibrationParametersPage::updateLabel()
 
 CalibrationAnalysisWizard::CalibrationAnalysisWizard(const Analysis &analysis, const bool isGeneralWizard, QWidget *parent)
   : AnalysisWizard(analysis, parent)
-  , observationsList_()
-  , introPage_(0)
-  , refPointPage_(0)
-  , priorDistPage_(0)
-  , obsErrorDistPage_(0)
-  , paramPage_(0)
 {
   const DesignOfExperiment observations(dynamic_cast<CalibrationAnalysis*>(analysis_.getImplementation().get())->getObservations());
 
@@ -442,7 +429,7 @@ CalibrationAnalysisWizard::CalibrationAnalysisWizard(const Analysis &analysis, c
   {
     if (Observer * obs = observations.getImplementation().get()->getObserver("Study"))
     {
-      StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
+      const StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
       Q_ASSERT(study);
       for (UnsignedInteger i = 0; i < study->getDataModels().getSize(); ++i)
       {

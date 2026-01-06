@@ -22,6 +22,8 @@
 
 #include <openturns/PlatformInfo.hxx>
 
+#include <QMessageBox>
+
 namespace PERSALYS
 {
 
@@ -89,6 +91,11 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   calibrationButton->setWhatsThis(tr("Calibrate the model"));
   connect(calibrationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestCalibrationCreation()));
   connect(physicalModelDiagramItem, SIGNAL(observationsNumberValidityChanged(bool, QString)), calibrationButton, SLOT(setEnabled(bool, QString)));
+  // emitted by ItemFactory in ItemFactory::newAnalysis
+  connect(physicalModelDiagramItem, &ItemFactory::showErrorMessageRequested, this, [this] (const QString & message)
+  {
+    QMessageBox::critical(this, tr("Error"), message);
+  });
 
   appendButton(calibrationButton, row, observationButton);
 

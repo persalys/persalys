@@ -33,7 +33,7 @@ class PERSALYS_UTILS_API ExportableTableView : public CopyableTableView
   Q_OBJECT
 
 public:
-  ExportableTableView(QWidget *parent = nullptr);
+  explicit ExportableTableView(QWidget *parent = nullptr);
 
   void setExportableAsImage(const bool exportable);
 
@@ -46,8 +46,8 @@ public slots:
   void exportImage();
 
 protected:
-  QAction * exportAction_;
-  QAction * exportableAsImageAction_;
+  QAction * exportAction_             = nullptr;
+  QAction * exportableAsImageAction_  = nullptr;
 };
 }
 #endif

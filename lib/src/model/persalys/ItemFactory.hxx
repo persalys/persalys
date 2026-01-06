@@ -24,6 +24,7 @@
 #include "persalys/Analysis.hxx"
 #include "persalys/DesignOfExperiment.hxx"
 #include "persalys/LimitState.hxx"
+#include "persalys/TranslationManager.hxx"
 
 #include <QAction>
 
@@ -37,7 +38,7 @@ class PERSALYS_MODEL_API ItemFactory : public QObject
 
 public:
   ItemFactory();
-  virtual ~ItemFactory();
+  ~ItemFactory() override;
 
   StudyItem * getParentStudyItem()
   {
@@ -50,11 +51,19 @@ public:
   template <class T>
   void newAnalysis(const QString &analysisName, const T &input, const bool isGeneralWizard = false)
   {
-    emit wizardRequested(getParentStudyItem(), createAnalysis(analysisName, input), isGeneralWizard);
+    try
+    {
+      emit wizardRequested(getParentStudyItem(), createAnalysis(analysisName, input), isGeneralWizard);
+    }
+    catch (const std::exception & e)
+    {
+      // connect to PhysicalModelDiagramWindow to show error message
+      emit showErrorMessageRequested(TranslationManager::GetTranslatedErrorMessage(e.what()));
+    }
   }
-  Analysis createAnalysis(const QString &analysisName, const DesignOfExperiment &doe);
-  Analysis createAnalysis(const QString &analysisName, const LimitState &limitState);
-  Analysis createAnalysis(const QString &analysisName, const Analysis &analysis);
+  Analysis createAnalysis(const QString &analysisName, const DesignOfExperiment &doe) const;
+  Analysis createAnalysis(const QString &analysisName, const LimitState &limitState)  const;
+  Analysis createAnalysis(const QString &analysisName, const Analysis &analysis)      const;
 
   QAction * createAction(const QString &analysisName, const PhysicalModel &model);
   QAction * createAction(const QString &analysisName, const DataFieldModel &model);
@@ -63,6 +72,7 @@ public:
   QAction * createAction(const QString &analysisName, const Analysis &analysis);
 
 signals:
+  void showErrorMessageRequested(const QString & message);
   void wizardRequested(StudyItem*, const Analysis&, const bool isGeneralWizard = false);
   void doeEvaluationWizardRequested(const Analysis&, const bool isGeneralWizard = false);
   void mmExportWizardRequested(StudyItem*, const Analysis&, const bool isGeneralWizard = false);
