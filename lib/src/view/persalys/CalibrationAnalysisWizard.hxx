@@ -48,7 +48,7 @@ public:
 
   enum Algorithm {LinearLeastSquares, NonlinearLeastSquares, LinearGaussian, NonlinearGaussian};
 
-  CalibrationIntroPage(QWidget* parent = 0);
+  explicit CalibrationIntroPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis, QList<DesignOfExperiment> observationsList);
   DesignOfExperiment getObservations() const;
@@ -61,10 +61,10 @@ signals:
   void observationsChanged(const DesignOfExperiment&);
 
 private:
-  QComboBox * observationsComboBox_;
-  QStandardItemModel * observationsComboBoxModel_;
-  QLabel * observationsLabel_;
-  QButtonGroup * methodGroup_;
+  QComboBox           * observationsComboBox_       = nullptr;
+  QStandardItemModel  * observationsComboBoxModel_  = nullptr;
+  QLabel              * observationsLabel_          = nullptr;
+  QButtonGroup        * methodGroup_                = nullptr;
 };
 
 
@@ -75,7 +75,7 @@ class PERSALYS_VIEW_API CalibrationReferencePointPage : public QWizardPage
   friend class TestCalibrationAnalysisWizard;
 
 public:
-  CalibrationReferencePointPage(QWidget* parent = 0);
+  explicit CalibrationReferencePointPage(QWidget* parent = nullptr);
 
   OT::PointWithDescription getFixedValues() const;
   OT::PointWithDescription getCalibratedInputs() const;
@@ -88,11 +88,11 @@ signals:
 
 private:
   PhysicalModel model_;
-  QLabel * calibratedLabel_ = nullptr;
-  QLabel * fixedLabel_ = nullptr;
-  ExportableTableView * tableView_ = nullptr;
-  CalibrationTableModel * tableModel_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  QLabel                * calibratedLabel_    = nullptr;
+  QLabel                * fixedLabel_         = nullptr;
+  ExportableTableView   * tableView_          = nullptr;
+  CalibrationTableModel * tableModel_         = nullptr;
+  TemporaryLabel        * errorMessageLabel_  = nullptr;
 };
 
 
@@ -101,7 +101,7 @@ class PERSALYS_VIEW_API CalibrationDistributionPage : public QWizardPage
   Q_OBJECT
 
 public:
-  CalibrationDistributionPage(const QString& title, const QString& subTitle, QWidget* parent = 0);
+  CalibrationDistributionPage(const QString& title, const QString& subTitle, QWidget* parent = nullptr);
 
   OT::Distribution getDistribution() const;
 
@@ -121,7 +121,7 @@ class PERSALYS_VIEW_API CalibrationParametersPage : public QWizardPage
 
 public:
   enum OptimAlgo {CMinpackAlgo, CeresAlgo};
-  CalibrationParametersPage(QWidget* parent = 0);
+  explicit CalibrationParametersPage(QWidget* parent = nullptr);
   void initialize(const Analysis& analysis);
   void updateAnalysis(CalibrationAnalysis * analysis_ptr);
   void initializePage() override;
@@ -131,13 +131,13 @@ protected:
   void updateLabel();
 
 private:
-  DoubleSpinBox * ciLengthSpinbox_;
-  QWidget * bootStrapWidget_;
-  QCheckBox * bootstrapCheckBox_;
-  UIntSpinBox * bootStrapSizeSpinBox_;
-  OptimizationStoppingCriteria * stoppingCriteriaLayout_;
-  QWidget * maxEvalWidget_;
-  QLabel * maxNbEvalLabel_;
+  DoubleSpinBox                 * ciLengthSpinbox_        = nullptr;
+  QWidget                       * bootStrapWidget_        = nullptr;
+  QCheckBox                     * bootstrapCheckBox_      = nullptr;
+  UIntSpinBox                   * bootStrapSizeSpinBox_   = nullptr;
+  OptimizationStoppingCriteria  * stoppingCriteriaLayout_ = nullptr;
+  QWidget                       * maxEvalWidget_          = nullptr;
+  QLabel                        * maxNbEvalLabel_         = nullptr;
 };
 
 
@@ -150,7 +150,7 @@ class PERSALYS_VIEW_API CalibrationAnalysisWizard : public AnalysisWizard
 public:
   enum {Page_Intro, Page_RefPoint, Page_PriorDist, Page_ObsErrorDist, Page_Param};
 
-  CalibrationAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = 0);
+  explicit CalibrationAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard = false, QWidget* parent = nullptr);
 
   Analysis getAnalysis() const override;
   int nextId() const override;
@@ -164,12 +164,12 @@ public slots:
   void fitContent(int);
 
 private:
-  QList<DesignOfExperiment> observationsList_;
-  CalibrationIntroPage * introPage_;
-  CalibrationReferencePointPage * refPointPage_;
-  CalibrationDistributionPage * priorDistPage_;
-  CalibrationDistributionPage * obsErrorDistPage_;
-  CalibrationParametersPage * paramPage_;
+  QList<DesignOfExperiment>     observationsList_;
+  CalibrationIntroPage          * introPage_        = nullptr;
+  CalibrationReferencePointPage * refPointPage_     = nullptr;
+  CalibrationDistributionPage   * priorDistPage_    = nullptr;
+  CalibrationDistributionPage   * obsErrorDistPage_ = nullptr;
+  CalibrationParametersPage     * paramPage_        = nullptr;
   QSize defaultSize_;
 };
 }

@@ -34,7 +34,7 @@ class PERSALYS_UTILS_API CopyableTableView : public QTableView
 
 public:
   /** Default constructor */
-  CopyableTableView(QWidget *parent = nullptr);
+  explicit CopyableTableView(QWidget *parent = nullptr);
 
   QSize sizeHint() const override;
   QSize minimumSizeHint() const override;

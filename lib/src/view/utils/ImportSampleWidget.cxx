@@ -161,7 +161,7 @@ void ImportSampleWidget::setData(const QString& fileName)
   }
   catch (const std::exception & ex)
   {
-    dataPreviewTableView_->setModel(0);
+    dataPreviewTableView_->setModel(nullptr);
     // DOE size
     DOESizeLabel_->setText("");
     errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(ex.what()));
@@ -183,6 +183,7 @@ void ImportSampleWidget::updateWidgets(const Sample& fileSample, const Descripti
 
   // set table model
   dataPreviewTableView_->setModel(new SampleTableModel(sample, initialDescription, dataPreviewTableView_));
+  emit checkColumnsRequested();
   connect(dataPreviewTableView_->model(), SIGNAL(headerDataChanged(Qt::Orientation, int, int)), this, SIGNAL(checkColumnsRequested()));
 
   // set comboboxes items: each of them contains the input Names and an empty item

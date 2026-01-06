@@ -36,10 +36,10 @@ class PERSALYS_VIEW_API ImportObservationsPage : public QWizardPage
   friend class TestObservationsWizard;
 
 public:
-  ImportObservationsPage(QWidget *parent = nullptr);
+  explicit ImportObservationsPage(QWidget *parent = nullptr);
 
   void initialize(const DesignOfExperiment& designOfExp);
-  DesignOfExperiment getDesignOfExperiment();
+  DesignOfExperiment getDesignOfExperiment() const;
   bool validatePage() override;
 
 protected:
@@ -62,7 +62,7 @@ class PERSALYS_VIEW_API ObservationsWizard : public Wizard
   friend class TestObservationsWizard;
 
 public:
-  ObservationsWizard(const DesignOfExperiment &designOfExp, QWidget *parent = nullptr)
+  explicit ObservationsWizard(const DesignOfExperiment &designOfExp, QWidget *parent = nullptr)
     : Wizard(parent)
   {
     docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#observationwizard";

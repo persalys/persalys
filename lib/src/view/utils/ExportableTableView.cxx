@@ -39,8 +39,6 @@ namespace PERSALYS
 
 ExportableTableView::ExportableTableView(QWidget* parent)
   : CopyableTableView(parent)
-  , exportAction_(0)
-  , exportableAsImageAction_(0)
 {
   // default action
   exportAction_ = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
