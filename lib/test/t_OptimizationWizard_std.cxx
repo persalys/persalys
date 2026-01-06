@@ -53,7 +53,7 @@ private slots:
     const OptimizationBoundsPage * boundsPage = wizard.boundsPage_;
     wizard.next();
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorWidget_->toPlainText().isEmpty(), "Label must be empty");
 
     // second page
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
@@ -122,18 +122,18 @@ private slots:
     // change value
     tableModel->setData(tableModel->index(1, 3), 10400, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
+    QVERIFY2(!boundsPage->errorWidget_->toPlainText().isEmpty(), "Label must be not empty");
     tableModel->setData(tableModel->index(1, 3), 10200, Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorWidget_->toPlainText().isEmpty(), "Label must be empty");
 
     // change lower bound
     tableModel->setData(tableModel->index(1, 4), 10400, Qt::EditRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
+    QVERIFY2(!boundsPage->errorWidget_->toPlainText().isEmpty(), "Label must be not empty");
     tableModel->setData(tableModel->index(1, 4), initBounds.getLowerBound()[0], Qt::EditRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorWidget_->toPlainText().isEmpty(), "Label must be empty");
 
     // change variable check state
     wizard.boundsPage_->tableModel_->setData(tableModel->index(3, 0), Qt::Checked, Qt::CheckStateRole);
@@ -141,11 +141,11 @@ private slots:
 
     wizard.boundsPage_->tableModel_->setData(tableModel->index(0, 0), Qt::Unchecked, Qt::CheckStateRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be not empty");
+    QVERIFY2(!boundsPage->errorWidget_->toPlainText().isEmpty(), "Label must be not empty");
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 0), Qt::Checked, Qt::CheckStateRole);
     wizard.boundsPage_->tableModel_->setData(tableModel->index(2, 0), Qt::Checked, Qt::CheckStateRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(boundsPage->errorMessageLabel_->toPlainText().isEmpty(), "Label must be empty");
+    QVERIFY2(boundsPage->errorWidget_->toPlainText().isEmpty(), "Label must be empty");
 
     // change bounds check state
     wizard.boundsPage_->tableModel_->setData(tableModel->index(1, 4), Qt::Unchecked, Qt::CheckStateRole);

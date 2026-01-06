@@ -35,16 +35,16 @@ namespace PERSALYS
 PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, QWidget * parent)
   : SubWindow(item, parent)
 {
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  auto * widgetLayout = new QVBoxLayout(this);
   QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#vectpythonmodel");
   if (item->getPhysicalModel().hasMesh())
     docLink = "user_manual/graphical_interface/field_model/user_manual_field_model.html#fieldpythonmodel";
   widgetLayout->addWidget(new TitleLabel(tr("Python model"), docLink));
 
-  QSplitter * horizontalSplitter = new QSplitter(Qt::Horizontal);
+  auto * horizontalSplitter = new QSplitter(Qt::Horizontal);
 
   // left side: code editor
-  QTableView * codeView = new QTableView;
+  auto * codeView = new QTableView;
   codeView->setEditTriggers(QTableView::AllEditTriggers);
   codeView->horizontalHeader()->setStretchLastSection(true);
   codeView->verticalHeader()->setStretchLastSection(true);
@@ -52,18 +52,19 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, Q
   codeView->verticalHeader()->hide();
   codeView->setItemDelegate(new CodeDelegate(codeView));
 
-  CodeModel * codeModel = new CodeModel(item->getPhysicalModel(), codeView);
+  auto * codeModel = new CodeModel(item->getPhysicalModel(), codeView);
   codeView->setModel(codeModel);
   codeView->openPersistentEditor(codeModel->index(0, 0));
-  connect(item, SIGNAL(codeChanged()), codeModel, SLOT(updateData()));
+  connect(item, &PhysicalModelItem::codeChanged, codeModel, &CodeModel::updateData);
 
   horizontalSplitter->addWidget(codeView);
 
   // right side:
   // - tables
-  PhysicalModelWindowWidget * tablesWidget = new PhysicalModelWindowWidget(item);
-  connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateInputTableData()));
-  connect(codeModel, SIGNAL(variablesChanged()), tablesWidget, SIGNAL(updateOutputTableData()));
+  auto * tablesWidget = new PhysicalModelWindowWidget(item);
+
+  connect(codeModel, &CodeModel::variablesChanged, tablesWidget, &PhysicalModelWindowWidget::updateInputTableData);
+  connect(codeModel, &CodeModel::variablesChanged, tablesWidget, &PhysicalModelWindowWidget::updateOutputTableData);
 
   horizontalSplitter->addWidget(tablesWidget);
 
@@ -71,14 +72,14 @@ PythonPhysicalModelWindow::PythonPhysicalModelWindow(PhysicalModelItem * item, Q
   widgetLayout->addWidget(horizontalSplitter, 1);
 
   // buttons
-  CheckModelButtonGroup *buttons = new CheckModelButtonGroup(this, !item->getPhysicalModel().hasMesh());
-  connect(buttons, SIGNAL(evaluateOutputsRequested()), tablesWidget, SIGNAL(evaluateOutputsRequested()));
-  connect(buttons, SIGNAL(evaluateGradientRequested()), tablesWidget, SIGNAL(evaluateGradientRequested()));
+  auto * buttons = new CheckModelButtonGroup(this, !item->getPhysicalModel().hasMesh());
+  connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, tablesWidget, &PhysicalModelWindowWidget::evaluateOutputsRequested);
+  connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, tablesWidget, &PhysicalModelWindowWidget::evaluateGradientRequested);
 
-  connect(codeModel, SIGNAL(variablesChanged()), buttons->getErrorMessageWidget(), SLOT(reset()));
-  connect(codeModel, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageWidget(), SLOT(setFramelessErrorMessage(QString)));
-  connect(tablesWidget, SIGNAL(errorMessageChanged(QString)), buttons->getErrorMessageWidget(), SLOT(setFramelessErrorMessage(QString)));
-  connect(tablesWidget, SIGNAL(resetMessageLabel()), buttons->getErrorMessageWidget(), SLOT(reset()));
+  connect(codeModel, &CodeModel::variablesChanged, buttons->getErrorMessageWidget(), &ErrorWidget::reset);
+  connect(codeModel, &CodeModel::errorMessageChanged, buttons->getErrorMessageWidget(), &ErrorWidget::setFramelessErrorMessage);
+  connect(tablesWidget, &PhysicalModelWindowWidget::errorMessageChanged, buttons->getErrorMessageWidget(), &ErrorWidget::setFramelessErrorMessage);
+  connect(tablesWidget, &PhysicalModelWindowWidget::resetMessageLabel, buttons->getErrorMessageWidget(), &ErrorWidget::reset);
   widgetLayout->addWidget(buttons);
 
 }

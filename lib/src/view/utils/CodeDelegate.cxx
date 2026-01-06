@@ -270,7 +270,7 @@ bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
   if(obj == qobject_cast<CodeEditor*>(obj) && event->type() == QEvent::Wheel )
   {
     CodeEditor *editor = qobject_cast<CodeEditor*>(obj);
-    QWheelEvent *wheel = static_cast<QWheelEvent*>(event);
+    const QWheelEvent *wheel = static_cast<QWheelEvent*>(event);
     if(wheel->modifiers() == Qt::ControlModifier)
     {
       if(wheel->angleDelta().y() > 0)
@@ -281,7 +281,7 @@ bool CodeDelegate::eventFilter(QObject *obj, QEvent *event)
   }
   if (event->type() == QEvent::KeyPress)
   {
-    QKeyEvent * keyEvent = dynamic_cast<QKeyEvent*>(event);
+    const QKeyEvent * keyEvent = dynamic_cast<QKeyEvent*>(event);
     if (keyEvent->key() == Qt::Key_Tab)
     {
       return false;
@@ -308,7 +308,7 @@ QWidget *CodeDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem
 void CodeDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
 {
   CodeEditor * textEdit = dynamic_cast<CodeEditor*>(editor);
-  CodeHighlighter * highlighter = new CodeHighlighter(textEdit->document());
+  const CodeHighlighter * highlighter = new CodeHighlighter(textEdit->document());
   (void) highlighter;
   QString currentText(textEdit->toPlainText());
   QString newText(index.model()->data(index, Qt::DisplayRole).toString());
@@ -319,7 +319,7 @@ void CodeDelegate::setEditorData(QWidget * editor, const QModelIndex & index) co
 
 void CodeDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
 {
-  QPlainTextEdit * textEdit = dynamic_cast<QPlainTextEdit*>(editor);
+  const QPlainTextEdit * textEdit = dynamic_cast<QPlainTextEdit*>(editor);
   model->setData(index, textEdit->toPlainText(), Qt::EditRole);
 }
 
