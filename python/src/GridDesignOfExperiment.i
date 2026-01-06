@@ -10,7 +10,7 @@ namespace OT {
   canConvert< _PySequence_, Point >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr(pyObj, &ptr, SWIGTYPE_p_OT__Point, 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr(pyObj, &ptr, SWIG_TypeQuery("OT::Point *"), 0))) {
       Point * p_it = reinterpret_cast< Point * >(ptr);
       return p_it != NULL;
     } else {

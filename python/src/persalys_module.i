@@ -39,16 +39,16 @@ OTgetImplementationHelper(PERSALYS, Interface, Implementation)
   {
     // From interface class, ok
   }
-  else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_PERSALYS__ ## Implementation, 0)))
+  else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("PERSALYS::Implementation *"), 0)))
   {
     // From Implementation*
-    PERSALYS::Implementation * p_impl = reinterpret_cast< PERSALYS::Implementation * >( ptr );
+    PERSALYS::Implementation * p_impl = reinterpret_cast< PERSALYS::Implementation * >(ptr);
     $1 = new PERSALYS::Interface( &*p_impl );
   }
   else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("OT::Pointer<PERSALYS::Implementation> *"), 0)))
   {
     // From Pointer<Implementation>
-    OT::Pointer<PERSALYS::Implementation> * p_impl = reinterpret_cast< OT::Pointer<PERSALYS::Implementation> * >( ptr );
+    OT::Pointer<PERSALYS::Implementation> * p_impl = reinterpret_cast< OT::Pointer<PERSALYS::Implementation> * >(ptr);
     $1 = new PERSALYS::Interface( **p_impl );
   }
 }
@@ -56,7 +56,7 @@ OTgetImplementationHelper(PERSALYS, Interface, Implementation)
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const PERSALYS::Interface &
 {
   $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
-    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIGTYPE_p_PERSALYS__ ## Implementation, 0))
+    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("PERSALYS::Implementation *"), 0))
     || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<PERSALYS::Implementation> *"), 0));
 }
 %enddef
