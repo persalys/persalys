@@ -151,7 +151,7 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
 #ifdef PERSALYS_HAVE_OTMORRIS
   else if (objectName == "MorrisAnalysis")
   {
-    item = new Item(tr("Screening"), "ScreeningTitle");
+    item = new Item(tr("Morris"), "ScreeningTitle");
     item->setData(QIcon(":/images/sensitivity.png"), Qt::DecorationRole);
     item->appendAction(newScreening_);
   }
@@ -285,11 +285,11 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
 #ifdef PERSALYS_HAVE_OTMORRIS
   else if (analysisName == "Screening")
   {
-    action = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
-    action->setStatusTip(tr("Create a new screening"));
+    action = new QAction(QIcon(":/images/sensitivity.png"), tr("Morris"), this);
+    action->setStatusTip(tr("Create a new morris analysis"));
     connect(action, &QAction::triggered, [ = ]()
     {
-      MorrisAnalysis analysis(availableAnalysisName(tr("screening_")), model);
+      MorrisAnalysis analysis(availableAnalysisName(tr("morris_")), model);
       analysis.setBlockSize(GetNumberOfPhysicalCores());
       emit wizardRequested(getParentStudyItem(), analysis);
     });

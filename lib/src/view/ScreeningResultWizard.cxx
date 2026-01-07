@@ -43,8 +43,8 @@ ScreeningResultWizard::ScreeningResultWizard(const Study& study, const PhysicalM
 
 void ScreeningResultWizard::buildInterface()
 {
-  setWindowTitle(tr("Screening analysis results"));
-  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#screeningresultwizard";
+  setWindowTitle(tr("Morris analysis results"));
+  docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#morrisresultwizard";
 
   QWizardPage * page = new QWizardPage(this);
   QGridLayout * mainLayout = new QGridLayout(page);

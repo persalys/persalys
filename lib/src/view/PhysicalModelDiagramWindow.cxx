@@ -51,7 +51,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
 #ifdef PERSALYS_HAVE_OTMORRIS
   DiagramPushButton * screeningButton = new DiagramPushButton;
-  screeningButton->setText(tr("Screening"));
+  screeningButton->setText(tr("Morris"));
   screeningButton->setWhatsThis(tr("One screening method : Morris"));
   connect(screeningButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newScreening_, SIGNAL(triggered()));
   connect(physicalModelDiagramItem, SIGNAL(twoInputsValidityChanged(bool, QString)), screeningButton, SLOT(setEnabled(bool, QString)));
