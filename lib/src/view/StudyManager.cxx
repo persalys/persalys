@@ -157,14 +157,15 @@ void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Anal
 
   connect(wizard, &QDialog::accepted, [item, analysis, wizard](){
       const auto * implementation = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
-      Analysis newAnalysis(wizard->getAnalysis());
+
+      Analysis newAnalysis{wizard->getAnalysis()};
       const auto * newImplementation = dynamic_cast<DesignOfExperimentEvaluation*>(newAnalysis.getImplementation().get());
 
-      DesignOfExperimentEvaluation * modifiedImplementation(implementation->clone());
+      DesignOfExperimentEvaluation * modifiedImplementation{implementation->clone()};
       try
       {
         modifiedImplementation->checkAndSetEvaluations(newImplementation->getResult().getDesignOfExperiment());
-        Analysis modifiedAnalysis(modifiedImplementation);
+        Analysis modifiedAnalysis{modifiedImplementation};
         item->getStudy().remove(analysis);
         item->getStudy().add(modifiedAnalysis);
       }
@@ -187,6 +188,14 @@ void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Anal
         QMessageBox::warning(QApplication::activeWindow(),
           tr("Wrong values"),
           tr("The input values contained in the CSV file do not match the values of this design of experiments.")
+        );
+      }
+      catch (const std::exception &e)
+      {
+        // should never happen, debug if it does
+        QMessageBox::warning(QApplication::activeWindow(),
+          tr("Error"),
+          tr("An error occurred while importing the evaluations: %1").arg(e.what())
         );
       }
   });

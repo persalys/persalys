@@ -33,7 +33,7 @@ public:
   DesignOfExperimentAnalysis();
 
   /** Constructor with parameters */
-  DesignOfExperimentAnalysis(const OT::String & name);
+  explicit DesignOfExperimentAnalysis(const OT::String & name);
   DesignOfExperimentAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
 
   /** Virtual constructor */

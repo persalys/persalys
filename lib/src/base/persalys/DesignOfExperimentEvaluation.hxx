@@ -64,7 +64,7 @@ public:
    * of the given DOE to the current DOE
    */
   void checkAndSetEvaluations(const DesignOfExperiment &evaluatedDoE);
-  void setEvaluations(const OT::Sample &outputSample);
+  void setEvaluations(OT::Sample & outputSample);
 
   static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
 
@@ -77,6 +77,9 @@ public:
 protected:
   void initialize() override;
   void launch() override;
+
+private:
+  void removeNaN(OT::Sample & inputSample, OT::Sample & outputSample);
 
 protected:
   mutable OT::Sample originalInputSample_;

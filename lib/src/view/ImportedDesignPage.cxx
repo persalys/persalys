@@ -68,7 +68,9 @@ void ImportedDesignPage::setTable(const QString& fileName)
   designOfExperiment_.setFileName(fileName.toUtf8().data());
 
   // update widgets
-  estimatedTimeValueLabel_->setText(QString::number(designOfExperiment_.getSampleFromFile().getSize()*designOfExperiment_.getPhysicalModel().getEvalTime()));
+  estimatedTimeValueLabel_->setText(QString::number(
+    (double) designOfExperiment_.getSampleFromFile().getSize() * designOfExperiment_.getPhysicalModel().getEvalTime()
+  ));
   if(estimatedTimeValueLabel_->text().toFloat() > 1e-6)
   {
     estimatedTimeValueLabel_->setVisible(true);
@@ -106,7 +108,7 @@ void ImportedDesignPage::checkColumns()
 
 void ImportedDesignPage::initialize(const Analysis& analysis)
 {
-  ImportedDesignOfExperiment * analysis_ptr = dynamic_cast<ImportedDesignOfExperiment*>(analysis.getImplementation().get());
+  const auto * analysis_ptr = dynamic_cast<ImportedDesignOfExperiment*>(analysis.getImplementation().get());
 
   // if already an ImportedDesignOfExperiment
   if (analysis_ptr)
@@ -123,7 +125,7 @@ void ImportedDesignPage::initialize(const Analysis& analysis)
 }
 
 
-Analysis ImportedDesignPage::getAnalysis()
+Analysis ImportedDesignPage::getAnalysis() const
 {
   return designOfExperiment_;
 }

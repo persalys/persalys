@@ -23,7 +23,8 @@
 namespace PERSALYS
 {
 
-ImportEvaluationsWizard::ImportEvaluationsWizard(const Analysis &designOfExperiment, QWidget *parent): AnalysisWizard(designOfExperiment, parent)
+ImportEvaluationsWizard::ImportEvaluationsWizard(const Analysis &designOfExperiment, QWidget *parent)
+: AnalysisWizard(designOfExperiment, parent)
 {
   buildInterface();
 }
