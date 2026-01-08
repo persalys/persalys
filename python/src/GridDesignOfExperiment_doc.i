@@ -4,7 +4,7 @@
 Available constructors:
     GridDesignOfExperiment(*name, physicalModel*)
 
-    GridDesignOfExperiment(*name, physicalModel, bounds, nbValues, values*)
+    GridDesignOfExperiment(*name, physicalModel, values*)
 
 Parameters
 ----------
@@ -14,9 +14,7 @@ physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 bounds : :py:class:`openturns.Interval`
     Bounds
-nbValues : sequence of int
-    Number of values along each direction
-values : sequence of float
+values : sequence of :py:class:`openturns.Point`
     Values of the constant variables (optional)
 
 Notes
@@ -47,7 +45,7 @@ Create the design of experiments:
 
 Returns
 -------
-values : :py:class:`openturns.Point`
+values : sequence of :py:class:`openturns.Point`
    Inputs values used in the case where there is at least a constant variable."
 
 // ---------------------------------------------------------------------
@@ -57,6 +55,20 @@ values : :py:class:`openturns.Point`
 
 Parameters
 ----------
-values : :py:class:`openturns.Point`
+values : sequence of :py:class:`openturns.Point`
    Inputs values used in the case where there is at least a constant variable."
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::GridDesignOfExperiment::GetDefaultBounds
+"Get the default bounds for the grid design of experiments.
+
+Parameters
+----------
+model : :class:`~persalys.PhysicalModel`
+   Physical model
+
+Returns
+-------
+bounds : :py:class:`openturns.Interval`
+   Default bounds"

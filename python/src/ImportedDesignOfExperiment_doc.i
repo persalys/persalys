@@ -2,7 +2,8 @@
 "Create a design of experiments, using an imported design.
 
 Available constructors:
-    ImportedDesignOfExperiment(*name, physicalModel, fileName, columns*)
+    ImportedDesignOfExperiment(*name, physicalModel*)
+    ImportedDesignOfExperiment(*name, physicalModel, fileName, inputColumns, outputColumns*)
 
 Parameters
 ----------
@@ -12,8 +13,10 @@ physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 fileName : str
     Name of a data file to load
-columns : sequence of int
-    Indices of columns in files to consider
+inputColumns : sequence of int
+    Columns of the input variables
+outputColumns : sequence of int
+    Columns of the output variables (optional)
 
 Examples
 --------
@@ -62,5 +65,15 @@ By default, the type is Monte-Carlo.
 
 Parameters
 ----------
-type : :class:`~persalys.ImportedDesignOfExperiment.Type`
+type : int
+   Type of the imported design of experiments"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getType
+"Get the type of the imported design of experiments.
+
+Returns
+-------
+type : int
    Type of the imported design of experiments"

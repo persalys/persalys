@@ -14,16 +14,6 @@ sample : :py:class:`openturns.Sample`
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DesignOfExperimentEvaluation::getFailedInputSample
-"Failed input sample accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Points of the design of experiments which could not be evaluated"
-
-// ----------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::DesignOfExperimentEvaluation::getNotEvaluatedInputSample
 "Not evaluated input sample accessor.
 
@@ -34,13 +24,22 @@ sample : :py:class:`openturns.Sample`
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DesignOfExperimentEvaluation::setEvaluations
-"Add evaluations for the design of experiments
-
+%feature("docstring") PERSALYS::DesignOfExperimentEvaluation::setDesignOfExperiment
+"Set the design of experiments.
 Parameters
 ----------
-outputSample : :py::class:`openturns.Sample`
-    sample containing values for the output variables"
+designOfExperiment : :class:`~persalys.DesignOfExperiment`
+    Design of experiments to set"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DesignOfExperimentEvaluation::getResult
+"Get the data analysis result.
+
+Returns
+-------
+result : :class:`~persalys.DataAnalysisResult`
+    Data analysis result associated to the design of experiments"
 
 // ----------------------------------------------------------------------
 
@@ -53,3 +52,13 @@ Parameters
 ----------
 evaluatedDoE : :py::class:`~persalys.DesignOfExperiment`
     Design of experiments containing evaluations to copy"
+
+// ----------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DesignOfExperimentEvaluation::setEvaluations
+"Add evaluations for the design of experiments
+
+Parameters
+----------
+outputSample : :py::class:`openturns.Sample`
+    sample containing values for the output variables"
