@@ -60,7 +60,7 @@ RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.8.0.t
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.bz2 | tar xj && cd eigen* \
- && cmake -B build . && cd build && make install > /dev/null 2>&1 && cd - && rm -r eigen*
+ && cmake -DEIGEN_BUILD_BLAS=OFF -DEIGEN_BUILD_LAPACK=OFF -B build . && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r eigen*
 
 # spectra
 RUN curl -fsSL https://github.com/yixuan/spectra/archive/v1.2.0.tar.gz | tar xz && cd spectra* && cmake . && make install > /dev/null 2>&1 && cd - && rm -r spectra*
@@ -70,7 +70,8 @@ RUN curl -fsSL https://github.com/google/glog/archive/v0.7.1.tar.gz | tar xz && 
 
 # ceres
 RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz | tar xz && cd ceres* \
- && cmake -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_BENCHMARKS=OFF -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r ceres*
+ && cmake -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_BENCHMARKS=OFF -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=ON -DGFLAGS=OFF -DSUITESPARSE=OFF . \
+ && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
 RUN curl -fSsL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2022.3.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
@@ -86,7 +87,7 @@ RUN wget -q https://github.com/AppImage/AppImageKit/releases/download/13/obsolet
 
 # openssl
 RUN curl -fSsL https://www.openssl.org/source/openssl-3.5.0.tar.gz | tar xz && cd openssl* \
- && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1
+ && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1 && cd - && rm -r openssl*
 
 # libffi
 RUN curl -fSsL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-3.4.6.tar.gz | tar xz && cd libffi* \
@@ -100,19 +101,30 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tgz | tar 
 # pip
 RUN pip3 install "numpy<2.4" "scipy<1.17" matplotlib ipython sphinx numpydoc dill meson flake8 doc8 openpyxl nopip cython setuptools paramiko --upgrade --quiet
 
+# superlu
+RUN git clone -b v4.0.1 --depth 1 https://github.com/xiaoyeli/superlu_mt.git && cd superlu_mt \
+ && cmake -DPLAT="_OPENMP" -DBUILD_SHARED_LIBS=OFF -Denable_tests=OFF -Denable_examples=OFF \
+    -DCMAKE_INSTALL_LIBDIR=lib -D SUPERLUMT_INSTALL_INCLUDEDIR=include . \
+ && make install > /dev/null 2>&1 && cd - && rm -r superlu_mt
+
 # sundials
 RUN curl -fSsL https://github.com/LLNL/sundials/archive/v7.5.0.tar.gz | tar xz && cd sundials* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
-    -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib -B build . \
+    -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib \
+    -DENABLE_SUPERLUMT=ON -DSUPERLUMT_THREAD_TYPE=OPENMP -DSUPERLUMT_INCLUDE_DIR="/usr/local/include" \
+    -DSUPERLUMT_LIBRARY=libsuperlu_mt_OPENMP.a -DSUPERLUMT_LIBRARIES="/usr/local/lib/libsuperlu_mt_OPENMP.a;blas" \
+    -B build . \
  && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
 
 # fmilib
 RUN curl -fSsL https://github.com/modelon-community/fmi-library/archive/3.0.4.tar.gz | tar xz && cd fmi-library* \
- && cmake -DFMILIB_BUILD_STATIC_LIB=OFF -DFMILIB_BUILD_TESTS=OFF -DCMAKE_INSTALL_LIBDIR=lib -B build . && make install -C build > /dev/null 2>&1 && cd - && rm -r fmi*
+ && cmake -DFMILIB_BUILD_STATIC_LIB=OFF -DFMILIB_BUILD_TESTS=OFF -DCMAKE_INSTALL_LIBDIR=lib -B build . \
+ && make install -C build > /dev/null 2>&1 && cd - && rm -r fmi*
 
 # assimulo
 RUN curl -fSsL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.2.tar.gz | tar xz && cd Assimulo* \
- && python3 setup.py install --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 > /dev/null 2>&1 \
+ && sed -i "s|blas_OPENMP|blas|g" setup.py \
+ && python3 setup.py install --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 --superlu-home=/usr/local > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
