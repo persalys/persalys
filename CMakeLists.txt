@@ -18,6 +18,16 @@ set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project (persalys)
 
+if (POLICY CMP0174)
+  # cmake_parse_arguments(PARSE_ARGV) defines a variable for an empty string after a single-value keyword (3.31)
+  cmake_policy (SET CMP0174 NEW)
+endif ()
+
+if (POLICY CMP0177)
+  # install() DESTINATION paths are normalized (3.31)
+  cmake_policy (SET CMP0177 NEW)
+endif ()
+
 string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 
 # set module dir to find custom scripts
