@@ -26,6 +26,7 @@
 #include "persalys/ImportSampleWidget.hxx"
 
 #include <QWizardPage>
+class QComboBox;
 
 namespace PERSALYS
 {
@@ -53,10 +54,11 @@ public slots:
   void checkColumns();
 
 private:
+  void selectType(ImportedDesignOfExperiment::Type type);
   ImportSampleWidget * sampleWidget_ = nullptr;
   ImportedDesignOfExperiment designOfExperiment_;
   QLabel * estimatedTimeValueLabel_ = nullptr;
-
+  QComboBox * typeCombo_ = nullptr;
 };
 }
 #endif

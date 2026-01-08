@@ -106,23 +106,21 @@ int DesignOfExperimentIntroPage::getMethodId() const
 
 int DesignOfExperimentIntroPage::nextId() const
 {
+  int nextId = DesignOfExperimentWizard::Page_Probabilistic;;
   switch (DesignOfExperimentIntroPage::Method(methodGroup_->checkedId()))
   {
     case DesignOfExperimentIntroPage::Deterministic:
-    {
-      return DesignOfExperimentWizard::Page_Deterministic;
-    }
-    case DesignOfExperimentIntroPage::Probabilistic:
-    {
-      return DesignOfExperimentWizard::Page_Probabilistic;
-    }
-    case DesignOfExperimentIntroPage::Import:
-    {
-      return DesignOfExperimentWizard::Page_Import;
-    }
-    default:
-      return -1;
+      nextId = DesignOfExperimentWizard::Page_Deterministic;
       break;
+
+    case DesignOfExperimentIntroPage::Probabilistic:
+      nextId = DesignOfExperimentWizard::Page_Probabilistic;
+      break;
+    
+    case DesignOfExperimentIntroPage::Import:
+      nextId = DesignOfExperimentWizard::Page_Import;
   }
+
+  return nextId;
 }
 }

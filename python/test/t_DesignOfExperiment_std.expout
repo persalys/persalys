@@ -157,12 +157,14 @@ aDesign_2 = persalys.ImportedDesignOfExperiment('aDesign_2', aModelPhys, 'normal
 aDesign_2.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_2.setInterestVariables(interestVariables)
+aDesign_2.setType(persalys.ImportedDesignOfExperiment.MC)
 anOTStudy.add(aDesign_2)
 inputColumns = [0, 2]
 aDesign_2_1 = persalys.ImportedDesignOfExperiment('aDesign_2_1', aModelPhys, 'normal.csv', inputColumns)
 aDesign_2_1.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_2_1.setInterestVariables(interestVariables)
+aDesign_2_1.setType(persalys.ImportedDesignOfExperiment.MC)
 anOTStudy.add(aDesign_2_1)
 aDesign_3 = persalys.ProbabilisticDesignOfExperiment('aDesign_3', aModelPhys, 10, 'QUASI_MONTE_CARLO')
 aDesign_3.setSeed(0)

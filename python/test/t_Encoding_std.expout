@@ -25,6 +25,7 @@ doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColu
 doeI.setBlockSize(1)
 interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
+doeI.setType(persalys.ImportedDesignOfExperiment.MC)
 myStudy.add(doeI)
 
 #!/usr/bin/env python
@@ -53,5 +54,6 @@ doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColu
 doeI.setBlockSize(1)
 interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
+doeI.setType(persalys.ImportedDesignOfExperiment.MC)
 myStudy.add(doeI)
 

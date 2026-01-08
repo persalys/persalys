@@ -144,10 +144,51 @@ Parameters ImportedDesignOfExperiment::getParameters() const
   }
   param.add("Columns", columns);
   param.add("Block size", getBlockSize());
+  
+  switch(type_)
+  {
+    case MC:
+      param.add("Type", "Monte Carlo");
+      break;
+    case QMC:
+      param.add("Type", "Quasi Monte Carlo");
+      break;
+    case LHS:
+      param.add("Type", "Latin Hypercube Sampling");
+      break;
+    case GRID:
+      param.add("Type", "Grid");
+  }
 
   return param;
 }
 
+void ImportedDesignOfExperiment::setType(Type type)
+{
+    type_ = type;
+}
+
+ImportedDesignOfExperiment::Type ImportedDesignOfExperiment::getType() const
+{
+    return type_;
+}
+
+String ImportedDesignOfExperiment::TypeToString(Type type)
+{
+    switch(type)
+    {
+        case MC:
+            return "MC";
+        case QMC:
+            return "QMC";
+        case LHS:
+            return "LHS";
+        case GRID:
+            return "GRID";
+        default:
+            throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
+    }
+}
 
 String ImportedDesignOfExperiment::getPythonScript() const
 {
@@ -161,6 +202,7 @@ String ImportedDesignOfExperiment::getPythonScript() const
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
+  oss << getName() << ".setType(persalys.ImportedDesignOfExperiment." << TypeToString(type_) << ")\n";
 
   return oss;
 }
@@ -175,7 +217,9 @@ String ImportedDesignOfExperiment::__repr__() const
       << " physicalModel=" << getPhysicalModel().getName()
       << " fileName=" << getFileName()
       << " inputColumns=" << getInputColumns()
-      << " blockSize=" << getBlockSize();
+      << " blockSize=" << getBlockSize()
+      << " type=" << TypeToString(type_);
+
   return oss;
 }
 
@@ -185,6 +229,7 @@ void ImportedDesignOfExperiment::save(Advocate& adv) const
 {
   DesignOfExperimentEvaluation::save(adv);
   DataImport::save(adv);
+  adv.saveAttribute("type_", static_cast<UnsignedInteger>(type_));
 }
 
 
@@ -193,5 +238,16 @@ void ImportedDesignOfExperiment::load(Advocate& adv)
 {
   DesignOfExperimentEvaluation::load(adv);
   DataImport::load(adv);
+  UnsignedInteger type_as_uint;
+  if (adv.hasAttribute("type_"))
+  {
+    adv.loadAttribute("type_", type_as_uint);
+    type_ = static_cast<Type>(type_as_uint);
+  }
+  else
+  {
+    // for backward compatibility, if type_ attribute does not exist, set to MC
+    type_ = MC;
+  }
 }
 }

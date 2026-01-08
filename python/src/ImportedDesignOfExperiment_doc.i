@@ -43,3 +43,24 @@ Returns
 -------
 result : :class:`~persalys.DataAnalysisResult`
    Result of the analysis of the data"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getType
+"Get the type of the imported design of experiments.
+
+Returns
+-------
+type : :class:`~persalys.ImportedDesignOfExperiment.Type`
+   Type of the imported design of experiments"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setType
+"Set the type of the imported design of experiments.
+By default, the type is Monte-Carlo.
+
+Parameters
+----------
+type : :class:`~persalys.ImportedDesignOfExperiment.Type`
+   Type of the imported design of experiments"

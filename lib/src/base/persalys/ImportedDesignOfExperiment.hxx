@@ -31,6 +31,8 @@ class PERSALYS_BASE_API ImportedDesignOfExperiment : public DesignOfExperimentEv
   CLASSNAME
 
 public:
+  enum Type {MC, QMC, LHS, GRID};
+
   /** Default constructor */
   ImportedDesignOfExperiment();
   /** Constructor with parameters */
@@ -51,6 +53,9 @@ public:
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
 
+  void setType(Type type);
+  Type getType() const;
+
   /** String converter */
   OT::String __repr__() const override;
 
@@ -64,6 +69,10 @@ protected:
   void check() override;
   OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
   void setDefaultColumns() override;
+  static OT::String TypeToString(Type type);
+
+private:
+    Type type_ = MC;
 };
 }
 #endif
