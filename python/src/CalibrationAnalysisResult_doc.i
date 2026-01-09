@@ -23,26 +23,6 @@ interval : :py:class:`openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CalibrationAnalysisResult::getOutputAtPrior
-"Output values at prior point accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Output values evaluated at prior point (mean of the prior distribution)"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::CalibrationAnalysisResult::getOutputAtPosterior
-"Output values at posterior point accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Output values evaluated at calibrated point (mean of the posterior distribution)"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::CalibrationAnalysisResult::getPriorResidualsPDF
 "Prior output residuals PDF accessor.
 

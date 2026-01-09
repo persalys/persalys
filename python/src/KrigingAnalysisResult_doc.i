@@ -1,5 +1,5 @@
 %feature("docstring") PERSALYS::KrigingAnalysisResult
-"Get the results of a Kriging analysis.
+"Get the results of a GPR analysis.
 
 See Also
 --------
@@ -8,13 +8,13 @@ KrigingAnalysis
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::KrigingAnalysisResult::getKrigingResultCollection
+%feature("docstring") PERSALYS::KrigingAnalysisResult::getGPRResultCollection
 "Sequence of kriging results accessor.
 
 Returns
 -------
-results : sequence of `openturns.KrigingResult`
-    The kriging results of all the outputs of interest"
+results : sequence of `openturns.GaussianProcessResult`
+    The GPR results of all the outputs of interest"
 
 // ---------------------------------------------------------------------
 

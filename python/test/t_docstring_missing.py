@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
-import persalys
 import inspect
+from pathlib import Path
+import persalys
+import re
 
 # find all instantiable classes
 instantiables = []
@@ -67,5 +69,26 @@ print(
 )
 if count_class_undoc + count_methods_undoc > 150:
     raise ValueError(
-        f"too much undocumented class/methods ({count_class_undoc + count_methods_undoc})"
+        f"too many undocumented class/methods ({count_class_undoc + count_methods_undoc})"
     )
+
+# count extra docstrings methods
+count_methods_extra = 0
+for swig_file in Path(__file__).parents[1].joinpath("src").glob("*_doc.i"):
+    with open(swig_file) as f:
+        for line in f.read().splitlines():
+            match = re.search(r'%feature\("docstring"\) PERSALYS::([\w]*)::([\w]*)', line)
+            if match is not None:
+                cn = match.group(1)
+                mn = match.group(2)
+                try:
+                    cls = getattr(persalys, cn)
+                    obj = cls()
+                    if not hasattr(obj, mn):
+                        print(f"extra {cn}::{mn} method")
+                        count_methods_extra += 1
+                except Exception:
+                    pass
+print(f"-- extra method docstrings: {count_methods_extra}")
+if count_methods_extra > 10:
+    raise ValueError(f"too many extra method docstrings ({count_methods_extra})")

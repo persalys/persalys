@@ -217,17 +217,6 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::MetaModelAnalysis::getDistribution
-"Input distribution accessor.
-
-Returns
--------
-distribution : :py:class:`openturns.JointDistribution`
-    The distribution defined in the probabilistic model or a distribution composed
-    of Uniform laws if there is no stochastic input variable."
-
-// --------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::MetaModelAnalysis::getMetaModel
 "metamodel accessor.
 

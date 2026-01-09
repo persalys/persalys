@@ -174,7 +174,7 @@ code : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CouplingStep::setTimeout
+%feature("docstring") PERSALYS::CouplingStep::setTimeOut
 "Timeout accessor.
 
 Parameters
@@ -184,7 +184,7 @@ timeOut : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CouplingStep::getTimeout
+%feature("docstring") PERSALYS::CouplingStep::getTimeOut
 "Timeout accessor.
 
 Returns

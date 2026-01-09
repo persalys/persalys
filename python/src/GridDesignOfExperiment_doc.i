@@ -40,17 +40,6 @@ Create the design of experiments:
 
 >>> myDOE = persalys.GridDesignOfExperiment('myDOE', myPhysicalModel)"
 
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::GridDesignOfExperiment::getTypeDesignOfExperiment
-"Design type accessor.
-
-Returns
--------
-type : int
-    Design type"
-
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::GridDesignOfExperiment::getValues
@@ -71,62 +60,3 @@ Parameters
 values : :py:class:`openturns.Point`
    Inputs values used in the case where there is at least a constant variable."
 
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::GridDesignOfExperiment::getBounds
-"Bounds accessor.
-
-Returns
--------
-bounds : :py:class:`openturns.Interval`
-   Bounds"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::GridDesignOfExperiment::setBounds
-"Bounds accessor.
-
-Parameters
-----------
-bounds : :py:class:`openturns.Interval`
-   Bounds for each input variables of the model"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::GridDesignOfExperiment::getLevels
-"Levels accessor.
-
-Returns
--------
-levels : :py:class:`openturns.Indices`
-   Levels"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::GridDesignOfExperiment::setLevels
-"Levels accessor.
-
-Parameters
-----------
-levels : :py:class:`openturns.Indices`
-   Levels"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::GridDesignOfExperiment::getDeltas
-"Deltas accessor.
-
-Returns
--------
-deltas : :py:class:`openturns.Point`
-   Deltas"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::GridDesignOfExperiment::setDeltas
-"Deltas accessor.
-
-Parameters
-----------
-deltas : :py:class:`openturns.Point`
-   Deltas"

@@ -1,7 +1,5 @@
 %feature("docstring") PERSALYS::ApproximationAnalysis
-"Class to define reliability analysis using approximation method.
-
-"
+"Reliability analysis using approximation methods."
 
 // ---------------------------------------------------------------------
 

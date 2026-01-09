@@ -36,16 +36,6 @@ Create the design of experiments:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setInputColumns
-"Input columns accessor.
-
-Parameters
-----------
-columns : sequence of int
-   Columns of the input variables"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::DataImport::getResult
 "Result of the analysis of the data accessor.
 

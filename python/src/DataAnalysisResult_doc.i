@@ -152,16 +152,6 @@ result : sequence of :py:class:`openturns.Point`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DataAnalysisResult::getFittedDistribution
-"Fitted distribution accessor.
-
-Returns
--------
-result : :py:class:`openturns.Distribution`
-    Fitted distribution"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::DataAnalysisResult::getCDF
 "CDF accessor.
 

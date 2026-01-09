@@ -89,16 +89,6 @@ data : :class:`~openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::CalibrationAnalysis::setObservations
-"Accessor to the data to be fitted.
-
-Returns
--------
-data : :class:`~openturns.Sample`
-    The data to be fitted."
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::CalibrationAnalysis::getPriorDistribution
 "Accessor to the prior distribution.
 

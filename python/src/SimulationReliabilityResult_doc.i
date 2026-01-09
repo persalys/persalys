@@ -13,16 +13,6 @@ sample : :py:class:`openturns.SimulationResult`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::SimulationReliabilityResult::getOutputSample
-"Output sample accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Sample`
-    Output sample"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::SimulationReliabilityResult::getConvergenceSample
 "Convergence sample accessor.
 

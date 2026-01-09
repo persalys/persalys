@@ -14,17 +14,12 @@ functions : sequence of :py:class:`openturns.Function`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::FieldMonteCarloResult::getKarhunenLoeveResult
+%feature("docstring") PERSALYS::FieldMonteCarloResult::getKarhunenLoeveResults
 "Karhunen Loeve result accessor.
-
-Parameters
-----------
-index : int
-    Index of the output
 
 Returns
 -------
-result : :py:class:`openturns.KarhunenLoeveResult`
+result : sequence of :py:class:`openturns.KarhunenLoeveResult`
     Karhunen Loeve result for an output"
 
 // ---------------------------------------------------------------------

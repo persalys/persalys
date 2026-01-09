@@ -198,16 +198,6 @@ analyses : sequence of :class:`~persalys.Analysis`
     
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::Study::getDesignOfExperiments
-"Designs of experiments accessor.
-
-Returns
--------
-designs : sequence of :class:`~persalys.DesignOfExperiment`
-    Designs of experiments"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::Study::getDataModels
 "Data model accessor.
 
@@ -230,21 +220,6 @@ Returns
 -------
 model : :class:`~persalys.PhysicalModel`
     Physical model"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::Study::getDesignOfExperimentByName
-"Design of experiments accessor.
-
-Parameters
-----------
-name : str
-    The design of experiments name
-
-Returns
--------
-design : :class:`~persalys.DesignOfExperiment`
-    Design of experiments"
 
 // ---------------------------------------------------------------------
 
@@ -333,16 +308,6 @@ name : str
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::Study::getAvailableDesignOfExperimentName
-"Available name for a design of experiments accessor.
-
-Returns
--------
-name : str
-    Available name for a design of experiments"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::Study::getAvailableLimitStateName
 "Available name for a limit state accessor.
 
@@ -405,21 +370,6 @@ Returns
 -------
 contains : bool
     Whether it contains a physical model named with the given name"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::Study::hasDesignOfExperimentNamed
-"Whether it contains a design of experiments named with the given name.
-
-Parameters
-----------
-name : str
-    A design of experiments name
-
-Returns
--------
-contains : bool
-    Whether it contains a design of experiments named with the given name"
 
 // ---------------------------------------------------------------------
 

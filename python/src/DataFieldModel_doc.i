@@ -18,5 +18,3 @@ PERSALYS_DataFieldModel_setSampleAsProcessSample_doc
 PERSALYS_DataFieldModel_getProcessSample_doc
 %feature("docstring") PERSALYS::DataFieldModel::getProcessSampleAsSample
 PERSALYS_DataFieldModel_getProcessSampleAsSample_doc
-%feature("docstring") PERSALYS::DataFieldModel::isValid
-PERSALYS_DataFieldModel_isValid_doc

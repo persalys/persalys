@@ -23,12 +23,12 @@ sample : :py:class:`openturns.Sample`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::MetaModelValidationResult::getResiduals
+%feature("docstring") PERSALYS::MetaModelValidationResult::getMeanSquaredError
 R"RAW(Residuals accessor.
 
 Returns
 -------
-error : :py:class:`openturns.Point`
+mse : :py:class:`openturns.Point`
     The errors are defined as follows for each output of the model:
     :math:`\displaystyle \frac{\sqrt{\sum_{i=1}^N (y_i - \hat{y_i})^2}}{N}`
     with :math:`y_i` the :math:`N` model's values and :math:`\hat{y_i}` the

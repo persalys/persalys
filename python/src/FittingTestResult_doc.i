@@ -33,13 +33,23 @@ distributions : sequence of :py:class:`openturns.Distribution`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::FittingTestResult::getLillieforsTestResults
-"Get the result of the Lilliefors goodness-of-fit test.
+%feature("docstring") PERSALYS::FittingTestResult::getTestResults
+"Get the result of the goodness-of-fit test.
 
 Returns
 -------
 results : sequence of :py:class:`openturns.TestResult`
     Results of the Lilliefors goodness-of-fit test for all the distributions"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FittingTestResult::getBICResults
+"Get the result of the goodness-of-fit test.
+
+Returns
+-------
+results : :py:class:`openturns.Point`
+    BIC values for all the distributions"
 
 // ---------------------------------------------------------------------
 

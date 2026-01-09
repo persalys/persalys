@@ -131,15 +131,3 @@ sample : :class:`~openturns.Sample`
 %feature("docstring") PERSALYS::DataFieldModelImplementation::getProcessSampleAsSample
 PERSALYS_DataFieldModel_getProcessSampleAsSample_doc
 
-// ---------------------------------------------------------------------
-
-%define PERSALYS_DataFieldModel_isValid_doc
-"Python script accessor.
-
-Returns
--------
-isValid : bool
-    Wether the model data is valid or not. It must contain only valid numerical values and data must be correctly indexed on the mesh model."
-%enddef
-%feature("docstring") PERSALYS::DataFieldModelImplementation::isValid
-PERSALYS_DataFieldModel_isValid_doc

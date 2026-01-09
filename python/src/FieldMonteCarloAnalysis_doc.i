@@ -38,16 +38,6 @@ Get the result:
 
 //----------------------------------------------------------
 
-%feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getKarhunenLoeveAnalysis
-"Karhunen-Loeve analysis accessor.
-
-Returns
--------
-analysis : :class:`persalys.FieldKarhunenLoeveAnalysis`
-    Karhunen-Loeve analysis"
-
-// --------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::FieldMonteCarloAnalysis::getKarhunenLoeveThreshold
 "Accessor to the limit ratio on eigenvalues.
 

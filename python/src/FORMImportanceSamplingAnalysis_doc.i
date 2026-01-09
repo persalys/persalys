@@ -37,7 +37,7 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::ApproximationAnalysis::getFORMResult
+%feature("docstring") PERSALYS::FORMImportanceSamplingAnalysis::getFORMResult
 "FORM result accessor.
 
 Returns
